@@ -156,8 +156,7 @@ describe('<%= entityAngularName %> Service', () => {
             it('should add a <%= entityAngularName %> to an empty array', () => {
                 const <%= entityInstance %>: I<%= entityAngularName %> = sampleWithRequiredData;
                 expectedResult = service.add<%= entityAngularName %>ToCollectionIfMissing([], <%= entityInstance %>);
-                expect(expectedResult).toHaveLength(1);
-                expect(expectedResult).toContain(<%= entityInstance %>);
+                expect(expectedResult).toEqual([<%= entityInstance %>]);
             });
 
             it('should not add a <%= entityAngularName %> to an array that contains it', () => {
@@ -188,16 +187,13 @@ describe('<%= entityAngularName %> Service', () => {
                 const <%= entityInstance %>: I<%= entityAngularName %> = sampleWithRequiredData;
                 const <%= entityInstance %>2: I<%= entityAngularName %> = sampleWithPartialData;
                 expectedResult = service.add<%= entityAngularName %>ToCollectionIfMissing([], <%= entityInstance %>, <%= entityInstance %>2);
-                expect(expectedResult).toHaveLength(2);
-                expect(expectedResult).toContain(<%= entityInstance %>);
-                expect(expectedResult).toContain(<%= entityInstance %>2);
+                expect(expectedResult).toEqual([<%= entityInstance %>, <%= entityInstance %>2]);
             });
 
             it('should accept null and undefined values', () => {
                 const <%= entityInstance %>: I<%= entityAngularName %> = sampleWithRequiredData;
                 expectedResult = service.add<%= entityAngularName %>ToCollectionIfMissing([], null, <%= entityInstance %>, undefined);
-                expect(expectedResult).toHaveLength(1);
-                expect(expectedResult).toContain(<%= entityInstance %>);
+                expect(expectedResult).toEqual([<%= entityInstance %>]);
             });
 
             it('should return initial array if no <%= entityAngularName %> is added', () => {

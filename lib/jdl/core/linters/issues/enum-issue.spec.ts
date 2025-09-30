@@ -18,8 +18,10 @@
  */
 
 import { describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import EnumIssue from './enum-issue.js';
+
+import EnumIssue from './enum-issue.ts';
 
 describe('jdl - EnumIssue', () => {
   describe('new', () => {

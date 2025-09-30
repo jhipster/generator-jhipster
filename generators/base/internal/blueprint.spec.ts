@@ -1,6 +1,7 @@
-import assert from 'assert';
 import { describe, expect, it } from 'esmocha';
-import { mergeBlueprints, normalizeBlueprintName, parseBlueprints, removeBlueprintDuplicates } from './blueprint.js';
+import assert from 'node:assert';
+
+import { mergeBlueprints, normalizeBlueprintName, parseBlueprints, removeBlueprintDuplicates } from './blueprint.ts';
 
 describe('generator - base - internal - blueprint', () => {
   describe('::parseBlueprints', () => {
@@ -10,7 +11,7 @@ describe('generator - base - internal - blueprint', () => {
       assert.deepStrictEqual(actual, expected);
     });
     it('returns a array if empty string', () => {
-      const expected = [];
+      const expected: any[] = [];
       const actual = parseBlueprints('');
       assert.deepStrictEqual(actual, expected);
     });
@@ -45,20 +46,20 @@ describe('generator - base - internal - blueprint', () => {
   describe('::mergeBlueprints', () => {
     describe('not passing arguments', () => {
       it('returns a empty array', () => {
-        const expected = [];
+        const expected: any[] = [];
         const actual = mergeBlueprints();
         assert.deepStrictEqual(actual, expected);
       });
     });
     describe('passing undefined', () => {
       it('throws an error', () => {
-        expect(() => mergeBlueprints(undefined as any)).toThrowError(/Only arrays are supported./);
+        expect(() => mergeBlueprints(undefined as any)).toThrow(/Only arrays are supported./);
       });
     });
     describe('passing array and undefined', () => {
       const argumentsToPass = [[], undefined];
       it('throws an error', () => {
-        expect(() => (mergeBlueprints as any)(...argumentsToPass)).toThrowError(/Only arrays are supported./);
+        expect(() => (mergeBlueprints as any)(...argumentsToPass)).toThrow(/Only arrays are supported./);
       });
     });
     describe('passing unique blueprints', () => {

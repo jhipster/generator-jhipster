@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { asWritingTask } from '../base-application/support/task-type-inference.ts';
 import { JAVA_DOCKER_DIR } from '../generator-constants.js';
 
-import { asWritingTask } from '../base-application/support/task-type-inference.js';
-import cleanupOauth2 from './cleanup-oauth2.js';
+import cleanupOauth2 from './cleanup-oauth2.ts';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
@@ -188,7 +188,7 @@ export default asWritingTask(async function cleanupTask(this, taskParam) {
       application.searchEngineCouchbase ||
       application.databaseTypeNeo4j
     ) {
-      // The condition is too complated, delete and recreate.
+      // The condition is too complicated, delete and recreate.
       this.removeFile(`${application.srcTestResources}META-INF/spring.factories`);
       this.removeFile(`${application.javaPackageTestDir}config/TestContainersSpringContextCustomizerFactory.java`);
     }

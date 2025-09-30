@@ -29,7 +29,9 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: ./generator-jhipster/.github/actions/setup-generator-jhipster-jit
+    - uses: jhipster/actions/setup-runner@v0
+      with:
+        binary-dir: ${{ github.workspace }}/generator-jhipster/bin
     - name: 'mvn: install JHipster'
       run: |
         echo "::group::jhipster-bom"
@@ -44,7 +46,7 @@ runs:
     - name: 'mvn(imperative): cache dependencies'
       run: |
         echo "::group::maven(imperative)"
-        jh generate-sample cache.jdl --skip-install --workspaces --monorepository --skip-git
+        jhipster.cjs generate-sample cache.jdl --skip-install --workspaces --monorepository --skip-git
         npm run backend:build-cache -- --ntp || true
         cd app1
         ./npmw -v
@@ -58,7 +60,7 @@ runs:
     - name: 'mvn(reactive): cache dependencies'
       run: |
         echo "::group::maven(reactive)"
-        jh generate-sample cache.jdl --skip-install --workspaces --reactive --websocket no --monorepository --skip-git
+        jhipster.cjs generate-sample cache.jdl --skip-install --workspaces --reactive --websocket no --monorepository --skip-git
         npm install --force
         npm run backend:build-cache -- --ntp || true
         echo "::endgroup::"
@@ -71,7 +73,7 @@ runs:
     - name: 'gradle(imperative): cache dependencies'
       run: |
         echo "::group::gradle(imperative)"
-        jh generate-sample cache.jdl --skip-install --workspaces --build gradle --monorepository --skip-git
+        jhipster.cjs generate-sample cache.jdl --skip-install --workspaces --build gradle --monorepository --skip-git
         npm install --force
         npm run backend:build-cache || true
         cd app1
@@ -86,7 +88,7 @@ runs:
     - name: 'gradle(reactive): cache dependencies'
       run: |
         echo "::group::gradle(reactive)"
-        jh generate-sample cache.jdl --skip-install --workspaces --build gradle --reactive --websocket no --monorepository --skip-git
+        jhipster.cjs generate-sample cache.jdl --skip-install --workspaces --build gradle --reactive --websocket no --monorepository --skip-git
         npm install --force
         npm run backend:build-cache || true
         echo "::endgroup::"

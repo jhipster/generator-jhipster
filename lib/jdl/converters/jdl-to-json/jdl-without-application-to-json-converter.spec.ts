@@ -17,27 +17,27 @@
  * limitations under the License.
  */
 
-import { after, before, describe, it, expect as jestExpect } from 'esmocha';
-import { use as chaiUse, expect } from 'chai';
+import { after, before, describe, expect as jestExpect, it } from 'esmocha';
+
+import { expect, use as chaiUse } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
 chaiUse(sinonChai);
 
-import { relationshipTypes } from '../../core/basic-types/index.js';
+import fieldTypes from '../../../jhipster/field-types.ts';
+import { relationshipTypes } from '../../core/basic-types/index.ts';
+import { binaryOptions, relationshipOptions, unaryOptions, validations } from '../../core/built-in-options/index.ts';
+import { JDLEntity, JDLEnum } from '../../core/models/index.ts';
+import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
+import JDLField from '../../core/models/jdl-field.ts';
+import JDLObject from '../../core/models/jdl-object.ts';
+import JDLRelationship from '../../core/models/jdl-relationship.ts';
+import JDLUnaryOption from '../../core/models/jdl-unary-option.ts';
+import JDLValidation from '../../core/models/jdl-validation.ts';
+import logger from '../../core/utils/objects/logger.ts';
 
-import { binaryOptions, relationshipOptions, unaryOptions, validations } from '../../core/built-in-options/index.js';
-import fieldTypes from '../../../jhipster/field-types.js';
-
-import JDLObject from '../../core/models/jdl-object.js';
-import { JDLEntity, JDLEnum } from '../../core/models/index.js';
-import JDLField from '../../core/models/jdl-field.js';
-import JDLValidation from '../../core/models/jdl-validation.js';
-import JDLRelationship from '../../core/models/jdl-relationship.js';
-import JDLUnaryOption from '../../core/models/jdl-unary-option.js';
-import JDLBinaryOption from '../../core/models/jdl-binary-option.js';
-import logger from '../../core/utils/objects/logger.js';
-import { convert } from './jdl-without-application-to-json-converter.js';
+import { convert } from './jdl-without-application-to-json-converter.ts';
 
 const {
   Validations: { REQUIRED, UNIQUE, MIN, MAX, MINLENGTH, MAXLENGTH, PATTERN, MINBYTES, MAXBYTES },
@@ -68,7 +68,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
       });
     });
     describe('when passing a JDL object without entities', () => {
-      let result;
+      let result: ReturnType<typeof convert>;
 
       before(() => {
         const jdlObject = new JDLObject();
@@ -81,8 +81,8 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
     });
     describe('when passing a JDL object with entities', () => {
       describe('with some of them being built-in entities', () => {
-        let builtInEntitiesAreConverted;
-        let customEntitiesAreConverted;
+        let builtInEntitiesAreConverted: boolean | undefined;
+        let customEntitiesAreConverted: boolean | undefined;
 
         before(() => {
           const jdlObject = new JDLObject();
@@ -113,7 +113,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
         });
       });
       describe('with no field, no option and no relationship', () => {
-        let convertedEntity;
+        let convertedEntity: any;
 
         before(() => {
           const jdlObject = new JDLObject();
@@ -156,7 +156,7 @@ JSONEntity {
         });
       });
       describe('with options', () => {
-        let convertedEntity;
+        let convertedEntity: any;
 
         before(() => {
           const jdlObject = new JDLObject();
@@ -262,8 +262,8 @@ JSONEntity {
         });
       });
       describe('when setting the DTO option without the service option', () => {
-        let convertedEntity;
-        let loggerSpy;
+        let convertedEntity: any;
+        let loggerSpy: ReturnType<typeof sinon.spy>;
 
         before(() => {
           loggerSpy = sinon.spy(logger, 'info');
@@ -324,8 +324,8 @@ JSONEntity {
         });
       });
       describe('when setting the filtering option without the service option', () => {
-        let convertedEntity;
-        let loggerSpy;
+        let convertedEntity: any;
+        let loggerSpy: ReturnType<typeof sinon.spy>;
 
         before(() => {
           loggerSpy = sinon.spy(logger, 'info');
@@ -385,7 +385,7 @@ JSONEntity {
         });
       });
       describe('when the searching option is set with exclusions', () => {
-        let convertedEntity;
+        let convertedEntity: any;
 
         before(() => {
           const jdlObject = new JDLObject();
@@ -438,7 +438,7 @@ JSONEntity {
       });
       describe('with fields', () => {
         describe('without validation, comment or option', () => {
-          let convertedEntity;
+          let convertedEntity: any;
 
           before(() => {
             const jdlObject = new JDLObject();
@@ -500,7 +500,7 @@ JSONEntity {
           });
         });
         describe('when having blobs', () => {
-          let convertedEntity;
+          let convertedEntity: any;
 
           before(() => {
             const jdlObject = new JDLObject();
@@ -580,7 +580,7 @@ JSONEntity {
           });
         });
         describe('with field types being enums', () => {
-          let convertedEntity;
+          let convertedEntity: any;
 
           before(() => {
             const jdlObject = new JDLObject();
@@ -635,7 +635,7 @@ JSONEntity {
           });
         });
         describe('with comments', () => {
-          let convertedEntity;
+          let convertedEntity: any;
 
           before(() => {
             const jdlObject = new JDLObject();
@@ -690,7 +690,7 @@ JSONEntity {
           });
         });
         describe('with validations', () => {
-          let convertedEntity;
+          let convertedEntity: any;
 
           before(() => {
             const jdlObject = new JDLObject();
@@ -829,7 +829,7 @@ JSONEntity {
           });
         });
         describe('with options', () => {
-          let convertedEntity;
+          let convertedEntity: any;
 
           before(() => {
             const jdlObject = new JDLObject();
@@ -892,8 +892,8 @@ JSONEntity {
       });
       describe('with relationships', () => {
         describe('without options, required relationships or comments', () => {
-          let relationshipsForA;
-          let relationshipsForB;
+          let relationshipsForA: any;
+          let relationshipsForB: any;
 
           before(() => {
             const jdlObject = new JDLObject();
@@ -1007,7 +1007,7 @@ JSONEntity {
         });
         describe('with options', () => {
           describe('being custom options', () => {
-            let convertedRelationship;
+            let convertedRelationship: any;
 
             before(() => {
               const jdlObject = new JDLObject();
@@ -1050,7 +1050,7 @@ JSONEntity {
             });
           });
           describe('being regular options', () => {
-            let convertedRelationship;
+            let convertedRelationship: any;
 
             before(() => {
               const jdlObject = new JDLObject();
@@ -1092,8 +1092,8 @@ JSONEntity {
           });
         });
         describe('with required relationships', () => {
-          let relationshipsForA;
-          let relationshipsForB;
+          let relationshipsForA: any;
+          let relationshipsForB: any;
 
           before(() => {
             const jdlObject = new JDLObject();
@@ -1144,8 +1144,8 @@ JSONEntity {
           });
         });
         describe('with comments', () => {
-          let relationshipsForA;
-          let relationshipsForB;
+          let relationshipsForA: any;
+          let relationshipsForB: any;
 
           before(() => {
             const jdlObject = new JDLObject();
@@ -1197,8 +1197,8 @@ JSONEntity {
         });
         describe("when the injected field in the destination side isn't present", () => {
           describe('for a One-to-One relationship', () => {
-            let relationshipFromSourceToDestination;
-            let relationshipFromDestinationToSource;
+            let relationshipFromSourceToDestination: any;
+            let relationshipFromDestinationToSource: any;
 
             before(() => {
               const jdlObject = new JDLObject();
@@ -1233,8 +1233,8 @@ JSONEntity {
             });
           });
           describe('for a One-to-Many relationship', () => {
-            let relationshipFromSourceToDestination;
-            let relationshipFromDestinationToSource;
+            let relationshipFromSourceToDestination: any;
+            let relationshipFromDestinationToSource: any;
 
             before(() => {
               const jdlObject = new JDLObject();
@@ -1269,8 +1269,8 @@ JSONEntity {
             });
           });
           describe('for a Many-to-One relationship', () => {
-            let relationshipFromSourceToDestination;
-            let relationshipFromDestinationToSource;
+            let relationshipFromSourceToDestination: any;
+            let relationshipFromDestinationToSource: any;
 
             before(() => {
               const jdlObject = new JDLObject();
@@ -1305,8 +1305,8 @@ JSONEntity {
             });
           });
           describe('for a Many-to-Many relationship', () => {
-            let relationshipFromSourceToDestination;
-            let relationshipFromDestinationToSource;
+            let relationshipFromSourceToDestination: any;
+            let relationshipFromDestinationToSource: any;
 
             before(() => {
               const jdlObject = new JDLObject();
@@ -1343,8 +1343,8 @@ JSONEntity {
         });
         describe('when setting custom field for relationship mapping', () => {
           describe('for a One-to-One relationship', () => {
-            let relationshipFromSourceToDestination;
-            let relationshipFromDestinationToSource;
+            let relationshipFromSourceToDestination: any;
+            let relationshipFromDestinationToSource: any;
 
             before(() => {
               const jdlObject = new JDLObject();
@@ -1391,8 +1391,8 @@ JSONEntity {
             });
           });
           describe('for a One-to-Many relationship', () => {
-            let relationshipFromSourceToDestination;
-            let relationshipFromDestinationToSource;
+            let relationshipFromSourceToDestination: any;
+            let relationshipFromDestinationToSource: any;
 
             before(() => {
               const jdlObject = new JDLObject();
@@ -1439,8 +1439,8 @@ JSONEntity {
             });
           });
           describe('for a Many-to-One relationship', () => {
-            let relationshipFromSourceToDestination;
-            let relationshipFromDestinationToSource;
+            let relationshipFromSourceToDestination: any;
+            let relationshipFromDestinationToSource: any;
 
             before(() => {
               const jdlObject = new JDLObject();
@@ -1487,8 +1487,8 @@ JSONEntity {
             });
           });
           describe('for a Many-to-Many relationship', () => {
-            let relationshipFromSourceToDestination;
-            let relationshipFromDestinationToSource;
+            let relationshipFromSourceToDestination: any;
+            let relationshipFromDestinationToSource: any;
 
             before(() => {
               const jdlObject = new JDLObject();

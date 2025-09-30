@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import type { JavaDependency } from '../../java/types.js';
-import type { MavenDefinition, MavenPlugin } from '../../maven/types.js';
+import type { JavaDependency } from '../../java/types.ts';
+import type { MavenDefinition, MavenDependency, MavenPlugin } from '../../maven/types.ts';
 
 type DatabaseTypeDependencies = {
   jdbc: MavenDefinition;
@@ -71,7 +71,7 @@ export const getH2MavenDefinition = ({
   prodDatabaseType,
   packageFolder,
 }: {
-  prodDatabaseType: string;
+  prodDatabaseType: keyof Omit<typeof javaSqlDatabaseArtifacts, 'h2'>;
   packageFolder: string;
 }): DatabaseTypeDependencies => {
   const testcontainerFile = testcontainerFileForDB[prodDatabaseType];
@@ -104,63 +104,25 @@ export const getH2MavenDefinition = ({
 };
 
 export const getDatabaseTypeMavenDefinition: (
-  databaseType: string,
+  databaseType: keyof Omit<typeof javaSqlDatabaseArtifacts, 'h2'>,
   options: { inProfile?: string; javaDependencies: Record<string, string> },
 ) => DatabaseTypeDependencies = (databaseType, { inProfile }) => {
-  const dependenciesForType: Record<string, DatabaseTypeDependencies> = {
-    mariadb: {
-      jdbc: {
-        dependencies: [
-          { inProfile, ...javaSqlDatabaseArtifacts.mariadb.jdbc },
-          { inProfile, ...javaSqlDatabaseArtifacts.mariadb.testContainer },
-        ],
-      },
-      r2dbc: {
-        dependencies: [{ inProfile, ...javaSqlDatabaseArtifacts.mariadb.r2dbc }],
-      },
+  if (!javaSqlDatabaseArtifacts[databaseType]) {
+    throw new Error(`Unsupported database type: ${databaseType}`);
+  }
+  const { jdbc, testContainer } = javaSqlDatabaseArtifacts[databaseType];
+  const testContainerDeps: MavenDependency[] = [{ inProfile, ...testContainer }];
+  if (inProfile === 'prod') {
+    // Add test containers dependency to provided in dev profile, as they need to be in a default profile for IDEs. Avoids `cannot find symbol` error.
+    testContainerDeps.push({ inProfile: 'dev', ...testContainer, scope: 'provided' });
+  }
+  return {
+    jdbc: {
+      dependencies: [{ inProfile, ...jdbc }, ...testContainerDeps],
     },
-    mssql: {
-      jdbc: {
-        dependencies: [
-          { inProfile, ...javaSqlDatabaseArtifacts.mssql.jdbc },
-          { inProfile, ...javaSqlDatabaseArtifacts.mssql.testContainer },
-        ],
-      },
-      r2dbc: {
-        dependencies: [{ inProfile, ...javaSqlDatabaseArtifacts.mssql.r2dbc }],
-      },
-    },
-    mysql: {
-      jdbc: {
-        dependencies: [
-          { inProfile, ...javaSqlDatabaseArtifacts.mysql.jdbc },
-          { inProfile, ...javaSqlDatabaseArtifacts.mysql.testContainer },
-        ],
-      },
-      r2dbc: {
-        dependencies: [{ inProfile, ...javaSqlDatabaseArtifacts.mysql.r2dbc }],
-      },
-    },
-    oracle: {
-      jdbc: {
-        dependencies: [
-          { inProfile, ...javaSqlDatabaseArtifacts.oracle.jdbc },
-          { inProfile, ...javaSqlDatabaseArtifacts.oracle.testContainer },
-        ],
-      },
-      r2dbc: {},
-    },
-    postgresql: {
-      jdbc: {
-        dependencies: [
-          { inProfile, ...javaSqlDatabaseArtifacts.postgresql.jdbc },
-          { inProfile, ...javaSqlDatabaseArtifacts.postgresql.testContainer },
-        ],
-      },
-      r2dbc: {
-        dependencies: [{ inProfile, ...javaSqlDatabaseArtifacts.postgresql.r2dbc }],
-      },
-    },
+    r2dbc:
+      databaseType !== 'oracle'
+        ? { dependencies: [{ inProfile, ...javaSqlDatabaseArtifacts[databaseType].r2dbc }] } // r2dbc uses jdbc for testcontainers.
+        : {},
   };
-  return dependenciesForType[databaseType];
 };

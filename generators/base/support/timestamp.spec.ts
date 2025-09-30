@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 import { describe, expect, it } from 'esmocha';
-import { parseChangelog } from './timestamp.js';
+
+import { parseChangelog } from './timestamp.ts';
 
 describe('generator - base - support - timestamp', () => {
   describe('::parseChangelog', () => {

@@ -17,10 +17,12 @@
  * limitations under the License.
  */
 
-import { readFileSync, writeFileSync } from 'fs';
 import { beforeEach, describe, expect, it } from 'esmocha';
+import { readFileSync, writeFileSync } from 'node:fs';
+
 import helpers from 'yeoman-test';
-import { writeConfigFile } from '../exporters/export-utils.js';
+
+import { writeConfigFile } from './export-utils.ts';
 
 describe('jdl - ExportUtils', () => {
   beforeEach(async () => {
@@ -28,7 +30,7 @@ describe('jdl - ExportUtils', () => {
   });
   describe('writeConfigFile', () => {
     describe('when there is no .yo-rc.json file present', () => {
-      let exportedConfig;
+      let exportedConfig: any;
 
       beforeEach(() => {
         const config = {
@@ -51,7 +53,7 @@ describe('jdl - ExportUtils', () => {
       });
     });
     describe('when there is a .yo-rc.json file present', () => {
-      let exportedConfig;
+      let exportedConfig: any;
 
       beforeEach(() => {
         const existingConfig = {
@@ -93,7 +95,7 @@ describe('jdl - ExportUtils', () => {
     });
 
     describe('when there is a .yo-rc.json file present with creationTimestamp', () => {
-      let exportedConfig;
+      let exportedConfig: any;
 
       beforeEach(() => {
         const existingConfig = {
@@ -138,7 +140,7 @@ describe('jdl - ExportUtils', () => {
     });
 
     describe('when there is a .yo-rc.json file present without creationTimestamp', () => {
-      let exportedConfig;
+      let exportedConfig: any;
 
       beforeEach(() => {
         const existingConfig = {

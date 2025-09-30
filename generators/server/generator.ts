@@ -17,17 +17,16 @@
  * limitations under the License.
  */
 
-import { existsSync } from 'fs';
+import { existsSync } from 'node:fs';
 
-import { GENERATOR_COMMON, GENERATOR_SPRING_BOOT } from '../generator-list.js';
-import BaseApplicationGenerator from '../base-application/index.js';
-
-import { databaseTypes, entityOptions, fieldTypes, reservedKeywords, searchEngineTypes, validations } from '../../lib/jhipster/index.js';
-import { stringifyApplicationData } from '../base-application/support/index.js';
-import { isReservedPaginationWords } from '../../lib/jhipster/reserved-keywords.js';
-import { isReservedH2Keyword } from '../spring-data-relational/support/h2-reserved-keywords.js';
 import { APPLICATION_TYPE_GATEWAY } from '../../lib/core/application-types.ts';
-import { hibernateSnakeCase } from './support/index.js';
+import { databaseTypes, entityOptions, fieldTypes, reservedKeywords, searchEngineTypes, validations } from '../../lib/jhipster/index.ts';
+import { isReservedPaginationWords } from '../../lib/jhipster/reserved-keywords.ts';
+import BaseApplicationGenerator from '../base-application/index.ts';
+import { stringifyApplicationData } from '../base-application/support/index.ts';
+import { isReservedH2Keyword } from '../spring-data-relational/support/h2-reserved-keywords.ts';
+
+import { hibernateSnakeCase } from './support/index.ts';
 import type {
   Application as ServerApplication,
   Config as ServerConfig,
@@ -36,7 +35,7 @@ import type {
   Options as ServerOptions,
   Relationship as ServerRelationship,
   Source as ServerSource,
-} from './types.js';
+} from './types.ts';
 
 const { SUPPORTED_VALIDATION_RULES } = validations;
 const { isReservedTableName } = reservedKeywords;
@@ -56,22 +55,19 @@ const { NO: NO_SERVICE } = ServiceTypes;
 
 export default class JHipsterServerGenerator extends BaseApplicationGenerator<
   ServerEntity,
-  ServerApplication<ServerEntity>,
+  ServerApplication,
   ServerConfig,
   ServerOptions,
   ServerSource
 > {
-  jhipsterDependenciesVersion!: string;
-  projectVersion!: string;
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplication();
-      await this.dependsOnJHipster(GENERATOR_COMMON);
+      await this.dependsOnBootstrap('server');
+      await this.dependsOnJHipster('common');
     }
   }
 
@@ -79,7 +75,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
     return this.asComposingTaskGroup({
       async composeBackendType() {
         if (!this.jhipsterConfig.backendType || ['spring-boot', 'java'].includes(this.jhipsterConfig.backendType.toLowerCase())) {
-          await this.composeWithJHipster(GENERATOR_SPRING_BOOT);
+          await this.composeWithJHipster('spring-boot');
         }
       },
     });
@@ -93,22 +89,14 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
     return this.asConfiguringEachEntityTaskGroup({
       configureMicroservice({ application, entityConfig }) {
         if (application.applicationTypeMicroservice) {
-          if (entityConfig.microserviceName === undefined) {
-            entityConfig.microserviceName = application.baseName;
-          }
-          if (entityConfig.clientRootFolder === undefined) {
-            entityConfig.clientRootFolder = entityConfig.microserviceName;
-          }
-          if (entityConfig.databaseType === undefined) {
-            entityConfig.databaseType = application.databaseType;
-          }
+          entityConfig.microserviceName ??= application.baseName;
+          entityConfig.clientRootFolder ??= entityConfig.microserviceName;
+          entityConfig.databaseType ??= application.databaseType;
         }
       },
       configureGateway({ application, entityConfig }) {
         if (application.applicationTypeGateway) {
-          if (entityConfig.databaseType === undefined) {
-            entityConfig.databaseType = application.databaseType;
-          }
+          entityConfig.databaseType ??= application.databaseType;
           if (entityConfig.clientRootFolder === undefined) {
             entityConfig.clientRootFolder = entityConfig.skipUiGrouping ? '' : entityConfig.microserviceName;
           }
@@ -197,7 +185,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
         const fields = entityConfig.fields;
         fields!.forEach(field => {
           // Migration from JodaTime to Java Time
-          if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
+          if ((field.fieldType as any) === 'DateTime' || (field.fieldType as any) === 'Date') {
             field.fieldType = INSTANT;
           }
 
@@ -317,7 +305,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
     const jhiTablePrefix = (entity as any).jhiTablePrefix;
     const instructions = `You can specify a different table name in your JDL file or change it in .jhipster/${entity.name}.json file and then run again 'jhipster entity ${entity.name}.'`;
 
-    if (!/^([a-zA-Z0-9_]*)$/.test(entityTableName)) {
+    if (!/^(\w*)$/.test(entityTableName)) {
       return `The table name cannot contain special characters.
 ${instructions}`;
     }

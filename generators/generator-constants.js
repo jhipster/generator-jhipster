@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { readFileSync } from 'fs';
-import { join } from 'path';
-import { fileURLToPath } from 'url';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 export * from '../lib/constants/yeoman.ts';
 export * from '../lib/constants/jhipster.ts';
@@ -39,30 +39,11 @@ export const RECOMMENDED_NODE_VERSION = readFileSync(
   'utf-8',
 ).trim();
 
-// The version should be coherent with the one from spring-data-elasticsearch project
-export const ELASTICSEARCH_TAG = '8.13.4';
-export const ELASTICSEARCH_IMAGE = 'docker.elastic.co/elasticsearch/elasticsearch';
-
-/**
- * @type {Record<string, string>}
- * Manually updated docker containers
- */
-export const dockerContainers = {
-  elasticsearchTag: ELASTICSEARCH_TAG,
-  elasticsearchImage: ELASTICSEARCH_IMAGE,
-  elasticsearch: `${ELASTICSEARCH_IMAGE}:${ELASTICSEARCH_TAG}`,
-};
-Object.freeze(dockerContainers);
-
 // all constants used throughout all generators
 
 export const LOGIN_REGEX = '^(?>[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$';
 // JS does not support atomic groups
 export const LOGIN_REGEX_JS = '^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$';
-
-// documentation constants
-export const JHIPSTER_DOCUMENTATION_URL = 'https://www.jhipster.tech';
-export const JHIPSTER_DOCUMENTATION_ARCHIVE_PATH = '/documentation-archive/';
 
 export const MAIN_DIR = 'src/main/';
 export const TEST_DIR = 'src/test/';

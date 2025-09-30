@@ -18,10 +18,12 @@
  */
 
 import { describe, it } from 'esmocha';
+
 import { expect } from 'chai';
 
-import validations from '../jdl/core/built-in-options/validations.js';
-import fieldTypes from './field-types.js';
+import validations from '../jdl/core/built-in-options/validations.ts';
+
+import fieldTypes from './field-types.ts';
 
 const {
   Validations: { MIN, MAXLENGTH, PATTERN },
@@ -48,22 +50,6 @@ describe('jdl - FieldTypes', () => {
     describe('when passing a valid type', () => {
       it('should return true', () => {
         expect(fieldTypes.isCommonDBType(fieldTypes.CommonDBTypes.BIG_DECIMAL)).to.be.true;
-      });
-    });
-  });
-  describe('getIsType', () => {
-    describe('when passing an invalid argument', () => {
-      it('should fail', () => {
-        expect(() => {
-          // @ts-expect-error
-          fieldTypes.getIsType(null);
-        }).to.throw(/^The passed type must not be nil\.$/);
-        expect(() => {
-          // @ts-expect-error
-          fieldTypes.getIsType(null, () => {
-            // do nothing
-          });
-        }).to.throw(/^The passed type must not be nil\.$/);
       });
     });
   });

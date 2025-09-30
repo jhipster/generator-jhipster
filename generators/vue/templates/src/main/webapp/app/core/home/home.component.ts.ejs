@@ -10,7 +10,6 @@ import { useLoginModal } from '@/account/login-modal';
 <%_ } _%>
 
 export default defineComponent({
-  compatConfig: { MODE: 3 },
   setup() {
 <%_ if (authenticationTypeOauth2) { _%>
     const { login } = inject<LoginService>('loginService');

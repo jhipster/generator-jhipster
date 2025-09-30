@@ -18,7 +18,7 @@
  */
 
 import { createNeedleCallback } from '../../base-core/support/needles.ts';
-import type { LiquibaseChangelog, LiquibaseChangelogSection } from '../types.js';
+import type { LiquibaseChangelog, LiquibaseChangelogSection } from '../types.ts';
 
 const changelogType = {
   base: 'liquibase-add-changelog',

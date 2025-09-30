@@ -16,25 +16,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname, join } from 'path';
-import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
-import { snakeCase } from 'lodash-es';
+import { basename, dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
+import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
+import { authenticationTypes, databaseTypes, searchEngineTypes } from '../../lib/jhipster/index.ts';
 import {
   buildSamplesFromMatrix,
   buildServerMatrix,
+  defaultHelpers as helpers,
   entitiesServerSamples as entities,
   extendMatrix,
-  defaultHelpers as helpers,
   runResult,
-} from '../../lib/testing/index.js';
+} from '../../lib/testing/index.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { authenticationTypes, databaseTypes, searchEngineTypes } from '../../lib/jhipster/index.js';
-import { filterBasicServerGenerators, shouldComposeWithSpringCloudStream } from '../server/__test-support/index.js';
-import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.js';
-import Generator from './generator.js';
-import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.js';
+import { filterBasicServerGenerators, shouldComposeWithSpringCloudStream } from '../server/__test-support/index.ts';
+
+import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.ts';
+import Generator from './generator.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -58,9 +58,6 @@ samples = extendMatrix(samples, {
 const testSamples = buildSamplesFromMatrix(samples, { commonConfig });
 
 describe('generator - elasticsearch', () => {
-  it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 

@@ -19,13 +19,15 @@
 
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+
 import chalk from 'chalk';
-import { monitoringTypes, serviceDiscoveryTypes } from '../../../lib/jhipster/index.js';
-import { asPromptingTask } from '../../base-application/support/index.js';
-import { asPromptingWorkspacesTask } from '../support/task-type-inference.ts';
-import type { BaseKubernetesGenerator } from '../../kubernetes/generator.ts';
+
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../lib/core/application-types.ts';
+import { monitoringTypes, serviceDiscoveryTypes } from '../../../lib/jhipster/index.ts';
+import { asPromptingTask } from '../../base-application/support/index.ts';
 import type CoreGenerator from '../../base-core/generator.ts';
+import type { BaseKubernetesGenerator } from '../../kubernetes/generator.ts';
+import { asPromptingWorkspacesTask } from '../support/task-type-inference.ts';
 
 const { PROMETHEUS } = monitoringTypes;
 const monitoring = monitoringTypes;
@@ -56,32 +58,6 @@ export const askForApplicationType = asPromptingTask(async function askForApplic
           },
         ],
         default: APPLICATION_TYPE_MONOLITH,
-      },
-    ],
-    this.config,
-  );
-});
-
-/**
- * Ask For Gateway Type
- */
-export const askForGatewayType = asPromptingTask(async function askForGatewayType(this: BaseKubernetesGenerator, { control }) {
-  if (!this.shouldAskForPrompts({ control })) return;
-  if (this.jhipsterConfigWithDefaults.deploymentApplicationType !== APPLICATION_TYPE_MICROSERVICE) return;
-
-  await this.prompt(
-    [
-      {
-        type: 'list',
-        name: 'gatewayType',
-        message: 'Which *type* of gateway would you like to use?',
-        choices: [
-          {
-            value: 'SpringCloudGateway',
-            name: 'JHipster gateway based on Spring Cloud Gateway',
-          },
-        ],
-        default: 'SpringCloudGateway',
       },
     ],
     this.config,

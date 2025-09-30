@@ -17,11 +17,12 @@
  * limitations under the License.
  */
 
-import { SpringBootApplicationGenerator } from '../spring-boot/generator.js';
-import { mutateData } from '../../lib/utils/index.js';
-import writeElasticsearchFilesTask from './files.js';
-import cleanupElasticsearchFilesTask from './cleanup.js';
-import writeElasticsearchEntityFilesTask, { cleanupElasticsearchEntityFilesTask } from './entity-files.js';
+import { mutateData } from '../../lib/utils/index.ts';
+import { SpringBootApplicationGenerator } from '../spring-boot/generator.ts';
+
+import cleanupElasticsearchFilesTask from './cleanup.ts';
+import writeElasticsearchEntityFilesTask, { cleanupElasticsearchEntityFilesTask } from './entity-files.ts';
+import writeElasticsearchFilesTask from './files.ts';
 
 export default class ElasticsearchGenerator extends SpringBootApplicationGenerator {
   async beforeQueue() {
@@ -30,7 +31,7 @@ export default class ElasticsearchGenerator extends SpringBootApplicationGenerat
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplication();
+      await this.dependsOnBootstrap('spring-boot');
     }
   }
 

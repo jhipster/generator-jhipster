@@ -17,12 +17,14 @@
  * limitations under the License.
  */
 import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
-import type { GetWebappTranslationCallback } from '../../client/translation.js';
-import { createTranslationReplacer } from './translate-react.js';
+
+import type { GetWebappTranslationCallback } from '../../client/translation.ts';
+
+import { createTranslationReplacer } from './translate-react.ts';
 
 describe('generator - react - transform', () => {
   describe('replaceReactTranslations', () => {
-    let replaceReactTranslations;
+    let replaceReactTranslations: ReturnType<typeof createTranslationReplacer>;
     beforeEach(() => {
       let value = 0;
       replaceReactTranslations = createTranslationReplacer(
@@ -48,7 +50,7 @@ home.subtitle-translated-value-0
 `);
         });
 
-        it('should replace multine Translate tag with contentKey coming first', () => {
+        it('should replace multiline Translate tag with contentKey coming first', () => {
           const body = `
 <Translate contentKey="sessions.title" interpolate={{ username: account.login }}>
 Active sessions for [<strong>{account.login}</strong>]
@@ -61,7 +63,7 @@ sessions.title-{&quot;username&quot;:&quot;{account.login}&quot;}-translated-val
 `);
         });
 
-        it('should replace multine Translate tag with interpolate coming first', () => {
+        it('should replace multiline Translate tag with interpolate coming first', () => {
           const body = `
 <Translate interpolate={{ username: account.login }} contentKey="sessions.title">
 Active sessions for [<strong>{account.login}</strong>]
@@ -131,7 +133,7 @@ export const Home = () => {
         <span className="hipster rounded" />
       </Col>
       <Col md="9">
-        <h2><Translate contentKey="home.title">Welcome,  Hipster!</Translate></h2>
+        <h2><Translate contentKey="home.title">Welcome, Hipster!</Translate></h2>
         <p className="lead">
         <Translate contentKey="home.subtitle"> This is your homepage </Translate>
          </p>
@@ -162,7 +164,7 @@ export const Home = () => {
           )
         }
         <p>
-          <Translate contentKey="home.question">If you have any question on JHipster:</Translate>
+          <Translate contentKey="home.question">If you have any questions on JHipster:</Translate>
         </p>
 
         <ul>

@@ -82,7 +82,7 @@ class AuthorizationHeaderUtilTest {
 
     @Test
     void getAuthorizationHeader_Authentication() {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("principal", "credentials");
+        var authenticationToken = new UsernamePasswordAuthenticationToken("principal", "credentials");
         doReturn(authenticationToken).when(securityContext).getAuthentication();
 
         Optional<String> header = authorizationHeaderUtil.getAuthorizationHeader();

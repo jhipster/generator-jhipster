@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`application mutation test expects mutateApplication to match snapshot 1`] = `
+{
+  "addLanguageCallbacks": [],
+  "enableI18nRTL": false,
+  "enableTranslation": false,
+  "languages": [],
+  "languagesDefinition": [],
+  "languagesToGenerate": undefined,
+  "languagesToGenerateDefinition": undefined,
+  "nativeLanguage": "en",
+  "nativeLanguageDefinition": {
+    "angularLocale": "en",
+    "dayjsLocale": "en",
+    "displayName": "English",
+    "fakerjsLocale": "en",
+    "javaLocaleMessageSourceSuffix": "en",
+    "languageTag": "en",
+    "name": "English",
+    "rtl": false,
+  },
+  "supportedLanguages": Any<Array>,
+}
+`;

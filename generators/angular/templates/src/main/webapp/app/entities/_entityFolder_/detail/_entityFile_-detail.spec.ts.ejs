@@ -1,0 +1,128 @@
+<%#
+ Copyright 2013-2025 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_
+const tsKeyId = primaryKey.tsSampleValues[0];
+const testEntity = tsPrimaryKeySamples[0];
+_%>
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
+import { RouterTestingHarness } from '@angular/router/testing';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faArrowLeft, faPencilAlt } from '@fortawesome/free-solid-svg-icons';
+<%_ if (enableTranslation) { _%>
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
+import { of } from 'rxjs';
+
+<%_ if (anyFieldIsBlobDerived) { _%>
+import { DataUtils } from 'app/core/util/data-util.service';
+<%_ } _%>
+
+import { <%= entityAngularName %>Detail } from './<%= entityFileName %>-detail';
+
+describe('<%= entityAngularName %> Management Detail Component', () => {
+  let comp: <%= entityAngularName %>Detail;
+  let fixture: ComponentFixture<<%= entityAngularName %>Detail>;
+<%_ if (anyFieldIsBlobDerived) { _%>
+  let dataUtils: DataUtils;
+<%_ } _%>
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
+      providers: [
+        provideRouter(
+          [
+            {
+              path: '**',
+              loadComponent: () => import('./<%= entityFileName %>-detail').then(m => m.<%= entityAngularName %>Detail),
+              resolve: { <%= entityInstance %>: () => of(<%- testEntity %>) },
+            },
+          ],
+          withComponentInputBinding()
+        ),
+      ],
+    });
+    const library = TestBed.inject(FaIconLibrary);
+    library.addIcons(faArrowLeft);
+    library.addIcons(faPencilAlt);
+<%_ if (anyFieldIsBlobDerived) { _%>
+    dataUtils = TestBed.inject(DataUtils);
+    jest.spyOn(window, 'open').mockImplementation(() => null);
+<%_ } _%>
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(<%= entityAngularName %>Detail);
+    comp = fixture.componentInstance;
+  });
+
+  describe('OnInit', () => {
+    it('should load <%= entityInstance %> on init', async () => {
+      const harness = await RouterTestingHarness.create();
+      const instance = await harness.navigateByUrl('/', <%= entityAngularName %>Detail);
+
+      // THEN
+      expect(instance.<%= entityInstance %>()).toEqual(expect.objectContaining(<%- testEntity %>));
+    });
+  });
+
+  describe('PreviousState', () => {
+    it('should navigate to previous state', () => {
+      jest.spyOn(window.history, 'back');
+      comp.previousState();
+      expect(window.history.back).toHaveBeenCalled();
+    });
+  });
+
+<%_ if (anyFieldIsBlobDerived) { _%>
+  describe('byteSize', () => {
+    it('should call byteSize from DataUtils', () => {
+      // GIVEN
+      jest.spyOn(dataUtils, 'byteSize');
+      const fakeBase64 = 'fake base64';
+
+      // WHEN
+      comp.byteSize(fakeBase64);
+
+      // THEN
+      expect(dataUtils.byteSize).toHaveBeenCalledWith(fakeBase64);
+    });
+  });
+
+  describe('openFile', () => {
+    it('should call openFile from DataUtils', () => {
+      const newWindow = { ...window };
+      window.open = jest.fn(() => newWindow);
+      window.onload = jest.fn(() => newWindow) as any;
+      window.URL.createObjectURL = jest.fn() as any;
+      // GIVEN
+      jest.spyOn(dataUtils, 'openFile');
+      const fakeContentType = 'fake content type';
+      const fakeBase64 = 'fake base64';
+
+      // WHEN
+      comp.openFile(fakeBase64, fakeContentType);
+
+      // THEN
+      expect(dataUtils.openFile).toHaveBeenCalledWith(fakeBase64, fakeContentType);
+    });
+  });
+<%_ } _%>
+});

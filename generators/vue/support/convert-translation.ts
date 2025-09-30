@@ -23,8 +23,8 @@ export function convertVueTranslations(body: string) {
   return body.replace(/\{\{\s*(\w+)\s*\}\}/g, '{ $1 }').replace(/([@|||$])/g, "{'$1'}");
 }
 
-const convertTranslationsSupport = ({ clientSrcDir }: { clientSrcDir: string }) => {
-  const minimatch = new Minimatch(`**/${clientSrcDir}i18n/**/*.json`);
+const convertTranslationsSupport = ({ clientI18nDir }: { clientI18nDir: string }) => {
+  const minimatch = new Minimatch(`**/${clientI18nDir}**/*.json`);
   const isTranslationFile = (file: { path: string }) => minimatch.match(file.path);
   const transform = passthrough(file => {
     if (isTranslationFile(file)) {

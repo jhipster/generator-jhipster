@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWriteFilesSection, asWritingTask } from '../base-application/support/index.js';
-import { clientApplicationTemplatesBlock, clientRootTemplatesBlock } from '../client/support/files.js';
-import type { Application as ClientApplication, Entity as ClientEntity } from '../client/types.js';
+import { asWriteFilesSection, asWritingTask } from '../base-application/support/index.ts';
+import { clientApplicationTemplatesBlock, clientRootTemplatesBlock } from '../client/support/files.ts';
+import type { Application as ClientApplication, Entity as ClientEntity } from '../client/types.ts';
 
 export const files = asWriteFilesSection({
   common: [
@@ -303,7 +303,7 @@ export const files = asWriteFilesSection({
   ],
 });
 
-export const writeFiles = asWritingTask<ClientEntity, ClientApplication<ClientEntity>>(async function writeFiles({ application }) {
+export const writeFiles = asWritingTask<ClientEntity, ClientApplication>(async function writeFiles({ application }) {
   if (!application.clientFrameworkReact) return;
 
   await this.writeFiles({

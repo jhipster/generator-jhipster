@@ -1,8 +1,10 @@
-import path, { basename, join } from 'path';
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { before, describe, expect, it } from 'esmocha';
-import { skipPrettierHelpers as helpers, runResult } from '../../lib/testing/index.js';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import path, { basename, join } from 'node:path';
+
+import { runResult, skipPrettierHelpers as helpers } from '../../lib/testing/index.ts';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
+import type GeneratorsByNamespace from '../types.ts';
 
 const exceptSourceMethods = ['addLiquibaseChangelog', 'addLiquibaseIncrementalChangelog', 'addLiquibaseConstraintsChangelog'];
 
@@ -167,13 +169,13 @@ relationship ManyToMany {
   One to Another
 }`;
 
-const exceptMockedGenerators = [
+const exceptMockedGenerators: (keyof GeneratorsByNamespace)[] = [
   'jdl',
   'app',
   'server',
   'spring-boot',
-  'java:bootstrap',
-  'java:domain',
+  'jhipster:java:bootstrap',
+  'jhipster:java:domain',
   'liquibase',
   'spring-data-relational',
 ];

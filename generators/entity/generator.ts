@@ -17,19 +17,20 @@
  * limitations under the License.
  */
 
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
+
 import chalk from 'chalk';
 import { upperFirst } from 'lodash-es';
-
 import type { Storage } from 'yeoman-generator';
-import BaseApplicationGenerator from '../base-application/index.js';
-import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
-import { reservedKeywords } from '../../lib/jhipster/index.js';
-import { GENERATOR_ENTITIES } from '../generator-list.js';
-import { getDBTypeFromDBValue, hibernateSnakeCase } from '../server/support/index.js';
+
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
-import type { Features } from '../base/types.js';
+import { reservedKeywords } from '../../lib/jhipster/index.ts';
+import type { Features } from '../base/types.ts';
+import BaseApplicationGenerator from '../base-application/index.ts';
+import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
+import { getDBTypeFromDBValue, hibernateSnakeCase } from '../server/support/index.ts';
+
 import {
   askForDTO,
   askForFields,
@@ -42,22 +43,17 @@ import {
   askForRelationships,
   askForService,
   askForUpdate,
-} from './prompts.js';
+} from './prompts.ts';
 import type {
   Application as EntityApplication,
   Config as EntityConfig,
   Entity as EntityEntity,
   Options as EntityOptions,
-} from './types.js';
+} from './types.ts';
 
 const { isReservedClassName } = reservedKeywords;
 
-export default class EntityGenerator extends BaseApplicationGenerator<
-  EntityEntity,
-  EntityApplication<EntityEntity>,
-  EntityConfig,
-  EntityOptions
-> {
+export default class EntityGenerator extends BaseApplicationGenerator<EntityEntity, EntityApplication, EntityConfig, EntityOptions> {
   name!: string;
   application: any = {};
   microserviceConfig?: any;
@@ -89,7 +85,7 @@ export default class EntityGenerator extends BaseApplicationGenerator<
     existingEnum?: boolean;
   };
 
-  constructor(args: string | string[], options: EntityOptions, features: Features) {
+  constructor(args?: string[], options?: EntityOptions, features?: Features) {
     super(args, options, { unique: 'argument', ...features });
   }
 
@@ -99,7 +95,7 @@ export default class EntityGenerator extends BaseApplicationGenerator<
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplication();
+      await this.dependsOnBootstrap('app');
     }
   }
 
@@ -193,7 +189,7 @@ export default class EntityGenerator extends BaseApplicationGenerator<
 The entity ${context.name} is being updated.
 `);
             try {
-              // We are generating a entity from a microservice.
+              // We are generating an entity from a microservice.
               // Load it directly into our entity configuration.
               this.microserviceConfig = this.fs.readJSON(context.microserviceFileName);
               if (this.microserviceConfig) {
@@ -227,10 +223,8 @@ The entity ${context.name} is being updated.
       bootstrapConfig({ application }) {
         const context = this.entityData;
         const entityName = context.name;
-        if ([APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_GATEWAY].includes(application.applicationType!)) {
-          if (this.entityConfig.databaseType === undefined) {
-            this.entityConfig.databaseType = context.databaseType!;
-          }
+        if ([APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_GATEWAY].includes(application.applicationType as any)) {
+          this.entityConfig.databaseType ??= context.databaseType!;
         }
         context.useConfigurationFile = context.configurationFileExists || context.useConfigurationFile;
         if (context.configurationFileExists) {
@@ -263,7 +257,7 @@ The entity ${entityName} is being created.
       askForPagination,
       async composeEntities() {
         // We need to compose with others entities to update relationships.
-        await this.composeWithJHipster(GENERATOR_ENTITIES, {
+        await this.composeWithJHipster('entities', {
           generatorArgs: this.options.singleEntity ? [this.entityData.name] : [],
         });
       },
@@ -293,9 +287,6 @@ The entity ${entityName} is being created.
    * all variables should be set to dest,
    * all variables should be referred from context,
    * all methods should be called on generator,
-   * @param {any} generator - generator instance
-   * @param {any} context - context to use default is generator instance
-   * @param {any} dest - destination context to use default is context
    */
   _setupEntityOptions() {
     this.entityData.regenerate = this.options.regenerate;
@@ -337,7 +328,7 @@ The entity ${entityName} is being created.
     if (!/^([a-zA-Z0-9]*)$/.test(entityName)) {
       return 'The entity name must be alphanumeric only';
     }
-    if (/^[0-9].*$/.test(entityName)) {
+    if (/^\d.*$/.test(entityName)) {
       return 'The entity name cannot start with a number';
     }
     if (entityName === '') {

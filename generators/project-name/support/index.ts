@@ -16,5 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './basename-properties.js';
-export { default as getDefaultAppName } from './name-resolver.js';
+export * from '../application.ts';
+export { default as getDefaultAppName } from './name-resolver.ts';

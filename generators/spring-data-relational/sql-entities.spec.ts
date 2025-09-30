@@ -1,25 +1,24 @@
 import { before, describe, expect, it } from 'esmocha';
+
+import { cacheTypes, databaseTypes } from '../../lib/jhipster/index.ts';
 import {
   buildSamplesFromMatrix,
   buildServerMatrix,
+  defaultHelpers as helpers,
   entitiesServerSamples as entities,
   extendFilteredMatrix,
   extendMatrix,
-  defaultHelpers as helpers,
   runResult,
-} from '../../lib/testing/index.js';
-import { filterBasicServerGenerators } from '../server/__test-support/index.js';
+} from '../../lib/testing/index.ts';
+import { filterBasicServerGenerators } from '../server/__test-support/index.ts';
 
-import { cacheTypes, databaseTypes } from '../../lib/jhipster/index.js';
-import { GENERATOR_SERVER } from '../generator-list.js';
+const GENERATOR_SERVER = 'server';
 
 const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
 const { NO: NO_CACHE_PROVIDER, EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
 
-let sqlSamples = buildServerMatrix();
-
-sqlSamples = extendMatrix(sqlSamples, {
+let sqlSamples = extendMatrix(buildServerMatrix(), {
   prodDatabaseType: [POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE],
   enableHibernateCache: [false, true],
 });

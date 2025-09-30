@@ -17,8 +17,9 @@
  * limitations under the License.
  */
 
-import type AbstractJDLOption from '../../core/models/abstract-jdl-option.js';
-import Validator from './validator.js';
+import type AbstractJDLOption from '../../core/models/abstract-jdl-option.ts';
+
+import Validator from './validator.ts';
 
 export default class OptionValidator extends Validator {
   constructor(optionType: string, additionalFieldToCheck?: string) {

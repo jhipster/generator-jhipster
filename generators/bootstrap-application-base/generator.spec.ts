@@ -16,29 +16,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname, join } from 'path';
-import { fileURLToPath } from 'url';
 import { before, beforeEach, describe, expect, it } from 'esmocha';
-import { snakeCase } from 'lodash-es';
+import { basename, dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { basicTests, shouldSupportFeatures } from '../../test/support/tests.js';
-import { parseChangelog } from '../base/support/timestamp.js';
-import Generator from './index.js';
+import { parseChangelog } from '../base/support/timestamp.ts';
+
+import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
-const generatorPath = join(__dirname, 'index.js');
+const generatorPath = join(__dirname, 'index.ts');
 
 describe(`generator - ${generator}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
-  it('generator-list esm exports constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
   basicTests({
     requiredConfig: {},
@@ -76,7 +70,7 @@ describe(`generator - ${generator}`, () => {
   });
   describe('nextTimestamp', () => {
     describe('when there is no configured lastLiquibaseTimestamp', () => {
-      let firstChangelogDate;
+      let firstChangelogDate: string;
       before(async () => {
         await helpers.runJHipster(generator).withJHipsterConfig();
         firstChangelogDate = runResult.generator.nextTimestamp();
@@ -89,7 +83,7 @@ describe(`generator - ${generator}`, () => {
       });
     });
     describe('when a past lastLiquibaseTimestamp is configured', () => {
-      let firstChangelogDate;
+      let firstChangelogDate: string;
       before(async () => {
         const lastLiquibaseTimestamp = new Date(2000, 1, 1);
         await helpers.runJHipster(generator).withJHipsterConfig({ lastLiquibaseTimestamp: lastLiquibaseTimestamp.getTime() });
@@ -106,8 +100,8 @@ describe(`generator - ${generator}`, () => {
       });
     });
     describe('when a future lastLiquibaseTimestamp is configured', () => {
-      let firstChangelogDate;
-      let secondChangelogDate;
+      let firstChangelogDate: string;
+      let secondChangelogDate: string;
       beforeEach(async () => {
         const lastLiquibaseTimestamp = new Date(Date.parse('2030-01-01'));
         await helpers
@@ -132,8 +126,8 @@ describe(`generator - ${generator}`, () => {
       });
     });
     describe('with reproducible=false argument', () => {
-      let firstChangelogDate;
-      let secondChangelogDate;
+      let firstChangelogDate: string;
+      let secondChangelogDate: string;
       before(async () => {
         await helpers.runJHipster(generator).withJHipsterConfig();
         firstChangelogDate = runResult.generator.nextTimestamp();
@@ -151,8 +145,8 @@ describe(`generator - ${generator}`, () => {
       });
     });
     describe('with a past creationTimestamp option', () => {
-      let firstChangelogDate;
-      let secondChangelogDate;
+      let firstChangelogDate: string;
+      let secondChangelogDate: string;
 
       before(async () => {
         await helpers.runJHipster(generator).withJHipsterConfig().withOptions({ creationTimestamp: '2000-01-01' });

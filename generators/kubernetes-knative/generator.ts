@@ -19,13 +19,9 @@
 
 import chalk from 'chalk';
 
-import BaseWorkspacesGenerator from '../base-workspaces/index.js';
-import { BaseKubernetesGenerator } from '../kubernetes/generator.ts';
-
-import { checkImages, configureImageNames } from '../base-workspaces/internal/docker-base.js';
-import { checkHelm } from '../kubernetes/kubernetes-base.js';
-import { buildToolTypes, kubernetesPlatformTypes } from '../../lib/jhipster/index.js';
-import { getJdbcUrl } from '../spring-data-relational/support/index.js';
+import { buildToolTypes, kubernetesPlatformTypes } from '../../lib/jhipster/index.ts';
+import BaseWorkspacesGenerator from '../base-workspaces/index.ts';
+import { checkImages, configureImageNames } from '../base-workspaces/internal/docker-base.ts';
 import {
   askForAdminPassword,
   askForApps,
@@ -35,9 +31,11 @@ import {
   askForMonitoring,
   askForPath,
   askForServiceDiscovery,
-} from '../base-workspaces/internal/docker-prompts.js';
-import { askForIngressDomain, askForKubernetesNamespace } from '../kubernetes/prompts.js';
-import { askForGeneratorType } from './prompts.js';
+} from '../base-workspaces/internal/docker-prompts.ts';
+import { BaseKubernetesGenerator } from '../kubernetes/generator.ts';
+import { checkHelm } from '../kubernetes/kubernetes-base.ts';
+import { askForIngressDomain, askForKubernetesNamespace } from '../kubernetes/prompts.ts';
+import { getJdbcUrl } from '../spring-data-relational/support/index.ts';
 
 import {
   applicationHelmFiles,
@@ -46,7 +44,8 @@ import {
   deploymentHelmFiles,
   deploymentKnativeFiles,
   deploymentKubernetesFiles,
-} from './files.js';
+} from './files.ts';
+import { askForGeneratorType } from './prompts.ts';
 
 const { GeneratorTypes } = kubernetesPlatformTypes;
 const { MAVEN } = buildToolTypes;

@@ -27,7 +27,7 @@
     "entitySuffix": "",
     "dtoSuffix": "DTO",
     "enableTranslation": false,
-    "clientPackageManager": "npm",
+    "nodePackageManager": "npm",
     "skipClient": true,
     "nativeLanguage": "en",
     "skipUserManagement": true

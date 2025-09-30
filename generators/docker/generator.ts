@@ -18,21 +18,23 @@
  */
 
 import { intersection } from 'lodash-es';
-import BaseApplicationGenerator from '../base-simple-application/index.js';
-import { createDockerComposeFile, createDockerExtendedServices } from '../docker/support/index.js';
+
+import { stringHashCode } from '../../lib/utils/index.ts';
 import { createFaker } from '../base-application/support/index.ts';
-import { stringHashCode } from '../../lib/utils/index.js';
-import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.js';
-import type { Application as SpringBootApplication } from '../spring-boot/index.js';
-import type { Application as SpringDataRelationalApplication } from '../spring-data-relational/index.js';
-import { dockerFiles } from './files.js';
-import { SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from './constants.js';
+import BaseApplicationGenerator from '../base-simple-application/index.ts';
+import type { Application as SpringBootApplication } from '../spring-boot/index.ts';
+import type { Application as SpringDataRelationalApplication } from '../spring-data-relational/index.ts';
+import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.ts';
+
+import { SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from './constants.ts';
+import { dockerFiles } from './files.ts';
+import { createDockerComposeFile, createDockerExtendedServices } from './support/index.ts';
 import type {
   Application as DockerApplication,
   Config as DockerConfig,
   Options as DockerOptions,
   Source as DockerSource,
-} from './types.js';
+} from './types.ts';
 
 // Current implementation adds support for docker services and add docker services based on SpringBoot generated application.
 // Splitting this generator into bootstrap generator (only injects docker support) and jhipster(adds docker service based on spring-boot implementation) should be considered.
@@ -47,7 +49,8 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:bootstrap-application-server');
+      await this.dependsOnBootstrap('common');
+      await this.dependsOnBootstrap('docker');
     }
   }
 
@@ -313,7 +316,7 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
   get end() {
     return this.asEndTaskGroup({
       async dockerComposeUp({ control }) {
-        if (!control.enviromentHasDockerCompose) {
+        if (!control.environmentHasDockerCompose) {
           this.log('');
           this.log.warn(
             'Docker Compose V2 is not installed on your computer. Some features may not work as expected. Read https://docs.docker.com/compose/install/',

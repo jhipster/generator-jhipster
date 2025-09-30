@@ -1,0 +1,32 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "jhipster",
+    "buildTool": "gradle",
+    "cacheProvider": "ehcache",
+    "clientFramework": "vue",
+    "clientTheme": "none",
+    "clientThemeVariant": "primary",
+    "creationTimestamp": 1594452153587,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Memory",
+    "dtoSuffix": "DTO",
+    "enableTranslation": true,
+    "entitySuffix": "",
+    "jhiPrefix": "",
+    "jwtSecretKey": "NGJiOTZiMWFlMmQ5NmVkNzhmNzA1NjgxYmNlYjI2MzgwZGE3MzAwY2VkZDc0MThmMzM4MjRiODg0ZWVkYTVkNzU1MDNiODM1YjJmMjBhMDJhYzQwZTViNDUwMzA4YjJlOGYxZjhkYzQ1M2RlMGY1ZGQyYmFlOWVmZGYxMjEyODQ=",
+    "languages": ["en"],
+    "nativeLanguage": "en",
+    "packageFolder": "tech/jhipster/sample",
+    "packageName": "tech.jhipster.sample",
+    "prodDatabaseType": "mysql",
+    "reactive": false,
+    "rememberMeKey": "a5e93fdeb16e2ee2dc4a629b5dbdabb30f968e418dfc0483c53afdc695cfac96d06cf5c581cbefb93e3aaa241880857fcafe",
+    "searchEngine": "no",
+    "serverPort": "8080",
+    "serviceDiscoveryType": "no",
+    "testFrameworks": ["gatling", "cypress"],
+    "websocket": "spring-websocket"
+  }
+}

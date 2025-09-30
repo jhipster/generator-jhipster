@@ -1,5 +1,4 @@
-import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
-import { GENERATOR_WORKSPACES } from '../generator-list.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 
 const command = {
   arguments: {
@@ -68,7 +67,7 @@ const command = {
       scope: 'generator',
     },
   },
-  import: [GENERATOR_WORKSPACES],
+  import: ['workspaces'],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

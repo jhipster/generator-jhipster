@@ -28,7 +28,7 @@
 # ===================================================================
 # Standard Spring Boot properties.
 # Full reference is available at:
-# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# https://docs.spring.io/spring-boot/appendix/application-properties/index.html
 # ===================================================================
 
 <%_ if (databaseTypeNeo4j && !databaseMigrationLiquibase) { _%>
@@ -185,7 +185,7 @@ server:
 jhipster:
 <%_ if (!skipClient) { _%>
   clientApp:
-    name: "<%= frontendAppName %>"
+    name: "<%= locals.frontendAppName %>"
 <%_ } _%>
   mail:
     from: <%= baseName %>@localhost.com

@@ -45,7 +45,7 @@ module.exports = async (env, options) => {
       resolve: {
         extensions: ['.ts', '.js', '.vue', '.json'],
         alias: {
-          vue$: '@vue/compat/dist/vue.esm-bundler.js',
+          vue$: 'vue/dist/vue.esm-bundler.js',
           '@': resolve('<%= this.relativeDir(clientRootDir, clientSrcDir) %>app'),
         },
       },
@@ -140,6 +140,7 @@ module.exports = async (env, options) => {
           APP_VERSION: JSON.stringify(config.version),
           SERVER_API_URL: JSON.stringify(config.serverApiUrl),
           __VUE_PROD_DEVTOOLS__: false,
+          __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
         }),
         new HtmlWebpackPlugin({
           base: '/',

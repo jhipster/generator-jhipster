@@ -54,15 +54,15 @@ export const SessionsPage = () => {
         </Translate>
       </h2>
 
-      {updateSuccess ? (
+      {updateSuccess && (
         <Alert color="success">
           <Translate contentKey="sessions.messages.success">
             <strong>Session invalidated!</strong>
           </Translate>
         </Alert>
-      ) : null}
+      )}
 
-      {updateFailure ? (
+      {updateFailure && (
         <Alert color="danger">
           <Translate contentKey="sessions.messages.error">
             <span>
@@ -70,7 +70,7 @@ export const SessionsPage = () => {
             </span>
           </Translate>
         </Alert>
-      ) : null}
+      )}
 
       <Button color="primary" onClick={refreshList}>
         Refresh

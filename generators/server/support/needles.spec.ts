@@ -17,10 +17,12 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'esmocha';
-import { defaultHelpers as helpers, runResult } from '../../../lib/testing/index.js';
-import { GENERATOR_SPRING_BOOT } from '../../generator-list.js';
-import { insertContentIntoApplicationProperties } from './needles.js';
 
+import { defaultHelpers as helpers, runResult } from '../../../lib/testing/index.ts';
+
+import { insertContentIntoApplicationProperties } from './needles.ts';
+
+const GENERATOR_SPRING_BOOT = 'spring-boot';
 describe('generator - server - support - needles', () => {
   describe('generated project', () => {
     before(async () => {
@@ -66,7 +68,7 @@ describe('generator - server - support - needles', () => {
               return bar;
             }
         };`;
-        let snapshot;
+        let snapshot: ReturnType<typeof runResult.getSnapshot>;
 
         before(() => {
           const application = runResult.application!;
@@ -75,7 +77,7 @@ describe('generator - server - support - needles', () => {
             propertyGetter,
             propertyClass,
           });
-          snapshot = runResult.getSnapshot(file => fileRegexp.test(file.path));
+          snapshot = runResult.getSnapshot((file: any) => fileRegexp.test(file.path));
         });
 
         it('should match snapshot', () => {
@@ -121,25 +123,25 @@ public class ApplicationProperties {
 `);
         });
 
-        it('should not be add the content at second call', () => {
+        it('should not add the content at second call', () => {
           const application = runResult.application!;
           insertContentIntoApplicationProperties.call(runResult.generator, application, {
             property,
             propertyGetter,
             propertyClass,
           });
-          expect(runResult.getSnapshot(file => fileRegexp.test(file.path))).toEqual(snapshot);
+          expect(runResult.getSnapshot((file: any) => fileRegexp.test(file.path))).toEqual(snapshot);
         });
 
-        it('should not be add new content with prettier differences', () => {
+        it('should not add new content with prettier differences', () => {
           const application = runResult.application!;
           insertContentIntoApplicationProperties.call(runResult.generator, application, {
             property: '  private   Foo   foo;',
           });
-          expect(runResult.getSnapshot(file => fileRegexp.test(file.path))).toEqual(snapshot);
+          expect(runResult.getSnapshot((file: any) => fileRegexp.test(file.path))).toEqual(snapshot);
         });
 
-        it('should not be add new content with prettier differences and new lines', () => {
+        it('should not add new content with prettier differences and new lines', () => {
           const application = runResult.application!;
           insertContentIntoApplicationProperties.call(runResult.generator, application, {
             property: `  private Foo getFoo() {
@@ -149,7 +151,7 @@ public class ApplicationProperties {
     };
 `,
           });
-          expect(runResult.getSnapshot(file => fileRegexp.test(file.path))).toEqual(snapshot);
+          expect(runResult.getSnapshot((file: any) => fileRegexp.test(file.path))).toEqual(snapshot);
         });
       });
     });

@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
-import { GENERATOR_INIT } from '../generator-list.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
+
 import {
   ADDITIONAL_SUB_GENERATORS,
   CLI_OPTION,
@@ -27,7 +27,7 @@ import {
   LINK_JHIPSTER_DEPENDENCY,
   LOCAL_BLUEPRINT_OPTION,
   SUB_GENERATORS,
-} from './constants.js';
+} from './constants.ts';
 
 const command = {
   configs: {
@@ -174,7 +174,7 @@ const command = {
       scope: 'storage',
     },
   },
-  import: [GENERATOR_INIT],
+  import: ['init'],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

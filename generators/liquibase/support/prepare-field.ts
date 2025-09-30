@@ -19,9 +19,10 @@
  */
 
 import type { ValueOf } from 'type-fest';
-import { databaseTypes, fieldTypes } from '../../../lib/jhipster/index.js';
+
 import { fieldTypesValues } from '../../../lib/jhipster/field-types.ts';
-import { mutateData } from '../../../lib/utils/index.js';
+import { databaseTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
+import { mutateData } from '../../../lib/utils/index.ts';
 import type { Application as LiquibaseApplication, Entity as LiquibaseEntity, Field as LiquibaseField } from '../types.d.ts';
 
 const { MYSQL, MARIADB } = databaseTypes;
@@ -46,7 +47,6 @@ const liquibaseFieldTypeByFieldType = {
   [fieldTypesValues.BYTES]: '${blobType}',
   [fieldTypesValues.STRING]: 'varchar',
   [fieldTypesValues.BOOLEAN]: 'boolean',
-  [fieldTypesValues.ENUM]: 'string',
   [fieldTypesValues.BYTE_BUFFER]: '${blobType}',
   [fieldTypesValues.BLOB]: '${blobType}',
   [fieldTypesValues.ANY_BLOB]: '${blobType}',
@@ -82,7 +82,6 @@ export const liquibaseLoadColumnTypeByFieldType = {
   '${blobType}': 'blob',
   '${clobType}': 'clob',
   varchar: 'string',
-  string: 'string',
   '${uuidType}': '${uuidType}',
 } as const satisfies Record<LiquibaseColumnType, string>;
 
@@ -92,15 +91,15 @@ function parseLiquibaseLoadColumnType(application: LiquibaseApplication<Liquibas
   const columnType = field.columnType!;
 
   if (field.fieldIsEnum) {
-    return liquibaseLoadColumnTypeByFieldType.string;
+    return liquibaseLoadColumnTypeByFieldType.varchar;
   }
 
   const { prodDatabaseType } = application;
   if (columnType === '${uuidType}' && (prodDatabaseType === MYSQL || prodDatabaseType === MARIADB)) {
-    return liquibaseLoadColumnTypeByFieldType.string;
+    return liquibaseLoadColumnTypeByFieldType.varchar;
   }
 
-  return liquibaseLoadColumnTypeByFieldType[columnType] ?? liquibaseLoadColumnTypeByFieldType.string;
+  return liquibaseLoadColumnTypeByFieldType[columnType] ?? liquibaseLoadColumnTypeByFieldType.varchar;
 }
 
 export default function prepareField(application: LiquibaseApplication<LiquibaseEntity>, field: LiquibaseField): LiquibaseField {

@@ -1,9 +1,13 @@
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../core/application-types.ts';
-import { authenticationTypes } from '../../jhipster/index.js';
+import { authenticationTypes } from '../../jhipster/index.ts';
 
 const { JWT, OAUTH2, SESSION } = authenticationTypes;
 export const AuthenticationTypeMatrix = {
   authenticationType: [OAUTH2, JWT, SESSION],
+};
+
+export const ReactiveMatrix = {
+  reactive: [false, true],
 };
 
 export const MatrixMonolith = {

@@ -1,11 +1,13 @@
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 import { upperFirst } from 'lodash-es';
 import type { Merge } from 'type-fest';
+
 import type { YoRcConfigValue, YoRcFileContent } from '../constants/yeoman.ts';
 import { YO_RC_FILE } from '../constants/yeoman.ts';
-import type { Entity } from '../jhipster/types/entity.js';
-import type { YoRcJHipsterContent } from '../jhipster/types/yo-rc.js';
+import type { Entity } from '../jhipster/types/entity.ts';
+import type { YoRcJHipsterContent } from '../jhipster/types/yo-rc.ts';
 
 export const YO_RC_CONFIG_KEY = 'generator-jhipster';
 

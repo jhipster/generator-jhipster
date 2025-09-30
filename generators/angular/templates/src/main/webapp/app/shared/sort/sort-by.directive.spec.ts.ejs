@@ -34,14 +34,14 @@ import { SortState, sortStateSignal } from './sort-state';
         <tr <%= jhiPrefix %>Sort [(sortState)]="sortState" (sortChange)="transition($event)">
           <th <%= jhiPrefix %>SortBy="name">
             ID
-            <fa-icon [icon]="'sort'"></fa-icon>
+            <fa-icon [icon]="'sort'" />
           </th>
         </tr>
       </thead>
     </table>
   `,
 })
-class TestSortByDirectiveComponent {
+class TestSortByDirective {
   sortState = sortStateSignal({ predicate: 'name' });
   transition = jest.fn();
 
@@ -54,15 +54,12 @@ class TestSortByDirectiveComponent {
 }
 
 describe('Directive: SortByDirective', () => {
-  let component: TestSortByDirectiveComponent;
-  let fixture: ComponentFixture<TestSortByDirectiveComponent>;
+  let component: TestSortByDirective;
+  let fixture: ComponentFixture<TestSortByDirective>;
   let tableHead: DebugElement;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TestSortByDirectiveComponent],
-    }).compileComponents();
-    fixture = TestBed.createComponent(TestSortByDirectiveComponent);
+  beforeEach(() => {
+    fixture = TestBed.createComponent(TestSortByDirective);
     component = fixture.componentInstance;
     tableHead = fixture.debugElement.query(By.directive(SortByDirective));
   });

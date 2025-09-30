@@ -26,7 +26,6 @@ import { useLoginModal } from '@/account/login-modal';
 import type AccountService from '../account.service';
 
 export default defineComponent({
-  compatConfig: { MODE: 3 },
   setup() {
     const authenticationError: Ref<boolean> = ref(false);
     const login: Ref<string> = ref(null);
@@ -47,7 +46,7 @@ export default defineComponent({
       try {
         const result = await axios.post('api/authenticate', data);
         const bearerToken = result.headers.authorization;
-        if (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') {
+        if (bearerToken?.startsWith('Bearer ')) {
           const jwt = bearerToken.slice(7, bearerToken.length);
           if (rememberMe.value) {
             localStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', jwt);

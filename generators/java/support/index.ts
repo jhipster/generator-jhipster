@@ -16,18 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './add-java-annotation.js';
-export * from './artifacts.js';
-export * from './checks/index.js';
-export * from './doc.js';
-export * from './files.js';
-export { default as generatedAnnotationTransform } from './generated-annotation-transform.js';
-export * from './java-enum.js';
-export * from './java-file-edit.js';
-export * from './java-formatting.js';
-export * from './key-store.js';
-export { default as packageInfoTransform } from './package-info-transform.js';
-export * from './package-info-transform.js';
-export * from './prepare-entity.js';
-export * from './reserved-keywords.js';
-export * from './util.js';
+export * from './add-java-annotation.ts';
+export * from './artifacts.ts';
+export * from './checks/index.ts';
+export * from './doc.ts';
+export * from './files.ts';
+export { default as generatedAnnotationTransform } from './generated-annotation-transform.ts';
+export * from './java-enum.ts';
+export * from './java-file-edit.ts';
+export * from './java-formatting.ts';
+export * from './key-store.ts';
+export { default as packageInfoTransform } from './package-info-transform.ts';
+export * from './package-info-transform.ts';
+export * from './prepare-entity.ts';
+export * from './reserved-keywords.ts';
+export * from './util.ts';

@@ -16,40 +16,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname, extname, isAbsolute, join, join as joinPath, relative } from 'path';
-import { relative as posixRelative } from 'path/posix';
-import { fileURLToPath } from 'url';
-import { existsSync, rmSync, statSync } from 'fs';
-import assert from 'assert';
+import assert from 'node:assert';
+import { existsSync, rmSync, statSync } from 'node:fs';
+import { basename, dirname, extname, isAbsolute, join, join as joinPath, relative } from 'node:path';
+import { relative as posixRelative } from 'node:path/posix';
+import { fileURLToPath } from 'node:url';
+
 import { requireNamespace } from '@yeoman/namespace';
 import type { GeneratorMeta } from '@yeoman/types';
 import chalk from 'chalk';
-import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
-import { get, kebabCase, merge, mergeWith, set, snakeCase } from 'lodash-es';
-import { simpleGit } from 'simple-git';
-import type { CopyOptions } from 'mem-fs-editor';
 import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
-import semver, { lt as semverLessThan } from 'semver';
-import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-generator';
-import type Environment from 'yeoman-environment';
 import latestVersion from 'latest-version';
+import { get, kebabCase, merge, mergeWith, set, snakeCase } from 'lodash-es';
+import type { CopyOptions } from 'mem-fs-editor';
+import semver, { lt as semverLessThan } from 'semver';
+import { simpleGit } from 'simple-git';
+import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
+import type Environment from 'yeoman-environment';
+import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-generator';
 
-import { CRLF, LF, type Logger, hasCrlr, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.js';
 import type {
   ExportGeneratorOptionsFromCommand,
   ExportStoragePropertiesFromCommand,
   JHipsterArguments,
   JHipsterCommandDefinition,
   JHipsterConfigs,
-  ParseableCommand,
-} from '../../lib/command/index.js';
-import { packageJson } from '../../lib/index.js';
-import baseCommand from '../base/command.js';
-import { dockerPlaceholderGenerator } from '../docker/utils.js';
+  ParsableCommand,
+} from '../../lib/command/index.ts';
+import { convertConfigToOption, extractArgumentsFromConfigs } from '../../lib/command/index.ts';
+import { packageJson } from '../../lib/index.ts';
+import { CRLF, LF, type Logger, hasCrlf, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.ts';
+import baseCommand from '../base/command.ts';
+import { dockerPlaceholderGenerator } from '../docker/utils.ts';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
-import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.js';
-import { convertConfigToOption, extractArgumentsFromConfigs } from '../../lib/command/index.js';
-import { convertWriteFileSectionsToBlocks, loadConfig, loadConfigDefaults, loadDerivedConfig } from './internal/index.js';
+import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.ts';
+import type GeneratorsByNamespace from '../types.ts';
+import type { GeneratorsWithBootstrap } from '../types.ts';
+
 import type {
   CascatedEditFileCallback,
   EditFileCallback,
@@ -57,10 +60,12 @@ import type {
   ValidationResult,
   WriteContext,
   WriteFileOptions,
-} from './api.js';
+} from './api.ts';
+import { convertWriteFileSectionsToBlocks, loadConfig, loadConfigDefaults, loadDerivedConfig } from './internal/index.ts';
+import { createJHipster7Context } from './internal/jhipster7-context.ts';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.ts';
-import { joinCallbacks } from './support/index.js';
-import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions, GenericTaskGroup } from './types.js';
+import { joinCallbacks } from './support/index.ts';
+import type { Config as CoreConfig, Features as CoreFeatures, GenericTask, Options as CoreOptions } from './types.ts';
 
 const {
   INITIALIZING,
@@ -160,7 +165,7 @@ export default class CoreGenerator<
   declare log: Logger;
   declare _meta?: GeneratorMeta;
 
-  constructor(args: string | string[], options: Options, features: Features) {
+  constructor(args?: string[], options?: Options, features?: Features) {
     super(args, options, {
       skipParseOptions: true,
       tasksMatchingPriority: true,
@@ -221,7 +226,7 @@ export default class CoreGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asAnyTaskGroup(taskGroup: GenericTaskGroup<this, any, any>): GenericTaskGroup<any, any, any> {
+  asAnyTaskGroup<const T extends Record<string, GenericTask<this, any>>>(taskGroup: T): Record<keyof T, GenericTask<any, any>> {
     return taskGroup;
   }
 
@@ -334,20 +339,34 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       },
     });
 
+    const { loadCommand = [], skipLoadCommand } = this.getFeatures();
+
     this.queueTask({
       queueName: QUEUES.LOADING_QUEUE,
       taskName: 'loadCurrentCommand',
       cancellable: true,
       async method() {
-        try {
-          const command = await this.#getCurrentJHipsterCommand();
-          if (!command.configs) return;
+        if (!skipLoadCommand) {
+          try {
+            const command = await this.#getCurrentJHipsterCommand();
+            if (!command.configs) return;
 
+            const context = this.context;
+            loadConfig.call(this, command.configs, { application: context });
+            loadDerivedConfig(command.configs, { application: context });
+          } catch {
+            // Ignore non existing command
+          }
+        }
+
+        if (loadCommand.length > 0) {
           const context = this.context;
-          loadConfig.call(this, command.configs, { application: context });
-          loadDerivedConfig(command.configs, { application: context });
-        } catch {
-          // Ignore non existing command
+          for (const commandToLoad of loadCommand) {
+            if (commandToLoad.configs) {
+              loadConfig.call(this, commandToLoad.configs, { application: context });
+              loadDerivedConfig(commandToLoad.configs, { application: context });
+            }
+          }
         }
       },
     });
@@ -357,14 +376,25 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       taskName: 'preparingCurrentCommand',
       cancellable: true,
       async method() {
-        try {
-          const command = await this.#getCurrentJHipsterCommand();
-          if (!command.configs) return;
+        if (!skipLoadCommand) {
+          try {
+            const command = await this.#getCurrentJHipsterCommand();
+            if (!command.configs) return;
 
+            const context = this.context;
+            loadConfigDefaults(command.configs, { context, scopes: ['blueprint', 'storage', 'context'] });
+          } catch {
+            // Ignore non existing command
+          }
+        }
+
+        if (loadCommand.length > 0) {
           const context = this.context;
-          loadConfigDefaults(command.configs, { context, scopes: ['blueprint', 'storage', 'context'] });
-        } catch {
-          // Ignore non existing command
+          for (const commandToLoad of loadCommand) {
+            if (commandToLoad.configs) {
+              loadConfigDefaults(commandToLoad.configs, { context, scopes: ['blueprint', 'storage', 'context'] });
+            }
+          }
         }
       },
     });
@@ -482,6 +512,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         if (optionsDesc.scope === 'storage') {
           this.config.set(optionName as keyof Config, optionValue);
         } else if (optionsDesc.scope === 'blueprint') {
+          if (!this.blueprintStorage) {
+            throw new Error('Blueprint storage is not initialized');
+          }
           this.blueprintStorage!.set(optionName, optionValue);
         } else if (optionsDesc.scope === 'generator') {
           (this as Record<string, any>)[optionName] = optionValue;
@@ -515,7 +548,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
           // Positional arguments already parsed or a single argument.
           argument = Array.isArray(positionalArguments) ? positionalArguments.shift() : positionalArguments;
         } else {
-          // Varags argument.
+          // Varargs argument.
           argument = positionalArguments;
           positionalArguments = [];
         }
@@ -530,6 +563,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
           } else if (argumentDef.scope === 'storage') {
             this.config.set(argumentName as keyof Config, convertedValue);
           } else if (argumentDef.scope === 'blueprint') {
+            if (!this.blueprintStorage) {
+              throw new Error('Blueprint storage is not initialized');
+            }
             this.blueprintStorage!.set(argumentName, convertedValue);
           }
         }
@@ -558,6 +594,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
             promptSpec = { ...promptSpec, default: () => (this.jhipsterConfigWithDefaults as Record<string, any>)[name] };
           }
         } else if (def.scope === 'blueprint') {
+          if (!this.blueprintStorage) {
+            throw new Error('Blueprint storage is not initialized');
+          }
           storage = this.blueprintStorage;
         } else if (def.scope === 'generator') {
           storage = {
@@ -601,9 +640,39 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   }
 
   /**
+   * Compose with a jhipster generator using default jhipster config, but queue it immediately.
+   */
+  async dependsOnJHipster<const G extends keyof GeneratorsByNamespace>(
+    gen: G,
+    options?: ComposeOptions<GeneratorsByNamespace[G]>,
+  ): Promise<GeneratorsByNamespace[G]>;
+  async dependsOnJHipster(gen: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator>;
+  async dependsOnJHipster(generator: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator> {
+    return this.composeWithJHipster(generator, {
+      ...options,
+      schedule: false,
+    });
+  }
+
+  /**
+   * Compose with a jhipster bootstrap generator using default jhipster config, but queue it immediately.
+   */
+  dependsOnBootstrap<const G extends GeneratorsWithBootstrap>(
+    gen: G,
+    options?: ComposeOptions<GeneratorsByNamespace[`jhipster:${G}:bootstrap`]>,
+  ) {
+    return this.dependsOnJHipster(`jhipster:${gen}:bootstrap`, options);
+  }
+
+  /**
    * Compose with a jhipster generator using default jhipster config.
    * @return {object} the composed generator
    */
+  async composeWithJHipster<const G extends keyof GeneratorsByNamespace>(
+    gen: G,
+    options?: ComposeOptions<GeneratorsByNamespace[G]>,
+  ): Promise<GeneratorsByNamespace[G]>;
+  async composeWithJHipster(gen: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator>;
   async composeWithJHipster(gen: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator> {
     assert(typeof gen === 'string', 'generator should to be a string');
     let generator: string = gen;
@@ -703,22 +772,27 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     assert(paramCount > 0, 'One of sections, blocks or templates is required');
     assert(paramCount === 1, 'Only one of sections, blocks or templates must be provided');
 
-    const { context: templateData = {} } = options;
+    let { context: templateData = {} } = options;
     const { rootTemplatesPath, customizeTemplatePath = file => file, transform: methodTransform = [] } = options;
     const startTime = new Date().getMilliseconds();
     const { customizeTemplatePaths: contextCustomizeTemplatePaths = [] } = templateData as WriteContext;
 
     const { jhipster7Migration } = this.getFeatures();
+    if (jhipster7Migration) {
+      templateData = createJHipster7Context(this, options.context ?? {}, {
+        log: jhipster7Migration === 'verbose' ? (msg: string) => this.log.info(msg) : () => {},
+      });
+    }
 
     /* Build lookup order first has preference.
      * Example
      * rootTemplatesPath = ['reactive', 'common']
-     * jhipsterTemplatesFolders = ['/.../generator-jhispter-blueprint/server/templates', '/.../generator-jhispter/server/templates']
+     * jhipsterTemplatesFolders = ['/.../generator-jhipster-blueprint/server/templates', '/.../generator-jhipster/server/templates']
      *
-     * /.../generator-jhispter-blueprint/server/templates/reactive/templatePath
-     * /.../generator-jhispter-blueprint/server/templates/common/templatePath
-     * /.../generator-jhispter/server/templates/reactive/templatePath
-     * /.../generator-jhispter/server/templates/common/templatePath
+     * /.../generator-jhipster-blueprint/server/templates/reactive/templatePath
+     * /.../generator-jhipster-blueprint/server/templates/common/templatePath
+     * /.../generator-jhipster/server/templates/reactive/templatePath
+     * /.../generator-jhipster/server/templates/common/templatePath
      */
     let rootTemplatesAbsolutePath: string | string[];
     if (!rootTemplatesPath) {
@@ -1035,7 +1109,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       // null return should be treated like an error.
     }
 
-    if (!originalContent) {
+    if (typeof originalContent !== 'string') {
       const { ignoreNonExisting, create } = actualOptions;
       const errorMessage = typeof ignoreNonExisting === 'string' ? ` ${ignoreNonExisting}.` : '';
       if (!create || transformCallbacks.length === 0) {
@@ -1055,7 +1129,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     const writeCallback = (...callbacks: EditFileCallback<this>[]): CascatedEditFileCallback<this> => {
       const { autoCrlf = this.jhipsterConfigWithDefaults.autoCrlf, assertModified } = actualOptions;
       try {
-        const fileHasCrlf = autoCrlf && hasCrlr(newContent);
+        const fileHasCrlf = autoCrlf && hasCrlf(newContent);
         newContent = joinCallbacks(...callbacks).call(this, fileHasCrlf ? normalizeLineEndings(newContent, LF) : newContent, filePath);
         if (assertModified && originalContent === newContent) {
           const errorMessage = `${chalk.yellow('Fail to modify ')}${filePath}.`;
@@ -1250,7 +1324,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 }
 
 export class CommandCoreGenerator<
-  Command extends ParseableCommand,
+  Command extends ParsableCommand,
   AdditionalOptions = unknown,
   AdditionalFeatures = unknown,
 > extends CoreGenerator<

@@ -16,12 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './basename.js';
-export * from './contents.js';
-export * from './derived-property.js';
-export * from './logger.js';
-export * from './namespace.js';
-export * from './object.js';
-export * from './path.js';
-export * from './secret.js';
-export * from './string.js';
+export * from './basename.ts';
+export * from './contents.ts';
+export * from './derived-property.ts';
+export * from './logger.ts';
+export * from './namespace.ts';
+export * from './object.ts';
+export * from './path.ts';
+export * from './secret.ts';
+export * from './string.ts';

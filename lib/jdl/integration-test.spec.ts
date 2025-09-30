@@ -17,20 +17,23 @@
  * limitations under the License.
  */
 
+import { beforeEach, describe, expect as jestExpect, it } from 'esmocha';
+
 import { expect } from 'chai';
-import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import helpers from 'yeoman-test';
-import { APPLICATION_TYPE_MONOLITH } from '../core/application-types.js';
-import { convert as convertWithoutApplication } from './converters/jdl-to-json/jdl-without-application-to-json-converter.js';
-import exportToJDL from './converters/exporters/jdl-exporter.js';
+
+import { APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
+
+import exportToJDL from './converters/exporters/jdl-exporter.ts';
+import { convert as convertWithoutApplication } from './converters/jdl-to-json/jdl-without-application-to-json-converter.ts';
 import {
   createImporterFromContent,
   getTestFile,
   parseFromConfigurationObject,
   parseFromContent,
   parseFromFiles,
-} from './core/__test-support__/index.js';
-import type { ApplicationWithEntities } from './jdl-importer.js';
+} from './core/__test-support__/index.ts';
+import type { ApplicationWithEntities } from './jdl-importer.ts';
 
 describe('jdl - integration tests', () => {
   beforeEach(async () => {
@@ -38,8 +41,8 @@ describe('jdl - integration tests', () => {
   });
 
   describe('when parsing and exporting a JDL', () => {
-    let originalContent;
-    let writtenContent;
+    let originalContent: ReturnType<typeof parseFromConfigurationObject>;
+    let writtenContent: ReturnType<typeof parseFromConfigurationObject>;
 
     beforeEach(() => {
       originalContent = parseFromConfigurationObject({
@@ -84,7 +87,7 @@ entity A
         convertedJdl = jdlObject.toString();
       });
 
-      it('stringfied JDL should match original jdl', () => {
+      it('stringified JDL should match original jdl', () => {
         jestExpect(convertedJdl).toEqual(expectedJdl);
       });
       it('should result matching', () => {
@@ -440,7 +443,7 @@ application {
 
       it('should throw error', () => {
         const importer = createImporterFromContent(jdl);
-        jestExpect(() => importer.import()).toThrowError(/Blueprint namespace config foo requires the blueprint foo/);
+        jestExpect(() => importer.import()).toThrow(/Blueprint namespace config foo requires the blueprint foo/);
       });
     });
 

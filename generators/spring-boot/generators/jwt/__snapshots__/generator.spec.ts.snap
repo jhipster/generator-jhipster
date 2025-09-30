@@ -1,0 +1,232 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`generator - spring-boot:jwt reactive(false)-skipUserManagement(false) should call source snapshot 1`] = `
+{
+  "addJavaDefinition": [
+    {
+      "dependencies": [
+        {
+          "artifactId": "spring-boot-starter-security",
+          "groupId": "org.springframework.boot",
+        },
+        {
+          "artifactId": "spring-boot-starter-oauth2-resource-server",
+          "groupId": "org.springframework.boot",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`generator - spring-boot:jwt reactive(false)-skipUserManagement(false) should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/SecurityJwtConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/AuthenticateController.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/vm/LoginVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/management/SecurityMetersServiceTests.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/AuthenticationIntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/JwtAuthenticationTestUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenAuthenticationIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenAuthenticationSecurityMetersIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/AuthenticateControllerIT.java": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - spring-boot:jwt reactive(false)-skipUserManagement(true) should call source snapshot 1`] = `
+{
+  "addJavaDefinition": [
+    {
+      "dependencies": [
+        {
+          "artifactId": "spring-boot-starter-security",
+          "groupId": "org.springframework.boot",
+        },
+        {
+          "artifactId": "spring-boot-starter-oauth2-resource-server",
+          "groupId": "org.springframework.boot",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`generator - spring-boot:jwt reactive(false)-skipUserManagement(true) should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/SecurityInMemoryConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/SecurityJwtConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/AuthenticateController.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/vm/LoginVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/management/SecurityMetersServiceTests.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/AuthenticationIntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/JwtAuthenticationTestUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenAuthenticationIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenAuthenticationSecurityMetersIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/AuthenticateControllerIT.java": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - spring-boot:jwt reactive(true)-skipUserManagement(false) should call source snapshot 1`] = `
+{
+  "addJavaDefinition": [
+    {
+      "dependencies": [
+        {
+          "artifactId": "spring-boot-starter-security",
+          "groupId": "org.springframework.boot",
+        },
+        {
+          "artifactId": "spring-boot-starter-oauth2-resource-server",
+          "groupId": "org.springframework.boot",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`generator - spring-boot:jwt reactive(true)-skipUserManagement(false) should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/SecurityJwtConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/AuthenticateController.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/vm/LoginVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/management/SecurityMetersServiceTests.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/AuthenticationIntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/JwtAuthenticationTestUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenAuthenticationIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenAuthenticationSecurityMetersIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/AuthenticateControllerIT.java": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - spring-boot:jwt reactive(true)-skipUserManagement(true) should call source snapshot 1`] = `
+{
+  "addJavaDefinition": [
+    {
+      "dependencies": [
+        {
+          "artifactId": "spring-boot-starter-security",
+          "groupId": "org.springframework.boot",
+        },
+        {
+          "artifactId": "spring-boot-starter-oauth2-resource-server",
+          "groupId": "org.springframework.boot",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`generator - spring-boot:jwt reactive(true)-skipUserManagement(true) should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/SecurityJwtConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/management/SecurityMetersService.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/AuthenticateController.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/vm/LoginVM.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/management/SecurityMetersServiceTests.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/AuthenticationIntegrationTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/JwtAuthenticationTestUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenAuthenticationIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/jwt/TokenAuthenticationSecurityMetersIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/AuthenticateControllerIT.java": {
+    "stateCleared": "modified",
+  },
+}
+`;

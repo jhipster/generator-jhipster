@@ -1,6 +1,10 @@
-import { fileURLToPath } from 'url';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import { minimatch } from 'minimatch';
 import { simpleGit } from 'simple-git';
+
+import { testIntegrationRelativeFolder } from '../../constants.ts';
 
 export const getGitChanges = async (options: { allTrue?: boolean } = {}) => {
   let hasPatternChanges: (pattern: string, ignore?: string) => boolean;
@@ -15,7 +19,8 @@ export const getGitChanges = async (options: { allTrue?: boolean } = {}) => {
   }
 
   const hasClientWorkflowChanges = (client: 'angular' | 'react' | 'vue') =>
-    hasPatternChanges(`.github/workflows/${client}.yml`) || hasPatternChanges(`test-integration/workflow-samples/${client}.json`);
+    hasPatternChanges(`.github/workflows/${client}.yml`) ||
+    hasPatternChanges(join(testIntegrationRelativeFolder, `workflow-samples/${client}.json`));
   return {
     angular: hasPatternChanges('generators/angular/**'),
     angularWorkflow: hasClientWorkflowChanges('angular'),
@@ -23,7 +28,7 @@ export const getGitChanges = async (options: { allTrue?: boolean } = {}) => {
       hasPatternChanges('lib/**') ||
       hasPatternChanges('generators/*') ||
       hasPatternChanges('generators/{base*,bootstrap*,git,jdl,project-name}/**'),
-    ci: hasPatternChanges('.github/{actions,workflows}/**') || hasPatternChanges('test-integration/{,jdl}samples/**'),
+    ci: hasPatternChanges('.github/{actions,workflows}/**') || hasPatternChanges(join(testIntegrationRelativeFolder, '{,jdl}samples/**')),
     devBlueprint: hasPatternChanges('.blueprint/**'),
     devserverWorkflow: hasPatternChanges('.github/workflows/devserver.yml'),
     common: hasPatternChanges('generators/{app,common,docker,languages}/**'),
@@ -39,6 +44,6 @@ export const getGitChanges = async (options: { allTrue?: boolean } = {}) => {
     workspaces: hasPatternChanges('generators/{docker-compose,kubernetes*,workspaces}/**'),
     vue: hasPatternChanges('generators/vue/**'),
     vueWorkflow: hasClientWorkflowChanges('vue'),
-    sonarPr: hasPatternChanges('test-integration/sonar-pr/**'),
+    sonarPr: hasPatternChanges('.github/actions/sonar/**'),
   };
 };

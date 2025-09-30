@@ -46,8 +46,8 @@ Also add the option `--skip-jhipster-dependencies` to generate the application i
 
 To put it in a nutshell, you need to:
 
-1.  Run `npm link` on the `generator-jhipster` project (link globally) or configure jit executable
-2.  Run `jhipster --skip-jhipster-dependencies` on the generated application folder
+1. Run `npm link` on the `generator-jhipster` project (link globally) or configure jit executable
+2. Run `jhipster --skip-jhipster-dependencies` on the generated application folder
 
 You can execute `jhipster --install-path` to check where JHipster is being executed from.
 
@@ -187,6 +187,6 @@ Sub templates should be named with the `ejs` extension because it's the default 
 
     <%- include('../common/field_validators', {field, reactive}); -%>
 
-This statement means that [_PersistClass_.java.jhi.jakarta_validation.ejs](generators/server/templates/entity/src/main/java/package/domain/_PersistClass_.java.jhi.jakarta_validation.ejs) template includes [field_validators.ejs](generators/server/templates/entity/src/main/java/package/common/field_validators.ejs) sub template.
+This statement means that [_PersistClass_.java.jhi.jakarta_validation.ejs](generators/java/generators/domain/templates/src/main/java/_package_/_entityPackage_/domain/_persistClass_.java.jhi.jakarta_validation.ejs) template includes [field_validators.ejs](generators/java/generators/domain/templates/_global_partials_entity_/field_validators.ejs) sub template.
 
 Sub templates can be unit tested.

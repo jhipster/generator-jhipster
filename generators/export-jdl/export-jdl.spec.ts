@@ -1,6 +1,8 @@
 import { before, describe, expect, it } from 'esmocha';
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
-import { GENERATOR_EXPORT_JDL } from '../generator-list.js';
+
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
+
+const GENERATOR_EXPORT_JDL = 'export-jdl';
 
 const files = {
   '.jhipster/Country.json': {
@@ -373,7 +375,7 @@ describe('generator - export-jdl', () => {
     });
 
     it('should match snapshot', () => {
-      expect(runResult.getSnapshot(file => file.path.endsWith('.jdl'))).toMatchSnapshot();
+      expect(runResult.getSnapshot((file: any) => file.path.endsWith('.jdl'))).toMatchSnapshot();
     });
     it('creates the jdl file based on app name', () => {
       runResult.assertFile('standard.jdl');
@@ -391,7 +393,7 @@ describe('generator - export-jdl', () => {
     });
 
     it('should match snapshot', () => {
-      expect(runResult.getSnapshot(file => file.path.endsWith('.jdl'))).toMatchSnapshot();
+      expect(runResult.getSnapshot((file: any) => file.path.endsWith('.jdl'))).toMatchSnapshot();
     });
     it('creates the jdl file', () => {
       runResult.assertFile('custom-app.jdl');

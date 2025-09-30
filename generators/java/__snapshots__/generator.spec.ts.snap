@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`generator - java source api addItemsToJavaEnumFile should match file content 1`] = `
 {
@@ -59,25 +59,7 @@ exports[`generator - java with default config should match files snapshot 1`] = 
   "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/domain/Authority.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/domain/AssertUtils.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/domain/AuthorityAsserts.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/domain/AuthorityTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/domain/AuthorityTestSamples.java": {
     "stateCleared": "modified",
   },
 }

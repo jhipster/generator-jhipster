@@ -16,8 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_APP } from '../generator-list.js';
+import BaseApplicationGenerator from '../base-application/index.ts';
 
 export default class EntitiesGenerator extends BaseApplicationGenerator {
   entities?: string[];
@@ -56,7 +55,7 @@ export default class EntitiesGenerator extends BaseApplicationGenerator {
   get composing() {
     return this.asComposingTaskGroup({
       async composeApp() {
-        await this.composeWithJHipster(GENERATOR_APP, {
+        await this.composeWithJHipster('app', {
           generatorOptions: { skipPriorities: ['writing', 'postWriting'], entities: this.entities },
         });
       },

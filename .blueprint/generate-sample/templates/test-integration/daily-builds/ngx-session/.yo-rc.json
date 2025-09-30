@@ -1,0 +1,25 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "appNg2Jwt",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "ci": true,
+    "clientFramework": "angular",
+    "creationTimestamp": 1596513172471,
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "enableTranslation": true,
+    "jhiPrefix": "jhi",
+    "languages": ["en"],
+    "nativeLanguage": "en",
+    "packageFolder": "io/github/jhipster/app",
+    "packageName": "io.github.jhipster.app",
+    "prodDatabaseType": "mysql",
+    "rememberMeKey": "a5e93fdeb16e2ee2dc4a629b5dbdabb30f968e418dfc0483c53afdc695cfac96d06cf5c581cbefb93e3aaa241880857fcafe",
+    "searchEngine": false,
+    "serverPort": "8080",
+    "testFrameworks": ["gatling", "cypress"]
+  }
+}

@@ -16,8 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { Merge, OmitIndexSignature, Simplify } from 'type-fest';
-import type { TaskTypes as BaseTaskTypes, TaskParamWithControl, TaskParamWithSource } from '../base/tasks.js';
+import type { Merge } from 'type-fest';
+
+import type { MutateDataParam } from '../../lib/utils/object.ts';
+import type { TaskParamWithControl, TaskParamWithSource, TaskTypes as BaseTaskTypes } from '../base/tasks.ts';
+
 import type { Application as BaseSimpleApplicationApplication, Source as BaseSimpleApplicationSource } from './types.d.ts';
 
 export type ApplicationDefaultsTaskParam<A extends BaseSimpleApplicationApplication = BaseSimpleApplicationApplication> = {
@@ -36,20 +39,7 @@ export type ApplicationDefaultsTaskParam<A extends BaseSimpleApplicationApplicat
    *   { prop: ({ prop }) => prop + '-bar', prop2: 'won\'t override' },
    * );
    */
-  applicationDefaults: (
-    ...defaults: Simplify<
-      OmitIndexSignature<{
-        [Key in keyof (Partial<A> & { __override__?: boolean })]?: Key extends '__override__'
-          ? boolean
-          : Key extends keyof A
-            ? // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-              A[Key] extends Function
-              ? (ctx: A) => A[Key]
-              : A[Key] | ((ctx: A) => A[Key])
-            : never;
-      }>
-    >[]
-  ) => void;
+  applicationDefaults: (...defaults: MutateDataParam<A>[]) => void;
 };
 
 export type TaskParamWithApplication<A extends BaseSimpleApplicationApplication = BaseSimpleApplicationApplication> =

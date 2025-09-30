@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`generator - init help should print expected information 1`] = `
 "Usage: jhipster init [options]
@@ -37,9 +37,6 @@ exports[`generator - init with default config should write files and match snaps
     "stateCleared": "modified",
   },
   "README.md": {
-    "stateCleared": "modified",
-  },
-  "package.json": {
     "stateCleared": "modified",
   },
 }

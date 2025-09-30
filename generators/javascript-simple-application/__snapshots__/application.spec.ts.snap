@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`application mutation test expects mutateApplication to match snapshot 1`] = `
+{
+  "cjsExtension": ".js",
+  "clientPackageJsonScripts": {},
+  "clientRootDir": "",
+  "clientSrcDir": "src/main/webapp/",
+  "eslintConfigFile": "eslint.config.mjs",
+  "jhipsterPackageJson": "jhipsterPackageJson",
+  "jhipsterVersion": "jhipsterVersion",
+  "mjsExtension": ".js",
+  "nodeDependencies": {},
+  "nodePackageManager": "npm",
+  "nodePackageManagerCommand": "npm",
+  "nodeVersion": "nodeVersion",
+  "packageJsonScripts": {},
+  "prettierExtensions": [
+    "md",
+    "json",
+    "yml",
+    "js",
+    "cjs",
+    "mjs",
+    "ts",
+    "cts",
+    "mts",
+  ],
+  "prettierFolders": [
+    "",
+    ".blueprint/**/",
+  ],
+}
+`;

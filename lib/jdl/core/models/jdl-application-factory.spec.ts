@@ -18,17 +18,20 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import { createJDLApplication } from '../models/jdl-application-factory.js';
-import { createRuntime } from '../runtime.js';
-import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
+
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
+import { createRuntime } from '../runtime.ts';
+
+import { createJDLApplication } from './jdl-application-factory.ts';
 
 const runtime = createRuntime();
 
 describe('jdl - JDLApplicationFactory', () => {
   describe('createJDLApplication', () => {
     describe(`when passing a ${APPLICATION_TYPE_MICROSERVICE} config`, () => {
-      let application;
+      let application: ReturnType<typeof createJDLApplication>;
 
       before(() => {
         application = createJDLApplication({ applicationType: APPLICATION_TYPE_MICROSERVICE }, runtime);
@@ -39,7 +42,7 @@ describe('jdl - JDLApplicationFactory', () => {
       });
     });
     describe(`when passing a ${APPLICATION_TYPE_GATEWAY} config`, () => {
-      let application;
+      let application: ReturnType<typeof createJDLApplication>;
 
       before(() => {
         application = createJDLApplication({ applicationType: APPLICATION_TYPE_GATEWAY }, runtime);
@@ -50,7 +53,7 @@ describe('jdl - JDLApplicationFactory', () => {
       });
     });
     describe(`when passing a ${APPLICATION_TYPE_MONOLITH} config`, () => {
-      let application;
+      let application: ReturnType<typeof createJDLApplication>;
 
       before(() => {
         application = createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH }, runtime);

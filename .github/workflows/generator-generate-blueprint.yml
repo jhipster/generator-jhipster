@@ -40,20 +40,13 @@ jobs:
       # Install all tools and check configuration
       #----------------------------------------------------------------------
       - name: 'SETUP: Checkout generator-jhipster'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: generator-jhipster
           fetch-depth: 2
-      - name: 'SETUP: environment'
-        id: setup
-        uses: ./generator-jhipster/.github/actions/setup
-        with:
-          application-sample: ng-default
-          executable: jhipster-foo
+      - uses: ./generator-jhipster/.github/actions/setup-default-node-java
       - uses: jhipster/actions/setup-runner@v0
         with:
-          node-version: ${{ steps.setup.outputs.node-version }}
-          java-version: ${{ steps.setup.outputs.java-version }}
           maven-cache: true
           binary-dir: ${{ github.workspace }}/generator-jhipster/bin
       - run: npm ci --ignore-scripts
@@ -71,18 +64,16 @@ jobs:
           cd ..
           mkdir generator-jhipster-foo
           cd generator-jhipster-foo
-          cp $JHI_INTEG/generate-blueprint-samples/default/.yo-rc.json .
-          jhipster.cjs generate-blueprint --force --link-jhipster-dependency --generate-snapshots --skip-install
+          cp ${{ github.workspace }}/generator-jhipster/.blueprint/generate-sample/templates/test-integration/generate-blueprint-samples/default/.yo-rc.json .
+          jhipster.cjs generate-blueprint --force --link-jhipster-dependency --generate-snapshots
           npm link generator-jhipster
           npm link
-      - name: 'GENERATION: config'
-        run: $JHI_SCRIPTS/11-generate-config.sh
       - name: 'GENERATION: project'
-        run: $JHI_SCRIPTS/12-generate-project.sh ${{ matrix.extra-args }} ${{ matrix.new-extra-args }} --blueprints foo
+        run: jhipster-foo --defaults --client-test-frameworks cypress --skip-jhipster-dependencies
         env:
           JHI_CLI: jhipster.cjs
       - name: 'GENERATION: jhipster info'
-        run: $JHI_SCRIPTS/14-jhipster-info.sh
+        run: jhipster info
       #----------------------------------------------------------------------
       # Launch tests
       #----------------------------------------------------------------------

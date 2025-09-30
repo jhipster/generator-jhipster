@@ -1,11 +1,12 @@
-import assert from 'assert';
 import { before, describe, it } from 'esmocha';
-import { getEnumInfo } from './enum.js';
+import assert from 'node:assert';
+
+import { getEnumInfo } from './enum.ts';
 
 describe('base-application - support - enum', () => {
   describe('::getEnumInfo', () => {
     describe('when passing field data', () => {
-      let enumInfo;
+      let enumInfo: ReturnType<typeof getEnumInfo>;
 
       before(() => {
         const clientRootFolder = 'root';
@@ -27,7 +28,7 @@ describe('base-application - support - enum', () => {
       });
     });
     describe("when the enums don't have custom values", () => {
-      let enumInfo;
+      let enumInfo: ReturnType<typeof getEnumInfo>;
 
       before(() => {
         const clientRootFolder = 'root';
@@ -48,7 +49,7 @@ describe('base-application - support - enum', () => {
       });
     });
     describe('when some enums have custom values', () => {
-      let enumInfo;
+      let enumInfo: ReturnType<typeof getEnumInfo>;
 
       before(() => {
         const clientRootFolder = 'root';
@@ -74,7 +75,7 @@ describe('base-application - support - enum', () => {
     });
     describe('when all the enums have custom values', () => {
       describe('without spaces inside them', () => {
-        let enumInfo;
+        let enumInfo: ReturnType<typeof getEnumInfo>;
 
         before(() => {
           const clientRootFolder = 'root';
@@ -99,7 +100,7 @@ describe('base-application - support - enum', () => {
         });
       });
       describe('with spaces inside them', () => {
-        let enumInfo;
+        let enumInfo: ReturnType<typeof getEnumInfo>;
 
         before(() => {
           const clientRootFolder = 'root';
@@ -124,7 +125,7 @@ describe('base-application - support - enum', () => {
         });
       });
       describe('with comments over them', () => {
-        let enumInfo;
+        let enumInfo: ReturnType<typeof getEnumInfo>;
 
         before(() => {
           const clientRootFolder = 'root';
@@ -157,7 +158,7 @@ describe('base-application - support - enum', () => {
       });
     });
     describe('when not passing a client root folder', () => {
-      let enumInfo;
+      let enumInfo: ReturnType<typeof getEnumInfo>;
 
       before(() => {
         const field = { enumName: 'fieldName', fieldValues: 'AAA, BBB' };
@@ -169,7 +170,7 @@ describe('base-application - support - enum', () => {
       });
     });
     describe('when passing a client root folder', () => {
-      let enumInfo;
+      let enumInfo: ReturnType<typeof getEnumInfo>;
 
       before(() => {
         const field = { enumName: 'fieldName', fieldValues: 'AAA, BBB' };

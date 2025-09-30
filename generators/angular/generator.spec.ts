@@ -1,14 +1,13 @@
-import { basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
-import { snakeCase } from 'lodash-es';
+import { basename, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-import { buildClientSamples, entitiesClientSamples as entities, defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
-import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.js';
-import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
+import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
+import { buildClientSamples, defaultHelpers as helpers, entitiesClientSamples as entities, runResult } from '../../lib/testing/index.ts';
+import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
-import { GENERATOR_ANGULAR } from '../generator-list.js';
-import Generator from './index.js';
+
+import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -16,66 +15,63 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 
 const { ANGULAR: clientFramework } = clientFrameworkTypes;
-const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr', 'en'] };
+const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr' as const, 'en' as const] };
 
 const testSamples = buildClientSamples(commonConfig);
 
 const clientAdminFiles = (clientSrcDir: string) => [
-  `${clientSrcDir}app/admin/configuration/configuration.component.html`,
-  `${clientSrcDir}app/admin/configuration/configuration.component.ts`,
+  `${clientSrcDir}app/admin/configuration/configuration.html`,
+  `${clientSrcDir}app/admin/configuration/configuration.ts`,
   `${clientSrcDir}app/admin/configuration/configuration.service.ts`,
   `${clientSrcDir}app/admin/configuration/configuration.model.ts`,
-  `${clientSrcDir}app/admin/health/modal/health-modal.component.html`,
-  `${clientSrcDir}app/admin/health/modal/health-modal.component.ts`,
-  `${clientSrcDir}app/admin/health/health.component.html`,
-  `${clientSrcDir}app/admin/health/health.component.ts`,
+  `${clientSrcDir}app/admin/health/modal/health-modal.html`,
+  `${clientSrcDir}app/admin/health/modal/health-modal.ts`,
+  `${clientSrcDir}app/admin/health/health.html`,
+  `${clientSrcDir}app/admin/health/health.ts`,
   `${clientSrcDir}app/admin/health/health.service.ts`,
   `${clientSrcDir}app/admin/health/health.model.ts`,
   `${clientSrcDir}app/admin/logs/log.model.ts`,
-  `${clientSrcDir}app/admin/logs/logs.component.html`,
-  `${clientSrcDir}app/admin/logs/logs.component.ts`,
+  `${clientSrcDir}app/admin/logs/logs.html`,
+  `${clientSrcDir}app/admin/logs/logs.ts`,
   `${clientSrcDir}app/admin/logs/logs.service.ts`,
-  `${clientSrcDir}app/admin/metrics/blocks/jvm-memory/jvm-memory.component.ts`,
-  `${clientSrcDir}app/admin/metrics/blocks/jvm-memory/jvm-memory.component.html`,
-  `${clientSrcDir}app/admin/metrics/blocks/jvm-threads/jvm-threads.component.ts`,
-  `${clientSrcDir}app/admin/metrics/blocks/jvm-threads/jvm-threads.component.html`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-cache/metrics-cache.component.ts`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-cache/metrics-cache.component.html`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-datasource/metrics-datasource.component.ts`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-datasource/metrics-datasource.component.html`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.component.ts`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.component.html`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.component.ts`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.component.html`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.component.ts`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.component.html`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-request/metrics-request.component.ts`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-request/metrics-request.component.html`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-system/metrics-system.component.ts`,
-  `${clientSrcDir}app/admin/metrics/blocks/metrics-system/metrics-system.component.html`,
-  `${clientSrcDir}app/admin/metrics/metrics.component.html`,
-  `${clientSrcDir}app/admin/metrics/metrics.component.ts`,
+  `${clientSrcDir}app/admin/metrics/blocks/jvm-memory/jvm-memory.ts`,
+  `${clientSrcDir}app/admin/metrics/blocks/jvm-memory/jvm-memory.html`,
+  `${clientSrcDir}app/admin/metrics/blocks/jvm-threads/jvm-threads.ts`,
+  `${clientSrcDir}app/admin/metrics/blocks/jvm-threads/jvm-threads.html`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-cache/metrics-cache.ts`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-cache/metrics-cache.html`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-datasource/metrics-datasource.ts`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-datasource/metrics-datasource.html`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.ts`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.html`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.ts`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.html`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.ts`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.html`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-request/metrics-request.ts`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-request/metrics-request.html`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-system/metrics-system.ts`,
+  `${clientSrcDir}app/admin/metrics/blocks/metrics-system/metrics-system.html`,
+  `${clientSrcDir}app/admin/metrics/metrics.html`,
+  `${clientSrcDir}app/admin/metrics/metrics.ts`,
   `${clientSrcDir}app/admin/metrics/metrics.service.ts`,
   `${clientSrcDir}app/admin/metrics/metrics.model.ts`,
-  `${clientSrcDir}app/admin/configuration/configuration.component.spec.ts`,
+  `${clientSrcDir}app/admin/configuration/configuration.spec.ts`,
   `${clientSrcDir}app/admin/configuration/configuration.service.spec.ts`,
-  `${clientSrcDir}app/admin/health/modal/health-modal.component.spec.ts`,
-  `${clientSrcDir}app/admin/health/health.component.spec.ts`,
+  `${clientSrcDir}app/admin/health/modal/health-modal.spec.ts`,
+  `${clientSrcDir}app/admin/health/health.spec.ts`,
   `${clientSrcDir}app/admin/health/health.service.spec.ts`,
-  `${clientSrcDir}app/admin/logs/logs.component.spec.ts`,
+  `${clientSrcDir}app/admin/logs/logs.spec.ts`,
   `${clientSrcDir}app/admin/logs/logs.service.spec.ts`,
-  `${clientSrcDir}app/admin/metrics/metrics.component.spec.ts`,
+  `${clientSrcDir}app/admin/metrics/metrics.spec.ts`,
   `${clientSrcDir}app/admin/metrics/metrics.service.spec.ts`,
 ];
 
 describe(`generator - ${clientFramework}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 
-  checkEnforcements({ client: true }, GENERATOR_ANGULAR);
+  checkEnforcements({ client: true }, generator);
 
   it('samples matrix should match snapshot', () => {
     expect(testSamples).toMatchSnapshot();
@@ -92,7 +88,7 @@ describe(`generator - ${clientFramework}`, () => {
           .withSharedApplication({ gatewayServicesApiAvailable: sampleConfig.applicationType === 'gateway' })
           .withSharedApplication({ getWebappTranslation: () => 'translations' })
           .withMockedSource()
-          .withMockedGenerators(['jhipster:common', 'jhipster:languages']);
+          .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
       });
 
       it('should match generated files snapshot', () => {
@@ -132,22 +128,22 @@ describe(`generator - ${clientFramework}`, () => {
               `
   {
     path: 'configuration',
-    loadComponent: () => import('./configuration/configuration.component'),
+    loadComponent: () => import('./configuration/configuration'),
     title: 'configuration.title',
   },
   {
     path: 'health',
-    loadComponent: () => import('./health/health.component'),
+    loadComponent: () => import('./health/health'),
     title: 'health.title',
   },
   {
     path: 'logs',
-    loadComponent: () => import('./logs/logs.component'),
+    loadComponent: () => import('./logs/logs'),
     title: 'logs.title',
   },
   {
     path: 'metrics',
-    loadComponent: () => import('./metrics/metrics.component'),
+    loadComponent: () => import('./metrics/metrics'),
     title: 'metrics.title',
   },
 `,

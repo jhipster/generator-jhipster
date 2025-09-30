@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { JavaDependency, JavaDependencyVersion } from '../../java/types.js';
+import type { JavaDependency, JavaDependencyVersion } from '../../java/types.ts';
 
 const javaxCacheApi = {
   groupId: 'javax.cache',
@@ -147,6 +147,10 @@ export const getCacheProviderMavenDefinition: (
             groupId: 'org.infinispan',
             artifactId: 'infinispan-component-annotations',
             scope: 'compile',
+          },
+          {
+            groupId: 'io.micrometer',
+            artifactId: 'micrometer-registry-prometheus',
           },
         ],
       },

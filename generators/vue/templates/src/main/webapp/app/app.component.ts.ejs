@@ -19,6 +19,7 @@
 import { defineComponent, provide } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { storeToRefs } from 'pinia';
+import { BToastOrchestrator } from 'bootstrap-vue-next';
 
 <%_ if (!authenticationTypeOauth2) { _%>
 import { useLoginModal } from '@/account/login-modal';
@@ -31,15 +32,15 @@ import { useAlertService } from '@/shared/alert/alert.service';
 import '@/shared/config/dayjs';
 
 export default defineComponent({
-  compatConfig: { MODE: 3 },
   name: 'App',
   components: {
-    ribbon: Ribbon,
-    'jhi-navbar': JhiNavbar,
+    BToastOrchestrator,
+    Ribbon,
+    JhiNavbar,
 <%_ if (!authenticationTypeOauth2) { _%>
-    'login-form': LoginForm,
+    LoginForm,
 <%_ } _%>
-    'jhi-footer': JhiFooter,
+    JhiFooter,
   },
   setup() {
     provide('alertService', useAlertService());

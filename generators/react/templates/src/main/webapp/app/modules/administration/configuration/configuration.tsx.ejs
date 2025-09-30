@@ -78,7 +78,7 @@ export const ConfigurationPage = () => {
         </thead>
         <tbody>
           {configProps.contexts
-            ? Object.values(getContextList(configProps.contexts))
+            && Object.values(getContextList(configProps.contexts))
                 .filter(propsFilterFn)
                 .map((property: any, propIndex) => (
                   <tr key={propIndex}>
@@ -95,11 +95,11 @@ export const ConfigurationPage = () => {
                     </td>
                   </tr>
                 ))
-            : null}
+              }
         </tbody>
       </Table>
       {env.propertySources
-        ? env.propertySources.map((envKey, envIndex) => (
+        && env.propertySources.map((envKey, envIndex) => (
             <div key={envIndex}>
               <h4>
                 <span>{envKey.name}</span>
@@ -126,7 +126,7 @@ export const ConfigurationPage = () => {
               </Table>
             </div>
           ))
-        : null}
+        }
     </div>
   );
 };

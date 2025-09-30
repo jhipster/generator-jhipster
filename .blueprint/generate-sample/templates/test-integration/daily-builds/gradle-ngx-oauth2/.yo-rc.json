@@ -1,0 +1,24 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "oauth2",
+    "baseName": "appOauth2",
+    "buildTool": "gradle",
+    "cacheProvider": "ehcache",
+    "ci": true,
+    "clientFramework": "angular",
+    "creationTimestamp": 1596513172471,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableTranslation": true,
+    "jhiPrefix": "jhi",
+    "languages": ["en", "fr"],
+    "nativeLanguage": "en",
+    "packageFolder": "io/github/jhipster/app",
+    "packageName": "io.github.jhipster.app",
+    "prodDatabaseType": "postgresql",
+    "searchEngine": false,
+    "serverPort": "8080",
+    "testFrameworks": ["gatling", "cypress"]
+  }
+}

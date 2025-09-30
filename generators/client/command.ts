@@ -18,10 +18,10 @@
  */
 import chalk from 'chalk';
 import { intersection } from 'lodash-es';
-import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.js';
-import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
-import { GENERATOR_COMMON } from '../generator-list.js';
+
+import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
+import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
 
 const { CYPRESS } = testFrameworkTypes;
 const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
@@ -83,19 +83,7 @@ const command = {
         type: String,
         hide: true,
       },
-      choices: ['webpack', 'vite', 'experimentalEsbuild'],
-      scope: 'storage',
-    },
-    clientBundlerName: {
-      cli: { type: String, hide: true },
-      scope: 'storage',
-    },
-    clientTestFramework: {
-      cli: { type: String, hide: true },
-      scope: 'storage',
-    },
-    clientTestFrameworkName: {
-      cli: { type: String, hide: true },
+      choices: ['webpack', 'vite', 'esbuild'],
       scope: 'storage',
     },
     devServerPort: {
@@ -187,7 +175,7 @@ const command = {
       scope: 'storage',
     },
   },
-  import: [GENERATOR_COMMON],
+  import: ['common'],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

@@ -17,22 +17,25 @@
  * limitations under the License.
  */
 
-import { afterEach, before, describe, it, expect as jestExpect } from 'esmocha';
-import { expect } from 'chai';
-import { relationshipTypes } from '../basic-types/index.js';
-import { binaryOptions, unaryOptions } from '../built-in-options/index.js';
+import { afterEach, before, describe, expect as jestExpect, it } from 'esmocha';
 
-import JDLObject from '../models/jdl-object.js';
-import { createJDLApplication } from '.././__test-support__/index.js';
-import JDLDeployment from '../models/jdl-deployment.js';
-import { JDLEntity, JDLEnum } from '../models/index.js';
-import JDLField from '../models/jdl-field.js';
-import JDLValidation from '../models/jdl-validation.js';
-import JDLRelationship from '../models/jdl-relationship.js';
-import JDLUnaryOption from '../models/jdl-unary-option.js';
-import JDLBinaryOption from '../models/jdl-binary-option.js';
-import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
-import { createRuntime } from '../runtime.js';
+import { expect } from 'chai';
+
+import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
+import { createJDLApplication } from '../__test-support__/index.ts';
+import { relationshipTypes } from '../basic-types/index.ts';
+import { binaryOptions, unaryOptions } from '../built-in-options/index.ts';
+import { createRuntime } from '../runtime.ts';
+
+import { JDLEntity, JDLEnum } from './index.ts';
+import type JDLApplication from './jdl-application.ts';
+import JDLBinaryOption from './jdl-binary-option.ts';
+import JDLDeployment from './jdl-deployment.ts';
+import JDLField from './jdl-field.ts';
+import JDLObject from './jdl-object.ts';
+import JDLRelationship from './jdl-relationship.ts';
+import JDLUnaryOption from './jdl-unary-option.ts';
+import JDLValidation from './jdl-validation.ts';
 
 describe('jdl - JDLObject', () => {
   const runtime = createRuntime();
@@ -51,8 +54,8 @@ describe('jdl - JDLObject', () => {
       });
     });
     describe('when adding a valid application', () => {
-      let addedApplication;
-      let originalApplication;
+      let addedApplication: JDLApplication;
+      let originalApplication: JDLApplication;
 
       before(() => {
         const object = new JDLObject();
@@ -153,8 +156,8 @@ describe('jdl - JDLObject', () => {
       });
     });
     describe('when adding a valid application', () => {
-      let object;
-      let application;
+      let object: JDLObject;
+      let application: JDLDeployment;
 
       before(() => {
         object = new JDLObject();
@@ -248,8 +251,8 @@ describe('jdl - JDLObject', () => {
       });
     });
     describe('when adding a valid entity', () => {
-      let object;
-      let entity;
+      let object: JDLObject;
+      let entity: JDLEntity;
 
       before(() => {
         object = new JDLObject();
@@ -266,9 +269,9 @@ describe('jdl - JDLObject', () => {
       });
     });
     describe('when adding an entity with the same name', () => {
-      let object;
-      let entity;
-      let entity2;
+      let object: JDLObject;
+      let entity: JDLEntity;
+      let entity2: JDLEntity;
 
       before(() => {
         object = new JDLObject();
@@ -316,7 +319,7 @@ describe('jdl - JDLObject', () => {
   });
   describe('getEntities', () => {
     describe('when there are no entities', () => {
-      let object;
+      let object: JDLObject;
 
       before(() => {
         object = new JDLObject();
@@ -328,7 +331,7 @@ describe('jdl - JDLObject', () => {
     });
     describe('when there are entities', () => {
       let entity;
-      let returnedEntities;
+      let returnedEntities: JDLEntity[];
 
       before(() => {
         const object = new JDLObject();
@@ -457,8 +460,8 @@ describe('jdl - JDLObject', () => {
       });
     });
     describe('when adding a valid enum', () => {
-      let object;
-      let enumObject;
+      let object: JDLObject;
+      let enumObject: JDLEnum;
 
       before(() => {
         object = new JDLObject();
@@ -471,9 +474,9 @@ describe('jdl - JDLObject', () => {
       });
     });
     describe('when adding an enum with the same name', () => {
-      let object;
-      let enumObject;
-      let enumObject2;
+      let object: JDLObject;
+      let enumObject: JDLEnum;
+      let enumObject2: JDLEnum;
 
       before(() => {
         object = new JDLObject();
@@ -489,7 +492,7 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('getEnum', () => {
-    let object;
+    let object: JDLObject;
 
     before(() => {
       object = new JDLObject();
@@ -501,7 +504,7 @@ describe('jdl - JDLObject', () => {
       });
     });
     describe('when fetching an existing enum', () => {
-      let jdlEnum;
+      let jdlEnum: JDLEnum;
 
       before(() => {
         jdlEnum = new JDLEnum({ name: 'A' });
@@ -514,7 +517,7 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('hasEnum', () => {
-    let object;
+    let object: JDLObject;
 
     before(() => {
       object = new JDLObject();
@@ -526,7 +529,7 @@ describe('jdl - JDLObject', () => {
       });
     });
     describe('when fetching an existing enum', () => {
-      let jdlEnum;
+      let jdlEnum: JDLEnum;
 
       before(() => {
         jdlEnum = new JDLEnum({ name: 'A' });
@@ -627,8 +630,8 @@ describe('jdl - JDLObject', () => {
       });
     });
     describe('when adding a valid relationship', () => {
-      let object;
-      let relationship;
+      let object: JDLObject;
+      let relationship: JDLRelationship;
 
       before(() => {
         object = new JDLObject();
@@ -647,7 +650,7 @@ describe('jdl - JDLObject', () => {
       });
     });
     describe('when adding twice the same relationship', () => {
-      let object;
+      let object: JDLObject;
 
       before(() => {
         object = new JDLObject();
@@ -795,9 +798,9 @@ describe('jdl - JDLObject', () => {
       });
     });
     describe('when checking for a present option', () => {
-      let option1;
-      let option2;
-      let option3;
+      let option1: JDLUnaryOption;
+      let option2: JDLUnaryOption;
+      let option3: JDLUnaryOption;
 
       before(() => {
         option1 = new JDLUnaryOption({
@@ -981,15 +984,15 @@ describe('jdl - JDLObject', () => {
     });
   });
   describe('toString', () => {
-    let application;
-    let deployment;
-    let object;
-    let entityA;
-    let entityB;
-    let enumObject;
-    let relationship;
-    let option;
-    let option2;
+    let application: JDLApplication;
+    let deployment: JDLDeployment;
+    let object: JDLObject;
+    let entityA: JDLEntity;
+    let entityB: JDLEntity;
+    let enumObject: JDLEnum;
+    let relationship: JDLRelationship;
+    let option: JDLUnaryOption;
+    let option2: JDLBinaryOption;
 
     before(() => {
       object = new JDLObject();

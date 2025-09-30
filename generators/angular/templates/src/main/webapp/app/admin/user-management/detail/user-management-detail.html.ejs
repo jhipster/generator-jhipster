@@ -1,0 +1,82 @@
+<%#
+ Copyright 2013-2025 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+  @if (user(); as userRef) {
+    <div>
+      <h2>
+        <span>__jhiTranslateTag__('userManagement.detail.title')</span> [<strong>{{ userRef.login }}</strong>]
+      </h2>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>__jhiTranslateTag__('userManagement.login')</span></dt>
+        <dd>
+          <span>{{ userRef.login }}</span>
+        @if (userRef.activated) {
+          <span class="badge bg-success">__jhiTranslateTag__('userManagement.activated')</span>
+        } @else {
+          <span class="badge bg-danger">__jhiTranslateTag__('userManagement.deactivated')</span>
+        }
+        </dd>
+
+        <dt><span>__jhiTranslateTag__('userManagement.firstName')</span></dt>
+        <dd>{{ userRef.firstName }}</dd>
+
+        <dt><span>__jhiTranslateTag__('userManagement.lastName')</span></dt>
+        <dd>{{ userRef.lastName }}</dd>
+
+        <dt><span>__jhiTranslateTag__('userManagement.email')</span></dt>
+        <dd>{{ userRef.email }}</dd>
+<%_ if (enableTranslation) { _%>
+
+        <dt><span>__jhiTranslateTag__('userManagement.langKey')</span></dt>
+        <dd>{{ userRef.langKey }}</dd>
+<%_ } _%>
+
+        <dt><span>__jhiTranslateTag__('userManagement.createdBy')</span></dt>
+        <dd>{{ userRef.createdBy }}</dd>
+
+        <dt><span>__jhiTranslateTag__('userManagement.createdDate')</span></dt>
+        <dd>{{ userRef.createdDate | date: 'dd/MM/yy HH:mm' }}</dd>
+
+        <dt><span>__jhiTranslateTag__('userManagement.lastModifiedBy')</span></dt>
+        <dd>{{ userRef.lastModifiedBy }}</dd>
+
+        <dt><span>__jhiTranslateTag__('userManagement.lastModifiedDate')</span></dt>
+        <dd>{{ userRef.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</dd>
+
+        <dt><span>__jhiTranslateTag__('userManagement.profiles')</span></dt>
+        <dd>
+          <ul class="list-unstyled">
+          @for (authority of userRef.authorities; track $index) {
+            <li>
+              <span class="badge bg-info">{{ authority }}</span>
+            </li>
+          }
+          </ul>
+        </dd>
+      </dl>
+
+      <button type="submit" routerLink="../../" class="btn btn-info">
+        <fa-icon icon="arrow-left" />&nbsp;<span>__jhiTranslateTag__('entity.action.back')</span>
+      </button>
+    </div>
+  }
+  </div>
+</div>

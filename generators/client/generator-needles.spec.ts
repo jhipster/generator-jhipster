@@ -1,13 +1,21 @@
 import { before, describe, it } from 'esmocha';
-import { dryRunHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
+
+import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
+import { dryRunHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
 import { CLIENT_WEBPACK_DIR } from '../generator-constants.js';
-import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
-import ClientGenerator from './index.js';
+
+import ClientGenerator from './index.ts';
 
 const { ANGULAR, REACT } = clientFrameworkTypes;
 
+type MockBlueprintSubGenConstructorParamsT = ConstructorParameters<typeof ClientGenerator>;
+
 const mockBlueprintSubGen: any = class extends ClientGenerator {
-  constructor(args, opts, features) {
+  constructor(
+    args: MockBlueprintSubGenConstructorParamsT[0],
+    opts: MockBlueprintSubGenConstructorParamsT[1],
+    features: MockBlueprintSubGenConstructorParamsT[2],
+  ) {
     super(args, opts, { ...features, sbsBlueprint: true });
   }
 
@@ -21,7 +29,9 @@ const mockBlueprintSubGen: any = class extends ClientGenerator {
 };
 
 describe('needle API Webpack: JHipster client generator with blueprint', () => {
-  function generateAppWithClientFramework(clientFramework) {
+  function generateAppWithClientFramework(
+    clientFramework: Exclude<(typeof clientFrameworkTypes)[keyof typeof clientFrameworkTypes], 'svelte'>,
+  ) {
     return helpers
       .runJHipster('client')
       .withOptions({
@@ -37,6 +47,7 @@ describe('needle API Webpack: JHipster client generator with blueprint', () => {
         enableTranslation: true,
         nativeLanguage: 'en',
         languages: ['en', 'fr'],
+        clientBundler: 'webpack',
       })
       .withGenerators([[mockBlueprintSubGen, { namespace: 'jhipster-myblueprint:client' }]]);
   }

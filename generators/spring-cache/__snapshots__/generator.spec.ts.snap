@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`generator - spring-cache caffeine-gradle should match files snapshot 1`] = `
 {
@@ -8,19 +8,7 @@ exports[`generator - spring-cache caffeine-gradle should match files snapshot 1`
   "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -92,19 +80,12 @@ exports[`generator - spring-cache caffeine-gradle should match source calls 1`] 
       },
     ],
   ],
-  "mergePrettierConfig": [
+  "ignoreSonarRule": [
     {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
+      "ruleId": "S1192",
+      "ruleKey": "java:S1192",
     },
   ],
 }
@@ -115,19 +96,7 @@ exports[`generator - spring-cache caffeine-maven should match files snapshot 1`]
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -182,19 +151,12 @@ exports[`generator - spring-cache caffeine-maven should match source calls 1`] =
       },
     ],
   ],
-  "mergePrettierConfig": [
+  "ignoreSonarRule": [
     {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
+      "ruleId": "S1192",
+      "ruleKey": "java:S1192",
     },
   ],
 }
@@ -208,19 +170,7 @@ exports[`generator - spring-cache ehcache-gradle should match files snapshot 1`]
   "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -272,19 +222,12 @@ exports[`generator - spring-cache ehcache-gradle should match source calls 1`] =
       },
     ],
   ],
-  "mergePrettierConfig": [
+  "ignoreSonarRule": [
     {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
+      "ruleId": "S1192",
+      "ruleKey": "java:S1192",
     },
   ],
 }
@@ -295,19 +238,7 @@ exports[`generator - spring-cache ehcache-maven should match files snapshot 1`] 
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -354,19 +285,12 @@ exports[`generator - spring-cache ehcache-maven should match source calls 1`] = 
       },
     ],
   ],
-  "mergePrettierConfig": [
+  "ignoreSonarRule": [
     {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
+      "ruleId": "S1192",
+      "ruleKey": "java:S1192",
     },
   ],
 }
@@ -380,19 +304,7 @@ exports[`generator - spring-cache hazelcast-gradle should match files snapshot 1
   "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -465,19 +377,12 @@ exports[`generator - spring-cache hazelcast-gradle should match source calls 1`]
       },
     ],
   ],
-  "mergePrettierConfig": [
+  "ignoreSonarRule": [
     {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
+      "ruleId": "S1192",
+      "ruleKey": "java:S1192",
     },
   ],
 }
@@ -488,19 +393,7 @@ exports[`generator - spring-cache hazelcast-maven should match files snapshot 1`
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -548,19 +441,12 @@ exports[`generator - spring-cache hazelcast-maven should match source calls 1`] 
       },
     ],
   ],
-  "mergePrettierConfig": [
+  "ignoreSonarRule": [
     {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
+      "ruleId": "S1192",
+      "ruleKey": "java:S1192",
     },
   ],
 }
@@ -574,19 +460,7 @@ exports[`generator - spring-cache infinispan-gradle should match files snapshot 
   "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -641,6 +515,10 @@ exports[`generator - spring-cache infinispan-gradle should match source calls 1`
             "groupId": "org.infinispan",
             "scope": "compile",
           },
+          {
+            "artifactId": "micrometer-registry-prometheus",
+            "groupId": "io.micrometer",
+          },
         ],
       },
       {
@@ -648,19 +526,12 @@ exports[`generator - spring-cache infinispan-gradle should match source calls 1`
       },
     ],
   ],
-  "mergePrettierConfig": [
+  "ignoreSonarRule": [
     {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
+      "ruleId": "S1192",
+      "ruleKey": "java:S1192",
     },
   ],
 }
@@ -671,19 +542,7 @@ exports[`generator - spring-cache infinispan-maven should match files snapshot 1
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -733,6 +592,10 @@ exports[`generator - spring-cache infinispan-maven should match source calls 1`]
             "groupId": "org.infinispan",
             "scope": "compile",
           },
+          {
+            "artifactId": "micrometer-registry-prometheus",
+            "groupId": "io.micrometer",
+          },
         ],
       },
       {
@@ -740,19 +603,12 @@ exports[`generator - spring-cache infinispan-maven should match source calls 1`]
       },
     ],
   ],
-  "mergePrettierConfig": [
+  "ignoreSonarRule": [
     {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
+      "ruleId": "S1192",
+      "ruleKey": "java:S1192",
     },
   ],
 }
@@ -766,19 +622,7 @@ exports[`generator - spring-cache memcached-gradle should match files snapshot 1
   "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -840,19 +684,12 @@ exports[`generator - spring-cache memcached-gradle should match source calls 1`]
       },
     ],
   ],
-  "mergePrettierConfig": [
+  "ignoreSonarRule": [
     {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
+      "ruleId": "S1192",
+      "ruleKey": "java:S1192",
     },
   ],
 }
@@ -863,19 +700,7 @@ exports[`generator - spring-cache memcached-maven should match files snapshot 1`
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -932,19 +757,12 @@ exports[`generator - spring-cache memcached-maven should match source calls 1`] 
       },
     ],
   ],
-  "mergePrettierConfig": [
+  "ignoreSonarRule": [
     {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
+      "ruleId": "S1192",
+      "ruleKey": "java:S1192",
     },
   ],
 }
@@ -958,19 +776,7 @@ exports[`generator - spring-cache redis-gradle should match files snapshot 1`] =
   "buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/EmbeddedRedis.java": {
@@ -1043,19 +849,12 @@ exports[`generator - spring-cache redis-gradle should match source calls 1`] = `
       "value": "com.mycompany.myapp.config.RedisTestContainersSpringContextCustomizerFactory",
     },
   ],
-  "mergePrettierConfig": [
+  "ignoreSonarRule": [
     {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
+      "ruleId": "S1192",
+      "ruleKey": "java:S1192",
     },
   ],
 }
@@ -1066,19 +865,7 @@ exports[`generator - spring-cache redis-maven should match files snapshot 1`] = 
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/EmbeddedRedis.java": {
@@ -1146,19 +933,12 @@ exports[`generator - spring-cache redis-maven should match source calls 1`] = `
       "value": "com.mycompany.myapp.config.RedisTestContainersSpringContextCustomizerFactory",
     },
   ],
-  "mergePrettierConfig": [
+  "ignoreSonarRule": [
     {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
+      "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
+      "ruleId": "S1192",
+      "ruleKey": "java:S1192",
     },
   ],
 }

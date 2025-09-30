@@ -16,14 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
-import { snakeCase } from 'lodash-es';
+import { basename, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { getCommandHelpOutput, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
-import Generator from './index.js';
+
+import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -31,9 +31,6 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 
 describe(`generator - ${generator}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
   describe('help', () => {
     it('should print expected information', async () => {
@@ -55,6 +52,8 @@ describe(`generator - ${generator}`, () => {
           jhipsterPackageJson: expect.any(Object),
           springBootDependencies: expect.any(Object),
           translations: expect.any(Object),
+          addLanguageCallbacks: expect.any(Array),
+          supportedLanguages: expect.any(Array),
         });
       });
     });
@@ -78,6 +77,8 @@ describe(`generator - ${generator}`, () => {
           jwtSecretKey: expect.any(String),
           springBootDependencies: expect.any(Object),
           translations: expect.any(Object),
+          addLanguageCallbacks: expect.any(Array),
+          supportedLanguages: expect.any(Array),
         });
       });
     });
@@ -97,6 +98,8 @@ describe(`generator - ${generator}`, () => {
           jhipsterPackageJson: expect.any(Object),
           jwtSecretKey: expect.any(String),
           springBootDependencies: expect.any(Object),
+          addLanguageCallbacks: expect.any(Array),
+          supportedLanguages: expect.any(Array),
         });
       });
     });

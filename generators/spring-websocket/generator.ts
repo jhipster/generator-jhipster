@@ -17,8 +17,9 @@
  * limitations under the License.
  */
 import { JavaApplicationGenerator } from '../java/generator.ts';
-import writeTask from './files.js';
-import cleanupTask from './cleanup.js';
+
+import cleanupTask from './cleanup.ts';
+import writeTask from './files.ts';
 
 export default class SpringWebsocketGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
@@ -27,7 +28,7 @@ export default class SpringWebsocketGenerator extends JavaApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:java:bootstrap');
+      await this.dependsOnBootstrap('java');
     }
   }
 

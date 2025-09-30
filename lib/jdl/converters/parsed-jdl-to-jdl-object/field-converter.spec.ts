@@ -18,8 +18,10 @@
  */
 
 import { before, describe, expect, it } from 'esmocha';
-import type JDLField from '../../core/models/jdl-field.js';
-import { convertField } from './field-converter.js';
+
+import type JDLField from '../../core/models/jdl-field.ts';
+
+import { convertField } from './field-converter.ts';
 
 describe('jdl - FieldConverter', () => {
   describe('convertField', () => {
@@ -31,7 +33,7 @@ describe('jdl - FieldConverter', () => {
     });
     describe('when passing a parsed field', () => {
       describe('with all the attributes', () => {
-        let convertedField;
+        let convertedField: ReturnType<typeof convertField>;
 
         before(() => {
           convertedField = convertField({
@@ -54,7 +56,7 @@ JDLField {
         });
       });
       describe('with a capitalized name', () => {
-        let nameFromConvertedField;
+        let nameFromConvertedField: string;
 
         before(() => {
           const convertedField: JDLField = convertField({
@@ -70,7 +72,7 @@ JDLField {
         });
       });
       describe('with a comment', () => {
-        let commentFromConvertedField;
+        let commentFromConvertedField: ReturnType<typeof convertField>['comment'];
 
         before(() => {
           const convertedField = convertField({

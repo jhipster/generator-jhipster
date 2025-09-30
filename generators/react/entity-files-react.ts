@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asPostWritingEntitiesTask, asWriteFilesSection, asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
-import { clientApplicationTemplatesBlock, filterEntitiesForClient } from '../client/support/index.js';
-import type { Application as ClientApplication, Entity as ClientEntity } from '../client/types.js';
+import { asPostWritingEntitiesTask, asWriteFilesSection, asWritingEntitiesTask } from '../base-application/support/task-type-inference.ts';
+import { clientApplicationTemplatesBlock, filterEntitiesForClient } from '../client/support/index.ts';
+import type { Application as ClientApplication, Entity as ClientEntity } from '../client/types.ts';
 
 export const reactFiles = asWriteFilesSection({
   client: [
@@ -52,10 +52,7 @@ export const reactFiles = asWriteFilesSection({
   ],
 });
 
-export const writeEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientApplication<ClientEntity>>(async function ({
-  application,
-  entities,
-}) {
+export const writeEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientApplication>(async function ({ application, entities }) {
   for (const entity of (application.filterEntitiesAndPropertiesForClient ?? filterEntitiesForClient)(entities).filter(
     entity => !entity.builtInUser && !entity.embedded,
   )) {
@@ -66,7 +63,7 @@ export const writeEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientAppl
   }
 });
 
-export const postWriteEntitiesFiles = asPostWritingEntitiesTask<ClientEntity, ClientApplication<ClientEntity>>(async function ({
+export const postWriteEntitiesFiles = asPostWritingEntitiesTask<ClientEntity, ClientApplication>(async function ({
   application,
   entities,
   source,
@@ -77,7 +74,7 @@ export const postWriteEntitiesFiles = asPostWritingEntitiesTask<ClientEntity, Cl
   source.addEntitiesToClient({ application, entities: clientEntities });
 });
 
-export const cleanupEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientApplication<ClientEntity>>(function cleanupEntitiesFiles({
+export const cleanupEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientApplication>(function cleanupEntitiesFiles({
   application,
   control,
   entities,

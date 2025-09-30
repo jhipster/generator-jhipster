@@ -16,16 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import test from 'node:test';
 import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
-import { createJHipsterLogger } from '../../../lib/utils/index.js';
+import test from 'node:test';
+
+import { createJHipsterLogger } from '../../../lib/utils/index.ts';
+
 import {
   checkContentIn,
   convertToPrettierExpressions,
   createBaseNeedle,
   createNeedleCallback,
   insertContentBeforeNeedle,
-} from './needles.js';
+} from './needles.ts';
 
 describe('needles - support', () => {
   describe('convertToPrettierExpressions', () => {
@@ -338,7 +340,7 @@ content to add2
 
   describe('createBaseNeedle', () => {
     const needles = { aNeedle: 'content to add' };
-    let generator;
+    let generator: any;
 
     beforeEach(() => {
       generator = {
@@ -371,10 +373,10 @@ content to add2
 
     it('should execute editFile if generator and filePath is passed', () => {
       const filePath = 'file.foo';
-      createBaseNeedle.call(generator as any, { filePath }, needles);
-      expect(generator.editFile).toBeCalledTimes(1);
-      expect(generator.editFile.mock.lastCall[0]).toBe(filePath);
-      expect(typeof generator.editFile.mock.lastCall[1]).toBe('function');
+      createBaseNeedle.call(generator, { filePath }, needles);
+      expect(generator.editFile).toHaveBeenCalledTimes(1);
+      expect(generator.editFile.mock.lastCall?.[0]).toBe(filePath);
+      expect(typeof generator.editFile.mock.lastCall?.[1]).toBe('function');
     });
   });
 });

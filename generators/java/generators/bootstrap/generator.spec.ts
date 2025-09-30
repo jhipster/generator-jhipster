@@ -16,13 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { before, describe, expect, it } from 'esmocha';
 
+import { defaultHelpers as helpers, result } from '../../../../lib/testing/index.ts';
+import { testBootstrapEntities } from '../../../../test/support/bootstrap-tests.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
-import { defaultHelpers as helpers, result } from '../../../../lib/testing/index.js';
-import Generator from './index.js';
+
+import Generator from './generator.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -35,17 +37,23 @@ describe(`generator - ${generator}`, () => {
 
   describe('with default config', () => {
     before(async () => {
-      await helpers.runJHipster(generator).withJHipsterConfig();
+      await helpers.runJHipster(generator).withMockedJHipsterGenerators().withMockedSource().withSharedApplication({}).withJHipsterConfig({
+        skipClient: true,
+      });
     });
 
     it('should match files snapshot', () => {
       expect(result.getStateSnapshot()).toMatchSnapshot();
     });
+
+    it('should call source snapshot', () => {
+      expect(result.sourceCallsArg).toMatchSnapshot();
+    });
+
+    it('should compose with generators', () => {
+      expect(result.composedMockedGenerators).toMatchInlineSnapshot(`[]`);
+    });
   });
 
-  it('packageName with reserved keyword', async () => {
-    await expect(helpers.runJHipster(generator).withJHipsterConfig({ packageName: 'com.public.myapp' })).rejects.toThrow(
-      'The package name "com.public.myapp" contains a reserved Java keyword "public".',
-    );
-  });
+  testBootstrapEntities(generator);
 });

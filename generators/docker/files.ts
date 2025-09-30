@@ -1,6 +1,7 @@
 import { asWriteFilesSection } from '../base-application/support/task-type-inference.ts';
 import { TEMPLATES_DOCKER_DIR } from '../generator-constants.js';
-import type { Application as DockerApplication } from './types.js';
+
+import type { Application as DockerApplication } from './types.ts';
 
 const renameTo = (ctx: DockerApplication, filepath: string) =>
   `${ctx.dockerServicesDir}${filepath}`.replace('/_eureka_', '').replace('/_consul_', '');

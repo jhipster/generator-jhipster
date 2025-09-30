@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JavaApplicationGenerator } from '../../generator.ts';
 import { GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.js';
-import { javaMainResourceTemplatesBlock } from '../../support/files.js';
+import { JavaApplicationGenerator } from '../../generator.ts';
+import { javaMainResourceTemplatesBlock } from '../../support/files.ts';
 
 export default class OpenapiGeneratorGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
@@ -27,7 +27,7 @@ export default class OpenapiGeneratorGenerator extends JavaApplicationGenerator 
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplication();
+      await this.dependsOnBootstrap('java');
       await this.dependsOnJHipster('jhipster:java:build-tool');
     }
   }

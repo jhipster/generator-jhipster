@@ -1,5 +1,4 @@
-import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
-import { GENERATOR_APP, GENERATOR_GIT } from '../generator-list.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 
 const command = {
   configs: {
@@ -37,13 +36,13 @@ const command = {
     generateWith: {
       cli: {
         type: String,
-        default: GENERATOR_APP,
+        default: 'app',
         hide: true,
       },
       scope: 'generator',
     },
   },
-  import: [GENERATOR_GIT],
+  import: ['git'],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

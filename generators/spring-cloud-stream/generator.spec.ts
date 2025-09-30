@@ -16,15 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
-import { snakeCase } from 'lodash-es';
+import { basename, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
+import { messageBrokerTypes } from '../../lib/jhipster/index.ts';
+import { buildSamplesFromMatrix, buildServerMatrix, defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { buildSamplesFromMatrix, buildServerMatrix, defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
-import { messageBrokerTypes } from '../../lib/jhipster/index.js';
-import Generator from './index.js';
+
+import Generator from './index.ts';
 
 const { KAFKA } = messageBrokerTypes;
 
@@ -38,9 +38,6 @@ const commonConfig = { messageBroker: KAFKA };
 const testSamples = buildSamplesFromMatrix(buildServerMatrix(), { commonConfig });
 
 describe(`generator - ${generator}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 
@@ -67,7 +64,7 @@ describe(`generator - ${generator}`, () => {
           .withMockedJHipsterGenerators()
           .withMockedSource()
           .withJHipsterConfig(),
-      ).rejects.toThrowError(`The value 'foo' is not allowed for the option 'messageBroker'`);
+      ).rejects.toThrow(`The value 'foo' is not allowed for the option 'messageBroker'`);
     });
   });
 });

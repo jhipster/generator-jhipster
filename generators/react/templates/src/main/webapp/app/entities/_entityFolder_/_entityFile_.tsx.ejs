@@ -324,8 +324,8 @@ export const <%= entityReactName %> = () => {
 
   return (
     <div>
-      <h2 id="<%= entityFileName %>-heading" data-cy="<%= entityClass %>Heading">
-        <Translate contentKey="<%= i18nKeyPrefix %>.home.title"><%= entityClassPluralHumanized %></Translate>
+      <h2 id="<%= entityFileName %>-heading" data-cy="<%- entityNameCapitalized %>Heading">
+        <Translate contentKey="<%= i18nKeyPrefix %>.home.title"><%= entityNamePluralHumanized %></Translate>
         <div className="d-flex justify-content-end">
           <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
             <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="<%= i18nKeyPrefix %>.home.refreshListLabel">Refresh List</Translate>
@@ -334,7 +334,7 @@ export const <%= entityReactName %> = () => {
             <Link to="/<%= entityPage %>/new" className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
               <FontAwesomeIcon icon="plus" />&nbsp;
               <Translate contentKey="<%= i18nKeyPrefix %>.home.createLabel">
-                Create new <%= entityClassHumanized %>
+                Create new <%= entityNameHumanized %>
               </Translate>
             </Link>
 <%_ } _%>
@@ -368,7 +368,7 @@ export const <%= entityReactName %> = () => {
                         loader={<div className="loader">Loading ...</div>}>
 <%_ } _%>
         {
-          <%= entityInstance %>List && <%= entityInstance %>List.length > 0 ?(
+          <%= entityInstance %>List?.length > 0 ?(
             <Table responsive>
               <thead>
                 <tr>
@@ -500,7 +500,7 @@ _%>
           ) : (
               !loading && <div className="alert alert-warning">
               <Translate contentKey="<%= i18nKeyPrefix %>.home.notFound">
-                No <%= entityClassPluralHumanized %> found
+                No <%= entityNamePluralHumanized %> found
               </Translate>
             </div>
           )

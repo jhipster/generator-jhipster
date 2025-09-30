@@ -1,6 +1,8 @@
 import { before, describe, expect, it } from 'esmocha';
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
-import { GENERATOR_KUBERNETES } from '../generator-list.js';
+
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
+
+const GENERATOR_KUBERNETES = 'kubernetes';
 
 const expectedFiles = {
   eurekaregistry: ['./kubernetes/registry-k8s/jhipster-registry.yml', './kubernetes/registry-k8s/application-configmap.yml'],

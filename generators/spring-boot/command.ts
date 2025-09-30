@@ -17,11 +17,11 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
-import { GENERATOR_JAVA, GENERATOR_LIQUIBASE, GENERATOR_SPRING_DATA_RELATIONAL } from '../generator-list.js';
-import { createBase64Secret, createSecret } from '../../lib/utils/index.js';
-import { authenticationTypes } from '../../lib/jhipster/index.js';
+
+import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../lib/core/application-types.ts';
+import { authenticationTypes } from '../../lib/jhipster/index.ts';
+import { createBase64Secret, createSecret } from '../../lib/utils/index.ts';
 
 const { OAUTH2, SESSION, JWT } = authenticationTypes;
 
@@ -54,7 +54,7 @@ const command = {
       prompt: gen => ({
         when: () => ['gateway', 'microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType),
         type: 'input',
-        validate: (input: string) => (/^([0-9]*)$/.test(input) ? true : 'This is not a valid port number.'),
+        validate: (input: string) => (/^(\d*)$/.test(input) ? true : 'This is not a valid port number.'),
         message:
           'As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.',
         default: () => gen.jhipsterConfigWithDefaults.serverPort,
@@ -105,12 +105,12 @@ const command = {
         description: 'Provide authentication type for the application when skipping server side generation',
         type: String,
       },
-      prompt: (gen: any, config: any) => ({
+      prompt: (gen: any, config) => ({
         type: 'list',
         message: `Which ${chalk.yellow('*type*')} of authentication would you like to use?`,
         choices: () =>
           gen.jhipsterConfigWithDefaults.applicationType !== APPLICATION_TYPE_MONOLITH
-            ? (config.choices as any).filter(({ value }: { value: any }) => value !== SESSION)
+            ? config.choices?.filter(choice => (typeof choice === 'string' ? choice : choice.value !== SESSION))
             : config.choices,
         default: () => gen.jhipsterConfigWithDefaults.authenticationType,
       }),
@@ -123,8 +123,6 @@ const command = {
         const { jwtSecretKey, rememberMeKey, authenticationType, applicationType } = gen.jhipsterConfigWithDefaults;
         if (authenticationType === SESSION && !rememberMeKey) {
           gen.jhipsterConfig.rememberMeKey = createSecret();
-        } else if (authenticationType === OAUTH2 && gen.jhipsterConfig.skipUserManagement === undefined) {
-          gen.jhipsterConfig.skipUserManagement = true;
         } else if (
           jwtSecretKey === undefined &&
           (authenticationType === JWT || applicationType === APPLICATION_TYPE_MICROSERVICE || applicationType === APPLICATION_TYPE_GATEWAY)
@@ -222,14 +220,7 @@ const command = {
       scope: 'storage',
     },
   },
-  import: [
-    GENERATOR_JAVA,
-    GENERATOR_LIQUIBASE,
-    GENERATOR_SPRING_DATA_RELATIONAL,
-    'jhipster:spring-cloud:gateway',
-    'spring-cache',
-    'spring-cloud-stream',
-  ],
+  import: ['java', 'liquibase', 'spring-data-relational', 'jhipster:spring-cloud:gateway', 'spring-cache', 'spring-cloud-stream'],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

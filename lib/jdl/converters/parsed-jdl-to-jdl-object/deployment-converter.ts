@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 
-import JDLDeployment from '../../core/models/jdl-deployment.js';
-import type { ParsedJDLDeployment } from '../../core/types/parsed.js';
+import JDLDeployment from '../../core/models/jdl-deployment.ts';
+import type { ParsedJDLDeployment } from '../../core/types/parsed.ts';
 
 export default { convertDeployments };
 

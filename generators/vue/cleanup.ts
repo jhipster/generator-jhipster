@@ -17,14 +17,14 @@
  * limitations under the License.
  */
 
-import { asWritingTask } from '../base-application/support/task-type-inference.js';
-import type { Application as ClientApplication, Entity as ClientEntity } from '../client/types.js';
+import { asWritingTask } from '../base-application/support/task-type-inference.ts';
+import type { Application as ClientApplication, Entity as ClientEntity } from '../client/types.ts';
 
 /**
  * Removes files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default asWritingTask<ClientEntity, ClientApplication<ClientEntity>>(async function cleanupOldFilesTask({ application, control }) {
+export default asWritingTask<ClientEntity, ClientApplication>(async function cleanupOldFilesTask({ application, control }) {
   if (control.isJhipsterVersionLessThan('7.0.0-beta.0')) {
     this.removeFile(`${application.clientSrcDir}app/admin/audits/audits.component.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/audits/audits.service.ts`);

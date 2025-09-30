@@ -17,25 +17,27 @@
  * limitations under the License.
  */
 import { inspect } from 'node:util';
-import { defaultsDeep, get, merge, template } from 'lodash-es';
+
 import { transform } from '@yeoman/transform';
-import { Minimatch } from 'minimatch';
+import { defaultsDeep, get, merge, template } from 'lodash-es';
 import type { MemFsEditorFile } from 'mem-fs-editor';
+import { Minimatch } from 'minimatch';
+
 import type CoreGenerator from '../base-core/generator.ts';
 
 export const createTranslationsFilter = ({
-  clientSrcDir,
+  clientI18nDir,
   nativeLanguage,
   fallbackLanguage,
 }: {
-  clientSrcDir: string;
+  clientI18nDir: string;
   nativeLanguage: string;
   fallbackLanguage?: string;
 }) => {
   const pattern =
     !fallbackLanguage || nativeLanguage === fallbackLanguage
-      ? `**/${clientSrcDir}i18n/${nativeLanguage}/*.json`
-      : `**/${clientSrcDir}i18n/{${nativeLanguage},${fallbackLanguage}}/*.json`;
+      ? `**/${clientI18nDir}${nativeLanguage}/*.json`
+      : `**/${clientI18nDir}{${nativeLanguage},${fallbackLanguage}}/*.json`;
   const minimatch = new Minimatch(pattern);
   return (filePath: string): boolean => minimatch.match(filePath);
 };
@@ -59,17 +61,17 @@ export default class TranslationData {
 
   loadFromStreamTransform({
     enableTranslation,
-    clientSrcDir,
+    clientI18nDir,
     nativeLanguage,
     fallbackLanguage = 'en',
   }: {
     enableTranslation: boolean;
-    clientSrcDir: string;
+    clientI18nDir: string;
     nativeLanguage: string;
     fallbackLanguage?: string;
   }) {
-    const filter = createTranslationsFileFilter({ clientSrcDir, nativeLanguage, fallbackLanguage });
-    const minimatchNative = new Minimatch(`**/${clientSrcDir}i18n/${nativeLanguage}/*.json`);
+    const filter = createTranslationsFileFilter({ clientI18nDir, nativeLanguage, fallbackLanguage });
+    const minimatchNative = new Minimatch(`**/${clientI18nDir}${nativeLanguage}/*.json`);
     return transform(file => {
       if (filter(file) && file.contents) {
         const contents = JSON.parse(file.contents.toString());

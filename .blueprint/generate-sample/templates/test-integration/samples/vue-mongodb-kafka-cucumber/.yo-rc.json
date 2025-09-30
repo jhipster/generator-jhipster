@@ -1,0 +1,31 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "jwt",
+    "baseName": "jhipster",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "vue",
+    "clientTheme": "none",
+    "clientThemeVariant": "primary",
+    "creationTimestamp": 1594541091665,
+    "databaseType": "mongodb",
+    "devDatabaseType": "mongodb",
+    "dtoSuffix": "DTO",
+    "enableHibernateCache": false,
+    "enableTranslation": true,
+    "entitySuffix": "",
+    "jhiPrefix": "",
+    "jwtSecretKey": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+    "languages": ["en"],
+    "nativeLanguage": "en",
+    "packageFolder": "tech/jhipster/sample",
+    "packageName": "tech.jhipster.sample",
+    "prodDatabaseType": "mongodb",
+    "reactive": false,
+    "searchEngine": "no",
+    "serverPort": "8080",
+    "serviceDiscoveryType": "no",
+    "testFrameworks": ["gatling", "cucumber", "cypress"]
+  }
+}

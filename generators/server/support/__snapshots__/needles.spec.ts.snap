@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`generator - server - support - needles generated project should match state snapshot 1`] = `
 {
@@ -299,6 +299,9 @@ exports[`generator - server - support - needles generated project should match s
   "src/main/resources/i18n/messages.properties": {
     "stateCleared": "modified",
   },
+  "src/main/resources/i18n/messages_en.properties": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/logback-spring.xml": {
     "stateCleared": "modified",
   },
@@ -441,6 +444,9 @@ exports[`generator - server - support - needles generated project should match s
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/i18n/messages_en.properties": {
     "stateCleared": "modified",
   },
   "src/test/resources/junit-platform.properties": {

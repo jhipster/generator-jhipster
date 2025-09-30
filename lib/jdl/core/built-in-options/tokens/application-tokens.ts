@@ -19,10 +19,11 @@
 
 import type { ITokenConfig } from 'chevrotain';
 import { Lexer } from 'chevrotain';
+
 import applicationOptions from '../../../../jhipster/application-options.ts';
-import type { JDLTokenConfig } from '../../types/parsing.js';
-import createTokenFromConfig from '../../parsing/lexer/token-creator.js';
-import { KEYWORD, UNARY_OPTION } from '../../parsing/lexer/shared-tokens.js';
+import { KEYWORD, UNARY_OPTION } from '../../parsing/lexer/shared-tokens.ts';
+import createTokenFromConfig from '../../parsing/lexer/token-creator.ts';
+import type { JDLTokenConfig } from '../../types/parsing.ts';
 
 const { OptionNames } = applicationOptions;
 
@@ -35,7 +36,6 @@ const {
   BUILD_TOOL,
   CACHE_PROVIDER,
   CLIENT_FRAMEWORK,
-  CLIENT_PACKAGE_MANAGER,
   CLIENT_THEME,
   CLIENT_THEME_VARIANT,
   CREATION_TIMESTAMP,
@@ -55,6 +55,7 @@ const {
   MICROFRONTEND,
   MICROFRONTENDS,
   NATIVE_LANGUAGE,
+  NODE_PACKAGE_MANAGER,
   PACKAGE_NAME,
   PROD_DATABASE_TYPE,
   REACTIVE,
@@ -99,7 +100,6 @@ export const buildApplicationTokens = (tokenConfigs: JDLTokenConfig[]) => {
     { name: 'JHI_PREFIX', pattern: JHI_PREFIX },
     { name: 'JWT_SECRET_KEY', pattern: JWT_SECRET_KEY },
     { name: 'JHIPSTER_VERSION', pattern: JHIPSTER_VERSION },
-    { name: 'CLIENT_PACKAGE_MANAGER', pattern: CLIENT_PACKAGE_MANAGER },
     { name: 'CLIENT_FRAMEWORK', pattern: CLIENT_FRAMEWORK },
     { name: 'CLIENT_THEME_VARIANT', pattern: CLIENT_THEME_VARIANT },
     { name: 'CLIENT_THEME', pattern: CLIENT_THEME },
@@ -118,6 +118,7 @@ export const buildApplicationTokens = (tokenConfigs: JDLTokenConfig[]) => {
     { name: 'GRADLE_DEVELOCITY_HOST', pattern: GRADLE_DEVELOCITY_HOST },
     { name: 'MICROFRONTENDS', pattern: MICROFRONTENDS },
     { name: 'MICROFRONTEND', pattern: MICROFRONTEND },
+    { name: 'NODE_PACKAGE_MANAGER', pattern: NODE_PACKAGE_MANAGER },
     ...tokenConfigs,
   ];
   return {

@@ -1,14 +1,16 @@
 import { before, describe, it } from 'esmocha';
-import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
+
+import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
+import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
-import { GENERATOR_SERVER } from '../generator-list.js';
-import { asPostWritingTask } from '../base-application/support/task-type-inference.js';
 
 const filePath = `${SERVER_MAIN_RES_DIR}logback-spring.xml`;
 
 const addNeedlesTask = asPostWritingTask(function ({ source }) {
   source.addMainLog?.({ name: 'org.test.logTest', level: 'OFF' });
 });
+
+const GENERATOR_SERVER = 'server';
 
 describe('generators - server - needle - logback', () => {
   before(async () => {

@@ -18,14 +18,16 @@
  */
 
 import assert from 'node:assert/strict';
+
 import { passthrough } from '@yeoman/transform';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
 import { JavaApplicationGenerator } from '../java/generator.ts';
-import files from './files.js';
-import { MAVEN } from './constants.js';
-import cleanupOldServerFilesTask from './cleanup.js';
-import { type PomStorage, createPomStorage, sortPomFile } from './support/index.js';
+
+import cleanupOldServerFilesTask from './cleanup.ts';
+import { MAVEN } from './constants.ts';
+import files from './files.ts';
+import { type PomStorage, createPomStorage, sortPomFile } from './support/index.ts';
 
 export default class MavenGenerator extends JavaApplicationGenerator {
   pomStorage!: PomStorage;
@@ -37,7 +39,7 @@ export default class MavenGenerator extends JavaApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:java:bootstrap');
+      await this.dependsOnBootstrap('java');
     }
   }
 
@@ -74,7 +76,7 @@ export default class MavenGenerator extends JavaApplicationGenerator {
       async verify({ application }) {
         assert.equal(application.buildTool, MAVEN);
       },
-      addSourceNeddles({ application, source }) {
+      addSourceNeedles({ application, source }) {
         const { javaProperties } = application;
         function createForEach<T>(callback: (arg: T) => any): (arg: T | T[]) => void {
           return (arg: T | T[]): void => {

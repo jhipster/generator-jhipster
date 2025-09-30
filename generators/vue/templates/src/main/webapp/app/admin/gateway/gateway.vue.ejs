@@ -1,19 +1,19 @@
 <template>
     <div>
         <h2>
-            <span id="gateway-page-heading" v-text="t$('gateway.title')">Gateway</span>
-            <button class="btn btn-primary float-right" @click="refresh()" :disabled="updatingRoutes">
-                <font-awesome-icon icon="sync"></font-awesome-icon> <span v-text="t$('gateway.refresh.button')">Refresh</span>
+            <span id="gateway-page-heading">{{ t$('gateway.title') }}</span>
+            <button class="btn btn-primary float-end" @click="refresh()" :disabled="updatingRoutes">
+                <font-awesome-icon icon="sync"></font-awesome-icon> <span>{{ t$('gateway.refresh.button') }}</span>
             </button>
         </h2>
-        <h3 v-text="t$('gateway.routes.title')">Current routes</h3>
+        <h3>{{ t$('gateway.routes.title') }}</h3>
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th v-text="t$('gateway.routes.url')">URL</th>
-                    <th v-text="t$('gateway.routes.service')">Service</th>
-                    <th v-text="t$('gateway.routes.servers')">Available servers</th>
+                    <th>{{ t$('gateway.routes.url') }}</th>
+                    <th>{{ t$('gateway.routes.service') }}</th>
+                    <th>{{ t$('gateway.routes.servers') }}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -21,21 +21,19 @@
                     <td>{{route.path}}</td>
                     <td>{{route.serviceId}}</td>
                     <td>
-                        <div v-if="route.serviceInstances.length === 0" class="label label-danger" v-text="t$('gateway.routes.error')">
-                            Warning: no server available!
-                        </div>
+                        <div v-if="route.serviceInstances.length === 0" class="label label-danger">{{ t$('gateway.routes.error') }}</div>
                         <div class="table-responsive">
                             <table class="table table-striped" v-if="route">
                                 <tr v-for="instance of route.serviceInstances" :key="instance.uri">
                                     <td><a :href="instance.uri" target="_blank">{{instance.uri}}</a></td>
                                     <td>
-                                        <div v-if="instance.instanceInfo" class="badge" :class="'badge-' + (instance.instanceInfo.status === 'UP' ? 'success' : 'danger')">{{instance.instanceInfo.status}}</div>
-                                        <div v-if="!instance.instanceInfo" class="badge badge-warning">?</div>
+                                        <div v-if="instance.instanceInfo" class="badge" :class="'bg-' + (instance.instanceInfo.status === 'UP' ? 'success' : 'danger')">{{instance.instanceInfo.status}}</div>
+                                        <div v-if="!instance.instanceInfo" class="badge bg-warning">?</div>
                                     </td>
                                     <td>
                                         <span v-for="(entry, key) of instance.metadata" :key="key">
-                                            <span class="badge badge-default font-weight-normal">
-                                                <span class="badge badge-pill badge-info font-weight-normal">{{key}}</span>
+                                            <span class="badge bg-default font-weight-normal">
+                                                <span class="badge rounded-pill bg-info font-weight-normal">{{key}}</span>
                                                 <span class="text-secondary">{{ entry }}</span>
                                             </span>
                                         </span>

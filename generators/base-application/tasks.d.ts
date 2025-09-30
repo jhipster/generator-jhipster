@@ -17,13 +17,15 @@
  * limitations under the License.
  */
 import type { Storage } from 'yeoman-generator';
-import type { TaskParamWithSource } from '../base/tasks.js';
-import type { SimpleTaskTypes, TaskParamWithApplication } from '../base-simple-application/tasks.js';
+
+import type { TaskParamWithSource } from '../base/tasks.ts';
+import type { SimpleTaskTypes, TaskParamWithApplication } from '../base-simple-application/tasks.ts';
+
 import type {
   Application as BaseApplicationApplication,
   Entity as BaseApplicationEntity,
   Source as BaseApplicationSource,
-} from './types.js';
+} from './types.ts';
 
 type GetRelationshipType<E> = E extends { relationships: (infer R)[] } ? R : never;
 type GetFieldType<E> = E extends { fields: (infer F)[] } ? F : never;

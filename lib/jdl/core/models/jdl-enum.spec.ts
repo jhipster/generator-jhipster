@@ -17,9 +17,11 @@
  * limitations under the License.
  */
 
-import { before, describe, it, expect as jestExpect } from 'esmocha';
+import { before, describe, expect as jestExpect, it } from 'esmocha';
+
 import { expect } from 'chai';
-import { JDLEnum } from '../models/index.js';
+
+import { JDLEnum } from './index.ts';
 
 describe('jdl - JDLEnum', () => {
   describe('new', () => {
@@ -45,7 +47,7 @@ describe('jdl - JDLEnum', () => {
     });
   });
   describe('getValuesAsString', () => {
-    let result;
+    let result: string;
 
     before(() => {
       const jdlEnum = new JDLEnum({ name: 'Toto', values: [{ key: 'A', value: 'aaaa' }, { key: 'B' }] });
@@ -57,7 +59,7 @@ describe('jdl - JDLEnum', () => {
     });
   });
   describe('getValueJavadocs', () => {
-    let result;
+    let result: Record<string, string>;
 
     before(() => {
       const jdlEnum = new JDLEnum({
@@ -82,7 +84,7 @@ describe('jdl - JDLEnum', () => {
   describe('toString', () => {
     describe('with simple enum values', () => {
       let values: any[] = [];
-      let jdlEnum;
+      let jdlEnum: JDLEnum;
 
       before(() => {
         values = [{ key: 'FRENCH' }, { key: 'ENGLISH' }, { key: 'ICELANDIC' }];
@@ -106,7 +108,7 @@ enum ${jdlEnum.name} {
     });
     describe('with explicit enum values', () => {
       let values: any[] = [];
-      let jdlEnum;
+      let jdlEnum: JDLEnum;
 
       before(() => {
         values = [{ key: 'FRENCH', value: 'french' }, { key: 'ENGLISH', value: 'english' }, { key: 'ICELANDIC' }];

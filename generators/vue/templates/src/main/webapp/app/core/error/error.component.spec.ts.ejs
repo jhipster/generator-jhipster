@@ -86,7 +86,7 @@ describe('Error component', () => {
 <%_ if (generateUserManagement) { _%>
     expect(login.showLogin).not.toHaveBeenCalled();
 <%_ } else { _%>
-    expect(loginService.login).toHaveBeenCalledTimes(0);
+    expect(loginService.login).not.toHaveBeenCalled();
 <%_ } _%>
   });
 
@@ -126,7 +126,7 @@ describe('Error component', () => {
 <%_ if (generateUserManagement) { _%>
     expect(login.showLogin).not.toHaveBeenCalled();
 <%_ } else { _%>
-    expect(loginService.login).toHaveBeenCalledTimes(0);
+    expect(loginService.login).not.toHaveBeenCalled();
 <%_ } _%>
   });
 
@@ -143,7 +143,7 @@ describe('Error component', () => {
 <%_ if (generateUserManagement) { _%>
     expect(login.showLogin).not.toHaveBeenCalled();
 <%_ } else { _%>
-    expect(loginService.login).toHaveBeenCalledTimes(0);
+    expect(loginService.login).not.toHaveBeenCalled();
 <%_ } _%>
   });
 });

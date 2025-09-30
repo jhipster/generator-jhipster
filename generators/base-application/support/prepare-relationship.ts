@@ -16,15 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { lowerFirst, startCase, upperFirst } from 'lodash-es';
-import pluralize from 'pluralize';
+import { lowerFirst } from 'lodash-es';
 
-import { databaseTypes, entityOptions, validations } from '../../../lib/jhipster/index.js';
-import { mutateData } from '../../../lib/utils/index.js';
-import type CoreGenerator from '../../base-core/generator.js';
-import type { Entity as BaseApplicationEntity, Relationship as BaseApplicationRelationship, RelationshipWithEntity } from '../types.js';
-import { prepareProperty } from './prepare-property.js';
-import { stringifyApplicationData } from './debug.js';
+import { databaseTypes, entityOptions, validations } from '../../../lib/jhipster/index.ts';
+import { mutateData } from '../../../lib/utils/index.ts';
+import type CoreGenerator from '../../base-core/generator.ts';
+import type { Entity as BaseApplicationEntity, Relationship as BaseApplicationRelationship, RelationshipWithEntity } from '../types.ts';
+
+import { stringifyApplicationData } from './debug.ts';
 
 const { NEO4J, NO: DATABASE_NO } = databaseTypes;
 const { MapperTypes } = entityOptions;
@@ -41,54 +40,8 @@ export default function prepareRelationship(
   ignoreMissingRequiredRelationship = false,
 ) {
   const entityName = entityWithConfig.name;
-  const { relationshipSide, relationshipType, relationshipName } = relationship;
-
-  if (!relationship.otherEntity) {
-    throw new Error(
-      `Error at entity ${entityName}: could not find the entity of the relationship ${stringifyApplicationData(relationship)}`,
-    );
-  }
-  const otherEntity = relationship.otherEntity;
-  if (!relationship.otherEntityField && otherEntity.primaryKey) {
-    relationship.otherEntityField = otherEntity.primaryKey.name;
-  }
-
-  // Prepare basic relationship data
-  Object.assign(relationship, {
-    relationshipLeftSide: relationshipSide === 'left',
-    relationshipRightSide: relationshipSide === 'right',
-    collection: relationshipType === 'one-to-many' || relationshipType === 'many-to-many',
-    relationshipOneToOne: relationshipType === 'one-to-one',
-    relationshipOneToMany: relationshipType === 'one-to-many',
-    relationshipManyToOne: relationshipType === 'many-to-one',
-    relationshipManyToMany: relationshipType === 'many-to-many',
-    otherEntityUser: relationship.otherEntityName.toLowerCase() === 'user',
-  });
-
-  const { collection, relationshipLeftSide, relationshipManyToOne, relationshipOneToMany } = relationship;
-
-  // Prepare property name
-  mutateData(relationship, {
-    __override__: false,
-    relationshipFieldName: lowerFirst(relationshipName),
-    relationshipFieldNamePlural: ({ relationshipFieldName }) => pluralize(relationshipFieldName!),
-    relationshipNamePlural: pluralize(relationshipName),
-    relationshipNameCapitalized: upperFirst(relationshipName),
-    relationshipNameHumanized: startCase(relationshipName),
-
-    propertyName: ({ relationshipFieldName, relationshipFieldNamePlural }) =>
-      collection ? relationshipFieldNamePlural! : relationshipFieldName!,
-
-    // let ownerSide true when type is 'many-to-one' for convenience.
-    // means that this side should control the reference.
-    ownerSide: relationship.otherEntity.embedded || relationshipManyToOne || (relationshipLeftSide && !relationshipOneToMany),
-    persistableRelationship: ({ ownerSide }) => ownerSide!,
-  });
-
-  prepareProperty(relationship);
-
   // Look for fields at the other other side of the relationship
-  const otherRelationship = relationship.otherRelationship;
+  const { otherRelationship, relationshipOneToMany, relationshipName, otherEntity } = relationship;
   if (
     !otherRelationship &&
     !ignoreMissingRequiredRelationship &&

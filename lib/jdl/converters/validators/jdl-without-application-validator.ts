@@ -17,16 +17,17 @@
  * limitations under the License.
  */
 
-import { relationshipOptions } from '../../core/built-in-options/index.js';
 import fieldTypes from '../../../jhipster/field-types.ts';
-import type JDLObject from '../../core/models/jdl-object.js';
-import type JDLRelationship from '../../core/models/jdl-relationship.js';
-import type JDLField from '../../core/models/jdl-field.js';
-import EntityValidator from './entity-validator.js';
-import FieldValidator from './field-validator.js';
-import ValidationValidator from './validation-validator.js';
-import RelationshipValidator from './relationship-validator.js';
-import EnumValidator from './enum-validator.js';
+import { relationshipOptions } from '../../core/built-in-options/index.ts';
+import type JDLField from '../../core/models/jdl-field.ts';
+import type JDLObject from '../../core/models/jdl-object.ts';
+import type JDLRelationship from '../../core/models/jdl-relationship.ts';
+
+import EntityValidator from './entity-validator.ts';
+import EnumValidator from './enum-validator.ts';
+import FieldValidator from './field-validator.ts';
+import RelationshipValidator from './relationship-validator.ts';
+import ValidationValidator from './validation-validator.ts';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
 

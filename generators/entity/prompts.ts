@@ -16,15 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import fs from 'fs';
+import fs from 'node:fs';
+
 import chalk from 'chalk';
 import { isArray, lowerFirst, snakeCase, uniq, upperFirst } from 'lodash-es';
-import { clientFrameworkTypes, databaseTypes, entityOptions, fieldTypes, reservedKeywords, validations } from '../../lib/jhipster/index.js';
-import { asPromptingTask } from '../base-application/support/task-type-inference.ts';
+
 import { APPLICATION_TYPE_GATEWAY } from '../../lib/core/application-types.ts';
-import type { Field as BaseApplicationField } from '../base-application/types.js';
-import { inputIsNumber, inputIsSignedDecimalNumber, inputIsSignedNumber } from './support/index.js';
-import type EntityGenerator from './generator.js';
+import { clientFrameworkTypes, databaseTypes, entityOptions, fieldTypes, reservedKeywords, validations } from '../../lib/jhipster/index.ts';
+import { asPromptingTask } from '../base-application/support/task-type-inference.ts';
+import type { Field as BaseApplicationField } from '../base-application/types.ts';
+
+import type EntityGenerator from './generator.ts';
+import { inputIsNumber, inputIsSignedDecimalNumber, inputIsSignedNumber } from './support/index.ts';
 
 const { isReservedPaginationWords, isReservedFieldName, isReservedTableName } = reservedKeywords;
 const { NO: NO_DATABASE, CASSANDRA, SQL } = databaseTypes;
@@ -420,7 +423,7 @@ async function askForField(this: EntityGenerator) {
       type: 'input',
       name: 'fieldName',
       validate: input => {
-        if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
+        if (!/^(\w*)$/.test(input)) {
           return 'Your field name cannot contain special characters';
         }
         if (input === '') {
@@ -487,7 +490,7 @@ async function askForField(this: EntityGenerator) {
         if (isReservedTableName(input, 'JAVA')) {
           return 'Your enum name cannot contain a Java reserved keyword';
         }
-        if (!/^[A-Za-z0-9_]*$/.test(input)) {
+        if (!/^\w*$/.test(input)) {
           return 'Your enum name cannot contain special characters (allowed characters: A-Z, a-z, 0-9 and _)';
         }
         if (context.enums?.includes(input)) {
@@ -521,11 +524,11 @@ async function askForField(this: EntityGenerator) {
         if (uniq(enums).length !== enums.length) {
           return `Enum values cannot contain duplicates (typed values: ${input})`;
         }
-        for (let i = 0; i < enums.length; i++) {
-          if (/^[0-9].*/.test(enums[i])) {
-            return `Enum value "${enums[i]}" cannot start with a number`;
+        for (const enumValue of enums) {
+          if (/^\d.*/.test(enumValue)) {
+            return `Enum value "${enumValue}" cannot start with a number`;
           }
-          if (enums[i] === '') {
+          if (enumValue === '') {
             return 'Enum value cannot be empty (did you accidentally type "," twice in a row?)';
           }
         }
@@ -748,7 +751,7 @@ async function askForRelationship(this: EntityGenerator, ...args: any[]) {
       type: 'input',
       name: 'relationshipName',
       validate: input => {
-        if (!/^([a-zA-Z0-9_]*)$/.test(input)) {
+        if (!/^(\w*)$/.test(input)) {
           return 'Your relationship cannot contain special characters';
         }
         if (input === '') {

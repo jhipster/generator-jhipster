@@ -20,33 +20,21 @@
 import chalk from 'chalk';
 import { camelCase } from 'lodash-es';
 
-import BaseApplicationGenerator from '../base-application/index.js';
-import type {
-  Application as CommonApplication,
-  Config as CommonConfig,
-  Entity as CommonEntity,
-  Options as CommonOptions,
-} from '../common/types.js';
-import { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_SERVER } from '../generator-list.js';
-import { getDefaultAppName } from '../project-name/support/index.js';
+import BaseApplicationGenerator from '../base-application/index.ts';
+import type { Application as CommonApplication, Config as CommonConfig, Entity as CommonEntity } from '../common/types.ts';
+import { getDefaultAppName } from '../project-name/support/index.ts';
 
-import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
-import cleanupOldFilesTask from './cleanup.js';
-import { checkNode } from './support/index.js';
+import cleanupOldFilesTask from './cleanup.ts';
+import { checkNode } from './support/index.ts';
 
-export default class AppGenerator extends BaseApplicationGenerator<
-  CommonEntity,
-  CommonApplication<CommonEntity>,
-  CommonConfig,
-  CommonOptions
-> {
+export default class AppGenerator extends BaseApplicationGenerator<CommonEntity, CommonApplication, CommonConfig> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplicationBase();
+      await this.dependsOnBootstrap('app');
     }
   }
 
@@ -79,11 +67,6 @@ export default class AppGenerator extends BaseApplicationGenerator<
 
   get configuring() {
     return this.asConfiguringTaskGroup({
-      setup() {
-        if (this.jhipsterConfig.applicationType === APPLICATION_TYPE_MICROSERVICE) {
-          this.jhipsterConfig.skipUserManagement = true;
-        }
-      },
       fixConfig() {
         if (this.jhipsterConfig.jhiPrefix) {
           this.jhipsterConfig.jhiPrefix = camelCase(this.jhipsterConfig.jhiPrefix);
@@ -125,16 +108,16 @@ export default class AppGenerator extends BaseApplicationGenerator<
        * This behaviour allows a more consistent blueprint support.
        */
       async composeCommon() {
-        await this.composeWithJHipster(GENERATOR_COMMON);
+        await this.composeWithJHipster('common');
       },
       async composeServer() {
         if (!this.jhipsterConfigWithDefaults.skipServer) {
-          await this.composeWithJHipster(GENERATOR_SERVER);
+          await this.composeWithJHipster('server');
         }
       },
       async composeClient() {
         if (!this.jhipsterConfigWithDefaults.skipClient) {
-          await this.composeWithJHipster(GENERATOR_CLIENT);
+          await this.composeWithJHipster('client');
         }
       },
     });

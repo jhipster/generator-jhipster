@@ -16,25 +16,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
-import { snakeCase } from 'lodash-es';
+import { basename, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
+import { cacheTypes, databaseTypes, searchEngineTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.ts';
 import {
   buildSamplesFromMatrix,
   buildServerMatrix,
+  defaultHelpers as helpers,
   extendFilteredMatrix,
   extendMatrix,
-  defaultHelpers as helpers,
   runResult,
-} from '../../lib/testing/index.js';
-import { matchElasticSearchDocker } from '../spring-data-elasticsearch/__test-support/elastic-search-matcher.js';
-
-import { cacheTypes, databaseTypes, searchEngineTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
+} from '../../lib/testing/index.ts';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
-import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.js';
-import Generator from './index.js';
+import { matchElasticSearchDocker } from '../spring-data-elasticsearch/__test-support/elastic-search-matcher.ts';
+
+import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.ts';
+import Generator from './index.ts';
 
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL } = databaseTypes;
 const { NO: NO_SEARCH_ENGINE, ELASTICSEARCH } = searchEngineTypes;
@@ -56,6 +55,7 @@ matrix = extendMatrix(matrix, {
 
 Object.entries(matrix).forEach(([_name, config]) => {
   if (NO_SQL.includes(config.prodDatabaseType as string)) {
+    // @ts-expect-error use prodDatabaseType for no-sql databases to simplify the matrix
     config.databaseType = config.prodDatabaseType;
     delete config.prodDatabaseType;
   }
@@ -75,9 +75,6 @@ matrix = extendFilteredMatrix(matrix, ({ reactive }) => !reactive, {
 const testSamples = buildSamplesFromMatrix(matrix);
 
 describe(`generator - ${generator}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
 
   Object.entries(testSamples).forEach(([name, sampleConfig]) => {

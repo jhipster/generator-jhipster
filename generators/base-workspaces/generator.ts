@@ -18,30 +18,32 @@
  */
 
 import { join } from 'node:path';
+
 import { defaults } from 'lodash-es';
-import BaseGenerator from '../base/index.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION } from '../generator-list.js';
-import { CONTEXT_DATA_APPLICATION_KEY } from '../base-simple-application/support/index.js';
-import { deploymentOptions } from '../../lib/jhipster/index.js';
-import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.js';
-import type { Application as SimpleApplication } from '../base-simple-application/types.d.ts';
-import type { GenericTaskGroup } from '../base-core/types.js';
+
+import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParsableCommand } from '../../lib/command/types.ts';
+import { deploymentOptions } from '../../lib/jhipster/index.ts';
 import { removeFieldsWithNullishValues } from '../../lib/utils/object.ts';
-import { CUSTOM_PRIORITIES, PRIORITY_NAMES } from './priorities.js';
+import BaseGenerator from '../base/index.ts';
+import type { GenericTask } from '../base-core/types.ts';
+import { CONTEXT_DATA_APPLICATION_KEY } from '../base-simple-application/support/index.ts';
+import type { Application as SimpleApplication } from '../base-simple-application/types.d.ts';
+
+import { CUSTOM_PRIORITIES, PRIORITY_NAMES } from './priorities.ts';
 import {
   CONTEXT_DATA_DEPLOYMENT_KEY,
   CONTEXT_DATA_WORKSPACES_APPLICATIONS_KEY,
   CONTEXT_DATA_WORKSPACES_ROOT_KEY,
-} from './support/index.js';
+} from './support/index.ts';
+import type { Tasks as WorkspacesTasks } from './tasks.ts';
 import type {
-  Deployment as BaseDeployment,
   Config as BaseWorkspacesConfig,
+  Deployment as BaseDeployment,
   Features as BaseWorkspacesFeatures,
   Options as BaseWorkspacesOptions,
   Source as BaseWorkspacesSource,
   WorkspacesApplication,
-} from './types.js';
-import type { Tasks as WorkspacesTasks } from './tasks.js';
+} from './types.ts';
 
 const { Options: DeploymentOptions } = deploymentOptions;
 
@@ -78,7 +80,7 @@ export default abstract class BaseWorkspacesGenerator<
 
   static PREPARING_WORKSPACES = BaseGenerator.asPriority(PREPARING_WORKSPACES);
 
-  constructor(args: string | string[], options: Options, features: Features) {
+  constructor(args?: string[], options?: Options, features?: Features) {
     super(args, options, features);
 
     if (this.options.help) {
@@ -162,7 +164,7 @@ export default abstract class BaseWorkspacesGenerator<
   async bootstrapApplications() {
     const resolvedApplicationFolders = this.resolveApplicationFolders();
     for (const [_appFolder, resolvedFolder] of Object.entries(resolvedApplicationFolders)) {
-      await this.composeWithJHipster(GENERATOR_BOOTSTRAP_APPLICATION, {
+      await this.composeWithJHipster('jhipster:app:bootstrap', {
         generatorOptions: { destinationRoot: resolvedFolder, reproducible: true },
       });
     }
@@ -202,41 +204,41 @@ export default abstract class BaseWorkspacesGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPromptingWorkspacesTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['PromptingWorkspacesTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['PromptingWorkspacesTaskParam']> {
+  asPromptingWorkspacesTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PromptingWorkspacesTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['PromptingWorkspacesTaskParam']>> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asConfiguringWorkspacesTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['ConfiguringWorkspacesTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['ConfiguringWorkspacesTaskParam']> {
+  asConfiguringWorkspacesTaskGroup<const T extends Record<string, GenericTask<this, Tasks['ConfiguringWorkspacesTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['ConfiguringWorkspacesTaskParam']>> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asLoadingWorkspacesTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['LoadingWorkspacesTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['LoadingWorkspacesTaskParam']> {
+  asLoadingWorkspacesTaskGroup<const T extends Record<string, GenericTask<this, Tasks['LoadingWorkspacesTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['LoadingWorkspacesTaskParam']>> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPreparingWorkspacesTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['PreparingWorkspacesTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['PreparingWorkspacesTaskParam']> {
+  asPreparingWorkspacesTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PreparingWorkspacesTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['PreparingWorkspacesTaskParam']>> {
     return taskGroup;
   }
 }
 
-export class CommandBaseWorkspacesGenerator<Command extends ParseableCommand, AdditionalOptions = unknown> extends BaseWorkspacesGenerator<
+export class CommandBaseWorkspacesGenerator<Command extends ParsableCommand, AdditionalOptions = unknown> extends BaseWorkspacesGenerator<
   BaseDeployment,
   WorkspacesApplication,
   BaseWorkspacesConfig & ExportStoragePropertiesFromCommand<Command>,

@@ -18,19 +18,21 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import { createJDLApplication } from '../core/models/jdl-application-factory.js';
-import JDLObject from '../core/models/jdl-object.js';
-import { convertApplicationsToJDL } from '../core/__test-support__/index.js';
-import { APPLICATION_TYPE_MONOLITH } from '../../core/application-types.js';
-import { createRuntime } from '../core/runtime.js';
+
+import { APPLICATION_TYPE_MONOLITH } from '../../core/application-types.ts';
+import { convertApplicationsToJDL } from '../core/__test-support__/index.ts';
+import { createJDLApplication } from '../core/models/jdl-application-factory.ts';
+import JDLObject from '../core/models/jdl-object.ts';
+import { createRuntime } from '../core/runtime.ts';
 
 describe('jdl - JSONToJDLApplicationConverter', () => {
   const runtime = createRuntime();
 
   describe('convert', () => {
     describe('when not passing any argument', () => {
-      let jdlObject;
+      let jdlObject: JDLObject;
 
       before(() => {
         // @ts-expect-error invalid argument
@@ -42,7 +44,7 @@ describe('jdl - JSONToJDLApplicationConverter', () => {
       });
     });
     describe('when not passing a jdl object', () => {
-      let jdlObject;
+      let jdlObject: JDLObject;
 
       before(() => {
         jdlObject = convertApplicationsToJDL({
@@ -57,7 +59,7 @@ describe('jdl - JSONToJDLApplicationConverter', () => {
       });
     });
     describe('when passing a jdl object', () => {
-      let jdlObject;
+      let jdlObject: JDLObject;
 
       before(() => {
         const previousJDLObject = new JDLObject();

@@ -19,9 +19,8 @@
 
 import chalk from 'chalk';
 
-import BaseWorkspacesGenerator from '../base-workspaces/index.js';
-import { BaseKubernetesGenerator } from '../kubernetes/generator.ts';
-
+import BaseWorkspacesGenerator from '../base-workspaces/index.ts';
+import { checkImages, configureImageNames } from '../base-workspaces/internal/docker-base.ts';
 import {
   askForAdminPassword,
   askForApplicationType,
@@ -32,18 +31,18 @@ import {
   askForMonitoring,
   askForPath,
   askForServiceDiscovery,
-} from '../base-workspaces/internal/docker-prompts.js';
+} from '../base-workspaces/internal/docker-prompts.ts';
+import { BaseKubernetesGenerator } from '../kubernetes/generator.ts';
+import { checkHelm } from '../kubernetes/kubernetes-base.ts';
 import {
   askForIngressDomain,
   askForIngressType,
   askForIstioSupport,
   askForKubernetesNamespace,
   askForKubernetesServiceType,
-} from '../kubernetes/prompts.js';
+} from '../kubernetes/prompts.ts';
+import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.ts';
 
-import { checkImages, configureImageNames } from '../base-workspaces/internal/docker-base.js';
-import { checkHelm } from '../kubernetes/kubernetes-base.js';
-import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.js';
 import { applicationHelmFiles, applicationKubernetesFiles, deploymentHelmFiles, deploymentKubernetesFiles } from './files.ts';
 
 export default class KubernetesHelmGenerator extends BaseKubernetesGenerator {

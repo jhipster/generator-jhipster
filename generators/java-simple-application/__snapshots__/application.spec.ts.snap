@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`application mutation test expects mutateApplication to match snapshot 1`] = `
+{
+  "addOpenapiGeneratorPlugin": true,
+  "domains": [],
+  "entityPackages": [],
+  "graalvmReachabilityMetadata": Any<String>,
+  "imperativeOrReactive": "imperative",
+  "javaCompatibleVersions": Any<Array>,
+  "javaDependencies": {},
+  "javaIntegrationTestExclude": [],
+  "javaManagedProperties": {},
+  "javaPackageSrcDir": "src/main/java/com/mycompany/myapp/",
+  "javaPackageTestDir": "src/test/java/com/mycompany/myapp/",
+  "javaProperties": {},
+  "javaVersion": Any<String>,
+  "jhipsterDependenciesVersion": Any<String>,
+  "listOrFlux": "List",
+  "listOrFluxClassPath": "java.util.List",
+  "mainClass": "BaseNameApp",
+  "optionalOrMono": "Optional",
+  "optionalOrMonoClassPath": "java.util.Optional",
+  "optionalOrMonoOfNullable": "Optional.ofNullable",
+  "packageFolder": "com/mycompany/myapp/",
+  "packageInfoJavadocs": [
+    {
+      "documentation": "Logging aspect.",
+      "packageName": "com.mycompany.myapp.aop.logging",
+    },
+    {
+      "documentation": "Application management.",
+      "packageName": "com.mycompany.myapp.management",
+    },
+    {
+      "documentation": "Webflux database column mapper.",
+      "packageName": "com.mycompany.myapp.repository.rowmapper",
+    },
+    {
+      "documentation": "Application security utilities.",
+      "packageName": "com.mycompany.myapp.security",
+    },
+    {
+      "documentation": "Data transfer objects for rest mapping.",
+      "packageName": "com.mycompany.myapp.service.dto",
+    },
+    {
+      "documentation": "Data transfer objects mappers.",
+      "packageName": "com.mycompany.myapp.service.mapper",
+    },
+    {
+      "documentation": "Request chain filters.",
+      "packageName": "com.mycompany.myapp.web.filter",
+    },
+    {
+      "documentation": "Rest layer error handling.",
+      "packageName": "com.mycompany.myapp.web.rest.errors",
+    },
+    {
+      "documentation": "Rest layer visual models.",
+      "packageName": "com.mycompany.myapp.web.rest.vm",
+    },
+  ],
+  "packageName": "com.mycompany.myapp",
+  "reactive": false,
+  "reactorBlock": "",
+  "reactorBlockOptional": "",
+  "srcMainJava": "src/main/java/",
+  "srcMainResources": "src/main/resources/",
+  "srcMainWebapp": "src/main/webapp/",
+  "srcTestJava": "src/test/java/",
+  "srcTestJavascript": "src/test/javascript/",
+  "srcTestResources": "src/test/resources/",
+  "withGeneratedFlag": false,
+  "wrapMono": [Function],
+}
+`;

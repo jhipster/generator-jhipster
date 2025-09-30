@@ -17,20 +17,19 @@
  * limitations under the License.
  */
 import { rm } from 'node:fs/promises';
+
 import chalk from 'chalk';
 import { camelCase, snakeCase, upperFirst } from 'lodash-es';
-
 import type { Storage } from 'yeoman-generator';
-import BaseSimpleApplicationGenerator from '../base-simple-application/index.js';
-import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base-core/priorities.ts';
 
-import * as GENERATOR_LIST from '../generator-list.js';
+import { getGeneratorNamespaces, getPackageRoot } from '../../lib/index.ts';
+import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base-core/priorities.ts';
+import BaseSimpleApplicationGenerator from '../base-simple-application/index.ts';
 import { BLUEPRINT_API_VERSION } from '../generator-constants.js';
-import { files, generatorFiles } from './files.js';
+
 import {
   DYNAMIC,
   GENERATE_SNAPSHOTS,
-  LINK_JHIPSTER_DEPENDENCY,
   LOCAL_BLUEPRINT_OPTION,
   PRIORITIES,
   WRITTEN,
@@ -40,15 +39,14 @@ import {
   prompts,
   requiredConfig,
   subGeneratorPrompts,
-} from './constants.js';
+} from './constants.ts';
+import { files, generatorFiles } from './files.ts';
 import type {
   Application as GenerateBlueprintApplication,
   Config as GenerateBlueprintConfig,
   Features as GenerateBlueprintFeatures,
   Options as GenerateBlueprintOptions,
-} from './types.js';
-
-const { GENERATOR_INIT } = GENERATOR_LIST;
+} from './types.ts';
 
 const defaultPublishedFiles = ['generators', '!**/__*', '!**/*.snap', '!**/*.spec.?(c|m)js'];
 
@@ -63,7 +61,7 @@ export default class extends BaseSimpleApplicationGenerator<
   gitDependency!: string;
   allGenerators!: boolean;
 
-  constructor(args: string | string[], options: GenerateBlueprintOptions, features: GenerateBlueprintFeatures) {
+  constructor(args?: string[], options?: GenerateBlueprintOptions, features?: GenerateBlueprintFeatures) {
     super(args, options, { storeJHipsterVersion: true, ...features });
   }
 
@@ -73,7 +71,7 @@ export default class extends BaseSimpleApplicationGenerator<
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplicationBase();
+      await this.dependsOnBootstrap('javascript-simple-application');
     }
   }
 
@@ -157,7 +155,7 @@ export default class extends BaseSimpleApplicationGenerator<
     return this.asComposingTaskGroup({
       async compose() {
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
-        const initGenerator = await this.composeWithJHipster(GENERATOR_INIT, { generatorOptions: { packageJsonType: 'module' } });
+        const initGenerator = await this.composeWithJHipster('init', { generatorOptions: { packageJsonType: 'module' } });
         initGenerator.generateReadme = false;
       },
     });
@@ -243,7 +241,7 @@ export default class extends BaseSimpleApplicationGenerator<
               constant: `${snakeCase(priority).toUpperCase()}`,
             }),
           );
-          const customGenerator = !Object.values(GENERATOR_LIST).includes(generator as any);
+          const customGenerator = !getGeneratorNamespaces().includes(generator);
           const jhipsterGenerator = customGenerator || subGeneratorConfig.sbs ? 'base-application' : generator;
           const subTemplateData = {
             ...application,
@@ -359,7 +357,9 @@ export default class extends BaseSimpleApplicationGenerator<
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const { jhipsterPackageJson } = application;
         const exactDependency = {
-          'generator-jhipster': `${jhipsterPackageJson.version}`,
+          'generator-jhipster': this.options.linkJhipsterDependency
+            ? `file:${this.relativeDir(this.destinationRoot(), getPackageRoot())}`
+            : `${jhipsterPackageJson.version}`,
         };
         const caretDependency = {
           'generator-jhipster': `^${jhipsterPackageJson.version}`,
@@ -398,11 +398,6 @@ export default class extends BaseSimpleApplicationGenerator<
           await rm(this.destinationPath('package-lock.json'), { force: true });
           await rm(this.destinationPath('node_modules'), { force: true, recursive: true });
           await this.spawn('npm', ['install'], { stdio: 'inherit' });
-        }
-
-        if (this.options[LINK_JHIPSTER_DEPENDENCY]) {
-          this.log.verboseInfo('Linking generator-jhipster');
-          await this.spawn('npm', ['link', 'generator-jhipster'], { stdio: 'inherit' });
         }
 
         if (generateSnapshots) {

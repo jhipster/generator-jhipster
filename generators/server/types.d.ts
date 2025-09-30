@@ -2,8 +2,8 @@ import type {
   ExportApplicationPropertiesFromCommand,
   ExportGeneratorOptionsFromCommand,
   ExportStoragePropertiesFromCommand,
-} from '../../lib/command/index.js';
-import type { Entity as BaseApplicationEntity } from '../base-application/types.js';
+} from '../../lib/command/index.ts';
+import type { Entity as BaseApplicationEntity, Features as BaseApplicationFeatures } from '../base-application/types.ts';
 import type {
   Application as CommonApplication,
   Entity as CommonEntity,
@@ -18,16 +18,19 @@ import type {
   Options as JavaOptions,
   Relationship as JavaRelationship,
   Source as JavaSource,
-} from '../java/types.js';
+} from '../java/types.ts';
 import type { Relationship as LanguagesRelationship } from '../languages/types.d.ts';
-import type { DatabaseEntity } from '../liquibase/types.js';
+import type { DatabaseEntity } from '../liquibase/types.ts';
+
 import type Command from './command.ts';
+
+export { BaseApplicationFeatures as Features };
 
 export type Config = JavaConfig & ExportStoragePropertiesFromCommand<typeof Command>;
 
 export type Options = JavaOptions & ExportGeneratorOptionsFromCommand<typeof Command>;
 
-export interface Field extends JavaField, CommonField {}
+export type Field = JavaField & CommonField;
 
 export interface Relationship extends JavaRelationship, LanguagesRelationship, CommonRelationship {
   relationshipApiDescription?: string;

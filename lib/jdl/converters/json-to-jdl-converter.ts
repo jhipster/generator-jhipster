@@ -17,22 +17,24 @@
  * limitations under the License.
  */
 
-import path from 'path';
-import fs from 'fs';
-import JDLObject from '../core/models/jdl-object.js';
-import mergeJDLObjects from '../core/models/jdl-object-merger.js';
-import { doesDirectoryExist, doesFileExist } from '../core/utils/file-utils.js';
-import { removeFieldsWithNullishValues } from '../../utils/object.js';
-import type JDLApplication from '../core/models/jdl-application.js';
-import type { JDLRuntime } from '../core/types/runtime.js';
-import { YO_RC_CONFIG_KEY, readEntityFile, readYoRcFile } from '../../utils/yo-rc.js';
-import type { RawJDLJSONApplication } from '../core/types/exporter.js';
-import type { YoRcJHipsterApplicationConfigValue, YoRcJHipsterApplicationContent } from '../../jhipster/types/yo-rc.js';
-import type { JSONEntity } from '../core/types/json-config.js';
+import fs from 'node:fs';
+import path from 'node:path';
+
 import type { YoRcFileContent } from '../../constants/yeoman.ts';
-import { convertApplicationToJDL } from './json-to-jdl-application-converter.js';
-import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.js';
-import exportJDLObject from './exporters/jdl-exporter.js';
+import type { YoRcJHipsterApplicationConfigValue, YoRcJHipsterApplicationContent } from '../../jhipster/types/yo-rc.ts';
+import { removeFieldsWithNullishValues } from '../../utils/object.ts';
+import { YO_RC_CONFIG_KEY, readEntityFile, readYoRcFile } from '../../utils/yo-rc.ts';
+import type JDLApplication from '../core/models/jdl-application.ts';
+import mergeJDLObjects from '../core/models/jdl-object-merger.ts';
+import JDLObject from '../core/models/jdl-object.ts';
+import type { RawJDLJSONApplication } from '../core/types/exporter.ts';
+import type { JSONEntity } from '../core/types/json-config.ts';
+import type { JDLRuntime } from '../core/types/runtime.ts';
+import { doesDirectoryExist, doesFileExist } from '../core/utils/file-utils.ts';
+
+import exportJDLObject from './exporters/jdl-exporter.ts';
+import { convertApplicationToJDL } from './json-to-jdl-application-converter.ts';
+import { convertEntitiesToJDL } from './json-to-jdl-entity-converter.ts';
 
 export default {
   convertToJDL,

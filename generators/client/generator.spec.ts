@@ -16,15 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { snakeCase } from 'lodash-es';
-import { before, describe, expect, it } from 'esmocha';
-import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.js';
-import { defaultHelpers as helpers, result, runResult } from '../../lib/testing/index.js';
-import { testFrameworkTypes } from '../../lib/jhipster/index.js';
-import { GENERATOR_CLIENT } from '../generator-list.js';
-import Generator from './index.js';
+import { before, describe, it } from 'esmocha';
+import { basename, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { testFrameworkTypes } from '../../lib/jhipster/index.ts';
+import { defaultHelpers as helpers, result, runResult } from '../../lib/testing/index.ts';
+import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
+
+import Generator from './index.ts';
 
 const { CYPRESS } = testFrameworkTypes;
 
@@ -34,12 +34,9 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 
 describe(`generator - ${generator}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
-  checkEnforcements({ client: true }, GENERATOR_CLIENT);
+  checkEnforcements({ client: true }, generator);
 
   describe('composing', () => {
     const mockedComposedGenerators = ['jhipster:common', 'jhipster:languages', 'jhipster:cypress'];

@@ -1,0 +1,31 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "jwt",
+    "baseName": "sampleReactCouchbaseCaffeine",
+    "buildTool": "gradle",
+    "cacheProvider": "caffeine",
+    "clientFramework": "react",
+    "clientTheme": "none",
+    "clientThemeVariant": "",
+    "creationTimestamp": 1596513172471,
+    "databaseType": "couchbase",
+    "devDatabaseType": "couchbase",
+    "dtoSuffix": "DTO",
+    "embeddableLaunchScript": false,
+    "enableHibernateCache": false,
+    "enableTranslation": true,
+    "entitySuffix": "",
+    "jhiPrefix": "jhi",
+    "jwtSecretKey": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+    "languages": ["en"],
+    "nativeLanguage": "en",
+    "packageFolder": "tech/jhipster/sample",
+    "packageName": "tech.jhipster.sample",
+    "prodDatabaseType": "couchbase",
+    "searchEngine": "couchbase",
+    "serverPort": "8080",
+    "serviceDiscoveryType": "no",
+    "testFrameworks": ["gatling", "cypress"]
+  }
+}

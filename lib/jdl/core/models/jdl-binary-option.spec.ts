@@ -18,9 +18,12 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import JDLBinaryOption from '../models/jdl-binary-option.js';
-import { binaryOptions } from '../built-in-options/index.js';
+
+import { binaryOptions } from '../built-in-options/index.ts';
+
+import JDLBinaryOption from './jdl-binary-option.ts';
 
 describe('jdl - JDLBinaryOption', () => {
   describe('new', () => {
@@ -41,7 +44,7 @@ describe('jdl - JDLBinaryOption', () => {
       });
     });
     describe('when passing a name and a value', () => {
-      let option;
+      let option: JDLBinaryOption;
 
       before(() => {
         option = new JDLBinaryOption({
@@ -57,7 +60,7 @@ describe('jdl - JDLBinaryOption', () => {
       });
     });
     describe('when passing a list of entity names and excluded names with some of them being repeated', () => {
-      let option;
+      let option: JDLBinaryOption;
 
       before(() => {
         option = new JDLBinaryOption({
@@ -80,7 +83,7 @@ describe('jdl - JDLBinaryOption', () => {
     });
   });
   describe('setEntityNames', () => {
-    let option;
+    let option: JDLBinaryOption;
 
     before(() => {
       option = new JDLBinaryOption({
@@ -98,7 +101,7 @@ describe('jdl - JDLBinaryOption', () => {
   });
   describe('addEntityName', () => {
     describe('when passing a nil name', () => {
-      let option;
+      let option: JDLBinaryOption;
 
       before(() => {
         option = new JDLBinaryOption({ name: binaryOptions.Options.DTO, value: binaryOptions.Values.dto.MAPSTRUCT });
@@ -106,12 +109,13 @@ describe('jdl - JDLBinaryOption', () => {
 
       it('should fail', () => {
         expect(() => {
+          // @ts-expect-error invalid api test
           option.addEntityName(null);
         }).to.throw('An entity name has to be passed so as to be added to the option.');
       });
     });
     describe("when passing a name that hasn't been added yet", () => {
-      let option;
+      let option: JDLBinaryOption;
 
       before(() => {
         option = new JDLBinaryOption({ name: binaryOptions.Options.DTO, value: binaryOptions.Values.dto.MAPSTRUCT });
@@ -123,7 +127,7 @@ describe('jdl - JDLBinaryOption', () => {
       });
     });
     describe('when passing a name that has already been added', () => {
-      let option;
+      let option: JDLBinaryOption;
 
       before(() => {
         option = new JDLBinaryOption({ name: binaryOptions.Options.DTO, value: binaryOptions.Values.dto.MAPSTRUCT });
@@ -136,7 +140,7 @@ describe('jdl - JDLBinaryOption', () => {
       });
     });
     describe('when passing an excluded name', () => {
-      let option;
+      let option: JDLBinaryOption;
 
       before(() => {
         option = new JDLBinaryOption({ name: binaryOptions.Options.DTO, value: binaryOptions.Values.dto.MAPSTRUCT });
@@ -152,7 +156,7 @@ describe('jdl - JDLBinaryOption', () => {
   });
   describe('excludeEntityName', () => {
     describe('when passing a nil name', () => {
-      let option;
+      let option: JDLBinaryOption;
 
       before(() => {
         option = new JDLBinaryOption({ name: binaryOptions.Options.DTO, value: binaryOptions.Values.dto.MAPSTRUCT });
@@ -160,12 +164,13 @@ describe('jdl - JDLBinaryOption', () => {
 
       it('should fail', () => {
         expect(() => {
+          // @ts-expect-error invalid api test
           option.excludeEntityName(null);
         }).to.throw('An entity name has to be passed so as to be excluded from the option.');
       });
     });
     describe("when passing a name that hasn't been excluded yet", () => {
-      let option;
+      let option: JDLBinaryOption;
 
       before(() => {
         option = new JDLBinaryOption({ name: binaryOptions.Options.DTO, value: binaryOptions.Values.dto.MAPSTRUCT });
@@ -177,7 +182,7 @@ describe('jdl - JDLBinaryOption', () => {
       });
     });
     describe('when passing a name that has already been excluded', () => {
-      let option;
+      let option: JDLBinaryOption;
 
       before(() => {
         option = new JDLBinaryOption({ name: binaryOptions.Options.DTO, value: binaryOptions.Values.dto.MAPSTRUCT });
@@ -190,7 +195,7 @@ describe('jdl - JDLBinaryOption', () => {
       });
     });
     describe('when passing an added name', () => {
-      let option;
+      let option: JDLBinaryOption;
 
       before(() => {
         option = new JDLBinaryOption({ name: binaryOptions.Options.DTO, value: binaryOptions.Values.dto.MAPSTRUCT });
@@ -217,7 +222,7 @@ describe('jdl - JDLBinaryOption', () => {
       });
     });
     describe('when passing a valid option', () => {
-      let returned;
+      let returned: boolean;
 
       before(() => {
         const option2 = new JDLBinaryOption({
@@ -241,7 +246,7 @@ describe('jdl - JDLBinaryOption', () => {
     });
   });
   describe('toString', () => {
-    let option;
+    let option: JDLBinaryOption;
 
     before(() => {
       option = new JDLBinaryOption({

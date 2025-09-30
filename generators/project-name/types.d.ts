@@ -16,9 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { HandleCommandTypes } from '../../lib/command/types.js';
-import type { Config as BaseConfig, Options as BaseOptions, Source as BaseSource } from '../base/types.js';
-import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../base-application/types.js';
+import type { HandleCommandTypes } from '../../lib/command/types.ts';
+import type { Config as BaseConfig, Options as BaseOptions, Source as BaseSource } from '../base/types.ts';
+
+import type { ProjectNameAddedApplicationProperties } from './application.ts';
 import type command from './command.ts';
 
 type Command = HandleCommandTypes<typeof command>;
@@ -27,6 +28,6 @@ export type Config = Command['Config'] & BaseConfig;
 
 export type Options = Command['Options'] & BaseOptions;
 
-export { BaseSource as Source, BaseApplicationEntity as Entity };
+export { BaseSource as Source };
 
-export type Application<E extends BaseApplicationEntity = BaseApplicationEntity> = Command['Application'] & BaseApplicationApplication<E>;
+export type Application = Command['Application'] & ProjectNameAddedApplicationProperties;

@@ -1,10 +1,11 @@
-import { extname } from 'path';
-import { passthrough } from 'p-transform';
-import { isFileStateModified } from 'mem-fs-editor/state';
+import { extname } from 'node:path';
+
 import type { VinylMemFsEditorFile } from 'mem-fs-editor';
+import { isFileStateModified } from 'mem-fs-editor/state';
+import { passthrough } from 'p-transform';
 import { Piscina } from 'piscina';
 
-import type CoreGenerator from '../../base-core/index.js';
+import type CoreGenerator from '../../base-core/index.ts';
 import { addLineNumbers } from '../internal/transform-utils.js';
 
 export const createRemoveUnusedImportsTransform = function (

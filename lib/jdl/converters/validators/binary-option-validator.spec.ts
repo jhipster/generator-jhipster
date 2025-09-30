@@ -18,12 +18,15 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import JDLBinaryOption from '../../core/models/jdl-binary-option.js';
-import BinaryOptionValidator from '../validators/binary-option-validator.js';
+
+import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
+
+import BinaryOptionValidator from './binary-option-validator.ts';
 
 describe('jdl - BinaryOptionValidator', () => {
-  let validator;
+  let validator: BinaryOptionValidator;
 
   before(() => {
     validator = new BinaryOptionValidator();
@@ -32,10 +35,12 @@ describe('jdl - BinaryOptionValidator', () => {
   describe('validate', () => {
     describe('when not passing anything', () => {
       it('should fail', () => {
+        // @ts-expect-error invalid api test
         expect(() => validator.validate()).to.throw(/^No binary option\.$/);
       });
     });
     it('should fail', () => {
+      // @ts-expect-error invalid api test
       expect(() => validator.validate({})).to.throw(
         /^The binary option attributes name, entityNames, excludedNames, getType, value were not found\.$/,
       );

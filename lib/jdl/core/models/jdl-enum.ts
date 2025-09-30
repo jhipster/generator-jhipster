@@ -17,9 +17,10 @@
  * limitations under the License.
  */
 
-import { merge } from '../utils/object-utils.js';
-import type { ParsedJDLEnumValue } from '../types/parsed.js';
-import JDLEnumValue from './jdl-enum-value.js';
+import type { ParsedJDLEnumValue } from '../types/parsed.ts';
+import { merge } from '../utils/object-utils.ts';
+
+import JDLEnumValue from './jdl-enum-value.ts';
 
 export default class JDLEnum {
   comment?: string;

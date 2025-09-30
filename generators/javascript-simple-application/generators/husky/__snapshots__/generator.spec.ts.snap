@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`generator - javascript-simple-application:husky skipCommitHook(false) should call source snapshot 1`] = `{}`;
+
+exports[`generator - javascript-simple-application:husky skipCommitHook(false) should match files snapshot 1`] = `
+{
+  ".husky/pre-commit": {
+    "contents": "if [ -z "$(which lint-staged)" ]; then
+    echo 'Running package manager install'
+    npm install
+fi
+
+lint-staged
+",
+    "stateCleared": "modified",
+  },
+  ".lintstagedrc.cjs": {
+    "contents": "module.exports = {
+  '{PRETTIER_FOLDERS}*.{PRETTIER_EXTENSIONS}': ['prettier --write'],
+};
+",
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": ObjectContaining {
+    "contents": Any<String>,
+  },
+  "package.json": {
+    "contents": "{
+  "scripts": {
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "HUSKY_VERSION",
+    "lint-staged": "LINT_STAGED_VERSION"
+  }
+}
+",
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - javascript-simple-application:husky skipCommitHook(true) should call source snapshot 1`] = `{}`;
+
+exports[`generator - javascript-simple-application:husky skipCommitHook(true) should match files snapshot 1`] = `
+{
+  ".yo-rc.json": ObjectContaining {
+    "contents": Any<String>,
+  },
+}
+`;

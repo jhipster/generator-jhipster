@@ -1,6 +1,8 @@
 import { before, describe, expect, it } from 'esmocha';
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
-import { GENERATOR_KUBERNETES_HELM } from '../generator-list.js';
+
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
+
+const GENERATOR_KUBERNETES_HELM = 'kubernetes-helm';
 
 const expectedFiles = {
   csvcfiles: [

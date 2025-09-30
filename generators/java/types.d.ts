@@ -1,8 +1,4 @@
-import type { RequireOneOrNone } from 'type-fest';
-import type { Application as GradleApplication, GradleNeedleOptions, Source as GradleSource } from '../gradle/types.js';
-import type { EditFileCallback } from '../base-core/api.js';
-import type { MavenDefinition, Source as MavenSource } from '../maven/types.js';
-import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/index.js';
+import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/index.ts';
 import type {
   Application as BaseApplicationApplication,
   Config as BaseApplicationConfig,
@@ -12,18 +8,34 @@ import type {
   Relationship as BaseApplicationRelationship,
   Source as BaseApplicationSource,
 } from '../base-application/types.d.ts';
-import type { JavaAnnotation } from './support/add-java-annotation.ts';
+import type { Application as GradleApplication } from '../gradle/types.ts';
 import type {
-  Application as JavaBootstrapApplication,
-  Config as JavaBootstrapConfig,
-  Options as JavaBootstrapOptions,
-} from './generators/bootstrap/types.js';
+  Application as JavaSimpleApplicationApplication,
+  Config as JavaSimpleApplicationConfig,
+  Options as JavaSimpleApplicationOptions,
+  Source as JavaSimpleApplicationSource,
+} from '../java-simple-application/types.ts';
+import type { Application as LanguagesApplication } from '../languages/types.ts';
+
+import type { JavaAddedApplicationProperties } from './application.ts';
 import type {
   Application as BuildToolApplication,
   Config as BuildToolConfig,
   Options as BuildToolOptions,
-} from './generators/build-tool/types.js';
-import type GraalvmCommand from './generators/graalvm/command.js';
+} from './generators/build-tool/types.ts';
+import type GraalvmCommand from './generators/graalvm/command.ts';
+
+export type {
+  ConditionalJavaDefinition,
+  JavaArtifact,
+  JavaArtifactType,
+  JavaArtifactVersion,
+  JavaDefinition,
+  JavaDependency,
+  JavaDependencyVersion,
+  JavaNeedleOptions,
+  SpringBean,
+} from '../java-simple-application/types.ts';
 
 type Property = {
   propertyJavaFilterName?: string;
@@ -66,6 +78,8 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
 
   propertyJavaFilteredType?: string;
 
+  dtoSuffix?: string;
+
   dtoClass?: string;
   dtoInstance?: string;
 
@@ -94,53 +108,18 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
   relationshipsContainOtherSideIgnore?: boolean;
 }
 
-export type JavaDependencyVersion = {
-  name: string;
-  version: string;
-};
-
-export type JavaArtifactType = {
-  type?: 'jar' | 'pom';
-  scope?: 'compile' | 'provided' | 'runtime' | 'test' | 'system' | 'import' | 'annotationProcessor';
-};
-
-export type JavaArtifact = {
-  groupId: string;
-  artifactId: string;
-  classifier?: string;
-} & JavaArtifactType;
-
-export type JavaArtifactVersion = RequireOneOrNone<{ version?: string; versionRef?: string }, 'version' | 'versionRef'>;
-
-export type JavaDependency = JavaArtifact &
-  JavaArtifactVersion & {
-    exclusions?: JavaArtifact[];
-  };
-
-export type JavaDefinition = {
-  versions?: JavaDependencyVersion[];
-  dependencies?: JavaDependency[];
-  mavenDefinition?: MavenDefinition;
-};
-
-export type JavaNeedleOptions = GradleNeedleOptions;
-
 export type Config = BaseApplicationConfig &
-  JavaBootstrapConfig &
+  JavaSimpleApplicationConfig &
   BuildToolConfig &
   ExportStoragePropertiesFromCommand<typeof GraalvmCommand>;
 
 export type Options = BaseApplicationOptions &
-  JavaBootstrapOptions &
+  JavaSimpleApplicationOptions &
   BuildToolOptions &
   ExportGeneratorOptionsFromCommand<typeof GraalvmCommand>;
 
 type DatabaseApplication = {
   jhiTablePrefix: string;
-};
-
-type CommonProperties = {
-  authenticationUsesCsrf: boolean;
 };
 
 type SpringApplication = {
@@ -149,103 +128,12 @@ type SpringApplication = {
 
 export type Application<E extends BaseApplicationEntity<BaseApplicationField, BaseApplicationRelationship> = Entity<Field, Relationship>> =
   BaseApplicationApplication<E> &
-    JavaBootstrapApplication &
+    JavaSimpleApplicationApplication &
+    JavaAddedApplicationProperties &
     BuildToolApplication &
     GradleApplication &
-    CommonProperties &
     SpringApplication &
-    DatabaseApplication & {
-      reactive?: boolean;
-      buildToolUnknown?: boolean;
-      buildToolExecutable: string;
+    LanguagesApplication &
+    DatabaseApplication & {};
 
-      prettierJava: boolean;
-
-      addOpenapiGeneratorPlugin: boolean;
-      useNpmWrapper: boolean;
-      graalvmReachabilityMetadata: string;
-
-      cucumberTests: boolean;
-      gatlingTests: boolean;
-
-      imperativeOrReactive: string;
-      optionalOrMono: string;
-      optionalOrMonoOfNullable: string;
-      listOrFlux: string;
-      optionalOrMonoClassPath: string;
-      wrapMono: (className: string) => string;
-      listOrFluxClassPath: string;
-      reactorBlock: string;
-      reactorBlockOptional: string;
-
-      domains: string[];
-      jhipsterDependenciesVersion?: string;
-    };
-
-export type ConditionalJavaDefinition = JavaDefinition & { condition?: boolean };
-
-export type SpringBean = { package: string; beanClass: string; beanName: string };
-
-export type Source = BaseApplicationSource &
-  MavenSource &
-  GradleSource & {
-    /**
-     * Add a JavaDefinition to the application.
-     * A version requires a valid version otherwise it will be ignored.
-     * A dependency with versionRef requires a valid referenced version at `versions` otherwise it will be ignored.
-     */
-    addJavaDefinition?(definition: JavaDefinition, options?: JavaNeedleOptions): void;
-    addJavaDefinitions?(
-      optionsOrDefinition: JavaNeedleOptions | ConditionalJavaDefinition,
-      ...definitions: ConditionalJavaDefinition[]
-    ): void;
-    addJavaDependencies?(dependency: JavaDependency[], options?: JavaNeedleOptions): void;
-    hasJavaProperty?(propertyName: string): boolean;
-    hasJavaManagedProperty?(propertyName: string): boolean;
-    addMainLog?({ name, level }: { name: string; level: string }): void;
-    addTestLog?({ name, level }: { name: string; level: string }): void;
-
-    /**
-     * Edit a Java file by adding static imports, imports and annotations.
-     * Callbacks are passed to the editFile method.
-     */
-    editJavaFile?: (
-      file: string,
-      options: {
-        staticImports?: string[];
-        imports?: string[];
-        annotations?: JavaAnnotation[];
-        /**
-         * Constructor parameters to add to the class.
-         */
-        constructorParams?: string[];
-        /**
-         * Fields to add to the class.
-         * Requires a valid constructor.
-         */
-        fields?: string[];
-        /**
-         * Spring beans to add to the class.
-         */
-        springBeans?: SpringBean[];
-      },
-      ...editFileCallback: EditFileCallback[]
-    ) => void;
-    /**
-     * Add enum values to a Java enum.
-     *
-     * @example
-     * ```js
-     * addItemsToJavaEnumFile('src/main/java/my/package/MyEnum.java', {
-     *   enumValues: ['VALUE1', 'VALUE2'],
-     * });
-     * ```
-     */
-    addItemsToJavaEnumFile?: (
-      file: string,
-      options: {
-        enumName?: string;
-        enumValues: string[];
-      },
-    ) => void;
-  };
+export type Source = BaseApplicationSource & JavaSimpleApplicationSource;

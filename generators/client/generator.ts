@@ -16,23 +16,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { startCase } from 'lodash-es';
 
-import BaseApplicationGenerator from '../base-application/index.js';
-
-import { LOGIN_REGEX_JS } from '../generator-constants.js';
-import { GENERATOR_CLIENT, GENERATOR_COMMON, GENERATOR_CYPRESS } from '../generator-list.js';
-
-import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.js';
+import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
+import BaseApplicationGenerator from '../base-application/index.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
-import { addEnumerationFiles } from './entity-files.js';
-import { writeFiles as writeCommonFiles } from './files-common.js';
-import { askForClientTheme, askForClientThemeVariant } from './prompts.js';
-import { filterEntitiesAndPropertiesForClient } from './support/filter-entities.js';
+import { isReservedTypescriptKeyword } from '../javascript-simple-application/support/reserved-words.ts';
+
+import { addEnumerationFiles } from './entity-files.ts';
+import { writeFiles as writeCommonFiles } from './files-common.ts';
+import { askForClientTheme, askForClientThemeVariant } from './prompts.ts';
+import { filterEntitiesAndPropertiesForClient } from './support/filter-entities.ts';
 import type {
   Application as ClientApplication,
   Config as ClientConfig,
   Entity as ClientEntity,
+  Features as ClientFeatures,
   Options as ClientOptions,
   Source as ClientSource,
 } from './types.d.ts';
@@ -49,15 +47,18 @@ export class ClientApplicationGenerator<
 > extends BaseApplicationGenerator<Entity, Application, Config, Options, Source> {}
 
 export default class ClientGenerator extends ClientApplicationGenerator {
+  constructor(args?: string[], options?: ClientOptions, features?: ClientFeatures) {
+    super(args, options, { skipLoadCommand: true, ...features });
+  }
+
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
-      await this.dependsOnBootstrapApplication();
-      await this.dependsOnJHipster(GENERATOR_COMMON);
+      await this.dependsOnBootstrap('client');
+      await this.dependsOnJHipster('common');
     }
   }
 
@@ -116,7 +117,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
           await this.composeWithJHipster(clientFramework!);
         }
         if (Array.isArray(testFrameworks) && testFrameworks.includes(CYPRESS)) {
-          await this.composeWithJHipster(GENERATOR_CYPRESS);
+          await this.composeWithJHipster('cypress');
         }
       },
     });
@@ -128,20 +129,11 @@ export default class ClientGenerator extends ClientApplicationGenerator {
 
   get loading() {
     return this.asLoadingTaskGroup({
-      loadProperties({ applicationDefaults }) {
-        // TODO v8 rename to nodePackageManager;
-        applicationDefaults({
-          clientPackageManager: 'npm',
-          clientThemeNone: ({ clientTheme }) => !clientTheme || clientTheme === 'none',
-          clientThemeAny: ({ clientThemeNone }) => !clientThemeNone,
-        });
-      },
-
       loadPackageJson({ application }) {
         // Load common client package.json into packageJson
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_CLIENT, 'resources', 'package.json'),
+          this.fetchFromInstalledJHipster('client', 'resources', 'package.json'),
         );
       },
     });
@@ -154,23 +146,6 @@ export default class ClientGenerator extends ClientApplicationGenerator {
   // Public API method used by the getter and also by Blueprints
   get preparing() {
     return this.asPreparingTaskGroup({
-      preparing({ applicationDefaults }) {
-        applicationDefaults({
-          clientBundlerName: ctx => (ctx.clientBundlerExperimentalEsbuild ? 'esbuild' : startCase(ctx.clientBundler)),
-          clientTestFramework: ctx => (ctx.clientFrameworkVue ? 'vitest' : 'jest'),
-          clientTestFrameworkName: ctx => startCase(ctx.clientTestFramework),
-        });
-      },
-      microservice({ application }) {
-        if (application.applicationTypeMicroservice) {
-          application.withAdminUi = false;
-        }
-      },
-
-      prepareForTemplates({ application }) {
-        application.webappLoginRegExp = LOGIN_REGEX_JS;
-      },
-
       addExternalResource({ application, source }) {
         if (!application.clientFrameworkBuiltIn) {
           return;
@@ -191,7 +166,50 @@ export default class ClientGenerator extends ClientApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
-  // Public API method used by the getter and also by Blueprints
+  get preparingEachEntity() {
+    return this.asPreparingEachEntityTaskGroup({
+      preparing({ entityName }) {
+        if (isReservedTypescriptKeyword(entityName)) {
+          throw new Error(`The entity name "${entityName}" is a reserved TypeScript keyword. It may cause issues in your application.`);
+        }
+      },
+    });
+  }
+
+  get [ClientApplicationGenerator.PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
+  }
+
+  get preparingEachEntityField() {
+    return this.asPreparingEachEntityFieldTaskGroup({
+      preparing({ entity, field }) {
+        if (isReservedTypescriptKeyword(field.fieldName)) {
+          throw new Error(`The field name "${field.fieldName}" in entity "${entity.name}" is a reserved TypeScript keyword.`);
+        }
+      },
+    });
+  }
+
+  get [ClientApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+  }
+
+  get preparingEachEntityRelationship() {
+    return this.asPreparingEachEntityRelationshipTaskGroup({
+      preparing({ entity, relationship }) {
+        if (isReservedTypescriptKeyword(relationship.relationshipName)) {
+          throw new Error(
+            `The relationship name "${relationship.relationshipName}" in entity "${entity.name}" is a reserved TypeScript keyword.`,
+          );
+        }
+      },
+    });
+  }
+
+  get [ClientApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
+  }
+
   get writing() {
     return this.asWritingTaskGroup({
       async cleanup({ application, control }) {

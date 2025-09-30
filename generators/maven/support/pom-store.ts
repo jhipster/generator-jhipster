@@ -19,8 +19,9 @@
 
 import { get, set } from 'lodash-es';
 
-import type CoreGenerator from '../../base-core/index.js';
-import XmlStorage from '../internal/xml-store.js';
+import type CoreGenerator from '../../base-core/index.ts';
+import { type MavenProjectLike, formatPomFirstLevel, sortPomProject } from '../internal/pom-sort.ts';
+import XmlStorage from '../internal/xml-store.ts';
 import type {
   MavenAnnotationProcessor,
   MavenArtifact,
@@ -31,8 +32,7 @@ import type {
   MavenProfile,
   MavenProperty,
   MavenRepository,
-} from '../types.js';
-import { type MavenProjectLike, formatPomFirstLevel, sortPomProject } from '../internal/pom-sort.js';
+} from '../types.ts';
 
 const artifactEquals = (a: MavenArtifact, b: MavenArtifact) => a.groupId === b.groupId && a.artifactId === b.artifactId;
 
@@ -124,23 +124,23 @@ export default class PomStorage extends XmlStorage {
     super({ saveFile, loadFile, sortFile });
   }
 
-  public addProperty({ inProfile, property, value = null }: MavenProperty) {
+  addProperty({ inProfile, property, value = null }: MavenProperty) {
     const node = this.getNode({ nodePath: 'properties', profile: inProfile });
     node[property] = value;
     this.persist();
   }
 
-  public addDependency({ inProfile, ...dependency }: MavenDependency): void {
+  addDependency({ inProfile, ...dependency }: MavenDependency): void {
     this.addDependencyAt(this.getNode({ profile: inProfile }), reorderDependency(dependency));
     this.persist();
   }
 
-  public addDependencyManagement({ inProfile, ...dependency }: MavenDependency): void {
+  addDependencyManagement({ inProfile, ...dependency }: MavenDependency): void {
     this.addDependencyAt(this.getNode({ profile: inProfile, nodePath: 'dependencyManagement' }), reorderDependency(dependency));
     this.persist();
   }
 
-  public addDistributionManagement({ inProfile, snapshotsId, snapshotsUrl, releasesId, releasesUrl }: MavenDistributionManagement) {
+  addDistributionManagement({ inProfile, snapshotsId, snapshotsUrl, releasesId, releasesUrl }: MavenDistributionManagement) {
     const store = this.getNode({ profile: inProfile });
     store.distributionManagement = {
       snapshotRepository: {
@@ -155,33 +155,33 @@ export default class PomStorage extends XmlStorage {
     this.persist();
   }
 
-  public addProfile({ content, ...profile }: MavenProfile): void {
+  addProfile({ content, ...profile }: MavenProfile): void {
     const profileArray = ensureChildIsArray(this.getNode(), 'profiles.profile');
     appendOrReplace(profileArray, this.mergeContent(profile, content), idEquals);
     this.persist();
   }
 
-  public addPlugin({ inProfile, ...plugin }: MavenPlugin): void {
+  addPlugin({ inProfile, ...plugin }: MavenPlugin): void {
     this.addPluginAt(this.getNode({ profile: inProfile, nodePath: 'build' }), plugin);
     this.persist();
   }
 
-  public addPluginManagement({ inProfile, ...plugin }: MavenPlugin): void {
+  addPluginManagement({ inProfile, ...plugin }: MavenPlugin): void {
     this.addPluginAt(this.getNode({ profile: inProfile, nodePath: 'build.pluginManagement' }), plugin);
     this.persist();
   }
 
-  public addRepository({ inProfile, ...repository }: MavenRepository): void {
+  addRepository({ inProfile, ...repository }: MavenRepository): void {
     this.addRepositoryAt(this.getNode({ profile: inProfile }), repository);
     this.persist();
   }
 
-  public addPluginRepository({ inProfile, ...repository }: MavenRepository): void {
+  addPluginRepository({ inProfile, ...repository }: MavenRepository): void {
     this.addPluginRepositoryAt(this.getNode({ profile: inProfile }), repository);
     this.persist();
   }
 
-  public addAnnotationProcessor({ inProfile, ...artifact }: MavenAnnotationProcessor) {
+  addAnnotationProcessor({ inProfile, ...artifact }: MavenAnnotationProcessor) {
     const node = this.getNode({ profile: inProfile });
     const plugins = ensureChildIsArray(node, 'build.pluginManagement.plugins.plugin');
     const annotationProcessorPaths = ensureChild(

@@ -18,9 +18,12 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import JDLValidation from '../models/jdl-validation.js';
-import { validations } from '../built-in-options/index.js';
+
+import { validations } from '../built-in-options/index.ts';
+
+import JDLValidation from './jdl-validation.ts';
 
 const {
   Validations: { PATTERN },
@@ -29,7 +32,7 @@ const {
 describe('jdl - JDLValidation', () => {
   describe('new', () => {
     describe('when not passing any argument', () => {
-      let validation;
+      let validation: JDLValidation;
 
       before(() => {
         // @ts-expect-error
@@ -42,7 +45,7 @@ describe('jdl - JDLValidation', () => {
       });
     });
     describe('when passing arguments', () => {
-      let validation;
+      let validation: JDLValidation;
 
       before(() => {
         validation = new JDLValidation({
@@ -59,7 +62,7 @@ describe('jdl - JDLValidation', () => {
   });
   describe('toString', () => {
     describe('with no value', () => {
-      let validation;
+      let validation: JDLValidation;
 
       before(() => {
         // @ts-expect-error
@@ -71,7 +74,7 @@ describe('jdl - JDLValidation', () => {
       });
     });
     describe('with a value', () => {
-      let validation;
+      let validation: JDLValidation;
       let args: any = {};
 
       before(() => {

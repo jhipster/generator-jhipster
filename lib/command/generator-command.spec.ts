@@ -1,8 +1,11 @@
 import { describe, expect } from 'esmocha';
+
 import type { GeneratorMeta } from '@yeoman/types';
-import { defaultHelpers as helpers, runResult } from '../testing/index.js';
-import BaseApplicationGenerator from '../../generators/base-application/generator.js';
-import type { JHipsterCommandDefinition, JHipsterConfig } from './types.js';
+
+import BaseApplicationGenerator from '../../generators/base-application/generator.ts';
+import { defaultHelpers as helpers, runResult } from '../testing/index.ts';
+
+import type { JHipsterCommandDefinition, JHipsterConfig } from './types.ts';
 
 const notImplementedCallback = (methodName: string) => {
   return () => {
@@ -20,19 +23,18 @@ const dummyMeta = {
 };
 
 class CommandGenerator extends BaseApplicationGenerator {
-  _context: any = {};
-
-  get context() {
-    return this._context;
-  }
-
   constructor(args: any, opts: any, features: any) {
     super(args, opts, { ...features, jhipsterBootstrap: false });
     this.customLifecycle = true;
   }
+
+  rootGeneratorName() {
+    // Simulates a blueprint generator.
+    return 'blueprint';
+  }
 }
 
-const runDummyCli = (cliArgs: string, config: JHipsterConfig<any>) => {
+const runDummyCli = (cliArgs: string, config: JHipsterConfig) => {
   return helpers
     .runCli(cliArgs.startsWith('jdl ') ? cliArgs : `dummy ${cliArgs}`.trim(), {
       useEnvironmentBuilder: false,
@@ -48,7 +50,7 @@ const runDummyCli = (cliArgs: string, config: JHipsterConfig<any>) => {
       }
 
       const metaStore: Record<string, GeneratorMeta> = (env as any).store._meta;
-      metaStore['jhipster:dummy'] = {
+      const generatorMeta = {
         ...dummyMeta,
         namespace: 'jhipster:dummy',
         importModule: () =>
@@ -57,6 +59,8 @@ const runDummyCli = (cliArgs: string, config: JHipsterConfig<any>) => {
           }),
         importGenerator: () => Promise.resolve(CommandGenerator as any),
       };
+      (CommandGenerator as any)._meta = generatorMeta;
+      metaStore['jhipster:dummy'] = generatorMeta;
       metaStore['jhipster:bootstrap'] = {
         ...dummyMeta,
         namespace: 'jhipster:bootstrap',
@@ -100,7 +104,7 @@ describe('generator commands', () => {
           expectGeneratorTestOption().toBe(value);
         }
 
-        if (scope !== 'context') {
+        if (!['application', 'context', 'storage', 'blueprint'].includes(scope)) {
           expectContextTestOption().toBeUndefined();
         } else if (Array.isArray(value)) {
           expectContextTestOption().toEqual(value);

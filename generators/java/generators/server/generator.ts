@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { Source as CommonSource } from '../../../common/types.d.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
 
 const WAIT_TIMEOUT = 3 * 60000;
@@ -27,7 +28,7 @@ export default class ServerGenerator extends JavaApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:java:bootstrap');
+      await this.dependsOnBootstrap('java');
     }
   }
 
@@ -107,6 +108,22 @@ export default class ServerGenerator extends JavaApplicationGenerator {
           : 'http-get://127.0.0.1:$npm_package_config_backend_port/management/health';
         scriptsStorage.set({
           'ci:server:await': `echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on -t ${applicationWaitTimeout} ${applicationEndpoint} && echo "Server at port $npm_package_config_backend_port started"`,
+        });
+      },
+      sonar({ application, source }) {
+        (source as CommonSource).ignoreSonarRule?.({
+          ruleId: 'S7027-dto',
+          ruleKey: 'javaarchitecture:S7027',
+          resourceKey: `${application.javaPackageSrcDir}service/dto/**/*`,
+          comment: 'Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for dtos',
+        });
+
+        (source as CommonSource).ignoreSonarRule?.({
+          ruleId: 'UndocumentedApi',
+          ruleKey: 'squid:UndocumentedApi',
+          resourceKey: `${application.javaPackageSrcDir}**/*`,
+          comment:
+            'Rule https://rules.sonarsource.com/java/RSPEC-1176 is ignored, as we want to follow "clean code" guidelines and classes, methods and arguments names should be self-explanatory',
         });
       },
     });

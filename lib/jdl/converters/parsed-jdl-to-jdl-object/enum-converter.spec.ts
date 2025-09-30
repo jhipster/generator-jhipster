@@ -18,7 +18,8 @@
  */
 
 import { before, describe, expect, it } from 'esmocha';
-import { convertEnums } from './enum-converter.js';
+
+import { convertEnums } from './enum-converter.ts';
 
 describe('jdl - EnumConverter', () => {
   describe('convertEnums', () => {
@@ -29,7 +30,7 @@ describe('jdl - EnumConverter', () => {
       });
     });
     describe('when passing enumerations', () => {
-      let convertedEnums;
+      let convertedEnums: ReturnType<typeof convertEnums>;
 
       before(() => {
         convertedEnums = convertEnums([

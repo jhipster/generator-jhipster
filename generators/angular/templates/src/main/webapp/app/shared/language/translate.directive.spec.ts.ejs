@@ -24,23 +24,23 @@ import TranslateDirective from './translate.directive';
 
 @Component({
   imports: [TranslateDirective],
-  template: ` <div <%= jhiPrefix %>Translate="test"></div> `,
+  template: `<div <%= jhiPrefix %>Translate="test"></div>`,
 })
-class TestTranslateDirectiveComponent {}
+class TestTranslateDirective {}
 
 describe('TranslateDirective Tests', () => {
-  let fixture: ComponentFixture<TestTranslateDirectiveComponent>;
+  let fixture: ComponentFixture<TestTranslateDirective>;
   let translateService: TranslateService;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot(), TestTranslateDirectiveComponent],
+      imports: [TranslateModule.forRoot()],
     });
   }));
 
   beforeEach(() => {
     translateService = TestBed.inject(TranslateService);
-    fixture = TestBed.createComponent(TestTranslateDirectiveComponent);
+    fixture = TestBed.createComponent(TestTranslateDirective);
   });
 
   it('should change HTML', () => {

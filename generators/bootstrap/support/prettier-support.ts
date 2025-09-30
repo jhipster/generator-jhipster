@@ -16,17 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { passthrough } from 'p-transform';
+import type { VinylMemFsEditorFile } from 'mem-fs-editor';
 import { isFileStateModified } from 'mem-fs-editor/state';
 import { Minimatch } from 'minimatch';
+import { passthrough } from 'p-transform';
 import { Piscina } from 'piscina';
 import type { Options as PrettierOptions } from 'prettier';
-import type { MemFsEditorFile, VinylMemFsEditorFile } from 'mem-fs-editor';
-import type CoreGenerator from '../../base-core/index.js';
+
+import type CoreGenerator from '../../base-core/index.ts';
 
 const minimatch = new Minimatch('**/{.prettierrc**,.prettierignore}');
 export const isPrettierConfigFilePath = (filePath: string) => minimatch.match(filePath);
-export const isPrettierConfigFile = (file: MemFsEditorFile) => isPrettierConfigFilePath(file.path);
 
 type PrettierWorkerOptions = {
   prettierPackageJson?: boolean;

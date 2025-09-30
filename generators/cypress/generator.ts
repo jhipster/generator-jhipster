@@ -17,22 +17,23 @@
  * limitations under the License.
  */
 
+import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
+import { mutateData, stringHashCode } from '../../lib/utils/index.ts';
+import BaseApplicationGenerator from '../base-application/index.ts';
 import { createFaker } from '../base-application/support/index.ts';
-import { mutateData, stringHashCode } from '../../lib/utils/index.js';
-import BaseApplicationGenerator from '../base-application/index.js';
-import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
+import { generateTestEntity } from '../client/support/index.ts';
+import type { Source as ClientSource } from '../client/types.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
+import type { Source as JavaSource } from '../java/types.d.ts';
 
-import { generateTestEntity } from '../client/support/index.js';
-import type { Source as ClientSource } from '../client/types.js';
-import { cypressEntityFiles, cypressFiles } from './files.js';
-import type { Application as CypressApplication, Entity as CypressEntity, Field as CypressField } from './types.js';
+import { cypressEntityFiles, cypressFiles } from './files.ts';
+import type { Application as CypressApplication, Entity as CypressEntity, Field as CypressField } from './types.ts';
 
 const { ANGULAR } = clientFrameworkTypes;
 
 const WAIT_TIMEOUT = 3 * 60000;
 
-export default class CypressGenerator extends BaseApplicationGenerator<CypressEntity, CypressApplication<CypressEntity>> {
+export default class CypressGenerator extends BaseApplicationGenerator<CypressEntity, CypressApplication> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -40,7 +41,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
 
     if (!this.delegateToBlueprint) {
       // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
-      await this.dependsOnBootstrapApplication();
+      await this.dependsOnBootstrap('client');
     }
   }
 
@@ -231,6 +232,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
         const clientPackageJson = this.createStorage(this.destinationPath(application.clientRootDir!, 'package.json'));
         clientPackageJson.merge({
           devDependencies: {
+            cypress: application.nodeDependencies.cypress,
             'eslint-plugin-cypress': application.nodeDependencies['eslint-plugin-cypress'],
           },
         });
@@ -301,6 +303,19 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
       : {}`,
           });
         }
+      },
+      mavenProfile({ source }) {
+        (source as JavaSource).addMavenProfile?.({
+          id: 'e2e',
+          content: `
+            <properties>
+                <profile.e2e>,e2e</profile.e2e>
+            </properties>
+            <build>
+                <finalName>e2e</finalName>
+            </build>
+          `,
+        });
       },
     });
   }

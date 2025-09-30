@@ -1,26 +1,18 @@
-import { basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
-import { snakeCase } from 'lodash-es';
+import { basename, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
+import { cacheTypes, databaseTypes } from '../../lib/jhipster/index.ts';
 import {
   buildSamplesFromMatrix,
   buildServerMatrix,
+  defaultHelpers as helpers,
   extendFilteredMatrix,
   extendMatrix,
-  defaultHelpers as helpers,
   runResult,
-} from '../../lib/testing/index.js';
+} from '../../lib/testing/index.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import Generator from '../server/index.js';
-
-import { cacheTypes, databaseTypes } from '../../lib/jhipster/index.js';
-import {
-  filterBasicServerGenerators,
-  shouldComposeWithLiquibase,
-  shouldComposeWithSpringCloudStream,
-} from '../server/__test-support/index.js';
-import { GENERATOR_SERVER } from '../generator-list.js';
+import Generator from '../server/index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -65,10 +57,9 @@ sqlSamples = extendFilteredMatrix(sqlSamples, ({ reactive }) => !reactive, {
 
 const testSamples = buildSamplesFromMatrix(sqlSamples, { commonConfig });
 
+const GENERATOR_SERVER = 'server';
+
 describe(`generator - ${databaseType}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 
@@ -77,7 +68,6 @@ describe(`generator - ${databaseType}`, () => {
   });
 
   Object.entries(testSamples).forEach(([name, sampleConfig]) => {
-    const { authenticationType, enableTranslation } = sampleConfig;
     describe(name, () => {
       if (
         sampleConfig.websocket &&
@@ -91,35 +81,18 @@ describe(`generator - ${databaseType}`, () => {
       }
       before(async () => {
         await helpers
-          .runJHipster('server')
+          .runJHipster('jhipster:spring-data-relational')
           .withJHipsterConfig(sampleConfig)
           .withMockedSource({ except: ['addTestSpringFactory'] })
-          .withMockedJHipsterGenerators({
-            except: ['jhipster:spring-data-relational'],
-            filter: filterBasicServerGenerators,
-          });
+          .withMockedJHipsterGenerators({ except: ['jhipster:java:domain'] });
       });
 
-      it('should compose with jhipster:common', () => {
-        runResult.assertGeneratorComposedOnce('jhipster:common');
-      });
-      it(`should ${enableTranslation ? '' : 'not '}compose with jhipster:languages`, () => {
-        expect(runResult.getGeneratorComposeCount('jhipster:languages')).toBe(enableTranslation ? 1 : 0);
-      });
-      it('should compose with jhipster:liquibase', () => {
-        runResult.assertGeneratorComposedOnce('jhipster:liquibase');
-      });
       it('should match generated files snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
-      it('contains correct authenticationType', () => {
-        runResult.assertFileContent('.yo-rc.json', new RegExp(`"authenticationType": "${authenticationType}"`));
+      it('should match source calls snapshot', () => {
+        expect(runResult.sourceCallsArg).toMatchSnapshot();
       });
-      it('contains correct databaseType', () => {
-        runResult.assertFileContent('.yo-rc.json', new RegExp(`"databaseType": "${databaseType}"`));
-      });
-      shouldComposeWithSpringCloudStream(sampleConfig, () => runResult);
-      shouldComposeWithLiquibase(sampleConfig, () => runResult);
     });
   });
 });

@@ -16,14 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { existsSync, readFileSync } from 'fs';
-import BaseApplicationGenerator from '../base-application/index.js';
-import { PRIORITY_NAMES } from '../base-application/priorities.js';
-import { loadEntitiesAnnotations, loadEntitiesOtherSide } from '../base-application/support/index.js';
-import { relationshipEquals, relationshipNeedsForeignKeyRecreationOnly } from '../liquibase/support/index.js';
-import { addEntitiesOtherRelationships } from '../server/support/index.js';
-import type { TaskTypes as ApplicationTaskTypes } from '../base-application/tasks.js';
-import type { TaskParamWithApplication } from '../base-simple-application/tasks.js';
+import { existsSync, readFileSync } from 'node:fs';
+
+import BaseApplicationGenerator from '../base-application/index.ts';
+import { PRIORITY_NAMES } from '../base-application/priorities.ts';
+import { loadEntitiesAnnotations, loadEntitiesOtherSide } from '../base-application/support/index.ts';
+import type { TaskTypes as ApplicationTaskTypes } from '../base-application/tasks.ts';
+import type { TaskParamWithApplication } from '../base-simple-application/tasks.ts';
+import { relationshipEquals, relationshipNeedsForeignKeyRecreationOnly } from '../liquibase/support/index.ts';
+import { addEntitiesOtherRelationships } from '../server/support/index.ts';
+
 import type {
   Application as BaseEntityChangesApplication,
   BaseChangelog as BaseEntityChangesChangelog,
@@ -33,7 +35,7 @@ import type {
   Field as BaseEntityChangesField,
   Options as BaseEntityChangesOptions,
   Source as BaseEntityChangesSource,
-} from './types.js';
+} from './types.ts';
 
 const { DEFAULT, WRITING_ENTITIES, POST_WRITING_ENTITIES } = PRIORITY_NAMES;
 

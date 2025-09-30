@@ -17,14 +17,16 @@
  * limitations under the License.
  */
 
-import { before, describe, it, expect as jestExpect } from 'esmocha';
-import { use as chaiUse, expect } from 'chai';
+import { before, describe, expect as jestExpect, it } from 'esmocha';
+
+import { expect, use as chaiUse } from 'chai';
 import sinonChai from 'sinon-chai';
 
 chaiUse(sinonChai);
 
-import { JDLEntity } from '../../core/models/index.js';
-import { convert } from './jdl-to-json-basic-entity-converter.js';
+import { JDLEntity } from '../../core/models/index.ts';
+
+import { convert } from './jdl-to-json-basic-entity-converter.ts';
 
 describe('jdl - JDLToJSONBasicEntityConverter', () => {
   describe('convert', () => {
@@ -41,8 +43,8 @@ describe('jdl - JDLToJSONBasicEntityConverter', () => {
     });
     describe('when passing JDL entities', () => {
       describe('with some of them being built-in entities', () => {
-        let builtInEntitiesAreConverted;
-        let customEntitiesAreConverted;
+        let builtInEntitiesAreConverted: boolean;
+        let customEntitiesAreConverted: boolean;
 
         before(() => {
           const entityA = new JDLEntity({
@@ -56,7 +58,7 @@ describe('jdl - JDLToJSONBasicEntityConverter', () => {
           const authorityEntity = new JDLEntity({
             name: 'Authority',
           });
-          const returnedMap: any = convert([entityA, userEntity, authorityEntity]);
+          const returnedMap = convert([entityA, userEntity, authorityEntity]);
           customEntitiesAreConverted = returnedMap.has('A');
           builtInEntitiesAreConverted = returnedMap.has('User') || returnedMap.has('Authority');
         });
@@ -69,7 +71,7 @@ describe('jdl - JDLToJSONBasicEntityConverter', () => {
         });
       });
       describe('with no field, no option and no relationship', () => {
-        let convertedEntity;
+        let convertedEntity: ReturnType<ReturnType<typeof convert>['get']>;
 
         before(() => {
           const entityA = new JDLEntity({
@@ -79,7 +81,7 @@ describe('jdl - JDLToJSONBasicEntityConverter', () => {
           });
           // TODO: Convert only accepts one argument. This might be a bug.
           // @ts-expect-error
-          const returnedMap: any = convert([entityA], new Date(2020, 0, 1, 1, 0, 0));
+          const returnedMap = convert([entityA], new Date(2020, 0, 1, 1, 0, 0));
           convertedEntity = returnedMap.get('A');
         });
 

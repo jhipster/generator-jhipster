@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`jdl - JDLImporter import when importing a JDL application with blueprints should return the blueprints attributes in the application 1`] = `
 [

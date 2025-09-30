@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type File from 'vinyl';
-import sortKeys from 'sort-keys';
 import { transformContents } from '@yeoman/transform';
 import type { MemFsEditorFile } from 'mem-fs-editor';
+import sortKeys from 'sort-keys';
+import type File from 'vinyl';
 
 const sortJsonFileContent = (contents: Exclude<File['contents'], null>) =>
   Buffer.from(`${JSON.stringify(sortKeys(JSON.parse(contents.toString('utf8')), { deep: true }), null, 2)}\n`);

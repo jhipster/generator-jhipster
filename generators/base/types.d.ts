@@ -1,5 +1,5 @@
-import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/types.js';
-import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions } from '../base-core/types.js';
+import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/types.ts';
+import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions } from '../base-core/types.ts';
 
 export type Source = {
   /* Dummy field to declare an empty type */
@@ -11,7 +11,7 @@ export type CleanupArgumentType = Record<string, (string | [boolean, ...string[]
 export type Control = {
   readonly existingProject: boolean;
   readonly jhipsterOldVersion: string | null;
-  readonly enviromentHasDockerCompose?: boolean;
+  readonly environmentHasDockerCompose?: boolean;
   readonly customizeRemoveFiles: ((file: string) => string | undefined)[];
   /**
    * Check if the JHipster version used to generate an existing project is less than the passed version argument

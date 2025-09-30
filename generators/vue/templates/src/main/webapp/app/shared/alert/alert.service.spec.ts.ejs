@@ -1,4 +1,4 @@
-import { vitest } from 'vitest';
+import { beforeEach, describe, expect, vitest } from 'vitest';
 import AlertService from './alert.service';
 
 describe('Alert Service test suite', () => {
@@ -17,8 +17,8 @@ describe('Alert Service test suite', () => {
 <%_ if (enableTranslation) { _%>
       i18n: { t: translationStub } as any,
 <%_ } _%>
-      bvToast: {
-        toast: toastStub,
+      toast: {
+        show: toastStub,
       } as any,
     });
   });
@@ -30,13 +30,14 @@ describe('Alert Service test suite', () => {
     alertService.showError(message);
 
     // THEN
-    expect(toastStub).toBeCalledTimes(1);
-    expect(toastStub).toHaveBeenCalledWith(message, {
-      toaster: 'b-toaster-top-center',
-      title: 'Error',
-      variant: 'danger',
-      solid: true,
-      autoHideDelay: 5000,
+    expect(toastStub).toHaveBeenCalledExactlyOnceWith({
+      props: {
+        body: message,
+        pos: 'top-center',
+        title: 'Error',
+        variant: 'danger',
+        solid: true,
+      },
     });
   });
 
@@ -58,16 +59,16 @@ describe('Alert Service test suite', () => {
 
     // THEN
 <%_ if (enableTranslation) { _%>
-    expect(translationStub).toBeCalledTimes(1);
-    expect(translationStub).toHaveBeenCalledWith(translationKey);
+    expect(translationStub).toHaveBeenCalledExactlyOnceWith(translationKey);
 <%_ } _%>
-    expect(toastStub).toBeCalledTimes(1);
-    expect(toastStub).toHaveBeenCalledWith(message, {
-      toaster: 'b-toaster-top-center',
-      title: 'Error',
-      variant: 'danger',
-      solid: true,
-      autoHideDelay: 5000,
+    expect(toastStub).toHaveBeenCalledExactlyOnceWith({
+      props: {
+        body: expect.any(String),
+        pos: 'top-center',
+        solid: true,
+        title: 'Error',
+        variant: 'danger',
+      },
     });
   });
 
@@ -101,16 +102,18 @@ describe('Alert Service test suite', () => {
 
     // THEN
 <%_ if (enableTranslation) { _%>
-    expect(translationStub).toBeCalledTimes(2);
+    expect(translationStub).toHaveBeenCalledTimes(2);
     expect(translationStub).toHaveBeenCalledWith(translationKey, { entityName: 'DummyEntity' });
     expect(translationStub).toHaveBeenCalledWith('global.menu.entities.dummyEntity');
 <%_ } _%>
-    expect(toastStub).toHaveBeenCalledWith(message, {
-      toaster: 'b-toaster-top-center',
-      title: 'Error',
-      variant: 'danger',
-      solid: true,
-      autoHideDelay: 5000,
+    expect(toastStub).toHaveBeenCalledWith({
+      props: {
+        body: expect.any(String),
+        pos: 'top-center',
+        solid: true,
+        title: 'Error',
+        variant: 'danger',
+      },
     });
   });
 
@@ -140,16 +143,16 @@ describe('Alert Service test suite', () => {
 
     // THEN
 <%_ if (enableTranslation) { _%>
-    expect(translationStub).toBeCalledTimes(1);
-    expect(translationStub).toHaveBeenCalledWith(message);
+    expect(translationStub).toHaveBeenCalledExactlyOnceWith(message);
 <%_ } _%>
-    expect(toastStub).toBeCalledTimes(1);
-    expect(toastStub).toHaveBeenCalledWith(message, {
-      toaster: 'b-toaster-top-center',
-      title: 'Error',
-      variant: 'danger',
-      solid: true,
-      autoHideDelay: 5000,
+    expect(toastStub).toHaveBeenCalledExactlyOnceWith({
+      props: {
+        body: expect.any(String),
+        pos: 'top-center',
+        solid: true,
+        title: 'Error',
+        variant: 'danger',
+      },
     });
   });
 
@@ -172,16 +175,16 @@ describe('Alert Service test suite', () => {
 
     // THEN
 <%_ if (enableTranslation) { _%>
-    expect(translationStub).toBeCalledTimes(1);
-    expect(translationStub).toHaveBeenCalledWith(translationKey);
+    expect(translationStub).toHaveBeenCalledExactlyOnceWith(translationKey);
 <%_ } _%>
-    expect(toastStub).toBeCalledTimes(1);
-    expect(toastStub).toHaveBeenCalledWith(message, {
-      toaster: 'b-toaster-top-center',
-      title: 'Error',
-      variant: 'danger',
-      solid: true,
-      autoHideDelay: 5000,
+    expect(toastStub).toHaveBeenCalledExactlyOnceWith({
+      props: {
+        body: expect.any(String),
+        pos: 'top-center',
+        solid: true,
+        title: 'Error',
+        variant: 'danger',
+      },
     });
   });
 
@@ -204,16 +207,16 @@ describe('Alert Service test suite', () => {
 
     // THEN
 <%_ if (enableTranslation) { _%>
-    expect(translationStub).toBeCalledTimes(1);
-    expect(translationStub).toHaveBeenCalledWith(message);
+    expect(translationStub).toHaveBeenCalledExactlyOnceWith(message);
 <%_ } _%>
-    expect(toastStub).toBeCalledTimes(1);
-    expect(toastStub).toHaveBeenCalledWith(message, {
-      toaster: 'b-toaster-top-center',
-      title: 'Error',
-      variant: 'danger',
-      solid: true,
-      autoHideDelay: 5000,
+    expect(toastStub).toHaveBeenCalledExactlyOnceWith({
+      props: {
+        body: expect.any(String),
+        pos: 'top-center',
+        solid: true,
+        title: 'Error',
+        variant: 'danger',
+      },
     });
   });
 });

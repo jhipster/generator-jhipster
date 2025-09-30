@@ -1,8 +1,8 @@
 <template>
   <div>
     <h2 v-if="authenticated">
-      <span v-text="t$('sessions.title')"
-        >Active sessions for [<strong>{{ username }}</strong
+      <span
+        >{{ t$('sessions.title') }}<strong>{{ username }}</strong
         >]</span
       >
     </h2>
@@ -18,9 +18,9 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th v-text="t$('sessions.table.ipaddress')">IP Address</th>
-            <th v-text="t$('sessions.table.useragent')">User agent</th>
-            <th v-text="t$('sessions.table.date')">Date</th>
+            <th>{{ t$('sessions.table.ipaddress') }}</th>
+            <th>{{ t$('sessions.table.useragent') }}</th>
+            <th>{{ t$('sessions.table.date') }}</th>
             <th></th>
           </tr>
         </thead>
@@ -30,9 +30,7 @@
             <td>{{ session.userAgent }}</td>
             <td>{{ session.tokenDate }}</td>
             <td>
-              <button type="submit" class="btn btn-primary" @click="invalidate(session.series)" v-text="t$('sessions.table.button')">
-                Invalidate
-              </button>
+              <button type="submit" class="btn btn-primary" @click="invalidate(session.series)">{{ t$('sessions.table.button') }}</button>
             </td>
           </tr>
         </tbody>

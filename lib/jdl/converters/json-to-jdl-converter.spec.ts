@@ -17,14 +17,17 @@
  * limitations under the License.
  */
 
-import fs, { readFileSync } from 'fs';
-import path from 'path';
-import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
+import { beforeEach, describe, expect as jestExpect, it } from 'esmocha';
+import fs, { readFileSync } from 'node:fs';
+import path from 'node:path';
+
 import { expect } from 'chai';
-import { createJHipsterConfigFiles, basicHelpers as helpers } from '../../../lib/testing/index.js';
-import { getTestFile } from '../core/__test-support__/index.js';
-import { getDefaultRuntime } from '../../jdl-config/jhipster-jdl-config.js';
-import { convertSingleContentToJDL, convertToJDL } from './json-to-jdl-converter.js';
+
+import { getDefaultRuntime } from '../../jdl-config/jhipster-jdl-config.ts';
+import { basicHelpers as helpers, createJHipsterConfigFiles } from '../../testing/index.ts';
+import { getTestFile } from '../core/__test-support__/index.ts';
+
+import { convertSingleContentToJDL, convertToJDL } from './json-to-jdl-converter.ts';
 
 describe('jdl - JSONToJDLConverter', () => {
   const runtime = getDefaultRuntime();
@@ -35,7 +38,7 @@ describe('jdl - JSONToJDLConverter', () => {
 
   describe('convertToJDL', () => {
     describe('when there is a yo-rc file in the passed directory', () => {
-      let jdlFileContent;
+      let jdlFileContent: string;
 
       describe('without entities', () => {
         beforeEach(async () => {
@@ -68,7 +71,7 @@ describe('jdl - JSONToJDLConverter', () => {
                 entitySuffix: '',
                 dtoSuffix: 'DTO',
                 enableTranslation: false,
-                clientPackageManager: 'npm',
+                nodePackageManager: 'npm',
                 skipClient: true,
                 nativeLanguage: 'en',
                 skipUserManagement: true,
@@ -81,39 +84,39 @@ describe('jdl - JSONToJDLConverter', () => {
 
         it('should write a JDL file with the application', () => {
           jestExpect(jdlFileContent).toMatchInlineSnapshot(`
-            "application {
-              config {
-                applicationType microservice
-                authenticationType jwt
-                baseName truc
-                blueprints [generator-jhipster-vuejs, generator-jhipster-dotnetcore]
-                buildTool maven
-                cacheProvider hazelcast
-                clientPackageManager npm
-                databaseType sql
-                devDatabaseType h2Disk
-                dtoSuffix DTO
-                enableHibernateCache true
-                enableSwaggerCodegen false
-                enableTranslation false
-                jhiPrefix jhi
-                jhipsterVersion "6.0.1"
-                jwtSecretKey "HIDDEN"
-                messageBroker no
-                nativeLanguage en
-                packageName com.mycompany.myapp
-                prodDatabaseType mysql
-                searchEngine no
-                serverPort 8081
-                serviceDiscoveryType eureka
-                skipClient true
-                skipUserManagement true
-                testFrameworks []
-                websocket no
-              }
-            }
-            "
-          `);
+"application {
+  config {
+    applicationType microservice
+    authenticationType jwt
+    baseName truc
+    blueprints [generator-jhipster-vuejs, generator-jhipster-dotnetcore]
+    buildTool maven
+    cacheProvider hazelcast
+    databaseType sql
+    devDatabaseType h2Disk
+    dtoSuffix DTO
+    enableHibernateCache true
+    enableSwaggerCodegen false
+    enableTranslation false
+    jhiPrefix jhi
+    jhipsterVersion "6.0.1"
+    jwtSecretKey "HIDDEN"
+    messageBroker no
+    nativeLanguage en
+    nodePackageManager npm
+    packageName com.mycompany.myapp
+    prodDatabaseType mysql
+    searchEngine no
+    serverPort 8081
+    serviceDiscoveryType eureka
+    skipClient true
+    skipUserManagement true
+    testFrameworks []
+    websocket no
+  }
+}
+"
+`);
         });
       });
 
@@ -133,7 +136,6 @@ describe('jdl - JSONToJDLConverter', () => {
     baseName truc
     buildTool maven
     cacheProvider hazelcast
-    clientPackageManager npm
     databaseType sql
     devDatabaseType h2Disk
     dtoSuffix DTO
@@ -145,6 +147,7 @@ describe('jdl - JSONToJDLConverter', () => {
     jwtSecretKey "HIDDEN"
     messageBroker no
     nativeLanguage en
+    nodePackageManager npm
     packageName com.mycompany.myapp
     prodDatabaseType mysql
     searchEngine no
@@ -235,7 +238,7 @@ paginate Country with pager
       describe('with several JHipster apps', () => {
         let rootDir;
         let jdlFilename;
-        let jdlFileContent;
+        let jdlFileContent: string;
 
         beforeEach(() => {
           rootDir = getTestFile('json_to_jdl_converter', 'multi_apps');
@@ -253,7 +256,6 @@ paginate Country with pager
     baseName app1
     buildTool maven
     cacheProvider hazelcast
-    clientPackageManager npm
     databaseType sql
     devDatabaseType h2Disk
     dtoSuffix DTO
@@ -265,6 +267,7 @@ paginate Country with pager
     jwtSecretKey "HIDDEN"
     messageBroker no
     nativeLanguage en
+    nodePackageManager npm
     packageName com.mycompany.app1
     prodDatabaseType mysql
     searchEngine no
@@ -285,7 +288,6 @@ application {
     baseName app2
     buildTool maven
     cacheProvider hazelcast
-    clientPackageManager npm
     databaseType sql
     devDatabaseType h2Disk
     dtoSuffix DTO
@@ -297,6 +299,7 @@ application {
     jwtSecretKey "HIDDEN"
     messageBroker no
     nativeLanguage en
+    nodePackageManager npm
     packageName com.mycompany.app2
     prodDatabaseType mysql
     searchEngine no
@@ -317,7 +320,6 @@ application {
     baseName app3
     buildTool maven
     cacheProvider hazelcast
-    clientPackageManager npm
     databaseType sql
     devDatabaseType h2Disk
     dtoSuffix DTO
@@ -329,6 +331,7 @@ application {
     jwtSecretKey "HIDDEN"
     messageBroker no
     nativeLanguage en
+    nodePackageManager npm
     packageName com.mycompany.app3
     prodDatabaseType mysql
     searchEngine no
@@ -365,7 +368,7 @@ noFluentMethod Region, Country, Location
       });
     });
     describe('when passing an output file', () => {
-      let file;
+      let file: string;
 
       beforeEach(async () => {
         file = 'exported.jdl';
@@ -390,7 +393,7 @@ noFluentMethod Region, Country, Location
   });
   describe('convertSingleContentToJDL', () => {
     describe('with microservices attribute', () => {
-      let jdl;
+      let jdl: string;
       beforeEach(() => {
         jdl = convertSingleContentToJDL(
           {

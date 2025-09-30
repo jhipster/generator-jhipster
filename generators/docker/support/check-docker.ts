@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import type CoreGenerator from '../../base-core/generator.js';
+
+import type CoreGenerator from '../../base-core/generator.ts';
 
 /**
  * Check that Docker exists.

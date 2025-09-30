@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseSimpleApplicationGenerator from '../base-simple-application/index.js';
-import { GENERATOR_GIT } from '../generator-list.js';
-import { files, readme } from './files.js';
-import type { Application as InitApplication, Config as InitConfig, Options as InitOptions } from './types.js';
+import BaseSimpleApplicationGenerator from '../base-simple-application/index.ts';
+
+import { files, readme } from './files.ts';
+import type { Application as InitApplication, Config as InitConfig, Options as InitOptions } from './types.ts';
 
 export default class InitGenerator extends BaseSimpleApplicationGenerator<InitApplication, InitConfig, InitOptions> {
   generateReadme = true;
@@ -30,18 +30,18 @@ export default class InitGenerator extends BaseSimpleApplicationGenerator<InitAp
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:javascript:bootstrap');
+      await this.dependsOnJHipster('jhipster:javascript-simple-application:bootstrap');
     }
   }
 
   get composing() {
     return this.asComposingTaskGroup({
       async compose() {
-        await this.composeWithJHipster(GENERATOR_GIT);
+        await this.composeWithJHipster('git');
         const generatorOptions = { fromInit: true };
-        await this.composeWithJHipster('jhipster:javascript:prettier', { generatorOptions });
-        await this.composeWithJHipster('jhipster:javascript:husky', { generatorOptions });
-        await this.composeWithJHipster('jhipster:javascript:eslint', { generatorOptions });
+        await this.composeWithJHipster('jhipster:javascript-simple-application:prettier', { generatorOptions });
+        await this.composeWithJHipster('jhipster:javascript-simple-application:husky', { generatorOptions });
+        await this.composeWithJHipster('jhipster:javascript-simple-application:eslint', { generatorOptions });
       },
     });
   }

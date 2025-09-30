@@ -16,11 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import assert from 'assert';
-import type CoreGenerator from '../../base-core/index.js';
+import assert from 'node:assert';
+
+import type { CascatedEditFileCallback } from '../../base-core/api.ts';
+import type CoreGenerator from '../../base-core/index.ts';
 import type { NeedleCallback } from '../../base-core/support/needles.ts';
 import { createBaseNeedle } from '../../base-core/support/needles.ts';
-import type { CascatedEditFileCallback } from '../../base-core/api.js';
 
 export type ApplicationPropertiesNeedles = {
   property?: string;
@@ -33,7 +34,7 @@ export type ApplicationPropertiesNeedles = {
  * @example
  * insertContentIntoApplicationProperties.call(generator, application, {
  *   property: 'private final bar = new Bar();',
- *   proppertyGetter: `
+ *   propertyGetter: `
  * public getBar() {
  *     return bar;
  * }`,

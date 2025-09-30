@@ -17,32 +17,34 @@
  * limitations under the License.
  */
 import { uniqBy } from 'lodash-es';
-import { readCurrentPathYoRcFile } from '../utils/yo-rc.js';
+
 import { APPLICATION_TYPE_KEY, type ApplicationType } from '../core/application-types.ts';
 import { getDefaultRuntime } from '../jdl-config/jhipster-jdl-config.ts';
-import ParsedJDLToJDLObjectConverter from './converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.js';
-import JDLWithoutApplicationToJSONConverter from './converters/jdl-to-json/jdl-without-application-to-json-converter.js';
-import { convert } from './converters/jdl-to-json/jdl-with-applications-to-json-converter.js';
+import { readCurrentPathYoRcFile } from '../utils/yo-rc.ts';
+
 import {
   formatApplicationToExport,
   formatApplicationsToExport,
-} from './converters/exporters/applications/jhipster-application-formatter.js';
-import exportDeployments from './converters/exporters/jhipster-deployment-exporter.js';
-import exportEntities from './converters/exporters/jhipster-entity-exporter.js';
-import { GENERATOR_NAME } from './converters/exporters/export-utils.js';
-import { parseFromContent, parseFromFiles } from './core/readers/jdl-reader.js';
-import createWithApplicationValidator from './converters/validators/jdl-with-application-validator.js';
-import createWithoutApplicationValidator from './converters/validators/jdl-without-application-validator.js';
-import type JDLObject from './core/models/jdl-object.js';
-import type { ParsedJDLApplications } from './core/types/parsed.js';
-import type { JDLJSONBlueprint, JDLJSONMicrofrontend, PostProcessedJDLJSONApplication } from './core/types/exporter.js';
-import type { JDLApplicationConfig } from './core/types/parsing.js';
-import type { JDLRuntime } from './core/types/runtime.js';
-import { createRuntime } from './core/runtime.js';
-import { BASE_NAME_KEY } from './core/built-in-options/index.ts';
-import type { JSONEntity } from './core/types/json-config.js';
+} from './converters/exporters/applications/jhipster-application-formatter.ts';
+import { GENERATOR_NAME } from './converters/exporters/export-utils.ts';
+import exportDeployments from './converters/exporters/jhipster-deployment-exporter.ts';
+import exportEntities from './converters/exporters/jhipster-entity-exporter.ts';
+import { convert } from './converters/jdl-to-json/jdl-with-applications-to-json-converter.ts';
+import JDLWithoutApplicationToJSONConverter from './converters/jdl-to-json/jdl-without-application-to-json-converter.ts';
+import ParsedJDLToJDLObjectConverter from './converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.ts';
+import createWithApplicationValidator from './converters/validators/jdl-with-application-validator.ts';
+import createWithoutApplicationValidator from './converters/validators/jdl-without-application-validator.ts';
 import type JDLJSONEntity from './core/basic-types/json-entity.ts';
+import { BASE_NAME_KEY } from './core/built-in-options/index.ts';
 import type JDLDeployment from './core/models/jdl-deployment.ts';
+import type JDLObject from './core/models/jdl-object.ts';
+import { parseFromContent, parseFromFiles } from './core/readers/jdl-reader.ts';
+import { createRuntime } from './core/runtime.ts';
+import type { JDLJSONBlueprint, JDLJSONMicrofrontend, PostProcessedJDLJSONApplication } from './core/types/exporter.ts';
+import type { JSONEntity } from './core/types/json-config.ts';
+import type { ParsedJDLApplications } from './core/types/parsed.ts';
+import type { JDLApplicationConfig } from './core/types/parsing.ts';
+import type { JDLRuntime } from './core/types/runtime.ts';
 
 const GENERATOR_JHIPSTER = 'generator-jhipster'; // can't use the one of the generator as it circles
 
@@ -119,7 +121,6 @@ function makeJDLImporter(content: ParsedJDLApplications, configuration: JDLAppli
   return {
     /**
      * Processes JDL files and converts them to JSON.
-     * @param {Object} logger - the logger to use, default to the console.
      * @returns {object} the state of the process:
      *          - exportedDeployments: the exported deployments, or an empty list
      *          - exportedApplications: the exported applications, or an empty list
@@ -173,14 +174,13 @@ function checkForErrors(jdlObject: JDLObject) {
 }
 
 function importOnlyEntities(jdlObject: JDLObject, configuration: JDLApplicationConfiguration) {
-  let { applicationName, applicationType } = configuration;
+  let { applicationName } = configuration;
 
   let application = configuration.application;
   if (!application) {
     application = readCurrentPathYoRcFile();
   }
   if (application?.[GENERATOR_JHIPSTER]) {
-    applicationType ??= application[GENERATOR_JHIPSTER].applicationType;
     applicationName ??= application[GENERATOR_JHIPSTER].baseName;
   }
 

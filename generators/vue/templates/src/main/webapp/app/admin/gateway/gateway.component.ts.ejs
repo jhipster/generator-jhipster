@@ -5,7 +5,6 @@ import { useI18n } from 'vue-i18n';
 import GatewayService from './gateway.service';
 
 export default defineComponent({
-  compatConfig: { MODE: 3 },
   name: '<%=jhiPrefixCapitalized%>GatewayComponent',
   setup() {
     const gatewayService = inject('gatewayService', () => new GatewayService(), true);

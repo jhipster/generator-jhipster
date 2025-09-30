@@ -1,0 +1,26 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleWebfluxMongodbEsSession",
+    "buildTool": "maven",
+    "cacheProvider": "no",
+    "clientFramework": "angular",
+    "creationTimestamp": 1596513172471,
+    "databaseType": "mongodb",
+    "devDatabaseType": "mongodb",
+    "enableHibernateCache": false,
+    "enableTranslation": false,
+    "jhiPrefix": "jhi",
+    "languages": ["en", "fr"],
+    "nativeLanguage": "en",
+    "packageFolder": "tech/jhipster/sample",
+    "packageName": "tech.jhipster.sample",
+    "prodDatabaseType": "mongodb",
+    "reactive": true,
+    "rememberMeKey": "a5e93fdeb16e2ee2dc4a629b5dbdabb30f968e418dfc0483c53afdc695cfac96d06cf5c581cbefb93e3aaa241880857fcafe",
+    "searchEngine": "elasticsearch",
+    "serverPort": "8080",
+    "testFrameworks": ["gatling", "cypress"]
+  }
+}

@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JavaApplicationGenerator } from '../../../java/generator.ts';
 import type { Application as DockerApplication } from '../../../docker/index.ts';
+import { JavaApplicationGenerator } from '../../../java/generator.ts';
 import type { Application as SpringCacheApplication } from '../../../spring-cache/index.ts';
 
 export default class JibGenerator extends JavaApplicationGenerator {
@@ -27,7 +27,7 @@ export default class JibGenerator extends JavaApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplication();
+      await this.dependsOnBootstrap('java');
       await this.dependsOnJHipster('maven');
     }
   }

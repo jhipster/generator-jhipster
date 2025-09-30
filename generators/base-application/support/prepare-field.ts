@@ -16,42 +16,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { defaults, kebabCase, snakeCase, startCase, upperFirst } from 'lodash-es';
-import { fieldTypes, validations } from '../../../lib/jhipster/index.js';
-import { getTypescriptType } from '../../client/support/index.js';
-import { prepareField as prepareServerFieldForTemplates } from '../../server/support/index.js';
-import { applyDerivedPropertyOnly, mutateData } from '../../../lib/utils/index.js';
-import type CoreGenerator from '../../base-core/generator.js';
-import type { Application as CommonApplication, Entity as CommonEntity, Field as CommonField } from '../../common/types.d.ts';
-import type { Application as ServerApplication, Entity as ServerEntity } from '../../server/types.d.ts';
-import { isFieldEnumType } from '../internal/types/field-types.ts';
+import { defaults, kebabCase } from 'lodash-es';
+
 import { fieldTypesValues } from '../../../lib/jhipster/field-types.ts';
-import type { DatabaseProperty } from '../../liquibase/types.js';
-import type { FakerWithRandexp } from './faker.js';
-import { prepareProperty } from './prepare-property.js';
+import { fieldTypes, validations } from '../../../lib/jhipster/index.ts';
+import { mutateData } from '../../../lib/utils/index.ts';
+import type CoreGenerator from '../../base-core/generator.ts';
+import type { DatabaseProperty } from '../../liquibase/types.ts';
+import { mutateField } from '../entity.ts';
+import type { Entity as BaseApplicationEntity, Field as BaseApplicationField } from '../types.ts';
+
+import type { FakerWithRandexp } from './faker.ts';
 
 const { BlobTypes, CommonDBTypes, RelationalOnlyDBTypes } = fieldTypes;
 const {
-  Validations: { MIN, MINLENGTH, MINBYTES, MAX, MAXBYTES, MAXLENGTH, PATTERN, REQUIRED, UNIQUE },
+  Validations: { MINLENGTH, MAXLENGTH, PATTERN, REQUIRED, UNIQUE },
 } = validations;
 
-const { TEXT, IMAGE, ANY } = BlobTypes;
-const {
-  BOOLEAN,
-  BIG_DECIMAL,
-  DOUBLE,
-  DURATION,
-  FLOAT,
-  INSTANT,
-  INTEGER,
-  LOCAL_DATE,
-  LONG,
-  STRING,
-  UUID,
-  ZONED_DATE_TIME,
-  TEXT_BLOB,
-  LOCAL_TIME,
-} = CommonDBTypes;
+const { TEXT } = BlobTypes;
+const { BOOLEAN, BIG_DECIMAL, DOUBLE, DURATION, FLOAT, INSTANT, INTEGER, LOCAL_DATE, LONG, STRING, UUID, ZONED_DATE_TIME, LOCAL_TIME } =
+  CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
 
 const fakeStringTemplateForFieldName = (columnName: string) => {
@@ -105,7 +89,7 @@ const fakeStringTemplateForFieldName = (columnName: string) => {
  */
 function generateFakeDataForField(
   this: CoreGenerator,
-  field: CommonField,
+  field: BaseApplicationField,
   faker: FakerWithRandexp,
   changelogDate: any,
   type: 'csv' | 'cypress' | 'json-serializable' | 'ts' = 'csv',
@@ -255,78 +239,19 @@ function generateFakeDataForField(
   return { data, originalData };
 }
 
-function _derivedProperties(field: CommonField) {
-  const fieldType = field.fieldType;
-  const fieldTypeBlobContent = field.fieldTypeBlobContent;
-  const validationRules = field.fieldValidate ? (field.fieldValidateRules ?? []) : [];
-
-  applyDerivedPropertyOnly(field, 'fieldType', fieldType, Object.values(fieldTypesValues));
-
-  mutateData(field, {
-    __override__: false,
-    blobContentTypeText: fieldTypeBlobContent === TEXT,
-    blobContentTypeImage: fieldTypeBlobContent === IMAGE,
-    blobContentTypeAny: fieldTypeBlobContent === ANY,
-    fieldTypeByteBuffer: fieldType === BYTE_BUFFER,
-    fieldTypeBytes: ({ fieldTypeByte }) => fieldTypeByte,
-
-    fieldTypeNumeric:
-      fieldType === INTEGER || fieldType === LONG || fieldType === FLOAT || fieldType === DOUBLE || fieldType === BIG_DECIMAL,
-    fieldTypeBinary: fieldType === BYTES || fieldType === BYTE_BUFFER,
-    fieldTypeTimed: fieldType === ZONED_DATE_TIME || fieldType === INSTANT,
-    fieldTypeCharSequence: fieldType === STRING || fieldType === UUID || fieldType === TEXT_BLOB,
-    fieldTypeTemporal: fieldType === ZONED_DATE_TIME || fieldType === INSTANT || fieldType === LOCAL_DATE,
-
-    fieldValidationRequired: validationRules.includes(REQUIRED),
-    fieldValidationMin: validationRules.includes(MIN),
-    fieldValidationMinLength: validationRules.includes(MINLENGTH),
-    fieldValidationMax: validationRules.includes(MAX),
-    fieldValidationMaxLength: validationRules.includes(MAXLENGTH),
-    fieldValidationPattern: validationRules.includes(PATTERN),
-    fieldValidationUnique: validationRules.includes(UNIQUE),
-    fieldValidationMinBytes: validationRules.includes(MINBYTES),
-    fieldValidationMaxBytes: validationRules.includes(MAXBYTES),
-  });
-}
-
-export default function prepareField(
-  application: CommonApplication,
-  entityWithConfig: CommonEntity,
-  field: CommonField,
+export function prepareCommonFieldForTemplates(
+  entityWithConfig: BaseApplicationEntity,
+  field: BaseApplicationField,
   generator: CoreGenerator,
-): CommonField {
-  prepareCommonFieldForTemplates(entityWithConfig, field, generator);
-
-  if (application.databaseTypeAny) {
-    prepareServerFieldForTemplates(application as ServerApplication, entityWithConfig as ServerEntity, field, generator);
-  }
-
-  return field;
-}
-
-function prepareCommonFieldForTemplates(entityWithConfig: CommonEntity, field: CommonField, generator: CoreGenerator): CommonField {
-  mutateData(field, {
-    __override__: false,
-    path: [field.fieldName],
-    propertyName: field.fieldName,
-
-    fieldNameCapitalized: ({ fieldName }) => upperFirst(fieldName),
-    fieldNameUnderscored: ({ fieldName }) => snakeCase(fieldName),
-    fieldNameHumanized: ({ fieldName }) => startCase(fieldName),
-    fieldTranslationKey: ({ fieldName }) => `${entityWithConfig.i18nKeyPrefix}.${fieldName}`,
-    tsType: ({ fieldType }) => getTypescriptType(fieldType),
-  });
-
-  prepareProperty(field);
+): BaseApplicationField {
+  mutateData(field, mutateField);
 
   defaults(field, {
     entity: entityWithConfig,
   });
   const fieldType = field.fieldType;
 
-  const fieldIsEnum = isFieldEnumType(field);
-  field.fieldIsEnum = fieldIsEnum;
-  if (fieldIsEnum) {
+  if (field.fieldIsEnum) {
     if ((Object.values(fieldTypesValues) as string[]).includes(fieldType)) {
       throw new Error(`Field type '${fieldType}' is a reserved keyword and can't be used as an enum name.`);
     }
@@ -348,7 +273,7 @@ function prepareCommonFieldForTemplates(entityWithConfig: CommonEntity, field: C
     field.maxlength = field.fieldValidateRulesMaxlength || 255;
   }
 
-  const faker = entityWithConfig.faker;
+  const faker = entityWithConfig.faker!;
   field.generateFakeDataFromPattern = () => {
     // check if regex is valid. If not, issue warning and we skip fake data generation.
     try {
@@ -390,7 +315,6 @@ function prepareCommonFieldForTemplates(entityWithConfig: CommonEntity, field: C
     return generated.data;
   };
 
-  _derivedProperties(field);
   return field;
 }
 

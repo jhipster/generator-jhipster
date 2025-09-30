@@ -17,12 +17,12 @@
  * limitations under the License.
  */
 
-import type { JSONEntity } from '../../core/types/json-config.js';
-import type JDLJSONEntity from '../../core/basic-types/json-entity.ts';
-import type { JhipsterJSONJDLExporterWrapper } from '../../core/types/exporter.js';
-import { readEntityFile } from '../../../utils/yo-rc.js';
 import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
 import { removeFieldsWithNullishValues } from '../../../utils/object.ts';
+import { readEntityFile } from '../../../utils/yo-rc.ts';
+import type JDLJSONEntity from '../../core/basic-types/json-entity.ts';
+import type { JhipsterJSONJDLExporterWrapper } from '../../core/types/exporter.ts';
+import type { JSONEntity } from '../../core/types/json-config.ts';
 
 let configuration: JhipsterJSONJDLExporterWrapper = {
   entities: [],
@@ -66,7 +66,7 @@ function init(passedConfiguration: JhipsterJSONJDLExporterWrapper) {
 
 /**
  * Writes entities in a sub folder.
- * @param subFolder the folder (to create) in which the JHipster entity folder will be.
+ * @param applicationPath the folder (to create) in which the JHipster entity folder will be.
  */
 function updateEntities(applicationPath: string): JSONEntity[] {
   return configuration.entities.map((entity: JDLJSONEntity) => updateEntityToGenerateWithExistingOne(applicationPath, entity));

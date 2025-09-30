@@ -17,11 +17,12 @@
  * limitations under the License.
  */
 
-import { clientFrameworkTypes, fieldTypes, validations } from '../../../lib/jhipster/index.js';
-import type { PrimaryKey, RelationshipWithEntity } from '../../base-application/types.js';
+import { clientFrameworkTypes, fieldTypes, validations } from '../../../lib/jhipster/index.ts';
+import type { PrimaryKey, RelationshipWithEntity } from '../../base-application/types.ts';
 import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../types.d.ts';
-import getTypescriptKeyType from './types-utils.js';
-import { filterRelevantRelationships } from './template-utils.js';
+
+import { filterRelevantRelationships } from './template-utils.ts';
+import getTypescriptKeyType from './types-utils.ts';
 
 const dbTypes = fieldTypes;
 const {
@@ -78,8 +79,7 @@ const generateEntityClientFields = (
     }
   }
   fields.forEach(field => {
-    const fieldType = field.fieldType;
-    const fieldName = field.fieldName;
+    const { fieldType, fieldName } = field;
     const nullable = !field.id && (field as any).nullable;
     let tsType = 'any';
     if (field.fieldIsEnum) {

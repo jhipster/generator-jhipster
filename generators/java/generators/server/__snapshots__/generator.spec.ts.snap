@@ -1,20 +1,19 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`generator - java:server with defaults options should call source snapshot 1`] = `
 {
-  "mergePrettierConfig": [
+  "ignoreSonarRule": [
     {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for dtos",
+      "resourceKey": "src/main/java/com/mycompany/myapp/service/dto/**/*",
+      "ruleId": "S7027-dto",
+      "ruleKey": "javaarchitecture:S7027",
+    },
+    {
+      "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1176 is ignored, as we want to follow "clean code" guidelines and classes, methods and arguments names should be self-explanatory",
+      "resourceKey": "src/main/java/com/mycompany/myapp/**/*",
+      "ruleId": "UndocumentedApi",
+      "ruleKey": "squid:UndocumentedApi",
     },
   ],
 }
@@ -26,12 +25,6 @@ exports[`generator - java:server with defaults options should match files snapsh
     "stateCleared": "modified",
   },
   "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }

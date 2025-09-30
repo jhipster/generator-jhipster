@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`mutation object test expects mutateEntity to match snapshot 1`] = `
+{
+  "entityApi": "services/microservicename/",
+  "entityApiUrl": "entityNamePluralizedAndSpinalCased",
+  "paginationInfiniteScroll": false,
+  "paginationNo": false,
+  "paginationPagination": true,
+}
+`;
+
+exports[`mutation object test expects mutateField to match snapshot 1`] = `
+{
+  "fieldTypeBinary": false,
+  "fieldTypeCharSequence": false,
+  "fieldTypeNumeric": false,
+  "fieldTypeTemporal": false,
+  "fieldTypeTimed": false,
+}
+`;

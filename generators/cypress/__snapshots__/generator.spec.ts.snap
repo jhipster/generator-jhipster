@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`generator - cypress jwt-cypressAudit(false)-angular-withAdminUi(false)-cypressCoverage(false)-clientRoot/ should match generated files snapshot 1`] = `
 {

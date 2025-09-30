@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { moveToJavaPackageTestDir } from '../java/support/index.js';
+import { asWriteFilesSection, asWritingTask } from '../base-application/support/index.ts';
 import { GRADLE_BUILD_SRC_MAIN_DIR, SERVER_TEST_RES_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
-import { asWriteFilesSection, asWritingTask } from '../base-application/support/index.js';
+import { moveToJavaPackageTestDir } from '../java/support/index.ts';
 
 const cucumberFiles = asWriteFilesSection({
   cucumberFiles: [

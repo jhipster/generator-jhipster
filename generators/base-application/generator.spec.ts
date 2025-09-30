@@ -16,15 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { before, describe, esmocha, expect, it } from 'esmocha';
-import { snakeCase } from 'lodash-es';
+import { basename, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-import EnvironmentBuilder from '../../cli/environment-builder.mjs';
-import { defaultHelpers as helpers } from '../../lib/testing/index.js';
+import EnvironmentBuilder from '../../cli/environment-builder.js';
+import { defaultHelpers as helpers } from '../../lib/testing/index.ts';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
-import Generator from './index.js';
+
+import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -32,16 +32,12 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 
 describe(`generator - ${generator}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
 
-  // TODO test is broken due to @esbuild-kit/esm-loader
-  describe.skip('EnvironmentBuilder', () => {
-    let envBuilder;
-    before(() => {
-      envBuilder = EnvironmentBuilder.createDefaultBuilder();
+  describe('EnvironmentBuilder', () => {
+    let envBuilder: EnvironmentBuilder;
+    before(async () => {
+      envBuilder = await EnvironmentBuilder.createDefaultBuilder();
     });
     it(`should be registered as jhipster:${generator} at yeoman-environment`, async () => {
       expect(await envBuilder.getEnvironment().get(`jhipster:${generator}`)).toBe(Generator);
@@ -242,12 +238,12 @@ describe(`generator - ${generator}`, () => {
       expect(loading).toHaveBeenCalledWith(applicationDefaultsArg);
       expect(postPreparing).toHaveBeenCalledWith(applicationSourceArg);
 
-      expect(configuringEachEntity).toBeCalledTimes(3);
+      expect(configuringEachEntity).toHaveBeenCalledTimes(3);
       expect(configuringEachEntity).toHaveBeenNthCalledWith(1, { ...entityConfiguringArg, entityName: 'One' });
       expect(configuringEachEntity).toHaveBeenNthCalledWith(2, { ...entityConfiguringArg, entityName: 'Two' });
       expect(configuringEachEntity).toHaveBeenNthCalledWith(3, { ...entityConfiguringArg, entityName: 'Three' });
 
-      expect(preparingEachEntity).toBeCalledTimes(6);
+      expect(preparingEachEntity).toHaveBeenCalledTimes(6);
       expect(preparingEachEntity).toHaveBeenNthCalledWith(1, { ...entityArg, entityName: 'User' });
       expect(preparingEachEntity).toHaveBeenNthCalledWith(2, { ...entityArg, entityName: 'UserManagement' });
       expect(preparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityArg, entityName: 'Authority' });
@@ -255,7 +251,7 @@ describe(`generator - ${generator}`, () => {
       expect(preparingEachEntity).toHaveBeenNthCalledWith(5, { ...entityArg, entityName: 'Two' });
       expect(preparingEachEntity).toHaveBeenNthCalledWith(6, { ...entityArg, entityName: 'Three' });
 
-      expect(preparingEachEntityField).toBeCalledTimes(21);
+      expect(preparingEachEntityField).toHaveBeenCalledTimes(21);
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(1, { ...fieldArg, description: 'User#id' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(2, { ...fieldArg, description: 'User#login' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(3, { ...fieldArg, description: 'User#firstName' });
@@ -267,13 +263,13 @@ describe(`generator - ${generator}`, () => {
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(21 - 1, { ...fieldArg, description: 'Two#name' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(21, { ...fieldArg, description: 'Three#id' });
 
-      expect(preparingEachEntityRelationship).toBeCalledTimes(4);
+      expect(preparingEachEntityRelationship).toHaveBeenCalledTimes(4);
       // Omit UserManagement relationships
       expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(2, { ...relationshipArg, description: 'One#two' });
       expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(3, { ...relationshipArg, description: 'Two#one' });
       expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(4, { ...relationshipArg, description: 'Two#three' });
 
-      expect(postPreparingEachEntity).toBeCalledTimes(6);
+      expect(postPreparingEachEntity).toHaveBeenCalledTimes(6);
       expect(postPreparingEachEntity).toHaveBeenNthCalledWith(1, { ...entityArg, entityName: 'User' });
       expect(postPreparingEachEntity).toHaveBeenNthCalledWith(2, { ...entityArg, entityName: 'UserManagement' });
       expect(postPreparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityArg, entityName: 'Authority' });
@@ -494,12 +490,12 @@ describe(`generator - ${generator}`, () => {
       expect(composing).toHaveBeenCalledWith(controlArg);
       expect(loading).toHaveBeenCalledWith(applicationDefaultsArg);
 
-      expect(configuringEachEntity).toBeCalledTimes(3);
+      expect(configuringEachEntity).toHaveBeenCalledTimes(3);
       expect(configuringEachEntity).toHaveBeenNthCalledWith(1, { ...entityConfiguringArg, entityName: 'One' });
       expect(configuringEachEntity).toHaveBeenNthCalledWith(2, { ...entityConfiguringArg, entityName: 'Two' });
       expect(configuringEachEntity).toHaveBeenNthCalledWith(3, { ...entityConfiguringArg, entityName: 'Three' });
 
-      expect(preparingEachEntity).toBeCalledTimes(6);
+      expect(preparingEachEntity).toHaveBeenCalledTimes(6);
       expect(preparingEachEntity).toHaveBeenNthCalledWith(1, { ...entityArg, entityName: 'User' });
       expect(preparingEachEntity).toHaveBeenNthCalledWith(2, { ...entityArg, entityName: 'UserManagement' });
       expect(preparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityArg, entityName: 'Authority' });
@@ -507,7 +503,7 @@ describe(`generator - ${generator}`, () => {
       expect(preparingEachEntity).toHaveBeenNthCalledWith(5, { ...entityArg, entityName: 'Two' });
       expect(preparingEachEntity).toHaveBeenNthCalledWith(6, { ...entityArg, entityName: 'Three' });
 
-      expect(preparingEachEntityField).toBeCalledTimes(21);
+      expect(preparingEachEntityField).toHaveBeenCalledTimes(21);
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(1, { ...fieldArg, description: 'User#id' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(2, { ...fieldArg, description: 'User#login' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(3, { ...fieldArg, description: 'User#firstName' });
@@ -519,13 +515,13 @@ describe(`generator - ${generator}`, () => {
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(21 - 1, { ...fieldArg, description: 'Two#name' });
       expect(preparingEachEntityField).toHaveBeenNthCalledWith(21, { ...fieldArg, description: 'Three#id' });
 
-      expect(preparingEachEntityRelationship).toBeCalledTimes(4);
+      expect(preparingEachEntityRelationship).toHaveBeenCalledTimes(4);
       // Omit UserManagement relationships
       expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(2, { ...relationshipArg, description: 'One#two' });
       expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(3, { ...relationshipArg, description: 'Two#one' });
       expect(preparingEachEntityRelationship).toHaveBeenNthCalledWith(4, { ...relationshipArg, description: 'Two#three' });
 
-      expect(postPreparingEachEntity).toBeCalledTimes(6);
+      expect(postPreparingEachEntity).toHaveBeenCalledTimes(6);
       expect(postPreparingEachEntity).toHaveBeenNthCalledWith(1, { ...entityArg, entityName: 'User' });
       expect(postPreparingEachEntity).toHaveBeenNthCalledWith(2, { ...entityArg, entityName: 'UserManagement' });
       expect(postPreparingEachEntity).toHaveBeenNthCalledWith(3, { ...entityArg, entityName: 'Authority' });

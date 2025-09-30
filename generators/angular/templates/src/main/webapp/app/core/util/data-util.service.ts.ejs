@@ -47,12 +47,12 @@ export class DataUtils {
    * Method to open file
    */
   openFile(data: string, contentType: string | null | undefined): void {
-    contentType = contentType ?? '';
+    contentType ??= '';
 
     const byteCharacters = Buffer.from(data, 'base64').toString('binary');
     const byteNumbers = new Array(byteCharacters.length);
     for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
+      byteNumbers[i] = byteCharacters.codePointAt(i);
     }
     const byteArray = new Uint8Array(byteNumbers);
     const blob = new Blob([byteArray], {

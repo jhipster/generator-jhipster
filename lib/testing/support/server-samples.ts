@@ -1,38 +1,42 @@
-import { MatrixGateway, MatrixMicroservice, MatrixMonolith } from './application-samples.js';
-import { buildSamplesFromMatrix, extendFilteredMatrix, extendMatrix, fromMatrix } from './matrix-utils.js';
+import type { ConfigAll } from '../../types/command-all.ts';
 
-export const buildServerMatrix = (matrix: Record<string, unknown> = {}) => {
-  let serverMatrix = {
-    ...fromMatrix({
-      ...MatrixMonolith,
-      ...matrix,
-      reactive: [false, true],
-    }),
-    ...fromMatrix({
-      ...MatrixMicroservice,
-      ...matrix,
-      reactive: [false, true],
-    }),
-    ...fromMatrix({
-      ...MatrixGateway,
-      ...matrix,
-    }),
-  };
+import { MatrixGateway, MatrixMicroservice, MatrixMonolith, ReactiveMatrix } from './application-samples.ts';
+import { type Matrix, type MatrixInput, buildSamplesFromMatrix, extendFilteredMatrix, extendMatrix, fromMatrix } from './matrix-utils.ts';
 
-  serverMatrix = extendMatrix(serverMatrix, {
-    buildTool: ['maven', 'gradle'],
-    enableTranslation: [false, true],
-    packageName: ['tech.jhipster', 'com.mycompany'],
-    jhiPrefix: ['jhi', 'fix'],
-    entitySuffix: ['Entity', ''],
-    dtoSuffix: ['DTO', 'Rest'],
-    skipCommitHook: [false, true],
-    testFrameworks: [[], ['gatling'], ['cucumber']],
-    serverSideOptions: [[], ['enableSwaggerCodegen:true']],
-  });
+export const buildServerMatrix = (matrix: MatrixInput<ConfigAll> = {}): Matrix<ConfigAll> => {
+  let serverMatrix = extendMatrix(
+    {
+      ...fromMatrix({
+        ...MatrixMonolith,
+        ...matrix,
+        ...ReactiveMatrix,
+      }),
+      ...fromMatrix({
+        ...MatrixMicroservice,
+        ...matrix,
+        ...ReactiveMatrix,
+      }),
+      ...fromMatrix({
+        ...MatrixGateway,
+        ...matrix,
+        ...ReactiveMatrix,
+      }),
+    },
+    {
+      buildTool: ['maven', 'gradle'],
+      enableTranslation: [false, true],
+      packageName: ['tech.jhipster', 'com.mycompany'],
+      jhiPrefix: ['jhi', 'fix'],
+      entitySuffix: ['Entity', ''],
+      dtoSuffix: ['DTO', 'Rest'],
+      skipCommitHook: [false, true],
+      testFrameworks: [[], ['gatling'], ['cucumber']],
+      enableSwaggerCodegen: [false, true],
+    },
+  );
 
   serverMatrix = extendFilteredMatrix(serverMatrix, sample => !sample.reactive, {
-    websocket: [false, true],
+    websocket: [undefined, 'spring-websocket'],
   });
 
   serverMatrix = extendFilteredMatrix(serverMatrix, sample => sample.authenticationType !== 'oauth2', {

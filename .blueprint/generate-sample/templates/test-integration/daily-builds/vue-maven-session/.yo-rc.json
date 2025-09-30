@@ -1,0 +1,30 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "jhipster",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "vue",
+    "clientTheme": "none",
+    "clientThemeVariant": "primary",
+    "creationTimestamp": 1595060535913,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "dtoSuffix": "DTO",
+    "enableTranslation": true,
+    "entitySuffix": "",
+    "jhiPrefix": "jhi",
+    "jwtSecretKey": "OWE1OTNlNDU1ZDI1ZTdkYTU2NDA0M2Q2MTc0MjZmNTFlZWExMjZjYjQ2YjAyYzEwNTRjNTQxMjQ1MDk5MThkMTVmNDZjZWFmOTYyM2Y4M2YyNWJkZTQ5Nzk5YzEyYzBjNDY3NzVmMjE1NzU3MmE0NTFjZGU2Nzk2ZTY5MTVhYmU=",
+    "languages": ["en"],
+    "nativeLanguage": "en",
+    "packageFolder": "io/github/jhipster/sample",
+    "packageName": "io.github.jhipster.sample",
+    "prodDatabaseType": "postgresql",
+    "reactive": false,
+    "rememberMeKey": "a5e93fdeb16e2ee2dc4a629b5dbdabb30f968e418dfc0483c53afdc695cfac96d06cf5c581cbefb93e3aaa241880857fcafe",
+    "searchEngine": false,
+    "serverPort": "8080",
+    "testFrameworks": ["gatling", "cypress"]
+  }
+}

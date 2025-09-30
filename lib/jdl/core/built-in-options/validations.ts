@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-const ValidationTypes = {
+export const validationTypes = {
   REQUIRED: 'required',
   UNIQUE: 'unique',
   MIN: 'min',
@@ -29,7 +29,9 @@ const ValidationTypes = {
   MAXBYTES: 'maxbytes',
 } as const;
 
-const exists = (validation: string) => (Object.values(ValidationTypes) as string[]).includes(validation);
+export type ValidationType = (typeof validationTypes)[keyof typeof validationTypes];
+
+const exists = (validation: string) => (Object.values(validationTypes) as string[]).includes(validation);
 
 const needsValuedMap = {
   required: false,
@@ -47,13 +49,13 @@ const needsValue = (validation: keyof typeof needsValuedMap | string) => {
   return needsValuedMap[validation as keyof typeof needsValuedMap];
 };
 
-const SUPPORTED_VALIDATION_RULES = Object.values(ValidationTypes) as string[];
+const SUPPORTED_VALIDATION_RULES = Object.values(validationTypes) as string[];
 
 const Validations = {
-  ...ValidationTypes,
+  ...validationTypes,
   exists,
   needsValue,
 };
 
-export { Validations, SUPPORTED_VALIDATION_RULES };
+export { SUPPORTED_VALIDATION_RULES, Validations };
 export default { Validations, SUPPORTED_VALIDATION_RULES };

@@ -16,17 +16,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { extname } from 'path';
-import { isFileStateDeleted, isFileStateModified } from 'mem-fs-editor/state';
+import { extname } from 'node:path';
+
 import { passthrough } from '@yeoman/transform';
-import { JavaApplicationGenerator } from '../../generator.ts';
-import { addJavaAnnotation } from '../../../java/support/add-java-annotation.js';
-import { javaMainPackageTemplatesBlock } from '../../../java/support/files.js';
-import type { Source as SpringBootSource } from '../../../spring-boot/index.ts';
+import { isFileStateDeleted, isFileStateModified } from 'mem-fs-editor/state';
+
 import type { Application as LanguagesApplication } from '../../../languages/index.ts';
+import type { Source as SpringBootSource } from '../../../spring-boot/index.ts';
 import type { Config as SpringCacheConfig } from '../../../spring-cache/index.ts';
-import { mavenDefinition } from './internal/maven-definition.js';
-import { GRAALVM_REACHABILITY_METADATA } from './internal/constants.js';
+import { JavaApplicationGenerator } from '../../generator.ts';
+import { addJavaAnnotation } from '../../support/add-java-annotation.ts';
+import { javaMainPackageTemplatesBlock } from '../../support/files.ts';
+
+import { GRAALVM_REACHABILITY_METADATA } from './internal/constants.ts';
+import { mavenDefinition } from './internal/maven-definition.ts';
 
 export default class GraalvmGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
@@ -35,7 +38,7 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:java:bootstrap');
+      await this.dependsOnBootstrap('java');
     }
   }
 

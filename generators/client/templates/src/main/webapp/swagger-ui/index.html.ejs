@@ -56,7 +56,7 @@
         }
 <%_ } else { _%>
         const getBearerToken = () => {
-          var authToken = localStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken');
+          let authToken = localStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken');
           if (authToken) {
 <%_ if (clientFrameworkAngular || clientFrameworkReact) { _%>
             authToken = JSON.parse(authToken);

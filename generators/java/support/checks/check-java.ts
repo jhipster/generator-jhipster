@@ -18,7 +18,8 @@
  */
 import chalk from 'chalk';
 import { execaCommandSync } from 'execa';
-import type { ValidationResult } from '../../../base-core/api.js';
+
+import type { ValidationResult } from '../../../base-core/api.ts';
 
 /**
  * Check if installed java version is compatible

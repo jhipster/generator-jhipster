@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './needles.js';
-export * from './reserved-keywords.js';
-export * from './translate-angular.js';
-export { default as updateLanguagesTask } from './update-languages.js';
+export * from './needles.ts';
+export * from './reserved-keywords.ts';
+export * from './translate-angular.ts';

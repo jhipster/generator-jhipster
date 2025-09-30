@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import entityOptions from '../../../jhipster/entity-options.js';
+import entityOptions from '../../../jhipster/entity-options.ts';
 
 const { MapperTypes, PaginationTypes, SearchTypes, ServiceTypes } = entityOptions;
 const { MAPSTRUCT } = MapperTypes;

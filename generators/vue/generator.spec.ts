@@ -1,15 +1,13 @@
-import { basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
-import { snakeCase } from 'lodash-es';
+import { basename, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-import { buildClientSamples, entitiesClientSamples as entities, defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
-import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.js';
-
-import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
+import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
+import { buildClientSamples, defaultHelpers as helpers, entitiesClientSamples as entities, runResult } from '../../lib/testing/index.ts';
+import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
-import { GENERATOR_VUE } from '../generator-list.js';
-import Generator from './index.js';
+
+import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -21,7 +19,7 @@ const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr', 
 
 const testSamples = buildClientSamples(commonConfig);
 
-const clientAdminFiles = clientSrcDir => [
+const clientAdminFiles = (clientSrcDir: string) => [
   `${clientSrcDir}app/admin/configuration/configuration.component.ts`,
   `${clientSrcDir}app/admin/configuration/configuration.component.spec.ts`,
   `${clientSrcDir}app/admin/configuration/configuration.vue`,
@@ -50,12 +48,9 @@ const clientAdminFiles = clientSrcDir => [
 ];
 
 describe(`generator - ${clientFramework}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
-  checkEnforcements({ client: true }, GENERATOR_VUE);
+  checkEnforcements({ client: true }, generator);
 
   it('samples matrix should match snapshot', () => {
     expect(testSamples).toMatchSnapshot();
@@ -72,7 +67,7 @@ describe(`generator - ${clientFramework}`, () => {
           .withSharedApplication({ getWebappTranslation: () => 'translations' })
           .withMockedSource()
           .withSharedApplication({ gatewayServicesApiAvailable: sampleConfig.applicationType === 'gateway' })
-          .withMockedGenerators(['jhipster:common', 'jhipster:languages']);
+          .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
       });
 
       it('should match generated files snapshot', () => {
@@ -92,7 +87,7 @@ describe(`generator - ${clientFramework}`, () => {
       });
 
       describe('withAdminUi', () => {
-        const { applicationType, withAdminUi } = sampleConfig;
+        const { applicationType, withAdminUi, enableTranslation } = sampleConfig;
         const clientSrcDir = `${clientRootDir}${clientRootDir ? 'src/' : CLIENT_MAIN_SRC_DIR}`;
         const generateAdminUi = applicationType !== 'microservice' && withAdminUi;
         const adminUiComponents = generateAdminUi ? 'should generate admin ui components' : 'should not generate admin ui components';
@@ -143,25 +138,27 @@ describe(`generator - ${clientFramework}`, () => {
       meta: { authorities: [Authority.ADMIN] }
     },`,
             );
-            assertion(
-              `${clientSrcDir}app/core/jhi-navbar/jhi-navbar.vue`,
-              '<b-dropdown-item to="/admin/metrics" active-class="active">\n' +
-                '            <font-awesome-icon icon="tachometer-alt" />\n' +
-                '            <span v-text="t$(\'global.menu.admin.metrics\')"></span>\n' +
-                '          </b-dropdown-item>\n' +
-                '          <b-dropdown-item to="/admin/health" active-class="active">\n' +
-                '            <font-awesome-icon icon="heart" />\n' +
-                '            <span v-text="t$(\'global.menu.admin.health\')"></span>\n' +
-                '          </b-dropdown-item>\n' +
-                '          <b-dropdown-item to="/admin/configuration" active-class="active">\n' +
-                '            <font-awesome-icon icon="cogs" />\n' +
-                '            <span v-text="t$(\'global.menu.admin.configuration\')"></span>\n' +
-                '          </b-dropdown-item>\n' +
-                '          <b-dropdown-item to="/admin/logs" active-class="active">\n' +
-                '            <font-awesome-icon icon="tasks" />\n' +
-                '            <span v-text="t$(\'global.menu.admin.logs\')"></span>\n' +
-                '          </b-dropdown-item>',
-            );
+            if (enableTranslation) {
+              assertion(
+                `${clientSrcDir}app/core/jhi-navbar/jhi-navbar.vue`,
+                '<b-dropdown-item to="/admin/metrics" active-class="active">\n' +
+                  '            <font-awesome-icon icon="tachometer-alt" />\n' +
+                  "            <span>{{ t$('global.menu.admin.metrics') }}</span>\n" +
+                  '          </b-dropdown-item>\n' +
+                  '          <b-dropdown-item to="/admin/health" active-class="active">\n' +
+                  '            <font-awesome-icon icon="heart" />\n' +
+                  "            <span>{{ t$('global.menu.admin.health') }}</span>\n" +
+                  '          </b-dropdown-item>\n' +
+                  '          <b-dropdown-item to="/admin/configuration" active-class="active">\n' +
+                  '            <font-awesome-icon icon="cogs" />\n' +
+                  "            <span>{{ t$('global.menu.admin.configuration') }}</span>\n" +
+                  '          </b-dropdown-item>\n' +
+                  '          <b-dropdown-item to="/admin/logs" active-class="active">\n' +
+                  '            <font-awesome-icon icon="tasks" />\n' +
+                  "            <span>{{ t$('global.menu.admin.logs') }}</span>\n" +
+                  '          </b-dropdown-item>',
+              );
+            }
           });
         }
       });

@@ -1,0 +1,120 @@
+<%#
+ Copyright 2013-2025 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { ChangeDetectorRef } from '@angular/core';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+<%_ if (enableTranslation) { _%>
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
+import { of } from 'rxjs';
+
+import Metrics from './metrics';
+import { MetricsService } from './metrics.service';
+import { MetricsModel, Thread, ThreadDump } from './metrics.model';
+
+describe('Metrics', () => {
+  let comp: Metrics;
+  let fixture: ComponentFixture<Metrics>;
+  let service: MetricsService;
+  let changeDetector: ChangeDetectorRef;
+
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
+      providers: [provideHttpClient()],
+    });
+  }));
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(Metrics);
+    comp = fixture.componentInstance;
+    service = TestBed.inject(MetricsService);
+    changeDetector = fixture.debugElement.injector.get(ChangeDetectorRef);
+  });
+
+  describe('refresh', () => {
+    it('should call refresh on init', () => {
+      // GIVEN
+      const metrics = {
+        garbageCollector: {
+          'PS Scavenge': {
+            collectionCount: 0,
+            collectionTime: 0,
+          },
+          'PS MarkSweep': {
+            collectionCount: 0,
+            collectionTime: 0,
+          },
+        },
+      } as unknown as MetricsModel;
+      const threadDump = { threads: [{ threadName: 'thread 1' } as Thread] } as ThreadDump;
+
+      jest.spyOn(service, 'getMetrics').mockReturnValue(of(metrics));
+      jest.spyOn(service, 'threadDump').mockReturnValue(of(threadDump));
+      jest.spyOn(changeDetector.constructor.prototype, 'markForCheck');
+
+      // WHEN
+      comp.ngOnInit();
+
+      // THEN
+      expect(service.getMetrics).toHaveBeenCalled();
+      expect(comp.metrics()).toEqual(metrics);
+      expect(comp.threads()).toEqual(threadDump.threads);
+      expect(comp.updatingMetrics()).toBeFalsy();
+      expect(changeDetector.constructor.prototype.markForCheck).toHaveBeenCalled();
+    });
+  });
+
+  describe('metricsKeyExistsAndObjectNotEmpty', () => {
+    it('should check that metrics key exists and is not empty', () => {
+      // GIVEN
+      comp.metrics.set({
+        garbageCollector: {
+          'PS Scavenge': {
+            collectionCount: 0,
+            collectionTime: 0,
+          },
+          'PS MarkSweep': {
+            collectionCount: 0,
+            collectionTime: 0,
+          },
+        },
+      } as unknown as MetricsModel);
+
+      // WHEN
+      const garbageCollectorKeyExistsAndNotEmpty = comp.metricsKeyExistsAndObjectNotEmpty('garbageCollector');
+
+      // THEN
+      expect(garbageCollectorKeyExistsAndNotEmpty).toBeTruthy();
+    });
+
+    it('should check that metrics key is empty', () => {
+      // GIVEN
+      comp.metrics.set({
+        garbageCollector: {},
+      } as MetricsModel);
+
+      // WHEN
+      const garbageCollectorKeyEmpty = comp.metricsKeyExistsAndObjectNotEmpty('garbageCollector');
+
+      // THEN
+      expect(garbageCollectorKeyEmpty).toBeFalsy();
+    });
+  });
+});

@@ -16,13 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
+import { basename, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { defaultHelpers as helpers, result } from '../../lib/testing/index.ts';
 import { basicTests, getCommandHelpOutput, testBlueprintSupport } from '../../test/support/tests.js';
-import { defaultHelpers as helpers, result } from '../../lib/testing/index.js';
-import { GENERATOR_INIT } from '../generator-list.js';
-import { defaultConfig, requiredConfig } from './config.js';
+
+import { defaultConfig, requiredConfig } from './config.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -30,9 +31,6 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 
 describe(`generator - ${generator}`, () => {
-  it('generator-list constant matches folder name', () => {
-    expect(GENERATOR_INIT).toBe(generator);
-  });
   basicTests({
     generatorNamespace: generator,
     requiredConfig,
@@ -49,7 +47,7 @@ describe(`generator - ${generator}`, () => {
     describe('default config', () => {
       before(async () => {
         await helpers
-          .runJHipster('init')
+          .runJHipster(generator)
           .withMockedJHipsterGenerators(['bootstrap'])
           .withSharedApplication({ projectDescription: 'projectDescription', prettierTabWidth: 'prettierTabWidth' })
           .withJHipsterConfig();
@@ -62,9 +60,9 @@ describe(`generator - ${generator}`, () => {
         expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
   "jhipster:git",
-  "jhipster:javascript:eslint",
-  "jhipster:javascript:husky",
-  "jhipster:javascript:prettier",
+  "jhipster:javascript-simple-application:eslint",
+  "jhipster:javascript-simple-application:husky",
+  "jhipster:javascript-simple-application:prettier",
 ]
 `);
       });

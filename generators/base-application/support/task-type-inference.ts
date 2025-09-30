@@ -14,33 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { TaskTypes as BaseTasks, SimpleTask } from '../../base/tasks.js';
-import type { TaskTypes } from '../tasks.js';
-import type CoreGenerator from '../../base-core/generator.js';
-import type { WriteFileBlock, WriteFileSection } from '../../base-core/api.js';
+import type { ApplicationAll, EntityAll } from '../../../lib/types/application-all.ts';
+import type { SourceAll } from '../../../lib/types/source-all.ts';
+import type { SimpleTask, TaskTypes as BaseTasks } from '../../base/tasks.ts';
+import type { WriteFileBlock, WriteFileSection } from '../../base-core/api.ts';
+import type CoreGenerator from '../../base-core/generator.ts';
+import type { TaskTypes } from '../tasks.ts';
 import type {
   Application as BaseApplicationApplication,
   Entity as BaseApplicationEntity,
   Source as BaseApplicationSource,
-} from '../types.js';
+} from '../types.ts';
 
-import type { ApplicationAll } from '../../../lib/types/application-properties-all.js';
-import type { EntityAll } from '../../../lib/types/entity-all.js';
-import type { SourceAll } from '../../../lib/types/source-all.js';
-
-export function asWriteFilesSection<Data = ApplicationAll<EntityAll>>(section: WriteFileSection<Data>): WriteFileSection<Data> {
+export function asWriteFilesSection<Data = ApplicationAll>(section: WriteFileSection<Data>): WriteFileSection<Data> {
   return section;
 }
 
-export function asWriteFilesBlock<Data = ApplicationAll<EntityAll>>(block: WriteFileBlock<Data>[]): WriteFileBlock<Data>[];
-export function asWriteFilesBlock<Data = ApplicationAll<EntityAll>>(block: WriteFileBlock<Data>): WriteFileBlock<Data>;
+export function asWriteFilesBlock<Data = ApplicationAll>(block: WriteFileBlock<Data>[]): WriteFileBlock<Data>[];
+export function asWriteFilesBlock<Data = ApplicationAll>(block: WriteFileBlock<Data>): WriteFileBlock<Data>;
 export function asWriteFilesBlock(block: any): any {
   return block;
 }
 
-export function asWriteEntityFilesSection<Data = EntityAll & ApplicationAll<EntityAll>>(
-  section: WriteFileSection<Data>,
-): WriteFileSection<Data> {
+export function asWriteEntityFilesSection<Data = EntityAll & ApplicationAll>(section: WriteFileSection<Data>): WriteFileSection<Data> {
   return section;
 }
 

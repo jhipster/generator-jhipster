@@ -18,9 +18,12 @@
  */
 
 import { describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import { createRuntime } from '../../core/runtime.js';
-import { parse } from './api.js';
+
+import { createRuntime } from '../runtime.ts';
+
+import { parse } from './api.ts';
 
 describe('jdl - JDLSyntaxValidatorVisitor', () => {
   const jdlRuntime = createRuntime();
@@ -724,7 +727,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         });
       });
     });
-    describe('and using for clientPackageManager', () => {
+    describe('and using for nodePackageManager', () => {
       describe('a valid value', () => {
         describe('with only letters', () => {
           it('should not report a syntax error', () => {
@@ -733,7 +736,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 `
             application {
               config {
-                clientPackageManager npm
+                nodePackageManager npm
               }
             }`,
                 jdlRuntime,
@@ -748,7 +751,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 `
             application {
               config {
-                clientPackageManager npm42
+                nodePackageManager npm42
               }
             }`,
                 jdlRuntime,
@@ -765,7 +768,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 `
             application {
               config {
-                clientPackageManager "npm"
+                nodePackageManager "npm"
               }
             }`,
                 jdlRuntime,
@@ -780,7 +783,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                 `
             application {
               config {
-                clientPackageManager 42
+                nodePackageManager 42
               }
             }`,
                 jdlRuntime,

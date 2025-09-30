@@ -16,22 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
+import { basename, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
 import { testBlueprintSupport } from '../../test/support/tests.js';
-import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
-import { GENERATOR_MAVEN } from '../generator-list.js';
-import MavenGenerator from './generator.js';
+
+import MavenGenerator from './generator.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 
+type T = ConstructorParameters<typeof MavenGenerator>;
+
 describe(`generator - ${generator}`, () => {
-  it('generator-list constant matches folder name', () => {
-    expect(GENERATOR_MAVEN).toBe(generator);
-  });
   describe('blueprint support', () => testBlueprintSupport(generator));
   describe('with valid configuration', () => {
     before(async () => {
@@ -56,14 +56,14 @@ describe(`generator - ${generator}`, () => {
   describe('needles', () => {
     before(async () => {
       await helpers
-        .runJHipster(GENERATOR_MAVEN)
+        .runJHipster(generator)
         .withJHipsterConfig({
           blueprints: [{ name: 'blueprint' }],
         })
         .withGenerators([
           [
             class extends MavenGenerator {
-              constructor(args, options, features) {
+              constructor(args: T[0], options: T[1], features: T[2]) {
                 super(args, options, { ...features, sbsBlueprint: true });
               }
 

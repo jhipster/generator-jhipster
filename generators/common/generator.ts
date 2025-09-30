@@ -19,36 +19,37 @@
 
 import { isFileStateModified } from 'mem-fs-editor/state';
 import { CheckRepoActions } from 'simple-git';
-import BaseApplicationGenerator from '../base-application/index.js';
 
-import { JHIPSTER_DOCUMENTATION_URL, MAIN_DIR, TEST_DIR } from '../generator-constants.js';
-import { GENERATOR_COMMON, GENERATOR_GIT } from '../generator-list.js';
-import { createPrettierTransform } from '../bootstrap/support/prettier-support.js';
-import command from './command.js';
-import { writeFiles } from './files.js';
+import BaseApplicationGenerator from '../base-application/index.ts';
+import type { PropertiesFileLines } from '../base-core/support/index.ts';
+import { editPropertiesFileCallback } from '../base-core/support/index.ts';
+import { createPrettierTransform } from '../bootstrap/support/prettier-support.ts';
+
+import { writeFiles } from './files.ts';
 import type {
   Application as CommonApplication,
   Config as CommonConfig,
   Entity as CommonEntity,
   Options as CommonOptions,
-} from './types.js';
+  Source as CommonSource,
+} from './types.ts';
 
 export default class CommonGenerator extends BaseApplicationGenerator<
   CommonEntity,
-  CommonApplication<CommonEntity>,
+  CommonApplication,
   CommonConfig,
-  CommonOptions
+  CommonOptions,
+  CommonSource
 > {
-  command = command;
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplication();
-      await this.dependsOnJHipster(GENERATOR_GIT);
+      await this.dependsOnBootstrap('common');
+      await this.dependsOnJHipster('javascript-simple-application');
+      await this.dependsOnJHipster('git');
     }
   }
 
@@ -78,9 +79,9 @@ export default class CommonGenerator extends BaseApplicationGenerator<
   get composing() {
     return this.asComposingTaskGroup({
       async composing() {
-        await this.composeWithJHipster('jhipster:javascript:prettier');
+        await this.composeWithJHipster('jhipster:javascript-simple-application:prettier');
         if (!this.jhipsterConfig.skipCommitHook) {
-          await this.composeWithJHipster('jhipster:javascript:husky');
+          await this.composeWithJHipster('jhipster:javascript-simple-application:husky');
         }
       },
     });
@@ -88,6 +89,87 @@ export default class CommonGenerator extends BaseApplicationGenerator<
 
   get [BaseApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  get loading() {
+    return this.asLoadingTaskGroup({
+      loadPackageJson({ application }) {
+        this.loadNodeDependenciesFromPackageJson(
+          application.nodeDependencies,
+          this.fetchFromInstalledJHipster('common', 'resources', 'package.json'),
+        );
+      },
+
+      loadConfig({ applicationDefaults }) {
+        applicationDefaults({
+          prettierTabWidth: this.jhipsterConfig.prettierTabWidth ?? 2,
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
+  // Public API method used by the getter and also by Blueprints
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      sonarSourceApi({ source }) {
+        source.ignoreSonarRule = ({ ruleId, ruleKey, resourceKey, comment }) => {
+          this.editFile(
+            'sonar-project.properties',
+            editPropertiesFileCallback([
+              {
+                key: 'sonar.issue.ignore.multicriteria',
+                value: ruleId,
+                valueSep: ', ',
+              },
+              {
+                key: `sonar.issue.ignore.multicriteria.${ruleId}.resourceKey`,
+                value: resourceKey,
+                comment,
+              },
+              {
+                key: `sonar.issue.ignore.multicriteria.${ruleId}.ruleKey`,
+                value: ruleKey,
+              },
+            ]),
+          );
+        };
+        source.addSonarProperties = properties => {
+          // Adds new properties before the sonar.issue.ignore.multicriteria key
+          this.editFile(
+            'sonar-project.properties',
+            editPropertiesFileCallback((lines, newValueCallback) => {
+              let multicriteriaIndex = lines.findIndex(line => Array.isArray(line) && line[0] === 'sonar.issue.ignore.multicriteria');
+              if (lines[multicriteriaIndex - 1] === '') {
+                multicriteriaIndex--;
+              }
+              const indexToInsert = multicriteriaIndex === -1 ? lines.length : multicriteriaIndex;
+              for (const { key, value, valueSep, comment } of properties) {
+                const existingLine = lines.find(line => Array.isArray(line) && line[0] === key) as [string, string] | undefined;
+                if (existingLine) {
+                  existingLine[1] = newValueCallback(value, existingLine[1], valueSep);
+                } else {
+                  const itemsToAdd: PropertiesFileLines = [[key, newValueCallback(value)]];
+                  if (comment) {
+                    itemsToAdd.unshift(comment);
+                  }
+                  lines.splice(indexToInsert, 0, ...itemsToAdd);
+                }
+              }
+              return lines;
+            }),
+          );
+        };
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get configuringEachEntity() {
@@ -121,51 +203,6 @@ export default class CommonGenerator extends BaseApplicationGenerator<
 
   get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
     return this.delegateTasksToBlueprint(() => this.configuringEachEntity);
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  get loading() {
-    return this.asLoadingTaskGroup({
-      loadPackageJson({ application }) {
-        this.loadNodeDependenciesFromPackageJson(
-          application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_COMMON, 'resources', 'package.json'),
-        );
-      },
-
-      loadConfig({ applicationDefaults }) {
-        applicationDefaults({
-          prettierTabWidth: this.jhipsterConfig.prettierTabWidth ?? 2,
-        });
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  get preparing() {
-    return this.asPreparingTaskGroup({
-      checkSuffix({ application }) {
-        if (application.entitySuffix === application.dtoSuffix) {
-          throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equals!');
-        }
-      },
-      setupConstants({ applicationDefaults }) {
-        // Make constants available in templates
-        applicationDefaults({
-          srcMain: MAIN_DIR,
-          srcTest: TEST_DIR,
-          documentationUrl: JHIPSTER_DOCUMENTATION_URL,
-        });
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get default() {

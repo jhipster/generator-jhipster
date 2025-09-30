@@ -16,8 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
-import detectLanguage from './support/detect-language.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
+
+import detectLanguage from './support/detect-language.ts';
 
 const command = {
   arguments: {

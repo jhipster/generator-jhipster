@@ -17,16 +17,15 @@
  * limitations under the License.
  */
 
-import assert from 'assert/strict';
+import assert from 'node:assert/strict';
 
-import BaseApplicationGenerator from '../base-application/index.js';
-
-import { GRADLE_BUILD_SRC_DIR } from '../generator-constants.js';
-import { mutateData } from '../../lib/utils/index.js';
+import { mutateData } from '../../lib/utils/index.ts';
 import { QUEUES } from '../base-core/priorities.ts';
-import files from './files.js';
-import { GRADLE } from './constants.js';
-import cleanupOldServerFilesTask from './cleanup.js';
+import BaseSimpleApplicationGenerator from '../base-simple-application/index.ts';
+import { GRADLE_BUILD_SRC_DIR } from '../generator-constants.js';
+
+import { GRADLE } from './constants.ts';
+import files from './files.ts';
 import {
   addGradleDependenciesCallback,
   addGradleDependenciesCatalogVersionCallback,
@@ -40,25 +39,18 @@ import {
   applyFromGradleCallback,
   gradleNeedleOptionsWithDefaults,
   sortDependencies,
-} from './internal/needles.js';
+} from './internal/needles.ts';
 import type {
   Application as GradleApplication,
   Config as GradleConfig,
   GradleDependency,
-  Entity as GradleEntity,
   Options as GradleOptions,
   Source as GradleSource,
-} from './types.js';
+} from './types.ts';
 
 const { PRE_CONFLICTS_QUEUE } = QUEUES;
 
-export default class GradleGenerator extends BaseApplicationGenerator<
-  GradleEntity,
-  GradleApplication<GradleEntity>,
-  GradleConfig,
-  GradleOptions,
-  GradleSource
-> {
+export default class GradleGenerator extends BaseSimpleApplicationGenerator<GradleApplication, GradleConfig, GradleOptions, GradleSource> {
   gradleVersionFromWrapper: string | undefined;
 
   async beforeQueue() {
@@ -67,7 +59,7 @@ export default class GradleGenerator extends BaseApplicationGenerator<
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplicationServer();
+      await this.dependsOnBootstrap('java');
     }
   }
 
@@ -83,7 +75,7 @@ export default class GradleGenerator extends BaseApplicationGenerator<
     });
   }
 
-  get [BaseApplicationGenerator.CONFIGURING]() {
+  get [BaseSimpleApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
@@ -102,7 +94,7 @@ export default class GradleGenerator extends BaseApplicationGenerator<
     });
   }
 
-  get [BaseApplicationGenerator.LOADING]() {
+  get [BaseSimpleApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
   }
 
@@ -119,7 +111,7 @@ export default class GradleGenerator extends BaseApplicationGenerator<
             !gradleDevelocityHost || gradleDevelocityHost.startsWith('https://') ? gradleDevelocityHost : `https://${gradleDevelocityHost}`,
         });
       },
-      addSourceNeddles({ application, source }) {
+      addSourceNeedles({ application, source }) {
         const { gradleBuildSrc } = application;
         source.applyFromGradle = script => this.editFile('build.gradle', applyFromGradleCallback(script));
         source.addGradleDependencies = (dependencies, options = {}) => {
@@ -181,20 +173,27 @@ export default class GradleGenerator extends BaseApplicationGenerator<
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
+  get [BaseSimpleApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get writing() {
     return this.asWritingTaskGroup({
-      cleanupOldServerFilesTask,
+      cleanupOldServerFilesTask({ control }) {
+        if (control.isJhipsterVersionLessThan('5.0.0')) {
+          this.removeFile('gradle/mapstruct.gradle');
+        }
+        if (control.isJhipsterVersionLessThan('5.2.2')) {
+          this.removeFile('gradle/liquibase.gradle');
+        }
+      },
       async writeFiles({ application }) {
         await this.writeFiles({ sections: files, context: application });
       },
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [BaseSimpleApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -211,7 +210,7 @@ export default class GradleGenerator extends BaseApplicationGenerator<
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [BaseSimpleApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

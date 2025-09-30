@@ -19,9 +19,10 @@
 
 import chalk from 'chalk';
 
-import BaseApplicationGenerator from '../base-simple-application/index.js';
-import { createPomStorage } from '../maven/support/pom-store.js';
-import type { Application as CiCdApplication } from './types.js';
+import BaseApplicationGenerator from '../base-simple-application/index.ts';
+import { createPomStorage } from '../maven/support/pom-store.ts';
+
+import type { Application as CiCdApplication } from './types.ts';
 
 export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplication> {
   insideDocker!: boolean;
@@ -35,11 +36,10 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
       if (this.options.commandName === 'ci-cd') {
         const { backendType = 'Java' } = this.jhipsterConfig as any;
         if (['Java', 'SpringBoot'].includes(backendType)) {
-          const javaBootstrap = await this.dependsOnJHipster('jhipster:java:bootstrap');
-          javaBootstrap.writeBootstrapFiles = false;
+          await this.dependsOnBootstrap('java');
         }
       } else {
-        await this.dependsOnBootstrapApplicationBase();
+        await this.dependsOnBootstrap('base-application');
       }
     }
   }

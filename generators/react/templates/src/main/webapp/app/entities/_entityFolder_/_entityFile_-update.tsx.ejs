@@ -199,8 +199,8 @@ _%>
     <div>
     <Row className="justify-content-center">
       <Col md="8">
-        <h2 id="<%= i18nKeyPrefix %>.home.createOrEditLabel" data-cy="<%= entityClass %>CreateUpdateHeading">
-          <Translate contentKey="<%= i18nKeyPrefix %>.home.createOrEditLabel">Create or edit a <%= entityClass %></Translate>
+        <h2 id="<%= i18nKeyPrefix %>.home.createOrEditLabel" data-cy="<%- entityNameCapitalized %>CreateUpdateHeading">
+          <Translate contentKey="<%= i18nKeyPrefix %>.home.createOrEditLabel">Create or edit a <%- entityNameCapitalized %></Translate>
         </h2>
       </Col>
     </Row>
@@ -208,14 +208,13 @@ _%>
       <Col md="8">
         { loading ? <p>Loading...</p> :
         <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity} >
-          { !isNew ?
+          { !isNew &&
             <ValidatedField
               name="<%= primaryKey.fields[0].fieldName %>" required readOnly
               id="<%= entityFileName %>-<%= primaryKey.fields[0].fieldName %>"
               label={translate('<%= primaryKey.fields[0].fieldTranslationKey %>')}
               validate={{ required: true }}
             />
-            : null
           }
 <%_ for (field of fields.filter(field => !field.id)) {
     const fieldType = field.fieldType;

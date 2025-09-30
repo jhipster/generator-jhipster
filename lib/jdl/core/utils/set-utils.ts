@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { join as arrayJoin } from './array-utils.js';
+import { join as arrayJoin } from './array-utils.ts';
 
 export function addAll<T>(set: Set<T>, elements: T[]) {
   if (!set) {

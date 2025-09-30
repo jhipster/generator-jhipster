@@ -1,60 +1,33 @@
-import type { addIconImport, addItemToMenu, addRoute } from '../angular/support/needles.js';
-import type { HandleCommandTypes } from '../../lib/command/index.js';
-import type { Application as CypressApplication } from '../cypress/types.js';
-import type {
-  Application as JavascriptApplication,
-  Config as JavascriptConfig,
-  Entity as JavascriptEntity,
-  Field as JavascriptField,
-  Options as JavascriptOptions,
-  Relationship as JavascriptRelationship,
-  Source as JavascriptSource,
-} from '../javascript/types.js';
+import type { HandleCommandTypes } from '../../lib/command/index.ts';
+import type { addIconImport, addItemToMenu, addRoute } from '../angular/support/needles.ts';
 import type {
   Application as CommonApplication,
   Config as CommonConfig,
-  Entity as CommonEntity,
-  Field as CommonField,
+  Features as CommonFeatures,
   Options as CommonOptions,
-  Relationship as CommonRelationship,
   Source as CommonSource,
-} from '../common/types.js';
-import type { Language } from '../languages/support/languages.ts';
-import type { Entity as LanguagesEntity, Field as LanguagesField, Relationship as LanguagesRelationship } from '../languages/types.d.ts';
-import type { GetWebappTranslationCallback } from './translation.js';
+} from '../common/types.ts';
+import type {
+  Config as JavascriptConfig,
+  Options as JavascriptOptions,
+  Source as JavascriptSource,
+} from '../javascript-simple-application/types.ts';
+
+import type { ClientAddedApplicationProperties } from './application.ts';
 import type command from './command.ts';
+import type { Entity } from './entity.ts';
 
 type Command = HandleCommandTypes<typeof command>;
+
+export * from './entity.ts';
+
+export type { CommonFeatures as Features };
 
 export type Config = JavascriptConfig & CommonConfig & Command['Config'];
 
 export type Options = JavascriptOptions & CommonOptions & Command['Options'];
 
-export interface Field extends JavascriptField, CommonField, LanguagesField {}
-
-export interface Relationship extends JavascriptRelationship, CommonRelationship, LanguagesRelationship {}
-
-export interface Entity<F extends Field = Field, R extends Relationship = Relationship>
-  extends JavascriptEntity<F, R>,
-    CommonEntity<F, R>,
-    LanguagesEntity<F, R> {}
-
-export type Application<E extends Entity = Entity> = Command['Application'] &
-  CommonApplication<E> &
-  JavascriptApplication<E> &
-  CypressApplication & {
-    webappLoginRegExp: string;
-    clientWebappDir?: string;
-    clientThemeNone?: boolean;
-    clientThemeAny?: boolean;
-    webappEnumerationsDir?: string;
-    clientFrameworkBuiltIn?: boolean;
-    frontendAppName?: string;
-    filterEntitiesForClient?: <const E extends Entity>(entity: E[]) => E[];
-    filterEntitiesAndPropertiesForClient?: <const E extends Entity>(entity: E[]) => E[];
-    filterEntityPropertiesForClient?: <const E extends Entity>(entity: E) => E;
-    getWebappTranslation?: GetWebappTranslationCallback;
-  };
+export type Application<E extends Entity = Entity> = Command['Application'] & CommonApplication<E> & ClientAddedApplicationProperties & {};
 
 export type ClientResources = {
   /**
@@ -88,5 +61,5 @@ export type Source = JavascriptSource &
      * Add webpack config.
      */
     addWebpackConfig?(args: { config: string }): void;
-    addLanguagesInFrontend?(args: { languagesDefinition: readonly Language[] }): void;
+    addEntityTranslationKey: (arg: { translationKey: string; translationValue: string; language: string }) => void;
   };

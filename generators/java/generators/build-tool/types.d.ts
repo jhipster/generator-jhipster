@@ -16,14 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { HandleCommandTypes } from '../../../../lib/command/types.js';
+import type { HandleCommandTypes } from '../../../../lib/command/types.ts';
 import type {
   Application as BaseApplicationApplication,
   Config as BaseApplicationConfig,
-  Entity as BaseApplicationEntity,
   Options as BaseApplicationOptions,
   Source as BaseApplicationSource,
-} from '../../../base-application/types.js';
+} from '../../../base-simple-application/types.ts';
+
 import type command from './command.ts';
 
 type Command = HandleCommandTypes<typeof command>;
@@ -32,6 +32,6 @@ export type Config = Command['Config'] & BaseApplicationConfig;
 
 export type Options = Command['Options'] & BaseApplicationOptions;
 
-export { BaseApplicationEntity as Entity, BaseApplicationSource as Source };
+export { BaseApplicationSource as Source };
 
-export type Application<E extends BaseApplicationEntity = BaseApplicationEntity> = Command['Application'] & BaseApplicationApplication<E>;
+export type Application = Command['Application'] & BaseApplicationApplication;

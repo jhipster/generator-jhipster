@@ -18,17 +18,20 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import JDLRelationship from '../../core/models/jdl-relationship.js';
-import RelationshipValidator from '../validators/relationship-validator.js';
-import { relationshipOptions } from '../../core/built-in-options/index.js';
-import { relationshipTypes } from '../../core/basic-types/index.js';
+
+import { relationshipTypes } from '../../core/basic-types/index.ts';
+import { relationshipOptions } from '../../core/built-in-options/index.ts';
+import JDLRelationship from '../../core/models/jdl-relationship.ts';
+
+import RelationshipValidator from './relationship-validator.ts';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
 const { ONE_TO_ONE, MANY_TO_MANY, MANY_TO_ONE, ONE_TO_MANY } = relationshipTypes;
 
 describe('jdl - RelationshipValidator', () => {
-  let validator;
+  let validator: RelationshipValidator;
 
   before(() => {
     validator = new RelationshipValidator();
@@ -37,12 +40,13 @@ describe('jdl - RelationshipValidator', () => {
   describe('validate', () => {
     describe('when not passing anything', () => {
       it('should fail', () => {
+        // @ts-expect-error invalid api test
         expect(() => validator.validate()).to.throw(/^No relationship\.$/);
       });
     });
     describe('when passing a relationship', () => {
       describe('with all its required attributes', () => {
-        let relationship;
+        let relationship: JDLRelationship;
 
         before(() => {
           relationship = new JDLRelationship({
@@ -59,7 +63,7 @@ describe('jdl - RelationshipValidator', () => {
         });
       });
       describe('with an invalid type', () => {
-        let relationship;
+        let relationship: any;
 
         before(() => {
           relationship = {
@@ -75,7 +79,7 @@ describe('jdl - RelationshipValidator', () => {
         });
       });
       describe('without any injected field', () => {
-        let relationship;
+        let relationship: any;
 
         before(() => {
           relationship = {
@@ -91,7 +95,7 @@ describe('jdl - RelationshipValidator', () => {
       });
       describe(`when using the ${BUILT_IN_ENTITY} option`, () => {
         describe(`in a ${ONE_TO_ONE} relationship`, () => {
-          let relationship;
+          let relationship: JDLRelationship;
 
           before(() => {
             relationship = new JDLRelationship({
@@ -116,7 +120,7 @@ describe('jdl - RelationshipValidator', () => {
         });
         [ONE_TO_MANY, MANY_TO_MANY, MANY_TO_ONE].forEach(type => {
           describe(`in a ${type} relationship`, () => {
-            let relationship;
+            let relationship: JDLRelationship;
 
             before(() => {
               relationship = new JDLRelationship({
@@ -142,7 +146,7 @@ describe('jdl - RelationshipValidator', () => {
       });
       describe('when having a reflexive relationship', () => {
         describe('with both sides being required', () => {
-          let relationship;
+          let relationship: any;
 
           before(() => {
             relationship = {
@@ -163,7 +167,7 @@ describe('jdl - RelationshipValidator', () => {
       });
       describe(`when having a ${ONE_TO_ONE} relationship`, () => {
         describe('without an injected field in the source entity', () => {
-          let relationship;
+          let relationship: any;
 
           before(() => {
             relationship = {
@@ -183,7 +187,7 @@ describe('jdl - RelationshipValidator', () => {
       });
       describe(`when having a ${MANY_TO_ONE} relationship`, () => {
         describe('when having a bidirectional relationship', () => {
-          let relationship;
+          let relationship: JDLRelationship;
 
           before(() => {
             relationship = new JDLRelationship({
@@ -203,7 +207,7 @@ describe('jdl - RelationshipValidator', () => {
       describe('with the user entity', () => {
         describe(`when having a ${ONE_TO_ONE} relationship`, () => {
           describe('having an injected field in the source entity', () => {
-            let relationship;
+            let relationship: any;
 
             before(() => {
               relationship = {
@@ -221,7 +225,7 @@ describe('jdl - RelationshipValidator', () => {
         });
         describe(`when having a ${MANY_TO_ONE} relationship`, () => {
           describe('without the User having the injected field', () => {
-            let relationship;
+            let relationship: JDLRelationship;
 
             before(() => {
               relationship = new JDLRelationship({
@@ -238,7 +242,7 @@ describe('jdl - RelationshipValidator', () => {
           });
           describe('with the User having the injected field', () => {
             describe('as the source', () => {
-              let relationship;
+              let relationship: JDLRelationship;
 
               before(() => {
                 relationship = new JDLRelationship({
@@ -254,7 +258,7 @@ describe('jdl - RelationshipValidator', () => {
               });
             });
             describe('as the destination', () => {
-              let relationship;
+              let relationship: JDLRelationship;
 
               before(() => {
                 relationship = new JDLRelationship({
@@ -273,7 +277,7 @@ describe('jdl - RelationshipValidator', () => {
         });
         describe(`when having a ${MANY_TO_MANY} relationship`, () => {
           describe('with the user being the destination', () => {
-            let relationship;
+            let relationship: JDLRelationship;
 
             before(() => {
               relationship = new JDLRelationship({
@@ -289,7 +293,7 @@ describe('jdl - RelationshipValidator', () => {
             });
           });
           describe('with the user being the source', () => {
-            let relationship;
+            let relationship: JDLRelationship;
 
             before(() => {
               relationship = new JDLRelationship({

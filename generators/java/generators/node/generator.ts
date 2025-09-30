@@ -18,8 +18,9 @@
  */
 import chalk from 'chalk';
 import type { ExecaError } from 'execa';
-import { JavaApplicationGenerator } from '../../generator.ts';
+
 import { isWin32 } from '../../../base-core/support/os.ts';
+import { JavaApplicationGenerator } from '../../generator.ts';
 
 // TODO adjust type
 export default class NodeGenerator extends JavaApplicationGenerator {
@@ -29,7 +30,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:java:bootstrap');
+      await this.dependsOnBootstrap('java');
       await this.dependsOnJHipster('jhipster:java:build-tool');
     }
   }
@@ -125,7 +126,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
 
         const npmCommand = isWin32 ? 'npmw' : './npmw';
         try {
-          await this.spawn(npmCommand, ['install'], { preferLocal: true });
+          await this.spawn(npmCommand, ['install'], { preferLocal: true, stdio: 'inherit' });
         } catch (error: unknown) {
           this.log.error(
             chalk.red(`Error executing '${npmCommand} install', please execute it yourself. (${(error as ExecaError).shortMessage})`),

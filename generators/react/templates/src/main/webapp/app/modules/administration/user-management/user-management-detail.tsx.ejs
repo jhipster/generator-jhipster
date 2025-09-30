@@ -21,6 +21,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Button, Row, Badge } from 'reactstrap';
 import { Translate, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 import { APP_DATE_FORMAT } from 'app/config/constants';
 <% if (enableTranslation) { %>import { languages } from 'app/config/translation';<% } %>
@@ -69,16 +70,16 @@ export const UserManagementDetail = () => {
           <dt><Translate contentKey="userManagement.createdBy">Created By</Translate></dt>
           <dd>{user.createdBy}</dd>
           <dt><Translate contentKey="userManagement.createdDate">Created Date</Translate></dt>
-          <dd>{user.createdDate ? <TextFormat value={user.createdDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid /> : null}</dd>
+          <dd>{user.createdDate && <TextFormat value={user.createdDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid />}</dd>
           <dt><Translate contentKey="userManagement.lastModifiedBy">Last Modified By</Translate></dt>
           <dd>{user.lastModifiedBy}</dd>
           <dt><Translate contentKey="userManagement.lastModifiedDate">Last Modified Date</Translate></dt>
-          <dd>{user.lastModifiedDate ? <TextFormat value={user.lastModifiedDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid /> : null}</dd>
+          <dd>{user.lastModifiedDate && <TextFormat value={user.lastModifiedDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid />}</dd>
           <dt><Translate contentKey="userManagement.profiles">Profiles</Translate></dt>
           <dd>
             <ul className="list-unstyled">
               {
-                user.authorities ? (
+                user.authorities && (
                   user.authorities.map(
                     (authority, i) => (
                       <li key={`user-auth-${i}`}>
@@ -87,13 +88,13 @@ export const UserManagementDetail = () => {
                     )
                   )
                 )
-                : null}
+              }
             </ul>
           </dd>
         </dl>
       </Row>
       <Button tag={Link} to="/admin/user-management" replace color="info">
-        <FontAwesomeIcon icon="arrow-left" />{' '}
+        <FontAwesomeIcon icon={faArrowLeft} />{' '}
         <span className="d-none d-md-inline">
           <Translate contentKey="entity.action.back">Back</Translate>
         </span>

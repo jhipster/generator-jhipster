@@ -17,14 +17,17 @@
  * limitations under the License.
  */
 
-import fs from 'fs';
-import path from 'path';
-import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
+import { beforeEach, describe, expect as jestExpect, it } from 'esmocha';
+import fs from 'node:fs';
+import path from 'node:path';
+
 import { expect } from 'chai';
 import helpers from 'yeoman-test';
-import exportDeployments from '../exporters/jhipster-deployment-exporter.js';
-import JDLDeployment from '../../core/models/jdl-deployment.js';
-import deploymentOptions from '../../../jhipster/deployment-options.js';
+
+import deploymentOptions from '../../../jhipster/deployment-options.ts';
+import JDLDeployment from '../../core/models/jdl-deployment.ts';
+
+import exportDeployments from './jhipster-deployment-exporter.ts';
 
 const {
   DeploymentTypes: { DOCKERCOMPOSE, KUBERNETES },
@@ -48,7 +51,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
     });
     describe('when passing valid arguments', () => {
       describe('when exporting deployments to JSON', () => {
-        let returned;
+        let returned: ReturnType<typeof exportDeployments>;
 
         beforeEach(() => {
           returned = exportDeployments({
@@ -69,7 +72,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
           expect(returned).to.have.lengthOf(2);
         });
         describe('for the first deployment', () => {
-          let content;
+          let content: any;
 
           beforeEach(() => {
             const data = fs.readFileSync(path.join('docker-compose', '.yo-rc.json'), { encoding: 'utf8' });
@@ -101,7 +104,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
           });
         });
         describe('for the second deployment', () => {
-          let content;
+          let content: any;
 
           beforeEach(() => {
             const data = fs.readFileSync(path.join('kubernetes', '.yo-rc.json'), { encoding: 'utf8' });

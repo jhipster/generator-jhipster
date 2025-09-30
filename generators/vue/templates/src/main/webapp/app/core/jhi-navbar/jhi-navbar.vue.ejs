@@ -1,8 +1,26 @@
+<%#
+ Copyright 2013-2025 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
 <template>
-  <b-navbar data-cy="navbar" toggleable="md" type="<%_ if (clientThemeNone || !clientThemeVariantLight) { _%>dark<%_ } else { _%>light<%_ } _%>" class="<%_ if (clientThemeNone) { _%>jh-navbar<%_ } else { _%>bg-<%= clientThemeVariant %><%_ } _%>">
+  <b-navbar data-cy="navbar" toggleable="md" variant="<%_ if (clientThemeNone || !clientThemeVariantLight) { _%>dark<%_ } else { _%>light<%_ } _%>" data-bs-theme="<%_ if (clientThemeNone || !clientThemeVariantLight) { _%>dark<%_ } else { _%>light<%_ } _%>">
     <b-navbar-brand class="logo" b-link to="/">
-        <span class="logo-img"></span>
-        <span v-text="t$('global.title')" class="navbar-title"><%= baseName %></span> <span class="navbar-version">{{version}}</span>
+      <span class="logo-img"></span>
+      <span class="navbar-title">{{ t$('global.title') }}</span> <span class="navbar-version">{{ version }}</span>
     </b-navbar-brand>
     <b-navbar-toggle
       right
@@ -17,18 +35,18 @@
     </b-navbar-toggle>
 
     <b-collapse is-nav id="header-tabs">
-      <b-navbar-nav class="ml-auto">
+      <b-navbar-nav class="ms-auto">
         <b-nav-item to="/" exact>
           <span>
-            <font-awesome-icon icon="home" />
-            <span v-text="t$('global.menu.home')">Home</span>
+            <font-awesome-icon icon="fa-solid fa-home" />
+            <span>{{ t$('global.menu.home') }}</span>
           </span>
         </b-nav-item>
-        <b-nav-item-dropdown right id="entity-menu" v-if="authenticated" active-class="active" class="pointer" data-cy="entity">
+        <b-nav-item-dropdown no-size="true" end id="entity-menu" v-if="authenticated" active-class="active" class="pointer" data-cy="entity">
           <template #button-content>
             <span class="navbar-dropdown-menu">
               <font-awesome-icon icon="th-list" />
-              <span class="no-bold" v-text="t$('global.menu.entities.main')">Entities</span>
+              <span class="no-bold">{{ t$('global.menu.entities.main') }}</span>
             </span>
           </template>
           <entities-menu></entities-menu>
@@ -51,61 +69,61 @@
           <template #button-content>
             <span class="navbar-dropdown-menu">
               <font-awesome-icon icon="users-cog" />
-              <span class="no-bold" v-text="t$('global.menu.admin.main')">Administration</span>
+              <span class="no-bold">{{ t$('global.menu.admin.main') }}</span>
             </span>
           </template>
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
           <b-dropdown-item to="/admin/gateway" active-class="active">
             <font-awesome-icon icon="road" />
-            <span v-text="t$('global.menu.admin.gateway')">Gateway</span>
+            <span>{{ t$('global.menu.admin.gateway') }}</span>
           </b-dropdown-item>
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
           <b-dropdown-item to="/admin/user-management" active-class="active">
             <font-awesome-icon icon="users" />
-            <span v-text="t$('global.menu.admin.userManagement')">User management</span>
+            <span>{{ t$('global.menu.admin.userManagement') }}</span>
           </b-dropdown-item>
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
           <b-dropdown-item to="/admin/tracker" active-class="active">
             <font-awesome-icon icon="eye" />
-            <span v-text="t$('global.menu.admin.tracker')">User tracker</span>
+            <span>{{ t$('global.menu.admin.tracker') }}</span>
           </b-dropdown-item>
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
           <b-dropdown-item to="/admin/metrics" active-class="active">
             <font-awesome-icon icon="tachometer-alt" />
-            <span v-text="t$('global.menu.admin.metrics')">Metrics</span>
+            <span>{{ t$('global.menu.admin.metrics') }}</span>
           </b-dropdown-item>
           <b-dropdown-item to="/admin/health" active-class="active">
             <font-awesome-icon icon="heart" />
-            <span v-text="t$('global.menu.admin.health')">Health</span>
+            <span>{{ t$('global.menu.admin.health') }}</span>
           </b-dropdown-item>
           <b-dropdown-item to="/admin/configuration" active-class="active">
             <font-awesome-icon icon="cogs" />
-            <span v-text="t$('global.menu.admin.configuration')">Configuration</span>
+            <span>{{ t$('global.menu.admin.configuration') }}</span>
           </b-dropdown-item>
           <b-dropdown-item to="/admin/logs" active-class="active">
             <font-awesome-icon icon="tasks" />
-            <span v-text="t$('global.menu.admin.logs')">Logs</span>
+            <span>{{ t$('global.menu.admin.logs') }}</span>
           </b-dropdown-item>
 <%_ } _%>
-          <b-dropdown-item v-if="openAPIEnabled"  to="/admin/docs" active-class="active">
+          <b-dropdown-item v-if="openAPIEnabled" to="/admin/docs" active-class="active">
             <font-awesome-icon icon="book" />
-            <span v-text="t$('global.menu.admin.apidocs')">API</span>
+            <span>{{ t$('global.menu.admin.apidocs') }}</span>
           </b-dropdown-item>
 <%_ if (devDatabaseTypeH2Any || databaseTypeCouchbase) { _%>
-          <b-dropdown-item v-if="!inProduction"  href='<% if (databaseTypeCouchbase) { %>http://localhost:8092/<% } else if (reactive) { %>http://localhost:8092/<% } else { %>./h2-console/<% } %>' target="_tab">
+          <b-dropdown-item v-if="!inProduction" href='<% if (databaseTypeCouchbase) { %>http://localhost:8092/<% } else if (reactive) { %>http://localhost:8092/<% } else { %>./h2-console/<% } %>' target="_tab">
             <font-awesome-icon icon="database" />
-            <span v-text="t$('global.menu.admin.database')">Database</span>
+            <span>{{ t$('global.menu.admin.database') }}</span>
           </b-dropdown-item>
 <%_ } _%>
         </b-nav-item-dropdown>
 <%_ if (enableTranslation) { _%>
-        <b-nav-item-dropdown id="languagesnavBarDropdown" right v-if="languages && Object.keys(languages).length > 1">
+        <b-nav-item-dropdown id="languagesnavBarDropdown" end v-if="languages && Object.keys(languages).length > 1">
           <template #button-content>
             <font-awesome-icon icon="flag" />
-            <span class="no-bold" v-text="t$('global.menu.language')">Language</span>
+            <span class="no-bold">{{ t$('global.menu.language') }}</span>
           </template>
           <b-dropdown-item
             v-for="(value, key) in languages"
@@ -129,37 +147,37 @@
           <template #button-content>
             <span class="navbar-dropdown-menu">
               <font-awesome-icon icon="user" />
-              <span class="no-bold" v-text="t$('global.menu.account.main')"> Account </span>
+              <span class="no-bold">{{ t$('global.menu.account.main') }}</span>
             </span>
           </template>
 <%_ if (generateUserManagement) { _%>
           <b-dropdown-item data-cy="settings" to="/account/settings" v-if="authenticated" active-class="active">
             <font-awesome-icon icon="wrench" />
-            <span v-text="t$('global.menu.account.settings')">Settings</span>
+            <span>{{ t$('global.menu.account.settings') }}</span>
           </b-dropdown-item>
           <b-dropdown-item data-cy="passwordItem" to="/account/password" v-if="authenticated" active-class="active">
             <font-awesome-icon icon="lock" />
-            <span v-text="t$('global.menu.account.password')">Password</span>
+            <span>{{ t$('global.menu.account.password') }}</span>
           </b-dropdown-item>
 <%_ } _%>
 <%_ if (authenticationTypeSession && generateUserManagement) { _%>
           <b-dropdown-item to="/account/sessions" v-if="authenticated" active-class="active">
             <font-awesome-icon icon="cloud" />
-            <span v-text="t$('global.menu.account.sessions')">Sessions</span>
+            <span>{{ t$('global.menu.account.sessions') }}</span>
           </b-dropdown-item>
 <%_ } _%>
-          <b-dropdown-item data-cy="logout" v-if="authenticated"  @click="logout()" id="logout" active-class="active">
+          <b-dropdown-item data-cy="logout" v-if="authenticated" @click="logout()" id="logout" active-class="active">
             <font-awesome-icon icon="sign-out-alt" />
-            <span v-text="t$('global.menu.account.logout')">Sign out</span>
+            <span>{{ t$('global.menu.account.logout') }}</span>
           </b-dropdown-item>
           <b-dropdown-item data-cy="login" v-if="!authenticated" @click="showLogin()" id="login" active-class="active">
             <font-awesome-icon icon="sign-in-alt" />
-            <span v-text="t$('global.menu.account.login')">Sign in</span>
+            <span>{{ t$('global.menu.account.login') }}</span>
           </b-dropdown-item>
 <%_ if (generateUserManagement) { _%>
           <b-dropdown-item data-cy="register" to="/register" id="register" v-if="!authenticated" active-class="active">
             <font-awesome-icon icon="user-plus" />
-            <span v-text="t$('global.menu.account.register')">Register</span>
+            <span>{{ t$('global.menu.account.register') }}</span>
           </b-dropdown-item>
 <%_ } _%>
         </b-nav-item-dropdown>
@@ -172,101 +190,57 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  /* ==========================================================================
-    Navbar
-    ========================================================================== */
-  .navbar-version {
-    font-size: 0.65em;
+/* ==========================================================================
+  Navbar
+  ========================================================================== */
+.navbar-version {
+  font-size: 0.65em;
 <%_ if (clientThemeNone) { _%>
-    color: #ccc;
+  color: #ccc;
 <%_ } _%>
-  }
+}
 
-<%_ if (clientThemeNone) { _%>
-  .jh-navbar {
-    background-color: #353d47;
-    padding: 0.2em 1em;
-  }
+.navbar .navbar-nav .nav-item {
+  margin-right: 0.5rem;
+}
 
-  .jh-navbar .profile-image {
-    margin: -10px 0;
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
+@media screen and (min-width: 768px) {
+  .jh-navbar-toggler {
+    display: none;
   }
+}
 
-  .jh-navbar .dropdown-item.active,
-  .jh-navbar .dropdown-item.active:focus,
-  .jh-navbar .dropdown-item.active:hover {
-    background-color: #353d47;
+@media screen and (min-width: 768px) and (max-width: 1150px) {
+  span span {
+    display: none;
   }
+}
 
-  .jh-navbar .dropdown-toggle::after {
-    margin-left: 0.15em;
-  }
+.navbar-title {
+  display: inline-block;
+  color: white;
+}
 
-  .jh-navbar ul.navbar-nav {
-    padding: 0.5em;
-  }
+/* ==========================================================================
+  Logo styles
+  ========================================================================== */
+.navbar-brand.logo {
+  padding: 0 7px;
+}
 
-  .jh-navbar .navbar-nav .nav-item {
-    margin-left: 1.5rem;
-  }
+.logo .logo-img {
+  height: 45px;
+  display: inline-block;
+  vertical-align: middle;
+  width: 45px;
+}
 
-  .jh-navbar a.nav-link, .jh-navbar .no-bold  {
-    font-weight: 400;
-  }
-
-  .jh-navbar .jh-navbar-toggler {
-    color: #ccc;
-    font-size: 1.5em;
-    padding: 10px;
-  }
-
-  .jh-navbar .jh-navbar-toggler:hover {
-    color: #fff;
-  }
-<%_ } _%>
-
-  @media screen and (min-width: 768px) {
-    .jh-navbar-toggler {
-      display: none;
-    }
-  }
-
-  @media screen and (min-width: 768px) and (max-width: 1150px) {
-    span span{
-      display:none;
-    }
-  }
-
-  .navbar-title {
-    display: inline-block;
-<%_ if (clientThemeNone && !clientThemeVariantDark) { _%>
-    color: white;
-<%_ } _%>
-  }
-
-  /* ==========================================================================
-    Logo styles
-    ========================================================================== */
-  .navbar-brand.logo {
-    padding: 0 7px;
-  }
-
-  .logo .logo-img {
-    height: 45px;
-    display: inline-block;
-    vertical-align: middle;
-    width: 45px;
-  }
-
-  .logo-img {
-    height: 100%;
-    background: url("/content/images/logo-jhipster.png") no-repeat center center;
-    background-size: contain;
-    width: 100%;
-    filter: drop-shadow(0 0 0.05rem white);
-    margin: 0 5px;
-  }
+.logo-img {
+  height: 100%;
+  background: url('/content/images/logo-jhipster.png') no-repeat center center;
+  background-size: contain;
+  width: 100%;
+  filter: drop-shadow(0 0 0.05rem white);
+  margin: 0 5px;
+}
 </style>

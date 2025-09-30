@@ -16,14 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWritingTask } from '../base-application/support/task-type-inference.js';
+import { asWritingTask } from '../base-application/support/task-type-inference.ts';
 import type { Application as JavaApplication, Entity as JavaEntity } from '../java/types.d.ts';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.
  */
-export default asWritingTask<JavaEntity, JavaApplication<JavaEntity>>(function cleanupOldServerFilesTask({ control }) {
+export default asWritingTask<JavaEntity, JavaApplication>(function cleanupOldServerFilesTask({ control }) {
   if (control.isJhipsterVersionLessThan('7.7.1')) {
     this.removeFile('.mvn/wrapper/MavenWrapperDownloader.java');
   }

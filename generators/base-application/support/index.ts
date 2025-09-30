@@ -17,21 +17,19 @@
  * limitations under the License.
  */
 
-export * from './constants.js';
-export * from './debug.js';
-export * from './doc.js';
-export * from './enum.js';
-export * from './entity.js';
-export * from './entities.js';
-export * from './faker.js';
-export * from './field-utils.js';
-export { default as prepareEntity } from './prepare-entity.js';
-export * from './prepare-entity.js';
-export { default as prepareField } from './prepare-field.js';
-export * from './prepare-field.js';
-export * from './prepare-property.js';
-export { default as prepareRelationship } from './prepare-relationship.js';
-export * from './relationship.js';
-export * from './task-type-inference.js';
+export * from './constants.ts';
+export * from './debug.ts';
+export * from './doc.ts';
+export * from './enum.ts';
+export * from './entity.ts';
+export * from './entities.ts';
+export * from './faker.ts';
+export * from './field-utils.ts';
+export { default as prepareEntity } from './prepare-entity.ts';
+export * from './prepare-entity.ts';
+export * from './prepare-field.ts';
+export { default as prepareRelationship } from './prepare-relationship.ts';
+export * from './relationship.ts';
+export * from './task-type-inference.ts';
 export * from '../../base/support/timestamp.ts';
-export * from './update-application-entities-transform.js';
+export * from './update-application-entities-transform.ts';

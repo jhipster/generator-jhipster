@@ -1,5 +1,5 @@
 [libraries]
-spring-cloud-dependencies = { module = 'org.springframework.cloud:spring-cloud-dependencies', version = '2024.0.1' }
+spring-cloud-dependencies = { module = 'org.springframework.cloud:spring-cloud-dependencies', version = '2025.0.0' }
 
 springdoc = { module = 'org.springdoc:springdoc-openapi-starter-webmvc-api', version = '2.8.9' }
 
@@ -11,7 +11,7 @@ cucumber-bom = { module = 'io.cucumber:cucumber-bom', version = '7.23.0' }
 
 mongock-bom = { module = 'io.mongock:mongock-bom', version = '5.5.1' }
 
-neo4j-migrations-spring-boot-starter = { module = 'eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter', version = '2.18.1' }
+neo4j-migrations-spring-boot-starter = { module = 'eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter', version = '2.19.2' }
 
 # Cassandra
 lz4-java = { module = 'org.lz4:lz4-java', version = '1.8.0' }
@@ -20,26 +20,28 @@ lz4-java = { module = 'org.lz4:lz4-java', version = '1.8.0' }
 couchmove = { module = 'com.github.differentway:couchmove', version = '3.4.1' }
 
 # jib
-jib-maven-plugin = { module = 'com.google.cloud.tools:jib-maven-plugin', version = '3.4.5' }
+jib-maven-plugin = { module = 'com.google.cloud.tools:jib-maven-plugin', version = '3.4.6' }
 jib-spring-boot-extension-maven = { module = 'com.google.cloud.tools:jib-spring-boot-extension-maven', version = '0.1.0' }
 
 [plugins]
-gradle-git-properties = { id = 'com.gorylenko.gradle-git-properties', version = '2.5.2' }
+gradle-git-properties = { id = 'com.gorylenko.gradle-git-properties', version = '2.5.3' }
 
 node-gradle = { id = 'com.github.node-gradle.node', version = '7.1.0' }
 
 gradle-liquibase = { id = 'org.liquibase.gradle', version = '3.0.2' }
 
-gradle-sonarqube = { id = 'org.sonarqube', version = '6.2.0.5505' }
+gradle-sonarqube = { id = 'org.sonarqube', version = '6.3.1.5724' }
 
-spotless-gradle-plugin = { id = 'com.diffplug.spotless', version = '7.1.0' }
+spotless-gradle-plugin = { id = 'com.diffplug.spotless', version = '7.2.1' }
 
 gradle-modernizer-plugin = { id = 'com.github.andygoossens.gradle-modernizer-plugin', version = '1.11.0' }
 
-gradle-develocity = { id = 'com.gradle.develocity', version = '4.1' }
+gradle-develocity = { id = 'com.gradle.develocity', version = '4.2' }
 
-common-custom-user-data-gradle-plugin = { id = 'com.gradle.common-custom-user-data-gradle-plugin', version = '2.3' }
+common-custom-user-data-gradle-plugin = { id = 'com.gradle.common-custom-user-data-gradle-plugin', version = '2.4.0' }
 
-gatling-gradle = { id = 'io.gatling.gradle', version = '3.14.3.3' }
+gatling-gradle = { id = 'io.gatling.gradle', version = '3.14.5' }
 
-gradle-openapi-generator = { id = 'org.openapi.generator', version = '7.14.0' }
+gradle-openapi-generator = { id = 'org.openapi.generator', version = '7.16.0' }
+
+gradle-jib = { id = "com.google.cloud.tools.jib", version = "3.4.5" }

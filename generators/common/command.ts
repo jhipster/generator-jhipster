@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 import chalk from 'chalk';
-import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.js';
+
+import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 import { applicationTypesChoices } from '../../lib/core/application-types.ts';
 
 const command = {
@@ -68,7 +68,11 @@ const command = {
       scope: 'storage',
     },
   },
-  import: [GENERATOR_BOOTSTRAP_APPLICATION_BASE, 'jhipster:javascript:prettier', 'jhipster:javascript:husky'],
+  import: [
+    'jhipster:base-application:bootstrap',
+    'jhipster:javascript-simple-application:prettier',
+    'jhipster:javascript-simple-application:husky',
+  ],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

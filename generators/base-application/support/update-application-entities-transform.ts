@@ -1,10 +1,12 @@
-import { readdir } from 'fs/promises';
-import { basename, join } from 'path';
+import { readdir } from 'node:fs/promises';
+import { basename, join } from 'node:path';
+
 import { loadFile } from 'mem-fs';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { Minimatch } from 'minimatch';
 import normalizePath from 'normalize-path';
 import { transform } from 'p-transform';
+
 import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
 
 export const updateApplicationEntitiesTransform = ({

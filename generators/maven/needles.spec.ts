@@ -1,7 +1,9 @@
 import { before, describe, expect, it } from 'esmocha';
-import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
-import { GENERATOR_MAVEN } from '../generator-list.js';
-import { asPostWritingTask } from '../base-application/support/task-type-inference.js';
+
+import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
+import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
+
+const GENERATOR_MAVEN = 'maven';
 
 const addNeedlesTask = asPostWritingTask(function ({ source }) {
   const inProfile = (this.options as any).profile;

@@ -18,9 +18,11 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import { KEYWORD, NAME } from '../../parsing/lexer/shared-tokens.js';
-import createTokenFromConfig from '../../parsing/lexer/token-creator.js';
+
+import { KEYWORD, NAME } from './shared-tokens.ts';
+import createTokenFromConfig from './token-creator.ts';
 
 describe('jdl - TokenCreator', () => {
   describe('createTokenFromConfig', () => {
@@ -32,7 +34,7 @@ describe('jdl - TokenCreator', () => {
     });
     describe('when passing a config', () => {
       describe('with just a name', () => {
-        let token;
+        let token: ReturnType<typeof createTokenFromConfig>;
 
         before(() => {
           token = createTokenFromConfig({ name: 'MY_TOKEN' });
@@ -46,7 +48,7 @@ describe('jdl - TokenCreator', () => {
         });
       });
       describe('when the pattern is a keyword', () => {
-        let token;
+        let token: ReturnType<typeof createTokenFromConfig>;
 
         before(() => {
           token = createTokenFromConfig({ name: 'MY_TOKEN', pattern: 'keyword' });
@@ -60,7 +62,7 @@ describe('jdl - TokenCreator', () => {
         });
       });
       describe('if there is no label but a pattern', () => {
-        let token;
+        let token: ReturnType<typeof createTokenFromConfig>;
 
         before(() => {
           token = createTokenFromConfig({ name: 'MY_TOKEN', pattern: 'pattern' });

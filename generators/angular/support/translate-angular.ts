@@ -17,10 +17,12 @@
  * limitations under the License.
  */
 import { extname } from 'node:path';
+
 import { passthrough } from '@yeoman/transform';
+import type { MemFsEditorFile } from 'mem-fs-editor';
 import { Minimatch } from 'minimatch';
 
-import type { MemFsEditorFile } from 'mem-fs-editor';
+import type { GetWebappTranslationCallback } from '../../client/translation.ts';
 import {
   type JHITranslateConverterOptions,
   createJhiTransformTranslateReplacer,
@@ -28,8 +30,7 @@ import {
   createJhiTranslateReplacer,
   escapeHtmlTranslationValue,
   escapeTsTranslationValue,
-} from '../../languages/support/index.js';
-import type { GetWebappTranslationCallback } from '../../client/translation.js';
+} from '../../languages/support/index.ts';
 
 const PLACEHOLDER_REGEX = /(?:placeholder|title)=['|"](\{\{\s?['|"]([a-zA-Z0-9.\-_]+)['|"]\s?\|\s?translate\s?\}\})['|"]/.source;
 
@@ -311,7 +312,7 @@ export const createTranslationReplacer = (getWebappTranslation: GetWebappTransla
       }
     }
     // Translate html files and inline templates.
-    if (/(:?\.html|component\.ts)$/.test(filePath)) {
+    if (/(:?\.html|.ts)$/.test(filePath)) {
       content = htmlJhiTranslateReplacer(content);
       content = htmlJhiTranslateStringifyReplacer(content);
     }

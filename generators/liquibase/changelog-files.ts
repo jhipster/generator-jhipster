@@ -16,10 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWriteFilesSection } from '../base-application/support/task-type-inference.js';
-import type { BaseChangelog } from '../base-entity-changes/types.js';
+import { asWriteFilesSection } from '../base-application/support/task-type-inference.ts';
+import type { BaseChangelog } from '../base-entity-changes/types.ts';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
-import type { Entity as LiquibaseEntity, Application as TemplateData } from './types.js';
+
+import type { Application as TemplateData, Entity as LiquibaseEntity } from './types.ts';
 
 export const addEntityFiles = asWriteFilesSection<TemplateData<LiquibaseEntity> & BaseChangelog<LiquibaseEntity>>({
   dbChangelog: [

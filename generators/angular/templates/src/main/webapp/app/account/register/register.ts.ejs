@@ -1,0 +1,103 @@
+<%#
+ Copyright 2013-2025 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { Component, AfterViewInit, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { RouterLink } from '@angular/router';
+import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+<%_ if (enableTranslation) { _%>
+import { TranslateService } from '@ngx-translate/core';
+<%_ } _%>
+
+import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/config/error.constants';
+import { RegisterService } from './register.service';
+import SharedModule from 'app/shared/shared.module';
+import PasswordStrengthBar from '../password/password-strength-bar/password-strength-bar';
+
+@Component({
+  selector: '<%= jhiPrefixDashed %>-register',
+  imports: [SharedModule, RouterLink, ReactiveFormsModule, PasswordStrengthBar],
+  templateUrl: './register.html',
+})
+export default class Register implements AfterViewInit {
+  login = viewChild.required<ElementRef>('login');
+
+  doNotMatch = signal(false);
+  error = signal(false);
+  errorEmailExists = signal(false);
+  errorUserExists = signal(false);
+  success = signal(false);
+
+  registerForm = new FormGroup({
+    login: new FormControl('', {
+      nonNullable: true,
+      validators: [
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(50),
+        Validators.pattern('^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$'),
+      ],
+    }),
+    email: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email],
+    }),
+    password: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(4), Validators.maxLength(50)],
+    }),
+    confirmPassword: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(4), Validators.maxLength(50)],
+    }),
+  });
+
+  <%_ if (enableTranslation) { _%>private readonly translateService = inject(TranslateService);<%_ } _%>
+  private readonly registerService = inject(RegisterService);
+
+  ngAfterViewInit(): void {
+    this.login().nativeElement.focus();
+  }
+
+  register(): void {
+    this.doNotMatch.set(false);
+    this.error.set(false);
+    this.errorEmailExists.set(false);
+    this.errorUserExists.set(false);
+
+    const { password, confirmPassword } = this.registerForm.getRawValue();
+    if (password !== confirmPassword) {
+      this.doNotMatch.set(true);
+    } else {
+      const { login, email } = this.registerForm.getRawValue();
+      this.registerService
+        .save({ login, email, password, langKey: <% if (enableTranslation) { %>this.translateService.getCurrentLang()<% } else { %>'<%= nativeLanguage %>'<% } %> })
+        .subscribe({ next: () => (this.success.set(true)), error: response => this.processError(response) });
+    }
+  }
+
+  private processError(response: HttpErrorResponse): void {
+    if (response.status === 400 && response.error.type === LOGIN_ALREADY_USED_TYPE) {
+      this.errorUserExists.set(true);
+    } else if (response.status === 400 && response.error.type === EMAIL_ALREADY_USED_TYPE) {
+      this.errorEmailExists.set(true);
+    } else {
+      this.error.set(true);
+    }
+  }
+}

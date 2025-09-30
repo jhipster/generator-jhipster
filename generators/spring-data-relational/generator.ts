@@ -17,29 +17,32 @@
  * limitations under the License.
  */
 
-import assert from 'assert';
-import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_LIQUIBASE } from '../generator-list.js';
-import { isReservedTableName } from '../../lib/jhipster/reserved-keywords.js';
-import { databaseTypes } from '../../lib/jhipster/index.js';
-import writeTask from './files.js';
-import cleanupTask from './cleanup.js';
-import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.js';
-import { getDBCExtraOption, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from './support/index.js';
-import { getDatabaseTypeMavenDefinition, getH2MavenDefinition, javaSqlDatabaseArtifacts } from './internal/dependencies.js';
+import assert from 'node:assert';
+
+import { databaseTypes } from '../../lib/jhipster/index.ts';
+import { isReservedTableName } from '../../lib/jhipster/reserved-keywords.ts';
+import BaseApplicationGenerator from '../base-application/index.ts';
+
+import cleanupTask from './cleanup.ts';
+import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.ts';
+import writeTask from './files.ts';
+import { getDatabaseTypeMavenDefinition, getH2MavenDefinition, javaSqlDatabaseArtifacts } from './internal/dependencies.ts';
+import { getDBCExtraOption, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from './support/index.ts';
 import type {
   Application as SpringDataRelationalApplication,
   Config as SpringDataRelationalConfig,
   Entity as SpringDataRelationalEntity,
   Options as SpringDataRelationalOptions,
   Source as SpringDataRelationalSource,
-} from './types.js';
+} from './types.ts';
+
+const GENERATOR_LIQUIBASE = 'liquibase';
 
 const { SQL } = databaseTypes;
 
 export default class SqlGenerator extends BaseApplicationGenerator<
   SpringDataRelationalEntity,
-  SpringDataRelationalApplication<SpringDataRelationalEntity>,
+  SpringDataRelationalApplication,
   SpringDataRelationalConfig,
   SpringDataRelationalOptions,
   SpringDataRelationalSource
@@ -50,6 +53,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
     }
 
     if (!this.delegateToBlueprint) {
+      await this.dependsOnBootstrap('spring-boot');
       await this.dependsOnJHipster('jhipster:java:domain');
     }
   }

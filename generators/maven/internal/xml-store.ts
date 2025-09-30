@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 
-import assert from 'assert';
+import assert from 'node:assert';
+
 import type { X2jOptions, XmlBuilderOptions } from 'fast-xml-parser';
 import { XMLBuilder, XMLParser } from 'fast-xml-parser';
 import { merge } from 'lodash-es';

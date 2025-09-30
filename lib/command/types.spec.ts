@@ -1,9 +1,10 @@
 import type { IsNever } from 'type-fest';
+
 import type {
   ExportApplicationPropertiesFromCommand,
   ExportGeneratorOptionsFromCommand,
   ExportStoragePropertiesFromCommand,
-} from './types.js';
+} from './types.ts';
 
 type AssertType<Expected extends true | false, _T2 extends Expected, _T3 extends Expected = Expected> = void;
 
@@ -114,7 +115,7 @@ const _applicationOptions = {
 } satisfies ApplicationOptions;
 
 const _applicationOptionsError = {
-  // @ts-expect-error unknow field
+  // @ts-expect-error unknown field
   foo: 'bar',
 } satisfies ApplicationOptions;
 

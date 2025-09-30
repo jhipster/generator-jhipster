@@ -16,18 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { existsSync } from 'fs';
+import { existsSync } from 'node:fs';
+
 import chalk from 'chalk';
 
-import { normalizePathEnd } from '../../../lib/utils/index.js';
-import { buildToolTypes } from '../../../lib/jhipster/index.js';
+import { buildToolTypes } from '../../../lib/jhipster/index.ts';
+import { normalizePathEnd } from '../../../lib/utils/index.ts';
 import type { BaseKubernetesGenerator } from '../../kubernetes/generator.ts';
-import type { WorkspacesApplication } from '../types.js';
 import { asPreparingWorkspacesTask } from '../support/task-type-inference.ts';
+import type { WorkspacesApplication } from '../types.ts';
 
 const { MAVEN } = buildToolTypes;
 
-export { checkDocker } from '../../docker/support/index.js';
+export { checkDocker } from '../../docker/support/index.ts';
 
 /**
  * Check Images

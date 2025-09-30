@@ -34,12 +34,12 @@ jobs:
     outputs:
       matrix: ${{ steps.build.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 2
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: '20'
+          node-version: 24
       - run: npm ci --ignore-scripts
       - id: build
         run: bin/jhipster.cjs github-build-matrix graalvm --event-name ${{ github.event_name }}
@@ -60,7 +60,7 @@ jobs:
       # Install all tools and check configuration
       #----------------------------------------------------------------------
       - name: 'SETUP: Checkout generator-jhipster'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: generator-jhipster
           fetch-depth: 2

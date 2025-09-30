@@ -16,12 +16,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { describe, expect, it } from 'esmocha';
+import { basename, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/helpers.ts';
 import { testBlueprintSupport } from '../../test/support/tests.js';
-import { GENERATOR_PROJECT_NAME } from '../generator-list.js';
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/helpers.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -29,9 +29,6 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 
 describe(`generator - ${generator}`, () => {
-  it('generator-list constant matches folder name', () => {
-    expect(GENERATOR_PROJECT_NAME).toBe(generator);
-  });
   describe('blueprint support', () => testBlueprintSupport(generator));
   describe('run', () => {
     before(async () => {

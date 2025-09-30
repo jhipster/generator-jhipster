@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type BaseWorkspacesGenerator from '../generator.js';
-import type { Tasks } from '../tasks.js';
-import type CoreGenerator from '../../base-core/generator.js';
-import type { Deployment, Source, WorkspacesApplication } from '../types.js';
-import type { SimpleTask } from '../../base/tasks.js';
+import type { SimpleTask } from '../../base/tasks.ts';
+import type CoreGenerator from '../../base-core/generator.ts';
+import type BaseWorkspacesGenerator from '../generator.ts';
+import type { Tasks } from '../tasks.ts';
+import type { Deployment, Source, WorkspacesApplication } from '../types.ts';
 
 export function asWritingWorkspacesTask<const G extends CoreGenerator = BaseWorkspacesGenerator>(
   task: SimpleTask<G, Tasks<Deployment, Source, WorkspacesApplication>['WritingTaskParam']>,

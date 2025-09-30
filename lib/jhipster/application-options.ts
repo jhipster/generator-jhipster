@@ -17,23 +17,24 @@
  * limitations under the License.
  */
 
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
 import type {
   JDLApplicationConfig,
   JDLApplicationOptionType,
   JDLApplicationOptionTypeValue,
   JDLApplicationOptionValue,
-} from '../jdl/core/types/parsing.js';
-import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
-import authenticationTypes from './authentication-types.js';
-import databaseTypes from './database-types.js';
-import cacheTypes from './cache-types.js';
-import serviceDiscoveryTypes from './service-discovery-types.js';
-import clientFrameworkTypes from './client-framework-types.js';
-import buildToolTypes from './build-tool-types.js';
-import searchEngineTypes from './search-engine-types.js';
-import testFrameworkTypes from './test-framework-types.js';
-import websocketTypes from './websocket-types.js';
-import { builtInConfigPropsValidations } from './jdl-validator-definition.js';
+} from '../jdl/core/types/parsing.ts';
+
+import authenticationTypes from './authentication-types.ts';
+import buildToolTypes from './build-tool-types.ts';
+import cacheTypes from './cache-types.ts';
+import clientFrameworkTypes from './client-framework-types.ts';
+import databaseTypes from './database-types.ts';
+import { builtInConfigPropsValidations } from './jdl-validator-definition.ts';
+import searchEngineTypes from './search-engine-types.ts';
+import serviceDiscoveryTypes from './service-discovery-types.ts';
+import testFrameworkTypes from './test-framework-types.ts';
+import websocketTypes from './websocket-types.ts';
 
 const { CASSANDRA, COUCHBASE, MARIADB, MONGODB, MSSQL, MYSQL, NEO4J, ORACLE, POSTGRESQL, SQL, H2_DISK, H2_MEMORY } = databaseTypes;
 
@@ -75,7 +76,6 @@ const optionNames = {
   BUILD_TOOL: 'buildTool',
   CACHE_PROVIDER: 'cacheProvider',
   CLIENT_FRAMEWORK: 'clientFramework',
-  CLIENT_PACKAGE_MANAGER: 'clientPackageManager',
   CLIENT_THEME: 'clientTheme',
   CLIENT_THEME_VARIANT: 'clientThemeVariant',
   WITH_ADMIN_UI: 'withAdminUi',
@@ -99,7 +99,7 @@ const optionNames = {
   MICROFRONTEND: 'microfrontend',
   MICROFRONTENDS: 'microfrontends',
   NATIVE_LANGUAGE: 'nativeLanguage',
-  NPM: 'npm',
+  NODE_PACKAGE_MANAGER: 'nodePackageManager',
   PACKAGE_NAME: 'packageName',
   PACKAGE_FOLDER: 'packageFolder',
   PROD_DATABASE_TYPE: 'prodDatabaseType',
@@ -154,9 +154,6 @@ export const jhipsterOptionValues = {
     [SVELTE]: SVELTE,
     [NO]: NO,
   },
-  [optionNames.CLIENT_PACKAGE_MANAGER]: {
-    npm: 'npm',
-  },
   [optionNames.CLIENT_THEME]: 'none',
   [optionNames.DATABASE_TYPE]: {
     [SQL]: SQL,
@@ -191,7 +188,9 @@ export const jhipsterOptionValues = {
   [optionNames.LANGUAGES]: [],
   [optionNames.MICROFRONTEND]: false,
   [optionNames.MICROFRONTENDS]: [],
-  [optionNames.NPM]: true,
+  [optionNames.NODE_PACKAGE_MANAGER]: {
+    npm: 'npm',
+  },
   [optionNames.PACKAGE_NAME]: 'com.mycompany.myapp',
   [optionNames.PROD_DATABASE_TYPE]: {
     [MYSQL]: MYSQL,
@@ -242,7 +241,6 @@ export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
   [optionNames.BUILD_TOOL]: { type: ApplicationOptionTypes.STRING },
   [optionNames.CACHE_PROVIDER]: { type: ApplicationOptionTypes.STRING },
   [optionNames.CLIENT_FRAMEWORK]: { type: ApplicationOptionTypes.STRING },
-  [optionNames.CLIENT_PACKAGE_MANAGER]: { type: ApplicationOptionTypes.STRING },
   [optionNames.CLIENT_THEME]: { type: ApplicationOptionTypes.STRING },
   [optionNames.CLIENT_THEME_VARIANT]: { type: ApplicationOptionTypes.STRING },
   [optionNames.CREATION_TIMESTAMP]: { type: ApplicationOptionTypes.INTEGER },
@@ -265,7 +263,7 @@ export const jhipsterOptionTypes: Record<string, JDLApplicationOptionType> = {
   [optionNames.MICROFRONTEND]: { type: ApplicationOptionTypes.BOOLEAN },
   [optionNames.MICROFRONTENDS]: { type: ApplicationOptionTypes.LIST },
   [optionNames.NATIVE_LANGUAGE]: { type: ApplicationOptionTypes.STRING },
-  [optionNames.NPM]: { type: ApplicationOptionTypes.BOOLEAN },
+  [optionNames.NODE_PACKAGE_MANAGER]: { type: ApplicationOptionTypes.STRING },
   [optionNames.PACKAGE_NAME]: { type: ApplicationOptionTypes.STRING },
   [optionNames.PACKAGE_FOLDER]: { type: ApplicationOptionTypes.STRING },
   [optionNames.PROD_DATABASE_TYPE]: { type: ApplicationOptionTypes.STRING },

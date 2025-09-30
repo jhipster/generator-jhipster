@@ -1,5 +1,7 @@
 import { after, before, describe, esmocha, expect, it, resetAllMocks } from 'esmocha';
 
+import type checkJava from './check-java.ts';
+
 const { execaCommandSync } = await esmocha.mock('execa', import('execa'));
 
 const baseResult = {
@@ -23,11 +25,11 @@ describe('generator - server - checkJava', () => {
 
   describe('with valid java --version output', () => {
     const stderr = 'openjdk 17.0.1 2021-10-19';
-    let result;
+    let result: ReturnType<typeof checkJava>;
 
     before(async () => {
       execaCommandSync.mockReturnValue({ ...baseResult, stderr });
-      const { default: checkJava } = await import('./check-java.js');
+      const { default: checkJava } = await import('./check-java.ts');
       result = checkJava([]);
     });
 
@@ -42,11 +44,11 @@ describe('generator - server - checkJava', () => {
   describe('with invalid java --version output', () => {
     const stderr = 'foo';
     const exitCode = 1;
-    let result;
+    let result: ReturnType<typeof checkJava>;
 
     before(async () => {
       execaCommandSync.mockReturnValue({ ...baseResult, exitCode, stderr });
-      const { default: checkJava } = await import('./check-java.js');
+      const { default: checkJava } = await import('./check-java.ts');
       result = checkJava([]);
     });
 
@@ -56,13 +58,13 @@ describe('generator - server - checkJava', () => {
   });
 
   describe('on exception', () => {
-    let result;
+    let result: ReturnType<typeof checkJava>;
 
     before(async () => {
       execaCommandSync.mockImplementation(() => {
         throw new Error('foo');
       });
-      const { default: checkJava } = await import('./check-java.js');
+      const { default: checkJava } = await import('./check-java.ts');
       result = checkJava([]);
     });
 

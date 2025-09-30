@@ -2,7 +2,7 @@ import { join } from 'path';
 import { merge } from 'lodash-es';
 import BaseGenerator from '../../generators/base-core/index.js';
 import { getPackageRoot } from '../../lib/index.js';
-import { defaultSamplesFolder, promptSamplesFolder, samplesFolderConfig } from '../support.mjs';
+import { defaultSamplesFolder, promptSamplesFolder, samplesFolderConfig } from '../support.ts';
 
 export default class extends BaseGenerator {
   samplePath?: string;

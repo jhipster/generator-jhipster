@@ -17,15 +17,16 @@
  * limitations under the License.
  */
 
-import type { ConfigAll } from '../types/application-config-all.js';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
-import authenticationTypes from './authentication-types.js';
-import databaseTypes from './database-types.js';
-import applicationOptions from './application-options.js';
-import cacheTypes from './cache-types.js';
-import serviceDiscoveryTypes from './service-discovery-types.js';
-import clientFrameworkTypes from './client-framework-types.js';
-import buildToolTypes from './build-tool-types.js';
+import type { ConfigAll } from '../types/command-all.ts';
+
+import applicationOptions from './application-options.ts';
+import authenticationTypes from './authentication-types.ts';
+import buildToolTypes from './build-tool-types.ts';
+import cacheTypes from './cache-types.ts';
+import clientFrameworkTypes from './client-framework-types.ts';
+import databaseTypes from './database-types.ts';
+import serviceDiscoveryTypes from './service-discovery-types.ts';
 
 const { CONSUL } = serviceDiscoveryTypes;
 const { SQL, POSTGRESQL } = databaseTypes;
@@ -108,9 +109,7 @@ function getConfigForClientApplication(options: ApplicationDefaults = {}): Appli
   if (clientFramework === NO_CLIENT_FRAMEWORK) {
     return options;
   }
-  if (options[OptionNames.MICROFRONTEND] === undefined) {
-    options[OptionNames.MICROFRONTEND] = Boolean(options[OptionNames.MICROFRONTENDS]?.length);
-  }
+  options[OptionNames.MICROFRONTEND] ??= Boolean(options[OptionNames.MICROFRONTENDS]?.length);
   if (!options[CLIENT_THEME]) {
     options[CLIENT_THEME] = OptionValues[CLIENT_THEME];
   } else if (options[CLIENT_THEME] !== OptionValues[CLIENT_THEME] && !options[CLIENT_THEME_VARIANT]) {
@@ -123,7 +122,7 @@ function getConfigForClientApplication(options: ApplicationDefaults = {}): Appli
     options.clientBundler ??= 'webpack';
     options.devServerPort ??= 9060;
   } else if (clientFramework === 'angular') {
-    options.clientBundler ??= 'webpack';
+    options.clientBundler ??= options.microfrontend || options.applicationType === 'microservice' ? 'webpack' : 'esbuild';
     options.devServerPort ??= 4200;
   } else {
     options.devServerPort ??= 9060;
@@ -165,19 +164,13 @@ function getConfigForCacheProvider(options: ApplicationDefaults = {}): Applicati
 }
 
 function getConfigForReactive(options: ApplicationDefaults = {}): ApplicationDefaults {
-  if (options[REACTIVE] === undefined) {
-    options[REACTIVE] = false;
-  }
+  options[REACTIVE] ??= false;
   return options;
 }
 
 function getConfigForTranslation(options: ApplicationDefaults = {}): ApplicationDefaults {
-  if (options[ENABLE_TRANSLATION] === undefined) {
-    options[ENABLE_TRANSLATION] = true;
-  }
-  if (options[NATIVE_LANGUAGE] === undefined) {
-    options[NATIVE_LANGUAGE] = 'en';
-  }
+  options[ENABLE_TRANSLATION] ??= true;
+  options[NATIVE_LANGUAGE] ??= 'en';
   if (options[ENABLE_TRANSLATION] && options[LANGUAGES] === undefined) {
     options[LANGUAGES] = [];
   }
@@ -185,16 +178,13 @@ function getConfigForTranslation(options: ApplicationDefaults = {}): Application
 }
 
 function getConfigForDatabaseType(options: ApplicationDefaults = {}): ApplicationDefaults {
-  if (options[DATABASE_TYPE] === undefined) {
-    options[DATABASE_TYPE] = SQL;
-  }
+  options[DATABASE_TYPE] ??= SQL;
   if (options[DATABASE_TYPE] === SQL) {
-    if (options[PROD_DATABASE_TYPE] === undefined) {
-      options[PROD_DATABASE_TYPE] = POSTGRESQL;
-    }
-    if (options[DEV_DATABASE_TYPE] === undefined) {
-      options[DEV_DATABASE_TYPE] = options[PROD_DATABASE_TYPE];
-    }
+    options[PROD_DATABASE_TYPE] ??= POSTGRESQL;
+    options[DEV_DATABASE_TYPE] ??= options[PROD_DATABASE_TYPE];
+  }
+  if (options[DATABASE_TYPE] === 'no') {
+    options[SKIP_USER_MANAGEMENT] = true;
   }
   options.databaseMigration ??= options.databaseType === SQL ? 'liquibase' : 'no';
 

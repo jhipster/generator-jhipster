@@ -16,10 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../java/support/index.js';
-import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
-import type { Application as JavaApplication, Entity as JavaEntity } from '../java/types.d.ts';
 import { asWriteFilesSection, asWritingTask } from '../base-application/support/task-type-inference.ts';
+import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
+import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../java/support/index.ts';
+import type { Application as JavaApplication, Entity as JavaEntity } from '../java/types.d.ts';
 
 export const neo4jFiles = asWriteFilesSection<JavaApplication>({
   serverResource: [
@@ -53,7 +53,7 @@ export const neo4jFiles = asWriteFilesSection<JavaApplication>({
   ],
 });
 
-export default asWritingTask<JavaEntity, JavaApplication<JavaEntity>>(async function writeFilesTask({ application }) {
+export default asWritingTask<JavaEntity, JavaApplication>(async function writeFilesTask({ application }) {
   await this.writeFiles({
     sections: neo4jFiles,
     context: application,

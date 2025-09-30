@@ -1,0 +1,20 @@
+@if (filters().hasAnyFilterSet()) {
+  <div class="filter-display">
+    <span>__jhiTranslateTag__('entity.filters.set')</span>
+    <button class="btn" (click)="clearAllFilters()" (keydown.enter)="clearAllFilters()">
+      <fa-icon icon="times" title="__jhiTranslatePipe__('entity.filters.clearAll')" />
+    </button>
+    <ul>
+      @for (filterOption of filters().filterOptions; track filterOption.name) {
+        @for (value of filterOption.values; track value) {
+          <li>
+            <span>{{ filterOption.name }}:</span> {{ value }}
+            <button class="btn" (click)="clearFilter(filterOption.name, value)" (keydown.enter)="clearFilter(filterOption.name, value)">
+              <fa-icon icon="times" title="__jhiTranslatePipe__('entity.filters.clear')" />
+            </button>
+          </li>
+        }
+      }
+    </ul>
+  </div>
+}

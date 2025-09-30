@@ -17,18 +17,17 @@
  * limitations under the License.
  */
 
-import { databaseTypes, searchEngineTypes } from '../../../lib/jhipster/index.js';
-
+import { databaseTypes, searchEngineTypes } from '../../../lib/jhipster/index.ts';
+import { mutateData } from '../../../lib/utils/object.ts';
+import type { RelationshipWithEntity } from '../../base-application/types.ts';
+import type { DatabaseField, DatabaseRelationship } from '../../liquibase/types.ts';
 import type {
   Entity as SpringBootEntity,
   Field as SpringBootField,
   Relationship as SpringBootRelationship,
 } from '../../spring-boot/types.d.ts';
 
-import type { RelationshipWithEntity } from '../../base-application/types.js';
-import { mutateData } from '../../../lib/utils/object.ts';
-import type { DatabaseField, DatabaseRelationship } from '../../liquibase/types.js';
-import { hibernateSnakeCase } from './string.js';
+import { hibernateSnakeCase } from './string.ts';
 
 const { NO: NO_SEARCH_ENGINE, ELASTICSEARCH } = searchEngineTypes;
 const { COUCHBASE } = databaseTypes;

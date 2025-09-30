@@ -18,17 +18,20 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import JDLObject from '../../core/models/jdl-object.js';
-import { JDLEntity } from '../../core/models/index.js';
-import JDLField from '../../core/models/jdl-field.js';
-import JDLValidation from '../../core/models/jdl-validation.js';
-import JDLRelationship from '../../core/models/jdl-relationship.js';
-import JDLBinaryOption from '../../core/models/jdl-binary-option.js';
-import { relationshipTypes } from '../../core/basic-types/index.js';
-import { binaryOptions, validations } from '../../core/built-in-options/index.js';
-import fieldTypes from '../../../jhipster/field-types.js';
-import createValidator from '../validators/jdl-without-application-validator.js';
+
+import fieldTypes from '../../../jhipster/field-types.ts';
+import { relationshipTypes } from '../../core/basic-types/index.ts';
+import { binaryOptions, validations } from '../../core/built-in-options/index.ts';
+import { JDLEntity } from '../../core/models/index.ts';
+import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
+import JDLField from '../../core/models/jdl-field.ts';
+import JDLObject from '../../core/models/jdl-object.ts';
+import JDLRelationship from '../../core/models/jdl-relationship.ts';
+import JDLValidation from '../../core/models/jdl-validation.ts';
+
+import createValidator from './jdl-without-application-validator.ts';
 
 const {
   Validations: { MIN },
@@ -46,7 +49,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
   describe('checkForErrors', () => {
     describe('when passing gateway as application type', () => {
       describe('with incompatible database type and field type', () => {
-        let validator;
+        let validator: ReturnType<typeof createValidator>;
 
         before(() => {
           const validEntity = new JDLEntity({
@@ -71,7 +74,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
       });
     });
     describe('when passing an unsupported validation for a field', () => {
-      let validator;
+      let validator: ReturnType<typeof createValidator>;
 
       before(() => {
         const entity = new JDLEntity({
@@ -100,7 +103,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
       });
     });
     describe('when the source entity of a relationship is missing', () => {
-      let validator;
+      let validator: ReturnType<typeof createValidator>;
 
       before(() => {
         const otherEntity = new JDLEntity({
@@ -128,7 +131,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
     });
     describe('when the destination entity of a relationship is missing', () => {
       describe('if it has builtInEntity annotation', () => {
-        let validator;
+        let validator: ReturnType<typeof createValidator>;
 
         before(() => {
           const sourceEntity = new JDLEntity({
@@ -160,7 +163,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
         });
       });
       describe('if it is not the User entity', () => {
-        let checker;
+        let checker: ReturnType<typeof createValidator>;
 
         before(() => {
           const sourceEntity = new JDLEntity({
@@ -188,7 +191,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
       });
     });
     describe('when having DTOs without services', () => {
-      let validator;
+      let validator: ReturnType<typeof createValidator>;
 
       before(() => {
         const jdlObject = new JDLObject();
@@ -216,7 +219,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
       });
     });
     describe('when having DTOs with services', () => {
-      let validator;
+      let validator: ReturnType<typeof createValidator>;
 
       before(() => {
         const jdlObject = new JDLObject();
@@ -258,7 +261,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
       });
     });
     describe('when having a relationship with the User entity as source', () => {
-      let validator;
+      let validator: ReturnType<typeof createValidator>;
 
       before(() => {
         const sourceEntity = new JDLEntity({
@@ -285,7 +288,7 @@ describe('jdl - JDLWithoutApplicationValidator', () => {
       });
     });
     describe('when having a relationship with the User entity as destination', () => {
-      let validator;
+      let validator: ReturnType<typeof createValidator>;
 
       before(() => {
         const sourceEntity = new JDLEntity({

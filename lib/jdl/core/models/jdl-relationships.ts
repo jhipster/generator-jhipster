@@ -17,10 +17,11 @@
  * limitations under the License.
  */
 
-import type { JDLRelationshipType } from '../basic-types/relationships.js';
-import { relationshipTypes } from '../basic-types/index.js';
-import { relationshipTypeExists } from '../basic-types/relationship-types.js';
-import type JDLRelationship from './jdl-relationship.js';
+import { relationshipTypes } from '../basic-types/index.ts';
+import { relationshipTypeExists } from '../basic-types/relationship-types.ts';
+import type { JDLRelationshipType } from '../basic-types/relationships.ts';
+
+import type JDLRelationship from './jdl-relationship.ts';
 
 export default class JDLRelationships {
   relationships: Record<JDLRelationshipType, Map<string, JDLRelationship>>;

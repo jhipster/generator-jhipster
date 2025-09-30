@@ -19,30 +19,26 @@
 import { upperFirst } from 'lodash-es';
 import type { ComposeOptions, Storage } from 'yeoman-generator';
 
-import type GeneratorsByNamespace from '../types.js';
-import BaseGenerator from '../base-simple-application/index.js';
-import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../base-simple-application/support/index.js';
+import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.ts';
+import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.ts';
+import { mutateData } from '../../lib/utils/index.ts';
+import type { GenericTask } from '../base-core/types.ts';
+import BaseGenerator from '../base-simple-application/index.ts';
+import { BOOTSTRAP_APPLICATION } from '../base-simple-application/priorities.ts';
+import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../base-simple-application/support/index.ts';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
-import { mutateData } from '../../lib/utils/index.js';
-import {
-  GENERATOR_BOOTSTRAP_APPLICATION,
-  GENERATOR_BOOTSTRAP_APPLICATION_CLIENT,
-  GENERATOR_BOOTSTRAP_APPLICATION_SERVER,
-} from '../generator-list.js';
-import type { GenericTaskGroup } from '../base-core/types.js';
-import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.js';
-import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
-import { BOOTSTRAP_APPLICATION } from '../base-simple-application/priorities.js';
+import type GeneratorsByNamespace from '../types.ts';
+
+import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.ts';
+import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY, getEntitiesFromDir } from './support/index.ts';
 import type {
   ConfiguringEachEntityTaskParam,
-  TaskTypes as DefaultTasks,
   EntityToLoad,
   PreparingEachEntityFieldTaskParam,
   PreparingEachEntityRelationshipTaskParam,
   PreparingEachEntityTaskParam,
-} from './tasks.js';
-import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY, getEntitiesFromDir } from './support/index.js';
-import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.js';
+  TaskTypes as DefaultTasks,
+} from './tasks.ts';
 import type {
   Application as BaseApplication,
   Config as BaseApplicationConfig,
@@ -50,7 +46,7 @@ import type {
   Features as BaseApplicationFeatures,
   Options as BaseApplicationOptions,
   Source as BaseApplicationSource,
-} from './types.js';
+} from './types.ts';
 
 const {
   LOADING,
@@ -151,8 +147,8 @@ export default class BaseApplicationGenerator<
 
   static POST_WRITING_ENTITIES = asPriority(POST_WRITING_ENTITIES);
 
-  constructor(args: string | string[], options: Options, features: Features) {
-    super(args, options, { storeJHipsterVersion: true, storeBlueprintVersion: true, ...features });
+  constructor(args?: string[], options?: Options, features?: Features) {
+    super(args, options, { storeJHipsterVersion: true, storeBlueprintVersion: true, ...features } as Features);
 
     if (this.options.help) {
       return;
@@ -201,22 +197,31 @@ export default class BaseApplicationGenerator<
     return getConfigWithDefaults(super.jhipsterConfigWithDefaults) as Config;
   }
 
+  /**
+   * @deprecated use dependsOnBootstrap('app')
+   */
   dependsOnBootstrapApplication(
-    options?: ComposeOptions<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION]> | undefined,
-  ): Promise<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION]> {
-    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION, options);
+    options?: ComposeOptions<GeneratorsByNamespace['jhipster:base-application:bootstrap']> | undefined,
+  ): Promise<GeneratorsByNamespace['jhipster:base-application:bootstrap']> {
+    return this.dependsOnJHipster('jhipster:base-application:bootstrap', options);
   }
 
+  /**
+   * @deprecated use dependsOnBootstrap('server')
+   */
   dependsOnBootstrapApplicationServer(
-    options?: ComposeOptions<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_SERVER]> | undefined,
-  ): Promise<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_SERVER]> {
-    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_SERVER, options);
+    options?: ComposeOptions<GeneratorsByNamespace['jhipster:server:bootstrap']> | undefined,
+  ): Promise<GeneratorsByNamespace['jhipster:server:bootstrap']> {
+    return this.dependsOnJHipster('jhipster:server:bootstrap', options);
   }
 
+  /**
+   * @deprecated use dependsOnBootstrap('client')
+   */
   dependsOnBootstrapApplicationClient(
-    options?: ComposeOptions<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_CLIENT]> | undefined,
-  ): Promise<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_CLIENT]> {
-    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_CLIENT, options);
+    options?: ComposeOptions<GeneratorsByNamespace['jhipster:client:bootstrap']> | undefined,
+  ): Promise<GeneratorsByNamespace['jhipster:client:bootstrap']> {
+    return this.dependsOnJHipster('jhipster:client:bootstrap', options);
   }
 
   /**
@@ -330,72 +335,72 @@ export default class BaseApplicationGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asConfiguringEachEntityTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['ConfiguringEachEntityTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['ConfiguringEachEntityTaskParam']> {
+  asConfiguringEachEntityTaskGroup<T extends Record<string, GenericTask<this, Tasks['ConfiguringEachEntityTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['ConfiguringEachEntityTaskParam']>> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asLoadingEntitiesTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['LoadingEntitiesTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['LoadingEntitiesTaskParam']> {
+  asLoadingEntitiesTaskGroup<T extends Record<string, GenericTask<this, Tasks['LoadingEntitiesTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['LoadingEntitiesTaskParam']>> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPreparingEachEntityTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['PreparingEachEntityTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['PreparingEachEntityTaskParam']> {
+  asPreparingEachEntityTaskGroup<T extends Record<string, GenericTask<this, Tasks['PreparingEachEntityTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['PreparingEachEntityTaskParam']>> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPreparingEachEntityFieldTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['PreparingEachEntityFieldTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['PreparingEachEntityFieldTaskParam']> {
+  asPreparingEachEntityFieldTaskGroup<T extends Record<string, GenericTask<this, Tasks['PreparingEachEntityFieldTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['PreparingEachEntityFieldTaskParam']>> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPreparingEachEntityRelationshipTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['PreparingEachEntityRelationshipTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['PreparingEachEntityRelationshipTaskParam']> {
+  asPreparingEachEntityRelationshipTaskGroup<
+    T extends Record<string, GenericTask<this, Tasks['PreparingEachEntityRelationshipTaskParam']>>,
+  >(taskGroup: T): Record<keyof T, GenericTask<any, Tasks['PreparingEachEntityRelationshipTaskParam']>> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPostPreparingEachEntityTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['PostPreparingEachEntityTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['PostPreparingEachEntityTaskParam']> {
+  asPostPreparingEachEntityTaskGroup<T extends Record<string, GenericTask<this, Tasks['PostPreparingEachEntityTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['PostPreparingEachEntityTaskParam']>> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asWritingEntitiesTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['WritingEntitiesTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['WritingEntitiesTaskParam']> {
+  asWritingEntitiesTaskGroup<T extends Record<string, GenericTask<this, Tasks['WritingEntitiesTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['WritingEntitiesTaskParam']>> {
     return taskGroup;
   }
 
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPostWritingEntitiesTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['PostWritingEntitiesTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['PostWritingEntitiesTaskParam']> {
+  asPostWritingEntitiesTaskGroup<T extends Record<string, GenericTask<this, Tasks['PostWritingEntitiesTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['PostWritingEntitiesTaskParam']>> {
     return taskGroup;
   }
 

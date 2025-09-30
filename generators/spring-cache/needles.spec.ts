@@ -1,8 +1,10 @@
 import { before, describe, it } from 'esmocha';
-import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
+
+import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
+import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
 import { SERVER_MAIN_SRC_DIR } from '../generator-constants.js';
-import { GENERATOR_SPRING_CACHE } from '../generator-list.js';
-import { asPostWritingTask } from '../base-application/support/task-type-inference.js';
+
+const GENERATOR_SPRING_CACHE = 'spring-cache';
 
 const addNeedlesTask = asPostWritingTask(function ({ source }) {
   source.addEntryToCache?.({ entry: 'entry' });

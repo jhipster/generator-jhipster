@@ -18,28 +18,32 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import JDLApplicationConfiguration from '../models/jdl-application-configuration.js';
-import StringJDLApplicationConfigurationOption from '../models/string-jdl-application-configuration-option.js';
-import applicationOptions from '../../../jhipster/application-options.js';
+
+import applicationOptions from '../../../jhipster/application-options.ts';
+
+import JDLApplicationConfiguration from './jdl-application-configuration.ts';
+import StringJDLApplicationConfigurationOption from './string-jdl-application-configuration-option.ts';
 
 const { OptionNames } = applicationOptions;
 
 describe('jdl - JDLApplicationConfiguration', () => {
   describe('hasOption', () => {
     describe('when not passing an option name', () => {
-      let configuration;
+      let configuration: JDLApplicationConfiguration;
 
       before(() => {
         configuration = new JDLApplicationConfiguration();
       });
 
       it('should return false', () => {
+        // @ts-expect-error invalid api test
         expect(configuration.hasOption()).to.be.false;
       });
     });
     describe('when the configuration does not have the option', () => {
-      let configuration;
+      let configuration: JDLApplicationConfiguration;
 
       before(() => {
         configuration = new JDLApplicationConfiguration();
@@ -50,7 +54,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
       });
     });
     describe('when the configuration has the option', () => {
-      let configuration;
+      let configuration: JDLApplicationConfiguration;
 
       before(() => {
         configuration = new JDLApplicationConfiguration();
@@ -64,18 +68,19 @@ describe('jdl - JDLApplicationConfiguration', () => {
   });
   describe('getOption', () => {
     describe('when not passing an option name', () => {
-      let configuration;
+      let configuration: JDLApplicationConfiguration;
 
       before(() => {
         configuration = new JDLApplicationConfiguration();
       });
 
       it('should fail', () => {
+        // @ts-expect-error invalid api test
         expect(() => configuration.getOption()).to.throw(/^An option name has to be passed to get the option\.$/);
       });
     });
     describe('when the configuration does not have the option', () => {
-      let configuration;
+      let configuration: JDLApplicationConfiguration;
 
       before(() => {
         configuration = new JDLApplicationConfiguration();
@@ -86,7 +91,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
       });
     });
     describe('when the configuration has the option', () => {
-      let configuration;
+      let configuration: JDLApplicationConfiguration;
 
       before(() => {
         configuration = new JDLApplicationConfiguration();
@@ -102,18 +107,19 @@ describe('jdl - JDLApplicationConfiguration', () => {
   });
   describe('setOption', () => {
     describe('when not passing an option', () => {
-      let configuration;
+      let configuration: JDLApplicationConfiguration;
 
       before(() => {
         configuration = new JDLApplicationConfiguration();
       });
 
       it('should fail', () => {
+        // @ts-expect-error invalid api test
         expect(() => configuration.setOption()).to.throw(/^An option has to be passed to set an option\.$/);
       });
     });
     describe('when setting a new option', () => {
-      let createdConfiguration;
+      let createdConfiguration: JDLApplicationConfiguration;
 
       before(() => {
         createdConfiguration = new JDLApplicationConfiguration();
@@ -125,7 +131,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
       });
     });
     describe('when setting an already present option', () => {
-      let createdConfiguration;
+      let createdConfiguration: JDLApplicationConfiguration;
 
       before(() => {
         createdConfiguration = new JDLApplicationConfiguration();
@@ -134,24 +140,25 @@ describe('jdl - JDLApplicationConfiguration', () => {
       });
 
       it('should replace its value', () => {
-        expect(createdConfiguration.getOption(OptionNames.BASE_NAME).getValue()).to.equal('application2');
+        expect(createdConfiguration.getOption(OptionNames.BASE_NAME)?.getValue()).to.equal('application2');
       });
     });
   });
   describe('forEachOption', () => {
     describe('when not passing a function', () => {
-      let configuration;
+      let configuration: JDLApplicationConfiguration;
 
       before(() => {
         configuration = new JDLApplicationConfiguration();
       });
 
       it('should not do anything', () => {
+        // @ts-expect-error invalid api test
         expect(() => configuration.forEachOption()).not.to.throw();
       });
     });
     describe('when passing a function', () => {
-      let result;
+      let result: any;
 
       before(() => {
         const configuration = new JDLApplicationConfiguration();
@@ -171,7 +178,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
   });
   describe('toString', () => {
     describe('when there is no option', () => {
-      let configuration;
+      let configuration: JDLApplicationConfiguration;
 
       before(() => {
         configuration = new JDLApplicationConfiguration();
@@ -189,7 +196,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
       });
     });
     describe('when there are options', () => {
-      let configuration;
+      let configuration: JDLApplicationConfiguration;
 
       before(() => {
         configuration = new JDLApplicationConfiguration();
@@ -216,7 +223,7 @@ jhiPrefix prefix
     });
     describe('when the configuration has the dto suffix option', () => {
       describe('without a value', () => {
-        let configuration;
+        let configuration: JDLApplicationConfiguration;
 
         before(() => {
           configuration = new JDLApplicationConfiguration();
@@ -228,7 +235,7 @@ jhiPrefix prefix
         });
       });
       describe('with a value', () => {
-        let configuration;
+        let configuration: JDLApplicationConfiguration;
 
         before(() => {
           configuration = new JDLApplicationConfiguration();
@@ -242,7 +249,7 @@ jhiPrefix prefix
     });
     describe('when the configuration has the entity suffix option', () => {
       describe('without a value', () => {
-        let configuration;
+        let configuration: JDLApplicationConfiguration;
 
         before(() => {
           configuration = new JDLApplicationConfiguration();
@@ -254,7 +261,7 @@ jhiPrefix prefix
         });
       });
       describe('with a value', () => {
-        let configuration;
+        let configuration: JDLApplicationConfiguration;
 
         before(() => {
           configuration = new JDLApplicationConfiguration();
@@ -268,7 +275,7 @@ jhiPrefix prefix
     });
     describe('when the configuration has the client theme variant option', () => {
       describe('without a value', () => {
-        let configuration;
+        let configuration: JDLApplicationConfiguration;
 
         before(() => {
           configuration = new JDLApplicationConfiguration();
@@ -280,7 +287,7 @@ jhiPrefix prefix
         });
       });
       describe('with a value', () => {
-        let configuration;
+        let configuration: JDLApplicationConfiguration;
 
         before(() => {
           configuration = new JDLApplicationConfiguration();
@@ -293,7 +300,7 @@ jhiPrefix prefix
       });
     });
     describe('when the configuration has the package folder option', () => {
-      let configuration;
+      let configuration: JDLApplicationConfiguration;
 
       before(() => {
         configuration = new JDLApplicationConfiguration();

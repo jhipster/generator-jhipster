@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { HandleCommandTypes } from '../../lib/command/types.js';
-import type { Entity as BaseApplicationEntity } from '../base-application/types.js';
+import type { HandleCommandTypes } from '../../lib/command/types.ts';
+import type { Entity as BaseApplicationEntity } from '../base-application/types.ts';
 import type {
   Application as SpringBootApplication,
   Config as SpringBootConfig,
@@ -27,6 +27,7 @@ import type {
   Relationship as SpringBootRelationship,
   Source as SpringBootSource,
 } from '../spring-boot/types.ts';
+
 import type command from './command.ts';
 
 type CommandTypes = HandleCommandTypes<typeof command>;

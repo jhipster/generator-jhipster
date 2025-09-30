@@ -16,12 +16,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JHipsterCommandDefinition } from '../lib/command/index.js';
+import type { ReadonlyDeep } from 'type-fest';
+
+import type { JHipsterCommandDefinition } from '../lib/command/index.ts';
+
+function deepFreeze<const T>(obj: T): ReadonlyDeep<T> {
+  if (obj && typeof obj === 'object' && !Object.isFrozen(obj)) {
+    Object.keys(obj).forEach(key => {
+      deepFreeze((obj as any)[key]);
+    });
+    Object.freeze(obj);
+  }
+  return obj as ReadonlyDeep<T>;
+}
 
 /**
  * Type inferring function to create a JHipster command definition.
- *
- * @param {JHipsterCommandDefinition} command
- * @returns {JHipsterCommandDefinition}
+ * Freezes the object to prevent further modifications.
  */
-export const asCommand = (command: JHipsterCommandDefinition): JHipsterCommandDefinition => command;
+export const asCommand = <const Def extends JHipsterCommandDefinition>(command: Def): ReadonlyDeep<Def> => deepFreeze(command);

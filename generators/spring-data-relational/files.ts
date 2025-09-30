@@ -16,15 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWriteFilesSection, asWritingTask } from '../base-application/support/index.js';
+import { asWriteFilesSection, asWritingTask } from '../base-application/support/index.ts';
 import { addSectionsCondition, mergeSections } from '../base-core/support/index.ts';
 import {
   javaMainPackageTemplatesBlock,
   javaMainResourceTemplatesBlock,
   javaTestPackageTemplatesBlock,
   javaTestResourceTemplatesBlock,
-} from '../java/support/index.js';
-import type { Application, Entity } from './types.js';
+} from '../java/support/index.ts';
+
+import type { Application, Entity } from './types.ts';
 
 export const sqlFiles = asWriteFilesSection<Application>({
   serverFiles: [
@@ -135,7 +136,7 @@ export const serverFiles = mergeSections(
   addSectionsCondition(postgresFiles, context => context.prodDatabaseTypePostgresql),
 );
 
-export default asWritingTask<Entity, Application<Entity>>(async function writeSqlFiles({ application }) {
+export default asWritingTask<Entity, Application>(async function writeSqlFiles({ application }) {
   await this.writeFiles({
     sections: serverFiles,
     context: application,

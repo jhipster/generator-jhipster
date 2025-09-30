@@ -20,14 +20,12 @@ import { describe, expect, it } from 'esmocha';
 
 describe('public api', () => {
   it('generator-jhipster/generators should match snapshot', async () => {
-    expect(await import('generator-jhipster/generators')).toMatchSnapshot();
-  });
-
-  it('generator-jhipster/generators should match snapshot', async () => {
+    // eslint-disable-next-line import-x/extensions
     expect(Object.keys(await import('generator-jhipster/testing'))).toMatchSnapshot();
   });
 
-  it('should import neasted sub-generators', async () => {
+  it('should import nested sub-generators', async () => {
+    // eslint-disable-next-line import-x/extensions
     expect(await import('generator-jhipster/generators/spring-cloud-stream/generators/kafka')).toBeDefined();
   });
 });

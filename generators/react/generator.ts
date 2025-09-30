@@ -16,25 +16,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { isFileStateModified } from 'mem-fs-editor/state';
 import chalk from 'chalk';
+import { isFileStateModified } from 'mem-fs-editor/state';
 
+import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.ts';
+import { upperFirstCamelCase } from '../../lib/utils/index.ts';
+import { createNeedleCallback } from '../base-core/support/index.ts';
 import { ClientApplicationGenerator } from '../client/generator.ts';
-import type { Entity as ClientEntity, Field as ClientField } from '../client/types.ts';
-import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_REACT } from '../generator-list.js';
-import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.js';
 import {
-  generateEntityClientImports as formatEntityClientImports,
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
-} from '../client/support/index.js';
-import { createNeedleCallback } from '../base-core/support/index.ts';
-import { upperFirstCamelCase } from '../../lib/utils/index.js';
-import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
-import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-react.js';
-import cleanupOldFilesTask from './cleanup.js';
-import { writeFiles } from './files-react.js';
-import { isTranslatedReactFile, translateReactFilesTransform } from './support/index.js';
+  generateEntityClientImports as formatEntityClientImports,
+} from '../client/support/index.ts';
+import type { Entity as ClientEntity, Field as ClientField } from '../client/types.ts';
+import { JAVA_WEBAPP_SOURCES_DIR } from '../index.ts';
+import { writeEslintClientRootConfigFile } from '../javascript-simple-application/generators/eslint/support/tasks.ts';
+
+import cleanupOldFilesTask from './cleanup.ts';
+import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-react.ts';
+import { writeFiles } from './files-react.ts';
+import { isTranslatedReactFile, translateReactFilesTransform } from './support/index.ts';
 
 const { CommonDBTypes } = fieldTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
@@ -48,10 +49,11 @@ export default class ReactGenerator extends ClientApplicationGenerator<
       await this.composeWithBlueprints();
     }
 
+    await this.dependsOnBootstrap('react');
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:javascript:bootstrap');
-      await this.dependsOnJHipster(GENERATOR_CLIENT);
-      await this.dependsOnJHipster(GENERATOR_LANGUAGES);
+      await this.dependsOnJHipster('jhipster:client:i18n');
+      await this.dependsOnJHipster('client');
+      await this.dependsOnJHipster('languages');
     }
   }
 
@@ -72,10 +74,10 @@ export default class ReactGenerator extends ClientApplicationGenerator<
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_REACT, 'resources', 'package.json'),
+          this.fetchFromInstalledJHipster('react', 'resources', 'package.json'),
         );
       },
-      applicationDefauts({ applicationDefaults }) {
+      applicationDefaults({ applicationDefaults }) {
         applicationDefaults({
           __override__: true,
           typescriptEslint: true,
@@ -90,8 +92,15 @@ export default class ReactGenerator extends ClientApplicationGenerator<
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      applicationDefauts({ application, applicationDefaults }) {
-        application.addPrettierExtensions?.(['html', 'tsx', 'css', 'scss']);
+      applicationDefaults({ application, applicationDefaults }) {
+        application.prettierExtensions.push('html', 'tsx', 'css', 'scss');
+        if (application.clientBundlerWebpack) {
+          application.prettierFolders.push('webpack/');
+        }
+        if (!application.backendTypeJavaAny && application.clientSrcDir !== JAVA_WEBAPP_SOURCES_DIR) {
+          // When we have a java backend, 'src/**' is already added by java:bootstrap
+          application.prettierFolders.push(`${application.clientSrcDir}**/`);
+        }
 
         applicationDefaults({
           __override__: true,
@@ -151,7 +160,7 @@ ${comment}
               entityPage,
               entityUrl,
               entityTranslationKeyMenu,
-              entityClassHumanized,
+              entityNameHumanized,
             } = entity;
 
             this.editFile(
@@ -159,7 +168,7 @@ ${comment}
               createNeedleCallback({
                 needle: 'add-entity-to-menu',
                 contentToAdd: `<MenuItem icon="asterisk" to="/${entityPage}">
-  ${application.enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${entityClassHumanized}`}
+  ${application.enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${entityNameHumanized}`}
 </MenuItem>`,
               }),
             );
@@ -265,12 +274,6 @@ ${comment}
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
-  get postWritingEntities() {
-    return {
-      postWriteEntitiesFiles,
-    };
-  }
-
   get postWriting() {
     return this.asPostWritingTaskGroup({
       clientBundler({ application, source }) {
@@ -312,11 +315,30 @@ ${comment}
           });
         }
       },
+      sonar({ application, source }) {
+        const { clientI18nDir, clientDistDir, clientSrcDir, temporaryDir } = application;
+        source.addSonarProperties?.([
+          { key: 'sonar.test.inclusions', value: `${clientSrcDir}app/**/*.spec.ts, ${clientSrcDir}app/**/*.spec.tsx`, valueSep: ', ' },
+          { key: 'sonar.testExecutionReportPaths', value: `${temporaryDir}/test-results/jest/TESTS-results-sonar.xml` },
+          { key: 'sonar.javascript.lcov.reportPaths', value: `${temporaryDir}/test-results/lcov.info` },
+          {
+            key: 'sonar.exclusions',
+            value: `${clientSrcDir}content/**/*.*, ${clientI18nDir}*.ts, ${clientDistDir}**/*.*`,
+            valueSep: ', ',
+          },
+        ]);
+      },
     });
   }
 
   get [ClientApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
+  }
+
+  get postWritingEntities() {
+    return {
+      postWriteEntitiesFiles,
+    };
   }
 
   get [ClientApplicationGenerator.POST_WRITING_ENTITIES]() {
@@ -347,8 +369,7 @@ ${comment}
   generateEntityClientFieldDefaultValues(fields: ClientField[]): Record<string, string> {
     const defaultVariablesValues: Record<string, string> = {};
     fields.forEach(field => {
-      const fieldType = field.fieldType;
-      const fieldName = field.fieldName;
+      const { fieldType, fieldName } = field;
       if (fieldType === TYPE_BOOLEAN) {
         defaultVariablesValues[fieldName] = `${fieldName}: false,`;
       }

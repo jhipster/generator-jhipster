@@ -57,7 +57,9 @@ const getFieldErrorsToasts = (fieldErrors: FieldErrorVM[]): ToastMessage[] =>
 <%_ } _%>
   });
 
+<%_ if (enableTranslation) { _%>
 // eslint-disable-next-line complexity
+<%_ } _%>
 export default () => next => action => {
   const { error, payload } = action;
 

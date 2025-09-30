@@ -16,14 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { describe, expect, it } from 'esmocha';
-import { snakeCase } from 'lodash-es';
+import { basename, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/helpers.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/helpers.js';
-import Generator from './index.js';
+
+import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -31,9 +31,6 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 
 describe(`generator - ${generator}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 
@@ -70,12 +67,14 @@ describe(`generator - ${generator}`, () => {
 
       it('should match context snapshot', () => {
         expect(runResult.application).toMatchSnapshot({
-          user: expect.any(Object),
-          authority: expect.any(Object),
-          userManagement: expect.any(Object),
           jhipsterPackageJson: expect.any(Object),
           javaDependencies: expect.any(Object),
           dockerContainers: expect.any(Object),
+          addLanguageCallbacks: expect.any(Array),
+          supportedLanguages: expect.any(Array),
+          user: expect.any(Object),
+          authority: expect.any(Object),
+          userManagement: expect.any(Object),
         });
       });
       it('should populate context', () => {

@@ -33,8 +33,6 @@ on:
       - 'generators/vue/**'
   pull_request:
     types: [closed, opened, synchronize, reopened]
-    branches:
-      - '*'
 env:
   FORCE_COLOR: 2
 jobs:
@@ -50,7 +48,7 @@ jobs:
       workflow-vue: ${{ steps.build.outputs.workflow-vue }}
     steps:
       - name: 'SETUP: Checkout generator-jhipster'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 2
       - run: npm ci --ignore-scripts
@@ -78,14 +76,13 @@ jobs:
     timeout-minutes: 50
     strategy:
       fail-fast: false
-      # Matrix available at https://github.com/jhipster/generator-jhipster/tree/main/test-integration/workflow-samples/
       matrix: ${{ fromJson(needs.build-matrix.outputs.matrix) }}
     steps:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
       #----------------------------------------------------------------------
       - name: 'SETUP: Checkout generator-jhipster'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: generator-jhipster
           fetch-depth: 2
@@ -217,8 +214,8 @@ jobs:
         with:
           sonar-project-key: ${{ matrix.sample }}
           application-dir: ${{ github.workspace }}/app
-          docker-compose-file: ${{ github.workspace }}/generator-jhipster/test-integration/sonar-pr/docker-compose.yml
-          comment-token: ${{ secrets.PAT_PR_ISSUES_TOKEN }}
+          docker-compose-file: ${{ github.workspace }}/generator-jhipster/.github/actions/sonar/docker-compose.yml
+          comment-token: ${{ secrets.JHIPSTER_PAT_PR_ISSUES }}
 
   check-angular:
     permissions:

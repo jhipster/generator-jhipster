@@ -158,8 +158,7 @@ updates:
           - 'eslint'
       fortawesome:
         patterns:
-          - '@fortawesome/fontawesome-svg-core'
-          - '@fortawesome/free-solid-svg-icons'
+          - '@fortawesome/*'
       react:
         patterns:
           - '@reduxjs/*'
@@ -196,8 +195,7 @@ updates:
           - 'eslint'
       fortawesome:
         patterns:
-          - '@fortawesome/fontawesome-svg-core'
-          - '@fortawesome/free-solid-svg-icons'
+          - '@fortawesome/*'
 
   - package-ecosystem: 'docker'
     directory: '/generators/server/resources/'
@@ -211,7 +209,7 @@ updates:
       - 'skip-changelog'
 
   - package-ecosystem: 'docker'
-    directory: '/test-integration/sonar-pr/'
+    directory: '/.github/actions/sonar/'
     schedule:
       interval: 'daily'
       time: '00:30'

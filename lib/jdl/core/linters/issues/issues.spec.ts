@@ -18,14 +18,17 @@
  */
 
 import { beforeEach, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import { rulesNames } from '../rules.js';
-import { relationshipTypes } from '../../basic-types/index.js';
-import Issues from './issues.js';
-import EntityIssue from './entity-issue.js';
-import FieldIssue from './field-issue.js';
-import EnumIssue from './enum-issue.js';
-import RelationshipIssue from './relationship-issue.js';
+
+import { relationshipTypes } from '../../basic-types/index.ts';
+import { rulesNames } from '../rules.ts';
+
+import EntityIssue from './entity-issue.ts';
+import EnumIssue from './enum-issue.ts';
+import FieldIssue from './field-issue.ts';
+import Issues from './issues.ts';
+import RelationshipIssue from './relationship-issue.ts';
 
 describe('jdl - Issues', () => {
   describe('getNumberOfIssues', () => {

@@ -1,16 +1,30 @@
+import type { HandleCommandTypes } from '../../lib/command/types.ts';
 import type {
   Entity as BaseApplicationEntity,
   Field as BaseApplicationField,
   Relationship as BaseApplicationRelationship,
 } from '../base-application/types.d.ts';
 import type {
+  Config as BaseEntityChangesConfig,
   Entity as BaseEntityChangesEntity,
+  Features as BaseEntityChangesFeatures,
   Field as BaseEntityChangesField,
+  Options as BaseEntityChangesOptions,
   Relationship as BaseEntityChangesRelationship,
   Source as BaseEntityChangesSource,
 } from '../base-entity-changes/types.d.ts';
-import type { Application as JavaApplication, Entity as JavaEntity, Field as JavaField, Source as JavaSource } from '../java/types.js';
+import type { Application as JavaApplication, Entity as JavaEntity, Field as JavaField, Source as JavaSource } from '../java/types.ts';
+
+import type command from './command.ts';
 import type { LiquibaseColumnType, LiquibaseLoadColumnType } from './support/prepare-field.ts';
+
+export type Features = BaseEntityChangesFeatures;
+
+type Command = HandleCommandTypes<typeof command>;
+
+export type Config = BaseEntityChangesConfig & Command['Config'];
+
+export type Options = BaseEntityChangesOptions & Command['Options'];
 
 export type LiquibaseChangelog = { changelogName: string };
 export type LiquibaseChangelogSection = LiquibaseChangelog & { section?: 'base' | 'incremental' | 'constraints' };

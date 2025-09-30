@@ -16,75 +16,76 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import fs from 'fs';
+import fs from 'node:fs';
+
 import { escape, min } from 'lodash-es';
 
-import BaseEntityChangesGenerator from '../base-entity-changes/index.js';
-import { getFKConstraintName, getUXConstraintName } from '../server/support/index.js';
-import { prepareEntity as prepareEntityForServer } from '../java/support/index.js';
+import { fieldTypes } from '../../lib/jhipster/index.ts';
+import type { EntityAll } from '../../lib/types/application-all.d.ts';
+import { mutateData } from '../../lib/utils/object.ts';
+import {
+  mutateRelationship as mutateBaseApplicationRelationship,
+  mutateRelationshipWithEntity as mutateBaseApplicationRelationshipWithEntity,
+} from '../base-application/entity.ts';
 import {
   loadRequiredConfigIntoEntity,
+  prepareCommonFieldForTemplates,
   prepareEntity,
   prepareEntityPrimaryKeyForTemplates,
-  prepareField,
   prepareRelationship,
-} from '../base-application/support/index.js';
-import { prepareSqlApplicationProperties } from '../spring-data-relational/support/index.js';
-import { fieldTypes } from '../../lib/jhipster/index.js';
-import type { MavenProperty } from '../maven/types.js';
-import type { HandleCommandTypes } from '../../lib/command/types.js';
-import type { Config as BaseApplicationConfig, Options as BaseApplicationOptions, BaseChangelog } from '../base-entity-changes/types.js';
-import type { Field as CommonField, Entity as ServerEntity } from '../server/types.js';
-import type { Application as CommonApplication, Entity as CommonEntity } from '../common/types.js';
-import type { Source as SpringBootSource } from '../spring-boot/index.js';
-import type { EntityAll } from '../../lib/types/entity-all.js';
-import type { DerivedField } from '../base-application/types.js';
+} from '../base-application/support/index.ts';
+import type { DerivedField } from '../base-application/types.ts';
+import BaseEntityChangesGenerator from '../base-entity-changes/index.ts';
+import type { BaseChangelog } from '../base-entity-changes/types.ts';
+import { mutateField as commonMutateField } from '../common/entity.ts';
+import type { Entity as CommonEntity, Field as CommonField } from '../common/types.ts';
+import { prepareEntity as prepareEntityForServer } from '../java/support/index.ts';
+import type { MavenProperty } from '../maven/types.ts';
+import { getFKConstraintName, getUXConstraintName, prepareField as prepareServerFieldForTemplates } from '../server/support/index.ts';
+import type { Entity as ServerEntity } from '../server/types.ts';
+import type { Source as SpringBootSource } from '../spring-boot/index.ts';
+import { prepareSqlApplicationProperties } from '../spring-data-relational/support/index.ts';
+
+import { addEntityFiles, fakeFiles, updateConstraintsFiles, updateEntityFiles, updateMigrateFiles } from './changelog-files.ts';
+import { liquibaseFiles } from './files.ts';
+import {
+  addLiquibaseChangelogCallback,
+  addLiquibaseConstraintsChangelogCallback,
+  addLiquibaseIncrementalChangelogCallback,
+} from './internal/needles.ts';
 import { checkAndReturnRelationshipOnValue } from './internal/relationship-on-handler-options.ts';
-import { liquibaseFiles } from './files.js';
 import {
   liquibaseComment,
   postPrepareEntity,
   prepareField as prepareFieldForLiquibase,
   prepareRelationshipForLiquibase,
-} from './support/index.js';
-import mavenPlugin from './support/maven-plugin.js';
-import {
-  addLiquibaseChangelogCallback,
-  addLiquibaseConstraintsChangelogCallback,
-  addLiquibaseIncrementalChangelogCallback,
-} from './internal/needles.js';
-import { addEntityFiles, fakeFiles, updateConstraintsFiles, updateEntityFiles, updateMigrateFiles } from './changelog-files.js';
-import type command from './command.js';
+} from './support/index.ts';
+import mavenPlugin from './support/maven-plugin.ts';
 import type {
   Application as LiquibaseApplication,
+  Config as LiquibaseConfig,
   Entity as LiquibaseEntity,
+  Features as LiquibaseFeatures,
   Field as LiquibaseField,
+  Options as LiquibaseOptions,
   Source as LiquibaseSource,
-} from './types.js';
+} from './types.ts';
 
 const {
   CommonDBTypes: { LONG: TYPE_LONG, INTEGER: TYPE_INTEGER },
 } = fieldTypes;
 
-type CommandType = HandleCommandTypes<typeof command>;
-
 export default class LiquibaseGenerator<
   Entity extends LiquibaseEntity = LiquibaseEntity<LiquibaseField>,
   Application extends LiquibaseApplication<Entity> = LiquibaseApplication<Entity>,
-> extends BaseEntityChangesGenerator<
-  Entity,
-  Application,
-  BaseApplicationConfig & CommandType['Config'],
-  BaseApplicationOptions & CommandType['Options'],
-  LiquibaseSource
-> {
+> extends BaseEntityChangesGenerator<Entity, Application, LiquibaseConfig, LiquibaseOptions, LiquibaseSource, LiquibaseFeatures> {
   recreateInitialChangelog: boolean;
   numberOfRows: number;
   databaseChangelogs: BaseChangelog<Entity>[] = [];
   injectBuildTool = true;
   injectLogs = true;
 
-  constructor(args: any, options: any, features: any) {
+  constructor(args?: string[], options?: LiquibaseOptions, features?: LiquibaseFeatures) {
     super(args, options, { skipParseOptions: false, ...features });
 
     this.argument('entities', {
@@ -103,7 +104,7 @@ export default class LiquibaseGenerator<
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:java:bootstrap');
+      await this.dependsOnBootstrap('java');
     }
   }
 
@@ -199,14 +200,16 @@ export default class LiquibaseGenerator<
             const entity = databaseChangelog.previousEntity!;
             loadRequiredConfigIntoEntity(entity as unknown as ServerEntity, this.jhipsterConfigWithDefaults);
             // TODO fix types
-            prepareEntity(entity as unknown as CommonEntity, this, application as unknown as CommonApplication);
+            prepareEntity(entity as unknown as CommonEntity, this);
             // TODO fix types
             prepareEntityForServer(entity, application as any);
             if (!entity.embedded && !entity.primaryKey) {
               prepareEntityPrimaryKeyForTemplates.call(this, { entity: entity as unknown as EntityAll, application });
             }
             for (const field of entity.fields ?? []) {
-              prepareField(application as any, entity as unknown as CommonEntity, field as unknown as CommonField, this);
+              prepareCommonFieldForTemplates(entity, field, this);
+              mutateData(field as CommonField, commonMutateField);
+              prepareServerFieldForTemplates(application as any, entity as unknown as ServerEntity, field as any, this);
               prepareFieldForLiquibase(application, field);
             }
           }
@@ -218,6 +221,7 @@ export default class LiquibaseGenerator<
             // Prepare them.
             const entity = databaseChangelog.previousEntity!;
             for (const relationship of entity.relationships ?? []) {
+              mutateData(relationship, mutateBaseApplicationRelationship, mutateBaseApplicationRelationshipWithEntity);
               prepareRelationship.call(this, entity, relationship, true);
               prepareRelationshipForLiquibase({ application, entity, relationship });
             }

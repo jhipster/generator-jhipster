@@ -17,8 +17,9 @@
  * limitations under the License.
  */
 import { JavaApplicationGenerator } from '../java/generator.ts';
-import writeTask from './files.js';
-import cleanupTask from './cleanup.js';
+
+import cleanupTask from './cleanup.ts';
+import writeTask from './files.ts';
 
 export default class CucumberGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
@@ -29,6 +30,18 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
     if (!this.delegateToBlueprint) {
       await this.dependsOnJHipster('jhipster:java:build-tool');
     }
+  }
+
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      preparing({ application }) {
+        application.javaIntegrationTestExclude.push('**/*CucumberIT*');
+      },
+    });
+  }
+
+  get [JavaApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get writing() {
@@ -44,6 +57,12 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      junitPlatform({ application, source }) {
+        source.editJUnitPlatformProperties?.([
+          { key: 'cucumber.publish.enabled', value: 'true' },
+          { key: 'cucumber.plugin', value: `pretty, html:${application.temporaryDir}cucumber-reports/Cucumber.html` },
+        ]);
+      },
       addDependencies({ application, source }) {
         const { javaDependencies, gradleBuildSrc } = application;
         source.addJavaDefinitions?.(

@@ -20,6 +20,7 @@ import React, { useState, useEffect } from 'react';
 import { Translate } from 'react-jhipster';
 import { Table, Badge, Col, Row, Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSync, faEye } from '@fortawesome/free-solid-svg-icons';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import HealthModal from './health-modal';
@@ -62,8 +63,8 @@ export const HealthPage = () => {
         <Translate contentKey="health.title">Health Checks</Translate>
       </h2>
       <p>
-        <Button onClick={fetchSystemHealth} color={isFetching ? 'btn btn-danger' : 'btn btn-primary'} disabled={isFetching}>
-          <FontAwesomeIcon icon="sync" />
+        <Button onClick={fetchSystemHealth} color={`btn ${isFetching ? 'btn-danger' : 'btn-primary'}`} disabled={isFetching}>
+          <FontAwesomeIcon icon={faSync} />
           &nbsp;
           <Translate component="span" contentKey="health.refresh.button">
             Refresh
@@ -88,21 +89,21 @@ export const HealthPage = () => {
             </thead>
             <tbody>
               {Object.keys(data).map((configPropKey, configPropIndex) =>
-                configPropKey !== 'status' ? (
+                configPropKey !== 'status' && (
                   <tr key={configPropIndex}>
                     <td>{configPropKey}</td>
                     <td>
                       <Badge color={getBadgeType(data[configPropKey].status)}>{data[configPropKey].status}</Badge>
                     </td>
                     <td>
-                      {data[configPropKey].details ? (
+                      {data[configPropKey].details && (
                         <a onClick={getSystemHealthInfo(configPropKey, data[configPropKey])}>
-                          <FontAwesomeIcon icon="eye" />
+                          <FontAwesomeIcon icon={faEye} />
                         </a>
-                      ) : null}
+                      )}
                     </td>
                   </tr>
-                ) : null,
+                ),
               )}
             </tbody>
           </Table>

@@ -66,7 +66,7 @@ if (!skipServer) { _%>
 <%_ }
 if (!skipClient) { _%>
             - name: Install Node.js packages
-              run: <%= clientPackageManager %> install
+              run: <%- nodePackageManager %> install
 <%_ } _%>
 <%_ if (ciCdIntegrationsSnyk) { _%>
             - name: Install Snyk CLI
@@ -92,10 +92,10 @@ if (!skipClient) { _%>
     <%_ } else if (buildToolGradle) { _%>
                   chmod +x gradlew
     <%_ } _%>
-                  <%= clientPackageManager %> run ci:backend:test
+                  <%- nodePackageManager %> run ci:backend:test
     <%_ if (!skipClient) { _%>
             - name: Run frontend test
-              run: <%= clientPackageManager %> run ci:frontend:test
+              run: <%- nodePackageManager %> run ci:frontend:test
     <%_ } _%>
 <%_ } _%>
 <%_ if (ciCdIntegrationsSonar) { _%>
@@ -116,9 +116,9 @@ if (!skipClient) { _%>
 <%_ } _%>
             - name: Package application
 <%_ if (!skipServer) { _%>
-              run: <%= clientPackageManager %> run java:jar:prod
+              run: <%- nodePackageManager %> run java:jar:prod
 <%_ } else { _%>
-              run: <%= clientPackageManager %> run build
+              run: <%- nodePackageManager %> run build
 <%_ }
 if (ciCdIntegrationsHeroku) { _%>
             - name: Deploy to Heroku
@@ -151,11 +151,11 @@ if (ciCdIntegrationsHeroku) { _%>
 <%_ if (cypressTests) {
   const commented = applicationTypeGateway ? '# ' : ''; _%>
             <%= commented %>- name: 'E2E: Package'
-            <%= commented %>  run: <%= clientPackageManager %> run ci:e2e:package
+            <%= commented %>  run: <%- nodePackageManager %> run ci:e2e:package
             <%= commented %>- name: 'E2E: Prepare'
-            <%= commented %>  run: <%= clientPackageManager %> run ci:e2e:prepare
+            <%= commented %>  run: <%- nodePackageManager %> run ci:e2e:prepare
             <%= commented %>- name: 'E2E: Run'
-            <%= commented %>  run: <%= clientPackageManager %> run ci:e2e:run
+            <%= commented %>  run: <%- nodePackageManager %> run ci:e2e:run
     <%_ if(cypressTests) { _%>
             <%= commented %>  env:
             <%= commented %>    CYPRESS_ENABLE_RECORD: <%= ciCdIntegrationsCypressDashboard %>
@@ -163,5 +163,5 @@ if (ciCdIntegrationsHeroku) { _%>
             <%= commented %>    CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
     <%_ } _%>
             <%= commented %>- name: 'E2E: Teardown'
-            <%= commented %>  run: <%= clientPackageManager %> run ci:e2e:teardown
+            <%= commented %>  run: <%- nodePackageManager %> run ci:e2e:teardown
 <%_ } _%>

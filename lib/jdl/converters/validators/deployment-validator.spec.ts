@@ -18,16 +18,18 @@
  */
 
 import { before, describe, it } from 'esmocha';
-import { expect } from 'chai';
-import deploymentOptions from '../../../jhipster/deployment-options.js';
 
-import DeploymentValidator from '../validators/deployment-validator.js';
-import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.js';
+import { expect } from 'chai';
+
+import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
+import deploymentOptions from '../../../jhipster/deployment-options.ts';
+
+import DeploymentValidator from './deployment-validator.ts';
 
 const { Options } = deploymentOptions;
 
 describe('jdl - DeploymentValidator', () => {
-  let validator;
+  let validator: DeploymentValidator;
 
   before(() => {
     validator = new DeploymentValidator();
@@ -36,6 +38,7 @@ describe('jdl - DeploymentValidator', () => {
   describe('validate', () => {
     describe('when no deployment is passed', () => {
       it('should fail', () => {
+        // @ts-expect-error invalid api test
         expect(() => validator.validate()).to.throw(/^No deployment\.$/);
       });
     });
@@ -49,6 +52,7 @@ describe('jdl - DeploymentValidator', () => {
                 directoryPath: '../',
                 gatewayType: Options.gatewayType.springCloudGateway,
                 monitoring: 'no',
+                // @ts-expect-error FIXME
                 serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
               }),
             ).to.throw(/^The deployment attribute appsFolders was not found.$/);
@@ -62,6 +66,7 @@ describe('jdl - DeploymentValidator', () => {
                 appsFolders: ['beers', 'burgers'],
                 gatewayType: Options.gatewayType.springCloudGateway,
                 monitoring: 'no',
+                // @ts-expect-error FIXME
                 serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
               }),
             ).to.throw(/^The deployment attribute directoryPath was not found.$/);
@@ -75,6 +80,7 @@ describe('jdl - DeploymentValidator', () => {
                 appsFolders: ['beers', 'burgers'],
                 directoryPath: '../',
                 gatewayType: Options.gatewayType.springCloudGateway,
+                // @ts-expect-error FIXME
                 serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
               }),
             ).not.to.throw();
@@ -90,6 +96,7 @@ describe('jdl - DeploymentValidator', () => {
                     appsFolders: ['beers', 'burgers'],
                     directoryPath: '../',
                     monitoring: 'no',
+                    // @ts-expect-error FIXME
                     serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
                   },
                   {
@@ -122,6 +129,7 @@ describe('jdl - DeploymentValidator', () => {
                 directoryPath: '../',
                 kubernetesServiceType: Options.kubernetesServiceType.loadBalancer,
                 monitoring: 'no',
+                // @ts-expect-error FIXME
                 serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
               }),
             ).to.throw(/^The deployment attribute appsFolders was not found.$/);
@@ -135,6 +143,7 @@ describe('jdl - DeploymentValidator', () => {
                 appsFolders: ['beers', 'burgers'],
                 kubernetesServiceType: Options.kubernetesServiceType.loadBalancer,
                 monitoring: 'no',
+                // @ts-expect-error FIXME
                 serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
               }),
             ).to.throw(/^The deployment attribute directoryPath was not found.$/);
@@ -148,6 +157,7 @@ describe('jdl - DeploymentValidator', () => {
                 appsFolders: ['beers', 'burgers'],
                 directoryPath: '../',
                 kubernetesServiceType: Options.kubernetesServiceType.loadBalancer,
+                // @ts-expect-error FIXME
                 serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
               }),
             ).not.to.throw();
@@ -160,6 +170,7 @@ describe('jdl - DeploymentValidator', () => {
                 deploymentType: Options.deploymentType.kubernetes,
                 appsFolders: ['beers', 'burgers'],
                 directoryPath: '../',
+                // @ts-expect-error FIXME
                 serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
               }),
             ).to.throw(/^A kubernetes service type must be provided when dealing with kubernetes-related deployments.$/);
@@ -173,6 +184,7 @@ describe('jdl - DeploymentValidator', () => {
                   deploymentType: Options.deploymentType.kubernetes,
                   appsFolders: ['beers', 'burgers'],
                   directoryPath: '../',
+                  // @ts-expect-error FIXME
                   serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
                   kubernetesServiceType: Options.kubernetesServiceType.loadBalancer,
                   istio: true,
@@ -192,6 +204,7 @@ describe('jdl - DeploymentValidator', () => {
                   appsFolders: ['beers', 'burgers'],
                   directoryPath: '../',
                   kubernetesServiceType: Options.kubernetesServiceType.ingress,
+                  // @ts-expect-error FIXME
                   serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
                 }),
               ).to.throw(

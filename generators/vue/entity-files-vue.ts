@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asPostWritingEntitiesTask, asWriteFilesSection, asWritingEntitiesTask } from '../base-application/support/index.js';
-import { clientApplicationTemplatesBlock, filterEntitiesForClient } from '../client/support/index.js';
-import type { Application as ClientApplication, Entity as ClientEntity, Source as ClientSource } from '../client/types.js';
+import { asPostWritingEntitiesTask, asWriteFilesSection, asWritingEntitiesTask } from '../base-application/support/index.ts';
+import { clientApplicationTemplatesBlock, filterEntitiesForClient } from '../client/support/index.ts';
+import type { Application as ClientApplication, Entity as ClientEntity, Source as ClientSource } from '../client/types.ts';
 
 export const entityFiles = asWriteFilesSection({
   client: [
@@ -52,7 +52,7 @@ export const entityFiles = asWriteFilesSection({
   ],
 });
 
-export const writeEntityFiles = asWritingEntitiesTask<ClientEntity, ClientApplication<ClientEntity>>(async function writeEntityFiles({
+export const writeEntityFiles = asWritingEntitiesTask<ClientEntity, ClientApplication>(async function writeEntityFiles({
   application,
   entities,
 }) {
@@ -66,7 +66,7 @@ export const writeEntityFiles = asWritingEntitiesTask<ClientEntity, ClientApplic
   }
 });
 
-export const postWriteEntityFiles = asPostWritingEntitiesTask<ClientEntity, ClientApplication<ClientEntity>, ClientSource>(
+export const postWriteEntityFiles = asPostWritingEntitiesTask<ClientEntity, ClientApplication, ClientSource>(
   async function postWriteEntityFiles({ application, entities, source }) {
     source.addEntitiesToClient({
       application,
@@ -77,7 +77,7 @@ export const postWriteEntityFiles = asPostWritingEntitiesTask<ClientEntity, Clie
   },
 );
 
-export const cleanupEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientApplication<ClientEntity>>(function cleanupEntitiesFiles({
+export const cleanupEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientApplication>(function cleanupEntitiesFiles({
   application,
   control,
   entities,

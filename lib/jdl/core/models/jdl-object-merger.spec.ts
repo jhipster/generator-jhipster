@@ -18,19 +18,22 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import { relationshipTypes } from '../basic-types/index.js';
-import { unaryOptions } from '../built-in-options/index.js';
-import fieldTypes from '../../../jhipster/field-types.js';
-import JDLObject from '../models/jdl-object.js';
-import { JDLEntity, JDLEnum } from '../models/index.js';
-import JDLField from '../models/jdl-field.js';
-import JDLRelationship from '../models/jdl-relationship.js';
-import JDLUnaryOption from '../models/jdl-unary-option.js';
-import mergeJDLObjects from '../models/jdl-object-merger.js';
-import { createJDLApplication } from '../__test-support__/index.js';
-import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.js';
-import { createRuntime } from '../runtime.js';
+
+import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
+import fieldTypes from '../../../jhipster/field-types.ts';
+import { createJDLApplication } from '../__test-support__/index.ts';
+import { relationshipTypes } from '../basic-types/index.ts';
+import { unaryOptions } from '../built-in-options/index.ts';
+import { createRuntime } from '../runtime.ts';
+
+import { JDLEntity, JDLEnum } from './index.ts';
+import JDLField from './jdl-field.ts';
+import mergeJDLObjects from './jdl-object-merger.ts';
+import JDLObject from './jdl-object.ts';
+import JDLRelationship from './jdl-relationship.ts';
+import JDLUnaryOption from './jdl-unary-option.ts';
 
 const runtime = createRuntime();
 
@@ -38,13 +41,13 @@ describe('jdl - JDLObjectMerger', () => {
   describe('mergeJDLObjects', () => {
     describe('when not passing the first object', () => {
       it('should fail', () => {
-        // @ts-expect-error invalid argment
+        // @ts-expect-error invalid argument
         expect(() => mergeJDLObjects(undefined, {})).to.throw(/^Can't merge nil JDL objects\.$/);
       });
     });
     describe('when not passing the second object', () => {
       it('should fail', () => {
-        // @ts-expect-error invalid argment
+        // @ts-expect-error invalid argument
         expect(() => mergeJDLObjects({}, undefined)).to.throw(/^Can't merge nil JDL objects\.$/);
       });
     });

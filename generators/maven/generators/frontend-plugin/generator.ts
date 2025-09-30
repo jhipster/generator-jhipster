@@ -25,7 +25,7 @@ export default class FrontendPluginGenerator extends JavaApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplication();
+      await this.dependsOnBootstrap('java');
       await this.dependsOnJHipster('maven');
       await this.dependsOnJHipster('jhipster:java:node');
     }

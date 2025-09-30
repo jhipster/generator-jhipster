@@ -1,0 +1,123 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`generator - spring-boot:oauth2 with defaults options should call source snapshot 1`] = `
+{
+  "addJavaDefinition": [
+    {
+      "dependencies": [
+        {
+          "artifactId": "caffeine",
+          "groupId": "com.github.ben-manes.caffeine",
+        },
+        {
+          "artifactId": "spring-boot-starter-oauth2-client",
+          "groupId": "org.springframework.boot",
+        },
+        {
+          "artifactId": "spring-boot-starter-oauth2-resource-server",
+          "groupId": "org.springframework.boot",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`generator - spring-boot:oauth2 with defaults options should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/OAuth2Configuration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/security/oauth2/AudienceValidator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/security/oauth2/CustomClaimConverter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/filter/OAuth2RefreshTokensWebFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/AuthInfoResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/LogoutResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/TestSecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/oauth2/AudienceValidatorTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/oauth2/CustomClaimConverterIT.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/test/util/OAuth2TestUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/LogoutResourceIT.java": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - spring-boot:oauth2 with reactive should call source snapshot 1`] = `
+{
+  "addJavaDefinition": [
+    {
+      "dependencies": [
+        {
+          "artifactId": "caffeine",
+          "groupId": "com.github.ben-manes.caffeine",
+        },
+        {
+          "artifactId": "spring-boot-starter-oauth2-client",
+          "groupId": "org.springframework.boot",
+        },
+        {
+          "artifactId": "spring-boot-starter-oauth2-resource-server",
+          "groupId": "org.springframework.boot",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`generator - spring-boot:oauth2 with reactive should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/OAuth2Configuration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/security/oauth2/AudienceValidator.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/filter/OAuth2ReactiveRefreshTokensWebFilter.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/AuthInfoResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/LogoutResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/config/TestSecurityConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/security/oauth2/AudienceValidatorTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/test/util/OAuth2TestUtil.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/LogoutResourceIT.java": {
+    "stateCleared": "modified",
+  },
+}
+`;

@@ -1,12 +1,14 @@
-import { existsSync } from 'fs';
-import sinon from 'sinon';
 import { before, describe, expect, it } from 'esmocha';
-import { buildJHipster } from '../../cli/index.mjs';
+import { existsSync } from 'node:fs';
+
+import sinon from 'sinon';
+
+import { buildJHipster } from '../../cli/index.ts';
+import { ENTITY_PRIORITY_NAMES, PRIORITY_NAMES, PRIORITY_NAMES_LIST } from '../../generators/base-application/priorities.ts';
+import { CONTEXT_DATA_APPLICATION_KEY } from '../../generators/base-simple-application/support/constants.ts';
+import { WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.ts';
 import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.js';
-import { getGenerator, skipPrettierHelpers as helpers, runResult } from '../../lib/testing/index.js';
-import { ENTITY_PRIORITY_NAMES, PRIORITY_NAMES, PRIORITY_NAMES_LIST } from '../../generators/base-application/priorities.js';
-import { WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.js';
-import { CONTEXT_DATA_APPLICATION_KEY } from '../../generators/base-simple-application/support/constants.js';
+import { getGenerator, runResult, skipPrettierHelpers as helpers } from '../../lib/testing/index.ts';
 
 const workspacesPriorityList = Object.values(WORKSPACES_PRIORITY_NAMES);
 
@@ -183,7 +185,7 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
   if (typeof options === 'boolean') {
     options = { skipSbsBlueprint: options };
   }
-  const { skipSbsBlueprint = false, entity = false } = options;
+  const { skipSbsBlueprint = false, entity = false, bootstrapGenerator = false } = options;
 
   const generatorPath = getGenerator(generatorName);
   if (!existsSync(generatorPath)) {
@@ -244,9 +246,15 @@ export const testBlueprintSupport = (generatorName, options = {}) => {
     it(`should compose with jhipster-foo:${generatorName} blueprint once`, () => {
       expect(runResult.getGeneratorComposeCount(`jhipster-foo:${generatorName}`)).toBe(1);
     });
-    it('should not call any priority', () => {
-      expect(spy.prioritiesSpy.callCount).toBe(0);
-    });
+    if (bootstrapGenerator) {
+      it('should call every priority', () => {
+        expect(spy.prioritiesSpy.callCount).toBe(spy.prioritiesCount);
+      });
+    } else {
+      it('should not call any priority', () => {
+        expect(spy.prioritiesSpy.callCount).toBe(0);
+      });
+    }
   });
   describe('with sbs blueprint', () => {
     let spy;

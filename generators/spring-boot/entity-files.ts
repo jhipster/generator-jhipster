@@ -16,20 +16,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import fs from 'fs';
-import * as _ from 'lodash-es';
+import fs from 'node:fs';
+
 import chalk from 'chalk';
+import * as _ from 'lodash-es';
+
+import { databaseTypes, entityOptions } from '../../lib/jhipster/index.ts';
+import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.ts';
+import { SERVER_TEST_SRC_DIR } from '../generator-constants.js';
 import {
   javaMainPackageTemplatesBlock,
   javaTestPackageTemplatesBlock,
   javaWriteFileSection,
   moveToJavaPackageSrcDir,
-} from '../java/support/index.js';
-import { SERVER_TEST_SRC_DIR } from '../generator-constants.js';
-import { databaseTypes, entityOptions } from '../../lib/jhipster/index.js';
-import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
-import { cleanupOldFiles } from './entity-cleanup.js';
-import type { Application as SpringBootApplication, Entity as SpringBootEntity } from './types.js';
+} from '../java/support/index.ts';
+
+import { cleanupOldFiles } from './entity-cleanup.ts';
+import type { Application as SpringBootApplication, Entity as SpringBootEntity } from './types.ts';
 
 const { COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
 const { MapperTypes } = entityOptions;
@@ -144,19 +147,19 @@ const userDtoFiles = javaWriteFileSection({
   domain: [
     {
       ...javaMainPackageTemplatesBlock(),
-      renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/User.java', `/${data.user.persistClass}.java`),
+      renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/User.java', `/${data.user!.persistClass}.java`),
       templates: ['domain/User.java'],
     },
   ],
   dto: [
     {
       ...javaMainPackageTemplatesBlock(),
-      renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/UserDTO.java', `/${data.user.dtoClass}.java`),
+      renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/UserDTO.java', `/${data.user!.dtoClass}.java`),
       templates: ['service/dto/UserDTO.java'],
     },
     {
       ...javaMainPackageTemplatesBlock(),
-      renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/AdminUserDTO.java', `/${data.user.adminUserDto}.java`),
+      renameTo: (data, file) => moveToJavaPackageSrcDir(data, file).replace('/AdminUserDTO.java', `/${data.user!.adminUserDto}.java`),
       templates: ['service/dto/AdminUserDTO.java'],
     },
     {
@@ -203,18 +206,11 @@ export const serverFiles = javaWriteFileSection({
 
 export function writeFiles() {
   return {
-    cleanupOldServerFiles: asWritingEntitiesTask<SpringBootEntity, SpringBootApplication<SpringBootEntity>>(function ({
-      application,
-      control,
-      entities,
-    }) {
+    cleanupOldServerFiles: asWritingEntitiesTask<SpringBootEntity, SpringBootApplication>(function ({ application, control, entities }) {
       cleanupOldFiles.call(this, { application, entities, control });
     }),
 
-    writeServerFiles: asWritingEntitiesTask<SpringBootEntity, SpringBootApplication<SpringBootEntity>>(async function ({
-      application,
-      entities,
-    }) {
+    writeServerFiles: asWritingEntitiesTask<SpringBootEntity, SpringBootApplication>(async function ({ application, entities }) {
       const rootTemplatesPath = application.reactive
         ? ['reactive', '', '../../server/templates/', '../../java/generators/domain/templates/']
         : ['', '../../server/templates/', '../../java/generators/domain/templates/'];

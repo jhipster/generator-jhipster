@@ -16,11 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { dirname } from 'path';
-import BaseCoreGenerator from '../../generators/base-core/index.js';
-import { createNeedleCallback } from '../../generators/base-core/support/needles.js';
+import { dirname } from 'node:path';
+
+import BaseCoreGenerator from '../../generators/base-core/index.ts';
+import { createNeedleCallback } from '../../generators/base-core/support/needles.ts';
 
 export default class UpdateGeneratorsGenerator extends BaseCoreGenerator {
+  async beforeQueue() {
+    await this.composeWith('jhipster:bootstrap');
+  }
+
   get [BaseCoreGenerator.WRITING]() {
     return this.asAnyTaskGroup({
       async writing() {
@@ -33,24 +38,33 @@ export default class UpdateGeneratorsGenerator extends BaseCoreGenerator {
 
         const contentToAdd = generators
           .map(([ns, meta]) => {
-            if (ns.startsWith('jhipster:base')) {
+            if (ns.startsWith('jhipster:base') && ns.split(':').length === 2) {
               // Base generators cannot be composed with.
               return [];
             }
             const parts = ns.split(':').length;
             const relativePath = this.relativeDir(this.templatePath('../../../generators/'), dirname(meta.resolved!));
-            const commentType = ns.match('jhipster:(entity|heroku|docker-compose|kubernetes|upgrade|workspaces)');
 
             const generateImport = (key: string) =>
-              `${commentType ? '// ' : ''}${/[:-]/.test(key) ? `'${key}'` : key}: import('./${relativePath}generator.ts').default;`;
+              `${/[:-]/.test(key) ? `'${key}'` : key}: import('./${relativePath}generator.ts').default;`;
             return parts === 2 ? [generateImport(ns.replace('jhipster:', '')), generateImport(ns)] : [generateImport(ns)];
           })
           .flat();
+
+        const generatorsWithBootstrap = generators
+          .map(([ns]) => ns)
+          .filter(ns => ns.split(':').length > 2 && ns.endsWith(':bootstrap'))
+          .map(ns => ns.replace(':bootstrap', '').replace('jhipster:', ''));
+
         this.editFile(
           this.templatePath('../../../generators/types.d.ts'),
           createNeedleCallback({
             needle: 'add-generator-by-namespace',
             contentToAdd,
+          }),
+          createNeedleCallback({
+            needle: 'add-generator-with-bootstrap',
+            contentToAdd: `export type GeneratorsWithBootstrap = '${generatorsWithBootstrap.join("' | '")}';`,
           }),
         );
       },

@@ -1,4 +1,4 @@
-import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 
 export const workflowChoices = ['angular', 'devserver', 'graalvm', 'react', 'docker-compose-integration', 'vue'] as const;
 export const eventNameChoices = ['push', 'pull_request', 'daily'] as const;

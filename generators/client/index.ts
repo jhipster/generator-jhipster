@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default } from './generator.js';
-export { default as command } from './command.js';
-export { files as commonFiles } from './files-common.js';
-export type { Application, Config, Entity, Field, Options, Relationship, Source } from './types.js';
+export { default } from './generator.ts';
+export { default as command } from './command.ts';
+export { files as commonFiles } from './files-common.ts';
+export type { Application, Config, Entity, Field, Options, Relationship, Source } from './types.ts';

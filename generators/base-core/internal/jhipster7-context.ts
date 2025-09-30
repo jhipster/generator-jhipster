@@ -2,19 +2,19 @@
 import chalk from 'chalk';
 import { camelCase } from 'lodash-es';
 
-import { isReservedTableName } from '../../../lib/jhipster/reserved-keywords.js';
+import { fieldTypes } from '../../../lib/jhipster/index.ts';
+import { isReservedTableName } from '../../../lib/jhipster/reserved-keywords.ts';
+import type { ApplicationAll } from '../../../lib/types/application-all.ts';
+import { upperFirstCamelCase } from '../../../lib/utils/index.ts';
 import {
   getJavaValueGeneratorForType,
   getJoinTableName,
   getPrimaryKeyValue,
   getSpecificationBuildForType,
   hibernateSnakeCase,
-} from '../../server/support/index.js';
-import { getDBCExtraOption } from '../../spring-data-relational/support/database-data.js';
-import { getJdbcUrl, getR2dbcUrl } from '../../spring-data-relational/support/database-url.js';
-import { fieldTypes } from '../../../lib/jhipster/index.js';
-import { upperFirstCamelCase } from '../../../lib/utils/index.js';
-import type { ApplicationAll } from '../../../lib/types/application-properties-all.js';
+} from '../../server/support/index.ts';
+import { getDBCExtraOption } from '../../spring-data-relational/support/database-data.ts';
+import { getJdbcUrl, getR2dbcUrl } from '../../spring-data-relational/support/database-url.ts';
 import type CoreGenerator from '../generator.ts';
 
 const { BYTES, BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
@@ -331,12 +331,28 @@ export const jhipster7deprecatedProperties: MigrationProperty = {
     replacement: 'entityJpqlInstance property',
     get: ({ data }) => data.entityJpqlInstance,
   },
+  entityClassHumanized: {
+    replacement: 'entityNameHumanized property',
+    get: ({ data }) => data.entityNameHumanized,
+  },
+  entityClassPluralHumanized: {
+    replacement: 'entityNamePluralHumanized property',
+    get: ({ data }) => data.entityNamePluralHumanized,
+  },
+  documentationUrl: {
+    replacement: 'hipsterDocumentationLink property',
+    get: ({ data }) => data.hipsterDocumentationLink,
+  },
+  clientPackageManager: {
+    replacement: 'nodePackageManager property',
+    get: ({ data }) => data.nodePackageManager,
+  },
 };
 
 const ejsBuiltInProperties: (string | symbol)[] = ['__append', '__line', 'escapeFn', 'include', 'undefined'];
 const javascriptBuiltInProperties: (string | symbol)[] = ['parseInt', 'Boolean', 'JSON', 'Object', 'toString'];
 
-const getPropertBuilder =
+const getPropertyBuilder =
   ({ log = (msg: any) => console.log(msg) } = {}) =>
   (context: HandledContext, prop: string | symbol) => {
     if (typeof prop === 'symbol') {
@@ -382,7 +398,7 @@ const getPropertBuilder =
   };
 
 const createHandler = ({ log }: Handler = { log: msg => console.log(msg) }): ProxyHandler<HandledContext> => {
-  const getProperty = getPropertBuilder({ log });
+  const getProperty = getPropertyBuilder({ log });
   return {
     ...Object.fromEntries(
       [

@@ -1,35 +1,15 @@
 import type { Config as BaseConfig } from '../base/types.d.ts';
-import type packageJson from '../../package.json';
-import type { WriteContext } from '../base-core/api.js';
+import type { WriteContext } from '../base-core/api.ts';
+import type { Application as ProjectNameApplication } from '../project-name/types.ts';
 
-export type { Source } from '../base/types.js';
-export type { Options } from '../base/types.js';
+import type { BaseSimpleApplicationAddedApplicationProperties } from './application.ts';
 
-export type { Features } from '../base/types.js';
+export type { Source } from '../base/types.ts';
+export type { Options } from '../base/types.ts';
 
-export type Application = WriteContext & {
-  jhipsterVersion: string;
-  baseName: string;
-  capitalizedBaseName: string;
-  dasherizedBaseName: string;
-  humanizedBaseName: string;
-  camelizedBaseName: string;
-  hipster: string;
-  lowercaseBaseName: string;
-  upperFirstCamelCaseBaseName: string;
-  documentationArchiveUrl: string;
+export type { Features } from '../base/types.ts';
 
-  projectVersion: string;
-  projectDescription: string;
-
-  skipJhipsterDependencies: boolean;
-
-  nodeVersion: string;
-  nodePackageManager: string;
-  nodeDependencies: Record<string, string>;
-
-  jhipsterPackageJson: typeof packageJson;
-};
+export type Application = WriteContext & ProjectNameApplication & BaseSimpleApplicationAddedApplicationProperties;
 
 export type Config = BaseConfig & {
   baseName?: string;

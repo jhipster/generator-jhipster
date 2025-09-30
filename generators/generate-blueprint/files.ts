@@ -16,9 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWriteFilesSection } from '../base-application/support/index.js';
-import { LOCAL_BLUEPRINT_OPTION } from './constants.js';
-import type { Application as GenerateBlueprintApplication, TemplateData } from './types.js';
+import { asWriteFilesSection } from '../base-application/support/index.ts';
+
+import { LOCAL_BLUEPRINT_OPTION } from './constants.ts';
+import type { Application as GenerateBlueprintApplication, TemplateData } from './types.ts';
 
 export const files = asWriteFilesSection<GenerateBlueprintApplication>({
   baseFiles: [

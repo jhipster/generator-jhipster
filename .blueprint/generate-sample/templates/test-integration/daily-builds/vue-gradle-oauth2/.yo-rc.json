@@ -1,0 +1,29 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "oauth2",
+    "baseName": "jhipster",
+    "buildTool": "gradle",
+    "cacheProvider": "ehcache",
+    "clientFramework": "vue",
+    "clientTheme": "none",
+    "clientThemeVariant": "primary",
+    "creationTimestamp": 1595060535913,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "dtoSuffix": "DTO",
+    "enableTranslation": true,
+    "entitySuffix": "",
+    "jhiPrefix": "jhi",
+    "jwtSecretKey": "OWE1OTNlNDU1ZDI1ZTdkYTU2NDA0M2Q2MTc0MjZmNTFlZWExMjZjYjQ2YjAyYzEwNTRjNTQxMjQ1MDk5MThkMTVmNDZjZWFmOTYyM2Y4M2YyNWJkZTQ5Nzk5YzEyYzBjNDY3NzVmMjE1NzU3MmE0NTFjZGU2Nzk2ZTY5MTVhYmU=",
+    "languages": ["en"],
+    "nativeLanguage": "en",
+    "packageFolder": "io/github/jhipster/sample",
+    "packageName": "io.github.jhipster.sample",
+    "prodDatabaseType": "postgresql",
+    "reactive": false,
+    "searchEngine": false,
+    "serverPort": "8080",
+    "testFrameworks": ["gatling", "cypress"]
+  }
+}

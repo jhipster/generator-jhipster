@@ -1,5 +1,6 @@
 import { before, describe, it } from 'esmocha';
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
+
+import { APPLICATION_TYPE_MONOLITH } from '../../lib/core/application-types.ts';
 import {
   authenticationTypes,
   buildToolTypes,
@@ -7,9 +8,10 @@ import {
   clientFrameworkTypes,
   databaseTypes,
   testFrameworkTypes,
-} from '../../lib/jhipster/index.js';
-import { GENERATOR_APP } from '../generator-list.js';
-import { APPLICATION_TYPE_MONOLITH } from '../../lib/core/application-types.js';
+} from '../../lib/jhipster/index.ts';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
+
+const GENERATOR_APP = 'app';
 
 const { H2_DISK, MYSQL, SQL } = databaseTypes;
 const { EHCACHE } = cacheTypes;

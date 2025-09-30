@@ -1,9 +1,9 @@
 import { before, describe, it } from 'esmocha';
-import { basicHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
 
+import { basicHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
+import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
+import type { Application as ClientApplication, Entity as ClientEntity } from '../client/index.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
-import { asPostWritingTask } from '../base-application/support/task-type-inference.js';
-import type { Application as ClientApplication, Entity as ClientEntity } from '../client/index.js';
 
 describe('needle API Vue: JHipster client generator with blueprint', () => {
   before(() =>
@@ -16,7 +16,7 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
       })
       .withTask(
         'postWriting',
-        asPostWritingTask<ClientEntity, ClientApplication<ClientEntity>>(function ({ application, source }) {
+        asPostWritingTask<ClientEntity, ClientApplication>(function ({ application, source }) {
           source.addEntitiesToClient({
             application,
             entities: [
@@ -28,7 +28,7 @@ describe('needle API Vue: JHipster client generator with blueprint', () => {
                 entityUrl: 'entityUrl',
                 microserviceName: 'microserviceName',
                 entityPage: 'routerName',
-                entityClassHumanized: 'Router Name',
+                entityNameHumanized: 'Router Name',
               } as ClientEntity,
             ],
           });

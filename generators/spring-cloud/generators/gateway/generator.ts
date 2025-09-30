@@ -17,14 +17,14 @@
  * limitations under the License.
  */
 import BaseApplicationGenerator from '../../../base-application/index.ts';
-import { javaMainPackageTemplatesBlock } from '../../../java/support/files.js';
+import { javaMainPackageTemplatesBlock } from '../../../java/support/files.ts';
 import type {
   Application as SpringCloudApplication,
   Config as SpringCloudConfig,
   Entity as SpringCloudEntity,
   Options as SpringCloudOptions,
   Source as SpringCloudSource,
-} from '../../types.js';
+} from '../../types.ts';
 
 const WAIT_TIMEOUT = 3 * 60000;
 
@@ -41,7 +41,7 @@ export default class GatewayGenerator extends BaseApplicationGenerator<
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplication();
+      await this.dependsOnBootstrap('java');
       await this.dependsOnJHipster('jhipster:java:build-tool');
     }
   }
@@ -129,7 +129,7 @@ export default class GatewayGenerator extends BaseApplicationGenerator<
       addDependencies({ application, source }) {
         const { reactive } = application;
         source.addJavaDependencies!([
-          { groupId: 'org.springframework.cloud', artifactId: `spring-cloud-starter-gateway${reactive ? '' : '-mvc'}` },
+          { groupId: 'org.springframework.cloud', artifactId: `spring-cloud-starter-gateway-server-${reactive ? 'webflux' : 'webmvc'}` },
         ]);
       },
     });

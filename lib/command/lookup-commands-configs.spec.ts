@@ -1,7 +1,9 @@
 import { before, describe, expect, it } from 'esmocha';
-import type { ImportState } from '../jdl/jdl-importer.js';
-import { createImporterFromContent } from '../jdl/jdl-importer.js';
-import { lookupCommandsConfigs } from './lookup-commands-configs.js';
+
+import type { ImportState } from '../jdl/jdl-importer.ts';
+import { createImporterFromContent } from '../jdl/jdl-importer.ts';
+
+import { lookupCommandsConfigs } from './lookup-commands-configs.ts';
 
 const jhipsterConfigsWithJDL = await lookupCommandsConfigs({ filter: config => Boolean(config.jdl) });
 
@@ -23,7 +25,7 @@ describe('jdl options', () => {
   });
 
   for (const [optionName, config] of jdlConfigs) {
-    let choices: any[] | undefined = config.choices?.map(choice => (typeof choice === 'string' ? choice : choice.value));
+    let choices: (string | boolean)[] | undefined = config.choices?.map(choice => (typeof choice === 'string' ? choice : choice.value));
     const isBoolean = config.cli?.type === Boolean;
     const isArray = config.cli?.type === Array;
     if (!choices && isBoolean) {

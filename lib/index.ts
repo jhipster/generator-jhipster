@@ -1,5 +1,7 @@
-import { basename, dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { basename, dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { globSync } from 'tinyglobby';
 
 import packageJson from '../package.json' with { type: 'json' };
 
@@ -17,6 +19,28 @@ export const getPackageRoot = (relativePath?: string) => {
 export const getSourceRoot = (relativePath?: string) => {
   const sourceRoot = dirname(__dirname);
   return relativePath ? join(sourceRoot, relativePath) : sourceRoot;
+};
+
+let generatorNamespaces: string[] | undefined;
+
+export const getGeneratorNamespaces = (): string[] => {
+  if (!generatorNamespaces) {
+    const sourceRoot = getSourceRoot();
+    const generators = globSync([`generators/*/index.{t,j}s`, `generators/*/generators/*/index.{t,j}s`], {
+      onlyFiles: true,
+      cwd: sourceRoot,
+    });
+    generatorNamespaces = generators
+      .map(gen =>
+        gen
+          .replace(/\/index\.(t|j)s$/, '')
+          .replace(/generators\//g, '')
+          .replaceAll('/', ':'),
+      )
+      .sort();
+  }
+
+  return generatorNamespaces!;
 };
 
 export { packageJson };

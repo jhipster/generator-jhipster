@@ -1,9 +1,11 @@
-import { readFile } from 'fs/promises';
 import { describe, expect } from 'esmocha';
-import { getPackageRoot } from '../../../lib/index.js';
+import { readFile } from 'node:fs/promises';
+
+import { getPackageRoot } from '../../../lib/index.ts';
 import { YO_RC_FILE } from '../../generator-constants.js';
-import { extractDataFromInfo } from './extract-info.js';
-import { markdownDetails } from './markdown-content.js';
+
+import { extractDataFromInfo } from './extract-info.ts';
+import { markdownDetails } from './markdown-content.ts';
 
 describe('extract-info', () => {
   it('should extract empty object from the jhipster info template', async () => {

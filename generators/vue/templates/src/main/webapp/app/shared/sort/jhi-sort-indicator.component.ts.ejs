@@ -1,11 +1,16 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  compatConfig: { MODE: 3 },
   name: 'JhiSortIndicatorComponent',
   props: {
-    currentOrder: String,
-    fieldName: String,
+    currentOrder: {
+      type: String,
+      default: '',
+    },
+    fieldName: {
+      type: String,
+      default: '',
+    },
     reverse: Boolean,
   },
 });

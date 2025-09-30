@@ -28,7 +28,7 @@ import type {
   GradleScript,
   GradleTomlPlugin,
   GradleTomlVersion,
-} from '../types.js';
+} from '../types.ts';
 
 const tomlItemToString = (item: Record<string, string | undefined>) =>
   `{ ${Object.entries(item)

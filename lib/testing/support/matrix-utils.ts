@@ -1,18 +1,26 @@
 import sortKeys from 'sort-keys';
 
-export type ValueType = string | boolean | number | undefined | (string | boolean)[];
+import type { ConfigAll } from '../../types/command-all.ts';
 
-export type MatrixSample = Record<string, ValueType>;
+type ValueType = string | boolean | number | undefined | (string | boolean)[];
 
-export type Matrix = Record<string, MatrixSample>;
+export type MatrixSample<T extends Record<string, any> = ConfigAll> = {
+  [P in keyof T]?: T[P];
+};
 
-export type MatrixInput = Record<string, ValueType[]>;
+export type Matrix<T extends Record<string, any> = ConfigAll> = Record<string, MatrixSample<T>>;
 
-type AdditionalValue = { value: ValueType; additional?: Record<string, ValueType> };
+export type MatrixInput<T extends Record<string, any> = ConfigAll> = {
+  [P in keyof T]?: T[P][];
+};
 
-export type MatrixAdditionalInput = Record<string, (AdditionalValue | ValueType)[]>;
+type AdditionalValue<T extends Record<string, any>, K extends keyof T> = { value: T[K]; additional?: MatrixSample<T> } | T[K];
 
-const appendTitle = (title: string, config: string, value: ValueType): string => {
+export type MatrixAdditionalInput<T extends Record<string, any> = ConfigAll> = {
+  [P in keyof T]?: AdditionalValue<T, P>[];
+};
+
+const appendTitle = <K extends string>(title: string, config: K, value: any): string => {
   if (Array.isArray(value)) value = value[0];
   if (value === undefined) return title;
   const newTitle = typeof value === 'string' && value !== 'no' ? value : `${config}(${value})`;
@@ -30,8 +38,8 @@ const appendTitle = (title: string, config: string, value: ValueType): string =>
  * //  'a(false)-b(false)': { a: false, b: false },
  * // }
  */
-export const fromMatrix = (configMatrix: MatrixInput): Matrix => {
-  const configEntries = Object.entries(configMatrix);
+export const fromMatrix = <T extends Record<string, any> = ConfigAll>(configMatrix: MatrixInput<T>): Matrix<T> => {
+  const configEntries = Object.entries(configMatrix) as [keyof T, ValueType[]][];
   const samples = configEntries.reduce(
     (previousValue, currentValue) => {
       const [config, configValues] = currentValue;
@@ -39,6 +47,7 @@ export const fromMatrix = (configMatrix: MatrixInput): Matrix => {
         .map(([previousName, previousConfig]) =>
           configValues.map((value: ValueType) => {
             return [
+              // @ts-expect-error fix type
               appendTitle(previousName as string, config, value),
               {
                 ...(previousConfig as Record<string, ValueType>),
@@ -49,25 +58,28 @@ export const fromMatrix = (configMatrix: MatrixInput): Matrix => {
         )
         .flat();
     },
-    [['', {} as Record<string, ValueType>]],
+    [['', {}]],
   );
   return Object.fromEntries(samples);
 };
 
-const applyExtendedMatrix = (matrixEntries: [string, MatrixSample][], configMatrix: MatrixAdditionalInput): [string, MatrixSample][] => {
-  const configEntries = Object.entries(configMatrix);
+const applyExtendedMatrix = <M extends Record<string, any> = ConfigAll, A extends Record<string, any> = ConfigAll>(
+  matrixEntries: [string, MatrixSample<M>][],
+  configMatrix: MatrixAdditionalInput<A>,
+): [string, MatrixSample<M & A>][] => {
+  const configEntries = Object.entries(configMatrix) as [keyof A, AdditionalValue<A, keyof A>[]][];
   const additionalMatrixTemp = configEntries.reduce(
     (currentArray, [configName, configValues]) => {
-      const currentConfigObjects: Record<string, ValueType | AdditionalValue>[] = configValues.map(configValue => ({
+      const currentConfigObjects = configValues.map(configValue => ({
         [configName]: configValue,
       }));
       return currentArray
         .map(existingConfig => currentConfigObjects.map(currentObject => ({ ...existingConfig, ...currentObject })))
         .flat();
     },
-    [{} as Record<string, ValueType | AdditionalValue>],
+    [{} as Record<keyof A, AdditionalValue<A, keyof A>>],
   );
-  const additionalMatrix: Record<string, ValueType | AdditionalValue>[] = [];
+  const additionalMatrix: Record<keyof A, AdditionalValue<A, keyof A>>[] = [];
   while (additionalMatrixTemp.length > 0) {
     additionalMatrix.push(additionalMatrixTemp.shift()!);
     if (additionalMatrixTemp.length > 0) {
@@ -79,7 +91,7 @@ const applyExtendedMatrix = (matrixEntries: [string, MatrixSample][], configMatr
     const matrixConfig = entry[1];
     let newValues = additionalMatrix[matrixIndex % additionalMatrix.length];
     Object.entries(newValues).forEach(([configName, configValue]) => {
-      if (typeof configValue === 'object' && !Array.isArray(configValue)) {
+      if (typeof configValue === 'object' && !Array.isArray(configValue) && 'value' in configValue) {
         const additionalValues = configValue.additional;
         configValue = configValue.value;
         newValues = { ...newValues, ...additionalValues, [configName]: configValue };
@@ -89,7 +101,7 @@ const applyExtendedMatrix = (matrixEntries: [string, MatrixSample][], configMatr
     entry.splice(0, entry.length);
     entry.push(matrixName, Object.assign(matrixConfig, newValues));
   });
-  return matrixEntries;
+  return matrixEntries as [string, MatrixSample<M & A>][];
 };
 
 /**
@@ -101,18 +113,20 @@ const applyExtendedMatrix = (matrixEntries: [string, MatrixSample][], configMatr
  * //  'initialMatrix(false)-toBeMerged(false)': { initialMatrix: false, toBeMerged: false },
  * // }
  */
-export const extendMatrix = (matrix: Matrix, configMatrix: MatrixAdditionalInput): Matrix =>
-  Object.fromEntries(applyExtendedMatrix(Object.entries(matrix), configMatrix));
+export const extendMatrix = <M extends Record<string, any> = ConfigAll, A extends Record<string, any> = ConfigAll>(
+  matrix: Matrix<M>,
+  configMatrix: MatrixAdditionalInput<A>,
+): Matrix<M & A> => Object.fromEntries(applyExtendedMatrix(Object.entries(matrix), configMatrix));
 
-export const extendFilteredMatrix = (
-  matrix: Matrix,
-  filter: (sample: MatrixSample) => boolean,
-  extendedConfig: MatrixAdditionalInput,
-): Matrix => {
+export const extendFilteredMatrix = <M extends Record<string, any> = ConfigAll, A extends Record<string, any> = ConfigAll>(
+  matrix: Matrix<M>,
+  filter: (sample: MatrixSample<M>) => boolean,
+  extendedConfig: MatrixAdditionalInput<A>,
+): Matrix<M & A> => {
   const matrixEntries = Object.entries(matrix);
   const filteredEntries = matrixEntries.filter(([_name, sample]) => filter(sample));
   applyExtendedMatrix(filteredEntries, extendedConfig);
-  return Object.fromEntries(matrixEntries);
+  return Object.fromEntries(matrixEntries) as Matrix<M & A>;
 };
 
 export const buildSamplesFromMatrix = (

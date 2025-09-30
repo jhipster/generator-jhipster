@@ -1,10 +1,10 @@
-import type { GitHubMatrixGroup } from '../../../lib/testing/github-matrix.js';
+import type { GitHubMatrixGroup } from '../../../lib/testing/github-matrix.ts';
 
 export const devServerMatrix = {
   angular: {
     'ng-default-esbuild': {
       sample: 'samples/ng-default',
-      args: '--sample-yorc-folder --entities-sample sqllight --client-bundler experimentalEsbuild',
+      args: '--sample-yorc-folder --entities-sample sqllight --client-bundler esbuild',
       os: 'macos-latest',
     },
     'ng-default-webpack': {

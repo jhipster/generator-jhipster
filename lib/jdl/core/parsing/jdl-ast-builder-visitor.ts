@@ -17,11 +17,8 @@
  * limitations under the License.
  */
 import type { CstNode, ICstVisitor, IToken } from 'chevrotain';
-import deduplicate from '../utils/array-utils.js';
 
-import { relationshipOptions, validations } from '../built-in-options/index.js';
-import logger from '../utils/objects/logger.js';
-import type { JDLRuntime } from '../types/runtime.js';
+import { relationshipOptions, validations } from '../built-in-options/index.ts';
 import type {
   ParsedJDLAnnotation,
   ParsedJDLApplications,
@@ -30,7 +27,10 @@ import type {
   ParsedJDLOption,
   ParsedJDLOptionConfig,
   ParsedJDLValidation,
-} from '../types/parsed.js';
+} from '../types/parsed.ts';
+import type { JDLRuntime } from '../types/runtime.ts';
+import deduplicate from '../utils/array-utils.ts';
+import logger from '../utils/objects/logger.ts';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
 const {

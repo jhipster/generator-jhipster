@@ -17,23 +17,24 @@
  * limitations under the License.
  */
 import assert from 'node:assert';
-import { existsSync } from 'fs';
+import { existsSync } from 'node:fs';
 
-import { GENERATOR_ANGULAR, GENERATOR_BOOTSTRAP_WORKSPACES, GENERATOR_GIT, GENERATOR_REACT } from '../generator-list.js';
+import { packageJson } from '../../lib/index.ts';
+import BaseWorkspacesGenerator from '../base-workspaces/index.ts';
+import type { Config as GitConfig, Options as GitOptions } from '../git/types.d.ts';
+import type { Config as ProjectNameConfig } from '../project-name/types.d.ts';
 
-import BaseWorkspacesGenerator from '../base-workspaces/index.js';
-import { packageJson } from '../../lib/index.js';
-import type { WorkspacesApplication, Config as WorkspacesConfig, Options as WorkspacesOptions } from './types.js';
+import type { Config as WorkspacesConfig, Options as WorkspacesOptions, WorkspacesApplication } from './types.ts';
 
 export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, WorkspacesApplication, WorkspacesConfig, WorkspacesOptions> {
-  workspaces!: boolean;
-  generateApplications!: () => Promise<void>;
-  generateWith!: string;
-  entrypointGenerator!: string;
   dockerCompose!: boolean;
-
   generateWorkspaces!: boolean;
   workspacesConfig!: Record<string, any>;
+
+  readonly workspaces!: boolean;
+  readonly generateApplications!: () => Promise<void>;
+  readonly generateWith!: string;
+  readonly entrypointGenerator!: string;
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -43,9 +44,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
       await this.composeWithBlueprints();
     }
 
-    if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_BOOTSTRAP_WORKSPACES);
-    }
+    await this.dependsOnBootstrap('base-workspaces');
   }
 
   override get directoryPath(): string {
@@ -55,8 +54,9 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   get initializing() {
     return this.asInitializingTaskGroup({
       loadConfig() {
-        // Generate workspaces file if workspace option is passed, or if workspace option is ommitted and monorepository is enabled, or if regenerating.
-        this.generateWorkspaces = (this.workspaces ?? this.jhipsterConfig.monorepository) || Boolean(this.packageJson?.get('workspaces'));
+        // Generate workspaces file if workspace option is passed, or if workspace option is omitted and monorepository is enabled, or if regenerating.
+        this.generateWorkspaces =
+          (this.workspaces ?? (this.jhipsterConfig as GitConfig).monorepository) || Boolean(this.packageJson?.get('workspaces'));
 
         // When generating workspaces, save to .yo-rc.json. Use a dummy config otherwise.
         this.workspacesConfig = this.generateWorkspaces ? this.jhipsterConfig : {};
@@ -71,7 +71,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   get configuring() {
     return this.asConfiguringTaskGroup({
       defaults() {
-        this.jhipsterConfig.baseName = this.jhipsterConfig.baseName ?? 'workspaces';
+        (this.jhipsterConfig as ProjectNameConfig).baseName ??= 'workspaces';
       },
       async configureUsingFiles() {
         if (!this.generateWorkspaces) return;
@@ -92,9 +92,11 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   get composing() {
     return this.asComposingTaskGroup({
       async composeGit() {
-        if (this.options.monorepository || this.jhipsterConfig.monorepository) {
-          await this.composeWithJHipster(GENERATOR_GIT);
-          await this.composeWithJHipster('jhipster:javascript:prettier', { generatorOptions: { monorepositoryRoot: true } });
+        if ((this.options as GitOptions).monorepository || (this.jhipsterConfig as GitConfig).monorepository) {
+          await this.composeWithJHipster('git');
+          await this.composeWithJHipster('jhipster:javascript-simple-application:prettier', {
+            generatorOptions: { monorepositoryRoot: true },
+          });
         }
       },
       async generateApplications() {
@@ -122,7 +124,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   get loading() {
     return this.asLoadingTaskGroup({
       checkWorkspaces() {
-        if (this.generateWorkspaces && !this.jhipsterConfig.monorepository) {
+        if (this.generateWorkspaces && !(this.jhipsterConfig as GitConfig).monorepository) {
           throw new Error('Workspaces option is only supported with monorepositories.');
         }
       },
@@ -148,16 +150,16 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   get loadingWorkspaces() {
     return this.asDefaultTaskGroup({
       configurePackageManager({ applications }) {
-        if (this.workspacesConfig.clientPackageManager || !this.generateWorkspaces) return;
+        if (this.workspacesConfig.nodePackageManager || !this.generateWorkspaces) return;
 
-        this.workspacesConfig.clientPackageManager =
-          this.options.clientPackageManager ?? applications.find(app => app.clientPackageManager)?.clientPackageManager ?? 'npm';
+        this.workspacesConfig.nodePackageManager =
+          this.options.nodePackageManager ?? applications.find(app => app.nodePackageManager)?.nodePackageManager ?? 'npm';
       },
       async loadConfig() {
         if (!this.generateWorkspaces) return;
 
         this.dockerCompose = this.workspacesConfig.dockerCompose;
-        (this.env as any).options.nodePackageManager = this.workspacesConfig.clientPackageManager;
+        (this.env as any).options.nodePackageManager = this.workspacesConfig.nodePackageManager;
       },
     });
   }
@@ -208,7 +210,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
           const {
             dependencies: { rxjs },
             devDependencies: { webpack: webpackVersion, 'browser-sync': browserSyncVersion },
-          } = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'resources', 'package.json'));
+          } = this.fs.readJSON(this.fetchFromInstalledJHipster('angular', 'resources', 'package.json'));
 
           this.packageJson.merge({
             devDependencies: {
@@ -224,7 +226,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
         if (applications.some(app => app.clientFrameworkReact)) {
           const {
             devDependencies: { 'browser-sync': browserSyncVersion },
-          } = this.fs.readJSON(this.fetchFromInstalledJHipster(GENERATOR_REACT, 'resources', 'package.json'));
+          } = this.fs.readJSON(this.fetchFromInstalledJHipster('react', 'resources', 'package.json'));
 
           this.packageJson.merge({
             overrides: {

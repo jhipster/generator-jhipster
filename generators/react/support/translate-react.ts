@@ -17,9 +17,10 @@
  * limitations under the License.
  */
 import { passthrough } from '@yeoman/transform';
-import { Minimatch } from 'minimatch';
 import type { MemFsEditorFile } from 'mem-fs-editor';
-import type { GetWebappTranslationCallback } from '../../client/translation.js';
+import { Minimatch } from 'minimatch';
+
+import type { GetWebappTranslationCallback } from '../../client/translation.ts';
 
 const TRANSLATE_IMPORT_1 = /import { ?[T|t]ranslate(?:, ?[T|t]ranslate)? ?} from 'react-jhipster';?/.source; // Translate imports
 const TRANSLATE_IMPORT_2 = / *[T|t]ranslate,|, ?[T|t]ranslate/.source; // Translate import
@@ -69,9 +70,7 @@ const replaceTranslationKeysWithText = (
       for (const interpolateMatch of interpolateMatches) {
         const field = interpolateMatch?.groups?.field;
         let value: string | number | undefined = interpolateMatch?.groups?.value;
-        if (value === undefined) {
-          value = key;
-        }
+        value ??= key;
         value = value.trim();
         if (/^\d+$/.test(value)) {
           // convert integer

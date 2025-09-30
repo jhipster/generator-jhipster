@@ -16,16 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { before, describe, expect, fn, it } from 'esmocha';
-import { snakeCase } from 'lodash-es';
+import { basename, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import { simpleGit } from 'simple-git';
 
+import { defaultHelpers as helpers, result } from '../../lib/testing/index.ts';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
-import { defaultHelpers as helpers, result } from '../../lib/testing/index.js';
-import { UPGRADE_BRANCH } from './support/index.js';
-import Generator from './index.js';
+
+import Generator from './index.ts';
+import { UPGRADE_BRANCH } from './support/index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -33,9 +34,6 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 
 describe(`generator - ${generator}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
 
   it('should throw without config', async () => {
@@ -87,7 +85,7 @@ describe(`generator - ${generator}`, () => {
     ).rejects.toThrow('You are on the upgrade branch, please switch to another branch before upgrading.');
   });
   describe('with createEnvBuilder option', async () => {
-    let createEnvBuilder;
+    let createEnvBuilder: any;
 
     before(async () => {
       createEnvBuilder = fn().mockReturnValue({ getEnvironment: () => ({ run: () => {} }) });
@@ -109,7 +107,7 @@ describe(`generator - ${generator}`, () => {
     });
   });
   describe('with createEnvBuilder and applyConfig options', async () => {
-    let createEnvBuilder;
+    let createEnvBuilder: any;
 
     before(async () => {
       createEnvBuilder = fn().mockReturnValue({ getEnvironment: () => ({ run: () => {} }) });

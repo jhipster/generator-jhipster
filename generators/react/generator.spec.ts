@@ -1,17 +1,15 @@
-import { basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
-import { snakeCase } from 'lodash-es';
+import { basename, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-import { buildClientSamples, entitiesClientSamples as entities, defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
-import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.js';
-
-import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
+import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
+import { buildClientSamples, defaultHelpers as helpers, entitiesClientSamples as entities, runResult } from '../../lib/testing/index.ts';
+import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
+import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
+import type { Application as ClientApplication, Entity as ClientEntity } from '../client/index.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
-import { GENERATOR_REACT } from '../generator-list.js';
-import { asPostWritingTask } from '../base-application/support/task-type-inference.js';
-import type { Application as ClientApplication, Entity as ClientEntity } from '../client/index.js';
-import Generator from './index.js';
+
+import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -23,7 +21,7 @@ const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr', 
 
 const testSamples = buildClientSamples(commonConfig);
 
-const clientAdminFiles = clientSrcDir => [
+const clientAdminFiles = (clientSrcDir: string) => [
   `${clientSrcDir}app/modules/administration/configuration/configuration.tsx`,
   `${clientSrcDir}app/modules/administration/health/health.tsx`,
   `${clientSrcDir}app/modules/administration/health/health-modal.tsx`,
@@ -32,12 +30,9 @@ const clientAdminFiles = clientSrcDir => [
 ];
 
 describe(`generator - ${clientFramework}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
-  checkEnforcements({ client: true }, GENERATOR_REACT);
+  checkEnforcements({ client: true }, generator);
 
   it('samples matrix should match snapshot', () => {
     expect(testSamples).toMatchSnapshot();
@@ -55,9 +50,8 @@ describe(`generator - ${clientFramework}`, () => {
             gatewayServicesApiAvailable: sampleConfig.applicationType === 'gateway',
             getWebappTranslation: () => 'translations',
           })
-          .withMockedGenerators(['jhipster:languages'])
           .withMockedSource()
-          .withMockedGenerators(['jhipster:common']);
+          .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
       });
 
       it('should match generated files snapshot', () => {
@@ -77,7 +71,7 @@ describe(`generator - ${clientFramework}`, () => {
       });
 
       describe('withAdminUi', () => {
-        const { applicationType, withAdminUi } = sampleConfig;
+        const { applicationType, withAdminUi, enableTranslation } = sampleConfig;
         const clientSrcDir = `${clientRootDir}${clientRootDir ? 'src/' : CLIENT_MAIN_SRC_DIR}`;
         const generateAdminUi = applicationType !== 'microservice' && withAdminUi;
         const adminUiComponents = generateAdminUi ? 'should generate admin ui components' : 'should not generate admin ui components';
@@ -107,13 +101,15 @@ describe(`generator - ${clientFramework}`, () => {
                 '  },',
             );
 
-            assertion(
-              `${clientSrcDir}app/shared/layout/menus/admin.tsx`,
-              '    <MenuItem icon="tachometer-alt" to="/admin/metrics"><Translate contentKey="global.menu.admin.metrics">Metrics</Translate></MenuItem>\n' +
-                '    <MenuItem icon="heart" to="/admin/health"><Translate contentKey="global.menu.admin.health">Health</Translate></MenuItem>\n' +
-                '    <MenuItem icon="cogs" to="/admin/configuration"><Translate contentKey="global.menu.admin.configuration">Configuration</Translate></MenuItem>\n' +
-                '    <MenuItem icon="tasks" to="/admin/logs"><Translate contentKey="global.menu.admin.logs">Logs</Translate></MenuItem>',
-            );
+            if (enableTranslation) {
+              assertion(
+                `${clientSrcDir}app/shared/layout/menus/admin.tsx`,
+                '    <MenuItem icon="tachometer-alt" to="/admin/metrics"><Translate contentKey="global.menu.admin.metrics">Metrics</Translate></MenuItem>\n' +
+                  '    <MenuItem icon="heart" to="/admin/health"><Translate contentKey="global.menu.admin.health">Health</Translate></MenuItem>\n' +
+                  '    <MenuItem icon="cogs" to="/admin/configuration"><Translate contentKey="global.menu.admin.configuration">Configuration</Translate></MenuItem>\n' +
+                  '    <MenuItem icon="tasks" to="/admin/logs"><Translate contentKey="global.menu.admin.logs">Logs</Translate></MenuItem>',
+              );
+            }
           });
         }
       });
@@ -123,7 +119,7 @@ describe(`generator - ${clientFramework}`, () => {
   describe('addClientStyle needle api', () => {
     before(async () => {
       await helpers
-        .runJHipster('react')
+        .runJHipster(generator)
         .withJHipsterConfig({
           clientFramework: 'react',
           skipServer: true,
@@ -152,14 +148,14 @@ describe(`generator - ${clientFramework}`, () => {
   describe('addEntitiesToClient needle api', () => {
     before(async () => {
       await helpers
-        .runJHipster('react')
+        .runJHipster(generator)
         .withJHipsterConfig({
           clientFramework: 'react',
           enableTranslation: false,
         })
         .withTask(
           'postWriting',
-          asPostWritingTask<ClientEntity, ClientApplication<ClientEntity>>(({ application, source }) => {
+          asPostWritingTask<ClientEntity, ClientApplication>(({ application, source }) => {
             source.addEntitiesToClient({
               application,
               entities: [
@@ -170,7 +166,7 @@ describe(`generator - ${clientFramework}`, () => {
                   entityInstance: 'entityInstance',
                   entityFolderName: 'entityFolderName',
                   entityFileName: 'entityFileName',
-                  entityClassHumanized: 'Router Name',
+                  entityNameHumanized: 'Router Name',
                 } as ClientEntity,
               ],
             });

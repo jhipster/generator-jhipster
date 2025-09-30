@@ -8,7 +8,7 @@ coverage
 *.iws
 atlassian-ide-plugin.xml
 /.project
-app.jdl
+lib/**/app.jdl
 test/temp/
 /docs
 *debug.log*
@@ -37,3 +37,4 @@ nbbuild/
 nbdist/
 .nb-gradle/
 generators/**/package-lock.json
+generators/**/.gradle

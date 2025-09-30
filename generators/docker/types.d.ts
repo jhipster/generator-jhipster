@@ -1,11 +1,12 @@
-import type { HandleCommandTypes } from '../../lib/command/types.js';
+import type { HandleCommandTypes } from '../../lib/command/types.ts';
 import type {
   Application as BaseSimpleApplicationApplication,
   Config as BaseSimpleApplicationConfig,
   Options as BaseSimpleApplicationOptions,
   Source as BaseSimpleApplicationSource,
 } from '../base-simple-application/types.d.ts';
-import type command from './command.js';
+
+import type command from './command.ts';
 
 type Command = HandleCommandTypes<typeof command>;
 

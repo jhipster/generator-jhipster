@@ -1,0 +1,31 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "oauth2",
+    "baseName": "sampleWebfluxMongodbOauth2",
+    "buildTool": "gradle",
+    "cacheProvider": "no",
+    "clientBundler": "webpack",
+    "clientFramework": "angular",
+    "clientTheme": "none",
+    "creationTimestamp": 1580314672693,
+    "databaseType": "mongodb",
+    "devDatabaseType": "mongodb",
+    "dtoSuffix": "DTO",
+    "embeddableLaunchScript": false,
+    "enableHibernateCache": false,
+    "enableTranslation": true,
+    "entitySuffix": "",
+    "jhiPrefix": "jhi",
+    "languages": ["en", "fr"],
+    "nativeLanguage": "en",
+    "packageFolder": "tech/jhipster/sample",
+    "packageName": "tech.jhipster.sample",
+    "prodDatabaseType": "mongodb",
+    "reactive": true,
+    "searchEngine": "no",
+    "serverPort": "8080",
+    "serviceDiscoveryType": "no",
+    "testFrameworks": ["gatling", "cypress"]
+  }
+}

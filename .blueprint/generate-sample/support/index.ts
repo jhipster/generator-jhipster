@@ -1,2 +1,2 @@
-export * from './copy-entity-samples.js';
-export * from './generate-sample.js';
+export * from './copy-entity-samples.ts';
+export * from './generate-sample.ts';

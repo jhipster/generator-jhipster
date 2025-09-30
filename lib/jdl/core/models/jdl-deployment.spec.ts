@@ -18,7 +18,8 @@
  */
 
 import { before, describe, expect, it } from 'esmocha';
-import JDLDeployment from '../models/jdl-deployment.js';
+
+import JDLDeployment from './jdl-deployment.ts';
 
 describe('jdl - JDLDeployment', () => {
   describe('new', () => {
@@ -39,7 +40,7 @@ describe('jdl - JDLDeployment', () => {
       });
     });
     describe('when passing arguments', () => {
-      let deployment;
+      let deployment: JDLDeployment;
       let args: any = {};
 
       before(() => {
@@ -54,19 +55,21 @@ describe('jdl - JDLDeployment', () => {
       it('should create a new instance', () => {
         expect(deployment.deploymentType).toEqual(args.deploymentType);
         expect(deployment.appsFolders).toEqual(args.appsFolders);
+        // @ts-expect-error FIXME: dockerRepositoryName is not defined in the type
         expect(deployment.dockerRepositoryName).toEqual(args.dockerRepositoryName);
       });
     });
   });
   describe('toString', () => {
     describe('with some default options', () => {
-      let deployment;
+      let deployment: JDLDeployment;
       let args;
 
       before(() => {
         args = {
           deploymentType: 'docker-compose',
           appsFolders: ['foo', 'bar'],
+          // @ts-expect-error FIXME directoryPath is not defined in the type
           directoryPath: '../',
           gatewayType: 'SpringCloudGateway',
           dockerRepositoryName: 'test',
@@ -86,13 +89,14 @@ describe('jdl - JDLDeployment', () => {
       });
     });
     describe('with some non default options', () => {
-      let deployment;
+      let deployment: JDLDeployment;
       let args;
 
       before(() => {
         args = {
           deploymentType: 'docker-compose',
           appsFolders: ['foo', 'bar'],
+          // @ts-expect-error FIXME directoryPath is not defined in the type
           directoryPath: '../parent',
           gatewayType: 'SpringCloudGateway',
           dockerRepositoryName: 'test',

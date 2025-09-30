@@ -16,6 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './utils.js';
-export * from './extract-info.js';
-export * from './markdown-content.js';
+export * from './utils.ts';
+export * from './extract-info.ts';
+export * from './markdown-content.ts';

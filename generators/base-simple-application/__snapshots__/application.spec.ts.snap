@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`application mutation test expects mutateApplication to match snapshot 1`] = `
+{
+  "customizeTemplatePaths": [],
+  "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vjhipsterVersion",
+  "hipsterBugTrackerLink": "https://github.com/jhipster/generator-jhipster/issues?state=open",
+  "hipsterBugTrackerProductName": "JHipster",
+  "hipsterChatLink": "https://gitter.im/jhipster/generator-jhipster",
+  "hipsterChatProductName": "JHipster",
+  "hipsterDocumentationLink": "https://www.jhipster.tech/",
+  "hipsterHomePageProductName": "JHipster",
+  "hipsterName": "Java Hipster",
+  "hipsterProductName": "JHipster",
+  "hipsterProjectLink": "https://github.com/jhipster/generator-jhipster",
+  "hipsterStackOverflowProductName": "JHipster",
+  "hipsterStackoverflowLink": "https://stackoverflow.com/tags/jhipster/info",
+  "hipsterTwitterLink": "https://twitter.com/jhipster",
+  "hipsterTwitterUsername": "@jhipster",
+  "jhiPrefix": "jhi",
+  "jhiPrefixCapitalized": "Jhi",
+  "jhiPrefixDashed": "jhi",
+  "jhipsterPackageJson": "jhipsterPackageJson",
+  "jhipsterVersion": "jhipsterVersion",
+  "nodeVersion": "nodeVersion",
+  "projectDescription": "projectDescription",
+}
+`;

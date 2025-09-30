@@ -29,13 +29,12 @@
     "@fortawesome/fontawesome-svg-core": "<%= nodeDependencies['@fortawesome/fontawesome-svg-core'] %>",
     "@fortawesome/free-solid-svg-icons": "<%= nodeDependencies['@fortawesome/free-solid-svg-icons'] %>",
     "@fortawesome/vue-fontawesome": "<%= nodeDependencies['@fortawesome/vue-fontawesome'] %>",
-    "@vue/compat": "<%= nodeDependencies.vue %>",
     "@vuelidate/core": "<%= nodeDependencies['@vuelidate/core'] %>",
     "@vuelidate/validators": "<%= nodeDependencies['@vuelidate/validators'] %>",
     "@vueuse/core": "<%= nodeDependencies['@vueuse/core'] %>",
     "axios": "<%= nodeDependencies['axios'] %>",
     "bootstrap": "<%= nodeDependencies['bootstrap'] %>",
-    "bootstrap-vue": "<%= nodeDependencies['bootstrap-vue'] %>",
+    "bootstrap-vue-next": "<%= nodeDependencies['bootstrap-vue-next'] %>",
 <%_ if (!clientThemeNone) { _%>
     "bootswatch": "<%= nodeDependencies['bootswatch'] %>",
 <%_ } _%>
@@ -55,6 +54,9 @@
     "vue-router": "<%= nodeDependencies['vue-router'] %>"
   },
   "devDependencies": {
+<%_ if (enableI18nRTL) { _%>
+    "postcss-rtlcss": "<%= nodeDependencies['postcss-rtlcss'] %>",
+<%_ } _%>
     "@eslint/js": null,
     "@pinia/testing": "<%= nodeDependencies['@pinia/testing'] %>",
     "@types/node": "<%= nodeDependencies['@types/node'] %>",
@@ -71,9 +73,6 @@
     "numeral": "<%= nodeDependencies['numeral'] %>",
     "postcss-import": "<%= nodeDependencies['postcss-import'] %>",
     "postcss-url": "<%= nodeDependencies['postcss-url'] %>",
-<%_ if (cypressTests) { _%>
-    "cypress": "<%= nodeDependencies['cypress'] %>",
-<%_ } _%>
     "rimraf": "<%= nodeDependencies['rimraf'] %>",
     "sass": "<%= nodeDependencies['sass'] %>",
     "sinon": "<%= nodeDependencies['sinon'] %>",
@@ -96,24 +95,24 @@
     "default_environment": "prod"
   },
   "scripts": {
-    "build": "<%= clientPackageManager %> run webapp:prod --",
+    "build": "<%- nodePackageManager %> run webapp:prod --",
     "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'<% if(!skipServer) { %> npm:backend:start<% } %>",
     "cleanup": "rimraf <%= this.relativeDir(clientRootDir, temporaryDir) %>",
     "clean-www": "rimraf <%= this.relativeDir(clientRootDir, clientDistDir) %>",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "serve": "<%= clientPackageManager %> run start --",
-    "start": "<%= clientPackageManager %> run webapp:dev --",
-    "start-tls": "<%= clientPackageManager %> run webapp:dev -- --env.tls",
-    "pretest": "<%= clientPackageManager %> run lint",
-    "test": "<%= clientPackageManager %> run vitest-run --",
-    "test:watch": "<%= clientPackageManager %> run vitest",
+    "serve": "<%- nodePackageManager %> run start --",
+    "start": "<%- nodePackageManager %> run webapp:dev --",
+    "start-tls": "<%- nodePackageManager %> run webapp:dev -- --env.tls",
+    "pretest": "<%- nodePackageManager %> run lint",
+    "test": "<%- nodePackageManager %> run vitest-run --",
+    "test:watch": "<%- nodePackageManager %> run vitest",
     "vitest-run": "vitest --run --coverage",
     "vitest": "vitest",
     "watch": "concurrently npm:start<% if(!skipServer) { %> npm:backend:start<% } %>",
-    "webapp:build": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:dev --",
-    "webapp:prod": "<%= clientPackageManager %> run clean-www && <%= clientPackageManager %> run webapp:build:prod --",
-    "webapp:test": "<%= clientPackageManager %> run test --"
+    "webapp:build": "<%- nodePackageManager %> run clean-www && <%- nodePackageManager %> run webapp:build:dev --",
+    "webapp:prod": "<%- nodePackageManager %> run clean-www && <%- nodePackageManager %> run webapp:build:prod --",
+    "webapp:test": "<%- nodePackageManager %> run test --"
   },
   "browserslist": [
     "> 1%",

@@ -18,7 +18,10 @@
  */
 
 import { before, describe, expect, it } from 'esmocha';
-import { convertDeployments } from './deployment-converter.js';
+
+import type JDLDeployment from '../../core/models/jdl-deployment.ts';
+
+import { convertDeployments } from './deployment-converter.ts';
 
 describe('jdl - DeploymentConverter', () => {
   describe('convertDeployments', () => {
@@ -29,7 +32,7 @@ describe('jdl - DeploymentConverter', () => {
       });
     });
     describe('when passing deployments', () => {
-      let convertedDeployments;
+      let convertedDeployments: JDLDeployment[];
 
       before(() => {
         convertedDeployments = convertDeployments([

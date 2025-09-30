@@ -217,7 +217,7 @@ public class SecurityConfiguration {
                 pathMatchers(
   <%_ if (clientBundlerVite) { _%>
                     "/assets/**",
-  <%_ } else if (clientBundlerExperimentalEsbuild) { _%>
+  <%_ } else if (clientBundlerEsbuild) { _%>
                     "/content/**",
                     "/resources/**",
   <%_ } else { _%>

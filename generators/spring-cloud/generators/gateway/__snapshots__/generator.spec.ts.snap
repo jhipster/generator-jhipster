@@ -1,29 +1,14 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`generator - spring-cloud:gateway with defaults options should call source snapshot 1`] = `
 {
   "addJavaDependencies": [
     [
       {
-        "artifactId": "spring-cloud-starter-gateway",
+        "artifactId": "spring-cloud-starter-gateway-server-webflux",
         "groupId": "org.springframework.cloud",
       },
     ],
-  ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
   ],
 }
 `;
@@ -33,19 +18,7 @@ exports[`generator - spring-cloud:gateway with defaults options should match fil
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/security/jwt/JWTRelayGatewayFilterFactory.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/security/jwt/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -56,25 +29,10 @@ exports[`generator - spring-cloud:gateway with imperative option should call sou
   "addJavaDependencies": [
     [
       {
-        "artifactId": "spring-cloud-starter-gateway-mvc",
+        "artifactId": "spring-cloud-starter-gateway-server-webmvc",
         "groupId": "org.springframework.cloud",
       },
     ],
-  ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
   ],
 }
 `;
@@ -84,25 +42,10 @@ exports[`generator - spring-cloud:gateway with imperative option should match fi
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/web/rest/GatewayResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/web/rest/vm/RouteVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -113,25 +56,10 @@ exports[`generator - spring-cloud:gateway with serviceDiscovery option should ca
   "addJavaDependencies": [
     [
       {
-        "artifactId": "spring-cloud-starter-gateway",
+        "artifactId": "spring-cloud-starter-gateway-server-webflux",
         "groupId": "org.springframework.cloud",
       },
     ],
-  ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
   ],
 }
 `;
@@ -141,31 +69,13 @@ exports[`generator - spring-cloud:gateway with serviceDiscovery option should ma
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/security/jwt/JWTRelayGatewayFilterFactory.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/security/jwt/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/GatewayResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/web/rest/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/web/rest/vm/RouteVM.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
 }

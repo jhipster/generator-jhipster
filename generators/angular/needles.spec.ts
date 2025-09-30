@@ -1,8 +1,10 @@
 import { before, describe, it } from 'esmocha';
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
+
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
+import { asPostWritingEntitiesTask } from '../base-application/support/task-type-inference.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
-import { asPostWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
-import type { Application as AngularApplication, Entity as AngularEntity, Source as AngularSource } from './types.js';
+
+import type { Application as AngularApplication, Entity as AngularEntity, Source as AngularSource } from './types.ts';
 
 const postWritingTask = asPostWritingEntitiesTask<AngularEntity, AngularApplication<AngularEntity>, AngularSource>(function ({
   source,
@@ -20,7 +22,7 @@ const postWritingTask = asPostWritingEntitiesTask<AngularEntity, AngularApplicat
         i18nKeyPrefix: 'entity',
         entityPage: 'entityPage',
         entityTranslationKeyMenu: 'entityTranslationKeyMenu',
-        entityClassHumanized: 'entityClassHumanized',
+        entityNameHumanized: 'entityNameHumanized',
       } as AngularEntity,
     ],
   });
@@ -38,12 +40,12 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
 
   it('entity menu contains the entity added by needle api', () => {
     runResult.assertFileContent(
-      `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.component.html`,
+      `${CLIENT_MAIN_SRC_DIR}app/layouts/navbar/navbar.html`,
       `
             <li>
               <a class="dropdown-item" routerLink="/entityPage" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-                <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-                <span jhiTranslate="global.menu.entities.entityTranslationKeyMenu">entityClassHumanized</span>
+                <fa-icon icon="asterisk" [fixedWidth]="true" />
+                <span jhiTranslate="global.menu.entities.entityTranslationKeyMenu">entityNameHumanized</span>
               </a>
             </li>
 `,

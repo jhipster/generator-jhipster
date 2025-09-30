@@ -16,14 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { mutateData } from '../../../../lib/utils/index.ts';
+import { getEnumInfo } from '../../../base-application/support/index.ts';
+import type { Source as CommonSource } from '../../../common/types.d.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
-import { mutateData } from '../../../../lib/utils/index.js';
-import { javaBeanCase, javaTestPackageTemplatesBlock } from '../../support/index.js';
-import { getEnumInfo } from '../../../base-application/support/index.js';
-import { isReservedJavaKeyword } from '../../support/reserved-keywords.js';
-import { entityServerFiles, enumFiles } from './entity-files.js';
+import { javaBeanCase, javaTestPackageTemplatesBlock } from '../../support/index.ts';
+import { isReservedJavaKeyword } from '../../support/reserved-keywords.ts';
 
-// TODO adjust type
+import { entityServerFiles, enumFiles } from './entity-files.ts';
+
 export default class DomainGenerator extends JavaApplicationGenerator {
   generateEntities!: boolean;
   useJakartaValidation!: boolean;
@@ -36,7 +37,7 @@ export default class DomainGenerator extends JavaApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:java:bootstrap');
+      await this.dependsOnBootstrap('java');
     }
   }
 
@@ -172,5 +173,30 @@ export default class DomainGenerator extends JavaApplicationGenerator {
 
   get [JavaApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
+  }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      sonar({ application, source }) {
+        (source as CommonSource).ignoreSonarRule?.({
+          ruleId: 'S7027-domain',
+          ruleKey: 'javaarchitecture:S7027',
+          resourceKey: `${application.javaPackageSrcDir}domain/**/*`,
+          comment: 'Rule https://rules.sonarsource.com/java/RSPEC-7027 is ignored for entities',
+        });
+
+        // TODO improve comment
+        (source as CommonSource).ignoreSonarRule?.({
+          ruleId: 'S3437',
+          ruleKey: 'squid:S3437',
+          resourceKey: `${application.javaPackageSrcDir}**/*`,
+          comment: 'Rule https://rules.sonarsource.com/java/RSPEC-3437 is ignored',
+        });
+      },
+    });
+  }
+
+  get [JavaApplicationGenerator.POST_WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

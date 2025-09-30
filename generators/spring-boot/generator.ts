@@ -18,34 +18,9 @@
  */
 import chalk from 'chalk';
 import { lowerFirst, sortedUniqBy } from 'lodash-es';
-import BaseApplicationGenerator from '../base-application/index.js';
-import {
-  GENERATOR_CUCUMBER,
-  GENERATOR_DOCKER,
-  GENERATOR_FEIGN_CLIENT,
-  GENERATOR_GATLING,
-  GENERATOR_LANGUAGES,
-  GENERATOR_SERVER,
-  GENERATOR_SPRING_CACHE,
-  GENERATOR_SPRING_CLOUD_STREAM,
-  GENERATOR_SPRING_DATA_CASSANDRA,
-  GENERATOR_SPRING_DATA_COUCHBASE,
-  GENERATOR_SPRING_DATA_ELASTICSEARCH,
-  GENERATOR_SPRING_DATA_MONGODB,
-  GENERATOR_SPRING_DATA_NEO4J,
-  GENERATOR_SPRING_DATA_RELATIONAL,
-  GENERATOR_SPRING_WEBSOCKET,
-} from '../generator-list.js';
-import { ADD_SPRING_MILESTONE_REPOSITORY } from '../generator-constants.js';
-import {
-  addSpringFactory,
-  getJavaValueGeneratorForType,
-  getSpecificationBuildForType,
-  insertContentIntoApplicationProperties,
-} from '../server/support/index.js';
-import { addJavaImport, generateKeyStore, javaBeanCase } from '../java/support/index.js';
-import { createNeedleCallback, isWin32 } from '../base-core/support/index.ts';
-import { mutateData } from '../../lib/utils/index.js';
+
+import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
+import type { FieldType } from '../../lib/jhipster/field-types.ts';
 import {
   cacheTypes,
   databaseTypes,
@@ -54,25 +29,36 @@ import {
   searchEngineTypes,
   testFrameworkTypes,
   websocketTypes,
-} from '../../lib/jhipster/index.js';
-import { getPomVersionProperties, parseMavenPom } from '../maven/support/index.js';
-import type { FieldType } from '../../lib/jhipster/field-types.ts';
-import type { Config as ClientConfig } from '../client/types.js';
-import type { Config as SpringCacheConfig } from '../spring-cache/types.js';
-import type { Config as SpringCloudStreamConfig } from '../spring-cloud-stream/types.js';
-import type { Entity as CypressEntity } from '../cypress/types.js';
-import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
-import { writeFiles as writeEntityFiles } from './entity-files.js';
-import cleanupTask from './cleanup.js';
-import { serverFiles } from './files.js';
-import { askForOptionalItems, askForServerSideOpts, askForServerTestOpts } from './prompts.js';
+} from '../../lib/jhipster/index.ts';
+import { mutateData } from '../../lib/utils/index.ts';
+import BaseApplicationGenerator from '../base-application/index.ts';
+import { createNeedleCallback, isWin32 } from '../base-core/support/index.ts';
+import { editPropertiesFileCallback } from '../base-core/support/properties-file.ts';
+import type { Config as ClientConfig, Entity as ClientEntity } from '../client/types.ts';
+import type { Source as CommonSource } from '../common/types.ts';
+import type { Entity as CypressEntity } from '../cypress/types.ts';
+import { ADD_SPRING_MILESTONE_REPOSITORY } from '../generator-constants.js';
+import { addJavaImport, generateKeyStore, javaBeanCase } from '../java/support/index.ts';
+import { getPomVersionProperties, parseMavenPom } from '../maven/support/index.ts';
+import {
+  getJavaValueGeneratorForType,
+  getSpecificationBuildForType,
+  insertContentIntoApplicationProperties,
+} from '../server/support/index.ts';
+import type { Config as SpringCacheConfig } from '../spring-cache/types.ts';
+import type { Config as SpringCloudStreamConfig } from '../spring-cloud-stream/types.ts';
+
+import cleanupTask from './cleanup.ts';
+import { writeFiles as writeEntityFiles } from './entity-files.ts';
+import { serverFiles } from './files.ts';
+import { askForOptionalItems, askForServerSideOpts, askForServerTestOpts } from './prompts.ts';
 import type {
   Application as SpringBootApplication,
   Config as SpringBootConfig,
   Entity as SpringBootEntity,
   Options as SpringBootOptions,
   Source as SpringBootSource,
-} from './types.js';
+} from './types.ts';
 
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
 const { NO: NO_WEBSOCKET, SPRING_WEBSOCKET } = websocketTypes;
@@ -85,7 +71,7 @@ const { CUCUMBER, GATLING } = testFrameworkTypes;
 
 export class SpringBootApplicationGenerator extends BaseApplicationGenerator<
   SpringBootEntity,
-  SpringBootApplication<SpringBootEntity>,
+  SpringBootApplication,
   SpringBootConfig,
   SpringBootOptions,
   SpringBootSource
@@ -100,7 +86,8 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_SERVER);
+      await this.dependsOnBootstrap('spring-boot');
+      await this.dependsOnJHipster('jhipster:java');
       await this.dependsOnJHipster('jhipster:java:domain');
       await this.dependsOnJHipster('jhipster:java:build-tool');
       await this.dependsOnJHipster('jhipster:java:server');
@@ -159,6 +146,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
       async composing() {
         const {
           applicationType,
+          authenticationType,
           databaseType,
           graalvmSupport,
           searchEngine,
@@ -170,9 +158,14 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
         const { cacheProvider } = this.jhipsterConfigWithDefaults as SpringCacheConfig;
         const { messageBroker } = this.jhipsterConfigWithDefaults as SpringCloudStreamConfig;
 
-        await this.composeWithJHipster(GENERATOR_DOCKER);
+        await this.composeWithJHipster('jhipster:java:i18n');
+        await this.composeWithJHipster('docker');
         await this.composeWithJHipster('jhipster:java:jib');
         await this.composeWithJHipster('jhipster:java:code-quality');
+
+        if (authenticationType === 'jwt' || authenticationType === 'oauth2') {
+          await this.composeWithJHipster(`jhipster:spring-boot:${authenticationType}`);
+        }
 
         if (graalvmSupport) {
           await this.composeWithJHipster('jhipster:java:graalvm');
@@ -187,37 +180,37 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
         }
 
         if (testFrameworks?.includes(CUCUMBER)) {
-          await this.composeWithJHipster(GENERATOR_CUCUMBER);
+          await this.composeWithJHipster('cucumber');
         }
         if (testFrameworks?.includes(GATLING)) {
-          await this.composeWithJHipster(GENERATOR_GATLING);
+          await this.composeWithJHipster('gatling');
         }
         if (feignClient) {
-          await this.composeWithJHipster(GENERATOR_FEIGN_CLIENT);
+          await this.composeWithJHipster('feign-client');
         }
 
         if (databaseType === SQL) {
-          await this.composeWithJHipster(GENERATOR_SPRING_DATA_RELATIONAL);
+          await this.composeWithJHipster('spring-data-relational');
         } else if (databaseType === CASSANDRA) {
-          await this.composeWithJHipster(GENERATOR_SPRING_DATA_CASSANDRA);
+          await this.composeWithJHipster('spring-data-cassandra');
         } else if (databaseType === COUCHBASE) {
-          await this.composeWithJHipster(GENERATOR_SPRING_DATA_COUCHBASE);
+          await this.composeWithJHipster('spring-data-couchbase');
         } else if (databaseType === MONGODB) {
-          await this.composeWithJHipster(GENERATOR_SPRING_DATA_MONGODB);
+          await this.composeWithJHipster('spring-data-mongodb');
         } else if (databaseType === NEO4J) {
-          await this.composeWithJHipster(GENERATOR_SPRING_DATA_NEO4J);
+          await this.composeWithJHipster('spring-data-neo4j');
         }
         if (messageBroker === KAFKA || messageBroker === PULSAR) {
-          await this.composeWithJHipster(GENERATOR_SPRING_CLOUD_STREAM);
+          await this.composeWithJHipster('spring-cloud-stream');
         }
         if (searchEngine === ELASTICSEARCH) {
-          await this.composeWithJHipster(GENERATOR_SPRING_DATA_ELASTICSEARCH);
+          await this.composeWithJHipster('spring-data-elasticsearch');
         }
         if (websocket === SPRING_WEBSOCKET) {
-          await this.composeWithJHipster(GENERATOR_SPRING_WEBSOCKET);
+          await this.composeWithJHipster('spring-websocket');
         }
         if (([EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS] as string[]).includes(cacheProvider!)) {
-          await this.composeWithJHipster(GENERATOR_SPRING_CACHE);
+          await this.composeWithJHipster('spring-cache');
         }
       },
     });
@@ -238,7 +231,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
       },
       async composeLanguages() {
         if (this.jhipsterConfigWithDefaults.enableTranslation) {
-          await this.composeWithJHipster(GENERATOR_LANGUAGES);
+          await this.composeWithJHipster('languages');
         }
       },
     });
@@ -306,8 +299,6 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
             (reactive && data.databaseTypeSql) ||
             (!reactive && data.databaseTypeMongodb) ||
             (!reactive && data.databaseTypeCassandra),
-          reactorBlock: reactive ? '.block()' : '',
-          reactorBlockOptional: reactive ? '.blockOptional()' : '',
 
           generateSpringAuditor: ctx =>
             ctx.databaseTypeSql || ctx.databaseTypeMongodb || ctx.databaseTypeNeo4j || ctx.databaseTypeCouchbase,
@@ -316,7 +307,11 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
       registerSpringFactory({ source, application }) {
         source.addTestSpringFactory = ({ key, value }) => {
           const springFactoriesFile = `${application.srcTestResources}META-INF/spring.factories`;
-          this.editFile(springFactoriesFile, { create: true }, addSpringFactory({ key, value }));
+          this.editFile(
+            springFactoriesFile,
+            { create: true },
+            editPropertiesFileCallback([{ key, value, valueSep: ',' }], { sortFile: true }),
+          );
         };
       },
       addSpringIntegrationTest({ application, source }) {
@@ -436,7 +431,7 @@ ${classProperties
     return this.asPreparingEachEntityTaskGroup({
       prepareEntity({ entity, application }) {
         if (entity.entityRestLayer === false) {
-          entity.entityClientModelOnly = true;
+          (entity as unknown as ClientEntity).entityClientModelOnly = true;
         }
 
         const hasAnyAuthority = (authorities: string[]): string | undefined =>
@@ -565,7 +560,7 @@ ${classProperties
           entityJavaCustomFilters: sortedUniqBy(entity.fields.map(field => field.propertyJavaCustomFilter).filter(Boolean), 'type'),
         });
 
-        mutateData(entity as CypressEntity, {
+        mutateData(entity as unknown as CypressEntity, {
           __override__: true,
           // Reactive with some r2dbc databases doesn't allow insertion without data.
           workaroundEntityCannotBeEmpty: ({ reactive, prodDatabaseType }: any) =>
@@ -742,6 +737,44 @@ ${classProperties
           source.addMavenDependency!({ inProfile: 'docker-compose', ...dockerComposeArtifact, optional: true });
         }
       },
+      sonar({ application, source }) {
+        (source as CommonSource).ignoreSonarRule?.({
+          ruleId: 'S125',
+          ruleKey: 'xml:S125',
+          resourceKey: `${application.srcMainResources}logback-spring.xml`,
+          comment: `Rule https://rules.sonarsource.com/xml/RSPEC-125 is ignored, we provide commented examples`,
+        });
+
+        if (!application.authenticationUsesCsrf && application.generateAuthenticationApi) {
+          (source as CommonSource).ignoreSonarRule?.({
+            ruleId: 'S4502',
+            ruleKey: 'java:S4502',
+            resourceKey: `${application.javaPackageSrcDir}config/SecurityConfiguration.java`,
+            comment: `Rule https://rules.sonarsource.com/java/RSPEC-4502 is ignored, as for JWT tokens we are not subject to CSRF attack`,
+          });
+        }
+
+        (source as CommonSource).ignoreSonarRule?.({
+          ruleId: 'S4684',
+          ruleKey: 'java:S4684',
+          resourceKey: `${application.javaPackageSrcDir}web/rest/**/*`,
+          comment: `Rule https://rules.sonarsource.com/java/RSPEC-4684`,
+        });
+
+        (source as CommonSource).ignoreSonarRule?.({
+          ruleId: 'S5145',
+          ruleKey: 'javasecurity:S5145',
+          resourceKey: `${application.javaPackageSrcDir}**/*`,
+          comment: `Rule https://rules.sonarsource.com/java/RSPEC-5145 is ignored, as we use log filter to format log messages`,
+        });
+
+        (source as CommonSource).ignoreSonarRule?.({
+          ruleId: 'S6437',
+          ruleKey: 'java:S6437',
+          resourceKey: `${application.srcMainResources}config/*`,
+          comment: `Rule https://rules.sonarsource.com/java/RSPEC-6437 is ignored, hardcoded passwords are provided for development purposes`,
+        });
+      },
     });
   }
 
@@ -755,7 +788,7 @@ ${classProperties
         const { buildToolExecutable } = application;
         this.log.ok('Spring Boot application generated successfully.');
 
-        if (application.dockerServices?.length && !control.enviromentHasDockerCompose) {
+        if (application.dockerServices?.length && !control.environmentHasDockerCompose) {
           const dockerComposeCommand = chalk.yellow.bold('docker compose');
           this.log('');
           this.log

@@ -19,11 +19,9 @@
 
 import chalk from 'chalk';
 
-import BaseWorkspacesGenerator from '../base-workspaces/index.js';
-import { buildToolTypes } from '../../lib/jhipster/index.js';
-
-import { checkImages, configureImageNames } from '../base-workspaces/internal/docker-base.js';
-import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.js';
+import { buildToolTypes } from '../../lib/jhipster/index.ts';
+import BaseWorkspacesGenerator from '../base-workspaces/index.ts';
+import { checkImages, configureImageNames } from '../base-workspaces/internal/docker-base.ts';
 import {
   askForAdminPassword,
   askForApplicationType,
@@ -34,7 +32,10 @@ import {
   askForMonitoring,
   askForPath,
   askForServiceDiscovery,
-} from '../base-workspaces/internal/docker-prompts.js';
+} from '../base-workspaces/internal/docker-prompts.ts';
+import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.ts';
+
+import { applicationFiles, writeDeploymentFiles } from './files.ts';
 import {
   askForIngressDomain,
   askForIngressType,
@@ -43,15 +44,14 @@ import {
   askForKubernetesServiceType,
   askForPersistentStorage,
   askForStorageClassName,
-} from './prompts.js';
-import { applicationFiles, writeDeploymentFiles } from './files.ts';
+} from './prompts.ts';
 import type {
   Config as KubernetesConfig,
   Deployment as KubernetesDeployment,
   Options as KubernetesOptions,
   Source as KubernetesSource,
   WorkspacesApplication as KubernetesWorkspacesApplication,
-} from './types.js';
+} from './types.ts';
 
 const { MAVEN } = buildToolTypes;
 

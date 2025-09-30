@@ -102,7 +102,7 @@ public class <%= mainClass %> {
         }
 
 <%_ } _%>
-        SpringApplication app = new SpringApplication(<%= mainClass %>.class);
+        var app = new SpringApplication(<%= mainClass %>.class);
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
         logApplicationStartup(env);
@@ -115,7 +115,7 @@ public class <%= mainClass %> {
         String contextPath = Optional.ofNullable(env.getProperty("server.servlet.context-path"))
             .filter(StringUtils::isNotBlank)
             .orElse("/");
-        String hostAddress = "localhost";
+        var hostAddress = "localhost";
         try {
             hostAddress = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {

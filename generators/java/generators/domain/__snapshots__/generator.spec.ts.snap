@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`generator - java:domain with default config should match files snapshot 1`] = `
 {
@@ -11,9 +11,6 @@ exports[`generator - java:domain with default config should match files snapshot
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/domain/Authority.java": {
     "stateCleared": "modified",
   },
@@ -24,15 +21,6 @@ exports[`generator - java:domain with default config should match files snapshot
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/domain/enumeration/MyEnum.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/domain/enumeration/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/domain/AssertUtils.java": {

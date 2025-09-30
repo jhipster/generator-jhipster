@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import JDLValidation from '../../core/models/jdl-validation.js';
-import { validations } from '../../core/built-in-options/index.js';
-import type { ParsedJDLValidation } from '../../core/types/parsed.js';
+import { validations } from '../../core/built-in-options/index.ts';
+import JDLValidation from '../../core/models/jdl-validation.ts';
+import type { ParsedJDLValidation } from '../../core/types/parsed.ts';
 
 const {
   Validations: { PATTERN },

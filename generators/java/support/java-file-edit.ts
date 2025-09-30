@@ -16,13 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import assert from 'assert';
+import assert from 'node:assert';
+
 import { escapeRegExp } from 'lodash-es';
 
 export type JavaClassName = { className: string };
-export type JavaContructorParam = JavaClassName & { param: string | string[] };
+export type JavaConstructorParam = JavaClassName & { param: string | string[] };
 export type JavaField = JavaClassName & { field: string | string[] };
-export type JavaContructorSetter = JavaClassName & { setter: string | string[] };
+export type JavaConstructorSetter = JavaClassName & { setter: string | string[] };
 
 const findJavaConstructor = (content: string, className: string) => {
   const regex = `(?<before>\\n(?<ident>[^\\S\\r\\n]*)(?:public|protect|private)?\\s*${className}\\s*\\()(?<params>[^(]*)(?<after>\\))\\s*\\{`;
@@ -42,13 +43,13 @@ const findJavaConstructor = (content: string, className: string) => {
   };
 };
 
-export function injectJavaConstructorParam(options: JavaContructorParam): (content: string) => string;
-export function injectJavaConstructorParam(content: string, options: JavaContructorParam): string;
+export function injectJavaConstructorParam(options: JavaConstructorParam): (content: string) => string;
+export function injectJavaConstructorParam(content: string, options: JavaConstructorParam): string;
 export function injectJavaConstructorParam(
-  paramOrAnnotation: string | JavaContructorParam,
-  options?: JavaContructorParam,
+  paramOrAnnotation: string | JavaConstructorParam,
+  options?: JavaConstructorParam,
 ): string | ((content: string) => string) {
-  const injectJavaConstructorParamToContent = (content: string, opts: JavaContructorParam): string => {
+  const injectJavaConstructorParamToContent = (content: string, opts: JavaConstructorParam): string => {
     const { className } = opts;
     const paramSpec = Array.isArray(opts.param) ? opts.param : [opts.param];
     const { params: constructorParams, paramStartIndex, paramEndIndex } = findJavaConstructor(content, className);
@@ -91,13 +92,13 @@ export function injectJavaField(paramOrOptions: string | JavaField, options?: Ja
   return (content: string) => injectJavaFieldToContent(content, paramOrOptions);
 }
 
-export function injectJavaConstructorSetter(options: JavaContructorSetter): (content: string) => string;
-export function injectJavaConstructorSetter(content: string, options: JavaContructorSetter): string;
+export function injectJavaConstructorSetter(options: JavaConstructorSetter): (content: string) => string;
+export function injectJavaConstructorSetter(content: string, options: JavaConstructorSetter): string;
 export function injectJavaConstructorSetter(
-  paramOrAnnotation: string | JavaContructorSetter,
-  options?: JavaContructorSetter,
+  paramOrAnnotation: string | JavaConstructorSetter,
+  options?: JavaConstructorSetter,
 ): string | ((content: string) => string) {
-  const injectJavaConstructorParamToContent = (content: string, opts: JavaContructorSetter): string => {
+  const injectJavaConstructorParamToContent = (content: string, opts: JavaConstructorSetter): string => {
     assert(opts.className, 'className is required');
     assert(opts.setter, 'setter is required');
 

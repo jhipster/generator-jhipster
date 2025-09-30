@@ -1,0 +1,29 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "session",
+    "baseName": "sampleWebfluxH2mem",
+    "buildTool": "gradle",
+    "cacheProvider": "no",
+    "clientBundler": "webpack",
+    "clientFramework": "angular",
+    "creationTimestamp": 1596513272473,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Memory",
+    "enableHibernateCache": false,
+    "enableSwaggerCodegen": true,
+    "enableTranslation": true,
+    "fakerSeed": "1",
+    "jhiPrefix": "jhi",
+    "languages": ["en", "fr"],
+    "nativeLanguage": "en",
+    "packageFolder": "tech/jhipster/sample",
+    "packageName": "tech.jhipster.sample",
+    "prodDatabaseType": "postgresql",
+    "reactive": true,
+    "rememberMeKey": "a5e93fdeb16e2ee2dc4a629b5dbdabb30f968e418dfc0483c53afdc695cfac96d06cf5c581cbefb93e3aaa241880857fcafe",
+    "searchEngine": "elasticsearch",
+    "serverPort": "8080",
+    "testFrameworks": ["gatling", "cypress"]
+  }
+}

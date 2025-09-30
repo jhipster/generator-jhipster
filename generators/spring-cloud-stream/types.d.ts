@@ -1,10 +1,11 @@
-import type { Application as JavaApplication, Entity as JavaEntity } from '../java/types.d.ts';
+import type { HandleCommandTypes } from '../../lib/command/types.ts';
 import type {
   Config as BaseApplicationConfig,
   Entity as BaseApplicationEntity,
   Options as BaseApplicationOptions,
 } from '../base-application/types.d.ts';
-import type { HandleCommandTypes } from '../../lib/command/types.js';
+import type { Application as JavaApplication, Entity as JavaEntity } from '../java/types.d.ts';
+
 import type command from './command.ts';
 
 type Command = HandleCommandTypes<typeof command>;

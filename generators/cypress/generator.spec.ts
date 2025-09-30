@@ -16,22 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
-import { snakeCase } from 'lodash-es';
-import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.js';
-import {
-  AuthenticationTypeMatrix,
-  type Matrix,
-  extendMatrix,
-  fromMatrix,
-  defaultHelpers as helpers,
-  runResult,
-} from '../../lib/testing/index.js';
-import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.js';
-import { GENERATOR_CYPRESS } from '../generator-list.js';
-import Generator from './generator.js';
+import { basename, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
+import { AuthenticationTypeMatrix, defaultHelpers as helpers, extendMatrix, fromMatrix, runResult } from '../../lib/testing/index.ts';
+import type { ConfigAll } from '../../lib/types/command-all.ts';
+import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
+
+import Generator from './generator.ts';
 
 const { CYPRESS } = testFrameworkTypes;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
@@ -41,7 +35,7 @@ const __dirname = dirname(__filename);
 
 const generator = basename(__dirname);
 
-const e2eMatrix = extendMatrix(
+const e2eMatrix = extendMatrix<ConfigAll>(
   fromMatrix({
     ...AuthenticationTypeMatrix,
     cypressAudit: [false, true],
@@ -54,7 +48,7 @@ const e2eMatrix = extendMatrix(
   },
 );
 
-const e2eSamples: Matrix = Object.fromEntries(
+const e2eSamples = Object.fromEntries(
   Object.entries(e2eMatrix).map(([name, sample]) => [
     name,
     {
@@ -72,12 +66,9 @@ const entities = [
 ];
 
 describe(`generator - ${generator}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
-  checkEnforcements({ client: true }, GENERATOR_CYPRESS);
+  checkEnforcements({ client: true }, generator);
 
   it('samples matrix should match snapshot', () => {
     expect(e2eSamples).toMatchSnapshot();
@@ -105,7 +96,7 @@ describe(`generator - ${generator}`, () => {
           const adminUiRoutingTitle = generateAdminUi ? 'should generate admin routing' : 'should not generate admin routing';
           const cypressAdminRoot = clientRootDir ? `${clientRootDir}test/` : 'src/test/javascript/';
           it(adminUiRoutingTitle, () => {
-            const assertion = (...args) =>
+            const assertion = (...args: any[]) =>
               generateAdminUi ? (runResult.assertFileContent as any)(...args) : (runResult.assertNoFileContent as any)(...args);
 
             assertion(

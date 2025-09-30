@@ -18,9 +18,13 @@
  */
 
 import { before, describe, expect, it } from 'esmocha';
-import { binaryOptions, unaryOptions } from '../../core/built-in-options/index.js';
-import type { ParsedJDLOption } from '../../core/types/parsed.js';
-import { convertOptions } from './option-converter.js';
+
+import { binaryOptions, unaryOptions } from '../../core/built-in-options/index.ts';
+import type { ParsedJDLOption } from '../../core/types/parsed.ts';
+
+import { convertOptions } from './option-converter.ts';
+
+type ConverterOptions = ReturnType<typeof convertOptions>;
 
 describe('jdl - OptionConverter', () => {
   describe('convertOptions', () => {
@@ -33,7 +37,7 @@ describe('jdl - OptionConverter', () => {
     describe('when passing options', () => {
       unaryOptions.forEach(unaryOptionName => {
         describe(`such as ${unaryOptionName}`, () => {
-          let convertedOptions;
+          let convertedOptions: ConverterOptions;
 
           before(() => {
             convertedOptions = convertOptions(
@@ -60,7 +64,7 @@ describe('jdl - OptionConverter', () => {
       ]);
       BinaryOptions.forEach((optionValue, optionName) => {
         describe(`such as ${optionName}`, () => {
-          let convertedOptions;
+          let convertedOptions: ConverterOptions;
 
           before(() => {
             convertedOptions = convertOptions(
@@ -81,7 +85,7 @@ describe('jdl - OptionConverter', () => {
     });
     describe('when passing use options', () => {
       describe('that exist', () => {
-        let convertedOptions;
+        let convertedOptions: ConverterOptions;
 
         before(() => {
           convertedOptions = convertOptions({}, [
@@ -134,7 +138,7 @@ describe('jdl - OptionConverter', () => {
         });
       });
       describe('that do not exist', () => {
-        let convertedOptions;
+        let convertedOptions: ConverterOptions;
 
         before(() => {
           convertedOptions = convertOptions({}, [

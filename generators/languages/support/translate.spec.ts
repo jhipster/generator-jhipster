@@ -17,14 +17,15 @@
  * limitations under the License.
  */
 import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
+
 import {
   createJhiTransformTranslateReplacer,
   createJhiTransformTranslateStringifyReplacer,
   createJhiTranslateReplacer,
-} from './translate.js';
+} from './translate.ts';
 
 describe('generator - languages - translate', () => {
-  let getWebappTranslation;
+  let getWebappTranslation: ReturnType<ReturnType<typeof esmocha.fn>['mockImplementation']>;
 
   beforeEach(() => {
     let value = 0;
@@ -37,7 +38,7 @@ describe('generator - languages - translate', () => {
   });
 
   describe('jhiTransformTranslate', () => {
-    let jhiTransformTranslate;
+    let jhiTransformTranslate: ReturnType<typeof createJhiTransformTranslateReplacer>;
 
     beforeEach(() => {
       jhiTransformTranslate = createJhiTransformTranslateReplacer(getWebappTranslation);
@@ -70,7 +71,7 @@ global-{"min":20,"max":50,"pattern":"^[a-zA-Z0-9]*$","anotherPattern":"^[a-zA-Z0
   });
 
   describe('jhiTransformTranslate with escapeHtml', () => {
-    let jhiTransformTranslate;
+    let jhiTransformTranslate: ReturnType<typeof createJhiTransformTranslateReplacer>;
 
     beforeEach(() => {
       jhiTransformTranslate = createJhiTransformTranslateReplacer(getWebappTranslation, { escapeHtml: true });
@@ -107,7 +108,7 @@ global-{&quot;min&quot;:20,&quot;max&quot;:50,&quot;pattern&quot;:&quot;^[a-zA-Z
   });
 
   describe('jhiTransformTranslate with wrapTranslation', () => {
-    let jhiTransformTranslate;
+    let jhiTransformTranslate: ReturnType<typeof createJhiTransformTranslateReplacer>;
 
     beforeEach(() => {
       jhiTransformTranslate = createJhiTransformTranslateReplacer(getWebappTranslation, { wrapTranslation: '"' });
@@ -148,7 +149,7 @@ __jhiTransformTranslate__('logs.nbloggers', { "total": "{{ loggers.length }}" })
   });
 
   describe('jhiTransformTranslate', () => {
-    let jhiTransformTranslateStringify;
+    let jhiTransformTranslateStringify: ReturnType<typeof createJhiTransformTranslateStringifyReplacer>;
 
     beforeEach(() => {
       jhiTransformTranslateStringify = createJhiTransformTranslateStringifyReplacer(getWebappTranslation);
@@ -167,7 +168,7 @@ __jhiTransformTranslateStringify__('global')
   });
 
   describe('jhiTranslate', () => {
-    let jhiTranslateReplacer;
+    let jhiTranslateReplacer: ReturnType<typeof createJhiTranslateReplacer>;
 
     beforeEach(() => {
       jhiTranslateReplacer = createJhiTranslateReplacer(opts => JSON.stringify(opts), { prefixPattern: '>\\s*', suffixPattern: '\\s*<' });
@@ -184,6 +185,7 @@ __jhiTranslateFoo__('local', { "min":20, "max": 50, "pattern": "^[a-zA-Z0-9]*$",
 })
 <
 `;
+      // @ts-expect-error FIXME
       expect(jhiTranslateReplacer(body)).toMatchInlineSnapshot(`
 "
 {"key":"global","type":"Foo","prefix":"","suffix":""}

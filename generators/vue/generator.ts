@@ -17,25 +17,27 @@
  * limitations under the License.
  */
 import assert from 'node:assert';
+
 import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
+import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.ts';
+import type { Field } from '../base-application/types.ts';
+import { createNeedleCallback } from '../base-core/support/index.ts';
 import { ClientApplicationGenerator } from '../client/generator.ts';
-import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.js';
-import { GENERATOR_CLIENT, GENERATOR_LANGUAGES, GENERATOR_VUE } from '../generator-list.js';
 import {
-  generateEntityClientImports as formatEntityClientImports,
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
-} from '../client/support/index.js';
-import { createNeedleCallback } from '../base-core/support/index.ts';
-import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
-import type { Field as ClientField } from '../client/types.js';
-import type { Field } from '../base-application/types.js';
-import { cleanupEntitiesFiles, postWriteEntityFiles, writeEntityFiles } from './entity-files-vue.js';
-import cleanupOldFilesTask from './cleanup.js';
-import { writeEntitiesFiles, writeFiles } from './files-vue.js';
-import { convertTranslationsSupport, isTranslatedVueFile, translateVueFilesTransform } from './support/index.js';
+  generateEntityClientImports as formatEntityClientImports,
+} from '../client/support/index.ts';
+import type { Field as ClientField } from '../client/types.ts';
+import { JAVA_WEBAPP_SOURCES_DIR } from '../index.ts';
+import { writeEslintClientRootConfigFile } from '../javascript-simple-application/generators/eslint/support/tasks.ts';
+
+import cleanupOldFilesTask from './cleanup.ts';
+import { cleanupEntitiesFiles, postWriteEntityFiles, writeEntityFiles } from './entity-files-vue.ts';
+import { writeEntitiesFiles, writeFiles } from './files-vue.ts';
+import { convertTranslationsSupport, isTranslatedVueFile, translateVueFilesTransform } from './support/index.ts';
 
 const { CommonDBTypes } = fieldTypes;
 const { VUE } = clientFrameworkTypes;
@@ -47,9 +49,11 @@ export default class VueGenerator extends ClientApplicationGenerator {
       await this.composeWithBlueprints();
     }
 
+    await this.dependsOnBootstrap('vue');
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_CLIENT);
-      await this.dependsOnJHipster(GENERATOR_LANGUAGES);
+      await this.dependsOnJHipster('jhipster:client:i18n');
+      await this.dependsOnJHipster('client');
+      await this.dependsOnJHipster('languages');
     }
   }
 
@@ -75,10 +79,10 @@ export default class VueGenerator extends ClientApplicationGenerator {
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_VUE, 'resources', 'package.json'),
+          this.fetchFromInstalledJHipster('vue', 'resources', 'package.json'),
         );
       },
-      applicationDefauts({ applicationDefaults }) {
+      applicationDefaults({ applicationDefaults }) {
         applicationDefaults({
           __override__: true,
           typescriptEslint: true,
@@ -93,13 +97,20 @@ export default class VueGenerator extends ClientApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      applicationDefauts({ applicationDefaults }) {
+      applicationDefaults({ application, applicationDefaults }) {
         applicationDefaults({
           __override__: true,
           eslintConfigFile: app => `eslint.config.${app.packageJsonType === 'module' ? 'js' : 'mjs'}`,
-          clientWebappDir: app => `${app.clientSrcDir}app/`,
-          webappEnumerationsDir: app => `${app.clientWebappDir}shared/model/enumerations/`,
+          webappEnumerationsDir: app => `${app.clientSrcDir}app/shared/model/enumerations/`,
         });
+
+        if (application.clientBundlerWebpack) {
+          application.prettierFolders.push('webpack/');
+        }
+        if (!application.backendTypeJavaAny && application.clientSrcDir !== JAVA_WEBAPP_SOURCES_DIR) {
+          // When we have a java backend, 'src/**' is already added by java:bootstrap
+          application.prettierFolders.push(`${application.clientSrcDir}**/`);
+        }
       },
       async javaNodeBuildPaths({ application }) {
         const { clientBundlerVite, clientBundlerWebpack, microfrontend, javaNodeBuildPaths } = application;
@@ -115,7 +126,7 @@ export default class VueGenerator extends ClientApplicationGenerator {
         }
       },
       prepareForTemplates({ application, source }) {
-        application.addPrettierExtensions?.(['html', 'vue', 'css', 'scss']);
+        application.prettierExtensions.push('html', 'vue', 'css', 'scss');
 
         source.addWebpackConfig = args => {
           if (!application.clientBundlerWebpack) {
@@ -140,7 +151,7 @@ export default class VueGenerator extends ClientApplicationGenerator {
               entityInstance,
               entityFolderName,
               entityFileName,
-              entityClassHumanized,
+              entityNameHumanized,
               entityPage,
               entityTranslationKeyMenu,
               entityAngularName,
@@ -216,7 +227,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
                 needle: 'add-entity-to-menu',
                 contentToAdd: `<b-dropdown-item to="/${entityPage}">
   <font-awesome-icon icon="asterisk" />
-  <span${enableTranslation ? ` v-text="$t('global.menu.entities.${entityTranslationKeyMenu}')"` : ''}>${entityClassHumanized}</span>
+  <span>${enableTranslation ? `{{ $t('global.menu.entities.${entityTranslationKeyMenu}') }}` : entityNameHumanized}</span>
 </b-dropdown-item>`,
                 contentToCheck: `<b-dropdown-item to="/${entityPage}">`,
               }),
@@ -234,7 +245,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   get default() {
     return this.asDefaultTaskGroup({
       async queueTranslateTransform({ application }) {
-        const { enableTranslation, clientSrcDir, getWebappTranslation } = application;
+        const { clientI18nDir, enableTranslation, getWebappTranslation } = application;
 
         assert.ok(getWebappTranslation, 'getWebappTranslation is required');
 
@@ -247,7 +258,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
           translateVueFilesTransform.call(this, { enableTranslation, getWebappTranslation }),
         );
         if (enableTranslation) {
-          const { transform, isTranslationFile } = convertTranslationsSupport({ clientSrcDir });
+          const { transform, isTranslationFile } = convertTranslationsSupport({ clientI18nDir });
           this.queueTransformStream(
             {
               name: 'converting vue translations',
@@ -305,14 +316,14 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addPackageJsonScripts({ application, source }) {
-        const { clientBundlerVite, clientBundlerWebpack, clientPackageManager } = application;
+        const { clientBundlerVite, clientBundlerWebpack, nodePackageManager } = application;
         if (clientBundlerVite) {
           source.mergeClientPackageJson!({
             scripts: {
-              'webapp:build:dev': `${clientPackageManager} run vite-build`,
-              'webapp:build:prod': `${clientPackageManager} run vite-build`,
-              'webapp:dev': `${clientPackageManager} run vite-serve`,
-              'webapp:serve': `${clientPackageManager} run vite-serve`,
+              'webapp:build:dev': `${nodePackageManager} run vite-build`,
+              'webapp:build:prod': `${nodePackageManager} run vite-build`,
+              'webapp:dev': `${nodePackageManager} run vite-serve`,
+              'webapp:serve': `${nodePackageManager} run vite-serve`,
               'vite-serve': 'vite',
               'vite-build': 'vite build',
             },
@@ -320,9 +331,9 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
         } else if (clientBundlerWebpack) {
           source.mergeClientPackageJson!({
             scripts: {
-              'webapp:build:dev': `${clientPackageManager} run webpack -- --mode development --env stats=minimal`,
-              'webapp:build:prod': `${clientPackageManager} run webpack -- --mode production --env stats=minimal`,
-              'webapp:dev': `${clientPackageManager} run webpack-dev-server -- --mode development --env stats=normal`,
+              'webapp:build:dev': `${nodePackageManager} run webpack -- --mode development --env stats=minimal`,
+              'webapp:build:prod': `${nodePackageManager} run webpack -- --mode production --env stats=minimal`,
+              'webapp:dev': `${nodePackageManager} run webpack-dev-server -- --mode development --env stats=normal`,
               'webpack-dev-server': 'webpack serve --config webpack/webpack.common.js',
               webpack: 'webpack --config webpack/webpack.common.js',
             },
@@ -381,6 +392,19 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
           comment: 'Load vue main',
         });
       },
+      sonar({ application, source }) {
+        const { clientI18nDir, clientDistDir, clientSrcDir, temporaryDir } = application;
+        source.addSonarProperties?.([
+          { key: 'sonar.test.inclusions', value: `${clientSrcDir}app/**/*.spec.ts`, valueSep: ', ' },
+          { key: 'sonar.testExecutionReportPaths', value: `${temporaryDir}/test-results/jest/TESTS-results-sonar.xml` },
+          { key: 'sonar.javascript.lcov.reportPaths', value: `${temporaryDir}/test-results/lcov.info` },
+          {
+            key: 'sonar.exclusions',
+            value: `${clientSrcDir}content/**/*.*, ${clientI18nDir}*.ts, ${clientDistDir}**/*.*`,
+            valueSep: ', ',
+          },
+        ]);
+      },
     });
   }
 
@@ -422,8 +446,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   generateEntityClientFieldDefaultValues(fields: ClientField[]): Record<string, string> {
     const defaultVariablesValues: Record<string, string> = {};
     fields.forEach(field => {
-      const fieldType = field.fieldType;
-      const fieldName = field.fieldName;
+      const { fieldType, fieldName } = field;
       if (fieldType === TYPE_BOOLEAN) {
         defaultVariablesValues[fieldName] = `this.${fieldName} = this.${fieldName} ?? false;`;
       }

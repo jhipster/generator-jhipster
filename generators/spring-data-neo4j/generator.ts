@@ -18,11 +18,13 @@
  */
 
 import { SpringBootApplicationGenerator } from '../spring-boot/generator.ts';
-import { GENERATOR_LIQUIBASE } from '../generator-list.js';
-import type { Source as SpringBootSource } from '../spring-boot/index.js';
-import writeTask from './files.js';
-import cleanupTask from './cleanup.js';
-import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.js';
+import type { Source as SpringBootSource } from '../spring-boot/index.ts';
+
+import cleanupTask from './cleanup.ts';
+import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.ts';
+import writeTask from './files.ts';
+
+const GENERATOR_LIQUIBASE = 'liquibase';
 
 export default class Neo4jGenerator extends SpringBootApplicationGenerator {
   async beforeQueue() {
@@ -31,7 +33,7 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplication();
+      await this.dependsOnBootstrap('spring-boot');
       (await this.dependsOnJHipster('jhipster:java:domain')).useJacksonIdentityInfo = true;
     }
   }
@@ -72,7 +74,7 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
       async configuringEachEntity({ entityConfig }) {
         if (entityConfig.dto && entityConfig.dto !== 'no') {
           this.log.warn(
-            `The DTO option is not supported for Neo4j database. Neo4j persists the entire constellation, DTO causes the constelation to be incomplete. DTO is found in entity ${entityConfig.name}.`,
+            `The DTO option is not supported for Neo4j database. Neo4j persists the entire constellation, DTO causes the constellation to be incomplete. DTO is found in entity ${entityConfig.name}.`,
           );
         }
       },
@@ -87,9 +89,7 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
     return this.asPreparingEachEntityTaskGroup({
       prepareEntity({ entity }) {
         entity.relationships.forEach(relationship => {
-          if (relationship.persistableRelationship === undefined) {
-            relationship.persistableRelationship = true;
-          }
+          relationship.persistableRelationship ??= true;
         });
       },
     });
@@ -105,7 +105,7 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
         entities.forEach(entity => {
           if (entity.relationships.some(relationship => relationship.otherEntity.builtInUser)) {
             this.log.warn(
-              `Relationship with User entity should be avoided for Neo4j database. Neo4j persists the entire constelation, related User entity will be updated causing security problems. Relationship with User entity is found in entity ${entity.name}.`,
+              `Relationship with User entity should be avoided for Neo4j database. Neo4j persists the entire constellation, related User entity will be updated causing security problems. Relationship with User entity is found in entity ${entity.name}.`,
             );
           }
         });
@@ -146,6 +146,9 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
           key: 'org.springframework.test.context.ContextCustomizerFactory',
           value: `${application.packageName}.config.Neo4jTestContainersSpringContextCustomizerFactory`,
         });
+      },
+      addLogs({ source }) {
+        source.addMainLog?.({ name: 'org.springframework.data.neo4j.cypher.unrecognized', level: 'ERROR' });
       },
       addDependencies({ application, source }) {
         source.addJavaDefinitions?.(

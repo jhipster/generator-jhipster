@@ -1,7 +1,8 @@
 import { before, describe, it } from 'esmocha';
 
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
-import { GENERATOR_APP } from '../generator-list.js';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
+
+const GENERATOR_APP = 'app';
 
 const allMockedComposedGenerators = [
   'jhipster:common',
@@ -19,7 +20,7 @@ describe('generator - app - composing', () => {
   describe('when mocking all generators', () => {
     describe('with default options', () => {
       before(async () => {
-        await helpers.runJHipster(GENERATOR_APP).withJHipsterConfig().withMockedGenerators(allMockedComposedGenerators);
+        await helpers.runJHipster('app').withJHipsterConfig().withMockedGenerators(allMockedComposedGenerators);
       });
 
       it('should compose with bootstrap generator', () => {

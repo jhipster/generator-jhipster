@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { upperFirstCamelCase } from '../../../lib/utils/index.ts';
 import { createNeedleCallback } from '../../base-core/support/needles.ts';
-import { upperFirstCamelCase } from '../../../lib/utils/index.js';
 import { joinCallbacks } from '../../base-core/support/write-files.ts';
 import type { Application as ClientApplication, Entity as ClientEntity } from '../../client/types.d.ts';
 
@@ -101,7 +101,7 @@ export function addItemToMenu({
   const contentToAdd = `
         <li>
           <a class="dropdown-item" ${routerLink} routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
-            <fa-icon icon="${icon}" [fixedWidth]="true"></fa-icon>
+            <fa-icon icon="${icon}" [fixedWidth]="true" />
             <span${enableTranslation ? ` ${jhiPrefix}Translate="${translationKey}"` : ''}>${name}</span>
           </a>
         </li>`;
@@ -146,9 +146,9 @@ export function addToEntitiesMenu<const E extends ClientEntity, const A extends 
         needle: entity.adminEntity ? 'jhipster-needle-add-element-to-admin-menu' : 'jhipster-needle-add-entity-to-menu',
         enableTranslation,
         icon: 'asterisk',
-        route: entity.entityPage,
+        route: entity.entityPage!,
         translationKey: `global.menu.entities.${entity.entityTranslationKeyMenu}`,
-        name: entity.entityClassHumanized,
+        name: entity.entityNameHumanized,
         jhiPrefix,
       });
     }),

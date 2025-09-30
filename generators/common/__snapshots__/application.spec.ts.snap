@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`application mutation test expects mutateApplication to match snapshot 1`] = `
+{
+  "authenticationTypeJwt": false,
+  "authenticationTypeOauth2": false,
+  "authenticationTypeSession": false,
+  "authenticationUsesCsrf": false,
+  "backendType": "Java",
+  "backendTypeJavaAny": true,
+  "backendTypeSpringBoot": true,
+  "clientDistDir": "target/classes/static/",
+  "devServerPort": 9060,
+  "endpointPrefix": "",
+  "loginRegex": "^(?>[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
+  "serverPort": 8081,
+  "srcMain": "src/main/",
+  "srcTest": "src/test/",
+  "temporaryDir": "target/",
+}
+`;

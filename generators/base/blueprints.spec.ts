@@ -1,10 +1,11 @@
+import { before, describe, expect, it } from 'esmocha';
 import type { Mock } from 'node:test';
 import { mock } from 'node:test';
-import { before, describe, expect, it } from 'esmocha';
 
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
-import { packageJson } from '../../lib/index.js';
-import BaseGenerator from './index.js';
+import { packageJson } from '../../lib/index.ts';
+import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
+
+import BaseGenerator from './index.ts';
 
 const jhipsterVersion = packageJson.version;
 
@@ -230,8 +231,8 @@ describe('generator - base - with blueprints disabled', () => {
 
 describe('generator - base - with blueprint with constructor error', () => {
   class BlueprintBlueprintedGenerator extends BaseGenerator {
-    constructor(args, opts, features) {
-      super(args, opts, features);
+    constructor(...args: ConstructorParameters<typeof BaseGenerator>) {
+      super(...args);
       throw new Error('blueprint with error');
     }
   }
@@ -343,7 +344,7 @@ describe('generator - base-blueprint', () => {
     return mockedPriorities;
   };
 
-  const createAllBlueprint = mockedPriorities => {
+  const createAllBlueprint = (mockedPriorities: ReturnType<typeof createPrioritiesFakes>) => {
     /**
      * @class
      * @extends {BaseGenerator}
@@ -512,7 +513,7 @@ describe('generator - base-blueprint', () => {
       before(() => {
         mockedPriorities = createPrioritiesFakes();
         mockBlueprintSubGen = class extends createAllBlueprint(mockedPriorities) {
-          constructor(args, opts, features) {
+          constructor(args: any, opts: any, features: any) {
             super(args, opts, features);
             this.sbsBlueprint = true;
           }

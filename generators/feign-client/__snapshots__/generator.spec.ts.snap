@@ -1,26 +1,14 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`generator - feign-client with jwt should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/client/UserFeignClientInterceptor.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/client/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/FeignConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -29,9 +17,6 @@ exports[`generator - feign-client with jwt should match generated files snapshot
 exports[`generator - feign-client with oauth2 should match generated files snapshot 1`] = `
 {
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/client/AuthorizationHeaderUtil.java": {
@@ -49,16 +34,7 @@ exports[`generator - feign-client with oauth2 should match generated files snaps
   "src/main/java/com/mycompany/myapp/client/TokenRelayRequestInterceptor.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/client/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/FeignConfiguration.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/client/AuthorizationHeaderUtilTest.java": {

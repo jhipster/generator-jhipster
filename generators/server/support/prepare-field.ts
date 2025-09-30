@@ -16,19 +16,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import assert from 'assert';
+import assert from 'node:assert';
+
 import { snakeCase, upperFirst } from 'lodash-es';
 
-import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../lib/jhipster/index.js';
-import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.js';
-import { applyDerivedProperty, mutateData } from '../../../lib/utils/index.js';
-import type { Application as ServerApplication, Entity as ServerEntity, Field as ServerField } from '../types.d.ts';
+import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../lib/jhipster/index.ts';
+import { buildMutateDataForProperty, mutateData } from '../../../lib/utils/index.ts';
+import type CoreGenerator from '../../base-core/generator.ts';
+import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.ts';
 import type { Field as LiquibaseField } from '../../liquibase/types.d.ts';
 import type { Field as SpringBootField } from '../../spring-boot/types.d.ts';
 import type { Field as SpringDataRelationalField } from '../../spring-data-relational/types.d.ts';
-import type CoreGenerator from '../../base-core/generator.ts';
-import { getUXConstraintName } from './database.js';
-import { getJavaValueGeneratorForType } from './templates/field-values.js';
+import type { Application as ServerApplication, Entity as ServerEntity, Field as ServerField } from '../types.d.ts';
+
+import { getUXConstraintName } from './database.ts';
+import { getJavaValueGeneratorForType } from './templates/field-values.ts';
 
 const { isReservedTableName } = reservedKeywords;
 const { CommonDBTypes } = fieldTypes;
@@ -50,7 +52,7 @@ export const prepareMapstructField = (entity: ServerEntity, field: SpringBootFie
 };
 
 export default function prepareField(
-  application: ServerApplication<ServerEntity>,
+  application: ServerApplication,
   entityWithConfig: ServerEntity,
   field: ServerField & LiquibaseField & SpringBootField & SpringDataRelationalField,
   generator: CoreGenerator,
@@ -68,9 +70,7 @@ export default function prepareField(
 
   const { reactive: entityReactive, prodDatabaseType: entityProdDatabaseType } = entityWithConfig as any;
   if (field.id && entityWithConfig.primaryKey) {
-    if (field.autoGenerate === undefined) {
-      field.autoGenerate = !entityWithConfig.primaryKey.composite && ([INTEGER, LONG, UUID] as string[]).includes(field.fieldType);
-    }
+    field.autoGenerate ??= !entityWithConfig.primaryKey.composite && ([INTEGER, LONG, UUID] as string[]).includes(field.fieldType);
 
     if (!field.autoGenerate) {
       field.liquibaseAutoIncrement = false;
@@ -162,7 +162,8 @@ export default function prepareField(
   } else {
     field.javaFieldType = field.fieldType;
   }
-  applyDerivedProperty(field, 'javaFieldType', ['String', 'Integer', 'Long', 'UUID']);
+
+  mutateData(field, buildMutateDataForProperty('javaFieldType', ['String', 'Integer', 'Long', 'UUID']));
 
   if (field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeString || field.fieldTypeUUID) {
     if (field.fieldTypeInteger) {

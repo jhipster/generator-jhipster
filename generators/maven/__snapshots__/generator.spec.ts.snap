@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`generator - maven needles should match generated pom 1`] = `
 {
@@ -66,12 +66,6 @@ exports[`generator - maven with empty configuration should generate only maven f
   "mvnw.cmd": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -93,12 +87,6 @@ exports[`generator - maven with valid configuration should generate only maven f
     "stateCleared": "modified",
   },
   "mvnw.cmd": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/tech/jhipster/package-info.java": {
     "stateCleared": "modified",
   },
 }

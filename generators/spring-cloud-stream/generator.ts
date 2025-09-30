@@ -17,16 +17,17 @@
  * limitations under the License.
  */
 import BaseApplicationGenerator from '../base-application/index.ts';
+
 import type {
   Application as SpringCloudApplication,
   Config as SpringCloudConfig,
   Entity as SpringCloudEntity,
   Options as SpringCloudOptions,
-} from './types.js';
+} from './types.ts';
 
 export default class KafkaGenerator extends BaseApplicationGenerator<
   SpringCloudEntity,
-  SpringCloudApplication<SpringCloudEntity>,
+  SpringCloudApplication,
   SpringCloudConfig,
   SpringCloudOptions
 > {
@@ -36,7 +37,7 @@ export default class KafkaGenerator extends BaseApplicationGenerator<
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:java:bootstrap');
+      await this.dependsOnBootstrap('java');
     }
   }
 

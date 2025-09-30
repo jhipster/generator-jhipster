@@ -17,9 +17,11 @@
  * limitations under the License.
  */
 
-import { before, describe, it, expect as jestExpect } from 'esmocha';
+import { before, describe, expect as jestExpect, it } from 'esmocha';
+
 import { expect } from 'chai';
-import { unaryOptions } from '../built-in-options/index.js';
+
+import { unaryOptions } from './index.ts';
 
 describe('jdl - UnaryOptions', () => {
   describe('exists', () => {
@@ -37,12 +39,12 @@ describe('jdl - UnaryOptions', () => {
   describe('forEach', () => {
     describe('when not passing a function', () => {
       it('should fail', () => {
-        // @ts-expect-error ivalid argument
+        // @ts-expect-error invalid argument
         expect(() => unaryOptions.forEach()).to.throw(/^A function has to be passed to loop over the unary options\.$/);
       });
     });
     describe('when passing a function', () => {
-      let result;
+      let result: any[];
 
       before(() => {
         result = [];

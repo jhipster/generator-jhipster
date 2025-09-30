@@ -30,6 +30,7 @@ import {
   Translate,
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSync } from '@fortawesome/free-solid-svg-icons';
 
 import { APP_TIMESTAMP_FORMAT, APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT, APP_WHOLE_NUMBER_FORMAT } from 'app/config/constants';
 import { getSystemMetrics, getSystemThreadDump } from '../administration.reducer';
@@ -59,8 +60,8 @@ export const MetricsPage = () => {
         <Translate contentKey="metrics.title">Application Metrics</Translate>
       </h2>
       <p>
-        <Button onClick={getMetrics} color={isFetching ? 'btn btn-danger' : 'btn btn-primary'} disabled={isFetching}>
-          <FontAwesomeIcon icon="sync" />
+        <Button onClick={getMetrics} color={`btn ${isFetching ? 'btn-danger' : 'btn-primary'}`} disabled={isFetching}>
+          <FontAwesomeIcon icon={faSync} />
           &nbsp;
           <Translate component="span" contentKey="health.refresh.button">
             Refresh
@@ -75,61 +76,49 @@ export const MetricsPage = () => {
             <Translate contentKey="metrics.jvm.title">JVM Metrics</Translate>
           </h3>
           <Row>
-            <Col md="4">{metrics?.jvm ? <JvmMemory jvmMetrics={metrics.jvm} wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT} /> : ''}</Col>
-            <Col md="4">{threadDump ? <JvmThreads jvmThreads={threadDump} wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT} /> : ''}</Col>
+            <Col md="4">{metrics?.jvm && <JvmMemory jvmMetrics={metrics.jvm} wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT} />}</Col>
+            <Col md="4">{threadDump && <JvmThreads jvmThreads={threadDump} wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT} />}</Col>
             <Col md="4">
-              {metrics?.processMetrics ? (
+              {metrics?.processMetrics && (
                 <SystemMetrics
                   systemMetrics={metrics.processMetrics}
                   wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT}
                   timestampFormat={APP_TIMESTAMP_FORMAT}
                 />
-              ) : (
-                ''
               )}
             </Col>
           </Row>
         </Col>
       </Row>
 
-      {metrics?.garbageCollector ? (
+      {metrics?.garbageCollector && (
         <GarbageCollectorMetrics garbageCollectorMetrics={metrics.garbageCollector} wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT} />
-      ) : (
-        ''
       )}
-      {metrics?.['http.server.requests'] ? (
+      {metrics?.['http.server.requests'] && (
         <HttpRequestMetrics
           requestMetrics={metrics['http.server.requests']}
           twoDigitAfterPointFormat={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT}
           wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT}
         />
-      ) : (
-        ''
       )}
-      {metrics?.services ? (
+      {metrics?.services && (
         <EndpointsRequestsMetrics endpointsRequestsMetrics={metrics.services} wholeNumberFormat={APP_WHOLE_NUMBER_FORMAT} />
-      ) : (
-        ''
       )}
 
-      {metrics?.cache ? (
+      {metrics?.cache && (
         <Row>
           <Col sm="12">
             <CacheMetrics cacheMetrics={metrics.cache} twoDigitAfterPointFormat={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
           </Col>
         </Row>
-      ) : (
-        ''
       )}
 
-      {metrics?.databases && JSON.stringify(metrics.databases) !== '{}' ? (
+      {metrics?.databases && JSON.stringify(metrics.databases) !== '{}' && (
         <Row>
           <Col sm="12">
             <DatasourceMetrics datasourceMetrics={metrics.databases} twoDigitAfterPointFormat={APP_TWO_DIGITS_AFTER_POINT_NUMBER_FORMAT} />
           </Col>
         </Row>
-      ) : (
-        ''
       )}
     </div>
   );

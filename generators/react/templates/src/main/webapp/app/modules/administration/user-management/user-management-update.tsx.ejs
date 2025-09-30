@@ -21,6 +21,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Button, Row, Col, FormText } from 'reactstrap';
 import { Translate, translate, ValidatedField, ValidatedForm, isEmail } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faSave } from '@fortawesome/free-solid-svg-icons';
 
 <%_ if (enableTranslation) { _%>
 import { locales, languages } from 'app/config/translation';
@@ -80,7 +81,7 @@ export const UserManagementUpdate = () => {
         <Col md="8">
         { loading ? <p>Loading...</p>
         : <ValidatedForm onSubmit={saveUser} defaultValues={user}>
-          {user.id ? (
+          {user.id && (
             <ValidatedField
               type="text"
               name="id"
@@ -89,7 +90,7 @@ export const UserManagementUpdate = () => {
               label={translate('global.field.id')}
               validate={{ required: true }}
             />
-          ) : null}
+          )}
           <ValidatedField
             type="text"
             name="login"
@@ -182,14 +183,14 @@ export const UserManagementUpdate = () => {
             ))}
           </ValidatedField>
           <Button tag={Link} to="/admin/user-management" replace color="info">
-            <FontAwesomeIcon icon="arrow-left" />&nbsp;
+            <FontAwesomeIcon icon={faArrowLeft} />&nbsp;
             <span className="d-none d-md-inline">
               <Translate contentKey="entity.action.back">Back</Translate>
             </span>
           </Button>
           &nbsp;
           <Button color="primary" type="submit" disabled={isInvalid || updating}>
-            <FontAwesomeIcon icon="save" />&nbsp;
+            <FontAwesomeIcon icon={faSave} />&nbsp;
             <Translate contentKey="entity.action.save">Save</Translate>
           </Button>
         </ValidatedForm>

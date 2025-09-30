@@ -28,16 +28,14 @@
 _&>
 <%_
 let clientPackageMngrName = 'Npm';
-let clientPackageMngrWrapper = locals.useNpmWrapper ? './npmw' : clientPackageManager;
-let clientPackageMngrAddGlobal = 'install -g';
 let clientPackageMngrAdd = 'install --save --save-exact';
 let clientPackageMngrAddDev = 'install --save-dev --save-exact';
 -%>
 <&_ if (fragment.developmentSection) { -&>
 <%_ if (locals.useNpmWrapper) { _%>
-The build system will install automatically the recommended version of Node and <%= clientPackageManager %>.
+The build system will install automatically the recommended version of Node and <%- nodePackageManager %>.
 
-We provide a wrapper to launch <%= clientPackageManager %>.
+We provide a wrapper to launch <%- nodePackageManager %>.
 <%_ } else { _%>
 Before you can build this project, you must install and configure the following dependencies on your machine:
 
@@ -49,10 +47,10 @@ After installing Node, you should be able to run the following command to instal
 You will only need to run this command when dependencies change in [package.json](package.json).
 
 ```
-<%= clientPackageMngrWrapper %> install
+<%= nodePackageManagerCommand %> install
 ```
 
-We use <%= clientPackageManager %> scripts and <&- fragments.customCliSection(' ') &>[<%= clientBundlerName %>][] as our build system.
+We use <%- nodePackageManager %> scripts and <&- fragments.customCliSection(' ') &>[<%= clientBundlerName %>][] as our build system.
 
   <%_ if (cacheProviderRedis || cacheProviderHazelcast || cacheProviderMemcached) { _%>
 If you are using <%= cacheProvider %> as a cache, you will have to launch a cache server.
@@ -72,7 +70,7 @@ spring:
         type: none
 ```
 
-See [here](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-caching.html#boot-features-caching-provider-none) for details.
+See [here](https://docs.spring.io/spring-boot/reference/io/caching.html#io.caching.provider.none) for details.
 
 **WARNING**: If you're using the second level Hibernate cache and disabling the Spring cache, you have to disable the second level Hibernate cache as well since they are using
 the same CacheManager.
@@ -83,20 +81,15 @@ Run the following commands in two separate terminals to create a blissful develo
 auto-refreshes when files change on your hard drive.
 
 ```
-  <%_ if (buildToolMaven) { _%>
-./mvnw
-  <%_ } _%>
-  <%_ if (buildToolGradle) { _%>
-./gradlew -x webapp
-  <%_ } _%>
-<%= clientPackageMngrWrapper %> start
+<%= nodePackageManagerCommand %> backend:start
+<%= nodePackageManagerCommand %> start
 ```
 
 <%= clientPackageMngrName %> is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
-specifying a newer version in [package.json](package.json). You can also run `<%= clientPackageMngrWrapper %> update` and `<%= clientPackageMngrWrapper %> install` to manage dependencies.
-Add the `help` flag on any command to see how you can use it. For example, `<%= clientPackageMngrWrapper %> help update`.
+specifying a newer version in [package.json](package.json). You can also run `<%= nodePackageManagerCommand %> update` and `<%= nodePackageManagerCommand %> install` to manage dependencies.
+Add the `help` flag on any command to see how you can use it. For example, `<%= nodePackageManagerCommand %> help update`.
 
-The `<%= clientPackageMngrWrapper %> run` command will list all the scripts available to run for this project.
+The `<%= nodePackageManagerCommand %> run` command will list all the scripts available to run for this project.
 
 ### PWA Support
 
@@ -130,13 +123,13 @@ ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
 For example, to add [Leaflet][] library as a runtime dependency of your application, you would run following command:
 
 ```
-<%= clientPackageMngrWrapper %> <%= clientPackageMngrAdd %> leaflet
+<%= nodePackageManagerCommand %> <%= clientPackageMngrAdd %> leaflet
 ```
 
 To benefit from TypeScript type definitions from [DefinitelyTyped][] repository in development, you would run following command:
 
 ```
-<%= clientPackageMngrWrapper %> <%= clientPackageMngrAddDev %> @types/leaflet
+<%= nodePackageManagerCommand %> <%= clientPackageMngrAddDev %> @types/leaflet
 ```
 
 Then you would import the JS and CSS files specified in library's installation instructions so that [<%= clientBundlerName %>][] knows about them:
@@ -168,9 +161,9 @@ Start gateway from source:
 
 ```
 cd gateway
-<%= clientPackageMngrWrapper %> run docker:db:up # start database if necessary
-<%= clientPackageMngrWrapper %> run docker:others:up # start service discovery and authentication service if necessary
-<%= clientPackageMngrWrapper %> run app:start # alias for ./(mvnw|gradlew)
+<%= nodePackageManagerCommand %> run docker:db:up # start database if necessary
+<%= nodePackageManagerCommand %> run docker:others:up # start service discovery and authentication service if necessary
+<%= nodePackageManagerCommand %> run app:start # alias for ./(mvnw|gradlew)
 ```
 
 Microfrontend's `build-watch` script is configured to watch and compile microfrontend's sources and synchronizes with gateway's frontend.
@@ -178,16 +171,16 @@ Start it using:
 
 ```
 cd microfrontend
-<%= clientPackageMngrWrapper %> run docker:db:up # start database if necessary
-<%= clientPackageMngrWrapper %> run build-watch
+<%= nodePackageManagerCommand %> run docker:db:up # start database if necessary
+<%= nodePackageManagerCommand %> run build-watch
 ```
 
 It's possible to run microfrontend's frontend standalone using:
 
 ```
 cd microfrontend
-<%= clientPackageMngrWrapper %> run docker:db:up # start database if necessary
-<%= clientPackageMngrWrapper %> watch # alias for `npm start` and `npm run backend:start` in parallel
+<%= nodePackageManagerCommand %> run docker:db:up # start database if necessary
+<%= nodePackageManagerCommand %> watch # alias for `npm start` and `npm run backend:start` in parallel
 ```
 
 <%_ } -%>
@@ -199,19 +192,8 @@ cd microfrontend
 Unit tests are run by [<%= clientTestFrameworkName %>][]. They're located near components and can be run with:
 
 ```
-<%= clientPackageMngrWrapper %> test
+<%= nodePackageManagerCommand %> test
 ```
-
-  <%_ if (cypressTests) { _%>
-UI end-to-end tests are powered by [Cypress][]. They're located in [<%= clientTestDir %>cypress](<%= clientTestDir %>cypress)
-and can be run by starting Spring Boot in one terminal (`<% if (buildToolMaven) { %>./mvnw spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`<%= clientPackageMngrWrapper %> run e2e`) in a second one.
-
-#### Lighthouse audits
-
-You can execute automated [Lighthouse audits](https://developers.google.com/web/tools/lighthouse/) with [cypress-audit](https://github.com/mfrachet/cypress-audit) by running `<%= clientPackageMngrWrapper %> run e2e:cypress:audits`.
-You should only run the audits when your application is packaged with the production profile.
-The lighthouse report is created in <% if (buildToolMaven) { %>`target/cypress/lhreport.html`<% } else { %>`build/cypress/lhreport.html`<% } %>
-  <%_ } _%>
 <&_ } -&>
 <&_ if (fragment.referenceSection) { -&>
 <%_ if (clientBundlerWebpack) { _%>
@@ -222,9 +204,6 @@ The lighthouse report is created in <% if (buildToolMaven) { %>`target/cypress/l
 <%_ } -%>
 <%_ if (clientFrameworkAngular || clientFrameworkReact) { _%>
 [Jest]: https://jestjs.io
-<%_ } -%>
-<%_ if (cypressTests) { _%>
-[Cypress]: https://www.cypress.io/
 <%_ } -%>
 [Leaflet]: https://leafletjs.com/
 [DefinitelyTyped]: https://definitelytyped.org/

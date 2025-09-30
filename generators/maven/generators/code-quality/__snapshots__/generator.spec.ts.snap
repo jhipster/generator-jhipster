@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`generator - maven:code-quality with defaults options should call source snapshot 1`] = `
 {
@@ -231,6 +231,22 @@ exports[`generator - maven:code-quality with defaults options should call source
         },
       ],
     },
+  ],
+  "addSonarProperties": [
+    [
+      {
+        "key": "sonar.coverage.jacoco.xmlReportPaths",
+        "value": "target/site/**/jacoco*.xml",
+      },
+      {
+        "key": "sonar.java.codeCoveragePlugin",
+        "value": "jacoco",
+      },
+      {
+        "key": "sonar.junit.reportPaths",
+        "value": "target/surefire-reports,target/failsafe-reports",
+      },
+    ],
   ],
 }
 `;

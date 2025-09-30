@@ -22,6 +22,7 @@ import {
   DropdownItem
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDatabase } from '@fortawesome/free-solid-svg-icons';
 import { NavDropdown } from './menu-components';
 import { Translate, translate } from 'react-jhipster';
 
@@ -53,7 +54,7 @@ const openAPIItem = () => (
 <% if (devDatabaseTypeH2Any) { %>
 const databaseItem = () => (
   <DropdownItem tag="a" href="<% if (reactive) { %>http://localhost:8092/<% } else { %>./h2-console/<% } %>" target="_tab">
-    <FontAwesomeIcon icon="database" fixedWidth /> <Translate contentKey="global.menu.admin.database">Database</Translate>
+    <FontAwesomeIcon icon={faDatabase} /> <Translate contentKey="global.menu.admin.database">Database</Translate>
   </DropdownItem>
 );
 <%_ } _%>

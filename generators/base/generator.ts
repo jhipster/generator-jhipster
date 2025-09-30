@@ -16,44 +16,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import assert from 'assert';
-import fs, { existsSync, readFileSync, statSync } from 'fs';
-import path, { join, relative } from 'path';
-import { rm } from 'fs/promises';
+import assert from 'node:assert';
+import fs, { existsSync, readFileSync, statSync } from 'node:fs';
+import { rm } from 'node:fs/promises';
+import path, { join, relative } from 'node:path';
+
 import chalk from 'chalk';
-import semver, { lt as semverLessThan } from 'semver';
 import { execaCommandSync } from 'execa';
 import { union } from 'lodash-es';
+import semver, { lt as semverLessThan } from 'semver';
 import type { PackageJson } from 'type-fest';
-import { type ComposeOptions } from 'yeoman-generator';
-import { packageJson } from '../../lib/index.js';
-import CoreGenerator from '../base-core/index.js';
+
+import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParsableCommand } from '../../lib/command/types.ts';
+import { packageJson } from '../../lib/index.ts';
+import { packageNameToNamespace } from '../../lib/utils/index.ts';
+import CoreGenerator from '../base-core/index.ts';
+import { PRIORITY_NAMES } from '../base-core/priorities.ts';
+import type { GenericTask } from '../base-core/types.ts';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
-import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand, ParseableCommand } from '../../lib/command/types.js';
-import { GENERATOR_BOOTSTRAP } from '../generator-list.js';
-import type { GenericTaskGroup } from '../base-core/types.js';
-import { packageNameToNamespace } from '../../lib/utils/index.js';
+
+import { mergeBlueprints, normalizeBlueprintName, parseBlueprints } from './internal/index.ts';
 import {
   CONTEXT_DATA_BLUEPRINTS_TO_COMPOSE,
   CONTEXT_DATA_EXISTING_PROJECT,
   CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP,
   LOCAL_BLUEPRINT_PACKAGE_NAMESPACE,
   formatDateForChangelog,
-} from '../base/support/index.js';
-import { PRIORITY_NAMES } from '../base-core/priorities.ts';
-import type GeneratorsByNamespace from '../types.js';
-import type { WriteFileOptions } from '../base-core/api.js';
-import { createJHipster7Context } from '../base-core/internal/jhipster7-context.ts';
-import type { TaskTypes as BaseTasks } from './tasks.js';
-import { mergeBlueprints, normalizeBlueprintName, parseBlueprints } from './internal/index.js';
+} from './support/index.ts';
+import type { TaskTypes as BaseTasks } from './tasks.ts';
 import type {
+  CleanupArgumentType,
   Config as BaseConfig,
+  Control,
   Features as BaseFeatures,
   Options as BaseOptions,
   Source as BaseSource,
-  CleanupArgumentType,
-  Control,
-} from './types.js';
+} from './types.ts';
 
 const { WRITING } = PRIORITY_NAMES;
 
@@ -74,9 +72,9 @@ export default class BaseGenerator<
   blueprintConfig?: Record<string, any>;
   jhipsterContext?: any;
 
-  constructor(args: string | string[], options: Options, features: Features) {
+  constructor(args?: string[], options?: Options, features?: Features) {
     const { jhipsterContext, ...opts } = options ?? {};
-    super(args, opts as Options, { blueprintSupport: true, ...features });
+    super(args, opts as Options, { blueprintSupport: true, ...features } as Features);
 
     if (this.options.help) {
       return;
@@ -124,7 +122,7 @@ export default class BaseGenerator<
 
     if (jhipsterBootstrap) {
       // jhipster:bootstrap is always required. Run it once the environment starts.
-      this.env.queueTask('environment:run', async () => this.composeWithJHipster(GENERATOR_BOOTSTRAP).then(), {
+      this.env.queueTask('environment:run', async () => this.composeWithJHipster('bootstrap').then(), {
         once: 'queueJhipsterBootstrap',
         startQueue: false,
       });
@@ -156,45 +154,6 @@ export default class BaseGenerator<
   }
 
   /**
-   * Compose with a jhipster generator using default jhipster config, but queue it immediately.
-   */
-  async dependsOnJHipster<const G extends keyof GeneratorsByNamespace>(
-    gen: G,
-    options?: ComposeOptions<GeneratorsByNamespace[G]>,
-  ): Promise<GeneratorsByNamespace[G]>;
-  async dependsOnJHipster(gen: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator>;
-  async dependsOnJHipster(generator: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator> {
-    // TODO move to base-core once types are fixed
-    return this.composeWithJHipster(generator, {
-      ...options,
-      schedule: false,
-    });
-  }
-
-  async composeWithJHipster<const G extends keyof GeneratorsByNamespace>(
-    gen: G,
-    options?: ComposeOptions<GeneratorsByNamespace[G]>,
-  ): Promise<GeneratorsByNamespace[G]>;
-  async composeWithJHipster(gen: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator>;
-  override async composeWithJHipster(gen: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator> {
-    // TODO move to base-core once types are fixed
-    return super.composeWithJHipster(gen, options);
-  }
-
-  override async writeFiles<DataType = any>(options: WriteFileOptions<DataType, this>): Promise<string[]> {
-    // TODO move to base-core
-    const { jhipster7Migration } = this.getFeatures();
-    if (!jhipster7Migration) {
-      return super.writeFiles<DataType>(options);
-    }
-
-    const context = createJHipster7Context(this, options.context ?? {}, {
-      log: jhipster7Migration === 'verbose' ? (msg: string) => this.log.info(msg) : () => {},
-    });
-    return super.writeFiles<DataType>({ ...options, context });
-  }
-
-  /**
    * Filter generator's tasks in case the blueprint should be responsible on queueing those tasks.
    */
   delegateTasksToBlueprint<TaskGroupType>(tasksGetter: () => TaskGroupType): TaskGroupType {
@@ -206,7 +165,7 @@ export default class BaseGenerator<
     return this.getContextData<Control>('jhipster:control', {
       factory: () => {
         let jhipsterOldVersion: string | null;
-        let enviromentHasDockerCompose: undefined | boolean;
+        let environmentHasDockerCompose: undefined | boolean;
         const customizeRemoveFiles: ((file: string) => string | undefined)[] = [];
         return {
           get existingProject(): boolean {
@@ -224,12 +183,12 @@ export default class BaseGenerator<
             }
             return jhipsterOldVersion;
           },
-          get enviromentHasDockerCompose(): boolean {
-            if (enviromentHasDockerCompose === undefined) {
+          get environmentHasDockerCompose(): boolean {
+            if (environmentHasDockerCompose === undefined) {
               const commandReturn = execaCommandSync('docker compose version', { reject: false, stdio: 'pipe' });
-              enviromentHasDockerCompose = !commandReturn || !commandReturn.failed; // TODO looks to be a bug on ARM MaCs and execaCommandSync, does not return anything, assuming mac users are smart and install docker.
+              environmentHasDockerCompose = !commandReturn || !commandReturn.failed; // TODO looks to be a bug on ARM MaCs and execaCommandSync, does not return anything, assuming mac users are smart and install docker.
             }
-            return enviromentHasDockerCompose;
+            return environmentHasDockerCompose;
           },
           customizeRemoveFiles,
           isJhipsterVersionLessThan(version: string): boolean {
@@ -308,9 +267,9 @@ export default class BaseGenerator<
     // Use started counter or use stored creationTimestamp if creationTimestamp option is passed
     const creationTimestamp = this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;
     let now = new Date();
-    // Miliseconds is ignored for changelogDate.
+    // Milliseconds is ignored for changelogDate.
     now.setMilliseconds(0);
-    // Run reproducible timestamp when regenerating the project with reproducible option or an specific timestamp.
+    // Run reproducible timestamp when regenerating the project with reproducible option or a specific timestamp.
     if (reproducible || creationTimestamp) {
       now = this.getContextData(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, {
         factory: () => {
@@ -384,13 +343,6 @@ export default class BaseGenerator<
   }
 
   /**
-   * Utility method to get typed objects for autocomplete.
-   */
-  asAnyTaskGroup(taskGroup: GenericTaskGroup<this, any>): GenericTaskGroup<any, any> {
-    return taskGroup;
-  }
-
-  /**
    * Priority API stub for blueprints.
    *
    * Initializing priority is used to show logo and tasks related to preparing for prompts, like loading constants.
@@ -402,9 +354,9 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asInitializingTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['InitializingTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['InitializingTaskParam']> {
+  asInitializingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['InitializingTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['InitializingTaskParam']>> {
     return taskGroup;
   }
 
@@ -420,7 +372,9 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPromptingTaskGroup(taskGroup: GenericTaskGroup<this, Tasks['PromptingTaskParam']>): GenericTaskGroup<any, Tasks['PromptingTaskParam']> {
+  asPromptingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PromptingTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['PromptingTaskParam']>> {
     return taskGroup;
   }
 
@@ -436,9 +390,9 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asConfiguringTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['ConfiguringTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['ConfiguringTaskParam']> {
+  asConfiguringTaskGroup<const T extends Record<string, GenericTask<this, Tasks['ConfiguringTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['ConfiguringTaskParam']>> {
     return taskGroup;
   }
 
@@ -454,7 +408,9 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asComposingTaskGroup(taskGroup: GenericTaskGroup<this, Tasks['ComposingTaskParam']>): GenericTaskGroup<any, Tasks['ComposingTaskParam']> {
+  asComposingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['ComposingTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['ComposingTaskParam']>> {
     return taskGroup;
   }
 
@@ -470,9 +426,9 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asComposingComponentTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['ComposingTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['ComposingTaskParam']> {
+  asComposingComponentTaskGroup<const T extends Record<string, GenericTask<this, Tasks['ComposingTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['ComposingTaskParam']>> {
     return taskGroup;
   }
 
@@ -489,7 +445,9 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asLoadingTaskGroup(taskGroup: GenericTaskGroup<this, Tasks['LoadingTaskParam']>): GenericTaskGroup<any, Tasks['LoadingTaskParam']> {
+  asLoadingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['LoadingTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['LoadingTaskParam']>> {
     return taskGroup;
   }
 
@@ -505,7 +463,9 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPreparingTaskGroup(taskGroup: GenericTaskGroup<this, Tasks['PreparingTaskParam']>): GenericTaskGroup<any, Tasks['PreparingTaskParam']> {
+  asPreparingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PreparingTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['PreparingTaskParam']>> {
     return taskGroup;
   }
 
@@ -521,9 +481,9 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPostPreparingTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['PostPreparingTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['PostPreparingTaskParam']> {
+  asPostPreparingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PostPreparingTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['PostPreparingTaskParam']>> {
     return taskGroup;
   }
 
@@ -539,7 +499,9 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asDefaultTaskGroup(taskGroup: GenericTaskGroup<this, Tasks['DefaultTaskParam']>): GenericTaskGroup<any, Tasks['DefaultTaskParam']> {
+  asDefaultTaskGroup<const T extends Record<string, GenericTask<this, Tasks['DefaultTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['DefaultTaskParam']>> {
     return taskGroup;
   }
 
@@ -555,7 +517,9 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asWritingTaskGroup(taskGroup: GenericTaskGroup<this, Tasks['WritingTaskParam']>): GenericTaskGroup<any, Tasks['WritingTaskParam']> {
+  asWritingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['WritingTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['WritingTaskParam']>> {
     return taskGroup;
   }
 
@@ -571,9 +535,9 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPostWritingTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['PostWritingTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['PostWritingTaskParam']> {
+  asPostWritingTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PostWritingTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['PostWritingTaskParam']>> {
     return taskGroup;
   }
 
@@ -589,7 +553,9 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asInstallTaskGroup(taskGroup: GenericTaskGroup<this, Tasks['InstallTaskParam']>): GenericTaskGroup<any, Tasks['InstallTaskParam']> {
+  asInstallTaskGroup<const T extends Record<string, GenericTask<this, Tasks['InstallTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['InstallTaskParam']>> {
     return taskGroup;
   }
 
@@ -605,9 +571,9 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asPostInstallTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['PostInstallTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['PostInstallTaskParam']> {
+  asPostInstallTaskGroup<const T extends Record<string, GenericTask<this, Tasks['PostInstallTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['PostInstallTaskParam']>> {
     return taskGroup;
   }
 
@@ -623,7 +589,9 @@ export default class BaseGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asEndTaskGroup(taskGroup: GenericTaskGroup<this, Tasks['EndTaskParam']>): GenericTaskGroup<any, Tasks['EndTaskParam']> {
+  asEndTaskGroup<const T extends Record<string, GenericTask<this, Tasks['EndTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['EndTaskParam']>> {
     return taskGroup;
   }
 
@@ -748,7 +716,7 @@ export default class BaseGenerator<
 
     if (!this.skipChecks) {
       const namespaces = blueprints.map(blueprint => packageNameToNamespace(blueprint.name));
-      // Verify if the blueprints hava been registered.
+      // Verify if the blueprints have been registered.
       const missing = namespaces.filter(namespace => !this.env.isPackageRegistered(namespace));
       if (missing && missing.length > 0) {
         throw new Error(`Some blueprints were not found ${missing}, you should install them manually`);
@@ -880,7 +848,7 @@ export default class BaseGenerator<
 }
 
 export class CommandBaseGenerator<
-  Command extends ParseableCommand,
+  Command extends ParsableCommand,
   AdditionalOptions = unknown,
   AdditionalFeatures = unknown,
 > extends BaseGenerator<

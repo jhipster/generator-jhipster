@@ -1,7 +1,9 @@
-import { join } from 'path';
+import { join } from 'node:path';
+
 import { execa } from 'execa';
-import { basicHelpers as helpers, runResult } from '../lib/testing/index.js';
-import { getPackageRoot } from '../lib/index.js';
+
+import { getPackageRoot } from '../lib/index.ts';
+import { basicHelpers as helpers, runResult } from '../lib/testing/index.ts';
 
 const jhipsterCli = join(getPackageRoot(), 'bin/jhipster.cjs');
 

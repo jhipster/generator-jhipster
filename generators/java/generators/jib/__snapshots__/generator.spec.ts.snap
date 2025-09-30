@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`generator - java:jib with defaults options should match files snapshot 1`] = `
 {
@@ -20,16 +20,7 @@ exports[`generator - java:jib with defaults options should match files snapshot 
   "mvnw.cmd": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -122,21 +113,6 @@ exports[`generator - java:jib with defaults options should match source snapshot
       ],
     },
   ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
-    },
-  ],
 }
 `;
 
@@ -169,16 +145,7 @@ exports[`generator - java:jib with gradle buildTool should match files snapshot 
   "gradlew.bat": {
     "stateCleared": "modified",
   },
-  "package.json": {
-    "stateCleared": "modified",
-  },
   "src/main/docker/jib/entrypoint.sh": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
 }
@@ -192,28 +159,13 @@ exports[`generator - java:jib with gradle buildTool should match source snapshot
         "libraryName": "jib-plugin",
         "module": "com.google.cloud.tools:jib-gradle-plugin",
         "scope": "implementation",
-        "version": "'JIB-MAVEN-PLUGIN-VERSION'",
+        "version": "'GRADLE-JIB-VERSION'",
       },
     ],
   ],
   "addGradlePlugin": [
     {
       "id": "jhipster.docker-conventions",
-    },
-  ],
-  "mergePrettierConfig": [
-    {
-      "overrides": [
-        {
-          "files": "*.java",
-          "options": {
-            "tabWidth": 4,
-          },
-        },
-      ],
-      "plugins": [
-        "prettier-plugin-java",
-      ],
     },
   ],
 }

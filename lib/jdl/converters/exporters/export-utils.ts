@@ -17,11 +17,12 @@
  * limitations under the License.
  */
 
-import fs from 'fs';
-import { doesFileExist } from '../../core/utils/file-utils.js';
+import fs from 'node:fs';
+
 import { YO_RC_FILE } from '../../../constants/yeoman.ts';
-import { mergeYoRcContent, readYoRcFile } from '../../../utils/yo-rc.js';
-import type { YoRcJHipsterContent } from '../../../jhipster/types/yo-rc.js';
+import type { YoRcJHipsterContent } from '../../../jhipster/types/yo-rc.ts';
+import { mergeYoRcContent, readYoRcFile } from '../../../utils/yo-rc.ts';
+import { doesFileExist } from '../../core/utils/file-utils.ts';
 
 export const GENERATOR_NAME = 'generator-jhipster';
 

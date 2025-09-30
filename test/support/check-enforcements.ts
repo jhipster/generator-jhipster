@@ -16,11 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import assert from 'assert';
-import { opendirSync, readFileSync, writeFileSync } from 'fs';
-import path, { basename } from 'path';
+import assert from 'node:assert';
+import { opendirSync, readFileSync, writeFileSync } from 'node:fs';
+import path, { basename } from 'node:path';
+
 import { before, describe, it } from 'mocha';
-import { getGeneratorFolder } from '../../lib/testing/get-generator.js';
+
+import { getGeneratorFolder } from '../../lib/testing/get-generator.ts';
 
 const fixEnforcements = process.argv.includes('--fix-enforcements');
 
@@ -43,7 +45,7 @@ const readDir = (dirPath: string) => {
 
 export default function checkEnforcements({ client }: { client?: boolean }, generator: string, ...generatorUsage: string[]) {
   describe('enforce some developments patterns', () => {
-    const allFiles = readDir(getGeneratorFolder(generator));
+    const allFiles = readDir(getGeneratorFolder(generator)).filter(file => !/i18n\/(.*)\.json\.ejs$/.test(file));
     allFiles
       .filter(file => !/\.spec\.[mc]?[jt]s(.snap)?$/.test(file))
       .forEach(file => {
@@ -62,9 +64,9 @@ export default function checkEnforcements({ client }: { client?: boolean }, gene
                   [' Java ', ' <%= backendType %> '],
                 ]
               : []),
-          ].forEach(([notSpected, replacement]) => {
-            const regex = new RegExp(notSpected, 'g');
-            const regexSeparator = new RegExp(`${notSpected}/`, 'g');
+          ].forEach(([notExpected, replacement]) => {
+            const regex = new RegExp(notExpected, 'g');
+            const regexSeparator = new RegExp(`${notExpected}/`, 'g');
             before(() => {
               if (!fixEnforcements || !replacement) return;
               if (file.endsWith('.ejs')) {
@@ -78,8 +80,8 @@ export default function checkEnforcements({ client }: { client?: boolean }, gene
                 }
               }
             });
-            it(`should not contain ${notSpected}`, () => {
-              assert(!regex.test(content), `file ${file} should not contain ${notSpected}`);
+            it(`should not contain ${notExpected}`, () => {
+              assert(!regex.test(content), `file ${file} should not contain ${notExpected}`);
             });
           });
         });

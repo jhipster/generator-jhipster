@@ -16,8 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 
 const command = {
   configs: {
@@ -31,7 +30,7 @@ const command = {
       },
     },
   },
-  import: [GENERATOR_BOOTSTRAP_APPLICATION_BASE, 'jhipster:javascript:prettier', 'jhipster:javascript:husky'],
+  import: ['bootstrap-application-base', 'jhipster:javascript-simple-application:prettier', 'jhipster:javascript-simple-application:husky'],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

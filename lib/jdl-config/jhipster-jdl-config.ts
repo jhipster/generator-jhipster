@@ -17,14 +17,15 @@
  * limitations under the License.
  */
 import { snakeCase, upperCase } from 'lodash-es';
-import type { JDLApplicationConfig, JHipsterOptionDefinition } from '../jdl/core/types/parsing.js';
-import springBootCommand from '../../generators/spring-boot/command.ts';
-import springCloudStreamCommand from '../../generators/spring-cloud-stream/command.ts';
+
 import liquibaseCommand from '../../generators/liquibase/command.ts';
+import springBootCommand from '../../generators/spring-boot/command.ts';
 import gatewayCommand from '../../generators/spring-cloud/generators/gateway/command.ts';
-import type { JHipsterConfigs } from '../command/types.js';
-import type { JDLRuntime } from '../jdl/core/types/runtime.js';
+import springCloudStreamCommand from '../../generators/spring-cloud-stream/command.ts';
+import type { JHipsterConfigs } from '../command/types.ts';
 import { createRuntime } from '../jdl/core/runtime.ts';
+import type { JDLApplicationConfig, JHipsterOptionDefinition } from '../jdl/core/types/parsing.ts';
+import type { JDLRuntime } from '../jdl/core/types/runtime.ts';
 
 export const extractJdlDefinitionFromCommandConfig = (configs: JHipsterConfigs = {}): JHipsterOptionDefinition[] =>
   Object.entries(configs)
@@ -72,14 +73,12 @@ export const buildJDLApplicationConfig = (configs: JHipsterConfigs): JDLApplicat
 
 let defaultJDLApplicationConfig: JDLApplicationConfig;
 export const getDefaultJDLApplicationConfig = () => {
-  if (defaultJDLApplicationConfig === undefined) {
-    defaultJDLApplicationConfig = buildJDLApplicationConfig({
-      ...springCloudStreamCommand.configs,
-      ...springBootCommand.configs,
-      ...liquibaseCommand.configs,
-      ...gatewayCommand.configs,
-    });
-  }
+  defaultJDLApplicationConfig ??= buildJDLApplicationConfig({
+    ...springCloudStreamCommand.configs,
+    ...springBootCommand.configs,
+    ...liquibaseCommand.configs,
+    ...gatewayCommand.configs,
+  });
   return defaultJDLApplicationConfig;
 };
 

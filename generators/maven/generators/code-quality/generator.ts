@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { Source as CommonSource } from '../../../common/types.d.ts';
 import { JavaApplicationGenerator } from '../../../java/generator.ts';
 
 export default class CodeQualityGenerator extends JavaApplicationGenerator {
@@ -25,7 +26,7 @@ export default class CodeQualityGenerator extends JavaApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplication();
+      await this.dependsOnBootstrap('java');
       await this.dependsOnJHipster('maven');
     }
   }
@@ -124,6 +125,15 @@ export default class CodeQualityGenerator extends JavaApplicationGenerator {
             },
           ],
         });
+
+        (source as CommonSource).addSonarProperties?.([
+          { key: 'sonar.coverage.jacoco.xmlReportPaths', value: `${application.temporaryDir}site/**/jacoco*.xml` },
+          { key: 'sonar.java.codeCoveragePlugin', value: 'jacoco' },
+          {
+            key: 'sonar.junit.reportPaths',
+            value: `${application.temporaryDir}surefire-reports,${application.temporaryDir}failsafe-reports`,
+          },
+        ]);
       },
       spotless({ application, source }) {
         const { javaDependencies } = application;

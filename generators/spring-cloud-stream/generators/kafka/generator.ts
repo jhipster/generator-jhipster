@@ -18,8 +18,9 @@
  */
 
 import { SpringBootApplicationGenerator } from '../../../spring-boot/generator.ts';
-import cleanupKafkaFilesTask from './cleanup.js';
-import { kafkaFiles } from './files.js';
+
+import cleanupKafkaFilesTask from './cleanup.ts';
+import { kafkaFiles } from './files.ts';
 
 export default class KafkaGenerator extends SpringBootApplicationGenerator {
   async beforeQueue() {
@@ -28,7 +29,7 @@ export default class KafkaGenerator extends SpringBootApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplicationServer();
+      await this.dependsOnBootstrap('java');
     }
   }
 

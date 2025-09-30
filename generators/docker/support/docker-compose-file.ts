@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { DockerComposeService } from '../types.js';
+import type { DockerComposeService } from '../types.ts';
 
 /**
  * Creates EditFileCallback that creates a base docker compose yml file if empty.

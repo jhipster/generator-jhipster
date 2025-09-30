@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { javaMainPackageTemplatesBlock } from '../java/support/index.js';
-import type { Application as JavaApplication, Entity as JavaEntity } from '../java/types.d.ts';
 import { asWriteFilesBlock, asWriteFilesSection, asWritingEntitiesTask } from '../base-application/support/task-type-inference.ts';
+import { javaMainPackageTemplatesBlock } from '../java/support/index.ts';
+import type { Application as JavaApplication, Entity as JavaEntity } from '../java/types.d.ts';
 
 const domainFiles = [
   asWriteFilesBlock({
@@ -43,7 +43,7 @@ export const entityFiles = asWriteFilesSection({
 
 export function cleanupEntitiesTask() {}
 
-export default asWritingEntitiesTask<JavaEntity, JavaApplication<JavaEntity>>(async function writeEntitiesTask({ application, entities }) {
+export default asWritingEntitiesTask<JavaEntity, JavaApplication>(async function writeEntitiesTask({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.skipServer)) {
     await this.writeFiles({
       sections: entityFiles,

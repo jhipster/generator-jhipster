@@ -231,7 +231,7 @@ _%>
     }
 
     private String extractTitleForResponseStatus(Throwable err, int statusCode) {
-        ResponseStatus specialStatus = extractResponseStatus(err);
+        var specialStatus = extractResponseStatus(err);
         return specialStatus == null ? HttpStatus.valueOf(statusCode).getReasonPhrase() : specialStatus.reason();
     }
 

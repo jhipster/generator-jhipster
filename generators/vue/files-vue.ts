@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import { asWriteFilesSection, asWritingEntitiesTask, asWritingTask } from '../base-application/support/index.js';
-import { clientApplicationTemplatesBlock, clientRootTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.js';
-import type { Application as ClientApplication, Entity as ClientEntity } from '../client/types.js';
+import { asWriteFilesSection, asWritingEntitiesTask, asWritingTask } from '../base-application/support/index.ts';
+import { clientApplicationTemplatesBlock, clientRootTemplatesBlock, clientSrcTemplatesBlock } from '../client/support/files.ts';
+import type { Application as ClientApplication, Entity as ClientEntity } from '../client/types.ts';
 
 export const vueFiles = asWriteFilesSection({
   common: [
@@ -102,6 +102,10 @@ export const vueFiles = asWriteFilesSection({
       ...clientApplicationTemplatesBlock(),
       templates: ['locale/translation.service.ts', 'shared/config/store/translation-store.ts', 'shared/config/languages.ts'],
     },
+    clientRootTemplatesBlock({
+      condition: ctx => ctx.enableTranslation && ctx.enableI18nRTL,
+      templates: ['postcss.config.ts'],
+    }),
   ],
   sharedVueApp: [
     {
@@ -285,14 +289,14 @@ export const entitiesFiles = {
   ],
 };
 
-export const writeFiles = asWritingTask<ClientEntity, ClientApplication<ClientEntity>>(async function writeFiles({ application }) {
+export const writeFiles = asWritingTask<ClientEntity, ClientApplication>(async function writeFiles({ application }) {
   await this.writeFiles({
     sections: vueFiles,
     context: application,
   });
 });
 
-export const writeEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientApplication<ClientEntity>>(async function writeEntitiesFiles({
+export const writeEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientApplication>(async function writeEntitiesFiles({
   application,
   entities,
 }) {

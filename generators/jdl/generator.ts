@@ -16,25 +16,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { extname } from 'path';
-import { readFile } from 'fs/promises';
+import { readFile } from 'node:fs/promises';
+import { extname } from 'node:path';
+
 import { upperFirst } from 'lodash-es';
 import { type Store as MemFs, create as createMemFs } from 'mem-fs';
 import { type MemFsEditor, create as createMemFsEditor } from 'mem-fs-editor';
 
-import BaseGenerator from '../base/index.js';
-import { downloadJdlFile } from '../../cli/download.mjs';
-import EnvironmentBuilder from '../../cli/environment-builder.mjs';
-import { CLI_NAME } from '../../cli/utils.mjs';
-import { GENERATOR_APP, GENERATOR_ENTITIES, GENERATOR_WORKSPACES } from '../generator-list.js';
-import type { ApplicationWithEntities } from '../../lib/jdl/jdl-importer.js';
-import { createImporterFromContent } from '../../lib/jdl/jdl-importer.js';
+import { downloadJdlFile } from '../../cli/download.ts';
+import EnvironmentBuilder from '../../cli/environment-builder.js';
+import { CLI_NAME } from '../../cli/utils.ts';
+import type { ApplicationWithEntities } from '../../lib/jdl/jdl-importer.ts';
+import { createImporterFromContent } from '../../lib/jdl/jdl-importer.ts';
+import { mergeYoRcContent } from '../../lib/utils/yo-rc.ts';
+import BaseGenerator from '../base/index.ts';
+import { normalizeBlueprintName } from '../base/internal/blueprint.ts';
+import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.ts';
 import { GENERATOR_JHIPSTER, JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
-import { mergeYoRcContent } from '../../lib/utils/yo-rc.js';
-import { normalizeBlueprintName } from '../base/internal/blueprint.js';
-import { updateApplicationEntitiesTransform } from '../base-application/support/update-application-entities-transform.js';
-import { addApplicationIndex, allNewApplications, customizeForMicroservices } from './internal/index.js';
-import type { Config as JdlConfig, Options as JdlOptions } from './types.js';
+import type { Options as GitOptions } from '../git/types.d.ts';
+
+import { addApplicationIndex, allNewApplications, customizeForMicroservices } from './internal/index.ts';
+import type { Config as JdlConfig, Options as JdlOptions } from './types.ts';
 
 /**
  * Add jdl extension to the file
@@ -52,9 +54,9 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
   jdlFiles?: string[];
   inline?: string;
   jdlContents: string[] = [];
-  entrypointGenerator = `${CLI_NAME}:${GENERATOR_APP}`;
-  entitiesGenerator = GENERATOR_ENTITIES;
-  workspacesGenerator = GENERATOR_WORKSPACES;
+  entrypointGenerator = `${CLI_NAME}:app`;
+  entitiesGenerator = 'entities';
+  workspacesGenerator = 'workspaces';
 
   interactive?: boolean;
   jsonOnly?: boolean;
@@ -216,9 +218,10 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
           this.log.info(`Generating ${this.applications.length} applications`);
           await this.composeWithJHipster(this.workspacesGenerator as 'workspaces', {
             generatorOptions: {
+              /** TODO types contains appsFolders which is not correctly handled, {@see file:../workspaces/command.ts} */
               workspacesFolders: this.applications.map(app => app.folder!),
               generateApplications: async () => this.runNonInteractive(this.applications, generatorOptions),
-            },
+            } as any,
           });
         } else {
           this.log.info('Generating 1 application');
@@ -275,7 +278,7 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
         const generatorOptions = { ...this.options, ...options, skipPriorities: ['prompting'] };
 
         // Install should happen at the root of the monorepository. Force skip install at childs.
-        if (this.options.monorepository) {
+        if ((this.options as GitOptions).monorepository) {
           generatorOptions.skipInstall = true;
         }
         const envBuilder = await this.createEnvBuilder(envOptions);

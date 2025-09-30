@@ -17,33 +17,33 @@
  * limitations under the License.
  */
 import assert from 'node:assert';
-import { existsSync } from 'fs';
-import pathjs from 'path';
+import { existsSync } from 'node:fs';
+import pathjs from 'node:path';
+
 import chalk from 'chalk';
-
-import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import normalize from 'normalize-path';
+import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 
-import BaseWorkspacesGenerator from '../base-workspaces/index.js';
+import { monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.ts';
+import { createBase64Secret, stringHashCode } from '../../lib/utils/index.ts';
+import { createFaker } from '../base-application/support/index.ts';
 import type {
   Deployment as BaseDeployment,
-  WorkspacesApplication as BaseWorkspacesApplication,
   WorkspacesApplication,
-} from '../base-workspaces/index.js';
-
-import { monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.js';
-import { createBase64Secret, stringHashCode } from '../../lib/utils/index.js';
-import { createFaker } from '../base-application/support/index.ts';
-import { checkDocker } from '../base-workspaces/internal/docker-base.js';
-import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.js';
+  WorkspacesApplication as BaseWorkspacesApplication,
+} from '../base-workspaces/index.ts';
+import BaseWorkspacesGenerator from '../base-workspaces/index.ts';
+import { checkDocker } from '../base-workspaces/internal/docker-base.ts';
 import {
   askForClustersModeWorkspace,
   askForMonitoring,
   askForServiceDiscoveryWorkspace,
-} from '../base-workspaces/internal/docker-prompts.js';
+} from '../base-workspaces/internal/docker-prompts.ts';
+import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.ts';
 import { askForDirectoryPath } from '../base-workspaces/prompts.ts';
-import cleanupOldFilesTask from './cleanup.js';
-import { writeFiles } from './files.js';
+
+import cleanupOldFilesTask from './cleanup.ts';
+import { writeFiles } from './files.ts';
 
 const { PROMETHEUS } = monitoringTypes;
 const { EUREKA, NO: NO_SERVICE_DISCOVERY } = serviceDiscoveryTypes;
@@ -57,9 +57,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
       await this.composeWithBlueprints();
     }
 
-    if (!this.delegateToBlueprint) {
-      await this.composeWithJHipster('jhipster:bootstrap-workspaces');
-    }
+    await this.dependsOnBootstrap('base-workspaces');
   }
 
   get initializing() {
@@ -72,7 +70,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
       async checkDockerCompose({ control }) {
         if (this.skipChecks) return;
 
-        if (!control.enviromentHasDockerCompose) {
+        if (!control.environmentHasDockerCompose) {
           throw new Error(`Docker Compose V2 is not installed on your computer.
          Read https://docs.docker.com/compose/install/
 `);

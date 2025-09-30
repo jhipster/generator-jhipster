@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../../../base-application/index.js';
-import { clientApplicationTemplatesBlock } from '../../support/index.js';
+import BaseApplicationGenerator from '../../../base-application/index.ts';
+import { clientApplicationTemplatesBlock } from '../../support/index.ts';
 
 export default class CommonGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
@@ -26,7 +26,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplication();
+      await this.dependsOnBootstrap('client');
     }
   }
 

@@ -18,25 +18,28 @@
  */
 
 import { before, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import JDLApplicationEntities from '../models/jdl-application-entities.js';
+
+import JDLApplicationEntities from './jdl-application-entities.ts';
 
 describe('jdl - JDLApplicationEntities', () => {
   describe('addEntityNames', () => {
     describe('when not passing anything', () => {
-      let jdlApplicationEntities;
+      let jdlApplicationEntities: JDLApplicationEntities;
 
       before(() => {
         jdlApplicationEntities = new JDLApplicationEntities();
       });
 
       it('should fail', () => {
+        // @ts-expect-error invalid api test
         expect(() => jdlApplicationEntities.add()).to.throw(/^An entity name has to be passed so as to be added\.$/);
       });
     });
     describe('when passing an entity name', () => {
       describe('that is already present', () => {
-        let jdlApplicationEntities;
+        let jdlApplicationEntities: JDLApplicationEntities;
 
         before(() => {
           jdlApplicationEntities = new JDLApplicationEntities(['A']);
@@ -48,7 +51,7 @@ describe('jdl - JDLApplicationEntities', () => {
         });
       });
       describe('that is not already present', () => {
-        let jdlApplicationEntities;
+        let jdlApplicationEntities: JDLApplicationEntities;
 
         before(() => {
           jdlApplicationEntities = new JDLApplicationEntities(['A']);
@@ -63,7 +66,7 @@ describe('jdl - JDLApplicationEntities', () => {
   });
   describe('addEntityNames', () => {
     describe('when not passing anything', () => {
-      let jdlApplicationEntities;
+      let jdlApplicationEntities: JDLApplicationEntities;
 
       before(() => {
         jdlApplicationEntities = new JDLApplicationEntities(['A']);
@@ -75,10 +78,11 @@ describe('jdl - JDLApplicationEntities', () => {
       });
     });
     describe('when passing a falsy name', () => {
-      let jdlApplicationEntities;
+      let jdlApplicationEntities: JDLApplicationEntities;
 
       before(() => {
         jdlApplicationEntities = new JDLApplicationEntities(['A']);
+        // @ts-expect-error invalid api test
         jdlApplicationEntities.addEntityNames([undefined, null]);
       });
 
@@ -87,7 +91,7 @@ describe('jdl - JDLApplicationEntities', () => {
       });
     });
     describe('when passing entity names', () => {
-      let jdlApplicationEntities;
+      let jdlApplicationEntities: JDLApplicationEntities;
 
       before(() => {
         jdlApplicationEntities = new JDLApplicationEntities(['A']);
@@ -101,18 +105,19 @@ describe('jdl - JDLApplicationEntities', () => {
   });
   describe('forEach', () => {
     describe('when not passing a function', () => {
-      let jdlApplicationEntities;
+      let jdlApplicationEntities: JDLApplicationEntities;
 
       before(() => {
         jdlApplicationEntities = new JDLApplicationEntities();
       });
 
       it('should not fail', () => {
+        // @ts-expect-error invalid api test
         expect(() => jdlApplicationEntities.forEach()).not.to.throw();
       });
     });
     describe('when passing a function', () => {
-      let result;
+      let result: any;
 
       before(() => {
         const jdlApplicationEntities = new JDLApplicationEntities(['A', 'B']);
@@ -128,7 +133,7 @@ describe('jdl - JDLApplicationEntities', () => {
   });
   describe('toArray', () => {
     describe('when there is no entity', () => {
-      let jdlApplicationEntities;
+      let jdlApplicationEntities: JDLApplicationEntities;
 
       before(() => {
         jdlApplicationEntities = new JDLApplicationEntities();
@@ -139,7 +144,7 @@ describe('jdl - JDLApplicationEntities', () => {
       });
     });
     describe('when there are entities', () => {
-      let jdlApplicationEntities;
+      let jdlApplicationEntities: JDLApplicationEntities;
 
       before(() => {
         jdlApplicationEntities = new JDLApplicationEntities(['A', 'B']);
@@ -152,7 +157,7 @@ describe('jdl - JDLApplicationEntities', () => {
   });
   describe('size', () => {
     describe('when there is no entity', () => {
-      let jdlApplicationEntities;
+      let jdlApplicationEntities: JDLApplicationEntities;
 
       before(() => {
         jdlApplicationEntities = new JDLApplicationEntities();
@@ -163,7 +168,7 @@ describe('jdl - JDLApplicationEntities', () => {
       });
     });
     describe('when there are entities', () => {
-      let jdlApplicationEntities;
+      let jdlApplicationEntities: JDLApplicationEntities;
 
       before(() => {
         jdlApplicationEntities = new JDLApplicationEntities(['A', 'B']);
@@ -176,7 +181,7 @@ describe('jdl - JDLApplicationEntities', () => {
   });
   describe('toString', () => {
     describe('when there is no entity', () => {
-      let jdlApplicationEntities;
+      let jdlApplicationEntities: JDLApplicationEntities;
 
       before(() => {
         jdlApplicationEntities = new JDLApplicationEntities();
@@ -187,7 +192,7 @@ describe('jdl - JDLApplicationEntities', () => {
       });
     });
     describe('when there is an entity', () => {
-      let jdlApplicationEntities;
+      let jdlApplicationEntities: JDLApplicationEntities;
 
       before(() => {
         jdlApplicationEntities = new JDLApplicationEntities(['A']);
@@ -198,7 +203,7 @@ describe('jdl - JDLApplicationEntities', () => {
       });
     });
     describe('when there are entities', () => {
-      let jdlApplicationEntities;
+      let jdlApplicationEntities: JDLApplicationEntities;
 
       before(() => {
         jdlApplicationEntities = new JDLApplicationEntities(['A', 'B']);

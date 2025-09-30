@@ -1,6 +1,0 @@
-if [ -z "$(which lint-staged)" ]; then
-    echo 'Running package manager install'
-    <% if (locals.useNpmWrapper) { %>./npmw<% } else { %>npm<% } %> install
-fi
-
-lint-staged

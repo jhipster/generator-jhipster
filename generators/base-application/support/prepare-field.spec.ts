@@ -18,12 +18,15 @@
  */
 
 import { beforeEach, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import { formatDateForChangelog } from '../../base/support/index.js';
-import BaseGenerator from '../../base/index.js';
-import { getConfigWithDefaults } from '../../../lib/jhipster/default-application-options.js';
-import prepareFieldForTemplates, { getEnumValuesWithCustomValues } from './prepare-field.js';
-import prepareEntityForTemplates, { loadRequiredConfigIntoEntity } from './prepare-entity.js';
+
+import { getConfigWithDefaults } from '../../../lib/jhipster/default-application-options.ts';
+import BaseGenerator from '../../base/index.ts';
+import { formatDateForChangelog } from '../../base/support/index.ts';
+
+import prepareEntityForTemplates, { loadRequiredConfigIntoEntity } from './prepare-entity.ts';
+import { getEnumValuesWithCustomValues, prepareCommonFieldForTemplates } from './prepare-field.ts';
 
 const defaultConfig = getConfigWithDefaults();
 
@@ -34,14 +37,13 @@ describe('generator - base-application - support - prepareField', () => {
   const defaultEntity = prepareEntityForTemplates(
     loadRequiredConfigIntoEntity({ changelogDate: formatDateForChangelog(new Date()), name: 'Entity' } as any, defaultConfig as any),
     defaultGenerator as any,
-    defaultConfig as any,
   );
 
   describe('prepareFieldForTemplates', () => {
     describe('when called', () => {
       let field: any = { fieldName: 'name', fieldType: 'String' };
       beforeEach(() => {
-        field = prepareFieldForTemplates(defaultConfig as any, defaultEntity, field, defaultGenerator as any);
+        field = prepareCommonFieldForTemplates(defaultEntity, field, defaultGenerator as any);
       });
       it('should prepare path correctly', () => {
         expect(field.path).to.deep.eq(['name']);

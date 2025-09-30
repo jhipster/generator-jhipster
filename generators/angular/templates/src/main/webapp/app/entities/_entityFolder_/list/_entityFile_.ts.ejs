@@ -1,0 +1,439 @@
+<%#
+ Copyright 2013-2025 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_
+  const notSortableFieldsAfterSearchArray = searchEngineNo ? [] : fields
+      .filter(field => !field.hidden && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal);
+
+  const notSortableFieldsAfterSearchFieldNames = notSortableFieldsAfterSearchArray
+      .map(field => field.fieldName);
+
+  const notSortableFieldsAfterSearch = notSortableFieldsAfterSearchArray
+      .map(field => `'${field.fieldName}'`)
+      .join(', ');
+
+  const componentName = entityAngularName;
+_%>
+import { Component, computed, effect, NgZone, inject, OnInit, signal, WritableSignal } from '@angular/core';
+<%_ if (!paginationNo) { _%>
+import { HttpHeaders } from '@angular/common/http';
+<%_ } _%>
+import { ActivatedRoute, Data, ParamMap, Router, RouterLink } from '@angular/router';
+import { combineLatest<%_ if (!readOnly) { _%>, filter<%_ } _%>, Observable, Subscription, tap } from 'rxjs';
+<%_ if (!readOnly) { _%>
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+<%_ } _%>
+
+import SharedModule from 'app/shared/shared.module';
+import { sortStateSignal, SortDirective, SortByDirective, type SortState, SortService } from 'app/shared/sort';
+import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
+<%_ if (paginationPagination) { _%>
+import { ItemCount } from 'app/shared/pagination';
+<%_ } _%>
+<%_ if (searchEngine) { _%>
+import { FormsModule } from '@angular/forms';
+<%_ } _%>
+import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
+<%_ if (!paginationNo) { %>
+import {
+  ITEMS_PER_PAGE,
+<%_ if (paginationPagination) { _%>
+  PAGE_HEADER,
+<%_ } _%>
+<%_ if (paginationPagination) { _%>
+  TOTAL_COUNT_RESPONSE_HEADER,
+<%_ } _%>
+} from 'app/config/pagination.constants';
+<%_ } _%>
+import {
+  SORT,
+<%_ if (!readOnly) { _%>
+  ITEM_DELETED_EVENT,
+<%_ } _%>
+  DEFAULT_SORT_DATA
+} from 'app/config/navigation.constants';
+import { EntityArrayResponseType, <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
+<%_ if (!readOnly) { _%>
+import { <%= entityAngularName %>DeleteDialog } from '../delete/<%= entityFileName %>-delete-dialog';
+<%_ } _%>
+<%_ if (anyFieldIsBlobDerived) { _%>
+import { DataUtils } from 'app/core/util/data-util.service';
+<%_ } _%>
+<%_ if (paginationInfiniteScroll) { _%>
+import { ParseLinks } from 'app/core/util/parse-links.service';
+<%_ } _%>
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+import { Filter, FilterOptions, IFilterOptions, IFilterOption } from 'app/shared/filter';
+<%_ } _%>
+<%_ if (paginationInfiniteScroll) { _%>
+import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
+<%_ } _%>
+
+@Component({
+    selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>',
+    templateUrl: './<%= entityFileName %>.html',
+    imports: [
+      RouterLink,
+<%_ if (searchEngine) { _%>
+      FormsModule,
+<%_ } _%>
+      SharedModule,
+      SortDirective,
+      SortByDirective,
+<%_ if (anyFieldIsDuration) { _%>
+      DurationPipe,
+<%_ } _%>
+<%_ if (anyFieldIsTimeDerived) { _%>
+      FormatMediumDatetimePipe,
+<%_ } _%>
+<%_ if (anyFieldIsLocalDate) { _%>
+      FormatMediumDatePipe,
+<%_ } _%>
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+      Filter,
+<%_ } _%>
+<%_ if (paginationPagination) { _%>
+      ItemCount,
+<%_ } _%>
+<%_ if (paginationInfiniteScroll) { _%>
+      InfiniteScrollDirective,
+<%_ } _%>
+    ],
+})
+export class <%= componentName %> implements OnInit {
+
+<%_ if (notSortableFieldsAfterSearch) { _%>
+    private static readonly NOT_SORTABLE_FIELDS_AFTER_SEARCH = [<%- notSortableFieldsAfterSearch %>];
+
+<%_ } _%>
+    subscription: Subscription | null = null;
+    <%= entityInstancePlural %> = signal<I<%= entityAngularName %>[]>([]);
+    isLoading = false;
+
+    sortState = sortStateSignal({});
+<%_ if (searchEngineAny) { _%>
+    currentSearch = '';
+<%_ } _%>
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+    filters: IFilterOptions = new FilterOptions();
+<%_ } _%>
+
+<%_ if (paginationPagination) { _%>
+  itemsPerPage = ITEMS_PER_PAGE;
+  totalItems = 0;
+  page = 1;
+<%_ } else if (paginationInfiniteScroll) { _%>
+    itemsPerPage = ITEMS_PER_PAGE;
+    links: WritableSignal<Record<string, undefined | Record<string, string | undefined>>> = signal({});
+    hasMorePage = computed(() => !!this.links().next);
+    isFirstFetch = computed(() => Object.keys(this.links()).length === 0);
+<%_ } _%>
+
+    readonly router = inject(Router);
+    protected readonly <%= entityInstance %>Service = inject(<%= entityAngularName %>Service);
+    protected readonly activatedRoute = inject(ActivatedRoute);
+    protected readonly sortService = inject(SortService);
+<%_ if (paginationInfiniteScroll) { _%>
+    protected parseLinks = inject(ParseLinks);
+<%_ } _%>
+<%_ if (anyFieldIsBlobDerived) { _%>
+    protected dataUtils = inject(DataUtils);
+<%_ } _%>
+<%_ if (!readOnly) { _%>
+    protected modalService = inject(NgbModal);
+<%_ } _%>
+    protected ngZone = inject(NgZone);
+<%_ if (primaryKey) { _%>
+
+    track<%= primaryKey.nameCapitalized %> = (item: I<%= entityAngularName %>): <%= primaryKey.tsType %> => this.<%= entityInstance %>Service.get<%= entityAngularName %>Identifier(item);
+<%_ } _%>
+
+    ngOnInit(): void {
+      this.subscription = combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
+        tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
+<%_ if (paginationInfiniteScroll) { _%>
+        tap(() => this.reset()),
+<%_ } _%>
+<%_ if (!paginationNo || searchEngineAny || jpaMetamodelFiltering) { _%>
+        tap(() => this.load()),
+<%_ } else { _%>
+        tap(() => {
+          if (this.<%= entityInstancePlural %>().length === 0) {
+            this.load();
+          } else {
+            this.<%= entityInstancePlural %>.set(this.refineData(this.<%= entityInstancePlural %>()));
+          }
+        }),
+<%_ } _%>
+      ).subscribe();
+
+<% if (jpaMetamodelFiltering && paginationPagination) { %>
+      this.filters.filterChanges.subscribe(filterOptions => this.handleNavigation(1, this.sortState(), filterOptions));
+<%_ } _%>
+    }
+
+<%_ if (paginationInfiniteScroll) { _%>
+    reset(): void {
+      this.<%= entityInstancePlural %>.set([]);
+    }
+
+    loadNextPage(): void {
+      this.load();
+    }
+
+<%_ } _%>
+<%_ if (searchEngineAny) { _%>
+    search(query: string): void {
+  <%_ if (paginationPagination) { _%>
+      this.page = 1;
+  <%_ } _%>
+      this.currentSearch = query;
+  <%_ if (notSortableFieldsAfterSearch) { _%>
+      const { predicate } = this.sortState();
+      if (query && predicate && <%= componentName %>.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(predicate)) {
+        this.navigateToWithComponentValues(this.getDefaultSortState());
+        return;
+      }
+  <%_ } _%>
+      this.navigateToWithComponentValues(this.sortState());
+    }
+
+    getDefaultSortState(): SortState {
+  <%_ if (notSortableFieldsAfterSearchFieldNames.includes(primaryKey.name)) { _%>
+      return {};
+  <%_ } else { _%>
+      return this.sortService.parseSortParam(this.activatedRoute.snapshot.data[DEFAULT_SORT_DATA]);
+  <%_ } _%>
+    }
+<%_ } _%>
+
+<%_ if (anyFieldIsBlobDerived) { _%>
+    byteSize(base64String: string): string {
+      return this.dataUtils.byteSize(base64String);
+    }
+
+    openFile(base64String: string, contentType: string | null | undefined): void {
+      return this.dataUtils.openFile(base64String, contentType);
+    }
+
+<%_ } _%>
+<%_ if (!readOnly) { _%>
+    delete(<%= entityInstance %>: I<%= entityAngularName %>): void {
+      const modalRef = this.modalService.open(<%= entityAngularName %>DeleteDialog, { size: 'lg', backdrop: 'static' });
+      modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
+      // unsubscribe not needed because closed completes on modal close
+      modalRef.closed
+        .pipe(
+          filter(reason => reason === ITEM_DELETED_EVENT),
+          tap(() => this.load())
+        ).subscribe();
+    }
+
+<%_ } _%>
+    load(): void {
+      this.queryBackend().subscribe({
+        next: (res: EntityArrayResponseType) => {
+          this.onResponseSuccess(res);
+        }
+      });
+    }
+
+    navigateToWithComponentValues(event: SortState): void {
+      this.handleNavigation(<% if (paginationPagination) { %>this.page, <% } %>event<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngineAny) { %>, this.currentSearch<% } %>);
+    }
+
+<%_ if (paginationPagination) { _%>
+    navigateToPage(page: number): void {
+      this.handleNavigation(page, this.sortState()<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngineAny) { %>, this.currentSearch<% } %>);
+    }
+
+<%_ } _%>
+    protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
+<%_ if (paginationPagination) { _%>
+      const page = params.get(PAGE_HEADER);
+      this.page = +(page ?? 1);
+<%_ } _%>
+      this.sortState.set(this.sortService.parseSortParam(params.get(SORT) ?? data[DEFAULT_SORT_DATA]));
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+      this.filters.initializeFromParams(params);
+<%_ } _%>
+<%_ if (searchEngineAny) { _%>
+      if (params.has('search') && params.get('search') !== '') {
+        this.currentSearch = params.get('search') as string;
+  <%_ if (notSortableFieldsAfterSearch) { _%>
+          const { predicate } = this.sortState();
+          if (predicate && <%= componentName %>.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(predicate)) {
+            this.sortState.set({});
+          }
+  <%_ } _%>
+      }
+<%_ } _%>
+    }
+
+    protected onResponseSuccess(response: EntityArrayResponseType): void {
+<%_ if (!paginationNo) { _%>
+      this.fillComponentAttributesFromResponseHeader(response.headers);
+<%_ } _%>
+      const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
+<%_ if (paginationNo) { _%>
+      this.<%= entityInstancePlural %>.set(this.refineData(dataFromBody));
+<%_ } else { _%>
+      this.<%= entityInstancePlural %>.set(dataFromBody);
+<%_ } _%>
+    }
+
+<%_ if (paginationNo) { _%>
+    protected refineData(data: I<%= entityAngularName %>[]): I<%= entityAngularName %>[] {
+      const { predicate, order } = this.sortState();
+      return predicate && order ? data.sort(this.sortService.startSort({ predicate, order })) : data;
+    }
+
+<%_ } _%>
+    protected fillComponentAttributesFromResponseBody(data: I<%= entityAngularName %>[] | null): I<%= entityAngularName %>[] {
+<%_ if (paginationInfiniteScroll) { _%>
+      // If there is previous link, data is a infinite scroll pagination content.
+      if (this.links().prev) {
+        const <%= entityInstancePlural %>New = this.<%= entityInstancePlural %>();
+        if (data) {
+          for (const d of data) {
+  <%_ if (primaryKey) { _%>
+            if (!<%= entityInstancePlural %>New.some(op => op.<%= primaryKey.name %> === d.<%= primaryKey.name %>)) {
+  <%_ } _%>
+              <%= entityInstancePlural %>New.push(d);
+  <%_ if (primaryKey) { _%>
+            }
+  <%_ } _%>
+          }
+        }
+        return <%= entityInstancePlural %>New;
+      }
+<%_ } _%>
+      return data ?? [];
+    }
+
+<%_ if (!paginationNo) { _%>
+    protected fillComponentAttributesFromResponseHeader(headers: HttpHeaders): void {
+  <%_ if (paginationPagination) { _%>
+      this.totalItems = Number(headers.get(TOTAL_COUNT_RESPONSE_HEADER));
+  <%_ } else if (paginationInfiniteScroll) { _%>
+      const linkHeader = headers.get('link');
+      if (linkHeader) {
+        this.links.set(this.parseLinks.parseAll(linkHeader));
+      } else {
+        this.links.set({});
+      }
+    <%_ } _%>
+    }
+
+<%_ } _%>
+    protected queryBackend(): Observable<EntityArrayResponseType> {
+<%_ if (paginationPagination || searchEngineAny) { _%>
+      const {
+  <%_ if (paginationPagination) { _%>
+        page,
+  <%_ } _%>
+  <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+        filters,
+  <%_ } _%>
+  <%_ if (searchEngineAny) { _%>
+        currentSearch,
+  <%_ } _%>
+      } = this;
+<%_ } _%>
+
+      this.isLoading = true;
+<%_ if (paginationPagination) { _%>
+      const pageToLoad: number = page;
+<%_ } _%>
+      const queryObject<% if ((jpaMetamodelFiltering && paginationPagination) || searchEngine) { %>: any <% } %> = {
+<%_ if (paginationPagination) { _%>
+        page: pageToLoad - 1,
+<%_ } _%>
+<%_ if (!paginationNo) { _%>
+        size: this.itemsPerPage,
+<%_ } _%>
+<%_ if(implementsEagerLoadApis || containsBagRelationships) { _%>
+        eagerload: true,
+<%_ } _%>
+<%_ if (searchEngineAny) { _%>
+        query: currentSearch,
+<%_ } _%>
+<%_ if (!paginationInfiniteScroll) { _%>
+        sort: this.sortService.buildSortParam(this.sortState()),
+<%_ } _%>
+      };
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+      filters.filterOptions.forEach(filterOption => {
+        queryObject[filterOption.name] = filterOption.values;
+      });
+<%_ } _%>
+<%_ if (paginationInfiniteScroll) { _%>
+      if (this.hasMorePage()) {
+        Object.assign(queryObject, this.links().next);
+      } else if (this.isFirstFetch()) {
+        Object.assign(queryObject, { sort: this.sortService.buildSortParam(this.sortState()) });
+      }
+
+<%_ } _%>
+<%_ if (searchEngineAny) { _%>
+      if (this.currentSearch && this.currentSearch !== '') {
+        return this.<%= entityInstance %>Service.search(queryObject)
+          .pipe(
+            tap(() => this.isLoading = false)
+          );
+      } else {
+<%_ } _%>
+        return this.<%= entityInstance %>Service.query(queryObject)
+          .pipe(
+            tap(() => this.isLoading = false)
+          );
+<%_ if (searchEngineAny) { _%>
+      }
+<%_ } _%>
+    }
+
+    protected handleNavigation(<% if (paginationPagination) { %>page: number, <% } %>sortState: SortState<% if (jpaMetamodelFiltering && paginationPagination) { %>, filterOptions?: IFilterOption[]<% } %><% if (searchEngineAny) { %>, currentSearch?: string<% } %>): void {
+<%_ if (paginationInfiniteScroll) { _%>
+      this.links.set({});
+
+<%_ } _%>
+      const queryParamsObj<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>: any<%_ } _%> = {
+<%_ if (searchEngineAny) { _%>
+        search: currentSearch,
+<%_ } _%>
+<%_ if (paginationPagination) { _%>
+        page,
+        size: this.itemsPerPage,
+<%_ } _%>
+        sort: this.sortService.buildSortParam(sortState),
+      };
+
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+      filterOptions?.forEach(filterOption => {
+        queryParamsObj[filterOption.nameAsQueryParam()] = filterOption.values;
+      });
+<%_ } _%>
+
+      this.ngZone.run(() => {
+        this.router.navigate(['./'], {
+          relativeTo: this.activatedRoute,
+          queryParams: queryParamsObj,
+        });
+      });
+    }
+}

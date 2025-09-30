@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { OmitIndexSignature, Simplify } from 'type-fest';
+import type { OmitIndexSignature, ReadonlyKeysOf, RequiredKeysOf, SetRequired, Simplify } from 'type-fest';
 
 const filterNullishValues = (value: unknown): boolean => value !== undefined && value !== null;
 
@@ -69,44 +69,56 @@ function filterValue<const T extends Record<string, any>>(
 export const pickFields = (source: Record<string | number, any>, fields: (string | number)[]) =>
   Object.fromEntries(fields.map(field => [field, source[field]]));
 
-/**
- * Mutation properties accepts:
- * - functions: receives the application and the return value is set at the application property.
- * - non functions: application property will receive the property in case current value is undefined.
- *
- * Applies each mutation object in order.
- *
- * @example
- * // application = { prop: 'foo-bar', prop2: 'foo2' }
- * mutateData(
- *   data,
- *   { prop: 'foo', prop2: ({ prop }) => prop + 2 },
- *   { prop: ({ prop }) => prop + '-bar', prop2: 'won\'t override' },
- * );
- */
-export const mutateData = <const T extends Record<string | number, any>>(
-  context: T,
-  ...mutations: Simplify<
-    OmitIndexSignature<{
-      [Key in keyof (Partial<T> & { __override__?: boolean })]?: Key extends '__override__'
-        ? boolean
+export type MutateDataParam<T extends object> = Simplify<
+  OmitIndexSignature<{
+    [Key in keyof (T & { __override__?: boolean })]?: Key extends '__override__'
+      ? boolean
+      : Key extends ReadonlyKeysOf<T>
+        ? never
         : Key extends keyof T
-          ? // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-            T[Key] extends Function
+          ? T[Key] extends Function
             ? (ctx: T) => T[Key]
             : T[Key] | ((ctx: T) => T[Key])
           : never;
-    }>
-  >[]
-) => {
+  }>
+>;
+
+/**
+ * Utility to ensure required mutation properties are set.
+ */
+export type MutateDataPropertiesWithRequiredProperties<D extends Record<string, any>, N extends Record<string, any>> = SetRequired<
+  D,
+  RequiredKeysOf<N>
+>;
+
+/**
+ * Mutation properties accepts:
+ * - functions: receives the data and the return value is set at the data property.
+ * - non functions: data property will receive the property in case current value is undefined.
+ * - __override__ property: if set to false, functions will not override existing values.
+ *
+ * Applies each mutation object in order.
+ *
+ * Note: if data property is expected to be a function, mutation should be a function that returns the desired function.
+ *
+ * @example
+ * // data = { prop: 'foo-bar', prop2: 'foo2', fn: () => 'fn' }
+ * mutateData(
+ *   data,
+ *   { prop: 'foo', prop2: ({ prop }) => prop + 2, fn: () => () => 'fn' },
+ *   { prop: ({ prop }) => prop + '-bar', prop2: 'won\'t override' },
+ *   { __override__: false, prop: () => 'won\'t override' },
+ * );
+ */
+export const mutateData = <const T extends Record<string | number, any>>(context: T, ...mutations: MutateDataParam<T>[]) => {
   for (const mutation of mutations) {
     const override = mutation.__override__;
     for (const [key, value] of Object.entries(mutation).filter(([key]) => key !== '__override__')) {
       if (typeof value === 'function') {
-        if (override !== false || context[key] === undefined) {
+        if (override !== false || !(key in context) || context[key] === undefined) {
           (context as any)[key] = value(context);
         }
-      } else if (context[key] === undefined || override === true) {
+      } else if (!(key in context) || context[key] === undefined || override === true) {
         (context as any)[key] = value;
       }
     }

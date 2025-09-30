@@ -18,18 +18,20 @@
  */
 import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
-import BaseApplicationGenerator from '../base-application/index.js';
-import { GENERATOR_ANGULAR, GENERATOR_CLIENT, GENERATOR_LANGUAGES } from '../generator-list.js';
-import { defaultLanguage } from '../languages/support/index.js';
-import { clientFrameworkTypes } from '../../lib/jhipster/index.js';
-import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '../client/support/index.js';
-import { createNeedleCallback } from '../base-core/support/index.js';
-import { mutateData } from '../../lib/utils/index.js';
-import { writeEslintClientRootConfigFile } from '../javascript/generators/eslint/support/tasks.js';
-import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-angular.js';
-import { writeFiles } from './files-angular.js';
-import cleanupOldFilesTask from './cleanup.js';
-import type { addItemToMenu } from './support/index.js';
+
+import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
+import { mutateData } from '../../lib/utils/index.ts';
+import BaseApplicationGenerator from '../base-application/index.ts';
+import { createNeedleCallback } from '../base-core/support/index.ts';
+import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '../client/support/index.ts';
+import { JAVA_WEBAPP_SOURCES_DIR } from '../index.ts';
+import { writeEslintClientRootConfigFile } from '../javascript-simple-application/generators/eslint/support/tasks.ts';
+import { defaultLanguage } from '../languages/support/index.ts';
+
+import cleanupOldFilesTask from './cleanup.ts';
+import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-angular.ts';
+import { writeFiles } from './files-angular.ts';
+import type { addItemToMenu } from './support/index.ts';
 import {
   addEntitiesRoute,
   addIconImport,
@@ -38,33 +40,55 @@ import {
   addToEntitiesMenu,
   isTranslatedAngularFile,
   translateAngularFilesTransform,
-} from './support/index.js';
+} from './support/index.ts';
 import type {
   Application as AngularApplication,
   Config as AngularConfig,
   Entity as AngularEntity,
   Options as AngularOptions,
   Source as AngularSource,
-} from './types.js';
+} from './types.ts';
 
 const { ANGULAR } = clientFrameworkTypes;
 
-export default class AngularGenerator extends BaseApplicationGenerator<
+export class AngularApplicationGenerator extends BaseApplicationGenerator<
   AngularEntity,
   AngularApplication<AngularEntity>,
   AngularConfig,
   AngularOptions,
   AngularSource
-> {
+> {}
+
+export default class AngularGenerator extends AngularApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
 
+    await this.dependsOnBootstrap('angular');
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster(GENERATOR_CLIENT);
-      await this.dependsOnJHipster(GENERATOR_LANGUAGES);
+      await this.dependsOnJHipster('jhipster:client:i18n');
+      await this.dependsOnJHipster('client');
+      await this.dependsOnJHipster('languages');
     }
+  }
+
+  get configuring() {
+    return this.asConfiguringTaskGroup({
+      migrateWebpackAndEsbuild({ control }) {
+        if (control.isJhipsterVersionLessThan('9.0.0-alpha.0')) {
+          this.jhipsterConfig.clientBundler ??= 'webpack';
+        }
+        // @ts-expect-error renamed option
+        if (this.jhipsterConfig.clientBundler === 'experimentalEsbuild') {
+          this.jhipsterConfig.clientBundler = 'esbuild';
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING]() {
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get loading() {
@@ -72,10 +96,10 @@ export default class AngularGenerator extends BaseApplicationGenerator<
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster(GENERATOR_ANGULAR, 'resources', 'package.json'),
+          this.fetchFromInstalledJHipster('angular', 'resources', 'package.json'),
         );
       },
-      applicationDefauts({ applicationDefaults }) {
+      applicationDefaults({ applicationDefaults }) {
         applicationDefaults({
           __override__: true,
           typescriptEslint: true,
@@ -90,20 +114,25 @@ export default class AngularGenerator extends BaseApplicationGenerator<
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      applicationDefauts({ application, applicationDefaults }) {
+      applicationDefaults({ application, applicationDefaults }) {
         applicationDefaults({
           __override__: true,
           eslintConfigFile: app => `eslint.config.${app.packageJsonType === 'module' ? 'js' : 'mjs'}`,
           webappEnumerationsDir: app => `${app.clientSrcDir}app/entities/enumerations/`,
           angularLocaleId: app => app.nativeLanguageDefinition.angularLocale ?? defaultLanguage.angularLocale!,
         });
-        application.addPrettierExtensions?.(['html', 'css', 'scss']);
+        application.prettierExtensions.push('html', 'css', 'scss');
+        application.prettierFolders.push(application.clientBundlerWebpack ? 'webpack/**/' : 'build-plugins/**/');
+        if (!application.backendTypeJavaAny && application.clientSrcDir !== JAVA_WEBAPP_SOURCES_DIR) {
+          // When we have a java backend, 'src/**' is already added by java:bootstrap
+          application.prettierFolders.push(`${application.clientSrcDir}**/`);
+        }
       },
       async javaNodeBuildPaths({ application }) {
         application.javaNodeBuildPaths?.push('angular.json', 'tsconfig.json', 'tsconfig.app.json');
         if (application.clientBundlerWebpack) {
           application.javaNodeBuildPaths?.push('webpack/');
-        } else if (application.clientBundlerExperimentalEsbuild) {
+        } else if (application.clientBundlerEsbuild) {
           application.javaNodeBuildPaths?.push('build-plugins/');
           if (application.enableI18nRTL) {
             application.javaNodeBuildPaths?.push('postcss.conf.json');
@@ -117,7 +146,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<
           const addRouteCallback = addEntitiesRoute(param);
           this.editFile(routeTemplatePath, { ignoreNonExisting: ignoreNonExistingRoute }, addRouteCallback);
 
-          const filePath = `${application.clientSrcDir}app/layouts/navbar/navbar.component.html`;
+          const filePath = `${application.clientSrcDir}app/layouts/navbar/navbar.html`;
           const ignoreNonExisting = chalk.yellow('Reference to entities not added to menu.');
           const editCallback = addToEntitiesMenu(param);
           this.editFile(filePath, { ignoreNonExisting }, editCallback);
@@ -133,7 +162,7 @@ export default class AngularGenerator extends BaseApplicationGenerator<
 
         source.addItemToAdminMenu = (args: Omit<Parameters<typeof addItemToMenu>[0], 'needle' | 'enableTranslation' | 'jhiPrefix'>) => {
           this.editFile(
-            `${application.clientSrcDir}app/layouts/navbar/navbar.component.html`,
+            `${application.clientSrcDir}app/layouts/navbar/navbar.html`,
             addItemToAdminMenu({
               enableTranslation: application.enableTranslation,
               jhiPrefix: application.jhiPrefix,
@@ -142,28 +171,6 @@ export default class AngularGenerator extends BaseApplicationGenerator<
           );
           if (args.icon) {
             source.addIconImport!({ icon: args.icon });
-          }
-        };
-
-        source.addLanguagesInFrontend = ({ languagesDefinition }) => {
-          if (application.clientBundlerExperimentalEsbuild) {
-            this.editFile(
-              `${application.clientSrcDir}i18n/index.ts`,
-              createNeedleCallback({
-                needle: 'i18n-language-loader',
-                contentToAdd: languagesDefinition.map(
-                  lang => `'${lang.languageTag}': async (): Promise<any> => import('i18n/${lang.languageTag}.json'),`,
-                ),
-              }),
-              createNeedleCallback({
-                needle: 'i18n-language-angular-loader',
-                contentToAdd: languagesDefinition
-                  .filter(lang => lang.angularLocale)
-                  .map(
-                    lang => `'${lang.languageTag}': async (): Promise<void> => import('@angular/common/locales/${lang.angularLocale}'),`,
-                  ),
-              }),
-            );
           }
         };
 
@@ -316,14 +323,14 @@ export default class AngularGenerator extends BaseApplicationGenerator<
   get postWriting() {
     return this.asPostWritingTaskGroup({
       clientBundler({ application, source }) {
-        const { clientBundlerExperimentalEsbuild, enableTranslation, nodeDependencies } = application;
-        if (clientBundlerExperimentalEsbuild) {
+        const { clientBundlerEsbuild, enableTranslation, nodeDependencies } = application;
+        if (clientBundlerEsbuild) {
           source.mergeClientPackageJson!({
             devDependencies: {
               '@angular-builders/custom-esbuild': null,
               '@angular/build': null,
-              globby: null,
-              ...(enableTranslation ? { 'folder-hash': null, deepmerge: null } : {}),
+              tinyglobby: null,
+              ...(enableTranslation ? { '@types/folder-hash': null, 'folder-hash': null, deepmerge: null } : {}),
             },
           });
         } else {
@@ -367,6 +374,30 @@ export default class AngularGenerator extends BaseApplicationGenerator<
             },
           });
         }
+      },
+      sonar({ application, source }) {
+        const { clientDistDir, clientSrcDir, clientI18nDir, temporaryDir } = application;
+        source.addSonarProperties?.([
+          { key: 'sonar.test.inclusions', value: `${clientSrcDir}app/**/*.spec.ts`, valueSep: ', ' },
+          { key: 'sonar.testExecutionReportPaths', value: `${temporaryDir}/test-results/jest/TESTS-results-sonar.xml` },
+          { key: 'sonar.javascript.lcov.reportPaths', value: `${temporaryDir}/test-results/lcov.info` },
+          {
+            key: 'sonar.exclusions',
+            value: `${clientSrcDir}content/**/*.*, ${clientI18nDir}*.ts, ${clientDistDir}**/*.*`,
+            valueSep: ', ',
+          },
+        ]);
+      },
+      async cleanup({ control, application }) {
+        await control.cleanupFiles({
+          '9.0.0-alpha.0': [
+            [
+              application.clientBundlerEsbuild!,
+              `${application.clientRootDir}build-plugins/define-esbuild.mjs`,
+              `${application.clientRootDir}build-plugins/i18n-esbuild.mjs`,
+            ],
+          ],
+        });
       },
     });
   }

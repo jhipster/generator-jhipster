@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`application mutation test expects mutateApplication to match snapshot 1`] = `
+{
+  "clientBundlerName": "esbuild",
+  "clientDistDir": "dist/",
+  "clientFrameworkBuiltIn": false,
+  "clientI18nDir": "clientSrcDiri18n/",
+  "clientTestDir": "clientRootDirtest/",
+  "clientTestFramework": "vitest",
+  "clientTestFrameworkName": "Vitest",
+  "clientThemeAny": true,
+  "clientThemeNone": false,
+  "frontendAppName": "baseNameApp",
+  "microfrontend": "clientFrameworkAny",
+  "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+  "withAdminUi": "applicationTypeMicroservice",
+}
+`;

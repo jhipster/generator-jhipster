@@ -17,22 +17,23 @@
  * limitations under the License.
  */
 
-import { BASE_NAME_KEY, relationshipOptions } from '../../core/built-in-options/index.js';
 import fieldTypes from '../../../jhipster/field-types.ts';
-import type JDLObject from '../../core/models/jdl-object.js';
-import type JDLRelationship from '../../core/models/jdl-relationship.js';
-import type JDLApplication from '../../core/models/jdl-application.js';
-import type JDLField from '../../core/models/jdl-field.js';
-import type JDLApplicationConfigurationOption from '../../core/models/jdl-application-configuration-option.js';
+import { BASE_NAME_KEY, relationshipOptions } from '../../core/built-in-options/index.ts';
+import type JDLApplicationConfigurationOption from '../../core/models/jdl-application-configuration-option.ts';
+import type JDLApplication from '../../core/models/jdl-application.ts';
 import type JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
-import EntityValidator from './entity-validator.js';
-import FieldValidator from './field-validator.js';
-import ValidationValidator from './validation-validator.js';
-import RelationshipValidator from './relationship-validator.js';
-import EnumValidator from './enum-validator.js';
-import DeploymentValidator from './deployment-validator.js';
-import UnaryOptionValidator from './unary-option-validator.js';
-import BinaryOptionValidator from './binary-option-validator.js';
+import type JDLField from '../../core/models/jdl-field.ts';
+import type JDLObject from '../../core/models/jdl-object.ts';
+import type JDLRelationship from '../../core/models/jdl-relationship.ts';
+
+import BinaryOptionValidator from './binary-option-validator.ts';
+import DeploymentValidator from './deployment-validator.ts';
+import EntityValidator from './entity-validator.ts';
+import EnumValidator from './enum-validator.ts';
+import FieldValidator from './field-validator.ts';
+import RelationshipValidator from './relationship-validator.ts';
+import UnaryOptionValidator from './unary-option-validator.ts';
+import ValidationValidator from './validation-validator.ts';
 
 const { BUILT_IN_ENTITY } = relationshipOptions;
 /**

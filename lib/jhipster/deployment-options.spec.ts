@@ -18,8 +18,10 @@
  */
 
 import { describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import deploymentOptions from './deployment-options.js';
+
+import deploymentOptions from './deployment-options.ts';
 
 const { DeploymentTypes, Options } = deploymentOptions;
 
@@ -49,14 +51,7 @@ describe('jdl - DeploymentOptions', () => {
     describe('defaults', () => {
       describe('when passing no args', () => {
         it('should return docker deployment config', () => {
-          expect(Options.defaults()).to.eql({
-            appsFolders: [],
-            clusteredDbApps: [],
-            directoryPath: '../',
-            gatewayType: 'SpringCloudGateway',
-            monitoring: 'no',
-            serviceDiscoveryType: 'consul',
-          });
+          expect(() => Options.defaults()).to.throw(/^Deployment type is required$/);
         });
       });
       describe('when passing kubernetes as arg', () => {
@@ -72,6 +67,7 @@ describe('jdl - DeploymentOptions', () => {
             monitoring: 'no',
             serviceDiscoveryType: 'consul',
             ingressDomain: '',
+            ingressType: 'nginx',
             istio: false,
             kubernetesNamespace: 'default',
             kubernetesServiceType: 'LoadBalancer',

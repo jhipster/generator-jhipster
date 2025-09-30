@@ -16,12 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { buildToolTypes } from '../../../../lib/jhipster/index.js';
-import { GENERATOR_GRADLE, GENERATOR_MAVEN } from '../../../generator-list.js';
-import type { MavenDependency } from '../../../maven/types.js';
+import { buildToolTypes } from '../../../../lib/jhipster/index.ts';
+import type { MavenDependency } from '../../../maven/types.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
-import { javaScopeToGradleScope } from '../../support/index.js';
-import type { ConditionalJavaDefinition, JavaDependency, JavaNeedleOptions } from '../../types.js';
+import { javaScopeToGradleScope } from '../../support/index.ts';
+import type { ConditionalJavaDefinition, JavaDependency, JavaNeedleOptions } from '../../types.ts';
 
 const { GRADLE, MAVEN } = buildToolTypes;
 
@@ -32,7 +31,7 @@ export default class BuildToolGenerator extends JavaApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:java:bootstrap');
+      await this.dependsOnBootstrap('java');
     }
   }
 
@@ -42,9 +41,9 @@ export default class BuildToolGenerator extends JavaApplicationGenerator {
         const { buildTool } = this.jhipsterConfigWithDefaults;
 
         if (buildTool === GRADLE) {
-          await this.composeWithJHipster(GENERATOR_GRADLE);
+          await this.composeWithJHipster('gradle');
         } else if (buildTool === MAVEN) {
-          await this.composeWithJHipster(GENERATOR_MAVEN);
+          await this.composeWithJHipster('maven');
         } else {
           throw new Error(`Build tool ${buildTool} is not supported`);
         }

@@ -1,19 +1,21 @@
-import path from 'path';
-import { mkdirSync, writeFileSync } from 'fs';
-import { escapeRegExp } from 'lodash-es';
 import { before, describe, expect, it } from 'esmocha';
-import { execaCommandSync } from 'execa';
-import { packageJson } from '../../lib/index.js';
-import { GENERATOR_APP, GENERATOR_UPGRADE } from '../generator-list.js';
-import { basicHelpers as helpers, result as runResult } from '../../lib/testing/index.js';
+import { mkdirSync, writeFileSync } from 'node:fs';
+import type { PathOrFileDescriptor } from 'node:fs';
+import path from 'node:path';
 
-const writeJsonSync = (file, content) => writeFileSync(file, JSON.stringify(content, null, 2));
+import { execaCommandSync } from 'execa';
+import { escapeRegExp } from 'lodash-es';
+
+import { packageJson } from '../../lib/index.ts';
+import { basicHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
+
+const writeJsonSync = (file: PathOrFileDescriptor, content: any) => writeFileSync(file, JSON.stringify(content, null, 2));
 
 describe('generator - upgrade', function () {
   describe('default application', () => {
     before(async () => {
       await helpers
-        .runJHipster(GENERATOR_APP)
+        .runJHipster('app')
         .withJHipsterConfig({
           skipClient: true,
           skipServer: true,
@@ -21,7 +23,7 @@ describe('generator - upgrade', function () {
         })
         .withOptions({ skipGit: false, useVersionPlaceholders: false });
       await helpers
-        .runJHipsterInApplication(GENERATOR_UPGRADE)
+        .runJHipsterInApplication('upgrade')
         .withSpawnMock()
         .withOptions({ useVersionPlaceholders: false } as any);
     });

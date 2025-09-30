@@ -16,8 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.js';
-import type { Application as SpringBootApplication, Entity as SpringBootEntity } from './types.js';
+import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.ts';
+
+import type { Application as SpringBootApplication, Entity as SpringBootEntity } from './types.ts';
 
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
@@ -27,7 +28,7 @@ import type { Application as SpringBootApplication, Entity as SpringBootEntity }
  * @param {Object} application
  * @param {Object} entity
  */
-export const cleanupOldFiles = asWritingEntitiesTask<SpringBootEntity, SpringBootApplication<SpringBootEntity>>(function cleanupOldFiles({
+export const cleanupOldFiles = asWritingEntitiesTask<SpringBootEntity, SpringBootApplication>(function cleanupOldFiles({
   application: { packageFolder, srcMainJava, srcTestJava, searchEngineElasticsearch },
   control,
   entities,

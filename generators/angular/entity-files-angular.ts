@@ -16,10 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { clientApplicationTemplatesBlock } from '../client/support/files.js';
-import { asPostWritingEntitiesTask, asWriteEntityFilesSection, asWritingEntitiesTask } from '../base-application/support/index.js';
-import { filterEntitiesAndPropertiesForClient, filterEntitiesForClient } from '../client/support/filter-entities.js';
-import type { Application as AngularApplication, Entity as AngularEntity, Source as AngularSource } from './types.js';
+import { asPostWritingEntitiesTask, asWriteEntityFilesSection, asWritingEntitiesTask } from '../base-application/support/index.ts';
+import { clientApplicationTemplatesBlock } from '../client/support/files.ts';
+import { filterEntitiesAndPropertiesForClient, filterEntitiesForClient } from '../client/support/filter-entities.ts';
+
+import type { Application as AngularApplication, Entity as AngularEntity, Source as AngularSource } from './types.ts';
 
 const entityModelFiles = clientApplicationTemplatesBlock({
   templates: ['entities/_entityFolder_/_entityFile_.model.ts', 'entities/_entityFolder_/_entityFile_.test-samples.ts'],
@@ -43,12 +44,12 @@ export const angularFiles = {
       condition: generator => !generator.embedded,
       templates: [
         'entities/_entityFolder_/_entityFile_.routes.ts',
-        'entities/_entityFolder_/detail/_entityFile_-detail.component.html',
-        'entities/_entityFolder_/detail/_entityFile_-detail.component.ts',
-        'entities/_entityFolder_/detail/_entityFile_-detail.component.spec.ts',
-        'entities/_entityFolder_/list/_entityFile_.component.html',
-        'entities/_entityFolder_/list/_entityFile_.component.ts',
-        'entities/_entityFolder_/list/_entityFile_.component.spec.ts',
+        'entities/_entityFolder_/detail/_entityFile_-detail.html',
+        'entities/_entityFolder_/detail/_entityFile_-detail.ts',
+        'entities/_entityFolder_/detail/_entityFile_-detail.spec.ts',
+        'entities/_entityFolder_/list/_entityFile_.html',
+        'entities/_entityFolder_/list/_entityFile_.ts',
+        'entities/_entityFolder_/list/_entityFile_.spec.ts',
         'entities/_entityFolder_/route/_entityFile_-routing-resolve.service.ts',
         'entities/_entityFolder_/route/_entityFile_-routing-resolve.service.spec.ts',
       ],
@@ -58,12 +59,12 @@ export const angularFiles = {
       templates: [
         'entities/_entityFolder_/update/_entityFile_-form.service.ts',
         'entities/_entityFolder_/update/_entityFile_-form.service.spec.ts',
-        'entities/_entityFolder_/update/_entityFile_-update.component.html',
-        'entities/_entityFolder_/update/_entityFile_-update.component.spec.ts',
-        'entities/_entityFolder_/delete/_entityFile_-delete-dialog.component.html',
-        'entities/_entityFolder_/update/_entityFile_-update.component.ts',
-        'entities/_entityFolder_/delete/_entityFile_-delete-dialog.component.ts',
-        'entities/_entityFolder_/delete/_entityFile_-delete-dialog.component.spec.ts',
+        'entities/_entityFolder_/update/_entityFile_-update.html',
+        'entities/_entityFolder_/update/_entityFile_-update.spec.ts',
+        'entities/_entityFolder_/delete/_entityFile_-delete-dialog.html',
+        'entities/_entityFolder_/update/_entityFile_-update.ts',
+        'entities/_entityFolder_/delete/_entityFile_-delete-dialog.ts',
+        'entities/_entityFolder_/delete/_entityFile_-delete-dialog.spec.ts',
       ],
     }),
   ],
@@ -75,18 +76,18 @@ export const userManagementFiles = asWriteEntityFilesSection({
       templates: [
         'admin/user-management/user-management.route.ts',
         'admin/user-management/user-management.model.ts',
-        'admin/user-management/list/user-management.component.html',
-        'admin/user-management/list/user-management.component.spec.ts',
-        'admin/user-management/list/user-management.component.ts',
-        'admin/user-management/detail/user-management-detail.component.html',
-        'admin/user-management/detail/user-management-detail.component.spec.ts',
-        'admin/user-management/detail/user-management-detail.component.ts',
-        'admin/user-management/update/user-management-update.component.html',
-        'admin/user-management/update/user-management-update.component.spec.ts',
-        'admin/user-management/update/user-management-update.component.ts',
-        'admin/user-management/delete/user-management-delete-dialog.component.html',
-        'admin/user-management/delete/user-management-delete-dialog.component.spec.ts',
-        'admin/user-management/delete/user-management-delete-dialog.component.ts',
+        'admin/user-management/list/user-management.html',
+        'admin/user-management/list/user-management.spec.ts',
+        'admin/user-management/list/user-management.ts',
+        'admin/user-management/detail/user-management-detail.html',
+        'admin/user-management/detail/user-management-detail.spec.ts',
+        'admin/user-management/detail/user-management-detail.ts',
+        'admin/user-management/update/user-management-update.html',
+        'admin/user-management/update/user-management-update.spec.ts',
+        'admin/user-management/update/user-management-update.ts',
+        'admin/user-management/delete/user-management-delete-dialog.html',
+        'admin/user-management/delete/user-management-delete-dialog.spec.ts',
+        'admin/user-management/delete/user-management-delete-dialog.ts',
         'admin/user-management/service/user-management.service.spec.ts',
         'admin/user-management/service/user-management.service.ts',
       ],
@@ -158,14 +159,14 @@ export const cleanupEntitiesFiles = asWritingEntitiesTask<AngularEntity, Angular
 
     if (control.isJhipsterVersionLessThan('7.0.0-beta.0')) {
       this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}.route.ts`);
-      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}.component.ts`);
-      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}.component.html`);
-      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}-detail.component.ts`);
-      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}-detail.component.html`);
-      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}-delete-dialog.component.ts`);
-      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}-delete-dialog.component.html`);
-      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}-update.component.ts`);
-      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}-update.component.html`);
+      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}.ts`);
+      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}.html`);
+      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}-detail.ts`);
+      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}-detail.html`);
+      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}-delete-dialog.ts`);
+      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}-delete-dialog.html`);
+      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}-update.ts`);
+      this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}-update.html`);
       this.removeFile(`${application.clientSrcDir}/app/shared/model/${entity.entityModelFileName}.model.ts`);
       entity.fields.forEach(field => {
         if (field.fieldIsEnum === true) {
@@ -177,18 +178,33 @@ export const cleanupEntitiesFiles = asWritingEntitiesTask<AngularEntity, Angular
       this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}-routing.module.ts`);
       this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}.service.ts`);
       this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}.service.spec.ts`);
-      this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}.component.spec.ts`);
-      this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}-detail.component.spec.ts`);
-      this.removeFile(
-        `${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}-delete-dialog.component.spec.ts`,
-      );
-      this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}-update.component.spec.ts`);
+      this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}.spec.ts`);
+      this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}-detail.spec.ts`);
+      this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}-delete-dialog.spec.ts`);
+      this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}-update.spec.ts`);
       this.removeFile(`${application.clientTestDir}/spec/app/entities/${entityFolderName}/${entityFileName}.service.spec.ts`);
     }
 
     if (control.isJhipsterVersionLessThan('7.10.0')) {
       this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/${entityFileName}.module.ts`);
       this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/route/${entityFileName}-routing.module.ts`);
+    }
+
+    if (control.isJhipsterVersionLessThan('8.12.0')) {
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/delete/${entityFileName}-delete-dialog.component.html`);
+      this.removeFile(
+        `${application.clientSrcDir}app/entities/${entityFolderName}/delete/${entityFileName}-delete-dialog.component.spec.ts`,
+      );
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/delete/${entityFileName}-delete-dialog.component.ts`);
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/detail/${entityFileName}-detail.component.html`);
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/detail/${entityFileName}-detail.component.spec.ts`);
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/detail/${entityFileName}-detail.component.ts`);
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/list/${entityFileName}.component.html`);
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/list/${entityFileName}.component.spec.ts`);
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/list/${entityFileName}.component.ts`);
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/update/${entityFileName}-update.component.html`);
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/update/${entityFileName}-update.component.spec.ts`);
+      this.removeFile(`${application.clientSrcDir}app/entities/${entityFolderName}/update/${entityFileName}-update.component.ts`);
     }
   }
 });

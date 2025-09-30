@@ -18,11 +18,10 @@
  */
 /* eslint-disable no-useless-escape */
 
-import { first, flatten, includes } from 'lodash-es';
 import type { CstElement, CstNode, ICstVisitor, IToken, TokenType } from 'chevrotain';
 import { tokenMatcher as matchesToken } from 'chevrotain';
+import { first, flatten, includes } from 'lodash-es';
 
-import type { JDLRuntime } from '../types/runtime.js';
 import {
   ALPHABETIC,
   ALPHABETIC_DASH_LOWER,
@@ -31,15 +30,16 @@ import {
   ALPHANUMERIC_DASH,
   ALPHANUMERIC_SPACE,
   ALPHANUMERIC_UNDERSCORE,
-} from '../built-in-options/validation-patterns.js';
-import type { JDLValidatorOptionType } from '../types/parsing.js';
+} from '../built-in-options/validation-patterns.ts';
+import type { JDLValidatorOptionType } from '../types/parsing.ts';
+import type { JDLRuntime } from '../types/runtime.ts';
 
 const CONSTANT_PATTERN = /^[A-Z_]+$/;
 const ENTITY_NAME_PATTERN = /^[A-Z][A-Za-z0-9]*$/;
 const TYPE_NAME_PATTERN = /^[A-Z][A-Za-z0-9]*$/;
 const ENUM_NAME_PATTERN = /^[A-Z][A-Za-z0-9]*$/;
-const ENUM_PROP_NAME_PATTERN = /^[A-Z][A-Za-z0-9_]*$/;
-const ENUM_PROP_VALUE_PATTERN = /^[A-Za-z][A-Za-z0-9_]*$/;
+const ENUM_PROP_NAME_PATTERN = /^[A-Z]\w*$/;
+const ENUM_PROP_VALUE_PATTERN = /^[A-Za-z]\w*$/;
 const METHOD_NAME_PATTERN = /^[A-Za-z][A-Za-z0-9-_]*$/;
 
 // const PASSWORD_PATTERN = /^(.+)$/;
@@ -138,7 +138,6 @@ const deploymentConfigPropsValidations = {
 } as const;
 
 interface JDLCstVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
-  // eslint-disable-next-line @typescript-eslint/no-misused-new
   new (): JDLCstVisitor<IN, OUT>;
   constantDeclaration(context: any): void;
   entityDeclaration(context: any): void;

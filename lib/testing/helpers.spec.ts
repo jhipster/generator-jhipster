@@ -1,5 +1,6 @@
 import { before, describe, expect, it } from 'esmocha';
-import { defaultHelpers as helpers, runResult } from './helpers.js';
+
+import { defaultHelpers as helpers, runResult } from './helpers.ts';
 
 const DUMMY_NAMESPACE = 'jhipster:dummy';
 

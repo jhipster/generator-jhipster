@@ -18,23 +18,23 @@
  */
 import type { ComposeOptions } from 'yeoman-generator';
 
-import type GeneratorsByNamespace from '../types.js';
-import BaseGenerator from '../base/index.js';
-import { mutateData } from '../../lib/utils/index.js';
-import { GENERATOR_BOOTSTRAP_APPLICATION_BASE } from '../generator-list.js';
-import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.js';
+import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.ts';
+import { mutateData } from '../../lib/utils/index.ts';
+import BaseGenerator from '../base/index.ts';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
-import type { GenericTaskGroup } from '../base-core/types.js';
-import type { SimpleTaskTypes } from './tasks.js';
-import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from './support/index.js';
+import type { GenericTask } from '../base-core/types.ts';
+import type GeneratorsByNamespace from '../types.ts';
+
+import { BOOTSTRAP_APPLICATION, CUSTOM_PRIORITIES } from './priorities.ts';
+import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from './support/index.ts';
+import type { SimpleTaskTypes } from './tasks.ts';
 import type {
   Application as BaseSimpleApplicationApplication,
   Config as BaseSimpleApplicationConfig,
   Features as BaseSimpleApplicationFeatures,
   Options as BaseSimpleApplicationOptions,
   Source as BaseSimpleApplicationSource,
-} from './types.js';
-import { BOOTSTRAP_APPLICATION, CUSTOM_PRIORITIES } from './priorities.js';
+} from './types.ts';
 
 const { LOADING, PREPARING, POST_PREPARING, DEFAULT, WRITING, POST_WRITING, PRE_CONFLICTS, INSTALL, END } = PRIORITY_NAMES;
 
@@ -72,8 +72,8 @@ export default class BaseSimpleApplicationGenerator<
 > extends BaseGenerator<Config, Options, Source, Features, Tasks> {
   static BOOTSTRAP_APPLICATION = BaseSimpleApplicationGenerator.asPriority(BOOTSTRAP_APPLICATION);
 
-  constructor(args: string | string[], options: Options, features: Features) {
-    super(args, options, { storeJHipsterVersion: true, storeBlueprintVersion: true, ...features });
+  constructor(args?: string[], options?: Options, features?: Features) {
+    super(args, options, { storeJHipsterVersion: true, storeBlueprintVersion: true, ...features } as Features);
 
     if (this.options.help) {
       return;
@@ -100,10 +100,13 @@ export default class BaseSimpleApplicationGenerator<
     return configWithDefaults as Config;
   }
 
+  /**
+   * @deprecated use dependsOnBootstrap('common'), dependsOnBootstrap('base-application') or dependsOnBootstrap('base-simple-application')
+   */
   dependsOnBootstrapApplicationBase(
-    options?: ComposeOptions<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_BASE]> | undefined,
-  ): Promise<GeneratorsByNamespace[typeof GENERATOR_BOOTSTRAP_APPLICATION_BASE]> {
-    return this.dependsOnJHipster(GENERATOR_BOOTSTRAP_APPLICATION_BASE, options);
+    options?: ComposeOptions<GeneratorsByNamespace['jhipster:base-application:bootstrap']> | undefined,
+  ): Promise<GeneratorsByNamespace['jhipster:base-application:bootstrap']> {
+    return this.dependsOnJHipster('jhipster:base-application:bootstrap', options);
   }
 
   getArgsForPriority(priorityName: (typeof PRIORITY_NAMES)[keyof typeof PRIORITY_NAMES]): any {
@@ -142,9 +145,9 @@ export default class BaseSimpleApplicationGenerator<
   /**
    * Utility method to get typed objects for autocomplete.
    */
-  asBootstrapApplicationTaskGroup(
-    taskGroup: GenericTaskGroup<this, Tasks['BootstrapApplicationTaskParam']>,
-  ): GenericTaskGroup<any, Tasks['BootstrapApplicationTaskParam']> {
+  asBootstrapApplicationTaskGroup<const T extends Record<string, GenericTask<this, Tasks['BootstrapApplicationTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['BootstrapApplicationTaskParam']>> {
     return taskGroup;
   }
 }

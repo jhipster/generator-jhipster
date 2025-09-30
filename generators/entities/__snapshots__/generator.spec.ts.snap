@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`generator - entities regenerating all entities should match snapshot 1`] = `
 {
@@ -77,31 +77,31 @@ exports[`generator - entities regenerating all entities should match snapshot 1`
   "src/main/webapp/app/entities/bar/bar.test-samples.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/delete/bar-delete-dialog.component.html": {
+  "src/main/webapp/app/entities/bar/delete/bar-delete-dialog.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/delete/bar-delete-dialog.component.spec.ts": {
+  "src/main/webapp/app/entities/bar/delete/bar-delete-dialog.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/delete/bar-delete-dialog.component.ts": {
+  "src/main/webapp/app/entities/bar/delete/bar-delete-dialog.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/detail/bar-detail.component.html": {
+  "src/main/webapp/app/entities/bar/detail/bar-detail.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/detail/bar-detail.component.spec.ts": {
+  "src/main/webapp/app/entities/bar/detail/bar-detail.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/detail/bar-detail.component.ts": {
+  "src/main/webapp/app/entities/bar/detail/bar-detail.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/list/bar.component.html": {
+  "src/main/webapp/app/entities/bar/list/bar.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/list/bar.component.spec.ts": {
+  "src/main/webapp/app/entities/bar/list/bar.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/list/bar.component.ts": {
+  "src/main/webapp/app/entities/bar/list/bar.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/bar/route/bar-routing-resolve.service.spec.ts": {
@@ -122,31 +122,31 @@ exports[`generator - entities regenerating all entities should match snapshot 1`
   "src/main/webapp/app/entities/bar/update/bar-form.service.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/update/bar-update.component.html": {
+  "src/main/webapp/app/entities/bar/update/bar-update.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/update/bar-update.component.spec.ts": {
+  "src/main/webapp/app/entities/bar/update/bar-update.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/update/bar-update.component.ts": {
+  "src/main/webapp/app/entities/bar/update/bar-update.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/delete/foo-delete-dialog.component.html": {
+  "src/main/webapp/app/entities/foo/delete/foo-delete-dialog.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/delete/foo-delete-dialog.component.spec.ts": {
+  "src/main/webapp/app/entities/foo/delete/foo-delete-dialog.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/delete/foo-delete-dialog.component.ts": {
+  "src/main/webapp/app/entities/foo/delete/foo-delete-dialog.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/detail/foo-detail.component.html": {
+  "src/main/webapp/app/entities/foo/detail/foo-detail.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/detail/foo-detail.component.spec.ts": {
+  "src/main/webapp/app/entities/foo/detail/foo-detail.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/detail/foo-detail.component.ts": {
+  "src/main/webapp/app/entities/foo/detail/foo-detail.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/foo/foo.model.ts": {
@@ -158,13 +158,13 @@ exports[`generator - entities regenerating all entities should match snapshot 1`
   "src/main/webapp/app/entities/foo/foo.test-samples.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/list/foo.component.html": {
+  "src/main/webapp/app/entities/foo/list/foo.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/list/foo.component.spec.ts": {
+  "src/main/webapp/app/entities/foo/list/foo.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/list/foo.component.ts": {
+  "src/main/webapp/app/entities/foo/list/foo.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/foo/route/foo-routing-resolve.service.spec.ts": {
@@ -185,40 +185,40 @@ exports[`generator - entities regenerating all entities should match snapshot 1`
   "src/main/webapp/app/entities/foo/update/foo-form.service.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/update/foo-update.component.html": {
+  "src/main/webapp/app/entities/foo/update/foo-update.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/update/foo-update.component.spec.ts": {
+  "src/main/webapp/app/entities/foo/update/foo-update.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/update/foo-update.component.ts": {
+  "src/main/webapp/app/entities/foo/update/foo-update.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/skip/delete/skip-delete-dialog.component.html": {
+  "src/main/webapp/app/entities/skip/delete/skip-delete-dialog.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/skip/delete/skip-delete-dialog.component.spec.ts": {
+  "src/main/webapp/app/entities/skip/delete/skip-delete-dialog.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/skip/delete/skip-delete-dialog.component.ts": {
+  "src/main/webapp/app/entities/skip/delete/skip-delete-dialog.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/skip/detail/skip-detail.component.html": {
+  "src/main/webapp/app/entities/skip/detail/skip-detail.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/skip/detail/skip-detail.component.spec.ts": {
+  "src/main/webapp/app/entities/skip/detail/skip-detail.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/skip/detail/skip-detail.component.ts": {
+  "src/main/webapp/app/entities/skip/detail/skip-detail.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/skip/list/skip.component.html": {
+  "src/main/webapp/app/entities/skip/list/skip.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/skip/list/skip.component.spec.ts": {
+  "src/main/webapp/app/entities/skip/list/skip.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/skip/list/skip.component.ts": {
+  "src/main/webapp/app/entities/skip/list/skip.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/skip/route/skip-routing-resolve.service.spec.ts": {
@@ -248,61 +248,19 @@ exports[`generator - entities regenerating all entities should match snapshot 1`
   "src/main/webapp/app/entities/skip/update/skip-form.service.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/skip/update/skip-update.component.html": {
+  "src/main/webapp/app/entities/skip/update/skip-update.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/skip/update/skip-update.component.spec.ts": {
+  "src/main/webapp/app/entities/skip/update/skip-update.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/skip/update/skip-update.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/activate.json": {
+  "src/main/webapp/app/entities/skip/update/skip-update.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/i18n/en/bar.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/configuration.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/error.json": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/i18n/en/foo.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/global.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/health.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/home.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/login.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/logs.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/metrics.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/password.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/register.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/reset.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/sessions.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/settings.json": {
     "stateCleared": "modified",
   },
   "src/main/webapp/i18n/en/skip.json": {
@@ -474,31 +432,31 @@ exports[`generator - entities regenerating some entities should match snapshot 1
   "src/main/webapp/app/entities/bar/bar.test-samples.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/delete/bar-delete-dialog.component.html": {
+  "src/main/webapp/app/entities/bar/delete/bar-delete-dialog.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/delete/bar-delete-dialog.component.spec.ts": {
+  "src/main/webapp/app/entities/bar/delete/bar-delete-dialog.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/delete/bar-delete-dialog.component.ts": {
+  "src/main/webapp/app/entities/bar/delete/bar-delete-dialog.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/detail/bar-detail.component.html": {
+  "src/main/webapp/app/entities/bar/detail/bar-detail.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/detail/bar-detail.component.spec.ts": {
+  "src/main/webapp/app/entities/bar/detail/bar-detail.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/detail/bar-detail.component.ts": {
+  "src/main/webapp/app/entities/bar/detail/bar-detail.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/list/bar.component.html": {
+  "src/main/webapp/app/entities/bar/list/bar.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/list/bar.component.spec.ts": {
+  "src/main/webapp/app/entities/bar/list/bar.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/list/bar.component.ts": {
+  "src/main/webapp/app/entities/bar/list/bar.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/bar/route/bar-routing-resolve.service.spec.ts": {
@@ -519,31 +477,31 @@ exports[`generator - entities regenerating some entities should match snapshot 1
   "src/main/webapp/app/entities/bar/update/bar-form.service.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/update/bar-update.component.html": {
+  "src/main/webapp/app/entities/bar/update/bar-update.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/update/bar-update.component.spec.ts": {
+  "src/main/webapp/app/entities/bar/update/bar-update.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/bar/update/bar-update.component.ts": {
+  "src/main/webapp/app/entities/bar/update/bar-update.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/delete/foo-delete-dialog.component.html": {
+  "src/main/webapp/app/entities/foo/delete/foo-delete-dialog.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/delete/foo-delete-dialog.component.spec.ts": {
+  "src/main/webapp/app/entities/foo/delete/foo-delete-dialog.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/delete/foo-delete-dialog.component.ts": {
+  "src/main/webapp/app/entities/foo/delete/foo-delete-dialog.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/detail/foo-detail.component.html": {
+  "src/main/webapp/app/entities/foo/detail/foo-detail.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/detail/foo-detail.component.spec.ts": {
+  "src/main/webapp/app/entities/foo/detail/foo-detail.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/detail/foo-detail.component.ts": {
+  "src/main/webapp/app/entities/foo/detail/foo-detail.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/foo/foo.model.ts": {
@@ -555,13 +513,13 @@ exports[`generator - entities regenerating some entities should match snapshot 1
   "src/main/webapp/app/entities/foo/foo.test-samples.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/list/foo.component.html": {
+  "src/main/webapp/app/entities/foo/list/foo.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/list/foo.component.spec.ts": {
+  "src/main/webapp/app/entities/foo/list/foo.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/list/foo.component.ts": {
+  "src/main/webapp/app/entities/foo/list/foo.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/foo/route/foo-routing-resolve.service.spec.ts": {
@@ -582,61 +540,19 @@ exports[`generator - entities regenerating some entities should match snapshot 1
   "src/main/webapp/app/entities/foo/update/foo-form.service.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/update/foo-update.component.html": {
+  "src/main/webapp/app/entities/foo/update/foo-update.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/update/foo-update.component.spec.ts": {
+  "src/main/webapp/app/entities/foo/update/foo-update.spec.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/foo/update/foo-update.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/activate.json": {
+  "src/main/webapp/app/entities/foo/update/foo-update.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/i18n/en/bar.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/configuration.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/error.json": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/i18n/en/foo.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/global.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/health.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/home.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/login.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/logs.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/metrics.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/password.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/register.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/reset.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/sessions.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/settings.json": {
     "stateCleared": "modified",
   },
   "src/main/webapp/i18n/en/user-management.json": {

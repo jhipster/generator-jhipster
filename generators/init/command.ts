@@ -16,12 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JHipsterCommandDefinition } from '../../lib/command/index.js';
-import { GENERATOR_PROJECT_NAME } from '../generator-list.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 
 const command = {
   configs: {},
-  import: ['jhipster:git', GENERATOR_PROJECT_NAME, 'jhipster:javascript:prettier', 'jhipster:javascript:husky'],
+  import: [
+    'jhipster:git',
+    'jhipster:project-name',
+    'jhipster:javascript-simple-application:prettier',
+    'jhipster:javascript-simple-application:husky',
+  ],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

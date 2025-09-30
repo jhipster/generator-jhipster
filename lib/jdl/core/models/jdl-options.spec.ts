@@ -17,17 +17,20 @@
  * limitations under the License.
  */
 
-import { afterEach, before, describe, it, expect as jestExpect } from 'esmocha';
+import { afterEach, before, describe, expect as jestExpect, it } from 'esmocha';
+
 import { expect } from 'chai';
-import { binaryOptions, unaryOptions } from '../built-in-options/index.js';
-import JDLOptions from '../models/jdl-options.js';
-import JDLUnaryOption from '../models/jdl-unary-option.js';
-import JDLBinaryOption from '../models/jdl-binary-option.js';
+
+import { binaryOptions, unaryOptions } from '../built-in-options/index.ts';
+
+import JDLBinaryOption from './jdl-binary-option.ts';
+import JDLOptions from './jdl-options.ts';
+import JDLUnaryOption from './jdl-unary-option.ts';
 
 describe('jdl - JDLOptions', () => {
   describe('addOption', () => {
     describe('when passing an invalid option', () => {
-      let options;
+      let options: JDLOptions;
 
       before(() => {
         options = new JDLOptions();
@@ -35,14 +38,15 @@ describe('jdl - JDLOptions', () => {
 
       it('should fail', () => {
         expect(() => {
+          // @ts-expect-error invalid api test
           options.addOption(null);
         }).to.throw(/^Can't add nil option.$/);
       });
     });
     describe('when passing a valid option', () => {
-      let options;
-      let option1;
-      let option2;
+      let options: JDLOptions;
+      let option1: JDLUnaryOption;
+      let option2: JDLUnaryOption;
 
       before(() => {
         options = new JDLOptions();
@@ -92,7 +96,7 @@ describe('jdl - JDLOptions', () => {
       });
     });
     describe('with a valid input', () => {
-      let options;
+      let options: JDLOptions;
 
       before(() => {
         options = new JDLOptions();
@@ -111,7 +115,7 @@ describe('jdl - JDLOptions', () => {
     });
   });
   describe('size', () => {
-    let options;
+    let options: JDLOptions;
 
     before(() => {
       options = new JDLOptions();
@@ -130,7 +134,7 @@ describe('jdl - JDLOptions', () => {
     });
   });
   describe('forEach', () => {
-    let jdlOptions;
+    let jdlOptions: JDLOptions;
 
     before(() => {
       jdlOptions = new JDLOptions();
@@ -148,6 +152,7 @@ describe('jdl - JDLOptions', () => {
 
     describe('when not passing a function', () => {
       it('should not fail', () => {
+        // @ts-expect-error invalid api test
         jdlOptions.forEach();
       });
     });
@@ -171,7 +176,7 @@ describe('jdl - JDLOptions', () => {
     });
   });
   describe('getOptionsForName', () => {
-    let jdlOptions;
+    let jdlOptions: JDLOptions;
 
     before(() => {
       jdlOptions = new JDLOptions();
@@ -183,6 +188,7 @@ describe('jdl - JDLOptions', () => {
 
     describe('when passing an invalid name', () => {
       it('should return an empty array', () => {
+        // @ts-expect-error invalid api test
         expect(jdlOptions.getOptionsForName()).to.be.empty;
       });
     });
@@ -192,9 +198,9 @@ describe('jdl - JDLOptions', () => {
       });
     });
     describe('when checking for a present option', () => {
-      let option1;
-      let option2;
-      let option3;
+      let option1: JDLUnaryOption;
+      let option2: JDLBinaryOption;
+      let option3: JDLBinaryOption;
 
       before(() => {
         option1 = new JDLUnaryOption({

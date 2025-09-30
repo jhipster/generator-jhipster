@@ -18,10 +18,13 @@
  */
 
 import { beforeEach, describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import { formatDateForChangelog } from '../../base/support/index.js';
-import type { EntityAll } from '../../../lib/types/entity-all.js';
-import { entityDefaultConfig, prepareEntityPrimaryKeyForTemplates } from './prepare-entity.js';
+
+import type { EntityAll } from '../../../lib/types/application-all.d.ts';
+import { formatDateForChangelog } from '../../base/support/index.ts';
+
+import { entityDefaultConfig, prepareEntityPrimaryKeyForTemplates } from './prepare-entity.ts';
 
 describe('generator - base-application - support - prepareEntity', () => {
   describe('prepareEntityPrimaryKeyForTemplates', () => {
@@ -47,7 +50,7 @@ describe('generator - base-application - support - prepareEntity', () => {
           });
         });
 
-        it('should contains correct structure', () => {
+        it('should contain correct structure', () => {
           expect(entity.primaryKey).to.deep.include({
             name: 'id',
             nameCapitalized: 'Id',
@@ -82,10 +85,11 @@ describe('generator - base-application - support - prepareEntity', () => {
       });
 
       describe('with multiple @Id relationships and field', () => {
-        let entity1;
-        let entity2;
-        let entity3;
-        let entity4;
+        // FIXME: mock data
+        let entity1: any;
+        let entity2: any;
+        let entity3: any;
+        let entity4: any;
 
         beforeEach(() => {
           entity1 = {

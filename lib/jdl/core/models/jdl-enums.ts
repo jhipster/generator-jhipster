@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type JDLEnum from './jdl-enum.js';
+import type JDLEnum from './jdl-enum.ts';
 
 export default class JDLEnums {
   enums: Map<string, JDLEnum>;

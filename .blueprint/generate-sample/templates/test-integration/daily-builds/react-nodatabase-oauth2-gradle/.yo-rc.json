@@ -1,0 +1,30 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "oauth2",
+    "baseName": "jhipster",
+    "buildTool": "gradle",
+    "cacheProvider": "ehcache",
+    "clientFramework": "react",
+    "clientTheme": "none",
+    "clientThemeVariant": "",
+    "creationTimestamp": 1596513172471,
+    "databaseType": "no",
+    "devDatabaseType": "no",
+    "dtoSuffix": "DTO",
+    "enableHibernateCache": false,
+    "enableTranslation": true,
+    "entitySuffix": "",
+    "jhiPrefix": "jhi",
+    "jwtSecretKey": "MjUzZGQzZjQwOWY3ZmEzYjBkOTQ5ZDc2ZmNhYjYyZDVhMjMzNmI3MGJkMTQyOTA3YzQzZWRiYjk0ODlhMmM2MDg1MDU3ODdkNGEzNzAzYTZlYjMxYWM4ZjM2MTY4ZjlmNjJjNDJiNGE2ZDUyNWQ1YTRjNzk5YzY5OTMxOGRjZTI=",
+    "languages": ["en"],
+    "nativeLanguage": "en",
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "prodDatabaseType": "no",
+    "promptValues": { "nativeLanguage": "en", "packageName": "com.mycompany.myapp" },
+    "searchEngine": false,
+    "serverPort": "8080",
+    "testFrameworks": ["cypress"]
+  }
+}

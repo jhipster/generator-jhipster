@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JHipsterCommandDefinition } from '../../../../lib/command/index.js';
+import type { JHipsterCommandDefinition } from '../../../../lib/command/index.ts';
 
 const command = {
   configs: {
@@ -29,7 +29,7 @@ const command = {
       jdl: {
         tokenType: 'quotedList',
         type: 'quotedList',
-        tokenValuePattern: /^"[A-Za-z][A-Za-z0-9_]*(?::[A-Za-z][A-Za-z0-9_]+(?::[0-9]+)?)?"$/,
+        tokenValuePattern: /^"[A-Za-z]\w*(?::[A-Za-z]\w+(?::\d+)?)?"$/,
       },
       scope: 'storage',
     },

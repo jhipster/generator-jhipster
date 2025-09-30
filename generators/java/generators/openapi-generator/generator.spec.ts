@@ -16,13 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { before, describe, expect, it } from 'esmocha';
 import { basename, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { before, describe, expect, it } from 'esmocha';
 
+import { defaultHelpers as helpers, fromMatrix, result } from '../../../../lib/testing/index.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
-import { fromMatrix, defaultHelpers as helpers, result } from '../../../../lib/testing/index.js';
-import Generator from './index.js';
+
+import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -33,7 +34,9 @@ describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 
-  for (const [name, config] of Object.entries(fromMatrix({ buildTool: ['maven', 'gradle'], addOpenapiGeneratorPlugin: [true, false] }))) {
+  for (const [name, config] of Object.entries(
+    fromMatrix({ buildTool: ['maven' as const, 'gradle' as const], addOpenapiGeneratorPlugin: [true, false] }),
+  )) {
     describe(name, () => {
       before(async () => {
         await helpers

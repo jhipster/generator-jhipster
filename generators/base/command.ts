@@ -16,8 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JHipsterCommandDefinition } from '../../lib/command/types.js';
-import { parseCreationTimestamp } from './support/timestamp.js';
+import type { JHipsterCommandDefinition } from '../../lib/command/types.ts';
+
+import { parseCreationTimestamp } from './support/timestamp.ts';
 
 const command = {
   configs: {
@@ -84,7 +85,7 @@ const command = {
       },
       scope: 'generator',
     },
-    clientPackageManager: {
+    nodePackageManager: {
       description: 'Force an unsupported client package manager',
       cli: {
         type: String,

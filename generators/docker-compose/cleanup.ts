@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWritingWorkspacesTask } from '../base-workspaces/support/task-type-inference.js';
+import { asWritingWorkspacesTask } from '../base-workspaces/support/task-type-inference.ts';
 
 export default asWritingWorkspacesTask(function cleanupOldFilesTask({ control }) {
   if (control.isJhipsterVersionLessThan('7.10.0')) {

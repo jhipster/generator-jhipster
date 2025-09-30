@@ -17,15 +17,19 @@
  * limitations under the License.
  */
 
-import { readFileSync, writeFileSync } from 'fs';
+import { beforeEach, describe, expect as jestExpect, it } from 'esmocha';
+import { readFileSync, writeFileSync } from 'node:fs';
+
 import { expect } from 'chai';
-import { beforeEach, describe, it, expect as jestExpect } from 'esmocha';
 import helpers from 'yeoman-test';
-import { createJDLLinterFromContent, getTestFile } from '.././__test-support__/index.js';
-import type { JDLLinter } from './jdl-linter.js';
-import type Issues from './issues/issues.js';
-import type EnumIssue from './issues/enum-issue.js';
-import type relationshipIssue from './issues/relationship-issue.js';
+
+import { createJDLLinterFromContent, getTestFile } from '../__test-support__/index.ts';
+
+import type EntityIssue from './issues/entity-issue.ts';
+import type EnumIssue from './issues/enum-issue.ts';
+import type Issues from './issues/issues.ts';
+import type relationshipIssue from './issues/relationship-issue.ts';
+import type { JDLLinter } from './jdl-linter.ts';
 
 /**
  * Creates a new JDL linters from a JDL file.
@@ -81,7 +85,7 @@ describe('jdl - JDLLinter', () => {
   describe('check', () => {
     describe('when checking for useless entity braces', () => {
       let linter: JDLLinter;
-      let issue: any;
+      let issue: EntityIssue;
       let reportedIssues: Issues;
 
       beforeEach(() => {
@@ -98,7 +102,7 @@ describe('jdl - JDLLinter', () => {
     });
     describe('when checking for duplicated', () => {
       describe('entities', () => {
-        let linter: { check: any };
+        let linter: JDLLinter;
         let reportedIssues: { getIssues: () => any; getNumberOfIssues: () => any };
         let issueForA: { ruleName: any };
         let issueForB: { ruleName: any };
@@ -118,7 +122,7 @@ describe('jdl - JDLLinter', () => {
         });
       });
       describe('fields', () => {
-        let linter: { check: any };
+        let linter: JDLLinter;
         let reportedIssues: { getIssues: () => any; getNumberOfIssues: () => any };
         let issueForAa: { ruleName: any };
         let issueForBb: { ruleName: any };
@@ -138,7 +142,7 @@ describe('jdl - JDLLinter', () => {
         });
       });
       describe('enums', () => {
-        let linter: { check: any };
+        let linter: JDLLinter;
         let reportedIssues: { getIssues: () => any; getNumberOfIssues: () => any };
         let issueForA: { ruleName: any };
 
@@ -176,7 +180,7 @@ describe('jdl - JDLLinter', () => {
       });
     });
     describe('when checking for collapsible relationships', () => {
-      let linter: { check: any };
+      let linter: JDLLinter;
       let reportedIssues: Issues;
       let issueForAToB: relationshipIssue;
       let issueForBToC: relationshipIssue;

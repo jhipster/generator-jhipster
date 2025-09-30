@@ -1,6 +1,6 @@
 {
   "name": "generator-jhipster",
-  "version": "8.11.0",
+  "version": "9.0.0-alpha.0",
   "description": "Spring Boot + Angular/React/Vue in one handy generator",
   "keywords": [
     "yeoman-generator",
@@ -41,8 +41,8 @@
       "default": "./dist/generators/index.js"
     },
     "./cli": {
-      "types": "./dist/cli/index.d.mts",
-      "default": "./dist/cli/index.mjs"
+      "types": "./dist/cli/index.d.ts",
+      "default": "./dist/cli/index.js"
     },
     "./package.json": "./package.json",
     "./eslint/recommended": {
@@ -52,10 +52,6 @@
     "./eslint": {
       "types": "./dist/lib/eslint/index.d.ts",
       "default": "./dist/lib/eslint/index.js"
-    },
-    "./generators": {
-      "types": "./dist/generators/generator-list.d.ts",
-      "default": "./dist/generators/generator-list.js"
     },
     "./generators/*": {
       "types": "./dist/generators/*/index.d.ts",
@@ -114,14 +110,13 @@
     "jsdoc": "jsdoc --configure jsdoc-conf.json",
     "lint": "npm run eslint && npm run ejslint",
     "lint-fix": "npm run eslint -- --fix && npm run prettier:format",
-    "mocha-test": "esmocha lib/jdl --no-insight --forbid-only --parallel --max-old-space-size=4096",
     "prepare": "npm run build",
     "prettier:check": "prettier --check \"{,**/}*.{js,ts,cjs,mjs,cts,mts,json,md,yml,java}\"",
     "prettier:format": "prettier --write \"{,**/}*.{js,ts,cjs,mjs,cts,mts,json,md,yml,java}\"",
     "pretest": "npm run lint && npm run check-types",
-    "test": "npm run mocha-test test generators cli .blueprint",
+    "test": "esmocha test generators cli .blueprint lib --forbid-only",
     "update-snapshot": "esmocha --no-insight --no-parallel --update-snapshot --",
-    "update-snapshots": "esmocha lib/jdl generators cli .blueprint --update-snapshot --no-insight --forbid-only"
+    "update-snapshots": "esmocha test generators cli .blueprint lib/jdl lib --forbid-only --update-snapshot --enable-source-maps"
   },
   "overrides": {
     "ejs-lint": {
@@ -129,32 +124,32 @@
     }
   },
   "dependencies": {
-    "@eslint/js": "9.31.0",
-    "@faker-js/faker": "9.9.0",
+    "@eslint/js": "9.36.0",
+    "@faker-js/faker": "10.0.0",
     "@iarna/toml": "3.0.0",
     "@types/ejs": "3.1.5",
     "@types/lodash-es": "4.17.12",
-    "@yeoman/adapter": "2.1.1",
-    "@yeoman/conflicter": "2.4.0",
+    "@yeoman/adapter": "3.1.0",
+    "@yeoman/conflicter": "3.0.0",
     "@yeoman/namespace": "1.0.1",
     "@yeoman/transform": "2.1.0",
-    "@yeoman/types": "1.6.0",
-    "chalk": "5.4.1",
+    "@yeoman/types": "1.8.0",
+    "chalk": "5.6.2",
     "chevrotain": "11.0.3",
-    "commander": "14.0.0",
-    "debug": "4.4.1",
+    "commander": "14.0.1",
+    "debug": "4.4.3",
     "didyoumean": "1.2.2",
     "dockerfile-ast": "0.7.1",
     "dot-properties": "1.1.0",
     "ejs": "3.1.10",
-    "eslint": "9.31.0",
+    "eslint": "9.36.0",
     "eslint-plugin-import-x": "4.16.1",
-    "eslint-plugin-unused-imports": "4.1.4",
+    "eslint-plugin-unused-imports": "4.2.0",
     "execa": "9.6.0",
     "fast-xml-parser": "5.2.5",
     "glob": "11.0.3",
-    "globals": "16.3.0",
-    "isbinaryfile": "5.0.4",
+    "globals": "16.4.0",
+    "isbinaryfile": "5.0.6",
     "java-lint": "0.3.0",
     "latest-version": "9.0.0",
     "lodash-es": "4.17.21",
@@ -168,54 +163,56 @@
     "piscina": "5.1.3",
     "pluralize": "8.0.0",
     "prettier": "3.6.2",
-    "prettier-plugin-java": "2.7.3",
+    "prettier-plugin-java": "2.7.5",
     "prettier-plugin-packagejson": "2.5.19",
     "prettier-plugin-properties": "0.3.0",
     "randexp": "0.5.3",
     "semver": "7.7.2",
     "simple-git": "3.28.0",
-    "sort-keys": "5.1.0",
-    "tinyglobby": "0.2.14",
-    "type-fest": "4.41.0",
-    "typescript": "5.8.3",
-    "typescript-eslint": "8.38.0",
-    "yaml": "2.8.0",
-    "yeoman-environment": "5.0.0-beta.0",
-    "yeoman-generator": "8.0.0-beta.5"
+    "sort-keys": "6.0.0",
+    "tinyglobby": "0.2.15",
+    "type-fest": "5.0.1",
+    "typescript": "5.9.2",
+    "typescript-eslint": "8.45.0",
+    "yaml": "2.8.1",
+    "yeoman-environment": "5.0.0",
+    "yeoman-generator": "^8.0.0-beta.6"
   },
   "devDependencies": {
-    "@eslint/core": "0.15.1",
+    "@eslint/core": "0.16.0",
     "@node-loaders/esbuild": "2.0.0",
     "@types/chai": "5.2.2",
     "@types/debug": "4.1.12",
     "@types/didyoumean": "1.2.3",
     "@types/estree": "1.0.8",
-    "@types/node": "20.19.9",
+    "@types/node": "20.19.18",
     "@types/normalize-path": "^3.0.2",
     "@types/npmcli__arborist": "^6.3.1",
+    "@types/picomatch": "^4.0.2",
     "@types/pluralize": "0.0.33",
-    "@types/semver": "7.7.0",
+    "@types/semver": "7.7.1",
     "@types/sinon-chai": "4.0.0",
-    "chai": "5.2.1",
-    "cpy-cli": "5.0.0",
+    "chai": "6.2.0",
+    "cpy-cli": "6.0.0",
     "diff": "8.0.2",
     "ejs-lint": "2.0.1",
     "eslint-config-prettier": "10.1.8",
     "eslint-import-resolver-typescript": "4.4.4",
     "eslint-plugin-chai-friendly": "1.1.0",
-    "eslint-plugin-prettier": "5.5.3",
-    "esmocha": "3.0.0",
+    "eslint-plugin-n": "17.23.1",
+    "eslint-plugin-prettier": "5.5.4",
+    "esmocha": "4.0.0",
+    "jiti": "2.6.0",
     "jsdoc": "4.0.4",
-    "mocha": "11.7.1",
-    "open-cli": "8.0.0",
+    "mocha": "11.7.2",
     "prettier2": "npm:prettier@2.8.8",
     "rimraf": "6.0.1",
     "sinon": "21.0.0",
-    "sinon-chai": "4.0.0",
-    "yeoman-test": "10.1.1"
+    "sinon-chai": "4.0.1",
+    "yeoman-test": "11.0.0"
   },
   "peerDependencies": {
-    "yeoman-test": "10.1.1"
+    "yeoman-test": "11.0.0"
   },
   "peerDependenciesMeta": {
     "yeoman-test": {

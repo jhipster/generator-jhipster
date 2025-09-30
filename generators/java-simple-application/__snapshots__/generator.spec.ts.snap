@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`generator - java-simple-application with defaults options should call source snapshot 1`] = `
+{
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "*.java",
+          "options": {
+            "tabWidth": 4,
+          },
+        },
+      ],
+      "plugins": [
+        "prettier-plugin-java",
+      ],
+    },
+  ],
+}
+`;
+
+exports[`generator - java-simple-application with defaults options should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
+    "stateCleared": "modified",
+  },
+}
+`;

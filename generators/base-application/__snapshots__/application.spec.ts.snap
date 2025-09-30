@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`application mutation test expects mutateApplication to match snapshot 1`] = `
+{
+  "authenticationTypeUsesRemoteAuthorization": false,
+  "dtoSuffix": "DTO",
+  "entitySuffix": "",
+  "generateAuthenticationApi": true,
+  "generateBuiltInAuthorityEntity": true,
+  "generateBuiltInUserEntity": true,
+  "generateInMemoryUserCredentials": false,
+  "generateUserManagement": true,
+  "javaNodeBuildPaths": [],
+  "skipUserManagement": false,
+  "syncUserWithIdp": false,
+}
+`;
+
+exports[`application mutation test expects mutateUserManagementApplication to match snapshot 1`] = `
+{
+  "authenticationTypeUsesRemoteAuthorization": false,
+  "generateAuthenticationApi": true,
+  "generateBuiltInAuthorityEntity": true,
+  "generateBuiltInUserEntity": true,
+  "generateInMemoryUserCredentials": false,
+  "generateUserManagement": true,
+  "skipUserManagement": false,
+  "syncUserWithIdp": false,
+}
+`;

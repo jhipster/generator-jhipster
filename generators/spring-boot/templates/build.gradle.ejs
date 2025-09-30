@@ -157,9 +157,6 @@ configurations {
 dependencies {
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
-<%_ if (authenticationTypeOauth2) { _%>
-    implementation "com.github.ben-manes.caffeine:caffeine"
-<%_ } _%>
     testImplementation("com.tngtech.archunit:archunit-junit5-api:${archunitJunit5Version}") {
         exclude group: "org.slf4j", module: "slf4j-api"
     }
@@ -175,9 +172,7 @@ dependencies {
 <%_ } _%>
     implementation "jakarta.annotation:jakarta.annotation-api"
     implementation "org.apache.commons:commons-lang3"
-<%_ if (reactive) { _%>
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-<%_ } _%>
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
@@ -190,13 +185,7 @@ if (addSpringMilestoneRepository) { _%>
     implementation "org.springframework.boot:spring-boot-starter-aop"
     implementation "org.springframework.boot:spring-boot-starter-logging"
     implementation "org.springframework.boot:spring-boot-starter-mail"
-<%_ if (authenticationTypeOauth2) { _%>
-    implementation "org.springframework.boot:spring-boot-starter-oauth2-client"
-<%_ } _%>
-<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
-    implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
-<%_ } _%>
-<%_ if (!authenticationTypeOauth2) { _%>
+<%_ if (authenticationTypeSession) { _%>
     implementation "org.springframework.boot:spring-boot-starter-security"
 <%_ } _%>
     testImplementation "org.springframework.boot:spring-boot-starter-test"

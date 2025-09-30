@@ -17,15 +17,18 @@
  * limitations under the License.
  */
 
-import { before, describe, it, expect as jestExpect } from 'esmocha';
+import { before, describe, expect as jestExpect, it } from 'esmocha';
+
 import { expect } from 'chai';
-import JDLObject from '../../core/models/jdl-object.js';
-import { JDLEntity, JDLEnum } from '../../core/models/index.js';
-import JDLField from '../../core/models/jdl-field.js';
-import JDLValidation from '../../core/models/jdl-validation.js';
-import { validations } from '../../core/built-in-options/index.js';
-import fieldTypes from '../../../jhipster/field-types.js';
-import { convert } from './jdl-to-json-field-converter.js';
+
+import fieldTypes from '../../../jhipster/field-types.ts';
+import { validations } from '../../core/built-in-options/index.ts';
+import { JDLEntity, JDLEnum } from '../../core/models/index.ts';
+import JDLField from '../../core/models/jdl-field.ts';
+import JDLObject from '../../core/models/jdl-object.ts';
+import JDLValidation from '../../core/models/jdl-validation.ts';
+
+import { convert } from './jdl-to-json-field-converter.ts';
 
 const { CommonDBTypes } = fieldTypes;
 
@@ -43,7 +46,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
     });
     describe('when passing a JDL object', () => {
       describe('without validation, comment or option', () => {
-        let convertedField;
+        let convertedField: any;
 
         before(() => {
           const jdlObject = new JDLObject();
@@ -58,8 +61,8 @@ describe('jdl - JDLToJSONFieldConverter', () => {
           });
           entityA.addField(firstFieldForA);
           jdlObject.addEntity(entityA);
-          const returnedMap: any = convert(jdlObject);
-          convertedField = returnedMap.get('A')[0];
+          const returnedMap = convert(jdlObject);
+          convertedField = returnedMap.get('A')?.[0];
         });
 
         it('should convert them', () => {
@@ -73,7 +76,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
       });
       describe('when having blobs', () => {
         describe('that are recognised', () => {
-          let convertedFields;
+          let convertedFields: ReturnType<ReturnType<typeof convert>['get']>;
 
           before(() => {
             const jdlObject = new JDLObject();
@@ -103,7 +106,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
             entityA.addField(blobField);
             entityA.addField(imageBlobField);
             jdlObject.addEntity(entityA);
-            const returnedMap: any = convert(jdlObject);
+            const returnedMap = convert(jdlObject);
             convertedFields = returnedMap.get('A');
           });
 
@@ -134,7 +137,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
         });
       });
       describe('with field types being enums', () => {
-        let convertedField;
+        let convertedField: any;
 
         before(() => {
           const jdlObject = new JDLObject();
@@ -150,8 +153,8 @@ describe('jdl - JDLToJSONFieldConverter', () => {
           jdlObject.addEnum(enumType);
           entityA.addField(enumField);
           jdlObject.addEntity(entityA);
-          const returnedMap: any = convert(jdlObject);
-          convertedField = returnedMap.get('A')[0];
+          const returnedMap = convert(jdlObject);
+          convertedField = returnedMap.get('A')?.[0];
         });
 
         it('should convert them', () => {
@@ -165,7 +168,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
         });
       });
       describe('with field types being enums with comments', () => {
-        let convertedField;
+        let convertedField: any;
 
         before(() => {
           const jdlObject = new JDLObject();
@@ -185,8 +188,8 @@ describe('jdl - JDLToJSONFieldConverter', () => {
           jdlObject.addEnum(enumType);
           entityA.addField(enumField);
           jdlObject.addEntity(entityA);
-          const returnedMap: any = convert(jdlObject);
-          convertedField = returnedMap.get('A')[0];
+          const returnedMap = convert(jdlObject);
+          convertedField = returnedMap.get('A')?.[0];
         });
 
         it('should convert them', () => {
@@ -205,7 +208,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
         });
       });
       describe('with comments', () => {
-        let convertedField;
+        let convertedField: any;
 
         before(() => {
           const jdlObject = new JDLObject();
@@ -221,8 +224,8 @@ describe('jdl - JDLToJSONFieldConverter', () => {
           });
           entityA.addField(firstFieldForA);
           jdlObject.addEntity(entityA);
-          const returnedMap: any = convert(jdlObject);
-          convertedField = returnedMap.get('A')[0];
+          const returnedMap = convert(jdlObject);
+          convertedField = returnedMap.get('A')?.[0];
         });
 
         it('should convert them', () => {
@@ -236,7 +239,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
         });
       });
       describe('with validations', () => {
-        let convertedFields;
+        let convertedFields: ReturnType<ReturnType<typeof convert>['get']>;
 
         before(() => {
           const jdlObject = new JDLObject();
@@ -307,7 +310,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
           entityA.addField(integerField);
           entityA.addField(blobField);
           jdlObject.addEntity(entityA);
-          const returnedMap: any = convert(jdlObject);
+          const returnedMap = convert(jdlObject);
           convertedFields = returnedMap.get('A');
         });
 
@@ -353,7 +356,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
         });
       });
       describe('with options', () => {
-        let convertedField;
+        let convertedField: any;
 
         before(() => {
           const jdlObject = new JDLObject();
@@ -372,8 +375,8 @@ describe('jdl - JDLToJSONFieldConverter', () => {
           });
           entityA.addField(firstFieldForA);
           jdlObject.addEntity(entityA);
-          const returnedMap: any = convert(jdlObject);
-          convertedField = returnedMap.get('A')[0];
+          const returnedMap = convert(jdlObject);
+          convertedField = returnedMap.get('A')?.[0];
         });
 
         it('should convert them', () => {

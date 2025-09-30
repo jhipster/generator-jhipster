@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`generator - Kubernetes Kafka application should match files snapshot 1`] = `
 {
@@ -3609,7 +3609,7 @@ data:
           "redirectUris": [
             "http://jhgate.default.example.com/*",
             "https://jhgate.default.example.com/*", "http://localhost:8080/*",
-            "https://localhost:8080/*","http://localhost:4200/*", "http://localhost:9000/*", 
+            "https://localhost:8080/*","http://localhost:4200/*", 
             "http://localhost:8100/*",
             "http://127.0.0.1:8761/*",
             "dev.localhost.ionic:*"
@@ -3617,7 +3617,7 @@ data:
           "webOrigins": [
             "http://jhgate.default.example.com",
             "https://jhgate.default.example.com", "http://localhost:8080",
-            "https://localhost:8080","http://localhost:4200", "http://localhost:9000", 
+            "https://localhost:8080","http://localhost:4200", 
             "http://localhost:8100",
             "http://127.0.0.1:8761"
           ],
@@ -7056,7 +7056,7 @@ data:
           "redirectUris": [
             "http://jhgate.default.example.com/*",
             "https://jhgate.default.example.com/*", "http://localhost:8080/*",
-            "https://localhost:8080/*","http://localhost:4200/*", "http://localhost:9000/*", 
+            "https://localhost:8080/*","http://localhost:4200/*", 
             "http://localhost:8100/*",
             "http://127.0.0.1:8761/*",
             "dev.localhost.ionic:*"
@@ -7064,7 +7064,7 @@ data:
           "webOrigins": [
             "http://jhgate.default.example.com",
             "https://jhgate.default.example.com", "http://localhost:8080",
-            "https://localhost:8080","http://localhost:4200", "http://localhost:9000", 
+            "https://localhost:8080","http://localhost:4200", 
             "http://localhost:8100",
             "http://127.0.0.1:8761"
           ],
@@ -19988,8 +19988,6 @@ spec:
           value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-          value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
           value: " -Xmx256m -Xms256m"
         - name: SERVER_SHUTDOWN
@@ -20711,8 +20709,6 @@ spec:
           value: jdbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
         - name: SPRING_R2DBC_URL
           value: r2dbc:mysql://jhgate-mysql.jhipsternamespace.svc.cluster.local:3306/jhgate?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-        - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
-          value: "x-request-id,x-ot-span-context"
         - name: JAVA_OPTS
           value: " -Xmx256m -Xms256m"
         - name: SERVER_SHUTDOWN

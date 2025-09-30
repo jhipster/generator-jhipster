@@ -21,10 +21,6 @@ package <%= packageName %>.config;
 import <%= packageName %>.security.*;
 import tech.jhipster.config.JHipsterProperties;
 
-<%_ if (authenticationTypeSession || devDatabaseTypeH2Any) { _%>
-import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
-
-<%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 <%_ if (devDatabaseTypeH2Any) { _%>
@@ -113,8 +109,8 @@ import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWrite
 <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
 import org.springframework.util.StringUtils;
 <%_ } _%>
-import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
-import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
+import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.util.AntPathMatcher;
 
 <%_ if (authenticationTypeOauth2 || !applicationTypeMicroservice || authenticationTypeJwt) { _%>
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -157,7 +153,7 @@ public class SecurityConfiguration {
 <%_ } _%>
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
 <%_ if (!applicationTypeMicroservice) { _%>
             .cors(withDefaults())
@@ -184,61 +180,61 @@ public class SecurityConfiguration {
                 // prettier-ignore
                 authz
 <%_ if (!skipClient) { _%>
-                    .requestMatchers(mvc.pattern("/index.html"), mvc.pattern("/*.js"), mvc.pattern("/*.txt"), mvc.pattern("/*.json"), mvc.pattern("/*.map"), mvc.pattern("/*.css")).permitAll()
-                    .requestMatchers(mvc.pattern("/*.ico"), mvc.pattern("/*.png"), mvc.pattern("/*.svg"), mvc.pattern("/*.webapp")).permitAll()
+                    .requestMatchers("/index.html", "/*.js", "/*.txt", "/*.json", "/*.map", "/*.css").permitAll()
+                    .requestMatchers("/*.ico", "/*.png", "/*.svg", "/*.webapp").permitAll()
   <%_ if (clientBundlerVite) { _%>
-                    .requestMatchers(mvc.pattern("/assets/**")).permitAll()
-  <%_ } else if (clientBundlerExperimentalEsbuild) { _%>
-                    .requestMatchers(mvc.pattern("/content/**")).permitAll()
-                    .requestMatchers(mvc.pattern("/resources/**")).permitAll()
+                    .requestMatchers("/assets/**").permitAll()
+  <%_ } else if (clientBundlerEsbuild) { _%>
+                    .requestMatchers("/content/**").permitAll()
+                    .requestMatchers("/resources/**").permitAll()
   <%_ } else { _%>
-                    .requestMatchers(mvc.pattern("/app/**")).permitAll()
-                    .requestMatchers(mvc.pattern("/i18n/**")).permitAll()
-                    .requestMatchers(mvc.pattern("/content/**")).permitAll()
+                    .requestMatchers("/app/**").permitAll()
+                    .requestMatchers("/i18n/**").permitAll()
+                    .requestMatchers("/content/**").permitAll()
   <%_ } _%>
-                    .requestMatchers(mvc.pattern("/swagger-ui/**")).permitAll()
+                    .requestMatchers("/swagger-ui/**").permitAll()
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
-                    .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/authenticate")).permitAll()
-                    .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/authenticate")).permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/authenticate").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/authenticate").permitAll()
 <%_ } else { _%>
-                    .requestMatchers(mvc.pattern("/api/authenticate")).permitAll()
+                    .requestMatchers("/api/authenticate").permitAll()
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
-                    .requestMatchers(mvc.pattern("/api/register")).permitAll()
-                    .requestMatchers(mvc.pattern("/api/activate")).permitAll()
-                    .requestMatchers(mvc.pattern("/api/account/reset-password/init")).permitAll()
-                    .requestMatchers(mvc.pattern("/api/account/reset-password/finish")).permitAll()
+                    .requestMatchers("/api/register").permitAll()
+                    .requestMatchers("/api/activate").permitAll()
+                    .requestMatchers("/api/account/reset-password/init").permitAll()
+                    .requestMatchers("/api/account/reset-password/finish").permitAll()
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
-                    .requestMatchers(mvc.pattern("/api/auth-info")).permitAll()
+                    .requestMatchers("/api/auth-info").permitAll()
 <%_ } _%>
-                    .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
-                    .requestMatchers(mvc.pattern("/api/**")).authenticated()
+                    .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                    .requestMatchers("/api/**").authenticated()
 <%_ if (applicationTypeGateway) { _%>
   <%_ if (microfrontend) { _%>
                     // microfrontend resources are loaded by webpack without authentication, they need to be public
     <%_ if (clientBundlerVite) { _%>
-                    .requestMatchers(mvc.pattern("/services/*/assets/**")).permitAll()
+                    .requestMatchers("/services/*/assets/**").permitAll()
     <%_ } _%>
-                    .requestMatchers(mvc.pattern("/services/*/*.js")).permitAll()
-                    .requestMatchers(mvc.pattern("/services/*/*.txt")).permitAll()
-                    .requestMatchers(mvc.pattern("/services/*/*.json")).permitAll()
-                    .requestMatchers(mvc.pattern("/services/*/*.js.map")).permitAll()
+                    .requestMatchers("/services/*/*.js").permitAll()
+                    .requestMatchers("/services/*/*.txt").permitAll()
+                    .requestMatchers("/services/*/*.json").permitAll()
+                    .requestMatchers("/services/*/*.js.map").permitAll()
   <%_ } _%>
-                    .requestMatchers(mvc.pattern("/services/*/management/health/readiness")).permitAll()
-                    .requestMatchers(mvc.pattern("/services/*/v3/api-docs")).hasAuthority(AuthoritiesConstants.ADMIN)
-                    .requestMatchers(mvc.pattern("/services/**")).authenticated()
+                    .requestMatchers("/services/*/management/health/readiness").permitAll()
+                    .requestMatchers("/services/*/v3/api-docs").hasAuthority(AuthoritiesConstants.ADMIN)
+                    .requestMatchers("/services/**").authenticated()
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
-                    .requestMatchers(mvc.pattern("/websocket/**")).authenticated()
+                    .requestMatchers("/websocket/**").authenticated()
 <%_ } _%>
-                    .requestMatchers(mvc.pattern("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ADMIN)
-                    .requestMatchers(mvc.pattern("/management/health")).permitAll()
-                    .requestMatchers(mvc.pattern("/management/health/**")).permitAll()
-                    .requestMatchers(mvc.pattern("/management/info")).permitAll()
-                    .requestMatchers(mvc.pattern("/management/prometheus")).permitAll()
-                    .requestMatchers(mvc.pattern("/management/**")).hasAuthority(AuthoritiesConstants.ADMIN))
+                    .requestMatchers("/v3/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                    .requestMatchers("/management/health").permitAll()
+                    .requestMatchers("/management/health/**").permitAll()
+                    .requestMatchers("/management/info").permitAll()
+                    .requestMatchers("/management/prometheus").permitAll()
+                    .requestMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN))
 <%_ if (authenticationTypeSession) { _%>
   <%_ if (generateUserManagement) { _%>
             .rememberMe(rememberMe ->
@@ -248,17 +244,22 @@ public class SecurityConfiguration {
                     .key(jHipsterProperties.getSecurity().getRememberMe().getKey())
             )
   <%_ } _%>
-            .exceptionHandling(exceptionHanding ->
+            .exceptionHandling(exceptionHanding -> {
+                AntPathMatcher pathMatcher = new AntPathMatcher();
+  <%_ if (communicationSpringWebsocket) { _%>
+                RequestMatcher websocketRequestMatcher = request -> pathMatcher.match("/websocket/**", request.getRequestURI());
+  <%_ } _%>
+                RequestMatcher apiRequestMatcher = request -> pathMatcher.match("/api/**", request.getRequestURI());
                 exceptionHanding.defaultAuthenticationEntryPointFor(
                     new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
                     new OrRequestMatcher(
   <%_ if (communicationSpringWebsocket) { _%>
-                        antMatcher("/websocket/**"),
+                        websocketRequestMatcher,
   <%_ } _%>
-                        antMatcher("/api/**")
+                        apiRequestMatcher
                     )
-                )
-            )
+                );
+            })
             .formLogin(formLogin ->
                 formLogin
                     .loginPage("/")
@@ -290,18 +291,14 @@ public class SecurityConfiguration {
         if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT))) {
             http
   <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
-                .csrf(csrf -> csrf.ignoringRequestMatchers(antMatcher("/h2-console/**")))
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
   <%_ } _%>
-                .authorizeHttpRequests(authz -> authz.requestMatchers(antMatcher("/h2-console/**")).permitAll());
+                .authorizeHttpRequests(authz -> authz.requestMatchers("/h2-console/**").permitAll());
         }
 <%_ } _%>
         return http.build();
     }
 
-    @Bean
-    MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
-        return new MvcRequestMatcher.Builder(introspector);
-    }
 <%_ if (authenticationTypeOauth2) { _%>
 
     Converter<Jwt, AbstractAuthenticationToken> authenticationConverter() {

@@ -17,31 +17,26 @@
  * limitations under the License.
  */
 
-import { kebabCase } from 'lodash-es';
 import chalk from 'chalk';
-import { glob } from 'glob';
-
 import type { Options as ExecaOptions } from 'execa';
-import BaseApplicationGenerator from '../base-application/index.ts';
+import { glob } from 'glob';
+import { kebabCase } from 'lodash-es';
 
+import BaseApplicationGenerator from '../base-application/index.ts';
 import { JAVA_COMPATIBLE_VERSIONS, RECOMMENDED_JAVA_VERSION, SERVER_MAIN_RES_DIR } from '../generator-constants.js';
-import { createPomStorage } from '../maven/support/pom-store.js';
-import { addGradlePluginCallback, applyFromGradleCallback } from '../gradle/internal/needles.js';
+import { addGradlePluginCallback, applyFromGradleCallback } from '../gradle/internal/needles.ts';
+import { createPomStorage } from '../maven/support/pom-store.ts';
 import prepareSqlApplicationProperties from '../spring-data-relational/support/application-properties.ts';
-import { mavenProfileContent } from './templates.js';
+
+import { mavenProfileContent } from './templates.ts';
 import type {
   Application as HerokuApplication,
   Config as HerokuConfig,
   Entity as HerokuEntity,
   Options as HerokuOptions,
-} from './types.js';
+} from './types.ts';
 
-export default class HerokuGenerator extends BaseApplicationGenerator<
-  HerokuEntity,
-  HerokuApplication<HerokuEntity>,
-  HerokuConfig,
-  HerokuOptions
-> {
+export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEntity, HerokuApplication, HerokuConfig, HerokuOptions> {
   hasHerokuCli!: boolean;
 
   herokuAppName!: string;
@@ -53,7 +48,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<
   herokuSkipBuild!: boolean;
   dynoSize!: string;
 
-  constructor(args: string | string[], options: any, features: any) {
+  constructor(args?: string[], options?: any, features?: any) {
     super(args, options, features);
 
     this.option('skip-build', {
@@ -81,7 +76,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<
       await this.composeWithBlueprints();
     }
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrapApplication();
+      await this.dependsOnBootstrap('app');
     }
   }
 

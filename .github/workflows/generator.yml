@@ -28,8 +28,6 @@ on:
       - 'dependabot/**'
   pull_request:
     types: [closed, opened, synchronize, reopened]
-    branches:
-      - '*'
 permissions:
   contents: read
 
@@ -43,7 +41,7 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: ./.github/actions/setup-default-node-java
         with:
           generator-path: '.'

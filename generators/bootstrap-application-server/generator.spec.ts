@@ -16,14 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { before, describe, expect, it } from 'esmocha';
-import { snakeCase } from 'lodash-es';
+import { basename, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.js';
-import { shouldSupportFeatures } from '../../test/support/tests.js';
-import Generator from './index.js';
+import { defaultHelpers as helpers, result } from '../../lib/testing/index.ts';
+import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
+
+import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -31,37 +31,24 @@ const __dirname = dirname(__filename);
 const generator = basename(__dirname);
 
 describe(`generator - ${generator}`, () => {
-  it('generator-list constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
-  it('generator-list esm exports constant matches folder name', async () => {
-    await expect((await import('../generator-list.js'))[`GENERATOR_${snakeCase(generator).toUpperCase()}`]).toBe(generator);
-  });
   shouldSupportFeatures(Generator);
+  describe('blueprint support', () => testBlueprintSupport(generator));
 
-  describe('with', () => {
-    describe('default config', () => {
-      before(async () => {
-        await helpers.runJHipster(generator).withJHipsterConfig();
-      });
+  describe('with defaults options', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withMockedJHipsterGenerators().withMockedSource().withSharedApplication({}).withJHipsterConfig();
+    });
 
-      it('should succeed', () => {
-        expect(runResult.getSnapshot()).toMatchInlineSnapshot(`
-{
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "baseName": "jhipster",
-    "creationTimestamp": 1577836800000,
-    "entities": []
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-}
-`);
-      });
+    it('should match files snapshot', () => {
+      expect(result.getStateSnapshot()).toMatchSnapshot();
+    });
+
+    it('should call source snapshot', () => {
+      expect(result.sourceCallsArg).toMatchSnapshot();
+    });
+
+    it('should compose with generators', () => {
+      expect(result.composedMockedGenerators).toMatchInlineSnapshot(`[]`);
     });
   });
 });

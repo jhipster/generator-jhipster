@@ -16,15 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { stat } from 'fs/promises';
-import { createReadStream } from 'fs';
-import { relative } from 'path';
-import { transform } from 'p-transform';
+import { createReadStream } from 'node:fs';
+import { stat } from 'node:fs/promises';
+import { relative } from 'node:path';
+
 import { isBinaryFile } from 'isbinaryfile';
-import { simpleGit } from 'simple-git';
-import { isFileStateModified } from 'mem-fs-editor/state';
 import type { MemFsEditorFile } from 'mem-fs-editor';
-import { CRLF, normalizeLineEndings } from '../../../lib/utils/index.js';
+import { isFileStateModified } from 'mem-fs-editor/state';
+import { transform } from 'p-transform';
+import { simpleGit } from 'simple-git';
+
+import { CRLF, normalizeLineEndings } from '../../../lib/utils/index.ts';
 
 /**
  * Detect the file first line endings

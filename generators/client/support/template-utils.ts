@@ -18,12 +18,18 @@
  */
 import assert from 'node:assert';
 
-import { clientFrameworkTypes, fieldTypes } from '../../../lib/jhipster/index.js';
-import type { FieldType } from '../../../lib/jhipster/field-types.js';
-import type { Relationship as BaseApplicationRelationship, PrimaryKey, RelationshipWithEntity } from '../../base-application/types.js';
-import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../../client/types.js';
+import type { FieldType } from '../../../lib/jhipster/field-types.ts';
+import { clientFrameworkTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
 import { normalizePathEnd } from '../../../lib/utils/path.ts';
-import { getEntryIfTypeOrTypeAttribute } from './types-utils.js';
+import type {
+  Field as BaseApplicationField,
+  PrimaryKey,
+  Relationship as BaseApplicationRelationship,
+  RelationshipWithEntity,
+} from '../../base-application/types.ts';
+import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../types.ts';
+
+import { getEntryIfTypeOrTypeAttribute } from './types-utils.ts';
 
 const { STRING: TYPE_STRING, UUID: TYPE_UUID } = fieldTypes.CommonDBTypes;
 const { ANGULAR, VUE } = clientFrameworkTypes;
@@ -75,7 +81,7 @@ export const generateEntityClientImports = (
  * @private
  * Generate Entity Client Enum Imports
  */
-export const generateEntityClientEnumImports = (fields: ClientField[], clientFramework: string): Map<string, string> => {
+export const generateEntityClientEnumImports = (fields: BaseApplicationField[], clientFramework: string): Map<string, string> => {
   const typeImports = new Map();
   const uniqueEnums: Record<string, string> = {};
   for (const field of fields) {
@@ -153,7 +159,7 @@ export const stringifyTsEntity = (data: Record<string, any>, options: { sep?: st
  * @deprecated
  * Generate a test entity, according to the type
  */
-export const generateTestEntity = (fields: ClientField[], index: 0 | 1 | 'random' = 'random') => {
+export const generateTestEntity = (fields: BaseApplicationField[], index: 0 | 1 | 'random' = 'random') => {
   const entries = fields
     .map(field => {
       if (index === 'random') {

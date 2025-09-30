@@ -1,0 +1,27 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "jwt",
+    "baseName": "appNeo4j",
+    "buildTool": "gradle",
+    "cacheProvider": "no",
+    "ci": true,
+    "clientFramework": "angular",
+    "creationTimestamp": 1596513172471,
+    "databaseType": "neo4j",
+    "devDatabaseType": "neo4j",
+    "enableHibernateCache": false,
+    "enableTranslation": true,
+    "jhiPrefix": "jhi",
+    "jwtSecretKey": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+    "languages": ["en", "fr"],
+    "nativeLanguage": "en",
+    "packageFolder": "io/github/jhipster/app",
+    "packageName": "io.github.jhipster.app",
+    "prodDatabaseType": "neo4j",
+    "rememberMeKey": "f19f0827c622eb9b81f5227a869ccd44932d78eb",
+    "searchEngine": false,
+    "serverPort": "8080",
+    "testFrameworks": ["gatling", "cypress"]
+  }
+}

@@ -26,7 +26,6 @@ describe('<%= entityAngularName %> Form Service', () => {
   let service: <%= entityAngularName %>FormService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
     service = TestBed.inject(<%= entityAngularName %>FormService);
   });
 
@@ -65,7 +64,7 @@ describe('<%= entityAngularName %> Form Service', () => {
       it('should return New<%= entityAngularName %> for default <%= entityAngularName %> initial value', () => {
         const formGroup = service.create<%= entityAngularName %>FormGroup(sampleWithNewData);
 
-        const <%= entityInstance %> = service.get<%= entityAngularName %>(formGroup) as any;
+        const <%= entityInstance %> = service.get<%= entityAngularName %>(formGroup);
 
         expect(<%= entityInstance %>).toMatchObject(sampleWithNewData);
       });
@@ -73,7 +72,7 @@ describe('<%= entityAngularName %> Form Service', () => {
       it('should return New<%= entityAngularName %> for empty <%= entityAngularName %> initial value', () => {
         const formGroup = service.create<%= entityAngularName %>FormGroup();
 
-        const <%= entityInstance %> = service.get<%= entityAngularName %>(formGroup) as any;
+        const <%= entityInstance %> = service.get<%= entityAngularName %>(formGroup);
 
         expect(<%= entityInstance %>).toMatchObject({});
       });
@@ -81,7 +80,7 @@ describe('<%= entityAngularName %> Form Service', () => {
       it('should return I<%= entityAngularName %>', () => {
         const formGroup = service.create<%= entityAngularName %>FormGroup(sampleWithRequiredData);
 
-        const <%= entityInstance %> = service.get<%= entityAngularName %>(formGroup) as any;
+        const <%= entityInstance %> = service.get<%= entityAngularName %>(formGroup);
 
         expect(<%= entityInstance %>).toMatchObject(sampleWithRequiredData);
       });

@@ -18,11 +18,12 @@
  */
 
 import { kebabCase, lowerFirst } from 'lodash-es';
-import { relationshipOptions, validations } from '../../core/built-in-options/index.js';
+
 import { customCamelCase } from '../../../utils/string-utils.ts';
-import type JDLRelationship from '../../core/models/jdl-relationship.js';
-import type { JSONRelationship } from '../../core/types/json-config.js';
-import type { RelationshipType } from '../../core/basic-types/relationships.js';
+import type { RelationshipType } from '../../core/basic-types/relationships.ts';
+import { relationshipOptions, validations } from '../../core/built-in-options/index.ts';
+import type JDLRelationship from '../../core/models/jdl-relationship.ts';
+import type { JSONRelationship } from '../../core/types/json-config.ts';
 
 const {
   Validations: { REQUIRED },

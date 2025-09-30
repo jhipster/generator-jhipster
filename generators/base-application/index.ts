@@ -20,6 +20,5 @@
 /*
  * Register generator-base at yeoman-environment
  */
-export { default } from './generator.js';
-export { default as comand } from './command.js';
-export type { Application, Field, Entity, Relationship, Config, Options, Source } from './types.js';
+export { default } from './generator.ts';
+export type { Application, Config, Entity, Field, Options, Relationship, Source } from './types.ts';

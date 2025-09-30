@@ -16,8 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JDLRuntime } from '../types/runtime.js';
-import JDLApplication from './jdl-application.js';
+import type { JDLRuntime } from '../types/runtime.ts';
+
+import JDLApplication from './jdl-application.ts';
 
 /**
  * Creates a JDL application from a passed configuration.
@@ -27,5 +28,3 @@ import JDLApplication from './jdl-application.js';
 export function createJDLApplication(config: any, runtime: JDLRuntime, namespaceConfigs?: Record<string, Record<string, any>>) {
   return new JDLApplication({ config: { baseName: 'jhipster', ...config }, namespaceConfigs }, runtime);
 }
-
-export default createJDLApplication;
