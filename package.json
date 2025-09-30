@@ -185,7 +185,7 @@
     "@types/debug": "4.1.12",
     "@types/didyoumean": "1.2.3",
     "@types/estree": "1.0.8",
-    "@types/node": "20.19.17",
+    "@types/node": "20.19.18",
     "@types/normalize-path": "^3.0.2",
     "@types/npmcli__arborist": "^6.3.1",
     "@types/picomatch": "^4.0.2",
