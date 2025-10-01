@@ -87,7 +87,7 @@ describe('<%= entityAngularName %> Management Detail Component', () => {
     it('should navigate to previous state', () => {
       jest.spyOn(window.history, 'back');
       comp.previousState();
-      expect(window.history.back).toHaveBeenCalled();
+      expect(globalThis.history.back).toHaveBeenCalled();
     });
   });
 

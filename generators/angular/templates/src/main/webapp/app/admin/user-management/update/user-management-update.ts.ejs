@@ -87,7 +87,7 @@ export default class UserManagementUpdate implements OnInit {
   }
 
   previousState(): void {
-    window.history.back();
+    globalThis.history.back();
   }
 
   save(): void {
