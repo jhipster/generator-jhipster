@@ -58,8 +58,8 @@ export class DataUtils {
     const blob = new Blob([byteArray], {
       type: contentType,
     });
-    const fileURL = window.URL.createObjectURL(blob);
-    const win = window.open(fileURL);
+    const fileURL = globalThis.URL.createObjectURL(blob);
+    const win = globalThis.open(fileURL);
     win!.onload = function () {
       URL.revokeObjectURL(fileURL);
     };
