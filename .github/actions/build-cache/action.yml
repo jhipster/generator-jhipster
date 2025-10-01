@@ -22,7 +22,7 @@ description: Build cache
 runs:
   using: composite
   steps:
-    - uses: jhipster/actions/cache-npm-dependencies@v0
+    - uses: jhipster/actions/cache-npm-dependencies@v1
       if: always()
       with:
         generator-path: generator-jhipster
@@ -32,14 +32,14 @@ runs:
       with:
         jhipster-bom-path: jhipster-bom
         generator-jhipster-path: generator-jhipster
-    - uses: jhipster/actions/save-cache@v0
+    - uses: jhipster/actions/save-cache@v1
       if: always()
       with:
         key: -${{ github.run_id }}
         npm: true
         maven: true
         gradle: true
-    - uses: jhipster/actions/restore-cache@v0
+    - uses: jhipster/actions/restore-cache@v1
       if: always()
       with:
         npm: true
