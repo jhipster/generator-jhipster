@@ -378,9 +378,9 @@ export class <%= componentName %> implements OnInit {
 <%_ } _%>
       };
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
-      filters.filterOptions.forEach(filterOption => {
+      for (const filterOption of filters.filterOptions) {
         queryObject[filterOption.name] = filterOption.values;
-      });
+      }
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
       if (this.hasMorePage()) {
@@ -424,9 +424,11 @@ export class <%= componentName %> implements OnInit {
       };
 
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
-      filterOptions?.forEach(filterOption => {
-        queryParamsObj[filterOption.nameAsQueryParam()] = filterOption.values;
-      });
+      if (filterOptions) {
+        for (const filterOption of filterOptions) {
+          queryParamsObj[filterOption.nameAsQueryParam()] = filterOption.values;
+        }
+      }
 <%_ } _%>
 
       this.ngZone.run(() => {
