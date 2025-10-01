@@ -28,7 +28,7 @@
     "@eslint/js": "9.36.0",
     "@types/folder-hash": "4.0.4",
     "@types/jest": "29.5.14",
-    "@types/node": "20.19.18",
+    "@types/node": "20.19.19",
     "@types/sockjs-client": "1.5.4",
     "angular-eslint": "20.3.0",
     "browser-sync": "3.0.4",
