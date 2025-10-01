@@ -38,3 +38,7 @@ nbdist/
 .nb-gradle/
 generators/**/package-lock.json
 generators/**/.gradle
+
+
+#Ignore vscode AI rules
+.github/instructions/codacy.instructions.md
