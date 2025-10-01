@@ -510,7 +510,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "javaCompatibleVersions": [
     "17",
     "21",
-    "24",
+    "25",
   ],
   "javaDependencies": {
     "archunit-junit5": "'ARCHUNIT-JUNIT-5-VERSION'",
@@ -1200,7 +1200,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "javaCompatibleVersions": [
     "17",
     "21",
-    "24",
+    "25",
   ],
   "javaDependencies": {
     "archunit-junit5": "'ARCHUNIT-JUNIT-5-VERSION'",
@@ -1870,7 +1870,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "javaCompatibleVersions": [
     "17",
     "21",
-    "24",
+    "25",
   ],
   "javaDependencies": {
     "archunit-junit5": "'ARCHUNIT-JUNIT-5-VERSION'",
