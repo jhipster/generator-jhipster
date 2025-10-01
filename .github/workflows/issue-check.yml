@@ -60,7 +60,7 @@ jobs:
         with:
           path: generator-jhipster
           fetch-depth: 2
-      - uses: jhipster/actions/setup-runner@v0
+      - uses: jhipster/actions/setup-runner@v1
         with:
           node-version: ${{ steps.setup.outputs.node-version }}
           java-version: ${{ steps.setup.outputs.java-version }}
@@ -73,7 +73,7 @@ jobs:
       #----------------------------------------------------------------------
       - run: npm ci --ignore-scripts
         working-directory: ${{ github.workspace }}/generator-jhipster
-      - uses: jhipster/actions/build-jhipster-bom@v0
+      - uses: jhipster/actions/build-jhipster-bom@v1
         with:
           jhipster-bom-ref: main
       - name: 'GENERATION: project'

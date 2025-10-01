@@ -39,7 +39,7 @@ jobs:
       - uses: ./.github/actions/setup-default-node-java
         with:
           generator-path: '.'
-      - uses: jhipster/actions/setup-runner@v0
+      - uses: jhipster/actions/setup-runner@v1
       - name: Create commit
         run: |
           rm package-lock.json

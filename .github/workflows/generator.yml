@@ -45,7 +45,7 @@ jobs:
       - uses: ./.github/actions/setup-default-node-java
         with:
           generator-path: '.'
-      - uses: jhipster/actions/setup-runner@v0
+      - uses: jhipster/actions/setup-runner@v1
       - run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit
         shell: bash
       - run: npm ci
