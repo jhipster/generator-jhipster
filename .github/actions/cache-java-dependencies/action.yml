@@ -29,7 +29,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: jhipster/actions/setup-runner@v0
+    - uses: jhipster/actions/setup-runner@v1
       with:
         binary-dir: ${{ github.workspace }}/generator-jhipster/bin
         npm-cache: false
