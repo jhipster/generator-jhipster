@@ -20,7 +20,7 @@ The following Java and Node combinations are tested and verified by GitHub Actio
 
 | Java     | Node     | Status |
 | -------- | -------- | ------ |
-| 17/21/24 | 18/20/22 | ✅     |
+| 17/21/24 | 20/22/24 | ✅     |
 
 ## Sponsors
 
