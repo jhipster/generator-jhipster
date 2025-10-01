@@ -28,7 +28,12 @@ if (!environment.DEBUG_INFO_ENABLED) {
   enableProdMode();
 }
 
-bootstrapApplication(App, appConfig)
-  // eslint-disable-next-line no-console
-  .then(() => console.log('Application started'))
-  .catch((err: unknown) => console.error(err));
+(async (): Promise<void> => {
+  try {
+    await bootstrapApplication(App, appConfig);
+    // eslint-disable-next-line no-console
+    console.log('Application started');
+  } catch (err: unknown) {
+    console.error(err);
+  }
+})();
