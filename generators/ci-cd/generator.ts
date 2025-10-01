@@ -32,6 +32,8 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
       await this.composeWithBlueprints();
     }
 
+    await this.dependsOnBootstrap('ci-cd');
+
     if (!this.delegateToBlueprint) {
       if (this.options.commandName === 'ci-cd') {
         const { backendType = 'Java' } = this.jhipsterConfig as any;

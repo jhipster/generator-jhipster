@@ -24,7 +24,7 @@ jobs:
         name: "Gradle Wrapper Validation"
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
+            - uses: <%= githubActions['actions/checkout'] %>
             - uses: gradle/wrapper-validation-action@v1
 <%_ } _%>
     pipeline:
@@ -52,14 +52,14 @@ if (!databaseTypeNo && !skipServer ) { _%>
             GRADLE_DEVELOCITY_ACCESS_KEY: ${{ secrets.GRADLE_DEVELOCITY_ACCESS_KEY }}
 <%_ } _%>
         steps:
-            - uses: actions/checkout@v4
+            - uses: <%= githubActions['actions/checkout'] %>
 <%_ if (!skipClient) { _%>
-            - uses: actions/setup-node@v4
+            - uses: <%= githubActions['actions/setup-node'] %>
               with:
                   node-version: <%= nodeVersion %>
 <%_ }
 if (!skipServer) { _%>
-            - uses: actions/setup-java@v4
+            - uses: <%= githubActions['actions/setup-java'] %>
               with:
                   distribution: 'temurin'
                   java-version: <%= javaVersion %>

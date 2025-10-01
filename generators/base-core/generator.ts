@@ -158,7 +158,7 @@ export default class CoreGenerator<
    */
   generatorsToCompose: string[] = [];
 
-  private _jhipsterGenerator?: string;
+  #jhipsterGeneratorRelativePath_?: string;
 
   // Override the type of `env` to be a full Environment
   declare env: Environment;
@@ -618,25 +618,43 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       });
   }
 
+  get #jhipsterGeneratorRelativePath(): string {
+    if (!this.#jhipsterGeneratorRelativePath_) {
+      try {
+        this.#jhipsterGeneratorRelativePath_ = requireNamespace(this.options.namespace).generator.replace(':', '/generators/');
+      } catch {
+        throw new Error('Could not determine the generator name');
+      }
+    }
+    return this.#jhipsterGeneratorRelativePath_;
+  }
+
   /**
    * Alternative templatePath that fetches from the blueprinted generator, instead of the blueprint.
    */
   jhipsterTemplatePath(...path: string[]): string {
-    let existingGenerator: string;
-    try {
-      existingGenerator = this._jhipsterGenerator ?? requireNamespace(this.options.namespace).generator;
-    } catch {
-      if (this.options.namespace) {
-        const split = this.options.namespace.split(':', 2);
-        existingGenerator = split.length === 1 ? split[0] : split[1];
-      } else {
-        throw new Error('Could not determine the generator name');
-      }
-    }
-    this._jhipsterGenerator = existingGenerator;
-    return this._jhipsterGenerator
-      ? this.fetchFromInstalledJHipster(this._jhipsterGenerator, 'templates', ...path)
-      : this.templatePath(...path);
+    return this.fetchFromInstalledJHipster(this.#jhipsterGeneratorRelativePath, 'templates', ...path);
+  }
+
+  /**
+   * Returns the resources path in the blueprinted jhipster generator
+   */
+  jhipsterResourcesPath(...path: string[]): string {
+    return this.fetchFromInstalledJHipster(this.#jhipsterGeneratorRelativePath, 'resources', ...path);
+  }
+
+  /**
+   * Reads a resource file from the generator
+   */
+  readResource(path: string): string | null {
+    return this.fs.read(this.templatePath('../resources', path));
+  }
+
+  /**
+   * Reads a resource file from the blueprinted jhipster generator
+   */
+  readJHipsterResource(path: string): string | null {
+    return this.fs.read(this.jhipsterResourcesPath(path));
   }
 
   /**
