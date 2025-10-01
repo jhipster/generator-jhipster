@@ -41,17 +41,19 @@ export class MetricsModalThreads implements OnInit {
   private readonly activeModal = inject(NgbActiveModal);
 
   ngOnInit(): void {
-    this.threads?.forEach(thread => {
-      if (thread.threadState === ThreadState.Runnable) {
-        this.threadDumpRunnable += 1;
-      } else if (thread.threadState === ThreadState.Waiting) {
-        this.threadDumpWaiting += 1;
-      } else if (thread.threadState === ThreadState.TimedWaiting) {
-        this.threadDumpTimedWaiting += 1;
-      } else if (thread.threadState === ThreadState.Blocked) {
-        this.threadDumpBlocked += 1;
+    if (this.threads) {
+      for (const thread of this.threads) {
+        if (thread.threadState === ThreadState.Runnable) {
+          this.threadDumpRunnable += 1;
+        } else if (thread.threadState === ThreadState.Waiting) {
+          this.threadDumpWaiting += 1;
+        } else if (thread.threadState === ThreadState.TimedWaiting) {
+          this.threadDumpTimedWaiting += 1;
+        } else if (thread.threadState === ThreadState.Blocked) {
+          this.threadDumpBlocked += 1;
+        }
       }
-    });
+    }
 
     this.threadDumpAll = this.threadDumpRunnable + this.threadDumpWaiting + this.threadDumpTimedWaiting + this.threadDumpBlocked;
   }
