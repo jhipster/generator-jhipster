@@ -66,7 +66,7 @@ task webapp(type: NpmTask) {
     outputs.dir("<%= clientDistDir %>")
         .withPropertyName("webapp-build-dir")
 
-    dependsOn npmInstall
+    dependsOn(npmInstall)
 
     args = ["run", "webapp:build"]
     environment = [APP_VERSION: project.version]
@@ -105,8 +105,8 @@ task integrationTest(type: Test) {
     exclude <%- javaIntegrationTestExclude.map(exclude => `"${exclude}"`).join('') %>
 <%_ } _%>
     testLogging {
-        events 'FAILED', 'SKIPPED'
-        exceptionFormat "full"
+        events = ['FAILED', 'SKIPPED']
+        exceptionFormat = "full"
     }
     systemProperty('spring.profiles.active', 'test,testdev')
     systemProperty('java.security.egd', 'file:/dev/./urandom')
@@ -122,9 +122,9 @@ task integrationTest(type: Test) {
     }
 <%_ } _%>
 }
-integrationTest.dependsOn test
+integrationTest.dependsOn(test)
 
 <%_ if (!skipClient) { _%>
-processResources.dependsOn webapp
-bootJar.dependsOn processResources
+processResources.dependsOn(webapp)
+bootJar.dependsOn(processResources)
 <%_ } _%>

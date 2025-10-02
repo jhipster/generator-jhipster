@@ -17,7 +17,7 @@ tasks.register('cucumberTest', Test) {
     dependsOn(consoleLauncherTest)
     description = "Execute cucumber BDD tests."
     group = "verification"
-    include "**/*CucumberIT*"
+    include("**/*CucumberIT*")
 
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
@@ -30,4 +30,4 @@ tasks.register('cucumberTestReport', TestReport) {
     testResults.from(cucumberTest)
 }
 
-check.dependsOn cucumberTest
+check.dependsOn(cucumberTest)
