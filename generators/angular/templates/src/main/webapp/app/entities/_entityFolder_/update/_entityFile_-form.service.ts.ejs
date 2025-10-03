@@ -135,7 +135,7 @@ _%>
             Validators.max(<%= field.fieldValidateRulesMax %>),
     <%_ } _%>
     <%_ if (field.fieldValidationPattern) { _%>
-            Validators.pattern('<%= field.fieldValidateRulesPattern.replace(/\\/g, '\\\\') %>'),
+            Validators.pattern(String.raw`<%= field.fieldValidateRulesPattern.replace(/\\\\/g, '\\') %>`),
     <%_ } _%>
           ],
         }
