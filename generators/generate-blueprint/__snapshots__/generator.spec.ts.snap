@@ -2,16 +2,16 @@
 
 exports[`generator - generate-blueprint with all option should match snapshot 1`] = `
 {
-  ".blueprint/cli/commands.mjs": {
+  ".blueprint/cli/commands.js": {
     "stateCleared": "modified",
   },
-  ".blueprint/generate-sample/command.mjs": {
+  ".blueprint/generate-sample/command.js": {
     "stateCleared": "modified",
   },
-  ".blueprint/generate-sample/generator.mjs": {
+  ".blueprint/generate-sample/generator.js": {
     "stateCleared": "modified",
   },
-  ".blueprint/generate-sample/index.mjs": {
+  ".blueprint/generate-sample/index.js": {
     "stateCleared": "modified",
   },
   ".blueprint/generate-sample/templates/samples/sample.jdl": {
@@ -26,10 +26,10 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "README.md": {
     "stateCleared": "modified",
   },
-  "cli/cli-customizations.cjs": {
+  "cli/cli-customizations.js": {
     "stateCleared": "modified",
   },
-  "cli/cli.cjs": {
+  "cli/cli.js": {
     "stateCleared": "modified",
   },
   "generators/angular/command.js": {
@@ -1591,16 +1591,16 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
 
 exports[`generator - generate-blueprint with default config should write files and match snapshot 1`] = `
 {
-  ".blueprint/cli/commands.mjs": {
+  ".blueprint/cli/commands.js": {
     "stateCleared": "modified",
   },
-  ".blueprint/generate-sample/command.mjs": {
+  ".blueprint/generate-sample/command.js": {
     "stateCleared": "modified",
   },
-  ".blueprint/generate-sample/generator.mjs": {
+  ".blueprint/generate-sample/generator.js": {
     "stateCleared": "modified",
   },
-  ".blueprint/generate-sample/index.mjs": {
+  ".blueprint/generate-sample/index.js": {
     "stateCleared": "modified",
   },
   ".blueprint/generate-sample/templates/samples/sample.jdl": {
@@ -1615,10 +1615,10 @@ exports[`generator - generate-blueprint with default config should write files a
   "README.md": {
     "stateCleared": "modified",
   },
-  "cli/cli-customizations.cjs": {
+  "cli/cli-customizations.js": {
     "stateCleared": "modified",
   },
-  "cli/cli.cjs": {
+  "cli/cli.js": {
     "stateCleared": "modified",
   },
   "package.json": {
