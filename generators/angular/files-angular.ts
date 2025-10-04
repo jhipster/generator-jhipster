@@ -89,7 +89,7 @@ export const files = asWriteFilesSection({
   angularApp: [
     {
       ...clientSrcTemplatesBlock(),
-      templates: ['main.ts', 'bootstrap.ts', 'declarations.d.ts'],
+      templates: ['main.ts', 'declarations.d.ts'],
     },
     {
       ...clientApplicationTemplatesBlock(),
