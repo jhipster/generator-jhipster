@@ -11,20 +11,20 @@ if (project.hasProperty("nodeInstall")) {
 
     // Copy local node and npm to a fixed location for npmw
     def deleteOldNpm = tasks.register("deleteOldNpm", Delete) {
-        delete '<%= temporaryDir %>node/lib/node_modules/npm'
+        delete('<%= temporaryDir %>node/lib/node_modules/npm')
     }
     def fixedNode = tasks.register("fixedNode", Copy) {
-        from nodeSetup
-        into '<%= temporaryDir %>node'
-        finalizedBy deleteOldNpm
+        from(nodeSetup)
+        into('<%= temporaryDir %>node')
+        finalizedBy(deleteOldNpm)
     }
-    tasks.named("nodeSetup").configure { finalizedBy fixedNode }
+    tasks.named("nodeSetup").configure { finalizedBy(fixedNode) }
 
     def fixedNpm = tasks.register("fixedNpm", Copy) {
-        from npmSetup
-        into '<%= temporaryDir %>node'
+        from(npmSetup)
+        into('<%= temporaryDir %>node')
     }
-    tasks.named("npmSetup").configure { finalizedBy fixedNpm }
+    tasks.named("npmSetup").configure { finalizedBy(fixedNpm) }
 }
 
 <%_ if (!skipClient) { _%>
@@ -49,10 +49,10 @@ task webapp_test(type: NpmTask) {
         outputs.file("build/test-results/clover.xml")
         .withPropertyName("clover-result")
 
-    dependsOn npmInstall,compileTestJava
+    dependsOn(npmInstall, compileTestJava)
     args = ["run", "webapp:test"]
 }
 
-test.dependsOn webapp_test
+test.dependsOn(webapp_test)
 
 <%_ } _%>

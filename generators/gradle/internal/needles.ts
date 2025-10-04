@@ -62,9 +62,7 @@ const serializeDependency = (dependency: GradleDependency) => {
   const { groupId, artifactId, version, classifier, scope, closure } = dependency;
   return wrapScope(
     scope,
-    classifier && !version
-      ? `group: "${groupId}", name: "${artifactId}", classifier: "${classifier}"`
-      : `"${groupId}:${artifactId}${version ? `:${version}` : ''}${classifier ? `:${classifier}` : ''}"`,
+    `"${groupId}:${artifactId}${version || classifier ? `:${version ?? ''}${classifier ? `:${classifier}` : ''}` : ''}"`,
     closure,
   );
 };
