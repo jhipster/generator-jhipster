@@ -411,5 +411,6 @@ export default asWritingTask<AngularEntity, AngularApplication<AngularEntity>>(f
     this.removeFile(`${application.clientSrcDir}app/shared/filter/filter.component.ts.ejs`);
     this.removeFile(`${application.clientSrcDir}app/shared/pagination/item-count.component.spec.ts.ejs`);
     this.removeFile(`${application.clientSrcDir}app/shared/pagination/item-count.component.ts.ejs`);
+    this.removeFile(`${application.clientSrcDir}bootstrap.ts`);
   }
 });
