@@ -67,7 +67,7 @@ Things that the Operator will **NOT** do:
 
 [guide-level-explanation]: #guide-level-explanation
 
-You can use the JHipster Kubernetes Operator to monitor and manage your JHipster MicroServices Applications running inside Kubernetes.In order to deploy your applications to Kubernetes you can use the `jhipster kubernetes` and `jhipster kubernetes-helm` generators to generate the Kubernetes Manifest required to run your containers in K8s.
+You can use the JHipster Kubernetes Operator to monitor and manage your JHipster MicroServices Applications running inside Kubernetes. In order to deploy your applications to Kubernetes you can use the `jhipster kubernetes` and `jhipster kubernetes-helm` generators to generate the Kubernetes Manifest required to run your containers in K8s.
 
 ![JHipster Flow to K8s](https://github.com/salaboy/jhipster-operator/blob/master/imgs/jhipster-flow.png 'JHipster Flow to K8s')
 
@@ -76,7 +76,7 @@ After deploying your applications to a Kubernetes environment you can deploy the
 Once the Operator is running you will be able to:
 
 1. Interact with the Kubernetes API to get JHipster specific resources, such as Applications, MicroServices, Gateways and Registries and see the relationships between them. You will be able to describe each of the resources to obtain more details about the services that are related to the application
-2. Automatically expose applications based on the healthyness of all the services belonging to that application, if a service is failing the application might be automatically hidden from the end users. This can be achieved by creating new Ingress or new Gateway Routes for Istio
+2. Automatically expose applications based on the healthiness of all the services belonging to that application, if a service is failing the application might be automatically hidden from the end users. This can be achieved by creating new Ingress or new Gateway Routes for Istio
 3. Manage multiple applications deployed in the same cluster
 4. Control the applications topology and isolation with other Applications
 5. Share infrastructure (Registry, SSO, maybe datastores) between different applications
@@ -110,11 +110,11 @@ The Operator will expose a set of APIs to fine tune the default behaviour and al
 
 Because we are using CRDs we will be able to ask to the Kubernetes APIs about our JHipster Resources using for example the `kubectl` command.
 
-An important aspect of the Operator is that it will not be in charge of deploying applications. Deployment should be done by standard tools such as HELM or the default Kubernetes APIs that we use after generatign the Kubernetes Manifests. The Operator responsability is to monitor and manage applications, not to deploy them.
+An important aspect of the Operator is that it will not be in charge of deploying applications. Deployment should be done by standard tools such as HELM or the default Kubernetes APIs that we use after generating the Kubernetes Manifests. The Operator responsibility is to monitor and manage applications, not to deploy them.
 
-The JHipster Kubernetes Operator can be built as a Spring Boot Starter meaning that it doesn't nesseraly needs to be it is own independent container it can be attached to an existing service if it is required.
+The JHipster Kubernetes Operator can be built as a Spring Boot Starter meaning that it doesn't necessarily need to be its own independent container; it can be attached to an existing service if required.
 
-The Operator will provide an excelent entry point for domain specific extensions and integrations with other platform wide services such as Istio, KNative, Jenkins X (Tekton Pipelines), etc. It will provide the entry point for a Developer Workflow on top of Kubernetes.
+The Operator will provide an excellent entry point for domain specific extensions and integrations with other platform wide services such as Istio, KNative, Jenkins X (Tekton Pipelines), etc. It will provide the entry point for a Developer Workflow on top of Kubernetes.
 
 # Drawbacks
 
@@ -129,7 +129,7 @@ A Kubernetes Operator only make sense if you are planning to run your applicatio
 
 [rationale-and-alternatives]: #rationale-and-alternatives
 
-Building Kubernetes Operators is a long journey. In order to find some best practices we need to iterate and improve while we learn. We don't have all the answers right now, but having a concreate project will help us to improve it until it is useful for the entire community.
+Building Kubernetes Operators is a long journey. In order to find some best practices we need to iterate and improve while we learn. We don't have all the answers right now, but having a concrete project will help us to improve it until it is useful for the entire community.
 
 # Prior art
 
