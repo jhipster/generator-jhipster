@@ -266,7 +266,7 @@ runs:
     - name: 'Find existing PR comment with SonarQube results'
       if: github.event_name == 'pull_request' && inputs.comment-token && steps.sonar_metrics.outcome == 'success'
       id: find_comment
-      uses: peter-evans/find-comment@v3
+      uses: peter-evans/find-comment@v4
       with:
         issue-number: ${{ github.event.pull_request.number }}
         body-includes: '## :bar_chart: SonarQube Analysis for ${{ inputs.sonar-project-key }}'
