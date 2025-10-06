@@ -275,7 +275,7 @@ runs:
     # Create or update PR comment with SonarQube results
     - name: 'Post SonarQube results as PR comment'
       if: github.event_name == 'pull_request' && inputs.comment-token && steps.sonar_metrics.outcome == 'success'
-      uses: peter-evans/create-or-update-comment@v4
+      uses: peter-evans/create-or-update-comment@v5
       with:
         issue-number: ${{ github.event.pull_request.number }}
         body: ${{ env.COMMENT_BODY }}
