@@ -440,11 +440,11 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+        "value": "target/test-results/jest/TESTS-results-sonar.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "target//test-results/lcov.info",
+        "value": "target/test-results/lcov.info",
       },
       {
         "key": "sonar.exclusions",
@@ -936,11 +936,11 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+        "value": "target/test-results/jest/TESTS-results-sonar.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "target//test-results/lcov.info",
+        "value": "target/test-results/lcov.info",
       },
       {
         "key": "sonar.exclusions",
@@ -1405,11 +1405,11 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+        "value": "target/test-results/jest/TESTS-results-sonar.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "target//test-results/lcov.info",
+        "value": "target/test-results/lcov.info",
       },
       {
         "key": "sonar.exclusions",
@@ -1899,11 +1899,11 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+        "value": "target/test-results/jest/TESTS-results-sonar.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "target//test-results/lcov.info",
+        "value": "target/test-results/lcov.info",
       },
       {
         "key": "sonar.exclusions",
@@ -2462,11 +2462,11 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+        "value": "target/test-results/jest/TESTS-results-sonar.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "target//test-results/lcov.info",
+        "value": "target/test-results/lcov.info",
       },
       {
         "key": "sonar.exclusions",
@@ -2925,11 +2925,11 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+        "value": "target/test-results/jest/TESTS-results-sonar.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "target//test-results/lcov.info",
+        "value": "target/test-results/lcov.info",
       },
       {
         "key": "sonar.exclusions",
@@ -3382,11 +3382,11 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "target//test-results/jest/TESTS-results-sonar.xml",
+        "value": "target/test-results/jest/TESTS-results-sonar.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "target//test-results/lcov.info",
+        "value": "target/test-results/lcov.info",
       },
       {
         "key": "sonar.exclusions",
