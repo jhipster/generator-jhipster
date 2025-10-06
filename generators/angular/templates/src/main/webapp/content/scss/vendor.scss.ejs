@@ -26,9 +26,9 @@ eg $input-color: red;
 @import 'bootswatch/dist/<%= clientTheme %>/variables';
 <%_ } _%>
 // Override Bootstrap variables
-@import 'bootstrap-variables';
+@use 'bootstrap-variables';
 // Import Bootstrap source files from node_modules
-@import 'bootstrap/scss/bootstrap';
+@use 'bootstrap/scss/bootstrap';
 <%_ if (!clientThemeNone) { _%>
 @import 'bootswatch/dist/<%= clientTheme %>/bootswatch';
 <%_ } _%>
