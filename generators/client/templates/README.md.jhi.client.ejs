@@ -120,13 +120,13 @@ ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
 
 ### Managing dependencies
 
-For example, to add [Leaflet][] library as a runtime dependency of your application, you would run following command:
+For example, to add [Leaflet][] library as a runtime dependency of your application, you would run the following command:
 
 ```
 <%= nodePackageManagerCommand %> <%= clientPackageMngrAdd %> leaflet
 ```
 
-To benefit from TypeScript type definitions from [DefinitelyTyped][] repository in development, you would run following command:
+To benefit from TypeScript type definitions from [DefinitelyTyped][] repository in development, you would run the following command:
 
 ```
 <%= nodePackageManagerCommand %> <%= clientPackageMngrAddDev %> @types/leaflet
