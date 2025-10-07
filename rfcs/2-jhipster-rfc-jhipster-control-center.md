@@ -98,7 +98,7 @@ Implementation details will be left to the discretion of the **JHipster Control 
 
 [drawbacks]: #drawbacks
 
--   As JHipster is first and foremost a code generator, it could be argued that it is not the goal of the project to release non code generator products. Two date, several external products have been released as part of the JHipster organization: the JHipster Registry and JHipster Console and their release cadence has been low compared to the main generator.
+-   As JHipster is first and foremost a code generator, it could be argued that it is not the goal of the project to release non code generator products. To date, several external products have been released as part of the JHipster organization: the JHipster Registry and JHipster Console and their release cadence has been low compared to the main generator.
 -   Impose the overhead of running another service in development and production
 
 ## Rationale and alternatives
@@ -137,6 +137,6 @@ Some existing similar or related solutions :
 Possible future evolutions:
 
 -   Provide a plugin mechanism to let organizations customize the **JHipster Control Center** with custom features without forking
--   Seamlessly integrate with observablility tools such as ELK, Grafana and Zipkin
+-   Seamlessly integrate with observability tools such as ELK, Grafana and Zipkin
 -   Plug into service mesh telemetry services such as those provided by Istio
 -   Integrate with the [JHipster Kubernetes Operator](https://github.com/jhipster/jhipster-operator)
