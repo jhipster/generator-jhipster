@@ -119,7 +119,7 @@ Compared to today's situation, the proposed solution would have the following ad
 Some existing similar or related solutions :
 
 - [JHipster Registry](https://www.jhipster.tech/jhipster-registry/)
-- [Spring Boot Admin](https://codecentric.github.io/spring-boot-admin/current/)
+- [Spring Boot Admin](https://docs.spring-boot-admin.com/)
 - [Trampoline](https://ernestort.github.io/Trampoline/)
 - [Pivotal Cloud Foundry Apps Manager](https://docs.run.pivotal.io/console/manage-apps.html)
 - [Azure Spring Cloud](https://azure.microsoft.com/en-in/services/spring-cloud/): currently focused only on running Spring Boot workloads but we can expect management features coming to it in the future.
