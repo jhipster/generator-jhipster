@@ -518,7 +518,7 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
 <%_ });
 }_%>
 <%_ ['DEFAULT_', 'UPDATED_'].forEach((fieldStatus) => { _%>
-<%_   const createInstance = fieldStatus === 'UPDATED_' ? `updated${persistClass}` : persistInstance;  _%>
+<%_   const createInstance = fieldStatus === 'UPDATED_' ? `updated${persistClass}` : persistInstance; _%>
     /**
      * Create an <% if (fieldStatus === 'UPDATED_') { %>updated <% } %>entity for this test.
      *
@@ -658,7 +658,7 @@ _%>
 <%_ } _%>
             inserted<%= persistClass %> = null;
         }
-<%_ if (databaseTypeSql && reactive) {  _%>
+<%_ if (databaseTypeSql && reactive) { _%>
         deleteEntities(em);
 <%_ } _%>
 <%_ if (requiresDeleteAllUsers && hasUserRepository) { _%>

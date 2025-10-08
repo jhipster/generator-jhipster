@@ -63,11 +63,11 @@ import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.r2dbc.core.RowsFetchSpec;
 
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
-<%_ if (jpaMetamodelFiltering && reactive) {  _%>
+<%_ if (jpaMetamodelFiltering && reactive) { _%>
 import <%= entityAbsolutePackage %>.domain.criteria.<%= entityClass %>Criteria;
 import <%= entityAbsolutePackage %>.repository.rowmapper.ColumnConverter;
 import tech.jhipster.service.ConditionBuilder;
-<%_ }  _%>
+<%_ } _%>
 <% relationships.forEach(rel => {
   if (rel.relationshipManyToMany && rel.ownerSide) { _%>
 import <%= rel.otherEntity.entityAbsolutePackage %>.domain.<%= rel.otherEntity.persistClass %>;
@@ -102,7 +102,7 @@ class <%= entityClass %>RepositoryInternalImpl extends SimpleR2dbcRepository<<%=
 <%_ reactiveUniqueEntityTypes.forEach(element => { _%>
     private final <%= element %>RowMapper <%= element.toLowerCase() %>Mapper;
 <%_ }); _%>
-<%_ if (jpaMetamodelFiltering && reactive) {  _%>
+<%_ if (jpaMetamodelFiltering && reactive) { _%>
     private final ColumnConverter columnConverter;
 <%_ } _%>
 
@@ -129,7 +129,7 @@ _%>
 <%_ reactiveUniqueEntityTypes.forEach(element => { _%>
         this.<%= element.toLowerCase() %>Mapper = <%= element.toLowerCase() %>Mapper;
 <%_ }); _%>
-<%_ if (jpaMetamodelFiltering && reactive) {  _%>
+<%_ if (jpaMetamodelFiltering && reactive) { _%>
         this.columnConverter = columnConverter;
 <%_ } _%>
     }
@@ -160,7 +160,7 @@ _%>
 
     @Override
     public Mono<<%= persistClass %>> findById(<%= primaryKey.type %> id) {
-<%_ if (primaryKey.type != 'Long') {  _%>
+<%_ if (primaryKey.type != 'Long') { _%>
         Comparison whereClause = Conditions.isEqual(entityTable.column("<%= primaryKey.fields[0].columnName %>"), Conditions.just(StringUtils.wrap(id.toString(), "'")));
 <%_ } else { _%>
         Comparison whereClause = Conditions.isEqual(entityTable.column("<%= primaryKey.fields[0].columnName %>"), Conditions.just(id.toString()));
@@ -237,7 +237,7 @@ _%>
   <%_ }); %>;
         }
 <%_ } _%>
-<%_ if (jpaMetamodelFiltering && reactive) {  _%>
+<%_ if (jpaMetamodelFiltering && reactive) { _%>
     @Override
     public Flux<<%= persistClass %>> findByCriteria(<%= entityClass %>Criteria <%= entityInstance %>Criteria, Pageable page) {
         return createQuery(page, buildConditions(<%= entityInstance %>Criteria)).all();

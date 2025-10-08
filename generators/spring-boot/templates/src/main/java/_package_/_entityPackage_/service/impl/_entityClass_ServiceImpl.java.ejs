@@ -34,9 +34,9 @@ _%>
 import <%= entityAbsolutePackage %>.service.<%= entityClass %>Service;
 <%_ } _%>
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
-<%_ if (jpaMetamodelFiltering && reactive) {  _%>
+<%_ if (jpaMetamodelFiltering && reactive) { _%>
 import <%= entityAbsolutePackage %>.domain.criteria.<%= entityClass %>Criteria;
-<%_ }  _%>
+<%_ } _%>
 import <%= entityAbsolutePackage %>.repository.<%= entityClass %>Repository;
 <%_ if (isUsingMapsId === true) { _%>
 import <%= entityAbsolutePackage %>.repository.<%= mapsIdAssoc.otherEntity.entityNameCapitalized %>Repository;
@@ -174,7 +174,7 @@ public class <%= serviceClassName %><% if (serviceImpl) { %> implements <%= enti
   <%_ } _%>
     }
 <%_ } _%>
-<%_ if (jpaMetamodelFiltering && reactive) {  _%>
+<%_ if (jpaMetamodelFiltering && reactive) { _%>
 
     <%_ if (!serviceImpl) { _%>
     /**
@@ -210,7 +210,7 @@ public class <%= serviceClassName %><% if (serviceImpl) { %> implements <%= enti
         LOG.debug("Request to get the count of all <%= entityClassPlural %> by Criteria");
         return <%= entityInstance %>Repository.countByCriteria(criteria);
     }
-<%_ }  _%>
+<%_ } _%>
 
 <%_ if (implementsEagerLoadApis) { _%>
 
