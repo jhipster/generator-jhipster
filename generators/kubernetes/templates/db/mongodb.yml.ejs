@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
+apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
 kind: ConfigMap
 metadata:
   namespace: <%= kubernetesNamespace %>
@@ -30,7 +30,7 @@ data:
     storage:
       dbPath: /data/db
 ---
-apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
+apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
 kind: ConfigMap
 metadata:
   namespace: <%= kubernetesNamespace %>
@@ -226,7 +226,7 @@ spec:
             - name: POD_NAMESPACE
               valueFrom:
                 fieldRef:
-                  apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
+                  apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
                   fieldPath: metadata.namespace
             - name: REPLICA_SET
               value: rs0
@@ -251,7 +251,7 @@ spec:
             - name: POD_NAMESPACE
               valueFrom:
                 fieldRef:
-                  apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
+                  apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
                   fieldPath: metadata.namespace
             - name: REPLICA_SET
               value: rs0
@@ -336,7 +336,7 @@ spec:
 <%_ } _%>
 ---
 # Headless service for DNS record
-apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
+apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
 kind: Service
 metadata:
   name: <%= app.baseName.toLowerCase() %>-mongodb

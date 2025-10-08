@@ -33,7 +33,7 @@
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
+apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
 kind: Secret
 metadata:
   name: gossip-key
@@ -42,7 +42,7 @@ type: Opaque
 data:
   gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
 ---
-apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
+apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
 kind: Service
 metadata:
   name: consul-headless

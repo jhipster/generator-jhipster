@@ -120,7 +120,7 @@ _%>
 
     public <%= entityClass %>RepositoryInternalImpl(R2dbcEntityTemplate template, EntityManager entityManager<%_
             reactiveUniqueEntityTypes.forEach(element => { _%>, <%= element %>RowMapper <%= element.toLowerCase() %>Mapper<%_ }); _%>, R2dbcEntityOperations entityOperations,
-        R2dbcConverter converter<% if (jpaMetamodelFiltering && reactive) {  %>,
+        R2dbcConverter converter<% if (jpaMetamodelFiltering && reactive) { %>,
         ColumnConverter columnConverter<% } %>) {
         super(new MappingRelationalEntityInformation(converter.getMappingContext().getRequiredPersistentEntity(<%= persistClass %>.class)), entityOperations, converter);
         this.db = template.getDatabaseClient();

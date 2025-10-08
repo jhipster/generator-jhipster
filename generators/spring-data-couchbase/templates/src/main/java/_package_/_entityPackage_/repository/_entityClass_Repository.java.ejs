@@ -64,9 +64,9 @@ public interface <%= entityClass %>Repository extends JHipsterCouchbaseRepositor
     String SELECT = "SELECT meta(b).id as __id, meta(b).cas as __cas, b.*" + <%
       for (const relationship of notEmbeddedRelationships) {
           if (relationship.collection) {
-            %> ", ARRAY OBJECT_ADD(item, 'id', meta(item).id) FOR item IN `<%= relationship.relationshipFieldNamePlural %>` END AS `<%= relationship.relationshipFieldNamePlural %>`"  + <%
+           %> ", ARRAY OBJECT_ADD(item, 'id', meta(item).id) FOR item IN `<%= relationship.relationshipFieldNamePlural %>` END AS `<%= relationship.relationshipFieldNamePlural %>`"  + <%
           } else {
-            %> ", OBJECT_ADD(`<%= relationship.relationshipFieldName %>`, 'id', meta(`<%= relationship.relationshipFieldName %>`).id) AS `<%= relationship.relationshipFieldName %>`" + <%
+           %> ", OBJECT_ADD(`<%= relationship.relationshipFieldName %>`, 'id', meta(`<%= relationship.relationshipFieldName %>`).id) AS `<%= relationship.relationshipFieldName %>`" + <%
           }
       } %>
         " FROM #{#n1ql.bucket}.#{#n1ql.scope}.#{#n1ql.collection} b";
