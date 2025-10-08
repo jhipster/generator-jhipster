@@ -108,7 +108,7 @@ The service worker initialization code is commented out by default. To enable it
 </script>
 ```
 
-Note: [Workbox](https://developers.google.com/web/tools/workbox/) powers JHipster's service worker. It dynamically generates the `service-worker.js` file.
+Note: [Workbox](https://developer.chrome.com/docs/workbox) powers JHipster's service worker. It dynamically generates the `service-worker.js` file.
   <%_ } _%>
   <%_ if (clientFrameworkAngular) { _%>
 The service worker initialization code is disabled by default. To enable it, uncomment the following code in `<%= clientSrcDir %>app/app.config.ts`:
@@ -197,7 +197,7 @@ Unit tests are run by [<%= clientTestFrameworkName %>][]. They're located near c
 <&_ } -&>
 <&_ if (fragment.referenceSection) { -&>
 <%_ if (clientBundlerWebpack) { _%>
-[Webpack]: https://webpack.github.io/
+[Webpack]: https://webpack.js.org/
 <%_ } -%>
 <%_ if (clientFrameworkReact || clientFrameworkAngular || microfrontend) { _%>
 [BrowserSync]: https://www.browsersync.io/

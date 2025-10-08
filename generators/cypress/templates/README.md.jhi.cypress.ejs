@@ -33,11 +33,11 @@ export CYPRESS_E2E_USERNAME="<your-username>"
 export CYPRESS_E2E_PASSWORD="<your-password>"
 ```
 
-See Cypress documentation for setting OS [environment variables](https://docs.cypress.io/guides/guides/environment-variables#Setting) to learn more.
+See Cypress documentation for setting OS [environment variables](https://docs.cypress.io/app/references/environment-variables#Setting) to learn more.
 
 #### Lighthouse audits
 
-You can execute automated [Lighthouse audits](https://developers.google.com/web/tools/lighthouse/) with [cypress-audit](https://github.com/mfrachet/cypress-audit) by running `<%= nodePackageManagerCommand %> run e2e:cypress:audits`.
+You can execute automated [Lighthouse audits](https://developer.chrome.com/docs/lighthouse/overview) with [cypress-audit](https://github.com/mfrachet/cypress-audit) by running `<%= nodePackageManagerCommand %> run e2e:cypress:audits`.
 You should only run the audits when your application is packaged with the production profile.
 The lighthouse report is created in `<%= cypressTemporaryDir %>lhreport.html`.
 <%_ if (cypressCoverage) { _%>
