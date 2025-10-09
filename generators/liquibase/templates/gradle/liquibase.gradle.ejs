@@ -88,8 +88,8 @@ liquibase {
   runList = project.ext.runList
 }
 
-liquibaseDiff.dependsOn compileJava
-liquibaseDiffChangelog.dependsOn compileJava
+liquibaseDiff.dependsOn(compileJava)
+liquibaseDiffChangelog.dependsOn(compileJava)
 <%_ if (backendTypeSpringBoot) { _%>
 
 ext {

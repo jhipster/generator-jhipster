@@ -30,9 +30,13 @@ version = "0.0.1-SNAPSHOT"
 
 description = ""
 
-sourceCompatibility=<%= javaVersion %>
-targetCompatibility=<%= javaVersion %>
+<%_ if (backendTypeJavaAny) { _%>
+java {
+    sourceCompatibility=<%= javaVersion %>
+    targetCompatibility=<%= javaVersion %>
+}
 assert System.properties["java.specification.version"] == <%- javaCompatibleVersions.map(ver => `"${ver}"`).join(' || '); %>
+<%_ } _%>
 
 ext {
     springProfiles = ""
@@ -111,14 +115,14 @@ test {
     useJUnitPlatform()
     exclude "**/*IT*", "**/*IntTest*"
     testLogging {
-        events 'FAILED', 'SKIPPED'
+        events = ['FAILED', 'SKIPPED']
+        exceptionFormat = "full"
     }
     jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx512m'
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
     reports.html.required = false
-    testLogging.exceptionFormat "full"
 <%_ if (reactive) { _%>
 
     if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
@@ -129,7 +133,7 @@ test {
 <%_ } _%>
 }
 
-check.dependsOn integrationTest
+check.dependsOn(integrationTest)
 task testReport(type: TestReport) {
     destinationDirectory = file("$buildDir/reports/tests")
     testResults.from(test)
@@ -265,5 +269,5 @@ bootJar {
 }
 <%_ } _%>
 
-compileJava.dependsOn processResources
-processResources.dependsOn bootBuildInfo
+compileJava.dependsOn(processResources)
+processResources.dependsOn(bootBuildInfo)
