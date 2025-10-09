@@ -33,9 +33,9 @@ public class <%= entityClass %>SqlHelper {
     let col = field.fieldNameAsDatabaseColumn;
     _%>
         columns.add(Column.aliased("<%= col %>", table, columnPrefix + "_<%= col %>"));
-   <%_  if ((field.fieldTypeBinary) && !field.blobContentTypeText) { _%>
+   <%_ if ((field.fieldTypeBinary) && !field.blobContentTypeText) { _%>
         columns.add(Column.aliased("<%= col %>_content_type", table, columnPrefix + "_<%= col %>_content_type"));
-   <%_  } _%>
+   <%_ } _%>
 <%_ }); _%>
 
 <%_ reactiveRegularEagerRelations.forEach(function(rel) { _%>

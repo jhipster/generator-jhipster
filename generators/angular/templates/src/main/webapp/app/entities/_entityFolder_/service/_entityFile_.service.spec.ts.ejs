@@ -34,7 +34,7 @@ import { <%= entityAngularName %>Service<% if (anyFieldIsDateDerived) { %>, Rest
 const requireRestSample: <% if (anyFieldIsDateDerived) { %>Rest<% } else { %>I<% } %><%= entityAngularName %> = {
   ...sampleWithRequiredData,
 <%_ fields.forEach((field) => { _%>
-<%_  if (field.fieldTypeLocalDate) { _%>
+<%_ if (field.fieldTypeLocalDate) { _%>
   <%= field.fieldName %>: sampleWithRequiredData.<%= field.fieldName %>?.format(DATE_FORMAT),
 <%_ } else if (field.fieldTypeTimed) { _%>
   <%= field.fieldName %>: sampleWithRequiredData.<%= field.fieldName %>?.toJSON(),

@@ -40,7 +40,7 @@ const appOut = appName.concat('-', suffix); _%>
   <%_ if (istio) { _%>
 - <%= appOut %>/<%= appName %>-destination-rule.yml
 - <%= appOut %>/<%= appName %>-virtual-service.yml
-  <%_  } _%>
+  <%_ } _%>
 <%_ }) _%>
 <%_ if (useKeycloak) { _%>
   <%_ if (ingressTypeGke) { _%>

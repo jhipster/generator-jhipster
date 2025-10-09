@@ -43,7 +43,7 @@ if (hasFieldConstraint) { _%>
         <addNotNullConstraint tableName="<%= entityTableName %>"
             columnName="<%= field.columnName %>_content_type"
             columnDataType="varchar(255)"/>
-    <%_     }
+    <%_    }
         }
     } _%>
     </changeSet>
@@ -95,7 +95,7 @@ if (hasFieldConstraint) { _%>
         <addNotNullConstraint tableName="<%= entityTableName %>"
             columnName="<%= relationshipData.columnName %>_id"
             columnDataType="<%= relationshipData.columnDataType %>"/>
-    <%_  }
+    <%_ }
      } _%>
     </changeSet>
 <%_ } _%>
