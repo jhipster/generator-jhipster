@@ -19,9 +19,9 @@
 package <%= entityAbsolutePackage %>.repository;
 
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
-<%_ if (jpaMetamodelFiltering) {  _%>
+<%_ if (jpaMetamodelFiltering) { _%>
 import <%= entityAbsolutePackage %>.domain.criteria.<%= entityClass %>Criteria;
-<%_ }  _%>
+<%_ } _%>
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.data.relational.core.query.Criteria;
@@ -99,11 +99,11 @@ interface <%= entityClass %>RepositoryInternal {
     Mono<<%= persistClass %>> findById(<%= primaryKey.type %> id);
     // this is not supported at the moment because of https://github.com/jhipster/generator-jhipster/issues/18269
     // Flux<<%= persistClass %>> findAllBy(Pageable pageable, Criteria criteria);
-<%_ if (jpaMetamodelFiltering) {  _%>
+<%_ if (jpaMetamodelFiltering) { _%>
     Flux<<%= persistClass %>> findByCriteria(<%= entityClass %>Criteria criteria, Pageable pageable);
 
     Mono<Long> countByCriteria(<%= entityClass %>Criteria criteria);
-<%_ }  _%>
+<%_ } _%>
 <%_ if (implementsEagerLoadApis) { _%>
 
     Mono<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);

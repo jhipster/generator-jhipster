@@ -46,7 +46,7 @@ data:
           jwt:
             base64-secret: <%= jwtSecretKey %>
   # app specific configuration
-<%_ if (serviceDiscoveryEureka) {  _%>
+<%_ if (serviceDiscoveryEureka) { _%>
   jhipster-registry.yml: |-
     eureka:
       client:
