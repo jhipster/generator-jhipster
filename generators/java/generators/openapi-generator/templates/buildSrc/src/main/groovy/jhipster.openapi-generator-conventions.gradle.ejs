@@ -29,7 +29,7 @@ openApiGenerate {
     apiFilesConstrainedTo = [""]
     modelFilesConstrainedTo = [""]
     supportingFilesConstrainedTo = ["ApiUtil.java"]
-    configOptions = [delegatePattern: "true", title: "<%= dasherizedBaseName %>"<% if (reactive) {  %>, reactive: "true"<% } %>, useSpringBoot3: "true"]
+    configOptions = [delegatePattern: "true", title: "<%= dasherizedBaseName %>"<% if (reactive) { %>, reactive: "true"<% } %>, useSpringBoot3: "true"]
     validateSpec = true
     importMappings = [Problem:"org.springframework.http.ProblemDetail"]
 }

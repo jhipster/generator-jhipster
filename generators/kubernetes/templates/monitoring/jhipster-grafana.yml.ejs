@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
+apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
 kind: Secret
 metadata:
   name: jhipster-grafana-credentials
@@ -79,7 +79,7 @@ spec:
         emptyDir: {}
       restartPolicy: Always
 ---
-apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
+apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
 kind: Service
 metadata:
   name: jhipster-grafana

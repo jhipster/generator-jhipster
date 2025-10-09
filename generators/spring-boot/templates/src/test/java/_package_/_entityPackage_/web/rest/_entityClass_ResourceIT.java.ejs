@@ -1087,7 +1087,7 @@ _%>
     !field.fieldTypeDouble
   ) { %>.toString()<% } %>))<%_ } _%>;
     }
-<%_ if (jpaMetamodelFiltering) {  %>
+<%_ if (jpaMetamodelFiltering) { %>
 
     @Test<%= transactionalAnnotation %>
     void get<%= entityClassPlural %>ByIdFiltering() <% if (!reactive) { %>throws Exception <% } %>{

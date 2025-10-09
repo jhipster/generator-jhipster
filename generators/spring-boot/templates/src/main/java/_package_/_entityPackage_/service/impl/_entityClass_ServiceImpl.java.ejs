@@ -195,9 +195,9 @@ public class <%= serviceClassName %><% if (serviceImpl) { %> implements <%= enti
     public <% if (paginationNo) { %><%= listOrFlux %><% } else { %><%= pageOrFlux %><% } %><<%= instanceType %>> findByCriteria(<%= entityClass %>Criteria criteria<% if (!paginationNo) { %>, Pageable pageable<% } %>) {
         LOG.debug("Request to get all <%= entityClassPlural %> by Criteria");
     <%_ if (paginationNo) { _%>
-        return <%= entityInstance %>Repository.findByCriteria(criteria, null)<% if (dtoMapstruct) { %>.map(<%= entityToDtoReference  %>)<% } %>;
+        return <%= entityInstance %>Repository.findByCriteria(criteria, null)<% if (dtoMapstruct) { %>.map(<%= entityToDtoReference %>)<% } %>;
     <%_ } else { _%>
-        return <%= entityInstance %>Repository.findByCriteria(criteria, pageable)<% if (dtoMapstruct) { %>.map(<%= entityToDtoReference  %>)<% } %>;
+        return <%= entityInstance %>Repository.findByCriteria(criteria, pageable)<% if (dtoMapstruct) { %>.map(<%= entityToDtoReference %>)<% } %>;
     <%_ } _%>
     }
 

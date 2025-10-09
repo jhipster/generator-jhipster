@@ -26,6 +26,6 @@ _%>
             .flatMap(<%= entityInstance %>SearchRepository::save)
 <%_ } -%>
 <%_ if (dtoMapstruct) { %>
-            .map(<%= entityToDtoReference  %>)
+            .map(<%= entityToDtoReference %>)
 <%_ } -%>
 <%_ if (returnDirectly) { _%>;<%_ } _%>
