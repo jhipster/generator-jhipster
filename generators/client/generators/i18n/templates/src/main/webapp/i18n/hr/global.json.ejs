@@ -159,6 +159,9 @@
         "idnull": "Neispravan ID",
         "idinvalid": "Invalid Id",
         "idnotfound": "ID cannot be found",
+ <%_ if (searchEngineElasticsearch) { _%>
+        "querySyntaxError": "Invalid search query",
+<%_ } _%>
         "file": {
             "could.not.extract": "Nije moguće izdvojiti datoteku.",
             "not.image": "Očekivano je da datoteka bude slika ali je prepoznato \"{{ fileType }}\""

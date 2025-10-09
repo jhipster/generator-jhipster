@@ -158,6 +158,9 @@
         "idnull": "无效的 ID",
         "idinvalid": "无效的 ID",
         "idnotfound": "找不到对应的 ID",
+ <%_ if (searchEngineElasticsearch) { _%>
+        "querySyntaxError": "Invalid search query",
+<%_ } _%>
         "file": {
           "could.not.extract": "无法解压缩文件",
           "not.image": "文件应该是图片格式，但实际却是 \"{{ fileType }}\""

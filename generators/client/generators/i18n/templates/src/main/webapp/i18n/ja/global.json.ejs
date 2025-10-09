@@ -158,6 +158,9 @@
         "idnull": "IDがありません。",
         "idinvalid": "無効なIDです。",
         "idnotfound": "IDが見つかりません。",
+ <%_ if (searchEngineElasticsearch) { _%>
+        "querySyntaxError": "Invalid search query",
+<%_ } _%>
         "file": {
             "could.not.extract": "ファイルを抽出できませんでした。",
             "not.image": "ファイルはイメージ形式である必要がありますが、\"{{ fileType }}\" 形式がアップロードされました。"

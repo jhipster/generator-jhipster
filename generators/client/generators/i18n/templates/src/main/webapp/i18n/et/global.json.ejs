@@ -158,6 +158,9 @@
         "idnull": "Vigane ID",
         "idinvalid": "Invalid Id",
         "idnotfound": "ID cannot be found",
+ <%_ if (searchEngineElasticsearch) { _%>
+        "querySyntaxError": "Invalid search query",
+<%_ } _%>
         "file": {
             "could.not.extract": "Ei saanud faili eraldada",
             "not.image": "Ootasime, et fail on pilt, aga faili tüüp on \"{{ fileType }}\""
