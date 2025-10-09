@@ -34,7 +34,7 @@ let helpBlocks = 0; %>
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
             "created": "<%= entityNameHumanized %> புதிதாக உருவாக்கப்பட்டது, அடையாளம் {{ param }}",
-            "updated": "<%= entityNameHumanized %> மாற்றப்பட்டது, அடையாளம்  {{ param }}",
+            "updated": "<%= entityNameHumanized %> மாற்றப்பட்டது, அடையாளம் {{ param }}",
             "deleted": "A <%= entityNameHumanized %> நீக்கப்பட்டது, அடையாளம {{ param }}",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
@@ -61,7 +61,7 @@ let helpBlocks = 0; %>
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
             "created": "<%= entityNameHumanized %> புதிதாக உருவாக்கப்பட்டது, அடையாளம் {{ param }}",
-            "updated": "<%= entityNameHumanized %> மாற்றப்பட்டது, அடையாளம்  {{ param }}",
+            "updated": "<%= entityNameHumanized %> மாற்றப்பட்டது, அடையாளம் {{ param }}",
             "deleted": "A <%= entityNameHumanized %> நீக்கப்பட்டது, அடையாளம {{ param }}"
         }
     }

@@ -25,7 +25,7 @@
                     "blockedcount": "अवरोधित संख्या",
                     "waitedtime": "वेळ वाट पाहिली",
                     "waitedcount": "वेळ वाट पाहिली संख्या",
-                    "lockname": "लॉक  नाव ",
+                    "lockname": "लॉक नाव ",
                     "stacktrace": "Stacktrace",
                     "show": "Stacktrace दाखवा ",
                     "hide": "Stacktrace लपवा "
