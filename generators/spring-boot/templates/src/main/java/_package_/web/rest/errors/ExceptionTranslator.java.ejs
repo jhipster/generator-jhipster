@@ -92,7 +92,7 @@ import java.util.Optional;
 <%_ if (databaseTypeSql && reactive) { _%>
 @Component("jhiExceptionTranslator")
 <%_ } _%>
-public class ExceptionTranslator extends ResponseEntityExceptionHandler <% if (reactive) { %> implements ExceptionTranslation <% }  %>{
+public class ExceptionTranslator extends ResponseEntityExceptionHandler <% if (reactive) { %> implements ExceptionTranslation <% } %>{
 
 <%_
 let returnType;

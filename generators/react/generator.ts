@@ -319,8 +319,8 @@ ${comment}
         const { clientI18nDir, clientDistDir, clientSrcDir, temporaryDir } = application;
         source.addSonarProperties?.([
           { key: 'sonar.test.inclusions', value: `${clientSrcDir}app/**/*.spec.ts, ${clientSrcDir}app/**/*.spec.tsx`, valueSep: ', ' },
-          { key: 'sonar.testExecutionReportPaths', value: `${temporaryDir}/test-results/jest/TESTS-results-sonar.xml` },
-          { key: 'sonar.javascript.lcov.reportPaths', value: `${temporaryDir}/test-results/lcov.info` },
+          { key: 'sonar.testExecutionReportPaths', value: `${temporaryDir}test-results/jest/TESTS-results-sonar.xml` },
+          { key: 'sonar.javascript.lcov.reportPaths', value: `${temporaryDir}test-results/lcov.info` },
           {
             key: 'sonar.exclusions',
             value: `${clientSrcDir}content/**/*.*, ${clientI18nDir}*.ts, ${clientDistDir}**/*.*`,

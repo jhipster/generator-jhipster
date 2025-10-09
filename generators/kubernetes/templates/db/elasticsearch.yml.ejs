@@ -95,7 +95,7 @@ spec:
             memory: "2Gi"
             cpu: "1"
 ---
-apiVersion: <%= KUBERNETES_CORE_API_VERSION  %>
+apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
 kind: Service
 metadata:
   name: <%= app.baseName.toLowerCase() %>-elasticsearch

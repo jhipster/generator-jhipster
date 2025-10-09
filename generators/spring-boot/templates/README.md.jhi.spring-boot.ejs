@@ -17,8 +17,8 @@
  limitations under the License.
 -%>
 <%#
- This is a fragment file, it will be merged into to root template if available.
- EJS fragments will process % delimiter tags in template and & delimiter tags in the merge process.
+ This is a fragment file, it will be merged into the root template if available.
+ EJS fragments will process % delimiter tags in the template and & delimiter tags during the merge process.
 -%>
 <&_ if (fragment.introSection) { -&>
   <%_ if (applicationTypeGateway || applicationTypeMicroservice) { _%>
@@ -340,7 +340,7 @@ To achieve this, first build a Docker image of your app by running:
 npm run java:docker
 ```
 
-Or build a arm64 Docker image when using an arm64 processor os like MacOS with M1 processor family running:
+Or build an arm64 Docker image when using an arm64 processor os like MacOS with M1 processor family running:
 
 ```sh
 npm run java:docker:arm64

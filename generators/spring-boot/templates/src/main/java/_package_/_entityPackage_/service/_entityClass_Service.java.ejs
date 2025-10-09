@@ -30,9 +30,9 @@ import <%= entityAbsolutePackage %>.service.dto.<%= dtoClass %>;
 <%_ } else { _%>
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
 <%_ } _%>
-<%_ if (jpaMetamodelFiltering && reactive) {  _%>
+<%_ if (jpaMetamodelFiltering && reactive) { _%>
 import <%= entityAbsolutePackage %>.domain.criteria.<%= entityClass %>Criteria;
-<%_ }  _%>
+<%_ } _%>
 <%_ if (!paginationNo || implementsEagerLoadApis) { _%>
 
   <%_ if (!reactive) { _%>
@@ -83,7 +83,7 @@ public interface <%= entityClass %>Service {
      * @return the persisted entity.
      */
     <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= instanceType %>> partialUpdate(<%= instanceType %> <%= instanceName %>);
-<%_ if (!jpaMetamodelFiltering) {  _%>
+<%_ if (!jpaMetamodelFiltering) { _%>
 
     /**
      * Get all the <%= entityInstancePlural %>.
@@ -94,7 +94,7 @@ public interface <%= entityClass %>Service {
     <% if (paginationNo) { %><%= listOrFlux %><% } else { %><%= pageOrFlux %><% } %><<%= instanceType %>> findAll(<% if (!paginationNo) { %>Pageable pageable<% } %>);
 
 <%_ } _%>
-<%_ if (jpaMetamodelFiltering && reactive) {  _%>
+<%_ if (jpaMetamodelFiltering && reactive) { _%>
       /**
       * Find <%= entityInstancePlural %> by criteria.
       *<% if (!paginationNo) { %>

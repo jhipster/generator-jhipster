@@ -182,10 +182,10 @@
           },
         });
 
-        window.ui = ui;
+        globalThis.ui = ui;
       }
 
-      window.onload = async function () {
+      globalThis.onload = async function () {
         const baseUrl = 'v3/api-docs';
         const serverBaseUri = document.baseURI.replace('swagger-ui/', '');
         const axiosConfig = createAxiosConfig(serverBaseUri);

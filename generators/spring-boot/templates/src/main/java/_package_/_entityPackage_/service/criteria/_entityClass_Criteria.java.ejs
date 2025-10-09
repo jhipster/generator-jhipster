@@ -8,7 +8,7 @@ import java.util.function.BiFunction;
 
 import org.springdoc.core.annotations.ParameterObject;
 import tech.jhipster.service.Criteria;
-<%_ for (const field of fields) {  _%>
+<%_ for (const field of fields) { _%>
   <%_ if (field.fieldIsEnum === true) { _%>
 import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ } _%>

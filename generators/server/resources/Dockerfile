@@ -1,7 +1,7 @@
 # Container name and `alias` can be used to retrieve the image with the tag
 # Tags can retrieved using the `alias` with `Tag` suffix
 # Images can be retrieved using the `alias` with `Image` suffix
-FROM jhipster/jhipster-registry:v7.4.0
+FROM jhipster/jhipster-registry:v7.5.0
 LABEL ALIAS=jhipster-registry
 
 FROM jhipster/jhipster-control-center:v0.5.0
@@ -13,14 +13,14 @@ LABEL ALIAS=consul-config-loader
 FROM postgres:18.0
 LABEL ALIAS=postgresql
 
-FROM quay.io/keycloak/keycloak:26.3.4
+FROM quay.io/keycloak/keycloak:26.4.0
 LABEL ALIAS=keycloak
 
 FROM mysql:9.2.0
 
 FROM mariadb:12.0.2
 
-FROM mongo:8.0.14
+FROM mongo:8.0.15
 LABEL ALIAS=mongodb
 
 FROM couchbase/server:7.6.7
@@ -31,14 +31,14 @@ FROM cassandra:5.0.2
 FROM mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
 LABEL ALIAS=mssql
 
-FROM neo4j:5.26.12
+FROM neo4j:5.26.13
 
 FROM hazelcast/management-center:5.8.0
 LABEL ALIAS=hazelcast
 
 FROM memcached:1.6.39-alpine
 
-FROM redis:8.2.1
+FROM redis:8.2.2
 
 FROM apache/kafka-native:4.0.0
 LABEL ALIAS=kafka
@@ -46,7 +46,7 @@ LABEL ALIAS=kafka
 FROM apachepulsar/pulsar:4.1.1
 LABEL ALIAS=pulsar
 
-FROM sonarqube:25.9.0.112764-community
+FROM sonarqube:25.10.0.114319-community
 LABEL ALIAS=sonar
 
 FROM hashicorp/consul:1.21.5
