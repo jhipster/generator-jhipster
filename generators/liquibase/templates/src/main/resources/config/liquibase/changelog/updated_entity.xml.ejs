@@ -146,7 +146,7 @@ if (removedRelationships && removedRelationships.length) {
                 if (relationship.shouldWriteRelationship) {
         _%>
         <dropForeignKeyConstraint baseTableName="<%= entity.entityTableName %>" constraintName="<%= this.getFKConstraintName(entity.entityTableName, relationship.relationshipName, prodDatabaseType) %>"/>
-        <%_     }
+        <%_    }
             }
 
             if (hasRelationshipWithFieldUpdates) {
@@ -159,7 +159,7 @@ if (removedRelationships && removedRelationships.length) {
                     for (const otherEntityPkField of relationship.otherEntity.primaryKey.fields) { _%>
             <column name="<%= relationship.columnName %>_<%= otherEntityPkField.columnName %>"/>
                     <%_ } _%>
-        <%_     }
+        <%_    }
             }
             /* ======== End drop relationship column ======== */ _%>
         </dropColumn>

@@ -518,7 +518,7 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
 <%_ });
 }_%>
 <%_ ['DEFAULT_', 'UPDATED_'].forEach((fieldStatus) => { _%>
-<%_   const createInstance = fieldStatus === 'UPDATED_' ? `updated${persistClass}` : persistInstance; _%>
+<%_  const createInstance = fieldStatus === 'UPDATED_' ? `updated${persistClass}` : persistInstance; _%>
     /**
      * Create an <% if (fieldStatus === 'UPDATED_') { %>updated <% } %>entity for this test.
      *
@@ -542,7 +542,7 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
     <%_ } _%>;
     <%_ if (!anyRelationshipIsRequired) { _%>
     }
-    <%_   return; _%>
+    <%_  return; _%>
     <%_ } _%>
   <%_ } else { _%>
         <%= persistClass %> <%= createInstance %> = new <%= persistClass %>();
@@ -1430,7 +1430,7 @@ _%>
     }
   <%_ } _%>
 
-<%_  } _%>
+<%_ } _%>
     @Test<%= transactionalAnnotation %>
     void getNonExisting<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Get the <%= entityInstance %>

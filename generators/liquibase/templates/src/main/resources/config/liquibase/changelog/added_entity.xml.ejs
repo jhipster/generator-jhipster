@@ -117,7 +117,7 @@ _%>
       <%_ for (field of relationship.otherEntity.primaryKey.fields) { _%>
             <column name="<%= relationship.columnName %>_<%= field.columnName %>" type="<%= field.loadColumnType %>"/>
     <%_ } _%>
-  <%_  } _%>
+  <%_ } _%>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>
