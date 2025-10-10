@@ -154,11 +154,11 @@ _%>
 
     private ProblemDetailWithCause getProblemDetailWithCause(Throwable ex) {
 <%_ if (!skipUserManagement) { _%>
-        if(ex instanceof <%= packageName %>.service.UsernameAlreadyUsedException )
+        if(ex instanceof <%= packageName %>.service.UsernameAlreadyUsedException)
             return (ProblemDetailWithCause) new LoginAlreadyUsedException().getBody();
-        if(ex instanceof <%= packageName %>.service.EmailAlreadyUsedException )
+        if(ex instanceof <%= packageName %>.service.EmailAlreadyUsedException)
             return (ProblemDetailWithCause) new EmailAlreadyUsedException().getBody();
-        if(ex instanceof <%= packageName %>.service.InvalidPasswordException )
+        if(ex instanceof <%= packageName %>.service.InvalidPasswordException)
             return (ProblemDetailWithCause) new InvalidPasswordException().getBody();
 
         <%_ if (reactive) { _%>

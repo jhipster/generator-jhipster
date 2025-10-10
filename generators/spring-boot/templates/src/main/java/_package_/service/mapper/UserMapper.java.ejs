@@ -162,7 +162,7 @@ public class UserMapper {
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     public Set<<%= user.dtoClass %>> toDtoIdSet(Set<<%= user.persistClass %>> users) {
-        if ( users == null ) {
+        if (users == null) {
             return Collections.emptySet();
         }
 

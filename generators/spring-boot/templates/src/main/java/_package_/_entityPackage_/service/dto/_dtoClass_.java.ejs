@@ -83,7 +83,7 @@ public class <%- dtoClass %> implements Serializable {
   const required = field && field.fieldValidate && field.fieldValidationRequired;
   _%>
   <%_ if (field) { _%>
-    <%_ if (property.fieldValidate ) { _%>
+    <%_ if (property.fieldValidate) { _%>
     <%- include('/_global_partials_entity_/field_validators', {field, reactive}); -%>
     <%_ } _%>
   <%_ } _%>
