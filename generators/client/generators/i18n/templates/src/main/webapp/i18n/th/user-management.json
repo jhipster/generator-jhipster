@@ -7,7 +7,7 @@
             "createOrEditLabel": "สร้างหรือแก้ไขผู้ใช้"
         },
         "created": "ผู้ใช้ใหม่ถูกสร้างด้วย {{ param }}",
-        "updated": "ผู้ใช้ถูกแก้ไขด้วย  {{ param }}",
+        "updated": "ผู้ใช้ถูกแก้ไขด้วย {{ param }}",
         "deleted": "ผู้ใช้ถูกลบด้วย {{ param }}",
         "delete": {
             "question": "คุณต้องการที่จะลบ {{ login }}?"

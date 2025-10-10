@@ -34,8 +34,8 @@ let helpBlocks = 0; %>
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
             "created": "En ny <%= entityNameHumanized %> är skapad med id {{ param }}",
-            "updated": "En <%= entityNameHumanized %> är uppdaterad med id  {{ param }}",
-            "deleted": "En <%= entityNameHumanized %> är borttagen med id  {{ param }}",
+            "updated": "En <%= entityNameHumanized %> är uppdaterad med id {{ param }}",
+            "deleted": "En <%= entityNameHumanized %> är borttagen med id {{ param }}",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
@@ -61,8 +61,8 @@ let helpBlocks = 0; %>
     "<%= microserviceAppName %>": {
         "<%= entityTranslationKey %>" : {
             "created": "En ny <%= entityNameHumanized %> är skapad med id {{ param }}",
-            "updated": "En <%= entityNameHumanized %> är uppdaterad med id  {{ param }}",
-            "deleted": "En <%= entityNameHumanized %> är borttagen med id  {{ param }}"
+            "updated": "En <%= entityNameHumanized %> är uppdaterad med id {{ param }}",
+            "deleted": "En <%= entityNameHumanized %> är borttagen med id {{ param }}"
         }
     }
 <%_ } _%>
