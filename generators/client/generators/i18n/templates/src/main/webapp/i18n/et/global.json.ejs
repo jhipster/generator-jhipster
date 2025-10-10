@@ -138,7 +138,8 @@
             "maxbytes": "Selles väljas ei tohi olla üle {{ max }} baidi.",
             "pattern": "Selle välja väärtus peab vastama mallile {{ pattern }}.",
             "number": "Selle välja väärtus peab olema number.",
-            "datetimelocal": "Selles väljas peab olema kuupäev ja kellaaeg."
+            "datetimelocal": "Selles väljas peab olema kuupäev ja kellaaeg.",
+            "patternLogin": "This field can only contain letters, digits and e-mail addresses."
         },
         "filters": {
           "set": "Following filters are set",
@@ -158,6 +159,9 @@
         "idnull": "Vigane ID",
         "idinvalid": "Invalid Id",
         "idnotfound": "ID cannot be found",
+ <%_ if (searchEngineElasticsearch) { _%>
+        "querySyntaxError": "Invalid search query",
+<%_ } _%>
         "file": {
             "could.not.extract": "Ei saanud faili eraldada",
             "not.image": "Ootasime, et fail on pilt, aga faili tüüp on \"{{ fileType }}\""

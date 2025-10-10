@@ -3,7 +3,7 @@
         "title": "[<strong>{{username}}</strong>] ਲਈ ਕਿਰਿਆਸ਼ੀਲ ਸੈਸ਼ਨ ",
         "table": {
             "ipaddress": "ਆਈ ਪੀ ਪਤਾ",
-            "userAgent": "ਉਪਭੋਗਤਾ ਏਜੰਟ",
+            "useragent": "ਉਪਭੋਗਤਾ ਏਜੰਟ",
             "date": "ਮਿਤੀ",
             "button": "ਅਯੋਗ"
         },

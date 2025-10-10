@@ -138,7 +138,8 @@
             "maxbytes": "हे फील्ड {{ max }} बाइटपेक्षा अधिक असू शकत नाही.",
             "pattern": "हे फील्ड {{ pattern }} नमुना अनुसरणे आवश्यक आहे.",
             "number": "हे फील्ड संख्या असावे.",
-            "datetimelocal": "हे फील्ड एक तारीख आणि वेळ असावी."
+                "datetimelocal": "हे फिल्ड एक तारीख आणि वेळ असावी.",
+                "patternLogin": "This field can only contain letters, digits and e-mail addresses."
         },
         "filters": {
           "set": "Following filters are set",
@@ -158,6 +159,9 @@
         "idnull": "Invalid ID",
         "idinvalid": "Invalid Id",
         "idnotfound": "ID cannot be found",
+ <%_ if (searchEngineElasticsearch) { _%>
+        "querySyntaxError": "Invalid search query",
+<%_ } _%>
         "file": {
             "could.not.extract": "Could not extract file",
             "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""

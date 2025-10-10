@@ -138,7 +138,8 @@
             "maxbytes": "Այս դաշտը չի կարող լինել մեծ, քան {{ max }} բայթ:",
             "pattern": "Այս դաշտը պետք է հետևի {{ pattern }} մոդելի:",
             "number": "Այս դաշտը պետք է լինի թիվ:",
-            "datetimelocal": "Այս դաշտը պետք է լինի ամսաթիվ և ժամ:"
+            "datetimelocal": "Այս դաշտը պետք է լինի ամսաթիվ և ժամ:",
+            "patternLogin": "This field can only contain letters, digits and e-mail addresses."
         },
         "filters": {
           "set": "Following filters are set",
@@ -158,6 +159,9 @@
         "idnull": "Invalid ID",
         "idinvalid": "Invalid Id",
         "idnotfound": "ID cannot be found",
+ <%_ if (searchEngineElasticsearch) { _%>
+        "querySyntaxError": "Invalid search query",
+<%_ } _%>
         "file": {
             "could.not.extract": "Could not extract file",
             "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""

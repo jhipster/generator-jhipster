@@ -136,7 +136,8 @@
             "maxbytes": "Detta fält måste vara mindre än {{max}} bytes",
             "pattern": "Detta fält måste följa mönstret {{pattern}}",
             "number": "Detta fält måste vara ett tal",
-            "datetimelocal": "Detta fält måste vara ett datum och en tid"
+            "datetimelocal": "Detta fält måste vara ett datum och en tid",
+            "patternLogin": "This field can only contain letters, digits and e-mail addresses."
         },
         "filters": {
           "set": "Following filters are set",
@@ -156,6 +157,9 @@
         "idnull": "Invalid ID",
         "idinvalid": "Invalid Id",
         "idnotfound": "ID cannot be found",
+ <%_ if (searchEngineElasticsearch) { _%>
+        "querySyntaxError": "Invalid search query",
+<%_ } _%>
         "file": {
             "could.not.extract": "Could not extract file",
             "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""

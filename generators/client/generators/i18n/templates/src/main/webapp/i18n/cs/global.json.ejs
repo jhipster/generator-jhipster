@@ -138,7 +138,8 @@
             "maxbytes": "Toto pole nemůže mít více než {{ max }} bajtů.",
             "pattern": "Toto pole musí splňovat vzor {{ pattern }}.",
             "number": "Toto pole by mělo obsahovat číslo.",
-            "datetimelocal": "Toto pole by mělo obsahovat datum a čas."
+            "datetimelocal": "Toto pole by mělo obsahovat datum a čas.",
+            "patternLogin": "This field can only contain letters, digits and e-mail addresses."
         },
         "filters": {
           "set": "Following filters are set",
@@ -158,6 +159,9 @@
         "idnull": "Invalid ID",
         "idinvalid": "Invalid Id",
         "idnotfound": "ID cannot be found",
+<%_ if (searchEngineElasticsearch) { _%>
+        "querySyntaxError": "Invalid search query",
+<%_ } _%>
         "file": {
             "could.not.extract": "Could not extract file",
             "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
