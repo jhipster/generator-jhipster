@@ -32,11 +32,6 @@ exports[`generator - cucumber with default config should match files snapshot 1`
         </dependency>
         <dependency>
             <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-junit-platform-engine</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.cucumber</groupId>
             <artifactId>cucumber-spring</artifactId>
             <scope>test</scope>
         </dependency>
@@ -91,6 +86,25 @@ exports[`generator - cucumber with default config should match files snapshot 1`
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>e2e</id>
+            <properties>
+                <profile.e2e>,e2e</profile.e2e>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>io.cucumber</groupId>
+                    <artifactId>cucumber-junit-platform-engine</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+            <build>
+                <finalName>e2e</finalName>
+            </build>
+        </profile>
+    </profiles>
 </project>
 ",
     "stateCleared": "modified",
@@ -144,7 +158,6 @@ dependencies {
   "buildSrc/src/main/groovy/jhipster.cucumber-conventions.gradle": {
     "contents": "dependencies {
     testImplementation "io.cucumber:cucumber-java"
-    testImplementation "io.cucumber:cucumber-junit-platform-engine"
     testImplementation "io.cucumber:cucumber-spring"
     testImplementation "org.junit.platform:junit-platform-console"
     implementation platform(libs.cucumber.bom)

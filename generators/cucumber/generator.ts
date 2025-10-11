@@ -76,7 +76,6 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
                 type: 'pom',
                 scope: 'import',
               },
-              { groupId: 'io.cucumber', artifactId: 'cucumber-junit-platform-engine', scope: 'test' },
               { groupId: 'io.cucumber', artifactId: 'cucumber-java', scope: 'test' },
               { groupId: 'io.cucumber', artifactId: 'cucumber-spring', scope: 'test' },
               { groupId: 'org.junit.platform', artifactId: 'junit-platform-console', scope: 'test' },
@@ -130,6 +129,31 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
 
         if (application.buildToolGradle) {
           source.addGradlePlugin?.({ id: 'jhipster.cucumber-conventions' });
+        }
+      },
+      addCucumberJunitPlatformEngine({ application, source }) {
+        if (application.buildToolMaven) {
+          source.addMavenDefinition!({
+            profiles: [
+              {
+                id: 'e2e',
+                content: `
+                <properties>
+                    <profile.e2e>,e2e</profile.e2e>
+                </properties>
+                <build>
+                    <finalName>e2e</finalName>
+                </build>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.cucumber</groupId>
+                        <artifactId>cucumber-junit-platform-engine</artifactId>
+                        <scope>test</scope>
+                    </dependency>
+                </dependencies>`,
+              },
+            ],
+          });
         }
       },
     });
