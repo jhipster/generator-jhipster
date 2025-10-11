@@ -76,7 +76,6 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
                 type: 'pom',
                 scope: 'import',
               },
-              { groupId: 'io.cucumber', artifactId: 'cucumber-junit-platform-engine', scope: 'test' },
               { groupId: 'io.cucumber', artifactId: 'cucumber-java', scope: 'test' },
               { groupId: 'io.cucumber', artifactId: 'cucumber-spring', scope: 'test' },
               { groupId: 'org.junit.platform', artifactId: 'junit-platform-console', scope: 'test' },
@@ -88,40 +87,6 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
                 {
                   groupId: 'org.apache.maven.plugins',
                   artifactId: 'maven-antrun-plugin',
-                  additionalContent: `
-<executions>
-  <execution>
-  <!--Work around. Surefire does not use JUnit's Test Engine discovery functionality -->
-  <id>prepare cucumber feature files</id>
-  <phase>integration-test</phase>
-  <goals>
-    <goal>run</goal>
-  </goals>
-  <configuration>
-    <target>
-        <echo message="Running JUnit Platform CLI"/>
-        <java classname="org.junit.platform.console.ConsoleLauncher"
-              fork="true"
-              failonerror="true"
-              newenvironment="true"
-              maxmemory="512m"
-              classpathref="maven.test.classpath">
-            <jvmarg value="-Dspring.profiles.active=testprod"/>${
-              application.reactive
-                ? `
-            <jvmarg value="-XX:+AllowRedefinitionToAddDeleteMethods"/>`
-                : ''
-            }
-            <arg value="--include-engine"/>
-            <arg value="cucumber"/>
-            <arg value="--scan-classpath"/>
-            <arg value="\${project.build.testOutputDirectory}"/>
-        </java>
-    </target>
-  </configuration>
-  </execution>
-</executions>
-`,
                 },
               ],
             },
@@ -130,6 +95,41 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
 
         if (application.buildToolGradle) {
           source.addGradlePlugin?.({ id: 'jhipster.cucumber-conventions' });
+        }
+      },
+      addCucumberJunitPlatformEngine({ application, source }) {
+        if (application.buildToolGradle) {
+          source.addJavaDefinitions?.({
+            dependencies: [
+              { groupId: 'io.cucumber', artifactId: 'cucumber-junit-platform-engine', scope: 'test' },
+              { groupId: 'org.junit.platform', artifactId: 'junit-platform-engine', scope: 'test', version: '1.14.0' },
+              { groupId: 'org.junit.platform', artifactId: 'junit-platform-commons', scope: 'test', version: '1.14.0' },
+              { groupId: 'org.junit.platform', artifactId: 'junit-platform-launcher', scope: 'runtime', version: '1.14.0' },
+            ],
+          });
+        }
+        if (application.buildToolMaven) {
+          source.addMavenDefinition!({
+            profiles: [
+              {
+                id: 'e2e',
+                content: `
+                <properties>
+                    <profile.e2e>,e2e</profile.e2e>
+                </properties>
+                <build>
+                    <finalName>e2e</finalName>
+                </build>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.cucumber</groupId>
+                        <artifactId>cucumber-junit-platform-engine</artifactId>
+                        <scope>test</scope>
+                    </dependency>
+                </dependencies>`,
+              },
+            ],
+          });
         }
       },
     });

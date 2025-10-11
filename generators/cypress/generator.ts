@@ -305,9 +305,14 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
         }
       },
       mavenProfile({ source }) {
-        (source as JavaSource).addMavenProfile?.({
-          id: 'e2e',
-          content: `
+        try {
+          const pomContent = this.readDestination('pom.xml')?.toString() ?? '';
+          const hasE2eProfile = pomContent.includes('<id>e2e</id>');
+
+          if (!hasE2eProfile) {
+            (source as JavaSource).addMavenProfile?.({
+              id: 'e2e',
+              content: `
             <properties>
                 <profile.e2e>,e2e</profile.e2e>
             </properties>
@@ -315,7 +320,11 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
                 <finalName>e2e</finalName>
             </build>
           `,
-        });
+            });
+          }
+        } catch {
+          // pom.xml doesn't exist, skip maven profile configuration
+        }
       },
     });
   }
