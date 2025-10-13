@@ -138,7 +138,8 @@
             "maxbytes": "هذا الحقل لا يمكن أن يكون أكثر من {{ max }} بايت.",
             "pattern": "هذا الحقل يجب أن يتبع نمط {{ pattern }}.",
             "number": "هذا الحقل يجب أن يكون رقم.",
-            "datetimelocal": "هذا الحقل يجب أن يكون تاريخ ووقت."
+            "datetimelocal": "هذا الحقل يجب أن يكون تاريخ ووقت.",
+            "patternLogin": "This field can only contain letters, digits and e-mail addresses."
         },
         "filters": {
           "set": "Following filters are set",
@@ -158,6 +159,9 @@
         "idnull": "Invalid ID",
         "idinvalid": "Invalid Id",
         "idnotfound": "ID cannot be found",
+ <%_ if (searchEngineElasticsearch) { _%>
+        "querySyntaxError": "Invalid search query",
+<%_ } _%>
         "file": {
             "could.not.extract": "Could not extract file",
             "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""

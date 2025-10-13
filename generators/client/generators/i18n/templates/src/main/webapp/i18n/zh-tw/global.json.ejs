@@ -138,7 +138,8 @@
             "maxbytes": "此欄位不能超過 {{max}} 個位元組。",
             "pattern": "此欄位要符合模式 {{pattern}}。",
             "number": "此欄位只能是數字。",
-            "datetimelocal": "此欄位應為日期和時間。"
+            "datetimelocal": "此欄位應為日期和時間。",
+            "patternLogin": "This field can only contain letters, digits and e-mail addresses."
         },
         "filters": {
           "set": "已設定以下篩選條件",
@@ -158,6 +159,9 @@
         "idnull": "無效的 ID",
         "idinvalid": "無效的 ID",
         "idnotfound": "找不到對應的 ID",
+ <%_ if (searchEngineElasticsearch) { _%>
+        "querySyntaxError": "Invalid search query",
+<%_ } _%>
         "file": {
             "could.not.extract": "無法解壓縮檔案",
             "not.image": "檔案應該要是圖片格式，但實際卻是 \"{{ fileType }}\""

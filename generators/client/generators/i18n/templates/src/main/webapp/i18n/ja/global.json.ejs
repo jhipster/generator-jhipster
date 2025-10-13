@@ -138,7 +138,8 @@
             "maxbytes": "このフィールドは{{max}}バイト以下で入力してください。",
             "pattern": "このフィールドはパターン{{pattern}}に従い入力してください。",
             "number": "このフィールドは数値を入力してください。",
-            "datetimelocal": "このフィールドは日付と時刻を入力してください。"
+            "datetimelocal": "このフィールドは日付と時刻を入力してください。",
+            "patternLogin": "This field can only contain letters, digits and e-mail addresses."
         },
         "filters": {
           "set": "次のフィルタが設定されています。",
@@ -158,6 +159,9 @@
         "idnull": "IDがありません。",
         "idinvalid": "無効なIDです。",
         "idnotfound": "IDが見つかりません。",
+ <%_ if (searchEngineElasticsearch) { _%>
+        "querySyntaxError": "Invalid search query",
+<%_ } _%>
         "file": {
             "could.not.extract": "ファイルを抽出できませんでした。",
             "not.image": "ファイルはイメージ形式である必要がありますが、\"{{ fileType }}\" 形式がアップロードされました。"

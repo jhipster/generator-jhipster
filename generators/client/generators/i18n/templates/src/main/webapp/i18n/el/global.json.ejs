@@ -138,7 +138,8 @@
             "maxbytes": "Αυτό το πεδίο δεν πρέπει να είναι μεγαλύτερο από {{ max }} bytes.",
             "pattern": "Πρέπει να ακολουθήσετε το ακόλουθο υπόδειγμα {{ pattern }}.",
             "number": "Αυτό το πεδίο πρέπει να περιέχει μονο ψηφία.",
-            "datetimelocal": "Αυτό το πεδίο πρέπει να περιέχει ημερομηνία και ώρα."
+            "datetimelocal": "Αυτό το πεδίο πρέπει να είναι ημερομηνία και ώρα.",
+            "patternLogin": "This field can only contain letters, digits and e-mail addresses."
         },
         "filters": {
           "set": "Following filters are set",
@@ -158,6 +159,9 @@
         "idnull": "Invalid ID",
         "idinvalid": "Invalid Id",
         "idnotfound": "ID cannot be found",
+ <%_ if (searchEngineElasticsearch) { _%>
+        "querySyntaxError": "Invalid search query",
+<%_ } _%>
         "file": {
             "could.not.extract": "Could not extract file",
             "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
