@@ -16,22 +16,27 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-const webpack = require('webpack');
-const { merge } = require('webpack-merge');
-const path = require('path');
+import webpack from 'webpack';
+import { merge } from 'webpack-merge';
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
 <%_ if (enableTranslation) { _%>
-const { hashElement } = require('folder-hash');
-const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
+import { hashElement } from 'folder-hash';
+import MergeJsonWebpackPlugin from 'merge-jsons-webpack-plugin';
 <%_ } _%>
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+import BrowserSyncPlugin from 'browser-sync-webpack-plugin';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import environment from './environment.js';
+import proxyConfig from './proxy.conf.js';
 const WebpackNotifierPlugin = require('webpack-notifier');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-const environment = require('./environment');
-const proxyConfig = require('./proxy.conf');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-module.exports = async (config, options, targetOptions) => {
+export default async (config, options, targetOptions) => {
 <%_ if (enableTranslation) { _%>
   const languagesHash = await hashElement(path.resolve(__dirname, '<%= this.relativeDir(clientRootDir + 'webpack/', clientSrcDir) %>i18n'), {
     algo: 'md5',

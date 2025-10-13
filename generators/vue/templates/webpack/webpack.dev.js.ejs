@@ -16,18 +16,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-'use strict';
+import { createRequire } from 'module';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import config from './config.js';
+import { styleLoaders } from './vue.utils.js';
+
+const require = createRequire(import.meta.url);
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
-const { styleLoaders } = require('./vue.utils');
-const config = require('./config');
 
-module.exports = (env, options) => {
+export default (env, options) => {
   const devConfig = {
     module: {
       rules: styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true }),
     },
-    // cheap-module-eval-source-map is faster for development
+    // cheap-module-eval-source-map is faster for developmenst
     devtool: config.dev.devtool,
     output: {
       filename: 'app/[name].[contenthash].bundle.js',

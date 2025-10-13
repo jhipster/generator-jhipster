@@ -35,7 +35,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/package.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/proxy.config.mjs": {
+  "clientRoot/proxy.config.js": {
     "stateCleared": "modified",
   },
   "clientRoot/src/404.html": {
@@ -763,7 +763,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/package.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/proxy.config.mjs": {
+  "clientRoot/proxy.config.js": {
     "stateCleared": "modified",
   },
   "clientRoot/src/404.html": {
@@ -3176,7 +3176,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "package.json": {
     "stateCleared": "modified",
   },
-  "proxy.config.mjs": {
+  "proxy.config.js": {
     "stateCleared": "modified",
   },
   "src/main/webapp/404.html": {
@@ -4298,7 +4298,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "package.json": {
     "stateCleared": "modified",
   },
-  "proxy.config.mjs": {
+  "proxy.config.js": {
     "stateCleared": "modified",
   },
   "src/main/webapp/404.html": {
@@ -4993,7 +4993,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "package.json": {
     "stateCleared": "modified",
   },
-  "proxy.config.mjs": {
+  "proxy.config.js": {
     "stateCleared": "modified",
   },
   "src/main/webapp/404.html": {
