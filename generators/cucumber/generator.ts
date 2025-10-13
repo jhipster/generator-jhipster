@@ -66,10 +66,10 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
       addDependencies({ application, source }) {
         const { javaDependencies, gradleBuildSrc } = application;
         source.addJavaDefinitions?.(
-          // https://github.com/cucumber/cucumber-jvm/issues/3071#issuecomment-3281811324
-          versions: [{ name: 'junit-jupiter', version: '5.13.3' }],
           { gradleFile: `${gradleBuildSrc}src/main/groovy/jhipster.cucumber-conventions.gradle` },
           {
+            // https://github.com/cucumber/cucumber-jvm/issues/3071#issuecomment-3281811324
+            versions: [{ name: 'junit-jupiter', version: '5.13.3' }],
             dependencies: [
               {
                 groupId: 'io.cucumber',
