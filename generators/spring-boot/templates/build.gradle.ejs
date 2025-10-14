@@ -39,7 +39,7 @@ assert System.properties["java.specification.version"] == <%- javaCompatibleVers
 <%_ } _%>
 
 ext {
-    springProfiles = ""
+    springProfiles = (project.hasProperty("prod")) ? "prod" : "dev"
     if (project.hasProperty("tls")) {
         springProfiles += ",tls"
     }
@@ -119,6 +119,9 @@ test {
         exceptionFormat = "full"
     }
     jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx512m'
+
+    systemProperty('spring.profiles.active', springProfiles + ",test,test" + (project.hasProperty("prod")) ? "prod" : "dev")
+
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true

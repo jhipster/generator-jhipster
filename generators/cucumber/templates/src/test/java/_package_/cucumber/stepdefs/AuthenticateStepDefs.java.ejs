@@ -20,9 +20,7 @@ package <%= packageName %>.cucumber.stepdefs;
 
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 <%_ if (reactive) { _%>
 
 import static org.hamcrest.Matchers.is;
@@ -36,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.springframework.test.web.servlet.MockMvc;
 <%_ } _%>
 
-public class UserStepDefs extends StepDefs {
+public class AuthenticateStepDefs extends StepDefs {
 
 <%_ if (reactive) { _%>
     @Autowired
@@ -46,26 +44,21 @@ public class UserStepDefs extends StepDefs {
     private MockMvc mockMvc;
 <%_ } _%>
 
-    @When("I list users")
-    public void i_list_users() throws Throwable {
+    @When("I get authenticate")
+    public void i_get_authenticate() throws Throwable {
 <%_ if (reactive) { _%>
-        actions = webTestClient.get().uri("/api/admin/users").accept(MediaType.APPLICATION_JSON).exchange();
+        actions = webTestClient.get().uri("/api/authenticate").exchange();
 <%_ } else { _%>
-        actions = mockMvc.perform(get("/api/admin/users").accept(MediaType.APPLICATION_JSON));
+        actions = mockMvc.perform(get("/api/authenticate"));
 <%_ } _%>
     }
 
-    @Then("the operation succeeds")
-    public void the_operation_succeeds() throws Throwable {
+    @Then("authenticate returns response with status No Content")
+    public void authenticate_returns_response_with_status_no_content() throws Throwable {
 <%_ if (reactive) { _%>
-        actions
-            .expectStatus().isOk()
-            .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE);
+        actions.expectStatus().isNoContent();
 <%_ } else { _%>
-        actions
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE));
+        actions.andExpect(status().isNoContent());
 <%_ } _%>
     }
-
 }
