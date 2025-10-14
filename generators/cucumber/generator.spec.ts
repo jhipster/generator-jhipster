@@ -44,6 +44,9 @@ plugins {
     // jhipster-needle-gradle-plugins
 }
 `,
+          'gradle.properties': `
+# jhipster-needle-gradle-property - JHipster will add additional properties here
+`,
         })
         .onEnvironment(async env => {
           await env.composeWith('jhipster:gradle');

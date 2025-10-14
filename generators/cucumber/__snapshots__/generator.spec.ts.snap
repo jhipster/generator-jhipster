@@ -9,7 +9,7 @@ exports[`generator - cucumber with default config should match files snapshot 1`
 
     <properties>
         <cucumber-bom.version>&apos;CUCUMBER-BOM-VERSION&apos;</cucumber-bom.version>
-        <testng.version>&apos;TESTNG-VERSION&apos;</testng.version>
+        <junit-jupiter.version>5.13.3</junit-jupiter.version>
     </properties>
 
     <dependencyManagement>
@@ -43,12 +43,6 @@ exports[`generator - cucumber with default config should match files snapshot 1`
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-console</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>\${testng.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -148,7 +142,6 @@ dependencies {
     testImplementation "io.cucumber:cucumber-spring"
     testImplementation "org.junit.platform:junit-platform-console"
     implementation platform(libs.cucumber.bom)
-    testImplementation libs.testng
     // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 
@@ -190,7 +183,6 @@ check.dependsOn(cucumberTest)
 
 [libraries]
 cucumber-bom = { module = "io.cucumber:cucumber-bom", version = "'CUCUMBER-BOM-VERSION'" }
-testng = { module = "org.testng:testng", version = "'TESTNG-VERSION'" }
 # jhipster-needle-gradle-dependency-catalog-libraries - JHipster will add additional libraries versions
 
 [plugins]
