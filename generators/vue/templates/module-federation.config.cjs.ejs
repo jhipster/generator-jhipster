@@ -31,6 +31,19 @@ const shareDependencies = ({ skipList = [] } = {}) =>
       .map(([dependency, version]) => [dependency, { ...sharedDefaults, version, requiredVersion: version }]),
   );
 
+const shareTransitiveDependencies = (...packages) => {
+  const result = {};
+  packages.forEach(pkg => {
+    try {
+      const version = require(`${pkg}/package.json`).version;
+      result[pkg] = { ...sharedDefaults, version, requiredVersion: version };
+    } catch {
+      // Package not found, skip it
+    }
+  });
+  return result;
+};
+
 /** @type {import('@module-federation/runtime').Options} */
 module.exports = {
   name: '<%= lowercaseBaseName %>',
@@ -44,6 +57,7 @@ module.exports = {
   shareScope: 'default',
   shared: {
     ...shareDependencies(),
+    ...shareTransitiveDependencies('vue-demi'),
     ...shareMappings(
       '@/shared/security/authority',
       '@/shared/alert/alert.service',
