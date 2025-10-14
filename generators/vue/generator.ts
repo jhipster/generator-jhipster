@@ -378,6 +378,9 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
                   }
                 : {}),
             },
+            dependencies: {
+              'vue-demi': null,
+            },
           });
         }
       },
