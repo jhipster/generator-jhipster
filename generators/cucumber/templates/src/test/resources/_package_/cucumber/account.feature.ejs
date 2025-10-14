@@ -1,0 +1,6 @@
+Feature: Account Resource
+
+    Scenario: Retrieve current account
+        When I get current account
+        Then the account is returned
+        And his login is admin

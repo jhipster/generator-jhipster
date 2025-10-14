@@ -19,7 +19,7 @@
 package <%= packageName %>.cucumber.stepdefs;
 
 import <%= packageName %>.security.AuthoritiesConstants;
-import <%= packageName %>.web.rest.UserResource;
+import <%= packageName %>.web.rest.AccountResource;
 
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Then;
@@ -51,15 +51,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 <%_ } _%>
 
-public class UserStepDefs extends StepDefs {
+public class AccountStepDefs extends StepDefs {
 
     @Autowired
-    private UserResource userResource;
+    private AccountResource accountResource;
 
 <%_ if (reactive) { _%>
-    private WebTestClient userResourceMock;
+    private WebTestClient accountResourceMock;
 <%_ } else { _%>
-    private MockMvc userResourceMock;
+    private MockMvc accountResourceMock;
 <%_ } _%>
 
     @Before
@@ -76,40 +76,38 @@ public class UserStepDefs extends StepDefs {
         context.setAuthentication(authentication);
         SecurityContextHolder.setContext(context);
 <%_ if (reactive) { _%>
-        this.userResourceMock = WebTestClient.bindToController(userResource).build();
+        this.accountResourceMock = WebTestClient.bindToController(accountResource).build();
 <%_ } else { _%>
-        this.userResourceMock = MockMvcBuilders.standaloneSetup(userResource).build();
+        this.accountResourceMock = MockMvcBuilders.standaloneSetup(accountResource).build();
 <%_ } _%>
     }
 
-    @When("I search user {string}")
-    public void i_search_user(String userId) throws Throwable {
+    @When("I get current account")
+    public void i_get_current_account() throws Throwable {
 <%_ if (reactive) { _%>
-        actions = userResourceMock.get().uri("/api/admin/users/" + userId).accept(MediaType.APPLICATION_JSON).exchange();
+        actions = accountResourceMock.get().uri("/api/account").accept(MediaType.APPLICATION_JSON).exchange();
 <%_ } else { _%>
-        actions = userResourceMock.perform(get("/api/admin/users/" + userId).accept(MediaType.APPLICATION_JSON));
+        actions = accountResourceMock.perform(get("/api/account").accept(MediaType.APPLICATION_JSON));
 <%_ } _%>
-    }
+}
 
-    @Then("the user is found")
-    public void the_user_is_found() throws Throwable {
+    @Then("the account is returned")
+    public void the_account_is_returned() throws Throwable {
 <%_ if (reactive) { _%>
         actions
             .expectStatus().isOk()
             .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON_VALUE);
 <%_ } else { _%>
-        actions
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE));
+        actions.andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE));
 <%_ } _%>
     }
 
-    @Then("his last name is {string}")
-    public void his_last_name_is(String lastName) throws Throwable {
+    @Then("his login is admin")
+    public void his_login_is_admin() throws Throwable {
 <%_ if (reactive) { _%>
-        actions.expectBody().jsonPath("$.lastName").value(is(lastName));
+        actions.expectBody().jsonPath("$.login").value(is("admin"));
 <%_ } else { _%>
-        actions.andExpect(jsonPath("$.lastName").value(lastName));
+        actions.andExpect(jsonPath("$.login").value("admin"));
 <%_ } _%>
     }
 
