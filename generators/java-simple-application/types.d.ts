@@ -89,6 +89,7 @@ export type Source = BaseSimpleApplicationSource &
       ...definitions: ConditionalJavaDefinition[]
     ): void;
     addJavaDependencies?(dependency: JavaDependency[], options?: JavaNeedleOptions): void;
+    addJavaProperty?({ property, value }: { property: string; value: string }): void;
     hasJavaProperty?(propertyName: string): boolean;
     hasJavaManagedProperty?(propertyName: string): boolean;
     addMainLog?({ name, level }: { name: string; level: string }): void;

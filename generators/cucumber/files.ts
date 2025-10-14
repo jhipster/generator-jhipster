@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { asWriteFilesSection, asWritingTask } from '../base-application/support/index.ts';
-import { GRADLE_BUILD_SRC_MAIN_DIR, SERVER_TEST_RES_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
+import { SERVER_TEST_RES_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
 import { moveToJavaPackageTestDir } from '../java/support/index.ts';
 
 const cucumberFiles = asWriteFilesSection({
@@ -27,32 +27,44 @@ const cucumberFiles = asWriteFilesSection({
       renameTo: moveToJavaPackageTestDir,
       templates: [
         // Create Cucumber test files
-        'cucumber/CucumberIT.java',
+        'cucumber/CucumberTest.java',
         'cucumber/stepdefs/StepDefs.java',
+        'cucumber/stepdefs/BasicStepDefs.java',
         'cucumber/CucumberTestContextConfiguration.java',
       ],
     },
     {
       path: `${SERVER_TEST_RES_DIR}_package_/`,
       renameTo: (data, filename) => `${data.srcTestResources}${data.packageFolder}${filename}`,
-      templates: ['cucumber/gitkeep'],
+      templates: ['cucumber/basic.feature'],
+    },
+  ],
+  account: [
+    {
+      condition: data => data.generateUserManagement,
+      path: `${SERVER_TEST_SRC_DIR}_package_/`,
+      renameTo: moveToJavaPackageTestDir,
+      templates: ['cucumber/stepdefs/AccountStepDefs.java'],
     },
     {
-      condition: generator => generator.generateUserManagement && !generator.databaseTypeMongodb && !generator.databaseTypeCassandra,
+      condition: data => data.generateUserManagement,
+      path: `${SERVER_TEST_RES_DIR}_package_/`,
+      renameTo: (data, filename) => `${data.srcTestResources}${data.packageFolder}${filename}`,
+      templates: ['cucumber/account.feature'],
+    },
+  ],
+  user: [
+    {
+      condition: data => data.generateUserManagement && !data.databaseTypeCassandra,
       path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['cucumber/stepdefs/UserStepDefs.java'],
     },
     {
-      condition: generator => generator.generateUserManagement && !generator.databaseTypeMongodb && !generator.databaseTypeCassandra,
+      condition: data => data.generateUserManagement && !data.databaseTypeCassandra,
       path: `${SERVER_TEST_RES_DIR}_package_/`,
       renameTo: (data, filename) => `${data.srcTestResources}${data.packageFolder}${filename}`,
       templates: ['cucumber/user.feature'],
-    },
-    {
-      condition: generator => generator.buildToolGradle,
-      path: GRADLE_BUILD_SRC_MAIN_DIR,
-      templates: ['jhipster.cucumber-conventions.gradle'],
     },
   ],
 });

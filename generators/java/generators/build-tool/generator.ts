@@ -58,6 +58,13 @@ export default class BuildToolGenerator extends JavaApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       prepareJavaApplication({ application, source }) {
+        source.addJavaProperty = ({ property, value }) => {
+          if (application.buildToolGradle) {
+            source.addGradleProperty?.({ property, value });
+          } else if (application.buildToolMaven) {
+            source.addMavenProperty?.({ property, value });
+          }
+        };
         source.addJavaDependencies = (dependencies, options) => {
           if (application.buildToolMaven) {
             const convertVersionToMavenDependency = ({ versionRef, version, exclusions, ...artifact }: JavaDependency): MavenDependency => {

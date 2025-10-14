@@ -18,9 +18,11 @@
 -%>
 package <%= packageName %>.cucumber;
 
-import <%= packageName %>.IntegrationTest;
-import io.cucumber.spring.CucumberContextConfiguration;
+import org.junit.platform.suite.api.IncludeEngines;
+import org.junit.platform.suite.api.SelectPackages;
+import org.junit.platform.suite.api.Suite;
 
-@CucumberContextConfiguration
-@IntegrationTest
-public class CucumberTestContextConfiguration {}
+@Suite
+@IncludeEngines("cucumber")
+@SelectPackages("<%= packageName %>.cucumber")
+class CucumberTest {}
