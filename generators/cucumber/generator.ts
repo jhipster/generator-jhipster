@@ -63,13 +63,20 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
           { key: 'cucumber.plugin', value: `pretty, html:${application.temporaryDir}cucumber-reports/Cucumber.html` },
         ]);
       },
+      upgradeJunitJupiter({ source }) {
+        // https://github.com/cucumber/cucumber-jvm/issues/3071#issuecomment-3281811324, SpringBoot depends on 5.12.2
+        const junitJupiterProperty = {
+          property: 'junit-jupiter.version',
+          value: '5.13.3',
+        };
+        source.addMavenProperty?.(junitJupiterProperty);
+        source.addGradleProperty?.(junitJupiterProperty);
+      },
       addDependencies({ application, source }) {
         const { javaDependencies, gradleBuildSrc } = application;
         source.addJavaDefinitions?.(
           { gradleFile: `${gradleBuildSrc}src/main/groovy/jhipster.cucumber-conventions.gradle` },
           {
-            // https://github.com/cucumber/cucumber-jvm/issues/3071#issuecomment-3281811324
-            versions: [{ name: 'junit-jupiter', version: '5.13.3' }],
             dependencies: [
               {
                 groupId: 'io.cucumber',
