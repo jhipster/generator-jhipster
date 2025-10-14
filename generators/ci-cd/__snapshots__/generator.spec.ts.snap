@@ -207,7 +207,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "javaCompatibleVersions": [
     "17",
     "21",
-    "24",
+    "25",
   ],
   "javaDependencies": Any<Object>,
   "javaIntegrationTestExclude": [],
