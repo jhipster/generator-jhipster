@@ -83,7 +83,7 @@ public class UserStepDefs extends StepDefs {
     }
 
     @When("I list users")
-    public void i_list_users(String userId) throws Throwable {
+    public void i_list_users() throws Throwable {
 <%_ if (reactive) { _%>
         actions = userResourceMock.get().uri("/api/admin/users").accept(MediaType.APPLICATION_JSON).exchange();
 <%_ } else { _%>
