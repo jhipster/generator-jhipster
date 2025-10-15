@@ -71,15 +71,16 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
                 templates: [
                   // Create Cucumber test files
                   'cucumber/CucumberTest.java',
-                  'cucumber/stepdefs/StepDefs.java',
+                  'cucumber/stepdefs/AuthenticateStepDefs.java',
                   'cucumber/stepdefs/BasicStepDefs.java',
+                  'cucumber/stepdefs/StepDefs.java',
                   'cucumber/CucumberTestContextConfiguration.java',
                 ],
               },
               {
                 path: `${SERVER_TEST_RES_DIR}_package_/`,
                 renameTo: (data, filename) => `${data.srcTestResources}${data.packageFolder}${filename}`,
-                templates: ['cucumber/basic.feature'],
+                templates: ['cucumber/authenticate.feature', 'cucumber/basic.feature'],
               },
             ],
             user: [
