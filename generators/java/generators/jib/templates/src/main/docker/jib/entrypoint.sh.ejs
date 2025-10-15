@@ -8,24 +8,24 @@ echo "The application will start in ${JHIPSTER_SLEEP}s..." && sleep ${JHIPSTER_S
 #  "$XYZ_DB_PASSWORD" from a file, especially for Docker's secrets feature)
 file_env() {
     local var="$1"
-    local fileVar="${var}_FILE"
+    local file_var="${var}_FILE"
     local def="${2:-}"
-    if [[ ${!var:-} && ${!fileVar:-} ]]; then
-        echo >&2 "error: both $var and $fileVar are set (but are exclusive)"
+    if [[ ${!var:-} && ${!file_var:-} ]]; then
+        echo >&2 "error: both $var and $file_var are set (but are exclusive)"
         exit 1
     fi
     local val="$def"
     if [[ ${!var:-} ]]; then
         val="${!var}"
-    elif [[ ${!fileVar:-} ]]; then
-        val="$(< "${!fileVar}")"
+    elif [[ ${!file_var:-} ]]; then
+        val="$(< "${!file_var}")"
     fi
 
     if [[ -n $val ]]; then
         export "$var"="$val"
     fi
 
-    unset "$fileVar"
+    unset "$file_var"
 }
 
 <%_ if (backendTypeSpringBoot) { _%>
