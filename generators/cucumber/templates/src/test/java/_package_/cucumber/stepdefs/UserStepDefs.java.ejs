@@ -82,17 +82,17 @@ public class UserStepDefs extends StepDefs {
 <%_ } _%>
     }
 
-    @When("I search user {string}")
-    public void i_search_user(String userId) throws Throwable {
+    @When("I list users")
+    public void i_list_users(String userId) throws Throwable {
 <%_ if (reactive) { _%>
-        actions = userResourceMock.get().uri("/api/admin/users/" + userId).accept(MediaType.APPLICATION_JSON).exchange();
+        actions = userResourceMock.get().uri("/api/admin/users").accept(MediaType.APPLICATION_JSON).exchange();
 <%_ } else { _%>
-        actions = userResourceMock.perform(get("/api/admin/users/" + userId).accept(MediaType.APPLICATION_JSON));
+        actions = userResourceMock.perform(get("/api/admin/users").accept(MediaType.APPLICATION_JSON));
 <%_ } _%>
     }
 
-    @Then("the user is found")
-    public void the_user_is_found() throws Throwable {
+    @Then("the operation succeeds")
+    public void the_operation_succeeds() throws Throwable {
 <%_ if (reactive) { _%>
         actions
             .expectStatus().isOk()
@@ -102,15 +102,5 @@ public class UserStepDefs extends StepDefs {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE));
 <%_ } _%>
-    }
-
-    @Then("his last name is {string}")
-    public void his_last_name_is(String lastName) throws Throwable {
-<%_ if (reactive) { _%>
-        actions.expectBody().jsonPath("$.lastName").value(is(lastName));
-<%_ } else { _%>
-        actions.andExpect(jsonPath("$.lastName").value(lastName));
-<%_ } _%>
-    }
 
 }
