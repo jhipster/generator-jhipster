@@ -41,13 +41,13 @@ const cucumberFiles = asWriteFilesSection({
   ],
   user: [
     {
-      condition: generator => generator.generateUserManagement && !generator.databaseTypeMongodb && !generator.databaseTypeCassandra,
+      condition: generator => generator.generateUserManagement,
       path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['cucumber/stepdefs/UserStepDefs.java'],
     },
     {
-      condition: generator => generator.generateUserManagement && !generator.databaseTypeMongodb && !generator.databaseTypeCassandra,
+      condition: generator => generator.generateUserManagement,
       path: `${SERVER_TEST_RES_DIR}_package_/`,
       renameTo: (data, filename) => `${data.srcTestResources}${data.packageFolder}${filename}`,
       templates: ['cucumber/user.feature'],
