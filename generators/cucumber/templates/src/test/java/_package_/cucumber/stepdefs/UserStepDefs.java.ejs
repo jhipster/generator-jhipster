@@ -29,6 +29,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+<%_ if (!reactive && !databaseTypeCassandra) { _%>
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+<%_ } _%>
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -78,7 +81,11 @@ public class UserStepDefs extends StepDefs {
 <%_ if (reactive) { _%>
         this.userResourceMock = WebTestClient.bindToController(userResource).build();
 <%_ } else { _%>
-        this.userResourceMock = MockMvcBuilders.standaloneSetup(userResource).build();
+        this.userResourceMock = MockMvcBuilders.standaloneSetup(userResource)
+  <%_ if (!databaseTypeCassandra) { _%>
+            .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+  <%_ } _%>
+            .build();
 <%_ } _%>
     }
 

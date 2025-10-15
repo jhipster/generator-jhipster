@@ -18,9 +18,9 @@
  */
 import { gt } from 'semver';
 
+import { SERVER_TEST_RES_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
 import { JavaApplicationGenerator } from '../java/generator.ts';
-
-import writeTask from './files.ts';
+import { moveToJavaPackageTestDir } from '../java/support/files.ts';
 
 export default class CucumberGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
@@ -61,7 +61,45 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
           ],
         });
       },
-      writeTask,
+      async writeFiles({ application }) {
+        await this.writeFiles<typeof application>({
+          sections: {
+            cucumberFiles: [
+              {
+                path: `${SERVER_TEST_SRC_DIR}_package_/`,
+                renameTo: moveToJavaPackageTestDir,
+                templates: [
+                  // Create Cucumber test files
+                  'cucumber/CucumberTest.java',
+                  'cucumber/stepdefs/StepDefs.java',
+                  'cucumber/stepdefs/BasicStepDefs.java',
+                  'cucumber/CucumberTestContextConfiguration.java',
+                ],
+              },
+              {
+                path: `${SERVER_TEST_RES_DIR}_package_/`,
+                renameTo: (data, filename) => `${data.srcTestResources}${data.packageFolder}${filename}`,
+                templates: ['cucumber/basic.feature'],
+              },
+            ],
+            user: [
+              {
+                condition: generator => generator.generateUserManagement,
+                path: `${SERVER_TEST_SRC_DIR}_package_/`,
+                renameTo: moveToJavaPackageTestDir,
+                templates: ['cucumber/stepdefs/UserStepDefs.java'],
+              },
+              {
+                condition: generator => generator.generateUserManagement,
+                path: `${SERVER_TEST_RES_DIR}_package_/`,
+                renameTo: (data, filename) => `${data.srcTestResources}${data.packageFolder}${filename}`,
+                templates: ['cucumber/user.feature'],
+              },
+            ],
+          },
+          context: application,
+        });
+      },
     });
   }
 

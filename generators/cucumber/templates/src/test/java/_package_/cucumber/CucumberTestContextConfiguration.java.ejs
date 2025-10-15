@@ -19,8 +19,11 @@
 package <%= packageName %>.cucumber;
 
 import <%= packageName %>.IntegrationTest;
+
 import io.cucumber.spring.CucumberContextConfiguration;
+import org.springframework.test.context.ActiveProfiles;
 
 @CucumberContextConfiguration
 @IntegrationTest
+@ActiveProfiles({ "test", "testprod" })
 public class CucumberTestContextConfiguration {}
