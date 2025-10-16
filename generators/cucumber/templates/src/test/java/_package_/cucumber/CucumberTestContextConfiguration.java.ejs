@@ -33,7 +33,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @CucumberContextConfiguration
 @IntegrationTest
-@ActiveProfiles({ "dev", "test", "testprod" })
+@ActiveProfiles({ "dev", "test", "testdev" })
 <%_ if (reactive) { _%>
 @AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
 <%_ } else { _%>
