@@ -119,6 +119,13 @@ test {
         exceptionFormat = "full"
     }
     jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx512m'
+
+    if (project.hasProperty("prod")) {
+        systemProperty('spring.profiles.active', 'prod,test,testprod')
+    } else {
+        systemProperty('spring.profiles.active', 'dev,test,testdev')
+    }
+
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
     // ignoreFailures true
