@@ -252,7 +252,6 @@ public class CacheConfiguration {
 
     private static final Logger LOG = LoggerFactory.getLogger(CacheConfiguration.class);
 
-    private final Environment env;
   <%_ if (serviceDiscoveryAny) { _%>
 
     private final ServerProperties serverProperties;
@@ -262,13 +261,6 @@ public class CacheConfiguration {
     private Registration registration;
   <%_ } _%>
 
-    public CacheConfiguration(<% if (cacheProviderHazelcast) { %>Environment env<% if (serviceDiscoveryAny) { %>, ServerProperties serverProperties, DiscoveryClient discoveryClient<% } } %>) {
-        this.env = env;
-  <%_ if (serviceDiscoveryAny) { _%>
-        this.serverProperties = serverProperties;
-        this.discoveryClient = discoveryClient;
-  <%_ } _%>
-    }
   <%_ if (serviceDiscoveryAny) { _%>
 
     @Autowired(required = false)
@@ -290,7 +282,7 @@ public class CacheConfiguration {
     }
 
     @Bean
-    public HazelcastInstance hazelcastInstance(JHipsterProperties jHipsterProperties) {
+    public HazelcastInstance hazelcastInstance(JHipsterProperties jHipsterProperties, Environment env) {
         LOG.debug("Configuring Hazelcast");
         HazelcastInstance hazelCastInstance = Hazelcast.getHazelcastInstanceByName("<%= baseName %>");
         if (hazelCastInstance != null) {
