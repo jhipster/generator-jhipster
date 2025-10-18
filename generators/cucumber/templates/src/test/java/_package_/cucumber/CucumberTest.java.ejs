@@ -18,24 +18,11 @@
 -%>
 package <%= packageName %>.cucumber;
 
-import <%= packageName %>.IntegrationTest;
-import <%= packageName %>.security.AuthoritiesConstants;
+import org.junit.platform.suite.api.IncludeEngines;
+import org.junit.platform.suite.api.SelectPackages;
+import org.junit.platform.suite.api.Suite;
 
-import io.cucumber.spring.CucumberContextConfiguration;
-
-<%_ if (reactive) { _%>
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-<%_ } else { _%>
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-<%_ } _%>
-import org.springframework.security.test.context.support.WithMockUser;
-
-@CucumberContextConfiguration
-@IntegrationTest
-<%_ if (reactive) { _%>
-@AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
-<%_ } else { _%>
-@AutoConfigureMockMvc
-<%_ } _%>
-@WithMockUser(authorities = AuthoritiesConstants.ADMIN)
-public class CucumberTestContextConfiguration {}
+@Suite
+@IncludeEngines("cucumber")
+@SelectPackages("<%= packageName %>.cucumber")
+class CucumberTest {}

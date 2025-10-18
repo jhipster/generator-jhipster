@@ -16,9 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.cucumber;
+package <%= packageName %>.cucumber.stepdefs;
 
-import <%= packageName %>.IntegrationTest;
+import io.cucumber.java.en.When;
 
-@IntegrationTest
-class CucumberIT {}
+public class BasicStepDefs extends StepDefs {
+    @When("I run basic step")
+    public void i_run_basic_step() throws Throwable {
+    }
+}

@@ -26,7 +26,7 @@
     "searchEngine": "no",
     "serverPort": "8080",
     "serviceDiscoveryType": "no",
-    "testFrameworks": ["gatling", "cypress"],
+    "testFrameworks": ["gatling", "cucumber", "cypress"],
     "websocket": "spring-websocket",
     "withAdminUi": false
   }
