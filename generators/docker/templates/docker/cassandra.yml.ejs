@@ -22,6 +22,9 @@ services:
   cassandra:
     image: <%- dockerContainers.cassandra %>
     container_name: <%= baseName.toLowerCase() %>-cassandra
+    environment:
+      - MAX_HEAP_SIZE=2G
+      - HEAP_NEWSIZE=512M
     # volumes:
     #   - ~/volumes/jhipster/<%= baseName %>/cassandra/:/var/lib/cassandra/data
     # If you want to expose these ports outside your dev PC,

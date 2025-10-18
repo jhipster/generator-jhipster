@@ -354,6 +354,9 @@ jhipster:
   mscassandra-cassandra:
     image: cassandra-placeholder
     container_name: mscassandra-cassandra
+    environment:
+      - MAX_HEAP_SIZE=2G
+      - HEAP_NEWSIZE=512M
     healthcheck:
       test:
         - CMD

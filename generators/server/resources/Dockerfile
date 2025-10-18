@@ -26,7 +26,7 @@ LABEL ALIAS=mongodb
 FROM couchbase/server:7.6.7
 LABEL ALIAS=couchbase
 
-FROM cassandra:5.0.2
+FROM cassandra:5.0.5
 
 FROM mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
 LABEL ALIAS=mssql
