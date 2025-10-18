@@ -85,13 +85,13 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
             ],
             user: [
               {
-                condition: generator => generator.generateUserManagement,
+                condition: data => data.generateUserManagement && (!data.applicationTypeMicroservice || !data.authenticationTypeOauth2),
                 path: `${SERVER_TEST_SRC_DIR}_package_/`,
                 renameTo: moveToJavaPackageTestDir,
                 templates: ['cucumber/stepdefs/UserStepDefs.java'],
               },
               {
-                condition: generator => generator.generateUserManagement,
+                condition: data => data.generateUserManagement && (!data.applicationTypeMicroservice || !data.authenticationTypeOauth2),
                 path: `${SERVER_TEST_RES_DIR}_package_/`,
                 renameTo: (data, filename) => `${data.srcTestResources}${data.packageFolder}${filename}`,
                 templates: ['cucumber/user.feature'],
