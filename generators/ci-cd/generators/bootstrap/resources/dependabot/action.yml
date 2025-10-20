@@ -23,7 +23,7 @@ runs:
   using: composite
   steps:
     - uses: actions/checkout@v5
-    - uses: actions/setup-node@v5
+    - uses: actions/setup-node@v6
     - uses: actions/setup-java@v5
     - uses: actions/upload-artifact@v4
     - uses: jhipster/actions/cache-npm-dependencies@v1
