@@ -2377,7 +2377,7 @@ metadata:
 spec:
   acme:
     server: https://acme-staging-v02.api.letsencrypt.org/directory
-    email: 
+    email:
     privateKeySecretRef:
       name: letsencrypt-staging
     solvers:
