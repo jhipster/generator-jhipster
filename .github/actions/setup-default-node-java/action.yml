@@ -32,7 +32,7 @@ runs:
         echo "npm-version=$(grep -o '"npm": "[^"]*"' ${{ github.workspace }}/${{ inputs.generator-path }}/generators/common/resources/package.json | cut -f4 -d '"')" >> $GITHUB_OUTPUT
       shell: bash
       id: setup
-    - uses: actions/setup-node@v5
+    - uses: actions/setup-node@v6
       with:
         node-version: ${{ steps.setup.outputs.node-version }}
     - run: npm install -g npm@${{ steps.setup.outputs.npm-version }}
