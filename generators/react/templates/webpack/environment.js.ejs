@@ -17,10 +17,12 @@
  limitations under the License.
 -%>
 <%_ if (buildToolUnknown) { _%>
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
 const packageJson = require('./../package.json');
 <%_ } _%>
 
-module.exports = {
+export default {
 <%_ if (buildToolUnknown) { _%>
   VERSION: packageJson.version,
 <%_ } else { _%>
