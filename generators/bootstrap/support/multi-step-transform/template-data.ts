@@ -4,19 +4,15 @@ export default class TemplateData {
   private _templateFile: TemplateFile;
   private _defaultData: { fragment?: any; section?: string };
   private _sections: Record<string, number>;
-  private _defaultFragment: any;
-  private last: any;
 
   constructor(templateFile: TemplateFile, defaultData = {}) {
     this._templateFile = templateFile;
     this._defaultData = defaultData;
     this._sections = {};
-    this._defaultFragment = {};
   }
 
   registerSections(sections: Record<string, number>) {
     this._sections = sections;
-    this._defaultFragment = Object.fromEntries(Object.keys(this._sections).map(section => [section, false]));
     Object.keys(this._sections).forEach(section => {
       (this as any)[section] = (fragmentData: any, suffix?: string) => this.renderSection(section, fragmentData, suffix);
     });
@@ -50,7 +46,6 @@ export default class TemplateData {
       }
     }
     const rendered = renderedFragments.join(join);
-    this.last = rendered;
     return rendered && suffix ? `${rendered}${suffix}` : rendered;
   }
 

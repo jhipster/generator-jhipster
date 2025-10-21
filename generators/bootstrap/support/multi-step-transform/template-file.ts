@@ -14,7 +14,6 @@ export default class TemplateFile {
   parentPath?: string;
   filePath?: string;
 
-  private depth: number;
   private _filename: string;
   private _extension: string;
   private _compiled: ejs.TemplateFunction;
@@ -32,11 +31,6 @@ export default class TemplateFile {
     this._debug = debugBuilder(`jhipster.templates.${this._filename}`);
 
     this.rootTemplate = !this._fragmentName;
-    if (!this.rootTemplate) {
-      this.depth = (this._fragmentName.match(/\./g) || []).length + 1;
-    } else {
-      this.depth = 0;
-    }
   }
 
   compile(filePath: string, contents: string, options: ejs.Options) {

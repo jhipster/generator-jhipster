@@ -36,9 +36,6 @@ const WRITING = 'writing';
 
 const TRANSFORM = 'transform';
 
-// eslint-disable-next-line unused-imports/no-unused-vars
-const CONFLICTS = 'conflicts';
-
 const INSTALL = 'install';
 
 const END = 'end';
