@@ -84,13 +84,13 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
             ],
             authenticate: [
               {
-                condition: data => data.authenticationTypeJwt || !data.applicationTypeMicroservice,
+                condition: data => data.authenticationTypeJwt || data.generateAuthenticationApi,
                 path: `${SERVER_TEST_SRC_DIR}_package_/`,
                 renameTo: moveToJavaPackageTestDir,
                 templates: ['cucumber/stepdefs/AuthenticateStepDefs.java'],
               },
               {
-                condition: data => data.authenticationTypeJwt || !data.applicationTypeMicroservice,
+                condition: data => data.authenticationTypeJwt || data.generateAuthenticationApi,
                 path: `${SERVER_TEST_RES_DIR}_package_/`,
                 renameTo: (data, filename) => `${data.srcTestResources}${data.packageFolder}${filename}`,
                 templates: ['cucumber/authenticate.feature'],
