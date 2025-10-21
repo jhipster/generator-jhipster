@@ -120,7 +120,7 @@ test {
     }
     jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx512m'
 
-    systemProperty('spring.profiles.active', springProfiles + ",test,test" + (project.hasProperty("prod")) ? "prod" : "dev")
+    systemProperty('spring.profiles.active', "test,test" + springProfiles)
 
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
