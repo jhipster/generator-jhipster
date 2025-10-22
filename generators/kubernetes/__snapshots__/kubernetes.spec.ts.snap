@@ -256,7 +256,7 @@ spec:
     app: jhipster-kafka
   ports:
   - port: 9092
-  ",
+",
     "stateCleared": "modified",
   },
   "kubernetes/samplekafka-k8s/samplekafka-deployment.yml": {
@@ -2384,7 +2384,6 @@ spec:
     - http01:
         ingress:
             class: ingress-gce
- 
 ",
     "stateCleared": "modified",
   },
