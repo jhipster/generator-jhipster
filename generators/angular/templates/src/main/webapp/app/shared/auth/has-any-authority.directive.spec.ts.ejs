@@ -16,6 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (clientTestFrameworkVitest) { _%>
+import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+<%_ } _%>
 import { provideHttpClient } from '@angular/common/http';
 import { Component, ElementRef, WritableSignal, signal, viewChild } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
@@ -51,7 +54,7 @@ describe('HasAnyAuthorityDirective tests', () => {
         {
           provide: AccountService,
           useValue: {
-            isAuthenticated: jest.fn(),
+            isAuthenticated: <%= clientTestFramework %>.fn(),
           },
         },
       ],
@@ -61,13 +64,13 @@ describe('HasAnyAuthorityDirective tests', () => {
   beforeEach(() => {
     mockAccountService = TestBed.inject(AccountService);
     currentAccount = signal<Account | null>({ activated: true, authorities: [] } as any);
-    mockAccountService.trackCurrentAccount = jest.fn(() => currentAccount);
+    mockAccountService.trackCurrentAccount = <%= clientTestFramework %>.fn(() => currentAccount);
   });
 
   describe('set <%= jhiPrefix %>HasAnyAuthority', () => {
     it('should show restricted content to user if user has required role', () => {
       // GIVEN
-      mockAccountService.hasAnyAuthority = jest.fn(() => true);
+      mockAccountService.hasAnyAuthority = <%= clientTestFramework %>.fn(() => true);
       const fixture = TestBed.createComponent(TestHasAnyAuthorityDirective);
       const comp = fixture.componentInstance;
 
@@ -80,7 +83,7 @@ describe('HasAnyAuthorityDirective tests', () => {
 
     it('should not show restricted content to user if user has not required role', () => {
       // GIVEN
-      mockAccountService.hasAnyAuthority = jest.fn(() => false);
+      mockAccountService.hasAnyAuthority = <%= clientTestFramework %>.fn(() => false);
       const fixture = TestBed.createComponent(TestHasAnyAuthorityDirective);
       const comp = fixture.componentInstance;
 
@@ -95,7 +98,7 @@ describe('HasAnyAuthorityDirective tests', () => {
   describe('change authorities', () => {
     it('should show or not show restricted content correctly if user authorities are changing', () => {
       // GIVEN
-      mockAccountService.hasAnyAuthority = jest.fn((): boolean => Boolean(currentAccount()));
+      mockAccountService.hasAnyAuthority = <%= clientTestFramework %>.fn((): boolean => Boolean(currentAccount()));
       const fixture = TestBed.createComponent(TestHasAnyAuthorityDirective);
       const comp = fixture.componentInstance;
 

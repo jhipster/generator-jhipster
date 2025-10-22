@@ -16,24 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (clientTestFrameworkVitest) { _%>
-import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-<%_ } _%>
-import { filterNaN, isPresent } from './operators';
+import { provideZonelessChangeDetection } from '@angular/core';
 
-describe('Operators Test', () => {
-  describe('isPresent', () => {
-    it('should remove null and undefined values', () => {
-      expect([1, null, undefined].filter(isPresent)).toEqual([1]);
-    });
-  });
-
-  describe('filterNaN', () => {
-    it('should return 0 for NaN', () => {
-      expect(filterNaN(NaN)).toBe(0);
-    });
-    it('should return number for a number', () => {
-      expect(filterNaN(12345)).toBe(12345);
-    });
-  });
-});
+export default [provideZonelessChangeDetection()];

@@ -16,6 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (clientTestFrameworkVitest) { _%>
+import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+<%_ } _%>
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
@@ -64,8 +67,8 @@ describe('Configuration', () => {
           },
         },
       ];
-      jest.spyOn(service, 'getBeans').mockReturnValue(of(beans));
-      jest.spyOn(service, 'getPropertySources').mockReturnValue(of(propertySources));
+      <%= clientTestFramework %>.spyOn(service, 'getBeans').mockReturnValue(of(beans));
+      <%= clientTestFramework %>.spyOn(service, 'getPropertySources').mockReturnValue(of(propertySources));
 
       // WHEN
       comp.ngOnInit();

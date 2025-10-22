@@ -16,6 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (clientTestFrameworkVitest) { _%>
+import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+<%_ } _%>
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 <%_ if (enableTranslation) { _%>
@@ -52,7 +55,7 @@ describe('Settings', () => {
         {
           provide: AccountService,
           useValue: {
-            authenticate: jest.fn(),
+            authenticate: <%= clientTestFramework %>.fn(),
           },
         },
       ],
@@ -63,12 +66,12 @@ describe('Settings', () => {
     fixture = TestBed.createComponent(Settings);
     comp = fixture.componentInstance;
     mockAccountService = TestBed.inject(AccountService);
-    mockAccountService.identity = jest.fn(() => of(account));
+    mockAccountService.identity = <%= clientTestFramework %>.fn(() => of(account));
   });
 
   it('should send the current identity upon save', () => {
     // GIVEN
-    mockAccountService.save = jest.fn(() => of({}));
+    mockAccountService.save = <%= clientTestFramework %>.fn(() => of({}));
     const settingsFormValues = {
       firstName: 'John',
       lastName: 'Doe',
@@ -91,7 +94,7 @@ describe('Settings', () => {
 
   it('should notify of success upon successful save', () => {
     // GIVEN
-    mockAccountService.save = jest.fn(() => of({}));
+    mockAccountService.save = <%= clientTestFramework %>.fn(() => of({}));
 
     // WHEN
     comp.ngOnInit();
@@ -103,7 +106,7 @@ describe('Settings', () => {
 
   it('should notify of error upon failed save', () => {
     // GIVEN
-    mockAccountService.save = jest.fn(() => throwError(Error));
+    mockAccountService.save = <%= clientTestFramework %>.fn(() => throwError(Error));
 
     // WHEN
     comp.ngOnInit();

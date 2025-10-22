@@ -66,6 +66,7 @@ Options:
   --client-framework <value>               Provide client framework for the application (choices: "angular", "react", "vue", "no")
   --microfrontend                          Enable microfrontend support
   --microfrontends <value>                 Microfrontends to load
+  --client-test-framework <value>          undefined (default: ctx => (ctx.clientFramework === 'vue' ? 'vitest' : 'jest')) (choices: "jest", "vitest")
   --with-admin-ui                          Generate administrative user interface
   --client-root-dir <value>                Client root
   --skip-git                               Skip git repository initialization
@@ -267,7 +268,10 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "clientSrcDir": "src/main/webapp/",
   "clientTestDir": "src/test/javascript/",
   "clientTestFramework": "jest",
+  "clientTestFrameworkAny": true,
+  "clientTestFrameworkJest": true,
   "clientTestFrameworkName": "Jest",
+  "clientTestFrameworkVitest": false,
   "clientTestFrameworks": undefined,
   "clientTestFrameworksAny": false,
   "clientTestFrameworksCypress": false,
@@ -706,6 +710,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
     "jest-junit": "JEST_JUNIT_VERSION",
     "jest-preset-angular": "JEST_PRESET_ANGULAR_VERSION",
     "jest-sonar": "JEST_SONAR_VERSION",
+    "jsdom": "JSDOM_VERSION",
     "lighthouse": "LIGHTHOUSE_VERSION",
     "lint-staged": "LINT_STAGED_VERSION",
     "merge-jsons-webpack-plugin": "MERGE_JSONS_WEBPACK_PLUGIN_VERSION",
@@ -726,6 +731,8 @@ exports[`generator - app with default config should match snapshot 1`] = `
     "tslib": "TSLIB_VERSION",
     "typescript": "TYPESCRIPT_VERSION",
     "typescript-eslint": "TYPESCRIPT_ESLINT_VERSION",
+    "vitest": "VITEST_VERSION",
+    "vitest-sonar-reporter": "VITEST_SONAR_REPORTER_VERSION",
     "wait-on": "WAIT_ON_VERSION",
     "webpack": "WEBPACK_VERSION",
     "webpack-bundle-analyzer": "WEBPACK_BUNDLE_ANALYZER_VERSION",
@@ -954,7 +961,10 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "clientSrcDir": "src/main/webapp/",
   "clientTestDir": "src/test/javascript/",
   "clientTestFramework": "jest",
+  "clientTestFrameworkAny": true,
+  "clientTestFrameworkJest": true,
   "clientTestFrameworkName": "Jest",
+  "clientTestFrameworkVitest": false,
   "clientTestFrameworks": undefined,
   "clientTestFrameworksAny": false,
   "clientTestFrameworksCypress": false,
@@ -1389,6 +1399,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
     "jest-junit": "JEST_JUNIT_VERSION",
     "jest-preset-angular": "JEST_PRESET_ANGULAR_VERSION",
     "jest-sonar": "JEST_SONAR_VERSION",
+    "jsdom": "JSDOM_VERSION",
     "lighthouse": "LIGHTHOUSE_VERSION",
     "lint-staged": "LINT_STAGED_VERSION",
     "merge-jsons-webpack-plugin": "MERGE_JSONS_WEBPACK_PLUGIN_VERSION",
@@ -1409,6 +1420,8 @@ exports[`generator - app with gateway should match snapshot 1`] = `
     "tslib": "TSLIB_VERSION",
     "typescript": "TYPESCRIPT_VERSION",
     "typescript-eslint": "TYPESCRIPT_ESLINT_VERSION",
+    "vitest": "VITEST_VERSION",
+    "vitest-sonar-reporter": "VITEST_SONAR_REPORTER_VERSION",
     "wait-on": "WAIT_ON_VERSION",
     "webpack": "WEBPACK_VERSION",
     "webpack-bundle-analyzer": "WEBPACK_BUNDLE_ANALYZER_VERSION",
@@ -1630,6 +1643,10 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "clientPackageJsonScripts": {},
   "clientRootDir": "",
   "clientSrcDir": "src/main/webapp/",
+  "clientTestFramework": "jest",
+  "clientTestFrameworkAny": true,
+  "clientTestFrameworkJest": true,
+  "clientTestFrameworkVitest": false,
   "clientTestFrameworks": undefined,
   "clientTestFrameworksAny": false,
   "clientTestFrameworksCypress": false,

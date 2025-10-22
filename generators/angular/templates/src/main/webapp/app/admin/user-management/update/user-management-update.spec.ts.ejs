@@ -19,6 +19,9 @@
 <%_
 const tsKeyId = user.primaryKey.tsSampleValues[0];
 _%>
+<%_ if (clientTestFrameworkVitest) { _%>
+import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+<%_ } _%>
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
@@ -62,7 +65,7 @@ describe('User Management Update Component', () => {
   describe('OnInit', () => {
     it('should load authorities and language on init', inject([], () => {
       // GIVEN
-      jest.spyOn(service, 'authorities').mockReturnValue(of(['USER']));
+      <%= clientTestFramework %>.spyOn(service, 'authorities').mockReturnValue(of(['USER']));
 
       // WHEN
       comp.ngOnInit();
@@ -77,7 +80,7 @@ describe('User Management Update Component', () => {
     it('should call update service on save for existing user', inject([], () => {
       // GIVEN
       const entity = { id: <%- tsKeyId %> };
-      jest.spyOn(service, 'update').mockReturnValue(of(entity));
+      <%= clientTestFramework %>.spyOn(service, 'update').mockReturnValue(of(entity));
       comp.editForm.patchValue(entity);
       // WHEN
       comp.save();
@@ -90,7 +93,7 @@ describe('User Management Update Component', () => {
     it('should call create service on save for new user', inject([], () => {
       // GIVEN
       const entity = { login: 'foo' } as User;
-      jest.spyOn(service, 'create').mockReturnValue(of(entity));
+      <%= clientTestFramework %>.spyOn(service, 'create').mockReturnValue(of(entity));
       comp.editForm.patchValue(entity);
       // WHEN
       comp.save();

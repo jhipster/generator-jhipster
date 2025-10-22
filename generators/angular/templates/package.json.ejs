@@ -27,6 +27,9 @@
     "node_modules"
   ],
   "dependencies": {
+<%_ if (clientTestFrameworkJest) { _%>
+    "zone.js": "<%= nodeDependencies['zone.js'] %>",
+<%_ } _%>
     "@angular/common": "<%= nodeDependencies['@angular/common'] %>",
     "@angular/compiler": "<%= nodeDependencies['@angular/common'] %>",
     "@angular/core": "<%= nodeDependencies['@angular/common'] %>",
@@ -50,8 +53,7 @@
     "dayjs": "<%= nodeDependencies['dayjs'] %>",
     "ngx-infinite-scroll": "<%= nodeDependencies['ngx-infinite-scroll'] %>",
     "rxjs": "<%= nodeDependencies['rxjs'] %>",
-    "tslib": "<%= nodeDependencies['tslib'] %>",
-    "zone.js": "<%= nodeDependencies['zone.js'] %>"
+    "tslib": "<%= nodeDependencies['tslib'] %>"
   },
   "devDependencies": {
 <%_ if (skipServer) { _%>
@@ -63,13 +65,25 @@
   <%_ } _%>
     "@angular-architects/module-federation": "<%= nodeDependencies['@angular-architects/module-federation'] %>",
 <%_ } _%>
+<%_ if (clientTestFrameworkJest) { _%>
+    "@angular-builders/jest": "<%= nodeDependencies['@angular-builders/jest'] %>",
+    "@types/jest": "<%= nodeDependencies['@types/jest'] %>",
+    "jest": "<%= nodeDependencies['jest'] %>",
+    "jest-environment-jsdom": "<%= nodeDependencies['jest'] %>",
+    "jest-preset-angular": "<%= nodeDependencies['jest-preset-angular'] %>",
+    "jest-junit": "<%= nodeDependencies['jest-junit'] %>",
+    "jest-sonar": "<%= nodeDependencies['jest-sonar'] %>",
+    "ts-jest": "<%= nodeDependencies['ts-jest'] %>",
+<%_ } else { _%>
+    "jsdom": null,
+    "vitest": null,
+    "vitest-sonar-reporter": null,
+<%_ } _%>
     "@angular/build": "<%= nodeDependencies['@angular/cli'] %>",
     "@angular/cli": "<%= nodeDependencies['@angular/cli'] %>",
     "@angular/compiler-cli": "<%= nodeDependencies['@angular/common'] %>",
     "@angular/service-worker": "<%= nodeDependencies['@angular/common'] %>",
-    "@angular-builders/jest": "<%= nodeDependencies['@angular-builders/jest'] %>",
     "@eslint/js": null,
-    "@types/jest": "<%= nodeDependencies['@types/jest'] %>",
     "@types/node": "<%= nodeDependencies['@types/node'] %>",
     "angular-eslint": "<%= nodeDependencies['angular-eslint'] %>",
     "browser-sync": "<%= nodeDependencies['browser-sync'] %>",
@@ -78,17 +92,11 @@
     "eslint-config-prettier": "<%= nodeDependencies['eslint-config-prettier'] %>",
     "eslint-plugin-prettier": "<%= nodeDependencies['eslint-plugin-prettier'] %>",
     "globals": "<%= nodeDependencies.globals %>",
-    "jest": "<%= nodeDependencies['jest'] %>",
-    "jest-environment-jsdom": "<%= nodeDependencies['jest'] %>",
-    "jest-preset-angular": "<%= nodeDependencies['jest-preset-angular'] %>",
-    "jest-junit": "<%= nodeDependencies['jest-junit'] %>",
-    "jest-sonar": "<%= nodeDependencies['jest-sonar'] %>",
 <%_ if (enableI18nRTL) { _%>
     "postcss-rtlcss": "<%= nodeDependencies['postcss-rtlcss'] %>",
 <%_ } _%>
     "rimraf": "<%= nodeDependencies['rimraf'] %>",
     "swagger-ui-dist": "<%= nodeDependencies['swagger-ui-dist'] %>",
-    "ts-jest": "<%= nodeDependencies['ts-jest'] %>",
     "typescript": "<%= nodeDependencies['typescript'] %>",
     "typescript-eslint": "<%= nodeDependencies['typescript-eslint'] %>"
   },
@@ -103,7 +111,6 @@
     "lint:fix": "<%- nodePackageManager %> run lint -- --fix",
     "cleanup": "rimraf <%= this.relativeDir(clientRootDir, temporaryDir) %>",
     "clean-www": "rimraf <%= this.relativeDir(clientRootDir, clientDistDir) %>",
-    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
     "start": "ng serve<% if (!microfrontend) { %> --hmr<% } %>",
     "start-tls": "<%- nodePackageManager %> run webapp:dev-ssl",
 <%_ if (skipServer) { _%>
@@ -112,7 +119,12 @@
     "serve": "<%- nodePackageManager %> run start --",
     "build": "<%- nodePackageManager %> run webapp:prod --",
     "pretest": "<%- nodePackageManager %> run lint",
+<%_ if (clientTestFrameworkJest) { _%>
+    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
     "test": "ng test --coverage --log-heap-usage -w=2",
+<%_ } else { _%>
+    "test": "ng test",
+<%_ } _%>
     "test:watch": "<%- nodePackageManager %> run test -- --watch",
     "watch": "concurrently npm:start<% if(!skipServer) { %> npm:backend:start<% } %>",
     "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'<% if(!skipServer) { %> npm:backend:start<% } %>",

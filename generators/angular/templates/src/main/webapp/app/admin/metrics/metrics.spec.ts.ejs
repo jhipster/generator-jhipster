@@ -16,6 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (clientTestFrameworkVitest) { _%>
+import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+<%_ } _%>
 import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
@@ -65,9 +68,9 @@ describe('Metrics', () => {
       } as unknown as MetricsModel;
       const threadDump = { threads: [{ threadName: 'thread 1' } as Thread] } as ThreadDump;
 
-      jest.spyOn(service, 'getMetrics').mockReturnValue(of(metrics));
-      jest.spyOn(service, 'threadDump').mockReturnValue(of(threadDump));
-      jest.spyOn(changeDetector.constructor.prototype, 'markForCheck');
+      <%= clientTestFramework %>.spyOn(service, 'getMetrics').mockReturnValue(of(metrics));
+      <%= clientTestFramework %>.spyOn(service, 'threadDump').mockReturnValue(of(threadDump));
+      <%= clientTestFramework %>.spyOn(changeDetector.constructor.prototype, 'markForCheck');
 
       // WHEN
       comp.ngOnInit();

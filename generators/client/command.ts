@@ -140,6 +140,14 @@ const command = {
       }),
       scope: 'storage',
     },
+    clientTestFramework: {
+      cli: {
+        type: String,
+      },
+      scope: 'storage',
+      choices: ['jest', 'vitest'],
+      default: ctx => (ctx.clientFramework === 'vue' ? 'vitest' : 'jest'),
+    },
     clientTestFrameworks: {
       description: 'Client test frameworks',
       cli: {

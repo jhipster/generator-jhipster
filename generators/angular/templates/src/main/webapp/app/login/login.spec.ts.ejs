@@ -16,6 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (clientTestFrameworkVitest) { _%>
+import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+<%_ } _%>
 import { ElementRef, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Navigation, Router } from '@angular/router';
@@ -50,13 +53,13 @@ describe('Login', () => {
         {
           provide: AccountService,
           useValue: {
-            isAuthenticated: jest.fn(),
+            isAuthenticated: <%= clientTestFramework %>.fn(),
           },
         },
         {
           provide: LoginService,
           useValue: {
-            login: jest.fn(() => of({})),
+            login: <%= clientTestFramework %>.fn(() => of({})),
           },
         },
       ],
@@ -67,7 +70,7 @@ describe('Login', () => {
     fixture = TestBed.createComponent(Login);
     comp = fixture.componentInstance;
     mockRouter = TestBed.inject(Router);
-    jest.spyOn(mockRouter, 'navigate');
+    <%= clientTestFramework %>.spyOn(mockRouter, 'navigate');
     mockLoginService = TestBed.inject(LoginService);
     mockAccountService = TestBed.inject(AccountService);
   });
@@ -75,7 +78,7 @@ describe('Login', () => {
   describe('ngOnInit', () => {
     it('should call accountService.identity on Init', () => {
       // GIVEN
-      mockAccountService.identity = jest.fn(() => of(null));
+      mockAccountService.identity = <%= clientTestFramework %>.fn(() => of(null));
 
       // WHEN
       comp.ngOnInit();
@@ -86,7 +89,7 @@ describe('Login', () => {
 
     it('should call accountService.isAuthenticated on Init', () => {
       // GIVEN
-      mockAccountService.identity = jest.fn(() => of(null));
+      mockAccountService.identity = <%= clientTestFramework %>.fn(() => of(null));
 
       // WHEN
       comp.ngOnInit();
@@ -97,7 +100,7 @@ describe('Login', () => {
 
     it('should navigate to home page on Init if authenticated=true', () => {
       // GIVEN
-      mockAccountService.identity = jest.fn(() => of(null));
+      mockAccountService.identity = <%= clientTestFramework %>.fn(() => of(null));
       mockAccountService.isAuthenticated = () => true;
 
       // WHEN
@@ -112,7 +115,7 @@ describe('Login', () => {
     it('should set focus to username input after the view has been initialized', () => {
       // GIVEN
       const node = {
-        focus: jest.fn(),
+        focus: <%= clientTestFramework %>.fn(),
       };
       comp.username = signal<ElementRef>(new ElementRef(node));
 
@@ -150,7 +153,7 @@ describe('Login', () => {
 
     it('should authenticate the user but not navigate to home page if authentication process is already routing to cached url from localstorage', () => {
       // GIVEN
-      jest.spyOn(mockRouter, 'currentNavigation').mockReturnValue({} as Navigation);
+      <%= clientTestFramework %>.spyOn(mockRouter, 'currentNavigation').mockReturnValue({} as Navigation);
 
       // WHEN
       comp.login();
@@ -162,7 +165,7 @@ describe('Login', () => {
 
     it('should stay on login form and show error message on login error', () => {
       // GIVEN
-      mockLoginService.login = jest.fn(() => throwError(Error));
+      mockLoginService.login = <%= clientTestFramework %>.fn(() => throwError(Error));
 
       // WHEN
       comp.login();

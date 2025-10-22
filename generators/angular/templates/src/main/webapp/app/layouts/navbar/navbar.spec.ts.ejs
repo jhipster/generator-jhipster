@@ -16,6 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (clientTestFrameworkVitest) { _%>
+import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+<%_ } _%>
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
@@ -72,7 +75,7 @@ describe('Navbar Component', () => {
     fixture = TestBed.createComponent(Navbar);
     comp = fixture.componentInstance;
 <%_ if (applicationTypeGateway && microfrontend) { _%>
-    comp.loadMicrofrontendsEntities = jest.fn();
+    comp.loadMicrofrontendsEntities = <%= clientTestFramework %>.fn();
 <%_ } _%>
     accountService = TestBed.inject(AccountService);
     profileService = TestBed.inject(ProfileService);
@@ -80,7 +83,7 @@ describe('Navbar Component', () => {
 
   it('should call profileService.getProfileInfo on init', () => {
     // GIVEN
-    jest.spyOn(profileService, 'getProfileInfo').mockReturnValue(of(new ProfileInfo()));
+    <%= clientTestFramework %>.spyOn(profileService, 'getProfileInfo').mockReturnValue(of(new ProfileInfo()));
 
     // WHEN
     comp.ngOnInit();

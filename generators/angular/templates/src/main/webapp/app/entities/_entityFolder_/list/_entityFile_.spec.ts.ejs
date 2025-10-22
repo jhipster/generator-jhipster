@@ -21,14 +21,17 @@ const order = 'desc';
 const testEntityPrimaryKey = tsPrimaryKeySamples[0];
 const testEntityPrimaryKey2 = tsPrimaryKeySamples[1];
 _%>
-
+<%_ if (clientTestFrameworkVitest) { _%>
+import { MockInstance, afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+<%_ } _%>
+import { provideHttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {
   ComponentFixture, TestBed,
 <%_ if (!readOnly) { _%>
   inject,
 <%_ } _%>
 } from '@angular/core/testing';
-import { provideHttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
@@ -57,13 +60,15 @@ describe('<%= entityAngularName %> Management Component', () => {
     let comp: <%= entityAngularName %>;
     let fixture: ComponentFixture<<%= entityAngularName %>>;
     let service: <%= entityAngularName %>Service;
-    let routerNavigateSpy: jest.SpyInstance<Promise<boolean>>;
+    let routerNavigateSpy: <%- clientTestFrameworkJest ? 'jest.SpyInstance<Promise<boolean>>' : 'MockInstance' %>;
 
-    beforeEach(() => {
+    beforeEach(<%- clientTestFrameworkJest ? '' : 'async ' %>() => {
+        const routerModule: typeof import('@angular/router') = <%- clientTestFrameworkJest ? 'jest.requireActual' : 'await vitest.importActual' %>('@angular/router');
         TestBed.configureTestingModule({
             <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
             providers: [
                 provideHttpClient(),
+                provideHttpClientTesting(),
                 {
                     provide: ActivatedRoute,
                     useValue: {
@@ -71,7 +76,7 @@ describe('<%= entityAngularName %> Management Component', () => {
                             defaultSort: '<%- primaryKey.name %>,asc',
                         }),
                         queryParamMap: of(
-                            jest.requireActual('@angular/router').convertToParamMap({
+                            routerModule.convertToParamMap({
                                 page: '1',
                                 size: '1',
                                 sort: '<%- primaryKey.name %>,desc',
@@ -82,7 +87,7 @@ describe('<%= entityAngularName %> Management Component', () => {
                         ),
                         snapshot: {
                             queryParams: {},
-                            queryParamMap: jest.requireActual('@angular/router').convertToParamMap({
+                            queryParamMap: routerModule.convertToParamMap({
                                 page: '1',
                                 size: '1',
                                 sort: '<%- primaryKey.name %>,desc',
@@ -99,9 +104,9 @@ describe('<%= entityAngularName %> Management Component', () => {
         fixture = TestBed.createComponent(<%= entityAngularName %>);
         comp = fixture.componentInstance;
         service = TestBed.inject(<%= entityAngularName %>Service);
-        routerNavigateSpy = jest.spyOn(comp.router, 'navigate');
+        routerNavigateSpy = <%= clientTestFramework %>.spyOn(comp.router, 'navigate');
 
-        jest
+        <%= clientTestFramework %>
           .spyOn(service, 'query')
           .mockReturnValueOnce(
             of(
@@ -140,7 +145,7 @@ describe('<%= entityAngularName %> Management Component', () => {
     describe('track<%= primaryKey.nameCapitalized %>', () => {
         it('should forward to <%= entityInstance %>Service', () => {
             const entity = <%- tsPrimaryKeySamples[0] %>;
-            jest.spyOn(service, 'get<%= entityAngularName %>Identifier');
+            <%= clientTestFramework %>.spyOn(service, 'get<%= entityAngularName %>Identifier');
             const <%= primaryKey.name %> = comp.track<%= primaryKey.nameCapitalized %>(entity);
             expect(service.get<%= entityAngularName %>Identifier).toHaveBeenCalledWith(entity);
             expect(<%= primaryKey.name %>).toBe(entity.<%= primaryKey.name %>);
@@ -212,12 +217,12 @@ describe('<%= entityAngularName %> Management Component', () => {
       // NgbModal is not a singleton using TestBed.inject.
       // ngbModal = TestBed.inject(NgbModal);
       ngbModal = (comp as any).modalService;
-      jest.spyOn(ngbModal, 'open').mockReturnValue(deleteModalMock);
+      <%= clientTestFramework %>.spyOn(ngbModal, 'open').mockReturnValue(deleteModalMock);
     });
 
     it('on confirm should call load', inject([], () => {
       // GIVEN
-      jest.spyOn(comp, 'load');
+      <%= clientTestFramework %>.spyOn(comp, 'load');
 
       // WHEN
       comp.delete(sampleWithRequiredData);
@@ -230,7 +235,7 @@ describe('<%= entityAngularName %> Management Component', () => {
 
     it('on dismiss should call load', inject([], () => {
       // GIVEN
-      jest.spyOn(comp, 'load');
+      <%= clientTestFramework %>.spyOn(comp, 'load');
 
       // WHEN
       comp.delete(sampleWithRequiredData);

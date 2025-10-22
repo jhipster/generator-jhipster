@@ -16,6 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (clientTestFrameworkVitest) { _%>
+import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+<%_ } _%>
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
@@ -67,9 +70,9 @@ describe('Register', () => {
   it('should update success to true after creating an account', inject(
     [RegisterService<% if (enableTranslation) { %>, TranslateService<% } %>],
     (service: RegisterService<% if (enableTranslation) { %>, mockTranslateService: TranslateService<% } %>) => {
-      jest.spyOn(service, 'save').mockReturnValue(of({}));
+      <%= clientTestFramework %>.spyOn(service, 'save').mockReturnValue(of({}));
 <%_ if (enableTranslation) { _%>
-      jest.spyOn(mockTranslateService, 'getCurrentLang').mockReturnValue('<%= nativeLanguage %>');
+      <%= clientTestFramework %>.spyOn(mockTranslateService, 'getCurrentLang').mockReturnValue('<%= nativeLanguage %>');
 <%_ } _%>
       comp.registerForm.patchValue({
         password: 'password',
@@ -95,7 +98,7 @@ describe('Register', () => {
     [RegisterService],
     (service: RegisterService) => {
       const err = { status: 400, error: { type: LOGIN_ALREADY_USED_TYPE } };
-      jest.spyOn(service, 'save').mockReturnValue(throwError(() => err));
+      <%= clientTestFramework %>.spyOn(service, 'save').mockReturnValue(throwError(() => err));
       comp.registerForm.patchValue({
         password: 'password',
         confirmPassword: 'password',
@@ -113,7 +116,7 @@ describe('Register', () => {
     [RegisterService],
     (service: RegisterService) => {
       const err = { status: 400, error: { type: EMAIL_ALREADY_USED_TYPE } };
-      jest.spyOn(service, 'save').mockReturnValue(throwError(() => err));
+      <%= clientTestFramework %>.spyOn(service, 'save').mockReturnValue(throwError(() => err));
       comp.registerForm.patchValue({
         password: 'password',
         confirmPassword: 'password',
@@ -131,7 +134,7 @@ describe('Register', () => {
     [RegisterService],
     (service: RegisterService) => {
       const err = { status: 503 };
-      jest.spyOn(service, 'save').mockReturnValue(throwError(() => err));
+      <%= clientTestFramework %>.spyOn(service, 'save').mockReturnValue(throwError(() => err));
       comp.registerForm.patchValue({
         password: 'password',
         confirmPassword: 'password',
