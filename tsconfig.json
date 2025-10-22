@@ -27,6 +27,8 @@
 
     /* Type Checking */
     "strict": true /* Enable all strict type-checking options. */,
+    "noUnusedLocals": true /* Report errors on unused local variables. */,
+    "noUnusedParameters": true /* Report errors on unused parameters. */,
     "rewriteRelativeImportExtensions": true,
     "erasableSyntaxOnly": true,
     "verbatimModuleSyntax": true,

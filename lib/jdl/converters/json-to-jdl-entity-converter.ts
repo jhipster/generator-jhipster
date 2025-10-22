@@ -135,7 +135,7 @@ function getEnumValuesFromString(valuesAsString: string): any[] {
     // if fieldValue looks like ENUM_VALUE (something)
     if (fieldValue.includes('(')) {
       const [key, value] = fieldValue
-        .replace(/^(\w+)\s\((\w+)\)$/, (match, matchedKey, matchedValue) => `${matchedKey},${matchedValue}`)
+        .replace(/^(\w+)\s\((\w+)\)$/, (_match, matchedKey, matchedValue) => `${matchedKey},${matchedValue}`)
         .split(',');
       return {
         key,

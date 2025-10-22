@@ -384,7 +384,7 @@ describe('cli', () => {
       commonTests();
 
       it('should forward argument and options', async () => {
-        const cb = (args: string[], options: Record<string, any>) => {
+        const cb = (_args: string[], options: Record<string, any>) => {
           expect(options.useFoo).toBe(true);
           expect(options.useBar).toBe('foo');
         };
