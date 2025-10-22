@@ -31,10 +31,6 @@ dependencies {
     // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 
-ext {
-    springProfiles = "dev" + springProfiles
-}
-
 springBoot {
     buildInfo {
         excludes = ['time']
@@ -108,7 +104,7 @@ task integrationTest(type: Test) {
         events = ['FAILED', 'SKIPPED']
         exceptionFormat = "full"
     }
-    systemProperty('spring.profiles.active', 'test,testdev')
+    systemProperty('spring.profiles.active', springTestProfiles)
     systemProperty('java.security.egd', 'file:/dev/./urandom')
     // uncomment if the tests reports are not generated
     // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484

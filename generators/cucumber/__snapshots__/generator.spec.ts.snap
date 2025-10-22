@@ -42,49 +42,10 @@ exports[`generator - cucumber with default config should match files snapshot 1`
         </dependency>
         <dependency>
             <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-console</artifactId>
+            <artifactId>junit-platform-suite</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-antrun-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <!--Work around. Surefire does not use JUnit's Test Engine discovery functionality -->
-                            <id>prepare cucumber feature files</id>
-                            <phase>integration-test</phase>
-                            <goals>
-                                <goal>run</goal>
-                            </goals>
-                            <configuration>
-                                <target>
-                                    <echo message="Running JUnit Platform CLI"/>
-                                    <java classname="org.junit.platform.console.ConsoleLauncher" fork="true" failonerror="true" newenvironment="true" maxmemory="512m" classpathref="maven.test.classpath">
-                                        <jvmarg value="-Dspring.profiles.active=testprod"/>
-                                        <arg value="--include-engine"/>
-                                        <arg value="cucumber"/>
-                                        <arg value="--scan-classpath"/>
-                                        <arg value="\${project.build.testOutputDirectory}"/>
-                                    </java>
-                                </target>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 </project>
 ",
     "stateCleared": "modified",
@@ -97,10 +58,14 @@ exports[`generator - cucumber with gradle build tool should match files snapshot
   "build.gradle": {
     "contents": "
 dependencies {
+    implementation platform(libs.cucumber.bom)
+    testImplementation "io.cucumber:cucumber-java"
+    testImplementation "io.cucumber:cucumber-junit-platform-engine"
+    testImplementation "io.cucumber:cucumber-spring"
+    testImplementation "org.junit.platform:junit-platform-suite"
     // jhipster-needle-gradle-dependency
 }
 plugins {
-    id "jhipster.cucumber-conventions"
     // jhipster-needle-gradle-plugins
 }
 ",
@@ -132,48 +97,6 @@ dependencies {
 
 [plugins]
 # jhipster-needle-gradle-dependency-catalog-plugins - JHipster will add additional plugins versions
-",
-    "stateCleared": "modified",
-  },
-  "buildSrc/src/main/groovy/jhipster.cucumber-conventions.gradle": {
-    "contents": "dependencies {
-    testImplementation "io.cucumber:cucumber-java"
-    testImplementation "io.cucumber:cucumber-junit-platform-engine"
-    testImplementation "io.cucumber:cucumber-spring"
-    testImplementation "org.junit.platform:junit-platform-console"
-    implementation platform(libs.cucumber.bom)
-    // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
-}
-
-tasks.register('consoleLauncherTest', JavaExec) {
-    dependsOn(testClasses)
-    String cucumberReportsDir = file("$buildDir/reports/tests")
-    outputs.dir(cucumberReportsDir)
-    classpath = sourceSets["test"].runtimeClasspath
-    mainClass = "org.junit.platform.console.ConsoleLauncher"
-    args("--scan-classpath")
-    args("--include-engine", "cucumber")
-    args("--reports-dir", cucumberReportsDir)
-}
-
-tasks.register('cucumberTest', Test) {
-    dependsOn(consoleLauncherTest)
-    description = "Execute cucumber BDD tests."
-    group = "verification"
-    include("**/*CucumberIT*")
-
-    // uncomment if the tests reports are not generated
-    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
-    // ignoreFailures true
-    reports.html.required = false
-}
-
-tasks.register('cucumberTestReport', TestReport) {
-    destinationDirectory = file("$buildDir/reports/tests")
-    testResults.from(cucumberTest)
-}
-
-check.dependsOn(cucumberTest)
 ",
     "stateCleared": "modified",
   },
