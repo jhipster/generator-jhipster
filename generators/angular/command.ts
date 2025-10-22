@@ -19,7 +19,16 @@
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 
 const command = {
-  configs: {},
+  configs: {
+    angularTestFramework: {
+      cli: {
+        type: String,
+      },
+      scope: 'storage',
+      choices: ['jest', 'vitest'],
+      default: 'vitest',
+    },
+  },
   import: [],
 } as const satisfies JHipsterCommandDefinition;
 
