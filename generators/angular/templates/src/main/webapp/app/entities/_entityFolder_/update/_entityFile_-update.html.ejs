@@ -181,7 +181,7 @@ _%>
                         <option [ngValue]="null" selected></option>
                     }
     <%_ } _%>
-                    @for (<%= otherEntityName %>Option of <% if (!relationship.otherRelationship || relationship.relationshipManyToOne) { %><%= otherEntity.entityInstancePlural %>Shared<% } else { %><%= relationshipFieldNamePlural %><% } %>Collection; track $index) {
+                    @for (<%= otherEntityName %>Option of <% if (!relationship.otherRelationship || relationship.relationshipManyToOne) { %><%= otherEntity.entityInstancePlural %>Shared<% } else { %><%= relationshipFieldNamePlural %><% } %>Collection(); track $index) {
                         <option [ngValue]="<%= otherEntityName %>Option">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
                     }
                     </select>
@@ -191,7 +191,7 @@ _%>
                 <div class="mb-3">
                     <label for="field_<%= relationshipFieldNamePlural %>">__jhiTranslateTag__('<%- translationKey %>')</label>
                     <select class="form-control" id="field_<%= relationshipFieldNamePlural %>" data-cy="<%= relationshipFieldName %>" multiple name="<%= propertyName %>" formControlName="<%= propertyName %>" [compareWith]="compare<%= otherEntity.entityAngularName %>">
-                    @for (<%= otherEntityName %>Option of <%= otherEntity.entityInstancePlural %>SharedCollection; track $index) {
+                    @for (<%= otherEntityName %>Option of <%= otherEntity.entityInstancePlural %>SharedCollection(); track $index) {
                         <option [ngValue]="<%= otherEntityName %>Option">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
                     }
                     </select>

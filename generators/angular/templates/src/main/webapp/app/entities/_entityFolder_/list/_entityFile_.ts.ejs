@@ -29,7 +29,7 @@
 
   const componentName = entityAngularName;
 _%>
-import { Component, computed, effect, NgZone, inject, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, signal, WritableSignal } from '@angular/core';
 <%_ if (!paginationNo) { _%>
 import { HttpHeaders } from '@angular/common/http';
 <%_ } _%>
@@ -157,7 +157,6 @@ export class <%= componentName %> implements OnInit {
 <%_ if (!readOnly) { _%>
     protected modalService = inject(NgbModal);
 <%_ } _%>
-    protected ngZone = inject(NgZone);
 <%_ if (primaryKey) { _%>
 
     track<%= primaryKey.nameCapitalized %> = (item: I<%= entityAngularName %>): <%= primaryKey.tsType %> => this.<%= entityInstance %>Service.get<%= entityAngularName %>Identifier(item);
@@ -431,11 +430,9 @@ export class <%= componentName %> implements OnInit {
       }
 <%_ } _%>
 
-      this.ngZone.run(() => {
-        this.router.navigate(['./'], {
-          relativeTo: this.activatedRoute,
-          queryParams: queryParamsObj,
-        });
+      this.router.navigate(['./'], {
+        relativeTo: this.activatedRoute,
+        queryParams: queryParamsObj,
       });
     }
 }

@@ -30,6 +30,9 @@ import {
 } from '@angular/core/testing';
 import { provideHttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faEye, faPencilAlt, faPlus, faSort, faSortDown, faSortUp, faSync, faTimes } from '@fortawesome/free-solid-svg-icons';
 <%_ if (enableTranslation) { _%>
 import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
@@ -120,7 +123,10 @@ describe('<%= entityAngularName %> Management Component', () => {
               }),
             ),
           );
-        });
+
+    const library = TestBed.inject(FaIconLibrary);
+    library.addIcons(faEye, faPencilAlt, faPlus, faSort, faSortDown, faSortUp, faSync, faTimes);
+  });
 
     it('should call load all on init', () => {
         // WHEN
