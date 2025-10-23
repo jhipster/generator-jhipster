@@ -31,7 +31,7 @@
         </tr>
       </thead>
       <tbody>
-      @for (activity of activities; track $index) {
+      @for (activity of activities(); track $index) {
         <tr>
           <td>{{ activity.userLogin }}</td>
           <td>{{ activity.ipAddress }}</td>
