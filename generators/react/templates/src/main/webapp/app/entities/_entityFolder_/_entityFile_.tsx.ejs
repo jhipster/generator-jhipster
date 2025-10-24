@@ -385,8 +385,8 @@ export const <%= entityReactName %> = () => {
               </thead>
               <tbody>
                 {
-                  <%= entityInstance %>List.map((<%= entityInstance %>, i) => (
-                  <tr key={`entity-${i}`} data-cy="entityTable">
+                  <%= entityInstance %>List.map(<%= entityInstance %> => (
+                  <tr key={`entity-${<%= entityInstance %>.<%= primaryKey.name %>}`} data-cy="entityTable">
                     <td>
                       <Button tag={Link} to={`/<%= entityPage %>/${<%= entityInstance %>.<%= primaryKey.name %>}`} color="link" size="sm">
                         {<%= entityInstance %>.<%= primaryKey.name %>}
