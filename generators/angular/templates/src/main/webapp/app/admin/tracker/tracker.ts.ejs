@@ -37,23 +37,22 @@ export default class Tracker implements OnInit, OnDestroy {
   showActivity(activity: TrackerActivity): void {
     let existingActivity = false;
 
-    const activities = this.activities();
-    for (let index = 0; index < activities.length; index++) {
-      if (activities[index].sessionId === activity.sessionId) {
-        existingActivity = true;
+    this.activities.update(activities => {
+      activities = [...activities];
+      const sessionIndex = activities.findIndex(a => a.sessionId === activity.sessionId);
+      if (sessionIndex > -1) {
+        // Update or remove existing session activity
         if (activity.page === 'logout') {
-          activities.splice(index, 1);
+          activities.splice(sessionIndex, 1);
         } else {
-          activities[index] = activity;
+          activities[sessionIndex] = activity;
         }
+      } else if (activity.page !== 'logout') {
+        activities.push(activity);
       }
-    }
 
-    if (!existingActivity && activity.page !== 'logout') {
-      activities.push(activity);
-    }
-
-    this.activities.set([...activities]);
+      return activities;
+    });
   }
 
   ngOnInit(): void {
