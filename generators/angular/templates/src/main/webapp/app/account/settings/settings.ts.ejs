@@ -90,6 +90,6 @@ export default class Settings implements OnInit {
         this.translateService.use(account.langKey);
       }
 <%_ } _%>
-    });
+    }).pipe(catchError(() => of({})));
   }
 }
