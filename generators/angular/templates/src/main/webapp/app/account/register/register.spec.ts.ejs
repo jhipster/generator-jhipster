@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { ComponentFixture, TestBed, waitForAsync, inject, tick, fakeAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, inject, tick, fakeAsync } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
@@ -33,22 +33,20 @@ describe('Register', () => {
   let fixture: ComponentFixture<Register>;
   let comp: Register;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
 <%_ if (enableTranslation) { _%>
-        imports: [TranslateModule.forRoot()],
+      imports: [TranslateModule.forRoot()],
 <%_ } _%>
-        providers: [
-          provideHttpClient(),
-          {
-            provide: ActivatedRoute,
-            useValue: {}
-          }
-        ],
-      });
-    })
-  );
+      providers: [
+        provideHttpClient(),
+        {
+          provide: ActivatedRoute,
+          useValue: {}
+        }
+      ],
+    });
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(Register);

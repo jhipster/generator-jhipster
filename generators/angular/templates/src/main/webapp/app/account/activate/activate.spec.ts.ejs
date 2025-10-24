@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { TestBed, waitForAsync, tick, fakeAsync, inject } from '@angular/core/testing';
+import { TestBed, tick, fakeAsync, inject } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 <%_ if (enableTranslation) { _%>
@@ -30,7 +30,7 @@ import Activate from './activate';
 describe('Activate', () => {
   let comp: Activate;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
       providers: [
@@ -41,7 +41,7 @@ describe('Activate', () => {
         },
       ],
     });
-  }));
+  });
 
   beforeEach(() => {
     const fixture = TestBed.createComponent(Activate);

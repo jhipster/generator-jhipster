@@ -19,7 +19,7 @@
 <%_
 const tsKeyId = primaryKey.tsSampleValues[0];
 _%>
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, tick } from '@angular/core/testing';
 import { provideHttpClient, HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -44,22 +44,19 @@ describe('<%= entityAngularName %> Management Delete Component', () => {
         mockActiveModal = TestBed.inject(NgbActiveModal);
     });
 
-    describe('confirmDelete', () => {
-        it('should call delete service on confirmDelete',
-            fakeAsync(() => {
-                // GIVEN
-                jest.spyOn(service, 'delete').mockReturnValue(of(new HttpResponse({ body: {} })));
-                jest.spyOn(mockActiveModal, 'close');
+  describe('confirmDelete', () => {
+    it('should call delete service on confirmDelete', () => {
+      // GIVEN
+      jest.spyOn(service, 'delete').mockReturnValue(of(new HttpResponse({ body: {} })));
+      jest.spyOn(mockActiveModal, 'close');
 
-                // WHEN
-                comp.confirmDelete(<%- tsKeyId %>);
-                tick();
+      // WHEN
+      comp.confirmDelete(<%- tsKeyId %>);
 
-                // THEN
-                expect(service.delete).toHaveBeenCalledWith(<%- tsKeyId %>);
-                expect(mockActiveModal.close).toHaveBeenCalledWith('deleted');
-            })
-        );
+      // THEN
+      expect(service.delete).toHaveBeenCalledWith(<%- tsKeyId %>);
+      expect(mockActiveModal.close).toHaveBeenCalledWith('deleted');
+    });
 
         it('should not call delete service on clear', () => {
             // GIVEN

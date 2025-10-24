@@ -19,7 +19,7 @@
 <%_
 const tsKeyId = user.primaryKey.tsSampleValues[0];
 _%>
-import { ComponentFixture, TestBed, waitForAsync, inject, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync, inject } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 <%_ if (enableTranslation) { _%>
@@ -60,56 +60,45 @@ describe('User Management Update Component', () => {
   });
 
   describe('OnInit', () => {
-    it('should load authorities and language on init', inject(
-      [],
-      fakeAsync(() => {
-        // GIVEN
-        jest.spyOn(service, 'authorities').mockReturnValue(of(['USER']));
+    it('should load authorities and language on init', inject([], () => {
+      // GIVEN
+      jest.spyOn(service, 'authorities').mockReturnValue(of(['USER']));
 
-        // WHEN
-        comp.ngOnInit();
+      // WHEN
+      comp.ngOnInit();
 
-        // THEN
-        expect(service.authorities).toHaveBeenCalled();
-        expect(comp.authorities()).toEqual(['USER']);
-      }),
-    ));
+      // THEN
+      expect(service.authorities).toHaveBeenCalled();
+      expect(comp.authorities()).toEqual(['USER']);
+    }));
   });
 
   describe('save', () => {
-    it('should call update service on save for existing user', inject(
-      [],
-      fakeAsync(() => {
-        // GIVEN
-        const entity = { id: <%- tsKeyId %> };
-        jest.spyOn(service, 'update').mockReturnValue(of(entity));
-        comp.editForm.patchValue(entity);
-        // WHEN
-        comp.save();
-        tick(); // simulate async
+    it('should call update service on save for existing user', inject([], () => {
+      // GIVEN
+      const entity = { id: <%- tsKeyId %> };
+      jest.spyOn(service, 'update').mockReturnValue(of(entity));
+      comp.editForm.patchValue(entity);
+      // WHEN
+      comp.save();
 
-        // THEN
-        expect(service.update).toHaveBeenCalledWith(expect.objectContaining(entity));
-        expect(comp.isSaving()).toEqual(false);
-      }),
-    ));
+      // THEN
+      expect(service.update).toHaveBeenCalledWith(expect.objectContaining(entity));
+      expect(comp.isSaving()).toEqual(false);
+    }));
 
-    it('should call create service on save for new user', inject(
-      [],
-      fakeAsync(() => {
-        // GIVEN
-        const entity = { login: 'foo' } as User;
-        jest.spyOn(service, 'create').mockReturnValue(of(entity));
-        comp.editForm.patchValue(entity);
-        // WHEN
-        comp.save();
-        tick(); // simulate async
+    it('should call create service on save for new user', inject([], () => {
+      // GIVEN
+      const entity = { login: 'foo' } as User;
+      jest.spyOn(service, 'create').mockReturnValue(of(entity));
+      comp.editForm.patchValue(entity);
+      // WHEN
+      comp.save();
 
-        // THEN
-        expect(comp.editForm.getRawValue().id).toBeNull();
-        expect(service.create).toHaveBeenCalledWith(expect.objectContaining(entity));
-        expect(comp.isSaving()).toEqual(false);
-      }),
-    ));
+      // THEN
+      expect(comp.editForm.getRawValue().id).toBeNull();
+      expect(service.create).toHaveBeenCalledWith(expect.objectContaining(entity));
+      expect(comp.isSaving()).toEqual(false);
+    }));
   });
 });
