@@ -82,16 +82,21 @@ export default class Settings implements OnInit {
     this.success.set(false);
 
     const account = this.settingsForm.getRawValue();
-    this.accountService.save(account).subscribe(() => {
-      this.success.set(true);
+    this.accountService.save(account).subscribe({
+      next: () => {
+        this.success.set(true);
 
-      this.accountService.authenticate(account);
+        this.accountService.authenticate(account);
 
 <%_ if (enableTranslation) { _%>
-      if (account.langKey !== this.translateService.getCurrentLang()) {
-        this.translateService.use(account.langKey);
-      }
+        if (account.langKey !== this.translateService.getCurrentLang()) {
+          this.translateService.use(account.langKey);
+        }
 <%_ } _%>
-    }, () => {});
+      },
+      error: () => {
+        // Ignore error
+      },
+    });
   }
 }
