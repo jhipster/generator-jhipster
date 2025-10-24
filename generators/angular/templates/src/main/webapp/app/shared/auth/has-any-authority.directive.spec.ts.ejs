@@ -16,17 +16,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-jest.mock('app/core/auth/account.service');
-
-import { Component, ElementRef, WritableSignal, signal, viewChild } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
+import { Component, ElementRef, WritableSignal, signal, viewChild } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
 <%_ if (enableTranslation) { _%>
 import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 
-import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
+import { AccountService } from 'app/core/auth/account.service';
 
 import HasAnyAuthorityDirective from './has-any-authority.directive';
 
@@ -44,8 +43,18 @@ describe('HasAnyAuthorityDirective tests', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
-      providers: [provideHttpClient(), AccountService],
+<%_ if (enableTranslation) { _%>
+      imports: [TranslateModule.forRoot()],
+<%_ } _%>
+      providers: [
+        provideHttpClient(),
+        {
+          provide: AccountService,
+          useValue: {
+            isAuthenticated: jest.fn(),
+          },
+        },
+      ],
     });
   });
 

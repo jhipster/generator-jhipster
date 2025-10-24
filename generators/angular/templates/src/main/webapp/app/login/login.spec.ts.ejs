@@ -16,11 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-jest.mock('app/core/auth/account.service');
-
 import { ElementRef, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router, Navigation } from '@angular/router';
+import { ActivatedRoute, Navigation, Router } from '@angular/router';
+
 <%_ if (enableTranslation) { _%>
 import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
@@ -28,8 +27,8 @@ import { of, throwError } from 'rxjs';
 
 import { AccountService } from 'app/core/auth/account.service';
 
-import { LoginService } from './login.service';
 import Login from './login';
+import { LoginService } from './login.service';
 
 describe('Login', () => {
   let comp: Login;
@@ -46,9 +45,14 @@ describe('Login', () => {
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: {}
+          useValue: {},
         },
-        AccountService,
+        {
+          provide: AccountService,
+          useValue: {
+            isAuthenticated: jest.fn(),
+          },
+        },
         {
           provide: LoginService,
           useValue: {
