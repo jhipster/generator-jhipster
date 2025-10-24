@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Component } from '@angular/core';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import TranslateDirective from './translate.directive';
@@ -32,11 +32,11 @@ describe('TranslateDirective Tests', () => {
   let fixture: ComponentFixture<TestTranslateDirective>;
   let translateService: TranslateService;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [TranslateModule.forRoot()],
     });
-  }));
+  });
 
   beforeEach(() => {
     translateService = TestBed.inject(TranslateService);

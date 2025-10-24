@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { ComponentFixture, TestBed, waitForAsync, inject, tick, fakeAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
@@ -33,22 +33,20 @@ describe('Register', () => {
   let fixture: ComponentFixture<Register>;
   let comp: Register;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
 <%_ if (enableTranslation) { _%>
-        imports: [TranslateModule.forRoot()],
+      imports: [TranslateModule.forRoot()],
 <%_ } _%>
-        providers: [
-          provideHttpClient(),
-          {
-            provide: ActivatedRoute,
-            useValue: {}
-          }
-        ],
-      });
-    })
-  );
+      providers: [
+        provideHttpClient(),
+        {
+          provide: ActivatedRoute,
+          useValue: {}
+        }
+      ],
+    });
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(Register);
@@ -68,7 +66,7 @@ describe('Register', () => {
 
   it('should update success to true after creating an account', inject(
     [RegisterService<% if (enableTranslation) { %>, TranslateService<% } %>],
-    fakeAsync((service: RegisterService<% if (enableTranslation) { %>, mockTranslateService: TranslateService<% } %>) => {
+    (service: RegisterService<% if (enableTranslation) { %>, mockTranslateService: TranslateService<% } %>) => {
       jest.spyOn(service, 'save').mockReturnValue(of({}));
 <%_ if (enableTranslation) { _%>
       jest.spyOn(mockTranslateService, 'getCurrentLang').mockReturnValue('<%= nativeLanguage %>');
@@ -79,7 +77,6 @@ describe('Register', () => {
       });
 
       comp.register();
-      tick();
 
       expect(service.save).toHaveBeenCalledWith({
         email: '',
@@ -91,12 +88,12 @@ describe('Register', () => {
       expect(comp.errorUserExists()).toBe(false);
       expect(comp.errorEmailExists()).toBe(false);
       expect(comp.error()).toBe(false);
-    }),
+    },
   ));
 
   it('should notify of user existence upon 400/login already in use', inject(
     [RegisterService],
-    fakeAsync((service: RegisterService) => {
+    (service: RegisterService) => {
       const err = { status: 400, error: { type: LOGIN_ALREADY_USED_TYPE } };
       jest.spyOn(service, 'save').mockReturnValue(throwError(() => err));
       comp.registerForm.patchValue({
@@ -105,17 +102,16 @@ describe('Register', () => {
       });
 
       comp.register();
-      tick();
 
       expect(comp.errorUserExists()).toBe(true);
       expect(comp.errorEmailExists()).toBe(false);
       expect(comp.error()).toBe(false);
-    }),
+    },
   ));
 
   it('should notify of email existence upon 400/email address already in use', inject(
     [RegisterService],
-    fakeAsync((service: RegisterService) => {
+    (service: RegisterService) => {
       const err = { status: 400, error: { type: EMAIL_ALREADY_USED_TYPE } };
       jest.spyOn(service, 'save').mockReturnValue(throwError(() => err));
       comp.registerForm.patchValue({
@@ -124,17 +120,16 @@ describe('Register', () => {
       });
 
       comp.register();
-      tick();
 
       expect(comp.errorEmailExists()).toBe(true);
       expect(comp.errorUserExists()).toBe(false);
       expect(comp.error()).toBe(false);
-    }),
+    },
   ));
 
   it('should notify of generic error', inject(
     [RegisterService],
-    fakeAsync((service: RegisterService) => {
+    (service: RegisterService) => {
       const err = { status: 503 };
       jest.spyOn(service, 'save').mockReturnValue(throwError(() => err));
       comp.registerForm.patchValue({
@@ -143,11 +138,10 @@ describe('Register', () => {
       });
 
       comp.register();
-      tick();
 
       expect(comp.errorUserExists()).toBe(false);
       expect(comp.errorEmailExists()).toBe(false);
       expect(comp.error()).toBe(true);
-    }),
+    },
   ));
 });

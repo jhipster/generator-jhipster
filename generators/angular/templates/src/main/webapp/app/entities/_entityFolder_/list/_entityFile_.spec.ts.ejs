@@ -25,7 +25,7 @@ _%>
 import {
   ComponentFixture, TestBed,
 <%_ if (!readOnly) { _%>
-  fakeAsync, inject, tick,
+  inject,
 <%_ } _%>
 } from '@angular/core/testing';
 import { provideHttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
@@ -209,39 +209,31 @@ describe('<%= entityAngularName %> Management Component', () => {
       jest.spyOn(ngbModal, 'open').mockReturnValue(deleteModalMock);
     });
 
-    it('on confirm should call load', inject(
-      [],
-      fakeAsync(() => {
-        // GIVEN
-        jest.spyOn(comp, 'load');
+    it('on confirm should call load', inject([], () => {
+      // GIVEN
+      jest.spyOn(comp, 'load');
 
-        // WHEN
-        comp.delete(sampleWithRequiredData);
-        deleteModalMock.closed.next('deleted');
-        tick();
+      // WHEN
+      comp.delete(sampleWithRequiredData);
+      deleteModalMock.closed.next('deleted');
 
-        // THEN
-        expect(ngbModal.open).toHaveBeenCalled();
-        expect(comp.load).toHaveBeenCalled();
-      }),
-    ));
+      // THEN
+      expect(ngbModal.open).toHaveBeenCalled();
+      expect(comp.load).toHaveBeenCalled();
+    }));
 
-    it('on dismiss should call load', inject(
-      [],
-      fakeAsync(() => {
-        // GIVEN
-        jest.spyOn(comp, 'load');
+    it('on dismiss should call load', inject([], () => {
+      // GIVEN
+      jest.spyOn(comp, 'load');
 
-        // WHEN
-        comp.delete(sampleWithRequiredData);
-        deleteModalMock.closed.next();
-        tick();
+      // WHEN
+      comp.delete(sampleWithRequiredData);
+      deleteModalMock.closed.next();
 
-        // THEN
-        expect(ngbModal.open).toHaveBeenCalled();
-        expect(comp.load).not.toHaveBeenCalled();
-      }),
-    ));
+      // THEN
+      expect(ngbModal.open).toHaveBeenCalled();
+      expect(comp.load).not.toHaveBeenCalled();
+    }));
   });
 <%_ } _%>
 });

@@ -18,7 +18,7 @@
 -%>
 jest.mock('app/core/util/alert.service');
 
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AlertService } from 'app/core/util/alert.service';
 
@@ -29,11 +29,11 @@ describe('Alert Component', () => {
   let fixture: ComponentFixture<Alert>;
   let mockAlertService: AlertService;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [AlertService],
     });
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(Alert);
