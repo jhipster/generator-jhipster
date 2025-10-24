@@ -62,7 +62,7 @@ describe('Home Component', () => {
         {
           provide: AccountService,
           useValue: {
-            isAuthenticated: vitest.fn(),
+            isAuthenticated: jest.fn(),
           },
         },
 <%_ if (authenticationTypeOauth2) { _%>
