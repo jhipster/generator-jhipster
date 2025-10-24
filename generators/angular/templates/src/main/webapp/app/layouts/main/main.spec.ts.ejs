@@ -66,7 +66,7 @@ describe('Main', () => {
         {
           provide: AccountService,
           useValue: {
-            identity: vitest.fn(() => of(null)),
+            identity: jest.fn(() => of(null)),
           },
         },
         { provide: TitleStrategy, useClass: AppPageTitleStrategy },
