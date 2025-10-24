@@ -19,7 +19,7 @@
 <%_
 const tsKeyId = user.primaryKey.tsSampleValues[0];
 _%>
-import { ComponentFixture, TestBed, waitForAsync, inject } from '@angular/core/testing';
+import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 <%_ if (enableTranslation) { _%>
@@ -38,7 +38,7 @@ describe('User Management Update Component', () => {
   let fixture: ComponentFixture<UserManagementUpdate>;
   let service: UserManagementService;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
       providers: [
@@ -51,7 +51,7 @@ describe('User Management Update Component', () => {
         },
       ],
     });
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(UserManagementUpdate);

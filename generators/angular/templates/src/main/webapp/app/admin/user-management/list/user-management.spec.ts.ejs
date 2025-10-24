@@ -21,7 +21,7 @@ const tsKeyId = user.primaryKey.tsSampleValues[0];
 _%>
 jest.mock('app/core/auth/account.service');
 
-import { ComponentFixture, TestBed, waitForAsync, inject, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
 import { provideHttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 <%_ if (enableTranslation) { _%>
@@ -51,12 +51,12 @@ describe('User Management Component', () => {
     }),
   );
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
       providers: [provideHttpClient(), { provide: ActivatedRoute, useValue: { data, queryParamMap } }, AccountService],
     });
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(UserManagement);

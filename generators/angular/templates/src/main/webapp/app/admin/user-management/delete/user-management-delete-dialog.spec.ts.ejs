@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { ComponentFixture, TestBed, waitForAsync, inject } from '@angular/core/testing';
+import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { of } from 'rxjs';
@@ -31,11 +31,11 @@ describe('User Management Delete Component', () => {
   let service: UserManagementService;
   let mockActiveModal: NgbActiveModal;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [provideHttpClient(), NgbActiveModal],
     });
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(UserManagementDeleteDialog);
