@@ -21,7 +21,7 @@ const tsKeyId = user.primaryKey.tsSampleValues[0];
 _%>
 jest.mock('app/core/auth/account.service');
 
-import { ComponentFixture, TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { provideHttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 <%_ if (enableTranslation) { _%>
@@ -67,57 +67,49 @@ describe('User Management Component', () => {
   });
 
   describe('OnInit', () => {
-    it('should call load all on init', inject(
-      [],
-      fakeAsync(() => {
-        // GIVEN
-        const headers = new HttpHeaders().append('link', 'link;link');
-        jest.spyOn(service, 'query').mockReturnValue(
-          of(
-            new HttpResponse({
-              body: [new User(<%- tsKeyId %>)],
-              headers,
-            }),
-          ),
-        );
+    it('should call load all on init', inject([], () => {
+      // GIVEN
+      const headers = new HttpHeaders().append('link', 'link;link');
+      jest.spyOn(service, 'query').mockReturnValue(
+        of(
+          new HttpResponse({
+            body: [new User(<%- tsKeyId %>)],
+            headers,
+          }),
+        ),
+      );
 
-        // WHEN
-        comp.ngOnInit();
-        tick(); // simulate async
+      // WHEN
+      comp.ngOnInit();
 
-        // THEN
-        expect(service.query).toHaveBeenCalled();
-        expect(comp.users()?.[0]).toEqual(expect.objectContaining({ id: <%- tsKeyId %> }));
-      })
-    ));
+      // THEN
+      expect(service.query).toHaveBeenCalled();
+      expect(comp.users()?.[0]).toEqual(expect.objectContaining({ id: <%- tsKeyId %> }));
+    }));
   });
 
   describe('setActive', () => {
-    it('should update user and call load all', inject(
-      [],
-      fakeAsync(() => {
-        // GIVEN
-        const headers = new HttpHeaders().append('link', 'link;link');
-        const user = new User(<%- tsKeyId %>);
-        jest.spyOn(service, 'query').mockReturnValue(
-          of(
-            new HttpResponse({
-              body: [user],
-              headers,
-            }),
-          ),
-        );
-        jest.spyOn(service, 'update').mockReturnValue(of(user));
+    it('should update user and call load all', inject([], () => {
+      // GIVEN
+      const headers = new HttpHeaders().append('link', 'link;link');
+      const user = new User(<%- tsKeyId %>);
+      jest.spyOn(service, 'query').mockReturnValue(
+        of(
+          new HttpResponse({
+            body: [user],
+            headers,
+          }),
+        ),
+      );
+      jest.spyOn(service, 'update').mockReturnValue(of(user));
 
-        // WHEN
-        comp.setActive(user, true);
-        tick(); // simulate async
+      // WHEN
+      comp.setActive(user, true);
 
-        // THEN
-        expect(service.update).toHaveBeenCalledWith({ ...user, activated: true });
-        expect(service.query).toHaveBeenCalled();
-        expect(comp.users()?.[0]).toEqual(expect.objectContaining({ id: <%- tsKeyId %> }));
-      })
-    ));
+      // THEN
+      expect(service.update).toHaveBeenCalledWith({ ...user, activated: true });
+      expect(service.query).toHaveBeenCalled();
+      expect(comp.users()?.[0]).toEqual(expect.objectContaining({ id: <%- tsKeyId %> }));
+    }));
   });
 });
