@@ -112,7 +112,7 @@ import org.hibernate.type.SqlTypes;
                <%= relationship.otherEntity.primaryKey.fields.length > 1 ? '}' : '' %>
       <%_ } _%>
   <%_ } else { -%>
-      <%_ if (relationship.ignoreOtherSideProperty) { -%>
+      <%_ if (relationship.ignoreOtherSideProperty && (!dtoMapstruct || !databaseTypeSql )) { -%>
     @JsonIgnoreProperties(value = {
         <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
         "<%= otherRelationship.propertyName %>",

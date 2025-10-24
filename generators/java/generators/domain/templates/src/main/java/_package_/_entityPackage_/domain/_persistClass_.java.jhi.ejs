@@ -148,31 +148,37 @@ for (relationship of relationships) {
 <&- fragments.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection() -&>
   <%_ if (relationship.relationshipOneToMany) { _%>
     <%_ if (relationship.ignoreOtherSideProperty) { _%>
+      <%_ if (!dtoMapstruct || !databaseTypeSql ) { _%>
     @JsonIgnoreProperties(value = {
         <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
         "<%= otherRelationship.propertyName %>",
         <%_ }); _%>
     }, allowSetters = true)
+      <%_ } _%>
     <%_ } _%>
     private Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.relationshipFieldNamePlural %> = new HashSet<>();
 
   <%_ } else if (relationship.relationshipManyToOne) { _%>
     <%_ if (relationship.ignoreOtherSideProperty) { _%>
+      <%_ if (!dtoMapstruct || !databaseTypeSql ) { _%>
     @JsonIgnoreProperties(value = {
       <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
         "<%= otherRelationship.propertyName %>",
       <%_ }); _%>
     }, allowSetters = true)
+      <%_ } _%>
     <%_ } _%>
     private <%= relationship.otherEntity.persistClass %> <%= relationship.relationshipFieldName %>;
 
   <%_ } else if (relationship.relationshipManyToMany) { _%>
     <%_ if (relationship.ignoreOtherSideProperty) { _%>
+      <%_ if (!dtoMapstruct || !databaseTypeSql ) { _%>
     @JsonIgnoreProperties(value = {
       <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
         "<%= otherRelationship.propertyName %>",
       <%_ }); _%>
     }, allowSetters = true)
+      <%_ } _%>
     <%_ } _%>
     private Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.relationshipFieldNamePlural %> = new HashSet<>();
 
