@@ -94,8 +94,8 @@ export default class Settings implements OnInit {
         }
 <%_ } _%>
       },
-      error: () => {
-        // Ignore error
+      error() {
+        // Handled by interceptor.
       },
     });
   }
