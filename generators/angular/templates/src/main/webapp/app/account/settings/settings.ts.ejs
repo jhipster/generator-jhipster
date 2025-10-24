@@ -21,6 +21,8 @@ import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angula
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
+import { of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import SharedModule from 'app/shared/shared.module';
 import { AccountService } from 'app/core/auth/account.service';
