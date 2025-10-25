@@ -35,9 +35,19 @@ export const files = asWriteFilesSection({
         'package.json',
         'tsconfig.json',
         'tsconfig.app.json',
-        'tsconfig.spec.json',
-        'jest.conf.js',
       ],
+    }),
+    clientRootTemplatesBlock({
+      condition: ctx => ctx.clientTestFramework === 'jest',
+      templates: ['tsconfig.spec.json', 'jest.conf.js'],
+    }),
+    clientRootTemplatesBlock({
+      condition: ctx => ctx.clientTestFramework === 'vitest',
+      templates: ['tsconfig.vitest.json', 'vitest.config.ts'],
+    }),
+    clientApplicationTemplatesBlock({
+      condition: ctx => ctx.clientTestFramework === 'vitest',
+      templates: ['test-setup.ts'],
     }),
     clientRootTemplatesBlock({
       condition: ctx => ctx.enableTranslation && ctx.enableI18nRTL,

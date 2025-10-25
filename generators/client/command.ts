@@ -140,6 +140,22 @@ const command = {
       }),
       scope: 'storage',
     },
+    clientTestFramework: {
+      description: 'Client unit test framework',
+      cli: {
+        type: String,
+      },
+      prompt: ({ jhipsterConfigWithDefaults: config }) => ({
+        when: answers => (answers.clientFramework ?? config.clientFramework) === ANGULAR,
+        type: 'list',
+        message: 'Which unit test framework would you like to use?',
+      }),
+      choices: [
+        { value: 'jest', name: 'Jest' },
+        { value: 'vitest', name: 'Vitest (experimental Angular support)' },
+      ],
+      scope: 'storage',
+    },
     clientTestFrameworks: {
       description: 'Client test frameworks',
       cli: {

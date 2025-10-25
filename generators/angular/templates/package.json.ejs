@@ -67,9 +67,14 @@
     "@angular/cli": "<%= nodeDependencies['@angular/cli'] %>",
     "@angular/compiler-cli": "<%= nodeDependencies['@angular/common'] %>",
     "@angular/service-worker": "<%= nodeDependencies['@angular/common'] %>",
+<%_ if (clientTestFramework === 'jest') { _%>
     "@angular-builders/jest": "<%= nodeDependencies['@angular-builders/jest'] %>",
+<%_ } _%>
     "@eslint/js": null,
+<%_ if (clientTestFramework === 'jest') { _%>
     "@types/jest": "<%= nodeDependencies['@types/jest'] %>",
+<%_ } _%>
+
     "@types/node": "<%= nodeDependencies['@types/node'] %>",
     "angular-eslint": "<%= nodeDependencies['angular-eslint'] %>",
     "browser-sync": "<%= nodeDependencies['browser-sync'] %>",
@@ -78,17 +83,26 @@
     "eslint-config-prettier": "<%= nodeDependencies['eslint-config-prettier'] %>",
     "eslint-plugin-prettier": "<%= nodeDependencies['eslint-plugin-prettier'] %>",
     "globals": "<%= nodeDependencies.globals %>",
+<%_ if (clientTestFramework === 'jest') { _%>
     "jest": "<%= nodeDependencies['jest'] %>",
     "jest-environment-jsdom": "<%= nodeDependencies['jest'] %>",
     "jest-preset-angular": "<%= nodeDependencies['jest-preset-angular'] %>",
     "jest-junit": "<%= nodeDependencies['jest-junit'] %>",
     "jest-sonar": "<%= nodeDependencies['jest-sonar'] %>",
+<%_ } else { _%>
+    "jsdom": "<%= nodeDependencies['jsdom'] %>",
+    "vitest": "<%= nodeDependencies['vitest'] %>",
+<%_ } _%>
+
 <%_ if (enableI18nRTL) { _%>
     "postcss-rtlcss": "<%= nodeDependencies['postcss-rtlcss'] %>",
 <%_ } _%>
     "rimraf": "<%= nodeDependencies['rimraf'] %>",
     "swagger-ui-dist": "<%= nodeDependencies['swagger-ui-dist'] %>",
+<%_ if (clientTestFramework === 'jest') { _%>
     "ts-jest": "<%= nodeDependencies['ts-jest'] %>",
+<%_ } _%>
+
     "typescript": "<%= nodeDependencies['typescript'] %>",
     "typescript-eslint": "<%= nodeDependencies['typescript-eslint'] %>"
   },
@@ -103,7 +117,10 @@
     "lint:fix": "<%- nodePackageManager %> run lint -- --fix",
     "cleanup": "rimraf <%= this.relativeDir(clientRootDir, temporaryDir) %>",
     "clean-www": "rimraf <%= this.relativeDir(clientRootDir, clientDistDir) %>",
+<%_ if (clientTestFramework === 'jest') { _%>
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
+<%_ } _%>
+
     "start": "ng serve<% if (!microfrontend) { %> --hmr<% } %>",
     "start-tls": "<%- nodePackageManager %> run webapp:dev-ssl",
 <%_ if (skipServer) { _%>
@@ -112,7 +129,12 @@
     "serve": "<%- nodePackageManager %> run start --",
     "build": "<%- nodePackageManager %> run webapp:prod --",
     "pretest": "<%- nodePackageManager %> run lint",
+<%_ if (clientTestFramework === 'jest') { _%>
     "test": "ng test --coverage --log-heap-usage -w=2",
+<%_ } else { _%>
+    "test": "ng test",
+<%_ } _%>
+
     "test:watch": "<%- nodePackageManager %> run test -- --watch",
     "watch": "concurrently npm:start<% if(!skipServer) { %> npm:backend:start<% } %>",
     "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'<% if(!skipServer) { %> npm:backend:start<% } %>",
