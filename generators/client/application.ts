@@ -40,6 +40,8 @@ export type ClientAddedApplicationProperties = {
   clientBundlerName: string;
   clientTestFramework: 'vitest' | 'jest';
   clientTestFrameworkName: string;
+  clientTestFrameworkJest: boolean;
+  clientTestFrameworkVitest: boolean;
   withAdminUi: boolean;
 };
 
@@ -63,7 +65,13 @@ export const mutateApplication = {
   clientThemeNone: ({ clientTheme }) => !clientTheme || clientTheme === 'none',
   clientThemeAny: ({ clientThemeNone }) => !clientThemeNone,
   clientBundlerName: ctx => (ctx.clientBundlerEsbuild ? 'esbuild' : startCase(ctx.clientBundler)),
-  clientTestFramework: ctx => (ctx.clientFrameworkVue ? 'vitest' : 'jest'),
+  clientTestFramework: ctx => {
+    if (ctx.clientFrameworkVue) return 'vitest';
+    if (ctx.clientFrameworkAngular) return ctx.clientTestFramework || 'jest';
+    return 'jest';
+  },
   clientTestFrameworkName: ctx => startCase(ctx.clientTestFramework),
+  clientTestFrameworkJest: ctx => ctx.clientTestFramework === 'jest',
+  clientTestFrameworkVitest: ctx => ctx.clientTestFramework === 'vitest',
   withAdminUi: ctx => ctx.applicationTypeMicroservice,
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<ClientApplication>, ClientAddedApplicationProperties>;
