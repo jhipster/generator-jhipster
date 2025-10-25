@@ -44,12 +44,14 @@ innodb_data_file_path = ibdata1:10M:autoextend
 innodb_buffer_pool_size = 16M
 #innodb_additional_mem_pool_size = 2M
 # Set .._log_file_size to 25 % of buffer pool size
+innodb_redo_log_capacity = 64M
 innodb_log_buffer_size = 8M
 innodb_flush_log_at_trx_commit = 1
 innodb_lock_wait_timeout = 50
 
 symbolic-links=0
 innodb_buffer_pool_size=5M
+innodb_log_buffer_size=256K
 max_connections=20
 key_buffer_size=8
 thread_cache_size=0
@@ -60,7 +62,7 @@ innodb_ft_total_cache_size=32000000
 #### http://www.tocker.ca/2014/03/10/configuring-mysql-to-use-minimal-memory.html
 
 # per thread or per operation settings
-thread_stack=131072
+#thread_stack=131072
 sort_buffer_size=32K
 read_buffer_size=8200
 read_rnd_buffer_size=8200

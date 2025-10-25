@@ -601,6 +601,9 @@ exports[`generator - sql gateway-jwt-mysql-reactive(false)-maven-enableTranslati
   "src/test/java/tech/jhipster/repository/timezone/DateTimeWrapperRepository.java": {
     "stateCleared": "modified",
   },
+  "src/test/resources/conf/mysql/my.cnf": {
+    "stateCleared": "modified",
+  },
   "src/test/resources/config/application-testdev.yml": {
     "stateCleared": "modified",
   },
@@ -802,6 +805,9 @@ exports[`generator - sql gateway-jwt-mysql-reactive(true)-gradle-enableTranslati
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/conf/mysql/my.cnf": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -3181,6 +3187,9 @@ exports[`generator - sql gateway-oauth2-mysql-reactive(true)-gradle-enableTransl
   "src/test/java/com/mycompany/domain/AuthorityTestSamples.java": {
     "stateCleared": "modified",
   },
+  "src/test/resources/conf/mysql/my.cnf": {
+    "stateCleared": "modified",
+  },
   "src/test/resources/config/application-testdev.yml": {
     "stateCleared": "modified",
   },
@@ -4483,6 +4492,9 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/repository/timezone/DateTimeWrapperRepository.java": {
     "stateCleared": "modified",
   },
+  "src/test/resources/conf/mysql/my.cnf": {
+    "stateCleared": "modified",
+  },
   "src/test/resources/config/application-testdev.yml": {
     "stateCleared": "modified",
   },
@@ -4717,6 +4729,9 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/conf/mysql/my.cnf": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -6790,6 +6805,9 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
   "src/test/java/com/mycompany/domain/AssertUtils.java": {
     "stateCleared": "modified",
   },
+  "src/test/resources/conf/mysql/my.cnf": {
+    "stateCleared": "modified",
+  },
   "src/test/resources/config/application-testdev.yml": {
     "stateCleared": "modified",
   },
@@ -8567,6 +8585,9 @@ exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/repository/timezone/DateTimeWrapperRepository.java": {
     "stateCleared": "modified",
   },
+  "src/test/resources/conf/mysql/my.cnf": {
+    "stateCleared": "modified",
+  },
   "src/test/resources/config/application-testdev.yml": {
     "stateCleared": "modified",
   },
@@ -8801,6 +8822,9 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/conf/mysql/my.cnf": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -10904,6 +10928,9 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
   "src/test/java/tech/jhipster/repository/timezone/DateTimeWrapperRepository.java": {
     "stateCleared": "modified",
   },
+  "src/test/resources/conf/mysql/my.cnf": {
+    "stateCleared": "modified",
+  },
   "src/test/resources/config/application-testdev.yml": {
     "stateCleared": "modified",
   },
@@ -11105,6 +11132,9 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/conf/mysql/my.cnf": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
@@ -13391,6 +13421,9 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
   "src/test/java/tech/jhipster/repository/timezone/DateTimeWrapperRepository.java": {
     "stateCleared": "modified",
   },
+  "src/test/resources/conf/mysql/my.cnf": {
+    "stateCleared": "modified",
+  },
   "src/test/resources/config/application-testdev.yml": {
     "stateCleared": "modified",
   },
@@ -13628,6 +13661,9 @@ exports[`generator - sql monolith-session-mysql-reactive(true)-gradle-enableTran
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/conf/mysql/my.cnf": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
