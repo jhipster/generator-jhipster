@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { TrackerService } from 'app/core/tracker/tracker.service';
@@ -29,7 +29,7 @@ import SharedModule from 'app/shared/shared.module';
   templateUrl: './tracker.html',
 })
 export default class Tracker implements OnInit, OnDestroy {
-  activities: TrackerActivity[] = [];
+  activities = signal<TrackerActivity[]>([]);
   subscription?: Subscription;
 
   private readonly trackerService = inject(TrackerService);
@@ -37,20 +37,22 @@ export default class Tracker implements OnInit, OnDestroy {
   showActivity(activity: TrackerActivity): void {
     let existingActivity = false;
 
-    for (let index = 0; index < this.activities.length; index++) {
-      if (this.activities[index].sessionId === activity.sessionId) {
-        existingActivity = true;
+    this.activities.update(activities => {
+      activities = [...activities];
+      const sessionIndex = activities.findIndex(a => a.sessionId === activity.sessionId);
+      if (sessionIndex > -1) {
+        // Update or remove existing session activity
         if (activity.page === 'logout') {
-          this.activities.splice(index, 1);
+          activities.splice(sessionIndex, 1);
         } else {
-          this.activities[index] = activity;
+          activities[sessionIndex] = activity;
         }
+      } else if (activity.page !== 'logout') {
+        activities.push(activity);
       }
-    }
 
-    if (!existingActivity && activity.page !== 'logout') {
-      this.activities.push(activity);
-    }
+      return activities;
+    });
   }
 
   ngOnInit(): void {

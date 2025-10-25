@@ -116,7 +116,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
                   <%= otherEntity.entityInstance %>Collection,
                   ...additional<%= otherEntity.entityAngularNamePlural %>.map(expect.objectContaining)
                 );
-                expect(comp.<%= otherEntity.entityInstancePlural %>SharedCollection).toEqual(expectedCollection);
+                expect(comp.<%= otherEntity.entityInstancePlural %>SharedCollection()).toEqual(expectedCollection);
         });
 
   <%_ } _%>
@@ -137,7 +137,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
 
                 expect(<%= otherEntity.entityInstance %>Service.query).toHaveBeenCalled();
                 expect(<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing).toHaveBeenCalledWith(<%= relationship.propertyName %>Collection, <%= relationship.propertyName %>);
-                expect(comp.<%= relationship.relationshipFieldNamePlural %>Collection).toEqual(expectedCollection);
+                expect(comp.<%= relationship.relationshipFieldNamePlural %>Collection()).toEqual(expectedCollection);
         });
 
   <%_ } _%>
@@ -159,7 +159,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
   <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipOneToOne && rel.otherRelationship); _%>
   <%_ for (const relationship of relationshipsByEntityNeedingOptions) { _%>
     <%_ const otherEntity = relationship.otherEntity _%>
-            expect(comp.<% if (!relationshipsWithCustomUniqueOptions.includes(relationship)) { %><%= otherEntity.entityInstancePlural %>Shared<% } else { %><%= relationship.relationshipFieldNamePlural %><% } %>Collection).toContainEqual(<%= relationship.relationshipName %>);
+            expect(comp.<% if (!relationshipsWithCustomUniqueOptions.includes(relationship)) { %><%= otherEntity.entityInstancePlural %>Shared<% } else { %><%= relationship.relationshipFieldNamePlural %><% } %>Collection()).toContainEqual(<%= relationship.relationshipName %>);
   <%_ } _%>
 <%_ } _%>
             expect(comp.<%= entityInstance %>).toEqual(<%= entityInstance %>);
