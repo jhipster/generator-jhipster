@@ -16,6 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (angularTestFrameworkVitest) { _%>
+import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+<%_ } _%>
 import { DOCUMENT } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
@@ -66,7 +69,7 @@ describe('Main', () => {
         {
           provide: AccountService,
           useValue: {
-            identity: jest.fn(() => of(null)),
+            identity: <%= angularTestFramework %>.fn(() => of(null)),
           },
         },
         { provide: TitleStrategy, useClass: AppPageTitleStrategy },
@@ -107,10 +110,10 @@ describe('Main', () => {
     beforeEach(() => {
       routerState.snapshot.root = { data: {} };
 <%_ if (enableTranslation) { _%>
-      jest.spyOn(translateService, 'get').mockImplementation((key: string | string[]) => of(`${key as string} translated`));
-      jest.spyOn(translateService, 'getCurrentLang').mockReturnValue('<%= nativeLanguage %>');
+      <%= angularTestFramework %>.spyOn(translateService, 'get').mockImplementation((key: string | string[]) => of(`${key as string} translated`));
+      <%= angularTestFramework %>.spyOn(translateService, 'getCurrentLang').mockReturnValue('<%= nativeLanguage %>');
 <%_ } _%>
-      jest.spyOn(titleService, 'setTitle');
+      <%= angularTestFramework %>.spyOn(titleService, 'setTitle');
       comp.ngOnInit();
     });
 
@@ -263,7 +266,7 @@ describe('Main', () => {
 
       // WHEN
   <%_ if (enableI18nRTL) { _%>
-      findLanguageFromKeyPipe.isRTL = jest.fn(() => false);
+      findLanguageFromKeyPipe.isRTL = <%= angularTestFramework %>.fn(() => false);
   <%_ } _%>
       langChangeSubject.next({ lang: 'lang1', translations: {} as InterpolatableTranslationObject });
 
@@ -275,7 +278,7 @@ describe('Main', () => {
 
       // WHEN
   <%_ if (enableI18nRTL) { _%>
-      findLanguageFromKeyPipe.isRTL = jest.fn(() => true);
+      findLanguageFromKeyPipe.isRTL = <%= angularTestFramework %>.fn(() => true);
   <%_ } _%>
       langChangeSubject.next({ lang: 'lang2', translations: {} as InterpolatableTranslationObject });
 
