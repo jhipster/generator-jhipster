@@ -31,6 +31,10 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
       templates: ['config/mysql/my.cnf'],
     },
     {
+      condition: ctx => ctx.dockerServices!.includes('mysql'),
+      templates: [{ sourceFile: 'my.cnf', destinationFile: ctx => `${ctx.srcTestResources}conf/my.cnf` }],
+    },
+    {
       condition: ctx => ctx.dockerServices!.includes('mariadb'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
