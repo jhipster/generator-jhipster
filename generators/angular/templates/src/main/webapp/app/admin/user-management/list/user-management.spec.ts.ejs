@@ -19,19 +19,18 @@
 <%_
 const tsKeyId = user.primaryKey.tsSampleValues[0];
 _%>
-jest.mock('app/core/auth/account.service');
-
+import { HttpHeaders, HttpResponse, provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
-import { provideHttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+
 <%_ if (enableTranslation) { _%>
 import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 import { of } from 'rxjs';
 
+import { AccountService } from 'app/core/auth/account.service';
 import { UserManagementService } from '../service/user-management.service';
 import { User } from '../user-management.model';
-import { AccountService } from 'app/core/auth/account.service';
 
 import UserManagement from './user-management';
 
@@ -53,8 +52,10 @@ describe('User Management Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
-      providers: [provideHttpClient(), { provide: ActivatedRoute, useValue: { data, queryParamMap } }, AccountService],
+<%_ if (enableTranslation) { _%>
+      imports: [TranslateModule.forRoot()],
+<%_ } _%>
+      providers: [provideHttpClient(), AccountService, { provide: ActivatedRoute, useValue: { data, queryParamMap } }],
     });
   });
 
@@ -63,6 +64,7 @@ describe('User Management Component', () => {
     comp = fixture.componentInstance;
     service = TestBed.inject(UserManagementService);
     mockAccountService = TestBed.inject(AccountService);
+    mockAccountService.isAuthenticated = jest.fn(() => false);
     mockAccountService.identity = jest.fn(() => of(null));
   });
 

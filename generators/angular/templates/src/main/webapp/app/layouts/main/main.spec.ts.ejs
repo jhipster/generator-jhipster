@@ -16,8 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-jest.mock('app/core/auth/account.service');
-
 import { DOCUMENT } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
@@ -65,7 +63,12 @@ describe('Main', () => {
 <%_ if (enableI18nRTL) { _%>
         FindLanguageFromKeyPipe,
 <%_ } _%>
-        AccountService,
+        {
+          provide: AccountService,
+          useValue: {
+            identity: jest.fn(() => of(null)),
+          },
+        },
         { provide: TitleStrategy, useClass: AppPageTitleStrategy },
       ],
     });
@@ -82,7 +85,6 @@ describe('Main', () => {
   <%_ } _%>
 <%_ } _%>
     mockAccountService = TestBed.inject(AccountService);
-    mockAccountService.identity = jest.fn(() => of(null));
     router = TestBed.inject(Router);
     document = TestBed.inject(DOCUMENT);
     <%_ if (enableTranslation) { _%>
