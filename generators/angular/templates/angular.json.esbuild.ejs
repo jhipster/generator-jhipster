@@ -151,7 +151,7 @@
 <%_ } else { _%>
             "runner": "vitest",
             "buildTarget": "::development",
-            "providersFile": "<%= clientSrcDir %>default-test-providers.ts",
+            "providersFile": "<%= this.relativeDir(clientRootDir, clientSrcDir) %>default-test-providers.ts",
 <%_ } _%>
             "tsConfig": "tsconfig.spec.json"
           }
