@@ -68,7 +68,9 @@ describe('Home Component', () => {
 <%_ if (authenticationTypeOauth2) { _%>
         {
           provide: LoginService,
-          useValue: {},
+          useValue: {
+            login: jest.fn(),
+          },
         },
 <%_ } _%>
       ],
