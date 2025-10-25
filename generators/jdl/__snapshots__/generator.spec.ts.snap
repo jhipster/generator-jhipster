@@ -229,6 +229,7 @@ Options:
   --client-framework <value>               Provide client framework for the application (choices: "angular", "react", "vue", "no")
   --microfrontend                          Enable microfrontend support
   --microfrontends <value>                 Microfrontends to load
+  --client-test-framework <value>          Client unit test framework (choices: "jest", "vitest")
   --with-admin-ui                          Generate administrative user interface
   --client-root-dir <value>                Client root
   --cypress-coverage                       Enable Cypress code coverage report generation
