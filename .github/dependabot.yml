@@ -82,7 +82,6 @@ updates:
           - 'ngx-cookie-service'
           - 'ngx-infinite-scroll'
           - 'typescript'
-          - 'zone.js'
       fortawesome:
         patterns:
           - '@fortawesome/fontawesome-svg-core'
