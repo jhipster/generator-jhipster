@@ -126,7 +126,7 @@ jobs:
         id: e2e
         if: steps.compare.outputs.equals != 'true'
       - name: Store the application
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always() && (steps.e2e.outcome == 'failure' || steps.packaging.outcome == 'failure')
         with:
           name: app-${{ matrix.sample }}
@@ -141,7 +141,7 @@ jobs:
             !**/app/*/target/**
             !**/node_modules/**
       - name: 'E2E: Store failure screenshots'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always() && steps.e2e.outcome == 'failure'
         with:
           name: screenshots-${{ matrix.sample }}
