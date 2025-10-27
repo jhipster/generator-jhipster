@@ -48,6 +48,7 @@
 <%_ if (communicationSpringWebsocket) { _%>
               "./<%= this.relativeDir(clientRootDir, clientSrcDir) %>sockjs-client.polyfill",
 <%_ } _%>
+              "zone.js",
               "@angular/localize/init"
             ],
             "tsConfig": "tsconfig.app.json",
