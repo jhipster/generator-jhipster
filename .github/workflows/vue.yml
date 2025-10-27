@@ -162,7 +162,7 @@ jobs:
         run: npm run ci:e2e:run --if-present
         timeout-minutes: 15
       - name: Store the application
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always() && (steps.backend.outcome == 'failure' || steps.e2e.outcome == 'failure' || steps.frontend.outcome == 'failure' || steps.packaging.outcome == 'failure' || steps.docker-compose.outcome == 'failure')
         with:
           name: app-${{ matrix.sample }}
@@ -177,13 +177,13 @@ jobs:
             !**/app/*/target/**
             !**/node_modules/**
       - name: 'BACKEND: Store failure logs'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always() && steps.backend.outcome == 'failure'
         with:
           name: log-${{ matrix.sample }}
           path: ${{ github.workspace }}/app/**/test-results/**/*.xml
       - name: 'E2E: Store failure screenshots'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always() && steps.e2e.outcome == 'failure'
         with:
           name: screenshots-${{ matrix.sample }}

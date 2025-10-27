@@ -108,13 +108,13 @@ jobs:
         run: npm run ci:e2e:run --if-present
         timeout-minutes: 15
       - name: 'BACKEND: Store failure logs'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always() && steps.backend.outcome == 'failure'
         with:
           name: log-${{ inputs.issue || github.event.issue.number }}
           path: ${{ steps.setup.outputs.application-path }}/**/test-results/**/*.xml
       - name: 'E2E: Store failure screenshots'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always() && steps.e2e.outcome == 'failure'
         with:
           name: screenshots-${{ inputs.issue || github.event.issue.number }}
