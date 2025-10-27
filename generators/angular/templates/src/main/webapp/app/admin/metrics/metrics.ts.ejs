@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { combineLatest } from 'rxjs';
 
 import SharedModule from 'app/shared/shared.module';
@@ -34,7 +34,6 @@ import { MetricsSystem } from './blocks/metrics-system/metrics-system';
 @Component({
   selector: '<%= jhiPrefixDashed %>-metrics',
   templateUrl: './metrics.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     SharedModule,
     JvmMemory,
@@ -53,7 +52,6 @@ export default class Metrics implements OnInit {
   updatingMetrics = signal(true);
 
   private readonly metricsService = inject(MetricsService);
-  private readonly changeDetector = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.refresh();
@@ -65,7 +63,6 @@ export default class Metrics implements OnInit {
       this.metrics.set(metrics);
       this.threads.set(threadDump.threads);
       this.updatingMetrics.set(false);
-      this.changeDetector.markForCheck();
     });
   }
 
