@@ -35,11 +35,11 @@ const expectedEntity = (entity: any) => ({
   primaryKey: expectedPrimaryKey(entity.primaryKey),
 });
 
-export const testBootstrapApplication = (generator: string) => {
+export const testBootstrapApplication = (generator: string, config: any = {}) => {
   describe(`bootstrapping`, () => {
     describe('default config', () => {
       before(async () => {
-        await helpers.runJHipster(generator).withJHipsterConfig({});
+        await helpers.runJHipster(generator).withJHipsterConfig(config);
       });
 
       it('should prepare application', () => {
@@ -49,11 +49,11 @@ export const testBootstrapApplication = (generator: string) => {
   });
 };
 
-export const testBootstrapEntities = (generator: string) => {
+export const testBootstrapEntities = (generator: string, config: any = {}) => {
   describe(`bootstrapping`, () => {
     describe('default config', () => {
       before(async () => {
-        await helpers.runJHipster(generator).withJHipsterConfig({}, entitiesSimple);
+        await helpers.runJHipster(generator).withJHipsterConfig(config, entitiesSimple);
       });
 
       it('should prepare entity names', () => {

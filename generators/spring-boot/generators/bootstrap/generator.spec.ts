@@ -53,5 +53,5 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
-  testBootstrapEntities(generator);
+  testBootstrapEntities(generator, { skipClient: true });
 });

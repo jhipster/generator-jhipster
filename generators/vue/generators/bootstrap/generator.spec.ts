@@ -55,5 +55,5 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
-  testBootstrapApplication(generator);
+  testBootstrapApplication(generator, { clientFramework: 'vue' });
 });
