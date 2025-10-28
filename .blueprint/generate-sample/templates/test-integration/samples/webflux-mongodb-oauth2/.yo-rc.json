@@ -7,6 +7,7 @@
     "cacheProvider": "no",
     "clientBundler": "webpack",
     "clientFramework": "angular",
+    "clientTestFramework": "vitest",
     "clientTheme": "none",
     "creationTimestamp": 1580314672693,
     "databaseType": "mongodb",

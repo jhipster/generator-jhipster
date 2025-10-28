@@ -41,6 +41,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "app-sample": "ng-default",
       "jdl-entity": "*",
       "generatorOptions": {
+        "clientTestFramework": "vitest",
         "clientBundler": "webpack"
       },
       "workspaces": "false",
