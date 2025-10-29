@@ -19,6 +19,7 @@ describe('jdl options', () => {
   "databaseMigration",
   "graalvmSupport",
   "incrementalChangelog",
+  "clientTestFramework",
   "routes",
 ]
 `);
@@ -40,7 +41,7 @@ describe('jdl options', () => {
       throw new Error(`No choices found for ${optionName}`);
     }
 
-    describe(`generators - server - jdl - ${optionName}`, function () {
+    describe(`jdl - ${optionName}`, function () {
       choices.forEach(optionValue => {
         if (isArray) {
           optionValue = `[${optionValue}]`;
