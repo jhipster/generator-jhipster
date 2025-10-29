@@ -27,7 +27,7 @@
     "node_modules"
   ],
   "dependencies": {
-<%_ if (clientTestFrameworkJest) { _%>
+<%_ if (clientTestFrameworkJest || microfrontend) { _%>
     "zone.js": "<%= nodeDependencies['zone.js'] %>",
 <%_ } _%>
     "@angular/common": "<%= nodeDependencies['@angular/common'] %>",
