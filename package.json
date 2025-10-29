@@ -179,7 +179,7 @@
     "yeoman-generator": "^8.0.0-beta.6"
   },
   "devDependencies": {
-    "@eslint/core": "0.16.0",
+    "@eslint/core": "0.17.0",
     "@node-loaders/esbuild": "2.0.0",
     "@types/chai": "5.2.3",
     "@types/debug": "4.1.12",
