@@ -97,6 +97,10 @@ export const mysqlFiles = asWriteFilesSection<Application>({
       ...javaTestPackageTemplatesBlock(),
       templates: ['config/MysqlTestContainer.java'],
     },
+    {
+      ...javaTestResourceTemplatesBlock(),
+      templates: ['conf/mysql/my.cnf'],
+    },
   ],
 });
 
