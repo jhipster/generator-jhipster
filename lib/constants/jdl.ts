@@ -16,25 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
-import { ALPHANUMERIC_PATTERN } from '../../lib/constants/jdl.ts';
 
-const command = {
-  configs: {
-    messageBroker: {
-      description: 'message broker',
-      cli: {
-        type: String,
-      },
-      jdl: {
-        type: 'string',
-        tokenType: 'NAME',
-        tokenValuePattern: ALPHANUMERIC_PATTERN,
-      },
-      choices: ['kafka', 'pulsar', 'no'],
-      scope: 'storage',
-    },
-  },
-} as const satisfies JHipsterCommandDefinition;
-
-export default command;
+export const ALPHANUMERIC_PATTERN = /^[A-Za-z][A-Za-z0-9]*$/;
