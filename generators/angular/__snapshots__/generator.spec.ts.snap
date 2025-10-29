@@ -185,9 +185,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/core/util/parse-links.service.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/entities/entity-navbar-items.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.html": {
     "stateCleared": "modified",
   },
@@ -1112,9 +1109,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/admin/authority/update/authority-update.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/entities/entity-navbar-items.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.html": {
@@ -3689,9 +3683,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/entities/admin/authority/update/authority-update.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/entity-navbar-items.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.html": {
     "stateCleared": "modified",
   },
@@ -4430,9 +4421,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/core/util/parse-links.service.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/entities/entity-navbar-items.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.html": {
     "stateCleared": "modified",
   },
@@ -5123,9 +5111,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/util/parse-links.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/entity-navbar-items.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.html": {

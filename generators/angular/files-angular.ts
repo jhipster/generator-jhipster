@@ -112,18 +112,20 @@ export const files = asWriteFilesSection({
       condition: generator => generator.clientBundlerWebpack && generator.microfrontend,
       templates: ['webpack/webpack.microfrontend.js'],
     }),
-    {
-      condition: generator => generator.microfrontend && generator.applicationTypeGateway,
-      ...clientApplicationTemplatesBlock(),
+    clientApplicationTemplatesBlock({
+      condition: data => data.microfrontend && data.applicationTypeGateway,
       templates: ['core/microfrontend/index.ts'],
-    },
+    }),
+    clientApplicationTemplatesBlock({
+      condition: data => data.microfrontend && data.applicationTypeMicroservice,
+      templates: ['entities/entity-navbar-items.ts'],
+    }),
   ],
   angularMain: [
     {
       ...clientApplicationTemplatesBlock(),
       templates: [
         // entities
-        'entities/entity-navbar-items.ts',
         'entities/entity.routes.ts',
         // home module
         'home/home.ts',
