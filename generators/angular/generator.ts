@@ -311,6 +311,21 @@ export default class AngularGenerator extends AngularApplicationGenerator {
 
   get writingEntities() {
     return this.asWritingEntitiesTaskGroup({
+      async cleanup({ control, application }) {
+        await control.cleanupFiles({
+          '9.0.0-alpha.0': [
+            [
+              application.clientBundlerEsbuild!,
+              `${application.clientRootDir}build-plugins/define-esbuild.mjs`,
+              `${application.clientRootDir}build-plugins/i18n-esbuild.mjs`,
+            ],
+            [
+              !application.microfrontend || !application.applicationTypeMicroservice,
+              `${application.clientSrcDir}app/entities/entity-navbar-items.ts`,
+            ],
+          ],
+        });
+      },
       cleanupEntitiesFiles,
       writeEntitiesFiles,
     });
@@ -387,17 +402,6 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             valueSep: ', ',
           },
         ]);
-      },
-      async cleanup({ control, application }) {
-        await control.cleanupFiles({
-          '9.0.0-alpha.0': [
-            [
-              application.clientBundlerEsbuild!,
-              `${application.clientRootDir}build-plugins/define-esbuild.mjs`,
-              `${application.clientRootDir}build-plugins/i18n-esbuild.mjs`,
-            ],
-          ],
-        });
       },
     });
   }

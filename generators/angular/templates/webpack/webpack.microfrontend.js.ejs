@@ -31,7 +31,7 @@ const shareDependencies = ({ skipList = [] } = {}) =>
       .map(([dependency, version]) => [dependency, { ...sharedDefaults, version, requiredVersion: version }]),
   );
 
-let sharedDependencies = shareDependencies({ skipList: ['@angular/localize', 'zone.js'] });
+let sharedDependencies = shareDependencies({ skipList: ['@angular/localize'] });
 sharedDependencies = {
   ...sharedDependencies,
   '@angular/common/http': sharedDependencies['@angular/common'],

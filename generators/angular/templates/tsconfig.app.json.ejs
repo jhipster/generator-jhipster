@@ -23,6 +23,9 @@
     "types": ["@angular/localize"]
   },
   "files": [
+<%_ if (microfrontend && applicationTypeMicroservice) { _%>
+    "<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entity-navbar-items.ts",
+<%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
     "<%= this.relativeDir(clientRootDir, clientSrcDir) %>sockjs-client.polyfill.ts",
 <%_ } _%>

@@ -57,9 +57,7 @@ if (environment.DEBUG_INFO_ENABLED) {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-<%_ if (!microfrontend) { _%>
     provideZonelessChangeDetection(),
-<%_ } _%>
     provideRouter(routes, ...routerFeatures),
     importProvidersFrom(BrowserModule),
     // Set this to true to enable service worker (PWA)
