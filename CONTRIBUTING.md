@@ -40,7 +40,7 @@ would like to implement a new feature then consider what kind of change it is:
 
 ## <a name="rfcs"></a> RFCs
 
-Sometimes, major feature requests are "complex" or "substantial". In this case, GitHub Issues might not be the best tool to to present them because we will need a lot of going back and forth to reach a consensus.
+Sometimes, major feature requests are "complex" or "substantial". In this case, GitHub Issues might not be the best tool to present them because we will need a lot of going back and forth to reach a consensus.
 
 So we ask that these feature request be put through a formal design process and have their specifications described in an "RFC" (request for comments) that will be validated by the team through a Pull Request Review.
 
@@ -318,7 +318,7 @@ Please ensure to run `npm run lint` and `npm test` on the project root before su
 ## <a name="templates"></a> Template Guidelines
 
 The template engine used by yeoman is [EJS](http://ejs.co/), its syntax is fairly simple.
-For simple code (few lines), logic can be embedded in the main file but if logic becomes more complex it's better to externalise the JS fragment to a sub template included by the first one and located in same folder.
+For simple code (few lines), logic can be embedded in the main file but if logic becomes more complex it's better to externalize the JS fragment to a sub template included by the first one and located in the same folder.
 
 Sub templates should be named with the `ejs` extension because it's the default one, it enables editors to apply correct syntax highlighting and it enables us to use a very concise syntax:
 
