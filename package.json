@@ -206,7 +206,7 @@
     "jsdoc": "4.0.5",
     "mocha": "11.7.4",
     "prettier2": "npm:prettier@2.8.8",
-    "rimraf": "6.0.1",
+    "rimraf": "6.1.0",
     "sinon": "21.0.0",
     "sinon-chai": "4.0.1",
     "yeoman-test": "11.0.0"
