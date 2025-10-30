@@ -19,6 +19,9 @@
 <%_
   const mainAlertField = enableTranslation ? 'translationKey' : 'message';
 _%>
+<%_ if (clientTestFrameworkVitest) { _%>
+import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+<%_ } _%>
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 <%_ if (enableTranslation) { _%>

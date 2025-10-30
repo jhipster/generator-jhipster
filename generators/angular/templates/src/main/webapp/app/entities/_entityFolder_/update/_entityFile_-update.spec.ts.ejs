@@ -25,8 +25,12 @@ const allRelationshipsByEntityNeedingOptions = Object
 const testEntityPrimaryKey0 = tsPrimaryKeySamples[0];
 const testEntityPrimaryKey1 = tsPrimaryKeySamples[1];
 _%>
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+<%_ if (clientTestFrameworkVitest) { _%>
+import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+<%_ } _%>
 import { provideHttpClient, HttpResponse } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateModule } from '@ngx-translate/core';
@@ -60,6 +64,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
             <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
             providers: [
               provideHttpClient(),
+              provideHttpClientTesting(),
               {
                 provide: ActivatedRoute,
                 useValue: {
@@ -99,14 +104,14 @@ describe('<%= entityAngularName %> Management Update Component', () => {
     <%_ } _%>
 
                 const <%= otherEntity.entityInstance %>Collection: I<%= otherEntity.entityAngularName %>[] = [<%- otherEntity.tsPrimaryKeySamples[0] %>];
-                jest.spyOn(<%= otherEntity.entityInstance %>Service, 'query').mockReturnValue(of(new HttpResponse({ body: <%= otherEntity.entityInstance %>Collection })));
+                <%= clientTestFramework %>.spyOn(<%= otherEntity.entityInstance %>Service, 'query').mockReturnValue(of(new HttpResponse({ body: <%= otherEntity.entityInstance %>Collection })));
                 const additional<%= otherEntity.entityAngularNamePlural %> = [
     <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
                     <% if (relationship.collection) { %>...<% } %><%= relationship.propertyName %>,
     <%_ } _%>
                 ];
                 const expectedCollection: I<%= otherEntity.entityAngularName %>[] = [...additional<%= otherEntity.entityAngularNamePlural %>, ...<%= otherEntity.entityInstance %>Collection];
-                jest.spyOn(<%= otherEntity.entityInstance %>Service, 'add<%= otherEntity.entityAngularName %>ToCollectionIfMissing').mockReturnValue(expectedCollection);
+                <%= clientTestFramework %>.spyOn(<%= otherEntity.entityInstance %>Service, 'add<%= otherEntity.entityAngularName %>ToCollectionIfMissing').mockReturnValue(expectedCollection);
 
                 activatedRoute.data = of({ <%= entityInstance %> });
                 comp.ngOnInit();
@@ -114,7 +119,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
                 expect(<%= otherEntity.entityInstance %>Service.query).toHaveBeenCalled();
                 expect(<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing).toHaveBeenCalledWith(
                   <%= otherEntity.entityInstance %>Collection,
-                  ...additional<%= otherEntity.entityAngularNamePlural %>.map(expect.objectContaining)
+                  ...additional<%= otherEntity.entityAngularNamePlural %>.map(i => expect.objectContaining(i) as typeof i)
                 );
                 expect(comp.<%= otherEntity.entityInstancePlural %>SharedCollection()).toEqual(expectedCollection);
         });
@@ -128,9 +133,9 @@ describe('<%= entityAngularName %> Management Update Component', () => {
                 <%= entityInstance %>.<%= relationship.propertyName %> = <%= relationship.propertyName %>;
 
                 const <%= relationship.propertyName %>Collection: I<%= otherEntity.entityAngularName %>[] = [<%- otherEntity.tsPrimaryKeySamples[0] %>];
-                jest.spyOn(<%= otherEntity.entityInstance %>Service, 'query').mockReturnValue(of(new HttpResponse({ body: <%= relationship.propertyName %>Collection })));
+                <%= clientTestFramework %>.spyOn(<%= otherEntity.entityInstance %>Service, 'query').mockReturnValue(of(new HttpResponse({ body: <%= relationship.propertyName %>Collection })));
                 const expectedCollection: I<%= otherEntity.entityAngularName %>[] = [<%= relationship.propertyName %>, ...<%= relationship.propertyName %>Collection];
-                jest.spyOn(<%= otherEntity.entityInstance %>Service, 'add<%= otherEntity.entityAngularName %>ToCollectionIfMissing').mockReturnValue(expectedCollection);
+                <%= clientTestFramework %>.spyOn(<%= otherEntity.entityInstance %>Service, 'add<%= otherEntity.entityAngularName %>ToCollectionIfMissing').mockReturnValue(expectedCollection);
 
                 activatedRoute.data = of({ <%= entityInstance %> });
                 comp.ngOnInit();
@@ -172,9 +177,9 @@ describe('<%= entityAngularName %> Management Update Component', () => {
             // GIVEN
             const saveSubject = new Subject<HttpResponse<I<%= entityAngularName %>>>();
             const <%= entityInstance %> = <%- testEntityPrimaryKey0 %>;
-            jest.spyOn(<%= entityInstance %>FormService, 'get<%= entityAngularName %>').mockReturnValue(<%= entityInstance %>);
-            jest.spyOn(<%= entityInstance %>Service, 'update').mockReturnValue(saveSubject);
-            jest.spyOn(comp, 'previousState');
+            <%= clientTestFramework %>.spyOn(<%= entityInstance %>FormService, 'get<%= entityAngularName %>').mockReturnValue(<%= entityInstance %>);
+            <%= clientTestFramework %>.spyOn(<%= entityInstance %>Service, 'update').mockReturnValue(saveSubject);
+            <%= clientTestFramework %>.spyOn(comp, 'previousState');
             activatedRoute.data = of({ <%= entityInstance %> });
             comp.ngOnInit();
 
@@ -196,9 +201,9 @@ describe('<%= entityAngularName %> Management Update Component', () => {
             // GIVEN
             const saveSubject = new Subject<HttpResponse<I<%= entityAngularName %>>>();
             const <%= entityInstance %> = <%- testEntityPrimaryKey0 %>;
-            jest.spyOn(<%= entityInstance %>FormService, 'get<%= entityAngularName %>').mockReturnValue({ <%= primaryKey.name %>: null });
-            jest.spyOn(<%= entityInstance %>Service, 'create').mockReturnValue(saveSubject);
-            jest.spyOn(comp, 'previousState');
+            <%= clientTestFramework %>.spyOn(<%= entityInstance %>FormService, 'get<%= entityAngularName %>').mockReturnValue({ <%= primaryKey.name %>: null });
+            <%= clientTestFramework %>.spyOn(<%= entityInstance %>Service, 'create').mockReturnValue(saveSubject);
+            <%= clientTestFramework %>.spyOn(comp, 'previousState');
             activatedRoute.data = of({ <%= entityInstance %>: null });
             comp.ngOnInit();
 
@@ -220,8 +225,8 @@ describe('<%= entityAngularName %> Management Update Component', () => {
             // GIVEN
             const saveSubject = new Subject<HttpResponse<I<%= entityAngularName %>>>();
             const <%= entityInstance %> = <%- testEntityPrimaryKey0 %>;
-            jest.spyOn(<%= entityInstance %>Service, 'update').mockReturnValue(saveSubject);
-            jest.spyOn(comp, 'previousState');
+            <%= clientTestFramework %>.spyOn(<%= entityInstance %>Service, 'update').mockReturnValue(saveSubject);
+            <%= clientTestFramework %>.spyOn(comp, 'previousState');
             activatedRoute.data = of({ <%= entityInstance %> });
             comp.ngOnInit();
 
@@ -250,7 +255,7 @@ _%>
             it('should forward to <%= otherEntity.entityInstance %>Service', () => {
                 const entity = <%- otherEntity.tsPrimaryKeySamples[0] %>;
                 const entity2 = <%- otherEntity.tsPrimaryKeySamples[1] %>;
-                jest.spyOn(<%= otherEntity.entityInstance %>Service, 'compare<%= otherEntity.entityAngularName %>');
+                <%= clientTestFramework %>.spyOn(<%= otherEntity.entityInstance %>Service, 'compare<%= otherEntity.entityAngularName %>');
                 comp.compare<%= otherEntity.entityAngularName %>(entity, entity2);
                 expect(<%= otherEntity.entityInstance %>Service.compare<%= otherEntity.entityAngularName %>).toHaveBeenCalledWith(entity, entity2);
             });

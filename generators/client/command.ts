@@ -20,6 +20,7 @@ import chalk from 'chalk';
 import { intersection } from 'lodash-es';
 
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
+import { ALPHANUMERIC_PATTERN } from '../../lib/constants/jdl.ts';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
 
@@ -139,6 +140,19 @@ const command = {
         transformer: microfrontendsToPromptValue,
       }),
       scope: 'storage',
+    },
+    clientTestFramework: {
+      cli: {
+        type: String,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
+      },
+      scope: 'storage',
+      choices: ['jest', 'vitest'],
+      default: ctx => (ctx.clientFramework === 'vue' ? 'vitest' : 'jest'),
     },
     clientTestFrameworks: {
       description: 'Client test frameworks',

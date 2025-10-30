@@ -38,7 +38,6 @@ export type ClientAddedApplicationProperties = {
   filterEntityPropertiesForClient?: <const E extends ClientEntity>(entity: E) => E;
   getWebappTranslation?: GetWebappTranslationCallback;
   clientBundlerName: string;
-  clientTestFramework: 'vitest' | 'jest';
   clientTestFrameworkName: string;
   withAdminUi: boolean;
 };
@@ -63,7 +62,6 @@ export const mutateApplication = {
   clientThemeNone: ({ clientTheme }) => !clientTheme || clientTheme === 'none',
   clientThemeAny: ({ clientThemeNone }) => !clientThemeNone,
   clientBundlerName: ctx => (ctx.clientBundlerEsbuild ? 'esbuild' : startCase(ctx.clientBundler)),
-  clientTestFramework: ctx => (ctx.clientFrameworkVue ? 'vitest' : 'jest'),
   clientTestFrameworkName: ctx => startCase(ctx.clientTestFramework),
   withAdminUi: ctx => ctx.applicationTypeMicroservice,
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<ClientApplication>, ClientAddedApplicationProperties>;

@@ -19,6 +19,9 @@
 <%_
 const tsKeyId = user.primaryKey.tsSampleValues[0];
 _%>
+<%_ if (clientTestFrameworkVitest) { _%>
+import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+<%_ } _%>
 import { HttpHeaders, HttpResponse, provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
@@ -42,15 +45,16 @@ describe('User Management Component', () => {
   const data = of({
     defaultSort: 'id,asc',
   });
-  const queryParamMap = of(
-    jest.requireActual('@angular/router').convertToParamMap({
-      page: '1',
-      size: '1',
-      sort: 'id,desc',
-    }),
-  );
 
-  beforeEach(() => {
+  beforeEach(<%- clientTestFrameworkJest ? '' : 'async ' %>() => {
+    const routerModule: typeof import('@angular/router') = <%- clientTestFrameworkJest ? 'jest.requireActual' : 'await vitest.importActual' %>('@angular/router');
+    const queryParamMap = of(
+      routerModule.convertToParamMap({
+        page: '1',
+        size: '1',
+        sort: 'id,desc',
+      }),
+    );
     TestBed.configureTestingModule({
 <%_ if (enableTranslation) { _%>
       imports: [TranslateModule.forRoot()],
@@ -64,15 +68,15 @@ describe('User Management Component', () => {
     comp = fixture.componentInstance;
     service = TestBed.inject(UserManagementService);
     mockAccountService = TestBed.inject(AccountService);
-    mockAccountService.isAuthenticated = jest.fn(() => false);
-    mockAccountService.identity = jest.fn(() => of(null));
+    mockAccountService.isAuthenticated = <%= clientTestFramework %>.fn(() => false);
+    mockAccountService.identity = <%= clientTestFramework %>.fn(() => of(null));
   });
 
   describe('OnInit', () => {
     it('should call load all on init', inject([], () => {
       // GIVEN
       const headers = new HttpHeaders().append('link', 'link;link');
-      jest.spyOn(service, 'query').mockReturnValue(
+      <%= clientTestFramework %>.spyOn(service, 'query').mockReturnValue(
         of(
           new HttpResponse({
             body: [new User(<%- tsKeyId %>)],
@@ -95,7 +99,7 @@ describe('User Management Component', () => {
       // GIVEN
       const headers = new HttpHeaders().append('link', 'link;link');
       const user = new User(<%- tsKeyId %>);
-      jest.spyOn(service, 'query').mockReturnValue(
+      <%= clientTestFramework %>.spyOn(service, 'query').mockReturnValue(
         of(
           new HttpResponse({
             body: [user],
@@ -103,7 +107,7 @@ describe('User Management Component', () => {
           }),
         ),
       );
-      jest.spyOn(service, 'update').mockReturnValue(of(user));
+      <%= clientTestFramework %>.spyOn(service, 'update').mockReturnValue(of(user));
 
       // WHEN
       comp.setActive(user, true);

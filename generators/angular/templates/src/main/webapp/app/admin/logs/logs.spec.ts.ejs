@@ -16,6 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (clientTestFrameworkVitest) { _%>
+import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+<%_ } _%>
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
@@ -57,7 +60,7 @@ describe('Logs', () => {
     it('should call load all on init', () => {
       // GIVEN
       const log = new Log('main', 'WARN');
-      jest.spyOn(service, 'findAll').mockReturnValue(
+      <%= clientTestFramework %>.spyOn(service, 'findAll').mockReturnValue(
         of({
           loggers: {
             main: {
@@ -80,8 +83,8 @@ describe('Logs', () => {
     it('should change log level correctly', () => {
       // GIVEN
       const log = new Log('main', 'ERROR');
-      jest.spyOn(service, 'changeLevel').mockReturnValue(of({}));
-      jest.spyOn(service, 'findAll').mockReturnValue(
+      <%= clientTestFramework %>.spyOn(service, 'changeLevel').mockReturnValue(of({}));
+      <%= clientTestFramework %>.spyOn(service, 'findAll').mockReturnValue(
         of({
           loggers: {
             main: {

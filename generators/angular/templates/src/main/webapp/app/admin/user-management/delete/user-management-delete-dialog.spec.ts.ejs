@@ -16,6 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (clientTestFrameworkVitest) { _%>
+import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+<%_ } _%>
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -47,8 +50,8 @@ describe('User Management Delete Component', () => {
   describe('confirmDelete', () => {
     it('should call delete service on confirmDelete', () => {
       // GIVEN
-      jest.spyOn(service, 'delete').mockReturnValue(of({}));
-      jest.spyOn(mockActiveModal, 'close');
+      <%= clientTestFramework %>.spyOn(service, 'delete').mockReturnValue(of({}));
+      <%= clientTestFramework %>.spyOn(mockActiveModal, 'close');
 
       // WHEN
       comp.confirmDelete('user');

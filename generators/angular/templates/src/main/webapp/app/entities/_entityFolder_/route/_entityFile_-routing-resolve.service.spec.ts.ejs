@@ -19,6 +19,9 @@
 <%_
 const tsKeyId = primaryKey.tsSampleValues[0];
 _%>
+<%_ if (clientTestFrameworkVitest) { _%>
+import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+<%_ } _%>
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient, HttpResponse } from '@angular/common/http';
 import { ActivatedRouteSnapshot, ActivatedRoute, Router, convertToParamMap } from '@angular/router';
@@ -49,62 +52,68 @@ describe('<%= entityAngularName %> routing resolve service', () => {
       ],
     });
     mockRouter = TestBed.inject(Router);
-    jest.spyOn(mockRouter, 'navigate');
+    <%= clientTestFramework %>.spyOn(mockRouter, 'navigate');
     mockActivatedRouteSnapshot = TestBed.inject(ActivatedRoute).snapshot;
     service = TestBed.inject(<%= entityAngularName %>Service);
   });
 
   describe('resolve', () => {
-    it('should return I<%= entityAngularName %> returned by find', done => {
+    it('should return I<%= entityAngularName %> returned by find', async () => {
       // GIVEN
-      service.find = jest.fn(<%= primaryKey.name %> => of(new HttpResponse({ body: { <%= primaryKey.name %> } })));
+      service.find = <%= clientTestFramework %>.fn(<%= primaryKey.name %> => of(new HttpResponse({ body: { <%= primaryKey.name %> } })));
       mockActivatedRouteSnapshot.params = { <%= primaryKey.name %>: <%- tsKeyId %> };
 
       // WHEN
-      TestBed.runInInjectionContext(() => {
-        <%= entityInstance %>Resolve(mockActivatedRouteSnapshot).subscribe({
-          next(result) {
-            // THEN
-            expect(service.find).toHaveBeenCalledWith(<%- tsKeyId %>);
-            expect(result).toEqual({ <%= primaryKey.name %>: <%- tsKeyId %> });
-            done();
-          },
+      await new Promise<void>(resolve => {
+        TestBed.runInInjectionContext(() => {
+          <%= entityInstance %>Resolve(mockActivatedRouteSnapshot).subscribe({
+            next(result) {
+              // THEN
+              expect(service.find).toHaveBeenCalledWith(<%- tsKeyId %>);
+              expect(result).toEqual({ <%= primaryKey.name %>: <%- tsKeyId %> });
+              resolve();
+            },
+          });
         });
       });
     });
 
-    it('should return null if id is not provided', done => {
+    it('should return null if id is not provided', async () => {
       // GIVEN
-      service.find = jest.fn();
+      service.find = <%= clientTestFramework %>.fn();
       mockActivatedRouteSnapshot.params = {};
 
       // WHEN
-      TestBed.runInInjectionContext(() => {
-        <%= entityInstance %>Resolve(mockActivatedRouteSnapshot).subscribe({
-          next(result) {
-            // THEN
-            expect(service.find).not.toHaveBeenCalled();
-            expect(result).toEqual(null);
-            done();
-          },
+      await new Promise<void>(resolve => {
+        TestBed.runInInjectionContext(() => {
+          <%= entityInstance %>Resolve(mockActivatedRouteSnapshot).subscribe({
+            next(result) {
+              // THEN
+              expect(service.find).not.toHaveBeenCalled();
+              expect(result).toEqual(null);
+              resolve();
+            },
+          });
         });
       });
     });
 
-    it('should route to 404 page if data not found in server', done => {
+    it('should route to 404 page if data not found in server', async () => {
       // GIVEN
-      jest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse<I<%= entityAngularName %>>({ body: null })));
+      <%= clientTestFramework %>.spyOn(service, 'find').mockReturnValue(of(new HttpResponse<I<%= entityAngularName %>>({ body: null })));
       mockActivatedRouteSnapshot.params = { <%= primaryKey.name %>: <%- tsKeyId %> };
 
       // WHEN
-      TestBed.runInInjectionContext(() => {
-        <%= entityInstance %>Resolve(mockActivatedRouteSnapshot).subscribe({
-          complete() {
-            // THEN
-            expect(service.find).toHaveBeenCalledWith(<%- tsKeyId %>);
-            expect(mockRouter.navigate).toHaveBeenCalledWith(['404']);
-            done();
-          },
+      await new Promise<void>(resolve => {
+        TestBed.runInInjectionContext(() => {
+          <%= entityInstance %>Resolve(mockActivatedRouteSnapshot).subscribe({
+            complete() {
+              // THEN
+              expect(service.find).toHaveBeenCalledWith(<%- tsKeyId %>);
+              expect(mockRouter.navigate).toHaveBeenCalledWith(['404']);
+              resolve();
+            },
+          });
         });
       });
     });

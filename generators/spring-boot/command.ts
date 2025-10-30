@@ -19,13 +19,12 @@
 import chalk from 'chalk';
 
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
+import { ALPHANUMERIC_PATTERN } from '../../lib/constants/jdl.ts';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../lib/core/application-types.ts';
 import { authenticationTypes } from '../../lib/jhipster/index.ts';
 import { createBase64Secret, createSecret } from '../../lib/utils/index.ts';
 
 const { OAUTH2, SESSION, JWT } = authenticationTypes;
-
-const ALPHANUMERIC_PATTERN = /^[A-Za-z][A-Za-z0-9]*$/;
 
 const command = {
   configs: {

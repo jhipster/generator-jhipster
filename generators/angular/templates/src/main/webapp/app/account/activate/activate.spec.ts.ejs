@@ -16,6 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (clientTestFrameworkVitest) { _%>
+import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+<%_ } _%>
 import { TestBed, inject } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
@@ -49,7 +52,7 @@ describe('Activate', () => {
   });
 
   it('calls activate.get with the key from params', inject([ActivateService], (service: ActivateService) => {
-    jest.spyOn(service, 'get').mockReturnValue(of());
+    <%= clientTestFramework %>.spyOn(service, 'get').mockReturnValue(of());
 
     comp.ngOnInit();
 
@@ -57,7 +60,7 @@ describe('Activate', () => {
   }));
 
   it('should set set success to true upon successful activation', inject([ActivateService], (service: ActivateService) => {
-    jest.spyOn(service, 'get').mockReturnValue(of({}));
+    <%= clientTestFramework %>.spyOn(service, 'get').mockReturnValue(of({}));
 
     comp.ngOnInit();
 
@@ -66,7 +69,7 @@ describe('Activate', () => {
   }));
 
   it('should set set error to true upon activation failure', inject([ActivateService], (service: ActivateService) => {
-    jest.spyOn(service, 'get').mockReturnValue(throwError(Error));
+    <%= clientTestFramework %>.spyOn(service, 'get').mockReturnValue(throwError(Error));
 
     comp.ngOnInit();
 

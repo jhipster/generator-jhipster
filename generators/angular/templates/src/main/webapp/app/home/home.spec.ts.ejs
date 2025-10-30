@@ -16,6 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (clientTestFrameworkVitest) { _%>
+import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+<%_ } _%>
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 <%_ if (!authenticationTypeOauth2) { _%>
 import { Router } from '@angular/router';
@@ -62,14 +65,14 @@ describe('Home Component', () => {
         {
           provide: AccountService,
           useValue: {
-            isAuthenticated: jest.fn(),
+            isAuthenticated: <%= clientTestFramework %>.fn(),
           },
         },
 <%_ if (authenticationTypeOauth2) { _%>
         {
           provide: LoginService,
           useValue: {
-            login: jest.fn(),
+            login: <%= clientTestFramework %>.fn(),
           },
         },
 <%_ } _%>
@@ -81,11 +84,11 @@ describe('Home Component', () => {
     fixture = TestBed.createComponent(Home);
     comp = fixture.componentInstance;
     mockAccountService = TestBed.inject(AccountService);
-    mockAccountService.identity = jest.fn(() => of(null));
+    mockAccountService.identity = <%= clientTestFramework %>.fn(() => of(null));
 <%_ if (!authenticationTypeOauth2) { _%>
 
     mockRouter = TestBed.inject(Router);
-    jest.spyOn(mockRouter, 'navigate');
+    <%= clientTestFramework %>.spyOn(mockRouter, 'navigate');
 
 <%_ } else { _%>
     mockLoginService = TestBed.inject(LoginService);
@@ -97,7 +100,7 @@ describe('Home Component', () => {
 <%_ if (!authenticationTypeOauth2) { _%>
       // GIVEN
       const authenticationState = new Subject<Account | null>();
-      mockAccountService.getAuthenticationState = jest.fn(() => authenticationState.asObservable());
+      mockAccountService.getAuthenticationState = <%= clientTestFramework %>.fn(() => authenticationState.asObservable());
 
       // WHEN
       comp.ngOnInit();
@@ -118,7 +121,7 @@ describe('Home Component', () => {
       expect(comp.account()).toBeNull();
 <%_ } else { _%>
       // GIVEN
-      mockAccountService.identity = jest.fn(() => of(account));
+      mockAccountService.identity = <%= clientTestFramework %>.fn(() => of(account));
 
       // WHEN
       comp.ngOnInit();
@@ -154,7 +157,7 @@ describe('Home Component', () => {
     it('should destroy authentication state subscription on component destroy', () => {
       // GIVEN
       const authenticationState = new Subject<Account | null>();
-      mockAccountService.getAuthenticationState = jest.fn(() => authenticationState.asObservable());
+      mockAccountService.getAuthenticationState = <%= clientTestFramework %>.fn(() => authenticationState.asObservable());
 
       // WHEN
       comp.ngOnInit();

@@ -19,6 +19,9 @@
 <%_
 const tsKeyId = primaryKey.tsSampleValues[0];
 _%>
+<%_ if (clientTestFrameworkVitest) { _%>
+import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+<%_ } _%>
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient, HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
@@ -47,8 +50,8 @@ describe('<%= entityAngularName %> Management Delete Component', () => {
   describe('confirmDelete', () => {
     it('should call delete service on confirmDelete', () => {
       // GIVEN
-      jest.spyOn(service, 'delete').mockReturnValue(of(new HttpResponse({ body: {} })));
-      jest.spyOn(mockActiveModal, 'close');
+      <%= clientTestFramework %>.spyOn(service, 'delete').mockReturnValue(of(new HttpResponse({ body: {} })));
+      <%= clientTestFramework %>.spyOn(mockActiveModal, 'close');
 
       // WHEN
       comp.confirmDelete(<%- tsKeyId %>);
@@ -60,9 +63,9 @@ describe('<%= entityAngularName %> Management Delete Component', () => {
 
         it('should not call delete service on clear', () => {
             // GIVEN
-            jest.spyOn(service, 'delete');
-            jest.spyOn(mockActiveModal, 'close');
-            jest.spyOn(mockActiveModal, 'dismiss');
+            <%= clientTestFramework %>.spyOn(service, 'delete');
+            <%= clientTestFramework %>.spyOn(mockActiveModal, 'close');
+            <%= clientTestFramework %>.spyOn(mockActiveModal, 'dismiss');
 
             // WHEN
             comp.cancel();

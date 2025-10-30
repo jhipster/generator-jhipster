@@ -13,6 +13,7 @@
       "app-sample": "ng-default",
       "jdl-entity": "*",
       "generatorOptions": {
+        "clientTestFramework": "vitest",
         "clientBundler": "webpack"
       }
     },

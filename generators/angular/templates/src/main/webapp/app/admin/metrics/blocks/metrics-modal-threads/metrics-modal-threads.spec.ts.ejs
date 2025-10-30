@@ -16,6 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (clientTestFrameworkVitest) { _%>
+import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+<%_ } _%>
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ if (enableTranslation) { _%>
@@ -313,7 +316,7 @@ describe('MetricsModalThreads', () => {
   describe('dismiss', () => {
     it('should call dismiss function for modal on dismiss', () => {
       // GIVEN
-      jest.spyOn(mockActiveModal, 'dismiss');
+      <%= clientTestFramework %>.spyOn(mockActiveModal, 'dismiss');
 
       // WHEN
       comp.dismiss();

@@ -16,6 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (clientTestFrameworkVitest) { _%>
+import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+<%_ } _%>
 import { Component, DebugElement, Type } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -35,7 +38,7 @@ import { SortState, sortStateSignal } from './sort-state';
 })
 class TestSortDirective {
   sortState = sortStateSignal({ predicate: 'ID' });
-  transition = jest.fn().mockImplementation((sortState: SortState) => {
+  transition = <%= clientTestFramework %>.fn().mockImplementation((sortState: SortState) => {
     this.sortState.set(sortState);
   });
 }
