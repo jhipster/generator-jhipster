@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import SharedModule from 'app/shared/shared.module';
 import { ProcessMetrics } from 'app/admin/metrics/metrics.model';
@@ -24,7 +24,6 @@ import { ProcessMetrics } from 'app/admin/metrics/metrics.model';
 @Component({
   selector: '<%= jhiPrefixDashed %>-metrics-system',
   templateUrl: './metrics-system.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [SharedModule],
 })
 export class MetricsSystem {

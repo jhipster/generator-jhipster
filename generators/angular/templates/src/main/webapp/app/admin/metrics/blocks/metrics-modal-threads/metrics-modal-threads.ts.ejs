@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
@@ -25,7 +25,6 @@ import { Thread, ThreadState } from 'app/admin/metrics/metrics.model';
 @Component({
   selector: '<%= jhiPrefixDashed %>-thread-modal',
   templateUrl: './metrics-modal-threads.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [SharedModule],
 })
 export class MetricsModalThreads implements OnInit {

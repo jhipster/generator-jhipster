@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import SharedModule from 'app/shared/shared.module';
 import { CacheMetrics } from 'app/admin/metrics/metrics.model';
@@ -25,7 +25,6 @@ import { filterNaN } from 'app/core/util/operators';
 @Component({
   selector: '<%= jhiPrefixDashed %>-metrics-cache',
   templateUrl: './metrics-cache.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [SharedModule],
 })
 export class MetricsCache {
