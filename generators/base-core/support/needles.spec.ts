@@ -319,6 +319,34 @@ content to add2
 `);
     });
 
+    it('returned function should add contentToAdd array of objects', () => {
+      const log = test.mock.fn(createJHipsterLogger());
+      const needleCallback = createNeedleCallback({
+        contentToAdd: [
+          { content: contentToAdd },
+          { content: `${contentToAdd}2` },
+          { content: 'existing content' },
+          { content: 'test', contentToCheck: 'another existing' },
+        ],
+        needle,
+      });
+      expect(
+        needleCallback.call(
+          { log } as any,
+          `existing content
+another existing
+// jhipster-needle-${needle}`,
+          'any-file',
+        ),
+      ).toMatchInlineSnapshot(`
+"existing content
+another existing
+content to add
+content to add2
+// jhipster-needle-a-needle"
+`);
+    });
+
     it('contentToAdd should be called', () => {
       const log = test.mock.fn(createJHipsterLogger());
       const contentToAdd = test.mock.fn((_arg0: string, _arg1: any) => 'result content');

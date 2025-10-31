@@ -40,12 +40,14 @@ type NeedleContentToAddCallback = {
   indentPrefix: string;
 };
 
+type ContentToAdd = { content: string; contentToCheck?: string | RegExp };
+
 export type NeedleInsertion = {
   needle: string;
   /**
    * Content to add.
    */
-  contentToAdd: string | string[] | ((content: string, options: NeedleContentToAddCallback) => string);
+  contentToAdd: string | string[] | ContentToAdd[] | ((content: string, options: NeedleContentToAddCallback) => string);
   contentToCheck?: string | RegExp;
   /**
    * check existing content ignoring white spaces and new lines.
@@ -61,7 +63,7 @@ export type NeedleInsertion = {
   autoIndent?: boolean;
 };
 
-type NeedleFileInsertion = NeedleInsertion & {
+type NeedleFileInsertion = Omit<NeedleInsertion, 'needle' | 'contentToAdd'> & {
   /**
    * Path to file.
    * The generator context must be passed.
@@ -73,8 +75,9 @@ type NeedleFileInsertion = NeedleInsertion & {
   needlesPrefix?: string;
 };
 
-type NeedleContentInsertion = NeedleInsertion & {
+type NeedleContentInsertion = Pick<NeedleInsertion, 'needle' | 'autoIndent'> & {
   content: string;
+  contentToAdd: string | string[] | ((content: string, options: NeedleContentToAddCallback) => string);
 };
 
 /**
@@ -85,6 +88,10 @@ export const convertToPrettierExpressions = (str: string): string =>
     .replace(/(<|\\\()(?! )/g, '$1\\n?[\\s]*')
     .replace(/(?! )(>|\\\))/g, ',?\\n?[\\s]*$1')
     .replace(/\s+/g, '[\\s\\n]*');
+
+const isArrayOfContentToAdd = (value: unknown): value is ContentToAdd[] => {
+  return Array.isArray(value) && value.every(item => typeof item === 'object' && 'content' in item);
+};
 
 /**
  * Check if contentToCheck existing in content
@@ -227,6 +234,15 @@ export const createNeedleCallback = <Generator extends CoreGenerator = CoreGener
   assert(contentToAdd, 'contentToAdd is required');
 
   return function (content, filePath) {
+    if (isArrayOfContentToAdd(contentToAdd)) {
+      contentToAdd = contentToAdd.filter(({ content: itemContent, contentToCheck }) => {
+        return !checkContentIn(contentToCheck ?? itemContent, content, ignoreWhitespaces);
+      });
+      if (contentToAdd.length === 0) {
+        return content;
+      }
+      contentToAdd = contentToAdd.map(({ content }) => content);
+    }
     if (contentToCheck && checkContentIn(contentToCheck, content, ignoreWhitespaces)) {
       return content;
     }
@@ -266,19 +282,16 @@ export const createNeedleCallback = <Generator extends CoreGenerator = CoreGener
  *
  * @param this - generator if provided, editFile will be executed
  */
-export function createBaseNeedle(
-  options: Omit<NeedleFileInsertion, 'filePath' | 'needle' | 'contentToAdd'>,
-  needles: Record<string, string>,
-): NeedleCallback;
+export function createBaseNeedle(options: Omit<NeedleFileInsertion, 'filePath'>, needles: Record<string, string>): NeedleCallback;
 export function createBaseNeedle(needles: Record<string, string>): NeedleCallback;
 export function createBaseNeedle<Generator extends CoreGenerator = CoreGenerator>(
   this: Generator,
-  options: Omit<NeedleFileInsertion, 'filePath' | 'needle' | 'contentToAdd'> & { filePath: string },
+  options: NeedleFileInsertion,
   needles: Record<string, string>,
 ): CascatedEditFileCallback<Generator>;
 export function createBaseNeedle<Generator extends CoreGenerator = CoreGenerator>(
   this: Generator | void,
-  options: Omit<NeedleFileInsertion, 'filePath' | 'needle' | 'contentToAdd'> | Record<string, string>,
+  options: NeedleFileInsertion | Record<string, string>,
   needles?: Record<string, string>,
 ): EditFileCallback<Generator> | CascatedEditFileCallback<Generator> {
   const actualNeedles = (needles ??= options as Record<string, string>);
