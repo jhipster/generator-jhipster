@@ -156,11 +156,9 @@ export default class AngularGenerator extends AngularApplicationGenerator {
               `${application.clientSrcDir}app/entities/entity-navbar-items.ts`,
               createNeedleCallback({
                 needle: 'add-entity-navbar',
-                contentToAdd: param.entities
-                  .filter(e => !e.adminEntity)
-                  .map(entity => ({
-                    contentToCheck: `route: '/${entity.entityPage}',`,
-                    content: `{
+                contentToAdd: param.entities.map(entity => ({
+                  contentToCheck: `route: '/${entity.entityPage}',`,
+                  content: `{
   name: '${entity.entityAngularName}',
   route: '/${entity.entityPage}',${
     application.enableTranslation
@@ -169,7 +167,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
       : ''
   }
   },`,
-                  })),
+                })),
               }),
             );
           }
