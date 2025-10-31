@@ -117,7 +117,7 @@ export default class VueGenerator extends ClientApplicationGenerator {
 
         javaNodeBuildPaths?.push('.postcssrc.js', 'tsconfig.json', 'tsconfig.app.json');
         if (microfrontend) {
-          javaNodeBuildPaths?.push('module-federation.config.cjs');
+          javaNodeBuildPaths?.push('module-federation.config.js');
         }
         if (clientBundlerWebpack) {
           javaNodeBuildPaths?.push('webpack/');

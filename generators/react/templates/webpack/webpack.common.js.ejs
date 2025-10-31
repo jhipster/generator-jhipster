@@ -16,19 +16,26 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-const path = require('path');
-const webpack = require('webpack');
-const { merge } = require('webpack-merge');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const ESLintPlugin = require('eslint-webpack-plugin');
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+import path from 'path';
+import {dirname} from 'path';
+import {fileURLToPath} from 'url';
+import webpack from 'webpack';
+import { merge } from 'webpack-merge';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import ESLintPlugin from 'eslint-webpack-plugin';
 <%_ if (enableTranslation) { _%>
 const { hashElement } = require('folder-hash');
-const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
+import MergeJsonWebpackPlugin from 'merge-jsons-webpack-plugin';
 <%_ } _%>
-const utils = require('./utils.js');
-const environment = require('./environment');
+import utils from './utils.js';
+import environment from './environment.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const getTsLoaderRule = () => {
   return [
@@ -51,7 +58,7 @@ const getTsLoaderRule = () => {
   ];
 };
 
-module.exports = async options => {
+export default async options => {
   const development = options.env === 'development';
 <%_ if (enableTranslation) { _%>
   const languagesHash = await hashElement(path.resolve(__dirname, '../<%= this.relativeDir(clientRootDir, clientSrcDir) %>i18n'), {

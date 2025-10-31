@@ -16,8 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-const { withModuleFederationPlugin } = require('@angular-architects/module-federation/webpack');
-const packageJson = require('../package.json');
+import { withModuleFederationPlugin } from '@angular-architects/module-federation/webpack';
+import packageJson from '../package.json' assert { type: 'json' };
 // Microfrontend api, should match across gateway and microservices.
 const apiVersion = '0.0.1';
 
@@ -39,7 +39,7 @@ sharedDependencies = {
 };
 
 // eslint-disable-next-line no-unused-vars
-module.exports = (config, options, targetOptions) => {
+export default (config, options, targetOptions) => {
   return withModuleFederationPlugin({
     name: '<%= lowercaseBaseName %>',
 <%_ if (applicationTypeMicroservice) { _%>
