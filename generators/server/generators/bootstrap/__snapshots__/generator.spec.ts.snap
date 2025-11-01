@@ -116,7 +116,7 @@ exports[`generator - server:bootstrap bootstrapping default config should prepar
   "devServerPortProxy": undefined,
   "dockerContainers": Any<Object>,
   "dockerServicesDir": "src/main/docker/",
-  "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
+  "documentationArchiveUrl": "https://www.jhipster.tech/",
   "dtoSuffix": "DTO",
   "dynamic": undefined,
   "embeddableLaunchScript": undefined,
