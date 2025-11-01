@@ -10,6 +10,19 @@
     "methods": [{ "name": "<init>", "parameterTypes": [] }]
   },
   {
+    "name": "liquibase.change.core.LoadDataChange",
+    "queryAllPublicMethods": true,
+    "allDeclaredMethods": true,
+    "allPublicConstructors": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.change.AbstractTableChange",
+    "queryAllPublicMethods": true,
+    "allDeclaredMethods": true,
+    "allPublicConstructors": true
+  },
+  {
     "name": "liquibase.command.CommandFactory",
     "methods": [{ "name": "<init>", "parameterTypes": [] }]
   },
