@@ -24,7 +24,7 @@ import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
 import { HttpHeaders, HttpResponse, provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
 import { TranslateModule } from '@ngx-translate/core';
@@ -46,10 +46,9 @@ describe('User Management Component', () => {
     defaultSort: 'id,asc',
   });
 
-  beforeEach(<%- clientTestFrameworkJest ? '' : 'async ' %>() => {
-    const routerModule: typeof import('@angular/router') = <%- clientTestFrameworkJest ? 'jest.requireActual' : 'await vitest.importActual' %>('@angular/router');
+  beforeEach(() => {
     const queryParamMap = of(
-      routerModule.convertToParamMap({
+      convertToParamMap({
         page: '1',
         size: '1',
         sort: 'id,desc',
