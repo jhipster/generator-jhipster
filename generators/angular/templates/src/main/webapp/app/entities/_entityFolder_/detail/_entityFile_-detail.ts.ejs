@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { Component, <% if (anyFieldIsBlobDerived) { %>inject, <% } %>input } from '@angular/core';
-<%_ if (entityFileName != 'authority') { _%>
+<%_ if (entityFileName != 'authority' && updatableEntity) { _%>
 import { RouterLink } from '@angular/router';
 <%_ } _%>
 
@@ -33,7 +33,7 @@ import { DataUtils } from 'app/core/util/data-util.service';
     templateUrl: './<%= entityFileName %>-detail.html',
     imports: [
       SharedModule,
-<%_ if (entityFileName != 'authority') { _%>
+<%_ if (entityFileName != 'authority' && updatableEntity) { _%>
       RouterLink,
 <%_ } _%>
 <%_ if (anyFieldIsDuration) { _%>
