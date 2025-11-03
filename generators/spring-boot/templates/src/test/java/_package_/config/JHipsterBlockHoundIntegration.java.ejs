@@ -24,6 +24,7 @@ import reactor.blockhound.integration.BlockHoundIntegration;
 public class JHipsterBlockHoundIntegration implements BlockHoundIntegration {
     @Override
     public void applyTo(BlockHound.Builder builder) {
+        builder.allowBlockingCallsInside("java.util.UUID", "randomUUID");
         builder.allowBlockingCallsInside("org.springframework.validation.beanvalidation.SpringValidatorAdapter", "validate");
         builder.allowBlockingCallsInside("<%= packageName %>.service.MailService", "sendEmailFromTemplate");
         builder.allowBlockingCallsInside("<%= packageName %>.security.DomainUserDetailsService", "createSpringSecurityUser");
