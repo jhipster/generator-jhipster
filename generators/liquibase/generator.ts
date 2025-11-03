@@ -95,7 +95,7 @@ export default class LiquibaseGenerator<
     });
 
     this.recreateInitialChangelog = this.options.recreateInitialChangelog ?? false;
-    this.numberOfRows = 10;
+    this.numberOfRows = 30;
   }
 
   async beforeQueue() {
