@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - spring-websocket with default config should match files snapshot 1`] = `
+exports[`generator - spring-boot:websocket with default config should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",

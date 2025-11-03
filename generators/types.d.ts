@@ -164,6 +164,7 @@ type GeneratorsByNamespace = {
   'jhipster:spring-boot:bootstrap': import('./spring-boot/generators/bootstrap/generator.ts').default;
   'jhipster:spring-boot:jwt': import('./spring-boot/generators/jwt/generator.ts').default;
   'jhipster:spring-boot:oauth2': import('./spring-boot/generators/oauth2/generator.ts').default;
+  'jhipster:spring-boot:websocket': import('./spring-boot/generators/websocket/generator.ts').default;
   'spring-cache': import('./spring-cache/generator.ts').default;
   'jhipster:spring-cache': import('./spring-cache/generator.ts').default;
   'spring-cloud-stream': import('./spring-cloud-stream/generator.ts').default;
@@ -183,8 +184,6 @@ type GeneratorsByNamespace = {
   'jhipster:spring-data-neo4j': import('./spring-data-neo4j/generator.ts').default;
   'spring-data-relational': import('./spring-data-relational/generator.ts').default;
   'jhipster:spring-data-relational': import('./spring-data-relational/generator.ts').default;
-  'spring-websocket': import('./spring-websocket/generator.ts').default;
-  'jhipster:spring-websocket': import('./spring-websocket/generator.ts').default;
   upgrade: import('./upgrade/generator.ts').default;
   'jhipster:upgrade': import('./upgrade/generator.ts').default;
   vue: import('./vue/generator.ts').default;

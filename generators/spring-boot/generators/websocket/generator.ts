@@ -16,19 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JavaApplicationGenerator } from '../java/generator.ts';
+import { SpringBootApplicationGenerator } from '../../generator.ts';
 
 import cleanupTask from './cleanup.ts';
 import writeTask from './files.ts';
 
-export default class SpringWebsocketGenerator extends JavaApplicationGenerator {
+export default class SpringBootWebsocketGenerator extends SpringBootApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrap('java');
+      await this.dependsOnBootstrap('spring-boot');
     }
   }
 
@@ -39,7 +39,7 @@ export default class SpringWebsocketGenerator extends JavaApplicationGenerator {
     });
   }
 
-  get [JavaApplicationGenerator.WRITING]() {
+  get [SpringBootApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -54,7 +54,7 @@ export default class SpringWebsocketGenerator extends JavaApplicationGenerator {
     });
   }
 
-  get [JavaApplicationGenerator.POST_WRITING]() {
+  get [SpringBootApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }
