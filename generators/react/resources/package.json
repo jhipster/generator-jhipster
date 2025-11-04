@@ -27,7 +27,7 @@
     "webstomp-client": "1.2.6"
   },
   "devDependencies": {
-    "@eslint/js": "9.39.0",
+    "@eslint/js": "9.39.1",
     "@module-federation/enhanced": "0.21.2",
     "@module-federation/utilities": "3.1.73",
     "@testing-library/react": "16.3.0",
@@ -47,7 +47,7 @@
     "cross-env": "10.1.0",
     "css-loader": "7.1.2",
     "css-minimizer-webpack-plugin": "7.0.2",
-    "eslint": "9.39.0",
+    "eslint": "9.39.1",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.4",
     "eslint-plugin-react": "7.37.5",
