@@ -67,7 +67,6 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.lang.Nullable;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 <%_ if (reactive) { _%>
@@ -133,10 +132,9 @@ _%>
         return handleExceptionInternal((Exception) ex, pdCause, buildHeaders(ex), HttpStatusCode.valueOf(pdCause.getStatus()), request);
     }
 
-    @Nullable
     @Override
     protected <%- returnType %> handleExceptionInternal(
-            Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, <%= requestEntityRequestClass %> request) {
+            Exception ex, Object body, HttpHeaders headers, HttpStatusCode statusCode, <%= requestEntityRequestClass %> request) {
         body = body == null ? wrapAndCustomizeProblem((Throwable) ex, (<%= requestClass %>) request) : body;
     <%_ if (reactive) { _%>
         if (request.getResponse().isCommitted()) {
