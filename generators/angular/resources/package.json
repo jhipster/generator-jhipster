@@ -52,7 +52,7 @@
     "tinyglobby": "0.2.15",
     "ts-jest": "29.4.5",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.46.2",
+    "typescript-eslint": "8.46.3",
     "vitest": "3.2.4",
     "vitest-sonar-reporter": "3.0.0",
     "webpack": "5.102.1",
