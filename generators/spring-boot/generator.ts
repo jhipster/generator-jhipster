@@ -207,7 +207,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
           await this.composeWithJHipster('spring-data-elasticsearch');
         }
         if (websocket === SPRING_WEBSOCKET) {
-          await this.composeWithJHipster('spring-websocket');
+          await this.composeWithJHipster('jhipster:spring-boot:websocket');
         }
         if (([EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS] as string[]).includes(cacheProvider!)) {
           await this.composeWithJHipster('spring-cache');

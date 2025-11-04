@@ -1328,6 +1328,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/spring-boot/generators/oauth2/templates/template-file-spring-boot:oauth2.ejs": {
     "stateCleared": "modified",
   },
+  "generators/spring-boot/generators/websocket/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/websocket/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/websocket/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/websocket/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/websocket/templates/template-file-spring-boot:websocket.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/spring-boot/index.js": {
     "stateCleared": "modified",
   },
@@ -1497,21 +1512,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/spring-data-relational/templates/template-file-spring-data-relational.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-websocket/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-websocket/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-websocket/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-websocket/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-websocket/templates/template-file-spring-websocket.ejs": {
     "stateCleared": "modified",
   },
   "generators/upgrade/command.js": {

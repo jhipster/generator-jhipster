@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWriteFilesSection, asWritingTask } from '../base-application/support/task-type-inference.ts';
-import { SERVER_MAIN_SRC_DIR } from '../generator-constants.js';
-import { moveToJavaPackageSrcDir } from '../java/support/index.ts';
+import { asWriteFilesSection, asWritingTask } from '../../../base-application/support/task-type-inference.ts';
+import { SERVER_MAIN_SRC_DIR } from '../../../generator-constants.js';
+import { moveToJavaPackageSrcDir } from '../../../java/support/files.ts';
 
 const files = asWriteFilesSection({
   websocketFiles: [
