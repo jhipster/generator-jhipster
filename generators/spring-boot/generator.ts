@@ -180,7 +180,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
         }
 
         if (testFrameworks?.includes(CUCUMBER)) {
-          await this.composeWithJHipster('cucumber');
+          await this.composeWithJHipster('jhipster:spring-boot:cucumber');
         }
         if (testFrameworks?.includes(GATLING)) {
           await this.composeWithJHipster('gatling');

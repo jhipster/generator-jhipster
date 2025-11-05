@@ -75,8 +75,6 @@ type GeneratorsByNamespace = {
   common: import('./common/generator.ts').default;
   'jhipster:common': import('./common/generator.ts').default;
   'jhipster:common:bootstrap': import('./common/generators/bootstrap/generator.ts').default;
-  cucumber: import('./cucumber/generator.ts').default;
-  'jhipster:cucumber': import('./cucumber/generator.ts').default;
   cypress: import('./cypress/generator.ts').default;
   'jhipster:cypress': import('./cypress/generator.ts').default;
   docker: import('./docker/generator.ts').default;
@@ -162,6 +160,7 @@ type GeneratorsByNamespace = {
   'spring-boot': import('./spring-boot/generator.ts').default;
   'jhipster:spring-boot': import('./spring-boot/generator.ts').default;
   'jhipster:spring-boot:bootstrap': import('./spring-boot/generators/bootstrap/generator.ts').default;
+  'jhipster:spring-boot:cucumber': import('./spring-boot/generators/cucumber/generator.ts').default;
   'jhipster:spring-boot:jwt': import('./spring-boot/generators/jwt/generator.ts').default;
   'jhipster:spring-boot:oauth2': import('./spring-boot/generators/oauth2/generator.ts').default;
   'jhipster:spring-boot:websocket': import('./spring-boot/generators/websocket/generator.ts').default;
