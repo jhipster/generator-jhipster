@@ -110,7 +110,7 @@ export default class EnvironmentBuilder {
   }
 
   async prepare({ blueprints, lookups, devBlueprintPath = jhipsterDevBlueprintPath } = {}) {
-    const devBlueprintEnabled = existsSync(devBlueprintPath);
+    const devBlueprintEnabled = devBlueprintPath && existsSync(devBlueprintPath);
     this.env.sharedOptions.devBlueprintEnabled = devBlueprintEnabled;
     this.devBlueprintPath = devBlueprintEnabled ? devBlueprintPath : undefined;
     this.localBlueprintPath = path.join(process.cwd(), '.blueprint');
@@ -199,12 +199,14 @@ export default class EnvironmentBuilder {
   }
 
   async _lookupDevBlueprint() {
-    // Register jhipster generators.
-    await this.env.lookup({
-      packagePaths: [this.devBlueprintPath],
-      lookups: ['.'],
-      customizeNamespace: ns => ns?.replace('.blueprint', '@jhipster/jhipster-dev'),
-    });
+    if (this.devBlueprintPath) {
+      // Register jhipster generators.
+      await this.env.lookup({
+        packagePaths: [this.devBlueprintPath],
+        lookups: ['.'],
+        customizeNamespace: ns => ns?.replace('.blueprint', '@jhipster/jhipster-dev'),
+      });
+    }
     return this;
   }
 
@@ -257,7 +259,7 @@ export default class EnvironmentBuilder {
   /**
    * Lookup for generators.
    *
-   * @param {string[]} [generators] - generators to lookup.
+   * @param {string[]} generators - generators to lookup.
    * @param {Object} [options] - forwarded to Environment lookup.
    * @return {EnvironmentBuilder} this for chaining.
    */
