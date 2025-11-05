@@ -31,7 +31,14 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 <%_ if (cypressCoverage) { _%>
+  <%_ if (cypressCoverageWebpack) { _%>
 import '@cypress/code-coverage/support';
+  <%_ } else { _%>
+if (Cypress.env('CYPRESS_COVERAGE')) {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  require('cypress-monocart-coverage/support');
+}
+  <%_ } _%>
 <%_ } _%>
 
 <%_ if (generateUserManagement) { _%>
