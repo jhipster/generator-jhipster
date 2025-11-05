@@ -437,21 +437,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/common/templates/template-file-common.ejs": {
     "stateCleared": "modified",
   },
-  "generators/cucumber/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/cucumber/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/cucumber/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/cucumber/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/cucumber/templates/template-file-cucumber.ejs": {
-    "stateCleared": "modified",
-  },
   "generators/cypress/command.js": {
     "stateCleared": "modified",
   },
@@ -1296,6 +1281,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/spring-boot/generators/bootstrap/templates/template-file-spring-boot:bootstrap.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/cucumber/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/cucumber/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/cucumber/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/cucumber/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/cucumber/templates/template-file-spring-boot:cucumber.ejs": {
     "stateCleared": "modified",
   },
   "generators/spring-boot/generators/jwt/command.js": {

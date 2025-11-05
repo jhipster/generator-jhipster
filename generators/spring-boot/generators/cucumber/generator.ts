@@ -18,9 +18,9 @@
  */
 import { gt } from 'semver';
 
-import { SERVER_TEST_RES_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
-import { JavaApplicationGenerator } from '../java/generator.ts';
-import { moveToJavaPackageTestDir } from '../java/support/files.ts';
+import { SERVER_TEST_RES_DIR, SERVER_TEST_SRC_DIR } from '../../../generator-constants.js';
+import { JavaApplicationGenerator } from '../../../java/generator.ts';
+import { moveToJavaPackageTestDir } from '../../../java/support/files.ts';
 
 export default class CucumberGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
