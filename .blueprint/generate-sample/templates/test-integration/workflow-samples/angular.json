@@ -13,6 +13,7 @@
       "app-sample": "ng-default",
       "jdl-entity": "*",
       "generatorOptions": {
+        "removeNeedles": true,
         "clientTestFramework": "vitest",
         "clientBundler": "webpack"
       }

@@ -26,11 +26,13 @@ import { isFilePending, isFileStateModified } from 'mem-fs-editor/state';
 import { createCommitTransform } from 'mem-fs-editor/transform';
 import type { Options as PrettierOptions } from 'prettier';
 
-import BaseGenerator from '../base/index.ts';
+import BaseGenerator, { CommandBaseGenerator } from '../base/index.ts';
 import type { Features as BaseFeatures, Options as BaseOptions } from '../base/types.d.ts';
 import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.ts';
+import { createNeedleTransform } from '../base-core/support/needles.ts';
 import { PRETTIER_EXTENSIONS } from '../generator-constants.js';
 
+import type command from './command.ts';
 import {
   autoCrlfTransform,
   createESLintTransform,
@@ -48,7 +50,7 @@ const { MULTISTEP_TRANSFORM_QUEUE, PRE_CONFLICTS_QUEUE } = QUEUES;
 const MULTISTEP_TRANSFORM_PRIORITY = BaseGenerator.asPriority(MULTISTEP_TRANSFORM);
 const PRE_CONFLICTS_PRIORITY = BaseGenerator.asPriority(PRE_CONFLICTS);
 
-export default class BootstrapGenerator extends BaseGenerator {
+export default class BootstrapGenerator extends CommandBaseGenerator<typeof command> {
   static MULTISTEP_TRANSFORM = MULTISTEP_TRANSFORM_PRIORITY;
 
   static PRE_CONFLICTS = PRE_CONFLICTS_PRIORITY;
@@ -240,11 +242,17 @@ export default class BootstrapGenerator extends BaseGenerator {
       };
     }
 
+    const removeNeedlesTransforms: FileTransform<MemFsEditorFile>[] = [];
+    if (this.jhipsterConfig.removeNeedles) {
+      removeNeedlesTransforms.push(createNeedleTransform());
+    }
+
     const transformStreams = [
       ...skipYoResolveTransforms,
       forceYoFiles(),
       createSortConfigFilesTransform(),
       createForceWriteConfigFilesTransform(),
+      ...removeNeedlesTransforms,
       ...prettierTransforms,
       ...autoCrlfTransforms,
       createConflicterTransform(this.env.adapter, { ...this.env.conflicterOptions, customizeActions }),

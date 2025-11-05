@@ -219,6 +219,7 @@ exports[`generator - react:bootstrap bootstrapping default config should prepare
   "projectVersion": undefined,
   "reactive": false,
   "rememberMeKey": undefined,
+  "removeNeedles": undefined,
   "routes": undefined,
   "sampleWritten": undefined,
   "searchEngine": "no",
