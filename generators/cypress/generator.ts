@@ -34,13 +34,14 @@ const { ANGULAR } = clientFrameworkTypes;
 const WAIT_TIMEOUT = 3 * 60000;
 
 export default class CypressGenerator extends BaseApplicationGenerator<CypressEntity, CypressApplication> {
+  angularSchematic = false;
+
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      // TODO depend on GENERATOR_BOOTSTRAP_APPLICATION_CLIENT.
       await this.dependsOnBootstrap('client');
     }
   }
@@ -101,10 +102,12 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
           cypressDir: ({ clientTestDir }) => (clientTestDir ? `${clientTestDir}cypress/` : 'cypress/'),
           cypressTemporaryDir: ({ temporaryDir }) => (temporaryDir ? `${temporaryDir}cypress/` : '.cypress/'),
           cypressBootstrapEntities: true,
+          cypressCoverageWebpack: data => Boolean(data.cypressCoverage && data.clientFrameworkAngular && data.clientBundlerWebpack),
         });
       },
       npmScripts({ application }) {
         const { devServerPort, devServerPortProxy: devServerPortE2e = devServerPort } = application;
+        this.angularSchematic = Boolean(application.clientFrameworkAngular && application.clientBundlerEsbuild);
 
         Object.assign(application.clientPackageJsonScripts, {
           cypress: 'cypress open --e2e',
@@ -120,7 +123,9 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
           'ci:e2e:run': 'concurrently -k -s first -n application,e2e -c red,blue npm:ci:e2e:server:start npm:e2e:headless',
           'ci:e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue npm:app:start npm:e2e:headless`,
           'e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue npm:app:start npm:e2e`,
-          'e2e:devserver': `concurrently -k -s first -n backend,frontend,e2e -c red,yellow,blue npm:backend:start npm:start "wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:${devServerPortE2e} && npm run e2e:headless -- -c baseUrl=http://localhost:${devServerPortE2e}"`,
+          'e2e:devserver': this.angularSchematic
+            ? `concurrently -k -s first -n backend,e2e -c red,blue npm:backend:start "npm run ci:server:await && ng e2e --configuration ${application.cypressCoverage ? 'coverage' : 'run'}"`
+            : `concurrently -k -s first -n backend,frontend,e2e -c red,yellow,blue npm:backend:start npm:start "wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:${devServerPortE2e} && npm run e2e:headless -- -c baseUrl=http://localhost:${devServerPortE2e}"`,
         });
 
         if (application.clientRootDir) {
@@ -236,6 +241,17 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
             'eslint-plugin-cypress': application.nodeDependencies['eslint-plugin-cypress'],
           },
         });
+        if (application.cypressCoverage && this.angularSchematic) {
+          clientPackageJson.merge({
+            devDependencies: {
+              'cypress-monocart-coverage': null,
+            },
+            scripts: {
+              'pree2e:cypress:coverage': 'npm run ci:server:await',
+              'e2e:cypress:coverage': 'ng e2e --configuration coverage',
+            },
+          });
+        }
       },
       configureAudits({ application }) {
         if (!application.cypressAudit) return;
@@ -252,9 +268,9 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
           },
         });
       },
-      configureCoverage({ application, source }) {
-        const { cypressCoverage, clientFrameworkAngular, clientRootDir, dasherizedBaseName } = application;
-        if (!cypressCoverage) return;
+      configureWebpackCoverage({ application, source }) {
+        const { cypressCoverageWebpack, clientFrameworkAngular, clientRootDir, dasherizedBaseName } = application;
+        if (!cypressCoverageWebpack) return;
         const clientPackageJson = this.createStorage(this.destinationPath(application.clientRootDir!, 'package.json'));
         clientPackageJson.merge({
           devDependencies: {
@@ -303,6 +319,77 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
       : {}`,
           });
         }
+      },
+      cypressSchematics({ application, source }) {
+        const { applicationTypeMicroservice, dasherizedBaseName, clientRootDir, gatewayServerPort, serverPort } = application;
+        if (!this.angularSchematic) return;
+
+        (source as ClientSource).mergeClientPackageJson?.({
+          devDependencies: {
+            '@cypress/schematic': null,
+          },
+        });
+        this.mergeDestinationJson(`${clientRootDir}angular.json`, {
+          projects: {
+            [application.dasherizedBaseName]: {
+              architect: {
+                e2e: {
+                  builder: '@cypress/schematic:cypress',
+                  options: { browser: 'chrome' },
+                  configurations: {
+                    baseHref: {
+                      headless: true,
+                      baseUrl: `http://localhost:${applicationTypeMicroservice ? gatewayServerPort : serverPort}`,
+                    },
+                    open: {
+                      watch: true,
+                      devServerTarget: `${dasherizedBaseName}:serve`,
+                    },
+                    openProduction: {
+                      watch: true,
+                      devServerTarget: `${dasherizedBaseName}:serve:production`,
+                    },
+                    run: {
+                      headless: true,
+                      devServerTarget: `${dasherizedBaseName}:serve`,
+                    },
+                    runProduction: {
+                      headless: true,
+                      devServerTarget: `${dasherizedBaseName}:serve:production`,
+                    },
+                  },
+                  defaultConfiguration: 'open',
+                },
+              },
+            },
+          },
+        });
+      },
+      configureV8Coverage({ application }) {
+        const { cypressCoverage, clientRootDir, dasherizedBaseName } = application;
+        if (!cypressCoverage || !this.angularSchematic) return;
+        this.mergeDestinationJson(`${clientRootDir}angular.json`, {
+          projects: {
+            [dasherizedBaseName]: {
+              architect: {
+                e2e: {
+                  configurations: {
+                    coverage: {
+                      headless: true,
+                      devServerTarget: `${dasherizedBaseName}:serve:development`,
+                      env: { CYPRESS_COVERAGE: true },
+                    },
+                    openCoverage: {
+                      watch: true,
+                      devServerTarget: `${dasherizedBaseName}:serve:development`,
+                      env: { CYPRESS_COVERAGE: true },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        });
       },
       mavenProfile({ source }) {
         (source as JavaSource).addMavenProfile?.({

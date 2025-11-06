@@ -69,7 +69,26 @@ export default <% if (cypressCoverage) { %>async <% } %>(on: Cypress.PluginEvent
   });
 <%_ } _%>
 <%_ if (cypressCoverage) { _%>
+  <%_ if (cypressCoverageWebpack) { _%>
   (await import('@cypress/code-coverage/task')).default(on, config);
+  <%_ } else { _%>
+  if (config.env.CYPRESS_COVERAGE) {
+    (await import('cypress-monocart-coverage')).default(on, config, {
+      name: 'Cypress Coverage Report',
+      entryFilter: {
+        '**/node_modules/**': false,
+        '**/swagger-ui/**': false,
+        '**/polyfills.js': false,
+        '**/*.js': true,
+      },
+      sourceFilter: {
+        '**/<%- clientSrcDir %>**': true,
+      },
+      outputDir: './<%- temporaryDir %>/cypress-coverage-reports',
+      reports: ['v8', 'console-details'],
+    });
+  }
+  <%_ } _%>
 <%_ } _%>
   return config;
 }

@@ -46,19 +46,21 @@ The lighthouse report is created in `<%= cypressTemporaryDir %>lhreport.html`.
 
 When using Cypress, you can generate code coverage report by running your dev server with instrumented code:
 
+<%_ if (cypressCoverageWebpack) { _%>
 Build your Angular application with instrumented code:
 
     <%= nodePackageManagerCommand %> run webapp:instrumenter
 
+<%_ } _%>
 Start your backend without compiling frontend:
 
     <%= nodePackageManagerCommand %> run backend:start
 
 Start your Cypress end to end testing:
 
-    <%= nodePackageManagerCommand %> run e2e:cypress:coverage
+    <%= nodePackageManagerCommand %> run e2e --configuration coverage
 
-The coverage report is generated under `./coverage/lcov-report/`
+The coverage report is generated under `<%- temporaryDir %>/cypress-coverage` folder.
 
 <%_ } _%>
 <&_ } -&>
