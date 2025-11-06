@@ -30,7 +30,7 @@ export const files = asWriteFilesSection({
   common: [
     clientRootTemplatesBlock({
       templates: [
-        { sourceFile: 'eslint.config.js.jhi.angular', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi.angular` },
+        'eslint.config.ts.jhi.angular',
         'ngsw-config.json',
         'package.json',
         'tsconfig.json',

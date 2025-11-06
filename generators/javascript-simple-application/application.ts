@@ -30,7 +30,6 @@ export type JavascriptSimpleApplicationAddedApplicationProperties = {
   nodeDependencies: Record<string, string>;
 
   packageJsonNodeEngine?: boolean | string;
-  eslintConfigFile: string;
   cjsExtension: string;
   mjsExtension: string;
   /** Root package.json scripts */
@@ -64,8 +63,6 @@ export const mutateApplication = {
 
   prettierFolders: () => ['', '.blueprint/**/'],
   prettierExtensions: () => 'md,json,yml,js,cjs,mjs,ts,cts,mts'.split(','),
-
-  eslintConfigFile: data => `eslint.config.${data.packageJsonType === 'module' ? 'js' : 'mjs'}`,
 } as const satisfies MutateDataPropertiesWithRequiredProperties<
   MutateDataParam<JavascriptSimpleApplicationApplication>,
   JavascriptSimpleApplicationAddedApplicationProperties

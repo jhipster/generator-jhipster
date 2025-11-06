@@ -17,7 +17,7 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/eslint.config.mjs": {
+  "clientRoot/eslint.config.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/package.json": {
@@ -525,7 +525,7 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/eslint.config.mjs": {
+  "clientRoot/eslint.config.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/package.json": {
@@ -1105,7 +1105,7 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/eslint.config.mjs": {
+  "clientRoot/eslint.config.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/module-federation.config.cjs": {
@@ -1654,7 +1654,7 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "eslint.config.mjs": {
+  "eslint.config.ts": {
     "stateCleared": "modified",
   },
   "module-federation.config.cjs": {
@@ -2202,7 +2202,7 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "eslint.config.mjs": {
+  "eslint.config.ts": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -2866,7 +2866,7 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "eslint.config.mjs": {
+  "eslint.config.ts": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -3350,7 +3350,7 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "eslint.config.mjs": {
+  "eslint.config.ts": {
     "stateCleared": "modified",
   },
   "package.json": {

@@ -17,7 +17,7 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/eslint.config.mjs": {
+  "clientRoot/eslint.config.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/jest.conf.js": {
@@ -480,7 +480,7 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/eslint.config.mjs": {
+  "clientRoot/eslint.config.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/jest.conf.js": {
@@ -976,7 +976,7 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/eslint.config.mjs": {
+  "clientRoot/eslint.config.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/jest.conf.js": {
@@ -1455,7 +1455,7 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "eslint.config.mjs": {
+  "eslint.config.ts": {
     "stateCleared": "modified",
   },
   "jest.conf.js": {
@@ -1949,7 +1949,7 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "eslint.config.mjs": {
+  "eslint.config.ts": {
     "stateCleared": "modified",
   },
   "jest.conf.js": {
@@ -2502,7 +2502,7 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "eslint.config.mjs": {
+  "eslint.config.ts": {
     "stateCleared": "modified",
   },
   "jest.conf.js": {
@@ -2965,7 +2965,7 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "eslint.config.mjs": {
+  "eslint.config.ts": {
     "stateCleared": "modified",
   },
   "jest.conf.js": {

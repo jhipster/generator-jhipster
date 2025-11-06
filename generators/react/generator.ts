@@ -104,7 +104,6 @@ export default class ReactGenerator extends ClientApplicationGenerator<
 
         applicationDefaults({
           __override__: true,
-          eslintConfigFile: app => `eslint.config.${app.packageJsonType === 'module' ? 'js' : 'mjs'}`,
           webappEnumerationsDir: app => `${app.clientSrcDir}app/shared/model/enumerations/`,
         });
       },
@@ -253,6 +252,15 @@ ${comment}
 
   get writing() {
     return this.asWritingTaskGroup({
+      async cleanup({ control }) {
+        await control.cleanupFiles({
+          '9.0.0-alpha.0': [
+            // Try to remove possibles old eslint config files
+            'eslint.config.js',
+            'eslint.config.mjs',
+          ],
+        });
+      },
       cleanupOldFilesTask,
       writeEslintClientRootConfigFile,
       writeFiles,
