@@ -27,6 +27,7 @@
       "app-sample": "ng-mongodb-kafka-cucumber",
       "entity": "mongodb",
       "generatorOptions": {
+        "clientTestFramework": "vitest",
         "defaultEnvironment": "dev"
       }
     },

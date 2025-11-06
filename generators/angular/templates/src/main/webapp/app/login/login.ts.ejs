@@ -18,7 +18,7 @@
 -%>
 import { Component, OnInit, AfterViewInit, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router<% if (generateUserManagement) { %>, RouterLink<% } %> } from '@angular/router';
 
 import SharedModule from 'app/shared/shared.module';
 import { LoginService } from 'app/login/login.service';
@@ -26,7 +26,7 @@ import { AccountService } from 'app/core/auth/account.service';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-login',
-  imports: [SharedModule, ReactiveFormsModule, RouterLink],
+  imports: [SharedModule, ReactiveFormsModule<% if (generateUserManagement) { %>, RouterLink<% } %>],
   templateUrl: './login.html',
 })
 export default class LoginComponent implements OnInit, AfterViewInit {

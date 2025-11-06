@@ -22,6 +22,7 @@
   "compilerOptions": {
     "composite": true,
     "outDir": "<%= this.relativeDir(clientRootDir, temporaryDir) %>out-tsc/spec",
+    "resolveJsonModule": true,
 <%_ if (clientTestFrameworkJest) { _%>
     "types": ["jest", "node"]
 <%_ } else { _%>
