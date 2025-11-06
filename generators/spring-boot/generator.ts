@@ -186,7 +186,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
           await this.composeWithJHipster('gatling');
         }
         if (feignClient) {
-          await this.composeWithJHipster('feign-client');
+          await this.composeWithJHipster('jhipster:spring-boot:feign-client');
         }
 
         if (databaseType === SQL) {

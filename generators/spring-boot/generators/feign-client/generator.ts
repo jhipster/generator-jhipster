@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { JavaApplicationGenerator } from '../java/generator.ts';
+import { JavaApplicationGenerator } from '../../../java/generator.ts';
 
 import cleanupTask from './cleanup.ts';
 import { feignFiles } from './files.ts';

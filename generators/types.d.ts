@@ -88,8 +88,6 @@ type GeneratorsByNamespace = {
   'jhipster:entity': import('./entity/generator.ts').default;
   'export-jdl': import('./export-jdl/generator.ts').default;
   'jhipster:export-jdl': import('./export-jdl/generator.ts').default;
-  'feign-client': import('./feign-client/generator.ts').default;
-  'jhipster:feign-client': import('./feign-client/generator.ts').default;
   gatling: import('./gatling/generator.ts').default;
   'jhipster:gatling': import('./gatling/generator.ts').default;
   'generate-blueprint': import('./generate-blueprint/generator.ts').default;
@@ -161,6 +159,7 @@ type GeneratorsByNamespace = {
   'jhipster:spring-boot': import('./spring-boot/generator.ts').default;
   'jhipster:spring-boot:bootstrap': import('./spring-boot/generators/bootstrap/generator.ts').default;
   'jhipster:spring-boot:cucumber': import('./spring-boot/generators/cucumber/generator.ts').default;
+  'jhipster:spring-boot:feign-client': import('./spring-boot/generators/feign-client/generator.ts').default;
   'jhipster:spring-boot:jwt': import('./spring-boot/generators/jwt/generator.ts').default;
   'jhipster:spring-boot:oauth2': import('./spring-boot/generators/oauth2/generator.ts').default;
   'jhipster:spring-boot:websocket': import('./spring-boot/generators/websocket/generator.ts').default;

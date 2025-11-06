@@ -539,21 +539,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/export-jdl/templates/template-file-export-jdl.ejs": {
     "stateCleared": "modified",
   },
-  "generators/feign-client/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/feign-client/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/feign-client/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/feign-client/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/feign-client/templates/template-file-feign-client.ejs": {
-    "stateCleared": "modified",
-  },
   "generators/gatling/command.js": {
     "stateCleared": "modified",
   },
@@ -1296,6 +1281,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/spring-boot/generators/cucumber/templates/template-file-spring-boot:cucumber.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/feign-client/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/feign-client/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/feign-client/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/feign-client/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/feign-client/templates/template-file-spring-boot:feign-client.ejs": {
     "stateCleared": "modified",
   },
   "generators/spring-boot/generators/jwt/command.js": {
