@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'esmocha';
-import { basename, dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename, join } from 'node:path';
 
 import { databaseTypes } from '../../lib/jhipster/index.ts';
 import {
@@ -38,12 +37,9 @@ import {
 
 import Generator from './generator.ts';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const generator = basename(__dirname);
+const generator = basename(import.meta.dirname);
 // compose with server generator, many conditionals at server generator
-const generatorFile = join(__dirname, '../server/index.js');
+const generatorFile = join(import.meta.dirname, '../server/index.js');
 
 const { COUCHBASE: databaseType } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };

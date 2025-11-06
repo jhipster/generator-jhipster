@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'esmocha';
-import { basename, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename } from 'node:path';
 
 import { cacheTypes, databaseTypes, searchEngineTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.ts';
 import {
@@ -40,10 +39,7 @@ const { NO: NO_SEARCH_ENGINE, ELASTICSEARCH } = searchEngineTypes;
 const { NO: NO_SERVICE_DISCOVERY, EUREKA, CONSUL } = serviceDiscoveryTypes;
 const { NO: NO_CACHE, REDIS, MEMCACHED, HAZELCAST } = cacheTypes;
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const generator = basename(__dirname);
+const generator = basename(import.meta.dirname);
 
 const NO_SQL = [CASSANDRA, COUCHBASE, MONGODB, NEO4J] as string[];
 

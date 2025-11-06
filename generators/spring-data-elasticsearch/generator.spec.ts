@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'esmocha';
-import { basename, dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename, join } from 'node:path';
 
 import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import { authenticationTypes, databaseTypes, searchEngineTypes } from '../../lib/jhipster/index.ts';
@@ -36,12 +35,9 @@ import { filterBasicServerGenerators, shouldComposeWithSpringCloudStream } from 
 import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.ts';
 import Generator from './generator.ts';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const generator = basename(__dirname);
+const generator = basename(import.meta.dirname);
 // compose with server generator, many conditionals at server generator
-const serverGeneratorFile = join(__dirname, '../server/index.js');
+const serverGeneratorFile = join(import.meta.dirname, '../server/index.js');
 
 const { SQL, CASSANDRA, MONGODB, NEO4J } = databaseTypes;
 const commonConfig = { baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };

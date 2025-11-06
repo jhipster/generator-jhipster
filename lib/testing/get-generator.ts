@@ -1,16 +1,13 @@
 import { existsSync } from 'node:fs';
-import { dirname, isAbsolute, join, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import { isAbsolute, join, resolve } from 'node:path';
 
 export const getGeneratorRelativeFolder = (generatorName: string) => {
   generatorName = generatorName.replace('jhipster:', '');
   return join('generators', generatorName.split(':').join('/generators/'));
 };
 
-export const getGeneratorFolder = (generatorName: string) => resolve(__dirname, '../..', getGeneratorRelativeFolder(generatorName));
+export const getGeneratorFolder = (generatorName: string) =>
+  resolve(import.meta.dirname, '../..', getGeneratorRelativeFolder(generatorName));
 
 const getGenerator = (generatorName: string) => {
   if (isAbsolute(generatorName)) {

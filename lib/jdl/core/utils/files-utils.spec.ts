@@ -19,8 +19,7 @@
 
 import { after, before, describe, it } from 'esmocha';
 import fs from 'node:fs';
-import path, { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import path from 'node:path';
 
 import { expect } from 'chai';
 
@@ -28,9 +27,6 @@ import { getPackageRoot } from '../../../index.ts';
 import { getTestFile } from '../__test-support__/index.ts';
 
 import { createFolderIfItDoesNotExist, doesDirectoryExist, doesFileExist } from './file-utils.ts';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 describe('jdl - FileUtils', () => {
   describe('doesFileExist', () => {
@@ -63,12 +59,12 @@ describe('jdl - FileUtils', () => {
       });
       describe('with an invalid directory path', () => {
         it('should return false', () => {
-          expect(doesDirectoryExist(path.join(__dirname, 'invalid-folder'))).to.be.false;
+          expect(doesDirectoryExist(path.join(import.meta.dirname, 'invalid-folder'))).to.be.false;
         });
       });
       describe('with a valid directory path', () => {
         it('should return true', () => {
-          expect(doesDirectoryExist(__dirname)).to.be.true;
+          expect(doesDirectoryExist(import.meta.dirname)).to.be.true;
         });
       });
     });

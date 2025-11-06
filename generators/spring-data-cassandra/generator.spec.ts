@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'esmocha';
-import { basename, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename } from 'node:path';
 
 import { databaseTypes } from '../../lib/jhipster/index.ts';
 import { buildServerSamples, defaultHelpers as helpers, entitiesSimple as entities, runResult } from '../../lib/testing/index.ts';
@@ -30,10 +29,7 @@ import {
 } from '../server/__test-support/index.ts';
 import Generator from '../server/index.ts';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const generator = basename(__dirname);
+const generator = basename(import.meta.dirname);
 
 const { CASSANDRA: databaseType } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };

@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'esmocha';
-import { basename, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename } from 'node:path';
 
 import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
 import { AuthenticationTypeMatrix, defaultHelpers as helpers, extendMatrix, fromMatrix, runResult } from '../../lib/testing/index.ts';
@@ -30,10 +29,7 @@ import Generator from './generator.ts';
 const { CYPRESS } = testFrameworkTypes;
 const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const generator = basename(__dirname);
+const generator = basename(import.meta.dirname);
 
 const e2eMatrix = extendMatrix<ConfigAll>(
   fromMatrix({

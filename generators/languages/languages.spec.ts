@@ -1,16 +1,12 @@
 import { before, describe, it } from 'esmocha';
-import { basename, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename } from 'node:path';
 
 import { basicHelpers, defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
 
 import { supportedLanguages } from './support/index.ts';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const generator = basename(__dirname);
+const generator = basename(import.meta.dirname);
 
 const createClientProject = (options?: Parameters<ReturnType<typeof basicHelpers.runJHipster>['withOptions']>[0]) =>
   basicHelpers
