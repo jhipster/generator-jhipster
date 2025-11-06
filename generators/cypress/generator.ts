@@ -310,7 +310,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
                   }
                 ],
                 enforce: 'post',
-                include: path.resolve(import.meta.dirname, '../${CLIENT_MAIN_SRC_DIR}'),
+                include: path.resolve(__dirname, '../${CLIENT_MAIN_SRC_DIR}'),
                 exclude: [/\\.(e2e|spec)\\.ts$/, /node_modules/, /(ngfactory|ngstyle)\\.js/],
               },
             ],
