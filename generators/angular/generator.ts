@@ -297,6 +297,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
         await control.cleanupFiles({
           '8.6.1': ['.eslintrc.json', '.eslintignore'],
           '8.7.4': [`${application.clientSrcDir}app/app.constants.ts`],
+          '9.0.0-alpha.0': [[application.clientTestFrameworkJest!, `${application.clientRootDir}jest.conf.js`]],
         });
       },
       cleanupOldFilesTask,

@@ -118,7 +118,7 @@
     "build": "<%- nodePackageManager %> run webapp:prod --",
     "pretest": "<%- nodePackageManager %> run lint",
 <%_ if (clientTestFrameworkJest) { _%>
-    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
+    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.ts",
     "test": "ng test --coverage --log-heap-usage -w=2",
 <%_ } else { _%>
     "test": "ng test",

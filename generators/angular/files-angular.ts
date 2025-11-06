@@ -46,7 +46,7 @@ export const files = asWriteFilesSection({
   jest: [
     clientRootTemplatesBlock({
       condition: ctx => ctx.clientTestFrameworkJest,
-      templates: ['jest.conf.js'],
+      templates: ['jest.conf.ts'],
     }),
   ],
   vitest: [

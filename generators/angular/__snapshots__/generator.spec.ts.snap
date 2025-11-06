@@ -26,7 +26,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/eslint.config.mjs": {
     "stateCleared": "modified",
   },
-  "clientRoot/jest.conf.js": {
+  "clientRoot/jest.conf.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/ngsw-config.json": {
@@ -751,7 +751,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/eslint.config.mjs": {
     "stateCleared": "modified",
   },
-  "clientRoot/jest.conf.js": {
+  "clientRoot/jest.conf.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/ngsw-config.json": {
@@ -1699,7 +1699,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/eslint.config.mjs": {
     "stateCleared": "modified",
   },
-  "clientRoot/jest.conf.js": {
+  "clientRoot/jest.conf.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/ngsw-config.json": {
@@ -2422,7 +2422,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "eslint.config.mjs": {
     "stateCleared": "modified",
   },
-  "jest.conf.js": {
+  "jest.conf.ts": {
     "stateCleared": "modified",
   },
   "ngsw-config.json": {
@@ -3161,7 +3161,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "eslint.config.mjs": {
     "stateCleared": "modified",
   },
-  "jest.conf.js": {
+  "jest.conf.ts": {
     "stateCleared": "modified",
   },
   "ngsw-config.json": {
@@ -4280,7 +4280,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "eslint.config.mjs": {
     "stateCleared": "modified",
   },
-  "jest.conf.js": {
+  "jest.conf.ts": {
     "stateCleared": "modified",
   },
   "ngsw-config.json": {
@@ -4972,7 +4972,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "eslint.config.mjs": {
     "stateCleared": "modified",
   },
-  "jest.conf.js": {
+  "jest.conf.ts": {
     "stateCleared": "modified",
   },
   "ngsw-config.json": {
