@@ -1,17 +1,18 @@
 import { before, describe, expect, it } from 'esmocha';
-import { basename, dirname } from 'node:path';
+import { basename, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
-import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
-import Generator from '../server/index.ts';
+import { defaultHelpers as helpers, runResult } from '../../../../lib/testing/index.ts';
+import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/index.ts';
+
+import Generator from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const generator = basename(__dirname);
+const generator = `${basename(resolve(__dirname, '../../'))}:${basename(__dirname)}`;
 
-describe('generator - feign-client', () => {
+describe(`generator - feign-client`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
   checkEnforcements({}, generator);
