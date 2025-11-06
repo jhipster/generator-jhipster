@@ -117,7 +117,7 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
             const files = globSync('*.jdl');
             await this.composeWithJHipster(GENERATOR_JDL, {
               generatorArgs: files,
-              generatorOptions: { jsonOnly: true, destinationRoot: this.projectFolder },
+              generatorOptions: { ...generatorOptions, jsonOnly: true, destinationRoot: this.projectFolder },
             });
           }
           await this.composeWithJHipster(GENERATOR_APP, { generatorOptions });
