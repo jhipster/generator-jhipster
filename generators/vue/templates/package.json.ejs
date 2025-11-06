@@ -25,6 +25,9 @@
   "cacheDirectories": [
     "node_modules"
   ],
+<%_ if (clientBundlerVite) { _%>
+  "type": "module",
+<%_ } _%>
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "<%= nodeDependencies['@fortawesome/fontawesome-svg-core'] %>",
     "@fortawesome/free-solid-svg-icons": "<%= nodeDependencies['@fortawesome/free-solid-svg-icons'] %>",
