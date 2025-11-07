@@ -131,7 +131,6 @@ exports[`generator - angular:bootstrap bootstrapping default config should prepa
   "enableTranslation": true,
   "endpointPrefix": "",
   "entitySuffix": "",
-  "eslintConfigFile": "eslint.config.mjs",
   "feignClient": undefined,
   "filterEntitiesAndPropertiesForClient": Any<Function>,
   "filterEntitiesForClient": Any<Function>,
