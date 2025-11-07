@@ -333,6 +333,7 @@ export default class extends BaseSimpleApplicationGenerator<
             eslint: `${mainDependencies.eslint}`,
             globals: `${mainDependencies.globals}`,
             vitest: mainDependencies.vitest,
+            rollup: '4.52.5',
             prettier: `${mainDependencies.prettier}`,
             /*
              * yeoman-test version is loaded through generator-jhipster peer dependency.
