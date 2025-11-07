@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'esmocha';
-import { basename, dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename, resolve } from 'node:path';
 
 import { defaultHelpers as helpers, extendMatrix, fromMatrix, result } from '../../../../lib/testing/index.ts';
 import type { ConfigAll } from '../../../../lib/types/command-all.ts';
@@ -27,10 +26,7 @@ import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/su
 
 import Generator from './generator.ts';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const generator = `${basename(resolve(__dirname, '../../'))}:${basename(__dirname)}`;
+const generator = `${basename(resolve(import.meta.dirname, '../../'))}:${basename(import.meta.dirname)}`;
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
