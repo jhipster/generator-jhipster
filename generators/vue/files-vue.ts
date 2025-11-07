@@ -25,7 +25,6 @@ export const vueFiles = asWriteFilesSection({
   common: [
     clientRootTemplatesBlock({
       templates: [
-        '.postcssrc.js',
         { sourceFile: 'eslint.config.js.jhi.vue', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi.vue` },
         'package.json',
         'tsconfig.json',
