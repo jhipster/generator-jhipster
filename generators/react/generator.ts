@@ -253,6 +253,11 @@ ${comment}
 
   get writing() {
     return this.asWritingTaskGroup({
+      async cleanup({ control }) {
+        await control.cleanupFiles({
+          '9.0.0-alpha.0': ['postcss.config.js'],
+        });
+      },
       cleanupOldFilesTask,
       writeEslintClientRootConfigFile,
       writeFiles,
