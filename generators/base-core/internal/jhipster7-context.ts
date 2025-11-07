@@ -13,8 +13,8 @@ import {
   getSpecificationBuildForType,
   hibernateSnakeCase,
 } from '../../server/support/index.ts';
-import { getDBCExtraOption } from '../../spring-data-relational/support/database-data.ts';
-import { getJdbcUrl, getR2dbcUrl } from '../../spring-data-relational/support/database-url.ts';
+import { getDBCExtraOption } from '../../spring-data/generators/relational/support/database-data.ts';
+import { getJdbcUrl, getR2dbcUrl } from '../../spring-data/generators/relational/support/database-url.ts';
 import type CoreGenerator from '../generator.ts';
 
 const { BYTES, BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
@@ -33,24 +33,24 @@ type MigrationProperty = Record<
 
 export const jhipster7deprecatedProperties: MigrationProperty = {
   devDatabaseType: {
-    behaviorOnlyReason: 'v8: devDatabaseType is only used in jhipster:spring-data-relational generator',
+    behaviorOnlyReason: 'v8: devDatabaseType is only used in jhipster:spring-data:relational generator',
     get: ({ data }) => {
       if (data.devDatabaseType !== undefined) return data.devDatabaseType;
       const fallbackValue = data.prodDatabaseType ?? data.databaseType;
 
       console.log(
-        `JHipster v8 behavior change(devDatabaseType is only used in jhipster:spring-data-relational generator): devDatabaseType is not set, using fallback: ${fallbackValue}`,
+        `JHipster v8 behavior change(devDatabaseType is only used in jhipster:spring-data:relational generator): devDatabaseType is not set, using fallback: ${fallbackValue}`,
       );
       return fallbackValue;
     },
   },
   prodDatabaseType: {
-    behaviorOnlyReason: 'v8: prodDatabaseType is only used in jhipster:spring-data-relational generator',
+    behaviorOnlyReason: 'v8: prodDatabaseType is only used in jhipster:spring-data:relational generator',
     get: ({ data }) => {
       if (data.prodDatabaseType !== undefined) return data.prodDatabaseType;
 
       console.log(
-        `JHipster v8 behavior change(prodDatabaseType is only used in jhipster:spring-data-relational generator): devDatabaseType is not set, using fallback: ${data.databaseType}`,
+        `JHipster v8 behavior change(prodDatabaseType is only used in jhipster:spring-data:relational generator): devDatabaseType is not set, using fallback: ${data.databaseType}`,
       );
       return data.databaseType;
     },

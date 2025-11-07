@@ -24,7 +24,7 @@ import { databaseTypes, entityOptions, fieldTypes, reservedKeywords, searchEngin
 import { isReservedPaginationWords } from '../../lib/jhipster/reserved-keywords.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { stringifyApplicationData } from '../base-application/support/index.ts';
-import { isReservedH2Keyword } from '../spring-data-relational/support/h2-reserved-keywords.ts';
+import { isReservedH2Keyword } from '../spring-data/generators/relational/support/h2-reserved-keywords.ts';
 
 import { hibernateSnakeCase } from './support/index.ts';
 import type {

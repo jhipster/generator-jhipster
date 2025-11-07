@@ -25,7 +25,7 @@ import { applicationOptions, authenticationTypes, cacheTypes, databaseTypes, tes
 import { asPromptingTask } from '../base-application/support/task-type-inference.ts';
 import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from '../server/support/database.ts';
 import type { Config as SpringCacheConfig } from '../spring-cache/types.ts';
-import type { Config as SpringDataRelationalConfig } from '../spring-data-relational/types.ts';
+import type { Config as SpringDataRelationalConfig } from '../spring-data/generators/relational/types.d.ts';
 
 import type SpringBootGenerator from './generator.ts';
 

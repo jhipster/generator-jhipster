@@ -23,8 +23,8 @@ import { stringHashCode } from '../../lib/utils/index.ts';
 import { createFaker } from '../base-application/support/index.ts';
 import BaseApplicationGenerator from '../base-simple-application/index.ts';
 import type { Application as SpringBootApplication } from '../spring-boot/index.ts';
-import type { Application as SpringDataRelationalApplication } from '../spring-data-relational/index.ts';
-import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.ts';
+import type { Application as SpringDataRelationalApplication } from '../spring-data/generators/relational/index.ts';
+import { getJdbcUrl, getR2dbcUrl } from '../spring-data/generators/relational/support/index.ts';
 
 import { SERVICE_COMPLETED_SUCCESSFULLY, SERVICE_HEALTHY } from './constants.ts';
 import { dockerFiles } from './files.ts';
