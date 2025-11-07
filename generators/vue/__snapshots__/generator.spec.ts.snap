@@ -17,9 +17,6 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/.postcssrc.js": {
-    "stateCleared": "modified",
-  },
   "clientRoot/eslint.config.mjs": {
     "stateCleared": "modified",
   },
@@ -526,9 +523,6 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/.postcssrc.js": {
     "stateCleared": "modified",
   },
   "clientRoot/eslint.config.mjs": {
@@ -1111,9 +1105,6 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/.postcssrc.js": {
-    "stateCleared": "modified",
-  },
   "clientRoot/eslint.config.mjs": {
     "stateCleared": "modified",
   },
@@ -1543,6 +1534,9 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "clientRoot/webpack/config.js": {
     "stateCleared": "modified",
   },
+  "clientRoot/webpack/package.json": {
+    "stateCleared": "modified",
+  },
   "clientRoot/webpack/vue.utils.js": {
     "stateCleared": "modified",
   },
@@ -1655,9 +1649,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   ".jhipster/SkipClient.json": {
-    "stateCleared": "modified",
-  },
-  ".postcssrc.js": {
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
@@ -2092,6 +2083,9 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "webpack/config.js": {
     "stateCleared": "modified",
   },
+  "webpack/package.json": {
+    "stateCleared": "modified",
+  },
   "webpack/vue.utils.js": {
     "stateCleared": "modified",
   },
@@ -2203,9 +2197,6 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   ".jhipster/SkipClient.json": {
-    "stateCleared": "modified",
-  },
-  ".postcssrc.js": {
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
@@ -2872,9 +2863,6 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   ".jhipster/SkipClient.json": {
     "stateCleared": "modified",
   },
-  ".postcssrc.js": {
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
@@ -3357,9 +3345,6 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
     "stateCleared": "modified",
   },
   ".jhipster/SkipClient.json": {
-    "stateCleared": "modified",
-  },
-  ".postcssrc.js": {
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
