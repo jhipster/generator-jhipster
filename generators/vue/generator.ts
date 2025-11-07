@@ -289,6 +289,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
               `${application.srcMainWebapp}microfrontends/entities-router-test.ts`,
             ],
           ],
+          '9.0.0-alpha.0': ['.postcssrc.js'],
         });
       },
       cleanupOldFilesTask,

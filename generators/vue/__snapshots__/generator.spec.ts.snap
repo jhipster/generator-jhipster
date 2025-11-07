@@ -17,9 +17,6 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/.postcssrc.js": {
-    "stateCleared": "modified",
-  },
   "clientRoot/eslint.config.mjs": {
     "stateCleared": "modified",
   },
@@ -440,10 +437,10 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "clientRoot/tsconfig.vitest.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/vite.config.mts": {
+  "clientRoot/vite.config.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/vitest.config.mts": {
+  "clientRoot/vitest.config.ts": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -526,9 +523,6 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/.postcssrc.js": {
     "stateCleared": "modified",
   },
   "clientRoot/eslint.config.mjs": {
@@ -1023,10 +1017,10 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/tsconfig.vitest.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/vite.config.mts": {
+  "clientRoot/vite.config.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/vitest.config.mts": {
+  "clientRoot/vitest.config.ts": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -1109,9 +1103,6 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/.postcssrc.js": {
     "stateCleared": "modified",
   },
   "clientRoot/eslint.config.mjs": {
@@ -1534,13 +1525,16 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "clientRoot/tsconfig.vitest.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/vite.config.mts": {
+  "clientRoot/vite.config.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/vitest.config.mts": {
+  "clientRoot/vitest.config.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/webpack/config.js": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/webpack/package.json": {
     "stateCleared": "modified",
   },
   "clientRoot/webpack/vue.utils.js": {
@@ -1655,9 +1649,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   ".jhipster/SkipClient.json": {
-    "stateCleared": "modified",
-  },
-  ".postcssrc.js": {
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
@@ -2083,13 +2074,16 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "tsconfig.vitest.json": {
     "stateCleared": "modified",
   },
-  "vite.config.mts": {
+  "vite.config.ts": {
     "stateCleared": "modified",
   },
-  "vitest.config.mts": {
+  "vitest.config.ts": {
     "stateCleared": "modified",
   },
   "webpack/config.js": {
+    "stateCleared": "modified",
+  },
+  "webpack/package.json": {
     "stateCleared": "modified",
   },
   "webpack/vue.utils.js": {
@@ -2203,9 +2197,6 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   ".jhipster/SkipClient.json": {
-    "stateCleared": "modified",
-  },
-  ".postcssrc.js": {
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
@@ -2790,10 +2781,10 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "tsconfig.vitest.json": {
     "stateCleared": "modified",
   },
-  "vite.config.mts": {
+  "vite.config.ts": {
     "stateCleared": "modified",
   },
-  "vitest.config.mts": {
+  "vitest.config.ts": {
     "stateCleared": "modified",
   },
 }
@@ -2870,9 +2861,6 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   ".jhipster/SkipClient.json": {
-    "stateCleared": "modified",
-  },
-  ".postcssrc.js": {
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
@@ -3277,10 +3265,10 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "tsconfig.vitest.json": {
     "stateCleared": "modified",
   },
-  "vite.config.mts": {
+  "vite.config.ts": {
     "stateCleared": "modified",
   },
-  "vitest.config.mts": {
+  "vitest.config.ts": {
     "stateCleared": "modified",
   },
 }
@@ -3357,9 +3345,6 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
     "stateCleared": "modified",
   },
   ".jhipster/SkipClient.json": {
-    "stateCleared": "modified",
-  },
-  ".postcssrc.js": {
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
@@ -3779,10 +3764,10 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "tsconfig.vitest.json": {
     "stateCleared": "modified",
   },
-  "vite.config.mts": {
+  "vite.config.ts": {
     "stateCleared": "modified",
   },
-  "vitest.config.mts": {
+  "vitest.config.ts": {
     "stateCleared": "modified",
   },
 }
