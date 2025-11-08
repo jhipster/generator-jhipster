@@ -34,7 +34,7 @@
 _&>
 # <%= baseName %>
 
-This application was generated using JHipster <%= jhipsterVersion %>, you can find documentation and help at [<%= documentationArchiveUrl %>](<%= documentationArchiveUrl %>).
+This application was generated using JHipster <%= jhipsterVersion %>, you can find documentation and help at [<%= documentationArchiveUrl %>releases/](<%= documentationArchiveUrl %>releases/).
 
 <&- fragments.introSection() &>
 ## Project Structure
@@ -57,22 +57,22 @@ This application was generated using JHipster <%= jhipsterVersion %>, you can fi
 <&- fragments.othersSection() &>
 <& } &>
 [JHipster Homepage and latest documentation]: <%= hipsterDocumentationLink %>
-[JHipster <%= jhipsterVersion %> archive]: <%= documentationArchiveUrl %>
+[JHipster releases]: <%= documentationArchiveUrl %>releases/
 <%_ if (applicationTypeGateway || applicationTypeMicroservice) { _%>
-[Doing microservices with JHipster]: <%= documentationArchiveUrl %>/microservices-architecture/
+[Doing microservices with JHipster]: <%= documentationArchiveUrl %>microservices-architecture/
 <%_ } _%>
-[Using JHipster in development]: <%= documentationArchiveUrl %>/development/
+[Using JHipster in development]: <%= documentationArchiveUrl %>development/
 <%_ if (serviceDiscoveryEureka) { _%>
-[Service Discovery and Configuration with the JHipster-Registry]: <%= documentationArchiveUrl %>/microservices-architecture/#jhipster-registry
+[Service Discovery and Configuration with the JHipster-Registry]: <%= documentationArchiveUrl %>microservices-architecture/#jhipster-registry
 <%_ } _%>
 <%_ if (serviceDiscoveryConsul) { _%>
-[Service Discovery and Configuration with Consul]: <%= documentationArchiveUrl %>/microservices-architecture/#consul
+[Service Discovery and Configuration with Consul]: <%= documentationArchiveUrl %>microservices-architecture/#consul
 <%_ } _%>
-[Using Docker and Docker-Compose]: <%= documentationArchiveUrl %>/docker-compose
-[Using JHipster in production]: <%= documentationArchiveUrl %>/production/
-[Running tests page]: <%= documentationArchiveUrl %>/running-tests/
-[Code quality page]: <%= documentationArchiveUrl %>/code-quality/
-[Setting up Continuous Integration]: <%= documentationArchiveUrl %>/setting-up-ci/
+[Using Docker and Docker-Compose]: <%= documentationArchiveUrl %>docker-compose
+[Using JHipster in production]: <%= documentationArchiveUrl %>production/
+[Running tests page]: <%= documentationArchiveUrl %>running-tests/
+[Code quality page]: <%= documentationArchiveUrl %>code-quality/
+[Setting up Continuous Integration]: <%= documentationArchiveUrl %>setting-up-ci/
 
 [Node.js]: https://nodejs.org/
 [NPM]: https://www.npmjs.com/

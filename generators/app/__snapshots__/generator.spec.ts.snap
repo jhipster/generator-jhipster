@@ -455,7 +455,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
     "postgresql",
   ],
   "dockerServicesDir": "src/main/docker/",
-  "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
+  "documentationArchiveUrl": "https://www.jhipster.tech/",
   "domains": [
     "com.mycompany.myapp",
   ],
@@ -1152,7 +1152,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
     "postgresql",
   ],
   "dockerServicesDir": "src/main/docker/",
-  "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
+  "documentationArchiveUrl": "https://www.jhipster.tech/",
   "domains": [
     "com.mycompany.myapp",
   ],
@@ -1835,7 +1835,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
     "postgresql",
   ],
   "dockerServicesDir": "src/main/docker/",
-  "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
+  "documentationArchiveUrl": "https://www.jhipster.tech/",
   "domains": [
     "com.mycompany.myapp",
   ],
