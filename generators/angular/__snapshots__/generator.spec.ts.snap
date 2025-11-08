@@ -23,6 +23,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/build-plugins/define-esbuild.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/build-plugins/typescript-loader.js": {
+    "stateCleared": "modified",
+  },
   "clientRoot/eslint.config.mjs": {
     "stateCleared": "modified",
   },
@@ -746,6 +749,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/build-plugins/i18n-esbuild.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/build-plugins/typescript-loader.js": {
     "stateCleared": "modified",
   },
   "clientRoot/eslint.config.mjs": {
@@ -3164,6 +3170,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "build-plugins/i18n-esbuild.ts": {
     "stateCleared": "modified",
   },
+  "build-plugins/typescript-loader.js": {
+    "stateCleared": "modified",
+  },
   "eslint.config.mjs": {
     "stateCleared": "modified",
   },
@@ -4283,6 +4292,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "build-plugins/define-esbuild.ts": {
     "stateCleared": "modified",
   },
+  "build-plugins/typescript-loader.js": {
+    "stateCleared": "modified",
+  },
   "eslint.config.mjs": {
     "stateCleared": "modified",
   },
@@ -4973,6 +4985,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "build-plugins/define-esbuild.ts": {
+    "stateCleared": "modified",
+  },
+  "build-plugins/typescript-loader.js": {
     "stateCleared": "modified",
   },
   "eslint.config.mjs": {
