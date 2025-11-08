@@ -35,13 +35,13 @@ export const couchbaseFiles = asWriteFilesSection<JavaApplication>({
       templates: ['repository/PersistentTokenRepository_couchbase.java'],
     },
     {
-      condition: (data: any) => data.searchEngineCouchbase,
+      condition: data => data.searchEngineCouchbase,
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['repository/CouchbaseSearchRepository.java'],
     },
     {
-      condition: (data: any) => data.searchEngineCouchbase,
+      condition: data => data.searchEngineCouchbase,
       path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['repository/CouchbaseSearchRepositoryTest.java'],
@@ -49,12 +49,12 @@ export const couchbaseFiles = asWriteFilesSection<JavaApplication>({
   ],
   serverResource: [
     {
-      condition: (data: any) => data.generateBuiltInUserEntity,
+      condition: data => data.generateBuiltInUserEntity,
       path: SERVER_MAIN_RES_DIR,
       templates: ['config/couchmove/changelog/V0__create_collections.n1ql', 'config/couchmove/changelog/V0.2__create_indexes.n1ql'],
     },
     {
-      condition: (data: any) => data.generateBuiltInUserEntity,
+      condition: data => data.generateBuiltInUserEntity,
       path: SERVER_MAIN_RES_DIR,
       templates: [
         'config/couchmove/changelog/V0.1__initial_setup/authority/ROLE_ADMIN.json',
