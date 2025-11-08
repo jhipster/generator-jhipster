@@ -26,7 +26,7 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "clientRoot/package.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/postcss.config.js": {
+  "clientRoot/postcss.config.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/404.html": {
@@ -401,6 +401,9 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "clientRoot/webpack/logo-jhipster.png": {
     "stateCleared": "modified",
   },
+  "clientRoot/webpack/package.json": {
+    "stateCleared": "modified",
+  },
   "clientRoot/webpack/utils.js": {
     "stateCleared": "modified",
   },
@@ -489,7 +492,7 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "clientRoot/package.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/postcss.config.js": {
+  "clientRoot/postcss.config.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/404.html": {
@@ -897,6 +900,9 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
   "clientRoot/webpack/logo-jhipster.png": {
     "stateCleared": "modified",
   },
+  "clientRoot/webpack/package.json": {
+    "stateCleared": "modified",
+  },
   "clientRoot/webpack/utils.js": {
     "stateCleared": "modified",
   },
@@ -985,7 +991,7 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "clientRoot/package.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/postcss.config.js": {
+  "clientRoot/postcss.config.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/404.html": {
@@ -1363,6 +1369,9 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "clientRoot/webpack/logo-jhipster.png": {
     "stateCleared": "modified",
   },
+  "clientRoot/webpack/package.json": {
+    "stateCleared": "modified",
+  },
   "clientRoot/webpack/utils.js": {
     "stateCleared": "modified",
   },
@@ -1464,7 +1473,7 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "package.json": {
     "stateCleared": "modified",
   },
-  "postcss.config.js": {
+  "postcss.config.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/404.html": {
@@ -1860,6 +1869,9 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "webpack/logo-jhipster.png": {
     "stateCleared": "modified",
   },
+  "webpack/package.json": {
+    "stateCleared": "modified",
+  },
   "webpack/utils.js": {
     "stateCleared": "modified",
   },
@@ -1958,7 +1970,7 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "package.json": {
     "stateCleared": "modified",
   },
-  "postcss.config.js": {
+  "postcss.config.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/404.html": {
@@ -2426,6 +2438,9 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "webpack/logo-jhipster.png": {
     "stateCleared": "modified",
   },
+  "webpack/package.json": {
+    "stateCleared": "modified",
+  },
   "webpack/utils.js": {
     "stateCleared": "modified",
   },
@@ -2511,7 +2526,7 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   "package.json": {
     "stateCleared": "modified",
   },
-  "postcss.config.js": {
+  "postcss.config.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/404.html": {
@@ -2889,6 +2904,9 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   "webpack/logo-jhipster.png": {
     "stateCleared": "modified",
   },
+  "webpack/package.json": {
+    "stateCleared": "modified",
+  },
   "webpack/utils.js": {
     "stateCleared": "modified",
   },
@@ -2974,7 +2992,7 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
   "package.json": {
     "stateCleared": "modified",
   },
-  "postcss.config.js": {
+  "postcss.config.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/404.html": {
@@ -3344,6 +3362,9 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
     "stateCleared": "modified",
   },
   "webpack/logo-jhipster.png": {
+    "stateCleared": "modified",
+  },
+  "webpack/package.json": {
     "stateCleared": "modified",
   },
   "webpack/utils.js": {

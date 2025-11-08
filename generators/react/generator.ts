@@ -258,6 +258,7 @@ ${comment}
             // Try to remove possibles old eslint config files
             'eslint.config.js',
             'eslint.config.mjs',
+            'postcss.config.js',
           ],
         });
       },
