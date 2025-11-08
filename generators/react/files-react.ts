@@ -29,6 +29,7 @@ export const files = asWriteFilesSection({
         'tsconfig.json',
         'tsconfig.test.json',
         'jest.conf.js',
+        'webpack/package.json',
         'webpack/environment.js',
         'webpack/webpack.common.js',
         'webpack/webpack.dev.js',
@@ -40,7 +41,7 @@ export const files = asWriteFilesSection({
   ],
   sass: [
     clientRootTemplatesBlock({
-      templates: ['postcss.config.js'],
+      templates: ['postcss.config.ts'],
     }),
   ],
   reactApp: [
