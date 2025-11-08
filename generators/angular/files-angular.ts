@@ -61,6 +61,7 @@ export const files = asWriteFilesSection({
       templates: [
         'angular.json',
         'webpack/environment.js',
+        'webpack/package.json',
         'webpack/proxy.conf.js',
         'webpack/webpack.custom.js',
         'webpack/logo-jhipster.png',

@@ -23,12 +23,7 @@
   "description": "<%= projectDescription %>",
   "private": true,
   "license": "UNLICENSED",
-  "cacheDirectories": [
-    "node_modules"
-  ],
-<%_ if (clientBundlerEsbuild) { _%>
   "type": "module",
-<%_ } _%>
   "dependencies": {
     "@angular/common": "<%= nodeDependencies['@angular/common'] %>",
     "@angular/compiler": "<%= nodeDependencies['@angular/common'] %>",

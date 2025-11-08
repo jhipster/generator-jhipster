@@ -2323,6 +2323,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/webpack/logo-jhipster.png": {
     "stateCleared": "modified",
   },
+  "clientRoot/webpack/package.json": {
+    "stateCleared": "modified",
+  },
   "clientRoot/webpack/proxy.conf.js": {
     "stateCleared": "modified",
   },
@@ -3053,6 +3056,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "webpack/logo-jhipster.png": {
+    "stateCleared": "modified",
+  },
+  "webpack/package.json": {
     "stateCleared": "modified",
   },
   "webpack/proxy.conf.js": {
