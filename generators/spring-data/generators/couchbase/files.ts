@@ -29,7 +29,7 @@ export const couchbaseFiles = asWriteFilesSection<JavaApplication>({
       templates: ['repository/JHipsterCouchbaseRepository.java', 'config/DatabaseConfiguration.java'],
     },
     {
-      condition: (data: any) => data.authenticationTypeSession && !data.reactive && data.generateUserManagement,
+      condition: data => data.authenticationTypeSession && !data.reactive && data.generateUserManagement,
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['repository/PersistentTokenRepository_couchbase.java'],

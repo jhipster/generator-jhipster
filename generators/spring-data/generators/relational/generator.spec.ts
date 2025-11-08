@@ -1,6 +1,5 @@
 import { before, describe, expect, it } from 'esmocha';
-import { basename, dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename, resolve } from 'node:path';
 
 import { cacheTypes, databaseTypes } from '../../../../lib/jhipster/index.ts';
 import {
@@ -14,10 +13,7 @@ import {
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
 import Generator from '../../../server/index.ts';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const generator = `${basename(resolve(__dirname, '../../'))}:${basename(__dirname)}`;
+const generator = `${basename(resolve(import.meta.dirname, '../../'))}:${basename(import.meta.dirname)}`;
 
 const { SQL: databaseType, H2_DISK, H2_MEMORY, POSTGRESQL, MARIADB, MYSQL, MSSQL, ORACLE } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };

@@ -49,7 +49,7 @@ export default class SpringDataGenerator extends BaseApplicationGenerator<
 
   get composing() {
     return this.asComposingTaskGroup({
-      async composeDatabase(this: any) {
+      async composeDatabase() {
         // Use resolved jhipsterConfigWithDefaults for reliable lookup at composing priority.
         const databaseType = this.jhipsterConfigWithDefaults?.databaseType;
         switch (databaseType) {

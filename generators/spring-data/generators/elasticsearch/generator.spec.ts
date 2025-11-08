@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'esmocha';
-import { basename, dirname, join, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename, join, resolve } from 'node:path';
 
 import { APPLICATION_TYPE_MICROSERVICE } from '../../../../lib/core/application-types.ts';
 import { authenticationTypes, databaseTypes, searchEngineTypes } from '../../../../lib/jhipster/index.ts';
@@ -36,10 +35,8 @@ import { filterBasicServerGenerators, shouldComposeWithSpringCloudStream } from 
 import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.ts';
 import Generator from './generator.ts';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const generator = `${basename(resolve(import.meta.dirname, '../../'))}:${basename(import.meta.dirname)}`;
 
-const generator = `${basename(resolve(__dirname, '../../'))}:${basename(__dirname)}`;
 // compose with server generator, many conditionals at server generator
 const serverGeneratorFile = join(import.meta.dirname, '../server/index.js');
 

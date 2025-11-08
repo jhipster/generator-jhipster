@@ -31,7 +31,7 @@ import org.springframework.data.cassandra.core.mapping.Table;
 
 <&_ if (fragment.annotationSection) { -&>
 // Since spring-data-cassandra 3.4.2, table names needs to be in lowercase
-// See https://github.com/spring-projects/spring-data:cassandra/issues/1293#issuecomment-1192555467
+// See https://github.com/spring-projects/spring-data-cassandra/issues/1293#issuecomment-1192555467
 @Table("<%= entityInstance.toLowerCase() %>")
 <&_ } -&>
 
