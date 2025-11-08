@@ -22,12 +22,12 @@ import { javaMainPackageTemplatesBlock } from '../../../java/support/index.ts';
 export const entityFiles = asWriteFilesSection({
   elasticSearchFiles: [
     {
-      condition: (generator: any) => !generator.embedded && generator.entitySearchLayer,
+      condition: generator => !generator.embedded && generator.entitySearchLayer,
       ...javaMainPackageTemplatesBlock('_entityPackage_'),
       templates: ['repository/search/_entityClass_SearchRepository.java'],
     },
     {
-      condition: (ctx: any) => ctx.entityDomainLayer,
+      condition: ctx => ctx.entityDomainLayer,
       ...javaMainPackageTemplatesBlock('_entityPackage_'),
       templates: ['domain/_persistClass_.java.jhi.elastic_search'],
     },
@@ -36,8 +36,8 @@ export const entityFiles = asWriteFilesSection({
 
 export function cleanupElasticsearchEntityFilesTask() {}
 
-export default asWritingEntitiesTask(async function writeEntityElasticsearchFiles(this: any, { application, entities }: any) {
-  for (const entity of entities.filter((entity: any) => !entity.skipServer && (entity as any).searchEngineElasticsearch)) {
+export default asWritingEntitiesTask(async function writeEntityElasticsearchFiles(this, { application, entities }) {
+  for (const entity of entities.filter(entity => !entity.skipServer && (entity as any).searchEngineElasticsearch)) {
     await this.writeFiles({
       sections: entityFiles,
       context: { ...application, ...entity },

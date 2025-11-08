@@ -54,13 +54,15 @@ describe(`generator - ${databaseType}`, () => {
   });
 
   Object.entries(testSamples).forEach(([name, sampleConfig]) => {
-    const sample: any = sampleConfig as any;
-    const { authenticationType } = sample;
+    const { authenticationType } = sampleConfig;
 
     describe(name, () => {
-      if (sample.websocket && (sample.reactive || sample.applicationType === 'microservice' || sample.applicationType === 'gateway')) {
+      if (
+        sampleConfig.websocket &&
+        (sampleConfig.reactive || sampleConfig.applicationType === 'microservice' || sampleConfig.applicationType === 'gateway')
+      ) {
         it('should throw an error', async () => {
-          await expect(helpers.runJHipster(generatorFile).withJHipsterConfig(sample)).rejects.toThrow();
+          await expect(helpers.runJHipster(generatorFile).withJHipsterConfig(sampleConfig)).rejects.toThrow();
         });
 
         return;
@@ -69,7 +71,7 @@ describe(`generator - ${databaseType}`, () => {
       before(async () => {
         await helpers
           .runJHipster('server')
-          .withJHipsterConfig(sample, entities)
+          .withJHipsterConfig(sampleConfig, entities)
           .withMockedSource({ except: ['addTestSpringFactory'] })
           .withMockedJHipsterGenerators({
             except: ['jhipster:spring-data:mongodb'],
@@ -86,7 +88,7 @@ describe(`generator - ${databaseType}`, () => {
       it('contains correct databaseType', () => {
         runResult.assertFileContent('.yo-rc.json', new RegExp(`"databaseType": "${databaseType}"`));
       });
-      shouldComposeWithSpringCloudStream(sample, () => runResult);
+      shouldComposeWithSpringCloudStream(sampleConfig, () => runResult);
       shouldComposeWithLiquibase(false, () => runResult);
     });
   });

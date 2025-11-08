@@ -59,8 +59,7 @@ describe(`generator - ${databaseType}`, () => {
     expect(testSamples).toMatchSnapshot();
   });
 
-  Object.entries(testSamples).forEach(([name, sample]) => {
-    const sampleConfig: any = sample;
+  Object.entries(testSamples).forEach(([name, sampleConfig]) => {
     const { authenticationType } = sampleConfig;
 
     describe(name, () => {

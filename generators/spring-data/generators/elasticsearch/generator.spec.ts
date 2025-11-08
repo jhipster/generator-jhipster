@@ -62,8 +62,7 @@ describe('generator - elasticsearch', () => {
     expect(testSamples).toMatchSnapshot();
   });
 
-  Object.entries(testSamples).forEach(([name, sample]) => {
-    const sampleConfig: any = sample;
+  Object.entries(testSamples).forEach(([name, sampleConfig]) => {
     const { enableTranslation } = sampleConfig;
 
     describe(name, () => {

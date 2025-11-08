@@ -86,23 +86,18 @@ export default class SqlGenerator extends BaseApplicationGenerator<
 
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
-      prepareEntity({ entity, application }) {
-        const e: any = entity;
-        if (Array.isArray(e.relationships)) {
-          e.relationships.forEach((relationship: any) => {
-            if (relationship.persistableRelationship === undefined && relationship.relationshipType === 'many-to-many') {
-              relationship.persistableRelationship = true;
-            }
-          });
-        }
+      prepareEntity({ entity }) {
+        entity.relationships.forEach(relationship => {
+          if (relationship.persistableRelationship === undefined && relationship.relationshipType === 'many-to-many') {
+            relationship.persistableRelationship = true;
+          }
+        });
 
-        const databaseType =
-          (application as any).prodDatabaseType ?? (application as any).devDatabaseType ?? (application as any).databaseType ?? 'sql';
-        const jhiPrefix = (application as any).jhiPrefix;
-        if (isReservedTableName(e.entityInstance, databaseType) && jhiPrefix) {
-          e.entityJpqlInstance = `${jhiPrefix}${e.entityClass}`;
+        const entityAny = entity as any;
+        if (isReservedTableName(entity.entityInstance, entityAny.prodDatabaseType ?? entity.databaseType) && entityAny.jhiPrefix) {
+          entity.entityJpqlInstance = `${entityAny.jhiPrefix}${entity.entityClass}`;
         } else {
-          e.entityJpqlInstance = e.entityInstance;
+          entity.entityJpqlInstance = entity.entityInstance;
         }
       },
     });
@@ -115,11 +110,10 @@ export default class SqlGenerator extends BaseApplicationGenerator<
   get preparingEachEntityRelationship() {
     return this.asPreparingEachEntityRelationshipTaskGroup({
       prepareRelationship({ application, relationship }) {
-        if (!application.reactive) return;
-        const r: any = relationship as any;
-        const name = r.relationshipName;
-        if (name) {
-          r.relationshipSqlSafeName = isReservedTableName(name, SQL) ? `e_${name}` : name;
+        if (application.reactive) {
+          relationship.relationshipSqlSafeName = isReservedTableName(relationship.relationshipName, SQL)
+            ? `e_${relationship.relationshipName}`
+            : relationship.relationshipName;
         }
       },
     });
@@ -226,13 +220,13 @@ export default class SqlGenerator extends BaseApplicationGenerator<
         );
 
         if (application.buildToolGradle) {
-          const artifacts = javaSqlDatabaseArtifacts[prodDatabaseType as keyof typeof javaSqlDatabaseArtifacts];
+          const artifacts = javaSqlDatabaseArtifacts[prodDatabaseType];
           source.addJavaDefinition!(
             {
               dependencies: [
                 artifacts.jdbc,
-                ...('testContainer' in artifacts && (artifacts as any).testContainer ? [(artifacts as any).testContainer] : []),
-                ...(reactive && 'r2dbc' in artifacts && (artifacts as any).r2dbc ? [(artifacts as any).r2dbc] : []),
+                artifacts.testContainer,
+                ...(reactive && 'r2dbc' in artifacts && artifacts.r2dbc ? [artifacts.r2dbc] : []),
               ],
             },
             { gradleFile: devDatabaseTypeH2Any ? 'gradle/profile_prod.gradle' : 'build.gradle' },
@@ -285,12 +279,8 @@ export default class SqlGenerator extends BaseApplicationGenerator<
     return this.asPostWritingEntitiesTaskGroup({
       async jsonFilter({ application, entities, source }) {
         if (application.reactive || !application.graalvmSupport) return;
-        for (const entity of (entities as any).filter(
-          ({ builtIn, builtInUser, embedded }: any) => builtInUser || (!builtIn && !embedded),
-        )) {
-          const e: any = entity;
-          if (!e.entityAbsoluteFolder || !e.entityClass) continue;
-          source.editJavaFile!(`${application.srcMainJava}/${e.entityAbsoluteFolder}/domain/${e.entityClass}.java`, {
+        for (const entity of entities.filter(({ builtIn, builtInUser, embedded }) => builtInUser || (!builtIn && !embedded))) {
+          source.editJavaFile!(`${application.srcMainJava}/${entity.entityAbsoluteFolder}/domain/${entity.entityClass}.java`, {
             annotations: [
               {
                 package: 'com.fasterxml.jackson.annotation',

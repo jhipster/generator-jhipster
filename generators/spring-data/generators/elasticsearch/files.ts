@@ -33,7 +33,7 @@ export const files = asWriteFilesSection<JavaApplication>({
       ],
     },
     {
-      condition: (generator: any) => generator.generateBuiltInUserEntity,
+      condition: generator => generator.generateBuiltInUserEntity,
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: ['repository/search/UserSearchRepository.java'],
@@ -51,7 +51,7 @@ export const files = asWriteFilesSection<JavaApplication>({
   ],
 });
 
-export default asWritingTask(async function writeElasticsearchFilesTask(this: any, { application }: any) {
+export default asWritingTask(async function writeElasticsearchFilesTask(this, { application }) {
   await this.writeFiles({
     sections: files,
     context: application,
