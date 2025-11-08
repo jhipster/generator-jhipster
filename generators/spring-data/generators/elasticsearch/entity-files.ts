@@ -36,7 +36,7 @@ export const entityFiles = asWriteFilesSection({
 
 export function cleanupElasticsearchEntityFilesTask() {}
 
-export default asWritingEntitiesTask(async function writeEntityElasticsearchFiles(this, { application, entities }) {
+export default asWritingEntitiesTask(async function writeEntityElasticsearchFiles({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.skipServer && (entity as any).searchEngineElasticsearch)) {
     await this.writeFiles({
       sections: entityFiles,

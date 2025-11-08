@@ -51,7 +51,7 @@ export const files = asWriteFilesSection<JavaApplication>({
   ],
 });
 
-export default asWritingTask(async function writeElasticsearchFilesTask(this, { application }) {
+export default asWritingTask(async function writeElasticsearchFilesTask({ application }) {
   await this.writeFiles({
     sections: files,
     context: application,

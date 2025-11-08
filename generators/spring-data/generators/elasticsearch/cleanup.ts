@@ -18,7 +18,7 @@ import { asWritingTask } from '../../../base-application/support/task-type-infer
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export default asWritingTask(function cleanupElasticsearchFilesTask(this, { application, control }) {
+export default asWritingTask(function cleanupElasticsearchFilesTask({ application, control }) {
   if (control.isJhipsterVersionLessThan('4.0.0')) {
     this.removeFile(`${application.javaPackageSrcDir}config/ElasticSearchConfiguration.java`);
   }

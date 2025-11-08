@@ -73,7 +73,7 @@ export const couchbaseFiles = asWriteFilesSection<JavaApplication>({
   ],
 });
 
-export const cleanupCouchbaseFilesTask = asWritingTask(function cleanupCouchbaseFilesTask(this, { application, control }) {
+export const cleanupCouchbaseFilesTask = asWritingTask(function cleanupCouchbaseFilesTask({ application, control }) {
   if (control.isJhipsterVersionLessThan('7.1.1')) {
     this.removeFile(`${application.javaPackageSrcDir}repository/CustomReactiveCouchbaseRepository.java `);
     this.removeFile(`${application.javaPackageSrcDir}config/DatabaseConfigurationIT.java`);
@@ -96,7 +96,7 @@ export const cleanupCouchbaseFilesTask = asWritingTask(function cleanupCouchbase
   }
 });
 
-export default asWritingTask(async function writeCouchbaseFilesTask(this, { application }) {
+export default asWritingTask(async function writeCouchbaseFilesTask({ application }) {
   await this.writeFiles({
     sections: couchbaseFiles,
     context: application,
