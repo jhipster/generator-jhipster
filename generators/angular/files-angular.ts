@@ -75,6 +75,7 @@ export const files = asWriteFilesSection({
         { sourceFile: 'angular.json.esbuild', destinationFile: 'angular.json' },
         'proxy.config.mjs',
         'build-plugins/define-esbuild.ts',
+        'build-plugins/package.json',
       ],
     }),
     clientRootTemplatesBlock({
