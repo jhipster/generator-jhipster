@@ -28,15 +28,6 @@ const command = {
       },
       scope: 'storage',
     },
-    packageJsonType: {
-      cli: {
-        type: String,
-        hide: true,
-      },
-      choices: ['commonjs', 'module'],
-      default: 'commonjs',
-      scope: 'storage',
-    },
   },
   import: [],
 } as const satisfies JHipsterCommandDefinition;

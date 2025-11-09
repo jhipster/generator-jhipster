@@ -30,8 +30,6 @@ export type JavascriptSimpleApplicationAddedApplicationProperties = {
   nodeDependencies: Record<string, string>;
 
   packageJsonNodeEngine?: boolean | string;
-  cjsExtension: string;
-  mjsExtension: string;
   /** Root package.json scripts */
   packageJsonScripts: Record<string, string>;
   /** Root package.json scripts */
@@ -51,9 +49,6 @@ export const mutateApplication = {
   nodePackageManager: 'npm',
   nodePackageManagerCommand: ({ nodePackageManager }) => nodePackageManager,
   nodeDependencies: () => ({}),
-
-  cjsExtension: data => (data.packageJsonTypeCommonjs ? '.js' : '.cjs'),
-  mjsExtension: data => (data.packageJsonTypeModule ? '.js' : '.mjs'),
 
   clientRootDir: '',
   clientSrcDir: ({ clientRootDir }) => `${clientRootDir}${clientRootDir ? 'src/' : CLIENT_MAIN_SRC_DIR}`,

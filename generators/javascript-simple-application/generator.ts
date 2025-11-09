@@ -84,14 +84,7 @@ export default class JavascriptGenerator extends JavascriptSimpleApplicationGene
   get postWriting() {
     return this.asPostWritingTaskGroup({
       mergePackageJson({ application, source }) {
-        const {
-          packageJsonNodeEngine,
-          packageJsonType,
-          dasherizedBaseName,
-          projectDescription,
-          packageJsonScripts,
-          clientPackageJsonScripts,
-        } = application;
+        const { packageJsonNodeEngine, dasherizedBaseName, projectDescription, packageJsonScripts, clientPackageJsonScripts } = application;
 
         this.packageJson.merge({ scripts: packageJsonScripts! });
 
@@ -101,10 +94,6 @@ export default class JavascriptGenerator extends JavascriptSimpleApplicationGene
           description: projectDescription,
           license: 'UNLICENSED',
         });
-
-        if (packageJsonType === 'module') {
-          this.packageJson.merge({ type: packageJsonType });
-        }
 
         if (packageJsonNodeEngine) {
           const packageJsonEngines: any = this.packageJson.get('engines') ?? {};
