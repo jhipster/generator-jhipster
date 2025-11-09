@@ -10,7 +10,7 @@ export default (builderOptions: ApplicationBuilderOptions, _target: Target): Plu
     if (asset.input.startsWith('node_modules/')) {
       // Replace with resolved path to avoid issues when building.
       if (asset.input.startsWith('node_modules/axios/')) {
-        asset.input = asset.input.replace('node_modules/axios', path.dirname(import.meta.resolve('axios/package.json')));
+        asset.input = asset.input.replace('node_modules/axios', path.dirname(require.resolve('axios/package.json')));
       } else if (asset.input.startsWith('node_modules/swagger-ui-dist/')) {
         // https://github.com/swagger-api/swagger-ui/blob/v4.6.1/swagger-ui-dist-package/README.md
         asset.input = getAbsoluteFSPath();
