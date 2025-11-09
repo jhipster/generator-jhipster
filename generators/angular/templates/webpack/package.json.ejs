@@ -17,16 +17,5 @@
  limitations under the License.
 -%>
 {
-  "extends": "./tsconfig.json",
-  "include": ["<%= this.relativeDir(clientRootDir, clientSrcDir) %>**/*.ts"],
-  "compilerOptions": {
-    "composite": true,
-    "outDir": "<%= this.relativeDir(clientRootDir, temporaryDir) %>out-tsc/spec",
-<%_ if (clientTestFrameworkJest) { _%>
-    "module": "node20",
-    "types": ["jest", "node"]
-<%_ } else { _%>
-    "types": ["node"]
-<%_ } _%>
-  }
+  "type": "commonjs"
 }

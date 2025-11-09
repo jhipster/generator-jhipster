@@ -300,7 +300,6 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             // Try to remove possibles old eslint config files
             'eslint.config.js',
             'eslint.config.mjs',
-            [application.clientTestFrameworkJest!, `${application.clientRootDir}jest.conf.js`],
             [
               application.clientBundlerEsbuild!,
               `${application.clientRootDir}build-plugins/define-esbuild.mjs`,

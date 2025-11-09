@@ -23,10 +23,13 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/build-plugins/define-esbuild.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/build-plugins/package.json": {
+    "stateCleared": "modified",
+  },
   "clientRoot/eslint.config.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/jest.conf.ts": {
+  "clientRoot/jest.conf.js": {
     "stateCleared": "modified",
   },
   "clientRoot/ngsw-config.json": {
@@ -748,10 +751,13 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/build-plugins/i18n-esbuild.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/build-plugins/package.json": {
+    "stateCleared": "modified",
+  },
   "clientRoot/eslint.config.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/jest.conf.ts": {
+  "clientRoot/jest.conf.js": {
     "stateCleared": "modified",
   },
   "clientRoot/ngsw-config.json": {
@@ -1699,7 +1705,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/eslint.config.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/jest.conf.ts": {
+  "clientRoot/jest.conf.js": {
     "stateCleared": "modified",
   },
   "clientRoot/ngsw-config.json": {
@@ -2323,6 +2329,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/webpack/logo-jhipster.png": {
     "stateCleared": "modified",
   },
+  "clientRoot/webpack/package.json": {
+    "stateCleared": "modified",
+  },
   "clientRoot/webpack/proxy.conf.js": {
     "stateCleared": "modified",
   },
@@ -2422,7 +2431,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "eslint.config.ts": {
     "stateCleared": "modified",
   },
-  "jest.conf.ts": {
+  "jest.conf.js": {
     "stateCleared": "modified",
   },
   "ngsw-config.json": {
@@ -3055,6 +3064,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "webpack/logo-jhipster.png": {
     "stateCleared": "modified",
   },
+  "webpack/package.json": {
+    "stateCleared": "modified",
+  },
   "webpack/proxy.conf.js": {
     "stateCleared": "modified",
   },
@@ -3158,10 +3170,13 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "build-plugins/i18n-esbuild.ts": {
     "stateCleared": "modified",
   },
+  "build-plugins/package.json": {
+    "stateCleared": "modified",
+  },
   "eslint.config.ts": {
     "stateCleared": "modified",
   },
-  "jest.conf.ts": {
+  "jest.conf.js": {
     "stateCleared": "modified",
   },
   "ngsw-config.json": {
@@ -4277,10 +4292,13 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "build-plugins/define-esbuild.ts": {
     "stateCleared": "modified",
   },
+  "build-plugins/package.json": {
+    "stateCleared": "modified",
+  },
   "eslint.config.ts": {
     "stateCleared": "modified",
   },
-  "jest.conf.ts": {
+  "jest.conf.js": {
     "stateCleared": "modified",
   },
   "ngsw-config.json": {
@@ -4969,10 +4987,13 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "build-plugins/define-esbuild.ts": {
     "stateCleared": "modified",
   },
+  "build-plugins/package.json": {
+    "stateCleared": "modified",
+  },
   "eslint.config.ts": {
     "stateCleared": "modified",
   },
-  "jest.conf.ts": {
+  "jest.conf.js": {
     "stateCleared": "modified",
   },
   "ngsw-config.json": {

@@ -46,7 +46,7 @@ export const files = asWriteFilesSection({
   jest: [
     clientRootTemplatesBlock({
       condition: ctx => ctx.clientTestFrameworkJest,
-      templates: ['jest.conf.ts'],
+      templates: ['jest.conf.js'],
     }),
   ],
   vitest: [
@@ -61,6 +61,7 @@ export const files = asWriteFilesSection({
       templates: [
         'angular.json',
         'webpack/environment.js',
+        'webpack/package.json',
         'webpack/proxy.conf.js',
         'webpack/webpack.custom.js',
         'webpack/logo-jhipster.png',
@@ -74,6 +75,7 @@ export const files = asWriteFilesSection({
         { sourceFile: 'angular.json.esbuild', destinationFile: 'angular.json' },
         'proxy.config.mjs',
         'build-plugins/define-esbuild.ts',
+        'build-plugins/package.json',
       ],
     }),
     clientRootTemplatesBlock({

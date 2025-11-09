@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import config from './tsconfig.json';
+import config from './tsconfig.json' with { type: 'json' };
 
 const { baseUrl = './' } = config.compilerOptions;
 
