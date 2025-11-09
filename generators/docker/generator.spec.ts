@@ -29,7 +29,7 @@ import {
   runResult,
 } from '../../lib/testing/index.ts';
 import { shouldSupportFeatures } from '../../test/support/tests.js';
-import { matchElasticSearchDocker } from '../spring-data-elasticsearch/__test-support/elastic-search-matcher.ts';
+import { matchElasticSearchDocker } from '../spring-data/generators/elasticsearch/__test-support/elastic-search-matcher.ts';
 
 import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.ts';
 import Generator from './index.ts';

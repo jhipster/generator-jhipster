@@ -43,7 +43,7 @@ import type {
   Entity as SpringDataRelationalEntity,
   Field as SpringDataRelationalField,
   Relationship as SpringDataRelationalRelationship,
-} from '../../generators/spring-data-relational/types.d.ts';
+} from '../../generators/spring-data/generators/relational/types.d.ts';
 
 export type FieldAll = SpringDataRelationalField &
   LiquibaseField &
