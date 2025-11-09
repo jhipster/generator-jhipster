@@ -18,8 +18,8 @@
  */
 import assert from 'node:assert';
 import { existsSync } from 'node:fs';
-import path, { dirname, resolve } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import path, { resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 import { QueuedAdapter } from '@yeoman/adapter';
 import chalk from 'chalk';
@@ -32,10 +32,8 @@ import { readCurrentPathYoRcFile } from '../lib/utils/yo-rc.ts';
 
 import { CLI_NAME, logger } from './utils.ts';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const jhipsterDevBlueprintPath = process.env.JHIPSTER_DEV_BLUEPRINT === 'true' ? path.join(__dirname, '../.blueprint') : undefined;
+const jhipsterDevBlueprintPath =
+  process.env.JHIPSTER_DEV_BLUEPRINT === 'true' ? path.join(import.meta.dirname, '../.blueprint') : undefined;
 const devBlueprintNamespace = '@jhipster/jhipster-dev';
 const localBlueprintNamespace = '@jhipster/jhipster-local';
 const defaultLookupOptions = {
@@ -158,14 +156,14 @@ export default class EnvironmentBuilder {
    */
   async _lookupJHipster() {
     // Register jhipster generators.
-    const sourceRoot = path.basename(path.join(__dirname, '..'));
+    const sourceRoot = path.basename(path.join(import.meta.dirname, '..'));
     let packagePath;
     let lookup;
     if (sourceRoot === 'generator-jhipster') {
-      packagePath = path.join(__dirname, '..');
+      packagePath = path.join(import.meta.dirname, '..');
       lookup = 'generators';
     } else {
-      packagePath = path.join(__dirname, '../..');
+      packagePath = path.join(import.meta.dirname, '../..');
       lookup = `${sourceRoot}/generators`;
     }
     const generators = await this.env.lookup({

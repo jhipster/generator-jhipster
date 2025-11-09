@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'esmocha';
-import { basename, dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename, resolve } from 'node:path';
 
 import { fieldTypes } from '../../../../lib/jhipster/index.ts';
 import { defaultHelpers as helpers, result as runResult } from '../../../../lib/testing/index.ts';
@@ -30,10 +29,7 @@ const {
   CommonDBTypes: { UUID },
 } = fieldTypes;
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const generator = `${basename(resolve(__dirname, '../../'))}:${basename(__dirname)}`;
+const generator = `${basename(resolve(import.meta.dirname, '../../'))}:${basename(import.meta.dirname)}`;
 
 const expectedField = () => ({
   generateFakeData: expect.any(Function),

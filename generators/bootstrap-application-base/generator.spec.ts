@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 import { before, beforeEach, describe, expect, it } from 'esmocha';
-import { basename, dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename, join } from 'node:path';
 
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { basicTests, shouldSupportFeatures } from '../../test/support/tests.js';
@@ -26,11 +25,8 @@ import { parseChangelog } from '../base/support/timestamp.ts';
 
 import Generator from './index.ts';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const generator = basename(__dirname);
-const generatorPath = join(__dirname, 'index.ts');
+const generator = basename(import.meta.dirname);
+const generatorPath = join(import.meta.dirname, 'index.ts');
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);

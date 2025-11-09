@@ -1,5 +1,4 @@
-import path, { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import path from 'node:path';
 
 import { getDefaultJDLApplicationConfig, getDefaultRuntime } from '../../../jdl-config/jhipster-jdl-config.ts';
 import type { JHipsterYoRcContentAndJDLWrapper } from '../../converters/json-to-jdl-application-converter.ts';
@@ -15,9 +14,6 @@ import { createJDLApplication as originalCreateJDLApplication } from '../models/
 import { parseFromContent as originalParseFromContent, parseFromFiles as originalParseFromFiles } from '../readers/jdl-reader.ts';
 import type { ParsedJDLApplication, ParsedJDLRoot } from '../types/parsed.ts';
 import type { JDLRuntime } from '../types/runtime.ts';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const runtime = getDefaultRuntime();
 
@@ -39,4 +35,4 @@ export const createJDLApplication = (config: any, runtime: JDLRuntime, namespace
 export const convertApplicationsToJDL = (applications: JHipsterYoRcContentAndJDLWrapper) =>
   originalConvertApplicationsToJDL(applications, runtime);
 
-export const getTestFile = (...args: string[]) => path.join(__dirname, 'files', ...args);
+export const getTestFile = (...args: string[]) => path.join(import.meta.dirname, 'files', ...args);

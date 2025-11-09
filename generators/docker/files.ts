@@ -1,4 +1,5 @@
 import { asWriteFilesSection } from '../base-application/support/task-type-inference.ts';
+import { clientRootTemplatesBlock } from '../client/support/files.ts';
 import { TEMPLATES_DOCKER_DIR } from '../generator-constants.js';
 
 import type { Application as DockerApplication } from './types.ts';
@@ -8,10 +9,9 @@ const renameTo = (ctx: DockerApplication, filepath: string) =>
 
 export const dockerFiles = asWriteFilesSection<DockerApplication>({
   commonFiles: [
-    {
-      condition: ctx => ctx.eslintConfigFile,
-      templates: [{ sourceFile: 'eslint.config.js.jhi.docker', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi.docker` }],
-    },
+    clientRootTemplatesBlock({
+      templates: ['eslint.config.ts.jhi.docker'],
+    }) as any,
   ],
   sqlDatabasesFiles: [
     {

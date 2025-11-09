@@ -105,7 +105,9 @@ export default function checkEnforcements({ client }: { client?: boolean }, gene
           const content = readFileSync(jsFile).toString();
           return content.includes(`/${reference}`) || content.includes(`'${reference}`);
         });
-        if (!found) throw new Error(`File ${templateFile} is not referenced`);
+        if (!found) {
+          throw new Error(`File ${templateFile} is not referenced`);
+        }
       });
     });
   });

@@ -17,16 +17,12 @@
  * limitations under the License.
  */
 import { describe, expect, it } from 'esmocha';
-import { basename, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename } from 'node:path';
 
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/helpers.ts';
 import { testBlueprintSupport } from '../../test/support/tests.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const generator = basename(__dirname);
+const generator = basename(import.meta.dirname);
 
 describe(`generator - ${generator}`, () => {
   describe('blueprint support', () => testBlueprintSupport(generator));

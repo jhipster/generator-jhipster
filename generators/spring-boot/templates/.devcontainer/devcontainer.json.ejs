@@ -62,6 +62,11 @@
 
   // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
   "remoteUser": "vscode",
+
+  // Mount the workspace folder to the same path inside the container, so docker-in-docker containers work correctly. See https://github.com/jhipster/generator-jhipster/issues/31239
+  "workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind",
+  "workspaceFolder": "${localWorkspaceFolder}",
+
   "features": {
     "docker-in-docker": "latest",
     "docker-from-docker": "latest"

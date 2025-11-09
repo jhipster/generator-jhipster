@@ -25,15 +25,14 @@ export const vueFiles = asWriteFilesSection({
   common: [
     clientRootTemplatesBlock({
       templates: [
-        '.postcssrc.js',
-        { sourceFile: 'eslint.config.js.jhi.vue', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi.vue` },
+        'eslint.config.ts.jhi.vue',
         'package.json',
         'tsconfig.json',
         'tsconfig.app.json',
         'tsconfig.node.json',
         'tsconfig.vitest.json',
-        'vite.config.mts',
-        'vitest.config.mts',
+        'vite.config.ts',
+        'vitest.config.ts',
       ],
     }),
   ],
@@ -43,8 +42,10 @@ export const vueFiles = asWriteFilesSection({
       templates: ['module-federation.config.cjs'],
     }),
     clientRootTemplatesBlock({
-      condition: ctx => ctx.microfrontend && ctx.clientBundlerWebpack,
+      condition: ctx => ctx.clientBundlerWebpack,
       templates: [
+        // webpack config files are commonjs, add a package.json in the webpack folder to set "type": "commonjs"
+        'webpack/package.json',
         'webpack/config.js',
         'webpack/webpack.common.js',
         'webpack/webpack.dev.js',

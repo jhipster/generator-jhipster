@@ -18,16 +18,12 @@
  */
 import { before, describe, expect, it } from 'esmocha';
 import { access } from 'node:fs/promises';
-import { basename, dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename, resolve } from 'node:path';
 
 import { runResult, skipPrettierHelpers as helpers } from '../../lib/testing/index.ts';
 import { testBlueprintSupport } from '../../test/support/tests.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const generator = basename(__dirname);
+const generator = basename(import.meta.dirname);
 
 describe(`generator - ${generator}`, () => {
   describe('blueprint support', () => testBlueprintSupport(generator));

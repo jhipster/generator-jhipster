@@ -35,7 +35,7 @@ import {
 import { BaseKubernetesGenerator } from '../kubernetes/generator.ts';
 import { checkHelm } from '../kubernetes/kubernetes-base.ts';
 import { askForIngressDomain, askForKubernetesNamespace } from '../kubernetes/prompts.ts';
-import { getJdbcUrl } from '../spring-data-relational/support/index.ts';
+import { getJdbcUrl } from '../spring-data/generators/relational/support/index.ts';
 
 import {
   applicationHelmFiles,

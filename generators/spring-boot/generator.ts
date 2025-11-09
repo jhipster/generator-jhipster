@@ -190,21 +190,21 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
         }
 
         if (databaseType === SQL) {
-          await this.composeWithJHipster('spring-data-relational');
+          await this.composeWithJHipster('jhipster:spring-data:relational');
         } else if (databaseType === CASSANDRA) {
-          await this.composeWithJHipster('spring-data-cassandra');
+          await this.composeWithJHipster('jhipster:spring-data:cassandra');
         } else if (databaseType === COUCHBASE) {
-          await this.composeWithJHipster('spring-data-couchbase');
+          await this.composeWithJHipster('jhipster:spring-data:couchbase');
         } else if (databaseType === MONGODB) {
-          await this.composeWithJHipster('spring-data-mongodb');
+          await this.composeWithJHipster('jhipster:spring-data:mongodb');
         } else if (databaseType === NEO4J) {
-          await this.composeWithJHipster('spring-data-neo4j');
+          await this.composeWithJHipster('jhipster:spring-data:neo4j');
         }
         if (messageBroker === KAFKA || messageBroker === PULSAR) {
           await this.composeWithJHipster('spring-cloud-stream');
         }
         if (searchEngine === ELASTICSEARCH) {
-          await this.composeWithJHipster('spring-data-elasticsearch');
+          await this.composeWithJHipster('jhipster:spring-data:elasticsearch');
         }
         if (websocket === SPRING_WEBSOCKET) {
           await this.composeWithJHipster('jhipster:spring-boot:websocket');

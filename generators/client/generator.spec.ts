@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 import { before, describe, it } from 'esmocha';
-import { basename, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename } from 'node:path';
 
 import { testFrameworkTypes } from '../../lib/jhipster/index.ts';
 import { defaultHelpers as helpers, result, runResult } from '../../lib/testing/index.ts';
@@ -28,10 +27,7 @@ import Generator from './index.ts';
 
 const { CYPRESS } = testFrameworkTypes;
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const generator = basename(__dirname);
+const generator = basename(import.meta.dirname);
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);

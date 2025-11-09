@@ -6,7 +6,6 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "clientPackageJsonScripts": {},
   "clientRootDir": "",
   "clientSrcDir": "src/main/webapp/",
-  "eslintConfigFile": "eslint.config.mjs",
   "jhipsterPackageJson": "jhipsterPackageJson",
   "jhipsterVersion": "jhipsterVersion",
   "mjsExtension": ".js",

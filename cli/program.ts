@@ -18,8 +18,7 @@
  */
 
 import fs from 'node:fs';
-import path, { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import path from 'node:path';
 
 import type { BaseEnvironmentOptions, GeneratorMeta, LookupOptions } from '@yeoman/types';
 import chalk from 'chalk';
@@ -42,9 +41,6 @@ import { CLI_NAME, done, getCommand, logger } from './utils.ts';
 const GENERATOR_APP = 'app';
 const GENERATOR_JDL = 'jdl';
 const GENERATOR_BOOTSTRAP = 'bootstrap';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const { version: JHIPSTER_VERSION } = packageJson;
 const JHIPSTER_NS = CLI_NAME;
@@ -363,7 +359,7 @@ export const buildCommands = ({
         };
         if (options.installPath) {
           // eslint-disable-next-line no-console
-          console.log(path.dirname(__dirname));
+          console.log(path.dirname(import.meta.dirname));
           return Promise.resolve();
         }
 
