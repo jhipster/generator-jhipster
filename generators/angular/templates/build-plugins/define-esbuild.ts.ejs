@@ -3,7 +3,6 @@ import path from 'node:path';
 import type { ApplicationBuilderOptions } from '@angular/build';
 import type { Target } from '@angular-devkit/architect';
 import type { Plugin } from 'esbuild';
-import { getAbsoluteFSPath } from 'swagger-ui-dist';
 
 export default (builderOptions: ApplicationBuilderOptions, _target: Target): Plugin => {
   for (const asset of builderOptions.assets?.filter(asset => typeof asset === 'object') ?? []) {
@@ -13,7 +12,7 @@ export default (builderOptions: ApplicationBuilderOptions, _target: Target): Plu
         asset.input = asset.input.replace('node_modules/axios', path.dirname(require.resolve('axios/package.json')));
       } else if (asset.input.startsWith('node_modules/swagger-ui-dist/')) {
         // https://github.com/swagger-api/swagger-ui/blob/v4.6.1/swagger-ui-dist-package/README.md
-        asset.input = getAbsoluteFSPath();
+        asset.input = require('swagger-ui-dist').getAbsoluteFSPath();
       }
     }
   }
