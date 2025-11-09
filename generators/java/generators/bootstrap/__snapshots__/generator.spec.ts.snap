@@ -130,7 +130,6 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
   "entities": Any<Array>,
   "entityPackages": Any<Array>,
   "entitySuffix": "",
-  "eslintConfigFile": "eslint.config.mjs",
   "feignClient": undefined,
   "gatewayRoutes": undefined,
   "gatewayServerPort": undefined,

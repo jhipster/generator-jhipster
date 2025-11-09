@@ -130,7 +130,6 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
   "entities": Any<Array>,
   "entityPackages": Any<Array>,
   "entitySuffix": "",
-  "eslintConfigFile": "eslint.config.mjs",
   "feignClient": undefined,
   "gatewayRoutes": undefined,
   "gatewayServerPort": undefined,

@@ -160,7 +160,6 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
     "com.mycompany.myapp",
   ],
   "entitySuffix": "",
-  "eslintConfigFile": "eslint.config.mjs",
   "feignClient": undefined,
   "gatewayRoutes": undefined,
   "gatewayServerPort": undefined,

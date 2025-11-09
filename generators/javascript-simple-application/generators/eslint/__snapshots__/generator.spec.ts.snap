@@ -7,7 +7,7 @@ exports[`generator - javascript-simple-application:eslint with defaults options 
   ".yo-rc.json": ObjectContaining {
     "contents": Any<String>,
   },
-  "eslint.config.mjs": {
+  "eslint.config.ts": {
     "contents": "import globals from 'globals';
 import prettier from 'eslint-plugin-prettier/recommended';
 // jhipster-needle-eslint-add-import - JHipster will add additional import here
@@ -30,7 +30,8 @@ export default [
     "contents": "{
   "devDependencies": {
     "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
-    "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION"
+    "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+    "jiti": "JITI_VERSION"
   }
 }
 ",

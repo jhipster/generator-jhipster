@@ -29,7 +29,7 @@ export const files = asWriteFilesSection<GenerateBlueprintApplication>({
         '.github/workflows/generator.yml',
         '.gitignore.jhi.blueprint',
         '.prettierignore.jhi.blueprint',
-        { sourceFile: 'eslint.config.js.jhi.blueprint', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi.blueprint` },
+        'eslint.config.ts.jhi.blueprint',
         'README.md',
         'tsconfig.json',
         'vitest.config.ts',
