@@ -10,6 +10,7 @@ exports[`generator - javascript-simple-application with defaults options should 
   "package.json": {
     "contents": "{
   "private": true,
+  "type": "module",
   "dependencies": {},
   "devDependencies": {},
   "engines": {},
