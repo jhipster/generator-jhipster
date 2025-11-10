@@ -743,6 +743,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/java-simple-application/generators/jib/templates/template-file-java-simple-application:jib.ejs": {
     "stateCleared": "modified",
   },
+  "generators/java-simple-application/generators/openapi-generator/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/openapi-generator/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/openapi-generator/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/openapi-generator/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/openapi-generator/templates/template-file-java-simple-application:openapi-generator.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/java-simple-application/index.js": {
     "stateCleared": "modified",
   },
@@ -846,21 +861,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/java/generators/node/templates/template-file-java:node.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/java/generators/openapi-generator/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/java/generators/openapi-generator/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/java/generators/openapi-generator/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/java/generators/openapi-generator/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/java/generators/openapi-generator/templates/template-file-java:openapi-generator.ejs": {
     "stateCleared": "modified",
   },
   "generators/java/generators/server/command.js": {

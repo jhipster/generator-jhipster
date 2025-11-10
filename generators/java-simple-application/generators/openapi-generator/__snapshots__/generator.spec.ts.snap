@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(false) should call source snapshot 1`] = `
+exports[`generator - java-simple-application:openapi-generator gradle-addOpenapiGeneratorPlugin(false) should call source snapshot 1`] = `
 {
   "addJavaDefinitions": [
     [
@@ -63,13 +63,13 @@ exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(fal
 }
 `;
 
-exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(false) should compose with generators 1`] = `
+exports[`generator - java-simple-application:openapi-generator gradle-addOpenapiGeneratorPlugin(false) should compose with generators 1`] = `
 [
   "jhipster:java:build-tool",
 ]
 `;
 
-exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(false) should match files snapshot 1`] = `
+exports[`generator - java-simple-application:openapi-generator gradle-addOpenapiGeneratorPlugin(false) should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -80,7 +80,7 @@ exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(fal
 }
 `;
 
-exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(true) should call source snapshot 1`] = `
+exports[`generator - java-simple-application:openapi-generator gradle-addOpenapiGeneratorPlugin(true) should call source snapshot 1`] = `
 {
   "addGradleBuildSrcDependencyCatalogLibraries": [
     [
@@ -158,13 +158,13 @@ exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(tru
 }
 `;
 
-exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(true) should compose with generators 1`] = `
+exports[`generator - java-simple-application:openapi-generator gradle-addOpenapiGeneratorPlugin(true) should compose with generators 1`] = `
 [
   "jhipster:java:build-tool",
 ]
 `;
 
-exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(true) should match files snapshot 1`] = `
+exports[`generator - java-simple-application:openapi-generator gradle-addOpenapiGeneratorPlugin(true) should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -178,7 +178,7 @@ exports[`generator - java:openapi-generator gradle-addOpenapiGeneratorPlugin(tru
 }
 `;
 
-exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(false) should call source snapshot 1`] = `
+exports[`generator - java-simple-application:openapi-generator maven-addOpenapiGeneratorPlugin(false) should call source snapshot 1`] = `
 {
   "addJavaDefinitions": [
     [
@@ -241,13 +241,13 @@ exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(fals
 }
 `;
 
-exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(false) should compose with generators 1`] = `
+exports[`generator - java-simple-application:openapi-generator maven-addOpenapiGeneratorPlugin(false) should compose with generators 1`] = `
 [
   "jhipster:java:build-tool",
 ]
 `;
 
-exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(false) should match files snapshot 1`] = `
+exports[`generator - java-simple-application:openapi-generator maven-addOpenapiGeneratorPlugin(false) should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -258,7 +258,7 @@ exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(fals
 }
 `;
 
-exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(true) should call source snapshot 1`] = `
+exports[`generator - java-simple-application:openapi-generator maven-addOpenapiGeneratorPlugin(true) should call source snapshot 1`] = `
 {
   "addJavaDefinitions": [
     [
@@ -321,13 +321,13 @@ exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(true
 }
 `;
 
-exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(true) should compose with generators 1`] = `
+exports[`generator - java-simple-application:openapi-generator maven-addOpenapiGeneratorPlugin(true) should compose with generators 1`] = `
 [
   "jhipster:java:build-tool",
 ]
 `;
 
-exports[`generator - java:openapi-generator maven-addOpenapiGeneratorPlugin(true) should match files snapshot 1`] = `
+exports[`generator - java-simple-application:openapi-generator maven-addOpenapiGeneratorPlugin(true) should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
