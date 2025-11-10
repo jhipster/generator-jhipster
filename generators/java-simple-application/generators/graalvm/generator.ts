@@ -21,12 +21,12 @@ import { extname } from 'node:path';
 import { passthrough } from '@yeoman/transform';
 import { isFileStateDeleted, isFileStateModified } from 'mem-fs-editor/state';
 
+import { JavaApplicationGenerator } from '../../../java/generator.ts';
+import { addJavaAnnotation } from '../../../java/support/add-java-annotation.ts';
+import { javaMainPackageTemplatesBlock } from '../../../java/support/files.ts';
 import type { Application as LanguagesApplication } from '../../../languages/index.ts';
 import type { Source as SpringBootSource } from '../../../spring-boot/index.ts';
 import type { Config as SpringCacheConfig } from '../../../spring-cache/index.ts';
-import { JavaApplicationGenerator } from '../../generator.ts';
-import { addJavaAnnotation } from '../../support/add-java-annotation.ts';
-import { javaMainPackageTemplatesBlock } from '../../support/files.ts';
 
 import { GRAALVM_REACHABILITY_METADATA } from './internal/constants.ts';
 import { mavenDefinition } from './internal/maven-definition.ts';

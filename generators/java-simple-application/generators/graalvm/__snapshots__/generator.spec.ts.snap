@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - java:graalvm with default options should call source snapshot 1`] = `
+exports[`generator - java-simple-application:graalvm with default options should call source snapshot 1`] = `
 {
   "addMavenDefinition": [
     {
@@ -177,7 +177,7 @@ exports[`generator - java:graalvm with default options should call source snapsh
 }
 `;
 
-exports[`generator - java:graalvm with default options should call source snapshot 2`] = `
+exports[`generator - java-simple-application:graalvm with default options should call source snapshot 2`] = `
 {
   "addGradleDependencyCatalogPlugin": [
     {
@@ -241,7 +241,7 @@ exports[`generator - java:graalvm with default options should call source snapsh
 }
 `;
 
-exports[`generator - java:graalvm with default options should match files snapshot 1`] = `
+exports[`generator - java-simple-application:graalvm with default options should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -252,7 +252,7 @@ exports[`generator - java:graalvm with default options should match files snapsh
 }
 `;
 
-exports[`generator - java:graalvm with default options should match files snapshot 2`] = `
+exports[`generator - java-simple-application:graalvm with default options should match files snapshot 2`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
