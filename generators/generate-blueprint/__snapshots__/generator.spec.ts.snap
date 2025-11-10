@@ -713,6 +713,36 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/java-simple-application/generators/bootstrap/templates/template-file-java-simple-application:bootstrap.ejs": {
     "stateCleared": "modified",
   },
+  "generators/java-simple-application/generators/code-quality/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/code-quality/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/code-quality/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/code-quality/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/code-quality/templates/template-file-java-simple-application:code-quality.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/jib/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/jib/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/jib/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/jib/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/jib/templates/template-file-java-simple-application:jib.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/java-simple-application/index.js": {
     "stateCleared": "modified",
   },
@@ -758,21 +788,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/java/generators/build-tool/templates/template-file-java:build-tool.ejs": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/code-quality/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/java/generators/code-quality/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/java/generators/code-quality/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/java/generators/code-quality/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/java/generators/code-quality/templates/template-file-java:code-quality.ejs": {
-    "stateCleared": "modified",
-  },
   "generators/java/generators/domain/command.js": {
     "stateCleared": "modified",
   },
@@ -816,21 +831,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/java/generators/i18n/templates/template-file-java:i18n.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/java/generators/jib/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/java/generators/jib/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/java/generators/jib/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/java/generators/jib/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/java/generators/jib/templates/template-file-java:jib.ejs": {
     "stateCleared": "modified",
   },
   "generators/java/generators/node/command.js": {

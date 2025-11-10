@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - java:jib with defaults options should match files snapshot 1`] = `
+exports[`generator - java-simple-application:jib with defaults options should match files snapshot 1`] = `
 {
   ".mvn/jvm.config": {
     "stateCleared": "modified",
@@ -26,7 +26,7 @@ exports[`generator - java:jib with defaults options should match files snapshot 
 }
 `;
 
-exports[`generator - java:jib with defaults options should match source snapshot 1`] = `
+exports[`generator - java-simple-application:jib with defaults options should match source snapshot 1`] = `
 {
   "addMavenDefinition": [
     {
@@ -116,7 +116,7 @@ exports[`generator - java:jib with defaults options should match source snapshot
 }
 `;
 
-exports[`generator - java:jib with gradle buildTool should match files snapshot 1`] = `
+exports[`generator - java-simple-application:jib with gradle buildTool should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -151,7 +151,7 @@ exports[`generator - java:jib with gradle buildTool should match files snapshot 
 }
 `;
 
-exports[`generator - java:jib with gradle buildTool should match source snapshot 1`] = `
+exports[`generator - java-simple-application:jib with gradle buildTool should match source snapshot 1`] = `
 {
   "addGradleBuildSrcDependencyCatalogLibraries": [
     [

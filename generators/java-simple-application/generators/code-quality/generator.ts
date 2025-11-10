@@ -16,16 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { JavaApplicationGenerator } from '../../generator.ts';
+import { JavaSimpleApplicationGenerator } from '../../generator.ts';
 
-export default class JibGenerator extends JavaApplicationGenerator {
+export default class CodeQualityGenerator extends JavaSimpleApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrap('java');
+      await this.dependsOnBootstrap('java-simple-application');
       await this.dependsOnJHipster('jhipster:java:build-tool');
     }
   }
@@ -33,38 +33,35 @@ export default class JibGenerator extends JavaApplicationGenerator {
   get composing() {
     return this.asComposingTaskGroup({
       async compose() {
-        const { buildTool } = this.jhipsterConfigWithDefaults;
+        // TODO fix type by moving buildTool to java-simple-application
+        const { buildTool } = this.jhipsterConfigWithDefaults as any;
         if (buildTool === 'maven') {
-          await this.composeWithJHipster('jhipster:maven:jib');
+          await this.composeWithJHipster('jhipster:maven:code-quality');
         } else if (buildTool === 'gradle') {
-          await this.composeWithJHipster('jhipster:gradle:jib');
+          await this.composeWithJHipster('jhipster:gradle:code-quality');
         }
       },
     });
   }
 
-  get [JavaApplicationGenerator.COMPOSING]() {
+  get [JavaSimpleApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   get writing() {
     return this.asWritingTaskGroup({
-      async write({ application }) {
-        const { dockerServicesDir } = application;
+      async writing({ application }) {
+        // TODO fix type by moving buildTool to java-simple-application
+        const app = application as any;
         await this.writeFiles({
-          blocks: [
-            {
-              path: `${dockerServicesDir}jib/`,
-              templates: ['entrypoint.sh'],
-            },
-          ],
-          context: application,
+          blocks: [{ templates: ['checkstyle.xml'] }],
+          context: { ...app, buildToolMaven: app.buildToolMaven },
         });
       },
     });
   }
 
-  get [JavaApplicationGenerator.WRITING]() {
+  get [JavaSimpleApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 }

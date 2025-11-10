@@ -110,13 +110,13 @@ type GeneratorsByNamespace = {
   'java-simple-application': import('./java-simple-application/generator.ts').default;
   'jhipster:java-simple-application': import('./java-simple-application/generator.ts').default;
   'jhipster:java-simple-application:bootstrap': import('./java-simple-application/generators/bootstrap/generator.ts').default;
+  'jhipster:java-simple-application:code-quality': import('./java-simple-application/generators/code-quality/generator.ts').default;
+  'jhipster:java-simple-application:jib': import('./java-simple-application/generators/jib/generator.ts').default;
   'jhipster:java:bootstrap': import('./java/generators/bootstrap/generator.ts').default;
   'jhipster:java:build-tool': import('./java/generators/build-tool/generator.ts').default;
-  'jhipster:java:code-quality': import('./java/generators/code-quality/generator.ts').default;
   'jhipster:java:domain': import('./java/generators/domain/generator.ts').default;
   'jhipster:java:graalvm': import('./java/generators/graalvm/generator.ts').default;
   'jhipster:java:i18n': import('./java/generators/i18n/generator.ts').default;
-  'jhipster:java:jib': import('./java/generators/jib/generator.ts').default;
   'jhipster:java:node': import('./java/generators/node/generator.ts').default;
   'jhipster:java:openapi-generator': import('./java/generators/openapi-generator/generator.ts').default;
   'jhipster:java:server': import('./java/generators/server/generator.ts').default;
