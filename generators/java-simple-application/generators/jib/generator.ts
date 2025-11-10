@@ -33,6 +33,7 @@ export default class JibGenerator extends JavaSimpleApplicationGenerator {
   get composing() {
     return this.asComposingTaskGroup({
       async compose() {
+        // TODO fix type by moving buildTool to java-simple-application
         const { buildTool } = this.jhipsterConfigWithDefaults as any;
         if (buildTool === 'maven') {
           await this.composeWithJHipster('jhipster:maven:jib');

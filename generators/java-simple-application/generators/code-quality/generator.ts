@@ -33,6 +33,7 @@ export default class CodeQualityGenerator extends JavaSimpleApplicationGenerator
   get composing() {
     return this.asComposingTaskGroup({
       async compose() {
+        // TODO fix type by moving buildTool to java-simple-application
         const { buildTool } = this.jhipsterConfigWithDefaults as any;
         if (buildTool === 'maven') {
           await this.composeWithJHipster('jhipster:maven:code-quality');
@@ -50,6 +51,7 @@ export default class CodeQualityGenerator extends JavaSimpleApplicationGenerator
   get writing() {
     return this.asWritingTaskGroup({
       async writing({ application }) {
+        // TODO fix type by moving buildTool to java-simple-application
         const app = application as any;
         await this.writeFiles({
           blocks: [{ templates: ['checkstyle.xml'] }],
