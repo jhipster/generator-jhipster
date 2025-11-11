@@ -25,7 +25,7 @@ import type {
 import type {
   Config as SpringDataRelationalConfig,
   Options as SpringDataRelationalOptions,
-} from '../../generators/spring-data-relational/types.d.ts';
+} from '../../generators/spring-data/generators/relational/types.d.ts';
 import type { YO_RC_CONFIG_KEY } from '../utils/yo-rc.ts';
 
 export type ConfigAll = Simplify<

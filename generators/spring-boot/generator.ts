@@ -160,19 +160,19 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
 
         await this.composeWithJHipster('jhipster:java:i18n');
         await this.composeWithJHipster('docker');
-        await this.composeWithJHipster('jhipster:java:jib');
-        await this.composeWithJHipster('jhipster:java:code-quality');
+        await this.composeWithJHipster('jhipster:java-simple-application:jib');
+        await this.composeWithJHipster('jhipster:java-simple-application:code-quality');
 
         if (authenticationType === 'jwt' || authenticationType === 'oauth2') {
           await this.composeWithJHipster(`jhipster:spring-boot:${authenticationType}`);
         }
 
         if (graalvmSupport) {
-          await this.composeWithJHipster('jhipster:java:graalvm');
+          await this.composeWithJHipster('jhipster:java-simple-application:graalvm');
         }
 
         if (enableSwaggerCodegen) {
-          await this.composeWithJHipster('jhipster:java:openapi-generator');
+          await this.composeWithJHipster('jhipster:java-simple-application:openapi-generator');
         }
 
         if (applicationType === APPLICATION_TYPE_GATEWAY) {
@@ -180,34 +180,34 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
         }
 
         if (testFrameworks?.includes(CUCUMBER)) {
-          await this.composeWithJHipster('cucumber');
+          await this.composeWithJHipster('jhipster:spring-boot:cucumber');
         }
         if (testFrameworks?.includes(GATLING)) {
           await this.composeWithJHipster('gatling');
         }
         if (feignClient) {
-          await this.composeWithJHipster('feign-client');
+          await this.composeWithJHipster('jhipster:spring-boot:feign-client');
         }
 
         if (databaseType === SQL) {
-          await this.composeWithJHipster('spring-data-relational');
+          await this.composeWithJHipster('jhipster:spring-data:relational');
         } else if (databaseType === CASSANDRA) {
-          await this.composeWithJHipster('spring-data-cassandra');
+          await this.composeWithJHipster('jhipster:spring-data:cassandra');
         } else if (databaseType === COUCHBASE) {
-          await this.composeWithJHipster('spring-data-couchbase');
+          await this.composeWithJHipster('jhipster:spring-data:couchbase');
         } else if (databaseType === MONGODB) {
-          await this.composeWithJHipster('spring-data-mongodb');
+          await this.composeWithJHipster('jhipster:spring-data:mongodb');
         } else if (databaseType === NEO4J) {
-          await this.composeWithJHipster('spring-data-neo4j');
+          await this.composeWithJHipster('jhipster:spring-data:neo4j');
         }
         if (messageBroker === KAFKA || messageBroker === PULSAR) {
           await this.composeWithJHipster('spring-cloud-stream');
         }
         if (searchEngine === ELASTICSEARCH) {
-          await this.composeWithJHipster('spring-data-elasticsearch');
+          await this.composeWithJHipster('jhipster:spring-data:elasticsearch');
         }
         if (websocket === SPRING_WEBSOCKET) {
-          await this.composeWithJHipster('spring-websocket');
+          await this.composeWithJHipster('jhipster:spring-boot:websocket');
         }
         if (([EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS] as string[]).includes(cacheProvider!)) {
           await this.composeWithJHipster('spring-cache');
@@ -660,7 +660,7 @@ ${classProperties
         ]);
         if (application.reactive) {
           source.addAllowBlockingCallsInside?.({ classPath: 'org.springdoc.core.service.OpenAPIService', method: 'build' });
-          source.addAllowBlockingCallsInside?.({ classPath: 'org.springdoc.core.service.OpenAPIService', method: 'getWebhooks' });
+          source.addAllowBlockingCallsInside?.({ classPath: 'org.springdoc.core.service.OpenAPIService', method: 'getWebhooksClasses' });
           source.addAllowBlockingCallsInside?.({ classPath: 'org.springdoc.core.service.AbstractRequestService', method: 'build' });
         }
       },

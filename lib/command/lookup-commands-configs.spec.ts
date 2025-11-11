@@ -20,6 +20,7 @@ describe('jdl options', () => {
   "graalvmSupport",
   "incrementalChangelog",
   "clientTestFramework",
+  "removeNeedles",
   "routes",
 ]
 `);

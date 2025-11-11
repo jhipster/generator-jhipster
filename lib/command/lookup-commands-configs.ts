@@ -1,14 +1,11 @@
-import { dirname, join } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 import { glob } from 'glob';
 
 import type { JHipsterConfig, JHipsterConfigs } from './types.ts';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const cwd = join(__dirname, '../..');
+const cwd = join(import.meta.dirname, '../..');
 let jhipsterConfigs: JHipsterConfigs;
 
 export const lookupCommandsConfigs = async (options?: { filter: (config: JHipsterConfig) => boolean }): Promise<JHipsterConfigs> => {

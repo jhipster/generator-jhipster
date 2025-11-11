@@ -32,7 +32,7 @@ import type { DatabaseProperty } from '../../liquibase/types.ts';
 import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/index.ts';
 import type { Entity as ServerEntity } from '../../server/types.ts';
 import type { Config as SpringBootConfig } from '../../spring-boot/types.ts';
-import type { Config as SpringDataRelationalConfig } from '../../spring-data-relational/types.ts';
+import type { Config as SpringDataRelationalConfig } from '../../spring-data/generators/relational/types.ts';
 import { mutateEntity } from '../entity.ts';
 import type { Entity as BaseApplicationEntity, PrimaryKey } from '../types.ts';
 

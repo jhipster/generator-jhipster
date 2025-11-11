@@ -124,7 +124,7 @@ test {
         events = ['FAILED', 'SKIPPED']
         exceptionFormat = "full"
     }
-    jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx512m'
+    jvmArgs += '-Xmx512m'
 
     systemProperty('spring.profiles.active', springTestProfiles)
 

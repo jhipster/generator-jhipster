@@ -45,7 +45,6 @@
           </span>
         </a>
       </li>
-      <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
       @if (account() !== null) {
         <li
           ngbDropdown
@@ -61,14 +60,15 @@
             </span>
           </a>
           <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+            <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
 <%_ if (applicationTypeGateway && microfrontend) { _%>
   <%_ for (const remote of microfrontends) { _%>
-          @if (<%= remote.lowercaseBaseName %>EntityNavbarItems.length === 0) {
+          @if (<%= remote.lowercaseBaseName %>EntityNavbarItems().length === 0) {
             <li>
               <span class="dropdown-item">Failed to load <%= remote.lowercaseBaseName %> entities</span>
             </li>
           }
-          @for (entityNavbarItem of <%= remote.lowercaseBaseName %>EntityNavbarItems; track $index) {
+          @for (entityNavbarItem of <%= remote.lowercaseBaseName %>EntityNavbarItems(); track $index) {
             <li>
               <a
                 class="dropdown-item"
@@ -88,7 +88,6 @@
         }
   <%_ } _%>
 <%_ } _%>
-            <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
           </ul>
         </li>
       }
@@ -159,7 +158,7 @@
           </li>
 <%_ } _%>
 <%_ if (!applicationTypeMicroservice) { _%>
-        @if (openAPIEnabled) {
+        @if (openAPIEnabled()) {
           <li>
             <a class="dropdown-item" routerLink="/admin/docs" routerLinkActive="active" (click)="collapseNavbar()">
               <fa-icon icon="book" [fixedWidth]="true" />
@@ -169,7 +168,7 @@
         }
 <%_ } _%>
 <%_ if (devDatabaseTypeH2Any || databaseTypeCouchbase) { _%>
-        @if (!inProduction) {
+        @if (!inProduction()) {
           <li>
             <a class="dropdown-item" href="<% if (databaseTypeCouchbase) { %>http://localhost:8091/<% } else if (reactive) { %> http://localhost:8092/ <% } else { %>./h2-console/<% } %>" target="_tab" (click)="collapseNavbar()">
               <fa-icon icon="database" [fixedWidth]="true" />

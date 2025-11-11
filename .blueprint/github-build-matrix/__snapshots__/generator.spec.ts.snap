@@ -41,6 +41,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "app-sample": "ng-default",
       "jdl-entity": "*",
       "generatorOptions": {
+        "removeNeedles": true,
         "clientTestFramework": "vitest",
         "clientBundler": "webpack"
       },
@@ -85,6 +86,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "app-sample": "ng-mongodb-kafka-cucumber",
       "entity": "mongodb",
       "generatorOptions": {
+        "clientTestFramework": "vitest",
         "defaultEnvironment": "dev"
       },
       "workspaces": "false",

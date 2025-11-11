@@ -23,7 +23,10 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/build-plugins/define-esbuild.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/eslint.config.mjs": {
+  "clientRoot/build-plugins/package.json": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/eslint.config.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/jest.conf.js": {
@@ -183,9 +186,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/util/parse-links.service.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/entities/entity-navbar-items.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.html": {
@@ -751,7 +751,10 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/build-plugins/i18n-esbuild.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/eslint.config.mjs": {
+  "clientRoot/build-plugins/package.json": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/eslint.config.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/jest.conf.js": {
@@ -1112,9 +1115,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/admin/authority/update/authority-update.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/entities/entity-navbar-items.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.html": {
@@ -1702,7 +1702,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/angular.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/eslint.config.mjs": {
+  "clientRoot/eslint.config.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/jest.conf.js": {
@@ -2329,6 +2329,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/webpack/logo-jhipster.png": {
     "stateCleared": "modified",
   },
+  "clientRoot/webpack/package.json": {
+    "stateCleared": "modified",
+  },
   "clientRoot/webpack/proxy.conf.js": {
     "stateCleared": "modified",
   },
@@ -2425,7 +2428,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "angular.json": {
     "stateCleared": "modified",
   },
-  "eslint.config.mjs": {
+  "eslint.config.ts": {
     "stateCleared": "modified",
   },
   "jest.conf.js": {
@@ -3061,6 +3064,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "webpack/logo-jhipster.png": {
     "stateCleared": "modified",
   },
+  "webpack/package.json": {
+    "stateCleared": "modified",
+  },
   "webpack/proxy.conf.js": {
     "stateCleared": "modified",
   },
@@ -3164,7 +3170,10 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "build-plugins/i18n-esbuild.ts": {
     "stateCleared": "modified",
   },
-  "eslint.config.mjs": {
+  "build-plugins/package.json": {
+    "stateCleared": "modified",
+  },
+  "eslint.config.ts": {
     "stateCleared": "modified",
   },
   "jest.conf.js": {
@@ -3687,9 +3696,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/authority/update/authority-update.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/entity-navbar-items.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.html": {
@@ -4286,7 +4292,10 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "build-plugins/define-esbuild.ts": {
     "stateCleared": "modified",
   },
-  "eslint.config.mjs": {
+  "build-plugins/package.json": {
+    "stateCleared": "modified",
+  },
+  "eslint.config.ts": {
     "stateCleared": "modified",
   },
   "jest.conf.js": {
@@ -4428,9 +4437,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/util/parse-links.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/entity-navbar-items.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.html": {
@@ -4981,7 +4987,10 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "build-plugins/define-esbuild.ts": {
     "stateCleared": "modified",
   },
-  "eslint.config.mjs": {
+  "build-plugins/package.json": {
+    "stateCleared": "modified",
+  },
+  "eslint.config.ts": {
     "stateCleared": "modified",
   },
   "jest.conf.js": {
@@ -5123,9 +5132,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/util/parse-links.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/entity-navbar-items.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.html": {

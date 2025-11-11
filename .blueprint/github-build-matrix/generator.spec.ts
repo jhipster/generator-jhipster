@@ -1,6 +1,5 @@
 import { before, describe, expect, it } from 'esmocha';
-import { basename, dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename, join } from 'node:path';
 
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { shouldSupportFeatures } from '../../test/support/index.ts';
@@ -8,10 +7,7 @@ import { shouldSupportFeatures } from '../../test/support/index.ts';
 import { workflowChoices } from './command.ts';
 import Generator from './generator.ts';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const generator = basename(__dirname);
+const generator = basename(import.meta.dirname);
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
@@ -19,7 +15,7 @@ describe(`generator - ${generator}`, () => {
   for (const workflow of workflowChoices) {
     describe(`with ${workflow}`, () => {
       before(async () => {
-        await helpers.runJHipster(join(__dirname, 'index.ts'), { useEnvironmentBuilder: true }).withArguments(workflow);
+        await helpers.runJHipster(join(import.meta.dirname, 'index.ts'), { useEnvironmentBuilder: true }).withArguments(workflow);
       });
 
       it('should set workflow value', () => {

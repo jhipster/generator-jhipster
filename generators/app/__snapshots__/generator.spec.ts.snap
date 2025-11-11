@@ -7,6 +7,7 @@ exports[`generator - app help should print expected information 1`] = `
 
 Options:
   --auto-crlf                              Detect line endings
+  --remove-needles                         Remove needles, needles are used by entity and language generators to inject code
   --defaults                               Execute jhipster with default config
   --jhi-prefix <value>                     Add prefix before services, controllers and states name
   --entity-suffix <value>                  Add suffix after entities name
@@ -471,7 +472,6 @@ exports[`generator - app with default config should match snapshot 1`] = `
     "com.mycompany.myapp",
   ],
   "entitySuffix": "",
-  "eslintConfigFile": "eslint.config.mjs",
   "feignClient": false,
   "filterEntitiesAndPropertiesForClient": [Function],
   "filterEntitiesForClient": [Function],
@@ -672,6 +672,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
     "@angular/cli": "ANGULAR_CLI_VERSION",
     "@angular/common": "ANGULAR_COMMON_VERSION",
     "@cypress/code-coverage": "CYPRESS_CODE_COVERAGE_VERSION",
+    "@cypress/schematic": "CYPRESS_SCHEMATIC_VERSION",
     "@eslint/js": "ESLINT_JS_VERSION",
     "@fortawesome/angular-fontawesome": "FORTAWESOME_ANGULAR_FONTAWESOME_VERSION",
     "@fortawesome/fontawesome-svg-core": "FORTAWESOME_FONTAWESOME_SVG_CORE_VERSION",
@@ -696,6 +697,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
     "copy-webpack-plugin": "COPY_WEBPACK_PLUGIN_VERSION",
     "cypress": "CYPRESS_VERSION",
     "cypress-audit": "CYPRESS_AUDIT_VERSION",
+    "cypress-monocart-coverage": "CYPRESS_MONOCART_COVERAGE_VERSION",
     "dayjs": "DAYJS_VERSION",
     "deepmerge": "DEEPMERGE_VERSION",
     "eslint": "ESLINT_VERSION",
@@ -709,6 +711,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
     "jest-junit": "JEST_JUNIT_VERSION",
     "jest-preset-angular": "JEST_PRESET_ANGULAR_VERSION",
     "jest-sonar": "JEST_SONAR_VERSION",
+    "jiti": "JITI_VERSION",
     "jsdom": "JSDOM_VERSION",
     "lighthouse": "LIGHTHOUSE_VERSION",
     "lint-staged": "LINT_STAGED_VERSION",
@@ -835,6 +838,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "reactorBlock": "",
   "reactorBlockOptional": "",
   "rememberMeKey": undefined,
+  "removeNeedles": undefined,
   "requiresDeleteAllUsers": false,
   "routes": undefined,
   "sampleWritten": undefined,
@@ -1165,7 +1169,6 @@ exports[`generator - app with gateway should match snapshot 1`] = `
     "com.mycompany.myapp",
   ],
   "entitySuffix": "",
-  "eslintConfigFile": "eslint.config.mjs",
   "feignClient": false,
   "filterEntitiesAndPropertiesForClient": [Function],
   "filterEntitiesForClient": [Function],
@@ -1360,6 +1363,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
     "@angular/cli": "ANGULAR_CLI_VERSION",
     "@angular/common": "ANGULAR_COMMON_VERSION",
     "@cypress/code-coverage": "CYPRESS_CODE_COVERAGE_VERSION",
+    "@cypress/schematic": "CYPRESS_SCHEMATIC_VERSION",
     "@eslint/js": "ESLINT_JS_VERSION",
     "@fortawesome/angular-fontawesome": "FORTAWESOME_ANGULAR_FONTAWESOME_VERSION",
     "@fortawesome/fontawesome-svg-core": "FORTAWESOME_FONTAWESOME_SVG_CORE_VERSION",
@@ -1384,6 +1388,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
     "copy-webpack-plugin": "COPY_WEBPACK_PLUGIN_VERSION",
     "cypress": "CYPRESS_VERSION",
     "cypress-audit": "CYPRESS_AUDIT_VERSION",
+    "cypress-monocart-coverage": "CYPRESS_MONOCART_COVERAGE_VERSION",
     "dayjs": "DAYJS_VERSION",
     "deepmerge": "DEEPMERGE_VERSION",
     "eslint": "ESLINT_VERSION",
@@ -1397,6 +1402,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
     "jest-junit": "JEST_JUNIT_VERSION",
     "jest-preset-angular": "JEST_PRESET_ANGULAR_VERSION",
     "jest-sonar": "JEST_SONAR_VERSION",
+    "jiti": "JITI_VERSION",
     "jsdom": "JSDOM_VERSION",
     "lighthouse": "LIGHTHOUSE_VERSION",
     "lint-staged": "LINT_STAGED_VERSION",
@@ -1524,6 +1530,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "reactorBlock": ".block()",
   "reactorBlockOptional": ".blockOptional()",
   "rememberMeKey": undefined,
+  "removeNeedles": undefined,
   "requiresDeleteAllUsers": true,
   "routes": undefined,
   "sampleWritten": undefined,
@@ -1846,7 +1853,6 @@ exports[`generator - app with microservice should match snapshot 1`] = `
     "com.mycompany.myapp",
   ],
   "entitySuffix": "",
-  "eslintConfigFile": "eslint.config.mjs",
   "feignClient": false,
   "gatewayRoutes": undefined,
   "gatewayServerPort": undefined,
@@ -2127,6 +2133,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "reactorBlock": "",
   "reactorBlockOptional": "",
   "rememberMeKey": undefined,
+  "removeNeedles": undefined,
   "requiresDeleteAllUsers": false,
   "routes": undefined,
   "sampleWritten": undefined,

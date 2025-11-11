@@ -18,9 +18,8 @@
  */
 import assert from 'node:assert';
 import { existsSync, rmSync, statSync } from 'node:fs';
-import { basename, dirname, extname, isAbsolute, join, join as joinPath, relative } from 'node:path';
+import { basename, extname, isAbsolute, join, join as joinPath, relative } from 'node:path';
 import { relative as posixRelative } from 'node:path/posix';
-import { fileURLToPath } from 'node:url';
 
 import { requireNamespace } from '@yeoman/namespace';
 import type { GeneratorMeta } from '@yeoman/types';
@@ -83,9 +82,6 @@ const {
   POST_INSTALL,
   END,
 } = PRIORITY_NAMES;
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const asPriority = (priorityName: string) => `${PRIORITY_PREFIX}${priorityName}`;
 
@@ -757,7 +753,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    */
   fetchFromInstalledJHipster(...path: string[]): string {
     if (path) {
-      return joinPath(__dirname, '..', ...path);
+      return joinPath(import.meta.dirname, '..', ...path);
     }
     return path;
   }

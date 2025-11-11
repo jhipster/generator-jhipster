@@ -100,7 +100,6 @@ export default class VueGenerator extends ClientApplicationGenerator {
       applicationDefaults({ application, applicationDefaults }) {
         applicationDefaults({
           __override__: true,
-          eslintConfigFile: app => `eslint.config.${app.packageJsonType === 'module' ? 'js' : 'mjs'}`,
           webappEnumerationsDir: app => `${app.clientSrcDir}app/shared/model/enumerations/`,
         });
 
@@ -288,6 +287,12 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
               `${application.srcMainWebapp}microfrontends/entities-menu-component-test.ts`,
               `${application.srcMainWebapp}microfrontends/entities-router-test.ts`,
             ],
+          ],
+          '9.0.0-alpha.0': [
+            '.postcssrc.js',
+            // Try to remove possibles old eslint config files
+            'eslint.config.js',
+            'eslint.config.mjs',
           ],
         });
       },

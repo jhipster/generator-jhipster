@@ -13,6 +13,7 @@
       "app-sample": "ng-default",
       "jdl-entity": "*",
       "generatorOptions": {
+        "removeNeedles": true,
         "clientTestFramework": "vitest",
         "clientBundler": "webpack"
       }
@@ -27,6 +28,7 @@
       "app-sample": "ng-mongodb-kafka-cucumber",
       "entity": "mongodb",
       "generatorOptions": {
+        "clientTestFramework": "vitest",
         "defaultEnvironment": "dev"
       }
     },

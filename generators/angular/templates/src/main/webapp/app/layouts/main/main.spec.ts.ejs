@@ -50,7 +50,6 @@ describe('Main', () => {
   let findLanguageFromKeyPipe: FindLanguageFromKeyPipe;
   <%_ } _%>
 <%_ } _%>
-  let mockAccountService: AccountService;
   const routerState: any = { snapshot: { root: { data: {} } } };
   let router: Router;
   let document: Document;
@@ -87,7 +86,6 @@ describe('Main', () => {
     findLanguageFromKeyPipe = TestBed.inject(FindLanguageFromKeyPipe);
   <%_ } _%>
 <%_ } _%>
-    mockAccountService = TestBed.inject(AccountService);
     router = TestBed.inject(Router);
     document = TestBed.inject(DOCUMENT);
     <%_ if (enableTranslation) { _%>

@@ -18,8 +18,8 @@
  */
 import assert from 'node:assert';
 import { existsSync } from 'node:fs';
-import path, { dirname, resolve } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import path, { resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 import { QueuedAdapter } from '@yeoman/adapter';
 import chalk from 'chalk';
@@ -32,10 +32,8 @@ import { readCurrentPathYoRcFile } from '../lib/utils/yo-rc.ts';
 
 import { CLI_NAME, logger } from './utils.ts';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const jhipsterDevBlueprintPath = process.env.JHIPSTER_DEV_BLUEPRINT === 'true' ? path.join(__dirname, '../.blueprint') : undefined;
+const jhipsterDevBlueprintPath =
+  process.env.JHIPSTER_DEV_BLUEPRINT === 'true' ? path.join(import.meta.dirname, '../.blueprint') : undefined;
 const devBlueprintNamespace = '@jhipster/jhipster-dev';
 const localBlueprintNamespace = '@jhipster/jhipster-local';
 const defaultLookupOptions = {
@@ -110,7 +108,7 @@ export default class EnvironmentBuilder {
   }
 
   async prepare({ blueprints, lookups, devBlueprintPath = jhipsterDevBlueprintPath } = {}) {
-    const devBlueprintEnabled = existsSync(devBlueprintPath);
+    const devBlueprintEnabled = devBlueprintPath && existsSync(devBlueprintPath);
     this.env.sharedOptions.devBlueprintEnabled = devBlueprintEnabled;
     this.devBlueprintPath = devBlueprintEnabled ? devBlueprintPath : undefined;
     this.localBlueprintPath = path.join(process.cwd(), '.blueprint');
@@ -158,14 +156,14 @@ export default class EnvironmentBuilder {
    */
   async _lookupJHipster() {
     // Register jhipster generators.
-    const sourceRoot = path.basename(path.join(__dirname, '..'));
+    const sourceRoot = path.basename(path.join(import.meta.dirname, '..'));
     let packagePath;
     let lookup;
     if (sourceRoot === 'generator-jhipster') {
-      packagePath = path.join(__dirname, '..');
+      packagePath = path.join(import.meta.dirname, '..');
       lookup = 'generators';
     } else {
-      packagePath = path.join(__dirname, '../..');
+      packagePath = path.join(import.meta.dirname, '../..');
       lookup = `${sourceRoot}/generators`;
     }
     const generators = await this.env.lookup({
@@ -199,12 +197,14 @@ export default class EnvironmentBuilder {
   }
 
   async _lookupDevBlueprint() {
-    // Register jhipster generators.
-    await this.env.lookup({
-      packagePaths: [this.devBlueprintPath],
-      lookups: ['.'],
-      customizeNamespace: ns => ns?.replace('.blueprint', '@jhipster/jhipster-dev'),
-    });
+    if (this.devBlueprintPath) {
+      // Register jhipster generators.
+      await this.env.lookup({
+        packagePaths: [this.devBlueprintPath],
+        lookups: ['.'],
+        customizeNamespace: ns => ns?.replace('.blueprint', '@jhipster/jhipster-dev'),
+      });
+    }
     return this;
   }
 
@@ -257,7 +257,7 @@ export default class EnvironmentBuilder {
   /**
    * Lookup for generators.
    *
-   * @param {string[]} [generators] - generators to lookup.
+   * @param {string[]} generators - generators to lookup.
    * @param {Object} [options] - forwarded to Environment lookup.
    * @return {EnvironmentBuilder} this for chaining.
    */

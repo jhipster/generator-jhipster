@@ -1,6 +1,5 @@
 import { before, describe, expect, it } from 'esmocha';
-import { basename, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename } from 'node:path';
 
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
@@ -10,10 +9,7 @@ import { filterBasicServerGenerators } from '../server/__test-support/index.ts';
 
 import Generator from './generator.ts';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const generator = basename(__dirname);
+const generator = basename(import.meta.dirname);
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);

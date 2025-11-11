@@ -25,7 +25,7 @@ export const writeEslintClientRootConfigFile = asWritingTask<BaseApplicationEnti
     await this.writeFiles({
       blocks: [
         clientRootTemplatesBlock({
-          templates: [{ sourceFile: 'eslint.config.js.jhi', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi` }],
+          templates: ['eslint.config.ts.jhi'],
         }),
       ],
       context: application,

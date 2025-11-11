@@ -117,7 +117,6 @@ export default class AngularGenerator extends AngularApplicationGenerator {
       applicationDefaults({ application, applicationDefaults }) {
         applicationDefaults({
           __override__: true,
-          eslintConfigFile: app => `eslint.config.${app.packageJsonType === 'module' ? 'js' : 'mjs'}`,
           webappEnumerationsDir: app => `${app.clientSrcDir}app/entities/enumerations/`,
           angularLocaleId: app => app.nativeLanguageDefinition.angularLocale ?? defaultLanguage.angularLocale!,
         });
@@ -316,6 +315,20 @@ export default class AngularGenerator extends AngularApplicationGenerator {
         await control.cleanupFiles({
           '8.6.1': ['.eslintrc.json', '.eslintignore'],
           '8.7.4': [`${application.clientSrcDir}app/app.constants.ts`],
+          '9.0.0-alpha.0': [
+            // Try to remove possibles old eslint config files
+            'eslint.config.js',
+            'eslint.config.mjs',
+            [
+              application.clientBundlerEsbuild!,
+              `${application.clientRootDir}build-plugins/define-esbuild.mjs`,
+              `${application.clientRootDir}build-plugins/i18n-esbuild.mjs`,
+            ],
+            [
+              !application.microfrontend || !application.applicationTypeMicroservice,
+              `${application.clientSrcDir}app/entities/entity-navbar-items.ts`,
+            ],
+          ],
         });
       },
       cleanupOldFilesTask,
@@ -406,17 +419,6 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             valueSep: ', ',
           },
         ]);
-      },
-      async cleanup({ control, application }) {
-        await control.cleanupFiles({
-          '9.0.0-alpha.0': [
-            [
-              application.clientBundlerEsbuild!,
-              `${application.clientRootDir}build-plugins/define-esbuild.mjs`,
-              `${application.clientRootDir}build-plugins/i18n-esbuild.mjs`,
-            ],
-          ],
-        });
       },
     });
   }

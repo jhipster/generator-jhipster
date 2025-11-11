@@ -1,0 +1,172 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`generator - java-simple-application:jib with defaults options should match files snapshot 1`] = `
+{
+  ".mvn/jvm.config": {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.jar": {
+    "stateCleared": "modified",
+  },
+  ".mvn/wrapper/maven-wrapper.properties": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "mvnw": {
+    "stateCleared": "modified",
+  },
+  "mvnw.cmd": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - java-simple-application:jib with defaults options should match source snapshot 1`] = `
+{
+  "addMavenDefinition": [
+    {
+      "pluginManagement": [
+        {
+          "additionalContent": "<configuration>
+    <from>
+        <image>\${jib-maven-plugin.image}</image>
+        <platforms>
+            <platform>
+                <architecture>\${jib-maven-plugin.architecture}</architecture>
+                <os>linux</os>
+            </platform>
+        </platforms>
+    </from>
+    <to>
+        <image>jhipster:latest</image>
+    </to>
+    <container>
+        <entrypoint>
+            <shell>bash</shell>
+            <option>-c</option>
+            <arg>/entrypoint.sh</arg>
+        </entrypoint>
+        <ports>
+            <port>8080</port>
+        </ports>
+        <environment>
+            <SPRING_OUTPUT_ANSI_ENABLED>ALWAYS</SPRING_OUTPUT_ANSI_ENABLED>
+            <JHIPSTER_SLEEP>0</JHIPSTER_SLEEP>
+        </environment>
+        <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+        <user>1000</user>
+    </container>
+    <extraDirectories>
+        <paths>src/main/docker/jib</paths>
+        <permissions>
+            <permission>
+                <file>/entrypoint.sh</file>
+                <mode>755</mode>
+            </permission>
+        </permissions>
+    </extraDirectories>
+    <pluginExtensions>
+        <pluginExtension>
+            <implementation>com.google.cloud.tools.jib.maven.extension.springboot.JibSpringBootExtension</implementation>
+        </pluginExtension>
+    </pluginExtensions>
+
+</configuration>
+<dependencies>
+    <dependency>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-spring-boot-extension-maven</artifactId>
+        <version>'JIB-SPRING-BOOT-EXTENSION-MAVEN-VERSION'</version>
+    </dependency>
+</dependencies>
+
+",
+          "artifactId": "jib-maven-plugin",
+          "groupId": "com.google.cloud.tools",
+          "version": "\${jib-maven-plugin.version}",
+        },
+      ],
+      "plugins": [
+        {
+          "artifactId": "jib-maven-plugin",
+          "groupId": "com.google.cloud.tools",
+        },
+      ],
+      "properties": [
+        {
+          "property": "jib-maven-plugin.version",
+          "value": "'JIB-MAVEN-PLUGIN-VERSION'",
+        },
+        {
+          "property": "jib-maven-plugin.image",
+          "value": "java-jre-placeholder",
+        },
+        {
+          "property": "jib-maven-plugin.architecture",
+          "value": "amd64",
+        },
+      ],
+    },
+  ],
+}
+`;
+
+exports[`generator - java-simple-application:jib with gradle buildTool should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/build.gradle": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/src/main/groovy/jhipster.docker-conventions.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.jar": {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": {
+    "stateCleared": "modified",
+  },
+  "gradlew": {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jib/entrypoint.sh": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - java-simple-application:jib with gradle buildTool should match source snapshot 1`] = `
+{
+  "addGradleBuildSrcDependencyCatalogLibraries": [
+    [
+      {
+        "libraryName": "jib-plugin",
+        "module": "com.google.cloud.tools:jib-gradle-plugin",
+        "scope": "implementation",
+        "version": "'GRADLE-JIB-VERSION'",
+      },
+    ],
+  ],
+  "addGradlePlugin": [
+    {
+      "id": "jhipster.docker-conventions",
+    },
+  ],
+}
+`;

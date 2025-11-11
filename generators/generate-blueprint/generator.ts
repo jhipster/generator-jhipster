@@ -331,6 +331,7 @@ export default class extends BaseSimpleApplicationGenerator<
           devDependencies: {
             'ejs-lint': `${mainDependencies['ejs-lint']}`,
             eslint: `${mainDependencies.eslint}`,
+            jiti: `${mainDependencies.jiti}`,
             globals: `${mainDependencies.globals}`,
             vitest: mainDependencies.vitest,
             prettier: `${mainDependencies.prettier}`,
@@ -338,7 +339,7 @@ export default class extends BaseSimpleApplicationGenerator<
              * yeoman-test version is loaded through generator-jhipster peer dependency.
              * generator-jhipster uses a fixed version, blueprints must set a compatible range.
              */
-            'yeoman-test': '>=8.2.0',
+            'yeoman-test': '>=10',
           },
           engines: {
             node: jhipsterPackageJson.engines!.node!,

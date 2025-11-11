@@ -134,7 +134,7 @@ const app = createApp({
     setupAxiosInterceptors(
       error => {
         const url = error.response?.config?.url;
-        const status = error.status || error.response.status;
+        const status = error.status || error.response?.status;
         if (status === 401) {
           // Store logged out state.
           store.logout();

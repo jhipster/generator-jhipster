@@ -32,7 +32,7 @@ import {
   inject,
 <%_ } _%>
 } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
 
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faEye, faPencilAlt, faPlus, faSort, faSortDown, faSortUp, faSync, faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -62,8 +62,7 @@ describe('<%= entityAngularName %> Management Component', () => {
     let service: <%= entityAngularName %>Service;
     let routerNavigateSpy: <%- clientTestFrameworkJest ? 'jest.SpyInstance<Promise<boolean>>' : 'MockInstance' %>;
 
-    beforeEach(<%- clientTestFrameworkJest ? '' : 'async ' %>() => {
-        const routerModule: typeof import('@angular/router') = <%- clientTestFrameworkJest ? 'jest.requireActual' : 'await vitest.importActual' %>('@angular/router');
+    beforeEach(() => {
         TestBed.configureTestingModule({
             <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
             providers: [
@@ -76,7 +75,7 @@ describe('<%= entityAngularName %> Management Component', () => {
                             defaultSort: '<%- primaryKey.name %>,asc',
                         }),
                         queryParamMap: of(
-                            routerModule.convertToParamMap({
+                            convertToParamMap({
                                 page: '1',
                                 size: '1',
                                 sort: '<%- primaryKey.name %>,desc',
@@ -87,7 +86,7 @@ describe('<%= entityAngularName %> Management Component', () => {
                         ),
                         snapshot: {
                             queryParams: {},
-                            queryParamMap: routerModule.convertToParamMap({
+                            queryParamMap: convertToParamMap({
                                 page: '1',
                                 size: '1',
                                 sort: '<%- primaryKey.name %>,desc',

@@ -23,13 +23,8 @@
   "description": "<%= projectDescription %>",
   "private": true,
   "license": "UNLICENSED",
-  "cacheDirectories": [
-    "node_modules"
-  ],
+  "type": "module",
   "dependencies": {
-<%_ if (clientTestFrameworkJest || microfrontend) { _%>
-    "zone.js": "<%= nodeDependencies['zone.js'] %>",
-<%_ } _%>
     "@angular/common": "<%= nodeDependencies['@angular/common'] %>",
     "@angular/compiler": "<%= nodeDependencies['@angular/common'] %>",
     "@angular/core": "<%= nodeDependencies['@angular/common'] %>",
@@ -74,6 +69,7 @@
     "jest-junit": "<%= nodeDependencies['jest-junit'] %>",
     "jest-sonar": "<%= nodeDependencies['jest-sonar'] %>",
     "ts-jest": "<%= nodeDependencies['ts-jest'] %>",
+    "zone.js": "<%= nodeDependencies['zone.js'] %>",
 <%_ } else { _%>
     "jsdom": null,
     "vitest": null,
@@ -92,6 +88,7 @@
     "eslint-config-prettier": "<%= nodeDependencies['eslint-config-prettier'] %>",
     "eslint-plugin-prettier": "<%= nodeDependencies['eslint-plugin-prettier'] %>",
     "globals": "<%= nodeDependencies.globals %>",
+    "jiti": null,
 <%_ if (enableI18nRTL) { _%>
     "postcss-rtlcss": "<%= nodeDependencies['postcss-rtlcss'] %>",
 <%_ } _%>

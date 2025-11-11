@@ -33,6 +33,10 @@ export default class EslintGenerator extends JavascriptSimpleApplicationGenerato
   get loading() {
     return this.asLoadingTaskGroup({
       loadNodeDependencies({ application }) {
+        this.loadNodeDependencies(application.nodeDependencies, {
+          jiti: application.jhipsterPackageJson.devDependencies.jiti,
+        });
+
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
           this.fetchFromInstalledJHipster('javascript-simple-application', 'resources', 'package.json'),
@@ -47,10 +51,10 @@ export default class EslintGenerator extends JavascriptSimpleApplicationGenerato
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      source({ application, source }) {
+      source({ source }) {
         source.addEslintConfig = ({ import: importToAdd, config }) =>
           this.editFile(
-            application.eslintConfigFile!,
+            'eslint.config.ts',
             config ? createNeedleCallback({ needle: 'eslint-add-config', contentToAdd: config }) : content => content,
             importToAdd ? createNeedleCallback({ needle: 'eslint-add-import', contentToAdd: importToAdd }) : content => content,
           );
@@ -66,11 +70,20 @@ export default class EslintGenerator extends JavascriptSimpleApplicationGenerato
 
   get writing() {
     return this.asWritingTaskGroup({
+      async cleanup({ control }) {
+        await control.cleanupFiles({
+          '9.0.0-alpha.0': [
+            // Try to remove possibles old eslint config files
+            'eslint.config.js',
+            'eslint.config.mjs',
+          ],
+        });
+      },
       async writing({ application }) {
         await this.writeFiles({
           blocks: [
             {
-              templates: [{ sourceFile: 'eslint.config.js.jhi', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi` }],
+              templates: ['eslint.config.ts.jhi'],
             },
           ],
           context: application,
@@ -90,6 +103,7 @@ export default class EslintGenerator extends JavascriptSimpleApplicationGenerato
           devDependencies: {
             'eslint-config-prettier': application.nodeDependencies['eslint-config-prettier'],
             'eslint-plugin-prettier': application.nodeDependencies['eslint-plugin-prettier'],
+            jiti: application.nodeDependencies.jiti,
           },
         });
       },

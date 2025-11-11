@@ -18,7 +18,9 @@
  */
 import assert from 'node:assert';
 
+import { transformContents } from '@yeoman/transform';
 import { escapeRegExp, kebabCase } from 'lodash-es';
+import type { MemFsEditorFile } from 'mem-fs-editor';
 
 import type { CascatedEditFileCallback, EditFileCallback } from '../api.ts';
 import type CoreGenerator from '../index.ts';
@@ -26,6 +28,10 @@ import type CoreGenerator from '../index.ts';
 import { joinCallbacks } from './write-files.ts';
 
 export type NeedleCallback = (content: string) => string;
+
+const needlesWhiteList = [
+  'liquibase-add-incremental-changelog', // mandatory for incremental changelogs
+];
 
 type NeedleContentToAddCallback = {
   /**
@@ -91,6 +97,27 @@ export const convertToPrettierExpressions = (str: string): string =>
 
 const isArrayOfContentToAdd = (value: unknown): value is ContentToAdd[] => {
   return Array.isArray(value) && value.every(item => typeof item === 'object' && 'content' in item);
+}:
+
+export const createNeedleRegexp = (needle: string): RegExp => new RegExp(`(?://|<!--|\\{?/\\*|#) ${needle}(?: [^$\\n]*)?(?:$|\\n)`, 'g');
+
+type NeedleLinePosition = {
+  start: number;
+  end: number;
+};
+
+export const getNeedlesPositions = (content: string, needle = 'jhipster-needle-(?:[-\\w]*)'): NeedleLinePosition[] => {
+  const regexp = createNeedleRegexp(needle);
+  const positions: NeedleLinePosition[] = [];
+  let match: RegExpExecArray | null;
+  while ((match = regexp.exec(content))) {
+    if (needlesWhiteList.some(whileList => match![0].includes(whileList))) {
+      continue;
+    }
+    const needleLineIndex = content.lastIndexOf('\n', match.index) + 1;
+    positions.unshift({ start: needleLineIndex, end: regexp.lastIndex });
+  }
+  return positions;
 };
 
 /**
@@ -142,7 +169,7 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
 
   needle = addNeedlePrefix(needle);
 
-  const regexp = new RegExp(`(?://|<!--|\\{?/\\*|#) ${needle}(?:$|\n| )`, 'g');
+  const regexp = createNeedleRegexp(needle);
   let firstMatch = regexp.exec(content);
   if (!firstMatch) {
     return null;
@@ -320,3 +347,18 @@ export function createBaseNeedle<Generator extends CoreGenerator = CoreGenerator
 
   return callback;
 }
+
+export const createNeedleTransform = () =>
+  transformContents<MemFsEditorFile>(content => {
+    if (content) {
+      let contentAsString = content.toString();
+      const positions = getNeedlesPositions(contentAsString);
+      if (positions.length > 0) {
+        for (const position of positions) {
+          contentAsString = contentAsString.slice(0, position.start) + contentAsString.slice(position.end);
+        }
+        return Buffer.from(contentAsString);
+      }
+    }
+    return content;
+  });

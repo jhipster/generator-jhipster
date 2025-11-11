@@ -20,8 +20,7 @@ import { before, describe, it } from 'esmocha';
 import assert from 'node:assert';
 import fs, { existsSync, writeFileSync } from 'node:fs';
 import type { PathOrFileDescriptor } from 'node:fs';
-import path, { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import path from 'node:path';
 
 import sortKeys from 'sort-keys';
 
@@ -32,16 +31,21 @@ import { authenticationTypes } from '../lib/jhipster/index.ts';
 const writeJsonSync = (file: PathOrFileDescriptor, content: any) => writeFileSync(file, JSON.stringify(content, null, 2));
 const readJsonSync = (file: PathOrFileDescriptor) => JSON.parse(fs.readFileSync(file, 'utf-8'));
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
 const { JWT, SESSION } = authenticationTypes;
 
 const fixSamples = process.argv.includes('--fix-samples');
-const itSamplesPath = path.join(__dirname, '..', '.blueprint', 'generate-sample', 'templates', 'test-integration', 'samples');
-const dailyBuildsSamplesPath = path.join(__dirname, '..', '.blueprint', 'generate-sample', 'templates', 'test-integration', 'daily-builds');
+const itSamplesPath = path.join(import.meta.dirname, '..', '.blueprint', 'generate-sample', 'templates', 'test-integration', 'samples');
+const dailyBuildsSamplesPath = path.join(
+  import.meta.dirname,
+  '..',
+  '.blueprint',
+  'generate-sample',
+  'templates',
+  'test-integration',
+  'daily-builds',
+);
 const itEntitiesSamplesPath = path.join(
-  __dirname,
+  import.meta.dirname,
   '..',
   '.blueprint',
   'generate-sample',

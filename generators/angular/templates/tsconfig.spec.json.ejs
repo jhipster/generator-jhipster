@@ -23,6 +23,7 @@
     "composite": true,
     "outDir": "<%= this.relativeDir(clientRootDir, temporaryDir) %>out-tsc/spec",
 <%_ if (clientTestFrameworkJest) { _%>
+    "module": "node20",
     "types": ["jest", "node"]
 <%_ } else { _%>
     "types": ["node"]

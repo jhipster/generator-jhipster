@@ -1,5 +1,13 @@
 import rtlcss from 'postcss-rtlcss';
+import postcssImport from 'postcss-import';
+import postcssUrl from 'postcss-url';
+import autoprefixer from 'autoprefixer';
 
 export default {
-  plugins: [rtlcss()],
+  plugins: [
+    rtlcss(),
+    postcssImport(),
+    postcssUrl(),
+    autoprefixer(),
+  ],
 }

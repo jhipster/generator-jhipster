@@ -41,7 +41,7 @@ import {
   askForKubernetesNamespace,
   askForKubernetesServiceType,
 } from '../kubernetes/prompts.ts';
-import { getJdbcUrl, getR2dbcUrl } from '../spring-data-relational/support/index.ts';
+import { getJdbcUrl, getR2dbcUrl } from '../spring-data/generators/relational/support/index.ts';
 
 import { applicationHelmFiles, applicationKubernetesFiles, deploymentHelmFiles, deploymentKubernetesFiles } from './files.ts';
 

@@ -30,7 +30,7 @@ export const files = asWriteFilesSection({
   common: [
     clientRootTemplatesBlock({
       templates: [
-        { sourceFile: 'eslint.config.js.jhi.angular', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi.angular` },
+        'eslint.config.ts.jhi.angular',
         'ngsw-config.json',
         'package.json',
         'tsconfig.json',
@@ -61,6 +61,7 @@ export const files = asWriteFilesSection({
       templates: [
         'angular.json',
         'webpack/environment.js',
+        'webpack/package.json',
         'webpack/proxy.conf.js',
         'webpack/webpack.custom.js',
         'webpack/logo-jhipster.png',
@@ -74,6 +75,7 @@ export const files = asWriteFilesSection({
         { sourceFile: 'angular.json.esbuild', destinationFile: 'angular.json' },
         'proxy.config.mjs',
         'build-plugins/define-esbuild.ts',
+        'build-plugins/package.json',
       ],
     }),
     clientRootTemplatesBlock({
@@ -112,18 +114,20 @@ export const files = asWriteFilesSection({
       condition: generator => generator.clientBundlerWebpack && generator.microfrontend,
       templates: ['webpack/webpack.microfrontend.js'],
     }),
-    {
-      condition: generator => generator.microfrontend && generator.applicationTypeGateway,
-      ...clientApplicationTemplatesBlock(),
+    clientApplicationTemplatesBlock({
+      condition: data => data.microfrontend && data.applicationTypeGateway,
       templates: ['core/microfrontend/index.ts'],
-    },
+    }),
+    clientApplicationTemplatesBlock({
+      condition: data => data.microfrontend && data.applicationTypeMicroservice,
+      templates: ['entities/entity-navbar-items.ts'],
+    }),
   ],
   angularMain: [
     {
       ...clientApplicationTemplatesBlock(),
       templates: [
         // entities
-        'entities/entity-navbar-items.ts',
         'entities/entity.routes.ts',
         // home module
         'home/home.ts',

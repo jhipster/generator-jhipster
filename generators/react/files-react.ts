@@ -24,11 +24,12 @@ export const files = asWriteFilesSection({
   common: [
     clientRootTemplatesBlock({
       templates: [
-        { sourceFile: 'eslint.config.js.jhi.react', destinationFile: ctx => `${ctx.eslintConfigFile}.jhi.react` },
+        'eslint.config.ts.jhi.react',
         'package.json',
         'tsconfig.json',
         'tsconfig.test.json',
         'jest.conf.js',
+        'webpack/package.json',
         'webpack/environment.js',
         'webpack/webpack.common.js',
         'webpack/webpack.dev.js',
@@ -40,7 +41,7 @@ export const files = asWriteFilesSection({
   ],
   sass: [
     clientRootTemplatesBlock({
-      templates: ['postcss.config.js'],
+      templates: ['postcss.config.ts'],
     }),
   ],
   reactApp: [
