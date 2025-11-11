@@ -237,6 +237,7 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
   "reactorBlock": "",
   "reactorBlockOptional": "",
   "rememberMeKey": undefined,
+  "removeNeedles": undefined,
   "routes": undefined,
   "sampleWritten": undefined,
   "searchEngine": "no",

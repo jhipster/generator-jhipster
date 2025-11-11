@@ -7,6 +7,7 @@ exports[`generator - app help should print expected information 1`] = `
 
 Options:
   --auto-crlf                              Detect line endings
+  --remove-needles                         Remove needles, needles are used by entity and language generators to inject code
   --defaults                               Execute jhipster with default config
   --jhi-prefix <value>                     Add prefix before services, controllers and states name
   --entity-suffix <value>                  Add suffix after entities name
@@ -838,6 +839,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   "reactorBlock": "",
   "reactorBlockOptional": "",
   "rememberMeKey": undefined,
+  "removeNeedles": undefined,
   "requiresDeleteAllUsers": false,
   "routes": undefined,
   "sampleWritten": undefined,
@@ -1530,6 +1532,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   "reactorBlock": ".block()",
   "reactorBlockOptional": ".blockOptional()",
   "rememberMeKey": undefined,
+  "removeNeedles": undefined,
   "requiresDeleteAllUsers": true,
   "routes": undefined,
   "sampleWritten": undefined,
@@ -2132,6 +2135,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   "reactorBlock": "",
   "reactorBlockOptional": "",
   "rememberMeKey": undefined,
+  "removeNeedles": undefined,
   "requiresDeleteAllUsers": false,
   "routes": undefined,
   "sampleWritten": undefined,

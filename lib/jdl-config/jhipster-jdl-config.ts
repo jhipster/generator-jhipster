@@ -18,6 +18,7 @@
  */
 import { snakeCase, upperCase } from 'lodash-es';
 
+import bootstrapCommand from '../../generators/bootstrap/command.ts';
 import clientCommand from '../../generators/client/command.ts';
 import liquibaseCommand from '../../generators/liquibase/command.ts';
 import springBootCommand from '../../generators/spring-boot/command.ts';
@@ -77,6 +78,7 @@ export const getDefaultJDLApplicationConfig = () => {
   defaultJDLApplicationConfig ??= buildJDLApplicationConfig({
     ...springCloudStreamCommand.configs,
     ...springBootCommand.configs,
+    ...bootstrapCommand.configs,
     ...clientCommand.configs,
     ...liquibaseCommand.configs,
     ...gatewayCommand.configs,

@@ -218,6 +218,7 @@ exports[`generator - vue:bootstrap bootstrapping default config should prepare a
   "projectVersion": undefined,
   "reactive": false,
   "rememberMeKey": undefined,
+  "removeNeedles": undefined,
   "routes": undefined,
   "sampleWritten": undefined,
   "searchEngine": "no",

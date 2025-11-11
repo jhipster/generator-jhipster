@@ -237,6 +237,7 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
   "reactorBlock": "",
   "reactorBlockOptional": "",
   "rememberMeKey": undefined,
+  "removeNeedles": undefined,
   "routes": undefined,
   "sampleWritten": undefined,
   "searchEngine": "no",

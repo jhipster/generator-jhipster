@@ -208,6 +208,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
   "projectVersion": undefined,
   "reactive": false,
   "rememberMeKey": undefined,
+  "removeNeedles": undefined,
   "routes": undefined,
   "sampleWritten": undefined,
   "searchEngine": "no",
