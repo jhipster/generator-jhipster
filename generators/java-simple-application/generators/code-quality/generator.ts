@@ -50,10 +50,9 @@ export default class CodeQualityGenerator extends JavaSimpleApplicationGenerator
   get writing() {
     return this.asWritingTaskGroup({
       async writing({ application }) {
-        const app = application;
         await this.writeFiles({
           blocks: [{ templates: ['checkstyle.xml'] }],
-          context: { ...app, buildToolMaven: app.buildToolMaven },
+          context: { ...application, buildToolMaven: application.buildToolMaven },
         });
       },
     });
