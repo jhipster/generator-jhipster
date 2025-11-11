@@ -31,7 +31,7 @@
     "@vitejs/plugin-vue": "6.0.1",
     "@vue/test-utils": "2.4.6",
     "@vue/tsconfig": "0.8.1",
-    "autoprefixer": "10.4.21",
+    "autoprefixer": "10.4.22",
     "axios-mock-adapter": "2.1.0",
     "browser-sync-webpack-plugin": "2.4.0",
     "copy-webpack-plugin": "13.0.1",
