@@ -97,7 +97,7 @@ export const convertToPrettierExpressions = (str: string): string =>
 
 const isArrayOfContentToAdd = (value: unknown): value is ContentToAdd[] => {
   return Array.isArray(value) && value.every(item => typeof item === 'object' && 'content' in item);
-}:
+};
 
 export const createNeedleRegexp = (needle: string): RegExp => new RegExp(`(?://|<!--|\\{?/\\*|#) ${needle}(?: [^$\\n]*)?(?:$|\\n)`, 'g');
 
