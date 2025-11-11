@@ -36,9 +36,9 @@ export const getGitChanges = async (options: { allTrue?: boolean } = {}) => {
     e2e: hasPatternChanges('generators/cypress/**'),
     java: hasPatternChanges(
       'generators/{cucumber,feign-client,gatling,gradle,java,liquibase,maven,server,spring*}/**',
-      'generators/java/generators/graalvm/**',
+      'generators/java-simple-application/generators/graalvm/**',
     ),
-    graalvm: hasPatternChanges('generators/java/generators/graalvm/**'),
+    graalvm: hasPatternChanges('generators/java-simple-application/generators/graalvm/**'),
     react: hasPatternChanges('generators/react/**'),
     reactWorkflow: hasClientWorkflowChanges('react'),
     workspaces: hasPatternChanges('generators/{docker-compose,kubernetes*,workspaces}/**'),

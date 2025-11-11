@@ -320,7 +320,7 @@ updates:
       - 'skip-changelog'
 
   - package-ecosystem: 'gradle'
-    directory: '/generators/java/generators/graalvm/resources/'
+    directory: '/generators/java-simple-application/generators/graalvm/resources/'
     schedule:
       interval: 'daily'
       time: '08:30'

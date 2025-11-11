@@ -168,7 +168,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
         }
 
         if (graalvmSupport) {
-          await this.composeWithJHipster('jhipster:java:graalvm');
+          await this.composeWithJHipster('jhipster:java-simple-application:graalvm');
         }
 
         if (enableSwaggerCodegen) {

@@ -728,6 +728,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/java-simple-application/generators/code-quality/templates/template-file-java-simple-application:code-quality.ejs": {
     "stateCleared": "modified",
   },
+  "generators/java-simple-application/generators/graalvm/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/graalvm/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/graalvm/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/graalvm/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/graalvm/templates/template-file-java-simple-application:graalvm.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/java-simple-application/generators/jib/command.js": {
     "stateCleared": "modified",
   },
@@ -816,21 +831,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/java/generators/domain/templates/template-file-java:domain.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/java/generators/graalvm/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/java/generators/graalvm/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/java/generators/graalvm/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/java/generators/graalvm/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/java/generators/graalvm/templates/template-file-java:graalvm.ejs": {
     "stateCleared": "modified",
   },
   "generators/java/generators/i18n/command.js": {
