@@ -3,11 +3,6 @@ import type { RequireOneOrNone } from 'type-fest';
 import type { HandleCommandTypes } from '../../lib/command/types.ts';
 import type { Source as BaseApplicationSource } from '../base-simple-application/types.ts';
 import type {
-  Application as BuildToolApplication,
-  Config as BuildToolConfig,
-  Options as BuildToolOptions,
-} from '../java/generators/build-tool/types.d.ts';
-import type {
   Application as JavaSimpleApplicationApplication,
   Config as JavaSimpleApplicationConfig,
   Options as JavaSimpleApplicationOptions,
@@ -75,13 +70,12 @@ export type Source = BaseApplicationSource & {
 
 type Command = HandleCommandTypes<typeof GradleCommand>;
 
-export type Config = Command['Config'] & JavaSimpleApplicationConfig & BuildToolConfig;
+export type Config = Command['Config'] & JavaSimpleApplicationConfig;
 
-export type Options = Command['Options'] & JavaSimpleApplicationOptions & BuildToolOptions;
+export type Options = Command['Options'] & JavaSimpleApplicationOptions;
 
 export type Application = Command['Application'] &
-  JavaSimpleApplicationApplication &
-  BuildToolApplication & {
+  JavaSimpleApplicationApplication & {
     gradleVersion?: string;
     gradleBuildSrc?: string;
     enableGradleDevelocity?: boolean;

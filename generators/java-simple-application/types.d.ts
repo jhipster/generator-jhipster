@@ -33,6 +33,11 @@ import type { MavenDefinition, Source as MavenSource } from '../maven/types.ts';
 
 import type { JavaSimpleApplicationAddedApplicationProperties } from './application.ts';
 import type command from './command.ts';
+import type {
+  Application as BuildToolApplication,
+  Config as BuildToolConfig,
+  Options as BuildToolOptions,
+} from './generators/build-tool/types.ts';
 
 type Command = HandleCommandTypes<typeof command>;
 
@@ -71,9 +76,9 @@ export type ConditionalJavaDefinition = JavaDefinition & { condition?: boolean }
 
 export type SpringBean = { package: string; beanClass: string; beanName: string };
 
-export type Config = Command['Config'] & BaseSimpleApplicationConfig;
+export type Config = Command['Config'] & BaseSimpleApplicationConfig & BuildToolConfig;
 
-export type Options = Command['Options'] & BaseSimpleApplicationOptions;
+export type Options = Command['Options'] & BaseSimpleApplicationOptions & BuildToolOptions;
 
 export type Source = BaseSimpleApplicationSource &
   MavenSource &
@@ -141,4 +146,7 @@ export type Source = BaseSimpleApplicationSource &
     ) => void;
   };
 
-export type Application = Command['Application'] & BaseSimpleApplicationApplication & JavaSimpleApplicationAddedApplicationProperties;
+export type Application = Command['Application'] &
+  BaseSimpleApplicationApplication &
+  JavaSimpleApplicationAddedApplicationProperties &
+  BuildToolApplication;

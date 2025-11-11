@@ -77,7 +77,7 @@ const command = {
       scope: 'generator',
     },
   },
-  import: [],
+  import: ['jhipster:java-simple-application:build-tool'],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

@@ -713,6 +713,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/java-simple-application/generators/bootstrap/templates/template-file-java-simple-application:bootstrap.ejs": {
     "stateCleared": "modified",
   },
+  "generators/java-simple-application/generators/build-tool/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/build-tool/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/build-tool/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/build-tool/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/build-tool/templates/template-file-java-simple-application:build-tool.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/java-simple-application/generators/code-quality/command.js": {
     "stateCleared": "modified",
   },
@@ -801,21 +816,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/java/generators/bootstrap/templates/template-file-java:bootstrap.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/java/generators/build-tool/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/java/generators/build-tool/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/java/generators/build-tool/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/java/generators/build-tool/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/java/generators/build-tool/templates/template-file-java:build-tool.ejs": {
     "stateCleared": "modified",
   },
   "generators/java/generators/domain/command.js": {

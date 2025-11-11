@@ -19,11 +19,6 @@ import type {
 import type { Application as LanguagesApplication } from '../languages/types.ts';
 
 import type { JavaAddedApplicationProperties } from './application.ts';
-import type {
-  Application as BuildToolApplication,
-  Config as BuildToolConfig,
-  Options as BuildToolOptions,
-} from './generators/build-tool/types.ts';
 
 export type {
   ConditionalJavaDefinition,
@@ -108,15 +103,9 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
   relationshipsContainOtherSideIgnore?: boolean;
 }
 
-export type Config = BaseApplicationConfig &
-  JavaSimpleApplicationConfig &
-  BuildToolConfig &
-  ExportStoragePropertiesFromCommand<typeof GraalvmCommand>;
+export type Config = BaseApplicationConfig & JavaSimpleApplicationConfig & ExportStoragePropertiesFromCommand<typeof GraalvmCommand>;
 
-export type Options = BaseApplicationOptions &
-  JavaSimpleApplicationOptions &
-  BuildToolOptions &
-  ExportGeneratorOptionsFromCommand<typeof GraalvmCommand>;
+export type Options = BaseApplicationOptions & JavaSimpleApplicationOptions & ExportGeneratorOptionsFromCommand<typeof GraalvmCommand>;
 
 type DatabaseApplication = {
   jhiTablePrefix: string;
@@ -130,7 +119,6 @@ export type Application<E extends BaseApplicationEntity<BaseApplicationField, Ba
   BaseApplicationApplication<E> &
     JavaSimpleApplicationApplication &
     JavaAddedApplicationProperties &
-    BuildToolApplication &
     GradleApplication &
     SpringApplication &
     LanguagesApplication &
