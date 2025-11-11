@@ -172,7 +172,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
         }
 
         if (enableSwaggerCodegen) {
-          await this.composeWithJHipster('jhipster:java:openapi-generator');
+          await this.composeWithJHipster('jhipster:java-simple-application:openapi-generator');
         }
 
         if (applicationType === APPLICATION_TYPE_GATEWAY) {
