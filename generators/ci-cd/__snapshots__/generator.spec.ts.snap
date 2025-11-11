@@ -67,7 +67,6 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "ciCdIntegrationsSonar": false,
   "ciCdJenkins": true,
   "ciCdTravis": false,
-  "cjsExtension": ".js",
   "cli": undefined,
   "cliName": undefined,
   "clientBundler": "esbuild",
@@ -247,7 +246,6 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "messageBrokerPulsar": false,
   "microfrontend": undefined,
   "microfrontends": undefined,
-  "mjsExtension": ".mjs",
   "monorepository": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {
@@ -319,10 +317,6 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   ],
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {},
-  "packageJsonType": "commonjs",
-  "packageJsonTypeAny": true,
-  "packageJsonTypeCommonjs": true,
-  "packageJsonTypeModule": false,
   "packageName": "com.mycompany.myapp",
   "pkType": undefined,
   "prettierExtensions": [

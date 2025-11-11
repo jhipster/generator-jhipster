@@ -157,7 +157,7 @@ export default class extends BaseSimpleApplicationGenerator<
     return this.asComposingTaskGroup({
       async compose() {
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
-        const initGenerator = await this.composeWithJHipster('init', { generatorOptions: { packageJsonType: 'module' } });
+        const initGenerator = await this.composeWithJHipster('init');
         initGenerator.generateReadme = false;
       },
     });

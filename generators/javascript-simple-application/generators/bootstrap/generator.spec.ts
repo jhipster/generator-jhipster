@@ -19,7 +19,7 @@
 import { before, describe, expect, it } from 'esmocha';
 import { basename, resolve } from 'node:path';
 
-import { defaultHelpers as helpers, extendMatrix, fromMatrix, result } from '../../../../lib/testing/index.ts';
+import { defaultHelpers as helpers, fromMatrix, result } from '../../../../lib/testing/index.ts';
 import type { ConfigAll } from '../../../../lib/types/command-all.ts';
 import { testBootstrapApplication } from '../../../../test/support/bootstrap-tests.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
@@ -32,11 +32,7 @@ describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
 
-  for (const [name, config] of Object.entries(
-    extendMatrix(fromMatrix<ConfigAll>({ packageJsonNodeEngine: [true, false, 'customVersion'] }), {
-      packageJsonType: [undefined, 'commonjs', 'module'],
-    }),
-  )) {
+  for (const [name, config] of Object.entries(fromMatrix<ConfigAll>({ packageJsonNodeEngine: [true, false, 'customVersion'] }))) {
     describe(name, () => {
       before(async () => {
         await helpers

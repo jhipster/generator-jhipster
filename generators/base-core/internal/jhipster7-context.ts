@@ -347,6 +347,30 @@ export const jhipster7deprecatedProperties: MigrationProperty = {
     replacement: 'nodePackageManager property',
     get: ({ data }) => data.nodePackageManager,
   },
+  eslintConfigFile: {
+    replacement: 'none, always eslint.config.ts',
+    get: () => 'eslint.config.ts',
+  },
+  packageJsonType: {
+    replacement: 'none, always module',
+    get: () => 'module',
+  },
+  packageJsonTypeModule: {
+    replacement: 'none, always true',
+    get: () => true,
+  },
+  packageJsonTypeCommonjs: {
+    replacement: 'none, always false',
+    get: () => false,
+  },
+  cjsExtension: {
+    replacement: 'none, always cjs',
+    get: () => 'cjs',
+  },
+  mjsExtension: {
+    replacement: 'none, always mjs',
+    get: () => 'mjs',
+  },
 };
 
 const ejsBuiltInProperties: (string | symbol)[] = ['__append', '__line', 'escapeFn', 'include', 'undefined'];
