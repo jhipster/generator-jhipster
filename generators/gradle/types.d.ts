@@ -6,7 +6,7 @@ import type {
   Application as BuildToolApplication,
   Config as BuildToolConfig,
   Options as BuildToolOptions,
-} from '../java/generators/build-tool/types.d.ts';
+} from '../java-simple-application/generators/build-tool/types.d.ts';
 import type {
   Application as JavaSimpleApplicationApplication,
   Config as JavaSimpleApplicationConfig,

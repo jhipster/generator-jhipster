@@ -26,7 +26,7 @@ export default class CodeQualityGenerator extends JavaSimpleApplicationGenerator
 
     if (!this.delegateToBlueprint) {
       await this.dependsOnBootstrap('java-simple-application');
-      await this.dependsOnJHipster('jhipster:java:build-tool');
+      await this.dependsOnJHipster('jhipster:java-simple-application:build-tool');
     }
   }
 

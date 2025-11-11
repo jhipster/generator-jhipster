@@ -17,10 +17,10 @@
  * limitations under the License.
  */
 import { buildToolTypes } from '../../../../lib/jhipster/index.ts';
+import { JavaApplicationGenerator } from '../../../java/generator.ts';
+import { javaScopeToGradleScope } from '../../../java/support/index.ts';
+import type { ConditionalJavaDefinition, JavaDependency, JavaNeedleOptions } from '../../../java/types.ts';
 import type { MavenDependency } from '../../../maven/types.ts';
-import { JavaApplicationGenerator } from '../../generator.ts';
-import { javaScopeToGradleScope } from '../../support/index.ts';
-import type { ConditionalJavaDefinition, JavaDependency, JavaNeedleOptions } from '../../types.ts';
 
 const { GRADLE, MAVEN } = buildToolTypes;
 

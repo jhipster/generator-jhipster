@@ -9,6 +9,11 @@ import type {
   Source as BaseApplicationSource,
 } from '../base-application/types.d.ts';
 import type { Application as GradleApplication } from '../gradle/types.ts';
+import type {
+  Application as BuildToolApplication,
+  Config as BuildToolConfig,
+  Options as BuildToolOptions,
+} from '../java-simple-application/generators/build-tool/types.ts';
 import type GraalvmCommand from '../java-simple-application/generators/graalvm/command.ts';
 import type {
   Application as JavaSimpleApplicationApplication,
@@ -19,11 +24,6 @@ import type {
 import type { Application as LanguagesApplication } from '../languages/types.ts';
 
 import type { JavaAddedApplicationProperties } from './application.ts';
-import type {
-  Application as BuildToolApplication,
-  Config as BuildToolConfig,
-  Options as BuildToolOptions,
-} from './generators/build-tool/types.ts';
 
 export type {
   ConditionalJavaDefinition,

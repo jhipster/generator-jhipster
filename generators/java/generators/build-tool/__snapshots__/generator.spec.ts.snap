@@ -1,3 +1,0 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
-
-exports[`generator - java:build-tool with defaults options should match files snapshot 1`] = `{}`;

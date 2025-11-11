@@ -34,7 +34,7 @@ describe(`generator - ${generator}`, () => {
     before(async () => {
       await helpers
         .runJHipster(generator)
-        .withMockedJHipsterGenerators({ except: ['jhipster:java:bootstrap', 'jhipster:java:build-tool'] })
+        .withMockedJHipsterGenerators({ except: ['jhipster:java:bootstrap', 'jhipster:java-simple-application:build-tool'] })
         .withMockedSource()
         .withSharedApplication({})
         .withJHipsterConfig();
@@ -61,7 +61,7 @@ describe(`generator - ${generator}`, () => {
     before(async () => {
       await helpers
         .runJHipster(generator)
-        .withMockedJHipsterGenerators({ except: ['jhipster:java:bootstrap', 'jhipster:java:build-tool'] })
+        .withMockedJHipsterGenerators({ except: ['jhipster:java:bootstrap', 'jhipster:java-simple-application:build-tool'] })
         .withMockedSource()
         .withSharedApplication({})
         .withJHipsterConfig({ serviceDiscoveryType: 'consul' });
@@ -89,7 +89,7 @@ describe(`generator - ${generator}`, () => {
       await expect(
         helpers
           .runJHipster(generator)
-          .withMockedJHipsterGenerators({ except: ['jhipster:java:bootstrap', 'jhipster:java:build-tool'] })
+          .withMockedJHipsterGenerators({ except: ['jhipster:java:bootstrap', 'jhipster:java-simple-application:build-tool'] })
           .withMockedSource()
           .withSharedApplication({})
           .withJHipsterConfig({ reactive: false }),
@@ -101,7 +101,7 @@ describe(`generator - ${generator}`, () => {
     before(async () => {
       await helpers
         .runJHipster(generator)
-        .withMockedJHipsterGenerators({ except: ['jhipster:java:bootstrap', 'jhipster:java:build-tool'] })
+        .withMockedJHipsterGenerators({ except: ['jhipster:java:bootstrap', 'jhipster:java-simple-application:build-tool'] })
         .withMockedSource()
         .withSharedApplication({})
         .withOptions({ experimental: true })

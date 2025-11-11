@@ -20,7 +20,7 @@ import type { JHipsterCommandDefinition } from '../../lib/command/types.ts';
 
 const command = {
   configs: {},
-  import: ['jhipster:java-simple-application', 'jhipster:java:domain', 'jhipster:java:build-tool'],
+  import: ['jhipster:java-simple-application', 'jhipster:java:domain', 'jhipster:java-simple-application:build-tool'],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

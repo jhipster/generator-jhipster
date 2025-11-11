@@ -42,7 +42,7 @@ export default class GatewayGenerator extends BaseApplicationGenerator<
 
     if (!this.delegateToBlueprint) {
       await this.dependsOnBootstrap('java');
-      await this.dependsOnJHipster('jhipster:java:build-tool');
+      await this.dependsOnJHipster('jhipster:java-simple-application:build-tool');
     }
   }
 

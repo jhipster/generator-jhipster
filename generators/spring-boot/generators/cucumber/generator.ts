@@ -29,7 +29,7 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:java:build-tool');
+      await this.dependsOnJHipster('jhipster:java-simple-application:build-tool');
     }
   }
 
