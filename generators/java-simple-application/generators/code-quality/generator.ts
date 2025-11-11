@@ -52,7 +52,7 @@ export default class CodeQualityGenerator extends JavaSimpleApplicationGenerator
       async writing({ application }) {
         await this.writeFiles({
           blocks: [{ templates: ['checkstyle.xml'] }],
-          context: { ...application, buildToolMaven: application.buildToolMaven },
+          context: application,
         });
       },
     });

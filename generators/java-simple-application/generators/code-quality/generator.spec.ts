@@ -32,7 +32,12 @@ describe(`generator - ${generator}`, () => {
 
   describe('with defaults options', () => {
     before(async () => {
-      await helpers.runJHipster(generator).withMockedJHipsterGenerators().withMockedSource().withSharedApplication({}).withJHipsterConfig();
+      await helpers
+        .runJHipster(generator)
+        .withMockedJHipsterGenerators({ except: ['jhipster:java-simple-application:build-tool'] })
+        .withMockedSource()
+        .withSharedApplication({})
+        .withJHipsterConfig();
     });
 
     it('should match files snapshot', () => {
@@ -46,7 +51,7 @@ describe(`generator - ${generator}`, () => {
     it('should compose with generators', () => {
       expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
-  "jhipster:java-simple-application:build-tool",
+  "jhipster:maven",
   "jhipster:maven:code-quality",
 ]
 `);
@@ -57,7 +62,7 @@ describe(`generator - ${generator}`, () => {
     before(async () => {
       await helpers
         .runJHipster(generator)
-        .withMockedJHipsterGenerators()
+        .withMockedJHipsterGenerators({ except: ['jhipster:java-simple-application:build-tool'] })
         .withMockedSource()
         .withSharedApplication({})
         .withJHipsterConfig({ buildTool: 'gradle' });
@@ -74,8 +79,8 @@ describe(`generator - ${generator}`, () => {
     it('should compose with generators', () => {
       expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
+  "jhipster:gradle",
   "jhipster:gradle:code-quality",
-  "jhipster:java-simple-application:build-tool",
 ]
 `);
     });
