@@ -45,7 +45,7 @@ export interface Entity<F extends Field = Field, R extends ClientRelationship = 
 export type Application<E extends Entity> = {
   /** @experimental to be replaced with needles */
   angularEntities?: E[];
-  angularLocaleId: string;
+  angularLocaleId?: string;
 
   // Common properties
   communicationSpringWebsocket?: boolean;
