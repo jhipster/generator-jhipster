@@ -27,7 +27,7 @@ export const BLUEPRINT_API_VERSION = 'jhipster-8';
 // jhipster-bom version
 export const JHIPSTER_DEPENDENCIES_VERSION = '8.11.0';
 // Version of Java
-export const RECOMMENDED_JAVA_VERSION = '17';
+export const RECOMMENDED_JAVA_VERSION = '21';
 // Supported Java versions, https://www.oracle.com/java/technologies/java-se-support-roadmap.html
 export const JAVA_COMPATIBLE_VERSIONS = ['17', '21', '25'];
 // Force spring milestone repository. Spring Boot milestones are detected.
@@ -38,6 +38,7 @@ export const RECOMMENDED_NODE_VERSION = readFileSync(
   join(fileURLToPath(import.meta.url), '../init/resources/.node-version'),
   'utf-8',
 ).trim();
+export const SUPPORTED_NODE_VERSIONS = ['20', '22', '24'];
 
 // all constants used throughout all generators
 

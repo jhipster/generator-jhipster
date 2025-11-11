@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
+import { type MutateDataParam, type MutateDataPropertiesWithRequiredProperties, overrideProperty } from '../../lib/utils/object.ts';
 import { normalizePathEnd } from '../../lib/utils/path.ts';
 import {
   CLIENT_MAIN_SRC_DIR,
@@ -36,6 +36,7 @@ import type { Application } from './types.ts';
 
 export type JavaSimpleApplicationAddedApplicationProperties = {
   javaVersion: string;
+  javaMinVersion: string;
   javaCompatibleVersions: string[];
   mainClass: string;
 
@@ -90,7 +91,10 @@ export const mutateApplication = {
   __override__: false,
 
   javaVersion: RECOMMENDED_JAVA_VERSION,
-  javaCompatibleVersions: () => [...JAVA_COMPATIBLE_VERSIONS],
+  javaCompatibleVersions: overrideProperty(
+    ({ javaCompatibleVersions }) => javaCompatibleVersions?.sort?.() ?? [...JAVA_COMPATIBLE_VERSIONS],
+  ),
+  javaMinVersion: ({ javaCompatibleVersions }) => javaCompatibleVersions[0],
   mainClass: ({ baseName }) => getMainClassName({ baseName }),
 
   packageName: 'com.mycompany.myapp',

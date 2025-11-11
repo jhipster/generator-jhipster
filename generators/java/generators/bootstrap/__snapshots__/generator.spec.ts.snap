@@ -164,6 +164,7 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
   "javaDependencies": Any<Object>,
   "javaIntegrationTestExclude": Any<Array>,
   "javaManagedProperties": Any<Object>,
+  "javaMinVersion": "17",
   "javaNodeBuildPaths": Any<Array>,
   "javaPackageSrcDir": "src/main/java/com/mycompany/myapp/",
   "javaPackageTestDir": "src/test/java/com/mycompany/myapp/",

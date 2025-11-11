@@ -11,6 +11,7 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "javaDependencies": {},
   "javaIntegrationTestExclude": [],
   "javaManagedProperties": {},
+  "javaMinVersion": "17",
   "javaPackageSrcDir": "src/main/java/com/mycompany/myapp/",
   "javaPackageTestDir": "src/test/java/com/mycompany/myapp/",
   "javaProperties": {},

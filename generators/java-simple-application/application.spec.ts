@@ -33,8 +33,12 @@ describe('application mutation test', () => {
         graalvmReachabilityMetadata: expect.any(String),
       });
     });
-    it(`expects ${name} to don't override existing properties`, () => {
-      expect(Object.keys(mutateMockedCompleteData(data))).toHaveLength(0);
+    it(`expects ${name} to override selected properties`, () => {
+      expect(Object.keys(mutateMockedCompleteData(data))).toMatchInlineSnapshot(`
+[
+  "javaCompatibleVersions",
+]
+`);
     });
   }
 });
