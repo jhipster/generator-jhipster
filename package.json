@@ -192,7 +192,7 @@
     "@types/pluralize": "0.0.33",
     "@types/semver": "7.7.1",
     "@types/sinon-chai": "4.0.0",
-    "chai": "6.2.0",
+    "chai": "6.2.1",
     "cpy-cli": "6.0.0",
     "diff": "8.0.2",
     "ejs-lint": "2.0.1",
