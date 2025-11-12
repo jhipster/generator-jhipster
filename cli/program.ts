@@ -372,7 +372,7 @@ export const buildCommands = ({
         }
 
         if (cmdName === 'run') {
-          return Promise.all(command.generatorNamespaces.map(generator => env.run(generator as any, options))).then(
+          return Promise.all(command.generatorNamespaces.map(generator => env.run(generator, options))).then(
             () => silent || done(),
             errors => silent || done(errors.find((error: any) => error)),
           );
@@ -383,7 +383,7 @@ export const buildCommands = ({
         }
         const namespace = blueprint ? `${packageNameToNamespace(blueprint)}:${cmdName}` : `${JHIPSTER_NS}:${cmdName}`;
         const generatorCommand = getCommand(namespace, args);
-        const promise = env.run(generatorCommand as any, options);
+        const promise = env.run(generatorCommand, options);
         if (silent) {
           return promise;
         }
@@ -409,8 +409,8 @@ export const buildJHipster = async ({
     createEnvBuilder ??
     (async options =>
       EnvironmentBuilder.create(options).prepare({ blueprints, lookups, devBlueprintPath } as {
-        blueprints?: Record<string, string>;
-        lookups?: any[];
+        blueprints?: typeof blueprints;
+        lookups?: typeof lookups;
         devBlueprintPath?: string;
       }));
   if (!env) {

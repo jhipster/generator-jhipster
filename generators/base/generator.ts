@@ -70,7 +70,7 @@ export default class BaseGenerator<
   sbsBlueprint?: boolean;
   delegateToBlueprint = false;
   blueprintConfig?: Record<string, any>;
-  jhipsterContext?: any;
+  jhipsterContext?: BaseGenerator;
 
   constructor(args?: string[], options?: Options, features?: Features) {
     const { jhipsterContext, ...opts } = options ?? {};
@@ -625,7 +625,7 @@ export default class BaseGenerator<
       let blueprintCommand;
       if (blueprintGenerator) {
         composedBlueprints.push(blueprintGenerator);
-        if ((blueprintGenerator as any).sbsBlueprint) {
+        if (blueprintGenerator.sbsBlueprint) {
           // If sbsBlueprint, add templatePath to the original generator templatesFolder.
           this.jhipsterTemplatesFolders.unshift(blueprintGenerator.templatePath());
         } else {
@@ -633,13 +633,13 @@ export default class BaseGenerator<
           this.delegateToBlueprint = true;
           this.#checkBlueprintImplementsPriorities(blueprintGenerator);
         }
-        const blueprintModule = (await blueprintGenerator._meta?.importModule?.()) as any;
+        const blueprintModule: any = await blueprintGenerator._meta?.importModule?.();
         blueprintCommand = blueprintModule?.command;
       } else {
         const generatorName = packageNameToNamespace(normalizeBlueprintName(blueprintName));
         const generatorNamespace = `${generatorName}:${subGen}`;
         const blueprintMeta = await this.env.findMeta(generatorNamespace);
-        const blueprintModule = (await blueprintMeta?.importModule?.()) as any;
+        const blueprintModule: any = await blueprintMeta?.importModule?.();
         blueprintCommand = blueprintModule?.command;
         if (blueprintCommand?.compose) {
           this.generatorsToCompose.push(...blueprintCommand.compose);
@@ -758,7 +758,7 @@ export default class BaseGenerator<
 
     const blueprintGenerator = await this.composeWith<BaseGenerator>(generatorNamespace, {
       forwardOptions: true,
-      schedule: generator => (generator as any).sbsBlueprint,
+      schedule: generator => generator.sbsBlueprint!,
       generatorArgs: this._args,
       generatorOptions: {
         jhipsterContext: this,

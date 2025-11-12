@@ -19,7 +19,7 @@
 import { defaults } from 'lodash-es';
 
 import { Validations, databaseTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
-import type { ApplicationAll, EntityAll as ApplicationEntity, UserEntity } from '../../../lib/types/application-all.d.ts';
+import type { EntityAll as ApplicationEntity, UserEntity } from '../../../lib/types/application-all.d.ts';
 import { formatDateForChangelog } from '../../base/support/timestamp.ts';
 import { LOGIN_REGEX, LOGIN_REGEX_JS } from '../../generator-constants.js';
 import { getDatabaseTypeData } from '../../server/support/database.ts';
@@ -85,7 +85,7 @@ export function createUserEntity(
 
   loadRequiredConfigIntoEntity(user, application);
   // Fallback to defaults for test cases.
-  loadRequiredConfigIntoEntity(user, this.jhipsterConfigWithDefaults);
+  loadRequiredConfigIntoEntity(user, this.jhipsterConfigWithDefaults as BaseApplicationApplication<BaseApplicationEntity>);
 
   const oauth2 = application.authenticationTypeOauth2;
   // If oauth2 or databaseType is cassandra, force type string, otherwise keep undefined for later processing.
@@ -170,15 +170,15 @@ export function createUserEntity(
 export function createUserManagementEntity(
   this: BaseApplicationGenerator,
   customUserManagementData: Partial<ApplicationEntity> = {},
-  application: ApplicationAll,
+  application: BaseApplicationApplication<BaseApplicationEntity>,
 ): Partial<ApplicationEntity> {
   const user = createUserEntity.call(this, {}, application);
   for (const field of user.fields ?? []) {
     // Login is used as the id field in rest api.
     if (field.fieldName === 'login') {
-      (field as any).id = true;
+      field.id = true;
     } else if (field.fieldName === 'id') {
-      (field as any).id = false;
+      field.id = false;
       field.fieldValidateRules = [Validations.REQUIRED];
       // Set id type fallback since it's not id anymore and will not be calculated.
       field.fieldType = field.fieldType ?? getDatabaseTypeData(application.databaseType!).defaultPrimaryKeyType;
@@ -221,7 +221,7 @@ export function createUserManagementEntity(
 export function createAuthorityEntity(
   this: BaseApplicationGenerator,
   customAuthorityData: Partial<ApplicationEntity> = {},
-  application: ApplicationAll,
+  application: BaseApplicationApplication<BaseApplicationEntity>,
 ): Partial<ApplicationEntity> {
   const entityDefinition = this.getEntityConfig(authorityEntityName)?.getAll() as Partial<ApplicationEntity>;
   if (entityDefinition) {
@@ -259,9 +259,9 @@ export function createAuthorityEntity(
     ...customAuthorityData,
   };
 
-  loadRequiredConfigIntoEntity(authorityEntity, application as any);
+  loadRequiredConfigIntoEntity(authorityEntity, application as BaseApplicationApplication<BaseApplicationEntity>);
   // Fallback to defaults for test cases.
-  loadRequiredConfigIntoEntity(authorityEntity, this.jhipsterConfigWithDefaults);
+  loadRequiredConfigIntoEntity(authorityEntity, this.jhipsterConfigWithDefaults as BaseApplicationApplication<BaseApplicationEntity>);
 
   addOrExtendFields(authorityEntity.fields!, [
     {
