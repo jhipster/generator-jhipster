@@ -73,7 +73,6 @@
     "simple-progress-webpack-plugin": "2.0.0",
     "sinon": "21.0.0",
     "source-map-loader": "5.0.0",
-    "sourcemap-istanbul-instrumenter-loader": "0.2.0",
     "style-loader": "4.0.0",
     "terser-webpack-plugin": "5.3.14",
     "thread-loader": "4.0.4",
