@@ -60,7 +60,6 @@
     "jest-fixed-jsdom": "0.0.10",
     "jest-junit": "16.0.0",
     "jest-sonar": "0.2.16",
-    "json-loader": "0.5.7",
     "merge-jsons-webpack-plugin": "2.0.1",
     "mini-css-extract-plugin": "2.9.4",
     "postcss-loader": "8.2.0",
