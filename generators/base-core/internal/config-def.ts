@@ -1,9 +1,19 @@
 import type { CommandConfigScope, JHipsterConfigs } from '../../../lib/command/index.ts';
 import { applyDerivedProperty } from '../../../lib/utils/derived-property.ts';
+import type BaseGenerator from '../../base/generator.ts';
+import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../base-application/types.d.ts';
 import type CoreGenerator from '../index.ts';
+import type { Config as BaseCoreConfig } from '../types.d.ts';
 
-export function loadConfig(this: CoreGenerator, configsDef: JHipsterConfigs | undefined, data: { application: any }): void;
-export function loadConfig(configsDef: JHipsterConfigs | undefined, data: { application: any; config?: any }): void;
+export function loadConfig(
+  this: CoreGenerator,
+  configsDef: JHipsterConfigs | undefined,
+  data: { application: BaseApplicationApplication<BaseApplicationEntity> },
+): void;
+export function loadConfig(
+  configsDef: JHipsterConfigs | undefined,
+  data: { application: BaseApplicationApplication<BaseApplicationEntity>; config?: BaseCoreConfig },
+): void;
 export function loadConfig(
   this: CoreGenerator | void,
   configsDef: JHipsterConfigs | undefined,
@@ -19,7 +29,7 @@ export function loadConfig(
             source = (this as CoreGenerator).context!;
           } else if (def.scope === 'blueprint') {
             // TODO Convert type to BaseGenerator
-            source = (this as any).blueprintStorage!.getAll();
+            source = (this as BaseGenerator).blueprintStorage!.getAll();
           } else if (def.scope === 'storage' || def.scope === undefined) {
             source = (this as CoreGenerator).jhipsterConfigWithDefaults;
           }

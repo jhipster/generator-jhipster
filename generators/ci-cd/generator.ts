@@ -19,6 +19,7 @@
 
 import chalk from 'chalk';
 
+import type { Config as BaseApplicationConfig } from '../base-application/types.d.ts';
 import BaseApplicationGenerator from '../base-simple-application/index.ts';
 import { createPomStorage } from '../maven/support/pom-store.ts';
 
@@ -36,7 +37,7 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
 
     if (!this.delegateToBlueprint) {
       if (this.options.commandName === 'ci-cd') {
-        const { backendType = 'Java' } = this.jhipsterConfig as any;
+        const { backendType = 'Java' } = this.jhipsterConfig as BaseApplicationConfig;
         if (['Java', 'SpringBoot'].includes(backendType)) {
           await this.dependsOnBootstrap('java');
         }

@@ -181,7 +181,7 @@ export default class CoreGenerator<
       this.#parseJHipsterConfigs(baseCommand.configs);
     }
 
-    this.logger = this.log as any;
+    this.logger = this.log;
 
     if (this.options.help) {
       return;

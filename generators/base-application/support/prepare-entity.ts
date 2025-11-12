@@ -27,14 +27,14 @@ import { getMicroserviceAppName, mutateData, stringHashCode } from '../../../lib
 import { parseChangelog } from '../../base/support/timestamp.ts';
 import type CoreGenerator from '../../base-core/generator.ts';
 import { getTypescriptKeyType } from '../../client/support/index.ts';
-import type { Config as ClientConfig } from '../../client/types.ts';
+import type { Application as ClientApplication } from '../../client/types.ts';
 import type { DatabaseProperty } from '../../liquibase/types.ts';
 import { getDatabaseTypeData, hibernateSnakeCase } from '../../server/support/index.ts';
 import type { Entity as ServerEntity } from '../../server/types.ts';
-import type { Config as SpringBootConfig } from '../../spring-boot/types.ts';
-import type { Config as SpringDataRelationalConfig } from '../../spring-data/generators/relational/types.ts';
+import type { Application as SpringBootApplication } from '../../spring-boot/types.ts';
+import type { Application as SpringDataRelationalApplication } from '../../spring-data/generators/relational/types.ts';
 import { mutateEntity } from '../entity.ts';
-import type { Entity as BaseApplicationEntity, PrimaryKey } from '../types.ts';
+import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity, PrimaryKey } from '../types.ts';
 
 import { createFaker } from './faker.ts';
 import { fieldIsEnum } from './field-utils.ts';
@@ -380,22 +380,22 @@ function fieldToId(field: FieldAll): any {
 export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntity>>(
   this: CoreGenerator | void,
   entity: E,
-  config: SpringBootConfig,
+  config: BaseApplicationApplication<BaseApplicationEntity>,
 ): E {
   mutateData(entity as Partial<ServerEntity>, {
     __override__: false,
     // applicationType: config.applicationType,
     // baseName: config.baseName,
     // authenticationType: config.authenticationType,
-    reactive: config.reactive,
-    microfrontend: (config as ClientConfig).microfrontend,
+    reactive: (config as SpringBootApplication).reactive,
+    microfrontend: (config as ClientApplication).microfrontend,
     // Workaround different paths
-    clientFramework: (config as ClientConfig).clientFramework,
+    clientFramework: (config as ClientApplication).clientFramework,
 
-    databaseType: config.databaseType,
-    prodDatabaseType: (config as SpringDataRelationalConfig).prodDatabaseType,
+    databaseType: (config as SpringBootApplication).databaseType,
+    prodDatabaseType: (config as SpringDataRelationalApplication).prodDatabaseType,
 
-    searchEngine: config.searchEngine,
+    searchEngine: (config as SpringBootApplication).searchEngine,
 
     // jhiPrefix: config.jhiPrefix,
     // entitySuffix: config.entitySuffix,

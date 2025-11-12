@@ -20,7 +20,12 @@
 import { lowerFirst, upperFirst } from 'lodash-es';
 
 import type { ValidationResult } from '../../base-core/api.d.ts';
-import type { Entity as BaseApplicationEntity, Relationship as BaseApplicationRelationship, RelationshipWithEntity } from '../types.ts';
+import type {
+  Application as BaseApplicationApplication,
+  Entity as BaseApplicationEntity,
+  Relationship as BaseApplicationRelationship,
+  RelationshipWithEntity,
+} from '../types.ts';
 
 import { stringifyApplicationData } from './debug.ts';
 import { findEntityInEntities } from './entity.ts';
@@ -66,7 +71,10 @@ export const loadEntitiesAnnotations = (entities: BaseApplicationEntity[]): void
   }
 };
 
-export const loadEntitiesOtherSide = (entities: BaseApplicationEntity[], { application }: { application?: any } = {}): ValidationResult => {
+export const loadEntitiesOtherSide = (
+  entities: BaseApplicationEntity[],
+  { application }: { application?: BaseApplicationApplication<BaseApplicationEntity> } = {},
+): ValidationResult => {
   const result: { warning: string[] } = { warning: [] };
   for (const entity of entities) {
     for (const relationship of entity.relationships ?? []) {

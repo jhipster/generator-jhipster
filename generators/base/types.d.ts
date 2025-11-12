@@ -1,6 +1,8 @@
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/types.ts';
 import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions } from '../base-core/types.ts';
 
+import type BaseGenerator from './generator.ts';
+
 export type Source = {
   /* Dummy field to declare an empty type */
   _jhipsterSource: never;
@@ -45,7 +47,7 @@ export type Options = CoreOptions &
     reproducibleTests?: boolean;
     entities?: string[];
 
-    jhipsterContext?: any;
+    jhipsterContext?: BaseGenerator;
     composeWithLocalBlueprint?: boolean;
   };
 

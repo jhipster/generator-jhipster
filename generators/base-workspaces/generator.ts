@@ -94,7 +94,7 @@ export default abstract class BaseWorkspacesGenerator<
     return defaults(
       {},
       removeFieldsWithNullishValues(this.config.getAll()),
-      DeploymentOptions.defaults(this.jhipsterConfig.deploymentType as any),
+      DeploymentOptions.defaults(this.jhipsterConfig.deploymentType),
     );
   }
 

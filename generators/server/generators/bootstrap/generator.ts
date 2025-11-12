@@ -22,6 +22,7 @@ import { upperFirst } from 'lodash-es';
 import { mutateData } from '../../../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { loadRequiredConfigIntoEntity } from '../../../base-application/support/index.ts';
+import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../../base-application/types.d.ts';
 import { loadDockerDependenciesTask } from '../../../base-workspaces/internal/docker-dependencies.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-data/generators/relational/types.d.ts';
 import serverCommand from '../../command.ts';
@@ -110,7 +111,11 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
     return this.asLoadingEntitiesTaskGroup({
       loadingEntities({ entitiesToLoad }) {
         for (const { entityBootstrap } of entitiesToLoad) {
-          loadRequiredConfigIntoEntity.call(this, entityBootstrap, this.jhipsterConfigWithDefaults);
+          loadRequiredConfigIntoEntity.call(
+            this,
+            entityBootstrap,
+            this.jhipsterConfigWithDefaults as BaseApplicationApplication<BaseApplicationEntity>,
+          );
         }
       },
       requiredOtherSideRelationships({ entitiesToLoad }) {

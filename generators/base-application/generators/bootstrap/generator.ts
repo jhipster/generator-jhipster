@@ -28,7 +28,6 @@ import { loadCommandConfigsIntoApplication, loadCommandConfigsKeysIntoTemplatesC
 import { lookupCommandsConfigs } from '../../../../lib/command/lookup-commands-configs.ts';
 import { packageJson } from '../../../../lib/index.ts';
 import { getConfigWithDefaults } from '../../../../lib/jhipster/default-application-options.ts';
-import type { ApplicationAll } from '../../../../lib/types/application-all.ts';
 import { mutateData, removeFieldsWithNullishValues } from '../../../../lib/utils/index.ts';
 import { loadDerivedConfig } from '../../../base-core/internal/config-def.ts';
 import { isWin32 } from '../../../base-core/support/index.ts';
@@ -271,8 +270,8 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
             throw new Error('User entity should already be passed.');
           }
 
-          const customUserData: any = customUser?.entityStorage.getAll() ?? {};
-          Object.assign(bootstrap, createUserEntity.call(this as any, { ...customUserData, ...customUserData.annotations }, application));
+          const customUserData = customUser?.entityStorage.getAll() ?? {};
+          Object.assign(bootstrap, createUserEntity.call(this, { ...customUserData, ...customUserData.annotations }, application));
           application.user = bootstrap;
         }
       },
@@ -288,11 +287,7 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
           const customUserManagementData: any = customUserManagement?.entityStorage.getAll() ?? {};
           Object.assign(
             bootstrap,
-            createUserManagementEntity.call(
-              this as any,
-              { ...customUserManagementData, ...customUserManagementData.annotations },
-              application as ApplicationAll,
-            ),
+            createUserManagementEntity.call(this, { ...customUserManagementData, ...customUserManagementData.annotations }, application),
           );
           application.userManagement = bootstrap;
         }
@@ -307,11 +302,8 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
             throw new Error('Authority entity should already be passed.');
           }
 
-          const customEntityData: any = customEntity?.entityStorage.getAll() ?? {};
-          Object.assign(
-            bootstrap,
-            createAuthorityEntity.call(this as any, { ...customEntityData, ...customEntityData.annotations }, application as any),
-          );
+          const customEntityData = customEntity?.entityStorage.getAll() ?? {};
+          Object.assign(bootstrap, createAuthorityEntity.call(this, { ...customEntityData, ...customEntityData.annotations }, application));
           application.authority = bootstrap;
         }
       },
