@@ -118,11 +118,6 @@
     "update-snapshot": "esmocha --no-insight --no-parallel --update-snapshot --",
     "update-snapshots": "esmocha test generators cli .blueprint lib/jdl lib --forbid-only --update-snapshot --enable-source-maps"
   },
-  "overrides": {
-    "ejs-lint": {
-      "ejs": "$ejs"
-    }
-  },
   "dependencies": {
     "@eslint/js": "9.39.1",
     "@faker-js/faker": "10.1.0",
