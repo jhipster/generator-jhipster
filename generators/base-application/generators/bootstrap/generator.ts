@@ -28,6 +28,7 @@ import { loadCommandConfigsIntoApplication, loadCommandConfigsKeysIntoTemplatesC
 import { lookupCommandsConfigs } from '../../../../lib/command/lookup-commands-configs.ts';
 import { packageJson } from '../../../../lib/index.ts';
 import { getConfigWithDefaults } from '../../../../lib/jhipster/default-application-options.ts';
+import type { Entity as BaseEntity } from '../../../../lib/jhipster/types/entity.ts';
 import { mutateData, removeFieldsWithNullishValues } from '../../../../lib/utils/index.ts';
 import { loadDerivedConfig } from '../../../base-core/internal/config-def.ts';
 import { isWin32 } from '../../../base-core/support/index.ts';
@@ -310,7 +311,7 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
       loadingEntities({ application, entitiesToLoad }) {
         for (const { entityName, entityBootstrap, entityStorage } of entitiesToLoad) {
           if (!entityBootstrap.builtIn) {
-            let entity = entityStorage.getAll() as any;
+            let entity = entityStorage.getAll() as BaseEntity;
             entity.name = entity.name ?? entityName;
             entity = { ...entity, ...entity.annotations };
             Object.assign(entityBootstrap, entity);
@@ -370,7 +371,7 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
       preparePrimaryKey({ entity, application }) {
         // If primaryKey doesn't exist, create it.
         if (!entity.embedded && !entity.primaryKey) {
-          prepareEntityPrimaryKeyForTemplates.call(this, { entity: entity as any, application });
+          prepareEntityPrimaryKeyForTemplates.call(this, { entity, application });
         }
       },
     });

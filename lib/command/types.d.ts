@@ -1,10 +1,10 @@
 import type { IsNever, PascalCase, Replace, RequireAtLeastOne, SetOptional, Simplify, TupleToUnion, ValueOf } from 'type-fest';
 import type { ArgumentSpec, CliOptionSpec } from 'yeoman-generator';
 
+import type BaseCoreGenerator from '../../generators/base-core/generator.ts';
 import type GeneratorsByNamespace from '../../generators/types.ts';
 import type { JHipsterNamedChoice } from '../core/types.ts';
 import type { JHipsterOptionDefinition } from '../jdl/core/types/parsing.ts';
-import type BaseCoreGenerator from '../../generators/base-core/generator.ts';
 
 import type { MergeUnion } from './support/merge-union.ts';
 
@@ -116,9 +116,7 @@ export type ConfigSpec<ConfigContext> = {
   readonly cli?: CliSpec;
   readonly argument?: JHipsterArgumentConfig;
   readonly internal?: { type: CommandConfigType };
-  readonly prompt?:
-    | PromptSpec
-    | ((gen: ConfigContext, config: ConfigSpec<ConfigContext>) => PromptSpec);
+  readonly prompt?: PromptSpec | ((gen: ConfigContext, config: ConfigSpec<ConfigContext>) => PromptSpec);
   readonly jdl?: Omit<JHipsterOptionDefinition, 'name' | 'knownChoices'>;
   /**
    * The callback receives the generator as input for 'generator' scope.

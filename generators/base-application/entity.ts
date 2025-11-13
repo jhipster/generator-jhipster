@@ -95,6 +95,8 @@ type BaseApplicationAddedFieldProperties = DerivedPropertiesOnlyOf<'fieldType', 
 
     enumInstance?: string;
     builtIn?: boolean;
+
+    derivedPath?: string[];
   };
 
 export type Field = Property &
@@ -205,10 +207,17 @@ export const mutateRelationship = {
  * Represents a relationship with an otherEntity, where the relationship is extended with the other entity.
  * Utility type to workaround https://github.com/Microsoft/TypeScript/issues/24364.
  */
-export type RelationshipWithEntity<R, E extends BaseEntity> = R & {
+export type RelationshipWithEntity<R, E extends BaseEntity, F extends BaseField = Field> = R & {
   otherEntity: E;
   relatedField: Exclude<E['fields'], undefined>[number];
   otherEntityUser: boolean;
+
+  derivedPrimaryKey?: {
+    derivedFields: (F & {
+      originalField: F;
+      derived: boolean;
+    })[];
+  };
 };
 
 export const mutateRelationshipWithEntity = {
@@ -227,7 +236,7 @@ export type PrimaryKey<F extends Field = Field> = {
   nameCapitalized: string;
   hibernateSnakeCaseName: string;
   fields: F[];
-  relationships: any[];
+  relationships: RelationshipWithEntity<Relationship, Entity, F>[];
 
   type: FieldType;
   composite: boolean;
@@ -285,7 +294,7 @@ type BaseApplicationAddedEntityProperties = {
   entityNamePluralHumanized: string;
 
   resetFakerSeed?(suffix?: string): void;
-  generateFakeData?: (type?: any) => any;
+  generateFakeData?: (type?: 'csv' | 'cypress' | 'json-serializable' | 'ts') => any;
   faker?: FakerWithRandexp;
 
   anyFieldIsBigDecimal?: boolean;
@@ -337,7 +346,7 @@ type BaseApplicationAddedEntityProperties = {
 export interface Entity<F extends Field = Field, R extends Relationship = Relationship>
   extends BaseApplicationAddedEntityProperties,
     Omit<Required<BaseEntity<F>>, 'relationships'> {
-  relationships: RelationshipWithEntity<R, this>[];
+  relationships: RelationshipWithEntity<R, this, F>[];
   otherRelationships: R[];
 
   primaryKey?: PrimaryKey<F>;

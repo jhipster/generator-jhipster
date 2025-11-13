@@ -53,7 +53,7 @@ export const downloadJdlFile = async (jdlFile: string, { skipSampleRepository }:
   try {
     return await downloadFile(url, jdlFile);
   } catch (error) {
-    logger.verboseInfo((error as any).message);
+    logger.verboseInfo((error as Error).message);
     url = new URL(jdlFile, `https://raw.githubusercontent.com/jhipster/jdl-samples/v${packageJson.version.split('.')[0]}/`).toString();
     return downloadFile(url, jdlFile);
   }
