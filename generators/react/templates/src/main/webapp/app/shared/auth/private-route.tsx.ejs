@@ -18,7 +18,7 @@ export const PrivateRoute = ({ children, hasAnyAuthorities = [], ...rest }: IOwn
   const pageLocation = useLocation();
 
   if (!children) {
-    throw new Error(`A component needs to be specified for private route for path ${(rest as any).path}`);
+    throw new Error(`A component needs to be specified for private route for path ${rest.path}`);
   }
 
   if (!sessionHasBeenFetched) {
