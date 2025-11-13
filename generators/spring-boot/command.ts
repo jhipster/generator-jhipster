@@ -21,8 +21,8 @@ import chalk from 'chalk';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 import { ALPHANUMERIC_PATTERN } from '../../lib/constants/jdl.ts';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../lib/core/application-types.ts';
-import { authenticationTypes } from '../../lib/jhipster/index.ts';
-import { createBase64Secret, createSecret } from '../../lib/utils/index.ts';
+import authenticationTypes from '../../lib/jhipster/authentication-types.ts';
+import { createBase64Secret, createSecret } from '../../lib/utils/secret.ts';
 
 const { OAUTH2, SESSION, JWT } = authenticationTypes;
 
@@ -104,7 +104,7 @@ const command = {
         description: 'Provide authentication type for the application when skipping server side generation',
         type: String,
       },
-      prompt: (gen: any, config) => ({
+      prompt: (gen, config) => ({
         type: 'list',
         message: `Which ${chalk.yellow('*type*')} of authentication would you like to use?`,
         choices: () =>
@@ -220,6 +220,6 @@ const command = {
     },
   },
   import: ['java', 'liquibase', 'jhipster:spring-data:relational', 'jhipster:spring-cloud:gateway', 'spring-cache', 'spring-cloud-stream'],
-} as const satisfies JHipsterCommandDefinition;
+} as const satisfies JHipsterCommandDefinition<any>;
 
 export default command;

@@ -37,7 +37,7 @@ const command = {
         type: Boolean,
         hide: true,
       },
-      configure: (gen: any) => {
+      configure: gen => {
         gen.prettierConfigFile = gen.fromInit || gen.monorepositoryRoot ? '.prettierrc.yml' : '.prettierrc';
       },
       scope: 'generator',
@@ -60,6 +60,6 @@ const command = {
     },
   },
   import: [],
-} as const satisfies JHipsterCommandDefinition;
+} as const satisfies JHipsterCommandDefinition<any>;
 
 export default command;

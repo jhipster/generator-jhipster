@@ -436,8 +436,8 @@ plugins {
   }
 
   private withContextData(key: string, sharedData: any): this {
-    this.onEnvironment((env: any) => {
-      const contextMap: Map<string, any> = env.getContextMap(this.targetDirectory);
+    this.onEnvironment(env => {
+      const contextMap: Map<string, any> = (env as Environment).getContextMap(this.targetDirectory!);
       contextMap.set(key, sharedData);
     });
     return this;

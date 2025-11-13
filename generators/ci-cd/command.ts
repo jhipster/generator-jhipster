@@ -229,6 +229,6 @@ const command = {
       prompt: undefined,
     },
   },
-} as const satisfies JHipsterCommandDefinition;
+} as const satisfies JHipsterCommandDefinition<any>;
 
 export default command;

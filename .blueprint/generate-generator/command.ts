@@ -25,7 +25,7 @@ const command = {
         type: String,
         required: true,
       },
-      configure: (gen: any) => {
+      configure: gen => {
         gen.generatorNamespace = gen.generatorNamespace.replaceAll(':', '/');
       },
       scope: 'generator',

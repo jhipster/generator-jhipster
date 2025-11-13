@@ -92,6 +92,6 @@ const command = {
       scope: 'generator',
     },
   },
-} as const satisfies JHipsterCommandDefinition;
+} as const satisfies JHipsterCommandDefinition<any>;
 
 export default command;

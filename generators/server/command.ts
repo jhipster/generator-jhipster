@@ -81,6 +81,6 @@ const command = {
     },
   },
   import: ['common', 'spring-boot'],
-} as const satisfies JHipsterCommandDefinition;
+} as const satisfies JHipsterCommandDefinition<any>;
 
 export default command;

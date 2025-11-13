@@ -54,6 +54,6 @@ const command = {
       scope: 'none',
     },
   },
-} as const satisfies JHipsterCommandDefinition;
+} as const satisfies JHipsterCommandDefinition<any>;
 
 export default command;
