@@ -115,7 +115,7 @@ export default class EnvironmentBuilder {
     devBlueprintPath?: string;
   } = {}) {
     const devBlueprintEnabled = devBlueprintPath && existsSync(devBlueprintPath);
-    (this.env as any).sharedOptions.devBlueprintEnabled = devBlueprintEnabled;
+    this.env.sharedOptions.devBlueprintEnabled = devBlueprintEnabled;
     this.devBlueprintPath = devBlueprintEnabled ? devBlueprintPath : undefined;
     this.localBlueprintPath = path.join(process.cwd(), '.blueprint');
     this.localBlueprintExists = this.localBlueprintPath !== this.devBlueprintPath && existsSync(this.localBlueprintPath);
@@ -194,7 +194,7 @@ export default class EnvironmentBuilder {
         customizeNamespace: ns => ns?.replaceAll(':generators:', ':').replace('.blueprint', '@jhipster/jhipster-local'),
       });
       if (generators.length > 0) {
-        (this.env as any).sharedOptions.composeWithLocalBlueprint = true;
+        this.env.sharedOptions.composeWithLocalBlueprint = true;
       }
     }
     return this;
@@ -269,7 +269,7 @@ export default class EnvironmentBuilder {
     if (blueprintsPackagePath) {
       const sharedOptions = (await this._getSharedOptions(blueprintsPackagePath)) ?? {};
       // Env will forward sharedOptions to every generator
-      Object.assign((this.env as any).sharedOptions, sharedOptions);
+      Object.assign(this.env.sharedOptions, sharedOptions);
     }
     return this;
   }

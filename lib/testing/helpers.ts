@@ -3,11 +3,12 @@ import { randomInt } from 'node:crypto';
 import { basename, dirname, isAbsolute, join } from 'node:path';
 import { mock } from 'node:test';
 
-import type { BaseEnvironmentOptions, BaseGenerator as YeomanGenerator, GetGeneratorConstructor } from '@yeoman/types';
+import type { BaseGenerator as YeomanGenerator, GetGeneratorConstructor } from '@yeoman/types';
 import { globSync } from 'glob';
 import { merge, snakeCase } from 'lodash-es';
 import type { EmptyObject } from 'type-fest';
 import type Environment from 'yeoman-environment';
+import type { EnvironmentOptions } from 'yeoman-environment';
 import { RunContext, YeomanTest, result } from 'yeoman-test';
 import type { RunContextSettings, RunResult } from 'yeoman-test';
 
@@ -523,7 +524,7 @@ class JHipsterTest extends YeomanTest {
   run<GeneratorType extends YeomanGenerator<GeneratorTestOptions> = YeomanGenerator<GeneratorTestOptions>>(
     GeneratorOrNamespace: string | GetGeneratorConstructor<GeneratorType>,
     settings?: RunContextSettings | undefined,
-    envOptions?: (BaseEnvironmentOptions & { createEnv?: any }) | undefined,
+    envOptions?: (EnvironmentOptions & { createEnv?: any }) | undefined,
   ): JHipsterRunContext {
     return super
       .run<GeneratorType>(GeneratorOrNamespace, settings, envOptions)
@@ -536,13 +537,13 @@ class JHipsterTest extends YeomanTest {
   runJHipster(
     jhipsterGenerator: string,
     settings?: RunContextSettings | undefined,
-    envOptions?: BaseEnvironmentOptions | undefined,
+    envOptions?: EnvironmentOptions | undefined,
   ): JHipsterRunContext;
   runJHipster(jhipsterGenerator: string, options?: RunJHipster): JHipsterRunContext;
   runJHipster(
     jhipsterGenerator: string,
     settings: RunContextSettings | RunJHipster | undefined,
-    envOptions?: BaseEnvironmentOptions | undefined,
+    envOptions?: EnvironmentOptions | undefined,
   ): JHipsterRunContext {
     const generatorSpec =
       !isAbsolute(jhipsterGenerator) && !jhipsterGenerator.startsWith('@') ? toJHipsterNamespace(jhipsterGenerator) : jhipsterGenerator;
@@ -605,7 +606,7 @@ class JHipsterTest extends YeomanTest {
   runJHipsterDeployment(
     jhipsterGenerator: string,
     settings?: RunContextSettings | undefined,
-    envOptions?: BaseEnvironmentOptions | undefined,
+    envOptions?: EnvironmentOptions | undefined,
   ): JHipsterRunContext {
     return this.runJHipsterInApplication(jhipsterGenerator, settings, envOptions).withOptions({
       destinationRoot: join(runResult.cwd, jhipsterGenerator.split(':').pop()!),
@@ -618,13 +619,13 @@ class JHipsterTest extends YeomanTest {
   runJHipsterInApplication(
     jhipsterGenerator: string,
     settings?: RunContextSettings | undefined,
-    envOptions?: BaseEnvironmentOptions | undefined,
+    envOptions?: EnvironmentOptions | undefined,
   ): JHipsterRunContext {
     const context = runResult.create(getGenerator(jhipsterGenerator), settings, envOptions) as JHipsterRunContext;
     return context.withJHipsterGenerators();
   }
 
-  runJDL(jdl: string, settings?: RunContextSettings | undefined, envOptions?: BaseEnvironmentOptions | undefined): JHipsterRunContext {
+  runJDL(jdl: string, settings?: RunContextSettings | undefined, envOptions?: EnvironmentOptions | undefined): JHipsterRunContext {
     return this.runJHipster('jdl', settings, envOptions).withOptions({ inline: jdl });
   }
 
@@ -634,7 +635,7 @@ class JHipsterTest extends YeomanTest {
   runJDLInApplication(
     jdl: string,
     settings?: RunContextSettings | undefined,
-    envOptions?: BaseEnvironmentOptions | undefined,
+    envOptions?: EnvironmentOptions | undefined,
   ): JHipsterRunContext {
     return this.runJHipsterInApplication('jdl', settings, envOptions).withOptions({ inline: jdl });
   }
@@ -664,7 +665,7 @@ class JHipsterTest extends YeomanTest {
   create<GeneratorType extends YeomanGenerator<GeneratorTestOptions> = YeomanGenerator<GeneratorTestOptions>>(
     GeneratorOrNamespace: string | GetGeneratorConstructor<GeneratorType>,
     settings?: RunContextSettings | undefined,
-    envOptions?: BaseEnvironmentOptions | undefined,
+    envOptions?: EnvironmentOptions | undefined,
   ): JHipsterRunContext {
     return super.create<GeneratorType>(GeneratorOrNamespace, settings, envOptions) as any;
   }

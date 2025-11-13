@@ -159,7 +159,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
         if (!this.generateWorkspaces) return;
 
         this.dockerCompose = this.workspacesConfig.dockerCompose;
-        (this.env as any).options.nodePackageManager = this.workspacesConfig.nodePackageManager;
+        this.env.options.nodePackageManager = this.workspacesConfig.nodePackageManager;
       },
     });
   }
