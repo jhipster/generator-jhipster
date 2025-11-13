@@ -35,7 +35,7 @@ const command = {
         type: String,
         description: 'Entities sample to copy',
       },
-      configure: (gen: any) => {
+      configure: gen => {
         if (['mongodb', 'couchbase'].includes(gen.entitiesSample)) {
           gen.entitiesSample = 'document';
         }
@@ -48,7 +48,7 @@ const command = {
         type: Boolean,
         description: 'Generate in global samples folder',
       },
-      configure: (gen: any) => {
+      configure: gen => {
         if (gen.global && !gen.projectFolder) {
           gen.projectFolder = join(gen._globalConfig.get('samplesFolder') ?? defaultSamplesFolder, gen.sampleName);
         }
@@ -61,7 +61,7 @@ const command = {
         description: 'Folder to generate the sample',
         env: 'JHI_FOLDER_APP',
       },
-      configure: (gen: any) => {
+      configure: gen => {
         if (!gen.projectFolder) {
           gen.projectFolder = process.cwd();
         }
@@ -84,6 +84,6 @@ const command = {
     },
   },
   import: ['app', 'workspaces'],
-} as const satisfies JHipsterCommandDefinition;
+} as const satisfies JHipsterCommandDefinition<any>;
 
 export default command;

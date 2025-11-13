@@ -34,7 +34,12 @@ import type { Entity as ServerEntity } from '../../server/types.ts';
 import type { Application as SpringBootApplication } from '../../spring-boot/types.ts';
 import type { Application as SpringDataRelationalApplication } from '../../spring-data/generators/relational/types.ts';
 import { mutateEntity } from '../entity.ts';
-import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity, PrimaryKey } from '../types.ts';
+import type {
+  Application as BaseApplicationApplication,
+  Entity as BaseApplicationEntity,
+  Field as BaseApplicationField,
+  PrimaryKey,
+} from '../types.ts';
 
 import { createFaker } from './faker.ts';
 import { fieldIsEnum } from './field-utils.ts';
@@ -183,7 +188,7 @@ export function prepareEntityPrimaryKeyForTemplates(
     entity: entityWithConfig,
     enableCompositeId = true,
     application,
-  }: { entity: EntityAll; enableCompositeId?: boolean; application?: any },
+  }: { entity: BaseApplicationEntity; enableCompositeId?: boolean; application?: any },
 ) {
   const idFields = entityWithConfig.fields.filter(field => field.id);
   const idRelationships = entityWithConfig.relationships.filter(relationship => relationship.id);
@@ -247,7 +252,9 @@ export function prepareEntityPrimaryKeyForTemplates(
                 : `${relationship.relationshipNameCapitalized}${field.fieldNameCapitalized}`;
             },
             get columnName() {
-              return idCount === 1 ? field.columnName : `${hibernateSnakeCase(relationship.relationshipName)}_${field.columnName}`;
+              return idCount === 1
+                ? (field as FieldAll).columnName
+                : `${hibernateSnakeCase(relationship.relationshipName)}_${(field as FieldAll).columnName}`;
             },
           }));
         },
@@ -303,10 +310,9 @@ export function prepareEntityPrimaryKeyForTemplates(
     let primaryKeyType: string;
     if (composite) {
       primaryKeyName = 'id';
-      primaryKeyType = `${entityWithConfig.entityClass}Id`;
+      primaryKeyType = `${(entityWithConfig as EntityAll).entityClass}Id`;
     } else {
       const idField = idFields[0];
-      idField.dynamic = false;
       // Allow ids type to be empty and fallback to default type for the database.
       if (!idField.fieldType) {
         idField.fieldType = application?.pkType ?? getDatabaseTypeData(entityWithConfig.databaseType).defaultPrimaryKeyType;
@@ -335,7 +341,7 @@ export function prepareEntityPrimaryKeyForTemplates(
       },
       // Fields inherited from id relationships.
       get derivedFields() {
-        return this.relationships.map(rel => rel.derivedPrimaryKey.derivedFields).flat();
+        return this.relationships.map(rel => rel.derivedPrimaryKey!.derivedFields).flat();
       },
       get ids() {
         return this.fields.map(field => fieldToId(field));
@@ -345,7 +351,7 @@ export function prepareEntityPrimaryKeyForTemplates(
   return entityWithConfig;
 }
 
-function fieldToId(field: FieldAll): any {
+function fieldToId(field: BaseApplicationField): any {
   return {
     field,
     get name() {

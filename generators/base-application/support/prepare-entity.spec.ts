@@ -21,8 +21,8 @@ import { beforeEach, describe, it } from 'esmocha';
 
 import { expect } from 'chai';
 
-import type { EntityAll } from '../../../lib/types/application-all.d.ts';
 import { formatDateForChangelog } from '../../base/support/index.ts';
+import type { Entity as BaseApplicationEntity } from '../types.d.ts';
 
 import { entityDefaultConfig, prepareEntityPrimaryKeyForTemplates } from './prepare-entity.ts';
 
@@ -42,7 +42,6 @@ describe('generator - base-application - support - prepareEntity', () => {
         it('should adopt id field as @Id', () => {
           expect(entity.fields[0]).to.eql({
             autoGenerate: true,
-            dynamic: false,
             fieldName: 'id',
             fieldType: 'CustomType',
             id: true,
@@ -63,17 +62,19 @@ describe('generator - base-application - support - prepareEntity', () => {
       });
 
       describe('with @Id', () => {
-        let entity = {
-          ...entityDefaultConfig,
-          name: 'Entity',
-          changelogDate: formatDateForChangelog(new Date()),
-          fields: [
-            { fieldName: 'id', fieldType: 'CustomType', path: ['id'] },
-            { fieldName: 'uuid', fieldType: 'UUID', id: true, path: ['uuid'] },
-          ],
-        } as unknown as EntityAll;
+        let entity: BaseApplicationEntity;
         beforeEach(() => {
-          entity = prepareEntityPrimaryKeyForTemplates({ entity });
+          entity = prepareEntityPrimaryKeyForTemplates({
+            entity: {
+              ...entityDefaultConfig,
+              name: 'Entity',
+              changelogDate: formatDateForChangelog(new Date()),
+              fields: [
+                { fieldName: 'id', fieldType: 'CustomType', path: ['id'] },
+                { fieldName: 'uuid', fieldType: 'UUID', id: true, path: ['uuid'] },
+              ],
+            } as unknown as BaseApplicationEntity,
+          });
         });
         it('should not adopt id field as @Id', () => {
           expect(entity.fields[0]).to.eql({

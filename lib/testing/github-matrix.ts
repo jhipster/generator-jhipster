@@ -63,7 +63,11 @@ export const defaultGithubEnvironment = {
     'ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=',
 };
 
-const randomReproducibleValue = <Choice = any>(seed: string, choices: Choice[], options?: { useVersionPlaceholders?: boolean }): Choice => {
+const randomReproducibleValue = <const Choice = string>(
+  seed: string,
+  choices: Choice[],
+  options?: { useVersionPlaceholders?: boolean },
+): Choice => {
   const { useVersionPlaceholders } = options ?? {};
   const index = createHash('shake256', { outputLength: 1 }).update(seed, 'utf8').digest('binary').charCodeAt(0) % choices.length;
   if (useVersionPlaceholders) {

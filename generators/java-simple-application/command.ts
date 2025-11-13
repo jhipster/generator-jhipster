@@ -78,6 +78,6 @@ const command = {
     },
   },
   import: ['jhipster:java-simple-application:build-tool'],
-} as const satisfies JHipsterCommandDefinition;
+} as const satisfies JHipsterCommandDefinition<any>;
 
 export default command;

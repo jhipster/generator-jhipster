@@ -26,7 +26,7 @@ const command = {
         type: String,
         description: 'GitHub issue to generate',
       },
-      configure(gen: any) {
+      configure: gen => {
         // Gets the owner, repo and issue_number from a string such as, "jhipster/generator-jhipster#12345"
         const { owner, repository, issue } = parseIssue(gen.issue);
         if (owner) {
@@ -73,6 +73,6 @@ const command = {
     },
   },
   import: ['jhipster:app', 'jhipster:workspaces'],
-} as const satisfies JHipsterCommandDefinition;
+} as const satisfies JHipsterCommandDefinition<any>;
 
 export default command;

@@ -45,21 +45,10 @@ import type {
   Relationship as SpringDataRelationalRelationship,
 } from '../../generators/spring-data/generators/relational/types.d.ts';
 
-export type FieldAll = SpringDataRelationalField &
-  LiquibaseField &
-  ClientField & {
-    derivedPath?: string[];
-    dynamic?: boolean;
-  };
+export type FieldAll = SpringDataRelationalField & LiquibaseField & ClientField;
 
 export interface RelationshipAll extends SpringDataRelationalRelationship, ServerRelationship, LiquibaseRelationship {
   bagRelationship?: boolean;
-  derivedPrimaryKey?: {
-    derivedFields: (FieldAll & {
-      originalField: FieldAll;
-      derived: boolean;
-    })[];
-  };
 }
 
 export interface EntityAll<F extends FieldAll = FieldAll, R extends RelationshipAll = RelationshipAll>

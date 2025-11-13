@@ -36,8 +36,8 @@ export default class ServerGenerator extends JavaApplicationGenerator {
     return this.asPostWritingTaskGroup({
       packageJsonScripts({ application }) {
         const packageJsonConfigStorage = this.packageJson.createStorage('config').createProxy();
-        (packageJsonConfigStorage as any).backend_port = application.gatewayServerPort || application.serverPort;
-        (packageJsonConfigStorage as any).packaging = application.defaultPackaging;
+        packageJsonConfigStorage.backend_port = application.gatewayServerPort || application.serverPort;
+        packageJsonConfigStorage.packaging = application.defaultPackaging;
       },
       packageJsonBackendScripts({ application }) {
         const scriptsStorage = this.packageJson.createStorage('scripts');

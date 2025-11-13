@@ -49,6 +49,7 @@ import { getFKConstraintName, getUXConstraintName, prepareField as prepareServer
 import type { Entity as ServerEntity } from '../server/types.ts';
 import type { Source as SpringBootSource } from '../spring-boot/index.ts';
 import { prepareSqlApplicationProperties } from '../spring-data/generators/relational/support/index.ts';
+import type { Application as SpringDataRelationalApplication } from '../spring-data/generators/relational/types.ts';
 
 import { addEntityFiles, fakeFiles, updateConstraintsFiles, updateEntityFiles, updateMigrateFiles } from './changelog-files.ts';
 import { liquibaseFiles } from './files.ts';
@@ -374,13 +375,13 @@ export default class LiquibaseGenerator<
 
         const { 'jakarta-validation': validationVersion, h2: h2Version, liquibase: liquibaseVersion } = javaDependencies;
 
-        const applicationAny = application as any;
-        const databaseTypeProfile = applicationAny.devDatabaseTypeH2Any ? 'prod' : undefined;
+        const relationalApplication = application as SpringDataRelationalApplication;
+        const databaseTypeProfile = relationalApplication.devDatabaseTypeH2Any ? 'prod' : undefined;
 
         let liquibasePluginHibernateDialect;
         let liquibasePluginJdbcDriver;
         const mavenProperties: MavenProperty[] = [];
-        if (applicationAny.devDatabaseTypeH2Any) {
+        if (relationalApplication.devDatabaseTypeH2Any) {
           // eslint-disable-next-line no-template-curly-in-string
           liquibasePluginHibernateDialect = '${liquibase-plugin.hibernate-dialect}';
           // eslint-disable-next-line no-template-curly-in-string
@@ -393,14 +394,14 @@ export default class LiquibaseGenerator<
           mavenProperties.push(
             { property: 'liquibase-plugin.hibernate-dialect' },
             { property: 'liquibase-plugin.driver' },
-            { inProfile: 'dev', property: 'liquibase-plugin.hibernate-dialect', value: applicationAny.devHibernateDialect },
-            { inProfile: 'prod', property: 'liquibase-plugin.hibernate-dialect', value: applicationAny.prodHibernateDialect },
-            { inProfile: 'dev', property: 'liquibase-plugin.driver', value: applicationAny.devJdbcDriver },
-            { inProfile: 'prod', property: 'liquibase-plugin.driver', value: applicationAny.prodJdbcDriver },
+            { inProfile: 'dev', property: 'liquibase-plugin.hibernate-dialect', value: relationalApplication.devHibernateDialect },
+            { inProfile: 'prod', property: 'liquibase-plugin.hibernate-dialect', value: relationalApplication.prodHibernateDialect },
+            { inProfile: 'dev', property: 'liquibase-plugin.driver', value: relationalApplication.devJdbcDriver },
+            { inProfile: 'prod', property: 'liquibase-plugin.driver', value: relationalApplication.prodJdbcDriver },
           );
         } else {
-          liquibasePluginHibernateDialect = applicationAny.prodHibernateDialect;
-          liquibasePluginJdbcDriver = applicationAny.prodJdbcDriver;
+          liquibasePluginHibernateDialect = relationalApplication.prodHibernateDialect;
+          liquibasePluginJdbcDriver = relationalApplication.prodJdbcDriver;
         }
 
         if (shouldAddProperty('jakarta-validation.version', validationVersion)) {
@@ -423,12 +424,12 @@ export default class LiquibaseGenerator<
             { property: 'liquibase-plugin.url' },
             { property: 'liquibase-plugin.username' },
             { property: 'liquibase-plugin.password' },
-            { inProfile: 'dev', property: 'liquibase-plugin.url', value: applicationAny.devLiquibaseUrl },
-            { inProfile: 'dev', property: 'liquibase-plugin.username', value: applicationAny.devDatabaseUsername },
-            { inProfile: 'dev', property: 'liquibase-plugin.password', value: applicationAny.devDatabasePassword },
-            { inProfile: 'prod', property: 'liquibase-plugin.url', value: applicationAny.prodLiquibaseUrl },
-            { inProfile: 'prod', property: 'liquibase-plugin.username', value: applicationAny.prodDatabaseUsername },
-            { inProfile: 'prod', property: 'liquibase-plugin.password', value: applicationAny.prodDatabasePassword },
+            { inProfile: 'dev', property: 'liquibase-plugin.url', value: relationalApplication.devLiquibaseUrl },
+            { inProfile: 'dev', property: 'liquibase-plugin.username', value: relationalApplication.devDatabaseUsername },
+            { inProfile: 'dev', property: 'liquibase-plugin.password', value: relationalApplication.devDatabasePassword },
+            { inProfile: 'prod', property: 'liquibase-plugin.url', value: relationalApplication.prodLiquibaseUrl },
+            { inProfile: 'prod', property: 'liquibase-plugin.username', value: relationalApplication.prodDatabaseUsername },
+            { inProfile: 'prod', property: 'liquibase-plugin.password', value: relationalApplication.prodDatabasePassword },
           ],
           pluginManagement: [
             {
@@ -442,9 +443,9 @@ export default class LiquibaseGenerator<
                 packageName: application.packageName!,
                 srcMainResources: application.srcMainResources,
                 authenticationTypeOauth2: application.authenticationTypeOauth2,
-                devDatabaseTypeH2Any: applicationAny.devDatabaseTypeH2Any,
-                driver: liquibasePluginJdbcDriver,
-                hibernateDialect: liquibasePluginHibernateDialect,
+                devDatabaseTypeH2Any: relationalApplication.devDatabaseTypeH2Any!,
+                driver: liquibasePluginJdbcDriver!,
+                hibernateDialect: liquibasePluginHibernateDialect!,
                 defaultSchemaName: application.liquibaseDefaultSchemaName,
                 // eslint-disable-next-line no-template-curly-in-string
                 url: '${liquibase-plugin.url}',
@@ -465,7 +466,7 @@ export default class LiquibaseGenerator<
           ],
         });
 
-        if (applicationAny.prodDatabaseTypeMssql) {
+        if (relationalApplication.prodDatabaseTypeMssql) {
           source.addMavenDependency?.({
             inProfile: databaseTypeProfile,
             groupId: 'org.liquibase.ext',
@@ -475,8 +476,8 @@ export default class LiquibaseGenerator<
           });
         }
 
-        if (applicationAny.databaseTypeNeo4j) {
-          if (applicationAny.backendTypeSpringBoot) {
+        if (relationalApplication.databaseTypeNeo4j) {
+          if (relationalApplication.backendTypeSpringBoot) {
             source.addMavenDependency?.([{ groupId: 'org.springframework', artifactId: 'spring-jdbc' }]);
           }
           source.addMavenDependency?.([

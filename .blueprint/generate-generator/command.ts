@@ -25,13 +25,13 @@ const command = {
         type: String,
         required: true,
       },
-      configure: (gen: any) => {
+      configure: gen => {
         gen.generatorNamespace = gen.generatorNamespace.replaceAll(':', '/');
       },
       scope: 'generator',
     },
   },
   import: [],
-} as const satisfies JHipsterCommandDefinition;
+} as const satisfies JHipsterCommandDefinition<any>;
 
 export default command;

@@ -44,6 +44,6 @@ export default (javaCompatibleVersions: string[]): ValidationResult & { javaVers
     }
     return { error: `Error parsing Java version. Output: ${stderr}` };
   } catch (error) {
-    return { error: `Java was not found on your computer (${(error as any).message}).` };
+    return { error: `Java was not found on your computer (${(error as Error).message}).` };
   }
 };
