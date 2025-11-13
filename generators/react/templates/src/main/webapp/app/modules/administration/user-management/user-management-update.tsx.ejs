@@ -62,7 +62,6 @@ export const UserManagementUpdate = () => {
     handleClose();
   };
 
-  const isInvalid = false;
   const user = useAppSelector(state => state.userManagement.user);
   const loading = useAppSelector(state => state.userManagement.loading);
   const updating = useAppSelector(state => state.userManagement.updating);
@@ -189,7 +188,7 @@ export const UserManagementUpdate = () => {
             </span>
           </Button>
           &nbsp;
-          <Button color="primary" type="submit" disabled={isInvalid || updating}>
+          <Button color="primary" type="submit" disabled={updating}>
             <FontAwesomeIcon icon={faSave} />&nbsp;
             <Translate contentKey="entity.action.save">Save</Translate>
           </Button>
