@@ -70,9 +70,9 @@ export type Application<E extends BaseApplicationEntity = Entity> = SpringBootAp
 
     devDatabaseName?: string;
     devJdbcUrl?: string;
-    devJdbcDriver?: string;
+    devJdbcDriver?: string | null;
     devLiquibaseUrl?: string;
-    devHibernateDialect?: string;
+    devHibernateDialect?: string | null;
     devR2dbcUrl?: string;
     devDatabaseUsername?: string;
     devDatabasePassword?: string;

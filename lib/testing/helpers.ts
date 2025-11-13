@@ -232,7 +232,7 @@ class JHipsterRunContext extends RunContext<GeneratorTestType> {
   private generateApplicationsSet = false;
 
   withOptions(options: Partial<Omit<OptionsAll, 'env' | 'resolved' | 'namespace'> & Record<string, any>>): this {
-    return super.withOptions(options as any);
+    return super.withOptions(options);
   }
 
   withJHipsterConfig<Config extends EmptyObject>(
@@ -488,7 +488,7 @@ plugins {
     });
     runResult.entities = entitiesMap ? Object.fromEntries(entitiesMap.entries()) : undefined;
 
-    return runResult as any;
+    return runResult;
   }
 
   withTask(
@@ -530,7 +530,7 @@ class JHipsterTest extends YeomanTest {
       .withOptions({
         jdlDefinition: getDefaultJDLApplicationConfig(),
       } as any)
-      .withAdapterOptions({ log: createJHipsterLogger() }) as any;
+      .withAdapterOptions({ log: createJHipsterLogger() }) as unknown as JHipsterRunContext;
   }
 
   runJHipster(

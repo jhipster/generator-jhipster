@@ -154,12 +154,12 @@ export default class DomainGenerator extends JavaApplicationGenerator {
           for (const field of entity.fields.filter(field => field.fieldIsEnum)) {
             const enumInfo = {
               ...application,
-              ...getEnumInfo(field, (entity as any).clientRootFolder),
+              ...getEnumInfo(field, entity.clientRootFolder),
               frontendAppName: application.frontendAppName,
               packageName: application.packageName,
               javaPackageSrcDir: application.javaPackageSrcDir,
-              entityJavaPackageFolder: (entity as any).entityJavaPackageFolder,
-              entityAbsolutePackage: (entity as any).entityAbsolutePackage || application.packageName,
+              entityJavaPackageFolder: entity.entityJavaPackageFolder,
+              entityAbsolutePackage: entity.entityAbsolutePackage || application.packageName,
             };
             await this.writeFiles({
               sections: enumFiles,

@@ -19,6 +19,7 @@
 
 import { SpringBootApplicationGenerator } from '../../../spring-boot/generator.ts';
 import type { Source as SpringBootSource } from '../../../spring-boot/index.ts';
+import type { Application as SpringDataRelationalApplication } from '../relational/types.d.ts';
 
 import cleanupTask from './cleanup.ts';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.ts';
@@ -55,12 +56,12 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       async preparing({ application }) {
-        const applicationAny = application as any;
-        applicationAny.devLiquibaseUrl = 'jdbc:neo4j:bolt://localhost:7687';
-        applicationAny.devDatabaseUsername = '';
-        applicationAny.devDatabasePassword = '';
-        applicationAny.devJdbcDriver = null;
-        applicationAny.devHibernateDialect = null;
+        const relationalApplication = application as SpringDataRelationalApplication;
+        relationalApplication.devLiquibaseUrl = 'jdbc:neo4j:bolt://localhost:7687';
+        relationalApplication.devDatabaseUsername = '';
+        relationalApplication.devDatabasePassword = '';
+        relationalApplication.devJdbcDriver = null;
+        relationalApplication.devHibernateDialect = null;
       },
     });
   }
