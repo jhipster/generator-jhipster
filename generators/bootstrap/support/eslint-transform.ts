@@ -23,7 +23,7 @@ import { Piscina } from 'piscina';
 
 import { isDistFolder } from '../../../lib/index.ts';
 import type BaseGenerator from '../../base-core/index.ts';
-import { addLineNumbers } from '../internal/transform-utils.js';
+import { addLineNumbers } from '../internal/transform-utils.ts';
 
 import type eslintWorker from './eslint-worker.ts';
 

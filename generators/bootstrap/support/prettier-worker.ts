@@ -5,7 +5,7 @@ import prettierPluginPackagejson from 'prettier-plugin-packagejson';
 // @ts-ignore No types available
 import prettierPluginProperties from 'prettier-plugin-properties';
 
-import { addLineNumbers } from '../internal/transform-utils.js';
+import { addLineNumbers } from '../internal/transform-utils.ts';
 
 export default async ({
   relativeFilePath,
