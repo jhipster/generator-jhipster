@@ -19,7 +19,7 @@
 import { before, describe, esmocha, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
-import EnvironmentBuilder from '../../cli/environment-builder.js';
+import EnvironmentBuilder from '../../cli/environment-builder.ts';
 import { defaultHelpers as helpers } from '../../lib/testing/index.ts';
 import { shouldSupportFeatures } from '../../test/support/tests.ts';
 

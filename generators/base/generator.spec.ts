@@ -19,7 +19,7 @@
 import { before, describe, esmocha, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
-import EnvironmentBuilder from '../../cli/environment-builder.js';
+import EnvironmentBuilder from '../../cli/environment-builder.ts';
 import { defaultHelpers as helpers } from '../../lib/testing/index.ts';
 import { getCommandHelpOutput, shouldSupportFeatures } from '../../test/support/tests.ts';
 
@@ -35,10 +35,10 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
-  describe.skip('EnvironmentBuilder', () => {
+  describe('EnvironmentBuilder', () => {
     let envBuilder: EnvironmentBuilder;
-    before(() => {
-      envBuilder = EnvironmentBuilder.createDefaultBuilder();
+    before(async () => {
+      envBuilder = await EnvironmentBuilder.createDefaultBuilder();
     });
     it(`should be registered as jhipster:${generator} at yeoman-environment`, async () => {
       expect(await envBuilder.getEnvironment().get(`jhipster:${generator}`)).toBe(BaseGenerator);

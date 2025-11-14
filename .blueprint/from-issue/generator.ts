@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 
-import EnvironmentBuilder from '../../cli/environment-builder.js';
+import EnvironmentBuilder from '../../cli/environment-builder.ts';
 import BaseGenerator from '../../generators/base-core/index.ts';
 import { type InfoData, extractDataFromInfo, markdownDetails } from '../../generators/info/support/index.ts';
 import { appendToSummary, getGithubIssue, setGithubTaskOutput } from '../../lib/testing/github.ts';

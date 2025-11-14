@@ -24,7 +24,7 @@ import { type Store as MemFs, create as createMemFs } from 'mem-fs';
 import { type MemFsEditor, create as createMemFsEditor } from 'mem-fs-editor';
 
 import { downloadJdlFile } from '../../cli/download.ts';
-import EnvironmentBuilder from '../../cli/environment-builder.js';
+import EnvironmentBuilder from '../../cli/environment-builder.ts';
 import { CLI_NAME } from '../../cli/utils.ts';
 import type { ApplicationWithEntities } from '../../lib/jdl/jdl-importer.ts';
 import { createImporterFromContent } from '../../lib/jdl/jdl-importer.ts';

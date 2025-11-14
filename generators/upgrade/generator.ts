@@ -20,11 +20,12 @@ import { readdir, rm } from 'node:fs/promises';
 import { setTimeout } from 'node:timers/promises';
 
 import chalk from 'chalk';
+import type { Store } from 'mem-fs';
 import gitignore from 'parse-gitignore';
 import semver from 'semver';
 import { ResetMode } from 'simple-git';
 
-import EnvironmentBuilder from '../../cli/environment-builder.js';
+import EnvironmentBuilder from '../../cli/environment-builder.ts';
 import { packageJson } from '../../lib/index.ts';
 import BaseGenerator from '../base/index.ts';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.ts';
@@ -320,7 +321,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
 
   async runNonInteractive(inherit = true) {
     const adapter = this.env.adapter.newAdapter?.();
-    const sharedFs = inherit ? this.env.sharedFs : undefined;
+    const sharedFs = inherit ? (this.env.sharedFs as Store<any>) : undefined;
     const inheritedOptions = inherit ? this.options : {};
     const envOptions = { sharedFs, adapter };
     const generatorOptions = { ...inheritedOptions, ...DEFAULT_NON_INTERACTIVE_OPTIONS };
