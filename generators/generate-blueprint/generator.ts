@@ -25,7 +25,7 @@ import type { Storage } from 'yeoman-generator';
 import { getGeneratorNamespaces, getPackageRoot } from '../../lib/index.ts';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base-core/priorities.ts';
 import BaseSimpleApplicationGenerator from '../base-simple-application/index.ts';
-import { BLUEPRINT_API_VERSION } from '../generator-constants.js';
+import { BLUEPRINT_API_VERSION } from '../generator-constants.ts';
 
 import {
   DYNAMIC,

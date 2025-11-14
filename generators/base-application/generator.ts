@@ -26,7 +26,7 @@ import type { GenericTask } from '../base-core/types.ts';
 import BaseGenerator from '../base-simple-application/index.ts';
 import { BOOTSTRAP_APPLICATION } from '../base-simple-application/priorities.ts';
 import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../base-simple-application/support/index.ts';
-import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
+import { JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
 import type GeneratorsByNamespace from '../types.ts';
 
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, QUEUES } from './priorities.ts';

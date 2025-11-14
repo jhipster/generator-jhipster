@@ -23,7 +23,7 @@ import * as _ from 'lodash-es';
 
 import { databaseTypes, entityOptions } from '../../lib/jhipster/index.ts';
 import { asWritingEntitiesTask } from '../base-application/support/task-type-inference.ts';
-import { SERVER_TEST_SRC_DIR } from '../generator-constants.js';
+import { SERVER_TEST_SRC_DIR } from '../generator-constants.ts';
 import {
   javaMainPackageTemplatesBlock,
   javaTestPackageTemplatesBlock,

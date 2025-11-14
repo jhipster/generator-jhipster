@@ -27,7 +27,7 @@ import type { Entity } from '../../lib/jhipster/types/entity.ts';
 import { getEntitiesFromDir } from '../base-application/support/index.ts';
 import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions } from '../base-core/index.ts';
 import BaseCoreGenerator from '../base-core/index.ts';
-import { JHIPSTER_CONFIG_DIR, YO_RC_FILE } from '../generator-constants.js';
+import { JHIPSTER_CONFIG_DIR, YO_RC_FILE } from '../generator-constants.ts';
 import { applicationsLookup } from '../workspaces/support/applications-lookup.ts';
 
 import { replaceSensitiveConfig } from './support/utils.ts';

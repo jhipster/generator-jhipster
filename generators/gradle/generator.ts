@@ -22,7 +22,7 @@ import assert from 'node:assert/strict';
 import { mutateData } from '../../lib/utils/index.ts';
 import { QUEUES } from '../base-core/priorities.ts';
 import BaseSimpleApplicationGenerator from '../base-simple-application/index.ts';
-import { GRADLE_BUILD_SRC_DIR } from '../generator-constants.js';
+import { GRADLE_BUILD_SRC_DIR } from '../generator-constants.ts';
 
 import { GRADLE } from './constants.ts';
 import files from './files.ts';

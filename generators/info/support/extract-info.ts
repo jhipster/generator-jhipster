@@ -1,5 +1,5 @@
 import { removeFieldsWithNullishValues } from '../../../lib/utils/index.ts';
-import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
+import { GENERATOR_JHIPSTER } from '../../generator-constants.ts';
 
 export type InfoFile = { filename: string; content: string; type: 'jdl' | 'yo-rc' | 'entity-jdl' | 'json' };
 

@@ -33,7 +33,7 @@ import { packageNameToNamespace } from '../../lib/utils/index.ts';
 import CoreGenerator from '../base-core/index.ts';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
 import type { GenericTask } from '../base-core/types.ts';
-import { GENERATOR_JHIPSTER } from '../generator-constants.js';
+import { GENERATOR_JHIPSTER } from '../generator-constants.ts';
 
 import { mergeBlueprints, normalizeBlueprintName, parseBlueprints } from './internal/index.ts';
 import {

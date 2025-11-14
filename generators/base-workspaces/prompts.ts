@@ -4,7 +4,7 @@ import { readdir } from 'node:fs/promises';
 import chalk from 'chalk';
 
 import { asPromptingTask } from '../base-application/support/index.ts';
-import { YO_RC_FILE } from '../generator-constants.js';
+import { YO_RC_FILE } from '../generator-constants.ts';
 
 import type BaseWorkspacesGenerator from './generator.ts';
 /**

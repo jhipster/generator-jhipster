@@ -37,7 +37,7 @@ import { editPropertiesFileCallback } from '../base-core/support/properties-file
 import type { Config as ClientConfig, Entity as ClientEntity } from '../client/types.ts';
 import type { Source as CommonSource } from '../common/types.ts';
 import type { Entity as CypressEntity } from '../cypress/types.ts';
-import { ADD_SPRING_MILESTONE_REPOSITORY } from '../generator-constants.js';
+import { ADD_SPRING_MILESTONE_REPOSITORY } from '../generator-constants.ts';
 import { addJavaImport, generateKeyStore, javaBeanCase } from '../java/support/index.ts';
 import { getPomVersionProperties, parseMavenPom } from '../maven/support/index.ts';
 import {

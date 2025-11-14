@@ -1,7 +1,7 @@
 import { it } from 'esmocha';
 
 import { matchWrittenConfig, matchWrittenFiles } from '../../../lib/testing/index.ts';
-import { JAVA_DOCKER_DIR } from '../../generator-constants.js';
+import { JAVA_DOCKER_DIR } from '../../generator-constants.ts';
 
 const expectedEurekaFiles = () => {
   return [

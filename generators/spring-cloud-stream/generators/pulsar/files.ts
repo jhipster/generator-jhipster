@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { asWriteFilesSection } from '../../../base-application/support/task-type-inference.ts';
-import { GRADLE_BUILD_SRC_MAIN_DIR, SERVER_TEST_SRC_DIR } from '../../../generator-constants.js';
+import { GRADLE_BUILD_SRC_MAIN_DIR, SERVER_TEST_SRC_DIR } from '../../../generator-constants.ts';
 import { moveToJavaPackageTestDir } from '../../../java/support/index.ts';
 
 export const pulsarFiles = asWriteFilesSection({

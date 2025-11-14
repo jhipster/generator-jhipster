@@ -47,7 +47,7 @@ import { packageJson } from '../../lib/index.ts';
 import { CRLF, LF, type Logger, hasCrlf, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.ts';
 import baseCommand from '../base/command.ts';
 import { dockerPlaceholderGenerator } from '../docker/utils.ts';
-import { GENERATOR_JHIPSTER } from '../generator-constants.js';
+import { GENERATOR_JHIPSTER } from '../generator-constants.ts';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.ts';
 import type GeneratorsByNamespace from '../types.ts';
 import type { GeneratorsWithBootstrap } from '../types.ts';

@@ -18,7 +18,7 @@
  */
 import { asWriteFilesSection } from '../base-application/support/task-type-inference.ts';
 import { clientRootTemplatesBlock } from '../client/support/index.ts';
-import { CLIENT_TEST_SRC_DIR } from '../generator-constants.js';
+import { CLIENT_TEST_SRC_DIR } from '../generator-constants.ts';
 
 const CYPRESS_TEMPLATE_SOURCE_DIR = `${CLIENT_TEST_SRC_DIR}cypress/`;
 

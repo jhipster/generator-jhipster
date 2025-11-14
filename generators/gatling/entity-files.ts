@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { asWriteEntityFilesSection, asWritingEntitiesTask } from '../base-application/support/task-type-inference.ts';
-import { TEST_DIR } from '../generator-constants.js';
+import { TEST_DIR } from '../generator-constants.ts';
 
 export const gatlingFiles = asWriteEntityFilesSection({
   gatlingFiles: [

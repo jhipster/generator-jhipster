@@ -9,7 +9,7 @@ import { Minimatch } from 'minimatch';
 import type { JDLApplicationConfig } from '../../../lib/jdl/core/types/parsing.ts';
 import { createImporterFromContent } from '../../../lib/jdl/jdl-importer.ts';
 import { mergeYoRcContent } from '../../../lib/utils/yo-rc.ts';
-import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
+import { GENERATOR_JHIPSTER } from '../../generator-constants.ts';
 
 export const importJDLTransform = ({
   destinationPath,

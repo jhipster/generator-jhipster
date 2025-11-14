@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { asWriteFilesSection, asWritingTask } from '../base-application/support/task-type-inference.ts';
-import { GRADLE_BUILD_SRC_MAIN_DIR, TEST_DIR } from '../generator-constants.js';
+import { GRADLE_BUILD_SRC_MAIN_DIR, TEST_DIR } from '../generator-constants.ts';
 
 const gatlingFiles = asWriteFilesSection({
   gatlingFiles: [

@@ -18,7 +18,7 @@
  */
 
 import { asWritingTask } from '../base-application/support/task-type-inference.ts';
-import { CLIENT_WEBPACK_DIR } from '../generator-constants.js';
+import { CLIENT_WEBPACK_DIR } from '../generator-constants.ts';
 
 import type { Application as AngularApplication, Entity as AngularEntity } from './types.d.ts';
 

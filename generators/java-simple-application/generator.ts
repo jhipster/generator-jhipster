@@ -20,7 +20,7 @@ import { isFileStateModified } from 'mem-fs-editor/state';
 
 import { normalizePathEnd } from '../../lib/utils/path.ts';
 import BaseSimpleApplicationGenerator from '../base-simple-application/index.ts';
-import { JAVA_COMPATIBLE_VERSIONS } from '../generator-constants.js';
+import { JAVA_COMPATIBLE_VERSIONS } from '../generator-constants.ts';
 import {
   checkJava,
   generatedAnnotationTransform,

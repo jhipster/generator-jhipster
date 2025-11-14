@@ -21,7 +21,7 @@ import { startCase } from 'lodash-es';
 import BaseApplicationGenerator from '../../../base-application/generator.ts';
 import { QUEUES } from '../../../base-application/priorities.ts';
 import { getEnumInfo } from '../../../base-application/support/enum.ts';
-import { CLIENT_MAIN_SRC_DIR } from '../../../generator-constants.js';
+import { CLIENT_MAIN_SRC_DIR } from '../../../generator-constants.ts';
 import { type Language, findLanguageForTag } from '../../../languages/support/languages.ts';
 import TranslationData, { createTranslationsFileFilter, createTranslationsFilter } from '../../../languages/translation-data.ts';
 import { ClientApplicationGenerator } from '../../generator.ts';

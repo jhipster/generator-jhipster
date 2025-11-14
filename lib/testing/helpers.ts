@@ -23,7 +23,7 @@ import type CoreGenerator from '../../generators/base-core/generator.ts';
 import type BaseCoreGenerator from '../../generators/base-core/index.ts';
 import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../../generators/base-simple-application/support/constants.ts';
 import type { PRIORITY_NAMES as WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.ts';
-import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.js';
+import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.ts';
 import type GeneratorsByNamespace from '../../generators/types.ts';
 import { getPackageRoot, getSourceRoot, isDistFolder } from '../index.ts';
 import { getDefaultJDLApplicationConfig } from '../jdl-config/jhipster-jdl-config.ts';

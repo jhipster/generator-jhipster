@@ -1,7 +1,7 @@
 import { lstat, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
-import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.js';
+import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.ts';
 import type { InfoFile } from '../../generators/info/support/extract-info.ts';
 import type { YoRcContent } from '../types/command-all.ts';
 import { mutateData } from '../utils/object.ts';
