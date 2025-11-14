@@ -21,7 +21,7 @@ export const foo = 'bar';
       setModifiedFileState(file);
       await pipeline(
         Readable.from([file]),
-        createESLintTransform(),
+        await createESLintTransform(),
         transform(() => undefined),
       );
       expect(file.contents.toString()).toBe(`
