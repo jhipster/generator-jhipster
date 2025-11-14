@@ -22,7 +22,7 @@ import { basename, resolve } from 'node:path';
 import { defaultHelpers as helpers, fromMatrix, result } from '../../../../lib/testing/index.ts';
 import type { ConfigAll } from '../../../../lib/types/command-all.ts';
 import { testBootstrapApplication } from '../../../../test/support/bootstrap-tests.ts';
-import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
+import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.ts';
 
 import Generator from './generator.ts';
 

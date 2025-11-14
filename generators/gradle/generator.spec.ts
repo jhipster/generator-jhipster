@@ -20,7 +20,7 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
-import { testBlueprintSupport } from '../../test/support/tests.js';
+import { testBlueprintSupport } from '../../test/support/tests.ts';
 import { GENERATOR_JHIPSTER } from '../generator-constants.js';
 
 const generator = basename(import.meta.dirname);

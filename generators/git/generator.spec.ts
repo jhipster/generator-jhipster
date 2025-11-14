@@ -21,7 +21,7 @@ import { access } from 'node:fs/promises';
 import { basename, resolve } from 'node:path';
 
 import { runResult, skipPrettierHelpers as helpers } from '../../lib/testing/index.ts';
-import { testBlueprintSupport } from '../../test/support/tests.js';
+import { testBlueprintSupport } from '../../test/support/tests.ts';
 
 const generator = basename(import.meta.dirname);
 

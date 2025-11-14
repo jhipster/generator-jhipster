@@ -21,7 +21,7 @@ import { basename, resolve } from 'node:path';
 
 import { databaseTypes } from '../../../../lib/jhipster/index.ts';
 import { buildServerSamples, defaultHelpers as helpers, entitiesSimple as entities, runResult } from '../../../../lib/testing/index.ts';
-import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
+import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.ts';
 import {
   filterBasicServerGenerators,
   shouldComposeWithLiquibase,

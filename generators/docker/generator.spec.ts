@@ -28,7 +28,7 @@ import {
   extendMatrix,
   runResult,
 } from '../../lib/testing/index.ts';
-import { shouldSupportFeatures } from '../../test/support/tests.js';
+import { shouldSupportFeatures } from '../../test/support/tests.ts';
 import { matchElasticSearchDocker } from '../spring-data/generators/elasticsearch/__test-support/elastic-search-matcher.ts';
 
 import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.ts';

@@ -20,7 +20,7 @@ import { before, beforeEach, describe, expect, it } from 'esmocha';
 import { basename, join } from 'node:path';
 
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
-import { basicTests, shouldSupportFeatures } from '../../test/support/tests.js';
+import { basicTests, shouldSupportFeatures } from '../../test/support/tests.ts';
 import { parseChangelog } from '../base/support/timestamp.ts';
 
 import Generator from './index.ts';

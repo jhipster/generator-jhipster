@@ -21,7 +21,7 @@ import { basename } from 'node:path';
 
 import { messageBrokerTypes } from '../../lib/jhipster/index.ts';
 import { buildSamplesFromMatrix, buildServerMatrix, defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
-import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
+import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.ts';
 
 import Generator from './index.ts';
 

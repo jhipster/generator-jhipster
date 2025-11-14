@@ -1,2 +1,2 @@
 export { default as checkEnforcements } from './check-enforcements.ts';
-export * from './tests.js';
+export * from './tests.ts';

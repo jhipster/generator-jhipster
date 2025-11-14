@@ -21,7 +21,7 @@ import { basename } from 'node:path';
 
 import EnvironmentBuilder from '../../cli/environment-builder.js';
 import { defaultHelpers as helpers } from '../../lib/testing/index.ts';
-import { shouldSupportFeatures } from '../../test/support/tests.js';
+import { shouldSupportFeatures } from '../../test/support/tests.ts';
 
 import Generator from './index.ts';
 
