@@ -1,46 +1,40 @@
 import axios from 'axios';
 
 export default class ConfigurationService {
-  loadConfiguration(): Promise<any> {
-    return new Promise(resolve => {
-      axios.get('management/configprops').then(res => {
-        const properties = [];
-        const propertiesObject = this.getConfigPropertiesObjects(res.data);
-        for (const key in propertiesObject) {
-          if (Object.hasOwn(propertiesObject, key)) {
-            properties.push(propertiesObject[key]);
-          }
-        }
+  async loadConfiguration(): Promise<any> {
+    const res = await axios.get('management/configprops');
+    const properties = [];
+    const propertiesObject = this.getConfigPropertiesObjects(res.data);
+    for (const key in propertiesObject) {
+      if (Object.hasOwn(propertiesObject, key)) {
+        properties.push(propertiesObject[key]);
+      }
+    }
 
-        properties.sort((propertyA, propertyB) => {
-          const comparePrefix = propertyA.prefix < propertyB.prefix ? -1 : 1;
-          return propertyA.prefix === propertyB.prefix ? 0 : comparePrefix;
-        });
-        resolve(properties);
-      });
+    properties.sort((propertyA, propertyB) => {
+      const comparePrefix = propertyA.prefix < propertyB.prefix ? -1 : 1;
+      return propertyA.prefix === propertyB.prefix ? 0 : comparePrefix;
     });
+    return properties;
   }
 
-  loadEnvConfiguration(): Promise<any> {
-    return new Promise(resolve => {
-      axios.get<any>('management/env').then(res => {
-        const properties = {};
-        const propertySources = res.data.propertySources;
+  async loadEnvConfiguration(): Promise<any> {
+    const res = await axios.get<any>('management/env');
+    const properties = {};
+    const propertySources = res.data.propertySources;
 
-        for (const propertyObject of propertySources) {
-          const name = propertyObject.name;
-          const detailProperties = propertyObject.properties;
-          const vals = [];
-          for (const keyDetail in detailProperties) {
-            if (Object.hasOwn(detailProperties, keyDetail)) {
-              vals.push({ key: keyDetail, val: detailProperties[keyDetail].value });
-            }
-          }
-          properties[name] = vals;
+    for (const propertyObject of propertySources) {
+      const name = propertyObject.name;
+      const detailProperties = propertyObject.properties;
+      const vals = [];
+      for (const keyDetail in detailProperties) {
+        if (Object.hasOwn(detailProperties, keyDetail)) {
+          vals.push({ key: keyDetail, val: detailProperties[keyDetail].value });
         }
-        resolve(properties);
-      });
-    });
+      }
+      properties[name] = vals;
+    }
+    return properties;
   }
 
   private getConfigPropertiesObjects(res): any {
