@@ -168,10 +168,9 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<
         if (!application.javaDependencies) {
           throw new Error('Some application fields are be mandatory');
         }
-        const { javaDependencies } = application;
-        const { cacheProvider, enableHibernateCache } = application as any;
+        const { javaDependencies, cacheProvider, enableHibernateCache } = application;
 
-        const definition = getCacheProviderMavenDefinition(cacheProvider, javaDependencies);
+        const definition = getCacheProviderMavenDefinition(cacheProvider!, javaDependencies);
         source.addJavaDefinitions?.(
           { gradleFile: 'buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle' },
           {

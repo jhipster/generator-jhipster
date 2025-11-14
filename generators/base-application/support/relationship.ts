@@ -98,7 +98,7 @@ export const loadEntitiesOtherSide = (
       relationship.otherEntity = otherEntity;
       const otherRelationship = findOtherRelationshipInRelationships(entity.name, relationship, otherEntity.relationships ?? []);
       if (otherRelationship) {
-        relationship.otherRelationship = otherRelationship as any;
+        relationship.otherRelationship = otherRelationship as RelationshipWithEntity<BaseApplicationRelationship, BaseApplicationEntity>;
         otherRelationship.otherEntityRelationshipName = otherRelationship.otherEntityRelationshipName ?? relationship.relationshipName;
         relationship.otherEntityRelationshipName = relationship.otherEntityRelationshipName ?? otherRelationship.relationshipName;
         if (
