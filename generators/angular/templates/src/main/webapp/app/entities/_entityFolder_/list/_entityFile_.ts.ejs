@@ -245,11 +245,7 @@ export class <%= componentName %> implements OnInit {
 
 <%_ } _%>
     load(): void {
-      this.queryBackend().subscribe({
-        next: (res: EntityArrayResponseType) => {
-          this.onResponseSuccess(res);
-        }
-      });
+      this.queryBackend().subscribe((res: EntityArrayResponseType) => this.onResponseSuccess(res));
     }
 
     navigateToWithComponentValues(event: SortState): void {
