@@ -102,7 +102,7 @@ export type PromptSpec = {
 
 type JHipsterArgumentConfig = SetOptional<ArgumentSpec, 'name'> & Partial<ScopedConfig>;
 
-type CliSpec = Omit<SetOptional<CliOptionSpec, 'name'>, 'storage'> & {
+export type CliSpec = Omit<SetOptional<CliOptionSpec, 'name'>, 'storage'> & {
   env?: string;
   /**
    * Imply other options.
@@ -134,6 +134,7 @@ export type ConfigSpec<ConfigContext> = {
 } & ScopedConfig;
 
 export type JHipsterArguments = Record<string, JHipsterArgumentConfig>;
+export type JHipsterArgumentsWithChoices = Record<string, JHipsterArgumentConfig & { choices?: JHipsterChoices }>;
 
 export type JHipsterConfig<ConfigContext = any> = RequireAtLeastOne<
   ConfigSpec<ConfigContext>,
