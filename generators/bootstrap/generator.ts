@@ -191,7 +191,7 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
       if (!this.skipEslint) {
         prettierTransforms.push(
           await createESLintTransform.call(this, { ignoreErrors }),
-          createRemoveUnusedImportsTransform.call(this, { ignoreErrors }),
+          await createRemoveUnusedImportsTransform.call(this, { ignoreErrors }),
         );
       }
       prettierTransforms.push(
