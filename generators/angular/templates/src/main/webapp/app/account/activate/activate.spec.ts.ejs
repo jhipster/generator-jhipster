@@ -59,7 +59,7 @@ describe('Activate', () => {
     expect(service.get).toHaveBeenCalledWith('ABC123');
   }));
 
-  it('should set set success to true upon successful activation', inject([ActivateService], (service: ActivateService) => {
+  it('should set success to true upon successful activation', inject([ActivateService], (service: ActivateService) => {
     <%= clientTestFramework %>.spyOn(service, 'get').mockReturnValue(of({}));
 
     comp.ngOnInit();
@@ -68,7 +68,7 @@ describe('Activate', () => {
     expect(comp.success()).toBe(true);
   }));
 
-  it('should set set error to true upon activation failure', inject([ActivateService], (service: ActivateService) => {
+  it('should set error to true upon activation failure', inject([ActivateService], (service: ActivateService) => {
     <%= clientTestFramework %>.spyOn(service, 'get').mockReturnValue(throwError(Error));
 
     comp.ngOnInit();
