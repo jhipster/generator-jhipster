@@ -579,6 +579,7 @@ exports[`generator - app with default config should match snapshot 1`] = `
   },
   "javaIntegrationTestExclude": [],
   "javaManagedProperties": {},
+  "javaMinVersion": "17",
   "javaNodeBuildPaths": [
     "angular.json",
     "build-plugins/",
@@ -1264,6 +1265,7 @@ exports[`generator - app with gateway should match snapshot 1`] = `
   },
   "javaIntegrationTestExclude": [],
   "javaManagedProperties": {},
+  "javaMinVersion": "17",
   "javaNodeBuildPaths": [
     "angular.json",
     "build-plugins/",
@@ -1943,6 +1945,7 @@ exports[`generator - app with microservice should match snapshot 1`] = `
   },
   "javaIntegrationTestExclude": [],
   "javaManagedProperties": {},
+  "javaMinVersion": "17",
   "javaNodeBuildPaths": [],
   "javaPackageSrcDir": "src/main/java/com/mycompany/myapp/",
   "javaPackageTestDir": "src/test/java/com/mycompany/myapp/",

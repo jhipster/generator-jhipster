@@ -86,11 +86,7 @@ task integrationTest(type: Test) {
     // ignoreFailures true
     reports.html.required = false
 <%_ if (reactive) { _%>
-    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
-        jvmArgs += [
-            "-XX:+AllowRedefinitionToAddDeleteMethods"
-        ]
-    }
+    jvmArgs += ["-XX:+AllowRedefinitionToAddDeleteMethods"]
 <%_ } _%>
 }
 integrationTest.dependsOn(test)

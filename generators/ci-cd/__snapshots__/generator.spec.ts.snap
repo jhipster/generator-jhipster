@@ -214,6 +214,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "javaDependencies": Any<Object>,
   "javaIntegrationTestExclude": [],
   "javaManagedProperties": {},
+  "javaMinVersion": "17",
   "javaNodeBuildPaths": [],
   "javaPackageSrcDir": "src/main/java/com/mycompany/myapp/",
   "javaPackageTestDir": "src/test/java/com/mycompany/myapp/",

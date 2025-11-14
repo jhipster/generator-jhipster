@@ -32,8 +32,8 @@ description = ""
 
 <%_ if (backendTypeJavaAny) { _%>
 java {
-    sourceCompatibility=<%= javaVersion %>
-    targetCompatibility=<%= javaVersion %>
+    sourceCompatibility=<%= javaMinVersion %>
+    targetCompatibility=<%= javaMinVersion %>
 }
 assert System.properties["java.specification.version"] == <%- javaCompatibleVersions.map(ver => `"${ver}"`).join(' || '); %>
 <%_ } _%>
@@ -134,11 +134,7 @@ test {
     reports.html.required = false
 <%_ if (reactive) { _%>
 
-    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
-        jvmArgs += [
-            "-XX:+AllowRedefinitionToAddDeleteMethods"
-        ]
-    }
+    jvmArgs += ["-XX:+AllowRedefinitionToAddDeleteMethods"]
 <%_ } _%>
 }
 
