@@ -106,7 +106,7 @@ export default () => next => action => {
         if (problem?.fieldErrors) {
           getFieldErrorsToasts(problem.fieldErrors).forEach(message => addErrorAlert(message));
         } else {
-          const { error: toastError<% if (enableTranslation) { %>, param<% } %> } = getMessageFromHeaders((response.headers as any) ?? {});
+          const { error: toastError<% if (enableTranslation) { %>, param<% } %> } = getMessageFromHeaders(response.headers ?? {});
           if (toastError) {
 <%_ if (enableTranslation) { _%>
             const entityName = translate('global.menu.entities.' + param);
