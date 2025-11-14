@@ -10,7 +10,7 @@ import {
   extendMatrix,
   runResult,
 } from '../../../../lib/testing/index.ts';
-import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
+import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.ts';
 import Generator from '../../../server/index.ts';
 
 const generator = `${basename(resolve(import.meta.dirname, '../../'))}:${basename(import.meta.dirname)}`;

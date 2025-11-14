@@ -20,7 +20,7 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
 import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
-import { getCommandHelpOutput, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.js';
+import { getCommandHelpOutput, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.ts';
 
 import Generator from './index.ts';
 

@@ -39,7 +39,7 @@ import type {
 export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEntity, HerokuApplication, HerokuConfig, HerokuOptions> {
   hasHerokuCli!: boolean;
 
-  herokuAppName!: string;
+  herokuAppName?: string;
   herokuDeployType!: string;
   herokuJavaVersion!: string;
   herokuRegion!: string;
@@ -127,7 +127,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
           });
           if (exitCode !== 0) {
             this.log.error(`Could not find application: ${chalk.cyan(this.jhipsterConfig.herokuAppName)}`);
-            this.herokuAppName = undefined as any;
+            this.herokuAppName = undefined;
             throw new Error('Run the generator again to create a new application.');
           } else {
             const json = JSON.parse(stdout);
@@ -271,7 +271,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
         const regionParams = this.herokuRegion !== 'us' ? ['--region', this.herokuRegion] : [];
 
         this.log.log(chalk.bold('\nCreating Heroku application and setting up Node environment'));
-        const { stdout, stderr, exitCode } = await this.spawnHeroku(['create', this.herokuAppName, ...regionParams]);
+        const { stdout, stderr, exitCode } = await this.spawnHeroku(['create', this.herokuAppName!, ...regionParams]);
 
         if (stdout.includes('Heroku credentials')) {
           throw new Error("Error: Not authenticated. Run 'heroku login' to log in to your Heroku account and try again.");
@@ -299,13 +299,13 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
               },
             ]);
             if (props.herokuForceName === 'Yes') {
-              await this.spawnHeroku(['git:remote', '--app', this.herokuAppName], { reject: true });
+              await this.spawnHeroku(['git:remote', '--app', this.herokuAppName!], { reject: true });
             } else {
               const { stdout } = await this.spawnHeroku(['create', ...regionParams]);
               // Extract from "Created random-app-name-1234... done"
               this.herokuAppName = stdout.substring(stdout.lastIndexOf('/') + 1, stdout.indexOf('.git'));
               // ensure that the git remote is the same as the appName
-              await this.spawnHeroku(['git:remote', '--app', this.herokuAppName]);
+              await this.spawnHeroku(['git:remote', '--app', this.herokuAppName!]);
               this.jhipsterConfig.herokuAppName = this.herokuAppName;
             }
           } else if (stderr.includes('Invalid credentials')) {
@@ -328,7 +328,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
             '--as',
             'BONSAI',
             '--app',
-            this.herokuAppName,
+            this.herokuAppName!,
           ])) as { stdout: string; stderr: string };
           this.checkAddOnReturn({ addOn: 'Elasticsearch', stdout, stderr });
         }
@@ -350,7 +350,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
             '--as',
             'DATABASE',
             '--app',
-            this.herokuAppName,
+            this.herokuAppName!,
           ])) as { stdout: string; stderr: string };
           this.checkAddOnReturn({ addOn: 'Database', stdout, stderr });
         } else {
@@ -367,7 +367,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
         if (cacheAddOn) {
           this.log.log(chalk.bold(`\nProvisioning cache addon '${cacheAddOn}'`));
 
-          const { stdout, stderr } = (await this.spawn('heroku', ['addons:create', ...cacheAddOn, '--app', this.herokuAppName])) as {
+          const { stdout, stderr } = (await this.spawn('heroku', ['addons:create', ...cacheAddOn, '--app', this.herokuAppName!])) as {
             stdout: string;
             stderr: string;
           };
@@ -404,7 +404,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
         const herokuJHipsterRegistryUsername = encodeURIComponent(answers.herokuJHipsterRegistryUsername);
         const herokuJHipsterRegistryPassword = encodeURIComponent(answers.herokuJHipsterRegistryPassword);
         const herokuJHipsterRegistry = `https://${herokuJHipsterRegistryUsername}:${herokuJHipsterRegistryPassword}@${answers.herokuJHipsterRegistryApp}.herokuapp.com`;
-        const configSetCmd = ['config:set', 'JHIPSTER_REGISTRY_URL', herokuJHipsterRegistry, '--app', this.herokuAppName];
+        const configSetCmd = ['config:set', 'JHIPSTER_REGISTRY_URL', herokuJHipsterRegistry, '--app', this.herokuAppName!];
         await this.spawnHeroku(configSetCmd, { stdio: 'pipe' });
       },
     });
@@ -491,14 +491,14 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
             }
 
             this.log.log(chalk.bold('\nConfiguring Heroku'));
-            const { stdout: configData } = await this.spawnHeroku(['config:get', configName, '--app', this.herokuAppName]);
+            const { stdout: configData } = await this.spawnHeroku(['config:get', configName, '--app', this.herokuAppName!]);
             if (!configData) {
-              await this.spawnHeroku(['config:set', `${configName}=${configValues}`, '--app', this.herokuAppName]);
+              await this.spawnHeroku(['config:set', `${configName}=${configValues}`, '--app', this.herokuAppName!]);
             }
 
-            const { stdout: buildpackData } = await this.spawnHeroku(['buildpacks', '--app', this.herokuAppName]);
+            const { stdout: buildpackData } = await this.spawnHeroku(['buildpacks', '--app', this.herokuAppName!]);
             if (!(buildpackData as string).includes(buildpack)) {
-              await this.spawnHeroku(['buildpacks:add', buildpack, '--app', this.herokuAppName]);
+              await this.spawnHeroku(['buildpacks:add', buildpack, '--app', this.herokuAppName!]);
             }
 
             this.log.log(chalk.bold('\nDeploying application...'));
@@ -527,7 +527,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
             ),
           );
           try {
-            await this.spawnHeroku(['deploy:jar', jarFile, '--app', this.herokuAppName], { stdio: 'pipe' });
+            await this.spawnHeroku(['deploy:jar', jarFile, '--app', this.herokuAppName!], { stdio: 'pipe' });
             await this.spawnHerokuCommand('buildpacks:set heroku/jvm', { stdio: 'pipe' });
             this.log.log(chalk.green(`\nYour app should now be live. To view it run\n\t${chalk.bold('heroku open')}`));
             this.log.log(chalk.yellow(`And you can view the logs with this command\n\t${chalk.bold('heroku logs --tail')}`));

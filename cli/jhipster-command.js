@@ -48,7 +48,7 @@ export default class JHipsterCommand extends Command {
   /**
    * Register a callback to be executed before _parseCommand.
    * Used to lazy load options.
-   * @param {(this: JHipsterCommand, args: string | string[]) => Promise<void>} lazyBuildCommandCallBack
+   * @param {(this: JHipsterCommand, args?: string | string[]) => Promise<void>} lazyBuildCommandCallBack
    * @return {JHipsterCommand} this;
    */
   lazyBuildCommand(lazyBuildCommandCallBack) {

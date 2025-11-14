@@ -20,7 +20,7 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
 import { defaultHelpers as helpers, result } from '../../lib/testing/index.ts';
-import { basicTests, getCommandHelpOutput, testBlueprintSupport } from '../../test/support/tests.js';
+import { basicTests, getCommandHelpOutput, testBlueprintSupport } from '../../test/support/tests.ts';
 
 import { defaultConfig, requiredConfig } from './config.ts';
 

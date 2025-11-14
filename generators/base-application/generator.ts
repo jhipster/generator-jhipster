@@ -412,7 +412,7 @@ export default class BaseApplicationGenerator<
     seed = `${this.#application.baseName}-${seed}`;
     this.log.debug(`Resetting entities seed with '${seed}'`);
     for (const entity of this.#entities.values()) {
-      (entity as any).resetFakerSeed?.(seed);
+      (entity as Entity).resetFakerSeed?.(seed);
     }
   }
 

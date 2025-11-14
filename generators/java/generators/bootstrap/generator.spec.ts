@@ -21,7 +21,7 @@ import { basename, resolve } from 'node:path';
 
 import { defaultHelpers as helpers, result } from '../../../../lib/testing/index.ts';
 import { testBootstrapEntities } from '../../../../test/support/bootstrap-tests.ts';
-import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
+import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.ts';
 
 import Generator from './generator.ts';
 

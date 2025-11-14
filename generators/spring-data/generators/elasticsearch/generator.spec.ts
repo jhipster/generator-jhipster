@@ -29,7 +29,7 @@ import {
   extendMatrix,
   runResult,
 } from '../../../../lib/testing/index.ts';
-import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.js';
+import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.ts';
 import { filterBasicServerGenerators, shouldComposeWithSpringCloudStream } from '../../../server/__test-support/index.ts';
 
 import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.ts';

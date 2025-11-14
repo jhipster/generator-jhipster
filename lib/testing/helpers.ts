@@ -20,6 +20,7 @@ import type BaseApplicationGenerator from '../../generators/base-application/gen
 import type { PRIORITY_NAMES as APPLICATION_PRIORITY_NAMES } from '../../generators/base-application/priorities.ts';
 import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY } from '../../generators/base-application/support/constants.ts';
 import type CoreGenerator from '../../generators/base-core/generator.ts';
+import type BaseCoreGenerator from '../../generators/base-core/index.ts';
 import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../../generators/base-simple-application/support/constants.ts';
 import type { PRIORITY_NAMES as WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.ts';
 import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.js';
@@ -34,7 +35,6 @@ import { createJHipsterLogger, normalizePathEnd } from '../utils/index.ts';
 
 import getGenerator, { getGeneratorRelativeFolder } from './get-generator.ts';
 
-type GeneratorTestType = YeomanGenerator<OptionsAll>;
 type GeneratorTestOptions = OptionsAll;
 type WithJHipsterGenerators = {
   /**
@@ -224,7 +224,7 @@ const commonTestOptions = {
   skipForks: true,
 };
 
-class JHipsterRunContext extends RunContext<GeneratorTestType> {
+class JHipsterRunContext extends RunContext<BaseCoreGenerator> {
   public sharedSource!: Record<string, any>;
   private sharedApplication!: Record<string, any>;
   private workspaceApplications: string[] = [];
@@ -443,7 +443,7 @@ plugins {
     return this;
   }
 
-  async run(): Promise<RunResult<GeneratorTestType>> {
+  async run(): Promise<RunResult<BaseCoreGenerator>> {
     const runResult = (await super.run()) as unknown as JHipsterRunResult;
     if (this.sharedSource) {
       // Convert big objects to an identifier to avoid big snapshot and serialization issues.
