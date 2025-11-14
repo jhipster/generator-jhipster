@@ -21,51 +21,42 @@ import { isFileStateModified } from 'mem-fs-editor/state';
 import { Minimatch } from 'minimatch';
 import { passthrough } from 'p-transform';
 import { Piscina } from 'piscina';
-import type { Options as PrettierOptions } from 'prettier';
 
+import { isDistFolder } from '../../../lib/index.ts';
 import type CoreGenerator from '../../base-core/index.ts';
+
+import type prettierWorker from './prettier-worker.ts';
 
 const minimatch = new Minimatch('**/{.prettierrc**,.prettierignore}');
 export const isPrettierConfigFilePath = (filePath: string) => minimatch.match(filePath);
 
-type PrettierWorkerOptions = {
-  prettierPackageJson?: boolean;
-  prettierJava?: boolean;
-  prettierProperties?: boolean;
-  prettierOptions?: PrettierOptions;
-};
-
-export class PrettierPool extends Piscina {
-  constructor(options = {}) {
-    super({
-      maxThreads: 1,
-      filename: new URL('./prettier-worker.js', import.meta.url).href,
-      ...options,
-    });
-  }
-
-  apply(
-    data: PrettierWorkerOptions & { relativeFilePath: string; filePath: string; fileContents: string },
-  ): Promise<{ result?: string; errorMessage?: string }> {
-    return this.run(data);
-  }
-}
+const supportsTsFiles = parseInt(process.versions.node.split('.')[0]) >= 22;
+const useTsFile = !isDistFolder();
 
 export const createPrettierTransform = async function (
   this: CoreGenerator,
-  options: PrettierWorkerOptions & { ignoreErrors?: boolean; extensions?: string; skipForks?: boolean } = {},
+  options: Omit<Parameters<typeof prettierWorker>[0], 'relativeFilePath' | 'filePath' | 'fileContents'> & {
+    ignoreErrors?: boolean;
+    extensions?: string;
+    skipForks?: boolean;
+  } = {},
 ) {
   const { ignoreErrors = false, extensions = '*', skipForks, ...workerOptions } = options;
   const globExpression = extensions.includes(',') ? `**/*.{${extensions}}` : `**/*.${extensions}`;
   const minimatch = new Minimatch(globExpression, { dot: true });
 
-  let applyPrettier: (data: any) => Promise<{ result?: string; errorMessage?: string }>;
-  const pool = skipForks ? undefined : new PrettierPool();
-  if (skipForks) {
-    const { default: applyPrettierWorker } = await import('./prettier-worker.js');
+  let applyPrettier: typeof prettierWorker;
+  let pool: Piscina | undefined;
+  if (skipForks || (useTsFile && !supportsTsFiles)) {
+    const { default: applyPrettierWorker } = await import('./prettier-worker.ts');
     applyPrettier = applyPrettierWorker;
   } else {
-    applyPrettier = data => pool!.apply(data);
+    pool = new Piscina<Parameters<typeof prettierWorker>[0], Awaited<ReturnType<typeof prettierWorker>>>({
+      maxThreads: 1,
+      filename: new URL(`./prettier-worker.${useTsFile ? 'ts' : 'js'}`, import.meta.url).href,
+      ...options,
+    });
+    applyPrettier = pool!.run.bind(pool!);
   }
 
   return passthrough(
@@ -76,20 +67,20 @@ export const createPrettierTransform = async function (
       if (!file.contents) {
         throw new Error(`File content doesn't exist for ${file.relative}`);
       }
-      const { result, errorMessage } = await applyPrettier({
+      const result = await applyPrettier({
         relativeFilePath: file.relative,
         filePath: file.path,
         fileContents: file.contents.toString('utf8'),
         ...workerOptions,
       });
-      if (result) {
-        file.contents = Buffer.from(result);
+      if ('result' in result) {
+        file.contents = Buffer.from(result.result);
       }
-      if (errorMessage) {
+      if ('errorMessage' in result) {
         if (!ignoreErrors) {
-          throw new Error(errorMessage);
+          throw new Error(result.errorMessage);
         }
-        this?.log?.warn?.(errorMessage);
+        this?.log?.warn?.(result.errorMessage);
       }
     },
     async () => {
