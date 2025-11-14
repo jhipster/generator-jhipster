@@ -10,7 +10,7 @@ import { getJDLObjectFromSingleApplication } from '../../../lib/jdl/converters/j
 import { createRuntime } from '../../../lib/jdl/core/runtime.ts';
 import type { JDLApplicationConfig } from '../../../lib/jdl/core/types/parsing.ts';
 import type { Entity } from '../../../lib/jhipster/types/entity.ts';
-import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
+import { GENERATOR_JHIPSTER } from '../../generator-constants.ts';
 
 export const exportJDLTransform = ({
   destinationPath,

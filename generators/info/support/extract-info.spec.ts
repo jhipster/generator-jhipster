@@ -2,7 +2,7 @@ import { describe, expect } from 'esmocha';
 import { readFile } from 'node:fs/promises';
 
 import { getPackageRoot } from '../../../lib/index.ts';
-import { YO_RC_FILE } from '../../generator-constants.js';
+import { YO_RC_FILE } from '../../generator-constants.ts';
 
 import { extractDataFromInfo } from './extract-info.ts';
 import { markdownDetails } from './markdown-content.ts';

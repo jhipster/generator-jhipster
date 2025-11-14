@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
-import { CLIENT_MAIN_SRC_DIR, RECOMMENDED_NODE_VERSION } from '../generator-constants.js';
+import { CLIENT_MAIN_SRC_DIR, RECOMMENDED_NODE_VERSION } from '../generator-constants.ts';
 
 import type { Application as JavascriptSimpleApplicationApplication } from './types.ts';
 

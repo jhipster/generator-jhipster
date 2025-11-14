@@ -27,7 +27,7 @@ import { ResetMode } from 'simple-git';
 import EnvironmentBuilder from '../../cli/environment-builder.js';
 import { packageJson } from '../../lib/index.ts';
 import BaseGenerator from '../base/index.ts';
-import { SERVER_MAIN_RES_DIR } from '../generator-constants.js';
+import { SERVER_MAIN_RES_DIR } from '../generator-constants.ts';
 import type { Config as ProjectNameConfig } from '../project-name/types.d.ts';
 
 import { GIT_VERSION_NOT_ALLOW_MERGE_UNRELATED_HISTORIES, UPGRADE_BRANCH } from './support/index.ts';

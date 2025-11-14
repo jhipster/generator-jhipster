@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.js';
+import { GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.ts';
 import { JavaApplicationGenerator } from '../../../java/generator.ts';
 
 export default class GradleJibGenerator extends JavaApplicationGenerator {

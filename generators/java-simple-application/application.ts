@@ -28,7 +28,7 @@ import {
   SERVER_MAIN_SRC_DIR,
   SERVER_TEST_RES_DIR,
   SERVER_TEST_SRC_DIR,
-} from '../generator-constants.js';
+} from '../generator-constants.ts';
 import { getMainClassName } from '../java/support/util.ts';
 
 import { GRAALVM_REACHABILITY_METADATA } from './generators/graalvm/internal/constants.ts';

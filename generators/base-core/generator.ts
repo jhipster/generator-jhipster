@@ -47,7 +47,7 @@ import { packageJson } from '../../lib/index.ts';
 import { CRLF, LF, type Logger, hasCrlf, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.ts';
 import baseCommand from '../base/command.ts';
 import { dockerPlaceholderGenerator } from '../docker/utils.ts';
-import { GENERATOR_JHIPSTER } from '../generator-constants.js';
+import { GENERATOR_JHIPSTER } from '../generator-constants.ts';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.ts';
 import type GeneratorsByNamespace from '../types.ts';
 import type { GeneratorsWithBootstrap } from '../types.ts';
@@ -498,10 +498,10 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       const envName = configDesc.cli?.env;
       // Hidden options are test options, which doesn't rely on commander for options parsing.
       // We must parse environment variables manually
-      if ((this.options as Record<string, any>)[name] === undefined && envName && process.env[envName]) {
+      if ((this.options as Record<string, any>)[name!] === undefined && envName && process.env[envName]) {
         optionValue = process.env[envName];
       } else {
-        optionValue = (this.options as Record<string, any>)[name];
+        optionValue = (this.options as Record<string, any>)[name!];
       }
       if (optionValue !== undefined) {
         optionValue = type !== Array && type !== Function ? type(optionValue) : optionValue;

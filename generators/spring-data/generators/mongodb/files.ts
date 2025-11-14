@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { asWriteFilesSection, asWritingTask } from '../../../base-application/support/task-type-inference.ts';
-import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../../../generator-constants.js';
+import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../../../generator-constants.ts';
 import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../../../java/support/index.ts';
 import type { Application as JavaApplication } from '../../../java/types.ts';
 

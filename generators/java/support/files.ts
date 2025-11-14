@@ -19,7 +19,7 @@
 
 import type { WriteFileBlock, WriteFileSection } from '../../base-core/api.ts';
 import type CoreGenerator from '../../base-core/generator.ts';
-import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_RES_DIR, SERVER_TEST_SRC_DIR } from '../../generator-constants.js';
+import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_RES_DIR, SERVER_TEST_SRC_DIR } from '../../generator-constants.ts';
 import type { Application as JavaApplication, Entity as JavaEntity } from '../types.ts';
 
 export const replaceEntityFilePathVariables = (data: any, filePath: string) => {

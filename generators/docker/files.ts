@@ -1,6 +1,6 @@
 import { asWriteFilesSection } from '../base-application/support/task-type-inference.ts';
 import { clientRootTemplatesBlock } from '../client/support/files.ts';
-import { TEMPLATES_DOCKER_DIR } from '../generator-constants.js';
+import { TEMPLATES_DOCKER_DIR } from '../generator-constants.ts';
 
 import type { Application as DockerApplication } from './types.ts';
 

@@ -33,7 +33,7 @@ import { packageNameToNamespace } from '../lib/utils/index.ts';
 
 import SUB_GENERATORS from './commands.ts';
 import EnvironmentBuilder from './environment-builder.js';
-import JHipsterCommand from './jhipster-command.js';
+import JHipsterCommand from './jhipster-command.ts';
 import logo from './logo.ts';
 import type { CliCommand } from './types.ts';
 import { CLI_NAME, done, getCommand, logger } from './utils.ts';
@@ -267,7 +267,7 @@ export const buildCommands = ({
       .addCommandOptions(commandOptions)
       .addHelpText('after', commandHelp!)
       .addAlias(alias!)
-      .excessArgumentsCallback(function (this, receivedArgs) {
+      .excessArgumentsCallback(function (this: JHipsterCommand, receivedArgs: string[]) {
         rejectExtraArgs({ program, command: this, extraArgs: receivedArgs });
       })
       .lazyBuildCommand(async function (this, operands = []) {

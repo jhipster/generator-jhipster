@@ -4,12 +4,12 @@ import { existsSync } from 'node:fs';
 import sinon from 'sinon';
 
 import { buildJHipster } from '../../cli/index.ts';
-import type JHipsterCommand from '../../cli/jhipster-command.js';
+import type JHipsterCommand from '../../cli/jhipster-command.ts';
 import { ENTITY_PRIORITY_NAMES, PRIORITY_NAMES, PRIORITY_NAMES_LIST } from '../../generators/base-application/priorities.ts';
 import type CoreGenerator from '../../generators/base-core/index.ts';
 import { CONTEXT_DATA_APPLICATION_KEY } from '../../generators/base-simple-application/support/constants.ts';
 import { WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.ts';
-import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.js';
+import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.ts';
 import { getGenerator, runResult, skipPrettierHelpers as helpers } from '../../lib/testing/index.ts';
 
 const workspacesPriorityList = Object.values(WORKSPACES_PRIORITY_NAMES);

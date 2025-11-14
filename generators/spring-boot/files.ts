@@ -18,7 +18,7 @@
  */
 import { asWriteFilesSection } from '../base-application/support/task-type-inference.ts';
 import { addSectionsCondition, mergeSections } from '../base-core/support/index.ts';
-import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_RES_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.js';
+import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_RES_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.ts';
 import {
   javaMainPackageTemplatesBlock,
   moveToJavaPackageSrcDir,

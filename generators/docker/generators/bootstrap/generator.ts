@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import BaseSimpleApplicationGenerator from '../../../base-simple-application/index.ts';
-import { JAVA_DOCKER_DIR } from '../../../generator-constants.js';
+import { JAVA_DOCKER_DIR } from '../../../generator-constants.ts';
 import type {
   Application as DockerApplication,
   Config as DockerConfig,

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
+import { GENERATOR_JHIPSTER } from '../../generator-constants.ts';
 
 export const replaceSensitiveConfig = (yoRc: any) => ({
   ...yoRc,

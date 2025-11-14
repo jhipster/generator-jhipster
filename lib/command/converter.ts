@@ -1,14 +1,11 @@
 import type {
+  CliSpec,
   CommandConfigDefault,
   CommandConfigScope,
-  CommandConfigType,
   ConfigSpec,
-  JHipsterArguments,
-  JHipsterChoices,
+  JHipsterArgumentsWithChoices,
   JHipsterConfigs,
 } from './types.ts';
-
-type JHipsterArgumentsWithChoices = JHipsterArguments & { choices?: JHipsterChoices };
 
 export const extractArgumentsFromConfigs = (configs: JHipsterConfigs | undefined): JHipsterArgumentsWithChoices => {
   if (!configs) return {};
@@ -27,19 +24,13 @@ export const extractArgumentsFromConfigs = (configs: JHipsterConfigs | undefined
   ) as JHipsterArgumentsWithChoices;
 };
 
-export const convertConfigToOption = <const T extends ConfigSpec<any>>(
-  name: string,
-  config: T,
-):
-  | {
-      name: string;
-      description?: string;
-      choices?: string[];
-      type?: CommandConfigType;
-      scope: CommandConfigScope;
-      default?: CommandConfigDefault<any>;
-    }
-  | undefined => {
+export type JHipsterCommandOptions = CliSpec & {
+  choices?: string[];
+  scope: CommandConfigScope;
+  default?: CommandConfigDefault<any>;
+};
+
+export const convertConfigToOption = <const T extends ConfigSpec<any>>(name: string, config: T): JHipsterCommandOptions | undefined => {
   const { cli } = config;
   const type = cli?.type ?? config.internal?.type;
   if (!type && config?.internal) return undefined;
@@ -52,6 +43,6 @@ export const convertConfigToOption = <const T extends ConfigSpec<any>>(
     description: config.description ?? cli?.description,
     choices,
     scope: config.scope,
-    type,
+    type: type!,
   };
 };

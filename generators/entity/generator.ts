@@ -28,7 +28,7 @@ import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../l
 import { reservedKeywords } from '../../lib/jhipster/index.ts';
 import type { Features } from '../base/types.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
-import { JHIPSTER_CONFIG_DIR } from '../generator-constants.js';
+import { JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
 import { getDBTypeFromDBValue, hibernateSnakeCase } from '../server/support/index.ts';
 
 import {

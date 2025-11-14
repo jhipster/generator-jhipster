@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import type { Source as CommonSource } from '../../../common/types.d.ts';
-import { GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.js';
+import { GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.ts';
 import { JavaApplicationGenerator } from '../../../java/generator.ts';
 
 export default class CodeQualityGenerator extends JavaApplicationGenerator {

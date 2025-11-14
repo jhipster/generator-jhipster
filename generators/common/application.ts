@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
-import { LOGIN_REGEX, MAIN_DIR, TEST_DIR } from '../generator-constants.js';
+import { LOGIN_REGEX, MAIN_DIR, TEST_DIR } from '../generator-constants.ts';
 
 import type { Application as CommonApplication } from './types.ts';
 

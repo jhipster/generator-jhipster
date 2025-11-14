@@ -7,7 +7,7 @@ import { Minimatch } from 'minimatch';
 import normalizePath from 'normalize-path';
 import { transform } from 'p-transform';
 
-import { GENERATOR_JHIPSTER } from '../../generator-constants.js';
+import { GENERATOR_JHIPSTER } from '../../generator-constants.ts';
 
 export const updateApplicationEntitiesTransform = ({
   destinationPath,

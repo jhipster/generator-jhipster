@@ -30,7 +30,7 @@ import BaseGenerator, { CommandBaseGenerator } from '../base/index.ts';
 import type { Features as BaseFeatures, Options as BaseOptions } from '../base/types.d.ts';
 import { PRIORITY_NAMES, QUEUES } from '../base-application/priorities.ts';
 import { createNeedleTransform } from '../base-core/support/needles.ts';
-import { PRETTIER_EXTENSIONS } from '../generator-constants.js';
+import { PRETTIER_EXTENSIONS } from '../generator-constants.ts';
 
 import type command from './command.ts';
 import {

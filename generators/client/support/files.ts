@@ -1,6 +1,6 @@
 import type { WriteFileBlock } from '../../base-core/api.ts';
 import type CoreGenerator from '../../base-core/index.ts';
-import { CLIENT_MAIN_SRC_DIR } from '../../generator-constants.js';
+import { CLIENT_MAIN_SRC_DIR } from '../../generator-constants.ts';
 import type { Application as ClientApplication } from '../types.ts';
 
 export const replaceEntityFilePath = (data: any, filepath: string) =>

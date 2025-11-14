@@ -24,7 +24,7 @@ export {
   SERVER_TEST_SRC_DIR as JAVA_TEST_SOURCES_DIR,
   SERVER_TEST_SRC_DIR as TEMPLATES_TEST_SOURCES_DIR,
   TEMPLATES_DOCKER_DIR,
-} from './generator-constants.js';
+} from './generator-constants.ts';
 
 export * from './type-utils.ts';
 

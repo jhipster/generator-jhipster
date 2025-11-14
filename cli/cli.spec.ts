@@ -11,7 +11,7 @@ import type FullEnvironment from 'yeoman-environment';
 
 import { createBlueprintFiles, defaultHelpers as helpers } from '../lib/testing/index.ts';
 
-import type JHipsterCommand from './jhipster-command.js';
+import type JHipsterCommand from './jhipster-command.ts';
 import { createProgram } from './program.ts';
 import type { CliCommand } from './types.ts';
 import { getCommand as actualGetCommand } from './utils.ts';
@@ -278,11 +278,11 @@ describe('cli', () => {
         options: [
           {
             option: '--foo',
-            description: 'Foo',
+            desc: 'Foo',
           },
           {
             option: '--foo-bar',
-            description: 'Foo bar',
+            desc: 'Foo bar',
           },
         ],
       };

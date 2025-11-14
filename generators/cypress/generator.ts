@@ -23,7 +23,7 @@ import BaseApplicationGenerator from '../base-application/index.ts';
 import { createFaker } from '../base-application/support/index.ts';
 import { generateTestEntity } from '../client/support/index.ts';
 import type { Source as ClientSource } from '../client/types.ts';
-import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.js';
+import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.ts';
 import type { Source as JavaSource } from '../java/types.d.ts';
 
 import { cypressEntityFiles, cypressFiles } from './files.ts';

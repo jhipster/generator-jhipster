@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../../../generator-constants.js';
+import { SERVER_MAIN_RES_DIR, SERVER_TEST_RES_DIR } from '../../../generator-constants.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
 
 export default class I18NGenerator extends JavaApplicationGenerator {

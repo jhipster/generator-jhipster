@@ -27,7 +27,7 @@ runs:
   using: composite
   steps:
     - run: |
-        echo "java-version=$(grep -o "JAVA_VERSION = '[^']*'" ${{ github.workspace }}/${{ inputs.generator-path }}/generators/generator-constants.js | cut -f2 -d "'")" >> $GITHUB_OUTPUT
+        echo "java-version=$(grep -o "JAVA_VERSION = '[^']*'" ${{ github.workspace }}/${{ inputs.generator-path }}/generators/generator-constants.ts | cut -f2 -d "'")" >> $GITHUB_OUTPUT
         echo "node-version=$(cat ${{ github.workspace }}/${{ inputs.generator-path }}/generators/init/resources/.node-version)" >> $GITHUB_OUTPUT
         echo "npm-version=$(grep -o '"npm": "[^"]*"' ${{ github.workspace }}/${{ inputs.generator-path }}/generators/common/resources/package.json | cut -f4 -d '"')" >> $GITHUB_OUTPUT
       shell: bash

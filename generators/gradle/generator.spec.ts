@@ -21,7 +21,7 @@ import { basename } from 'node:path';
 
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { testBlueprintSupport } from '../../test/support/tests.ts';
-import { GENERATOR_JHIPSTER } from '../generator-constants.js';
+import { GENERATOR_JHIPSTER } from '../generator-constants.ts';
 
 const generator = basename(import.meta.dirname);
 
