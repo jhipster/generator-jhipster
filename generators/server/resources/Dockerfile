@@ -10,7 +10,7 @@ LABEL ALIAS=jhipster-control-center
 FROM jhipster/consul-config-loader:v0.4.1
 LABEL ALIAS=consul-config-loader
 
-FROM postgres:18.0
+FROM postgres:18.1
 LABEL ALIAS=postgresql
 
 FROM quay.io/keycloak/keycloak:26.4.5
