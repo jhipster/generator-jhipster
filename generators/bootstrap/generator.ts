@@ -190,8 +190,8 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
       const ignoreErrors = this.options.ignoreErrors || this.upgradeCommand;
       if (!this.skipEslint) {
         prettierTransforms.push(
-          createESLintTransform.call(this, { ignoreErrors }),
-          createRemoveUnusedImportsTransform.call(this, { ignoreErrors }),
+          await createESLintTransform.call(this, { ignoreErrors }),
+          await createRemoveUnusedImportsTransform.call(this, { ignoreErrors }),
         );
       }
       prettierTransforms.push(
