@@ -169,7 +169,7 @@ export const cleanupEntitiesFiles = asWritingEntitiesTask<AngularEntity, Angular
       this.removeFile(`${application.clientSrcDir}/app/entities/${entityFolderName}/${entityFileName}-update.html`);
       this.removeFile(`${application.clientSrcDir}/app/shared/model/${entity.entityModelFileName}.model.ts`);
       entity.fields.forEach(field => {
-        if (field.fieldIsEnum === true) {
+        if (field.fieldIsEnum) {
           const { enumFileName } = field;
           this.removeFile(`${application.clientSrcDir}/app/shared/model/enumerations/${enumFileName}.model.ts`);
         }

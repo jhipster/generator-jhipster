@@ -50,7 +50,7 @@ export default class GatewayGenerator extends BaseApplicationGenerator<
     return this.asConfiguringTaskGroup({
       reactiveByDefault() {
         this.jhipsterConfig.reactive = this.jhipsterConfig.reactive ?? true;
-        if (this.jhipsterConfig.reactive === false) {
+        if (!this.jhipsterConfig.reactive) {
           const message = 'Spring Cloud Gateway MVC support is experimental and not officially supported.';
           if (!this.experimental) {
             throw new Error(`${message} To use it, run the generator with the --experimental flag.`);
