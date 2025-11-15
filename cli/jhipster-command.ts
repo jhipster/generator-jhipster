@@ -138,29 +138,6 @@ export default class JHipsterCommand extends Command {
     return this.addOption(new Option(opt.option, opt.desc + additionalDescription).default(opt.default));
   }
 
-  /**
-   * Register arguments using generator._arguments structure.
-   */
-  addGeneratorArguments(generatorArgs: Array<{ name: string; description?: string; required?: boolean; type?: unknown }> = []): this {
-    if (!generatorArgs) return this;
-    generatorArgs.forEach(argument => {
-      let argName = argument.type === Array ? `${argument.name}...` : argument.name;
-      argName = argument.required ? `<${argName}>` : `[${argName}]`;
-      this.argument(argName, argument.description);
-    });
-    return this;
-  }
-
-  /**
-   * Register options using generator._options structure.
-   */
-  addGeneratorOptions(options: Record<string, JHipsterCommandOptions>, blueprintOptionDescription?: string): this {
-    Object.entries(options ?? {}).forEach(([key, value]) => {
-      this._addGeneratorOption(key, value, blueprintOptionDescription);
-    });
-    return this;
-  }
-
   addJHipsterArguments(jhipsterArguments?: JHipsterArgumentsWithChoices): this {
     Object.entries(jhipsterArguments ?? {}).forEach(([key, value]) => {
       let argName = value.type === Array ? `${key}...` : key;

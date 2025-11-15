@@ -161,10 +161,6 @@ export type JHipsterCommandDefinition<ConfigContext = BaseCoreGenerator> = {
    * Override options from the generator been blueprinted.
    */
   readonly override?: boolean;
-  /**
-   * Load old options definition (yeoman's `this.options()`) from the generator.
-   */
-  readonly loadGeneratorOptions?: boolean;
 };
 
 /**
