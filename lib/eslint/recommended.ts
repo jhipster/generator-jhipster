@@ -1,8 +1,8 @@
+import type { ConfigObject } from '@eslint/core';
 import js from '@eslint/js';
 
-import baseConfig from './base.js';
+import baseConfig from './base.ts';
 
-/** @type {import('typescript-eslint').ConfigWithExtends} */
 const recommended = {
   languageOptions: {
     ecmaVersion: 2022,
@@ -21,6 +21,6 @@ const recommended = {
     ...js.configs.recommended.rules,
     ...baseConfig.rules,
   },
-};
+} as const satisfies ConfigObject;
 
 export default recommended;

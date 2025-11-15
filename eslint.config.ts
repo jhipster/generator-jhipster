@@ -1,6 +1,7 @@
 import js from '@eslint/js';
-import type { Linter } from 'eslint';
+import { type Config, defineConfig } from 'eslint/config';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
+// @ts-ignore: missing types
 import chai from 'eslint-plugin-chai-friendly';
 import imports from 'eslint-plugin-import-x';
 import n from 'eslint-plugin-n';
@@ -8,9 +9,9 @@ import prettier from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 import ts from 'typescript-eslint';
 
-import jhipster from './lib/eslint/index.js';
+import jhipster from './lib/eslint/index.ts';
 
-const config: Linter.Config[] = [
+export default defineConfig(
   {
     languageOptions: {
       ecmaVersion: 2022,
@@ -22,7 +23,7 @@ const config: Linter.Config[] = [
   },
   { ignores: ['dist'] },
   js.configs.recommended,
-  jhipster.base as Linter.Config,
+  jhipster.base,
   {
     plugins: { n },
     rules: {
@@ -60,8 +61,8 @@ const config: Linter.Config[] = [
     },
   },
   {
-    ...(imports.flatConfigs.recommended as Linter.Config),
-    ...(imports.flatConfigs.typescript as Linter.Config),
+    ...(imports.flatConfigs.recommended as Config),
+    ...(imports.flatConfigs.typescript as Config),
     languageOptions: {
       // import plugin does not use ecmaVersion and sourceType from languageOptions object
       parserOptions: {
@@ -106,10 +107,8 @@ const config: Linter.Config[] = [
     },
   },
   {
-    ...(chai.configs.recommendedFlat as Linter.Config),
+    ...(chai.configs.recommendedFlat as Config),
     files: ['jdl/**/*.spec.{js,ts}'],
   },
   prettier,
-];
-
-export default config;
+);

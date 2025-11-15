@@ -119,6 +119,7 @@
     "update-snapshots": "esmocha test generators cli .blueprint lib/jdl lib --forbid-only --update-snapshot --enable-source-maps"
   },
   "dependencies": {
+    "@eslint/core": "0.17.0",
     "@eslint/js": "9.39.1",
     "@faker-js/faker": "10.1.0",
     "@iarna/toml": "3.0.0",
@@ -174,7 +175,6 @@
     "yeoman-generator": "^8.0.0-beta.6"
   },
   "devDependencies": {
-    "@eslint/core": "1.0.0",
     "@node-loaders/esbuild": "2.0.0",
     "@types/chai": "5.2.3",
     "@types/debug": "4.1.12",
