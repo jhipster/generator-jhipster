@@ -1,4 +1,7 @@
+import type { ConfigObject } from '@eslint/core';
+
 import base from './base.ts';
 import recommended from './recommended.ts';
 
-export default { recommended, base };
+const config: { recommended: ConfigObject; base: ConfigObject } = { recommended, base };
+export default config;

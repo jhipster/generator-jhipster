@@ -3,7 +3,7 @@ import js from '@eslint/js';
 
 import baseConfig from './base.ts';
 
-const recommended = {
+const recommended: ConfigObject = {
   languageOptions: {
     ecmaVersion: 2022,
     sourceType: 'module',
@@ -21,6 +21,6 @@ const recommended = {
     ...js.configs.recommended.rules,
     ...baseConfig.rules,
   },
-} as const satisfies ConfigObject;
+};
 
 export default recommended;
