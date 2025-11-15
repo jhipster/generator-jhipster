@@ -20,7 +20,6 @@ import { before, describe, esmocha, expect, it } from 'esmocha';
 import test from 'node:test';
 
 import { basicHelpers as helpers } from '../../../lib/testing/helpers.ts';
-import { createJHipsterLogger } from '../../../lib/utils/index.ts';
 
 import {
   checkContentIn,
