@@ -138,4 +138,4 @@ This will allow creating a modular implementation.
 
 ## Implementation
 
-Modular needle will be implemented at JHipster 7 keeping api stability and exposing the needles at generator-base.
+Modular needle will be implemented in JHipster 7 keeping api stability and exposing the needles at generator-base.
