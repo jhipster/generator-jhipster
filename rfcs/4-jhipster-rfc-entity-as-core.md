@@ -16,7 +16,7 @@ This RFC proposes to implement entities as JHipster core feature instead of gene
 
 [motivation]: #motivation
 
-With JHipster 8 modular proposal, entity related generators would multiply and become a development problem due to generator dependencies order. Probably inviable. A solution for this issue must be implemented.
+With JHipster 8 modular proposal, entity related generators would multiply and become a development problem due to generator dependencies order. Probably not viable. A solution for this issue must be implemented.
 
 Another reason is that JHipster has too many generators, this will allow a more concise workflow.
 
