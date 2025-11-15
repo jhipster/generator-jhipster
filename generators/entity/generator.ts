@@ -334,7 +334,7 @@ The entity ${entityName} is being created.
     if (entityName === '') {
       return 'The entity name cannot be empty';
     }
-    if (entityName.indexOf('Detail', entityName.length - 'Detail'.length) !== -1) {
+    if (entityName.endsWith('Detail')) {
       return "The entity name cannot end with 'Detail'";
     }
     if (!this.entityData.skipServer && isReservedClassName(entityName)) {
