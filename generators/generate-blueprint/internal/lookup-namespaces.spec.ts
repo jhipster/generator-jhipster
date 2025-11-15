@@ -18,11 +18,11 @@
  */
 import { describe, expect, it } from 'esmocha';
 
-import { getGeneratorNamespaces } from './index.ts';
+import { lookupGeneratorsNamespaces } from './lookup-namespaces.ts';
 
-describe('getGeneratorNamespaces', () => {
+describe('lookupGeneratorsNamespaces', () => {
   it('should return the correct generator namespaces', () => {
-    expect(getGeneratorNamespaces()).toMatchInlineSnapshot(`
+    expect(lookupGeneratorsNamespaces()).toMatchInlineSnapshot(`
 [
   "angular",
   "angular:bootstrap",

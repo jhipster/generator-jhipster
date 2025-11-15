@@ -22,7 +22,7 @@ import chalk from 'chalk';
 import { camelCase, snakeCase, upperFirst } from 'lodash-es';
 import type { Storage } from 'yeoman-generator';
 
-import { getGeneratorNamespaces, getPackageRoot } from '../../lib/index.ts';
+import { getPackageRoot } from '../../lib/index.ts';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base-core/priorities.ts';
 import BaseSimpleApplicationGenerator from '../base-simple-application/index.ts';
 import { BLUEPRINT_API_VERSION } from '../generator-constants.ts';
@@ -41,6 +41,7 @@ import {
   subGeneratorPrompts,
 } from './constants.ts';
 import { files, generatorFiles } from './files.ts';
+import { lookupGeneratorsNamespaces } from './internal/lookup-namespaces.ts';
 import type {
   Application as GenerateBlueprintApplication,
   Config as GenerateBlueprintConfig,
@@ -243,7 +244,7 @@ export default class extends BaseSimpleApplicationGenerator<
               constant: `${snakeCase(priority).toUpperCase()}`,
             }),
           );
-          const customGenerator = !getGeneratorNamespaces().includes(generator);
+          const customGenerator = !lookupGeneratorsNamespaces().includes(generator);
           const jhipsterGenerator = customGenerator || subGeneratorConfig.sbs ? 'base-application' : generator;
           const subTemplateData = {
             ...application,
