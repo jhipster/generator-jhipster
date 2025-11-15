@@ -39,7 +39,7 @@ We have priorities to be used on entity generators.
 
 Those generators and priorities will be replaced by entity focused priorities and internal methods to support the workflow. Some entity related generators may be kept for more specific purpose like prompts.
 
-Planed priorities include:
+Planned priorities include:
 
 - `configuringEachEntity`: priority to manipulate entities config.
 - `preparingEachEntity`: priority to create derived properties for entities to be used by the templates.
