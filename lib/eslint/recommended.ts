@@ -1,5 +1,5 @@
+import type { ConfigObject } from '@eslint/core';
 import js from '@eslint/js';
-import type { Config } from 'eslint/config';
 
 import baseConfig from './base.ts';
 
@@ -21,6 +21,6 @@ const recommended = {
     ...js.configs.recommended.rules,
     ...baseConfig.rules,
   },
-} as const satisfies Config;
+} as const satisfies ConfigObject;
 
 export default recommended;

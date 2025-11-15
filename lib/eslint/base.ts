@@ -1,4 +1,4 @@
-import type { Config } from 'eslint/config';
+import type { ConfigObject } from '@eslint/core';
 import imports from 'eslint-plugin-import-x';
 import unusedImports from 'eslint-plugin-unused-imports';
 
@@ -58,6 +58,6 @@ const baseConfig = {
       },
     ],
   },
-} as const satisfies Config;
+} as const satisfies ConfigObject;
 
 export default baseConfig;
