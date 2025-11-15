@@ -55,6 +55,15 @@ export function languageToJavaLanguage(language: string): string {
   return languageSnakeCase(languageUpperCaseCountry(language));
 }
 
+/**
+ * Convert a language tag to faker exported name.
+ * @param language
+ * @returns
+ */
+export function languageToFakerLanguage(language: string): string {
+  return languageSnakeCase(languageUpperCaseCountry(language));
+}
+
 const languageToFakerjsLanguage = (languageTag: string): string => languageUpperCaseCountry(languageTag);
 
 const languageToAngularLanguage = (languageTag: string): string => languageUpperCaseCountry(languageTag);
