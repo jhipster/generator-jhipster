@@ -27,7 +27,7 @@ export function customCamelCase(string: string): string {
 }
 
 function checkStringIsValid(string: string) {
-  if (string === undefined || string === null) {
+  if (string == null) {
     throw new Error('The passed string cannot be nil.');
   }
 }
