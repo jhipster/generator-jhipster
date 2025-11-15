@@ -189,6 +189,11 @@ export const createProgram = ({
       .option('--install-path', 'Show jhipster install path', false)
       .option('--skip-regenerate', "Don't regenerate identical files", false)
       .option('--skip-yo-resolve', 'Ignore .yo-resolve files', false)
+      // Yeoman Generator options
+      .option('--skip-cache', 'Do not remember prompt answers', false)
+      .option('--skip-install', 'Do not automatically install dependencies', false)
+      .option('--force-install', 'Fail on install dependencies error', false)
+      .option('--ask-answered', 'Show prompts for already configured options', false)
       .addJHipsterConfigs(baseCommand.configs)
   );
 };
