@@ -1,5 +1,4 @@
 import js from '@eslint/js';
-import type { Linter } from 'eslint';
 import { type Config, defineConfig } from 'eslint/config';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 // @ts-ignore: missing types
@@ -62,8 +61,8 @@ export default defineConfig(
     },
   },
   {
-    ...(imports.flatConfigs.recommended as Linter.Config),
-    ...(imports.flatConfigs.typescript as Linter.Config),
+    ...(imports.flatConfigs.recommended as Config),
+    ...(imports.flatConfigs.typescript as Config),
     languageOptions: {
       // import plugin does not use ecmaVersion and sourceType from languageOptions object
       parserOptions: {
