@@ -24,7 +24,8 @@ describe('generator - base - support - timestamp', () => {
   describe('::parseChangelog', () => {
     describe('when not passing parameters', () => {
       it('throws', () => {
-        expect(() => parseChangelog(undefined as any)).toThrow(/^changelogDate is required\.$/);
+        // @ts-expect-error testing invalid argument
+        expect(() => parseChangelog(undefined)).toThrow(/^changelogDate is required\.$/);
       });
     });
     describe('when passing a number', () => {
