@@ -32,7 +32,7 @@ import { buildJDLApplicationConfig } from '../lib/jdl-config/jhipster-jdl-config
 import { packageNameToNamespace } from '../lib/utils/index.ts';
 
 import SUB_GENERATORS from './commands.ts';
-import EnvironmentBuilder from './environment-builder.js';
+import EnvironmentBuilder from './environment-builder.ts';
 import JHipsterCommand from './jhipster-command.ts';
 import logo from './logo.ts';
 import type { CliCommand } from './types.ts';
@@ -405,14 +405,7 @@ export const buildJHipster = async ({
   env,
   ...buildOptions
 }: BuildJHipsterOptions = {}) => {
-  createEnvBuilder =
-    createEnvBuilder ??
-    (async options =>
-      EnvironmentBuilder.create(options).prepare({ blueprints, lookups, devBlueprintPath } as {
-        blueprints?: typeof blueprints;
-        lookups?: typeof lookups;
-        devBlueprintPath?: string;
-      }));
+  createEnvBuilder ??= async options => EnvironmentBuilder.create(options).prepare({ blueprints, lookups, devBlueprintPath });
   if (!env) {
     envBuilder = envBuilder ?? (await createEnvBuilder());
     env = env ?? envBuilder.getEnvironment();

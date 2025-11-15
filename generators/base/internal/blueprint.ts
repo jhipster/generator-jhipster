@@ -18,7 +18,7 @@
  */
 import { requireNamespace } from '@yeoman/namespace';
 
-type Blueprint = {
+export type Blueprint = {
   name: string;
   version?: string;
 };

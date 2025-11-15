@@ -26,7 +26,7 @@ import sinon from 'sinon';
 
 import { createBlueprintFiles, defaultHelpers as helpers } from '../lib/testing/index.ts';
 
-import EnvironmentBuilder from './environment-builder.js';
+import EnvironmentBuilder from './environment-builder.ts';
 
 const cliBlueprintFiles = {
   'cli/commands.js': `export default {
@@ -125,11 +125,8 @@ describe('cli - EnvironmentBuilder', () => {
     beforeEach(async () => {
       await helpers.prepareTemporaryDir();
       createSpy = sinon.spy(EnvironmentBuilder, 'create');
-      // @ts-expect-error
       _lookupJHipsterSpy = sinon.spy(EnvironmentBuilder.prototype, '_lookupJHipster');
-      // @ts-expect-error
       _loadBlueprintsSpy = sinon.spy(EnvironmentBuilder.prototype, '_loadBlueprints');
-      // @ts-expect-error
       _lookupBlueprintsSpy = sinon.spy(EnvironmentBuilder.prototype, '_lookupBlueprints');
       // Use localOnly to lookup at local node_modules only to improve lookup speed.
       await EnvironmentBuilder.createDefaultBuilder();

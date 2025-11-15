@@ -11,7 +11,7 @@ import type Environment from 'yeoman-environment';
 import { RunContext, YeomanTest, result } from 'yeoman-test';
 import type { RunContextSettings, RunResult } from 'yeoman-test';
 
-import EnvironmentBuilder from '../../cli/environment-builder.js';
+import EnvironmentBuilder from '../../cli/environment-builder.ts';
 import { buildJHipster, createProgram } from '../../cli/program.ts';
 import type { CliCommand } from '../../cli/types.ts';
 import BaseGenerator from '../../generators/base/index.ts';
