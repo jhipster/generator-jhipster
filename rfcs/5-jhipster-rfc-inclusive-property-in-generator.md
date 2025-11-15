@@ -26,7 +26,7 @@ Basically, options should always be inclusive and follow this simple rules:
 - If the option is not defined by the end user: we'll take a reasonable default.
 - If the option is specified, we'll take the decision of the end user.
 
-For example, let say that we want to remove the jhipster `skipClient` option in the jdl syntax by an option that would be compliant with this spec:
+For example, let's say that we want to remove the jhipster `skipClient` option in the jdl syntax by an option that would be compliant with this spec:
 
 - A JDL `application`, defined without any `generateClient` attribute declaration will generate a frontend for that app (use of reasonable default).
 - A JDL `application`, defined with any `generateClient` attribute declaration will take the end user's choice into consideration (if `generateClient: false` is set, the frontend won't be generated.
