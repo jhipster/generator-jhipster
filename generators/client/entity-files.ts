@@ -27,7 +27,7 @@ export async function addEnumerationFiles(
   { application, entity }: { application: ClientApplication; entity: ClientEntity },
 ) {
   for (const field of entity.fields) {
-    if (field.fieldIsEnum === true) {
+    if (field.fieldIsEnum) {
       const { enumFileName } = field;
       const enumInfo = {
         ...getEnumInfo(field, entity.clientRootFolder),

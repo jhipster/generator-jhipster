@@ -882,7 +882,7 @@ function logFieldsAndRelationships(this: EntityGenerator) {
     this.entityConfig.fields.forEach(field => {
       const validationDetails: string[] = [];
       const fieldValidate = isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
-      if (fieldValidate === true) {
+      if (fieldValidate) {
         if (field.fieldValidateRules!.includes(REQUIRED)) {
           validationDetails.push(REQUIRED);
         }
