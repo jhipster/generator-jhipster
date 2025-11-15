@@ -92,8 +92,8 @@ describe(`generator - ${generator}`, () => {
           const adminUiRoutingTitle = generateAdminUi ? 'should generate admin routing' : 'should not generate admin routing';
           const cypressAdminRoot = clientRootDir ? `${clientRootDir}test/` : 'src/test/javascript/';
           it(adminUiRoutingTitle, () => {
-            const assertion = (...args: any[]) =>
-              generateAdminUi ? (runResult.assertFileContent as any)(...args) : (runResult.assertNoFileContent as any)(...args);
+            const assertion = (...args: [string, string | RegExp]) =>
+              generateAdminUi ? runResult.assertFileContent(...args) : runResult.assertNoFileContent(...args);
 
             assertion(
               `${cypressAdminRoot}cypress/e2e/administration/administration.cy.ts`,
