@@ -186,13 +186,16 @@ describe('cli', () => {
           description: 'Foo bar',
         },
       };
-      env.run = esmocha.fn<typeof env.run>((...args) => {
+      const runSpy = esmocha.spyOn(env, 'run');
+      runSpy.mockImplementation((...args) => {
         runArgs = args;
         return Promise.resolve();
       });
-      env.composeWith = esmocha.fn<typeof env.composeWith>() as any;
+      const composeWithSpy = esmocha.spyOn(env, 'composeWith');
+      composeWithSpy.mockImplementation(async () => undefined as any);
       const originalGetGeneratorMeta = env.getGeneratorMeta.bind(env);
-      env.getGeneratorMeta = esmocha.fn((namespace: any): GeneratorMeta | undefined => {
+      const getGeneratorMetaSpy = esmocha.spyOn(env, 'getGeneratorMeta');
+      getGeneratorMetaSpy.mockImplementation((namespace: string): GeneratorMeta | undefined => {
         if (namespace === 'jhipster:mocked') {
           return {
             namespace,

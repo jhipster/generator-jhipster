@@ -19,8 +19,7 @@ import { parseCreationTimestamp } from '../../generators/base/support/index.ts';
 import type BaseApplicationGenerator from '../../generators/base-application/generator.ts';
 import type { PRIORITY_NAMES as APPLICATION_PRIORITY_NAMES } from '../../generators/base-application/priorities.ts';
 import { CONTEXT_DATA_APPLICATION_ENTITIES_KEY } from '../../generators/base-application/support/constants.ts';
-import type CoreGenerator from '../../generators/base-core/generator.ts';
-import type BaseCoreGenerator from '../../generators/base-core/index.ts';
+import BaseCoreGenerator from '../../generators/base-core/index.ts';
 import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../../generators/base-simple-application/support/constants.ts';
 import type { PRIORITY_NAMES as WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.ts';
 import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.ts';
@@ -59,7 +58,7 @@ type RunJHipster = WithJHipsterGenerators & {
   useEnvironmentBuilder?: boolean;
 };
 
-type JHipsterRunResult<GeneratorType extends CoreGenerator = CoreGenerator> = Omit<RunResult<GeneratorType>, 'env'> & {
+type JHipsterRunResult<GeneratorType extends BaseCoreGenerator = BaseCoreGenerator> = Omit<RunResult<GeneratorType>, 'env'> & {
   env: Environment;
 
   /**
@@ -89,6 +88,8 @@ type HelpersDefaults = {
 
 const runResult = result as JHipsterRunResult<BaseApplicationGenerator>;
 const coreRunResult = result as JHipsterRunResult;
+
+export const resultWithGenerator = <T extends BaseCoreGenerator>(): JHipsterRunResult<T> => runResult as unknown as JHipsterRunResult<T>;
 
 export { coreRunResult, runResult, runResult as result };
 
@@ -495,7 +496,7 @@ plugins {
     priorityName:
       | (typeof APPLICATION_PRIORITY_NAMES)[keyof typeof APPLICATION_PRIORITY_NAMES]
       | (typeof WORKSPACES_PRIORITY_NAMES)[keyof typeof WORKSPACES_PRIORITY_NAMES],
-    method: (this: CoreGenerator, ...args: any[]) => any,
+    method: (this: BaseCoreGenerator, ...args: any[]) => any,
   ): this {
     return this.onGenerator(async gen => {
       const generator = gen as BaseApplicationGenerator;
@@ -595,7 +596,7 @@ class JHipsterTest extends YeomanTest {
     return context.withEnvironmentRun(async function (this, env) {
       // Customize program to throw an error instead of exiting the process on cli parse error.
       const program = createProgram().exitOverride();
-      await buildJHipster({ program, env: env as any, silent: true, ...buildJHipsterOptions });
+      await buildJHipster({ program, env: env as Environment, silent: true, ...buildJHipsterOptions });
       await program.parseAsync(['jhipster', 'jhipster', ...(Array.isArray(command) ? command : command.split(' '))]);
       // Put the rootGenerator in context to be used in result assertions.
       this.generator = env.rootGenerator();
@@ -677,6 +678,13 @@ class JHipsterTest extends YeomanTest {
         generateWith: 'docker',
         skipPriorities: ['prompting'],
       });
+  }
+
+  async instantiateDummyBaseCoreGenerator(): Promise<BaseCoreGenerator> {
+    return new (this.createDummyGenerator(BaseCoreGenerator as any))([], {
+      namespace: 'dummy:generator',
+      env: await this.createTestEnv(),
+    }) as BaseCoreGenerator;
   }
 }
 

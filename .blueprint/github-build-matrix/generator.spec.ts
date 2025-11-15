@@ -1,12 +1,13 @@
 import { before, describe, expect, it } from 'esmocha';
 import { basename, join } from 'node:path';
 
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
+import { defaultHelpers as helpers, resultWithGenerator } from '../../lib/testing/index.ts';
 import { shouldSupportFeatures } from '../../test/support/index.ts';
 
 import { workflowChoices } from './command.ts';
 import Generator from './generator.ts';
 
+const runResult = resultWithGenerator<Generator>();
 const generator = basename(import.meta.dirname);
 
 describe(`generator - ${generator}`, () => {
@@ -19,10 +20,10 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should set workflow value', () => {
-        expect((runResult.generator as any).workflow).toBe(workflow);
+        expect(runResult.generator.workflow).toBe(workflow);
       });
       it('should match matrix value', () => {
-        expect((runResult.generator as any).matrix).toMatchSnapshot();
+        expect(runResult.generator.matrix).toMatchSnapshot();
       });
     });
   }

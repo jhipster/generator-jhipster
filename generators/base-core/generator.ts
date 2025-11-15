@@ -430,7 +430,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     if (!generatorCommand.configs) {
       throw new Error(`Configs not found for generator ${this.options.namespace}`);
     }
-    return this.prompt(this.#prepareQuestions(generatorCommand.configs) as any);
+    return this.prompt(this.#prepareQuestions(generatorCommand.configs));
   }
 
   /**
@@ -578,7 +578,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     this.options.positionalArguments = [];
   }
 
-  #prepareQuestions(configs: JHipsterConfigs = {}) {
+  #prepareQuestions(configs: JHipsterConfigs = {}): Parameters<CoreGenerator['prompt']>[0] {
     return Object.entries(configs)
       .filter(([_name, def]) => def?.prompt)
       .map(([name, def]) => {
@@ -611,7 +611,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
           ...promptSpec,
           storage,
         };
-      });
+      }) as Parameters<CoreGenerator['prompt']>[0];
   }
 
   get #jhipsterGeneratorRelativePath(): string {

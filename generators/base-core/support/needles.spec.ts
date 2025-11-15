@@ -16,9 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { beforeEach, describe, esmocha, expect, it } from 'esmocha';
+import { before, describe, esmocha, expect, it } from 'esmocha';
 import test from 'node:test';
 
+import { basicHelpers as helpers } from '../../../lib/testing/helpers.ts';
 import { createJHipsterLogger } from '../../../lib/utils/index.ts';
 
 import {
@@ -265,6 +266,11 @@ ${needlePrefix} jhipster-needle-a-needle"
   describe('createNeedleCallback', () => {
     const needle = 'a-needle';
     const contentToAdd = 'content to add';
+    let gen: Awaited<ReturnType<typeof helpers.instantiateDummyBaseCoreGenerator>>;
+
+    before(async () => {
+      gen = await helpers.instantiateDummyBaseCoreGenerator();
+    });
 
     it('should throw without needle', () => {
       // @ts-expect-error
@@ -283,36 +289,32 @@ ${needlePrefix} jhipster-needle-a-needle"
     it('returned function should throw on missing content', () => {
       const needleCallback = createNeedleCallback({ contentToAdd, needle });
       // @ts-expect-error invalid params
-      expect(() => needleCallback.call({ log() {} })).toThrow(/content is required/);
+      expect(() => needleCallback.call(gen)).toThrow(/content is required/);
     });
 
     it('returned function should throw on missing needle', () => {
-      const log = test.mock.fn(createJHipsterLogger());
       const needleCallback = createNeedleCallback({ contentToAdd, needle });
       // @ts-expect-error invalid params
-      expect(() => needleCallback.call({ log } as any, 'no needle')).toThrow(/Missing required jhipster-needle/);
+      expect(() => needleCallback.call(gen, 'no needle')).toThrow(/Missing required jhipster-needle/);
     });
 
     it('returned function should not throw on optional missing needle', () => {
       const content = 'no needle';
-      const log = test.mock.fn(createJHipsterLogger());
       const needleCallback = createNeedleCallback({ contentToAdd, needle, optional: true });
-      expect(needleCallback.call({ log } as any, content, 'file')).toBe(content);
+      expect(needleCallback.call(gen, content, 'file')).toBe(content);
     });
 
     it('returned function should add contentToAdd', () => {
-      const log = test.mock.fn(createJHipsterLogger());
       const needleCallback = createNeedleCallback({ contentToAdd, needle });
-      expect(needleCallback.call({ log } as any, `// jhipster-needle-${needle}`, 'file')).toMatchInlineSnapshot(`
+      expect(needleCallback.call(gen, `// jhipster-needle-${needle}`, 'file')).toMatchInlineSnapshot(`
 "content to add
 // jhipster-needle-a-needle"
 `);
     });
 
     it('returned function should add contentToAdd array', () => {
-      const log = test.mock.fn(createJHipsterLogger());
       const needleCallback = createNeedleCallback({ contentToAdd: [contentToAdd, `${contentToAdd}2`], needle });
-      expect(needleCallback.call({ log } as any, `// jhipster-needle-${needle}`, 'any-file')).toMatchInlineSnapshot(`
+      expect(needleCallback.call(gen, `// jhipster-needle-${needle}`, 'any-file')).toMatchInlineSnapshot(`
 "content to add
 content to add2
 // jhipster-needle-a-needle"
@@ -320,7 +322,6 @@ content to add2
     });
 
     it('returned function should add contentToAdd array of objects', () => {
-      const log = test.mock.fn(createJHipsterLogger());
       const needleCallback = createNeedleCallback({
         contentToAdd: [
           { content: contentToAdd },
@@ -332,7 +333,7 @@ content to add2
       });
       expect(
         needleCallback.call(
-          { log } as any,
+          gen,
           `existing content
 another existing
 // jhipster-needle-${needle}`,
@@ -348,11 +349,10 @@ content to add2
     });
 
     it('contentToAdd should be called', () => {
-      const log = test.mock.fn(createJHipsterLogger());
       const contentToAdd = test.mock.fn((_arg0: string, _arg1: any) => 'result content');
       const needleCallback = createNeedleCallback({ contentToAdd, needle });
       const content = `  // jhipster-needle-${needle}`;
-      expect(needleCallback.call({ log } as any, content, 'file')).toMatchInlineSnapshot(`"result content"`);
+      expect(needleCallback.call(gen, content, 'file')).toMatchInlineSnapshot(`"result content"`);
       expect(contentToAdd.mock.callCount()).toBe(1);
       expect(contentToAdd.mock.calls[0].arguments[0]).toBe(content);
       expect(contentToAdd.mock.calls[0].arguments[1]).toMatchInlineSnapshot(`
@@ -368,13 +368,6 @@ content to add2
 
   describe('createBaseNeedle', () => {
     const needles = { aNeedle: 'content to add' };
-    let generator: any;
-
-    beforeEach(() => {
-      generator = {
-        editFile: esmocha.fn(),
-      };
-    });
 
     it('should throw without needles parameter', () => {
       // @ts-expect-error
@@ -399,12 +392,15 @@ content to add2
       expect(() => createBaseNeedle({ filePath }, needles)).toThrow(/when passing filePath, the generator is required/);
     });
 
-    it('should execute editFile if generator and filePath is passed', () => {
+    it('should execute editFile if generator and filePath is passed', async () => {
       const filePath = 'file.foo';
+      const generator = await helpers.instantiateDummyBaseCoreGenerator();
+      const spy = esmocha.spyOn(generator, 'editFile');
+      spy.mockImplementation(() => undefined as any);
       createBaseNeedle.call(generator, { filePath }, needles);
       expect(generator.editFile).toHaveBeenCalledTimes(1);
-      expect(generator.editFile.mock.lastCall?.[0]).toBe(filePath);
-      expect(typeof generator.editFile.mock.lastCall?.[1]).toBe('function');
+      expect(spy.mock.lastCall?.[0]).toBe(filePath);
+      expect(typeof spy.mock.lastCall?.[1]).toBe('function');
     });
   });
 });
