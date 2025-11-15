@@ -296,7 +296,7 @@ export function prepareCommonFieldForTemplates(
     // manage uniqueness
     if ((field.fieldValidate === true && field.fieldValidateRules!.includes(UNIQUE)) || field.id) {
       let i = 0;
-      while (field.uniqueValue!.indexOf(generated.originalData) !== -1) {
+      while (field.uniqueValue!.includes(generated.originalData)) {
         if (i++ === 5) {
           generated = {};
           break;
