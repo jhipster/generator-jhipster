@@ -1,9 +1,8 @@
+import type { Config } from 'eslint/config';
 import imports from 'eslint-plugin-import-x';
 import unusedImports from 'eslint-plugin-unused-imports';
 
 /**
- * @type {import('typescript-eslint').ConfigWithExtends}
- *
  * Config applied to transformed source in generation process.
  * Rules must be compatible with auto fix to be applied.
  */
@@ -59,6 +58,6 @@ const baseConfig = {
       },
     ],
   },
-};
+} as const satisfies Config;
 
 export default baseConfig;

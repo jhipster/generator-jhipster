@@ -2,7 +2,7 @@ import eslint from 'eslint';
 import { defineConfig } from 'eslint/config';
 import ts from 'typescript-eslint';
 
-import jhipster from '../../../lib/eslint/index.js';
+import jhipster from '../../../lib/eslint/index.ts';
 
 let eslintInstance: eslint.ESLint;
 
