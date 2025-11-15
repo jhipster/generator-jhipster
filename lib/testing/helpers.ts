@@ -329,13 +329,13 @@ class JHipsterRunContext extends RunContext<BaseCoreGenerator> {
    * @param lookups generators relative folder
    * @returns
    */
-  withParentBlueprintLookup(lookups = ['generators', 'generators/*/generators']): this {
+  withParentBlueprintLookup(): this {
     const packageRootParent = join(getPackageRoot(), '..');
     if (basename(packageRootParent) === 'node_modules') {
-      this.withLookups([{ packagePaths: [join(packageRootParent, '..')], lookups }] as any);
+      this.withLookups([{ packagePaths: [join(packageRootParent, '..')] }]);
     } else {
       // Try to lookup at current path for linked generator-jhipster.
-      this.withLookups([{ packagePaths: [process.cwd()], lookups }] as any);
+      this.withLookups([{ packagePaths: [process.cwd()] }]);
     }
     return this;
   }
@@ -685,6 +685,10 @@ class JHipsterTest extends YeomanTest {
       namespace: 'dummy:generator',
       env: await this.createTestEnv(),
     });
+  }
+
+  async createEnv(options: EnvironmentOptions): Promise<Environment> {
+    return EnvironmentBuilder.create(options).getEnvironment();
   }
 }
 

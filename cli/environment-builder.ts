@@ -27,6 +27,7 @@ import { cloneDeep, mergeWith } from 'lodash-es';
 import Environment from 'yeoman-environment';
 
 import { type Blueprint, mergeBlueprints, parseBlueprintInfo } from '../generators/base/internal/index.ts';
+import { getPackageRoot, isDistFolder } from '../lib/index.ts';
 import { createJHipsterLogger, packageNameToNamespace } from '../lib/utils/index.ts';
 import { readCurrentPathYoRcFile } from '../lib/utils/yo-rc.ts';
 
@@ -37,16 +38,20 @@ const jhipsterDevBlueprintPath =
   process.env.JHIPSTER_DEV_BLUEPRINT === 'true' ? path.join(import.meta.dirname, '../.blueprint') : undefined;
 const devBlueprintNamespace = '@jhipster/jhipster-dev';
 const localBlueprintNamespace = '@jhipster/jhipster-local';
-const defaultLookupOptions = {
-  lookups: ['generators', 'generators/*/generators'],
+
+const defaultLookupOptions = Object.freeze({
+  lookups: ['generators', 'generators/*/generators'].map(lookup => (isDistFolder() ? `dist/${lookup}` : lookup)),
   customizeNamespace: (ns?: string) => ns?.replaceAll(':generators:', ':'),
-};
+});
 
 type EnvironmentOptions = ConstructorParameters<typeof Environment>[0];
 
 const createEnvironment = (options: EnvironmentOptions = {}) => {
-  options.adapter = options.adapter ?? new QueuedAdapter({ log: createJHipsterLogger() });
-  return new Environment({ ...options });
+  return new Environment({
+    adapter: new QueuedAdapter({ log: createJHipsterLogger() }),
+    ...options,
+    generatorLookupOptions: { ...defaultLookupOptions, ...options.generatorLookupOptions },
+  });
 };
 
 export default class EnvironmentBuilder {
@@ -160,20 +165,9 @@ export default class EnvironmentBuilder {
    */
   async _lookupJHipster() {
     // Register jhipster generators.
-    const sourceRoot = path.basename(path.join(import.meta.dirname, '..'));
-    let packagePath;
-    let lookup;
-    if (sourceRoot === 'generator-jhipster') {
-      packagePath = path.join(import.meta.dirname, '..');
-      lookup = 'generators';
-    } else {
-      packagePath = path.join(import.meta.dirname, '../..');
-      lookup = `${sourceRoot}/generators`;
-    }
     const generators = await this.env.lookup({
       ...defaultLookupOptions,
-      packagePaths: [packagePath],
-      lookups: [lookup, `${lookup}/*/generators`],
+      packagePaths: [getPackageRoot()],
     });
     generators.forEach(generator => {
       // Verify jhipster generators namespace.
