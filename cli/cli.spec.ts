@@ -176,7 +176,6 @@ describe('cli', () => {
 
       const BaseGenerator = (await import('../generators/base/index.ts')).default;
       env = (await helpers.createTestEnv()) as FullEnvironment;
-      // @ts-expect-error
       generator = new (helpers.createDummyGenerator(BaseGenerator))([], { env });
       generator._options = {
         foo: {

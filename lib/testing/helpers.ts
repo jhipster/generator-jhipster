@@ -585,7 +585,7 @@ class JHipsterTest extends YeomanTest {
     const { useEnvironmentBuilder, ...buildJHipsterOptions } = options;
     // Use a dummy generator which will not be used to match yeoman-test requirement.
     const context = this.run(
-      this.createDummyGenerator(),
+      this.createDummyGenerator(BaseCoreGenerator),
       { namespace: 'non-used-dummy:generator' },
       { createEnv: useEnvironmentBuilder ? createEnvBuilderEnvironment : undefined, sharedOptions: { ...(commonTestOptions as any) } },
     );
@@ -681,10 +681,10 @@ class JHipsterTest extends YeomanTest {
   }
 
   async instantiateDummyBaseCoreGenerator(): Promise<BaseCoreGenerator> {
-    return new (this.createDummyGenerator(BaseCoreGenerator as any))([], {
+    return new (this.createDummyGenerator(BaseCoreGenerator))([], {
       namespace: 'dummy:generator',
       env: await this.createTestEnv(),
-    }) as BaseCoreGenerator;
+    });
   }
 }
 
