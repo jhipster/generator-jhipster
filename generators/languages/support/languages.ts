@@ -57,8 +57,6 @@ export function languageToJavaLanguage(language: string): string {
 
 /**
  * Convert a language tag to faker exported name.
- * @param language
- * @returns
  */
 export function languageToFakerLanguage(language: string): string {
   return languageSnakeCase(languageUpperCaseCountry(language));
