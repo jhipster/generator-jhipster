@@ -4,7 +4,7 @@ import { fork } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import type { GeneratorMeta } from '@yeoman/types';
+import type { BaseGenerator, GeneratorMeta } from '@yeoman/types';
 import { execaCommandSync } from 'execa';
 import { coerce } from 'semver';
 import type FullEnvironment from 'yeoman-environment';
@@ -93,12 +93,12 @@ describe('cli', () => {
   const __filename = fileURLToPath(import.meta.url);
   const jhipsterCli = join(dirname(__filename), '..', 'bin', 'jhipster.cjs');
   const logger = { verboseInfo: esmocha.fn(), warn: esmocha.fn(), fatal: esmocha.fn(), debug: esmocha.fn() };
-  const getCommand = esmocha.fn();
+  const getCommand = esmocha.fn<typeof actualGetCommand>();
   let mockCli: (argv: string[], opts?: Record<string, any>) => Promise<JHipsterCommand>;
   let argv: string[];
 
   before(async () => {
-    await esmocha.mock('./utils.ts', { logger, getCommand, CLI_NAME: 'jhipster', done: () => {} } as any);
+    await esmocha.mock('./utils.ts', { logger, getCommand, CLI_NAME: 'jhipster', done: () => {} });
     const { buildJHipster } = await import('./program.ts');
 
     mockCli = async (argv: string[], opts = {}) => {
@@ -167,31 +167,30 @@ describe('cli', () => {
 
   describe('with mocked generator command', () => {
     const commands = { mocked: {} };
-    let generator: any;
+    let generator: Awaited<ReturnType<typeof helpers.instantiateDummyBaseCoreGenerator>>;
     let runArgs: any[];
     let env: FullEnvironment;
 
     beforeEach(async () => {
-      getCommand.mockImplementation(actualGetCommand as any);
+      getCommand.mockImplementation(actualGetCommand);
 
-      const BaseGenerator = (await import('../generators/base/index.ts')).default;
-      env = (await helpers.createTestEnv()) as FullEnvironment;
-      generator = new (helpers.createDummyGenerator(BaseGenerator))([], { env });
-      generator._options = {
+      generator = await helpers.instantiateDummyBaseCoreGenerator();
+      env = generator.env;
+      Object.assign(generator._options, {
         foo: {
           description: 'Foo',
         },
         'foo-bar': {
           description: 'Foo bar',
         },
-      };
+      });
       const runSpy = esmocha.spyOn(env, 'run');
       runSpy.mockImplementation((...args) => {
         runArgs = args;
         return Promise.resolve();
       });
       const composeWithSpy = esmocha.spyOn(env, 'composeWith');
-      composeWithSpy.mockImplementation(async () => undefined as any);
+      composeWithSpy.mockImplementation(async () => undefined as unknown as BaseGenerator);
       const originalGetGeneratorMeta = env.getGeneratorMeta.bind(env);
       const getGeneratorMetaSpy = esmocha.spyOn(env, 'getGeneratorMeta');
       getGeneratorMetaSpy.mockImplementation((namespace: string): GeneratorMeta | undefined => {
@@ -200,10 +199,10 @@ describe('cli', () => {
             namespace,
             importModule: async () => ({}),
             resolved: __filename,
-            instantiateHelp: () => generator,
+            instantiateHelp: <G>() => Promise.resolve(generator as G),
             packageNamespace: undefined,
             importGenerator: undefined as any,
-            instantiate: generator,
+            instantiate: <G>() => Promise.resolve(generator as G),
           };
         }
         return originalGetGeneratorMeta(namespace);
@@ -236,7 +235,7 @@ describe('cli', () => {
 
     describe('with argument', () => {
       beforeEach(() => {
-        generator._arguments = [{ name: 'name' }];
+        generator._arguments.push({ name: 'name', type: String });
         argv = ['jhipster', 'jhipster', 'mocked', 'Foo', '--foo', '--foo-bar'];
       });
 
@@ -253,7 +252,7 @@ describe('cli', () => {
 
     describe('with variable arguments', () => {
       beforeEach(() => {
-        generator._arguments = [{ name: 'name', type: Array }];
+        generator._arguments.push({ name: 'name', type: Array });
         argv = ['jhipster', 'jhipster', 'mocked', 'Foo', 'Bar', '--foo', '--foo-bar'];
       });
 

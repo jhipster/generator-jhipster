@@ -84,13 +84,15 @@ JSONEntity {
           entityName: 'Titi',
           dto: 'mapstruct',
           entityTableName: 'titi',
-          fields: [42 as any],
+          // @ts-expect-error invalid type for test purpose
+          fields: [42],
           fluentMethods: true,
           documentation: '',
           jpaMetamodelFiltering: true,
           pagination: 'pagination',
           embedded: true,
-          relationships: [42 as any, 43 as any],
+          // @ts-expect-error invalid type for test purpose
+          relationships: [42, 43],
           service: 'serviceClass',
           microserviceName: 'nope',
           angularJSSuffix: 'yes',
