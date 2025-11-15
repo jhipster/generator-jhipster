@@ -36,7 +36,7 @@ describe('generator - base-application - support - prepareField', () => {
 
   const defaultEntity = prepareEntityForTemplates(
     loadRequiredConfigIntoEntity({ changelogDate: formatDateForChangelog(new Date()), name: 'Entity' } as any, defaultConfig as any),
-    defaultGenerator as any,
+    defaultGenerator as BaseGenerator,
   );
 
   describe('prepareFieldForTemplates', () => {

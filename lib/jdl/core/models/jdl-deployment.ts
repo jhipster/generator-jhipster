@@ -82,5 +82,5 @@ function stringifyOptionValue(name: string, value: any): string {
 }
 
 function defaults(deploymentType: string) {
-  return deploymentOptions.Options.defaults(deploymentType as any);
+  return deploymentOptions.Options.defaults(deploymentType);
 }

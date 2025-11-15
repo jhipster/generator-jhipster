@@ -75,7 +75,7 @@ describe(`generator - ${generator}`, () => {
 
     before(async () => {
       await helpers
-        .run(CustomGenerator as any)
+        .run(CustomGenerator)
         .withJHipsterGenerators({ useDefaultMocks: true })
         .withOptions({
           skipPriorities: ['prompting', 'writing', 'postWriting'],

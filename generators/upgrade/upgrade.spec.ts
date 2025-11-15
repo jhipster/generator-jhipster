@@ -22,10 +22,7 @@ describe('generator - upgrade', function () {
           baseName: 'upgradeTest',
         })
         .withOptions({ skipGit: false, useVersionPlaceholders: false });
-      await helpers
-        .runJHipsterInApplication('upgrade')
-        .withSpawnMock()
-        .withOptions({ useVersionPlaceholders: false } as any);
+      await helpers.runJHipsterInApplication('upgrade').withSpawnMock().withOptions({ useVersionPlaceholders: false });
     });
 
     it('generated git commits to match snapshot', () => {

@@ -113,7 +113,7 @@ describe(`generator - ${generator}`, () => {
 
     before(async () => {
       await helpers
-        .run(CustomGenerator as any)
+        .run(CustomGenerator)
         .withJHipsterGenerators({ useDefaultMocks: true })
         .withJHipsterConfig({}, [
           {
@@ -243,7 +243,7 @@ describe(`generator - ${generator}`, () => {
 
     before(async () => {
       await helpers
-        .run(CustomGenerator as any)
+        .run(CustomGenerator)
         .withJHipsterGenerators({ useDefaultMocks: true })
         .withJHipsterConfig({}, [
           {

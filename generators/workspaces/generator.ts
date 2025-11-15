@@ -195,7 +195,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
             packages: this.appsFolders,
           },
           devDependencies: {
-            concurrently: findDependencyVersion('concurrently'),
+            concurrently: findDependencyVersion('concurrently')!,
           },
           scripts: {
             'ci:e2e:package': 'npm run ci:docker:build --workspaces --if-present && npm run java:docker --workspaces --if-present',
@@ -204,7 +204,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
             ...this.createConcurrentlyScript('watch', 'backend:build-cache', 'java:docker', 'java:docker:arm64'),
             ...this.createWorkspacesScript('ci:backend:test', 'ci:frontend:test', 'webapp:test'),
           },
-        } as any);
+        });
 
         if (applications.some(app => app.clientFrameworkAngular)) {
           const {

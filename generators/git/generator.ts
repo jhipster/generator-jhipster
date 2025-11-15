@@ -19,6 +19,7 @@
 
 import type { QueuedAdapter } from '@yeoman/types';
 import chalk from 'chalk';
+import { CheckRepoActions } from 'simple-git';
 
 import BaseGenerator from '../base/index.ts';
 
@@ -146,7 +147,7 @@ export default class GitGenerator extends BaseGenerator<GitConfig, GitOptions> {
             this.log.ok(`Application successfully committed to Git from ${repositoryRoot}.`);
           } catch (e) {
             this.log.warn(
-              chalk.red.bold(`Application commit to Git failed from ${repositoryRoot}. Try to commit manually. (${(e as any).message})`),
+              chalk.red.bold(`Application commit to Git failed from ${repositoryRoot}. Try to commit manually. (${(e as Error).message})`),
             );
           }
         };
@@ -169,7 +170,7 @@ export default class GitGenerator extends BaseGenerator<GitConfig, GitOptions> {
     try {
       const git = this.createGit();
       if (await git.checkIsRepo()) {
-        if (await git.checkIsRepo('root' as any)) {
+        if (await git.checkIsRepo(CheckRepoActions.IS_REPO_ROOT)) {
           this.log.info('Using existing git repository.');
         } else {
           this.log.info('Using existing git repository at parent folder.');
