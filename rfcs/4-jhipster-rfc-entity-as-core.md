@@ -133,4 +133,4 @@ As advantages, we can list:
 
 ## Implementation
 
-New priorities will be implemented at v7 as a incremental feature. Entity breaking change implementation will only be migrated to the new priorities at v8 pre-release cycle.
+New priorities will be implemented at v7 as an incremental feature. Entity breaking change implementation will only be migrated to the new priorities at v8 pre-release cycle.
