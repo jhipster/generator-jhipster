@@ -19,7 +19,7 @@
 
 import type { OmitIndexSignature, ReadonlyKeysOf, RequiredKeysOf, SetRequired, Simplify } from 'type-fest';
 
-const filterNullishValues = (value: unknown): boolean => value !== undefined && value !== null;
+const filterNullishValues = (value: unknown): boolean => value != null;
 
 /**
  * Copy and remove null and undefined values
