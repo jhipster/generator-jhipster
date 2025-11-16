@@ -52,7 +52,6 @@ exports[`public api generator-jhipster/generators should match snapshot 1`] = `
   "prepareSample",
   "resetDefaults",
   "result",
-  "resultWithGenerator",
   "runResult",
   "setGithubTaskOutput",
   "skipPrettierHelpers",
