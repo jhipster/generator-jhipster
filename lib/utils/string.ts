@@ -40,7 +40,7 @@ export function stringHashCode(str: string): number {
 }
 
 /**
- * get the an upperFirst camelCase value.
+ * Get the an upperFirst camelCase value.
  * @param value string to convert
  */
 export function upperFirstCamelCase(value: string): string {
