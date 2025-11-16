@@ -46,7 +46,8 @@ export const createESLintTransform = async function (
     apply = eslintWorkerImport;
   } else {
     pool = new Piscina<Parameters<typeof eslintWorker>[0], ReturnType<typeof eslintWorker>>({
-      maxThreads: 1,
+      maxThreads: 2,
+      idleTimeout: 100,
       filename: new URL(`./eslint-worker.${useTsFile ? 'ts' : 'js'}`, import.meta.url).href,
       ...poolOptions,
     });
