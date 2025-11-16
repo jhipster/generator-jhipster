@@ -66,7 +66,7 @@ var imported = [];
 for (relationship of relationships) { // import entities in required relationships
   const relationshipValidate = relationship.relationshipValidate;
   const isUsingMapsIdL1 = relationship.id;
-  if (imported.indexOf(relationship.otherEntity.entityNameCapitalized) === -1) {
+  if (!imported.includes(relationship.otherEntity.entityNameCapitalized)) {
     if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) { _%>
 import <%= entityAbsolutePackage %>.domain.<%= relationship.otherEntity.persistClass %>;
 <%_
