@@ -16,7 +16,7 @@ This RFC proposes to implement entities as JHipster core feature instead of gene
 
 [motivation]: #motivation
 
-With JHipster 8 modular proposal, entity related generators would multiply and become a development problem due to generator dependencies order. Probably inviable. A solution for this issue must be implemented.
+With JHipster 8 modular proposal, entity related generators would multiply and become a development problem due to generator dependencies order. Probably not viable. A solution for this issue must be implemented.
 
 Another reason is that JHipster has too many generators, this will allow a more concise workflow.
 
@@ -39,7 +39,7 @@ We have priorities to be used on entity generators.
 
 Those generators and priorities will be replaced by entity focused priorities and internal methods to support the workflow. Some entity related generators may be kept for more specific purpose like prompts.
 
-Planed priorities include:
+Planned priorities include:
 
 - `configuringEachEntity`: priority to manipulate entities config.
 - `preparingEachEntity`: priority to create derived properties for entities to be used by the templates.
@@ -133,4 +133,4 @@ As advantages, we can list:
 
 ## Implementation
 
-New priorities will be implemented at v7 as a incremental feature. Entity breaking change implementation will only be migrated to the new priorities at v8 pre-release cycle.
+New priorities will be implemented at v7 as an incremental feature. Entity breaking change implementation will only be migrated to the new priorities at v8 pre-release cycle.

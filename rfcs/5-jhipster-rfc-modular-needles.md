@@ -22,7 +22,7 @@ JHipster 8 modular approach needs a new needle approach for a better modularity.
 
 [guide-level-explanation]: #guide-level-explanation
 
-JHipster 7 have lots of technology specific needles implemented at `generator-base` like:
+JHipster 7 has lots of technology specific needles implemented at `generator-base` like:
 
 - `addIcon`
 - `addElementToMenu`
@@ -138,4 +138,4 @@ This will allow creating a modular implementation.
 
 ## Implementation
 
-Modular needle will be implemented at JHipster 7 keeping api stability and exposing the needles at generator-base.
+Modular needle will be implemented in JHipster 7 keeping api stability and exposing the needles at generator-base.

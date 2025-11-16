@@ -109,7 +109,7 @@ Compared to today's situation, the proposed solution would have the following ad
 
 - Reduce the generated code as code related to management screens will no longer be generated
 - Faster build times for the front end resulting from less front-end code to compile
-- Stop developing the same management UI with 3 different frontend framework (Angular, React and Vue)
+- Stop developing the same management UI with 3 different frontend frameworks (Angular, React and Vue)
 - Improve security as management endpoint will no longer be exposed to the outside but only internally on a separate port. Also the **JHipster Control Center** can have proper authentication (JWT, OAuth) rather than the basic authentication scheme that is present on the JHipster registry (which is the only scheme supported by the Eureka server).
 
 ## Prior art
