@@ -49,15 +49,6 @@ const cliBlueprintFiles = {
   'generators/foo/index.js': `export const createGenerator = async env => {
   const BaseGenerator = await env.requireGenerator('jhipster:base');
   return class extends BaseGenerator {
-    constructor(args, opts, features) {
-      super(args, opts, features);
-
-      this.option('foo-bar', {
-        description: 'Sample option',
-        type: Boolean,
-      });
-    }
-
     get [BaseGenerator.INITIALIZING]() {
       /* eslint-disable no-console */
       console.log('Running foo');
@@ -68,6 +59,18 @@ const cliBlueprintFiles = {
       }
     }
   };
+};
+
+export const command = {
+  configs: {
+    fooBar: {
+      cli: {
+        description: 'Sample option',
+        type: Boolean,
+      },
+      scope: 'none',
+    },
+  },
 };
 `,
 };
@@ -88,15 +91,20 @@ const cliSharedBlueprintFiles = {
   'generators/bar/index.js': `export const createGenerator = async env => {
   const BaseGenerator = await env.requireGenerator('jhipster:base');
   return class extends BaseGenerator {
-    constructor(args, options) {
-      super(args, options);
-      this.option('foo', {
-        description: 'foo description',
-        type: Boolean,
-      });
-    }
     get [BaseGenerator.INITIALIZING]() {}
   };
+};
+
+export const command = {
+  configs: {
+    foo: {
+      cli: {
+        description: 'foo description',
+        type: Boolean,
+      },
+      scope: 'none',
+    },
+  },
 };
 `,
 };

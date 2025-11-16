@@ -358,10 +358,15 @@ export const buildCommands = ({
         }
 
         if (cmdName === 'run') {
-          return Promise.all(command.generatorNamespaces.map(generator => env.run(generator, options))).then(
-            () => silent || done(),
-            errors => silent || done(errors.find((error: any) => error)),
-          );
+          try {
+            args.shift(); // remove first argument which is handled in lazyBuildCommand
+            await Promise.all(command.generatorNamespaces.map(generator => env.run(generator, options)));
+
+            silent || done();
+          } catch (error) {
+            silent || done(error as Error);
+          }
+          return;
         }
         if (cmdName === 'upgrade') {
           options.programName = program.name();

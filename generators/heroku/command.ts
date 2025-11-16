@@ -19,7 +19,22 @@
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 
 const command = {
-  configs: {},
+  configs: {
+    skipBuild: {
+      description: 'Skips building the application',
+      cli: {
+        type: Boolean,
+      },
+      scope: 'none',
+    },
+    skipDeploy: {
+      description: 'Skips deployment to Heroku',
+      cli: {
+        type: Boolean,
+      },
+      scope: 'none',
+    },
+  },
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

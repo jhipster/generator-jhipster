@@ -15,6 +15,10 @@ Options:
   --install-path                  Show jhipster install path (default: false)
   --skip-regenerate               Don't regenerate identical files (default: false)
   --skip-yo-resolve               Ignore .yo-resolve files (default: false)
+  --skip-cache                    Do not remember prompt answers (default: false)
+  --skip-install                  Do not automatically install dependencies (default: false)
+  --force-install                 Fail on install dependencies error (default: false)
+  --ask-answered                  Show prompts for already configured options (default: false)
   --skip-checks                   Check the status of the required tools
   --experimental                  Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time
   --disable-blueprints            Disable blueprints support
