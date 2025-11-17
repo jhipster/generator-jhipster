@@ -63,7 +63,7 @@ const replaceTranslationKeysWithText = (
       interpolate = interpolateMatch?.groups?.interpolate;
     }
 
-    let data: any;
+    let data: Record<string, unknown> | undefined;
     if (interpolate) {
       const interpolateMatches = interpolate.matchAll(/(?<field>[^{\s:,}]+)(?::\s*(?<value>[^,}]+))?/g);
       data = {};
