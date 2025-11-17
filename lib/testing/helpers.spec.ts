@@ -13,7 +13,7 @@ describe('helpers', () => {
     });
     it('should register not jhipster generators namespaces', () => {
       expect(
-        Object.keys((runResult.env as any).store._meta)
+        Object.keys(runResult.env.getGeneratorsMeta())
           .filter(ns => ns !== DUMMY_NAMESPACE)
           .sort(),
       ).toHaveLength(0);
@@ -25,7 +25,7 @@ describe('helpers', () => {
     });
     it('should register jhipster generators namespaces', () => {
       expect(
-        Object.keys((runResult.env as any).store._meta)
+        Object.keys(runResult.env.getGeneratorsMeta())
           .filter(ns => ns !== DUMMY_NAMESPACE)
           .sort(),
       ).toMatchSnapshot();
@@ -37,7 +37,7 @@ describe('helpers', () => {
     });
     it('should register jhipster generators namespaces', () => {
       expect(
-        Object.keys((runResult.env as any).store._meta)
+        Object.keys(runResult.env.getGeneratorsMeta())
           .filter(ns => ns !== DUMMY_NAMESPACE)
           .sort(),
       ).toMatchSnapshot();
@@ -51,7 +51,7 @@ describe('helpers', () => {
     });
     it('should register jhipster generators namespaces', () => {
       expect(
-        Object.keys((runResult.env as any).store._meta)
+        Object.keys(runResult.env.getGeneratorsMeta())
           .filter(ns => ns !== DUMMY_NAMESPACE)
           .sort(),
       ).toMatchSnapshot();
