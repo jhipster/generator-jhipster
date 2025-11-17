@@ -185,7 +185,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
         const fields = entityConfig.fields;
         fields!.forEach(field => {
           // Migration from JodaTime to Java Time
-          if ((field.fieldType as any) === 'DateTime' || (field.fieldType as any) === 'Date') {
+          if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
             field.fieldType = INSTANT;
           }
 
@@ -225,7 +225,8 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
               )}, using ${relationship.otherEntityName} as fallback`,
             );
           }
-          if ((relationship as any).useJPADerivedIdentifier) {
+          // @ts-expect-error deprecated property
+          if (relationship.useJPADerivedIdentifier) {
             this.log.verboseInfo('Option useJPADerivedIdentifier is deprecated, use id instead');
             relationship.options ??= {};
             relationship.options.id = true;

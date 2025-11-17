@@ -17,10 +17,10 @@ BaseGenerator.logger = createJHipsterLogger();
 
 describe('generator - base-core', () => {
   describe('passing arguments', () => {
-    let Dummy: typeof BaseGenerator;
+    let Dummy: any;
     beforeEach(async () => {
       await helpers.prepareTemporaryDir();
-      Dummy = helpers.createDummyGenerator(Base as any);
+      Dummy = helpers.createDummyGenerator(Base);
     });
 
     it('no argument', async () => {
@@ -101,7 +101,7 @@ describe('generator - base-core', () => {
     it('supports callbacks', async () => {
       await helpers.run('dummy').withGenerators([
         [
-          helpers.createDummyGenerator(Base as any, {
+          helpers.createDummyGenerator(Base, {
             [Base.POST_WRITING]() {
               this.editFile(
                 'dummy.properties',
@@ -122,7 +122,7 @@ describe('generator - base-core', () => {
             await expect(
               helpers.run('dummy').withGenerators([
                 [
-                  helpers.createDummyGenerator(Base as any, {
+                  helpers.createDummyGenerator(Base, {
                     [Base.POST_WRITING]() {
                       this.editFile(
                         'dummy.properties',
@@ -138,7 +138,7 @@ describe('generator - base-core', () => {
           it('should optionally create the file', async () => {
             await helpers.run('dummy').withGenerators([
               [
-                helpers.createDummyGenerator(Base as any, {
+                helpers.createDummyGenerator(Base, {
                   [Base.POST_WRITING]() {
                     this.editFile(
                       'dummy.properties',
@@ -164,7 +164,7 @@ override.existing = existingValue`,
               })
               .withGenerators([
                 [
-                  helpers.createDummyGenerator(Base as any, {
+                  helpers.createDummyGenerator(Base, {
                     [Base.POST_WRITING]() {
                       this.editFile(
                         'dummy.properties',
