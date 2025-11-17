@@ -16,7 +16,7 @@ describe(`generator - ${generator}`, () => {
   describe(`with ng-default`, () => {
     before(async () => {
       await helpers
-        .runJHipster(join(import.meta.dirname, 'index.ts'), { useEnvironmentBuilder: true })
+        .runJHipster(join(import.meta.dirname, 'index.ts'), { prepareEnvironmentBuilder: true })
         .withArguments('ng-default')
         .withOptions({
           sampleOnly: true,
@@ -31,7 +31,7 @@ describe(`generator - ${generator}`, () => {
   describe(`with ng-default-additional (star jdl-entity)`, () => {
     before(async () => {
       await helpers
-        .runJHipster(join(import.meta.dirname, 'index.ts'), { useEnvironmentBuilder: true })
+        .runJHipster(join(import.meta.dirname, 'index.ts'), { prepareEnvironmentBuilder: true })
         .withArguments('ng-default-additional')
         .withOptions({
           sampleOnly: true,
@@ -46,7 +46,7 @@ describe(`generator - ${generator}`, () => {
   describe(`with vue-default-additional (specific jdl-entity)`, () => {
     before(async () => {
       await helpers
-        .runJHipster(join(import.meta.dirname, 'index.ts'), { useEnvironmentBuilder: true })
+        .runJHipster(join(import.meta.dirname, 'index.ts'), { prepareEnvironmentBuilder: true })
         .withArguments('vue-default-additional')
         .withOptions({
           sampleOnly: true,
@@ -61,7 +61,7 @@ describe(`generator - ${generator}`, () => {
   describe(`with ng-webflux-psql-additional (specific jdl-samples)`, () => {
     before(async () => {
       await helpers
-        .runJHipster(join(import.meta.dirname, 'index.ts'), { useEnvironmentBuilder: true })
+        .runJHipster(join(import.meta.dirname, 'index.ts'), { prepareEnvironmentBuilder: true })
         .withArguments('ng-webflux-psql-additional')
         .withOptions({
           sampleOnly: true,
@@ -76,7 +76,7 @@ describe(`generator - ${generator}`, () => {
   describe(`with daily-builds/ngx-oauth2 (daily-builds sample)`, () => {
     before(async () => {
       await helpers
-        .runJHipster(join(import.meta.dirname, 'index.ts'), { useEnvironmentBuilder: true })
+        .runJHipster(join(import.meta.dirname, 'index.ts'), { prepareEnvironmentBuilder: true })
         .withArguments('ng-default')
         .withOptions({
           sampleOnly: true,
