@@ -1,8 +1,8 @@
 import { basename, join } from 'node:path';
 import { Duplex } from 'node:stream';
 
+import type { ConflicterFile } from '@yeoman/conflicter';
 import { loadFile } from 'mem-fs';
-import type { MemFsEditorFile } from 'mem-fs-editor';
 import { setModifiedFileState } from 'mem-fs-editor/state';
 import { Minimatch } from 'minimatch';
 
@@ -25,15 +25,14 @@ export const exportJDLTransform = ({
   keepEntitiesConfig?: boolean;
   jdlDefinition: JDLApplicationConfig;
 }) =>
-  Duplex.from(async function* (files: AsyncGenerator<MemFsEditorFile>) {
+  Duplex.from(async function* (files: AsyncGenerator<ConflicterFile>) {
     const yoRcFilePath = join(destinationPath, '.yo-rc.json');
     const entitiesMatcher = new Minimatch(`${destinationPath}/.jhipster/*.json`);
-    const entitiesFiles: MemFsEditorFile[] = [];
+    const entitiesFiles: ConflicterFile[] = [];
     const entitiesMap = new Map<string, Entity>();
 
-    let yoRcFileInMemory: MemFsEditorFile | undefined;
-    let jdlStoreFileInMemory: MemFsEditorFile | undefined;
-
+    let yoRcFileInMemory: ConflicterFile | undefined;
+    let jdlStoreFileInMemory: ConflicterFile | undefined;
     for await (const file of files) {
       if (file.path === yoRcFilePath) {
         yoRcFileInMemory = file;
@@ -47,7 +46,7 @@ export const exportJDLTransform = ({
       }
     }
 
-    const yoRcFile = loadFile(yoRcFilePath) as MemFsEditorFile;
+    const yoRcFile = loadFile(yoRcFilePath) as ConflicterFile;
     const yoRcContents = yoRcFileInMemory?.contents ?? yoRcFile.contents;
     if (yoRcContents) {
       const contents = JSON.parse(yoRcContents.toString());
@@ -64,17 +63,17 @@ export const exportJDLTransform = ({
 
         const jdlContents = jdlObject.toString();
 
-        const jdlStoreFile: MemFsEditorFile = jdlStoreFileInMemory ?? (loadFile(jdlStorePath) as any);
+        const jdlStoreFile = jdlStoreFileInMemory ?? (loadFile(jdlStorePath) as ConflicterFile);
         jdlStoreFile.contents = Buffer.from(jdlContents);
         setModifiedFileState(jdlStoreFile);
-        (jdlStoreFile as any).conflicter = 'force';
+        jdlStoreFile.conflicter = 'force';
         yield jdlStoreFile;
 
         yoRcFile.contents = Buffer.from(
           JSON.stringify({ [GENERATOR_JHIPSTER]: { jdlStore, jwtSecretKey, rememberMeKey, jhipsterVersion, creationTimestamp } }, null, 2),
         );
         setModifiedFileState(yoRcFile);
-        (yoRcFile as any).conflicter = 'force';
+        yoRcFile.conflicter = 'force';
         yield yoRcFile;
 
         // Incremental changelog requires entities files to be kept for incremental change at next run

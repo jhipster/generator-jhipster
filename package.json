@@ -129,7 +129,7 @@
     "@types/ejs": "3.1.5",
     "@types/lodash-es": "4.17.12",
     "@yeoman/adapter": "3.1.0",
-    "@yeoman/conflicter": "3.0.0",
+    "@yeoman/conflicter": "4.0.0",
     "@yeoman/namespace": "1.0.1",
     "@yeoman/transform": "2.1.0",
     "@yeoman/types": "1.8.0",
