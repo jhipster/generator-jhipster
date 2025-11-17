@@ -152,7 +152,7 @@ const command = {
       },
       scope: 'storage',
       choices: ['jest', 'vitest'],
-      default: ctx => (ctx.clientFramework === 'vue' ? 'vitest' : 'jest'),
+      default: ctx => (ctx?.clientFramework === 'vue' ? 'vitest' : 'jest'),
     },
     clientTestFrameworks: {
       description: 'Client test frameworks',

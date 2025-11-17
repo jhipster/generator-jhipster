@@ -211,7 +211,7 @@ export default class JHipsterCommand extends Command {
     // We want default value to be set on jhipster options parsing so ignore default at commander.
     let defaultDescription = '';
     if (optionDefinition.default !== undefined && (!Array.isArray(optionDefinition.default) || optionDefinition.default.length !== 0)) {
-      defaultDescription = ` (default: ${optionDefinition.default})`;
+      defaultDescription = ` (default: ${typeof optionDefinition.default === 'function' ? optionDefinition.default() : optionDefinition.default})`;
     }
     const option = new Option(cmdString, optionDefinition.description + defaultDescription + additionalDescription).hideHelp(
       optionDefinition.hide ?? false,
