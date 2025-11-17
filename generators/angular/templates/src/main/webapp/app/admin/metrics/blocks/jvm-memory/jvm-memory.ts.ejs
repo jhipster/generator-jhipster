@@ -28,12 +28,12 @@ import { JvmMetrics } from 'app/admin/metrics/metrics.model';
 })
 export class JvmMemory {
   /**
-   * object containing all jvm memory metrics
+   * Object containing all jvm memory metrics
    */
   jvmMemoryMetrics = input<Record<string, JvmMetrics>>();
 
   /**
-   * boolean field saying if the metrics are in the process of being updated
+   * Boolean field saying if the metrics are in the process of being updated
    */
   updating = input<boolean>();
 }

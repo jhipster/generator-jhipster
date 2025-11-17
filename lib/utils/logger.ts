@@ -23,7 +23,7 @@ import chalk from 'chalk';
 import createDebug from 'debug';
 
 /**
- * formats the message to be displayed in the console.
+ * Formats the message to be displayed in the console.
  * @param message the info message to format.
  */
 const addPrefixToParameters = (prefix: string, ...args: Parameters<LoggerApi['write']>): Parameters<LoggerApi['write']> => {
