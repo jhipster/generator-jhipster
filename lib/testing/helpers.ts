@@ -416,9 +416,8 @@ class JHipsterRunContext extends RunContext<BaseCoreGenerator> {
     const filePatterns = actualGenerators.map(ns => getGeneratorRelativeFolder(ns)).map(path => `${prefix}${path}/index.{j,t}s`);
     return this.withMockedGenerators(mockedGenerators).withLookups({
       packagePaths: [getPackageRoot()],
-      // @ts-expect-error lookups is not exported
-      lookups: [`${prefix}generators`, `${prefix}generators/*/generators`],
       filePatterns,
+      // @ts-expect-error customizeNamespace is not exported
       customizeNamespace: (ns?: string) => ns?.replaceAll(':generators:', ':'),
     });
   }
