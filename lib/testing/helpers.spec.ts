@@ -1,6 +1,6 @@
 import { before, describe, expect, it } from 'esmocha';
 
-import CoreGenerator from '../../generators/base-core/index.ts';
+import type CoreGenerator from '../../generators/base-core/index.ts';
 
 import { defaultHelpers as helpers, runResult } from './helpers.ts';
 
@@ -9,7 +9,7 @@ const DUMMY_NAMESPACE = 'jhipster:dummy';
 describe('helpers', () => {
   describe('run defaults', () => {
     before(async () => {
-      await helpers.run(helpers.createDummyGenerator(CoreGenerator), { namespace: DUMMY_NAMESPACE });
+      await helpers.run(helpers.createDummyGenerator<typeof CoreGenerator>(), { namespace: DUMMY_NAMESPACE });
     });
     it('should register not jhipster generators namespaces', () => {
       expect(
@@ -33,7 +33,7 @@ describe('helpers', () => {
   });
   describe('run using withJHipsterGenerators', () => {
     before(async () => {
-      await helpers.run(helpers.createDummyGenerator(CoreGenerator), { namespace: DUMMY_NAMESPACE }).withJHipsterGenerators();
+      await helpers.run(helpers.createDummyGenerator<typeof CoreGenerator>(), { namespace: DUMMY_NAMESPACE }).withJHipsterGenerators();
     });
     it('should register jhipster generators namespaces', () => {
       expect(
