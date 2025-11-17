@@ -47,8 +47,8 @@ const defaultLookupOptions = Object.freeze({
 type EnvironmentOptions = ConstructorParameters<typeof Environment>[0];
 
 const createEnvironment = (options: EnvironmentOptions = {}) => {
+  options.adapter = options.adapter ?? new QueuedAdapter({ log: createJHipsterLogger() });
   return new Environment({
-    adapter: new QueuedAdapter({ log: createJHipsterLogger() }),
     ...options,
     generatorLookupOptions: { ...defaultLookupOptions, ...options.generatorLookupOptions },
   });
