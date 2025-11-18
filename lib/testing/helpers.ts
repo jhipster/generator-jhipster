@@ -12,7 +12,7 @@ import type { EnvironmentOptions } from 'yeoman-environment';
 import { RunContext, YeomanTest, result } from 'yeoman-test';
 import type { RunContextSettings, RunResult } from 'yeoman-test';
 
-import EnvironmentBuilder, { generatorsLookup } from '../../cli/environment-builder.ts';
+import EnvironmentBuilder, { generatorsLookup, jhipsterGeneratorsLookup } from '../../cli/environment-builder.ts';
 import { buildJHipster, createProgram } from '../../cli/program.ts';
 import type { CliCommand } from '../../cli/types.ts';
 import BaseGenerator from '../../generators/base/index.ts';
@@ -404,6 +404,8 @@ class JHipsterRunContext extends RunContext<BaseCoreGenerator> {
     const filePatterns = actualGenerators.map(ns => getGeneratorRelativeFolder(ns)).map(path => `${prefix}${path}/index.{j,t}s`);
     return this.withMockedGenerators(mockedGenerators).withLookups({
       packagePaths: [getPackageRoot()],
+      // @ts-expect-error lookups is not exported by @yeoman/types
+      lookups: jhipsterGeneratorsLookup,
       filePatterns,
     });
   }
