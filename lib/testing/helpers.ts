@@ -12,7 +12,7 @@ import type { EnvironmentOptions } from 'yeoman-environment';
 import { RunContext, YeomanTest, result } from 'yeoman-test';
 import type { RunContextSettings, RunResult } from 'yeoman-test';
 
-import EnvironmentBuilder from '../../cli/environment-builder.ts';
+import EnvironmentBuilder, { generatorsLookup } from '../../cli/environment-builder.ts';
 import { buildJHipster, createProgram } from '../../cli/program.ts';
 import type { CliCommand } from '../../cli/types.ts';
 import BaseGenerator from '../../generators/base/index.ts';
@@ -122,7 +122,13 @@ export const resetDefaults = () => {
 
 const createPreparedEnvBuilderEnvironment = (
   ...args: Parameters<typeof EnvironmentBuilder.createEnv>
-): ReturnType<typeof EnvironmentBuilder.createEnv> => EnvironmentBuilder.createEnv(...args);
+): ReturnType<typeof EnvironmentBuilder.createEnv> => {
+  args[0] ??= {};
+  args[0].generatorLookupOptions ??= {};
+  // Default to lookup for source generators only inside tests.
+  args[0].generatorLookupOptions.lookups ??= generatorsLookup;
+  return EnvironmentBuilder.createEnv(...args);
+};
 
 export const defineDefaults = async (
   defaults: {
@@ -315,9 +321,6 @@ class JHipsterRunContext extends RunContext<BaseCoreGenerator> {
     return this.withLookups([
       {
         packagePaths: [blueprintPackagePath],
-        // @ts-expect-error lookups is not exported
-        lookups: [`generators`, `generators/*/generators`],
-        customizeNamespace: (ns: string) => ns?.replaceAll(':generators:', ':'),
       },
     ]).withOptions({
       blueprint: [blueprint],
@@ -418,8 +421,6 @@ class JHipsterRunContext extends RunContext<BaseCoreGenerator> {
     return this.withMockedGenerators(mockedGenerators).withLookups({
       packagePaths: [getPackageRoot()],
       filePatterns,
-      // @ts-expect-error customizeNamespace is not exported
-      customizeNamespace: (ns?: string) => ns?.replaceAll(':generators:', ':'),
     });
   }
 
@@ -683,6 +684,9 @@ class JHipsterTest extends YeomanTest {
   }
 
   async createEnv(options: EnvironmentOptions): Promise<Environment> {
+    options.generatorLookupOptions ??= {};
+    // Default to lookup for source generators only inside tests.
+    options.generatorLookupOptions.lookups ??= generatorsLookup;
     return EnvironmentBuilder.create(options).getEnvironment();
   }
 }
