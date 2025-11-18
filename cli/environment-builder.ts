@@ -38,7 +38,7 @@ const jhipsterDevBlueprintPath =
   process.env.JHIPSTER_DEV_BLUEPRINT === 'true' ? path.join(import.meta.dirname, '../.blueprint') : undefined;
 const devBlueprintNamespace = '@jhipster/jhipster-dev';
 const localBlueprintNamespace = '@jhipster/jhipster-local';
-const customizeNeastedNamespace = (ns?: string) => ns?.replaceAll(':generators:', ':');
+const customizeNestedNamespace = (ns?: string) => ns?.replaceAll(':generators:', ':');
 
 // Support nested generators.
 export const generatorsLookup = ['generators', 'generators/*/generators'];
@@ -51,7 +51,7 @@ const packagedGeneratorsLookup = generatorsLookup.map(lookup => [`dist/${lookup}
 
 const defaultLookupOptions = Object.freeze({
   lookups: packagedGeneratorsLookup,
-  customizeNamespace: customizeNeastedNamespace,
+  customizeNamespace: customizeNestedNamespace,
 });
 
 type EnvironmentOptions = ConstructorParameters<typeof Environment>[0];
@@ -195,7 +195,7 @@ export default class EnvironmentBuilder {
       const generators = await this.env.lookup({
         packagePaths: [this.localBlueprintPath!],
         lookups: localBlueprintGeneratorsLookup,
-        customizeNamespace: ns => customizeNeastedNamespace(ns)?.replace('.blueprint', '@jhipster/jhipster-local'),
+        customizeNamespace: ns => customizeNestedNamespace(ns)?.replace('.blueprint', '@jhipster/jhipster-local'),
       });
       if (generators.length > 0) {
         this.env.sharedOptions.composeWithLocalBlueprint = true;
@@ -210,7 +210,7 @@ export default class EnvironmentBuilder {
       await this.env.lookup({
         packagePaths: [this.devBlueprintPath],
         lookups: localBlueprintGeneratorsLookup,
-        customizeNamespace: ns => customizeNeastedNamespace(ns)?.replace('.blueprint', '@jhipster/jhipster-dev'),
+        customizeNamespace: ns => customizeNestedNamespace(ns)?.replace('.blueprint', '@jhipster/jhipster-dev'),
       });
     }
     return this;

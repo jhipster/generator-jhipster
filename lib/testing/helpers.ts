@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 import { randomInt } from 'node:crypto';
-import { basename, dirname, isAbsolute, join } from 'node:path';
+import { dirname, isAbsolute, join } from 'node:path';
 import { mock } from 'node:test';
 
 import type { BaseGenerator as YeomanGenerator, GetGeneratorConstructor } from '@yeoman/types';
@@ -325,22 +325,6 @@ class JHipsterRunContext extends RunContext<BaseCoreGenerator> {
     ]).withOptions({
       blueprint: [blueprint],
     });
-  }
-
-  /**
-   * Lookup generators at generator-jhipster's parent at a npm repository
-   * @param lookups generators relative folder
-   * @returns
-   */
-  withParentBlueprintLookup(): this {
-    const packageRootParent = join(getPackageRoot(), '..');
-    if (basename(packageRootParent) === 'node_modules') {
-      this.withLookups([{ packagePaths: [join(packageRootParent, '..')] }]);
-    } else {
-      // Try to lookup at current path for linked generator-jhipster.
-      this.withLookups([{ packagePaths: [process.cwd()] }]);
-    }
-    return this;
   }
 
   withFakeTestBlueprint(blueprintPackage: string, { packageJson, generator = 'test-blueprint' }: FakeBlueprintOptions = {}): this {
