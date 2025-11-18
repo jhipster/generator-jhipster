@@ -9,7 +9,7 @@
     "@vueuse/core": "14.0.0",
     "axios": "1.13.2",
     "bootstrap": "5.3.7",
-    "bootstrap-vue-next": "0.40.7",
+    "bootstrap-vue-next": "0.40.8",
     "bootswatch": "5.3.8",
     "deepmerge": "4.3.1",
     "js-cookie": "3.0.5",
