@@ -16,7 +16,7 @@ describe(`generator - ${generator}`, () => {
   for (const workflow of workflowChoices) {
     describe(`with ${workflow}`, () => {
       before(async () => {
-        await helpers.runJHipster(join(import.meta.dirname, 'index.ts'), { prepareEnvironmentBuilder: true }).withArguments(workflow);
+        await helpers.runJHipster(join(import.meta.dirname, 'index.ts'), { prepareEnvironment: true }).withArguments(workflow);
       });
 
       it('should set workflow value', () => {

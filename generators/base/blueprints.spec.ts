@@ -293,7 +293,7 @@ describe('generator - base - local blueprint', () => {
   describe('generates application', () => {
     before(async () => {
       await helpers
-        .runJHipster(BLUEPRINT_NS, { prepareEnvironmentBuilder: true })
+        .runJHipster(BLUEPRINT_NS, { prepareEnvironment: true })
         .withFiles({ '.blueprint/app/index.mjs': BLUEPRINT_CONTENTS })
         .commitFiles()
         .withJHipsterConfig();

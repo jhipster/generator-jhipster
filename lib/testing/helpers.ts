@@ -56,7 +56,7 @@ type RunJHipster = WithJHipsterGenerators & {
    * Use the EnvironmentBuilder default preparation to create the environment.
    * Includes local and dev blueprints.
    */
-  prepareEnvironmentBuilder?: boolean;
+  prepareEnvironment?: boolean;
 };
 
 type JHipsterRunResult<GeneratorType extends BaseCoreGenerator = BaseCoreGenerator> = Omit<RunResult<GeneratorType>, 'env'> & {
@@ -118,16 +118,6 @@ let helpersDefaults: HelpersDefaults = {};
 
 export const resetDefaults = () => {
   helpersDefaults = {};
-};
-
-const createPreparedEnvBuilderEnvironment = (
-  ...args: Parameters<typeof EnvironmentBuilder.createEnv>
-): ReturnType<typeof EnvironmentBuilder.createEnv> => {
-  args[0] ??= {};
-  args[0].generatorLookupOptions ??= {};
-  // Default to lookup for source generators only inside tests.
-  args[0].generatorLookupOptions.lookups ??= generatorsLookup;
-  return EnvironmentBuilder.createEnv(...args);
 };
 
 export const defineDefaults = async (
@@ -431,6 +421,12 @@ plugins {
     return this;
   }
 
+  public prepareEnvironment() {
+    return this.onEnvironment(async env => {
+      await new EnvironmentBuilder(env as Environment).prepare();
+    });
+  }
+
   async run(): Promise<RunResult<BaseCoreGenerator>> {
     const runResult = (await super.run()) as unknown as JHipsterRunResult;
     if (this.sharedSource) {
@@ -536,17 +532,15 @@ class JHipsterTest extends YeomanTest {
       !isAbsolute(jhipsterGenerator) && !jhipsterGenerator.startsWith('@') ? toJHipsterNamespace(jhipsterGenerator) : jhipsterGenerator;
     const isRunJHipster = (opt: any): opt is RunJHipster | undefined =>
       envOptions === undefined &&
-      (opt === undefined ||
-        'actualGeneratorsList' in opt ||
-        'useMock' in opt ||
-        'useDefaultMocks' in opt ||
-        'prepareEnvironmentBuilder' in opt);
+      (opt === undefined || 'actualGeneratorsList' in opt || 'useMock' in opt || 'useDefaultMocks' in opt || 'prepareEnvironment' in opt);
     let context: JHipsterRunContext;
     if (isRunJHipster(settings)) {
-      const { prepareEnvironmentBuilder, ...otherOptions } = settings ?? {};
-      context = this.run(generatorSpec, undefined, {
-        createEnv: prepareEnvironmentBuilder ? createPreparedEnvBuilderEnvironment : undefined,
-      }).withJHipsterGenerators(otherOptions);
+      const { prepareEnvironment, ...otherOptions } = settings ?? {};
+      context = this.run(generatorSpec);
+      if (prepareEnvironment) {
+        context = context.prepareEnvironment();
+      }
+      context.withJHipsterGenerators(otherOptions);
     } else {
       context = this.run(getGenerator(generatorSpec), settings, envOptions).withJHipsterGenerators();
     }
@@ -559,19 +553,20 @@ class JHipsterTest extends YeomanTest {
 
   runCli(
     command: string | string[],
-    options: { commands?: Record<string, CliCommand>; prepareEnvironmentBuilder?: boolean; entrypointGenerator?: string } = {},
+    options: { commands?: Record<string, CliCommand>; prepareEnvironment?: boolean; entrypointGenerator?: string } = {},
   ): JHipsterRunContext {
-    const { prepareEnvironmentBuilder, ...buildJHipsterOptions } = options;
+    const { prepareEnvironment, ...buildJHipsterOptions } = options;
     // Use a dummy generator which will not be used to match yeoman-test requirement.
     const context = this.run(
       this.createDummyGenerator(BaseCoreGenerator),
       { namespace: 'non-used-dummy:generator' },
       {
-        createEnv: prepareEnvironmentBuilder ? createPreparedEnvBuilderEnvironment : undefined,
         sharedOptions: { ...(commonTestOptions as any) },
       },
     );
-    if (!prepareEnvironmentBuilder) {
+    if (prepareEnvironment) {
+      context.prepareEnvironment();
+    } else {
       // If not using EnvironmentBuilder, use the default JHipster generators lookup.
       context.withJHipsterGenerators();
     }
