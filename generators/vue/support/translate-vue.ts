@@ -132,7 +132,7 @@ export function replaceTranslations({
   return content.replaceAll(regex, (_complete, ...args) => {
     const groups: Record<string, string> = args.pop();
     const key = groups.key.substring(1, groups.key.length - 1).replaceAll("\\'", "'");
-    let data: any;
+    let data: Record<string, unknown> | undefined;
     if (groups.data) {
       const interpolateMatches = groups.data.matchAll(/(?<field>[^{\s:,}]+)(?:\s*:\s*(?<value>[^,}]+))?/g);
       data = {};

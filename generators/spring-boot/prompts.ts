@@ -50,7 +50,7 @@ export const askForServerSideOpts = asPromptingTask(async function (this: Spring
         name: 'databaseType',
         message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
         choices: () => {
-          const opts: any[] = [];
+          const opts: Array<{ value: string; name: string }> = [];
           if (!reactive) {
             opts.push({
               value: SQL,
@@ -173,7 +173,7 @@ export const askForOptionalItems = asPromptingTask(async function askForOptional
 
   const { applicationType, reactive, databaseType } = this.jhipsterConfigWithDefaults;
 
-  const choices: any[] = [];
+  const choices: Array<{ name: string; value: string; checked?: boolean }> = [];
   if (([SQL, MONGODB, NEO4J] as string[]).includes(databaseType as string)) {
     choices.push({
       name: 'Elasticsearch as search engine',
