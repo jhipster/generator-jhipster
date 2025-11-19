@@ -40,7 +40,7 @@ export const updateApplicationEntitiesTransform = ({
       }
       if (entities.length > 0) {
         // The mem-fs instance requires another file instance to emit a change event
-        const yoRcFile: MemFsEditorFile = loadFile(yoRcFilePath) as any;
+        const yoRcFile = loadFile(yoRcFilePath) as MemFsEditorFile;
         // Prefer in-memory file if it exists
         const yoRcFileContents = yoRcFileInMemory?.contents ?? yoRcFile.contents;
         if (yoRcFileContents) {

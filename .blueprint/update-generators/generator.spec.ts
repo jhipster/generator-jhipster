@@ -12,6 +12,6 @@ describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
 
   it('should not fail', async () => {
-    await helpers.runJHipster(join(import.meta.dirname, 'index.ts'), undefined, { bail: true } as any);
+    await helpers.runJHipster(join(import.meta.dirname, 'index.ts'), undefined, { bail: true });
   });
 });

@@ -85,7 +85,7 @@ describe('generator - angular - transform', () => {
 `);
         });
 
-        it('should remove neasted [translateValues] attribute', () => {
+        it('should remove nested [translateValues] attribute', () => {
           const body = `
 <h1 [translateValues]="{ max: 50 }"><span [translateValues]="{ max: 50 }">translate-values1</span></h1>
 <h1 [translateValues]="{ max: 50 }"><span [translateValues]="{ max: 50 }">translate-values2</span></h1>
@@ -111,7 +111,7 @@ describe('generator - angular - transform', () => {
 `);
         });
 
-        it('should remove neasted [translateValues] attribute', () => {
+        it('should remove nested [translateValues] attribute', () => {
           const body = `
 <h1 [translateValues]="{ max: 50 }"><span [translateValues]="{ max: 50 }">translate-values1</span></h1>
 <h1 [translateValues]="{ max: 20 }"><span [translateValues]="{ max: 20 }">translate-values2</span></h1>

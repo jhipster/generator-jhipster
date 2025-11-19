@@ -69,7 +69,7 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
 
   async beforeQueue() {
     // Force npm override later if needed
-    (this.env as any).options.nodePackageManager = 'npm';
+    this.env.options.nodePackageManager = 'npm';
     this.upgradeCommand = this.options.commandName === 'upgrade';
 
     if (!this.fromBlueprint) {

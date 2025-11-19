@@ -1,6 +1,7 @@
 import { describe, expect } from 'esmocha';
 
 import type { GeneratorMeta } from '@yeoman/types';
+import type FullEnvironment from 'yeoman-environment';
 
 import BaseApplicationGenerator from '../../generators/base-application/generator.ts';
 import { defaultHelpers as helpers, runResult } from '../testing/index.ts';
@@ -37,7 +38,7 @@ class CommandGenerator extends BaseApplicationGenerator {
 const runDummyCli = (cliArgs: string, config: JHipsterConfig) => {
   return helpers
     .runCli(cliArgs.startsWith('jdl ') ? cliArgs : `dummy ${cliArgs}`.trim(), {
-      useEnvironmentBuilder: false,
+      prepareEnvironment: false,
       entrypointGenerator: 'dummy',
       commands: {
         dummy: { desc: 'dummy Generator' },
@@ -49,7 +50,7 @@ const runDummyCli = (cliArgs: string, config: JHipsterConfig) => {
         throw new Error('command not set');
       }
 
-      const metaStore: Record<string, GeneratorMeta> = (env as any).store._meta;
+      const metaStore: Record<string, GeneratorMeta> = (env as FullEnvironment).getGeneratorsMeta();
       const generatorMeta = {
         ...dummyMeta,
         namespace: 'jhipster:dummy',
