@@ -9,6 +9,7 @@ import { execaCommandSync } from 'execa';
 import { coerce } from 'semver';
 import type FullEnvironment from 'yeoman-environment';
 
+import type { JHipsterCommandDefinition } from '../generators/index.ts';
 import { createBlueprintFiles, defaultHelpers as helpers } from '../lib/testing/index.ts';
 
 import type JHipsterCommand from './jhipster-command.ts';
@@ -178,8 +179,27 @@ describe('cli', () => {
     let generator: Awaited<ReturnType<typeof helpers.instantiateDummyBaseCoreGenerator>>;
     let runArgs: any[];
     let env: FullEnvironment;
+    let command: JHipsterCommandDefinition;
 
     beforeEach(async () => {
+      command = {
+        configs: {
+          foo: {
+            cli: {
+              description: 'Foo',
+              type: Boolean,
+            },
+            scope: 'none',
+          },
+          fooBar: {
+            cli: {
+              description: 'Foo bar',
+              type: Boolean,
+            },
+            scope: 'none',
+          },
+        },
+      };
       getCommand.mockImplementation(actualGetCommand);
 
       const BaseGenerator = (await import('../generators/base/index.ts')).default;
@@ -197,7 +217,9 @@ describe('cli', () => {
         if (namespace === 'jhipster:mocked') {
           return {
             namespace,
-            importModule: async () => ({}),
+            importModule: async () => ({
+              command,
+            }),
             resolved: __filename,
             instantiateHelp: <G>() => Promise.resolve(generator as G),
             packageNamespace: undefined,
@@ -217,7 +239,7 @@ describe('cli', () => {
       });
     };
 
-    describe.skip('without argument', () => {
+    describe('without argument', () => {
       beforeEach(() => {
         argv = ['jhipster', 'jhipster', 'mocked', '--foo', '--foo-bar'];
       });
@@ -233,8 +255,14 @@ describe('cli', () => {
       });
     });
 
-    describe.skip('with argument', () => {
+    describe('with argument', () => {
       beforeEach(() => {
+        (command as any).arguments = {
+          name: {
+            type: String,
+            scope: 'none',
+          },
+        };
         argv = ['jhipster', 'jhipster', 'mocked', 'Foo', '--foo', '--foo-bar'];
       });
 
@@ -249,8 +277,14 @@ describe('cli', () => {
       });
     });
 
-    describe.skip('with variable arguments', () => {
+    describe('with variable arguments', () => {
       beforeEach(() => {
+        (command as any).arguments = {
+          name: {
+            type: Array,
+            scope: 'none',
+          },
+        };
         argv = ['jhipster', 'jhipster', 'mocked', 'Foo', 'Bar', '--foo', '--foo-bar'];
       });
 
