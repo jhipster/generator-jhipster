@@ -10,6 +10,6 @@ hazelcast-spring = { module = 'com.hazelcast:hazelcast-spring', version = '5.5.0
 # memcached
 xmemcached-provider = { module = 'com.google.code.simple-spring-memcached:xmemcached-provider', version = '4.1.3' }
 
-xmemcached = { module = 'com.googlecode.xmemcached:xmemcached', version = '2.4.8' }
+xmemcached = { module = 'com.googlecode.xmemcached:xmemcached', version = '2.4.9' }
 
 redisson = { module = 'org.redisson:redisson', version = '3.52.0' }
