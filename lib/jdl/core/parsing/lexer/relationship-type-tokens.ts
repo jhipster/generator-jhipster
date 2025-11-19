@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { Lexer } from 'chevrotain';
+import { type ITokenConfig, Lexer } from 'chevrotain';
 
 import {
   JDL_RELATIONSHIP_MANY_TO_MANY,
@@ -30,13 +30,15 @@ import createTokenFromConfig from './token-creator.ts';
 
 const relationshipTypeCategoryToken = createTokenFromConfig({ name: 'RELATIONSHIP_TYPE', pattern: Lexer.NA });
 
-const relationshipTypeTokens = [
-  { name: 'ONE_TO_ONE', pattern: JDL_RELATIONSHIP_ONE_TO_ONE },
-  { name: 'ONE_TO_MANY', pattern: JDL_RELATIONSHIP_ONE_TO_MANY },
-  { name: 'MANY_TO_ONE', pattern: JDL_RELATIONSHIP_MANY_TO_ONE },
-  { name: 'MANY_TO_MANY', pattern: JDL_RELATIONSHIP_MANY_TO_MANY },
-].map(tokenConfig => {
-  (tokenConfig as any).categories = [relationshipTypeCategoryToken];
+const relationshipTypeTokens = (
+  [
+    { name: 'ONE_TO_ONE', pattern: JDL_RELATIONSHIP_ONE_TO_ONE },
+    { name: 'ONE_TO_MANY', pattern: JDL_RELATIONSHIP_ONE_TO_MANY },
+    { name: 'MANY_TO_ONE', pattern: JDL_RELATIONSHIP_MANY_TO_ONE },
+    { name: 'MANY_TO_MANY', pattern: JDL_RELATIONSHIP_MANY_TO_MANY },
+  ] as ITokenConfig[]
+).map(tokenConfig => {
+  tokenConfig.categories = [relationshipTypeCategoryToken];
   return createTokenFromConfig(tokenConfig);
 });
 
