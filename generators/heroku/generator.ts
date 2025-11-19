@@ -155,7 +155,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
 
           const answers = await this.prompt([
             {
-              type: 'list',
+              type: 'select',
               name: 'herokuRegion',
               message: 'On which region do you want to deploy?',
               choices: ['us', 'eu'],
@@ -169,7 +169,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
         await this.prompt(
           [
             {
-              type: 'list',
+              type: 'select',
               name: 'herokuDeployType',
               message: 'Which type of deployment do you want?',
               choices: [
@@ -187,7 +187,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
         await this.prompt(
           [
             {
-              type: 'list',
+              type: 'select',
               name: 'herokuJavaVersion',
               message: 'Which Java version would you like to use to build and run your app?',
               choices: JAVA_COMPATIBLE_VERSIONS.map(version => ({ value: version })),
@@ -282,7 +282,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
             this.log.log('');
             const props = await this.prompt([
               {
-                type: 'list',
+                type: 'select',
                 name: 'herokuForceName',
                 message: `The Heroku application "${chalk.cyan(this.herokuAppName)}" already exists! Use it anyways?`,
                 choices: [

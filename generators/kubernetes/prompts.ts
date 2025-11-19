@@ -58,7 +58,7 @@ export const askForKubernetesServiceType = asPromptingTask(async function askFor
     [
       {
         when: () => !this.jhipsterConfigWithDefaults.istio,
-        type: 'list',
+        type: 'select',
         name: 'kubernetesServiceType',
         message: 'Choose the Kubernetes service type for your edge services',
         choices: [
@@ -88,7 +88,7 @@ export const askForIngressType = asPromptingTask(async function askForIngressTyp
     [
       {
         when: () => this.jhipsterConfigWithDefaults.kubernetesServiceType === INGRESS,
-        type: 'list',
+        type: 'select',
         name: 'ingressType',
         message: 'Choose the Kubernetes Ingress type',
         choices: [
@@ -180,7 +180,7 @@ export const askForIstioSupport = asPromptingTask(async function askForIstioSupp
   await this.prompt(
     [
       {
-        type: 'list',
+        type: 'select',
         name: 'istio',
         message: 'Do you want to enable Istio?',
         choices: [
@@ -210,7 +210,7 @@ export const askForPersistentStorage = asPromptingWorkspacesTask(async function 
     [
       {
         when: () => usingDataBase,
-        type: 'list',
+        type: 'select',
         name: 'kubernetesUseDynamicStorage',
         message: 'Do you want to use dynamic storage provisioning for your stateful services?',
         choices: [

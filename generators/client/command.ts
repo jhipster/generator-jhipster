@@ -46,7 +46,7 @@ const command = {
         type: String,
       },
       prompt: generator => ({
-        type: 'list',
+        type: 'select',
         message: () =>
           generator.jhipsterConfigWithDefaults.applicationType === APPLICATION_TYPE_MICROSERVICE
             ? `Which ${chalk.yellow('*framework*')} would you like to use as microfrontend?`

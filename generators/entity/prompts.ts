@@ -112,7 +112,7 @@ export const askForUpdate = asPromptingTask(async function askForUpdate(this: En
   }
   const answers = await this.prompt([
     {
-      type: 'list',
+      type: 'select',
       name: 'updateEntity',
       message:
         'Do you want to update the entity? This will replace the existing files for this entity, all your custom code will be overwritten',
@@ -262,7 +262,7 @@ export function askForFiltering(this: EntityGenerator) {
   }
   return this.prompt([
     {
-      type: 'list',
+      type: 'select',
       name: 'filtering',
       message: 'Do you want to add filtering?',
       choices: [
@@ -308,7 +308,7 @@ export function askForDTO(this: EntityGenerator) {
   }
   return this.prompt([
     {
-      type: 'list',
+      type: 'select',
       name: 'dto',
       message: 'Do you want to use a Data Transfer Object (DTO)?',
       choices: [
@@ -336,7 +336,7 @@ export function askForService(this: EntityGenerator) {
   }
   return this.prompt([
     {
-      type: 'list',
+      type: 'select',
       name: 'service',
       message: 'Do you want to use separate service class for your business logic?',
       choices: [
@@ -371,7 +371,7 @@ export function askForPagination(this: EntityGenerator) {
   }
   return this.prompt([
     {
-      type: 'list',
+      type: 'select',
       name: 'pagination',
       message: 'Do you want pagination and sorting on your entity?',
       choices: [
@@ -450,7 +450,7 @@ async function askForField(this: EntityGenerator) {
       message: 'What is the name of your field?',
     },
     {
-      type: 'list',
+      type: 'select',
       name: 'fieldType',
       message: 'What is the type of your field?',
       choices: () => [
@@ -544,7 +544,7 @@ async function askForField(this: EntityGenerator) {
     },
     {
       when: response => response.fieldType === BYTES || response.fieldType === BYTE_BUFFER,
-      type: 'list',
+      type: 'select',
       name: 'fieldTypeBlobContent',
       message: 'What is the content of the Blob field?',
       choices: answers => [
@@ -742,7 +742,7 @@ async function askForRelationship(this: EntityGenerator, ...args: any[]) {
 
   const answers = await this.prompt([
     {
-      type: 'list',
+      type: 'select',
       name: 'otherEntityName',
       message: 'What is the other entity?',
       choices: () => [...this.getExistingEntityNames(), ...(application.generateBuiltInUserEntity ? ['User'] : [])],
@@ -772,7 +772,7 @@ async function askForRelationship(this: EntityGenerator, ...args: any[]) {
       default: response => lowerFirst(response.otherEntityName),
     },
     {
-      type: 'list',
+      type: 'select',
       name: 'relationshipType',
       message: 'What is the type of the relationship?',
       choices: response => [

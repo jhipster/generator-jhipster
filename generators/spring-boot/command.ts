@@ -72,7 +72,7 @@ const command = {
       },
       prompt: gen => ({
         when: () => ['gateway', 'microservice'].includes(gen.jhipsterConfigWithDefaults.applicationType),
-        type: 'list',
+        type: 'select',
         message: 'Which service discovery server do you want to use?',
         default: 'consul',
       }),
@@ -105,7 +105,7 @@ const command = {
         type: String,
       },
       prompt: (gen, config) => ({
-        type: 'list',
+        type: 'select',
         message: `Which ${chalk.yellow('*type*')} of authentication would you like to use?`,
         choices: () =>
           gen.jhipsterConfigWithDefaults.applicationType !== APPLICATION_TYPE_MONOLITH

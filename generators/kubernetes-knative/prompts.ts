@@ -29,7 +29,7 @@ export const askForGeneratorType = asPromptingTask(async function askForGenerato
   await this.prompt(
     [
       {
-        type: 'list',
+        type: 'select',
         name: 'generatorType',
         message: 'Which *type* of generator would you like to base this on?',
         choices: [

@@ -29,7 +29,7 @@ const command = {
         type: String,
       },
       prompt: {
-        type: 'list',
+        type: 'select',
         message: 'Would you like to use Maven or Gradle for building the backend?',
       },
       choices: [

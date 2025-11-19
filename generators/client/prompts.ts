@@ -31,7 +31,7 @@ export const askForClientTheme = asPromptingTask(async function askForClientThem
 
   await this.prompt(
     {
-      type: 'list',
+      type: 'select',
       name: 'clientTheme',
       when: () => ['angular', 'react', 'vue'].includes(clientFramework!),
       message: 'Would you like to use a Bootswatch theme (https://bootswatch.com/)?',
@@ -60,7 +60,7 @@ export const askForClientThemeVariant = asPromptingTask(async function askForCli
   const config = this.jhipsterConfigWithDefaults;
   await this.prompt(
     {
-      type: 'list',
+      type: 'select',
       name: 'clientThemeVariant',
       when: () => !this.jhipsterConfig.skipClient,
       message: 'Choose a Bootswatch variant navbar theme (https://bootswatch.com/)?',

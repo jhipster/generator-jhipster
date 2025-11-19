@@ -34,7 +34,7 @@ export const askI18n = asPromptingTask<LanguagesGenerator>(async function askI18
         default: true,
       },
       {
-        type: 'list',
+        type: 'select',
         name: 'nativeLanguage',
         message: 'Please choose the native language of the application',
         choices: () => languagesAsChoices([...this.supportedLanguages.values()]),

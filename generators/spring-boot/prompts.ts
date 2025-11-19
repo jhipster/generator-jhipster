@@ -46,7 +46,7 @@ export const askForServerSideOpts = asPromptingTask(async function (this: Spring
   await this.prompt(
     [
       {
-        type: 'list',
+        type: 'select',
         name: 'databaseType',
         message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
         choices: () => {
@@ -90,7 +90,7 @@ export const askForServerSideOpts = asPromptingTask(async function (this: Spring
       },
       {
         when: response => response.databaseType === SQL,
-        type: 'list',
+        type: 'select',
         name: 'prodDatabaseType',
         message: `Which ${chalk.yellow('*production*')} database would you like to use?`,
         choices: reactive ? R2DBC_DB_OPTIONS : SQL_DB_OPTIONS,
@@ -98,7 +98,7 @@ export const askForServerSideOpts = asPromptingTask(async function (this: Spring
       },
       {
         when: response => response.databaseType === SQL,
-        type: 'list',
+        type: 'select',
         name: 'devDatabaseType',
         message: `Which ${chalk.yellow('*development*')} database would you like to use?`,
         choices: response => {
@@ -117,7 +117,7 @@ export const askForServerSideOpts = asPromptingTask(async function (this: Spring
       },
       {
         when: !reactive,
-        type: 'list',
+        type: 'select',
         name: 'cacheProvider',
         message: 'Which cache do you want to use? (Spring cache abstraction)',
         choices: [

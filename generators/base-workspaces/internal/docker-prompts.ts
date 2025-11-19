@@ -44,7 +44,7 @@ export const askForApplicationType = asPromptingTask(async function askForApplic
   await this.prompt(
     [
       {
-        type: 'list',
+        type: 'select',
         name: 'deploymentApplicationType',
         message: 'Which *type* of application would you like to deploy?',
         choices: [
@@ -168,7 +168,7 @@ export const askForMonitoring = asPromptingTask(async function askForMonitoring(
   await this.prompt(
     [
       {
-        type: 'list',
+        type: 'select',
         name: 'monitoring',
         message: 'Do you want to setup monitoring for your applications ?',
         choices: [
@@ -224,7 +224,7 @@ export const askForServiceDiscovery: any = asPromptingWorkspacesTask(async funct
     await this.prompt(
       [
         {
-          type: 'list',
+          type: 'select',
           name: 'serviceDiscoveryType',
           message: 'Which Service Discovery registry and Configuration server would you like to use ?',
           choices: [
@@ -294,7 +294,7 @@ export const askForServiceDiscoveryWorkspace = asPromptingWorkspacesTask(async f
     await this.prompt(
       [
         {
-          type: 'list',
+          type: 'select',
           name: 'serviceDiscoveryType',
           message: 'Which Service Discovery registry and Configuration server would you like to use ?',
           choices: [
