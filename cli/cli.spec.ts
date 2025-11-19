@@ -183,6 +183,7 @@ describe('cli', () => {
 
     beforeEach(async () => {
       command = {
+        arguments: {},
         configs: {
           foo: {
             cli: {
@@ -257,12 +258,7 @@ describe('cli', () => {
 
     describe('with argument', () => {
       beforeEach(() => {
-        (command as any).arguments = {
-          name: {
-            type: String,
-            scope: 'none',
-          },
-        };
+        command.arguments!.name = { type: String, scope: 'none' };
         argv = ['jhipster', 'jhipster', 'mocked', 'Foo', '--foo', '--foo-bar'];
       });
 
@@ -279,12 +275,7 @@ describe('cli', () => {
 
     describe('with variable arguments', () => {
       beforeEach(() => {
-        (command as any).arguments = {
-          name: {
-            type: Array,
-            scope: 'none',
-          },
-        };
+        command.arguments!.name = { type: Array, scope: 'none' };
         argv = ['jhipster', 'jhipster', 'mocked', 'Foo', 'Bar', '--foo', '--foo-bar'];
       });
 
