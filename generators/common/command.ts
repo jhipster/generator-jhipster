@@ -61,7 +61,7 @@ const command = {
         type: String,
       },
       prompt: {
-        type: 'list',
+        type: 'select',
         message: `Which ${chalk.yellow('*type*')} of application would you like to create?`,
       },
       choices: applicationTypesChoices,

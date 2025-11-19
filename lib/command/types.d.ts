@@ -91,7 +91,7 @@ type CliSpecType = CliOptionSpec['type'] | typeof Object;
 export type JHipsterChoices = readonly [...(string | JHipsterNamedChoice)[]];
 
 export type PromptSpec = {
-  readonly type: 'input' | 'list' | 'confirm' | 'checkbox';
+  readonly type: 'input' | 'select' | 'confirm' | 'checkbox';
   readonly message: string | ((arg: any) => string);
   readonly when?: boolean | ((arg: any) => boolean);
   readonly default?: any | ((arg: any) => any);
