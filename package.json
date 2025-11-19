@@ -207,10 +207,10 @@
     "rimraf": "6.1.2",
     "sinon": "21.0.0",
     "sinon-chai": "4.0.1",
-    "yeoman-test": "11.1.1"
+    "yeoman-test": "11.2.0"
   },
   "peerDependencies": {
-    "yeoman-test": "11.1.1"
+    "yeoman-test": "11.2.0"
   },
   "peerDependenciesMeta": {
     "yeoman-test": {
