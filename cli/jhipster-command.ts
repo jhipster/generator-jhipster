@@ -35,7 +35,7 @@ export default class JHipsterCommand extends Command {
   blueprintConfigs = {};
   generatorNamespaces: string[] = [];
   _lazyBuildCommandCallBack?: (this: JHipsterCommand, args?: string | string[]) => Promise<void>;
-  private _excessArgumentsCallback: any;
+  private _excessArgumentsCallback?: (this: JHipsterCommand, receivedArgs: string[]) => void;
 
   createCommand(name?: string): JHipsterCommand {
     return new JHipsterCommand(name);
@@ -141,7 +141,7 @@ export default class JHipsterCommand extends Command {
   /**
    * Register arguments using generator._arguments structure.
    */
-  addGeneratorArguments(generatorArgs: any[] = []): this {
+  addGeneratorArguments(generatorArgs: Array<{ name: string; description?: string; required?: boolean; type?: unknown }> = []): this {
     if (!generatorArgs) return this;
     generatorArgs.forEach(argument => {
       let argName = argument.type === Array ? `${argument.name}...` : argument.name;
