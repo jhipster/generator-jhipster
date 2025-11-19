@@ -9,6 +9,7 @@ import { execaCommandSync } from 'execa';
 import { coerce } from 'semver';
 import type FullEnvironment from 'yeoman-environment';
 
+import type { JHipsterCommandDefinition } from '../generators/index.ts';
 import { createBlueprintFiles, defaultHelpers as helpers } from '../lib/testing/index.ts';
 
 import type JHipsterCommand from './jhipster-command.ts';
@@ -37,15 +38,6 @@ const cliBlueprintFiles = {
   'generators/foo/index.js': `export const createGenerator = async env => {
   const BaseGenerator = await env.requireGenerator('jhipster:base');
   return class extends BaseGenerator {
-    constructor(args, opts, features) {
-      super(args, opts, features);
-
-      this.option('foo-bar', {
-        description: 'Sample option',
-        type: Boolean,
-      });
-    }
-
     get [BaseGenerator.INITIALIZING]() {
       /* eslint-disable no-console */
       console.log('Running foo');
@@ -56,6 +48,18 @@ const cliBlueprintFiles = {
       }
     }
   };
+};
+
+export const command = {
+  configs: {
+    fooBar: {
+      cli: {
+        description: 'Sample option',
+        type: Boolean,
+      },
+      scope: 'none',
+    },
+  },
 };
 `,
 };
@@ -76,15 +80,20 @@ const cliSharedBlueprintFiles = {
   'generators/bar/index.js': `export const createGenerator = async env => {
   const BaseGenerator = await env.requireGenerator('jhipster:base');
   return class extends BaseGenerator {
-    constructor(args, options) {
-      super(args, options);
-      this.option('foo', {
-        description: 'foo description',
-        type: Boolean,
-      });
-    }
     get [BaseGenerator.INITIALIZING]() {}
   };
+};
+
+export const command = {
+  configs: {
+    foo: {
+      cli: {
+        description: 'foo description',
+        type: Boolean,
+      },
+      scope: 'none',
+    },
+  },
 };
 `,
 };
@@ -170,22 +179,34 @@ describe('cli', () => {
     let generator: Awaited<ReturnType<typeof helpers.instantiateDummyBaseCoreGenerator>>;
     let runArgs: any[];
     let env: FullEnvironment;
+    let command: JHipsterCommandDefinition;
 
     beforeEach(async () => {
+      command = {
+        arguments: {},
+        configs: {
+          foo: {
+            cli: {
+              description: 'Foo',
+              type: Boolean,
+            },
+            scope: 'none',
+          },
+          fooBar: {
+            cli: {
+              description: 'Foo bar',
+              type: Boolean,
+            },
+            scope: 'none',
+          },
+        },
+      };
       getCommand.mockImplementation(actualGetCommand);
 
-      generator = await helpers.instantiateDummyBaseCoreGenerator();
-      env = generator.env;
-      Object.assign(generator._options, {
-        foo: {
-          description: 'Foo',
-        },
-        'foo-bar': {
-          description: 'Foo bar',
-        },
-      });
-      const runSpy = esmocha.spyOn(env, 'run');
-      runSpy.mockImplementation((...args) => {
+      const BaseGenerator = (await import('../generators/base/index.ts')).default;
+      env = (await helpers.createTestEnv()) as FullEnvironment;
+      generator = new (helpers.createDummyGenerator(BaseGenerator))([], { env });
+      env.run = esmocha.fn<typeof env.run>((...args) => {
         runArgs = args;
         return Promise.resolve();
       });
@@ -197,7 +218,9 @@ describe('cli', () => {
         if (namespace === 'jhipster:mocked') {
           return {
             namespace,
-            importModule: async () => ({}),
+            importModule: async () => ({
+              command,
+            }),
             resolved: __filename,
             instantiateHelp: <G>() => Promise.resolve(generator as G),
             packageNamespace: undefined,
@@ -235,7 +258,7 @@ describe('cli', () => {
 
     describe('with argument', () => {
       beforeEach(() => {
-        generator._arguments.push({ name: 'name', type: String });
+        command.arguments!.name = { type: String, scope: 'none' };
         argv = ['jhipster', 'jhipster', 'mocked', 'Foo', '--foo', '--foo-bar'];
       });
 
@@ -252,7 +275,7 @@ describe('cli', () => {
 
     describe('with variable arguments', () => {
       beforeEach(() => {
-        generator._arguments.push({ name: 'name', type: Array });
+        command.arguments!.name = { type: Array, scope: 'none' };
         argv = ['jhipster', 'jhipster', 'mocked', 'Foo', 'Bar', '--foo', '--foo-bar'];
       });
 
@@ -549,20 +572,23 @@ describe('cli', () => {
                 generatorContent: `export const createGenerator = async env => {
     const BaseGenerator = await env.requireGenerator('jhipster:base');
     return class extends BaseGenerator {
-      constructor(args, opts, features) {
-        super(args, opts, features);
-
-        this.option('foo-bar', {
-          description: 'Sample option',
-          type: Boolean,
-        });
-      }
-
       get [BaseGenerator.INITIALIZING]() {
         return {};
       }
     };
   };
+
+export const command = {
+  configs: {
+    fooBar: {
+      cli: {
+        description: 'Sample option',
+        type: Boolean,
+      },
+      scope: 'none',
+    },
+  },
+};
   `,
               }),
             )

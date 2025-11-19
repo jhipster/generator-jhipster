@@ -48,29 +48,6 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
   herokuSkipBuild!: boolean;
   dynoSize!: string;
 
-  constructor(args?: string[], options?: any, features?: any) {
-    super(args, options, features);
-
-    this.option('skip-build', {
-      description: 'Skips building the application',
-      type: Boolean,
-      default: false,
-    });
-
-    this.option('skip-deploy', {
-      description: 'Skips deployment to Heroku',
-      type: Boolean,
-      default: false,
-    });
-
-    if (this.options.help) {
-      return;
-    }
-
-    this.herokuSkipBuild = this.options.skipBuild;
-    this.herokuSkipDeploy = this.options.skipDeploy || this.options.skipBuild;
-  }
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -110,6 +87,8 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
         this.log.log(chalk.bold('Heroku configuration is starting'));
         this.dynoSize = 'Basic';
         this.herokuAppExists = Boolean(this.jhipsterConfig.herokuAppName);
+        this.herokuSkipBuild = this.options.skipBuild;
+        this.herokuSkipDeploy = this.options.skipDeploy || this.options.skipBuild;
       },
     });
   }

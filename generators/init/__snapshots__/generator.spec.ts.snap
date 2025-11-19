@@ -8,10 +8,6 @@ Init project (alpha)
 Options:
   --auto-crlf                   Detect line endings
   --remove-needles              Remove needles, needles are used by entity and language generators to inject code
-  --skip-cache                  Do not remember prompt answers (default: false)
-  --skip-install                Do not automatically install dependencies (default: false)
-  --force-install               Fail on install dependencies error (default: false)
-  --ask-answered                Show prompts for already configured options (default: false)
   --skip-git                    Skip git repository initialization
   --force-git                   Force commit to git repository
   --commit-msg <value>          Commit changes (implies forceGit)

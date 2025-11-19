@@ -140,7 +140,7 @@ const buildAllDependencies = async (
 const addCommandGeneratorOptions = async (
   command: JHipsterCommand,
   generatorMeta: GeneratorMeta,
-  { root, blueprintOptionDescription, info }: { root?: boolean; blueprintOptionDescription?: string; info?: string } = {},
+  { blueprintOptionDescription }: { blueprintOptionDescription?: string } = {},
 ) => {
   const generatorModule = (await generatorMeta.importModule!()) as JHipsterModule;
   if (generatorModule.command) {
@@ -149,30 +149,12 @@ const addCommandGeneratorOptions = async (
       command.addJHipsterConfigs(configs, blueprintOptionDescription);
     }
   }
-  try {
-    if (
-      generatorModule.command?.loadGeneratorOptions !== false &&
-      (root || !generatorModule.command || generatorModule.command.loadGeneratorOptions)
-    ) {
-      const generator = await generatorMeta.instantiateHelp();
-      // Add basic yeoman generator options
-      command.addGeneratorOptions((generator as any)._options, blueprintOptionDescription);
-    }
-  } catch (error) {
-    if (!info) {
-      throw error;
-    }
-    logger.verboseInfo(`${info}, error: ${error}`);
-  }
 };
 
 const addCommandRootGeneratorOptions = async (command: JHipsterCommand, generatorMeta: GeneratorMeta, { usage = true } = {}) => {
   const generatorModule = (await generatorMeta.importModule!()) as JHipsterModule;
   if (generatorModule.command) {
     command.addJHipsterArguments(generatorModule.command.arguments ?? extractArgumentsFromConfigs(generatorModule.command.configs));
-  } else {
-    const generator = await generatorMeta.instantiateHelp();
-    command.addGeneratorArguments((generator as any)._arguments);
   }
   if (usage) {
     const usagePath = path.resolve(path.dirname(generatorMeta.resolved!), 'USAGE');
@@ -207,6 +189,11 @@ export const createProgram = ({
       .option('--install-path', 'Show jhipster install path', false)
       .option('--skip-regenerate', "Don't regenerate identical files", false)
       .option('--skip-yo-resolve', 'Ignore .yo-resolve files', false)
+      // Yeoman Generator options
+      .option('--skip-cache', 'Do not remember prompt answers', false)
+      .option('--skip-install', 'Do not automatically install dependencies', false)
+      .option('--force-install', 'Fail on install dependencies error', false)
+      .option('--ask-answered', 'Show prompts for already configured options', false)
       .addJHipsterConfigs(baseCommand.configs)
   );
 };
@@ -299,7 +286,7 @@ export const buildCommands = ({
               }
 
               await addCommandRootGeneratorOptions(command, generatorMeta!, { usage: command.generatorNamespaces.length === 1 });
-              await addCommandGeneratorOptions(command, generatorMeta!, { root: true });
+              await addCommandGeneratorOptions(command, generatorMeta!);
             }),
           );
           return;
@@ -324,15 +311,14 @@ export const buildCommands = ({
             env,
             blueprintNamespaces: envBuilder?.getBlueprintsNamespaces(),
           });
-          for (const [metaName, { meta: generatorMeta, blueprintNamespace }] of Object.entries(allDependencies)) {
+          for (const [_metaName, { meta: generatorMeta, blueprintNamespace }] of Object.entries(allDependencies)) {
             if (blueprintNamespace) {
               const blueprintOptionDescription = chalk.yellow(` (blueprint option: ${blueprintNamespace.replace(/^jhipster-/, '')})`);
               await addCommandGeneratorOptions(command, generatorMeta, {
                 blueprintOptionDescription,
-                info: `Error parsing options for generator ${metaName}`,
               });
             } else {
-              await addCommandGeneratorOptions(command, generatorMeta, { root: metaName === generator });
+              await addCommandGeneratorOptions(command, generatorMeta);
             }
           }
         }
@@ -372,10 +358,15 @@ export const buildCommands = ({
         }
 
         if (cmdName === 'run') {
-          return Promise.all(command.generatorNamespaces.map(generator => env.run(generator, options))).then(
-            () => silent || done(),
-            errors => silent || done(errors.find((error: any) => error)),
-          );
+          try {
+            args.shift(); // remove first argument which is handled in lazyBuildCommand
+            await Promise.all(command.generatorNamespaces.map(generator => env.run(generator, options)));
+
+            silent || done();
+          } catch (error) {
+            silent || done(error as Error);
+          }
+          return;
         }
         if (cmdName === 'upgrade') {
           options.programName = program.name();
