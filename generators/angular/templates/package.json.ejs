@@ -105,15 +105,15 @@
   },
   "overrides": {
     "@angular-devkit/architect": ">=0.2100.0 < 0.2200.0",
-    "@angular-devkit/build-angular": "$@angular/cli",
-    "@angular-devkit/core": "$@angular/cli",
-    "@angular/build": "$@angular/build",
-    "@angular/core": "$@angular/core",
-    "@angular/common": "$@angular/common",
-    "@angular/compiler-cli": "$@angular/core",
-    "@angular/forms": "$@angular/forms",
-    "@angular/localize": "$@angular/localize",
-    "@angular/platform-browser-dynamic": "$@angular/core"
+    "@angular-devkit/build-angular": "<%= nodeDependencies['@angular/cli'] %>",
+    "@angular-devkit/core": "<%= nodeDependencies['@angular/cli'] %>",
+    "@angular/build": "<%= nodeDependencies['@angular/cli'] %>",
+    "@angular/core": "<%= nodeDependencies['@angular/common'] %>",
+    "@angular/common": "<%= nodeDependencies['@angular/common'] %>",
+    "@angular/compiler-cli": "<%= nodeDependencies['@angular/common'] %>",
+    "@angular/forms": "<%= nodeDependencies['@angular/common'] %>",
+    "@angular/localize": "<%= nodeDependencies['@angular/common'] %>",
+    "@angular/platform-browser-dynamic": "<%= nodeDependencies['@angular/common'] %>"
   },
   "scripts": {
     "lint": "eslint .",
