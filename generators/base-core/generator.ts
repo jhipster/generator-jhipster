@@ -167,6 +167,7 @@ export default class CoreGenerator<
       tasksMatchingPriority: true,
       taskPrefix: PRIORITY_PREFIX,
       unique: 'namespace',
+      disableInGeneratorOptionsSupport: true,
       ...features,
     });
 

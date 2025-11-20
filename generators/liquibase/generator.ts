@@ -84,24 +84,10 @@ export default class LiquibaseGenerator<
   Entity extends LiquibaseEntity = LiquibaseEntity<LiquibaseField>,
   Application extends LiquibaseApplication<Entity> = LiquibaseApplication<Entity>,
 > extends BaseEntityChangesGenerator<Entity, Application, LiquibaseConfig, LiquibaseOptions, LiquibaseSource, LiquibaseFeatures> {
-  recreateInitialChangelog: boolean;
-  numberOfRows: number;
+  numberOfRows!: number;
   databaseChangelogs: BaseChangelog<Entity>[] = [];
   injectBuildTool = true;
   injectLogs = true;
-
-  constructor(args?: string[], options?: LiquibaseOptions, features?: LiquibaseFeatures) {
-    super(args, options, { skipParseOptions: false, ...features });
-
-    this.argument('entities', {
-      description: 'Which entities to generate a new changelog',
-      type: Array,
-      required: false,
-    });
-
-    this.recreateInitialChangelog = this.options.recreateInitialChangelog ?? false;
-    this.numberOfRows = 10;
-  }
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -116,6 +102,7 @@ export default class LiquibaseGenerator<
   get preparing() {
     return this.asPreparingTaskGroup({
       preparing({ application }) {
+        this.numberOfRows = 10;
         application.liquibaseDefaultSchemaName = '';
         // Generate h2 properties at master.xml for blueprints that uses h2 for tests or others purposes.
         application.liquibaseAddH2Properties ??= application.devDatabaseTypeH2Any;
