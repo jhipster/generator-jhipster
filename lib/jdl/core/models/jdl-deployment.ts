@@ -45,9 +45,9 @@ export default class JDLDeployment {
     const merged = merge(defaults(args.deploymentType), args);
     Object.entries(merged).forEach(([key, option]) => {
       if (Array.isArray(option) && arrayTypes.includes(key)) {
-        (this as any)[key] = new Set(option);
+        (this as Record<string, any>)[key] = new Set(option);
       } else {
-        (this as any)[key] = option;
+        (this as Record<string, any>)[key] = option;
       }
     });
   }

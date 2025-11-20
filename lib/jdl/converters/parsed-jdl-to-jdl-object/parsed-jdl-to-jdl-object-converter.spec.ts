@@ -481,7 +481,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
               parsedContent: input,
             });
           } catch (error) {
-            expect((error as any).name).to.equal('IllegalOptionException');
+            expect((error as Error).name).to.equal('IllegalOptionException');
           }
         });
       });
