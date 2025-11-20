@@ -189,7 +189,7 @@ export default class CoreGenerator<
 
     this.registerPriorities(CUSTOM_PRIORITIES);
 
-    const { blueprintSupport = false, queueCommandTasks = true } = this.getFeatures();
+    const { blueprintSupport = false, queueCommandTasks = true } = this.features;
 
     // Add base template folder.
     this.jhipsterTemplatesFolders = [this.templatePath()];
@@ -335,7 +335,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       },
     });
 
-    const { loadCommand = [], skipLoadCommand } = this.getFeatures();
+    const { loadCommand = [], skipLoadCommand } = this.features;
 
     this.queueTask({
       queueName: QUEUES.LOADING_QUEUE,
@@ -791,7 +791,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     const startTime = new Date().getMilliseconds();
     const { customizeTemplatePaths: contextCustomizeTemplatePaths = [] } = templateData as WriteContext;
 
-    const { jhipster7Migration } = this.getFeatures();
+    const { jhipster7Migration } = this.features;
     if (jhipster7Migration) {
       templateData = createJHipster7Context(this, options.context ?? {}, {
         log: jhipster7Migration === 'verbose' ? (msg: string) => this.log.info(msg) : () => {},
