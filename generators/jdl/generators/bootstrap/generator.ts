@@ -40,7 +40,9 @@ export default class JdlBootstrapGenerator extends BaseGenerator<JdlBootstrapCon
           const jdlStorePath = this.destinationPath(this.jhipsterConfig.jdlStore);
           const { jdlDefinition } = this.options;
 
-          this.features.commitTransformFactory = () => exportJDLTransform({ destinationPath, jdlStorePath, jdlDefinition: jdlDefinition! });
+          this.setFeatures({
+            commitTransformFactory: () => exportJDLTransform({ destinationPath, jdlStorePath, jdlDefinition: jdlDefinition! }),
+          });
           await this.pipeline(
             { refresh: true, pendingFiles: false },
             importJDLTransform({ destinationPath, jdlStorePath, jdlDefinition: jdlDefinition! }),

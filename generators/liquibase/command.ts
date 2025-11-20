@@ -20,6 +20,13 @@ import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 
 const command = {
   configs: {
+    entities: {
+      argument: {
+        description: 'Which entities to generate a new changelog',
+        type: Array,
+      },
+      scope: 'none',
+    },
     skipFakeData: {
       description: 'Skip generation of fake data for development',
       cli: {
@@ -32,7 +39,7 @@ const command = {
       cli: {
         type: Boolean,
       },
-      scope: 'none',
+      scope: 'generator',
     },
     skipDbChangelog: {
       description: 'Skip the generation of database migrations',
