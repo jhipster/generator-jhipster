@@ -103,6 +103,16 @@
   "config": {
     "default_environment": "prod"
   },
+  "overrides": {
+    "@angular-devkit/architect": ">=0.2100.0 < 0.2200.0",
+    "@angular-devkit/build-angular": "$@angular/cli",
+    "@angular-devkit/core": "$@angular/cli",
+    "@angular/build": "$@angular/build",
+    "@angular/core": "$@angular/core",
+    "@angular/common": "$@angular/common",
+    "@angular/compiler-cli": "$@angular/core",
+    "@angular/platform-browser-dynamic": "$@angular/core"
+  },
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "<%- nodePackageManager %> run lint -- --fix",
