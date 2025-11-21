@@ -266,5 +266,11 @@ task cleanResources(type: Delete) {
     delete "build/resources"
 }
 
+<%_ if (databaseTypeCouchbase) { _%>
+bootJar {
+    loaderImplementation = org.springframework.boot.loader.tools.LoaderImplementation.CLASSIC
+}
+
+<%_ } _%>
 compileJava.dependsOn(processResources)
 processResources.dependsOn(bootBuildInfo)
