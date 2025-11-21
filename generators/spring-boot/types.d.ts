@@ -156,7 +156,6 @@ export type Application<E extends BaseApplicationEntity = Entity> = Command['App
     addSpringMilestoneRepository: boolean;
 
     enableSwaggerCodegen: boolean;
-    embeddableLaunchScript: boolean;
     skipFakeData: boolean;
     skipCheckLengthOfIdentifier: boolean;
 

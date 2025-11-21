@@ -119,7 +119,6 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
   "domains": Any<Array>,
   "dtoSuffix": "DTO",
   "dynamic": undefined,
-  "embeddableLaunchScript": undefined,
   "enableGradleDevelocity": undefined,
   "enableHibernateCache": true,
   "enableI18nRTL": false,

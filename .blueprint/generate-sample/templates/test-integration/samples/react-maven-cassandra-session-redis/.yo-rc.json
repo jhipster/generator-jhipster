@@ -12,7 +12,6 @@
     "databaseType": "cassandra",
     "devDatabaseType": "cassandra",
     "dtoSuffix": "DTO",
-    "embeddableLaunchScript": false,
     "enableHibernateCache": false,
     "enableTranslation": true,
     "entitySuffix": "",

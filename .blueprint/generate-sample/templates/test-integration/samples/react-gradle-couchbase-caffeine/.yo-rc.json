@@ -12,7 +12,6 @@
     "databaseType": "couchbase",
     "devDatabaseType": "couchbase",
     "dtoSuffix": "DTO",
-    "embeddableLaunchScript": false,
     "enableHibernateCache": false,
     "enableTranslation": true,
     "entitySuffix": "",

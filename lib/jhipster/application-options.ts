@@ -83,7 +83,6 @@ const optionNames = {
   DATABASE_TYPE: 'databaseType',
   DEV_DATABASE_TYPE: 'devDatabaseType',
   DTO_SUFFIX: 'dtoSuffix',
-  EMBEDDABLE_LAUNCH_SCRIPT: 'embeddableLaunchScript',
   ENABLE_HIBERNATE_CACHE: 'enableHibernateCache',
   ENABLE_SWAGGER_CODEGEN: 'enableSwaggerCodegen',
   ENABLE_TRANSLATION: 'enableTranslation',
