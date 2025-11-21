@@ -45,7 +45,7 @@ export class UserManagementService {
   }
 
   find(login: string): Observable<IUser> {
-    return this.http.get<IUser>(`${this.resourceUrl}/${login}`);
+    return this.http.get<IUser>(`${this.resourceUrl}/${encodeURIComponent(login)}`);
   }
 <%_ } _%>
 
@@ -56,7 +56,7 @@ export class UserManagementService {
 
 <%_ if (generateUserManagement) { _%>
   delete(login: string): Observable<{}> {
-    return this.http.delete(`${this.resourceUrl}/${login}`);
+    return this.http.delete(`${this.resourceUrl}/${encodeURIComponent(login)}`);
   }
 
   authorities(): Observable<string[]> {

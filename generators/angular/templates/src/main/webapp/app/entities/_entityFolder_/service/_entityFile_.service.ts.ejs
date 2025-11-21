@@ -116,7 +116,7 @@ export class <%= entityAngularName %>Service {
     <%_ if (builtInUserManagement) { _%>
         const copy = this.convertUserManagementFromClient(<%= entityInstance %>);
     <%_ } _%>
-        return this.http.put<<%= entityRestName %>>(`${this.resourceUrl}/${this.get<%= entityAngularName %>Identifier(<%= entityInstance %>)}`,
+        return this.http.put<<%= entityRestName %>>(`${this.resourceUrl}/${encodeURIComponent(this.get<%= entityAngularName %>Identifier(<%= entityInstance %>))}`,
                 <% if (anyFieldIsDateDerived || builtInUserManagement) { %> copy <% } else { %> <%= entityInstance %> <% } %>,
                 { observe: 'response' })
         <% if (anyFieldIsDateDerived) { %>.pipe(map(res => this.convertResponseFromServer(res)))<% } %>;
@@ -129,7 +129,7 @@ export class <%= entityAngularName %>Service {
     <%_ if (builtInUserManagement) { _%>
         const copy = this.convertUserManagementFromClient(<%= entityInstance %>);
     <%_ } _%>
-        return this.http.patch<<%= entityRestName %>>(`${this.resourceUrl}/${this.get<%= entityAngularName %>Identifier(<%= entityInstance %>)}`,
+        return this.http.patch<<%= entityRestName %>>(`${this.resourceUrl}/${encodeURIComponent(this.get<%= entityAngularName %>Identifier(<%= entityInstance %>))}`,
                 <% if (anyFieldIsDateDerived || builtInUserManagement) { %> copy <% } else { %> <%= entityInstance %> <% } %>,
                 { observe: 'response' })
         <% if (anyFieldIsDateDerived) { %>.pipe(map(res => this.convertResponseFromServer(res)))<% } %>
@@ -138,7 +138,7 @@ export class <%= entityAngularName %>Service {
 <%_ } _%>
 
     find(id: <%= tsKeyType %>): Observable<EntityResponseType> {
-        return this.http.get<<%= entityRestName %>>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+        return this.http.get<<%= entityRestName %>>(`${this.resourceUrl}/${encodeURIComponent(id)}`, { observe: 'response' })
             <% if (anyFieldIsDateDerived) { %>.pipe(map(res => this.convertResponseFromServer(res)))<% } %>
             <% if (builtInUserManagement) { %>.pipe(map(res => this.convertUserManagementResponseFromServer(res)))<% } %>;
     }
@@ -152,7 +152,7 @@ export class <%= entityAngularName %>Service {
 
 <%_ if (!readOnly) { _%>
     delete(id: <%= tsKeyType %>): Observable<HttpResponse<{}>> {
-        return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
+        return this.http.delete(`${this.resourceUrl}/${encodeURIComponent(id)}`, { observe: 'response' });
     }
 <%_ } _%>
 
