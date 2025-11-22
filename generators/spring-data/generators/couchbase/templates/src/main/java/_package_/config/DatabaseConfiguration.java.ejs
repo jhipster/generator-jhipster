@@ -163,7 +163,7 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
         LOG.debug("Configuring Couchmove");
         Bucket bucket = cluster.bucket(getBucketName());
         Collection collection = bucket.scope(getScopeName()).collection(CHANGELOG_COLLECTION);
-        Couchmove couchmove = new Couchmove(collection, cluster, "classpath:config/couchmove/changelog");
+        Couchmove couchmove = new Couchmove(collection, cluster, "config/couchmove/changelog");
         couchmove.migrate();
         couchmove.buildN1qlDeferredIndexes(getScopeName());
         return couchmove;
