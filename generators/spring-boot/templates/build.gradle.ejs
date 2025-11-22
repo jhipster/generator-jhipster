@@ -178,7 +178,6 @@ dependencies {
 <%_ if (reactive) { _%>
     testImplementation "io.projectreactor.tools:blockhound-junit-platform:${blockhoundJunitPlatformVersion}"
 <%_ } _%>
-    implementation "jakarta.annotation:jakarta.annotation-api"
     implementation "org.apache.commons:commons-lang3"
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
@@ -188,9 +187,6 @@ dependencies {
 <%_ /* This is useful for major Spring Boot migration */
 if (addSpringMilestoneRepository) { _%>
     runtimeOnly "org.springframework.boot:spring-boot-properties-migrator"
-<%_ } _%>
-<%_ if (authenticationTypeSession) { _%>
-    implementation "org.springframework.boot:spring-boot-starter-security"
 <%_ } _%>
 <%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
     implementation "org.springframework.cloud:spring-cloud-starter"

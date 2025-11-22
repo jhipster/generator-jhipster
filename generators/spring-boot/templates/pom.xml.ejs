@@ -133,10 +133,6 @@
         </dependency>
 <%_ } _%>
         <dependency>
-            <groupId>jakarta.annotation</groupId>
-            <artifactId>jakarta.annotation-api</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
@@ -160,12 +156,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-loader-tools</artifactId>
         </dependency>
-<%_ if (authenticationTypeSession) { _%>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-<%_ } _%>
 <%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>

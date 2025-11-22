@@ -425,13 +425,15 @@ ${classProperties
           return moduleName.endsWith('-test') ? 'test' : undefined;
         };
         source.addSpringBootModule = (...moduleNames) =>
-          source.addJavaDependencies!(
-            moduleNames.map(name => ({
+          moduleNames
+            .filter(module => typeof module === 'string' || module.condition)
+            .map(module => (typeof module === 'string' ? module : module.module))
+            .map(name => ({
               groupId: 'org.springframework.boot',
               artifactId: name,
               scope: getScopeForModule(name),
-            })),
-          );
+            }));
+
         source.overrideProperty = props => source.addJavaProperty!(props);
       },
     });
@@ -632,9 +634,9 @@ ${classProperties
     return this.asPostWritingTaskGroup({
       baseDependencies({ application, source }) {
         source.addSpringBootModule!(
+          'spring-boot-starter',
           'spring-boot-starter-actuator',
           'spring-boot-starter-aop',
-          'spring-boot-starter-logging',
           'spring-boot-starter-mail',
           'spring-boot-starter-test',
           'spring-boot-starter-thymeleaf',
@@ -642,6 +644,10 @@ ${classProperties
           'spring-boot-starter-validation',
           `spring-boot-starter-web${application.reactive ? 'flux' : ''}`,
           'spring-boot-test',
+          {
+            condition: application.authenticationTypeSession,
+            module: 'spring-boot-starter-security',
+          }
         );
       },
       addJHipsterBomDependencies({ application, source }) {
