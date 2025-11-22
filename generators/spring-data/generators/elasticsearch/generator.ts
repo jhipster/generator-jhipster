@@ -80,7 +80,7 @@ export default class ElasticsearchGenerator extends SpringBootApplicationGenerat
         });
       },
       addDependencies({ source }) {
-        source.addSpringBootModule?.(['spring-boot-starter-data-elasticsearch']);
+        source.addSpringBootModule?.('spring-boot-starter-data-elasticsearch');
         source.addJavaDependencies?.([
           { scope: 'test', groupId: 'org.awaitility', artifactId: 'awaitility' },
           { scope: 'test', groupId: 'org.testcontainers', artifactId: 'elasticsearch' },

@@ -424,7 +424,7 @@ ${classProperties
           if (moduleName === 'spring-boot-properties-migrator') return 'runtime';
           return moduleName.endsWith('-test') ? 'test' : undefined;
         };
-        source.addSpringBootModule = moduleNames =>
+        source.addSpringBootModule = (...moduleNames) =>
           source.addJavaDependencies!(
             moduleNames.map(name => ({
               groupId: 'org.springframework.boot',
@@ -709,7 +709,7 @@ ${classProperties
             };
             source.addMavenPluginRepository?.(springRepository);
             source.addMavenRepository?.(springRepository);
-            source.addSpringBootModule?.(['spring-boot-properties-migrator']);
+            source.addSpringBootModule?.('spring-boot-properties-migrator');
           }
           if (application.jhipsterDependenciesVersion?.endsWith('-SNAPSHOT')) {
             source.addMavenRepository?.({

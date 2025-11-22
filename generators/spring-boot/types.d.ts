@@ -87,7 +87,7 @@ export type Source = JavaSource &
     /**
      * Add a Spring Boot Module to dependencies.
      */
-    addSpringBootModule?(moduleName: SpringBootModule[]): void;
+    addSpringBootModule?(...moduleNames: SpringBootModule[]): void;
     /**
      * Override a property defined in Spring Boot Dependencies POM.
      */

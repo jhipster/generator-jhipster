@@ -241,9 +241,7 @@ exports[`generator - sql gateway-jwt-mariadb-reactive(true)-gradle-enableTransla
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -515,9 +513,7 @@ exports[`generator - sql gateway-jwt-mssql-reactive(true)-gradle-enableTranslati
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -733,9 +729,7 @@ exports[`generator - sql gateway-jwt-mysql-reactive(false)-maven-enableTranslati
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -1010,9 +1004,7 @@ exports[`generator - sql gateway-jwt-mysql-reactive(true)-gradle-enableTranslati
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -1214,9 +1206,7 @@ exports[`generator - sql gateway-jwt-oracle-reactive(false)-maven-enableTranslat
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -1460,9 +1450,7 @@ exports[`generator - sql gateway-jwt-oracle-reactive(true)-gradle-enableTranslat
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -1675,9 +1663,7 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(false)-maven-enableTran
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -1949,9 +1935,7 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(true)-gradle-enableTran
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -2203,9 +2187,7 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(false)-maven-enableTran
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -2504,9 +2486,7 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(true)-gradle-enableTran
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -2758,9 +2738,7 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(false)-maven-enableTransl
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -3059,9 +3037,7 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(true)-gradle-enableTransl
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -3363,9 +3339,7 @@ exports[`generator - sql gateway-oauth2-mysql-reactive(true)-gradle-enableTransl
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -3636,9 +3610,7 @@ exports[`generator - sql gateway-oauth2-oracle-reactive(true)-gradle-enableTrans
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -3937,9 +3909,7 @@ exports[`generator - sql gateway-oauth2-postgresql-reactive(true)-gradle-enableT
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -4155,9 +4125,7 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -4373,9 +4341,7 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -4615,9 +4581,7 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -4836,9 +4800,7 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -5051,9 +5013,7 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -5254,9 +5214,7 @@ exports[`generator - sql microservice-jwt-oracle-reactive(true)-gradle-enableTra
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -5493,9 +5451,7 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -5711,9 +5667,7 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(true)-gradle-enabl
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -5911,9 +5865,7 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -6185,9 +6137,7 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -6385,9 +6335,7 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -6659,9 +6607,7 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -6936,9 +6882,7 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -7182,9 +7126,7 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(true)-gradle-enable
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -7456,9 +7398,7 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(true)-gradle-en
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -7710,9 +7650,7 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -7928,9 +7866,7 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -8182,9 +8118,7 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -8400,9 +8334,7 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -8657,9 +8589,7 @@ exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslat
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -8878,9 +8808,7 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -9108,9 +9036,7 @@ exports[`generator - sql monolith-jwt-oracle-reactive(false)-maven-enableTransla
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -9311,9 +9237,7 @@ exports[`generator - sql monolith-jwt-oracle-reactive(true)-gradle-enableTransla
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -9565,9 +9489,7 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -9783,9 +9705,7 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(true)-gradle-enableTra
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -9983,9 +9903,7 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -10257,9 +10175,7 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -10457,9 +10373,7 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -10731,9 +10645,7 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -10934,9 +10846,7 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -11211,9 +11121,7 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -11400,9 +11308,7 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -11646,9 +11552,7 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(true)-gradle-enableTran
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -11846,9 +11750,7 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -12120,9 +12022,7 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(true)-gradle-enable
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -12374,9 +12274,7 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -12648,9 +12546,7 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -12902,9 +12798,7 @@ exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTran
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -13176,9 +13070,7 @@ exports[`generator - sql monolith-session-mssql-reactive(true)-gradle-enableTran
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -13433,9 +13325,7 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -13710,9 +13600,7 @@ exports[`generator - sql monolith-session-mysql-reactive(true)-gradle-enableTran
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -13940,9 +13828,7 @@ exports[`generator - sql monolith-session-oracle-reactive(false)-maven-enableTra
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -14186,9 +14072,7 @@ exports[`generator - sql monolith-session-oracle-reactive(true)-gradle-enableTra
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {
@@ -14440,9 +14324,7 @@ exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enabl
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-jpa",
-    ],
+    "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
     {
@@ -14714,9 +14596,7 @@ exports[`generator - sql monolith-session-postgresql-reactive(true)-gradle-enabl
     ],
   ],
   "addSpringBootModule": [
-    [
-      "spring-boot-starter-data-r2dbc",
-    ],
+    "spring-boot-starter-data-r2dbc",
   ],
   "addTestLog": [
     {

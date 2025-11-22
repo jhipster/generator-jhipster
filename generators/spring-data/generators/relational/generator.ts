@@ -171,7 +171,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
         });
         const h2Definitions = devDatabaseTypeH2Any ? getH2MavenDefinition({ prodDatabaseType, packageFolder }) : undefined;
 
-        source.addSpringBootModule?.([`spring-boot-starter-data-${reactive ? 'r2dbc' : 'jpa'}`]);
+        source.addSpringBootModule?.(`spring-boot-starter-data-${reactive ? 'r2dbc' : 'jpa'}`);
         source.addJavaDefinitions?.(
           {
             condition: reactive,
