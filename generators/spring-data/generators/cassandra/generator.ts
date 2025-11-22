@@ -90,7 +90,7 @@ export default class CassandraGenerator extends SpringBootApplicationGenerator {
       addDependencies({ application, source }) {
         const { reactive, javaDependencies } = application;
 
-        source.addSpringBootModule([`spring-boot-starter-data-cassandra${reactive ? '-reactive' : ''}`]);
+        source.addSpringBootModule?.([`spring-boot-starter-data-cassandra${reactive ? '-reactive' : ''}`]);
         source.addJavaDependencies?.([
           { groupId: 'org.apache.cassandra', artifactId: 'java-driver-mapper-runtime' },
           { groupId: 'commons-codec', artifactId: 'commons-codec' },

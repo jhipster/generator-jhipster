@@ -709,7 +709,7 @@ ${classProperties
             };
             source.addMavenPluginRepository?.(springRepository);
             source.addMavenRepository?.(springRepository);
-            source.addSpringBootModule(['spring-boot-properties-migrator']);
+            source.addSpringBootModule?.(['spring-boot-properties-migrator']);
           }
           if (application.jhipsterDependenciesVersion?.endsWith('-SNAPSHOT')) {
             source.addMavenRepository?.({

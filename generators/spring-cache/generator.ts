@@ -44,7 +44,7 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrap('java');
+      await this.dependsOnBootstrap('spring-boot');
     }
   }
 
@@ -170,7 +170,7 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<
         }
         const { javaDependencies, cacheProvider, enableHibernateCache } = application;
 
-        source.addSpringBootModule(['spring-boot-starter-cache']);
+        source.addSpringBootModule?.(['spring-boot-starter-cache']);
         const definition = getCacheProviderMavenDefinition(cacheProvider!, javaDependencies);
         source.addJavaDefinitions?.(
           { gradleFile: 'buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle' },

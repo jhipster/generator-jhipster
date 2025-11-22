@@ -9,16 +9,14 @@ exports[`generator - spring-boot:oauth2 with defaults options should call source
           "artifactId": "caffeine",
           "groupId": "com.github.ben-manes.caffeine",
         },
-        {
-          "artifactId": "spring-boot-starter-oauth2-client",
-          "groupId": "org.springframework.boot",
-        },
-        {
-          "artifactId": "spring-boot-starter-oauth2-resource-server",
-          "groupId": "org.springframework.boot",
-        },
       ],
     },
+  ],
+  "addSpringBootModule": [
+    [
+      "spring-boot-starter-oauth2-client",
+      "spring-boot-starter-oauth2-resource-server",
+    ],
   ],
 }
 `;
@@ -73,16 +71,14 @@ exports[`generator - spring-boot:oauth2 with reactive should call source snapsho
           "artifactId": "caffeine",
           "groupId": "com.github.ben-manes.caffeine",
         },
-        {
-          "artifactId": "spring-boot-starter-oauth2-client",
-          "groupId": "org.springframework.boot",
-        },
-        {
-          "artifactId": "spring-boot-starter-oauth2-resource-server",
-          "groupId": "org.springframework.boot",
-        },
       ],
     },
+  ],
+  "addSpringBootModule": [
+    [
+      "spring-boot-starter-oauth2-client",
+      "spring-boot-starter-oauth2-resource-server",
+    ],
   ],
 }
 `;

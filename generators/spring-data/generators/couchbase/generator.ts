@@ -64,7 +64,7 @@ export default class CouchbaseGenerator extends SpringBootApplicationGenerator {
       },
       addDependencies({ application, source }) {
         const { reactive, javaDependencies } = application;
-        source.addSpringBootModule([`spring-boot-starter-data-couchbase${reactive ? '-reactive' : ''}`]);
+        source.addSpringBootModule?.([`spring-boot-starter-data-couchbase${reactive ? '-reactive' : ''}`]);
         source.addJavaDependencies?.([
           { groupId: 'commons-codec', artifactId: 'commons-codec' },
           { groupId: 'com.couchbase.client', artifactId: 'java-client' },
