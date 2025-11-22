@@ -170,15 +170,13 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<
         }
         const { javaDependencies, cacheProvider, enableHibernateCache } = application;
 
+        source.addSpringBootModule(['spring-boot-starter-cache']);
         const definition = getCacheProviderMavenDefinition(cacheProvider!, javaDependencies);
         source.addJavaDefinitions?.(
           { gradleFile: 'buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle' },
           {
             ...definition.base,
-            dependencies: [
-              { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-cache' },
-              ...definition.base.dependencies,
-            ],
+            dependencies: [...definition.base.dependencies],
           },
           {
             condition: Boolean(enableHibernateCache && definition.hibernateCache),

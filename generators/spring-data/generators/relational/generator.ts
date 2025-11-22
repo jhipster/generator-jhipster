@@ -171,6 +171,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
         });
         const h2Definitions = devDatabaseTypeH2Any ? getH2MavenDefinition({ prodDatabaseType, packageFolder }) : undefined;
 
+        source.addSpringBootModule([`spring-boot-starter-data-${reactive ? 'r2dbc' : 'jpa'}`]);
         source.addJavaDefinitions?.(
           {
             condition: reactive,
@@ -182,7 +183,6 @@ export default class SqlGenerator extends BaseApplicationGenerator<
                 exclusions: [{ groupId: 'commons-logging', artifactId: 'commons-logging' }],
               },
               { groupId: 'jakarta.persistence', artifactId: 'jakarta.persistence-api' },
-              { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-r2dbc' },
             ],
             mavenDefinition: dbDefinitions.r2dbc,
           },
@@ -192,7 +192,6 @@ export default class SqlGenerator extends BaseApplicationGenerator<
               { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-hibernate6' },
               { groupId: 'org.hibernate.orm', artifactId: 'hibernate-core' },
               { groupId: 'org.hibernate.validator', artifactId: 'hibernate-validator' },
-              { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-jpa' },
               { groupId: 'org.springframework.security', artifactId: 'spring-security-data' },
               { scope: 'annotationProcessor', groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen' },
             ],

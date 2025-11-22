@@ -152,10 +152,10 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
         source.addMainLog?.({ name: 'org.springframework.data.neo4j.cypher.unrecognized', level: 'ERROR' });
       },
       addDependencies({ application, source }) {
+        source.addSpringBootModule(['spring-boot-starter-data-neo4j']);
         source.addJavaDefinitions?.(
           {
             dependencies: [
-              { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-neo4j' },
               { scope: 'test', groupId: 'org.testcontainers', artifactId: 'junit-jupiter' },
               { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers' },
               { scope: 'test', groupId: 'org.testcontainers', artifactId: 'neo4j' },

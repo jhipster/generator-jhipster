@@ -39,7 +39,6 @@ import type { Source as CommonSource } from '../common/types.ts';
 import type { Entity as CypressEntity } from '../cypress/types.ts';
 import { ADD_SPRING_MILESTONE_REPOSITORY } from '../generator-constants.ts';
 import { addJavaImport, generateKeyStore, javaBeanCase } from '../java/support/index.ts';
-import { getPomVersionProperties, parseMavenPom } from '../maven/support/index.ts';
 import {
   getJavaValueGeneratorForType,
   getSpecificationBuildForType,
@@ -52,12 +51,14 @@ import cleanupTask from './cleanup.ts';
 import { writeFiles as writeEntityFiles } from './entity-files.ts';
 import { serverFiles } from './files.ts';
 import { askForOptionalItems, askForServerSideOpts, askForServerTestOpts } from './prompts.ts';
+import springBootDependencies from './resources/spring-boot-dependencies.ts';
 import type {
   Application as SpringBootApplication,
   Config as SpringBootConfig,
   Entity as SpringBootEntity,
   Options as SpringBootOptions,
   Source as SpringBootSource,
+  SpringBootModule,
 } from './types.ts';
 
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
@@ -274,11 +275,9 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
             'spring-boot-dependencies': "'SPRING-BOOT-VERSION'",
           };
         } else {
-          const pomFile = this.readJHipsterResource('spring-boot-dependencies.pom')!;
-          const pom = parseMavenPom(pomFile);
-          application.springBootDependencies = this.prepareDependencies(getPomVersionProperties(pom), 'java');
+          application.springBootDependencies = this.prepareDependencies(springBootDependencies.versions, 'java');
           application.javaDependencies!['spring-boot'] = application.springBootDependencies['spring-boot-dependencies'];
-          Object.assign(application.javaManagedProperties!, pom.project.properties);
+          Object.assign(application.javaManagedProperties!, springBootDependencies.properties);
           application.javaDependencies!.liquibase = application.javaManagedProperties!['liquibase.version']!;
         }
       },
@@ -419,6 +418,21 @@ ${classProperties
             }),
           );
         };
+      },
+      needles({ source }) {
+        const getScopeForModule = (moduleName: SpringBootModule) => {
+          if (moduleName === 'spring-boot-properties-migrator') return 'runtime';
+          return moduleName.endsWith('-test') ? 'test' : undefined;
+        };
+        source.addSpringBootModule = moduleNames =>
+          source.addJavaDependencies!(
+            moduleNames.map(name => ({
+              groupId: 'org.springframework.boot',
+              artifactId: name,
+              scope: getScopeForModule(name),
+            })),
+          );
+        source.overrideProperty = props => source.addJavaProperty!(props);
       },
     });
   }
@@ -695,11 +709,7 @@ ${classProperties
             };
             source.addMavenPluginRepository?.(springRepository);
             source.addMavenRepository?.(springRepository);
-            source.addMavenDependency?.({
-              groupId: 'org.springframework.boot',
-              artifactId: 'spring-boot-properties-migrator',
-              scope: 'runtime',
-            });
+            source.addSpringBootModule(['spring-boot-properties-migrator']);
           }
           if (application.jhipsterDependenciesVersion?.endsWith('-SNAPSHOT')) {
             source.addMavenRepository?.({
