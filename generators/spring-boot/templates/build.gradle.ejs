@@ -182,8 +182,6 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     implementation "org.mapstruct:mapstruct:${mapstructVersion}"
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
-    implementation "org.springframework.boot:spring-boot-loader-tools"
 <%_ /* This is useful for major Spring Boot migration */
 if (addSpringMilestoneRepository) { _%>
     runtimeOnly "org.springframework.boot:spring-boot-properties-migrator"

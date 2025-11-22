@@ -39,6 +39,7 @@ import type { Source as CommonSource } from '../common/types.ts';
 import type { Entity as CypressEntity } from '../cypress/types.ts';
 import { ADD_SPRING_MILESTONE_REPOSITORY } from '../generator-constants.ts';
 import { addJavaImport, generateKeyStore, javaBeanCase } from '../java/support/index.ts';
+import type { JavaArtifactType } from '../java-simple-application/types.ts';
 import {
   getJavaValueGeneratorForType,
   getSpecificationBuildForType,
@@ -420,19 +421,22 @@ ${classProperties
         };
       },
       needles({ source }) {
-        const getScopeForModule = (moduleName: SpringBootModule) => {
+        const getScopeForModule = (moduleName: SpringBootModule): JavaArtifactType['scope'] => {
           if (moduleName === 'spring-boot-properties-migrator') return 'runtime';
+          if (moduleName === 'spring-boot-configuration-processor') return 'annotationProcessor';
           return moduleName.endsWith('-test') ? 'test' : undefined;
         };
         source.addSpringBootModule = (...moduleNames) =>
-          moduleNames
-            .filter(module => typeof module === 'string' || module.condition)
-            .map(module => (typeof module === 'string' ? module : module.module))
-            .map(name => ({
-              groupId: 'org.springframework.boot',
-              artifactId: name,
-              scope: getScopeForModule(name),
-            }));
+          source.addJavaDependencies?.(
+            moduleNames
+              .filter(module => typeof module === 'string' || module.condition)
+              .map(module => (typeof module === 'string' ? module : module.module))
+              .map(name => ({
+                groupId: 'org.springframework.boot',
+                artifactId: name,
+                scope: getScopeForModule(name),
+              })),
+          );
 
         source.overrideProperty = props => source.addJavaProperty!(props);
       },
@@ -634,6 +638,8 @@ ${classProperties
     return this.asPostWritingTaskGroup({
       baseDependencies({ application, source }) {
         source.addSpringBootModule!(
+          'spring-boot-configuration-processor',
+          'spring-boot-loader-tools',
           'spring-boot-starter',
           'spring-boot-starter-actuator',
           'spring-boot-starter-aop',
@@ -647,7 +653,7 @@ ${classProperties
           {
             condition: application.authenticationTypeSession,
             module: 'spring-boot-starter-security',
-          }
+          },
         );
       },
       addJHipsterBomDependencies({ application, source }) {
