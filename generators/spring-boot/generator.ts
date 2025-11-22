@@ -630,6 +630,20 @@ ${classProperties
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      baseDependencies({ application, source }) {
+        source.addSpringBootModule!(
+          'spring-boot-starter-actuator',
+          'spring-boot-starter-aop',
+          'spring-boot-starter-logging',
+          'spring-boot-starter-mail',
+          'spring-boot-starter-test',
+          'spring-boot-starter-thymeleaf',
+          'spring-boot-starter-tomcat',
+          'spring-boot-starter-validation',
+          `spring-boot-starter-web${application.reactive ? 'flux' : ''}`,
+          'spring-boot-test',
+        );
+      },
       addJHipsterBomDependencies({ application, source }) {
         const {
           applicationTypeGateway,
