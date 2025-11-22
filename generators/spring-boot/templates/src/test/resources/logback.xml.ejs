@@ -62,10 +62,6 @@
 <%_ if (databaseTypeSql && reactive) { _%>
     <logger name="io.r2dbc" level="WARN"/>
 <%_ } _%>
-<%_ if (!reactive) { _%>
-    <logger name="io.undertow" level="WARN"/>
-    <logger name="io.undertow.websockets.jsr" level="ERROR"/>
-<%_ } _%>
 <%_ if (cacheProviderMemcached) { _%>
     <logger name="net.rubyeye.xmemcached" level="INFO"/>
 <%_ } _%>

@@ -162,11 +162,6 @@ tasks.withType(com.gorylenko.GenerateGitPropertiesTask).configureEach {
   outputs.doNotCacheIf("Task is always executed") { true }
 }
 
-configurations {
-    providedRuntime
-    implementation.exclude module: "spring-boot-starter-tomcat"
-}
-
 dependencies {
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
@@ -203,14 +198,7 @@ if (addSpringMilestoneRepository) { _%>
 <%_ } _%>
     testImplementation "org.springframework.boot:spring-boot-starter-test"
     implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
-<%_ if (!reactive) { _%>
-    implementation "org.springframework.boot:spring-boot-starter-undertow"
-    modules {
-        module("org.springframework.boot:spring-boot-starter-tomcat") {
-            replacedBy("org.springframework.boot:spring-boot-starter-undertow", "Use Undertow instead of Tomcat")
-        }
-    }
-<%_ } _%>
+    implementation "org.springframework.boot:spring-boot-starter-tomcat"
     implementation "org.springframework.boot:spring-boot-starter-validation"
     implementation "org.springframework.boot:spring-boot-starter-web<% if (reactive) { %>flux<% } %>"
     testImplementation "org.springframework.boot:spring-boot-test"

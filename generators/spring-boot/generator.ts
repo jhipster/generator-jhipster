@@ -626,6 +626,15 @@ ${classProperties
           serviceDiscoveryAny,
         } = application;
 
+        if (application.reactive && application.graalvmSupport) {
+          source.addNativeHint!({
+            advanced: [
+              // Tomcat
+              'hints.reflection().registerType(org.apache.catalina.connector.RequestFacade.class, (hint) -> hint.withMembers(MemberCategory.DECLARED_FIELDS));',
+              'hints.reflection().registerType(org.apache.catalina.connector.ResponseFacade.class, (hint) -> hint.withMembers(MemberCategory.DECLARED_FIELDS));',
+            ],
+          });
+        }
         source.addJavaDefinitions?.(
           {
             dependencies: [{ groupId: 'tech.jhipster', artifactId: 'jhipster-framework', version: jhipsterDependenciesVersion! }],
