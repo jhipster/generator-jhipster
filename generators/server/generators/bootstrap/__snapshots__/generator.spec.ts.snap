@@ -118,7 +118,6 @@ exports[`generator - server:bootstrap bootstrapping default config should prepar
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "dtoSuffix": "DTO",
   "dynamic": undefined,
-  "embeddableLaunchScript": undefined,
   "enableGradleDevelocity": undefined,
   "enableHibernateCache": true,
   "enableI18nRTL": false,

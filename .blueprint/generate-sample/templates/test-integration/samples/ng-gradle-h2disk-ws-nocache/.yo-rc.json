@@ -12,7 +12,6 @@
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",
     "dtoSuffix": "DTO",
-    "embeddableLaunchScript": false,
     "enableHibernateCache": false,
     "enableTranslation": true,
     "entitySuffix": "",

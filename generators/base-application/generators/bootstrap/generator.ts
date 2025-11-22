@@ -125,7 +125,6 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
       loadApplicationKeysForEjs({ application }) {
         mutateData(application as unknown as SpringBootApplication, {
           communicationSpringWebsocket: undefined,
-          embeddableLaunchScript: undefined,
           buildToolUnknown: ({ buildTool }) => !['gradle', 'maven'].includes(buildTool!),
         });
 

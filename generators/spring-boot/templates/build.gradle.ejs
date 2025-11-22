@@ -254,17 +254,11 @@ task cleanResources(type: Delete) {
     delete "build/resources"
 }
 
-<%_ if ( embeddableLaunchScript || databaseTypeCouchbase ) { _%>
-
+<%_ if (databaseTypeCouchbase) { _%>
 bootJar {
-<%_ if ( databaseTypeCouchbase ) { _%>
     loaderImplementation = org.springframework.boot.loader.tools.LoaderImplementation.CLASSIC
-<%_ } _%>
-<%_ if ( embeddableLaunchScript ) { _%>
-    launchScript()
-<%_ } _%>
 }
-<%_ } _%>
 
+<%_ } _%>
 compileJava.dependsOn(processResources)
 processResources.dependsOn(bootBuildInfo)

@@ -148,7 +148,6 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   ],
   "dtoSuffix": "DTO",
   "dynamic": undefined,
-  "embeddableLaunchScript": undefined,
   "enableGradleDevelocity": undefined,
   "enableHibernateCache": true,
   "enableI18nRTL": false,
