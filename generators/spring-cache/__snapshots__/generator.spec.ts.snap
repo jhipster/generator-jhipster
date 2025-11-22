@@ -47,6 +47,10 @@ exports[`generator - spring-cache caffeine-gradle should match source calls 1`] 
       {
         "dependencies": [
           {
+            "artifactId": "spring-boot-starter-cache",
+            "groupId": "org.springframework.boot",
+          },
+          {
             "artifactId": "cache-api",
             "groupId": "javax.cache",
           },
@@ -74,11 +78,6 @@ exports[`generator - spring-cache caffeine-gradle should match source calls 1`] 
           },
         ],
       },
-    ],
-  ],
-  "addSpringBootModule": [
-    [
-      "spring-boot-starter-cache",
     ],
   ],
   "ignoreSonarRule": [
@@ -119,6 +118,10 @@ exports[`generator - spring-cache caffeine-maven should match source calls 1`] =
       {
         "dependencies": [
           {
+            "artifactId": "spring-boot-starter-cache",
+            "groupId": "org.springframework.boot",
+          },
+          {
             "artifactId": "cache-api",
             "groupId": "javax.cache",
           },
@@ -146,11 +149,6 @@ exports[`generator - spring-cache caffeine-maven should match source calls 1`] =
           },
         ],
       },
-    ],
-  ],
-  "addSpringBootModule": [
-    [
-      "spring-boot-starter-cache",
     ],
   ],
   "ignoreSonarRule": [
@@ -199,6 +197,10 @@ exports[`generator - spring-cache ehcache-gradle should match source calls 1`] =
       {
         "dependencies": [
           {
+            "artifactId": "spring-boot-starter-cache",
+            "groupId": "org.springframework.boot",
+          },
+          {
             "artifactId": "cache-api",
             "groupId": "javax.cache",
           },
@@ -218,11 +220,6 @@ exports[`generator - spring-cache ehcache-gradle should match source calls 1`] =
           },
         ],
       },
-    ],
-  ],
-  "addSpringBootModule": [
-    [
-      "spring-boot-starter-cache",
     ],
   ],
   "ignoreSonarRule": [
@@ -263,6 +260,10 @@ exports[`generator - spring-cache ehcache-maven should match source calls 1`] = 
       {
         "dependencies": [
           {
+            "artifactId": "spring-boot-starter-cache",
+            "groupId": "org.springframework.boot",
+          },
+          {
             "artifactId": "cache-api",
             "groupId": "javax.cache",
           },
@@ -282,11 +283,6 @@ exports[`generator - spring-cache ehcache-maven should match source calls 1`] = 
           },
         ],
       },
-    ],
-  ],
-  "addSpringBootModule": [
-    [
-      "spring-boot-starter-cache",
     ],
   ],
   "ignoreSonarRule": [
@@ -355,6 +351,10 @@ exports[`generator - spring-cache hazelcast-gradle should match source calls 1`]
       {
         "dependencies": [
           {
+            "artifactId": "spring-boot-starter-cache",
+            "groupId": "org.springframework.boot",
+          },
+          {
             "artifactId": "cache-api",
             "groupId": "javax.cache",
           },
@@ -375,11 +375,6 @@ exports[`generator - spring-cache hazelcast-gradle should match source calls 1`]
           },
         ],
       },
-    ],
-  ],
-  "addSpringBootModule": [
-    [
-      "spring-boot-starter-cache",
     ],
   ],
   "ignoreSonarRule": [
@@ -420,6 +415,10 @@ exports[`generator - spring-cache hazelcast-maven should match source calls 1`] 
       {
         "dependencies": [
           {
+            "artifactId": "spring-boot-starter-cache",
+            "groupId": "org.springframework.boot",
+          },
+          {
             "artifactId": "cache-api",
             "groupId": "javax.cache",
           },
@@ -440,11 +439,6 @@ exports[`generator - spring-cache hazelcast-maven should match source calls 1`] 
           },
         ],
       },
-    ],
-  ],
-  "addSpringBootModule": [
-    [
-      "spring-boot-starter-cache",
     ],
   ],
   "ignoreSonarRule": [
@@ -493,6 +487,10 @@ exports[`generator - spring-cache infinispan-gradle should match source calls 1`
       {
         "dependencies": [
           {
+            "artifactId": "spring-boot-starter-cache",
+            "groupId": "org.springframework.boot",
+          },
+          {
             "artifactId": "cache-api",
             "groupId": "javax.cache",
           },
@@ -526,11 +524,6 @@ exports[`generator - spring-cache infinispan-gradle should match source calls 1`
       {
         "condition": false,
       },
-    ],
-  ],
-  "addSpringBootModule": [
-    [
-      "spring-boot-starter-cache",
     ],
   ],
   "ignoreSonarRule": [
@@ -571,6 +564,10 @@ exports[`generator - spring-cache infinispan-maven should match source calls 1`]
       {
         "dependencies": [
           {
+            "artifactId": "spring-boot-starter-cache",
+            "groupId": "org.springframework.boot",
+          },
+          {
             "artifactId": "cache-api",
             "groupId": "javax.cache",
           },
@@ -604,11 +601,6 @@ exports[`generator - spring-cache infinispan-maven should match source calls 1`]
       {
         "condition": false,
       },
-    ],
-  ],
-  "addSpringBootModule": [
-    [
-      "spring-boot-starter-cache",
     ],
   ],
   "ignoreSonarRule": [
@@ -657,6 +649,10 @@ exports[`generator - spring-cache memcached-gradle should match source calls 1`]
       {
         "dependencies": [
           {
+            "artifactId": "spring-boot-starter-cache",
+            "groupId": "org.springframework.boot",
+          },
+          {
             "artifactId": "cache-api",
             "groupId": "javax.cache",
           },
@@ -686,11 +682,6 @@ exports[`generator - spring-cache memcached-gradle should match source calls 1`]
       {
         "condition": false,
       },
-    ],
-  ],
-  "addSpringBootModule": [
-    [
-      "spring-boot-starter-cache",
     ],
   ],
   "ignoreSonarRule": [
@@ -731,6 +722,10 @@ exports[`generator - spring-cache memcached-maven should match source calls 1`] 
       {
         "dependencies": [
           {
+            "artifactId": "spring-boot-starter-cache",
+            "groupId": "org.springframework.boot",
+          },
+          {
             "artifactId": "cache-api",
             "groupId": "javax.cache",
           },
@@ -760,11 +755,6 @@ exports[`generator - spring-cache memcached-maven should match source calls 1`] 
       {
         "condition": false,
       },
-    ],
-  ],
-  "addSpringBootModule": [
-    [
-      "spring-boot-starter-cache",
     ],
   ],
   "ignoreSonarRule": [
@@ -822,6 +812,10 @@ exports[`generator - spring-cache redis-gradle should match source calls 1`] = `
       {
         "dependencies": [
           {
+            "artifactId": "spring-boot-starter-cache",
+            "groupId": "org.springframework.boot",
+          },
+          {
             "artifactId": "junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
@@ -847,11 +841,6 @@ exports[`generator - spring-cache redis-gradle should match source calls 1`] = `
           },
         ],
       },
-    ],
-  ],
-  "addSpringBootModule": [
-    [
-      "spring-boot-starter-cache",
     ],
   ],
   "addTestSpringFactory": [
@@ -907,6 +896,10 @@ exports[`generator - spring-cache redis-maven should match source calls 1`] = `
       {
         "dependencies": [
           {
+            "artifactId": "spring-boot-starter-cache",
+            "groupId": "org.springframework.boot",
+          },
+          {
             "artifactId": "junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
@@ -932,11 +925,6 @@ exports[`generator - spring-cache redis-maven should match source calls 1`] = `
           },
         ],
       },
-    ],
-  ],
-  "addSpringBootModule": [
-    [
-      "spring-boot-starter-cache",
     ],
   ],
   "addTestSpringFactory": [
