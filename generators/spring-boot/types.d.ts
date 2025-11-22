@@ -23,8 +23,11 @@ import type {
 } from '../server/types.d.ts';
 
 import type command from './command.ts';
+import type springBootDependencies from './resources/spring-boot-dependencies.ts';
 
 type Command = HandleCommandTypes<typeof command>;
+
+export type SpringBootModule = keyof (typeof springBootDependencies)['modules'];
 
 export type Config = Command['Config'] & JavaConfig & ServerConfig & CommonConfig;
 
@@ -81,6 +84,14 @@ export type Source = JavaSource &
     addAllowBlockingCallsInside?({ classPath, method }: { classPath: string; method: string }): void;
     addApplicationPropertiesContent?(content: ApplicationPropertiesNeedles): void;
     addApplicationPropertiesProperty?({ propertyName, propertyType }: { propertyName: string; propertyType: string }): void;
+    /**
+     * Add a Spring Boot Module to dependencies.
+     */
+    addSpringBootModule?(...moduleNames: (SpringBootModule | { condition: boolean; module: SpringBootModule })[]): void;
+    /**
+     * Override a property defined in Spring Boot Dependencies POM.
+     */
+    overrideProperty?({ property, value }: { property: SpringBootModule; value: string }): void;
     /**
      * @example
      * addApplicationPropertiesClass({

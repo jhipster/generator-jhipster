@@ -38,12 +38,16 @@ const defaultCommands = {
     desc: 'Generate a matrix for GitHub Actions',
     blueprint: '@jhipster/jhipster-dev',
   },
-  'update-vscode': {
-    desc: 'Update generator-jhipster vscode files',
-    blueprint: '@jhipster/jhipster-dev',
-  },
   'update-generators': {
     desc: 'Update generator-jhipster generators files',
+    blueprint: '@jhipster/jhipster-dev',
+  },
+  'update-spring-boot': {
+    desc: 'Update Spring Boot metadata files',
+    blueprint: '@jhipster/jhipster-dev',
+  },
+  'update-vscode': {
+    desc: 'Update generator-jhipster vscode files',
     blueprint: '@jhipster/jhipster-dev',
   },
 };
