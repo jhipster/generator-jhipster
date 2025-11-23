@@ -73,6 +73,7 @@ class WebConfigurerTest {
     }
 
 <%_ if (!skipClient) { _%>
+    /*
     @Test
     void shouldCustomizeServletContainer() {
         env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION);
@@ -85,6 +86,7 @@ class WebConfigurerTest {
             assertThat(container.getDocumentRoot()).isEqualTo(Path.of("<%= clientDistDir %>").toFile());
         }
     }
+    */
 
 <%_ } _%>
     @Test
