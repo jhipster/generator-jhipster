@@ -434,7 +434,7 @@ ${classProperties
         const getScopeForModule = (moduleName: SpringBootModule): JavaArtifactType['scope'] => {
           if (moduleName === 'spring-boot-properties-migrator') return 'runtime';
           if (moduleName === 'spring-boot-configuration-processor') return 'annotationProcessor';
-          return moduleName.endsWith('-test') ? 'test' : undefined;
+          return moduleName.endsWith('-test') || moduleName.includes('-test-') ? 'test' : undefined;
         };
         source.addSpringBootModule = (...moduleNames) =>
           source.addJavaDependencies?.(
@@ -649,16 +649,18 @@ ${classProperties
       baseDependencies({ application, source }) {
         source.addSpringBootModule!(
           'spring-boot-configuration-processor',
-          'spring-boot-loader-tools',
+          'spring-boot-jarmode-tools',
           'spring-boot-starter',
+          'spring-boot-starter-classic',
+          'spring-boot-starter-test-classic',
           'spring-boot-starter-actuator',
-          'spring-boot-starter-aop',
+          'spring-boot-starter-aspectj',
           'spring-boot-starter-mail',
           'spring-boot-starter-test',
           'spring-boot-starter-thymeleaf',
           'spring-boot-starter-tomcat',
           'spring-boot-starter-validation',
-          `spring-boot-starter-web${application.reactive ? 'flux' : ''}`,
+          `spring-boot-starter-web${application.reactive ? 'flux' : 'mvc'}`,
           'spring-boot-test',
           {
             condition: application.authenticationTypeSession,

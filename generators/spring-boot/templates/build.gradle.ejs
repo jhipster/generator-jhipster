@@ -216,9 +216,6 @@ if (addSpringMilestoneRepository) { _%>
 <%_ if (reactive) { _%>
     implementation "org.springframework.data:spring-data-commons"
 <%_ } _%>
-<%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
-    implementation "org.springframework.retry:spring-retry"
-<%_ } _%>
     testImplementation "org.springframework.security:spring-security-test"
     // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 <%_ if (reactive) { _%>
