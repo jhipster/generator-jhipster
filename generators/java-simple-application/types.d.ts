@@ -70,7 +70,7 @@ export type JavaDefinition = {
   mavenDefinition?: MavenDefinition;
 };
 
-export type JavaNeedleOptions = GradleNeedleOptions;
+export type JavaNeedleOptions = GradleNeedleOptions & { profile?: 'dev' | 'prod' };
 
 export type ConditionalJavaDefinition = JavaDefinition & { condition?: boolean };
 
