@@ -193,9 +193,9 @@ export default class SqlGenerator extends BaseApplicationGenerator<
               { groupId: 'org.hibernate.orm', artifactId: 'hibernate-core' },
               { groupId: 'org.hibernate.validator', artifactId: 'hibernate-validator' },
               { groupId: 'org.springframework.security', artifactId: 'spring-security-data' },
-              { scope: 'annotationProcessor', groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen' },
+              { scope: 'annotationProcessor', groupId: 'org.hibernate.orm', artifactId: 'hibernate-processor' },
             ],
-            mavenDefinition: { dependencies: [{ inProfile: 'IDE', groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen' }] },
+            mavenDefinition: { dependencies: [{ inProfile: 'IDE', groupId: 'org.hibernate.orm', artifactId: 'hibernate-processor' }] },
           },
           {
             dependencies: [
