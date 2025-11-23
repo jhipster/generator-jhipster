@@ -23,9 +23,9 @@ import io.mongock.runner.springboot.EnableMongock;
 import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.domain.util.JSR310DateConverters.DateToZonedDateTimeConverter;
 import tech.jhipster.domain.util.JSR310DateConverters.ZonedDateTimeToDateConverter;
-import org.springframework.boot.mongo.autoconfigure.MongoAutoConfiguration;
+import org.springframework.boot.mongodb.autoconfigure.MongoAutoConfiguration;
 <%_ if (reactive) { _%>
-import org.springframework.boot.mongo.autoconfigure.MongoReactiveAutoConfiguration;
+import org.springframework.boot.mongodb.autoconfigure.MongoReactiveAutoConfiguration;
 <%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
