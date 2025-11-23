@@ -69,9 +69,9 @@ export default class CouchbaseGenerator extends SpringBootApplicationGenerator {
           { groupId: 'commons-codec', artifactId: 'commons-codec' },
           { groupId: 'com.couchbase.client', artifactId: 'java-client' },
           { groupId: 'com.github.differentway', artifactId: 'couchmove', version: javaDependencies!.couchmove },
-          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'junit-jupiter' },
+          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers-junit-jupiter' },
           { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers' },
-          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'couchbase' },
+          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers-couchbase' },
         ]);
       },
       couchmoveSetup({ application }) {
