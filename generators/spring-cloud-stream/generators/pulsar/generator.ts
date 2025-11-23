@@ -70,9 +70,9 @@ export default class PulsarGenerator extends SpringBootApplicationGenerator {
             dependencies: [
               { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-stream' },
               { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-stream-binder-pulsar' },
-              { groupId: 'org.testcontainers', artifactId: 'junit-jupiter', scope: 'test' },
+              { groupId: 'org.testcontainers', artifactId: 'testcontainers-junit-jupiter', scope: 'test' },
               { groupId: 'org.testcontainers', artifactId: 'testcontainers', scope: 'test' },
-              { groupId: 'org.testcontainers', artifactId: 'pulsar', scope: 'test' },
+              { groupId: 'org.testcontainers', artifactId: 'testcontainers-pulsar', scope: 'test' },
             ],
           });
         }
