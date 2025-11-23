@@ -51,12 +51,17 @@ jobs:
         with:
           ref: ${{ inputs.destBranch }}
           fetch-depth: 0
-      - uses: jhipster/actions/setup-git@v1
+      - uses: jhipster/actions/setup-runner@v1
+        with:
+          node-version: 24
+          binary-dir: ${{ github.workspace }}/generator-jhipster/bin
       - name: Download spring-boot-dependencies bom
         run: |
           wget -O spring-boot-dependencies.pom ${{ inputs.repository }}/org/springframework/boot/spring-boot-dependencies/${{ inputs.springBootVersion }}/spring-boot-dependencies-${{ inputs.springBootVersion }}.pom
           git add .
         working-directory: generators/spring-boot/resources
+      - name: Parse POM
+        run: bin/jhipster.cjs update-spring-boot-dependencies --force
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
         with:

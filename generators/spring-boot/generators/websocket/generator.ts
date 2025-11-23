@@ -46,10 +46,8 @@ export default class SpringBootWebsocketGenerator extends SpringBootApplicationG
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addDependencies({ source }) {
-        source.addJavaDependencies?.([
-          { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-websocket' },
-          { groupId: 'org.springframework.security', artifactId: 'spring-security-messaging' },
-        ]);
+        source.addSpringBootModule?.('spring-boot-starter-websocket');
+        source.addJavaDependencies?.([{ groupId: 'org.springframework.security', artifactId: 'spring-security-messaging' }]);
       },
     });
   }
