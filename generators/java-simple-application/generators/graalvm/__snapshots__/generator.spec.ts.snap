@@ -50,8 +50,8 @@ exports[`generator - java-simple-application:graalvm with default options should
         <build>
             <plugins>
                 <plugin>
-                    <groupId>org.hibernate.orm.tooling</groupId>
-                    <artifactId>hibernate-enhance-maven-plugin</artifactId>
+                    <groupId>org.hibernate.orm</groupId>
+                    <artifactId>hibernate-maven-plugin</artifactId>
                     <executions>
                         <execution>
                             <goals>

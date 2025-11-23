@@ -50,8 +50,8 @@ export const mavenDefinition = ({
       ? []
       : [
           {
-            groupId: 'org.hibernate.orm.tooling',
-            artifactId: 'hibernate-enhance-maven-plugin',
+            groupId: 'org.hibernate.orm',
+            artifactId: 'hibernate-maven-plugin',
             version: '${hibernate.version}',
             additionalContent: `
                 <configuration>
@@ -74,8 +74,8 @@ export const mavenDefinition = ({
               databaseTypeSql && !reactive
                 ? `
                 <plugin>
-                    <groupId>org.hibernate.orm.tooling</groupId>
-                    <artifactId>hibernate-enhance-maven-plugin</artifactId>
+                    <groupId>org.hibernate.orm</groupId>
+                    <artifactId>hibernate-maven-plugin</artifactId>
                     <executions>
                         <execution>
                             <goals>
