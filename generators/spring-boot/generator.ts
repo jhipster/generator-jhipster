@@ -651,8 +651,6 @@ ${classProperties
           'spring-boot-configuration-processor',
           'spring-boot-jarmode-tools',
           'spring-boot-starter',
-          'spring-boot-starter-classic',
-          'spring-boot-starter-test-classic',
           'spring-boot-starter-actuator',
           'spring-boot-starter-aspectj',
           'spring-boot-jackson2',
