@@ -660,6 +660,7 @@ ${classProperties
           'spring-boot-starter-tomcat',
           'spring-boot-starter-validation',
           `spring-boot-starter-web${application.reactive ? 'flux' : 'mvc'}`,
+          `spring-boot-starter-web${application.reactive ? 'flux' : 'mvc'}-test`,
           'spring-boot-test',
           {
             condition: application.authenticationTypeSession,
