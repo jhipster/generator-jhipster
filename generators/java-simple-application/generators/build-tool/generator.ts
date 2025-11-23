@@ -20,7 +20,7 @@ import { buildToolTypes } from '../../../../lib/jhipster/index.ts';
 import { JavaApplicationGenerator } from '../../../java/generator.ts';
 import { javaScopeToGradleScope } from '../../../java/support/index.ts';
 import type { ConditionalJavaDefinition, JavaDependency, JavaNeedleOptions } from '../../../java/types.ts';
-import type { MavenDependency } from '../maven/types.ts';
+import type { MavenDependency, MavenProperty } from '../maven/types.ts';
 
 const { GRADLE, MAVEN } = buildToolTypes;
 
@@ -66,6 +66,9 @@ export default class BuildToolGenerator extends JavaApplicationGenerator {
           }
         };
         source.addJavaDependencies = (dependencies, options) => {
+          if (options?.profile) {
+            options.gradleFile ??= `gradle/profile_${options.profile}.gradle`;
+          }
           if (application.buildToolMaven) {
             const convertVersionToMavenDependency = ({ versionRef, version, exclusions, ...artifact }: JavaDependency): MavenDependency => {
               // If a version is provided, convert to version ref using artifactId
@@ -87,7 +90,7 @@ export default class BuildToolGenerator extends JavaApplicationGenerator {
             };
             const removeScope = ({ scope: _scope, ...artifact }: JavaDependency) => artifact;
 
-            const properties = dependencies
+            const properties: MavenProperty[] = dependencies
               .filter(dep => dep.version)
               .map(({ artifactId, version }) => ({ property: `${artifactId}.version`, value: version }));
             dependencies = dependencies.map(({ scope, ...artifact }) => ({
@@ -102,6 +105,21 @@ export default class BuildToolGenerator extends JavaApplicationGenerator {
             const commonDependencies = dependencies
               .filter(dep => !['annotationProcessor', 'import'].includes(dep.scope!))
               .map(convertVersionToMavenDependency);
+
+            if (options?.profile) {
+              properties.forEach(prop => {
+                prop.inProfile = options.profile;
+              });
+              commonDependencies.forEach(dep => {
+                dep.inProfile = options.profile;
+              });
+              dependencyManagement.forEach(dep => {
+                dep.inProfile = options.profile;
+              });
+              annotationProcessors.forEach(dep => {
+                dep.inProfile = options.profile;
+              });
+            }
 
             source.addMavenDefinition?.({
               properties,
@@ -147,7 +165,11 @@ export default class BuildToolGenerator extends JavaApplicationGenerator {
         };
 
         source.addJavaDefinition = (definition, options) => {
+          if (options?.profile) {
+            options.gradleFile ??= `gradle/profile_${options.profile}.gradle`;
+          }
           const { dependencies, versions, mavenDefinition } = definition;
+          const { profile: inProfile } = options ?? {};
           if (dependencies) {
             source.addJavaDependencies!(
               dependencies.filter(dep => {
@@ -162,7 +184,9 @@ export default class BuildToolGenerator extends JavaApplicationGenerator {
           if (versions) {
             if (application.buildToolMaven) {
               source.addMavenDefinition!({
-                properties: versions.filter(v => v.version).map(({ name, version }) => ({ property: `${name}.version`, value: version })),
+                properties: versions
+                  .filter(v => v.version)
+                  .map(({ name, version }) => ({ property: `${name}.version`, value: version, inProfile })),
               });
             }
             if (application.buildToolGradle) {
@@ -174,12 +198,13 @@ export default class BuildToolGenerator extends JavaApplicationGenerator {
           }
         };
 
-        source.addJavaDefinitions = (
-          optionsOrDefinition: JavaNeedleOptions | ConditionalJavaDefinition,
-          ...definitions: ConditionalJavaDefinition[]
-        ) => {
+        source.addJavaDefinitions = (optionsOrDefinition, ...definitions) => {
           let options: JavaNeedleOptions | undefined = undefined;
-          if ('gradleFile' in optionsOrDefinition || 'gradleVersionCatalogFile' in optionsOrDefinition) {
+          if (
+            'gradleFile' in optionsOrDefinition ||
+            'gradleVersionCatalogFile' in optionsOrDefinition ||
+            'profile' in optionsOrDefinition
+          ) {
             options = optionsOrDefinition;
           } else {
             definitions.unshift(optionsOrDefinition as ConditionalJavaDefinition);
