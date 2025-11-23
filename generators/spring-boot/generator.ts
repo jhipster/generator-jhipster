@@ -655,6 +655,7 @@ ${classProperties
           'spring-boot-starter-test-classic',
           'spring-boot-starter-actuator',
           'spring-boot-starter-aspectj',
+          'spring-boot-jackson2',
           'spring-boot-starter-mail',
           'spring-boot-starter-test',
           'spring-boot-starter-thymeleaf',

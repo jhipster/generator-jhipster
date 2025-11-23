@@ -49,7 +49,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
-import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;
+import org.springframework.boot.cassandra.autoconfigure.CassandraProperties;
 import org.springframework.stereotype.Repository;
 
 import jakarta.validation.ConstraintViolation;

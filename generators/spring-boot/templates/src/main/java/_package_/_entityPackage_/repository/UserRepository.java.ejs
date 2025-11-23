@@ -102,7 +102,7 @@ import org.springframework.data.cassandra.core.mapping.CassandraPersistentEntity
 import org.springframework.stereotype.Repository;
 <%_ if (databaseTypeCassandra) { _%>
   <%_ if (!reactive) { _%>
-import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;
+import org.springframework.boot.cassandra.autoconfigure.CassandraProperties;
   <%_ } _%>
 import org.springframework.util.StringUtils;
 <%_ } _%>
