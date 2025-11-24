@@ -5,7 +5,7 @@ springdoc = { module = 'org.springdoc:springdoc-openapi-starter-webmvc-api', ver
 
 feign-reactor-bom = { module = 'com.playtika.reactivefeign:feign-reactor-bom', version = '4.2.1' }
 
-cucumber-bom = { module = 'io.cucumber:cucumber-bom', version = '7.31.0' }
+cucumber-bom = { module = 'io.cucumber:cucumber-bom', version = '7.32.0' }
 
 mongock-bom = { module = 'io.mongock:mongock-bom', version = '5.5.1' }
 
