@@ -49,6 +49,10 @@ export const sqlFiles = asWriteFilesSection<Application>({
     },
   ],
   hibernate: [
+    javaMainPackageTemplatesBlock({
+      condition: ctx => !ctx.reactive,
+      templates: ['config/JacksonHibernateConfiguration.java'],
+    }),
     {
       condition: generator => !generator.reactive,
       ...javaTestPackageTemplatesBlock(),

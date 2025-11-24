@@ -163,8 +163,6 @@ tasks.withType(com.gorylenko.GenerateGitPropertiesTask).configureEach {
 }
 
 dependencies {
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
     testImplementation("com.tngtech.archunit:archunit-junit5-api:${archunitJunit5Version}") {
         exclude group: "org.slf4j", module: "slf4j-api"
     }
