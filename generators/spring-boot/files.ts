@@ -296,9 +296,16 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
         'config/DateTimeFormatConfiguration.java',
         'config/LoggingConfiguration.java',
         'config/ApplicationProperties.java',
-        'config/JacksonConfiguration.java',
         'config/LoggingAspectConfiguration.java',
         'config/WebConfigurer.java',
+      ],
+    },
+    {
+      condition: ctx => ctx.databaseTypeSql && !ctx.reactive,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: [
+        'config/JacksonConfiguration.java',
       ],
     },
     {
