@@ -103,7 +103,7 @@ import <%= entityAbsolutePackage %>.service.mapper.<%= entityClass %>Mapper;
 <%_ if (jpaMetamodelFiltering && !reactive) { _%>
 import <%= entityAbsolutePackage %>.service.criteria.<%= entityClass %>Criteria;
 <%_ } _%>
-import tools.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 <%_ if (searchEngineElasticsearch) { _%>
 import org.assertj.core.util.IterableUtil;
 import org.springframework.data.util.Streamable;
