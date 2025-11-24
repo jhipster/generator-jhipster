@@ -22,7 +22,7 @@ description: dependabot
 runs:
   using: composite
   steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: actions/setup-node@v6
     - uses: actions/setup-java@v5
     - uses: actions/upload-artifact@v5
