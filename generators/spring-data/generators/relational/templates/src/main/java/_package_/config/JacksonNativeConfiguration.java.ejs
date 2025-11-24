@@ -1,14 +1,14 @@
 package <%=packageName%>.config;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
-import com.fasterxml.jackson.databind.ser.PropertyFilter;
-import com.fasterxml.jackson.databind.ser.PropertyWriter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.JsonMappingException;
+import tools.jackson.databind.SerializerProvider;
+import tools.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
+import tools.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.ser.BeanPropertyWriter;
+import tools.jackson.databind.ser.PropertyFilter;
+import tools.jackson.databind.ser.PropertyWriter;
+import tools.jackson.databind.ser.impl.SimpleFilterProvider;
 import jakarta.persistence.Basic;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.FetchType;
@@ -17,7 +17,7 @@ import jakarta.persistence.OneToMany;
 import java.lang.annotation.Annotation;
 import java.util.function.Function;
 import org.hibernate.Hibernate;
-import org.springframework.boot.jackson2.autoconfigure.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.boot.jackson.autoconfigure.JacksonObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -29,7 +29,7 @@ public class JacksonNativeConfiguration {
      * see: https://github.com/FasterXML/jackson-datatype-hibernate/issues/148#issuecomment-1383923857
      */
     @Bean
-    public Jackson2ObjectMapperBuilderCustomizer customizeJackson() {
+    public JacksonObjectMapperBuilderCustomizer customizeJackson() {
         return builder -> {
             String filterName = "lazyPropertyFilter";
             builder.filters(new SimpleFilterProvider().addFilter(filterName, new LazyPropertyFilter()));
