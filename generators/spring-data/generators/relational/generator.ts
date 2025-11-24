@@ -171,10 +171,11 @@ export default class SqlGenerator extends BaseApplicationGenerator<
         });
         const h2Definitions = devDatabaseTypeH2Any ? getH2MavenDefinition({ prodDatabaseType, packageFolder }) : undefined;
 
-        source.addSpringBootModule?.(
-          `spring-boot-starter-data-${reactive ? 'r2dbc' : 'jpa'}`,
-          { condition: devDatabaseTypeH2Any!, module: 'spring-boot-h2console', profile: 'dev' },
-        );
+        source.addSpringBootModule?.(`spring-boot-starter-data-${reactive ? 'r2dbc' : 'jpa'}`, {
+          condition: devDatabaseTypeH2Any!,
+          module: 'spring-boot-h2console',
+          profile: 'dev',
+        });
         source.addJavaDefinitions?.(
           {
             condition: reactive,
@@ -192,7 +193,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
           {
             condition: !reactive,
             dependencies: [
-              { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-hibernate6' },
+              { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-hibernate7' },
               { groupId: 'org.hibernate.orm', artifactId: 'hibernate-core' },
               { groupId: 'org.hibernate.validator', artifactId: 'hibernate-validator' },
               { groupId: 'org.springframework.security', artifactId: 'spring-security-data' },

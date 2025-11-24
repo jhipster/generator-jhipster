@@ -21,7 +21,7 @@
  * get hibernate SnakeCase in JHipster preferred style.
  *
  * @param {string} value - table column name or table name string
- * @see org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
+ * @see org.springframework.boot.hibernateSpringNamingStrategy
  * @returns hibernate SnakeCase in JHipster preferred style
  */
 

@@ -35,7 +35,7 @@ export default function mavenPluginContent({
       <defaultSchemaName>${defaultSchemaName}</defaultSchemaName>
       <username>${username}</username>
       <password>${password}</password>${reactive || !backendTypeSpringBoot ? '' : `
-      <referenceUrl>hibernate:spring:${packageName}.domain?dialect=${hibernateDialect}&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>`}
+      <referenceUrl>hibernate:spring:${packageName}.domain?dialect=${hibernateDialect}&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.hibernate.SpringImplicitNamingStrategy</referenceUrl>`}
       <verbose>true</verbose>
       <logging>debug</logging>
       <contexts>!test</contexts>${authenticationTypeOauth2 ? `

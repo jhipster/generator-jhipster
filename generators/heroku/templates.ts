@@ -42,7 +42,7 @@ export const mavenProfileContent = (data: any) => {
                             <defaultSchemaName></defaultSchemaName>
                             <username>\${env.JDBC_DATABASE_USERNAME}</username>
                             <password>\${env.JDBC_DATABASE_PASSWORD}</password>
-                            <referenceUrl>hibernate:spring:${data.packageName}.domain?dialect=${data.prodHibernateDialect}&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
+                            <referenceUrl>hibernate:spring:${data.packageName}.domain?dialect=${data.prodHibernateDialect}&amp;hibernate.physical_naming_strategy=org.springframework.boot.hibernateSpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                             <verbose>true</verbose>
                             <logging>debug</logging>
                             <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
