@@ -193,7 +193,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
           {
             condition: !reactive,
             dependencies: [
-              { groupId: 'tools.jackson.datatype', artifactId: 'jackson-datatype-hibernate7' },
+              { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-hibernate7' },
               { groupId: 'org.hibernate.orm', artifactId: 'hibernate-core' },
               { groupId: 'org.hibernate.validator', artifactId: 'hibernate-validator' },
               { groupId: 'org.springframework.security', artifactId: 'spring-security-data' },
@@ -203,7 +203,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
           },
           {
             dependencies: [
-              { groupId: 'tools.jackson.module', artifactId: 'jackson-module-jaxb-annotations' },
+              { groupId: 'com.fasterxml.jackson.module', artifactId: 'jackson-module-jaxb-annotations' },
               { groupId: 'com.zaxxer', artifactId: 'HikariCP' },
               { scope: 'annotationProcessor', groupId: 'org.glassfish.jaxb', artifactId: 'jaxb-runtime' },
               { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers-jdbc' },
