@@ -56,7 +56,7 @@ jobs:
       # Install all tools and check configuration
       #----------------------------------------------------------------------
       - name: 'SETUP: Checkout generator-jhipster'
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           path: generator-jhipster
           fetch-depth: 2

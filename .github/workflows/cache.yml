@@ -28,10 +28,10 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: 'SETUP: Checkout generator-jhipster'
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           path: generator-jhipster
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           path: jhipster-bom
           repository: jhipster/jhipster-bom
