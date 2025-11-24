@@ -19,8 +19,6 @@
 package <%= packageName %>.config;
 
 import ch.qos.logback.classic.LoggerContext;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import tech.jhipster.config.JHipsterProperties;
 import org.slf4j.LoggerFactory;
 <%_ if (serviceDiscoveryConsul || (serviceDiscoveryAny && applicationTypeGateway || applicationTypeMicroservice)) { _%>
@@ -37,6 +35,8 @@ import org.springframework.cloud.consul.serviceregistry.ConsulRegistration;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 <%_ } _%>
 import org.springframework.context.annotation.Configuration;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,7 +61,7 @@ public class LoggingConfiguration {
 <%_ if (serviceDiscoveryAny && (applicationTypeMicroservice || applicationTypeGateway)) { _%>
                                 ObjectProvider<BuildProperties> buildProperties,
 <%_ } _%>
-                                ObjectMapper mapper) throws JsonProcessingException {
+                                ObjectMapper mapper) throws JacksonException {
 
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
 
