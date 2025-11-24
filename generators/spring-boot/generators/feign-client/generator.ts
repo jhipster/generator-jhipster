@@ -17,12 +17,12 @@
  * limitations under the License.
  */
 
-import { JavaApplicationGenerator } from '../../../java/generator.ts';
+import { SpringBootApplicationGenerator } from '../../generator.ts';
 
 import cleanupTask from './cleanup.ts';
 import { feignFiles } from './files.ts';
 
-export default class FeignClientGenerator extends JavaApplicationGenerator {
+export default class FeignClientGenerator extends SpringBootApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -45,13 +45,14 @@ export default class FeignClientGenerator extends JavaApplicationGenerator {
     });
   }
 
-  get [JavaApplicationGenerator.WRITING]() {
+  get [SpringBootApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addDependencies({ application, source }) {
+        source.addSpringBootModule?.('spring-boot-starter-restclient');
         const openFeignArtifact = { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-openfeign' };
         if (application.buildToolMaven) {
           source.addMavenDependency?.(openFeignArtifact);
@@ -66,7 +67,7 @@ export default class FeignClientGenerator extends JavaApplicationGenerator {
     });
   }
 
-  get [JavaApplicationGenerator.POST_WRITING]() {
+  get [SpringBootApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }
