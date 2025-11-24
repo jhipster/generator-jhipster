@@ -5,7 +5,12 @@ exports[`generator - spring-boot:jwt reactive(false)-skipUserManagement(false) s
   "addSpringBootModule": [
     [
       "spring-boot-starter-security",
+      "spring-boot-starter-security-test",
       "spring-boot-starter-oauth2-resource-server",
+      {
+        "condition": false,
+        "module": "spring-boot-webflux-test",
+      },
     ],
   ],
 }
@@ -54,7 +59,12 @@ exports[`generator - spring-boot:jwt reactive(false)-skipUserManagement(true) sh
   "addSpringBootModule": [
     [
       "spring-boot-starter-security",
+      "spring-boot-starter-security-test",
       "spring-boot-starter-oauth2-resource-server",
+      {
+        "condition": false,
+        "module": "spring-boot-webflux-test",
+      },
     ],
   ],
 }
@@ -106,7 +116,12 @@ exports[`generator - spring-boot:jwt reactive(true)-skipUserManagement(false) sh
   "addSpringBootModule": [
     [
       "spring-boot-starter-security",
+      "spring-boot-starter-security-test",
       "spring-boot-starter-oauth2-resource-server",
+      {
+        "condition": true,
+        "module": "spring-boot-webflux-test",
+      },
     ],
   ],
 }
@@ -155,7 +170,12 @@ exports[`generator - spring-boot:jwt reactive(true)-skipUserManagement(true) sho
   "addSpringBootModule": [
     [
       "spring-boot-starter-security",
+      "spring-boot-starter-security-test",
       "spring-boot-starter-oauth2-resource-server",
+      {
+        "condition": true,
+        "module": "spring-boot-webflux-test",
+      },
     ],
   ],
 }

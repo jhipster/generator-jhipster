@@ -649,13 +649,11 @@ ${classProperties
       baseDependencies({ application, source }) {
         source.addSpringBootModule!(
           'spring-boot-configuration-processor',
-          'spring-boot-jarmode-tools',
           'spring-boot-starter',
           'spring-boot-starter-actuator',
           'spring-boot-starter-aspectj',
           'spring-boot-jackson2',
           'spring-boot-starter-mail',
-          'spring-boot-starter-restclient',
           'spring-boot-starter-test',
           'spring-boot-starter-thymeleaf',
           'spring-boot-starter-tomcat',
