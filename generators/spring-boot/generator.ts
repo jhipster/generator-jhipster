@@ -609,6 +609,11 @@ ${classProperties
   get writing() {
     return this.asWritingTaskGroup({
       cleanupTask,
+      async cleanup({ application, control }) {
+        await control.cleanupFiles({
+          '9.0.0-alpha.0': [`${application.javaPackageSrcDir}config/JacksonConfiguration.java`],
+        });
+      },
       resetFakeDataSeed() {
         this.resetEntitiesFakeData('server');
       },
@@ -649,10 +654,12 @@ ${classProperties
       baseDependencies({ application, source }) {
         source.addSpringBootModule!(
           'spring-boot-configuration-processor',
+          'spring-boot-jackson2',
           'spring-boot-starter',
           'spring-boot-starter-actuator',
           'spring-boot-starter-aspectj',
-          'spring-boot-jackson2',
+          'spring-boot-starter-jackson',
+          'spring-boot-starter-jackson-test',
           'spring-boot-starter-mail',
           'spring-boot-starter-test',
           'spring-boot-starter-thymeleaf',
