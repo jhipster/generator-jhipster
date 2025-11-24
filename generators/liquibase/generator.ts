@@ -340,7 +340,9 @@ export default class LiquibaseGenerator<
         }
       },
       addDependencies({ application, source }) {
-        (source as SpringBootSource).addSpringBootModule?.('spring-boot-starter-liquibase');
+        if ((application as SpringDataRelationalApplication).backendTypeSpringBoot) {
+          (source as SpringBootSource).addSpringBootModule?.('spring-boot-starter-liquibase');
+        }
       },
       customizeMaven({ source, application }) {
         if (!application.buildToolMaven || !this.injectBuildTool) return;

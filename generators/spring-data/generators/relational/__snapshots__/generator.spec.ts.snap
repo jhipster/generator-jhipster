@@ -49,7 +49,7 @@ exports[`generator - sql gateway-jwt-mariadb-reactive(true)-gradle-enableTransla
             "groupId": "org.mariadb.jdbc",
           },
           {
-            "artifactId": "mariadb",
+            "artifactId": "testcontainers-mariadb",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -116,7 +116,7 @@ exports[`generator - sql gateway-jwt-mariadb-reactive(true)-gradle-enableTransla
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -132,7 +132,7 @@ exports[`generator - sql gateway-jwt-mariadb-reactive(true)-gradle-enableTransla
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -140,7 +140,7 @@ exports[`generator - sql gateway-jwt-mariadb-reactive(true)-gradle-enableTransla
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -163,12 +163,12 @@ exports[`generator - sql gateway-jwt-mariadb-reactive(true)-gradle-enableTransla
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -186,13 +186,13 @@ exports[`generator - sql gateway-jwt-mariadb-reactive(true)-gradle-enableTransla
               "inProfile": "prod",
             },
             {
-              "artifactId": "mariadb",
+              "artifactId": "testcontainers-mariadb",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "mariadb",
+              "artifactId": "testcontainers-mariadb",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -241,7 +241,14 @@ exports[`generator - sql gateway-jwt-mariadb-reactive(true)-gradle-enableTransla
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -321,7 +328,7 @@ exports[`generator - sql gateway-jwt-mssql-reactive(true)-gradle-enableTranslati
             "groupId": "com.microsoft.sqlserver",
           },
           {
-            "artifactId": "mssqlserver",
+            "artifactId": "testcontainers-mssqlserver",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -388,7 +395,7 @@ exports[`generator - sql gateway-jwt-mssql-reactive(true)-gradle-enableTranslati
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -404,7 +411,7 @@ exports[`generator - sql gateway-jwt-mssql-reactive(true)-gradle-enableTranslati
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -412,7 +419,7 @@ exports[`generator - sql gateway-jwt-mssql-reactive(true)-gradle-enableTranslati
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -435,12 +442,12 @@ exports[`generator - sql gateway-jwt-mssql-reactive(true)-gradle-enableTranslati
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -458,13 +465,13 @@ exports[`generator - sql gateway-jwt-mssql-reactive(true)-gradle-enableTranslati
               "inProfile": "prod",
             },
             {
-              "artifactId": "mssqlserver",
+              "artifactId": "testcontainers-mssqlserver",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "mssqlserver",
+              "artifactId": "testcontainers-mssqlserver",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -513,7 +520,14 @@ exports[`generator - sql gateway-jwt-mssql-reactive(true)-gradle-enableTranslati
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -640,7 +654,7 @@ exports[`generator - sql gateway-jwt-mysql-reactive(false)-maven-enableTranslati
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -656,7 +670,7 @@ exports[`generator - sql gateway-jwt-mysql-reactive(false)-maven-enableTranslati
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -664,7 +678,7 @@ exports[`generator - sql gateway-jwt-mysql-reactive(false)-maven-enableTranslati
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -687,12 +701,12 @@ exports[`generator - sql gateway-jwt-mysql-reactive(false)-maven-enableTranslati
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -710,7 +724,7 @@ exports[`generator - sql gateway-jwt-mysql-reactive(false)-maven-enableTranslati
               "inProfile": undefined,
             },
             {
-              "artifactId": "mysql",
+              "artifactId": "testcontainers-mysql",
               "groupId": "org.testcontainers",
               "inProfile": undefined,
               "scope": "test",
@@ -729,7 +743,14 @@ exports[`generator - sql gateway-jwt-mysql-reactive(false)-maven-enableTranslati
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": false,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -812,7 +833,7 @@ exports[`generator - sql gateway-jwt-mysql-reactive(true)-gradle-enableTranslati
             "groupId": "com.mysql",
           },
           {
-            "artifactId": "mysql",
+            "artifactId": "testcontainers-mysql",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -879,7 +900,7 @@ exports[`generator - sql gateway-jwt-mysql-reactive(true)-gradle-enableTranslati
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -895,7 +916,7 @@ exports[`generator - sql gateway-jwt-mysql-reactive(true)-gradle-enableTranslati
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -903,7 +924,7 @@ exports[`generator - sql gateway-jwt-mysql-reactive(true)-gradle-enableTranslati
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -926,12 +947,12 @@ exports[`generator - sql gateway-jwt-mysql-reactive(true)-gradle-enableTranslati
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -949,13 +970,13 @@ exports[`generator - sql gateway-jwt-mysql-reactive(true)-gradle-enableTranslati
               "inProfile": "prod",
             },
             {
-              "artifactId": "mysql",
+              "artifactId": "testcontainers-mysql",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "mysql",
+              "artifactId": "testcontainers-mysql",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -1004,7 +1025,14 @@ exports[`generator - sql gateway-jwt-mysql-reactive(true)-gradle-enableTranslati
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -1117,7 +1145,7 @@ exports[`generator - sql gateway-jwt-oracle-reactive(false)-maven-enableTranslat
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -1133,7 +1161,7 @@ exports[`generator - sql gateway-jwt-oracle-reactive(false)-maven-enableTranslat
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -1141,7 +1169,7 @@ exports[`generator - sql gateway-jwt-oracle-reactive(false)-maven-enableTranslat
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -1164,12 +1192,12 @@ exports[`generator - sql gateway-jwt-oracle-reactive(false)-maven-enableTranslat
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -1187,7 +1215,7 @@ exports[`generator - sql gateway-jwt-oracle-reactive(false)-maven-enableTranslat
               "inProfile": undefined,
             },
             {
-              "artifactId": "oracle-xe",
+              "artifactId": "testcontainers-oracle-xe",
               "groupId": "org.testcontainers",
               "inProfile": undefined,
               "scope": "test",
@@ -1206,7 +1234,14 @@ exports[`generator - sql gateway-jwt-oracle-reactive(false)-maven-enableTranslat
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": false,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -1283,7 +1318,7 @@ exports[`generator - sql gateway-jwt-oracle-reactive(true)-gradle-enableTranslat
             "groupId": "com.oracle.database.jdbc",
           },
           {
-            "artifactId": "oracle-xe",
+            "artifactId": "testcontainers-oracle-xe",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -1338,7 +1373,7 @@ exports[`generator - sql gateway-jwt-oracle-reactive(true)-gradle-enableTranslat
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -1354,7 +1389,7 @@ exports[`generator - sql gateway-jwt-oracle-reactive(true)-gradle-enableTranslat
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -1362,7 +1397,7 @@ exports[`generator - sql gateway-jwt-oracle-reactive(true)-gradle-enableTranslat
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -1385,12 +1420,12 @@ exports[`generator - sql gateway-jwt-oracle-reactive(true)-gradle-enableTranslat
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -1408,13 +1443,13 @@ exports[`generator - sql gateway-jwt-oracle-reactive(true)-gradle-enableTranslat
               "inProfile": "prod",
             },
             {
-              "artifactId": "oracle-xe",
+              "artifactId": "testcontainers-oracle-xe",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "oracle-xe",
+              "artifactId": "testcontainers-oracle-xe",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -1450,7 +1485,14 @@ exports[`generator - sql gateway-jwt-oracle-reactive(true)-gradle-enableTranslat
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -1574,7 +1616,7 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(false)-maven-enableTran
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -1590,7 +1632,7 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(false)-maven-enableTran
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -1598,7 +1640,7 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(false)-maven-enableTran
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -1621,12 +1663,12 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(false)-maven-enableTran
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -1644,7 +1686,7 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(false)-maven-enableTran
               "inProfile": undefined,
             },
             {
-              "artifactId": "postgresql",
+              "artifactId": "testcontainers-postgresql",
               "groupId": "org.testcontainers",
               "inProfile": undefined,
               "scope": "test",
@@ -1663,7 +1705,14 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(false)-maven-enableTran
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": false,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -1743,7 +1792,7 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(true)-gradle-enableTran
             "groupId": "org.postgresql",
           },
           {
-            "artifactId": "postgresql",
+            "artifactId": "testcontainers-postgresql",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -1810,7 +1859,7 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(true)-gradle-enableTran
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -1826,7 +1875,7 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(true)-gradle-enableTran
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -1834,7 +1883,7 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(true)-gradle-enableTran
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -1857,12 +1906,12 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(true)-gradle-enableTran
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -1880,13 +1929,13 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(true)-gradle-enableTran
               "inProfile": "prod",
             },
             {
-              "artifactId": "postgresql",
+              "artifactId": "testcontainers-postgresql",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "postgresql",
+              "artifactId": "testcontainers-postgresql",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -1935,7 +1984,14 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(true)-gradle-enableTran
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -2062,7 +2118,7 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(false)-maven-enableTran
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -2078,7 +2134,7 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(false)-maven-enableTran
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -2086,7 +2142,7 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(false)-maven-enableTran
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -2109,12 +2165,12 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(false)-maven-enableTran
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -2132,13 +2188,13 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(false)-maven-enableTran
               "inProfile": "prod",
             },
             {
-              "artifactId": "mariadb",
+              "artifactId": "testcontainers-mariadb",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "mariadb",
+              "artifactId": "testcontainers-mariadb",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -2187,7 +2243,14 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(false)-maven-enableTran
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -2294,7 +2357,7 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(true)-gradle-enableTran
             "groupId": "org.mariadb.jdbc",
           },
           {
-            "artifactId": "mariadb",
+            "artifactId": "testcontainers-mariadb",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -2361,7 +2424,7 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(true)-gradle-enableTran
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -2377,7 +2440,7 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(true)-gradle-enableTran
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -2385,7 +2448,7 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(true)-gradle-enableTran
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -2408,12 +2471,12 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(true)-gradle-enableTran
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -2431,13 +2494,13 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(true)-gradle-enableTran
               "inProfile": "prod",
             },
             {
-              "artifactId": "mariadb",
+              "artifactId": "testcontainers-mariadb",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "mariadb",
+              "artifactId": "testcontainers-mariadb",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -2486,7 +2549,14 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(true)-gradle-enableTran
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -2613,7 +2683,7 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(false)-maven-enableTransl
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -2629,7 +2699,7 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(false)-maven-enableTransl
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -2637,7 +2707,7 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(false)-maven-enableTransl
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -2660,12 +2730,12 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(false)-maven-enableTransl
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -2683,13 +2753,13 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(false)-maven-enableTransl
               "inProfile": "prod",
             },
             {
-              "artifactId": "mssqlserver",
+              "artifactId": "testcontainers-mssqlserver",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "mssqlserver",
+              "artifactId": "testcontainers-mssqlserver",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -2738,7 +2808,14 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(false)-maven-enableTransl
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -2845,7 +2922,7 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(true)-gradle-enableTransl
             "groupId": "com.microsoft.sqlserver",
           },
           {
-            "artifactId": "mssqlserver",
+            "artifactId": "testcontainers-mssqlserver",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -2912,7 +2989,7 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(true)-gradle-enableTransl
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -2928,7 +3005,7 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(true)-gradle-enableTransl
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -2936,7 +3013,7 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(true)-gradle-enableTransl
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -2959,12 +3036,12 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(true)-gradle-enableTransl
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -2982,13 +3059,13 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(true)-gradle-enableTransl
               "inProfile": "prod",
             },
             {
-              "artifactId": "mssqlserver",
+              "artifactId": "testcontainers-mssqlserver",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "mssqlserver",
+              "artifactId": "testcontainers-mssqlserver",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -3037,7 +3114,14 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(true)-gradle-enableTransl
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -3147,7 +3231,7 @@ exports[`generator - sql gateway-oauth2-mysql-reactive(true)-gradle-enableTransl
             "groupId": "com.mysql",
           },
           {
-            "artifactId": "mysql",
+            "artifactId": "testcontainers-mysql",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -3214,7 +3298,7 @@ exports[`generator - sql gateway-oauth2-mysql-reactive(true)-gradle-enableTransl
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -3230,7 +3314,7 @@ exports[`generator - sql gateway-oauth2-mysql-reactive(true)-gradle-enableTransl
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -3238,7 +3322,7 @@ exports[`generator - sql gateway-oauth2-mysql-reactive(true)-gradle-enableTransl
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -3261,12 +3345,12 @@ exports[`generator - sql gateway-oauth2-mysql-reactive(true)-gradle-enableTransl
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -3284,13 +3368,13 @@ exports[`generator - sql gateway-oauth2-mysql-reactive(true)-gradle-enableTransl
               "inProfile": "prod",
             },
             {
-              "artifactId": "mysql",
+              "artifactId": "testcontainers-mysql",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "mysql",
+              "artifactId": "testcontainers-mysql",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -3339,7 +3423,14 @@ exports[`generator - sql gateway-oauth2-mysql-reactive(true)-gradle-enableTransl
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -3443,7 +3534,7 @@ exports[`generator - sql gateway-oauth2-oracle-reactive(true)-gradle-enableTrans
             "groupId": "com.oracle.database.jdbc",
           },
           {
-            "artifactId": "oracle-xe",
+            "artifactId": "testcontainers-oracle-xe",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -3498,7 +3589,7 @@ exports[`generator - sql gateway-oauth2-oracle-reactive(true)-gradle-enableTrans
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -3514,7 +3605,7 @@ exports[`generator - sql gateway-oauth2-oracle-reactive(true)-gradle-enableTrans
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -3522,7 +3613,7 @@ exports[`generator - sql gateway-oauth2-oracle-reactive(true)-gradle-enableTrans
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -3545,12 +3636,12 @@ exports[`generator - sql gateway-oauth2-oracle-reactive(true)-gradle-enableTrans
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -3568,13 +3659,13 @@ exports[`generator - sql gateway-oauth2-oracle-reactive(true)-gradle-enableTrans
               "inProfile": "prod",
             },
             {
-              "artifactId": "oracle-xe",
+              "artifactId": "testcontainers-oracle-xe",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "oracle-xe",
+              "artifactId": "testcontainers-oracle-xe",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -3610,7 +3701,14 @@ exports[`generator - sql gateway-oauth2-oracle-reactive(true)-gradle-enableTrans
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -3717,7 +3815,7 @@ exports[`generator - sql gateway-oauth2-postgresql-reactive(true)-gradle-enableT
             "groupId": "org.postgresql",
           },
           {
-            "artifactId": "postgresql",
+            "artifactId": "testcontainers-postgresql",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -3784,7 +3882,7 @@ exports[`generator - sql gateway-oauth2-postgresql-reactive(true)-gradle-enableT
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -3800,7 +3898,7 @@ exports[`generator - sql gateway-oauth2-postgresql-reactive(true)-gradle-enableT
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -3808,7 +3906,7 @@ exports[`generator - sql gateway-oauth2-postgresql-reactive(true)-gradle-enableT
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -3831,12 +3929,12 @@ exports[`generator - sql gateway-oauth2-postgresql-reactive(true)-gradle-enableT
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -3854,13 +3952,13 @@ exports[`generator - sql gateway-oauth2-postgresql-reactive(true)-gradle-enableT
               "inProfile": "prod",
             },
             {
-              "artifactId": "postgresql",
+              "artifactId": "testcontainers-postgresql",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "postgresql",
+              "artifactId": "testcontainers-postgresql",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -3909,7 +4007,14 @@ exports[`generator - sql gateway-oauth2-postgresql-reactive(true)-gradle-enableT
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -3986,7 +4091,7 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
             "groupId": "org.mariadb.jdbc",
           },
           {
-            "artifactId": "mariadb",
+            "artifactId": "testcontainers-mariadb",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -4036,7 +4141,7 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -4052,7 +4157,7 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -4060,7 +4165,7 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -4083,12 +4188,12 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -4106,7 +4211,7 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
               "inProfile": undefined,
             },
             {
-              "artifactId": "mariadb",
+              "artifactId": "testcontainers-mariadb",
               "groupId": "org.testcontainers",
               "inProfile": undefined,
               "scope": "test",
@@ -4125,7 +4230,14 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": false,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -4202,7 +4314,7 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
             "groupId": "com.microsoft.sqlserver",
           },
           {
-            "artifactId": "mssqlserver",
+            "artifactId": "testcontainers-mssqlserver",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -4252,7 +4364,7 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -4268,7 +4380,7 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -4276,7 +4388,7 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -4299,12 +4411,12 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -4322,7 +4434,7 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
               "inProfile": undefined,
             },
             {
-              "artifactId": "mssqlserver",
+              "artifactId": "testcontainers-mssqlserver",
               "groupId": "org.testcontainers",
               "inProfile": undefined,
               "scope": "test",
@@ -4341,7 +4453,14 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": false,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -4456,7 +4575,7 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -4472,7 +4591,7 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -4480,7 +4599,7 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -4503,12 +4622,12 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -4526,13 +4645,13 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
               "inProfile": "prod",
             },
             {
-              "artifactId": "mysql",
+              "artifactId": "testcontainers-mysql",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "mysql",
+              "artifactId": "testcontainers-mysql",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -4581,7 +4700,14 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -4661,7 +4787,7 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
             "groupId": "com.mysql",
           },
           {
-            "artifactId": "mysql",
+            "artifactId": "testcontainers-mysql",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -4711,7 +4837,7 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -4727,7 +4853,7 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -4735,7 +4861,7 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -4758,12 +4884,12 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -4781,7 +4907,7 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
               "inProfile": undefined,
             },
             {
-              "artifactId": "mysql",
+              "artifactId": "testcontainers-mysql",
               "groupId": "org.testcontainers",
               "inProfile": undefined,
               "scope": "test",
@@ -4800,7 +4926,14 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": false,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -4901,7 +5034,7 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -4917,7 +5050,7 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -4925,7 +5058,7 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -4948,12 +5081,12 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -4971,13 +5104,13 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
               "inProfile": "prod",
             },
             {
-              "artifactId": "oracle-xe",
+              "artifactId": "testcontainers-oracle-xe",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "oracle-xe",
+              "artifactId": "testcontainers-oracle-xe",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -5013,7 +5146,14 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -5087,7 +5227,7 @@ exports[`generator - sql microservice-jwt-oracle-reactive(true)-gradle-enableTra
             "groupId": "com.oracle.database.jdbc",
           },
           {
-            "artifactId": "oracle-xe",
+            "artifactId": "testcontainers-oracle-xe",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -5125,7 +5265,7 @@ exports[`generator - sql microservice-jwt-oracle-reactive(true)-gradle-enableTra
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -5141,7 +5281,7 @@ exports[`generator - sql microservice-jwt-oracle-reactive(true)-gradle-enableTra
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -5149,7 +5289,7 @@ exports[`generator - sql microservice-jwt-oracle-reactive(true)-gradle-enableTra
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -5172,12 +5312,12 @@ exports[`generator - sql microservice-jwt-oracle-reactive(true)-gradle-enableTra
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -5195,7 +5335,7 @@ exports[`generator - sql microservice-jwt-oracle-reactive(true)-gradle-enableTra
               "inProfile": undefined,
             },
             {
-              "artifactId": "oracle-xe",
+              "artifactId": "testcontainers-oracle-xe",
               "groupId": "org.testcontainers",
               "inProfile": undefined,
               "scope": "test",
@@ -5214,7 +5354,14 @@ exports[`generator - sql microservice-jwt-oracle-reactive(true)-gradle-enableTra
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": false,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -5326,7 +5473,7 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -5342,7 +5489,7 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -5350,7 +5497,7 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -5373,12 +5520,12 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -5396,13 +5543,13 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
               "inProfile": "prod",
             },
             {
-              "artifactId": "postgresql",
+              "artifactId": "testcontainers-postgresql",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "postgresql",
+              "artifactId": "testcontainers-postgresql",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -5451,7 +5598,14 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -5528,7 +5682,7 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(true)-gradle-enabl
             "groupId": "org.postgresql",
           },
           {
-            "artifactId": "postgresql",
+            "artifactId": "testcontainers-postgresql",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -5578,7 +5732,7 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(true)-gradle-enabl
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -5594,7 +5748,7 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(true)-gradle-enabl
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -5602,7 +5756,7 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(true)-gradle-enabl
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -5625,12 +5779,12 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(true)-gradle-enabl
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -5648,7 +5802,7 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(true)-gradle-enabl
               "inProfile": undefined,
             },
             {
-              "artifactId": "postgresql",
+              "artifactId": "testcontainers-postgresql",
               "groupId": "org.testcontainers",
               "inProfile": undefined,
               "scope": "test",
@@ -5667,7 +5821,14 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(true)-gradle-enabl
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": false,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -5776,7 +5937,7 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -5792,7 +5953,7 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -5800,7 +5961,7 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -5823,12 +5984,12 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -5846,7 +6007,7 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
               "inProfile": undefined,
             },
             {
-              "artifactId": "mariadb",
+              "artifactId": "testcontainers-mariadb",
               "groupId": "org.testcontainers",
               "inProfile": undefined,
               "scope": "test",
@@ -5865,7 +6026,14 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": false,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -5945,7 +6113,7 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
             "groupId": "org.mariadb.jdbc",
           },
           {
-            "artifactId": "mariadb",
+            "artifactId": "testcontainers-mariadb",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -6012,7 +6180,7 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -6028,7 +6196,7 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -6036,7 +6204,7 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -6059,12 +6227,12 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -6082,13 +6250,13 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
               "inProfile": "prod",
             },
             {
-              "artifactId": "mariadb",
+              "artifactId": "testcontainers-mariadb",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "mariadb",
+              "artifactId": "testcontainers-mariadb",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -6137,7 +6305,14 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -6246,7 +6421,7 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -6262,7 +6437,7 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -6270,7 +6445,7 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -6293,12 +6468,12 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -6316,7 +6491,7 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
               "inProfile": undefined,
             },
             {
-              "artifactId": "mssqlserver",
+              "artifactId": "testcontainers-mssqlserver",
               "groupId": "org.testcontainers",
               "inProfile": undefined,
               "scope": "test",
@@ -6335,7 +6510,14 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": false,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -6415,7 +6597,7 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
             "groupId": "com.microsoft.sqlserver",
           },
           {
-            "artifactId": "mssqlserver",
+            "artifactId": "testcontainers-mssqlserver",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -6482,7 +6664,7 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -6498,7 +6680,7 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -6506,7 +6688,7 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -6529,12 +6711,12 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -6552,13 +6734,13 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
               "inProfile": "prod",
             },
             {
-              "artifactId": "mssqlserver",
+              "artifactId": "testcontainers-mssqlserver",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "mssqlserver",
+              "artifactId": "testcontainers-mssqlserver",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -6607,7 +6789,14 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -6690,7 +6879,7 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
             "groupId": "com.mysql",
           },
           {
-            "artifactId": "mysql",
+            "artifactId": "testcontainers-mysql",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -6757,7 +6946,7 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -6773,7 +6962,7 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -6781,7 +6970,7 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -6804,12 +6993,12 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -6827,13 +7016,13 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
               "inProfile": "prod",
             },
             {
-              "artifactId": "mysql",
+              "artifactId": "testcontainers-mysql",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "mysql",
+              "artifactId": "testcontainers-mysql",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -6882,7 +7071,14 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -6959,7 +7155,7 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(true)-gradle-enable
             "groupId": "com.oracle.database.jdbc",
           },
           {
-            "artifactId": "oracle-xe",
+            "artifactId": "testcontainers-oracle-xe",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -7014,7 +7210,7 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(true)-gradle-enable
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -7030,7 +7226,7 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(true)-gradle-enable
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -7038,7 +7234,7 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(true)-gradle-enable
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -7061,12 +7257,12 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(true)-gradle-enable
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -7084,13 +7280,13 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(true)-gradle-enable
               "inProfile": "prod",
             },
             {
-              "artifactId": "oracle-xe",
+              "artifactId": "testcontainers-oracle-xe",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "oracle-xe",
+              "artifactId": "testcontainers-oracle-xe",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -7126,7 +7322,14 @@ exports[`generator - sql microservice-oauth2-oracle-reactive(true)-gradle-enable
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -7206,7 +7409,7 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(true)-gradle-en
             "groupId": "org.postgresql",
           },
           {
-            "artifactId": "postgresql",
+            "artifactId": "testcontainers-postgresql",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -7273,7 +7476,7 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(true)-gradle-en
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -7289,7 +7492,7 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(true)-gradle-en
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -7297,7 +7500,7 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(true)-gradle-en
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -7320,12 +7523,12 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(true)-gradle-en
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -7343,13 +7546,13 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(true)-gradle-en
               "inProfile": "prod",
             },
             {
-              "artifactId": "postgresql",
+              "artifactId": "testcontainers-postgresql",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "postgresql",
+              "artifactId": "testcontainers-postgresql",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -7398,7 +7601,14 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(true)-gradle-en
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -7525,7 +7735,7 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -7541,7 +7751,7 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -7549,7 +7759,7 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -7572,12 +7782,12 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -7595,13 +7805,13 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
               "inProfile": "prod",
             },
             {
-              "artifactId": "mariadb",
+              "artifactId": "testcontainers-mariadb",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "mariadb",
+              "artifactId": "testcontainers-mariadb",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -7650,7 +7860,14 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -7727,7 +7944,7 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
             "groupId": "org.mariadb.jdbc",
           },
           {
-            "artifactId": "mariadb",
+            "artifactId": "testcontainers-mariadb",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -7777,7 +7994,7 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -7793,7 +8010,7 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -7801,7 +8018,7 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -7824,12 +8041,12 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -7847,7 +8064,7 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
               "inProfile": undefined,
             },
             {
-              "artifactId": "mariadb",
+              "artifactId": "testcontainers-mariadb",
               "groupId": "org.testcontainers",
               "inProfile": undefined,
               "scope": "test",
@@ -7866,7 +8083,14 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": false,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -7993,7 +8217,7 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -8009,7 +8233,7 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -8017,7 +8241,7 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -8040,12 +8264,12 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -8063,13 +8287,13 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
               "inProfile": "prod",
             },
             {
-              "artifactId": "mssqlserver",
+              "artifactId": "testcontainers-mssqlserver",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "mssqlserver",
+              "artifactId": "testcontainers-mssqlserver",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -8118,7 +8342,14 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -8195,7 +8426,7 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
             "groupId": "com.microsoft.sqlserver",
           },
           {
-            "artifactId": "mssqlserver",
+            "artifactId": "testcontainers-mssqlserver",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -8245,7 +8476,7 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -8261,7 +8492,7 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -8269,7 +8500,7 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -8292,12 +8523,12 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -8315,7 +8546,7 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
               "inProfile": undefined,
             },
             {
-              "artifactId": "mssqlserver",
+              "artifactId": "testcontainers-mssqlserver",
               "groupId": "org.testcontainers",
               "inProfile": undefined,
               "scope": "test",
@@ -8334,7 +8565,14 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": false,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -8464,7 +8702,7 @@ exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslat
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -8480,7 +8718,7 @@ exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslat
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -8488,7 +8726,7 @@ exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslat
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -8511,12 +8749,12 @@ exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslat
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -8534,13 +8772,13 @@ exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslat
               "inProfile": "prod",
             },
             {
-              "artifactId": "mysql",
+              "artifactId": "testcontainers-mysql",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "mysql",
+              "artifactId": "testcontainers-mysql",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -8589,7 +8827,14 @@ exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslat
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -8669,7 +8914,7 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
             "groupId": "com.mysql",
           },
           {
-            "artifactId": "mysql",
+            "artifactId": "testcontainers-mysql",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -8719,7 +8964,7 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -8735,7 +8980,7 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -8743,7 +8988,7 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -8766,12 +9011,12 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -8789,7 +9034,7 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
               "inProfile": undefined,
             },
             {
-              "artifactId": "mysql",
+              "artifactId": "testcontainers-mysql",
               "groupId": "org.testcontainers",
               "inProfile": undefined,
               "scope": "test",
@@ -8808,7 +9053,14 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": false,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -8924,7 +9176,7 @@ exports[`generator - sql monolith-jwt-oracle-reactive(false)-maven-enableTransla
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -8940,7 +9192,7 @@ exports[`generator - sql monolith-jwt-oracle-reactive(false)-maven-enableTransla
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -8948,7 +9200,7 @@ exports[`generator - sql monolith-jwt-oracle-reactive(false)-maven-enableTransla
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -8971,12 +9223,12 @@ exports[`generator - sql monolith-jwt-oracle-reactive(false)-maven-enableTransla
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -8994,13 +9246,13 @@ exports[`generator - sql monolith-jwt-oracle-reactive(false)-maven-enableTransla
               "inProfile": "prod",
             },
             {
-              "artifactId": "oracle-xe",
+              "artifactId": "testcontainers-oracle-xe",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "oracle-xe",
+              "artifactId": "testcontainers-oracle-xe",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -9036,7 +9288,14 @@ exports[`generator - sql monolith-jwt-oracle-reactive(false)-maven-enableTransla
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -9110,7 +9369,7 @@ exports[`generator - sql monolith-jwt-oracle-reactive(true)-gradle-enableTransla
             "groupId": "com.oracle.database.jdbc",
           },
           {
-            "artifactId": "oracle-xe",
+            "artifactId": "testcontainers-oracle-xe",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -9148,7 +9407,7 @@ exports[`generator - sql monolith-jwt-oracle-reactive(true)-gradle-enableTransla
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -9164,7 +9423,7 @@ exports[`generator - sql monolith-jwt-oracle-reactive(true)-gradle-enableTransla
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -9172,7 +9431,7 @@ exports[`generator - sql monolith-jwt-oracle-reactive(true)-gradle-enableTransla
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -9195,12 +9454,12 @@ exports[`generator - sql monolith-jwt-oracle-reactive(true)-gradle-enableTransla
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -9218,7 +9477,7 @@ exports[`generator - sql monolith-jwt-oracle-reactive(true)-gradle-enableTransla
               "inProfile": undefined,
             },
             {
-              "artifactId": "oracle-xe",
+              "artifactId": "testcontainers-oracle-xe",
               "groupId": "org.testcontainers",
               "inProfile": undefined,
               "scope": "test",
@@ -9237,7 +9496,14 @@ exports[`generator - sql monolith-jwt-oracle-reactive(true)-gradle-enableTransla
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": false,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -9364,7 +9630,7 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -9380,7 +9646,7 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -9388,7 +9654,7 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -9411,12 +9677,12 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -9434,13 +9700,13 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
               "inProfile": "prod",
             },
             {
-              "artifactId": "postgresql",
+              "artifactId": "testcontainers-postgresql",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "postgresql",
+              "artifactId": "testcontainers-postgresql",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -9489,7 +9755,14 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -9566,7 +9839,7 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(true)-gradle-enableTra
             "groupId": "org.postgresql",
           },
           {
-            "artifactId": "postgresql",
+            "artifactId": "testcontainers-postgresql",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -9616,7 +9889,7 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(true)-gradle-enableTra
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -9632,7 +9905,7 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(true)-gradle-enableTra
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -9640,7 +9913,7 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(true)-gradle-enableTra
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -9663,12 +9936,12 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(true)-gradle-enableTra
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -9686,7 +9959,7 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(true)-gradle-enableTra
               "inProfile": undefined,
             },
             {
-              "artifactId": "postgresql",
+              "artifactId": "testcontainers-postgresql",
               "groupId": "org.testcontainers",
               "inProfile": undefined,
               "scope": "test",
@@ -9705,7 +9978,14 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(true)-gradle-enableTra
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": false,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -9814,7 +10094,7 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -9830,7 +10110,7 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -9838,7 +10118,7 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -9861,12 +10141,12 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -9884,7 +10164,7 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
               "inProfile": undefined,
             },
             {
-              "artifactId": "mariadb",
+              "artifactId": "testcontainers-mariadb",
               "groupId": "org.testcontainers",
               "inProfile": undefined,
               "scope": "test",
@@ -9903,7 +10183,14 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": false,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -9983,7 +10270,7 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
             "groupId": "org.mariadb.jdbc",
           },
           {
-            "artifactId": "mariadb",
+            "artifactId": "testcontainers-mariadb",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -10050,7 +10337,7 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -10066,7 +10353,7 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -10074,7 +10361,7 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -10097,12 +10384,12 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -10120,13 +10407,13 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
               "inProfile": "prod",
             },
             {
-              "artifactId": "mariadb",
+              "artifactId": "testcontainers-mariadb",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "mariadb",
+              "artifactId": "testcontainers-mariadb",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -10175,7 +10462,14 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -10284,7 +10578,7 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -10300,7 +10594,7 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -10308,7 +10602,7 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -10331,12 +10625,12 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -10354,7 +10648,7 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
               "inProfile": undefined,
             },
             {
-              "artifactId": "mssqlserver",
+              "artifactId": "testcontainers-mssqlserver",
               "groupId": "org.testcontainers",
               "inProfile": undefined,
               "scope": "test",
@@ -10373,7 +10667,14 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": false,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -10453,7 +10754,7 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
             "groupId": "com.microsoft.sqlserver",
           },
           {
-            "artifactId": "mssqlserver",
+            "artifactId": "testcontainers-mssqlserver",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -10520,7 +10821,7 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -10536,7 +10837,7 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -10544,7 +10845,7 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -10567,12 +10868,12 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -10590,13 +10891,13 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
               "inProfile": "prod",
             },
             {
-              "artifactId": "mssqlserver",
+              "artifactId": "testcontainers-mssqlserver",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "mssqlserver",
+              "artifactId": "testcontainers-mssqlserver",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -10645,7 +10946,14 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -10757,7 +11065,7 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -10773,7 +11081,7 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -10781,7 +11089,7 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -10804,12 +11112,12 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -10827,7 +11135,7 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
               "inProfile": undefined,
             },
             {
-              "artifactId": "mysql",
+              "artifactId": "testcontainers-mysql",
               "groupId": "org.testcontainers",
               "inProfile": undefined,
               "scope": "test",
@@ -10846,7 +11154,14 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": false,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -10929,7 +11244,7 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
             "groupId": "com.mysql",
           },
           {
-            "artifactId": "mysql",
+            "artifactId": "testcontainers-mysql",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -10996,7 +11311,7 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -11012,7 +11327,7 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -11020,7 +11335,7 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -11043,12 +11358,12 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -11066,13 +11381,13 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
               "inProfile": "prod",
             },
             {
-              "artifactId": "mysql",
+              "artifactId": "testcontainers-mysql",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "mysql",
+              "artifactId": "testcontainers-mysql",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -11121,7 +11436,14 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -11219,7 +11541,7 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -11235,7 +11557,7 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -11243,7 +11565,7 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -11266,12 +11588,12 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -11289,7 +11611,7 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
               "inProfile": undefined,
             },
             {
-              "artifactId": "oracle-xe",
+              "artifactId": "testcontainers-oracle-xe",
               "groupId": "org.testcontainers",
               "inProfile": undefined,
               "scope": "test",
@@ -11308,7 +11630,14 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": false,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -11385,7 +11714,7 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(true)-gradle-enableTran
             "groupId": "com.oracle.database.jdbc",
           },
           {
-            "artifactId": "oracle-xe",
+            "artifactId": "testcontainers-oracle-xe",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -11440,7 +11769,7 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(true)-gradle-enableTran
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -11456,7 +11785,7 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(true)-gradle-enableTran
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -11464,7 +11793,7 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(true)-gradle-enableTran
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -11487,12 +11816,12 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(true)-gradle-enableTran
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -11510,13 +11839,13 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(true)-gradle-enableTran
               "inProfile": "prod",
             },
             {
-              "artifactId": "oracle-xe",
+              "artifactId": "testcontainers-oracle-xe",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "oracle-xe",
+              "artifactId": "testcontainers-oracle-xe",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -11552,7 +11881,14 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(true)-gradle-enableTran
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -11661,7 +11997,7 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -11677,7 +12013,7 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -11685,7 +12021,7 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -11708,12 +12044,12 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -11731,7 +12067,7 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
               "inProfile": undefined,
             },
             {
-              "artifactId": "postgresql",
+              "artifactId": "testcontainers-postgresql",
               "groupId": "org.testcontainers",
               "inProfile": undefined,
               "scope": "test",
@@ -11750,7 +12086,14 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": false,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -11830,7 +12173,7 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(true)-gradle-enable
             "groupId": "org.postgresql",
           },
           {
-            "artifactId": "postgresql",
+            "artifactId": "testcontainers-postgresql",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -11897,7 +12240,7 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(true)-gradle-enable
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -11913,7 +12256,7 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(true)-gradle-enable
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -11921,7 +12264,7 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(true)-gradle-enable
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -11944,12 +12287,12 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(true)-gradle-enable
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -11967,13 +12310,13 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(true)-gradle-enable
               "inProfile": "prod",
             },
             {
-              "artifactId": "postgresql",
+              "artifactId": "testcontainers-postgresql",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "postgresql",
+              "artifactId": "testcontainers-postgresql",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -12022,7 +12365,14 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(true)-gradle-enable
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -12149,7 +12499,7 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -12165,7 +12515,7 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -12173,7 +12523,7 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -12196,12 +12546,12 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -12219,13 +12569,13 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
               "inProfile": "prod",
             },
             {
-              "artifactId": "mariadb",
+              "artifactId": "testcontainers-mariadb",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "mariadb",
+              "artifactId": "testcontainers-mariadb",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -12274,7 +12624,14 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -12354,7 +12711,7 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
             "groupId": "org.mariadb.jdbc",
           },
           {
-            "artifactId": "mariadb",
+            "artifactId": "testcontainers-mariadb",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -12421,7 +12778,7 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -12437,7 +12794,7 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -12445,7 +12802,7 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -12468,12 +12825,12 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -12491,13 +12848,13 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
               "inProfile": "prod",
             },
             {
-              "artifactId": "mariadb",
+              "artifactId": "testcontainers-mariadb",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "mariadb",
+              "artifactId": "testcontainers-mariadb",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -12546,7 +12903,14 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -12673,7 +13037,7 @@ exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTran
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -12689,7 +13053,7 @@ exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTran
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -12697,7 +13061,7 @@ exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTran
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -12720,12 +13084,12 @@ exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTran
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -12743,13 +13107,13 @@ exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTran
               "inProfile": "prod",
             },
             {
-              "artifactId": "mssqlserver",
+              "artifactId": "testcontainers-mssqlserver",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "mssqlserver",
+              "artifactId": "testcontainers-mssqlserver",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -12798,7 +13162,14 @@ exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTran
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -12878,7 +13249,7 @@ exports[`generator - sql monolith-session-mssql-reactive(true)-gradle-enableTran
             "groupId": "com.microsoft.sqlserver",
           },
           {
-            "artifactId": "mssqlserver",
+            "artifactId": "testcontainers-mssqlserver",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -12945,7 +13316,7 @@ exports[`generator - sql monolith-session-mssql-reactive(true)-gradle-enableTran
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -12961,7 +13332,7 @@ exports[`generator - sql monolith-session-mssql-reactive(true)-gradle-enableTran
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -12969,7 +13340,7 @@ exports[`generator - sql monolith-session-mssql-reactive(true)-gradle-enableTran
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -12992,12 +13363,12 @@ exports[`generator - sql monolith-session-mssql-reactive(true)-gradle-enableTran
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -13015,13 +13386,13 @@ exports[`generator - sql monolith-session-mssql-reactive(true)-gradle-enableTran
               "inProfile": "prod",
             },
             {
-              "artifactId": "mssqlserver",
+              "artifactId": "testcontainers-mssqlserver",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "mssqlserver",
+              "artifactId": "testcontainers-mssqlserver",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -13070,7 +13441,14 @@ exports[`generator - sql monolith-session-mssql-reactive(true)-gradle-enableTran
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -13200,7 +13578,7 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -13216,7 +13594,7 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -13224,7 +13602,7 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -13247,12 +13625,12 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -13270,13 +13648,13 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
               "inProfile": "prod",
             },
             {
-              "artifactId": "mysql",
+              "artifactId": "testcontainers-mysql",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "mysql",
+              "artifactId": "testcontainers-mysql",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -13325,7 +13703,14 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -13408,7 +13793,7 @@ exports[`generator - sql monolith-session-mysql-reactive(true)-gradle-enableTran
             "groupId": "com.mysql",
           },
           {
-            "artifactId": "mysql",
+            "artifactId": "testcontainers-mysql",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -13475,7 +13860,7 @@ exports[`generator - sql monolith-session-mysql-reactive(true)-gradle-enableTran
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -13491,7 +13876,7 @@ exports[`generator - sql monolith-session-mysql-reactive(true)-gradle-enableTran
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -13499,7 +13884,7 @@ exports[`generator - sql monolith-session-mysql-reactive(true)-gradle-enableTran
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -13522,12 +13907,12 @@ exports[`generator - sql monolith-session-mysql-reactive(true)-gradle-enableTran
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -13545,13 +13930,13 @@ exports[`generator - sql monolith-session-mysql-reactive(true)-gradle-enableTran
               "inProfile": "prod",
             },
             {
-              "artifactId": "mysql",
+              "artifactId": "testcontainers-mysql",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "mysql",
+              "artifactId": "testcontainers-mysql",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -13600,7 +13985,14 @@ exports[`generator - sql monolith-session-mysql-reactive(true)-gradle-enableTran
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -13716,7 +14108,7 @@ exports[`generator - sql monolith-session-oracle-reactive(false)-maven-enableTra
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -13732,7 +14124,7 @@ exports[`generator - sql monolith-session-oracle-reactive(false)-maven-enableTra
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -13740,7 +14132,7 @@ exports[`generator - sql monolith-session-oracle-reactive(false)-maven-enableTra
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -13763,12 +14155,12 @@ exports[`generator - sql monolith-session-oracle-reactive(false)-maven-enableTra
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -13786,13 +14178,13 @@ exports[`generator - sql monolith-session-oracle-reactive(false)-maven-enableTra
               "inProfile": "prod",
             },
             {
-              "artifactId": "oracle-xe",
+              "artifactId": "testcontainers-oracle-xe",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "oracle-xe",
+              "artifactId": "testcontainers-oracle-xe",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -13828,7 +14220,14 @@ exports[`generator - sql monolith-session-oracle-reactive(false)-maven-enableTra
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -13905,7 +14304,7 @@ exports[`generator - sql monolith-session-oracle-reactive(true)-gradle-enableTra
             "groupId": "com.oracle.database.jdbc",
           },
           {
-            "artifactId": "oracle-xe",
+            "artifactId": "testcontainers-oracle-xe",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -13960,7 +14359,7 @@ exports[`generator - sql monolith-session-oracle-reactive(true)-gradle-enableTra
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -13976,7 +14375,7 @@ exports[`generator - sql monolith-session-oracle-reactive(true)-gradle-enableTra
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -13984,7 +14383,7 @@ exports[`generator - sql monolith-session-oracle-reactive(true)-gradle-enableTra
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -14007,12 +14406,12 @@ exports[`generator - sql monolith-session-oracle-reactive(true)-gradle-enableTra
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -14030,13 +14429,13 @@ exports[`generator - sql monolith-session-oracle-reactive(true)-gradle-enableTra
               "inProfile": "prod",
             },
             {
-              "artifactId": "oracle-xe",
+              "artifactId": "testcontainers-oracle-xe",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "oracle-xe",
+              "artifactId": "testcontainers-oracle-xe",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -14072,7 +14471,14 @@ exports[`generator - sql monolith-session-oracle-reactive(true)-gradle-enableTra
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -14199,7 +14605,7 @@ exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enabl
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -14215,7 +14621,7 @@ exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enabl
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -14223,7 +14629,7 @@ exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enabl
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -14246,12 +14652,12 @@ exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enabl
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -14269,13 +14675,13 @@ exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enabl
               "inProfile": "prod",
             },
             {
-              "artifactId": "postgresql",
+              "artifactId": "testcontainers-postgresql",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "postgresql",
+              "artifactId": "testcontainers-postgresql",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -14324,7 +14730,14 @@ exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enabl
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-jpa",
+    [
+      "spring-boot-starter-data-jpa",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
@@ -14404,7 +14817,7 @@ exports[`generator - sql monolith-session-postgresql-reactive(true)-gradle-enabl
             "groupId": "org.postgresql",
           },
           {
-            "artifactId": "postgresql",
+            "artifactId": "testcontainers-postgresql",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -14471,7 +14884,7 @@ exports[`generator - sql monolith-session-postgresql-reactive(true)-gradle-enabl
         "condition": false,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
+            "artifactId": "jackson-datatype-hibernate7",
             "groupId": "com.fasterxml.jackson.datatype",
           },
           {
@@ -14487,7 +14900,7 @@ exports[`generator - sql monolith-session-postgresql-reactive(true)-gradle-enabl
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -14495,7 +14908,7 @@ exports[`generator - sql monolith-session-postgresql-reactive(true)-gradle-enabl
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -14518,12 +14931,12 @@ exports[`generator - sql monolith-session-postgresql-reactive(true)-gradle-enabl
             "scope": "annotationProcessor",
           },
           {
-            "artifactId": "jdbc",
+            "artifactId": "testcontainers-jdbc",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -14541,13 +14954,13 @@ exports[`generator - sql monolith-session-postgresql-reactive(true)-gradle-enabl
               "inProfile": "prod",
             },
             {
-              "artifactId": "postgresql",
+              "artifactId": "testcontainers-postgresql",
               "groupId": "org.testcontainers",
               "inProfile": "prod",
               "scope": "test",
             },
             {
-              "artifactId": "postgresql",
+              "artifactId": "testcontainers-postgresql",
               "groupId": "org.testcontainers",
               "inProfile": "dev",
               "scope": "provided",
@@ -14596,7 +15009,14 @@ exports[`generator - sql monolith-session-postgresql-reactive(true)-gradle-enabl
     ],
   ],
   "addSpringBootModule": [
-    "spring-boot-starter-data-r2dbc",
+    [
+      "spring-boot-starter-data-r2dbc",
+      {
+        "condition": true,
+        "module": "spring-boot-h2console",
+        "profile": "dev",
+      },
+    ],
   ],
   "addTestLog": [
     {
