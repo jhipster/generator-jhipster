@@ -19,7 +19,7 @@
 package <%= packageName %>.config;
 
 <%_ if (reactive) { _%>
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 <%_ } _%>
 <%_ if (!skipClient || devDatabaseTypeH2Any) { _%>
 import tech.jhipster.config.JHipsterConstants;
