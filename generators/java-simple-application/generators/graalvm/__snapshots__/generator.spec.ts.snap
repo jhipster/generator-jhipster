@@ -34,8 +34,8 @@ exports[`generator - java-simple-application:graalvm with default options should
                 <configuration>
                     <enableLazyInitialization>true</enableLazyInitialization>
                 </configuration>",
-          "artifactId": "hibernate-enhance-maven-plugin",
-          "groupId": "org.hibernate.orm.tooling",
+          "artifactId": "hibernate-maven-plugin",
+          "groupId": "org.hibernate.orm",
           "version": "\${hibernate.version}",
         },
       ],
