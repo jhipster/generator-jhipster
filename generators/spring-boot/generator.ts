@@ -661,6 +661,8 @@ ${classProperties
           'spring-boot-starter-jackson',
           'spring-boot-starter-jackson-test',
           'spring-boot-starter-mail',
+          'spring-boot-starter-security',
+          'spring-boot-starter-security-test',
           'spring-boot-starter-test',
           'spring-boot-starter-thymeleaf',
           'spring-boot-starter-tomcat',
@@ -668,10 +670,6 @@ ${classProperties
           `spring-boot-starter-web${application.reactive ? 'flux' : 'mvc'}`,
           `spring-boot-starter-web${application.reactive ? 'flux' : 'mvc'}-test`,
           'spring-boot-test',
-          {
-            condition: application.authenticationTypeSession,
-            module: 'spring-boot-starter-security',
-          },
         );
       },
       addJHipsterBomDependencies({ application, source }) {
