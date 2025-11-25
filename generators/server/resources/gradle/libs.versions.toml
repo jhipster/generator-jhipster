@@ -1,5 +1,5 @@
 [libraries]
-spring-cloud-dependencies = { module = 'org.springframework.cloud:spring-cloud-dependencies', version = '2025.0.0' }
+spring-cloud-dependencies = { module = 'org.springframework.cloud:spring-cloud-dependencies', version = '2025.1.0' }
 
 springdoc = { module = 'org.springdoc:springdoc-openapi-starter-webmvc-api', version = '3.0.0' }
 
