@@ -299,6 +299,8 @@ spring:
         - api-docs
         # Uncomment to activate TLS for the dev profile
         #- tls
+  jackson:
+    use-jackson2-defaults: true
   jmx:
     enabled: false
 <%_ if (databaseTypeSql && !reactive) { _%>
