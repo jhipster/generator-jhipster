@@ -357,6 +357,11 @@ spring:
     problemdetails:
       enabled: true
 <%_ if (generateInMemoryUserCredentials || authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+<%_ if (databaseTypeMongodb) { _%>
+  mongodb:
+    representation:
+      uuid-representation: standard
+<%_ } _%>
   security:
   <%_ if (generateInMemoryUserCredentials) { _%>
     user:
