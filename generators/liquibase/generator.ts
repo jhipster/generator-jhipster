@@ -341,7 +341,15 @@ export default class LiquibaseGenerator<
       },
       addDependencies({ application, source }) {
         if ((application as SpringDataRelationalApplication).backendTypeSpringBoot) {
-          (source as SpringBootSource).addSpringBootModule?.('spring-boot-starter-liquibase');
+          source.addJavaDependencies!([
+            {
+              groupId: 'org.springframework.boot',
+              artifactId: 'spring-boot-starter-liquibase',
+              exclusions: (application as SpringDataRelationalApplication).databaseTypeNeo4j
+                ? [{ groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-jdbc' }]
+                : undefined,
+            },
+          ]);
         }
       },
       customizeMaven({ source, application }) {
@@ -469,15 +477,11 @@ export default class LiquibaseGenerator<
         }
 
         if (relationalApplication.databaseTypeNeo4j) {
-          if (relationalApplication.backendTypeSpringBoot) {
-            source.addMavenDependency?.([{ groupId: 'org.springframework', artifactId: 'spring-jdbc' }]);
-          }
           source.addMavenDependency?.([
             {
               groupId: 'org.liquibase.ext',
               artifactId: 'liquibase-neo4j',
-              // eslint-disable-next-line no-template-curly-in-string
-              version: '${liquibase.version}',
+              version: application.javaDependencies['liquibase-neo4j'],
               // Exclude current neo4j driver and use the one provided by spring-data
               // See: https://github.com/jhipster/generator-jhipster/pull/24241
               additionalContent: `
@@ -527,6 +531,13 @@ export default class LiquibaseGenerator<
             },
             { gradleFile: 'gradle/liquibase.gradle' },
           );
+        }
+        if (application.databaseTypeNeo4j) {
+          source.addGradleDependencyCatalogLibrary!({
+            libraryName: 'liquibase-neo4j',
+            module: 'org.liquibase.ext:liquibase-neo4j',
+            version: application.javaDependencies['liquibase-neo4j'],
+          });
         }
       },
       nativeHints({ source, application }) {
