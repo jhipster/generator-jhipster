@@ -22,7 +22,6 @@ import { lowerFirst, sortedUniqBy } from 'lodash-es';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import type { FieldType } from '../../lib/jhipster/field-types.ts';
 import {
-  cacheTypes,
   databaseTypes,
   fieldTypes,
   messageBrokerTypes,
@@ -62,7 +61,6 @@ import type {
   SpringBootModule,
 } from './types.ts';
 
-const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
 const { NO: NO_WEBSOCKET, SPRING_WEBSOCKET } = websocketTypes;
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
 const { KAFKA, PULSAR } = messageBrokerTypes;
@@ -110,6 +108,11 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
 
   get configuring() {
     return this.asConfiguringTaskGroup({
+      disableInfinispan() {
+        if ((this.jhipsterConfig as SpringCacheConfig).cacheProvider === 'infinispan') {
+          (this.jhipsterConfig as SpringCacheConfig).cacheProvider = 'no';
+        }
+      },
       syncUserWithIdpMigration({ control }) {
         if (this.jhipsterConfig.syncUserWithIdp === undefined && this.jhipsterConfigWithDefaults.authenticationType === 'oauth2') {
           if (control.isJhipsterVersionLessThan('8.1.1')) {
@@ -211,7 +214,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
         if (websocket === SPRING_WEBSOCKET) {
           await this.composeWithJHipster('jhipster:spring-boot:websocket');
         }
-        if (([EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS] as string[]).includes(cacheProvider!)) {
+        if (['ehcache', 'caffeine', 'hazelcast', 'infinispan', 'memcached', 'redis'].includes(cacheProvider!)) {
           await this.composeWithJHipster('spring-cache');
         }
       },
