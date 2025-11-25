@@ -176,18 +176,20 @@ export default class SqlGenerator extends BaseApplicationGenerator<
           module: 'spring-boot-h2console',
           profile: 'dev',
         });
-        source.addIntegrationTestAnnotation?.({
-          annotation: 'SpringBootTest',
-          parameters: oldParameters => {
-            if (oldParameters?.includes('classes = {')) {
-              return oldParameters.replace(
-                'classes = {',
-                `classes = { ${application.packageName}.config.JacksonHibernateConfiguration.class, `,
-              );
-            }
-            throw new Error('Cannot add JacksonHibernateConfiguration to @SpringBootTest annotation');
-          },
-        });
+        if (!application.reactive) {
+          source.addIntegrationTestAnnotation?.({
+            annotation: 'SpringBootTest',
+            parameters: oldParameters => {
+              if (oldParameters?.includes('classes = {')) {
+                const annotation = `${application.packageName}.config.JacksonHibernateConfiguration.class`;
+                return oldParameters.includes(annotation)
+                  ? oldParameters
+                  : oldParameters.replace('classes = {', `classes = { ${annotation}, `);
+              }
+              throw new Error('Cannot add JacksonHibernateConfiguration to @SpringBootTest annotation');
+            },
+          });
+        }
         source.addJavaDefinitions?.(
           {
             condition: reactive,
