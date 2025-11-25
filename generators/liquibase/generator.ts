@@ -476,8 +476,7 @@ export default class LiquibaseGenerator<
             {
               groupId: 'org.liquibase.ext',
               artifactId: 'liquibase-neo4j',
-              // eslint-disable-next-line no-template-curly-in-string
-              version: '${liquibase.version}',
+              version: application.javaDependencies['liquibase-neo4j'],
               // Exclude current neo4j driver and use the one provided by spring-data
               // See: https://github.com/jhipster/generator-jhipster/pull/24241
               additionalContent: `
@@ -527,6 +526,13 @@ export default class LiquibaseGenerator<
             },
             { gradleFile: 'gradle/liquibase.gradle' },
           );
+        }
+        if (application.databaseTypeNeo4j) {
+          source.addGradleDependencyCatalogLibrary!({
+            libraryName: 'liquibase-neo4j',
+            module: 'org.liquibase.ext:liquibase-neo4j',
+            version: application.javaDependencies['liquibase-neo4j'],
+          });
         }
       },
       nativeHints({ source, application }) {
