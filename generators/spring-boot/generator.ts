@@ -109,7 +109,8 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
   get configuring() {
     return this.asConfiguringTaskGroup({
       disableInfinispan() {
-        if ((this.jhipsterConfig as SpringCacheConfig).cacheProvider === 'infinispan') {
+        const { cacheProvider } = this.jhipsterConfig as SpringCacheConfig;
+        if (cacheProvider === 'infinispan' || cacheProvider === 'hazelcast') {
           (this.jhipsterConfig as SpringCacheConfig).cacheProvider = 'no';
         }
       },
