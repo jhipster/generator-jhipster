@@ -291,9 +291,6 @@
                     </executions>
                     <configuration>
                         <mainClass>${start-class}</mainClass>
-<%_ if (databaseTypeCouchbase) { _%>
-                        <loaderImplementation>CLASSIC</loaderImplementation>
-<%_ } _%>
                         <!--
                         Enable the line below to have remote debugging of your application on port 5005
                         <jvmArguments>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005</jvmArguments>
