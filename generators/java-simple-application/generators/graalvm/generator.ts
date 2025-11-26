@@ -166,6 +166,14 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      updateHibernateForHibernatePlugin({ application, source }) {
+        if (application.javaManagedProperties['hibernate.version'] !== '7.1.8.Final') {
+          throw new Error('Hibernate version has changed, this customization can be dropped.');
+        }
+        // https://hibernate.atlassian.net/browse/HHH-19940
+        source.addJavaProperty!({ property: 'hibernate.version', value: '7.1.10.Final' });
+      },
+
       async customizeGradle({ application, source }) {
         const { buildToolGradle, javaDependencies } = application;
         if (!buildToolGradle) return;
