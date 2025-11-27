@@ -62,12 +62,6 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
           ? 'GRAALVM_REACHABILITY_METADATA_VERSION'
           : GRAALVM_REACHABILITY_METADATA;
       },
-      gradle({ application }) {
-        if (application.buildToolGradle && !application.reactive && application.databaseTypeSql) {
-          // Downgrade gradle due to https://hibernate.atlassian.net/jira/software/c/projects/HHH/issues/?jql=project%20%3D%20%22HHH%22%20AND%20textfields%20~%20%22gradle%209%22%20ORDER%20BY%20created%20DESC&selectedIssue=HHH-18984
-          application.gradleVersion = '8.14.3';
-        }
-      },
     });
   }
 
