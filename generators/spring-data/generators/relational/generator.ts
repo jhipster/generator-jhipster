@@ -257,13 +257,18 @@ export default class SqlGenerator extends BaseApplicationGenerator<
         }
       },
       nativeHints({ application, source }) {
-        if (application.reactive || !application.graalvmSupport) return;
+        if (!application.graalvmSupport) return;
 
-        // Latest hibernate-core version supported by Reachability Repository is 6.5.0.Final
-        // Hints may be dropped if newer version is supported
-        // https://github.com/oracle/graalvm-reachability-metadata/blob/master/metadata/org.hibernate.orm/hibernate-core/index.json
+        if (!application.reactive) {
+          // Latest hibernate-core version supported by Reachability Repository is 6.5.0.Final
+          // Hints may be dropped if newer version is supported
+          // https://github.com/oracle/graalvm-reachability-metadata/blob/master/metadata/org.hibernate.orm/hibernate-core/index.json
+          source.addNativeHint!({
+            publicConstructors: ['org.hibernate.binder.internal.BatchSizeBinder.class'],
+          });
+        }
         source.addNativeHint!({
-          publicConstructors: ['org.hibernate.binder.internal.BatchSizeBinder.class'],
+          publicMethods: ['com.zaxxer.hikari.HikariDataSource.class'],
         });
       },
       async nativeMavenBuildTool({ application, source }) {
