@@ -109,6 +109,7 @@ export type Source = JavaSource &
       declaredConstructors?: string[];
       resources?: string[];
       publicConstructors?: string[];
+      publicMethods?: string[];
     }): void;
     /**
      * Injects a document into the application.yml file using '---' document separator.

@@ -139,8 +139,8 @@ exports[`generator - java-simple-application:graalvm with default options should
   ],
   "addNativeHint": [
     {
-      "advanced": [
-        "hints.reflection().registerType(java.util.Locale.class, (hint) -> hint.withMembers(MemberCategory.INVOKE_PUBLIC_METHODS));",
+      "publicMethods": [
+        "java.util.Locale.class",
       ],
       "resources": [
         "i18n/*",
@@ -188,8 +188,8 @@ exports[`generator - java-simple-application:graalvm with default options should
   ],
   "addNativeHint": [
     {
-      "advanced": [
-        "hints.reflection().registerType(java.util.Locale.class, (hint) -> hint.withMembers(MemberCategory.INVOKE_PUBLIC_METHODS));",
+      "publicMethods": [
+        "java.util.Locale.class",
       ],
       "resources": [
         "i18n/*",
