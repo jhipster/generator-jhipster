@@ -469,9 +469,6 @@ export default class LiquibaseGenerator<
         }
 
         if (relationalApplication.databaseTypeNeo4j) {
-          if (relationalApplication.backendTypeSpringBoot) {
-            source.addMavenDependency?.([{ groupId: 'org.springframework', artifactId: 'spring-jdbc' }]);
-          }
           source.addMavenDependency?.([
             {
               groupId: 'org.liquibase.ext',
