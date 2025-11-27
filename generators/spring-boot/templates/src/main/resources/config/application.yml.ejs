@@ -281,6 +281,11 @@ spring:
           group: <%= dasherizedBaseName %>
   <%_ } _%>
 <%_ } _%>
+<%_ if (databaseMigrationLiquibase && databaseTypeNeo4j) { -%>
+  datasource:
+    type:
+      driver-class-name: org.neo4j.jdbc.Neo4jDriver
+<%_ } _%>
 <%_ if ('dockerServices' in locals && dockerServices?.length) { _%>
   docker:
     compose:
