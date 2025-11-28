@@ -42,7 +42,7 @@
     "eslint-plugin-vue": "10.6.1",
     "flush-promises": "1.0.2",
     "folder-hash": "4.1.1",
-    "happy-dom": "20.0.10",
+    "happy-dom": "20.0.11",
     "html-webpack-plugin": "5.6.5",
     "jiti": "2.6.1",
     "merge-jsons-webpack-plugin": "2.0.1",
