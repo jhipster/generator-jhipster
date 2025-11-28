@@ -52,7 +52,8 @@ export interface RelationshipAll extends SpringDataRelationalRelationship, Serve
 }
 
 export interface EntityAll<F extends FieldAll = FieldAll, R extends RelationshipAll = RelationshipAll>
-  extends BaseApplicationEntity<F, R>,
+  extends
+    BaseApplicationEntity<F, R>,
     AngularEntity<F, R>,
     LiquibaseEntity<F, R>,
     SpringDataRelationalEntity<F, R>,

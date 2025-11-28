@@ -56,9 +56,8 @@ export const buildMutateDataForProperty = <
   const S extends string = '',
   const IsAny extends boolean = false,
   const IsArray extends boolean = false,
-  const Data extends Partial<
-    Record<P, IsArray extends true ? PropertyType[] : IsAny extends true ? any : PropertyType | undefined>
-  > = Simplify<Partial<Record<P, IsArray extends true ? PropertyType[] : IsAny extends true ? any : PropertyType | undefined>>>,
+  const Data extends Partial<Record<P, IsArray extends true ? PropertyType[] : IsAny extends true ? any : PropertyType | undefined>> =
+    Simplify<Partial<Record<P, IsArray extends true ? PropertyType[] : IsAny extends true ? any : PropertyType | undefined>>>,
 >(
   property: P,
   possibleValues: Values,

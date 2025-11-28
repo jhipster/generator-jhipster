@@ -92,6 +92,4 @@ export const mutateEntity = {
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Entity>, ClientAddedEntityProperties>;
 
 export interface Entity<F extends Field = Field, R extends BaseApplicationRelationship = BaseApplicationRelationship>
-  extends CommonEntity<F, R>,
-    LanguagesEntity<F, R>,
-    ClientAddedEntityProperties {}
+  extends CommonEntity<F, R>, LanguagesEntity<F, R>, ClientAddedEntityProperties {}

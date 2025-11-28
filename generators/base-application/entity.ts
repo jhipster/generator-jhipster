@@ -344,8 +344,7 @@ type BaseApplicationAddedEntityProperties = {
  * Interface is used to allow `this` type in the relationships.
  */
 export interface Entity<F extends Field = Field, R extends Relationship = Relationship>
-  extends BaseApplicationAddedEntityProperties,
-    Omit<Required<BaseEntity<F>>, 'relationships'> {
+  extends BaseApplicationAddedEntityProperties, Omit<Required<BaseEntity<F>>, 'relationships'> {
   relationships: RelationshipWithEntity<R, this, F>[];
   otherRelationships: R[];
 

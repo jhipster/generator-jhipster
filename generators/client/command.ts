@@ -125,7 +125,7 @@ const command = {
         when: answers => {
           const askForMicrofrontends = Boolean(
             (answers.microfrontend ?? config.microfrontend) &&
-              (answers.applicationType ?? config.applicationType) === APPLICATION_TYPE_GATEWAY,
+            (answers.applicationType ?? config.applicationType) === APPLICATION_TYPE_GATEWAY,
           );
           if (askForMicrofrontends && answers.microfrontends) {
             answers.microfrontends = microfrontendsToPromptValue(answers.microfrontends);
