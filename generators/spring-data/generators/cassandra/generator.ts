@@ -94,7 +94,7 @@ export default class CassandraGenerator extends SpringBootApplicationGenerator {
         source.addJavaDependencies?.([
           { groupId: 'org.apache.cassandra', artifactId: 'java-driver-mapper-runtime' },
           { groupId: 'commons-codec', artifactId: 'commons-codec' },
-          { groupId: 'org.lz4', artifactId: 'lz4-java', version: javaDependencies!['lz4-java'] },
+          { groupId: 'at.yawk.lz4', artifactId: 'lz4-java', version: javaDependencies!['lz4-java'] },
           { scope: 'test', groupId: 'org.testcontainers', artifactId: 'junit-jupiter' },
           { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers' },
           { scope: 'test', groupId: 'org.testcontainers', artifactId: 'cassandra' },
