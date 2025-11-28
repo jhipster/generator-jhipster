@@ -3,7 +3,7 @@
     "@fortawesome/fontawesome-svg-core": "7.1.0",
     "@fortawesome/free-solid-svg-icons": "7.1.0",
     "@fortawesome/react-fontawesome": "3.1.0",
-    "@reduxjs/toolkit": "2.10.1",
+    "@reduxjs/toolkit": "2.11.0",
     "axios": "1.13.2",
     "bootstrap": "5.3.8",
     "bootswatch": "5.3.8",
@@ -28,11 +28,11 @@
   },
   "devDependencies": {
     "@eslint/js": "9.39.1",
-    "@module-federation/enhanced": "0.21.4",
-    "@module-federation/utilities": "3.1.75",
+    "@module-federation/enhanced": "0.21.6",
+    "@module-federation/utilities": "3.1.77",
     "@testing-library/react": "16.3.0",
     "@types/jest": "30.0.0",
-    "@types/lodash": "4.17.20",
+    "@types/lodash": "4.17.21",
     "@types/node": "20.19.25",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
@@ -66,7 +66,7 @@
     "postcss-rtlcss": "5.7.1",
     "react-infinite-scroll-component": "6.1.0",
     "redux-mock-store": "1.5.5",
-    "rimraf": "6.1.0",
+    "rimraf": "6.1.2",
     "sass": "1.77.6",
     "sass-loader": "16.0.6",
     "simple-progress-webpack-plugin": "2.0.0",
@@ -84,7 +84,7 @@
     "webpack-dev-server": "5.2.2",
     "webpack-merge": "6.0.1",
     "webpack-notifier": "1.15.0",
-    "workbox-webpack-plugin": "7.3.0"
+    "workbox-webpack-plugin": "7.4.0"
   },
   "packageManager": "npm@11"
 }

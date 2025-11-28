@@ -71,9 +71,7 @@ export const mutateEntity = {
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Entity>, CommonAddedEntityProperties>;
 
 export interface Entity<F extends Field = Field, R extends BaseApplicationRelationship = BaseApplicationRelationship>
-  extends LanguagesEntity<F, R>,
-    BaseApplicationEntity<F, R>,
-    CommonAddedEntityProperties {
+  extends LanguagesEntity<F, R>, BaseApplicationEntity<F, R>, CommonAddedEntityProperties {
   restProperties?: (F | R)[];
 
   uniqueEnums?: F[];

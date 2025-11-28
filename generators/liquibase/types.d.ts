@@ -57,8 +57,10 @@ export interface DatabaseRelationship extends BaseApplicationRelationship, Datab
   joinColumnNames?: string[];
 }
 
-export interface DatabaseEntity<F extends DatabaseField = DatabaseField, R extends DatabaseRelationship = DatabaseRelationship>
-  extends BaseApplicationEntity<F, R> {
+export interface DatabaseEntity<
+  F extends DatabaseField = DatabaseField,
+  R extends DatabaseRelationship = DatabaseRelationship,
+> extends BaseApplicationEntity<F, R> {
   entityTableName: string;
 }
 type Property = {
@@ -97,9 +99,7 @@ export type Field = BaseEntityChangesField &
   };
 
 export interface Entity<F extends Field = Field, R extends Relationship = Relationship>
-  extends BaseEntityChangesEntity<F, R>,
-    JavaEntity<F, R>,
-    DatabaseEntity<F, R> {
+  extends BaseEntityChangesEntity<F, R>, JavaEntity<F, R>, DatabaseEntity<F, R> {
   anyRelationshipIsOwnerSide: boolean;
   liquibaseFakeData: Record<string, any>[];
   fakeDataCount: number;

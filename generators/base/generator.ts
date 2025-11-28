@@ -86,7 +86,7 @@ export default class BaseGenerator<
       jhipsterBootstrap = this._namespace !== 'jhipster:project-name' &&
         !this._namespace.split(':')[1]?.startsWith('bootstrap') &&
         !this._namespace.endsWith(':bootstrap'),
-    } = this.getFeatures();
+    } = this.features;
 
     this.sbsBlueprint = sbsBlueprint;
     this.fromBlueprint = this.rootGeneratorName() !== 'generator-jhipster';
@@ -129,7 +129,7 @@ export default class BaseGenerator<
     }
 
     this.on('before:queueOwnTasks', () => {
-      const { storeBlueprintVersion, storeJHipsterVersion, queueCommandTasks = true } = this.getFeatures();
+      const { storeBlueprintVersion, storeJHipsterVersion, queueCommandTasks = true } = this.features;
       if (this.fromBlueprint) {
         if (storeBlueprintVersion && !this.options.reproducibleTests) {
           try {

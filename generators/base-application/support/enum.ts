@@ -80,12 +80,12 @@ const getEnums = (enums: string[], customValuesState: EnumValuesData, comments?:
   });
 };
 
-const extractEnumInstance = (field: BaseApplicationField): string => {
+const extractEnumInstance = (field: Pick<BaseApplicationField, 'fieldType'>): string => {
   const fieldType = field.fieldType;
   return lowerFirst(fieldType);
 };
 
-const extractEnumEntries = (field: BaseApplicationField): string[] =>
+const extractEnumEntries = (field: Pick<BaseApplicationField, 'fieldValues'>): string[] =>
   field.fieldValues!.split(',').map((fieldValue: string) => fieldValue.trim());
 
 /**
@@ -96,7 +96,7 @@ const extractEnumEntries = (field: BaseApplicationField): string[] =>
  */
 
 export const getEnumInfo = (
-  field: BaseApplicationField,
+  field: Pick<BaseApplicationField, 'enumInstance' | 'fieldType' | 'fieldValues' | 'fieldValuesJavadocs' | 'fieldTypeDocumentation'>,
   clientRootFolder?: string,
 ): EnumValuesData & {
   enumName: string;

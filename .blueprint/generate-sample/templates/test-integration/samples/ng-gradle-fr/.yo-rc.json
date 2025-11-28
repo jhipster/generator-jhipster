@@ -11,7 +11,6 @@
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",
     "dtoSuffix": "DTO",
-    "embeddableLaunchScript": false,
     "enableSwaggerCodegen": true,
     "enableTranslation": true,
     "entitySuffix": "",

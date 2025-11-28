@@ -18,6 +18,7 @@
  */
 import { XMLParser } from 'fast-xml-parser';
 
+import type { JavaArtifact } from '../../java-simple-application/types.ts';
 import { defaultXmlParserOptions } from '../internal/xml-store.ts';
 
 export type MavenPom = {
@@ -25,6 +26,12 @@ export type MavenPom = {
     artifactId: string;
     version: string;
     properties?: Record<string, string>;
+    dependencies?: JavaArtifact[];
+    dependencyManagement?: {
+      dependencies: {
+        dependency: JavaArtifact[];
+      };
+    };
   };
 };
 

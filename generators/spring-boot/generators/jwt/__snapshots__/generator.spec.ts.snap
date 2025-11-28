@@ -2,19 +2,11 @@
 
 exports[`generator - spring-boot:jwt reactive(false)-skipUserManagement(false) should call source snapshot 1`] = `
 {
-  "addJavaDefinition": [
-    {
-      "dependencies": [
-        {
-          "artifactId": "spring-boot-starter-security",
-          "groupId": "org.springframework.boot",
-        },
-        {
-          "artifactId": "spring-boot-starter-oauth2-resource-server",
-          "groupId": "org.springframework.boot",
-        },
-      ],
-    },
+  "addSpringBootModule": [
+    [
+      "spring-boot-starter-security",
+      "spring-boot-starter-oauth2-resource-server",
+    ],
   ],
 }
 `;
@@ -59,19 +51,11 @@ exports[`generator - spring-boot:jwt reactive(false)-skipUserManagement(false) s
 
 exports[`generator - spring-boot:jwt reactive(false)-skipUserManagement(true) should call source snapshot 1`] = `
 {
-  "addJavaDefinition": [
-    {
-      "dependencies": [
-        {
-          "artifactId": "spring-boot-starter-security",
-          "groupId": "org.springframework.boot",
-        },
-        {
-          "artifactId": "spring-boot-starter-oauth2-resource-server",
-          "groupId": "org.springframework.boot",
-        },
-      ],
-    },
+  "addSpringBootModule": [
+    [
+      "spring-boot-starter-security",
+      "spring-boot-starter-oauth2-resource-server",
+    ],
   ],
 }
 `;
@@ -119,19 +103,11 @@ exports[`generator - spring-boot:jwt reactive(false)-skipUserManagement(true) sh
 
 exports[`generator - spring-boot:jwt reactive(true)-skipUserManagement(false) should call source snapshot 1`] = `
 {
-  "addJavaDefinition": [
-    {
-      "dependencies": [
-        {
-          "artifactId": "spring-boot-starter-security",
-          "groupId": "org.springframework.boot",
-        },
-        {
-          "artifactId": "spring-boot-starter-oauth2-resource-server",
-          "groupId": "org.springframework.boot",
-        },
-      ],
-    },
+  "addSpringBootModule": [
+    [
+      "spring-boot-starter-security",
+      "spring-boot-starter-oauth2-resource-server",
+    ],
   ],
 }
 `;
@@ -176,19 +152,11 @@ exports[`generator - spring-boot:jwt reactive(true)-skipUserManagement(false) sh
 
 exports[`generator - spring-boot:jwt reactive(true)-skipUserManagement(true) should call source snapshot 1`] = `
 {
-  "addJavaDefinition": [
-    {
-      "dependencies": [
-        {
-          "artifactId": "spring-boot-starter-security",
-          "groupId": "org.springframework.boot",
-        },
-        {
-          "artifactId": "spring-boot-starter-oauth2-resource-server",
-          "groupId": "org.springframework.boot",
-        },
-      ],
-    },
+  "addSpringBootModule": [
+    [
+      "spring-boot-starter-security",
+      "spring-boot-starter-oauth2-resource-server",
+    ],
   ],
 }
 `;

@@ -44,7 +44,7 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<
     }
 
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrap('java');
+      await this.dependsOnBootstrap('spring-boot');
     }
   }
 

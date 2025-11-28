@@ -65,19 +65,19 @@ export default class MongoDBGenerator extends SpringBootApplicationGenerator {
       },
       addDependencies({ application, source }) {
         const { reactive, javaDependencies } = application;
+        source.addSpringBootModule?.(`spring-boot-starter-data-mongodb${reactive ? '-reactive' : ''}`);
         source.addJavaDependencies?.([
           { groupId: 'io.mongock', artifactId: 'mongock-bom', type: 'pom', version: javaDependencies!['mongock-bom'], scope: 'import' },
           { groupId: 'io.mongock', artifactId: 'mongock-springboot-v3' },
-          { groupId: 'org.springframework.boot', artifactId: `spring-boot-starter-data-mongodb${reactive ? '-reactive' : ''}` },
           { groupId: 'io.mongock', artifactId: reactive ? 'mongodb-reactive-driver' : 'mongodb-springdata-v4-driver' },
           { scope: 'test', groupId: 'org.testcontainers', artifactId: 'junit-jupiter' },
           { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers' },
           { scope: 'test', groupId: 'org.testcontainers', artifactId: 'mongodb' },
         ]);
         if (reactive) {
+          // Mongock requires non reactive starter workaround https://github.com/mongock/mongock/issues/613.
+          source.addSpringBootModule?.('spring-boot-starter-data-mongodb');
           source.addJavaDependencies?.([
-            // Mongock requires non reactive starter workaround https://github.com/mongock/mongock/issues/613.
-            { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-data-mongodb' },
             // Mongock requires non reactive driver workaround https://github.com/mongock/mongock/issues/613.
             // switch to mongodb-reactive-driver
             { groupId: 'io.mongock', artifactId: 'mongodb-springdata-v4-driver' },

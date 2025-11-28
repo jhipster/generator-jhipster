@@ -127,7 +127,7 @@ class JSONEntity {
 
   setOptions(options: Partial<JSONEntity> = {}) {
     Object.keys(options).forEach(optionName => {
-      (this as any)[optionName] = (options as any)[optionName];
+      (this as Record<string, unknown>)[optionName] = (options as Record<string, unknown>)[optionName];
     });
   }
 

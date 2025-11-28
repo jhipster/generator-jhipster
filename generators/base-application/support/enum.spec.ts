@@ -11,7 +11,7 @@ describe('base-application - support - enum', () => {
       before(() => {
         const clientRootFolder = 'root';
         const field = { enumName: 'fieldName', fieldType: 'BigLetters', fieldValues: 'AAA, BBB', fieldTypeDocumentation: 'enum comment' };
-        enumInfo = getEnumInfo(field as any, clientRootFolder);
+        enumInfo = getEnumInfo(field, clientRootFolder);
       });
 
       it("returns the enum's name", () => {
@@ -32,8 +32,8 @@ describe('base-application - support - enum', () => {
 
       before(() => {
         const clientRootFolder = 'root';
-        const field = { enumName: 'fieldName', fieldValues: 'AAA, BBB' };
-        enumInfo = getEnumInfo(field as any, clientRootFolder);
+        const field = { fieldType: 'fieldName', fieldValues: 'AAA, BBB' };
+        enumInfo = getEnumInfo(field, clientRootFolder);
       });
 
       it('returns whether there are custom enums', () => {
@@ -53,8 +53,8 @@ describe('base-application - support - enum', () => {
 
       before(() => {
         const clientRootFolder = 'root';
-        const field = { enumName: 'fieldName', fieldValues: 'AAA(aaa), BBB' };
-        enumInfo = getEnumInfo(field as any, clientRootFolder);
+        const field = { fieldType: 'fieldName', fieldValues: 'AAA(aaa), BBB' };
+        enumInfo = getEnumInfo(field, clientRootFolder);
       });
 
       it('returns whether there are custom enums', () => {
@@ -79,8 +79,8 @@ describe('base-application - support - enum', () => {
 
         before(() => {
           const clientRootFolder = 'root';
-          const field = { enumName: 'fieldName', fieldValues: 'AAA(aaa), BBB(bbb)' };
-          enumInfo = getEnumInfo(field as any, clientRootFolder);
+          const field = { fieldType: 'fieldName', fieldValues: 'AAA(aaa), BBB(bbb)' };
+          enumInfo = getEnumInfo(field, clientRootFolder);
         });
 
         it('returns whether there are custom enums', () => {
@@ -104,8 +104,8 @@ describe('base-application - support - enum', () => {
 
         before(() => {
           const clientRootFolder = 'root';
-          const field = { enumName: 'fieldName', fieldValues: 'AAA(aaa), BBB(bbb and b)' };
-          enumInfo = getEnumInfo(field as any, clientRootFolder);
+          const field = { fieldType: 'fieldName', fieldValues: 'AAA(aaa), BBB(bbb and b)' };
+          enumInfo = getEnumInfo(field, clientRootFolder);
         });
 
         it('returns whether there are custom enums', () => {
@@ -130,14 +130,14 @@ describe('base-application - support - enum', () => {
         before(() => {
           const clientRootFolder = 'root';
           const field = {
-            enumName: 'fieldName',
+            fieldType: 'fieldName',
             fieldValues: 'AAA(aaa), BBB(bbb and b)',
             fieldValuesJavadocs: {
               AAA: 'first comment',
               BBB: 'second comment',
             },
           };
-          enumInfo = getEnumInfo(field as any, clientRootFolder);
+          enumInfo = getEnumInfo(field, clientRootFolder);
         });
 
         it('returns whether there are custom enums', () => {
@@ -161,8 +161,8 @@ describe('base-application - support - enum', () => {
       let enumInfo: ReturnType<typeof getEnumInfo>;
 
       before(() => {
-        const field = { enumName: 'fieldName', fieldValues: 'AAA, BBB' };
-        enumInfo = getEnumInfo(field as any);
+        const field = { fieldType: 'fieldName', fieldValues: 'AAA, BBB' };
+        enumInfo = getEnumInfo(field);
       });
 
       it('returns an empty string for the clientRootFolder property', () => {
@@ -173,9 +173,9 @@ describe('base-application - support - enum', () => {
       let enumInfo: ReturnType<typeof getEnumInfo>;
 
       before(() => {
-        const field = { enumName: 'fieldName', fieldValues: 'AAA, BBB' };
+        const field = { fieldType: 'fieldName', fieldValues: 'AAA, BBB' };
         const clientRootFolder = 'root';
-        enumInfo = getEnumInfo(field as any, clientRootFolder);
+        enumInfo = getEnumInfo(field, clientRootFolder);
       });
 
       it('returns the clientRootFolder property suffixed by a dash', () => {

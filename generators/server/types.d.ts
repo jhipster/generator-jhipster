@@ -37,9 +37,7 @@ export interface Relationship extends JavaRelationship, LanguagesRelationship, C
 }
 
 export interface Entity<F extends Field = Field, R extends Relationship = Relationship>
-  extends JavaEntity<F, R>,
-    CommonEntity<F, R>,
-    DatabaseEntity<F, R> {
+  extends JavaEntity<F, R>, CommonEntity<F, R>, DatabaseEntity<F, R> {
   skipCheckLengthOfIdentifier?: boolean;
 }
 

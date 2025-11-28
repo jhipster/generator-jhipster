@@ -116,7 +116,6 @@ export const builtInConfigPropsValidations: Record<string, JDLValidatorOption> =
     pattern: ALPHANUMERIC,
     msg: 'dtoSuffix property',
   },
-  EMBEDDABLE_LAUNCH_SCRIPT: { type: 'BOOLEAN' },
   ENABLE_HIBERNATE_CACHE: { type: 'BOOLEAN' },
   ENABLE_SWAGGER_CODEGEN: { type: 'BOOLEAN' },
   ENABLE_TRANSLATION: { type: 'BOOLEAN' },

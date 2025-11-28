@@ -14,7 +14,8 @@ export default class TemplateData {
   registerSections(sections: Record<string, number>) {
     this._sections = sections;
     Object.keys(this._sections).forEach(section => {
-      (this as any)[section] = (fragmentData: any, suffix?: string) => this.renderSection(section, fragmentData, suffix);
+      (this as Record<string, unknown>)[section] = (fragmentData: any, suffix?: string) =>
+        this.renderSection(section, fragmentData, suffix);
     });
   }
 
@@ -23,13 +24,13 @@ export default class TemplateData {
       suffix = fragmentData;
       fragmentData = {};
     }
-    if (!(this as any)[`_${section}`]) {
-      (this as any)[`_${section}`] = this.render(
+    if (!(this as Record<string, unknown>)[`_${section}`]) {
+      (this as Record<string, unknown>)[`_${section}`] = this.render(
         { ...fragmentData, fragment: { [section]: true }, section, sections: Object.keys(this._sections) },
         suffix,
       );
     }
-    return (this as any)[`_${section}`];
+    return (this as Record<string, unknown>)[`_${section}`];
   }
 
   /**

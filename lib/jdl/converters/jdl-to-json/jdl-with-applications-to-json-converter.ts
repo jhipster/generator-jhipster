@@ -27,7 +27,7 @@ import OptionConverter from './jdl-to-json-option-converter.ts';
 import RelationshipConverter from './jdl-to-json-relationship-converter.ts';
 
 let entities: Record<string, JSONEntity> | null | undefined;
-let jdlObject: JDLObject;
+let jdlObject: JDLObject | null;
 let entitiesPerApplication: Map<string, string[]>;
 
 export default { convert };
@@ -66,7 +66,7 @@ function init(jdlObjectArg: JDLObject): void {
 }
 
 function resetState(): void {
-  jdlObject = null as any;
+  jdlObject = null;
   entities = null;
 }
 
@@ -82,14 +82,14 @@ function setEntitiesPerApplication(): void {
 }
 
 function setBasicEntityInformation(): void {
-  const convertedEntities = BasicEntityConverter.convert(jdlObject.getEntities());
+  const convertedEntities = BasicEntityConverter.convert(jdlObject!.getEntities());
   convertedEntities.forEach((jsonEntity, entityName) => {
     entities![entityName] = jsonEntity;
   });
 }
 
 function setFields(): void {
-  const convertedFields = FieldConverter.convert(jdlObject);
+  const convertedFields = FieldConverter.convert(jdlObject!);
   convertedFields.forEach((entityFields, entityName) => {
     entities![entityName].addFields(entityFields);
   });
@@ -115,7 +115,7 @@ function setApplicationToEntities(): void {
 }
 
 function setOptions(entitiesForEachApplication: Map<string, Record<string, JSONEntity>>) {
-  const convertedOptionContents = OptionConverter.convert(jdlObject);
+  const convertedOptionContents = OptionConverter.convert(jdlObject!);
   convertedOptionContents.forEach((optionContent, entityName) => {
     entities![entityName].setOptions(optionContent);
   });

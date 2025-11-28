@@ -9,7 +9,6 @@
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",
     "dtoSuffix": "DTO",
-    "embeddableLaunchScript": false,
     "enableTranslation": true,
     "entitySuffix": "",
     "jhiPrefix": "jhi",

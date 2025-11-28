@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { Lexer } from 'chevrotain';
+import { type ITokenConfig, Lexer } from 'chevrotain';
 
 import createTokenFromConfig from '../../parsing/lexer/token-creator.ts';
 
@@ -26,26 +26,28 @@ const deploymentCategoryToken = createTokenFromConfig({
   pattern: Lexer.NA,
 });
 
-const _deploymentTokens = [
-  { name: 'APPS_FOLDERS', pattern: 'appsFolders' },
-  { name: 'CLUSTERED_DB_APPS', pattern: 'clusteredDbApps' },
-  { name: 'DEPLOYMENT_TYPE', pattern: 'deploymentType' },
-  { name: 'DIRECTORY_PATH', pattern: 'directoryPath' },
-  { name: 'DOCKER_PUSH_COMMAND', pattern: 'dockerPushCommand' },
-  { name: 'DOCKER_REPOSITORY_NAME', pattern: 'dockerRepositoryName' },
-  { name: 'GATEWAY_TYPE', pattern: 'gatewayType' },
-  { name: 'INGRESS_DOMAIN', pattern: 'ingressDomain' },
-  { name: 'INGRESS_TYPE', pattern: 'ingressType' },
-  { name: 'ISTIO', pattern: 'istio' },
-  { name: 'KUBERNETES_NAMESPACE', pattern: 'kubernetesNamespace' },
-  { name: 'KUBERNETES_SERVICE_TYPE', pattern: 'kubernetesServiceType' },
-  { name: 'KUBERNETES_STORAGE_CLASS_NAME', pattern: 'kubernetesStorageClassName' },
-  { name: 'KUBERNETES_USE_DYNAMIC_STORAGE', pattern: 'kubernetesUseDynamicStorage' },
-  { name: 'MONITORING', pattern: 'monitoring' },
-  { name: 'REGISTRY_REPLICAS', pattern: 'registryReplicas' },
-  { name: 'STORAGE_TYPE', pattern: 'storageType' },
-].map(tokenConfig => {
-  (tokenConfig as any).categories = [deploymentCategoryToken];
+const _deploymentTokens = (
+  [
+    { name: 'APPS_FOLDERS', pattern: 'appsFolders' },
+    { name: 'CLUSTERED_DB_APPS', pattern: 'clusteredDbApps' },
+    { name: 'DEPLOYMENT_TYPE', pattern: 'deploymentType' },
+    { name: 'DIRECTORY_PATH', pattern: 'directoryPath' },
+    { name: 'DOCKER_PUSH_COMMAND', pattern: 'dockerPushCommand' },
+    { name: 'DOCKER_REPOSITORY_NAME', pattern: 'dockerRepositoryName' },
+    { name: 'GATEWAY_TYPE', pattern: 'gatewayType' },
+    { name: 'INGRESS_DOMAIN', pattern: 'ingressDomain' },
+    { name: 'INGRESS_TYPE', pattern: 'ingressType' },
+    { name: 'ISTIO', pattern: 'istio' },
+    { name: 'KUBERNETES_NAMESPACE', pattern: 'kubernetesNamespace' },
+    { name: 'KUBERNETES_SERVICE_TYPE', pattern: 'kubernetesServiceType' },
+    { name: 'KUBERNETES_STORAGE_CLASS_NAME', pattern: 'kubernetesStorageClassName' },
+    { name: 'KUBERNETES_USE_DYNAMIC_STORAGE', pattern: 'kubernetesUseDynamicStorage' },
+    { name: 'MONITORING', pattern: 'monitoring' },
+    { name: 'REGISTRY_REPLICAS', pattern: 'registryReplicas' },
+    { name: 'STORAGE_TYPE', pattern: 'storageType' },
+  ] as ITokenConfig[]
+).map(tokenConfig => {
+  tokenConfig.categories = [deploymentCategoryToken];
   return createTokenFromConfig(tokenConfig);
 });
 

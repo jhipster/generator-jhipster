@@ -37,8 +37,8 @@ type LanguagesAddedEntityProperties = {
 export interface Entity<
   F extends BaseApplicationField = BaseApplicationField,
   R extends BaseApplicationRelationship = BaseApplicationRelationship,
-> extends BaseApplicationEntity<F, R>,
-    LanguagesAddedEntityProperties {
+>
+  extends BaseApplicationEntity<F, R>, LanguagesAddedEntityProperties {
   i18nKeyPrefix: string;
   i18nAlertHeaderPrefix: string;
 }

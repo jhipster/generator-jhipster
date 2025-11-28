@@ -95,12 +95,7 @@ export default class JwtGenerator extends SpringBootApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       dependencies({ source }) {
-        source.addJavaDefinition!({
-          dependencies: [
-            { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-security' },
-            { groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-oauth2-resource-server' },
-          ],
-        });
+        source.addSpringBootModule?.('spring-boot-starter-security', 'spring-boot-starter-oauth2-resource-server');
       },
     });
   }
