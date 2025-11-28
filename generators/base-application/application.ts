@@ -48,9 +48,9 @@ export const mutateUserManagementApplication = {
   syncUserWithIdp: data =>
     Boolean(
       (data.backendType ?? 'Java') === 'Java' &&
-        data.authenticationType === 'oauth2' &&
-        data.databaseType !== 'no' &&
-        (data.applicationType === 'gateway' || data.anyEntityHasRelationshipWithUser),
+      data.authenticationType === 'oauth2' &&
+      data.databaseType !== 'no' &&
+      (data.applicationType === 'gateway' || data.anyEntityHasRelationshipWithUser),
     ),
   generateBuiltInUserEntity: ({ generateUserManagement, syncUserWithIdp }) => Boolean(generateUserManagement || syncUserWithIdp),
   generateBuiltInAuthorityEntity: ({ generateBuiltInUserEntity, databaseType }) =>
