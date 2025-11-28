@@ -193,7 +193,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
           body: {
             ...<%= entityInstance %>Sample,
     <%_ for (relationship of requiredRelationships) { _%>
-            <%= relationship.relationshipName %>: <%= relationship.otherEntity.entityInstance %>,
+            <%= relationship.propertyName %>: <%= relationship.collection ? '[' : '' %><%= relationship.otherEntity.entityInstance %><%= relationship.collection ? ']' : '' %>,
     <%_ } _%>
           },
   <%_ } else { _%>
