@@ -341,7 +341,15 @@ export default class LiquibaseGenerator<
       },
       addDependencies({ application, source }) {
         if ((application as SpringDataRelationalApplication).backendTypeSpringBoot) {
-          (source as SpringBootSource).addSpringBootModule?.('spring-boot-starter-liquibase');
+          source.addJavaDependencies!([
+            {
+              groupId: 'org.springframework.boot',
+              artifactId: 'spring-boot-starter-liquibase',
+              exclusions: (application as SpringDataRelationalApplication).databaseTypeNeo4j
+                ? [{ groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-jdbc' }]
+                : undefined,
+            },
+          ]);
         }
       },
       customizeMaven({ source, application }) {
