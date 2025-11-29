@@ -163,8 +163,6 @@ tasks.withType(com.gorylenko.GenerateGitPropertiesTask).configureEach {
 }
 
 dependencies {
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
     testImplementation("com.tngtech.archunit:archunit-junit5-api:${archunitJunit5Version}") {
         exclude group: "org.slf4j", module: "slf4j-api"
     }
@@ -216,9 +214,6 @@ if (addSpringMilestoneRepository) { _%>
 <%_ if (reactive) { _%>
     implementation "org.springframework.data:spring-data-commons"
 <%_ } _%>
-<%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
-    implementation "org.springframework.retry:spring-retry"
-<%_ } _%>
     testImplementation "org.springframework.security:spring-security-test"
     // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 <%_ if (reactive) { _%>
@@ -238,11 +233,5 @@ task cleanResources(type: Delete) {
     delete "build/resources"
 }
 
-<%_ if (databaseTypeCouchbase) { _%>
-bootJar {
-    loaderImplementation = org.springframework.boot.loader.tools.LoaderImplementation.CLASSIC
-}
-
-<%_ } _%>
 compileJava.dependsOn(processResources)
 processResources.dependsOn(bootBuildInfo)

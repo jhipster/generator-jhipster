@@ -40,26 +40,26 @@ export const javaSqlDatabaseArtifacts = {
     // maria-r2dbc driver is failing.
     // r2dbc: { groupId: 'org.mariadb', artifactId: 'r2dbc-mariadb' },
     r2dbc: { groupId: 'io.asyncer', artifactId: 'r2dbc-mysql' },
-    testContainer: { groupId: 'org.testcontainers', artifactId: 'mariadb', scope: 'test' },
+    testContainer: { groupId: 'org.testcontainers', artifactId: 'testcontainers-mariadb', scope: 'test' },
   },
   mssql: {
     jdbc: { groupId: 'com.microsoft.sqlserver', artifactId: 'mssql-jdbc' },
     r2dbc: { groupId: 'io.r2dbc', artifactId: 'r2dbc-mssql' },
-    testContainer: { groupId: 'org.testcontainers', artifactId: 'mssqlserver', scope: 'test' },
+    testContainer: { groupId: 'org.testcontainers', artifactId: 'testcontainers-mssqlserver', scope: 'test' },
   },
   mysql: {
     jdbc: { groupId: 'com.mysql', artifactId: 'mysql-connector-j' },
     r2dbc: { groupId: 'io.asyncer', artifactId: 'r2dbc-mysql' },
-    testContainer: { groupId: 'org.testcontainers', artifactId: 'mysql', scope: 'test' },
+    testContainer: { groupId: 'org.testcontainers', artifactId: 'testcontainers-mysql', scope: 'test' },
   },
   postgresql: {
     jdbc: { groupId: 'org.postgresql', artifactId: 'postgresql' },
     r2dbc: { groupId: 'org.postgresql', artifactId: 'r2dbc-postgresql' },
-    testContainer: { groupId: 'org.testcontainers', artifactId: 'postgresql', scope: 'test' },
+    testContainer: { groupId: 'org.testcontainers', artifactId: 'testcontainers-postgresql', scope: 'test' },
   },
   oracle: {
     jdbc: { groupId: 'com.oracle.database.jdbc', artifactId: 'ojdbc8' },
-    testContainer: { groupId: 'org.testcontainers', artifactId: 'oracle-xe', scope: 'test' },
+    testContainer: { groupId: 'org.testcontainers', artifactId: 'testcontainers-oracle-xe', scope: 'test' },
   },
   h2: {
     jdbc: { groupId: 'com.h2database', artifactId: 'h2' },

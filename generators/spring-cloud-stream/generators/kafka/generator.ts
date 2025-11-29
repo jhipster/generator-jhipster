@@ -85,7 +85,7 @@ export default class KafkaGenerator extends SpringBootApplicationGenerator {
             },
             {
               groupId: 'org.testcontainers',
-              artifactId: 'junit-jupiter',
+              artifactId: 'testcontainers-junit-jupiter',
               scope: 'test',
             },
             {
@@ -95,7 +95,7 @@ export default class KafkaGenerator extends SpringBootApplicationGenerator {
             },
             {
               groupId: 'org.testcontainers',
-              artifactId: 'kafka',
+              artifactId: 'testcontainers-kafka',
               scope: 'test',
             },
           ]);

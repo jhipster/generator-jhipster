@@ -82,14 +82,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-hppc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit-junit5-api</artifactId>
             <version>${archunit-junit5.version}</version>
@@ -204,12 +196,6 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons</artifactId>
-        </dependency>
-<%_ } _%>
-<%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
-        <dependency>
-            <groupId>org.springframework.retry</groupId>
-            <artifactId>spring-retry</artifactId>
         </dependency>
 <%_ } _%>
         <dependency>
@@ -439,9 +425,6 @@
                     </executions>
                     <configuration>
                         <mainClass>${start-class}</mainClass>
-<%_ if (databaseTypeCouchbase) { _%>
-                        <loaderImplementation>CLASSIC</loaderImplementation>
-<%_ } _%>
                         <!--
                         Enable the line below to have remote debugging of your application on port 5005
                         <jvmArguments>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005</jvmArguments>
