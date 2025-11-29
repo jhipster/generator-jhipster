@@ -14,7 +14,7 @@ export default Object.fromEntries(
   ).map(([key, value]) => [
     key,
     {
-      'java-version': '21',
+      'java-version': '25',
       jdl: convertOptionsToJDL({ ...value, graalvmSupport: true }),
     },
   ]),
