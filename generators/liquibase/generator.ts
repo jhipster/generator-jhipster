@@ -530,7 +530,7 @@ export default class LiquibaseGenerator<
         // Hints may be dropped if newer version is supported
         // https://github.com/oracle/graalvm-reachability-metadata/blob/master/metadata/org.liquibase/liquibase-core/index.json
         (source as SpringBootSource).addNativeHint!({
-          resources: ['config/liquibase/*'],
+          resources: ['config/liquibase/**'],
           declaredConstructors: [
             'liquibase.database.LiquibaseTableNamesFactory.class',
             'liquibase.report.ShowSummaryGeneratorFactory.class',
