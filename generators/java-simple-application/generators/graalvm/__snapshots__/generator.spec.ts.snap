@@ -143,7 +143,7 @@ exports[`generator - java-simple-application:graalvm with default options should
         "hints.reflection().registerType(java.util.Locale.class, (hint) -> hint.withMembers(MemberCategory.INVOKE_PUBLIC_METHODS));",
       ],
       "resources": [
-        "i18n/*",
+        "i18n/**",
       ],
     },
   ],
@@ -192,7 +192,7 @@ exports[`generator - java-simple-application:graalvm with default options should
         "hints.reflection().registerType(java.util.Locale.class, (hint) -> hint.withMembers(MemberCategory.INVOKE_PUBLIC_METHODS));",
       ],
       "resources": [
-        "i18n/*",
+        "i18n/**",
       ],
     },
   ],

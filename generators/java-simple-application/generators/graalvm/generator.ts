@@ -255,7 +255,7 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
             // Thymeleaf template
             'hints.reflection().registerType(java.util.Locale.class, (hint) -> hint.withMembers(MemberCategory.INVOKE_PUBLIC_METHODS));',
           ],
-          resources: ['i18n/*'],
+          resources: ['i18n/**'],
         });
       },
     });
