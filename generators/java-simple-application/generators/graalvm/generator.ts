@@ -253,7 +253,7 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
         (source as SpringBootSource).addNativeHint?.({
           // Thymeleaf template
           publicMethods: ['java.util.Locale.class'],
-          resources: ['i18n/*'],
+          resources: ['i18n/**'],
         });
       },
     });
