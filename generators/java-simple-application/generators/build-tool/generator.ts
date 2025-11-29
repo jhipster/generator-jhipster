@@ -72,13 +72,15 @@ export default class BuildToolGenerator extends JavaApplicationGenerator {
               versionRef ??= version ? artifact.artifactId : undefined;
               version = versionRef ? `\${${versionRef}.version}` : undefined;
               const additionalContent = exclusions?.length
-                ? `<exclusions>${exclusions.map(
-                    e => `
+                ? `<exclusions>${exclusions
+                    .map(
+                      e => `
                 <exclusion>
                     <groupId>${e.groupId}</groupId>
                     <artifactId>${e.artifactId}</artifactId>
                 </exclusion>`,
-                  )}
+                    )
+                    .join('')}
                 </exclusions>`
                 : '';
               return additionalContent ? { ...artifact, version, additionalContent } : { ...artifact, version };
