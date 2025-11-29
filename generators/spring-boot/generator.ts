@@ -397,7 +397,13 @@ ${classProperties
         };
       },
       addNativeHint({ source, application }) {
-        source.addNativeHint = ({ advanced = [], declaredConstructors = [], publicConstructors = [], resources = [] }) => {
+        source.addNativeHint = ({
+          advanced = [],
+          declaredConstructors = [],
+          publicConstructors = [],
+          publicMethods = [],
+          resources = [],
+        }) => {
           this.editFile(
             `${application.javaPackageSrcDir}config/NativeConfiguration.java`,
             addJavaImport('org.springframework.aot.hint.MemberCategory'),
@@ -408,6 +414,10 @@ ${classProperties
                 ...publicConstructors.map(
                   classPath =>
                     `hints.reflection().registerType(${classPath}, (hint) -> hint.withMembers(MemberCategory.INVOKE_PUBLIC_CONSTRUCTORS));`,
+                ),
+                ...publicMethods.map(
+                  classPath =>
+                    `hints.reflection().registerType(${classPath}, (hint) -> hint.withMembers(MemberCategory.INVOKE_PUBLIC_METHODS));`,
                 ),
                 ...declaredConstructors.map(
                   classPath =>
