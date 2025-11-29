@@ -186,6 +186,9 @@ import java.time.temporal.ChronoUnit;
 <%_ if (anyFieldIsLocalTime) { _%>
 import java.time.LocalTime;
 <%_ } _%>
+<%_ if (fieldsToTest.some(field => field.fieldTypeLocalTime)) { _%>
+import java.time.format.DateTimeFormatter;
+<%_ } _%>
 <%_ if (!reactive && implementsEagerLoadApis) { _%>
 import java.util.ArrayList;
 <%_ } _%>
@@ -261,89 +264,92 @@ import <%= entityAbsolutePackage %>.domain.enumeration.<%= field.fieldType %>;
 <%_ } _%>
 @WithMockUser<% if (entityAuthority) { %>(authorities = {"<%- entityAuthority %>"})<% } %>
 class <%= entityClass %>ResourceIT {
-<%_
-for (field of fieldsToTest) {
-const defaultValueName = 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase();
-const updatedValueName = 'UPDATED_' + field.fieldNameUnderscored.toUpperCase();
-const smallerValueName = 'SMALLER_' + field.fieldNameUnderscored.toUpperCase();
-const needsSmallerValueName = jpaMetamodelFiltering && field.filterableField
+<%_ if (fieldsToTest.some(field => field.fieldTypeLocalTime)) { _%>
+
+    private static final DateTimeFormatter LOCAL_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
+<%_ } _%>
+<%_ for (field of fieldsToTest) {
+  const defaultValueName = 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase();
+  const updatedValueName = 'UPDATED_' + field.fieldNameUnderscored.toUpperCase();
+  const smallerValueName = 'SMALLER_' + field.fieldNameUnderscored.toUpperCase();
+  const needsSmallerValueName = jpaMetamodelFiltering && field.filterableField
         && (field.fieldTypeNumeric || field.fieldTypeDuration || field.fieldTypeLocalDate || field.fieldTypeZonedDateTime);
 
-let defaultValue = 1;
-let updatedValue = 2;
+  let defaultValue = 1;
+  let updatedValue = 2;
 
-if (field.fieldValidate === true) {
-  if (field.fieldValidationMax) {
-    defaultValue = field.fieldValidateRulesMax;
-    updatedValue = parseInt(field.fieldValidateRulesMax) - 1;
-  }
-  if (field.fieldValidationMin) {
-    defaultValue = field.fieldValidateRulesMin;
-    updatedValue = parseInt(field.fieldValidateRulesMin) + 1;
-  }
-  if (field.fieldValidationMinBytes) {
-    defaultValue = field.fieldValidateRulesMinbytes;
-    updatedValue = field.fieldValidateRulesMinbytes;
-  }
-  if (field.fieldValidationMaxBytes) {
-    updatedValue = field.fieldValidateRulesMaxbytes;
-  }
-}
-
-const fieldType = field.fieldType;
-const isEnum = field.fieldIsEnum;
-let enumValue1;
-let enumValue2;
-if (isEnum) {
-  const enumValues = field.enumValues;
-  enumValue1 = enumValues[0];
-  if (enumValues.length > 1) {
-    enumValue2 = enumValues[1];
-  } else {
-    enumValue2 = enumValue1;
-  }
-}
-
-if (field.fieldTypeString || field.blobContentTypeText) {
-  // Generate Strings, using the min and max string length if they are configured
-  let sampleTextString = "";
-  let updatedTextString = "";
-  let sampleTextLength = 10;
-  if (field.fieldValidateRulesMinlength > sampleTextLength) {
-    sampleTextLength = field.fieldValidateRulesMinlength;
-  }
-  if (field.fieldValidateRulesMaxlength < sampleTextLength) {
-    sampleTextLength = field.fieldValidateRulesMaxlength;
-  }
-  for (let i = 0; i < sampleTextLength; i++) {
-    sampleTextString += "A";
-    updatedTextString += "B";
-  }
-  if (field.fieldValidateRulesPattern !== undefined) {
-    // Generate Strings, using pattern
-    try {
-      const patternRegExp = new RegExp(field.fieldValidateRulesPattern);
-      // set infinite repetitions max range
-      if (!patternRegExp.test(sampleTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
-        const value = field.generateFakeDataFromPattern();
-        sampleTextString = value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-      }
-      if (!patternRegExp.test(updatedTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
-        const value = field.generateFakeDataFromPattern();
-        updatedTextString = value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-      }
-    } catch (error) {
-      this.log.warn('Error generating test value for entity "' + entityClass +
-        '" field "' + field.fieldName + '" with pattern "' + field.fieldValidateRulesPattern +
-        '", generating default values for this field. Detailed error message: "' + error.message + '".');
+  if (field.fieldValidate === true) {
+    if (field.fieldValidationMax) {
+      defaultValue = field.fieldValidateRulesMax;
+      updatedValue = parseInt(field.fieldValidateRulesMax) - 1;
     }
-    if (sampleTextString === updatedTextString) {
-      updatedTextString = updatedTextString + "B";
-      this.log.warn('Randomly generated first and second test values for entity "' + entityClass +
-        '" field "' + field.fieldName + '" with pattern "' + field.fieldValidateRulesPattern +
-        '" in file "' + entityClass + 'ResourceIT" where equal, added symbol "B" to second value.');
+    if (field.fieldValidationMin) {
+      defaultValue = field.fieldValidateRulesMin;
+      updatedValue = parseInt(field.fieldValidateRulesMin) + 1;
     }
-  } _%>
+    if (field.fieldValidationMinBytes) {
+      defaultValue = field.fieldValidateRulesMinbytes;
+      updatedValue = field.fieldValidateRulesMinbytes;
+    }
+    if (field.fieldValidationMaxBytes) {
+      updatedValue = field.fieldValidateRulesMaxbytes;
+    }
+  }
+
+  const fieldType = field.fieldType;
+  const isEnum = field.fieldIsEnum;
+  let enumValue1;
+  let enumValue2;
+  if (isEnum) {
+    const enumValues = field.enumValues;
+    enumValue1 = enumValues[0];
+    if (enumValues.length > 1) {
+      enumValue2 = enumValues[1];
+    } else {
+      enumValue2 = enumValue1;
+    }
+  }
+
+  if (field.fieldTypeString || field.blobContentTypeText) {
+    // Generate Strings, using the min and max string length if they are configured
+    let sampleTextString = "";
+    let updatedTextString = "";
+    let sampleTextLength = 10;
+    if (field.fieldValidateRulesMinlength > sampleTextLength) {
+      sampleTextLength = field.fieldValidateRulesMinlength;
+    }
+    if (field.fieldValidateRulesMaxlength < sampleTextLength) {
+      sampleTextLength = field.fieldValidateRulesMaxlength;
+    }
+    for (let i = 0; i < sampleTextLength; i++) {
+      sampleTextString += "A";
+      updatedTextString += "B";
+    }
+    if (field.fieldValidateRulesPattern !== undefined) {
+      // Generate Strings, using pattern
+      try {
+        const patternRegExp = new RegExp(field.fieldValidateRulesPattern);
+        // set infinite repetitions max range
+        if (!patternRegExp.test(sampleTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
+          const value = field.generateFakeDataFromPattern();
+          sampleTextString = value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+        }
+        if (!patternRegExp.test(updatedTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
+          const value = field.generateFakeDataFromPattern();
+          updatedTextString = value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+        }
+      } catch (error) {
+        this.log.warn('Error generating test value for entity "' + entityClass +
+          '" field "' + field.fieldName + '" with pattern "' + field.fieldValidateRulesPattern +
+          '", generating default values for this field. Detailed error message: "' + error.message + '".');
+      }
+      if (sampleTextString === updatedTextString) {
+        updatedTextString = updatedTextString + "B";
+        this.log.warn('Randomly generated first and second test values for entity "' + entityClass +
+          '" field "' + field.fieldName + '" with pattern "' + field.fieldValidateRulesPattern +
+          '" in file "' + entityClass + 'ResourceIT" where equal, added symbol "B" to second value.');
+      }
+    } _%>
 
     private static final String <%= defaultValueName %> = "<%- sampleTextString %>";
     private static final String <%= updatedValueName %> = "<%- updatedTextString %>";
@@ -440,8 +446,8 @@ if (field.fieldTypeString || field.blobContentTypeText) {
 
     private static final <%= fieldType %> <%= defaultValueName %> = <%= fieldType %>.<%= enumValue1.name %>;
     private static final <%= fieldType %> <%= updatedValueName %> = <%= fieldType %>.<%= enumValue2.name %>;
-  <%_ }
-} _%>
+  <%_ } _%>
+<%_ } _%>
 
     private static final String ENTITY_API_URL = "/api/<%= entityApiUrl %>";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{<%= primaryKey.name %>}";
@@ -988,6 +994,7 @@ _%>
   if (field.fieldTypeFloat) { %>.doubleValue()<% } else
   if (field.fieldTypeBigDecimal) { %>)<% } else
   if (field.fieldTypeZonedDateTime) { %>)<% } else
+  if (field.fieldTypeLocalTime) { %>.format(LOCAL_DATE_TIME_FORMAT)<% } else
   if (
     !field.fieldTypeString &&
     !field.javaFieldTypeString &&
@@ -1079,6 +1086,7 @@ _%>
   if (field.fieldTypeFloat) { %>.doubleValue()<% } else
   if (field.fieldTypeBigDecimal) { %>)<% } else
   if (field.fieldTypeZonedDateTime) { %>)<% } else
+  if (field.fieldTypeLocalTime) { %>.format(LOCAL_DATE_TIME_FORMAT)<% } else
   if (
     !field.fieldTypeString &&
     !field.javaFieldTypeString &&
@@ -1323,6 +1331,7 @@ _%>
       if (field.fieldTypeFloat) { %>.doubleValue()<% } else
       if (field.fieldTypeBigDecimal) { %>)<% } else
       if (field.fieldTypeZonedDateTime) { %>)<% } else
+      if (field.fieldTypeLocalTime) { %>.format(LOCAL_DATE_TIME_FORMAT)<% } else
       if (
         !field.fieldTypeString &&
         !field.javaFieldTypeString &&
@@ -1370,6 +1379,7 @@ _%>
     if (field.fieldTypeFloat) { %>.doubleValue()<% } else
     if (field.fieldTypeBigDecimal) { %>)<% } else
     if (field.fieldTypeZonedDateTime) { %>)<% } else
+    if (field.fieldTypeLocalTime) { %>.format(LOCAL_DATE_TIME_FORMAT)<% } else
     if (
       !field.fieldTypeString &&
       !field.javaFieldTypeString &&
@@ -1895,6 +1905,7 @@ _%>
   if (field.fieldTypeFloat) { %>.doubleValue()<% } else
   if (field.fieldTypeBigDecimal) { %>)<% } else
   if (field.fieldTypeZonedDateTime) { %>)<% } else
+  if (field.fieldTypeLocalTime) { %>.format(LOCAL_DATE_TIME_FORMAT)<% } else
   if (
     !field.fieldTypeString &&
     !field.fieldTypeBoolean &&
