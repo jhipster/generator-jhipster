@@ -103,6 +103,12 @@
   "config": {
     "default_environment": "prod"
   },
+  "overrides": {
+    "ngx-infinite-scroll": {
+      "@angular/core": "<%= nodeDependencies['@angular/common'] %>",
+      "@angular/common": "<%= nodeDependencies['@angular/common'] %>"
+    }
+  },
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "<%- nodePackageManager %> run lint -- --fix",
