@@ -54,7 +54,9 @@ export class AuthServerProvider {
     return this.http.post(this.applicationConfigService.getEndpointFor('api/logout'), {}).pipe(
       map(() => {
         // to get a new csrf token call the api
-        this.http.get(this.applicationConfigService.getEndpointFor('api/account')).subscribe();
+        this.http.get(this.applicationConfigService.getEndpointFor('api/account')).subscribe({
+          error: () => {},
+        });
       })
     );
   }
