@@ -55,7 +55,9 @@ export class AuthServerProvider {
       map(() => {
         // to get a new csrf token call the api
         this.http.get(this.applicationConfigService.getEndpointFor('api/account')).subscribe({
-          error: () => {},
+          error() {
+            // Handled by interceptor
+          },
         });
       })
     );
