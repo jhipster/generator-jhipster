@@ -30,6 +30,14 @@ describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   // describe('blueprint support', () => testBlueprintSupport(generator, { bootstrapGenerator: true }));
 
+  it('alias', async () => {
+    await helpers
+      .runJHipster('jhipster:bootstrap-application-base')
+      .prepareEnvironment()
+      .withMockedGenerators(['jhipster:base-application:bootstrap']);
+    expect(result.getComposedGenerators()).toContain('jhipster:base-application:bootstrap');
+  });
+
   describe('with defaults options', () => {
     before(async () => {
       await helpers.runJHipster(generator).withMockedJHipsterGenerators().withMockedSource().withSharedApplication({}).withJHipsterConfig();
