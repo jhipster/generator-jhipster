@@ -30,7 +30,11 @@ const command = {
       },
     },
   },
-  import: ['bootstrap-application-base', 'jhipster:javascript-simple-application:prettier', 'jhipster:javascript-simple-application:husky'],
+  import: [
+    'jhipster:base-application:bootstrap',
+    'jhipster:javascript-simple-application:prettier',
+    'jhipster:javascript-simple-application:husky',
+  ],
 } as const satisfies JHipsterCommandDefinition<any>;
 
 export default command;

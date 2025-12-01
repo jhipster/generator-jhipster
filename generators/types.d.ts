@@ -54,16 +54,6 @@ type GeneratorsByNamespace = {
   'jhipster:base-workspaces:bootstrap': import('./base-workspaces/generators/bootstrap/generator.ts').default;
   bootstrap: import('./bootstrap/generator.ts').default;
   'jhipster:bootstrap': import('./bootstrap/generator.ts').default;
-  'bootstrap-application': import('./bootstrap-application/generator.ts').default;
-  'jhipster:bootstrap-application': import('./bootstrap-application/generator.ts').default;
-  'bootstrap-application-base': import('./bootstrap-application-base/generator.ts').default;
-  'jhipster:bootstrap-application-base': import('./bootstrap-application-base/generator.ts').default;
-  'bootstrap-application-client': import('./bootstrap-application-client/generator.ts').default;
-  'jhipster:bootstrap-application-client': import('./bootstrap-application-client/generator.ts').default;
-  'bootstrap-application-server': import('./bootstrap-application-server/generator.ts').default;
-  'jhipster:bootstrap-application-server': import('./bootstrap-application-server/generator.ts').default;
-  'bootstrap-workspaces': import('./bootstrap-workspaces/generator.ts').default;
-  'jhipster:bootstrap-workspaces': import('./bootstrap-workspaces/generator.ts').default;
   'ci-cd': import('./ci-cd/generator.ts').default;
   'jhipster:ci-cd': import('./ci-cd/generator.ts').default;
   'jhipster:ci-cd:bootstrap': import('./ci-cd/generators/bootstrap/generator.ts').default;

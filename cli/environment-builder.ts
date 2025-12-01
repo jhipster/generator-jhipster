@@ -18,7 +18,7 @@
  */
 import assert from 'node:assert';
 import { existsSync } from 'node:fs';
-import path, { resolve } from 'node:path';
+import path, { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 import { QueuedAdapter } from '@yeoman/adapter';
@@ -26,8 +26,9 @@ import chalk from 'chalk';
 import { cloneDeep, mergeWith } from 'lodash-es';
 import Environment from 'yeoman-environment';
 
+import BaseGenerator from '../generators/base/index.ts';
 import { type Blueprint, mergeBlueprints, parseBlueprintInfo } from '../generators/base/internal/index.ts';
-import { getPackageRoot, isDistFolder } from '../lib/index.ts';
+import { getPackageRoot, getSourceRoot, isDistFolder } from '../lib/index.ts';
 import { createJHipsterLogger, packageNameToNamespace } from '../lib/utils/index.ts';
 import { readCurrentPathYoRcFile } from '../lib/utils/yo-rc.ts';
 
@@ -179,6 +180,7 @@ export default class EnvironmentBuilder {
       packagePaths: [getPackageRoot()],
       lookups: jhipsterGeneratorsLookup,
     });
+
     generators.forEach(generator => {
       // Verify jhipster generators namespace.
       assert(
@@ -186,6 +188,35 @@ export default class EnvironmentBuilder {
         `Error on the registered namespace ${generator.namespace}, make sure your folder is called generator-jhipster.`,
       );
     });
+
+    // TODO: remove aliases in JHipster 10
+    for (const [alias, gen] of [
+      ['bootstrap-application', 'app:bootstrap'],
+      ['bootstrap-application-base', 'base-application:bootstrap'],
+      ['bootstrap-application-client', 'client:bootstrap'],
+      ['bootstrap-application-server', 'server:bootstrap'],
+      ['bootstrap-workspaces', 'base-workspaces:bootstrap'],
+    ]) {
+      this.env.register(
+        class extends BaseGenerator {
+          customLifecycle = true;
+
+          async beforeQueue() {
+            if (!this.fromBlueprint) {
+              await this.composeWithBlueprints();
+            }
+
+            await this.dependsOnJHipster(`jhipster:${gen}`);
+          }
+        },
+        {
+          namespace: `jhipster:${alias}`,
+          resolved: join(getSourceRoot(), `generators/${gen.replaceAll(':', '/generators/')}/index.${isDistFolder() ? 'j' : 't'}s`),
+          packagePath: getPackageRoot(),
+        },
+      );
+    }
+
     return this;
   }
 

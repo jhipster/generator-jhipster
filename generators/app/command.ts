@@ -71,7 +71,7 @@ const command = {
   import: [
     'base',
     'bootstrap',
-    'bootstrap-application-base',
+    'jhipster:base-application:bootstrap',
     'jhipster:jdl:bootstrap',
     'common',
     'server',

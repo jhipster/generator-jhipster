@@ -30,6 +30,14 @@ const generator = `${basename(resolve(import.meta.dirname, '../../'))}:${basenam
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
 
+  it('bootstrap migration', async () => {
+    await helpers
+      .runJHipster('jhipster:bootstrap-application-client')
+      .prepareEnvironment()
+      .withMockedGenerators(['jhipster:client:bootstrap']);
+    expect(runResult.getComposedGenerators()).toContain('jhipster:client:bootstrap');
+  });
+
   describe('with', () => {
     describe('default config', () => {
       before(async () => {

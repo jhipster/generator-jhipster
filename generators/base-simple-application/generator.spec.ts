@@ -59,7 +59,7 @@ describe(`generator - ${generator}`, () => {
 
     class CustomGenerator extends Generator {
       async beforeQueue() {
-        await this.dependsOnJHipster('bootstrap-application');
+        await this.dependsOnBootstrap('app');
       }
 
       get [Generator.INITIALIZING]() {
@@ -193,7 +193,7 @@ describe(`generator - ${generator}`, () => {
 
     class CustomGenerator extends Generator {
       async beforeQueue() {
-        await this.dependsOnJHipster('bootstrap-application');
+        await this.dependsOnBootstrap('app');
       }
 
       get [Generator.INITIALIZING]() {
