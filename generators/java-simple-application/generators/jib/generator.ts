@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { Application as DockerApplication } from '../../../docker/index.ts';
+import { GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.ts';
 import type { Application as SpringCacheApplication } from '../../../spring-cache/index.ts';
 import { JavaSimpleApplicationGenerator } from '../../generator.ts';
 
@@ -32,30 +33,16 @@ export default class JibGenerator extends JavaSimpleApplicationGenerator {
     }
   }
 
-  get composing() {
-    return this.asComposingTaskGroup({
-      async compose() {
-        const { buildTool } = this.jhipsterConfigWithDefaults;
-        if (buildTool === 'gradle') {
-          await this.composeWithJHipster('jhipster:gradle:jib');
-        }
-      },
-    });
-  }
-
-  get [JavaSimpleApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
-  }
-
   get writing() {
     return this.asWritingTaskGroup({
       async write({ application }) {
         const { dockerServicesDir } = application;
         await this.writeFiles({
           blocks: [
-            {
-              path: `${dockerServicesDir}jib/`,
-              templates: ['entrypoint.sh'],
+            { path: `${dockerServicesDir}jib/`, templates: ['entrypoint.sh'] },
+            { 
+              condition: () => application.buildToolGradle!,
+              templates: [`${GRADLE_BUILD_SRC_MAIN_DIR}/jhipster.docker-conventions.gradle`],
             },
           ],
           context: application,
@@ -165,6 +152,20 @@ export default class JibGenerator extends JavaSimpleApplicationGenerator {
             },
           ],
         });
+      },
+      addJibGradlePlugin({ application, source }) {
+        if (!application.buildToolGradle) return;
+        const { javaDependencies } = application;
+        source.addGradleBuildSrcDependencyCatalogLibraries?.([
+          {
+            libraryName: 'jib-plugin',
+            module: 'com.google.cloud.tools:jib-gradle-plugin',
+            version: javaDependencies!['gradle-jib'],
+            scope: 'implementation',
+          },
+        ]);
+
+        source.addGradlePlugin?.({ id: 'jhipster.docker-conventions' });
       },
     });
   }
