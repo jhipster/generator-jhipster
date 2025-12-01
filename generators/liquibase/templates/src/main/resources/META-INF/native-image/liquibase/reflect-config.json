@@ -1,5 +1,31 @@
 [
   {
+    "name": "liquibase.configuration.ConfiguredValueModifierFactory",
+    "methods": [
+      { "name": "<init>", "parameterTypes": [] },
+      { "name": "<init>", "parameterTypes": ["liquibase.Scope"] }
+    ]
+  },
+  {
+    "name": "liquibase.executor.ExecutorService",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.change.ChangeFactory",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.change.ColumnConfig",
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
+    "name": "liquibase.change.core.CreateTableChange",
+    "allPublicMethods": true,
+    "allDeclaredMethods": true,
+    "queryAllPublicMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
     "name": "liquibase.logging.mdc.MdcManagerFactory",
     "methods": [{ "name": "<init>", "parameterTypes": [] }]
   },
