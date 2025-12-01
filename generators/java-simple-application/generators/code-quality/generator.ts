@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import type { Source as CommonSource } from '../../../common/types.d.ts';
+import { GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.ts';
 import { JavaSimpleApplicationGenerator } from '../../generator.ts';
 
 export default class CodeQualityGenerator extends JavaSimpleApplicationGenerator {
@@ -31,26 +32,17 @@ export default class CodeQualityGenerator extends JavaSimpleApplicationGenerator
     }
   }
 
-  get composing() {
-    return this.asComposingTaskGroup({
-      async compose() {
-        const { buildTool } = this.jhipsterConfigWithDefaults;
-        if (buildTool === 'gradle') {
-          await this.composeWithJHipster('jhipster:gradle:code-quality');
-        }
-      },
-    });
-  }
-
-  get [JavaSimpleApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
-  }
-
   get writing() {
     return this.asWritingTaskGroup({
       async writing({ application }) {
         await this.writeFiles({
-          blocks: [{ templates: ['checkstyle.xml'] }],
+          blocks: [
+            { templates: ['checkstyle.xml'] },
+            {
+              condition: () => application.buildToolGradle!,
+              templates: [`${GRADLE_BUILD_SRC_MAIN_DIR}/jhipster.code-quality-conventions.gradle`],
+            },
+          ],
           context: application,
         });
       },
@@ -110,6 +102,38 @@ export default class CodeQualityGenerator extends JavaSimpleApplicationGenerator
           ],
         });
       },
+      checkstyleGradle({ application, source }) {
+        if (!application.buildToolGradle) return;
+        const { javaDependencies } = application;
+        source.addGradleDependencyCatalogVersions!([{ name: 'checkstyle', version: javaDependencies!.checkstyle }]);
+        source.addGradleBuildSrcDependencyCatalogLibraries?.([
+          {
+            libraryName: 'sonarqube-plugin',
+            module: 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin',
+            version: javaDependencies!['gradle-sonarqube'],
+            scope: 'implementation',
+          },
+          {
+            libraryName: 'spotless-plugin',
+            module: 'com.diffplug.spotless:spotless-plugin-gradle',
+            version: javaDependencies!['spotless-gradle-plugin'],
+            scope: 'implementation',
+          },
+          {
+            libraryName: 'modernizer-plugin',
+            module: 'com.github.andygoossens:gradle-modernizer-plugin',
+            version: javaDependencies!['gradle-modernizer-plugin'],
+            scope: 'implementation',
+          },
+          {
+            libraryName: 'nohttp-plugin',
+            module: 'io.spring.nohttp:nohttp-gradle',
+            version: javaDependencies!['nohttp-checkstyle'],
+            scope: 'implementation',
+          },
+        ]);
+        source.addGradlePlugin?.({ id: 'jhipster.code-quality-conventions' });
+      },
       jacocoMaven({ application, source }) {
         if (!application.buildToolMaven) return;
         const { javaDependencies } = application;
@@ -164,6 +188,19 @@ export default class CodeQualityGenerator extends JavaSimpleApplicationGenerator
           {
             key: 'sonar.junit.reportPaths',
             value: `${application.temporaryDir}surefire-reports,${application.temporaryDir}failsafe-reports`,
+          },
+        ]);
+      },
+      jacocoGradle({ application, source }) {
+        if (!application.buildToolGradle) return;
+        const { javaDependencies } = application;
+        source.addGradleDependencyCatalogVersions!([{ name: 'jacoco', version: javaDependencies!['jacoco-maven-plugin'] }]);
+        (source as CommonSource).addSonarProperties?.([
+          { key: 'sonar.coverage.jacoco.xmlReportPaths', value: `${application.temporaryDir}reports/jacoco/test/jacocoTestReport.xml` },
+          { key: 'sonar.java.codeCoveragePlugin', value: 'jacoco' },
+          {
+            key: 'sonar.junit.reportPaths',
+            value: `${application.temporaryDir}test-results/test,${application.temporaryDir}test-results/integrationTest`,
           },
         ]);
       },

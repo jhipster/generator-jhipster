@@ -79,7 +79,6 @@ describe(`generator - ${generator}`, () => {
       expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
   "jhipster:gradle",
-  "jhipster:gradle:code-quality",
 ]
 `);
     });
