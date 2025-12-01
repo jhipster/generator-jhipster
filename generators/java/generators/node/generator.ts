@@ -21,6 +21,7 @@ import type { ExecaError } from 'execa';
 
 import { isWin32 } from '../../../base-core/support/os.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
+import { GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.ts';
 
 // TODO adjust type
 export default class NodeGenerator extends JavaApplicationGenerator {
@@ -33,21 +34,6 @@ export default class NodeGenerator extends JavaApplicationGenerator {
       await this.dependsOnBootstrap('java');
       await this.dependsOnJHipster('jhipster:java-simple-application:build-tool');
     }
-  }
-
-  get composing() {
-    return this.asComposingTaskGroup({
-      async compose() {
-        const { buildTool } = this.jhipsterConfigWithDefaults;
-        if (buildTool === 'gradle') {
-          await this.composeWithJHipster('jhipster:gradle:node-gradle');
-        }
-      },
-    });
-  }
-
-  get [JavaApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   get preparing() {
@@ -98,6 +84,10 @@ export default class NodeGenerator extends JavaApplicationGenerator {
               condition: (ctx: any) => ctx.useNpmWrapper,
               templates: ['npmw', 'npmw.cmd'],
             },
+            {
+              condition: () => application.buildToolGradle,
+              templates: [`${GRADLE_BUILD_SRC_MAIN_DIR}/jhipster.node-gradle-conventions.gradle`],
+            },
           ],
           context: application,
         });
@@ -136,6 +126,20 @@ export default class NodeGenerator extends JavaApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      nodeGradlePlugin({ application, source }) {
+        if (!application.buildToolGradle) return;
+        source.addGradlePlugin!({ id: 'jhipster.node-gradle-conventions' });
+        source.addGradleBuildSrcDependencyCatalogLibraries!([
+          {
+            libraryName: 'node-gradle',
+            module: 'com.github.node-gradle:gradle-node-plugin',
+            version: application.javaDependencies!['node-gradle'],
+            scope: 'implementation',
+          },
+        ]);
+
+        source.addGradleProperty!({ property: 'nodeInstall', comment: 'Install and use a local version of node and npm.' });
+      },
       frontendMavenPlugin({ application, source }) {
         if (!application.buildToolMaven) return;
         const { javaDependencies, nodeDependencies, nodeVersion } = application;

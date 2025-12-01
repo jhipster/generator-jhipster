@@ -94,7 +94,6 @@ type GeneratorsByNamespace = {
   'jhipster:git': import('./git/generator.ts').default;
   gradle: import('./gradle/generator.ts').default;
   'jhipster:gradle': import('./gradle/generator.ts').default;
-  'jhipster:gradle:node-gradle': import('./gradle/generators/node-gradle/generator.ts').default;
   heroku: import('./heroku/generator.ts').default;
   'jhipster:heroku': import('./heroku/generator.ts').default;
   info: import('./info/generator.ts').default;
