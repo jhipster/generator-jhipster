@@ -30,7 +30,7 @@ describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   // describe('blueprint support', () => testBlueprintSupport(generator, { bootstrapGenerator: true }));
 
-  it('alias', async () => {
+  it('bootstrap migration', async () => {
     await helpers
       .runJHipster('jhipster:bootstrap-application-base')
       .prepareEnvironment()

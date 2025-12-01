@@ -16,16 +16,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { describe } from 'esmocha';
+import { describe, expect } from 'esmocha';
 import { basename } from 'node:path';
 
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.ts';
 
 import Generator from './generator.ts';
 
+import { defaultHelpers as helpers, result } from '#testing';
+
 const generator = basename(import.meta.dirname);
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   describe('blueprint support', () => testBlueprintSupport(generator));
+
+  it('bootstrap migration', async () => {
+    await helpers
+      .runJHipster('jhipster:bootstrap-application-base')
+      .prepareEnvironment()
+      .withMockedGenerators(['jhipster:base-application:bootstrap']);
+    expect(result.getComposedGenerators()).toContain('jhipster:base-application:bootstrap');
+  });
 });
