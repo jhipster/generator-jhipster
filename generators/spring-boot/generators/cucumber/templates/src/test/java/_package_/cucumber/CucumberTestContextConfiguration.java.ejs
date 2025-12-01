@@ -30,6 +30,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 <%_ } _%>
 import org.springframework.security.test.context.support.WithMockUser;
 
+<%_ if (locals.devDatabaseTypeH2Any) { _%>
+import org.springframework.test.context.ActiveProfiles;
+
+@ActiveProfiles({ "test", "test<%- locals.defaultEnvironment %>" })
+<%_ } _%>
 @CucumberContextConfiguration
 @IntegrationTest
 <%_ if (reactive) { _%>
