@@ -16,33 +16,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWriteFilesSection, asWritingTask } from '../base-application/support/task-type-inference.ts';
-import { GRADLE_BUILD_SRC_MAIN_DIR, TEST_DIR } from '../generator-constants.ts';
+import { asWriteEntityFilesSection, asWritingEntitiesTask } from '../../../base-application/support/task-type-inference.ts';
+import { TEST_DIR } from '../../../generator-constants.ts';
 
-const gatlingFiles = asWriteFilesSection({
+export const gatlingFiles = asWriteEntityFilesSection({
   gatlingFiles: [
-    {
-      templates: ['README.md.jhi.gatling'],
-    },
-    {
-      condition: generator => generator.buildToolGradle,
-      path: GRADLE_BUILD_SRC_MAIN_DIR,
-      templates: ['jhipster.gatling-conventions.gradle'],
-    },
     {
       path: TEST_DIR,
       templates: [
-        // Create Gatling test files
-        'gatling/conf/gatling.conf',
-        'gatling/conf/logback.xml',
+        {
+          file: 'java/gatling/simulations/_entityClass_GatlingTest.java',
+          renameTo: generator => `java/gatling/simulations/${generator.entityClass}GatlingTest.java`,
+        },
       ],
     },
   ],
 });
 
-export default asWritingTask(async function writeTask({ application }) {
-  await this.writeFiles({
-    sections: gatlingFiles,
-    context: application,
-  });
+export function cleanupEntitiesTask() {}
+
+export default asWritingEntitiesTask(async function writeEntitiesTask({ application, entities }) {
+  for (const entity of entities.filter(entity => !entity.builtIn && !entity.skipServer)) {
+    await this.writeFiles({
+      sections: gatlingFiles,
+      context: { ...application, ...entity },
+    });
+  }
 });

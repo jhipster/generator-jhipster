@@ -88,8 +88,6 @@ type GeneratorsByNamespace = {
   'jhipster:entity': import('./entity/generator.ts').default;
   'export-jdl': import('./export-jdl/generator.ts').default;
   'jhipster:export-jdl': import('./export-jdl/generator.ts').default;
-  gatling: import('./gatling/generator.ts').default;
-  'jhipster:gatling': import('./gatling/generator.ts').default;
   'generate-blueprint': import('./generate-blueprint/generator.ts').default;
   'jhipster:generate-blueprint': import('./generate-blueprint/generator.ts').default;
   git: import('./git/generator.ts').default;
@@ -117,6 +115,7 @@ type GeneratorsByNamespace = {
   'jhipster:java-simple-application:openapi-generator': import('./java-simple-application/generators/openapi-generator/generator.ts').default;
   'jhipster:java:bootstrap': import('./java/generators/bootstrap/generator.ts').default;
   'jhipster:java:domain': import('./java/generators/domain/generator.ts').default;
+  'jhipster:java:gatling': import('./java/generators/gatling/generator.ts').default;
   'jhipster:java:i18n': import('./java/generators/i18n/generator.ts').default;
   'jhipster:java:node': import('./java/generators/node/generator.ts').default;
   'jhipster:java:server': import('./java/generators/server/generator.ts').default;

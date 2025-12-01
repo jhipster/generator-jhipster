@@ -19,11 +19,12 @@
 import { basename, resolve } from 'node:path';
 import { before, it, describe, expect } from 'esmocha';
 
-import { shouldSupportFeatures, testBlueprintSupport } from '<%- generatorRelativePath %>../test/support/tests.js';
-import { defaultHelpers as helpers, result } from '<%- generatorRelativePath %>../lib/testing/index.ts';
 import Generator from './index.ts';
 
-const generator = `${basename(resolve(import.meta.dirname, '../../'))}:${basename(import.meta.dirname)}`;
+import { getGeneratorNamespace, shouldSupportFeatures, testBlueprintSupport } from '#test-support';
+import { defaultHelpers as helpers, result } from '#testing';
+  
+const generator = getGeneratorNamespace(import.meta.dirname);
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
