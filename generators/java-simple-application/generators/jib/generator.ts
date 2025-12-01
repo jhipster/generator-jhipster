@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { Application as DockerApplication } from '../../../docker/index.ts';
+import type { Application as SpringCacheApplication } from '../../../spring-cache/index.ts';
 import { JavaSimpleApplicationGenerator } from '../../generator.ts';
 
 export default class JibGenerator extends JavaSimpleApplicationGenerator {
@@ -34,9 +36,7 @@ export default class JibGenerator extends JavaSimpleApplicationGenerator {
     return this.asComposingTaskGroup({
       async compose() {
         const { buildTool } = this.jhipsterConfigWithDefaults;
-        if (buildTool === 'maven') {
-          await this.composeWithJHipster('jhipster:maven:jib');
-        } else if (buildTool === 'gradle') {
+        if (buildTool === 'gradle') {
           await this.composeWithJHipster('jhipster:gradle:jib');
         }
       },
@@ -66,5 +66,110 @@ export default class JibGenerator extends JavaSimpleApplicationGenerator {
 
   get [JavaSimpleApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
+  }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      addMavenJibPlugin({ application, source }) {
+        if (!application.buildToolMaven) return;
+        const { baseName, serverPort, javaDependencies } = application;
+        const { dockerContainers, dockerServicesDir } = application as DockerApplication;
+        const { cacheProviderHazelcast, cacheProviderInfinispan } = application as SpringCacheApplication;
+        source.addMavenDefinition?.({
+          properties: [
+            { property: 'jib-maven-plugin.version', value: javaDependencies!['jib-maven-plugin'] },
+            { property: 'jib-maven-plugin.image', value: dockerContainers!.javaJre },
+            { property: 'jib-maven-plugin.architecture', value: 'amd64' },
+          ],
+          plugins: [{ groupId: 'com.google.cloud.tools', artifactId: 'jib-maven-plugin' }],
+          pluginManagement: [
+            {
+              groupId: 'com.google.cloud.tools',
+              artifactId: 'jib-maven-plugin',
+              // eslint-disable-next-line no-template-curly-in-string
+              version: '${jib-maven-plugin.version}',
+              additionalContent: `<configuration>
+    <from>
+        <image>\${jib-maven-plugin.image}</image>
+        <platforms>
+            <platform>
+                <architecture>\${jib-maven-plugin.architecture}</architecture>
+                <os>linux</os>
+            </platform>
+        </platforms>
+    </from>
+    <to>
+        <image>${baseName.toLowerCase()}:latest</image>
+    </to>
+    <container>
+        <entrypoint>
+            <shell>bash</shell>
+            <option>-c</option>
+            <arg>/entrypoint.sh</arg>
+        </entrypoint>
+        <ports>
+            <port>${serverPort}</port>${
+              cacheProviderHazelcast
+                ? `
+            <port>5701/udp</port>
+`
+                : ''
+            }
+        </ports>
+        <environment>${
+          cacheProviderInfinispan
+            ? `
+            <JAVA_OPTS>-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true</JAVA_OPTS>
+`
+            : ''
+        }
+            <SPRING_OUTPUT_ANSI_ENABLED>ALWAYS</SPRING_OUTPUT_ANSI_ENABLED>
+            <JHIPSTER_SLEEP>0</JHIPSTER_SLEEP>
+        </environment>
+        <creationTime>USE_CURRENT_TIMESTAMP</creationTime>
+        <user>1000</user>
+    </container>
+    <extraDirectories>
+        <paths>${dockerServicesDir}jib</paths>
+        <permissions>
+            <permission>
+                <file>/entrypoint.sh</file>
+                <mode>755</mode>
+            </permission>
+        </permissions>
+    </extraDirectories>${
+      application.backendTypeSpringBoot
+        ? `
+    <pluginExtensions>
+        <pluginExtension>
+            <implementation>com.google.cloud.tools.jib.maven.extension.springboot.JibSpringBootExtension</implementation>
+        </pluginExtension>
+    </pluginExtensions>
+`
+        : ''
+    }
+</configuration>${
+                application.backendTypeSpringBoot
+                  ? `
+<dependencies>
+    <dependency>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-spring-boot-extension-maven</artifactId>
+        <version>${application.javaDependencies!['jib-spring-boot-extension-maven']}</version>
+    </dependency>
+</dependencies>
+`
+                  : ''
+              }
+`,
+            },
+          ],
+        });
+      },
+    });
+  }
+
+  get [JavaSimpleApplicationGenerator.POST_WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

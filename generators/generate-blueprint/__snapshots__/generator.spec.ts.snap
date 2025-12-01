@@ -1103,51 +1103,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/maven/generator.spec.js": {
     "stateCleared": "modified",
   },
-  "generators/maven/generators/code-quality/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/maven/generators/code-quality/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/maven/generators/code-quality/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/maven/generators/code-quality/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/maven/generators/code-quality/templates/template-file-maven:code-quality.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/maven/generators/frontend-plugin/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/maven/generators/frontend-plugin/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/maven/generators/frontend-plugin/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/maven/generators/frontend-plugin/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/maven/generators/frontend-plugin/templates/template-file-maven:frontend-plugin.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/maven/generators/jib/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/maven/generators/jib/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/maven/generators/jib/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/maven/generators/jib/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/maven/generators/jib/templates/template-file-maven:jib.ejs": {
-    "stateCleared": "modified",
-  },
   "generators/maven/index.js": {
     "stateCleared": "modified",
   },

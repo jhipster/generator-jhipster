@@ -52,7 +52,6 @@ describe(`generator - ${generator}`, () => {
       expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
   "jhipster:maven",
-  "jhipster:maven:code-quality",
 ]
 `);
     });

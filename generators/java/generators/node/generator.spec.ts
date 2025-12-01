@@ -47,7 +47,6 @@ describe(`generator - ${generator}`, () => {
       expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
   "jhipster:java-simple-application:build-tool",
-  "jhipster:maven:frontend-plugin",
 ]
 `);
     });

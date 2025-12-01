@@ -143,9 +143,6 @@ type GeneratorsByNamespace = {
   'jhipster:liquibase': import('./liquibase/generator.ts').default;
   maven: import('./maven/generator.ts').default;
   'jhipster:maven': import('./maven/generator.ts').default;
-  'jhipster:maven:code-quality': import('./maven/generators/code-quality/generator.ts').default;
-  'jhipster:maven:frontend-plugin': import('./maven/generators/frontend-plugin/generator.ts').default;
-  'jhipster:maven:jib': import('./maven/generators/jib/generator.ts').default;
   'project-name': import('./project-name/generator.ts').default;
   'jhipster:project-name': import('./project-name/generator.ts').default;
   'jhipster:project-name:bootstrap': import('./project-name/generators/bootstrap/generator.ts').default;
