@@ -21,7 +21,7 @@ import chalk from 'chalk';
 
 import type { Config as BaseApplicationConfig } from '../base-application/types.d.ts';
 import BaseApplicationGenerator from '../base-simple-application/index.ts';
-import { createPomStorage } from '../maven/support/pom-store.ts';
+import { createPomStorage } from '../java-simple-application/generators/maven/support/pom-store.ts';
 
 import type { Application as CiCdApplication } from './types.ts';
 

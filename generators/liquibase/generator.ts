@@ -44,7 +44,7 @@ import type { BaseChangelog } from '../base-entity-changes/types.ts';
 import { mutateField as commonMutateField } from '../common/entity.ts';
 import type { Entity as CommonEntity, Field as CommonField } from '../common/types.ts';
 import { prepareEntity as prepareEntityForServer } from '../java/support/index.ts';
-import type { MavenProperty } from '../maven/types.ts';
+import type { MavenProperty } from '../java-simple-application/generators/maven/types.ts';
 import { getFKConstraintName, getUXConstraintName, prepareField as prepareServerFieldForTemplates } from '../server/support/index.ts';
 import type { Entity as ServerEntity } from '../server/types.ts';
 import type { Source as SpringBootSource } from '../spring-boot/index.ts';

@@ -112,6 +112,7 @@ type GeneratorsByNamespace = {
   'jhipster:java-simple-application:code-quality': import('./java-simple-application/generators/code-quality/generator.ts').default;
   'jhipster:java-simple-application:graalvm': import('./java-simple-application/generators/graalvm/generator.ts').default;
   'jhipster:java-simple-application:jib': import('./java-simple-application/generators/jib/generator.ts').default;
+  'jhipster:java-simple-application:maven': import('./java-simple-application/generators/maven/generator.ts').default;
   'jhipster:java-simple-application:openapi-generator': import('./java-simple-application/generators/openapi-generator/generator.ts').default;
   'jhipster:java:bootstrap': import('./java/generators/bootstrap/generator.ts').default;
   'jhipster:java:domain': import('./java/generators/domain/generator.ts').default;
@@ -140,8 +141,6 @@ type GeneratorsByNamespace = {
   'jhipster:languages:bootstrap': import('./languages/generators/bootstrap/generator.ts').default;
   liquibase: import('./liquibase/generator.ts').default;
   'jhipster:liquibase': import('./liquibase/generator.ts').default;
-  maven: import('./maven/generator.ts').default;
-  'jhipster:maven': import('./maven/generator.ts').default;
   'project-name': import('./project-name/generator.ts').default;
   'jhipster:project-name': import('./project-name/generator.ts').default;
   'jhipster:project-name:bootstrap': import('./project-name/generators/bootstrap/generator.ts').default;

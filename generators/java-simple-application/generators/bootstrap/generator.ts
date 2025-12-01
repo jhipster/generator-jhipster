@@ -25,9 +25,9 @@ import { addJavaAnnotation, addJavaImport } from '../../../java/support/add-java
 import { createEnumNeedleCallback } from '../../../java/support/java-enum.ts';
 import { injectJavaConstructorParam, injectJavaConstructorSetter, injectJavaField } from '../../../java/support/java-file-edit.ts';
 import type { Application as JavascriptApplication } from '../../../javascript-simple-application/types.ts';
-import { getPomVersionProperties } from '../../../maven/support/dependabot-maven.ts';
 import { mutateApplication } from '../../application.ts';
 import { JavaSimpleApplicationGenerator } from '../../generator.ts';
+import { getPomVersionProperties } from '../maven/support/dependabot-maven.ts';
 
 export default class BootstrapGenerator extends JavaSimpleApplicationGenerator {
   async beforeQueue() {

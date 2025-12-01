@@ -18,7 +18,7 @@
  */
 import { XMLParser } from 'fast-xml-parser';
 
-import type { JavaArtifact } from '../../java-simple-application/types.ts';
+import type { JavaArtifact } from '../../../types.ts';
 import { defaultXmlParserOptions } from '../internal/xml-store.ts';
 
 export type MavenPom = {

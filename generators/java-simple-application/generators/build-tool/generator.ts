@@ -20,7 +20,7 @@ import { buildToolTypes } from '../../../../lib/jhipster/index.ts';
 import { JavaApplicationGenerator } from '../../../java/generator.ts';
 import { javaScopeToGradleScope } from '../../../java/support/index.ts';
 import type { ConditionalJavaDefinition, JavaDependency, JavaNeedleOptions } from '../../../java/types.ts';
-import type { MavenDependency } from '../../../maven/types.ts';
+import type { MavenDependency } from '../maven/types.ts';
 
 const { GRADLE, MAVEN } = buildToolTypes;
 
@@ -43,7 +43,7 @@ export default class BuildToolGenerator extends JavaApplicationGenerator {
         if (buildTool === GRADLE) {
           await this.composeWithJHipster('gradle');
         } else if (buildTool === MAVEN) {
-          await this.composeWithJHipster('maven');
+          await this.composeWithJHipster('jhipster:java-simple-application:maven');
         } else {
           throw new Error(`Build tool ${buildTool} is not supported`);
         }

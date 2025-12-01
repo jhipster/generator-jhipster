@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import BaseApplicationGenerator from '../../generators/base-core/index.ts';
-import { parseMavenPom } from '../../generators/maven/support/dependabot-maven.ts';
+import { parseMavenPom } from '../../generators/java-simple-application/generators/maven/support/dependabot-maven.ts';
 import { getPackageRoot } from '../../lib/index.ts';
 
 export default class UpdateSpringBootGenerator extends BaseApplicationGenerator {

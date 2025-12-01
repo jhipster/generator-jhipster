@@ -19,7 +19,7 @@
 
 import { get, set } from 'lodash-es';
 
-import type CoreGenerator from '../../base-core/index.ts';
+import type CoreGenerator from '../../../../base-core/index.ts';
 import { type MavenProjectLike, formatPomFirstLevel, sortPomProject } from '../internal/pom-sort.ts';
 import XmlStorage from '../internal/xml-store.ts';
 import type {

@@ -104,7 +104,7 @@ export default class UnrelatedGenerator {
 Realistic example applying multiple needles in the same file:
 
 ```mjs
-import { addProperty, addDependency, addDependencyToDevProfile } from 'generator-jhipster/generators/maven'
+import { addProperty, addDependency, addDependencyToDevProfile } from 'generator-jhipster/generators/java-simple-application/generators/maven'
 
 export default class UnrelatedGenerator {
   get [POST_WRITING_PRIORITY]() {
