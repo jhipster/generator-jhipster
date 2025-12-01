@@ -196,6 +196,8 @@ export default class EnvironmentBuilder {
       ['bootstrap-application-client', 'client:bootstrap'],
       ['bootstrap-application-server', 'server:bootstrap'],
       ['bootstrap-workspaces', 'base-workspaces:bootstrap'],
+      ['maven', 'java-simple-application:maven'],
+      ['gradle', 'java-simple-application:gradle'],
     ]) {
       this.env.register(
         class extends BaseGenerator {

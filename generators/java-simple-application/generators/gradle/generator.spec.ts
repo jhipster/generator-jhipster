@@ -17,13 +17,13 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'esmocha';
-import { basename } from 'node:path';
 
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
-import { testBlueprintSupport } from '../../test/support/tests.ts';
-import { GENERATOR_JHIPSTER } from '../generator-constants.ts';
+import { defaultHelpers as helpers, runResult } from '../../../../lib/testing/index.ts';
+import { GENERATOR_JHIPSTER } from '../../../generator-constants.ts';
 
-const generator = basename(import.meta.dirname);
+import { getGeneratorNamespace, testBlueprintSupport } from '#test-support';
+
+const generator = getGeneratorNamespace(import.meta.dirname);
 
 describe(`generator - ${generator}`, () => {
   describe('blueprint support', () => testBlueprintSupport(generator));

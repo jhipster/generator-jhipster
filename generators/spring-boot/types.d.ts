@@ -2,7 +2,6 @@ import type { HandleCommandTypes } from '../../lib/command/types.ts';
 import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.ts';
 import type { Entity as BaseApplicationEntity, RelationshipWithEntity } from '../base-application/types.ts';
 import type { Config as CommonConfig } from '../common/types.d.ts';
-import type { Application as GradleApplication } from '../gradle/types.ts';
 import type { JavaAnnotation } from '../java/support/add-java-annotation.ts';
 import type {
   Config as JavaConfig,
@@ -11,6 +10,7 @@ import type {
   Relationship as JavaRelationship,
   Source as JavaSource,
 } from '../java/types.ts';
+import type { Application as GradleApplication } from '../java-simple-application/generators/gradle/types.ts';
 import type { ApplicationPropertiesNeedles } from '../server/support/needles.ts';
 import type {
   Application as ServerApplication,

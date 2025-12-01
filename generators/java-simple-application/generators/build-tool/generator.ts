@@ -41,7 +41,7 @@ export default class BuildToolGenerator extends JavaApplicationGenerator {
         const { buildTool } = this.jhipsterConfigWithDefaults;
 
         if (buildTool === GRADLE) {
-          await this.composeWithJHipster('gradle');
+          await this.composeWithJHipster('jhipster:java-simple-application:gradle');
         } else if (buildTool === MAVEN) {
           await this.composeWithJHipster('jhipster:java-simple-application:maven');
         } else {

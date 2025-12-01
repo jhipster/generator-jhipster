@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - gradle with empty configuration should generate only gradle files 1`] = `
+exports[`generator - java-simple-application:gradle with empty configuration should generate only gradle files 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -29,7 +29,7 @@ exports[`generator - gradle with empty configuration should generate only gradle
 }
 `;
 
-exports[`generator - gradle with valid configuration should generate only gradle files 1`] = `
+exports[`generator - java-simple-application:gradle with valid configuration should generate only gradle files 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",

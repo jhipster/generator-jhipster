@@ -1,7 +1,7 @@
 import { before, describe, it } from 'esmocha';
 
-import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
-import { GeneratorBaseApplication } from '../index.ts';
+import { defaultHelpers as helpers, result as runResult } from '../../../../lib/testing/index.ts';
+import { GeneratorBaseApplication } from '../../../index.ts';
 
 const GENERATOR_SERVER = 'server';
 

@@ -8,8 +8,8 @@ import type {
   Relationship as BaseApplicationRelationship,
   Source as BaseApplicationSource,
 } from '../base-application/types.d.ts';
-import type { Application as GradleApplication } from '../gradle/types.ts';
 import type GraalvmCommand from '../java-simple-application/generators/graalvm/command.ts';
+import type { Application as GradleApplication } from '../java-simple-application/generators/gradle/types.ts';
 import type {
   Application as JavaSimpleApplicationApplication,
   Config as JavaSimpleApplicationConfig,
