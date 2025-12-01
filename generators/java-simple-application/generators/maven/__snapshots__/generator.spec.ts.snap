@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - maven needles should match generated pom 1`] = `
+exports[`generator - java-simple-application:maven needles should match generated pom 1`] = `
 {
   "pom.xml": {
     "contents": "<?xml version="1.0" encoding="UTF-8"?>
@@ -46,7 +46,7 @@ exports[`generator - maven needles should match generated pom 1`] = `
 }
 `;
 
-exports[`generator - maven with empty configuration should generate only maven files 1`] = `
+exports[`generator - java-simple-application:maven with empty configuration should generate only maven files 1`] = `
 {
   ".mvn/jvm.config": {
     "stateCleared": "modified",
@@ -69,7 +69,7 @@ exports[`generator - maven with empty configuration should generate only maven f
 }
 `;
 
-exports[`generator - maven with valid configuration should generate only maven files 1`] = `
+exports[`generator - java-simple-application:maven with valid configuration should generate only maven files 1`] = `
 {
   ".mvn/jvm.config": {
     "stateCleared": "modified",

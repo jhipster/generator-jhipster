@@ -95,7 +95,7 @@
 'theme: maven':
   - changed-files:
       - any-glob-to-any-file:
-          - generators/maven/**/*
+          - generators/java-simple-application/generators/maven/**/*
           - '**/pom.xml*'
 
 'theme: gradle':

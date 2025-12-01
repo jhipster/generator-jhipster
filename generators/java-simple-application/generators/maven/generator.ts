@@ -22,14 +22,13 @@ import assert from 'node:assert/strict';
 import { passthrough } from '@yeoman/transform';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
-import { JavaApplicationGenerator } from '../java/generator.ts';
+import { JavaSimpleApplicationGenerator } from '../../generator.ts';
 
-import cleanupOldServerFilesTask from './cleanup.ts';
 import { MAVEN } from './constants.ts';
 import files from './files.ts';
 import { type PomStorage, createPomStorage, sortPomFile } from './support/index.ts';
 
-export default class MavenGenerator extends JavaApplicationGenerator {
+export default class MavenGenerator extends JavaSimpleApplicationGenerator {
   pomStorage!: PomStorage;
   sortMavenPom!: boolean;
 
@@ -51,7 +50,7 @@ export default class MavenGenerator extends JavaApplicationGenerator {
     });
   }
 
-  get [JavaApplicationGenerator.INITIALIZING]() {
+  get [JavaSimpleApplicationGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
@@ -67,7 +66,7 @@ export default class MavenGenerator extends JavaApplicationGenerator {
     });
   }
 
-  get [JavaApplicationGenerator.CONFIGURING]() {
+  get [JavaSimpleApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
@@ -125,7 +124,7 @@ export default class MavenGenerator extends JavaApplicationGenerator {
     });
   }
 
-  get [JavaApplicationGenerator.PREPARING]() {
+  get [JavaSimpleApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
@@ -148,20 +147,24 @@ export default class MavenGenerator extends JavaApplicationGenerator {
     });
   }
 
-  get [JavaApplicationGenerator.DEFAULT]() {
+  get [JavaSimpleApplicationGenerator.DEFAULT]() {
     return this.delegateTasksToBlueprint(() => this.default);
   }
 
   get writing() {
     return this.asWritingTaskGroup({
-      cleanupOldServerFilesTask,
+      cleanup({ control }) {
+        if (control.isJhipsterVersionLessThan('7.7.1')) {
+          this.removeFile('.mvn/wrapper/MavenWrapperDownloader.java');
+        }
+      },
       async writeFiles({ application }) {
         await this.writeFiles({ sections: files, context: application });
       },
     });
   }
 
-  get [JavaApplicationGenerator.WRITING]() {
+  get [JavaSimpleApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -173,7 +176,7 @@ export default class MavenGenerator extends JavaApplicationGenerator {
     });
   }
 
-  get [JavaApplicationGenerator.POST_WRITING]() {
+  get [JavaSimpleApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 }

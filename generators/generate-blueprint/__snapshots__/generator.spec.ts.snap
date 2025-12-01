@@ -758,6 +758,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/java-simple-application/generators/jib/templates/template-file-java-simple-application:jib.ejs": {
     "stateCleared": "modified",
   },
+  "generators/java-simple-application/generators/maven/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/maven/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/maven/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/maven/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/maven/templates/template-file-java-simple-application:maven.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/java-simple-application/generators/openapi-generator/command.js": {
     "stateCleared": "modified",
   },
@@ -1092,21 +1107,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/liquibase/templates/template-file-liquibase.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/maven/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/maven/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/maven/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/maven/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/maven/templates/template-file-maven.ejs": {
     "stateCleared": "modified",
   },
   "generators/project-name/command.js": {

@@ -25,7 +25,7 @@ import { kebabCase } from 'lodash-es';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { JAVA_COMPATIBLE_VERSIONS, RECOMMENDED_JAVA_VERSION, SERVER_MAIN_RES_DIR } from '../generator-constants.ts';
 import { addGradlePluginCallback, applyFromGradleCallback } from '../gradle/internal/needles.ts';
-import { createPomStorage } from '../maven/support/pom-store.ts';
+import { createPomStorage } from '../java-simple-application/generators/maven/support/pom-store.ts';
 import { prepareSqlApplicationProperties } from '../spring-data/generators/relational/support/index.ts';
 
 import { mavenProfileContent } from './templates.ts';

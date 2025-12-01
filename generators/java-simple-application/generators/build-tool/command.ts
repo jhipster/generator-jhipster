@@ -41,7 +41,7 @@ const command = {
       scope: 'storage',
     },
   },
-  import: ['gradle', 'maven'],
+  import: ['gradle', 'jhipster:java-simple-application:maven'],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

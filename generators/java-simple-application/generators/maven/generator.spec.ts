@@ -17,14 +17,13 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'esmocha';
-import { basename } from 'node:path';
-
-import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
-import { testBlueprintSupport } from '../../test/support/tests.ts';
 
 import MavenGenerator from './generator.ts';
 
-const generator = basename(import.meta.dirname);
+import { getGeneratorNamespace, testBlueprintSupport } from '#test-support';
+import { defaultHelpers as helpers, result as runResult } from '#testing';
+
+const generator = getGeneratorNamespace(import.meta.dirname);
 
 type T = ConstructorParameters<typeof MavenGenerator>;
 
@@ -90,7 +89,7 @@ describe(`generator - ${generator}`, () => {
                 });
               }
             },
-            { namespace: 'jhipster-blueprint:maven' },
+            { namespace: 'jhipster-blueprint:java-simple-application:maven' },
           ],
         ]);
     });

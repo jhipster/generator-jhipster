@@ -1,5 +1,5 @@
 /* eslint-disable no-template-curly-in-string */
-import type { MavenDefinition } from '../../../../maven/types.ts';
+import type { MavenDefinition } from '../../maven/types.ts';
 
 export const mavenDefinition = ({
   graalvmReachabilityMetadata,

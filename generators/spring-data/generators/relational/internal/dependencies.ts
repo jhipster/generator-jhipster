@@ -18,7 +18,7 @@
  */
 
 import type { JavaDependency } from '../../../../java/types.ts';
-import type { MavenDefinition, MavenDependency, MavenPlugin } from '../../../../maven/types.ts';
+import type { MavenDefinition, MavenDependency, MavenPlugin } from '../../../../java-simple-application/generators/maven/types.ts';
 
 type DatabaseTypeDependencies = {
   jdbc: MavenDefinition;

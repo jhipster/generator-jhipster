@@ -29,7 +29,6 @@ import type {
 } from '../base-simple-application/types.ts';
 import type { GradleNeedleOptions, Source as GradleSource } from '../gradle/types.ts';
 import type { JavaAnnotation } from '../java/support/add-java-annotation.ts';
-import type { MavenDefinition, Source as MavenSource } from '../maven/types.ts';
 
 import type { JavaSimpleApplicationAddedApplicationProperties } from './application.ts';
 import type command from './command.ts';
@@ -38,6 +37,7 @@ import type {
   Config as BuildToolConfig,
   Options as BuildToolOptions,
 } from './generators/build-tool/types.ts';
+import type { MavenDefinition, Source as MavenSource } from './generators/maven/types.ts';
 
 type Command = HandleCommandTypes<typeof command>;
 
