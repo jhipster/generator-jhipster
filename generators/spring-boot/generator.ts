@@ -185,7 +185,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
           await this.composeWithJHipster('jhipster:spring-boot:cucumber');
         }
         if (testFrameworks?.includes(GATLING)) {
-          await this.composeWithJHipster('gatling');
+          await this.composeWithJHipster('jhipster:java:gatling');
         }
         if (feignClient) {
           await this.composeWithJHipster('jhipster:spring-boot:feign-client');

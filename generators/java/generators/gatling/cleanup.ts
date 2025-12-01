@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { asWritingTask } from '../base-application/support/task-type-inference.ts';
+import { asWritingTask } from '../../../base-application/support/task-type-inference.ts';
 /**
  * Removes server files that where generated in previous JHipster versions and therefore
  * need to be removed.

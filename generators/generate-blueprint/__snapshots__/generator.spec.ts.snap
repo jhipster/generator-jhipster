@@ -539,21 +539,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/export-jdl/templates/template-file-export-jdl.ejs": {
     "stateCleared": "modified",
   },
-  "generators/gatling/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/gatling/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/gatling/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/gatling/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/gatling/templates/template-file-gatling.ejs": {
-    "stateCleared": "modified",
-  },
   "generators/generate-blueprint/command.js": {
     "stateCleared": "modified",
   },
@@ -831,6 +816,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/java/generators/domain/templates/template-file-java:domain.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/gatling/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/gatling/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/gatling/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/gatling/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java/generators/gatling/templates/template-file-java:gatling.ejs": {
     "stateCleared": "modified",
   },
   "generators/java/generators/i18n/command.js": {
