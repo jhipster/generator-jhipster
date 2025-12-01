@@ -262,11 +262,80 @@ exports[`generator - java-simple-application:code-quality with defaults options 
 }
 `;
 
-exports[`generator - java-simple-application:code-quality with gradle build tool should call source snapshot 1`] = `{}`;
+exports[`generator - java-simple-application:code-quality with gradle build tool should call source snapshot 1`] = `
+{
+  "addGradleBuildSrcDependencyCatalogLibraries": [
+    [
+      {
+        "libraryName": "sonarqube-plugin",
+        "module": "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin",
+        "scope": "implementation",
+        "version": "'GRADLE-SONARQUBE-VERSION'",
+      },
+      {
+        "libraryName": "spotless-plugin",
+        "module": "com.diffplug.spotless:spotless-plugin-gradle",
+        "scope": "implementation",
+        "version": "'SPOTLESS-GRADLE-PLUGIN-VERSION'",
+      },
+      {
+        "libraryName": "modernizer-plugin",
+        "module": "com.github.andygoossens:gradle-modernizer-plugin",
+        "scope": "implementation",
+        "version": "'GRADLE-MODERNIZER-PLUGIN-VERSION'",
+      },
+      {
+        "libraryName": "nohttp-plugin",
+        "module": "io.spring.nohttp:nohttp-gradle",
+        "scope": "implementation",
+        "version": "'NOHTTP-CHECKSTYLE-VERSION'",
+      },
+    ],
+  ],
+  "addGradleDependencyCatalogVersions": [
+    [
+      {
+        "name": "checkstyle",
+        "version": "'CHECKSTYLE-VERSION'",
+      },
+    ],
+    [
+      {
+        "name": "jacoco",
+        "version": "'JACOCO-MAVEN-PLUGIN-VERSION'",
+      },
+    ],
+  ],
+  "addGradlePlugin": [
+    {
+      "id": "jhipster.code-quality-conventions",
+    },
+  ],
+  "addSonarProperties": [
+    [
+      {
+        "key": "sonar.coverage.jacoco.xmlReportPaths",
+        "value": "build/reports/jacoco/test/jacocoTestReport.xml",
+      },
+      {
+        "key": "sonar.java.codeCoveragePlugin",
+        "value": "jacoco",
+      },
+      {
+        "key": "sonar.junit.reportPaths",
+        "value": "build/test-results/test,build/test-results/integrationTest",
+      },
+    ],
+  ],
+}
+`;
 
 exports[`generator - java-simple-application:code-quality with gradle build tool should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle": {
     "stateCleared": "modified",
   },
   "checkstyle.xml": {

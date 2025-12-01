@@ -578,51 +578,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/gradle/generator.spec.js": {
     "stateCleared": "modified",
   },
-  "generators/gradle/generators/code-quality/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/gradle/generators/code-quality/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/gradle/generators/code-quality/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/gradle/generators/code-quality/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/gradle/generators/code-quality/templates/template-file-gradle:code-quality.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/gradle/generators/jib/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/gradle/generators/jib/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/gradle/generators/jib/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/gradle/generators/jib/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/gradle/generators/jib/templates/template-file-gradle:jib.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/gradle/generators/node-gradle/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/gradle/generators/node-gradle/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/gradle/generators/node-gradle/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/gradle/generators/node-gradle/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/gradle/generators/node-gradle/templates/template-file-gradle:node-gradle.ejs": {
-    "stateCleared": "modified",
-  },
   "generators/gradle/index.js": {
     "stateCleared": "modified",
   },

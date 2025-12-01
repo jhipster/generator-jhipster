@@ -226,7 +226,31 @@ exports[`generator - java:node with defaults options should match files snapshot
 }
 `;
 
-exports[`generator - java:node with gradle build tool should call source snapshot 1`] = `{}`;
+exports[`generator - java:node with gradle build tool should call source snapshot 1`] = `
+{
+  "addGradleBuildSrcDependencyCatalogLibraries": [
+    [
+      {
+        "libraryName": "node-gradle",
+        "module": "com.github.node-gradle:gradle-node-plugin",
+        "scope": "implementation",
+        "version": "'NODE-GRADLE-VERSION'",
+      },
+    ],
+  ],
+  "addGradlePlugin": [
+    {
+      "id": "jhipster.node-gradle-conventions",
+    },
+  ],
+  "addGradleProperty": [
+    {
+      "comment": "Install and use a local version of node and npm.",
+      "property": "nodeInstall",
+    },
+  ],
+}
+`;
 
 exports[`generator - java:node with gradle build tool should match files snapshot 1`] = `
 {
@@ -234,6 +258,9 @@ exports[`generator - java:node with gradle build tool should match files snapsho
     "stateCleared": "modified",
   },
   "build.gradle": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/src/main/groovy/jhipster.node-gradle-conventions.gradle": {
     "stateCleared": "modified",
   },
   "npmw": {

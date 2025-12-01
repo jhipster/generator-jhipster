@@ -68,7 +68,6 @@ describe(`generator - ${generator}`, () => {
     it('should compose with generators', () => {
       expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
-  "jhipster:gradle:node-gradle",
   "jhipster:java-simple-application:build-tool",
 ]
 `);
