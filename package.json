@@ -35,6 +35,10 @@
     "url": "https://github.com/jdubois"
   },
   "type": "module",
+  "imports": {
+    "#testing": "./lib/testing/index.js",
+    "#test-support": "./test/support/index.js"
+  },
   "exports": {
     ".": {
       "types": "./dist/generators/index.d.ts",
