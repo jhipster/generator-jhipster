@@ -36,8 +36,8 @@
   },
   "type": "module",
   "imports": {
-    "#testing": "./lib/testing/index.js",
-    "#test-support": "./test/support/index.js"
+    "#testing": "./lib/testing/index.ts",
+    "#test-support": "./test/support/index.ts"
   },
   "exports": {
     ".": {

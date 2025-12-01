@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - gatling with default config should match files snapshot 1`] = `
+exports[`generator - java:gatling with default config should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "contents": "{
@@ -180,7 +180,7 @@ gatling {
 }
 `;
 
-exports[`generator - gatling with gradle build tool should match files snapshot 1`] = `
+exports[`generator - java:gatling with gradle build tool should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "contents": "{
