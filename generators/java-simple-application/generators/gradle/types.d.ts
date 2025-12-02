@@ -1,12 +1,12 @@
 import type { RequireOneOrNone } from 'type-fest';
 
-import type { HandleCommandTypes } from '../../lib/command/types.ts';
-import type { Source as BaseApplicationSource } from '../base-simple-application/types.ts';
+import type { HandleCommandTypes } from '../../../../lib/command/types.ts';
+import type { Source as BaseApplicationSource } from '../../../base-simple-application/types.ts';
 import type {
   Application as JavaSimpleApplicationApplication,
   Config as JavaSimpleApplicationConfig,
   Options as JavaSimpleApplicationOptions,
-} from '../java-simple-application/types.ts';
+} from '../../types.ts';
 
 import type GradleCommand from './command.ts';
 

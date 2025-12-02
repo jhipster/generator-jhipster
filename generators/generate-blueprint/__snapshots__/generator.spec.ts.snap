@@ -494,21 +494,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/git/templates/template-file-git.ejs": {
     "stateCleared": "modified",
   },
-  "generators/gradle/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/gradle/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/gradle/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/gradle/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/gradle/templates/template-file-gradle.ejs": {
-    "stateCleared": "modified",
-  },
   "generators/heroku/command.js": {
     "stateCleared": "modified",
   },
@@ -621,6 +606,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/java-simple-application/generators/graalvm/templates/template-file-java-simple-application:graalvm.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/gradle/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/gradle/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/gradle/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/gradle/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/gradle/templates/template-file-java-simple-application:gradle.ejs": {
     "stateCleared": "modified",
   },
   "generators/java-simple-application/generators/jib/command.js": {

@@ -49,14 +49,14 @@ describe(`generator - ${generator}`, () => {
             buildTool: 'maven',
           })
           .withSkipWritingPriorities()
-          .withMockedGenerators(['jhipster:java-simple-application:maven', 'jhipster:gradle']);
+          .withMockedGenerators(['jhipster:java-simple-application:maven', 'jhipster:java-simple-application:gradle']);
       });
 
       it('should compose with maven generator', () => {
         runResult.assertGeneratorComposedOnce('jhipster:java-simple-application:maven');
       });
       it('should not compose with others buildTool generators', () => {
-        runResult.assertGeneratorNotComposed('jhipster:gradle');
+        runResult.assertGeneratorNotComposed('jhipster:java-simple-application:gradle');
       });
     });
     describe('gradle', () => {
@@ -67,11 +67,11 @@ describe(`generator - ${generator}`, () => {
             buildTool: 'gradle',
           })
           .withSkipWritingPriorities()
-          .withMockedGenerators(['jhipster:java-simple-application:maven', 'jhipster:gradle']);
+          .withMockedGenerators(['jhipster:java-simple-application:maven', 'jhipster:java-simple-application:gradle']);
       });
 
       it('should compose with gradle generator', () => {
-        runResult.assertGeneratorComposedOnce('jhipster:gradle');
+        runResult.assertGeneratorComposedOnce('jhipster:java-simple-application:gradle');
       });
       it('should not compose with others buildTool generators', () => {
         runResult.assertGeneratorNotComposed('jhipster:java-simple-application:maven');

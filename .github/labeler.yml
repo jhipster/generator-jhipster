@@ -101,7 +101,7 @@
 'theme: gradle':
   - changed-files:
       - any-glob-to-any-file:
-          - generators/gradle/**/*
+          - generators/java-simple-application/generators/gradle/**/*
           - '**/*.gradle'
           - '**/gradle/**/*'
 

@@ -82,8 +82,6 @@ type GeneratorsByNamespace = {
   'jhipster:generate-blueprint': import('./generate-blueprint/generator.ts').default;
   git: import('./git/generator.ts').default;
   'jhipster:git': import('./git/generator.ts').default;
-  gradle: import('./gradle/generator.ts').default;
-  'jhipster:gradle': import('./gradle/generator.ts').default;
   heroku: import('./heroku/generator.ts').default;
   'jhipster:heroku': import('./heroku/generator.ts').default;
   info: import('./info/generator.ts').default;
@@ -98,6 +96,7 @@ type GeneratorsByNamespace = {
   'jhipster:java-simple-application:build-tool': import('./java-simple-application/generators/build-tool/generator.ts').default;
   'jhipster:java-simple-application:code-quality': import('./java-simple-application/generators/code-quality/generator.ts').default;
   'jhipster:java-simple-application:graalvm': import('./java-simple-application/generators/graalvm/generator.ts').default;
+  'jhipster:java-simple-application:gradle': import('./java-simple-application/generators/gradle/generator.ts').default;
   'jhipster:java-simple-application:jib': import('./java-simple-application/generators/jib/generator.ts').default;
   'jhipster:java-simple-application:maven': import('./java-simple-application/generators/maven/generator.ts').default;
   'jhipster:java-simple-application:openapi-generator': import('./java-simple-application/generators/openapi-generator/generator.ts').default;

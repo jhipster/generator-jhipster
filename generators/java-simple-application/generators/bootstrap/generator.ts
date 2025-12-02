@@ -20,13 +20,13 @@ import { basename } from 'node:path';
 
 import { mutateData } from '../../../../lib/utils/object.ts';
 import { editPropertiesFileCallback } from '../../../base-core/support/properties-file.ts';
-import { getGradleLibsVersionsProperties } from '../../../gradle/support/dependabot-gradle.ts';
 import { addJavaAnnotation, addJavaImport } from '../../../java/support/add-java-annotation.ts';
 import { createEnumNeedleCallback } from '../../../java/support/java-enum.ts';
 import { injectJavaConstructorParam, injectJavaConstructorSetter, injectJavaField } from '../../../java/support/java-file-edit.ts';
 import type { Application as JavascriptApplication } from '../../../javascript-simple-application/types.ts';
 import { mutateApplication } from '../../application.ts';
 import { JavaSimpleApplicationGenerator } from '../../generator.ts';
+import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.ts';
 import { getPomVersionProperties } from '../maven/support/dependabot-maven.ts';
 
 export default class BootstrapGenerator extends JavaSimpleApplicationGenerator {
