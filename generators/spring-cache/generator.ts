@@ -19,6 +19,7 @@
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { createNeedleCallback } from '../base-core/support/needles.ts';
 import type { Source as CommonSource } from '../common/types.ts';
+import { GRADLE_BUILD_SRC_MAIN_DIR } from '../generator-constants.ts';
 
 import cleanupTask from './cleanup.ts';
 import writeTask from './files.ts';
@@ -115,6 +116,11 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<
 
   get writing() {
     return this.asWritingTaskGroup({
+      async cleanup({ control }) {
+        await control.cleanupFiles({
+          '9.0.0-alpha.0': [`${GRADLE_BUILD_SRC_MAIN_DIR}/jhipster.spring-cache-conventions.gradle`],
+        });
+      },
       cleanupTask,
       writeTask,
     });
@@ -161,7 +167,6 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<
               });
             }
           }
-          source.addGradlePlugin?.({ id: 'jhipster.spring-cache-conventions' });
         }
       },
       addDependencies({ application, source }) {
@@ -172,7 +177,6 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<
 
         const definition = getCacheProviderMavenDefinition(cacheProvider!, javaDependencies);
         source.addJavaDefinitions?.(
-          { gradleFile: 'buildSrc/src/main/groovy/jhipster.spring-cache-conventions.gradle' },
           {
             ...definition.base,
             dependencies: [

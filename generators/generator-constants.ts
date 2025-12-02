@@ -49,7 +49,7 @@ export const MAIN_DIR = 'src/main/';
 export const TEST_DIR = 'src/test/';
 
 export const GRADLE_BUILD_SRC_DIR = 'buildSrc/';
-export const GRADLE_BUILD_SRC_MAIN_DIR = `${GRADLE_BUILD_SRC_DIR}/src/main/groovy/`;
+export const GRADLE_BUILD_SRC_MAIN_DIR = `${GRADLE_BUILD_SRC_DIR}src/main/groovy/`;
 
 // Note: this will be prepended with 'target/classes' for Maven, or with 'build/resources/main' for Gradle.
 export const CLIENT_DIST_DIR = 'static/';
