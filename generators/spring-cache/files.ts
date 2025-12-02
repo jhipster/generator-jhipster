@@ -17,15 +17,11 @@
  * limitations under the License.
  */
 import { asWriteFilesSection, asWritingTask } from '../base-application/support/task-type-inference.ts';
-import { GRADLE_BUILD_SRC_MAIN_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.ts';
+import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.ts';
 import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../java/support/index.ts';
 
 const files = asWriteFilesSection({
   cacheFiles: [
-    {
-      condition: data => data.buildToolGradle,
-      templates: [`${GRADLE_BUILD_SRC_MAIN_DIR}/jhipster.spring-cache-conventions.gradle`],
-    },
     {
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
