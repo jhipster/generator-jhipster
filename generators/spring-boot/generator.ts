@@ -754,6 +754,24 @@ ${classProperties
               releasesEnabled: false,
             });
           }
+        } else if (application.buildToolGradle) {
+          source.addGradleRepository?.({
+            repository: `// Local maven repository is required for libraries built locally with maven like development jhipster-bom.
+${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenLocal()`,
+          });
+          if (application.addSpringMilestoneRepository) {
+            source.addGradleMavenRepository?.({ url: 'https://repo.spring.io/milestone' });
+          }
+          if (application.jhipsterDependenciesVersion?.endsWith('-SNAPSHOT')) {
+            source.addGradleRepository?.({
+              repository: `maven {
+    url "https://oss.sonatype.org/content/repositories/snapshots/"
+    mavenContent {
+        snapshotsOnly()
+    }
+}`,
+            });
+          }
         }
       },
       addSpringBootPlugin({ application, source }) {

@@ -25,7 +25,9 @@ export type GradlePlugin = { id: string; version?: string };
 
 export type GradleProperty = { property: string; value?: string };
 
-export type GradleRepository = { url: string; username?: string; password?: string };
+export type GradleRepository = { repository: string };
+
+export type GradleMavenRepository = { url: string; username?: string; password?: string };
 
 export type GradleTomlVersion = { name: string; version?: string };
 
@@ -53,7 +55,8 @@ export type Source = BaseApplicationSource & {
   addGradlePlugin?(plugin: GradlePlugin): void;
   addGradlePluginManagement?(pluginManagement: GradlePlugin): void;
   addGradleProperty?(property: GradleProperty & GradleComment): void;
-  addGradleMavenRepository?(repository: GradleRepository): void;
+  addGradleRepository?(repository: GradleRepository): void;
+  addGradleMavenRepository?(repository: GradleMavenRepository): void;
   addGradleBuildSrcDependency?(dependency: GradleDependency): void;
 
   addGradleDependencyCatalogVersion?(catalogVersion: GradleTomlVersion, options?: GradleCatalogNeedleOptions): void;
