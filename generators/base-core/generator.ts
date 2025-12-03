@@ -63,7 +63,7 @@ import type {
 import { convertWriteFileSectionsToBlocks, loadConfig, loadConfigDefaults, loadDerivedConfig } from './internal/index.ts';
 import { createJHipster7Context } from './internal/jhipster7-context.ts';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.ts';
-import { joinCallbacks } from './support/index.ts';
+import { type NeedleInsertion, createNeedleCallback, joinCallbacks } from './support/index.ts';
 import type { Config as CoreConfig, Features as CoreFeatures, GenericTask, Options as CoreOptions } from './types.ts';
 
 const {
@@ -1096,11 +1096,15 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * editFile('foo.txt')(content => content + 'foo.txt content');
    */
   editFile(file: string, ...transformCallbacks: EditFileCallback<this>[]): CascatedEditFileCallback<this>;
-  editFile(file: string, options: EditFileOptions, ...transformCallbacks: EditFileCallback<this>[]): CascatedEditFileCallback<this>;
+  editFile(
+    file: string,
+    options: EditFileOptions | NeedleInsertion,
+    ...transformCallbacks: EditFileCallback<this>[]
+  ): CascatedEditFileCallback<this>;
 
   editFile(
     file: string,
-    options?: EditFileOptions | EditFileCallback<this>,
+    options?: EditFileOptions | EditFileCallback<this> | NeedleInsertion,
     ...transformCallbacks: EditFileCallback<this>[]
   ): CascatedEditFileCallback<this> {
     let actualOptions: EditFileOptions;
@@ -1108,6 +1112,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       transformCallbacks = [options, ...transformCallbacks];
       actualOptions = {};
     } else if (options === undefined) {
+      actualOptions = {};
+    } else if ('needle' in options && 'contentToAdd' in options) {
+      transformCallbacks = [createNeedleCallback(options), ...transformCallbacks];
       actualOptions = {};
     } else {
       actualOptions = options;

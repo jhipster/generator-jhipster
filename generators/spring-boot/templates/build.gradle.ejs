@@ -163,75 +163,7 @@ tasks.withType(com.gorylenko.GenerateGitPropertiesTask).configureEach {
 }
 
 dependencies {
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
-    testImplementation("com.tngtech.archunit:archunit-junit5-api:${archunitJunit5Version}") {
-        exclude group: "org.slf4j", module: "slf4j-api"
-    }
-    testRuntimeOnly("com.tngtech.archunit:archunit-junit5-engine:${archunitJunit5Version}") {
-        exclude group: "org.slf4j", module: "slf4j-api"
-    }
-    implementation "io.micrometer:micrometer-registry-prometheus-simpleclient"
-<%_ if (reactive) { _%>
-    runtimeOnly "io.netty:netty-tcnative-boringssl-static"
-<%_ } _%>
-<%_ if (reactive) { _%>
-    testImplementation "io.projectreactor.tools:blockhound-junit-platform:${blockhoundJunitPlatformVersion}"
-<%_ } _%>
-    implementation "org.apache.commons:commons-lang3"
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
-    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
-<%_ /* This is useful for major Spring Boot migration */
-if (addSpringMilestoneRepository) { _%>
-    runtimeOnly "org.springframework.boot:spring-boot-properties-migrator"
-<%_ } _%>
-<%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
-    implementation "org.springframework.cloud:spring-cloud-starter"
-<%_ } _%>
-<%_ if (serviceDiscoveryAny) { _%>
-    implementation "org.springframework.cloud:spring-cloud-starter-bootstrap"
-<%_ } _%>
-<%_ if ((applicationTypeMicroservice || applicationTypeGateway) && reactive) { _%>
-    implementation "org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j"
-<%_ } _%>
-<%_ if ((applicationTypeMicroservice || applicationTypeGateway) && !reactive) { _%>
-    implementation "org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j"
-<%_ } _%>
-<%_ if (serviceDiscoveryAny && serviceDiscoveryEureka) { _%>
-    implementation "org.springframework.cloud:spring-cloud-starter-config"
-<%_ } _%>
-<%_ if (applicationTypeGateway && !reactive) { _%>
-    implementation "org.springframework.cloud:spring-cloud-starter-loadbalancer"
-<%_ } _%>
-<%_ if (serviceDiscoveryAny && serviceDiscoveryConsul) { _%>
-    implementation "org.springframework.cloud:spring-cloud-starter-consul-config"
-<%_ } _%>
-<%_ if (serviceDiscoveryAny && serviceDiscoveryConsul) { _%>
-    implementation "org.springframework.cloud:spring-cloud-starter-consul-discovery"
-<%_ } _%>
-<%_ if (serviceDiscoveryAny && serviceDiscoveryEureka) { _%>
-    implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
-<%_ } _%>
-<%_ if (reactive) { _%>
-    implementation "org.springframework.data:spring-data-commons"
-<%_ } _%>
-<%_ if (applicationTypeMicroservice || applicationTypeGateway) { _%>
-    implementation "org.springframework.retry:spring-retry"
-<%_ } _%>
-    testImplementation "org.springframework.security:spring-security-test"
     // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
-<%_ if (reactive) { _%>
-    OperatingSystem os = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentOperatingSystem();
-    Architecture arch = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentArchitecture();
-    if (os.isMacOsX() && !arch.isAmd64()) {
-        implementation("io.netty:netty-resolver-dns-native-macos") {
-            artifact {
-                classifier = "osx-aarch_64"
-            }
-        }
-    }
-<%_ } _%>
 }
 
 task cleanResources(type: Delete) {

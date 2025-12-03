@@ -19,9 +19,9 @@ export const javaScopeToGradleScope = (artifactType: JavaArtifactType): string =
       case 'test':
         return 'testImplementation';
       case 'system':
-        return 'system';
       case 'annotationProcessor':
-        return 'annotationProcessor';
+      case 'testRuntimeOnly':
+        return scope;
       default:
         throw new Error(`Unsupported scope for JAR artifact: ${scope}`);
     }

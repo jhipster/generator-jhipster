@@ -48,7 +48,7 @@ export type JavaDependencyVersion = {
 
 export type JavaArtifactType = {
   type?: 'jar' | 'pom';
-  scope?: 'compile' | 'provided' | 'runtime' | 'test' | 'system' | 'import' | 'annotationProcessor';
+  scope?: 'compile' | 'provided' | 'runtime' | 'test' | 'system' | 'import' | 'annotationProcessor' | 'testRuntimeOnly';
 };
 
 export type JavaArtifact = {
