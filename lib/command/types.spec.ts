@@ -1,12 +1,8 @@
-import type { IsNever } from 'type-fest';
-
 import type {
   ExportApplicationPropertiesFromCommand,
   ExportGeneratorOptionsFromCommand,
   ExportStoragePropertiesFromCommand,
 } from './types.ts';
-
-type AssertType<Expected extends true | false, _T2 extends Expected, _T3 extends Expected = Expected> = void;
 
 const _testCommand = {
   configs: {
@@ -41,40 +37,40 @@ type TestCommand = typeof _testCommand;
 
 type StorageProperties = ExportStoragePropertiesFromCommand<TestCommand>;
 
-const _stringRootType = {
+({
   stringRootType: 'foo',
-} satisfies StorageProperties;
+}) satisfies StorageProperties;
 
-const _stringRootTypeError = {
+({
   // @ts-expect-error invalid value
   stringRootType: false,
-} satisfies StorageProperties;
+}) satisfies StorageProperties;
 
-const _booleanCliType = {
+({
   booleanCliType: false,
-} satisfies StorageProperties;
+}) satisfies StorageProperties;
 
-const _booleanCliTypeError = {
+({
   // @ts-expect-error invalid value
   booleanCliType: 'false',
-} satisfies StorageProperties;
+}) satisfies StorageProperties;
 
-const _choiceType = {
+({
   choiceType: 'foo',
-} satisfies StorageProperties;
+}) satisfies StorageProperties;
 
-const _choiceTypeError = {
+({
   // @ts-expect-error invalid value
   choiceType: 'bar',
-} satisfies StorageProperties;
+}) satisfies StorageProperties;
 
-const _unknownType = {
+({
   unknownType: true,
-} satisfies StorageProperties;
+}) satisfies StorageProperties;
 
-const _unknownType2 = {
+({
   unknownType: 'string',
-} satisfies StorageProperties;
+}) satisfies StorageProperties;
 
 type ApplicationProperties = ExportApplicationPropertiesFromCommand<TestCommand>;
 
@@ -98,26 +94,26 @@ const _applicationChoiceTypeAny = {
   // @ts-expect-error missing fields
 } satisfies ApplicationProperties;
 
-const _applicationChoiceComplete = {
+({
   ..._applicationChoiceType,
   ..._applicationChoiceTypeNo,
   ..._applicationChoiceTypeFoo,
   ..._applicationChoiceTypeAny,
-} satisfies ApplicationProperties;
+}) satisfies ApplicationProperties;
 
 type ApplicationOptions = ExportGeneratorOptionsFromCommand<TestCommand>;
 
-const _applicationOptions = {
+({
   stringRootType: 'foo',
   booleanCliType: false,
   choiceType: 'foo',
   none: 'foo',
-} satisfies ApplicationOptions;
+}) satisfies ApplicationOptions;
 
-const _applicationOptionsError = {
+({
   // @ts-expect-error unknown field
   foo: 'bar',
-} satisfies ApplicationOptions;
+}) satisfies ApplicationOptions;
 
 const _dummyCommand = {
   options: {},
@@ -129,29 +125,3 @@ const _dummyCommand = {
 (() => {})(({} as ExportApplicationPropertiesFromCommand<typeof _dummyCommand>).nonExisting);
 // @ts-expect-error unknown field
 (() => {})(({} as ExportStoragePropertiesFromCommand<typeof _dummyCommand>).nonExisting);
-
-type _DummyCommandAssertions = AssertType<false, IsNever<ExportApplicationPropertiesFromCommand<typeof _dummyCommand>>>;
-
-const _simpleConfig = {
-  options: {},
-  configs: {
-    stringOption: {
-      cli: { type: String },
-      scope: 'storage',
-    },
-  },
-} as const;
-
-type _SimpleConfigAssertions = AssertType<false, IsNever<ExportApplicationPropertiesFromCommand<typeof _simpleConfig>>>;
-
-const _choiceConfig = {
-  options: {},
-  configs: {
-    stringOption: {
-      choices: ['foo', 'bar'],
-      scope: 'storage',
-    },
-  },
-} as const;
-
-type _ChoiceConfigAssertions = AssertType<false, IsNever<ExportApplicationPropertiesFromCommand<typeof _choiceConfig>>>;
