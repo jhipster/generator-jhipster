@@ -776,7 +776,14 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
       },
       addSpringBootPlugin({ application, source }) {
         if (application.buildToolGradle) {
+          source.applyFromGradle!({ script: 'gradle/spring-boot.gradle' });
           source.addGradleDependencyCatalogPlugins?.([
+            {
+              pluginName: 'gradle-git-properties',
+              id: 'com.gorylenko.gradle-git-properties',
+              version: application.javaDependencies!['gradle-git-properties'],
+              addToBuild: true,
+            },
             {
               pluginName: 'spring-boot',
               id: 'org.springframework.boot',

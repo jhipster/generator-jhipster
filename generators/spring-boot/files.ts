@@ -168,11 +168,11 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
     {
       condition: generator => generator.buildToolGradle,
       templates: [
-        'build.gradle',
         'settings.gradle',
         'gradle.properties',
         'gradle/profile_dev.gradle',
         'gradle/profile_prod.gradle',
+        'gradle/spring-boot.gradle',
         'gradle/war.gradle',
         'gradle/zipkin.gradle',
       ],

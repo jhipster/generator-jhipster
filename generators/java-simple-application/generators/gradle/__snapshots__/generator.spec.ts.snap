@@ -5,6 +5,9 @@ exports[`generator - java-simple-application:gradle with empty configuration sho
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "build.gradle": {
+    "stateCleared": "modified",
+  },
   "buildSrc/build.gradle": {
     "stateCleared": "modified",
   },
@@ -32,6 +35,9 @@ exports[`generator - java-simple-application:gradle with empty configuration sho
 exports[`generator - java-simple-application:gradle with valid configuration should generate only gradle files 1`] = `
 {
   ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "build.gradle": {
     "stateCleared": "modified",
   },
   "buildSrc/build.gradle": {

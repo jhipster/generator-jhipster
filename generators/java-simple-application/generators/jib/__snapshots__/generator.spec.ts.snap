@@ -121,6 +121,9 @@ exports[`generator - java-simple-application:jib with gradle buildTool should ma
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "build.gradle": {
+    "stateCleared": "modified",
+  },
   "buildSrc/build.gradle": {
     "stateCleared": "modified",
   },
