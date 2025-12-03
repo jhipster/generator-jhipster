@@ -21,6 +21,7 @@ import assert from 'node:assert/strict';
 
 import { mutateData } from '../../../../lib/utils/index.ts';
 import { QUEUES } from '../../../base-core/priorities.ts';
+import { createNeedleCallback } from '../../../base-core/support/needles.ts';
 import BaseSimpleApplicationGenerator from '../../../base-simple-application/index.ts';
 import { GRADLE_BUILD_SRC_DIR } from '../../../generator-constants.ts';
 
@@ -135,6 +136,8 @@ export default class GradleGenerator extends BaseSimpleApplicationGenerator<Grad
         };
         source.addGradleDependency = (dependency, options) => source.addGradleDependencies!([dependency], options);
         source.addGradlePlugin = plugin => this.editFile('build.gradle', addGradlePluginCallback(plugin));
+        source.addGradleRepository = repository =>
+          this.editFile('build.gradle', createNeedleCallback({ needle: 'gradle-repositories', contentToAdd: repository.repository }));
         source.addGradleMavenRepository = repository => this.editFile('build.gradle', addGradleMavenRepositoryCallback(repository));
         source.addGradlePluginManagement = plugin => this.editFile('settings.gradle', addGradlePluginManagementCallback(plugin));
         source.addGradleProperty = property => {

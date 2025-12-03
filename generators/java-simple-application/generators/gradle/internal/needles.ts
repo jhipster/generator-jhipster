@@ -21,10 +21,10 @@ import type {
   GradleComment,
   GradleDependency,
   GradleLibraryDependency,
+  GradleMavenRepository,
   GradleNeedleOptions,
   GradlePlugin,
   GradleProperty,
-  GradleRepository,
   GradleScript,
   GradleTomlPlugin,
   GradleTomlVersion,
@@ -164,7 +164,7 @@ export const addGradlePropertyCallback = ({ comment, property, value }: GradlePr
     autoIndent: false,
   });
 
-export const addGradleMavenRepositoryCallback = ({ url, username, password }: GradleRepository) =>
+export const addGradleMavenRepositoryCallback = ({ url, username, password }: GradleMavenRepository) =>
   createNeedleCallback({
     needle: 'gradle-repositories',
     // prettier-ignore
