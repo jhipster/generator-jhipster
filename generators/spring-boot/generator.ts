@@ -848,6 +848,115 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
           comment: `Rule https://rules.sonarsource.com/java/RSPEC-6437 is ignored, hardcoded passwords are provided for development purposes`,
         });
       },
+      dependencies({ application, source }) {
+        if (!application.buildToolGradle) return;
+        source.addJavaDefinitions!(
+          {
+            versions: [
+              { name: 'mapstruct', version: application.javaDependencies.mapstruct },
+              { name: 'archunit-junit5', version: application.javaDependencies['archunit-junit5'] },
+            ],
+            dependencies: [
+              { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-hppc' },
+              { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-jsr310' },
+              { groupId: 'io.micrometer', artifactId: 'micrometer-registry-prometheus-simpleclient' },
+              { groupId: 'org.apache.commons', artifactId: 'commons-lang3' },
+              { groupId: 'org.junit.platform', artifactId: 'junit-platform-launcher', scope: 'testRuntimeOnly' },
+              { groupId: 'org.mapstruct', artifactId: 'mapstruct', versionRef: 'mapstruct' },
+              { groupId: 'org.mapstruct', artifactId: 'mapstruct-processor', versionRef: 'mapstruct', scope: 'annotationProcessor' },
+              { groupId: 'org.springframework.security', artifactId: 'spring-security-test' },
+              {
+                scope: 'test',
+                groupId: 'com.tngtech.archunit',
+                artifactId: 'archunit-junit5-api',
+                versionRef: 'archunit-junit5',
+                exclusions: [{ groupId: 'org.slf4j', artifactId: 'slf4j-api' }],
+              },
+              {
+                scope: 'testRuntimeOnly',
+                groupId: 'com.tngtech.archunit',
+                artifactId: 'archunit-junit5-engine',
+                versionRef: 'archunit-junit5',
+                exclusions: [{ groupId: 'org.slf4j', artifactId: 'slf4j-api' }],
+              },
+            ],
+          },
+          {
+            condition: application.reactive,
+            versions: [{ name: 'blockhound-junit-platform', version: application.javaDependencies['blockhound-junit-platform'] }],
+            dependencies: [
+              { groupId: 'io.netty', artifactId: 'netty-tcnative-boringssl-static', scope: 'runtime' },
+              {
+                groupId: 'io.projectreactor.tools',
+                artifactId: 'blockhound-junit-platform',
+                versionRef: 'blockhound-junit-platform',
+              },
+            ],
+          },
+          {
+            condition: application.addSpringMilestoneRepository,
+            dependencies: [{ groupId: 'org.springframework.boot', artifactId: 'spring-boot-properties-migrator', scope: 'runtime' }],
+          },
+          {
+            condition: application.applicationTypeMicroservice || application.applicationTypeGateway,
+            dependencies: [{ groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter' }],
+          },
+          {
+            condition: application.serviceDiscoveryAny,
+            dependencies: [{ groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-bootstrap' }],
+          },
+          {
+            condition: application.applicationTypeMicroservice || application.applicationTypeGateway,
+            dependencies: [
+              {
+                groupId: 'org.springframework.cloud',
+                artifactId: `spring-cloud-starter-circuitbreaker-${application.reactive ? 'reactor-' : ''}resilience4j`,
+              },
+            ],
+          },
+          {
+            condition: application.serviceDiscoveryEureka,
+            dependencies: [{ groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-config' }],
+          },
+          {
+            condition: application.reactive,
+            dependencies: [{ groupId: 'org.springframework.data', artifactId: 'spring-data-commons' }],
+          },
+          {
+            condition: application.applicationTypeMicroservice || application.applicationTypeGateway,
+            dependencies: [{ groupId: 'org.springframework.retry', artifactId: 'spring-retry' }],
+          },
+          {
+            condition: application.applicationTypeGateway && !application.reactive,
+            dependencies: [{ groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-loadbalancer' }],
+          },
+          {
+            condition: application.serviceDiscoveryConsul,
+            dependencies: [
+              { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-consul-config' },
+              { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-consul-discovery' },
+            ],
+          },
+          {
+            condition: application.serviceDiscoveryEureka,
+            dependencies: [{ groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-netflix-eureka-client' }],
+          },
+        );
+        if (application.reactive) {
+          this.editFile('build.gradle', {
+            needle: 'gradle-dependency',
+            contentToAdd: `OperatingSystem os = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentOperatingSystem();
+Architecture arch = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentArchitecture();
+if (os.isMacOsX() && !arch.isAmd64()) {
+    implementation("io.netty:netty-resolver-dns-native-macos") {
+        artifact {
+            classifier = "osx-aarch_64"
+        }
+    }
+}`,
+          });
+        }
+      },
     });
   }
 

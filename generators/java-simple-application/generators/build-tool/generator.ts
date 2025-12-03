@@ -90,6 +90,10 @@ export default class BuildToolGenerator extends JavaApplicationGenerator {
             const properties = dependencies
               .filter(dep => dep.version)
               .map(({ artifactId, version }) => ({ property: `${artifactId}.version`, value: version }));
+            dependencies = dependencies.map(({ scope, ...artifact }) => ({
+              scope: scope === 'testRuntimeOnly' ? 'test' : scope,
+              ...artifact,
+            }));
             const annotationProcessors = dependencies
               .filter(dep => dep.scope === 'annotationProcessor')
               .map(removeScope)

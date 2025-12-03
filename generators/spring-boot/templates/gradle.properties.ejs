@@ -19,13 +19,6 @@
 rootProject.name=<%= dasherizedBaseName %>
 profile=dev
 
-# Dependency versions
-mapstructVersion=<%- javaDependencies.mapstruct %>
-archunitJunit5Version=<%- javaDependencies['archunit-junit5'] %>
-<%_ if (reactive) { _%>
-blockhoundJunitPlatformVersion=<%- javaDependencies['blockhound-junit-platform'] %>
-<%_ } _%>
-
 # gradle plugin version
 gitPropertiesPluginVersion=<%- javaDependencies['gradle-git-properties'] %>
 <%_ if (enableGradleDevelocity) { _%>
