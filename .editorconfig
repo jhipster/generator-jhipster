@@ -14,6 +14,3 @@ trim_trailing_whitespace = false
 
 [{*.{java,java.ejs,xml.ejs,gradle.ejs,sh,sh.ejs,n1ql.ejs,cql.ejs,scala.ejs},USAGE}]
 indent_size = 4
-
-[generators/entity-server/templates/**/*_template.ejs]
-indent_size = 4
