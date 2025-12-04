@@ -882,10 +882,19 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
           },
           {
             condition: application.reactive,
-            versions: [{ name: 'blockhound-junit-platform', version: application.javaDependencies['blockhound-junit-platform'] }],
+            versions: [
+              { name: 'blockhound-junit-platform', version: application.javaDependencies['blockhound-junit-platform'] },
+              { name: 'micrometer-context-propagation', version: application.javaDependencies['micrometer-context-propagation'] },
+            ],
             dependencies: [
               { groupId: 'io.netty', artifactId: 'netty-tcnative-boringssl-static', scope: 'runtime' },
-              { groupId: 'io.projectreactor.tools', artifactId: 'blockhound-junit-platform', versionRef: 'blockhound-junit-platform' },
+              { groupId: 'io.micrometer', artifactId: 'context-propagation', versionRef: 'micrometer-context-propagation' },
+              {
+                groupId: 'io.projectreactor.tools',
+                artifactId: 'blockhound-junit-platform',
+                versionRef: 'blockhound-junit-platform',
+                scope: 'testRuntimeOnly',
+              },
               { groupId: 'org.springframework.data', artifactId: 'spring-data-commons' },
             ],
           },

@@ -60,12 +60,6 @@
         <profile.e2e />
         <profile.test />
 
-<%_ if (reactive) { _%>
-        <blockhound-junit-platform.version><%- javaDependencies['blockhound-junit-platform'] %></blockhound-junit-platform.version>
-        <micrometer-context-propagation.version><%- javaDependencies['micrometer-context-propagation'] %></micrometer-context-propagation.version>
-<%_ } _%>
-        <archunit-junit5.version><%- javaDependencies['archunit-junit5'] %></archunit-junit5.version>
-        <mapstruct.version><%- javaDependencies.mapstruct %></mapstruct.version>
         <git-commit-id-maven-plugin.version><%- javaDependencies['git-commit-id-maven-plugin'] %></git-commit-id-maven-plugin.version>
         <lifecycle-mapping.version><%- javaDependencies['lifecycle-mapping'] %></lifecycle-mapping.version>
         <maven-clean-plugin.version><%- javaDependencies['maven-clean-plugin'] %></maven-clean-plugin.version>
