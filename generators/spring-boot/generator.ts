@@ -849,7 +849,6 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
         });
       },
       dependencies({ application, source }) {
-        if (!application.buildToolGradle) return;
         source.addJavaDefinitions!(
           {
             versions: [
@@ -864,7 +863,7 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
               { groupId: 'org.junit.platform', artifactId: 'junit-platform-launcher', scope: 'testRuntimeOnly' },
               { groupId: 'org.mapstruct', artifactId: 'mapstruct', versionRef: 'mapstruct' },
               { groupId: 'org.mapstruct', artifactId: 'mapstruct-processor', versionRef: 'mapstruct', scope: 'annotationProcessor' },
-              { groupId: 'org.springframework.security', artifactId: 'spring-security-test' },
+              { groupId: 'org.springframework.security', artifactId: 'spring-security-test', scope: 'test' },
               {
                 scope: 'test',
                 groupId: 'com.tngtech.archunit',
@@ -942,7 +941,8 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
             dependencies: [{ groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-netflix-eureka-client' }],
           },
         );
-        if (application.reactive) {
+
+        if (application.buildToolGradle && application.reactive) {
           this.editFile('build.gradle', {
             needle: 'gradle-dependency',
             contentToAdd: `OperatingSystem os = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentOperatingSystem();
@@ -954,6 +954,11 @@ if (os.isMacOsX() && !arch.isAmd64()) {
         }
     }
 }`,
+          });
+        } else if (application.buildToolMaven) {
+          source.addJavaDefinitions!({
+            condition: application.reactive,
+            dependencies: [{ groupId: 'io.netty', artifactId: 'netty-resolver-dns-native-macos', classifier: 'osx-aarch_64' }],
           });
         }
       },
