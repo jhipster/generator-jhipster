@@ -2,11 +2,24 @@
 
 exports[`generator - spring-cloud:gateway with defaults options should call source snapshot 1`] = `
 {
-  "addJavaDependencies": [
+  "addJavaDefinitions": [
     [
       {
-        "artifactId": "spring-cloud-starter-gateway-server-webflux",
-        "groupId": "org.springframework.cloud",
+        "dependencies": [
+          {
+            "artifactId": "spring-cloud-starter-gateway-server-webflux",
+            "groupId": "org.springframework.cloud",
+          },
+        ],
+      },
+      {
+        "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "spring-cloud-starter-loadbalancer",
+            "groupId": "org.springframework.cloud",
+          },
+        ],
       },
     ],
   ],
@@ -26,11 +39,24 @@ exports[`generator - spring-cloud:gateway with defaults options should match fil
 
 exports[`generator - spring-cloud:gateway with imperative option should call source snapshot 1`] = `
 {
-  "addJavaDependencies": [
+  "addJavaDefinitions": [
     [
       {
-        "artifactId": "spring-cloud-starter-gateway-server-webmvc",
-        "groupId": "org.springframework.cloud",
+        "dependencies": [
+          {
+            "artifactId": "spring-cloud-starter-gateway-server-webmvc",
+            "groupId": "org.springframework.cloud",
+          },
+        ],
+      },
+      {
+        "condition": true,
+        "dependencies": [
+          {
+            "artifactId": "spring-cloud-starter-loadbalancer",
+            "groupId": "org.springframework.cloud",
+          },
+        ],
       },
     ],
   ],
@@ -53,11 +79,24 @@ exports[`generator - spring-cloud:gateway with imperative option should match fi
 
 exports[`generator - spring-cloud:gateway with serviceDiscovery option should call source snapshot 1`] = `
 {
-  "addJavaDependencies": [
+  "addJavaDefinitions": [
     [
       {
-        "artifactId": "spring-cloud-starter-gateway-server-webflux",
-        "groupId": "org.springframework.cloud",
+        "dependencies": [
+          {
+            "artifactId": "spring-cloud-starter-gateway-server-webflux",
+            "groupId": "org.springframework.cloud",
+          },
+        ],
+      },
+      {
+        "condition": false,
+        "dependencies": [
+          {
+            "artifactId": "spring-cloud-starter-loadbalancer",
+            "groupId": "org.springframework.cloud",
+          },
+        ],
       },
     ],
   ],

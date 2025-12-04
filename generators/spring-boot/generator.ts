@@ -856,7 +856,6 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
         });
       },
       dependencies({ application, source }) {
-        if (!application.buildToolGradle) return;
         source.addJavaDefinitions!(
           {
             versions: [
@@ -868,10 +867,9 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
               { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-jsr310' },
               { groupId: 'io.micrometer', artifactId: 'micrometer-registry-prometheus-simpleclient' },
               { groupId: 'org.apache.commons', artifactId: 'commons-lang3' },
-              { groupId: 'org.junit.platform', artifactId: 'junit-platform-launcher', scope: 'testRuntimeOnly' },
               { groupId: 'org.mapstruct', artifactId: 'mapstruct', versionRef: 'mapstruct' },
               { groupId: 'org.mapstruct', artifactId: 'mapstruct-processor', versionRef: 'mapstruct', scope: 'annotationProcessor' },
-              { groupId: 'org.springframework.security', artifactId: 'spring-security-test' },
+              { groupId: 'org.springframework.security', artifactId: 'spring-security-test', scope: 'test' },
               {
                 scope: 'test',
                 groupId: 'com.tngtech.archunit',
@@ -890,14 +888,20 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
           },
           {
             condition: application.reactive,
-            versions: [{ name: 'blockhound-junit-platform', version: application.javaDependencies['blockhound-junit-platform'] }],
+            versions: [
+              { name: 'blockhound-junit-platform', version: application.javaDependencies['blockhound-junit-platform'] },
+              { name: 'micrometer-context-propagation', version: application.javaDependencies['micrometer-context-propagation'] },
+            ],
             dependencies: [
               { groupId: 'io.netty', artifactId: 'netty-tcnative-boringssl-static', scope: 'runtime' },
+              { groupId: 'io.micrometer', artifactId: 'context-propagation', versionRef: 'micrometer-context-propagation' },
               {
                 groupId: 'io.projectreactor.tools',
                 artifactId: 'blockhound-junit-platform',
                 versionRef: 'blockhound-junit-platform',
+                scope: 'test',
               },
+              { groupId: 'org.springframework.data', artifactId: 'spring-data-commons' },
             ],
           },
           {
@@ -906,15 +910,8 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
           },
           {
             condition: application.applicationTypeMicroservice || application.applicationTypeGateway,
-            dependencies: [{ groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter' }],
-          },
-          {
-            condition: application.serviceDiscoveryAny,
-            dependencies: [{ groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-bootstrap' }],
-          },
-          {
-            condition: application.applicationTypeMicroservice || application.applicationTypeGateway,
             dependencies: [
+              { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter' },
               {
                 groupId: 'org.springframework.cloud',
                 artifactId: `spring-cloud-starter-circuitbreaker-${application.reactive ? 'reactor-' : ''}resilience4j`,
@@ -922,20 +919,15 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
             ],
           },
           {
+            condition: application.serviceDiscoveryAny,
+            dependencies: [{ groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-bootstrap' }],
+          },
+          {
             condition: application.serviceDiscoveryEureka,
-            dependencies: [{ groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-config' }],
-          },
-          {
-            condition: application.reactive,
-            dependencies: [{ groupId: 'org.springframework.data', artifactId: 'spring-data-commons' }],
-          },
-          {
-            condition: application.applicationTypeMicroservice || application.applicationTypeGateway,
-            dependencies: [{ groupId: 'org.springframework.retry', artifactId: 'spring-retry' }],
-          },
-          {
-            condition: application.applicationTypeGateway && !application.reactive,
-            dependencies: [{ groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-loadbalancer' }],
+            dependencies: [
+              { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-config' },
+              { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-netflix-eureka-client' },
+            ],
           },
           {
             condition: application.serviceDiscoveryConsul,
@@ -944,12 +936,9 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
               { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-consul-discovery' },
             ],
           },
-          {
-            condition: application.serviceDiscoveryEureka,
-            dependencies: [{ groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-netflix-eureka-client' }],
-          },
         );
-        if (application.reactive) {
+
+        if (application.buildToolGradle && application.reactive) {
           this.editFile('build.gradle', {
             needle: 'gradle-dependency',
             contentToAdd: `OperatingSystem os = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentOperatingSystem();
@@ -961,6 +950,11 @@ if (os.isMacOsX() && !arch.isAmd64()) {
         }
     }
 }`,
+          });
+        } else if (application.buildToolMaven) {
+          source.addJavaDefinitions!({
+            condition: application.reactive,
+            dependencies: [{ groupId: 'io.netty', artifactId: 'netty-resolver-dns-native-macos', classifier: 'osx-aarch_64' }],
           });
         }
       },
