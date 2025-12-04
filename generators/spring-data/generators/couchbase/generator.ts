@@ -74,6 +74,17 @@ export default class CouchbaseGenerator extends SpringBootApplicationGenerator {
           { scope: 'test', groupId: 'org.testcontainers', artifactId: 'couchbase' },
         ]);
       },
+      couchmoveSetup({ application }) {
+        if (application.buildToolGradle) {
+          this.editFile('build.gradle', {
+            needle: '',
+            contentToAdd: `
+bootJar {
+    loaderImplementation = org.springframework.boot.loader.tools.LoaderImplementation.CLASSIC
+}`,
+          });
+        }
+      },
     });
   }
 
