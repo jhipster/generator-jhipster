@@ -127,7 +127,7 @@ public class <%= serviceClassName %> extends QueryService<<%= persistClass %>> {
         if (criteria != null) {
             // This has to be called first, because the distinct method returns null
             specification = Specification.allOf(
-                Boolean.TRUE.equals(criteria.getDistinct()) ? distinct(criteria.getDistinct()) : null
+                Boolean.TRUE.equals(criteria.getDistinct()) ? distinct(criteria.getDistinct()) : Specification.unrestricted()
 <%_ for (const field of fields.filter(field => !field.transient && field.filterableField)) { _%>
                 ,
                 <%= field.fieldJavaBuildSpecification %>(criteria.get<%= field.fieldInJavaBeanMethod %>(), <%= persistClass %>_.<%= field.fieldName %>)
