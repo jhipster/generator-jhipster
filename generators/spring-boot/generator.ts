@@ -885,11 +885,8 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
             versions: [{ name: 'blockhound-junit-platform', version: application.javaDependencies['blockhound-junit-platform'] }],
             dependencies: [
               { groupId: 'io.netty', artifactId: 'netty-tcnative-boringssl-static', scope: 'runtime' },
-              {
-                groupId: 'io.projectreactor.tools',
-                artifactId: 'blockhound-junit-platform',
-                versionRef: 'blockhound-junit-platform',
-              },
+              { groupId: 'io.projectreactor.tools', artifactId: 'blockhound-junit-platform', versionRef: 'blockhound-junit-platform' },
+              { groupId: 'org.springframework.data', artifactId: 'spring-data-commons' },
             ],
           },
           {
@@ -898,15 +895,8 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
           },
           {
             condition: application.applicationTypeMicroservice || application.applicationTypeGateway,
-            dependencies: [{ groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter' }],
-          },
-          {
-            condition: application.serviceDiscoveryAny,
-            dependencies: [{ groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-bootstrap' }],
-          },
-          {
-            condition: application.applicationTypeMicroservice || application.applicationTypeGateway,
             dependencies: [
+              { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter' },
               {
                 groupId: 'org.springframework.cloud',
                 artifactId: `spring-cloud-starter-circuitbreaker-${application.reactive ? 'reactor-' : ''}resilience4j`,
@@ -914,20 +904,15 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
             ],
           },
           {
+            condition: application.serviceDiscoveryAny,
+            dependencies: [{ groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-bootstrap' }],
+          },
+          {
             condition: application.serviceDiscoveryEureka,
-            dependencies: [{ groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-config' }],
-          },
-          {
-            condition: application.reactive,
-            dependencies: [{ groupId: 'org.springframework.data', artifactId: 'spring-data-commons' }],
-          },
-          {
-            condition: application.applicationTypeMicroservice || application.applicationTypeGateway,
-            dependencies: [{ groupId: 'org.springframework.retry', artifactId: 'spring-retry' }],
-          },
-          {
-            condition: application.applicationTypeGateway && !application.reactive,
-            dependencies: [{ groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-loadbalancer' }],
+            dependencies: [
+              { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-config' },
+              { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-netflix-eureka-client' },
+            ],
           },
           {
             condition: application.serviceDiscoveryConsul,
@@ -935,10 +920,6 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
               { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-consul-config' },
               { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-consul-discovery' },
             ],
-          },
-          {
-            condition: application.serviceDiscoveryEureka,
-            dependencies: [{ groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-netflix-eureka-client' }],
           },
         );
 
