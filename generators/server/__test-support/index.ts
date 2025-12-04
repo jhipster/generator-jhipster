@@ -57,6 +57,14 @@ export const filterBasicServerGenerators = (ns: string) => {
   return (
     subGenerator !== 'bootstrap' &&
     !generator.startsWith('bootstrap') &&
-    ![`jhipster:project-name`, `jhipster:java`, `jhipster:java:domain`, `jhipster:server`, `jhipster:spring-boot`].includes(ns)
+    ![
+      `jhipster:project-name`,
+      `jhipster:java-simple-application:build-tool`,
+      `jhipster:java-simple-application:gradle`,
+      `jhipster:java`,
+      `jhipster:java:domain`,
+      `jhipster:server`,
+      `jhipster:spring-boot`,
+    ].includes(ns)
   );
 };

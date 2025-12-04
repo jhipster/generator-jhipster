@@ -460,7 +460,16 @@ exports[`generator - elasticsearch gateway-jwt-reactive(true)-gradle-enableTrans
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/build.gradle": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
   "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/libs.versions.toml": {
     "stateCleared": "modified",
   },
   "gradle/profile_dev.gradle": {
@@ -469,10 +478,25 @@ exports[`generator - elasticsearch gateway-jwt-reactive(true)-gradle-enableTrans
   "gradle/profile_prod.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/spring-boot.gradle": {
+    "stateCleared": "modified",
+  },
   "gradle/war.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/wrapper/gradle-wrapper.jar": {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": {
+    "stateCleared": "modified",
+  },
   "gradle/zipkin.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradlew": {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": {
     "stateCleared": "modified",
   },
   "settings.gradle": {
@@ -774,7 +798,16 @@ exports[`generator - elasticsearch gateway-oauth2-reactive(true)-gradle-enableTr
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/build.gradle": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
   "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/libs.versions.toml": {
     "stateCleared": "modified",
   },
   "gradle/profile_dev.gradle": {
@@ -783,10 +816,25 @@ exports[`generator - elasticsearch gateway-oauth2-reactive(true)-gradle-enableTr
   "gradle/profile_prod.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/spring-boot.gradle": {
+    "stateCleared": "modified",
+  },
   "gradle/war.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/wrapper/gradle-wrapper.jar": {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": {
+    "stateCleared": "modified",
+  },
   "gradle/zipkin.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradlew": {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": {
     "stateCleared": "modified",
   },
   "settings.gradle": {
@@ -1435,7 +1483,16 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/build.gradle": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
   "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/libs.versions.toml": {
     "stateCleared": "modified",
   },
   "gradle/profile_dev.gradle": {
@@ -1444,10 +1501,25 @@ exports[`generator - elasticsearch microservice-jwt-reactive(true)-gradle-enable
   "gradle/profile_prod.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/spring-boot.gradle": {
+    "stateCleared": "modified",
+  },
   "gradle/war.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/wrapper/gradle-wrapper.jar": {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": {
+    "stateCleared": "modified",
+  },
   "gradle/zipkin.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradlew": {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -1758,7 +1830,16 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(true)-gradle-ena
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/build.gradle": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
   "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/libs.versions.toml": {
     "stateCleared": "modified",
   },
   "gradle/profile_dev.gradle": {
@@ -1767,10 +1848,25 @@ exports[`generator - elasticsearch microservice-oauth2-reactive(true)-gradle-ena
   "gradle/profile_prod.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/spring-boot.gradle": {
+    "stateCleared": "modified",
+  },
   "gradle/war.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/wrapper/gradle-wrapper.jar": {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": {
+    "stateCleared": "modified",
+  },
   "gradle/zipkin.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradlew": {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -2494,7 +2590,16 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/build.gradle": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
   "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/libs.versions.toml": {
     "stateCleared": "modified",
   },
   "gradle/profile_dev.gradle": {
@@ -2503,10 +2608,25 @@ exports[`generator - elasticsearch monolith-jwt-reactive(true)-gradle-enableTran
   "gradle/profile_prod.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/spring-boot.gradle": {
+    "stateCleared": "modified",
+  },
   "gradle/war.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/wrapper/gradle-wrapper.jar": {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": {
+    "stateCleared": "modified",
+  },
   "gradle/zipkin.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradlew": {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": {
     "stateCleared": "modified",
   },
   "settings.gradle": {
@@ -3140,7 +3260,16 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/build.gradle": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
   "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/libs.versions.toml": {
     "stateCleared": "modified",
   },
   "gradle/profile_dev.gradle": {
@@ -3149,10 +3278,25 @@ exports[`generator - elasticsearch monolith-oauth2-reactive(true)-gradle-enableT
   "gradle/profile_prod.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/spring-boot.gradle": {
+    "stateCleared": "modified",
+  },
   "gradle/war.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/wrapper/gradle-wrapper.jar": {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": {
+    "stateCleared": "modified",
+  },
   "gradle/zipkin.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradlew": {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": {
     "stateCleared": "modified",
   },
   "settings.gradle": {
@@ -3930,7 +4074,16 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/build.gradle": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
   "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/libs.versions.toml": {
     "stateCleared": "modified",
   },
   "gradle/profile_dev.gradle": {
@@ -3939,10 +4092,25 @@ exports[`generator - elasticsearch monolith-session-reactive(true)-gradle-enable
   "gradle/profile_prod.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/spring-boot.gradle": {
+    "stateCleared": "modified",
+  },
   "gradle/war.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/wrapper/gradle-wrapper.jar": {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": {
+    "stateCleared": "modified",
+  },
   "gradle/zipkin.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradlew": {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": {
     "stateCleared": "modified",
   },
   "settings.gradle": {

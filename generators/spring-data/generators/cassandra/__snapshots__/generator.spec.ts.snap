@@ -403,7 +403,16 @@ exports[`generator - cassandra gateway-jwt-reactive(true)-gradle-enableTranslati
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/build.gradle": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
   "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/libs.versions.toml": {
     "stateCleared": "modified",
   },
   "gradle/profile_dev.gradle": {
@@ -412,10 +421,25 @@ exports[`generator - cassandra gateway-jwt-reactive(true)-gradle-enableTranslati
   "gradle/profile_prod.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/spring-boot.gradle": {
+    "stateCleared": "modified",
+  },
   "gradle/war.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/wrapper/gradle-wrapper.jar": {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": {
+    "stateCleared": "modified",
+  },
   "gradle/zipkin.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradlew": {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": {
     "stateCleared": "modified",
   },
   "settings.gradle": {
@@ -693,7 +717,16 @@ exports[`generator - cassandra gateway-oauth2-reactive(true)-gradle-enableTransl
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/build.gradle": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
   "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/libs.versions.toml": {
     "stateCleared": "modified",
   },
   "gradle/profile_dev.gradle": {
@@ -702,10 +735,25 @@ exports[`generator - cassandra gateway-oauth2-reactive(true)-gradle-enableTransl
   "gradle/profile_prod.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/spring-boot.gradle": {
+    "stateCleared": "modified",
+  },
   "gradle/war.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/wrapper/gradle-wrapper.jar": {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": {
+    "stateCleared": "modified",
+  },
   "gradle/zipkin.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradlew": {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": {
     "stateCleared": "modified",
   },
   "settings.gradle": {
@@ -1267,7 +1315,16 @@ exports[`generator - cassandra microservice-jwt-reactive(true)-gradle-enableTran
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/build.gradle": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
   "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/libs.versions.toml": {
     "stateCleared": "modified",
   },
   "gradle/profile_dev.gradle": {
@@ -1276,10 +1333,25 @@ exports[`generator - cassandra microservice-jwt-reactive(true)-gradle-enableTran
   "gradle/profile_prod.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/spring-boot.gradle": {
+    "stateCleared": "modified",
+  },
   "gradle/war.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/wrapper/gradle-wrapper.jar": {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": {
+    "stateCleared": "modified",
+  },
   "gradle/zipkin.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradlew": {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -1554,7 +1626,16 @@ exports[`generator - cassandra microservice-oauth2-reactive(true)-gradle-enableT
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/build.gradle": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
   "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/libs.versions.toml": {
     "stateCleared": "modified",
   },
   "gradle/profile_dev.gradle": {
@@ -1563,10 +1644,25 @@ exports[`generator - cassandra microservice-oauth2-reactive(true)-gradle-enableT
   "gradle/profile_prod.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/spring-boot.gradle": {
+    "stateCleared": "modified",
+  },
   "gradle/war.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/wrapper/gradle-wrapper.jar": {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": {
+    "stateCleared": "modified",
+  },
   "gradle/zipkin.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradlew": {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": {
     "stateCleared": "modified",
   },
   "package.json": {
@@ -2218,7 +2314,16 @@ exports[`generator - cassandra monolith-jwt-reactive(true)-gradle-enableTranslat
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/build.gradle": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
   "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/libs.versions.toml": {
     "stateCleared": "modified",
   },
   "gradle/profile_dev.gradle": {
@@ -2227,10 +2332,25 @@ exports[`generator - cassandra monolith-jwt-reactive(true)-gradle-enableTranslat
   "gradle/profile_prod.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/spring-boot.gradle": {
+    "stateCleared": "modified",
+  },
   "gradle/war.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/wrapper/gradle-wrapper.jar": {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": {
+    "stateCleared": "modified",
+  },
   "gradle/zipkin.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradlew": {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": {
     "stateCleared": "modified",
   },
   "settings.gradle": {
@@ -2762,7 +2882,16 @@ exports[`generator - cassandra monolith-oauth2-reactive(true)-gradle-enableTrans
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/build.gradle": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
   "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/libs.versions.toml": {
     "stateCleared": "modified",
   },
   "gradle/profile_dev.gradle": {
@@ -2771,10 +2900,25 @@ exports[`generator - cassandra monolith-oauth2-reactive(true)-gradle-enableTrans
   "gradle/profile_prod.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/spring-boot.gradle": {
+    "stateCleared": "modified",
+  },
   "gradle/war.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/wrapper/gradle-wrapper.jar": {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": {
+    "stateCleared": "modified",
+  },
   "gradle/zipkin.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradlew": {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": {
     "stateCleared": "modified",
   },
   "settings.gradle": {
@@ -3435,7 +3579,16 @@ exports[`generator - cassandra monolith-session-reactive(true)-gradle-enableTran
   "build.gradle": {
     "stateCleared": "modified",
   },
+  "buildSrc/build.gradle": {
+    "stateCleared": "modified",
+  },
+  "buildSrc/gradle/libs.versions.toml": {
+    "stateCleared": "modified",
+  },
   "gradle.properties": {
+    "stateCleared": "modified",
+  },
+  "gradle/libs.versions.toml": {
     "stateCleared": "modified",
   },
   "gradle/profile_dev.gradle": {
@@ -3444,10 +3597,25 @@ exports[`generator - cassandra monolith-session-reactive(true)-gradle-enableTran
   "gradle/profile_prod.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/spring-boot.gradle": {
+    "stateCleared": "modified",
+  },
   "gradle/war.gradle": {
     "stateCleared": "modified",
   },
+  "gradle/wrapper/gradle-wrapper.jar": {
+    "stateCleared": "modified",
+  },
+  "gradle/wrapper/gradle-wrapper.properties": {
+    "stateCleared": "modified",
+  },
   "gradle/zipkin.gradle": {
+    "stateCleared": "modified",
+  },
+  "gradlew": {
+    "stateCleared": "modified",
+  },
+  "gradlew.bat": {
     "stateCleared": "modified",
   },
   "settings.gradle": {

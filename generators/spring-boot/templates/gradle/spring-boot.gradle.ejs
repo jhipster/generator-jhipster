@@ -16,28 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-plugins {
-    id "java"
-    id "maven-publish"
-    id "idea"
-    id "eclipse"
-    id "com.gorylenko.gradle-git-properties"
-    // jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
-}
-
-group = "<%= packageName %>"
-version = "0.0.1-SNAPSHOT"
-
-description = ""
-
-<%_ if (backendTypeJavaAny) { _%>
-java {
-    sourceCompatibility=<%= javaVersion %>
-    targetCompatibility=<%= javaVersion %>
-}
-assert System.properties["java.specification.version"] == <%- javaCompatibleVersions.map(ver => `"${ver}"`).join(' || '); %>
-<%_ } _%>
-
 ext {
     if (project.hasProperty("prod")) {
         springProfiles = "prod"
@@ -52,11 +30,6 @@ ext {
     if (project.hasProperty("e2e")) {
         springProfiles += ",e2e"
     }
-}
-
-repositories {
-    mavenCentral()
-    // jhipster-needle-gradle-repositories - JHipster will add additional repositories
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -78,22 +51,6 @@ if (project.hasProperty("zipkin")) {
     apply from: "gradle/zipkin.gradle"
 }
 <%_ } _%>
-
-idea {
-    module {
-        excludeDirs += files("node_modules")
-    }
-}
-
-eclipse {
-    sourceSets {
-        main {
-            java {
-                srcDirs += ["build/generated/sources/annotationProcessor/java/main"]
-            }
-        }
-    }
-}
 
 defaultTasks "bootRun"
 
@@ -127,6 +84,7 @@ test {
 }
 
 check.dependsOn(integrationTest)
+
 task testReport(type: TestReport) {
     destinationDirectory = file("$buildDir/reports/tests")
     testResults.from(test)
@@ -142,23 +100,13 @@ gitProperties {
     keys = ["git.branch", "git.commit.id.abbrev", "git.commit.id.describe"]
 }
 
-tasks.withType(com.gorylenko.GenerateGitPropertiesTask).configureEach {
+tasks.named('generateGitProperties') {
   outputs.doNotCacheIf("Task is always executed") { true }
-}
-
-dependencies {
-    // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 
 task cleanResources(type: Delete) {
     delete "build/resources"
 }
 
-<%_ if (databaseTypeCouchbase) { _%>
-bootJar {
-    loaderImplementation = org.springframework.boot.loader.tools.LoaderImplementation.CLASSIC
-}
-
-<%_ } _%>
 compileJava.dependsOn(processResources)
 processResources.dependsOn(bootBuildInfo)

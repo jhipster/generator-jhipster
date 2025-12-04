@@ -49,6 +49,11 @@ type NeedleContentToAddCallback = {
 type ContentToAdd = { content: string; contentToCheck?: string | RegExp };
 
 export type NeedleInsertion = {
+  /**
+   * Needle identifier.
+   * The `jhipster-needle-` prefix is optional.
+   * An empty string can be provided to append content at the end of the file.
+   */
   needle: string;
   /**
    * Content to add.
@@ -257,7 +262,8 @@ export const createNeedleCallback = <Generator extends CoreGenerator = CoreGener
   ignoreWhitespaces = true,
   autoIndent,
 }: NeedleInsertion): EditFileCallback<Generator> => {
-  assert(needle, 'needle is required');
+  assert(needle !== undefined, 'needle is required');
+  assert(needle || typeof contentToAdd === 'string', 'end of file needle requires string contentToAdd');
   assert(contentToAdd, 'contentToAdd is required');
 
   return function (content, filePath) {
@@ -278,12 +284,16 @@ export const createNeedleCallback = <Generator extends CoreGenerator = CoreGener
         contentToAdd = contentToAdd.slice(1);
       }
       contentToAdd = Array.isArray(contentToAdd) ? contentToAdd : [contentToAdd];
-      if (!hasNeedleStart(content, needle)) {
+      if (!needle || !hasNeedleStart(content, needle)) {
         contentToAdd = contentToAdd.filter(eachContent => !checkContentIn(eachContent, content, ignoreWhitespaces));
       }
       if (contentToAdd.length === 0) {
         return content;
       }
+    }
+
+    if (needle === '') {
+      return `${content}\n${(contentToAdd as string[]).join('\n')}\n`;
     }
 
     const newContent = insertContentBeforeNeedle({

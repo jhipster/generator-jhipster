@@ -19,13 +19,11 @@
 rootProject.name=<%= dasherizedBaseName %>
 profile=dev
 
-# gradle plugin version
-gitPropertiesPluginVersion=<%- javaDependencies['gradle-git-properties'] %>
 <%_ if (enableGradleDevelocity) { _%>
 gradleDevelocityPluginVersion=<%- javaDependencies['gradle-develocity'] %>
 gradleCommonCustomUserDataPluginVersion=<%- javaDependencies['common-custom-user-data-gradle-plugin'] %>
-<%_ } _%>
 
+<%_ } _%>
 # jhipster-needle-gradle-property - JHipster will add additional properties here
 
 ## below are some of the gradle performance improvement settings that can be used as required, these are not enabled by default
