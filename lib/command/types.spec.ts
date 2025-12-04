@@ -125,3 +125,34 @@ const _dummyCommand = {
 (() => {})(({} as ExportApplicationPropertiesFromCommand<typeof _dummyCommand>).nonExisting);
 // @ts-expect-error unknown field
 (() => {})(({} as ExportStoragePropertiesFromCommand<typeof _dummyCommand>).nonExisting);
+
+({}) satisfies ExportApplicationPropertiesFromCommand<typeof _dummyCommand>;
+
+const _simpleConfig = {
+  options: {},
+  configs: {
+    stringOption: {
+      cli: { type: String },
+      scope: 'storage',
+    },
+  },
+} as const;
+
+({}) satisfies ExportApplicationPropertiesFromCommand<typeof _simpleConfig>;
+
+const _choiceConfig = {
+  options: {},
+  configs: {
+    stringOption: {
+      choices: ['foo', 'bar'],
+      scope: 'storage',
+    },
+  },
+} as const;
+
+({
+  stringOption: 'foo',
+  stringOptionFoo: true,
+  stringOptionBar: false,
+  stringOptionAny: false,
+}) satisfies ExportApplicationPropertiesFromCommand<typeof _choiceConfig>;
