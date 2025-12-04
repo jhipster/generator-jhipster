@@ -27,10 +27,11 @@ Another reason is that JHipster has too many generators, this will allow a more 
 JHipster has a few generators related to entities:
 
 - `entities` generator is used to delegate selected entities to `entity` generator and `database-changelog` generator.
-- `entities-client` generator is used to rebuild webpack when some entity changes.
 - `entity` generator is used for prompting, configuring, preparing.
-- `entity-client` generator is used for entity customizations and writing files related to client.
-- `entity-server` generator is used for entity customizations and writing files related to server.
+- `client` generator is used
+  - to rebuild webpack when some entity changes.
+  - for entity customizations and writing files related to client.
+- `server` generator is used for entity customizations and writing files related to server.
 
 We have priorities to be used on entity generators.
 
