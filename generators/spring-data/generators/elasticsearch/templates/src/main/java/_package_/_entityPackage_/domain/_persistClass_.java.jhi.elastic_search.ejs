@@ -47,6 +47,8 @@
       @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Long)
       <%_ } else if (field.fieldTypeLocalTime) { _%>
       @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Date, format = org.springframework.data.elasticsearch.annotations.DateFormat.hour_minute_second_millis)
+      <%_ } else if (field.fieldTypeInstant) { _%>
+      @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Date, format = org.springframework.data.elasticsearch.annotations.DateFormat.date_time)
       <%_ } _%>
     <%_ } _%>
   <&_ } -&>
