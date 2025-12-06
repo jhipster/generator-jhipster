@@ -48,7 +48,7 @@ export default function getDatabaseUrl(databaseType: string, protocol: 'r2dbc' |
   if (databaseDataForType.getData) {
     databaseDataForType = {
       ...databaseDataForType,
-      ...(databaseDataForType.getData(options) || {}),
+      ...databaseDataForType.getData(options),
     };
   }
   const { port = '', protocolSuffix = '', extraOptions = '', localDirectory = options.localDirectory } = databaseDataForType;
