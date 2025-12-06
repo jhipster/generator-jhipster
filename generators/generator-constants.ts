@@ -25,7 +25,7 @@ export * from '../lib/constants/jhipster.ts';
 
 export const BLUEPRINT_API_VERSION = 'jhipster-8';
 // jhipster-bom version
-export const JHIPSTER_DEPENDENCIES_VERSION = '8.11.0';
+export const JHIPSTER_DEPENDENCIES_VERSION = '9.0.0-beta.0';
 // Version of Java
 export const RECOMMENDED_JAVA_VERSION = '17';
 // Supported Java versions, https://www.oracle.com/java/technologies/java-se-support-roadmap.html
