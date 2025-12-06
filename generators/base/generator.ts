@@ -638,7 +638,7 @@ export default class BaseGenerator<
       } else {
         const generatorName = packageNameToNamespace(normalizeBlueprintName(blueprintName));
         const generatorNamespace = `${generatorName}:${subGen}`;
-        const blueprintMeta = await this.env.findMeta(generatorNamespace);
+        const blueprintMeta = this.env.findMeta(generatorNamespace);
         const blueprintModule: any = await blueprintMeta?.importModule?.();
         blueprintCommand = blueprintModule?.command;
         if (blueprintCommand?.compose) {

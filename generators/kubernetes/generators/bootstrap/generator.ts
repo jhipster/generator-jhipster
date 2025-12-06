@@ -99,7 +99,7 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
         defaults(deployment, kubernetesConstants, helmConstants);
       },
       async loadDockerDependenciesTask({ deployment }) {
-        await loadDockerDependenciesTask.call(this, { context: deployment });
+        loadDockerDependenciesTask.call(this, { context: deployment });
       },
       appsConfigs({ deployment, applications }) {
         deployment.appConfigs = applications;
