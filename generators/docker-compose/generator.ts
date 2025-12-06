@@ -134,10 +134,10 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
 
   get loadingWorkspaces() {
     return this.asLoadingWorkspacesTaskGroup({
-      async loadBaseDeployment({ deployment }) {
+      loadBaseDeployment({ deployment }) {
         deployment.jwtSecretKey = this.jhipsterConfig.jwtSecretKey;
 
-        await loadDockerDependenciesTask.call(this, { context: deployment });
+        loadDockerDependenciesTask.call(this, { context: deployment });
       },
     });
   }

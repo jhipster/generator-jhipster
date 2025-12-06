@@ -31,7 +31,7 @@ const downloadFile = async (url: string, filename: string): Promise<string> => {
     throw new Error(`Error downloading ${url}: ${response.status} - ${response.statusText}`);
   }
   logger.debug(`Creating file: ${path.join(filename)}`);
-  await writeFile(filename, await response.body!, 'utf8');
+  await writeFile(filename, response.body!, 'utf8');
   return filename;
 };
 
