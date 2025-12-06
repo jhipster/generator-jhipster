@@ -1,8 +1,8 @@
 import { removeUnusedImports } from 'java-lint';
 
-export default async ({ fileContents }: { fileContents: string }): Promise<{ result: string } | { error: string }> => {
+export default ({ fileContents }: { fileContents: string }): { result: string } | { error: string } => {
   try {
-    return { result: await removeUnusedImports(fileContents) };
+    return { result: removeUnusedImports(fileContents) };
   } catch (error) {
     return { error: `${error}` };
   }
