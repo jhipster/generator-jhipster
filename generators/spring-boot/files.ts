@@ -296,7 +296,6 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
         'config/DateTimeFormatConfiguration.java',
         'config/LoggingConfiguration.java',
         'config/ApplicationProperties.java',
-        'config/JacksonConfiguration.java',
         'config/LoggingAspectConfiguration.java',
         'config/WebConfigurer.java',
       ],

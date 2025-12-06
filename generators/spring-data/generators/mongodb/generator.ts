@@ -70,9 +70,9 @@ export default class MongoDBGenerator extends SpringBootApplicationGenerator {
           { groupId: 'io.mongock', artifactId: 'mongock-bom', type: 'pom', version: javaDependencies!['mongock-bom'], scope: 'import' },
           { groupId: 'io.mongock', artifactId: 'mongock-springboot-v3' },
           { groupId: 'io.mongock', artifactId: reactive ? 'mongodb-reactive-driver' : 'mongodb-springdata-v4-driver' },
-          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'junit-jupiter' },
+          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers-junit-jupiter' },
           { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers' },
-          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'mongodb' },
+          { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers-mongodb' },
         ]);
         if (reactive) {
           // Mongock requires non reactive starter workaround https://github.com/mongock/mongock/issues/613.

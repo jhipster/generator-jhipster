@@ -47,7 +47,7 @@ import org.junit.jupiter.api.AfterEach;
 <%_ } _%>
 <%_ if (reactive) { _%>
 import org.junit.jupiter.api.BeforeEach;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -59,7 +59,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 <%_ } else { _%>
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.test.context.TestSecurityContextHolder;
