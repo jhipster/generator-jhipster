@@ -273,7 +273,7 @@ export default class BaseApplicationGenerator<
     const configDir = this.getEntitiesConfigPath();
 
     const entities: { name: string; definition: Entity }[] = [];
-    for (const entityName of [...new Set(((this.jhipsterConfig.entities as string[]) || []).concat(getEntitiesFromDir(configDir)))]) {
+    for (const entityName of new Set(((this.jhipsterConfig.entities as string[]) || []).concat(getEntitiesFromDir(configDir)))) {
       const definition: Entity = this.getEntityConfig(entityName)?.getAll() as unknown as Entity;
       if (definition) {
         entities.push({ name: entityName, definition });

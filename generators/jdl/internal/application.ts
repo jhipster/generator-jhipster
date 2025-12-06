@@ -38,7 +38,7 @@ export const customizeForMicroservices = (applicationsWithEntities: Record<strin
       }
     }
 
-    const relatedBaseNames = [...microfrontends.map(mf => mf.baseName)];
+    const relatedBaseNames = microfrontends.map(mf => mf.baseName);
     gateway.entities
       .map(entity => entity.microserviceName)
       .filter(Boolean)

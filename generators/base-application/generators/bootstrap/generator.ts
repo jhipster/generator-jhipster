@@ -423,7 +423,7 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
           relatedEntities.add(entity);
           return entity.relationships
             ?.filter(rel => rel.relationshipRequired || rel.id)
-            .some(rel => detectCyclicRequiredRelationship(rel.otherEntity, new Set([...relatedEntities])));
+            .some(rel => detectCyclicRequiredRelationship(rel.otherEntity, new Set(relatedEntities)));
         };
         entity.hasCyclicRequiredRelationship = detectCyclicRequiredRelationship(entity, new Set());
       },
