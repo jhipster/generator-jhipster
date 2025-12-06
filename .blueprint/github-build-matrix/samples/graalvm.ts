@@ -3,17 +3,15 @@ import { extendMatrix, fromMatrix } from '../../../lib/testing/support/matrix-ut
 import { convertOptionsToJDL } from '../support/jdl.ts';
 
 export default Object.fromEntries(
-  [
-    ...Object.entries(
-      extendMatrix(
-        fromMatrix({
-          buildTool: ['maven', 'gradle'],
-          reactive: [undefined, true],
-        }),
-        {},
-      ),
+  Object.entries(
+    extendMatrix(
+      fromMatrix({
+        buildTool: ['maven', 'gradle'],
+        reactive: [undefined, true],
+      }),
+      {},
     ),
-  ].map(([key, value]) => [
+  ).map(([key, value]) => [
     key,
     {
       'java-version': '21',
