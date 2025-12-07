@@ -17,7 +17,6 @@ import type { Config as ProjectNameConfig, Options as ProjectNameOptions } from 
 import type { Config as ServerConfig, Options as ServerOptions } from '../../generators/server/types.d.ts';
 import type { Config as SpringBootConfig, Options as SpringBootOptions } from '../../generators/spring-boot/types.d.ts';
 import type { Config as SpringCacheConfig, Options as SpringCacheOptions } from '../../generators/spring-cache/types.d.ts';
-import type { Options as SpringCloudOptions } from '../../generators/spring-cloud/types.d.ts';
 import type {
   Config as SpringCloudStreamConfig,
   Options as SpringCloudStreamOptions,
@@ -71,7 +70,6 @@ export type OptionsAll = Simplify<
     ServerOptions &
     SpringBootOptions &
     SpringCacheOptions &
-    SpringCloudOptions &
     SpringCloudStreamOptions &
     SpringDataRelationalOptions
 >;
