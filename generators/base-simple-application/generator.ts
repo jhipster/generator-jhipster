@@ -104,7 +104,7 @@ export default class BaseSimpleApplicationGenerator<
    * @deprecated use dependsOnBootstrap('common'), dependsOnBootstrap('base-application') or dependsOnBootstrap('base-simple-application')
    */
   dependsOnBootstrapApplicationBase(
-    options?: ComposeOptions<GeneratorsByNamespace['jhipster:base-application:bootstrap']> | undefined,
+    options?: ComposeOptions<GeneratorsByNamespace['jhipster:base-application:bootstrap']>,
   ): Promise<GeneratorsByNamespace['jhipster:base-application:bootstrap']> {
     return this.dependsOnJHipster('jhipster:base-application:bootstrap', options);
   }

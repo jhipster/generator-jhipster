@@ -201,7 +201,7 @@ export default class BaseApplicationGenerator<
    * @deprecated use dependsOnBootstrap('app')
    */
   dependsOnBootstrapApplication(
-    options?: ComposeOptions<GeneratorsByNamespace['jhipster:base-application:bootstrap']> | undefined,
+    options?: ComposeOptions<GeneratorsByNamespace['jhipster:base-application:bootstrap']>,
   ): Promise<GeneratorsByNamespace['jhipster:base-application:bootstrap']> {
     return this.dependsOnJHipster('jhipster:base-application:bootstrap', options);
   }
@@ -210,7 +210,7 @@ export default class BaseApplicationGenerator<
    * @deprecated use dependsOnBootstrap('server')
    */
   dependsOnBootstrapApplicationServer(
-    options?: ComposeOptions<GeneratorsByNamespace['jhipster:server:bootstrap']> | undefined,
+    options?: ComposeOptions<GeneratorsByNamespace['jhipster:server:bootstrap']>,
   ): Promise<GeneratorsByNamespace['jhipster:server:bootstrap']> {
     return this.dependsOnJHipster('jhipster:server:bootstrap', options);
   }
@@ -219,7 +219,7 @@ export default class BaseApplicationGenerator<
    * @deprecated use dependsOnBootstrap('client')
    */
   dependsOnBootstrapApplicationClient(
-    options?: ComposeOptions<GeneratorsByNamespace['jhipster:client:bootstrap']> | undefined,
+    options?: ComposeOptions<GeneratorsByNamespace['jhipster:client:bootstrap']>,
   ): Promise<GeneratorsByNamespace['jhipster:client:bootstrap']> {
     return this.dependsOnJHipster('jhipster:client:bootstrap', options);
   }
