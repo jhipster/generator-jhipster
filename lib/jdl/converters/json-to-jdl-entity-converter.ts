@@ -20,6 +20,7 @@
 import { lowerFirst, upperFirst } from 'lodash-es';
 
 import { asJdlRelationshipType } from '../core/basic-types/relationship-types.ts';
+import type { JDLOptionName } from '../core/built-in-options/binary-options.ts';
 import { binaryOptions, relationshipOptions, unaryOptions } from '../core/built-in-options/index.ts';
 import { JDLEntity, JDLEnum } from '../core/models/index.ts';
 import JDLBinaryOption from '../core/models/jdl-binary-option.ts';
@@ -307,7 +308,7 @@ function addEntityOptionsToJDL(entity: JSONEntity, entityName: string): void {
   }
 }
 
-function addUnaryOptionToJDL(unaryOption: string, entityName: string): void {
+function addUnaryOptionToJDL(unaryOption: JDLOptionName, entityName: string): void {
   jdlObject.addOption(
     new JDLUnaryOption({
       name: unaryOption,
@@ -316,7 +317,7 @@ function addUnaryOptionToJDL(unaryOption: string, entityName: string): void {
   );
 }
 
-function addBinaryOptionToJDL(binaryOption: string, value: string, entityName: string): void {
+function addBinaryOptionToJDL(binaryOption: JDLOptionName, value: string, entityName: string): void {
   jdlObject.addOption(
     new JDLBinaryOption({
       name: binaryOption,

@@ -55,12 +55,6 @@ describe('jdl - BinaryOptions', () => {
         expect(binaryOptions.exists(binaryOptions.Options.DTO, binaryOptions.Values.dto.MAPSTRUCT)).to.be.true;
       });
     });
-    describe('when checking for a custom binary option', () => {
-      it('should return true', () => {
-        expect(binaryOptions.exists('customOption')).to.be.true;
-        expect(binaryOptions.exists('customOption', 'customValue')).to.be.true;
-      });
-    });
   });
   describe('forEach', () => {
     describe('when not passing a function', () => {

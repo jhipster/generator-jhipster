@@ -17,7 +17,9 @@
  * limitations under the License.
  */
 
+import type { BinaryOptionType } from '../../core/built-in-options/binary-options.ts';
 import { binaryOptions, unaryOptions } from '../../core/built-in-options/index.ts';
+import type { UnaryOptionType } from '../../core/built-in-options/unary-options.ts';
 import type AbstractJDLOption from '../../core/models/abstract-jdl-option.ts';
 import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
 import JDLUnaryOption from '../../core/models/jdl-unary-option.ts';
@@ -47,7 +49,7 @@ export function convertOptions(
 
 function convertUnaryOptions(parsedOptions: Record<string, ParsedJDLOption>): JDLUnaryOption[] {
   const convertedUnaryOptions: JDLUnaryOption[] = [];
-  unaryOptions.forEach((unaryOptionName: string) => {
+  unaryOptions.forEach((unaryOptionName: UnaryOptionType) => {
     const parsedUnaryOption = parsedOptions[unaryOptionName];
     if (!parsedUnaryOption?.list || parsedUnaryOption.list.length === 0) {
       return;
@@ -65,7 +67,7 @@ function convertUnaryOptions(parsedOptions: Record<string, ParsedJDLOption>): JD
 
 function convertBinaryOptions(parsedOptions: Record<string, Record<string, ParsedJDLOption>>): JDLBinaryOption[] {
   const convertedBinaryOptions: JDLBinaryOption[] = [];
-  binaryOptions.forEach((binaryOptionName: string) => {
+  binaryOptions.forEach((binaryOptionName: BinaryOptionType) => {
     if (!parsedOptions[binaryOptionName]) {
       return;
     }
