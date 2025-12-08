@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
 
 import { TrackerService } from 'app/core/tracker/tracker.service';
@@ -25,7 +26,7 @@ import SharedModule from 'app/shared/shared.module';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-tracker',
-  imports: [SharedModule],
+  imports: [SharedModule, DatePipe],
   templateUrl: './tracker.html',
 })
 export default class Tracker implements OnInit, OnDestroy {

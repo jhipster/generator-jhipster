@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { DecimalPipe, DatePipe } from '@angular/common';
 
 import SharedModule from 'app/shared/shared.module';
 import { ProcessMetrics } from 'app/admin/metrics/metrics.model';
@@ -25,7 +26,7 @@ import { ProcessMetrics } from 'app/admin/metrics/metrics.model';
   selector: '<%= jhiPrefixDashed %>-metrics-system',
   templateUrl: './metrics-system.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule],
+  imports: [SharedModule, DecimalPipe, DatePipe],
 })
 export class MetricsSystem {
   /**

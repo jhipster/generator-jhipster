@@ -18,6 +18,7 @@
 -%>
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterLink<%_ if (!databaseTypeCassandra) { _%>, ActivatedRoute, Router<%_ } _%> } from '@angular/router';
+import { DatePipe } from '@angular/common';
 import { HttpResponse<%_ if (!databaseTypeCassandra) { %>, HttpHeaders <% } %>} from '@angular/common/http';
 <%_ if (!databaseTypeCassandra) { _%>
 import { combineLatest } from 'rxjs';
@@ -47,6 +48,7 @@ import UserManagementDeleteDialog from '../delete/user-management-delete-dialog'
     SortDirective,
     SortByDirective,
     ItemCount,
+    DatePipe,
 <%_ } _%>
   ],
 })

@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { KeyValuePipe, DecimalPipe } from '@angular/common';
 
 import SharedModule from 'app/shared/shared.module';
 import { CacheMetrics } from 'app/admin/metrics/metrics.model';
@@ -26,7 +27,7 @@ import { filterNaN } from 'app/core/util/operators';
   selector: '<%= jhiPrefixDashed %>-metrics-cache',
   templateUrl: './metrics-cache.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule],
+  imports: [SharedModule, KeyValuePipe, DecimalPipe],
 })
 export class MetricsCache {
   /**

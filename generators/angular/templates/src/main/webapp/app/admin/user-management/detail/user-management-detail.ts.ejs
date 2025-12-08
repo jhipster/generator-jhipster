@@ -18,6 +18,7 @@
 -%>
 import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { DatePipe } from '@angular/common';
 import SharedModule from 'app/shared/shared.module';
 
 import { User } from '../user-management.model';
@@ -25,7 +26,7 @@ import { User } from '../user-management.model';
 @Component({
   selector: '<%= jhiPrefixDashed %>-user-mgmt-detail',
   templateUrl: './user-management-detail.html',
-  imports: [RouterLink, SharedModule],
+  imports: [RouterLink, SharedModule, DatePipe],
 })
 export default class UserManagementDetail {
   user = input<User | null>(null);

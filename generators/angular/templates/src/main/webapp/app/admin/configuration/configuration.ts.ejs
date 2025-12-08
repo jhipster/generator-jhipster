@@ -18,6 +18,7 @@
 -%>
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { KeyValuePipe, JsonPipe } from '@angular/common';
 
 import SharedModule from 'app/shared/shared.module';
 import { SortDirective, SortByDirective, sortStateSignal, SortService } from 'app/shared/sort';
@@ -27,7 +28,7 @@ import { Bean, PropertySource } from './configuration.model';
 @Component({
   selector: '<%= jhiPrefixDashed %>-configuration',
   templateUrl: './configuration.html',
-  imports: [SharedModule, FormsModule, SortDirective, SortByDirective],
+  imports: [SharedModule, FormsModule, SortDirective, SortByDirective, KeyValuePipe, JsonPipe],
 })
 export default class Configuration implements OnInit {
   allBeans = signal<Bean[] | undefined>(undefined);

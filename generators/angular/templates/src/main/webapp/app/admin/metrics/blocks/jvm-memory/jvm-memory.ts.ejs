@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import { Component, input } from '@angular/core';
+import { KeyValuePipe, DecimalPipe } from '@angular/common';
 
 import SharedModule from 'app/shared/shared.module';
 import { JvmMetrics } from 'app/admin/metrics/metrics.model';
@@ -24,7 +25,7 @@ import { JvmMetrics } from 'app/admin/metrics/metrics.model';
 @Component({
   selector: '<%= jhiPrefixDashed %>-jvm-memory',
   templateUrl: './jvm-memory.html',
-  imports: [SharedModule],
+  imports: [SharedModule, KeyValuePipe, DecimalPipe],
 })
 export class JvmMemory {
   /**

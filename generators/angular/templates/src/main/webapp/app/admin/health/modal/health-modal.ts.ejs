@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import { Component, inject } from '@angular/core';
+import { KeyValuePipe } from '@angular/common';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
@@ -25,7 +26,7 @@ import { HealthKey, HealthDetails } from '../health.model';
 @Component({
   selector: '<%= jhiPrefixDashed %>-health-modal',
   templateUrl: './health-modal.html',
-  imports: [SharedModule],
+  imports: [SharedModule, KeyValuePipe],
 })
 export default class HealthModal {
   health?: { key: HealthKey; value: HealthDetails };

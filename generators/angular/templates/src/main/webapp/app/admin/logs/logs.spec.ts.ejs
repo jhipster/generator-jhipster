@@ -37,10 +37,11 @@ describe('Logs', () => {
   let service: LogsService;
 
   beforeEach(
-    () => {
-      TestBed.configureTestingModule({
+    async () => {
+      await TestBed.configureTestingModule({
+        imports: [Logs],
         providers: [provideHttpClient(), provideHttpClientTesting(), LogsService<%= applicationTypeGateway && gatewayServicesApiAvailable ? ', GatewayRoutesService' : '' %>],
-      });
+      }).compileComponents();
     }
   );
 
