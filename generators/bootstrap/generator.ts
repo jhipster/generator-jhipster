@@ -81,7 +81,7 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
     }
   }
 
-  get multistepTransform(): Record<string, (this: this) => unknown | Promise<unknown>> {
+  get multistepTransform(): Record<string, (this: this) => unknown> {
     return {
       queueMultistepTransform() {
         this.queueMultistepTransform();
