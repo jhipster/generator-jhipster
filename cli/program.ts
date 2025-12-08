@@ -94,7 +94,7 @@ const buildAllDependencies = async (
     namespace: string;
     blueprintNamespace?: string;
   }): Promise<JHipsterModule> => {
-    const meta = await env.getGeneratorMeta(namespace.includes(':') ? namespace : `${JHIPSTER_NS}:${namespace}`);
+    const meta = env.getGeneratorMeta(namespace.includes(':') ? namespace : `${JHIPSTER_NS}:${namespace}`);
     if (meta) {
       allDependencies[namespace] = { meta, blueprintNamespace };
     } else if (!blueprintNamespace) {
