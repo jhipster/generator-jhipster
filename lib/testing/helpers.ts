@@ -506,8 +506,8 @@ class JHipsterTest extends YeomanTest {
   // @ts-expect-error testing types should be improved
   run<GeneratorType extends YeomanGenerator<GeneratorTestOptions> = YeomanGenerator<GeneratorTestOptions>>(
     GeneratorOrNamespace: string | GetGeneratorConstructor<GeneratorType>,
-    settings?: RunContextSettings | undefined,
-    envOptions?: (EnvironmentOptions & { createEnv?: any }) | undefined,
+    settings?: RunContextSettings,
+    envOptions?: EnvironmentOptions & { createEnv?: any },
   ): JHipsterRunContext {
     return super
       .run<GeneratorType>(GeneratorOrNamespace, settings, envOptions)
@@ -517,16 +517,12 @@ class JHipsterTest extends YeomanTest {
       .withAdapterOptions({ log: createJHipsterLogger() }) as unknown as JHipsterRunContext;
   }
 
-  runJHipster(
-    jhipsterGenerator: string,
-    settings?: RunContextSettings | undefined,
-    envOptions?: EnvironmentOptions | undefined,
-  ): JHipsterRunContext;
+  runJHipster(jhipsterGenerator: string, settings?: RunContextSettings, envOptions?: EnvironmentOptions): JHipsterRunContext;
   runJHipster(jhipsterGenerator: string, options?: RunJHipster): JHipsterRunContext;
   runJHipster(
     jhipsterGenerator: string,
     settings: RunContextSettings | RunJHipster | undefined,
-    envOptions?: EnvironmentOptions | undefined,
+    envOptions?: EnvironmentOptions,
   ): JHipsterRunContext {
     const generatorSpec =
       !isAbsolute(jhipsterGenerator) && !jhipsterGenerator.startsWith('@') ? toJHipsterNamespace(jhipsterGenerator) : jhipsterGenerator;
@@ -580,11 +576,7 @@ class JHipsterTest extends YeomanTest {
     });
   }
 
-  runJHipsterDeployment(
-    jhipsterGenerator: string,
-    settings?: RunContextSettings | undefined,
-    envOptions?: EnvironmentOptions | undefined,
-  ): JHipsterRunContext {
+  runJHipsterDeployment(jhipsterGenerator: string, settings?: RunContextSettings, envOptions?: EnvironmentOptions): JHipsterRunContext {
     return this.runJHipsterInApplication(jhipsterGenerator, settings, envOptions).withOptions({
       destinationRoot: join(runResult.cwd, jhipsterGenerator.split(':').pop()!),
     });
@@ -593,27 +585,19 @@ class JHipsterTest extends YeomanTest {
   /**
    * Run a generator in current application context.
    */
-  runJHipsterInApplication(
-    jhipsterGenerator: string,
-    settings?: RunContextSettings | undefined,
-    envOptions?: EnvironmentOptions | undefined,
-  ): JHipsterRunContext {
+  runJHipsterInApplication(jhipsterGenerator: string, settings?: RunContextSettings, envOptions?: EnvironmentOptions): JHipsterRunContext {
     const context = runResult.create(getGenerator(jhipsterGenerator), settings, envOptions) as JHipsterRunContext;
     return context.withJHipsterGenerators();
   }
 
-  runJDL(jdl: string, settings?: RunContextSettings | undefined, envOptions?: EnvironmentOptions | undefined): JHipsterRunContext {
+  runJDL(jdl: string, settings?: RunContextSettings, envOptions?: EnvironmentOptions): JHipsterRunContext {
     return this.runJHipster('jdl', settings, envOptions).withOptions({ inline: jdl });
   }
 
   /**
    * Run the JDL generator in current application context.
    */
-  runJDLInApplication(
-    jdl: string,
-    settings?: RunContextSettings | undefined,
-    envOptions?: EnvironmentOptions | undefined,
-  ): JHipsterRunContext {
+  runJDLInApplication(jdl: string, settings?: RunContextSettings, envOptions?: EnvironmentOptions): JHipsterRunContext {
     return this.runJHipsterInApplication('jdl', settings, envOptions).withOptions({ inline: jdl });
   }
 
@@ -641,8 +625,8 @@ class JHipsterTest extends YeomanTest {
   // @ts-expect-error testing types should be improved
   create<GeneratorType extends YeomanGenerator<GeneratorTestOptions> = YeomanGenerator<GeneratorTestOptions>>(
     GeneratorOrNamespace: string | GetGeneratorConstructor<GeneratorType>,
-    settings?: RunContextSettings | undefined,
-    envOptions?: EnvironmentOptions | undefined,
+    settings?: RunContextSettings,
+    envOptions?: EnvironmentOptions,
   ): JHipsterRunContext {
     return super.create<GeneratorType>(GeneratorOrNamespace, settings, envOptions) as any;
   }
