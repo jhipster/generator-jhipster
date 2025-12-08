@@ -94,10 +94,10 @@ export type PromptSpec = {
   readonly type: 'input' | 'select' | 'confirm' | 'checkbox';
   readonly message: string | ((arg: any) => string);
   readonly when?: boolean | ((arg: any) => boolean);
-  readonly default?: any | ((arg: any) => any);
-  readonly filter?: any | ((arg: any) => any);
-  readonly transformer?: any | ((arg: any) => any);
-  readonly validate?: any | ((arg: any) => any);
+  readonly default?: any;
+  readonly filter?: any;
+  readonly transformer?: any;
+  readonly validate?: any;
 };
 
 type JHipsterArgumentConfig = SetOptional<ArgumentSpec, 'name'> & Partial<ScopedConfig>;
