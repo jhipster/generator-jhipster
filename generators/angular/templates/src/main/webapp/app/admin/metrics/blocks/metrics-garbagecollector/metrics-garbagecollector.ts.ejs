@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import { Component, input } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 
 import SharedModule from 'app/shared/shared.module';
 import { GarbageCollector } from 'app/admin/metrics/metrics.model';
@@ -24,7 +25,7 @@ import { GarbageCollector } from 'app/admin/metrics/metrics.model';
 @Component({
   selector: '<%= jhiPrefixDashed %>-metrics-garbagecollector',
   templateUrl: './metrics-garbagecollector.html',
-  imports: [SharedModule],
+  imports: [SharedModule, DecimalPipe],
 })
 export class MetricsGarbageCollector {
   /**

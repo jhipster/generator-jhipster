@@ -18,6 +18,7 @@
 -%>
 import { Component, inject, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
+import { KeyValuePipe, NgClass } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
@@ -28,7 +29,7 @@ import HealthModal from './modal/health-modal';
 @Component({
   selector: '<%= jhiPrefixDashed %>-health',
   templateUrl: './health.html',
-  imports: [SharedModule],
+  imports: [SharedModule, KeyValuePipe, NgClass],
 })
 export default class Health implements OnInit {
   health?: HealthModel;

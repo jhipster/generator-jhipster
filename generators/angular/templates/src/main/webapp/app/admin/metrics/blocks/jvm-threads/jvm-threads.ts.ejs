@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import { Component, inject, computed, input } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
@@ -26,7 +27,7 @@ import { MetricsModalThreads } from '../metrics-modal-threads/metrics-modal-thre
 @Component({
   selector: '<%= jhiPrefixDashed %>-jvm-threads',
   templateUrl: './jvm-threads.html',
-  imports: [SharedModule],
+  imports: [SharedModule, DecimalPipe],
 })
 export class JvmThreads {
   threads = input<Thread[] | undefined>();
