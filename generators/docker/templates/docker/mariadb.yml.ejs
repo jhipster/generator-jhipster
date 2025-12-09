@@ -22,7 +22,7 @@ services:
   mariadb:
     image: <%- dockerContainers.mariadb %>
     volumes:
-      - ./config/mariadb:/etc/mariadb/conf.d
+      - ./config/mariadb:/etc/mysql/conf.d:ro
     # volumes:
     #   - ~/volumes/jhipster/<%= baseName %>/mariadb/:/var/lib/mariadb/
     environment:
