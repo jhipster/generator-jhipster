@@ -79,8 +79,8 @@ exports[`generator - Heroku microservice application with JAR deployment should 
                         </configuration>
                     </plugin>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-clean-plugin</artifactId>
-                        <version>\${maven-clean-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>clean-artifacts</id>
@@ -295,8 +295,8 @@ exports[`generator - Heroku monolith application in the EU should match files sn
                         </configuration>
                     </plugin>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-clean-plugin</artifactId>
-                        <version>\${maven-clean-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>clean-artifacts</id>
@@ -509,8 +509,8 @@ exports[`generator - Heroku monolith application in the US should match files sn
                         </configuration>
                     </plugin>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-clean-plugin</artifactId>
-                        <version>\${maven-clean-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>clean-artifacts</id>
@@ -778,8 +778,8 @@ exports[`generator - Heroku monolith application with Git deployment should matc
                         </configuration>
                     </plugin>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-clean-plugin</artifactId>
-                        <version>\${maven-clean-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>clean-artifacts</id>
@@ -994,8 +994,8 @@ exports[`generator - Heroku monolith application with PostgreSQL should match fi
                         </configuration>
                     </plugin>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-clean-plugin</artifactId>
-                        <version>\${maven-clean-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>clean-artifacts</id>
@@ -1232,8 +1232,8 @@ exports[`generator - Heroku monolith application with an unavailable app name sh
                         </configuration>
                     </plugin>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-clean-plugin</artifactId>
-                        <version>\${maven-clean-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>clean-artifacts</id>
@@ -1459,8 +1459,8 @@ exports[`generator - Heroku monolith application with elasticsearch should match
                         </configuration>
                     </plugin>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-clean-plugin</artifactId>
-                        <version>\${maven-clean-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>clean-artifacts</id>
@@ -1664,8 +1664,8 @@ exports[`generator - Heroku monolith application with existing app should match 
                         </configuration>
                     </plugin>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-clean-plugin</artifactId>
-                        <version>\${maven-clean-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>clean-artifacts</id>
