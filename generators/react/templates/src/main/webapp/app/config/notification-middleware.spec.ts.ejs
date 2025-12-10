@@ -42,7 +42,7 @@ describe('Notification Middleware', () => {
     payload: {
       status: 201,
       statusText: 'Created',
-      headers: { 'app-alert': 'foo.created', 'app-params': 'foo' },
+      headers: { '<%= messageHeaderNameAlert %>': 'foo.created', '<%= messageHeaderNameParam %>': 'foo' },
     },
   };
 
@@ -76,7 +76,7 @@ describe('Notification Middleware', () => {
       response: {
         status: 400,
         statusText: 'Bad Request',
-        headers: { 'app-error': 'foo.creation', 'app-params': 'foo' },
+        headers: { '<%= messageHeaderNameError %>': 'foo.creation', '<%= messageHeaderNameParam %>': 'foo' },
       },
     },
   };
