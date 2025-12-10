@@ -311,6 +311,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/client/generators/common/templates/template-file-client:common.ejs": {
     "stateCleared": "modified",
   },
+  "generators/client/generators/encode-csrf-token/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/encode-csrf-token/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/encode-csrf-token/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/encode-csrf-token/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/client/generators/encode-csrf-token/templates/template-file-client:encode-csrf-token.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/client/generators/i18n/command.js": {
     "stateCleared": "modified",
   },
