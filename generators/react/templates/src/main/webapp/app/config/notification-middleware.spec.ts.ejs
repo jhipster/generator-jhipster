@@ -23,6 +23,7 @@ import sinon from 'sinon';
 <%_ if (enableTranslation) { _%>
 import { TranslatorContext } from 'react-jhipster';
 <%_ } _%>
+import { MESSAGE_ALERT_HEADER_NAME, MESSAGE_ERROR_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from 'app/shared/jhipster/constants';
 
 import notificationMiddleware from './notification-middleware';
 
@@ -42,7 +43,7 @@ describe('Notification Middleware', () => {
     payload: {
       status: 201,
       statusText: 'Created',
-      headers: { 'app-alert': 'foo.created', 'app-params': 'foo' },
+      headers: { [MESSAGE_ALERT_HEADER_NAME]: 'foo.created', [MESSAGE_PARAM_HEADER_NAME]: 'foo' },
     },
   };
 
@@ -76,7 +77,7 @@ describe('Notification Middleware', () => {
       response: {
         status: 400,
         statusText: 'Bad Request',
-        headers: { 'app-error': 'foo.creation', 'app-params': 'foo' },
+        headers: { [MESSAGE_ERROR_HEADER_NAME]: 'foo.creation', [MESSAGE_PARAM_HEADER_NAME]: 'foo' },
       },
     },
   };

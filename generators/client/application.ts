@@ -40,6 +40,10 @@ export type ClientAddedApplicationProperties = {
   clientBundlerName: string;
   clientTestFrameworkName: string;
   withAdminUi: boolean;
+
+  messageHeaderNameAlert: string;
+  messageHeaderNameError: string;
+  messageHeaderNameParam: string;
 };
 
 export const mutateApplication = {
@@ -64,4 +68,8 @@ export const mutateApplication = {
   clientBundlerName: ctx => (ctx.clientBundlerEsbuild ? 'esbuild' : startCase(ctx.clientBundler)),
   clientTestFrameworkName: ctx => startCase(ctx.clientTestFramework),
   withAdminUi: ctx => ctx.applicationTypeMicroservice,
+
+  messageHeaderNameAlert: ({ frontendAppName }) => `x-${frontendAppName.toLowerCase()}-alert`,
+  messageHeaderNameError: ({ frontendAppName }) => `x-${frontendAppName.toLowerCase()}-error`,
+  messageHeaderNameParam: ({ frontendAppName }) => `x-${frontendAppName.toLowerCase()}-params`,
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<ClientApplication>, ClientAddedApplicationProperties>;

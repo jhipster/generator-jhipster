@@ -7,6 +7,9 @@ exports[`generator - client:common with defaults options should match files snap
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/constants.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/headers.ts": {
     "stateCleared": "modified",
   },
