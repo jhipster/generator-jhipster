@@ -117,7 +117,7 @@ jhipster:
   jhgate-mysql:
     image: mysql-placeholder
     volumes:
-      - ./config/mysql:/etc/mysql/conf.d
+      - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -304,7 +304,7 @@ jhipster:
   jhgate-mysql:
     image: mysql-placeholder
     volumes:
-      - ./config/mysql:/etc/mysql/conf.d
+      - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -558,7 +558,7 @@ jhipster:
   jhgate-mysql:
     image: mysql-placeholder
     volumes:
-      - ./config/mysql:/etc/mysql/conf.d
+      - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -596,7 +596,7 @@ jhipster:
   msmysql-mysql:
     image: mysql-placeholder
     volumes:
-      - ./config/mysql:/etc/mysql/conf.d
+      - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -723,7 +723,7 @@ jhipster:
   msmariadb-mariadb:
     image: mariadb-placeholder
     volumes:
-      - ./config/mariadb:/etc/mariadb/conf.d
+      - ./config/mariadb:/etc/mysql/conf.d:ro
     environment:
       - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
       - MARIADB_ALLOW_EMPTY_PASSWORD=yes
@@ -935,7 +935,7 @@ jhipster:
   jhgate-mysql:
     image: mysql-placeholder
     volumes:
-      - ./config/mysql:/etc/mysql/conf.d
+      - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -978,7 +978,7 @@ jhipster:
   msmysql-mysql:
     image: mysql-placeholder
     volumes:
-      - ./config/mysql:/etc/mysql/conf.d
+      - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -1121,7 +1121,7 @@ jhipster:
   msmariadb-mariadb:
     image: mariadb-placeholder
     volumes:
-      - ./config/mariadb:/etc/mariadb/conf.d
+      - ./config/mariadb:/etc/mysql/conf.d:ro
     environment:
       - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
       - MARIADB_ALLOW_EMPTY_PASSWORD=yes
@@ -1354,7 +1354,7 @@ jhipster:
   jhgate-mysql:
     image: mysql-placeholder
     volumes:
-      - ./config/mysql:/etc/mysql/conf.d
+      - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -1392,7 +1392,7 @@ jhipster:
   msmysql-mysql:
     image: mysql-placeholder
     volumes:
-      - ./config/mysql:/etc/mysql/conf.d
+      - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -1682,7 +1682,7 @@ jhipster:
   jhgate-mysql:
     image: mysql-placeholder
     volumes:
-      - ./config/mysql:/etc/mysql/conf.d
+      - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -1720,7 +1720,7 @@ jhipster:
   msmysql-mysql:
     image: mysql-placeholder
     volumes:
-      - ./config/mysql:/etc/mysql/conf.d
+      - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -1848,7 +1848,7 @@ jhipster:
   msmariadb-mariadb:
     image: mariadb-placeholder
     volumes:
-      - ./config/mariadb:/etc/mariadb/conf.d
+      - ./config/mariadb:/etc/mysql/conf.d:ro
     environment:
       - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
       - MARIADB_ALLOW_EMPTY_PASSWORD=yes
@@ -1999,7 +1999,7 @@ jhipster:
   jhgate-mysql:
     image: mysql-placeholder
     volumes:
-      - ./config/mysql:/etc/mysql/conf.d
+      - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -2037,7 +2037,7 @@ jhipster:
   msmysql-mysql:
     image: mysql-placeholder
     volumes:
-      - ./config/mysql:/etc/mysql/conf.d
+      - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -2185,7 +2185,7 @@ jhipster:
   jhgate-mysql:
     image: mysql-placeholder
     volumes:
-      - ./config/mysql:/etc/mysql/conf.d
+      - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -2223,7 +2223,7 @@ jhipster:
   msmysql-mysql:
     image: mysql-placeholder
     volumes:
-      - ./config/mysql:/etc/mysql/conf.d
+      - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -2396,7 +2396,7 @@ management:
   jhgate-mysql:
     image: mysql-placeholder
     volumes:
-      - ./config/mysql:/etc/mysql/conf.d
+      - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -2434,7 +2434,7 @@ management:
   msmysql-mysql:
     image: mysql-placeholder
     volumes:
-      - ./config/mysql:/etc/mysql/conf.d
+      - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -2671,7 +2671,7 @@ jhipster:
   jhgate-mysql:
     image: mysql-placeholder
     volumes:
-      - ./config/mysql:/etc/mysql/conf.d
+      - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -2709,7 +2709,7 @@ jhipster:
   msmysql-mysql:
     image: mysql-placeholder
     volumes:
-      - ./config/mysql:/etc/mysql/conf.d
+      - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -2826,7 +2826,7 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
   samplemysql-mysql:
     image: mysql-placeholder
     volumes:
-      - ./config/mysql:/etc/mysql/conf.d
+      - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=samplemysql
@@ -2954,7 +2954,7 @@ jhipster:
   msmysql-mysql:
     image: mysql-placeholder
     volumes:
-      - ./config/mysql:/etc/mysql/conf.d
+      - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql
@@ -3084,7 +3084,7 @@ jhipster:
   jhgate-mysql:
     image: mysql-placeholder
     volumes:
-      - ./config/mysql:/etc/mysql/conf.d
+      - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=jhgate
@@ -3212,7 +3212,7 @@ jhipster:
   msmysql-mysql:
     image: mysql-placeholder
     volumes:
-      - ./config/mysql:/etc/mysql/conf.d
+      - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=msmysql

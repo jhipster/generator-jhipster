@@ -22,7 +22,7 @@ services:
   mysql:
     image: <%- dockerContainers.mysql %>
     volumes:
-      - ./config/mysql:/etc/mysql/conf.d
+      - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=<%= baseName.toLowerCase() %>
