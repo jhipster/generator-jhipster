@@ -8,6 +8,7 @@ import axios from 'axios';
 import sinon from 'sinon';
 
 import AlertService from '@/shared/alert/alert.service';
+import { MESSAGE_ALERT_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from '@/shared/jhipster/constants';
 import UserManagement from './user-management.vue';
 
 type UserManagementComponentType = InstanceType<typeof UserManagement>;
@@ -90,8 +91,8 @@ describe('UserManagement Component', () => {
       // GIVEN
       axiosStub.delete.resolves({
         headers: {
-          'x-<%= frontendAppName.toLowerCase() %>-alert': '',
-          'x-<%= frontendAppName.toLowerCase() %>-params': '',
+          [MESSAGE_ALERT_HEADER_NAME]: '',
+          [MESSAGE_PARAM_HEADER_NAME]: '',
         },
       });
 

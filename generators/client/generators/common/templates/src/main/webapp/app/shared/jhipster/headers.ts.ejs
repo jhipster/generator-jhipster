@@ -60,7 +60,7 @@ const decodeHeaderValue = (headerValue?: string): string | undefined =>
   headerValue ? decodeURIComponent(headerValue.replaceAll('+', ' ')) : headerValue;
 
 export const getMessageFromHeaders = (headers: Record<string, any>): HeaderMessage => {
-  const alertHeader = headerToString(headers[<% if (microfrontend || applicationTypeGateway) { %>Object.keys(headers).find(key => /x-(.*)-alert/.test(key)) ?? <% } %>MESSAGE_ALERT_HEADER_NAME]);
+  const alertHeader = headerToString(headers[<% if (microfrontend || applicationTypeGateway) { %>Object.keys(headers).find(key => /^x-(.*)-alert$/.test(key)) ?? <% } %>MESSAGE_ALERT_HEADER_NAME]);
 <%_ if (enableTranslation) { _%>
   // Try to determine if the alertHeader is a key or a message
   const alertIsKey = /^[A-Za-z0-9](?:[A-Za-z0-9.]*[A-Za-z0-9])?$/.test(alertHeader ?? '');
@@ -68,7 +68,7 @@ export const getMessageFromHeaders = (headers: Record<string, any>): HeaderMessa
   const alertMessage = alertIsKey ? undefined : alertHeader;
 
 <%_ } _%>
-  const errorHeader = headerToString(headers[<% if (microfrontend || applicationTypeGateway) { %>Object.keys(headers).find(key => /x-(.*)-error/.test(key)) ?? <% } %>MESSAGE_ERROR_HEADER_NAME]);
+  const errorHeader = headerToString(headers[<% if (microfrontend || applicationTypeGateway) { %>Object.keys(headers).find(key => /^x-(.*)-error$/.test(key)) ?? <% } %>MESSAGE_ERROR_HEADER_NAME]);
 <%_ if (enableTranslation) { _%>
   // Try to determine if the errorHeader is a key or a message
   const errorIsKey = /^[A-Za-z0-9](?:[A-Za-z0-9.]*[A-Za-z0-9])?$/.test(errorHeader ?? '');
@@ -91,6 +91,6 @@ export const getMessageFromHeaders = (headers: Record<string, any>): HeaderMessa
 <%_ } else { _%>
     errorMessage: errorHeader,
 <%_ } _%>
-    param: decodeHeaderValue(headerToString(headers[<% if (microfrontend || applicationTypeGateway) { %>Object.keys(headers).find(key => /x-(.*)-params/.test(key)) ?? <% } %>MESSAGE_PARAM_HEADER_NAME])),
+    param: decodeHeaderValue(headerToString(headers[<% if (microfrontend || applicationTypeGateway) { %>Object.keys(headers).find(key => /^x-(.*)-params$/.test(key)) ?? <% } %>MESSAGE_PARAM_HEADER_NAME])),
   };
 };

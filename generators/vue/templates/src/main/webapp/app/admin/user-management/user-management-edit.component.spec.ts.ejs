@@ -8,6 +8,7 @@ import sinon from 'sinon';
 import { type RouteLocation } from 'vue-router';
 
 import AlertService from '@/shared/alert/alert.service';
+import { MESSAGE_ALERT_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from '@/shared/jhipster/constants';
 import UserManagementEdit from './user-management-edit.vue';
 
 type UserManagementEditComponentType = InstanceType<typeof UserManagementEdit>;
@@ -108,8 +109,8 @@ describe('UserManagementEdit Component', () => {
       // GIVEN
       axiosStub.put.resolves({
         headers: {
-          'x-<%= frontendAppName.toLowerCase() %>-alert': '',
-          'x-<%= frontendAppName.toLowerCase() %>-params': '',
+          [MESSAGE_ALERT_HEADER_NAME]: '',
+          [MESSAGE_PARAM_HEADER_NAME]: '',
         },
       });
       axiosStub.get.withArgs('api/admin/users/' + <%- tsKeyId %>).resolves({
@@ -140,8 +141,8 @@ describe('UserManagementEdit Component', () => {
       // GIVEN
       axiosStub.post.resolves({
         headers: {
-          'x-<%= frontendAppName.toLowerCase() %>-alert': '',
-          'x-<%= frontendAppName.toLowerCase() %>-params': '',
+          [MESSAGE_ALERT_HEADER_NAME]: '',
+          [MESSAGE_PARAM_HEADER_NAME]: '',
         },
       });
       axiosStub.get.resolves({});

@@ -194,7 +194,7 @@ function translateVueFilesTransform(
       newContent = replaceTranslations({ type: 'ts', content: file.contents.toString(), getWebappTranslation });
       newContent = removeDeclarations({ content: newContent });
     }
-    if (newContent) {
+    if (newContent && newContent !== file.contents.toString()) {
       if (!enableTranslation && newContent.includes('t$')) {
         throw new Error(`Could not translate ${file.path}:
 ${newContent}`);
