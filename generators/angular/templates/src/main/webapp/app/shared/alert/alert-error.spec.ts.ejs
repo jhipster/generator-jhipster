@@ -30,6 +30,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { EventManager } from 'app/core/util/event-manager.service';
 import { AlertModel, AlertService } from 'app/core/util/alert.service';
+import { MESSAGE_ERROR_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from 'app/shared/jhipster/constants';
 
 import { AlertError } from './alert-error';
 
@@ -153,7 +154,7 @@ describe('Alert Error Component', () => {
       // GIVEN
       const response = new HttpErrorResponse({
         url: 'http://localhost:8080/api/foos',
-        headers: new HttpHeaders().append('app-error', 'Error Message').append('app-params', 'foo'),
+        headers: new HttpHeaders().append(MESSAGE_ERROR_HEADER_NAME, 'Error Message').append(MESSAGE_PARAM_HEADER_NAME, 'foo'),
         status: 400,
         statusText: 'Bad Request',
         error: {

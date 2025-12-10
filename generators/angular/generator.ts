@@ -91,6 +91,18 @@ export default class AngularGenerator extends AngularApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
+  get composing() {
+    return this.asComposingTaskGroup({
+      async composing() {
+        await this.composeWithJHipster('jhipster:client:common');
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
+  }
+
   get loading() {
     return this.asLoadingTaskGroup({
       loadPackageJson({ application }) {
