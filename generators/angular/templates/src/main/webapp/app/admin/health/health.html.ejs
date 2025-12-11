@@ -44,7 +44,7 @@
           <td class="text-center">
             <span
               class="badge"
-              [ngClass]="getBadgeClass(componentHealth.value!.status)"
+              [class]="getBadgeClass(componentHealth.value!.status)"
             >
               __jhiTranslateTagEnum__('health.status', { "value": "componentHealth.value?.status ?? 'UNKNOWN'" })
             </span>

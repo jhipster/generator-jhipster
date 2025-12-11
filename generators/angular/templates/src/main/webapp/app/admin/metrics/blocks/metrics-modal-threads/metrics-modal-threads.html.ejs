@@ -79,7 +79,7 @@
   @for (thread of getThreads(); track $index) {
     <div class="pad">
       <h6>
-        <span class="badge" [ngClass]="getBadgeClass(thread.threadState)">{{ thread.threadState }}</span>
+        <span class="badge" [class]="getBadgeClass(thread.threadState)">{{ thread.threadState }}</span>
 
         &nbsp;{{ thread.threadName }} (ID {{ thread.threadId }})
 
