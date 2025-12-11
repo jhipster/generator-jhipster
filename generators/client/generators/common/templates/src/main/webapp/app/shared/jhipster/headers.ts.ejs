@@ -46,18 +46,18 @@ const headerToString = (headerValue: any): string | undefined => {
   }
   if (Array.isArray(headerValue)) {
     if (headerValue.length > 1) {
-      throw new Error('Multiple header values found');
+      throw new TypeError('Multiple header values found');
     }
     headerValue = headerValue[0];
   }
   if (typeof headerValue !== 'string') {
-    throw new Error('Header value is not a string');
+    throw new TypeError('Header value is not a string');
   }
   return headerValue;
 };
 
 const decodeHeaderValue = (headerValue?: string): string | undefined =>
-  headerValue ? decodeURIComponent(headerValue.replace(/\+/g, ' ')) : headerValue;
+  headerValue ? decodeURIComponent(headerValue.replaceAll(/\+/g, ' ')) : headerValue;
 
 export const getMessageFromHeaders = (headers: Record<string, any>): HeaderMessage => {
   const alertHeader = headerToString(headers[<% if (microfrontend || applicationTypeGateway) { %>Object.keys(headers).find(key => /x-(.*)-alert/.test(key)) ?? <% } %>MESSAGE_ALERT_HEADER_NAME]);
