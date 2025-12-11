@@ -27,14 +27,16 @@ const Options = {
 
 const optionNames = Object.values(Options);
 
+export type UnaryOptionType = (typeof Options)[keyof typeof Options];
+
 export default {
   ...Options,
-  forEach: (passedFunction: (optionName: string) => void) => {
+  forEach: (passedFunction: (optionName: UnaryOptionType) => void) => {
     if (!passedFunction) {
       throw new Error('A function has to be passed to loop over the unary options.');
     }
     optionNames.forEach(optionName => {
-      passedFunction(optionName);
+      passedFunction(optionName as UnaryOptionType);
     });
   },
   exists: (optionName: string) => (Object.values(Options) as string[]).includes(optionName),

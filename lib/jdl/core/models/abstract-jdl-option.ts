@@ -17,17 +17,18 @@
  * limitations under the License.
  */
 
+import type { JDLOptionName } from '../built-in-options/binary-options.ts';
 import { merge } from '../utils/object-utils.ts';
 import { addAll } from '../utils/set-utils.ts';
 
 export type JDLOptionParams = {
-  name: string;
+  name: JDLOptionName;
   entityNames?: Set<string> | string[];
   excludedNames?: Set<string> | string[];
 };
 
 export default class AbstractJDLOption {
-  name: string;
+  name: JDLOptionName;
   entityNames: Set<string>;
   excludedNames: Set<string>;
 

@@ -18,6 +18,8 @@
  */
 import entityOptions from '../../../jhipster/entity-options.ts';
 
+import type { UnaryOptionType } from './unary-options.ts';
+
 const { MapperTypes, PaginationTypes, SearchTypes, ServiceTypes } = entityOptions;
 const { MAPSTRUCT } = MapperTypes;
 const NO_MAPPER = MapperTypes.NO;
@@ -52,13 +54,17 @@ const Values = {
   search: searchValues,
 } as const;
 
+export type BinaryOptionType = (typeof Options)[keyof typeof Options];
+
+export type JDLOptionName = BinaryOptionType | UnaryOptionType | 'paginate';
+
 const DefaultValues = {
   [Options.DTO]: Values[Options.DTO].NO,
   [Options.SERVICE]: Values[Options.SERVICE].NO,
   [Options.PAGINATION]: Values[Options.PAGINATION].NO,
 };
 
-function getOptionName(optionValue: string): string | undefined {
+function getOptionName(optionValue: string): JDLOptionName | undefined {
   return optionNames.find(optionName => (Values as Record<string, Record<string, string>>)[optionName]?.[optionValue]);
 }
 
@@ -72,14 +78,14 @@ const OptionValues = {
   couchbase: 'COUCHBASE',
 } as const;
 
-function forEach(passedFunction: (optionName: string) => void): void {
+function forEach(passedFunction: (optionName: BinaryOptionType) => void): void {
   if (!passedFunction) {
     throw new Error('A function has to be passed to loop over the binary options.');
   }
-  optionNames.forEach(passedFunction);
+  optionNames.forEach(optionName => passedFunction(optionName as BinaryOptionType));
 }
 
-function exists(passedOption: string | keyof typeof Values | 'microservice' | 'angularSuffix' | 'clientRootFolder', passedValue?: any) {
+function exists(passedOption: JDLOptionName, passedValue?: any) {
   return (
     !(optionNames as string[]).includes(passedOption) ||
     optionNames.some(
