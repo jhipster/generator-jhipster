@@ -30,6 +30,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 import { EventManager } from 'app/core/util/event-manager.service';
 import { AlertModel, AlertService } from 'app/core/util/alert.service';
+import { MESSAGE_ERROR_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from 'app/shared/jhipster/constants';
 
 import { AlertError } from './alert-error';
 
@@ -153,7 +154,7 @@ describe('Alert Error Component', () => {
       // GIVEN
       const response = new HttpErrorResponse({
         url: 'http://localhost:8080/api/foos',
-        headers: new HttpHeaders().append('app-error', 'Error Message').append('app-params', 'foo'),
+        headers: new HttpHeaders().append(MESSAGE_ERROR_HEADER_NAME, 'header.error').append(MESSAGE_PARAM_HEADER_NAME, 'foo'),
         status: 400,
         statusText: 'Bad Request',
         error: {
@@ -164,7 +165,7 @@ describe('Alert Error Component', () => {
       eventManager.broadcast({ name: '<%= frontendAppName %>.httpError', content: response });
       // THEN
       expect(comp.alerts().length).toBe(1);
-      expect(comp.alerts()[0].<%= mainAlertField %>).toBe('Error Message');
+      expect(comp.alerts()[0].<%= mainAlertField %>).toBe('header.error');
     });
 
     it('should display an alert on status 500 with detail', () => {

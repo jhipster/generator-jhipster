@@ -407,7 +407,7 @@ export const files = asWriteFilesSection({
       templates: ['core/auth/auth-session.service.ts'],
     },
     {
-      condition: generator => generator.authenticationTypeSession && generator.communicationSpringWebsocket,
+      condition: generator => generator.authenticationUsesCsrf && generator.communicationSpringWebsocket,
       ...clientApplicationTemplatesBlock(),
       templates: ['core/auth/csrf.service.ts'],
     },

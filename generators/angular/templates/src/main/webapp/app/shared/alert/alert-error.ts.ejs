@@ -27,6 +27,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AlertErrorModel } from './alert-error.model';
 import { AlertModel, AlertService } from 'app/core/util/alert.service';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
+import { getMessageFromHeaders } from 'app/shared/jhipster/headers';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-alert-error',
@@ -99,25 +100,16 @@ export class AlertError implements OnDestroy {
   }
 
   private handleBadRequest(httpErrorResponse: HttpErrorResponse): void {
-    const arr = httpErrorResponse.headers.keys();
-    let errorHeader: string | null = null;
+    const headers = Object.fromEntries(httpErrorResponse.headers.keys().map(key => [key, httpErrorResponse.headers.getAll(key)]));
+    const message = getMessageFromHeaders(headers);
 <%_ if (enableTranslation) { _%>
-    let entityKey: string | null = null;
+    if (message.errorKey) {
+      const alertData = message.param ? { entityName: this.translateService.instant(`global.menu.entities.${message.param}`) } : undefined;
+      this.addErrorAlert(message.errorKey<% if (enableTranslation) { %>, message.errorKey, alertData<% } %>);
+    } else
 <%_ } _%>
-    for (const entry of arr) {
-      if (entry.toLowerCase().endsWith('app-error')) {
-        errorHeader = httpErrorResponse.headers.get(entry);
-<%_ if (enableTranslation) { _%>
-      } else if (entry.toLowerCase().endsWith('app-params')) {
-        entityKey = httpErrorResponse.headers.get(entry);
-<%_ } _%>
-      }
-    }
-    if (errorHeader) {
-<%_ if (enableTranslation) { _%>
-      const alertData = entityKey ? { entityName: this.translateService.instant(`global.menu.entities.${entityKey}`) } : undefined;
-<%_ } _%>
-      this.addErrorAlert(errorHeader<% if (enableTranslation) { %>, errorHeader, alertData<% } %>);
+    if (message.errorMessage) {
+      this.addErrorAlert(message.errorMessage);
     } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.fieldErrors) {
       this.handleFieldsError(httpErrorResponse);
     } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
