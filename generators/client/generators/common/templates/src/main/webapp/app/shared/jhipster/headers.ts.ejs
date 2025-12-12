@@ -57,7 +57,7 @@ const headerToString = (headerValue: any): string | undefined => {
 };
 
 const decodeHeaderValue = (headerValue?: string): string | undefined =>
-  headerValue ? decodeURIComponent(headerValue.replaceAll(/+/g, ' ')) : headerValue;
+  headerValue ? decodeURIComponent(headerValue.replaceAll('+', ' ')) : headerValue;
 
 export const getMessageFromHeaders = (headers: Record<string, any>): HeaderMessage => {
   const alertHeader = headerToString(headers[<% if (microfrontend || applicationTypeGateway) { %>Object.keys(headers).find(key => /x-(.*)-alert/.test(key)) ?? <% } %>MESSAGE_ALERT_HEADER_NAME]);
