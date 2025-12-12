@@ -127,7 +127,7 @@
   },
   "dependencies": {
     "@eslint/core": "1.0.0",
-    "@eslint/js": "9.39.1",
+    "@eslint/js": "9.39.2",
     "@faker-js/faker": "10.1.0",
     "@iarna/toml": "3.0.0",
     "@types/ejs": "3.1.5",
@@ -145,7 +145,7 @@
     "dockerfile-ast": "0.7.1",
     "dot-properties": "1.1.0",
     "ejs": "3.1.10",
-    "eslint": "9.39.1",
+    "eslint": "9.39.2",
     "eslint-plugin-import-x": "4.16.1",
     "eslint-plugin-unused-imports": "4.3.0",
     "execa": "9.6.1",
