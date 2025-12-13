@@ -6,6 +6,7 @@ import { RxStomp, RxStompState } from '@stomp/rx-stomp';
 import Cookies from 'js-cookie';
 
 import { CSRF_TOKEN_COOKIE_NAME, CSRF_TOKEN_HEADER_NAME } from '@/shared/jhipster/constants';
+import { encodeCsrfToken } from '@/shared/jhipster/encode-csrf-token';
  
 const DESTINATION_TRACKER = '/topic/tracker';
 const DESTINATION_ACTIVITY = '/topic/activity';
@@ -117,7 +118,7 @@ export default class TrackerService {
       },
 <%_ if (authenticationUsesCsrf) { _%>
       connectHeaders: {
-        [CSRF_TOKEN_HEADER_NAME]: Cookies.get(CSRF_TOKEN_COOKIE_NAME),
+        [CSRF_TOKEN_HEADER_NAME]: encodeCsrfToken(Cookies.get(CSRF_TOKEN_COOKIE_NAME)),
       },
 <%_ } _%>
     });
