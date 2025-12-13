@@ -3,13 +3,7 @@ import type { OptionWithDerivedProperties } from '../base-application/internal/t
 import type { Entity as BaseApplicationEntity, RelationshipWithEntity } from '../base-application/types.ts';
 import type { Config as CommonConfig } from '../common/types.d.ts';
 import type { JavaAnnotation } from '../java/support/add-java-annotation.ts';
-import type {
-  Config as JavaConfig,
-  Field as JavaField,
-  Options as JavaOptions,
-  Relationship as JavaRelationship,
-  Source as JavaSource,
-} from '../java/types.ts';
+import type { Config as JavaConfig, Field as JavaField, Options as JavaOptions, Relationship as JavaRelationship } from '../java/types.ts';
 import type { Application as GradleApplication } from '../java-simple-application/generators/gradle/types.ts';
 import type { ApplicationPropertiesNeedles } from '../server/support/needles.ts';
 import type {
@@ -76,52 +70,51 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
   reactiveUniqueEntityTypes: Set<string>;
 }
 
-export type Source = JavaSource &
-  ServerSource & {
-    addTestSpringFactory?({ key, value }: { key: string; value: string }): void;
-    addLogbackLogEntry?({ file, name, level }: { file: string; name: string; level: string }): void;
-    addIntegrationTestAnnotation?(annotation: JavaAnnotation): void;
-    addAllowBlockingCallsInside?({ classPath, method }: { classPath: string; method: string }): void;
-    addApplicationPropertiesContent?(content: ApplicationPropertiesNeedles): void;
-    addApplicationPropertiesProperty?({ propertyName, propertyType }: { propertyName: string; propertyType: string }): void;
-    /**
-     * Add a Spring Boot Module to dependencies.
-     */
-    addSpringBootModule?(...moduleNames: (SpringBootModule | { condition: boolean; module: SpringBootModule })[]): void;
-    /**
-     * Override a property defined in Spring Boot Dependencies POM.
-     */
-    overrideProperty?({ property, value }: { property: SpringBootModule; value: string }): void;
-    /**
-     * @example
-     * addApplicationPropertiesClass({
-     *   propertyType: 'Liquibase',
-     *   classStructure: { enabled: ['PropertyType', '"default value"'], asyncStart: 'PropertyTypeOnly' },
-     * });
-     */
-    addApplicationPropertiesClass?(opts: {
-      propertyName?: string;
-      propertyType: string;
-      classStructure: Record<string, string | string[]>;
-    }): void;
-    addNativeHint?(hints: {
-      advanced?: string[];
-      declaredConstructors?: string[];
-      resources?: string[];
-      publicConstructors?: string[];
-      publicMethods?: string[];
-    }): void;
-    /**
-     * Injects a document into the application.yml file using '---' document separator.
-     *
-     * @example
-     * addApplicationYamlDocument(`
-     * spring:
-     *  key: value
-     * `);
-     */
-    addApplicationYamlDocument?(document: string): void;
-  };
+export type Source = ServerSource & {
+  addTestSpringFactory?({ key, value }: { key: string; value: string }): void;
+  addLogbackLogEntry?({ file, name, level }: { file: string; name: string; level: string }): void;
+  addIntegrationTestAnnotation?(annotation: JavaAnnotation): void;
+  addAllowBlockingCallsInside?({ classPath, method }: { classPath: string; method: string }): void;
+  addApplicationPropertiesContent?(content: ApplicationPropertiesNeedles): void;
+  addApplicationPropertiesProperty?({ propertyName, propertyType }: { propertyName: string; propertyType: string }): void;
+  /**
+   * Add a Spring Boot Module to dependencies.
+   */
+  addSpringBootModule?(...moduleNames: (SpringBootModule | { condition: boolean; module: SpringBootModule })[]): void;
+  /**
+   * Override a property defined in Spring Boot Dependencies POM.
+   */
+  overrideProperty?({ property, value }: { property: SpringBootModule; value: string }): void;
+  /**
+   * @example
+   * addApplicationPropertiesClass({
+   *   propertyType: 'Liquibase',
+   *   classStructure: { enabled: ['PropertyType', '"default value"'], asyncStart: 'PropertyTypeOnly' },
+   * });
+   */
+  addApplicationPropertiesClass?(opts: {
+    propertyName?: string;
+    propertyType: string;
+    classStructure: Record<string, string | string[]>;
+  }): void;
+  addNativeHint?(hints: {
+    advanced?: string[];
+    declaredConstructors?: string[];
+    resources?: string[];
+    publicConstructors?: string[];
+    publicMethods?: string[];
+  }): void;
+  /**
+   * Injects a document into the application.yml file using '---' document separator.
+   *
+   * @example
+   * addApplicationYamlDocument(`
+   * spring:
+   *  key: value
+   * `);
+   */
+  addApplicationYamlDocument?(document: string): void;
+};
 
 type ImperativeApplication = {
   reactive: false;
