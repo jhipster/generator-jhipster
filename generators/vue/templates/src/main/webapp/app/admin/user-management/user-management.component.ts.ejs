@@ -2,10 +2,12 @@ import { type ComputedRef, defineComponent, inject, type Ref, ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
-import UserManagementService from './user-management.service';
-import { useAlertService } from '@/shared/alert/alert.service';
 
+import { useAlertService } from '@/shared/alert/alert.service';
 import { useDateFormat } from '@/shared/composables'
+import { getMessageFromHeaders } from '@/shared/jhipster/headers';
+
+import UserManagementService from './user-management.service';
 
 export default defineComponent({
   name: '<%=jhiPrefixCapitalized%>UserManagementComponent',
@@ -130,15 +132,12 @@ export default defineComponent({
       this.userManagementService
         .remove(this.removeId)
         .then(res => {
-<%_
-  const headerAlert = `X-${frontendAppName}-alert`.toLowerCase();
-  const headerParams = `X-${frontendAppName}-params`.toLowerCase();
-_%>
+          const message = getMessageFromHeaders(res.headers);
           this.alertService.showInfo(
 <%_ if (enableTranslation) { _%>
-            this.t$(res.headers['<%=headerAlert%>'].toString(), { param: decodeURIComponent(res.headers['<%=headerParams%>'].replace(/\+/g, ' ')) }),
+            message.alertKey ? this.t$(message.alertKey, { param: message.param }) : message.alertMessage,
 <%_ } else { _%>
-            res.headers['<%=headerAlert%>'].toString(),
+            message.alertMessage,
 <%_ } _%>
             { variant: 'danger' },
           );

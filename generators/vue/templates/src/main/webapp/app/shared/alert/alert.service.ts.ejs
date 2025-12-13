@@ -2,6 +2,7 @@ import { type BToastProps, useToast } from 'bootstrap-vue-next';
 <%_ if (enableTranslation) { _%>
 import { type Composer, useI18n } from 'vue-i18n';
 <%_ } _%>
+import { getMessageFromHeaders } from '@/shared/jhipster/headers';
 
 export const useAlertService = () => {
   const toast = useToast();
@@ -69,40 +70,35 @@ export default class AlertService {
     });
   }
 
-  showHttpError(httpErrorResponse: any) {
+  showHttpError({ data, status, headers }: any) {
     let errorMessage: string | null = null;
-    switch (httpErrorResponse.status) {
+    switch (status) {
       case 0:
         errorMessage = this.i18n.t('error.server.not.reachable').toString();
         break;
 
       case 400: {
-        const arr = Object.keys(httpErrorResponse.headers);
+        const message = getMessageFromHeaders(headers);
 <%_ if (enableTranslation) { _%>
-        let entityKey: string | null = null;
 <%_ } _%>
-        for (const entry of arr) {
-          if (entry.toLowerCase().endsWith('app-error')) {
-            errorMessage = httpErrorResponse.headers[entry];
 <%_ if (enableTranslation) { _%>
-          } else if (entry.toLowerCase().endsWith('app-params')) {
-            entityKey = httpErrorResponse.headers[entry];
+        if (message.errorKey && message.param) {
+          errorMessage = this.i18n.t(message.errorKey!, { entityName: this.i18n.t(`global.menu.entities.${message.param!}`) }).toString();
+        } else if (message.errorKey) {
+          errorMessage = this.i18n.t(message.errorKey!).toString();
+        } else
 <%_ } _%>
-          }
-        }
+        if (message.errorMessage) {
+          errorMessage = message.errorMessage;
+        } else if (data.message) {
 <%_ if (enableTranslation) { _%>
-        if (errorMessage && entityKey) {
-          errorMessage = this.i18n.t(errorMessage, { entityName: this.i18n.t(`global.menu.entities.${entityKey}`) }).toString();
-        } else if (!errorMessage) {
-          errorMessage = this.i18n.t(httpErrorResponse.data.message).toString();
-        }
+          errorMessage = this.i18n.t(data.message).toString();
 <%_ } else { _%>
-        if (!errorMessage && httpErrorResponse.data?.fieldErrors) {
-          errorMessage = 'Validation error';
-        } else if (!errorMessage) {
-          errorMessage = httpErrorResponse.data.message;
-        }
+          errorMessage = data.message;
 <%_ } _%>
+        } else if (data?.fieldErrors) {
+          errorMessage = 'Validation error';
+        }
         break;
       }
 
@@ -112,11 +108,11 @@ export default class AlertService {
 
       default:
 <%_ if (enableTranslation) { _%>
-        errorMessage = this.i18n.t(httpErrorResponse.data.message).toString();
+        errorMessage = this.i18n.t(data.message).toString();
 <%_ } else { _%>
-        errorMessage = httpErrorResponse.data.message;
+        errorMessage = data.message;
 <%_ } _%>
     }
-    this.showError(errorMessage);
+    this.showError(errorMessage!);
   }
 }

@@ -27,6 +27,7 @@ import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '.
 import { JAVA_WEBAPP_SOURCES_DIR } from '../index.ts';
 import { writeEslintClientRootConfigFile } from '../javascript-simple-application/generators/eslint/support/tasks.ts';
 import { defaultLanguage } from '../languages/support/index.ts';
+import type { Config as SpringBootConfig } from '../spring-boot/types.d.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
 import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-angular.ts';
@@ -95,6 +96,9 @@ export default class AngularGenerator extends AngularApplicationGenerator {
     return this.asComposingTaskGroup({
       async composing() {
         await this.composeWithJHipster('jhipster:client:common');
+        if ((this.jhipsterConfigWithDefaults as SpringBootConfig).websocket === 'spring-websocket') {
+          await this.composeWithJHipster('jhipster:client:encode-csrf-token');
+        }
       },
     });
   }
