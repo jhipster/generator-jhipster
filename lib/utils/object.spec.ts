@@ -3,6 +3,7 @@ import { describe, expect, it } from 'esmocha';
 import type { MutateDataParam } from './object.ts';
 import { removeFieldsWithNullishValues } from './object.ts';
 
+// __override__ field should be accepted.
 ({
   __override__: true,
 }) satisfies MutateDataParam<{ str: string }>;
