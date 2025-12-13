@@ -31,6 +31,7 @@ import {
 import type { Entity as ClientEntity, Field as ClientField } from '../client/types.ts';
 import { JAVA_WEBAPP_SOURCES_DIR } from '../index.ts';
 import { writeEslintClientRootConfigFile } from '../javascript-simple-application/generators/eslint/support/tasks.ts';
+import type { Config as SpringBootConfig } from '../spring-boot/types.d.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
 import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-react.ts';
@@ -61,6 +62,9 @@ export default class ReactGenerator extends ClientApplicationGenerator<
     return this.asComposingTaskGroup({
       async composing() {
         await this.composeWithJHipster('jhipster:client:common');
+        if ((this.jhipsterConfigWithDefaults as SpringBootConfig).websocket === 'spring-websocket') {
+          await this.composeWithJHipster('jhipster:client:encode-csrf-token');
+        }
       },
     });
   }
