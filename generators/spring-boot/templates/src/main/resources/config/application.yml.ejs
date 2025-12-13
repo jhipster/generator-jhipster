@@ -299,6 +299,8 @@ spring:
         - api-docs
         # Uncomment to activate TLS for the dev profile
         #- tls
+  jackson:
+    use-jackson2-defaults: true
   jmx:
     enabled: false
 <%_ if (databaseTypeSql && !reactive) { _%>
@@ -347,7 +349,7 @@ spring:
       ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
-        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+        implicit-strategy: org.springframework.boot.hibernate.SpringImplicitNamingStrategy
 <%_ } _%>
   messages:
     basename: i18n/messages
@@ -357,6 +359,11 @@ spring:
     problemdetails:
       enabled: true
 <%_ if (generateInMemoryUserCredentials || authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+<%_ if (databaseTypeMongodb) { _%>
+  mongodb:
+    representation:
+      uuid-representation: standard
+<%_ } _%>
   security:
   <%_ if (generateInMemoryUserCredentials) { _%>
     user:

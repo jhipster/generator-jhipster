@@ -735,7 +735,7 @@ exports[`generator - spring-cache redis-gradle should match source calls 1`] = `
             "groupId": "org.springframework.boot",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },
@@ -816,7 +816,7 @@ exports[`generator - spring-cache redis-maven should match source calls 1`] = `
             "groupId": "org.springframework.boot",
           },
           {
-            "artifactId": "junit-jupiter",
+            "artifactId": "testcontainers-junit-jupiter",
             "groupId": "org.testcontainers",
             "scope": "test",
           },

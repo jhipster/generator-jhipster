@@ -22,7 +22,6 @@ import { lowerFirst, sortedUniqBy } from 'lodash-es';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import type { FieldType } from '../../lib/jhipster/field-types.ts';
 import {
-  cacheTypes,
   databaseTypes,
   fieldTypes,
   messageBrokerTypes,
@@ -62,7 +61,6 @@ import type {
   SpringBootModule,
 } from './types.ts';
 
-const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
 const { NO: NO_WEBSOCKET, SPRING_WEBSOCKET } = websocketTypes;
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
 const { KAFKA, PULSAR } = messageBrokerTypes;
@@ -110,6 +108,18 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
 
   get configuring() {
     return this.asConfiguringTaskGroup({
+      disableInfinispan() {
+        const { cacheProvider } = this.jhipsterConfig as SpringCacheConfig;
+        if (cacheProvider === 'infinispan' || cacheProvider === 'hazelcast') {
+          (this.jhipsterConfig as SpringCacheConfig).cacheProvider = 'no';
+        }
+      },
+      disableWebsocket() {
+        const { websocket } = this.jhipsterConfig as SpringCacheConfig;
+        if (websocket === 'spring-websocket') {
+          (this.jhipsterConfig as SpringCacheConfig).websocket = 'no';
+        }
+      },
       syncUserWithIdpMigration({ control }) {
         if (this.jhipsterConfig.syncUserWithIdp === undefined && this.jhipsterConfigWithDefaults.authenticationType === 'oauth2') {
           if (control.isJhipsterVersionLessThan('8.1.1')) {
@@ -211,7 +221,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
         if (websocket === SPRING_WEBSOCKET) {
           await this.composeWithJHipster('jhipster:spring-boot:websocket');
         }
-        if (([EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS] as string[]).includes(cacheProvider!)) {
+        if (['ehcache', 'caffeine', 'hazelcast', 'infinispan', 'memcached', 'redis'].includes(cacheProvider!)) {
           await this.composeWithJHipster('spring-cache');
         }
       },
@@ -434,7 +444,7 @@ ${classProperties
         const getScopeForModule = (moduleName: SpringBootModule): JavaArtifactType['scope'] => {
           if (moduleName === 'spring-boot-properties-migrator') return 'runtime';
           if (moduleName === 'spring-boot-configuration-processor') return 'annotationProcessor';
-          return moduleName.endsWith('-test') ? 'test' : undefined;
+          return moduleName.endsWith('-test') || moduleName.includes('-test-') ? 'test' : undefined;
         };
         source.addSpringBootModule = (...moduleNames) =>
           source.addJavaDependencies?.(
@@ -609,6 +619,11 @@ ${classProperties
   get writing() {
     return this.asWritingTaskGroup({
       cleanupTask,
+      async cleanup({ application, control }) {
+        await control.cleanupFiles({
+          '9.0.0-alpha.0': [`${application.javaPackageSrcDir}config/JacksonConfiguration.java`],
+        });
+      },
       resetFakeDataSeed() {
         this.resetEntitiesFakeData('server');
       },
@@ -649,21 +664,22 @@ ${classProperties
       baseDependencies({ application, source }) {
         source.addSpringBootModule!(
           'spring-boot-configuration-processor',
-          'spring-boot-loader-tools',
+          'spring-boot-jackson2',
           'spring-boot-starter',
           'spring-boot-starter-actuator',
-          'spring-boot-starter-aop',
+          'spring-boot-starter-aspectj',
+          'spring-boot-starter-jackson',
+          'spring-boot-starter-jackson-test',
           'spring-boot-starter-mail',
+          'spring-boot-starter-security',
+          'spring-boot-starter-security-test',
           'spring-boot-starter-test',
           'spring-boot-starter-thymeleaf',
           'spring-boot-starter-tomcat',
           'spring-boot-starter-validation',
-          `spring-boot-starter-web${application.reactive ? 'flux' : ''}`,
+          `spring-boot-starter-web${application.reactive ? 'flux' : 'mvc'}`,
+          `spring-boot-starter-web${application.reactive ? 'flux' : 'mvc'}-test`,
           'spring-boot-test',
-          {
-            condition: application.authenticationTypeSession,
-            module: 'spring-boot-starter-security',
-          },
         );
       },
       addJHipsterBomDependencies({ application, source }) {

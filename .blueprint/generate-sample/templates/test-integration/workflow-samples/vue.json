@@ -47,6 +47,7 @@
     },
     {
       "name": "ms-vue-eureka-jwt-couchbase-hazelcast",
+      "disabled": "needs adjusts for sb4",
       "jdl-samples": "ms-vue-eureka-jwt-couchbase-hazelcast",
       "generatorOptions": {
         "workspaces": true,

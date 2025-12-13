@@ -62,12 +62,6 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
           ? 'GRAALVM_REACHABILITY_METADATA_VERSION'
           : GRAALVM_REACHABILITY_METADATA;
       },
-      gradle({ application }) {
-        if (application.buildToolGradle && !application.reactive && application.databaseTypeSql) {
-          // Downgrade gradle due to https://hibernate.atlassian.net/jira/software/c/projects/HHH/issues/?jql=project%20%3D%20%22HHH%22%20AND%20textfields%20~%20%22gradle%209%22%20ORDER%20BY%20created%20DESC&selectedIssue=HHH-18984
-          application.gradleVersion = '8.14.3';
-        }
-      },
     });
   }
 
@@ -166,6 +160,14 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      updateHibernateForHibernatePlugin({ application, source }) {
+        if (application.javaManagedProperties['hibernate.version'] !== '7.1.8.Final') {
+          throw new Error('Hibernate version has changed, this customization can be dropped.');
+        }
+        // https://hibernate.atlassian.net/browse/HHH-19940
+        source.addJavaProperty!({ property: 'hibernate.version', value: '7.1.10.Final' });
+      },
+
       async customizeGradle({ application, source }) {
         const { buildToolGradle, javaDependencies } = application;
         if (!buildToolGradle) return;
@@ -253,7 +255,7 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
         (source as SpringBootSource).addNativeHint?.({
           // Thymeleaf template
           publicMethods: ['java.util.Locale.class'],
-          resources: ['i18n/*'],
+          resources: ['i18n/**'],
         });
       },
     });
