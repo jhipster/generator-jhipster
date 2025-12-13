@@ -28,6 +28,7 @@ import { RxStomp } from '@stomp/rx-stomp';
 <%_ if (authenticationUsesCsrf) { _%>
 import { CSRFService } from 'app/core/auth/csrf.service';
 import { CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN_COOKIE_NAME } from 'app/shared/jhipster/constants';
+import { encodeCsrfToken } from 'app/shared/jhipster/encode-csrf-token';
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
 import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
@@ -135,7 +136,7 @@ export class TrackerService {
       webSocketFactory: () => SockJS(this.buildUrl()),
 <%_ if (authenticationUsesCsrf) { _%>
       connectHeaders: {
-        [CSRF_TOKEN_HEADER_NAME]: this.csrfService.getCSRF(CSRF_TOKEN_COOKIE_NAME),
+        [CSRF_TOKEN_HEADER_NAME]: encodeCsrfToken(this.csrfService.getCSRF(CSRF_TOKEN_COOKIE_NAME)),
       }
 <%_ } _%>
     });
