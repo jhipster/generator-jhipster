@@ -74,6 +74,18 @@ export default class VueGenerator extends ClientApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
+  get composing() {
+    return this.asComposingTaskGroup({
+      async composing() {
+        await this.composeWithJHipster('jhipster:client:common');
+      },
+    });
+  }
+
+  get [ClientApplicationGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
+  }
+
   get loading() {
     return this.asLoadingTaskGroup({
       loadPackageJson({ application }) {

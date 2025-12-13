@@ -2,15 +2,19 @@ import { defineComponent, inject, ref, type Ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
+import { useRoute, useRouter } from 'vue-router';
+
 import { useVuelidate } from '@vuelidate/core'
 import { email, maxLength, minLength, required } from '@vuelidate/validators';
-import UserManagementService from './user-management.service';
+
 import { type IUser, User } from '@/shared/model/user.model';
 import { useAlertService } from '@/shared/alert/alert.service';
-import { useRoute, useRouter } from 'vue-router';
+import { getMessageFromHeaders } from '@/shared/jhipster/headers';
+
 <%_ if (enableTranslation) { _%>
 import languages from '@/shared/config/languages';
 <%_ } _%>
+import UserManagementService from './user-management.service';
 
 const loginValidator = (value: string) => {
   if (!value) {
@@ -123,14 +127,11 @@ export default defineComponent({
     },
 
     getToastMessageFromHeader(res: any): string {
-<%_
-  const headerAlert = `X-${frontendAppName}-alert`.toLowerCase();
-  const headerParams = `X-${frontendAppName}-params`.toLowerCase();
-  if (enableTranslation) {
-_%>
-      return this.t$(res.headers['<%=headerAlert%>'], { param: decodeURIComponent(res.headers['<%=headerParams%>'].replace(/\+/g, ' ')) }).toString();
+      const message = getMessageFromHeaders(res.headers);
+<%_ if (enableTranslation) { _%>
+      return message.alertKey ? this.t$(message.alertKey, { param: message.param }) : message.alertMessage;
 <%_ } else {_%>
-      return res.headers['<%=headerAlert%>'];
+      return message.alertMessage!;
 <%_ } _%>
     },
   },

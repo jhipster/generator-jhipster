@@ -195,7 +195,7 @@ function translateVueFilesTransform(
       newContent = removeDeclarations({ content: newContent });
     }
     if (newContent) {
-      if (!enableTranslation && newContent.includes('t$')) {
+      if (!enableTranslation && /(?<![A-Za-z0-9])t\$/.test(newContent)) {
         throw new Error(`Could not translate ${file.path}:
 ${newContent}`);
       }
