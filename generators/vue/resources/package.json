@@ -22,7 +22,7 @@
     "vue-router": "4.6.4"
   },
   "devDependencies": {
-    "@eslint/js": "9.39.1",
+    "@eslint/js": "9.39.2",
     "@module-federation/enhanced": "0.21.6",
     "@pinia/testing": "1.0.3",
     "@tsconfig/node18": "18.2.6",
@@ -37,7 +37,7 @@
     "copy-webpack-plugin": "13.0.1",
     "css-loader": "7.1.2",
     "css-minimizer-webpack-plugin": "7.0.4",
-    "eslint": "9.39.1",
+    "eslint": "9.39.2",
     "eslint-plugin-prettier": "5.5.4",
     "eslint-plugin-vue": "10.6.2",
     "flush-promises": "1.0.2",
