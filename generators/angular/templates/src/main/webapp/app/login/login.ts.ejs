@@ -20,13 +20,16 @@ import { Component, OnInit, AfterViewInit, ElementRef, inject, signal, viewChild
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router<% if (generateUserManagement) { %>, RouterLink<% } %> } from '@angular/router';
 
-import SharedModule from 'app/shared/shared.module';
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 import { LoginService } from 'app/login/login.service';
 import { AccountService } from 'app/core/auth/account.service';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-login',
-  imports: [SharedModule, ReactiveFormsModule<% if (generateUserManagement) { %>, RouterLink<% } %>],
+  imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>ReactiveFormsModule<% if (generateUserManagement) { %>, RouterLink<% } %>],
   templateUrl: './login.html',
 })
 export default class LoginComponent implements OnInit, AfterViewInit {
