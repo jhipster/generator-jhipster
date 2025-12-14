@@ -203,7 +203,7 @@
     "eslint-plugin-chai-friendly": "1.1.0",
     "eslint-plugin-n": "17.23.1",
     "eslint-plugin-prettier": "5.5.4",
-    "esmocha": "4.0.0",
+    "esmocha": "5.0.0",
     "jiti": "2.6.1",
     "jsdoc": "4.0.5",
     "mocha": "11.7.5",
