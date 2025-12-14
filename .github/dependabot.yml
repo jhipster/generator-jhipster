@@ -121,7 +121,7 @@ updates:
       - 'skip-changelog'
 
   - package-ecosystem: 'npm'
-    directory: '/generators/javascript/resources/'
+    directory: '/generators/javascript-simple-application/resources/'
     rebase-strategy: 'auto'
     schedule:
       interval: 'daily'
