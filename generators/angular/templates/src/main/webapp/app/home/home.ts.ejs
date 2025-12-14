@@ -32,7 +32,10 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 <%_ } _%>
 
-import SharedModule from 'app/shared/shared.module';
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import { LoginService } from 'app/login/login.service';
 <%_ } _%>
@@ -43,7 +46,7 @@ import { Account } from 'app/core/auth/account.model';
   selector: '<%= jhiPrefixDashed %>-home',
   templateUrl: './home.html',
   styleUrl: './home.scss',
-  imports: [SharedModule<%_ if (generateUserManagement) { _%>, RouterLink<%_ } _%>],
+  imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%><%_ if (generateUserManagement) { _%>RouterLink<%_ } _%>],
 })
 export default class Home implements OnInit<% if (!authenticationTypeOauth2) { %>, OnDestroy<% } %> {
   account = signal<Account | null>(null);

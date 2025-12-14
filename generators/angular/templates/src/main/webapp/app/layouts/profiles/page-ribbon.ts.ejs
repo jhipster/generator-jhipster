@@ -21,7 +21,10 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { toSignal } from '@angular/core/rxjs-interop';
 
-import SharedModule from 'app/shared/shared.module';
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 import { ProfileService } from './profile.service';
 
 @Component({
@@ -34,7 +37,7 @@ import { ProfileService } from './profile.service';
     }
   `,
   styleUrl: './page-ribbon.scss',
-  imports: [SharedModule],
+  <%_ if (enableTranslation) { _%>imports: [TranslateDirective, TranslateModule],<%_ } _%>
 })
 export default class PageRibbon implements OnInit {
   ribbonEnvSignal?: Signal<string | undefined>;

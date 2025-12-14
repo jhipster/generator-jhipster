@@ -20,13 +20,16 @@ import { Component, inject } from '@angular/core';
 import { KeyValuePipe } from '@angular/common';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import SharedModule from 'app/shared/shared.module';
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 import { HealthKey, HealthDetails } from '../health.model';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-health-modal',
   templateUrl: './health-modal.html',
-  imports: [SharedModule, KeyValuePipe],
+  imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>KeyValuePipe],
 })
 export default class HealthModal {
   health?: { key: HealthKey; value: HealthDetails };

@@ -26,12 +26,15 @@ import { TranslateService } from '@ngx-translate/core';
 
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/config/error.constants';
 import { RegisterService } from './register.service';
-import SharedModule from 'app/shared/shared.module';
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 import PasswordStrengthBar from '../password/password-strength-bar/password-strength-bar';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-register',
-  imports: [SharedModule, RouterLink, ReactiveFormsModule, PasswordStrengthBar],
+  imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>RouterLink, ReactiveFormsModule, PasswordStrengthBar],
   templateUrl: './register.html',
 })
 export default class Register implements AfterViewInit {
