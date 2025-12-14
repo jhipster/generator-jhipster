@@ -19,7 +19,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, inject, signal } from '@angular/core';
 import { combineLatest } from 'rxjs';
 
-import SharedModule from 'app/shared/shared.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MetricsService } from './metrics.service';
 import { MetricsModel, Thread } from './metrics.model';
 import { JvmMemory } from './blocks/jvm-memory/jvm-memory';
@@ -36,7 +36,7 @@ import { MetricsSystem } from './blocks/metrics-system/metrics-system';
   templateUrl: './metrics.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    SharedModule,
+    FontAwesomeModule,
     JvmMemory,
     JvmThreads,
     MetricsCache,

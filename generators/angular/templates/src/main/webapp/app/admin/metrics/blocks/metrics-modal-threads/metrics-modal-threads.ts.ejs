@@ -19,14 +19,14 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-import SharedModule from 'app/shared/shared.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Thread, ThreadState } from 'app/admin/metrics/metrics.model';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-thread-modal',
   templateUrl: './metrics-modal-threads.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule],
+  imports: [FontAwesomeModule],
 })
 export class MetricsModalThreads implements OnInit {
   ThreadState = ThreadState;
