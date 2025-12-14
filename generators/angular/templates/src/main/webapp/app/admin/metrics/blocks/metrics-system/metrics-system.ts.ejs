@@ -19,14 +19,14 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { DecimalPipe, DatePipe } from '@angular/common';
 
-import SharedModule from 'app/shared/shared.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProcessMetrics } from 'app/admin/metrics/metrics.model';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-metrics-system',
   templateUrl: './metrics-system.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule, DecimalPipe, DatePipe],
+  imports: [NgbModule, DecimalPipe, DatePipe],
 })
 export class MetricsSystem {
   /**

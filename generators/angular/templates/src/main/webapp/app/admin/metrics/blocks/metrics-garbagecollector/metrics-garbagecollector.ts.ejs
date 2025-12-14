@@ -19,13 +19,13 @@
 import { Component, input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 
-import SharedModule from 'app/shared/shared.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { GarbageCollector } from 'app/admin/metrics/metrics.model';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-metrics-garbagecollector',
   templateUrl: './metrics-garbagecollector.html',
-  imports: [SharedModule, DecimalPipe],
+  imports: [NgbModule, DecimalPipe],
 })
 export class MetricsGarbageCollector {
   /**
