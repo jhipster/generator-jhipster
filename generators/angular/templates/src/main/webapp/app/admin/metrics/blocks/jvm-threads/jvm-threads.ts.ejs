@@ -20,14 +20,14 @@ import { Component, inject, computed, input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import SharedModule from 'app/shared/shared.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Thread, ThreadState } from 'app/admin/metrics/metrics.model';
 import { MetricsModalThreads } from '../metrics-modal-threads/metrics-modal-threads';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-jvm-threads',
   templateUrl: './jvm-threads.html',
-  imports: [SharedModule, DecimalPipe],
+  imports: [NgbModule, DecimalPipe],
 })
 export class JvmThreads {
   threads = input<Thread[] | undefined>();

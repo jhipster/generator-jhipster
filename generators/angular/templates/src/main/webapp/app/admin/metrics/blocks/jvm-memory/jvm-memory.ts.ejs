@@ -19,13 +19,13 @@
 import { Component, input } from '@angular/core';
 import { KeyValuePipe, DecimalPipe } from '@angular/common';
 
-import SharedModule from 'app/shared/shared.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { JvmMetrics } from 'app/admin/metrics/metrics.model';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-jvm-memory',
   templateUrl: './jvm-memory.html',
-  imports: [SharedModule, KeyValuePipe, DecimalPipe],
+  imports: [NgbModule, KeyValuePipe, DecimalPipe],
 })
 export class JvmMemory {
   /**
