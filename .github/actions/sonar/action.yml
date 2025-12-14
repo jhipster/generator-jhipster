@@ -55,7 +55,7 @@ runs:
 
     - name: 'Store cache (main branch)'
       if: github.ref == 'refs/heads/main'
-      uses: actions/cache/save@v4
+      uses: actions/cache/save@v5
       with:
         path: ./${{ inputs.sonar-project-key }}
         key: application-${{ inputs.sonar-project-key }}-${{ github.sha }}
@@ -64,7 +64,7 @@ runs:
     - name: 'Restore project cache for PR analysis'
       if: github.event_name == 'pull_request'
       id: restore_cache
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       with:
         path: ./${{ inputs.sonar-project-key }}
         key: application-${{ inputs.sonar-project-key }}-${{ github.event.pull_request.base.sha }}
