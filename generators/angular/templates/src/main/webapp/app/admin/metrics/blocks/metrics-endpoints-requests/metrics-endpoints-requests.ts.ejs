@@ -19,13 +19,12 @@
 import { Component, input } from '@angular/core';
 import { KeyValuePipe, DecimalPipe } from '@angular/common';
 
-import SharedModule from 'app/shared/shared.module';
 import { Services } from 'app/admin/metrics/metrics.model';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-metrics-endpoints-requests',
   templateUrl: './metrics-endpoints-requests.html',
-  imports: [SharedModule, KeyValuePipe, DecimalPipe],
+  imports: [KeyValuePipe, DecimalPipe],
 })
 export class MetricsEndpointsRequests {
   /**

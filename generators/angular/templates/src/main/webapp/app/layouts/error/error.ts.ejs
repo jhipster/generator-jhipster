@@ -22,12 +22,10 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
-import SharedModule from 'app/shared/shared.module';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-error',
   templateUrl: './error.html',
-  imports: [SharedModule],
 })
 export default class Error implements OnInit<% if (enableTranslation) { %>, OnDestroy<% } %> {
   errorMessage = signal<string | undefined>(undefined);

@@ -20,12 +20,11 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { mergeMap } from 'rxjs/operators';
 
-import SharedModule from 'app/shared/shared.module';
 import { ActivateService } from './activate.service';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-activate',
-  imports: [SharedModule, RouterLink],
+  imports: [RouterLink],
   templateUrl: './activate.html',
 })
 export default class Activate implements OnInit {
