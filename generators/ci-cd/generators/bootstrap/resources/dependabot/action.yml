@@ -25,7 +25,7 @@ runs:
     - uses: actions/checkout@v6
     - uses: actions/setup-node@v6
     - uses: actions/setup-java@v5
-    - uses: actions/upload-artifact@v5
+    - uses: actions/upload-artifact@v6
     - uses: jhipster/actions/cache-npm-dependencies@v1
     - uses: jhipster/actions/compare-sample@v1
     - uses: jhipster/actions/save-cache@v1
