@@ -95,7 +95,7 @@ jobs:
         id: e2e
         run: npm run ci:e2e:run --if-present
       - name: 'E2E: Store failure screenshots'
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         if: always() && steps.e2e.outcome == 'failure'
         with:
           name: screenshots-${{ matrix.app-type }}
