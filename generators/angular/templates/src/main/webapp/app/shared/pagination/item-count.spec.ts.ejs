@@ -25,10 +25,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 
-<%_ if (enableTranslation) { _%>
-import TranslateDirective from 'app/shared/language/translate.directive';
-<%_ } _%>
-
 import ItemCount from './item-count';
 
 describe('ItemCount test', () => {
@@ -43,7 +39,6 @@ describe('ItemCount test', () => {
 <%_ if (enableTranslation) { _%>
         imports: [
           TranslateModule.forRoot(),
-          TranslateDirective,
         ],
 <%_ } _%>
       });
