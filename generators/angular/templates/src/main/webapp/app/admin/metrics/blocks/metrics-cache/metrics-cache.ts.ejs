@@ -19,7 +19,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { KeyValuePipe, DecimalPipe } from '@angular/common';
 
-import SharedModule from 'app/shared/shared.module';
 import { CacheMetrics } from 'app/admin/metrics/metrics.model';
 import { filterNaN } from 'app/core/util/operators';
 
@@ -27,7 +26,7 @@ import { filterNaN } from 'app/core/util/operators';
   selector: '<%= jhiPrefixDashed %>-metrics-cache',
   templateUrl: './metrics-cache.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule, KeyValuePipe, DecimalPipe],
+  imports: [KeyValuePipe, DecimalPipe],
 })
 export class MetricsCache {
   /**
