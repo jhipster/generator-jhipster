@@ -22,11 +22,15 @@ import { Subscription } from 'rxjs';
 
 import { TrackerService } from 'app/core/tracker/tracker.service';
 import { TrackerActivity } from 'app/core/tracker/tracker-activity.model';
-import SharedModule from 'app/shared/shared.module';
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-tracker',
-  imports: [SharedModule, DatePipe],
+  imports: [DatePipe<%_ if (enableTranslation) { _%>
+, TranslateDirective, TranslateModule<%_ } _%>],
   templateUrl: './tracker.html',
 })
 export default class Tracker implements OnInit, OnDestroy {

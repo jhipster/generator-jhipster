@@ -20,11 +20,14 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
+import { TranslateDirective } from 'app/shared/language';
+import { TranslateModule } from '@ngx-translate/core';
+import { FindLanguageFromKeyPipe } from 'app/shared/language';
 <%_ } _%>
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import SharedModule from 'app/shared/shared.module';
+import { AlertError } from 'app/shared/alert/alert-error';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 <%_ if (enableTranslation) { _%>
@@ -35,7 +38,7 @@ const initialAccount: Account = {} as Account;
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-settings',
-  imports: [SharedModule, ReactiveFormsModule],
+  imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, FindLanguageFromKeyPipe, <%_ } _%>AlertError, ReactiveFormsModule],
   templateUrl: './settings.html',
 })
 export default class Settings implements OnInit {

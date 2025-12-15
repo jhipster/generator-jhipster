@@ -20,8 +20,11 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import SharedModule from 'app/shared/shared.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { AlertError } from 'app/shared/alert/alert-error';
 <%_ if (enableTranslation) { _%>
+import { FindLanguageFromKeyPipe, TranslateDirective } from 'app/shared/language';
+import { TranslateModule } from '@ngx-translate/core';
 import { LANGUAGES } from 'app/config/language.constants';
 <%_ } _%>
 import { IUser } from '../user-management.model';
@@ -39,7 +42,7 @@ const newUser: IUser = {
 @Component({
   selector: '<%= jhiPrefixDashed %>-user-mgmt-update',
   templateUrl: './user-management-update.html',
-  imports: [SharedModule, ReactiveFormsModule],
+  imports: [<%_ if (enableTranslation) { _%>FindLanguageFromKeyPipe, TranslateDirective, TranslateModule, <%_ } _%>FontAwesomeModule, AlertError, ReactiveFormsModule],
 })
 export default class UserManagementUpdate implements OnInit {
 <%_ if (enableTranslation) { _%>

@@ -19,7 +19,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
-import SharedModule from 'app/shared/shared.module';
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 import { AccountService } from 'app/core/auth/account.service';
 import { Session } from './session.model';
 import { SessionsService } from './sessions.service';
@@ -27,7 +30,7 @@ import { Account } from 'app/core/auth/account.model';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-sessions',
-  imports: [SharedModule, DatePipe],
+  imports: [DatePipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
   templateUrl: './sessions.html',
 })
 export default class Sessions implements OnInit {

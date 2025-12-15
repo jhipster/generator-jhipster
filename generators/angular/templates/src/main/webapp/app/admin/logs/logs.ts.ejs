@@ -19,7 +19,11 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { finalize<%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>, map<%_ } _%> } from 'rxjs/operators';
 
-import SharedModule from 'app/shared/shared.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 import { FormsModule } from '@angular/forms';
 import { SlicePipe } from '@angular/common';
 import { SortDirective, SortByDirective, sortStateSignal, SortService } from 'app/shared/sort';
@@ -35,7 +39,7 @@ import { GatewayRoutesService } from '../gateway/gateway-routes.service';
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
   providers: [GatewayRoutesService],
 <%_ } _%>
-  imports: [SharedModule, FormsModule, SortDirective, SortByDirective, SlicePipe],
+  imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>FontAwesomeModule, FormsModule, SortDirective, SortByDirective, SlicePipe],
 })
 export default class Logs implements OnInit {
   loggers = signal<Log[] | undefined>(undefined);

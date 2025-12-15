@@ -23,11 +23,17 @@ import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
 
 import { StateStorageService } from 'app/core/auth/state-storage.service';
-import SharedModule from 'app/shared/shared.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+<%_ if (enableI18nRTL) { _%>
+<%_ } _%>
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import HasAnyAuthorityDirective from 'app/shared/auth/has-any-authority.directive'
 <%_ if (enableTranslation) { _%>
 import { LANGUAGES } from 'app/config/language.constants';
 import ActiveMenuDirective from './active-menu.directive';
+import FindLanguageFromKeyPipe from 'app/shared/language/find-language-from-key.pipe';
+import { TranslateDirective } from 'app/shared/language';
+import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
@@ -46,10 +52,14 @@ import NavbarItem from './navbar-item.model';
   imports: [
     RouterLink,
     RouterLinkActive,
-    SharedModule,
+    FontAwesomeModule,
+    NgbModule,
     HasAnyAuthorityDirective,
 <%_ if (enableTranslation) { _%>
     ActiveMenuDirective,
+    FindLanguageFromKeyPipe,
+    TranslateDirective,
+    TranslateModule,
 <%_ } _%>
   ],
 })

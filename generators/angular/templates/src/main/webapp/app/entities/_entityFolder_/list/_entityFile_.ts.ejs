@@ -39,7 +39,14 @@ import { combineLatest<%_ if (!readOnly) { _%>, filter<%_ } _%>, Observable, Sub
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ } _%>
 
-import SharedModule from 'app/shared/shared.module';
+import { AlertError } from 'app/shared/alert/alert-error';
+import { Alert } from 'app/shared/alert/alert';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 import { sortStateSignal, SortDirective, SortByDirective, type SortState, SortService } from 'app/shared/sort';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
 <%_ if (paginationPagination) { _%>
@@ -92,9 +99,16 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 <%_ if (searchEngine) { _%>
       FormsModule,
 <%_ } _%>
-      SharedModule,
+      FontAwesomeModule,
+      NgbModule,
+      AlertError,
+      Alert,
       SortDirective,
       SortByDirective,
+<%_ if (enableTranslation) { _%>
+      TranslateDirective,
+      TranslateModule,
+<%_ } _%>
 <%_ if (anyFieldIsDuration) { _%>
       DurationPipe,
 <%_ } _%>

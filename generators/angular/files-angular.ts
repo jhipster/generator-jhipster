@@ -344,7 +344,6 @@ export const files = asWriteFilesSection({
     {
       ...clientApplicationTemplatesBlock(),
       templates: [
-        'shared/shared.module.ts',
         'shared/date/index.ts',
         'shared/date/duration.pipe.ts',
         'shared/date/format-medium-date.pipe.ts',

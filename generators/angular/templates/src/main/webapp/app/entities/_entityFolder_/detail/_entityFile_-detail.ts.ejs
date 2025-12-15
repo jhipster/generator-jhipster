@@ -21,7 +21,14 @@ import { Component, <% if (anyFieldIsBlobDerived) { %>inject, <% } %>input } fro
 import { RouterLink } from '@angular/router';
 <%_ } _%>
 
-import SharedModule from 'app/shared/shared.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { Alert } from 'app/shared/alert/alert';
+import { AlertError } from 'app/shared/alert/alert-error';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 <%_ if (anyFieldIsBlobDerived) { _%>
@@ -32,7 +39,14 @@ import { DataUtils } from 'app/core/util/data-util.service';
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-detail',
     templateUrl: './<%= entityFileName %>-detail.html',
     imports: [
-      SharedModule,
+      FontAwesomeModule,
+      NgbModule,
+      Alert,
+      AlertError,
+<%_ if (enableTranslation) { _%>
+      TranslateDirective,
+      TranslateModule,
+<%_ } _%>
 <%_ if (entityFileName != 'authority' && updatableEntity) { _%>
       RouterLink,
 <%_ } _%>

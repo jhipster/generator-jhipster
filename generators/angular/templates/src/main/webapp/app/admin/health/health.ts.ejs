@@ -21,7 +21,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { KeyValuePipe } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import SharedModule from 'app/shared/shared.module';
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HealthService } from './health.service';
 import { HealthModel, HealthDetails, HealthStatus } from './health.model';
 import HealthModal from './modal/health-modal';
@@ -29,7 +33,7 @@ import HealthModal from './modal/health-modal';
 @Component({
   selector: '<%= jhiPrefixDashed %>-health',
   templateUrl: './health.html',
-  imports: [SharedModule, KeyValuePipe],
+  imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>FontAwesomeModule, KeyValuePipe],
 })
 export default class Health implements OnInit {
   health?: HealthModel;

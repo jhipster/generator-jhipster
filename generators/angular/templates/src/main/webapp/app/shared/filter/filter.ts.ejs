@@ -1,10 +1,14 @@
 import { Component, input } from '@angular/core';
 import { IFilterOptions } from './filter.model';
-import SharedModule from '../shared.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-filter',
-  imports: [SharedModule],
+  imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>FontAwesomeModule],
   templateUrl: './filter.html',
 })
 export default class Filter {
