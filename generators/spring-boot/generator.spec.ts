@@ -50,6 +50,19 @@ describe(`generator - ${generator}`, () => {
     it('should match generated files snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
+
+    it('should match application snapshot', () => {
+      expect(runResult.application).toMatchSnapshot({
+        user: expect.any(Object),
+        authority: expect.any(Object),
+        userManagement: expect.any(Object),
+        jhipsterPackageJson: expect.any(Object),
+        jwtSecretKey: expect.any(String),
+        springBootDependencies: expect.any(Object),
+        addLanguageCallbacks: expect.any(Array),
+        supportedLanguages: expect.any(Array),
+      });
+    });
   });
 
   describe('with oauth2', () => {
@@ -63,6 +76,15 @@ describe(`generator - ${generator}`, () => {
 
     it('should match generated files snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
+    });
+
+    it('should match application snapshot', () => {
+      expect(runResult.application).toMatchSnapshot({
+        jhipsterPackageJson: expect.any(Object),
+        springBootDependencies: expect.any(Object),
+        addLanguageCallbacks: expect.any(Array),
+        supportedLanguages: expect.any(Array),
+      });
     });
   });
 
