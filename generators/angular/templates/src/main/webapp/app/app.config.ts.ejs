@@ -20,10 +20,11 @@ import { ApplicationConfig, LOCALE_ID, importProvidersFrom, inject, provideZonel
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { Router, RouterFeatures, TitleStrategy, provideRouter, withComponentInputBinding, withDebugTracing, withNavigationErrorHandler, NavigationError } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { provideHttpClient, withInterceptorsFromDi<%_ if (authenticationTypeJwt) { _%>, withInterceptors<%_ } _%> } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withInterceptors } from '@angular/common/http';
 <%_ if (authenticationTypeJwt) { _%>
 import { authInterceptor } from 'app/core/interceptor/auth.interceptor';
 <%_ } _%>
+import { errorHandlerInterceptor } from 'app/core/interceptor/error-handler.interceptor';
 import { NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 
 import './config/dayjs';
@@ -66,7 +67,7 @@ export const appConfig: ApplicationConfig = {
 <%_ if (enableTranslation) { _%>
     importProvidersFrom(TranslationModule),
 <%_ } _%>
-    provideHttpClient(<%_ if (authenticationTypeJwt) { _%>withInterceptors([authInterceptor]), <%_ } _%>withInterceptorsFromDi()),
+    provideHttpClient(withInterceptors([<%_ if (authenticationTypeJwt) { _%>authInterceptor, <%_ } _%>errorHandlerInterceptor]), withInterceptorsFromDi()),
     Title,
     { provide: LOCALE_ID, useValue: '<%= angularLocaleId %>' },
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
