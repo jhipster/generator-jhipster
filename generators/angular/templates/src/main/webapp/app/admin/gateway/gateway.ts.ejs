@@ -19,7 +19,11 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { KeyValuePipe } from '@angular/common';
 
-import SharedModule from 'app/shared/shared.module';
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { GatewayRoutesService } from './gateway-routes.service';
 import { GatewayRoute } from './gateway-route.model';
 
@@ -27,7 +31,7 @@ import { GatewayRoute } from './gateway-route.model';
   selector: '<%= jhiPrefixDashed %>-gateway',
   templateUrl: './gateway.html',
   providers: [GatewayRoutesService],
-  imports: [SharedModule, KeyValuePipe],
+  imports: [KeyValuePipe, FontAwesomeModule<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
 })
 export default class Gateway implements OnInit {
   gatewayRoutes: GatewayRoute[] = [];
