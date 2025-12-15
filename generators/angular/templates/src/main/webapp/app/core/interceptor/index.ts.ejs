@@ -18,21 +18,11 @@
 -%>
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
-<%_ if (authenticationTypeJwt) { _%>
-import { AuthInterceptor } from 'app/core/interceptor/auth.interceptor';
-<%_ } _%>
 import { AuthExpiredInterceptor } from 'app/core/interceptor/auth-expired.interceptor';
 import { ErrorHandlerInterceptor } from 'app/core/interceptor/error-handler.interceptor';
 import { NotificationInterceptor } from 'app/core/interceptor/notification.interceptor';
 
 export const httpInterceptorProviders = [
-<%_ if (authenticationTypeJwt) { _%>
-  {
-    provide: HTTP_INTERCEPTORS,
-    useClass: AuthInterceptor,
-    multi: true,
-  },
-<%_ } _%>
   {
     provide: HTTP_INTERCEPTORS,
     useClass: AuthExpiredInterceptor,
