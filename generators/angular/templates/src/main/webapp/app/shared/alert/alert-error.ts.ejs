@@ -46,12 +46,12 @@ export class AlertError implements OnDestroy {
 <% } %>
 
   constructor() {
-    this.errorListener = this.eventManager.subscribe('<%= frontendAppName %>.error', (response: EventWithContent<unknown> | string) => {
+    this.errorListener = this.eventManager.subscribe('<%= frontendAppName %>.error', (response: EventWithContent<unknown>) => {
       const errorResponse = (response as EventWithContent<AlertErrorModel>).content;
       this.addErrorAlert(errorResponse.message<% if (enableTranslation) { %>, errorResponse.key, errorResponse.params<% } %>);
     });
 
-    this.httpErrorListener = this.eventManager.subscribe('<%= frontendAppName %>.httpError', (response: EventWithContent<unknown> | string) => {
+    this.httpErrorListener = this.eventManager.subscribe('<%= frontendAppName %>.httpError', (response: EventWithContent<unknown>) => {
       this.handleHttpError(response);
     });
   }
@@ -77,7 +77,7 @@ export class AlertError implements OnDestroy {
     this.alertService.addAlert({ type: 'danger', message<% if (enableTranslation) { %>, translationKey, translationParams<% } %> }, this.alerts());
   }
 
-  private handleHttpError(response: EventWithContent<unknown> | string): void {
+  private handleHttpError(response: EventWithContent<unknown>): void {
     const httpErrorResponse = (response as EventWithContent<HttpErrorResponse>).content;
     switch (httpErrorResponse.status) {
       // connection refused, server not reachable

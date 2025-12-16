@@ -35,7 +35,7 @@ describe('Event Manager tests', () => {
   });
 
   describe('EventManager', () => {
-    let receivedEvent: EventWithContent<unknown> | string | null;
+    let receivedEvent: EventWithContent<unknown> | null;
     let eventManager: EventManager;
 
     beforeEach(() => {
@@ -53,7 +53,7 @@ describe('Event Manager tests', () => {
 
     it('should create an observable and callback when broadcasted EventWithContent', () => {
       // GIVEN
-      eventManager.subscribe('modifier', (event: EventWithContent<unknown> | string) => (receivedEvent = event));
+      eventManager.subscribe('modifier', (event: EventWithContent<unknown>) => (receivedEvent = event));
 
       // WHEN
       eventManager.broadcast({ name: 'unrelatedModifier', content: 'unrelated modification' });
@@ -68,7 +68,7 @@ describe('Event Manager tests', () => {
 
     it('should create an observable and callback when broadcasted string', () => {
       // GIVEN
-      eventManager.subscribe('modifier', (event: EventWithContent<unknown> | string) => (receivedEvent = event));
+      eventManager.subscribe('modifier', (event: EventWithContent<unknown>) => (receivedEvent = event));
 
       // WHEN
       eventManager.broadcast('unrelatedModifier');
@@ -83,7 +83,7 @@ describe('Event Manager tests', () => {
 
     it('should subscribe to multiple events', () => {
       // GIVEN
-      eventManager.subscribe(['modifier', 'modifier2'], (event: EventWithContent<unknown> | string) => (receivedEvent = event));
+      eventManager.subscribe(['modifier', 'modifier2'], (event: EventWithContent<unknown>) => (receivedEvent = event));
 
       // WHEN
       eventManager.broadcast('unrelatedModifier');
