@@ -19,8 +19,8 @@
 
 import chalk from 'chalk';
 import type { Options as ExecaOptions } from 'execa';
-import { glob } from 'glob';
 import { kebabCase } from 'lodash-es';
+import { globSync } from 'tinyglobby';
 
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { JAVA_COMPATIBLE_VERSIONS, RECOMMENDED_JAVA_VERSION, SERVER_MAIN_RES_DIR } from '../generator-constants.ts';
@@ -497,7 +497,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
             jarFileWildcard = 'build/libs/*.jar';
           }
 
-          const files = glob.sync(jarFileWildcard, {});
+          const files = globSync(jarFileWildcard, {});
           const jarFile = files[0];
 
           this.log.log(

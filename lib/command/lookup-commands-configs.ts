@@ -1,7 +1,7 @@
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-import { glob } from 'glob';
+import { lookupGenerators } from '../utils/index.ts';
 
 import type { JHipsterConfig, JHipsterConfigs } from './types.ts';
 
@@ -12,10 +12,7 @@ export const lookupCommandsConfigs = async (options?: { filter: (config: JHipste
   const { filter = () => true } = options ?? {};
   if (!jhipsterConfigs) {
     jhipsterConfigs = {};
-    const files = [
-      ...(await glob('generators/*/index.{j,t}s', { cwd })),
-      ...(await glob('generators/*/generators/*/index.{j,t}s', { cwd })),
-    ];
+    const files = lookupGenerators();
     for (const file of files) {
       try {
         const index = await import(pathToFileURL(`${cwd}/${file}`).toString());
