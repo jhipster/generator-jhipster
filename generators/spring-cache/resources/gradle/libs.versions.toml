@@ -2,6 +2,9 @@
 # caffeine
 typesafe = { module = 'com.typesafe:config', version = '1.4.5' }
 
+# TODO drop when Spring Boot updates to a v4 supported version
+infinispan = { module = 'org.infinispan:infinispan-bom', version = '16.1.0.Dev01' }
+
 # hazelcast
 hazelcast-hibernate53 = { module = 'com.hazelcast:hazelcast-hibernate53', version = '5.2.0' }
 

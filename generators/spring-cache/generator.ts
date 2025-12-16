@@ -155,6 +155,9 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      dependencies({ application, source }) {
+        source.overrideProperty!({ property: 'infinispan.version', value: application.javaDependencies!.infinispan });
+      },
       addTestSpringFactory({ source, application }) {
         if (application.cacheProviderRedis) {
           source.addTestSpringFactory?.({
