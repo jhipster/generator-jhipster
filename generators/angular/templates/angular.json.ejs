@@ -134,6 +134,10 @@
             "runner": "vitest",
             "buildTarget": "::development",
             "providersFile": "<%= clientSrcDir %>default-test-providers.ts",
+            "reporters": [
+              "default",
+              ["vitest-sonar-reporter", { "outputFile": "./<%= this.relativeDir(clientRootDir, temporaryDir) %>test-results/TESTS-results-sonar-vitest.xml" }]
+            ],
 <%_ } _%>
             "tsConfig": "tsconfig.spec.json"
           }

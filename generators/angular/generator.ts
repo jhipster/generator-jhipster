@@ -431,8 +431,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
         const { clientDistDir, clientSrcDir, clientI18nDir, temporaryDir } = application;
         source.addSonarProperties?.([
           { key: 'sonar.test.inclusions', value: `${clientSrcDir}app/**/*.spec.ts`, valueSep: ', ' },
-          { key: 'sonar.testExecutionReportPaths', value: `${temporaryDir}test-results/jest/TESTS-results-sonar.xml` },
-          { key: 'sonar.javascript.lcov.reportPaths', value: `${temporaryDir}test-results/lcov.info` },
+          { key: 'sonar.testExecutionReportPaths', value: `${temporaryDir}test-results/TESTS-results-sonar-vitest.xml` },
           {
             key: 'sonar.exclusions',
             value: `${clientSrcDir}content/**/*.*, ${clientI18nDir}*.ts, ${clientDistDir}**/*.*`,
