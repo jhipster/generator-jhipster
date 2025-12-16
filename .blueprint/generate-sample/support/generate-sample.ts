@@ -2,8 +2,8 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import process from 'node:process';
 
-import { globSync } from 'glob';
 import type { MemFsEditor } from 'mem-fs-editor';
+import { globSync } from 'tinyglobby';
 
 import { dailyBuildsFolder, jdlEntitiesSamplesFolder, jdlSamplesFolder, samplesFolder } from '../../constants.ts';
 

@@ -1,10 +1,9 @@
 import assert from 'node:assert';
 import { randomInt } from 'node:crypto';
-import { dirname, isAbsolute, join } from 'node:path';
+import { isAbsolute, join } from 'node:path';
 import { mock } from 'node:test';
 
 import type { BaseGenerator as YeomanGenerator, GetGeneratorConstructor } from '@yeoman/types';
-import { globSync } from 'glob';
 import { merge, snakeCase } from 'lodash-es';
 import type { EmptyObject } from 'type-fest';
 import type Environment from 'yeoman-environment';
@@ -25,13 +24,13 @@ import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../../gen
 import type { PRIORITY_NAMES as WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.ts';
 import { JHIPSTER_CONFIG_DIR } from '../../generators/generator-constants.ts';
 import type GeneratorsByNamespace from '../../generators/types.ts';
-import { getPackageRoot, getSourceRoot, isDistFolder } from '../index.ts';
+import { getPackageRoot, isDistFolder } from '../index.ts';
 import { getDefaultJDLApplicationConfig } from '../jdl-config/jhipster-jdl-config.ts';
 import type { Entity } from '../jhipster/types/entity.ts';
 import type { Relationship } from '../jhipster/types/relationship.d.ts';
 import type { ApplicationAll } from '../types/application-all.ts';
 import type { ConfigAll as ApplicationConfiguration, OptionsAll } from '../types/command-all.ts';
-import { createJHipsterLogger, normalizePathEnd } from '../utils/index.ts';
+import { createJHipsterLogger, lookupGeneratorsWithNamespace, normalizePathEnd } from '../utils/index.ts';
 
 import getGenerator, { getGeneratorRelativeFolder } from './get-generator.ts';
 
@@ -99,12 +98,8 @@ const DEFAULT_TEST_OPTIONS = { skipInstall: true };
 const DEFAULT_TEST_ENV_OPTIONS = { skipInstall: true, dryRun: false };
 
 const toJHipsterNamespace = (ns: string) => (/^jhipster[:-]/.test(ns) ? ns : `jhipster:${ns}`);
-const generatorsDir = getSourceRoot('generators');
-const allGenerators: (keyof GeneratorsByNamespace)[] = [
-  ...globSync('*/index.{j,t}s', { cwd: generatorsDir, posix: true }).map(file => dirname(file)),
-  ...globSync('*/generators/*/index.{j,t}s', { cwd: generatorsDir, posix: true }).map(file => dirname(file).replace('/generators/', ':')),
-]
-  .map(gen => `jhipster:${gen}`)
+const allGenerators: (keyof GeneratorsByNamespace)[] = lookupGeneratorsWithNamespace()
+  .map(gen => `jhipster:${gen.namespace}`)
   .sort() as (keyof GeneratorsByNamespace)[];
 const filterBootstrapGenerators = (gen: keyof GeneratorsByNamespace): boolean =>
   !gen.startsWith('jhipster:bootstrap-') && !gen.endsWith(':bootstrap') && gen !== 'jhipster:project-name';

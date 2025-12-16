@@ -13,14 +13,14 @@ describe('jdl options', () => {
   it('jdl configs names should match snapshot', () => {
     expect(jdlConfigs.map(([name]) => name)).toMatchInlineSnapshot(`
 [
-  "messageBroker",
+  "removeNeedles",
+  "clientTestFramework",
+  "incrementalChangelog",
   "feignClient",
   "syncUserWithIdp",
   "databaseMigration",
   "graalvmSupport",
-  "incrementalChangelog",
-  "clientTestFramework",
-  "removeNeedles",
+  "messageBroker",
   "routes",
 ]
 `);
