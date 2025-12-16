@@ -25,6 +25,7 @@ import { provideHttpClient, withInterceptorsFromDi, withInterceptors } from '@an
 import { authInterceptor } from 'app/core/interceptor/auth.interceptor';
 <%_ } _%>
 import { errorHandlerInterceptor } from 'app/core/interceptor/error-handler.interceptor';
+import { notificationInterceptor } from 'app/core/interceptor/notification.interceptor';
 import { NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 
 import './config/dayjs';
@@ -67,7 +68,7 @@ export const appConfig: ApplicationConfig = {
 <%_ if (enableTranslation) { _%>
     importProvidersFrom(TranslationModule),
 <%_ } _%>
-    provideHttpClient(withInterceptors([<%_ if (authenticationTypeJwt) { _%>authInterceptor, <%_ } _%>errorHandlerInterceptor]), withInterceptorsFromDi()),
+    provideHttpClient(withInterceptors([<%_ if (authenticationTypeJwt) { _%>authInterceptor, <%_ } _%>errorHandlerInterceptor, notificationInterceptor]), withInterceptorsFromDi()),
     Title,
     { provide: LOCALE_ID, useValue: '<%= angularLocaleId %>' },
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
