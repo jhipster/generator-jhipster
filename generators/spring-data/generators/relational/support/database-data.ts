@@ -160,7 +160,7 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     jdbcDriver: 'org.h2.Driver',
     hibernateDialect: 'org.hibernate.dialect.H2Dialect',
 
-    getData: options => h2GetProdDatabaseData(H2_DISK, { extraOptions: ';DB_CLOSE_DELAY=-1' }, options),
+    getData: options => h2GetProdDatabaseData(H2_DISK, { extraOptions: ';DATABASE_TO_UPPER=false;DB_CLOSE_DELAY=-1' }, options),
     r2dbc: {
       protocolSuffix: 'h2:file:///',
     },
@@ -171,7 +171,8 @@ const databaseData: Record<string, DatabaseDataSpec> = {
     jdbcDriver: 'org.h2.Driver',
     hibernateDialect: 'org.hibernate.dialect.H2Dialect',
 
-    getData: options => h2GetProdDatabaseData(H2_MEMORY, { extraOptions: ';DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE' }, options),
+    getData: options =>
+      h2GetProdDatabaseData(H2_MEMORY, { extraOptions: ';DATABASE_TO_UPPER=false;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE' }, options),
     r2dbc: {
       protocolSuffix: 'h2:mem:///',
     },
@@ -189,6 +190,6 @@ export function getDatabaseData(databaseType: string) {
 
 export const getDBCExtraOption = (databaseType: string) => {
   const databaseDataForType = databaseData[databaseType];
-  const { extraOptions = '' } = databaseDataForType;
-  return extraOptions;
+  const { getData } = databaseDataForType;
+  return databaseDataForType.extraOptions ?? getData?.({ localDirectory: 'any' })?.extraOptions ?? '';
 };
