@@ -1,0 +1,925 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`git-changes generators/angular/index.ts should match changes snapshot 1`] = `
+{
+  "angular": true,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/app/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": true,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/base/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": true,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/base-application/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": true,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/base-core/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": true,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/base-entity-changes/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": true,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/base-simple-application/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": true,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/base-workspaces/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": true,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/bootstrap/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": true,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/ci-cd/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/client/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": true,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/common/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": true,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/cypress/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": true,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/docker/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": true,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/docker-compose/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": true,
+}
+`;
+
+exports[`git-changes generators/entities/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/entity/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/export-jdl/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/generate-blueprint/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/git/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": true,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/heroku/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/info/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/init/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": true,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/java/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": true,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/java-simple-application/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": true,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/javascript-simple-application/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": true,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/jdl/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": true,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/kubernetes/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": true,
+}
+`;
+
+exports[`git-changes generators/kubernetes-helm/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": true,
+}
+`;
+
+exports[`git-changes generators/kubernetes-knative/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": true,
+}
+`;
+
+exports[`git-changes generators/languages/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": true,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/liquibase/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": true,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/project-name/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": true,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/react/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": true,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/server/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": true,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/spring-boot/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": true,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/spring-cache/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": true,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/spring-cloud-stream/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": true,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/spring-data/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": true,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/upgrade/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/vue/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": true,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
+exports[`git-changes generators/workspaces/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": true,
+}
+`;

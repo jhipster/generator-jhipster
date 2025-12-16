@@ -16,13 +16,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './basename.ts';
-export * from './contents.ts';
-export * from './derived-property.ts';
-export * from './logger.ts';
-export * from './lookup.ts';
-export * from './namespace.ts';
-export * from './object.ts';
-export * from './path.ts';
-export * from './secret.ts';
-export * from './string.ts';
+import { globSync } from 'tinyglobby';
+
+import { getSourceRoot } from '../index.ts';
+
+export const lookupGenerators = ({ firstLevelOnly }: { firstLevelOnly?: boolean } = {}) =>
+  globSync([`generators/*/index.{t,j}s`, ...(firstLevelOnly ? [] : [`generators/*/generators/*/index.{t,j}s`])], {
+    onlyFiles: true,
+    cwd: getSourceRoot(),
+  }).sort();
+
+export const lookupGeneratorsWithNamespace = (): { namespace: string; generator: string }[] =>
+  lookupGenerators().map(gen => ({
+    generator: gen,
+    namespace: gen
+      .replace(/\/index\.(t|j)s$/, '')
+      .replace(/generators\//g, '')
+      .replaceAll('/', ':'),
+  }));
