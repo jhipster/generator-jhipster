@@ -251,7 +251,6 @@ export default asWritingTask<AngularEntity, AngularApplication<AngularEntity>>(f
   if (control.isJhipsterVersionLessThan('7.1.1')) {
     this.removeFile('.npmrc');
   }
-
   if (control.isJhipsterVersionLessThan('7.6.1')) {
     this.removeFile(`${application.clientSrcDir}content/scss/rtl.scss`);
   }
