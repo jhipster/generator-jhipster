@@ -43,6 +43,7 @@ describe('lookupGeneratorsNamespaces', () => {
   "client",
   "client:bootstrap",
   "client:common",
+  "client:encode-csrf-token",
   "client:i18n",
   "common",
   "common:bootstrap",
