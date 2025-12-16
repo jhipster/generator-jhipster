@@ -114,12 +114,6 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
           (this.jhipsterConfig as SpringCacheConfig).cacheProvider = 'no';
         }
       },
-      disableWebsocket() {
-        const { websocket } = this.jhipsterConfig as SpringCacheConfig;
-        if (websocket === 'spring-websocket') {
-          (this.jhipsterConfig as SpringCacheConfig).websocket = 'no';
-        }
-      },
       syncUserWithIdpMigration({ control }) {
         if (this.jhipsterConfig.syncUserWithIdp === undefined && this.jhipsterConfigWithDefaults.authenticationType === 'oauth2') {
           if (control.isJhipsterVersionLessThan('8.1.1')) {
