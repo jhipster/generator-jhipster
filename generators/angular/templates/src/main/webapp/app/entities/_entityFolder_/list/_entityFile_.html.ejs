@@ -21,8 +21,8 @@
         <span>__jhiTranslateTag__('<%- i18nKeyPrefix %>.home.title')</span>
 
         <div class="d-flex justify-content-end">
-            <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
-                <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined" />
+            <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading()">
+                <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined" />
                 <span>__jhiTranslateTag__('<%- i18nKeyPrefix %>.home.refreshListLabel')</span>
             </button>
             <%_ if (!readOnly) { _%>

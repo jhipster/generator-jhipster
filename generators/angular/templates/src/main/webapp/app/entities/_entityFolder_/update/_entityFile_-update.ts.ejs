@@ -67,7 +67,7 @@ import { <%- importedType %> } from '<%- importedPath %>';
 TranslateDirective, TranslateModule,<%_ } _%>NgbModule, FontAwesomeModule, AlertError, ReactiveFormsModule],
 })
 export class <%= entityAngularName %>Update implements OnInit {
-    isSaving = false;
+    isSaving = signal(false);
     <%= entityInstance %>: I<%= entityAngularName %> | null = null;
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
     <%- this._.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
@@ -164,7 +164,7 @@ _%>
     }
 
     save(): void {
-        this.isSaving = true;
+        this.isSaving.set(true);
         const <%= entityInstance %> = this.<%= entityInstance %>FormService.get<%= entityAngularName %>(this.editForm);
 <%_ if (updatableEntity) { _%>
         if (<%= entityInstance %>.<%= primaryKey.name %> === null) {
@@ -193,7 +193,7 @@ _%>
     }
 
     protected onSaveFinalize(): void {
-        this.isSaving = false;
+        this.isSaving.set(false);
     }
 
     protected updateForm(<%= entityInstance %>: I<%= entityAngularName %>): void {
