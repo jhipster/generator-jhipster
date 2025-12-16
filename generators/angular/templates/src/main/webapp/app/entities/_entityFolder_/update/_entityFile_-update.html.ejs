@@ -216,7 +216,7 @@ _%>
                     <fa-icon icon="ban" />&nbsp;<span>__jhiTranslateTag__('entity.action.cancel')</span>
                 </button>
 
-                <button type="submit" id="save-entity" data-cy="entityCreateSaveButton" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                <button type="submit" id="save-entity" data-cy="entityCreateSaveButton" [disabled]="editForm.invalid || isSaving()" class="btn btn-primary">
                     <fa-icon icon="save" />&nbsp;<span>__jhiTranslateTag__('entity.action.save')</span>
                 </button>
             </div>

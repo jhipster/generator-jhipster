@@ -34,7 +34,7 @@ import { Component, computed, effect, inject, OnInit, signal, WritableSignal } f
 import { HttpHeaders } from '@angular/common/http';
 <%_ } _%>
 import { ActivatedRoute, Data, ParamMap, Router, RouterLink } from '@angular/router';
-import { combineLatest<%_ if (!readOnly) { _%>, filter<%_ } _%>, Observable, Subscription, tap } from 'rxjs';
+import { combineLatest<%_ if (!readOnly) { _%>, filter<%_ } _%>, finalize, Observable, Subscription, tap } from 'rxjs';
 <%_ if (!readOnly) { _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ } _%>
@@ -137,7 +137,7 @@ export class <%= componentName %> implements OnInit {
 <%_ } _%>
     subscription: Subscription | null = null;
     <%= entityInstancePlural %> = signal<I<%= entityAngularName %>[]>([]);
-    isLoading = false;
+    isLoading = signal(false);
 
     sortState = sortStateSignal({});
 <%_ if (searchEngineAny) { _%>
@@ -365,7 +365,7 @@ export class <%= componentName %> implements OnInit {
       } = this;
 <%_ } _%>
 
-      this.isLoading = true;
+      this.isLoading.set(true);
 <%_ if (paginationPagination) { _%>
       const pageToLoad: number = page;
 <%_ } _%>
@@ -403,13 +403,13 @@ export class <%= componentName %> implements OnInit {
       if (this.currentSearch && this.currentSearch !== '') {
         return this.<%= entityInstance %>Service.search(queryObject)
           .pipe(
-            tap(() => this.isLoading = false)
+            finalize(() => this.isLoading.set(false))
           );
       } else {
 <%_ } _%>
         return this.<%= entityInstance %>Service.query(queryObject)
           .pipe(
-            tap(() => this.isLoading = false)
+            finalize(() => this.isLoading.set(false))
           );
 <%_ if (searchEngineAny) { _%>
       }
