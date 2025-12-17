@@ -345,7 +345,10 @@ export default class AngularGenerator extends AngularApplicationGenerator {
               `${application.clientSrcDir}app/entities/entity-navbar-items.ts`,
             ],
           ],
-          '8.0.0-beta.1': [`${application.clientSrcDir}app/shared/shared.module.ts.ejs`],
+          '8.0.0-beta.1': [
+            `${application.clientSrcDir}app/shared/shared.module.ts.ejs`,
+            `${application.clientSrcDir}app/core/interceptor/index.ts.ejs`,
+          ],
         });
       },
       cleanupOldFilesTask,
