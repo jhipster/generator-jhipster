@@ -63,11 +63,11 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRootDir": "clientRoot/",
   "clientSrcDir": "clientRoot/src/",
   "clientTestDir": "clientRoot/test/",
-  "clientTestFramework": "jest",
+  "clientTestFramework": "vitest",
   "clientTestFrameworkAny": true,
-  "clientTestFrameworkJest": true,
-  "clientTestFrameworkName": "Jest",
-  "clientTestFrameworkVitest": false,
+  "clientTestFrameworkJest": false,
+  "clientTestFrameworkName": "Vitest",
+  "clientTestFrameworkVitest": true,
   "clientTestFrameworks": undefined,
   "clientTestFrameworksAny": false,
   "clientTestFrameworksCypress": false,
@@ -325,9 +325,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     "stateCleared": "modified",
   },
   "clientRoot/eslint.config.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/jest.conf.js": {
     "stateCleared": "modified",
   },
   "clientRoot/ngsw-config.json": {
@@ -939,6 +936,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/declarations.d.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/default-test-providers.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/environments/environment.development.ts": {
     "stateCleared": "modified",
   },
@@ -1001,7 +1001,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "target/test-results/jest/TESTS-results-sonar.xml",
+        "value": "target/test-results/TESTS-results-sonar-vitest.xml",
       },
       {
         "key": "sonar.exclusions",
@@ -1086,11 +1086,11 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRootDir": "clientRoot/",
   "clientSrcDir": "clientRoot/src/",
   "clientTestDir": "clientRoot/test/",
-  "clientTestFramework": "jest",
+  "clientTestFramework": "vitest",
   "clientTestFrameworkAny": true,
-  "clientTestFrameworkJest": true,
-  "clientTestFrameworkName": "Jest",
-  "clientTestFrameworkVitest": false,
+  "clientTestFrameworkJest": false,
+  "clientTestFrameworkName": "Vitest",
+  "clientTestFrameworkVitest": true,
   "clientTestFrameworks": undefined,
   "clientTestFrameworksAny": false,
   "clientTestFrameworksCypress": false,
@@ -1354,9 +1354,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/eslint.config.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/jest.conf.js": {
     "stateCleared": "modified",
   },
   "clientRoot/ngsw-config.json": {
@@ -2190,6 +2187,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/declarations.d.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/default-test-providers.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/environments/environment.development.ts": {
     "stateCleared": "modified",
   },
@@ -2256,7 +2256,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "target/test-results/jest/TESTS-results-sonar.xml",
+        "value": "target/test-results/TESTS-results-sonar-vitest.xml",
       },
       {
         "key": "sonar.exclusions",
@@ -2343,11 +2343,11 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRootDir": "clientRoot/",
   "clientSrcDir": "clientRoot/src/",
   "clientTestDir": "clientRoot/test/",
-  "clientTestFramework": "jest",
+  "clientTestFramework": "vitest",
   "clientTestFrameworkAny": true,
-  "clientTestFrameworkJest": true,
-  "clientTestFrameworkName": "Jest",
-  "clientTestFrameworkVitest": false,
+  "clientTestFrameworkJest": false,
+  "clientTestFrameworkName": "Vitest",
+  "clientTestFrameworkVitest": true,
   "clientTestFrameworks": undefined,
   "clientTestFrameworksAny": false,
   "clientTestFrameworksCypress": false,
@@ -2599,9 +2599,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/eslint.config.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/jest.conf.js": {
     "stateCleared": "modified",
   },
   "clientRoot/ngsw-config.json": {
@@ -3189,6 +3186,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/declarations.d.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/default-test-providers.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/environments/environment.development.ts": {
     "stateCleared": "modified",
   },
@@ -3269,7 +3269,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "target/test-results/jest/TESTS-results-sonar.xml",
+        "value": "target/test-results/TESTS-results-sonar-vitest.xml",
       },
       {
         "key": "sonar.exclusions",
@@ -3366,11 +3366,11 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "clientRootDir": "",
   "clientSrcDir": "src/main/webapp/",
   "clientTestDir": "src/test/javascript/",
-  "clientTestFramework": "jest",
+  "clientTestFramework": "vitest",
   "clientTestFrameworkAny": true,
-  "clientTestFrameworkJest": true,
-  "clientTestFrameworkName": "Jest",
-  "clientTestFrameworkVitest": false,
+  "clientTestFrameworkJest": false,
+  "clientTestFrameworkName": "Vitest",
+  "clientTestFrameworkVitest": true,
   "clientTestFrameworks": undefined,
   "clientTestFrameworksAny": false,
   "clientTestFrameworksCypress": false,
@@ -3625,9 +3625,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "eslint.config.ts": {
-    "stateCleared": "modified",
-  },
-  "jest.conf.js": {
     "stateCleared": "modified",
   },
   "ngsw-config.json": {
@@ -4224,6 +4221,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/declarations.d.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/default-test-providers.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/environments/environment.development.ts": {
     "stateCleared": "modified",
   },
@@ -4301,7 +4301,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "target/test-results/jest/TESTS-results-sonar.xml",
+        "value": "target/test-results/TESTS-results-sonar-vitest.xml",
       },
       {
         "key": "sonar.exclusions",
@@ -4403,11 +4403,11 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "clientRootDir": "",
   "clientSrcDir": "src/main/webapp/",
   "clientTestDir": "src/test/javascript/",
-  "clientTestFramework": "jest",
+  "clientTestFramework": "vitest",
   "clientTestFrameworkAny": true,
-  "clientTestFrameworkJest": true,
-  "clientTestFrameworkName": "Jest",
-  "clientTestFrameworkVitest": false,
+  "clientTestFrameworkJest": false,
+  "clientTestFrameworkName": "Vitest",
+  "clientTestFrameworkVitest": true,
   "clientTestFrameworks": undefined,
   "clientTestFrameworksAny": false,
   "clientTestFrameworksCypress": false,
@@ -4672,9 +4672,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "eslint.config.ts": {
-    "stateCleared": "modified",
-  },
-  "jest.conf.js": {
     "stateCleared": "modified",
   },
   "ngsw-config.json": {
@@ -5679,6 +5676,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/declarations.d.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/default-test-providers.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/environments/environment.development.ts": {
     "stateCleared": "modified",
   },
@@ -5742,7 +5742,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "target/test-results/jest/TESTS-results-sonar.xml",
+        "value": "target/test-results/TESTS-results-sonar-vitest.xml",
       },
       {
         "key": "sonar.exclusions",
@@ -5829,11 +5829,11 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "clientRootDir": "",
   "clientSrcDir": "src/main/webapp/",
   "clientTestDir": "src/test/javascript/",
-  "clientTestFramework": "jest",
+  "clientTestFramework": "vitest",
   "clientTestFrameworkAny": true,
-  "clientTestFrameworkJest": true,
-  "clientTestFrameworkName": "Jest",
-  "clientTestFrameworkVitest": false,
+  "clientTestFrameworkJest": false,
+  "clientTestFrameworkName": "Vitest",
+  "clientTestFrameworkVitest": true,
   "clientTestFrameworks": undefined,
   "clientTestFrameworksAny": false,
   "clientTestFrameworksCypress": false,
@@ -6091,9 +6091,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     "stateCleared": "modified",
   },
   "eslint.config.ts": {
-    "stateCleared": "modified",
-  },
-  "jest.conf.js": {
     "stateCleared": "modified",
   },
   "ngsw-config.json": {
@@ -6678,6 +6675,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/declarations.d.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/default-test-providers.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/environments/environment.development.ts": {
     "stateCleared": "modified",
   },
@@ -6737,7 +6737,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "target/test-results/jest/TESTS-results-sonar.xml",
+        "value": "target/test-results/TESTS-results-sonar-vitest.xml",
       },
       {
         "key": "sonar.exclusions",
@@ -6821,11 +6821,11 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "clientRootDir": "",
   "clientSrcDir": "src/main/webapp/",
   "clientTestDir": "src/test/javascript/",
-  "clientTestFramework": "jest",
+  "clientTestFramework": "vitest",
   "clientTestFrameworkAny": true,
-  "clientTestFrameworkJest": true,
-  "clientTestFrameworkName": "Jest",
-  "clientTestFrameworkVitest": false,
+  "clientTestFrameworkJest": false,
+  "clientTestFrameworkName": "Vitest",
+  "clientTestFrameworkVitest": true,
   "clientTestFrameworks": undefined,
   "clientTestFrameworksAny": false,
   "clientTestFrameworksCypress": false,
@@ -7083,9 +7083,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "eslint.config.ts": {
-    "stateCleared": "modified",
-  },
-  "jest.conf.js": {
     "stateCleared": "modified",
   },
   "ngsw-config.json": {
@@ -7679,6 +7676,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/declarations.d.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/default-test-providers.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/environments/environment.development.ts": {
     "stateCleared": "modified",
   },
@@ -7738,7 +7738,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "target/test-results/jest/TESTS-results-sonar.xml",
+        "value": "target/test-results/TESTS-results-sonar-vitest.xml",
       },
       {
         "key": "sonar.exclusions",

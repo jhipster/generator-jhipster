@@ -122,15 +122,8 @@
           "defaultConfiguration": "development"
         },
         "test": {
-<%_ if (clientTestFrameworkJest) { _%>
-          "builder": "@angular-builders/jest:run",
-<%_ } else { _%>
           "builder": "@angular/build:unit-test",
-<%_ } _%>
           "options": {
-<%_ if (clientTestFrameworkJest) { _%>
-            "config": "jest.conf.js",
-<%_ } else { _%>
             "runner": "vitest",
             "buildTarget": "::development",
             "providersFile": "<%= this.relativeDir(clientRootDir, clientSrcDir) %>default-test-providers.ts",
@@ -138,7 +131,6 @@
               "default",
               ["vitest-sonar-reporter", { "outputFile": "./<%= this.relativeDir(clientRootDir, temporaryDir) %>test-results/TESTS-results-sonar-vitest.xml" }]
             ],
-<%_ } _%>
             "tsConfig": "tsconfig.spec.json"
           }
         }

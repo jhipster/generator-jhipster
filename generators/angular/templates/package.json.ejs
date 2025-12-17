@@ -60,21 +60,9 @@
   <%_ } _%>
     "@angular-architects/module-federation": "<%= nodeDependencies['@angular-architects/module-federation'] %>",
 <%_ } _%>
-<%_ if (clientTestFrameworkJest) { _%>
-    "@angular-builders/jest": "<%= nodeDependencies['@angular-builders/jest'] %>",
-    "@types/jest": "<%= nodeDependencies['@types/jest'] %>",
-    "jest": "<%= nodeDependencies['jest'] %>",
-    "jest-environment-jsdom": "<%= nodeDependencies['jest'] %>",
-    "jest-preset-angular": "<%= nodeDependencies['jest-preset-angular'] %>",
-    "jest-junit": "<%= nodeDependencies['jest-junit'] %>",
-    "jest-sonar": "<%= nodeDependencies['jest-sonar'] %>",
-    "ts-jest": "<%= nodeDependencies['ts-jest'] %>",
-    "zone.js": "<%= nodeDependencies['zone.js'] %>",
-<%_ } else { _%>
     "jsdom": null,
     "vitest": null,
     "vitest-sonar-reporter": null,
-<%_ } _%>
     "@angular/build": "<%= nodeDependencies['@angular/cli'] %>",
     "@angular/cli": "<%= nodeDependencies['@angular/cli'] %>",
     "@angular/compiler-cli": "<%= nodeDependencies['@angular/common'] %>",
@@ -116,12 +104,7 @@
     "serve": "<%- nodePackageManager %> run start --",
     "build": "<%- nodePackageManager %> run webapp:prod --",
     "pretest": "<%- nodePackageManager %> run lint",
-<%_ if (clientTestFrameworkJest) { _%>
-    "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
-    "test": "ng test --coverage --log-heap-usage -w=2",
-<%_ } else { _%>
     "test": "ng test",
-<%_ } _%>
     "test:watch": "<%- nodePackageManager %> run test -- --watch",
     "watch": "concurrently npm:start<% if(!skipServer) { %> npm:backend:start<% } %>",
     "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'<% if(!skipServer) { %> npm:backend:start<% } %>",
