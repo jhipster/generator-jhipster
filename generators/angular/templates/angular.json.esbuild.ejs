@@ -147,11 +147,11 @@
 <%_ } _%>
           "options": {
 <%_ if (clientTestFrameworkJest) { _%>
-            "configPath": "jest.conf.js",
+            "config": "jest.conf.js",
 <%_ } else { _%>
             "runner": "vitest",
             "buildTarget": "::development",
-            "providersFile": "<%= clientSrcDir %>default-test-providers.ts",
+            "providersFile": "<%= this.relativeDir(clientRootDir, clientSrcDir) %>default-test-providers.ts",
             "reporters": [
               "default",
               ["vitest-sonar-reporter", { "outputFile": "./<%= this.relativeDir(clientRootDir, temporaryDir) %>test-results/TESTS-results-sonar-vitest.xml" }]
