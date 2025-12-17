@@ -16,42 +16,38 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { inject, Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { tap } from 'rxjs/operators';
 
-import { LoginService } from 'app/login/login.service';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
+import { LoginService } from 'app/login/login.service';
 
-@Injectable()
-export class AuthExpiredInterceptor implements HttpInterceptor {
-  private readonly loginService = inject(LoginService);
-  private readonly stateStorageService = inject(StateStorageService);
-  private readonly router = inject(Router);
+export const authExpiredInterceptor: HttpInterceptorFn = (req, next) => {
+  const loginService = inject(LoginService);
+  const stateStorageService = inject(StateStorageService);
+  const router = inject(Router);
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(request).pipe(
-      tap({
-        error: (err: HttpErrorResponse) => {
-          if (err.status === 401 && err.url && !err.url.includes('api/account')) {
+  return next(req).pipe(
+    tap({
+      error(err: HttpErrorResponse) {
+        if (err.status === 401 && err.url && !err.url.includes('api/account')) {
 <%_ if (authenticationTypeSession) { _%>
-            if (err.url.includes(this.loginService.logoutUrl())) {
-              this.loginService.logoutInClient();
-              return;
-            }
+        if (err.url.includes(loginService.logoutUrl())) {
+          loginService.logoutInClient();
+          return;
+        }
 <%_ } _%>
-            this.stateStorageService.storeUrl(this.router.routerState.snapshot.url);
+        stateStorageService.storeUrl(router.routerState.snapshot.url);
 <%_ if (authenticationTypeSession || authenticationTypeJwt) { _%>
-            this.loginService.logout();
-            this.router.navigate(['/login']);
+        loginService.logout();
+        router.navigate(['/login']);
 <%_ } else { _%>
-            this.loginService.login();
+        loginService.login();
 <%_ } _%>
-          }
-        },
-      }),
-    );
-  }
-}
+        }
+      },
+    }),
+  );
+};
