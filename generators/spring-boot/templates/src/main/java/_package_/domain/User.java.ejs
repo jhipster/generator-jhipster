@@ -158,6 +158,11 @@ public class <%= user.persistClass %><% if (generateSpringAuditor) { %> extends 
   <%_ if (searchEngineElasticsearch && authenticationTypeOauth2) { _%>
     @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
   <%_ } _%>
+  <%_ if (reactive) { _%>
+    @Column("id")
+  <%_ } else { _%>
+    @Column(name = "id")
+  <%_ } _%>
 <%_ } else if (databaseTypeNeo4j) { _%>
     @Id
   <%_ if (!authenticationTypeOauth2) { _%>
@@ -191,8 +196,12 @@ public class <%= user.persistClass %><% if (generateSpringAuditor) { %> extends 
     @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = 50)
-<%_ if (databaseTypeSql && !reactive) { _%>
-    @Column(length = 50, unique = true, nullable = false)
+<%_ if (databaseTypeSql) { _%>
+  <%_ if (reactive) { _%>
+    @Column("login")
+  <%_ } else { _%>
+    @Column(name = "login", length = 50, unique = true, nullable = false)
+  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
     @Indexed
@@ -262,8 +271,12 @@ public class <%= user.persistClass %><% if (generateSpringAuditor) { %> extends 
 
     @Email
     @Size(min = 5, max = 254)
-<%_ if (databaseTypeSql && !reactive) { _%>
-    @Column(length = 254, unique = true)
+<%_ if (databaseTypeSql) { _%>
+  <%_ if (reactive) { _%>
+    @Column("email")
+  <%_ } else { _%>
+    @Column(name = "email", length = 254, unique = true)
+  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
     @Indexed
@@ -272,8 +285,10 @@ public class <%= user.persistClass %><% if (generateSpringAuditor) { %> extends 
 
 <%_ if (databaseTypeSql) { _%>
     @NotNull
-  <%_ if (!reactive) { _%>
-    @Column(nullable = false)
+  <%_ if (reactive) { _%>
+    @Column("activated")
+  <%_ } else { _%>
+    @Column(name = "activated", nullable = false)
   <%_ } _%>
 <%_ } _%>
     private boolean activated = false;
