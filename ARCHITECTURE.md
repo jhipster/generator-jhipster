@@ -24,7 +24,6 @@ Internally, JHipster uses [Yeoman](https://yeoman.io) as the core. JHipster is t
 - `jdl` - (exported) jdl parser implementation
 - `rfcs` - (RFCs)[CONTRIBUTING.md#rfcs]
 - `test` - package tests
-- `test-integration` - CI related stuff. Samples, scripts.
 
 ## Lifecycle
 
