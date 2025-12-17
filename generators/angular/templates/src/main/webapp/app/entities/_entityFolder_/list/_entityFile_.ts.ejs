@@ -141,18 +141,18 @@ export class <%= componentName %> implements OnInit {
 
     sortState = sortStateSignal({});
 <%_ if (searchEngineAny) { _%>
-    currentSearch = '';
+    currentSearch = signal('');
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
     filters: IFilterOptions = new FilterOptions();
 <%_ } _%>
 
 <%_ if (paginationPagination) { _%>
-  itemsPerPage = ITEMS_PER_PAGE;
-  totalItems = 0;
-  page = 1;
+  itemsPerPage = signal(ITEMS_PER_PAGE);
+  totalItems = signal(0);
+  page = signal(1);
 <%_ } else if (paginationInfiniteScroll) { _%>
-    itemsPerPage = ITEMS_PER_PAGE;
+    itemsPerPage = signal(ITEMS_PER_PAGE);
     links: WritableSignal<Record<string, undefined | Record<string, string | undefined>>> = signal({});
     hasMorePage = computed(() => !!this.links().next);
     isFirstFetch = computed(() => Object.keys(this.links()).length === 0);
@@ -213,9 +213,9 @@ export class <%= componentName %> implements OnInit {
 <%_ if (searchEngineAny) { _%>
     search(query: string): void {
   <%_ if (paginationPagination) { _%>
-      this.page = 1;
+      this.page.set(1);
   <%_ } _%>
-      this.currentSearch = query;
+      this.currentSearch.set(query);
   <%_ if (notSortableFieldsAfterSearch) { _%>
       const { predicate } = this.sortState();
       if (query && predicate && <%= componentName %>.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(predicate)) {
@@ -263,19 +263,19 @@ export class <%= componentName %> implements OnInit {
     }
 
     navigateToWithComponentValues(event: SortState): void {
-      this.handleNavigation(<% if (paginationPagination) { %>this.page, <% } %>event<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngineAny) { %>, this.currentSearch<% } %>);
+      this.handleNavigation(<% if (paginationPagination) { %>this.page(), <% } %>event<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngineAny) { %>, this.currentSearch()<% } %>);
     }
 
 <%_ if (paginationPagination) { _%>
     navigateToPage(page: number): void {
-      this.handleNavigation(page, this.sortState()<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngineAny) { %>, this.currentSearch<% } %>);
+      this.handleNavigation(page, this.sortState()<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngineAny) { %>, this.currentSearch()<% } %>);
     }
 
 <%_ } _%>
     protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
 <%_ if (paginationPagination) { _%>
       const page = params.get(PAGE_HEADER);
-      this.page = +(page ?? 1);
+      this.page.set(+ (page ?? 1));
 <%_ } _%>
       this.sortState.set(this.sortService.parseSortParam(params.get(SORT) ?? data[DEFAULT_SORT_DATA]));
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
@@ -283,7 +283,7 @@ export class <%= componentName %> implements OnInit {
 <%_ } _%>
 <%_ if (searchEngineAny) { _%>
       if (params.has('search') && params.get('search') !== '') {
-        this.currentSearch = params.get('search') as string;
+        this.currentSearch.set(params.get('search') as string);
   <%_ if (notSortableFieldsAfterSearch) { _%>
           const { predicate } = this.sortState();
           if (predicate && <%= componentName %>.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(predicate)) {
@@ -338,7 +338,7 @@ export class <%= componentName %> implements OnInit {
 <%_ if (!paginationNo) { _%>
     protected fillComponentAttributesFromResponseHeader(headers: HttpHeaders): void {
   <%_ if (paginationPagination) { _%>
-      this.totalItems = Number(headers.get(TOTAL_COUNT_RESPONSE_HEADER));
+      this.totalItems.set(Number(headers.get(TOTAL_COUNT_RESPONSE_HEADER)));
   <%_ } else if (paginationInfiniteScroll) { _%>
       const linkHeader = headers.get('link');
       if (linkHeader) {
@@ -351,43 +351,29 @@ export class <%= componentName %> implements OnInit {
 
 <%_ } _%>
     protected queryBackend(): Observable<EntityArrayResponseType> {
-<%_ if (paginationPagination || searchEngineAny) { _%>
-      const {
-  <%_ if (paginationPagination) { _%>
-        page,
-  <%_ } _%>
-  <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
-        filters,
-  <%_ } _%>
-  <%_ if (searchEngineAny) { _%>
-        currentSearch,
-  <%_ } _%>
-      } = this;
-<%_ } _%>
-
       this.isLoading.set(true);
 <%_ if (paginationPagination) { _%>
-      const pageToLoad: number = page;
+      const pageToLoad: number = this.page();
 <%_ } _%>
       const queryObject<% if ((jpaMetamodelFiltering && paginationPagination) || searchEngine) { %>: any <% } %> = {
 <%_ if (paginationPagination) { _%>
         page: pageToLoad - 1,
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
-        size: this.itemsPerPage,
+        size: this.itemsPerPage(),
 <%_ } _%>
 <%_ if(implementsEagerLoadApis || containsBagRelationships) { _%>
         eagerload: true,
 <%_ } _%>
 <%_ if (searchEngineAny) { _%>
-        query: currentSearch,
+        query: this.currentSearch(),
 <%_ } _%>
 <%_ if (!paginationInfiniteScroll) { _%>
         sort: this.sortService.buildSortParam(this.sortState()),
 <%_ } _%>
       };
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
-      for (const filterOption of filters.filterOptions) {
+      for (const filterOption of this.filters.filterOptions) {
         queryObject[filterOption.name] = filterOption.values;
       }
 <%_ } _%>
@@ -400,7 +386,7 @@ export class <%= componentName %> implements OnInit {
 
 <%_ } _%>
 <%_ if (searchEngineAny) { _%>
-      if (this.currentSearch && this.currentSearch !== '') {
+      if (this.currentSearch() && this.currentSearch() !== '') {
         return this.<%= entityInstance %>Service.search(queryObject)
           .pipe(
             finalize(() => this.isLoading.set(false))
@@ -427,7 +413,7 @@ export class <%= componentName %> implements OnInit {
 <%_ } _%>
 <%_ if (paginationPagination) { _%>
         page,
-        size: this.itemsPerPage,
+        size: this.itemsPerPage(),
 <%_ } _%>
         sort: this.sortService.buildSortParam(sortState),
       };
