@@ -46,11 +46,11 @@
                 <label class="visually-hidden" for="currentSearch">__jhiTranslateTag__('<%- i18nKeyPrefix %>.home.search')</label>
                 <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="__jhiTranslatePipe__('<%= i18nKeyPrefix %>.home.search')">
 
-                <button class="btn btn-info" (click)="search(currentSearch)">
+                <button class="btn btn-info" (click)="search(currentSearch())">
                     <fa-icon icon="search" />
                 </button>
 
-            @if (currentSearch) {
+            @if (currentSearch()) {
                 <button class="btn btn-danger" (click)="search('')">
                     <fa-icon icon="trash-alt" />
                 </button>
@@ -226,11 +226,11 @@ _%>
 @if (<%= entityInstancePlural %>().length > 0) {
     <div>
         <div class="d-flex justify-content-center">
-            <<%= jhiPrefixDashed %>-item-count [params]="{ page, totalItems, itemsPerPage }" />
+            <<%= jhiPrefixDashed %>-item-count [params]="{ page: page(), totalItems: totalItems(), itemsPerPage: itemsPerPage() }" />
         </div>
 
         <div class="d-flex justify-content-center">
-            <ngb-pagination [collectionSize]="totalItems" [page]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="navigateToPage($event)" />
+            <ngb-pagination [collectionSize]="totalItems()" [page]="page()" [pageSize]="itemsPerPage()" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="navigateToPage($event)" />
         </div>
     </div>
 }
