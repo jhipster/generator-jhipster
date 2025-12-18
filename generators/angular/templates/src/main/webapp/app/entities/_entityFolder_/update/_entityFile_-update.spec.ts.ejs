@@ -28,7 +28,7 @@ _%>
 <%_ if (clientTestFrameworkVitest) { _%>
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
-import { provideHttpClient, HttpResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
@@ -63,7 +63,6 @@ describe('<%= entityAngularName %> Management Update Component', () => {
         TestBed.configureTestingModule({
             <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
             providers: [
-              provideHttpClient(),
               provideHttpClientTesting(),
               {
                 provide: ActivatedRoute,

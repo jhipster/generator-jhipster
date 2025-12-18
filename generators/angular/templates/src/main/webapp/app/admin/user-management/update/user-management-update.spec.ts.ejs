@@ -23,7 +23,6 @@ _%>
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateModule } from '@ngx-translate/core';
@@ -45,7 +44,6 @@ describe('User Management Update Component', () => {
     TestBed.configureTestingModule({
       <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
       providers: [
-        provideHttpClient(),
         {
           provide: ActivatedRoute,
           useValue: {

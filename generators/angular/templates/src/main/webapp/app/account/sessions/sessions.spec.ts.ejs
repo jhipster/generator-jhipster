@@ -20,7 +20,6 @@
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
 
 import { AccountService } from 'app/core/auth/account.service';
@@ -49,7 +48,6 @@ describe('Sessions', () => {
     fixture = TestBed.configureTestingModule({
       imports: [Sessions],
       providers: [
-        provideHttpClient(),
         {
           provide: AccountService,
           useValue: {},

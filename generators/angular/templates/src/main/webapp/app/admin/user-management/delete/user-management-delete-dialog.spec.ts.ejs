@@ -20,7 +20,6 @@
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { of } from 'rxjs';
 
@@ -36,7 +35,7 @@ describe('User Management Delete Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), NgbActiveModal],
+      providers: [NgbActiveModal],
     });
   });
 
