@@ -60,7 +60,7 @@ describe('<%= entityAngularName %> Management Component', () => {
     let comp: <%= entityAngularName %>;
     let fixture: ComponentFixture<<%= entityAngularName %>>;
     let service: <%= entityAngularName %>Service;
-    let routerNavigateSpy: <%- clientTestFrameworkJest ? 'jest.SpyInstance<Promise<boolean>>' : 'MockInstance' %>;
+    let routerNavigateSpy: MockInstance;
 
     beforeEach(() => {
         TestBed.configureTestingModule({

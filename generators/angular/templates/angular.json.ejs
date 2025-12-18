@@ -122,19 +122,17 @@
           "defaultConfiguration": "development"
         },
         "test": {
-<%_ if (clientTestFrameworkJest) { _%>
-          "builder": "@angular-builders/jest:run",
-<%_ } else { _%>
           "builder": "@angular/build:unit-test",
-<%_ } _%>
           "options": {
-<%_ if (clientTestFrameworkJest) { _%>
-            "configPath": "jest.conf.js",
-<%_ } else { _%>
             "runner": "vitest",
             "buildTarget": "::development",
-            "providersFile": "<%= clientSrcDir %>default-test-providers.ts",
-<%_ } _%>
+            "runnerConfig": true,
+            "coverageReporters": ["text", "lcov"],
+            "providersFile": "<%= this.relativeDir(clientRootDir, clientSrcDir) %>default-test-providers.ts",
+            "reporters": [
+              "default",
+              ["vitest-sonar-reporter", { "outputFile": "./<%= this.relativeDir(clientRootDir, temporaryDir) %>test-results/TESTS-results-sonar-vitest.xml" }]
+            ],
             "tsConfig": "tsconfig.spec.json"
           }
         }

@@ -43,16 +43,13 @@ export const files = asWriteFilesSection({
       templates: ['postcss.config.json'],
     }),
   ],
-  jest: [
-    clientRootTemplatesBlock({
-      condition: ctx => ctx.clientTestFrameworkJest,
-      templates: ['jest.conf.js'],
-    }),
-  ],
   vitest: [
     clientSrcTemplatesBlock({
       condition: ctx => ctx.clientTestFrameworkVitest,
       templates: ['default-test-providers.ts'],
+    }),
+    clientRootTemplatesBlock({
+      templates: ['vitest-base.config.ts'],
     }),
   ],
   webpack: [
