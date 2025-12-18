@@ -20,7 +20,6 @@
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 <%_ if (enableTranslation) { _%>
@@ -42,7 +41,6 @@ describe('Register', () => {
       imports: [TranslateModule.forRoot()],
 <%_ } _%>
       providers: [
-        provideHttpClient(),
         {
           provide: ActivatedRoute,
           useValue: {}

@@ -19,7 +19,6 @@
 <%_ if (clientTestFrameworkVitest) { _%>
 import { Mock, afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
-import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
@@ -72,7 +71,6 @@ describe('Account Service', () => {
       ],
       <%_ } _%>
       providers: [
-        provideHttpClient(),
         provideHttpClientTesting(),
         {
           provide: StateStorageService,

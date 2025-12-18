@@ -22,7 +22,7 @@ _%>
 <%_ if (clientTestFrameworkVitest) { _%>
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
-import { HttpHeaders, HttpResponse, provideHttpClient } from '@angular/common/http';
+import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 
@@ -58,7 +58,7 @@ describe('User Management Component', () => {
 <%_ if (enableTranslation) { _%>
       imports: [TranslateModule.forRoot()],
 <%_ } _%>
-      providers: [provideHttpClient(), AccountService, { provide: ActivatedRoute, useValue: { data, queryParamMap } }],
+      providers: [AccountService, { provide: ActivatedRoute, useValue: { data, queryParamMap } }],
     });
   });
 

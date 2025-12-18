@@ -21,7 +21,6 @@ import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient } from '@angular/common/http';
 import { of } from 'rxjs';
 
 import Logs from './logs';
@@ -40,7 +39,7 @@ describe('Logs', () => {
     async () => {
       await TestBed.configureTestingModule({
         imports: [Logs],
-        providers: [provideHttpClient(), provideHttpClientTesting(), LogsService<%= applicationTypeGateway && gatewayServicesApiAvailable ? ', GatewayRoutesService' : '' %>],
+        providers: [provideHttpClientTesting(), LogsService<%= applicationTypeGateway && gatewayServicesApiAvailable ? ', GatewayRoutesService' : '' %>],
       }).compileComponents();
     }
   );

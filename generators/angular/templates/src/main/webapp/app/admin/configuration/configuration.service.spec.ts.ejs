@@ -21,7 +21,6 @@ import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
-import { provideHttpClient } from '@angular/common/http';
 
 import { ConfigurationService } from './configuration.service';
 import { Bean, ConfigProps, Env, PropertySource } from './configuration.model';
@@ -33,7 +32,7 @@ describe('Logs Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [provideHttpClientTesting()],
     });
 
     expectedResult = null;

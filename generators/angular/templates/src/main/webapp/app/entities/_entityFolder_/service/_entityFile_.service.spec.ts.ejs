@@ -24,7 +24,6 @@ import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
-import { provideHttpClient } from '@angular/common/http';
 
 <%_ if (anyFieldIsLocalDate) { _%>
 import { DATE_FORMAT } from 'app/config/input.constants';
@@ -53,7 +52,6 @@ describe('<%= entityAngularName %> Service', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
-                provideHttpClient(),
                 provideHttpClientTesting()
             ]
         });
