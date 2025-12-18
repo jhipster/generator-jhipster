@@ -25,6 +25,8 @@ import { provideHttpClient, withInterceptorsFromDi, withInterceptors } from '@an
 import { authInterceptor } from 'app/core/interceptor/auth.interceptor';
 <%_ } _%>
 import { errorHandlerInterceptor } from 'app/core/interceptor/error-handler.interceptor';
+import { notificationInterceptor } from 'app/core/interceptor/notification.interceptor';
+import { authExpiredInterceptor } from 'app/core/interceptor/auth-expired.interceptor';
 import { NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 
 import './config/dayjs';
@@ -32,7 +34,6 @@ import './config/dayjs';
 import { TranslationModule } from 'app/shared/language/translation.module';
 <%_ } _%>
 import { environment } from 'environments/environment';
-import { httpInterceptorProviders } from './core/interceptor';
 import FindLanguageFromKeyPipe from 'app/shared/language/find-language-from-key.pipe';
 import routes from './app.routes';
 import { NgbDateDayjsAdapter } from './config/datepicker-adapter';
@@ -67,14 +68,13 @@ export const appConfig: ApplicationConfig = {
 <%_ if (enableTranslation) { _%>
     importProvidersFrom(TranslationModule),
 <%_ } _%>
-    provideHttpClient(withInterceptors([<%_ if (authenticationTypeJwt) { _%>authInterceptor, <%_ } _%>errorHandlerInterceptor]), withInterceptorsFromDi()),
+    provideHttpClient(withInterceptors([<%_ if (authenticationTypeJwt) { _%>authInterceptor, <%_ } _%>authExpiredInterceptor, errorHandlerInterceptor, notificationInterceptor]), withInterceptorsFromDi()),
     Title,
     { provide: LOCALE_ID, useValue: '<%= angularLocaleId %>' },
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
 <%_ if (enableI18nRTL) { _%>
     FindLanguageFromKeyPipe,
 <%_ } _%>
-    httpInterceptorProviders,
     { provide: TitleStrategy, useClass: AppPageTitleStrategy },
   ],
 };

@@ -28,6 +28,7 @@ import { websocketActivityMessage } from 'app/modules/administration/administrat
 import { getAccount<% if (authenticationTypeJwt) { %>, logoutSession<% } else { %>,logoutServer<% } %> } from 'app/shared/reducers/authentication';
 <%_ if (authenticationUsesCsrf) { _%>
 import { CSRF_TOKEN_HEADER_NAME, CSRF_TOKEN_COOKIE_NAME } from 'app/shared/jhipster/constants';
+import { encodeCsrfToken } from 'app/shared/jhipster/encode-csrf-token';
 <%_ } _%>
 <%_ if (authenticationTypeSession) { _%>
 import cookie from 'app/shared/util/cookie-utils';
@@ -82,7 +83,7 @@ const connect = () => {
   const headers = {};
 <%_ if (authenticationUsesCsrf) { _%>
   const url = '//' + loc.host + baseHref + '/websocket/tracker';
-  headers[CSRF_TOKEN_HEADER_NAME] = cookie.read(CSRF_TOKEN_COOKIE_NAME);
+  headers[CSRF_TOKEN_HEADER_NAME] = encodeCsrfToken(cookie.read(CSRF_TOKEN_COOKIE_NAME));
 <%_ } else { _%>
   let url = '//' + loc.host + baseHref + '/websocket/tracker';
   const authToken = Storage.local.get('<%= jhiPrefixDashed %>-authenticationToken') || Storage.session.get('<%= jhiPrefixDashed %>-authenticationToken');

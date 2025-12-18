@@ -137,14 +137,14 @@
 
   <div>
     <div class="d-flex justify-content-center">
-      <<%= jhiPrefixDashed %>-item-count [params]="{ page, totalItems: totalItems(), itemsPerPage }" />
+      <<%= jhiPrefixDashed %>-item-count [params]="{ page: page(), totalItems: totalItems(), itemsPerPage: itemsPerPage() }" />
     </div>
 
     <div class="d-flex justify-content-center">
       <ngb-pagination
         [collectionSize]="totalItems()"
         [(page)]="page"
-        [pageSize]="itemsPerPage"
+        [pageSize]="itemsPerPage()"
         [maxSize]="5"
         [rotate]="true"
         [boundaryLinks]="true"

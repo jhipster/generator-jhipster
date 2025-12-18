@@ -50,7 +50,7 @@ function accountWithAuthorities(authorities: string[]): Account {
   };
 }
 
-const mockFn = (value: string | null): <%- clientTestFrameworkJest ? 'jest.Mock<string | null>' : 'Mock' %> => <%= clientTestFramework %>.fn(() => value);
+const mockFn = (value: string | null): Mock => <%= clientTestFramework %>.fn(() => value);
 
 describe('Account Service', () => {
   let service: AccountService;

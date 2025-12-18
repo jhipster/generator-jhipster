@@ -16,42 +16,38 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { HttpInterceptor, HttpRequest, HttpResponse, HttpHandler, HttpEvent } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { HttpEvent, HttpInterceptorFn, HttpResponse } from '@angular/common/http';
+import { inject } from '@angular/core';
 import { tap } from 'rxjs/operators';
 
 import { AlertService } from 'app/core/util/alert.service';
 import { getMessageFromHeaders } from 'app/shared/jhipster/headers';
 
-@Injectable()
-export class NotificationInterceptor implements HttpInterceptor {
-  private readonly alertService = inject(AlertService);
+export const notificationInterceptor: HttpInterceptorFn = (req, next) => {
+  const alertService = inject(AlertService);
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(request).pipe(
-      tap((event: HttpEvent<any>) => {
-        if (event instanceof HttpResponse) {
-          const headers = Object.fromEntries(event.headers.keys().map(key => [key, event.headers.getAll(key)]));
-          const message = getMessageFromHeaders(headers);
+  return next(req).pipe(
+    tap((event: HttpEvent<any>) => {
+      if (event instanceof HttpResponse) {
+        const headers = Object.fromEntries(event.headers.keys().map(key => [key, event.headers.getAll(key)]));
+        const message = getMessageFromHeaders(headers);
 
 <%_ if (enableTranslation) { _%>
-          if (message.alertKey) {
-            this.alertService.addAlert({
-              type: 'success',
-              translationKey: message.alertKey,
-              translationParams: { param: message.param },
-            });
-          } else
+        if (message.alertKey) {
+          alertService.addAlert({
+            type: 'success',
+            translationKey: message.alertKey,
+            translationParams: { param: message.param },
+          });
+        } else 
 <%_ } _%>
-          if (message.alertMessage) {
-            this.alertService.addAlert({
-              type: 'success',
-              message: message.alertMessage,
-            });
-          }
+        if (message.alertMessage) {
+          alertService.addAlert({
+            type: 'success',
+            message: message.alertMessage,
+          });
         }
-      }),
-    );
-  }
-}
+      }
+    }),
+  );
+};

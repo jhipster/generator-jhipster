@@ -36,7 +36,7 @@ FROM neo4j:5.26.18
 FROM hazelcast/management-center:5.9.0
 LABEL ALIAS=hazelcast
 
-FROM memcached:1.6.39-alpine
+FROM memcached:1.6.40-alpine
 
 FROM redis:8.4.0
 
@@ -49,10 +49,10 @@ LABEL ALIAS=pulsar
 FROM sonarqube:25.12.0.117093-community
 LABEL ALIAS=sonar
 
-FROM hashicorp/consul:1.22.1
+FROM hashicorp/consul:1.22.2
 LABEL ALIAS=consul
 
-FROM prom/prometheus:v3.8.0
+FROM prom/prometheus:v3.8.1
 LABEL ALIAS=prometheus
 
 FROM prom/alertmanager:v0.30.0
@@ -61,7 +61,7 @@ LABEL ALIAS=prometheus-alertmanager
 FROM quay.io/coreos/prometheus-operator:v0.42.1
 LABEL ALIAS=prometheus-operator
 
-FROM grafana/grafana:12.3.0
+FROM grafana/grafana:12.3.1
 LABEL ALIAS=grafana
 
 FROM quay.io/coreos/grafana-watcher:v0.0.8

@@ -27,6 +27,7 @@ import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '.
 import { JAVA_WEBAPP_SOURCES_DIR } from '../index.ts';
 import { writeEslintClientRootConfigFile } from '../javascript-simple-application/generators/eslint/support/tasks.ts';
 import { defaultLanguage } from '../languages/support/index.ts';
+import type { Config as SpringBootConfig } from '../spring-boot/types.d.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
 import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-angular.ts';
@@ -95,6 +96,9 @@ export default class AngularGenerator extends AngularApplicationGenerator {
     return this.asComposingTaskGroup({
       async composing() {
         await this.composeWithJHipster('jhipster:client:common');
+        if ((this.jhipsterConfigWithDefaults as SpringBootConfig).websocket === 'spring-websocket') {
+          await this.composeWithJHipster('jhipster:client:encode-csrf-token');
+        }
       },
     });
   }
@@ -341,6 +345,11 @@ export default class AngularGenerator extends AngularApplicationGenerator {
               `${application.clientSrcDir}app/entities/entity-navbar-items.ts`,
             ],
           ],
+          '8.0.0-beta.1': [
+            `${application.clientRootDir}jest.js`,
+            `${application.clientSrcDir}app/shared/shared.module.ts.ejs`,
+            `${application.clientSrcDir}app/core/interceptor/index.ts.ejs`,
+          ],
         });
       },
       cleanupOldFilesTask,
@@ -423,7 +432,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
         const { clientDistDir, clientSrcDir, clientI18nDir, temporaryDir } = application;
         source.addSonarProperties?.([
           { key: 'sonar.test.inclusions', value: `${clientSrcDir}app/**/*.spec.ts`, valueSep: ', ' },
-          { key: 'sonar.testExecutionReportPaths', value: `${temporaryDir}test-results/jest/TESTS-results-sonar.xml` },
+          { key: 'sonar.testExecutionReportPaths', value: `${temporaryDir}test-results/TESTS-results-sonar-vitest.xml` },
           { key: 'sonar.javascript.lcov.reportPaths', value: `${temporaryDir}test-results/lcov.info` },
           {
             key: 'sonar.exclusions',
