@@ -60,9 +60,7 @@
   <%_ } _%>
     "@angular-architects/module-federation": "<%= nodeDependencies['@angular-architects/module-federation'] %>",
 <%_ } _%>
-    "jsdom": null,
-    "vitest": null,
-    "vitest-sonar-reporter": null,
+    "@vitest/coverage-v8": "<%= nodeDependencies.vitest %>",
     "@angular/build": "<%= nodeDependencies['@angular/cli'] %>",
     "@angular/cli": "<%= nodeDependencies['@angular/cli'] %>",
     "@angular/compiler-cli": "<%= nodeDependencies['@angular/common'] %>",
@@ -77,13 +75,16 @@
     "eslint-plugin-prettier": "<%= nodeDependencies['eslint-plugin-prettier'] %>",
     "globals": "<%= nodeDependencies.globals %>",
     "jiti": null,
+    "jsdom": null,
 <%_ if (enableI18nRTL) { _%>
     "postcss-rtlcss": "<%= nodeDependencies['postcss-rtlcss'] %>",
 <%_ } _%>
     "rimraf": "<%= nodeDependencies['rimraf'] %>",
     "swagger-ui-dist": "<%= nodeDependencies['swagger-ui-dist'] %>",
     "typescript": "<%= nodeDependencies['typescript'] %>",
-    "typescript-eslint": "<%= nodeDependencies['typescript-eslint'] %>"
+    "typescript-eslint": "<%= nodeDependencies['typescript-eslint'] %>",
+    "vitest": null,
+    "vitest-sonar-reporter": null
   },
   "engines": {
     "node": ">=<%= nodeVersion %>"
@@ -104,7 +105,7 @@
     "serve": "<%- nodePackageManager %> run start --",
     "build": "<%- nodePackageManager %> run webapp:prod --",
     "pretest": "<%- nodePackageManager %> run lint",
-    "test": "ng test",
+    "test": "ng test --coverage",
     "test:watch": "<%- nodePackageManager %> run test -- --watch",
     "watch": "concurrently npm:start<% if(!skipServer) { %> npm:backend:start<% } %>",
     "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'<% if(!skipServer) { %> npm:backend:start<% } %>",

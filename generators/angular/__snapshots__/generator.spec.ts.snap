@@ -972,6 +972,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/tsconfig.spec.json": {
     "stateCleared": "modified",
   },
+  "clientRoot/vitest-base.config.ts": {
+    "stateCleared": "modified",
+  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -1002,6 +1005,10 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
       {
         "key": "sonar.testExecutionReportPaths",
         "value": "target/test-results/TESTS-results-sonar-vitest.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
       },
       {
         "key": "sonar.exclusions",
@@ -2226,6 +2233,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/tsconfig.spec.json": {
     "stateCleared": "modified",
   },
+  "clientRoot/vitest-base.config.ts": {
+    "stateCleared": "modified",
+  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -2257,6 +2267,10 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
       {
         "key": "sonar.testExecutionReportPaths",
         "value": "target/test-results/TESTS-results-sonar-vitest.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
       },
       {
         "key": "sonar.exclusions",
@@ -3222,6 +3236,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/tsconfig.spec.json": {
     "stateCleared": "modified",
   },
+  "clientRoot/vitest-base.config.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/webpack/environment.js": {
     "stateCleared": "modified",
   },
@@ -3270,6 +3287,10 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
       {
         "key": "sonar.testExecutionReportPaths",
         "value": "target/test-results/TESTS-results-sonar-vitest.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
       },
       {
         "key": "sonar.exclusions",
@@ -4257,6 +4278,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "tsconfig.spec.json": {
     "stateCleared": "modified",
   },
+  "vitest-base.config.ts": {
+    "stateCleared": "modified",
+  },
   "webpack/environment.js": {
     "stateCleared": "modified",
   },
@@ -4302,6 +4326,10 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
       {
         "key": "sonar.testExecutionReportPaths",
         "value": "target/test-results/TESTS-results-sonar-vitest.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
       },
       {
         "key": "sonar.exclusions",
@@ -5715,6 +5743,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "tsconfig.spec.json": {
     "stateCleared": "modified",
   },
+  "vitest-base.config.ts": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -5743,6 +5774,10 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
       {
         "key": "sonar.testExecutionReportPaths",
         "value": "target/test-results/TESTS-results-sonar-vitest.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
       },
       {
         "key": "sonar.exclusions",
@@ -6711,6 +6746,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "tsconfig.spec.json": {
     "stateCleared": "modified",
   },
+  "vitest-base.config.ts": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -6738,6 +6776,10 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
       {
         "key": "sonar.testExecutionReportPaths",
         "value": "target/test-results/TESTS-results-sonar-vitest.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
       },
       {
         "key": "sonar.exclusions",
@@ -7712,6 +7754,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "tsconfig.spec.json": {
     "stateCleared": "modified",
   },
+  "vitest-base.config.ts": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -7739,6 +7784,10 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
       {
         "key": "sonar.testExecutionReportPaths",
         "value": "target/test-results/TESTS-results-sonar-vitest.xml",
+      },
+      {
+        "key": "sonar.javascript.lcov.reportPaths",
+        "value": "target//test-results/lcov.info",
       },
       {
         "key": "sonar.exclusions",
