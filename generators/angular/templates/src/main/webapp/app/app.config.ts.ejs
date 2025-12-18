@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { ApplicationConfig, LOCALE_ID, importProvidersFrom, inject, provideZonelessChangeDetection } from '@angular/core';
+import { ApplicationConfig, LOCALE_ID, importProvidersFrom, inject } from '@angular/core';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { Router, RouterFeatures, TitleStrategy, provideRouter, withComponentInputBinding, withDebugTracing, withNavigationErrorHandler, NavigationError } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -60,7 +60,6 @@ if (environment.DEBUG_INFO_ENABLED) {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZonelessChangeDetection(),
     provideRouter(routes, ...routerFeatures),
     importProvidersFrom(BrowserModule),
     // Set this to true to enable service worker (PWA)
