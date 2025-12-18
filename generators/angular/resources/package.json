@@ -27,7 +27,7 @@
     "@types/folder-hash": "4.0.4",
     "@types/node": "20.19.27",
     "@types/sockjs-client": "1.5.4",
-    "angular-eslint": "20.6.0",
+    "angular-eslint": "21.1.0",
     "browser-sync": "3.0.4",
     "browser-sync-webpack-plugin": "2.4.0",
     "buffer": "6.0.3",
