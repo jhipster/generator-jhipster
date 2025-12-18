@@ -49,8 +49,8 @@ export const mavenProfileContent = (data: any) => {
                         </configuration>
                     </plugin>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-clean-plugin</artifactId>
-                        <version>\${maven-clean-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>clean-artifacts</id>
