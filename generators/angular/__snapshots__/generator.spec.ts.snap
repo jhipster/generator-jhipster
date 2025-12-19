@@ -936,9 +936,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/declarations.d.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/default-test-providers.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/environments/environment.development.ts": {
     "stateCleared": "modified",
   },
@@ -2194,9 +2191,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/declarations.d.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/default-test-providers.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/environments/environment.development.ts": {
     "stateCleared": "modified",
   },
@@ -3198,9 +3192,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/src/declarations.d.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/default-test-providers.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/environments/environment.development.ts": {
@@ -4240,9 +4231,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/declarations.d.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/default-test-providers.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/environments/environment.development.ts": {
@@ -5704,9 +5692,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/declarations.d.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/default-test-providers.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/environments/environment.development.ts": {
     "stateCleared": "modified",
   },
@@ -6708,9 +6693,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     "stateCleared": "modified",
   },
   "src/main/webapp/declarations.d.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/default-test-providers.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/environments/environment.development.ts": {
@@ -7716,9 +7698,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/declarations.d.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/default-test-providers.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/environments/environment.development.ts": {

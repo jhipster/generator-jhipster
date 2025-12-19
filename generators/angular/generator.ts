@@ -349,6 +349,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             `${application.clientRootDir}jest.js`,
             `${application.clientSrcDir}app/shared/shared.module.ts.ejs`,
             `${application.clientSrcDir}app/core/interceptor/index.ts.ejs`,
+            `${application.clientSrcDir}default-test-providers.ts.ejs`,
           ],
         });
       },
