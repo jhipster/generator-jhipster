@@ -46,10 +46,10 @@ describe('TranslateDirective Tests', () => {
     fixture = TestBed.createComponent(TestTranslateDirective);
   });
 
-  it('should change HTML', () => {
+  it('should change HTML', async () => {
     const spy = <%= clientTestFramework %>.spyOn(translateService, 'get');
 
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     expect(spy).toHaveBeenCalled();
   });

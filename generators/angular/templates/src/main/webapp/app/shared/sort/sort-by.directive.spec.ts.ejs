@@ -67,65 +67,65 @@ describe('Directive: SortByDirective', () => {
     tableHead = fixture.debugElement.query(By.directive(SortByDirective));
   });
 
-  it('should have a neutral state for predicate column and undefined order value', () => {
+  it('should have a neutral state for predicate column and undefined order value', async () => {
     // GIVEN
     component.sortState.set({ predicate: 'name' });
     const sortByDirective = tableHead.injector.get(SortByDirective as Type<SortByDirective>);
 
     // WHEN
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     // THEN
     expect(sortByDirective.<%= jhiPrefix %>SortBy()).toEqual('name');
     expect(sortByDirective.iconComponent()?.icon()).toEqual(faSort.iconName);
   });
 
-  it('should have an asc state for predicate column and true asc value', () => {
+  it('should have an asc state for predicate column and true asc value', async () => {
     // GIVEN
     component.sortState.set({ predicate: 'name', order: 'asc' });
     const sortByDirective = tableHead.injector.get(SortByDirective as Type<SortByDirective>);
 
     // WHEN
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     // THEN
     expect(sortByDirective.<%= jhiPrefix %>SortBy()).toEqual('name');
     expect(sortByDirective.iconComponent()?.icon()).toEqual(faSortUp.iconName);
   });
 
-  it('should have a desc state for predicate column and desc value', () => {
+  it('should have a desc state for predicate column and desc value', async () => {
     // GIVEN
     component.sortState.set({ predicate: 'name', order: 'desc' });
     const sortByDirective = tableHead.injector.get(SortByDirective as Type<SortByDirective>);
 
     // WHEN
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     // THEN
     expect(sortByDirective.<%= jhiPrefix %>SortBy()).toEqual('name');
     expect(sortByDirective.iconComponent()?.icon()).toEqual(faSortDown.iconName);
   });
 
-  it('should have a neutral state for non-predicate column', () => {
+  it('should have a neutral state for non-predicate column', async () => {
     // GIVEN
     component.sortState.set({ predicate: 'non-existing-column', order: 'asc' });
     const sortByDirective = tableHead.injector.get(SortByDirective as Type<SortByDirective>);
 
     // WHEN
-    fixture.detectChanges();
+    await fixture.whenStable();
 
     // THEN
     expect(sortByDirective.<%= jhiPrefix %>SortBy()).toEqual('name');
     expect(sortByDirective.iconComponent()?.icon()).toEqual(faSort.iconName);
   });
 
-  it('multiple clicks at same component, should call SortDirective sort', () => {
+  it('multiple clicks at same component, should call SortDirective sort', async () => {
     // GIVEN
     const sortDirective = tableHead.injector.get(SortDirective as Type<SortDirective>);
     sortDirective.sort = <%= clientTestFramework %>.fn();
 
     // WHEN
-    fixture.detectChanges();
+    await fixture.whenStable();
     tableHead.triggerEventHandler('click', null);
     tableHead.triggerEventHandler('click', null);
 

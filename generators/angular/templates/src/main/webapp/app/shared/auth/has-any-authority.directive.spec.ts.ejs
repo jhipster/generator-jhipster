@@ -66,27 +66,27 @@ describe('HasAnyAuthorityDirective tests', () => {
   });
 
   describe('set <%= jhiPrefix %>HasAnyAuthority', () => {
-    it('should show restricted content to user if user has required role', () => {
+    it('should show restricted content to user if user has required role', async () => {
       // GIVEN
       mockAccountService.hasAnyAuthority = <%= clientTestFramework %>.fn(() => true);
       const fixture = TestBed.createComponent(TestHasAnyAuthorityDirective);
       const comp = fixture.componentInstance;
 
       // WHEN
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       // THEN
       expect(comp.content).toBeDefined();
     });
 
-    it('should not show restricted content to user if user has not required role', () => {
+    it('should not show restricted content to user if user has not required role', async () => {
       // GIVEN
       mockAccountService.hasAnyAuthority = <%= clientTestFramework %>.fn(() => false);
       const fixture = TestBed.createComponent(TestHasAnyAuthorityDirective);
       const comp = fixture.componentInstance;
 
       // WHEN
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       // THEN
       expect(comp.content()).toBeUndefined();
@@ -94,14 +94,14 @@ describe('HasAnyAuthorityDirective tests', () => {
   });
 
   describe('change authorities', () => {
-    it('should show or not show restricted content correctly if user authorities are changing', () => {
+    it('should show or not show restricted content correctly if user authorities are changing', async () => {
       // GIVEN
       mockAccountService.hasAnyAuthority = <%= clientTestFramework %>.fn((): boolean => Boolean(currentAccount()));
       const fixture = TestBed.createComponent(TestHasAnyAuthorityDirective);
       const comp = fixture.componentInstance;
 
       // WHEN
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       // THEN
       expect(comp.content()).toBeDefined();
@@ -110,14 +110,14 @@ describe('HasAnyAuthorityDirective tests', () => {
       currentAccount.set(null);
 
       // WHEN
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       // THEN
       expect(comp.content()).toBeUndefined();
 
       // WHEN
       currentAccount.set({ activated: true, authorities: ['foo'] } as any);
-      fixture.detectChanges();
+      await fixture.whenStable();
 
       // THEN
       expect(comp.content).toBeDefined();
