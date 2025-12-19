@@ -154,7 +154,8 @@ describe('Account Service', () => {
       // Once more
       service.identity().subscribe();
       // Then there is only request
-      httpMock.expectOne({ method: 'GET' });
+      const requests = httpMock.match({ method: 'GET' });
+      expect(requests.length).toBe(1);
     });
 
     it('should call /account only once if not logged out after first authentication and should call /account again if user has logged out', () => {
@@ -174,7 +175,8 @@ describe('Account Service', () => {
       service.identity().subscribe();
 
       // Then there is a new request
-      httpMock.expectOne({ method: 'GET' });
+      const requests = httpMock.match({ method: 'GET' });
+      expect(requests.length).toBe(1);
     });
 
 <%_ if (enableTranslation) { _%>
