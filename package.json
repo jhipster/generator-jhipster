@@ -177,7 +177,7 @@
     "typescript": "5.9.3",
     "typescript-eslint": "8.50.0",
     "yaml": "2.8.2",
-    "yeoman-environment": "5.1.1",
+    "yeoman-environment": "5.1.2",
     "yeoman-generator": "^8.0.0-beta.7"
   },
   "devDependencies": {
