@@ -21,10 +21,13 @@ import { ActivatedRoute } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { Subscription } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
+import { TranslateDirective } from 'app/shared/language';
+import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-error',
+  <% if (enableTranslation) { %>imports: [TranslateDirective, TranslateModule],<% } %>
   templateUrl: './error.html',
 })
 export default class Error implements OnInit<% if (enableTranslation) { %>, OnDestroy<% } %> {

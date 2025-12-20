@@ -19,6 +19,10 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { KeyValuePipe, JsonPipe } from '@angular/common';
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SortDirective, SortByDirective, sortStateSignal, SortService } from 'app/shared/sort';
@@ -28,7 +32,7 @@ import { Bean, PropertySource } from './configuration.model';
 @Component({
   selector: '<%= jhiPrefixDashed %>-configuration',
   templateUrl: './configuration.html',
-  imports: [FontAwesomeModule, FormsModule, SortDirective, SortByDirective, KeyValuePipe, JsonPipe],
+  imports: [FontAwesomeModule, FormsModule, SortDirective, SortByDirective, KeyValuePipe, JsonPipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
 })
 export default class Configuration implements OnInit {
   allBeans = signal<Bean[] | undefined>(undefined);

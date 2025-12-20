@@ -19,12 +19,16 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { mergeMap } from 'rxjs/operators';
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 
 import { ActivateService } from './activate.service';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-activate',
-  imports: [RouterLink],
+  imports: [RouterLink<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
   templateUrl: './activate.html',
 })
 export default class Activate implements OnInit {

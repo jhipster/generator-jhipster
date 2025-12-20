@@ -18,6 +18,10 @@
 -%>
 import { Component, input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { GarbageCollector } from 'app/admin/metrics/metrics.model';
@@ -25,7 +29,7 @@ import { GarbageCollector } from 'app/admin/metrics/metrics.model';
 @Component({
   selector: '<%= jhiPrefixDashed %>-metrics-garbagecollector',
   templateUrl: './metrics-garbagecollector.html',
-  imports: [NgbModule, DecimalPipe],
+  imports: [NgbModule, DecimalPipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
 })
 export class MetricsGarbageCollector {
   /**
