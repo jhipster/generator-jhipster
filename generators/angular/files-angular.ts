@@ -44,10 +44,6 @@ export const files = asWriteFilesSection({
     }),
   ],
   vitest: [
-    clientSrcTemplatesBlock({
-      condition: ctx => ctx.clientTestFrameworkVitest,
-      templates: ['default-test-providers.ts'],
-    }),
     clientRootTemplatesBlock({
       templates: ['vitest-base.config.ts'],
     }),
