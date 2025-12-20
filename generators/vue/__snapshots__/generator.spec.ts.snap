@@ -2530,9 +2530,6 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
       },
     },
     {
-      "dependencies": {
-        "vue-demi": null,
-      },
       "devDependencies": {
         "@module-federation/enhanced": null,
         "browser-sync-webpack-plugin": null,
@@ -3385,9 +3382,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
       },
     },
     {
-      "dependencies": {
-        "vue-demi": null,
-      },
       "devDependencies": {
         "@module-federation/enhanced": null,
         "browser-sync-webpack-plugin": null,
