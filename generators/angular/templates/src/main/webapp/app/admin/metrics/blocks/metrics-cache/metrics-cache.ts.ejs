@@ -18,6 +18,10 @@
 -%>
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { KeyValuePipe, DecimalPipe } from '@angular/common';
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 
 import { CacheMetrics } from 'app/admin/metrics/metrics.model';
 import { filterNaN } from 'app/core/util/operators';
@@ -26,7 +30,7 @@ import { filterNaN } from 'app/core/util/operators';
   selector: '<%= jhiPrefixDashed %>-metrics-cache',
   templateUrl: './metrics-cache.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [KeyValuePipe, DecimalPipe],
+  imports: [KeyValuePipe, DecimalPipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
 })
 export class MetricsCache {
   /**
