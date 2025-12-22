@@ -70,7 +70,7 @@
     "sass": "1.77.6",
     "sass-loader": "16.0.6",
     "simple-progress-webpack-plugin": "2.0.0",
-    "sinon": "21.0.0",
+    "sinon": "21.0.1",
     "source-map-loader": "5.0.0",
     "style-loader": "4.0.0",
     "terser-webpack-plugin": "5.3.16",
