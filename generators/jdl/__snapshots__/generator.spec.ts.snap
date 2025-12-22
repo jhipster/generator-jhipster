@@ -209,6 +209,7 @@ Options:
   --sync-user-with-idp                     Allow relationships with User for oauth2 applications
   --database-migration <value>             Database migration (choices: "liquibase", "no")
   --graalvm-support                        Experimental GraalVM Native support
+  --message-broker <value>                 message broker (choices: "kafka", "pulsar", "no")
   --with-generated-flag                    Add a GeneratedByJHipster annotation to all generated java classes and interfaces
   --package-name <value>                   The package name for the generated application
   --project-version <value>                project version to use, this option is not persisted (env: JHI_PROJECT_VERSION)
@@ -222,7 +223,6 @@ Options:
   --dev-database-type <value>              Development database (choices: "postgresql", "mysql", "mariadb", "oracle", "mssql", "h2Disk", "h2Memory")
   --cache-provider <value>                 Cache provider (choices: "no", "caffeine", "ehcache", "hazelcast", "infinispan", "memcached", "redis")
   --enable-hibernate-cache                 Enable hibernate cache
-  --message-broker <value>                 message broker (choices: "kafka", "pulsar", "no")
   --client-framework <value>               Provide client framework for the application (choices: "angular", "react", "vue", "no")
   --microfrontend                          Enable microfrontend support
   --microfrontends <value>                 Microfrontends to load

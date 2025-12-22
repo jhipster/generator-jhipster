@@ -46,7 +46,6 @@ import {
   insertContentIntoApplicationProperties,
 } from '../server/support/index.ts';
 import type { Config as SpringCacheConfig } from '../spring-cache/types.ts';
-import type { Config as SpringCloudStreamConfig } from '../spring-cloud-stream/types.ts';
 
 import cleanupTask from './cleanup.ts';
 import { writeFiles as writeEntityFiles } from './entity-files.ts';
@@ -158,7 +157,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
           enableSwaggerCodegen,
         } = this.jhipsterConfigWithDefaults;
         const { cacheProvider } = this.jhipsterConfigWithDefaults as SpringCacheConfig;
-        const { messageBroker } = this.jhipsterConfigWithDefaults as SpringCloudStreamConfig;
+        const { messageBroker } = this.jhipsterConfigWithDefaults;
 
         await this.composeWithJHipster('jhipster:java:i18n');
         await this.composeWithJHipster('docker');
@@ -203,7 +202,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
           await this.composeWithJHipster('jhipster:spring-data:neo4j');
         }
         if (messageBroker === KAFKA || messageBroker === PULSAR) {
-          await this.composeWithJHipster('spring-cloud-stream');
+          await this.composeWithJHipster(`jhipster:spring-cloud:${messageBroker}`);
         }
         if (searchEngine === ELASTICSEARCH) {
           await this.composeWithJHipster('jhipster:spring-data:elasticsearch');

@@ -218,8 +218,29 @@ const command = {
       },
       scope: 'storage',
     },
+    messageBroker: {
+      description: 'message broker',
+      cli: {
+        type: String,
+      },
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
+      },
+      choices: ['kafka', 'pulsar', 'no'],
+      scope: 'storage',
+    },
   },
-  import: ['java', 'liquibase', 'jhipster:spring-data:relational', 'jhipster:spring-cloud:gateway', 'spring-cache', 'spring-cloud-stream'],
+  import: [
+    'java',
+    'liquibase',
+    'jhipster:spring-data:relational',
+    'jhipster:spring-cloud:gateway',
+    'spring-cache',
+    'jhipster:spring-cloud:kafka',
+    'jhipster:spring-cloud:pulsar',
+  ],
 } as const satisfies JHipsterCommandDefinition<any>;
 
 export default command;

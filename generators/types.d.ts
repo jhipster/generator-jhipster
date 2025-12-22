@@ -147,11 +147,9 @@ type GeneratorsByNamespace = {
   'jhipster:spring-boot:websocket': import('./spring-boot/generators/websocket/generator.ts').default;
   'spring-cache': import('./spring-cache/generator.ts').default;
   'jhipster:spring-cache': import('./spring-cache/generator.ts').default;
-  'spring-cloud-stream': import('./spring-cloud-stream/generator.ts').default;
-  'jhipster:spring-cloud-stream': import('./spring-cloud-stream/generator.ts').default;
-  'jhipster:spring-cloud-stream:kafka': import('./spring-cloud-stream/generators/kafka/generator.ts').default;
-  'jhipster:spring-cloud-stream:pulsar': import('./spring-cloud-stream/generators/pulsar/generator.ts').default;
   'jhipster:spring-cloud:gateway': import('./spring-cloud/generators/gateway/generator.ts').default;
+  'jhipster:spring-cloud:kafka': import('./spring-cloud/generators/kafka/generator.ts').default;
+  'jhipster:spring-cloud:pulsar': import('./spring-cloud/generators/pulsar/generator.ts').default;
   'spring-data': import('./spring-data/generator.ts').default;
   'jhipster:spring-data': import('./spring-data/generator.ts').default;
   'jhipster:spring-data:cassandra': import('./spring-data/generators/cassandra/generator.ts').default;

@@ -19,10 +19,6 @@ import type { Config as SpringBootConfig, Options as SpringBootOptions } from '.
 import type { Config as SpringCacheConfig, Options as SpringCacheOptions } from '../../generators/spring-cache/types.d.ts';
 import type { Config as SpringCloudConfig, Options as SpringCloudOptions } from '../../generators/spring-cloud/types.d.ts';
 import type {
-  Config as SpringCloudStreamConfig,
-  Options as SpringCloudStreamOptions,
-} from '../../generators/spring-cloud-stream/types.d.ts';
-import type {
   Config as SpringDataRelationalConfig,
   Options as SpringDataRelationalOptions,
 } from '../../generators/spring-data/generators/relational/types.d.ts';
@@ -47,7 +43,6 @@ export type ConfigAll = Simplify<
     SpringBootConfig &
     SpringCacheConfig &
     SpringCloudConfig &
-    SpringCloudStreamConfig &
     SpringDataRelationalConfig & {
       creationTimestamp?: number;
       microfrontends?: { baseName: string }[];
@@ -73,7 +68,6 @@ export type OptionsAll = Simplify<
     SpringBootOptions &
     SpringCacheOptions &
     SpringCloudOptions &
-    SpringCloudStreamOptions &
     SpringDataRelationalOptions
 >;
 

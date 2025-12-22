@@ -25,13 +25,22 @@ export const shouldComposeWithSpringCloudStream = (
 ) => {
   const pulsarEnabled = typeof sampleConfig === 'boolean' ? sampleConfig : sampleConfig?.messageBroker === PULSAR;
   const kafkaEnabled = typeof sampleConfig === 'boolean' ? sampleConfig : sampleConfig?.messageBroker === KAFKA;
-  if (pulsarEnabled || kafkaEnabled) {
-    it(`should compose with spring-cloud-stream generator`, () => {
-      runResultSupplier().assertGeneratorComposedOnce(`jhipster:spring-cloud-stream`);
+  if (pulsarEnabled) {
+    it(`should compose with spring-cloud:pulsar generator`, () => {
+      runResultSupplier().assertGeneratorComposedOnce(`jhipster:spring-cloud:pulsar`);
     });
   } else {
-    it(`should not compose with spring-cloud-stream generator`, () => {
-      runResultSupplier().assertGeneratorNotComposed(`jhipster:spring-cloud-stream`);
+    it(`should not compose with spring-cloud:pulsar generator`, () => {
+      runResultSupplier().assertGeneratorNotComposed(`jhipster:spring-cloud:pulsar`);
+    });
+  }
+  if (kafkaEnabled) {
+    it(`should compose with spring-cloud:kafka generator`, () => {
+      runResultSupplier().assertGeneratorComposedOnce(`jhipster:spring-cloud:kafka`);
+    });
+  } else {
+    it(`should not compose with spring-cloud:kafka generator`, () => {
+      runResultSupplier().assertGeneratorNotComposed(`jhipster:spring-cloud:kafka`);
     });
   }
 };

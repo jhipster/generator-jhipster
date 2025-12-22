@@ -23,7 +23,6 @@ import clientCommand from '../../generators/client/command.ts';
 import liquibaseCommand from '../../generators/liquibase/command.ts';
 import springBootCommand from '../../generators/spring-boot/command.ts';
 import gatewayCommand from '../../generators/spring-cloud/generators/gateway/command.ts';
-import springCloudStreamCommand from '../../generators/spring-cloud-stream/command.ts';
 import type { JHipsterConfigs } from '../command/types.ts';
 import { createRuntime } from '../jdl/core/runtime.ts';
 import type { JDLApplicationConfig, JHipsterOptionDefinition } from '../jdl/core/types/parsing.ts';
@@ -76,7 +75,6 @@ export const buildJDLApplicationConfig = (configs: JHipsterConfigs): JDLApplicat
 let defaultJDLApplicationConfig: JDLApplicationConfig;
 export const getDefaultJDLApplicationConfig = () => {
   defaultJDLApplicationConfig ??= buildJDLApplicationConfig({
-    ...springCloudStreamCommand.configs,
     ...springBootCommand.configs,
     ...bootstrapCommand.configs,
     ...clientCommand.configs,
