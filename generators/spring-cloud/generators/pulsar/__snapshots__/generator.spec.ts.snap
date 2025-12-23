@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - spring-cloud-stream:pulsar jdl support should match files snapshot 1`] = `
+exports[`generator - spring-cloud:pulsar jdl support should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "contents": "{
@@ -17,7 +17,7 @@ exports[`generator - spring-cloud-stream:pulsar jdl support should match files s
 }
 `;
 
-exports[`generator - spring-cloud-stream:pulsar with defaults options should call source snapshot 1`] = `
+exports[`generator - spring-cloud:pulsar with defaults options should call source snapshot 1`] = `
 {
   "addIntegrationTestAnnotation": [
     {
@@ -75,7 +75,7 @@ exports[`generator - spring-cloud-stream:pulsar with defaults options should cal
 }
 `;
 
-exports[`generator - spring-cloud-stream:pulsar with defaults options should match files snapshot 1`] = `
+exports[`generator - spring-cloud:pulsar with defaults options should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",

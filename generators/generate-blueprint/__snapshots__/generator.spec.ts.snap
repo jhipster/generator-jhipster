@@ -1214,51 +1214,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/spring-cache/templates/template-file-spring-cache.ejs": {
     "stateCleared": "modified",
   },
-  "generators/spring-cloud-stream/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-cloud-stream/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-cloud-stream/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-cloud-stream/generators/kafka/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-cloud-stream/generators/kafka/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-cloud-stream/generators/kafka/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-cloud-stream/generators/kafka/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-cloud-stream/generators/kafka/templates/template-file-spring-cloud-stream:kafka.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-cloud-stream/generators/pulsar/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-cloud-stream/generators/pulsar/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-cloud-stream/generators/pulsar/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-cloud-stream/generators/pulsar/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-cloud-stream/generators/pulsar/templates/template-file-spring-cloud-stream:pulsar.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-cloud-stream/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-cloud-stream/templates/template-file-spring-cloud-stream.ejs": {
-    "stateCleared": "modified",
-  },
   "generators/spring-cloud/generators/gateway/command.js": {
     "stateCleared": "modified",
   },
@@ -1272,6 +1227,36 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/spring-cloud/generators/gateway/templates/template-file-spring-cloud:gateway.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud/generators/kafka/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud/generators/kafka/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud/generators/kafka/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud/generators/kafka/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud/generators/kafka/templates/template-file-spring-cloud:kafka.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud/generators/pulsar/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud/generators/pulsar/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud/generators/pulsar/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud/generators/pulsar/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud/generators/pulsar/templates/template-file-spring-cloud:pulsar.ejs": {
     "stateCleared": "modified",
   },
   "generators/spring-data/command.js": {

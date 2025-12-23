@@ -24,6 +24,6 @@ describe('public api', () => {
   });
 
   it('should import nested sub-generators', async () => {
-    expect(await import('generator-jhipster/generators/spring-cloud-stream/generators/kafka' as string)).toBeDefined();
+    expect(await import('generator-jhipster/generators/spring-cloud/generators/kafka' as string)).toBeDefined();
   });
 });

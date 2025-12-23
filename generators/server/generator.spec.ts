@@ -49,30 +49,32 @@ describe(`generator - ${generator}`, () => {
         shouldComposeWithSpringCloudStream(false, () => runResult);
       });
       describe('kafka', () => {
+        const config = {
+          messageBroker: 'kafka' as const,
+        };
         before(async () => {
           await helpers
             .runJHipster(generator)
-            .withJHipsterConfig({
-              messageBroker: 'kafka',
-            })
+            .withJHipsterConfig(config)
             .withSkipWritingPriorities()
             .withMockedSource({ except: ['addTestSpringFactory'] })
             .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
         });
-        shouldComposeWithSpringCloudStream(true, () => runResult);
+        shouldComposeWithSpringCloudStream(config, () => runResult);
       });
       describe('pulsar', () => {
+        const config = {
+          messageBroker: 'pulsar' as const,
+        };
         before(async () => {
           await helpers
             .runJHipster(generator)
-            .withJHipsterConfig({
-              messageBroker: 'pulsar',
-            })
+            .withJHipsterConfig(config)
             .withSkipWritingPriorities()
             .withMockedSource({ except: ['addTestSpringFactory'] })
             .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
         });
-        shouldComposeWithSpringCloudStream(true, () => runResult);
+        shouldComposeWithSpringCloudStream(config, () => runResult);
       });
     });
 

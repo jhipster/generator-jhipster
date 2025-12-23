@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - spring-cloud-stream:kafka jdl support should match files snapshot 1`] = `
+exports[`generator - spring-cloud:kafka jdl support should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "contents": "{
@@ -17,7 +17,7 @@ exports[`generator - spring-cloud-stream:kafka jdl support should match files sn
 }
 `;
 
-exports[`generator - spring-cloud-stream:kafka with defaults options should call source snapshot 1`] = `
+exports[`generator - spring-cloud:kafka with defaults options should call source snapshot 1`] = `
 {
   "addIntegrationTestAnnotation": [
     {
@@ -86,7 +86,7 @@ exports[`generator - spring-cloud-stream:kafka with defaults options should call
 }
 `;
 
-exports[`generator - spring-cloud-stream:kafka with defaults options should match files snapshot 1`] = `
+exports[`generator - spring-cloud:kafka with defaults options should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
