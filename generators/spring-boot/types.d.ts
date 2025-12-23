@@ -29,6 +29,8 @@ type Command = HandleCommandTypes<typeof command>;
 
 export type SpringBootModule = keyof (typeof springBootDependencies)['modules'];
 
+export type SpringBootProperties = keyof (typeof springBootDependencies)['properties'];
+
 export type Config = Command['Config'] & JavaConfig & ServerConfig & CommonConfig;
 
 export type Options = Command['Options'] & JavaOptions & ServerOptions;
@@ -87,11 +89,13 @@ export type Source = JavaSource &
     /**
      * Add a Spring Boot Module to dependencies.
      */
-    addSpringBootModule?(...moduleNames: (SpringBootModule | { condition: boolean; module: SpringBootModule })[]): void;
+    addSpringBootModule?(
+      ...moduleNames: (SpringBootModule | { condition: boolean; profile?: 'dev' | 'prod'; module: SpringBootModule })[]
+    ): void;
     /**
      * Override a property defined in Spring Boot Dependencies POM.
      */
-    overrideProperty?({ property, value }: { property: SpringBootModule; value: string }): void;
+    overrideProperty?({ property, value }: { property: SpringBootProperties; value: string }): void;
     /**
      * @example
      * addApplicationPropertiesClass({

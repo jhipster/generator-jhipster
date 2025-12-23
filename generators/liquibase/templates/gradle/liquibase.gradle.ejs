@@ -33,7 +33,7 @@ dependencies {
 <%_ } else if (databaseTypeNeo4j) { _%>
   // Exclude current neo4j driver and use the one provided by spring-data
   // See: https://github.com/jhipster/generator-jhipster/pull/24241
-  implementation ("org.liquibase.ext:liquibase-neo4j:${dependencyManagement.importedProperties['liquibase.version']}") {
+  implementation (libs.liquibase.neo4j) {
     exclude group: "org.neo4j.driver", module: "neo4j-java-driver"
     exclude group: "org.slf4j", module: "*"
   }
@@ -72,7 +72,7 @@ liquibase {
 <%_ } _%>
       changelogFile project.ext.diffChangelogFile
 <%_ if (!reactive && backendTypeSpringBoot) { _%>
-      referenceUrl "hibernate:spring:<%= packageName %>.domain?dialect=<%= devHibernateDialect %>&hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy"
+      referenceUrl "hibernate:spring:<%= packageName %>.domain?dialect=<%= devHibernateDialect %>&hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.hibernate.SpringImplicitNamingStrategy"
 <%_ } _%>
 <%_ if (liquibaseDefaultSchemaName) { _%>
       defaultSchemaName "<%- liquibaseDefaultSchemaName %>"

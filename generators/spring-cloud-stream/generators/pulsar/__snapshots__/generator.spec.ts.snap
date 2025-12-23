@@ -43,7 +43,7 @@ exports[`generator - spring-cloud-stream:pulsar with defaults options should cal
           "groupId": "org.springframework.cloud",
         },
         {
-          "artifactId": "junit-jupiter",
+          "artifactId": "testcontainers-junit-jupiter",
           "groupId": "org.testcontainers",
           "scope": "test",
         },
@@ -53,7 +53,7 @@ exports[`generator - spring-cloud-stream:pulsar with defaults options should cal
           "scope": "test",
         },
         {
-          "artifactId": "pulsar",
+          "artifactId": "testcontainers-pulsar",
           "groupId": "org.testcontainers",
           "scope": "test",
         },

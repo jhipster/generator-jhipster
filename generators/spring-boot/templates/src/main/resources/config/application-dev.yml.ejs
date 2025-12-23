@@ -94,7 +94,7 @@ spring:
       profiles:
         active: dev
 <%_ } _%>
-  jackson:
+  jackson2:
     serialization:
       indent-output: true
 <%_ if (databaseTypeNeo4j) { _%>
@@ -163,9 +163,8 @@ spring:
   <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
-  data:
-    mongodb:
-      uri: mongodb://localhost:27017/<%= baseName %><% if (reactive) { %>?waitQueueMultiple=1000<% } %>
+  mongodb:
+    uri: mongodb://localhost:27017/<%= baseName %><% if (reactive) { %>?waitQueueMultiple=1000<% } %>
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
   cassandra:

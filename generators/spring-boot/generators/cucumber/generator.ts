@@ -16,8 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { gt } from 'semver';
-
 import { SERVER_TEST_RES_DIR, SERVER_TEST_SRC_DIR } from '../../../generator-constants.ts';
 import { JavaApplicationGenerator } from '../../../java/generator.ts';
 import { moveToJavaPackageTestDir } from '../../../java/support/files.ts';
@@ -128,17 +126,6 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
           { key: 'cucumber.publish.enabled', value: 'false' },
           { key: 'cucumber.plugin', value: `pretty, html:${application.temporaryDir}cucumber-reports/Cucumber.html` },
         ]);
-      },
-      upgradeJunitJupiter({ application, source }) {
-        // https://github.com/cucumber/cucumber-jvm/issues/3071#issuecomment-3281811324, SpringBoot depends on 5.12.2
-        const springBootJunitJupiterVersion = application.javaManagedProperties?.['junit-jupiter.version'];
-        const junitJupiterVersion = '5.13.3';
-        if (springBootJunitJupiterVersion && gt(springBootJunitJupiterVersion, junitJupiterVersion)) {
-          throw new Error(
-            `Spring Boot provides junit-jupiter.version=${application.javaManagedProperties!['junit-jupiter.version']}, which is compatible with Cucumber. Custom version can be dropped.`,
-          );
-        }
-        source.addJavaProperty?.({ property: 'junit-jupiter.version', value: junitJupiterVersion });
       },
       addDependencies({ application, source }) {
         const { javaDependencies } = application;

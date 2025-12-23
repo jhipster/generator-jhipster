@@ -34,7 +34,7 @@ import tech.jhipster.web.filter.reactive.CookieCsrfFilter;
 <%_ } _%>
 import tech.jhipster.config.JHipsterProperties;
 <%_ if (generateInMemoryUserCredentials) { _%>
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.boot.security.autoconfigure.SecurityProperties;
 <%_ } _%>
 <%_ if (!skipClient) { _%>
 import <%= packageName %>.web.filter.SpaWebFilter;
