@@ -69,7 +69,7 @@ describe('Health', () => {
 
       // THEN
       expect(service.checkHealth).toHaveBeenCalled();
-      expect(comp.health).toEqual(health);
+      expect(comp.health()).toEqual(health);
     });
 
     it('should handle a 503 on refreshing health data', () => {
@@ -82,7 +82,7 @@ describe('Health', () => {
 
       // THEN
       expect(service.checkHealth).toHaveBeenCalled();
-      expect(comp.health).toEqual(health);
+      expect(comp.health()).toEqual(health);
     });
   });
 });

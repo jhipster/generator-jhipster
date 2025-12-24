@@ -34,7 +34,7 @@
           <th scope="col" class="text-center">__jhiTranslateTag__('health.details.details')</th>
         </tr>
       </thead>
-    @if (health) {
+    @if (health(); as health) {
       <tbody>
       @for (componentHealth of health.components | keyvalue; track componentHealth.key) {
         <tr>

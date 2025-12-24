@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { KeyValuePipe } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -36,7 +36,7 @@ import HealthModal from './modal/health-modal';
   imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>FontAwesomeModule, KeyValuePipe],
 })
 export default class Health implements OnInit {
-  health?: HealthModel;
+  health = signal<HealthModel | null>(null);
 
   private readonly modalService = inject(NgbModal);
   private readonly healthService = inject(HealthService);
@@ -54,10 +54,10 @@ export default class Health implements OnInit {
 
   refresh(): void {
     this.healthService.checkHealth().subscribe({
-      next: health => (this.health = health),
+      next: health => this.health.set(health),
       error: (error: HttpErrorResponse) => {
         if (error.status === 503) {
-          this.health = error.error;
+          this.health.set(error.error);
         }
       },
     });
