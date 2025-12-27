@@ -255,6 +255,23 @@ title: 'translated-value-activate.title2-1',
         });
       });
 
+      describe('.routes.ts files', () => {
+        const extension = '.routes.ts';
+
+        it('should translate title fields with translation values', () => {
+          const body = `
+title: 'activate.title1',
+title: 'activate.title2',
+`;
+          expect(replaceAngularTranslations(body, extension)).toMatchInlineSnapshot(`
+"
+title: 'translated-value-activate.title1-0',
+title: 'translated-value-activate.title2-1',
+"
+`);
+        });
+      });
+
       describe('.module.ts files', () => {
         const extension = '.module.ts';
 

@@ -187,4 +187,22 @@ describe(`generator - ${clientFramework}`, () => {
       });
     });
   });
+
+  describe('enableTranslation: false', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({
+          clientFramework,
+          enableTranslation: false,
+        })
+        .withSharedApplication({ getWebappTranslation: () => 'translated-value' })
+        .withMockedSource()
+        .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
+    });
+
+    it('should add value title in *.routes.ts files', () => {
+      runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/admin/admin.routes.ts`, /title: 'translated-value'/);
+    });
+  });
 });
