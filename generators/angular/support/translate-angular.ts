@@ -320,7 +320,7 @@ export const createTranslationReplacer = (getWebappTranslation: GetWebappTransla
       content = translationReplacer ? translationReplacer?.(content, filePath) : content;
     }
     if (!enableTranslation) {
-      if (/(:?route|module)\.ts$/.test(filePath)) {
+      if (/(:?routes?|module)\.ts$/.test(filePath)) {
         content = replacePageTitles(getWebappTranslation, content);
       }
       if (filePath.endsWith('error.route.ts')) {
