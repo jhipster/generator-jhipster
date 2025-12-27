@@ -147,6 +147,8 @@ type GeneratorsByNamespace = {
   'jhipster:spring-boot:websocket': import('./spring-boot/generators/websocket/generator.ts').default;
   'spring-cache': import('./spring-cache/generator.ts').default;
   'jhipster:spring-cache': import('./spring-cache/generator.ts').default;
+  'spring-cloud': import('./spring-cloud/generator.ts').default;
+  'jhipster:spring-cloud': import('./spring-cloud/generator.ts').default;
   'jhipster:spring-cloud:gateway': import('./spring-cloud/generators/gateway/generator.ts').default;
   'jhipster:spring-cloud:kafka': import('./spring-cloud/generators/kafka/generator.ts').default;
   'jhipster:spring-cloud:pulsar': import('./spring-cloud/generators/pulsar/generator.ts').default;

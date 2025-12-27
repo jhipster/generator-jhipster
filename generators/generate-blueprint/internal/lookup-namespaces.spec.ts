@@ -103,6 +103,7 @@ describe('lookupGeneratorsNamespaces', () => {
   "spring-boot:oauth2",
   "spring-boot:websocket",
   "spring-cache",
+  "spring-cloud",
   "spring-cloud:gateway",
   "spring-cloud:kafka",
   "spring-cloud:pulsar",
