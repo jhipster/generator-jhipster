@@ -136,6 +136,10 @@ export default abstract class BaseEntityChangesGenerator<
       }
     }
 
+    if (application.generateBuiltInUserEntity && !previousEntitiesByName.User) {
+      previousEntitiesByName.User = { name: 'User', builtIn: true } as any;
+    }
+
     const entities = Object.values(previousEntitiesByName);
     loadEntitiesAnnotations(entities);
     loadEntitiesOtherSide(entities);
