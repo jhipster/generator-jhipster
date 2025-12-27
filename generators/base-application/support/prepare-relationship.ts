@@ -76,6 +76,9 @@ export default function prepareRelationship(
             `Error at entity ${entityName}: could not find the related field for the relationship ${relationship.relationshipName}`,
           );
         }
+        if (otherEntity.primaryKey.composite) {
+          return null;
+        }
         const { otherEntityField } = relationship;
         const fields = otherEntity.primaryKey.derived ? otherEntity.primaryKey.derivedFields! : otherEntity.primaryKey.fields;
         if (otherEntityField) {
