@@ -46,8 +46,8 @@ Commands:
   jdl|import-jdl                  Create entities from the JDL file/URL/content passed in argument.
       Use the '--interactive' flag to generate multiple applications in series.
   kubernetes|k8s                  Deploy the current application to Kubernetes
-  kubernetes-helm|helm            Deploy the current application to Kubernetes using Helm package manager
-  kubernetes-knative|knative      Deploy the current application to Kubernetes using knative constructs
+  kubernetes:helm|helm            Deploy the current application to Kubernetes using Helm package manager
+  kubernetes:knative|knative      Deploy the current application to Kubernetes using knative constructs
   languages                       Select languages from a list of available languages. The i18n files will be copied to the /webapp/i18n folder
   maven                           Create Maven project (alpha)
   project-name                    Configure project name (alpha)

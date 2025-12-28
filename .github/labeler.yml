@@ -114,5 +114,5 @@
   - changed-files:
       - any-glob-to-any-file:
           - generators/kubernetes/**/*
-          - generators/kubernetes-helm/**/*
-          - generators/kubernetes-knative/**/*
+          - generators/kubernetes/generators/helm/**/*
+          - generators/kubernetes/generators/knative/**/*

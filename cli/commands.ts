@@ -119,11 +119,11 @@ const defaultCommands = {
     alias: 'k8s',
     desc: 'Deploy the current application to Kubernetes',
   },
-  'kubernetes-helm': {
+  'kubernetes:helm': {
     alias: 'helm',
     desc: 'Deploy the current application to Kubernetes using Helm package manager',
   },
-  'kubernetes-knative': {
+  'kubernetes:knative': {
     alias: 'knative',
     desc: 'Deploy the current application to Kubernetes using knative constructs',
   },
