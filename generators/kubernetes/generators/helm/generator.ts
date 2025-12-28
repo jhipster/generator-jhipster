@@ -19,8 +19,8 @@
 
 import chalk from 'chalk';
 
-import BaseWorkspacesGenerator from '../base-workspaces/index.ts';
-import { checkImages, configureImageNames } from '../base-workspaces/internal/docker-base.ts';
+import BaseWorkspacesGenerator from '../../../base-workspaces/index.ts';
+import { checkImages, configureImageNames } from '../../../base-workspaces/internal/docker-base.ts';
 import {
   askForAdminPassword,
   askForApplicationType,
@@ -31,17 +31,17 @@ import {
   askForMonitoring,
   askForPath,
   askForServiceDiscovery,
-} from '../base-workspaces/internal/docker-prompts.ts';
-import { BaseKubernetesGenerator } from '../kubernetes/generator.ts';
-import { checkHelm } from '../kubernetes/kubernetes-base.ts';
+} from '../../../base-workspaces/internal/docker-prompts.ts';
+import { getJdbcUrl, getR2dbcUrl } from '../../../spring-data/generators/relational/support/index.ts';
+import { BaseKubernetesGenerator } from '../../generator.ts';
+import { checkHelm } from '../../kubernetes-base.ts';
 import {
   askForIngressDomain,
   askForIngressType,
   askForIstioSupport,
   askForKubernetesNamespace,
   askForKubernetesServiceType,
-} from '../kubernetes/prompts.ts';
-import { getJdbcUrl, getR2dbcUrl } from '../spring-data/generators/relational/support/index.ts';
+} from '../../prompts.ts';
 
 import { applicationHelmFiles, applicationKubernetesFiles, deploymentHelmFiles, deploymentKubernetesFiles } from './files.ts';
 

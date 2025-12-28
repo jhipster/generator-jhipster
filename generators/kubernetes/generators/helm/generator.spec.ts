@@ -19,7 +19,7 @@
 import { describe } from 'esmocha';
 import { basename } from 'node:path';
 
-import { shouldSupportFeatures } from '../../test/support/tests.ts';
+import { shouldSupportFeatures } from '../../../../test/support/tests.ts';
 
 import Generator from './index.ts';
 

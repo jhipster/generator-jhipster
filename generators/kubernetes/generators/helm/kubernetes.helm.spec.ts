@@ -1,86 +1,80 @@
 import { before, describe, expect, it } from 'esmocha';
 
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
+import { defaultHelpers as helpers, runResult } from '../../../../lib/testing/index.ts';
 
-const GENERATOR_KUBERNETES_HELM = 'kubernetes-helm';
+const GENERATOR_KUBERNETES_HELM = 'kubernetes:helm';
 
 const expectedFiles = {
   csvcfiles: [
-    './kubernetes-helm/csvc-helm/Chart.yaml',
-    './kubernetes-helm/csvc-helm/requirements.yaml',
-    './kubernetes-helm/csvc-helm/values.yaml',
-    './kubernetes-helm/csvc-helm/templates/_helpers.tpl',
+    './helm/csvc-helm/Chart.yaml',
+    './helm/csvc-helm/requirements.yaml',
+    './helm/csvc-helm/values.yaml',
+    './helm/csvc-helm/templates/_helpers.tpl',
   ],
-  eurekaregistry: [
-    './kubernetes-helm/csvc-helm/templates/jhipster-registry.yml',
-    './kubernetes-helm/csvc-helm/templates/application-configmap.yml',
-  ],
+  eurekaregistry: ['./helm/csvc-helm/templates/jhipster-registry.yml', './helm/csvc-helm/templates/application-configmap.yml'],
   consulregistry: [
-    './kubernetes-helm/csvc-helm/templates/consul.yml',
-    './kubernetes-helm/csvc-helm/templates/consul-config-loader.yml',
-    './kubernetes-helm/csvc-helm/templates/application-configmap.yml',
+    './helm/csvc-helm/templates/consul.yml',
+    './helm/csvc-helm/templates/consul-config-loader.yml',
+    './helm/csvc-helm/templates/application-configmap.yml',
   ],
   jhgate: [
-    './kubernetes-helm/jhgate-helm/templates/jhgate-deployment.yml',
-    './kubernetes-helm/jhgate-helm/templates/jhgate-service.yml',
-    './kubernetes-helm/jhgate-helm/Chart.yaml',
-    './kubernetes-helm/jhgate-helm/requirements.yaml',
-    './kubernetes-helm/jhgate-helm/values.yaml',
-    './kubernetes-helm/jhgate-helm/templates/_helpers.tpl',
+    './helm/jhgate-helm/templates/jhgate-deployment.yml',
+    './helm/jhgate-helm/templates/jhgate-service.yml',
+    './helm/jhgate-helm/Chart.yaml',
+    './helm/jhgate-helm/requirements.yaml',
+    './helm/jhgate-helm/values.yaml',
+    './helm/jhgate-helm/templates/_helpers.tpl',
   ],
-  jhgateingress: ['./kubernetes-helm/jhgate-helm/templates/jhgate-ingress.yml'],
-  customnamespace: ['./kubernetes-helm/namespace.yml'],
+  jhgateingress: ['./helm/jhgate-helm/templates/jhgate-ingress.yml'],
+  customnamespace: ['./helm/namespace.yml'],
   msmysql: [
-    './kubernetes-helm/msmysql-helm/Chart.yaml',
-    './kubernetes-helm/msmysql-helm/requirements.yaml',
-    './kubernetes-helm/msmysql-helm/values.yaml',
-    './kubernetes-helm/msmysql-helm/templates/_helpers.tpl',
-    './kubernetes-helm/msmysql-helm/templates/msmysql-deployment.yml',
-    './kubernetes-helm/msmysql-helm/templates/msmysql-service.yml',
+    './helm/msmysql-helm/Chart.yaml',
+    './helm/msmysql-helm/requirements.yaml',
+    './helm/msmysql-helm/values.yaml',
+    './helm/msmysql-helm/templates/_helpers.tpl',
+    './helm/msmysql-helm/templates/msmysql-deployment.yml',
+    './helm/msmysql-helm/templates/msmysql-service.yml',
   ],
   mspsql: [
-    './kubernetes-helm/mspsql-helm/Chart.yaml',
-    './kubernetes-helm/mspsql-helm/requirements.yaml',
-    './kubernetes-helm/mspsql-helm/values.yaml',
-    './kubernetes-helm/mspsql-helm/templates/_helpers.tpl',
-    './kubernetes-helm/mspsql-helm/templates/mspsql-deployment.yml',
-    './kubernetes-helm/mspsql-helm/templates/mspsql-service.yml',
+    './helm/mspsql-helm/Chart.yaml',
+    './helm/mspsql-helm/requirements.yaml',
+    './helm/mspsql-helm/values.yaml',
+    './helm/mspsql-helm/templates/_helpers.tpl',
+    './helm/mspsql-helm/templates/mspsql-deployment.yml',
+    './helm/mspsql-helm/templates/mspsql-service.yml',
   ],
   msmongodb: [
-    './kubernetes-helm/msmongodb-helm/Chart.yaml',
-    './kubernetes-helm/msmongodb-helm/requirements.yaml',
-    './kubernetes-helm/msmongodb-helm/values.yaml',
-    './kubernetes-helm/msmongodb-helm/templates/_helpers.tpl',
-    './kubernetes-helm/msmongodb-helm/templates/msmongodb-deployment.yml',
-    './kubernetes-helm/msmongodb-helm/templates/msmongodb-service.yml',
+    './helm/msmongodb-helm/Chart.yaml',
+    './helm/msmongodb-helm/requirements.yaml',
+    './helm/msmongodb-helm/values.yaml',
+    './helm/msmongodb-helm/templates/_helpers.tpl',
+    './helm/msmongodb-helm/templates/msmongodb-deployment.yml',
+    './helm/msmongodb-helm/templates/msmongodb-service.yml',
   ],
   msmariadb: [
-    './kubernetes-helm/msmariadb-helm/Chart.yaml',
-    './kubernetes-helm/msmariadb-helm/requirements.yaml',
-    './kubernetes-helm/msmariadb-helm/values.yaml',
-    './kubernetes-helm/msmariadb-helm/templates/_helpers.tpl',
-    './kubernetes-helm/msmariadb-helm/templates/msmariadb-deployment.yml',
-    './kubernetes-helm/msmariadb-helm/templates/msmariadb-service.yml',
+    './helm/msmariadb-helm/Chart.yaml',
+    './helm/msmariadb-helm/requirements.yaml',
+    './helm/msmariadb-helm/values.yaml',
+    './helm/msmariadb-helm/templates/_helpers.tpl',
+    './helm/msmariadb-helm/templates/msmariadb-deployment.yml',
+    './helm/msmariadb-helm/templates/msmariadb-service.yml',
   ],
   monolith: [
-    './kubernetes-helm/samplemysql-helm/Chart.yaml',
-    './kubernetes-helm/samplemysql-helm/requirements.yaml',
-    './kubernetes-helm/samplemysql-helm/values.yaml',
-    './kubernetes-helm/samplemysql-helm/templates/_helpers.tpl',
-    './kubernetes-helm/samplemysql-helm/templates/samplemysql-deployment.yml',
-    './kubernetes-helm/samplemysql-helm/templates/samplemysql-service.yml',
-    './kubernetes-helm/samplemysql-helm/templates/samplemysql-elasticsearch.yml',
+    './helm/samplemysql-helm/Chart.yaml',
+    './helm/samplemysql-helm/requirements.yaml',
+    './helm/samplemysql-helm/values.yaml',
+    './helm/samplemysql-helm/templates/_helpers.tpl',
+    './helm/samplemysql-helm/templates/samplemysql-deployment.yml',
+    './helm/samplemysql-helm/templates/samplemysql-service.yml',
+    './helm/samplemysql-helm/templates/samplemysql-elasticsearch.yml',
   ],
-  kafka: [
-    './kubernetes-helm/samplekafka-helm/templates/samplekafka-deployment.yml',
-    './kubernetes-helm/samplekafka-helm/templates/samplekafka-service.yml',
-  ],
+  kafka: ['./helm/samplekafka-helm/templates/samplekafka-deployment.yml', './helm/samplekafka-helm/templates/samplekafka-service.yml'],
   jhgategateway: [
-    './kubernetes-helm/jhgate-helm/templates/jhgate-gateway.yml',
-    './kubernetes-helm/jhgate-helm/templates/jhgate-destination-rule.yml',
-    './kubernetes-helm/jhgate-helm/templates/jhgate-virtual-service.yml',
+    './helm/jhgate-helm/templates/jhgate-gateway.yml',
+    './helm/jhgate-helm/templates/jhgate-destination-rule.yml',
+    './helm/jhgate-helm/templates/jhgate-virtual-service.yml',
   ],
-  applyScript: ['./kubernetes-helm/helm-apply.sh', './kubernetes-helm/helm-upgrade.sh'],
+  applyScript: ['./helm/helm-apply.sh', './helm/helm-upgrade.sh'],
 };
 
 describe('generator - Kubernetes Helm', () => {
@@ -120,7 +114,7 @@ describe('generator - Kubernetes Helm', () => {
     });
     it('creates expected gateway files and content', () => {
       runResult.assertFile(expectedFiles.jhgate);
-      runResult.assertFileContent('./kubernetes-helm/jhgate-helm/requirements.yaml', /name: mysql/);
+      runResult.assertFileContent('./helm/jhgate-helm/requirements.yaml', /name: mysql/);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
@@ -165,7 +159,7 @@ describe('generator - Kubernetes Helm', () => {
     });
     it('creates expected mysql files', () => {
       runResult.assertFile(expectedFiles.msmysql);
-      runResult.assertFileContent('./kubernetes-helm/msmysql-helm/requirements.yaml', /name: mysql/);
+      runResult.assertFileContent('./helm/msmysql-helm/requirements.yaml', /name: mysql/);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
@@ -207,7 +201,7 @@ describe('generator - Kubernetes Helm', () => {
     });
     it('creates expected mysql files', () => {
       runResult.assertFile(expectedFiles.msmysql);
-      runResult.assertFileContent('./kubernetes-helm/msmysql-helm/requirements.yaml', /name: mysql/);
+      runResult.assertFileContent('./helm/msmysql-helm/requirements.yaml', /name: mysql/);
     });
     it('creates expected namespace file', () => {
       runResult.assertFile(expectedFiles.customnamespace);
@@ -260,7 +254,7 @@ describe('generator - Kubernetes Helm', () => {
       runResult.assertFile(expectedFiles.jhgate);
       runResult.assertFile(expectedFiles.csvcfiles);
       runResult.assertFile(expectedFiles.jhgateingress);
-      runResult.assertFileContent('./kubernetes-helm/jhgate-helm/requirements.yaml', /name: mysql/);
+      runResult.assertFileContent('./helm/jhgate-helm/requirements.yaml', /name: mysql/);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
@@ -306,11 +300,11 @@ describe('generator - Kubernetes Helm', () => {
     });
     it('creates expected mysql files', () => {
       runResult.assertFile(expectedFiles.msmysql);
-      runResult.assertFileContent('./kubernetes-helm/msmysql-helm/requirements.yaml', /name: mysql/);
+      runResult.assertFileContent('./helm/msmysql-helm/requirements.yaml', /name: mysql/);
     });
     it('creates expected psql files', () => {
       runResult.assertFile(expectedFiles.mspsql);
-      runResult.assertFileContent('./kubernetes-helm/mspsql-helm/requirements.yaml', /name: postgresql/);
+      runResult.assertFileContent('./helm/mspsql-helm/requirements.yaml', /name: postgresql/);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
@@ -357,19 +351,19 @@ describe('generator - Kubernetes Helm', () => {
     });
     it('creates expected mysql files', () => {
       runResult.assertFile(expectedFiles.msmysql);
-      runResult.assertFileContent('./kubernetes-helm/msmysql-helm/requirements.yaml', /name: mysql/);
+      runResult.assertFileContent('./helm/msmysql-helm/requirements.yaml', /name: mysql/);
     });
     it('creates expected psql files', () => {
       runResult.assertFile(expectedFiles.mspsql);
-      runResult.assertFileContent('./kubernetes-helm/mspsql-helm/requirements.yaml', /name: postgresql/);
+      runResult.assertFileContent('./helm/mspsql-helm/requirements.yaml', /name: postgresql/);
     });
     it('creates expected mongodb files', () => {
       runResult.assertFile(expectedFiles.msmongodb);
-      runResult.assertFileContent('./kubernetes-helm/msmongodb-helm/requirements.yaml', /name: mongodb-replicaset/);
+      runResult.assertFileContent('./helm/msmongodb-helm/requirements.yaml', /name: mongodb-replicaset/);
     });
     it('creates expected mariadb files', () => {
       runResult.assertFile(expectedFiles.msmariadb);
-      runResult.assertFileContent('./kubernetes-helm/msmariadb-helm/requirements.yaml', /name: mariadb/);
+      runResult.assertFileContent('./helm/msmariadb-helm/requirements.yaml', /name: mariadb/);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
@@ -410,7 +404,7 @@ describe('generator - Kubernetes Helm', () => {
     });
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.monolith);
-      runResult.assertFileContent('./kubernetes-helm/samplemysql-helm/requirements.yaml', /name: mysql/);
+      runResult.assertFileContent('./helm/samplemysql-helm/requirements.yaml', /name: mysql/);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
@@ -449,8 +443,8 @@ describe('generator - Kubernetes Helm', () => {
     it('creates expected default files', () => {
       runResult.assertFile(expectedFiles.csvcfiles);
       runResult.assertFile(expectedFiles.kafka);
-      runResult.assertFileContent('./kubernetes-helm/csvc-helm/requirements.yaml', /name: kafka/);
-      runResult.assertFileContent('./kubernetes-helm/samplekafka-helm/requirements.yaml', /name: mysql/);
+      runResult.assertFileContent('./helm/csvc-helm/requirements.yaml', /name: kafka/);
+      runResult.assertFileContent('./helm/samplekafka-helm/requirements.yaml', /name: mysql/);
     });
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
@@ -490,12 +484,12 @@ describe('generator - Kubernetes Helm', () => {
     });
     it('creates expected mysql files', () => {
       runResult.assertFile(expectedFiles.msmysql);
-      runResult.assertFileContent('./kubernetes-helm/msmysql-helm/requirements.yaml', /name: mysql/);
+      runResult.assertFileContent('./helm/msmysql-helm/requirements.yaml', /name: mysql/);
     });
     it('creates expected prometheus files', () => {
       runResult.assertFile(expectedFiles.csvcfiles);
-      runResult.assertFileContent('./kubernetes-helm/csvc-helm/requirements.yaml', /name: prometheus/);
-      runResult.assertFileContent('./kubernetes-helm/csvc-helm/requirements.yaml', /name: grafana/);
+      runResult.assertFileContent('./helm/csvc-helm/requirements.yaml', /name: prometheus/);
+      runResult.assertFileContent('./helm/csvc-helm/requirements.yaml', /name: grafana/);
     });
     it('creates expected namespace file', () => {
       runResult.assertFile(expectedFiles.customnamespace);

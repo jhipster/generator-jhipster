@@ -899,36 +899,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/jdl/templates/template-file-jdl.ejs": {
     "stateCleared": "modified",
   },
-  "generators/kubernetes-helm/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/kubernetes-helm/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/kubernetes-helm/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/kubernetes-helm/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/kubernetes-helm/templates/template-file-kubernetes-helm.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/kubernetes-knative/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/kubernetes-knative/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/kubernetes-knative/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/kubernetes-knative/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/kubernetes-knative/templates/template-file-kubernetes-knative.ejs": {
-    "stateCleared": "modified",
-  },
   "generators/kubernetes/command.js": {
     "stateCleared": "modified",
   },
@@ -951,6 +921,36 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/kubernetes/generators/bootstrap/templates/template-file-kubernetes:bootstrap.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes/generators/helm/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes/generators/helm/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes/generators/helm/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes/generators/helm/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes/generators/helm/templates/template-file-kubernetes:helm.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes/generators/knative/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes/generators/knative/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes/generators/knative/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes/generators/knative/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/kubernetes/generators/knative/templates/template-file-kubernetes:knative.ejs": {
     "stateCleared": "modified",
   },
   "generators/kubernetes/index.js": {

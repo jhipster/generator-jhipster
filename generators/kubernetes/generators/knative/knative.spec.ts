@@ -1,115 +1,103 @@
 import { before, describe, expect, it } from 'esmocha';
 
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
+import { defaultHelpers as helpers, runResult } from '../../../../lib/testing/index.ts';
 
-const GENERATOR_KUBERNETES_KNATIVE = 'kubernetes-knative';
+const GENERATOR_KUBERNETES_KNATIVE = 'kubernetes:knative';
 
 const expectedFiles = {
-  eurekaregistry: [
-    './kubernetes-knative/registry-knative/jhipster-registry.yml',
-    './kubernetes-knative/registry-knative/application-configmap.yml',
-  ],
+  eurekaregistry: ['./knative/registry-knative/jhipster-registry.yml', './knative/registry-knative/application-configmap.yml'],
   consulregistry: [
-    './kubernetes-knative/registry-knative/consul.yml',
-    './kubernetes-knative/registry-knative/consul-config-loader.yml',
-    './kubernetes-knative/registry-knative/application-configmap.yml',
+    './knative/registry-knative/consul.yml',
+    './knative/registry-knative/consul-config-loader.yml',
+    './knative/registry-knative/application-configmap.yml',
   ],
-  jhgate: ['./kubernetes-knative/jhgate-knative/jhgate-mysql.yml', './kubernetes-knative/jhgate-knative/jhgate-service.yml'],
-  jhgateingress: ['./kubernetes-knative/jhgate-knative/jhgate-ingress.yml'],
-  customnamespace: ['./kubernetes-knative/namespace.yml'],
-  msmysql: ['./kubernetes-knative/msmysql-knative/msmysql-service.yml', './kubernetes-knative/msmysql-knative/msmysql-mysql.yml'],
+  jhgate: ['./knative/jhgate-knative/jhgate-mysql.yml', './knative/jhgate-knative/jhgate-service.yml'],
+  jhgateingress: ['./knative/jhgate-knative/jhgate-ingress.yml'],
+  customnamespace: ['./knative/namespace.yml'],
+  msmysql: ['./knative/msmysql-knative/msmysql-service.yml', './knative/msmysql-knative/msmysql-mysql.yml'],
   mspsql: [
-    './kubernetes-knative/mspsql-knative/mspsql-service.yml',
-    './kubernetes-knative/mspsql-knative/mspsql-postgresql.yml',
-    './kubernetes-knative/mspsql-knative/mspsql-service.yml',
-    './kubernetes-knative/mspsql-knative/mspsql-elasticsearch.yml',
+    './knative/mspsql-knative/mspsql-service.yml',
+    './knative/mspsql-knative/mspsql-postgresql.yml',
+    './knative/mspsql-knative/mspsql-service.yml',
+    './knative/mspsql-knative/mspsql-elasticsearch.yml',
   ],
-  msmongodb: [
-    './kubernetes-knative/msmongodb-knative/msmongodb-service.yml',
-    './kubernetes-knative/msmongodb-knative/msmongodb-mongodb.yml',
-  ],
-  msmariadb: [
-    './kubernetes-knative/msmariadb-knative/msmariadb-service.yml',
-    './kubernetes-knative/msmariadb-knative/msmariadb-mariadb.yml',
-  ],
-  msmssqldb: ['./kubernetes-knative/msmssqldb-knative/msmssqldb-service.yml', './kubernetes-knative/msmssqldb-knative/msmssqldb-mssql.yml'],
+  msmongodb: ['./knative/msmongodb-knative/msmongodb-service.yml', './knative/msmongodb-knative/msmongodb-mongodb.yml'],
+  msmariadb: ['./knative/msmariadb-knative/msmariadb-service.yml', './knative/msmariadb-knative/msmariadb-mariadb.yml'],
+  msmssqldb: ['./knative/msmssqldb-knative/msmssqldb-service.yml', './knative/msmssqldb-knative/msmssqldb-mssql.yml'],
   prometheusmonit: [
-    './kubernetes-knative/monitoring-knative/jhipster-prometheus-crd.yml',
-    './kubernetes-knative/monitoring-knative/jhipster-prometheus-cr.yml',
-    './kubernetes-knative/monitoring-knative/jhipster-grafana.yml',
-    './kubernetes-knative/monitoring-knative/jhipster-grafana-dashboard.yml',
+    './knative/monitoring-knative/jhipster-prometheus-crd.yml',
+    './knative/monitoring-knative/jhipster-prometheus-cr.yml',
+    './knative/monitoring-knative/jhipster-grafana.yml',
+    './knative/monitoring-knative/jhipster-grafana-dashboard.yml',
   ],
   jhgategateway: [
-    './kubernetes-knative/jhgate-knative/jhgate-gateway.yml',
-    './kubernetes-knative/jhgate-knative/jhgate-destination-rule.yml',
-    './kubernetes-knative/jhgate-knative/jhgate-virtual-service.yml',
+    './knative/jhgate-knative/jhgate-gateway.yml',
+    './knative/jhgate-knative/jhgate-destination-rule.yml',
+    './knative/jhgate-knative/jhgate-virtual-service.yml',
   ],
-  applyScript: ['./kubernetes-knative/kubectl-knative-apply.sh'],
+  applyScript: ['./knative/kubectl-knative-apply.sh'],
 };
 
 const helmExpectedFiles = {
   csvcfiles: [
-    './kubernetes-knative/csvc-knative/Chart.yaml',
-    './kubernetes-knative/csvc-knative/requirements.yml',
-    './kubernetes-knative/csvc-knative/values.yml',
-    './kubernetes-knative/csvc-knative/templates/_helpers.tpl',
+    './knative/csvc-knative/Chart.yaml',
+    './knative/csvc-knative/requirements.yml',
+    './knative/csvc-knative/values.yml',
+    './knative/csvc-knative/templates/_helpers.tpl',
   ],
-  eurekaregistry: [
-    './kubernetes-knative/csvc-knative/templates/jhipster-registry.yml',
-    './kubernetes-knative/csvc-knative/templates/application-configmap.yml',
-  ],
+  eurekaregistry: ['./knative/csvc-knative/templates/jhipster-registry.yml', './knative/csvc-knative/templates/application-configmap.yml'],
   consulregistry: [
-    './kubernetes-knative/csvc-knative/templates/consul.yml',
-    './kubernetes-knative/csvc-knative/templates/consul-config-loader.yml',
-    './kubernetes-knative/csvc-knative/templates/application-configmap.yml',
+    './knative/csvc-knative/templates/consul.yml',
+    './knative/csvc-knative/templates/consul-config-loader.yml',
+    './knative/csvc-knative/templates/application-configmap.yml',
   ],
   jhgate: [
-    './kubernetes-knative/jhgate-knative/templates/jhgate-service.yml',
-    './kubernetes-knative/jhgate-knative/Chart.yaml',
-    './kubernetes-knative/jhgate-knative/requirements.yml',
-    './kubernetes-knative/jhgate-knative/values.yml',
-    './kubernetes-knative/jhgate-knative/templates/_helpers.tpl',
+    './knative/jhgate-knative/templates/jhgate-service.yml',
+    './knative/jhgate-knative/Chart.yaml',
+    './knative/jhgate-knative/requirements.yml',
+    './knative/jhgate-knative/values.yml',
+    './knative/jhgate-knative/templates/_helpers.tpl',
   ],
-  customnamespace: ['./kubernetes-knative/namespace.yml'],
+  customnamespace: ['./knative/namespace.yml'],
   msmysql: [
-    './kubernetes-knative/msmysql-knative/Chart.yaml',
-    './kubernetes-knative/msmysql-knative/requirements.yml',
-    './kubernetes-knative/msmysql-knative/values.yml',
-    './kubernetes-knative/msmysql-knative/templates/_helpers.tpl',
-    './kubernetes-knative/msmysql-knative/templates/msmysql-service.yml',
+    './knative/msmysql-knative/Chart.yaml',
+    './knative/msmysql-knative/requirements.yml',
+    './knative/msmysql-knative/values.yml',
+    './knative/msmysql-knative/templates/_helpers.tpl',
+    './knative/msmysql-knative/templates/msmysql-service.yml',
   ],
   mspsql: [
-    './kubernetes-knative/mspsql-knative/Chart.yaml',
-    './kubernetes-knative/mspsql-knative/requirements.yml',
-    './kubernetes-knative/mspsql-knative/values.yml',
-    './kubernetes-knative/mspsql-knative/templates/_helpers.tpl',
-    './kubernetes-knative/mspsql-knative/templates/mspsql-service.yml',
+    './knative/mspsql-knative/Chart.yaml',
+    './knative/mspsql-knative/requirements.yml',
+    './knative/mspsql-knative/values.yml',
+    './knative/mspsql-knative/templates/_helpers.tpl',
+    './knative/mspsql-knative/templates/mspsql-service.yml',
   ],
   msmongodb: [
-    './kubernetes-knative/msmongodb-knative/Chart.yaml',
-    './kubernetes-knative/msmongodb-knative/requirements.yml',
-    './kubernetes-knative/msmongodb-knative/values.yml',
-    './kubernetes-knative/msmongodb-knative/templates/_helpers.tpl',
-    './kubernetes-knative/msmongodb-knative/templates/msmongodb-service.yml',
+    './knative/msmongodb-knative/Chart.yaml',
+    './knative/msmongodb-knative/requirements.yml',
+    './knative/msmongodb-knative/values.yml',
+    './knative/msmongodb-knative/templates/_helpers.tpl',
+    './knative/msmongodb-knative/templates/msmongodb-service.yml',
   ],
   msmariadb: [
-    './kubernetes-knative/msmariadb-knative/Chart.yaml',
-    './kubernetes-knative/msmariadb-knative/requirements.yml',
-    './kubernetes-knative/msmariadb-knative/values.yml',
-    './kubernetes-knative/msmariadb-knative/templates/_helpers.tpl',
-    './kubernetes-knative/msmariadb-knative/templates/msmariadb-service.yml',
-    './kubernetes-knative/msmariadb-knative/templates/msmariadb-service.yml',
+    './knative/msmariadb-knative/Chart.yaml',
+    './knative/msmariadb-knative/requirements.yml',
+    './knative/msmariadb-knative/values.yml',
+    './knative/msmariadb-knative/templates/_helpers.tpl',
+    './knative/msmariadb-knative/templates/msmariadb-service.yml',
+    './knative/msmariadb-knative/templates/msmariadb-service.yml',
   ],
   kafka: [
-    './kubernetes-knative/samplekafka-knative/templates/samplekafka-service.yml',
-    './kubernetes-knative/samplekafka-knative/templates/samplekafka-service.yml',
+    './knative/samplekafka-knative/templates/samplekafka-service.yml',
+    './knative/samplekafka-knative/templates/samplekafka-service.yml',
   ],
   jhgategateway: [
-    './kubernetes-knative/jhgate-knative/templates/jhgate-gateway.yml',
-    './kubernetes-knative/jhgate-knative/templates/jhgate-destination-rule.yml',
-    './kubernetes-knative/jhgate-knative/templates/jhgate-virtual-service.yml',
+    './knative/jhgate-knative/templates/jhgate-gateway.yml',
+    './knative/jhgate-knative/templates/jhgate-destination-rule.yml',
+    './knative/jhgate-knative/templates/jhgate-virtual-service.yml',
   ],
-  applyScript: ['./kubernetes-knative/helm-knative-apply.sh', './kubernetes-knative/helm-knative-upgrade.sh'],
+  applyScript: ['./knative/helm-knative-apply.sh', './knative/helm-knative-upgrade.sh'],
 };
 
 describe('generator - Knative', () => {
@@ -147,11 +135,11 @@ describe('generator - Knative', () => {
       });
       it('creates expected registry files and content', () => {
         runResult.assertFile(expectedFiles.consulregistry);
-        runResult.assertFileContent('./kubernetes-knative/registry-knative/consul.yml', /a 24 chars base64 encoded string/);
+        runResult.assertFileContent('./knative/registry-knative/consul.yml', /a 24 chars base64 encoded string/);
       });
       it('creates expected gateway files and content', () => {
         runResult.assertFile(expectedFiles.jhgate);
-        // runResult.assertFileContent('./kubernetes-knative/jhgate-knative/jhgate-service.yml', /image: jhipsterrepository\/jhgate/);
+        // runResult.assertFileContent('./knative/jhgate-knative/jhgate-service.yml', /image: jhipsterrepository\/jhgate/);
       });
       it('create the apply script', () => {
         runResult.assertFile(expectedFiles.applyScript);
@@ -520,7 +508,7 @@ describe('generator - Knative', () => {
       });
       it('creates expected gateway files and content', () => {
         runResult.assertFile(helmExpectedFiles.jhgate);
-        runResult.assertFileContent('./kubernetes-knative/jhgate-knative/requirements.yml', /name: mysql/);
+        runResult.assertFileContent('./knative/jhgate-knative/requirements.yml', /name: mysql/);
       });
       it('create the apply script', () => {
         runResult.assertFile(helmExpectedFiles.applyScript);
@@ -566,7 +554,7 @@ describe('generator - Knative', () => {
       });
       it('creates expected mysql files', () => {
         runResult.assertFile(helmExpectedFiles.msmysql);
-        runResult.assertFileContent('./kubernetes-knative/msmysql-knative/requirements.yml', /name: mysql/);
+        runResult.assertFileContent('./knative/msmysql-knative/requirements.yml', /name: mysql/);
       });
       it('create the apply script', () => {
         runResult.assertFile(helmExpectedFiles.applyScript);
@@ -609,7 +597,7 @@ describe('generator - Knative', () => {
       });
       it('creates expected mysql files', () => {
         runResult.assertFile(helmExpectedFiles.msmysql);
-        runResult.assertFileContent('./kubernetes-knative/msmysql-knative/requirements.yml', /name: mysql/);
+        runResult.assertFileContent('./knative/msmysql-knative/requirements.yml', /name: mysql/);
       });
       it('creates expected namespace file', () => {
         runResult.assertFile(helmExpectedFiles.customnamespace);
@@ -661,7 +649,7 @@ describe('generator - Knative', () => {
       it('creates expected ingress files', () => {
         runResult.assertFile(helmExpectedFiles.jhgate);
         runResult.assertFile(helmExpectedFiles.csvcfiles);
-        runResult.assertFileContent('./kubernetes-knative/jhgate-knative/requirements.yml', /name: mysql/);
+        runResult.assertFileContent('./knative/jhgate-knative/requirements.yml', /name: mysql/);
       });
       it('create the apply script', () => {
         runResult.assertFile(helmExpectedFiles.applyScript);
@@ -708,11 +696,11 @@ describe('generator - Knative', () => {
       });
       it('creates expected mysql files', () => {
         runResult.assertFile(helmExpectedFiles.msmysql);
-        runResult.assertFileContent('./kubernetes-knative/msmysql-knative/requirements.yml', /name: mysql/);
+        runResult.assertFileContent('./knative/msmysql-knative/requirements.yml', /name: mysql/);
       });
       it('creates expected psql files', () => {
         runResult.assertFile(helmExpectedFiles.mspsql);
-        runResult.assertFileContent('./kubernetes-knative/mspsql-knative/requirements.yml', /name: postgresql/);
+        runResult.assertFileContent('./knative/mspsql-knative/requirements.yml', /name: postgresql/);
       });
       it('create the apply script', () => {
         runResult.assertFile(helmExpectedFiles.applyScript);
@@ -760,19 +748,19 @@ describe('generator - Knative', () => {
       });
       it('creates expected mysql files', () => {
         runResult.assertFile(helmExpectedFiles.msmysql);
-        runResult.assertFileContent('./kubernetes-knative/msmysql-knative/requirements.yml', /name: mysql/);
+        runResult.assertFileContent('./knative/msmysql-knative/requirements.yml', /name: mysql/);
       });
       it('creates expected psql files', () => {
         runResult.assertFile(helmExpectedFiles.mspsql);
-        runResult.assertFileContent('./kubernetes-knative/mspsql-knative/requirements.yml', /name: postgresql/);
+        runResult.assertFileContent('./knative/mspsql-knative/requirements.yml', /name: postgresql/);
       });
       it('creates expected mongodb files', () => {
         runResult.assertFile(helmExpectedFiles.msmongodb);
-        runResult.assertFileContent('./kubernetes-knative/msmongodb-knative/requirements.yml', /name: mongodb-replicaset/);
+        runResult.assertFileContent('./knative/msmongodb-knative/requirements.yml', /name: mongodb-replicaset/);
       });
       it('creates expected mariadb files', () => {
         runResult.assertFile(helmExpectedFiles.msmariadb);
-        runResult.assertFileContent('./kubernetes-knative/msmariadb-knative/requirements.yml', /name: mariadb/);
+        runResult.assertFileContent('./knative/msmariadb-knative/requirements.yml', /name: mariadb/);
       });
       it('create the apply script', () => {
         runResult.assertFile(helmExpectedFiles.applyScript);
@@ -813,12 +801,12 @@ describe('generator - Knative', () => {
       });
       it('creates expected mysql files', () => {
         runResult.assertFile(helmExpectedFiles.msmysql);
-        runResult.assertFileContent('./kubernetes-knative/msmysql-knative/requirements.yml', /name: mysql/);
+        runResult.assertFileContent('./knative/msmysql-knative/requirements.yml', /name: mysql/);
       });
       it('creates expected prometheus files', () => {
         runResult.assertFile(helmExpectedFiles.csvcfiles);
-        runResult.assertFileContent('./kubernetes-knative/csvc-knative/requirements.yml', /name: prometheus/);
-        runResult.assertFileContent('./kubernetes-knative/csvc-knative/requirements.yml', /name: grafana/);
+        runResult.assertFileContent('./knative/csvc-knative/requirements.yml', /name: prometheus/);
+        runResult.assertFileContent('./knative/csvc-knative/requirements.yml', /name: grafana/);
       });
       it('creates expected namespace file', () => {
         runResult.assertFile(helmExpectedFiles.customnamespace);

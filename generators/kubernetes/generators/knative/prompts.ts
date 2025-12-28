@@ -16,9 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { kubernetesPlatformTypes } from '../../lib/jhipster/index.ts';
-import { asPromptingTask } from '../base-application/support/index.ts';
-import type { BaseKubernetesGenerator } from '../kubernetes/generator.ts';
+import { kubernetesPlatformTypes } from '../../../../lib/jhipster/index.ts';
+import { asPromptingTask } from '../../../base-application/support/index.ts';
+import type { BaseKubernetesGenerator } from '../../generator.ts';
 
 const { GeneratorTypes } = kubernetesPlatformTypes;
 const { HELM, K8S } = GeneratorTypes;

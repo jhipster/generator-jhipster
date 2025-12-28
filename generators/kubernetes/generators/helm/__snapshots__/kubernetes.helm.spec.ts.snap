@@ -17,7 +17,7 @@ exports[`generator - Kubernetes Helm Kafka application should match files snapsh
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/.yo-rc.json": {
+  "helm/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "appsFolders": [
@@ -41,7 +41,7 @@ exports[`generator - Kubernetes Helm Kafka application should match files snapsh
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/HELM-README.md": {
+  "helm/HELM-README.md": {
     "contents": "# JHipster generated helm package manager
 
 ## Preparation
@@ -93,7 +93,7 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/Chart.yaml": {
+  "helm/csvc-helm/Chart.yaml": {
     "contents": "name: common-service
 version: 1.0.0
 appVersion: 1.0.0
@@ -119,7 +119,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/requirements.yaml": {
+  "helm/csvc-helm/requirements.yaml": {
     "contents": "dependencies:
   - name: kafka
     version: ^0.20.1
@@ -128,7 +128,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/_helpers.tpl": {
+  "helm/csvc-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 Kafka customisation
@@ -145,14 +145,14 @@ Kafka customisation
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/values.yaml": {
+  "helm/csvc-helm/values.yaml": {
     "contents": "kafka:
   enabled: true
   replicas: 3
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/helm-apply.sh": {
+  "helm/helm-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -188,7 +188,7 @@ helm install --name samplekafka  ./samplekafka-\${suffix} --replace --namespace 
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/helm-upgrade.sh": {
+  "helm/helm-upgrade.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -205,7 +205,7 @@ helm upgrade --install samplekafka ./samplekafka-\${suffix} --namespace default
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/samplekafka-helm/Chart.yaml": {
+  "helm/samplekafka-helm/Chart.yaml": {
     "contents": "name: samplekafka
 version: 1.0.0
 appVersion: 1.0.0
@@ -231,7 +231,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/samplekafka-helm/requirements.yaml": {
+  "helm/samplekafka-helm/requirements.yaml": {
     "contents": "dependencies:
   - name: mysql
     version: ^1.4.0
@@ -240,7 +240,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/samplekafka-helm/templates/_helpers.tpl": {
+  "helm/samplekafka-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mysql customisation
@@ -255,7 +255,7 @@ mysql customisation
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/samplekafka-helm/templates/samplekafka-deployment.yml": {
+  "helm/samplekafka-helm/templates/samplekafka-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -357,7 +357,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/samplekafka-helm/templates/samplekafka-service.yml": {
+  "helm/samplekafka-helm/templates/samplekafka-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -376,7 +376,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/samplekafka-helm/values.yaml": {
+  "helm/samplekafka-helm/values.yaml": {
     "contents": "mysql:
   enabled: true
   mysqlDatabase: samplekafka
@@ -422,7 +422,7 @@ exports[`generator - Kubernetes Helm MySQL and PostgreSQL microservices without 
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/.yo-rc.json": {
+  "helm/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "appsFolders": [
@@ -448,7 +448,7 @@ exports[`generator - Kubernetes Helm MySQL and PostgreSQL microservices without 
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/HELM-README.md": {
+  "helm/HELM-README.md": {
     "contents": "# JHipster generated helm package manager
 
 ## Preparation
@@ -502,7 +502,7 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/Chart.yaml": {
+  "helm/csvc-helm/Chart.yaml": {
     "contents": "name: common-service
 version: 1.0.0
 appVersion: 1.0.0
@@ -524,18 +524,18 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/requirements.yaml": {
+  "helm/csvc-helm/requirements.yaml": {
     "contents": "dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/_helpers.tpl": {
+  "helm/csvc-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/application-configmap.yml": {
+  "helm/csvc-helm/templates/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -556,7 +556,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/consul-config-loader.yml": {
+  "helm/csvc-helm/templates/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -593,7 +593,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/consul.yml": {
+  "helm/csvc-helm/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -819,11 +819,11 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/values.yaml": {
+  "helm/csvc-helm/values.yaml": {
     "contents": "",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/helm-apply.sh": {
+  "helm/helm-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -870,7 +870,7 @@ helm install --name mspsql  ./mspsql-\${suffix} --replace --namespace default
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/helm-upgrade.sh": {
+  "helm/helm-upgrade.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -889,7 +889,7 @@ helm upgrade --install mspsql ./mspsql-\${suffix} --namespace default
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/Chart.yaml": {
+  "helm/msmysql-helm/Chart.yaml": {
     "contents": "name: msmysql
 version: 1.0.0
 appVersion: 1.0.0
@@ -915,7 +915,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/requirements.yaml": {
+  "helm/msmysql-helm/requirements.yaml": {
     "contents": "dependencies:
   - name: mysql
     version: ^1.4.0
@@ -924,7 +924,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/templates/_helpers.tpl": {
+  "helm/msmysql-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mysql customisation
@@ -939,7 +939,7 @@ mysql customisation
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/templates/msmysql-deployment.yml": {
+  "helm/msmysql-helm/templates/msmysql-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -1031,7 +1031,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/templates/msmysql-service.yml": {
+  "helm/msmysql-helm/templates/msmysql-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -1048,7 +1048,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/values.yaml": {
+  "helm/msmysql-helm/values.yaml": {
     "contents": "mysql:
   enabled: true
   mysqlDatabase: msmysql
@@ -1059,7 +1059,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/mspsql-helm/Chart.yaml": {
+  "helm/mspsql-helm/Chart.yaml": {
     "contents": "name: mspsql
 version: 1.0.0
 appVersion: 1.0.0
@@ -1085,7 +1085,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/mspsql-helm/requirements.yaml": {
+  "helm/mspsql-helm/requirements.yaml": {
     "contents": "dependencies:
   - name: postgresql
     version: ^6.5.3
@@ -1094,7 +1094,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/mspsql-helm/templates/_helpers.tpl": {
+  "helm/mspsql-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 postgresql customisation
@@ -1109,7 +1109,7 @@ postgresql customisation
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/mspsql-helm/templates/mspsql-deployment.yml": {
+  "helm/mspsql-helm/templates/mspsql-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -1210,7 +1210,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/mspsql-helm/templates/mspsql-elasticsearch.yml": {
+  "helm/mspsql-helm/templates/mspsql-elasticsearch.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -1282,7 +1282,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/mspsql-helm/templates/mspsql-service.yml": {
+  "helm/mspsql-helm/templates/mspsql-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -1299,7 +1299,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/mspsql-helm/values.yaml": {
+  "helm/mspsql-helm/values.yaml": {
     "contents": "postgresql:
   enabled: true
   postgresqlUsername: mspsql
@@ -1326,7 +1326,7 @@ exports[`generator - Kubernetes Helm gateway and ingress should match files snap
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/.yo-rc.json": {
+  "helm/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "appsFolders": [
@@ -1351,7 +1351,7 @@ exports[`generator - Kubernetes Helm gateway and ingress should match files snap
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/HELM-README.md": {
+  "helm/HELM-README.md": {
     "contents": "# JHipster generated helm package manager
 
 ## Preparation
@@ -1403,7 +1403,7 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/Chart.yaml": {
+  "helm/csvc-helm/Chart.yaml": {
     "contents": "name: common-service
 version: 1.0.0
 appVersion: 1.0.0
@@ -1425,18 +1425,18 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/requirements.yaml": {
+  "helm/csvc-helm/requirements.yaml": {
     "contents": "dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/_helpers.tpl": {
+  "helm/csvc-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/application-configmap.yml": {
+  "helm/csvc-helm/templates/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -1457,7 +1457,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/consul-config-loader.yml": {
+  "helm/csvc-helm/templates/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -1494,7 +1494,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/consul.yml": {
+  "helm/csvc-helm/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -1720,11 +1720,11 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/values.yaml": {
+  "helm/csvc-helm/values.yaml": {
     "contents": "",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/helm-apply.sh": {
+  "helm/helm-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -1760,7 +1760,7 @@ helm install --name jhgate  ./jhgate-\${suffix} --replace --namespace default
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/helm-upgrade.sh": {
+  "helm/helm-upgrade.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -1777,7 +1777,7 @@ helm upgrade --install jhgate ./jhgate-\${suffix} --namespace default
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/Chart.yaml": {
+  "helm/jhgate-helm/Chart.yaml": {
     "contents": "name: jhgate
 version: 1.0.0
 appVersion: 1.0.0
@@ -1803,7 +1803,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/requirements.yaml": {
+  "helm/jhgate-helm/requirements.yaml": {
     "contents": "dependencies:
   - name: mysql
     version: ^1.4.0
@@ -1812,7 +1812,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/templates/_helpers.tpl": {
+  "helm/jhgate-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mysql customisation
@@ -1827,7 +1827,7 @@ mysql customisation
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/templates/jhgate-deployment.yml": {
+  "helm/jhgate-helm/templates/jhgate-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -1921,7 +1921,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/templates/jhgate-ingress.yml": {
+  "helm/jhgate-helm/templates/jhgate-ingress.yml": {
     "contents": "apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -1942,7 +1942,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/templates/jhgate-service.yml": {
+  "helm/jhgate-helm/templates/jhgate-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -1960,7 +1960,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/values.yaml": {
+  "helm/jhgate-helm/values.yaml": {
     "contents": "mysql:
   enabled: true
   mysqlDatabase: jhgate
@@ -2005,7 +2005,7 @@ exports[`generator - Kubernetes Helm gateway and mysql microservice should match
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/.yo-rc.json": {
+  "helm/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "appsFolders": [
@@ -2031,7 +2031,7 @@ exports[`generator - Kubernetes Helm gateway and mysql microservice should match
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/HELM-README.md": {
+  "helm/HELM-README.md": {
     "contents": "# JHipster generated helm package manager
 
 ## Preparation
@@ -2085,7 +2085,7 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/Chart.yaml": {
+  "helm/csvc-helm/Chart.yaml": {
     "contents": "name: common-service
 version: 1.0.0
 appVersion: 1.0.0
@@ -2107,18 +2107,18 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/requirements.yaml": {
+  "helm/csvc-helm/requirements.yaml": {
     "contents": "dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/_helpers.tpl": {
+  "helm/csvc-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/application-configmap.yml": {
+  "helm/csvc-helm/templates/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -2139,7 +2139,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/consul-config-loader.yml": {
+  "helm/csvc-helm/templates/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -2176,7 +2176,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/consul.yml": {
+  "helm/csvc-helm/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -2402,11 +2402,11 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/values.yaml": {
+  "helm/csvc-helm/values.yaml": {
     "contents": "",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/helm-apply.sh": {
+  "helm/helm-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -2453,7 +2453,7 @@ helm install --name msmysql  ./msmysql-\${suffix} --replace --namespace default
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/helm-upgrade.sh": {
+  "helm/helm-upgrade.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -2472,7 +2472,7 @@ helm upgrade --install msmysql ./msmysql-\${suffix} --namespace default
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/Chart.yaml": {
+  "helm/jhgate-helm/Chart.yaml": {
     "contents": "name: jhgate
 version: 1.0.0
 appVersion: 1.0.0
@@ -2498,7 +2498,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/requirements.yaml": {
+  "helm/jhgate-helm/requirements.yaml": {
     "contents": "dependencies:
   - name: mysql
     version: ^1.4.0
@@ -2507,7 +2507,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/templates/_helpers.tpl": {
+  "helm/jhgate-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mysql customisation
@@ -2522,7 +2522,7 @@ mysql customisation
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/templates/jhgate-deployment.yml": {
+  "helm/jhgate-helm/templates/jhgate-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -2616,7 +2616,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/templates/jhgate-service.yml": {
+  "helm/jhgate-helm/templates/jhgate-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -2634,7 +2634,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/values.yaml": {
+  "helm/jhgate-helm/values.yaml": {
     "contents": "mysql:
   enabled: true
   mysqlDatabase: jhgate
@@ -2645,7 +2645,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/Chart.yaml": {
+  "helm/msmysql-helm/Chart.yaml": {
     "contents": "name: msmysql
 version: 1.0.0
 appVersion: 1.0.0
@@ -2671,7 +2671,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/requirements.yaml": {
+  "helm/msmysql-helm/requirements.yaml": {
     "contents": "dependencies:
   - name: mysql
     version: ^1.4.0
@@ -2680,7 +2680,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/templates/_helpers.tpl": {
+  "helm/msmysql-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mysql customisation
@@ -2695,7 +2695,7 @@ mysql customisation
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/templates/msmysql-deployment.yml": {
+  "helm/msmysql-helm/templates/msmysql-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -2787,7 +2787,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/templates/msmysql-service.yml": {
+  "helm/msmysql-helm/templates/msmysql-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -2804,7 +2804,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/values.yaml": {
+  "helm/msmysql-helm/values.yaml": {
     "contents": "mysql:
   enabled: true
   mysqlDatabase: msmysql
@@ -2834,7 +2834,7 @@ exports[`generator - Kubernetes Helm gateway with istio should match files snaps
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/.yo-rc.json": {
+  "helm/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "appsFolders": [
@@ -2859,7 +2859,7 @@ exports[`generator - Kubernetes Helm gateway with istio should match files snaps
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/HELM-README.md": {
+  "helm/HELM-README.md": {
     "contents": "# JHipster generated helm package manager
 
 ## Preparation
@@ -2911,7 +2911,7 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/Chart.yaml": {
+  "helm/csvc-helm/Chart.yaml": {
     "contents": "name: common-service
 version: 1.0.0
 appVersion: 1.0.0
@@ -2933,18 +2933,18 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/requirements.yaml": {
+  "helm/csvc-helm/requirements.yaml": {
     "contents": "dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/_helpers.tpl": {
+  "helm/csvc-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/application-configmap.yml": {
+  "helm/csvc-helm/templates/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -2965,7 +2965,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/consul-config-loader.yml": {
+  "helm/csvc-helm/templates/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -3002,7 +3002,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/consul.yml": {
+  "helm/csvc-helm/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -3230,7 +3230,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/grafana-gateway.yml": {
+  "helm/csvc-helm/templates/grafana-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -3276,7 +3276,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/kiali-gateway.yml": {
+  "helm/csvc-helm/templates/kiali-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -3321,7 +3321,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/zipkin-gateway.yml": {
+  "helm/csvc-helm/templates/zipkin-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
@@ -3367,11 +3367,11 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/values.yaml": {
+  "helm/csvc-helm/values.yaml": {
     "contents": "",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/helm-apply.sh": {
+  "helm/helm-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -3408,7 +3408,7 @@ helm install --name jhgate  ./jhgate-\${suffix} --replace --namespace default
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/helm-upgrade.sh": {
+  "helm/helm-upgrade.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -3425,7 +3425,7 @@ helm upgrade --install jhgate ./jhgate-\${suffix} --namespace default
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/Chart.yaml": {
+  "helm/jhgate-helm/Chart.yaml": {
     "contents": "name: jhgate
 version: 1.0.0
 appVersion: 1.0.0
@@ -3451,7 +3451,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/requirements.yaml": {
+  "helm/jhgate-helm/requirements.yaml": {
     "contents": "dependencies:
   - name: mysql
     version: ^1.4.0
@@ -3460,7 +3460,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/templates/_helpers.tpl": {
+  "helm/jhgate-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mysql customisation
@@ -3475,7 +3475,7 @@ mysql customisation
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/templates/jhgate-deployment.yml": {
+  "helm/jhgate-helm/templates/jhgate-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -3575,7 +3575,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/templates/jhgate-destination-rule.yml": {
+  "helm/jhgate-helm/templates/jhgate-destination-rule.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -3606,7 +3606,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/templates/jhgate-gateway.yml": {
+  "helm/jhgate-helm/templates/jhgate-gateway.yml": {
     "contents": "# This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
 # using certificates and prefer that for production use
@@ -3654,7 +3654,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/templates/jhgate-service.yml": {
+  "helm/jhgate-helm/templates/jhgate-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -3672,7 +3672,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/templates/jhgate-virtual-service.yml": {
+  "helm/jhgate-helm/templates/jhgate-virtual-service.yml": {
     "contents": "apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -3693,7 +3693,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/values.yaml": {
+  "helm/jhgate-helm/values.yaml": {
     "contents": "mysql:
   enabled: true
   mysqlDatabase: jhgate
@@ -3783,7 +3783,7 @@ exports[`generator - Kubernetes Helm gateway, mysql, psql, mongodb, mariadb micr
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/.yo-rc.json": {
+  "helm/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "appsFolders": [
@@ -3813,7 +3813,7 @@ exports[`generator - Kubernetes Helm gateway, mysql, psql, mongodb, mariadb micr
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/HELM-README.md": {
+  "helm/HELM-README.md": {
     "contents": "# JHipster generated helm package manager
 
 ## Preparation
@@ -3873,7 +3873,7 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/Chart.yaml": {
+  "helm/csvc-helm/Chart.yaml": {
     "contents": "name: common-service
 version: 1.0.0
 appVersion: 1.0.0
@@ -3895,18 +3895,18 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/requirements.yaml": {
+  "helm/csvc-helm/requirements.yaml": {
     "contents": "dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/_helpers.tpl": {
+  "helm/csvc-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/application-configmap.yml": {
+  "helm/csvc-helm/templates/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -3927,7 +3927,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/consul-config-loader.yml": {
+  "helm/csvc-helm/templates/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -3964,7 +3964,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/consul.yml": {
+  "helm/csvc-helm/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -4190,11 +4190,11 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/values.yaml": {
+  "helm/csvc-helm/values.yaml": {
     "contents": "",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/helm-apply.sh": {
+  "helm/helm-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -4274,7 +4274,7 @@ helm install --name msmariadb  ./msmariadb-\${suffix} --replace --namespace defa
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/helm-upgrade.sh": {
+  "helm/helm-upgrade.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -4299,7 +4299,7 @@ helm upgrade --install msmariadb ./msmariadb-\${suffix} --namespace default
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/Chart.yaml": {
+  "helm/jhgate-helm/Chart.yaml": {
     "contents": "name: jhgate
 version: 1.0.0
 appVersion: 1.0.0
@@ -4325,7 +4325,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/requirements.yaml": {
+  "helm/jhgate-helm/requirements.yaml": {
     "contents": "dependencies:
   - name: mysql
     version: ^1.4.0
@@ -4334,7 +4334,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/templates/_helpers.tpl": {
+  "helm/jhgate-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mysql customisation
@@ -4349,7 +4349,7 @@ mysql customisation
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/templates/jhgate-deployment.yml": {
+  "helm/jhgate-helm/templates/jhgate-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -4443,7 +4443,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/templates/jhgate-service.yml": {
+  "helm/jhgate-helm/templates/jhgate-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -4461,7 +4461,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/values.yaml": {
+  "helm/jhgate-helm/values.yaml": {
     "contents": "mysql:
   enabled: true
   mysqlDatabase: jhgate
@@ -4472,7 +4472,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmariadb-helm/Chart.yaml": {
+  "helm/msmariadb-helm/Chart.yaml": {
     "contents": "name: msmariadb
 version: 1.0.0
 appVersion: 1.0.0
@@ -4498,7 +4498,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmariadb-helm/requirements.yaml": {
+  "helm/msmariadb-helm/requirements.yaml": {
     "contents": "dependencies:
   - name: mariadb
     version: ^6.12.2
@@ -4507,7 +4507,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmariadb-helm/templates/_helpers.tpl": {
+  "helm/msmariadb-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mariadb customisation
@@ -4522,7 +4522,7 @@ mariadb customisation
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmariadb-helm/templates/msmariadb-deployment.yml": {
+  "helm/msmariadb-helm/templates/msmariadb-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -4619,7 +4619,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmariadb-helm/templates/msmariadb-service.yml": {
+  "helm/msmariadb-helm/templates/msmariadb-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -4636,7 +4636,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmariadb-helm/values.yaml": {
+  "helm/msmariadb-helm/values.yaml": {
     "contents": "mariadb:
   enabled: true
   replication:
@@ -4646,7 +4646,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmongodb-helm/Chart.yaml": {
+  "helm/msmongodb-helm/Chart.yaml": {
     "contents": "name: msmongodb
 version: 1.0.0
 appVersion: 1.0.0
@@ -4672,7 +4672,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmongodb-helm/requirements.yaml": {
+  "helm/msmongodb-helm/requirements.yaml": {
     "contents": "dependencies:
   - name: mongodb-replicaset
     version: ^3.10.1
@@ -4681,7 +4681,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmongodb-helm/templates/_helpers.tpl": {
+  "helm/msmongodb-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mongodb customisation
@@ -4696,7 +4696,7 @@ mongodb customisation
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmongodb-helm/templates/msmongodb-deployment.yml": {
+  "helm/msmongodb-helm/templates/msmongodb-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -4786,7 +4786,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmongodb-helm/templates/msmongodb-service.yml": {
+  "helm/msmongodb-helm/templates/msmongodb-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -4803,7 +4803,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmongodb-helm/values.yaml": {
+  "helm/msmongodb-helm/values.yaml": {
     "contents": "mongodb:
   enabled: true
 mongodb-replicaset:
@@ -4811,7 +4811,7 @@ mongodb-replicaset:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/Chart.yaml": {
+  "helm/msmysql-helm/Chart.yaml": {
     "contents": "name: msmysql
 version: 1.0.0
 appVersion: 1.0.0
@@ -4837,7 +4837,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/requirements.yaml": {
+  "helm/msmysql-helm/requirements.yaml": {
     "contents": "dependencies:
   - name: mysql
     version: ^1.4.0
@@ -4846,7 +4846,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/templates/_helpers.tpl": {
+  "helm/msmysql-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mysql customisation
@@ -4861,7 +4861,7 @@ mysql customisation
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/templates/msmysql-deployment.yml": {
+  "helm/msmysql-helm/templates/msmysql-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -4953,7 +4953,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/templates/msmysql-service.yml": {
+  "helm/msmysql-helm/templates/msmysql-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -4970,7 +4970,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/values.yaml": {
+  "helm/msmysql-helm/values.yaml": {
     "contents": "mysql:
   enabled: true
   mysqlDatabase: msmysql
@@ -4981,7 +4981,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/mspsql-helm/Chart.yaml": {
+  "helm/mspsql-helm/Chart.yaml": {
     "contents": "name: mspsql
 version: 1.0.0
 appVersion: 1.0.0
@@ -5007,7 +5007,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/mspsql-helm/requirements.yaml": {
+  "helm/mspsql-helm/requirements.yaml": {
     "contents": "dependencies:
   - name: postgresql
     version: ^6.5.3
@@ -5016,7 +5016,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/mspsql-helm/templates/_helpers.tpl": {
+  "helm/mspsql-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 postgresql customisation
@@ -5031,7 +5031,7 @@ postgresql customisation
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/mspsql-helm/templates/mspsql-deployment.yml": {
+  "helm/mspsql-helm/templates/mspsql-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -5132,7 +5132,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/mspsql-helm/templates/mspsql-elasticsearch.yml": {
+  "helm/mspsql-helm/templates/mspsql-elasticsearch.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -5204,7 +5204,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/mspsql-helm/templates/mspsql-service.yml": {
+  "helm/mspsql-helm/templates/mspsql-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -5221,7 +5221,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/mspsql-helm/values.yaml": {
+  "helm/mspsql-helm/values.yaml": {
     "contents": "postgresql:
   enabled: true
   postgresqlUsername: mspsql
@@ -5250,7 +5250,7 @@ exports[`generator - Kubernetes Helm monolith application should match files sna
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/.yo-rc.json": {
+  "helm/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "appsFolders": [
@@ -5274,7 +5274,7 @@ exports[`generator - Kubernetes Helm monolith application should match files sna
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/HELM-README.md": {
+  "helm/HELM-README.md": {
     "contents": "# JHipster generated helm package manager
 
 ## Preparation
@@ -5326,7 +5326,7 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/helm-apply.sh": {
+  "helm/helm-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -5362,7 +5362,7 @@ helm install --name samplemysql  ./samplemysql-\${suffix} --replace --namespace 
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/helm-upgrade.sh": {
+  "helm/helm-upgrade.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -5379,7 +5379,7 @@ helm upgrade --install samplemysql ./samplemysql-\${suffix} --namespace default
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/samplemysql-helm/Chart.yaml": {
+  "helm/samplemysql-helm/Chart.yaml": {
     "contents": "name: samplemysql
 version: 1.0.0
 appVersion: 1.0.0
@@ -5405,7 +5405,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/samplemysql-helm/requirements.yaml": {
+  "helm/samplemysql-helm/requirements.yaml": {
     "contents": "dependencies:
   - name: mysql
     version: ^1.4.0
@@ -5414,7 +5414,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/samplemysql-helm/templates/_helpers.tpl": {
+  "helm/samplemysql-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mysql customisation
@@ -5429,7 +5429,7 @@ mysql customisation
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/samplemysql-helm/templates/samplemysql-deployment.yml": {
+  "helm/samplemysql-helm/templates/samplemysql-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -5517,7 +5517,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/samplemysql-helm/templates/samplemysql-elasticsearch.yml": {
+  "helm/samplemysql-helm/templates/samplemysql-elasticsearch.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -5589,7 +5589,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/samplemysql-helm/templates/samplemysql-service.yml": {
+  "helm/samplemysql-helm/templates/samplemysql-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -5608,7 +5608,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/samplemysql-helm/values.yaml": {
+  "helm/samplemysql-helm/values.yaml": {
     "contents": "mysql:
   enabled: true
   mysqlDatabase: samplemysql
@@ -5639,7 +5639,7 @@ exports[`generator - Kubernetes Helm mysql microservice with custom namespace an
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/.yo-rc.json": {
+  "helm/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "appsFolders": [
@@ -5664,7 +5664,7 @@ exports[`generator - Kubernetes Helm mysql microservice with custom namespace an
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/HELM-README.md": {
+  "helm/HELM-README.md": {
     "contents": "# JHipster generated helm package manager
 
 ## Preparation
@@ -5716,7 +5716,7 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/Chart.yaml": {
+  "helm/csvc-helm/Chart.yaml": {
     "contents": "name: common-service
 version: 1.0.0
 appVersion: 1.0.0
@@ -5746,7 +5746,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/requirements.yaml": {
+  "helm/csvc-helm/requirements.yaml": {
     "contents": "dependencies:
   - name: prometheus
     version: ^9.2.0
@@ -5759,7 +5759,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/_helpers.tpl": {
+  "helm/csvc-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 prometheus/grafana customisation
@@ -5799,7 +5799,7 @@ prometheus/grafana customisation
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/application-configmap.yml": {
+  "helm/csvc-helm/templates/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -5820,7 +5820,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/consul-config-loader.yml": {
+  "helm/csvc-helm/templates/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -5857,7 +5857,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/consul.yml": {
+  "helm/csvc-helm/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -6083,7 +6083,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/values.yaml": {
+  "helm/csvc-helm/values.yaml": {
     "contents": "prometheus:
   enabled: true
   server:
@@ -8382,7 +8382,7 @@ grafana:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/helm-apply.sh": {
+  "helm/helm-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -8419,7 +8419,7 @@ helm install --name msmysql  ./msmysql-\${suffix} --replace --namespace mynamesp
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/helm-upgrade.sh": {
+  "helm/helm-upgrade.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -8436,7 +8436,7 @@ helm upgrade --install msmysql ./msmysql-\${suffix} --namespace mynamespace
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/Chart.yaml": {
+  "helm/msmysql-helm/Chart.yaml": {
     "contents": "name: msmysql
 version: 1.0.0
 appVersion: 1.0.0
@@ -8462,7 +8462,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/requirements.yaml": {
+  "helm/msmysql-helm/requirements.yaml": {
     "contents": "dependencies:
   - name: mysql
     version: ^1.4.0
@@ -8471,7 +8471,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/templates/_helpers.tpl": {
+  "helm/msmysql-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mysql customisation
@@ -8486,7 +8486,7 @@ mysql customisation
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/templates/msmysql-deployment.yml": {
+  "helm/msmysql-helm/templates/msmysql-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -8580,7 +8580,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/templates/msmysql-service.yml": {
+  "helm/msmysql-helm/templates/msmysql-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -8597,7 +8597,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/values.yaml": {
+  "helm/msmysql-helm/values.yaml": {
     "contents": "mysql:
   enabled: true
   mysqlDatabase: msmysql
@@ -8608,7 +8608,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/namespace.yml": {
+  "helm/namespace.yml": {
     "contents": "apiVersion: v1
 kind: Namespace
 metadata:
@@ -8637,7 +8637,7 @@ exports[`generator - Kubernetes Helm mysql microservice with custom namespace sh
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/.yo-rc.json": {
+  "helm/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "appsFolders": [
@@ -8662,7 +8662,7 @@ exports[`generator - Kubernetes Helm mysql microservice with custom namespace sh
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/HELM-README.md": {
+  "helm/HELM-README.md": {
     "contents": "# JHipster generated helm package manager
 
 ## Preparation
@@ -8714,7 +8714,7 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/Chart.yaml": {
+  "helm/csvc-helm/Chart.yaml": {
     "contents": "name: common-service
 version: 1.0.0
 appVersion: 1.0.0
@@ -8736,18 +8736,18 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/requirements.yaml": {
+  "helm/csvc-helm/requirements.yaml": {
     "contents": "dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/_helpers.tpl": {
+  "helm/csvc-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/application-configmap.yml": {
+  "helm/csvc-helm/templates/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -8768,7 +8768,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/consul-config-loader.yml": {
+  "helm/csvc-helm/templates/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -8805,7 +8805,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/consul.yml": {
+  "helm/csvc-helm/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -9031,11 +9031,11 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/values.yaml": {
+  "helm/csvc-helm/values.yaml": {
     "contents": "",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/helm-apply.sh": {
+  "helm/helm-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -9072,7 +9072,7 @@ helm install --name msmysql  ./msmysql-\${suffix} --replace --namespace mynamesp
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/helm-upgrade.sh": {
+  "helm/helm-upgrade.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -9089,7 +9089,7 @@ helm upgrade --install msmysql ./msmysql-\${suffix} --namespace mynamespace
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/Chart.yaml": {
+  "helm/msmysql-helm/Chart.yaml": {
     "contents": "name: msmysql
 version: 1.0.0
 appVersion: 1.0.0
@@ -9115,7 +9115,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/requirements.yaml": {
+  "helm/msmysql-helm/requirements.yaml": {
     "contents": "dependencies:
   - name: mysql
     version: ^1.4.0
@@ -9124,7 +9124,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/templates/_helpers.tpl": {
+  "helm/msmysql-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mysql customisation
@@ -9139,7 +9139,7 @@ mysql customisation
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/templates/msmysql-deployment.yml": {
+  "helm/msmysql-helm/templates/msmysql-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -9231,7 +9231,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/templates/msmysql-service.yml": {
+  "helm/msmysql-helm/templates/msmysql-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -9248,7 +9248,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/msmysql-helm/values.yaml": {
+  "helm/msmysql-helm/values.yaml": {
     "contents": "mysql:
   enabled: true
   mysqlDatabase: msmysql
@@ -9259,7 +9259,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/namespace.yml": {
+  "helm/namespace.yml": {
     "contents": "apiVersion: v1
 kind: Namespace
 metadata:
@@ -9287,7 +9287,7 @@ exports[`generator - Kubernetes Helm only gateway should match files snapshot 1`
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/.yo-rc.json": {
+  "helm/.yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
     "appsFolders": [
@@ -9312,7 +9312,7 @@ exports[`generator - Kubernetes Helm only gateway should match files snapshot 1`
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/HELM-README.md": {
+  "helm/HELM-README.md": {
     "contents": "# JHipster generated helm package manager
 
 ## Preparation
@@ -9364,7 +9364,7 @@ For Kubernetes specific information, refer to the \`kubernetes\` sub-generator R
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/Chart.yaml": {
+  "helm/csvc-helm/Chart.yaml": {
     "contents": "name: common-service
 version: 1.0.0
 appVersion: 1.0.0
@@ -9386,18 +9386,18 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/requirements.yaml": {
+  "helm/csvc-helm/requirements.yaml": {
     "contents": "dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/_helpers.tpl": {
+  "helm/csvc-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/application-configmap.yml": {
+  "helm/csvc-helm/templates/application-configmap.yml": {
     "contents": "apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -9418,7 +9418,7 @@ data:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/consul-config-loader.yml": {
+  "helm/csvc-helm/templates/consul-config-loader.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -9455,7 +9455,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/templates/consul.yml": {
+  "helm/csvc-helm/templates/consul.yml": {
     "contents": "# Consul HA cluster
 #
 # Based on https://artifacthub.io/packages/helm/bitnami/consul
@@ -9681,11 +9681,11 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/csvc-helm/values.yaml": {
+  "helm/csvc-helm/values.yaml": {
     "contents": "",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/helm-apply.sh": {
+  "helm/helm-apply.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -9722,7 +9722,7 @@ helm install --name jhgate  ./jhgate-\${suffix} --replace --namespace jhipsterna
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/helm-upgrade.sh": {
+  "helm/helm-upgrade.sh": {
     "contents": "#!/bin/bash
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash helm-apply.sh
@@ -9739,7 +9739,7 @@ helm upgrade --install jhgate ./jhgate-\${suffix} --namespace jhipsternamespace
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/Chart.yaml": {
+  "helm/jhgate-helm/Chart.yaml": {
     "contents": "name: jhgate
 version: 1.0.0
 appVersion: 1.0.0
@@ -9765,7 +9765,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/requirements.yaml": {
+  "helm/jhgate-helm/requirements.yaml": {
     "contents": "dependencies:
   - name: mysql
     version: ^1.4.0
@@ -9774,7 +9774,7 @@ dependencies:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/templates/_helpers.tpl": {
+  "helm/jhgate-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
 {{/*
 mysql customisation
@@ -9789,7 +9789,7 @@ mysql customisation
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/templates/jhgate-deployment.yml": {
+  "helm/jhgate-helm/templates/jhgate-deployment.yml": {
     "contents": "apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -9883,7 +9883,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/templates/jhgate-service.yml": {
+  "helm/jhgate-helm/templates/jhgate-service.yml": {
     "contents": "apiVersion: v1
 kind: Service
 metadata:
@@ -9901,7 +9901,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/jhgate-helm/values.yaml": {
+  "helm/jhgate-helm/values.yaml": {
     "contents": "mysql:
   enabled: true
   mysqlDatabase: jhgate
@@ -9912,7 +9912,7 @@ spec:
 ",
     "stateCleared": "modified",
   },
-  "kubernetes-helm/namespace.yml": {
+  "helm/namespace.yml": {
     "contents": "apiVersion: v1
 kind: Namespace
 metadata:

@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { asWriteFilesSection } from '../base-application/support/index.ts';
+import { asWriteFilesSection } from '../../../base-application/support/index.ts';
 
 export const applicationKubernetesFiles = (suffix: string) =>
   asWriteFilesSection<any>({

@@ -118,11 +118,9 @@ type GeneratorsByNamespace = {
   'jhipster:jdl:bootstrap': import('./jdl/generators/bootstrap/generator.ts').default;
   kubernetes: import('./kubernetes/generator.ts').default;
   'jhipster:kubernetes': import('./kubernetes/generator.ts').default;
-  'kubernetes-helm': import('./kubernetes-helm/generator.ts').default;
-  'jhipster:kubernetes-helm': import('./kubernetes-helm/generator.ts').default;
-  'kubernetes-knative': import('./kubernetes-knative/generator.ts').default;
-  'jhipster:kubernetes-knative': import('./kubernetes-knative/generator.ts').default;
   'jhipster:kubernetes:bootstrap': import('./kubernetes/generators/bootstrap/generator.ts').default;
+  'jhipster:kubernetes:helm': import('./kubernetes/generators/helm/generator.ts').default;
+  'jhipster:kubernetes:knative': import('./kubernetes/generators/knative/generator.ts').default;
   languages: import('./languages/generator.ts').default;
   'jhipster:languages': import('./languages/generator.ts').default;
   'jhipster:languages:bootstrap': import('./languages/generators/bootstrap/generator.ts').default;
