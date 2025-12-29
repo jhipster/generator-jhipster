@@ -16,5 +16,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default } from './generator.ts';
-export { default as command } from './command.ts';
+import { type JHipsterCommandDefinition } from '../../lib/command/index.ts';
+
+const command = {
+  arguments: {
+    version: {
+      type: String,
+      scope: 'generator',
+      required: true,
+    },
+    repository: {
+      type: String,
+      scope: 'generator',
+    },
+  },
+  configs: {},
+} as const satisfies JHipsterCommandDefinition;
+
+export default command;
