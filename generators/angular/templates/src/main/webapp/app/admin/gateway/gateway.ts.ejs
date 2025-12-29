@@ -46,7 +46,7 @@ export default class Gateway implements OnInit {
   refresh(): void {
     this.updatingRoutes = true;
     this.gatewayRoutesService.findAll().subscribe(gatewayRoutes => {
-      <%_ if (serviceDiscoveryConsul) { _%>
+      <%_ if (locals.serviceDiscoveryConsul) { _%>
       this.gatewayRoutes = gatewayRoutes.map(gatewayRoute => {
         gatewayRoute.serviceInstances = gatewayRoute.serviceInstances.map(serviceInstance => {
           if (serviceInstance?.healthService?.checks) {

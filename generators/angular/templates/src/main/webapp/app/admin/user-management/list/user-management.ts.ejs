@@ -17,10 +17,10 @@
  limitations under the License.
 -%>
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { RouterLink<%_ if (!databaseTypeCassandra) { _%>, ActivatedRoute, Router<%_ } _%> } from '@angular/router';
+import { RouterLink<%_ if (!locals.databaseTypeCassandra) { _%>, ActivatedRoute, Router<%_ } _%> } from '@angular/router';
 import { DatePipe } from '@angular/common';
-import { HttpResponse<%_ if (!databaseTypeCassandra) { %>, HttpHeaders <% } %>} from '@angular/common/http';
-<%_ if (!databaseTypeCassandra) { _%>
+import { HttpResponse<%_ if (!locals.databaseTypeCassandra) { %>, HttpHeaders <% } %>} from '@angular/common/http';
+<%_ if (!locals.databaseTypeCassandra) { _%>
 import { combineLatest } from 'rxjs';
 <%_ } _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -33,7 +33,7 @@ import { TranslateDirective } from 'app/shared/language';
 import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-<%_ if (!databaseTypeCassandra) { _%>
+<%_ if (!locals.databaseTypeCassandra) { _%>
 import { SortDirective, SortByDirective, sortStateSignal, SortService, SortState } from 'app/shared/sort';
 import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
 import { SORT } from 'app/config/navigation.constants';
@@ -58,7 +58,7 @@ import UserManagementDeleteDialog from '../delete/user-management-delete-dialog'
     TranslateDirective,
     TranslateModule,
 <%_ } _%>
-<%_ if (!databaseTypeCassandra) { _%>
+<%_ if (!locals.databaseTypeCassandra) { _%>
     SortDirective,
     SortByDirective,
     ItemCount,
@@ -70,7 +70,7 @@ export default class UserManagement implements OnInit {
   currentAccount = inject(AccountService).trackCurrentAccount();
   users = signal<User[] | null>(null);
   isLoading = signal(false);
-<%_ if (!databaseTypeCassandra) { _%>
+<%_ if (!locals.databaseTypeCassandra) { _%>
   totalItems = signal(0);
   itemsPerPage = signal(ITEMS_PER_PAGE);
   page = signal(0);
@@ -78,7 +78,7 @@ export default class UserManagement implements OnInit {
 <%_ } _%>
 
   private readonly userService = inject(UserManagementService);
-<%_ if (!databaseTypeCassandra) { _%>
+<%_ if (!locals.databaseTypeCassandra) { _%>
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly sortService = inject(SortService);
@@ -86,7 +86,7 @@ export default class UserManagement implements OnInit {
   private readonly modalService = inject(NgbModal);
 
   ngOnInit(): void {
-<%_ if (databaseTypeCassandra) { _%>
+<%_ if (locals.databaseTypeCassandra) { _%>
     this.loadAll();
 <%_ } else { _%>
     this.handleNavigation();
@@ -115,7 +115,7 @@ export default class UserManagement implements OnInit {
   loadAll(): void {
     this.isLoading.set(true);
     this.userService
-      .query(<% if (!databaseTypeCassandra) { %>{
+      .query(<% if (!locals.databaseTypeCassandra) { %>{
         page: this.page() - 1,
         size: this.itemsPerPage(),
         sort: this.sortService.buildSortParam(this.sortState(), 'id'),
@@ -123,13 +123,13 @@ export default class UserManagement implements OnInit {
       .subscribe({
         next: (res: HttpResponse<User[]>) => {
           this.isLoading.set(false);
-          this.onSuccess(res.body<% if (!databaseTypeCassandra) { %>, res.headers<% } %>);
+          this.onSuccess(res.body<% if (!locals.databaseTypeCassandra) { %>, res.headers<% } %>);
         },
         error: () => this.isLoading.set(false),
       });
   }
 
-<%_ if (!databaseTypeCassandra) { _%>
+<%_ if (!locals.databaseTypeCassandra) { _%>
   transition(sortState?: SortState): void {
     this.router.navigate(['./'], {
       relativeTo: this.activatedRoute.parent,
@@ -150,8 +150,8 @@ export default class UserManagement implements OnInit {
   }
 <%_ } _%>
 
-  private onSuccess(users: User[] | null<% if (!databaseTypeCassandra) { %>, headers: HttpHeaders<% } %>): void {
-<%_ if (!databaseTypeCassandra) { _%>
+  private onSuccess(users: User[] | null<% if (!locals.databaseTypeCassandra) { %>, headers: HttpHeaders<% } %>): void {
+<%_ if (!locals.databaseTypeCassandra) { _%>
     this.totalItems.set(Number(headers.get('X-Total-Count')));
 <%_ } _%>
     this.users.set(users);

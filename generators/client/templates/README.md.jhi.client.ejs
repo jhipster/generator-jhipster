@@ -52,12 +52,12 @@ You will only need to run this command when dependencies change in [package.json
 
 We use <%- nodePackageManager %> scripts and <&- fragments.customCliSection(' ') &>[<%= clientBundlerName %>][] as our build system.
 
-  <%_ if (cacheProviderRedis || cacheProviderHazelcast || cacheProviderMemcached) { _%>
+  <%_ if (locals.cacheProviderRedis || locals.cacheProviderHazelcast || locals.cacheProviderMemcached) { _%>
 If you are using <%= cacheProvider %> as a cache, you will have to launch a cache server.
 To start your cache server, run:
 
 ```
-docker compose -f src/main/docker/<%= cacheProviderHazelcast?'hazelcast-management-center':cacheProvider %>.yml up -d
+docker compose -f src/main/docker/<%= locals.cacheProviderHazelcast ? 'hazelcast-management-center' : cacheProvider %>.yml up -d
 ```
 
     <%_ if (cacheProviderRedis) { _%>

@@ -149,6 +149,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
           applicationType,
           authenticationType,
           databaseType,
+          enableTranslation,
           graalvmSupport,
           searchEngine,
           websocket,
@@ -163,6 +164,10 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
         await this.composeWithJHipster('docker');
         await this.composeWithJHipster('jhipster:java-simple-application:jib');
         await this.composeWithJHipster('jhipster:java-simple-application:code-quality');
+
+        if (enableTranslation) {
+          await this.dependsOnBootstrap('languages');
+        }
 
         if (authenticationType === 'jwt' || authenticationType === 'oauth2') {
           await this.composeWithJHipster(`jhipster:spring-boot:${authenticationType}`);
@@ -258,6 +263,23 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      updateLanguages({ application }) {
+        if (!application.enableTranslation || !application.generateUserManagement) return;
+
+        application.addLanguageCallbacks.push((_newLanguages, allLanguages) => {
+          const { javaPackageTestDir } = application;
+          const { ignoreNeedlesError: ignoreNonExisting } = this;
+
+          this.editFile(
+            `${javaPackageTestDir}/service/MailServiceIT.java`,
+            { ignoreNonExisting },
+            createNeedleCallback({
+              contentToAdd: allLanguages.map(language => `"${language.languageTag}"`).join(',\n'),
+              needle: 'jhipster-needle-i18n-language-constant',
+            }),
+          );
+        });
+      },
       checksWebsocket({ application }) {
         const { websocket } = application;
         if (websocket && websocket !== NO_WEBSOCKET) {
