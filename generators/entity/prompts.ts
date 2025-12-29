@@ -779,7 +779,7 @@ async function askForRelationship(this: EntityGenerator, ...args: any[]) {
         'many-to-one',
         'many-to-many',
         'one-to-one',
-        ...(this.isBuiltInUser(response.otherEntityName) ? [] : ['one-to-many']),
+        ...(application.generateBuiltInUserEntity && response.otherEntityName.toLowerCase() === 'user' ? [] : ['one-to-many']),
       ],
       default: 0,
     },
@@ -792,7 +792,7 @@ async function askForRelationship(this: EntityGenerator, ...args: any[]) {
     },
     {
       when: answers => {
-        if (this.isBuiltInUser(answers.otherEntityName)) {
+        if (application.generateBuiltInUserEntity && answers.otherEntityName.toLowerCase() === 'user)') {
           answers.bidirectional = false;
           return false;
         }
@@ -860,7 +860,7 @@ async function askForRelationship(this: EntityGenerator, ...args: any[]) {
     otherEntityRelationshipName: answers.otherEntityRelationshipName,
   };
 
-  if (this.isBuiltInUser(answers.otherEntityName)) {
+  if (application.generateBuiltInUserEntity && answers.otherEntityName.toLowerCase() === 'user') {
     relationship.otherEntityRelationshipName = lowerFirst(name);
   }
 
