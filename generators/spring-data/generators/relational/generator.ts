@@ -135,10 +135,10 @@ export default class SqlGenerator extends BaseApplicationGenerator<
   }
 
   get writingEntities() {
-    return {
+    return this.asWritingEntitiesTaskGroup({
       cleanupEntitiesTask,
       writeEntitiesTask,
-    };
+    });
   }
 
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
@@ -172,6 +172,21 @@ export default class SqlGenerator extends BaseApplicationGenerator<
         const h2Definitions = devDatabaseTypeH2Any ? getH2MavenDefinition({ prodDatabaseType, packageFolder }) : undefined;
 
         source.addSpringBootModule?.(`spring-boot-starter-data-${reactive ? 'r2dbc' : 'jpa'}`);
+
+        if (!application.reactive) {
+          source.addIntegrationTestAnnotation?.({
+            annotation: 'SpringBootTest',
+            parameters: oldParameters => {
+              if (oldParameters?.includes('classes = {')) {
+                const annotation = `${application.packageName}.config.JacksonHibernateConfiguration.class`;
+                return oldParameters.includes(annotation)
+                  ? oldParameters
+                  : oldParameters.replace('classes = {', `classes = { ${annotation}, `);
+              }
+              throw new Error('Cannot add JacksonHibernateConfiguration to @SpringBootTest annotation');
+            },
+          });
+        }
         source.addJavaDefinitions?.(
           {
             condition: reactive,

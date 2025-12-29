@@ -552,6 +552,9 @@ exports[`generator - sql gateway-jwt-mysql-reactive(false)-maven-enableTranslati
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
@@ -605,6 +608,12 @@ exports[`generator - sql gateway-jwt-mysql-reactive(false)-maven-enableTranslati
 
 exports[`generator - sql gateway-jwt-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(true)-gatling-enableSwaggerCodegen(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-mysql-caffeine should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
@@ -1043,6 +1052,9 @@ exports[`generator - sql gateway-jwt-oracle-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
@@ -1090,6 +1102,12 @@ exports[`generator - sql gateway-jwt-oracle-reactive(false)-maven-enableTranslat
 
 exports[`generator - sql gateway-jwt-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(true)-cucumber-enableSwaggerCodegen(false)-skipUserManagement(false)-eureka-enableHibernateCache(false)-oracle-hazelcast should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
@@ -1489,6 +1507,9 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
@@ -1539,6 +1560,12 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(false)-maven-enableTran
 
 exports[`generator - sql gateway-jwt-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(true)-enableSwaggerCodegen(false)-skipUserManagement(false)-consul-enableHibernateCache(false)-postgresql-ehcache should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
@@ -1974,6 +2001,9 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
@@ -2027,6 +2057,12 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(false)-maven-enableTran
 
 exports[`generator - sql gateway-oauth2-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Memory-infinispan should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
@@ -2525,6 +2561,9 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(false)-maven-enableTransl
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
@@ -2578,6 +2617,12 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(false)-maven-enableTransl
 
 exports[`generator - sql gateway-oauth2-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen(false)-eureka-enableHibernateCache(false)-h2Memory-cacheProvider(no) should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
@@ -4380,6 +4425,9 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -4421,6 +4469,12 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
 
 exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-cucumber-enableSwaggerCodegen(false)-skipUserManagement(false)-eureka-enableHibernateCache(false)-h2Disk-redis should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
@@ -4839,6 +4893,9 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -4874,6 +4931,12 @@ exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTra
 
 exports[`generator - sql microservice-jwt-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi--DTO-skipCommitHook(false)-enableSwaggerCodegen(false)-skipUserManagement(false)-consul-enableHibernateCache(false)-h2Disk-memcached should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
@@ -5253,6 +5316,9 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
@@ -5291,6 +5357,12 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
 
 exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-gatling-enableSwaggerCodegen(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Disk-hazelcast should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
@@ -5706,6 +5778,9 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
@@ -5741,6 +5816,12 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
 
 exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-cucumber-enableSwaggerCodegen(false)-eureka-enableHibernateCache(false)-mariadb-ehcache should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
@@ -6176,6 +6257,9 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
@@ -6211,6 +6295,12 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
 
 exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(true)-enableSwaggerCodegen(false)-consul-enableHibernateCache(false)-mssql-caffeine should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
@@ -7437,6 +7527,9 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
@@ -7490,6 +7583,12 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
 
 exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-enableSwaggerCodegen(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Disk-hazelcast should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
@@ -7905,6 +8004,9 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
@@ -7958,6 +8060,12 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
 
 exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-gatling-enableSwaggerCodegen(false)-skipUserManagement(false)-eureka-enableHibernateCache(false)-h2Disk-redis should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
@@ -8373,6 +8481,9 @@ exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslat
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
@@ -8429,6 +8540,12 @@ exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslat
 
 exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-enableSwaggerCodegen(true)-spring-websocket-skipUserManagement(false)-consul-enableHibernateCache(false)-h2Disk-cacheProvider(no) should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
@@ -8847,6 +8964,9 @@ exports[`generator - sql monolith-jwt-oracle-reactive(false)-maven-enableTransla
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
@@ -8897,6 +9017,12 @@ exports[`generator - sql monolith-jwt-oracle-reactive(false)-maven-enableTransla
 
 exports[`generator - sql monolith-jwt-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-gatling-enableSwaggerCodegen(true)-spring-websocket-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Disk-ehcache should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
@@ -9276,6 +9402,9 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
@@ -9329,6 +9458,12 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
 
 exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen(true)-spring-websocket-skipUserManagement(false)-eureka-enableHibernateCache(false)-h2Disk-infinispan should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
@@ -9744,6 +9879,9 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
@@ -9779,6 +9917,12 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
 
 exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen(true)-spring-websocket-consul-enableHibernateCache(false)-mariadb-redis should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
@@ -10214,6 +10358,9 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
@@ -10249,6 +10396,12 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
 
 exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen(true)-spring-websocket-serviceDiscoveryType(no)-enableHibernateCache(false)-mssql-memcached should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
@@ -10684,6 +10837,9 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
@@ -10722,6 +10878,12 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
 
 exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-gatling-enableSwaggerCodegen(false)-eureka-enableHibernateCache(false)-mysql-ehcache should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
@@ -11160,6 +11322,9 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
@@ -11192,6 +11357,12 @@ exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTran
 
 exports[`generator - sql monolith-oauth2-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-cucumber-enableSwaggerCodegen(false)-consul-enableHibernateCache(false)-oracle-caffeine should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
@@ -11591,6 +11762,9 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
@@ -11626,6 +11800,12 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
 
 exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(false)-enableSwaggerCodegen(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-postgresql-cacheProvider(no) should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
@@ -12061,6 +12241,9 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
@@ -12114,6 +12297,12 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
 
 exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-cucumber-enableSwaggerCodegen(true)-spring-websocket-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Memory-caffeine should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
@@ -12585,6 +12774,9 @@ exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
@@ -12638,6 +12830,12 @@ exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTran
 
 exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-enableSwaggerCodegen(true)-spring-websocket-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Memory-hazelcast should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
@@ -13109,6 +13307,9 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
@@ -13165,6 +13366,12 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
 
 exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-enableSwaggerCodegen(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Memory-infinispan should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
@@ -13639,6 +13846,9 @@ exports[`generator - sql monolith-session-oracle-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
@@ -13689,6 +13899,12 @@ exports[`generator - sql monolith-session-oracle-reactive(false)-maven-enableTra
 
 exports[`generator - sql monolith-session-oracle-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-Rest-skipCommitHook(false)-gatling-enableSwaggerCodegen(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Memory-cacheProvider(no) should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
@@ -14111,6 +14327,9 @@ exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enabl
   "src/main/java/tech/jhipster/config/DatabaseConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/tech/jhipster/domain/Authority.java": {
     "stateCleared": "modified",
   },
@@ -14164,6 +14383,12 @@ exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enabl
 
 exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enableTranslation(false)-tech.jhipster-jhi-Entity-DTO-skipCommitHook(true)-cucumber-enableSwaggerCodegen(false)-skipUserManagement(false)-serviceDiscoveryType(no)-enableHibernateCache(false)-h2Memory-memcached should match source calls snapshot 1`] = `
 {
+  "addIntegrationTestAnnotation": [
+    {
+      "annotation": "SpringBootTest",
+      "parameters": [Function],
+    },
+  ],
   "addJavaDefinitions": [
     [
       {
