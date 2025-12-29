@@ -72,9 +72,8 @@ exports[`generator - Heroku microservice application with JAR deployment should 
                             <defaultSchemaName/>
                             <username>\${env.JDBC_DATABASE_USERNAME}</username>
                             <password>\${env.JDBC_DATABASE_PASSWORD}</password>
-                            <referenceUrl>hibernate:spring:com.mycompany.myapp.domain?dialect=org.hibernate.dialect.PostgreSQLDialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
+                            <referenceUrl>hibernate:spring:com.mycompany.myapp.domain?dialect=org.hibernate.dialect.PostgreSQLDialect&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                             <verbose>true</verbose>
-                            <logging>debug</logging>
                             <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                         </configuration>
                     </plugin>
@@ -288,9 +287,8 @@ exports[`generator - Heroku monolith application in the EU should match files sn
                             <defaultSchemaName/>
                             <username>\${env.JDBC_DATABASE_USERNAME}</username>
                             <password>\${env.JDBC_DATABASE_PASSWORD}</password>
-                            <referenceUrl>hibernate:spring:com.mycompany.myapp.domain?dialect=org.hibernate.dialect.PostgreSQLDialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
+                            <referenceUrl>hibernate:spring:com.mycompany.myapp.domain?dialect=org.hibernate.dialect.PostgreSQLDialect&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                             <verbose>true</verbose>
-                            <logging>debug</logging>
                             <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                         </configuration>
                     </plugin>
@@ -502,9 +500,8 @@ exports[`generator - Heroku monolith application in the US should match files sn
                             <defaultSchemaName/>
                             <username>\${env.JDBC_DATABASE_USERNAME}</username>
                             <password>\${env.JDBC_DATABASE_PASSWORD}</password>
-                            <referenceUrl>hibernate:spring:com.mycompany.myapp.domain?dialect=org.hibernate.dialect.PostgreSQLDialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
+                            <referenceUrl>hibernate:spring:com.mycompany.myapp.domain?dialect=org.hibernate.dialect.PostgreSQLDialect&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                             <verbose>true</verbose>
-                            <logging>debug</logging>
                             <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                         </configuration>
                     </plugin>
@@ -771,9 +768,8 @@ exports[`generator - Heroku monolith application with Git deployment should matc
                             <defaultSchemaName/>
                             <username>\${env.JDBC_DATABASE_USERNAME}</username>
                             <password>\${env.JDBC_DATABASE_PASSWORD}</password>
-                            <referenceUrl>hibernate:spring:com.mycompany.myapp.domain?dialect=org.hibernate.dialect.PostgreSQLDialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
+                            <referenceUrl>hibernate:spring:com.mycompany.myapp.domain?dialect=org.hibernate.dialect.PostgreSQLDialect&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                             <verbose>true</verbose>
-                            <logging>debug</logging>
                             <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                         </configuration>
                     </plugin>
@@ -987,9 +983,8 @@ exports[`generator - Heroku monolith application with PostgreSQL should match fi
                             <defaultSchemaName/>
                             <username>\${env.JDBC_DATABASE_USERNAME}</username>
                             <password>\${env.JDBC_DATABASE_PASSWORD}</password>
-                            <referenceUrl>hibernate:spring:com.mycompany.myapp.domain?dialect=org.hibernate.dialect.PostgreSQLDialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
+                            <referenceUrl>hibernate:spring:com.mycompany.myapp.domain?dialect=org.hibernate.dialect.PostgreSQLDialect&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                             <verbose>true</verbose>
-                            <logging>debug</logging>
                             <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                         </configuration>
                     </plugin>
@@ -1225,9 +1220,8 @@ exports[`generator - Heroku monolith application with an unavailable app name sh
                             <defaultSchemaName/>
                             <username>\${env.JDBC_DATABASE_USERNAME}</username>
                             <password>\${env.JDBC_DATABASE_PASSWORD}</password>
-                            <referenceUrl>hibernate:spring:com.mycompany.myapp.domain?dialect=org.hibernate.dialect.PostgreSQLDialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
+                            <referenceUrl>hibernate:spring:com.mycompany.myapp.domain?dialect=org.hibernate.dialect.PostgreSQLDialect&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                             <verbose>true</verbose>
-                            <logging>debug</logging>
                             <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                         </configuration>
                     </plugin>
@@ -1452,9 +1446,8 @@ exports[`generator - Heroku monolith application with elasticsearch should match
                             <defaultSchemaName/>
                             <username>\${env.JDBC_DATABASE_USERNAME}</username>
                             <password>\${env.JDBC_DATABASE_PASSWORD}</password>
-                            <referenceUrl>hibernate:spring:com.mycompany.myapp.domain?dialect=org.hibernate.dialect.PostgreSQLDialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
+                            <referenceUrl>hibernate:spring:com.mycompany.myapp.domain?dialect=org.hibernate.dialect.PostgreSQLDialect&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                             <verbose>true</verbose>
-                            <logging>debug</logging>
                             <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                         </configuration>
                     </plugin>
@@ -1657,9 +1650,8 @@ exports[`generator - Heroku monolith application with existing app should match 
                             <defaultSchemaName/>
                             <username>\${env.JDBC_DATABASE_USERNAME}</username>
                             <password>\${env.JDBC_DATABASE_PASSWORD}</password>
-                            <referenceUrl>hibernate:spring:com.mycompany.myapp.domain?dialect=org.hibernate.dialect.PostgreSQLDialect&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
+                            <referenceUrl>hibernate:spring:com.mycompany.myapp.domain?dialect=org.hibernate.dialect.PostgreSQLDialect&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                             <verbose>true</verbose>
-                            <logging>debug</logging>
                             <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                         </configuration>
                     </plugin>

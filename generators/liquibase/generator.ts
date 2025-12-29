@@ -426,7 +426,8 @@ export default class LiquibaseGenerator<
               version: '${liquibase.version}',
               additionalContent: mavenPlugin({
                 backendTypeSpringBoot: application.backendTypeSpringBoot!,
-                reactive: application.reactive!,
+                hibernateNamingPhysicalStrategy: application.hibernateNamingPhysicalStrategy,
+                hibernateNamingImplicitStrategy: application.hibernateNamingImplicitStrategy,
                 packageName: application.packageName!,
                 srcMainResources: application.srcMainResources,
                 authenticationTypeOauth2: application.authenticationTypeOauth2,

@@ -59,6 +59,20 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
     await this.dependsOnBootstrap('common');
   }
 
+  get composing() {
+    return this.asComposingTaskGroup({
+      async composeBackendType() {
+        if (!this.jhipsterConfig.backendType || ['spring-boot', 'java'].includes(this.jhipsterConfig.backendType.toLowerCase())) {
+          await this.composeWithJHipster('jhipster:spring-boot:bootstrap');
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
+  }
+
   get loading() {
     return this.asLoadingTaskGroup({
       cancel({ application }) {

@@ -48,6 +48,14 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
           },
         });
       },
+      hibernate({ application, applicationDefaults }) {
+        if (application.databaseTypeSql && !application.reactive) {
+          applicationDefaults({
+            hibernateNamingPhysicalStrategy: 'org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy',
+            hibernateNamingImplicitStrategy: 'org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy',
+          });
+        }
+      },
     });
   }
 

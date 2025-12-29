@@ -142,6 +142,8 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
   "hasNonBuiltInEntity": true,
+  "hibernateNamingImplicitStrategy": "org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy",
+  "hibernateNamingPhysicalStrategy": "org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy",
   "hipster": "jhipster_family_member_3",
   "hipsterBugTrackerLink": "https://github.com/jhipster/generator-jhipster/issues?state=open",
   "hipsterBugTrackerProductName": "JHipster",

@@ -72,7 +72,7 @@ liquibase {
 <%_ } _%>
       changelogFile project.ext.diffChangelogFile
 <%_ if (!reactive && backendTypeSpringBoot) { _%>
-      referenceUrl "hibernate:spring:<%= packageName %>.domain?dialect=<%= devHibernateDialect %>&hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy"
+      referenceUrl "hibernate:spring:<%= packageName %>.domain?dialect=<%= devHibernateDialect %>&hibernate.physical_naming_strategy=<%= hibernateNamingPhysicalStrategy %>&hibernate.implicit_naming_strategy=<%= hibernateNamingImplicitStrategy %>"
 <%_ } _%>
 <%_ if (liquibaseDefaultSchemaName) { _%>
       defaultSchemaName "<%- liquibaseDefaultSchemaName %>"

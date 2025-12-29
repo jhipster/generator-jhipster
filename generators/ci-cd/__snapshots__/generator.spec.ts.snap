@@ -382,6 +382,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "sonarName": "sonar",
   "sonarOrga": undefined,
   "sonarUrl": "https://sonarcloud.io",
+  "springDataDescription": "Spring Data JPA",
   "srcMain": "src/main/",
   "srcMainJava": "src/main/java/",
   "srcMainResources": "src/main/resources/",
