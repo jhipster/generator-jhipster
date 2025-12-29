@@ -67,6 +67,7 @@ export default class BuildToolGenerator extends JavaApplicationGenerator {
         };
         source.addJavaDependencies = (dependencies, options) => {
           if (application.buildToolMaven) {
+            const inProfile = options?.dev ? 'dev' : undefined;
             const convertVersionToMavenDependency = ({ versionRef, version, exclusions, ...artifact }: JavaDependency): MavenDependency => {
               // If a version is provided, convert to version ref using artifactId
               versionRef ??= version ? artifact.artifactId : undefined;
@@ -89,9 +90,10 @@ export default class BuildToolGenerator extends JavaApplicationGenerator {
 
             const properties = dependencies
               .filter(dep => dep.version)
-              .map(({ artifactId, version }) => ({ property: `${artifactId}.version`, value: version }));
+              .map(({ artifactId, version }) => ({ property: `${artifactId}.version`, value: version, inProfile }));
             dependencies = dependencies.map(({ scope, ...artifact }) => ({
               scope: scope === 'testRuntimeOnly' ? 'test' : scope,
+              inProfile,
               ...artifact,
             }));
             const annotationProcessors = dependencies
@@ -116,6 +118,9 @@ export default class BuildToolGenerator extends JavaApplicationGenerator {
           }
 
           if (application.buildToolGradle) {
+            if (options?.dev) {
+              options.gradleFile ??= 'gradle/profile_dev.gradle';
+            }
             const gradleDependencies = dependencies.map(({ exclusions, ...dep }) => ({
               ...dep,
               closure: exclusions?.map(({ groupId, artifactId }) => `    exclude group: '${groupId}', module: '${artifactId}'`),

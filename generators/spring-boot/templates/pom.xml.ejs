@@ -273,7 +273,7 @@
                     </executions>
                     <configuration>
                         <mainClass>${start-class}</mainClass>
-<%_ if (databaseTypeCouchbase) { _%>
+<%_ if (databaseTypeCouchbase && !springBoot4) { _%>
                         <loaderImplementation>CLASSIC</loaderImplementation>
 <%_ } _%>
                         <!--

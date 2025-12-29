@@ -266,8 +266,21 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      springBoot4({ application }) {
+        if (!application.springBoot4) {
+          // Latest version that supports Spring Boot 3
+          application.jhipsterDependenciesVersion = '9.0.0-beta.0';
+        }
+      },
       springBoot3({ application }) {
         if (!application.springBoot4) {
+          // Downgrade some dependencies for Spring Boot 3
+          Object.assign(application.javaDependencies, {
+            'spring-cloud-dependencies': '2025.0.0',
+            springdoc: '2.8.14',
+            'neo4j-migrations-spring-boot-starter': '2.20.1',
+          });
+
           const prefixReplacements = {
             'webmvc.test': 'test.',
             'webflux.test': 'test.',
@@ -740,23 +753,31 @@ ${classProperties
   get postWriting() {
     return this.asPostWritingTaskGroup({
       baseDependencies({ application, source }) {
+        if (application.springBoot4) {
+          source.addSpringBootModule!(
+            'spring-boot-jackson2',
+            'spring-boot-starter-aspectj',
+            'spring-boot-starter-jackson',
+            'spring-boot-starter-jackson-test',
+            'spring-boot-starter-security-test',
+            `spring-boot-starter-web${application.reactive ? 'flux' : 'mvc'}-test`,
+          );
+        } else {
+          source.addSpringBootModule!('spring-boot-loader-tools', 'spring-boot-starter-aop');
+        }
+
         source.addSpringBootModule!(
           'spring-boot-configuration-processor',
-          'spring-boot-loader-tools',
           'spring-boot-starter',
           'spring-boot-starter-actuator',
-          'spring-boot-starter-aop',
           'spring-boot-starter-mail',
+          'spring-boot-starter-security',
           'spring-boot-starter-test',
           'spring-boot-starter-thymeleaf',
           'spring-boot-starter-tomcat',
           'spring-boot-starter-validation',
           `spring-boot-starter-web${application.reactive ? 'flux' : ''}`,
           'spring-boot-test',
-          {
-            condition: application.authenticationTypeSession,
-            module: 'spring-boot-starter-security',
-          },
         );
       },
       addJHipsterBomDependencies({ application, source }) {

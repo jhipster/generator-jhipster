@@ -171,6 +171,12 @@ export default class SqlGenerator extends BaseApplicationGenerator<
         });
         const h2Definitions = devDatabaseTypeH2Any ? getH2MavenDefinition({ prodDatabaseType, packageFolder }) : undefined;
 
+        if (application.springBoot4) {
+          source.addSpringBootModule!('spring-boot-h2console');
+          // TODO move spring-boot-h2console to dev profile
+          // source.addJavaDependencies!([{ groupId: 'org.springframework.boot', artifactId: 'spring-boot-h2console' }], { dev: true });
+        }
+
         source.addSpringBootModule?.(`spring-boot-starter-data-${reactive ? 'r2dbc' : 'jpa'}`);
 
         if (!application.reactive) {
@@ -204,17 +210,35 @@ export default class SqlGenerator extends BaseApplicationGenerator<
           {
             condition: !reactive,
             dependencies: [
-              { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-hibernate6' },
+              {
+                groupId: application.springBoot4 ? 'tools.jackson.datatype' : 'com.fasterxml.jackson.datatype',
+                artifactId: application.springBoot4 ? 'jackson-datatype-hibernate7' : 'jackson-datatype-hibernate6',
+              },
               { groupId: 'org.hibernate.orm', artifactId: 'hibernate-core' },
               { groupId: 'org.hibernate.validator', artifactId: 'hibernate-validator' },
               { groupId: 'org.springframework.security', artifactId: 'spring-security-data' },
-              { scope: 'annotationProcessor', groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen' },
+              {
+                scope: 'annotationProcessor',
+                groupId: 'org.hibernate.orm',
+                artifactId: application.springBoot4 ? 'hibernate-processor' : 'hibernate-jpamodelgen',
+              },
             ],
-            mavenDefinition: { dependencies: [{ inProfile: 'IDE', groupId: 'org.hibernate.orm', artifactId: 'hibernate-jpamodelgen' }] },
+            mavenDefinition: {
+              dependencies: [
+                {
+                  inProfile: 'IDE',
+                  groupId: 'org.hibernate.orm',
+                  artifactId: application.springBoot4 ? 'hibernate-processor' : 'hibernate-jpamodelgen',
+                },
+              ],
+            },
           },
           {
             dependencies: [
-              { groupId: 'com.fasterxml.jackson.module', artifactId: 'jackson-module-jaxb-annotations' },
+              {
+                groupId: application.springBoot4 ? 'tools.jackson.module' : 'com.fasterxml.jackson.module',
+                artifactId: 'jackson-module-jaxb-annotations',
+              },
               { groupId: 'com.zaxxer', artifactId: 'HikariCP' },
               { scope: 'annotationProcessor', groupId: 'org.glassfish.jaxb', artifactId: 'jaxb-runtime' },
               { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers-jdbc' },
@@ -254,13 +278,18 @@ export default class SqlGenerator extends BaseApplicationGenerator<
         }
       },
       nativeHints({ application, source }) {
-        if (application.reactive || !application.graalvmSupport) return;
+        if (!application.graalvmSupport) return;
 
-        // Latest hibernate-core version supported by Reachability Repository is 6.5.0.Final
-        // Hints may be dropped if newer version is supported
-        // https://github.com/oracle/graalvm-reachability-metadata/blob/master/metadata/org.hibernate.orm/hibernate-core/index.json
+        if (!application.reactive) {
+          // Latest hibernate-core version supported by Reachability Repository is 6.5.0.Final
+          // Hints may be dropped if newer version is supported
+          // https://github.com/oracle/graalvm-reachability-metadata/blob/master/metadata/org.hibernate.orm/hibernate-core/index.json
+          source.addNativeHint!({
+            publicConstructors: ['org.hibernate.binder.internal.BatchSizeBinder.class'],
+          });
+        }
         source.addNativeHint!({
-          publicConstructors: ['org.hibernate.binder.internal.BatchSizeBinder.class'],
+          publicMethods: ['com.zaxxer.hikari.HikariDataSource.class'],
         });
       },
       async nativeMavenBuildTool({ application, source }) {

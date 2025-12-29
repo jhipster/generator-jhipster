@@ -119,7 +119,7 @@ spring:
   liquibase:
     contexts: test
 <%_ } _%>
-  jackson:
+  jackson<%= springBoot4 ? '2' : '' %>:
     serialization:
       write-durations-as-timestamps: false
 <%_ if (databaseTypeCassandra) { _%>

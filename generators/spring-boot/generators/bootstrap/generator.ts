@@ -33,8 +33,14 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
     return this.asPreparingTaskGroup({
       defaults({ applicationDefaults }) {
         applicationDefaults({
-          // TODO data => data.databaseTypeSql && !data.reactive && !data.cacheProviderInfinispan && !data.cacheProviderHazelcast
-          springBoot4: false,
+          springBoot4: data =>
+            Boolean(
+              data.databaseTypeSql &&
+              !data.reactive &&
+              !data.cacheProviderInfinispan &&
+              !data.cacheProviderHazelcast &&
+              !data.searchEngineElasticsearch,
+            ),
           springDataDescription: ({ databaseType, reactive }) => {
             let springDataDatabase: string;
             if (databaseType !== 'sql') {
@@ -53,7 +59,7 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
         if (application.databaseTypeSql && !application.reactive) {
           applicationDefaults({
             hibernateNamingPhysicalStrategy: 'org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy',
-            hibernateNamingImplicitStrategy: 'org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy',
+            hibernateNamingImplicitStrategy: `org.springframework.boot${application.springBoot4 ? '' : '.orm.jpa'}.hibernate.SpringImplicitNamingStrategy`,
           });
         }
       },

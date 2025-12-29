@@ -1,7 +1,7 @@
 [libraries]
-spring-cloud-dependencies = { module = 'org.springframework.cloud:spring-cloud-dependencies', version = '2025.0.0' }
+spring-cloud-dependencies = { module = 'org.springframework.cloud:spring-cloud-dependencies', version = '2025.1.0' }
 
-springdoc = { module = 'org.springdoc:springdoc-openapi-starter-webmvc-api', version = '2.8.14' }
+springdoc = { module = 'org.springdoc:springdoc-openapi-starter-webmvc-api', version = '3.0.0' }
 
 feign-reactor-bom = { module = 'com.playtika.reactivefeign:feign-reactor-bom', version = '4.2.1' }
 
@@ -9,7 +9,7 @@ cucumber-bom = { module = 'io.cucumber:cucumber-bom', version = '7.33.0' }
 
 mongock-bom = { module = 'io.mongock:mongock-bom', version = '5.5.1' }
 
-neo4j-migrations-spring-boot-starter = { module = 'eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter', version = '2.20.1' }
+neo4j-migrations-spring-boot-starter = { module = 'eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter', version = '3.1.0' }
 
 # Cassandra
 lz4-java = { module = 'at.yawk.lz4:lz4-java', version = '1.10.2' }
