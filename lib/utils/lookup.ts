@@ -20,14 +20,18 @@ import { globSync } from 'tinyglobby';
 
 import { getSourceRoot } from '../index.ts';
 
-export const lookupGenerators = ({ firstLevelOnly }: { firstLevelOnly?: boolean } = {}) =>
+type LookupGeneratorsOptions = {
+  firstLevelOnly?: boolean;
+};
+
+export const lookupGenerators = ({ firstLevelOnly }: LookupGeneratorsOptions = {}) =>
   globSync([`generators/*/index.{t,j}s`, ...(firstLevelOnly ? [] : [`generators/*/generators/*/index.{t,j}s`])], {
     onlyFiles: true,
     cwd: getSourceRoot(),
   }).sort();
 
-export const lookupGeneratorsWithNamespace = (): { namespace: string; generator: string }[] =>
-  lookupGenerators().map(gen => ({
+export const lookupGeneratorsWithNamespace = (options?: LookupGeneratorsOptions): { namespace: string; generator: string }[] =>
+  lookupGenerators(options).map(gen => ({
     generator: gen,
     namespace: gen
       .replace(/\/index\.(t|j)s$/, '')

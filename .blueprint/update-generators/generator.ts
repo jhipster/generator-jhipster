@@ -20,6 +20,8 @@ import { dirname } from 'node:path';
 
 import BaseCoreGenerator from '../../generators/base-core/index.ts';
 import { createNeedleCallback } from '../../generators/base-core/support/needles.ts';
+import { getSourceRoot } from '../../lib/index.ts';
+import { lookupGeneratorsWithNamespace } from '../../lib/utils/lookup.ts';
 
 export default class UpdateGeneratorsGenerator extends BaseCoreGenerator {
   async beforeQueue() {
@@ -29,30 +31,33 @@ export default class UpdateGeneratorsGenerator extends BaseCoreGenerator {
   get [BaseCoreGenerator.WRITING]() {
     return this.asAnyTaskGroup({
       async writing() {
-        const generators = Object.entries(this.env.getGeneratorsMeta()).filter(
-          ([key]) => key.startsWith('jhipster:') && !key.startsWith('jhipster:.'),
-        );
+        const generators = lookupGeneratorsWithNamespace().map(({ namespace, generator }) => ({
+          namespace: `jhipster:${namespace}`,
+          generator: getSourceRoot(generator),
+        }));
         generators.sort((a, b) => {
-          return a[0].localeCompare(b[0]);
+          return a.namespace.localeCompare(b.namespace);
         });
 
         const contentToAdd = generators
-          .map(([ns, meta]) => {
-            if (ns.startsWith('jhipster:base') && ns.split(':').length === 2) {
+          .map(({ namespace, generator }) => {
+            if (namespace.startsWith('jhipster:base') && namespace.split(':').length === 2) {
               // Base generators cannot be composed with.
               return [];
             }
-            const parts = ns.split(':').length;
-            const relativePath = this.relativeDir(this.templatePath('../../../generators/'), dirname(meta.resolved!));
+            const parts = namespace.split(':').length;
+            const relativePath = this.relativeDir(this.templatePath('../../../generators/'), dirname(generator));
 
             const generateImport = (key: string) =>
               `${/[:-]/.test(key) ? `'${key}'` : key}: import('./${relativePath}generator.ts').default;`;
-            return parts === 2 ? [generateImport(ns.replace('jhipster:', '')), generateImport(ns)] : [generateImport(ns)];
+            return parts === 2
+              ? [generateImport(namespace.replace('jhipster:', '')), generateImport(namespace)]
+              : [generateImport(namespace)];
           })
           .flat();
 
         const generatorsWithBootstrap = generators
-          .map(([ns]) => ns)
+          .map(({ namespace }) => namespace)
           .filter(ns => ns.split(':').length > 2 && ns.endsWith(':bootstrap'))
           .map(ns => ns.replace(':bootstrap', '').replace('jhipster:', ''));
 
