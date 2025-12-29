@@ -23,13 +23,16 @@ import type {
 } from '../server/types.d.ts';
 
 import type command from './command.ts';
-import type springBootDependencies from './resources/spring-boot-dependencies.ts';
+import type springBootDependencies4 from './resources/spring-boot-dependencies-4.ts';
+import type springBootDependencies3 from './resources/spring-boot-dependencies.ts';
 
 type Command = HandleCommandTypes<typeof command>;
 
-export type SpringBootModule = keyof (typeof springBootDependencies)['modules'];
+export type SpringBootModule = keyof (typeof springBootDependencies3)['modules'] | keyof (typeof springBootDependencies4)['modules'];
 
-export type SpringBootProperties = keyof (typeof springBootDependencies)['properties'];
+export type SpringBootProperties =
+  | keyof (typeof springBootDependencies3)['properties']
+  | keyof (typeof springBootDependencies4)['properties'];
 
 export type Config = Command['Config'] & JavaConfig & ServerConfig & CommonConfig;
 
@@ -179,6 +182,7 @@ export type Application<E extends BaseApplicationEntity = Entity> = Command['App
     communicationSpringWebsocket: boolean;
     requiresDeleteAllUsers: boolean;
 
+    springBoot4: boolean;
     springDataDescription: string;
 
     hibernateNamingPhysicalStrategy?: string;

@@ -258,6 +258,7 @@ exports[`generator - server:bootstrap bootstrapping default config should prepar
   "skipJhipsterDependencies": undefined,
   "skipServer": undefined,
   "skipUserManagement": false,
+  "springBoot4": false,
   "springDataDescription": "Spring Data JPA",
   "srcMain": "src/main/",
   "srcMainJava": "src/main/java/",

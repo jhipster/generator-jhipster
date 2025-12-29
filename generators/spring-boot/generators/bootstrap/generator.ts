@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { mutateData } from '../../../../lib/utils/object.ts';
 import { getDatabaseTypeData } from '../../../server/support/database.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';
 
@@ -32,8 +31,10 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      prepareSpringData({ application }) {
-        mutateData(application, {
+      defaults({ applicationDefaults }) {
+        applicationDefaults({
+          // TODO data => data.databaseTypeSql && !data.reactive && !data.cacheProviderInfinispan && !data.cacheProviderHazelcast
+          springBoot4: false,
           springDataDescription: ({ databaseType, reactive }) => {
             let springDataDatabase: string;
             if (databaseType !== 'sql') {

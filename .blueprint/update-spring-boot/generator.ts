@@ -38,7 +38,7 @@ export default class UpdateSpringBootGenerator extends BaseApplicationGenerator 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.asAnyTaskGroup({
       springBootDependenciesFile() {
-        const suffix = this.version.startsWith('4') ? `-${this.version}` : '';
+        const suffix = this.version.startsWith('4') ? `-${this.version.split('.')[0]}` : '';
         this.springBootDependenciesFile = this.fetchFromInstalledJHipster(`spring-boot/resources/spring-boot-dependencies${suffix}`);
       },
       async download() {

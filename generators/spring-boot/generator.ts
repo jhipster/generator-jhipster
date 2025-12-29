@@ -51,7 +51,8 @@ import cleanupTask from './cleanup.ts';
 import { writeFiles as writeEntityFiles } from './entity-files.ts';
 import { serverFiles } from './files.ts';
 import { askForOptionalItems, askForServerSideOpts, askForServerTestOpts } from './prompts.ts';
-import springBootDependencies from './resources/spring-boot-dependencies.ts';
+import springBootDependencies4 from './resources/spring-boot-dependencies-4.ts';
+import springBootDependencies3 from './resources/spring-boot-dependencies.ts';
 import type {
   Application as SpringBootApplication,
   Config as SpringBootConfig,
@@ -297,6 +298,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
             'spring-boot-dependencies': "'SPRING-BOOT-VERSION'",
           };
         } else {
+          const springBootDependencies = application.springBoot4 ? springBootDependencies4 : springBootDependencies3;
           application.springBootDependencies = this.prepareDependencies(springBootDependencies.versions, 'java');
           application.javaDependencies!['spring-boot'] = application.springBootDependencies['spring-boot-dependencies'];
           Object.assign(application.javaManagedProperties!, springBootDependencies.properties);
