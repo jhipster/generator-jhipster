@@ -21,6 +21,10 @@ import { parseMavenPom } from '../../generators/java-simple-application/generato
 import { getPackageRoot } from '../../lib/index.ts';
 
 export default class UpdateSpringBootGenerator extends BaseApplicationGenerator {
+  version!: string;
+  repository = 'https://repo1.maven.org/maven2/';
+  springBootDependenciesFile!: string;
+  pomContent!: string;
   springBootJson!: {
     versions: Record<string, string>;
     properties: Record<string, string>;
@@ -33,12 +37,22 @@ export default class UpdateSpringBootGenerator extends BaseApplicationGenerator 
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.asAnyTaskGroup({
+      springBootDependenciesFile() {
+        const suffix = this.version.startsWith('4') ? `-${this.version}` : '';
+        this.springBootDependenciesFile = this.fetchFromInstalledJHipster(`spring-boot/resources/spring-boot-dependencies${suffix}`);
+      },
+      async download() {
+        const response = await fetch(
+          `${this.repository}org/springframework/boot/spring-boot-dependencies/${this.version}/spring-boot-dependencies-${this.version}.pom`,
+        );
+
+        if (!response.ok) throw new Error(`Unexpected response ${response.statusText}`);
+
+        this.pomContent = await response.text();
+      },
       parsePom() {
         this.destinationRoot(getPackageRoot());
-        const springDependenciesPom = this.readTemplate(
-          this.fetchFromInstalledJHipster('spring-boot/resources/spring-boot-dependencies.pom'),
-        ) as string;
-        const pom = parseMavenPom(springDependenciesPom);
+        const pom = parseMavenPom(this.pomContent);
         this.springBootJson = {
           versions: {
             [pom.project.artifactId]: pom.project.version,
@@ -62,7 +76,8 @@ export default class UpdateSpringBootGenerator extends BaseApplicationGenerator 
   get [BaseApplicationGenerator.WRITING]() {
     return this.asAnyTaskGroup({
       async writing() {
-        this.writeDestinationJSON('generators/spring-boot/resources/spring-boot-dependencies.json', this.springBootJson);
+        this.writeDestination(`${this.springBootDependenciesFile}.pom`, this.pomContent);
+        this.writeDestinationJSON(`${this.springBootDependenciesFile}.json`, this.springBootJson);
       },
     });
   }
