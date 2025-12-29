@@ -44,7 +44,11 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
 <%_ if (databaseTypeSql) { _%>
+  <%_ if (reactive) { _%>
+import org.springframework.data.relational.core.mapping.Column;
+  <%_ } else { _%>
 import jakarta.persistence.Column;
+  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeSql && !reactive) { _%>
 import jakarta.persistence.EntityListeners;
@@ -71,7 +75,11 @@ public abstract class AbstractAuditingEntity<T> implements Serializable {
     @CreatedBy
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
+  <%_ if (reactive) { _%>
+    @Column("created_by")
+  <%_ } else { _%>
     @Column(name = "created_by", nullable = false, length = 50, updatable = false)
+  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
     @Field("created_by")
@@ -86,7 +94,11 @@ public abstract class AbstractAuditingEntity<T> implements Serializable {
 
     @CreatedDate
 <%_ if (databaseTypeSql) { _%>
+  <%_ if (reactive) { _%>
+    @Column("created_date")
+  <%_ } else { _%>
     @Column(name = "created_date", updatable = false)
+  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
     @Field("created_date")
@@ -103,7 +115,11 @@ public abstract class AbstractAuditingEntity<T> implements Serializable {
     @LastModifiedBy
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
+  <%_ if (reactive) { _%>
+    @Column("last_modified_by")
+  <%_ } else { _%>
     @Column(name = "last_modified_by", length = 50)
+  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
     @Field("last_modified_by")
@@ -118,7 +134,11 @@ public abstract class AbstractAuditingEntity<T> implements Serializable {
 
     @LastModifiedDate
 <%_ if (databaseTypeSql) { _%>
+  <%_ if (reactive) { _%>
+    @Column("last_modified_date")
+  <%_ } else { _%>
     @Column(name = "last_modified_date")
+  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
     @Field("last_modified_date")
