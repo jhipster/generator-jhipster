@@ -232,15 +232,7 @@ const command = {
       scope: 'storage',
     },
   },
-  import: [
-    'java',
-    'liquibase',
-    'jhipster:spring-data:relational',
-    'jhipster:spring-cloud:gateway',
-    'spring-cache',
-    'jhipster:spring-cloud:kafka',
-    'jhipster:spring-cloud:pulsar',
-  ],
+  import: ['java', 'liquibase', 'jhipster:spring-data:relational', 'spring-cache', 'jhipster:spring-cloud'],
 } as const satisfies JHipsterCommandDefinition<any>;
 
 export default command;

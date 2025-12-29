@@ -39,13 +39,34 @@ export class SpringCloudApplicationGenerator extends BaseApplicationGenerator<
 > {}
 
 export default class SpringCloudGenerator extends SpringCloudApplicationGenerator {
-  customLifecycle = true;
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
 
-    await this.dependsOnBootstrap('java');
+    await this.dependsOnBootstrap('spring-boot');
+  }
+
+  get composing() {
+    return this.asComposingTaskGroup({
+      async composeCloud() {
+        const { applicationType, messageBroker } = this.jhipsterConfigWithDefaults;
+
+        if (applicationType === 'gateway') {
+          await this.composeWithJHipster('jhipster:spring-cloud:gateway');
+        }
+
+        if (messageBroker === 'kafka') {
+          await this.composeWithJHipster('jhipster:spring-cloud:kafka');
+        }
+        if (messageBroker === 'pulsar') {
+          await this.composeWithJHipster('jhipster:spring-cloud:pulsar');
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
   }
 }
