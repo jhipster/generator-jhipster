@@ -167,7 +167,7 @@
           </li>
         }
 <%_ } _%>
-<%_ if (devDatabaseTypeH2Any || databaseTypeCouchbase) { _%>
+<%_ if (locals.devDatabaseTypeH2Any || locals.databaseTypeCouchbase) { _%>
         @if (!inProduction()) {
           <li>
             <a class="dropdown-item" href="<% if (databaseTypeCouchbase) { %>http://localhost:8091/<% } else if (reactive) { %> http://localhost:8092/ <% } else { %>./h2-console/<% } %>" target="_tab" (click)="collapseNavbar()">

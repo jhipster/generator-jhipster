@@ -79,7 +79,7 @@
 
       async function fetchUrls(serverBaseUri, axiosConfig, baseUrl) {
         let urls;
-<%_ if ((!applicationTypeMonolith && serviceDiscoveryAny) || (gatewayRoutes ?? []).length > 0) { _%>
+<%_ if ((!applicationTypeMonolith && locals.serviceDiscoveryAny) || (gatewayRoutes ?? []).length > 0) { _%>
 
         try {
   <%_ if ((gatewayRoutes ?? []).length > 0) { _%>

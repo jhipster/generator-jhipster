@@ -112,8 +112,8 @@
             <font-awesome-icon icon="book" />
             <span>{{ t$('global.menu.admin.apidocs') }}</span>
           </b-dropdown-item>
-<%_ if (devDatabaseTypeH2Any || databaseTypeCouchbase) { _%>
-          <b-dropdown-item v-if="!inProduction" href='<% if (databaseTypeCouchbase) { %>http://localhost:8092/<% } else if (reactive) { %>http://localhost:8092/<% } else { %>./h2-console/<% } %>' target="_tab">
+<%_ if (locals.devDatabaseTypeH2Any || locals.databaseTypeCouchbase) { _%>
+          <b-dropdown-item v-if="!inProduction" href='<% if (locals.databaseTypeCouchbase) { %>http://localhost:8092/<% } else if (locals.reactive) { %>http://localhost:8092/<% } else { %>./h2-console/<% } %>' target="_tab">
             <font-awesome-icon icon="database" />
             <span>{{ t$('global.menu.admin.database') }}</span>
           </b-dropdown-item>
