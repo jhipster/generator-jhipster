@@ -21,7 +21,6 @@ package <%= packageName %>.web.rest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import <%= packageName %>.IntegrationTest;
-import <%= packageName %>.config.EmbeddedKafka;
 <%_ if (authenticationUsesCsrf) { _%>
 
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
@@ -50,7 +49,6 @@ import org.springframework.util.MimeTypeUtils;
 
 @AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
 @WithMockUser
-@EmbeddedKafka
 @IntegrationTest
 @ImportAutoConfiguration(TestChannelBinderConfiguration.class)
 class <%= upperFirstCamelCaseBaseName %>KafkaResourceIT {
