@@ -16,8 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { passthrough } from '@yeoman/transform';
 import chalk from 'chalk';
 import { lowerFirst, sortedUniqBy } from 'lodash-es';
+import { isFileStateModified } from 'mem-fs-editor/state';
 
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import type { FieldType } from '../../lib/jhipster/field-types.ts';
@@ -264,6 +266,64 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      springBoot3({ application }) {
+        if (!application.springBoot4) {
+          const prefixReplacements = {
+            'webmvc.test': 'test.',
+            'webflux.test': 'test.',
+            webtestclient: 'test.',
+          } as Record<string, string>;
+
+          const suffixReplacements = {
+            jackson2: 'jackson.',
+            h2console: 'h2.',
+            hibernate: 'orm.jpa.',
+            mongodb: 'mongo.',
+            restclient: 'web.client.',
+            webflux: 'web.reactive.',
+            'webflux.test': 'web.reactive.',
+            'webmvc.test': 'web.servlet.',
+            webtestclient: 'web.reactive.',
+            'health.contributor.': 'actuate.health.',
+            'web.server': 'web.',
+            'restclient.': 'web.client.',
+            'web.server.servlet.': 'web.servlet.server.',
+          } as Record<string, string>;
+
+          this.queueTransformStream(
+            {
+              name: 'reverting files to Spring Boot 3 package names',
+              filter: file =>
+                isFileStateModified(file) &&
+                (file.path.startsWith(this.destinationPath(application.srcMainJava)) ||
+                  file.path.startsWith(this.destinationPath(application.srcTestJava))),
+              refresh: false,
+            },
+
+            // org.springframework.boot.restclient
+            passthrough(file => {
+              file.contents = Buffer.from(
+                (file.contents as Buffer)
+                  .toString('utf8')
+                  .replace(
+                    /import org\.springframework\.boot\.(.+)\.autoconfigure\./g,
+                    (_match, p1) =>
+                      `import org.springframework.boot.${prefixReplacements[p1] ?? ''}autoconfigure.${suffixReplacements[p1] ?? `${p1}.`}`,
+                  )
+                  .replace(
+                    /import org\.springframework\.boot\.(restclient\.|health\.contributor\.|web\.server\.servlet\.)/g,
+                    (_match, p1) => `import org.springframework.boot.${suffixReplacements[p1] ?? p1}`,
+                  )
+                  .replaceAll('import org.jspecify.annotations.Nullable;', 'import org.springframework.lang.Nullable;')
+                  .replaceAll(
+                    'import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;',
+                    'import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;',
+                  ),
+              );
+            }),
+          );
+        }
+      },
       updateLanguages({ application }) {
         if (!application.enableTranslation || !application.generateUserManagement) return;
 
