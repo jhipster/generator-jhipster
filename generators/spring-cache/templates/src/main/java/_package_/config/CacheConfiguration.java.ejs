@@ -54,14 +54,14 @@ import org.slf4j.LoggerFactory;
 
 <%_ } _%>
 <%_ if (cacheProviderEhcache || cacheProviderCaffeine) { _%>
-import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
+import org.springframework.boot.cache.autoconfigure.JCacheManagerCustomizer;
   <%_ if (enableHibernateCache) { _%>
-import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
+import org.springframework.boot.hibernate.autoconfigure.HibernatePropertiesCustomizer;
   <%_ } _%>
 <%_ } _%>
 <%_ if (cacheProviderHazelcast) { _%>
   <%_ if (serviceDiscoveryAny) { _%>
-import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.boot.web.server.autoconfigure.ServerProperties;
   <%_ } _%>
 
 import org.springframework.cache.CacheManager;
@@ -116,7 +116,7 @@ import org.hibernate.cfg.AvailableSettings;
 import org.infinispan.spring.starter.embedded.InfinispanCacheConfigurer;
 import org.infinispan.spring.starter.embedded.InfinispanGlobalConfigurer;
 import org.infinispan.transaction.TransactionMode;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
+import org.springframework.boot.hibernate.autoconfigure.HibernatePropertiesCustomizer;
 import java.util.stream.Stream;
   <%_ if (serviceDiscoveryAny) { _%>
 import org.infinispan.remoting.transport.jgroups.JGroupsTransport;
@@ -157,11 +157,11 @@ import org.redisson.config.Config;
 import org.redisson.config.ClusterServersConfig;
 import org.redisson.config.SingleServerConfig;
 import org.redisson.jcache.configuration.RedissonConfiguration;
-import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
+import org.springframework.boot.cache.autoconfigure.JCacheManagerCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
   <%_ if (enableHibernateCache) { _%>
-import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
+import org.springframework.boot.hibernate.autoconfigure.HibernatePropertiesCustomizer;
 import org.hibernate.cache.jcache.ConfigSettings;
   <%_ } _%>
 
