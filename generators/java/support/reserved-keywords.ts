@@ -43,6 +43,7 @@ export const javaReservedKeywords = [
   'IMPORT',
   'PUBLIC',
   'THROWS',
+  'LIST',
   'CASE',
   'ENUM',
   'INSTANCEOF',
