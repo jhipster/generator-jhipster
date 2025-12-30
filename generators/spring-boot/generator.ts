@@ -44,6 +44,7 @@ import {
   getJavaValueGeneratorForType,
   getSpecificationBuildForType,
   insertContentIntoApplicationProperties,
+  getPrimaryKeyValue
 } from '../server/support/index.ts';
 import type { Config as SpringCacheConfig } from '../spring-cache/types.ts';
 
@@ -471,6 +472,10 @@ ${classProperties
 
         source.overrideProperty = props => source.addJavaProperty!(props);
       },
+      prepareCompositePrimaryKeyHelpers({ application }) {
+        // needed for _dtoClass_Test with composite key, this could be improved
+        (application as any).getPrimaryKeyValue = getPrimaryKeyValue;
+      }
     });
   }
 
@@ -595,19 +600,42 @@ ${classProperties
       prepareEntity({ entity }) {
         const { primaryKey } = entity;
         if (primaryKey) {
-          primaryKey.javaBuildSpecification = getSpecificationBuildForType(primaryKey.type);
-          primaryKey.javaValueGenerator = getJavaValueGeneratorForType(primaryKey.type);
           for (const field of primaryKey.fields) {
             field.fieldJavaValueGenerator = getJavaValueGeneratorForType(field.fieldType);
+          }
+          if (!primaryKey.composite) {
+            primaryKey.javaBuildSpecification = getSpecificationBuildForType(primaryKey.type);
+            primaryKey.javaValueGenerator = getJavaValueGeneratorForType(primaryKey.type);
+            primaryKey.urlIdGenerator = getJavaValueGeneratorForType(primaryKey.type);
+          } else {
+            primaryKey.javaValueGenerator = `new ${primaryKey.type}(${primaryKey.fields.map(field => getJavaValueGeneratorForType(field.fieldType)).join(', ')})`;
+            primaryKey.urlIdGenerator = primaryKey.fields
+              .map(field => `"${field.fieldName}=" + ${getJavaValueGeneratorForType(field.fieldType)}`)
+              .join(' + ";" + ');
           }
         }
       },
       prepareFilters({ application, entity }) {
+        const relationshipFilterableProperties = entity.relationships
+          .filter(rel => !application.reactive || (rel.persistableRelationship && !rel.collection && rel.otherEntity.primaryKey))
+          .flatMap(relationship =>
+            relationship.otherEntity.primaryKey!.fields.map(field => {
+              const fieldType = field.fieldType;
+              let filterType = `${fieldType}Filter`;
+              // user has a String PK when using OAuth, so change relationships accordingly
+              if (relationship.otherEntityUser && application.authenticationTypeOauth2) {
+                filterType = 'StringFilter';
+              }
+              return {
+                propertyJavaFilterType: filterType,
+                propertyJavaFilterName: `${relationship.relationshipFieldName}${field.fieldNameCapitalized}`,
+                propertyJavaFilterJavaBeanName: `${relationship.relationshipNameCapitalized}${field.fieldNameCapitalized}`,
+              };
+            }),
+          );
+
         mutateData(entity, {
-          entityJavaFilterableProperties: [
-            ...entity.fields.filter(field => field.filterableField),
-            ...entity.relationships.filter(rel => !application.reactive || (rel.persistableRelationship && !rel.collection)),
-          ],
+          entityJavaFilterableProperties: [...entity.fields.filter(field => field.filterableField), ...relationshipFilterableProperties],
           entityJavaCustomFilters: sortedUniqBy(entity.fields.map(field => field.propertyJavaCustomFilter).filter(Boolean), 'type'),
         });
 

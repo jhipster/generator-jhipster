@@ -23,6 +23,9 @@
     if (!readOnly) {
       beans.push({class: `${entityClass}Repository`, instance: `${entityInstance}Repository`});
     }
+    if (dtoMapstruct && primaryKey.composite) {
+      beans.push({class: `${entityClass}Mapper`, instance: `${entityInstance}Mapper`});
+    }
     if (queryService && !reactive) {
       beans.push({class: `${entityClass}QueryService`, instance: `${entityInstance}QueryService`});
     }
@@ -32,7 +35,7 @@
     }
   } else {
     beans.push({class: `${entityClass}Repository`, instance: `${entityInstance}Repository`});
-    if (dtoMapstruct) {
+    if (dtoMapstruct || primaryKey.composite) {
       beans.push({class: `${entityClass}Mapper`, instance: `${entityInstance}Mapper`});
     }
     if (searchEngineElasticsearch) {

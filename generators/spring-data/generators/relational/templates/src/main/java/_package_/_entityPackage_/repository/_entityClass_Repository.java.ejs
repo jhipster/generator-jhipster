@@ -31,6 +31,9 @@ import org.springframework.stereotype.Repository;
 <%_ if (implementsEagerLoadApis || relationships.some(r => r.relationshipManyToOne && r.otherEntityUser)) { _%>
 import java.util.List;
 <%_ } _%>
+<%_ if (primaryKey.composite) { _%>
+import <%=packageName%>.domain.<%=primaryKey.type%>;
+<%_ } _%>
 <%_ if (primaryKey.typeUUID) { _%>
 
 import java.util.UUID;
