@@ -25,7 +25,7 @@ const patterns = {
   java: ['generators/{java,java-simple-application,liquibase,server,spring*}/**'],
   react: ['generators/react/**'],
   reactWorkflow: clientPatterns('react'),
-  sonarPr: ['.github/workflows/sonar-pr.yml'],
+  sonarPr: ['.github/actions/sonar/**'],
   workspaces: ['generators/{docker-compose,kubernetes*,workspaces}/**'],
   vue: ['generators/vue/**'],
   vueWorkflow: clientPatterns('vue'),
