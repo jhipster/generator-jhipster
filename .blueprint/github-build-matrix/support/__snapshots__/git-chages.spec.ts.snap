@@ -1,5 +1,27 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
+exports[`git-changes .github/actions/sonar/any-file.txt should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": true,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "graalvm": false,
+  "java": false,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": true,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
 exports[`git-changes generators/angular/index.ts should match changes snapshot 1`] = `
 {
   "angular": true,
