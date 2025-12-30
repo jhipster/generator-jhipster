@@ -51,7 +51,7 @@ exports[`generator - spring-cloud:kafka with defaults options should call source
         "scope": "test",
       },
       {
-        "artifactId": "junit-jupiter",
+        "artifactId": "testcontainers-junit-jupiter",
         "groupId": "org.testcontainers",
         "scope": "test",
       },
@@ -61,7 +61,7 @@ exports[`generator - spring-cloud:kafka with defaults options should call source
         "scope": "test",
       },
       {
-        "artifactId": "kafka",
+        "artifactId": "testcontainers-kafka",
         "groupId": "org.testcontainers",
         "scope": "test",
       },

@@ -156,9 +156,9 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
         source.addJavaDefinitions?.(
           {
             dependencies: [
-              { scope: 'test', groupId: 'org.testcontainers', artifactId: 'junit-jupiter' },
+              { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers-junit-jupiter' },
               { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers' },
-              { scope: 'test', groupId: 'org.testcontainers', artifactId: 'neo4j' },
+              { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers-neo4j' },
             ],
           },
           {

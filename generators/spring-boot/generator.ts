@@ -295,12 +295,11 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
               name: 'reverting files to Spring Boot 3 package names',
               filter: file =>
                 isFileStateModified(file) &&
+                file.path.endsWith('.java') &&
                 (file.path.startsWith(this.destinationPath(application.srcMainJava)) ||
                   file.path.startsWith(this.destinationPath(application.srcTestJava))),
               refresh: false,
             },
-
-            // org.springframework.boot.restclient
             passthrough(file => {
               file.contents = Buffer.from(
                 (file.contents as Buffer)
@@ -320,6 +319,17 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
                     'import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;',
                   ),
               );
+            }),
+          );
+
+          this.queueTransformStream(
+            {
+              name: 'reverting testcontainers dependencies to v1',
+              filter: file => isFileStateModified(file) && (file.path.endsWith('pom.xml') || file.path.endsWith('.gradle')),
+              refresh: false,
+            },
+            passthrough(file => {
+              file.contents = Buffer.from((file.contents as Buffer).toString('utf8').replaceAll('testcontainers-', ''));
             }),
           );
         }
