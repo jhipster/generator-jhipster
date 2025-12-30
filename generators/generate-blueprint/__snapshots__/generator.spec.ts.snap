@@ -1214,6 +1214,15 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/spring-cache/templates/template-file-spring-cache.ejs": {
     "stateCleared": "modified",
   },
+  "generators/spring-cloud/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud/generator.spec.js": {
+    "stateCleared": "modified",
+  },
   "generators/spring-cloud/generators/gateway/command.js": {
     "stateCleared": "modified",
   },
@@ -1257,6 +1266,12 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/spring-cloud/generators/pulsar/templates/template-file-spring-cloud:pulsar.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-cloud/templates/template-file-spring-cloud.ejs": {
     "stateCleared": "modified",
   },
   "generators/spring-data/command.js": {
