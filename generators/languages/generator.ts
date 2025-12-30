@@ -68,7 +68,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
 
     if (!this.delegateToBlueprint) {
       await this.dependsOnBootstrap('languages');
-      await this.dependsOnBootstrap('app');
+      await this.dependsOnBootstrap('common');
     }
 
     const { skipClient, clientFramework } = this.jhipsterConfigWithDefaults as ClientConfig;

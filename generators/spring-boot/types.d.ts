@@ -180,4 +180,7 @@ export type Application<E extends BaseApplicationEntity = Entity> = Command['App
     requiresDeleteAllUsers: boolean;
 
     springDataDescription: string;
+
+    hibernateNamingPhysicalStrategy?: string;
+    hibernateNamingImplicitStrategy?: string;
   };

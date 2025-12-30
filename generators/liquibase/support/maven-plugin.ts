@@ -1,6 +1,7 @@
 export default function mavenPluginContent({
   backendTypeSpringBoot,
-  reactive,
+  hibernateNamingPhysicalStrategy,
+  hibernateNamingImplicitStrategy,
   packageName,
   srcMainResources,
   authenticationTypeOauth2,
@@ -13,7 +14,8 @@ export default function mavenPluginContent({
   defaultSchemaName = '',
 }: {
   backendTypeSpringBoot: boolean;
-  reactive: boolean;
+  hibernateNamingPhysicalStrategy?: string;
+  hibernateNamingImplicitStrategy?: string;
   packageName: string;
   srcMainResources: string;
   authenticationTypeOauth2: boolean;
@@ -34,10 +36,9 @@ export default function mavenPluginContent({
       <url>${url}</url>
       <defaultSchemaName>${defaultSchemaName}</defaultSchemaName>
       <username>${username}</username>
-      <password>${password}</password>${reactive || !backendTypeSpringBoot ? '' : `
-      <referenceUrl>hibernate:spring:${packageName}.domain?dialect=${hibernateDialect}&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>`}
+      <password>${password}</password>${!hibernateNamingPhysicalStrategy || !hibernateNamingImplicitStrategy ? '' : `
+      <referenceUrl>hibernate:spring:${packageName}.domain?dialect=${hibernateDialect}&amp;hibernate.physical_naming_strategy=${hibernateNamingPhysicalStrategy}&amp;hibernate.implicit_naming_strategy=${hibernateNamingImplicitStrategy}</referenceUrl>`}
       <verbose>true</verbose>
-      <logging>debug</logging>
       <contexts>!test</contexts>${authenticationTypeOauth2 ? `
       <diffExcludeObjects>oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token</diffExcludeObjects>`: ''}
     </configuration>
