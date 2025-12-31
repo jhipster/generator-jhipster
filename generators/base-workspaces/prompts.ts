@@ -8,7 +8,7 @@ import { YO_RC_FILE } from '../generator-constants.ts';
 
 import type BaseWorkspacesGenerator from './generator.ts';
 /**
- * Copyright 2013-2025 the original author or authors from the JHipster project.
+ * Copyright 2013-2026 the original author or authors from the JHipster project.
  *
  * This file is part of the JHipster project, see https://www.jhipster.tech/
  * for more information.
