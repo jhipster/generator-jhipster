@@ -68,11 +68,17 @@ jobs:
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
+      - run: jhipster.cjs --export-github-output
+        id: jhipster-output
       - uses: jhipster/actions/build-jhipster-bom@v1
         with:
-          jhipster-bom-ref: main
+          jhipster-bom-ref: ${{ steps.jhipster-output.outputs.jhipster-bom-branch }}
       - run: jhipster.cjs generate-sample incremental-changelog-samples/liquibase-jdl-rename-field/app.jdl --skip-jhipster-dependencies
+        env:
+          JHIPSTER_DEPENDENCIES_VERSION: ${{ steps.jhipster-output.outputs.jhipster-dependencies-version }}
       - run: jhipster.cjs generate-sample --incremental-changelog incremental-changelog-samples/liquibase-jdl-rename-field-post/app.jdl --force
+        env:
+          JHIPSTER_DEPENDENCIES_VERSION: ${{ steps.jhipster-output.outputs.jhipster-dependencies-version }}
       - name: 'GENERATION: incremental changes'
         run: |
           git add .
