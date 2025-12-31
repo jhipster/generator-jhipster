@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import { Component, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -31,7 +32,7 @@ import { UserManagementService } from '../service/user-management.service';
 @Component({
   selector: '<%= jhiPrefixDashed %>-user-mgmt-delete-dialog',
   templateUrl: './user-management-delete-dialog.html',
-  imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>FontAwesomeModule, AlertError],
+  imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>FontAwesomeModule, AlertError, FormsModule],
 })
 export default class UserManagementDeleteDialog {
   user?: User;
