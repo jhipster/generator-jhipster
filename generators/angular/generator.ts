@@ -462,7 +462,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
   get end() {
     return this.asEndTaskGroup({
       end({ application }) {
-        this.log.ok('Angular application generated successfully.');
+        this.log.ok(`Angular ${application.nodeDependencies['@angular/common']} application generated successfully.`);
         this.log.log(
           chalk.green(`  Start your Webpack development server with:
   ${chalk.yellow.bold(`${application.nodePackageManager} start`)}

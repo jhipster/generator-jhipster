@@ -1062,7 +1062,7 @@ if (os.isMacOsX() && !arch.isAmd64()) {
     return this.asEndTaskGroup({
       end({ application, control }) {
         const { buildToolExecutable } = application;
-        this.log.ok('Spring Boot application generated successfully.');
+        this.log.ok(`Spring Boot ${application.springBootDependencies['spring-boot-dependencies']} application generated successfully.`);
 
         if (application.dockerServices?.length && !control.environmentHasDockerCompose) {
           const dockerComposeCommand = chalk.yellow.bold('docker compose');
