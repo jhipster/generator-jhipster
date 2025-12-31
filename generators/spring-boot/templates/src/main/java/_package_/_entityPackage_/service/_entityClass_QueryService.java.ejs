@@ -124,9 +124,21 @@ public class <%= serviceClassName %> extends QueryService<<%= persistClass %>> {
      */
     protected Specification<<%= persistClass %>> createSpecification(<%= criteria %> criteria) {
         Specification<<%= persistClass %>> specification = Specification.unrestricted();
+<%_ const eagerRelationships = relationships.filter(rel => rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide === true));
+if (eagerRelationships.length > 0) {
+_%>
+        specification = specification.and((root, query, builder) -> {
+            if (Long.class != query.getResultType()) {
+<%_ for (const relationship of eagerRelationships) { _%>
+            root.fetch(<%= persistClass %>_.<%= relationship.propertyName %>, JoinType.LEFT);
+<%_ } _%>
+            }
+            return null;
+        });
+<%_ } _%>
         if (criteria != null) {
             // This has to be called first, because the distinct method returns null
-            specification = Specification.allOf(
+            specification = specification.and(Specification.allOf(
                 Boolean.TRUE.equals(criteria.getDistinct()) ? distinct(criteria.getDistinct()) : Specification.unrestricted()
 <%_ for (const field of fields.filter(field => !field.transient && field.filterableField)) { _%>
                 ,
@@ -137,7 +149,7 @@ public class <%= serviceClassName %> extends QueryService<<%= persistClass %>> {
                 buildSpecification(criteria.get<%= relationship.relationshipNameCapitalized %>Id(),
                     root -> root.join(<%= persistClass %>_.<%= relationship.propertyName %>, JoinType.LEFT).get(<%= relationship.otherEntity.persistClass %>_.<%= relationship.otherEntity.primaryKey.name %>))
 <%_ } _%>
-            );
+            ));
         }
         return specification;
     }
