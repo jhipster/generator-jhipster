@@ -82,7 +82,7 @@ const randomEnvironmentMatrix = (key: string, options: RandomEnvironmentOptions)
   const {
     useVersionPlaceholders,
     javaVersions = [RECOMMENDED_JAVA_VERSION, ...JAVA_COMPATIBLE_VERSIONS],
-    nodeVersions = [RECOMMENDED_NODE_VERSION, '20', '22'],
+    nodeVersions = [RECOMMENDED_NODE_VERSION, '22'],
   } = options;
   const javaVersion = randomReproducibleValue(`java-${key}`, javaVersions, { useVersionPlaceholders });
   const nodeVersion = randomReproducibleValue(`node-${key}`, nodeVersions, { useVersionPlaceholders });

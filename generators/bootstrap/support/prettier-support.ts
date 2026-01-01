@@ -30,7 +30,6 @@ import type prettierWorker from './prettier-worker.ts';
 const minimatch = new Minimatch('**/{.prettierrc**,.prettierignore}');
 export const isPrettierConfigFilePath = (filePath: string) => minimatch.match(filePath);
 
-const supportsTsFiles = parseInt(process.versions.node.split('.')[0]) >= 22;
 const useTsFile = !isDistFolder();
 
 export const createPrettierTransform = async function (
@@ -47,7 +46,7 @@ export const createPrettierTransform = async function (
 
   let applyPrettier: typeof prettierWorker;
   let pool: Piscina | undefined;
-  if (skipForks || (useTsFile && !supportsTsFiles)) {
+  if (skipForks) {
     const { default: applyPrettierWorker } = await import('./prettier-worker.ts');
     applyPrettier = applyPrettierWorker;
   } else {
@@ -56,7 +55,7 @@ export const createPrettierTransform = async function (
       filename: new URL(`./prettier-worker.${useTsFile ? 'ts' : 'js'}`, import.meta.url).href,
       ...options,
     });
-    applyPrettier = pool!.run.bind(pool!);
+    applyPrettier = pool.run.bind(pool);
   }
 
   return passthrough(

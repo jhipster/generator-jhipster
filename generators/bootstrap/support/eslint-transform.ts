@@ -29,7 +29,6 @@ import type eslintWorker from './eslint-worker.ts';
 
 type PoolOptions = Exclude<ConstructorParameters<typeof Piscina>[0], undefined>;
 
-const supportsTsFiles = parseInt(process.versions.node.split('.')[0]) >= 22;
 const useTsFile = !isDistFolder();
 
 export const createESLintTransform = async function (
@@ -39,20 +38,12 @@ export const createESLintTransform = async function (
   const { extensions = 'js,cjs,mjs,ts,cts,mts,jsx,tsx', ignoreErrors, cwd, poolOptions, recreateEslint } = transformOptions;
   const minimatch = new Minimatch(`**/*.{${extensions}}`, { dot: true });
 
-  let pool: Piscina | undefined;
-  let apply: typeof eslintWorker;
-  if (useTsFile && !supportsTsFiles) {
-    const { default: eslintWorkerImport } = await import('./eslint-worker.ts');
-    apply = eslintWorkerImport;
-  } else {
-    pool = new Piscina<Parameters<typeof eslintWorker>[0], ReturnType<typeof eslintWorker>>({
-      maxThreads: 2,
-      idleTimeout: 100,
-      filename: new URL(`./eslint-worker.${useTsFile ? 'ts' : 'js'}`, import.meta.url).href,
-      ...poolOptions,
-    });
-    apply = data => pool!.run(data);
-  }
+  const pool = new Piscina<Parameters<typeof eslintWorker>[0], Awaited<ReturnType<typeof eslintWorker>>>({
+    maxThreads: 2,
+    idleTimeout: 100,
+    filename: new URL(`./eslint-worker.${useTsFile ? 'ts' : 'js'}`, import.meta.url).href,
+    ...poolOptions,
+  });
 
   return passthrough(
     async file => {
@@ -60,7 +51,7 @@ export const createESLintTransform = async function (
         return;
       }
       const fileContents = file.contents.toString();
-      const result = await apply({
+      const result = await pool.run({
         cwd,
         filePath: file.path,
         fileContents,
@@ -80,7 +71,7 @@ export const createESLintTransform = async function (
       }
     },
     async () => {
-      await pool?.destroy();
+      await pool.destroy();
     },
   );
 };
