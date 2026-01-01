@@ -355,7 +355,8 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
             // Ignore non existing command
           }
 
-          if (this.options.namespace.endsWith(':bootstrap')) {
+          const split = this.options.namespace.split(':');
+          if (split.length === 3 && split[2] === 'bootstrap') {
             const parentMeta = this.env.getGeneratorMeta(this.options.namespace.replace(':bootstrap', ''));
             const parentModule: any = await parentMeta?.importModule?.();
             if (parentModule?.command?.configs) {
