@@ -115,3 +115,37 @@ exports[`generator - entity with default configuration should match files snapsh
   },
 }
 `;
+
+exports[`generator - entity with default configuration should match source calls 1`] = `
+{
+  "addEntitiesToClient": [
+    {
+      "application": "Application[jhipster]",
+      "control": "TaskParameter[control]",
+      "entities": [
+        "Entity[Foo]",
+      ],
+      "source": "TaskParameter[source]",
+    },
+  ],
+  "addEntityToCache": [
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Foo",
+      "relationships": [],
+    },
+  ],
+  "addEntityTranslationKey": [
+    {
+      "language": "en",
+      "translationKey": "foo",
+      "translationValue": "Foo",
+    },
+  ],
+  "addLiquibaseChangelog": [
+    {
+      "changelogName": "20200101000100_added_entity_Foo",
+      "section": "base",
+    },
+  ],
+}
+`;

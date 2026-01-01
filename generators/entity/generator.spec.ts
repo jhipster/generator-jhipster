@@ -34,13 +34,14 @@ describe(`generator - ${generator}`, () => {
     before(async () => {
       await helpers
         .runJHipster('entity')
-        .withMockedGenerators(['jhipster:languages'])
         .withJHipsterConfig({})
         .withAnswers({ fieldAdd: false, relationshipAdd: false, service: 'no', dto: 'no', pagination: 'no' })
-        .withSharedApplication({ getWebappTranslation: () => 'translations' })
         .withArguments(['Foo'])
-        .withOptions({ ignoreNeedlesError: true, regenerate: true, force: true, singleEntity: true })
         .withMockedSource();
+    });
+
+    it('should match source calls', () => {
+      expect(runResult.sourceCallsArg).toMatchSnapshot();
     });
 
     it('should match files snapshot', () => {
