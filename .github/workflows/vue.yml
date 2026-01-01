@@ -51,9 +51,11 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 2
+      - run: echo "node-version=$(cat ${{ github.workspace }}/generators/init/resources/.node-version)" >> $GITHUB_OUTPUT
+        id: node-version
       - uses: actions/setup-node@v6
         with:
-          node-version: 24
+          node-version: ${{ steps.node-version.outputs.node-version }}
       - run: npm ci --ignore-scripts
       - id: build
         run: bin/jhipster.cjs github-build-matrix vue --event-name ${{ github.event_name }}

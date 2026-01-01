@@ -51,9 +51,11 @@ jobs:
         with:
           ref: ${{ inputs.destBranch }}
           fetch-depth: 0
+      - run: echo "node-version=$(cat ${{ github.workspace }}/generators/init/resources/.node-version)" >> $GITHUB_OUTPUT
+        id: node-version
       - uses: jhipster/actions/setup-runner@v1
         with:
-          node-version: 24
+          node-version: ${{ steps.node-version.outputs.node-version }}
           binary-dir: ${{ github.workspace }}/generator-jhipster/bin
       - name: Parse POM
         run: bin/jhipster.cjs update-spring-boot ${{ inputs.springBootVersion }} ${{ inputs.repository }} --force
