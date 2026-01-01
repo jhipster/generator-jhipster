@@ -62,14 +62,6 @@ const command = {
       },
       scope: 'generator',
     },
-    skipForks: {
-      description: 'Dont use forks',
-      cli: {
-        type: Boolean,
-        hide: true,
-      },
-      scope: 'generator',
-    },
   },
 } as const satisfies JHipsterCommandDefinition;
 
