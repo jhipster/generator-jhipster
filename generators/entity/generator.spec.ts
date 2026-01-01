@@ -16,9 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { describe } from 'esmocha';
+import { describe, expect } from 'esmocha';
 import { basename } from 'node:path';
 
+import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.ts';
 
 import Generator from './index.ts';
@@ -28,4 +29,22 @@ const generator = basename(import.meta.dirname);
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
   describe.skip('blueprint support', () => testBlueprintSupport(generator));
+
+  describe('with default configuration', () => {
+    before(async () => {
+      await helpers
+        .runJHipster('entity')
+        .withMockedGenerators(['jhipster:languages'])
+        .withJHipsterConfig({})
+        .withAnswers({ fieldAdd: false, relationshipAdd: false, service: 'no', dto: 'no', pagination: 'no' })
+        .withSharedApplication({ getWebappTranslation: () => 'translations' })
+        .withArguments(['Foo'])
+        .withOptions({ ignoreNeedlesError: true, regenerate: true, force: true, singleEntity: true })
+        .withMockedSource();
+    });
+
+    it('should match files snapshot', () => {
+      expect(runResult.getStateSnapshot()).toMatchSnapshot();
+    });
+  });
 });
