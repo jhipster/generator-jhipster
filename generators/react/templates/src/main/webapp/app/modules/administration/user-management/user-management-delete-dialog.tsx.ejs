@@ -50,7 +50,7 @@ export const UserManagementDeleteDialog = () => {
 
   return (
     <Modal isOpen toggle={handleClose}>
-      <ModalHeader toggle={handleClose}>
+      <ModalHeader toggle={handleClose} data-cy="userManagementDeleteDialogHeading">
         <Translate contentKey="entity.delete.title">Confirm delete operation</Translate>
       </ModalHeader>
       <ModalBody>
@@ -64,7 +64,7 @@ export const UserManagementDeleteDialog = () => {
           &nbsp;
           <Translate contentKey="entity.action.cancel">Cancel</Translate>
         </Button>
-        <Button color="danger" onClick={confirmDelete}>
+        <Button color="danger" onClick={confirmDelete} data-cy="entityConfirmDeleteButton">
           <FontAwesomeIcon icon={faTrash} />
           &nbsp;
           <Translate contentKey="entity.action.delete">Delete</Translate>

@@ -19,7 +19,7 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="myUserLabel">__jhiTranslateTag__('userManagement.home.createOrEditLabel')</h2>
+      <h2 id="myUserLabel" data-cy="userManagementCreateUpdateHeading">__jhiTranslateTag__('userManagement.home.createOrEditLabel')</h2>
 
       <<%= jhiPrefixDashed %>-alert-error />
 
@@ -148,11 +148,11 @@
         }
         </select>
       </div>
-      <button type="button" class="btn btn-secondary" (click)="previousState()">
+      <button type="button" class="btn btn-secondary" (click)="previousState()" data-cy="entityCreateCancelButton">
         <fa-icon icon="ban" />&nbsp;<span>__jhiTranslateTag__('entity.action.cancel')</span>
       </button>
 
-      <button type="submit" [disabled]="editForm.invalid || isSaving()" class="btn btn-primary">
+      <button type="submit" [disabled]="editForm.invalid || isSaving()" class="btn btn-primary" data-cy="entityCreateSaveButton">
         <fa-icon icon="save" />&nbsp;<span>__jhiTranslateTag__('entity.action.save')</span>
       </button>
     </form>

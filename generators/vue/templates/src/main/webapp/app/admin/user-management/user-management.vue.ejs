@@ -8,7 +8,7 @@
           <font-awesome-icon icon="sync" :spin="isLoading"></font-awesome-icon> <span>{{ t$('userManagement.home.refreshListLabel') }}</span>
         </button>
         <router-link custom v-slot="{ navigate }" :to="{name: '<%= jhiPrefixCapitalized %>UserCreate'}">
-          <button @click="navigate" class="btn btn-primary jh-create-entity">
+          <button @click="navigate" class="btn btn-primary jh-create-entity" data-cy="entityCreateButton">
             <font-awesome-icon icon="plus"></font-awesome-icon> <span>{{ t$('userManagement.home.createLabel') }}</span>
           </button>
         </router-link>
@@ -60,18 +60,18 @@
             <td class="text-end">
               <div class="btn-group">
                 <router-link :to="{name: '<%= jhiPrefixCapitalized %>UserView', params: {userId: user.login}}" custom v-slot="{ navigate }">
-                  <button @click="navigate" class="btn btn-info btn-sm details">
+                  <button @click="navigate" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
                     <font-awesome-icon icon="eye"></font-awesome-icon>
                     <span class="d-none d-md-inline">{{ t$('entity.action.view') }}</span>
                   </button>
                 </router-link>
                 <router-link :to="{name: '<%= jhiPrefixCapitalized %>UserEdit', params: {userId: user.login}}" custom v-slot="{ navigate }">
-                  <button @click="navigate" class="btn btn-primary btn-sm edit">
+                  <button @click="navigate" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">
                     <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                     <span class="d-none d-md-inline">{{ t$('entity.action.edit') }}</span>
                   </button>
                 </router-link>
-                <b-button @click="prepareRemove(user)" variant="danger" class="btn btn-sm delete" :disabled="username === user.login">
+                <b-button @click="prepareRemove(user)" variant="danger" class="btn btn-sm delete" :disabled="username === user.login" data-cy="entityDeleteButton">
                   <font-awesome-icon icon="times"></font-awesome-icon>
                   <span class="d-none d-md-inline">{{ t$('entity.action.delete') }}</span>
                 </b-button>
@@ -80,14 +80,14 @@
           </tr>
         </tbody>
       </table>
-      <b-modal ref="removeUser" id="removeUser" :title="t$('entity.delete.title')" @ok="deleteUser()">
+      <b-modal ref="removeUser" id="removeUser" :title="t$('entity.delete.title')" @ok="deleteUser()" data-cy="userManagementDeleteDialogHeading">
           <div class="modal-body">
               <p id="<%= jhiPrefixDashed %>-delete-user-heading">{{ t$('userManagement.delete.question', { 'login': removeId}) }}</p>
           </div>
           <template #footer>
             <div>
               <button type="button" class="btn btn-secondary" @click="closeDialog()">{{ t$('entity.action.cancel') }}</button>
-              <button type="button" class="btn btn-primary" id="confirm-delete-user" @click="deleteUser()">{{ t$('entity.action.delete') }}</button>
+              <button type="button" class="btn btn-primary" id="confirm-delete-user" @click="deleteUser()" data-cy="entityConfirmDeleteButton">{{ t$('entity.action.delete') }}</button>
             </div>
           </template>
       </b-modal>

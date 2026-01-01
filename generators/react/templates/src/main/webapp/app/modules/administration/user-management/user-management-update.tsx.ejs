@@ -71,7 +71,7 @@ export const UserManagementUpdate = () => {
     <div>
       <Row className="justify-content-center">
         <Col md="8">
-          <h1>
+          <h1 data-cy="userManagementCreateUpdateHeading">
             <Translate contentKey="userManagement.home.createOrEditLabel">Create or edit a User</Translate>
           </h1>
         </Col>
@@ -181,14 +181,14 @@ export const UserManagementUpdate = () => {
               </option>
             ))}
           </ValidatedField>
-          <Button tag={Link} to="/admin/user-management" replace color="info">
+          <Button tag={Link} to="/admin/user-management" replace color="info" data-cy="entityCreateCancelButton">
             <FontAwesomeIcon icon={faArrowLeft} />&nbsp;
             <span className="d-none d-md-inline">
               <Translate contentKey="entity.action.back">Back</Translate>
             </span>
           </Button>
           &nbsp;
-          <Button color="primary" type="submit" disabled={updating}>
+          <Button color="primary" type="submit" disabled={updating} data-cy="entityCreateSaveButton">
             <FontAwesomeIcon icon={faSave} />&nbsp;
             <Translate contentKey="entity.action.save">Save</Translate>
           </Button>

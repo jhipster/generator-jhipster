@@ -25,7 +25,7 @@
         <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined" />
         <span>__jhiTranslateTag__('userManagement.home.refreshListLabel')</span>
       </button>
-      <button class="btn btn-primary jh-create-entity" [routerLink]="['./new']">
+      <button class="btn btn-primary jh-create-entity" [routerLink]="['./new']" data-cy="entityCreateButton">
         <fa-icon icon="plus" /> <span>__jhiTranslateTag__('userManagement.home.createLabel')</span>
       </button>
     </div>
@@ -107,12 +107,12 @@
 <%_ } _%>
           <td class="text-end">
             <div class="btn-group">
-              <button type="submit" [routerLink]="['./', user.login, 'view']" class="btn btn-info btn-sm">
+              <button type="submit" [routerLink]="['./', user.login, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                 <fa-icon icon="eye" />
                 <span class="d-none d-md-inline">__jhiTranslateTag__('entity.action.view')</span>
               </button>
 
-              <button type="submit" [routerLink]="['./', user.login, 'edit']" queryParamsHandling="merge" class="btn btn-primary btn-sm">
+              <button type="submit" [routerLink]="['./', user.login, 'edit']" queryParamsHandling="merge" class="btn btn-primary btn-sm" data-cy="entityEditButton">
                 <fa-icon icon="pencil-alt" />
                 <span class="d-none d-md-inline">__jhiTranslateTag__('entity.action.edit')</span>
               </button>
@@ -121,6 +121,7 @@
                 type="button"
                 (click)="deleteUser(user)"
                 class="btn btn-danger btn-sm"
+                data-cy="entityDeleteButton"
                 [disabled]="!currentAccount() || currentAccount()?.login === user.login"
               >
                 <fa-icon icon="times" />
