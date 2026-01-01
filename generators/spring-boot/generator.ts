@@ -759,11 +759,15 @@ ${classProperties
             'spring-boot-starter-aspectj',
             'spring-boot-starter-jackson',
             'spring-boot-starter-jackson-test',
+            'spring-boot-starter-security',
             'spring-boot-starter-security-test',
             `spring-boot-starter-web${application.reactive ? 'flux' : 'mvc'}-test`,
           );
         } else {
           source.addSpringBootModule!('spring-boot-loader-tools', 'spring-boot-starter-aop');
+          if (!application.authenticationTypeOauth2) {
+            source.addSpringBootModule!('spring-boot-starter-security');
+          }
         }
 
         source.addSpringBootModule!(
@@ -771,7 +775,6 @@ ${classProperties
           'spring-boot-starter',
           'spring-boot-starter-actuator',
           'spring-boot-starter-mail',
-          'spring-boot-starter-security',
           'spring-boot-starter-test',
           'spring-boot-starter-thymeleaf',
           'spring-boot-starter-tomcat',
