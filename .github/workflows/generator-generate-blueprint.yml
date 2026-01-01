@@ -56,9 +56,11 @@ jobs:
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
+      - run: jhipster.cjs --export-github-output
+        id: jhipster-output
       - uses: jhipster/actions/build-jhipster-bom@v1
         with:
-          jhipster-bom-ref: main
+          jhipster-bom-ref: ${{ steps.jhipster-output.outputs.jhipster-bom-branch }}
       - name: 'GENERATION: generate blueprint'
         run: |
           cd ..
@@ -66,12 +68,13 @@ jobs:
           cd generator-jhipster-foo
           cp ${{ github.workspace }}/generator-jhipster/.blueprint/generate-sample/templates/test-integration/generate-blueprint-samples/default/.yo-rc.json .
           jhipster.cjs generate-blueprint --force --link-jhipster-dependency --generate-snapshots
-          npm link generator-jhipster
           npm link
+          cat package.json
       - name: 'GENERATION: project'
         run: jhipster-foo --defaults --client-test-frameworks cypress --skip-jhipster-dependencies
         env:
           JHI_CLI: jhipster.cjs
+          JHIPSTER_DEPENDENCIES_VERSION: ${{ steps.jhipster-output.outputs.jhipster-dependencies-version }}
       - name: 'GENERATION: jhipster info'
         run: jhipster info
       #----------------------------------------------------------------------

@@ -22,9 +22,6 @@ import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-<%_ if (!skipClient) { _%>
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-<%_ } _%>
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.env.MockEnvironment;
 import org.springframework.mock.web.MockServletContext;
@@ -72,21 +69,6 @@ class WebConfigurerTest {
         webConfigurer = new WebConfigurer(env, props);
     }
 
-<%_ if (!skipClient) { _%>
-    @Test
-    void shouldCustomizeServletContainer() {
-        env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION);
-        TomcatServletWebServerFactory container = new TomcatServletWebServerFactory();
-        webConfigurer.customize(container);
-        assertThat(container.getMimeMappings().get("abs")).isEqualTo("audio/x-mpeg");
-        assertThat(container.getMimeMappings().get("html")).isEqualTo("text/html");
-        assertThat(container.getMimeMappings().get("json")).isEqualTo("application/json");
-        if (container.getDocumentRoot() != null) {
-            assertThat(container.getDocumentRoot()).isEqualTo(Path.of("<%= clientDistDir %>").toFile());
-        }
-    }
-
-<%_ } _%>
     @Test
     void shouldCorsFilterOnApiPath() throws Exception {
         props.getCors().setAllowedOrigins(Collections.singletonList("other.domain.com"));

@@ -13,6 +13,7 @@ Options:
   --whitespace                    Whitespace changes will not trigger conflicts (default: false)
   --bail                          Fail on first conflict (default: false)
   --install-path                  Show jhipster install path (default: false)
+  --export-github-output          Export output for GitHub Actions (default: false)
   --skip-regenerate               Don't regenerate identical files (default: false)
   --skip-yo-resolve               Ignore .yo-resolve files (default: false)
   --skip-cache                    Do not remember prompt answers (default: false)

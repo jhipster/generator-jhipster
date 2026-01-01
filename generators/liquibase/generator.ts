@@ -339,6 +339,19 @@ export default class LiquibaseGenerator<
           });
         }
       },
+      addDependencies({ application, source }) {
+        if (application.springBoot4 && (application as SpringDataRelationalApplication).backendTypeSpringBoot) {
+          source.addJavaDependencies?.([
+            {
+              groupId: 'org.springframework.boot',
+              artifactId: 'spring-boot-starter-liquibase',
+              exclusions: (application as SpringDataRelationalApplication).databaseTypeNeo4j
+                ? [{ groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-jdbc' }]
+                : undefined,
+            },
+          ]);
+        }
+      },
       customizeMaven({ source, application }) {
         if (!application.buildToolMaven || !this.injectBuildTool) return;
         if (!application.javaDependencies) {
@@ -360,7 +373,12 @@ export default class LiquibaseGenerator<
           }
         };
 
-        const { 'jakarta-validation': validationVersion, h2: h2Version, liquibase: liquibaseVersion } = javaDependencies;
+        const {
+          'jakarta-persistence': persistenceVersion,
+          'jakarta-validation': validationVersion,
+          h2: h2Version,
+          liquibase: liquibaseVersion,
+        } = javaDependencies;
 
         const relationalApplication = application as SpringDataRelationalApplication;
         const databaseTypeProfile = relationalApplication.devDatabaseTypeH2Any ? 'prod' : undefined;
@@ -395,6 +413,12 @@ export default class LiquibaseGenerator<
           mavenProperties.push({ property: 'jakarta-validation.version', value: validationVersion });
         } else {
           checkProperty('jakarta-validation.version');
+        }
+
+        if (shouldAddProperty('jakarta-persistence.version', persistenceVersion)) {
+          mavenProperties.push({ property: 'jakarta-persistence.version', value: persistenceVersion });
+        } else {
+          checkProperty('jakarta-persistence.version');
         }
 
         if (shouldAddProperty('liquibase.version', liquibaseVersion)) {
@@ -531,7 +555,7 @@ export default class LiquibaseGenerator<
         // Hints may be dropped if newer version is supported
         // https://github.com/oracle/graalvm-reachability-metadata/blob/master/metadata/org.liquibase/liquibase-core/index.json
         (source as SpringBootSource).addNativeHint!({
-          resources: ['config/liquibase/*'],
+          resources: ['config/liquibase/**'],
           declaredConstructors: [
             'liquibase.database.LiquibaseTableNamesFactory.class',
             'liquibase.report.ShowSummaryGeneratorFactory.class',

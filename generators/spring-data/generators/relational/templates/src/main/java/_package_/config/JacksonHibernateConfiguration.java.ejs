@@ -21,8 +21,8 @@ package <%= packageName %>.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.fasterxml.jackson.datatype.hibernate6.Hibernate6Module;
-import com.fasterxml.jackson.datatype.hibernate6.Hibernate6Module.Feature;
+import <%= springBoot4 ? 'tools' : 'com.fasterxml' %>.jackson.datatype.hibernate<%= springBoot4 ? '7' : '6' %>.Hibernate<%= springBoot4 ? '7' : '6' %>Module;
+import <%= springBoot4 ? 'tools' : 'com.fasterxml' %>.jackson.datatype.hibernate<%= springBoot4 ? '7' : '6' %>.Hibernate<%= springBoot4 ? '7' : '6' %>Module.Feature;
 
 @Configuration
 public class JacksonHibernateConfiguration {
@@ -31,7 +31,7 @@ public class JacksonHibernateConfiguration {
      * Support for Hibernate types in Jackson.
      */
     @Bean
-    public Hibernate6Module hibernate6Module() {
-        return new Hibernate6Module().configure(Feature.SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS, true);
+    public Hibernate<%= springBoot4 ? '7' : '6' %>Module hibernate<%= springBoot4 ? '7' : '6' %>Module() {
+        return new Hibernate<%= springBoot4 ? '7' : '6' %>Module().configure(Feature.SERIALIZE_IDENTIFIER_FOR_LAZY_NOT_LOADED_OBJECTS, true);
     }
 }

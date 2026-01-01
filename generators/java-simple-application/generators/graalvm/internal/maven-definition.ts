@@ -8,6 +8,7 @@ export const mavenDefinition = ({
   databaseTypeSql,
   userLanguage,
   languages,
+  hibernate7 = false,
 }: {
   graalvmReachabilityMetadata: string;
   reactive?: boolean;
@@ -15,6 +16,7 @@ export const mavenDefinition = ({
   databaseTypeSql?: boolean;
   userLanguage: string;
   languages: string[];
+  hibernate7?: boolean;
 }): MavenDefinition => ({
   properties: [
     { property: 'repackage.classifier' },
@@ -50,8 +52,8 @@ export const mavenDefinition = ({
       ? []
       : [
           {
-            groupId: 'org.hibernate.orm.tooling',
-            artifactId: 'hibernate-enhance-maven-plugin',
+            groupId: hibernate7 ? 'org.hibernate.orm' : 'org.hibernate.orm.tooling',
+            artifactId: hibernate7 ? 'hibernate-maven-plugin' : 'hibernate-enhance-maven-plugin',
             version: '${hibernate.version}',
             additionalContent: `
                 <configuration>
@@ -74,8 +76,8 @@ export const mavenDefinition = ({
               databaseTypeSql && !reactive
                 ? `
                 <plugin>
-                    <groupId>org.hibernate.orm.tooling</groupId>
-                    <artifactId>hibernate-enhance-maven-plugin</artifactId>
+                    <groupId>org.hibernate.orm${hibernate7 ? '' : '.tooling'}</groupId>
+                    <artifactId>hibernate-${hibernate7 ? '' : 'enhance-'}maven-plugin</artifactId>
                     <executions>
                         <execution>
                             <goals>

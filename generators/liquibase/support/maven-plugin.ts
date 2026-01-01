@@ -54,9 +54,19 @@ export default function mavenPluginContent({
         <version>\${liquibase.version}</version>
       </dependency>
       <dependency>
+        <groupId>jakarta.persistence</groupId>
+        <artifactId>jakarta.persistence-api</artifactId>
+        <version>\${jakarta-persistence.version}</version>
+      </dependency>
+      <dependency>
         <groupId>jakarta.validation</groupId>
         <artifactId>jakarta.validation-api</artifactId>
         <version>\${jakarta-validation.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.logging</groupId>
+        <artifactId>jboss-logging</artifactId>
+        <version>\${jboss-logging.version}</version>
       </dependency>${backendTypeSpringBoot ? `
       <dependency>
         <groupId>org.springframework.boot</groupId>

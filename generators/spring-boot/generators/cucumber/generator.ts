@@ -130,6 +130,7 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
         ]);
       },
       upgradeJunitJupiter({ application, source }) {
+        if (application.springBoot4) return;
         // https://github.com/cucumber/cucumber-jvm/issues/3071#issuecomment-3281811324, SpringBoot depends on 5.12.2
         const springBootJunitJupiterVersion = application.javaManagedProperties?.['junit-jupiter.version'];
         const junitJupiterVersion = '5.13.3';

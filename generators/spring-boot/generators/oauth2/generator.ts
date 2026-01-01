@@ -107,7 +107,11 @@ export default class Oauth2Generator extends SpringBootApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      dependencies({ source }) {
+      dependencies({ application, source }) {
+        if (application.springBoot4) {
+          source.addSpringBootModule?.('spring-boot-starter-restclient');
+        }
+
         source.addSpringBootModule?.('spring-boot-starter-oauth2-client', 'spring-boot-starter-oauth2-resource-server');
         source.addJavaDefinition!({
           dependencies: [{ groupId: 'com.github.ben-manes.caffeine', artifactId: 'caffeine' }],

@@ -18,6 +18,7 @@
 -%>
 package <%= packageName %>.web.rest;
 
+import static org.hamcrest.Matchers.hasItem;
 <%_ if (authenticationTypeJwt) { _%>
 import static <%= packageName %>.security.jwt.JwtAuthenticationTestUtils.createValidTokenForUser;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,9 +36,9 @@ import <%= packageName %>.security.AuthoritiesConstants;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ if (reactive) { _%>
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 <%_ } else { _%>
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 <%_ } _%>
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -107,7 +108,7 @@ class AccountResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.login").value(TEST_USER_LOGIN))
-            .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
+            .andExpect(jsonPath("$.authorities", hasItem(AuthoritiesConstants.ADMIN)));
 <%_ } _%>
     }
 

@@ -13,6 +13,7 @@ exports[`generator - spring-boot:oauth2 with defaults options should call source
     },
   ],
   "addSpringBootModule": [
+    "spring-boot-starter-restclient",
     [
       "spring-boot-starter-oauth2-client",
       "spring-boot-starter-oauth2-resource-server",

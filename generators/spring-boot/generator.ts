@@ -16,8 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { passthrough } from '@yeoman/transform';
 import chalk from 'chalk';
 import { lowerFirst, sortedUniqBy } from 'lodash-es';
+import { isFileStateModified } from 'mem-fs-editor/state';
 
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import type { FieldType } from '../../lib/jhipster/field-types.ts';
@@ -51,7 +53,8 @@ import cleanupTask from './cleanup.ts';
 import { writeFiles as writeEntityFiles } from './entity-files.ts';
 import { serverFiles } from './files.ts';
 import { askForOptionalItems, askForServerSideOpts, askForServerTestOpts } from './prompts.ts';
-import springBootDependencies from './resources/spring-boot-dependencies.ts';
+import springBootDependencies4 from './resources/spring-boot-dependencies-4.ts';
+import springBootDependencies3 from './resources/spring-boot-dependencies.ts';
 import type {
   Application as SpringBootApplication,
   Config as SpringBootConfig,
@@ -263,6 +266,87 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      springBoot4({ application }) {
+        if (!application.springBoot4) {
+          // Latest version that supports Spring Boot 3
+          application.jhipsterDependenciesVersion = '9.0.0-beta.0';
+        }
+      },
+      springBoot3({ application }) {
+        if (!application.springBoot4) {
+          // Downgrade some dependencies for Spring Boot 3
+          Object.assign(application.javaDependencies, {
+            'spring-cloud-dependencies': '2025.0.0',
+            springdoc: '2.8.15',
+            'neo4j-migrations-spring-boot-starter': '2.20.1',
+          });
+
+          const prefixReplacements = {
+            'webmvc.test': 'test.',
+            'webflux.test': 'test.',
+            webtestclient: 'test.',
+          } as Record<string, string>;
+
+          const suffixReplacements = {
+            jackson2: 'jackson.',
+            h2console: 'h2.',
+            hibernate: 'orm.jpa.',
+            mongodb: 'mongo.',
+            restclient: 'web.client.',
+            webflux: 'web.reactive.',
+            'webflux.test': 'web.reactive.',
+            'webmvc.test': 'web.servlet.',
+            webtestclient: 'web.reactive.',
+            'health.contributor.': 'actuate.health.',
+            'web.server': 'web.',
+            'restclient.': 'web.client.',
+            'web.server.servlet.': 'web.servlet.server.',
+          } as Record<string, string>;
+
+          this.queueTransformStream(
+            {
+              name: 'reverting files to Spring Boot 3 package names',
+              filter: file =>
+                isFileStateModified(file) &&
+                file.path.endsWith('.java') &&
+                (file.path.startsWith(this.destinationPath(application.srcMainJava)) ||
+                  file.path.startsWith(this.destinationPath(application.srcTestJava))),
+              refresh: false,
+            },
+            passthrough(file => {
+              file.contents = Buffer.from(
+                (file.contents as Buffer)
+                  .toString('utf8')
+                  .replace(
+                    /import org\.springframework\.boot\.(.+)\.autoconfigure\./g,
+                    (_match, p1) =>
+                      `import org.springframework.boot.${prefixReplacements[p1] ?? ''}autoconfigure.${suffixReplacements[p1] ?? `${p1}.`}`,
+                  )
+                  .replace(
+                    /import org\.springframework\.boot\.(restclient\.|health\.contributor\.|web\.server\.servlet\.)/g,
+                    (_match, p1) => `import org.springframework.boot.${suffixReplacements[p1] ?? p1}`,
+                  )
+                  .replaceAll('import org.jspecify.annotations.Nullable;', 'import org.springframework.lang.Nullable;')
+                  .replaceAll(
+                    'import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;',
+                    'import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;',
+                  ),
+              );
+            }),
+          );
+
+          this.queueTransformStream(
+            {
+              name: 'reverting testcontainers dependencies to v1',
+              filter: file => isFileStateModified(file) && (file.path.endsWith('pom.xml') || file.path.endsWith('.gradle')),
+              refresh: false,
+            },
+            passthrough(file => {
+              file.contents = Buffer.from((file.contents as Buffer).toString('utf8').replaceAll('testcontainers-', ''));
+            }),
+          );
+        }
+      },
       updateLanguages({ application }) {
         if (!application.enableTranslation || !application.generateUserManagement) return;
 
@@ -297,6 +381,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
             'spring-boot-dependencies': "'SPRING-BOOT-VERSION'",
           };
         } else {
+          const springBootDependencies = application.springBoot4 ? springBootDependencies4 : springBootDependencies3;
           application.springBootDependencies = this.prepareDependencies(springBootDependencies.versions, 'java');
           application.javaDependencies!['spring-boot'] = application.springBootDependencies['spring-boot-dependencies'];
           Object.assign(application.javaManagedProperties!, springBootDependencies.properties);
@@ -668,12 +753,27 @@ ${classProperties
   get postWriting() {
     return this.asPostWritingTaskGroup({
       baseDependencies({ application, source }) {
+        if (application.springBoot4) {
+          source.addSpringBootModule!(
+            'spring-boot-jackson2',
+            'spring-boot-starter-aspectj',
+            'spring-boot-starter-jackson',
+            'spring-boot-starter-jackson-test',
+            'spring-boot-starter-security',
+            'spring-boot-starter-security-test',
+            `spring-boot-starter-web${application.reactive ? 'flux' : 'mvc'}-test`,
+          );
+        } else {
+          source.addSpringBootModule!('spring-boot-loader-tools', 'spring-boot-starter-aop');
+          if (!application.authenticationTypeOauth2) {
+            source.addSpringBootModule!('spring-boot-starter-security');
+          }
+        }
+
         source.addSpringBootModule!(
           'spring-boot-configuration-processor',
-          'spring-boot-loader-tools',
           'spring-boot-starter',
           'spring-boot-starter-actuator',
-          'spring-boot-starter-aop',
           'spring-boot-starter-mail',
           'spring-boot-starter-test',
           'spring-boot-starter-thymeleaf',
@@ -681,10 +781,6 @@ ${classProperties
           'spring-boot-starter-validation',
           `spring-boot-starter-web${application.reactive ? 'flux' : ''}`,
           'spring-boot-test',
-          {
-            condition: application.authenticationTypeSession,
-            module: 'spring-boot-starter-security',
-          },
         );
       },
       addJHipsterBomDependencies({ application, source }) {
@@ -990,7 +1086,7 @@ if (os.isMacOsX() && !arch.isAmd64()) {
     return this.asEndTaskGroup({
       end({ application, control }) {
         const { buildToolExecutable } = application;
-        this.log.ok('Spring Boot application generated successfully.');
+        this.log.ok(`Spring Boot ${application.springBootDependencies['spring-boot-dependencies']} application generated successfully.`);
 
         if (application.dockerServices?.length && !control.environmentHasDockerCompose) {
           const dockerComposeCommand = chalk.yellow.bold('docker compose');

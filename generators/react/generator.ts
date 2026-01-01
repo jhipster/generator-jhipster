@@ -361,7 +361,7 @@ ${comment}
   get end() {
     return this.asEndTaskGroup({
       end({ application }) {
-        this.log.ok('React application generated successfully.');
+        this.log.ok(`React ${application.nodeDependencies.react} application generated successfully.`);
         this.log.log(
           chalk.green(`  Start your Webpack development server with:
   ${chalk.yellow.bold(`${application.nodePackageManager} start`)}

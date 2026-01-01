@@ -37,10 +37,10 @@ import org.slf4j.LoggerFactory;
 <%_ if (!reactive) { _%>
 import org.springframework.boot.web.server.*;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
-import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
+import org.springframework.boot.web.server.servlet.ConfigurableServletWebServerFactory;
 <%_ } _%>
 <%_ if (reactive && !skipClient) { _%>
-import org.springframework.boot.autoconfigure.web.reactive.ResourceHandlerRegistrationCustomizer;
+import org.springframework.boot.webflux.autoconfigure.ResourceHandlerRegistrationCustomizer;
 <%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

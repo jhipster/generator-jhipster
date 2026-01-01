@@ -446,7 +446,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   get end() {
     return this.asEndTaskGroup({
       end({ application }) {
-        this.log.ok('Vue application generated successfully.');
+        this.log.ok(`Vue ${application.nodeDependencies.vue} application generated successfully.`);
         this.log.log(
           chalk.green(`  Start your Webpack development server with:
   ${chalk.yellow.bold(`${application.nodePackageManager} start`)}

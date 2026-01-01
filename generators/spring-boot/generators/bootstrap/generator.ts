@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { mutateData } from '../../../../lib/utils/object.ts';
 import { getDatabaseTypeData } from '../../../server/support/database.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';
 
@@ -32,8 +31,16 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      prepareSpringData({ application }) {
-        mutateData(application, {
+      defaults({ applicationDefaults }) {
+        applicationDefaults({
+          springBoot4: data =>
+            Boolean(
+              data.databaseTypeSql &&
+              !data.reactive &&
+              !data.cacheProviderInfinispan &&
+              !data.cacheProviderHazelcast &&
+              !data.searchEngineElasticsearch,
+            ),
           springDataDescription: ({ databaseType, reactive }) => {
             let springDataDatabase: string;
             if (databaseType !== 'sql') {
@@ -52,7 +59,7 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
         if (application.databaseTypeSql && !application.reactive) {
           applicationDefaults({
             hibernateNamingPhysicalStrategy: 'org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy',
-            hibernateNamingImplicitStrategy: 'org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy',
+            hibernateNamingImplicitStrategy: `org.springframework.boot${application.springBoot4 ? '' : '.orm.jpa'}.hibernate.SpringImplicitNamingStrategy`,
           });
         }
       },

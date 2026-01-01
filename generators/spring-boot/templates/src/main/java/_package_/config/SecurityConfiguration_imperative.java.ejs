@@ -100,7 +100,7 @@ import org.springframework.security.oauth2.server.resource.web.access.BearerToke
 <%_ } _%>
 <%_ if (authenticationTypeOauth2 && !applicationTypeMicroservice) { _%>
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.restclient.RestTemplateBuilder;
 import <%= packageName %>.security.oauth2.CustomClaimConverter;
 <%_ } _%>
 <%_ if(!skipClient) { _%>
