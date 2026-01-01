@@ -277,7 +277,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
           // Downgrade some dependencies for Spring Boot 3
           Object.assign(application.javaDependencies, {
             'spring-cloud-dependencies': '2025.0.0',
-            springdoc: '2.8.14',
+            springdoc: '2.8.15',
             'neo4j-migrations-spring-boot-starter': '2.20.1',
           });
 
