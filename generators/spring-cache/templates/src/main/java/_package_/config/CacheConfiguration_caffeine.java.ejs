@@ -1,0 +1,89 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.config;
+
+import com.github.benmanes.caffeine.jcache.configuration.CaffeineConfiguration;
+import java.util.OptionalLong;
+import java.util.concurrent.TimeUnit;
+
+<%_ if (enableHibernateCache) { _%>
+import org.hibernate.cache.jcache.ConfigSettings;
+<%_ } _%>
+import tech.jhipster.config.JHipsterProperties;
+
+import org.springframework.boot.cache.autoconfigure.JCacheManagerCustomizer;
+<%_ if (enableHibernateCache) { _%>
+import org.springframework.boot.hibernate.autoconfigure.HibernatePropertiesCustomizer;
+<%_ } _%>
+import org.springframework.cache.annotation.EnableCaching;
+
+@Configuration
+@EnableCaching
+public class CacheConfiguration {
+    private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
+
+    public CacheConfiguration(JHipsterProperties jHipsterProperties) {
+        JHipsterProperties.Cache.Caffeine caffeine = jHipsterProperties.getCache().getCaffeine();
+
+        CaffeineConfiguration<Object, Object> caffeineConfiguration = new CaffeineConfiguration<>();
+        caffeineConfiguration.setMaximumSize(OptionalLong.of(caffeine.getMaxEntries()));
+        caffeineConfiguration.setExpireAfterWrite(OptionalLong.of(TimeUnit.SECONDS.toNanos(caffeine.getTimeToLiveSeconds())));
+        caffeineConfiguration.setStatisticsEnabled(true);
+        jcacheConfiguration = caffeineConfiguration;
+    }
+
+<%_ if (enableHibernateCache) { _%>
+    @Bean
+    public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(javax.cache.CacheManager cacheManager) {
+        return hibernateProperties -> hibernateProperties.put(ConfigSettings.CACHE_MANAGER, cacheManager);
+    }
+<%_ } _%>
+
+    @Bean
+    public JCacheManagerCustomizer cacheManagerCustomizer() {
+        return cm -> {
+<%_ if (authenticationTypeOauth2 && applicationTypeMicroservice) { _%>
+            createCache(cm, "oAuth2Authentication");
+<%_ } _%>
+<%_ if (generateBuiltInUserEntity) { _%>
+            createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_LOGIN_CACHE);
+            createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_EMAIL_CACHE);
+  <%_ if (enableHibernateCache) { _%>
+            createCache(cm, <%= user.entityAbsoluteClass %>.class.getName());
+            createCache(cm, <%= packageName %>.domain.Authority.class.getName());
+            createCache(cm, <%= user.entityAbsoluteClass %>.class.getName() + ".authorities");
+    <%_ if (authenticationTypeSession) { _%>
+            createCache(cm, <%= packageName %>.domain.PersistentToken.class.getName());
+            createCache(cm, <%= user.entityAbsoluteClass %>.class.getName() + ".persistentTokens");
+    <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
+            // jhipster-needle-caffeine-add-entry
+        };
+    }
+
+    private void createCache(javax.cache.CacheManager cm, String cacheName) {
+        javax.cache.Cache<Object, Object> cache = cm.getCache(cacheName);
+        if (cache != null) {
+            cache.clear();
+        } else {
+            cm.createCache(cacheName, jcacheConfiguration);
+        }
+    }
+}

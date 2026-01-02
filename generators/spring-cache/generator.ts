@@ -138,7 +138,7 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<
         });
       },
       async writeTask({ application }) {
-        const useModularedCacheConfiguration = application.cacheProviderInfinispan || application.cacheProviderEhcache;
+        const useModularedCacheConfiguration = application.cacheProviderInfinispan || application.cacheProviderEhcache || application.cacheProviderCaffeine;
         await this.writeFiles({
           sections: {
             cacheFiles: [
