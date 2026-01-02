@@ -27,7 +27,7 @@ This is a "<%= applicationType %>" application intended to be part of a microser
   <%_ } _%>
   <%_ if (serviceDiscoveryAny) { _%>
 
-This application is configured for Service Discovery and Configuration with <% if (serviceDiscoveryEureka) { %>the JHipster-Registry<% } %><% if (serviceDiscoveryConsul) { %>Consul<% } %>. On launch, it will refuse to start if it is not able to connect to <% if (serviceDiscoveryEureka) { %>the JHipster-Registry at [http://localhost:8761](http://localhost:8761)<% } %><% if (serviceDiscoveryConsul) { %>Consul at [http://localhost:8500](http://localhost:8500)<% } %>.<% if (serviceDiscoveryEureka) { %> For more information, read our documentation on [Service Discovery and Configuration with the JHipster-Registry][].<% } %><% if (serviceDiscoveryConsul) { %> For more information, read our documentation on [Service Discovery and Configuration with Consul][].<% } %>
+This application is configured for Service Discovery and Configuration with <% if (serviceDiscoveryEureka) { %>the JHipster-Registry<% } %><% if (serviceDiscoveryConsul) { %>Consul<% } %>. On launch, it will refuse to start if it is not able to connect to <% if (serviceDiscoveryEureka) { %>the JHipster-Registry at [http://localhost:8761](http://localhost:8761)<% } %><% if (serviceDiscoveryConsul) { %>Consul at [http://localhost:8500](http://localhost:8500)<% } %>.<% if (serviceDiscoveryEureka) { %> For more information, read our documentation on [JHipster Registry](<%= documentationArchiveUrl %>/jhipster-registry/).<% } %><% if (serviceDiscoveryConsul) { %> For more information, read our documentation on [Consul][<%= documentationArchiveUrl %>/consul/).<% } %>
   <%_ } _%>
 
 <&_ } -&>
@@ -58,7 +58,7 @@ JHipster installs Node and npm locally using the build tool by default. This wra
   <%_ if (skipClient) { _%>
 To start your application in the dev profile, run:
 
-```
+```bash
 <% if (buildToolMaven) { %>./mvnw<% } %><% if (buildToolGradle) { %>./gradlew<% } %>
 ```
 
@@ -72,7 +72,7 @@ Congratulations! You've selected an excellent way to secure your JHipster applic
 
 To log in to your app, you'll need to have [Keycloak](https://keycloak.org) up and running. The JHipster Team has created a Docker container for you that has the default users and roles. Start Keycloak using the following command.
 
-```
+```bash
 docker compose -f src/main/docker/keycloak.yml up
 ```
 
@@ -141,13 +141,14 @@ After making these changes, you should be good to go! If you have any issues, pl
 
 If you'd like to use [Auth0](https://auth0.com/) instead of Keycloak, follow the configuration steps below:
 
-- Create a free developer account at <https://auth0.com/signup>. After successful sign-up, your account will be associated with a unique domain like `dev-xxx.us.auth0.com`
+- Create a free developer account at [Sign Up - Auth0](https://auth0.com/signup). After successful sign-up, your account will be associated with a unique domain like `dev-xxx.us.auth0.com`
 - Create a new application of type `Regular Web Applications`. Switch to the `Settings` tab, and configure your application settings like:
     - Allowed Callback URLs: `http://localhost:8080/login/oauth2/code/oidc`
     - Allowed Logout URLs: `http://localhost:8080/`
 - Navigate to **User Management** > **Roles** and create new roles named `ROLE_ADMIN`, and `ROLE_USER`.
 - Navigate to **User Management** > **Users** and create a new user account. Click on the **Role** tab to assign roles to the newly created user account.
 - Navigate to **Auth Pipeline** > **Rules** and create a new Rule. Choose `Empty rule` template. Provide a meaningful name like `JHipster claims` and replace `Script` content with the following and Save.
+
 ```javascript
 function (user, context, callback) {
   user.preferred_username = user.email;
@@ -170,7 +171,9 @@ function (user, context, callback) {
   callback(null, user, context);
 }
 ```
+
 - In your `JHipster` application, modify `src/main/resources/config/application.yml` to use your Auth0 application settings:
+
 ```yaml
 spring:
   ...
@@ -201,7 +204,7 @@ jhipster:
 
 To launch your application's tests, run:
 
-```
+```bash
 <%_ if (buildToolMaven) { _%>
 ./mvnw verify
 <%_ } else { _%>
@@ -216,7 +219,7 @@ To launch your application's tests, run:
 
 To build the final jar and optimize the <%= baseName %> application for production, run:
 
-```
+```bash
 <%_ if (buildToolMaven) { _%>
 ./mvnw -Pprod clean verify
 <%_ } _%>
@@ -230,7 +233,7 @@ This will concatenate and minify the client CSS and JavaScript files. It will al
 <%_ } _%>
 To ensure everything worked, run:
 
-```
+```bash
 <%_ if (buildToolMaven) { _%>
 java -jar target/*.jar
 <%_ } _%>
@@ -247,7 +250,7 @@ Refer to [Using JHipster in production][] for more details.
 
 To package your application as a war in order to deploy it to an application server, run:
 
-```
+```bash
 <%_ if (buildToolMaven) { _%>
 ./mvnw -Pprod,war clean verify
 <%_ } _%>
@@ -260,7 +263,7 @@ To package your application as a war in order to deploy it to an application ser
 
 JHipster Control Center can help you manage and control your application(s). You can start a local control center server (accessible on http://localhost:7419) with:
 
-```
+```bash
 docker compose -f src/main/docker/jhipster-control-center.yml up
 ```
 
@@ -272,7 +275,7 @@ docker compose -f src/main/docker/jhipster-control-center.yml up
 
 Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
 
-```
+```bash
 docker compose -f src/main/docker/sonar.yml up -d
 ```
 
@@ -283,24 +286,24 @@ You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqu
 Then, run a Sonar analysis:
 
 <%_ if (buildToolMaven) { _%>
-```
+```bash
 ./mvnw -Pprod clean verify sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
 ```
 
 If you need to re-run the Sonar phase, please be sure to specify at least the `initialize` phase since Sonar properties are loaded from the sonar-project.properties file.
 
-```
+```bash
 ./mvnw initialize sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
 ```
 <%_ } else if (buildToolGradle) { _%>
-```
+```bash
 ./gradlew -Pprod clean check jacocoTestReport sonarqube -Dsonar.login=admin -Dsonar.password=admin
 ```
 <%_ } _%>
 
 Additionally, Instead of passing `sonar.password` and `sonar.login` as CLI arguments, these parameters can be configured from [sonar-project.properties](sonar-project.properties) as shown below:
 
-```
+```bash
 sonar.login=admin
 sonar.password=admin
 ```
@@ -313,17 +316,17 @@ JHipster generates a number of Docker Compose configuration files in the [<%- do
 
 For example, to start required services in Docker containers, run:
 
-```
+```bash
 docker compose -f <%- dockerServicesDir %>services.yml up -d
 ```
 
 To stop and remove the containers, run:
 
-```
+```bash
 docker compose -f <%- dockerServicesDir %>services.yml down
 ```
 
-[Spring Docker Compose Integration](https://docs.spring.io/spring-boot/reference/features/dev-services.html) is enabled by default. It's possible to disable it in application.yml:
+[Spring Docker Compose Integration](https://docs.spring.io/spring-boot/reference/features/dev-services.html) is enabled by default. It's possible to disable it in `application.yml`:
 
 ```yaml
 spring:
@@ -336,26 +339,26 @@ spring:
 You can also fully dockerize your application and all the services that it depends on.
 To achieve this, first build a Docker image of your app by running:
 
-```sh
+```bash
 npm run java:docker
 ```
 
-Or build an arm64 Docker image when using an arm64 processor os like MacOS with M1 processor family running:
+Or build an arm64 Docker image when using an arm64 processor OS, i.e., Apple Silicon chips (M*), running:
 
-```sh
+```bash
 npm run java:docker:arm64
 ```
 
 Then run:
 
-```sh
+```bash
 docker compose -f <%- dockerServicesDir %>app.yml up -d
 ```
 
-For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the Docker Compose sub-generator (`jhipster docker-compose`), which is able to generate Docker configurations for one or several JHipster applications.
+For more information refer to [Docker and Docker-Compose](<%= documentationArchiveUrl %>/docker-compose/), this page also contains information on the Docker Compose sub-generator (`jhipster docker-compose`), which is able to generate Docker configurations for one or several JHipster applications.
 
 ## Continuous Integration (optional)
 
-To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
+To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration](<%= documentationArchiveUrl %>/setting-up-ci/) page for more information.
 
 <&_ } -&>

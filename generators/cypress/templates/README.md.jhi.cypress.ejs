@@ -28,7 +28,7 @@ and can be run by starting Spring Boot in one terminal (`<%= nodePackageManagerC
 
 Before running Cypress tests, it's possible to specify user credentials by overriding the `CYPRESS_E2E_USERNAME` and `CYPRESS_E2E_PASSWORD` environment variables.
 
-```
+```bash
 export CYPRESS_E2E_USERNAME="<your-username>"
 export CYPRESS_E2E_PASSWORD="<your-password>"
 ```
@@ -38,8 +38,10 @@ See Cypress documentation for setting OS [environment variables](https://docs.cy
 #### Lighthouse audits
 
 You can execute automated [Lighthouse audits](https://developer.chrome.com/docs/lighthouse/overview) with [cypress-audit](https://github.com/mfrachet/cypress-audit) by running `<%= nodePackageManagerCommand %> run e2e:cypress:audits`.
+
 You should only run the audits when your application is packaged with the production profile.
-The lighthouse report is created in `<%= cypressTemporaryDir %>lhreport.html`.
+
+The Lighthouse report is created in `<%= cypressTemporaryDir %>lhreport.html`.
 <%_ if (cypressCoverage) { _%>
 
 ### E2E Webapp Code Coverage
@@ -49,21 +51,27 @@ When using Cypress, you can generate code coverage report by running your dev se
 <%_ if (cypressCoverageWebpack) { _%>
 Build your Angular application with instrumented code:
 
-    <%= nodePackageManagerCommand %> run webapp:instrumenter
+```bash
+<%= nodePackageManagerCommand %> run webapp:instrumenter
+```
 
 <%_ } _%>
 Start your backend without compiling frontend:
 
-    <%= nodePackageManagerCommand %> run backend:start
+```bash
+<%= nodePackageManagerCommand %> run backend:start
+```
 
 Start your Cypress end to end testing:
 
-    <%= nodePackageManagerCommand %> run e2e --configuration coverage
+```bash
+<%= nodePackageManagerCommand %> run e2e --configuration coverage
+```
 
 The coverage report is generated under `<%- temporaryDir %>/cypress-coverage` folder.
 
 <%_ } _%>
 <&_ } -&>
 <&_ if (fragment.referenceSection) { -&>
-[Cypress]: https://www.cypress.io/
+- [Cypress](https://www.cypress.io/)
 <&_ } -&>
