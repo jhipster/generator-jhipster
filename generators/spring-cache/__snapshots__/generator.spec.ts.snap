@@ -8,6 +8,9 @@ exports[`generator - spring-cache caffeine-gradle should match files snapshot 1`
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/config/CacheKeyGeneratorConfiguration.java": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -88,6 +91,9 @@ exports[`generator - spring-cache caffeine-maven should match files snapshot 1`]
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/config/CacheKeyGeneratorConfiguration.java": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -156,6 +162,9 @@ exports[`generator - spring-cache ehcache-gradle should match files snapshot 1`]
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/config/CacheKeyGeneratorConfiguration.java": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -216,6 +225,9 @@ exports[`generator - spring-cache ehcache-maven should match files snapshot 1`] 
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/config/CacheKeyGeneratorConfiguration.java": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -274,6 +286,9 @@ exports[`generator - spring-cache hazelcast-gradle should match files snapshot 1
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CacheKeyGeneratorConfiguration.java": {
     "stateCleared": "modified",
   },
 }
@@ -355,6 +370,9 @@ exports[`generator - spring-cache hazelcast-maven should match files snapshot 1`
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CacheKeyGeneratorConfiguration.java": {
     "stateCleared": "modified",
   },
 }
@@ -566,6 +584,9 @@ exports[`generator - spring-cache memcached-gradle should match files snapshot 1
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/config/CacheKeyGeneratorConfiguration.java": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -636,6 +657,9 @@ exports[`generator - spring-cache memcached-maven should match files snapshot 1`
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/config/CacheKeyGeneratorConfiguration.java": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -704,6 +728,9 @@ exports[`generator - spring-cache redis-gradle should match files snapshot 1`] =
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CacheKeyGeneratorConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/EmbeddedRedis.java": {
@@ -785,6 +812,9 @@ exports[`generator - spring-cache redis-maven should match files snapshot 1`] = 
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CacheKeyGeneratorConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/EmbeddedRedis.java": {
