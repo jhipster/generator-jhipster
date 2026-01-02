@@ -19,12 +19,6 @@ exports[`generator - spring-cloud:kafka jdl support should match files snapshot 
 
 exports[`generator - spring-cloud:kafka with defaults options should call source snapshot 1`] = `
 {
-  "addIntegrationTestAnnotation": [
-    {
-      "annotation": "EmbeddedKafka",
-      "package": "com.mycompany.myapp.config",
-    },
-  ],
   "addMainLog": [
     {
       "level": "INFO",
