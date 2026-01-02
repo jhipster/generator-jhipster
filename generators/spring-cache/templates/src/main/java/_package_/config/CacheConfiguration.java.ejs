@@ -18,39 +18,9 @@
 -%>
 package <%= packageName %>.config;
 
-<%_ if (cacheProviderMemcached) { _%>
-  <%_ if (generateBuiltInUserEntity) { _%>
-import <%= packageName %>.repository.UserRepository;
-  <%_ } _%>
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.cache.CacheManager;
-<%_ } _%>
 import org.springframework.cache.annotation.EnableCaching;
-<%_ if (cacheProviderMemcached) { _%>
-import org.springframework.cache.support.NoOpCacheManager;
-<%_ } _%>
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
-<%_ if (cacheProviderMemcached) { _%>
-import java.util.HashMap;
-import java.util.Map;
-import java.net.InetSocketAddress;
-import net.rubyeye.xmemcached.auth.AuthInfo;
-import net.rubyeye.xmemcached.utils.AddrUtil;
-import com.google.code.ssm.providers.xmemcached.XMemcachedConfiguration;
-import com.google.code.ssm.CacheFactory;
-import com.google.code.ssm.config.DefaultAddressProvider;
-import com.google.code.ssm.providers.xmemcached.MemcacheClientFactoryImpl;
-import com.google.code.ssm.spring.SSMCache;
-import com.google.code.ssm.spring.SSMCacheManager;
-
-import tech.jhipster.config.JHipsterProperties;
-<%_ } _%>
-<%_ if (cacheProviderRedis) { _%>
 import java.net.URI;
 import org.redisson.Redisson;
 import org.redisson.config.Config;
@@ -72,92 +42,10 @@ import javax.cache.expiry.CreatedExpiryPolicy;
 import javax.cache.expiry.Duration;
 
 import tech.jhipster.config.JHipsterProperties;
-<%_ } _%>
 
 @Configuration
 @EnableCaching
 public class CacheConfiguration {
-<%_ if (cacheProviderMemcached) { _%>
-
-    private static final Logger LOG = LoggerFactory.getLogger(CacheConfiguration.class);
-
-    @Bean
-    public CacheManager memcachedCacheManager(JHipsterProperties jHipsterProperties, List<CacheFactory> caches)
-        throws Exception {
-
-        if (!jHipsterProperties.getCache().getMemcached().isEnabled()) {
-            // Note that Memcached cannot work with Spring Boot devtools
-            // So it should be disabled in development mode
-            LOG.debug("Memcached is disabled");
-            return new NoOpCacheManager();
-        }
-        LOG.debug("Starting Memcached configuration");
-        SSMCacheManager cacheManager = new SSMCacheManager();
-        List<SSMCache> ssmCaches = new ArrayList<>();
-        for (CacheFactory cache : caches) {
-            SSMCache ssmCache =
-                new SSMCache(cache.getObject(), jHipsterProperties.getCache().getMemcached().getExpiration(),
-                    false);
-
-            ssmCaches.add(ssmCache);
-        }
-        cacheManager.setCaches(ssmCaches);
-        return cacheManager;
-    }
-
-    @Bean
-    CacheFactory defaultCacheFactory(JHipsterProperties jHipsterProperties) {
-        return createCache("default", jHipsterProperties);
-    }
-  <%_ if (generateBuiltInUserEntity) { _%>
-
-    @Bean
-    public CacheFactory usersByLoginCache(JHipsterProperties jHipsterProperties) {
-        return this.createCache(UserRepository.USERS_BY_LOGIN_CACHE, jHipsterProperties);
-    }
-
-    @Bean
-    public CacheFactory usersByEmailCache(JHipsterProperties jHipsterProperties) {
-        return this.createCache(UserRepository.USERS_BY_EMAIL_CACHE, jHipsterProperties);
-    }
-  <%_ } _%>
-
-    private CacheFactory createCache(String cacheName, JHipsterProperties jHipsterProperties) {
-        if (!jHipsterProperties.getCache().getMemcached().isEnabled()) {
-            // Note that Memcached cannot work with Spring Boot devtools
-            // So it should be disabled in development mode
-            return null;
-        }
-        CacheFactory defaultCache = new CacheFactory();
-        defaultCache.setCacheName(cacheName);
-        defaultCache.setCacheClientFactory(new MemcacheClientFactoryImpl());
-
-        DefaultAddressProvider addressProvider = new DefaultAddressProvider();
-        addressProvider.setAddress(jHipsterProperties.getCache().getMemcached().getServers());
-        defaultCache.setAddressProvider(addressProvider);
-
-        Map<InetSocketAddress, AuthInfo> authInfoMap = new HashMap<>();
-
-        if (jHipsterProperties.getCache().getMemcached().getAuthentication().isEnabled()) {
-            InetSocketAddress memcachedServers = AddrUtil.getOneAddress(jHipsterProperties.getCache().getMemcached().getServers());
-            AuthInfo authInfo =
-                AuthInfo.plain(
-                    jHipsterProperties.getCache().getMemcached().getAuthentication().getUsername(),
-                    jHipsterProperties.getCache().getMemcached().getAuthentication().getPassword());
-
-            authInfoMap.put(memcachedServers, authInfo);
-        }
-        XMemcachedConfiguration cacheConfiguration = new XMemcachedConfiguration();
-        if (!authInfoMap.isEmpty()) {
-            cacheConfiguration.setAuthInfoMap(authInfoMap);
-        }
-        cacheConfiguration.setConsistentHashing(true);
-        cacheConfiguration.setUseBinaryProtocol(jHipsterProperties.getCache().getMemcached().isUseBinaryProtocol());
-        defaultCache.setConfiguration(cacheConfiguration);
-
-        return defaultCache;
-    }
-<%_ } _%>
 
 <%_ if (cacheProviderRedis) { _%>
     @Bean
