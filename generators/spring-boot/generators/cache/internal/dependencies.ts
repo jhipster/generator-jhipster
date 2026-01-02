@@ -138,11 +138,11 @@ export const getCacheProviderJavaDefinition: (
           javaxCacheApi,
           {
             groupId: 'org.infinispan',
-            artifactId: 'infinispan-hibernate-cache-v62',
+            artifactId: 'infinispan-hibernate-cache-v66',
           },
           {
             groupId: 'org.infinispan',
-            artifactId: 'infinispan-spring-boot3-starter-embedded',
+            artifactId: 'infinispan-spring-boot4-starter-embedded',
           },
           {
             groupId: 'org.infinispan',

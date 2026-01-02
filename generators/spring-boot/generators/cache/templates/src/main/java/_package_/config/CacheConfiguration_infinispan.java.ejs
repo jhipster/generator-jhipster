@@ -18,23 +18,28 @@
 -%>
 package <%= packageName %>.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import tech.jhipster.config.cache.PrefixedKeyGenerator;
-import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.context.annotation.*;import org.infinispan.configuration.cache.CacheMode;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
+
+import org.infinispan.configuration.cache.CacheMode;
 import org.infinispan.configuration.cache.ConfigurationBuilder;
 import org.infinispan.configuration.global.GlobalConfigurationBuilder;
 import org.infinispan.jboss.marshalling.core.JBossUserMarshaller;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import tech.jhipster.config.JHipsterProperties;
-import java.util.concurrent.TimeUnit;
-import org.hibernate.cfg.AvailableSettings;
 import org.infinispan.spring.starter.embedded.InfinispanCacheConfigurer;
 import org.infinispan.spring.starter.embedded.InfinispanGlobalConfigurer;
 import org.infinispan.transaction.TransactionMode;
-import org.springframework.boot.hibernate.autoconfigure.HibernatePropertiesCustomizer;
-import java.util.stream.Stream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import tech.jhipster.config.JHipsterProperties;
+import tech.jhipster.config.cache.PrefixedKeyGenerator;
+
 <%_ if (serviceDiscoveryAny) { _%>
 import org.infinispan.remoting.transport.jgroups.JGroupsTransport;
 import org.jgroups.JChannel;
@@ -105,7 +110,7 @@ public class CacheConfiguration {
             if (this.registration == null) { // if registry is not defined, use native discovery
                 LOG.warn("No discovery service is set up, Infinispan will use default discovery for cluster formation");
                 return () -> GlobalConfigurationBuilder
-                    .defaultClusteredBuilder().transport().defaultTransport()
+                    .defaultClusteredBuilder().transport().defaultTransport().stack("tcp")
                     .addProperty("configurationFile", jHipsterProperties.getCache().getInfinispan().getConfigFile())
                     .clusterName("infinispan-<%= baseName %>-cluster")
                     .jmx().enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
@@ -182,6 +187,10 @@ public class CacheConfiguration {
 
         return manager -> {
             // initialize application cache
+            manager.defineConfiguration("default", new ConfigurationBuilder()
+                .clustering()
+                .cacheMode(CacheMode.LOCAL)
+                .build());
             manager.defineConfiguration("local-app-data", new ConfigurationBuilder()
                 .clustering().cacheMode(CacheMode.LOCAL)
                 .statistics().enabled(cacheInfo.isStatsEnabled())
