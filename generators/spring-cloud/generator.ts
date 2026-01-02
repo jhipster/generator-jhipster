@@ -69,4 +69,56 @@ export default class SpringCloudGenerator extends SpringCloudApplicationGenerato
   get [BaseApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
+
+  get postWriting() {
+    return this.asPostWritingTaskGroup({
+      addJHipsterBomDependencies({ application, source }) {
+        source.addJavaDefinitions?.(
+          {
+            dependencies: [
+              {
+                groupId: 'org.springframework.cloud',
+                artifactId: 'spring-cloud-dependencies',
+                type: 'pom',
+                scope: 'import',
+                version: application.javaDependencies!['spring-cloud-dependencies'],
+              },
+            ],
+          },
+          {
+            condition: application.applicationTypeMicroservice || application.applicationTypeGateway,
+            dependencies: [
+              { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter' },
+              {
+                groupId: 'org.springframework.cloud',
+                artifactId: `spring-cloud-starter-circuitbreaker-${application.reactive ? 'reactor-' : ''}resilience4j`,
+              },
+            ],
+          },
+          {
+            condition: application.serviceDiscoveryAny,
+            dependencies: [{ groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-bootstrap' }],
+          },
+          {
+            condition: application.serviceDiscoveryEureka,
+            dependencies: [
+              { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-config' },
+              { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-netflix-eureka-client' },
+            ],
+          },
+          {
+            condition: application.serviceDiscoveryConsul,
+            dependencies: [
+              { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-consul-config' },
+              { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-consul-discovery' },
+            ],
+          },
+        );
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.postWriting);
+  }
 }

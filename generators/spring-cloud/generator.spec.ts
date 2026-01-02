@@ -21,4 +21,27 @@ describe(`generator - ${generator}`, () => {
       expect(result.getStateSnapshot()).toMatchSnapshot();
     });
   });
+
+  describe('composing', () => {
+    describe('messageBroker option', () => {
+      for (const messageBroker of ['no', 'kafka', 'pulsar'] as const) {
+        describe(messageBroker, () => {
+          before(async () => {
+            await helpers
+              .runJHipster(generator)
+              .withJHipsterConfig({
+                messageBroker,
+              })
+              .withSkipWritingPriorities()
+              .withMockedSource({ except: ['addTestSpringFactory'] })
+              .withMockedJHipsterGenerators();
+          });
+
+          it('should match composed generators snapshot', () => {
+            expect(result.composedMockedGenerators).toMatchSnapshot();
+          });
+        });
+      }
+    });
+  });
 });

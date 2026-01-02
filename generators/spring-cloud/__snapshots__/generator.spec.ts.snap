@@ -1,5 +1,19 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
+exports[`generator - spring-cloud composing messageBroker option kafka should match composed generators snapshot 1`] = `
+[
+  "jhipster:spring-cloud:kafka",
+]
+`;
+
+exports[`generator - spring-cloud composing messageBroker option no should match composed generators snapshot 1`] = `[]`;
+
+exports[`generator - spring-cloud composing messageBroker option pulsar should match composed generators snapshot 1`] = `
+[
+  "jhipster:spring-cloud:pulsar",
+]
+`;
+
 exports[`generator - spring-cloud with default config should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
