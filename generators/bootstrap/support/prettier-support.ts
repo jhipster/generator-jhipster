@@ -30,7 +30,6 @@ import type prettierWorker from './prettier-worker.ts';
 const minimatch = new Minimatch('**/{.prettierrc**,.prettierignore}');
 export const isPrettierConfigFilePath = (filePath: string) => minimatch.match(filePath);
 
-const supportsTsFiles = parseInt(process.versions.node.split('.')[0]) >= 22;
 const useTsFile = !isDistFolder();
 
 export const createPrettierTransform = async function (
@@ -38,26 +37,17 @@ export const createPrettierTransform = async function (
   options: Omit<Parameters<typeof prettierWorker>[0], 'relativeFilePath' | 'filePath' | 'fileContents'> & {
     ignoreErrors?: boolean;
     extensions?: string;
-    skipForks?: boolean;
   } = {},
 ) {
-  const { ignoreErrors = false, extensions = '*', skipForks, ...workerOptions } = options;
+  const { ignoreErrors = false, extensions = '*', ...workerOptions } = options;
   const globExpression = extensions.includes(',') ? `**/*.{${extensions}}` : `**/*.${extensions}`;
   const minimatch = new Minimatch(globExpression, { dot: true });
 
-  let applyPrettier: typeof prettierWorker;
-  let pool: Piscina | undefined;
-  if (skipForks || (useTsFile && !supportsTsFiles)) {
-    const { default: applyPrettierWorker } = await import('./prettier-worker.ts');
-    applyPrettier = applyPrettierWorker;
-  } else {
-    pool = new Piscina<Parameters<typeof prettierWorker>[0], Awaited<ReturnType<typeof prettierWorker>>>({
-      maxThreads: 1,
-      filename: new URL(`./prettier-worker.${useTsFile ? 'ts' : 'js'}`, import.meta.url).href,
-      ...options,
-    });
-    applyPrettier = pool!.run.bind(pool!);
-  }
+  const pool = new Piscina<Parameters<typeof prettierWorker>[0], Awaited<ReturnType<typeof prettierWorker>>>({
+    maxThreads: 1,
+    filename: new URL(`./prettier-worker.${useTsFile ? 'ts' : 'js'}`, import.meta.url).href,
+    ...options,
+  });
 
   return passthrough(
     async (file: VinylMemFsEditorFile) => {
@@ -67,7 +57,7 @@ export const createPrettierTransform = async function (
       if (!file.contents) {
         throw new Error(`File content doesn't exist for ${file.relative}`);
       }
-      const result = await applyPrettier({
+      const result = await pool.run({
         relativeFilePath: file.relative,
         filePath: file.path,
         fileContents: file.contents.toString('utf8'),

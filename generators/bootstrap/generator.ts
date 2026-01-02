@@ -58,7 +58,6 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
   upgradeCommand?: boolean;
   skipPrettier?: boolean;
   skipEslint?: boolean;
-  skipForks?: boolean;
   prettierExtensions: string[] = PRETTIER_EXTENSIONS.split(',');
   prettierOptions: PrettierOptions = { plugins: [] };
   refreshOnCommit = false;
@@ -201,7 +200,6 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
           prettierJava: !(this.jhipsterConfig as any).skipServer,
           extensions: this.prettierExtensions.join(','),
           prettierOptions: this.prettierOptions,
-          skipForks: this.skipForks,
         }),
       );
     }
