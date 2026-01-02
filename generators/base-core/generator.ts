@@ -354,6 +354,19 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
           } catch {
             // Ignore non existing command
           }
+
+          const split = this.options.namespace.split(':');
+          if (split.length === 3 && split[2] === 'bootstrap') {
+            const parentMeta = this.env.getGeneratorMeta(this.options.namespace.replace(':bootstrap', ''));
+            const parentModule: any = await parentMeta?.importModule?.();
+            if (parentModule?.command?.configs) {
+              const context = this.context;
+              if (context) {
+                loadConfig.call(this, parentModule.command.configs, { application: context });
+                loadDerivedConfig(parentModule.command.configs, { application: context });
+              }
+            }
+          }
         }
 
         if (loadCommand.length > 0) {

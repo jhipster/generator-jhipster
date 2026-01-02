@@ -1,0 +1,151 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`generator - entity with default configuration should match files snapshot 1`] = `
+{
+  ".jhipster/Foo.json": {
+    "stateCleared": "modified",
+  },
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/Foo.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/repository/FooRepository.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/repository/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/FooResource.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/web/rest/package-info.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/changelog/20200101000100_added_entity_Foo.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/liquibase/fake-data/foo.csv": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/delete/foo-delete-dialog.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/delete/foo-delete-dialog.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/delete/foo-delete-dialog.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/detail/foo-detail.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/detail/foo-detail.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/detail/foo-detail.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/foo.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/foo.routes.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/foo.test-samples.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/list/foo.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/list/foo.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/list/foo.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/route/foo-routing-resolve.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/route/foo-routing-resolve.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/service/foo.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/service/foo.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/update/foo-form.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/update/foo-form.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/update/foo-update.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/update/foo-update.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/foo/update/foo-update.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/foo.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/user-management.json": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/FooAsserts.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/FooTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/FooTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/web/rest/FooResourceIT.java": {
+    "stateCleared": "modified",
+  },
+}
+`;
+
+exports[`generator - entity with default configuration should match source calls 1`] = `
+{
+  "addEntitiesToClient": [
+    {
+      "application": "Application[jhipster]",
+      "control": "TaskParameter[control]",
+      "entities": [
+        "Entity[Foo]",
+      ],
+      "source": "TaskParameter[source]",
+    },
+  ],
+  "addEntityToCache": [
+    {
+      "entityAbsoluteClass": "com.mycompany.myapp.domain.Foo",
+      "relationships": [],
+    },
+  ],
+  "addEntityTranslationKey": [
+    {
+      "language": "en",
+      "translationKey": "foo",
+      "translationValue": "Foo",
+    },
+  ],
+  "addLiquibaseChangelog": [
+    {
+      "changelogName": "20200101000100_added_entity_Foo",
+      "section": "base",
+    },
+  ],
+}
+`;

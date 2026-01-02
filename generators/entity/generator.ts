@@ -256,6 +256,11 @@ The entity ${entityName} is being created.
       askForReadOnly,
       askForPagination,
       async composeEntities() {
+        if (!this.jhipsterConfig.entities) {
+          this.jhipsterConfig.entities = [];
+        }
+        this.jhipsterConfig.entities = [...this.jhipsterConfig.entities, this.entityData.name];
+
         // We need to compose with others entities to update relationships.
         await this.composeWithJHipster('entities', {
           generatorArgs: this.options.singleEntity ? [this.entityData.name] : [],
