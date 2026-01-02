@@ -25,10 +25,11 @@ export default class extends BaseGenerator {
         // Push events requires a base commit for diff. Diff cannot be checked by @~1 if PR was merged with a rebase.
         const useChanges = this.eventName === 'pull_request';
         const changes = await getGitChanges({ allTrue: !useChanges });
-        const { base, common, devBlueprint, client, e2e, graalvm, java, workspaces } = changes;
+        const { base, common, devBlueprint, client, e2e, generateBlueprint, graalvm, java, workspaces, springBootDefaults } = changes;
         const hasWorkflowChanges = Boolean((changes as Record<string, boolean>)[`${this.workflow}Workflow`]);
 
         let matrix: GitHubMatrixGroup = {};
+        let convertToGitHubMatrixInclude = true;
         let randomEnvironment = false;
         if (this.workflow === 'docker-compose-integration') {
           const { samples, warnings } = await getGithubSamplesGroup(this.templatePath('../samples/'), this.workflow);
@@ -36,6 +37,19 @@ export default class extends BaseGenerator {
           if (warnings.length) {
             this.log.warn(warnings.join('\n'));
           }
+        } else if (this.workflow === 'generators') {
+          convertToGitHubMatrixInclude = false;
+          matrix = {
+            'database-changelog': {
+              disabled: !springBootDefaults,
+            },
+            'generate-blueprint': {
+              disabled: !generateBlueprint,
+            },
+            graalvm: {
+              disabled: !graalvm,
+            },
+          };
         } else if (this.workflow === 'graalvm') {
           if (hasWorkflowChanges || java || graalvm) {
             const { samples, warnings } = await getGithubSamplesGroup(this.templatePath('../samples/'), this.workflow);
@@ -105,7 +119,11 @@ export default class extends BaseGenerator {
         });
 
         const { useVersionPlaceholders } = this;
-        this.matrix = JSON.stringify(convertToGitHubMatrix(matrix, { randomEnvironment, useVersionPlaceholders }), null, 2);
+        this.matrix = JSON.stringify(
+          convertToGitHubMatrixInclude ? convertToGitHubMatrix(matrix, { randomEnvironment, useVersionPlaceholders }) : matrix,
+          null,
+          2,
+        );
         const githubOutputFile = getGithubOutputFile();
         this.log.info('matrix', this.matrix);
         if (githubOutputFile) {

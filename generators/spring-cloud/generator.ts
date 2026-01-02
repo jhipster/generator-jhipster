@@ -17,7 +17,9 @@
  * limitations under the License.
  */
 
+import { mutateData } from '../../lib/utils/object.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
+import { getGradleLibsVersionsProperties } from '../java-simple-application/generators/gradle/support/dependabot-gradle.ts';
 
 import type {
   Application as SpringCloudApplication,
@@ -68,6 +70,28 @@ export default class SpringCloudGenerator extends SpringCloudApplicationGenerato
 
   get [BaseApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
+  }
+
+  get loading() {
+    return this.asLoadingTaskGroup({
+      async loadJavaDependencies({ application }) {
+        const gradleLibsVersions = this.readTemplate(
+          this.fetchFromInstalledJHipster('spring-cloud/resources/gradle/libs.versions.toml'),
+        )?.toString();
+        const applicationJavaDependencies = this.prepareDependencies(
+          {
+            ...getGradleLibsVersionsProperties(gradleLibsVersions!),
+          },
+          'java',
+        );
+
+        mutateData(application.javaDependencies, applicationJavaDependencies);
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get postWriting() {

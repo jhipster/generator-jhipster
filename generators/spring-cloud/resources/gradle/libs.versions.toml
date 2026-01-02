@@ -1,0 +1,4 @@
+[libraries]
+spring-cloud-dependencies = { module = 'org.springframework.cloud:spring-cloud-dependencies', version = '2025.1.0' }
+
+feign-reactor-bom = { module = 'com.playtika.reactivefeign:feign-reactor-bom', version = '4.2.1' }
