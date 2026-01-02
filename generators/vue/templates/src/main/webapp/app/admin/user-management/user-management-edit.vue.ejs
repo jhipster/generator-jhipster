@@ -2,7 +2,7 @@
   <div class="d-flex justify-content-center">
     <div class="col-8">
       <form name="editForm" novalidate @submit.prevent="save()" v-if="userAccount">
-        <h2 id="myUserLabel">{{ t$('userManagement.home.createOrEditLabel') }}</h2>
+        <h2 id="myUserLabel" data-cy="userManagementCreateUpdateHeading">{{ t$('userManagement.home.createOrEditLabel') }}</h2>
         <div>
           <div class="mb-3" :hidden="!userAccount.id">
             <label>{{ t$('global.field.id') }}</label>
@@ -125,10 +125,10 @@
           </div>
         </div>
         <div>
-          <button type="button" class="btn btn-secondary" @click="previousState()">
+          <button type="button" class="btn btn-secondary" @click="previousState()" data-cy="entityCreateCancelButton">
             <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.cancel') }}</span>
           </button>
-          <button type="submit" :disabled="v$.userAccount.$invalid || isSaving" class="btn btn-primary">
+          <button type="submit" :disabled="v$.userAccount.$invalid || isSaving" class="btn btn-primary" data-cy="entityCreateSaveButton">
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.save') }}</span>
           </button>
         </div>
