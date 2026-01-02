@@ -1,9 +1,5 @@
 [libraries]
-spring-cloud-dependencies = { module = 'org.springframework.cloud:spring-cloud-dependencies', version = '2025.1.0' }
-
 springdoc = { module = 'org.springdoc:springdoc-openapi-starter-webmvc-api', version = '3.0.1' }
-
-feign-reactor-bom = { module = 'com.playtika.reactivefeign:feign-reactor-bom', version = '4.2.1' }
 
 cucumber-bom = { module = 'io.cucumber:cucumber-bom', version = '7.33.0' }
 

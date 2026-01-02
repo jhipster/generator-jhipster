@@ -34,18 +34,40 @@ permissions:
 env:
   FORCE_COLOR: 2
 jobs:
+  build-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.build.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 2
+      - run: echo "node-version=$(cat ${{ github.workspace }}/generators/init/resources/.node-version)" >> $GITHUB_OUTPUT
+        id: node-version
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ steps.node-version.outputs.node-version }}
+      - run: npm ci --ignore-scripts
+      - id: build
+        run: bin/jhipster.cjs github-build-matrix generators --event-name ${{ github.event_name }}
   generate-blueprint:
     permissions:
       contents: none
     uses: ./.github/workflows/generator-generate-blueprint.yml
+    needs: build-matrix
+    if: ${{ !fromJson(needs.build-matrix.outputs.matrix).generate-blueprint.disabled }}
   database-changelog-liquibase:
     permissions:
       contents: none
     uses: ./.github/workflows/generator-database-changelog-liquibase.yml
+    needs: build-matrix
+    if: ${{ !fromJson(needs.build-matrix.outputs.matrix).database-changelog.disabled }}
   graalvm:
     permissions:
       contents: none
     uses: ./.github/workflows/generator-graalvm.yml
+    needs: build-matrix
+    if: ${{ !fromJson(needs.build-matrix.outputs.matrix).graalvm.disabled }}
   check-generators:
     permissions:
       contents: none

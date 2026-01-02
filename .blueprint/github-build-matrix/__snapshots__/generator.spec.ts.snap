@@ -720,6 +720,29 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
 }"
 `;
 
+exports[`generator - github-build-matrix with generators should match matrix value 1`] = `
+"{
+  "database-changelog": {
+    "disabled": false,
+    "build-jhipster-bom": true,
+    "jhipster-bom-branch": "spring-boot-v4",
+    "jhipster-bom-cicd-version": "0.0.0-CICD"
+  },
+  "generate-blueprint": {
+    "disabled": false,
+    "build-jhipster-bom": true,
+    "jhipster-bom-branch": "spring-boot-v4",
+    "jhipster-bom-cicd-version": "0.0.0-CICD"
+  },
+  "graalvm": {
+    "disabled": false,
+    "build-jhipster-bom": true,
+    "jhipster-bom-branch": "spring-boot-v4",
+    "jhipster-bom-cicd-version": "0.0.0-CICD"
+  }
+}"
+`;
+
 exports[`generator - github-build-matrix with graalvm should match matrix value 1`] = `
 "{
   "include": [

@@ -243,6 +243,17 @@ updates:
       - 'skip-changelog'
 
   - package-ecosystem: 'gradle'
+    directory: '/generators/spring-cloud/resources/'
+    schedule:
+      interval: 'daily'
+      time: '08:00'
+    open-pull-requests-limit: 5
+    labels:
+      - 'theme: dependencies'
+      - 'theme: java'
+      - 'skip-changelog'
+
+  - package-ecosystem: 'gradle'
     directory: '/generators/spring-cache/resources/'
     schedule:
       interval: 'daily'
