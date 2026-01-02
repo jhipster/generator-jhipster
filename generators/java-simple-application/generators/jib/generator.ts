@@ -18,7 +18,7 @@
  */
 import type { Application as DockerApplication } from '../../../docker/index.ts';
 import { GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.ts';
-import type { Application as SpringCacheApplication } from '../../../spring-cache/index.ts';
+import type { Application as SpringBootApplication } from '../../../spring-boot/types.ts';
 import { JavaSimpleApplicationGenerator } from '../../generator.ts';
 
 export default class JibGenerator extends JavaSimpleApplicationGenerator {
@@ -61,7 +61,7 @@ export default class JibGenerator extends JavaSimpleApplicationGenerator {
         if (!application.buildToolMaven) return;
         const { baseName, serverPort, javaDependencies } = application;
         const { dockerContainers, dockerServicesDir } = application as DockerApplication;
-        const { cacheProviderHazelcast, cacheProviderInfinispan } = application as SpringCacheApplication;
+        const { cacheProviderHazelcast, cacheProviderInfinispan } = application as SpringBootApplication;
         source.addMavenDefinition?.({
           properties: [
             { property: 'jib-maven-plugin.version', value: javaDependencies!['jib-maven-plugin'] },

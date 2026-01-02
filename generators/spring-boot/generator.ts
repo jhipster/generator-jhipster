@@ -39,7 +39,6 @@ import {
   getSpecificationBuildForType,
   insertContentIntoApplicationProperties,
 } from '../server/support/index.ts';
-import type { Config as SpringCacheConfig } from '../spring-cache/types.ts';
 
 import cleanupTask from './cleanup.ts';
 import { writeFiles as writeEntityFiles } from './entity-files.ts';
@@ -152,8 +151,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
           enableSwaggerCodegen,
           serviceDiscoveryType,
         } = this.jhipsterConfigWithDefaults;
-        const { cacheProvider } = this.jhipsterConfigWithDefaults as SpringCacheConfig;
-        const { messageBroker } = this.jhipsterConfigWithDefaults;
+        const { cacheProvider, messageBroker } = this.jhipsterConfigWithDefaults;
 
         await this.composeWithJHipster('jhipster:java:i18n');
         await this.composeWithJHipster('docker');
@@ -205,7 +203,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
           await this.composeWithJHipster('jhipster:spring-boot:websocket');
         }
         if (([EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS] as string[]).includes(cacheProvider!)) {
-          await this.composeWithJHipster('spring-cache');
+          await this.composeWithJHipster('jhipster:spring-boot:cache');
         }
       },
     });

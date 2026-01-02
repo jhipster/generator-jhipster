@@ -840,7 +840,7 @@ exports[`git-changes generators/spring-boot/generators/bootstrap/index.ts should
 }
 `;
 
-exports[`git-changes generators/spring-boot/generators/cucumber/index.ts should match changes snapshot 1`] = `
+exports[`git-changes generators/spring-boot/generators/cache/index.ts should match changes snapshot 1`] = `
 {
   "angular": false,
   "angularWorkflow": false,
@@ -864,7 +864,7 @@ exports[`git-changes generators/spring-boot/generators/cucumber/index.ts should 
 }
 `;
 
-exports[`git-changes generators/spring-boot/generators/feign-client/index.ts should match changes snapshot 1`] = `
+exports[`git-changes generators/spring-boot/generators/cucumber/index.ts should match changes snapshot 1`] = `
 {
   "angular": false,
   "angularWorkflow": false,
@@ -978,30 +978,6 @@ exports[`git-changes generators/spring-boot/index.ts should match changes snapsh
   "reactWorkflow": false,
   "sonarPr": false,
   "springBootDefaults": true,
-  "vue": false,
-  "vueWorkflow": false,
-  "workspaces": false,
-}
-`;
-
-exports[`git-changes generators/spring-cache/index.ts should match changes snapshot 1`] = `
-{
-  "angular": false,
-  "angularWorkflow": false,
-  "base": false,
-  "ci": false,
-  "client": false,
-  "common": false,
-  "devBlueprint": false,
-  "devserverWorkflow": false,
-  "e2e": false,
-  "generateBlueprint": false,
-  "graalvm": false,
-  "java": true,
-  "react": false,
-  "reactWorkflow": false,
-  "sonarPr": false,
-  "springBootDefaults": false,
   "vue": false,
   "vueWorkflow": false,
   "workspaces": false,

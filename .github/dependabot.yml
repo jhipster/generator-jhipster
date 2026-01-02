@@ -254,7 +254,7 @@ updates:
       - 'skip-changelog'
 
   - package-ecosystem: 'gradle'
-    directory: '/generators/spring-cache/resources/'
+    directory: '/generators/spring-boot/generators/cache/resources/'
     schedule:
       interval: 'daily'
       time: '08:30'

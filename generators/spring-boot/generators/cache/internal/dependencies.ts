@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { JavaDependency, JavaDependencyVersion } from '../../java/types.ts';
+import type { JavaDependency, JavaDependencyVersion } from '../../../../java/types.ts';
 
 const javaxCacheApi = {
   groupId: 'javax.cache',
