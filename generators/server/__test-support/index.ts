@@ -1,7 +1,6 @@
-import { databaseTypes, messageBrokerTypes } from '../../../lib/jhipster/index.ts';
+import { databaseTypes } from '../../../lib/jhipster/index.ts';
 import type { result } from '../../../lib/testing/index.ts';
 
-const { KAFKA, PULSAR } = messageBrokerTypes;
 const { SQL, COUCHBASE } = databaseTypes;
 
 type RunResultSupplier = () => typeof result;
@@ -15,32 +14,6 @@ export const shouldComposeWithLiquibase = (testSample: boolean | Record<string, 
   } else {
     it('should not compose with liquibase generator', () => {
       runResultSupplier().assertGeneratorNotComposed('jhipster:liquibase');
-    });
-  }
-};
-
-export const shouldComposeWithSpringCloudStream = (
-  sampleConfig: boolean | Record<string, unknown>,
-  runResultSupplier: RunResultSupplier,
-) => {
-  const pulsarEnabled = typeof sampleConfig === 'boolean' ? sampleConfig : sampleConfig?.messageBroker === PULSAR;
-  const kafkaEnabled = typeof sampleConfig === 'boolean' ? sampleConfig : sampleConfig?.messageBroker === KAFKA;
-  if (pulsarEnabled) {
-    it(`should compose with spring-cloud:pulsar generator`, () => {
-      runResultSupplier().assertGeneratorComposedOnce(`jhipster:spring-cloud:pulsar`);
-    });
-  } else {
-    it(`should not compose with spring-cloud:pulsar generator`, () => {
-      runResultSupplier().assertGeneratorNotComposed(`jhipster:spring-cloud:pulsar`);
-    });
-  }
-  if (kafkaEnabled) {
-    it(`should compose with spring-cloud:kafka generator`, () => {
-      runResultSupplier().assertGeneratorComposedOnce(`jhipster:spring-cloud:kafka`);
-    });
-  } else {
-    it(`should not compose with spring-cloud:kafka generator`, () => {
-      runResultSupplier().assertGeneratorNotComposed(`jhipster:spring-cloud:kafka`);
     });
   }
 };

@@ -30,7 +30,7 @@ import {
   runResult,
 } from '../../../../lib/testing/index.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.ts';
-import { filterBasicServerGenerators, shouldComposeWithSpringCloudStream } from '../../../server/__test-support/index.ts';
+import { filterBasicServerGenerators } from '../../../server/__test-support/index.ts';
 
 import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.ts';
 import Generator from './generator.ts';
@@ -107,7 +107,6 @@ describe('generator - elasticsearch', () => {
               (sampleConfig.applicationType !== APPLICATION_TYPE_MICROSERVICE && !sampleConfig.skipUserManagement)),
         );
       });
-      shouldComposeWithSpringCloudStream(sampleConfig, () => runResult);
     });
   });
 });

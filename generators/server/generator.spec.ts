@@ -22,7 +22,7 @@ import { basename } from 'node:path';
 import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
 
-import { filterBasicServerGenerators, shouldComposeWithCouchbase, shouldComposeWithSpringCloudStream } from './__test-support/index.ts';
+import { filterBasicServerGenerators, shouldComposeWithCouchbase } from './__test-support/index.ts';
 import Generator from './index.ts';
 
 const generator = basename(import.meta.dirname);
@@ -33,51 +33,6 @@ describe(`generator - ${generator}`, () => {
   checkEnforcements({}, generator, 'spring-boot');
 
   describe('composing', () => {
-    describe('messageBroker option', () => {
-      describe('no', () => {
-        before(async () => {
-          await helpers
-            .runJHipster(generator)
-            .withJHipsterConfig({
-              messageBroker: 'no',
-            })
-            .withSkipWritingPriorities()
-            .withMockedSource({ except: ['addTestSpringFactory'] })
-            .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
-        });
-
-        shouldComposeWithSpringCloudStream(false, () => runResult);
-      });
-      describe('kafka', () => {
-        const config = {
-          messageBroker: 'kafka' as const,
-        };
-        before(async () => {
-          await helpers
-            .runJHipster(generator)
-            .withJHipsterConfig(config)
-            .withSkipWritingPriorities()
-            .withMockedSource({ except: ['addTestSpringFactory'] })
-            .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
-        });
-        shouldComposeWithSpringCloudStream(config, () => runResult);
-      });
-      describe('pulsar', () => {
-        const config = {
-          messageBroker: 'pulsar' as const,
-        };
-        before(async () => {
-          await helpers
-            .runJHipster(generator)
-            .withJHipsterConfig(config)
-            .withSkipWritingPriorities()
-            .withMockedSource({ except: ['addTestSpringFactory'] })
-            .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
-        });
-        shouldComposeWithSpringCloudStream(config, () => runResult);
-      });
-    });
-
     describe('databaseType option', () => {
       describe('no with jwt', () => {
         before(async () => {

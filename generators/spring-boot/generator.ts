@@ -21,17 +21,9 @@ import chalk from 'chalk';
 import { lowerFirst, sortedUniqBy } from 'lodash-es';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
-import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
+import { APPLICATION_TYPE_MICROSERVICE } from '../../lib/core/application-types.ts';
 import type { FieldType } from '../../lib/jhipster/field-types.ts';
-import {
-  cacheTypes,
-  databaseTypes,
-  fieldTypes,
-  messageBrokerTypes,
-  searchEngineTypes,
-  testFrameworkTypes,
-  websocketTypes,
-} from '../../lib/jhipster/index.ts';
+import { cacheTypes, databaseTypes, fieldTypes, searchEngineTypes, testFrameworkTypes, websocketTypes } from '../../lib/jhipster/index.ts';
 import { mutateData } from '../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { createNeedleCallback, isWin32 } from '../base-core/support/index.ts';
@@ -67,7 +59,6 @@ import type {
 const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheTypes;
 const { NO: NO_WEBSOCKET, SPRING_WEBSOCKET } = websocketTypes;
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, SQL } = databaseTypes;
-const { KAFKA, PULSAR } = messageBrokerTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
 
 const { BYTES: TYPE_BYTES, BYTE_BUFFER: TYPE_BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
@@ -159,6 +150,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
           testFrameworks,
           feignClient,
           enableSwaggerCodegen,
+          serviceDiscoveryType,
         } = this.jhipsterConfigWithDefaults;
         const { cacheProvider } = this.jhipsterConfigWithDefaults as SpringCacheConfig;
         const { messageBroker } = this.jhipsterConfigWithDefaults;
@@ -184,8 +176,8 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
           await this.composeWithJHipster('jhipster:java-simple-application:openapi-generator');
         }
 
-        if (applicationType === APPLICATION_TYPE_GATEWAY) {
-          await this.composeWithJHipster('jhipster:spring-cloud:gateway');
+        if (applicationType !== 'monolith' || messageBroker !== 'no' || serviceDiscoveryType !== 'no') {
+          await this.composeWithJHipster('jhipster:spring-cloud');
         }
 
         if (testFrameworks?.includes(CUCUMBER)) {
@@ -208,9 +200,6 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
           await this.composeWithJHipster('jhipster:spring-data:mongodb');
         } else if (databaseType === NEO4J) {
           await this.composeWithJHipster('jhipster:spring-data:neo4j');
-        }
-        if (messageBroker === KAFKA || messageBroker === PULSAR) {
-          await this.composeWithJHipster(`jhipster:spring-cloud:${messageBroker}`);
         }
         if (searchEngine === ELASTICSEARCH) {
           await this.composeWithJHipster('jhipster:spring-data:elasticsearch');
@@ -784,14 +773,7 @@ ${classProperties
         );
       },
       addJHipsterBomDependencies({ application, source }) {
-        const {
-          applicationTypeGateway,
-          applicationTypeMicroservice,
-          javaDependencies,
-          jhipsterDependenciesVersion,
-          messageBrokerAny,
-          serviceDiscoveryAny,
-        } = application;
+        const { jhipsterDependenciesVersion } = application;
 
         if (application.reactive && application.graalvmSupport) {
           source.addNativeHint!({
@@ -802,32 +784,18 @@ ${classProperties
             ],
           });
         }
-        source.addJavaDefinitions?.(
-          {
-            dependencies: [{ groupId: 'tech.jhipster', artifactId: 'jhipster-framework', version: jhipsterDependenciesVersion! }],
-            mavenDefinition: {
-              properties: [
-                {
-                  property: 'spring-boot.version',
-                  // eslint-disable-next-line no-template-curly-in-string
-                  value: '${project.parent.version}',
-                },
-              ],
-            },
-          },
-          {
-            condition: applicationTypeGateway || applicationTypeMicroservice || serviceDiscoveryAny || messageBrokerAny,
-            dependencies: [
+        source.addJavaDefinitions?.({
+          dependencies: [{ groupId: 'tech.jhipster', artifactId: 'jhipster-framework', version: jhipsterDependenciesVersion! }],
+          mavenDefinition: {
+            properties: [
               {
-                groupId: 'org.springframework.cloud',
-                artifactId: 'spring-cloud-dependencies',
-                type: 'pom',
-                scope: 'import',
-                version: javaDependencies!['spring-cloud-dependencies'],
+                property: 'spring-boot.version',
+                // eslint-disable-next-line no-template-curly-in-string
+                value: '${project.parent.version}',
               },
             ],
           },
-        );
+        });
       },
       addSpringdoc({ application, source }) {
         const springdocDependency = `springdoc-openapi-starter-${application.reactive ? 'webflux' : 'webmvc'}-api`;
@@ -1024,34 +992,6 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
           {
             condition: application.addSpringMilestoneRepository,
             dependencies: [{ groupId: 'org.springframework.boot', artifactId: 'spring-boot-properties-migrator', scope: 'runtime' }],
-          },
-          {
-            condition: application.applicationTypeMicroservice || application.applicationTypeGateway,
-            dependencies: [
-              { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter' },
-              {
-                groupId: 'org.springframework.cloud',
-                artifactId: `spring-cloud-starter-circuitbreaker-${application.reactive ? 'reactor-' : ''}resilience4j`,
-              },
-            ],
-          },
-          {
-            condition: application.serviceDiscoveryAny,
-            dependencies: [{ groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-bootstrap' }],
-          },
-          {
-            condition: application.serviceDiscoveryEureka,
-            dependencies: [
-              { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-config' },
-              { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-netflix-eureka-client' },
-            ],
-          },
-          {
-            condition: application.serviceDiscoveryConsul,
-            dependencies: [
-              { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-consul-config' },
-              { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-consul-discovery' },
-            ],
           },
         );
 
