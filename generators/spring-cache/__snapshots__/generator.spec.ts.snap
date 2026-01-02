@@ -436,6 +436,9 @@ exports[`generator - spring-cache infinispan-gradle should match files snapshot 
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/config/CacheKeyGeneratorConfiguration.java": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -508,6 +511,9 @@ exports[`generator - spring-cache infinispan-maven should match files snapshot 1
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/CacheKeyGeneratorConfiguration.java": {
     "stateCleared": "modified",
   },
 }

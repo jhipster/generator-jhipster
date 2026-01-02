@@ -617,6 +617,9 @@ exports[`generator - server with entities should match files snapshot 1`] = `
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/config/CacheKeyGeneratorConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/Constants.java": {
     "stateCleared": "modified",
   },

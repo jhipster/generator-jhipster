@@ -18,20 +18,19 @@
 -%>
 package <%= packageName %>.config;
 
+<%_ if (enableHibernateCache) { _%>
+import org.hibernate.cache.jcache.ConfigSettings;
+import org.springframework.boot.hibernate.autoconfigure.HibernatePropertiesCustomizer;
+<%_ } _%>
 import com.github.benmanes.caffeine.jcache.configuration.CaffeineConfiguration;
 import java.util.OptionalLong;
 import java.util.concurrent.TimeUnit;
-
-<%_ if (enableHibernateCache) { _%>
-import org.hibernate.cache.jcache.ConfigSettings;
-<%_ } _%>
-import tech.jhipster.config.JHipsterProperties;
-
 import org.springframework.boot.cache.autoconfigure.JCacheManagerCustomizer;
-<%_ if (enableHibernateCache) { _%>
-import org.springframework.boot.hibernate.autoconfigure.HibernatePropertiesCustomizer;
-<%_ } _%>
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Bean;
+
+import tech.jhipster.config.JHipsterProperties;
 
 @Configuration
 @EnableCaching
