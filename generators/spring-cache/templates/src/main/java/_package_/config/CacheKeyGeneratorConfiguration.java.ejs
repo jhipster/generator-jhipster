@@ -31,8 +31,6 @@ public class CacheKeyGeneratorConfiguration {
     private GitProperties gitProperties;
     private BuildProperties buildProperties;
 
-    private static final Logger LOG = LoggerFactory.getLogger(CacheKeyGeneratorConfiguration.class);
-
     @Autowired(required = false)
     public void setGitProperties(GitProperties gitProperties) {
         this.gitProperties = gitProperties;
