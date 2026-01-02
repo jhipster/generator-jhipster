@@ -18,18 +18,6 @@
 -%>
 package <%= packageName %>.config;
 
-<%_ if (cacheProviderEhcache) { _%>
-import java.time.Duration;
-
-import org.ehcache.config.builders.*;
-import org.ehcache.jsr107.Eh107Configuration;
-
-  <%_ if (enableHibernateCache) { _%>
-import org.hibernate.cache.jcache.ConfigSettings;
-  <%_ } _%>
-import tech.jhipster.config.JHipsterProperties;
-
-<%_ } _%>
 <%_ if (cacheProviderCaffeine) { _%>
 import com.github.benmanes.caffeine.jcache.configuration.CaffeineConfiguration;
 import java.util.OptionalLong;
@@ -53,7 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 <%_ } _%>
-<%_ if (cacheProviderEhcache || cacheProviderCaffeine) { _%>
+<%_ if (cacheProviderCaffeine) { _%>
 import org.springframework.boot.cache.autoconfigure.JCacheManagerCustomizer;
   <%_ if (enableHibernateCache) { _%>
 import org.springframework.boot.hibernate.autoconfigure.HibernatePropertiesCustomizer;
@@ -140,19 +128,10 @@ import tech.jhipster.config.JHipsterProperties;
 @Configuration
 @EnableCaching
 public class CacheConfiguration {
-<%_ if (cacheProviderEhcache || cacheProviderCaffeine) { _%>
+<%_ if (cacheProviderCaffeine) { _%>
     private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
 
     public CacheConfiguration(JHipsterProperties jHipsterProperties) {
-  <%_ if (cacheProviderEhcache) { _%>
-        var ehcache = jHipsterProperties.getCache().getEhcache();
-
-        jcacheConfiguration = Eh107Configuration.fromEhcacheCacheConfiguration(
-            CacheConfigurationBuilder.newCacheConfigurationBuilder(Object.class, Object.class,
-                ResourcePoolsBuilder.heap(ehcache.getMaxEntries()))
-                .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofSeconds(ehcache.getTimeToLiveSeconds())))
-                .build());
-  <%_ } else { _%>
         JHipsterProperties.Cache.Caffeine caffeine = jHipsterProperties.getCache().getCaffeine();
 
         CaffeineConfiguration<Object, Object> caffeineConfiguration = new CaffeineConfiguration<>();
@@ -160,7 +139,6 @@ public class CacheConfiguration {
         caffeineConfiguration.setExpireAfterWrite(OptionalLong.of(TimeUnit.SECONDS.toNanos(caffeine.getTimeToLiveSeconds())));
         caffeineConfiguration.setStatisticsEnabled(true);
         jcacheConfiguration = caffeineConfiguration;
-  <%_ } _%>
     }
 
   <%_ if (enableHibernateCache) { _%>
@@ -188,9 +166,6 @@ public class CacheConfiguration {
             createCache(cm, <%= user.entityAbsoluteClass %>.class.getName() + ".persistentTokens");
       <%_ } _%>
     <%_ } _%>
-  <%_ } _%>
-  <%_ if (cacheProviderEhcache) { _%>
-            // jhipster-needle-ehcache-add-entry
   <%_ } _%>
   <%_ if (cacheProviderCaffeine) { _%>
             // jhipster-needle-caffeine-add-entry
