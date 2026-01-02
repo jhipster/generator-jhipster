@@ -463,11 +463,11 @@ exports[`generator - spring-cache infinispan-gradle should match source calls 1`
             "groupId": "javax.cache",
           },
           {
-            "artifactId": "infinispan-hibernate-cache-v62",
+            "artifactId": "infinispan-hibernate-cache-v66",
             "groupId": "org.infinispan",
           },
           {
-            "artifactId": "infinispan-spring-boot3-starter-embedded",
+            "artifactId": "infinispan-spring-boot4-starter-embedded",
             "groupId": "org.infinispan",
           },
           {
@@ -500,6 +500,12 @@ exports[`generator - spring-cache infinispan-gradle should match source calls 1`
       "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
       "ruleId": "S1192",
       "ruleKey": "java:S1192",
+    },
+  ],
+  "overrideProperty": [
+    {
+      "property": "infinispan.version",
+      "value": "'INFINISPAN-VERSION'",
     },
   ],
 }
@@ -540,11 +546,11 @@ exports[`generator - spring-cache infinispan-maven should match source calls 1`]
             "groupId": "javax.cache",
           },
           {
-            "artifactId": "infinispan-hibernate-cache-v62",
+            "artifactId": "infinispan-hibernate-cache-v66",
             "groupId": "org.infinispan",
           },
           {
-            "artifactId": "infinispan-spring-boot3-starter-embedded",
+            "artifactId": "infinispan-spring-boot4-starter-embedded",
             "groupId": "org.infinispan",
           },
           {
@@ -577,6 +583,12 @@ exports[`generator - spring-cache infinispan-maven should match source calls 1`]
       "resourceKey": "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java",
       "ruleId": "S1192",
       "ruleKey": "java:S1192",
+    },
+  ],
+  "overrideProperty": [
+    {
+      "property": "infinispan.version",
+      "value": "'INFINISPAN-VERSION'",
     },
   ],
 }
