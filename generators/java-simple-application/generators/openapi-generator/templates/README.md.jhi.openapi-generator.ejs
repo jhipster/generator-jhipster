@@ -23,7 +23,7 @@
 <&_ if (fragment.developmentSection) { -&>
 ### Doing API-First development using openapi-generator-cli
 
-[OpenAPI-Generator]() is configured for this application. You can generate API code from the `src/main/resources/swagger/api.yml` definition file by running:
+[OpenAPI-Generator](https://openapi-generator.tech) is configured for this application. You can generate API code from the `src/main/resources/swagger/api.yml` definition file by running:
 <%_ if (buildToolMaven) { _%>
 ```bash
 ./mvnw generate-sources
@@ -38,11 +38,11 @@ Then implements the generated delegate classes with `@Service` classes.
 
 To edit the `api.yml` definition file, you can use a tool such as [Swagger-Editor](). Start a local instance of the swagger-editor using docker by running: `docker compose -f src/main/docker/swagger-editor.yml up -d`. The editor will then be reachable at [http://localhost:7742](http://localhost:7742).
 
-Refer to [Doing API-First development][] for more details.
+Refer to [Doing API-First development](<%= documentationArchiveUrl %>/doing-api-first-development/) for more details.
 <&_ } -&>
 
 <&_ if (fragment.referenceSection) { -&>
-[OpenAPI-Generator]: https://openapi-generator.tech
-[Swagger-Editor]: https://editor.swagger.io
-[Doing API-First development]: <%= documentationArchiveUrl %>/doing-api-first-development/
+- [OpenAPI-Generator](https://openapi-generator.tech)
+- [Swagger-Editor](https://editor.swagger.io)
+- [Doing API-First development](<%= documentationArchiveUrl %>/doing-api-first-development/)
 <&_ } -&>

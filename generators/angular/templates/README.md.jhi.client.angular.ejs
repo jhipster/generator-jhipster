@@ -21,22 +21,22 @@
  EJS fragments will process % delimiter tags in the template and & delimiter tags during the merge process.
 -%>
 <&_ if (fragment.customCliSection) { -&>
-[Angular CLI][] with
+[Angular CLI](https://angular.dev/tools/cli) with
 <&_ } -&>
 <&_ if (fragment.developmentSection) { -&>
 ### Using Angular CLI
 
-You can also use [Angular CLI][] to generate some custom client code.
+You can also use [Angular CLI](https://angular.dev/tools/cli) to generate some custom client code.
 
 For example, the following command:
 
-```
+```bash
 ng generate component my-component
 ```
 
 will generate few files:
 
-```
+```bash
 create <%= clientSrcDir %>app/my-component/my-component.html
 create <%= clientSrcDir %>app/my-component/my-component.ts
 update <%= clientSrcDir %>app/app.config.ts
@@ -44,5 +44,5 @@ update <%= clientSrcDir %>app/app.config.ts
 
 <&_ } -&>
 <&_ if (fragment.referenceSection) { _&>
-[Angular CLI]: https://angular.dev/tools/cli
+- [Angular CLI](https://angular.dev/tools/cli)
 <&_ } -&>
