@@ -30,10 +30,10 @@ import org.redisson.jcache.configuration.RedissonConfiguration;
 import org.springframework.boot.cache.autoconfigure.JCacheManagerCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-  <%_ if (enableHibernateCache) { _%>
+<%_ if (enableHibernateCache) { _%>
 import org.springframework.boot.hibernate.autoconfigure.HibernatePropertiesCustomizer;
 import org.hibernate.cache.jcache.ConfigSettings;
-  <%_ } _%>
+<%_ } _%>
 
 import java.util.concurrent.TimeUnit;
 
@@ -47,7 +47,6 @@ import tech.jhipster.config.JHipsterProperties;
 @EnableCaching
 public class CacheConfiguration {
 
-<%_ if (cacheProviderRedis) { _%>
     @Bean
     public javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration(JHipsterProperties jHipsterProperties) {
         MutableConfiguration<Object, Object> jcacheConfig = new MutableConfiguration<>();
@@ -55,10 +54,10 @@ public class CacheConfiguration {
         URI redisUri = URI.create(jHipsterProperties.getCache().getRedis().getServer()[0]);
 
         Config config = new Config();
-  <%_ if (databaseTypeSql) { _%>
+<%_ if (databaseTypeSql) { _%>
         // Fix Hibernate lazy initialization https://github.com/jhipster/generator-jhipster/issues/22889
         config.setCodec(new org.redisson.codec.SerializationCodec());
-  <%_ } _%>
+<%_ } _%>
         if (jHipsterProperties.getCache().getRedis().isCluster()) {
             ClusterServersConfig clusterServersConfig = config
                 .useClusterServers()
@@ -87,29 +86,29 @@ public class CacheConfiguration {
         return RedissonConfiguration.fromInstance(Redisson.create(config), jcacheConfig);
     }
 
-  <%_ if (enableHibernateCache) { _%>
+<%_ if (enableHibernateCache) { _%>
     @Bean
     public HibernatePropertiesCustomizer hibernatePropertiesCustomizer(javax.cache.CacheManager cm) {
         return hibernateProperties -> hibernateProperties.put(ConfigSettings.CACHE_MANAGER, cm);
     }
-  <%_ } _%>
+<%_ } _%>
 
     @Bean
     public JCacheManagerCustomizer cacheManagerCustomizer(javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration) {
         return cm -> {
-  <%_ if (generateBuiltInUserEntity) { _%>
+<%_ if (generateBuiltInUserEntity) { _%>
             createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
             createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
-    <%_ if (enableHibernateCache) { _%>
+  <%_ if (enableHibernateCache) { _%>
             createCache(cm, <%= user.entityAbsoluteClass %>.class.getName(), jcacheConfiguration);
             createCache(cm, <%= packageName %>.domain.Authority.class.getName(), jcacheConfiguration);
             createCache(cm, <%= user.entityAbsoluteClass %>.class.getName() + ".authorities", jcacheConfiguration);
-      <%_ if (authenticationTypeSession) { _%>
+    <%_ if (authenticationTypeSession) { _%>
             createCache(cm, <%= packageName %>.domain.PersistentToken.class.getName(), jcacheConfiguration);
             createCache(cm, <%= user.entityAbsoluteClass %>.class.getName() + ".persistentTokens", jcacheConfiguration);
-      <%_ } _%>
     <%_ } _%>
   <%_ } _%>
+<%_ } _%>
             // jhipster-needle-redis-add-entry
         };
     }
@@ -122,6 +121,4 @@ public class CacheConfiguration {
             cm.createCache(cacheName, jcacheConfiguration);
         }
     }
-
-<%_ } _%>
 }

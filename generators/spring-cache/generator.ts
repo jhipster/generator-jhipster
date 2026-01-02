@@ -138,7 +138,6 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<
         });
       },
       async writeTask({ application }) {
-        const useModularedCacheConfiguration = application.cacheProviderInfinispan || application.cacheProviderEhcache || application.cacheProviderCaffeine || application.cacheProviderHazelcast || application.cacheProviderMemcached;
         await this.writeFiles({
           sections: {
             cacheFiles: [
@@ -148,13 +147,6 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<
                 templates: ['config/CacheKeyGeneratorConfiguration.java'],
               },
               {
-                condition: () => !useModularedCacheConfiguration,
-                path: `${SERVER_MAIN_SRC_DIR}_package_/`,
-                renameTo: moveToJavaPackageSrcDir,
-                templates: ['config/CacheConfiguration.java'],
-              },
-              {
-                condition: () => useModularedCacheConfiguration,
                 path: `${SERVER_MAIN_SRC_DIR}_package_/`,
                 renameTo: moveToJavaPackageSrcDir,
                 templates: [`config/CacheConfiguration_${application.cacheProvider}.java`],
