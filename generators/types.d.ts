@@ -139,7 +139,6 @@ type GeneratorsByNamespace = {
   'jhipster:spring-boot': import('./spring-boot/generator.ts').default;
   'jhipster:spring-boot:bootstrap': import('./spring-boot/generators/bootstrap/generator.ts').default;
   'jhipster:spring-boot:cucumber': import('./spring-boot/generators/cucumber/generator.ts').default;
-  'jhipster:spring-boot:feign-client': import('./spring-boot/generators/feign-client/generator.ts').default;
   'jhipster:spring-boot:jwt': import('./spring-boot/generators/jwt/generator.ts').default;
   'jhipster:spring-boot:oauth2': import('./spring-boot/generators/oauth2/generator.ts').default;
   'jhipster:spring-boot:websocket': import('./spring-boot/generators/websocket/generator.ts').default;
@@ -147,6 +146,7 @@ type GeneratorsByNamespace = {
   'jhipster:spring-cache': import('./spring-cache/generator.ts').default;
   'spring-cloud': import('./spring-cloud/generator.ts').default;
   'jhipster:spring-cloud': import('./spring-cloud/generator.ts').default;
+  'jhipster:spring-cloud:feign-client': import('./spring-cloud/generators/feign-client/generator.ts').default;
   'jhipster:spring-cloud:gateway': import('./spring-cloud/generators/gateway/generator.ts').default;
   'jhipster:spring-cloud:kafka': import('./spring-cloud/generators/kafka/generator.ts').default;
   'jhipster:spring-cloud:pulsar': import('./spring-cloud/generators/pulsar/generator.ts').default;

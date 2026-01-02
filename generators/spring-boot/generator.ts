@@ -176,7 +176,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
           await this.composeWithJHipster('jhipster:java-simple-application:openapi-generator');
         }
 
-        if (applicationType !== 'monolith' || messageBroker !== 'no' || serviceDiscoveryType !== 'no') {
+        if (applicationType !== 'monolith' || messageBroker !== 'no' || serviceDiscoveryType !== 'no' || feignClient) {
           await this.composeWithJHipster('jhipster:spring-cloud');
         }
 
@@ -185,9 +185,6 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
         }
         if (testFrameworks?.includes(GATLING)) {
           await this.composeWithJHipster('jhipster:java:gatling');
-        }
-        if (feignClient) {
-          await this.composeWithJHipster('jhipster:spring-boot:feign-client');
         }
 
         if (databaseType === SQL) {
@@ -806,18 +803,6 @@ ${classProperties
           source.addAllowBlockingCallsInside?.({ classPath: 'org.springdoc.core.service.OpenAPIService', method: 'build' });
           source.addAllowBlockingCallsInside?.({ classPath: 'org.springdoc.core.service.OpenAPIService', method: 'getWebhooksClasses' });
           source.addAllowBlockingCallsInside?.({ classPath: 'org.springdoc.core.service.AbstractRequestService', method: 'build' });
-        }
-      },
-      addFeignReactor({ application, source }) {
-        const { applicationTypeGateway, applicationTypeMicroservice, javaDependencies, reactive } = application;
-        if ((applicationTypeMicroservice || applicationTypeGateway) && reactive) {
-          const groupId = 'com.playtika.reactivefeign';
-          source.addJavaDependencies?.([
-            { groupId, artifactId: 'feign-reactor-bom', type: 'pom', scope: 'import', version: javaDependencies!['feign-reactor-bom'] },
-            { groupId, artifactId: 'feign-reactor-cloud' },
-            { groupId, artifactId: 'feign-reactor-spring-configuration' },
-            { groupId, artifactId: 'feign-reactor-webclient' },
-          ]);
         }
       },
       addSpringSnapshotRepository({ application, source }) {
