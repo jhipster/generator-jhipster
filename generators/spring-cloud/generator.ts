@@ -50,17 +50,19 @@ export default class SpringCloudGenerator extends SpringCloudApplicationGenerato
   get composing() {
     return this.asComposingTaskGroup({
       async composeCloud() {
-        const { applicationType, messageBroker } = this.jhipsterConfigWithDefaults;
+        const { applicationType, feignClient, messageBroker } = this.jhipsterConfigWithDefaults;
 
         if (applicationType === 'gateway') {
           await this.composeWithJHipster('jhipster:spring-cloud:gateway');
         }
-
         if (messageBroker === 'kafka') {
           await this.composeWithJHipster('jhipster:spring-cloud:kafka');
         }
         if (messageBroker === 'pulsar') {
           await this.composeWithJHipster('jhipster:spring-cloud:pulsar');
+        }
+        if (feignClient) {
+          await this.composeWithJHipster('jhipster:spring-cloud:feign-client');
         }
       },
     });

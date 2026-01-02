@@ -2,7 +2,7 @@
   <div class="d-flex justify-content-center">
     <div class="col-8">
       <div v-if="user">
-        <h2 class="jh-entity-heading">
+        <h2 class="jh-entity-heading" data-cy="userManagementDetailsHeading">
           <span>{{ t$('userManagement.detail.title') }}</span> [<strong>{{user.login}}</strong>]
         </h2>
         <dl class="row-md jh-entity-details">
@@ -48,7 +48,7 @@
         </dl>
         <router-link custom v-slot="{ navigate }"
                 :to="{name: '<%= jhiPrefixCapitalized %>User'}">
-          <button @click="navigate" class="btn btn-info">
+          <button @click="navigate" class="btn btn-info" data-cy="entityDetailsBackButton">
             <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span>{{ t$('entity.action.back') }}</span>
           </button>
         </router-link>

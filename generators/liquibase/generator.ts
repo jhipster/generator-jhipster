@@ -107,6 +107,12 @@ export default class LiquibaseGenerator<
         // Generate h2 properties at master.xml for blueprints that uses h2 for tests or others purposes.
         application.liquibaseAddH2Properties ??= application.devDatabaseTypeH2Any;
       },
+      liquibaseNeo4j({ application }) {
+        // TODO drop hardcoded version
+        if (application.databaseTypeNeo4j && application.javaManagedProperties['liquibase.version'] === '5.0.1') {
+          application.javaDependencies['liquibase-neo4j'] = '5.0.0';
+        }
+      },
       checkDatabaseCompatibility({ application }) {
         if (!application.databaseTypeSql && !application.databaseTypeNeo4j) {
           throw new Error(`Database type ${application.databaseType} is not supported`);
@@ -488,8 +494,8 @@ export default class LiquibaseGenerator<
           });
         }
 
-        if (relationalApplication.databaseTypeNeo4j) {
-          if (relationalApplication.backendTypeSpringBoot) {
+        if (application.databaseTypeNeo4j) {
+          if (application.backendTypeSpringBoot && !application.springBoot4) {
             source.addMavenDependency?.([{ groupId: 'org.springframework', artifactId: 'spring-jdbc' }]);
           }
           source.addMavenDependency?.([
@@ -497,7 +503,7 @@ export default class LiquibaseGenerator<
               groupId: 'org.liquibase.ext',
               artifactId: 'liquibase-neo4j',
               // eslint-disable-next-line no-template-curly-in-string
-              version: '${liquibase.version}',
+              version: application.javaDependencies['liquibase-neo4j'] ?? '${liquibase.version}',
               // Exclude current neo4j driver and use the one provided by spring-data
               // See: https://github.com/jhipster/generator-jhipster/pull/24241
               additionalContent: `
@@ -547,6 +553,13 @@ export default class LiquibaseGenerator<
             },
             { gradleFile: 'gradle/liquibase.gradle' },
           );
+        }
+        if (application.databaseTypeNeo4j && application.javaDependencies['liquibase-neo4j']) {
+          source.addGradleDependencyCatalogLibrary!({
+            libraryName: 'liquibase-neo4j',
+            module: 'org.liquibase.ext:liquibase-neo4j',
+            version: application.javaDependencies['liquibase-neo4j'],
+          });
         }
       },
       nativeHints({ source, application }) {

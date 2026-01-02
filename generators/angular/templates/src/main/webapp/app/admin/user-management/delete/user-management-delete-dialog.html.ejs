@@ -19,7 +19,7 @@
 @if (user) {
 <form name="deleteForm" (ngSubmit)="confirmDelete(user.login!)">
   <div class="modal-header">
-    <h4 class="modal-title">__jhiTranslateTag__('entity.delete.title')</h4>
+    <h4 class="modal-title" data-cy="userManagementDeleteDialogHeading">__jhiTranslateTag__('entity.delete.title')</h4>
   </div>
 
   <div class="modal-body">
@@ -33,7 +33,7 @@
       <fa-icon icon="ban" />&nbsp;<span>__jhiTranslateTag__('entity.action.cancel')</span>
     </button>
 
-    <button type="submit" class="btn btn-danger">
+    <button type="submit" class="btn btn-danger" data-cy="entityConfirmDeleteButton">
       <fa-icon icon="times" />&nbsp;<span>__jhiTranslateTag__('entity.action.delete')</span>
     </button>
   </div>

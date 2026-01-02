@@ -19,10 +19,9 @@
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { createNeedleCallback } from '../base-core/support/needles.ts';
 import type { Source as CommonSource } from '../common/types.ts';
-import { GRADLE_BUILD_SRC_MAIN_DIR } from '../generator-constants.ts';
+import { GRADLE_BUILD_SRC_MAIN_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.ts';
+import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../java/support/files.ts';
 
-import cleanupTask from './cleanup.ts';
-import writeTask from './files.ts';
 import { getCacheProviderMavenDefinition } from './internal/dependencies.ts';
 import type {
   Application as SpringCacheApplication,
@@ -116,13 +115,57 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<
 
   get writing() {
     return this.asWritingTaskGroup({
-      async cleanup({ control }) {
+      async cleanup({ application, control }) {
+        if (application.cacheProviderHazelcast) {
+          if (control.isJhipsterVersionLessThan('3.12.0')) {
+            this.removeFile(`${application.javaPackageSrcDir}config/hazelcast/HazelcastCacheRegionFactory.java`);
+            this.removeFile(`${application.javaPackageSrcDir}config/hazelcast/package-info.java`);
+          }
+        }
+        if (application.cacheProviderRedis) {
+          if (control.isJhipsterVersionLessThan('7.8.2')) {
+            this.removeFile(`${application.javaPackageTestDir}RedisTestContainerExtension.java`);
+          }
+        }
+        if (application.buildToolGradle) {
+          if (control.isJhipsterVersionLessThan('8.1.1')) {
+            this.removeFile('gradle/cache.gradle');
+          }
+        }
         await control.cleanupFiles({
+          '8.9.1': [[application.cacheProviderInfinispan!, `${application.javaPackageSrcDir}config/CacheFactoryConfiguration.java`]],
           '9.0.0-alpha.0': [`${GRADLE_BUILD_SRC_MAIN_DIR}/jhipster.spring-cache-conventions.gradle`],
         });
       },
-      cleanupTask,
-      writeTask,
+      async writeTask({ application }) {
+        await this.writeFiles({
+          sections: {
+            cacheFiles: [
+              {
+                path: `${SERVER_MAIN_SRC_DIR}_package_/`,
+                renameTo: moveToJavaPackageSrcDir,
+                templates: ['config/CacheKeyGeneratorConfiguration.java'],
+              },
+              {
+                path: `${SERVER_MAIN_SRC_DIR}_package_/`,
+                renameTo: moveToJavaPackageSrcDir,
+                templates: [`config/CacheConfiguration_${application.cacheProvider}.java`],
+              },
+              {
+                condition: () => application.cacheProviderRedis,
+                path: `${SERVER_TEST_SRC_DIR}_package_/`,
+                renameTo: moveToJavaPackageTestDir,
+                templates: [
+                  'config/EmbeddedRedis.java',
+                  'config/RedisTestContainer.java',
+                  'config/RedisTestContainersSpringContextCustomizerFactory.java',
+                ],
+              },
+            ],
+          },
+          context: application,
+        });
+      },
     });
   }
 

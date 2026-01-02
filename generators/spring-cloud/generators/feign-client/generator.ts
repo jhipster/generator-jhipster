@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { SpringBootApplicationGenerator } from '../../generator.ts';
+import { SpringBootApplicationGenerator } from '../../../spring-boot/generator.ts';
 
 import cleanupTask from './cleanup.ts';
 import { feignFiles } from './files.ts';
@@ -64,6 +64,18 @@ export default class FeignClientGenerator extends SpringBootApplicationGenerator
             ...openFeignArtifact,
             scope: 'implementation',
           });
+        }
+      },
+      addFeignReactor({ application, source }) {
+        const { applicationTypeGateway, applicationTypeMicroservice, javaDependencies, reactive } = application;
+        if ((applicationTypeMicroservice || applicationTypeGateway) && reactive) {
+          const groupId = 'com.playtika.reactivefeign';
+          source.addJavaDependencies?.([
+            { groupId, artifactId: 'feign-reactor-bom', type: 'pom', scope: 'import', version: javaDependencies!['feign-reactor-bom'] },
+            { groupId, artifactId: 'feign-reactor-cloud' },
+            { groupId, artifactId: 'feign-reactor-spring-configuration' },
+            { groupId, artifactId: 'feign-reactor-webclient' },
+          ]);
         }
       },
     });

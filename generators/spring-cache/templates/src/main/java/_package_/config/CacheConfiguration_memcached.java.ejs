@@ -1,0 +1,129 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.config;
+
+<%_ if (generateBuiltInUserEntity) { _%>
+import <%= packageName %>.repository.UserRepository;
+<%_ } _%>
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.support.NoOpCacheManager;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Bean;
+import java.util.HashMap;
+import java.util.Map;
+import java.net.InetSocketAddress;
+import net.rubyeye.xmemcached.auth.AuthInfo;
+import net.rubyeye.xmemcached.utils.AddrUtil;
+import com.google.code.ssm.providers.xmemcached.XMemcachedConfiguration;
+import com.google.code.ssm.CacheFactory;
+import com.google.code.ssm.config.DefaultAddressProvider;
+import com.google.code.ssm.providers.xmemcached.MemcacheClientFactoryImpl;
+import com.google.code.ssm.spring.SSMCache;
+import com.google.code.ssm.spring.SSMCacheManager;
+
+import tech.jhipster.config.JHipsterProperties;
+
+@Configuration
+@EnableCaching
+public class CacheConfiguration {
+    private static final Logger LOG = LoggerFactory.getLogger(CacheConfiguration.class);
+
+    @Bean
+    public CacheManager memcachedCacheManager(JHipsterProperties jHipsterProperties, List<CacheFactory> caches)
+        throws Exception {
+
+        if (!jHipsterProperties.getCache().getMemcached().isEnabled()) {
+            // Note that Memcached cannot work with Spring Boot devtools
+            // So it should be disabled in development mode
+            LOG.debug("Memcached is disabled");
+            return new NoOpCacheManager();
+        }
+        LOG.debug("Starting Memcached configuration");
+        SSMCacheManager cacheManager = new SSMCacheManager();
+        List<SSMCache> ssmCaches = new ArrayList<>();
+        for (CacheFactory cache : caches) {
+            SSMCache ssmCache =
+                new SSMCache(cache.getObject(), jHipsterProperties.getCache().getMemcached().getExpiration(),
+                    false);
+
+            ssmCaches.add(ssmCache);
+        }
+        cacheManager.setCaches(ssmCaches);
+        return cacheManager;
+    }
+
+    @Bean
+    CacheFactory defaultCacheFactory(JHipsterProperties jHipsterProperties) {
+        return createCache("default", jHipsterProperties);
+    }
+<%_ if (generateBuiltInUserEntity) { _%>
+
+    @Bean
+    public CacheFactory usersByLoginCache(JHipsterProperties jHipsterProperties) {
+        return this.createCache(UserRepository.USERS_BY_LOGIN_CACHE, jHipsterProperties);
+    }
+
+    @Bean
+    public CacheFactory usersByEmailCache(JHipsterProperties jHipsterProperties) {
+        return this.createCache(UserRepository.USERS_BY_EMAIL_CACHE, jHipsterProperties);
+    }
+<%_ } _%>
+
+    private CacheFactory createCache(String cacheName, JHipsterProperties jHipsterProperties) {
+        if (!jHipsterProperties.getCache().getMemcached().isEnabled()) {
+            // Note that Memcached cannot work with Spring Boot devtools
+            // So it should be disabled in development mode
+            return null;
+        }
+        CacheFactory defaultCache = new CacheFactory();
+        defaultCache.setCacheName(cacheName);
+        defaultCache.setCacheClientFactory(new MemcacheClientFactoryImpl());
+
+        DefaultAddressProvider addressProvider = new DefaultAddressProvider();
+        addressProvider.setAddress(jHipsterProperties.getCache().getMemcached().getServers());
+        defaultCache.setAddressProvider(addressProvider);
+
+        Map<InetSocketAddress, AuthInfo> authInfoMap = new HashMap<>();
+
+        if (jHipsterProperties.getCache().getMemcached().getAuthentication().isEnabled()) {
+            InetSocketAddress memcachedServers = AddrUtil.getOneAddress(jHipsterProperties.getCache().getMemcached().getServers());
+            AuthInfo authInfo =
+                AuthInfo.plain(
+                    jHipsterProperties.getCache().getMemcached().getAuthentication().getUsername(),
+                    jHipsterProperties.getCache().getMemcached().getAuthentication().getPassword());
+
+            authInfoMap.put(memcachedServers, authInfo);
+        }
+        XMemcachedConfiguration cacheConfiguration = new XMemcachedConfiguration();
+        if (!authInfoMap.isEmpty()) {
+            cacheConfiguration.setAuthInfoMap(authInfoMap);
+        }
+        cacheConfiguration.setConsistentHashing(true);
+        cacheConfiguration.setUseBinaryProtocol(jHipsterProperties.getCache().getMemcached().isUseBinaryProtocol());
+        defaultCache.setConfiguration(cacheConfiguration);
+
+        return defaultCache;
+    }
+}

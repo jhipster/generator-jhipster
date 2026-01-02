@@ -20,7 +20,7 @@
   <div class="col-8">
   @if (user(); as userRef) {
     <div>
-      <h2>
+      <h2 data-cy="userManagementDetailsHeading">
         <span>__jhiTranslateTag__('userManagement.detail.title')</span> [<strong>{{ userRef.login }}</strong>]
       </h2>
 
@@ -73,7 +73,7 @@
         </dd>
       </dl>
 
-      <button type="submit" routerLink="../../" class="btn btn-info">
+      <button type="submit" routerLink="../../" class="btn btn-info" data-cy="entityDetailsBackButton">
         <fa-icon icon="arrow-left" />&nbsp;<span>__jhiTranslateTag__('entity.action.back')</span>
       </button>
     </div>
