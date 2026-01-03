@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { getPageNumberFromLinkHeader } from '@/shared/jhipster/link-header';
 import { byteSize, openFile, toBase64 } from '@/shared/jhipster/data-utils';
 
 /**
@@ -100,33 +101,7 @@ const useDataUtils = () => ({
    * Method to parse header links
    */
   parseLinks(header) {
-    const links = {};
-
-    if (!(header?.includes(','))) {
-      return links;
-    }
-    // Split parts by comma
-    const parts = header.split(',');
-
-    // Parse each part into a named link
-    parts.forEach(p => {
-      if (!p.includes('>;')) {
-        return;
-      }
-      const section = p.split('>;');
-      const url = section[0].replace(/<(.*)/, '$1').trim();
-      const queryString = { page: null };
-      url.replace(new RegExp(/([^?=&]+)(=([^&]*))?/g), ($0, $1, $2, $3) => {
-        queryString[$1] = $3;
-      });
-      let page = queryString.page;
-      if (typeof page === 'string') {
-        page = parseInt(page, 10);
-      }
-      const name = section[1].replace(/rel="(.*)"/, '$1').trim();
-      links[name] = page;
-    });
-    return links;
+    return getPageNumberFromLinkHeader(header);
   },
 });
 
