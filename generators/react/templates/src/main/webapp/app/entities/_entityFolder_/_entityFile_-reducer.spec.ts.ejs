@@ -25,7 +25,7 @@ import axios from 'axios';
 import { configureStore } from '@reduxjs/toolkit';
 import sinon from 'sinon';
 <%_ if (paginationInfiniteScroll) { _%>
-import { parseHeaderForLinks } from 'react-jhipster';
+import { getPageNumberFromLinkHeader } from 'app/shared/jhipster/link-header';
 <%_ } _%>
 
 import reducer, {
@@ -182,7 +182,7 @@ describe('Entities reducer tests', () => {
     it('should fetch all entities', () => {
       const payload = { data: [{ 1: 'fake1' }, { 2: 'fake2' }]<% if (!paginationNo) { %>, headers: { 'x-total-count': 123<% if (paginationInfiniteScroll) { %>, link: ';'<% } %> }<% } %> };
 <%_ if (paginationInfiniteScroll) { _%>
-      const links = parseHeaderForLinks(payload.headers.link);
+      const links = getPageNumberFromLinkHeader(payload.headers.link);
 <%_ } _%>
       expect(reducer(undefined, {
         type: getEntities.fulfilled.type,
@@ -203,7 +203,7 @@ describe('Entities reducer tests', () => {
     it('should search all entities', () => {
       const payload = { data: [{ 1: 'fake1' }, { 2: 'fake2' }]<% if (!paginationNo) { %>, headers: { 'x-total-count': 123<% if (paginationInfiniteScroll) { %>, link: ';'<% } %> }<% } %> };
   <%_ if (paginationInfiniteScroll) { _%>
-      const links = parseHeaderForLinks(payload.headers.link);
+      const links = getPageNumberFromLinkHeader(payload.headers.link);
   <%_ } _%>
       expect(reducer(undefined, {
         type: searchEntities.fulfilled.type,
