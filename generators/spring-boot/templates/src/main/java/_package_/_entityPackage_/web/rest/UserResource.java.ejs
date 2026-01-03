@@ -162,7 +162,7 @@ public class UserResource {
      */
     @PostMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public <% if (reactive) { %>Mono<ResponseEntity<<%= user.persistClass %>>><% } else { %>ResponseEntity<<%= user.persistClass %>><% } %> createUser(@Valid @RequestBody <%= user.adminUserDto %> userDTO)<% if (!reactive) { %> throws URISyntaxException<% } %> {
+    public <% if (reactive) { %>Mono<ResponseEntity<<%= user.persistClass %>>><% } else { %>ResponseEntity<<%= user.adminUserDto %>><% } %> createUser(@Valid @RequestBody <%= user.adminUserDto %> userDTO)<% if (!reactive) { %> throws URISyntaxException<% } %> {
         LOG.debug("REST request to save User : {}", userDTO);
 
         if (userDTO.getId() != null) {
@@ -191,7 +191,7 @@ public class UserResource {
                 try {
                     return ResponseEntity.created(new URI("/api/admin/users/" + user.getLogin()))
                         .headers(HeaderUtil.createAlert(applicationName, <% if (enableTranslation) { %> "userManagement.created"<% } else { %> "A user is created with identifier " + user.getLogin()<% } %>, user.getLogin()))
-                        .body(user);
+                        .body(new <%= user.adminUserDto %>(user));
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
                 }
@@ -206,7 +206,7 @@ public class UserResource {
             mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/admin/users/" + newUser.getLogin()))
                 .headers(HeaderUtil.createAlert(applicationName, <% if (enableTranslation) { %> "userManagement.created"<% } else { %> "A user is created with identifier " + newUser.getLogin()<% } %>, newUser.getLogin()))
-                .body(newUser);
+                .body(new <%= user.adminUserDto %>(newUser));
         }
 <%_ } _%>
     }
