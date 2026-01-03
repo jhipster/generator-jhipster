@@ -6,8 +6,7 @@
     "noEmit": true,
     "noImplicitAny": true,
     "types": [],
-    // Disable for test files that have type-checking variables
-    "noUnusedLocals": false,
-    "noUnusedParameters": false
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   }
 }
