@@ -16,28 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../base-application/index.ts';
-import { createNeedleCallback } from '../base-core/support/needles.ts';
-import type { Source as CommonSource } from '../common/types.ts';
-import { GRADLE_BUILD_SRC_MAIN_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../generator-constants.ts';
-import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../java/support/files.ts';
+import { createNeedleCallback } from '../../../base-core/support/needles.ts';
+import type { Source as CommonSource } from '../../../common/types.ts';
+import { GRADLE_BUILD_SRC_MAIN_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../../../generator-constants.ts';
+import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../../../java/support/files.ts';
+import { SpringBootApplicationGenerator } from '../../generator.ts';
 
 import { getCacheProviderMavenDefinition } from './internal/dependencies.ts';
-import type {
-  Application as SpringCacheApplication,
-  Config as SpringCacheConfig,
-  Entity as SpringCacheEntity,
-  Options as SpringCacheOptions,
-  Source as SpringCacheSource,
-} from './types.ts';
 
-export default class SpringCacheGenerator extends BaseApplicationGenerator<
-  SpringCacheEntity,
-  SpringCacheApplication,
-  SpringCacheConfig,
-  SpringCacheOptions,
-  SpringCacheSource
-> {
+export default class SpringCacheGenerator extends SpringBootApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -63,7 +50,7 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<
     });
   }
 
-  get [BaseApplicationGenerator.CONFIGURING]() {
+  get [SpringBootApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
@@ -109,7 +96,7 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
+  get [SpringBootApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
@@ -169,7 +156,7 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [SpringBootApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -244,7 +231,7 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [SpringBootApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
@@ -263,7 +250,7 @@ export default class SpringCacheGenerator extends BaseApplicationGenerator<
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
+  get [SpringBootApplicationGenerator.POST_WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.postWritingEntities);
   }
 }

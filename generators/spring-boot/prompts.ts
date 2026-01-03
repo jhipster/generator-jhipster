@@ -24,7 +24,6 @@ import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MONOLITH } from '../../lib/c
 import { applicationOptions, authenticationTypes, cacheTypes, databaseTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
 import { asPromptingTask } from '../base-application/support/task-type-inference.ts';
 import { R2DBC_DB_OPTIONS, SQL_DB_OPTIONS } from '../server/support/database.ts';
-import type { Config as SpringCacheConfig } from '../spring-cache/types.ts';
 import type { Config as SpringDataRelationalConfig } from '../spring-data/generators/relational/types.ts';
 
 import type SpringBootGenerator from './generator.ts';
@@ -150,7 +149,7 @@ export const askForServerSideOpts = asPromptingTask(async function (this: Spring
             name: 'No cache - Warning, when using an SQL database, this will disable the Hibernate 2nd level cache!',
           },
         ],
-        default: (this.jhipsterConfigWithDefaults as SpringCacheConfig).cacheProvider,
+        default: this.jhipsterConfigWithDefaults.cacheProvider,
       },
       {
         when: answers =>
@@ -161,7 +160,7 @@ export const askForServerSideOpts = asPromptingTask(async function (this: Spring
         type: 'confirm',
         name: 'enableHibernateCache',
         message: 'Do you want to use Hibernate 2nd level cache?',
-        default: (this.jhipsterConfigWithDefaults as SpringCacheConfig).enableHibernateCache,
+        default: this.jhipsterConfigWithDefaults.enableHibernateCache,
       },
     ],
     this.config,
