@@ -34,8 +34,6 @@ public class KafkaTestContainersSpringContextCustomizerFactory implements Contex
 
     private Logger log = LoggerFactory.getLogger(KafkaTestContainersSpringContextCustomizerFactory.class);
 
-    private static KafkaTestContainer kafkaBean;
-
     @Override
     public ContextCustomizer createContextCustomizer(Class<?> testClass, List<ContextConfigurationAttributes> configAttributes) {
 
@@ -43,25 +41,26 @@ public class KafkaTestContainersSpringContextCustomizerFactory implements Contex
             @Override
             public void customizeContext(ConfigurableApplicationContext context,
                     MergedContextConfiguration mergedConfig) {
-                ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
                 TestPropertyValues testValues = TestPropertyValues.empty();
                 EmbeddedKafka kafkaAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedKafka.class);
                 if (null != kafkaAnnotation) {
                     log.debug("detected the EmbeddedKafka annotation on class {}", testClass.getName());
-                    log.info("Warming up the kafka broker");
-                    if (null == kafkaBean) {
-                        kafkaBean = beanFactory.createBean(KafkaTestContainer.class);
-                        beanFactory.registerSingleton(KafkaTestContainer.class.getName(), kafkaBean);
-                    }
-                    testValues = testValues.and("spring.cloud.stream.kafka.binder.brokers=" + kafkaBean.getKafkaContainer().getHost() + ':' + kafkaBean.getKafkaContainer().getFirstMappedPort());
-                    testValues = testValues.and("spring.cloud.stream.enabled=true");
+                    testValues = testValues.and("spring.cloud.function.scan.enabled=true");
+                    testValues = testValues.and("spring.cloud.function.definition=kafkaConsumer;kafkaProducer");
+                    testValues = testValues.and("spring.cloud.stream.bindings.binding-out-0.content-type=text/plain");
+                    testValues = testValues.and("spring.cloud.stream.bindings.binding-out-0.group=<%= dasherizedBaseName %>");
+                    testValues = testValues.and("spring.cloud.stream.bindings.kafkaConsumer-in-0.destination=sse-topic");
+                    testValues = testValues.and("spring.cloud.stream.bindings.kafkaConsumer-in-0.content-type=text/plain");
+                    testValues = testValues.and("spring.cloud.stream.bindings.kafkaConsumer-in-0.group=<%= dasherizedBaseName %>");
+                    testValues = testValues.and("spring.cloud.stream.bindings.kafkaProducer-out-0.content-type=text/plain");
+                    testValues = testValues.and("spring.cloud.stream.bindings.kafkaProducer-out-0.group=<%= dasherizedBaseName %>");
                 }
                 testValues.applyTo(context);
             }
 
             @Override
             public int hashCode() {
-                return KafkaTestContainer.class.getName().hashCode();
+                return KafkaTestContainersSpringContextCustomizerFactory.class.getName().hashCode();
             }
 
             @Override

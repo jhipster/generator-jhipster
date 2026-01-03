@@ -63,10 +63,15 @@ mongock:
 spring:
   application:
     name: <%= baseName %>
-<%_ if (applicationTypeGateway) { _%>
+<%_ if (applicationTypeGateway || messageBrokerKafka) { _%>
   autoconfigure:
     exclude:
+  <%_ if (applicationTypeGateway) { _%>
       - org.springframework.cloud.gateway.config.GatewayMetricsAutoConfiguration
+  <%_ } _%>
+  <%_ if (messageBrokerKafka) { _%>
+      - org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
+  <%_ } _%>
 <%_ } _%>
 <%_ if (serviceDiscoveryEureka || serviceDiscoveryConsul || messageBrokerAny) { _%>
   cloud:
@@ -86,24 +91,11 @@ spring:
 <%_ } _%>
 <%_ if (messageBrokerKafka) { _%>
     function:
-      definition: kafkaConsumer;kafkaProducer
+      scan:
+        enabled: false
+      definition: ''
     stream:
-      enabled: false
-      kafka:
-        binder:
-          replicationFactor: 1
-          auto-create-topics: true
-      bindings:
-        binding-out-0:
-          content-type: text/plain
-          group: <%= dasherizedBaseName %>
-        kafkaConsumer-in-0:
-          destination: sse-topic
-          content-type: text/plain
-          group: <%= dasherizedBaseName %>
-        kafkaProducer-out-0:
-          content-type: text/plain
-          group: <%= dasherizedBaseName %>
+      defaultBinder: test
 <%_ } _%>
 <%_ if (messageBrokerPulsar) { _%>
     function:
@@ -235,3 +227,7 @@ management:
   health:
     mail:
       enabled: false
+<%_ if (messageBrokerKafka) { _%>
+    kafka:
+      enabled: false
+<%_ } _%>
