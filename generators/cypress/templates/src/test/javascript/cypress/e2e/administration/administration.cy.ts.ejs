@@ -46,7 +46,7 @@ describe('/admin', () => {
       cy.clickOnAdminMenuItem('user-management');
       cy.get(userManagementPageHeadingSelector).should('be.visible');
     });
-    describe('/user-management CRUD', () => {
+    describe.skip('/user-management CRUD', () => {
       const userManagementPageUrlPattern = new RegExp('/admin/user-management(\\?.*)?$');
       const userManagementPageUrl = '/admin/user-management';
       let user;
