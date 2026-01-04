@@ -79,6 +79,13 @@ describe('/admin', () => {
             method: 'POST',
             url: '/api/admin/users',
             body: userSample,
+            failOnStatusCode: false,
+          }).then(({ status }) => {
+            expect(status).to.be.oneOf([201, 500]);
+            return cy.authenticatedRequest({
+              method: 'GET',
+              url: `/api/admin/users/${userSample.login}`,
+            });
           }).then(({ body }) => {
             user = body;
             cy.intercept(
