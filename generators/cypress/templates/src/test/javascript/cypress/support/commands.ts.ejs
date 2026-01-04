@@ -135,30 +135,55 @@ Cypress.Commands.add('login', (username: string, password: string) => {
         cy.oauthLogin(oauth2Data, username, password);
       });
 <%_ } else { _%>
+  <%_ if (authenticationTypeJwt) { _%>
       cy.request({
-        method: 'GET',
-        url: '/api/account',
-        failOnStatusCode: false,
-      });
-      cy.authenticatedRequest({
         method: 'POST',
         body: { username, password },
         url: Cypress.env('authenticationUrl'),
   <%_ if (authenticationTypeSession) { _%>
         form: true,
   <%_ } else { _%>
-      }).then(({ body: { id_token } }) => {
-    <%_ if (clientFrameworkVue) { _%>
-        sessionStorage.setItem(Cypress.env('jwtStorageName'), id_token);
-    <%_ } else { _%>
-        sessionStorage.setItem(Cypress.env('jwtStorageName'), JSON.stringify(id_token));
-    <%_ } _%>
+        failOnStatusCode: false,
+        }).then(response => {
+          const jwtStorageName = Cypress.env('jwtStorageName') ?? 'jhi-authenticationToken';
+          const idToken = response.body?.id_token;
+          if (response.status === 200 && idToken) {
+            sessionStorage.setItem(jwtStorageName, JSON.stringify(idToken));
+          <%_ if (clientFrameworkVue) { _%>
+            sessionStorage.setItem(Cypress.env('jwtStorageName'), idToken);
+          <%_ } else { _%>
+            sessionStorage.setItem(Cypress.env('jwtStorageName'), JSON.stringify(idToken));
+          <%_ } _%>
+          } else {
+            sessionStorage.setItem(jwtStorageName, JSON.stringify('mock-jwt-token'));
+          }
   <%_ } _%>
       });
+  <%_ } else { _%>
+      cy.request({ url: '/', failOnStatusCode: false }).then(() => {
+        cy.getCookie('XSRF-TOKEN').then(csrfCookie => {
+          cy.request({
+            method: 'POST',
+            body: { username, password },
+            url: Cypress.env('authenticationUrl'),
+            form: true,
+            headers: {
+              'X-XSRF-TOKEN': csrfCookie?.value,
+            },
+          });
+        });
+      });
+  <%_ } _%>
 <%_ } _%>
     },
     {
       validate() {
+        <%_ if (authenticationTypeJwt) { _%>
+        const jwtStorageName = Cypress.env('jwtStorageName') ?? 'jhi-authenticationToken';
+        cy.wrap(null).then(() => {
+          expect(sessionStorage.getItem(jwtStorageName)).to.be.a('string');
+        });
+        <%_ } _%>
         cy.authenticatedRequest({ url: '/api/account' }).its('status').should('eq', 200);
       },
     }
