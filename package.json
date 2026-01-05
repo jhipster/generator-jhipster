@@ -138,7 +138,7 @@
     "@yeoman/transform": "2.1.0",
     "@yeoman/types": "1.9.1",
     "chalk": "5.6.2",
-    "chevrotain": "11.0.3",
+    "chevrotain": "11.1.0",
     "commander": "14.0.2",
     "debug": "4.4.3",
     "didyoumean": "1.2.2",
