@@ -80,7 +80,7 @@ export default class ElasticsearchGenerator extends SpringBootApplicationGenerat
         });
       },
       addAnnotations({ application, source }) {
-        source.editJavaFile!(`${application.javaPackageSrcDir}config/DatabaseConfiguration.java`, {
+        source.editJavaFile!(`${application.javaPackageSrcDir}${application.mainClass}.java`, {
           imports: ['org.springframework.context.annotation.ComponentScan', 'org.springframework.context.annotation.FilterType'],
           annotations: [
             {
