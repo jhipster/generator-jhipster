@@ -7,7 +7,7 @@
     "@cypress/schematic": "5.0.0",
     "babel-loader": "10.0.0",
     "babel-plugin-istanbul": "7.0.1",
-    "cypress": "15.8.1",
+    "cypress": "15.8.2",
     "cypress-audit": "1.1.0",
     "cypress-monocart-coverage": "1.0.1",
     "eslint-plugin-cypress": "5.2.0",
