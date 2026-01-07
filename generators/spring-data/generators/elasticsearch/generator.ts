@@ -79,6 +79,20 @@ export default class ElasticsearchGenerator extends SpringBootApplicationGenerat
           value: `${application.packageName}.config.TestContainersSpringContextCustomizerFactory`,
         });
       },
+      addAnnotations({ application, source }) {
+        source.editJavaFile!(`${application.javaPackageSrcDir}config/DatabaseConfiguration.java`, {
+          imports: ['org.springframework.context.annotation.ComponentScan', 'org.springframework.context.annotation.FilterType'],
+          annotations: [
+            {
+              annotation: `Enable${application.emptyOrReactive}ElasticsearchRepositories`,
+              package: 'org.springframework.data.elasticsearch.repository.config',
+              parameters: () =>
+                `basePackages = "${application.packageName}.repository.search", includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = { org.springframework.data.elasticsearch.repository.${application.emptyOrReactive}ElasticsearchRepository.class })`,
+              // parameters: () => application.generateBuiltInUserEntity ? `basePackages = "${application.packageName}.repository.search", excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = { ${application.packageName}.repository.UserRepository.class })` : '',
+            },
+          ],
+        });
+      },
       addDependencies({ source }) {
         source.addSpringBootModule?.('spring-boot-starter-data-elasticsearch');
         source.addJavaDependencies?.([
