@@ -48,7 +48,7 @@
     "vitest": "4.0.16",
     "vitest-sonar-reporter": "3.0.0",
     "webpack": "5.104.1",
-    "webpack-bundle-analyzer": "5.1.0",
+    "webpack-bundle-analyzer": "5.1.1",
     "webpack-merge": "6.0.1",
     "webpack-notifier": "1.15.0"
   },
