@@ -339,6 +339,10 @@ exports[`generator - spring-boot:cache hazelcast-gradle should match source call
             "groupId": "com.hazelcast",
             "version": "'HAZELCAST-SPRING-VERSION'",
           },
+          {
+            "artifactId": "spring-boot-starter-hazelcast",
+            "groupId": "org.springframework.boot",
+          },
         ],
       },
       {
@@ -402,6 +406,10 @@ exports[`generator - spring-boot:cache hazelcast-maven should match source calls
             "artifactId": "hazelcast-spring",
             "groupId": "com.hazelcast",
             "version": "'HAZELCAST-SPRING-VERSION'",
+          },
+          {
+            "artifactId": "spring-boot-starter-hazelcast",
+            "groupId": "org.springframework.boot",
           },
         ],
       },
