@@ -23,7 +23,7 @@ import { mutateData } from '../../../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { loadRequiredConfigIntoEntity } from '../../../base-application/support/index.ts';
 import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../../base-application/types.d.ts';
-import { loadDockerDependenciesTask } from '../../../base-workspaces/internal/docker-dependencies.ts';
+import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../../../base-workspaces/internal/docker-dependencies.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-data/generators/relational/types.d.ts';
 import serverCommand from '../../command.ts';
 import {
@@ -119,6 +119,22 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.preparing;
+  }
+
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      async loadDockerDependencies({ application }) {
+        // springBoot4 is prepared in preparing phase of spring-boot generator
+        loadDockerElasticsearchVersion.call(this, {
+          springBoot4: application.springBoot4,
+          dockerContainers: application.dockerContainers!,
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING]() {
+    return this.postPreparing;
   }
 
   get loadingEntities() {

@@ -36,9 +36,6 @@ import org.springframework.context.annotation.FilterType;
 <%_ } _%>
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.converter.Converter;
-<%_ if (searchEngineElasticsearch) { _%>
-import org.springframework.data.elasticsearch.repository.config.Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories;
-<%_ } _%>
 <%_ if (!reactive) { _%>
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 <%_ } _%>
@@ -55,7 +52,6 @@ import java.util.List;
 @Configuration
 @EnableMongock
 <%_ if (searchEngineElasticsearch) { _%>
-@Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories("<%= packageName %>.repository.search")
 @Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories(basePackages = "<%= packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>MongoRepository.class))
 <%_ } else { _%>
 @Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories("<%= packageName %>.repository")

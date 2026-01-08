@@ -70,6 +70,7 @@ export type JavaSimpleApplicationAddedApplicationProperties = {
   addOpenapiGeneratorPlugin: boolean;
   graalvmReachabilityMetadata: string;
 
+  emptyOrReactive: string;
   imperativeOrReactive: string;
   optionalOrMono: string;
   optionalOrMonoOfNullable: string;
@@ -126,6 +127,7 @@ export const mutateApplication = {
 
   addOpenapiGeneratorPlugin: true,
 
+  emptyOrReactive: ({ reactive }) => (reactive ? 'Reactive' : ''),
   imperativeOrReactive: ({ reactive }) => (reactive ? 'reactive' : 'imperative'),
   optionalOrMono: ({ reactive }) => (reactive ? 'Mono' : 'Optional'),
   optionalOrMonoOfNullable: ({ reactive }) => (reactive ? 'Mono.justOrEmpty' : 'Optional.ofNullable'),

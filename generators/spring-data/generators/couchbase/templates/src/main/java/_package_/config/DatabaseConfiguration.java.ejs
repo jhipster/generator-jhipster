@@ -36,9 +36,6 @@ import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.GenericConverter;
 import org.springframework.core.convert.support.GenericConversionService;
-<%_ if (searchEngineElasticsearch) { _%>
-import org.springframework.data.elasticsearch.repository.config.Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories;
-<%_ } _%>
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.couchbase.config.AbstractCouchbaseConfiguration;
@@ -68,9 +65,6 @@ import reactor.core.publisher.Flux;
 
 @Configuration
 @EnableConfigurationProperties(CouchbaseProperties.class)
-<%_ if (searchEngineElasticsearch) { _%>
-@Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories("<%= packageName %>.repository.search")
-<%_ } _%>
 @Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)
 @Enable<% if (reactive) { %>Reactive<% } %>CouchbaseRepositories(basePackages = "<%= packageName %>.repository"<%_ if (searchEngineElasticsearch) { %>,
     includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>CouchbaseRepository.class)<%_ } _%>)
