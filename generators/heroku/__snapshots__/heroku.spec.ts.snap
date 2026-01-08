@@ -1589,7 +1589,7 @@ exports[`generator - Heroku monolith application with existing app should match 
     "entities": [],
     "herokuAppName": "jhipster-existing",
     "herokuDeployType": "git",
-    "herokuJavaVersion": "17"
+    "herokuJavaVersion": "JAVA_VERSION"
   }
 }
 ",
@@ -1733,7 +1733,7 @@ server:
     "stateCleared": "modified",
   },
   "system.properties": {
-    "contents": "java.runtime.version=17 ",
+    "contents": "java.runtime.version=JAVA_VERSION ",
     "stateCleared": "modified",
   },
 }

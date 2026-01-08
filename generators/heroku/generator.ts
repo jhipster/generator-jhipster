@@ -170,7 +170,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
               name: 'herokuJavaVersion',
               message: 'Which Java version would you like to use to build and run your app?',
               choices: JAVA_COMPATIBLE_VERSIONS.map(version => ({ value: version })),
-              default: RECOMMENDED_JAVA_VERSION,
+              default: this.useVersionPlaceholders ? 'JAVA_VERSION' : RECOMMENDED_JAVA_VERSION,
             },
           ],
           this.config,

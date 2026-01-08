@@ -4,11 +4,11 @@ exports[`generator - github-build-matrix with angular should match matrix value 
 "{
   "include": [
     {
-      "job-name": "ng-default (n[0]/j[3])",
+      "job-name": "ng-default (n[0]/j[2])",
       "sample": "ng-default",
       "os": "ubuntu-latest",
       "node-version": "[0]",
-      "java-version": "[3]",
+      "java-version": "[2]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -25,11 +25,11 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "ng-default-additional-webpack (n[1]/j[1])",
+      "job-name": "ng-default-additional-webpack (n[1]/j[2])",
       "sample": "ng-default-additional",
       "os": "ubuntu-latest",
       "node-version": "[1]",
-      "java-version": "[1]",
+      "java-version": "[2]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -51,11 +51,11 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "ng-mysql-es-noi18n-mapsid (n[2]/j[0])",
+      "job-name": "ng-mysql-es-noi18n-mapsid (n[2]/j[2])",
       "sample": "ng-mysql-es-noi18n-mapsid",
       "os": "ubuntu-latest",
       "node-version": "[2]",
-      "java-version": "[0]",
+      "java-version": "[2]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -71,11 +71,11 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "ng-mongodb-kafka-cucumber (n[2]/j[2])",
+      "job-name": "ng-mongodb-kafka-cucumber (n[2]/j[1])",
       "sample": "ng-mongodb-kafka-cucumber",
       "os": "ubuntu-latest",
       "node-version": "[2]",
-      "java-version": "[2]",
+      "java-version": "[1]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -118,11 +118,11 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "ng-couchbase (n[1]/j[0])",
+      "job-name": "ng-couchbase (n[1]/j[1])",
       "sample": "ng-couchbase",
       "os": "ubuntu-latest",
       "node-version": "[1]",
-      "java-version": "[0]",
+      "java-version": "[1]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -138,11 +138,11 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "ng-gradle-couchbase-search (n[0]/j[1])",
+      "job-name": "ng-gradle-couchbase-search (n[0]/j[2])",
       "sample": "ng-gradle-couchbase-search",
       "os": "ubuntu-latest",
       "node-version": "[0]",
-      "java-version": "[1]",
+      "java-version": "[2]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -159,11 +159,11 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "ng-gradle-fr (n[2]/j[3])",
+      "job-name": "ng-gradle-fr (n[2]/j[2])",
       "sample": "ng-gradle-fr",
       "os": "ubuntu-latest",
       "node-version": "[2]",
-      "java-version": "[3]",
+      "java-version": "[2]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -180,11 +180,11 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "ng-gradle-mariadb-oauth2-infinispan (n[2]/j[3])",
+      "job-name": "ng-gradle-mariadb-oauth2-infinispan (n[2]/j[2])",
       "sample": "ng-gradle-mariadb-oauth2-infinispan",
       "os": "ubuntu-latest",
       "node-version": "[2]",
-      "java-version": "[3]",
+      "java-version": "[2]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -204,11 +204,11 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "ng-gradle-h2disk-ws-nocache (n[2]/j[3])",
+      "job-name": "ng-gradle-h2disk-ws-nocache (n[2]/j[1])",
       "sample": "ng-gradle-h2disk-ws-nocache",
       "os": "ubuntu-latest",
       "node-version": "[2]",
-      "java-version": "[3]",
+      "java-version": "[1]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -229,11 +229,11 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "ng-webflux-mongodb (n[2]/j[2])",
+      "job-name": "ng-webflux-mongodb (n[2]/j[0])",
       "sample": "ng-webflux-mongodb",
       "os": "ubuntu-latest",
       "node-version": "[2]",
-      "java-version": "[2]",
+      "java-version": "[0]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -249,11 +249,11 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "ng-webflux-gradle-mongodb-oauth2-webpack (n[0]/j[0])",
+      "job-name": "ng-webflux-gradle-mongodb-oauth2-webpack (n[0]/j[1])",
       "sample": "ng-webflux-gradle-mongodb-oauth2",
       "os": "ubuntu-latest",
       "node-version": "[0]",
-      "java-version": "[0]",
+      "java-version": "[1]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -270,11 +270,11 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "ng-webflux-psql-default-webpack (n[0]/j[1])",
+      "job-name": "ng-webflux-psql-default-webpack (n[0]/j[2])",
       "sample": "ng-webflux-psql-default",
       "os": "ubuntu-latest",
       "node-version": "[0]",
-      "java-version": "[1]",
+      "java-version": "[2]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -290,11 +290,11 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "ng-webflux-psql-additional (n[2]/j[3])",
+      "job-name": "ng-webflux-psql-additional (n[2]/j[2])",
       "sample": "ng-webflux-psql-additional",
       "os": "ubuntu-latest",
       "node-version": "[2]",
-      "java-version": "[3]",
+      "java-version": "[2]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -309,11 +309,11 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "ng-webflux-gradle-session-h2mem-es-webpack (n[2]/j[1])",
+      "job-name": "ng-webflux-gradle-session-h2mem-es-webpack (n[2]/j[2])",
       "sample": "ng-webflux-gradle-session-h2mem-es",
       "os": "ubuntu-latest",
       "node-version": "[2]",
-      "java-version": "[1]",
+      "java-version": "[2]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -333,11 +333,11 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "ng-webflux-couchbase (n[1]/j[3])",
+      "job-name": "ng-webflux-couchbase (n[1]/j[2])",
       "sample": "ng-webflux-couchbase",
       "os": "ubuntu-latest",
       "node-version": "[1]",
-      "java-version": "[3]",
+      "java-version": "[2]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -378,11 +378,11 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "mf-ng-eureka-jwt-psql-ehcache (n[0]/j[0])",
+      "job-name": "mf-ng-eureka-jwt-psql-ehcache (n[0]/j[1])",
       "sample": "mf-ng-eureka-jwt-psql-ehcache",
       "os": "ubuntu-latest",
       "node-version": "[0]",
-      "java-version": "[0]",
+      "java-version": "[1]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -402,11 +402,11 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "ms-mf-ng-consul-oauth2-neo4j (n[0]/j[0])",
+      "job-name": "ms-mf-ng-consul-oauth2-neo4j (n[0]/j[1])",
       "sample": "ms-mf-ng-consul-oauth2-neo4j",
       "os": "ubuntu-latest",
       "node-version": "[0]",
-      "java-version": "[0]",
+      "java-version": "[1]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -814,11 +814,11 @@ exports[`generator - github-build-matrix with react should match matrix value 1`
 "{
   "include": [
     {
-      "job-name": "react-default (n[2]/j[2])",
+      "job-name": "react-default (n[2]/j[1])",
       "sample": "react-default",
       "os": "ubuntu-latest",
       "node-version": "[2]",
-      "java-version": "[2]",
+      "java-version": "[1]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -834,11 +834,11 @@ exports[`generator - github-build-matrix with react should match matrix value 1`
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "react-maven-h2mem-memcached (n[2]/j[0])",
+      "job-name": "react-maven-h2mem-memcached (n[2]/j[1])",
       "sample": "react-maven-h2mem-memcached",
       "os": "ubuntu-latest",
       "node-version": "[2]",
-      "java-version": "[0]",
+      "java-version": "[1]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -857,11 +857,11 @@ exports[`generator - github-build-matrix with react should match matrix value 1`
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "react-gradle-mysql-es-noi18n-mapsid (n[0]/j[3])",
+      "job-name": "react-gradle-mysql-es-noi18n-mapsid (n[0]/j[1])",
       "sample": "react-gradle-mysql-es-noi18n-mapsid",
       "os": "ubuntu-latest",
       "node-version": "[0]",
-      "java-version": "[3]",
+      "java-version": "[1]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -878,11 +878,11 @@ exports[`generator - github-build-matrix with react should match matrix value 1`
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "react-gradle-cassandra-session-redis (n[2]/j[0])",
+      "job-name": "react-gradle-cassandra-session-redis (n[2]/j[1])",
       "sample": "react-gradle-cassandra-session-redis",
       "os": "ubuntu-latest",
       "node-version": "[2]",
-      "java-version": "[0]",
+      "java-version": "[1]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -923,11 +923,11 @@ exports[`generator - github-build-matrix with react should match matrix value 1`
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "ms-mf-react-eureka-oauth2-mariadb-infinispan (n[1]/j[0])",
+      "job-name": "ms-mf-react-eureka-oauth2-mariadb-infinispan (n[1]/j[1])",
       "sample": "ms-mf-react-eureka-oauth2-mariadb-infinispan",
       "os": "ubuntu-latest",
       "node-version": "[1]",
-      "java-version": "[0]",
+      "java-version": "[1]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -954,11 +954,11 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
 "{
   "include": [
     {
-      "job-name": "vue-default (n[0]/j[2])",
+      "job-name": "vue-default (n[0]/j[1])",
       "sample": "vue-default",
       "os": "ubuntu-latest",
       "node-version": "[0]",
-      "java-version": "[2]",
+      "java-version": "[1]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -974,11 +974,11 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "vue-default-additional (n[2]/j[2])",
+      "job-name": "vue-default-additional (n[2]/j[1])",
       "sample": "vue-default-additional",
       "os": "ubuntu-latest",
       "node-version": "[2]",
-      "java-version": "[2]",
+      "java-version": "[1]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -995,11 +995,11 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "vue-noi18n-mysql-ws-oauth2 (n[2]/j[2])",
+      "job-name": "vue-noi18n-mysql-ws-oauth2 (n[2]/j[1])",
       "sample": "vue-noi18n-mysql-ws-oauth2",
       "os": "ubuntu-latest",
       "node-version": "[2]",
-      "java-version": "[2]",
+      "java-version": "[1]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -1015,11 +1015,11 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "vue-fulli18n-mysql-es (n[2]/j[3])",
+      "job-name": "vue-fulli18n-mysql-es (n[2]/j[1])",
       "sample": "vue-fulli18n-mysql-es",
       "os": "ubuntu-latest",
       "node-version": "[2]",
-      "java-version": "[3]",
+      "java-version": "[1]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -1059,11 +1059,11 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "vue-h2disk-ws-theme (n[2]/j[1])",
+      "job-name": "vue-h2disk-ws-theme (n[2]/j[2])",
       "sample": "vue-h2disk-ws-theme",
       "os": "ubuntu-latest",
       "node-version": "[2]",
-      "java-version": "[1]",
+      "java-version": "[2]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -1105,11 +1105,11 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "ms-vue-eureka-jwt-couchbase-hazelcast (n[0]/j[0])",
+      "job-name": "ms-vue-eureka-jwt-couchbase-hazelcast (n[0]/j[1])",
       "sample": "ms-vue-eureka-jwt-couchbase-hazelcast",
       "os": "ubuntu-latest",
       "node-version": "[0]",
-      "java-version": "[0]",
+      "java-version": "[1]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -1129,11 +1129,11 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "ms-mf-vue-consul-oauth2-mysql-memcached (n[2]/j[2])",
+      "job-name": "ms-mf-vue-consul-oauth2-mysql-memcached (n[2]/j[1])",
       "sample": "ms-mf-vue-consul-oauth2-mysql-memcached",
       "os": "ubuntu-latest",
       "node-version": "[2]",
-      "java-version": "[2]",
+      "java-version": "[1]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
@@ -1153,11 +1153,11 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
       "jhipster-bom-cicd-version": "0.0.0-CICD"
     },
     {
-      "job-name": "stack-vue-no-db (n[1]/j[3])",
+      "job-name": "stack-vue-no-db (n[1]/j[0])",
       "sample": "stack-vue-no-db",
       "os": "ubuntu-latest",
       "node-version": "[1]",
-      "java-version": "[3]",
+      "java-version": "[0]",
       "npm-version": "NPM-VERSION",
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
