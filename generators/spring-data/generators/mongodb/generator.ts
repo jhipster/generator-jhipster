@@ -84,6 +84,11 @@ export default class MongoDBGenerator extends SpringBootApplicationGenerator {
           ]);
         }
       },
+      integrationTest({ application, source }) {
+        source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
+          annotations: [{ package: `${application.packageName}.config`, annotation: 'EmbeddedMongo' }],
+        });
+      },
       blockhound({ application, source }) {
         const { reactive } = application;
         if (reactive) {

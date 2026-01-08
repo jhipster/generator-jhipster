@@ -277,6 +277,11 @@ export default class SqlGenerator extends BaseApplicationGenerator<
           }
         }
       },
+      integrationTest({ application, source }) {
+        source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
+          annotations: [{ package: `${application.packageName}.config`, annotation: 'EmbeddedSQL' }],
+        });
+      },
       nativeHints({ application, source }) {
         if (!application.graalvmSupport) return;
 
