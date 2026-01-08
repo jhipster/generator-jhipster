@@ -161,6 +161,7 @@ export const getCacheProviderJavaDefinition: (
             groupId: 'io.micrometer',
             artifactId: 'micrometer-registry-prometheus',
           },
+          ...(springBoot4 ? [{ groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-cache-test' }] : []),
         ],
       },
     },

@@ -543,6 +543,10 @@ exports[`generator - spring-boot:cache infinispan-gradle should match source cal
             "artifactId": "micrometer-registry-prometheus",
             "groupId": "io.micrometer",
           },
+          {
+            "artifactId": "spring-boot-starter-cache-test",
+            "groupId": "org.springframework.boot",
+          },
         ],
       },
       {
@@ -554,7 +558,12 @@ exports[`generator - spring-boot:cache infinispan-gradle should match source cal
     [
       "src/test/java/com/mycompany/myapp/IntegrationTest.java",
       {
-        "annotations": [],
+        "annotations": [
+          {
+            "annotation": "AutoConfigureCache",
+            "package": "org.springframework.boot.cache.test.autoconfigure",
+          },
+        ],
       },
     ],
   ],
@@ -634,6 +643,10 @@ exports[`generator - spring-boot:cache infinispan-maven should match source call
             "artifactId": "micrometer-registry-prometheus",
             "groupId": "io.micrometer",
           },
+          {
+            "artifactId": "spring-boot-starter-cache-test",
+            "groupId": "org.springframework.boot",
+          },
         ],
       },
       {
@@ -645,7 +658,12 @@ exports[`generator - spring-boot:cache infinispan-maven should match source call
     [
       "src/test/java/com/mycompany/myapp/IntegrationTest.java",
       {
-        "annotations": [],
+        "annotations": [
+          {
+            "annotation": "AutoConfigureCache",
+            "package": "org.springframework.boot.cache.test.autoconfigure",
+          },
+        ],
       },
     ],
   ],
