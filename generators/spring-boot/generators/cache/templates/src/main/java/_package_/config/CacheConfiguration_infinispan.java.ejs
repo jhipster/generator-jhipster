@@ -110,7 +110,7 @@ public class CacheConfiguration {
             if (this.registration == null) { // if registry is not defined, use native discovery
                 LOG.warn("No discovery service is set up, Infinispan will use default discovery for cluster formation");
                 return () -> GlobalConfigurationBuilder
-                    .defaultClusteredBuilder().transport().defaultTransport().stack("tcp")
+                    .defaultClusteredBuilder().transport().defaultTransport()
                     .addProperty("configurationFile", jHipsterProperties.getCache().getInfinispan().getConfigFile())
                     .clusterName("infinispan-<%= baseName %>-cluster")
                     .jmx().enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
