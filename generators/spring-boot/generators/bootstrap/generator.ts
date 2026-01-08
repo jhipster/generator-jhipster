@@ -34,11 +34,7 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
       defaults({ applicationDefaults }) {
         applicationDefaults({
           springBoot4: data =>
-            Boolean(
-              ((data.databaseTypeSql && !data.reactive) || data.databaseTypeNeo4j) &&
-              !data.cacheProviderInfinispan &&
-              !data.cacheProviderHazelcast,
-            ),
+            Boolean(((data.databaseTypeSql && !data.reactive) || data.databaseTypeNeo4j) && !data.cacheProviderInfinispan),
           springDataDescription: ({ databaseType, reactive }) => {
             let springDataDatabase: string;
             if (databaseType !== 'sql') {

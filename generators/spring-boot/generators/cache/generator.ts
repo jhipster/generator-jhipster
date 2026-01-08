@@ -22,7 +22,7 @@ import { GRADLE_BUILD_SRC_MAIN_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } f
 import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../../../java/support/files.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';
 
-import { getCacheProviderMavenDefinition } from './internal/dependencies.ts';
+import { getCacheProviderJavaDefinition } from './internal/dependencies.ts';
 
 export default class SpringCacheGenerator extends SpringBootApplicationGenerator {
   async beforeQueue() {
@@ -203,9 +203,9 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
         if (!application.javaDependencies) {
           throw new Error('Some application fields are be mandatory');
         }
-        const { javaDependencies, cacheProvider, enableHibernateCache } = application;
+        const { javaDependencies, cacheProvider, enableHibernateCache, springBoot4 } = application;
 
-        const definition = getCacheProviderMavenDefinition(cacheProvider!, javaDependencies);
+        const definition = getCacheProviderJavaDefinition(cacheProvider!, javaDependencies, { springBoot4 });
         source.addJavaDefinitions?.(
           {
             ...definition.base,
