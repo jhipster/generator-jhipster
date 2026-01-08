@@ -209,7 +209,6 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "indent": "",
   "insideDocker": false,
   "javaCompatibleVersions": [
-    "17",
     "21",
     "25",
   ],

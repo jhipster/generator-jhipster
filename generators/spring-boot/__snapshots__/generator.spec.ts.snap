@@ -374,7 +374,6 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
   "imperativeOrReactive": "imperative",
   "incrementalChangelog": undefined,
   "javaCompatibleVersions": [
-    "17",
     "21",
     "25",
   ],
@@ -1193,7 +1192,6 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
   "imperativeOrReactive": "imperative",
   "incrementalChangelog": undefined,
   "javaCompatibleVersions": [
-    "17",
     "21",
     "25",
   ],
