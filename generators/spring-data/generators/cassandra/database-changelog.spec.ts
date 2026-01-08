@@ -14,6 +14,7 @@ describe('generator - app - database changelogs', () => {
         await helpers
           .runJHipster(GENERATOR_SPRING_DATA_CASSANDRA)
           .withJHipsterConfig({ databaseType: 'cassandra' }, [entityFoo])
+          .withMockedSource()
           .withOptions({ force: true, skipClient: true });
       });
 

@@ -220,6 +220,13 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
           },
         );
       },
+      integrationTest({ application, source }) {
+        source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
+          annotations: [
+            ...(application.cacheProviderRedis ? [{ package: `${application.packageName}.config`, annotation: 'EmbeddedRedis' }] : []),
+          ],
+        });
+      },
       sonar({ application, source }) {
         (source as CommonSource).ignoreSonarRule?.({
           ruleId: 'S1192',

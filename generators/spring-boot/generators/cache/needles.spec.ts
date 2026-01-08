@@ -27,6 +27,11 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
           clientFramework: 'no',
           enableHibernateCache: true,
         })
+        .withFiles({
+          'src/test/java/com/mycompany/myapp/IntegrationTest.java': `
+public @interface IntegrationTest {}
+          `,
+        })
         .withTask('postWriting', addNeedlesTask);
     });
 
@@ -59,6 +64,11 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
           clientFramework: 'no',
           enableHibernateCache: true,
         })
+        .withFiles({
+          'src/test/java/com/mycompany/myapp/IntegrationTest.java': `
+public @interface IntegrationTest {}
+          `,
+        })
         .withTask('postWriting', addNeedlesTask);
     });
 
@@ -90,6 +100,11 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
           cacheProvider: 'redis',
           clientFramework: 'no',
           enableHibernateCache: true,
+        })
+        .withFiles({
+          'src/test/java/com/mycompany/myapp/IntegrationTest.java': `
+public @interface IntegrationTest {}
+          `,
         })
         .withTask('postWriting', addNeedlesTask);
     });

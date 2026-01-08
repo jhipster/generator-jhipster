@@ -173,6 +173,11 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
           },
         );
       },
+      integrationTest({ application, source }) {
+        source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
+          annotations: [{ package: `${application.packageName}.config`, annotation: 'EmbeddedNeo4j' }],
+        });
+      },
     });
   }
 
