@@ -27,6 +27,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 <%_ } else { _%>
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.autoconfigure.WebMvcAutoConfiguration;
 
 <%_ } _%>
 @Target(ElementType.TYPE)
@@ -68,6 +69,7 @@ import org.springframework.boot.test.context.SpringBootTest;
         SecurityConfiguration.class,
         SecurityJwtConfiguration.class,
         SecurityMetersService.class,
+        WebMvcAutoConfiguration.class,
 <%_ if (!applicationTypeMicroservice) { _%>
         AuthenticateController.class,
 <%_ } _%>
