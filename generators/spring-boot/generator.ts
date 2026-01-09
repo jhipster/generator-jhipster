@@ -63,6 +63,8 @@ const { ELASTICSEARCH } = searchEngineTypes;
 const { BYTES: TYPE_BYTES, BYTE_BUFFER: TYPE_BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
 const { CUCUMBER, GATLING } = testFrameworkTypes;
 
+const JHIPSTER_FRAMEWORK_SB3_VERSION = '8.12.0';
+
 export class SpringBootApplicationGenerator extends BaseApplicationGenerator<
   SpringBootEntity,
   SpringBootApplication,
@@ -253,7 +255,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
       springBoot4({ application }) {
         if (!application.springBoot4) {
           // Latest version that supports Spring Boot 3
-          application.jhipsterDependenciesVersion = '9.0.0-beta.0';
+          application.jhipsterDependenciesVersion = JHIPSTER_FRAMEWORK_SB3_VERSION;
         }
       },
       springBoot3({ application }) {
