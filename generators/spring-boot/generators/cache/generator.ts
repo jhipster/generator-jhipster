@@ -162,6 +162,11 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      dependencies({ application, source }) {
+        if (application.springBoot4 && application.cacheProviderInfinispan) {
+          source.overrideProperty!({ property: 'infinispan.version', value: application.javaDependencies!.infinispan });
+        }
+      },
       addTestSpringFactory({ source, application }) {
         if (application.cacheProviderRedis) {
           source.addTestSpringFactory?.({
@@ -220,9 +225,17 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
           },
         );
       },
-      integrationTest({ application, source }) {
+      annotations({ application, source }) {
         source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
           annotations: [
+            ...(application.springBoot4 && application.cacheProviderInfinispan
+              ? [
+                  {
+                    package: 'org.springframework.boot.cache.test.autoconfigure',
+                    annotation: 'AutoConfigureCache',
+                  },
+                ]
+              : []),
             ...(application.cacheProviderRedis ? [{ package: `${application.packageName}.config`, annotation: 'EmbeddedRedis' }] : []),
           ],
         });
