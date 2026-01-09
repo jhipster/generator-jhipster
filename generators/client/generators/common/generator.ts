@@ -36,7 +36,12 @@ export default class CommonGenerator extends BaseApplicationGenerator {
         await this.writeFiles({
           blocks: [
             clientApplicationTemplatesBlock({
-              templates: ['shared/jhipster/constants.ts', 'shared/jhipster/problem-details.ts', 'shared/jhipster/headers.ts'],
+              templates: [
+                'shared/jhipster/constants.ts',
+                'shared/jhipster/link-header.ts',
+                'shared/jhipster/problem-details.ts',
+                'shared/jhipster/headers.ts',
+              ],
             }),
           ],
           context: application,
