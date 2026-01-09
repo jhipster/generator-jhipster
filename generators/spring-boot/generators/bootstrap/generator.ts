@@ -35,7 +35,6 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
         applicationDefaults({
           springBoot4: data =>
             Boolean(
-              !(data.databaseTypeSql && data.reactive) &&
               !(data.databaseTypeCassandra && data.reactive) &&
               !data.databaseTypeCouchbase &&
               !data.databaseTypeMongodb &&
