@@ -136,7 +136,7 @@ spring:
 <%_ if (databaseTypeMongodb && !springBoot4) { _%>
   data:
     mongodb:
-      uri: mongodb://localhost:27017/<%= baseName %><% if (reactive) { %>?waitQueueMultiple=1000<% } %>
+      uri: mongodb://localhost:27017/<%= baseName %>
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
   cassandra:
@@ -172,7 +172,7 @@ spring:
 <%_ } _%>
 <%_ if (databaseTypeMongodb && springBoot4) { _%>
   mongodb:
-    uri: mongodb://localhost:27017/<%= baseName %><% if (reactive) { %>?waitQueueMultiple=1000<% } %>
+    uri: mongodb://localhost:27017/<%= baseName %>
 <%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
   r2dbc:

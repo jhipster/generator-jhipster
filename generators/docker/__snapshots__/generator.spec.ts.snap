@@ -1060,7 +1060,7 @@ services:
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_CLOUD_CONSUL_HOST=consul
       - SPRING_CLOUD_CONSUL_PORT=8500
-      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/jhipster?waitQueueMultiple=1000
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/jhipster
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
       - SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS=kafka:9092
     ports:

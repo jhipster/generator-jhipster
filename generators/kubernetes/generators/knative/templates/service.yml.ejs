@@ -107,7 +107,7 @@ spec:
 <%_ } _%>
 <%_ if (app.databaseTypeMongodb) { _%>
             - name: SPRING_DATA_MONGODB_URI
-              value: "mongodb://<% for (let i = 0; i < app.dbPeerCount; i++) { %><%= app.baseName.toLowerCase() %>-mongodb-<%= i %>.<%= app.baseName.toLowerCase() %>-mongodb.<%= kubernetesNamespace %>:27017<% if (i < (app.dbPeerCount-1)) { %>,<% }} %>/<%= app.baseName %><% if (app.reactive) { %>?waitQueueMultiple=1000<% } %>"
+              value: "mongodb://<% for (let i = 0; i < app.dbPeerCount; i++) { %><%= app.baseName.toLowerCase() %>-mongodb-<%= i %>.<%= app.baseName.toLowerCase() %>-mongodb.<%= kubernetesNamespace %>:27017<% if (i < (app.dbPeerCount-1)) { %>,<% }} %>/<%= app.baseName %>"
 <%_ } _%>
 <%_ if (app.databaseTypeCouchbase) { _%>
             - name: SPRING_COUCHBASE_CONNECTION_STRING
