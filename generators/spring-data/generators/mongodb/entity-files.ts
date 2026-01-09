@@ -45,8 +45,6 @@ export const entityFiles = asWriteFilesSection({
   repositoryFiles,
 });
 
-export function cleanupMongodbEntityFilesTask() {}
-
 export default asWritingEntitiesTask(async function writeEntityMongodbFiles({ application, entities }) {
   for (const entity of entities.filter(entity => !entity.skipServer)) {
     await this.writeFiles({
