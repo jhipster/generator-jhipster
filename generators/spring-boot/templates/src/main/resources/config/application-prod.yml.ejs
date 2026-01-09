@@ -132,8 +132,7 @@ spring:
         prepStmtCacheSqlLimit: 2048
         useServerPrepStmts: true
   <%_ } _%>
-<%_ } _%>
-<%_ if (databaseTypeMongodb) { _%>
+<%_ if (databaseTypeMongodb && !springBoot4) { _%>
   data:
     mongodb:
       uri: mongodb://localhost:27017/<%= baseName %><% if (reactive) { %>?waitQueueMultiple=1000<% } %>
@@ -169,6 +168,10 @@ spring:
     port: 25
     username:
     password:
+<%_ } _%>
+<%_ if (databaseTypeMongodb && springBoot4) { _%>
+  mongodb:
+    uri: mongodb://localhost:27017/<%= baseName %><% if (reactive) { %>?waitQueueMultiple=1000<% } %>
 <%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
   r2dbc:

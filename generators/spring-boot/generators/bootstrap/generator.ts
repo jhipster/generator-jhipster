@@ -38,7 +38,6 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
               !(data.databaseTypeSql && data.reactive) &&
               !(data.databaseTypeCassandra && data.reactive) &&
               !data.databaseTypeCouchbase &&
-              !data.databaseTypeMongodb &&
               !data.cacheProviderInfinispan,
             ),
           springDataDescription: ({ databaseType, reactive }) => {
