@@ -182,7 +182,8 @@ export default class SqlGenerator extends BaseApplicationGenerator<
         if (!application.reactive) {
           source.addIntegrationTestAnnotation?.({
             annotation: 'SpringBootTest',
-            parameters: (_, cb) => cb.addKeyValue('classes', `${application.packageName}.config.JacksonHibernateConfiguration.class`),
+            imports: [`${application.packageName}.config.JacksonHibernateConfiguration`],
+            parameters: (_, cb) => cb.addKeyValue('classes', 'JacksonHibernateConfiguration.class'),
           });
         }
         source.addJavaDefinitions?.(
