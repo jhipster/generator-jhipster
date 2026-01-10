@@ -311,6 +311,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
                     (_match, p1) => `import org.springframework.boot.${suffixReplacements[p1] ?? p1}`,
                   )
                   .replaceAll('import org.jspecify.annotations.Nullable;', 'import org.springframework.lang.Nullable;')
+                  .replaceAll(/import org\.testcontainers\.(mongodb)\./g, 'import org.testcontainers.containers.')
                   .replaceAll(
                     'import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;',
                     'import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;',
