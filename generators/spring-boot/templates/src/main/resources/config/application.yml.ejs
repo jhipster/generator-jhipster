@@ -356,6 +356,11 @@ spring:
   <% if (reactive) { %>webflux<% } else { %>mvc<% } %>:
     problemdetails:
       enabled: true
+<%_ if (databaseTypeMongodb && springBoot4) { _%>
+  mongodb:
+    representation:
+      uuid: standard
+<%_ } _%>
 <%_ if (generateInMemoryUserCredentials || authenticationTypeOauth2 || authenticationTypeJwt) { _%>
   security:
   <%_ if (generateInMemoryUserCredentials) { _%>

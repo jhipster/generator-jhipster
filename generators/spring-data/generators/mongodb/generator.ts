@@ -66,6 +66,9 @@ export default class MongoDBGenerator extends SpringBootApplicationGenerator {
       addDependencies({ application, source }) {
         const { reactive, javaDependencies } = application;
         source.addSpringBootModule?.(`spring-boot-starter-data-mongodb${reactive ? '-reactive' : ''}`);
+        if (application.springBoot4) {
+          source.addSpringBootModule?.(`spring-boot-starter-data-mongodb${reactive ? '-reactive' : ''}-test`);
+        }
         source.addJavaDependencies?.([
           { groupId: 'io.mongock', artifactId: 'mongock-bom', type: 'pom', version: javaDependencies!['mongock-bom'], scope: 'import' },
           { groupId: 'io.mongock', artifactId: 'mongock-springboot-v3' },

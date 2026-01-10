@@ -132,6 +132,11 @@ spring:
     allow-bean-definition-overriding: true
   messages:
     basename: i18n/messages
+<%_ if (databaseTypeMongodb && springBoot4) { _%>
+  mongodb:
+    representation:
+      uuid: standard
+<%_ } _%>
 <%_ if (generateInMemoryUserCredentials || authenticationTypeOauth2 || authenticationTypeJwt) { _%>
   security:
   <%_ if (generateInMemoryUserCredentials) { _%>
