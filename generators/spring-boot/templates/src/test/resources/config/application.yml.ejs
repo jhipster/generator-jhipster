@@ -70,7 +70,7 @@ spring:
       - org.springframework.cloud.gateway.config.GatewayMetricsAutoConfiguration
   <%_ } _%>
   <%_ if (messageBrokerKafka) { _%>
-      - org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
+      - org.springframework.boot.kafka.autoconfigure.KafkaAutoConfiguration
   <%_ } _%>
 <%_ } _%>
 <%_ if (serviceDiscoveryEureka || serviceDiscoveryConsul || messageBrokerAny) { _%>
