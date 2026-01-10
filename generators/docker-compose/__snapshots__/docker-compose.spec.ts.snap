@@ -670,7 +670,7 @@ jhipster:
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_CLOUD_CONSUL_HOST=consul
       - SPRING_CLOUD_CONSUL_PORT=8500
-      - SPRING_DATA_MONGODB_URI=mongodb://msmongodb-mongodb:27017/msmongodb
+      - SPRING_MONGODB_URI=mongodb://msmongodb-mongodb:27017/msmongodb
     healthcheck:
       test:
         - CMD
@@ -1466,7 +1466,7 @@ jhipster:
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_CLOUD_CONSUL_HOST=consul
       - SPRING_CLOUD_CONSUL_PORT=8500
-      - SPRING_DATA_MONGODB_URI=mongodb://msmongodb-mongodb:27017/msmongodb
+      - SPRING_MONGODB_URI=mongodb://msmongodb-mongodb:27017/msmongodb
     healthcheck:
       test:
         - CMD

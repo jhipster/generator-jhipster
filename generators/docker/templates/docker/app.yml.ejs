@@ -44,7 +44,7 @@ _%>
       - SPRING_LIQUIBASE_URL=<%- this.getJDBCUrl(prodDatabaseType, { hostname: prodDatabaseType, databaseName: databaseName }) %>
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
-      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/<%= baseName %>
+      - SPRING_MONGODB_URI=mongodb://mongodb:27017/<%= baseName %>
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
       - SPRING_NEO4J_URI=bolt://neo4j:7687

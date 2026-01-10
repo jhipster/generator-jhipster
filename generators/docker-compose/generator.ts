@@ -213,7 +213,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
                 'SPRING_DATASOURCE_URL',
                 'SPRING_LIQUIBASE_URL',
                 'SPRING_NEO4J_URI',
-                'SPRING_DATA_MONGODB_URI',
+                'SPRING_MONGODB_URI',
                 'JHIPSTER_CACHE_REDIS_SERVER',
                 'SPRING_ELASTICSEARCH_URIS',
               ].forEach(varName => {
