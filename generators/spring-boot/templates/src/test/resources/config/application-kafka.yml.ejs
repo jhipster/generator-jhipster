@@ -1,0 +1,18 @@
+spring:
+  cloud:
+    function:
+      scan:
+        enabled: true
+      definition: kafkaConsumer;kafkaProducer
+    stream:
+      bindings:
+        binding-out-0:
+          content-type: text/plain
+          group: <%= dasherizedBaseName %>
+        kafkaConsumer-in-0:
+          destination: sse-topic
+          content-type: text/plain
+          group: <%= dasherizedBaseName %>
+        kafkaProducer-out-0:
+          content-type: text/plain
+          group: <%= dasherizedBaseName %>
