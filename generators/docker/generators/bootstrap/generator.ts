@@ -18,6 +18,7 @@
  */
 import BaseSimpleApplicationGenerator from '../../../base-simple-application/index.ts';
 import { JAVA_DOCKER_DIR } from '../../../generator-constants.ts';
+import { mutateApplication } from '../../application.ts';
 import type {
   Application as DockerApplication,
   Config as DockerConfig,
@@ -42,9 +43,7 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
   get [BaseSimpleApplicationGenerator.BOOTSTRAP_APPLICATION]() {
     return this.asBootstrapApplicationTaskGroup({
       loadConfig({ applicationDefaults }) {
-        applicationDefaults({
-          dockerContainers: {},
-        });
+        applicationDefaults(mutateApplication);
       },
     });
   }

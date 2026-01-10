@@ -48,24 +48,10 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
       await this.composeWithBlueprints();
     }
 
+    await this.dependsOnBootstrap('docker');
     if (!this.delegateToBlueprint) {
       await this.dependsOnBootstrap('common');
-      await this.dependsOnBootstrap('docker');
     }
-  }
-
-  get loading() {
-    return this.asLoadingTaskGroup({
-      loading({ applicationDefaults }) {
-        applicationDefaults({
-          dockerServices: [],
-        });
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get preparing() {

@@ -6,6 +6,7 @@ import type {
   Source as BaseSimpleApplicationSource,
 } from '../base-simple-application/types.d.ts';
 
+import type { DockerAddedApplicationProperties } from './application.ts';
 import type command from './command.ts';
 
 type Command = HandleCommandTypes<typeof command>;
@@ -22,13 +23,7 @@ export type DockerComposeService = {
   extendedServiceName?: string;
 };
 
-export type Application = BaseSimpleApplicationApplication &
-  Command['Application'] & {
-    dockerContainers?: Record<string, string>;
-    dockerServicesDir?: string;
-    dockerServices?: string[];
-    keycloakSecrets?: string[];
-  };
+export type Application = BaseSimpleApplicationApplication & DockerAddedApplicationProperties;
 
 export type Source = BaseSimpleApplicationSource & {
   addDockerExtendedServiceToApplicationAndServices?(...services: DockerComposeService[]): void;
