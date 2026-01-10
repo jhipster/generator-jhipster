@@ -182,15 +182,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
         if (!application.reactive) {
           source.addIntegrationTestAnnotation?.({
             annotation: 'SpringBootTest',
-            parameters: oldParameters => {
-              if (oldParameters?.includes('classes = {')) {
-                const annotation = `${application.packageName}.config.JacksonHibernateConfiguration.class`;
-                return oldParameters.includes(annotation)
-                  ? oldParameters
-                  : oldParameters.replace('classes = {', `classes = { ${annotation}, `);
-              }
-              throw new Error('Cannot add JacksonHibernateConfiguration to @SpringBootTest annotation');
-            },
+            parameters: (_, cb) => cb.addKeyValue('classes', `${application.packageName}.config.JacksonHibernateConfiguration.class`),
           });
         }
         source.addJavaDefinitions?.(
