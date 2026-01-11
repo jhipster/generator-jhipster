@@ -35,7 +35,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 <%_ if (!locals.databaseTypeCassandra) { _%>
 import { SortDirective, SortByDirective, sortStateSignal, SortService, SortState } from 'app/shared/sort';
-import { ITEMS_PER_PAGE, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
+import { ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
 import { SORT } from 'app/config/navigation.constants';
 import { ItemCount } from 'app/shared/pagination';
 <%_ } _%>
@@ -142,7 +142,7 @@ export default class UserManagement implements OnInit {
 
   private handleNavigation(): void {
     combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
-      const page = params.get('page');
+      const page = params.get(PAGE_HEADER);
       this.page.set(+(page ?? 1));
       this.sortState.set(this.sortService.parseSortParam(params.get(SORT) ?? data.defaultSort));
       this.loadAll();
