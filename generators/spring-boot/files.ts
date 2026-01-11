@@ -375,6 +375,11 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
       path: SERVER_TEST_RES_DIR,
       templates: ['config/application.yml', 'logback.xml', 'junit-platform.properties'],
     },
+    {
+      condition: generator => generator.messageBrokerKafka,
+      path: SERVER_TEST_RES_DIR,
+      templates: ['config/application-kafka.yml'],
+    },
   ],
   serverJavaUserManagement: [
     {
