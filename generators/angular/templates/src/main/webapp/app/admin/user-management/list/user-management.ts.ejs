@@ -35,7 +35,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 <%_ if (!locals.databaseTypeCassandra) { _%>
 import { SortDirective, SortByDirective, sortStateSignal, SortService, SortState } from 'app/shared/sort';
-import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
+import { ITEMS_PER_PAGE, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
 import { SORT } from 'app/config/navigation.constants';
 import { ItemCount } from 'app/shared/pagination';
 <%_ } _%>
@@ -152,7 +152,7 @@ export default class UserManagement implements OnInit {
 
   private onSuccess(users: User[] | null<% if (!locals.databaseTypeCassandra) { %>, headers: HttpHeaders<% } %>): void {
 <%_ if (!locals.databaseTypeCassandra) { _%>
-    this.totalItems.set(Number(headers.get('X-Total-Count')));
+    this.totalItems.set(Number(headers.get(TOTAL_COUNT_RESPONSE_HEADER)));
 <%_ } _%>
     this.users.set(users);
   }
