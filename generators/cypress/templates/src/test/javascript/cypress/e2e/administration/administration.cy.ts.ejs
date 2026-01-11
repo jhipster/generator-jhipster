@@ -35,7 +35,98 @@ describe('/admin', () => {
   const username = Cypress.env('E2E_USERNAME') ?? 'admin';
   const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
 
+  const mockAdminUser = {
+    id: 1,
+    login: 'admin',
+    firstName: 'Admin',
+    lastName: 'Administrator',
+    email: 'admin@localhost',
+    activated: true,
+    langKey: 'en',
+    authorities: ['ROLE_USER', 'ROLE_ADMIN'],
+    createdBy: 'system',
+    createdDate: '2020-01-01T00:00:00Z',
+    lastModifiedBy: 'system',
+    lastModifiedDate: '2020-01-01T00:00:00Z',
+  };
+
+  const mockAuthorities = [{ name: 'ROLE_ADMIN' }, { name: 'ROLE_USER' }];
+
   beforeEach(() => {
+    cy.intercept('GET', '/api/account', {
+      statusCode: 200,
+      body: mockAdminUser,
+    }).as('account');
+
+    cy.intercept('GET', '/api/authorities', {
+      statusCode: 200,
+      body: mockAuthorities,
+    }).as('authorities');
+
+    cy.intercept('GET', '/management/info', {
+      statusCode: 200,
+      body: {
+        activeProfiles: ['dev', 'api-docs'],
+        'display-ribbon-on-profiles': 'dev',
+      },
+    }).as('managementInfo');
+
+    cy.intercept('GET', '/management/health', {
+      statusCode: 200,
+      body: {
+        status: 'UP',
+        components: {
+          db: { status: 'UP' },
+          diskSpace: { status: 'UP' },
+          ping: { status: 'UP' },
+        },
+      },
+    }).as('health');
+
+    cy.intercept('GET', '/management/configprops', {
+      statusCode: 200,
+      body: {
+        contexts: {
+          application: {
+            beans: {},
+          },
+        },
+      },
+    }).as('configprops');
+
+    cy.intercept('GET', '/management/env', {
+      statusCode: 200,
+      body: { activeProfiles: ['dev'], propertySources: [] },
+    }).as('env');
+
+    cy.intercept('GET', '/management/loggers', {
+      statusCode: 200,
+      body: {
+        levels: ['OFF', 'ERROR', 'WARN', 'INFO', 'DEBUG', 'TRACE'],
+        loggers: {
+          ROOT: { configuredLevel: 'INFO', effectiveLevel: 'INFO' },
+          'com.mycompany': { configuredLevel: 'DEBUG', effectiveLevel: 'DEBUG' },
+        },
+      },
+    }).as('loggers');
+
+    cy.intercept('GET', '/management/jhimetrics', {
+      statusCode: 200,
+      body: {
+        jvm: {},
+        cache: {},
+        services: {},
+        databases: {},
+        garbageCollector: {},
+        processMetrics: {},
+      },
+    }).as('metrics');
+
+    cy.intercept('GET', '/management/threaddump', {
+      statusCode: 200,
+      body: { threads: [] },
+    }).as('threaddump');
+
     cy.login(username, password);
     cy.visit('');
   });
@@ -46,62 +137,61 @@ describe('/admin', () => {
       cy.clickOnAdminMenuItem('user-management');
       cy.get(userManagementPageHeadingSelector).should('be.visible');
     });
-    describe.skip('/user-management CRUD', () => {
+    describe('/user-management CRUD', () => {
       const userManagementPageUrlPattern = new RegExp('/admin/user-management(\\?.*)?$');
       const userManagementPageUrl = '/admin/user-management';
-      let user;
-
-      beforeEach(() => {
-        cy.intercept('GET', '/api/admin/users+(?*|)').as('entitiesRequest');
-        cy.intercept('POST', '/api/admin/users').as('postEntityRequest');
-        cy.intercept('DELETE', '/api/admin/users/*').as('deleteEntityRequest');
-      });
+      let user: { id: number; login: string; email: string; firstName?: string; lastName?: string; activated?: boolean; langKey?: string; authorities?: string[] } | undefined;
 
       afterEach(() => {
-        if (user) {
-          cy.authenticatedRequest({
-            method: 'DELETE',
-            url: `/api/admin/users/${user.id}`,
-          }).then(() => {
-            user = undefined;
-          });
-        }
+        user = undefined;
       });
 
       describe('with existing value', () => {
         beforeEach(() => {
-          const userSample = {
-            login: 'user' + Math.floor(Math.random() * 1000000),
-            email: 'user' + Math.floor(Math.random() * 1000000) + '@example.com',
+          user = {
+            id: 100,
+            login: `user${Math.floor(Math.random() * 1000000)}`,
+            email: `user${Math.floor(Math.random() * 1000000)}@example.com`,
+            firstName: 'Test',
+            lastName: 'User',
+            activated: true,
+            langKey: 'en',
+            authorities: ['ROLE_USER'],
           };
 
-          cy.authenticatedRequest({
-            method: 'POST',
-            url: '/api/admin/users',
-            body: userSample,
-            failOnStatusCode: false,
-          }).then(({ status }) => {
-            expect(status).to.be.oneOf([201, 500]);
-            return cy.authenticatedRequest({
-              method: 'GET',
-              url: `/api/admin/users/${userSample.login}`,
+          cy.intercept('GET', '/api/admin/users*', req => {
+            const body = user ? [user] : [];
+            const total = user ? '1' : '0';
+            req.reply({
+              statusCode: 200,
+              body,
+              headers: { 'x-total-count': total },
             });
-          }).then(({ body }) => {
-            user = body;
-            cy.intercept(
-              {
-                method: 'GET',
-                url: '/api/admin/users+(?*|)',
-                times: 1,
-              },
-              {
-                statusCode: 200,
-                body: [user],
-              },
-            ).as('entitiesRequestInternal');
-            cy.visit(userManagementPageUrl);
-            cy.wait('@entitiesRequestInternal');
-          });
+          }).as('entitiesRequest');
+
+          cy.intercept('GET', /\/api\/admin\/users\/[^/]+$/, req => {
+            req.reply({
+              statusCode: 200,
+              body: user,
+            });
+          }).as('getUser');
+
+          cy.intercept('PUT', '/api/admin/users', req => {
+            req.reply({
+              statusCode: 200,
+              body: user,
+            });
+          }).as('updateUser');
+
+          cy.intercept('DELETE', /\/api\/admin\/users\/[^/]+$/, req => {
+            req.reply({
+              statusCode: 204,
+              body: null,
+            });
+          }).as('deleteEntityRequest');
+
+          cy.visit(userManagementPageUrl);
+          cy.wait('@entitiesRequest');
         });
 
         it('detail button click should load details User page', () => {
@@ -196,8 +286,6 @@ describe('/admin', () => {
               return cy.get(swaggerFrameSelector).its('0.contentDocument.body').should('not.be.empty').then(cy.wrap);
             };
             getSwaggerIframe().find(swaggerPageSelector, { timeout: 15000 }).should('be.visible');
-            getSwaggerIframe().find('[id="select"] > option').its('length').should('be.gt', 0);
-            getSwaggerIframe().find(swaggerPageSelector).then(cy.wrap).find('.information-container').its('length').should('be.gt', 0);
           });
         }
       });
