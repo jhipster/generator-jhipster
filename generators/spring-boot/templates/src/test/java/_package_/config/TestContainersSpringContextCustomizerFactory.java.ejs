@@ -38,9 +38,6 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
 
     private Logger log = LoggerFactory.getLogger(TestContainersSpringContextCustomizerFactory.class);
 
-<%_ if (databaseTypeMongodb) { _%>
-    private static MongoDbTestContainer mongoDbBean;
-<%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
     private static ElasticsearchTestContainer elasticsearchBean;
 <%_ } _%>
@@ -74,19 +71,6 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
                     testValues = testValues.and("jhipster.database.couchbase.scope-name=testScope");
                 }
     <%_ } _%>
-    <%_ if (databaseTypeMongodb) { _%>
-                    EmbeddedMongo mongoAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedMongo.class);
-                    if (null != mongoAnnotation) {
-                        log.debug("detected the EmbeddedMongo annotation on class {}", testClass.getName());
-                        log.info("Warming up the mongo database");
-                        if (null == mongoDbBean) {
-                            mongoDbBean = beanFactory.createBean(MongoDbTestContainer.class);
-                            beanFactory.registerSingleton(MongoDbTestContainer.class.getName(), mongoDbBean);
-                            // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(MongoDbTestContainer.class.getName(), mongoDbBean);
-                        }
-                        testValues = testValues.and("spring.mongodb.uri=" + mongoDbBean.getMongoDBContainer().getReplicaSetUrl());
-                    }
-    <%_ } _%>
     <%_ if (searchEngineElasticsearch) { _%>
                 EmbeddedElasticsearch elasticsearchAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedElasticsearch.class);
                 if (null != elasticsearchAnnotation) {
@@ -109,9 +93,6 @@ public class TestContainersSpringContextCustomizerFactory implements ContextCust
             @Override
             public int hashCode() {
                 return
-                <%_ if (databaseTypeMongodb) { _%>
-                    MongoDbTestContainer.class.getName().hashCode() <% if (searchEngineElasticsearch || databaseTypeCouchbase || searchEngineCouchbase) { %> + <% } else { %>;<% } %>
-                <%_ } _%>
                 <%_ if (searchEngineElasticsearch) { _%>
                     ElasticsearchTestContainer.class.getName().hashCode() <% if (databaseTypeCouchbase || searchEngineCouchbase) { %> + <% } else { %>;<% } %>
                 <%_ } _%>
