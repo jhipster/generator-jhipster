@@ -77,7 +77,6 @@ export const vueFiles = asWriteFilesSection({
         'app.vue',
         'app.component.ts',
         'shims-vue.d.ts',
-        'constants.ts',
         'declarations.d.ts',
         'main.ts',
         'shared/alert/alert.service.ts',
