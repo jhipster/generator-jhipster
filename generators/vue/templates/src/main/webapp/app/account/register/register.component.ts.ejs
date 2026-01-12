@@ -24,7 +24,7 @@ import { useVuelidate } from '@vuelidate/core';
 import { email, helpers, maxLength, minLength, required, sameAs } from '@vuelidate/validators';
 import { useLoginModal } from '@/account/login-modal';
 import RegisterService from '@/account/register/register.service';
-import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/constants';
+import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/shared/jhipster/error.constants';
 
 const loginPattern = helpers.regex(/<%- webappLoginRegExp %>/);
 

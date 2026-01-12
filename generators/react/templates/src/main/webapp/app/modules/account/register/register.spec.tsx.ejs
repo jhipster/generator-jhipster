@@ -24,6 +24,7 @@ import configureStore from 'redux-mock-store';
 import { spy, sandbox } from 'sinon';
 
 import { RegisterPage } from 'app/modules/account/register/register';
+import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/shared/jhipster/constants';
 
 describe('RegisterComponent', () => {
   describe('RegisterPage', () => {
@@ -105,7 +106,7 @@ describe('RegisterComponent', () => {
       const resolved = new Promise(r => r({ status: 400, data: {
           'entityName' : 'userManagement',
           'errorKey' : 'userexists',
-          'type' : 'https://www.jhipster.tech/problem/login-already-used',
+          'type' : LOGIN_ALREADY_USED_TYPE,
           'title' : 'Login name already used!',
           'status' : 400,
           'message' : 'error.userexists',
@@ -127,7 +128,7 @@ describe('RegisterComponent', () => {
       const resolved = new Promise(r => r({ status: 400, data: {
           'entityName' : 'userManagement',
           'errorKey' : 'emailexists',
-          'type' : 'https://www.jhipster.tech/problem/email-already-used',
+          'type' : EMAIL_ALREADY_USED_TYPE,
           'title' : 'Email is already in use!',
           'status' : 400,
           'message' : 'error.emailexists',

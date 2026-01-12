@@ -25,6 +25,7 @@ import { TranslatorContext } from 'react-jhipster';
 <%_ } _%>
 import { MESSAGE_ALERT_HEADER_NAME, MESSAGE_ERROR_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from 'app/shared/jhipster/constants';
 import { ProblemWithMessageType } from 'app/shared/jhipster/problem-details';
+import { INVALID_PASSWORD_TYPE } from 'app/shared/jhipster/constants';
 
 import notificationMiddleware from './notification-middleware';
 
@@ -137,7 +138,7 @@ describe('Notification Middleware', () => {
         data: {
           title: 'Incorrect password',
           status: 400,
-          type: 'https://www.jhipster.tech/problem/invalid-password',
+          type: INVALID_PASSWORD_TYPE,
         },
         status: 400,
       },

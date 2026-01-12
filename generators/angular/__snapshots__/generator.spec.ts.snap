@@ -380,9 +380,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/config/error.constants.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
@@ -807,6 +804,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/constants.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/headers.ts": {
@@ -1544,9 +1544,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/config/error.constants.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
@@ -2040,6 +2037,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/constants.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/headers.ts": {
@@ -2621,9 +2621,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/config/error.constants.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
@@ -3051,6 +3048,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/constants.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/headers.ts": {
@@ -3644,9 +3644,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/config/error.constants.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
@@ -4068,6 +4065,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/constants.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/headers.ts": {
@@ -5009,9 +5009,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/config/error.constants.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
@@ -5520,6 +5517,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/constants.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/headers.ts": {
@@ -6119,9 +6119,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/config/error.constants.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
@@ -6531,6 +6528,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/constants.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/headers.ts": {
@@ -7108,9 +7108,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "src/main/webapp/app/config/dayjs.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/config/error.constants.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/config/font-awesome-icons.ts": {
     "stateCleared": "modified",
   },
@@ -7529,6 +7526,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/constants.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/headers.ts": {

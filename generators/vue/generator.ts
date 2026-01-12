@@ -309,6 +309,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
             // Try to remove possibles old eslint config files
             'eslint.config.js',
             'eslint.config.mjs',
+            `${application.clientSrcDir}app/config/error.constants.ts`,
           ],
         });
       },
