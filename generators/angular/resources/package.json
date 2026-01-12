@@ -24,7 +24,7 @@
     "@angular/cli": "21.0.5",
     "@eslint/js": "9.39.2",
     "@types/folder-hash": "4.0.4",
-    "@types/node": "20.19.27",
+    "@types/node": "20.19.28",
     "@types/sockjs-client": "1.5.4",
     "angular-eslint": "21.1.0",
     "browser-sync": "3.0.4",
