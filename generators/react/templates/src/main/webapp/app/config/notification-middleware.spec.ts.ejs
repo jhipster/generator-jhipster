@@ -24,6 +24,7 @@ import sinon from 'sinon';
 import { TranslatorContext } from 'react-jhipster';
 <%_ } _%>
 import { MESSAGE_ALERT_HEADER_NAME, MESSAGE_ERROR_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from 'app/shared/jhipster/constants';
+import { ProblemWithMessageType } from 'app/shared/jhipster/problem-details';
 
 import notificationMiddleware from './notification-middleware';
 
@@ -57,7 +58,7 @@ describe('Notification Middleware', () => {
       isAxiosError: true,
       response: {
         data: {
-          type: 'https://www.jhipster.tech/problem/problem-with-message',
+          type: ProblemWithMessageType,
           title: 'Method argument not valid',
           status: 400,
           path: '/api/foos',

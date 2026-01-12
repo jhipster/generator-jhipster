@@ -31,6 +31,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { EventManager } from 'app/core/util/event-manager.service';
 import { AlertModel, AlertService } from 'app/core/util/alert.service';
 import { MESSAGE_ERROR_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from 'app/shared/jhipster/constants';
+import { ProblemWithMessageType } from 'app/shared/jhipster/problem-details';
 
 import { AlertError } from './alert-error';
 
@@ -101,7 +102,7 @@ describe('Alert Error Component', () => {
         status: 400,
         statusText: 'Bad Request',
         error: {
-          type: 'https://www.jhipster.tech/problem/problem-with-message',
+          type: ProblemWithMessageType,
           title: 'Bad Request',
           status: 400,
           path: '/api/foos',
@@ -136,7 +137,7 @@ describe('Alert Error Component', () => {
         status: 400,
         statusText: 'Bad Request',
         error: {
-          type: 'https://www.jhipster.tech/problem/problem-with-message',
+          type: ProblemWithMessageType,
           title: 'Method argument not valid',
           status: 400,
           path: '/api/foos',
