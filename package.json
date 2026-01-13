@@ -195,7 +195,7 @@
     "@types/sinon-chai": "4.0.0",
     "chai": "6.2.2",
     "cpy-cli": "6.0.0",
-    "diff": "8.0.2",
+    "diff": "8.0.3",
     "ejs-lint": "2.0.1",
     "eslint-config-prettier": "10.1.8",
     "eslint-import-resolver-typescript": "4.4.4",
