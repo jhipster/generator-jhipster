@@ -22,6 +22,8 @@ import java.util.Collections;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
@@ -34,4 +36,9 @@ public interface MongoDbTestContainer {
 	MongoDBContainer mongoDbContainer = new MongoDBContainer("<%- dockerContainers.mongodb %>").withReuse(true).withLogConsumer(
 		new Slf4jLogConsumer(LoggerFactory.getLogger(MongoDbTestContainer.class))
 	);
+
+    @DynamicPropertySource
+    static void registerProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.mongodb.uri", mongoDbContainer::getReplicaSetUrl);
+	}
 }
