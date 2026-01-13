@@ -308,7 +308,6 @@ export const files = asWriteFilesSection({
         'config/input.constants.ts',
         'config/navigation.constants.ts',
         'config/pagination.constants.ts',
-        'config/authority.constants.ts',
 
         // interceptors
         'core/interceptor/error-handler.interceptor.ts',
