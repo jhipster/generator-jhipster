@@ -102,7 +102,7 @@ _%>
       - 127.0.0.1:<%= serverPort %>:<%= serverPort %>
 <%_ } _%>
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:<%= serverPort %>/management/health']
+      test: ['CMD', 'curl', '-f', 'http://127.0.0.1:<%= serverPort %>/management/health']
       interval: 5s
       timeout: 5s
       retries: 40
