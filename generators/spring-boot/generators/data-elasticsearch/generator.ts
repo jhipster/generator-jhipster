@@ -95,12 +95,20 @@ export default class ElasticsearchGenerator extends SpringBootApplicationGenerat
       },
       integrationTest({ application, source }) {
         source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
-          imports: [`${application.packageName}.config.ElasticsearchTestContainer`],
+          imports: [
+            `${application.packageName}.config.ElasticsearchTestContainer`,
+            `${application.packageName}.config.ElasticsearchTestConfiguration`,
+          ],
           annotations: [
             {
               package: 'org.springframework.boot.testcontainers.context',
               annotation: 'ImportTestcontainers',
               parameters: (_, cb) => cb.addKeyValue('value', 'ElasticsearchTestContainer.class'),
+            },
+            {
+              package: 'org.springframework.boot.test.context',
+              annotation: 'SpringBootTest',
+              parameters: (_, cb) => cb.addKeyValue('classes', 'ElasticsearchTestConfiguration.class'),
             },
           ],
         });
