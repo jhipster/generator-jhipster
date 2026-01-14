@@ -201,7 +201,7 @@
     "eslint-import-resolver-typescript": "4.4.4",
     "eslint-plugin-chai-friendly": "1.1.0",
     "eslint-plugin-n": "17.23.2",
-    "eslint-plugin-prettier": "5.5.4",
+    "eslint-plugin-prettier": "5.5.5",
     "esmocha": "5.0.0",
     "jiti": "2.6.1",
     "jsdoc": "4.0.5",
