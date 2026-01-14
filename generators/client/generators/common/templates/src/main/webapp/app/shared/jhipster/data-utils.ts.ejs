@@ -18,3 +18,16 @@
 -%>
 export const formatAsBytes = (size: number): string =>
     `${size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} bytes`; // NOSONAR
+
+export const endsWith = (suffix: string, str: string): boolean =>
+    str.includes(suffix, str.length - suffix.length);
+
+export const paddingSize = (value: string): number => {
+    if (endsWith('==', value)) {
+      return 2;
+    }
+    if (endsWith('=', value)) {
+      return 1;
+    }
+    return 0;
+}

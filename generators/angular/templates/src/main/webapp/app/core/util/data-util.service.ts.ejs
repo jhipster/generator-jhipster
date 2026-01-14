@@ -20,7 +20,7 @@ import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable, Observer } from 'rxjs';
 
-import { formatAsBytes } from 'app/shared/jhipster/data-utils';
+import { formatAsBytes, paddingSize } from 'app/shared/jhipster/data-utils';
 
 export type FileLoadErrorType = 'not.image' | 'could.not.extract';
 
@@ -125,21 +125,7 @@ export class DataUtils {
     fileReader.readAsDataURL(file);
   }
 
-  private endsWith(suffix: string, str: string): boolean {
-    return str.includes(suffix, str.length - suffix.length);
-  }
-
-  private paddingSize(value: string): number {
-    if (this.endsWith('==', value)) {
-      return 2;
-    }
-    if (this.endsWith('=', value)) {
-      return 1;
-    }
-    return 0;
-  }
-
   private size(value: string): number {
-    return (value.length / 4) * 3 - this.paddingSize(value);
+    return (value.length / 4) * 3 - paddingSize(value);
   }
 }
