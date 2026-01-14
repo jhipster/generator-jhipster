@@ -29,30 +29,32 @@
     <%_ if (field.id && field.fieldName != 'id') { _%>
     @org.springframework.data.annotation.Id
     <%_ } _%>
-    <%_ if (!field.id) { _%>
-      <%_ if (field.fieldIsEnum) { _%>
-      @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
-      <%_ } else if (field.blobContentTypeText || field.fieldTypeString) { _%>
-      @org.springframework.data.elasticsearch.annotations.MultiField(
-          mainField = @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text),
-          otherFields = { 
-              @org.springframework.data.elasticsearch.annotations.InnerField(suffix = "keyword", type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword, ignoreAbove = 256)
-          }
-      )
-      <%_ } else if (field.fieldTypeBoolean) { _%>
-      @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Boolean)
-      <%_ } else if (field.fieldTypeInteger) { _%>
-      @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
-      <%_ } else if (field.fieldTypeLocalTime) { _%>
-      @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Date, format = org.springframework.data.elasticsearch.annotations.DateFormat.hour_minute_second_millis)
-      <%_ } _%>
+    <%_ if (field.fieldIsEnum) { _%>
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword)
+    <%_ } else if (field.blobContentTypeText || field.fieldTypeString) { _%>
+    @org.springframework.data.elasticsearch.annotations.MultiField(
+        mainField = @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Text),
+        otherFields = { 
+            @org.springframework.data.elasticsearch.annotations.InnerField(suffix = "keyword", type = org.springframework.data.elasticsearch.annotations.FieldType.Keyword, ignoreAbove = 256)
+        }
+    )
+    <%_ } else if (field.fieldTypeBoolean) { _%>
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Boolean)
+    <%_ } else if (field.fieldTypeInteger) { _%>
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Integer)
+    <%_ } else if (field.fieldTypeLong) { _%>
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Long)
+    <%_ } else if (field.fieldTypeLocalTime) { _%>
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Date, format = org.springframework.data.elasticsearch.annotations.DateFormat.hour_minute_second_millis)
+    <%_ } else if (field.fieldTypeInstant) { _%>
+    @org.springframework.data.elasticsearch.annotations.Field(type = org.springframework.data.elasticsearch.annotations.FieldType.Date, format = org.springframework.data.elasticsearch.annotations.DateFormat.date_time)
     <%_ } _%>
   <&_ } -&>
 <%_ } -%>
 
 <%_ for (const relationship of relationships) { -%>
   <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
-    <% /* just break the cycle in the reactive area, we already have the annotation in place */
+    <% // just break the cycle; in the reactive area, we already have the annotation in place
       if (!relationship.ownerSide && !reactive) { %>
         @org.springframework.data.annotation.Transient
     <% } %>
