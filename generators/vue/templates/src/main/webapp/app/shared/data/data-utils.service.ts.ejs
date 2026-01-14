@@ -16,6 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { formatAsBytes } from '@/shared/jhipster/data-utils';
+
 /**
  * An composable utility for data.
  */
@@ -34,7 +36,7 @@ const useDataUtils = () => ({
    * Method to find the byte size of the string provides
    */
   byteSize(base64String) {
-    return this.formatAsBytes(this.size(base64String));
+    return formatAsBytes(this.size(base64String));
   },
 
   /**
@@ -102,10 +104,6 @@ const useDataUtils = () => ({
 
   size(value) {
     return (value.length / 4) * 3 - this.paddingSize(value);
-  },
-
-  formatAsBytes(size) {
-    return `${size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} bytes`;
   },
 
   setFileData(event, entity, field, isImage) {

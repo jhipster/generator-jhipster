@@ -41,6 +41,7 @@ export default class CommonGenerator extends BaseApplicationGenerator {
                 'shared/jhipster/problem-details.ts',
                 'shared/jhipster/headers.ts',
                 'shared/jhipster/error.constants.ts',
+                'shared/jhipster/data-utils.ts',
               ],
             }),
           ],
