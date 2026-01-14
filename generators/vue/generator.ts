@@ -310,6 +310,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
             'eslint.config.js',
             'eslint.config.mjs',
             `${application.clientSrcDir}app/config/error.constants.ts`,
+            `${application.clientSrcDir}app/shared/security/authority.ts`,
           ],
         });
       },

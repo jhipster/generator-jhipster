@@ -371,9 +371,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/app.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/config/authority.constants.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/config/datepicker-adapter.ts": {
     "stateCleared": "modified",
   },
@@ -1535,9 +1532,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/app.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/config/authority.constants.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/config/datepicker-adapter.ts": {
     "stateCleared": "modified",
   },
@@ -2612,9 +2606,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/app/app.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/config/authority.constants.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/config/datepicker-adapter.ts": {
     "stateCleared": "modified",
   },
@@ -3633,9 +3624,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/app.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/authority.constants.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/datepicker-adapter.ts": {
@@ -5000,9 +4988,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/app.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/config/authority.constants.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/config/datepicker-adapter.ts": {
     "stateCleared": "modified",
   },
@@ -6110,9 +6095,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/app.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/config/authority.constants.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/config/datepicker-adapter.ts": {
     "stateCleared": "modified",
   },
@@ -7097,9 +7079,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/app.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/authority.constants.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/datepicker-adapter.ts": {

@@ -44,7 +44,7 @@ import EntitiesRoutes from 'app/entities/routes';
 import PrivateRoute from 'app/shared/auth/private-route';
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 import PageNotFound from 'app/shared/error/page-not-found';
-import { AUTHORITIES } from 'app/config/constants';
+import { Authority } from 'app/shared/jhipster/constants';
 <%_ if (communicationSpringWebsocket) { _%>
 import { sendActivity } from 'app/config/websocket-middleware';
 <%_ } _%>
@@ -93,7 +93,7 @@ const AppRoutes = () => {
           <Route
             path="*"
             element={
-              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN, AUTHORITIES.USER]}>
+              <PrivateRoute hasAnyAuthorities={[Authority.ADMIN, Authority.USER]}>
                 <Account />
               </PrivateRoute>
             }
@@ -109,7 +109,7 @@ const AppRoutes = () => {
         <Route
           path="admin/*"
           element={
-            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.ADMIN]}>
+            <PrivateRoute hasAnyAuthorities={[Authority.ADMIN]}>
               <Admin />
             </PrivateRoute>
           }
@@ -123,7 +123,7 @@ const AppRoutes = () => {
           path="<%= remote.lowercaseBaseName %>/*"
           element={
             <Suspense fallback={loading}>
-              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
+              <PrivateRoute hasAnyAuthorities={[Authority.USER]}>
                 <<%= remote.capitalizedBaseName %>Routes />
               </PrivateRoute>
             </Suspense>
@@ -134,7 +134,7 @@ const AppRoutes = () => {
         <Route
           path="<%= microfrontend && applicationTypeMicroservice ? lowercaseBaseName + '/' : '' %>*"
           element={
-            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
+            <PrivateRoute hasAnyAuthorities={[Authority.USER]}>
               <EntitiesRoutes />
             </PrivateRoute>
           }

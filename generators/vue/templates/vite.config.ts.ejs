@@ -151,8 +151,8 @@ config = mergeConfig(config, {
         'vue-i18n': {},
         'vue-router': {},
         pinia: {},
-        '@/shared/security/authority': {
-          packagePath: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/shared/security/authority',
+        '@/shared/jhipster/constants': {
+          packagePath: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/shared/jhipster/constants',
   <%_ if (applicationTypeGateway) { _%>
           version: sharedAppVersion,
   <%_ } _%>

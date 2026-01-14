@@ -25,7 +25,7 @@ import { createRequestOption } from 'app/core/request/request-util';
 import { Pagination } from 'app/core/request/request.model';
 import { IUser } from '../user-management.model';
 <%_ if (generateUserManagement && !generateBuiltInAuthorityEntity) { _%>
-import { Authority } from 'app/config/authority.constants';
+import { Authority } from 'app/shared/jhipster/constants';
 <%_ } _%>
 
 @Injectable({ providedIn: 'root' })

@@ -87,7 +87,6 @@ export const vueFiles = asWriteFilesSection({
         'shared/config/config-bootstrap-vue.ts',
         'shared/config/dayjs.ts',
         'shared/config/store/account-store.ts',
-        'shared/security/authority.ts',
         'store.ts',
         'router/index.ts',
         'router/admin.ts',
