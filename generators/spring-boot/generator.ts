@@ -527,7 +527,7 @@ ${classProperties
         const getScopeForModule = (moduleName: SpringBootModule): JavaArtifactType['scope'] => {
           if (moduleName === 'spring-boot-properties-migrator') return 'runtime';
           if (moduleName === 'spring-boot-configuration-processor') return 'annotationProcessor';
-          return moduleName.endsWith('-test') || moduleName.includes('-test-') || moduleName.includes('-testcontainers') ? 'test' : undefined;
+          return /-test($|-|containers)/.test(moduleName) ? 'test' : undefined;
         };
         source.addSpringBootModule = (...moduleNames) =>
           source.addJavaDependencies?.(
