@@ -41,6 +41,7 @@ export default class MongoDBGenerator extends SpringBootApplicationGenerator {
           '9.0.0-beta.1': [
             `${application.javaPackageSrcDir}TestContainersSpringContextCustomizerFactory.java`,
             `${application.javaPackageSrcDir}config/EmbeddedMongo.java`,
+            `${application.srcTestResources}META-INF/spring.factories`,
           ],
         });
       },
