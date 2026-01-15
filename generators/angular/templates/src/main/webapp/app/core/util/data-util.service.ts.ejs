@@ -20,7 +20,7 @@ import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable, Observer } from 'rxjs';
 
-import { formatAsBytes, paddingSize } from 'app/shared/jhipster/data-utils';
+import { formatAsBytes, paddingSize, size } from 'app/shared/jhipster/data-utils';
 
 export type FileLoadErrorType = 'not.image' | 'could.not.extract';
 
@@ -41,7 +41,7 @@ export class DataUtils {
    * Method to find the byte size of the string provides
    */
   byteSize(base64String: string): string {
-    return formatAsBytes(this.size(base64String));
+    return formatAsBytes(size(base64String));
   }
 
   /**
@@ -123,9 +123,5 @@ export class DataUtils {
       }
     };
     fileReader.readAsDataURL(file);
-  }
-
-  private size(value: string): number {
-    return (value.length / 4) * 3 - paddingSize(value);
   }
 }

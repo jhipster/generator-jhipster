@@ -31,3 +31,6 @@ export const paddingSize = (value: string): number => {
     }
     return 0;
 }
+
+export const size = (value: string): number =>
+  (value.length / 4) * 3 - paddingSize(value);
