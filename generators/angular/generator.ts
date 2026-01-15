@@ -344,14 +344,14 @@ export default class AngularGenerator extends AngularApplicationGenerator {
               !application.microfrontend || !application.applicationTypeMicroservice,
               `${application.clientSrcDir}app/entities/entity-navbar-items.ts`,
             ],
-            `${application.clientSrcDir}app/config/error.constants.ts`,
-            `${application.clientSrcDir}app/config/authority.constants.ts`,
           ],
           '8.0.0-beta.1': [
             `${application.clientRootDir}jest.js`,
             `${application.clientSrcDir}app/shared/shared.module.ts.ejs`,
             `${application.clientSrcDir}app/core/interceptor/index.ts.ejs`,
             `${application.clientSrcDir}default-test-providers.ts.ejs`,
+            `${application.clientSrcDir}app/config/error.constants.ts`,
+            `${application.clientSrcDir}app/config/authority.constants.ts`,
           ],
         });
       },
