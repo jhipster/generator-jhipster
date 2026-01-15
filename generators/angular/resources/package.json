@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@angular/common": "21.0.8",
+    "@angular/common": "21.1.0",
     "@fortawesome/angular-fontawesome": "4.0.0",
     "@fortawesome/free-solid-svg-icons": "7.1.0",
     "@ng-bootstrap/ng-bootstrap": "20.0.0",
@@ -18,10 +18,10 @@
   "devDependencies": {
     "@angular-architects/module-federation": "20.0.0",
     "@angular-architects/module-federation-runtime": "20.0.0",
-    "@angular-builders/custom-esbuild": "21.0.0-beta.1",
-    "@angular-builders/custom-webpack": "21.0.0-beta.1",
-    "@angular/build": "21.0.5",
-    "@angular/cli": "21.0.5",
+    "@angular-builders/custom-esbuild": "21.0.3",
+    "@angular-builders/custom-webpack": "21.0.3",
+    "@angular/build": "21.1.0",
+    "@angular/cli": "21.1.0",
     "@eslint/js": "9.39.2",
     "@types/folder-hash": "4.0.4",
     "@types/node": "20.19.29",
