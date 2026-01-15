@@ -20,7 +20,7 @@ import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable, Observer } from 'rxjs';
 
-import { formatAsBytes, paddingSize, size } from 'app/shared/jhipster/data-utils';
+import { formatAsBytes, paddingSize, size, toBase64 } from 'app/shared/jhipster/data-utils';
 
 export type FileLoadErrorType = 'not.image' | 'could.not.extract';
 
@@ -91,7 +91,7 @@ export class DataUtils {
           observer.error(error);
         } else {
           const fieldContentType = `${field}ContentType`;
-          this.toBase64(file, (base64Data: string) => {
+          toBase64(file, (base64Data: string) => {
             editForm.patchValue({
               [field]: base64Data,
               [fieldContentType]: file.type,
@@ -109,19 +109,5 @@ export class DataUtils {
         observer.error(error);
       }
     });
-  }
-
-  /**
-   * Method to convert the file to base64
-   */
-  private toBase64(file: File, callback: (base64Data: string) => void): void {
-    const fileReader: FileReader = new FileReader();
-    fileReader.onload = (e: ProgressEvent<FileReader>) => {
-      if (typeof e.target?.result === 'string') {
-        const base64Data: string = e.target.result.substring(e.target.result.indexOf('base64,') + 'base64,'.length);
-        callback(base64Data);
-      }
-    };
-    fileReader.readAsDataURL(file);
   }
 }

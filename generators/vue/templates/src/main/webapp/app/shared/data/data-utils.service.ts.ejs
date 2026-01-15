@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { formatAsBytes, paddingSize, size } from '@/shared/jhipster/data-utils';
+import { formatAsBytes, paddingSize, size, toBase64 } from '@/shared/jhipster/data-utils';
 
 /**
  * An composable utility for data.
@@ -60,18 +60,6 @@ const useDataUtils = () => ({
   },
 
   /**
-   * Method to convert the file to base64
-   */
-  toBase64(file, cb) {
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(file);
-    fileReader.onload = (e: any) => {
-      const base64Data = e.target.result.substring(e.target.result.indexOf('base64,') + 'base64,'.length);
-      cb(base64Data);
-    };
-  },
-
-  /**
    * Method to clear the input
    */
   clearInputImage(entity, elementRef, field, fieldContentType, idInput) {
@@ -94,7 +82,7 @@ const useDataUtils = () => ({
       if (isImage && !file.type.startsWith("image/")) {
         return;
       }
-      this.toBase64(file, base64Data => {
+      toBase64(file, base64Data => {
         entity[field] = base64Data;
         entity[`${field}ContentType`] = file.type;
       });
