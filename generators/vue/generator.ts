@@ -309,6 +309,8 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
             // Try to remove possibles old eslint config files
             'eslint.config.js',
             'eslint.config.mjs',
+          ],
+          '9.0.0-beta.1': [
             `${application.clientSrcDir}app/config/error.constants.ts`,
             `${application.clientSrcDir}app/shared/security/authority.ts`,
           ],
