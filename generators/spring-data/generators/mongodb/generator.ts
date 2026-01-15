@@ -18,8 +18,7 @@
  */
 import { SpringBootApplicationGenerator } from '../../../spring-boot/generator.ts';
 
-import cleanupMongodbFilesTask from './cleanup.ts';
-import writeMongodbEntityFilesTask, { cleanupMongodbEntityFilesTask } from './entity-files.ts';
+import writeMongodbEntityFilesTask from './entity-files.ts';
 import writeMongodbFilesTask from './files.ts';
 
 export default class MongoDBGenerator extends SpringBootApplicationGenerator {
@@ -34,10 +33,20 @@ export default class MongoDBGenerator extends SpringBootApplicationGenerator {
   }
 
   get writing() {
-    return {
-      cleanupMongodbFilesTask,
+    return this.asWritingTaskGroup({
+      async cleanupMongodbFilesTask({ application, control }) {
+        await control.cleanupFiles({
+          '3.10.0': [`${application.javaPackageSrcDir}config/CloudMongoDbConfiguration.java`],
+          '7.7.1': [`${application.javaPackageTestDir}MongoDbTestContainerExtension.java`],
+          '9.0.0-beta.1': [
+            `${application.javaPackageSrcDir}TestContainersSpringContextCustomizerFactory.java`,
+            `${application.javaPackageSrcDir}config/EmbeddedMongo.java`,
+            `${application.srcTestResources}META-INF/spring.factories`,
+          ],
+        });
+      },
       writeMongodbFilesTask,
-    };
+    });
   }
 
   get [SpringBootApplicationGenerator.WRITING]() {
@@ -45,10 +54,9 @@ export default class MongoDBGenerator extends SpringBootApplicationGenerator {
   }
 
   get writingEntities() {
-    return {
-      cleanupMongodbEntityFilesTask,
+    return this.asWritingEntitiesTaskGroup({
       writeMongodbEntityFilesTask,
-    };
+    });
   }
 
   get [SpringBootApplicationGenerator.WRITING_ENTITIES]() {
@@ -57,15 +65,9 @@ export default class MongoDBGenerator extends SpringBootApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      addTestSpringFactory({ source, application }) {
-        source.addTestSpringFactory!({
-          key: 'org.springframework.test.context.ContextCustomizerFactory',
-          value: `${application.packageName}.config.TestContainersSpringContextCustomizerFactory`,
-        });
-      },
       addDependencies({ application, source }) {
         const { reactive, javaDependencies } = application;
-        source.addSpringBootModule?.(`spring-boot-starter-data-mongodb${reactive ? '-reactive' : ''}`);
+        source.addSpringBootModule?.(`spring-boot-starter-data-mongodb${reactive ? '-reactive' : ''}`, 'spring-boot-testcontainers');
         if (application.springBoot4) {
           source.addSpringBootModule?.(`spring-boot-starter-data-mongodb${reactive ? '-reactive' : ''}-test`);
         }
@@ -89,7 +91,14 @@ export default class MongoDBGenerator extends SpringBootApplicationGenerator {
       },
       integrationTest({ application, source }) {
         source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
-          annotations: [{ package: `${application.packageName}.config`, annotation: 'EmbeddedMongo' }],
+          imports: [`${application.packageName}.config.MongoDbTestContainer`],
+          annotations: [
+            {
+              package: 'org.springframework.boot.testcontainers.context',
+              annotation: 'ImportTestcontainers',
+              parameters: (_, cb) => cb.addKeyValue('value', 'MongoDbTestContainer.class'),
+            },
+          ],
         });
       },
       blockhound({ application, source }) {
