@@ -21,6 +21,7 @@ package <%= packageName %>.web.rest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import <%= packageName %>.IntegrationTest;
+import <%= packageName %>.config.DatabaseTestcontainer;
 <%_ if (databaseTypeSql && reactive) { _%>
 import <%= packageName %>.config.Constants;
 <%_ } _%>
@@ -42,6 +43,7 @@ import <%= packageName %>.repository.EntityManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.testcontainers.context.ImportTestcontainers;
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ if (reactive) { _%>
 import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
@@ -93,6 +95,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 <%_ } _%>
 
+import org.testcontainers.junit.jupiter.Testcontainers;
+
 /**
  * Integration tests for the {@link PublicUserResource} REST controller.
  */
@@ -102,6 +106,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 <%_ } _%>
 @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
+<%_ if (databaseTypeMongodb) { _%>
+@Testcontainers
+@ImportTestcontainers(DatabaseTestcontainer.class)
+<%_ } _%>
 @IntegrationTest
 class PublicUserResourceIT {
 

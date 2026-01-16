@@ -60,6 +60,7 @@ _%>
 import <%= packageName %>.web.rest.TestUtil;
 <% } %>
 import <%= packageName %>.IntegrationTest;
+import <%= packageName %>.config.DatabaseTestcontainer;
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
 <%_
 var imported = [];
@@ -121,6 +122,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 <%_ } _%>
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.testcontainers.context.ImportTestcontainers;
 <%_ if (reactive) { _%>
 import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 <%_ } else { _%>
@@ -247,9 +249,16 @@ import static org.awaitility.Awaitility.await;
 import <%= entityAbsolutePackage %>.domain.enumeration.<%= field.fieldType %>;
 <%_ }
 } _%>
+
+import org.testcontainers.junit.jupiter.Testcontainers;
+
 /**
  * Integration tests for the {@link <%= entityClass %>Resource} REST controller.
  */
+<%_ if (databaseTypeMongodb) { _%>
+@Testcontainers
+@ImportTestcontainers(DatabaseTestcontainer.class)
+<%_ } _%>
 @IntegrationTest
 <%_ if (skipJunitTests) { _%>
 @Disabled("<%- skipJunitTests %>")
