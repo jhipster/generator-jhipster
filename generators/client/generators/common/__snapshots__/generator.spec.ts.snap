@@ -10,6 +10,9 @@ exports[`generator - client:common with defaults options should match files snap
   "src/main/webapp/app/shared/jhipster/constants.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/data-utils.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/error.constants.ts": {
     "stateCleared": "modified",
   },
