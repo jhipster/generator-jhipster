@@ -55,7 +55,6 @@ export default class KafkaGenerator extends SpringBootApplicationGenerator {
         source.addMainLog?.({ name: 'org.apache.kafka', level: 'INFO' });
         source.addTestLog?.({ name: 'kafka', level: 'WARN' });
         source.addTestLog?.({ name: 'org.I0Itec', level: 'WARN' });
-        source.addIntegrationTestAnnotation?.({ package: `${application.packageName}.config`, annotation: 'EmbeddedKafka' });
 
         source.addTestSpringFactory?.({
           key: 'org.springframework.test.context.ContextCustomizerFactory',
