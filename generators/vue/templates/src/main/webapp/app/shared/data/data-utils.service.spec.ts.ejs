@@ -98,7 +98,7 @@ describe('Formatter i18n', () => {
     const header = '<http://localhost/api/entities?' +
       'sort=date%2Cdesc&sort=id&page=1&size=12> rel="next",<http://localhost/api' +
       '/entities?sort=date%2Cdesc&sort=id&page=2&size=12> rel="last",<http://localhost' +
-      '/api/entities?sort=date%2Cdesc&sort=id&page=0&size=12> rel="first"',
+      '/api/entities?sort=date%2Cdesc&sort=id&page=0&size=12> rel="first"';
     expect(() => dataUtilsService.parseLinks(header)).toThrow();
   });
 
