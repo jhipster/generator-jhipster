@@ -254,7 +254,7 @@ exports[`generator - mongodb gateway-jwt-reactive(false)-maven-enableTranslation
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/MongoDbTestContainer.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
@@ -586,10 +586,10 @@ exports[`generator - mongodb gateway-jwt-reactive(true)-gradle-enableTranslation
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MongoDbTestContainer.java": {
+  "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SpringBootTestClassOrderer.java": {
@@ -900,10 +900,10 @@ exports[`generator - mongodb gateway-oauth2-reactive(true)-gradle-enableTranslat
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MongoDbTestContainer.java": {
+  "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SpringBootTestClassOrderer.java": {
@@ -1169,7 +1169,7 @@ exports[`generator - mongodb microservice-jwt-reactive(false)-maven-enableTransl
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/MongoDbTestContainer.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
@@ -1453,10 +1453,10 @@ exports[`generator - mongodb microservice-jwt-reactive(true)-gradle-enableTransl
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MongoDbTestContainer.java": {
+  "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SpringBootTestClassOrderer.java": {
@@ -1734,10 +1734,10 @@ exports[`generator - mongodb microservice-oauth2-reactive(true)-gradle-enableTra
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MongoDbTestContainer.java": {
+  "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SpringBootTestClassOrderer.java": {
@@ -2063,7 +2063,7 @@ exports[`generator - mongodb monolith-jwt-reactive(false)-maven-enableTranslatio
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/MongoDbTestContainer.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
@@ -2386,10 +2386,10 @@ exports[`generator - mongodb monolith-jwt-reactive(true)-gradle-enableTranslatio
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MongoDbTestContainer.java": {
+  "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SpringBootTestClassOrderer.java": {
@@ -2631,7 +2631,7 @@ exports[`generator - mongodb monolith-oauth2-reactive(false)-maven-enableTransla
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/MongoDbTestContainer.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
@@ -2921,10 +2921,10 @@ exports[`generator - mongodb monolith-oauth2-reactive(true)-gradle-enableTransla
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MongoDbTestContainer.java": {
+  "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SpringBootTestClassOrderer.java": {
@@ -3259,7 +3259,7 @@ exports[`generator - mongodb monolith-session-reactive(false)-maven-enableTransl
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/MongoDbTestContainer.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
@@ -3588,10 +3588,10 @@ exports[`generator - mongodb monolith-session-reactive(true)-gradle-enableTransl
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MongoDbTestContainer.java": {
+  "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SpringBootTestClassOrderer.java": {

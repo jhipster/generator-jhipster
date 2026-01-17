@@ -19,10 +19,14 @@
 package <%= packageName %>.cucumber;
 
 import <%= packageName %>.IntegrationTest;
+import <%= packageName %>.config.DatabaseTestcontainer;
 import <%= packageName %>.security.AuthoritiesConstants;
 
 import io.cucumber.spring.CucumberContextConfiguration;
 
+import org.testcontainers.junit.jupiter.Testcontainers;
+
+import org.springframework.boot.testcontainers.context.ImportTestcontainers;
 <%_ if (reactive) { _%>
 import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 <%_ } else { _%>
@@ -36,6 +40,10 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles({ "test", "test<%- locals.defaultEnvironment %>" })
 <%_ } _%>
 @CucumberContextConfiguration
+<%_ if (databaseTypeMongodb) { _%>
+@Testcontainers
+@ImportTestcontainers(DatabaseTestcontainer.class)
+<%_ } _%>
 @IntegrationTest
 <%_ if (reactive) { _%>
 @AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)

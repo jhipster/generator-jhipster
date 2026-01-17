@@ -23,6 +23,7 @@ if (!reactive && databaseTypeSql) {
     saveMethod = 'saveAndFlush';
 }
 _%>
+import <%= packageName %>.config.DatabaseTestcontainer;
 import <%= packageName %>.IntegrationTest;
 
 <%_ if (databaseTypeSql && reactive) { _%>
@@ -55,6 +56,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.testcontainers.context.ImportTestcontainers;
 <%_ if (reactive) { _%>
 import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 <%_ } else { _%>
@@ -110,6 +112,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 <%_ } _%>
 
+import org.testcontainers.junit.jupiter.Testcontainers;
+
 /**
  * Integration tests for the {@link UserResource} REST controller.
  */
@@ -119,6 +123,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 <%_ } _%>
 @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
+<%_ if (databaseTypeMongodb) { _%>
+@Testcontainers
+@ImportTestcontainers(DatabaseTestcontainer.class)
+<%_ } _%>
 @IntegrationTest
 class UserResourceIT {
 

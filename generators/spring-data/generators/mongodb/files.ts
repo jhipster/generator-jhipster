@@ -37,7 +37,7 @@ export const mongoDbFiles = asWriteFilesSection<JavaApplication>({
     {
       path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
-      templates: ['config/MongoDbTestContainer.java'],
+      templates: ['config/DatabaseTestcontainer.java'],
     },
   ],
 });
