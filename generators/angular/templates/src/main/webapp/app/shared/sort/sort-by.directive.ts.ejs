@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Directive, HostListener, contentChild, effect, inject, input } from '@angular/core';
+import { Directive, contentChild, effect, inject, input } from '@angular/core';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faSort, faSortDown, faSortUp, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
@@ -24,6 +24,9 @@ import { SortDirective } from './sort.directive';
 
 @Directive({
   selector: '[<%= jhiPrefix %>SortBy]',
+  host: {
+    '(click)': 'onClick()',
+  },
 })
 export class SortByDirective {
   readonly <%= jhiPrefix %>SortBy = input.required<string>();
@@ -49,7 +52,6 @@ export class SortByDirective {
     });
   }
 
-  @HostListener('click')
   onClick(): void {
     if (this.iconComponent()) {
       this.sort.sort(this.<%= jhiPrefix %>SortBy());
