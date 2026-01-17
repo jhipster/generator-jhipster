@@ -361,9 +361,6 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "clientRoot/src/app/app.vue": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/constants.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/core/error/error.component.spec.ts": {
     "stateCleared": "modified",
   },
@@ -592,6 +589,12 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "clientRoot/src/app/shared/jhipster/constants.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/data-utils.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/jhipster/error.constants.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/headers.ts": {
     "stateCleared": "modified",
   },
@@ -611,9 +614,6 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/model/user.model.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/shared/security/authority.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/sort/jhi-sort-indicator.component.ts": {
@@ -1238,9 +1238,6 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/src/app/app.vue": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/constants.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/core/error/error.component.spec.ts": {
     "stateCleared": "modified",
   },
@@ -1478,6 +1475,12 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/src/app/shared/jhipster/constants.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/data-utils.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/jhipster/error.constants.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/headers.ts": {
     "stateCleared": "modified",
   },
@@ -1497,9 +1500,6 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/model/user.model.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/shared/security/authority.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/sort/jhi-sort-indicator.component.ts": {
@@ -2048,9 +2048,6 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "clientRoot/src/app/app.vue": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/constants.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/core/error/error-loading.vue": {
     "stateCleared": "modified",
   },
@@ -2288,6 +2285,12 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "clientRoot/src/app/shared/jhipster/constants.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/data-utils.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/jhipster/error.constants.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/headers.ts": {
     "stateCleared": "modified",
   },
@@ -2307,9 +2310,6 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/model/user.model.ts": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/src/app/shared/security/authority.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/sort/jhi-sort-indicator.component.ts": {
@@ -2893,9 +2893,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp/app/app.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/constants.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/core/error/error-loading.vue": {
     "stateCleared": "modified",
   },
@@ -3139,6 +3136,12 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp/app/shared/jhipster/constants.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/data-utils.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/error.constants.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/headers.ts": {
     "stateCleared": "modified",
   },
@@ -3158,9 +3161,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/model/user.model.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/security/authority.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/sort/jhi-sort-indicator.component.ts": {
@@ -3907,9 +3907,6 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp/app/app.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/constants.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/core/error/error.component.spec.ts": {
     "stateCleared": "modified",
   },
@@ -4150,6 +4147,12 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp/app/shared/jhipster/constants.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/data-utils.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/error.constants.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/headers.ts": {
     "stateCleared": "modified",
   },
@@ -4169,9 +4172,6 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/model/user.model.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/security/authority.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/sort/jhi-sort-indicator.component.ts": {
@@ -4708,9 +4708,6 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "src/main/webapp/app/app.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/constants.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/core/error/error.component.spec.ts": {
     "stateCleared": "modified",
   },
@@ -4936,6 +4933,12 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "src/main/webapp/app/shared/jhipster/constants.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/data-utils.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/error.constants.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/headers.ts": {
     "stateCleared": "modified",
   },
@@ -4955,9 +4958,6 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/model/user.model.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/security/authority.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/sort/jhi-sort-indicator.component.ts": {
@@ -5506,9 +5506,6 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "src/main/webapp/app/app.vue": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/constants.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/core/error/error.component.spec.ts": {
     "stateCleared": "modified",
   },
@@ -5737,6 +5734,12 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "src/main/webapp/app/shared/jhipster/constants.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/data-utils.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/error.constants.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/headers.ts": {
     "stateCleared": "modified",
   },
@@ -5756,9 +5759,6 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/model/user.model.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/shared/security/authority.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/sort/jhi-sort-indicator.component.ts": {

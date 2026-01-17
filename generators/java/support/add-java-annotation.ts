@@ -40,7 +40,80 @@ export function addJavaImport(
   return (content: string) => addJavaImportToContent(content, contentOrIdentifier, identifierOrType);
 }
 
-export type JavaAnnotation = { package?: string; annotation: string; parameters?: (oldParameters?: string) => string };
+type JavaAnnotationParameter = { value?: string | string[] } & Record<string, string | string[]>;
+
+export type JavaAnnotation = {
+  package?: string;
+  annotation: string;
+  parameters?: (
+    oldParameters: JavaAnnotationParameter,
+    callbacks: {
+      addKeyValue: (key: string, item: string) => void;
+      setKeyValue: (key: string, item: string) => void;
+    },
+  ) => void | string | JavaAnnotationParameter;
+};
+
+export function parseJavaAnnotation(annotation?: string): JavaAnnotationParameter {
+  if (annotation === undefined) {
+    return {};
+  }
+  const params = [];
+  let current = '';
+  let depth = 0;
+
+  // Iterate to find top-level commas
+  for (const char of annotation) {
+    if (char === '(' || char === '{' || char === '[') depth++;
+    if (char === ')' || char === '}' || char === ']') depth--;
+
+    if (char === ',' && depth === 0) {
+      params.push(current.trim());
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+  params.push(current.trim());
+
+  // Convert array of strings into a key-value object
+  return params.reduce((acc, param) => {
+    const eqIdx = param.indexOf('=');
+    if (eqIdx === -1) {
+      acc.value = param.trim();
+      return acc;
+    }
+
+    const key = param.substring(0, eqIdx).trim();
+    let value: string | string[] = param.substring(eqIdx + 1).trim();
+
+    if (value.startsWith('{')) {
+      // Handle Java arrays by stripping braces and splitting
+      value = value
+        .slice(1, -1)
+        .split(/,\s*/)
+        .map(v => v.replace(/^"|"$/g, ''));
+    } else {
+      value = value.replace(/^"|"$/g, ''); // Simple strings
+    }
+
+    acc[key] = value;
+    return acc;
+  }, {} as JavaAnnotationParameter);
+}
+
+const serializeJavaAnnotationParameters = (params?: JavaAnnotationParameter): string => {
+  if (!params) {
+    return '';
+  }
+  const entries = Object.entries(params).map(([key, value]) => [key, Array.isArray(value) ? `{${value.join(', ')}}` : value]);
+  if (entries.length === 0) {
+    return '';
+  } else if (entries.length === 1 && entries[0][0] === 'value') {
+    return entries[0][1] as string;
+  }
+  return entries.map(([key, value]) => `${key} = ${value}`).join(', ');
+};
 
 const addJavaAnnotationToContent = (content: string, annotationDef: JavaAnnotation) => {
   const { package: packageName, annotation, parameters } = annotationDef;
@@ -48,7 +121,44 @@ const addJavaAnnotationToContent = (content: string, annotationDef: JavaAnnotati
     content = addJavaImport(content, `${packageName}.${annotation}`);
   }
   const annotationWithParametersMatches = content.match(new RegExp(`@${annotation}\\((?<oldParameters>[^)]*)\\)`));
-  const annotationToAdd = parameters ? `${annotation}(${parameters(annotationWithParametersMatches?.groups?.oldParameters)})` : annotation;
+  let annotationToAdd: string | undefined;
+  if (parameters) {
+    const oldParameters = annotationWithParametersMatches?.groups?.oldParameters?.trim?.();
+    const parsedParameters = parseJavaAnnotation(oldParameters);
+    const returnedParameters = parameters(parsedParameters, {
+      addKeyValue: (key, value) => {
+        const existing = parsedParameters[key];
+        if (existing) {
+          if (Array.isArray(existing)) {
+            parsedParameters[key] = Array.isArray(value) ? [...existing, ...value] : [...existing, value];
+          } else {
+            parsedParameters[key] = Array.isArray(value) ? [existing, ...value] : [existing, value];
+          }
+        } else {
+          parsedParameters[key] = value;
+        }
+      },
+      setKeyValue: (key, value) => {
+        const existing = parsedParameters[key];
+        if (existing) {
+          if (Array.isArray(existing)) {
+            parsedParameters[key] = Array.isArray(value) ? [...existing, ...value] : [...existing, value];
+          } else {
+            parsedParameters[key] = Array.isArray(value) ? [existing, ...value] : [existing, value];
+          }
+        } else {
+          parsedParameters[key] = value;
+        }
+      },
+    });
+    const serializedParam =
+      typeof returnedParameters === 'string'
+        ? returnedParameters
+        : serializeJavaAnnotationParameters(returnedParameters ?? parsedParameters);
+    annotationToAdd = serializedParam ? `${annotation}(${serializedParam})` : annotation;
+  } else {
+    annotationToAdd = annotation;
+  }
   if (annotationWithParametersMatches) {
     content = content.replace(new RegExp(`@${annotation}\\((?<oldParameters>[^)]*)\\)`), `@${annotationToAdd}`);
   } else if (!new RegExp(escapeRegExp(`\n@${annotationToAdd}\n`)).test(content)) {

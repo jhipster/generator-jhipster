@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import type { JavaDependency, JavaDependencyVersion } from '../../java/types.ts';
+import type { JavaDependency, JavaDependencyVersion } from '../../../../java/types.ts';
 
 const javaxCacheApi = {
   groupId: 'javax.cache',
@@ -35,10 +35,11 @@ type CacheProviderDependencies = {
   hibernateCache?: CacheProviderDefinition;
 };
 
-export const getCacheProviderMavenDefinition: (
+export const getCacheProviderJavaDefinition: (
   cacheProvider: string,
   javaDependencies: Record<string, string>,
-) => CacheProviderDependencies = (cacheProvider: string, javaDependencies: Record<string, string>) => {
+  opts?: { springBoot4?: boolean },
+) => CacheProviderDependencies = (cacheProvider: string, javaDependencies: Record<string, string>, { springBoot4 } = {}) => {
   const dependenciesForCache: Record<string, CacheProviderDependencies> = {
     redis: {
       base: {
@@ -111,6 +112,14 @@ export const getCacheProviderMavenDefinition: (
             artifactId: 'hazelcast-spring',
             version: javaDependencies['hazelcast-spring'],
           },
+          ...(springBoot4
+            ? [
+                {
+                  groupId: 'org.springframework.boot',
+                  artifactId: 'spring-boot-starter-hazelcast',
+                },
+              ]
+            : []),
         ],
       },
       hibernateCache: {

@@ -74,6 +74,19 @@ export default class CouchbaseGenerator extends SpringBootApplicationGenerator {
           { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers-couchbase' },
         ]);
       },
+      integrationTest({ application, source }) {
+        source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
+          annotations: [
+            { package: `${application.packageName}.config`, annotation: 'EmbeddedCouchbase' },
+            {
+              package: 'org.springframework.test.context',
+              annotation: 'ActiveProfiles',
+              parameters: () => 'JHipsterConstants.SPRING_PROFILE_TEST',
+            },
+          ],
+          imports: ['tech.jhipster.config.JHipsterConstants'],
+        });
+      },
       couchmoveSetup({ application }) {
         if (application.buildToolGradle) {
           this.editFile('build.gradle', {

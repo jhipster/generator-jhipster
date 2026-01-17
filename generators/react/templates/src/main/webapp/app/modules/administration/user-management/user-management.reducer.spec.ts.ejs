@@ -31,7 +31,7 @@ import userManagement, {
   reset,
 } from './user-management.reducer';
 import { defaultValue } from 'app/shared/model/user.model';
-import { AUTHORITIES } from 'app/config/constants';
+import { Authority } from 'app/shared/jhipster/constants';
 
 describe('User management reducer tests', () => {
   const username = process.env.E2E_USERNAME ?? 'admin';
@@ -150,7 +150,7 @@ describe('User management reducer tests', () => {
     });
 
     it('should update state according to a successful fetch role request', () => {
-      const payload = { data: [AUTHORITIES.ADMIN] };
+      const payload = { data: [Authority.ADMIN] };
       const toTest = userManagement(undefined, { type: getRoles.fulfilled.type, payload });
 
       expect(toTest).toMatchObject({

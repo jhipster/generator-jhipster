@@ -1118,6 +1118,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/spring-boot/generators/bootstrap/templates/template-file-spring-boot:bootstrap.ejs": {
     "stateCleared": "modified",
   },
+  "generators/spring-boot/generators/cache/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/cache/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/cache/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/cache/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/cache/templates/template-file-spring-boot:cache.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/spring-boot/generators/cucumber/command.js": {
     "stateCleared": "modified",
   },
@@ -1182,21 +1197,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/spring-boot/templates/template-file-spring-boot.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-cache/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-cache/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-cache/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-cache/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-cache/templates/template-file-spring-cache.ejs": {
     "stateCleared": "modified",
   },
   "generators/spring-cloud/command.js": {

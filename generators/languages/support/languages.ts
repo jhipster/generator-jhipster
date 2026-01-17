@@ -75,7 +75,7 @@ const languageToDayjsLanguage = (languageTag: string): string => {
 type specificLocales =
   /**
    * Locale id fallback for java.
-   * Tags can be found at [Java 17 locales tags](https://www.oracle.com/java/technologies/javase/jdk17-suported-locales.html#modules)
+   * Tags can be found at [Java 21 locales tags](https://www.oracle.com/java/technologies/javase/jdk21-suported-locales.html#modules)
    */
   | 'javaLocaleMessageSourceSuffix'
   /**

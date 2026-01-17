@@ -25,27 +25,6 @@ import <%= packageName %>.config.JacksonConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import tech.jhipster.config.JHipsterConstants;
 <%_ } _%>
-<%_ if (databaseTypeMongodb) { _%>
-import <%= packageName %>.config.EmbeddedMongo;
-<%_ } _%>
-<%_ if (databaseTypeCassandra) { _%>
-import <%= packageName %>.config.EmbeddedCassandra;
-<%_ } _%>
-<%_ if (databaseTypeCouchbase || searchEngineCouchbase) { _%>
-import <%= packageName %>.config.EmbeddedCouchbase;
-<%_ } _%>
-<%_ if (searchEngineElasticsearch) { _%>
-import <%= packageName %>.config.EmbeddedElasticsearch;
-<%_ } _%>
-<%_ if (databaseTypeNeo4j) { _%>
-import <%= packageName %>.config.EmbeddedNeo4j;
-<%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-import <%= packageName %>.config.EmbeddedSQL;
-<%_ } _%>
-<%_ if (cacheProviderRedis) { _%>
-import <%= packageName %>.config.EmbeddedRedis;
-<%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import <%= packageName %>.config.TestSecurityConfiguration;
 <%_ } _%>
@@ -65,28 +44,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @SpringBootTest(classes = {<%= mainClass %>.class, JacksonConfiguration.class, AsyncSyncConfiguration.class<% if (authenticationTypeOauth2) { %>, TestSecurityConfiguration.class<% } %>})
-<%_ if (cacheProviderRedis) { _%>
-@EmbeddedRedis
-<%_ } _%>
-<%_ if (databaseTypeCouchbase || searchEngineCouchbase) { _%>
-@EmbeddedCouchbase
-@ActiveProfiles(JHipsterConstants.SPRING_PROFILE_TEST)
-<%_ } _%>
-<%_ if (databaseTypeMongodb) { _%>
-@EmbeddedMongo
-<%_ } _%>
-<%_ if (databaseTypeCassandra) { _%>
-@EmbeddedCassandra
-<%_ } _%>
-<%_ if (searchEngineElasticsearch) { _%>
-@EmbeddedElasticsearch
-<%_ } _%>
-<%_ if (databaseTypeNeo4j) { _%>
-@EmbeddedNeo4j
-<%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-@EmbeddedSQL
-<%_ } _%>
 public @interface IntegrationTest {
 <%_ if (reactive) { _%>
     // 5s is Spring's default https://github.com/spring-projects/spring-framework/blob/main/spring-test/src/main/java/org/springframework/test/web/reactive/server/DefaultWebTestClient.java#L106

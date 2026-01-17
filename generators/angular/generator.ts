@@ -350,6 +350,8 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             `${application.clientSrcDir}app/shared/shared.module.ts.ejs`,
             `${application.clientSrcDir}app/core/interceptor/index.ts.ejs`,
             `${application.clientSrcDir}default-test-providers.ts.ejs`,
+            `${application.clientSrcDir}app/config/error.constants.ts`,
+            `${application.clientSrcDir}app/config/authority.constants.ts`,
           ],
         });
       },

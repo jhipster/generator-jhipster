@@ -1,10 +1,10 @@
 import { before, describe, it } from 'esmocha';
 
-import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
-import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
-import { SERVER_MAIN_SRC_DIR } from '../generator-constants.ts';
+import { defaultHelpers as helpers, result as runResult } from '../../../../lib/testing/index.ts';
+import { asPostWritingTask } from '../../../base-application/support/task-type-inference.ts';
+import { SERVER_MAIN_SRC_DIR } from '../../../generator-constants.ts';
 
-const GENERATOR_SPRING_CACHE = 'spring-cache';
+const GENERATOR_SPRING_CACHE = 'jhipster:spring-boot:cache';
 
 const addNeedlesTask = asPostWritingTask(function ({ source }) {
   source.addEntryToCache?.({ entry: 'entry' });
@@ -26,6 +26,11 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
           cacheProvider: 'ehcache',
           clientFramework: 'no',
           enableHibernateCache: true,
+        })
+        .withFiles({
+          'src/test/java/com/mycompany/myapp/IntegrationTest.java': `
+public @interface IntegrationTest {}
+          `,
         })
         .withTask('postWriting', addNeedlesTask);
     });
@@ -59,6 +64,11 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
           clientFramework: 'no',
           enableHibernateCache: true,
         })
+        .withFiles({
+          'src/test/java/com/mycompany/myapp/IntegrationTest.java': `
+public @interface IntegrationTest {}
+          `,
+        })
         .withTask('postWriting', addNeedlesTask);
     });
 
@@ -90,6 +100,11 @@ describe('needle API server cache: JHipster server generator with blueprint', ()
           cacheProvider: 'redis',
           clientFramework: 'no',
           enableHibernateCache: true,
+        })
+        .withFiles({
+          'src/test/java/com/mycompany/myapp/IntegrationTest.java': `
+public @interface IntegrationTest {}
+          `,
         })
         .withTask('postWriting', addNeedlesTask);
     });

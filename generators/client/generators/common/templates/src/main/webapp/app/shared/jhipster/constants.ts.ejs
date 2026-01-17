@@ -23,3 +23,8 @@ export const MESSAGE_PARAM_HEADER_NAME = '<%= messageHeaderNameParam %>';
 export const CSRF_TOKEN_HEADER_NAME = 'X-XSRF-TOKEN';
 export const CSRF_TOKEN_COOKIE_NAME = 'XSRF-TOKEN';
 <%_ } _%>
+
+export enum Authority {
+  ADMIN = 'ROLE_ADMIN',
+  USER = 'ROLE_USER',
+}

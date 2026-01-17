@@ -23,7 +23,6 @@ import org.springframework.context.annotation.Configuration;
 <%_ if (searchEngineElasticsearch) { _%>
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.data.elasticsearch.repository.config.Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories;
 <%_ } _%>
 
 import org.springframework.data.neo4j.repository.config.Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories;
@@ -43,9 +42,6 @@ import org.springframework.transaction.<% if (reactive) { %>Reactive<% } %>Trans
 @Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories(basePackages = "<%= packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>Neo4jRepository.class))
 <%_ } else { _%>
 @Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories("<%= packageName %>.repository")
-<%_ } _%>
-<%_ if (searchEngineElasticsearch) { _%>
-@Enable<% if (reactive) { %>Reactive<% } %>ElasticsearchRepositories("<%= packageName %>.repository.search")
 <%_ } _%>
 public class DatabaseConfiguration {
 <%_ if (reactive) { _%>

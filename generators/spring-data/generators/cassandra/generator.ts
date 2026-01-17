@@ -101,6 +101,11 @@ export default class CassandraGenerator extends SpringBootApplicationGenerator {
           { scope: 'annotationProcessor', groupId: 'org.apache.cassandra', artifactId: 'java-driver-mapper-processor' },
         ]);
       },
+      integrationTest({ application, source }) {
+        source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
+          annotations: [{ package: `${application.packageName}.config`, annotation: 'EmbeddedCassandra' }],
+        });
+      },
     });
   }
 

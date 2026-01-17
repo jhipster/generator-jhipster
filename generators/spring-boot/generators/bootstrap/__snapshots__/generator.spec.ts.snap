@@ -119,6 +119,7 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
   "domains": Any<Array>,
   "dtoSuffix": "DTO",
   "dynamic": undefined,
+  "emptyOrReactive": "",
   "enableGradleDevelocity": undefined,
   "enableHibernateCache": true,
   "enableI18nRTL": false,

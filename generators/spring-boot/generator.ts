@@ -39,7 +39,6 @@ import {
   getSpecificationBuildForType,
   insertContentIntoApplicationProperties,
 } from '../server/support/index.ts';
-import type { Config as SpringCacheConfig } from '../spring-cache/types.ts';
 
 import cleanupTask from './cleanup.ts';
 import { writeFiles as writeEntityFiles } from './entity-files.ts';
@@ -63,6 +62,8 @@ const { ELASTICSEARCH } = searchEngineTypes;
 
 const { BYTES: TYPE_BYTES, BYTE_BUFFER: TYPE_BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
 const { CUCUMBER, GATLING } = testFrameworkTypes;
+
+const JHIPSTER_FRAMEWORK_SB3_VERSION = '8.12.0';
 
 export class SpringBootApplicationGenerator extends BaseApplicationGenerator<
   SpringBootEntity,
@@ -152,8 +153,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
           enableSwaggerCodegen,
           serviceDiscoveryType,
         } = this.jhipsterConfigWithDefaults;
-        const { cacheProvider } = this.jhipsterConfigWithDefaults as SpringCacheConfig;
-        const { messageBroker } = this.jhipsterConfigWithDefaults;
+        const { cacheProvider, messageBroker } = this.jhipsterConfigWithDefaults;
 
         await this.composeWithJHipster('jhipster:java:i18n');
         await this.composeWithJHipster('docker');
@@ -205,7 +205,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
           await this.composeWithJHipster('jhipster:spring-boot:websocket');
         }
         if (([EHCACHE, CAFFEINE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS] as string[]).includes(cacheProvider!)) {
-          await this.composeWithJHipster('spring-cache');
+          await this.composeWithJHipster('jhipster:spring-boot:cache');
         }
       },
     });
@@ -255,7 +255,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
       springBoot4({ application }) {
         if (!application.springBoot4) {
           // Latest version that supports Spring Boot 3
-          application.jhipsterDependenciesVersion = '9.0.0-beta.0';
+          application.jhipsterDependenciesVersion = JHIPSTER_FRAMEWORK_SB3_VERSION;
         }
       },
       springBoot3({ application }) {
@@ -313,6 +313,7 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
                     (_match, p1) => `import org.springframework.boot.${suffixReplacements[p1] ?? p1}`,
                   )
                   .replaceAll('import org.jspecify.annotations.Nullable;', 'import org.springframework.lang.Nullable;')
+                  .replaceAll(/import org\.testcontainers\.(mongodb)\./g, 'import org.testcontainers.containers.')
                   .replaceAll(
                     'import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;',
                     'import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;',
@@ -526,7 +527,7 @@ ${classProperties
         const getScopeForModule = (moduleName: SpringBootModule): JavaArtifactType['scope'] => {
           if (moduleName === 'spring-boot-properties-migrator') return 'runtime';
           if (moduleName === 'spring-boot-configuration-processor') return 'annotationProcessor';
-          return moduleName.endsWith('-test') || moduleName.includes('-test-') ? 'test' : undefined;
+          return /-test($|-|containers)/.test(moduleName) ? 'test' : undefined;
         };
         source.addSpringBootModule = (...moduleNames) =>
           source.addJavaDependencies?.(

@@ -25,8 +25,7 @@ import { JavaApplicationGenerator } from '../../../java/generator.ts';
 import { addJavaAnnotation } from '../../../java/support/add-java-annotation.ts';
 import { javaMainPackageTemplatesBlock } from '../../../java/support/files.ts';
 import type { Application as LanguagesApplication } from '../../../languages/index.ts';
-import type { Source as SpringBootSource } from '../../../spring-boot/index.ts';
-import type { Config as SpringCacheConfig } from '../../../spring-cache/index.ts';
+import type { Config as SpringBootConfig, Source as SpringBootSource } from '../../../spring-boot/index.ts';
 
 import { GRAALVM_REACHABILITY_METADATA } from './internal/constants.ts';
 import { mavenDefinition } from './internal/maven-definition.ts';
@@ -46,7 +45,7 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
     return this.asInitializingTaskGroup({
       forceConfig() {
         // Cache is not supported for GraalVM native image
-        (this.jhipsterConfig as SpringCacheConfig).cacheProvider ??= 'no';
+        (this.jhipsterConfig as SpringBootConfig).cacheProvider ??= 'no';
       },
     });
   }

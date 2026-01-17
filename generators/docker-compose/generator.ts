@@ -39,7 +39,7 @@ import {
   askForMonitoring,
   askForServiceDiscoveryWorkspace,
 } from '../base-workspaces/internal/docker-prompts.ts';
-import { loadDockerDependenciesTask } from '../base-workspaces/internal/index.ts';
+import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../base-workspaces/internal/index.ts';
 import { askForDirectoryPath } from '../base-workspaces/prompts.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
@@ -134,10 +134,14 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
 
   get loadingWorkspaces() {
     return this.asLoadingWorkspacesTaskGroup({
-      loadBaseDeployment({ deployment }) {
+      loadBaseDeployment({ deployment, applications }) {
         deployment.jwtSecretKey = this.jhipsterConfig.jwtSecretKey;
 
         loadDockerDependenciesTask.call(this, { context: deployment });
+        loadDockerElasticsearchVersion.call(this, {
+          springBoot4: applications.some(app => app.springBoot4),
+          dockerContainers: deployment.dockerContainers!,
+        });
       },
     });
   }
@@ -209,7 +213,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
                 'SPRING_DATASOURCE_URL',
                 'SPRING_LIQUIBASE_URL',
                 'SPRING_NEO4J_URI',
-                'SPRING_DATA_MONGODB_URI',
+                'SPRING_MONGODB_URI',
                 'JHIPSTER_CACHE_REDIS_SERVER',
                 'SPRING_ELASTICSEARCH_URIS',
               ].forEach(varName => {

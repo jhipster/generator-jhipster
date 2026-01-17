@@ -3214,10 +3214,10 @@ env:
     - CYPRESS_ENABLE_RECORD: false
 before_install:
   - |
-    echo '*** Using OpenJDK 17 by default'
+    echo '*** Using OpenJDK JAVA_VERSION by default'
     sudo apt-get update -q
-    sudo apt-get install -y openjdk-17-jdk
-    sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
+    sudo apt-get install -y openjdk-JAVA_VERSION-jdk
+    sudo update-java-alternatives -s java-JAVA_VERSION-openjdk-amd64
     java -version
   - sudo /etc/init.d/mysql stop
   - sudo /etc/init.d/postgresql stop
@@ -3290,10 +3290,10 @@ env:
     - CYPRESS_ENABLE_RECORD: false
 before_install:
   - |
-    echo '*** Using OpenJDK 17 by default'
+    echo '*** Using OpenJDK JAVA_VERSION by default'
     sudo apt-get update -q
-    sudo apt-get install -y openjdk-17-jdk
-    sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
+    sudo apt-get install -y openjdk-JAVA_VERSION-jdk
+    sudo update-java-alternatives -s java-JAVA_VERSION-openjdk-amd64
     java -version
   - sudo /etc/init.d/mysql stop
   - sudo /etc/init.d/postgresql stop
@@ -3366,10 +3366,10 @@ env:
     - CYPRESS_ENABLE_RECORD: true
 before_install:
   - |
-    echo '*** Using OpenJDK 17 by default'
+    echo '*** Using OpenJDK JAVA_VERSION by default'
     sudo apt-get update -q
-    sudo apt-get install -y openjdk-17-jdk
-    sudo update-java-alternatives -s java-1.17.0-openjdk-amd64
+    sudo apt-get install -y openjdk-JAVA_VERSION-jdk
+    sudo update-java-alternatives -s java-JAVA_VERSION-openjdk-amd64
     java -version
   - sudo /etc/init.d/mysql stop
   - sudo /etc/init.d/postgresql stop

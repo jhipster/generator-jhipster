@@ -4753,7 +4753,7 @@ spec:
           value: consul-headless.default.svc.cluster.local
         - name: SPRING_CLOUD_CONSUL_PORT
           value: "8500"
-        - name: SPRING_DATA_MONGODB_URI
+        - name: SPRING_MONGODB_URI
           value: "mongodb://msmongodb-mongodb-0.msmongodb-mongodb.default:27017/msmongodb"
         - name: MANAGEMENT_TRACING_BAGGAGE_REMOTE_FIELDS
           value: "x-request-id,x-ot-span-context"

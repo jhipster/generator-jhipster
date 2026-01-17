@@ -305,11 +305,9 @@ export const files = asWriteFilesSection({
         'config/dayjs.ts',
         'config/datepicker-adapter.ts',
         'config/font-awesome-icons.ts',
-        'config/error.constants.ts',
         'config/input.constants.ts',
         'config/navigation.constants.ts',
         'config/pagination.constants.ts',
-        'config/authority.constants.ts',
 
         // interceptors
         'core/interceptor/error-handler.interceptor.ts',

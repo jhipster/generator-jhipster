@@ -4,6 +4,7 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
 {
   "addOpenapiGeneratorPlugin": true,
   "domains": [],
+  "emptyOrReactive": "",
   "entityPackages": [],
   "graalvmReachabilityMetadata": Any<String>,
   "imperativeOrReactive": "imperative",

@@ -1,5 +1,3 @@
-import { asWritingTask } from '../../../base-application/support/task-type-inference.ts';
-
 /**
  * Copyright 2013-2026 the original author or authors from the JHipster project.
  *
@@ -18,11 +16,5 @@ import { asWritingTask } from '../../../base-application/support/task-type-infer
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export default asWritingTask(function cleanupMongodbFilesTask({ application, control }) {
-  if (control.isJhipsterVersionLessThan('3.10.0')) {
-    this.removeFile(`${application.javaPackageSrcDir}config/CloudMongoDbConfiguration.java`);
-  }
-  if (control.isJhipsterVersionLessThan('7.7.1')) {
-    this.removeFile(`${application.javaPackageTestDir}MongoDbTestContainerExtension.java`);
-  }
-});
+export { default } from './generator.ts';
+export { default as command } from './command.ts';

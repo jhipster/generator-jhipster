@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - spring-cache caffeine-gradle should match files snapshot 1`] = `
+exports[`generator - spring-boot:cache caffeine-gradle should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -14,7 +14,7 @@ exports[`generator - spring-cache caffeine-gradle should match files snapshot 1`
 }
 `;
 
-exports[`generator - spring-cache caffeine-gradle should match source calls 1`] = `
+exports[`generator - spring-boot:cache caffeine-gradle should match source calls 1`] = `
 {
   "addEntityToCache": [
     {
@@ -72,6 +72,14 @@ exports[`generator - spring-cache caffeine-gradle should match source calls 1`] 
       },
     ],
   ],
+  "editJavaFile": [
+    [
+      "src/test/java/com/mycompany/myapp/IntegrationTest.java",
+      {
+        "annotations": [],
+      },
+    ],
+  ],
   "ignoreSonarRule": [
     {
       "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
@@ -83,7 +91,7 @@ exports[`generator - spring-cache caffeine-gradle should match source calls 1`] 
 }
 `;
 
-exports[`generator - spring-cache caffeine-maven should match files snapshot 1`] = `
+exports[`generator - spring-boot:cache caffeine-maven should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -97,7 +105,7 @@ exports[`generator - spring-cache caffeine-maven should match files snapshot 1`]
 }
 `;
 
-exports[`generator - spring-cache caffeine-maven should match source calls 1`] = `
+exports[`generator - spring-boot:cache caffeine-maven should match source calls 1`] = `
 {
   "addEntityToCache": [
     {
@@ -143,6 +151,14 @@ exports[`generator - spring-cache caffeine-maven should match source calls 1`] =
       },
     ],
   ],
+  "editJavaFile": [
+    [
+      "src/test/java/com/mycompany/myapp/IntegrationTest.java",
+      {
+        "annotations": [],
+      },
+    ],
+  ],
   "ignoreSonarRule": [
     {
       "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
@@ -154,7 +170,7 @@ exports[`generator - spring-cache caffeine-maven should match source calls 1`] =
 }
 `;
 
-exports[`generator - spring-cache ehcache-gradle should match files snapshot 1`] = `
+exports[`generator - spring-boot:cache ehcache-gradle should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -168,7 +184,7 @@ exports[`generator - spring-cache ehcache-gradle should match files snapshot 1`]
 }
 `;
 
-exports[`generator - spring-cache ehcache-gradle should match source calls 1`] = `
+exports[`generator - spring-boot:cache ehcache-gradle should match source calls 1`] = `
 {
   "addEntityToCache": [
     {
@@ -206,6 +222,14 @@ exports[`generator - spring-cache ehcache-gradle should match source calls 1`] =
       },
     ],
   ],
+  "editJavaFile": [
+    [
+      "src/test/java/com/mycompany/myapp/IntegrationTest.java",
+      {
+        "annotations": [],
+      },
+    ],
+  ],
   "ignoreSonarRule": [
     {
       "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
@@ -217,7 +241,7 @@ exports[`generator - spring-cache ehcache-gradle should match source calls 1`] =
 }
 `;
 
-exports[`generator - spring-cache ehcache-maven should match files snapshot 1`] = `
+exports[`generator - spring-boot:cache ehcache-maven should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -231,7 +255,7 @@ exports[`generator - spring-cache ehcache-maven should match files snapshot 1`] 
 }
 `;
 
-exports[`generator - spring-cache ehcache-maven should match source calls 1`] = `
+exports[`generator - spring-boot:cache ehcache-maven should match source calls 1`] = `
 {
   "addEntityToCache": [
     {
@@ -269,6 +293,14 @@ exports[`generator - spring-cache ehcache-maven should match source calls 1`] = 
       },
     ],
   ],
+  "editJavaFile": [
+    [
+      "src/test/java/com/mycompany/myapp/IntegrationTest.java",
+      {
+        "annotations": [],
+      },
+    ],
+  ],
   "ignoreSonarRule": [
     {
       "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
@@ -280,7 +312,7 @@ exports[`generator - spring-cache ehcache-maven should match source calls 1`] = 
 }
 `;
 
-exports[`generator - spring-cache hazelcast-gradle should match files snapshot 1`] = `
+exports[`generator - spring-boot:cache hazelcast-gradle should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -294,7 +326,7 @@ exports[`generator - spring-cache hazelcast-gradle should match files snapshot 1
 }
 `;
 
-exports[`generator - spring-cache hazelcast-gradle should match source calls 1`] = `
+exports[`generator - spring-boot:cache hazelcast-gradle should match source calls 1`] = `
 {
   "addEntityToCache": [
     {
@@ -339,6 +371,10 @@ exports[`generator - spring-cache hazelcast-gradle should match source calls 1`]
             "groupId": "com.hazelcast",
             "version": "'HAZELCAST-SPRING-VERSION'",
           },
+          {
+            "artifactId": "spring-boot-starter-hazelcast",
+            "groupId": "org.springframework.boot",
+          },
         ],
       },
       {
@@ -353,6 +389,14 @@ exports[`generator - spring-cache hazelcast-gradle should match source calls 1`]
       },
     ],
   ],
+  "editJavaFile": [
+    [
+      "src/test/java/com/mycompany/myapp/IntegrationTest.java",
+      {
+        "annotations": [],
+      },
+    ],
+  ],
   "ignoreSonarRule": [
     {
       "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
@@ -364,7 +408,7 @@ exports[`generator - spring-cache hazelcast-gradle should match source calls 1`]
 }
 `;
 
-exports[`generator - spring-cache hazelcast-maven should match files snapshot 1`] = `
+exports[`generator - spring-boot:cache hazelcast-maven should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -378,7 +422,7 @@ exports[`generator - spring-cache hazelcast-maven should match files snapshot 1`
 }
 `;
 
-exports[`generator - spring-cache hazelcast-maven should match source calls 1`] = `
+exports[`generator - spring-boot:cache hazelcast-maven should match source calls 1`] = `
 {
   "addEntityToCache": [
     {
@@ -403,6 +447,10 @@ exports[`generator - spring-cache hazelcast-maven should match source calls 1`] 
             "groupId": "com.hazelcast",
             "version": "'HAZELCAST-SPRING-VERSION'",
           },
+          {
+            "artifactId": "spring-boot-starter-hazelcast",
+            "groupId": "org.springframework.boot",
+          },
         ],
       },
       {
@@ -417,6 +465,14 @@ exports[`generator - spring-cache hazelcast-maven should match source calls 1`] 
       },
     ],
   ],
+  "editJavaFile": [
+    [
+      "src/test/java/com/mycompany/myapp/IntegrationTest.java",
+      {
+        "annotations": [],
+      },
+    ],
+  ],
   "ignoreSonarRule": [
     {
       "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
@@ -428,7 +484,7 @@ exports[`generator - spring-cache hazelcast-maven should match source calls 1`] 
 }
 `;
 
-exports[`generator - spring-cache infinispan-gradle should match files snapshot 1`] = `
+exports[`generator - spring-boot:cache infinispan-gradle should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -442,7 +498,7 @@ exports[`generator - spring-cache infinispan-gradle should match files snapshot 
 }
 `;
 
-exports[`generator - spring-cache infinispan-gradle should match source calls 1`] = `
+exports[`generator - spring-boot:cache infinispan-gradle should match source calls 1`] = `
 {
   "addEntityToCache": [
     {
@@ -494,6 +550,14 @@ exports[`generator - spring-cache infinispan-gradle should match source calls 1`
       },
     ],
   ],
+  "editJavaFile": [
+    [
+      "src/test/java/com/mycompany/myapp/IntegrationTest.java",
+      {
+        "annotations": [],
+      },
+    ],
+  ],
   "ignoreSonarRule": [
     {
       "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
@@ -505,7 +569,7 @@ exports[`generator - spring-cache infinispan-gradle should match source calls 1`
 }
 `;
 
-exports[`generator - spring-cache infinispan-maven should match files snapshot 1`] = `
+exports[`generator - spring-boot:cache infinispan-maven should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -519,7 +583,7 @@ exports[`generator - spring-cache infinispan-maven should match files snapshot 1
 }
 `;
 
-exports[`generator - spring-cache infinispan-maven should match source calls 1`] = `
+exports[`generator - spring-boot:cache infinispan-maven should match source calls 1`] = `
 {
   "addEntityToCache": [
     {
@@ -571,6 +635,14 @@ exports[`generator - spring-cache infinispan-maven should match source calls 1`]
       },
     ],
   ],
+  "editJavaFile": [
+    [
+      "src/test/java/com/mycompany/myapp/IntegrationTest.java",
+      {
+        "annotations": [],
+      },
+    ],
+  ],
   "ignoreSonarRule": [
     {
       "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
@@ -582,7 +654,7 @@ exports[`generator - spring-cache infinispan-maven should match source calls 1`]
 }
 `;
 
-exports[`generator - spring-cache memcached-gradle should match files snapshot 1`] = `
+exports[`generator - spring-boot:cache memcached-gradle should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -596,7 +668,7 @@ exports[`generator - spring-cache memcached-gradle should match files snapshot 1
 }
 `;
 
-exports[`generator - spring-cache memcached-gradle should match source calls 1`] = `
+exports[`generator - spring-boot:cache memcached-gradle should match source calls 1`] = `
 {
   "addEntityToCache": [
     {
@@ -644,6 +716,14 @@ exports[`generator - spring-cache memcached-gradle should match source calls 1`]
       },
     ],
   ],
+  "editJavaFile": [
+    [
+      "src/test/java/com/mycompany/myapp/IntegrationTest.java",
+      {
+        "annotations": [],
+      },
+    ],
+  ],
   "ignoreSonarRule": [
     {
       "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
@@ -655,7 +735,7 @@ exports[`generator - spring-cache memcached-gradle should match source calls 1`]
 }
 `;
 
-exports[`generator - spring-cache memcached-maven should match files snapshot 1`] = `
+exports[`generator - spring-boot:cache memcached-maven should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -669,7 +749,7 @@ exports[`generator - spring-cache memcached-maven should match files snapshot 1`
 }
 `;
 
-exports[`generator - spring-cache memcached-maven should match source calls 1`] = `
+exports[`generator - spring-boot:cache memcached-maven should match source calls 1`] = `
 {
   "addEntityToCache": [
     {
@@ -717,6 +797,14 @@ exports[`generator - spring-cache memcached-maven should match source calls 1`] 
       },
     ],
   ],
+  "editJavaFile": [
+    [
+      "src/test/java/com/mycompany/myapp/IntegrationTest.java",
+      {
+        "annotations": [],
+      },
+    ],
+  ],
   "ignoreSonarRule": [
     {
       "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
@@ -728,7 +816,7 @@ exports[`generator - spring-cache memcached-maven should match source calls 1`] 
 }
 `;
 
-exports[`generator - spring-cache redis-gradle should match files snapshot 1`] = `
+exports[`generator - spring-boot:cache redis-gradle should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -751,7 +839,7 @@ exports[`generator - spring-cache redis-gradle should match files snapshot 1`] =
 }
 `;
 
-exports[`generator - spring-cache redis-gradle should match source calls 1`] = `
+exports[`generator - spring-boot:cache redis-gradle should match source calls 1`] = `
 {
   "addEntityToCache": [
     {
@@ -801,6 +889,19 @@ exports[`generator - spring-cache redis-gradle should match source calls 1`] = `
       "value": "com.mycompany.myapp.config.RedisTestContainersSpringContextCustomizerFactory",
     },
   ],
+  "editJavaFile": [
+    [
+      "src/test/java/com/mycompany/myapp/IntegrationTest.java",
+      {
+        "annotations": [
+          {
+            "annotation": "EmbeddedRedis",
+            "package": "com.mycompany.myapp.config",
+          },
+        ],
+      },
+    ],
+  ],
   "ignoreSonarRule": [
     {
       "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
@@ -812,7 +913,7 @@ exports[`generator - spring-cache redis-gradle should match source calls 1`] = `
 }
 `;
 
-exports[`generator - spring-cache redis-maven should match files snapshot 1`] = `
+exports[`generator - spring-boot:cache redis-maven should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -835,7 +936,7 @@ exports[`generator - spring-cache redis-maven should match files snapshot 1`] = 
 }
 `;
 
-exports[`generator - spring-cache redis-maven should match source calls 1`] = `
+exports[`generator - spring-boot:cache redis-maven should match source calls 1`] = `
 {
   "addEntityToCache": [
     {
@@ -884,6 +985,19 @@ exports[`generator - spring-cache redis-maven should match source calls 1`] = `
       "key": "org.springframework.test.context.ContextCustomizerFactory",
       "value": "com.mycompany.myapp.config.RedisTestContainersSpringContextCustomizerFactory",
     },
+  ],
+  "editJavaFile": [
+    [
+      "src/test/java/com/mycompany/myapp/IntegrationTest.java",
+      {
+        "annotations": [
+          {
+            "annotation": "EmbeddedRedis",
+            "package": "com.mycompany.myapp.config",
+          },
+        ],
+      },
+    ],
   ],
   "ignoreSonarRule": [
     {

@@ -23,10 +23,12 @@ import type {
 } from '../server/types.d.ts';
 
 import type command from './command.ts';
+import type cacheCommand from './generators/cache/command.ts';
 import type springBootDependencies4 from './resources/spring-boot-dependencies-4.ts';
 import type springBootDependencies3 from './resources/spring-boot-dependencies.ts';
 
 type Command = HandleCommandTypes<typeof command>;
+type CacheCommand = HandleCommandTypes<typeof cacheCommand>;
 
 export type SpringBootModule = keyof (typeof springBootDependencies3)['modules'] | keyof (typeof springBootDependencies4)['modules'];
 
@@ -34,9 +36,9 @@ export type SpringBootProperties =
   | keyof (typeof springBootDependencies3)['properties']
   | keyof (typeof springBootDependencies4)['properties'];
 
-export type Config = Command['Config'] & JavaConfig & ServerConfig & CommonConfig;
+export type Config = Command['Config'] & CacheCommand['Config'] & JavaConfig & ServerConfig & CommonConfig;
 
-export type Options = Command['Options'] & JavaOptions & ServerOptions;
+export type Options = Command['Options'] & CacheCommand['Options'] & JavaOptions & ServerOptions;
 
 export type SpringEntity = {
   entitySearchLayer?: boolean;
@@ -126,6 +128,8 @@ export type Source = JavaSource &
      * `);
      */
     addApplicationYamlDocument?(document: string): void;
+    addEntryToCache?(entry: { entry: string }): void;
+    addEntityToCache?(entry: { entityAbsoluteClass: string; relationships?: { propertyName: string; collection: boolean }[] }): void;
   };
 
 type ImperativeApplication = {
@@ -163,6 +167,7 @@ type ApplicationNature = (ImperativeApplication & CacheProviderApplication) | Re
 type ApplicationNature = { reactive: boolean };
 
 export type Application<E extends BaseApplicationEntity = Entity> = Command['Application'] &
+  CacheCommand['Application'] &
   ServerApplication<E> &
   GradleApplication &
   ApplicationNature &
