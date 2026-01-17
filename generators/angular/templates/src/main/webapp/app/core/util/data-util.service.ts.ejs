@@ -20,7 +20,7 @@ import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable, Observer } from 'rxjs';
 
-import { formatAsBytes, openFile, paddingSize, size, toBase64 } from 'app/shared/jhipster/data-utils';
+import { byteSize, openFile, paddingSize, toBase64 } from 'app/shared/jhipster/data-utils';
 
 export type FileLoadErrorType = 'not.image' | 'could.not.extract';
 
@@ -41,7 +41,7 @@ export class DataUtils {
    * Method to find the byte size of the string provides
    */
   byteSize(base64String: string): string {
-    return formatAsBytes(size(base64String));
+    return byteSize(base64String);
   }
 
   /**

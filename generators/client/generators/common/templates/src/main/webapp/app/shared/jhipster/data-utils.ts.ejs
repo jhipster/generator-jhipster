@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-export const formatAsBytes = (size: number): string =>
+const formatAsBytes = (size: number): string =>
   `${size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} bytes`; // NOSONAR
 
 export const endsWith = (suffix: string, str: string): boolean =>
@@ -32,7 +32,7 @@ export const paddingSize = (value: string): number => {
   return 0;
 }
 
-export const size = (value: string): number =>
+const size = (value: string): number =>
   (value.length / 4) * 3 - paddingSize(value);
 
 export const toBase64 = (file: File, callback: (base64Data: string) => void): void => {
@@ -64,3 +64,6 @@ export const openFile = (data: string, contentType: string | null | undefined): 
     win.onload = () => URL.revokeObjectURL(fileURL);
   }
 }
+
+export const byteSize = (base64String: string): string =>
+  formatAsBytes(size(base64String));
