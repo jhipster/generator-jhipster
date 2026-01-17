@@ -45,3 +45,22 @@ export const toBase64 = (file: File, callback: (base64Data: string) => void): vo
   };
   fileReader.readAsDataURL(file);
 }
+
+export const openFile = (data: string, contentType: string | null | undefined): void => {
+  contentType ??= '';
+
+  const byteCharacters = atob(data);
+  const byteNumbers = new Array(byteCharacters.length);
+  for (let i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.codePointAt(i);
+  }
+  const byteArray = new Uint8Array(byteNumbers);
+  const blob = new Blob([byteArray], {
+    type: contentType,
+  });
+  const fileURL = globalThis.URL.createObjectURL(blob);
+  const win = globalThis.open(fileURL);
+  if (win) {
+    win.onload = () => URL.revokeObjectURL(fileURL);
+  }
+}

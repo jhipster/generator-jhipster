@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { formatAsBytes, paddingSize, size, toBase64 } from '@/shared/jhipster/data-utils';
+import { formatAsBytes, openFile, paddingSize, size, toBase64 } from '@/shared/jhipster/data-utils';
 
 /**
  * An composable utility for data.
@@ -43,20 +43,7 @@ const useDataUtils = () => ({
    * Method to open file
    */
   openFile(contentType, data) {
-    const byteCharacters = atob(data);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], {
-      type: contentType,
-    });
-    const objectURL = URL.createObjectURL(blob);
-    const win = window.open(objectURL);
-    if (win) {
-      win.onload = () => URL.revokeObjectURL(objectURL);
-    }
+    openFile(data, contentType);
   },
 
   /**
