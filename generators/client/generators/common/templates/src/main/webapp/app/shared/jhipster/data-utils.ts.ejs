@@ -46,7 +46,7 @@ export const toBase64 = (file: File, callback: (base64Data: string) => void): vo
   fileReader.readAsDataURL(file);
 }
 
-export const openFileUtil = (data: string, contentType: string | null | undefined): void => {
+export const openFile = (data: string, contentType: string | null | undefined): void => {
   contentType ??= '';
 
   const byteCharacters = atob(data);
