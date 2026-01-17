@@ -118,7 +118,7 @@ const useDataUtils = () => ({
       return {};
     }
 
-    return getPageNumberFromLinkHeader(header);
+    return getPageNumberFromLinkHeader(header) ?? {};
   },
 });
 
