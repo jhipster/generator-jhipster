@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { formatAsBytes, openFile, paddingSize, size, toBase64 } from '@/shared/jhipster/data-utils';
+import { byteSize, openFile, paddingSize, toBase64 } from '@/shared/jhipster/data-utils';
 
 /**
  * An composable utility for data.
@@ -36,7 +36,7 @@ const useDataUtils = () => ({
    * Method to find the byte size of the string provides
    */
   byteSize(base64String) {
-    return formatAsBytes(size(base64String));
+    return byteSize(base64String);
   },
 
   /**
