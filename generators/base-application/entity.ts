@@ -350,7 +350,7 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
 
   primaryKey?: PrimaryKey<F>;
 
-  changelogDateForRecent: any;
+  changelogDateForRecent: Date;
 }
 
 export const mutateEntity = {
