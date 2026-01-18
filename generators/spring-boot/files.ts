@@ -378,7 +378,7 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
   ],
   serverJavaUserManagement: [
     {
-      condition: generator => generator.searchEngineElasticsearch || generator.databaseTypeCouchbase || generator.searchEngineCouchbase,
+      condition: generator => generator.databaseTypeCouchbase || generator.searchEngineCouchbase,
       path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
       templates: ['config/TestContainersSpringContextCustomizerFactory.java'],
