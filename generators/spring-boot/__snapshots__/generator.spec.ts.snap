@@ -200,6 +200,13 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
   "devJdbcUrl": undefined,
   "devServerPort": 4200,
   "devServerPortProxy": undefined,
+  "dockerApplicationEnvironment": {
+    "MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED": "true",
+    "SPRING_DATASOURCE_URL": "jdbc:postgresql://postgresql:5432/jhipster",
+    "SPRING_LIQUIBASE_URL": "jdbc:postgresql://postgresql:5432/jhipster",
+    "SPRING_PROFILES_ACTIVE": "prod,api-docs",
+    "_JAVA_OPTIONS": "-Xmx512m -Xms256m",
+  },
   "dockerContainers": {
     "apache/kafka-native": "apache-kafka-native-placeholder",
     "apachepulsar/pulsar": "apachepulsar-pulsar-placeholder",
@@ -321,6 +328,7 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
     "zipkinImage": "zipkin-image-placeholder",
     "zipkinTag": "zipkin-tag-placeholder",
   },
+  "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "domains": [
@@ -1018,6 +1026,13 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
   "devJdbcUrl": undefined,
   "devServerPort": 4200,
   "devServerPortProxy": undefined,
+  "dockerApplicationEnvironment": {
+    "MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED": "true",
+    "SPRING_DATASOURCE_URL": "jdbc:postgresql://postgresql:5432/jhipster",
+    "SPRING_LIQUIBASE_URL": "jdbc:postgresql://postgresql:5432/jhipster",
+    "SPRING_PROFILES_ACTIVE": "prod,api-docs",
+    "_JAVA_OPTIONS": "-Xmx512m -Xms256m",
+  },
   "dockerContainers": {
     "apache/kafka-native": "apache-kafka-native-placeholder",
     "apachepulsar/pulsar": "apachepulsar-pulsar-placeholder",
@@ -1139,6 +1154,7 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
     "zipkinImage": "zipkin-image-placeholder",
     "zipkinTag": "zipkin-tag-placeholder",
   },
+  "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "domains": [
