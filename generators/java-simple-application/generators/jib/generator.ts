@@ -30,13 +30,14 @@ export default class JibGenerator extends JavaSimpleApplicationGenerator {
     if (!this.delegateToBlueprint) {
       await this.dependsOnBootstrap('java-simple-application');
       await this.dependsOnJHipster('jhipster:java-simple-application:build-tool');
+      await this.dependsOnBootstrap('docker');
     }
   }
 
   get writing() {
     return this.asWritingTaskGroup({
       async write({ application }) {
-        const { dockerServicesDir } = application;
+        const { dockerServicesDir } = application as unknown as DockerApplication;
         await this.writeFiles({
           blocks: [
             { path: `${dockerServicesDir}jib/`, templates: ['entrypoint.sh'] },
@@ -60,7 +61,7 @@ export default class JibGenerator extends JavaSimpleApplicationGenerator {
       addMavenJibPlugin({ application, source }) {
         if (!application.buildToolMaven) return;
         const { baseName, serverPort, javaDependencies } = application;
-        const { dockerContainers, dockerServicesDir } = application as DockerApplication;
+        const { dockerContainers, dockerServicesDir } = application as unknown as DockerApplication;
         const { cacheProviderHazelcast, cacheProviderInfinispan } = application as SpringBootApplication;
         source.addMavenDefinition?.({
           properties: [

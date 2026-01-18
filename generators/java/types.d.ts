@@ -122,6 +122,6 @@ export type Application<E extends BaseApplicationEntity<BaseApplicationField, Ba
     GradleApplication &
     SpringApplication &
     LanguagesApplication &
-    DatabaseApplication & {};
+    DatabaseApplication;
 
 export type Source = BaseApplicationSource & JavaSimpleApplicationSource;

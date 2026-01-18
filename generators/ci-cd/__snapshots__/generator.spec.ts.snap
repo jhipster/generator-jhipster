@@ -139,8 +139,16 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "devJdbcUrl": undefined,
   "devServerPort": 4200,
   "devServerPortProxy": undefined,
+  "dockerApplicationEnvironment": {
+    "MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED": "true",
+    "SPRING_DATASOURCE_URL": "jdbc:postgresql://postgresql:5432/jhipster",
+    "SPRING_LIQUIBASE_URL": "jdbc:postgresql://postgresql:5432/jhipster",
+    "SPRING_PROFILES_ACTIVE": "prod,api-docs",
+    "_JAVA_OPTIONS": "-Xmx512m -Xms256m",
+  },
   "dockerContainers": Any<Object>,
   "dockerImage": undefined,
+  "dockerServices": [],
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "domains": [

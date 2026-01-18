@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import BaseSimpleApplicationGenerator from '../../../base-simple-application/index.ts';
-import { JAVA_DOCKER_DIR } from '../../../generator-constants.ts';
+import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
 import type {
   Application as DockerApplication,
   Config as DockerConfig,
@@ -39,22 +39,22 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
     await this.dependsOnBootstrap('base-simple-application');
   }
 
-  get [BaseSimpleApplicationGenerator.BOOTSTRAP_APPLICATION]() {
-    return this.asBootstrapApplicationTaskGroup({
+  get loading() {
+    return this.asLoadingTaskGroup({
       loadConfig({ applicationDefaults }) {
-        applicationDefaults({
-          dockerContainers: {},
-        });
+        applicationDefaults(mutateApplicationLoading);
       },
     });
+  }
+
+  get [BaseSimpleApplicationGenerator.LOADING]() {
+    return this.loading;
   }
 
   get preparing() {
     return this.asPreparingTaskGroup({
       prepareApplication({ applicationDefaults }) {
-        applicationDefaults({
-          dockerServicesDir: JAVA_DOCKER_DIR,
-        });
+        applicationDefaults(mutateApplicationPreparing);
       },
     });
   }

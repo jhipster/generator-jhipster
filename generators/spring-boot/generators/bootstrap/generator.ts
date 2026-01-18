@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { getDatabaseTypeData } from '../../../server/support/database.ts';
+import { getJdbcUrl, getR2dbcUrl } from '../../../spring-data/generators/relational/support/database-url.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';
 
 export default class BootstrapGenerator extends SpringBootApplicationGenerator {
@@ -60,6 +61,46 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
             hibernateNamingPhysicalStrategy: 'org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy',
             hibernateNamingImplicitStrategy: `org.springframework.boot${application.springBoot4 ? '' : '.orm.jpa'}.hibernate.SpringImplicitNamingStrategy`,
           });
+        }
+      },
+      dockerEnvironment({ application }) {
+        const { baseName, dockerApplicationEnvironment } = application;
+
+        Object.assign(application.dockerApplicationEnvironment, {
+          _JAVA_OPTIONS: '-Xmx512m -Xms256m',
+          SPRING_PROFILES_ACTIVE: 'prod,api-docs',
+          MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED: 'true',
+        });
+
+        // TODO move to spring-cloud:bootstrap generator
+        if (application.serviceDiscoveryConsul) {
+          dockerApplicationEnvironment.SPRING_CLOUD_CONSUL_HOST = 'consul';
+          dockerApplicationEnvironment.SPRING_CLOUD_CONSUL_PORT = '8500';
+        }
+        if (application.serviceDiscoveryEureka) {
+          // eslint-disable-next-line no-template-curly-in-string
+          const jhipsterRegistryUrl = 'http://admin:$${jhipster.registry.password}@jhipster-registry:8761/';
+          dockerApplicationEnvironment.EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE = `${jhipsterRegistryUrl}eureka`;
+          dockerApplicationEnvironment.SPRING_CLOUD_CONFIG_URI = `${jhipsterRegistryUrl}config`;
+        }
+        if (application.databaseTypeSql) {
+          const databaseName = application.prodDatabaseTypeMysql || application.prodDatabaseTypeMariadb ? baseName.toLowerCase() : baseName;
+          const jdbcUrl = getJdbcUrl(application.prodDatabaseType, {
+            hostname: application.prodDatabaseType,
+            databaseName,
+          });
+          if (application.reactive) {
+            dockerApplicationEnvironment.SPRING_R2DBC_URL = getR2dbcUrl(application.prodDatabaseType, {
+              hostname: application.prodDatabaseType,
+              databaseName,
+            });
+          } else {
+            dockerApplicationEnvironment.SPRING_DATASOURCE_URL = jdbcUrl;
+          }
+          dockerApplicationEnvironment.SPRING_LIQUIBASE_URL = jdbcUrl;
+        } else if (application.databaseTypeMongodb) {
+          const mongodbUri = `mongodb://mongodb:27017/${application.baseName}`;
+          application.dockerApplicationEnvironment.SPRING_MONGODB_URI = mongodbUri;
         }
       },
     });

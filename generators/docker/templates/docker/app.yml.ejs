@@ -22,29 +22,8 @@ services:
   app:
     image: <%= baseName.toLowerCase() %>
     environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=prod,api-docs
-      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-<%_ if (serviceDiscoveryConsul) { _%>
-      - SPRING_CLOUD_CONSUL_HOST=consul
-      - SPRING_CLOUD_CONSUL_PORT=8500
-<%_ } _%>
-<%_ if (serviceDiscoveryEureka) { _%>
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config
-<%_ } _%>
-<%_ if (databaseTypeSql) {
-const databaseName = prodDatabaseTypeMysql || prodDatabaseTypeMariadb ? baseName.toLowerCase() : baseName;
-_%>
-  <%_ if (reactive) { _%>
-      - SPRING_R2DBC_URL=<%- this.getR2DBCUrl(prodDatabaseType, { hostname: prodDatabaseType, databaseName: databaseName }) %>
-  <%_ } else { _%>
-      - SPRING_DATASOURCE_URL=<%- this.getJDBCUrl(prodDatabaseType, { hostname: prodDatabaseType, databaseName: databaseName }) %>
-  <%_ } _%>
-      - SPRING_LIQUIBASE_URL=<%- this.getJDBCUrl(prodDatabaseType, { hostname: prodDatabaseType, databaseName: databaseName }) %>
-<%_ } _%>
-<%_ if (databaseTypeMongodb) { _%>
-      - SPRING_MONGODB_URI=mongodb://mongodb:27017/<%= baseName %>
+<%_ for (const [key, value] of Object.entries(dockerApplicationEnvironment)) { _%>
+      - <%- key %>=<%- value %>
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
       - SPRING_NEO4J_URI=bolt://neo4j:7687
