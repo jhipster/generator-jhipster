@@ -17,20 +17,35 @@
  * limitations under the License.
  */
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
+import { JAVA_DOCKER_DIR } from '../generator-constants.ts';
 
 import type { Application as DockerApplication } from './types.ts';
 
-export type DockerAddedApplicationProperties = {
+export type DockerAddedApplicationLoadingProperties = {
   dockerContainers: Record<string, string>;
   dockerApplicationEnvironment: Record<string, string>;
-  dockerServicesDir?: string;
   dockerServices: string[];
   keycloakSecrets?: string[];
 };
 
-export const mutateApplication = {
+export type DockerAddedApplicationPreparingProperties = {
+  dockerServicesDir: string;
+};
+
+export const mutateApplicationLoading = {
   __override__: false,
   dockerContainers: () => ({}),
   dockerApplicationEnvironment: () => ({}),
   dockerServices: () => [],
-} as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<DockerApplication>, DockerAddedApplicationProperties>;
+} as const satisfies MutateDataPropertiesWithRequiredProperties<
+  MutateDataParam<DockerApplication>,
+  DockerAddedApplicationLoadingProperties
+>;
+
+export const mutateApplicationPreparing = {
+  __override__: false,
+  dockerServicesDir: JAVA_DOCKER_DIR,
+} as const satisfies MutateDataPropertiesWithRequiredProperties<
+  MutateDataParam<DockerApplication>,
+  DockerAddedApplicationPreparingProperties
+>;
