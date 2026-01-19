@@ -33,10 +33,19 @@ export default class CouchbaseGenerator extends SpringBootApplicationGenerator {
   }
 
   get writing() {
-    return {
+    return this.asWritingTaskGroup({
+      async cleanup({ application, control }) {
+        await control.cleanupFiles({
+          '9.0.0-beta.1': [
+            `${application.javaPackageSrcDir}TestContainersSpringContextCustomizerFactory.java`,
+            `${application.javaPackageSrcDir}config/EmbeddedCouchbase.java`,
+            `${application.srcTestResources}META-INF/spring.factories`,
+          ],
+        });
+      },
       cleanupCouchbaseFilesTask,
       writeCouchbaseFilesTask,
-    };
+    });
   }
 
   get [SpringBootApplicationGenerator.WRITING]() {
@@ -44,10 +53,10 @@ export default class CouchbaseGenerator extends SpringBootApplicationGenerator {
   }
 
   get writingEntities() {
-    return {
+    return this.asWritingEntitiesTaskGroup({
       cleanupCouchbaseEntityFilesTask,
       writeCouchbaseEntityFilesTask,
-    };
+    });
   }
 
   get [SpringBootApplicationGenerator.WRITING_ENTITIES]() {
@@ -56,12 +65,6 @@ export default class CouchbaseGenerator extends SpringBootApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      addTestSpringFactory({ source, application }) {
-        source.addTestSpringFactory?.({
-          key: 'org.springframework.test.context.ContextCustomizerFactory',
-          value: `${application.packageName}.config.TestContainersSpringContextCustomizerFactory`,
-        });
-      },
       addDependencies({ application, source }) {
         const { reactive, javaDependencies } = application;
         source.addSpringBootModule?.(`spring-boot-starter-data-couchbase${reactive ? '-reactive' : ''}`);
@@ -77,14 +80,18 @@ export default class CouchbaseGenerator extends SpringBootApplicationGenerator {
       integrationTest({ application, source }) {
         source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
           annotations: [
-            { package: `${application.packageName}.config`, annotation: 'EmbeddedCouchbase' },
             {
               package: 'org.springframework.test.context',
               annotation: 'ActiveProfiles',
-              parameters: () => 'JHipsterConstants.SPRING_PROFILE_TEST',
+              parameters: (_, cb) => cb.addKeyValue('value', 'JHipsterConstants.SPRING_PROFILE_TEST'),
+            },
+            {
+              package: 'org.springframework.boot.testcontainers.context',
+              annotation: 'ImportTestcontainers',
+              parameters: (_, cb) => cb.addKeyValue('value', 'CouchbaseTestContainer.class'),
             },
           ],
-          imports: ['tech.jhipster.config.JHipsterConstants'],
+          imports: ['tech.jhipster.config.JHipsterConstants', `${application.packageName}.config.CouchbaseTestContainer`],
         });
       },
       couchmoveSetup({ application }) {

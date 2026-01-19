@@ -68,7 +68,7 @@ export const couchbaseFiles = asWriteFilesSection<JavaApplication>({
     {
       path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
-      templates: ['config/CouchbaseTestContainer.java', 'config/EmbeddedCouchbase.java'],
+      templates: ['config/CouchbaseTestContainer.java'],
     },
   ],
 });
