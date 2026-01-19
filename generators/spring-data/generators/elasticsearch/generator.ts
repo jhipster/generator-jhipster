@@ -50,10 +50,19 @@ export default class ElasticsearchGenerator extends SpringBootApplicationGenerat
   }
 
   get writing() {
-    return {
+    return this.asWritingTaskGroup({
+      async cleanup({ application, control }) {
+        await control.cleanupFiles({
+          '9.0.0-beta.1': [
+            `${application.javaPackageSrcDir}TestContainersSpringContextCustomizerFactory.java`,
+            `${application.javaPackageSrcDir}config/EmbeddedElasticsearch.java`,
+            `${application.srcTestResources}META-INF/spring.factories`,
+          ],
+        });
+      },
       cleanupElasticsearchFilesTask,
       writeElasticsearchFilesTask,
-    };
+    });
   }
 
   get [SpringBootApplicationGenerator.WRITING]() {
@@ -61,10 +70,10 @@ export default class ElasticsearchGenerator extends SpringBootApplicationGenerat
   }
 
   get writingEntities() {
-    return {
+    return this.asWritingEntitiesTaskGroup({
       cleanupElasticsearchEntityFilesTask,
       writeElasticsearchEntityFilesTask,
-    };
+    });
   }
 
   get [SpringBootApplicationGenerator.WRITING_ENTITIES]() {
@@ -73,12 +82,6 @@ export default class ElasticsearchGenerator extends SpringBootApplicationGenerat
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      addTestSpringFactory({ source, application }) {
-        source.addTestSpringFactory!({
-          key: 'org.springframework.test.context.ContextCustomizerFactory',
-          value: `${application.packageName}.config.TestContainersSpringContextCustomizerFactory`,
-        });
-      },
       addAnnotations({ application, source }) {
         source.editJavaFile!(`${application.javaPackageSrcDir}${application.mainClass}.java`, {
           annotations: [
@@ -89,12 +92,21 @@ export default class ElasticsearchGenerator extends SpringBootApplicationGenerat
             },
           ],
         });
+      },
+      integrationTest({ application, source }) {
         source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
-          annotations: [{ package: `${application.packageName}.config`, annotation: 'EmbeddedElasticsearch' }],
+          imports: [`${application.packageName}.config.ElasticsearchTestContainer`],
+          annotations: [
+            {
+              package: 'org.springframework.boot.testcontainers.context',
+              annotation: 'ImportTestcontainers',
+              parameters: (_, cb) => cb.addKeyValue('value', 'ElasticsearchTestContainer.class'),
+            },
+          ],
         });
       },
       addDependencies({ source }) {
-        source.addSpringBootModule?.('spring-boot-starter-data-elasticsearch');
+        source.addSpringBootModule?.('spring-boot-starter-data-elasticsearch', 'spring-boot-testcontainers');
         source.addJavaDependencies?.([
           { scope: 'test', groupId: 'org.awaitility', artifactId: 'awaitility' },
           { scope: 'test', groupId: 'org.testcontainers', artifactId: 'testcontainers-elasticsearch' },

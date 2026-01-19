@@ -44,7 +44,6 @@ export const files = asWriteFilesSection<JavaApplication>({
       templates: [
         'config/ElasticsearchTestConfiguration.java',
         'config/ElasticsearchTestContainer.java',
-        'config/EmbeddedElasticsearch.java',
         'web/rest/errors/ElasticsearchExceptionMapperTest.java',
       ],
     },
