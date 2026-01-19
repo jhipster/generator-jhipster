@@ -27,10 +27,11 @@ import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.elasticsearch.ElasticsearchContainer;
 import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.utility.DockerImageName;
 
 public interface ElasticsearchTestContainer {
 	@Container
-	ElasticsearchContainer elasticsearchContainer = new ElasticsearchContainer("<%- dockerContainers.elasticsearchImage %>")
+	ElasticsearchContainer elasticsearchContainer = new ElasticsearchContainer(DockerImageName.parse("<%- dockerContainers.elasticsearchImage %>").withTag("<%- dockerContainers.elasticsearchTag %>"))
 	    .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(ElasticsearchTestContainer.class)))
 		.withEnv("xpack.security.enabled", "false")
 	    .withReuse(true);
