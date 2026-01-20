@@ -59,7 +59,7 @@
         "servicesstats": {
             "title": "Statistiques des services (temps en millisecondes)",
             "table": {
-                "name": "Nom du server",
+                "name": "Nom du serveur",
                 "count": "Total",
                 "mean": "Médian",
                 "min": "Min",
