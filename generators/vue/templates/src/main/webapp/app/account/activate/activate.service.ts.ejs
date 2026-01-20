@@ -1,7 +1,7 @@
 import axios, { type AxiosInstance } from 'axios';
 
 export default class ActivateService {
-  private axios: AxiosInstance;
+  private readonly axios: AxiosInstance;
 
   constructor() {
     this.axios = axios;
