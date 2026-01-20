@@ -1,7 +1,7 @@
 <%_
 const tsKeyId = user.primaryKey.tsSampleValues[0];
 _%>
-import { vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { ref } from 'vue';
 import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
