@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
-import { vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { shallowMount, type MountingOptions } from '@vue/test-utils';
 import sinon, { type SinonStubbedInstance } from 'sinon';
 import { type RouteLocation } from 'vue-router';
