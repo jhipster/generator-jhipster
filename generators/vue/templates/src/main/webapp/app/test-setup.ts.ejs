@@ -6,7 +6,7 @@ import { createI18n } from 'vue-i18n';
 <%_ } _%>
 
 beforeAll(() => {
-  window.location.href = 'https://jhipster.tech/';
+  globalThis.location.href = 'https://jhipster.tech/';
 
   // Make sure axios is never executed.
   axios.interceptors.request.use(request => {
