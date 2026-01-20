@@ -21,9 +21,9 @@ export const useAlertService = () => {
 };
 
 export default class AlertService {
-  private toast: ReturnType<typeof useToast>;
+  private readonly toast: ReturnType<typeof useToast>;
 <%_ if (enableTranslation) { _%>
-  private i18n: Composer;
+  private readonly i18n: Composer;
 <%_ } _%>
 
   constructor({

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { type AccountStore } from '@/store';
 
 export default class AccountService {
-  constructor(private store: AccountStore) {}
+  constructor(private readonly store: AccountStore) {}
 
   async update(): Promise<void> {
     if (!this.store.profilesLoaded) {
