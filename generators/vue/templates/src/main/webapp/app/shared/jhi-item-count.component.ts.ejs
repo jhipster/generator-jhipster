@@ -20,7 +20,7 @@ export default defineComponent({
   },
   setup(props) {
     const first = computed(() => ((props.page - 1) * props.itemsPerPage === 0 ? 1 : (props.page - 1) * props.itemsPerPage + 1));
-    const second = computed(() => (props.page * props.itemsPerPage < props.total ? props.page * props.itemsPerPage : props.total));
+    const second = computed(() => Math.min(props.page * props.itemsPerPage, props.total));
 
     return {
       first,
