@@ -87,7 +87,7 @@ export default function checkEnforcements({ client }: { client?: boolean }, gene
         });
       });
     const templateFiles = allFiles.filter(file => file.endsWith('.ejs'));
-    const jsFiles: string[] = [...allFiles, ...generatorUsage.map(gen => readDir(getGeneratorFolder(gen))).flat()]
+    const jsFiles: string[] = [...allFiles, ...generatorUsage.flatMap(gen => readDir(getGeneratorFolder(gen)))]
       .filter(file => file.endsWith('.js') || file.endsWith('.ts') || file.endsWith('.ejs'))
       .sort((a, b) => {
         if (a.includes('files')) return -1;
