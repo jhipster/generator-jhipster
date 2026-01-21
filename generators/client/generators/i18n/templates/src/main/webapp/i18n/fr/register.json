@@ -8,7 +8,7 @@
             "validate": {
                 "login": {
                     "required": "Votre nom d'utilisateur est obligatoire.",
-                    "minlength": "Votre nom d'utilisateur doit contenir plus d'un caractère.",
+                    "minlength": "Votre nom d'utilisateur doit contenir au moins un caractère.",
                     "maxlength": "Votre nom d'utilisateur ne peut pas contenir plus de 50 caractères.",
                     "pattern": "Votre nom d'utilisateur est invalide."
                 }
