@@ -34,11 +34,11 @@ export class EventWithContent<T> {
   providedIn: 'root',
 })
 export class EventManager {
-  observable: Observable<EventWithContent<unknown> | string>;
-  observer?: Observer<EventWithContent<unknown> | string>;
+  observable: Observable<EventWithContent<unknown>>;
+  observer?: Observer<EventWithContent<unknown>>;
 
   constructor() {
-    this.observable = new Observable((observer: Observer<EventWithContent<unknown> | string>) => {
+    this.observable = new Observable((observer: Observer<EventWithContent<unknown>>) => {
       this.observer = observer;
     }).pipe(share());
   }
@@ -46,7 +46,7 @@ export class EventManager {
   /**
    * Method to broadcast the event to observer
    */
-  broadcast(event: EventWithContent<unknown> | string): void {
+  broadcast(event: EventWithContent<unknown>): void {
     if (this.observer) {
       this.observer.next(event);
     }
@@ -57,13 +57,13 @@ export class EventManager {
    * @param eventNames  Single event name or array of event names to what subscribe
    * @param callback    Callback to run when the event occurs
    */
-  subscribe(eventNames: string | string[], callback: (event: EventWithContent<unknown> | string) => void): Subscription {
+  subscribe(eventNames: string | string[], callback: (event: EventWithContent<unknown>) => void): Subscription {
     if (typeof eventNames === 'string') {
       eventNames = [eventNames];
     }
     return this.observable
       .pipe(
-        filter((event: EventWithContent<unknown> | string) => eventNames.includes(typeof event === 'string' ? event : event.name)),
+        filter((event: EventWithContent<unknown>) => eventNames.includes(typeof event === 'string' ? event : event.name)),
       )
       .subscribe(callback);
   }
