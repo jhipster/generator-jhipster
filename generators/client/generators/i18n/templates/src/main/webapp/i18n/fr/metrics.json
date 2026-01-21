@@ -25,7 +25,7 @@
                     "blockedcount": "Nb fois bloqué",
                     "waitedtime": "Temps d'attente",
                     "waitedcount": "Nb fois en attente",
-                    "lockname": "Nom du process bloquant",
+                    "lockname": "Nom du processus bloquant",
                     "stacktrace": "Stacktrace",
                     "show": "Afficher",
                     "hide": "Cacher"
