@@ -48,7 +48,7 @@ export const applyChangesToFile = ({ templateFile, oldFileContents, newFileConte
   let applied = content;
   let failures = 0;
   let success = 0;
-  for (const hunk of patch.hunks.map(hunk => splitHunk(hunk, contextSize)).flat()) {
+  for (const hunk of patch.hunks.flatMap(hunk => splitHunk(hunk, contextSize))) {
     const result = applyPatch(applied, { ...patch, hunks: [hunk] }, { fuzzFactor });
     if (result) {
       applied = result;
