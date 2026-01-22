@@ -14,8 +14,7 @@ const splitHunk = ({ lines, ...hunk }: StructuredPatchHunk, contextSize: number)
         hunkLines = [];
       }
     } else {
-      hunkLines.push(...contextLines);
-      hunkLines.push(line);
+      hunkLines.push(...contextLines, line);
       contextLines = [];
     }
   }
