@@ -56,17 +56,16 @@ jobs:
       - uses: jhipster/actions/setup-runner@v1
         with:
           node-version: ${{ steps.node-version.outputs.node-version }}
-          binary-dir: ${{ github.workspace }}/generator-jhipster/bin
+          binary-dir: ${{ github.workspace }}/bin
       - run: npm ci --ignore-scripts
-        working-directory: ${{ github.workspace }}/generator-jhipster
       - name: Parse POM
-        run: bin/jhipster.cjs update-spring-boot ${{ inputs.springBootVersion }} ${{ inputs.repository }} --force
+        run: jhipster.cjs update-spring-boot ${{ inputs.springBootVersion }} ${{ inputs.repository }} --force
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: spring-boot/v${{ inputs.springBootVersion }}
-          commit-message: 'update spring-boot-dependencies bom to v${{ inputs.springBootVersion }}'
-          title: 'update spring-boot-dependencies bom to v${{ inputs.springBootVersion }}'
-          body: update spring-boot-dependencies bom to v${{ inputs.springBootVersion }}
+          commit-message: 'Update Spring Boot to v${{ inputs.springBootVersion }}'
+          title: 'Update Spring Boot to v${{ inputs.springBootVersion }}'
+          body: Update Spring Boot to v${{ inputs.springBootVersion }}
           labels: 'theme: dependencies'
