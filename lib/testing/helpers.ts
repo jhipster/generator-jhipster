@@ -220,7 +220,7 @@ const commonTestOptions = {
 class JHipsterRunContext extends RunContext<BaseCoreGenerator> {
   public sharedSource!: Record<string, any>;
   private sharedApplication!: Record<string, any>;
-  private workspaceApplications: string[] = [];
+  private readonly workspaceApplications: string[] = [];
   private commonWorkspacesConfig!: Record<string, unknown>;
   private generateApplicationsSet = false;
 

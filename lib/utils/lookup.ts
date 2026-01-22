@@ -34,7 +34,7 @@ export const lookupGeneratorsWithNamespace = (options?: LookupGeneratorsOptions)
   lookupGenerators(options).map(gen => ({
     generator: gen,
     namespace: gen
-      .replace(/\/index\.(t|j)s$/, '')
+      .replace(/\/index\.[tj]s$/, '')
       .replace(/generators\//g, '')
       .replaceAll('/', ':'),
   }));
