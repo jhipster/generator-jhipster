@@ -48,11 +48,9 @@ function filterValue<const T extends Record<string, any>>(
       if (typeof value === 'object') {
         if (Array.isArray(value)) {
           clone[key] = value.filter(customFilterValue);
-        } else {
-          if (deep < 4) {
-            // Avoid recursion depth issues
-            clone[key] = filterValue(value, customFilterValue, deep + 1);
-          }
+        } else if (deep < 4) {
+          // Avoid recursion depth issues
+          clone[key] = filterValue(value, customFilterValue, deep + 1);
         }
       } else {
         clone[key] = value;
