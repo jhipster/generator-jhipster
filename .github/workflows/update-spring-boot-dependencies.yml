@@ -65,7 +65,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: spring-boot/v${{ inputs.springBootVersion }}
-          commit-message: 'update spring-boot-dependencies bom to v${{ inputs.springBootVersion }}'
-          title: 'update spring-boot-dependencies bom to v${{ inputs.springBootVersion }}'
-          body: update spring-boot-dependencies bom to v${{ inputs.springBootVersion }}
+          commit-message: 'Update Spring Boot to v${{ inputs.springBootVersion }}'
+          title: 'Update Spring Boot to v${{ inputs.springBootVersion }}'
+          body: Update Spring Boot to v${{ inputs.springBootVersion }}
           labels: 'theme: dependencies'
