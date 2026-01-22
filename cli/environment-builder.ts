@@ -48,7 +48,7 @@ const localBlueprintGeneratorsLookup = ['.', './*/generators'];
 // Lookup for source or built generators depending on the files being used.
 export const jhipsterGeneratorsLookup = isDistFolder() ? generatorsLookup.map(lookup => `dist/${lookup}`) : generatorsLookup;
 // Lookup for source and built generators.
-const packagedGeneratorsLookup = generatorsLookup.map(lookup => [`dist/${lookup}`, lookup]).flat();
+const packagedGeneratorsLookup = generatorsLookup.flatMap(lookup => [`dist/${lookup}`, lookup]);
 
 const defaultLookupOptions = Object.freeze({
   lookups: packagedGeneratorsLookup,
