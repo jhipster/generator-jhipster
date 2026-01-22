@@ -43,7 +43,7 @@ export default class UpdateSpringBootGenerator extends BaseApplicationGenerator 
       },
       async download() {
         const response = await fetch(
-          `${this.repository}org/springframework/boot/spring-boot-dependencies/${this.version}/spring-boot-dependencies-${this.version}.pom`,
+          `${this.repository}/org/springframework/boot/spring-boot-dependencies/${this.version}/spring-boot-dependencies-${this.version}.pom`,
         );
 
         if (!response.ok) throw new Error(`Unexpected response ${response.statusText}`);
