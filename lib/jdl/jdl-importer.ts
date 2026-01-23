@@ -177,9 +177,7 @@ function importOnlyEntities(jdlObject: JDLObject, configuration: JDLApplicationC
   let { applicationName } = configuration;
 
   let application = configuration.application;
-  if (!application) {
-    application = readCurrentPathYoRcFile();
-  }
+  application ??= readCurrentPathYoRcFile();
   if (application?.[GENERATOR_JHIPSTER]) {
     applicationName ??= application[GENERATOR_JHIPSTER].baseName;
   }
