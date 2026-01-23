@@ -17,20 +17,35 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'esmocha';
-import { basename, resolve } from 'node:path';
+import { basename, join, resolve } from 'node:path';
 
 import { databaseTypes } from '../../../../lib/jhipster/index.ts';
-import { buildServerSamples, defaultHelpers as helpers, entitiesSimple as entities, runResult } from '../../../../lib/testing/index.ts';
+import {
+  buildSamplesFromMatrix,
+  buildServerMatrix,
+  defaultHelpers as helpers,
+  entitiesSimple as entities,
+  extendMatrix,
+  runResult,
+} from '../../../../lib/testing/index.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.ts';
 import { filterBasicServerGenerators, shouldComposeWithLiquibase } from '../../../server/__test-support/index.ts';
-import Generator from '../../../server/index.ts';
+
+import Generator from './generator.ts';
 
 const generator = `${basename(resolve(import.meta.dirname, '../../'))}:${basename(import.meta.dirname)}`;
 
-const { CASSANDRA: databaseType } = databaseTypes;
+// compose with server generator, many conditionals at server generator
+const generatorFile = join(import.meta.dirname, '../server/index.js');
+
+const { COUCHBASE: databaseType } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
 
-const testSamples = buildServerSamples(commonConfig);
+const couchbaseSamples = extendMatrix(buildServerMatrix(), {
+  searchEngine: ['no', 'couchbase'],
+});
+
+const testSamples = buildSamplesFromMatrix(couchbaseSamples, { commonConfig });
 
 describe(`generator - ${databaseType}`, () => {
   shouldSupportFeatures(Generator);
@@ -49,7 +64,7 @@ describe(`generator - ${databaseType}`, () => {
         (sampleConfig.reactive || sampleConfig.applicationType === 'microservice' || sampleConfig.applicationType === 'gateway')
       ) {
         it('should throw an error', async () => {
-          await expect(helpers.runJHipster('server').withJHipsterConfig(sampleConfig)).rejects.toThrow();
+          await expect(helpers.runJHipster(generatorFile).withJHipsterConfig(sampleConfig)).rejects.toThrow();
         });
 
         return;
@@ -61,7 +76,7 @@ describe(`generator - ${databaseType}`, () => {
           .withJHipsterConfig(sampleConfig, entities)
           .withMockedSource({ except: ['addTestSpringFactory'] })
           .withMockedJHipsterGenerators({
-            except: ['jhipster:spring-data:cassandra'],
+            except: ['jhipster:spring-boot:data-couchbase'],
             filter: filterBasicServerGenerators,
           });
       });

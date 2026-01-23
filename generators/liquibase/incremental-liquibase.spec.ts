@@ -177,7 +177,7 @@ const exceptMockedGenerators: (keyof GeneratorsByNamespace)[] = [
   'jhipster:java:bootstrap',
   'jhipster:java:domain',
   'liquibase',
-  'jhipster:spring-data:relational',
+  'jhipster:spring-boot:data-relational',
 ];
 
 describe('generator - app - --incremental-changelog', function () {

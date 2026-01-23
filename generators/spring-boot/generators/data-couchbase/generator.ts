@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { SpringBootApplicationGenerator } from '../../../spring-boot/generator.ts';
+import { SpringBootApplicationGenerator } from '../../generator.ts';
 
 import writeCouchbaseEntityFilesTask, { cleanupCouchbaseEntityFilesTask } from './entity-files.ts';
 import writeCouchbaseFilesTask, { cleanupCouchbaseFilesTask } from './files.ts';

@@ -22,11 +22,11 @@ const shouldComposeWithDatabasetype = (databaseType: string, shouldCompose: bool
   const generator = databaseType;
   if (shouldCompose) {
     it(`should compose with ${generator} generator`, () => {
-      runResultSupplier().assertGeneratorComposedOnce(`jhipster:spring-data:${generator}`);
+      runResultSupplier().assertGeneratorComposedOnce(`jhipster:spring-boot:data-${generator}`);
     });
   } else {
     it(`should not compose with ${generator} generator`, () => {
-      runResultSupplier().assertGeneratorNotComposed(`jhipster:spring-data:${generator}`);
+      runResultSupplier().assertGeneratorNotComposed(`jhipster:spring-boot:data-${generator}`);
     });
   }
 };

@@ -15,12 +15,12 @@ import type { Config as LanguagesConfig, Options as LanguagesOptions } from '../
 import type { Config as LiquibaseConfig, Options as LiquibaseOptions } from '../../generators/liquibase/types.d.ts';
 import type { Config as ProjectNameConfig, Options as ProjectNameOptions } from '../../generators/project-name/types.d.ts';
 import type { Config as ServerConfig, Options as ServerOptions } from '../../generators/server/types.d.ts';
-import type { Config as SpringBootConfig, Options as SpringBootOptions } from '../../generators/spring-boot/types.d.ts';
-import type { Config as SpringCloudConfig, Options as SpringCloudOptions } from '../../generators/spring-cloud/types.d.ts';
 import type {
   Config as SpringDataRelationalConfig,
   Options as SpringDataRelationalOptions,
-} from '../../generators/spring-data/generators/relational/types.d.ts';
+} from '../../generators/spring-boot/generators/data-relational/types.d.ts';
+import type { Config as SpringBootConfig, Options as SpringBootOptions } from '../../generators/spring-boot/types.d.ts';
+import type { Config as SpringCloudConfig, Options as SpringCloudOptions } from '../../generators/spring-cloud/types.d.ts';
 import type { YO_RC_CONFIG_KEY } from '../utils/yo-rc.ts';
 
 export type ConfigAll = Simplify<

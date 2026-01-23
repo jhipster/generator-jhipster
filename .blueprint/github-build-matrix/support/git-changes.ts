@@ -29,7 +29,7 @@ const patterns = {
   springBootDefaults: [
     'generators/spring-boot/*',
     'generators/spring-boot/{resources,templates,generators/bootstrap,generators/jwt}/**',
-    'generators/spring-data/generators/relational/**',
+    'generators/spring-boot/generators/data-relational/**',
     'generators/{java,java-simple-application,liquibase,server}/**',
   ],
   sonarPr: ['.github/actions/sonar/**'],

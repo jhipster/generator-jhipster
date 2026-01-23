@@ -25,27 +25,21 @@ import {
   buildServerMatrix,
   defaultHelpers as helpers,
   entitiesSimple as entities,
-  extendMatrix,
   runResult,
 } from '../../../../lib/testing/index.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.ts';
 import { filterBasicServerGenerators, shouldComposeWithLiquibase } from '../../../server/__test-support/index.ts';
-
-import Generator from './generator.ts';
+import Generator from '../../../server/index.ts';
 
 const generator = `${basename(resolve(import.meta.dirname, '../../'))}:${basename(import.meta.dirname)}`;
 
 // compose with server generator, many conditionals at server generator
 const generatorFile = join(import.meta.dirname, '../server/index.js');
 
-const { COUCHBASE: databaseType } = databaseTypes;
+const { MONGODB: databaseType } = databaseTypes;
 const commonConfig = { databaseType, baseName: 'jhipster', nativeLanguage: 'en', languages: ['fr', 'en'] };
 
-const couchbaseSamples = extendMatrix(buildServerMatrix(), {
-  searchEngine: ['no', 'couchbase'],
-});
-
-const testSamples = buildSamplesFromMatrix(couchbaseSamples, { commonConfig });
+const testSamples = buildSamplesFromMatrix(buildServerMatrix(), { commonConfig });
 
 describe(`generator - ${databaseType}`, () => {
   shouldSupportFeatures(Generator);
@@ -76,7 +70,7 @@ describe(`generator - ${databaseType}`, () => {
           .withJHipsterConfig(sampleConfig, entities)
           .withMockedSource({ except: ['addTestSpringFactory'] })
           .withMockedJHipsterGenerators({
-            except: ['jhipster:spring-data:couchbase'],
+            except: ['jhipster:spring-boot:data-mongodb'],
             filter: filterBasicServerGenerators,
           });
       });

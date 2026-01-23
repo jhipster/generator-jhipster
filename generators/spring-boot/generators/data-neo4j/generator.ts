@@ -17,9 +17,9 @@
  * limitations under the License.
  */
 
-import { SpringBootApplicationGenerator } from '../../../spring-boot/generator.ts';
-import type { Source as SpringBootSource } from '../../../spring-boot/index.ts';
-import type { Application as SpringDataRelationalApplication } from '../relational/types.d.ts';
+import { SpringBootApplicationGenerator } from '../../generator.ts';
+import type { Source as SpringBootSource } from '../../index.ts';
+import type { Application as SpringDataRelationalApplication } from '../data-relational/types.d.ts';
 
 import cleanupTask from './cleanup.ts';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.ts';

@@ -24,7 +24,7 @@ import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { loadRequiredConfigIntoEntity } from '../../../base-application/support/index.ts';
 import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../../base-application/types.d.ts';
 import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../../../base-workspaces/internal/docker-dependencies.ts';
-import type { Application as SpringDataRelationalApplication } from '../../../spring-data/generators/relational/types.d.ts';
+import type { Application as SpringDataRelationalApplication } from '../../../spring-boot/generators/data-relational/types.d.ts';
 import serverCommand from '../../command.ts';
 import {
   addEntitiesOtherRelationships,

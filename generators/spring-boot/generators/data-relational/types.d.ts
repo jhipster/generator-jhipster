@@ -26,7 +26,7 @@ import type {
   Options as SpringBootOptions,
   Relationship as SpringBootRelationship,
   Source as SpringBootSource,
-} from '../../../spring-boot/types.ts';
+} from '../../types.ts';
 
 import type command from './command.ts';
 

@@ -140,6 +140,12 @@ type GeneratorsByNamespace = {
   'jhipster:spring-boot:bootstrap': import('./spring-boot/generators/bootstrap/generator.ts').default;
   'jhipster:spring-boot:cache': import('./spring-boot/generators/cache/generator.ts').default;
   'jhipster:spring-boot:cucumber': import('./spring-boot/generators/cucumber/generator.ts').default;
+  'jhipster:spring-boot:data-cassandra': import('./spring-boot/generators/data-cassandra/generator.ts').default;
+  'jhipster:spring-boot:data-couchbase': import('./spring-boot/generators/data-couchbase/generator.ts').default;
+  'jhipster:spring-boot:data-elasticsearch': import('./spring-boot/generators/data-elasticsearch/generator.ts').default;
+  'jhipster:spring-boot:data-mongodb': import('./spring-boot/generators/data-mongodb/generator.ts').default;
+  'jhipster:spring-boot:data-neo4j': import('./spring-boot/generators/data-neo4j/generator.ts').default;
+  'jhipster:spring-boot:data-relational': import('./spring-boot/generators/data-relational/generator.ts').default;
   'jhipster:spring-boot:jwt': import('./spring-boot/generators/jwt/generator.ts').default;
   'jhipster:spring-boot:oauth2': import('./spring-boot/generators/oauth2/generator.ts').default;
   'jhipster:spring-boot:websocket': import('./spring-boot/generators/websocket/generator.ts').default;
@@ -149,14 +155,6 @@ type GeneratorsByNamespace = {
   'jhipster:spring-cloud:gateway': import('./spring-cloud/generators/gateway/generator.ts').default;
   'jhipster:spring-cloud:kafka': import('./spring-cloud/generators/kafka/generator.ts').default;
   'jhipster:spring-cloud:pulsar': import('./spring-cloud/generators/pulsar/generator.ts').default;
-  'spring-data': import('./spring-data/generator.ts').default;
-  'jhipster:spring-data': import('./spring-data/generator.ts').default;
-  'jhipster:spring-data:cassandra': import('./spring-data/generators/cassandra/generator.ts').default;
-  'jhipster:spring-data:couchbase': import('./spring-data/generators/couchbase/generator.ts').default;
-  'jhipster:spring-data:elasticsearch': import('./spring-data/generators/elasticsearch/generator.ts').default;
-  'jhipster:spring-data:mongodb': import('./spring-data/generators/mongodb/generator.ts').default;
-  'jhipster:spring-data:neo4j': import('./spring-data/generators/neo4j/generator.ts').default;
-  'jhipster:spring-data:relational': import('./spring-data/generators/relational/generator.ts').default;
   upgrade: import('./upgrade/generator.ts').default;
   'jhipster:upgrade': import('./upgrade/generator.ts').default;
   vue: import('./vue/generator.ts').default;

@@ -17,8 +17,8 @@
  * limitations under the License.
  */
 import { getDatabaseTypeData } from '../../../server/support/database.ts';
-import { getJdbcUrl, getR2dbcUrl } from '../../../spring-data/generators/relational/support/database-url.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';
+import { getJdbcUrl, getR2dbcUrl } from '../data-relational/support/database-url.ts';
 
 export default class BootstrapGenerator extends SpringBootApplicationGenerator {
   async beforeQueue() {

@@ -51,7 +51,7 @@ describe(`generator - ${databaseType}`, () => {
           .withJHipsterConfig(sampleConfig, entities)
           .withMockedSource({ except: ['addTestSpringFactory'] })
           .withMockedJHipsterGenerators({
-            except: ['jhipster:spring-data:neo4j'],
+            except: ['jhipster:spring-boot:data-neo4j'],
             filter: filterBasicServerGenerators,
           });
       });
