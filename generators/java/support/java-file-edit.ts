@@ -26,7 +26,7 @@ export type JavaField = JavaClassName & { field: string | string[] };
 export type JavaConstructorSetter = JavaClassName & { setter: string | string[] };
 
 const findJavaConstructor = (content: string, className: string) => {
-  const regex = `(?<before>\\n(?<ident>[^\\S\\r\\n]*)(?:public|protect|private)?\\s*${className}\\s*\\()(?<params>[^(]*)(?<after>\\))\\s*\\{`;
+  const regex = String.raw`(?<before>\n(?<ident>[^\S\r\n]*)(?:public|protect|private)?\s*${className}\s*\()(?<params>[^(]*)(?<after>\))\s*\{`;
   const result = new RegExp(regex, 'g').exec(content);
   if (!result || result.length === 1) {
     throw new Error(`Constructor not found for ${className}`);

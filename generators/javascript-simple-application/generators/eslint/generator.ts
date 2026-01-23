@@ -59,7 +59,7 @@ export default class EslintGenerator extends JavascriptSimpleApplicationGenerato
             importToAdd ? createNeedleCallback({ needle: 'eslint-add-import', contentToAdd: importToAdd }) : content => content,
           );
         source.addEslintIgnore = ({ ignorePattern }) =>
-          source.addEslintConfig!({ config: `{ ignores: '${ignorePattern.replaceAll("'", "\\')}")},` });
+          source.addEslintConfig!({ config: `{ ignores: '${ignorePattern.replaceAll("'", String.raw`\')}`)},` });
       },
     });
   }

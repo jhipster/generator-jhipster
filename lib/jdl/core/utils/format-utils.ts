@@ -38,7 +38,7 @@ export default function formatComment(comment?: string): string | undefined {
     // studio to generated domain class
     let delimiter = '';
     if (previousValue !== '') {
-      delimiter = '\\n';
+      delimiter = String.raw`\n`;
     }
     return previousValue.concat(delimiter, currentValue.trim().replace(/[*]*\s*/, ''));
   }, '');

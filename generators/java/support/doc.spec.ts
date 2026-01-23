@@ -28,7 +28,7 @@ describe('generator - server - support - doc', () => {
     });
     describe('when passing a comment with newlines', () => {
       it('formats the comment correctly with line breaks', () => {
-        const comment = 'This is the first line.\\nAnd this is the second.';
+        const comment = String.raw`This is the first line.\nAnd this is the second.`;
         expect(formatDocAsJavaDoc(comment, 1)).toBe(' /**\n  * This is the first line.\n  * And this is the second.\n  */');
       });
     });
@@ -63,7 +63,7 @@ describe('generator - server - support - doc', () => {
       });
       describe('when having quotes', () => {
         it('formats the text to make the string valid', () => {
-          expect(formatDocAsApiDescription('JHipster is "the" best')).toEqual('JHipster is \\"the\\" best');
+          expect(formatDocAsApiDescription('JHipster is "the" best')).toEqual(String.raw`JHipster is \"the\" best`);
         });
       });
     });

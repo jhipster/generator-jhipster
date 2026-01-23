@@ -791,8 +791,8 @@ entity A`);
 
           before(() => {
             const content = parseFromContent(
-              `entity A {
-  name String ${PATTERN}(/[A-Za-z]\\d/)
+              String.raw`entity A {
+  name String ${PATTERN}(/[A-Za-z]\d/)
 }
 `,
             );
@@ -803,7 +803,7 @@ entity A`);
             expect(parsedEntity.body?.[0].validations).to.deep.equal([
               {
                 key: PATTERN,
-                value: '[A-Za-z]\\d',
+                value: String.raw`[A-Za-z]\d`,
               },
             ]);
           });

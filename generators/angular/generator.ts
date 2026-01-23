@@ -284,7 +284,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
                 fieldDefaultValue = defaultValue;
               }
 
-              fieldDefaultValue = String(fieldDefaultValue).replace(/'/g, "\\'");
+              fieldDefaultValue = String(fieldDefaultValue).replace(/'/g, String.raw`\'`);
 
               if (fieldTypeCharSequence) {
                 returnValue = `'${fieldDefaultValue}'`;

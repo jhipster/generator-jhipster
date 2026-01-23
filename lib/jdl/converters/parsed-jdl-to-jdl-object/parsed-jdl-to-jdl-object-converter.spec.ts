@@ -890,7 +890,7 @@ JDLDeployment {
 
         it('formats it', () => {
           // @ts-expect-error FIXME
-          expect(jdlObject.getEntity('Alumni').fields.firstName.validations.pattern.value.includes("\\'")).be.true;
+          expect(jdlObject.getEntity('Alumni').fields.firstName.validations.pattern.value.includes(String.raw`\'`)).be.true;
         });
       });
       describe('when parsing a JDL with the unique constraint', () => {

@@ -81,5 +81,5 @@ function formatThePatternValidationValue(value: string): string {
     }
     return chunk;
   });
-  return chunks.join("\\'");
+  return chunks.join(String.raw`\'`);
 }

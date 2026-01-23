@@ -230,9 +230,9 @@ function generateFakeDataForField(
   if (data !== undefined) {
     // eslint-disable-next-line no-template-curly-in-string
     if (type === 'ts' && ![BOOLEAN, INTEGER, LONG, FLOAT, '${floatType}', DOUBLE, BIG_DECIMAL].includes(field.fieldType)) {
-      data = `'${typeof data === 'string' ? data.replace(/\\/g, '\\\\').replace(/'/g, "\\'") : data}'`;
+      data = `'${typeof data === 'string' ? data.replace(/\\/g, '\\\\').replace(/'/g, String.raw`\'`) : data}'`;
     } else if (type === 'csv' && field.fieldValidate && field.fieldValidateRules?.includes(PATTERN)) {
-      data = `"${typeof data === 'string' ? data.replace(/"/g, '\\"') : data}"`;
+      data = `"${typeof data === 'string' ? data.replace(/"/g, String.raw`\"`) : data}"`;
     }
   }
 

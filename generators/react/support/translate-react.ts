@@ -28,10 +28,10 @@ const TRANSLATE_IMPORT = [TRANSLATE_IMPORT_1, TRANSLATE_IMPORT_2].join('|');
 
 const TRANSLATE_FUNCTION = /translate\(\s*'(?<key>[^']+)'(?:,\s*(?<interpolate>\{[^}]*\}))?\s*\)/g.source;
 
-const CONTENT_TYPE_ATTRIBUTE = 'contentKey=(?:"(?<key>[^"]+)"|\\{[^\\}]+\\})\\s*';
-const INTERPOLATE_ATTRIBUTE = 'interpolate=\\{(?<interpolate>\\{[^\\}]+\\})\\}\\s*';
-const COMPONENT_ATTRIBUTE = 'component="(?<component>[^"]+)"\\s*';
-const TRANSLATE_TAG = `<Translate\\s*(?:(?:${COMPONENT_ATTRIBUTE}|${INTERPOLATE_ATTRIBUTE}|${CONTENT_TYPE_ATTRIBUTE})+)>(?<translation>[\\s\\S]*?)<\\/Translate>`;
+const CONTENT_TYPE_ATTRIBUTE = String.raw`contentKey=(?:"(?<key>[^\"]+)"|\{[^\}]+\})\s*`;
+const INTERPOLATE_ATTRIBUTE = String.raw`interpolate=\{(?<interpolate>\{[^\}]+\})\}\s*`;
+const COMPONENT_ATTRIBUTE = String.raw`component="(?<component>[^\"]+)"\s*`;
+const TRANSLATE_TAG = String.raw`<Translate\s*(?:(?:${COMPONENT_ATTRIBUTE}|${INTERPOLATE_ATTRIBUTE}|${CONTENT_TYPE_ATTRIBUTE})+)>(?<translation>[\s\S]*?)<\/Translate>`;
 
 type Options = { keyPattern?: string; interpolatePattern?: string; wrapTranslation?: string | string[]; escapeHtml?: boolean };
 
@@ -109,7 +109,9 @@ export const createTranslationReplacer = (getWebappTranslation: GetWebappTransla
   function replaceReactTranslations(body: string, filePath: string) {
     if (filePath.endsWith('.tsx')) {
       body = body.replace(new RegExp(TRANSLATE_IMPORT, 'g'), '');
-      body = replaceTranslationKeysWithText(getWebappTranslation, body, `\\{\\s*${TRANSLATE_FUNCTION}\\s*\\}`, { wrapTranslation: '"' });
+      body = replaceTranslationKeysWithText(getWebappTranslation, body, String.raw`\{\s*${TRANSLATE_FUNCTION}\s*\}`, {
+        wrapTranslation: '"',
+      });
       body = replaceTranslationKeysWithText(getWebappTranslation, body, TRANSLATE_FUNCTION, { wrapTranslation: '"' });
       body = replaceTranslationKeysWithText(getWebappTranslation, body, TRANSLATE_TAG, {
         keyPattern: CONTENT_TYPE_ATTRIBUTE,

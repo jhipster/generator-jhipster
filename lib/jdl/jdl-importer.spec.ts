@@ -330,7 +330,7 @@ relationship OneToOne {
       });
 
       it('escapes the back-slash in the returned object', () => {
-        expect(returned.exportedEntities[0].fields[0].fieldValidateRulesPattern).to.equal('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$');
+        expect(returned.exportedEntities[0].fields[0].fieldValidateRulesPattern).to.equal(String.raw`^[^@\s]+@[^@\s]+\.[^@\s]+$`);
       });
     });
     describe('when parsing a JDL with a pattern validation containing a quote', () => {
@@ -346,7 +346,7 @@ relationship OneToOne {
       });
 
       it('escapes the quote', () => {
-        expect(returned.exportedEntities[0].fields[0].fieldValidateRulesPattern.includes("\\'")).to.be.true;
+        expect(returned.exportedEntities[0].fields[0].fieldValidateRulesPattern.includes(String.raw`\'`)).to.be.true;
       });
     });
     describe('when parsing JDL applications and deployment config', () => {

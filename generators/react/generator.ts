@@ -224,7 +224,7 @@ ${comment}
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
       react({ field }) {
-        field.fieldValidateRulesPatternReact ??= field.fieldValidateRulesPattern?.replace(/'/g, "\\'");
+        field.fieldValidateRulesPatternReact ??= field.fieldValidateRulesPattern?.replace(/'/g, String.raw`\'`);
       },
     });
   }

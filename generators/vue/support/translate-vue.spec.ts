@@ -23,7 +23,7 @@ import type { GetWebappTranslationCallback } from '../../client/translation.ts';
 
 import { removeDeclarations, replaceTranslations, replaceVueTranslations } from './translate-vue.ts';
 
-const FULL_BODY = `
+const FULL_BODY = String.raw`
 <span v-html="t$('activate.messages.success')"><strong>Your user account has been activated.</strong> Please </span>
 <b-link :to="'/account/reset/request'" class="alert-link" v-text="t$('login.password.forgot')"
  data-cy="forgetYourPasswordSelector" >Did you forget your password?</b-link>
@@ -36,7 +36,7 @@ const FULL_BODY = `
     id="password"
     type="password"
     name="password"
-    :placeholder="t$('login.form[\\'password.placeholder\\']')"
+    :placeholder="t$('login.form[\'password.placeholder\']')"
     v-model="password"
     data-cy="password"
   >
@@ -189,7 +189,7 @@ getWebappTranslation('msg', { exp: '{{ foo }}', num: 1, str: 'a' })
 
     describe('with translation enabled', () => {
       it('should return the body without translation tags contents', () => {
-        expect(replaceVueTranslations({ getWebappTranslation, body: FULL_BODY, enableTranslation: true })).toMatchInlineSnapshot(`
+        expect(replaceVueTranslations({ getWebappTranslation, body: FULL_BODY, enableTranslation: true })).toMatchInlineSnapshot(String.raw`
 "
 <span v-html="t$('activate.messages.success')"></span>
 <b-link :to="'/account/reset/request'" class="alert-link" v-text="t$('login.password.forgot')"
@@ -203,7 +203,7 @@ getWebappTranslation('msg', { exp: '{{ foo }}', num: 1, str: 'a' })
     id="password"
     type="password"
     name="password"
-    :placeholder="t$('login.form[\\'password.placeholder\\']')"
+    :placeholder="t$('login.form[\'password.placeholder\']')"
     v-model="password"
     data-cy="password"
   >
