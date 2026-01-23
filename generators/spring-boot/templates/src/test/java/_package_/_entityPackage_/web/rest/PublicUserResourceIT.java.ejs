@@ -24,9 +24,6 @@ import <%= packageName %>.IntegrationTest;
 <%_ if (databaseTypeSql && reactive) { _%>
 import <%= packageName %>.config.Constants;
 <%_ } _%>
-<%_ if (authenticationTypeOauth2) { _%>
-import <%= packageName %>.config.TestSecurityConfiguration;
-<%_ } _%>
 import <%= user.entityAbsoluteClass %>;
 import <%= packageName %>.repository.UserRepository;
 <%_ if (!requiresDeleteAllUsers) { _%>

@@ -19,6 +19,23 @@ exports[`generator - spring-boot:oauth2 with defaults options should call source
       "spring-boot-starter-oauth2-resource-server",
     ],
   ],
+  "editJavaFile": [
+    [
+      "src/test/java/com/mycompany/myapp/IntegrationTest.java",
+      {
+        "annotations": [
+          {
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
+            "parameters": [Function],
+          },
+        ],
+        "imports": [
+          "com.mycompany.myapp.config.TestSecurityConfiguration",
+        ],
+      },
+    ],
+  ],
 }
 `;
 
@@ -79,6 +96,23 @@ exports[`generator - spring-boot:oauth2 with reactive should call source snapsho
     [
       "spring-boot-starter-oauth2-client",
       "spring-boot-starter-oauth2-resource-server",
+    ],
+  ],
+  "editJavaFile": [
+    [
+      "src/test/java/com/mycompany/myapp/IntegrationTest.java",
+      {
+        "annotations": [
+          {
+            "annotation": "SpringBootTest",
+            "package": "org.springframework.boot.test.context",
+            "parameters": [Function],
+          },
+        ],
+        "imports": [
+          "com.mycompany.myapp.config.TestSecurityConfiguration",
+        ],
+      },
     ],
   ],
 }
