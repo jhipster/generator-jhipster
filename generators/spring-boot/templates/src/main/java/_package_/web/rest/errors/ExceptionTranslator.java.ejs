@@ -195,7 +195,7 @@ _%>
 
         Map<String, Object> problemProperties = problem.getProperties();
         if (problemProperties == null || !problemProperties.containsKey(MESSAGE_KEY))
-        	problem.setProperty(MESSAGE_KEY,
+            problem.setProperty(MESSAGE_KEY,
                 getMappedMessageKey(err) != null
                     ? getMappedMessageKey(err)
                     : "error.http." + problem.getStatus());
@@ -286,15 +286,15 @@ _%>
     }
 
     private String getCustomizedErrorDetails(Throwable err) {
-    	Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
-    	if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
-	        if (err instanceof HttpMessageConversionException) return "Unable to convert http message";
+        Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
+        if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
+            if (err instanceof HttpMessageConversionException) return "Unable to convert http message";
     <%_ if (!databaseTypeNo) { _%>
-	        if (err instanceof DataAccessException) return "Failure during data access";
+            if (err instanceof DataAccessException) return "Failure during data access";
     <%_ } _%>
-	        if (containsPackageName(err.getMessage())) return "Unexpected runtime exception";
+            if (containsPackageName(err.getMessage())) return "Unexpected runtime exception";
         }
-    	return err.getCause() != null ? err.getCause().getMessage() : err.getMessage();
+        return err.getCause() != null ? err.getCause().getMessage() : err.getMessage();
     }
 
     private HttpStatus getMappedStatus(Throwable err) {
