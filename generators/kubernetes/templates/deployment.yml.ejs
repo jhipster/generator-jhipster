@@ -218,7 +218,7 @@ spec:
       <%_ if (ingressTypeGke) { _%>
         # Custom trustStore required when using Let's Encrypt staging
         - name: JAVA_OPTS
-          value: "-Djavax.net.ssl.trustStore=/etc/pki/java/cacerts -Djavax.net.ssl.trustStorePassword=123456 -Xmx256m -Xms256m"
+          value: "-Djavax.net.ssl.trustStore=/etc/pki/java/cacerts -Djavax.net.ssl.trustStorePassword=<%= baseName %> -Xmx256m -Xms256m"
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI
           value: https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>/realms/jhipster
       <%_ } else { _%>
