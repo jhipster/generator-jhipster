@@ -273,8 +273,8 @@ public class SecurityConfiguration {
 <%_ } else if (authenticationTypeJwt) { _%>
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .exceptionHandling((exceptions) -> exceptions
-				.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
-				.accessDeniedHandler(new BearerTokenAccessDeniedHandler()))
+                .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
+                .accessDeniedHandler(new BearerTokenAccessDeniedHandler()))
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()));
 <%_ } else if (authenticationTypeOauth2) { _%>
   <%_ if (!applicationTypeMicroservice) { _%>

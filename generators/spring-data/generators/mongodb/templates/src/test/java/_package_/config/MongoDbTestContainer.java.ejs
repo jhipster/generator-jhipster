@@ -29,13 +29,13 @@ import org.testcontainers.mongodb.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 
 public interface MongoDbTestContainer {
-	@Container
-	MongoDBContainer mongoDbContainer = new MongoDBContainer("<%- dockerContainers.mongodb %>")
-	    .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(MongoDbTestContainer.class)))
-	    .withReuse(true);
+    @Container
+    MongoDBContainer mongoDbContainer = new MongoDBContainer("<%- dockerContainers.mongodb %>")
+        .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(MongoDbTestContainer.class)))
+        .withReuse(true);
 
     @DynamicPropertySource
     static void registerProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.mongodb.uri", mongoDbContainer::getReplicaSetUrl);
-	}
+    }
 }

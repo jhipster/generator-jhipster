@@ -117,6 +117,18 @@ export default class Oauth2Generator extends SpringBootApplicationGenerator {
           dependencies: [{ groupId: 'com.github.ben-manes.caffeine', artifactId: 'caffeine' }],
         });
       },
+      integrationTest({ application, source }) {
+        source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
+          imports: [`${application.packageName}.config.TestSecurityConfiguration`],
+          annotations: [
+            {
+              package: 'org.springframework.boot.test.context',
+              annotation: 'SpringBootTest',
+              parameters: (_, cb) => cb.addKeyValue('classes', 'TestSecurityConfiguration.class'),
+            },
+          ],
+        });
+      },
     });
   }
 

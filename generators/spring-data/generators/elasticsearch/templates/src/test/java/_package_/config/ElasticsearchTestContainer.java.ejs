@@ -30,14 +30,14 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.utility.DockerImageName;
 
 public interface ElasticsearchTestContainer {
-	@Container
-	ElasticsearchContainer elasticsearchContainer = new ElasticsearchContainer(DockerImageName.parse("<%- dockerContainers.elasticsearchImage %>").withTag("<%- dockerContainers.elasticsearchTag %>"))
-	    .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(ElasticsearchTestContainer.class)))
-		.withEnv("xpack.security.enabled", "false")
-	    .withReuse(true);
+    @Container
+    ElasticsearchContainer elasticsearchContainer = new ElasticsearchContainer(DockerImageName.parse("<%- dockerContainers.elasticsearchImage %>").withTag("<%- dockerContainers.elasticsearchTag %>"))
+        .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(ElasticsearchTestContainer.class)))
+        .withEnv("xpack.security.enabled", "false")
+        .withReuse(true);
 
     @DynamicPropertySource
     static void registerProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.elasticsearch.uris", () -> "http://" + elasticsearchContainer.getHttpHostAddress());
-	}
+    }
 }
