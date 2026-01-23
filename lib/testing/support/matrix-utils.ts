@@ -44,7 +44,7 @@ export const fromMatrix = <T extends Record<string, any> = ConfigAll>(configMatr
     (previousValue, currentValue) => {
       const [config, configValues] = currentValue;
       return previousValue
-        .map(([previousName, previousConfig]) =>
+        .flatMap(([previousName, previousConfig]) =>
           configValues.map((value: ValueType) => {
             return [
               // @ts-expect-error fix type
@@ -55,8 +55,7 @@ export const fromMatrix = <T extends Record<string, any> = ConfigAll>(configMatr
               },
             ];
           }),
-        )
-        .flat();
+        );
     },
     [['', {}]],
   );
