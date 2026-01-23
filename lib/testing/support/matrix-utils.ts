@@ -73,8 +73,7 @@ const applyExtendedMatrix = <M extends Record<string, any> = ConfigAll, A extend
         [configName]: configValue,
       }));
       return currentArray
-        .map(existingConfig => currentConfigObjects.map(currentObject => ({ ...existingConfig, ...currentObject })))
-        .flat();
+        .flatMap(existingConfig => currentConfigObjects.map(currentObject => ({ ...existingConfig, ...currentObject })));
     },
     [{} as Record<keyof A, AdditionalValue<A, keyof A>>],
   );
