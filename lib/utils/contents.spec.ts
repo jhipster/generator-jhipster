@@ -22,10 +22,10 @@ import { normalizeLineEndings } from './contents.ts';
 
 describe('generator - base - support - contents', () => {
   describe('::normalizeLineEndings', () => {
-    it('should convert \\r\\n to \\n', () => {
+    it(String.raw`should convert \r\n to \n`, () => {
       expect(normalizeLineEndings('a\r\ncrlf\r\nfile\r\nwith\nlf\nlines\r\n', '\r\n')).toBe('a\r\ncrlf\r\nfile\r\nwith\r\nlf\r\nlines\r\n');
     });
-    it('should convert \\n to \\r\\n', () => {
+    it(String.raw`should convert \n to \r\n`, () => {
       expect(normalizeLineEndings('a\r\ncrlf\r\nfile\r\nwith\nlf\nlines\r\n', '\n')).toBe('a\ncrlf\nfile\nwith\nlf\nlines\n');
     });
   });

@@ -23,7 +23,7 @@ const TRANSLATE_FUNCTION_ARGS = /\(\s*'(?<key>[^']+)'(?:,\s*(?<interpolate>\{(?:
 export const escapeHtmlTranslationValue = (translation: string) =>
   translation.replace(/'/g, '&apos;').replace(/"/g, '&quot;').replace(/@/g, '&#64;');
 
-export const escapeTsTranslationValue = (translation: string) => translation.replace(/'/g, "\\'").replace(/\\/g, '\\\\');
+export const escapeTsTranslationValue = (translation: string) => translation.replace(/'/g, String.raw`\'`).replace(/\\/g, '\\\\');
 
 export type TranslationReplaceOptions = {
   keyPattern?: string;
@@ -160,6 +160,6 @@ export const createJhiTranslateReplacer =
     replaceTranslateContents(
       body,
       filePath,
-      `${prefixPattern ? `(?<prefix>(${prefixPattern}))?` : ''}__jhiTranslate(?<type>(\\w+))__${TRANSLATE_FUNCTION_ARGS}${suffixPattern ? `(?<suffix>(${suffixPattern}))?` : ''}`,
+      String.raw`${prefixPattern ? `(?<prefix>(${prefixPattern}))?` : ''}__jhiTranslate(?<type>(\w+))__${TRANSLATE_FUNCTION_ARGS}${suffixPattern ? `(?<suffix>(${suffixPattern}))?` : ''}`,
       converter,
     );

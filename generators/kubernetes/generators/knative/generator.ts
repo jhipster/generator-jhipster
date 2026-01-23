@@ -75,7 +75,7 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
         if (this.skipChecks) return;
         try {
           await this.spawnCommand(
-            'kubectl get deploy -n knative-serving --label-columns=serving.knative.dev/release | grep -E "v0\\.[8-9]{1,3}\\.[0-9]*',
+            String.raw`kubectl get deploy -n knative-serving --label-columns=serving.knative.dev/release | grep -E "v0\.[8-9]{1,3}\.[0-9]*`,
           );
         } catch {
           this.log.warn(

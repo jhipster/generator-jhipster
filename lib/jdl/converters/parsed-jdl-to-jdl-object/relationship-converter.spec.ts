@@ -70,11 +70,11 @@ describe('jdl - RelationshipConverter', () => {
         });
 
         it('should convert them', () => {
-          expect(convertedRelationships).toMatchInlineSnapshot(`
+          expect(convertedRelationships).toMatchInlineSnapshot(String.raw`
             [
               JDLRelationship {
-                "commentInFrom": "/**\\nRequired\\n/",
-                "commentInTo": "/**\\nNot required\\n/",
+                "commentInFrom": "/**\nRequired\n/",
+                "commentInTo": "/**\nNot required\n/",
                 "from": "Source",
                 "injectedFieldInFrom": "destination",
                 "injectedFieldInTo": "source",
@@ -131,11 +131,11 @@ describe('jdl - RelationshipConverter', () => {
         });
 
         it('should generate them', () => {
-          expect(convertedRelationships).toMatchInlineSnapshot(`
+          expect(convertedRelationships).toMatchInlineSnapshot(String.raw`
             [
               JDLRelationship {
-                "commentInFrom": "/**\\nRequired\\n/",
-                "commentInTo": "/**\\nNot required\\n/",
+                "commentInFrom": "/**\nRequired\n/",
+                "commentInTo": "/**\nNot required\n/",
                 "from": "Source",
                 "injectedFieldInFrom": "destination",
                 "injectedFieldInTo": "source",

@@ -32,19 +32,19 @@ import {
 describe('needles - support', () => {
   describe('convertToPrettierExpressions', () => {
     it('should add whitespaces pattern to spaces', () => {
-      expect(convertToPrettierExpressions('1 2 3')).toBe('1[\\s\\n]*2[\\s\\n]*3');
+      expect(convertToPrettierExpressions('1 2 3')).toBe(String.raw`1[\s\n]*2[\s\n]*3`);
     });
     it('should add whitespaces pattern to before >', () => {
-      expect(convertToPrettierExpressions('>')).toBe(',?\\n?[\\s]*>');
+      expect(convertToPrettierExpressions('>')).toBe(String.raw`,?\n?[\s]*>`);
     });
     it('should add whitespaces pattern to after <', () => {
-      expect(convertToPrettierExpressions('<')).toBe('<\\n?[\\s]*');
+      expect(convertToPrettierExpressions('<')).toBe(String.raw`<\n?[\s]*`);
     });
     it('should add whitespaces pattern to before )', () => {
-      expect(convertToPrettierExpressions('\\)')).toBe(',?\\n?[\\s]*\\)');
+      expect(convertToPrettierExpressions(String.raw`\)`)).toBe(String.raw`,?\n?[\s]*\)`);
     });
     it('should add whitespaces pattern to after (', () => {
-      expect(convertToPrettierExpressions('\\(')).toBe('\\(\\n?[\\s]*');
+      expect(convertToPrettierExpressions(String.raw`\(`)).toBe(String.raw`\(\n?[\s]*`);
     });
   });
   describe('checkContentIn', () => {

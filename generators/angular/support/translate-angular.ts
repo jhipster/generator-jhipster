@@ -85,7 +85,7 @@ function replaceJSTranslation(getWebappTranslation: GetWebappTranslationCallback
   return replaceTranslationKeysWithText(
     getWebappTranslation,
     content,
-    `${jsKey}\\s?:\\s?['|"]([a-zA-Z0-9.\\-_]+\\.[a-zA-Z0-9.\\-_]+)['|"]`,
+    String.raw`${jsKey}\s?:\s?['|"]([a-zA-Z0-9.\-_]+\.[a-zA-Z0-9.\-_]+)['|"]`,
     {
       escape: (translation, match) => translation.replaceAll(match[0].slice(-1), `\\${match[0].slice(-1)}`),
     },
@@ -301,7 +301,7 @@ export const createTranslationReplacer = (getWebappTranslation: GetWebappTransla
           });
         return replacer(getWebappTranslation, opts, optsReplacer);
       },
-      { prefixPattern: '>\\s*', suffixPattern: '\\s*<' },
+      { prefixPattern: String.raw`>\s*`, suffixPattern: String.raw`\s*<` },
     );
   }
   return function replaceAngularTranslations(content: string, filePath: string) {

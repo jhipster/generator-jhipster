@@ -153,7 +153,7 @@ export default function prepareField(
 
   if (field.fieldValidateRulesPatternJava === undefined) {
     field.fieldValidateRulesPatternJava = field.fieldValidateRulesPattern
-      ? field.fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+      ? field.fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/"/g, String.raw`\"`)
       : field.fieldValidateRulesPattern;
   }
 

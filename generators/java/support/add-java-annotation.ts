@@ -120,7 +120,7 @@ const addJavaAnnotationToContent = (content: string, annotationDef: JavaAnnotati
   if (packageName) {
     content = addJavaImport(content, `${packageName}.${annotation}`);
   }
-  const annotationWithParametersMatches = content.match(new RegExp(`@${annotation}\\((?<oldParameters>[^)]*)\\)`));
+  const annotationWithParametersMatches = content.match(new RegExp(String.raw`@${annotation}\((?<oldParameters>[^)]*)\)`));
   let annotationToAdd: string | undefined;
   if (parameters) {
     const oldParameters = annotationWithParametersMatches?.groups?.oldParameters?.trim?.();
@@ -160,7 +160,7 @@ const addJavaAnnotationToContent = (content: string, annotationDef: JavaAnnotati
     annotationToAdd = annotation;
   }
   if (annotationWithParametersMatches) {
-    content = content.replace(new RegExp(`@${annotation}\\((?<oldParameters>[^)]*)\\)`), `@${annotationToAdd}`);
+    content = content.replace(new RegExp(String.raw`@${annotation}\((?<oldParameters>[^)]*)\)`), `@${annotationToAdd}`);
   } else if (!new RegExp(escapeRegExp(`\n@${annotationToAdd}\n`)).test(content)) {
     // add the annotation before class or interface
     content = content.replace(/\n([a-w ]*(class|@?interface|enum) )/, `\n@${annotationToAdd}\n$1`);

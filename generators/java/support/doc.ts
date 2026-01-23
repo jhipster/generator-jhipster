@@ -20,7 +20,7 @@ import { formatDocAsSingleLine } from '../../base-application/support/doc.ts';
 
 const escapeDoubleQuotes = (text: string): string => {
   if (text.includes('"')) {
-    return text.replace(/"/g, '\\"');
+    return text.replace(/"/g, String.raw`\"`);
   }
   return text;
 };
@@ -41,7 +41,7 @@ export const formatDocAsJavaDoc = (text: string, indentSize = 0): string => {
   }
   text = escapeDoubleQuotes(text);
   const indent = ' '.repeat(indentSize);
-  const rows = ['/**', ...text.split('\\n').map(row => ` * ${row}`), ' */'].map(row => `${indent}${row}`);
+  const rows = ['/**', ...text.split(String.raw`\n`).map(row => ` * ${row}`), ' */'].map(row => `${indent}${row}`);
   return rows.join('\n');
 };
 

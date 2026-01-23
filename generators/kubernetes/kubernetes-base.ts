@@ -24,7 +24,7 @@ export const checkHelm = asInitializingTask(async function (this: BaseKubernetes
   if (this.skipChecks) return;
 
   try {
-    await this.spawnCommand('helm version --client | grep -E "(v2\\.1[2-9]{1,2}\\.[0-9]{1,3})|(v3\\.[0-9]{1,2}\\.[0-9]{1,3})"');
+    await this.spawnCommand(String.raw`helm version --client | grep -E "(v2\.1[2-9]{1,2}\.[0-9]{1,3})|(v3\.[0-9]{1,2}\.[0-9]{1,3})"`);
   } catch {
     this.log.warn(
       'helm 2.12.x or later is not installed on your computer.\n' +

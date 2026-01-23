@@ -86,7 +86,7 @@ export function replaceVueTranslations(
       /(?<tagWithAttributes>(?<beforeTranslateTag><(?<tagName>a|b-(?:badge|link|button|alert)|button|div|h[1-9]|input|label|p|router-link|small|span|t[hd])(?:[^>]*)) v-(?:text|html)="(?<translate>t\$\([^)]*\))"(?<afterTranslateTag>(?:(?!\/?>)[^/>])*>))(?<tagContent>(?:(?!<\/\k<tagName>(?:>|\s|\n)).|\n)*)/g,
       (_complete, ...args) => {
         const groups: Record<string, string> = args.pop();
-        if (new RegExp(`<${groups.tagName}[\\s>]`, 'g').test(groups.tagContent)) {
+        if (new RegExp(String.raw`<${groups.tagName}[\s>]`, 'g').test(groups.tagContent)) {
           throw new Error(`Nested tags identical to the translated tag are not supported: ${groups.tagWithAttributes}${groups.tagContent}`);
         }
         if (enableTranslation) {
@@ -131,7 +131,7 @@ export function replaceTranslations({
       : /t\$\((?<key>[^),]*)(?:,\s*{(?<data>[^)]*)})?\)/g;
   return content.replaceAll(regex, (_complete, ...args) => {
     const groups: Record<string, string> = args.pop();
-    const key = groups.key.substring(1, groups.key.length - 1).replaceAll("\\'", "'");
+    const key = groups.key.substring(1, groups.key.length - 1).replaceAll(String.raw`\'`, "'");
     let data: Record<string, unknown> | undefined;
     if (groups.data) {
       const interpolateMatches = groups.data.matchAll(/(?<field>[^{\s:,}]+)(?:\s*:\s*(?<value>[^,}]+))?/g);

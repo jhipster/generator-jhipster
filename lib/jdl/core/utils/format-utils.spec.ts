@@ -65,9 +65,9 @@ describe('jdl - FormatUtils', () => {
       const multiLineComment1 = '\n* <p>first line of comment</p><br/>\n*<p>second line</p>\n';
       const multiLineComment2 = '*** <p>first line of comment</p><br/>\n* *<p>second line</p>\n\n';
       const multiLineComment3 = '\n * abcde\n * fghij\n * nothing\n';
-      const expectedResult1 = '<p>first line of comment</p><br/>\\n<p>second line</p>';
-      const expectedResult2 = '<p>first line of comment</p><br/>\\n*<p>second line</p>';
-      const expectedResult3 = 'abcde\\nfghij\\nnothing';
+      const expectedResult1 = String.raw`<p>first line of comment</p><br/>\n<p>second line</p>`;
+      const expectedResult2 = String.raw`<p>first line of comment</p><br/>\n*<p>second line</p>`;
+      const expectedResult3 = String.raw`abcde\nfghij\nnothing`;
 
       describe(buildTestTitle(multiLineComment1), () => {
         it(`should return ${buildTestTitle(expectedResult1)}`, () => {

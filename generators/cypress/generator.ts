@@ -295,12 +295,12 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
             {},
           );
           (source as ClientSource).addWebpackConfig?.({
-            config: `targetOptions.configuration === 'instrumenter'
+            config: String.raw`targetOptions.configuration === 'instrumenter'
       ? {
           module: {
             rules: [
               {
-                test: /\\.(js|ts)$/,
+                test: /\.(js|ts)$/,
                 use: [
                   {
                     loader: 'babel-loader',
@@ -311,7 +311,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
                 ],
                 enforce: 'post',
                 include: path.resolve(__dirname, '../${CLIENT_MAIN_SRC_DIR}'),
-                exclude: [/\\.(e2e|spec)\\.ts$/, /node_modules/, /(ngfactory|ngstyle)\\.js/],
+                exclude: [/\.(e2e|spec)\.ts$/, /node_modules/, /(ngfactory|ngstyle)\.js/],
               },
             ],
           },

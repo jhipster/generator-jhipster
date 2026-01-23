@@ -96,22 +96,23 @@ type NeedleContentInsertion = Pick<NeedleInsertion, 'needle' | 'autoIndent'> & {
  */
 export const convertToPrettierExpressions = (str: string): string =>
   str
-    .replace(/(<|\\\()(?! )/g, '$1\\n?[\\s]*')
-    .replace(/(?! )(>|\\\))/g, ',?\\n?[\\s]*$1')
-    .replace(/\s+/g, '[\\s\\n]*');
+    .replace(/(<|\\\()(?! )/g, String.raw`$1\n?[\s]*`)
+    .replace(/(?! )(>|\\\))/g, String.raw`,?\n?[\s]*$1`)
+    .replace(/\s+/g, String.raw`[\s\n]*`);
 
 const isArrayOfContentToAdd = (value: unknown): value is ContentToAdd[] => {
   return Array.isArray(value) && value.every(item => typeof item === 'object' && 'content' in item);
 };
 
-export const createNeedleRegexp = (needle: string): RegExp => new RegExp(`(?://|<!--|\\{?/\\*|#) ${needle}(?: [^$\\n]*)?(?:$|\\n)`, 'g');
+export const createNeedleRegexp = (needle: string): RegExp =>
+  new RegExp(String.raw`(?://|<!--|\{?/\*|#) ${needle}(?: [^$\n]*)?(?:$|\n)`, 'g');
 
 type NeedleLinePosition = {
   start: number;
   end: number;
 };
 
-export const getNeedlesPositions = (content: string, needle = 'jhipster-needle-(?:[-\\w]*)'): NeedleLinePosition[] => {
+export const getNeedlesPositions = (content: string, needle = String.raw`jhipster-needle-(?:[-\w]*)`): NeedleLinePosition[] => {
   const regexp = createNeedleRegexp(needle);
   const positions: NeedleLinePosition[] = [];
   let match: RegExpExecArray | null;
@@ -142,7 +143,7 @@ export const checkContentIn = (contentToCheck: string | RegExp, content: string,
       ? convertToPrettierExpressions(escapeRegExp(contentToCheck))
       : contentToCheck
           .split('\n')
-          .map(line => `\\s*${escapeRegExp(line)}`)
+          .map(line => String.raw`\s*${escapeRegExp(line)}`)
           .join('\n');
     re = new RegExp(pattern);
   } else {

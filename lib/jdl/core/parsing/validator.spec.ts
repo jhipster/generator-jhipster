@@ -415,9 +415,9 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
         it('should fail', () => {
           expect(() =>
             parse(
-              `application {
+              String.raw`application {
   config {
-    blueprints [generator-jh\\ipster-vuejs]
+    blueprints [generator-jh\ipster-vuejs]
   }
 }`,
               jdlRuntime,
@@ -2293,7 +2293,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                   jdlRuntime,
                 ),
               ).to.throw(
-                `The ${type} property name must match: /^"((?:http(s)?:\\/\\/)?[\\w.-]+(?:\\.[\\w.-]+)+[\\w\\-._~:\\/?#[\\]@!$&'()*+,;=]+|[a-zA-Z0-9]+)"$/`,
+                String.raw`The ${type} property name must match: /^"((?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:\/?#[\]@!$&'()*+,;=]+|[a-zA-Z0-9]+)"$/`,
               );
             });
           });

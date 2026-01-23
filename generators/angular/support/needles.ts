@@ -123,7 +123,7 @@ export const addIconImport = ({ icon }: { icon: string }) => {
   const iconImport = `fa${upperFirstCamelCase(icon)}`;
   return createNeedleCallback({
     needle: 'jhipster-needle-add-icon-import',
-    contentToCheck: new RegExp(`\\b${iconImport}\\b`),
+    contentToCheck: new RegExp(String.raw`\b${iconImport}\b`),
     contentToAdd: (content, { indentPrefix }) =>
       content.replace(
         /(\r?\n)(\s*)\/\/ jhipster-needle-add-icon-import/g,
