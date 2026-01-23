@@ -119,7 +119,7 @@ export default class JDLRelationships {
 }
 
 function relationshipTypeToString(relationships: Map<string, JDLRelationship>, type: string) {
-  const relationshipsLines = [...relationships.values()].map(relationship => relationship.toString().split('\n').slice(1, -1)).flat();
+  const relationshipsLines = [...relationships.values()].flatMap(relationship => relationship.toString().split('\n').slice(1, -1));
   return `relationship ${type} {
 ${relationshipsLines.join('\n')}
 }`;

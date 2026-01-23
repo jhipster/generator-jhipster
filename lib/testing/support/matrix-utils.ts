@@ -43,20 +43,18 @@ export const fromMatrix = <T extends Record<string, any> = ConfigAll>(configMatr
   const samples = configEntries.reduce(
     (previousValue, currentValue) => {
       const [config, configValues] = currentValue;
-      return previousValue
-        .map(([previousName, previousConfig]) =>
-          configValues.map((value: ValueType) => {
-            return [
-              // @ts-expect-error fix type
-              appendTitle(previousName as string, config, value),
-              {
-                ...(previousConfig as Record<string, ValueType>),
-                [config]: value,
-              },
-            ];
-          }),
-        )
-        .flat();
+      return previousValue.flatMap(([previousName, previousConfig]) =>
+        configValues.map((value: ValueType) => {
+          return [
+            // @ts-expect-error fix type
+            appendTitle(previousName as string, config, value),
+            {
+              ...(previousConfig as Record<string, ValueType>),
+              [config]: value,
+            },
+          ];
+        }),
+      );
     },
     [['', {}]],
   );
@@ -73,9 +71,7 @@ const applyExtendedMatrix = <M extends Record<string, any> = ConfigAll, A extend
       const currentConfigObjects = configValues.map(configValue => ({
         [configName]: configValue,
       }));
-      return currentArray
-        .map(existingConfig => currentConfigObjects.map(currentObject => ({ ...existingConfig, ...currentObject })))
-        .flat();
+      return currentArray.flatMap(existingConfig => currentConfigObjects.map(currentObject => ({ ...existingConfig, ...currentObject })));
     },
     [{} as Record<keyof A, AdditionalValue<A, keyof A>>],
   );

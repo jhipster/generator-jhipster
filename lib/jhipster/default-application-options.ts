@@ -145,10 +145,10 @@ function getConfigForAuthenticationType(options: ApplicationDefaults = {}): Appl
 
 function getConfigForPackageName(options: ApplicationDefaults = {}): ApplicationDefaults {
   if (!options[PACKAGE_NAME]) {
-    if (!options[PACKAGE_FOLDER]) {
-      options[PACKAGE_NAME] = OptionValues[PACKAGE_NAME];
-    } else {
+    if (options[PACKAGE_FOLDER]) {
       options[PACKAGE_NAME] = options[PACKAGE_FOLDER].split('/').filter(Boolean).join('.');
+    } else {
+      options[PACKAGE_NAME] = OptionValues[PACKAGE_NAME];
     }
   }
   return options;

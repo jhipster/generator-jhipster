@@ -27,7 +27,7 @@ export const mergeYoRcContent = <
     merged[ns] = { ...oldConfig[ns], ...newConfig[ns] };
   }
   if ((oldConfig[YO_RC_CONFIG_KEY] as ConfigWithCreationTimestamp)?.creationTimestamp) {
-    (merged[YO_RC_CONFIG_KEY] as ConfigWithCreationTimestamp)!.creationTimestamp = (
+    (merged[YO_RC_CONFIG_KEY] as ConfigWithCreationTimestamp).creationTimestamp = (
       oldConfig[YO_RC_CONFIG_KEY] as ConfigWithCreationTimestamp
     ).creationTimestamp;
   }

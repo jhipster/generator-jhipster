@@ -127,8 +127,7 @@ export const buildApplicationTokens = (tokenConfigs: JDLTokenConfig[]) => {
         tokenConfig.categories = [applicationConfigCategoryToken];
         // This is actually needed as the skipClient & skipServer options are both entity & app options...
         if (['SKIP_CLIENT', 'SKIP_SERVER'].includes(tokenConfig.name)) {
-          tokenConfig.categories.push(KEYWORD);
-          tokenConfig.categories.push(UNARY_OPTION);
+          tokenConfig.categories.push(KEYWORD, UNARY_OPTION);
         }
         return createTokenFromConfig(tokenConfig);
       }),

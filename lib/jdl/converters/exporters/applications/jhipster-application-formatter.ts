@@ -59,7 +59,10 @@ function setUpApplicationStructure(application: JDLApplication): PostProcessedJD
   }
   applicationToExport[GENERATOR_NAME].entities = application.getEntityNames();
   if (application.hasConfigurationOption('creationTimestamp')) {
-    applicationToExport[GENERATOR_NAME].creationTimestamp = parseInt(application.getConfigurationOptionValue('creationTimestamp'), 10);
+    applicationToExport[GENERATOR_NAME].creationTimestamp = Number.parseInt(
+      application.getConfigurationOptionValue('creationTimestamp'),
+      10,
+    );
   }
   const postProcessedApplicationToExport: PostProcessedJDLJSONApplication = cleanUpOptions(applicationToExport as JDLJSONApplication);
   return postProcessedApplicationToExport;
