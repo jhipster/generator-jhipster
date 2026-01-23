@@ -45,7 +45,7 @@
     "tinyglobby": "0.2.15",
     "typescript": "5.9.3",
     "typescript-eslint": "8.53.1",
-    "vitest": "4.0.17",
+    "vitest": "4.0.18",
     "vitest-sonar-reporter": "3.0.0",
     "webpack": "5.104.1",
     "webpack-bundle-analyzer": "5.1.1",
