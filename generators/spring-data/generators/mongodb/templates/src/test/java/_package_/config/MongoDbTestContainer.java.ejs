@@ -20,6 +20,9 @@ package <%= packageName %>.config;
 
 import java.util.Collections;
 
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.slf4j.Logger;
@@ -28,11 +31,15 @@ import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.mongodb.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 
-public interface MongoDbTestContainer {
+@TestConfiguration(proxyBeanMethods = false)
+public class DatabaseTestcontainer {
+	@Bean
 	@Container
-	MongoDBContainer mongoDbContainer = new MongoDBContainer("<%- dockerContainers.mongodb %>")
-	    .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(MongoDbTestContainer.class)))
-	    .withReuse(true);
+	public static MongoDBContainer mongoDbContainer() {
+        return new MongoDBContainer("<%- dockerContainers.mongodb %>")
+            .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(DatabaseTestcontainer.class)))
+            .withReuse(true);
+    }
 
     @DynamicPropertySource
     static void registerProperties(DynamicPropertyRegistry registry) {
