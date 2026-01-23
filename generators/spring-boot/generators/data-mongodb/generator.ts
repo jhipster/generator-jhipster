@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { SpringBootApplicationGenerator } from '../../../spring-boot/generator.ts';
+import { SpringBootApplicationGenerator } from '../../generator.ts';
 
 import writeMongodbEntityFilesTask from './entity-files.ts';
 import writeMongodbFilesTask from './files.ts';

@@ -18,7 +18,7 @@
  */
 
 import { mutateData } from '../../../../lib/utils/index.ts';
-import { SpringBootApplicationGenerator } from '../../../spring-boot/generator.ts';
+import { SpringBootApplicationGenerator } from '../../generator.ts';
 
 import cleanupElasticsearchFilesTask from './cleanup.ts';
 import writeElasticsearchEntityFilesTask, { cleanupElasticsearchEntityFilesTask } from './entity-files.ts';

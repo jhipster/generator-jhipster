@@ -33,8 +33,8 @@ import { mutateData, removeFieldsWithNullishValues } from '../../../../lib/utils
 import { loadDerivedConfig } from '../../../base-core/internal/config-def.ts';
 import { isWin32 } from '../../../base-core/support/index.ts';
 import serverCommand from '../../../server/command.ts';
+import type { Application as SpringDataRelationalApplication } from '../../../spring-boot/generators/data-relational/types.ts';
 import type { Application as SpringBootApplication } from '../../../spring-boot/types.ts';
-import type { Application as SpringDataRelationalApplication } from '../../../spring-data/generators/relational/types.ts';
 import { mutateApplication } from '../../application.ts';
 import { mutateRelationship, mutateRelationshipWithEntity } from '../../entity.ts';
 import BaseApplicationGenerator from '../../index.ts';

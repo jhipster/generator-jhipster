@@ -83,7 +83,7 @@ describe('generator - elasticsearch', () => {
           .withJHipsterConfig(sampleConfig, entities)
           .withMockedSource({ except: ['addTestSpringFactory'] })
           .withMockedJHipsterGenerators({
-            except: ['jhipster:spring-data:elasticsearch'],
+            except: ['jhipster:spring-boot:data-elasticsearch'],
             filter: filterBasicServerGenerators,
           });
       });

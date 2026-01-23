@@ -3,7 +3,7 @@ import { before, describe, it } from 'esmocha';
 import { defaultHelpers as helpers, runResult } from '../../../../lib/testing/index.ts';
 import { SERVER_MAIN_RES_DIR } from '../../../generator-constants.ts';
 
-const GENERATOR_SPRING_DATA_CASSANDRA = 'spring-data:cassandra';
+const GENERATOR_SPRING_DATA_CASSANDRA = 'spring-boot:data-cassandra';
 
 const entityFoo = { name: 'Foo', changelogDate: '20160926101210' };
 

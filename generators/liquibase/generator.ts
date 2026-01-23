@@ -47,9 +47,9 @@ import { prepareEntity as prepareEntityForServer } from '../java/support/index.t
 import type { MavenProperty } from '../java-simple-application/generators/maven/types.ts';
 import { getFKConstraintName, getUXConstraintName, prepareField as prepareServerFieldForTemplates } from '../server/support/index.ts';
 import type { Entity as ServerEntity } from '../server/types.ts';
+import { prepareSqlApplicationProperties } from '../spring-boot/generators/data-relational/support/index.ts';
+import type { Application as SpringDataRelationalApplication } from '../spring-boot/generators/data-relational/types.ts';
 import type { Source as SpringBootSource } from '../spring-boot/index.ts';
-import { prepareSqlApplicationProperties } from '../spring-data/generators/relational/support/index.ts';
-import type { Application as SpringDataRelationalApplication } from '../spring-data/generators/relational/types.ts';
 
 import { addEntityFiles, fakeFiles, updateConstraintsFiles, updateEntityFiles, updateMigrateFiles } from './changelog-files.ts';
 import { liquibaseFiles } from './files.ts';

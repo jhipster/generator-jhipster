@@ -25,8 +25,8 @@ import { buildMutateDataForProperty, mutateData } from '../../../lib/utils/index
 import type CoreGenerator from '../../base-core/generator.ts';
 import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.ts';
 import type { Field as LiquibaseField } from '../../liquibase/types.d.ts';
+import type { Field as SpringDataRelationalField } from '../../spring-boot/generators/data-relational/types.d.ts';
 import type { Field as SpringBootField } from '../../spring-boot/types.d.ts';
-import type { Field as SpringDataRelationalField } from '../../spring-data/generators/relational/types.d.ts';
 import type { Application as ServerApplication, Entity as ServerEntity, Field as ServerField } from '../types.d.ts';
 
 import { getUXConstraintName } from './database.ts';

@@ -75,7 +75,7 @@ describe(`generator - ${databaseType} - entities`, () => {
           .runJHipster(GENERATOR_SERVER)
           .withJHipsterConfig(sampleConfig, entities)
           .withOptions({ skipPriorities })
-          .withMockedJHipsterGenerators({ except: ['jhipster:spring-data:relational'], filter: filterBasicServerGenerators });
+          .withMockedJHipsterGenerators({ except: ['jhipster:spring-boot:data-relational'], filter: filterBasicServerGenerators });
       });
 
       it('should compose with jhipster:common', () => {

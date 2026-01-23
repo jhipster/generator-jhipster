@@ -32,7 +32,7 @@ import {
   askForPath,
   askForServiceDiscovery,
 } from '../../../base-workspaces/internal/docker-prompts.ts';
-import { getJdbcUrl } from '../../../spring-data/generators/relational/support/index.ts';
+import { getJdbcUrl } from '../../../spring-boot/generators/data-relational/support/index.ts';
 import { BaseKubernetesGenerator } from '../../generator.ts';
 import { checkHelm } from '../../kubernetes-base.ts';
 import { askForIngressDomain, askForKubernetesNamespace } from '../../prompts.ts';

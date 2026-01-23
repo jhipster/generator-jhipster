@@ -1148,6 +1148,96 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/spring-boot/generators/cucumber/templates/template-file-spring-boot:cucumber.ejs": {
     "stateCleared": "modified",
   },
+  "generators/spring-boot/generators/data-cassandra/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-cassandra/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-cassandra/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-cassandra/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-cassandra/templates/template-file-spring-boot:data-cassandra.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-couchbase/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-couchbase/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-couchbase/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-couchbase/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-couchbase/templates/template-file-spring-boot:data-couchbase.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-elasticsearch/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-elasticsearch/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-elasticsearch/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-elasticsearch/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-elasticsearch/templates/template-file-spring-boot:data-elasticsearch.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-mongodb/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-mongodb/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-mongodb/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-mongodb/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-mongodb/templates/template-file-spring-boot:data-mongodb.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-neo4j/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-neo4j/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-neo4j/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-neo4j/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-neo4j/templates/template-file-spring-boot:data-neo4j.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-relational/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-relational/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-relational/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-relational/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/data-relational/templates/template-file-spring-boot:data-relational.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/spring-boot/generators/jwt/command.js": {
     "stateCleared": "modified",
   },
@@ -1272,111 +1362,6 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/spring-cloud/templates/template-file-spring-cloud.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/cassandra/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/cassandra/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/cassandra/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/cassandra/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/cassandra/templates/template-file-spring-data:cassandra.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/couchbase/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/couchbase/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/couchbase/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/couchbase/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/couchbase/templates/template-file-spring-data:couchbase.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/elasticsearch/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/elasticsearch/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/elasticsearch/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/elasticsearch/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/elasticsearch/templates/template-file-spring-data:elasticsearch.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/mongodb/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/mongodb/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/mongodb/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/mongodb/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/mongodb/templates/template-file-spring-data:mongodb.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/neo4j/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/neo4j/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/neo4j/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/neo4j/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/neo4j/templates/template-file-spring-data:neo4j.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/relational/command.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/relational/generator.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/relational/generator.spec.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/relational/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/generators/relational/templates/template-file-spring-data:relational.ejs": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/index.js": {
-    "stateCleared": "modified",
-  },
-  "generators/spring-data/templates/template-file-spring-data.ejs": {
     "stateCleared": "modified",
   },
   "generators/upgrade/command.js": {

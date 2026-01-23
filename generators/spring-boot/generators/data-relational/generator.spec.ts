@@ -77,7 +77,7 @@ describe(`generator - ${databaseType}`, () => {
       }
       before(async () => {
         await helpers
-          .runJHipster('jhipster:spring-data:relational')
+          .runJHipster('jhipster:spring-boot:data-relational')
           .withJHipsterConfig(sampleConfig)
           .withMockedSource({ except: ['addTestSpringFactory'] })
           .withMockedJHipsterGenerators({ except: ['jhipster:java:domain'] });

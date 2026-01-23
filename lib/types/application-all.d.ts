@@ -34,14 +34,14 @@ import type {
 } from '../../generators/liquibase/types.d.ts';
 import type { Application as ProjectNameApplication } from '../../generators/project-name/types.d.ts';
 import type { Relationship as ServerRelationship } from '../../generators/server/types.d.ts';
-import type { Application as SpringBootApplication, Entity as SpringBootEntity } from '../../generators/spring-boot/types.d.ts';
-import type { Application as SpringCloudApplication } from '../../generators/spring-cloud/types.d.ts';
 import type {
   Application as SpringDataRelationalApplication,
   Entity as SpringDataRelationalEntity,
   Field as SpringDataRelationalField,
   Relationship as SpringDataRelationalRelationship,
-} from '../../generators/spring-data/generators/relational/types.d.ts';
+} from '../../generators/spring-boot/generators/data-relational/types.d.ts';
+import type { Application as SpringBootApplication, Entity as SpringBootEntity } from '../../generators/spring-boot/types.d.ts';
+import type { Application as SpringCloudApplication } from '../../generators/spring-cloud/types.d.ts';
 
 export type FieldAll = SpringDataRelationalField & LiquibaseField & ClientField;
 
