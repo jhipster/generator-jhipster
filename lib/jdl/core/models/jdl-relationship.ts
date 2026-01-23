@@ -141,7 +141,7 @@ export default class JDLRelationship implements JDLRelationshipModel {
 
     string += '\n}';
 
-    return string.replace(/ \n/g, '\n').replace(/[ ]{4}/g, '  ');
+    return string.replace(/ \n/g, '\n').replace(/ {4}/g, '  ');
   }
 
   private formatComment(comment: string | null | undefined): string {
