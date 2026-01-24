@@ -252,7 +252,7 @@ export const buildCommands = ({
     program
       .command(cmdName, '', { isDefault: cmdName === defaultCommand, hidden: Boolean(removed) })
       .description(desc + (blueprint ? chalk.yellow(` (blueprint: ${blueprint})`) : ''))
-      .addCommandArguments(argument!)
+      .addCommandArguments(argument)
       .addCommandOptions(commandOptions)
       .addHelpText('after', commandHelp!)
       .addAlias(alias!)
