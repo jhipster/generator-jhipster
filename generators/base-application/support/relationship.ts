@@ -133,7 +133,7 @@ export const addOtherRelationship = <const R extends BaseApplicationRelationship
   const otherRelationship = {
     otherEntityName: lowerFirst(entity.name),
     otherEntityRelationshipName: relationship.relationshipName,
-    relationshipName: relationship.otherEntityRelationshipName as string,
+    relationshipName: relationship.otherEntityRelationshipName,
     relationshipType: otherRelationshipType(relationship.relationshipType),
     otherEntity: entity,
     ownerSide: !relationship.ownerSide,
