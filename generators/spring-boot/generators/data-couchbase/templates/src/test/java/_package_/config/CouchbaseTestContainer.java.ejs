@@ -25,12 +25,17 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
+import org.testcontainers.couchbase.BucketDefinition;
 import org.testcontainers.couchbase.CouchbaseContainer;
 import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.utility.DockerImageName;
 
 public interface CouchbaseTestContainer {
+    private static final BUCKET_NAME = "testBucket";
+
     @Container
-    CouchbaseContainer couchbaseContainer = new CouchbaseContainer("<%- dockerContainers.couchbase %>")
+    CouchbaseContainer couchbaseContainer = new CouchbaseContainer(DockerImageName.parse("<%- dockerContainers.couchbase %>").asCompatibleSubstituteFor("couchbase/server"))
+        .withBucket(new BucketDefinition(BUCKET_NAME))
         .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(CouchbaseTestContainer.class)))
         .withReuse(true);
 
@@ -39,7 +44,7 @@ public interface CouchbaseTestContainer {
         registry.add("spring.couchbase.connection-string", couchbaseContainer::getConnectionString);
         registry.add("spring.couchbase.username", couchbaseContainer::getUsername);
         registry.add("spring.couchbase.password", couchbaseContainer::getPassword);
-        registry.add("jhipster.database.couchbase.bucket-name", couchbaseContainer::getBucketName);
+        registry.add("jhipster.database.couchbase.bucket-name", () -> BUCKET_NAME);
         registry.add("jhipster.database.couchbase.scope-name", () -> "testScope");
     }
 }
