@@ -89,7 +89,7 @@ export const parseCreationTimestamp = (creationTimestampOption: string): number 
     if (!creationTimestamp) {
       return undefined;
     }
-    if (creationTimestamp > new Date().getTime()) {
+    if (creationTimestamp > Date.now()) {
       throw new Error(`Creation timestamp should not be in the future: ${creationTimestampOption}.`);
     }
   }
