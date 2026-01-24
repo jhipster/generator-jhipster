@@ -59,9 +59,7 @@ export default class BootstrapApplicationGenerator extends BaseApplicationGenera
   get configuringEachEntity() {
     return this.asConfiguringEachEntityTaskGroup({
       configureFields({ entityName, entityConfig }) {
-        if (entityConfig.name === undefined) {
-          entityConfig.name = entityName;
-        }
+        entityConfig.name ??= entityName;
 
         entityConfig.fields!.forEach((field: CommonField) => {
           const { fieldName, fieldType, fieldValidateRules } = field;

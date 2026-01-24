@@ -76,7 +76,7 @@ export default class AppGenerator extends BaseApplicationGenerator<CommonEntity,
         if (!this.options.reproducible) {
           this.config.defaults({
             baseName: getDefaultAppName({ cwd: this.destinationPath() }),
-            creationTimestamp: new Date().getTime(),
+            creationTimestamp: Date.now(),
           });
         }
       },

@@ -278,10 +278,10 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             let returnValue: string | undefined;
             if (fieldTsDefaultValue !== undefined || defaultValue !== undefined) {
               let fieldDefaultValue;
-              if (fieldTsDefaultValue !== undefined) {
-                fieldDefaultValue = fieldTsDefaultValue;
-              } else {
+              if (fieldTsDefaultValue === undefined) {
                 fieldDefaultValue = defaultValue;
+              } else {
+                fieldDefaultValue = fieldTsDefaultValue;
               }
 
               fieldDefaultValue = String(fieldDefaultValue).replace(/'/g, String.raw`\'`);

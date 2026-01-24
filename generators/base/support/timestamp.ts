@@ -71,7 +71,7 @@ export function parseChangelog(changelogDate: string): Date {
   const day = zeroFallback(changelogDate.substring(6, 8), '01');
   const formattedDate = `${year}-${month}-${day}T${changelogDate.substring(8, 10)}:${changelogDate.substring(10, 12)}:${changelogDate.substring(12, 14)}+00:00`;
   const parsedTimestamp = Date.parse(formattedDate);
-  if (isNaN(parsedTimestamp)) {
+  if (Number.isNaN(parsedTimestamp)) {
     throw new Error(`changelogDate ${changelogDate} is not a valid date.`);
   }
   return new Date(parsedTimestamp);
@@ -89,7 +89,7 @@ export const parseCreationTimestamp = (creationTimestampOption: string): number 
     if (!creationTimestamp) {
       return undefined;
     }
-    if (creationTimestamp > new Date().getTime()) {
+    if (creationTimestamp > Date.now()) {
       throw new Error(`Creation timestamp should not be in the future: ${creationTimestampOption}.`);
     }
   }

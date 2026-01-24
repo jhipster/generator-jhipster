@@ -180,9 +180,9 @@ export default class JHipsterCommand extends Command {
     }
     cmdString = `${cmdString}${longOption}`;
     if (optionDefinition.type === Array) {
-      cmdString = optionDefinition.required !== false ? `${cmdString} <value...>` : `${cmdString} [value...]`;
+      cmdString = optionDefinition.required === false ? `${cmdString} [value...]` : `${cmdString} <value...>`;
     } else if (optionDefinition.type && optionDefinition.type !== Boolean) {
-      cmdString = optionDefinition.required !== false ? `${cmdString} <value>` : `${cmdString} [value]`;
+      cmdString = optionDefinition.required === false ? `${cmdString} [value]` : `${cmdString} <value>`;
     }
     // Passing default to `commander` (`.default(optionDefinition.default)`), will set at options passed to initial generator, so it's used in entire generation process.
     // We want default value to be set on jhipster options parsing so ignore default at commander.

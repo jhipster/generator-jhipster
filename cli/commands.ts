@@ -96,7 +96,7 @@ const defaultCommands = {
     alias: 'import-jdl',
     desc: `Create entities from the JDL file/URL/content passed in argument.
     Use the '--interactive' flag to generate multiple applications in series.`,
-    help: `
+    help: String.raw`
     Arguments:
     jdlFiles # The JDL file names or URL Type: String[] Required: true if --inline is not set
 
@@ -106,7 +106,7 @@ const defaultCommands = {
     jhipster jdl https://gist.githubusercontent.com/user/path/app.jdl
     jhipster jdl jdl-name-from-jdl-samples-repo.jdl (just pass any file name from https://github.com/jhipster/jdl-samples)
     jhipster jdl --inline "application { config { baseName jhapp, testFrameworks [cypress] }}"
-    jhipster jdl --inline \\
+    jhipster jdl --inline \
         "application {
             config {
                 baseName jhapp,
