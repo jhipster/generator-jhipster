@@ -259,7 +259,7 @@ export function createAuthorityEntity(
     ...customAuthorityData,
   };
 
-  loadRequiredConfigIntoEntity(authorityEntity, application as BaseApplicationApplication<BaseApplicationEntity>);
+  loadRequiredConfigIntoEntity(authorityEntity, application);
   // Fallback to defaults for test cases.
   loadRequiredConfigIntoEntity(authorityEntity, this.jhipsterConfigWithDefaults as BaseApplicationApplication<BaseApplicationEntity>);
 
