@@ -298,11 +298,11 @@ function addOrExtendRelationships<const R extends BaseApplicationRelationship>(r
   for (const relationshipToAdd of relationshipsToAdd) {
     const { relationshipName: newrelationshipName } = relationshipToAdd;
     let relationship = relationships.find(relationship => relationship.relationshipName === newrelationshipName);
-    if (!relationship) {
+    if (relationship) {
+      defaults(relationship, relationshipToAdd);
+    } else {
       relationship = { ...relationshipToAdd };
       relationships.push(relationship);
-    } else {
-      defaults(relationship, relationshipToAdd);
     }
   }
 }
