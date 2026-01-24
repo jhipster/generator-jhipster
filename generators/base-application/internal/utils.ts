@@ -281,15 +281,15 @@ function addOrExtendFields<const F extends BaseApplicationField>(fields: F[], fi
   for (const fieldToAdd of fieldsToAdd) {
     const { fieldName: newFieldName, id } = fieldToAdd;
     let field = fields.find(field => field.fieldName === newFieldName);
-    if (!field) {
+    if (field) {
+      defaults(field, fieldToAdd);
+    } else {
       field = { ...fieldToAdd };
       if (id) {
         fields.unshift(field);
       } else {
         fields.push(field);
       }
-    } else {
-      defaults(field, fieldToAdd);
     }
   }
 }
