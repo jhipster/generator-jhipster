@@ -198,7 +198,7 @@ export const mutateRelationship = {
   relationshipNameHumanized: ({ relationshipName }) => startCase(relationshipName),
 
   propertyName: ({ collection, relationshipFieldName, relationshipFieldNamePlural }) =>
-    collection ? relationshipFieldNamePlural! : relationshipFieldName,
+    collection ? relationshipFieldNamePlural : relationshipFieldName,
 
   ...mutateProperty,
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Relationship>, BaseApplicationAddedRelationshipProperties>;
