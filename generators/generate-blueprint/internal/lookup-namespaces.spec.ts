@@ -106,6 +106,7 @@ describe('lookupGeneratorsNamespaces', () => {
   "spring-boot:data-neo4j",
   "spring-boot:data-relational",
   "spring-boot:jwt",
+  "spring-boot:liquibase",
   "spring-boot:oauth2",
   "spring-boot:websocket",
   "spring-cloud",

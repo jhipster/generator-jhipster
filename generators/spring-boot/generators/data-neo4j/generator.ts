@@ -25,8 +25,6 @@ import cleanupTask from './cleanup.ts';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.ts';
 import writeTask from './files.ts';
 
-const GENERATOR_LIQUIBASE = 'liquibase';
-
 export default class Neo4jGenerator extends SpringBootApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -43,7 +41,7 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
     return this.asComposingTaskGroup({
       async composing() {
         if (this.jhipsterConfigWithDefaults.databaseMigration === 'liquibase') {
-          await this.composeWithJHipster(GENERATOR_LIQUIBASE);
+          await this.composeWithJHipster('jhipster:spring-boot:liquibase');
         }
       },
     });

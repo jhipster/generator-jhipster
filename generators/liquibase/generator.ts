@@ -49,7 +49,6 @@ import { getFKConstraintName, getUXConstraintName, prepareField as prepareServer
 import type { Entity as ServerEntity } from '../server/types.ts';
 import { prepareSqlApplicationProperties } from '../spring-boot/generators/data-relational/support/index.ts';
 import type { Application as SpringDataRelationalApplication } from '../spring-boot/generators/data-relational/types.ts';
-import type { Source as SpringBootSource } from '../spring-boot/index.ts';
 
 import { addEntityFiles, fakeFiles, updateConstraintsFiles, updateEntityFiles, updateMigrateFiles } from './changelog-files.ts';
 import { liquibaseFiles } from './files.ts';
@@ -337,27 +336,6 @@ export default class LiquibaseGenerator<
         source.addTestLog?.({ name: 'liquibase', level: 'WARN' });
         source.addTestLog?.({ name: 'LiquibaseSchemaResolver', level: 'INFO' });
       },
-      customizeApplicationProperties({ source, application }) {
-        if (application.databaseTypeSql && !application.reactive) {
-          (source as SpringBootSource).addApplicationPropertiesClass?.({
-            propertyType: 'Liquibase',
-            classStructure: { asyncStart: ['Boolean', 'true'] },
-          });
-        }
-      },
-      addDependencies({ application, source }) {
-        if (application.springBoot4 && (application as SpringDataRelationalApplication).backendTypeSpringBoot) {
-          source.addJavaDependencies?.([
-            {
-              groupId: 'org.springframework.boot',
-              artifactId: 'spring-boot-starter-liquibase',
-              exclusions: (application as SpringDataRelationalApplication).databaseTypeNeo4j
-                ? [{ groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-jdbc' }]
-                : undefined,
-            },
-          ]);
-        }
-      },
       customizeMaven({ source, application }) {
         if (!application.buildToolMaven || !this.injectBuildTool) return;
         if (!application.javaDependencies) {
@@ -495,9 +473,6 @@ export default class LiquibaseGenerator<
         }
 
         if (application.databaseTypeNeo4j) {
-          if (application.backendTypeSpringBoot && !application.springBoot4) {
-            source.addMavenDependency?.([{ groupId: 'org.springframework', artifactId: 'spring-jdbc' }]);
-          }
           source.addMavenDependency?.([
             {
               groupId: 'org.liquibase.ext',
@@ -561,22 +536,6 @@ export default class LiquibaseGenerator<
             version: application.javaDependencies['liquibase-neo4j'],
           });
         }
-      },
-      nativeHints({ source, application }) {
-        if (!application.graalvmSupport) return;
-        // Latest liquibase version supported by Reachability Repository is 4.23.0
-        // Hints may be dropped if newer version is supported
-        // https://github.com/oracle/graalvm-reachability-metadata/blob/master/metadata/org.liquibase/liquibase-core/index.json
-        (source as SpringBootSource).addNativeHint!({
-          resources: ['config/liquibase/**'],
-          declaredConstructors: [
-            'liquibase.database.LiquibaseTableNamesFactory.class',
-            'liquibase.report.ShowSummaryGeneratorFactory.class',
-            'liquibase.changelog.FastCheckService.class',
-            'liquibase.changelog.visitor.ValidatingVisitorGeneratorFactory.class',
-          ],
-          publicConstructors: ['liquibase.ui.LoggerUIService.class'],
-        });
       },
     });
   }

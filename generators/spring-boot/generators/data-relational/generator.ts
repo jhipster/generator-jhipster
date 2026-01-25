@@ -36,8 +36,6 @@ import type {
   Source as SpringDataRelationalSource,
 } from './types.ts';
 
-const GENERATOR_LIQUIBASE = 'liquibase';
-
 const { SQL } = databaseTypes;
 
 export default class SqlGenerator extends BaseApplicationGenerator<
@@ -61,7 +59,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
   get composing() {
     return this.asComposingTaskGroup({
       async composing() {
-        await this.composeWithJHipster(GENERATOR_LIQUIBASE);
+        await this.composeWithJHipster('jhipster:spring-boot:liquibase');
       },
     });
   }
