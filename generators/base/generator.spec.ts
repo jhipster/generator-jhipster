@@ -20,7 +20,7 @@ import { before, describe, esmocha, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
 import EnvironmentBuilder from '../../cli/environment-builder.ts';
-import { defaultHelpers as helpers } from '../../lib/testing/index.ts';
+import { defaultHelpers as helpers, result } from '../../lib/testing/index.ts';
 import { getCommandHelpOutput, shouldSupportFeatures } from '../../test/support/tests.ts';
 
 import BaseGenerator from './index.ts';
@@ -87,6 +87,120 @@ describe(`generator - ${generator}`, () => {
       expect(prompting).not.toHaveBeenCalled();
       expect(writing).not.toHaveBeenCalled();
       expect(postWriting).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('control', () => {
+    class CustomGenerator extends BaseGenerator {
+      beforeQueue() {
+        this.customLifecycle = true;
+      }
+    }
+
+    describe('.jhipsterOldVersion', () => {
+      let jhipsterOldVersion: string | undefined;
+
+      before(async () => {
+        await helpers
+          .run(CustomGenerator)
+          .withJHipsterConfig({ jhipsterVersion: '1.0.0' })
+          .commitFiles()
+          .withJHipsterGenerators({ useDefaultMocks: true })
+          .withTask('postWriting', async function (this, { control }) {
+            jhipsterOldVersion = control.jhipsterOldVersion;
+          });
+      });
+
+      it('have jhipsterOldVersion set correctly', async () => {
+        expect(jhipsterOldVersion).toBe('1.0.0');
+      });
+    });
+
+    describe('.cleanupFiles', () => {
+      let removeFiles: ReturnType<typeof esmocha.fn>;
+
+      before(async () => {
+        removeFiles = esmocha.fn();
+
+        await helpers
+          .run(CustomGenerator)
+          .withJHipsterConfig({ jhipsterVersion: '1.0.0' })
+          .commitFiles()
+          .withJHipsterGenerators({ useDefaultMocks: true })
+          .withTask('postWriting', async function (this, { control }) {
+            control.removeFiles = removeFiles;
+            await control.cleanupFiles({
+              '1.0.1': [
+                '1.0.1-file.txt',
+                [true, '1.0.1-conditional-truthy-file1.txt', '1.0.1-conditional-truthy-file2.txt'],
+                [false, '1.0.1-conditional-falsy-file1.txt'],
+              ],
+            });
+          });
+      });
+
+      it('should call removeFiles', async () => {
+        expect(removeFiles.mock.lastCall).toMatchInlineSnapshot(`
+[
+  {
+    "oldVersion": "1.0.0",
+    "removedInVersion": "1.0.1",
+  },
+  "1.0.1-file.txt",
+  "1.0.1-conditional-truthy-file1.txt",
+  "1.0.1-conditional-truthy-file2.txt",
+]
+`);
+      });
+    });
+
+    describe('.removeFiles', () => {
+      before(async () => {
+        await helpers
+          .run(CustomGenerator)
+          .withJHipsterConfig({ jhipsterVersion: '1.0.0' })
+          .withFiles({ 'diskFileToBeRemoved1.txt': 'foo', 'diskFileToBeRemoved2.txt': 'foo', 'diskFileNotToBeRemoved1.txt': 'foo' })
+          .commitFiles()
+          .withFiles({ 'memFsFileToBeRemoved1.txt': 'foo' })
+          .withJHipsterGenerators({ useDefaultMocks: true })
+          .withTask('postWriting', async function (this, { control }) {
+            await control.removeFiles({ removedInVersion: '1.0.0' }, 'diskFileNotToBeRemoved1.txt');
+            await control.removeFiles({ removedInVersion: '1.0.1' }, 'diskFileToBeRemoved1.txt', 'memFsFileToBeRemoved1.txt');
+            await control.removeFiles({ oldVersion: '0.1.0', removedInVersion: '1.0.0' }, 'diskFileToBeRemoved2.txt');
+          });
+      });
+
+      it('should remove files', () => {
+        result.assertNoFile('diskFileToBeRemoved1.txt');
+        result.assertNoFile('diskFileToBeRemoved2.txt');
+        result.assertNoFile('memFsFileToBeRemoved1.txt');
+      });
+      it('should not remove files', () => {
+        result.assertFile('diskFileNotToBeRemoved1.txt');
+      });
+      it('should match state snapshot', async () => {
+        expect(result.getStateSnapshot()).toMatchInlineSnapshot(`
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "diskFileNotToBeRemoved1.txt": {
+    "stateCleared": "modified",
+  },
+  "diskFileToBeRemoved1.txt": {
+    "state": "deleted",
+    "stateCleared": "modified",
+  },
+  "diskFileToBeRemoved2.txt": {
+    "state": "deleted",
+    "stateCleared": "modified",
+  },
+  "memFsFileToBeRemoved1.txt": {
+    "state": "deleted",
+  },
+}
+`);
+      });
     });
   });
 });

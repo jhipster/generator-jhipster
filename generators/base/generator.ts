@@ -19,7 +19,7 @@
 import assert from 'node:assert';
 import fs, { existsSync, readFileSync, statSync } from 'node:fs';
 import { rm } from 'node:fs/promises';
-import path, { join, relative } from 'node:path';
+import path, { relative } from 'node:path';
 
 import chalk from 'chalk';
 import { execaCommandSync } from 'execa';
@@ -228,14 +228,14 @@ export default class BaseGenerator<
             );
           },
           async cleanupFiles(oldVersionOrCleanup: string | CleanupArgumentType, cleanup?: CleanupArgumentType) {
-            if (!jhipsterOldVersion) return;
+            if (!this.jhipsterOldVersion) return;
             let oldVersion: string;
             if (typeof oldVersionOrCleanup === 'string') {
               oldVersion = oldVersionOrCleanup;
               assert(cleanup, 'cleanupFiles requires cleanup object');
             } else {
               cleanup = oldVersionOrCleanup;
-              oldVersion = jhipsterOldVersion;
+              oldVersion = this.jhipsterOldVersion!;
             }
             await Promise.all(
               Object.entries(cleanup).map(async ([version, files]) => {
@@ -244,7 +244,7 @@ export default class BaseGenerator<
                   if (Array.isArray(file)) {
                     const [condition, ...fileParts] = file;
                     if (condition) {
-                      stringFiles.push(join(...fileParts));
+                      stringFiles.push(...fileParts);
                     }
                   } else {
                     stringFiles.push(file);
