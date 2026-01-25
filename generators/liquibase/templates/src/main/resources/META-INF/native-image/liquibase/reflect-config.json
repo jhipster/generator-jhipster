@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "name": "liquibase.change.core.LoadDataChange",
+    "queryAllPublicMethods": true,
+    "allDeclaredMethods": true,
+    "allPublicConstructors": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  }
+]
