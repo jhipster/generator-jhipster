@@ -40,7 +40,7 @@ import org.springframework.context.annotation.Import;
 /**
  * This class allows you to run unit and integration tests without an IdP.
  */
-@TestConfiguration
+@TestConfiguration(proxyBeanMethods = false)
 <%_ if (applicationTypeMonolith) { _%>
 @Import(OAuth2Configuration.class)
 <%_ } _%>
