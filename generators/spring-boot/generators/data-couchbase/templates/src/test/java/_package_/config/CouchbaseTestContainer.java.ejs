@@ -31,7 +31,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.utility.DockerImageName;
 
 public interface CouchbaseTestContainer {
-    private static final String BUCKET_NAME = "testBucket";
+    String BUCKET_NAME = "testBucket";
 
     @Container
     CouchbaseContainer couchbaseContainer = new CouchbaseContainer(DockerImageName.parse("<%- dockerContainers.couchbase %>").asCompatibleSubstituteFor("couchbase/server"))
