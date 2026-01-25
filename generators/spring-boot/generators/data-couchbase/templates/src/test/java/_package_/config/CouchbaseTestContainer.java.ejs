@@ -28,13 +28,12 @@ import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.couchbase.BucketDefinition;
 import org.testcontainers.couchbase.CouchbaseContainer;
 import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.utility.DockerImageName;
 
 public interface CouchbaseTestContainer {
     String BUCKET_NAME = "testBucket";
 
     @Container
-    CouchbaseContainer couchbaseContainer = new CouchbaseContainer(DockerImageName.parse("<%- dockerContainers.couchbase %>").asCompatibleSubstituteFor("couchbase/server"))
+    CouchbaseContainer couchbaseContainer = new CouchbaseContainer("<%- dockerContainers.couchbase %>")
         .withBucket(new BucketDefinition(BUCKET_NAME))
         .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(CouchbaseTestContainer.class)))
         .withReuse(true);
