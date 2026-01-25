@@ -96,14 +96,33 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
+    private final Liquibase liquibase = new Liquibase();
     private Foo foo;
     // jhipster-needle-application-properties-property
+
+    public Liquibase getLiquibase() {
+        return liquibase;
+    }
 
 
     private Foo getFoo() {
         return foo;
     };
     // jhipster-needle-application-properties-property-getter
+
+    public static class Liquibase {
+
+        private Boolean asyncStart = true;
+
+        public Boolean getAsyncStart() {
+            return asyncStart;
+        }
+
+
+        public void setAsyncStart(Boolean asyncStart) {
+            this.asyncStart = asyncStart;
+        }
+    }
 
 
     public static Foo{} {

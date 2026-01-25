@@ -109,6 +109,7 @@ jobs:
       #----------------------------------------------------------------------
       - name: 'SETUP: setup graalvm'
         uses: graalvm/setup-graalvm@v1
+        if: steps.compare.outputs.equals != 'true'
         with:
           java-version: ${{ matrix.java-version }}
           distribution: 'graalvm-community'
@@ -129,7 +130,7 @@ jobs:
         if: steps.compare.outputs.equals != 'true'
       - name: Store the application
         uses: actions/upload-artifact@v6
-        if: always() && (steps.e2e.outcome == 'failure' || steps.packaging.outcome == 'failure')
+        if: steps.compare.outputs.equals != 'true' && always() && (steps.e2e.outcome == 'failure' || steps.packaging.outcome == 'failure')
         with:
           name: app-${{ matrix.sample }}
           include-hidden-files: true
@@ -144,12 +145,12 @@ jobs:
             !**/node_modules/**
       - name: 'E2E: Store failure screenshots'
         uses: actions/upload-artifact@v6
-        if: always() && steps.e2e.outcome == 'failure'
+        if: steps.compare.outputs.equals != 'true' && always() && steps.e2e.outcome == 'failure'
         with:
           name: screenshots-${{ matrix.sample }}
           path: ${{ github.workspace }}/app/**/cypress/screenshots
       - name: Dump docker logs
-        if: always() && contains(matrix.os, 'ubuntu')
+        if: steps.compare.outputs.equals != 'true' && always() && contains(matrix.os, 'ubuntu')
         uses: jwalton/gh-docker-logs@v2
 
   check-graalvm:
