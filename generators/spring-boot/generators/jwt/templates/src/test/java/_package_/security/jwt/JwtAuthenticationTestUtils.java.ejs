@@ -20,7 +20,7 @@ import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
-<%_ if (!reactive) { _%>
+<%_ if (!reactive && !springBoot4) { _%>
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 <%_ } _%>
 
@@ -29,10 +29,12 @@ public class JwtAuthenticationTestUtils {
 
     public static final String BEARER = "Bearer ";
 
+<%_ if (!springBoot4) { _%>
     @Bean
     private HandlerMappingIntrospector mvcHandlerMappingIntrospector() {
         return new HandlerMappingIntrospector();
     }
+<%_ } _%>
 <%_ } _%>
 <%_ if (applicationTypeMicroservice && !reactive) { _%>
 
