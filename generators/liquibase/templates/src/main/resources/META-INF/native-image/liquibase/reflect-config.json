@@ -1,5 +1,11 @@
 [
   {
+    "name": "liquibase.change.core.LoadDataColumnConfig",
+    "queryAllPublicMethods": true,
+    "allDeclaredMethods": true,
+    "methods": [{ "name": "<init>", "parameterTypes": [] }]
+  },
+  {
     "name": "liquibase.change.core.LoadDataChange",
     "queryAllPublicMethods": true,
     "allDeclaredMethods": true,
