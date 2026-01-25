@@ -21,7 +21,7 @@ package <%= packageName %>.config;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.<%= springBoot4 ? 'postgresql' : 'containers' %>.PostgreSQLContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import java.util.Collections;
 
@@ -29,7 +29,7 @@ public class PostgreSqlTestContainer implements SqlTestContainer {
 
     private static final Logger LOG = LoggerFactory.getLogger(PostgreSqlTestContainer.class);
 
-    private PostgreSQLContainer<?> postgreSQLContainer;
+    private PostgreSQLContainer<%- springBoot4 ? '' : '<?>' %> postgreSQLContainer;
 
     @Override
     public void destroy() {
@@ -40,7 +40,7 @@ public class PostgreSqlTestContainer implements SqlTestContainer {
     @Override
     public void afterPropertiesSet() {
         if (null == postgreSQLContainer) {
-            postgreSQLContainer = new PostgreSQLContainer<>("<%- dockerContainers.postgresql %>")
+            postgreSQLContainer = new PostgreSQLContainer<%- springBoot4 ? '' : '<>' %>("<%- dockerContainers.postgresql %>")
                 .withDatabaseName("<%= baseName %>")
                 .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
                 .withLogConsumer(new Slf4jLogConsumer(LOG))
