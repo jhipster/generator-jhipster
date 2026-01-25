@@ -192,13 +192,13 @@ export const mutateRelationship = {
   collection: ({ relationshipType }) => relationshipType === 'one-to-many' || relationshipType === 'many-to-many',
 
   relationshipFieldName: ({ relationshipName }) => lowerFirst(relationshipName),
-  relationshipFieldNamePlural: ({ relationshipFieldName }) => pluralize(relationshipFieldName!),
+  relationshipFieldNamePlural: ({ relationshipFieldName }) => pluralize(relationshipFieldName),
   relationshipNamePlural: ({ relationshipName }) => pluralize(relationshipName),
   relationshipNameCapitalized: ({ relationshipName }) => upperFirst(relationshipName),
   relationshipNameHumanized: ({ relationshipName }) => startCase(relationshipName),
 
   propertyName: ({ collection, relationshipFieldName, relationshipFieldNamePlural }) =>
-    collection ? relationshipFieldNamePlural! : relationshipFieldName!,
+    collection ? relationshipFieldNamePlural : relationshipFieldName,
 
   ...mutateProperty,
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Relationship>, BaseApplicationAddedRelationshipProperties>;

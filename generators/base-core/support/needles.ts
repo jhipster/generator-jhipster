@@ -216,7 +216,7 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
   }
   contentToAdd = Array.isArray(contentToAdd) ? contentToAdd : [contentToAdd];
   if (autoIndent) {
-    contentToAdd = contentToAdd.map(eachContentToAdd => eachContentToAdd.split('\n')).flat();
+    contentToAdd = contentToAdd.flatMap(eachContentToAdd => eachContentToAdd.split('\n'));
   }
 
   // Normalize needle indent with contentToAdd.

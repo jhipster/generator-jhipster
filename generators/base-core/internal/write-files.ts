@@ -31,13 +31,11 @@ export const convertWriteFileSectionsToBlocks = <DataType, Generator>(
     })
     .filter(({ sectionName }) => !sectionName.startsWith('_'));
 
-  return parsedSections
-    .map(({ sectionName, sectionBlocks }) => {
-      return sectionBlocks.map((block, blockIdx) => {
-        const blockSpecPath = `${sectionName}[${blockIdx}]`;
-        assert(typeof block === 'object', `Block must be an object for ${blockSpecPath}`);
-        return { blockSpecPath, ...block };
-      });
-    })
-    .flat();
+  return parsedSections.flatMap(({ sectionName, sectionBlocks }) => {
+    return sectionBlocks.map((block, blockIdx) => {
+      const blockSpecPath = `${sectionName}[${blockIdx}]`;
+      assert(typeof block === 'object', `Block must be an object for ${blockSpecPath}`);
+      return { blockSpecPath, ...block };
+    });
+  });
 };

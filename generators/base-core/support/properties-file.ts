@@ -76,7 +76,7 @@ export const editPropertiesFileCallback = (
         const existingLine = lines.find(line => Array.isArray(line) && line[0] === key) as string[] | undefined;
         if (existingLine) {
           if (typeof value === 'function' || valueSep) {
-            existingLine[1] = getNewValue(value, existingLine[1] as string, valueSep);
+            existingLine[1] = getNewValue(value, existingLine[1], valueSep);
           } else {
             existingLine[1] = value;
           }

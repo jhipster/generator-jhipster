@@ -259,7 +259,7 @@ export function createAuthorityEntity(
     ...customAuthorityData,
   };
 
-  loadRequiredConfigIntoEntity(authorityEntity, application as BaseApplicationApplication<BaseApplicationEntity>);
+  loadRequiredConfigIntoEntity(authorityEntity, application);
   // Fallback to defaults for test cases.
   loadRequiredConfigIntoEntity(authorityEntity, this.jhipsterConfigWithDefaults as BaseApplicationApplication<BaseApplicationEntity>);
 
@@ -281,15 +281,15 @@ function addOrExtendFields<const F extends BaseApplicationField>(fields: F[], fi
   for (const fieldToAdd of fieldsToAdd) {
     const { fieldName: newFieldName, id } = fieldToAdd;
     let field = fields.find(field => field.fieldName === newFieldName);
-    if (!field) {
+    if (field) {
+      defaults(field, fieldToAdd);
+    } else {
       field = { ...fieldToAdd };
       if (id) {
         fields.unshift(field);
       } else {
         fields.push(field);
       }
-    } else {
-      defaults(field, fieldToAdd);
     }
   }
 }
@@ -298,11 +298,11 @@ function addOrExtendRelationships<const R extends BaseApplicationRelationship>(r
   for (const relationshipToAdd of relationshipsToAdd) {
     const { relationshipName: newrelationshipName } = relationshipToAdd;
     let relationship = relationships.find(relationship => relationship.relationshipName === newrelationshipName);
-    if (!relationship) {
+    if (relationship) {
+      defaults(relationship, relationshipToAdd);
+    } else {
       relationship = { ...relationshipToAdd };
       relationships.push(relationship);
-    } else {
-      defaults(relationship, relationshipToAdd);
     }
   }
 }
