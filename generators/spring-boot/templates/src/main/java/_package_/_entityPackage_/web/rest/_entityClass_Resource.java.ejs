@@ -120,6 +120,9 @@ import java.util.Optional;
 <%_ if (primaryKey.hasUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
+<%_ if (updatableEntity && !viaService && !dtoMapstruct && fields.some(field => !field.id && !field.transient)) { _%>
+import java.util.function.Consumer;
+<%_ } _%>
 <%_ if ((searchEngineAny || fieldsContainNoOwnerOneToOne) && !reactive) { _%>
   <%_ if (!viaService) { _%>
 import java.util.stream.Collectors;
@@ -517,5 +520,13 @@ public class <%= entityClass %>Resource {
     @PreAuthorize("<%- entitySpringReadPreAuthorize %>")
   <%_ } _%>
 <%- include('../../_partials_entity_/search_template', {viaService}); -%>
+<%_ } _%>
+<%_ if (updatableEntity && !viaService && !dtoMapstruct && fields.some(field => !field.id && !field.transient)) { _%>
+
+    private <T> void updateIfPresent(Consumer<T> setter, T value) {
+        if (value != null) {
+            setter.accept(value);
+        }
+    }
 <%_ } _%>
 }
