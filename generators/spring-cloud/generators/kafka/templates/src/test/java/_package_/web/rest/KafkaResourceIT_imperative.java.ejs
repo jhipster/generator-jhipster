@@ -19,7 +19,6 @@
 package <%= packageName %>.web.rest;
 
 import <%= packageName %>.IntegrationTest;
-import <%= packageName %>.config.EmbeddedKafka;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -50,7 +49,6 @@ import org.springframework.util.MimeTypeUtils;
 @IntegrationTest
 @AutoConfigureMockMvc
 @WithMockUser
-@EmbeddedKafka
 @ImportAutoConfiguration(TestChannelBinderConfiguration.class)
 class <%= upperFirstCamelCaseBaseName %>KafkaResourceIT {
 

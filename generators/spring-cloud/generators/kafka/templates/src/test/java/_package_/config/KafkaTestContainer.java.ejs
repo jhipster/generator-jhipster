@@ -19,41 +19,25 @@
 package <%= packageName %>.config;
 
 import java.time.Duration;
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
+
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testcontainers.kafka.KafkaContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
-import org.testcontainers.utility.DockerImageName;
+import org.testcontainers.kafka.KafkaContainer;
+import org.testcontainers.junit.jupiter.Container;
 
-public class KafkaTestContainer implements InitializingBean, DisposableBean {
+public interface KafkaTestContainer {
+    @Container
+    KafkaContainer kafkaContainer = new KafkaContainer("<%- dockerContainers.kafka %>")
+        .withStartupTimeout(Duration.ofMinutes(4))
+        .withEnv("KAFKA_LISTENERS", "PLAINTEXT://:9092,BROKER://:9093,CONTROLLER://:9094")
+        .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(KafkaTestContainer.class)))
+        .withReuse(true);
 
-    private KafkaContainer kafkaContainer;
-    private static final Logger LOG = LoggerFactory.getLogger(KafkaTestContainer.class);
-
-    @Override
-    public void destroy() {
-        if (null != kafkaContainer && kafkaContainer.isRunning()) {
-            kafkaContainer.close();
-        }
-    }
-
-    @Override
-    public void afterPropertiesSet() {
-        if (null == kafkaContainer) {
-            kafkaContainer = new KafkaContainer(DockerImageName.parse("<%- dockerContainers.kafka %>"))
-                .withLogConsumer(new Slf4jLogConsumer(LOG))
-                .withStartupTimeout(Duration.ofMinutes(3))
-                .withEnv("KAFKA_LISTENERS", "PLAINTEXT://:9092,BROKER://:9093,CONTROLLER://:9094")
-                .withReuse(true);
-        }
-        if (!kafkaContainer.isRunning()) {
-            kafkaContainer.start();
-        }
-    }
-
-    public KafkaContainer getKafkaContainer() {
-        return kafkaContainer;
+    @DynamicPropertySource
+    static void registerProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.cloud.stream.kafka.binder.brokers", () -> kafkaContainer.getHost() + ':' + kafkaContainer.getFirstMappedPort());
     }
 }
