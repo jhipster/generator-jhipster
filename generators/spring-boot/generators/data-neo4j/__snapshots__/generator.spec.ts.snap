@@ -257,13 +257,7 @@ exports[`generator - neo4j gateway-jwt-reactive(false)-maven-enableTranslation(f
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedNeo4j.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/Neo4jTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/Neo4jTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
@@ -360,9 +354,6 @@ exports[`generator - neo4j gateway-jwt-reactive(false)-maven-enableTranslation(f
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": {
@@ -598,16 +589,10 @@ exports[`generator - neo4j gateway-jwt-reactive(true)-gradle-enableTranslation(t
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedNeo4j.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/Neo4jTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/Neo4jTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SpringBootTestClassOrderer.java": {
@@ -671,9 +656,6 @@ exports[`generator - neo4j gateway-jwt-reactive(true)-gradle-enableTranslation(t
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": {
@@ -927,16 +909,10 @@ exports[`generator - neo4j gateway-oauth2-reactive(true)-gradle-enableTranslatio
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedNeo4j.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/Neo4jTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/Neo4jTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SpringBootTestClassOrderer.java": {
@@ -1024,9 +1000,6 @@ exports[`generator - neo4j gateway-oauth2-reactive(true)-gradle-enableTranslatio
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": {
@@ -1202,13 +1175,7 @@ exports[`generator - neo4j microservice-jwt-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedNeo4j.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/Neo4jTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/Neo4jTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
@@ -1266,9 +1233,6 @@ exports[`generator - neo4j microservice-jwt-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": {
@@ -1495,16 +1459,10 @@ exports[`generator - neo4j microservice-jwt-reactive(true)-gradle-enableTranslat
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedNeo4j.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/Neo4jTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/Neo4jTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SpringBootTestClassOrderer.java": {
@@ -1559,9 +1517,6 @@ exports[`generator - neo4j microservice-jwt-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": {
@@ -1785,16 +1740,10 @@ exports[`generator - neo4j microservice-oauth2-reactive(true)-gradle-enableTrans
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedNeo4j.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/Neo4jTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/Neo4jTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SpringBootTestClassOrderer.java": {
@@ -1849,9 +1798,6 @@ exports[`generator - neo4j microservice-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": {
@@ -2126,13 +2072,7 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedNeo4j.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/Neo4jTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/Neo4jTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
@@ -2229,9 +2169,6 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": {
@@ -2458,16 +2395,10 @@ exports[`generator - neo4j monolith-jwt-reactive(true)-gradle-enableTranslation(
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedNeo4j.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/Neo4jTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/Neo4jTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SpringBootTestClassOrderer.java": {
@@ -2531,9 +2462,6 @@ exports[`generator - neo4j monolith-jwt-reactive(true)-gradle-enableTranslation(
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": {
@@ -2709,13 +2637,7 @@ exports[`generator - neo4j monolith-oauth2-reactive(false)-maven-enableTranslati
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedNeo4j.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/Neo4jTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/Neo4jTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
@@ -2782,9 +2704,6 @@ exports[`generator - neo4j monolith-oauth2-reactive(false)-maven-enableTranslati
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": {
@@ -3008,16 +2927,10 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedNeo4j.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/Neo4jTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/Neo4jTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SpringBootTestClassOrderer.java": {
@@ -3081,9 +2994,6 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": {
@@ -3358,13 +3268,7 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
   "src/test/java/tech/jhipster/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedNeo4j.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/tech/jhipster/config/Neo4jTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/Neo4jTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SpringBootTestClassOrderer.java": {
@@ -3461,9 +3365,6 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": {
@@ -3696,16 +3597,10 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
   "src/test/java/com/mycompany/config/AsyncSyncConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedNeo4j.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/config/JHipsterBlockHoundIntegration.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/Neo4jTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/config/Neo4jTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SpringBootTestClassOrderer.java": {
@@ -3769,9 +3664,6 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/test/resources/META-INF/services/reactor.blockhound.integration.BlockHoundIntegration": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application.yml": {
