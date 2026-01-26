@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { SERVER_MAIN_SRC_DIR } from '../../../generator-constants.ts';
+import { moveToJavaPackageSrcDir } from '../../../java/support/files.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';
 
 export default class SpringBootLiquibaseGenerator extends SpringBootApplicationGenerator {
@@ -28,6 +30,27 @@ export default class SpringBootLiquibaseGenerator extends SpringBootApplicationG
       await this.dependsOnBootstrap('spring-boot');
       await this.dependsOnJHipster('liquibase');
     }
+  }
+
+  get writing() {
+    return this.asWritingTaskGroup({
+      async writeFiles({ application }) {
+        await this.writeFiles({
+          blocks: [
+            {
+              path: `${SERVER_MAIN_SRC_DIR}_package_/`,
+              renameTo: moveToJavaPackageSrcDir,
+              templates: ['config/LiquibaseConfiguration.java'],
+            },
+          ],
+          context: application,
+        });
+      },
+    });
+  }
+
+  get [SpringBootApplicationGenerator.WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.writing);
   }
 
   get postWriting() {

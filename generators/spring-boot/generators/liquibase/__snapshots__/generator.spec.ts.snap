@@ -30,5 +30,8 @@ exports[`generator - spring-boot:liquibase with defaults options should match fi
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/config/LiquibaseConfiguration.java": {
+    "stateCleared": "modified",
+  },
 }
 `;

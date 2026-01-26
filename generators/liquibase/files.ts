@@ -17,18 +17,9 @@
  * limitations under the License.
  */
 import { asWriteFilesSection } from '../base-application/support/task-type-inference.ts';
-import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR } from '../generator-constants.ts';
-import { moveToJavaPackageSrcDir } from '../java/support/index.ts';
+import { SERVER_MAIN_RES_DIR } from '../generator-constants.ts';
 
 export const liquibaseFiles = asWriteFilesSection({
-  liquibase: [
-    {
-      condition: ctx => ctx.backendTypeSpringBoot,
-      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: ['config/LiquibaseConfiguration.java'],
-    },
-  ],
   gradle: [
     {
       condition: ctx => ctx.buildToolGradle,
