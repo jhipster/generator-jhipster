@@ -72,14 +72,6 @@ exports[`generator - spring-boot:cache caffeine-gradle should match source calls
       },
     ],
   ],
-  "editJavaFile": [
-    [
-      "src/test/java/com/mycompany/myapp/IntegrationTest.java",
-      {
-        "annotations": [],
-      },
-    ],
-  ],
   "ignoreSonarRule": [
     {
       "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
@@ -151,14 +143,6 @@ exports[`generator - spring-boot:cache caffeine-maven should match source calls 
       },
     ],
   ],
-  "editJavaFile": [
-    [
-      "src/test/java/com/mycompany/myapp/IntegrationTest.java",
-      {
-        "annotations": [],
-      },
-    ],
-  ],
   "ignoreSonarRule": [
     {
       "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
@@ -222,14 +206,6 @@ exports[`generator - spring-boot:cache ehcache-gradle should match source calls 
       },
     ],
   ],
-  "editJavaFile": [
-    [
-      "src/test/java/com/mycompany/myapp/IntegrationTest.java",
-      {
-        "annotations": [],
-      },
-    ],
-  ],
   "ignoreSonarRule": [
     {
       "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
@@ -290,14 +266,6 @@ exports[`generator - spring-boot:cache ehcache-maven should match source calls 1
             "groupId": "org.hibernate.orm",
           },
         ],
-      },
-    ],
-  ],
-  "editJavaFile": [
-    [
-      "src/test/java/com/mycompany/myapp/IntegrationTest.java",
-      {
-        "annotations": [],
       },
     ],
   ],
@@ -389,14 +357,6 @@ exports[`generator - spring-boot:cache hazelcast-gradle should match source call
       },
     ],
   ],
-  "editJavaFile": [
-    [
-      "src/test/java/com/mycompany/myapp/IntegrationTest.java",
-      {
-        "annotations": [],
-      },
-    ],
-  ],
   "ignoreSonarRule": [
     {
       "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
@@ -462,14 +422,6 @@ exports[`generator - spring-boot:cache hazelcast-maven should match source calls
             "version": "'HAZELCAST-HIBERNATE-53-VERSION'",
           },
         ],
-      },
-    ],
-  ],
-  "editJavaFile": [
-    [
-      "src/test/java/com/mycompany/myapp/IntegrationTest.java",
-      {
-        "annotations": [],
       },
     ],
   ],
@@ -550,14 +502,6 @@ exports[`generator - spring-boot:cache infinispan-gradle should match source cal
       },
     ],
   ],
-  "editJavaFile": [
-    [
-      "src/test/java/com/mycompany/myapp/IntegrationTest.java",
-      {
-        "annotations": [],
-      },
-    ],
-  ],
   "ignoreSonarRule": [
     {
       "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
@@ -635,14 +579,6 @@ exports[`generator - spring-boot:cache infinispan-maven should match source call
       },
     ],
   ],
-  "editJavaFile": [
-    [
-      "src/test/java/com/mycompany/myapp/IntegrationTest.java",
-      {
-        "annotations": [],
-      },
-    ],
-  ],
   "ignoreSonarRule": [
     {
       "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
@@ -713,14 +649,6 @@ exports[`generator - spring-boot:cache memcached-gradle should match source call
       },
       {
         "condition": false,
-      },
-    ],
-  ],
-  "editJavaFile": [
-    [
-      "src/test/java/com/mycompany/myapp/IntegrationTest.java",
-      {
-        "annotations": [],
       },
     ],
   ],
@@ -797,14 +725,6 @@ exports[`generator - spring-boot:cache memcached-maven should match source calls
       },
     ],
   ],
-  "editJavaFile": [
-    [
-      "src/test/java/com/mycompany/myapp/IntegrationTest.java",
-      {
-        "annotations": [],
-      },
-    ],
-  ],
   "ignoreSonarRule": [
     {
       "comment": "Rule https://rules.sonarsource.com/java/RSPEC-1192, there is no easy way to avoid this issue",
@@ -827,13 +747,7 @@ exports[`generator - spring-boot:cache redis-gradle should match files snapshot 
   "src/main/java/com/mycompany/myapp/config/CacheKeyGeneratorConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/EmbeddedRedis.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/config/RedisTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/config/RedisTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
 }
@@ -883,11 +797,8 @@ exports[`generator - spring-boot:cache redis-gradle should match source calls 1`
       },
     ],
   ],
-  "addTestSpringFactory": [
-    {
-      "key": "org.springframework.test.context.ContextCustomizerFactory",
-      "value": "com.mycompany.myapp.config.RedisTestContainersSpringContextCustomizerFactory",
-    },
+  "addSpringBootModule": [
+    "spring-boot-testcontainers",
   ],
   "editJavaFile": [
     [
@@ -895,9 +806,13 @@ exports[`generator - spring-boot:cache redis-gradle should match source calls 1`
       {
         "annotations": [
           {
-            "annotation": "EmbeddedRedis",
-            "package": "com.mycompany.myapp.config",
+            "annotation": "ImportTestcontainers",
+            "package": "org.springframework.boot.testcontainers.context",
+            "parameters": [Function],
           },
+        ],
+        "imports": [
+          "com.mycompany.myapp.config.RedisTestContainer",
         ],
       },
     ],
@@ -924,13 +839,7 @@ exports[`generator - spring-boot:cache redis-maven should match files snapshot 1
   "src/main/java/com/mycompany/myapp/config/CacheKeyGeneratorConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/EmbeddedRedis.java": {
-    "stateCleared": "modified",
-  },
   "src/test/java/com/mycompany/myapp/config/RedisTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/config/RedisTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
 }
@@ -980,11 +889,8 @@ exports[`generator - spring-boot:cache redis-maven should match source calls 1`]
       },
     ],
   ],
-  "addTestSpringFactory": [
-    {
-      "key": "org.springframework.test.context.ContextCustomizerFactory",
-      "value": "com.mycompany.myapp.config.RedisTestContainersSpringContextCustomizerFactory",
-    },
+  "addSpringBootModule": [
+    "spring-boot-testcontainers",
   ],
   "editJavaFile": [
     [
@@ -992,9 +898,13 @@ exports[`generator - spring-boot:cache redis-maven should match source calls 1`]
       {
         "annotations": [
           {
-            "annotation": "EmbeddedRedis",
-            "package": "com.mycompany.myapp.config",
+            "annotation": "ImportTestcontainers",
+            "package": "org.springframework.boot.testcontainers.context",
+            "parameters": [Function],
           },
+        ],
+        "imports": [
+          "com.mycompany.myapp.config.RedisTestContainer",
         ],
       },
     ],

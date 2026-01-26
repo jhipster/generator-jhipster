@@ -101,6 +101,7 @@ public @interface IntegrationTest {}
           clientFramework: 'no',
           enableHibernateCache: true,
         })
+        .withMockedSource({ except: ['addEntryToCache', 'addEntityToCache'] })
         .withFiles({
           'src/test/java/com/mycompany/myapp/IntegrationTest.java': `
 public @interface IntegrationTest {}
