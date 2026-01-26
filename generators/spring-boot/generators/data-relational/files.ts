@@ -66,7 +66,18 @@ export const sqlFiles = asWriteFilesSection<Application>({
   testContainers: [
     {
       ...javaTestPackageTemplatesBlock(),
+      condition: data => !data.implementsDynamicSourceTestcontainersSupport,
       templates: ['config/EmbeddedSQL.java', 'config/SqlTestContainer.java', 'config/SqlTestContainersSpringContextCustomizerFactory.java'],
+    },
+    {
+      ...javaTestPackageTemplatesBlock(),
+      condition: data => Boolean(data.testcontainerClass),
+      templates: [
+        {
+          sourceFile: data =>
+            `config/DatabaseTestcontainer_${data.implementsDynamicSourceTestcontainersSupport ? 'devprod' : 'prodonly'}.java`,
+        },
+      ],
     },
     {
       ...javaTestResourceTemplatesBlock(),
@@ -98,39 +109,8 @@ export const h2Files = asWriteFilesSection<Application>({
 export const mysqlFiles = asWriteFilesSection<Application>({
   serverTestSources: [
     {
-      ...javaTestPackageTemplatesBlock(),
-      templates: ['config/MysqlTestContainer.java'],
-    },
-    {
       ...javaTestResourceTemplatesBlock(),
       templates: ['conf/mysql/my.cnf'],
-    },
-  ],
-});
-
-export const mariadbFiles = asWriteFilesSection<Application>({
-  serverTestSources: [
-    {
-      ...javaTestPackageTemplatesBlock(),
-      templates: ['config/MariadbTestContainer.java'],
-    },
-  ],
-});
-
-export const mssqlFiles = asWriteFilesSection<Application>({
-  serverTestSources: [
-    {
-      ...javaTestPackageTemplatesBlock(),
-      templates: ['config/MsSqlTestContainer.java'],
-    },
-  ],
-});
-
-export const postgresFiles = asWriteFilesSection<Application>({
-  serverTestSources: [
-    {
-      ...javaTestPackageTemplatesBlock(),
-      templates: ['config/PostgreSqlTestContainer.java'],
     },
   ],
 });
@@ -139,9 +119,6 @@ export const serverFiles = mergeSections(
   sqlFiles,
   addSectionsCondition(h2Files, context => context.devDatabaseTypeH2Any),
   addSectionsCondition(mysqlFiles, context => context.prodDatabaseTypeMysql),
-  addSectionsCondition(mariadbFiles, context => context.prodDatabaseTypeMariadb),
-  addSectionsCondition(mssqlFiles, context => context.prodDatabaseTypeMssql),
-  addSectionsCondition(postgresFiles, context => context.prodDatabaseTypePostgresql),
 );
 
 export default asWritingTask<Entity, Application>(async function writeSqlFiles({ application }) {

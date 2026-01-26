@@ -1,0 +1,59 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+package <%= packageName %>.config;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import <%- testcontainerClassPackage %>.<%- testcontainerClass %>;
+import org.testcontainers.containers.output.Slf4jLogConsumer;
+import org.testcontainers.junit.jupiter.Container;
+
+public interface DatabaseTestcontainer {
+
+    @Container
+    <%- testcontainerClass %><%- useTestcontainersV1 ? '<?>' : '' %> databaseContainer = <%- useTestcontainersV1 ? `(${testcontainerClass}) ` : '' %>new <%- testcontainerClass %><%- useTestcontainersV1 ? '<>' : '' %>("<%- testcontainerDockerImageName %>")
+        .withDatabaseName("<%= baseName %>")
+        <%- testcontainerClassInitialization %>
+        .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(DatabaseTestcontainer.class)))
+        .withReuse(true);
+
+    @DynamicPropertySource
+    static void registerProperties(DynamicPropertyRegistry registry) {
+<%_ if (reactive) { _%>
+        registry.add("spring.r2dbc.url", () -> databaseContainer.getJdbcUrl().replace("jdbc", "r2dbc")<% if (prodDatabaseTypeMariadb) { %>.replace("mariadb", "mysql")<% } else if (prodDatabaseTypeMssql) { %>.replace(";encrypt=false", "")<% } %> + "<%- prodDatabaseExtraOptions %>");
+        registry.add("spring.r2dbc.username", databaseContainer::getUsername);
+        registry.add("spring.r2dbc.password", databaseContainer::getPassword);
+  <%_ if (prodDatabaseExtraOptions) { _%>
+        registry.add("spring.liquibase.url", () -> databaseContainer.getJdbcUrl() + "<%- prodDatabaseExtraOptions %>");
+  <%_ } else { _%>
+        registry.add("spring.liquibase.url", databaseContainer::getJdbcUrl);
+  <%_ } _%>
+<%_ } else { _%>
+  <%_ if (prodDatabaseExtraOptions) { _%>
+        registry.add("spring.datasource.url", () -> databaseContainer.getJdbcUrl() + "<%- prodDatabaseExtraOptions %>");
+  <%_ } else { _%>
+        registry.add("spring.datasource.url", databaseContainer::getJdbcUrl);
+  <%_ } _%>
+        registry.add("spring.datasource.username", databaseContainer::getUsername);
+        registry.add("spring.datasource.password", databaseContainer::getPassword);
+<%_ } _%>
+    }
+}

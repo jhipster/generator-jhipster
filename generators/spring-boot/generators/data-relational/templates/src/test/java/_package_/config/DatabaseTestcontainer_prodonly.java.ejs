@@ -18,41 +18,44 @@
 -%>
 package <%= packageName %>.config;
 
-import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testcontainers.<%= springBoot4 ? 'postgresql' : 'containers' %>.PostgreSQLContainer;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
+import org.testcontainers.containers.JdbcDatabaseContainer;
+import <%- testcontainerClassPackage %>.<%- testcontainerClass %>;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import java.util.Collections;
 
-public class PostgreSqlTestContainer implements SqlTestContainer {
+public class DatabaseTestcontainer implements SqlTestContainer, InitializingBean, DisposableBean {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PostgreSqlTestContainer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DatabaseTestcontainer.class);
 
-    private PostgreSQLContainer<%- springBoot4 ? '' : '<?>' %> postgreSQLContainer;
+    private <%- testcontainerClass %><%- useTestcontainersV1 ? '<?>' : '' %> databaseContainer;
 
     @Override
     public void destroy() {
-        if (null != postgreSQLContainer && postgreSQLContainer.isRunning()) {
-            postgreSQLContainer.stop();
+        if (null != databaseContainer && databaseContainer.isRunning()) {
+            databaseContainer.stop();
         }
     }
+
     @Override
     public void afterPropertiesSet() {
-        if (null == postgreSQLContainer) {
-            postgreSQLContainer = new PostgreSQLContainer<%- springBoot4 ? '' : '<>' %>("<%- dockerContainers.postgresql %>")
+        if (null == databaseContainer) {
+            databaseContainer = <%- useTestcontainersV1 ? `(${testcontainerClass}) ` : '' %>new <%- testcontainerClass %><%- useTestcontainersV1 ? '<>' : '' %>("<%- testcontainerDockerImageName %>")
                 .withDatabaseName("<%= baseName %>")
-                .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
+                <%- testcontainerClassInitialization %>
                 .withLogConsumer(new Slf4jLogConsumer(LOG))
                 .withReuse(true);
         }
-        if (!postgreSQLContainer.isRunning()) {
-            postgreSQLContainer.start();
+        if (!databaseContainer.isRunning()) {
+            databaseContainer.start();
         }
     }
 
     @Override
     public JdbcDatabaseContainer<?> getTestContainer() {
-        return postgreSQLContainer;
+        return databaseContainer;
     }
 }

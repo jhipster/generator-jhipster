@@ -26,7 +26,12 @@ import BaseApplicationGenerator from '../../../base-application/index.ts';
 import cleanupTask from './cleanup.ts';
 import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.ts';
 import writeTask from './files.ts';
-import { getDatabaseTypeMavenDefinition, getH2MavenDefinition, javaSqlDatabaseArtifacts } from './internal/dependencies.ts';
+import {
+  getDatabaseTypeMavenDefinition,
+  getH2MavenDefinition,
+  getTestcontainerSupport,
+  javaSqlDatabaseArtifacts,
+} from './internal/dependencies.ts';
 import { getDBCExtraOption, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from './support/index.ts';
 import type {
   Application as SpringDataRelationalApplication,
@@ -72,10 +77,19 @@ export default class SqlGenerator extends BaseApplicationGenerator<
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      async preparing({ application }) {
+      async preparing({ application, applicationDefaults }) {
         prepareSqlApplicationProperties({ application });
         application.devDatabaseExtraOptions = getDBCExtraOption(application.devDatabaseType);
         application.prodDatabaseExtraOptions = getDBCExtraOption(application.prodDatabaseType);
+
+        const { prodDatabaseType, springBoot4, dockerContainers } = application;
+        applicationDefaults(getTestcontainerSupport({ databaseType: prodDatabaseType, springBoot4, dockerContainers }));
+
+        applicationDefaults({
+          implementsDynamicSourceTestcontainersSupport: data =>
+            Boolean(!application.devDatabaseTypeH2Any && data.testcontainerClass && data.springBoot4),
+          useTestcontainersV1: data => Boolean(data.testcontainerClassPackage?.endsWith('.containers')),
+        });
       },
     });
   }
@@ -125,6 +139,23 @@ export default class SqlGenerator extends BaseApplicationGenerator<
 
   get writing() {
     return this.asWritingTaskGroup({
+      async cleanup({ application, control }) {
+        await control.cleanupFiles({
+          '9.0.0-beta.1': [
+            [
+              !application.devDatabaseTypeH2Any! && application.springBoot4,
+              `${application.srcTestJava}config/EmbeddedSQL.java`,
+              `${application.srcTestJava}config/SqlTestContainer.java`,
+              `${application.srcTestJava}config/SqlTestContainersSpringContextCustomizerFactory.java`,
+              `${application.srcTestResources}META-INF/spring.factories`,
+            ],
+            [application.prodDatabaseTypeMysql!, `${application.srcTestJava}config/MysqlTestContainer.java`],
+            [application.prodDatabaseTypeMariadb!, `${application.srcTestJava}config/MariadbTestContainer.java`],
+            [application.prodDatabaseTypeMssql!, `${application.srcTestJava}config/MsSqlTestContainer.java`],
+            [application.prodDatabaseTypePostgresql!, `${application.srcTestJava}config/PostgreSqlTestContainer.java`],
+          ],
+        });
+      },
       cleanupTask,
       writeTask,
     });
@@ -148,6 +179,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addTestSpringFactory({ source, application }) {
+        if (application.implementsDynamicSourceTestcontainersSupport) return;
         source.addTestSpringFactory?.({
           key: 'org.springframework.test.context.ContextCustomizerFactory',
           value: `${application.packageName}.config.SqlTestContainersSpringContextCustomizerFactory`,
@@ -169,7 +201,12 @@ export default class SqlGenerator extends BaseApplicationGenerator<
           inProfile: devDatabaseTypeH2Any ? 'prod' : undefined,
           javaDependencies,
         });
-        const h2Definitions = devDatabaseTypeH2Any ? getH2MavenDefinition({ prodDatabaseType, packageFolder }) : undefined;
+        const h2Definitions = devDatabaseTypeH2Any
+          ? getH2MavenDefinition({
+              implementsTestcontainersSupport: Boolean(application.testcontainerClass),
+              packageFolder,
+            })
+          : undefined;
 
         if (application.springBoot4) {
           source.addSpringBootModule!('spring-boot-h2console');
@@ -178,6 +215,9 @@ export default class SqlGenerator extends BaseApplicationGenerator<
         }
 
         source.addSpringBootModule?.(`spring-boot-starter-data-${reactive ? 'r2dbc' : 'jpa'}`);
+        if (application.implementsDynamicSourceTestcontainersSupport) {
+          source.addSpringBootModule?.('spring-boot-testcontainers');
+        }
 
         if (!application.reactive) {
           source.addIntegrationTestAnnotation?.({
@@ -270,9 +310,22 @@ export default class SqlGenerator extends BaseApplicationGenerator<
         }
       },
       integrationTest({ application, source }) {
-        source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
-          annotations: [{ package: `${application.packageName}.config`, annotation: 'EmbeddedSQL' }],
-        });
+        if (application.implementsDynamicSourceTestcontainersSupport) {
+          source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
+            imports: [`${application.packageName}.config.DatabaseTestcontainer`],
+            annotations: [
+              {
+                package: 'org.springframework.boot.testcontainers.context',
+                annotation: 'ImportTestcontainers',
+                parameters: (_, cb) => cb.addKeyValue('value', 'DatabaseTestcontainer.class'),
+              },
+            ],
+          });
+        } else {
+          source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
+            annotations: [{ package: `${application.packageName}.config`, annotation: 'EmbeddedSQL' }],
+          });
+        }
       },
       nativeHints({ application, source }) {
         if (!application.graalvmSupport) return;

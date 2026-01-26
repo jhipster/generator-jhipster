@@ -19,17 +19,57 @@
 
 import type { JavaDependency } from '../../../../java/types.ts';
 import type { MavenDefinition, MavenDependency, MavenPlugin } from '../../../../java-simple-application/generators/maven/types.ts';
+import type { TestcontainerSupport } from '../types.ts';
 
 type DatabaseTypeDependencies = {
   jdbc: MavenDefinition;
   r2dbc: MavenDefinition;
 };
 
-const testcontainerFileForDB: Record<string, string> = {
-  mariadb: 'MariadbTestContainer.java',
-  mssql: 'MsSqlTestContainer.java',
-  mysql: 'MysqlTestContainer.java',
-  postgresql: 'PostgreSqlTestContainer.java',
+export const getTestcontainerSupport = ({
+  databaseType,
+  springBoot4,
+  dockerContainers,
+}: {
+  databaseType: string;
+  springBoot4: boolean;
+  dockerContainers: Record<string, string>;
+}): TestcontainerSupport => {
+  return (
+    {
+      mariadb: {
+        testcontainerClass: 'MariaDBContainer',
+        testcontainerClassPackage: 'org.testcontainers.containers',
+        testcontainerClassInitialization: '',
+        testcontainerDockerImageName: dockerContainers.mariadb,
+      },
+      mssql: {
+        testcontainerClass: 'MSSQLServerContainer',
+        testcontainerClassPackage: 'org.testcontainers.containers',
+        testcontainerClassInitialization: `// You are required to accept EULA license for SQL server containers
+                // Refer to https://java.testcontainers.org/modules/databases/mssqlserver/
+                //.acceptLicense()`,
+        testcontainerDockerImageName: dockerContainers!.mssql,
+      },
+      mysql: {
+        testcontainerClass: 'MySQLContainer',
+        testcontainerClassPackage: 'org.testcontainers.containers',
+        testcontainerClassInitialization: '.withConfigurationOverride("conf/mysql")',
+        testcontainerDockerImageName: dockerContainers!.mysql,
+      },
+      postgresql: {
+        testcontainerClass: 'PostgreSQLContainer',
+        testcontainerClassPackage: `org.testcontainers.${springBoot4 ? 'postgresql' : 'containers'}`,
+        testcontainerClassInitialization: '',
+        testcontainerDockerImageName: dockerContainers!.postgresql,
+      },
+    }[databaseType] ?? {
+      testcontainerClass: undefined,
+      testcontainerClassPackage: undefined,
+      testcontainerClassInitialization: undefined,
+      testcontainerDockerImageName: undefined,
+    }
+  );
 };
 
 export type DatabaseArtifact = { jdbc: JavaDependency; r2dbc?: JavaDependency; testContainer?: JavaDependency };
@@ -68,14 +108,13 @@ export const javaSqlDatabaseArtifacts = {
 } as const satisfies Record<string, DatabaseArtifact>;
 
 export const getH2MavenDefinition = ({
-  prodDatabaseType,
+  implementsTestcontainersSupport,
   packageFolder,
 }: {
-  prodDatabaseType: keyof Omit<typeof javaSqlDatabaseArtifacts, 'h2'>;
+  implementsTestcontainersSupport: boolean;
   packageFolder: string;
 }): DatabaseTypeDependencies => {
-  const testcontainerFile = testcontainerFileForDB[prodDatabaseType];
-  const excludeContainerPlugin: MavenPlugin[] = testcontainerFile
+  const excludeContainerPlugin: MavenPlugin[] = implementsTestcontainersSupport
     ? [
         {
           inProfile: 'dev',
@@ -84,7 +123,7 @@ export const getH2MavenDefinition = ({
           additionalContent: `
 <configuration>
   <testExcludes>
-    <testExclude>${packageFolder}config/${testcontainerFile}</testExclude>
+    <testExclude>${packageFolder}config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 `,

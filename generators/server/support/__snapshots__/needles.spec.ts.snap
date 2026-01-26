@@ -335,19 +335,10 @@ exports[`generator - server - support - needles generated project should match s
   "src/test/java/com/mycompany/myapp/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/config/PostgreSqlTestContainer.java": {
+  "src/test/java/com/mycompany/myapp/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/config/SqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/config/SqlTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/StaticResourcesWebConfigurerTest.java": {
@@ -438,9 +429,6 @@ exports[`generator - server - support - needles generated project should match s
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {
