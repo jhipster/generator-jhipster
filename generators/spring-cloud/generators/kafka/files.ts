@@ -17,16 +17,11 @@
  * limitations under the License.
  */
 import { asWriteFilesSection } from '../../../base-application/support/task-type-inference.ts';
-import { GRADLE_BUILD_SRC_MAIN_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../../../generator-constants.ts';
+import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../../../generator-constants.ts';
 import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../../../java/support/index.ts';
 
 export const kafkaFiles = asWriteFilesSection({
   config: [
-    {
-      condition: data => data.buildToolGradle,
-      path: GRADLE_BUILD_SRC_MAIN_DIR,
-      templates: ['jhipster.kafka-conventions.gradle'],
-    },
     {
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
@@ -49,11 +44,7 @@ export const kafkaFiles = asWriteFilesSection({
     {
       path: `${SERVER_TEST_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageTestDir,
-      templates: [
-        'config/KafkaTestContainer.java',
-        'config/EmbeddedKafka.java',
-        'config/KafkaTestContainersSpringContextCustomizerFactory.java',
-      ],
+      templates: ['config/KafkaTestContainer.java'],
     },
     {
       path: `${SERVER_TEST_SRC_DIR}_package_/`,

@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 
+import { GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.ts';
 import { SpringBootApplicationGenerator } from '../../../spring-boot/generator.ts';
 
 import cleanupKafkaFilesTask from './cleanup.ts';
@@ -35,6 +36,16 @@ export default class KafkaGenerator extends SpringBootApplicationGenerator {
 
   get writing() {
     return this.asWritingTaskGroup({
+      async cleanup({ application, control }) {
+        await control.cleanupFiles({
+          '9.0.0-beta.1': [
+            [application.buildToolGradle, `${GRADLE_BUILD_SRC_MAIN_DIR}jhipster.kafka-conventions.gradle`],
+            `${application.javaPackageSrcDir}config/KafkaTestContainersSpringContextCustomizerFactory.java`,
+            `${application.javaPackageSrcDir}config/EmbeddedKafka.java`,
+            `${application.srcTestResources}META-INF/spring.factories`,
+          ],
+        });
+      },
       cleanupKafkaFilesTask,
       async writing({ application }) {
         await this.writeFiles({
@@ -51,58 +62,54 @@ export default class KafkaGenerator extends SpringBootApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      customizeApplicationForKafka({ source, application }) {
-        source.addMainLog?.({ name: 'org.apache.kafka', level: 'INFO' });
+      customizeLog({ source }) {
+        source.addMainLog?.({ name: 'org.apache.kafka', level: 'WARN' });
         source.addTestLog?.({ name: 'kafka', level: 'WARN' });
         source.addTestLog?.({ name: 'org.I0Itec', level: 'WARN' });
-        source.addIntegrationTestAnnotation?.({ package: `${application.packageName}.config`, annotation: 'EmbeddedKafka' });
-
-        source.addTestSpringFactory?.({
-          key: 'org.springframework.test.context.ContextCustomizerFactory',
-          value: `${application.packageName}.config.KafkaTestContainersSpringContextCustomizerFactory`,
+      },
+      integrationTest({ application, source }) {
+        source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
+          imports: [`${application.packageName}.config.KafkaTestContainer`],
+          annotations: [
+            {
+              package: 'org.springframework.boot.testcontainers.context',
+              annotation: 'ImportTestcontainers',
+              parameters: (_, cb) => cb.addKeyValue('value', 'KafkaTestContainer.class'),
+            },
+          ],
         });
       },
-      applyKafkaGradleConventionPlugin({ source, application }) {
-        if (application.buildToolGradle) {
-          source.addGradlePlugin?.({ id: 'jhipster.kafka-conventions' });
-        }
-      },
-      addKafkaMavenDependencies({ application, source }) {
-        if (application.buildToolMaven) {
-          source.addMavenDependency?.([
-            {
-              groupId: 'org.springframework.cloud',
-              artifactId: 'spring-cloud-stream',
-            },
-            {
-              groupId: 'org.springframework.cloud',
-              artifactId: 'spring-cloud-starter-stream-kafka',
-            },
-            {
-              groupId: 'org.springframework.cloud',
-              artifactId: 'spring-cloud-stream-test-binder',
-              scope: 'test',
-            },
-            {
-              groupId: 'org.testcontainers',
-              artifactId: 'testcontainers-junit-jupiter',
-              scope: 'test',
-            },
-            {
-              groupId: 'org.testcontainers',
-              artifactId: 'testcontainers',
-              scope: 'test',
-            },
-            {
-              groupId: 'org.testcontainers',
-              artifactId: 'testcontainers-kafka',
-              scope: 'test',
-            },
-          ]);
-        }
-      },
-      addLog({ source }) {
-        source.addMainLog!({ name: 'org.apache.kafka', level: 'WARN' });
+      addDependencies({ source }) {
+        source.addJavaDependencies?.([
+          {
+            groupId: 'org.springframework.cloud',
+            artifactId: 'spring-cloud-stream',
+          },
+          {
+            groupId: 'org.springframework.cloud',
+            artifactId: 'spring-cloud-starter-stream-kafka',
+          },
+          {
+            groupId: 'org.springframework.cloud',
+            artifactId: 'spring-cloud-stream-test-binder',
+            scope: 'test',
+          },
+          {
+            groupId: 'org.testcontainers',
+            artifactId: 'testcontainers-junit-jupiter',
+            scope: 'test',
+          },
+          {
+            groupId: 'org.testcontainers',
+            artifactId: 'testcontainers',
+            scope: 'test',
+          },
+          {
+            groupId: 'org.testcontainers',
+            artifactId: 'testcontainers-kafka',
+            scope: 'test',
+          },
+        ]);
       },
     });
   }
