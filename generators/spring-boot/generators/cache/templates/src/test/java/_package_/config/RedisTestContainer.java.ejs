@@ -35,6 +35,6 @@ public interface RedisTestContainer {
 
     @DynamicPropertySource
     static void registerProperties(DynamicPropertyRegistry registry) {
-        registry.add("jhipster.cache.redis.server", "redis://" + redisContainer.getContainerIpAddress() + ":" + redisContainer.getMappedPort(6379));
+        registry.add("jhipster.cache.redis.server", () -> "redis://" + redisContainer.getContainerIpAddress() + ":" + redisContainer.getMappedPort(6379));
     }
 }
