@@ -16,7 +16,7 @@
     "react-loadable": "5.5.0",
     "react-redux": "9.2.0",
     "react-redux-loading-bar": "5.0.8",
-    "react-router-dom": "7.12.0",
+    "react-router-dom": "7.13.0",
     "react-toastify": "11.0.5",
     "reactstrap": "9.2.3",
     "redux": "5.0.1",
