@@ -54,7 +54,7 @@ export default class ElasticsearchGenerator extends SpringBootApplicationGenerat
       async cleanup({ application, control }) {
         await control.cleanupFiles({
           '9.0.0-beta.1': [
-            `${application.javaPackageSrcDir}TestContainersSpringContextCustomizerFactory.java`,
+            `${application.javaPackageSrcDir}config/TestContainersSpringContextCustomizerFactory.java`,
             `${application.javaPackageSrcDir}config/EmbeddedElasticsearch.java`,
             `${application.srcTestResources}META-INF/spring.factories`,
           ],
