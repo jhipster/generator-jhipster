@@ -122,6 +122,14 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
         await control.cleanupFiles({
           '8.9.1': [[application.cacheProviderInfinispan!, `${application.javaPackageSrcDir}config/CacheFactoryConfiguration.java`]],
           '9.0.0-alpha.0': [`${GRADLE_BUILD_SRC_MAIN_DIR}/jhipster.spring-cache-conventions.gradle`],
+          '9.0.0-beta.1': [
+            [
+              application.cacheProviderRedis!,
+              `${application.javaPackageSrcDir}config/RedisTestContainersSpringContextCustomizerFactory.java`,
+              `${application.javaPackageSrcDir}config/EmbeddedRedis.java`,
+              `${application.srcTestResources}META-INF/spring.factories`,
+            ],
+          ],
         });
       },
       async writeTask({ application }) {
@@ -142,11 +150,7 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
                 condition: () => application.cacheProviderRedis,
                 path: `${SERVER_TEST_SRC_DIR}_package_/`,
                 renameTo: moveToJavaPackageTestDir,
-                templates: [
-                  'config/EmbeddedRedis.java',
-                  'config/RedisTestContainer.java',
-                  'config/RedisTestContainersSpringContextCustomizerFactory.java',
-                ],
+                templates: ['config/RedisTestContainer.java'],
               },
             ],
           },
@@ -162,14 +166,6 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      addTestSpringFactory({ source, application }) {
-        if (application.cacheProviderRedis) {
-          source.addTestSpringFactory?.({
-            key: 'org.springframework.test.context.ContextCustomizerFactory',
-            value: `${application.packageName}.config.RedisTestContainersSpringContextCustomizerFactory`,
-          });
-        }
-      },
       applyGradleScript({ source, application }) {
         if (application.buildToolGradle) {
           const applicationAny = application as any;
@@ -219,13 +215,24 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
             ...definition.hibernateCache,
           },
         );
+
+        if (application.cacheProviderRedis) {
+          source.addSpringBootModule!('spring-boot-testcontainers');
+        }
       },
       integrationTest({ application, source }) {
-        source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
-          annotations: [
-            ...(application.cacheProviderRedis ? [{ package: `${application.packageName}.config`, annotation: 'EmbeddedRedis' }] : []),
-          ],
-        });
+        if (application.cacheProviderRedis) {
+          source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
+            imports: [`${application.packageName}.config.RedisTestContainer`],
+            annotations: [
+              {
+                package: 'org.springframework.boot.testcontainers.context',
+                annotation: 'ImportTestcontainers',
+                parameters: (_, cb) => cb.addKeyValue('value', 'RedisTestContainer.class'),
+              },
+            ],
+          });
+        }
       },
       sonar({ application, source }) {
         (source as CommonSource).ignoreSonarRule?.({
