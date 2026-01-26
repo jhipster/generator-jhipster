@@ -119,6 +119,9 @@ exports[`generator - server - support - needles generated project should match s
   "src/main/java/com/mycompany/myapp/config/JacksonHibernateConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/config/LiquibaseConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/LoggingAspectConfiguration.java": {
     "stateCleared": "modified",
   },
