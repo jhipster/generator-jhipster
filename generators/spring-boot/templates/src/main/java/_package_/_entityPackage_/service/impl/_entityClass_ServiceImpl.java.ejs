@@ -75,6 +75,9 @@ import java.util.List;
 <%_ if (!reactive) { _%>
 import java.util.Optional;
 <%_ } _%>
+<%_ if (updatableEntity && !dtoMapstruct && fields.some(field => !field.id && !field.transient)) { _%>
+import java.util.function.Consumer;
+<%_ } _%>
 <%_ if (primaryKey.typeUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
@@ -313,6 +316,14 @@ public class <%= serviceClassName %><% if (serviceImpl) { %> implements <%= enti
         return <%= entityInstance %><% if (searchEngineElasticsearch) { %>Search<% } %>Repository.search(query, pageable)<%_ if (!dtoMapstruct) { _%>;<% } else { %>
             .map(<%= entityToDtoReference %>);
   <%_ } } _%>
+    }
+<%_ } _%>
+<%_ if (updatableEntity && !dtoMapstruct && fields.some(field => !field.id && !field.transient)) { _%>
+
+    private <T> void updateIfPresent(Consumer<T> setter, T value) {
+        if (value != null) {
+            setter.accept(value);
+        }
     }
 <%_ } _%>
 }
