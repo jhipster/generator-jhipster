@@ -32,9 +32,7 @@ public interface Neo4jTestContainer {
     @Container
     Neo4jContainer neo4jContainer = (Neo4jContainer) new Neo4jContainer("<%- dockerContainers.neo4j %>")
         .withoutAuthentication()
-        .withStartupTimeout(Duration.ofMinutes(10))
-        .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(Neo4jTestContainer.class)))
-        .withReuse(true);
+        .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(Neo4jTestContainer.class)));
 
     @DynamicPropertySource
     static void registerProperties(DynamicPropertyRegistry registry) {
