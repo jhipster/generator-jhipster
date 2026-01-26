@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`generator - spring-boot:liquibase with defaults options should call source snapshot 1`] = `
+{
+  "addApplicationPropertiesClass": [
+    {
+      "classStructure": {
+        "asyncStart": [
+          "Boolean",
+          "true",
+        ],
+      },
+      "propertyType": "Liquibase",
+    },
+  ],
+  "addJavaDependencies": [
+    [
+      {
+        "artifactId": "spring-boot-starter-liquibase",
+        "exclusions": undefined,
+        "groupId": "org.springframework.boot",
+      },
+    ],
+  ],
+}
+`;
+
+exports[`generator - spring-boot:liquibase with defaults options should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+}
+`;

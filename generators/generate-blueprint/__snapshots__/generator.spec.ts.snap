@@ -1253,6 +1253,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/spring-boot/generators/jwt/templates/template-file-spring-boot:jwt.ejs": {
     "stateCleared": "modified",
   },
+  "generators/spring-boot/generators/liquibase/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/liquibase/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/liquibase/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/liquibase/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/liquibase/templates/template-file-spring-boot:liquibase.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/spring-boot/generators/oauth2/command.js": {
     "stateCleared": "modified",
   },

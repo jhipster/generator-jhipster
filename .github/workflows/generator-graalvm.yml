@@ -109,27 +109,28 @@ jobs:
       #----------------------------------------------------------------------
       - name: 'SETUP: setup graalvm'
         uses: graalvm/setup-graalvm@v1
+        if: steps.compare.outputs.has-backend-changes == 'true'
         with:
           java-version: ${{ matrix.java-version }}
           distribution: 'graalvm-community'
           github-token: ${{ secrets.GITHUB_TOKEN }}
           native-image-job-reports: 'true'
       - uses: jhipster/actions/build-jhipster-bom@v1
-        if: matrix.build-jhipster-bom && steps.compare.outputs.equals != 'true'
+        if: matrix.build-jhipster-bom && steps.compare.outputs.has-backend-changes == 'true'
         with:
           jhipster-bom-ref: ${{ matrix.jhipster-bom-branch }}
       - run: npm run native-package
-        if: steps.compare.outputs.equals != 'true'
+        if: steps.compare.outputs.has-backend-changes == 'true'
         id: packaging
         timeout-minutes: 20
       - run: npm run services:up
-        if: steps.compare.outputs.equals != 'true'
+        if: steps.compare.outputs.has-backend-changes == 'true'
       - run: npm run native-e2e --if-present
         id: e2e
-        if: steps.compare.outputs.equals != 'true'
+        if: steps.compare.outputs.has-backend-changes == 'true'
       - name: Store the application
         uses: actions/upload-artifact@v6
-        if: always() && (steps.e2e.outcome == 'failure' || steps.packaging.outcome == 'failure')
+        if: steps.compare.outputs.has-backend-changes == 'true' && always() && (steps.e2e.outcome == 'failure' || steps.packaging.outcome == 'failure')
         with:
           name: app-${{ matrix.sample }}
           include-hidden-files: true
@@ -144,12 +145,12 @@ jobs:
             !**/node_modules/**
       - name: 'E2E: Store failure screenshots'
         uses: actions/upload-artifact@v6
-        if: always() && steps.e2e.outcome == 'failure'
+        if: steps.compare.outputs.has-backend-changes == 'true' && always() && steps.e2e.outcome == 'failure'
         with:
           name: screenshots-${{ matrix.sample }}
           path: ${{ github.workspace }}/app/**/cypress/screenshots
       - name: Dump docker logs
-        if: always() && contains(matrix.os, 'ubuntu')
+        if: steps.compare.outputs.has-backend-changes == 'true' && always() && contains(matrix.os, 'ubuntu')
         uses: jwalton/gh-docker-logs@v2
 
   check-graalvm:

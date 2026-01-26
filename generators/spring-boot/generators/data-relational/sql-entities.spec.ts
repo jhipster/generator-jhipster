@@ -84,8 +84,8 @@ describe(`generator - ${databaseType} - entities`, () => {
       it(`should ${enableTranslation ? '' : 'not '}compose with jhipster:languages`, () => {
         expect(runResult.getGeneratorComposeCount('jhipster:languages')).toBe(enableTranslation ? 1 : 0);
       });
-      it('should compose with jhipster:liquibase', () => {
-        runResult.assertGeneratorComposedOnce('jhipster:liquibase');
+      it('should compose with jhipster:spring-boot:liquibase', () => {
+        runResult.assertGeneratorComposedOnce('jhipster:spring-boot:liquibase');
       });
       it('should match generated files snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
