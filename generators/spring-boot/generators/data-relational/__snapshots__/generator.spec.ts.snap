@@ -17,10 +17,10 @@ exports[`generator - sql gateway-jwt-mariadb-reactive(true)-gradle-enableTransla
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MariadbTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -215,7 +215,7 @@ exports[`generator - sql gateway-jwt-mariadb-reactive(true)-gradle-enableTransla
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>com/mycompany/config/MariadbTestContainer.java</testExclude>
+    <testExclude>com/mycompany/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -302,10 +302,10 @@ exports[`generator - sql gateway-jwt-mssql-reactive(true)-gradle-enableTranslati
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MsSqlTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -500,7 +500,7 @@ exports[`generator - sql gateway-jwt-mssql-reactive(true)-gradle-enableTranslati
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>com/mycompany/config/MsSqlTestContainer.java</testExclude>
+    <testExclude>com/mycompany/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -587,16 +587,7 @@ exports[`generator - sql gateway-jwt-mysql-reactive(false)-maven-enableTranslati
   "src/main/java/tech/jhipster/repository/AuthorityRepository.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/MysqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/SqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/SqlTestContainersSpringContextCustomizerFactory.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/timezone/HibernateTimeZoneIT.java": {
@@ -766,17 +757,12 @@ exports[`generator - sql gateway-jwt-mysql-reactive(false)-maven-enableTranslati
   "addSpringBootModule": [
     "spring-boot-h2console",
     "spring-boot-starter-data-jpa",
+    "spring-boot-testcontainers",
   ],
   "addTestLog": [
     {
       "level": "ERROR",
       "name": "org.hibernate.orm.incubating",
-    },
-  ],
-  "addTestSpringFactory": [
-    {
-      "key": "org.springframework.test.context.ContextCustomizerFactory",
-      "value": "tech.jhipster.config.SqlTestContainersSpringContextCustomizerFactory",
     },
   ],
   "editJavaFile": [
@@ -785,9 +771,13 @@ exports[`generator - sql gateway-jwt-mysql-reactive(false)-maven-enableTranslati
       {
         "annotations": [
           {
-            "annotation": "EmbeddedSQL",
-            "package": "tech.jhipster.config",
+            "annotation": "ImportTestcontainers",
+            "package": "org.springframework.boot.testcontainers.context",
+            "parameters": [Function],
           },
+        ],
+        "imports": [
+          "tech.jhipster.config.DatabaseTestcontainer",
         ],
       },
     ],
@@ -826,10 +816,10 @@ exports[`generator - sql gateway-jwt-mysql-reactive(true)-gradle-enableTranslati
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MysqlTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -1027,7 +1017,7 @@ exports[`generator - sql gateway-jwt-mysql-reactive(true)-gradle-enableTranslati
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>com/mycompany/config/MysqlTestContainer.java</testExclude>
+    <testExclude>com/mycompany/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -1596,16 +1586,7 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(false)-maven-enableTran
   "src/main/java/tech/jhipster/repository/AuthorityRepository.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/PostgreSqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/SqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/SqlTestContainersSpringContextCustomizerFactory.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/timezone/HibernateTimeZoneIT.java": {
@@ -1772,17 +1753,12 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(false)-maven-enableTran
   "addSpringBootModule": [
     "spring-boot-h2console",
     "spring-boot-starter-data-jpa",
+    "spring-boot-testcontainers",
   ],
   "addTestLog": [
     {
       "level": "ERROR",
       "name": "org.hibernate.orm.incubating",
-    },
-  ],
-  "addTestSpringFactory": [
-    {
-      "key": "org.springframework.test.context.ContextCustomizerFactory",
-      "value": "tech.jhipster.config.SqlTestContainersSpringContextCustomizerFactory",
     },
   ],
   "editJavaFile": [
@@ -1791,9 +1767,13 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(false)-maven-enableTran
       {
         "annotations": [
           {
-            "annotation": "EmbeddedSQL",
-            "package": "tech.jhipster.config",
+            "annotation": "ImportTestcontainers",
+            "package": "org.springframework.boot.testcontainers.context",
+            "parameters": [Function],
           },
+        ],
+        "imports": [
+          "tech.jhipster.config.DatabaseTestcontainer",
         ],
       },
     ],
@@ -1832,10 +1812,10 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(true)-gradle-enableTran
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/PostgreSqlTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -2030,7 +2010,7 @@ exports[`generator - sql gateway-jwt-postgresql-reactive(true)-gradle-enableTran
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>com/mycompany/config/PostgreSqlTestContainer.java</testExclude>
+    <testExclude>com/mycompany/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -2120,10 +2100,10 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(false)-maven-enableTran
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/MariadbTestContainer.java": {
+  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SqlTestContainer.java": {
@@ -2304,7 +2284,7 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(false)-maven-enableTran
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>tech/jhipster/config/MariadbTestContainer.java</testExclude>
+    <testExclude>tech/jhipster/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -2410,10 +2390,10 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(true)-gradle-enableTran
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MariadbTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -2617,7 +2597,7 @@ exports[`generator - sql gateway-oauth2-mariadb-reactive(true)-gradle-enableTran
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>com/mycompany/config/MariadbTestContainer.java</testExclude>
+    <testExclude>com/mycompany/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -2707,10 +2687,10 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(false)-maven-enableTransl
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/MsSqlTestContainer.java": {
+  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SqlTestContainer.java": {
@@ -2891,7 +2871,7 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(false)-maven-enableTransl
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>tech/jhipster/config/MsSqlTestContainer.java</testExclude>
+    <testExclude>tech/jhipster/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -2997,10 +2977,10 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(true)-gradle-enableTransl
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MsSqlTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -3204,7 +3184,7 @@ exports[`generator - sql gateway-oauth2-mssql-reactive(true)-gradle-enableTransl
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>com/mycompany/config/MsSqlTestContainer.java</testExclude>
+    <testExclude>com/mycompany/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -3309,10 +3289,10 @@ exports[`generator - sql gateway-oauth2-mysql-reactive(true)-gradle-enableTransl
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MysqlTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -3519,7 +3499,7 @@ exports[`generator - sql gateway-oauth2-mysql-reactive(true)-gradle-enableTransl
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>com/mycompany/config/MysqlTestContainer.java</testExclude>
+    <testExclude>com/mycompany/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -3908,10 +3888,10 @@ exports[`generator - sql gateway-oauth2-postgresql-reactive(true)-gradle-enableT
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/PostgreSqlTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -4115,7 +4095,7 @@ exports[`generator - sql gateway-oauth2-postgresql-reactive(true)-gradle-enableT
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>com/mycompany/config/PostgreSqlTestContainer.java</testExclude>
+    <testExclude>com/mycompany/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -4199,10 +4179,10 @@ exports[`generator - sql microservice-jwt-mariadb-reactive(true)-gradle-enableTr
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MariadbTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -4428,10 +4408,10 @@ exports[`generator - sql microservice-jwt-mssql-reactive(true)-gradle-enableTran
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MsSqlTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -4657,10 +4637,10 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/MysqlTestContainer.java": {
+  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SqlTestContainer.java": {
@@ -4835,7 +4815,7 @@ exports[`generator - sql microservice-jwt-mysql-reactive(false)-maven-enableTran
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>tech/jhipster/config/MysqlTestContainer.java</testExclude>
+    <testExclude>tech/jhipster/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -4920,10 +4900,10 @@ exports[`generator - sql microservice-jwt-mysql-reactive(true)-gradle-enableTran
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MysqlTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -5602,10 +5582,10 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/PostgreSqlTestContainer.java": {
+  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SqlTestContainer.java": {
@@ -5777,7 +5757,7 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(false)-maven-enabl
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>tech/jhipster/config/PostgreSqlTestContainer.java</testExclude>
+    <testExclude>tech/jhipster/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -5862,10 +5842,10 @@ exports[`generator - sql microservice-jwt-postgresql-reactive(true)-gradle-enabl
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/PostgreSqlTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -6088,16 +6068,7 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
   "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/MariadbTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/SqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/SqlTestContainersSpringContextCustomizerFactory.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/timezone/HibernateTimeZoneIT.java": {
@@ -6255,17 +6226,12 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
   "addSpringBootModule": [
     "spring-boot-h2console",
     "spring-boot-starter-data-jpa",
+    "spring-boot-testcontainers",
   ],
   "addTestLog": [
     {
       "level": "ERROR",
       "name": "org.hibernate.orm.incubating",
-    },
-  ],
-  "addTestSpringFactory": [
-    {
-      "key": "org.springframework.test.context.ContextCustomizerFactory",
-      "value": "tech.jhipster.config.SqlTestContainersSpringContextCustomizerFactory",
     },
   ],
   "editJavaFile": [
@@ -6274,9 +6240,13 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(false)-maven-enabl
       {
         "annotations": [
           {
-            "annotation": "EmbeddedSQL",
-            "package": "tech.jhipster.config",
+            "annotation": "ImportTestcontainers",
+            "package": "org.springframework.boot.testcontainers.context",
+            "parameters": [Function],
           },
+        ],
+        "imports": [
+          "tech.jhipster.config.DatabaseTestcontainer",
         ],
       },
     ],
@@ -6315,10 +6285,10 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MariadbTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -6513,7 +6483,7 @@ exports[`generator - sql microservice-oauth2-mariadb-reactive(true)-gradle-enabl
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>com/mycompany/config/MariadbTestContainer.java</testExclude>
+    <testExclude>com/mycompany/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -6594,16 +6564,7 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
   "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/MsSqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/SqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/SqlTestContainersSpringContextCustomizerFactory.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/timezone/HibernateTimeZoneIT.java": {
@@ -6761,17 +6722,12 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
   "addSpringBootModule": [
     "spring-boot-h2console",
     "spring-boot-starter-data-jpa",
+    "spring-boot-testcontainers",
   ],
   "addTestLog": [
     {
       "level": "ERROR",
       "name": "org.hibernate.orm.incubating",
-    },
-  ],
-  "addTestSpringFactory": [
-    {
-      "key": "org.springframework.test.context.ContextCustomizerFactory",
-      "value": "tech.jhipster.config.SqlTestContainersSpringContextCustomizerFactory",
     },
   ],
   "editJavaFile": [
@@ -6780,9 +6736,13 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(false)-maven-enableT
       {
         "annotations": [
           {
-            "annotation": "EmbeddedSQL",
-            "package": "tech.jhipster.config",
+            "annotation": "ImportTestcontainers",
+            "package": "org.springframework.boot.testcontainers.context",
+            "parameters": [Function],
           },
+        ],
+        "imports": [
+          "tech.jhipster.config.DatabaseTestcontainer",
         ],
       },
     ],
@@ -6821,10 +6781,10 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MsSqlTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -7019,7 +6979,7 @@ exports[`generator - sql microservice-oauth2-mssql-reactive(true)-gradle-enableT
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>com/mycompany/config/MsSqlTestContainer.java</testExclude>
+    <testExclude>com/mycompany/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -7106,10 +7066,10 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MysqlTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -7307,7 +7267,7 @@ exports[`generator - sql microservice-oauth2-mysql-reactive(true)-gradle-enableT
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>com/mycompany/config/MysqlTestContainer.java</testExclude>
+    <testExclude>com/mycompany/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -7651,10 +7611,10 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(true)-gradle-en
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/PostgreSqlTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -7849,7 +7809,7 @@ exports[`generator - sql microservice-oauth2-postgresql-reactive(true)-gradle-en
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>com/mycompany/config/PostgreSqlTestContainer.java</testExclude>
+    <testExclude>com/mycompany/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -7939,10 +7899,10 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/MariadbTestContainer.java": {
+  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SqlTestContainer.java": {
@@ -8123,7 +8083,7 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(false)-maven-enableTransl
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>tech/jhipster/config/MariadbTestContainer.java</testExclude>
+    <testExclude>tech/jhipster/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -8208,10 +8168,10 @@ exports[`generator - sql monolith-jwt-mariadb-reactive(true)-gradle-enableTransl
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MariadbTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -8443,10 +8403,10 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/MsSqlTestContainer.java": {
+  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SqlTestContainer.java": {
@@ -8627,7 +8587,7 @@ exports[`generator - sql monolith-jwt-mssql-reactive(false)-maven-enableTranslat
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>tech/jhipster/config/MsSqlTestContainer.java</testExclude>
+    <testExclude>tech/jhipster/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -8712,10 +8672,10 @@ exports[`generator - sql monolith-jwt-mssql-reactive(true)-gradle-enableTranslat
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MsSqlTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -8947,10 +8907,10 @@ exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslat
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/MysqlTestContainer.java": {
+  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SqlTestContainer.java": {
@@ -9134,7 +9094,7 @@ exports[`generator - sql monolith-jwt-mysql-reactive(false)-maven-enableTranslat
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>tech/jhipster/config/MysqlTestContainer.java</testExclude>
+    <testExclude>tech/jhipster/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -9219,10 +9179,10 @@ exports[`generator - sql monolith-jwt-mysql-reactive(true)-gradle-enableTranslat
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MysqlTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -9922,10 +9882,10 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/PostgreSqlTestContainer.java": {
+  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SqlTestContainer.java": {
@@ -10106,7 +10066,7 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>tech/jhipster/config/PostgreSqlTestContainer.java</testExclude>
+    <testExclude>tech/jhipster/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -10190,10 +10150,10 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(true)-gradle-enableTra
   "src/main/java/com/mycompany/repository/rowmapper/ColumnConverter.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/PostgreSqlTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -10416,16 +10376,7 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
   "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/MariadbTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/SqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/SqlTestContainersSpringContextCustomizerFactory.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/timezone/HibernateTimeZoneIT.java": {
@@ -10583,17 +10534,12 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
   "addSpringBootModule": [
     "spring-boot-h2console",
     "spring-boot-starter-data-jpa",
+    "spring-boot-testcontainers",
   ],
   "addTestLog": [
     {
       "level": "ERROR",
       "name": "org.hibernate.orm.incubating",
-    },
-  ],
-  "addTestSpringFactory": [
-    {
-      "key": "org.springframework.test.context.ContextCustomizerFactory",
-      "value": "tech.jhipster.config.SqlTestContainersSpringContextCustomizerFactory",
     },
   ],
   "editJavaFile": [
@@ -10602,9 +10548,13 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(false)-maven-enableTra
       {
         "annotations": [
           {
-            "annotation": "EmbeddedSQL",
-            "package": "tech.jhipster.config",
+            "annotation": "ImportTestcontainers",
+            "package": "org.springframework.boot.testcontainers.context",
+            "parameters": [Function],
           },
+        ],
+        "imports": [
+          "tech.jhipster.config.DatabaseTestcontainer",
         ],
       },
     ],
@@ -10643,10 +10593,10 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MariadbTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -10841,7 +10791,7 @@ exports[`generator - sql monolith-oauth2-mariadb-reactive(true)-gradle-enableTra
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>com/mycompany/config/MariadbTestContainer.java</testExclude>
+    <testExclude>com/mycompany/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -10922,16 +10872,7 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
   "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/MsSqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/SqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/SqlTestContainersSpringContextCustomizerFactory.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/timezone/HibernateTimeZoneIT.java": {
@@ -11089,17 +11030,12 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
   "addSpringBootModule": [
     "spring-boot-h2console",
     "spring-boot-starter-data-jpa",
+    "spring-boot-testcontainers",
   ],
   "addTestLog": [
     {
       "level": "ERROR",
       "name": "org.hibernate.orm.incubating",
-    },
-  ],
-  "addTestSpringFactory": [
-    {
-      "key": "org.springframework.test.context.ContextCustomizerFactory",
-      "value": "tech.jhipster.config.SqlTestContainersSpringContextCustomizerFactory",
     },
   ],
   "editJavaFile": [
@@ -11108,9 +11044,13 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(false)-maven-enableTrans
       {
         "annotations": [
           {
-            "annotation": "EmbeddedSQL",
-            "package": "tech.jhipster.config",
+            "annotation": "ImportTestcontainers",
+            "package": "org.springframework.boot.testcontainers.context",
+            "parameters": [Function],
           },
+        ],
+        "imports": [
+          "tech.jhipster.config.DatabaseTestcontainer",
         ],
       },
     ],
@@ -11149,10 +11089,10 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MsSqlTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -11347,7 +11287,7 @@ exports[`generator - sql monolith-oauth2-mssql-reactive(true)-gradle-enableTrans
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>com/mycompany/config/MsSqlTestContainer.java</testExclude>
+    <testExclude>com/mycompany/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -11428,16 +11368,7 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
   "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/MysqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/SqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/SqlTestContainersSpringContextCustomizerFactory.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/timezone/HibernateTimeZoneIT.java": {
@@ -11598,17 +11529,12 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
   "addSpringBootModule": [
     "spring-boot-h2console",
     "spring-boot-starter-data-jpa",
+    "spring-boot-testcontainers",
   ],
   "addTestLog": [
     {
       "level": "ERROR",
       "name": "org.hibernate.orm.incubating",
-    },
-  ],
-  "addTestSpringFactory": [
-    {
-      "key": "org.springframework.test.context.ContextCustomizerFactory",
-      "value": "tech.jhipster.config.SqlTestContainersSpringContextCustomizerFactory",
     },
   ],
   "editJavaFile": [
@@ -11617,9 +11543,13 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(false)-maven-enableTrans
       {
         "annotations": [
           {
-            "annotation": "EmbeddedSQL",
-            "package": "tech.jhipster.config",
+            "annotation": "ImportTestcontainers",
+            "package": "org.springframework.boot.testcontainers.context",
+            "parameters": [Function],
           },
+        ],
+        "imports": [
+          "tech.jhipster.config.DatabaseTestcontainer",
         ],
       },
     ],
@@ -11658,10 +11588,10 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MysqlTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -11859,7 +11789,7 @@ exports[`generator - sql monolith-oauth2-mysql-reactive(true)-gradle-enableTrans
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>com/mycompany/config/MysqlTestContainer.java</testExclude>
+    <testExclude>com/mycompany/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -12407,16 +12337,7 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
   "src/main/java/tech/jhipster/config/JacksonHibernateConfiguration.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/PostgreSqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/SqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/tech/jhipster/config/SqlTestContainersSpringContextCustomizerFactory.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/timezone/HibernateTimeZoneIT.java": {
@@ -12574,17 +12495,12 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
   "addSpringBootModule": [
     "spring-boot-h2console",
     "spring-boot-starter-data-jpa",
+    "spring-boot-testcontainers",
   ],
   "addTestLog": [
     {
       "level": "ERROR",
       "name": "org.hibernate.orm.incubating",
-    },
-  ],
-  "addTestSpringFactory": [
-    {
-      "key": "org.springframework.test.context.ContextCustomizerFactory",
-      "value": "tech.jhipster.config.SqlTestContainersSpringContextCustomizerFactory",
     },
   ],
   "editJavaFile": [
@@ -12593,9 +12509,13 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(false)-maven-enable
       {
         "annotations": [
           {
-            "annotation": "EmbeddedSQL",
-            "package": "tech.jhipster.config",
+            "annotation": "ImportTestcontainers",
+            "package": "org.springframework.boot.testcontainers.context",
+            "parameters": [Function],
           },
+        ],
+        "imports": [
+          "tech.jhipster.config.DatabaseTestcontainer",
         ],
       },
     ],
@@ -12634,10 +12554,10 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(true)-gradle-enable
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/PostgreSqlTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -12832,7 +12752,7 @@ exports[`generator - sql monolith-oauth2-postgresql-reactive(true)-gradle-enable
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>com/mycompany/config/PostgreSqlTestContainer.java</testExclude>
+    <testExclude>com/mycompany/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -12922,10 +12842,10 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/MariadbTestContainer.java": {
+  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SqlTestContainer.java": {
@@ -13106,7 +13026,7 @@ exports[`generator - sql monolith-session-mariadb-reactive(false)-maven-enableTr
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>tech/jhipster/config/MariadbTestContainer.java</testExclude>
+    <testExclude>tech/jhipster/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -13194,10 +13114,10 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MariadbTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -13392,7 +13312,7 @@ exports[`generator - sql monolith-session-mariadb-reactive(true)-gradle-enableTr
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>com/mycompany/config/MariadbTestContainer.java</testExclude>
+    <testExclude>com/mycompany/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -13482,10 +13402,10 @@ exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTran
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/MsSqlTestContainer.java": {
+  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SqlTestContainer.java": {
@@ -13666,7 +13586,7 @@ exports[`generator - sql monolith-session-mssql-reactive(false)-maven-enableTran
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>tech/jhipster/config/MsSqlTestContainer.java</testExclude>
+    <testExclude>tech/jhipster/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -13754,10 +13674,10 @@ exports[`generator - sql monolith-session-mssql-reactive(true)-gradle-enableTran
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MsSqlTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -13952,7 +13872,7 @@ exports[`generator - sql monolith-session-mssql-reactive(true)-gradle-enableTran
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>com/mycompany/config/MsSqlTestContainer.java</testExclude>
+    <testExclude>com/mycompany/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -14042,10 +13962,10 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/MysqlTestContainer.java": {
+  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SqlTestContainer.java": {
@@ -14229,7 +14149,7 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>tech/jhipster/config/MysqlTestContainer.java</testExclude>
+    <testExclude>tech/jhipster/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -14316,10 +14236,10 @@ exports[`generator - sql monolith-session-mysql-reactive(true)-gradle-enableTran
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/MysqlTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -14517,7 +14437,7 @@ exports[`generator - sql monolith-session-mysql-reactive(true)-gradle-enableTran
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>com/mycompany/config/MysqlTestContainer.java</testExclude>
+    <testExclude>com/mycompany/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -15115,10 +15035,10 @@ exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enabl
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
+  "src/test/java/tech/jhipster/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/tech/jhipster/config/PostgreSqlTestContainer.java": {
+  "src/test/java/tech/jhipster/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/tech/jhipster/config/SqlTestContainer.java": {
@@ -15299,7 +15219,7 @@ exports[`generator - sql monolith-session-postgresql-reactive(false)-maven-enabl
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>tech/jhipster/config/PostgreSqlTestContainer.java</testExclude>
+    <testExclude>tech/jhipster/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",
@@ -15387,10 +15307,10 @@ exports[`generator - sql monolith-session-postgresql-reactive(true)-gradle-enabl
   "src/main/resources/.h2.server.properties": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
+  "src/test/java/com/mycompany/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/config/PostgreSqlTestContainer.java": {
+  "src/test/java/com/mycompany/config/EmbeddedSQL.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/config/SqlTestContainer.java": {
@@ -15585,7 +15505,7 @@ exports[`generator - sql monolith-session-postgresql-reactive(true)-gradle-enabl
               "additionalContent": "
 <configuration>
   <testExcludes>
-    <testExclude>com/mycompany/config/PostgreSqlTestContainer.java</testExclude>
+    <testExclude>com/mycompany/config/DatabaseTestcontainer.java</testExclude>
   </testExcludes>
 </configuration>
 ",

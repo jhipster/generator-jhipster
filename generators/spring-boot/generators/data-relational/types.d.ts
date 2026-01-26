@@ -56,8 +56,16 @@ type LiquibaseApplication = {
   incrementalChangelog: boolean;
 };
 
+export type TestcontainerSupport = {
+  testcontainerClass?: string;
+  testcontainerClassPackage?: string;
+  testcontainerClassInitialization?: string;
+  testcontainerDockerImageName?: string;
+};
+
 export type Application<E extends BaseApplicationEntity = Entity> = SpringBootApplication<E> &
   LiquibaseApplication &
+  TestcontainerSupport &
   CommandTypes['Application'] & {
     devDatabaseExtraOptions: string;
     prodDatabaseExtraOptions: string;
@@ -85,4 +93,7 @@ export type Application<E extends BaseApplicationEntity = Entity> = SpringBootAp
     prodR2dbcUrl?: string;
     prodDatabaseUsername?: string;
     prodDatabasePassword?: string;
+
+    implementsDynamicSourceTestcontainersSupport?: boolean;
+    useTestcontainersV1?: boolean;
   };

@@ -100,7 +100,7 @@ export default function checkEnforcements({ client }: { client?: boolean }, gene
       });
     templateFiles.forEach(templateFile => {
       const reference = basename(templateFile, '.ejs').replaceAll(
-        /_(reactive|imperative|caffeine|ehcache|hazelcast|infinispan|memcached|redis).java/g,
+        /_(reactive|imperative|caffeine|ehcache|hazelcast|infinispan|memcached|redis|prodonly|devprod).java/g,
         '_',
       );
       it(`${templateFile} must have referenced with ${reference}`, () => {
