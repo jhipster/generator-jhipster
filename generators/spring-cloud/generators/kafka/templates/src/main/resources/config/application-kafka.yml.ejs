@@ -1,0 +1,21 @@
+spring:
+  cloud:
+    function:
+      definition: kafkaConsumer;kafkaProducer
+    stream:
+      kafka:
+        binder:
+          replicationFactor: 1
+          auto-create-topics: true
+          brokers: localhost:9092
+      bindings:
+        binding-out-0:
+          content-type: text/plain
+          group: <%= dasherizedBaseName %>
+        kafkaConsumer-in-0:
+          destination: sse-topic
+          content-type: text/plain
+          group: <%= dasherizedBaseName %>
+        kafkaProducer-out-0:
+          content-type: text/plain
+          group: <%= dasherizedBaseName %>

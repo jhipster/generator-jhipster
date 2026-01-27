@@ -17,27 +17,29 @@
  * limitations under the License.
  */
 import { asWriteFilesSection } from '../../../base-application/support/task-type-inference.ts';
-import { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../../../generator-constants.ts';
-import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir } from '../../../java/support/index.ts';
+import { SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } from '../../../generator-constants.ts';
+import { moveToJavaPackageSrcDir, moveToJavaPackageTestDir, moveToSrcMainResourcesDir } from '../../../java/support/index.ts';
 
 export const kafkaFiles = asWriteFilesSection({
-  config: [
-    {
-      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
-      renameTo: moveToJavaPackageSrcDir,
-      templates: [data => `broker/KafkaConsumer_${data.imperativeOrReactive}.java`, 'broker/KafkaProducer.java'],
-    },
-  ],
-  resources: [
+  base: [
     {
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: [
+        data => `broker/KafkaConsumer_${data.imperativeOrReactive}.java`,
+        'broker/KafkaProducer.java',
         {
           sourceFile: data => `web/rest/KafkaResource_${data.imperativeOrReactive}.java`,
           destinationFile: data => `web/rest/${data.upperFirstCamelCaseBaseName}KafkaResource.java`,
         },
       ],
+    },
+  ],
+  resources: [
+    {
+      path: `${SERVER_MAIN_RES_DIR}`,
+      renameTo: moveToSrcMainResourcesDir,
+      templates: ['config/application-kafka.yml'],
     },
   ],
   test: [

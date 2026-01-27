@@ -34,6 +34,19 @@ export default class KafkaGenerator extends SpringBootApplicationGenerator {
     }
   }
 
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      preparing({ application }) {
+        application.devActiveProfiles.push('kafka');
+        application.prodActiveProfiles.push('kafka');
+      },
+    });
+  }
+
+  get [SpringBootApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
   get writing() {
     return this.asWritingTaskGroup({
       async cleanup({ application, control }) {
