@@ -151,7 +151,7 @@
     "eslint-plugin-unused-imports": "4.3.0",
     "execa": "9.6.1",
     "fast-xml-parser": "5.3.3",
-    "globals": "17.1.0",
+    "globals": "17.2.0",
     "isbinaryfile": "6.0.0",
     "java-lint": "0.3.0",
     "latest-version": "9.0.0",
