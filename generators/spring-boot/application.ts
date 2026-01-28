@@ -21,13 +21,29 @@ import { getDatabaseTypeData } from '../server/support/database.ts';
 
 import type { Application as SpringBootApplication } from './types.ts';
 
-export type SpringBootAddedApplicationProperties = {
+type SpringBootLoadingAddedApplicationProperties = {
+  prodActiveProfiles: string[];
+  devActiveProfiles: string[];
+};
+
+type SpringBootPreparingAddedApplicationProperties = {
   springDataDescription: string;
 };
 
-export const mutateApplication = {
-  __override__: false,
+export type SpringBootAddedApplicationProperties = SpringBootLoadingAddedApplicationProperties &
+  SpringBootPreparingAddedApplicationProperties;
 
+export const mutateApplicationLoading = {
+  __override__: false,
+  prodActiveProfiles: () => [],
+  devActiveProfiles: () => [],
+} as const satisfies MutateDataPropertiesWithRequiredProperties<
+  MutateDataParam<SpringBootApplication>,
+  SpringBootLoadingAddedApplicationProperties
+>;
+
+export const mutateApplicationPreparing = {
+  __override__: false,
   springDataDescription: ({ databaseType, reactive }) => {
     let springDataDatabase: string;
     if (databaseType !== 'sql') {
@@ -42,5 +58,5 @@ export const mutateApplication = {
   },
 } as const satisfies MutateDataPropertiesWithRequiredProperties<
   MutateDataParam<SpringBootApplication>,
-  SpringBootAddedApplicationProperties
+  SpringBootPreparingAddedApplicationProperties
 >;

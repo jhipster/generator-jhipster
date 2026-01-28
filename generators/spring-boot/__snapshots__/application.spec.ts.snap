@@ -1,6 +1,13 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`application mutation test expects mutateApplication to match snapshot 1`] = `
+exports[`application mutation test expects mutateApplicationLoading to match snapshot 1`] = `
+{
+  "devActiveProfiles": [],
+  "prodActiveProfiles": [],
+}
+`;
+
+exports[`application mutation test expects mutateApplicationPreparing to match snapshot 1`] = `
 {
   "springDataDescription": "Spring Data Unknown reactive",
 }

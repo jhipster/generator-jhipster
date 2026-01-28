@@ -296,9 +296,18 @@ spring:
     group:
       dev:
         - dev
+<%_ for (const profile of devActiveProfiles) { _%>
+        - <%= profile %>
+<%_ } _%>
         - api-docs
         # Uncomment to activate TLS for the dev profile
         #- tls
+<%_ if (prodActiveProfiles.length > 0) { _%>
+      prod:
+  <%_ for (const profile of prodActiveProfiles) { _%>
+        - <%= profile %>
+  <%_ } _%>
+<%_ } _%>
   jmx:
     enabled: false
 <%_ if (databaseTypeSql && !reactive) { _%>
