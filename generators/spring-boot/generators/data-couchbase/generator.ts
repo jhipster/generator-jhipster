@@ -37,8 +37,8 @@ export default class CouchbaseGenerator extends SpringBootApplicationGenerator {
       async cleanup({ application, control }) {
         await control.cleanupFiles({
           '9.0.0-beta.1': [
-            `${application.javaPackageSrcDir}TestContainersSpringContextCustomizerFactory.java`,
-            `${application.javaPackageSrcDir}config/EmbeddedCouchbase.java`,
+            `${application.javaPackageTestDir}config/TestContainersSpringContextCustomizerFactory.java`,
+            `${application.javaPackageTestDir}config/EmbeddedCouchbase.java`,
             `${application.srcTestResources}META-INF/spring.factories`,
           ],
         });
