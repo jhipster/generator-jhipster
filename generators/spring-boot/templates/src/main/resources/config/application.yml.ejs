@@ -295,7 +295,6 @@ spring:
     active: '@spring.profiles.active@'
     group:
       dev:
-        - dev
 <%_ for (const profile of devActiveProfiles) { _%>
         - <%= profile %>
 <%_ } _%>
