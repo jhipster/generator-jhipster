@@ -49,7 +49,7 @@ jobs:
         with:
           maven-cache: true
           binary-dir: ${{ github.workspace }}/generator-jhipster/bin
-      - run: npm ci --prod --ignore-scripts
+      - run: npm ci --ignore-scripts
         working-directory: ${{ github.workspace }}/generator-jhipster
       - run: npm link
         working-directory: ${{ github.workspace }}/generator-jhipster
