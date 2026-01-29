@@ -19,7 +19,7 @@ export default class TemplateFile {
   private _compiled: ejs.TemplateFunction;
 
   private readonly _fragments: TemplateFile[];
-  private _fragmentName: string;
+  private readonly _fragmentName: string;
   private _debug: { enabled: boolean } & ((msg: string) => void);
 
   constructor(filename: string, extension: string) {
