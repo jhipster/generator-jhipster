@@ -77,7 +77,7 @@ export const mutateEntity = {
     const entityAngularJSSuffix = data.entityAngularJSSuffix ?? data.angularJSSuffix ?? '';
     return entityAngularJSSuffix.startsWith('-') || !entityAngularJSSuffix ? entityAngularJSSuffix : `-${entityAngularJSSuffix}`;
   },
-  entityTsName: data => upperFirst(data.entityNameCapitalized) + upperFirstCamelCase(data.entityAngularJSSuffix!),
+  entityTsName: data => upperFirst(data.entityNameCapitalized) + upperFirstCamelCase(data.entityAngularJSSuffix),
   entityFileName: data => kebabCase(data.entityNameCapitalized + upperFirst(data.entityAngularJSSuffix)),
   entityFolderName: data => `${normalizePathEnd(data.clientRootFolder)}${data.entityFileName}`,
   entityModelFileName: data => data.entityFolderName,
