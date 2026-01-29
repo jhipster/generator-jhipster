@@ -167,8 +167,7 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
       { refresh: this.refreshOnCommit },
       ...this.env
         .findFeature('commitTransformFactory')
-        .map(({ feature }) => feature())
-        .flat(),
+        .flatMap(({ feature }) => feature()),
     );
   }
 
