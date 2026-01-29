@@ -51,7 +51,7 @@ const MULTISTEP_TRANSFORM_PRIORITY = BaseGenerator.asPriority(MULTISTEP_TRANSFOR
 const PRE_CONFLICTS_PRIORITY = BaseGenerator.asPriority(PRE_CONFLICTS);
 
 export default class BootstrapGenerator extends CommandBaseGenerator<typeof command> {
-  static MULTISTEP_TRANSFORM = MULTISTEP_TRANSFORM_PRIORITY;
+  static readonly MULTISTEP_TRANSFORM = MULTISTEP_TRANSFORM_PRIORITY;
 
   static PRE_CONFLICTS = PRE_CONFLICTS_PRIORITY;
 
