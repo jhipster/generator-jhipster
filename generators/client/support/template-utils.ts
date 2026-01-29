@@ -130,7 +130,7 @@ export const generateTestEntityId = (primaryKey: FieldType | PrimaryKey, index: 
  */
 export const generateTsTestEntityForFields = (fields: ClientField[]): Record<string, string | number | boolean> => {
   const entries = fields
-    .map(field => {
+    .flatMap(field => {
       const { fieldWithContentType, contentTypeFieldName, fieldTypeTimed, fieldTypeLocalDate } = field;
       const fakeData = field.generateFakeData!('ts');
       if (fieldWithContentType) {
@@ -143,8 +143,7 @@ export const generateTsTestEntityForFields = (fields: ClientField[]): Record<str
         return [[field.propertyName, `dayjs(${fakeData})`]];
       }
       return [[field.propertyName, fakeData]];
-    })
-    .flat();
+    });
   return Object.fromEntries(entries);
 };
 
