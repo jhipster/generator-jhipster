@@ -2,7 +2,7 @@ import type TemplateFile from './template-file.ts';
 
 export default class TemplateData {
   private readonly _templateFile: TemplateFile;
-  private _defaultData: { fragment?: any; section?: string };
+  private readonly _defaultData: { fragment?: any; section?: string };
   private _sections: Record<string, number>;
 
   constructor(templateFile: TemplateFile, defaultData = {}) {
