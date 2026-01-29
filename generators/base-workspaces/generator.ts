@@ -76,7 +76,7 @@ export default abstract class BaseWorkspacesGenerator<
 
   static readonly CONFIGURING_WORKSPACES = BaseGenerator.asPriority(CONFIGURING_WORKSPACES);
 
-  static LOADING_WORKSPACES = BaseGenerator.asPriority(LOADING_WORKSPACES);
+  static readonly LOADING_WORKSPACES = BaseGenerator.asPriority(LOADING_WORKSPACES);
 
   static PREPARING_WORKSPACES = BaseGenerator.asPriority(PREPARING_WORKSPACES);
 
