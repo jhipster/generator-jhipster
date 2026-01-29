@@ -222,13 +222,13 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
 
               if ((file as VinylMemFsEditorFile).history?.[0] && file.conflicterData?.diskContents) {
                 const templateFile = (file as VinylMemFsEditorFile).history[0];
-                if (!file.contents) {
-                  await rm(templateFile, { force: true });
-                } else {
+                if (file.contents) {
                   const oldFileContents = file.conflicterData.diskContents.toString();
                   const newFileContents = file.contents.toString();
 
                   applyChangesToFileOrCopy({ templateFile, oldFileContents, newFileContents });
+                } else {
+                  await rm(templateFile, { force: true });
                 }
               }
 
