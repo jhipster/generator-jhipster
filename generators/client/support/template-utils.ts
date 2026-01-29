@@ -160,7 +160,7 @@ export const stringifyTsEntity = (data: Record<string, any>, options: { sep?: st
  */
 export const generateTestEntity = (fields: BaseApplicationField[], index: 0 | 1 | 'random' = 'random') => {
   const entries = fields
-    .map(field => {
+    .flatMap(field => {
       if (index === 'random') {
         const { fieldWithContentType, contentTypeFieldName } = field;
         const fakeData = field.generateFakeData!('json-serializable');
@@ -173,7 +173,6 @@ export const generateTestEntity = (fields: BaseApplicationField[], index: 0 | 1 
         return [[field.propertyName, fakeData]];
       }
       return [[field.propertyName, generateTestEntityId(field.fieldType as FieldType, index, false)]];
-    })
-    .flat();
+    });
   return Object.fromEntries(entries);
 };
