@@ -74,7 +74,7 @@ export default abstract class BaseWorkspacesGenerator<
 > extends BaseGenerator<Config, Options, Source, Features, Tasks> {
   static readonly PROMPTING_WORKSPACES = BaseGenerator.asPriority(PROMPTING_WORKSPACES);
 
-  static CONFIGURING_WORKSPACES = BaseGenerator.asPriority(CONFIGURING_WORKSPACES);
+  static readonly CONFIGURING_WORKSPACES = BaseGenerator.asPriority(CONFIGURING_WORKSPACES);
 
   static LOADING_WORKSPACES = BaseGenerator.asPriority(LOADING_WORKSPACES);
 
