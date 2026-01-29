@@ -15,7 +15,7 @@ export default class TemplateFile {
   filePath?: string;
 
   private readonly _filename: string;
-  private _extension: string;
+  private readonly _extension: string;
   private _compiled: ejs.TemplateFunction;
 
   private _fragments: TemplateFile[];
