@@ -50,6 +50,14 @@ jobs:
         shell: bash
       - run: npm ci
       - run: npm run prettier:check
+      - name: Test production CLI (no devDependencies)
+        run: |
+          npm pack --pack-destination=/tmp
+          TEST_DIR=$(mktemp -d)
+          cd "$TEST_DIR"
+          npm init -y
+          npm install /tmp/generator-jhipster-*.tgz
+          ./node_modules/.bin/jhipster --version
       - run: npm test
         if: >-
           !contains(github.event.head_commit.message, '[ci skip]') &&

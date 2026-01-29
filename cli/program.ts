@@ -29,7 +29,7 @@ import baseCommand from '../generators/base/command.ts';
 import { type JHipsterCommandDefinition, extractArgumentsFromConfigs } from '../lib/command/index.ts';
 import { packageJson } from '../lib/index.ts';
 import { buildJDLApplicationConfig } from '../lib/jdl-config/jhipster-jdl-config.ts';
-import { getGithubOutputFile, setGithubTaskOutput } from '../lib/testing/index.ts';
+import { getGithubOutputFile, setGithubTaskOutput } from '../lib/testing/github.ts';
 import { packageNameToNamespace } from '../lib/utils/index.ts';
 
 import SUB_GENERATORS from './commands.ts';
