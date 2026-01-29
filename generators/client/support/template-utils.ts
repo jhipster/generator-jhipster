@@ -105,7 +105,7 @@ export const generateEntityClientEnumImports = (fields: BaseApplicationField[], 
 
 export const generateTestEntityId = (primaryKey: FieldType | PrimaryKey, index: 0 | 1 | 'random' = 0, wrapped = true): string | number => {
   if (index === 'random' && typeof primaryKey === 'object') {
-    return primaryKey.fields[0]!.generateFakeData!('ts');
+    return primaryKey.fields[0].generateFakeData!('ts');
   }
 
   assert(index === 0 || index === 1, 'index must be 0 or 1');
