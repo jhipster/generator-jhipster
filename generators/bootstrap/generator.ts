@@ -165,9 +165,7 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
   async commitTask() {
     await this.commitSharedFs(
       { refresh: this.refreshOnCommit },
-      ...this.env
-        .findFeature('commitTransformFactory')
-        .flatMap(({ feature }) => feature()),
+      ...this.env.findFeature('commitTransformFactory').flatMap(({ feature }) => feature()),
     );
   }
 

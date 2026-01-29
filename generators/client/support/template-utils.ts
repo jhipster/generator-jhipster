@@ -129,21 +129,20 @@ export const generateTestEntityId = (primaryKey: FieldType | PrimaryKey, index: 
  * Generate a test entity, according to the type
  */
 export const generateTsTestEntityForFields = (fields: ClientField[]): Record<string, string | number | boolean> => {
-  const entries = fields
-    .flatMap(field => {
-      const { fieldWithContentType, contentTypeFieldName, fieldTypeTimed, fieldTypeLocalDate } = field;
-      const fakeData = field.generateFakeData!('ts');
-      if (fieldWithContentType) {
-        return [
-          [field.propertyName, fakeData],
-          [contentTypeFieldName, "'unknown'"],
-        ];
-      }
-      if (fieldTypeTimed || fieldTypeLocalDate) {
-        return [[field.propertyName, `dayjs(${fakeData})`]];
-      }
-      return [[field.propertyName, fakeData]];
-    });
+  const entries = fields.flatMap(field => {
+    const { fieldWithContentType, contentTypeFieldName, fieldTypeTimed, fieldTypeLocalDate } = field;
+    const fakeData = field.generateFakeData!('ts');
+    if (fieldWithContentType) {
+      return [
+        [field.propertyName, fakeData],
+        [contentTypeFieldName, "'unknown'"],
+      ];
+    }
+    if (fieldTypeTimed || fieldTypeLocalDate) {
+      return [[field.propertyName, `dayjs(${fakeData})`]];
+    }
+    return [[field.propertyName, fakeData]];
+  });
   return Object.fromEntries(entries);
 };
 
@@ -159,20 +158,19 @@ export const stringifyTsEntity = (data: Record<string, any>, options: { sep?: st
  * Generate a test entity, according to the type
  */
 export const generateTestEntity = (fields: BaseApplicationField[], index: 0 | 1 | 'random' = 'random') => {
-  const entries = fields
-    .flatMap(field => {
-      if (index === 'random') {
-        const { fieldWithContentType, contentTypeFieldName } = field;
-        const fakeData = field.generateFakeData!('json-serializable');
-        if (fieldWithContentType) {
-          return [
-            [field.propertyName, fakeData],
-            [contentTypeFieldName, 'unknown'],
-          ];
-        }
-        return [[field.propertyName, fakeData]];
+  const entries = fields.flatMap(field => {
+    if (index === 'random') {
+      const { fieldWithContentType, contentTypeFieldName } = field;
+      const fakeData = field.generateFakeData!('json-serializable');
+      if (fieldWithContentType) {
+        return [
+          [field.propertyName, fakeData],
+          [contentTypeFieldName, 'unknown'],
+        ];
       }
-      return [[field.propertyName, generateTestEntityId(field.fieldType as FieldType, index, false)]];
-    });
+      return [[field.propertyName, fakeData]];
+    }
+    return [[field.propertyName, generateTestEntityId(field.fieldType as FieldType, index, false)]];
+  });
   return Object.fromEntries(entries);
 };
