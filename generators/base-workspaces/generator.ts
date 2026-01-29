@@ -78,7 +78,7 @@ export default abstract class BaseWorkspacesGenerator<
 
   static readonly LOADING_WORKSPACES = BaseGenerator.asPriority(LOADING_WORKSPACES);
 
-  static PREPARING_WORKSPACES = BaseGenerator.asPriority(PREPARING_WORKSPACES);
+  static readonly PREPARING_WORKSPACES = BaseGenerator.asPriority(PREPARING_WORKSPACES);
 
   constructor(args?: string[], options?: Options, features?: Features) {
     super(args, options, features);
