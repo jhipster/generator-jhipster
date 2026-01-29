@@ -1,5 +1,5 @@
-import type { GitHubMatrixGroup } from '../../../lib/testing/github-matrix.ts';
-import { extendMatrix, fromMatrix } from '../../../lib/testing/support/matrix-utils.ts';
+import type { GitHubMatrixGroup } from '../../../lib/ci/index.ts';
+import { extendMatrix, fromMatrix } from '../../../lib/ci/index.ts';
 import { convertOptionsToJDL } from '../support/jdl.ts';
 
 export default Object.fromEntries(

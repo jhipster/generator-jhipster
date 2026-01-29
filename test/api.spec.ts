@@ -19,8 +19,12 @@
 import { describe, expect, it } from 'esmocha';
 
 describe('public api', () => {
-  it('generator-jhipster/generators should match snapshot', async () => {
+  it('generator-jhipster/testing should match snapshot', async () => {
     expect(Object.keys(await import('generator-jhipster/testing' as string))).toMatchSnapshot();
+  });
+
+  it('generator-jhipster/ci should match snapshot', async () => {
+    expect(Object.keys(await import('generator-jhipster/ci' as string))).toMatchSnapshot();
   });
 
   it('should import nested sub-generators', async () => {

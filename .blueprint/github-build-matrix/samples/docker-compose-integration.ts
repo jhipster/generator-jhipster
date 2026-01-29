@@ -1,5 +1,5 @@
-import type { GitHubMatrixGroup } from '../../../lib/testing/github-matrix.ts';
-import { type MatrixSample, extendMatrix, fromMatrix } from '../../../lib/testing/support/matrix-utils.ts';
+import type { GitHubMatrixGroup, MatrixSample } from '../../../lib/ci/index.ts';
+import { extendMatrix, fromMatrix } from '../../../lib/ci/index.ts';
 import { convertOptionsToJDL } from '../support/jdl.ts';
 
 // Supported containers: https://github.com/spring-projects/spring-boot/tree/main/spring-boot-project/spring-boot-docker-compose/src/main/java/org/springframework/boot/docker/compose/service/connection

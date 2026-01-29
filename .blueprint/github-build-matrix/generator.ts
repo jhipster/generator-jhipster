@@ -2,11 +2,8 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import BaseGenerator from '../../generators/base-core/index.ts';
-import { getGithubSamplesGroup } from '../../lib/testing/github-group.ts';
-import type { GitHubMatrixGroup } from '../../lib/testing/github-matrix.ts';
-import { convertToGitHubMatrix } from '../../lib/testing/github-matrix.ts';
-import { getGithubOutputFile, setGithubTaskOutput } from '../../lib/testing/github.ts';
-import type { JHipsterGitHubInputMatrix, WorkflowSamples } from '../../lib/testing/workflow-samples.ts';
+import { convertToGitHubMatrix, getGithubOutputFile, getGithubSamplesGroup, setGithubTaskOutput } from '../../lib/ci/index.ts';
+import type { GitHubMatrixGroup, JHipsterGitHubInputMatrix, WorkflowSamples } from '../../lib/ci/index.ts';
 import { testIntegrationFolder } from '../constants.ts';
 
 import type { eventNameChoices, workflowChoices } from './command.ts';

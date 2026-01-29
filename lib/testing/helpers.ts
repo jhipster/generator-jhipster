@@ -30,9 +30,8 @@ import type { Entity } from '../jhipster/types/entity.ts';
 import type { Relationship } from '../jhipster/types/relationship.d.ts';
 import type { ApplicationAll } from '../types/application-all.ts';
 import type { ConfigAll as ApplicationConfiguration, OptionsAll } from '../types/command-all.ts';
+import getGenerator, { getGeneratorRelativeFolder } from '../utils/get-generator.ts';
 import { createJHipsterLogger, lookupGeneratorsWithNamespace, normalizePathEnd } from '../utils/index.ts';
-
-import getGenerator, { getGeneratorRelativeFolder } from './get-generator.ts';
 
 type GeneratorTestOptions = OptionsAll;
 type WithJHipsterGenerators = {
@@ -264,7 +263,7 @@ class JHipsterRunContext extends RunContext<BaseCoreGenerator> {
   withWorkspacesSamples(...appNames: string[]): this {
     return this.onBeforePrepare(async () => {
       try {
-        const { default: deploymentTestSamples } = await import('./support/deployment-samples.ts');
+        const { default: deploymentTestSamples } = await import('../ci/support/deployment-samples.ts');
         for (const appName of appNames) {
           const application = (deploymentTestSamples as Record<string, Record<string, any>>)[appName];
           if (!application) {
