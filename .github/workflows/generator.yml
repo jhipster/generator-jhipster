@@ -48,8 +48,11 @@ jobs:
       - uses: jhipster/actions/setup-runner@v1
       - run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit
         shell: bash
-      - run: npm ci
+        # Scripts will be executed later by npm pack
+      - run: npm ci --ignore-scripts
       - run: npm run prettier:check
+      - run: npm pack
+      - run: npx -y --package generator-jhipster-$(./bin/jhipster.cjs --version).tgz jhipster --version
       - run: npm test
         if: >-
           !contains(github.event.head_commit.message, '[ci skip]') &&
