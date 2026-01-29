@@ -61,6 +61,11 @@ const defaultCommands = {
     cliOnly: true,
     argument: ['<jdlFiles...>'],
   },
+  'ci-utils': {
+    desc: 'Download jdl file from template repository',
+    options: [{ option: '--export-github-output', desc: 'Export output for GitHub Actions' }],
+    cliOnly: true,
+  },
   entity: {
     desc: 'Create a new JHipster entity: JPA entity, Spring server-side components and Angular client-side components',
   },

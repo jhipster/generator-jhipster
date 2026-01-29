@@ -16,14 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export * from './basename.ts';
-export * from './contents.ts';
-export * from './derived-property.ts';
-export { default as getGenerator } from './get-generator.ts';
-export * from './logger.ts';
-export * from './lookup.ts';
-export * from './namespace.ts';
-export * from './object.ts';
-export * from './path.ts';
-export * from './secret.ts';
-export * from './string.ts';
+import { JHIPSTER_BOM_BRANCH, JHIPSTER_BOM_CICD_VERSION } from '../.blueprint/github-build-matrix/support/integration-test-constants.ts';
+import { getGithubOutputFile, setGithubTaskOutput } from '../lib/ci/index.ts';
+
+const ciUtilsCommand: (positionalArgs: [string[]], options: any) => Promise<any> = async (_args, options) => {
+  if (options.exportGithubOutput) {
+    // eslint-disable-next-line no-console
+    console.log(JHIPSTER_BOM_BRANCH);
+    const githubOutputFile = getGithubOutputFile();
+    if (githubOutputFile) {
+      setGithubTaskOutput('jhipster-bom-branch', JHIPSTER_BOM_BRANCH);
+      setGithubTaskOutput('jhipster-dependencies-version', JHIPSTER_BOM_CICD_VERSION);
+    }
+  }
+};
+
+export default ciUtilsCommand;

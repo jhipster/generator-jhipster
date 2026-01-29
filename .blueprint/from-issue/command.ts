@@ -16,8 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { parseIssue } from '../../lib/ci/index.ts';
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
-import { parseIssue } from '../../lib/testing/github.ts';
 
 const command = {
   configs: {

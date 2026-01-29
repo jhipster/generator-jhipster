@@ -42,7 +42,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: ${{ steps.node-version.outputs.node-version }}
-      - run: npm ci --ignore-scripts
+      - run: npm ci --prod --ignore-scripts
       - id: build
         run: bin/jhipster.cjs github-build-matrix graalvm --event-name ${{ github.event_name }}
   applications:
@@ -77,7 +77,7 @@ jobs:
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
-      - run: npm ci --ignore-scripts
+      - run: npm ci --prod --ignore-scripts
         working-directory: ${{ github.workspace }}/generator-jhipster
       - name: 'GENERATION: project'
         run: jhipster.cjs jdl --skip-jhipster-dependencies --skip-install

@@ -63,12 +63,12 @@ jobs:
         with:
           maven-cache: true
           binary-dir: ${{ github.workspace }}/generator-jhipster/bin
-      - run: npm ci --ignore-scripts
+      - run: npm ci --prod --ignore-scripts
         working-directory: ${{ github.workspace }}/generator-jhipster
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
-      - run: jhipster.cjs --export-github-output
+      - run: jhipster.cjs ci-utils --export-github-output
         id: jhipster-output
       - uses: jhipster/actions/build-jhipster-bom@v1
         with:

@@ -1,0 +1,5 @@
+Description:
+    Creates a new JHipster generator
+
+Example:
+    jhipster @dev-blueprint:new-generator

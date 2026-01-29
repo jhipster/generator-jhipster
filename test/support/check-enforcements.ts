@@ -22,7 +22,7 @@ import path, { basename } from 'node:path';
 
 import { before, describe, it } from 'mocha';
 
-import { getGeneratorFolder } from '../../lib/testing/get-generator.ts';
+import { getGeneratorFolder } from '../../lib/utils/get-generator.ts';
 
 const fixEnforcements = process.argv.includes('--fix-enforcements');
 

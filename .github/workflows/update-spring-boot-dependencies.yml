@@ -57,7 +57,7 @@ jobs:
         with:
           node-version: ${{ steps.node-version.outputs.node-version }}
           binary-dir: ${{ github.workspace }}/bin
-      - run: npm ci --ignore-scripts
+      - run: npm ci --prod --ignore-scripts
       - name: Parse POM
         run: jhipster.cjs update-spring-boot ${{ inputs.springBootVersion }} ${{ inputs.repository }} --force
       - name: Create Pull Request

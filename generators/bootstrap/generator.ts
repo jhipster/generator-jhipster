@@ -219,7 +219,7 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
             key: 't',
             name: 'apply to template',
             value: async ({ file }) => {
-              const { applyChangesToFileOrCopy } = await import('../../lib/testing/apply-patch-to-template.ts');
+              const { applyChangesToFileOrCopy } = await import('../../lib/ci/apply-patch-to-template.ts');
 
               if ((file as VinylMemFsEditorFile).history?.[0] && file.conflicterData?.diskContents) {
                 const templateFile = (file as VinylMemFsEditorFile).history[0];

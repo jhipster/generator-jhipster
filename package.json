@@ -84,6 +84,10 @@
     "./utils": {
       "types": "./dist/lib/utils/index.d.ts",
       "default": "./dist/lib/utils/index.js"
+    },
+    "./ci": {
+      "types": "./dist/lib/ci/index.d.ts",
+      "default": "./dist/lib/ci/index.js"
     }
   },
   "main": "./dist/generators/index.js",

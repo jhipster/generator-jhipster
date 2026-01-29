@@ -29,7 +29,6 @@ import baseCommand from '../generators/base/command.ts';
 import { type JHipsterCommandDefinition, extractArgumentsFromConfigs } from '../lib/command/index.ts';
 import { packageJson } from '../lib/index.ts';
 import { buildJDLApplicationConfig } from '../lib/jdl-config/jhipster-jdl-config.ts';
-import { getGithubOutputFile, setGithubTaskOutput } from '../lib/testing/index.ts';
 import { packageNameToNamespace } from '../lib/utils/index.ts';
 
 import SUB_GENERATORS from './commands.ts';
@@ -188,7 +187,6 @@ export const createProgram = ({
       .option('--whitespace', 'Whitespace changes will not trigger conflicts', false)
       .option('--bail', 'Fail on first conflict', false)
       .option('--install-path', 'Show jhipster install path', false)
-      .option('--export-github-output', 'Export output for GitHub Actions', false)
       .option('--skip-regenerate', "Don't regenerate identical files", false)
       .option('--skip-yo-resolve', 'Ignore .yo-resolve files', false)
       // Yeoman Generator options
@@ -227,17 +225,17 @@ export const buildCommands = ({
   envBuilder,
   env,
   loadCommand = async key => {
-    try {
-      const { default: command } = await import(`./${key}.js`);
-      return command;
-    } catch (error) {
+    const module = key.startsWith('.') ? key : `./${key}`;
+    let error;
+    for (const extension of ['js', 'mjs', 'ts']) {
       try {
-        const { default: command } = await import(`./${key}.mjs`);
+        const { default: command } = await import(`${module}.${extension}`);
         return command;
-      } catch {
-        throw error;
+      } catch (e) {
+        error = e;
       }
     }
+    throw error;
   },
   defaultCommand = GENERATOR_APP,
   entrypointGenerator,
@@ -348,19 +346,6 @@ export const buildCommands = ({
         if (options.installPath) {
           // eslint-disable-next-line no-console
           console.log(path.dirname(import.meta.dirname));
-          return Promise.resolve();
-        }
-
-        if (options.exportGithubOutput) {
-          const { JHIPSTER_BOM_BRANCH, JHIPSTER_BOM_CICD_VERSION } =
-            await import('../.blueprint/github-build-matrix/support/integration-test-constants.ts');
-          // eslint-disable-next-line no-console
-          console.log(JHIPSTER_BOM_BRANCH);
-          const githubOutputFile = getGithubOutputFile();
-          if (githubOutputFile) {
-            setGithubTaskOutput('jhipster-bom-branch', JHIPSTER_BOM_BRANCH);
-            setGithubTaskOutput('jhipster-dependencies-version', JHIPSTER_BOM_CICD_VERSION);
-          }
           return Promise.resolve();
         }
 
