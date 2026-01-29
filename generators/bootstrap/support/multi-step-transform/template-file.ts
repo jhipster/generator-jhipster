@@ -20,7 +20,7 @@ export default class TemplateFile {
 
   private readonly _fragments: TemplateFile[];
   private readonly _fragmentName: string;
-  private _debug: { enabled: boolean } & ((msg: string) => void);
+  private readonly _debug: { enabled: boolean } & ((msg: string) => void);
 
   constructor(filename: string, extension: string) {
     this._filename = filename;
