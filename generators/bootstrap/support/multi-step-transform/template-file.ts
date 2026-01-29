@@ -14,7 +14,7 @@ export default class TemplateFile {
   parentPath?: string;
   filePath?: string;
 
-  private _filename: string;
+  private readonly _filename: string;
   private _extension: string;
   private _compiled: ejs.TemplateFunction;
 
