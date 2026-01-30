@@ -88,7 +88,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
       templates: ['hazelcast-management-center.yml'],
     },
     {
-      condition: ctx => ctx.dockerServices!.includes('memcached'),
+      condition: ctx => ctx.dockerServices.includes('memcached'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['memcached.yml'],
