@@ -149,7 +149,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
       templates: ['sonar.yml', 'prometheus/prometheus.yml'],
     },
     {
-      condition: ctx => ctx.dockerServices!.includes('elasticsearch'),
+      condition: ctx => ctx.dockerServices.includes('elasticsearch'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['elasticsearch.yml'],
