@@ -74,7 +74,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
   ],
   neo4jFiles: [
     {
-      condition: ctx => ctx.dockerServices!.includes('neo4j'),
+      condition: ctx => ctx.dockerServices.includes('neo4j'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['neo4j.yml'],
