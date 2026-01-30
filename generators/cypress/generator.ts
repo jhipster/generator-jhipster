@@ -255,7 +255,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
       },
       configureAudits({ application }) {
         if (!application.cypressAudit) return;
-        const clientPackageJson = this.createStorage(this.destinationPath(application.clientRootDir!, 'package.json'));
+        const clientPackageJson = this.createStorage(this.destinationPath(application.clientRootDir, 'package.json'));
         clientPackageJson.merge({
           devDependencies: {
             lighthouse: application.nodeDependencies.lighthouse,
