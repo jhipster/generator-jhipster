@@ -20,7 +20,6 @@ import { rm } from 'node:fs/promises';
 
 import chalk from 'chalk';
 import { camelCase, snakeCase, upperFirst } from 'lodash-es';
-import type { Storage } from 'yeoman-generator';
 
 import { getPackageRoot } from '../../lib/index.ts';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base-core/priorities.ts';
