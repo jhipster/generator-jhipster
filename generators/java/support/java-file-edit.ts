@@ -31,7 +31,7 @@ const findJavaConstructor = (content: string, className: string) => {
   if (!result || result.length === 1) {
     throw new Error(`Constructor not found for ${className}`);
   }
-  const paramStartIndex = result.index + result.groups!.before!.length;
+  const paramStartIndex = result.index + result.groups!.before.length;
   const { params, ident } = result.groups!;
   return {
     newLineIndex: result?.index,
