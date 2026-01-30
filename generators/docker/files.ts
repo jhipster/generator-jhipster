@@ -82,7 +82,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
   ],
   cacheProvideFiles: [
     {
-      condition: ctx => ctx.dockerServices!.includes('hazelcast'),
+      condition: ctx => ctx.dockerServices.includes('hazelcast'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['hazelcast-management-center.yml'],
