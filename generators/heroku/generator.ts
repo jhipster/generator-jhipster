@@ -247,7 +247,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
       async herokuCreate() {
         if (!this.hasHerokuCli || this.herokuAppExists) return;
 
-        const regionParams = this.herokuRegion !== 'us' ? ['--region', this.herokuRegion] : [];
+        const regionParams = this.herokuRegion === 'us' ? [] : ['--region', this.herokuRegion];
 
         this.log.log(chalk.bold('\nCreating Heroku application and setting up Node environment'));
         const { stdout, stderr, exitCode } = await this.spawnHeroku(['create', this.herokuAppName!, ...regionParams]);
