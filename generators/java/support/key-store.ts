@@ -47,7 +47,7 @@ export async function generateKeyStore(keyStoreFile: string, { packageName }: { 
       '-dname',
       `CN=Java Hipster, OU=Development, O=${packageName}, L=, ST=, C=`,
     ]);
-    return { info: [...result.stderr.split('\n').filter(line => line), `KeyStore '${keyStoreFile}' generated successfully.`] };
+    return { info: [...result.stderr.split('\n').filter(Boolean), `KeyStore '${keyStoreFile}' generated successfully.`] };
   } catch (error) {
     return { debug: error, warning: `Failed to create a KeyStore with 'keytool': ${(error as Error).message}` };
   }

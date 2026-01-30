@@ -104,11 +104,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
           const { stdout, exitCode } = await this.spawnHeroku(['apps:info', '--json', this.jhipsterConfig.herokuAppName!], {
             verboseInfo: false,
           });
-          if (exitCode !== 0) {
-            this.log.error(`Could not find application: ${chalk.cyan(this.jhipsterConfig.herokuAppName)}`);
-            this.herokuAppName = undefined;
-            throw new Error('Run the generator again to create a new application.');
-          } else {
+          if (exitCode === 0) {
             const json = JSON.parse(stdout);
             this.herokuAppName = json.app.name;
             if (json.dynos.length > 0) {
@@ -118,6 +114,10 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
             this.config.set({
               herokuAppName: this.herokuAppName,
             });
+          } else {
+            this.log.error(`Could not find application: ${chalk.cyan(this.jhipsterConfig.herokuAppName)}`);
+            this.herokuAppName = undefined;
+            throw new Error('Run the generator again to create a new application.');
           }
         } else {
           await this.prompt(
@@ -247,7 +247,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
       async herokuCreate() {
         if (!this.hasHerokuCli || this.herokuAppExists) return;
 
-        const regionParams = this.herokuRegion !== 'us' ? ['--region', this.herokuRegion] : [];
+        const regionParams = this.herokuRegion === 'us' ? [] : ['--region', this.herokuRegion];
 
         this.log.log(chalk.bold('\nCreating Heroku application and setting up Node environment'));
         const { stdout, stderr, exitCode } = await this.spawnHeroku(['create', this.herokuAppName!, ...regionParams]);
@@ -284,7 +284,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
               // Extract from "Created random-app-name-1234... done"
               this.herokuAppName = stdout.substring(stdout.lastIndexOf('/') + 1, stdout.indexOf('.git'));
               // ensure that the git remote is the same as the appName
-              await this.spawnHeroku(['git:remote', '--app', this.herokuAppName!]);
+              await this.spawnHeroku(['git:remote', '--app', this.herokuAppName]);
               this.jhipsterConfig.herokuAppName = this.herokuAppName;
             }
           } else if (stderr.includes('Invalid credentials')) {
@@ -476,7 +476,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
             }
 
             const { stdout: buildpackData } = await this.spawnHeroku(['buildpacks', '--app', this.herokuAppName!]);
-            if (!(buildpackData as string).includes(buildpack)) {
+            if (!buildpackData.includes(buildpack)) {
               await this.spawnHeroku(['buildpacks:add', buildpack, '--app', this.herokuAppName!]);
             }
 

@@ -133,7 +133,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
           {
             libraryName: 'node-gradle',
             module: 'com.github.node-gradle:gradle-node-plugin',
-            version: application.javaDependencies!['node-gradle'],
+            version: application.javaDependencies['node-gradle'],
             scope: 'implementation',
           },
         ]);
@@ -150,15 +150,15 @@ export default class NodeGenerator extends JavaApplicationGenerator {
             { property: 'npm.version', value: nodeDependencies.npm },
             {
               property: 'frontend-maven-plugin.version',
-              value: javaDependencies!['frontend-maven-plugin'],
+              value: javaDependencies['frontend-maven-plugin'],
             },
             {
               property: 'checksum-maven-plugin.version',
-              value: javaDependencies!['checksum-maven-plugin'],
+              value: javaDependencies['checksum-maven-plugin'],
             },
             {
               property: 'maven-antrun-plugin.version',
-              value: javaDependencies!['maven-antrun-plugin'],
+              value: javaDependencies['maven-antrun-plugin'],
             },
           ],
           pluginManagement: [

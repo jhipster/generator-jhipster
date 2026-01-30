@@ -110,7 +110,7 @@ const serializeJavaAnnotationParameters = (params?: JavaAnnotationParameter): st
   if (entries.length === 0) {
     return '';
   } else if (entries.length === 1 && entries[0][0] === 'value') {
-    return entries[0][1] as string;
+    return entries[0][1];
   }
   return entries.map(([key, value]) => `${key} = ${value}`).join(', ');
 };

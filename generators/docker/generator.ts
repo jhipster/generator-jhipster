@@ -57,7 +57,7 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
   get preparing() {
     return this.asPreparingTaskGroup({
       async dockerServices({ application }) {
-        const dockerServices = application.dockerServices!;
+        const dockerServices = application.dockerServices;
         if (application.authenticationTypeOauth2) {
           dockerServices.push('keycloak');
 
@@ -169,7 +169,7 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
   get postWriting() {
     return this.asPostWritingTaskGroup({
       async dockerServices({ application, source }) {
-        if (application.dockerServices!.includes('cassandra')) {
+        if (application.dockerServices.includes('cassandra')) {
           const serviceName = application.databaseType!;
           source.addDockerExtendedServiceToApplicationAndServices!(
             { serviceName },
@@ -197,11 +197,11 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
           source.addDockerDependencyToApplication!({ serviceName, condition: SERVICE_HEALTHY });
         }
 
-        for (const serviceName of application.dockerServices!.filter(service => ['redis', 'memcached', 'pulsar'].includes(service))) {
+        for (const serviceName of application.dockerServices.filter(service => ['redis', 'memcached', 'pulsar'].includes(service))) {
           source.addDockerExtendedServiceToApplicationAndServices!({ serviceName });
         }
 
-        if (application.dockerServices!.includes('eureka')) {
+        if (application.dockerServices.includes('eureka')) {
           const depends_on = application.authenticationTypeOauth2
             ? {
                 keycloak: {
@@ -218,13 +218,13 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
 
           source.addDockerDependencyToApplication!({ serviceName: 'jhipster-registry', condition: SERVICE_HEALTHY });
         }
-        if (application.dockerServices!.includes('consul')) {
+        if (application.dockerServices.includes('consul')) {
           source.addDockerExtendedServiceToApplicationAndServices!(
             { serviceName: 'consul' },
             { serviceFile: './consul.yml', serviceName: 'consul-config-loader' },
           );
         }
-        if (application.dockerServices!.includes('kafka')) {
+        if (application.dockerServices.includes('kafka')) {
           source.addDockerExtendedServiceToApplicationAndServices!({ serviceName: 'kafka' });
         }
       },

@@ -31,7 +31,7 @@ const findJavaConstructor = (content: string, className: string) => {
   if (!result || result.length === 1) {
     throw new Error(`Constructor not found for ${className}`);
   }
-  const paramStartIndex = result.index! + result.groups!.before!.length;
+  const paramStartIndex = result.index + result.groups!.before.length;
   const { params, ident } = result.groups!;
   return {
     newLineIndex: result?.index,
@@ -53,7 +53,7 @@ export function injectJavaConstructorParam(
     const { className } = opts;
     const paramSpec = Array.isArray(opts.param) ? opts.param : [opts.param];
     const { params: constructorParams, paramStartIndex, paramEndIndex } = findJavaConstructor(content, className);
-    const paramsToAdd = paramSpec.filter(param => !constructorParams.split(',').find(existing => existing.trim() === param.trim()));
+    const paramsToAdd = paramSpec.filter(param => !constructorParams.split(',').some(existing => existing.trim() === param.trim()));
     if (paramsToAdd.length === 0) {
       return content;
     }

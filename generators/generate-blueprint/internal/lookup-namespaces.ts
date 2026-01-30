@@ -9,5 +9,5 @@ export const lookupGeneratorsNamespaces = (): string[] => {
       .sort();
   }
 
-  return generatorNamespaces!;
+  return generatorNamespaces;
 };

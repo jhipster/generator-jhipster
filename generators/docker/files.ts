@@ -15,7 +15,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
   ],
   sqlDatabasesFiles: [
     {
-      condition: ctx => ctx.dockerServices!.some(service => ['postgresql', 'mariadb', 'mysql', 'mssql'].includes(service)),
+      condition: ctx => ctx.dockerServices.some(service => ['postgresql', 'mariadb', 'mysql', 'mssql'].includes(service)),
       templates: [
         {
           sourceFile: ctx => `${TEMPLATES_DOCKER_DIR}${ctx.prodDatabaseType}.yml`,
@@ -24,14 +24,14 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
       ],
     },
     {
-      condition: ctx => ctx.dockerServices!.includes('mysql'),
+      condition: ctx => ctx.dockerServices.includes('mysql'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       transform: false,
       templates: ['config/mysql/my.cnf'],
     },
     {
-      condition: ctx => ctx.dockerServices!.includes('mariadb'),
+      condition: ctx => ctx.dockerServices.includes('mariadb'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       transform: false,
@@ -40,7 +40,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
   ],
   couchbaseFiles: [
     {
-      condition: ctx => ctx.dockerServices!.includes('couchbase'),
+      condition: ctx => ctx.dockerServices.includes('couchbase'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['couchbase.yml', 'couchbase-cluster.yml', 'couchbase/Couchbase.Dockerfile', 'couchbase/scripts/configure-node.sh'],
@@ -48,7 +48,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
   ],
   mongodbFiles: [
     {
-      condition: ctx => ctx.dockerServices!.includes('mongodb'),
+      condition: ctx => ctx.dockerServices.includes('mongodb'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['mongodb.yml', 'mongodb-cluster.yml', 'mongodb/MongoDB.Dockerfile', 'mongodb/scripts/init_replicaset.js'],
@@ -56,7 +56,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
   ],
   cassandraFiles: [
     {
-      condition: ctx => ctx.dockerServices!.includes('cassandra'),
+      condition: ctx => ctx.dockerServices.includes('cassandra'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: [
@@ -74,7 +74,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
   ],
   neo4jFiles: [
     {
-      condition: ctx => ctx.dockerServices!.includes('neo4j'),
+      condition: ctx => ctx.dockerServices.includes('neo4j'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['neo4j.yml'],
@@ -82,19 +82,19 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
   ],
   cacheProvideFiles: [
     {
-      condition: ctx => ctx.dockerServices!.includes('hazelcast'),
+      condition: ctx => ctx.dockerServices.includes('hazelcast'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['hazelcast-management-center.yml'],
     },
     {
-      condition: ctx => ctx.dockerServices!.includes('memcached'),
+      condition: ctx => ctx.dockerServices.includes('memcached'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['memcached.yml'],
     },
     {
-      condition: ctx => ctx.dockerServices!.includes('redis'),
+      condition: ctx => ctx.dockerServices.includes('redis'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['redis.yml', 'redis-cluster.yml', 'redis/Redis-Cluster.Dockerfile', 'redis/connectRedisCluster.sh'],
@@ -149,44 +149,44 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
       templates: ['sonar.yml', 'prometheus/prometheus.yml'],
     },
     {
-      condition: ctx => ctx.dockerServices!.includes('elasticsearch'),
+      condition: ctx => ctx.dockerServices.includes('elasticsearch'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['elasticsearch.yml'],
     },
     {
-      condition: ctx => ctx.dockerServices!.includes('kafka'),
+      condition: ctx => ctx.dockerServices.includes('kafka'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['kafka.yml'],
     },
     {
-      condition: ctx => ctx.dockerServices!.includes('pulsar'),
+      condition: ctx => ctx.dockerServices.includes('pulsar'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['pulsar.yml'],
     },
     {
-      condition: generator => !!generator.dockerServices!.includes('swagger-editor'),
+      condition: generator => !!generator.dockerServices.includes('swagger-editor'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['swagger-editor.yml'],
     },
     {
-      condition: ctx => ctx.dockerServices!.includes('keycloak'),
+      condition: ctx => ctx.dockerServices.includes('keycloak'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['keycloak.yml', 'realm-config/jhipster-realm.json'],
     },
     {
-      condition: ctx => ctx.dockerServices!.includes('keycloak'),
+      condition: ctx => ctx.dockerServices.includes('keycloak'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       transform: false,
       templates: ['realm-config/keycloak-health-check.sh'],
     },
     {
-      condition: ctx => ctx.dockerServices!.includes('zipkin'),
+      condition: ctx => ctx.dockerServices.includes('zipkin'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['zipkin.yml'],

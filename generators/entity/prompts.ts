@@ -187,7 +187,7 @@ export function askForFieldsToRemove(this: EntityGenerator) {
       const fields = this.entityConfig.fields;
       for (let i = fields.length - 1; i >= 0; i -= 1) {
         const field = this.entityConfig.fields[i];
-        if (props.fieldsToRemove.filter((val: string) => val === field.fieldName).length > 0) {
+        if (props.fieldsToRemove.includes(field.fieldName)) {
           fields.splice(i, 1);
         }
       }
@@ -245,7 +245,7 @@ export function askForRelationsToRemove(this: EntityGenerator) {
       const relationships = this.entityConfig.relationships;
       for (let i = relationships.length - 1; i >= 0; i -= 1) {
         const rel = relationships[i];
-        if ((props.relsToRemove as string[]).filter(val => val === `${rel.relationshipName}:${rel.relationshipType}`).length > 0) {
+        if ((props.relsToRemove as string[]).includes(`${rel.relationshipName}:${rel.relationshipType}`)) {
           relationships.splice(i, 1);
         }
       }
@@ -429,7 +429,7 @@ async function askForField(this: EntityGenerator) {
         if (input === '') {
           return 'Your field name cannot be empty';
         }
-        if (input.charAt(0) === input.charAt(0).toUpperCase()) {
+        if (input.startsWith(input.charAt(0).toUpperCase())) {
           return 'Your field name cannot start with an upper case letter';
         }
         if (input === 'id' || getFieldNameUndercored(this.entityConfig.fields).includes(snakeCase(input))) {
@@ -757,7 +757,7 @@ async function askForRelationship(this: EntityGenerator, ...args: any[]) {
         if (input === '') {
           return 'Your relationship cannot be empty';
         }
-        if (input.charAt(0) === input.charAt(0).toUpperCase()) {
+        if (input.startsWith(input.charAt(0).toUpperCase())) {
           return 'Your relationship cannot start with an upper case letter';
         }
         if (input === 'id' || getFieldNameUndercored(this.entityConfig.fields).includes(snakeCase(input))) {

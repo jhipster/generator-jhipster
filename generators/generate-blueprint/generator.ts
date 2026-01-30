@@ -20,7 +20,6 @@ import { rm } from 'node:fs/promises';
 
 import chalk from 'chalk';
 import { camelCase, snakeCase, upperFirst } from 'lodash-es';
-import type { Storage } from 'yeoman-generator';
 
 import { getPackageRoot } from '../../lib/index.ts';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base-core/priorities.ts';
@@ -105,7 +104,7 @@ export default class extends BaseSimpleApplicationGenerator<
         const { allPriorities } = this.options;
         const subGenerators = (this.jhipsterConfig.subGenerators ?? []) as string[];
         for (const subGenerator of subGenerators) {
-          const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator) as Storage<Record<string, any>>;
+          const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator);
           if (allPriorities) {
             subGeneratorStorage.defaults({ [PRIORITIES]: BASE_PRIORITY_NAMES_LIST });
           }
@@ -120,7 +119,7 @@ export default class extends BaseSimpleApplicationGenerator<
           .split(',')
           .map(sub => sub.trim())
           .filter(Boolean)) {
-          const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator) as Storage<Record<string, any>>;
+          const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator);
           if (allPriorities) {
             subGeneratorStorage.defaults({ [PRIORITIES]: BASE_PRIORITY_NAMES_LIST });
           }
@@ -309,8 +308,8 @@ export default class extends BaseSimpleApplicationGenerator<
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const { jhipsterPackageJson } = application;
         const mainDependencies: Record<string, string> = {
-          ...jhipsterPackageJson.dependencies!,
-          ...jhipsterPackageJson.devDependencies!,
+          ...jhipsterPackageJson.dependencies,
+          ...jhipsterPackageJson.devDependencies,
         } as Record<string, string>;
         this.loadNodeDependenciesFromPackageJson(
           mainDependencies,
@@ -343,7 +342,7 @@ export default class extends BaseSimpleApplicationGenerator<
             'yeoman-test': '>=10',
           },
           engines: {
-            node: jhipsterPackageJson.engines!.node!,
+            node: jhipsterPackageJson.engines.node,
           },
         });
       },
@@ -352,7 +351,7 @@ export default class extends BaseSimpleApplicationGenerator<
         if (!cli || !cliName || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         this.packageJson.merge({
           bin: {
-            [cliName!]: 'cli/cli.cjs',
+            [cliName]: 'cli/cli.cjs',
           },
           files: ['cli', ...defaultPublishedFiles],
         });
