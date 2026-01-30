@@ -127,8 +127,7 @@
     "update-snapshots": "esmocha test generators cli .blueprint lib/jdl lib --forbid-only --update-snapshot --enable-source-maps"
   },
   "overrides": {
-    "@eslint/core": "$@eslint/core",
-    "chevrotain": "$chevrotain"
+    "@eslint/core": "$@eslint/core"
   },
   "dependencies": {
     "@eslint/core": "1.0.1",
@@ -143,7 +142,7 @@
     "@yeoman/transform": "2.1.0",
     "@yeoman/types": "1.9.1",
     "chalk": "5.6.2",
-    "chevrotain": "11.1.1",
+    "chevrotain": "11.0.3",
     "commander": "14.0.2",
     "debug": "4.4.3",
     "didyoumean": "1.2.2",
