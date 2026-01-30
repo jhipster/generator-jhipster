@@ -167,7 +167,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
       templates: ['pulsar.yml'],
     },
     {
-      condition: generator => !!generator.dockerServices!.includes('swagger-editor'),
+      condition: generator => !!generator.dockerServices.includes('swagger-editor'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['swagger-editor.yml'],
