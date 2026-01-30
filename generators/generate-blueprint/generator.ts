@@ -352,7 +352,7 @@ export default class extends BaseSimpleApplicationGenerator<
         if (!cli || !cliName || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         this.packageJson.merge({
           bin: {
-            [cliName!]: 'cli/cli.cjs',
+            [cliName]: 'cli/cli.cjs',
           },
           files: ['cli', ...defaultPublishedFiles],
         });
