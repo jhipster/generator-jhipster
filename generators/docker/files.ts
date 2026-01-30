@@ -15,7 +15,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
   ],
   sqlDatabasesFiles: [
     {
-      condition: ctx => ctx.dockerServices!.some(service => ['postgresql', 'mariadb', 'mysql', 'mssql'].includes(service)),
+      condition: ctx => ctx.dockerServices.some(service => ['postgresql', 'mariadb', 'mysql', 'mssql'].includes(service)),
       templates: [
         {
           sourceFile: ctx => `${TEMPLATES_DOCKER_DIR}${ctx.prodDatabaseType}.yml`,
