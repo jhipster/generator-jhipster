@@ -343,7 +343,7 @@ export default class extends BaseSimpleApplicationGenerator<
             'yeoman-test': '>=10',
           },
           engines: {
-            node: jhipsterPackageJson.engines!.node!,
+            node: jhipsterPackageJson.engines.node,
           },
         });
       },
