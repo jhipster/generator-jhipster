@@ -104,11 +104,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
           const { stdout, exitCode } = await this.spawnHeroku(['apps:info', '--json', this.jhipsterConfig.herokuAppName!], {
             verboseInfo: false,
           });
-          if (exitCode !== 0) {
-            this.log.error(`Could not find application: ${chalk.cyan(this.jhipsterConfig.herokuAppName)}`);
-            this.herokuAppName = undefined;
-            throw new Error('Run the generator again to create a new application.');
-          } else {
+          if (exitCode === 0) {
             const json = JSON.parse(stdout);
             this.herokuAppName = json.app.name;
             if (json.dynos.length > 0) {
@@ -118,6 +114,10 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
             this.config.set({
               herokuAppName: this.herokuAppName,
             });
+          } else {
+            this.log.error(`Could not find application: ${chalk.cyan(this.jhipsterConfig.herokuAppName)}`);
+            this.herokuAppName = undefined;
+            throw new Error('Run the generator again to create a new application.');
           }
         } else {
           await this.prompt(
