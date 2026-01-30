@@ -154,11 +154,11 @@ export default class NodeGenerator extends JavaApplicationGenerator {
             },
             {
               property: 'checksum-maven-plugin.version',
-              value: javaDependencies!['checksum-maven-plugin'],
+              value: javaDependencies['checksum-maven-plugin'],
             },
             {
               property: 'maven-antrun-plugin.version',
-              value: javaDependencies!['maven-antrun-plugin'],
+              value: javaDependencies['maven-antrun-plugin'],
             },
           ],
           pluginManagement: [
