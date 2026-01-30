@@ -150,7 +150,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
             { property: 'npm.version', value: nodeDependencies.npm },
             {
               property: 'frontend-maven-plugin.version',
-              value: javaDependencies!['frontend-maven-plugin'],
+              value: javaDependencies['frontend-maven-plugin'],
             },
             {
               property: 'checksum-maven-plugin.version',
