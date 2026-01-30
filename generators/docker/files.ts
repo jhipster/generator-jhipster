@@ -186,7 +186,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
       templates: ['realm-config/keycloak-health-check.sh'],
     },
     {
-      condition: ctx => ctx.dockerServices!.includes('zipkin'),
+      condition: ctx => ctx.dockerServices.includes('zipkin'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['zipkin.yml'],
