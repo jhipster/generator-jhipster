@@ -310,7 +310,7 @@ export default class extends BaseSimpleApplicationGenerator<
         const { jhipsterPackageJson } = application;
         const mainDependencies: Record<string, string> = {
           ...jhipsterPackageJson.dependencies,
-          ...jhipsterPackageJson.devDependencies!,
+          ...jhipsterPackageJson.devDependencies,
         } as Record<string, string>;
         this.loadNodeDependenciesFromPackageJson(
           mainDependencies,
