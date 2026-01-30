@@ -284,7 +284,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
               // Extract from "Created random-app-name-1234... done"
               this.herokuAppName = stdout.substring(stdout.lastIndexOf('/') + 1, stdout.indexOf('.git'));
               // ensure that the git remote is the same as the appName
-              await this.spawnHeroku(['git:remote', '--app', this.herokuAppName!]);
+              await this.spawnHeroku(['git:remote', '--app', this.herokuAppName]);
               this.jhipsterConfig.herokuAppName = this.herokuAppName;
             }
           } else if (stderr.includes('Invalid credentials')) {
