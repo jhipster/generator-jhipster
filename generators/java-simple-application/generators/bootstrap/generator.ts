@@ -113,14 +113,12 @@ export default class BootstrapGenerator extends JavaSimpleApplicationGenerator {
             ...annotations.map(annotation => addJavaAnnotation(annotation)),
             constructorParams.length > 0 ? injectJavaConstructorParam({ className, param: constructorParams }) : c => c,
             fields.length > 0 ? injectJavaField({ className, field: fields }) : c => c,
-            ...springBeans
-              .map(({ package: javaPackage, beanClass, beanName }) => [
-                addJavaImport(`${javaPackage}.${beanClass}`),
-                injectJavaField({ className, field: `private final ${beanClass} ${beanName};` }),
-                injectJavaConstructorParam({ className, param: `${beanClass} ${beanName}` }),
-                injectJavaConstructorSetter({ className, setter: `this.${beanName} = ${beanName};` }),
-              ])
-              .flat(),
+            ...springBeans.flatMap(({ package: javaPackage, beanClass, beanName }) => [
+              addJavaImport(`${javaPackage}.${beanClass}`),
+              injectJavaField({ className, field: `private final ${beanClass} ${beanName};` }),
+              injectJavaConstructorParam({ className, param: `${beanClass} ${beanName}` }),
+              injectJavaConstructorSetter({ className, setter: `this.${beanName} = ${beanName};` }),
+            ]),
             ...editFileCallback,
           );
         };

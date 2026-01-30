@@ -828,9 +828,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     } else if (typeof rootTemplatesPath === 'string' && isAbsolute(rootTemplatesPath)) {
       rootTemplatesAbsolutePath = rootTemplatesPath;
     } else {
-      rootTemplatesAbsolutePath = this.jhipsterTemplatesFolders
-        .map(templateFolder => ([] as string[]).concat(rootTemplatesPath).map(relativePath => join(templateFolder, relativePath)))
-        .flat();
+      rootTemplatesAbsolutePath = this.jhipsterTemplatesFolders.flatMap(templateFolder =>
+        ([] as string[]).concat(rootTemplatesPath).map(relativePath => join(templateFolder, relativePath)),
+      );
     }
 
     const normalizeEjs = (file: string) => file.replace('.ejs', '');
@@ -990,7 +990,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       const sectionTransform = 'sections' in options ? (options.sections._?.transform ?? []) : [];
 
       parsedTemplates = ('sections' in options ? convertWriteFileSectionsToBlocks<DataType, this>(options.sections) : options.blocks)
-        .map((block, blockIdx) => {
+        .flatMap((block, blockIdx) => {
           const {
             path: blockPathValue = './',
             from: blockFromCallback,
@@ -1079,7 +1079,6 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             };
           });
         })
-        .flat()
         .filter(template => template) as RenderTemplateParam[];
     } else {
       parsedTemplates = options.templates.map(template => {

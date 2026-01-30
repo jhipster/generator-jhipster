@@ -341,7 +341,7 @@ export function prepareEntityPrimaryKeyForTemplates(
       },
       // Fields inherited from id relationships.
       get derivedFields() {
-        return this.relationships.map(rel => rel.derivedPrimaryKey!.derivedFields).flat();
+        return this.relationships.flatMap(rel => rel.derivedPrimaryKey!.derivedFields);
       },
       get ids() {
         return this.fields.map(field => fieldToId(field));

@@ -262,16 +262,14 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   }
 
   createConcurrentlyScript(...scripts: string[]) {
-    const scriptsList = scripts
-      .map(script => {
-        const packageScripts = this.appsFolders!.map(packageName => [
-          `${script}:${packageName}`,
-          `npm run ${script} --workspace ${packageName} --if-present`,
-        ]);
-        packageScripts.push([script, `concurrently ${this.appsFolders!.map(packageName => `npm:${script}:${packageName}`).join(' ')}`]);
-        return packageScripts;
-      })
-      .flat();
+    const scriptsList = scripts.flatMap(script => {
+      const packageScripts = this.appsFolders!.map(packageName => [
+        `${script}:${packageName}`,
+        `npm run ${script} --workspace ${packageName} --if-present`,
+      ]);
+      packageScripts.push([script, `concurrently ${this.appsFolders!.map(packageName => `npm:${script}:${packageName}`).join(' ')}`]);
+      return packageScripts;
+    });
     return Object.fromEntries(scriptsList);
   }
 

@@ -152,14 +152,12 @@ export default class JavaGenerator extends JavaSimpleApplicationGenerator {
                 [`${application.packageName}`]: 'Application root.',
                 [`${application.packageName}.config`]: 'Application configuration.',
                 ...Object.fromEntries(
-                  application
-                    .entityPackages!.map(pkg => [
-                      [`${pkg}.domain`, 'Domain objects.'],
-                      [`${pkg}.repository`, 'Repository layer.'],
-                      [`${pkg}.service`, 'Service layer.'],
-                      [`${pkg}.web.rest`, 'Rest layer.'],
-                    ])
-                    .flat(),
+                  application.entityPackages!.flatMap(pkg => [
+                    [`${pkg}.domain`, 'Domain objects.'],
+                    [`${pkg}.repository`, 'Repository layer.'],
+                    [`${pkg}.service`, 'Service layer.'],
+                    [`${pkg}.web.rest`, 'Rest layer.'],
+                  ]),
                 ),
               },
             }),

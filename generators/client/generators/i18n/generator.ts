@@ -247,38 +247,35 @@ export default class I18NGenerator extends ClientApplicationGenerator {
         await Promise.all(
           entities
             .filter(entity => !entity.skipClient && !entity.builtInUser)
-            .map(entity =>
-              entity.fields
-                .map(field => {
-                  if (!field.fieldIsEnum) return undefined;
-                  return this.languagesToGenerate.map(({ languageTag }) =>
-                    this.writeFiles({
-                      sections: {
-                        enumBaseFiles: [
-                          {
-                            templates: [
-                              {
-                                sourceFile: 'entity/i18n/enum.json.ejs',
-                                destinationFile: context =>
-                                  `${context.clientI18nDir}${context.lang}/${context.clientRootFolder}${context.enumInstance}.json`,
-                              },
-                            ],
-                          },
-                        ],
-                      },
-                      context: {
-                        ...getEnumInfo(field, entity.clientRootFolder),
-                        lang: languageTag,
-                        frontendAppName,
-                        clientI18nDir,
-                        clientSrcDir,
-                      },
-                    }),
-                  );
-                })
-                .flat(),
-            )
-            .flat(),
+            .flatMap(entity =>
+              entity.fields.flatMap(field => {
+                if (!field.fieldIsEnum) return [];
+                return this.languagesToGenerate.map(({ languageTag }) =>
+                  this.writeFiles({
+                    sections: {
+                      enumBaseFiles: [
+                        {
+                          templates: [
+                            {
+                              sourceFile: 'entity/i18n/enum.json.ejs',
+                              destinationFile: context =>
+                                `${context.clientI18nDir}${context.lang}/${context.clientRootFolder}${context.enumInstance}.json`,
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    context: {
+                      ...getEnumInfo(field, entity.clientRootFolder),
+                      lang: languageTag,
+                      frontendAppName,
+                      clientI18nDir,
+                      clientSrcDir,
+                    },
+                  }),
+                );
+              }),
+            ),
         );
       },
     });

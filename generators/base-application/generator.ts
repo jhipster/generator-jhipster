@@ -533,20 +533,18 @@ export default class BaseApplicationGenerator<
     PreparingEachEntityFieldTaskParam<Entity, Application>,
     'entity' | 'entityName' | 'field' | 'fieldName' | 'description'
   >[] {
-    return this.#getEntitiesDataToPrepare()
-      .map(({ entity, entityName, ...data }) => {
-        if (!entity.fields) return [];
+    return this.#getEntitiesDataToPrepare().flatMap(({ entity, entityName, ...data }) => {
+      if (!entity.fields) return [];
 
-        return entity.fields.map(field => ({
-          entity,
-          entityName,
-          ...data,
-          field,
-          fieldName: field.fieldName,
-          description: `${entityName}#${field.fieldName}`,
-        }));
-      })
-      .flat() as any;
+      return entity.fields.map(field => ({
+        entity,
+        entityName,
+        ...data,
+        field,
+        fieldName: field.fieldName,
+        description: `${entityName}#${field.fieldName}`,
+      }));
+    }) as any;
   }
 
   /**
@@ -558,20 +556,18 @@ export default class BaseApplicationGenerator<
     PreparingEachEntityRelationshipTaskParam<Entity, Application>,
     'entity' | 'entityName' | 'relationship' | 'relationshipName' | 'description'
   >[] {
-    return this.#getEntitiesDataToPrepare()
-      .map(({ entity, entityName, ...data }) => {
-        if (!entity.relationships) return [];
+    return this.#getEntitiesDataToPrepare().flatMap(({ entity, entityName, ...data }) => {
+      if (!entity.relationships) return [];
 
-        return entity.relationships.map(relationship => ({
-          entity,
-          entityName,
-          ...data,
-          relationship,
-          relationshipName: relationship.relationshipName,
-          description: `${entityName}#${relationship.relationshipName}`,
-        }));
-      })
-      .flat() as any;
+      return entity.relationships.map(relationship => ({
+        entity,
+        entityName,
+        ...data,
+        relationship,
+        relationshipName: relationship.relationshipName,
+        description: `${entityName}#${relationship.relationshipName}`,
+      }));
+    }) as any;
   }
 
   /**
