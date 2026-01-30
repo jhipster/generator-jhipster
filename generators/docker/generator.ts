@@ -201,7 +201,7 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
           source.addDockerExtendedServiceToApplicationAndServices!({ serviceName });
         }
 
-        if (application.dockerServices!.includes('eureka')) {
+        if (application.dockerServices.includes('eureka')) {
           const depends_on = application.authenticationTypeOauth2
             ? {
                 keycloak: {
