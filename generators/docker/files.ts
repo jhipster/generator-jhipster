@@ -48,7 +48,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
   ],
   mongodbFiles: [
     {
-      condition: ctx => ctx.dockerServices!.includes('mongodb'),
+      condition: ctx => ctx.dockerServices.includes('mongodb'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['mongodb.yml', 'mongodb-cluster.yml', 'mongodb/MongoDB.Dockerfile', 'mongodb/scripts/init_replicaset.js'],
