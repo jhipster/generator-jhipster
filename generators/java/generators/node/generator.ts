@@ -133,7 +133,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
           {
             libraryName: 'node-gradle',
             module: 'com.github.node-gradle:gradle-node-plugin',
-            version: application.javaDependencies!['node-gradle'],
+            version: application.javaDependencies['node-gradle'],
             scope: 'implementation',
           },
         ]);
