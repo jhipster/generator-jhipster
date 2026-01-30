@@ -155,7 +155,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
       templates: ['elasticsearch.yml'],
     },
     {
-      condition: ctx => ctx.dockerServices!.includes('kafka'),
+      condition: ctx => ctx.dockerServices.includes('kafka'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['kafka.yml'],
