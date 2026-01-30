@@ -39,7 +39,7 @@ export const checkDocker = async function (this: CoreGenerator) {
   }
 
   const dockerVersion = ret.stdout.split(' ')[2].replace(/,/g, '');
-  const dockerVersionMajor = parseInt(dockerVersion.split('.')[0]);
+  const dockerVersionMajor = Number.parseInt(dockerVersion.split('.')[0]);
   const dockerVersionMinor = parseInt(dockerVersion.split('.')[1]);
   if (dockerVersionMajor < 1 || (dockerVersionMajor === 1 && dockerVersionMinor < 10)) {
     this.log.error(
