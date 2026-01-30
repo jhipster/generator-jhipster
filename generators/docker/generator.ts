@@ -169,7 +169,7 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
   get postWriting() {
     return this.asPostWritingTaskGroup({
       async dockerServices({ application, source }) {
-        if (application.dockerServices!.includes('cassandra')) {
+        if (application.dockerServices.includes('cassandra')) {
           const serviceName = application.databaseType!;
           source.addDockerExtendedServiceToApplicationAndServices!(
             { serviceName },
