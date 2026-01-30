@@ -48,7 +48,7 @@ const isNumber = (input: any): input is number => !Number.isNaN(filterNumber(inp
  * @param {any} input input
  * @returns {boolean} true if input is a signed number; false otherwise
  */
-const isSignedNumber = (input: any): boolean => !isNaN(filterNumber(input, true));
+const isSignedNumber = (input: any): boolean => !Number.isNaN(filterNumber(input, true));
 
 /**
  * @private
