@@ -56,7 +56,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
   ],
   cassandraFiles: [
     {
-      condition: ctx => ctx.dockerServices!.includes('cassandra'),
+      condition: ctx => ctx.dockerServices.includes('cassandra'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: [
