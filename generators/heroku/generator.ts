@@ -476,7 +476,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
             }
 
             const { stdout: buildpackData } = await this.spawnHeroku(['buildpacks', '--app', this.herokuAppName!]);
-            if (!(buildpackData as string).includes(buildpack)) {
+            if (!(buildpackData).includes(buildpack)) {
               await this.spawnHeroku(['buildpacks:add', buildpack, '--app', this.herokuAppName!]);
             }
 
