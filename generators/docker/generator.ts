@@ -197,7 +197,7 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
           source.addDockerDependencyToApplication!({ serviceName, condition: SERVICE_HEALTHY });
         }
 
-        for (const serviceName of application.dockerServices!.filter(service => ['redis', 'memcached', 'pulsar'].includes(service))) {
+        for (const serviceName of application.dockerServices.filter(service => ['redis', 'memcached', 'pulsar'].includes(service))) {
           source.addDockerExtendedServiceToApplicationAndServices!({ serviceName });
         }
 
