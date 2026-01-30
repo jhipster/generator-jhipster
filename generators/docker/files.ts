@@ -179,7 +179,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
       templates: ['keycloak.yml', 'realm-config/jhipster-realm.json'],
     },
     {
-      condition: ctx => ctx.dockerServices!.includes('keycloak'),
+      condition: ctx => ctx.dockerServices.includes('keycloak'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       transform: false,
