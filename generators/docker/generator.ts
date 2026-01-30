@@ -224,7 +224,7 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
             { serviceFile: './consul.yml', serviceName: 'consul-config-loader' },
           );
         }
-        if (application.dockerServices!.includes('kafka')) {
+        if (application.dockerServices.includes('kafka')) {
           source.addDockerExtendedServiceToApplicationAndServices!({ serviceName: 'kafka' });
         }
       },
