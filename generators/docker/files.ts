@@ -24,7 +24,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
       ],
     },
     {
-      condition: ctx => ctx.dockerServices!.includes('mysql'),
+      condition: ctx => ctx.dockerServices.includes('mysql'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       transform: false,
