@@ -309,7 +309,7 @@ export default class extends BaseSimpleApplicationGenerator<
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const { jhipsterPackageJson } = application;
         const mainDependencies: Record<string, string> = {
-          ...jhipsterPackageJson.dependencies!,
+          ...jhipsterPackageJson.dependencies,
           ...jhipsterPackageJson.devDependencies!,
         } as Record<string, string>;
         this.loadNodeDependenciesFromPackageJson(
