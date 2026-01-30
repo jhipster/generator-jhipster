@@ -429,7 +429,7 @@ async function askForField(this: EntityGenerator) {
         if (input === '') {
           return 'Your field name cannot be empty';
         }
-        if (input.charAt(0) === input.charAt(0).toUpperCase()) {
+        if (input.startsWith(input.charAt(0).toUpperCase())) {
           return 'Your field name cannot start with an upper case letter';
         }
         if (input === 'id' || getFieldNameUndercored(this.entityConfig.fields).includes(snakeCase(input))) {
@@ -757,7 +757,7 @@ async function askForRelationship(this: EntityGenerator, ...args: any[]) {
         if (input === '') {
           return 'Your relationship cannot be empty';
         }
-        if (input.charAt(0) === input.charAt(0).toUpperCase()) {
+        if (input.startsWith(input.charAt(0).toUpperCase())) {
           return 'Your relationship cannot start with an upper case letter';
         }
         if (input === 'id' || getFieldNameUndercored(this.entityConfig.fields).includes(snakeCase(input))) {
