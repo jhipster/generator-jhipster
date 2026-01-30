@@ -271,7 +271,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
       configureWebpackCoverage({ application, source }) {
         const { cypressCoverageWebpack, clientFrameworkAngular, clientRootDir, dasherizedBaseName } = application;
         if (!cypressCoverageWebpack) return;
-        const clientPackageJson = this.createStorage(this.destinationPath(application.clientRootDir!, 'package.json'));
+        const clientPackageJson = this.createStorage(this.destinationPath(application.clientRootDir, 'package.json'));
         clientPackageJson.merge({
           devDependencies: {
             '@cypress/code-coverage': application.nodeDependencies['@cypress/code-coverage'],
