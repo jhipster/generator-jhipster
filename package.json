@@ -127,8 +127,7 @@
     "update-snapshots": "esmocha test generators cli .blueprint lib/jdl lib --forbid-only --update-snapshot --enable-source-maps"
   },
   "overrides": {
-    "@eslint/core": "$@eslint/core",
-    "chevrotain": "$chevrotain"
+    "@eslint/core": "$@eslint/core"
   },
   "dependencies": {
     "@eslint/core": "1.0.1",
