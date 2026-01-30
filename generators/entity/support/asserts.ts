@@ -33,7 +33,7 @@ const filterNumber = (input: any, isSigned = false, isDecimal = false) => {
 
   if (regex.test(input)) return Number(input);
 
-  return NaN;
+  return Number.NaN;
 };
 
 /**
