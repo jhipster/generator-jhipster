@@ -94,7 +94,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
       templates: ['memcached.yml'],
     },
     {
-      condition: ctx => ctx.dockerServices!.includes('redis'),
+      condition: ctx => ctx.dockerServices.includes('redis'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['redis.yml', 'redis-cluster.yml', 'redis/Redis-Cluster.Dockerfile', 'redis/connectRedisCluster.sh'],
