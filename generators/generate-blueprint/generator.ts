@@ -120,7 +120,7 @@ export default class extends BaseSimpleApplicationGenerator<
           .split(',')
           .map(sub => sub.trim())
           .filter(Boolean)) {
-          const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator) as Storage<Record<string, any>>;
+          const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator);
           if (allPriorities) {
             subGeneratorStorage.defaults({ [PRIORITIES]: BASE_PRIORITY_NAMES_LIST });
           }
