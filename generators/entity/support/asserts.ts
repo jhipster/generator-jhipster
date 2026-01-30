@@ -55,6 +55,6 @@ const isSignedNumber = (input: any): boolean => !Number.isNaN(filterNumber(input
  * @param {any} input input
  * @returns {boolean} true if input is a signed decimal number; false otherwise
  */
-const isSignedDecimalNumber = (input: any): boolean => !isNaN(filterNumber(input, true, true));
+const isSignedDecimalNumber = (input: any): boolean => !Number.isNaN(filterNumber(input, true, true));
 
 export { isNumber, isSignedDecimalNumber, isSignedNumber };
