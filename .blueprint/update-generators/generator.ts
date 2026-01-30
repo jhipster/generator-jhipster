@@ -39,22 +39,20 @@ export default class UpdateGeneratorsGenerator extends BaseCoreGenerator {
           return a.namespace.localeCompare(b.namespace);
         });
 
-        const contentToAdd = generators
-          .map(({ namespace, generator }) => {
-            if (namespace.startsWith('jhipster:base') && namespace.split(':').length === 2) {
-              // Base generators cannot be composed with.
-              return [];
-            }
-            const parts = namespace.split(':').length;
-            const relativePath = this.relativeDir(this.templatePath('../../../generators/'), dirname(generator));
+        const contentToAdd = generators.flatMap(({ namespace, generator }) => {
+          if (namespace.startsWith('jhipster:base') && namespace.split(':').length === 2) {
+            // Base generators cannot be composed with.
+            return [];
+          }
+          const parts = namespace.split(':').length;
+          const relativePath = this.relativeDir(this.templatePath('../../../generators/'), dirname(generator));
 
-            const generateImport = (key: string) =>
-              `${/[:-]/.test(key) ? `'${key}'` : key}: import('./${relativePath}generator.ts').default;`;
-            return parts === 2
-              ? [generateImport(namespace.replace('jhipster:', '')), generateImport(namespace)]
-              : [generateImport(namespace)];
-          })
-          .flat();
+          const generateImport = (key: string) =>
+            `${/[:-]/.test(key) ? `'${key}'` : key}: import('./${relativePath}generator.ts').default;`;
+          return parts === 2
+            ? [generateImport(namespace.replace('jhipster:', '')), generateImport(namespace)]
+            : [generateImport(namespace)];
+        });
 
         const generatorsWithBootstrap = generators
           .map(({ namespace }) => namespace)

@@ -30,8 +30,4 @@ export const getWorkflowSamples = (workflows: string[] = WORKFLOW_NAMES): Record
   );
 
 export default (workflows?: string[]) =>
-  Object.fromEntries(
-    Object.values(getWorkflowSamples(workflows))
-      .map(workflowSamples => Object.entries(workflowSamples))
-      .flat(),
-  );
+  Object.fromEntries(Object.values(getWorkflowSamples(workflows)).flatMap(workflowSamples => Object.entries(workflowSamples)));
