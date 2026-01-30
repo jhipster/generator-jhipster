@@ -105,7 +105,7 @@ export default class extends BaseSimpleApplicationGenerator<
         const { allPriorities } = this.options;
         const subGenerators = (this.jhipsterConfig.subGenerators ?? []) as string[];
         for (const subGenerator of subGenerators) {
-          const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator) as Storage<Record<string, any>>;
+          const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator);
           if (allPriorities) {
             subGeneratorStorage.defaults({ [PRIORITIES]: BASE_PRIORITY_NAMES_LIST });
           }
