@@ -161,7 +161,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
       templates: ['kafka.yml'],
     },
     {
-      condition: ctx => ctx.dockerServices!.includes('pulsar'),
+      condition: ctx => ctx.dockerServices.includes('pulsar'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['pulsar.yml'],
