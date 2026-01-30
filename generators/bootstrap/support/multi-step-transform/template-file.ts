@@ -14,13 +14,13 @@ export default class TemplateFile {
   parentPath?: string;
   filePath?: string;
 
-  private _filename: string;
-  private _extension: string;
+  private readonly _filename: string;
+  private readonly _extension: string;
   private _compiled: ejs.TemplateFunction;
 
-  private _fragments: TemplateFile[];
-  private _fragmentName: string;
-  private _debug: { enabled: boolean } & ((msg: string) => void);
+  private readonly _fragments: TemplateFile[];
+  private readonly _fragmentName: string;
+  private readonly _debug: { enabled: boolean } & ((msg: string) => void);
 
   constructor(filename: string, extension: string) {
     this._filename = filename;

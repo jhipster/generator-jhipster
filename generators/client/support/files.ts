@@ -58,7 +58,7 @@ function clientBlock({
   blockOrRelativePath: string | RelativeWriteFileBlock;
   relativeToSrc?: string;
 }): ClientFileBlock | Pick<ClientFileBlock, 'path' | 'renameTo'> {
-  const block: RelativeWriteFileBlock | undefined = typeof blockOrRelativePath !== 'string' ? blockOrRelativePath : undefined;
+  const block: RelativeWriteFileBlock | undefined = typeof blockOrRelativePath === 'string' ? undefined : blockOrRelativePath;
   const blockRenameTo = typeof block?.renameTo === 'function' ? block.renameTo : undefined;
   const relativePath: string = typeof blockOrRelativePath === 'string' ? blockOrRelativePath : (blockOrRelativePath.relativePath ?? '');
   return {

@@ -51,9 +51,9 @@ const MULTISTEP_TRANSFORM_PRIORITY = BaseGenerator.asPriority(MULTISTEP_TRANSFOR
 const PRE_CONFLICTS_PRIORITY = BaseGenerator.asPriority(PRE_CONFLICTS);
 
 export default class BootstrapGenerator extends CommandBaseGenerator<typeof command> {
-  static MULTISTEP_TRANSFORM = MULTISTEP_TRANSFORM_PRIORITY;
+  static readonly MULTISTEP_TRANSFORM = MULTISTEP_TRANSFORM_PRIORITY;
 
-  static PRE_CONFLICTS = PRE_CONFLICTS_PRIORITY;
+  static readonly PRE_CONFLICTS = PRE_CONFLICTS_PRIORITY;
 
   upgradeCommand?: boolean;
   skipPrettier?: boolean;
@@ -165,10 +165,7 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
   async commitTask() {
     await this.commitSharedFs(
       { refresh: this.refreshOnCommit },
-      ...this.env
-        .findFeature('commitTransformFactory')
-        .map(({ feature }) => feature())
-        .flat(),
+      ...this.env.findFeature('commitTransformFactory').flatMap(({ feature }) => feature()),
     );
   }
 
@@ -223,13 +220,13 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
 
               if ((file as VinylMemFsEditorFile).history?.[0] && file.conflicterData?.diskContents) {
                 const templateFile = (file as VinylMemFsEditorFile).history[0];
-                if (!file.contents) {
-                  await rm(templateFile, { force: true });
-                } else {
+                if (file.contents) {
                   const oldFileContents = file.conflicterData.diskContents.toString();
                   const newFileContents = file.contents.toString();
 
                   applyChangesToFileOrCopy({ templateFile, oldFileContents, newFileContents });
+                } else {
+                  await rm(templateFile, { force: true });
                 }
               }
 

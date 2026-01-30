@@ -133,7 +133,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
     return this.asWritingTaskGroup({
       async writeClientTranslations({ application }) {
         await Promise.all(
-          this.languagesToGenerate!.map(({ languageTag }) =>
+          this.languagesToGenerate.map(({ languageTag }) =>
             this.writeFiles({
               sections: {
                 clientI18nFiles: [

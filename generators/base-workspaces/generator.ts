@@ -72,13 +72,13 @@ export default abstract class BaseWorkspacesGenerator<
   Features extends BaseWorkspacesFeatures = BaseWorkspacesFeatures,
   Tasks extends WorkspacesTasks<Deployment, Source, Application> = WorkspacesTasks<Deployment, Source, Application>,
 > extends BaseGenerator<Config, Options, Source, Features, Tasks> {
-  static PROMPTING_WORKSPACES = BaseGenerator.asPriority(PROMPTING_WORKSPACES);
+  static readonly PROMPTING_WORKSPACES = BaseGenerator.asPriority(PROMPTING_WORKSPACES);
 
-  static CONFIGURING_WORKSPACES = BaseGenerator.asPriority(CONFIGURING_WORKSPACES);
+  static readonly CONFIGURING_WORKSPACES = BaseGenerator.asPriority(CONFIGURING_WORKSPACES);
 
-  static LOADING_WORKSPACES = BaseGenerator.asPriority(LOADING_WORKSPACES);
+  static readonly LOADING_WORKSPACES = BaseGenerator.asPriority(LOADING_WORKSPACES);
 
-  static PREPARING_WORKSPACES = BaseGenerator.asPriority(PREPARING_WORKSPACES);
+  static readonly PREPARING_WORKSPACES = BaseGenerator.asPriority(PREPARING_WORKSPACES);
 
   constructor(args?: string[], options?: Options, features?: Features) {
     super(args, options, features);

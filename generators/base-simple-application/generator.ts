@@ -44,7 +44,6 @@ const PRIORITY_WITH_APPLICATION: string[] = [
   LOADING,
   PREPARING,
   POST_PREPARING,
-
   DEFAULT,
   WRITING,
   POST_WRITING,
@@ -70,7 +69,7 @@ export default class BaseSimpleApplicationGenerator<
   Features extends BaseSimpleApplicationFeatures = BaseSimpleApplicationFeatures,
   Tasks extends SimpleTaskTypes<Application, Source> = SimpleTaskTypes<Application, Source>,
 > extends BaseGenerator<Config, Options, Source, Features, Tasks> {
-  static BOOTSTRAP_APPLICATION = BaseSimpleApplicationGenerator.asPriority(BOOTSTRAP_APPLICATION);
+  static readonly BOOTSTRAP_APPLICATION = BaseSimpleApplicationGenerator.asPriority(BOOTSTRAP_APPLICATION);
 
   constructor(args?: string[], options?: Options, features?: Features) {
     super(args, options, { storeJHipsterVersion: true, storeBlueprintVersion: true, ...features } as Features);
