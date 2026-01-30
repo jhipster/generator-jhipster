@@ -40,7 +40,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
   ],
   couchbaseFiles: [
     {
-      condition: ctx => ctx.dockerServices!.includes('couchbase'),
+      condition: ctx => ctx.dockerServices.includes('couchbase'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['couchbase.yml', 'couchbase-cluster.yml', 'couchbase/Couchbase.Dockerfile', 'couchbase/scripts/configure-node.sh'],
