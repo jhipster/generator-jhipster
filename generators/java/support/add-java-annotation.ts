@@ -84,8 +84,8 @@ export function parseJavaAnnotation(annotation?: string): JavaAnnotationParamete
       return acc;
     }
 
-    const key = param.substring(0, eqIdx).trim();
-    let value: string | string[] = param.substring(eqIdx + 1).trim();
+    const key = param.slice(0, eqIdx).trim();
+    let value: string | string[] = param.slice(eqIdx + 1).trim();
 
     if (value.startsWith('{')) {
       // Handle Java arrays by stripping braces and splitting

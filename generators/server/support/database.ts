@@ -141,10 +141,10 @@ export function calculateDbNameWithLimit(
     .digest('hex')}`;
 
   let formattedName = noSnakeCase ? tableOrEntityName : hibernateSnakeCase(tableOrEntityName);
-  formattedName = formattedName.substring(0, halfLimit - separator.length);
+  formattedName = formattedName.slice(0, halfLimit - separator.length);
 
   let otherFormattedName = noSnakeCase ? columnOrRelationshipName : hibernateSnakeCase(columnOrRelationshipName);
-  otherFormattedName = otherFormattedName.substring(0, limit - formattedName.length - separator.length - prefix.length - suffix.length);
+  otherFormattedName = otherFormattedName.slice(0, limit - formattedName.length - separator.length - prefix.length - suffix.length);
 
   return `${prefix}${formattedName}${separator}${otherFormattedName}${suffix}`;
 }
