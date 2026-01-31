@@ -28,82 +28,95 @@ export default class extends BaseGenerator {
         let matrix: GitHubMatrixGroup = {};
         let convertToGitHubMatrixInclude = true;
         let randomEnvironment = false;
-        if (this.workflow === 'docker-compose-integration') {
-          const { samples, warnings } = await getGithubSamplesGroup(this.templatePath('../samples/'), this.workflow);
-          matrix = samples;
-          if (warnings.length) {
-            this.log.warn(warnings.join('\n'));
-          }
-        } else if (this.workflow === 'generators') {
-          convertToGitHubMatrixInclude = false;
-          matrix = {
-            'database-changelog': {
-              disabled: !springBootDefaults,
-            },
-            'generate-blueprint': {
-              disabled: !generateBlueprint,
-            },
-            graalvm: {
-              disabled: !graalvm,
-            },
-          };
-        } else if (this.workflow === 'graalvm') {
-          if (hasWorkflowChanges || java || graalvm) {
+        switch (this.workflow) {
+          case 'docker-compose-integration': {
             const { samples, warnings } = await getGithubSamplesGroup(this.templatePath('../samples/'), this.workflow);
             matrix = samples;
             if (warnings.length) {
               this.log.warn(warnings.join('\n'));
             }
+            break;
           }
-        } else if (this.workflow === 'devserver') {
-          if (devBlueprint || hasWorkflowChanges || client) {
-            matrix = { ...devServerMatrix.angular, ...devServerMatrix.react, ...devServerMatrix.vue };
-          } else {
-            for (const client of ['angular', 'react', 'vue']) {
-              if ((changes as Record<string, boolean>)[client]) {
-                Object.assign(matrix, (devServerMatrix as Record<string, GitHubMatrixGroup>)[client]);
+          case 'generators': {
+            convertToGitHubMatrixInclude = false;
+            matrix = {
+              'database-changelog': {
+                disabled: !springBootDefaults,
+              },
+              'generate-blueprint': {
+                disabled: !generateBlueprint,
+              },
+              graalvm: {
+                disabled: !graalvm,
+              },
+            };
+            break;
+          }
+          case 'graalvm': {
+            if (hasWorkflowChanges || java || graalvm) {
+              const { samples, warnings } = await getGithubSamplesGroup(this.templatePath('../samples/'), this.workflow);
+              matrix = samples;
+              if (warnings.length) {
+                this.log.warn(warnings.join('\n'));
               }
             }
+            break;
           }
-        } else if (['angular', 'react', 'vue'].includes(this.workflow)) {
-          const hasClientFrameworkChanges = changes[this.workflow];
-          const hasSonarPrChanges = changes.sonarPr && this.workflow === 'angular';
-          const enableAllTests = base || common || hasWorkflowChanges || devBlueprint;
-          const enableBackendTests = enableAllTests || java;
-          const enableFrontendTests = enableAllTests || client || hasClientFrameworkChanges;
-          const enableE2eTests = enableBackendTests || enableFrontendTests || e2e || workspaces;
-          const enableAnyTest = enableE2eTests;
+          case 'devserver': {
+            if (devBlueprint || hasWorkflowChanges || client) {
+              matrix = { ...devServerMatrix.angular, ...devServerMatrix.react, ...devServerMatrix.vue };
+            } else {
+              for (const client of ['angular', 'react', 'vue']) {
+                if ((changes as Record<string, boolean>)[client]) {
+                  Object.assign(matrix, (devServerMatrix as Record<string, GitHubMatrixGroup>)[client]);
+                }
+              }
+            }
+            break;
+          }
+          case 'angular':
+          case 'react':
+          case 'vue': {
+            const hasClientFrameworkChanges = changes[this.workflow];
+            const hasSonarPrChanges = changes.sonarPr && this.workflow === 'angular';
+            const enableAllTests = base || common || hasWorkflowChanges || devBlueprint;
+            const enableBackendTests = enableAllTests || java;
+            const enableFrontendTests = enableAllTests || client || hasClientFrameworkChanges;
+            const enableE2eTests = enableBackendTests || enableFrontendTests || e2e || workspaces;
+            const enableAnyTest = enableE2eTests;
 
-          randomEnvironment = true;
-          if (enableAnyTest || hasSonarPrChanges) {
-            const content = await readFile(join(testIntegrationFolder, `workflow-samples/${this.workflow}.json`));
-            const parsed: WorkflowSamples = JSON.parse(content.toString());
-            matrix = Object.fromEntries(
-              parsed.include
-                .filter(sample => enableAnyTest || sample['sonar-analyse'])
-                .map((sample): [string, JHipsterGitHubInputMatrix] => {
-                  const { 'job-name': jobName = sample.name, 'sonar-analyse': sonarAnalyse, generatorOptions } = sample;
-                  const enableSonar = sonarAnalyse === 'true';
-                  const workspaces = generatorOptions?.workspaces ? 'true' : 'false';
-                  if (enableSonar && workspaces === 'true') {
-                    throw new Error('Sonar is not supported with workspaces');
-                  }
-                  return [
-                    jobName,
-                    {
-                      'skip-compare': `${changes.sonarPr && enableSonar}`,
-                      // Force tests if sonar is enabled
-                      'skip-backend-tests': `${!(enableBackendTests || enableSonar)}`,
-                      // Force tests if sonar is enabled
-                      'skip-frontend-tests': `${!(enableFrontendTests || enableSonar)}`,
-                      'gradle-cache': generatorOptions?.workspaces || jobName.includes('gradle') ? true : undefined,
-                      ...sample,
-                      sample: sample.name ?? jobName,
-                      workspaces,
-                    },
-                  ];
-                }),
-            );
+            randomEnvironment = true;
+            if (enableAnyTest || hasSonarPrChanges) {
+              const content = await readFile(join(testIntegrationFolder, `workflow-samples/${this.workflow}.json`));
+              const parsed: WorkflowSamples = JSON.parse(content.toString());
+              matrix = Object.fromEntries(
+                parsed.include
+                  .filter(sample => enableAnyTest || sample['sonar-analyse'])
+                  .map((sample): [string, JHipsterGitHubInputMatrix] => {
+                    const { 'job-name': jobName = sample.name, 'sonar-analyse': sonarAnalyse, generatorOptions } = sample;
+                    const enableSonar = sonarAnalyse === 'true';
+                    const workspaces = generatorOptions?.workspaces ? 'true' : 'false';
+                    if (enableSonar && workspaces === 'true') {
+                      throw new Error('Sonar is not supported with workspaces');
+                    }
+                    return [
+                      jobName,
+                      {
+                        'skip-compare': `${changes.sonarPr && enableSonar}`,
+                        // Force tests if sonar is enabled
+                        'skip-backend-tests': `${!(enableBackendTests || enableSonar)}`,
+                        // Force tests if sonar is enabled
+                        'skip-frontend-tests': `${!(enableFrontendTests || enableSonar)}`,
+                        'gradle-cache': generatorOptions?.workspaces || jobName.includes('gradle') ? true : undefined,
+                        ...sample,
+                        sample: sample.name ?? jobName,
+                        workspaces,
+                      },
+                    ];
+                  }),
+              );
+            }
+            break;
           }
         }
 
