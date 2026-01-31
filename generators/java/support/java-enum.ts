@@ -22,8 +22,8 @@ export const createEnumNeedleCallback = ({
         throw new Error(`Invalid file content ${beforeContent}, expected to contain ${needleValuePrefix}`);
       }
       const beforeNeedleContentIndex = beforeContent.lastIndexOf(needleValuePrefix) + needleValuePrefix.length;
-      const beforeNeedleContent = beforeContent.substring(0, beforeNeedleContentIndex);
-      let needleContent = beforeContent.substring(beforeNeedleContentIndex).slice(0, -needleValueSuffix.length);
+      const beforeNeedleContent = beforeContent.slice(0, beforeNeedleContentIndex);
+      let needleContent = beforeContent.slice(beforeNeedleContentIndex).slice(0, -needleValueSuffix.length);
       needleContent = needleContent.trim() ? needleContent : '';
 
       return `${beforeNeedleContent}${needleContent}${needleContent ? needleValueSeparator : ''}${enumValues.map(value => `${needleData.indentPrefix}${value}`).join(needleValueSeparator)}${needleValueSuffix}${afterContent}`;

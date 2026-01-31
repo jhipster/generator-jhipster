@@ -190,7 +190,7 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
   const startMatch = regexpStart.exec(content);
   if (startMatch) {
     const needleLineIndex = content.lastIndexOf('\n', firstMatch.index) + 1;
-    content = content.substring(0, startMatch.index + startMatch[0].length) + content.substring(needleLineIndex);
+    content = content.slice(0, startMatch.index + startMatch[0].length) + content.slice(needleLineIndex);
     regexp.lastIndex = 0;
     firstMatch = regexp.exec(content);
     if (!firstMatch) {
@@ -201,8 +201,8 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
   const needleIndex = firstMatch.index;
 
   const needleLineIndex = content.lastIndexOf('\n', needleIndex) + 1;
-  const beforeContent = content.substring(0, needleLineIndex);
-  const afterContent = content.substring(needleLineIndex);
+  const beforeContent = content.slice(0, needleLineIndex);
+  const afterContent = content.slice(needleLineIndex);
   const needleIndent = needleIndex - needleLineIndex;
 
   if (typeof contentToAdd === 'function') {
@@ -240,7 +240,7 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
           identToRemove = lineIndent;
         }
       });
-    contentToAdd = contentToAdd.map(line => (line.length > identToRemove ? line.substring(identToRemove) : ''));
+    contentToAdd = contentToAdd.map(line => (line.length > identToRemove ? line.slice(identToRemove) : ''));
   }
 
   const newContent = `${beforeContent}${contentToAdd.join('\n')}\n${afterContent}`;

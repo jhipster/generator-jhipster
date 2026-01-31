@@ -131,7 +131,7 @@ export function replaceTranslations({
       : /t\$\((?<key>[^),]*)(?:,\s*{(?<data>[^)]*)})?\)/g;
   return content.replaceAll(regex, (_complete, ...args) => {
     const groups: Record<string, string> = args.pop();
-    const key = groups.key.substring(1, groups.key.length - 1).replaceAll(String.raw`\'`, "'");
+    const key = groups.key.slice(1, -1).replaceAll(String.raw`\'`, "'");
     let data: Record<string, unknown> | undefined;
     if (groups.data) {
       const interpolateMatches = groups.data.matchAll(/(?<field>[^{\s:,}]+)(?:\s*:\s*(?<value>[^,}]+))?/g);
@@ -141,7 +141,7 @@ export function replaceTranslations({
         let { field, value }: { field?: string; value?: string | number } = interpolateMatch.groups || {};
         if (/^'.*'$/.test(field) || /^".*"$/.test(field)) {
           // unwrap field
-          field = field.substring(1, field.length - 1);
+          field = field.slice(1, -1);
         }
         value ??= field;
         value = value.trim();

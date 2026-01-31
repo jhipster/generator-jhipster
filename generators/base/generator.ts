@@ -607,7 +607,7 @@ export default class BaseGenerator<
     if (!namespace?.startsWith('jhipster:')) {
       throw new Error(`Generator is not blueprintable ${namespace}`);
     }
-    const subGen = namespace.substring('jhipster:'.length);
+    const subGen = namespace.slice('jhipster:'.length);
 
     this.delegateToBlueprint = false;
 

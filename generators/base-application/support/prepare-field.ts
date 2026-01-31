@@ -161,7 +161,7 @@ function generateFakeDataForField(
       // time without seconds by default
       const timeWithoutMilliseconds = originalData.split('T')[1].split('.')[0];
       // default time input fields are set to support HH:mm. Some databases require :00 during loading of fake data to detect the datatype.
-      data = `${timeWithoutMilliseconds.substring(0, timeWithoutMilliseconds.lastIndexOf(':'))}:00`;
+      data = `${timeWithoutMilliseconds.slice(0, timeWithoutMilliseconds.lastIndexOf(':'))}:00`;
     } else if (type === 'json-serializable') {
       data = date;
     } else {
@@ -171,7 +171,7 @@ function generateFakeDataForField(
       data = originalData.split('.')[0];
       if (type === 'cypress' || type === 'ts') {
         // YYYY-MM-DDTHH:mm
-        data = data.substr(0, data.length - 3);
+        data = data.slice(0, -3);
       }
     }
   } else if (field.fieldTypeBinary && field.fieldTypeBlobContent !== TEXT) {
@@ -200,7 +200,7 @@ function generateFakeDataForField(
     if (field.fieldValidateRules.includes(MAXLENGTH) && fieldValidateRulesMaxlength !== undefined) {
       if (typeof data === 'string') {
         const maxlength = field.fieldValidateRulesMaxlength;
-        data = data.substring(0, maxlength);
+        data = data.slice(0, maxlength);
       } else {
         this.log.error(`Error at field ${field.fieldName}: maxLength validation rule is only supported for string fields.`);
       }
