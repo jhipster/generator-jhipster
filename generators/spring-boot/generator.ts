@@ -187,16 +187,27 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
           await this.composeWithJHipster('jhipster:java:gatling');
         }
 
-        if (databaseType === SQL) {
-          await this.composeWithJHipster('jhipster:spring-boot:data-relational');
-        } else if (databaseType === CASSANDRA) {
-          await this.composeWithJHipster('jhipster:spring-boot:data-cassandra');
-        } else if (databaseType === COUCHBASE) {
-          await this.composeWithJHipster('jhipster:spring-boot:data-couchbase');
-        } else if (databaseType === MONGODB) {
-          await this.composeWithJHipster('jhipster:spring-boot:data-mongodb');
-        } else if (databaseType === NEO4J) {
-          await this.composeWithJHipster('jhipster:spring-boot:data-neo4j');
+        switch (databaseType) {
+          case SQL: {
+            await this.composeWithJHipster('jhipster:spring-boot:data-relational');
+            break;
+          }
+          case CASSANDRA: {
+            await this.composeWithJHipster('jhipster:spring-boot:data-cassandra');
+            break;
+          }
+          case COUCHBASE: {
+            await this.composeWithJHipster('jhipster:spring-boot:data-couchbase');
+            break;
+          }
+          case MONGODB: {
+            await this.composeWithJHipster('jhipster:spring-boot:data-mongodb');
+            break;
+          }
+          case NEO4J: {
+            await this.composeWithJHipster('jhipster:spring-boot:data-neo4j');
+            break;
+          }
         }
         if (searchEngine === ELASTICSEARCH) {
           await this.composeWithJHipster('jhipster:spring-boot:data-elasticsearch');

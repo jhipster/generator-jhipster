@@ -519,19 +519,31 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       }
       if (optionValue !== undefined) {
         optionValue = type !== Array && type !== Function ? type(optionValue) : optionValue;
-        if (optionsDesc.scope === 'storage') {
-          this.config.set(optionName as keyof Config, optionValue);
-        } else if (optionsDesc.scope === 'blueprint') {
-          if (!this.blueprintStorage) {
-            throw new Error('Blueprint storage is not initialized');
+        switch (optionsDesc.scope) {
+          case 'storage': {
+            this.config.set(optionName as keyof Config, optionValue);
+            break;
           }
-          this.blueprintStorage!.set(optionName, optionValue);
-        } else if (optionsDesc.scope === 'generator') {
-          (this as Record<string, any>)[optionName] = optionValue;
-        } else if (optionsDesc.scope === 'context') {
-          this.context![optionName] = optionValue;
-        } else if (optionsDesc.scope !== 'none') {
-          throw new Error(`Scope ${optionsDesc.scope} not supported`);
+          case 'blueprint': {
+            if (!this.blueprintStorage) {
+              throw new Error('Blueprint storage is not initialized');
+            }
+            this.blueprintStorage!.set(optionName, optionValue);
+            break;
+          }
+          case 'generator': {
+            (this as Record<string, any>)[optionName] = optionValue;
+            break;
+          }
+          case 'context': {
+            this.context![optionName] = optionValue;
+            break;
+          }
+          default: {
+            if (optionsDesc.scope !== 'none') {
+              throw new Error(`Scope ${optionsDesc.scope} not supported`);
+            }
+          }
         }
       } else if (
         optionsDesc.default !== undefined &&
@@ -566,17 +578,27 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
         argument = Array.isArray(argument) && argument.length === 0 ? undefined : argument;
         if (argument !== undefined) {
           const convertedValue = !argumentDef.type || argumentDef.type === Array ? argument : argumentDef.type(argument);
-          if (argumentDef.scope === undefined || argumentDef.scope === 'generator') {
-            (this as Record<string, any>)[argumentName] = convertedValue;
-          } else if (argumentDef.scope === 'context') {
-            this.context![argumentName] = convertedValue;
-          } else if (argumentDef.scope === 'storage') {
-            this.config.set(argumentName as keyof Config, convertedValue);
-          } else if (argumentDef.scope === 'blueprint') {
-            if (!this.blueprintStorage) {
-              throw new Error('Blueprint storage is not initialized');
+          switch (argumentDef.scope) {
+            case undefined:
+            case 'generator': {
+              (this as Record<string, any>)[argumentName] = convertedValue;
+              break;
             }
-            this.blueprintStorage!.set(argumentName, convertedValue);
+            case 'context': {
+              this.context![argumentName] = convertedValue;
+              break;
+            }
+            case 'storage': {
+              this.config.set(argumentName as keyof Config, convertedValue);
+              break;
+            }
+            case 'blueprint': {
+              if (!this.blueprintStorage) {
+                throw new Error('Blueprint storage is not initialized');
+              }
+              this.blueprintStorage!.set(argumentName, convertedValue);
+              break;
+            }
           }
         }
       } else {
@@ -598,26 +620,36 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       .map(([name, def]) => {
         let promptSpec = typeof def.prompt === 'function' ? def.prompt(this, def) : { ...def.prompt };
         let storage: any;
-        if ((def.scope ?? 'storage') === 'storage') {
-          storage = this.config;
-          if (promptSpec.default === undefined) {
-            promptSpec = { ...promptSpec, default: () => (this.jhipsterConfigWithDefaults as Record<string, any>)[name] };
+        switch (def.scope) {
+          case 'storage':
+          case undefined: {
+            storage = this.config;
+            if (promptSpec.default === undefined) {
+              promptSpec = { ...promptSpec, default: () => (this.jhipsterConfigWithDefaults as Record<string, any>)[name] };
+            }
+            break;
           }
-        } else if (def.scope === 'blueprint') {
-          if (!this.blueprintStorage) {
-            throw new Error('Blueprint storage is not initialized');
+          case 'blueprint': {
+            if (!this.blueprintStorage) {
+              throw new Error('Blueprint storage is not initialized');
+            }
+            storage = this.blueprintStorage;
+            break;
           }
-          storage = this.blueprintStorage;
-        } else if (def.scope === 'generator') {
-          storage = {
-            getPath: (path: string) => get(this, path),
-            setPath: (path: string, value: any) => set(this, path, value),
-          };
-        } else if (def.scope === 'context') {
-          storage = {
-            getPath: (path: string) => get(this.context, path),
-            setPath: (path: string, value: any) => set(this.context!, path, value),
-          };
+          case 'generator': {
+            storage = {
+              getPath: (path: string) => get(this, path),
+              setPath: (path: string, value: any) => set(this, path, value),
+            };
+            break;
+          }
+          case 'context': {
+            storage = {
+              getPath: (path: string) => get(this.context, path),
+              setPath: (path: string, value: any) => set(this.context!, path, value),
+            };
+            break;
+          }
         }
         return {
           name,

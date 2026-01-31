@@ -25,13 +25,21 @@ export function loadConfig(
       if (value === undefined || value === null) {
         let source = config;
         if (!source) {
-          if (def.scope === 'context') {
-            source = (this as CoreGenerator).context!;
-          } else if (def.scope === 'blueprint') {
-            // TODO Convert type to BaseGenerator
-            source = (this as BaseGenerator).blueprintStorage!.getAll();
-          } else if (def.scope === 'storage' || def.scope === undefined) {
-            source = (this as CoreGenerator).jhipsterConfigWithDefaults;
+          switch (def.scope) {
+            case 'context': {
+              source = (this as CoreGenerator).context!;
+              break;
+            }
+            case 'blueprint': {
+              // TODO Convert type to BaseGenerator
+              source = (this as BaseGenerator).blueprintStorage!.getAll();
+              break;
+            }
+            case 'storage':
+            case undefined: {
+              source = (this as CoreGenerator).jhipsterConfigWithDefaults;
+              break;
+            }
           }
         }
 
