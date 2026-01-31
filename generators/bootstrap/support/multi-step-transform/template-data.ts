@@ -38,7 +38,7 @@ export default class TemplateData {
    */
   render(fragmentData: { join?: string; section?: string } = {}, suffix = '\n') {
     const { join = '\n' } = fragmentData;
-    const renderedFragments = this.renderFragments(fragmentData).filter(fragment => fragment);
+    const renderedFragments = this.renderFragments(fragmentData).filter(Boolean);
     const section = fragmentData.section || this._defaultData.section;
     if (section) {
       const limit = this._sections[section];
