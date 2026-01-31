@@ -90,7 +90,8 @@ const relativeDir = (from: string, to: string) => {
   return rel ? `${rel}/` : '';
 };
 
-const deepMerge = (source1: any, source2: any) => mergeWith({}, source1, source2, (a, b) => (Array.isArray(a) ? a.concat(b) : undefined));
+const deepMerge = (source1: any, source2: any) =>
+  mergeWith({}, source1, source2, (a, b) => (Array.isArray(a) ? [...a, ...(Array.isArray(b) ? b : [b])] : undefined));
 
 /**
  * This is the base class for a generator for every generator.
@@ -829,7 +830,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       rootTemplatesAbsolutePath = rootTemplatesPath;
     } else {
       rootTemplatesAbsolutePath = this.jhipsterTemplatesFolders.flatMap(templateFolder =>
-        ([] as string[]).concat(rootTemplatesPath).map(relativePath => join(templateFolder, relativePath)),
+        (Array.isArray(rootTemplatesPath) ? rootTemplatesPath : [rootTemplatesPath]).map(relativePath =>
+          join(templateFolder, relativePath),
+        ),
       );
     }
 
@@ -918,7 +921,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       sourceFileFrom = file.resolvedSourceFile;
       targetFile = file.destinationFile;
 
-      let templatesRoots = ([] as string[]).concat(rootTemplatesAbsolutePath);
+      let templatesRoots = Array.isArray(rootTemplatesAbsolutePath) ? [...rootTemplatesAbsolutePath] : [rootTemplatesAbsolutePath];
       for (const contextCustomizeTemplatePath of contextCustomizeTemplatePaths) {
         const file: undefined | { sourceFile: string; resolvedSourceFile: string; destinationFile: string; templatesRoots: string[] } =
           contextCustomizeTemplatePath.call(
