@@ -307,7 +307,7 @@ export default class BaseGenerator<
    * Get arguments for the priority
    */
   override getArgsForPriority(priorityName: string) {
-    const [fistArg] = super.getArgsForPriority(priorityName);
+    const [firstArg] = super.getArgsForPriority(priorityName);
     const control = this.#control;
     if (priorityName === WRITING) {
       if (existsSync(this.config.path)) {
@@ -325,13 +325,13 @@ export default class BaseGenerator<
               )
               .map(key => [key, { newValue: newConfig[key], oldValue: oldConfig[key] }]),
           );
-          return [{ ...fistArg, control, configChanges }];
+          return [{ ...firstArg, control, configChanges }];
         } catch {
           // Fail to parse
         }
       }
     }
-    return [{ ...fistArg, control }];
+    return [{ ...firstArg, control }];
   }
 
   /**
