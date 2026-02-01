@@ -77,7 +77,7 @@ const replaceTranslationKeysWithText = (
           value = parseInt(value, 10);
         } else if (/^'.*'$/.test(value) || /^".*"$/.test(value)) {
           // extract string value
-          value = value.substring(1, value.length - 2);
+          value = value.slice(1, -2);
         } else {
           // wrap expression
           value = `{${value}}`;
