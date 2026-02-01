@@ -57,6 +57,7 @@ export function convertFieldBlobType<const F extends BaseApplicationField = Base
       // Unknown type is not supported.
       // Fallback to ByteBuffer for cassandra databases.
       field.fieldType = 'ByteBuffer';
+      break;
     }
   }
   return field;

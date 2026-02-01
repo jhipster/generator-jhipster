@@ -217,32 +217,18 @@ function generateFakeDataForField(
         data = data.substr(0, data.length - 3);
       }
     }
+  } else if (field.fieldTypeBinary && field.fieldTypeBlobContent !== TEXT) {
+    data = '../fake-data/blob/hipster.png';
+  } else if (field.fieldTypeBinary && field.fieldTypeBlobContent === TEXT) {
+    data = '../fake-data/blob/hipster.txt';
+  } else if (field.fieldType === STRING) {
+    data = field.id ? faker.string.uuid() : faker.helpers.fake(fakeStringTemplateForFieldName((field as DatabaseProperty).columnName!));
+  } else if (field.fieldType === UUID) {
+    data = faker.string.uuid();
+  } else if (field.fieldType === BOOLEAN) {
+    data = faker.datatype.boolean();
   } else {
-    switch (true) {
-      case field.fieldTypeBinary && field.fieldTypeBlobContent !== TEXT: {
-        data = '../fake-data/blob/hipster.png';
-        break;
-      }
-      case field.fieldTypeBinary && field.fieldTypeBlobContent === TEXT: {
-        data = '../fake-data/blob/hipster.txt';
-        break;
-      }
-      case field.fieldType === STRING: {
-        data = field.id ? faker.string.uuid() : faker.helpers.fake(fakeStringTemplateForFieldName((field as DatabaseProperty).columnName!));
-        break;
-      }
-      case field.fieldType === UUID: {
-        data = faker.string.uuid();
-        break;
-      }
-      case field.fieldType === BOOLEAN: {
-        data = faker.datatype.boolean();
-        break;
-      }
-      default: {
-        this.log.warn(`Fake data for field ${field.fieldType} is not supported`);
-      }
-    }
+    this.log.warn(`Fake data for field ${field.fieldType} is not supported`);
   }
   originalData ??= data;
 
