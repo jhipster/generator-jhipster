@@ -1079,7 +1079,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             };
           });
         })
-        .filter(template => template) as RenderTemplateParam[];
+        .filter(Boolean) as RenderTemplateParam[];
     } else {
       parsedTemplates = options.templates.map(template => {
         if (typeof template === 'string') {
@@ -1091,7 +1091,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     const files = (await Promise.all(parsedTemplates.map(template => renderTemplate(template)).filter(Boolean))) as string[];
     this.log.debug(`Time taken to write files: ${new Date().getMilliseconds() - startTime}ms`);
-    return files.filter(file => file);
+    return files.filter(Boolean);
   }
 
   /**

@@ -202,7 +202,7 @@ export default class BaseGenerator<
             }
 
             for (const customize of this.customizeRemoveFiles) {
-              files = files.map(customize).filter(file => file) as string[];
+              files = files.map(customize).filter(Boolean) as string[];
             }
 
             const { removedInVersion, oldVersion = this.jhipsterOldVersion } = versions;
