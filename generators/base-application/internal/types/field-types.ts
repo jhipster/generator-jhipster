@@ -7,14 +7,20 @@ export const isBlobType = (fieldType: string): fieldType is FieldBlobType =>
   (Object.values(blobFieldTypesValues) as string[]).includes(fieldType);
 
 export const getBlobContentType = (fieldType: FieldBlobType) => {
-  if (fieldType === 'AnyBlob') {
-    return 'any';
-  } else if (fieldType === 'ImageBlob') {
-    return 'image';
-  } else if (fieldType === 'TextBlob') {
-    return 'text';
+  switch (fieldType) {
+    case 'AnyBlob': {
+      return 'any';
+    }
+    case 'ImageBlob': {
+      return 'image';
+    }
+    case 'TextBlob': {
+      return 'text';
+    }
+    default: {
+      return undefined;
+    }
   }
-  return undefined;
 };
 
 export const isFieldBlobType = (field: BaseApplicationField): field is SetFieldType<BaseApplicationField, 'fieldType', FieldBlobType> =>
@@ -29,21 +35,30 @@ export const isFieldEnumType = (field: BaseApplicationField): field is SetRequir
 export const isFieldNotEnumType = (field: BaseApplicationField): field is SetFieldType<BaseApplicationField, 'fieldType', FieldType> =>
   !field.fieldValues;
 
-export const convertFieldBlobType = <const F extends BaseApplicationField = BaseApplicationField>(field: F): F => {
+export function convertFieldBlobType<const F extends BaseApplicationField = BaseApplicationField>(field: F): F {
   // Convert fieldTypes to correct fieldTypes
-  if (field.fieldTypeBlobContent === 'image') {
-    field.fieldType = 'ImageBlob';
-    field.fieldTypeBlobContent = undefined;
-  } else if (field.fieldTypeBlobContent === 'any') {
-    field.fieldType = 'AnyBlob';
-    field.fieldTypeBlobContent = undefined;
-  } else if (field.fieldTypeBlobContent === 'text') {
-    field.fieldType = 'TextBlob';
-    field.fieldTypeBlobContent = undefined;
-  } else {
-    // Unknown type is not supported.
-    // Fallback to ByteBuffer for cassandra databases.
-    field.fieldType = 'ByteBuffer';
+  switch (field.fieldTypeBlobContent) {
+    case 'image': {
+      field.fieldType = 'ImageBlob';
+      field.fieldTypeBlobContent = undefined;
+      break;
+    }
+    case 'any': {
+      field.fieldType = 'AnyBlob';
+      field.fieldTypeBlobContent = undefined;
+      break;
+    }
+    case 'text': {
+      field.fieldType = 'TextBlob';
+      field.fieldTypeBlobContent = undefined;
+      break;
+    }
+    default: {
+      // Unknown type is not supported.
+      // Fallback to ByteBuffer for cassandra databases.
+      field.fieldType = 'ByteBuffer';
+      break;
+    }
   }
   return field;
-};
+}

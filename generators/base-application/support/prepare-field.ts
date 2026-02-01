@@ -40,46 +40,89 @@ const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
 
 const fakeStringTemplateForFieldName = (columnName: string) => {
   let fakeTemplate;
-  if (columnName === 'first_name') {
-    fakeTemplate = 'person.firstName';
-  } else if (columnName === 'last_name') {
-    fakeTemplate = 'person.lastName';
-  } else if (columnName === 'job_title') {
-    fakeTemplate = 'person.jobTitle';
-  } else if (columnName === 'telephone' || columnName === 'phone') {
-    fakeTemplate = 'phone.number';
-  } else if (columnName === 'zip_code' || columnName === 'post_code') {
-    fakeTemplate = 'location.zipCode';
-  } else if (columnName === 'city') {
-    fakeTemplate = 'location.city';
-  } else if (columnName === 'street_name' || columnName === 'street') {
-    fakeTemplate = 'location.street';
-  } else if (columnName === 'country') {
-    fakeTemplate = 'location.country';
-  } else if (columnName === 'country_code') {
-    fakeTemplate = 'location.countryCode';
-  } else if (columnName === 'color') {
-    fakeTemplate = 'color.human';
-  } else if (columnName === 'account') {
-    fakeTemplate = 'finance.account';
-  } else if (columnName === 'account_name') {
-    fakeTemplate = 'finance.accountName';
-  } else if (columnName === 'currency_code') {
-    fakeTemplate = 'finance.currencyCode';
-  } else if (columnName === 'currency_name') {
-    fakeTemplate = 'finance.currencyName';
-  } else if (columnName === 'currency_symbol') {
-    fakeTemplate = 'finance.currencySymbol';
-  } else if (columnName === 'iban') {
-    fakeTemplate = 'finance.iban';
-  } else if (columnName === 'bic') {
-    fakeTemplate = 'finance.bic';
-  } else if (columnName === 'email') {
-    fakeTemplate = 'internet.email';
-  } else if (columnName === 'url') {
-    fakeTemplate = 'internet.url';
-  } else {
-    fakeTemplate = 'word.words';
+  switch (columnName) {
+    case 'first_name': {
+      fakeTemplate = 'person.firstName';
+      break;
+    }
+    case 'last_name': {
+      fakeTemplate = 'person.lastName';
+      break;
+    }
+    case 'job_title': {
+      fakeTemplate = 'person.jobTitle';
+      break;
+    }
+    case 'telephone':
+    case 'phone': {
+      fakeTemplate = 'phone.number';
+      break;
+    }
+    case 'zip_code':
+    case 'post_code': {
+      fakeTemplate = 'location.zipCode';
+      break;
+    }
+    case 'city': {
+      fakeTemplate = 'location.city';
+      break;
+    }
+    case 'street_name':
+    case 'street': {
+      fakeTemplate = 'location.street';
+      break;
+    }
+    case 'country': {
+      fakeTemplate = 'location.country';
+      break;
+    }
+    case 'country_code': {
+      fakeTemplate = 'location.countryCode';
+      break;
+    }
+    case 'color': {
+      fakeTemplate = 'color.human';
+      break;
+    }
+    case 'account': {
+      fakeTemplate = 'finance.account';
+      break;
+    }
+    case 'account_name': {
+      fakeTemplate = 'finance.accountName';
+      break;
+    }
+    case 'currency_code': {
+      fakeTemplate = 'finance.currencyCode';
+      break;
+    }
+    case 'currency_name': {
+      fakeTemplate = 'finance.currencyName';
+      break;
+    }
+    case 'currency_symbol': {
+      fakeTemplate = 'finance.currencySymbol';
+      break;
+    }
+    case 'iban': {
+      fakeTemplate = 'finance.iban';
+      break;
+    }
+    case 'bic': {
+      fakeTemplate = 'finance.bic';
+      break;
+    }
+    case 'email': {
+      fakeTemplate = 'internet.email';
+      break;
+    }
+    case 'url': {
+      fakeTemplate = 'internet.url';
+      break;
+    }
+    default: {
+      fakeTemplate = 'word.words';
+    }
   }
   return `{{${fakeTemplate}}}`;
 };

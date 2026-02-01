@@ -115,17 +115,26 @@ function getConfigForClientApplication(options: ApplicationDefaults = {}): Appli
   } else if (options[CLIENT_THEME] !== OptionValues[CLIENT_THEME] && !options[CLIENT_THEME_VARIANT]) {
     options[CLIENT_THEME_VARIANT] = 'primary';
   }
-  if (clientFramework === 'vue') {
-    options.clientBundler ??= options.microfrontend || options.applicationType === 'microservice' ? 'webpack' : 'vite';
-    options.devServerPort ??= options.clientBundler === 'webpack' ? 9060 : 9000;
-  } else if (clientFramework === 'react') {
-    options.clientBundler ??= 'webpack';
-    options.devServerPort ??= 9060;
-  } else if (clientFramework === 'angular') {
-    options.clientBundler ??= options.microfrontend || options.applicationType === 'microservice' ? 'webpack' : 'esbuild';
-    options.devServerPort ??= 4200;
-  } else {
-    options.devServerPort ??= 9060;
+  switch (clientFramework) {
+    case 'vue': {
+      options.clientBundler ??= options.microfrontend || options.applicationType === 'microservice' ? 'webpack' : 'vite';
+      options.devServerPort ??= options.clientBundler === 'webpack' ? 9060 : 9000;
+      break;
+    }
+    case 'react': {
+      options.clientBundler ??= 'webpack';
+      options.devServerPort ??= 9060;
+      break;
+    }
+    case 'angular': {
+      options.clientBundler ??= options.microfrontend || options.applicationType === 'microservice' ? 'webpack' : 'esbuild';
+      options.devServerPort ??= 4200;
+      break;
+    }
+    default: {
+      options.devServerPort ??= 9060;
+      break;
+    }
   }
   options.devServerPortProxy ??= options.clientBundler === 'webpack' ? 9000 : undefined;
 
