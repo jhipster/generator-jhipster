@@ -31,8 +31,7 @@ import org.testcontainers.junit.jupiter.Container;
 public interface MongoDbTestContainer {
     @Container
     MongoDBContainer mongoDbContainer = new MongoDBContainer("<%- dockerContainers.mongodb %>")
-        .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(MongoDbTestContainer.class)))
-        .withReuse(true);
+        .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(MongoDbTestContainer.class)));
 
     @DynamicPropertySource
     static void registerProperties(DynamicPropertyRegistry registry) {
