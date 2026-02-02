@@ -38,9 +38,9 @@ import type {
 
 const { LOADING, PREPARING, POST_PREPARING, DEFAULT, WRITING, POST_WRITING, PRE_CONFLICTS, INSTALL, END } = PRIORITY_NAMES;
 
-const PRIORITY_WITH_SOURCE: string[] = [PREPARING, POST_PREPARING, POST_WRITING];
-const PRIORITY_WITH_APPLICATION_DEFAULTS: string[] = [BOOTSTRAP_APPLICATION, PREPARING, LOADING];
-const PRIORITY_WITH_APPLICATION: string[] = [
+const PRIORITY_WITH_SOURCE = new Set<string>([PREPARING, POST_PREPARING, POST_WRITING]);
+const PRIORITY_WITH_APPLICATION_DEFAULTS = new Set<string>([BOOTSTRAP_APPLICATION, PREPARING, LOADING]);
+const PRIORITY_WITH_APPLICATION = new Set<string>([
   LOADING,
   PREPARING,
   POST_PREPARING,
@@ -50,12 +50,12 @@ const PRIORITY_WITH_APPLICATION: string[] = [
   PRE_CONFLICTS,
   INSTALL,
   END,
-];
+]);
 
 const getFirstArgForPriority = (priorityName: string) => ({
-  source: PRIORITY_WITH_SOURCE.includes(priorityName),
-  application: PRIORITY_WITH_APPLICATION.includes(priorityName),
-  applicationDefaults: PRIORITY_WITH_APPLICATION_DEFAULTS.includes(priorityName),
+  source: PRIORITY_WITH_SOURCE.has(priorityName),
+  application: PRIORITY_WITH_APPLICATION.has(priorityName),
+  applicationDefaults: PRIORITY_WITH_APPLICATION_DEFAULTS.has(priorityName),
 });
 
 /**

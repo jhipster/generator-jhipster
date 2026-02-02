@@ -23,7 +23,7 @@ import type { ParsedJDLDeployment } from '../types/parsed.ts';
 import { merge } from '../utils/object-utils.ts';
 import { join } from '../utils/set-utils.ts';
 
-const arrayTypes = ['appsFolders', 'clusteredDbApps'];
+const arrayTypes = new Set(['appsFolders', 'clusteredDbApps']);
 
 export default class JDLDeployment {
   deploymentType!: string;
@@ -44,7 +44,7 @@ export default class JDLDeployment {
     }
     const merged = merge(defaults(args.deploymentType), args);
     Object.entries(merged).forEach(([key, option]) => {
-      if (Array.isArray(option) && arrayTypes.includes(key)) {
+      if (Array.isArray(option) && arrayTypes.has(key)) {
         (this as Record<string, any>)[key] = new Set(option);
       } else {
         (this as Record<string, any>)[key] = option;
@@ -69,7 +69,7 @@ function stringifyConfig(applicationConfig: Record<string, any>): string {
 }
 
 function stringifyOptionValue(name: string, value: any): string {
-  if (arrayTypes.includes(name)) {
+  if (arrayTypes.has(name)) {
     if (value.size === 0) {
       return ' []';
     }

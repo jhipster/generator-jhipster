@@ -664,8 +664,8 @@ export default class BaseGenerator<
     const { taskPrefix: baseGeneratorTaskPrefix = '' } = this.features;
     const { taskPrefix: blueprintTaskPrefix = '' } = blueprintGenerator.features;
     // v8 remove deprecated priorities
-    const DEPRECATED_PRIORITIES = ['preConflicts'];
-    for (const priorityName of Object.values(PRIORITY_NAMES).filter(p => !DEPRECATED_PRIORITIES.includes(p))) {
+    const DEPRECATED_PRIORITIES = new Set(['preConflicts']);
+    for (const priorityName of Object.values(PRIORITY_NAMES).filter(p => !DEPRECATED_PRIORITIES.has(p))) {
       const baseGeneratorPriorityName = `${baseGeneratorTaskPrefix}${priorityName}`;
       if (baseGeneratorPriorityName in this) {
         const blueprintPriorityName = `${blueprintTaskPrefix}${priorityName}`;

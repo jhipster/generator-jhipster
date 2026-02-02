@@ -373,16 +373,14 @@ class JHipsterRunContext extends RunContext<BaseCoreGenerator> {
   ): this {
     const optionsObj = Array.isArray(options) ? { except: options } : options;
     const { except = [], filter = filterBootstrapGenerators } = optionsObj;
-    const jhipsterExceptList = except.map(toJHipsterNamespace);
-    return this.withMockedGenerators(
-      allGenerators.filter(filter).filter(gen => !jhipsterExceptList.includes(gen) && this.Generator !== gen),
-    );
+    const jhipsterExceptList = new Set(except.map(toJHipsterNamespace));
+    return this.withMockedGenerators(allGenerators.filter(filter).filter(gen => !jhipsterExceptList.has(gen) && this.Generator !== gen));
   }
 
   withJHipsterGenerators(options: WithJHipsterGenerators = {}): this {
     const { useDefaultMocks, actualGeneratorsList = [], useMock = useDefaultMocks ? filterBootstrapGenerators : () => false } = options;
-    const jhipsterExceptList = actualGeneratorsList.map(toJHipsterNamespace);
-    const mockedGenerators = allGenerators.filter(useMock).filter(gen => !jhipsterExceptList.includes(gen) && this.Generator !== gen);
+    const jhipsterExceptList = new Set(actualGeneratorsList.map(toJHipsterNamespace));
+    const mockedGenerators = allGenerators.filter(useMock).filter(gen => !jhipsterExceptList.has(gen) && this.Generator !== gen);
     const actualGenerators = allGenerators.filter(gen => !mockedGenerators.includes(gen));
     const prefix = isDistFolder() ? 'dist/' : '';
     const filePatterns = actualGenerators.map(ns => getGeneratorRelativeFolder(ns)).map(path => `${prefix}${path}/index.{j,t}s`);
