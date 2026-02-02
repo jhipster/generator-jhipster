@@ -35,8 +35,7 @@ public interface CouchbaseTestContainer {
     @Container
     CouchbaseContainer couchbaseContainer = new CouchbaseContainer("<%- dockerContainers.couchbase %>")
         .withBucket(new BucketDefinition(BUCKET_NAME))
-        .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(CouchbaseTestContainer.class)))
-        .withReuse(true);
+        .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(CouchbaseTestContainer.class)));
 
     @DynamicPropertySource
     static void registerProperties(DynamicPropertyRegistry registry) {
