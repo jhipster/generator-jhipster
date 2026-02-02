@@ -199,17 +199,16 @@ export default abstract class BaseEntityChangesGenerator<
 
       // calculate relationships that only need a foreign key recreation from the ones that are added
       // we need both the added and the removed ones here
-      const relationshipsToRecreateForeignKeysOnly = addedRelationships
-        .filter(addedRelationship =>
+      const relationshipsToRecreateForeignKeysOnly = [
+        ...addedRelationships.filter(addedRelationship =>
           removedRelationships.some(removedRelationship =>
             relationshipNeedsForeignKeyRecreationOnly(removedRelationship, addedRelationship),
           ),
-        )
-        .concat(
-          removedRelationships.filter(removedRelationship =>
-            addedRelationships.some(addedRelationship => relationshipNeedsForeignKeyRecreationOnly(addedRelationship, removedRelationship)),
-          ),
-        );
+        ),
+        ...removedRelationships.filter(removedRelationship =>
+          addedRelationships.some(addedRelationship => relationshipNeedsForeignKeyRecreationOnly(addedRelationship, removedRelationship)),
+        ),
+      ];
 
       const oldFieldsWithDefaultValues = oldFields.filter(field => this.hasAnyDefaultValue(field));
       const newFieldsWithDefaultValues = newFields.filter(field => this.hasAnyDefaultValue(field));
