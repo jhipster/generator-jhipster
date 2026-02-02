@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { getDatabaseTypeData } from '../../../server/support/database.ts';
+import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';
 import { getJdbcUrl, getR2dbcUrl } from '../data-relational/support/database-url.ts';
 
@@ -30,10 +30,22 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
     await this.dependsOnBootstrap('server');
   }
 
+  get loading() {
+    return this.asLoadingTaskGroup({
+      defaults({ applicationDefaults }) {
+        applicationDefaults(mutateApplicationLoading);
+      },
+    });
+  }
+
+  get [SpringBootApplicationGenerator.LOADING]() {
+    return this.loading;
+  }
+
   get preparing() {
     return this.asPreparingTaskGroup({
       defaults({ applicationDefaults }) {
-        applicationDefaults({
+        applicationDefaults(mutateApplicationPreparing, {
           springBoot4: data =>
             Boolean(
               !(data.databaseTypeSql && data.reactive) &&
@@ -41,18 +53,6 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
               !data.databaseTypeCouchbase &&
               !data.cacheProviderInfinispan,
             ),
-          springDataDescription: ({ databaseType, reactive }) => {
-            let springDataDatabase: string;
-            if (databaseType !== 'sql') {
-              springDataDatabase = getDatabaseTypeData(databaseType as string).name;
-              if (reactive) {
-                springDataDatabase += ' reactive';
-              }
-            } else {
-              springDataDatabase = reactive ? 'R2DBC' : 'JPA';
-            }
-            return `Spring Data ${springDataDatabase}`;
-          },
         });
       },
       hibernate({ application, applicationDefaults }) {

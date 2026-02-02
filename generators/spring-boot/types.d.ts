@@ -22,6 +22,7 @@ import type {
   Source as ServerSource,
 } from '../server/types.d.ts';
 
+import type { SpringBootAddedApplicationProperties } from './application.ts';
 import type command from './command.ts';
 import type cacheCommand from './generators/cache/command.ts';
 import type springBootDependencies4 from './resources/spring-boot-dependencies-4.ts';
@@ -172,7 +173,8 @@ export type Application<E extends BaseApplicationEntity = Entity> = Command['App
   GradleApplication &
   ApplicationNature &
   SearchEngine &
-  DatabaseTypeApplication & {
+  DatabaseTypeApplication &
+  SpringBootAddedApplicationProperties & {
     springBootDependencies: Record<string, string>;
 
     addSpringMilestoneRepository: boolean;
@@ -188,7 +190,6 @@ export type Application<E extends BaseApplicationEntity = Entity> = Command['App
     requiresDeleteAllUsers: boolean;
 
     springBoot4: boolean;
-    springDataDescription: string;
 
     hibernateNamingPhysicalStrategy?: string;
     hibernateNamingImplicitStrategy?: string;
