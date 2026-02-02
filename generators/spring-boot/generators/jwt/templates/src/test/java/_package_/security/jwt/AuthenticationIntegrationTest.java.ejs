@@ -75,7 +75,7 @@ import org.springframework.boot.test.context.SpringBootTest;
     }
 )
 <%_ } _%>
-<%_ if (reactive) { %>
+<%_ if (reactive && generateAuthenticationApi) { %>
 @MockitoBean(types = ReactiveUserDetailsService.class)
 <%_ } _%>
 <%_ if (reactive && generateBuiltInUserEntity) { _%>
