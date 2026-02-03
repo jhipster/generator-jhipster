@@ -9967,8 +9967,8 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
-            "groupId": "com.fasterxml.jackson.datatype",
+            "artifactId": "jackson-datatype-hibernate7",
+            "groupId": "tools.jackson.datatype",
           },
           {
             "artifactId": "hibernate-core",
@@ -9983,7 +9983,7 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -9991,7 +9991,7 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -10002,7 +10002,7 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
         "dependencies": [
           {
             "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "com.fasterxml.jackson.module",
+            "groupId": "tools.jackson.module",
           },
           {
             "artifactId": "HikariCP",
@@ -10092,6 +10092,7 @@ exports[`generator - sql monolith-jwt-postgresql-reactive(false)-maven-enableTra
     ],
   ],
   "addSpringBootModule": [
+    "spring-boot-h2console",
     "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [
@@ -14050,8 +14051,8 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
         "condition": true,
         "dependencies": [
           {
-            "artifactId": "jackson-datatype-hibernate6",
-            "groupId": "com.fasterxml.jackson.datatype",
+            "artifactId": "jackson-datatype-hibernate7",
+            "groupId": "tools.jackson.datatype",
           },
           {
             "artifactId": "hibernate-core",
@@ -14066,7 +14067,7 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
             "groupId": "org.springframework.security",
           },
           {
-            "artifactId": "hibernate-jpamodelgen",
+            "artifactId": "hibernate-processor",
             "groupId": "org.hibernate.orm",
             "scope": "annotationProcessor",
           },
@@ -14074,7 +14075,7 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
         "mavenDefinition": {
           "dependencies": [
             {
-              "artifactId": "hibernate-jpamodelgen",
+              "artifactId": "hibernate-processor",
               "groupId": "org.hibernate.orm",
               "inProfile": "IDE",
             },
@@ -14085,7 +14086,7 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
         "dependencies": [
           {
             "artifactId": "jackson-module-jaxb-annotations",
-            "groupId": "com.fasterxml.jackson.module",
+            "groupId": "tools.jackson.module",
           },
           {
             "artifactId": "HikariCP",
@@ -14175,6 +14176,7 @@ exports[`generator - sql monolith-session-mysql-reactive(false)-maven-enableTran
     ],
   ],
   "addSpringBootModule": [
+    "spring-boot-h2console",
     "spring-boot-starter-data-jpa",
   ],
   "addTestLog": [

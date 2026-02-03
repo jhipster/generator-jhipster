@@ -138,19 +138,11 @@ export const getCacheProviderJavaDefinition: (
           javaxCacheApi,
           {
             groupId: 'org.infinispan',
-            artifactId: 'infinispan-hibernate-cache-v62',
+            artifactId: `infinispan-hibernate-cache-${springBoot4 ? 'v66' : 'v62'}`,
           },
           {
             groupId: 'org.infinispan',
-            artifactId: 'infinispan-spring-boot3-starter-embedded',
-          },
-          {
-            groupId: 'org.infinispan',
-            artifactId: 'infinispan-commons',
-          },
-          {
-            groupId: 'org.infinispan',
-            artifactId: 'infinispan-core',
+            artifactId: `infinispan-spring-boot${springBoot4 ? '4' : '3'}-starter-embedded`,
           },
           {
             groupId: 'org.infinispan',
@@ -161,6 +153,7 @@ export const getCacheProviderJavaDefinition: (
             groupId: 'io.micrometer',
             artifactId: 'micrometer-registry-prometheus',
           },
+          ...(springBoot4 ? [{ groupId: 'org.springframework.boot', artifactId: 'spring-boot-starter-cache-test' }] : []),
         ],
       },
     },
