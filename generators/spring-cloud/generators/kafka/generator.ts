@@ -69,12 +69,15 @@ export default class KafkaGenerator extends SpringBootApplicationGenerator {
       },
       integrationTest({ application, source }) {
         source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
-          imports: [`${application.packageName}.config.KafkaTestContainer`],
+          imports: [
+            'org.springframework.boot.autoconfigure.ImportAutoConfiguration',
+            'org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration',
+          ],
           annotations: [
             {
-              package: 'org.springframework.boot.testcontainers.context',
-              annotation: 'ImportTestcontainers',
-              parameters: (_, cb) => cb.addKeyValue('value', 'KafkaTestContainer.class'),
+              package: 'org.springframework.boot.autoconfigure',
+              annotation: 'ImportAutoConfiguration',
+              parameters: (_, cb) => cb.addKeyValue('value', 'TestChannelBinderConfiguration.class'),
             },
           ],
         });

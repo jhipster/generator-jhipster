@@ -67,19 +67,20 @@ exports[`generator - spring-cloud:kafka with defaults options should call source
       "name": "org.I0Itec",
     },
   ],
-  "editJavaFile": [
+      "editJavaFile": [
     [
       "src/test/java/com/mycompany/myapp/IntegrationTest.java",
       {
         "annotations": [
           {
-            "annotation": "ImportTestcontainers",
-            "package": "org.springframework.boot.testcontainers.context",
+            "annotation": "ImportAutoConfiguration",
+            "package": "org.springframework.boot.autoconfigure",
             "parameters": [Function],
           },
         ],
         "imports": [
-          "com.mycompany.myapp.config.KafkaTestContainer",
+          "org.springframework.boot.autoconfigure.ImportAutoConfiguration",
+          "org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration",
         ],
       },
     ],
