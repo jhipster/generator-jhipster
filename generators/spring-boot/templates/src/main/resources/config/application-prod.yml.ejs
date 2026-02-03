@@ -223,7 +223,7 @@ jhipster:
       enabled: false
   <%_ if (!reactive) { _%>
     authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
-      app1: /api # recommended prod configuration
+      app1: /api<% if (enableSwaggerCodegen) { %>,/v3/api-docs<% } %> # recommended prod configuration
   <%_ } _%>
 <%_ } _%>
   http:
