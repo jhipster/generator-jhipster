@@ -11,6 +11,22 @@ jhipster generate-blueprint
 When creating blueprints it's cleaner to have the blueprint forwarding to a custom generator and keep main generators like client/common/server with customizations.
 Example [jOOQ Blueprint](https://github.com/jhipster/generator-jhipster-jooq/blob/ce48a06a2b031013383db01cc787bbe94aa2c683/generators/server/generator.mjs#L21)
 
+## Stable API Surface
+
+The semver-stable API surface for blueprints is limited to the public entrypoints exported by `generator-jhipster`.
+In particular, the following paths are considered stable for reuse in blueprints:
+
+- `generator-jhipster/generators/*/support`
+- `generator-jhipster/generators/*/generators/*/support`
+
+Prefer these entrypoints over deep imports, as other internal files can change without notice.
+
+Example:
+
+```
+import { createNeedleCallback } from 'generator-jhipster/generators/base-core/support';
+```
+
 ## Maintaining a Blueprint
 
 ### Upgrading to a new JHipster version
