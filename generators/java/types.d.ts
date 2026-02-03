@@ -39,6 +39,14 @@ type Property = {
   propertyJavaFilteredType?: string;
   propertyJavaBeanName?: string;
   propertyDtoJavaType?: string;
+  /**
+   * Name of the Supplier (Getter) method to use to initialize the property.
+   */
+  propertySupplierName?: string;
+  /**
+   * Name of the Consumer (Setter) method to use to set the property.
+   */
+  propertyConsumerName?: string;
 };
 
 export type Field = BaseApplicationField &
