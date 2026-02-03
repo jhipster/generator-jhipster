@@ -534,7 +534,7 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
     public static <%= persistClass %> create<% if (fieldStatus === 'UPDATED_') { _%>Updated<%_ } %>Entity(<% if (databaseTypeSql && anyRelationshipIsRequired) { %>EntityManager em<% } %>) {
   <%_ if (fluentMethods) { _%>
         <% if (!anyRelationshipIsRequired) { %>return <% } else { %><%= persistClass %> <%= createInstance %> = <% } %>new <%= persistClass %>()
-    <%_ if (!primaryKey.derived && !primaryKey.composite && !isUsingMapsId) { _%>
+    <%_ if (!primaryKey.derived && !isUsingMapsId) { _%>
       <%_ for (const idField of primaryKey.fields.filter(field => !field.autoGenerateByRepository)) { _%>
             .<%= idField.fieldName %>(<%- idField.fieldJavaValueGenerator %>)
       <%_ } _%>
@@ -551,7 +551,7 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
     <%_ } _%>
   <%_ } else { _%>
         <%= persistClass %> <%= createInstance %> = new <%= persistClass %>();
-    <%_ if (!primaryKey.derived && !primaryKey.composite && !isUsingMapsId) { _%>
+    <%_ if (!primaryKey.derived && !isUsingMapsId) { _%>
       <%_ for (const idField of primaryKey.fields.filter(field => !field.autoGenerateByRepository)) { _%>
         <%= createInstance %>.set<%= idField.fieldInJavaBeanMethod %>(<%- idField.fieldJavaValueGenerator %>);
       <%_ } _%>
