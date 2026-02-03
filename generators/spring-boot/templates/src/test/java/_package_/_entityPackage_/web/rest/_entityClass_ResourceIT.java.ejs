@@ -534,11 +534,10 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
     public static <%= persistClass %> create<% if (fieldStatus === 'UPDATED_') { _%>Updated<%_ } %>Entity(<% if (databaseTypeSql && anyRelationshipIsRequired) { %>EntityManager em<% } %>) {
   <%_ if (fluentMethods) { _%>
         <% if (!anyRelationshipIsRequired) { %>return <% } else { %><%= persistClass %> <%= createInstance %> = <% } %>new <%= persistClass %>()
-    <%_ if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
-            .<%= primaryKey.name %>(UUID.randomUUID())
-    <%_ } _%>
-    <%_ if (primaryKey.typeString && !isUsingMapsId && !primaryKey.autoGenerate) { _%>
-            .<%= primaryKey.name %>(UUID.randomUUID().toString())
+    <%_ if (!primaryKey.derived && !isUsingMapsId) { _%>
+      <%_ for (const idField of primaryKey.fields.filter(field => !field.autoGenerateByRepository)) { _%>
+            .<%= idField.fieldName %>(<%- idField.fieldJavaValueGenerator %>)
+      <%_ } _%>
     <%_ } _%>
     <%_ for (field of fieldsToTest) { _%>
             .<%= field.fieldName %>(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>)
@@ -552,11 +551,10 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
     <%_ } _%>
   <%_ } else { _%>
         <%= persistClass %> <%= createInstance %> = new <%= persistClass %>();
-    <%_ if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
-        <%= createInstance %>.set<%= primaryKey.fields[0].fieldInJavaBeanMethod %>(UUID.randomUUID());
-    <%_ } _%>
-    <%_ if (primaryKey.typeString && !isUsingMapsId && !primaryKey.autoGenerate) { _%>
-        <%= createInstance %>.set<%= primaryKey.fields[0].fieldInJavaBeanMethod %>(UUID.randomUUID().toString());
+    <%_ if (!primaryKey.derived && !isUsingMapsId) { _%>
+      <%_ for (const idField of primaryKey.fields.filter(field => !field.autoGenerateByRepository)) { _%>
+        <%= createInstance %>.set<%= idField.fieldInJavaBeanMethod %>(<%- idField.fieldJavaValueGenerator %>);
+      <%_ } _%>
     <%_ } _%>
     <%_ for (field of fieldsToTest) { _%>
         <%= createInstance %>.set<%= field.fieldInJavaBeanMethod %>(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>);
@@ -686,7 +684,7 @@ _%>
       // overwrite the id field again with null
       // the create method here is supposed to be used for other tests as well,
       // which may expect an id to be set (at least in the reactive stack)
-      if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
+      if (reactive && databaseTypeSql && primaryKey.typeUUID && primaryKey.autoGenerate && !isUsingMapsId) { _%>
         <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(null);
   <%_ } _%>
         // Create the <%= entityClass %>
