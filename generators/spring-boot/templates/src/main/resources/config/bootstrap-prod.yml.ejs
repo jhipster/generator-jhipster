@@ -34,12 +34,15 @@ spring:
 <%_ } _%>
 <%_ if (serviceDiscoveryConsul) { _%>
     consul:
-      # Prefer the standard Consul token env var while keeping backward-compatible fallbacks.
-      token: ${CONSUL_HTTP_TOKEN:${CONSUL_TOKEN:}}
       config:
+        # Prefer the standard Consul token env var while keeping backward-compatible fallbacks.
+        acl-token: ${CONSUL_HTTP_TOKEN:${CONSUL_TOKEN:}}
         fail-fast: true
         format: yaml # set this to "files" if using git2consul
         profile-separator: '-'
+      discovery:
+        # Prefer the standard Consul token env var while keeping backward-compatible fallbacks.
+        acl-token: ${CONSUL_HTTP_TOKEN:${CONSUL_TOKEN:}}
       retry:
         initial-interval: 1000
         max-interval: 2000
