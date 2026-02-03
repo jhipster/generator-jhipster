@@ -13,8 +13,9 @@ Example [jOOQ Blueprint](https://github.com/jhipster/generator-jhipster-jooq/blo
 
 ## Stable API Surface
 
-The semver-stable API surface for blueprints is limited to the public entrypoints exported by `generator-jhipster`.
-In particular, the following paths are considered stable for reuse in blueprints:
+The semver-stable API surface for blueprints is intentionally small.
+While `generator-jhipster` exports additional entrypoints (generators, utils, jdl, testing, etc.), only the
+`support` entrypoints listed below are guaranteed stable for reuse in blueprints.
 
 - `generator-jhipster/generators/*/support`
 - `generator-jhipster/generators/*/generators/*/support`
