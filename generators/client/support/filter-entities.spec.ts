@@ -1,6 +1,8 @@
 import { describe, it } from 'esmocha';
+
 import { expect } from 'chai';
-import { isClientRelationship, isClientField, filterEntityPropertiesForClient } from './filter-entities.ts';
+
+import { filterEntityPropertiesForClient, isClientField, isClientRelationship } from './filter-entities.ts';
 
 describe('generator - client - support - filter-entities', () => {
   describe('isClientField', () => {
@@ -77,7 +79,10 @@ describe('generator - client - support - filter-entities', () => {
   describe('filterEntityPropertiesForClient', () => {
     it('filters out fields with skipClient=true', () => {
       const entity = {
-        fields: [{ fieldName: 'a', skipClient: false }, { fieldName: 'b', skipClient: true }],
+        fields: [
+          { fieldName: 'a', skipClient: false },
+          { fieldName: 'b', skipClient: true },
+        ],
         relationships: [],
       };
       const result = filterEntityPropertiesForClient(entity as any);
