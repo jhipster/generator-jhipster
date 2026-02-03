@@ -34,6 +34,8 @@ spring:
 <%_ } _%>
 <%_ if (serviceDiscoveryConsul) { _%>
     consul:
+      # Prefer the standard Consul token env var while keeping backward-compatible fallbacks.
+      token: ${CONSUL_HTTP_TOKEN:${CONSUL_TOKEN:}}
       config:
         fail-fast: true
         format: yaml # set this to "files" if using git2consul

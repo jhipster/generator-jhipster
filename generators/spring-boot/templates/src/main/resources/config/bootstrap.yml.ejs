@@ -34,6 +34,8 @@ spring:
   cloud:
 <%_ if (serviceDiscoveryConsul) { _%>
     consul:
+      # Prefer the standard Consul token env var while keeping backward-compatible fallbacks.
+      token: ${CONSUL_HTTP_TOKEN:${CONSUL_TOKEN:}}
       config:
         fail-fast: false # if not in "prod" profile, do not force to use Spring Cloud Config
         format: yaml
