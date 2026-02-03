@@ -394,7 +394,8 @@ spring:
             client-id: web_app
             client-secret: web_app
     <%_ } _%>
-            scope: openid, profile, email, offline_access # last one for refresh tokens
+            scope: openid, profile, email
+            # Add offline_access to request refresh tokens.
   <%_ } _%>
   <%_ if (authenticationTypeJwt) { _%>
     oauth2:
