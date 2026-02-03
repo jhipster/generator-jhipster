@@ -28,6 +28,13 @@ import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../.
 import { checkDocker } from '../../../docker/support/index.ts';
 import { BaseKubernetesGenerator } from '../../generator.ts';
 import { helmConstants, kubernetesConstants } from '../../support/constants.ts';
+import {
+  LETSENCRYPT_STAGING_TRUSTSTORE_BASE64,
+  LETSENCRYPT_STAGING_TRUSTSTORE_BASE64_TEST,
+  LETSENCRYPT_STAGING_TRUSTSTORE_PASSWORD,
+  LETSENCRYPT_STAGING_TRUSTSTORE_PASSWORD_TEST,
+} from '../../support/letsencrypt-staging-truststore.ts';
+import { rekeyTruststoreBase64 } from '../../support/truststore.ts';
 
 export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerator {
   async beforeQueue() {
@@ -125,7 +132,7 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
 
   get preparingWorkspaces() {
     return this.asPreparingWorkspacesTaskGroup({
-      derivedProperties({ deployment, applications }) {
+      async derivedProperties({ deployment, applications }) {
         deployment.deploymentApplicationTypeMicroservice = deployment.deploymentApplicationType === 'microservice';
         deployment.ingressTypeNginx = deployment.ingressType === 'nginx';
         deployment.ingressTypeGke = deployment.ingressType === 'gke';
@@ -137,6 +144,31 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
         deployment.useKafka = applications.some(appConfig => appConfig.messageBroker === 'kafka');
         deployment.usesIngress = deployment.kubernetesServiceType === 'Ingress';
         deployment.useKeycloak = deployment.usesOauth2 && deployment.usesIngress;
+
+        if (deployment.useKeycloak && deployment.ingressTypeGke) {
+          if (this.options.reproducibleTests) {
+            deployment.truststorePassword = LETSENCRYPT_STAGING_TRUSTSTORE_PASSWORD_TEST;
+            deployment.truststoreBase64 = LETSENCRYPT_STAGING_TRUSTSTORE_BASE64_TEST;
+          } else {
+            const truststorePassword = randomBytes(30).toString('hex');
+            try {
+              deployment.truststorePassword = truststorePassword;
+              deployment.truststoreBase64 = await rekeyTruststoreBase64({
+                base64: LETSENCRYPT_STAGING_TRUSTSTORE_BASE64,
+                currentPassword: LETSENCRYPT_STAGING_TRUSTSTORE_PASSWORD,
+                newPassword: truststorePassword,
+              });
+            } catch (error) {
+              this.log.warn(
+                `Failed to update Let's Encrypt staging truststore password with keytool: ${(error as Error).message}`,
+              );
+              this.log.warn('Falling back to the default truststore password.');
+              deployment.truststorePassword = LETSENCRYPT_STAGING_TRUSTSTORE_PASSWORD;
+              deployment.truststoreBase64 = LETSENCRYPT_STAGING_TRUSTSTORE_BASE64;
+            }
+          }
+        }
+
         deployment.keycloakRedirectUris = '';
         deployment.entryPort = 8080;
         deployment.adminPassword ??= 'admin';
