@@ -40,10 +40,12 @@ export async function rekeyTruststoreBase64({
     return base64;
   }
 
-  const tempDir = await mkdtemp(join(tmpdir(), 'jhipster-truststore-'));
-  const truststorePath = join(tempDir, 'truststore.jks');
+  let tempDir: string | undefined;
+  let truststorePath = '';
 
   try {
+    tempDir = await mkdtemp(join(tmpdir(), 'jhipster-truststore-'));
+    truststorePath = join(tempDir, 'truststore.jks');
     await writeFile(truststorePath, Buffer.from(base64, 'base64'));
 
     await execa(resolveKeytoolCommand(), [
@@ -59,6 +61,8 @@ export async function rekeyTruststoreBase64({
     const updatedTruststore = await readFile(truststorePath);
     return updatedTruststore.toString('base64');
   } finally {
-    await rm(tempDir, { recursive: true, force: true });
+    if (tempDir) {
+      await rm(tempDir, { recursive: true, force: true });
+    }
   }
 }

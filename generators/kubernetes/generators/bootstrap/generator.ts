@@ -152,12 +152,12 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
           } else {
             const truststorePassword = randomBytes(30).toString('hex');
             try {
-              deployment.truststorePassword = truststorePassword;
               deployment.truststoreBase64 = await rekeyTruststoreBase64({
                 base64: LETSENCRYPT_STAGING_TRUSTSTORE_BASE64,
                 currentPassword: LETSENCRYPT_STAGING_TRUSTSTORE_PASSWORD,
                 newPassword: truststorePassword,
               });
+              deployment.truststorePassword = truststorePassword;
             } catch (error) {
               this.log.warn(
                 `Failed to update Let's Encrypt staging truststore password with keytool: ${(error as Error).message}`,
