@@ -47,7 +47,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: ${{ steps.node-version.outputs.node-version }}
-      - run: npm ci --prod --ignore-scripts
+      - run: npm ci --prod --engine-strict --ignore-scripts
       - id: build
         run: bin/jhipster.cjs github-build-matrix generators --event-name ${{ github.event_name }}
   generate-blueprint:
