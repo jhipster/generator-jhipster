@@ -176,11 +176,11 @@ public class <%= entityClass %>Resource {
     public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%= instanceType %>><% if (reactive) { %>><% } %> create<%= entityClass %>(<% if (anyPropertyHasValidation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
         LOG.debug("REST request to save <%= entityClass %> : {}", <%= instanceName %>);
   <%_ if (primaryKey.autoGenerate) { _%>
-        if (<%= instanceName %>.get<%= primaryKey.nameCapitalized %>() != null) {
+        if (<%= instanceName %>.<%- primaryKey.propertySupplierName %>() != null) {
             throw new BadRequestAlertException("A new <%= entityInstance %> cannot already have an ID", ENTITY_NAME, "idexists");
         }
   <%_ } else if (!reactive) { _%>
-        if (<%= entityInstance %>Repository.existsById(<%- instanceName %>.get<%= primaryKey.nameCapitalized %>())) {
+        if (<%= entityInstance %>Repository.existsById(<%- instanceName %>.<%- primaryKey.propertySupplierName %>())) {
             throw new BadRequestAlertException("<%- entityInstance %> already exists", ENTITY_NAME, "idexists");
         }
   <%_ } _%>
@@ -211,7 +211,7 @@ public class <%= entityClass %>Resource {
   <%_ } _%>
   <%_ if (!primaryKey.autoGenerate && reactive) { _%>
         return <%= entityInstance %>Repository
-            .existsById(<%- instanceName %>.get<%= primaryKey.nameCapitalized %>())
+            .existsById(<%- instanceName %>.<%- primaryKey.propertySupplierName %>())
             .flatMap(exists -> {
                 if (exists) {
                     return Mono.error(new BadRequestAlertException("<%- entityInstance %> already exists", ENTITY_NAME, "idexists"));
@@ -227,8 +227,8 @@ public class <%= entityClass %>Resource {
     <%_ } _%>
             .map(result -> {
                 try {
-                    return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.get<%= primaryKey.nameCapitalized %>()))
-                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.get<%= primaryKey.nameCapitalized %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
+                    return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.<%- primaryKey.propertySupplierName %>()))
+                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.<%- primaryKey.propertySupplierName %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
                         .body(result);
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
@@ -241,8 +241,8 @@ public class <%= entityClass %>Resource {
     <%_ if (!serviceNo) { _%>
         <%- restInstance %> = <%= entityInstance %>Service.save(<%= instanceName %>);
     <%_ } _%>
-        return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + <%- restInstance %>.get<%= primaryKey.nameCapitalized %>()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%- restInstance %>.get<%= primaryKey.nameCapitalized %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
+        return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + <%- restInstance %>.<%- primaryKey.propertySupplierName %>()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%- restInstance %>.<%- primaryKey.propertySupplierName %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
             .body(<%- restInstance %>);
   <%_ } _%>
     }
@@ -268,10 +268,10 @@ public class <%= entityClass %>Resource {
         <% if (anyPropertyHasValidation) { %>@Valid <% } %>@RequestBody <%= restClass %> <%= restInstance %>
     ) throws URISyntaxException {
         LOG.debug("REST request to update <%= entityClass %> : {}, {}", <%= primaryKey.name %>, <%= instanceName %>);
-        if (<%= instanceName %>.get<%= primaryKey.nameCapitalized %>() == null) {
+        if (<%= instanceName %>.<%- primaryKey.propertySupplierName %>() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(<%= primaryKey.name %>, <%= instanceName %>.get<%= primaryKey.nameCapitalized %>())) {
+        if (!Objects.equals(<%= primaryKey.name %>, <%= instanceName %>.<%- primaryKey.propertySupplierName %>())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -313,7 +313,7 @@ public class <%= entityClass %>Resource {
     <%_ } _%>
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
                 .map(result -> ResponseEntity.ok()
-                    .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.get<%= primaryKey.nameCapitalized %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
+                    .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.<%- primaryKey.propertySupplierName %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
                     .body(result)
                 );
         });
@@ -322,7 +322,7 @@ public class <%= entityClass %>Resource {
         <%- restInstance %> = <%= entityInstance %>Service.update(<%= restInstance %>);
     <%_ } _%>
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%- restInstance %>.get<%= primaryKey.nameCapitalized %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%- restInstance %>.<%- primaryKey.propertySupplierName %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
             .body(<%- restInstance %>);
   <%_ } _%>
     }
@@ -347,10 +347,10 @@ public class <%= entityClass %>Resource {
         <% if (anyPropertyHasValidation) { %>@NotNull <% } %>@RequestBody <%= instanceType %> <%= instanceName %>
     ) throws URISyntaxException {
         LOG.debug("REST request to partial update <%= entityClass %> partially : {}, {}", <%= primaryKey.name %>, <%= instanceName %>);
-        if (<%= instanceName %>.get<%= primaryKey.nameCapitalized %>() == null) {
+        if (<%= instanceName %>.<%- primaryKey.propertySupplierName %>() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(<%= primaryKey.name %>, <%= instanceName %>.get<%= primaryKey.nameCapitalized %>())) {
+        if (!Objects.equals(<%= primaryKey.name %>, <%= instanceName %>.<%- primaryKey.propertySupplierName %>())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -386,14 +386,14 @@ public class <%= entityClass %>Resource {
             return result
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
                 .map(res -> ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, res.get<%= primaryKey.nameCapitalized %>()<% if (primaryKey.type !== 'String') { %>.toString()<% } %>))
+                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, res.<%- primaryKey.propertySupplierName %>()<% if (primaryKey.type !== 'String') { %>.toString()<% } %>))
                 .body(res)
             );
         });
   <%_ } else { _%>
             return ResponseUtil.wrapOrNotFound(
                 result,
-                HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%= instanceName %>.get<%= primaryKey.nameCapitalized %>()<% if (primaryKey.type !== 'String') { %>.toString()<% } %>)
+                HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%= instanceName %>.<%- primaryKey.propertySupplierName %>()<% if (primaryKey.type !== 'String') { %>.toString()<% } %>)
             );
   <%_ } _%>
     }

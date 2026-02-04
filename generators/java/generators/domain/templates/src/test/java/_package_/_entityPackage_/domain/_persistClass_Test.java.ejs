@@ -43,7 +43,7 @@ class <%= persistClass %>Test {
         <%= persistClass %> <%= persistInstance %>2 = new <%= persistClass %>();
         assertThat(<%= persistInstance %>1).isNotEqualTo(<%= persistInstance %>2);
 
-        <%= persistInstance %>2.set<%= primaryKey.nameCapitalized %>(<%= persistInstance %>1.get<%= primaryKey.nameCapitalized %>());
+        <%= persistInstance %>2.<%- primaryKey.propertyConsumerName %>(<%= persistInstance %>1.<%- primaryKey.propertySupplierName %>());
         assertThat(<%= persistInstance %>1).isEqualTo(<%= persistInstance %>2);
 
         <%= persistInstance %>2 = get<%= persistClass %>Sample2();
@@ -58,7 +58,7 @@ class <%= persistClass %>Test {
         assertThat(<%= persistInstance %>.hashCode()).isZero();
 
         <%= persistClass %> <%= persistInstance %>1 = get<%= persistClass %>Sample1();
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%= persistInstance %>1.get<%= primaryKey.nameCapitalized %>());
+        <%= persistInstance %>.<%- primaryKey.propertyConsumerName %>(<%= persistInstance %>1.<%- primaryKey.propertySupplierName %>());
         assertThat(<%= persistInstance %>).hasSameHashCodeAs(<%= persistInstance %>1);
     }
 <%_ } _%>

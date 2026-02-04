@@ -70,19 +70,19 @@ import org.springframework.data.relational.core.mapping.Table;
       <%_ if (relationship.otherRelationship.collection) { _%>
             this.<%= relationship.relationshipFieldName %>.remove<%= relationship.otherRelationship.relationshipNameCapitalized %>(this);
       <%_ } else { _%>
-            this.<%= relationship.relationshipFieldName %>.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(null);
+            this.<%= relationship.relationshipFieldName %>.<%= relationship.otherRelationship.propertyConsumerName %>(null);
       <%_ } _%>
         }
         if (<%= relationship.otherEntityName %> != null) {
       <%_ if (relationship.otherRelationship.collection) { _%>
             <%= relationship.otherEntityName %>.add<%= relationship.otherRelationship.relationshipNameCapitalized %>(this);
       <%_ } else { _%>
-            <%= relationship.otherEntityName %>.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(this);
+            <%= relationship.otherEntityName %>.<%= relationship.otherRelationship.propertyConsumerName %>(this);
       <%_ } _%>
         }
     <%_ } _%>
         this.<%= relationship.relationshipFieldName %> = <%= relationship.otherEntityName %>;
-        this.<%= relationship.relationshipFieldName %>Id = <%= relationship.otherEntityName %> != null ? <%= relationship.otherEntityName %>.get<%= relationship.otherEntity.primaryKey.nameCapitalized %>() : null;
+        this.<%= relationship.relationshipFieldName %>Id = <%= relationship.otherEntityName %> != null ? <%= relationship.otherEntityName %>.<%= relationship.otherEntity.primaryKey.propertySupplierName %>() : null;
     }
   <%_ } _%>
 <&_ } -&>

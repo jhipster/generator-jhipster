@@ -23,8 +23,8 @@
         <%- persistInstance %>.setIsPersisted();
 <%_ } _%>
 <%_ if (saveNewEntityOperation && isUsingMapsId) { _%>
-        <%- mapsIdAssoc.otherEntity.primaryKey.type %> <%- mapsIdAssoc.otherEntityName %>Id = <%- persistInstance %>.get<%- mapsIdAssoc.relationshipNameCapitalized %>().get<%- mapsIdAssoc.otherEntity.primaryKey.nameCapitalized %>();
-        <%- mapsIdAssoc.otherEntity.entityInstance %>Repository.findById(<%- mapsIdAssoc.otherEntityName %>Id).ifPresent(<%- persistInstance %>::<%_ if (!fluentMethods) { _%>set<%- mapsIdAssoc.relationshipNameCapitalized %> <%_ } else { _%><%- mapsIdAssoc.relationshipName %><%_ } _%>);
+        <%- mapsIdAssoc.otherEntity.primaryKey.type %> <%- mapsIdAssoc.otherEntityName %>Id = <%- persistInstance %>.get<%- mapsIdAssoc.relationshipNameCapitalized %>().<%- mapsIdAssoc.otherEntity.primaryKey.propertySupplierName %>();
+        <%- mapsIdAssoc.otherEntity.entityInstance %>Repository.findById(<%- mapsIdAssoc.otherEntityName %>Id).ifPresent(<%- persistInstance %>::<%_ if (!fluentMethods) { _%><%- mapsIdAssoc.propertyConsumerName %> <%_ } else { _%><%- mapsIdAssoc.relationshipName %><%_ } _%>);
 <%_ } _%>
         <%- returnDirectly && !searchEngineElasticsearch && !dtoMapstruct ? 'return' : `${persistInstance} =` %> <%- entityInstance %>Repository.save(<%- persistInstance %>);
 <%_ if (searchEngineElasticsearch) { _%>

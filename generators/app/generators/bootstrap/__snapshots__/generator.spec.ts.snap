@@ -403,6 +403,8 @@ exports[`generator - app:bootstrap with default config should prepare EntityA 1`
     "name": "id",
     "nameCapitalized": "Id",
     "ownFields": Any<Array>,
+    "propertyConsumerName": "setId",
+    "propertySupplierName": "getId",
     "relationships": [],
     "tsSampleValues": [
       "'9fec3727-3421-4967-b213-ba36557ca194'",
@@ -1319,6 +1321,8 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
     "name": "id",
     "nameCapitalized": "Id",
     "ownFields": Any<Array>,
+    "propertyConsumerName": "setId",
+    "propertySupplierName": "getId",
     "relationships": [],
     "tsSampleValues": [
       "'9fec3727-3421-4967-b213-ba36557ca194'",
@@ -1620,6 +1624,8 @@ exports[`generator - app:bootstrap with skipUserManagement should prepare Entity
     "name": "id",
     "nameCapitalized": "Id",
     "ownFields": Any<Array>,
+    "propertyConsumerName": "setId",
+    "propertySupplierName": "getId",
     "relationships": [],
     "tsSampleValues": [
       "'9fec3727-3421-4967-b213-ba36557ca194'",

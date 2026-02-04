@@ -234,6 +234,14 @@ export const mutateRelationshipWithEntity = {
 export type PrimaryKey<F extends Field = Field> = {
   name: string;
   nameCapitalized: string;
+  /**
+   * Name of the Consumer (Setter) method to use to set the property.
+   */
+  propertyConsumerName?: string;
+  /**
+   * Name of the Supplier (Getter) method to use to initialize the property.
+   */
+  propertySupplierName?: string;
   hibernateSnakeCaseName: string;
   fields: F[];
   relationships: RelationshipWithEntity<Relationship, Entity, F>[];

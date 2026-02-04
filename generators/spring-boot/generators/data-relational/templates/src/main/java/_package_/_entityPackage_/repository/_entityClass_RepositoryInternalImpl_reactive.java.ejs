@@ -197,8 +197,8 @@ _%>
     @Override
     public <S extends <%= persistClass %>> Mono<S> save(S entity) {
 <%_ if (isUsingMapsId) { _%>
-        if (entity.get<%= primaryKey.nameCapitalized %>() == null && entity.<%= mapsIdAssoc.propertySupplierName %>() != null) {
-            entity.set<%= primaryKey.nameCapitalized %>(entity.<%= mapsIdAssoc.propertySupplierName %>().get<%= mapsIdAssoc.otherEntity.primaryKey.nameCapitalized %>());
+        if (entity.<%- primaryKey.propertySupplierName %>() == null && entity.<%= mapsIdAssoc.propertySupplierName %>() != null) {
+            entity.<%- primaryKey.propertyConsumerName %>(entity.<%= mapsIdAssoc.propertySupplierName %>().<%- mapsIdAssoc.otherEntity.primaryKey.propertySupplierName %>());
             return entityManager.insert(entity);
         }
 <%_ } _%>
@@ -211,9 +211,9 @@ _%>
     return (rel.relationshipManyToMany && rel.ownerSide);
    }).forEach(function(rel, idx) { _%>
     <%_ if (idx === 0) { _%>
-        Mono<Void> result = entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.get<%= primaryKey.nameCapitalized %>(), entity.<%= rel.propertySupplierName %>().stream().map(<%= rel.otherEntity.persistClass %>::get<%= rel.otherEntity.primaryKey.nameCapitalized %>)).then();
+        Mono<Void> result = entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.<%- primaryKey.propertySupplierName %>(), entity.<%= rel.propertySupplierName %>().stream().map(<%= rel.otherEntity.persistClass %>::<%- rel.otherEntity.primaryKey.propertySupplierName %>)).then();
     <%_ } else { _%>
-        result = result.and(entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.get<%= primaryKey.nameCapitalized %>(), entity.<%= rel.propertySupplierName %>().stream().map(<%= rel.otherEntity.persistClass %>::get<%= rel.otherEntity.primaryKey.nameCapitalized %>)));
+        result = result.and(entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.<%- primaryKey.propertySupplierName %>(), entity.<%= rel.propertySupplierName %>().stream().map(<%= rel.otherEntity.persistClass %>::<%- rel.otherEntity.primaryKey.propertySupplierName %>)));
     <%_ } _%>
   <%_ }); _%>
         return result.thenReturn(entity);
@@ -254,8 +254,8 @@ _%>
         ConditionBuilder builder = new ConditionBuilder(this.columnConverter);
         List<Condition> allConditions = new ArrayList<Condition>();
         if (criteria != null) {
-            if (criteria.get<%= primaryKey.nameCapitalized %>() != null) {
-                builder.buildFilterConditionForField(criteria.get<%= primaryKey.nameCapitalized %>(), entityTable.column("<%= primaryKey.name %>"));
+            if (criteria.<%- primaryKey.propertySupplierName %>() != null) {
+                builder.buildFilterConditionForField(criteria.<%- primaryKey.propertySupplierName %>(), entityTable.column("<%= primaryKey.name %>"));
             }
 <%_
 fields.forEach((field) => {
