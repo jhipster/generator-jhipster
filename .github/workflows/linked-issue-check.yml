@@ -75,7 +75,7 @@ jobs:
         working-directory: ${{ github.workspace }}/generator-jhipster
       - name: 'GENERATION: project'
         id: project
-        run: jhipster.cjs from-issue "${{ matrix.linked-issue }}" --no-code-workspace --disable-blueprints
+        run: jhipster.cjs from-issue "${{ matrix.linked-issue }}" --no-code-workspace --disable-blueprints --skip-jhipster-dependencies --skip-checks
         env:
           # generate-sample uses JHI_FOLDER_APP to generate the application.
           JHI_FOLDER_APP: ${{ github.workspace }}/app
@@ -88,7 +88,7 @@ jobs:
           !contains(github.event.pull_request.labels.*.name, 'pr: disable-compare')
         with:
           generator-path: generator-jhipster
-          cmd: jhipster.cjs from-issue "${{ matrix.linked-issue }}" --skip-jhipster-dependencies --skip-checks --skip-install --no-insight
+          cmd: jhipster.cjs from-issue "${{ matrix.linked-issue }}" --no-code-workspace --disable-blueprints --skip-jhipster-dependencies --skip-checks --skip-install --no-insight
         env:
           # generate-sample uses JHI_FOLDER_APP to generate the application.
           JHI_FOLDER_APP: ${{ github.workspace }}/base/app
