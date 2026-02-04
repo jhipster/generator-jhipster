@@ -19,7 +19,7 @@
 
 import type { Logger } from '../../../lib/utils/logger.ts';
 
-const validOptions = ['NO ACTION', 'RESTRICT', 'CASCADE', 'SET NULL', 'SET DEFAULT'];
+const validOptions = new Set(['NO ACTION', 'RESTRICT', 'CASCADE', 'SET NULL', 'SET DEFAULT']);
 
 /**
  * Checks that the value is a valid option for foreign key on handlers, and returns it if it is. If it isn't, resets the value to undefined.
@@ -31,7 +31,7 @@ export function checkAndReturnRelationshipOnValue(onValue: string | undefined, {
   let result = onValue;
 
   if (result) {
-    if (!validOptions.includes(result)) {
+    if (!validOptions.has(result)) {
       log.warn(`Invalid value '${result}' for onDelete or onUpdate - resetting to undefined.`);
 
       result = undefined;

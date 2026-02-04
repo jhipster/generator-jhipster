@@ -81,13 +81,13 @@ const {
 
 const asPriority = BaseGenerator.asPriority;
 
-const PRIORITY_WITH_ENTITIES_TO_LOAD: string[] = [LOADING_ENTITIES];
-const PRIORITY_WITH_ENTITIES: string[] = [DEFAULT];
-const PRIORITY_WITH_FILTERED_ENTITIES: string[] = [WRITING_ENTITIES, POST_WRITING_ENTITIES];
+const PRIORITY_WITH_ENTITIES_TO_LOAD = new Set<string>([LOADING_ENTITIES]);
+const PRIORITY_WITH_ENTITIES = new Set<string>([DEFAULT]);
+const PRIORITY_WITH_FILTERED_ENTITIES = new Set<string>([WRITING_ENTITIES, POST_WRITING_ENTITIES]);
 
-const PRIORITY_WITH_SOURCE: string[] = [PREPARING, POST_PREPARING, POST_WRITING, POST_WRITING_ENTITIES];
-const PRIORITY_WITH_APPLICATION_DEFAULTS: string[] = [BOOTSTRAP_APPLICATION, PREPARING, LOADING];
-const PRIORITY_WITH_APPLICATION: string[] = [
+const PRIORITY_WITH_SOURCE = new Set<string>([PREPARING, POST_PREPARING, POST_WRITING, POST_WRITING_ENTITIES]);
+const PRIORITY_WITH_APPLICATION_DEFAULTS = new Set<string>([BOOTSTRAP_APPLICATION, PREPARING, LOADING]);
+const PRIORITY_WITH_APPLICATION = new Set<string>([
   LOADING,
   PREPARING,
   POST_PREPARING,
@@ -108,15 +108,15 @@ const PRIORITY_WITH_APPLICATION: string[] = [
 
   WRITING_ENTITIES,
   POST_WRITING_ENTITIES,
-];
+]);
 
 const getFirstArgForPriority = (priorityName: string) => ({
-  source: PRIORITY_WITH_SOURCE.includes(priorityName),
-  application: PRIORITY_WITH_APPLICATION.includes(priorityName),
-  applicationDefaults: PRIORITY_WITH_APPLICATION_DEFAULTS.includes(priorityName),
-  entitiesToLoad: PRIORITY_WITH_ENTITIES_TO_LOAD.includes(priorityName),
-  entities: PRIORITY_WITH_ENTITIES.includes(priorityName),
-  filteredEntities: PRIORITY_WITH_FILTERED_ENTITIES.includes(priorityName),
+  source: PRIORITY_WITH_SOURCE.has(priorityName),
+  application: PRIORITY_WITH_APPLICATION.has(priorityName),
+  applicationDefaults: PRIORITY_WITH_APPLICATION_DEFAULTS.has(priorityName),
+  entitiesToLoad: PRIORITY_WITH_ENTITIES_TO_LOAD.has(priorityName),
+  entities: PRIORITY_WITH_ENTITIES.has(priorityName),
+  filteredEntities: PRIORITY_WITH_FILTERED_ENTITIES.has(priorityName),
 });
 
 /**

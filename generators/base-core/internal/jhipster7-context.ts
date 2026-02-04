@@ -373,8 +373,8 @@ export const jhipster7deprecatedProperties: MigrationProperty = {
   },
 };
 
-const ejsBuiltInProperties: (string | symbol)[] = ['__append', '__line', 'escapeFn', 'include', 'undefined'];
-const javascriptBuiltInProperties: (string | symbol)[] = ['parseInt', 'Boolean', 'JSON', 'Object', 'toString'];
+const ejsBuiltInProperties = new Set<string | symbol>(['__append', '__line', 'escapeFn', 'include', 'undefined']);
+const javascriptBuiltInProperties = new Set<string | symbol>(['parseInt', 'Boolean', 'JSON', 'Object', 'toString']);
 
 const getPropertyBuilder =
   ({ log = (msg: any) => console.log(msg) } = {}) =>
@@ -443,10 +443,10 @@ const createHandler = ({ log }: Handler = { log: msg => console.log(msg) }): Pro
     getPrototypeOf: ({ data }) => Object.getPrototypeOf(data),
     getOwnPropertyDescriptor: ({ data }, prop) => Object.getOwnPropertyDescriptor(data, prop),
     has: (context, prop) => {
-      if (ejsBuiltInProperties.includes(prop)) {
+      if (ejsBuiltInProperties.has(prop)) {
         return false;
       }
-      if (javascriptBuiltInProperties.includes(prop)) {
+      if (javascriptBuiltInProperties.has(prop)) {
         log(`${chalk.yellow(prop)} is a javascript built in symbol, its use is discouraged inside templates`);
         return false;
       }
