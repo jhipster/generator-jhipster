@@ -828,7 +828,7 @@ _%>
     <%_ } _%>
 
         // Update the <%= mapsIdAssoc?.otherEntity?.entityNameCapitalized %> with new association value
-        updated<%= persistClass %>.set<%= mapsIdAssoc?.otherEntity?.entityNameCapitalized %>(<%= alreadyGeneratedEntities.pop() %>);
+        updated<%= persistClass %>.<%= mapsIdAssoc?.propertyConsumerName %>(<%= alreadyGeneratedEntities.pop() %>);
     <%_ if (dtoMapstruct) { _%>
         <%= dtoClass %> updated<%= dtoClass %> = <%= entityInstance %>Mapper.toDto(updated<%= persistClass %>);
         assertThat(updated<%= dtoClass %>).isNotNull();
@@ -858,7 +858,7 @@ _%>
          * Validate the id for MapsId, the ids must be same
          * Uncomment the following line for assertion. However, please note that there is a known issue and uncommenting will fail the test.
          * Please look at https://github.com/jhipster/generator-jhipster/issues/9100. You can modify this test as necessary.
-         * assertThat(test<%= entityClass %>.<%- primaryKey.propertySupplierName %>()).isEqualTo(test<%= entityClass %>.get<%= mapsIdAssoc?.otherEntity?.entityNameCapitalized %>().<%- primaryKey.propertySupplierName %>());
+         * assertThat(test<%= entityClass %>.<%- primaryKey.propertySupplierName %>()).isEqualTo(test<%= entityClass %>.<%= mapsIdAssoc?.propertySupplierName %>().<%- primaryKey.propertySupplierName %>());
          */
     <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
@@ -1277,7 +1277,7 @@ _%>
         <%_ } _%>
       <%_ } else { _%>
         <%= relationship.otherEntity.primaryKey.type %> <%= relationship.relationshipFieldName %>Id = <%= relationship.relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.propertySupplierName %>();
-        <%= persistInstance %>.set<%= relationship.relationshipNameCapitalized %>Id(<%= relationship.relationshipFieldName %>Id);
+        <%= persistInstance %>.<%- relationship.propertyConsumerName %>Id(<%= relationship.relationshipFieldName %>Id);
         inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
       <%_ } _%>
     <%_ } _%>

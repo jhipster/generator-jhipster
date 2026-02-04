@@ -248,34 +248,34 @@ _%>
       <%_ if (relationship.otherRelationship.collection) { _%>
             this.<%= relationship.relationshipFieldNamePlural %>.forEach(i -> i.remove<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
       <%_ } else { _%>
-            this.<%= relationship.relationshipFieldNamePlural %>.forEach(i -> i.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(null));
+            this.<%= relationship.relationshipFieldNamePlural %>.forEach(i -> i.<%- relationship.otherRelationship.propertyConsumerName %>(null));
       <%_ } _%>
         }
         if (<%= relationship.otherEntity.entityInstancePlural %> != null) {
       <%_ if (relationship.otherRelationship.collection) { _%>
             <%= relationship.otherEntity.entityInstancePlural %>.forEach(i -> i.add<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
       <%_ } else { _%>
-            <%= relationship.otherEntity.entityInstancePlural %>.forEach(i -> i.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
+            <%= relationship.otherEntity.entityInstancePlural %>.forEach(i -> i.<%- relationship.otherRelationship.propertyConsumerName %>(this));
       <%_ } _%>
         }
     <%_ } _%>
         this.<%= relationship.relationshipFieldNamePlural %> = <%= relationship.otherEntity.entityInstancePlural %>;
     }
   <%_ } else { _%>
-    public void set<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
+    public void <%- relationship.propertyConsumerName %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
     <%_ if (relationship.otherRelationship && relationship.relationshipUpdateBackReference) { _%>
         if (this.<%= relationship.relationshipFieldName %> != null) {
       <%_ if (relationship.otherRelationship.collection) { _%>
             this.<%= relationship.relationshipFieldName %>.remove<%= relationship.otherRelationship.relationshipNameCapitalized %>(this);
       <%_ } else { _%>
-            this.<%= relationship.relationshipFieldName %>.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(null);
+            this.<%= relationship.relationshipFieldName %>.<%- relationship.otherRelationship.propertyConsumerName %>(null);
       <%_ } _%>
         }
         if (<%= relationship.otherEntityName %> != null) {
       <%_ if (relationship.otherRelationship.collection) { _%>
             <%= relationship.otherEntityName %>.add<%= relationship.otherRelationship.relationshipNameCapitalized %>(this);
       <%_ } else { _%>
-            <%= relationship.otherEntityName %>.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(this);
+            <%= relationship.otherEntityName %>.<%- relationship.otherRelationship.propertyConsumerName %>(this);
       <%_ } _%>
         }
     <%_ } _%>
