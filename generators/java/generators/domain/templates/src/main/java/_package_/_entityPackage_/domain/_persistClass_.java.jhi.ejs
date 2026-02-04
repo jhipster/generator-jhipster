@@ -248,34 +248,34 @@ _%>
       <%_ if (relationship.otherRelationship.collection) { _%>
             this.<%= relationship.relationshipFieldNamePlural %>.forEach(i -> i.remove<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
       <%_ } else { _%>
-            this.<%= relationship.relationshipFieldNamePlural %>.forEach(i -> i.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(null));
+            this.<%= relationship.relationshipFieldNamePlural %>.forEach(i -> i.<%- relationship.otherRelationship.propertyConsumerName %>(null));
       <%_ } _%>
         }
         if (<%= relationship.otherEntity.entityInstancePlural %> != null) {
       <%_ if (relationship.otherRelationship.collection) { _%>
             <%= relationship.otherEntity.entityInstancePlural %>.forEach(i -> i.add<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
       <%_ } else { _%>
-            <%= relationship.otherEntity.entityInstancePlural %>.forEach(i -> i.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
+            <%= relationship.otherEntity.entityInstancePlural %>.forEach(i -> i.<%- relationship.otherRelationship.propertyConsumerName %>(this));
       <%_ } _%>
         }
     <%_ } _%>
         this.<%= relationship.relationshipFieldNamePlural %> = <%= relationship.otherEntity.entityInstancePlural %>;
     }
   <%_ } else { _%>
-    public void set<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
+    public void <%- relationship.propertyConsumerName %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
     <%_ if (relationship.otherRelationship && relationship.relationshipUpdateBackReference) { _%>
         if (this.<%= relationship.relationshipFieldName %> != null) {
       <%_ if (relationship.otherRelationship.collection) { _%>
             this.<%= relationship.relationshipFieldName %>.remove<%= relationship.otherRelationship.relationshipNameCapitalized %>(this);
       <%_ } else { _%>
-            this.<%= relationship.relationshipFieldName %>.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(null);
+            this.<%= relationship.relationshipFieldName %>.<%- relationship.otherRelationship.propertyConsumerName %>(null);
       <%_ } _%>
         }
         if (<%= relationship.otherEntityName %> != null) {
       <%_ if (relationship.otherRelationship.collection) { _%>
             <%= relationship.otherEntityName %>.add<%= relationship.otherRelationship.relationshipNameCapitalized %>(this);
       <%_ } else { _%>
-            <%= relationship.otherEntityName %>.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(this);
+            <%= relationship.otherEntityName %>.<%- relationship.otherRelationship.propertyConsumerName %>(this);
       <%_ } _%>
         }
     <%_ } _%>
@@ -342,7 +342,7 @@ _%>
             return false;
         }
 <%_ if (!embedded) { _%>
-        return get<%= primaryKey.nameCapitalized %>() != null && get<%= primaryKey.nameCapitalized %>().equals(((<%= persistClass %>) o).get<%= primaryKey.nameCapitalized %>());
+        return <%- primaryKey.propertySupplierName %>() != null && <%- primaryKey.propertySupplierName %>().equals(((<%= persistClass %>) o).<%- primaryKey.propertySupplierName %>());
 <%_ } else { _%>
         return false;
 <%_ } _%>
@@ -354,7 +354,7 @@ _%>
         // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
 <%_ } else { _%>
-        return Objects.hashCode(get<%= primaryKey.nameCapitalized %>());
+        return Objects.hashCode(<%- primaryKey.propertySupplierName %>());
 <%_ } _%>
     }
 
@@ -363,7 +363,7 @@ _%>
     public String toString() {
         return "<%= persistClass %>{" +
 <%_ if (!embedded) { _%>
-            "<%= primaryKey.name %>=" + get<%= primaryKey.nameCapitalized %>() +
+            "<%= primaryKey.name %>=" + <%- primaryKey.propertySupplierName %>() +
 <%_ } _%>
 <%_ for (const field of fields.filter(field => !field.id && !field.transient)) {
   const isNumeric = field.fieldTypeNumeric; _%>

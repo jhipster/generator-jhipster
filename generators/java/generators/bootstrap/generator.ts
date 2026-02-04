@@ -23,7 +23,7 @@ import pluralize from 'pluralize';
 import { mutateData } from '../../../../lib/utils/index.ts';
 import { mutateApplication } from '../../application.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
-import { prepareEntity } from '../../support/index.ts';
+import { javaBeanCase, prepareEntity } from '../../support/index.ts';
 
 export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
@@ -69,6 +69,13 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
     return this.asPreparingEachEntityTaskGroup({
       prepareEntity({ application, entity }) {
         prepareEntity(entity, application);
+
+        if (entity.primaryKey) {
+          mutateData(entity.primaryKey, {
+            propertyConsumerName: ({ nameCapitalized }) => `set${nameCapitalized}`,
+            propertySupplierName: ({ nameCapitalized }) => `get${nameCapitalized}`,
+          });
+        }
       },
     });
   }
@@ -77,16 +84,31 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
+  get preparingEachEntityField() {
+    return this.asPreparingEachEntityFieldTaskGroup({
+      prepareEntity({ field }) {
+        mutateData(field, {
+          propertyJavaBeanName: ({ propertyName }) => javaBeanCase(propertyName),
+          propertyConsumerName: ({ propertyJavaBeanName }) => `set${propertyJavaBeanName}`,
+          propertySupplierName: ({ propertyJavaBeanName }) => `get${propertyJavaBeanName}`,
+        });
+      },
+    });
+  }
+
+  get [JavaApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+  }
+
   get preparingEachEntityRelationship() {
     return this.asPreparingEachEntityRelationshipTaskGroup({
       prepareRelationship({ application, relationship }) {
         mutateData(relationship, {
           relationshipNameCapitalizedPlural: ({ relationshipNameCapitalized, relationshipName }) =>
             relationshipName.length > 1 ? pluralize(relationshipNameCapitalized) : upperFirst(pluralize(relationshipName)),
-          propertyConsumerName: ({ collection, relationshipNameCapitalized, relationshipNameCapitalizedPlural }) =>
-            `set${collection ? relationshipNameCapitalizedPlural : relationshipNameCapitalized}`,
-          propertySupplierName: ({ collection, relationshipNameCapitalized, relationshipNameCapitalizedPlural }) =>
-            `get${collection ? relationshipNameCapitalizedPlural : relationshipNameCapitalized}`,
+          propertyJavaBeanName: ({ propertyName }) => javaBeanCase(propertyName),
+          propertyConsumerName: ({ propertyJavaBeanName }) => `set${propertyJavaBeanName}`,
+          propertySupplierName: ({ propertyJavaBeanName }) => `get${propertyJavaBeanName}`,
           relationshipUpdateBackReference: ({ ownerSide, relationshipRightSide, otherEntity }) =>
             !otherEntity.embedded && (application.databaseTypeNeo4j ? relationshipRightSide : !ownerSide),
         });

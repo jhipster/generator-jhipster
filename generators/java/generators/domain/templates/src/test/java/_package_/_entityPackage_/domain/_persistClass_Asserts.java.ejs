@@ -61,7 +61,7 @@ public class <%= persistClass %>Asserts {
      */
     public static void assert<%- persistClass %>MapsIdRelationshipPersistedValue(<%- persistClass %> entityToPersist, <%- persistClass %> persisted) {
         // Validate the id for MapsId, the ids must be same
-        assertThat(entityToPersist.get<%= primaryKey.relationships[0].propertyJavaBeanName %>().get<%= primaryKey.nameCapitalized %>()).isEqualTo(persisted.get<%= primaryKey.nameCapitalized %>());
+        assertThat(entityToPersist.<%= primaryKey.relationships[0].propertySupplierName %>().<%- primaryKey.propertySupplierName %>()).isEqualTo(persisted.<%- primaryKey.propertySupplierName %>());
     }
 <%_ } _%>
 

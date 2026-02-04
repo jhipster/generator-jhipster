@@ -20,7 +20,7 @@ import { mutateData } from '../../../../lib/utils/index.ts';
 import { getEnumInfo } from '../../../base-application/support/index.ts';
 import type { Source as CommonSource } from '../../../common/types.d.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
-import { javaBeanCase, javaTestPackageTemplatesBlock } from '../../support/index.ts';
+import { javaTestPackageTemplatesBlock } from '../../support/index.ts';
 import { isReservedJavaKeyword } from '../../support/reserved-keywords.ts';
 
 import { entityServerFiles, enumFiles } from './entity-files.ts';
@@ -68,7 +68,6 @@ export default class DomainGenerator extends JavaApplicationGenerator {
         }
       },
       prepareEntity({ entity, field }) {
-        field.propertyJavaBeanName = javaBeanCase(field.propertyName);
         if (entity.dtoMapstruct || entity.builtIn) {
           field.propertyDtoJavaType = field.fieldTypeBlobContent === 'text' ? 'String' : field.fieldType;
         }
@@ -88,7 +87,6 @@ export default class DomainGenerator extends JavaApplicationGenerator {
         }
       },
       prepareEntity({ entity, relationship }) {
-        relationship.propertyJavaBeanName = javaBeanCase(relationship.propertyName);
         if (entity.dtoMapstruct) {
           relationship.propertyDtoJavaType = relationship.collection
             ? `Set<${relationship.otherEntity.dtoClass}>`

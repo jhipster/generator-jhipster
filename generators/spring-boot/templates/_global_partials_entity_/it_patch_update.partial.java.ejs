@@ -20,7 +20,7 @@ long databaseSizeBeforeUpdate = getRepositoryCount();
 
 // Update the <%= entityInstance %> using partial update
 <%= persistClass %> partialUpdated<%= persistClass %> = new <%= persistClass %>();
-partialUpdated<%= persistClass %>.set<%= primaryKey.nameCapitalized %>(<%= persistInstance %>.get<%= primaryKey.nameCapitalized %>());
+partialUpdated<%= persistClass %>.<%- primaryKey.propertyConsumerName %>(<%= persistInstance %>.<%- primaryKey.propertySupplierName %>());
 <%_ fieldsToUpdate = fields.filter(field => field.includeField) %>
 <%_ if (fluentMethods && fieldsToUpdate.length > 0) { _%>
     partialUpdated<%= persistClass %><% for (field of fieldsToUpdate) { %>
@@ -40,14 +40,14 @@ partialUpdated<%= persistClass %>.set<%= primaryKey.nameCapitalized %>(<%= persi
 <%_ if (reactive) { _%>
 webTestClient
 .patch()
-.uri(ENTITY_API_URL_ID, partialUpdated<%= persistClass %>.get<%= primaryKey.nameCapitalized %>())
+.uri(ENTITY_API_URL_ID, partialUpdated<%= persistClass %>.<%- primaryKey.propertySupplierName %>())
 .contentType(MediaType.valueOf("application/merge-patch+json"))
 .bodyValue(om.writeValueAsBytes(<%= 'partialUpdated' + persistClass %>))
 .exchange()
 .expectStatus()
 .isOk();
 <%_ } else { _%>
-rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, partialUpdated<%= persistClass %>.get<%= primaryKey.nameCapitalized %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
+rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, partialUpdated<%= persistClass %>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
 .contentType("application/merge-patch+json")
 .content(om.writeValueAsBytes(<%= 'partialUpdated' + persistClass %>)))
 .andExpect(status().isOk());

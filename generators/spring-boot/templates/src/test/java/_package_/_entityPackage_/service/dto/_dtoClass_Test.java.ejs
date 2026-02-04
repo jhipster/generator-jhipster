@@ -39,14 +39,14 @@ class <%= dtoClass %>Test {
         TestUtil.equalsVerifier(<%= dtoClass %>.class);
 <%_if (!embedded) { _%>
         <%= dtoClass %> <%= dtoInstance %>1 = new <%= dtoClass %>();
-        <%= dtoInstance %>1.set<%= primaryKey.nameCapitalized %>(<%- id1 %>);
+        <%= dtoInstance %>1.<%- primaryKey.propertyConsumerName %>(<%- id1 %>);
         <%= dtoClass %> <%= dtoInstance %>2 = new <%= dtoClass %>();
         assertThat(<%= dtoInstance %>1).isNotEqualTo(<%= dtoInstance %>2);
-        <%= dtoInstance %>2.set<%= primaryKey.nameCapitalized %>(<%= dtoInstance %>1.get<%= primaryKey.nameCapitalized %>());
+        <%= dtoInstance %>2.<%- primaryKey.propertyConsumerName %>(<%= dtoInstance %>1.<%- primaryKey.propertySupplierName %>());
         assertThat(<%= dtoInstance %>1).isEqualTo(<%= dtoInstance %>2);
-        <%= dtoInstance %>2.set<%= primaryKey.nameCapitalized %>(<%- id2 %>);
+        <%= dtoInstance %>2.<%- primaryKey.propertyConsumerName %>(<%- id2 %>);
         assertThat(<%= dtoInstance %>1).isNotEqualTo(<%= dtoInstance %>2);
-        <%= dtoInstance %>1.set<%= primaryKey.nameCapitalized %>(null);
+        <%= dtoInstance %>1.<%- primaryKey.propertyConsumerName %>(null);
         assertThat(<%= dtoInstance %>1).isNotEqualTo(<%= dtoInstance %>2);
 <%_ } _%>
     }

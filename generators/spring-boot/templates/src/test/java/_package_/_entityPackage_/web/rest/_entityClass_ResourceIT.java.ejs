@@ -44,7 +44,7 @@ if (databaseTypeSql && reactive) {
   createEntityPrefix = 'em.insert(';
   createEntityPostfix = ').block()';
 }
-let idValue = `${persistInstance}.get${primaryKey.nameCapitalized}()`;
+let idValue = `${persistInstance}.${primaryKey.propertySupplierName}()`;
 if (primaryKey.typeLong || primaryKey.typeInteger) {
   idValue = idValue + '.intValue()';
 } else if (primaryKey.typeUUID) {
@@ -571,7 +571,6 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
     const otherEntity = relationship.otherEntity;
     const relationshipValidate = relationship.relationshipValidate;
     const otherEntityName = relationship.otherEntityName;
-    const relationshipNameCapitalized = relationship.relationshipNameCapitalized;
     const mapsIdUse = relationship.id;
     if ((relationshipValidate !== null && relationshipValidate && !relationship.otherEntity.hasCyclicRequiredRelationship) || mapsIdUse) { _%>
         // Add required entity
@@ -583,7 +582,7 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
         em.flush();
           <%_ } _%>
           <%_ if (databaseTypeMongodb) { _%>
-        <%= otherEntityName %>.set<%= primaryKey.nameCapitalized %>("fixed-id-for-tests");
+        <%= otherEntityName %>.<%- primaryKey.propertyConsumerName %>("fixed-id-for-tests");
           <%_ } _%>
         <%_ } else { _%>
         <%= relationship.otherEntity.persistClass %> <%= otherEntityName %>;
@@ -603,7 +602,7 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
         <%= otherEntityName %> = <%= createEntityPrefix %><%= relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (databaseType === 'sql' && otherEntity.anyRelationshipIsRequired) { %>em<% } %>)<%= createEntityPostfix %>;
           <%_ } _%>
           <%_ if (databaseTypeMongodb) { _%>
-        <%= otherEntityName %>.set<%= primaryKey.nameCapitalized %>("fixed-id-for-tests");
+        <%= otherEntityName %>.<%- primaryKey.propertyConsumerName %>("fixed-id-for-tests");
           <%_ } _%>
         <%_ } _%>
       <%_ } _%>
@@ -686,7 +685,7 @@ _%>
       // the create method here is supposed to be used for other tests as well,
       // which may expect an id to be set (at least in the reactive stack)
       if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(null);
+        <%= persistInstance %>.<%- primaryKey.propertyConsumerName %>(null);
   <%_ } _%>
         // Create the <%= entityClass %>
   <%_ if (dtoMapstruct) { _%>
@@ -751,7 +750,7 @@ _%>
   <%_ if ((primaryKey.typeUUID && databaseTypeSql) || !primaryKey.autoGenerate) { _%>
         inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
   <%_ } else { _%>
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<% if (primaryKey.typeUUID) { %>UUID.randomUUID()<% } else if (primaryKey.typeLong) { %>1L<% } else if (primaryKey.typeInteger) { %>1<% } else { %>"existing_id"<% } %>);
+        <%= persistInstance %>.<%- primaryKey.propertyConsumerName %>(<% if (primaryKey.typeUUID) { %>UUID.randomUUID()<% } else if (primaryKey.typeLong) { %>1L<% } else if (primaryKey.typeInteger) { %>1<% } else { %>"existing_id"<% } %>);
   <%_ } _%>
   <%_ if (dtoMapstruct) { _%>
         <%= dtoClass %> <%= dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);
@@ -821,7 +820,7 @@ _%>
     <%_ break; } _%>
 
         // Load the <%= entityInstance %>
-        <%= persistClass %> updated<%= persistClass %> = <%= entityInstance %>Repository.findById(<%= persistInstance %>.get<%= primaryKey.nameCapitalized %>())<%= reactive ? '.block()' : '.orElseThrow()' %>;
+        <%= persistClass %> updated<%= persistClass %> = <%= entityInstance %>Repository.findById(<%= persistInstance %>.<%- primaryKey.propertySupplierName %>())<%= reactive ? '.block()' : '.orElseThrow()' %>;
         assertThat(updated<%= persistClass %>).isNotNull();
     <%_ if (databaseTypeSql && !reactive) { _%>
         // Disconnect from session so that the updates on updated<%= persistClass %> are not directly saved in db
@@ -829,7 +828,7 @@ _%>
     <%_ } _%>
 
         // Update the <%= mapsIdAssoc?.otherEntity?.entityNameCapitalized %> with new association value
-        updated<%= persistClass %>.set<%= mapsIdAssoc?.otherEntity?.entityNameCapitalized %>(<%= alreadyGeneratedEntities.pop() %>);
+        updated<%= persistClass %>.<%= mapsIdAssoc?.propertyConsumerName %>(<%= alreadyGeneratedEntities.pop() %>);
     <%_ if (dtoMapstruct) { _%>
         <%= dtoClass %> updated<%= dtoClass %> = <%= entityInstance %>Mapper.toDto(updated<%= persistClass %>);
         assertThat(updated<%= dtoClass %>).isNotNull();
@@ -837,13 +836,13 @@ _%>
 
         // Update the entity
     <%_ if (reactive) { _%>
-        webTestClient.put().uri(ENTITY_API_URL_ID, <%_ if (dtoMapstruct) { _%>updated<%= dtoClass %> <%_ } else { _%> updated<%= persistClass %> <%_ } _%>.get<%= primaryKey.nameCapitalized %>())
+        webTestClient.put().uri(ENTITY_API_URL_ID, <%_ if (dtoMapstruct) { _%>updated<%= dtoClass %> <%_ } else { _%> updated<%= persistClass %> <%_ } _%>.<%- primaryKey.propertySupplierName %>())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(<%_ if (dtoMapstruct) { _%>updated<%= dtoClass %> <%_ } else { _%> updated<%= persistClass %> <%_ } _%>))
             .exchange()
             .expectStatus().isOk();
     <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%_ if (dtoMapstruct) { _%>updated<%= dtoClass %> <%_ } else { _%> updated<%= persistClass %> <%_ } _%>.get<%= primaryKey.nameCapitalized %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
+        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%_ if (dtoMapstruct) { _%>updated<%= dtoClass %> <%_ } else { _%> updated<%= persistClass %> <%_ } _%>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(<%_ if (dtoMapstruct) { _%>updated<%= dtoClass %> <%_ } else { _%> updated<%= persistClass %> <%_ } _%>)))
             .andExpect(status().isOk());
@@ -859,7 +858,7 @@ _%>
          * Validate the id for MapsId, the ids must be same
          * Uncomment the following line for assertion. However, please note that there is a known issue and uncommenting will fail the test.
          * Please look at https://github.com/jhipster/generator-jhipster/issues/9100. You can modify this test as necessary.
-         * assertThat(test<%= entityClass %>.get<%= primaryKey.nameCapitalized %>()).isEqualTo(test<%= entityClass %>.get<%= mapsIdAssoc?.otherEntity?.entityNameCapitalized %>().get<%= primaryKey.nameCapitalized %>());
+         * assertThat(test<%= entityClass %>.<%- primaryKey.propertySupplierName %>()).isEqualTo(test<%= entityClass %>.<%= mapsIdAssoc?.propertySupplierName %>().<%- primaryKey.propertySupplierName %>());
          */
     <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
@@ -1059,14 +1058,14 @@ _%>
 
         // Get the <%= entityInstance %>
 <%_ if (reactive) { _%>
-        webTestClient.get().uri(ENTITY_API_URL_ID, <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>())
+        webTestClient.get().uri(ENTITY_API_URL_ID, <%= persistInstance %>.<%- primaryKey.propertySupplierName %>())
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
 <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL_ID, <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>()))
+        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL_ID, <%= persistInstance %>.<%- primaryKey.propertySupplierName %>()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
 <%_ } _%>
@@ -1101,7 +1100,7 @@ _%>
         // Initialize the database
         inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
 
-        <%= primaryKey.type %> id = <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>();
+        <%= primaryKey.type %> id = <%= persistInstance %>.<%- primaryKey.propertySupplierName %>();
 
         default<%= entityClass %>Filtering("<%= primaryKey.name %>.equals=" + id, "<%= primaryKey.name %>.notEquals=" + id);
 
@@ -1274,17 +1273,17 @@ _%>
       <%_ } else if (!reactive) { _%>
         <%= persistInstance %>.<%= relationship.propertyConsumerName %>(<%= relationship.relationshipFieldName %>);
         <%_ if (!relationship.ownerSide) { _%>
-        <%= relationship.relationshipFieldName %>.set<%= relationship.otherRelationship.propertyJavaBeanName %>(<%= persistInstance %>);
+        <%= relationship.relationshipFieldName %>.<%= relationship.otherRelationship.propertyConsumerName %>(<%= persistInstance %>);
         <%_ } _%>
       <%_ } else { _%>
-        <%= relationship.otherEntity.primaryKey.type %> <%= relationship.relationshipFieldName %>Id = <%= relationship.relationshipFieldName %>.get<%= relationship.otherEntity.primaryKey.nameCapitalized %>();
-        <%= persistInstance %>.set<%= relationship.relationshipNameCapitalized %>Id(<%= relationship.relationshipFieldName %>Id);
+        <%= relationship.otherEntity.primaryKey.type %> <%= relationship.relationshipFieldName %>Id = <%= relationship.relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.propertySupplierName %>();
+        <%= persistInstance %>.<%- relationship.propertyConsumerName %>Id(<%= relationship.relationshipFieldName %>Id);
         inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
       <%_ } _%>
     <%_ } _%>
     <%_ if(!reactive) { _%>
         <%= entityInstance %>Repository.saveAndFlush(<%= persistInstance %>);
-        <%= relationship.otherEntity.primaryKey.type %> <%= relationship.relationshipFieldName %>Id = <%= relationship.relationshipFieldName %>.get<%= relationship.otherEntity.primaryKey.nameCapitalized %>();
+        <%= relationship.otherEntity.primaryKey.type %> <%= relationship.relationshipFieldName %>Id = <%= relationship.relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.propertySupplierName %>();
     <%_ } _%>
         // Get all the <%= entityInstance %>List where <%= relationship.relationshipFieldName %> equals to <%= relationship.relationshipFieldName %>Id
         default<%= entityClass %>ShouldBeFound("<%= relationship.relationshipFieldName %>Id.equals=" + <%= relationship.relationshipFieldName %>Id);
@@ -1364,7 +1363,7 @@ _%>
                 'UUID' : '.toString()'
             }[primaryKey.type] || '';
             _%>
-            .andExpect(jsonPath("$.[*].<%= primaryKey.name %>").value(hasItem(<%= persistInstance %>.get<%= primaryKey.nameCapitalized %>()<%= primaryKeyConversion %>)))<% fieldsToTest.forEach((field) => { %>
+            .andExpect(jsonPath("$.[*].<%= primaryKey.name %>").value(hasItem(<%= persistInstance %>.<%- primaryKey.propertySupplierName %>()<%= primaryKeyConversion %>)))<% fieldsToTest.forEach((field) => { %>
     <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
             .andExpect(jsonPath("$.[*].<%= field.fieldName %>ContentType").value(hasItem(<%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)))
     <%_ } _%>
@@ -1472,7 +1471,7 @@ _%>
   <%_ } _%>
 
         // Update the <%= entityInstance %>
-        <%= persistClass %> updated<%= persistClass %> = <%= entityInstance %>Repository.findById(<%= persistInstance %>.get<%= primaryKey.nameCapitalized %>())<%= reactive ? '.block()' : '.orElseThrow()' %>;
+        <%= persistClass %> updated<%= persistClass %> = <%= entityInstance %>Repository.findById(<%= persistInstance %>.<%- primaryKey.propertySupplierName %>())<%= reactive ? '.block()' : '.orElseThrow()' %>;
   <%_ if (databaseTypeSql && !reactive) { _%>
         // Disconnect from session so that the updates on updated<%= persistClass %> are not directly saved in db
         em.detach(updated<%= persistClass %>);
@@ -1494,13 +1493,13 @@ _%>
   <%_ } _%>
 
   <%_ if (reactive) { _%>
-        webTestClient.put().uri(ENTITY_API_URL_ID, <%= (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>.get<%= primaryKey.nameCapitalized %>())
+        webTestClient.put().uri(ENTITY_API_URL_ID, <%= (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>.<%- primaryKey.propertySupplierName %>())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(<%= (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>))
             .exchange()
             .expectStatus().isOk();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%= (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>.get<%= primaryKey.nameCapitalized %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
+        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%= (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(<%= (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>)))
             .andExpect(status().isOk());
@@ -1537,7 +1536,7 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
   <%_ } _%>
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- primaryKey.javaValueGenerator %>);
+        <%= persistInstance %>.<%- primaryKey.propertyConsumerName %>(<%- primaryKey.javaValueGenerator %>);
 
   <%_ if (dtoMapstruct) { _%>
         // Create the <%= entityClass %>
@@ -1546,13 +1545,13 @@ _%>
   <%_ } _%>
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
   <%_ if (reactive) { _%>
-        webTestClient.put().uri(ENTITY_API_URL_ID, <%= restInstance %>.get<%= primaryKey.nameCapitalized %>())
+        webTestClient.put().uri(ENTITY_API_URL_ID, <%= restInstance %>.<%- primaryKey.propertySupplierName %>())
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(<%= restInstance %>))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%= restInstance %>.get<%= primaryKey.nameCapitalized %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
+        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%= restInstance %>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(<%= restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -1576,7 +1575,7 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
   <%_ } _%>
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- primaryKey.javaValueGenerator %>);
+        <%= persistInstance %>.<%- primaryKey.propertyConsumerName %>(<%- primaryKey.javaValueGenerator %>);
 
   <%_ if (dtoMapstruct) { _%>
         // Create the <%= entityClass %>
@@ -1614,7 +1613,7 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
   <%_ } _%>
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- primaryKey.javaValueGenerator %>);
+        <%= persistInstance %>.<%- primaryKey.propertyConsumerName %>(<%- primaryKey.javaValueGenerator %>);
 
   <%_ if (dtoMapstruct) { _%>
         // Create the <%= entityClass %>
@@ -1701,7 +1700,7 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
   <%_ } _%>
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- primaryKey.javaValueGenerator %>);
+        <%= persistInstance %>.<%- primaryKey.propertyConsumerName %>(<%- primaryKey.javaValueGenerator %>);
 
   <%_ if (dtoMapstruct) { _%>
             // Create the <%= entityClass %>
@@ -1710,13 +1709,13 @@ _%>
   <%_ } _%>
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
   <%_ if (reactive) { _%>
-        webTestClient.patch().uri(ENTITY_API_URL_ID, <%= restInstance %>.get<%= primaryKey.nameCapitalized %>())
+        webTestClient.patch().uri(ENTITY_API_URL_ID, <%= restInstance %>.<%- primaryKey.propertySupplierName %>())
             .contentType(MediaType.valueOf("application/merge-patch+json"))
             .bodyValue(om.writeValueAsBytes(<%= restInstance %>))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%= restInstance %>.get<%= primaryKey.nameCapitalized %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
+        rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%= restInstance %>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
             .contentType("application/merge-patch+json")
             .content(om.writeValueAsBytes(<%= restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -1739,7 +1738,7 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
   <%_ } _%>
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- primaryKey.javaValueGenerator %>);
+        <%= persistInstance %>.<%- primaryKey.propertyConsumerName %>(<%- primaryKey.javaValueGenerator %>);
 
   <%_ if (dtoMapstruct) { _%>
             // Create the <%= entityClass %>
@@ -1777,7 +1776,7 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
       int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
   <%_ } _%>
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- primaryKey.javaValueGenerator %>);
+        <%= persistInstance %>.<%- primaryKey.propertyConsumerName %>(<%- primaryKey.javaValueGenerator %>);
 
   <%_ if (dtoMapstruct) { _%>
             // Create the <%= entityClass %>
@@ -1817,7 +1816,7 @@ _%>
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= primaryKey.nameCapitalized %>(<%- field.fieldJavaValueGenerator %>);
+        <%= persistInstance %>.<%- primaryKey.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
     <%_ } _%>
   <%_ } _%>
               <%_ if (!databaseTypeCouchbase) { _%>  inserted<%= persistClass %> = <%_ } _%><%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1834,12 +1833,12 @@ _%>
 
         // Delete the <%= entityInstance %>
   <%_ if (reactive) { _%>
-        webTestClient.delete().uri(ENTITY_API_URL_ID, <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>())
+        webTestClient.delete().uri(ENTITY_API_URL_ID, <%= persistInstance %>.<%- primaryKey.propertySupplierName %>())
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isNoContent();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(delete(ENTITY_API_URL_ID, <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>()<% if (primaryKey.typeUUID && databaseTypeSql) { %>.toString()<% } %>)<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
+        rest<%= entityClass %>MockMvc.perform(delete(ENTITY_API_URL_ID, <%= persistInstance %>.<%- primaryKey.propertySupplierName %>()<% if (primaryKey.typeUUID && databaseTypeSql) { %>.toString()<% } %>)<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
   <%_ } _%>
@@ -1874,18 +1873,18 @@ _%>
         <%= entityInstance %>SearchRepository.save(<%= persistInstance %>)<%= callBlock %>;
   <%_ } else if (searchEngineCouchbase) { _%>
         // Wait for the <%= entityInstance %> to be indexed
-        TestUtil.retryUntilNotEmpty(() -> <%= entityInstance %>Repository.search("id:" + <%= entityInstance %>.get<%= primaryKey.nameCapitalized %>())<% if (reactive) { %>.collectList().block()<% } %>);
+        TestUtil.retryUntilNotEmpty(() -> <%= entityInstance %>Repository.search("id:" + <%= entityInstance %>.<%- primaryKey.propertySupplierName %>())<% if (reactive) { %>.collectList().block()<% } %>);
   <%_ } _%>
 
         // Search the <%= entityInstance %>
   <%_ if (reactive) { _%>
-        webTestClient.get().uri(ENTITY_SEARCH_API_URL + "?query=id:" + <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>())
+        webTestClient.get().uri(ENTITY_SEARCH_API_URL + "?query=id:" + <%= persistInstance %>.<%- primaryKey.propertySupplierName %>())
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(get(ENTITY_SEARCH_API_URL + "?query=id:" + <%= persistInstance %>.get<%= primaryKey.nameCapitalized %>()))
+        rest<%= entityClass %>MockMvc.perform(get(ENTITY_SEARCH_API_URL + "?query=id:" + <%= persistInstance %>.<%- primaryKey.propertySupplierName %>()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
   <%_ } _%>
@@ -1931,7 +1930,7 @@ _%>
     }
 
     protected <%- persistClass %> getPersisted<%- persistClass %>(<%- persistClass %> <%- entityInstance %>) {
-        return <%= entityInstance %>Repository.findById(<%- entityInstance %>.get<%- primaryKey.nameCapitalized %>()).<%- reactive ? 'block()' : 'orElseThrow()' %>;
+        return <%= entityInstance %>Repository.findById(<%- entityInstance %>.<%- primaryKey.propertySupplierName %>()).<%- reactive ? 'block()' : 'orElseThrow()' %>;
     }
 
     protected void assertPersisted<%- persistClass %>ToMatchAllProperties(<%- persistClass %> expected<%- persistClass %>) {

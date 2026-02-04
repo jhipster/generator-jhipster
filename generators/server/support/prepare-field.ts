@@ -149,8 +149,6 @@ export default function prepareField(
       }
       return upperFirst(field.fieldName);
     },
-    propertySupplierName: ({ fieldInJavaBeanMethod }) => `get${fieldInJavaBeanMethod}`,
-    propertyConsumerName: ({ fieldInJavaBeanMethod }) => `set${fieldInJavaBeanMethod}`,
   });
 
   if (field.fieldValidateRulesPatternJava === undefined) {
