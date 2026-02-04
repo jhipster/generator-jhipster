@@ -101,7 +101,11 @@ const useDataUtils = () => ({
    * Method to parse header links
    */
   parseLinks(header) {
-    return getPageNumberFromLinkHeader(header);
+    try {
+      return getPageNumberFromLinkHeader(header);
+    } catch {
+      return {};
+    }
   },
 });
 
