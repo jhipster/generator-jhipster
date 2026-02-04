@@ -5,3 +5,20 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "useNpmWrapper": false,
 }
 `;
+
+exports[`application mutation test expects mutateField to match snapshot 1`] = `
+{
+  "fieldInJavaBeanMethod": "FieldName",
+  "propertyConsumerName": "setPropertyName",
+  "propertyJavaBeanName": "PropertyName",
+  "propertySupplierName": "getPropertyName",
+}
+`;
+
+exports[`application mutation test expects mutateRelationship to match snapshot 1`] = `
+{
+  "propertyConsumerName": "setPropertyName",
+  "propertyJavaBeanName": "PropertyName",
+  "propertySupplierName": "getPropertyName",
+}
+`;

@@ -18,7 +18,7 @@ import type {
 } from '../java-simple-application/types.ts';
 import type { Application as LanguagesApplication } from '../languages/types.ts';
 
-import type { JavaAddedApplicationProperties } from './application.ts';
+import type { JavaAddedApplicationProperties, JavaAddedFieldProperties, JavaAddedRelationshipProperties } from './application.ts';
 
 export type {
   ConditionalJavaDefinition,
@@ -39,20 +39,12 @@ type Property = {
   propertyJavaFilteredType?: string;
   propertyJavaBeanName?: string;
   propertyDtoJavaType?: string;
-  /**
-   * Name of the Supplier (Getter) method to use to initialize the property.
-   */
-  propertySupplierName?: string;
-  /**
-   * Name of the Consumer (Setter) method to use to set the property.
-   */
-  propertyConsumerName?: string;
 };
 
 export type Field = BaseApplicationField &
+  JavaAddedFieldProperties &
   Property & {
     javaFieldType?: string;
-    fieldInJavaBeanMethod?: string;
     fieldJavaBuildSpecification?: string;
     fieldJavadoc?: string;
     fieldJavaValueGenerator?: string;
@@ -65,7 +57,7 @@ export type Field = BaseApplicationField &
     fieldValidateRulesPatternJava?: string;
   };
 
-export interface Relationship extends BaseApplicationRelationship, Property {
+export interface Relationship extends BaseApplicationRelationship, JavaAddedRelationshipProperties, Property {
   relationshipJavadoc?: string;
   propertyDtoJavaType?: string;
   relationshipUpdateBackReference?: boolean;
