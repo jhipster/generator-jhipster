@@ -19,7 +19,7 @@
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
 import { getDatabaseTypeData } from '../server/support/database.ts';
 
-import type { Application as SpringBootApplication } from './types.ts';
+import type { Application as SpringBootApplication, Field as SpringBootField, Relationship as SpringBootRelationship } from './types.ts';
 
 type SpringBootLoadingAddedApplicationProperties = {
   prodActiveProfiles: string[];
@@ -60,3 +60,29 @@ export const mutateApplicationPreparing = {
   MutateDataParam<SpringBootApplication>,
   SpringBootPreparingAddedApplicationProperties
 >;
+
+export type SpringBootAddedPropertyProperties = {
+  propertyJavaFilterName?: string;
+  propertyJavaFilterJavaBeanName?: string;
+
+  propertyFilterConsumerName?: string;
+  propertyFilterSupplierName?: string;
+};
+
+export const mutateFilterableField = {
+  __override__: false,
+  propertyJavaFilterName: ({ fieldName }) => fieldName,
+  propertyJavaFilterJavaBeanName: ({ fieldInJavaBeanMethod }) => fieldInJavaBeanMethod,
+
+  propertyFilterConsumerName: ({ propertyJavaFilterJavaBeanName }) => `set${propertyJavaFilterJavaBeanName}`,
+  propertyFilterSupplierName: ({ propertyJavaFilterJavaBeanName }) => `get${propertyJavaFilterJavaBeanName}`,
+} as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<SpringBootField>, SpringBootAddedPropertyProperties>;
+
+export const mutateFilterableRelationship = {
+  __override__: false,
+  propertyJavaFilterName: ({ relationshipName }) => `${relationshipName}Id`,
+  propertyJavaFilterJavaBeanName: ({ relationshipNameCapitalized }) => `${relationshipNameCapitalized}Id`,
+
+  propertyFilterConsumerName: ({ propertyJavaFilterJavaBeanName }) => `set${propertyJavaFilterJavaBeanName}`,
+  propertyFilterSupplierName: ({ propertyJavaFilterJavaBeanName }) => `get${propertyJavaFilterJavaBeanName}`,
+} as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<SpringBootRelationship>, SpringBootAddedPropertyProperties>;

@@ -21,9 +21,9 @@ import { upperFirst } from 'lodash-es';
 import pluralize from 'pluralize';
 
 import { mutateData } from '../../../../lib/utils/index.ts';
-import { mutateApplication } from '../../application.ts';
+import { mutateApplication, mutateField, mutateRelationship } from '../../application.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
-import { javaBeanCase, prepareEntity } from '../../support/index.ts';
+import { prepareEntity } from '../../support/index.ts';
 
 export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
   async beforeQueue() {
@@ -87,11 +87,7 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
   get preparingEachEntityField() {
     return this.asPreparingEachEntityFieldTaskGroup({
       prepareEntity({ field }) {
-        mutateData(field, {
-          propertyJavaBeanName: ({ propertyName }) => javaBeanCase(propertyName),
-          propertyConsumerName: ({ propertyJavaBeanName }) => `set${propertyJavaBeanName}`,
-          propertySupplierName: ({ propertyJavaBeanName }) => `get${propertyJavaBeanName}`,
-        });
+        mutateData(field, mutateField);
       },
     });
   }
@@ -103,12 +99,9 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
   get preparingEachEntityRelationship() {
     return this.asPreparingEachEntityRelationshipTaskGroup({
       prepareRelationship({ application, relationship }) {
-        mutateData(relationship, {
+        mutateData(relationship, mutateRelationship, {
           relationshipNameCapitalizedPlural: ({ relationshipNameCapitalized, relationshipName }) =>
             relationshipName.length > 1 ? pluralize(relationshipNameCapitalized) : upperFirst(pluralize(relationshipName)),
-          propertyJavaBeanName: ({ propertyName }) => javaBeanCase(propertyName),
-          propertyConsumerName: ({ propertyJavaBeanName }) => `set${propertyJavaBeanName}`,
-          propertySupplierName: ({ propertyJavaBeanName }) => `get${propertyJavaBeanName}`,
           relationshipUpdateBackReference: ({ ownerSide, relationshipRightSide, otherEntity }) =>
             !otherEntity.embedded && (application.databaseTypeNeo4j ? relationshipRightSide : !ownerSide),
         });
