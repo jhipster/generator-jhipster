@@ -163,7 +163,7 @@
     "mem-fs-editor": "11.1.4",
     "minimatch": "10.1.2",
     "normalize-path": "3.0.0",
-    "os-locale": "6.0.2",
+    "os-locale": "8.0.0",
     "p-transform": "5.0.1",
     "parse-gitignore": "2.0.0",
     "piscina": "5.1.4",
