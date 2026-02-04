@@ -254,8 +254,8 @@ _%>
         ConditionBuilder builder = new ConditionBuilder(this.columnConverter);
         List<Condition> allConditions = new ArrayList<Condition>();
         if (criteria != null) {
-            if (criteria.<%- primaryKey.propertySupplierName %>() != null) {
-                builder.buildFilterConditionForField(criteria.<%- primaryKey.propertySupplierName %>(), entityTable.column("<%= primaryKey.name %>"));
+            if (criteria.get<%= primaryKey.nameCapitalized %>() != null) {
+                builder.buildFilterConditionForField(criteria.get<%= primaryKey.nameCapitalized %>(), entityTable.column("<%= primaryKey.name %>"));
             }
 <%_
 fields.forEach((field) => {
