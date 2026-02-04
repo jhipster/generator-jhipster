@@ -118,7 +118,7 @@ import java.util.stream.Collectors;
 <%_ for (const relationship of relationships) { _%>
 <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>CustomSetSection) { -&>
   <%_ if (relationship.collection) { _%>
-    public void set<%= relationship.relationshipNameCapitalizedPlural %>(Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.otherEntity.entityInstancePlural %>) {
+    public void <%- relationship.propertyConsumerName %>(Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.otherEntity.entityInstancePlural %>) {
     <%_ if (relationship.otherRelationship && !relationship.ownerSide) { _%>
         if (this.<%= relationship.relationshipFieldNamePlural %> != null) {
       <%_ if (relationship.otherRelationship.collection) { _%>
@@ -177,9 +177,9 @@ import java.util.stream.Collectors;
         <%_ } _%>
         <%_ if (relationship.otherRelationship) { _%>
           <%_ if (!relationship.otherRelationship.collection) { _%>
-        <%= relationship.otherEntityName %>.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(this);
+        <%= relationship.otherEntityName %>.<%- relationship.otherRelationship.propertyConsumerName %>(this);
           <%_ } else if (relationship.otherRelationship.relationshipNamePlural && !relationship.otherEntityUser && relationship.otherRelationship.collection) { _%>
-        <%= relationship.otherEntityName %>.get<%= relationship.otherRelationship.relationshipNameCapitalizedPlural %>().add(this);
+        <%= relationship.otherEntityName %>.<%- relationship.otherRelationship.propertySupplierName %>().add(this);
           <%_ } _%>
         <%_ } _%>
       <%_ } _%>
@@ -198,9 +198,9 @@ import java.util.stream.Collectors;
         <%_ } _%>
         <%_ if (relationship.otherRelationship) { _%>
           <%_ if (!relationship.otherRelationship.collection) { _%>
-        <%= relationship.otherEntityName %>.set<%= relationship.otherRelationship.relationshipNameCapitalized %>(null);
+        <%= relationship.otherEntityName %>.<%- relationship.otherRelationship.propertyConsumerName %>(null);
           <%_ } else if (!relationship.otherEntityUser && relationship.otherRelationship.collection) { _%>
-        <%= relationship.otherEntityName %>.get<%= relationship.otherRelationship.relationshipNameCapitalizedPlural %>().remove(this);
+        <%= relationship.otherEntityName %>.<%- relationship.otherRelationship.propertySupplierName %>().remove(this);
           <%_ } _%>
         <%_ } _%>
       <%_ } _%>

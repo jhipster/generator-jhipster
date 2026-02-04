@@ -39,7 +39,7 @@ import org.springframework.data.relational.core.mapping.Table;
 <&_ } -&>
   <%_ if (field.fieldTypeBigDecimal) { _%>
 <&_ if (fragment.field<%- field.fieldNameCapitalized %>CustomSetSection) { -&>
-    public void set<%= field.fieldInJavaBeanMethod %>(<%= field.javaFieldType %> <%= field.fieldName %>) {
+    public void <%- field.propertyConsumerName %>(<%= field.javaFieldType %> <%= field.fieldName %>) {
         this.<%= field.fieldName %> = <%= field.fieldName %> != null ? <%= field.fieldName %>.stripTrailingZeros() : null;
     }
 <&_ } -&>

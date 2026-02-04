@@ -135,21 +135,23 @@ export default function prepareField(
     }).value;
   }
 
-  if (field.fieldInJavaBeanMethod === undefined) {
-    // Handle the specific case when the second letter is capitalized
-    // See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
-    if (field.fieldName.length > 1) {
-      const firstLetter = field.fieldName.charAt(0);
-      const secondLetter = field.fieldName.charAt(1);
-      if (firstLetter === firstLetter.toLowerCase() && secondLetter === secondLetter.toUpperCase()) {
-        field.fieldInJavaBeanMethod = firstLetter.toLowerCase() + field.fieldName.slice(1);
-      } else {
-        field.fieldInJavaBeanMethod = upperFirst(field.fieldName);
+  mutateData(field, {
+    fieldInJavaBeanMethod: () => {
+      // Handle the specific case when the second letter is capitalized
+      // See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
+      if (field.fieldName.length > 1) {
+        const firstLetter = field.fieldName.charAt(0);
+        const secondLetter = field.fieldName.charAt(1);
+        if (firstLetter === firstLetter.toLowerCase() && secondLetter === secondLetter.toUpperCase()) {
+          return firstLetter.toLowerCase() + field.fieldName.slice(1);
+        }
+        return upperFirst(field.fieldName);
       }
-    } else {
-      field.fieldInJavaBeanMethod = upperFirst(field.fieldName);
-    }
-  }
+      return upperFirst(field.fieldName);
+    },
+    propertySupplierName: ({ fieldInJavaBeanMethod }) => `get${fieldInJavaBeanMethod}`,
+    propertyConsumerName: ({ fieldInJavaBeanMethod }) => `set${fieldInJavaBeanMethod}`,
+  });
 
   if (field.fieldValidateRulesPatternJava === undefined) {
     field.fieldValidateRulesPatternJava = field.fieldValidateRulesPattern

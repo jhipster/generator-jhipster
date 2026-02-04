@@ -38,9 +38,9 @@ _%>
        <%= mapper %>.partialUpdate(existing<%= entityClass %>, <%= instanceName %>);
   <%_ } else { _%>
     <%_ for (const field of fields.filter(field => !field.id && !field.transient)) { _%>
-        updateIfPresent(existing<%= entityClass %>::set<%= field.fieldInJavaBeanMethod %>, <%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>());
+        updateIfPresent(existing<%= entityClass %>::<%- field.propertyConsumerName %>, <%= instanceName %>.<%- field.propertySupplierName %>());
       <%_ if (field.fieldWithContentType) { _%>
-        updateIfPresent(existing<%= entityClass %>::set<%= field.fieldInJavaBeanMethod %>ContentType, <%= instanceName %>.get<%= field.fieldInJavaBeanMethod %>ContentType());
+        updateIfPresent(existing<%= entityClass %>::<%- field.propertyConsumerName %>ContentType, <%= instanceName %>.<%- field.propertySupplierName %>ContentType());
       <%_ } _%>
     <%_ } %>
   <% } %>

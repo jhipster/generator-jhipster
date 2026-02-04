@@ -553,15 +553,15 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
   <%_ } else { _%>
         <%= persistClass %> <%= createInstance %> = new <%= persistClass %>();
     <%_ if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
-        <%= createInstance %>.set<%= primaryKey.fields[0].fieldInJavaBeanMethod %>(UUID.randomUUID());
+        <%= createInstance %>.<%= primaryKey.fields[0].propertySupplierName %>(UUID.randomUUID());
     <%_ } _%>
     <%_ if (primaryKey.typeString && !isUsingMapsId && !primaryKey.autoGenerate) { _%>
-        <%= createInstance %>.set<%= primaryKey.fields[0].fieldInJavaBeanMethod %>(UUID.randomUUID().toString());
+        <%= createInstance %>.<%= primaryKey.fields[0].propertySupplierName %>(UUID.randomUUID().toString());
     <%_ } _%>
     <%_ for (field of fieldsToTest) { _%>
-        <%= createInstance %>.set<%= field.fieldInJavaBeanMethod %>(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>);
+        <%= createInstance %>.<%- field.propertyConsumerName %>(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>);
       <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-        <%= createInstance %>.set<%= field.fieldInJavaBeanMethod %>ContentType(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
+        <%= createInstance %>.<%- field.propertyConsumerName %>ContentType(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
@@ -571,7 +571,6 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
     const otherEntity = relationship.otherEntity;
     const relationshipValidate = relationship.relationshipValidate;
     const otherEntityName = relationship.otherEntityName;
-    const relationshipNameCapitalizedPlural = relationship.relationshipNameCapitalizedPlural;
     const relationshipNameCapitalized = relationship.relationshipNameCapitalized;
     const mapsIdUse = relationship.id;
     if ((relationshipValidate !== null && relationshipValidate && !relationship.otherEntity.hasCyclicRequiredRelationship) || mapsIdUse) { _%>
@@ -609,9 +608,9 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
         <%_ } _%>
       <%_ } _%>
       <%_ if (relationship.relationshipManyToMany || relationship.relationshipOneToMany) { _%>
-        <%= createInstance %>.get<%= relationshipNameCapitalizedPlural %>().add(<%= otherEntityName %>);
+        <%= createInstance %>.<%- relationship.propertySupplierName %>().add(<%= otherEntityName %>);
       <%_ } else { _%>
-        <%= createInstance %>.set<%= relationshipNameCapitalized %>(<%= otherEntityName %>);
+        <%= createInstance %>.<%- relationship.propertyConsumerName %>(<%= otherEntityName %>);
       <%_ } _%>
         <%_ alreadyGeneratedEntities.push(otherEntityName) _%>
     <%_ } _%>
@@ -883,7 +882,7 @@ _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
         <%_ } _%>
         // set the field null
-        <%= persistInstance %>.set<%= field.fieldInJavaBeanMethod %>(null);
+        <%= persistInstance %>.<%- field.propertyConsumerName %>(null);
 
         // Create the <%= entityClass %>, which fails.<% if (dtoMapstruct) { %>
         <%= dtoClass %> <%= dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);<% } %>
@@ -923,7 +922,7 @@ _%>
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- field.fieldJavaValueGenerator %>);
+        <%= persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
     <%_ } _%>
   <%_ } _%>
         <%= entityInstance %>Repository.save(<%= persistInstance %>)<%= callBlock %>;
@@ -961,7 +960,7 @@ _%>
         // Initialize the database
 <%_ if (!primaryKey.derived) { _%>
   <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- field.fieldJavaValueGenerator %>);
+        <%= persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
   <%_ } _%>
 <%_ } _%>
         inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1053,7 +1052,7 @@ _%>
         // Initialize the database
 <%_ if (!primaryKey.derived) { _%>
   <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- field.fieldJavaValueGenerator %>);
+        <%= persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
   <%_ } _%>
 <%_ } _%>
         inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1251,7 +1250,7 @@ _%>
     void getAll<%= entityClassPlural %>By<%= relationship.relationshipNameCapitalized %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
     <%_ if ((relationship.relationshipValidate && relationship.relationshipOneToOne) || relationship.id) { _%>
         // Get already existing entity
-        <%= relationship.otherEntity.persistClass %> <%= relationship.relationshipFieldName %> = <%= persistInstance %>.get<%= relationship.relationshipNameCapitalized %>();
+        <%= relationship.otherEntity.persistClass %> <%= relationship.relationshipFieldName %> = <%= persistInstance %>.<%= relationship.propertySupplierName %>();
     <%_ } else { _%>
       <%_ if (databaseTypeSql && !reactive) { _%>
         <%= relationship.otherEntity.persistClass %> <%= relationship.relationshipFieldName %>;
@@ -1273,7 +1272,7 @@ _%>
       <%_ if (!reactive && (relationship.relationshipManyToMany || relationship.relationshipOneToMany)) { _%>
         <%= persistInstance %>.add<%= relationship.relationshipNameCapitalized %>(<%= relationship.relationshipFieldName %>);
       <%_ } else if (!reactive) { _%>
-        <%= persistInstance %>.set<%= relationship.relationshipNameCapitalized %>(<%= relationship.relationshipFieldName %>);
+        <%= persistInstance %>.<%= relationship.propertyConsumerName %>(<%= relationship.relationshipFieldName %>);
         <%_ if (!relationship.ownerSide) { _%>
         <%= relationship.relationshipFieldName %>.set<%= relationship.otherRelationship.propertyJavaBeanName %>(<%= persistInstance %>);
         <%_ } _%>
@@ -1461,7 +1460,7 @@ _%>
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- field.fieldJavaValueGenerator %>);
+        <%= persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
     <%_ } _%>
   <%_ } _%>
         inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1484,9 +1483,9 @@ _%>
             .<%= field.fieldName %>ContentType(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)<% } %><% } %>;
   <%_ } else { _%>
     <%_ for (field of fieldsToTest) { _%>
-        updated<%= persistClass %>.set<%= field.fieldInJavaBeanMethod %>(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>);
+        updated<%= persistClass %>.<%- field.propertyConsumerName %>(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>);
       <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-        updated<%= persistClass %>.set<%= field.fieldInJavaBeanMethod %>ContentType(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
+        updated<%= persistClass %>.<%- field.propertyConsumerName %>ContentType(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
@@ -1661,7 +1660,7 @@ _%>
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- field.fieldJavaValueGenerator %>);
+        <%= persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
     <%_ } _%>
   <%_ } _%>
         inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1681,7 +1680,7 @@ _%>
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- field.fieldJavaValueGenerator %>);
+        <%= persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
     <%_ } _%>
   <%_ } _%>
         inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
@@ -1867,7 +1866,7 @@ _%>
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.set<%= field.fieldNameCapitalized %>(<%- field.fieldJavaValueGenerator %>);
+        <%= persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
     <%_ } _%>
   <%_ } _%>
         inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;

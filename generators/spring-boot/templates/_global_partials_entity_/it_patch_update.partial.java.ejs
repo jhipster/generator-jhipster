@@ -29,9 +29,9 @@ partialUpdated<%= persistClass %>.set<%= primaryKey.nameCapitalized %>(<%= persi
 <%_ } else { _%>
   <%_ for (field of fieldsToUpdate) { _%>
     <%_ if (field.includeField) { %>
-    partialUpdated<%= persistClass %>.set<%= field.fieldInJavaBeanMethod %>(<%= field.updateWithValue %>);
+    partialUpdated<%= persistClass %>.<%- field.propertyConsumerName %>(<%= field.updateWithValue %>);
       <%_ if (field.fieldWithContentType) { _%>
-        partialUpdated<%= persistClass %>.set<%= field.fieldInJavaBeanMethod %>ContentType(<%= field.updateWithValue %>_CONTENT_TYPE);
+        partialUpdated<%= persistClass %>.<%- field.propertyConsumerName %>ContentType(<%= field.updateWithValue %>_CONTENT_TYPE);
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
