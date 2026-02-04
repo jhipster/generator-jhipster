@@ -347,10 +347,6 @@ export function prepareEntityPrimaryKeyForTemplates(
         return this.fields.map(field => fieldToId(field));
       },
     };
-    mutateData(entityWithConfig.primaryKey!, {
-      propertyConsumerName: ({ nameCapitalized }) => `set${nameCapitalized}`,
-      propertySupplierName: ({ nameCapitalized }) => `get${nameCapitalized}`,
-    });
   }
   return entityWithConfig;
 }

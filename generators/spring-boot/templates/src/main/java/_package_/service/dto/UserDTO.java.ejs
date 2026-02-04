@@ -54,7 +54,7 @@ public class <%= user.dtoClass %> implements Serializable {
         // Customize it here if you need, or not, firstName/lastName/etc
         this.login = user.getLogin();
   <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-        this.<%= field.fieldName %> = user.get<%= field.propertyJavaBeanName %>();
+        this.<%= field.fieldName %> = user.<%= field.propertySupplierName %>();
   <%_ } _%>
     }
 
@@ -76,11 +76,11 @@ public class <%= user.dtoClass %> implements Serializable {
     }
 
 <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-    public String get<%= field.propertyJavaBeanName %>() {
+    public String <%= field.propertySupplierName %>() {
         return <%= field.fieldName %>;
     }
 
-    public void set<%= field.propertyJavaBeanName %>(String <%= field.fieldName %>) {
+    public void <%= field.propertyConsumerName %>(String <%= field.fieldName %>) {
         this.<%= field.fieldName %> = <%= field.fieldName %>;
     }
 
@@ -101,7 +101,7 @@ public class <%= user.dtoClass %> implements Serializable {
 
         return Objects.equals(getId(), userDTO.getId()) &&
 <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-            Objects.equals(get<%= field.propertyJavaBeanName %>(), userDTO.get<%= field.propertyJavaBeanName %>()) &&
+            Objects.equals(<%= field.propertySupplierName %>(), userDTO.<%= field.propertySupplierName %>()) &&
 <%_ } _%>
             Objects.equals(getLogin(), userDTO.getLogin());
     }
@@ -110,8 +110,8 @@ public class <%= user.dtoClass %> implements Serializable {
     public int hashCode() {
         return Objects.hash(
             getId(),
-<%_ for (const { propertyJavaBeanName } of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-          get<%= field.propertyJavaBeanName %>(),
+<%_ for (const { propertySupplierName } of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
+          <%- propertySupplierName %>(),
 <%_ } _%>
             getLogin()
         );

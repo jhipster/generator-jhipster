@@ -105,20 +105,20 @@ public class <%- dtoClass %> implements Serializable {
 _%>
 
 <%_ for (property of restProperties) { _%>
-    public <%- property.propertyDtoJavaType %> get<%- property.propertyJavaBeanName %>() {
+    public <%- property.propertyDtoJavaType %> <%- property.propertySupplierName %>() {
         return <%- property.propertyName %>;
     }
 
-    public void set<%- property.propertyJavaBeanName %>(<%- property.propertyDtoJavaType %> <%- property.propertyName %>) %> {
+    public void <%- property.propertyConsumerName %>(<%- property.propertyDtoJavaType %> <%- property.propertyName %>) {
         this.<%- property.propertyName %> = <%- property.propertyName %>;
     }
   <%_ if (property.fieldWithContentType) { _%>
 
-    public String get<%- property.propertyJavaBeanName %>ContentType() {
+    public String <%- property.propertySupplierName %>ContentType() {
         return <%- property.propertyName %>ContentType;
     }
 
-    public void set<%- property.propertyJavaBeanName %>ContentType(String <%- property.propertyName %>ContentType) {
+    public void <%- property.propertyConsumerName %>ContentType(String <%- property.propertyName %>ContentType) {
         this.<%- property.propertyName %>ContentType = <%- property.propertyName %>ContentType;
     }
   <%_ } _%>
@@ -160,7 +160,7 @@ _%>
         return "<%- dtoClass %>{" +
 <%_ for ([idx, property] of restProperties.entries()) {
   const isQuoted = property.fieldName && !property.fieldTypeNumeric _%>
-            "<%- idx === 0 ? '' : ', ' %><%- property.propertyName %>=<% if (isQuoted) { %>'<% } %>" + get<%- property.propertyJavaBeanName %>() <% if (isQuoted) { %>+ "'" <% } %>+
+            "<%- idx === 0 ? '' : ', ' %><%- property.propertyName %>=<% if (isQuoted) { %>'<% } %>" + <%- property.propertySupplierName %>() <% if (isQuoted) { %>+ "'" <% } %>+
 <%_ } _%>
             "}";
     }

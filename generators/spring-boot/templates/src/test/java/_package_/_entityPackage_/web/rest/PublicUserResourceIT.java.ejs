@@ -201,7 +201,7 @@ class PublicUserResourceIT {
             .jsonPath(String.format("$.[?(@.id == <%- primaryKey.typeNumeric ? '%d' : "'%s'" %>)].login", user.getId())).isEqualTo(user.getLogin())
             .jsonPath(String.format("$.[?(@.id == <%- primaryKey.typeNumeric ? '%d' : "'%s'" %>)].keys()", user.getId())).isEqualTo(Set.of("id", "login"))
   <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-            .jsonPath(String.format("$.[?(@.id == <%- primaryKey.typeNumeric ? '%d' : "'%s'" %>)].<%= field.fieldName %>", user.getId())).isEqualTo(user.get<%= field.propertyJavaBeanName %>())
+            .jsonPath(String.format("$.[?(@.id == <%- primaryKey.typeNumeric ? '%d' : "'%s'" %>)].<%= field.fieldName %>", user.getId())).isEqualTo(user.<%- field.propertySupplierName %>())
   <%_ } _%>
             .jsonPath("$.[*].email").doesNotHaveJsonPath()
   <%_ if (!databaseTypeCassandra) { _%>
@@ -216,7 +216,7 @@ class PublicUserResourceIT {
             .andExpect(jsonPath(String.format("$.[?(@.id == <%- primaryKey.typeNumeric ? '%d' : "'%s'" %>)].login", user.getId())).value(user.getLogin()))
             .andExpect(jsonPath(String.format("$.[?(@.id == <%- primaryKey.typeNumeric ? '%d' : "'%s'" %>)].keys()", user.getId())).value(Set.of("id", "login")))
   <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-            .andExpect(jsonPath(String.format("$.[?(@.id == <%- primaryKey.typeNumeric ? '%d' : "'%s'" %>)].<%= field.fieldName %>", user.getId())).value(user.get<%= field.propertyJavaBeanName %>()))
+            .andExpect(jsonPath(String.format("$.[?(@.id == <%- primaryKey.typeNumeric ? '%d' : "'%s'" %>)].<%= field.fieldName %>", user.getId())).value(user.<%- field.propertySupplierName %>()))
   <%_ } _%>
             .andExpect(jsonPath("$.[*].email").doesNotHaveJsonPath())
   <%_ if (!databaseTypeCassandra) { _%>

@@ -37,14 +37,14 @@ for (const relationship of relationships) { if (relationship.relationshipOneToOn
     <%_ } else if (reactive) { _%>
         return <%= entityInstance %>Repository
             .findAll()
-            .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationship.relationshipNameCapitalized %>() == null)
+            .filter(<%= entityInstance %> -> <%= entityInstance %>.<%= relationship.propertySupplierName %>() == null)
       <%_ if (dtoMapstruct) { _%>
             .map(<%= entityToDtoReference %>)
       <%_ } _%>;
     <%_ } else { _%>
         return StreamSupport
             .stream(<%= entityInstance %>Repository.findAll().spliterator(), false)
-            .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationship.relationshipNameCapitalized %>() == null)
+            .filter(<%= entityInstance %> -> <%= entityInstance %>.<%= relationship.propertySupplierName %>() == null)
       <%_ if (dtoMapstruct) { _%>
             .map(<%= entityToDtoReference %>)
             .collect(Collectors.toCollection(LinkedList::new));

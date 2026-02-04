@@ -64,7 +64,7 @@ import org.springframework.data.relational.core.mapping.Table;
  _%>
 <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>CustomSetSection) { -&>
   <%_ if (!relationship.collection && reactiveRelationshipWithId) { _%>
-    public void set<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
+    public void <%= relationship.propertyConsumerName %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
     <%_ if (relationship.otherRelationship && !relationship.ownerSide) { _%>
         if (this.<%= relationship.relationshipFieldName %> != null) {
       <%_ if (relationship.otherRelationship.collection) { _%>
@@ -101,11 +101,11 @@ import org.springframework.data.relational.core.mapping.Table;
     <%_ for (const relationship of relationships) { _%>
       <%_ if (relationship.ownerSide && !relationship.collection && !relationship.id) { _%>
 
-    public <%= relationship.otherEntity.primaryKey.type %> get<%= relationship.relationshipNameCapitalized %>Id() {
+    public <%= relationship.otherEntity.primaryKey.type %> <%= relationship.propertySupplierName %>Id() {
         return this.<%= relationship.relationshipFieldName %>Id;
     }
 
-    public void set<%= relationship.relationshipNameCapitalized %>Id(<%= relationship.otherEntity.primaryKey.type %> <%= relationship.otherEntityName %>) {
+    public void <%= relationship.propertyConsumerName %>Id(<%= relationship.otherEntity.primaryKey.type %> <%= relationship.otherEntityName %>) {
         this.<%= relationship.relationshipFieldName %>Id = <%= relationship.otherEntityName %>;
     }
       <%_ } _%>

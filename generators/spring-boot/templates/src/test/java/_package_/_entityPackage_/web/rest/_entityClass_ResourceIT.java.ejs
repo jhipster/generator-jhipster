@@ -44,7 +44,7 @@ if (databaseTypeSql && reactive) {
   createEntityPrefix = 'em.insert(';
   createEntityPostfix = ').block()';
 }
-let idValue = `${persistInstance}.get${primaryKey.nameCapitalized}()`;
+let idValue = `${persistInstance}.${primaryKey.propertySupplierName}()`;
 if (primaryKey.typeLong || primaryKey.typeInteger) {
   idValue = idValue + '.intValue()';
 } else if (primaryKey.typeUUID) {
@@ -571,7 +571,6 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
     const otherEntity = relationship.otherEntity;
     const relationshipValidate = relationship.relationshipValidate;
     const otherEntityName = relationship.otherEntityName;
-    const relationshipNameCapitalized = relationship.relationshipNameCapitalized;
     const mapsIdUse = relationship.id;
     if ((relationshipValidate !== null && relationshipValidate && !relationship.otherEntity.hasCyclicRequiredRelationship) || mapsIdUse) { _%>
         // Add required entity
@@ -1274,7 +1273,7 @@ _%>
       <%_ } else if (!reactive) { _%>
         <%= persistInstance %>.<%= relationship.propertyConsumerName %>(<%= relationship.relationshipFieldName %>);
         <%_ if (!relationship.ownerSide) { _%>
-        <%= relationship.relationshipFieldName %>.set<%= relationship.otherRelationship.propertyJavaBeanName %>(<%= persistInstance %>);
+        <%= relationship.relationshipFieldName %>.<%= relationship.otherRelationship.propertyConsumerName %>(<%= persistInstance %>);
         <%_ } _%>
       <%_ } else { _%>
         <%= relationship.otherEntity.primaryKey.type %> <%= relationship.relationshipFieldName %>Id = <%= relationship.relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.propertySupplierName %>();
