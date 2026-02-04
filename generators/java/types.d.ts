@@ -33,11 +33,6 @@ export type {
 } from '../java-simple-application/types.ts';
 
 type Property = {
-  propertyJavaFilterName?: string;
-  propertyJavaFilterJavaBeanName?: string;
-  propertyJavaFilterType?: string;
-  propertyJavaFilteredType?: string;
-  propertyJavaBeanName?: string;
   propertyDtoJavaType?: string;
 };
 

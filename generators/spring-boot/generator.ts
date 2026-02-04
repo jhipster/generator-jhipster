@@ -40,6 +40,7 @@ import {
   insertContentIntoApplicationProperties,
 } from '../server/support/index.ts';
 
+import { mutateFilterableField, mutateFilterableRelationship } from './application.ts';
 import cleanupTask from './cleanup.ts';
 import { writeFiles as writeEntityFiles } from './entity-files.ts';
 import { serverFiles } from './files.ts';
@@ -602,12 +603,8 @@ ${classProperties
 
         field.filterableField = !([TYPE_BYTES, TYPE_BYTE_BUFFER] as string[]).includes(field.fieldType) && !field.transient;
         if (field.filterableField) {
-          const { fieldType, fieldName, fieldInJavaBeanMethod } = field;
-          mutateData(field, {
-            propertyJavaFilterName: fieldName,
-            propertyJavaFilteredType: fieldType,
-            propertyJavaFilterJavaBeanName: fieldInJavaBeanMethod,
-          });
+          const { fieldType } = field;
+          mutateData(field, mutateFilterableField);
 
           if (field.fieldIsEnum) {
             const filterType = `${fieldType}Filter`;
@@ -657,11 +654,8 @@ ${classProperties
         const { primaryKey } = relationship.otherEntity;
         if (!primaryKey) return;
 
-        const { relationshipName, relationshipNameCapitalized } = relationship;
         const otherEntityPkField = primaryKey.fields[0];
-        mutateData(relationship, {
-          propertyJavaFilterName: `${relationshipName}Id`,
-          propertyJavaFilterJavaBeanName: `${relationshipNameCapitalized}Id`,
+        mutateData(relationship, mutateFilterableRelationship, {
           propertyJavaFilterType: otherEntityPkField.propertyJavaFilterType,
           propertyJavaFilteredType: otherEntityPkField.propertyJavaFilteredType,
         });

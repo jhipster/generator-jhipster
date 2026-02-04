@@ -22,7 +22,7 @@ import type {
   Source as ServerSource,
 } from '../server/types.d.ts';
 
-import type { SpringBootAddedApplicationProperties } from './application.ts';
+import type { SpringBootAddedApplicationProperties, SpringBootAddedPropertyProperties } from './application.ts';
 import type command from './command.ts';
 import type cacheCommand from './generators/cache/command.ts';
 import type springBootDependencies4 from './resources/spring-boot-dependencies-4.ts';
@@ -58,7 +58,14 @@ export type SpringEntity = {
   saveUserSnapshot?: boolean;
 };
 
+type SpringBootProperty = {
+  propertyJavaFilterType?: string;
+  propertyJavaFilteredType?: string;
+};
+
 export type Field = ServerField &
+  SpringBootAddedPropertyProperties &
+  SpringBootProperty &
   JavaField & {
     filterableField?: boolean;
     autoGenerateByService?: boolean;
@@ -69,7 +76,7 @@ export type Field = ServerField &
     fieldNameAsDatabaseColumn?: string;
   };
 
-export interface Relationship extends ServerRelationship, JavaRelationship {}
+export interface Relationship extends ServerRelationship, SpringBootAddedPropertyProperties, SpringBootProperty, JavaRelationship {}
 
 export interface Entity<F extends Field = Field, R extends Relationship = Relationship> extends ServerEntity<F, R>, SpringEntity {
   skipDbChangelog?: boolean;

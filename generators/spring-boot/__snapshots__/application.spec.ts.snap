@@ -12,3 +12,21 @@ exports[`application mutation test expects mutateApplicationPreparing to match s
   "springDataDescription": "Spring Data Unknown reactive",
 }
 `;
+
+exports[`application mutation test expects mutateFilterableField to match snapshot 1`] = `
+{
+  "propertyFilterConsumerName": "setfieldInJavaBeanMethod",
+  "propertyFilterSupplierName": "getfieldInJavaBeanMethod",
+  "propertyJavaFilterJavaBeanName": "fieldInJavaBeanMethod",
+  "propertyJavaFilterName": "fieldName",
+}
+`;
+
+exports[`application mutation test expects mutateFilterableRelationship to match snapshot 1`] = `
+{
+  "propertyFilterConsumerName": "setrelationshipNameCapitalizedId",
+  "propertyFilterSupplierName": "getrelationshipNameCapitalizedId",
+  "propertyJavaFilterJavaBeanName": "relationshipNameCapitalizedId",
+  "propertyJavaFilterName": "relationshipNameId",
+}
+`;

@@ -74,9 +74,9 @@ public class <%- entityClass %>Criteria implements Serializable, Criteria {
     public <%- entityClass %>Criteria copy() {
         return new <%- entityClass %>Criteria(this);
     }
-<%_ for (const { propertyJavaFilterName, propertyJavaFilterType, propertyJavaFilterJavaBeanName } of entityJavaFilterableProperties) { _%>
+<%_ for (const { propertyJavaFilterName, propertyJavaFilterType, propertyJavaFilterJavaBeanName, propertyFilterConsumerName, propertyFilterSupplierName } of entityJavaFilterableProperties) { _%>
 
-    public <%- propertyJavaFilterType %> get<%- propertyJavaFilterJavaBeanName %>() {
+    public <%- propertyJavaFilterType %> <%- propertyFilterSupplierName %>() {
         return <%- propertyJavaFilterName %>;
     }
 
@@ -86,12 +86,12 @@ public class <%- entityClass %>Criteria implements Serializable, Criteria {
 
     public <%- propertyJavaFilterType %> <%- propertyJavaFilterName %>() {
         if (<%- propertyJavaFilterName %> == null) {
-            set<%- propertyJavaFilterJavaBeanName %>(new <%- propertyJavaFilterType %>());
+            <%- propertyFilterConsumerName %>(new <%- propertyJavaFilterType %>());
         }
         return <%- propertyJavaFilterName %>;
     }
 
-    public void set<%- propertyJavaFilterJavaBeanName %>(<%- propertyJavaFilterType %> <%- propertyJavaFilterName %>) {
+    public void <%- propertyFilterConsumerName %>(<%- propertyJavaFilterType %> <%- propertyJavaFilterName %>) {
         this.<%- propertyJavaFilterName %> = <%- propertyJavaFilterName %>;
     }
 <%_ } _%>

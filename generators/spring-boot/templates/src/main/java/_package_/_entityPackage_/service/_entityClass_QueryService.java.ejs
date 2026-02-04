@@ -130,11 +130,11 @@ public class <%= serviceClassName %> extends QueryService<<%= persistClass %>> {
                 Boolean.TRUE.equals(criteria.getDistinct()) ? distinct(criteria.getDistinct()) : Specification.unrestricted()
 <%_ for (const field of fields.filter(field => !field.transient && field.filterableField)) { _%>
                 ,
-                <%= field.fieldJavaBuildSpecification %>(criteria.get<%= field.fieldInJavaBeanMethod %>(), <%= persistClass %>_.<%= field.fieldName %>)
+                <%= field.fieldJavaBuildSpecification %>(criteria.<%- field.propertyFilterSupplierName %>(), <%= persistClass %>_.<%= field.fieldName %>)
 <%_ } _%>
 <%_ for (const relationship of relationships) { _%>
                 ,
-                buildSpecification(criteria.get<%= relationship.relationshipNameCapitalized %>Id(),
+                buildSpecification(criteria.<%- relationship.propertyFilterSupplierName %>(),
                     root -> root.join(<%= persistClass %>_.<%= relationship.propertyName %>, JoinType.LEFT).get(<%= relationship.otherEntity.persistClass %>_.<%= relationship.otherEntity.primaryKey.name %>))
 <%_ } _%>
             );

@@ -261,14 +261,14 @@ _%>
 fields.forEach((field) => {
   if (field.id || field.transient) return;
   if (field.filterableField) { _%>
-            if (criteria.get<%= field.fieldInJavaBeanMethod %>() != null) {
-                builder.buildFilterConditionForField(criteria.<%- field.propertySupplierName %>(), entityTable.column("<%= field.columnName %>"));
+            if (criteria.<%- field.propertyFilterSupplierName %>() != null) {
+                builder.buildFilterConditionForField(criteria.<%- field.propertyFilterSupplierName %>(), entityTable.column("<%= field.columnName %>"));
             }
 <%_ } _%>
 <%_ }); _%>
 <%_ reactiveEagerRelations.forEach((relationship) => { _%>
-            if (criteria.get<%= relationship.relationshipNameCapitalized %>Id() != null) {
-                builder.buildFilterConditionForField(criteria.get<%= relationship.relationshipNameCapitalized %>Id(), <%= relationship.relationshipName %>Table.column("<%= relationship.otherEntity.primaryKey.ownFields[0].columnName %>"));
+            if (criteria.<%- relationship.propertyFilterSupplierName %>() != null) {
+                builder.buildFilterConditionForField(criteria.<%- relationship.propertyFilterSupplierName %>(), <%= relationship.relationshipName %>Table.column("<%= relationship.otherEntity.primaryKey.ownFields[0].columnName %>"));
             }
 <%_ }); _%>
         }
