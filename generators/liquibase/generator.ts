@@ -208,7 +208,7 @@ export default class LiquibaseGenerator<
             }
             for (const field of entity.fields ?? []) {
               prepareCommonFieldForTemplates(entity, field, this);
-              mutateData(field as CommonField, commonMutateField);
+              mutateData(field as unknown as CommonField, commonMutateField);
               prepareServerFieldForTemplates(application as any, entity as unknown as ServerEntity, field as any, this);
               prepareFieldForLiquibase(application, field);
             }
