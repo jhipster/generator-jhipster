@@ -18,11 +18,10 @@
 -%>
 package <%= packageName %>.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import <%= packageName %>.IntegrationTest;
-<%_ if (authenticationUsesCsrf) { _%>
 
+import static org.assertj.core.api.Assertions.assertThat;
+<%_ if (authenticationUsesCsrf) { _%>
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -44,13 +43,15 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.MimeTypeUtils;
 
+@IntegrationTest
 @AutoConfigureWebTestClient(timeout = IntegrationTest.DEFAULT_TIMEOUT)
 @WithMockUser
-@IntegrationTest
 @ImportAutoConfiguration(TestChannelBinderConfiguration.class)
+@ActiveProfiles({ "kafka" })
 class <%= upperFirstCamelCaseBaseName %>KafkaResourceIT {
     private static String KAFKA_API = "/api/<%= dasherizedBaseName %>-kafka/{command}";
 

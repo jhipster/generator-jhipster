@@ -101,6 +101,9 @@ exports[`generator - spring-cloud:kafka with defaults options should match files
   "src/main/java/com/mycompany/myapp/web/rest/JhipsterKafkaResource.java": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-kafka.yml": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/config/KafkaTestContainer.java": {
     "stateCleared": "modified",
   },

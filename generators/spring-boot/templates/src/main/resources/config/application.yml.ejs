@@ -171,13 +171,9 @@ mongock:
 
 <%_ } _%>
 spring:
-<%_ if (databaseTypeSql && messageBrokerKafka) { _%>
-  autoconfigure:
-    exclude: org.springframework.boot.actuate.autoconfigure.metrics.jdbc.DataSourcePoolMetricsAutoConfiguration
-<%_ } _%>
   application:
     name: <%= baseName %>
-<%_ if (serviceDiscoveryConsul || applicationTypeGateway || messageBrokerKafka) { _%>
+<%_ if (serviceDiscoveryConsul || applicationTypeGateway) { _%>
   cloud:
   <%_ if (serviceDiscoveryConsul) { _%>
     consul:
@@ -254,27 +250,6 @@ spring:
     <%_ } _%>
           # See alternatives in https://github.com/spring-cloud/spring-cloud-gateway/issues/3818
           trusted-proxies: '.*'
-  <%_ } _%>
-  <%_ if (messageBrokerKafka) { _%>
-    function:
-      definition: kafkaConsumer;kafkaProducer
-    stream:
-      kafka:
-        binder:
-          replicationFactor: 1
-          auto-create-topics: true
-          brokers: localhost:9092
-      bindings:
-        binding-out-0:
-          content-type: text/plain
-          group: <%= dasherizedBaseName %>
-        kafkaConsumer-in-0:
-          destination: sse-topic
-          content-type: text/plain
-          group: <%= dasherizedBaseName %>
-        kafkaProducer-out-0:
-          content-type: text/plain
-          group: <%= dasherizedBaseName %>
   <%_ } _%>
 <%_ } _%>
 <%_ if ('dockerServices' in locals && dockerServices?.length) { _%>
