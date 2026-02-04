@@ -58,8 +58,8 @@ module.exports = () => {
         require('../module-federation.config.cjs'),
 <%_ } else { -%>
         {
-  <%_ if (applicationTypeMicroservice) { _%>
         name: '<%= lowercaseBaseName %>',
+  <%_ if (applicationTypeMicroservice) { _%>
         filename: 'remoteEntry.js',
   <%_ } _%>
         shareScope: 'default',
