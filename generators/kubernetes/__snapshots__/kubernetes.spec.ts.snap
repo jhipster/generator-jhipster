@@ -2356,7 +2356,7 @@ kubectl describe certificate keycloak-ssl
   "kubernetes/cert-manager/letsencrypt-staging-ca-secret.yml": {
     "contents": "# The truststore contains  "(STAGING) Artificial Apricot R3" and "(STAGING) Pretend Pear X1" certificates
 # https://letsencrypt.org/docs/staging-environment/
-# Truststore password is 123456
+# Truststore password is generated during Kubernetes configuration
 apiVersion: v1
 kind: Secret
 metadata:

@@ -18,6 +18,9 @@
  */
 import assert from 'node:assert';
 import { randomBytes } from 'node:crypto';
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 import chalk from 'chalk';
 import { defaults } from 'lodash-es';
@@ -28,6 +31,16 @@ import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../.
 import { checkDocker } from '../../../docker/support/index.ts';
 import { BaseKubernetesGenerator } from '../../generator.ts';
 import { helmConstants, kubernetesConstants } from '../../support/constants.ts';
+
+const DEFAULT_TRUSTSTORE_PASSWORD = '123456';
+const TRUSTSTORE_BASE64_URL = new URL('../../support/letsencrypt-staging-truststore.base64', import.meta.url);
+let truststoreBase64Cache: string | undefined;
+const loadTruststoreBase64 = async () => {
+  if (!truststoreBase64Cache) {
+    truststoreBase64Cache = (await readFile(TRUSTSTORE_BASE64_URL, 'utf8')).trim();
+  }
+  return truststoreBase64Cache;
+};
 
 export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerator {
   async beforeQueue() {
@@ -167,6 +180,39 @@ export default class KubernetesBootstrapGenerator extends BaseKubernetesGenerato
             this.debug(chalk.red.bold(`${appConfig.baseName} has redirect URIs ${deployment.keycloakRedirectUris}`));
           }
         });
+      },
+      async generateTruststoreSecrets({ deployment }) {
+        if (!deployment.useKeycloak || !deployment.ingressTypeGke) {
+          return;
+        }
+
+        const useDefaultPassword = this.options.reproducibleTests;
+        deployment.truststorePassword ??= useDefaultPassword ? DEFAULT_TRUSTSTORE_PASSWORD : randomBytes(20).toString('hex');
+
+        const truststoreBase64 = await loadTruststoreBase64();
+        if (useDefaultPassword) {
+          deployment.truststoreBase64 = truststoreBase64;
+          return;
+        }
+
+        const tmpDir = await mkdtemp(join(tmpdir(), 'jhipster-truststore-'));
+        const truststorePath = join(tmpDir, 'truststore.jks');
+        try {
+          await writeFile(truststorePath, Buffer.from(truststoreBase64, 'base64'));
+          await this.spawnCommand('keytool', [
+            '-storepasswd',
+            '-keystore',
+            truststorePath,
+            '-storepass',
+            DEFAULT_TRUSTSTORE_PASSWORD,
+            '-new',
+            deployment.truststorePassword,
+          ]);
+          const updated = await readFile(truststorePath);
+          deployment.truststoreBase64 = updated.toString('base64');
+        } finally {
+          await rm(tmpDir, { recursive: true, force: true });
+        }
       },
     });
   }
