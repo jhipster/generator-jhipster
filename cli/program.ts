@@ -118,10 +118,11 @@ const buildAllDependencies = async (
     if (!namespace.includes(':')) {
       for (const nextBlueprint of blueprintNamespaces) {
         const blueprintSubGenerator = `${nextBlueprint}:${namespace}`;
-        if (!allDependencies[blueprintSubGenerator]) {
-          if (await lookupGeneratorAndImports({ namespace: blueprintSubGenerator, blueprintNamespace: nextBlueprint })) {
-            overridden = true;
-          }
+        if (
+          !allDependencies[blueprintSubGenerator] &&
+          (await lookupGeneratorAndImports({ namespace: blueprintSubGenerator, blueprintNamespace: nextBlueprint }))
+        ) {
+          overridden = true;
         }
       }
     }

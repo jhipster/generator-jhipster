@@ -39,14 +39,12 @@ export const extractDataFromInfo = (info: string): InfoData => {
       } else if (title.includes('JDL entity definitions')) {
         jdlEntitiesDefinitions = body.trim();
         files.push({ filename: 'entities.jdl', content: jdlEntitiesDefinitions, type: 'entity-jdl' });
-      } else if (title.includes('JDL definitions')) {
+      } else if (title.includes('JDL definitions') && (body.match(/application\s*\{/g) || []).length > 0) {
         // JDL definitions can be be a placeholder
-        if ((body.match(/application\s*\{/g) || []).length > 0) {
-          const jdlCount = files.filter(file => file.type === 'jdl').length;
-          files.push({ filename: jdlCount === 0 ? 'app.jdl' : `app-${jdlCount}.jdl`, content: body.trim(), type: 'jdl' });
-          jdlApplications ??= (body.match(/application\s*\{/g) || []).length;
-          jdlDefinitions ??= body.trim();
-        }
+        const jdlCount = files.filter(file => file.type === 'jdl').length;
+        files.push({ filename: jdlCount === 0 ? 'app.jdl' : `app-${jdlCount}.jdl`, content: body.trim(), type: 'jdl' });
+        jdlApplications ??= (body.match(/application\s*\{/g) || []).length;
+        jdlDefinitions ??= body.trim();
       }
     }
   }
