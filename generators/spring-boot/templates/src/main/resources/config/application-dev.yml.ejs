@@ -102,10 +102,6 @@ spring:
     pool:
       metrics-enabled: true
     uri: bolt://localhost:7687
-    # Uncomment to use an authenticated connection
-    # authentication:
-    #   username: neo4j
-    #   password: secret
 <%_ } _%>
 <%_ if (serviceDiscoveryConsul) { _%>
   cloud:
@@ -139,8 +135,6 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: <%- devJdbcUrl %>
-    username: <%- devDatabaseUsername %>
-    password: <%- devDatabasePassword %>
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -181,8 +175,6 @@ spring:
 <%_ if (databaseTypeCouchbase) { _%>
   couchbase:
     connection-string: couchbase://localhost
-    username: Administrator
-    password: password
 <%_ } _%>
 <%_ if (databaseMigrationLiquibase) { _%>
   liquibase:
@@ -198,8 +190,6 @@ spring:
   mail:
     host: localhost
     port: 25
-    username:
-    password:
 <%_ } _%>
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
@@ -210,8 +200,6 @@ spring:
 <%_ if (databaseTypeSql && reactive) { _%>
   r2dbc:
     url: <%- devR2dbcUrl %>
-    username: <%- devDatabaseUsername %>
-    password: <%- devDatabasePassword %>
 <%_ } _%>
   thymeleaf:
     cache: false
@@ -295,10 +283,6 @@ jhipster:
       # cluster: true
   <%_ } _%>
 <%_ } _%>
-<%_ if (serviceDiscoveryEureka) { _%>
-  registry:
-    password: admin
-<%_ } _%>
 <%_ if (!applicationTypeMicroservice) { _%>
   # CORS is only enabled by default with the "dev" profile
   cors:
@@ -333,17 +317,9 @@ jhipster:
   security:
     authentication:
       jwt:
-        # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
-        base64-secret: <%= jwtSecretKey %>
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
-<%_ } _%>
-<%_ if (authenticationTypeSession && !reactive) { _%>
-  security:
-    remember-me:
-      # security key (this key should be unique for your application, and kept secret)
-      key: <%= rememberMeKey %>
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
   mail: # specific JHipster mail property, for standard properties see MailProperties

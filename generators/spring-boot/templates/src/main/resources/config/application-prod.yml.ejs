@@ -89,10 +89,6 @@ spring:
     pool:
       metrics-enabled: true
     uri: bolt://localhost:7687
-    # Uncomment to use an authenticated connection
-    # authentication:
-    #   username: neo4j
-    #   password: secret
 <%_ } _%>
 <%_ if (serviceDiscoveryEureka) { _%>
   cloud:
@@ -120,8 +116,6 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: <%- prodJdbcUrl %>
-    username: <%- prodDatabaseUsername %>
-    password: <%- prodDatabasePassword %>
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -152,8 +146,6 @@ spring:
 <%_ if (databaseTypeCouchbase) { _%>
   couchbase:
     connection-string: couchbase://localhost
-    username: Administrator
-    password: password
 <%_ } _%>
 <%_ if (databaseMigrationLiquibase) { _%>
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
@@ -167,8 +159,6 @@ spring:
   mail:
     host: localhost
     port: 25
-    username:
-    password:
 <%_ } _%>
 <%_ if (databaseTypeMongodb && springBoot4) { _%>
   mongodb:
@@ -177,8 +167,6 @@ spring:
 <%_ if (databaseTypeSql && reactive) { _%>
   r2dbc:
     url: <%- prodR2dbcUrl %>
-    username: <%- prodDatabaseUsername %>
-    password: <%- prodDatabasePassword %>
 <%_ } _%>
   thymeleaf:
     cache: true
@@ -286,33 +274,13 @@ jhipster:
       # cluster: true
   <%_ } _%>
 <%_ } _%>
-<%_ if (serviceDiscoveryEureka) { _%>
-  registry:
-    password: admin
-<%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
   security:
     authentication:
       jwt:
-        # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
-        # As this is the PRODUCTION configuration, you MUST change the default key, and store it securely:
-        <%_ if (serviceDiscoveryEureka) { _%>
-        # - In the JHipster Registry (which includes a Spring Cloud Config server)
-        <%_ } else { _%>
-        # - In the Consul configserver
-        <%_ } _%>
-        # - In a separate `application-prod.yml` file, in the same folder as your executable JAR file
-        # - In the `JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET` environment variable
-        base64-secret: <%= jwtSecretKey %>
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
-<%_ } _%>
-<%_ if (authenticationTypeSession && !reactive) { _%>
-  security:
-    remember-me:
-      # security key (this key should be unique for your application, and kept secret)
-      key: <%= rememberMeKey %>
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
   mail: # specific JHipster mail property, for standard properties see MailProperties

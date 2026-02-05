@@ -295,6 +295,7 @@ spring:
     active: '@spring.profiles.active@'
     group:
       dev:
+        - secret-samples
 <%_ for (const profile of devActiveProfiles) { _%>
         - <%= profile %>
 <%_ } _%>
@@ -369,16 +370,8 @@ spring:
     representation:
       uuid: standard
 <%_ } _%>
-<%_ if (generateInMemoryUserCredentials || authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
   security:
-  <%_ if (generateInMemoryUserCredentials) { _%>
-    user:
-      name: admin
-      password: admin
-      roles:
-        - ADMIN
-        - USER
-  <%_ } _%>
   <%_ if (authenticationTypeOauth2) { _%>
     oauth2:
       client:

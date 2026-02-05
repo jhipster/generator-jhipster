@@ -142,7 +142,9 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {
     "MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED": "true",
+    "SPRING_DATASOURCE_PASSWORD": undefined,
     "SPRING_DATASOURCE_URL": "jdbc:postgresql://postgresql:5432/jhipster",
+    "SPRING_DATASOURCE_USERNAME": undefined,
     "SPRING_LIQUIBASE_URL": "jdbc:postgresql://postgresql:5432/jhipster",
     "SPRING_PROFILES_ACTIVE": "prod,api-docs",
     "_JAVA_OPTIONS": "-Xmx512m -Xms256m",

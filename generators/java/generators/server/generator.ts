@@ -95,7 +95,7 @@ export default class ServerGenerator extends JavaApplicationGenerator {
           'ci:e2e:package':
             'npm run java:$npm_package_config_packaging:$npm_package_config_default_environment -- -Pe2e -Denforcer.skip=true',
           'preci:e2e:server:start': 'npm run services:db:await --if-present && npm run services:others:await --if-present',
-          'ci:e2e:server:start': `java -jar ${e2ePackage}.$npm_package_config_packaging --spring.profiles.active=e2e,$npm_package_config_default_environment ${javaCommonLog} ${javaTestLog} --logging.level.org.springframework.web=ERROR`,
+          'ci:e2e:server:start': `java -jar ${e2ePackage}.$npm_package_config_packaging --spring.profiles.active=e2e,secret-samples,$npm_package_config_default_environment ${javaCommonLog} ${javaTestLog} --logging.level.org.springframework.web=ERROR`,
         });
       },
       packageJsonE2eScripts({ application }) {

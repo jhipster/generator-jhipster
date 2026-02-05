@@ -209,6 +209,9 @@ exports[`generator - neo4j gateway-jwt-reactive(false)-maven-enableTranslation(f
   "src/main/resources/config/application-prod.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-secret-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -568,6 +571,9 @@ exports[`generator - neo4j gateway-jwt-reactive(true)-gradle-enableTranslation(t
   "src/main/resources/config/application-prod.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-secret-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -897,6 +903,9 @@ exports[`generator - neo4j gateway-oauth2-reactive(true)-gradle-enableTranslatio
   "src/main/resources/config/application-prod.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-secret-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -1170,6 +1179,9 @@ exports[`generator - neo4j microservice-jwt-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application-tls.yml": {
@@ -1462,6 +1474,9 @@ exports[`generator - neo4j microservice-jwt-reactive(true)-gradle-enableTranslat
   "src/main/resources/config/application-prod.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-secret-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -1750,6 +1765,9 @@ exports[`generator - neo4j microservice-oauth2-reactive(true)-gradle-enableTrans
     "stateCleared": "modified",
   },
   "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application-tls.yml": {
@@ -2076,6 +2094,9 @@ exports[`generator - neo4j monolith-jwt-reactive(false)-maven-enableTranslation(
     "stateCleared": "modified",
   },
   "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application-tls.yml": {
@@ -2434,6 +2455,9 @@ exports[`generator - neo4j monolith-jwt-reactive(true)-gradle-enableTranslation(
   "src/main/resources/config/application-prod.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-secret-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -2680,6 +2704,9 @@ exports[`generator - neo4j monolith-oauth2-reactive(false)-maven-enableTranslati
     "stateCleared": "modified",
   },
   "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application-tls.yml": {
@@ -2976,6 +3003,9 @@ exports[`generator - neo4j monolith-oauth2-reactive(true)-gradle-enableTranslati
     "stateCleared": "modified",
   },
   "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application-tls.yml": {
@@ -3314,6 +3344,9 @@ exports[`generator - neo4j monolith-session-reactive(false)-maven-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application-tls.yml": {
@@ -3664,6 +3697,9 @@ exports[`generator - neo4j monolith-session-reactive(true)-gradle-enableTranslat
     "stateCleared": "modified",
   },
   "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application-tls.yml": {

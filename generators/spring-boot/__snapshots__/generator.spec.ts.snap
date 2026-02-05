@@ -203,7 +203,9 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {
     "MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED": "true",
+    "SPRING_DATASOURCE_PASSWORD": undefined,
     "SPRING_DATASOURCE_URL": "jdbc:postgresql://postgresql:5432/jhipster",
+    "SPRING_DATASOURCE_USERNAME": undefined,
     "SPRING_LIQUIBASE_URL": "jdbc:postgresql://postgresql:5432/jhipster",
     "SPRING_PROFILES_ACTIVE": "prod,api-docs",
     "_JAVA_OPTIONS": "-Xmx512m -Xms256m",
@@ -788,6 +790,9 @@ exports[`generator - spring-boot with jwt should match generated files snapshot 
   "src/main/resources/config/application-prod.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-secret-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
@@ -1031,7 +1036,9 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {
     "MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED": "true",
+    "SPRING_DATASOURCE_PASSWORD": undefined,
     "SPRING_DATASOURCE_URL": "jdbc:postgresql://postgresql:5432/jhipster",
+    "SPRING_DATASOURCE_USERNAME": undefined,
     "SPRING_LIQUIBASE_URL": "jdbc:postgresql://postgresql:5432/jhipster",
     "SPRING_PROFILES_ACTIVE": "prod,api-docs",
     "_JAVA_OPTIONS": "-Xmx512m -Xms256m",
@@ -1547,6 +1554,9 @@ exports[`generator - spring-boot with oauth2 should match generated files snapsh
     "stateCleared": "modified",
   },
   "src/main/resources/config/application-prod.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/config/application-secret-samples.yml": {
     "stateCleared": "modified",
   },
   "src/main/resources/config/application-tls.yml": {
