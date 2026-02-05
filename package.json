@@ -197,7 +197,7 @@
     "@types/semver": "7.7.1",
     "@types/sinon-chai": "4.0.0",
     "chai": "6.2.2",
-    "cpy-cli": "6.0.0",
+    "cpy-cli": "7.0.0",
     "diff": "8.0.3",
     "ejs-lint": "2.0.1",
     "eslint-config-prettier": "10.1.8",
