@@ -17,12 +17,12 @@
  * limitations under the License.
  */
 
+import { javaMainPackageTemplatesBlock } from '../../../java/support/files.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';
 import type { Source as SpringBootSource } from '../../index.ts';
 import type { Application as SpringDataRelationalApplication } from '../data-relational/types.d.ts';
 
 import cleanupTask from './cleanup.ts';
-import writeEntitiesTask, { cleanupEntitiesTask } from './entity-files.ts';
 import writeTask from './files.ts';
 
 export default class Neo4jGenerator extends SpringBootApplicationGenerator {
@@ -128,10 +128,31 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
   }
 
   get writingEntities() {
-    return {
-      cleanupEntitiesTask,
-      writeEntitiesTask,
-    };
+    return this.asWritingEntitiesTaskGroup({
+      async writeEntitiesTask({ application, entities }) {
+        for (const entity of entities.filter(entity => !entity.skipServer)) {
+          await this.writeFiles({
+            sections: {
+              domain: [
+                {
+                  condition: ctx => ctx.entityDomainLayer,
+                  ...javaMainPackageTemplatesBlock('_entityPackage_'),
+                  templates: ['domain/_persistClass_.java.jhi.spring_data_neo4j'],
+                },
+              ],
+              repository: [
+                {
+                  condition: ctx => ctx.entityPersistenceLayer,
+                  ...javaMainPackageTemplatesBlock('_entityPackage_'),
+                  templates: ['repository/_entityClass_Repository.java'],
+                },
+              ],
+            },
+            context: { ...application, ...entity },
+          });
+        }
+      },
+    });
   }
 
   get [SpringBootApplicationGenerator.WRITING_ENTITIES]() {
