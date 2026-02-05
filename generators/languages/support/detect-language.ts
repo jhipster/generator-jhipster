@@ -17,13 +17,13 @@
  * limitations under the License.
  */
 
-import { osLocaleSync } from 'os-locale';
+import osLocale from 'os-locale';
 
 import type { Language } from './languages.ts';
 import { findLanguageForTag, supportedLanguages } from './languages.ts';
 
 const detectLanguage = (languages: readonly Language[] = supportedLanguages) => {
-  const locale = osLocaleSync();
+  const locale = osLocale();
   if (locale) {
     const language = findLanguageForTag(locale.toLowerCase(), languages) ?? findLanguageForTag(locale.split('-')[0], languages);
     if (language) {
