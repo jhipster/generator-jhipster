@@ -49,7 +49,7 @@ jobs:
       - run: git --no-pager log -n 10 --graph --pretty='%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue) <%an>%Creset' --abbrev-commit
         shell: bash
         # Scripts will be executed later by npm pack
-      - run: npm ci --ignore-scripts
+      - run: npm ci --engine-strict --ignore-scripts
       - run: npm run prettier:check
       - run: npm pack
       - run: npx -y --package generator-jhipster-$(./bin/jhipster.cjs --version).tgz jhipster --version
