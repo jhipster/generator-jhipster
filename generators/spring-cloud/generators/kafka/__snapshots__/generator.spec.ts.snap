@@ -73,13 +73,20 @@ exports[`generator - spring-cloud:kafka with defaults options should call source
       {
         "annotations": [
           {
-            "annotation": "ImportTestcontainers",
-            "package": "org.springframework.boot.testcontainers.context",
+            "annotation": "ImportAutoConfiguration",
+            "package": "org.springframework.boot.autoconfigure",
+            "parameters": [Function],
+          },
+          {
+            "annotation": "TestPropertySource",
+            "package": "org.springframework.test.context",
             "parameters": [Function],
           },
         ],
         "imports": [
-          "com.mycompany.myapp.config.KafkaTestContainer",
+          "org.springframework.boot.autoconfigure.ImportAutoConfiguration",
+          "org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration",
+          "org.springframework.test.context.TestPropertySource",
         ],
       },
     ],
