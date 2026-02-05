@@ -99,12 +99,10 @@ export default function prepareRelationship(
     });
   }
 
-  if (entityWithConfig.dto === MAPSTRUCT) {
-    if (otherEntity.dto !== MAPSTRUCT && !otherEntity.builtInUser) {
-      this.log.warn(
-        `Entity ${entityName}: this entity has the DTO option, and it has a relationship with entity "${otherEntity.name}" that doesn't have the DTO option. This will result in an error.`,
-      );
-    }
+  if (entityWithConfig.dto === MAPSTRUCT && otherEntity.dto !== MAPSTRUCT && !otherEntity.builtInUser) {
+    this.log.warn(
+      `Entity ${entityName}: this entity has the DTO option, and it has a relationship with entity "${otherEntity.name}" that doesn't have the DTO option. This will result in an error.`,
+    );
   }
 
   if (relationship.relationshipValidateRules?.includes(REQUIRED)) {

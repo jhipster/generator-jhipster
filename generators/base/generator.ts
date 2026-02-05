@@ -98,14 +98,12 @@ export default class BaseGenerator<
       // jhipsterContext is the original generator
       this.jhipsterContext = jhipsterContext;
 
-      if (checkBlueprint) {
-        if (!this.jhipsterContext) {
-          throw new Error(
-            `This is a JHipster blueprint and should be used only like ${chalk.yellow(
-              `jhipster --blueprints ${this.options.namespace.split(':')[0]}`,
-            )}`,
-          );
-        }
+      if (checkBlueprint && !this.jhipsterContext) {
+        throw new Error(
+          `This is a JHipster blueprint and should be used only like ${chalk.yellow(
+            `jhipster --blueprints ${this.options.namespace.split(':')[0]}`,
+          )}`,
+        );
       }
 
       try {
@@ -130,25 +128,19 @@ export default class BaseGenerator<
 
     this.on('before:queueOwnTasks', () => {
       const { storeBlueprintVersion, storeJHipsterVersion, queueCommandTasks = true } = this.features;
-      if (this.fromBlueprint) {
-        if (storeBlueprintVersion && !this.options.reproducibleTests) {
-          try {
-            const blueprintPackageJson = JSON.parse(readFileSync(this._meta!.packagePath!, 'utf8'));
-            this.blueprintConfig!.blueprintVersion = blueprintPackageJson.version;
-          } catch {
-            this.log(`Could not retrieve version of blueprint '${this.options.namespace}'`);
-          }
+      if (this.fromBlueprint && storeBlueprintVersion && !this.options.reproducibleTests) {
+        try {
+          const blueprintPackageJson = JSON.parse(readFileSync(this._meta!.packagePath!, 'utf8'));
+          this.blueprintConfig!.blueprintVersion = blueprintPackageJson.version;
+        } catch {
+          this.log(`Could not retrieve version of blueprint '${this.options.namespace}'`);
         }
       }
-      if (!this.fromBlueprint && !this.delegateToBlueprint) {
-        if (storeJHipsterVersion && !this.options.reproducibleTests) {
-          this.jhipsterConfig.jhipsterVersion = packageJson.version;
-        }
+      if (!this.fromBlueprint && !this.delegateToBlueprint && storeJHipsterVersion && !this.options.reproducibleTests) {
+        this.jhipsterConfig.jhipsterVersion = packageJson.version;
       }
-      if (this.fromBlueprint || !this.delegateToBlueprint) {
-        if (queueCommandTasks) {
-          this._queueCurrentJHipsterCommandTasks();
-        }
+      if ((this.fromBlueprint || !this.delegateToBlueprint) && queueCommandTasks) {
+        this._queueCurrentJHipsterCommandTasks();
       }
     });
   }
@@ -309,26 +301,24 @@ export default class BaseGenerator<
   override getArgsForPriority(priorityName: string) {
     const [firstArg] = super.getArgsForPriority(priorityName);
     const control = this.#control;
-    if (priorityName === WRITING) {
-      if (existsSync(this.config.path)) {
-        try {
-          const oldConfig = JSON.parse(readFileSync(this.config.path).toString())[GENERATOR_JHIPSTER];
-          const newConfig: any = this.config.getAll();
-          const keys = [...new Set([...Object.keys(oldConfig), ...Object.keys(newConfig)])];
-          const configChanges = Object.fromEntries(
-            keys
-              .filter(key =>
-                Array.isArray(newConfig[key])
-                  ? newConfig[key].length === oldConfig[key].length &&
-                    newConfig[key].find((element, index) => element !== oldConfig[key][index])
-                  : newConfig[key] !== oldConfig[key],
-              )
-              .map(key => [key, { newValue: newConfig[key], oldValue: oldConfig[key] }]),
-          );
-          return [{ ...firstArg, control, configChanges }];
-        } catch {
-          // Fail to parse
-        }
+    if (priorityName === WRITING && existsSync(this.config.path)) {
+      try {
+        const oldConfig = JSON.parse(readFileSync(this.config.path).toString())[GENERATOR_JHIPSTER];
+        const newConfig: any = this.config.getAll();
+        const keys = [...new Set([...Object.keys(oldConfig), ...Object.keys(newConfig)])];
+        const configChanges = Object.fromEntries(
+          keys
+            .filter(key =>
+              Array.isArray(newConfig[key])
+                ? newConfig[key].length === oldConfig[key].length &&
+                  newConfig[key].find((element, index) => element !== oldConfig[key][index])
+                : newConfig[key] !== oldConfig[key],
+            )
+            .map(key => [key, { newValue: newConfig[key], oldValue: oldConfig[key] }]),
+        );
+        return [{ ...firstArg, control, configChanges }];
+      } catch {
+        // Fail to parse
       }
     }
     return [{ ...firstArg, control }];

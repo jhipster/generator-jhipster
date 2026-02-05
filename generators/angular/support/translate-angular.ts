@@ -305,11 +305,9 @@ export const createTranslationReplacer = (getWebappTranslation: GetWebappTransla
     );
   }
   return function replaceAngularTranslations(content: string, filePath: string) {
-    if (filePath.endsWith('.html')) {
-      if (!enableTranslation) {
-        content = content.replace(new RegExp(TRANSLATE_REGEX, 'g'), '');
-        content = replacePlaceholders(getWebappTranslation, content);
-      }
+    if (filePath.endsWith('.html') && !enableTranslation) {
+      content = content.replace(new RegExp(TRANSLATE_REGEX, 'g'), '');
+      content = replacePlaceholders(getWebappTranslation, content);
     }
     // Translate html files and inline templates.
     if (/(:?\.html|.ts)$/.test(filePath)) {

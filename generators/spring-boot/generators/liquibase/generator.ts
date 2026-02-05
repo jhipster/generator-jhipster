@@ -76,10 +76,8 @@ export default class SpringBootLiquibaseGenerator extends SpringBootApplicationG
             },
           ]);
         }
-        if (application.databaseTypeNeo4j) {
-          if (!application.springBoot4) {
-            source.addMavenDependency?.([{ groupId: 'org.springframework', artifactId: 'spring-jdbc' }]);
-          }
+        if (application.databaseTypeNeo4j && !application.springBoot4) {
+          source.addMavenDependency?.([{ groupId: 'org.springframework', artifactId: 'spring-jdbc' }]);
         }
       },
 
