@@ -33,7 +33,7 @@ export default (javaCompatibleVersions: string[]): ValidationResult & { javaVers
       if (matchResult && matchResult.length > 0) {
         const javaVersion = matchResult[1];
         const debug = `Detected java version ${javaVersion}`;
-        if (javaCompatibleVersions && !new RegExp(`(${javaCompatibleVersions.map(ver => `^${ver}`).join('|')})`).exec(javaVersion)) {
+        if (javaCompatibleVersions && !new RegExp(`(${javaCompatibleVersions.map(ver => `^${ver}`).join('|')})`).test(javaVersion)) {
           const [latest, ...others] = javaCompatibleVersions.concat().reverse();
           const humanizedVersions = `${others.reverse().join(', ')} or ${latest}`;
           const warning = `Java ${humanizedVersions} are not found on your computer. Your Java version is: ${chalk.yellow(javaVersion)}`;
