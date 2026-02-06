@@ -38,4 +38,4 @@ gatling-gradle = { id = 'io.gatling.gradle', version = '3.14.9.8' }
 
 gradle-openapi-generator = { id = 'org.openapi.generator', version = '7.19.0' }
 
-gradle-jib = { id = "com.google.cloud.tools.jib", version = "3.5.2" }
+gradle-jib = { id = "com.google.cloud.tools.jib", version = "3.5.3" }
