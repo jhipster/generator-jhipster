@@ -1,0 +1,73 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+/**
+ * Method to parse the link header into an object
+ * @example
+ * link: </api/audits?page=0&size=20>; rel="last",</api/audits?page=0&size=20>; rel="first"
+ * will return { last: { page: '0', size: '20' }, first: { page: '0', size: '20' } }
+ */
+export function parseLinkHeader(header: string): Record<string, Record<string, string | undefined> | undefined> {
+  if (header.length === 0) {
+    throw new Error('input must not be of zero length');
+  }
+
+  // Split parts by comma
+  const parts: string[] = header.split(',');
+
+  // Parse each part into a named link
+  return Object.fromEntries(
+    parts.map(p => {
+      const section: string[] = p.split(';');
+
+      if (section.length !== 2) {
+        throw new Error('section could not be split on ";"');
+      }
+
+      const url: string = section[0].replace(/<(.*)>/, '$1').trim(); // NOSONAR
+      const queryString: Record<string, string> = {};
+
+      url.replaceAll(/([^?=&]+)(=([^&]*))?/g, (_$0: string, $1: string | undefined, _$2: string | undefined, $3: string | undefined) => {
+        if ($1 !== undefined && $3 !== undefined) {
+          queryString[$1] = decodeURIComponent($3);
+        }
+        return $3 ?? '';
+      });
+
+      const name: string = section[1].replace(/rel="(.*)"/, '$1').trim();
+      return [name, queryString];
+    }),
+  );
+}
+
+/**
+ * Method to parse the link header
+ * @example
+ * link: </api/audits?page=0&size=20>; rel="last",</api/audits?page=0&size=20>; rel="first"
+ * will return { last: 0, first: 0 }
+ */
+export function getPageNumberFromLinkHeader(header: string): Record<string, number> {
+  const sections = parseLinkHeader(header);
+  const pages: Record<string, number> = {};
+  for (const [name, queryParams] of Object.entries(sections)) {
+    if (queryParams?.page !== undefined) {
+      pages[name] = Number.parseInt(queryParams.page, 10);
+    }
+  }
+  return pages;
+}
