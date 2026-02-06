@@ -296,6 +296,9 @@ exports[`generator - server - support - needles generated project should match s
   "src/main/resources/config/application-prod.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-secret-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },

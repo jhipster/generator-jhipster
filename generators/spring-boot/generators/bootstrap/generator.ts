@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { mutateData } from '../../../../lib/utils/object.ts';
 import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';
 import { getJdbcUrl, getR2dbcUrl } from '../data-relational/support/database-url.ts';
@@ -57,10 +58,19 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
           });
         }
       },
+    });
+  }
+
+  get [SpringBootApplicationGenerator.PREPARING]() {
+    return this.preparing;
+  }
+
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
       dockerEnvironment({ application }) {
         const { baseName, dockerApplicationEnvironment } = application;
 
-        Object.assign(application.dockerApplicationEnvironment, {
+        mutateData(dockerApplicationEnvironment as any, {
           _JAVA_OPTIONS: '-Xmx512m -Xms256m',
           SPRING_PROFILES_ACTIVE: 'prod,api-docs',
           MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED: 'true',
@@ -68,15 +78,33 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
 
         // TODO move to spring-cloud:bootstrap generator
         if (application.serviceDiscoveryConsul) {
-          dockerApplicationEnvironment.SPRING_CLOUD_CONSUL_HOST = 'consul';
-          dockerApplicationEnvironment.SPRING_CLOUD_CONSUL_PORT = '8500';
+          mutateData(dockerApplicationEnvironment as any, {
+            SPRING_CLOUD_CONSUL_HOST: 'consul',
+            SPRING_CLOUD_CONSUL_PORT: '8500',
+          });
         }
         if (application.serviceDiscoveryEureka) {
           // eslint-disable-next-line no-template-curly-in-string
           const jhipsterRegistryUrl = 'http://admin:$${jhipster.registry.password}@jhipster-registry:8761/';
-          dockerApplicationEnvironment.EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE = `${jhipsterRegistryUrl}eureka`;
-          dockerApplicationEnvironment.SPRING_CLOUD_CONFIG_URI = `${jhipsterRegistryUrl}config`;
+          mutateData(dockerApplicationEnvironment as any, {
+            EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: `${jhipsterRegistryUrl}eureka`,
+            SPRING_CLOUD_CONFIG_URI: `${jhipsterRegistryUrl}config`,
+          });
         }
+
+        if (application.authenticationTypeSession) {
+          mutateData(dockerApplicationEnvironment as any, {
+            SPRING_SECURITY_REMEMBER_ME_KEY: application.rememberMeKey,
+          });
+        }
+        if (application.generateInMemoryUserCredentials) {
+          mutateData(dockerApplicationEnvironment as any, {
+            SPRING_SECURITY_USER_NAME: 'admin',
+            SPRING_SECURITY_USER_PASSWORD: 'admin',
+            SPRING_SECURITY_USER_ROLES: 'ADMIN,USER',
+          });
+        }
+
         if (application.databaseTypeSql) {
           const databaseName = application.prodDatabaseTypeMysql || application.prodDatabaseTypeMariadb ? baseName.toLowerCase() : baseName;
           const jdbcUrl = getJdbcUrl(application.prodDatabaseType, {
@@ -84,23 +112,40 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
             databaseName,
           });
           if (application.reactive) {
-            dockerApplicationEnvironment.SPRING_R2DBC_URL = getR2dbcUrl(application.prodDatabaseType, {
-              hostname: application.prodDatabaseType,
-              databaseName,
+            mutateData(dockerApplicationEnvironment as any, {
+              SPRING_R2DBC_URL: getR2dbcUrl(application.prodDatabaseType, {
+                hostname: application.prodDatabaseType,
+                databaseName,
+              }),
+              SPRING_R2DBC_USERNAME: application.prodDatabaseUsername,
+              SPRING_R2DBC_PASSWORD: application.prodDatabasePassword,
             });
           } else {
-            dockerApplicationEnvironment.SPRING_DATASOURCE_URL = jdbcUrl;
+            mutateData(dockerApplicationEnvironment as any, {
+              SPRING_DATASOURCE_URL: jdbcUrl,
+              SPRING_DATASOURCE_USERNAME: application.prodDatabaseUsername,
+              SPRING_DATASOURCE_PASSWORD: application.prodDatabasePassword,
+            });
           }
-          dockerApplicationEnvironment.SPRING_LIQUIBASE_URL = jdbcUrl;
+          mutateData(dockerApplicationEnvironment as any, {
+            SPRING_LIQUIBASE_URL: jdbcUrl,
+          });
         } else if (application.databaseTypeMongodb) {
           const mongodbUri = `mongodb://mongodb:27017/${application.baseName}`;
-          application.dockerApplicationEnvironment.SPRING_MONGODB_URI = mongodbUri;
+          mutateData(dockerApplicationEnvironment as any, {
+            SPRING_MONGODB_URI: mongodbUri,
+          });
+        } else if (application.databaseTypeCouchbase) {
+          mutateData(dockerApplicationEnvironment as any, {
+            SPRING_COUCHBASE_USERNAME: 'Administrator',
+            SPRING_COUCHBASE_PASSWORD: 'password',
+          });
         }
       },
     });
   }
 
-  get [SpringBootApplicationGenerator.PREPARING]() {
-    return this.preparing;
+  get [SpringBootApplicationGenerator.POST_PREPARING]() {
+    return this.postPreparing;
   }
 }
