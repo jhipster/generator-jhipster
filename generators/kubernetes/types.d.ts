@@ -68,4 +68,7 @@ export type Deployment = Command['Application'] &
 
     dockerRepositoryName?: string;
     dockerPushCommand?: string;
+
+    truststorePassword?: string;
+    truststoreBase64?: string;
   };
