@@ -54,7 +54,7 @@ export const cypressFiles = asWriteFilesSection({
       condition: generator => !generator.applicationTypeMicroservice,
       path: CYPRESS_TEMPLATE_SOURCE_DIR,
       renameTo: (ctx, file) => `${ctx.cypressDir}${file}`,
-      templates: ['e2e/account/logout.cy.ts'],
+      templates: ['e2e/account/logout-page.cy.ts'],
     },
     {
       condition: generator => !generator.authenticationTypeOauth2,
