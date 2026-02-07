@@ -66,7 +66,6 @@ export const replaceTranslationKeysWithText = (
 
     let data;
     if (interpolate) {
-      data = {};
       try {
         data = JSON.parse(interpolate);
       } catch {
@@ -134,7 +133,6 @@ export const replaceTranslateContents = (body: string, filePath: string, regexp:
 
     let parsedInterpolate: Record<string, string> | undefined;
     if (interpolate) {
-      parsedInterpolate = {};
       try {
         parsedInterpolate = JSON.parse(interpolate);
       } catch {
