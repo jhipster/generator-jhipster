@@ -1,3 +1,5 @@
+import { it } from 'esmocha';
+
 import { databaseTypes } from '../../../lib/jhipster/index.ts';
 import type { result } from '../../../lib/testing/index.ts';
 

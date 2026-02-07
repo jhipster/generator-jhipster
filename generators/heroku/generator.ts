@@ -36,6 +36,10 @@ import type {
   Options as HerokuOptions,
 } from './types.ts';
 
+type StreamLike = {
+  on(event: 'data', listener: (chunk: any) => void): any;
+};
+
 export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEntity, HerokuApplication, HerokuConfig, HerokuOptions> {
   hasHerokuCli!: boolean;
 
@@ -559,7 +563,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
     return (await this.printChildOutput(child)) as any;
   }
 
-  printChildOutput<const T extends { stdout?: NodeJS.ReadableStream | null; stderr?: NodeJS.ReadableStream | null }>(
+  printChildOutput<const T extends { stdout?: StreamLike | null; stderr?: StreamLike | null }>(
     child: T,
     log = (data: any) => this.log.verboseInfo(data),
   ): T {
