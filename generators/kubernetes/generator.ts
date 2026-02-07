@@ -179,7 +179,7 @@ export default class KubernetesGenerator extends BaseKubernetesGenerator {
         if (deployment.dockerRepositoryName) {
           this.log.log('\nAlternatively, you can use Jib to build and push image directly to a remote registry:');
           for (const app of applications) {
-            let runCommand = '';
+            let runCommand;
             if (app.buildTool === MAVEN) {
               runCommand = `./mvnw -ntp -Pprod verify jib:build${
                 process.arch === 'arm64' ? ' -Djib-maven-plugin.architecture=arm64' : ''
