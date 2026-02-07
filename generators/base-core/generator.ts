@@ -1210,9 +1210,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         this.writeDestination(filePath, fileHasCrlf ? normalizeLineEndings(newContent, CRLF) : newContent);
       } catch (error: unknown) {
         if (error instanceof Error) {
-          throw new Error(`Error editing file ${filePath}: ${error.message} at ${error.stack}`);
+          throw new Error(`Error editing file ${filePath}: ${error.message} at ${error.stack}`, { cause: error });
         }
-        throw new Error(`Unknown Error ${error}`);
+        throw new Error(`Unknown Error ${error}`, { cause: error });
       }
       return writeCallback;
     };
