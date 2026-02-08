@@ -56,7 +56,6 @@ export default defineConfig(
     rules: {
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-unused-expressions': 'off',
-      'no-undef': 'off',
     },
   },
   {

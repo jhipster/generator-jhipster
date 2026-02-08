@@ -1,4 +1,4 @@
-import { describe, expect } from 'esmocha';
+import { describe, expect, it } from 'esmocha';
 import { readFile } from 'node:fs/promises';
 
 import { getPackageRoot } from '../../../lib/index.ts';
