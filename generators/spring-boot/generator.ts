@@ -927,7 +927,13 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
         (source as CommonSource).ignoreSonarRule?.({
           ruleId: 'S6437',
           ruleKey: 'java:S6437',
-          resourceKey: `${application.srcMainResources}config/application-secret-samples.yml,${application.srcMainResources}config/application-tls.yml`,
+          resourceKey: `${application.srcMainResources}config/application-secret-samples.yml`,
+          comment: `Rule https://rules.sonarsource.com/java/RSPEC-6437 is ignored, hardcoded passwords are provided for development purposes`,
+        });
+        (source as CommonSource).ignoreSonarRule?.({
+          ruleId: 'S6437-2',
+          ruleKey: 'java:S6437',
+          resourceKey: `${application.srcMainResources}config/application-tls.yml`,
           comment: `Rule https://rules.sonarsource.com/java/RSPEC-6437 is ignored, hardcoded passwords are provided for development purposes`,
         });
         (source as CommonSource).ignoreSonarRule?.({
