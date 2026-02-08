@@ -1,6 +1,5 @@
 import { type Options, format, resolveConfig } from 'prettier';
 import prettierPluginJava from 'prettier-plugin-java';
-// @ts-ignore No types available
 import prettierPluginPackagejson from 'prettier-plugin-packagejson';
 // @ts-ignore No types available
 import prettierPluginProperties from 'prettier-plugin-properties';
