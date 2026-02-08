@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 
 import { lookupCommandsConfigs } from '../command/lookup-commands-configs.ts';
 import type { JDLApplicationConfig } from '../jdl/core/types/parsing.ts';

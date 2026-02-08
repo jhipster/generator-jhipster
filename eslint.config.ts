@@ -49,7 +49,6 @@ export default defineConfig(
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-this-alias': 'off',
       'no-redeclare': 'off',
-      'no-undef': 'off',
     },
   },
   {
@@ -57,7 +56,6 @@ export default defineConfig(
     rules: {
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-unused-expressions': 'off',
-      'no-undef': 'off',
     },
   },
   {

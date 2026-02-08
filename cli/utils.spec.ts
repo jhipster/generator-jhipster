@@ -1,3 +1,5 @@
+import { describe, it } from 'esmocha';
+
 import { expect } from 'chai';
 
 import { getCommand } from './utils.ts';

@@ -1,4 +1,4 @@
-import { describe, expect } from 'esmocha';
+import { describe, expect, it } from 'esmocha';
 
 import type { GeneratorMeta } from '@yeoman/types';
 import type FullEnvironment from 'yeoman-environment';

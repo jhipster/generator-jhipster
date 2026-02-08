@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { expect } from 'esmocha';
+import { describe, expect, it } from 'esmocha';
 
 import { mutateMockedCompleteData, mutateMockedData } from '../../lib/testing/index.ts';
 

@@ -1,4 +1,4 @@
-import { after, before, describe, esmocha, expect, it, resetAllMocks } from 'esmocha';
+import { after, afterEach, before, describe, esmocha, expect, it, resetAllMocks } from 'esmocha';
 
 import type checkJava from './check-java.ts';
 

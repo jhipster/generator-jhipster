@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'esmocha';
+import { afterEach, beforeEach, describe, expect, it } from 'esmocha';
 
 import type { SinonStub } from 'sinon';
 import sinon from 'sinon';

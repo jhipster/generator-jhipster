@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { after, before, beforeEach, describe, expect as jestExpect, it } from 'esmocha';
+import { after, afterEach, before, beforeEach, describe, expect as jestExpect, it } from 'esmocha';
 import assert from 'node:assert';
 import fs from 'node:fs';
 

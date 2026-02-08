@@ -1,3 +1,4 @@
+import { describe, it } from 'esmocha';
 import { join } from 'node:path';
 
 import { execa } from 'execa';

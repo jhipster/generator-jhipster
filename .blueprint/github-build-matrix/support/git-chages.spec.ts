@@ -1,4 +1,4 @@
-import { expect } from 'esmocha';
+import { describe, expect, it } from 'esmocha';
 
 import { lookupGenerators } from '../../../lib/utils/index.ts';
 
