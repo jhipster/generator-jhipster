@@ -126,9 +126,6 @@
     "update-snapshot": "esmocha --no-insight --no-parallel --update-snapshot --",
     "update-snapshots": "esmocha test generators cli .blueprint lib/jdl lib --forbid-only --update-snapshot --enable-source-maps"
   },
-  "overrides": {
-    "@eslint/core": "$@eslint/core"
-  },
   "dependencies": {
     "@eslint/core": "1.1.0",
     "@eslint/js": "9.39.2",
