@@ -1,6 +1,7 @@
 import type { ExportGeneratorOptionsFromCommand, ExportStoragePropertiesFromCommand } from '../../lib/command/types.ts';
 import type { Config as CoreConfig, Features as CoreFeatures, Options as CoreOptions } from '../base-core/types.ts';
 
+import type Command from './command.ts';
 import type BaseGenerator from './generator.ts';
 
 export type Source = {
@@ -33,8 +34,7 @@ export type Control = {
 };
 
 export type Config = CoreConfig &
-  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-  ExportStoragePropertiesFromCommand<typeof import('./command.ts').default> & {
+  ExportStoragePropertiesFromCommand<typeof Command> & {
     jhipsterVersion?: string;
     lastLiquibaseTimestamp?: number;
     creationTimestamp?: number;
@@ -42,8 +42,7 @@ export type Config = CoreConfig &
   };
 
 export type Options = CoreOptions &
-  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-  ExportGeneratorOptionsFromCommand<typeof import('./command.js').default> & {
+  ExportGeneratorOptionsFromCommand<typeof Command> & {
     reproducibleTests?: boolean;
     entities?: string[];
 
