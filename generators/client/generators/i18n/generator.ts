@@ -102,7 +102,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
         this.languagesToGenerate =
           application.enableTranslation && application.languagesToGenerateDefinition
             ? application.languagesToGenerateDefinition
-            : [...new Set([application.nativeLanguage, 'en'])].map(lang => findLanguageForTag(lang, application.supportedLanguages)!);
+            : [...new Set([application.nativeLanguage])].map(lang => findLanguageForTag(lang, application.supportedLanguages)!);
       },
       async loadNativeLanguage({ application }) {
         application.translations = application.translations ?? {};
