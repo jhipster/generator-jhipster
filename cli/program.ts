@@ -76,9 +76,7 @@ type JHipsterModule = {
 
 export const printJHipsterLogo = () => {
   // eslint-disable-next-line no-console
-  console.log();
-  // eslint-disable-next-line no-console
-  console.log(logo);
+  console.log(`\n${logo}`);
 };
 
 const buildAllDependencies = async (
