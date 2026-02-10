@@ -252,7 +252,7 @@ jhipster:
   <%_ } _%>
   <%_ if (cacheProviderInfinispan) { _%>
     infinispan:
-      config-file: <%- springBoot4 ? 'org/infinispan/configuration/' : 'default-configs/' %>default-jgroups-tcp.xml
+      config-file: org/infinispan/configuration/default-jgroups-tcp.xml
       statsEnabled: true
       # local app cache
       local:
