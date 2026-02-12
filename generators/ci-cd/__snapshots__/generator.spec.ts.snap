@@ -172,7 +172,6 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   ],
   "entitySuffix": "",
   "feignClient": false,
-  "gatewayRoutes": undefined,
   "gatewayServerPort": undefined,
   "generateAuthenticationApi": true,
   "generateBuiltInAuthorityEntity": true,

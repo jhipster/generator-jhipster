@@ -60,22 +60,6 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
-      loading({ applicationDefaults }) {
-        applicationDefaults({
-          // TODO: fix type
-          // @ts-ignore
-          ciCdIntegrations: () => [],
-        });
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
-  }
-
   get preparing() {
     return this.asPreparingTaskGroup({
       preparing({ applicationDefaults }) {

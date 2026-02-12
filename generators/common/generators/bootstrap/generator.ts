@@ -47,7 +47,6 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
         applicationDefaults({
           dockerContainers: {},
           authenticationUsesCsrf: undefined,
-          gatewayRoutes: undefined,
         });
       },
     });

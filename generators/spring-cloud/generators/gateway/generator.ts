@@ -67,11 +67,14 @@ export default class GatewayGenerator extends BaseApplicationGenerator<
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      prepareGateway({ application }) {
-        application.gatewayServicesApiAvailable = application.serviceDiscoveryAny || !application.reactive;
-        application.gatewayRoutes = (application.routes ?? []).map(routeDef => {
-          const [route, host = route, serverPort = '8080'] = routeDef.split(':');
-          return { route, serverPort, host };
+      prepareGateway({ applicationDefaults }) {
+        applicationDefaults({
+          gatewayServicesApiAvailable: ({ serviceDiscoveryAny, reactive }) => serviceDiscoveryAny || !reactive,
+          gatewayRoutes: ({ routes }) =>
+            (routes ?? []).map(routeDef => {
+              const [route, host = route, serverPort = '8080'] = routeDef.split(':');
+              return { route, serverPort, host };
+            }),
         });
       },
     });

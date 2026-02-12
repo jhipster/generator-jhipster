@@ -199,7 +199,7 @@ spring:
               - instanceId: <%= lowercaseBaseName %>1
                 host: localhost
                 port: <%= serverPort %>
-      <%_ for (const ms of gatewayRoutes ?? []) { _%>
+      <%_ for (const ms of locals.gatewayRoutes ?? []) { _%>
             <%= ms.route %>:
               - instanceId: <%= ms.route %>1
                 host: <%= ms.host %>
@@ -240,7 +240,7 @@ spring:
                 - Path=/services/<%= lowercaseBaseName %>/**
               filters:
                 - StripPrefix=2
-      <%_ for (const ms of gatewayRoutes ?? []) { _%>
+      <%_ for (const ms of locals.gatewayRoutes ?? []) { _%>
             - id: <%= ms.route %>_route
               uri: lb://<%= ms.route %>
               predicates:

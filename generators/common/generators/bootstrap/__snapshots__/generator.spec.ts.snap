@@ -127,7 +127,6 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
   "entities": Any<Array>,
   "entitySuffix": "",
   "feignClient": undefined,
-  "gatewayRoutes": undefined,
   "gatewayServerPort": undefined,
   "generateAuthenticationApi": true,
   "generateBuiltInAuthorityEntity": true,

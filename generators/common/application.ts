@@ -29,7 +29,6 @@ export type CommonAddedApplicationProperties = {
 
   endpointPrefix?: string;
   authenticationUsesCsrf: boolean;
-  gatewayRoutes?: { route: string; host: string; serverPort: string }[];
 
   devServerPort?: number;
   serverPort?: number;
