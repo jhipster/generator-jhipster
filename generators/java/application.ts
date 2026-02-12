@@ -27,7 +27,7 @@ export type JavaAddedApplicationProperties = {
   useNpmWrapper: boolean;
 };
 
-export const mutateApplication = {
+export const mutateApplicationPreparing = {
   __override__: false,
 
   useNpmWrapper: false,

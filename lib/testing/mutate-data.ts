@@ -18,11 +18,23 @@
  */
 import { type MutateDataParam, mutateData } from '../utils/object.ts';
 
+export const prepareMutationTest = (data: any) => {
+  return Object.entries(data).reduce(
+    (acc, [name, value]) => {
+      const cleanupName = name.replace(/(Loading|Preparing)$/, '');
+      acc[cleanupName] ??= [];
+      acc[cleanupName].push(value);
+      return acc;
+    },
+    {} as Record<string, any[]>,
+  );
+};
+
 export const mutateMockedData = (...mutations: MutateDataParam<any>[]) => {
   const data = {};
   const proxy = new Proxy(data, {
-    get: (_target: any, p: string | symbol) => {
-      return _target[p] === undefined ? p : _target[p];
+    get: (target: any, p: string | symbol) => {
+      return target[p] === undefined ? p : target[p];
     },
     set: (target: any, p: string | symbol, value: any) => {
       target[p] = value;
@@ -35,12 +47,20 @@ export const mutateMockedData = (...mutations: MutateDataParam<any>[]) => {
 
 export const mutateMockedCompleteData = (...mutations: MutateDataParam<any>[]) => {
   const data = {};
+  const proxyGeneratedProperties = {} as Record<string | symbol, any>;
   const proxy = new Proxy(data, {
-    get: (_target: any, p: string | symbol) => {
-      return _target[p] === undefined ? p : _target[p];
+    get: (target: any, p: string | symbol) => {
+      if (!proxyGeneratedProperties[p]) {
+        const prop = new String(p);
+        (prop as any).push = () => {};
+        proxyGeneratedProperties[p] = prop;
+      }
+      return target[p] === undefined ? proxyGeneratedProperties[p] : target[p];
     },
     set: (target: any, p: string | symbol, value: any) => {
-      target[p] = value;
+      if (proxyGeneratedProperties[p] !== value) {
+        target[p] = value;
+      }
       return true;
     },
     has: (_target: any) => {

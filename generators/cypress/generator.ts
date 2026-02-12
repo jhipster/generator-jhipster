@@ -74,31 +74,18 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
     return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
+  get preparing() {
+    return this.asPreparingTaskGroup({
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
           this.fetchFromInstalledJHipster('client', 'resources', 'package.json'),
         );
       },
-
-      prepareForTemplates({ application }) {
-        const { cypressAudit = true, cypressCoverage = false } = this.jhipsterConfig as any;
-        application.cypressAudit = cypressAudit;
-        application.cypressCoverage = cypressCoverage;
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
-  }
-
-  get preparing() {
-    return this.asPreparingTaskGroup({
       prepareForTemplates({ applicationDefaults }) {
         applicationDefaults({
+          cypressAudit: true,
+          cypressCoverage: false,
           cypressDir: ({ clientTestDir }) => (clientTestDir ? `${clientTestDir}cypress/` : 'cypress/'),
           cypressTemporaryDir: ({ temporaryDir }) => (temporaryDir ? `${temporaryDir}cypress/` : '.cypress/'),
           cypressBootstrapEntities: true,

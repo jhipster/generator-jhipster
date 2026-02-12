@@ -74,8 +74,8 @@ export default class SpringCloudGenerator extends SpringCloudApplicationGenerato
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
+  get preparing() {
+    return this.asPreparingTaskGroup({
       async loadJavaDependencies({ application }) {
         const gradleLibsVersions = this.readTemplate(
           this.fetchFromInstalledJHipster('spring-cloud/resources/gradle/libs.versions.toml'),
@@ -92,8 +92,8 @@ export default class SpringCloudGenerator extends SpringCloudApplicationGenerato
     });
   }
 
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get postWriting() {

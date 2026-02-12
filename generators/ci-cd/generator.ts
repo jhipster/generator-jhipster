@@ -60,12 +60,26 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
-  // Public API method used by the getter and also by Blueprints
   get loading() {
     return this.asLoadingTaskGroup({
       loading({ applicationDefaults }) {
         applicationDefaults({
-          ciCdIntegrations: [] as any,
+          // TODO: fix type
+          // @ts-ignore
+          ciCdIntegrations: () => [],
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      preparing({ applicationDefaults }) {
+        applicationDefaults({
           gitLabIndent: ({ sendBuildToGitlab }) => (sendBuildToGitlab ? '    ' : ''),
           indent: ({ insideDocker, gitLabIndent }) => {
             let indent = insideDocker ? '    ' : '';
@@ -78,8 +92,8 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
     });
   }
 
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   // Public API method used by the getter and also by Blueprints

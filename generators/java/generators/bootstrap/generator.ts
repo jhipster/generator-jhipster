@@ -21,7 +21,7 @@ import { upperFirst } from 'lodash-es';
 import pluralize from 'pluralize';
 
 import { mutateData } from '../../../../lib/utils/index.ts';
-import { mutateApplication, mutateField, mutateRelationship } from '../../application.ts';
+import { mutateApplicationPreparing, mutateField, mutateRelationship } from '../../application.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
 import { prepareEntity } from '../../support/index.ts';
 
@@ -40,9 +40,9 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
     }
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
-      loading({ application, applicationDefaults }) {
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      preparing({ application, applicationDefaults }) {
         applicationDefaults(
           {
             __override__: false,
@@ -52,7 +52,7 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
             __override__: true,
             nodePackageManagerCommand: data => (data.useNpmWrapper ? './npmw' : data.nodePackageManagerCommand),
           },
-          mutateApplication,
+          mutateApplicationPreparing,
         );
         if (application.prettierFolders && !application.prettierFolders.includes('src/**/')) {
           application.prettierFolders.push('src/**/');
@@ -61,8 +61,8 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
     });
   }
 
-  get [JavaApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
+  get [JavaApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get preparingEachEntity() {

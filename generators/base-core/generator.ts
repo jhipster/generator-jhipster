@@ -44,7 +44,7 @@ import type {
 } from '../../lib/command/index.ts';
 import { convertConfigToOption, extractArgumentsFromConfigs } from '../../lib/command/index.ts';
 import { packageJson } from '../../lib/index.ts';
-import { CRLF, LF, type Logger, hasCrlf, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.ts';
+import { CRLF, LF, type Logger, hasCrlf, mutateData, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.ts';
 import baseCommand from '../base/command.ts';
 import { dockerPlaceholderGenerator } from '../docker/utils.ts';
 import { GENERATOR_JHIPSTER } from '../generator-constants.ts';
@@ -1280,7 +1280,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   loadNodeDependencies(destination: Record<string, string>, source: Record<string, string>): void {
-    Object.assign(destination, this.prepareDependencies(source));
+    mutateData(destination, this.prepareDependencies(source));
   }
 
   /**

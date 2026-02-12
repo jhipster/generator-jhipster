@@ -19,17 +19,19 @@
 
 import { describe, expect, it } from 'esmocha';
 
-import { mutateMockedCompleteData, mutateMockedData } from '../../lib/testing/index.ts';
+import { mutateMockedCompleteData, mutateMockedData, prepareMutationTest } from '../../lib/testing/index.ts';
 
 import * as entityData from './application.ts';
 
 describe('application mutation test', () => {
-  for (const [name, data] of Object.entries(entityData)) {
+  for (const [name, data] of Object.entries(prepareMutationTest(entityData))) {
     it(`expects ${name} to match snapshot`, () => {
-      expect(mutateMockedData(data)).toMatchSnapshot({ supportedLanguages: expect.any(Array) });
+      expect(mutateMockedData({ languages: [], supportedLanguages: [] }, ...data)).toMatchSnapshot({
+        supportedLanguages: expect.any(Array),
+      });
     });
     it(`expects ${name} to don't override existing properties`, () => {
-      expect(Object.keys(mutateMockedCompleteData(data))).toHaveLength(0);
+      expect(Object.keys(mutateMockedCompleteData(...data))).toHaveLength(0);
     });
   }
 });

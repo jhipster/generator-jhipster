@@ -5,10 +5,36 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "addLanguageCallbacks": [],
   "enableI18nRTL": false,
   "enableTranslation": false,
-  "languages": [],
-  "languagesDefinition": [],
-  "languagesToGenerate": undefined,
-  "languagesToGenerateDefinition": undefined,
+  "languages": [
+    "en",
+  ],
+  "languagesDefinition": [
+    {
+      "angularLocale": "en",
+      "dayjsLocale": "en",
+      "displayName": "English",
+      "fakerjsLocale": "en",
+      "javaLocaleMessageSourceSuffix": "en",
+      "languageTag": "en",
+      "name": "English",
+      "rtl": false,
+    },
+  ],
+  "languagesToGenerate": [
+    "en",
+  ],
+  "languagesToGenerateDefinition": [
+    {
+      "angularLocale": "en",
+      "dayjsLocale": "en",
+      "displayName": "English",
+      "fakerjsLocale": "en",
+      "javaLocaleMessageSourceSuffix": "en",
+      "languageTag": "en",
+      "name": "English",
+      "rtl": false,
+    },
+  ],
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {
     "angularLocale": "en",

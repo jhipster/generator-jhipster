@@ -18,6 +18,7 @@
  */
 import { parse as parseYaml } from 'yaml';
 
+import { mutateData } from '../../../../lib/utils/object.ts';
 import BaseSimpleApplicationGenerator from '../../../base-simple-application/index.ts';
 import type { Application as CiCdApplication } from '../../types.ts';
 
@@ -34,18 +35,35 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<C
 
   get loading() {
     return this.asLoadingTaskGroup({
-      loadDependabotVersions({ application }) {
-        const dependabotConfig = parseYaml(this.readJHipsterResource('dependabot/action.yml')!);
-        application.githubActions = Object.fromEntries(
-          dependabotConfig.runs.steps
-            .map(({ uses }: { uses: string }) => uses.split('@'))
-            .map(([name, version]: [string, string]) => [name, `${name}@${this.useVersionPlaceholders ? 'VERSION' : version}`]),
-        ) as typeof application.githubActions;
+      loadDependabotVersions({ applicationDefaults }) {
+        applicationDefaults({
+          githubActions: () => ({}),
+        });
       },
     });
   }
 
   get [BaseSimpleApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      async preparing({ application }) {
+        const dependabotConfig = parseYaml(this.readJHipsterResource('dependabot/action.yml')!);
+        mutateData(
+          application.githubActions,
+          Object.fromEntries(
+            dependabotConfig.runs.steps
+              .map(({ uses }: { uses: string }) => uses.split('@'))
+              .map(([name, version]: [string, string]) => [name, `${name}@${this.useVersionPlaceholders ? 'VERSION' : version}`]),
+          ),
+        );
+      },
+    });
+  }
+
+  get [BaseSimpleApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 }

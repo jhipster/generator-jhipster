@@ -54,22 +54,15 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
-      loading({ application }) {
-        application.graalvmReachabilityMetadata = this.useVersionPlaceholders
-          ? 'GRAALVM_REACHABILITY_METADATA_VERSION'
-          : GRAALVM_REACHABILITY_METADATA;
-      },
-    });
-  }
-
-  get [JavaApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
-  }
-
   get preparing() {
     return this.asPreparingTaskGroup({
+      loading({ applicationDefaults }) {
+        applicationDefaults({
+          graalvmReachabilityMetadata: this.useVersionPlaceholders
+            ? 'GRAALVM_REACHABILITY_METADATA_VERSION'
+            : GRAALVM_REACHABILITY_METADATA,
+        });
+      },
       load({ application }) {
         this.loadJavaDependenciesFromGradleCatalog(application.javaDependencies!);
       },

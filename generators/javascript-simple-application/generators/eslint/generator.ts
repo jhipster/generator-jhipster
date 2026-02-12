@@ -30,8 +30,8 @@ export default class EslintGenerator extends JavascriptSimpleApplicationGenerato
     }
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
+  get preparing() {
+    return this.asPreparingTaskGroup({
       loadNodeDependencies({ application }) {
         this.loadNodeDependencies(application.nodeDependencies, {
           jiti: application.jhipsterPackageJson.devDependencies.jiti,
@@ -42,15 +42,6 @@ export default class EslintGenerator extends JavascriptSimpleApplicationGenerato
           this.fetchFromInstalledJHipster('javascript-simple-application', 'resources', 'package.json'),
         );
       },
-    });
-  }
-
-  get [JavascriptSimpleApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
-  }
-
-  get preparing() {
-    return this.asPreparingTaskGroup({
       source({ source }) {
         source.addEslintConfig = ({ import: importToAdd, config }) =>
           this.editFile(

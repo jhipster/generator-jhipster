@@ -70,11 +70,8 @@ export default class extends BaseSimpleApplicationGenerator<
       await this.composeWithBlueprints();
     }
 
+    await this.dependsOnBootstrap('javascript-simple-application');
     await this.dependsOnBootstrap('ci-cd');
-
-    if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrap('javascript-simple-application');
-    }
   }
 
   get initializing() {
@@ -169,8 +166,8 @@ export default class extends BaseSimpleApplicationGenerator<
 
   get loading() {
     return this.asLoadingTaskGroup({
-      async loadDefaults({ applicationDefaults }) {
-        applicationDefaults(this.config.getAll(), defaultConfig(), { commands: [] });
+      async loading({ applicationDefaults }) {
+        applicationDefaults({ commands: () => [] });
       },
     });
   }
@@ -181,6 +178,9 @@ export default class extends BaseSimpleApplicationGenerator<
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      async preparing({ applicationDefaults }) {
+        applicationDefaults(defaultConfig());
+      },
       prepareCommands({ application }) {
         if (!application.generators) return;
         for (const generator of Object.keys(application.generators)) {

@@ -26,15 +26,15 @@ export default class BootstrapGenerator extends BaseApplicationGenerator {
     }
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
-      loading({ applicationDefaults }) {
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      preparing({ applicationDefaults }) {
         applicationDefaults(mutateApplication);
       },
     });
   }
 
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 }

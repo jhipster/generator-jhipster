@@ -89,6 +89,15 @@ export type MutateDataPropertiesWithRequiredProperties<D extends Record<string, 
   RequiredKeysOf<N>
 >;
 
+const OverrideMutation = Symbol('OverrideMutation');
+
+type MutateDataFunction = ((ctx: any) => any) & { [OverrideMutation]?: boolean };
+
+export const overrideMutateDataProperty = <const T extends MutateDataFunction>(fn: T): T => {
+  fn[OverrideMutation] = true;
+  return fn;
+};
+
 /**
  * Mutation properties accepts:
  * - functions: receives the data and the return value is set at the data property.
@@ -113,7 +122,7 @@ export const mutateData = <const T extends Record<string | number, any>>(context
     const override = mutation.__override__;
     for (const [key, value] of Object.entries(mutation).filter(([key]) => key !== '__override__')) {
       if (typeof value === 'function') {
-        if (override !== false || !(key in context) || context[key] === undefined) {
+        if (override !== false || !(key in context) || context[key] === undefined || value[OverrideMutation] === true) {
           (context as any)[key] = value(context);
         }
       } else if (!(key in context) || context[key] === undefined || override === true) {

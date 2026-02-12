@@ -109,12 +109,6 @@ export default class AngularGenerator extends AngularApplicationGenerator {
 
   get loading() {
     return this.asLoadingTaskGroup({
-      loadPackageJson({ application }) {
-        this.loadNodeDependenciesFromPackageJson(
-          application.nodeDependencies,
-          this.fetchFromInstalledJHipster('angular', 'resources', 'package.json'),
-        );
-      },
       applicationDefaults({ applicationDefaults }) {
         applicationDefaults({
           __override__: true,
@@ -130,6 +124,12 @@ export default class AngularGenerator extends AngularApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      loadPackageJson({ application }) {
+        this.loadNodeDependenciesFromPackageJson(
+          application.nodeDependencies,
+          this.fetchFromInstalledJHipster('angular', 'resources', 'package.json'),
+        );
+      },
       applicationDefaults({ application, applicationDefaults }) {
         applicationDefaults({
           __override__: true,

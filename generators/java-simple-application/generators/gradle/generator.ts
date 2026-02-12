@@ -80,8 +80,8 @@ export default class GradleGenerator extends BaseSimpleApplicationGenerator<Grad
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
+  get preparing() {
+    return this.asPreparingTaskGroup({
       loadGradleVersion({ application }) {
         const propFile = this.readTemplate(this.jhipsterTemplatePath('gradle/wrapper/gradle-wrapper.properties'));
         this.gradleVersionFromWrapper = propFile?.toString().match(/gradle-(\d+\.\d+(?:\.\d+)?)-/)?.[1];
@@ -92,15 +92,6 @@ export default class GradleGenerator extends BaseSimpleApplicationGenerator<Grad
           gradleVersion: this.useVersionPlaceholders ? 'GRADLE_VERSION' : this.gradleVersionFromWrapper,
         });
       },
-    });
-  }
-
-  get [BaseSimpleApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
-  }
-
-  get preparing() {
-    return this.asPreparingTaskGroup({
       async verify({ application }) {
         assert.equal(application.buildTool, GRADLE);
       },

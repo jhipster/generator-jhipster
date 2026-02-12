@@ -193,7 +193,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
   }
 
   get loading() {
-    return this.asPreparingTaskGroup({
+    return this.asLoadingTaskGroup({
       prepareForTemplates({ application }) {
         if (application.enableTranslation) {
           if (!this.languageCommand || this.regenerateLanguages) {
@@ -202,7 +202,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
             this.languagesToApply = [...new Set(this.languagesToApply || [])];
           }
         }
-        application.languagesToGenerate = this.languagesToApply;
+        application.languagesToGenerate?.push(...this.languagesToApply);
       },
     });
   }

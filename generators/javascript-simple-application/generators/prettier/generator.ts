@@ -37,8 +37,8 @@ export default class PrettierGenerator extends JavascriptSimpleApplicationGenera
     }
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
+  get preparing() {
+    return this.asPreparingTaskGroup({
       loadNodeDependencies({ application }) {
         this.loadNodeDependencies(application.nodeDependencies, {
           prettier: packageJson.dependencies.prettier,
@@ -46,15 +46,6 @@ export default class PrettierGenerator extends JavascriptSimpleApplicationGenera
           'prettier-plugin-packagejson': packageJson.dependencies['prettier-plugin-packagejson'],
         });
       },
-    });
-  }
-
-  get [JavascriptSimpleApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
-  }
-
-  get preparing() {
-    return this.asPreparingTaskGroup({
       source({ source }) {
         source.mergePrettierConfig = config => this.mergeDestinationYaml(this.prettierConfigFile, config);
         // `.prettierignore` file is only supported in the root of a project refer to https://github.com/prettier/prettier/issues/4081.

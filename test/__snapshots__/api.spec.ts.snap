@@ -69,6 +69,7 @@ exports[`public api generator-jhipster/testing should match snapshot 1`] = `
   "matchWrittenFiles",
   "mutateMockedCompleteData",
   "mutateMockedData",
+  "prepareMutationTest",
   "resetDefaults",
   "result",
   "resultWithGenerator",

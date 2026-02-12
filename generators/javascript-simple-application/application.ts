@@ -21,15 +21,8 @@ import { CLIENT_MAIN_SRC_DIR, RECOMMENDED_NODE_VERSION } from '../generator-cons
 
 import type { Application as JavascriptSimpleApplicationApplication } from './types.ts';
 
-export type JavascriptSimpleApplicationAddedApplicationProperties = {
-  skipJhipsterDependencies?: boolean;
-
-  nodeVersion: string;
-  nodePackageManager: string;
-  nodePackageManagerCommand: string;
+export type JavascriptSimpleApplicationLoadingAddedApplicationProperties = {
   nodeDependencies: Record<string, string>;
-
-  packageJsonNodeEngine?: boolean | string;
   /** Root package.json scripts */
   packageJsonScripts: Record<string, string>;
   /** Root package.json scripts */
@@ -37,21 +30,28 @@ export type JavascriptSimpleApplicationAddedApplicationProperties = {
 
   prettierFolders: string[];
   prettierExtensions: string[];
+};
+
+export type JavascriptSimpleApplicationPreparingAddedApplicationProperties = {
+  skipJhipsterDependencies?: boolean;
+
+  nodeVersion: string;
+  nodePackageManager: string;
+  nodePackageManagerCommand: string;
+
+  packageJsonNodeEngine?: boolean | string;
 
   clientRootDir: string;
   clientSrcDir: string;
 };
 
-export const mutateApplication = {
+export type JavascriptSimpleApplicationAddedApplicationProperties = JavascriptSimpleApplicationLoadingAddedApplicationProperties &
+  JavascriptSimpleApplicationPreparingAddedApplicationProperties;
+
+export const mutateApplicationLoading = {
   __override__: false,
 
-  nodeVersion: RECOMMENDED_NODE_VERSION,
-  nodePackageManager: 'npm',
-  nodePackageManagerCommand: ({ nodePackageManager }) => nodePackageManager,
   nodeDependencies: () => ({}),
-
-  clientRootDir: '',
-  clientSrcDir: ({ clientRootDir }) => `${clientRootDir}${clientRootDir ? 'src/' : CLIENT_MAIN_SRC_DIR}`,
 
   packageJsonScripts: () => ({}),
   clientPackageJsonScripts: () => ({}),
@@ -60,5 +60,19 @@ export const mutateApplication = {
   prettierExtensions: () => 'md,json,yml,js,cjs,mjs,ts,cts,mts'.split(','),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<
   MutateDataParam<JavascriptSimpleApplicationApplication>,
-  JavascriptSimpleApplicationAddedApplicationProperties
+  JavascriptSimpleApplicationLoadingAddedApplicationProperties
+>;
+
+export const mutateApplicationPreparing = {
+  __override__: false,
+
+  nodeVersion: RECOMMENDED_NODE_VERSION,
+  nodePackageManager: 'npm',
+  nodePackageManagerCommand: ({ nodePackageManager }) => nodePackageManager,
+
+  clientRootDir: '',
+  clientSrcDir: ({ clientRootDir }) => `${clientRootDir}${clientRootDir ? 'src/' : CLIENT_MAIN_SRC_DIR}`,
+} as const satisfies MutateDataPropertiesWithRequiredProperties<
+  MutateDataParam<JavascriptSimpleApplicationApplication>,
+  JavascriptSimpleApplicationPreparingAddedApplicationProperties
 >;

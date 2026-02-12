@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 import { removeFieldsWithNullishValues } from '../../../../lib/utils/object.ts';
-import { mutateApplication } from '../../application.ts';
+import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
 import BaseSimpleApplicationGenerator from '../../index.ts';
 
 export default class BaseSimpleApplicationBootstrapGenerator extends BaseSimpleApplicationGenerator {
@@ -42,33 +42,39 @@ export default class BaseSimpleApplicationBootstrapGenerator extends BaseSimpleA
     return this.configuring;
   }
 
-  get bootstrapApplication() {
-    return this.asBootstrapApplicationTaskGroup({
-      loadConfig({ applicationDefaults }) {
-        applicationDefaults(removeFieldsWithNullishValues(this.config.getAll()));
-      },
-    });
-  }
-
-  get [BaseSimpleApplicationGenerator.BOOTSTRAP_APPLICATION]() {
-    return this.bootstrapApplication;
-  }
-
   get loading() {
     return this.asLoadingTaskGroup({
-      loading({ applicationDefaults }) {
-        if (this.useVersionPlaceholders) {
-          applicationDefaults({
-            jhipsterVersion: 'JHIPSTER_VERSION',
-          });
-        }
-
-        applicationDefaults(mutateApplication);
+      loadConfig({ applicationDefaults }) {
+        applicationDefaults(
+          removeFieldsWithNullishValues(this.config.getAll()),
+          {
+            commandName: this.options.commandName,
+          },
+          mutateApplicationLoading,
+        );
       },
     });
   }
 
   get [BaseSimpleApplicationGenerator.LOADING]() {
     return this.loading;
+  }
+
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      preparing({ applicationDefaults }) {
+        if (this.useVersionPlaceholders) {
+          applicationDefaults({
+            jhipsterVersion: 'JHIPSTER_VERSION',
+          });
+        }
+
+        applicationDefaults(mutateApplicationPreparing);
+      },
+    });
+  }
+
+  get [BaseSimpleApplicationGenerator.PREPARING]() {
+    return this.preparing;
   }
 }
