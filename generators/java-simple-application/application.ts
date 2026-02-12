@@ -132,9 +132,6 @@ export const mutateApplicationPreparing = {
   javaPackageSrcDir: ({ srcMainJava, packageFolder }) => normalizePathEnd(`${srcMainJava}${packageFolder}`),
   javaPackageTestDir: ({ srcTestJava, packageFolder }) => normalizePathEnd(`${srcTestJava}${packageFolder}`),
 
-  javaDependencies: () => ({}),
-  javaProperties: () => ({}),
-  javaManagedProperties: () => ({}),
   packageInfoJavadocs: overrideMutateDataProperty(({ packageInfoJavadocs, packageName }: Application) => {
     packageInfoJavadocs.push(
       { packageName: `${packageName}.aop.logging`, documentation: 'Logging aspect.' },
