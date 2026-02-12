@@ -22,13 +22,15 @@ import {
   overrideMutateDataProperty,
 } from '../../lib/utils/object.ts';
 
-import { type Language, findLanguageForTag, supportedLanguages as defaultSupportedLanguages } from './support/languages.ts';
+import { type Language, findLanguageForTag } from './support/languages.ts';
 import type { Application } from './types.ts';
 
 export type LanguagesLoadingAddedApplicationProperties = {
   supportedLanguages: Language[];
   languages: string[];
+  languagesDefinition: Language[];
   languagesToGenerate: string[];
+  languagesToGenerateDefinition: Language[];
   addLanguageCallbacks: ((newLanguages: readonly Language[], allLanguages: readonly Language[]) => void)[];
 };
 
@@ -37,8 +39,6 @@ export type LanguagesPreparingAddedApplicationProperties = {
   enableI18nRTL: boolean;
   nativeLanguage: string;
   nativeLanguageDefinition: Language;
-  languagesDefinition: readonly Language[];
-  languagesToGenerateDefinition: readonly Language[] | undefined;
 };
 
 export type LanguagesAddedApplicationProperties = LanguagesLoadingAddedApplicationProperties & LanguagesPreparingAddedApplicationProperties;
@@ -46,20 +46,12 @@ export type LanguagesAddedApplicationProperties = LanguagesLoadingAddedApplicati
 export const mutateApplicationLoading = {
   __override__: false,
 
-  supportedLanguages: overrideMutateDataProperty(({ supportedLanguages }: LanguagesAddedApplicationProperties) => {
-    supportedLanguages ??= [];
-    supportedLanguages.push(...defaultSupportedLanguages);
-    return supportedLanguages;
-  }),
-  languages: overrideMutateDataProperty(({ languages }: LanguagesAddedApplicationProperties) => {
-    languages ??= [];
-    if (languages.length === 0) {
-      languages.push('en');
-    }
-    return languages;
-  }),
+  supportedLanguages: () => [],
+  languages: () => [],
+  languagesDefinition: () => [],
   addLanguageCallbacks: () => [],
   languagesToGenerate: () => [],
+  languagesToGenerateDefinition: () => [],
 } as const satisfies MutateDataPropertiesWithRequiredProperties<
   MutateDataParam<LanguagesAddedApplicationProperties>,
   LanguagesLoadingAddedApplicationProperties
@@ -69,8 +61,34 @@ export const mutateApplicationPreparing = {
   __override__: false,
   enableTranslation: false,
   nativeLanguage: 'en',
-  nativeLanguageDefinition: ({ nativeLanguage, supportedLanguages }) => findLanguageForTag(nativeLanguage, supportedLanguages)!,
-  languagesDefinition: data => data.languages.map(lang => findLanguageForTag(lang, data.supportedLanguages)!).filter(lang => lang),
+  languages: overrideMutateDataProperty(({ languages, nativeLanguage }: LanguagesAddedApplicationProperties) => {
+    if (languages.length === 0) {
+      languages.push(nativeLanguage);
+    }
+    return languages;
+  }),
+  nativeLanguageDefinition: ({ nativeLanguage, supportedLanguages }: LanguagesAddedApplicationProperties) => {
+    const nativeLanguageDefinition = findLanguageForTag(nativeLanguage, supportedLanguages);
+    if (!nativeLanguageDefinition) {
+      throw new Error(`Unsupported native language: ${nativeLanguage}`);
+    }
+    return nativeLanguageDefinition;
+  },
+  languagesDefinition: overrideMutateDataProperty(
+    ({ languages, languagesDefinition, supportedLanguages }: LanguagesAddedApplicationProperties) => {
+      languages.forEach(lang => {
+        if (languagesDefinition.some(def => def.languageTag === lang)) {
+          return;
+        }
+        const languageDefinition = findLanguageForTag(lang, supportedLanguages);
+        if (!languageDefinition) {
+          throw new Error(`Unsupported language: ${lang}`);
+        }
+        languagesDefinition.push(languageDefinition);
+      });
+      return languagesDefinition;
+    },
+  ),
   languagesToGenerate: overrideMutateDataProperty(({ commandName, languagesToGenerate, nativeLanguage }: Application) => {
     if (languagesToGenerate.length === 0 && commandName !== 'languages') {
       if (!nativeLanguage) {
@@ -80,6 +98,21 @@ export const mutateApplicationPreparing = {
     }
     return languagesToGenerate;
   }),
-  languagesToGenerateDefinition: data => data.languagesToGenerate?.map?.(lang => findLanguageForTag(lang, data.supportedLanguages)!),
-  enableI18nRTL: data => data.nativeLanguageDefinition.rtl || data.languagesDefinition?.some(lang => lang.rtl),
+  languagesToGenerateDefinition: overrideMutateDataProperty(
+    ({ languagesToGenerate, languagesToGenerateDefinition, supportedLanguages }: LanguagesAddedApplicationProperties) => {
+      languagesToGenerate.forEach(lang => {
+        if (languagesToGenerateDefinition.some(def => def.languageTag === lang)) {
+          return;
+        }
+        const languageDefinition = findLanguageForTag(lang, supportedLanguages);
+        if (!languageDefinition) {
+          throw new Error(`Unsupported language to generate: ${lang}`);
+        }
+        languagesToGenerateDefinition.push(languageDefinition);
+      });
+      return languagesToGenerateDefinition;
+    },
+  ),
+  enableI18nRTL: ({ nativeLanguageDefinition, languagesDefinition }: LanguagesAddedApplicationProperties) =>
+    nativeLanguageDefinition.rtl || languagesDefinition.some(lang => lang.rtl),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Application>, LanguagesPreparingAddedApplicationProperties>;

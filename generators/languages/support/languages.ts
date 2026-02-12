@@ -267,14 +267,16 @@ const partialLanguages: PartialLanguage[] = [
   },
 ];
 
-export const supportedLanguages: readonly Language[] = partialLanguages.map(language => ({
-  rtl: false,
-  javaLocaleMessageSourceSuffix: languageToJavaLanguage(language.languageTag),
-  angularLocale: languageToAngularLanguage(language.languageTag),
-  dayjsLocale: languageToDayjsLanguage(language.languageTag),
-  fakerjsLocale: languageToFakerjsLanguage(language.languageTag),
-  ...language,
-}));
+export const supportedLanguages: readonly Language[] = partialLanguages.map(language =>
+  Object.freeze({
+    rtl: false,
+    javaLocaleMessageSourceSuffix: languageToJavaLanguage(language.languageTag),
+    angularLocale: languageToAngularLanguage(language.languageTag),
+    dayjsLocale: languageToDayjsLanguage(language.languageTag),
+    fakerjsLocale: languageToFakerjsLanguage(language.languageTag),
+    ...language,
+  }),
+);
 
 export const findLanguageForTag = (languageTag: string, languages: readonly Language[] = supportedLanguages): Language | undefined =>
   languages.find(lang => lang.languageTag === languageTag);
