@@ -50,7 +50,7 @@ export const mutateMockedCompleteData = (...mutations: MutateDataParam<any>[]) =
   const proxyGeneratedProperties = {} as Record<string | symbol, any>;
   if (mutations.length > 1) {
     // Treat the first mutation as the one that should bootstrap the data with arrays and objects.
-    mutateData(proxyGeneratedProperties, mutations.shift()!);
+    mutateData(proxyGeneratedProperties, mutations[0]);
   }
   const proxy = new Proxy(data, {
     get: (target: any, p: string | symbol) => {
