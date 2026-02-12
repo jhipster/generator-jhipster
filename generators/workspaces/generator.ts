@@ -121,8 +121,8 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
+  get configuringWorkspaces() {
+    return this.asConfiguringWorkspacesTaskGroup({
       checkWorkspaces() {
         if (this.generateWorkspaces && !(this.jhipsterConfig as GitConfig).monorepository) {
           throw new Error('Workspaces option is only supported with monorepositories.');
@@ -131,8 +131,8 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
     });
   }
 
-  get [BaseWorkspacesGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
+  get [BaseWorkspacesGenerator.CONFIGURING_WORKSPACES]() {
+    return this.delegateTasksToBlueprint(() => this.configuringWorkspaces);
   }
 
   get preparing() {

@@ -8,6 +8,7 @@ exports[`generator - javascript-simple-application:bootstrap bootstrapping defau
   "clientPackageJsonScripts": Any<Object>,
   "clientRootDir": "",
   "clientSrcDir": "src/main/webapp/",
+  "commandName": undefined,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,
   "dasherizedBaseName": "jhipster",
@@ -44,7 +45,6 @@ exports[`generator - javascript-simple-application:bootstrap bootstrapping defau
   "projectDescription": "Description for JHipster",
   "skipJhipsterDependencies": undefined,
   "upperFirstCamelCaseBaseName": "Jhipster",
-  "user": undefined,
 }
 `;
 

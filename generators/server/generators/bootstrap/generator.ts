@@ -73,14 +73,8 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
-      cancel({ application }) {
-        if (application.skipServer) {
-          // TODO fix preparation for skipServer
-          // this.cancelCancellableTasks();
-        }
-      },
+  get preparing() {
+    return this.asPreparingTaskGroup({
       properties({ application }) {
         mutateData(application as unknown as SpringDataRelationalApplication, {
           devDatabaseTypeH2Any: ({ devDatabaseType }) => devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory',
@@ -95,15 +89,6 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
       async loadDockerDependencies({ application }) {
         loadDockerDependenciesTask.call(this, { context: application });
       },
-    });
-  }
-
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.loading;
-  }
-
-  get preparing() {
-    return this.asPreparingTaskGroup({
       checkSuffix({ application }) {
         if (application.entitySuffix === application.dtoSuffix) {
           throw new Error('Entities cannot be generated as the entity suffix and DTO suffix are equals!');

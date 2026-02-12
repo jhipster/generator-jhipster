@@ -18,7 +18,7 @@
  */
 import { mutateData } from '../../../../lib/utils/object.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
-import { mutateApplication as languagesMutateApplication } from '../../application.ts';
+import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
 import { mutateEntity as languagesMutateEntity } from '../../entity.ts';
 import { CONTEXT_DATA_SUPPORTED_LANGUAGES } from '../../support/constants.ts';
 import { type Language, supportedLanguages } from '../../support/languages.ts';
@@ -52,10 +52,22 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
     return this.getContextData<Map<string, Language>>(CONTEXT_DATA_SUPPORTED_LANGUAGES, { factory: () => new Map() });
   }
 
+  get loading() {
+    return this.asLoadingTaskGroup({
+      preparing({ applicationDefaults }) {
+        applicationDefaults({ supportedLanguages: [...this.supportedLanguages.values()] }, mutateApplicationLoading);
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
   get preparing() {
     return this.asPreparingTaskGroup({
       preparing({ applicationDefaults }) {
-        applicationDefaults({ supportedLanguages: [...this.supportedLanguages.values()] }, languagesMutateApplication);
+        applicationDefaults(mutateApplicationPreparing);
       },
     });
   }

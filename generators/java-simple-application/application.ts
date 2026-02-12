@@ -16,7 +16,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
+import {
+  type MutateDataParam,
+  type MutateDataPropertiesWithRequiredProperties,
+  overrideMutateDataProperty,
+} from '../../lib/utils/object.ts';
 import { normalizePathEnd } from '../../lib/utils/path.ts';
 import {
   CLIENT_MAIN_SRC_DIR,
@@ -34,13 +38,28 @@ import { getMainClassName } from '../java/support/util.ts';
 import { GRAALVM_REACHABILITY_METADATA } from './generators/graalvm/internal/constants.ts';
 import type { Application } from './types.ts';
 
-export type JavaSimpleApplicationAddedApplicationProperties = {
-  javaVersion: string;
+export type JavaSimpleApplicationLoadingAddedApplicationProperties = {
   javaCompatibleVersions: string[];
+  entityPackages: string[];
+
+  /** Java dependency versions */
+  javaDependencies: Record<string, string>;
+  /** Known properties that can be used */
+  javaProperties: Record<string, string | null>;
+  /** Known managed properties that can be used */
+  javaManagedProperties: Record<string, string | null>;
+  /** Pre-defined package JavaDocs */
+  packageInfoJavadocs: { packageName: string; documentation: string }[];
+
+  domains: string[];
+  javaIntegrationTestExclude: string[];
+};
+
+export type JavaSimpleApplicationPreparingAddedApplicationProperties = {
+  javaVersion: string;
   mainClass: string;
 
   packageFolder: string;
-  entityPackages: string[];
 
   srcMainJava: string;
   srcMainResources: string;
@@ -53,15 +72,6 @@ export type JavaSimpleApplicationAddedApplicationProperties = {
   javaPackageTestDir: string;
 
   temporaryDir?: string;
-
-  /** Java dependency versions */
-  javaDependencies: Record<string, string>;
-  /** Known properties that can be used */
-  javaProperties: Record<string, string | null>;
-  /** Known managed properties that can be used */
-  javaManagedProperties: Record<string, string | null>;
-  /** Pre-defined package JavaDocs */
-  packageInfoJavadocs: { packageName: string; documentation: string }[];
 
   reactive: boolean;
   buildToolUnknown?: boolean;
@@ -81,22 +91,36 @@ export type JavaSimpleApplicationAddedApplicationProperties = {
   reactorBlock: string;
   reactorBlockOptional: string;
 
-  domains: string[];
   jhipsterDependenciesVersion?: string;
-
-  javaIntegrationTestExclude: string[];
 };
 
-export const mutateApplication = {
+export type JavaSimpleApplicationAddedApplicationProperties = JavaSimpleApplicationLoadingAddedApplicationProperties &
+  JavaSimpleApplicationPreparingAddedApplicationProperties;
+
+export const mutateApplicationLoading = {
+  __override__: false,
+
+  javaCompatibleVersions: () => [...JAVA_COMPATIBLE_VERSIONS],
+  entityPackages: () => [],
+  javaDependencies: () => ({}),
+  javaProperties: () => ({}),
+  javaManagedProperties: () => ({}),
+  packageInfoJavadocs: () => [],
+  javaIntegrationTestExclude: () => [],
+  domains: () => [],
+} as const satisfies MutateDataPropertiesWithRequiredProperties<
+  MutateDataParam<Application>,
+  JavaSimpleApplicationLoadingAddedApplicationProperties
+>;
+
+export const mutateApplicationPreparing = {
   __override__: false,
 
   javaVersion: RECOMMENDED_JAVA_VERSION,
-  javaCompatibleVersions: () => [...JAVA_COMPATIBLE_VERSIONS],
   mainClass: ({ baseName }) => getMainClassName({ baseName }),
 
   packageName: 'com.mycompany.myapp',
   packageFolder: ({ packageName }) => `${packageName!.replace(/\./g, '/')}/`,
-  entityPackages: () => [],
 
   srcMainJava: SERVER_MAIN_SRC_DIR,
   srcMainResources: SERVER_MAIN_RES_DIR,
@@ -108,20 +132,20 @@ export const mutateApplication = {
   javaPackageSrcDir: ({ srcMainJava, packageFolder }) => normalizePathEnd(`${srcMainJava}${packageFolder}`),
   javaPackageTestDir: ({ srcTestJava, packageFolder }) => normalizePathEnd(`${srcTestJava}${packageFolder}`),
 
-  javaDependencies: () => ({}),
-  javaProperties: () => ({}),
-  javaManagedProperties: () => ({}),
-  packageInfoJavadocs: ({ packageName }) => [
-    { packageName: `${packageName}.aop.logging`, documentation: 'Logging aspect.' },
-    { packageName: `${packageName}.management`, documentation: 'Application management.' },
-    { packageName: `${packageName}.repository.rowmapper`, documentation: 'Webflux database column mapper.' },
-    { packageName: `${packageName}.security`, documentation: 'Application security utilities.' },
-    { packageName: `${packageName}.service.dto`, documentation: 'Data transfer objects for rest mapping.' },
-    { packageName: `${packageName}.service.mapper`, documentation: 'Data transfer objects mappers.' },
-    { packageName: `${packageName}.web.filter`, documentation: 'Request chain filters.' },
-    { packageName: `${packageName}.web.rest.errors`, documentation: 'Rest layer error handling.' },
-    { packageName: `${packageName}.web.rest.vm`, documentation: 'Rest layer visual models.' },
-  ],
+  packageInfoJavadocs: overrideMutateDataProperty(({ packageInfoJavadocs, packageName }: Application) => {
+    packageInfoJavadocs.push(
+      { packageName: `${packageName}.aop.logging`, documentation: 'Logging aspect.' },
+      { packageName: `${packageName}.management`, documentation: 'Application management.' },
+      { packageName: `${packageName}.repository.rowmapper`, documentation: 'Webflux database column mapper.' },
+      { packageName: `${packageName}.security`, documentation: 'Application security utilities.' },
+      { packageName: `${packageName}.service.dto`, documentation: 'Data transfer objects for rest mapping.' },
+      { packageName: `${packageName}.service.mapper`, documentation: 'Data transfer objects mappers.' },
+      { packageName: `${packageName}.web.filter`, documentation: 'Request chain filters.' },
+      { packageName: `${packageName}.web.rest.errors`, documentation: 'Rest layer error handling.' },
+      { packageName: `${packageName}.web.rest.vm`, documentation: 'Rest layer visual models.' },
+    );
+    return packageInfoJavadocs;
+  }),
 
   reactive: false,
 
@@ -141,13 +165,11 @@ export const mutateApplication = {
   reactorBlock: ({ reactive }) => (reactive ? '.block()' : ''),
   reactorBlockOptional: ({ reactive }) => (reactive ? '.blockOptional()' : ''),
 
-  domains: () => [],
   jhipsterDependenciesVersion: JHIPSTER_DEPENDENCIES_VERSION,
 
-  javaIntegrationTestExclude: () => [],
   withGeneratedFlag: false,
   graalvmReachabilityMetadata: GRAALVM_REACHABILITY_METADATA,
 } as const satisfies MutateDataPropertiesWithRequiredProperties<
   MutateDataParam<Application>,
-  JavaSimpleApplicationAddedApplicationProperties
+  JavaSimpleApplicationPreparingAddedApplicationProperties
 >;

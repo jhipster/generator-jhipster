@@ -248,22 +248,13 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
     return this.delegateTasksToBlueprint(() => this.composingComponent);
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
+  get preparing() {
+    return this.asPreparingTaskGroup({
       loading({ applicationDefaults }) {
         applicationDefaults({
           communicationSpringWebsocket: ({ websocket }) => websocket === SPRING_WEBSOCKET,
         });
       },
-    });
-  }
-
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
-  }
-
-  get preparing() {
-    return this.asPreparingTaskGroup({
       springBoot4({ application }) {
         if (!application.springBoot4) {
           // Latest version that supports Spring Boot 3

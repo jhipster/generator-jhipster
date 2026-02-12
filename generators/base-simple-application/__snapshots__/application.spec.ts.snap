@@ -2,6 +2,7 @@
 
 exports[`application mutation test expects mutateApplication to match snapshot 1`] = `
 {
+  "commandName": undefined,
   "customizeTemplatePaths": [],
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vjhipsterVersion",
   "hipsterBugTrackerLink": "https://github.com/jhipster/generator-jhipster/issues?state=open",

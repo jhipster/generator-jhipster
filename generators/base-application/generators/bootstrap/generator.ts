@@ -91,44 +91,26 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
     return this.initializing;
   }
 
-  get [BaseApplicationGenerator.BOOTSTRAP_APPLICATION]() {
-    return this.asBootstrapApplicationTaskGroup({
+  get loading() {
+    return this.asLoadingTaskGroup({
       loadConfig({ applicationDefaults }) {
         applicationDefaults({
-          testFrameworks: [],
+          testFrameworks: () => [],
           user: undefined,
         });
       },
     });
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
-      loadDefaults({ application, applicationDefaults }) {
-        let { applyDefaults } = this.options;
-        applyDefaults ??= getConfigWithDefaults as any;
-        applicationDefaults(applyDefaults!(application));
-      },
-      serverConfig({ application }) {
-        loadDerivedConfig(serverCommand.configs, { application });
-      },
-      loadApplication({ applicationDefaults }) {
-        applicationDefaults(
-          {
-            anyEntityHasRelationshipWithUser: this.getExistingEntities().some(entity =>
-              (entity.definition.relationships ?? []).some(relationship => relationship.otherEntityName.toLowerCase() === 'user'),
-            ),
-          },
-          mutateApplication,
-        );
-      },
-      loadApplicationKeysForEjs({ application }) {
-        mutateData(application as unknown as SpringBootApplication, {
-          communicationSpringWebsocket: undefined,
-          buildToolUnknown: ({ buildTool }) => !['gradle', 'maven'].includes(buildTool!),
-        });
+  get [BaseApplicationGenerator.LOADING]() {
+    return this.loading;
+  }
 
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      loadApplicationKeysForEjs({ application }) {
         mutateData(application as unknown as SpringDataRelationalApplication, {
+          communicationSpringWebsocket: undefined,
           devDatabaseTypeH2Any: undefined,
         });
       },
@@ -144,15 +126,27 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
           this.fetchFromInstalledJHipster('common', 'resources', 'package.json'),
         );
       },
-    });
-  }
-
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.loading;
-  }
-
-  get preparing() {
-    return this.asPreparingTaskGroup({
+      loadDefaults({ application, applicationDefaults }) {
+        let { applyDefaults } = this.options;
+        applyDefaults ??= getConfigWithDefaults as any;
+        applicationDefaults(applyDefaults!(application));
+      },
+      serverConfig({ application }) {
+        loadDerivedConfig(serverCommand.configs, { application });
+      },
+      loadApplication({ applicationDefaults, application }) {
+        applicationDefaults(
+          {
+            anyEntityHasRelationshipWithUser: this.getExistingEntities().some(entity =>
+              (entity.definition.relationships ?? []).some(relationship => relationship.otherEntityName.toLowerCase() === 'user'),
+            ),
+          },
+          mutateApplication,
+        );
+        mutateData(application as unknown as SpringBootApplication, {
+          buildToolUnknown: ({ buildTool }) => !['gradle', 'maven'].includes(buildTool!),
+        });
+      },
       /**
        * Avoid having undefined keys in the application object when rendering ejs templates
        */

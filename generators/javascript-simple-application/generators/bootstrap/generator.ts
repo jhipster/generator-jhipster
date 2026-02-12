@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { mutateApplication } from '../../application.ts';
+import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
 import { JavascriptSimpleApplicationGenerator } from '../../generator.ts';
 
 export default class JavascriptBootstrapGenerator extends JavascriptSimpleApplicationGenerator {
@@ -32,19 +32,8 @@ export default class JavascriptBootstrapGenerator extends JavascriptSimpleApplic
 
   get loading() {
     return this.asLoadingTaskGroup({
-      loadNodeDependencies({ application }) {
-        this.loadNodeDependenciesFromPackageJson(
-          application.nodeDependencies,
-          this.fetchFromInstalledJHipster('javascript-simple-application', 'resources', 'package.json'),
-        );
-      },
       jsExtensions({ applicationDefaults }) {
-        if (this.useVersionPlaceholders) {
-          applicationDefaults({
-            nodeVersion: 'NODE_VERSION',
-          });
-        }
-        applicationDefaults(mutateApplication);
+        applicationDefaults(mutateApplicationLoading);
       },
     });
   }
@@ -55,6 +44,20 @@ export default class JavascriptBootstrapGenerator extends JavascriptSimpleApplic
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      loadNodeDependencies({ application }) {
+        this.loadNodeDependenciesFromPackageJson(
+          application.nodeDependencies,
+          this.fetchFromInstalledJHipster('javascript-simple-application', 'resources', 'package.json'),
+        );
+      },
+      preparing({ applicationDefaults }) {
+        if (this.useVersionPlaceholders) {
+          applicationDefaults({
+            nodeVersion: 'NODE_VERSION',
+          });
+        }
+        applicationDefaults(mutateApplicationPreparing);
+      },
       addSource({ application, source }) {
         source.mergeClientPackageJson = args => {
           this.mergeDestinationJson(`${application.clientRootDir}package.json`, args);

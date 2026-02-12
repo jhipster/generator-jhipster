@@ -127,8 +127,8 @@ export default class ClientGenerator extends ClientApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
+  get preparing() {
+    return this.asPreparingTaskGroup({
       loadPackageJson({ application }) {
         // Load common client package.json into packageJson
         this.loadNodeDependenciesFromPackageJson(
@@ -136,16 +136,6 @@ export default class ClientGenerator extends ClientApplicationGenerator {
           this.fetchFromInstalledJHipster('client', 'resources', 'package.json'),
         );
       },
-    });
-  }
-
-  get [ClientApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  get preparing() {
-    return this.asPreparingTaskGroup({
       addExternalResource({ application, source }) {
         if (!application.clientFrameworkBuiltIn) {
           return;

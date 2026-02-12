@@ -24,7 +24,7 @@ import { addJavaAnnotation, addJavaImport } from '../../../java/support/add-java
 import { createEnumNeedleCallback } from '../../../java/support/java-enum.ts';
 import { injectJavaConstructorParam, injectJavaConstructorSetter, injectJavaField } from '../../../java/support/java-file-edit.ts';
 import type { Application as JavascriptApplication } from '../../../javascript-simple-application/types.ts';
-import { mutateApplication } from '../../application.ts';
+import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
 import { JavaSimpleApplicationGenerator } from '../../generator.ts';
 import { getGradleLibsVersionsProperties } from '../gradle/support/dependabot-gradle.ts';
 import { getPomVersionProperties } from '../maven/support/dependabot-maven.ts';
@@ -41,6 +41,18 @@ export default class BootstrapGenerator extends JavaSimpleApplicationGenerator {
   get loading() {
     return this.asLoadingTaskGroup({
       setupServerconsts({ applicationDefaults }) {
+        applicationDefaults(mutateApplicationLoading);
+      },
+    });
+  }
+
+  get [JavaSimpleApplicationGenerator.LOADING]() {
+    return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      applicationDefaults({ application, applicationDefaults }) {
         applicationDefaults(
           {
             __override__: false,
@@ -54,10 +66,12 @@ export default class BootstrapGenerator extends JavaSimpleApplicationGenerator {
             },
             graalvmReachabilityMetadata: () => (this.useVersionPlaceholders ? 'GRAALVM_REACHABILITY_METADATA_VERSION' : (undefined as any)),
           },
-          mutateApplication,
+          mutateApplicationPreparing,
         );
+
+        (application as unknown as JavascriptApplication).prettierExtensions?.push('java');
       },
-      loadEnvironmentVariables({ application }) {
+      log({ application }) {
         if (application.defaultPackaging === 'war') {
           this.log.info(`Using ${application.defaultPackaging} as default packaging`);
         }
@@ -76,18 +90,6 @@ export default class BootstrapGenerator extends JavaSimpleApplicationGenerator {
         );
 
         mutateData(application.javaDependencies, applicationJavaDependencies);
-      },
-    });
-  }
-
-  get [JavaSimpleApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
-  }
-
-  get preparing() {
-    return this.asPreparingTaskGroup({
-      applicationDefaults({ application }) {
-        (application as unknown as JavascriptApplication).prettierExtensions?.push('java');
       },
       prepareJavaApplication({ application, source }) {
         source.hasJavaProperty = (property: string) => application.javaProperties![property] !== undefined;

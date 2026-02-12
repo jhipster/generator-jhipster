@@ -41,8 +41,8 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
     await this.dependsOnBootstrap('languages');
   }
 
-  get [BaseApplicationGenerator.BOOTSTRAP_APPLICATION]() {
-    return this.asBootstrapApplicationTaskGroup({
+  get loading() {
+    return this.asLoadingTaskGroup({
       loadConfig({ applicationDefaults }) {
         applicationDefaults({
           dockerContainers: {},
@@ -51,6 +51,10 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
         });
       },
     });
+  }
+
+  get [BaseApplicationGenerator.LOADING]() {
+    return this.loading;
   }
 
   get preparing() {

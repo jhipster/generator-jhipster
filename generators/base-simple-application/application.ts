@@ -23,7 +23,9 @@ import packageJson from '../../package.json' with { type: 'json' };
 import type { WriteContext } from '../base-core/api.ts';
 import type { ProjectNameAddedApplicationProperties } from '../project-name/application.ts';
 
-export type BaseSimpleApplicationAddedApplicationProperties = WriteContext & {
+export type BaseSimpleApplicationLoadingAddedApplicationProperties = WriteContext;
+
+export type BaseSimpleApplicationPreparingAddedApplicationProperties = {
   jhipsterVersion: string;
   documentationArchiveUrl: string;
 
@@ -49,17 +51,28 @@ export type BaseSimpleApplicationAddedApplicationProperties = WriteContext & {
   projectDescription: string;
 
   jhipsterPackageJson: typeof packageJson;
+  commandName?: string;
 };
 
-export const mutateApplication = {
+export type BaseSimpleApplicationAddedApplicationProperties = BaseSimpleApplicationLoadingAddedApplicationProperties &
+  BaseSimpleApplicationPreparingAddedApplicationProperties;
+
+export const mutateApplicationLoading = {
+  __override__: false,
+
+  customizeTemplatePaths: () => [],
+} as const satisfies MutateDataPropertiesWithRequiredProperties<
+  MutateDataParam<BaseSimpleApplicationLoadingAddedApplicationProperties>,
+  BaseSimpleApplicationLoadingAddedApplicationProperties
+>;
+
+export const mutateApplicationPreparing = {
   __override__: false,
 
   jhipsterVersion: packageJson.version,
   jhiPrefix: 'jhi',
   jhiPrefixCapitalized: ({ jhiPrefix }) => upperFirst(jhiPrefix),
   jhiPrefixDashed: ({ jhiPrefix }) => kebabCase(jhiPrefix),
-
-  customizeTemplatePaths: () => [],
 
   hipsterName: 'Java Hipster',
   hipsterProductName: 'JHipster',
@@ -80,7 +93,8 @@ export const mutateApplication = {
     `${hipsterDocumentationLink}documentation-archive/v${jhipsterVersion}`,
 
   jhipsterPackageJson: packageJson,
+  commandName: undefined,
 } as const satisfies MutateDataPropertiesWithRequiredProperties<
   MutateDataParam<ProjectNameAddedApplicationProperties & BaseSimpleApplicationAddedApplicationProperties>,
-  BaseSimpleApplicationAddedApplicationProperties
+  BaseSimpleApplicationPreparingAddedApplicationProperties
 >;

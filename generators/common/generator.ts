@@ -91,9 +91,8 @@ export default class CommonGenerator extends BaseApplicationGenerator<
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
-  // Public API method used by the getter and also by Blueprints
-  get loading() {
-    return this.asLoadingTaskGroup({
+  get preparing() {
+    return this.asPreparingTaskGroup({
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
@@ -106,16 +105,6 @@ export default class CommonGenerator extends BaseApplicationGenerator<
           prettierTabWidth: this.jhipsterConfig.prettierTabWidth ?? 2,
         });
       },
-    });
-  }
-
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  get preparing() {
-    return this.asPreparingTaskGroup({
       sonarSourceApi({ source }) {
         source.ignoreSonarRule = ({ ruleId, ruleKey, resourceKey, comment }) => {
           this.editFile(

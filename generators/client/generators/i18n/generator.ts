@@ -35,6 +35,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
       await this.composeWithBlueprints();
     }
 
+    await this.dependsOnBootstrap('languages');
     await this.dependsOnBootstrap('client');
     // TODO entityClass is required for translations, should be moved to base application.
     await this.dependsOnBootstrap('java');
