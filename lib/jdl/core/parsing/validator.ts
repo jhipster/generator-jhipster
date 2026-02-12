@@ -16,8 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/* eslint-disable no-useless-escape */
-
 import type { CstElement, CstNode, ICstVisitor, IToken, TokenType } from 'chevrotain';
 import { tokenMatcher as matchesToken } from 'chevrotain';
 import { first, flatten, includes } from 'lodash-es';
@@ -43,9 +41,9 @@ const ENUM_PROP_VALUE_PATTERN = /^[A-Za-z]\w*$/;
 const METHOD_NAME_PATTERN = /^[A-Za-z][A-Za-z0-9-_]*$/;
 
 // const PASSWORD_PATTERN = /^(.+)$/;
-const REPONAME_PATTERN = /^"((?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:\/?#[\]@!$&'()*+,;=]+|[a-zA-Z0-9]+)"$/;
+const REPONAME_PATTERN = /^"((?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=]+|[a-zA-Z0-9]+)"$/;
 const KUBERNETES_STORAGE_CLASS_NAME = /^"[A-Za-z]*"$/;
-const PATH_PATTERN = /^"([^\/]+).*"$/;
+const PATH_PATTERN = /^"([^/]+).*"$/;
 
 const deploymentConfigPropsValidations = {
   DEPLOYMENT_TYPE: {
