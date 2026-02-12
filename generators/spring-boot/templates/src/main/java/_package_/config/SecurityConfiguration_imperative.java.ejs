@@ -373,8 +373,8 @@ public class SecurityConfiguration {
 
     private RestOperations restTemplate(RestTemplateBuilder restTemplateBuilder) {
         return restTemplateBuilder
-            .setConnectTimeout(Duration.ofSeconds(10))
-            .setReadTimeout(Duration.ofSeconds(10))
+            .connectTimeout(Duration.ofSeconds(10))
+            .readTimeout(Duration.ofSeconds(10))
             .build();
     }
 <%_ } _%>
