@@ -202,7 +202,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
             this.languagesToApply = [...new Set(this.languagesToApply || [])];
           }
         }
-        application.languagesToGenerate?.push(...this.languagesToApply);
+        application.languagesToGenerate.push(...this.languagesToApply);
       },
     });
   }
