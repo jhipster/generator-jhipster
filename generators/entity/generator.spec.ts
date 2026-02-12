@@ -19,7 +19,7 @@
 import { before, describe, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
-import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
+import { basicHelpers, defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.ts';
 
 import Generator from './index.ts';
@@ -32,9 +32,11 @@ describe(`generator - ${generator}`, () => {
 
   describe('with default configuration', () => {
     before(async () => {
-      await helpers
-        .runJHipster('entity')
-        .withJHipsterConfig({})
+      const res = await basicHelpers.runJHipster('app').withJHipsterConfig({});
+      res.memFs = undefined as any;
+      await runResult
+        .createJHipster('entity')
+        .withJHipsterContextOptions()
         .withAnswers({ fieldAdd: false, relationshipAdd: false, service: 'no', dto: 'no', pagination: 'no' })
         .withArguments(['Foo'])
         .withMockedSource();
@@ -46,6 +48,34 @@ describe(`generator - ${generator}`, () => {
 
     it('should match files snapshot', () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
+    });
+
+    it('should correctly translate pages', () => {
+      runResult.assertNoFileContent('src/main/webapp/app/entities/foo/list/foo.html', 'Translation missing for');
+    });
+  });
+
+  describe('with enableTranslation disabled', () => {
+    before(async () => {
+      await helpers
+        .runJHipster('entity')
+        .withJHipsterConfig({ enableTranslation: false })
+        .withJHipsterContextOptions()
+        .withAnswers({ fieldAdd: false, relationshipAdd: false, service: 'no', dto: 'no', pagination: 'no' })
+        .withArguments(['Foo'])
+        .withMockedSource();
+    });
+
+    it('should match source calls', () => {
+      expect(runResult.sourceCallsArg).toMatchSnapshot();
+    });
+
+    it('should match files snapshot', () => {
+      expect(runResult.getStateSnapshot()).toMatchSnapshot();
+    });
+
+    it('should correctly translate pages', () => {
+      runResult.assertNoFileContent('src/main/webapp/app/entities/foo/list/foo.html', 'Translation missing for');
     });
   });
 });

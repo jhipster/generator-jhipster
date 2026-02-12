@@ -40,10 +40,6 @@ type WithJHipsterGenerators = {
    */
   useDefaultMocks?: boolean;
   /**
-   * List of generators to don't mock.
-   */
-  actualGeneratorsList?: string[];
-  /**
    * Filter to mock a generator.
    */
   useMock?: (ns: string) => boolean;
@@ -70,7 +66,7 @@ type JHipsterRunResult<GeneratorType extends BaseCoreGenerator = BaseCoreGenerat
    */
   composedMockedGenerators: string[];
 
-  createJHipster: (ns: string, options?: WithJHipsterGenerators) => JHipsterRunContext;
+  createJHipster: (ns: string) => JHipsterRunContext;
 
   application?: ApplicationAll;
 
@@ -378,9 +374,8 @@ class JHipsterRunContext extends RunContext<BaseCoreGenerator> {
   }
 
   withJHipsterGenerators(options: WithJHipsterGenerators = {}): this {
-    const { useDefaultMocks, actualGeneratorsList = [], useMock = useDefaultMocks ? filterBootstrapGenerators : () => false } = options;
-    const jhipsterExceptList = new Set(actualGeneratorsList.map(toJHipsterNamespace));
-    const mockedGenerators = allGenerators.filter(useMock).filter(gen => !jhipsterExceptList.has(gen) && this.Generator !== gen);
+    const { useDefaultMocks, useMock = useDefaultMocks ? filterBootstrapGenerators : () => false } = options;
+    const mockedGenerators = allGenerators.filter(useMock).filter(gen => this.Generator !== gen);
     const actualGenerators = allGenerators.filter(gen => !mockedGenerators.includes(gen));
     const prefix = isDistFolder() ? 'dist/' : '';
     const filePatterns = actualGenerators.map(ns => getGeneratorRelativeFolder(ns)).map(path => `${prefix}${path}/index.{j,t}s`);
@@ -410,6 +405,22 @@ plugins {
       const contextMap: Map<string, any> = (env as Environment).getContextMap(this.targetDirectory!);
       contextMap.set(key, sharedData);
     });
+    return this;
+  }
+
+  public withJHipsterContextOptions(opts?: RunJHipster): this {
+    const { prepareEnvironment, ...otherOptions } = opts ?? {};
+    if (prepareEnvironment) {
+      this.prepareEnvironment();
+    }
+    return this.withJHipsterGenerators(otherOptions).withCommandName();
+  }
+
+  public withCommandName(): this {
+    if (typeof this.Generator === 'string' && this.Generator.match(/^(jhipster:)?[a-zA-Z0-9-]*$/)) {
+      // Set the commandName to the entrypoint generator name.
+      this.withOptions({ commandName: this.Generator.split(':').pop() });
+    }
     return this;
   }
 
@@ -463,6 +474,7 @@ plugins {
       factory: (): any => undefined,
     });
     runResult.entities = entitiesMap ? Object.fromEntries(entitiesMap.entries()) : undefined;
+    runResult.createJHipster = (gen: string) => runResult.create(toJHipsterNamespace(gen)) as JHipsterRunContext;
 
     return runResult;
   }
@@ -519,24 +531,12 @@ class JHipsterTest extends YeomanTest {
     const generatorSpec =
       !isAbsolute(jhipsterGenerator) && !jhipsterGenerator.startsWith('@') ? toJHipsterNamespace(jhipsterGenerator) : jhipsterGenerator;
     const isRunJHipster = (opt: any): opt is RunJHipster | undefined =>
-      envOptions === undefined &&
-      (opt === undefined || 'actualGeneratorsList' in opt || 'useMock' in opt || 'useDefaultMocks' in opt || 'prepareEnvironment' in opt);
-    let context: JHipsterRunContext;
+      envOptions === undefined && (opt === undefined || 'useMock' in opt || 'useDefaultMocks' in opt || 'prepareEnvironment' in opt);
     if (isRunJHipster(settings)) {
-      const { prepareEnvironment, ...otherOptions } = settings ?? {};
-      context = this.run(generatorSpec);
-      if (prepareEnvironment) {
-        context = context.prepareEnvironment();
-      }
-      context.withJHipsterGenerators(otherOptions);
-    } else {
-      context = this.run(getGenerator(generatorSpec), settings, envOptions).withJHipsterGenerators();
+      return this.run(generatorSpec).withJHipsterContextOptions(settings!);
     }
-    if (jhipsterGenerator.match(/^(jhipster:)?[a-zA-Z0-9-]*$/)) {
-      // Set the commandName to the entrypoint generator name.
-      context = context.withOptions({ commandName: jhipsterGenerator.split(':').pop() });
-    }
-    return context;
+
+    return this.run(getGenerator(generatorSpec), settings, envOptions).withJHipsterGenerators().withCommandName();
   }
 
   runCli(
