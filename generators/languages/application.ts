@@ -29,7 +29,7 @@ export type LanguagesLoadingAddedApplicationProperties = {
   supportedLanguages: Language[];
   languages: string[];
   languagesToGenerate: string[];
-  addLanguageCallbacks: ((mewLanguages: readonly Language[], allLanguages: readonly Language[]) => void)[];
+  addLanguageCallbacks: ((newLanguages: readonly Language[], allLanguages: readonly Language[]) => void)[];
 };
 
 export type LanguagesPreparingAddedApplicationProperties = {
