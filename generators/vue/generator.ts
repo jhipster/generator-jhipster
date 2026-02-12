@@ -90,29 +90,14 @@ export default class VueGenerator extends ClientApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
+  get preparing() {
+    return this.asPreparingTaskGroup({
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
           this.fetchFromInstalledJHipster('vue', 'resources', 'package.json'),
         );
       },
-      applicationDefaults({ applicationDefaults }) {
-        applicationDefaults({
-          __override__: true,
-          typescriptEslint: true,
-        });
-      },
-    });
-  }
-
-  get [ClientApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
-  }
-
-  get preparing() {
-    return this.asPreparingTaskGroup({
       applicationDefaults({ application, applicationDefaults }) {
         applicationDefaults({
           __override__: true,

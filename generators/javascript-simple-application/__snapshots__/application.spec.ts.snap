@@ -27,5 +27,6 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
     "",
     ".blueprint/**/",
   ],
+  "typescriptEslint": true,
 }
 `;

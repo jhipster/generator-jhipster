@@ -107,21 +107,6 @@ export default class AngularGenerator extends AngularApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
-      applicationDefaults({ applicationDefaults }) {
-        applicationDefaults({
-          __override__: true,
-          typescriptEslint: true,
-        });
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
-  }
-
   get preparing() {
     return this.asPreparingTaskGroup({
       loadPackageJson({ application }) {

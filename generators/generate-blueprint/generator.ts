@@ -167,7 +167,7 @@ export default class extends BaseSimpleApplicationGenerator<
   get loading() {
     return this.asLoadingTaskGroup({
       async loading({ applicationDefaults }) {
-        applicationDefaults({ commands: () => [] });
+        applicationDefaults({ commands: () => [], typescriptEslint: false });
       },
     });
   }

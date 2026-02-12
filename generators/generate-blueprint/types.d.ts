@@ -17,12 +17,12 @@
  * limitations under the License.
  */
 import type { HandleCommandTypes } from '../../lib/command/types.ts';
+import type { Options as GitOptions } from '../git/types.d.ts';
 import type {
   Application as BaseSimpleApplicationApplication,
   Config as BaseSimpleApplicationConfig,
   Options as BaseSimpleApplicationOptions,
-} from '../base-simple-application/types.d.ts';
-import type { Options as GitOptions } from '../git/types.d.ts';
+} from '../javascript-simple-application/types.d.ts';
 
 import type command from './command.ts';
 
