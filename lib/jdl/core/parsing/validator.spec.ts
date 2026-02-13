@@ -2293,7 +2293,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
                   jdlRuntime,
                 ),
               ).to.throw(
-                String.raw`The ${type} property name must match: /^"((?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:\/?#[\]@!$&'()*+,;=]+|[a-zA-Z0-9]+)"$/`,
+                String.raw`The ${type} property name must match: /^"((?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=]+|[a-zA-Z0-9]+)"$/`,
               );
             });
           });
