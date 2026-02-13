@@ -98,10 +98,10 @@ export const classValid = <% if (clientFrameworkAngular) { %>'ng-valid'<% } else
 Cypress.Commands.add('authenticatedRequest', (data) => {
 <%_ if (authenticationTypeJwt) { _%>
   <%_ if (clientFrameworkAngular || clientFrameworkReact) { _%>
-  const jwtToken = sessionStorage.getItem(Cypress.env('jwtStorageName'));
+  const jwtToken = sessionStorage.getItem(Cypress.expose('jwtStorageName'));
   const bearerToken = jwtToken && JSON.parse(jwtToken);
   <%_ } else { _%>
-  const bearerToken = sessionStorage.getItem(Cypress.env('jwtStorageName'));
+  const bearerToken = sessionStorage.getItem(Cypress.expose('jwtStorageName'));
   <%_ } _%>
   if (bearerToken) {
     return cy.request({
@@ -143,15 +143,15 @@ Cypress.Commands.add('login', (username: string, password: string) => {
       cy.authenticatedRequest({
         method: 'POST',
         body: { username, password },
-        url: Cypress.env('authenticationUrl'),
+        url: Cypress.expose('authenticationUrl'),
   <%_ if (authenticationTypeSession) { _%>
         form: true,
   <%_ } else { _%>
       }).then(({ body: { id_token } }) => {
     <%_ if (clientFrameworkVue) { _%>
-        sessionStorage.setItem(Cypress.env('jwtStorageName'), id_token);
+        sessionStorage.setItem(Cypress.expose('jwtStorageName'), id_token);
     <%_ } else { _%>
-        sessionStorage.setItem(Cypress.env('jwtStorageName'), JSON.stringify(id_token));
+        sessionStorage.setItem(Cypress.expose('jwtStorageName'), JSON.stringify(id_token));
     <%_ } _%>
   <%_ } _%>
       });

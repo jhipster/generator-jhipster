@@ -28,16 +28,17 @@ export default defineConfig({
   viewportWidth: 1200,
   viewportHeight: 720,
   retries: 2,
+  allowCypressEnv: false,
 <%_ if (clientFrameworkReact) { _%>
   scrollBehavior: 'center',
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
-  env: {
+  expose: {
     authenticationUrl: '/api/authenticate',
     jwtStorageName: '<%= jhiPrefixDashed %>-authenticationToken',
   },
 <%_ } else if (authenticationTypeSession) { _%>
-  env: {
+  expose: {
     authenticationUrl: '/api/authentication',
   },
 <%_ } _%>

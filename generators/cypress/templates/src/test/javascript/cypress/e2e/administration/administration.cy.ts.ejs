@@ -32,8 +32,15 @@ import {
 } from '../../support/commands';
 
 describe('/admin', () => {
-  const username = Cypress.env('E2E_USERNAME') ?? 'admin';
-  const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
+  let username = 'admin';
+  let password = 'admin';
+
+  before(() => {
+    cy.env(['E2E_USERNAME', 'E2E_PASSWORD']).then(({ E2E_USERNAME, E2E_PASSWORD }) => {
+      username = E2E_USERNAME ?? username;
+      password = E2E_PASSWORD ?? password;
+    });
+  });
 
   beforeEach(() => {
     cy.login(username, password);
