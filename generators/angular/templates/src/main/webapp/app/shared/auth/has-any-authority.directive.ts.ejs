@@ -42,7 +42,7 @@ export default class HasAnyAuthorityDirective {
 
   constructor() {
     const accountService = inject(AccountService);
-    const currentAccount = accountService.trackCurrentAccount();
+    const currentAccount = accountService.account;
     const hasPermission = computed(() => currentAccount()?.authorities && accountService.hasAnyAuthority(this.authorities()));
 
     effect(() => {

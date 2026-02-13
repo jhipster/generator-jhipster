@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, signal, OnInit<% if (!authenticationTypeOauth2) { %>, OnDestroy<% } %> } from '@angular/core';
+import { Component, inject, signal, effect } from '@angular/core';
 <%_ if (generateUserManagement || !authenticationTypeOauth2) { _%>
 import {
 <%_ if (!authenticationTypeOauth2) { _%>
@@ -48,30 +48,14 @@ import { Account } from 'app/core/auth/account.model';
   styleUrl: './home.scss',
   imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%><%_ if (generateUserManagement) { _%>RouterLink<%_ } _%>],
 })
-export default class Home implements OnInit<% if (!authenticationTypeOauth2) { %>, OnDestroy<% } %> {
-  account = signal<Account | null>(null);
-<%_ if (!authenticationTypeOauth2) { _%>
+export default class Home {
+  public readonly account = inject(AccountService).account;
 
-  private readonly destroy$ = new Subject<void>();
-<%_ } _%>
-
-  private readonly accountService = inject(AccountService);
 <%_ if (!authenticationTypeOauth2) { _%>
   private readonly router = inject(Router);
 <%_ } else { _%>
   private readonly loginService = inject(LoginService);
 <%_ } _%>
-
-  ngOnInit(): void {
-<%_ if (authenticationTypeOauth2) { _%>
-    this.accountService.identity().subscribe(account => (this.account.set(account)));
-<%_ } else { _%>
-    this.accountService
-      .getAuthenticationState()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(account => (this.account.set(account)));
-<%_ } _%>
-  }
 
   login(): void {
 <%_ if (!authenticationTypeOauth2) { _%>
@@ -81,10 +65,4 @@ export default class Home implements OnInit<% if (!authenticationTypeOauth2) { %
 <%_ } _%>
   }
 
-<%_ if (!authenticationTypeOauth2) { _%>
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-<%_ } _%>
 }
