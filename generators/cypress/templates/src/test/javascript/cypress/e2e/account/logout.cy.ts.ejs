@@ -23,8 +23,8 @@ import {
 } from '../../support/commands';
 
 describe('logout', () => {
-  let username = '<%- generateInMemoryUserCredentials ? 'admin' : 'user' %>';
-  let password = '<%- generateInMemoryUserCredentials ? 'admin' : 'user' %>';
+  let username = <%_ if (generateInMemoryUserCredentials) { _%>Cypress.expose('adminUsername')<%_ } else { _%>Cypress.expose('username')<%_ } _%>;
+  let password = <%_ if (generateInMemoryUserCredentials) { _%>Cypress.expose('adminPassword')<%_ } else { _%>Cypress.expose('password')<%_ } _%>;
 
   before(() => {
     cy.credentials().then(credentials => {

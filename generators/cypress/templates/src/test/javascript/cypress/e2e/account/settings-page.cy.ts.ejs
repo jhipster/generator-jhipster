@@ -25,10 +25,10 @@ import {
 import type { Account } from '../../support/account';
 
 describe('/account/settings', () => {
-  let adminUsername = 'admin';
-  let adminPassword = 'admin';
-  let username = 'user';
-  let password = 'user';
+  let adminUsername = Cypress.expose('adminUsername');
+  let adminPassword = Cypress.expose('adminPassword');
+  let username = Cypress.expose('username');
+  let password = Cypress.expose('password');
 
   const testUserEmail = 'user@localhost.fr';
   let originalUserAccount: Account;

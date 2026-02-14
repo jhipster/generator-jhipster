@@ -32,8 +32,8 @@ import {
 } from '../../support/commands';
 
 describe('/admin', () => {
-  let username = 'admin';
-  let password = 'admin';
+  let username = Cypress.expose('adminUsername');
+  let password = Cypress.expose('adminPassword');
 
   before(() => {
     cy.credentials().then(credentials => {

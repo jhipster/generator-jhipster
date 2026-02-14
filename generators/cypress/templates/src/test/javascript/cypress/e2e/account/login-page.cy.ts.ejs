@@ -25,8 +25,8 @@ import {
 } from '../../support/commands';
 
 describe('login page', () => {
-  let username = '<%= skipUserManagement && (applicationTypeMonolith || applicationTypeGateway) ? 'admin' : 'user' %>';
-  let password = '<%= skipUserManagement && (applicationTypeMonolith || applicationTypeGateway) ? 'admin' : 'user' %>';
+  let username = <%_ if (skipUserManagement && (applicationTypeMonolith || applicationTypeGateway)) { _%>Cypress.expose('adminUsername')<%_ } else { _%>Cypress.expose('username')<%_ } _%>;
+  let password = <%_ if (skipUserManagement && (applicationTypeMonolith || applicationTypeGateway)) { _%>Cypress.expose('adminPassword')<%_ } else { _%>Cypress.expose('password')<%_ } _%>;
 
   before(() => {
     cy.credentials().then(credentials => {
