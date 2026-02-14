@@ -62,9 +62,9 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
 <%_ } _%>
 
   before(() => {
-    cy.env(['E2E_USERNAME', 'E2E_PASSWORD']).then(({ E2E_USERNAME, E2E_PASSWORD }) => {
-      username = E2E_USERNAME ?? username;
-      password = E2E_PASSWORD ?? password;
+    cy.credentials().then(credentials => {
+      username = credentials.username ?? username;
+      password = credentials.password ?? password;
     });
   });
 

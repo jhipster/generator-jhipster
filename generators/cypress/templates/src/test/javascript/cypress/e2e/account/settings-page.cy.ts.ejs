@@ -35,11 +35,11 @@ describe('/account/settings', () => {
   let testUserAccount: Account;
 
   before(() => {
-    cy.env(['E2E_USERNAME', 'E2E_PASSWORD']).then(({ E2E_USERNAME, E2E_PASSWORD }) => {
-      adminUsername = E2E_USERNAME ?? adminUsername;
-      adminPassword = E2E_PASSWORD ?? adminPassword;
-      username = E2E_USERNAME ?? username;
-      password = E2E_PASSWORD ?? password;
+    cy.credentials().then(credentials => {
+      adminUsername = credentials.username ?? adminUsername;
+      adminPassword = credentials.password ?? adminPassword;
+      username = credentials.username ?? username;
+      password = credentials.password ?? password;
     });
   });
 

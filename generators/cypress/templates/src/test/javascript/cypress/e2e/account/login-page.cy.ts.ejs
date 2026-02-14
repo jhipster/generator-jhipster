@@ -29,9 +29,9 @@ describe('login page', () => {
   let password = '<%= skipUserManagement && (applicationTypeMonolith || applicationTypeGateway) ? 'admin' : 'user' %>';
 
   before(() => {
-    cy.env(['E2E_USERNAME', 'E2E_PASSWORD']).then(({ E2E_USERNAME, E2E_PASSWORD }) => {
-      username = E2E_USERNAME ?? username;
-      password = E2E_PASSWORD ?? password;
+    cy.credentials().then(credentials => {
+      username = credentials.username ?? username;
+      password = credentials.password ?? password;
     });
   });
 

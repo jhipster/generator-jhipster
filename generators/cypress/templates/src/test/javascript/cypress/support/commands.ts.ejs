@@ -165,11 +165,30 @@ Cypress.Commands.add('login', (username: string, password: string) => {
   );
 });
 
+export interface Credentials {
+  adminUsername: string;
+  adminPassword: string;
+  username: string;
+  password: string;
+}
+
+Cypress.Commands.add('credentials', () => {
+  return cy.env(['E2E_USERNAME', 'E2E_PASSWORD']).then(({ E2E_USERNAME, E2E_PASSWORD }) => {
+    return {
+      adminUsername: E2E_USERNAME,
+      adminPassword: E2E_PASSWORD,
+      username: E2E_USERNAME,
+      password: E2E_PASSWORD,
+    };
+  });
+});
+
 declare global {
   namespace Cypress {
     interface Chainable {
       authenticatedRequest(data): Cypress.Chainable;
       login(username: string, password: string): Cypress.Chainable;
+      credentials(): Cypress.Chainable<Credentials>;
     }
   }
 }
