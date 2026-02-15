@@ -50,8 +50,8 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
 
   const <%= entityInstance %>PageUrl = '/<%= entityPage %>';
   const <%= entityInstance %>PageUrlPattern = new RegExp('/<%= entityPage %>(\\?.*)?$');
-  let username = '<%- adminEntity ? 'admin' : 'user' %>';
-  let password = '<%- adminEntity ? 'admin' : 'user' %>';
+  let username;
+  let password;
 <%_ if (!readOnly) { _%>
   <% if (skipCreateTest) { %>// <% } %>const <%= entityInstance %>Sample = <%- JSON.stringify(this.generateTestEntity(sampleFields)) %>;
 <%_ } _%>
@@ -63,8 +63,8 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
 
   before(() => {
     cy.credentials().then(credentials => {
-      username = credentials.username ?? username;
-      password = credentials.password ?? password;
+      username = credentials.<%- adminEntity ? 'adminUsername' : 'username' %>;
+      password = credentials.<%- adminEntity ? 'adminPassword' : 'password' %>;
     });
   });
 

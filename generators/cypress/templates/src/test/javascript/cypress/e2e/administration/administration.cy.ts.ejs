@@ -32,18 +32,17 @@ import {
 } from '../../support/commands';
 
 describe('/admin', () => {
-  let username = Cypress.expose('adminUsername');
-  let password = Cypress.expose('adminPassword');
+  let adminUsername;
+  let adminPassword;
 
   before(() => {
     cy.credentials().then(credentials => {
-      username = credentials.username ?? username;
-      password = credentials.password ?? password;
+      ({ adminUsername, adminPassword } = credentials);
     });
   });
 
   beforeEach(() => {
-    cy.login(username, password);
+    cy.login(adminUsername, adminPassword);
     cy.visit('');
   });
 

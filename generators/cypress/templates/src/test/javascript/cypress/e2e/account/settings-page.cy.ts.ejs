@@ -25,10 +25,10 @@ import {
 import type { Account } from '../../support/account';
 
 describe('/account/settings', () => {
-  let adminUsername = Cypress.expose('adminUsername');
-  let adminPassword = Cypress.expose('adminPassword');
-  let username = Cypress.expose('username');
-  let password = Cypress.expose('password');
+  let adminUsername;
+  let adminPassword;
+  let username;
+  let password;
 
   const testUserEmail = 'user@localhost.fr';
   let originalUserAccount: Account;
@@ -36,10 +36,7 @@ describe('/account/settings', () => {
 
   before(() => {
     cy.credentials().then(credentials => {
-      adminUsername = credentials.username ?? adminUsername;
-      adminPassword = credentials.password ?? adminPassword;
-      username = credentials.username ?? username;
-      password = credentials.password ?? password;
+      ({ adminUsername, adminPassword, username, password } = credentials);
     });
   });
 

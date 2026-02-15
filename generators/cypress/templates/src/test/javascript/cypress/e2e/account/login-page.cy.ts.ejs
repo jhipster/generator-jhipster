@@ -25,13 +25,13 @@ import {
 } from '../../support/commands';
 
 describe('login page', () => {
-  let username = <%_ if (skipUserManagement && (applicationTypeMonolith || applicationTypeGateway)) { _%>Cypress.expose('adminUsername')<%_ } else { _%>Cypress.expose('username')<%_ } _%>;
-  let password = <%_ if (skipUserManagement && (applicationTypeMonolith || applicationTypeGateway)) { _%>Cypress.expose('adminPassword')<%_ } else { _%>Cypress.expose('password')<%_ } _%>;
+  let username;
+  let password;
 
   before(() => {
     cy.credentials().then(credentials => {
-      username = credentials.username ?? username;
-      password = credentials.password ?? password;
+      username = credentials.<%- (skipUserManagement && (applicationTypeMonolith || applicationTypeGateway)) ? 'adminUsername' : 'username' %>;
+      password = credentials.<%- (skipUserManagement && (applicationTypeMonolith || applicationTypeGateway)) ? 'adminPassword' : 'password' %>;
     });
   });
 
