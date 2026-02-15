@@ -50,8 +50,8 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
 
   const <%= entityInstance %>PageUrl = '/<%= entityPage %>';
   const <%= entityInstance %>PageUrlPattern = new RegExp('/<%= entityPage %>(\\?.*)?$');
-  const username = Cypress.env('E2E_USERNAME') ?? '<%- adminEntity ? 'admin' : 'user' %>';
-  const password = Cypress.env('E2E_PASSWORD') ?? '<%- adminEntity ? 'admin' : 'user' %>';
+  let username;
+  let password;
 <%_ if (!readOnly) { _%>
   <% if (skipCreateTest) { %>// <% } %>const <%= entityInstance %>Sample = <%- JSON.stringify(this.generateTestEntity(sampleFields)) %>;
 <%_ } _%>
@@ -60,6 +60,13 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
 <%_ for (otherEntity of requiredOtherEntities) { _%>
   <% if (skipCreateTest) { %>// <% } %>let <%= otherEntity.entityInstance %>;
 <%_ } _%>
+
+  before(() => {
+    cy.credentials().then(credentials => {
+      username = credentials.<%- adminEntity ? 'adminUsername' : 'username' %>;
+      password = credentials.<%- adminEntity ? 'adminPassword' : 'password' %>;
+    });
+  });
 
   beforeEach(() => {
     cy.login(username, password);
