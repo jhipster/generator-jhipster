@@ -63,8 +63,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
 
   before(() => {
     cy.credentials().then(credentials => {
-      username = credentials.<%- adminEntity ? 'adminUsername' : 'username' %>;
-      password = credentials.<%- adminEntity ? 'adminPassword' : 'password' %>;
+      ({ <%- adminEntity ? 'adminUsername : ' : '' %>username, <%- adminEntity ? 'adminPassword : ' : '' %>password } = credentials);
     });
   });
 

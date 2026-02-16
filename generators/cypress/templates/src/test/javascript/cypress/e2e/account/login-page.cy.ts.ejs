@@ -30,8 +30,7 @@ describe('login page', () => {
 
   before(() => {
     cy.credentials().then(credentials => {
-      username = credentials.<%- (skipUserManagement && (applicationTypeMonolith || applicationTypeGateway)) ? 'adminUsername' : 'username' %>;
-      password = credentials.<%- (skipUserManagement && (applicationTypeMonolith || applicationTypeGateway)) ? 'adminPassword' : 'password' %>;
+      ({ username, password } = credentials);
     });
   });
 
