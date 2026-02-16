@@ -1,5 +1,5 @@
 <%#
- Copyright 2013-2025 the original author or authors from the JHipster project.
+ Copyright 2013-2026 the original author or authors from the JHipster project.
 
  This file is part of the JHipster project, see https://www.jhipster.tech/
  for more information.
@@ -69,7 +69,28 @@ export default <% if (cypressCoverage) { %>async <% } %>(on: Cypress.PluginEvent
   });
 <%_ } _%>
 <%_ if (cypressCoverage) { _%>
+  <%_ if (cypressCoverageWebpack) { _%>
   (await import('@cypress/code-coverage/task')).default(on, config);
+  <%_ } else { _%>
+  if (config.env.CYPRESS_COVERAGE) {
+    // Propagate to expose for browser-side access via Cypress.expose()
+    config.expose = { ...config.expose, CYPRESS_COVERAGE: true };
+    (await import('cypress-monocart-coverage')).default(on, config, {
+      name: 'Cypress Coverage Report',
+      entryFilter: {
+        '**/node_modules/**': false,
+        '**/swagger-ui/**': false,
+        '**/polyfills.js': false,
+        '**/*.js': true,
+      },
+      sourceFilter: {
+        '**/<%- clientSrcDir %>**': true,
+      },
+      outputDir: './<%- temporaryDir %>/cypress-coverage-reports',
+      reports: ['v8', 'console-details'],
+    });
+  }
+  <%_ } _%>
 <%_ } _%>
   return config;
 }
