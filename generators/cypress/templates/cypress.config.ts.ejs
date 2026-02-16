@@ -33,6 +33,9 @@ export default defineConfig({
   scrollBehavior: 'center',
 <%_ } _%>
   expose: {
+<%_ if (cypressCoverage && !cypressCoverageWebpack) { _%>
+    CYPRESS_COVERAGE: false,
+<%_ } _%>
     adminUsername: 'admin',
     adminPassword: 'admin',
     username: 'user',
