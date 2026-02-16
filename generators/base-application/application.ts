@@ -27,7 +27,6 @@ type UserManagementProperties<Entity> = {
   generateUserManagement: boolean;
   generateBuiltInUserEntity?: boolean;
   generateBuiltInAuthorityEntity: boolean;
-  generateInMemoryUserCredentials?: boolean;
   user?: Entity & { adminUserDto?: string };
   userManagement?: Entity;
   authority?: Entity;
@@ -42,8 +41,6 @@ export const mutateUserManagementApplication = {
   skipUserManagement: data =>
     !data.generateAuthenticationApi || data.authenticationTypeUsesRemoteAuthorization || data.databaseType === 'no',
   generateUserManagement: data => !data.skipUserManagement && data.generateAuthenticationApi,
-  generateInMemoryUserCredentials: data =>
-    data.generateAuthenticationApi && data.skipUserManagement && !data.authenticationTypeUsesRemoteAuthorization,
 
   syncUserWithIdp: data =>
     Boolean(

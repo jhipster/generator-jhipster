@@ -42,6 +42,14 @@ export type CommonAddedApplicationProperties = {
   skipClient?: boolean;
   skipServer?: boolean;
 
+  generateInMemoryUserCredentials: boolean;
+  defaultUserUsername: string;
+  defaultUserPassword: string;
+  defaultUserRoles: string[];
+  defaultAdminUsername: string;
+  defaultAdminPassword: string;
+  defaultAdminRoles: string[];
+
   /**
    * True if the application has at least one non-builtin entity.
    */
@@ -80,4 +88,13 @@ export const mutateApplication = {
 
   devServerPort: 9060,
   serverPort: ({ applicationTypeMicroservice }) => (applicationTypeMicroservice ? 8081 : 8080),
+
+  generateInMemoryUserCredentials: data =>
+    data.generateAuthenticationApi && data.skipUserManagement && !data.authenticationTypeUsesRemoteAuthorization,
+  defaultAdminUsername: 'admin',
+  defaultAdminPassword: 'admin',
+  defaultAdminRoles: ['ADMIN', 'USER'],
+  defaultUserUsername: data => (data.generateInMemoryUserCredentials ? data.defaultAdminUsername : 'user'),
+  defaultUserPassword: data => (data.generateInMemoryUserCredentials ? data.defaultAdminPassword : 'user'),
+  defaultUserRoles: data => (data.generateInMemoryUserCredentials ? data.defaultAdminRoles : ['USER']),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<CommonApplication>, CommonAddedApplicationProperties>;
