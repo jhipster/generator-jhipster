@@ -63,7 +63,7 @@ export default class extends BaseGenerator {
             break;
           }
           case 'devserver': {
-            if (devBlueprint || hasWorkflowChanges || client) {
+            if (devBlueprint || hasWorkflowChanges || client || e2e) {
               matrix = { ...devServerMatrix.angular, ...devServerMatrix.react, ...devServerMatrix.vue };
             } else {
               for (const client of ['angular', 'react', 'vue']) {
