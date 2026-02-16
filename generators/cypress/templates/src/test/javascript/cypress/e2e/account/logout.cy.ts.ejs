@@ -28,8 +28,7 @@ describe('logout', () => {
 
   before(() => {
     cy.credentials().then(credentials => {
-      username = credentials.<%- generateInMemoryUserCredentials ? 'adminUsername' : 'username' %>;
-      password = credentials.<%- generateInMemoryUserCredentials ? 'adminPassword' : 'password' %>;
+      ({ username, password } = credentials);
     });
   });
 

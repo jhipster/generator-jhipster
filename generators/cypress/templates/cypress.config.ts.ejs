@@ -35,8 +35,8 @@ export default defineConfig({
   expose: {
     adminUsername: 'admin',
     adminPassword: 'admin',
-    username: 'user',
-    password: 'user',
+    username: '<%- generateInMemoryUserCredentials ? 'admin' : 'user' %>',
+    password: '<%- generateInMemoryUserCredentials ? 'admin' : 'user' %>',
 <%_ if (authenticationTypeJwt) { _%>
     authenticationUrl: '/api/authenticate',
     jwtStorageName: '<%= jhiPrefixDashed %>-authenticationToken',
