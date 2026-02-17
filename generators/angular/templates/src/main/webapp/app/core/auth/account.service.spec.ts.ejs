@@ -119,7 +119,7 @@ describe('Account Service', () => {
 
 <%_ } _%>
   describe('identity', () => {
-   it('should update account with returned account', () => {
+   it('should set account after successful identity request', () => {
       const account = { ...accountWithAuthorities([]) };
       // When I call
       service.identity().subscribe();
