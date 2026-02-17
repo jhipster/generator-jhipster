@@ -450,8 +450,21 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
   "jhipsterVersion": "JHIPSTER_VERSION",
   "js": undefined,
   "jwtSecretKey": Any<String>,
-  "languages": [],
-  "languagesDefinition": [],
+  "languages": [
+    "en",
+  ],
+  "languagesDefinition": [
+    {
+      "angularLocale": "en",
+      "dayjsLocale": "en",
+      "displayName": "English",
+      "fakerjsLocale": "en",
+      "javaLocaleMessageSourceSuffix": "en",
+      "languageTag": "en",
+      "name": "English",
+      "rtl": false,
+    },
+  ],
   "languagesToGenerate": [
     "en",
   ],
@@ -1297,8 +1310,21 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
   "jhipsterVersion": "JHIPSTER_VERSION",
   "js": undefined,
   "jwtSecretKey": undefined,
-  "languages": [],
-  "languagesDefinition": [],
+  "languages": [
+    "en",
+  ],
+  "languagesDefinition": [
+    {
+      "angularLocale": "en",
+      "dayjsLocale": "en",
+      "displayName": "English",
+      "fakerjsLocale": "en",
+      "javaLocaleMessageSourceSuffix": "en",
+      "languageTag": "en",
+      "name": "English",
+      "rtl": false,
+    },
+  ],
   "languagesToGenerate": [
     "en",
   ],

@@ -48,14 +48,13 @@ export const mutateMockedData = (...mutations: MutateDataParam<any>[]) => {
 export const mutateMockedCompleteData = (...mutations: MutateDataParam<any>[]) => {
   const data = {};
   const proxyGeneratedProperties = {} as Record<string | symbol, any>;
+  if (mutations.length > 1) {
+    // Treat the first mutation as the one that should bootstrap the data with arrays and objects.
+    mutateData(proxyGeneratedProperties, mutations[0]);
+  }
   const proxy = new Proxy(data, {
     get: (target: any, p: string | symbol) => {
-      if (!proxyGeneratedProperties[p]) {
-        const prop = new String(p);
-        (prop as any).push = () => {};
-        proxyGeneratedProperties[p] = prop;
-      }
-      return target[p] === undefined ? proxyGeneratedProperties[p] : target[p];
+      return target[p] === undefined ? (proxyGeneratedProperties[p] ?? p) : target[p];
     },
     set: (target: any, p: string | symbol, value: any) => {
       if (proxyGeneratedProperties[p] !== value) {

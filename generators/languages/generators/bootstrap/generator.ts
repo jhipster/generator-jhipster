@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { mutateData } from '../../../../lib/utils/object.ts';
+import { mutateData, overrideMutateDataProperty } from '../../../../lib/utils/object.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
 import { mutateEntity as languagesMutateEntity } from '../../entity.ts';
@@ -55,7 +55,12 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
   get loading() {
     return this.asLoadingTaskGroup({
       preparing({ applicationDefaults }) {
-        applicationDefaults({ supportedLanguages: [...this.supportedLanguages.values()] }, mutateApplicationLoading);
+        applicationDefaults(mutateApplicationLoading, {
+          supportedLanguages: overrideMutateDataProperty(({ supportedLanguages }: LanguagesApplication<LanguagesEntity>) => {
+            supportedLanguages.push(...this.supportedLanguages.values());
+            return supportedLanguages;
+          }),
+        });
       },
     });
   }

@@ -18,7 +18,7 @@ exports[`generator - java-simple-application:graalvm with default options should
             <verbose>true</verbose>
             <buildArgs>
                 <buildArg>-Duser.language=en</buildArg>
-                <buildArg>-H:IncludeLocales=</buildArg>
+                <buildArg>-H:IncludeLocales=en</buildArg>
             </buildArgs>
             <jvmArgs>
                 <arg>-Xms4g</arg>
