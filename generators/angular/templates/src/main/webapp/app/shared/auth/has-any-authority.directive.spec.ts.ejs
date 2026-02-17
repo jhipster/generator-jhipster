@@ -42,7 +42,7 @@ class TestHasAnyAuthorityDirective {
 describe('HasAnyAuthorityDirective tests', () => {
   let mockAccountService: AccountService;
   let currentAccount: WritableSignal<Account | null>;
-  let hasAnyAuthority;
+  let hasAnyAuthority: vitest.Mock;
 
   beforeEach(() => {
     currentAccount = signal<Account | null>({ activated: true, authorities: [] } as any);
