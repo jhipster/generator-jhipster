@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_ if (clientTestFrameworkVitest) { _%>
-import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vitest, type Mock } from 'vitest';
 <%_ } _%>
 import { Component, ElementRef, WritableSignal, signal, viewChild } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
@@ -42,7 +42,7 @@ class TestHasAnyAuthorityDirective {
 describe('HasAnyAuthorityDirective tests', () => {
   let mockAccountService: AccountService;
   let currentAccount: WritableSignal<Account | null>;
-  let hasAnyAuthority: vitest.Mock;
+  let hasAnyAuthority: Mock;
 
   beforeEach(() => {
     currentAccount = signal<Account | null>({ activated: true, authorities: [] } as any);
