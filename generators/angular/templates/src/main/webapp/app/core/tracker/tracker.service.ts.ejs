@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, effect } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, NavigationEnd, Event } from '@angular/router';
 import { Subscription, Observer } from 'rxjs';
@@ -62,14 +62,12 @@ export class TrackerService {
       debug: (msg: string): void => console.log(new Date(), msg),
     });
 
-    this.accountService.getAuthenticationState().subscribe({
-      next: (account: Account | null) => {
-        if (account) {
-          this.connect();
-        } else {
-          this.disconnect();
-        }
-      },
+    effect(() => {
+      if (this.accountService.account()) {
+        this.connect();
+      } else {
+        this.disconnect();
+      }
     });
 
     this.rxStomp.connected$.subscribe(() => {

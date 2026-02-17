@@ -67,7 +67,7 @@ import UserManagementDeleteDialog from '../delete/user-management-delete-dialog'
   ],
 })
 export default class UserManagement implements OnInit {
-  currentAccount = inject(AccountService).trackCurrentAccount();
+  currentAccount = inject(AccountService).account;
   users = signal<User[] | null>(null);
   isLoading = signal(false);
 <%_ if (!locals.databaseTypeCassandra) { _%>

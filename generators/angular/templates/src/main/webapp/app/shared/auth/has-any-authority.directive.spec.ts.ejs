@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_ if (clientTestFrameworkVitest) { _%>
-import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vitest, type Mock } from 'vitest';
 <%_ } _%>
 import { Component, ElementRef, WritableSignal, signal, viewChild } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
@@ -42,8 +42,12 @@ class TestHasAnyAuthorityDirective {
 describe('HasAnyAuthorityDirective tests', () => {
   let mockAccountService: AccountService;
   let currentAccount: WritableSignal<Account | null>;
+  let hasAnyAuthority: Mock;
 
   beforeEach(() => {
+    currentAccount = signal<Account | null>({ activated: true, authorities: [] } as any);
+    hasAnyAuthority = <%= clientTestFramework %>.fn((): boolean => Boolean(currentAccount()));
+
     TestBed.configureTestingModule({
 <%_ if (enableTranslation) { _%>
       imports: [TranslateModule.forRoot()],
@@ -52,23 +56,19 @@ describe('HasAnyAuthorityDirective tests', () => {
         {
           provide: AccountService,
           useValue: {
-            isAuthenticated: <%= clientTestFramework %>.fn(),
+            account: currentAccount,
+            hasAnyAuthority,
           },
         },
       ],
     });
-  });
 
-  beforeEach(() => {
     mockAccountService = TestBed.inject(AccountService);
-    currentAccount = signal<Account | null>({ activated: true, authorities: [] } as any);
-    mockAccountService.trackCurrentAccount = <%= clientTestFramework %>.fn(() => currentAccount);
   });
 
   describe('set <%= jhiPrefix %>HasAnyAuthority', () => {
     it('should show restricted content to user if user has required role', () => {
       // GIVEN
-      mockAccountService.hasAnyAuthority = <%= clientTestFramework %>.fn(() => true);
       const fixture = TestBed.createComponent(TestHasAnyAuthorityDirective);
       const comp = fixture.componentInstance;
 
@@ -81,7 +81,7 @@ describe('HasAnyAuthorityDirective tests', () => {
 
     it('should not show restricted content to user if user has not required role', () => {
       // GIVEN
-      mockAccountService.hasAnyAuthority = <%= clientTestFramework %>.fn(() => false);
+      currentAccount.set(null);
       const fixture = TestBed.createComponent(TestHasAnyAuthorityDirective);
       const comp = fixture.componentInstance;
 
@@ -96,7 +96,6 @@ describe('HasAnyAuthorityDirective tests', () => {
   describe('change authorities', () => {
     it('should show or not show restricted content correctly if user authorities are changing', () => {
       // GIVEN
-      mockAccountService.hasAnyAuthority = <%= clientTestFramework %>.fn((): boolean => Boolean(currentAccount()));
       const fixture = TestBed.createComponent(TestHasAnyAuthorityDirective);
       const comp = fixture.componentInstance;
 

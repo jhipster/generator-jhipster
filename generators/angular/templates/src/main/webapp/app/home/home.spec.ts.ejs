@@ -19,6 +19,7 @@
 <%_ if (clientTestFrameworkVitest) { _%>
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
+import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 <%_ if (!authenticationTypeOauth2) { _%>
 import { Router } from '@angular/router';
@@ -95,43 +96,6 @@ describe('Home Component', () => {
 <%_ } _%>
   });
 
-  describe('ngOnInit', () => {
-    it('should synchronize account variable with current account', () => {
-<%_ if (!authenticationTypeOauth2) { _%>
-      // GIVEN
-      const authenticationState = new Subject<Account | null>();
-      mockAccountService.getAuthenticationState = <%= clientTestFramework %>.fn(() => authenticationState.asObservable());
-
-      // WHEN
-      comp.ngOnInit();
-
-      // THEN
-      expect(comp.account()).toBeNull();
-
-      // WHEN
-      authenticationState.next(account);
-
-      // THEN
-      expect(comp.account()).toEqual(account);
-
-      // WHEN
-      authenticationState.next(null);
-
-      // THEN
-      expect(comp.account()).toBeNull();
-<%_ } else { _%>
-      // GIVEN
-      mockAccountService.identity = <%= clientTestFramework %>.fn(() => of(account));
-
-      // WHEN
-      comp.ngOnInit();
-
-      // THEN
-      expect(comp.account()).toEqual(account);
-<%_ } _%>
-    });
-  });
-
   describe('login', () => {
 <%_ if (!authenticationTypeOauth2) { _%>
     it('should navigate to /login on login', () => {
@@ -152,32 +116,4 @@ describe('Home Component', () => {
 <%_ } _%>
   });
 
-<%_ if (!authenticationTypeOauth2) { _%>
-  describe('ngOnDestroy', () => {
-    it('should destroy authentication state subscription on component destroy', () => {
-      // GIVEN
-      const authenticationState = new Subject<Account | null>();
-      mockAccountService.getAuthenticationState = <%= clientTestFramework %>.fn(() => authenticationState.asObservable());
-
-      // WHEN
-      comp.ngOnInit();
-
-      // THEN
-      expect(comp.account()).toBeNull();
-
-      // WHEN
-      authenticationState.next(account);
-
-      // THEN
-      expect(comp.account()).toEqual(account);
-
-      // WHEN
-      comp.ngOnDestroy();
-      authenticationState.next(null);
-
-      // THEN
-      expect(comp.account()).toEqual(account);
-    });
-  });
-<%_ } _%>
 });
