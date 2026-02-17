@@ -137,7 +137,6 @@ exports[`generator - vue:bootstrap bootstrapping default config should prepare a
   "filterEntitiesForClient": Any<Function>,
   "filterEntityPropertiesForClient": Any<Function>,
   "frontendAppName": "jhipsterApp",
-  "gatewayRoutes": undefined,
   "gatewayServerPort": undefined,
   "generateAuthenticationApi": true,
   "generateBuiltInAuthorityEntity": true,

@@ -137,7 +137,6 @@ exports[`generator - angular:bootstrap bootstrapping default config should prepa
   "filterEntitiesForClient": Any<Function>,
   "filterEntityPropertiesForClient": Any<Function>,
   "frontendAppName": "jhipsterApp",
-  "gatewayRoutes": undefined,
   "gatewayServerPort": undefined,
   "generateAuthenticationApi": true,
   "generateBuiltInAuthorityEntity": true,

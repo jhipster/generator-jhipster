@@ -134,7 +134,6 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
   "entityPackages": Any<Array>,
   "entitySuffix": "",
   "feignClient": false,
-  "gatewayRoutes": undefined,
   "gatewayServerPort": undefined,
   "generateAuthenticationApi": true,
   "generateBuiltInAuthorityEntity": true,

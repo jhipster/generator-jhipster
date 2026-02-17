@@ -137,7 +137,6 @@ exports[`generator - react:bootstrap bootstrapping default config should prepare
   "filterEntitiesForClient": Any<Function>,
   "filterEntityPropertiesForClient": Any<Function>,
   "frontendAppName": "jhipsterApp",
-  "gatewayRoutes": undefined,
   "gatewayServerPort": undefined,
   "generateAuthenticationApi": true,
   "generateBuiltInAuthorityEntity": true,
