@@ -279,7 +279,7 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
   "syncUserWithIdp": false,
   "temporaryDir": "target/",
   "testFrameworks": Any<Array>,
-  "typescriptEslint": undefined,
+  "typescriptEslint": true,
   "upperFirstCamelCaseBaseName": "Jhipster",
   "useNpmWrapper": true,
   "user": Any<Object>,

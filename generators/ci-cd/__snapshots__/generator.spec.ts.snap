@@ -438,7 +438,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "syncUserWithIdp": false,
   "temporaryDir": "target/",
   "testFrameworks": [],
-  "typescriptEslint": undefined,
+  "typescriptEslint": true,
   "upperFirstCamelCaseBaseName": "Jhipster",
   "useNpmWrapper": true,
   "user": Any<Object>,

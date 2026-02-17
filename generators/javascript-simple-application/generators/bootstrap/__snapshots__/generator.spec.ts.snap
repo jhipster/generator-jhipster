@@ -44,6 +44,7 @@ exports[`generator - javascript-simple-application:bootstrap bootstrapping defau
   "prettierFolders": Any<Array>,
   "projectDescription": "Description for JHipster",
   "skipJhipsterDependencies": undefined,
+  "typescriptEslint": true,
   "upperFirstCamelCaseBaseName": "Jhipster",
 }
 `;

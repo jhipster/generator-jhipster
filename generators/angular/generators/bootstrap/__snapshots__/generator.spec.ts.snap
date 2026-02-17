@@ -250,7 +250,7 @@ exports[`generator - angular:bootstrap bootstrapping default config should prepa
   "syncUserWithIdp": false,
   "temporaryDir": "target/",
   "testFrameworks": Any<Array>,
-  "typescriptEslint": undefined,
+  "typescriptEslint": true,
   "upperFirstCamelCaseBaseName": "Jhipster",
   "user": Any<Object>,
   "userManagement": Any<Object>,

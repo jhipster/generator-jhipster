@@ -45,7 +45,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
     return this.asLoadingTaskGroup({
       loadConfig({ applicationDefaults }) {
         applicationDefaults({
-          dockerContainers: {},
+          dockerContainers: () => ({}),
           authenticationUsesCsrf: undefined,
           gatewayRoutes: undefined,
         });

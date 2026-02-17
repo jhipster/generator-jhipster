@@ -73,29 +73,14 @@ export default class ReactGenerator extends ClientApplicationGenerator<
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
+  get preparing() {
+    return this.asPreparingTaskGroup({
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
           this.fetchFromInstalledJHipster('react', 'resources', 'package.json'),
         );
       },
-      applicationDefaults({ applicationDefaults }) {
-        applicationDefaults({
-          __override__: true,
-          typescriptEslint: true,
-        });
-      },
-    });
-  }
-
-  get [ClientApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
-  }
-
-  get preparing() {
-    return this.asPreparingTaskGroup({
       applicationDefaults({ application, applicationDefaults }) {
         application.prettierExtensions.push('html', 'tsx', 'css', 'scss');
         if (application.clientBundlerWebpack) {

@@ -279,7 +279,7 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
   "syncUserWithIdp": false,
   "temporaryDir": "target/",
   "testFrameworks": Any<Array>,
-  "typescriptEslint": undefined,
+  "typescriptEslint": true,
   "upperFirstCamelCaseBaseName": "Jhipster",
   "useNpmWrapper": true,
   "user": Any<Object>,
