@@ -9,7 +9,7 @@ export const devServerMatrix = {
     },
     'ng-default-webpack': {
       sample: 'samples/ng-default',
-      args: '--sample-yorc-folder --entities-sample sqllight --client-bundler webpack',
+      args: '--auth oauth2 --sample-yorc-folder --entities-sample sqllight --client-bundler webpack',
     },
   },
   react: {
