@@ -28,7 +28,7 @@ import {
 import vue from '@vitejs/plugin-vue';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 <%_ if (microfrontend && clientBundlerVite) { _%>
-import federation from "@originjs/vite-plugin-federation";
+import { federation } from '@module-federation/vite';
 
   <%_ if (applicationTypeGateway) { _%>
 const sharedAppVersion = '0.0.0';
@@ -127,11 +127,18 @@ config = mergeConfig(config, {
   plugins: [
     federation({
       name: '<%= lowercaseBaseName %>',
+      filename: 'remoteEntry.js',
   <%_ if (applicationTypeGateway) { _%>
       remotes: {
     <%_ for (const remote of microfrontends) { _%>
-        '@<%= remote.lowercaseBaseName %>': `/<%= remote.endpointPrefix %>/assets/remoteEntry.js`,
-  <%_ } _%>
+        '<%= remote.lowercaseBaseName %>': {
+          type: 'module',
+          name: '<%= remote.lowercaseBaseName %>',
+          entry: '/<%= remote.endpointPrefix %>/remoteEntry.js',
+          entryGlobalName: '<%= remote.lowercaseBaseName %>',
+          shareScope: 'default',
+        },
+    <%_ } _%>
       },
   <%_ } _%>
   <%_ if (applicationTypeMicroservice) { _%>
@@ -146,25 +153,25 @@ config = mergeConfig(config, {
         axios: {},
         // 'bootstrap-vue': {},
         vue: {
-          packagePath: 'vue/dist/vue.esm-bundler.js',
+          import: 'vue/dist/vue.esm-bundler.js',
         },
         'vue-i18n': {},
         'vue-router': {},
         pinia: {},
         '@/shared/jhipster/constants': {
-          packagePath: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/shared/jhipster/constants',
+          import: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/shared/jhipster/constants',
   <%_ if (applicationTypeGateway) { _%>
           version: sharedAppVersion,
   <%_ } _%>
         },
         '@/shared/alert/alert.service': {
-          packagePath: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/shared/alert/alert.service',
+          import: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/shared/alert/alert.service',
   <%_ if (applicationTypeGateway) { _%>
           version: sharedAppVersion,
   <%_ } _%>
         },
         '@/locale/translation.service': {
-          packagePath: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/locale/translation.service',
+          import: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/locale/translation.service',
   <%_ if (applicationTypeGateway) { _%>
           version: sharedAppVersion,
   <%_ } _%>
