@@ -18,26 +18,34 @@
 -%>
 import { Routes } from '@angular/router';
 
+<%_ if (!builtInUserManagement) { _%>
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
+<%_ } _%>
 import <%= entityAngularName %>Resolve from './route/<%= entityFileName %>-routing-resolve.service';
+<%_ if (!builtInUserManagement) { _%>
 import { ASC } from 'app/config/navigation.constants';
+<%_ } _%>
 
 const <%= entityInstance %>Route: Routes = [
   {
     path: '',
     loadComponent: () => import('./list/<%= entityFileName %>').then(m => m.<%= entityAngularName %>),
     data: {
-<%_ if (primaryKey.typeLong && primaryKey.autoGenerate) { _%>
+<%_ if (primaryKey.typeLong && primaryKey.autoGenerate && !builtInUserManagement) { _%>
       defaultSort: '<%- primaryKey.name %>,' + ASC,
+<%_ } else if (builtInUserManagement) { _%>
+      defaultSort: 'id,asc',
 <%_ } _%>
 <%_ if (entityAngularReadAuthorities) { _%>
       authorities: [<%- entityAngularReadAuthorities %>],
 <%_ } _%>
     },
+<%_ if (!builtInUserManagement) { _%>
     canActivate: [UserRouteAccessService],
+<%_ } _%>
   },
   {
-    path: ':<%= primaryKey.name %>/view',
+    path: ':<% if (builtInUserManagement) { %>login<% } else { %><%= primaryKey.name %><% } %>/view',
     loadComponent: () => import('./detail/<%= entityFileName %>-detail').then(m => m.<%= entityAngularName %>Detail),
     resolve: {
       <%= entityInstance %>: <%= entityAngularName %>Resolve
@@ -47,7 +55,9 @@ const <%= entityInstance %>Route: Routes = [
       authorities: [<%- entityAngularReadAuthorities %>],
     },
 <%_ } _%>
+<%_ if (!builtInUserManagement) { _%>
     canActivate: [UserRouteAccessService]
+<%_ } _%>
   },
 <%_ if (!readOnly) { _%>
   {
@@ -61,12 +71,14 @@ const <%= entityInstance %>Route: Routes = [
       authorities: [<%- entityAngularAuthorities %>],
     },
 <%_ } _%>
+<%_ if (!builtInUserManagement) { _%>
     canActivate: [UserRouteAccessService]
+<%_ } _%>
   },
 <%_ } _%>
 <%_ if (!readOnly && updatableEntity) { _%>
   {
-    path: ':<%= primaryKey.name %>/edit',
+    path: ':<% if (builtInUserManagement) { %>login<% } else { %><%= primaryKey.name %><% } %>/edit',
     loadComponent: () => import('./update/<%= entityFileName %>-update').then(m => m.<%= entityAngularName %>Update),
     resolve: {
       <%= entityInstance %>: <%= entityAngularName %>Resolve
@@ -76,7 +88,9 @@ const <%= entityInstance %>Route: Routes = [
       authorities: [<%- entityAngularAuthorities %>],
     },
 <%_ } _%>
+<%_ if (!builtInUserManagement) { _%>
     canActivate: [UserRouteAccessService]
+<%_ } _%>
   },
 <%_ } _%>
 ];

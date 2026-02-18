@@ -117,10 +117,18 @@ _%>
 <%_ if (!readOnly && updatableEntity) { _%>
 
       <button type="button"
-          [routerLink]="['/<%= entityPage %>', <%= entityInstance %>Ref.<%= primaryKey.name %>, 'edit']"
+          [routerLink]="['/<%= entityPage %>', <%= entityInstance %>Ref.<% if (builtInUserManagement) { %>login<% } else { %><%= primaryKey.name %><% } %>, 'edit']"
           class="btn btn-primary">
         <fa-icon icon="pencil-alt" />&nbsp;<span>__jhiTranslateTag__('entity.action.edit')</span>
       </button>
+<%_ } _%>
+<%_ if (builtInUserManagement) { _%>
+        <dt><span>__jhiTranslateTag__('userManagement.profiles')</span></dt>
+        <dd>
+        @for (authority of <%= entityInstance %>Ref.authorities; track $index) {
+          <span class="badge bg-info">{{ authority<% if (generateBuiltInAuthorityEntity) { %>.name<% } %> }}</span>
+        }
+        </dd>
 <%_ } _%>
     </div>
     }
