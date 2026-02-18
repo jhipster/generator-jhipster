@@ -35,10 +35,14 @@ spring:
 <%_ if (serviceDiscoveryConsul) { _%>
     consul:
       config:
+        # Prefer the standard Consul token env var while keeping backward-compatible fallbacks.
+        acl-token: ${CONSUL_HTTP_TOKEN:${CONSUL_TOKEN:}}
         fail-fast: false # if not in "prod" profile, do not force to use Spring Cloud Config
         format: yaml
         profile-separator: '-'
       discovery:
+        # Prefer the standard Consul token env var while keeping backward-compatible fallbacks.
+        acl-token: ${CONSUL_HTTP_TOKEN:${CONSUL_TOKEN:}}
         tags:
           - profile=${spring.profiles.active}
           - version='@project.version@'
