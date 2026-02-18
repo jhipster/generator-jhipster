@@ -47,7 +47,7 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
     return this.asPreparingTaskGroup({
       defaults({ applicationDefaults }) {
         applicationDefaults(mutateApplicationPreparing, {
-          springBoot4: data => Boolean(!(data.databaseTypeSql && data.reactive) && !data.databaseTypeCouchbase),
+          springBoot4: data => Boolean(!data.databaseTypeCouchbase),
         });
       },
       hibernate({ application, applicationDefaults }) {
