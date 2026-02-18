@@ -22,7 +22,7 @@ import type { Entity as ClientEntity, Field as ClientField, Relationship as Clie
 export const isClientField = (field: ClientField) => !field.skipClient;
 
 export const isClientRelationship = (rel: RelationshipWithEntity<ClientRelationship, ClientEntity>) =>
-  !!(rel.skipClient ?? !(rel.persistableRelationship || rel.relationshipEagerLoad || rel.otherEntity.jpaMetamodelFiltering));
+  !rel.skipClient && (rel.persistableRelationship || rel.relationshipEagerLoad || rel.otherEntity.jpaMetamodelFiltering);
 
 /**
  * Clone entity properties for frontend templates.
