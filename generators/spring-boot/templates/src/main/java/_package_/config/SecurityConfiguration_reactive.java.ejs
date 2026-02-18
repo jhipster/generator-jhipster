@@ -118,18 +118,21 @@ import org.springframework.security.web.server.util.matcher.OrServerWebExchangeM
 import reactor.core.publisher.Mono;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
-  <%_ if (!applicationTypeMicroservice) { _%>
+import io.netty.channel.ChannelOption;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.netty.http.client.HttpClient;
 
+  <%_ if (!applicationTypeMicroservice) { _%>
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 
-import java.time.Duration;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
   <%_ } _%>
 
+import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
   <%_ if (!applicationTypeMicroservice) { _%>
@@ -394,7 +397,9 @@ public class SecurityConfiguration {
     @Bean
     ReactiveJwtDecoder jwtDecoder(<%_ if (!applicationTypeMicroservice) { _%>ReactiveClientRegistrationRepository registrations<%_ } _%>) {
     <%_ if (applicationTypeMicroservice) { _%>
-        NimbusReactiveJwtDecoder jwtDecoder = (NimbusReactiveJwtDecoder) ReactiveJwtDecoders.fromOidcIssuerLocation(issuerUri);
+        NimbusReactiveJwtDecoder jwtDecoder = NimbusReactiveJwtDecoder.withIssuerLocation(issuerUri)
+            .webClient(webClient())
+            .build();
 
         OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());
         OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
@@ -403,6 +408,15 @@ public class SecurityConfiguration {
         jwtDecoder.setJwtValidator(withAudience);
 
         return jwtDecoder;
+    }
+
+    private WebClient webClient() {
+        HttpClient httpClient = HttpClient.create()
+            .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000)
+            .responseTimeout(Duration.ofSeconds(10));
+        return WebClient.builder()
+            .clientConnector(new ReactorClientHttpConnector(httpClient))
+            .build();
     }
     <%_ } else { _%>
 
