@@ -85,8 +85,6 @@ spring:
       enabled: false
 <%_ } _%>
 <%_ if (messageBrokerKafka) { _%>
-    function:
-      definition: kafkaConsumer;kafkaProducer
     stream:
       kafka:
         binder:
