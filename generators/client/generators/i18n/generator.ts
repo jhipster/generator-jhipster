@@ -16,6 +16,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { glob } from 'node:fs/promises';
+import { join } from 'node:path';
+
 import { startCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../../../base-application/generator.ts';
@@ -140,16 +143,51 @@ export default class I18NGenerator extends ClientApplicationGenerator {
               sections: {
                 clientI18nFiles: [
                   {
-                    from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
-                    to: context => `${context.clientI18nDir}${context.lang}/`,
-                    transform: false,
-                    templates: ['error.json', 'login.json', 'password.json', 'register.json', 'sessions.json', 'settings.json'],
-                  },
-                  {
                     condition: ctx => ctx.clientFrameworkVue && ctx.enableTranslation && !ctx.microfrontend,
                     path: `${CLIENT_MAIN_SRC_DIR}/i18n/`,
                     renameTo: context => `${context.clientI18nDir}${context.lang}/${context.lang}.js`,
                     templates: ['index.js'],
+                  },
+                ],
+              },
+              context: {
+                ...application,
+                lang: languageTag,
+              },
+            }),
+          ),
+        );
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.writing);
+  }
+
+  get writingEntities() {
+    return this.asWritingEntitiesTaskGroup({
+      async writeGlobalTranslations({ application }) {
+        if ((application.commandName === 'entity' || application.commandName === 'entities') && application.enableTranslation) {
+          // For entity/entities sub generators, we need to load existing translations into mem-fs to be able to load them in the translation data.
+          for await (const file of glob(`${application.clientI18nDir}**/*.json`, { cwd: this.destinationRoot(), withFileTypes: true })) {
+            if (file.isFile()) {
+              this.env.sharedFs.get(join(file.parentPath, file.name));
+            }
+          }
+          return;
+        }
+        // writing/postWriting priorities are skipped by entity command, we need to write global translations here
+        await Promise.all(
+          this.languagesToGenerate.map(({ languageTag }) =>
+            this.writeFiles({
+              sections: {
+                clientI18nFiles: [
+                  {
+                    from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
+                    to: context => `${context.clientI18nDir}${context.lang}/`,
+                    transform: false,
+                    templates: ['error.json', 'login.json', 'password.json', 'register.json', 'sessions.json', 'settings.json'],
                   },
                   {
                     from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
@@ -195,15 +233,6 @@ export default class I18NGenerator extends ClientApplicationGenerator {
           ),
         );
       },
-    });
-  }
-
-  get [BaseApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
-  }
-
-  get writingEntities() {
-    return this.asWritingEntitiesTaskGroup({
       async writeEntityFiles({ application, entities }) {
         const entitiesToWriteTranslationFor = entities.filter(entity => !entity.skipClient && !entity.builtInUser);
         if (application.userManagement?.skipClient) {
@@ -335,6 +364,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
           {
             name: 'loading translations',
             filter: file => file.path.startsWith(this.destinationPath()) && filter(file),
+            pendingFiles: false,
             refresh: true,
           },
           this.translationData.loadFromStreamTransform({
