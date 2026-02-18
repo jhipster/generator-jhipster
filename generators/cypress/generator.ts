@@ -27,13 +27,18 @@ import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.ts';
 import type { Source as JavaSource } from '../java/types.d.ts';
 
 import { cypressEntityFiles, cypressFiles } from './files.ts';
-import type { Application as CypressApplication, Entity as CypressEntity, Field as CypressField } from './types.ts';
+import type {
+  Application as CypressApplication,
+  Config as CypressConfig,
+  Entity as CypressEntity,
+  Field as CypressField,
+} from './types.ts';
 
 const { ANGULAR } = clientFrameworkTypes;
 
 const WAIT_TIMEOUT = 3 * 60000;
 
-export default class CypressGenerator extends BaseApplicationGenerator<CypressEntity, CypressApplication> {
+export default class CypressGenerator extends BaseApplicationGenerator<CypressEntity, CypressApplication, CypressConfig> {
   angularSchematic = false;
 
   async beforeQueue() {
@@ -74,6 +79,21 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
     return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
+  get configuring() {
+    return this.asConfiguringTaskGroup({
+      setCypressTestFramework({ control }) {
+        if (control.isJhipsterVersionLessThan('9.0.0-beta.4')) {
+          // cypressAudit is set to false by default since next release following 9.0.0-beta.3.
+          this.jhipsterConfig.cypressAudit ??= true;
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.CONFIGURING]() {
+    return this.delegateTasksToBlueprint(() => this.configuring);
+  }
+
   get preparing() {
     return this.asPreparingTaskGroup({
       loadPackageJson({ application }) {
@@ -84,7 +104,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
       },
       prepareForTemplates({ applicationDefaults }) {
         applicationDefaults({
-          cypressAudit: true,
+          cypressAudit: false,
           cypressCoverage: false,
           cypressDir: ({ clientTestDir }) => (clientTestDir ? `${clientTestDir}cypress/` : 'cypress/'),
           cypressTemporaryDir: ({ temporaryDir }) => (temporaryDir ? `${temporaryDir}cypress/` : '.cypress/'),

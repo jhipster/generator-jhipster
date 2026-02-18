@@ -8,6 +8,7 @@
     "clientFramework": "angular",
     "clientTheme": "none",
     "creationTimestamp": 1596513172471,
+    "cypressAudit": true,
     "cypressCoverage": true,
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",
