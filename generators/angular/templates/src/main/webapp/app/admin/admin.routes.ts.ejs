@@ -23,7 +23,7 @@ const routes: Routes = [
 <%_ if (generateUserManagement && userManagement.skipClient) { _%>
   {
     path: 'user-management',
-    loadChildren: () => import('./user-management/user-management.route'),
+    loadChildren: () => import('../entities/admin/user-management/user-management.routes').then(m => m.default),
     title: 'userManagement.home.title',
   },
 <%_ } _%>

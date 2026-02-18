@@ -70,31 +70,6 @@ export const angularFiles = {
   ],
 };
 
-export const userManagementFiles = asWriteEntityFilesSection({
-  userManagement: [
-    clientApplicationTemplatesBlock({
-      templates: [
-        'admin/user-management/user-management.route.ts',
-        'admin/user-management/user-management.model.ts',
-        'admin/user-management/list/user-management.html',
-        'admin/user-management/list/user-management.spec.ts',
-        'admin/user-management/list/user-management.ts',
-        'admin/user-management/detail/user-management-detail.html',
-        'admin/user-management/detail/user-management-detail.spec.ts',
-        'admin/user-management/detail/user-management-detail.ts',
-        'admin/user-management/update/user-management-update.html',
-        'admin/user-management/update/user-management-update.spec.ts',
-        'admin/user-management/update/user-management-update.ts',
-        'admin/user-management/delete/user-management-delete-dialog.html',
-        'admin/user-management/delete/user-management-delete-dialog.spec.ts',
-        'admin/user-management/delete/user-management-delete-dialog.ts',
-        'admin/user-management/service/user-management.service.spec.ts',
-        'admin/user-management/service/user-management.service.ts',
-      ],
-    }),
-  ],
-});
-
 export const writeEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularApplication<AngularEntity>>(async function ({
   application,
   entities,
@@ -112,17 +87,31 @@ export const writeEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularAp
       });
 
       if (application.generateUserManagement && application.userManagement!.skipClient) {
+        // Use standard entity templates for User Management
+        const userManagementEntity = application.userManagement!;
         await this.writeFiles({
-          sections: userManagementFiles,
+          sections: angularFiles,
           context: {
             ...application,
-            ...entity,
+            ...userManagementEntity,
+            builtInUserManagement: true,
             i18nKeyPrefix: 'userManagement',
             entityFileName: 'user-management',
-            entityFolderPrefix: 'admin',
+            entityFolderName: 'admin/user-management',
+            entityPage: 'admin/user-management',
           },
         });
       }
+    } else if (entity.builtInUserManagement) {
+      // UserManagement entity should use standard entity templates
+      await this.writeFiles({
+        sections: angularFiles,
+        context: {
+          ...application,
+          ...entity,
+          builtInUserManagement: true,
+        },
+      });
     } else {
       await this.writeFiles({
         sections: entity.entityClientModelOnly ? { model: [entityModelFiles] } : angularFiles,

@@ -28,12 +28,15 @@ import {
 <%_ if (builtInUserManagement || anyFieldIsDateDerived) { _%>
   map,
 <%_ } _%>
-  Observable,
+  Observable<% if (builtInUserManagement && !generateBuiltInAuthorityEntity) { %>, of<% } %>,
 <%_ if (searchEngineAny) { _%>
   asapScheduler,
   scheduled,
 <%_ } _%>
 } from 'rxjs';
+<%_ if (builtInUserManagement && !generateBuiltInAuthorityEntity) { _%>
+import { Authority } from 'app/config/authority.constants';
+<%_ } _%>
 
 <%_ if (searchEngineAny) { _%>
 import { catchError } from 'rxjs/operators';
@@ -137,8 +140,8 @@ export class <%= entityAngularName %>Service {
     }
 <%_ } _%>
 
-    find(id: <%= tsKeyType %>): Observable<EntityResponseType> {
-        return this.http.get<<%= entityRestName %>>(`${this.resourceUrl}/${encodeURIComponent(id)}`, { observe: 'response' })
+    find(<% if (builtInUserManagement) { %>login: string<% } else { %>id: <%= tsKeyType %><% } %>): Observable<EntityResponseType> {
+        return this.http.get<<%= entityRestName %>>(`${this.resourceUrl}/${encodeURIComponent(<% if (builtInUserManagement) { %>login<% } else { %>id<% } %>)}`, { observe: 'response' })
             <% if (anyFieldIsDateDerived) { %>.pipe(map(res => this.convertResponseFromServer(res)))<% } %>
             <% if (builtInUserManagement) { %>.pipe(map(res => this.convertUserManagementResponseFromServer(res)))<% } %>;
     }
@@ -151,8 +154,8 @@ export class <%= entityAngularName %>Service {
     }
 
 <%_ if (!readOnly) { _%>
-    delete(id: <%= tsKeyType %>): Observable<HttpResponse<{}>> {
-        return this.http.delete(`${this.resourceUrl}/${encodeURIComponent(id)}`, { observe: 'response' });
+    delete(<% if (builtInUserManagement) { %>login: string<% } else { %>id: <%= tsKeyType %><% } %>): Observable<HttpResponse<{}>> {
+        return this.http.delete(`${this.resourceUrl}/${encodeURIComponent(<% if (builtInUserManagement) { %>login<% } else { %>id<% } %>)}`, { observe: 'response' });
     }
 <%_ } _%>
 
@@ -168,15 +171,27 @@ export class <%= entityAngularName %>Service {
     }
 <%_ } _%>
 
-    get<%= entityAngularName %>Identifier(<%= entityInstance %>: Pick<I<%= entityAngularName %>, '<%= primaryKey.name %>'>): <%= primaryKey.tsType %> {
-        return <%= entityInstance %>.<%= primaryKey.name %>;
+    get<%= entityAngularName %>Identifier(<%= entityInstance %>: Pick<I<%= entityAngularName %>, '<% if (builtInUserManagement) { %>login<% } else { %><%= primaryKey.name %><% } %>'>): <% if (builtInUserManagement) { %>string<% } else { %><%= primaryKey.tsType %><% } %> {
+        return <%= entityInstance %>.<% if (builtInUserManagement) { %>login<% } else { %><%= primaryKey.name %><% } %>;
     }
 
-    compare<%= entityAngularName %>(o1: Pick<I<%= entityAngularName %>, '<%= primaryKey.name %>'> | null, o2: Pick<I<%= entityAngularName %>, '<%= primaryKey.name %>'> | null): boolean {
+    compare<%= entityAngularName %>(o1: Pick<I<%= entityAngularName %>, '<% if (builtInUserManagement) { %>login<% } else { %><%= primaryKey.name %><% } %>'> | null, o2: Pick<I<%= entityAngularName %>, '<% if (builtInUserManagement) { %>login<% } else { %><%= primaryKey.name %><% } %>'> | null): boolean {
         return o1 && o2 ? this.get<%= entityAngularName %>Identifier(o1) === this.get<%= entityAngularName %>Identifier(o2) : o1 === o2;
     }
+<%_ if (builtInUserManagement) { _%>
 
-    add<%= entityAngularName %>ToCollectionIfMissing<Type extends Pick<I<%= entityAngularName %>, '<%= primaryKey.name %>'>>(<%= entityInstance %>Collection: Type[], ...<%= entityInstancePlural %>ToCheck: (Type | null | undefined)[]): Type[] {
+    authorities(): Observable<string[]> {
+  <%_ if (generateBuiltInAuthorityEntity) { _%>
+        return this.http
+          .get<{ name: string }[]>(this.applicationConfigService.getEndpointFor('api/authorities'))
+          .pipe(map(authorities => authorities.map(a => a.name)));
+  <%_ } else { _%>
+        return of([Authority.ADMIN, Authority.USER]);
+  <%_ } _%>
+    }
+<%_ } _%>
+
+    add<%= entityAngularName %>ToCollectionIfMissing<Type extends Pick<I<%= entityAngularName %>, '<% if (builtInUserManagement) { %>login<% } else { %><%= primaryKey.name %><% } %>'>>(<%= entityInstance %>Collection: Type[], ...<%= entityInstancePlural %>ToCheck: (Type | null | undefined)[]): Type[] {
         const <%= entityInstancePlural %>: Type[] = <%= entityInstancePlural %>ToCheck.filter(isPresent);
         if (<%= entityInstancePlural %>.length > 0) {
             const <%= entityInstance %>CollectionIdentifiers = <%= entityInstance %>Collection.map(<%= entityInstance %>Item => this.get<%= entityAngularName %>Identifier(<%= entityInstance %>Item));
@@ -234,14 +249,18 @@ export class <%= entityAngularName %>Service {
   protected convertUserManagementFromClient<T extends I<%= entityAngularName %><% if (!readOnly) { %> | New<%= entityAngularName %><% } %><% if (!readOnly && updatableEntity) { %> | PartialUpdate<%= entityAngularName %><% } %>>(<%= entityInstance %>: T): any {
     return {
       ...<%= entityInstance %>,
-      authorities: <%= entityInstance %>.authorities?.map(authority => authority.name),
+      authorities: <%= entityInstance %>.authorities?.map(authority => <% if (generateBuiltInAuthorityEntity) { %>authority.name<% } else { %>authority<% } %>),
     };
   }
 
   protected convertUserManagementFromServer(rest<%= entityAngularName %>: <%= entityRestName %>): I<%= entityAngularName %> {
     return {
       ...rest<%= entityAngularName %>,
+      <%_ if (generateBuiltInAuthorityEntity) { _%>
       authorities: rest<%= entityAngularName %>.authorities?.map(authority => ({ name: authority as unknown as string })),
+      <%_ } else { _%>
+      authorities: rest<%= entityAngularName %>.authorities,
+      <%_ } _%>
     }
   }
 

@@ -4976,54 +4976,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/admin/metrics/metrics.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/user-management/delete/user-management-delete-dialog.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/delete/user-management-delete-dialog.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/delete/user-management-delete-dialog.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/detail/user-management-detail.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/detail/user-management-detail.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/detail/user-management-detail.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/list/user-management.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/list/user-management.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/list/user-management.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/service/user-management.service.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/service/user-management.service.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/update/user-management-update.html": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/update/user-management-update.spec.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/update/user-management-update.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management.model.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/user-management/user-management.route.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/app-page-title-strategy.ts": {
     "stateCleared": "modified",
   },
@@ -5199,6 +5151,69 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/authority/update/authority-update.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/delete/user-management-delete-dialog.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/delete/user-management-delete-dialog.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/delete/user-management-delete-dialog.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/detail/user-management-detail.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/detail/user-management-detail.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/detail/user-management-detail.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/list/user-management.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/list/user-management.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/list/user-management.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/route/user-management-routing-resolve.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/route/user-management-routing-resolve.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/service/user-management.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/service/user-management.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/update/user-management-form.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/update/user-management-form.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/update/user-management-update.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/update/user-management-update.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/update/user-management-update.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/user-management.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/user-management.routes.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/user-management.test-samples.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entity-with-custom-id/delete/entity-with-custom-id-delete-dialog.html": {

@@ -75,6 +75,9 @@ import {
   DEFAULT_SORT_DATA
 } from 'app/config/navigation.constants';
 import { EntityArrayResponseType, <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
+<%_ if (builtInUserManagement) { _%>
+import { AccountService } from 'app/core/auth/account.service';
+<%_ } _%>
 <%_ if (!readOnly) { _%>
 import { <%= entityAngularName %>DeleteDialog } from '../delete/<%= entityFileName %>-delete-dialog';
 <%_ } _%>
@@ -138,6 +141,9 @@ export class <%= componentName %> implements OnInit {
     subscription: Subscription | null = null;
     <%= entityInstancePlural %> = signal<I<%= entityAngularName %>[]>([]);
     isLoading = signal(false);
+<%_ if (builtInUserManagement) { _%>
+    currentAccount = inject(AccountService).trackCurrentAccount();
+<%_ } _%>
 
     sortState = sortStateSignal({});
 <%_ if (searchEngineAny) { _%>
@@ -172,8 +178,17 @@ export class <%= componentName %> implements OnInit {
     protected modalService = inject(NgbModal);
 <%_ } _%>
 <%_ if (primaryKey) { _%>
-
+<%_ if (builtInUserManagement) { _%>
+    trackIdentity = (item: I<%= entityAngularName %>): <%= primaryKey.tsType %> => item.id!;
+<%_ } else { _%>
     track<%= primaryKey.nameCapitalized %> = (item: I<%= entityAngularName %>): <%= primaryKey.tsType %> => this.<%= entityInstance %>Service.get<%= entityAngularName %>Identifier(item);
+<%_ } _%>
+<%_ } _%>
+<%_ if (builtInUserManagement) { _%>
+
+    setActive(<%= entityInstance %>: I<%= entityAngularName %>, isActivated: boolean): void {
+      this.<%= entityInstance %>Service.update({ ...<%= entityInstance %>, activated: isActivated }).subscribe(() => this.load());
+    }
 <%_ } _%>
 
     ngOnInit(): void {

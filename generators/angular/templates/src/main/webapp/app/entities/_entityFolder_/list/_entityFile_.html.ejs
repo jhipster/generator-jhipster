@@ -102,14 +102,51 @@ _%>
                     </th>
   <%_ } _%>
 <%_ } _%>
+<%_ if (builtInUserManagement) { _%>
+                    <th scope="col"></th>
+<%_ if (enableTranslation) { _%>
+                    <th scope="col"<% if (!databaseTypeCassandra) { %> <%= jhiPrefix %>SortBy="langKey"<% } %>>
+                        <div class="d-flex">
+                            <span>__jhiTranslateTag__('userManagement.langKey')</span>
+  <%_ if (!databaseTypeCassandra) { _%>
+                            <fa-icon class="p-1" icon="sort" />
+  <%_ } _%>
+                        </div>
+                    </th>
+<%_ } _%>
+                    <th scope="col">
+                        <span>__jhiTranslateTag__('userManagement.profiles')</span>
+                    </th>
+<%_ if (!databaseTypeCassandra) { _%>
+                    <th scope="col" <%= jhiPrefix %>SortBy="createdDate">
+                        <div class="d-flex">
+                            <span>__jhiTranslateTag__('userManagement.createdDate')</span>
+                            <fa-icon class="p-1" icon="sort" />
+                        </div>
+                    </th>
+                    <th scope="col" <%= jhiPrefix %>SortBy="lastModifiedBy">
+                        <div class="d-flex">
+                            <span>__jhiTranslateTag__('userManagement.lastModifiedBy')</span>
+                            <fa-icon class="p-1" icon="sort" />
+                        </div>
+                    </th>
+                    <th scope="col" <%= jhiPrefix %>SortBy="lastModifiedDate">
+                        <div class="d-flex">
+                            <span>__jhiTranslateTag__('userManagement.lastModifiedDate')</span>
+                            <fa-icon class="p-1" icon="sort" />
+                        </div>
+                    </th>
+<%_ } _%>
+<%_ } _%>
                     <th scope="col"></th>
                 </tr>
             </thead>
             <tbody<% if (paginationInfiniteScroll) { %> infinite-scroll (scrolled)="loadNextPage()" [infiniteScrollDisabled]="!hasMorePage()" [infiniteScrollDistance]="0"<% } %>>
-            @for (<%= entityInstance %> of <%= entityInstancePlural %>(); track track<%= primaryKey.nameCapitalized %>(<%= entityInstance %>)) {
+            @for (<%= entityInstance %> of <%= entityInstancePlural %>(); track <% if (builtInUserManagement) { %>trackIdentity<% } else { %>track<%= primaryKey.nameCapitalized %><% } %>(<%= entityInstance %>)) {
                 <tr data-cy="entityTable">
 <%_
-const routerLink = ` [routerLink]="['/${ entityPage }', ${entityInstance}.${primaryKey.name}, 'view']"`;
+const primaryKeyField = builtInUserManagement ? 'login' : primaryKey.name;
+const routerLink = ` [routerLink]="['/${ entityPage }', ${entityInstance}.${primaryKeyField}, 'view']"`;
 for (field of fields.filter(field => !field.hidden)) {
     const fieldName = field.fieldName;
     const fieldType = field.fieldType;
@@ -176,6 +213,35 @@ _%>
                     </td>
     <%_ } _%>
 <%_ } _%>
+<%_ if (builtInUserManagement) { _%>
+                    <td>
+                    @if (!<%= entityInstance %>.activated) {
+                        <button class="btn btn-danger btn-sm"
+                          (click)="setActive(<%= entityInstance %>, true)"
+                        >__jhiTranslateTag__('userManagement.deactivated')</button>
+                    } @else {
+                        <button class="btn btn-success btn-sm"
+                          (click)="setActive(<%= entityInstance %>, false)"
+                          [disabled]="!currentAccount() || currentAccount()?.login === <%= entityInstance %>.login"
+                        >__jhiTranslateTag__('userManagement.activated')</button>
+                    }
+                    </td>
+<%_ if (enableTranslation) { _%>
+                    <td>{{ <%= entityInstance %>.langKey }}</td>
+<%_ } _%>
+                    <td>
+                    @for (authority of <%= entityInstance %>.authorities; track $index) {
+                        <div>
+                            <span class="badge bg-info">{{ authority<% if (generateBuiltInAuthorityEntity) { %>.name<% } %> }}</span>
+                        </div>
+                    }
+                    </td>
+<%_ if (!databaseTypeCassandra) { _%>
+                    <td>{{ <%= entityInstance %>.createdDate | date: 'dd/MM/yy HH:mm' }}</td>
+                    <td>{{ <%= entityInstance %>.lastModifiedBy }}</td>
+                    <td>{{ <%= entityInstance %>.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</td>
+<%_ } _%>
+<%_ } _%>
                     <td class="text-end">
                         <div class="btn-group">
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
@@ -192,14 +258,14 @@ _%>
                             </button>
     <%_ } _%>
 <%_ } _%>
-                            <a [routerLink]="['/<%= entityPage %>', <%= entityInstance %>.<%= primaryKey.name %>, 'view']"
+                            <a [routerLink]="['/<%= entityPage %>', <%= entityInstance %>.<% if (builtInUserManagement) { %>login<% } else { %><%= primaryKey.name %><% } %>, 'view']"
                                class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                                 <fa-icon icon="eye" />
                                 <span class="d-none d-md-inline">__jhiTranslateTag__('entity.action.view')</span>
                             </a>
 <%_ if (!readOnly && updatableEntity) { _%>
 
-                            <a [routerLink]="['/<%= entityPage %>', <%= entityInstance %>.<%= primaryKey.name %>, 'edit']"
+                            <a [routerLink]="['/<%= entityPage %>', <%= entityInstance %>.<% if (builtInUserManagement) { %>login<% } else { %><%= primaryKey.name %><% } %>, 'edit']"
                                class="btn btn-primary btn-sm" data-cy="entityEditButton">
                                 <fa-icon icon="pencil-alt" />
                                 <span class="d-none d-md-inline">__jhiTranslateTag__('entity.action.edit')</span>
@@ -209,7 +275,11 @@ _%>
 
                             <button type="submit" (click)="delete(<%= entityInstance %>)"
                                     class="btn btn-danger btn-sm"
-                                    data-cy="entityDeleteButton">
+                                    data-cy="entityDeleteButton"
+<%_ if (builtInUserManagement) { _%>
+                                    [disabled]="!currentAccount() || currentAccount()?.login === <%= entityInstance %>.login"
+<%_ } _%>
+                                    >
                                 <fa-icon icon="times" />
                                 <span class="d-none d-md-inline">__jhiTranslateTag__('entity.action.delete')</span>
                             </button>
