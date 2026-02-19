@@ -24,7 +24,7 @@ import { IQueryParams, serializeAxiosError } from 'app/shared/reducers/reducer.u
 
 const initialState = {
   errorMessage: null,
-  users: [] as ReadonlyArray<IUser>,
+  users: [] as readonly IUser[],
 };
 
 const apiUrl = 'api/users';
