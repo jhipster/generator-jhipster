@@ -613,6 +613,9 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "clientRoot/src/app/shared/jhipster/headers.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/link-header.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/problem-details.ts": {
     "stateCleared": "modified",
   },
@@ -1498,6 +1501,9 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientRoot/src/app/shared/jhipster/headers.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/link-header.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/problem-details.ts": {
     "stateCleared": "modified",
   },
@@ -2318,6 +2324,9 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/headers.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/jhipster/link-header.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/problem-details.ts": {
@@ -3168,6 +3177,9 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/headers.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/link-header.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {
@@ -4180,6 +4192,9 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "src/main/webapp/app/shared/jhipster/headers.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/link-header.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {
     "stateCleared": "modified",
   },
@@ -4976,6 +4991,9 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/headers.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/link-header.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {
@@ -5789,6 +5807,9 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/headers.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/link-header.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {

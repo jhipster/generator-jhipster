@@ -529,6 +529,9 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "clientRoot/src/app/shared/jhipster/headers.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/link-header.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/problem-details.ts": {
     "stateCleared": "modified",
   },
@@ -1313,6 +1316,9 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/headers.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/shared/jhipster/link-header.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/jhipster/problem-details.ts": {
@@ -2116,6 +2122,9 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "clientRoot/src/app/shared/jhipster/headers.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/shared/jhipster/link-header.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/shared/jhipster/problem-details.ts": {
     "stateCleared": "modified",
   },
@@ -2900,6 +2909,9 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/headers.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/link-header.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {
@@ -3786,6 +3798,9 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
   "src/main/webapp/app/shared/jhipster/headers.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/jhipster/link-header.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {
     "stateCleared": "modified",
   },
@@ -4564,6 +4579,9 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/headers.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/link-header.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {
@@ -5347,6 +5365,9 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/headers.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/jhipster/link-header.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/jhipster/problem-details.ts": {
