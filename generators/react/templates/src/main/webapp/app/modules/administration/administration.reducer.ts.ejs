@@ -120,7 +120,7 @@ export const AdministrationSlice = createSlice({
     },
     <%_ } _%>
   },
-  extraReducers(builder) {
+  extraReducers(<%_ if (withAdminUi || (applicationTypeGateway && gatewayServicesApiAvailable)) { _%>builder<%_ } _%>) {
 <%_ if (withAdminUi || (applicationTypeGateway && gatewayServicesApiAvailable)) { _%>
     builder
       <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>

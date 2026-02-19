@@ -86,11 +86,13 @@ export const UserManagement = () => {
       sort: p,
     });
 
+<%_ if (!databaseTypeCassandra) { _%>
   const handlePagination = currentPage =>
     setPagination({
       ...pagination,
       activePage: currentPage,
     });
+<%_ } _%>
 
   const handleSyncList = () => {
     getUsersFromProps();
@@ -107,7 +109,9 @@ export const UserManagement = () => {
 
   const account = useAppSelector(state => state.authentication.account);
   const users = useAppSelector(state => state.userManagement.users);
+<%_ if (!databaseTypeCassandra) { _%>
   const totalItems = useAppSelector(state => state.userManagement.totalItems);
+<%_ } _%>
   const loading = useAppSelector(state => state.userManagement.loading);
   const getSortIconByFieldName = (fieldName: string) => {
     const sortFieldName = pagination.sort;

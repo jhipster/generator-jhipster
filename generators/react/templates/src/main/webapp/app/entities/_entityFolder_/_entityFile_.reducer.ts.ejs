@@ -56,7 +56,7 @@ const apiSearchUrl = '<%= entityApi %>api/<%= entityApiUrl %>/_search';
 <%_ if (searchEngineAny) { _%>
 export const searchEntities = createAsyncThunk(
   '<%= entityInstance %>/search_entity',
-  async ({ query, page, size, sort }: IQueryParams) => {
+  async ({ query<%_ if (!paginationNo) { _%>, page, size, sort<%_ } _%> }: IQueryParams) => {
   <%_ if (!paginationNo) { _%>
     const requestUrl = `${apiSearchUrl}?query=${query}${sort ? `&page=${page}&size=${size}&sort=${sort}` : ''}`;
   <%_ } else { _%>
