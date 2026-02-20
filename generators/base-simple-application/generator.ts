@@ -25,7 +25,6 @@ import { PRIORITY_NAMES } from '../base-core/priorities.ts';
 import type { GenericTask } from '../base-core/types.ts';
 import type GeneratorsByNamespace from '../types.ts';
 
-import { BOOTSTRAP_APPLICATION, CUSTOM_PRIORITIES } from './priorities.ts';
 import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from './support/index.ts';
 import type { SimpleTaskTypes } from './tasks.ts';
 import type {
@@ -39,7 +38,7 @@ import type {
 const { LOADING, PREPARING, POST_PREPARING, DEFAULT, WRITING, POST_WRITING, PRE_CONFLICTS, INSTALL, END } = PRIORITY_NAMES;
 
 const PRIORITY_WITH_SOURCE = new Set<string>([PREPARING, POST_PREPARING, POST_WRITING]);
-const PRIORITY_WITH_APPLICATION_DEFAULTS = new Set<string>([BOOTSTRAP_APPLICATION, PREPARING, LOADING]);
+const PRIORITY_WITH_APPLICATION_DEFAULTS = new Set<string>([PREPARING, LOADING]);
 const PRIORITY_WITH_APPLICATION = new Set<string>([
   LOADING,
   PREPARING,
@@ -69,16 +68,8 @@ export default class BaseSimpleApplicationGenerator<
   Features extends BaseSimpleApplicationFeatures = BaseSimpleApplicationFeatures,
   Tasks extends SimpleTaskTypes<Application, Source> = SimpleTaskTypes<Application, Source>,
 > extends BaseGenerator<Config, Options, Source, Features, Tasks> {
-  static readonly BOOTSTRAP_APPLICATION = BaseSimpleApplicationGenerator.asPriority(BOOTSTRAP_APPLICATION);
-
   constructor(args?: string[], options?: Options, features?: Features) {
     super(args, options, { storeJHipsterVersion: true, storeBlueprintVersion: true, ...features } as Features);
-
-    if (this.options.help) {
-      return;
-    }
-
-    this.registerPriorities(CUSTOM_PRIORITIES);
   }
 
   override get context(): Application {
@@ -135,10 +126,6 @@ export default class BaseSimpleApplicationGenerator<
         mutateData(this.context, ...args.map(data => ({ __override__: false, ...data })));
     }
     return args;
-  }
-
-  get bootstrapApplication() {
-    return {};
   }
 
   /**
