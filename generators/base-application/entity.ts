@@ -37,7 +37,9 @@ type BaseApplicationAddedFieldProperties = DerivedPropertiesOnlyOf<'fieldType', 
     fieldNameCapitalized: string;
     fieldNameHumanized: string;
     fieldNameUnderscored: string;
+    /** @deprecated use propertyTranslationKey */
     fieldTranslationKey?: string;
+    propertyTranslationKey?: string;
 
     fieldApiDescription?: string;
 

@@ -31,6 +31,8 @@ import { getTypescriptType } from './support/types-utils.ts';
 // DerivedPropertiesOnlyOf<'fieldTsType', FieldTsType> &
 type ClientAddedFieldProperties = {
   tsType: string;
+  hidden?: boolean;
+  hideListView?: boolean;
 };
 
 export const mutateField = {

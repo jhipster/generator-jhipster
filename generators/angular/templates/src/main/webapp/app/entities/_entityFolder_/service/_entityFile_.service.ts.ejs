@@ -95,10 +95,10 @@ export class <%= entityAngularName %>Service {
 <%_ if (!readOnly) { _%>
     create(<%= entityInstance %>: New<%= entityAngularName %>): Observable<EntityResponseType> {
     <%_ if (anyFieldIsDateDerived) { _%>
-        const copy = this.convertDateFromClient(<%= entityInstance %>);
+        <%= builtInUserManagement ? 'let' : 'const' %> copy = this.convertDateFromClient(<%= entityInstance %>);
     <%_ } _%>
     <%_ if (builtInUserManagement) { _%>
-        const copy = this.convertUserManagementFromClient(<%= entityInstance %>);
+        copy = this.convertUserManagementFromClient(<%= entityInstance %>);
     <%_ } _%>
         return this.http.post<<%= entityRestName %>>(this.resourceUrl,
                 <% if (anyFieldIsDateDerived || builtInUserManagement) { %> copy <% } else { %> <%= entityInstance %> <% } %>,
@@ -111,10 +111,10 @@ export class <%= entityAngularName %>Service {
 
     update(<%= entityInstance %>: I<%= entityAngularName %>): Observable<EntityResponseType> {
     <%_ if (anyFieldIsDateDerived) { _%>
-        const copy = this.convertDateFromClient(<%= entityInstance %>);
+        <%= builtInUserManagement ? 'let' : 'const' %> copy = this.convertDateFromClient(<%= entityInstance %>);
     <%_ } _%>
     <%_ if (builtInUserManagement) { _%>
-        const copy = this.convertUserManagementFromClient(<%= entityInstance %>);
+        copy = this.convertUserManagementFromClient(<%= entityInstance %>);
     <%_ } _%>
         return this.http.put<<%= entityRestName %>>(`${this.resourceUrl}/${encodeURIComponent(this.get<%= entityAngularName %>Identifier(<%= entityInstance %>))}`,
                 <% if (anyFieldIsDateDerived || builtInUserManagement) { %> copy <% } else { %> <%= entityInstance %> <% } %>,
@@ -124,10 +124,10 @@ export class <%= entityAngularName %>Service {
 
     partialUpdate(<%= entityInstance %>: PartialUpdate<%= entityAngularName %>): Observable<EntityResponseType> {
     <%_ if (anyFieldIsDateDerived) { _%>
-        const copy = this.convertDateFromClient(<%= entityInstance %>);
+        <%= builtInUserManagement ? 'let' : 'const' %> copy = this.convertDateFromClient(<%= entityInstance %>);
     <%_ } _%>
     <%_ if (builtInUserManagement) { _%>
-        const copy = this.convertUserManagementFromClient(<%= entityInstance %>);
+        copy = this.convertUserManagementFromClient(<%= entityInstance %>);
     <%_ } _%>
         return this.http.patch<<%= entityRestName %>>(`${this.resourceUrl}/${encodeURIComponent(this.get<%= entityAngularName %>Identifier(<%= entityInstance %>))}`,
                 <% if (anyFieldIsDateDerived || builtInUserManagement) { %> copy <% } else { %> <%= entityInstance %> <% } %>,
@@ -137,8 +137,8 @@ export class <%= entityAngularName %>Service {
     }
 <%_ } _%>
 
-    find(id: <%= tsKeyType %>): Observable<EntityResponseType> {
-        return this.http.get<<%= entityRestName %>>(`${this.resourceUrl}/${encodeURIComponent(id)}`, { observe: 'response' })
+    find(<%= primaryKey.name %>: <%= tsKeyType %>): Observable<EntityResponseType> {
+        return this.http.get<<%= entityRestName %>>(`${this.resourceUrl}/${encodeURIComponent(<%= primaryKey.name %>)}`, { observe: 'response' })
             <% if (anyFieldIsDateDerived) { %>.pipe(map(res => this.convertResponseFromServer(res)))<% } %>
             <% if (builtInUserManagement) { %>.pipe(map(res => this.convertUserManagementResponseFromServer(res)))<% } %>;
     }
@@ -151,8 +151,8 @@ export class <%= entityAngularName %>Service {
     }
 
 <%_ if (!readOnly) { _%>
-    delete(id: <%= tsKeyType %>): Observable<HttpResponse<{}>> {
-        return this.http.delete(`${this.resourceUrl}/${encodeURIComponent(id)}`, { observe: 'response' });
+    delete(<%= primaryKey.name %>: <%= tsKeyType %>): Observable<HttpResponse<{}>> {
+        return this.http.delete(`${this.resourceUrl}/${encodeURIComponent(<%= primaryKey.name %>)}`, { observe: 'response' });
     }
 <%_ } _%>
 

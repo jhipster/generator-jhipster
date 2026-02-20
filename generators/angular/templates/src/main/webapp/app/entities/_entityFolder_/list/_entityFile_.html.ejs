@@ -73,12 +73,12 @@
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
                 <tr <%= jhiPrefix %>Sort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
-<%_ for (const field of fields.filter(field => !field.hidden)) {
+<%_ for (const field of fields.filter(field => !field.hidden && !field.hideListView)) {
     const { fieldSupportsSortBy } = field;
 _%>
                     <th scope="col"<% if (fieldSupportsSortBy) { %> <%= jhiPrefix %>SortBy="<%= field.fieldName %>"<% } %>>
                         <div class="d-flex">
-                            <span>__jhiTranslateTag__('<%- field.fieldTranslationKey %>')</span>
+                            <span>__jhiTranslateTag__('<%- field.propertyTranslationKey %>')</span>
   <%_ if (fieldSupportsSortBy) { _%>
                         <% if (searchEngineAny && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>@if (!currentSearch) {<% } %>
                             <fa-icon class="p-1" icon="sort" />
@@ -94,7 +94,7 @@ _%>
   _%>
                     <th scope="col"<% if (relatedFieldSupportsSortBy) { %> <%= jhiPrefix %>SortBy="<%= relationship.relationshipName + (fieldName) %>"<% } %>>
                         <div class="d-flex">
-                            <span>__jhiTranslateTag__('<%- i18nKeyPrefix %>.<%- relationship.relationshipName %>')</span>
+                            <span>__jhiTranslateTag__('<%- relationship.propertyTranslationKey %>')</span>
     <%_ if (relatedFieldSupportsSortBy) { _%>
                             <fa-icon class="p-1" icon="sort" />
     <%_ } _%>
@@ -110,7 +110,7 @@ _%>
                 <tr data-cy="entityTable">
 <%_
 const routerLink = ` [routerLink]="['/${ entityPage }', ${entityInstance}.${primaryKey.name}, 'view']"`;
-for (field of fields.filter(field => !field.hidden)) {
+for (field of fields.filter(field => !field.hidden && !field.hideListView)) {
     const fieldName = field.fieldName;
     const fieldType = field.fieldType;
 _%>
@@ -180,7 +180,6 @@ _%>
                         <div class="btn-group">
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
     <%_ if (relationship.otherEntity.jpaMetamodelFiltering && relationship.otherEntity.paginationPagination && relationship.collection && !relationship.persistableRelationship) {
-        const otherEntityTranslationKey = i18nKeyPrefix + '.' + relationship.relationshipName;
     _%>
                             <button type="submit"
                                     [routerLink]="['/<%= relationship.otherEntity.entityPage %>']"
@@ -188,7 +187,7 @@ _%>
                                     class="btn btn-info btn-sm"
                                     data-cy="filterOtherEntityButton">
                                 <fa-icon icon="eye" />
-                                <span class="d-none d-md-inline">__jhiTranslateTagPipe__('entity.action.show', { "otherEntity": "<%= otherEntityTranslationKey %>" })</span>
+                                <span class="d-none d-md-inline">__jhiTranslateTagPipe__('entity.action.show', { "otherEntity": "<%= relationship.propertyTranslationKey %>" })</span>
                             </button>
     <%_ } _%>
 <%_ } _%>

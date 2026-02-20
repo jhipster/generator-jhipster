@@ -19,7 +19,8 @@
 import { defaults } from 'lodash-es';
 
 import { Validations, databaseTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
-import type { EntityAll as ApplicationEntity, UserEntity } from '../../../lib/types/application-all.d.ts';
+import type { Field as BaseField } from '../../../lib/jhipster/types/field.ts';
+import type { EntityAll, EntityAll as ApplicationEntity, UserEntity } from '../../../lib/types/application-all.d.ts';
 import { formatDateForChangelog } from '../../base/support/timestamp.ts';
 import { LOGIN_REGEX, LOGIN_REGEX_JS } from '../../generator-constants.ts';
 import { getDatabaseTypeData } from '../../server/support/database.ts';
@@ -35,7 +36,7 @@ import type {
 const { CASSANDRA } = databaseTypes;
 const { CommonDBTypes } = fieldTypes;
 
-const { STRING: TYPE_STRING, BOOLEAN: TYPE_BOOLEAN } = CommonDBTypes;
+const { STRING: TYPE_STRING, BOOLEAN: TYPE_BOOLEAN, INSTANT: TYPE_INSTANT } = CommonDBTypes;
 
 const authorityEntityName = 'Authority';
 
@@ -97,7 +98,7 @@ export function createUserEntity(
       fieldName: 'id',
       fieldType: userIdType,
       fieldValidateRulesMaxlength,
-      fieldTranslationKey: 'global.field.id',
+      propertyTranslationKey: 'global.field.id',
       fieldNameHumanized: 'ID',
       readonly: true,
       id: true,
@@ -134,6 +135,17 @@ export function createUserEntity(
       fieldValidateRulesMaxlength: 191,
       builtIn: true,
     },
+    ...(application.enableTranslation
+      ? [
+          {
+            fieldName: 'langKey',
+            fieldType: TYPE_STRING,
+            fieldValidateRules: [Validations.MAXLENGTH],
+            fieldValidateRulesMaxlength: 10,
+            builtIn: true,
+          },
+        ]
+      : []),
     ...(hasImageField
       ? [
           {
@@ -151,26 +163,44 @@ export function createUserEntity(
       builtIn: true,
       autoGenerate: true,
     },
-    ...(application.enableTranslation
-      ? [
-          {
-            fieldName: 'langKey',
-            fieldType: TYPE_STRING,
-            fieldValidateRules: [Validations.MAXLENGTH],
-            fieldValidateRulesMaxlength: 10,
-            builtIn: true,
-          },
-        ]
-      : []),
   ] as BaseApplicationField[]);
 
   return user;
 }
 
+function getAuditFields(): (BaseField & Partial<BaseApplicationField>)[] {
+  return [
+    {
+      fieldName: 'createdBy',
+      fieldType: TYPE_STRING,
+      autoGenerate: true,
+      readonly: true,
+    },
+    {
+      fieldName: 'createdDate',
+      fieldType: TYPE_INSTANT,
+      autoGenerate: true,
+      readonly: true,
+    },
+    {
+      fieldName: 'lastModifiedBy',
+      fieldType: TYPE_STRING,
+      autoGenerate: true,
+      readonly: true,
+    },
+    {
+      fieldName: 'lastModifiedDate',
+      fieldType: TYPE_INSTANT,
+      autoGenerate: true,
+      readonly: true,
+    },
+  ] as const;
+}
+
 export function createUserManagementEntity(
   this: BaseApplicationGenerator,
   customUserManagementData: Partial<ApplicationEntity> = {},
-  application: BaseApplicationApplication<BaseApplicationEntity>,
+  application: BaseApplicationApplication<EntityAll>,
 ): Partial<ApplicationEntity> {
   const user = createUserEntity.call(this, {}, application);
   for (const field of user.fields ?? []) {
@@ -179,9 +209,14 @@ export function createUserManagementEntity(
       field.id = true;
     } else if (field.fieldName === 'id') {
       field.id = false;
+      field.hidden = true;
       field.fieldValidateRules = [Validations.REQUIRED];
       // Set id type fallback since it's not id anymore and will not be calculated.
       field.fieldType = field.fieldType ?? getDatabaseTypeData(application.databaseType!).defaultPrimaryKeyType;
+    } else if (field.fieldName === 'imageUrl') {
+      field.hidden = true;
+    } else if (field.fieldName === 'firstName' || field.fieldName === 'lastName') {
+      field.hideListView = true;
     }
   }
 
@@ -202,7 +237,11 @@ export function createUserManagementEntity(
     adminEntity: true,
     builtInUser: false,
     builtInUserManagement: true,
+    entityRestLayer: true,
+    entityTranslationKey: 'userManagement',
   };
+
+  addOrExtendFields(userManagement.fields!, getAuditFields());
 
   if (application.generateBuiltInAuthorityEntity) {
     addOrExtendRelationships(userManagement.relationships!, [
@@ -211,8 +250,9 @@ export function createUserManagementEntity(
         relationshipName: 'authority',
         relationshipType: 'many-to-many',
         relationshipIgnoreBackReference: true,
+        propertyTranslationKey: 'userManagement.profiles',
       },
-    ] as BaseApplicationRelationship[]);
+    ]);
   }
 
   return userManagement;
@@ -277,14 +317,17 @@ export function createAuthorityEntity(
   return authorityEntity;
 }
 
-function addOrExtendFields<const F extends BaseApplicationField>(fields: F[], fieldsToAdd: F[]): void {
+function addOrExtendFields<const F extends BaseField = BaseField>(
+  fields: F[],
+  fieldsToAdd: ({ fieldName: string; id?: boolean } & Partial<F>)[],
+): void {
   for (const fieldToAdd of fieldsToAdd) {
     const { fieldName: newFieldName, id } = fieldToAdd;
     let field = fields.find(field => field.fieldName === newFieldName);
     if (field) {
       defaults(field, fieldToAdd);
     } else {
-      field = { ...fieldToAdd };
+      field = { ...fieldToAdd } as F;
       if (id) {
         fields.unshift(field);
       } else {
@@ -294,14 +337,14 @@ function addOrExtendFields<const F extends BaseApplicationField>(fields: F[], fi
   }
 }
 
-function addOrExtendRelationships<const R extends BaseApplicationRelationship>(relationships: R[], relationshipsToAdd: R[]): void {
+function addOrExtendRelationships<const R extends BaseApplicationRelationship>(relationships: R[], relationshipsToAdd: Partial<R>[]): void {
   for (const relationshipToAdd of relationshipsToAdd) {
     const { relationshipName: newrelationshipName } = relationshipToAdd;
     let relationship = relationships.find(relationship => relationship.relationshipName === newrelationshipName);
     if (relationship) {
       defaults(relationship, relationshipToAdd);
     } else {
-      relationship = { ...relationshipToAdd };
+      relationship = { ...relationshipToAdd } as R;
       relationships.push(relationship);
     }
   }

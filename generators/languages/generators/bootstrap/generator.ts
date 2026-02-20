@@ -104,7 +104,8 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
       prepareField({ entity, field }) {
         mutateData(field, {
           __override__: false,
-          fieldTranslationKey: ({ fieldName }) => `${entity.i18nKeyPrefix}.${fieldName}`,
+          propertyTranslationKey: ({ fieldTranslationKey, fieldName }) => fieldTranslationKey ?? `${entity.i18nKeyPrefix}.${fieldName}`,
+          fieldTranslationKey: ({ propertyTranslationKey }) => propertyTranslationKey,
         });
       },
     });
@@ -112,5 +113,21 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
 
   get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
+  }
+
+  get preparingEachEntityRelationship() {
+    return this.asPreparingEachEntityRelationshipTaskGroup({
+      prepareRelationship({ entity, relationship }) {
+        relationship.relationshipName;
+        mutateData(relationship, {
+          __override__: false,
+          propertyTranslationKey: ({ relationshipName }) => `${entity.i18nKeyPrefix}.${relationshipName}`,
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY_RELATIONSHIP]() {
+    return this.delegateTasksToBlueprint(() => this.preparingEachEntityRelationship);
   }
 }

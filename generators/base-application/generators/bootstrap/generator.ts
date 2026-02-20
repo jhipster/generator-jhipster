@@ -281,7 +281,11 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
           const customUserManagementData: any = customUserManagement?.entityStorage.getAll() ?? {};
           Object.assign(
             bootstrap,
-            createUserManagementEntity.call(this, { ...customUserManagementData, ...customUserManagementData.annotations }, application),
+            createUserManagementEntity.call(
+              this,
+              { ...customUserManagementData, ...customUserManagementData.annotations },
+              application as any,
+            ),
           );
           application.userManagement = bootstrap;
         }

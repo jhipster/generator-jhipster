@@ -46,7 +46,7 @@ _%>
             <% if (field.autoGenerate) { %>@if (editForm.controls.<%= field.fieldName %>.value !== null) {<% } %>
                 <% if (field.fieldTypeBinary && !field.blobContentTypeText || field.fieldValidate) { %>@let <%= fieldName %>Ref = editForm.get('<%= fieldName %>')!;<% } %>
                 <div class="mb-3">
-                    <label class="form-label" for="field_<%= fieldName %>"<% if (field.documentation) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.documentation %>"<% } } %>>__jhiTranslateTag__('<%= i18nKeyPrefix %>.<%= fieldName %>')</label>
+                    <label class="form-label" for="field_<%= fieldName %>"<% if (field.documentation) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.documentation %>"<% } } %>>__jhiTranslateTag__('<%= field.propertyTranslationKey %>')</label>
   <%_ if (field.fieldIsEnum) { _%>
                     <select class="form-control" name="<%= fieldName %>" formControlName="<%= fieldName %>" id="field_<%= fieldName %>" data-cy="<%= fieldName %>">
     <%_ const enumPrefix = frontendAppName + '.'+ fieldType; _%>
@@ -163,12 +163,11 @@ _%>
   const otherEntityName = relationship.otherEntityName;
   const relationshipFieldName = relationship.relationshipFieldName;
   const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
-  const translationKey = `${i18nKeyPrefix}.${relationshipName}`;
 _%>
   <%_ if (relationship.persistableRelationship && !relationship.collection) { _%>
 
                 <div class="mb-3">
-                    <label class="form-label" for="field_<%= relationshipName %>">__jhiTranslateTag__('<%- translationKey %>')</label>
+                    <label class="form-label" for="field_<%= relationshipName %>">__jhiTranslateTag__('<%- relationship.propertyTranslationKey %>')</label>
                     <select class="form-control" id="field_<%= relationshipName %>" data-cy="<%= propertyName %>" name="<%= relationshipName %>" formControlName="<%= propertyName %>" [compareWith]="compare<%= otherEntity.entityAngularName %>">
     <%_ if (!relationshipRequired) { _%>
                         <option [ngValue]="null"></option>
@@ -189,7 +188,7 @@ _%>
   <%_ } else if (relationship.persistableRelationship) { _%>
 
                 <div class="mb-3">
-                    <label for="field_<%= relationshipFieldNamePlural %>">__jhiTranslateTag__('<%- translationKey %>')</label>
+                    <label for="field_<%= relationshipFieldNamePlural %>">__jhiTranslateTag__('<%- relationship.propertyTranslationKey %>')</label>
                     <select class="form-control" id="field_<%= relationshipFieldNamePlural %>" data-cy="<%= relationshipFieldName %>" multiple name="<%= propertyName %>" formControlName="<%= propertyName %>" [compareWith]="compare<%= otherEntity.entityAngularName %>">
                     @for (<%= otherEntityName %>Option of <%= otherEntity.entityInstancePlural %>SharedCollection(); track $index) {
                         <option [ngValue]="<%= otherEntityName %>Option">{{ <%= otherEntityName %>Option.<%= otherEntityField %> }}</option>
