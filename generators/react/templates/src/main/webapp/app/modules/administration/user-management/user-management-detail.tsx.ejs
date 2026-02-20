@@ -79,13 +79,11 @@ export const UserManagementDetail = () => {
           <dd>
             <ul className="list-unstyled">
               {
-                user.authorities && (
-                  user.authorities.map(
-                    (authority, i) => (
-                      <li key={`user-auth-${i}`}>
-                        <Badge color="info">{authority}</Badge>
-                      </li>
-                    )
+                user.authorities?.map(
+                  (authority, i) => (
+                    <li key={`user-auth-${i}`}>
+                      <Badge color="info">{authority}</Badge>
+                    </li>
                   )
                 )
               }
