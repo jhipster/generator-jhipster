@@ -101,7 +101,7 @@ export default class LiquibaseGenerator<
   get preparing() {
     return this.asPreparingTaskGroup({
       preparing({ application }) {
-        this.numberOfRows = 10;
+        this.numberOfRows = application.clientFrameworkReact ? 10 : 30;
         application.liquibaseDefaultSchemaName = '';
         // Generate h2 properties at master.xml for blueprints that uses h2 for tests or others purposes.
         application.liquibaseAddH2Properties ??= application.devDatabaseTypeH2Any;
