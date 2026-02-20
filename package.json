@@ -152,7 +152,7 @@
     "execa": "9.6.1",
     "fast-xml-parser": "5.3.7",
     "globals": "17.3.0",
-    "isbinaryfile": "5.0.0",
+    "isbinaryfile": "6.0.0",
     "java-lint": "0.3.0",
     "latest-version": "9.0.0",
     "lodash-es": "4.17.23",
