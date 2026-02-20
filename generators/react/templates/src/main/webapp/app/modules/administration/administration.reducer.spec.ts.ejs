@@ -40,12 +40,14 @@ import administration, {
 
 describe('Administration reducer tests', () => {
 
+<%_ if (applicationTypeGateway && gatewayServicesApiAvailable || withAdminUi || communicationSpringWebsocket) { _%>
   function isEmpty(element): boolean {
     if (element instanceof Array) {
       return element.length === 0;
     }
     return Object.keys(element).length === 0;
   }
+<%_ } _%>
 
   function testInitialState(state) {
     expect(state).toMatchObject({
@@ -259,11 +261,11 @@ describe('Administration reducer tests', () => {
   });
 <%_ } _%>
   describe('Actions', () => {
+<%_ if (applicationTypeGateway && gatewayServicesApiAvailable || withAdminUi) { _%>
     const resolvedObject = { value: 'whatever' };
     const getState = jest.fn();
     const dispatch = jest.fn();
     const extra = {};
-<%_ if (applicationTypeGateway && gatewayServicesApiAvailable || withAdminUi) { _%>
     beforeEach(() => {
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
       axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));

@@ -35,7 +35,7 @@ export const GatewayPage = () => {
 
   const metadata = instance => {
     const spans = [];
-    Object.keys(instance).map((key, index) => {
+    Object.keys(instance).map((key) => {
       spans.push((
         <span key={key.toString() + 'value'}>
           <Badge key={key.toString() + '-containerbadge'} className="fw-normal">
@@ -73,7 +73,7 @@ export const GatewayPage = () => {
       return (
         <Table striped responsive>
           <tbody>
-            {route.serviceInstances.map((instance, i) =>
+            {route.serviceInstances.map((instance) =>
               <tr key={instance.instanceInfo + '-info'}>
                 <td><a href={instance.uri} target="_blank" rel="noopener noreferrer">{instance.uri}</a></td>
                 <td>{badgeInfo(<% if (serviceDiscoveryConsul) { %>instance.healthService<% } else { %>instance.instanceInfo<% } %>)}</td>

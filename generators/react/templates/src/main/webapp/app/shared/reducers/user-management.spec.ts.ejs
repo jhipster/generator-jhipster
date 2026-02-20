@@ -61,14 +61,12 @@ describe('User management reducer tests', () => {
   });
 
   describe('Actions', () => {
-    let store;
-
     const resolvedObject = { value: 'whatever' };
     const getState = jest.fn();
     const dispatch = jest.fn();
     const extra = {};
     beforeEach(() => {
-      store = configureStore({
+      configureStore({
         reducer: (state = [], action) => [...state, action],
       });
       axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
