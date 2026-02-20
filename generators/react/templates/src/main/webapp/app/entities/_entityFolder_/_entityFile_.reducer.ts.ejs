@@ -72,9 +72,9 @@ export const getEntities = createAsyncThunk(
   '<%= entityInstance %>/fetch_entity_list',
   async ({ <%_ if(!paginationNo) { _%>page, size, <%_ } _%>sort }: IQueryParams) => {
 <%_ if (!paginationNo) { _%>
-    const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
+    const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${Date.now()}`;
 <%_ } else { _%>
-    const requestUrl = `${apiUrl}?${sort ? `sort=${sort}&` : ''}cacheBuster=${new Date().getTime()}`;
+    const requestUrl = `${apiUrl}?${sort ? `sort=${sort}&` : ''}cacheBuster=${Date.now()}`;
 <%_ } _%>
     return axios.get<I<%= entityReactName %>[]>(requestUrl);
   },
