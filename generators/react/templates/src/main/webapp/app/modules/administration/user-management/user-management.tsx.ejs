@@ -185,8 +185,7 @@ export const UserManagement = () => {
               <td>{user.langKey}</td>
 <%_ } _%>
               <td>
-                {user.authorities
-                  && user.authorities.map((authority, j) => (
+                {user.authorities?.map((authority, j) => (
                       <div key={`user-auth-${i}-${j}`}>
                         <Badge color="info">{authority}</Badge>
                       </div>

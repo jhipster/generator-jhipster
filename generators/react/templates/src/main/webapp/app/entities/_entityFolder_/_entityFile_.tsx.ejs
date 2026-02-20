@@ -214,7 +214,7 @@ export const <%= entityReactName %> = () => {
   }, [paginationState.activePage]);
 
   const handleLoadMore = () => {
-    if ((window as any).pageYOffset > 0) {
+    if ((globalThis as any).pageYOffset > 0) {
       setPaginationState({
         ...paginationState,
         activePage: paginationState.activePage + 1

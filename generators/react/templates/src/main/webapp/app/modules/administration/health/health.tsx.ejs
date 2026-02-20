@@ -49,7 +49,7 @@ export const HealthPage = () => {
     setHealthObject({ ...healthObj, name });
   };
 
-  const getBadgeType = (status: string) => (status !== 'UP' ? 'danger' : 'success');
+  const getBadgeType = (status: string) => (status === 'UP' ? 'success' : 'danger');
 
   const handleClose = () => setShowModal(false);
 
