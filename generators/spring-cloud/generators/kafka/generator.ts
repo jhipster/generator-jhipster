@@ -18,10 +18,14 @@
  */
 
 import { GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.ts';
+import {
+  javaMainPackageTemplatesBlock,
+  javaMainResourceTemplatesBlock,
+  javaTestPackageTemplatesBlock,
+} from '../../../java/support/files.ts';
 import { SpringBootApplicationGenerator } from '../../../spring-boot/generator.ts';
 
 import cleanupKafkaFilesTask from './cleanup.ts';
-import { kafkaFiles } from './files.ts';
 
 export default class KafkaGenerator extends SpringBootApplicationGenerator {
   async beforeQueue() {
@@ -32,6 +36,19 @@ export default class KafkaGenerator extends SpringBootApplicationGenerator {
     if (!this.delegateToBlueprint) {
       await this.dependsOnBootstrap('java');
     }
+  }
+
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      preparing({ application }) {
+        application.devActiveProfiles.push('kafka');
+        application.prodActiveProfiles.push('kafka');
+      },
+    });
+  }
+
+  get [SpringBootApplicationGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get writing() {
@@ -49,7 +66,34 @@ export default class KafkaGenerator extends SpringBootApplicationGenerator {
       cleanupKafkaFilesTask,
       async writing({ application }) {
         await this.writeFiles({
-          sections: kafkaFiles,
+          sections: {
+            base: [
+              javaMainPackageTemplatesBlock({
+                templates: [
+                  data => `broker/KafkaConsumer_${data.imperativeOrReactive}.java`,
+                  'broker/KafkaProducer.java',
+                  {
+                    sourceFile: data => `web/rest/KafkaResource_${data.imperativeOrReactive}.java`,
+                    destinationFile: data => `web/rest/${data.upperFirstCamelCaseBaseName}KafkaResource.java`,
+                  },
+                ],
+              }),
+              javaMainResourceTemplatesBlock({
+                templates: ['config/application-kafka.yml'],
+              }),
+            ],
+            test: [
+              javaTestPackageTemplatesBlock({
+                templates: [
+                  'config/KafkaTestContainer.java',
+                  {
+                    sourceFile: data => `web/rest/KafkaResourceIT_${data.imperativeOrReactive}.java`,
+                    destinationFile: data => `web/rest/${data.upperFirstCamelCaseBaseName}KafkaResourceIT.java`,
+                  },
+                ],
+              }),
+            ],
+          },
           context: application,
         });
       },

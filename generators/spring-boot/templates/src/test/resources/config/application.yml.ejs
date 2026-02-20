@@ -84,26 +84,6 @@ spring:
         enabled: false
       enabled: false
 <%_ } _%>
-<%_ if (messageBrokerKafka) { _%>
-    function:
-      definition: kafkaConsumer;kafkaProducer
-    stream:
-      kafka:
-        binder:
-          replicationFactor: 1
-          auto-create-topics: true
-      bindings:
-        binding-out-0:
-          content-type: text/plain
-          group: <%= dasherizedBaseName %>
-        kafkaConsumer-in-0:
-          destination: sse-topic
-          content-type: text/plain
-          group: <%= dasherizedBaseName %>
-        kafkaProducer-out-0:
-          content-type: text/plain
-          group: <%= dasherizedBaseName %>
-<%_ } _%>
 <%_ if (messageBrokerPulsar) { _%>
     function:
       definition: testStringSupplier;testStringConsumer
