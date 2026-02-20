@@ -34,7 +34,7 @@ export default defineConfig({
 <%_ } _%>
   expose: {
 <%_ if (cypressCoverage && !cypressCoverageWebpack) { _%>
-    CYPRESS_COVERAGE: false,
+    CYPRESS_COVERAGE: Boolean(process.env.CYPRESS_COVERAGE),
 <%_ } _%>
     adminUsername: 'admin',
     adminPassword: 'admin',
