@@ -17,14 +17,14 @@
  limitations under the License.
 -%>
 @if (<%= entityInstance %>) {
-<form name="deleteForm" (ngSubmit)="confirmDelete(<%= entityInstance %>.<%= primaryKey.name %>!)">
+<form name="deleteForm" (ngSubmit)="confirmDelete(<%= entityInstance %>.<% if (builtInUserManagement) { %>login<% } else { %><%= primaryKey.name %><% } %>!)">
     <div class="modal-header">
         <h4 class="modal-title" data-cy="<%= entityInstance %>DeleteDialogHeading">__jhiTranslateTag__('entity.delete.title')</h4>
     </div>
 
     <div class="modal-body">
         <<%= jhiPrefixDashed %>-alert-error />
-        <p id="<%= jhiPrefixDashed %>-delete-<%= entityInstance %>-heading">__jhiTranslateTag__('<%- i18nKeyPrefix %>.delete.question', { "id": "<%- entityInstance%>.<%- primaryKey.name%>" })</p>
+        <p id="<%= jhiPrefixDashed %>-delete-<%= entityInstance %>-heading">__jhiTranslateTag__('<%- i18nKeyPrefix %>.delete.question', { "<% if (builtInUserManagement) { %>login<% } else { %>id<% } %>": "<%- entityInstance%>.<% if (builtInUserManagement) { %>login<% } else { %><%- primaryKey.name%><% } %>" })</p>
     </div>
 
     <div class="modal-footer">

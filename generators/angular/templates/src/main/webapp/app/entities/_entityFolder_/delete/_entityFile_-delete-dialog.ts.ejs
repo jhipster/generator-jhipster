@@ -44,8 +44,8 @@ export class <%= entityAngularName %>DeleteDialog {
         this.activeModal.dismiss();
     }
 
-    confirmDelete(id: <%= tsKeyType %>): void {
-        this.<%= entityInstance %>Service.delete(id).subscribe(() => {
+    confirmDelete(<% if (builtInUserManagement) { %>login: string<% } else { %>id: <%= tsKeyType %><% } %>): void {
+        this.<%= entityInstance %>Service.delete(<% if (builtInUserManagement) { %>login<% } else { %>id<% } %>).subscribe(() => {
             this.activeModal.close(ITEM_DELETED_EVENT);
         });
     }

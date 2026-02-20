@@ -26,6 +26,23 @@ import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
 
 const <%= entityInstance %>Resolve = (route: ActivatedRouteSnapshot): Observable<null | I<%= entityAngularName %>> => {
+<%_ if (builtInUserManagement) { _%>
+  const login = route.params['login'];
+  if (login) {
+    return inject(<%= entityAngularName %>Service)
+      .find(login)
+      .pipe(
+        mergeMap((<%= entityInstance %>: HttpResponse<I<%= entityAngularName %>>) => {
+          if (<%= entityInstance %>.body) {
+            return of(<%= entityInstance %>.body);
+          } else {
+            inject(Router).navigate(['404']);
+            return EMPTY;
+          }
+        }),
+      );
+  }
+<%_ } else { _%>
   const id = route.params['<%= primaryKey.name %>'];
   if (id) {
     return inject(<%= entityAngularName %>Service)
@@ -41,6 +58,7 @@ const <%= entityInstance %>Resolve = (route: ActivatedRouteSnapshot): Observable
         }),
       );
   }
+<%_ } _%>
   return of(null);
 };
 
