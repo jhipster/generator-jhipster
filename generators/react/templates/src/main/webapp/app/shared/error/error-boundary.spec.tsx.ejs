@@ -10,8 +10,8 @@ const ErrorComp = () => {
 describe('error component', () => {
   beforeEach(() => {
     // ignore console and jsdom errors
-    jest.spyOn((window as any)._virtualConsole, 'emit').mockImplementation(() => false);
-    jest.spyOn((window as any).console, 'error').mockImplementation(() => false);
+    jest.spyOn((globalThis as any)._virtualConsole, 'emit').mockImplementation(() => false);
+    jest.spyOn((globalThis as any).console, 'error').mockImplementation(() => false);
   });
 
   it('Should throw an error when component is not enclosed in Error Boundary', () => {
