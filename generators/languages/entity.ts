@@ -25,7 +25,11 @@ import type {
   Relationship as BaseApplicationRelationship,
 } from '../base-application/types.ts';
 
-export type { BaseApplicationField as Field, BaseApplicationRelationship as Relationship };
+export type { BaseApplicationField as Field };
+
+export interface Relationship extends BaseApplicationRelationship {
+  propertyTranslationKey?: string;
+}
 
 type LanguagesAddedEntityProperties = {
   /** i18n variant ex: 'male', 'female' when applied */
@@ -34,10 +38,7 @@ type LanguagesAddedEntityProperties = {
   entityTranslationKeyMenu: string;
 };
 
-export interface Entity<
-  F extends BaseApplicationField = BaseApplicationField,
-  R extends BaseApplicationRelationship = BaseApplicationRelationship,
->
+export interface Entity<F extends BaseApplicationField = BaseApplicationField, R extends BaseApplicationRelationship = Relationship>
   extends BaseApplicationEntity<F, R>, LanguagesAddedEntityProperties {
   i18nKeyPrefix: string;
   i18nAlertHeaderPrefix: string;

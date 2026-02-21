@@ -209,7 +209,7 @@ export function prepareEntityPrimaryKeyForTemplates(
         fieldName: 'id',
         id: true,
         fieldNameHumanized: 'ID',
-        fieldTranslationKey: 'global.field.id',
+        propertyTranslationKey: 'global.field.id',
         autoGenerate: true,
       } as FieldAll;
       entityWithConfig.fields.unshift(idField!);

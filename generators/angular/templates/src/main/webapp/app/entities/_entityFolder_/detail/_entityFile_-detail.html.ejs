@@ -33,7 +33,7 @@
     const fieldName = field.fieldName;
     const fieldType = field.fieldType;
 _%>
-        <dt><span<% if (field.documentation) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.documentation %>"<% } } %>>__jhiTranslateTag__('<%- field.fieldTranslationKey %>')</span></dt>
+        <dt><span<% if (field.documentation) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.documentation %>"<% } } %>>__jhiTranslateTag__('<%- field.propertyTranslationKey %>')</span></dt>
         <dd>
     <%_ if (field.fieldIsEnum) { _%>
           <%# TODO: import enum and use its key as label _%>
@@ -74,7 +74,7 @@ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded
     const otherEntityField = relationship.otherEntityField;
     if (persistableRelationship) {
 _%>
-        <dt><span>__jhiTranslateTag__('<%- i18nKeyPrefix %>.<%- relationshipName %>')</span></dt>
+        <dt><span>__jhiTranslateTag__('<%- relationship.propertyTranslationKey %>')</span></dt>
         <dd>
     <%_ if (relationship.otherEntityUser) { _%>
       <%_ if (relationship.collection) { _%>

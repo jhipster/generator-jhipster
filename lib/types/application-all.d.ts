@@ -25,7 +25,7 @@ import type {
 import type { Application as ClientApplication, Field as ClientField } from '../../generators/client/types.d.ts';
 import type { Application as DockerApplication } from '../../generators/docker/types.d.ts';
 import type { Application as GitApplication } from '../../generators/git/types.d.ts';
-import type { Application as I18nApplication } from '../../generators/languages/types.d.ts';
+import type { Application as I18nApplication, Relationship as LanguagesRelationship } from '../../generators/languages/types.d.ts';
 import type {
   Application as LiquibaseApplication,
   Entity as LiquibaseEntity,
@@ -45,7 +45,8 @@ import type { Application as SpringCloudApplication } from '../../generators/spr
 
 export type FieldAll = SpringDataRelationalField & LiquibaseField & ClientField;
 
-export interface RelationshipAll extends SpringDataRelationalRelationship, ServerRelationship, LiquibaseRelationship {
+export interface RelationshipAll
+  extends SpringDataRelationalRelationship, ServerRelationship, LanguagesRelationship, LiquibaseRelationship {
   bagRelationship?: boolean;
 }
 

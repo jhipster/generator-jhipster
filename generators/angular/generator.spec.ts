@@ -205,4 +205,24 @@ describe(`generator - ${clientFramework}`, () => {
       runResult.assertFileContent(`${CLIENT_MAIN_SRC_DIR}app/admin/admin.routes.ts`, /title: 'translated-value'/);
     });
   });
+
+  describe('builtIn UserManagementEntity', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig(
+          {
+            clientFramework,
+            enableTranslation: false,
+          },
+          [{ name: 'UserManagement', skipClient: false }],
+        )
+        .withMockedSource()
+        .withMockedGenerators(['jhipster:common']);
+    });
+
+    it('should match snapshot for UserManagement files', () => {
+      expect(runResult.getSnapshot('**/entities/admin/user-management/**')).toMatchSnapshot();
+    });
+  });
 });

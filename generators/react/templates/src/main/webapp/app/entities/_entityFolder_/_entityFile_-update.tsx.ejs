@@ -212,7 +212,7 @@ _%>
             <ValidatedField
               name="<%= primaryKey.fields[0].fieldName %>" required readOnly
               id="<%= entityFileName %>-<%= primaryKey.fields[0].fieldName %>"
-              label={translate('<%= primaryKey.fields[0].fieldTranslationKey %>')}
+              label={translate('<%= primaryKey.fields[0].propertyTranslationKey %>')}
               validate={{ required: true }}
             />
           }
@@ -227,7 +227,7 @@ _%>
           <ValidatedField
   <%_ } _%>
   <%_ if (enableTranslation) { _%>
-            label={translate('<%= field.fieldTranslationKey %>')}
+            label={translate('<%= field.propertyTranslationKey %>')}
   <%_ } else { _%>
             label="<%= fieldNameHumanized %>"
   <%_ } _%>
