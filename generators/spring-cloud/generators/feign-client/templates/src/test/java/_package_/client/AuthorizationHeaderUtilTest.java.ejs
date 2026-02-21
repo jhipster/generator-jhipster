@@ -257,7 +257,7 @@ class AuthorizationHeaderUtilTest {
         dto.setSessionState("ccea4a55");
         dto.setExpiresIn(300l);
         dto.setRefreshToken(hasRefreshToken ? "tokenVal" : null);
-        dto.setScope("openid email profile offline_access");
+        dto.setScope("openid email profile");
         return Optional.of(dto);
     }
 }
