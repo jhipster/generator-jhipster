@@ -186,7 +186,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
     });
 
 <%_ } _%>
-    describe<% if (locals.builtInUserManagement) { %>.skip<% } %>('with existing value', () => {
+    describe('with existing value', () => {
 <%_ if (!readOnly) { _%>
   <%_ if (skipCreateTest) { _%>
       /* Disabled due to incompatibility
