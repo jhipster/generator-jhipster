@@ -24,7 +24,6 @@ import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.ts';
 import { mutateData } from '../../lib/utils/index.ts';
 import type { GenericTask } from '../base-core/types.ts';
 import BaseGenerator from '../base-simple-application/index.ts';
-import { BOOTSTRAP_APPLICATION } from '../base-simple-application/priorities.ts';
 import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../base-simple-application/support/index.ts';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
 import type GeneratorsByNamespace from '../types.ts';
@@ -86,7 +85,7 @@ const PRIORITY_WITH_ENTITIES = new Set<string>([DEFAULT]);
 const PRIORITY_WITH_FILTERED_ENTITIES = new Set<string>([WRITING_ENTITIES, POST_WRITING_ENTITIES]);
 
 const PRIORITY_WITH_SOURCE = new Set<string>([PREPARING, POST_PREPARING, POST_WRITING, POST_WRITING_ENTITIES]);
-const PRIORITY_WITH_APPLICATION_DEFAULTS = new Set<string>([BOOTSTRAP_APPLICATION, PREPARING, LOADING]);
+const PRIORITY_WITH_APPLICATION_DEFAULTS = new Set<string>([PREPARING, LOADING]);
 const PRIORITY_WITH_APPLICATION = new Set<string>([
   LOADING,
   PREPARING,
