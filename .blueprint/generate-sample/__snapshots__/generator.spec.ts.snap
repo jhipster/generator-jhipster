@@ -285,6 +285,9 @@ exports[`generator - generate-sample with ng-default-additional (star jdl-entity
   "entities.jdl": {
     "stateCleared": "modified",
   },
+  "user-management.jdl": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
