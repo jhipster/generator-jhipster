@@ -28,6 +28,10 @@ import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.kafka.KafkaContainer;
 import org.testcontainers.junit.jupiter.Container;
 
+/**
+ * Sample Kafka Test Container configuration for integration tests. This will start a Kafka container before the tests and stop it afterwards.
+ * To use it, add @ImportTestcontainers(KafkaTestContainer.class) to your test class.
+ */
 public interface KafkaTestContainer {
     @Container
     KafkaContainer kafkaContainer = new KafkaContainer("<%- dockerContainers.kafka %>")
