@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 import { lowerFirst } from 'lodash-es';
+import pluralizeString from 'pluralize';
 
 export function customCamelCase(string: string): string {
   checkStringIsValid(string);
@@ -30,4 +31,15 @@ function checkStringIsValid(string: string) {
   if (string == null) {
     throw new Error('The passed string cannot be nil.');
   }
+}
+
+/**
+ * Pluralizes a string. If force is passed and the plural is the same as the singular, it adds an "s" or "es" suffix at the end of the string to avoid conflicts.
+ */
+export function pluralize(string: string, { force }: { force: boolean }): string {
+  const plural = pluralizeString(string);
+  if (plural === string && force) {
+    return string.endsWith('s') ? `${string}es` : `${string}s`;
+  }
+  return plural;
 }
