@@ -55,7 +55,7 @@ export const HealthPage = () => {
 
   const renderModal = () => <HealthModal healthObject={healthObject} handleClose={handleClose} showModal={showModal} />;
 
-  const data = (health || {}).components || {};
+  const data = health?.components || {};
 
   return (
     <div>
