@@ -3,14 +3,15 @@ import { describe, expect, it } from 'esmocha';
 import type { MutateDataParam } from './object.ts';
 import { removeFieldsWithNullishValues } from './object.ts';
 
-const _shouldAcceptOverride: MutateDataParam<{ str: string }> = {
+// __override__ field should be accepted.
+({
   __override__: true,
-};
+}) satisfies MutateDataParam<{ str: string }>;
 
-const _shouldNotAcceptUnknownProperties: MutateDataParam<{ str: string }> = {
+({
   // @ts-expect-error unknown properties should not be allowed
   str2: 'baz',
-};
+}) satisfies MutateDataParam<{ str: string }>;
 
 const _shouldAcceptStringProperties: MutateDataParam<{ str: string }> = {
   str: 'baz',
@@ -24,28 +25,28 @@ const _shouldAcceptNumberProperties: MutateDataParam<{ nr: number }> = {
 
 _shouldAcceptNumberProperties.nr satisfies number | ((ctx: { nr: number }) => number) | undefined;
 
-const _shouldNotAcceptFunction: MutateDataParam<{ fn: () => string }> = {
+({
   // @ts-expect-error function properties should always use callbacks
   fn: () => '',
-};
+}) satisfies MutateDataParam<{ fn: () => string }>;
 
-const _shouldAcceptFunctionGenerator: MutateDataParam<{ fn: () => string }> = {
+({
   fn: () => () => '',
-};
+}) satisfies MutateDataParam<{ fn: () => string }>;
 
-const _shouldAcceptReadonlyProperties: MutateDataParam<{ readonly readonly: string }> = {
+({
   // @ts-expect-error readonly properties should be removed
   readonly: 'baz',
-};
+}) satisfies MutateDataParam<{ readonly readonly: string }>;
 
-const _shouldAcceptReadonlyPropertiesOnCallbacks: MutateDataParam<{ readonly readonly: string; str: string }> = {
+({
   str: ctx => ctx.readonly,
-};
+}) satisfies MutateDataParam<{ readonly readonly: string; str: string }>;
 
-const _shouldNotAllowIndexSignature: MutateDataParam<Record<string, any>> = {
+({
   // @ts-expect-error fails to build because index signatures should be removed
   str: ctx => ctx.readonly,
-};
+}) satisfies MutateDataParam<Record<string, any>>;
 
 describe('generator - base - support - config', () => {
   describe('deepCleanup', () => {
