@@ -22,9 +22,11 @@ import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 import { ALPHANUMERIC_PATTERN } from '../../lib/constants/jdl.ts';
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../lib/core/application-types.ts';
 import authenticationTypes from '../../lib/jhipster/authentication-types.ts';
+import databaseTypes from '../../lib/jhipster/database-types.ts';
 import { createBase64Secret, createSecret } from '../../lib/utils/secret.ts';
 
 const { OAUTH2, SESSION, JWT } = authenticationTypes;
+const NO_DATABASE = databaseTypes.NO;
 
 const command = {
   configs: {
@@ -193,6 +195,11 @@ const command = {
       },
       choices: ['sql', 'mongodb', 'couchbase', 'cassandra', 'neo4j', 'no'],
       scope: 'storage',
+      configure: gen => {
+        if (gen.jhipsterConfig.syncUserWithIdp && gen.jhipsterConfig.databaseType === NO_DATABASE) {
+          throw new Error('syncUserWithIdp and no databaseType are not compatible');
+        }
+      },
     },
     databaseMigration: {
       description: 'Database migration',
