@@ -50,7 +50,7 @@ import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= enti
 describe('Entities reducer tests', () => {
 
   function isEmpty(element): boolean {
-    if (element instanceof Array) {
+    if (Array.isArray(element)) {
       return element.length === 0;
     } else {
       return Object.keys(element).length === 0;

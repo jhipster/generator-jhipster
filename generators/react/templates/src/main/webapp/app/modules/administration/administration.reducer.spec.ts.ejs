@@ -42,7 +42,7 @@ describe('Administration reducer tests', () => {
 
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable || withAdminUi || communicationSpringWebsocket) { _%>
   function isEmpty(element): boolean {
-    if (element instanceof Array) {
+    if (Array.isArray(element)) {
       return element.length === 0;
     }
     return Object.keys(element).length === 0;

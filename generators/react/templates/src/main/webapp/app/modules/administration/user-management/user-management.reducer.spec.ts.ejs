@@ -37,7 +37,7 @@ describe('User management reducer tests', () => {
   const username = process.env.E2E_USERNAME ?? 'admin';
 
   function isEmpty(element): boolean {
-    if (element instanceof Array) {
+    if (Array.isArray(element)) {
       return element.length === 0;
     }
     return Object.keys(element).length === 0;
