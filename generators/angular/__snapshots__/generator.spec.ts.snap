@@ -405,7 +405,7 @@ export class UserManagementDetail {
   "src/main/webapp/app/entities/admin/user-management/list/user-management.spec.ts": {
     "contents": "import { MockInstance, afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import {
   ComponentFixture, TestBed,
   inject,
@@ -425,7 +425,10 @@ import { UserManagementService } from '../service/user-management.service';
 
 import { UserManagement } from './user-management';
 
+vitest.useFakeTimers();
+
 describe('UserManagement Management Component', () => {
+  let httpMock: HttpTestingController;
     let comp: UserManagement;
     let fixture: ComponentFixture<UserManagement>;
     let service: UserManagementService;
@@ -466,41 +469,30 @@ describe('UserManagement Management Component', () => {
         service = TestBed.inject(UserManagementService);
         routerNavigateSpy = vitest.spyOn(comp.router, 'navigate');
 
-        vitest
-          .spyOn(service, 'query')
-          .mockReturnValueOnce(
-            of(
-              new HttpResponse({
-                body: [{id: 2904}],
-                headers: new HttpHeaders({
-                  link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
-                }),
-              }),
-            ),
-          )
-          .mockReturnValueOnce(
-            of(
-              new HttpResponse({
-                body: [{id: 21226}],
-                headers: new HttpHeaders({
-                  link: '<http://localhost/api/foo?page=0&size=20>; rel="prev",<http://localhost/api/foo?page=2&size=20>; rel="next"',
-                }),
-              }),
-            ),
-          );
-
     const library = TestBed.inject(FaIconLibrary);
     library.addIcons(faEye, faPencilAlt, faPlus, faSort, faSortDown, faSortUp, faSync, faTimes);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
-    it('should call load all on init', () => {
-        // WHEN
-        comp.ngOnInit();
+  afterEach(() => {
+    TestBed.resetTestingModule();
+    httpMock.verify();
+  });
 
-        // THEN
-        expect(service.query).toHaveBeenCalled();
-        expect(comp.userManagements()[0]).toEqual(expect.objectContaining({id: 2904}));
-    });
+  it('should call load all on init', async () => {
+    // WHEN
+    TestBed.tick();
+    const req = httpMock.expectOne({ method: 'GET' });
+    req.flush(
+      [{id: 2904}],
+      { headers: { link: '<http://localhost/api/foo?page=1&size=20>; rel="next"' } },
+    );
+    await vitest.runAllTimersAsync();
+
+    // THEN
+    expect(service.userManagementsResource.isLoading()).toEqual(false);
+    expect(comp.userManagements()[0]).toEqual(expect.objectContaining({id: 2904}));
+  });
 
     describe('trackId', () => {
         it('should forward to userManagementService', () => {
@@ -533,13 +525,14 @@ describe('UserManagement Management Component', () => {
         expect(routerNavigateSpy).toHaveBeenCalled();
     });
 
-    it('should calculate the sort attribute for an id', () => {
-        // WHEN
-        comp.ngOnInit();
+  it('should calculate the sort attribute for an id', () => {
+    // WHEN
+    TestBed.tick();
+    httpMock.expectOne({ method: 'GET' });
 
-        // THEN
-        expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ sort: ['id,desc'] }));
-    });
+    // THEN
+    expect(service.userManagementsParams()).toMatchObject(expect.objectContaining({ sort: ['id,desc'] }));
+  });
 
   describe('delete', () => {
     let ngbModal: NgbModal;
@@ -610,7 +603,7 @@ import {
   ITEM_DELETED_EVENT,
   DEFAULT_SORT_DATA
 } from 'app/config/navigation.constants';
-import { EntityArrayResponseType, UserManagementService } from '../service/user-management.service';
+import { UserManagementService } from '../service/user-management.service';
 import { UserManagementDeleteDialog } from '../delete/user-management-delete-dialog';
 
 @Component({
@@ -632,8 +625,7 @@ import { UserManagementDeleteDialog } from '../delete/user-management-delete-dia
 export class UserManagement implements OnInit {
 
     subscription: Subscription | null = null;
-    userManagements = signal<IUserManagement[]>([]);
-    isLoading = signal(false);
+    readonly userManagements = signal<IUserManagement[]>([]);
 
     sortState = sortStateSignal({});
 
@@ -643,9 +635,23 @@ export class UserManagement implements OnInit {
 
     readonly router = inject(Router);
     protected readonly userManagementService = inject(UserManagementService);
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    readonly isLoading = this.userManagementService.userManagementsResource.isLoading;
     protected readonly activatedRoute = inject(ActivatedRoute);
     protected readonly sortService = inject(SortService);
     protected modalService = inject(NgbModal);
+
+  constructor() {
+    effect(() => {
+      const headers = this.userManagementService.userManagementsResource.headers();
+      if (headers) {
+        this.fillComponentAttributesFromResponseHeader(headers);
+      }
+    });
+    effect(() => {
+      this.userManagements.set(this.fillComponentAttributesFromResponseBody([...this.userManagementService.userManagements()]));
+    });
+  }
 
     trackId = (item: IUserManagement): number => this.userManagementService.getUserManagementIdentifier(item);
 
@@ -669,9 +675,9 @@ export class UserManagement implements OnInit {
         ).subscribe();
     }
 
-    load(): void {
-      this.queryBackend().subscribe((res: EntityArrayResponseType) => this.onResponseSuccess(res));
-    }
+  load(): void {
+    this.queryBackend();
+  }
 
     navigateToWithComponentValues(event: SortState): void {
       this.handleNavigation(this.page(), event);
@@ -687,32 +693,22 @@ export class UserManagement implements OnInit {
       this.sortState.set(this.sortService.parseSortParam(params.get(SORT) ?? data[DEFAULT_SORT_DATA]));
     }
 
-    protected onResponseSuccess(response: EntityArrayResponseType): void {
-      this.fillComponentAttributesFromResponseHeader(response.headers);
-      const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
-      this.userManagements.set(dataFromBody);
-    }
-
-    protected fillComponentAttributesFromResponseBody(data: IUserManagement[] | null): IUserManagement[] {
-      return data ?? [];
-    }
+  protected fillComponentAttributesFromResponseBody(data: IUserManagement[]): IUserManagement[] {
+    return data;
+  }
 
     protected fillComponentAttributesFromResponseHeader(headers: HttpHeaders): void {
       this.totalItems.set(Number(headers.get(TOTAL_COUNT_RESPONSE_HEADER)));
     }
 
-    protected queryBackend(): Observable<EntityArrayResponseType> {
-      this.isLoading.set(true);
+    protected queryBackend(): void {
       const pageToLoad: number = this.page();
       const queryObject: any  = {
         page: pageToLoad - 1,
         size: this.itemsPerPage(),
         sort: this.sortService.buildSortParam(this.sortState()),
       };
-        return this.userManagementService.query(queryObject)
-          .pipe(
-            finalize(() => this.isLoading.set(false))
-          );
+      this.userManagementService.userManagementsParams.set(queryObject);
     }
 
     protected handleNavigation(page: number, sortState: SortState): void {
@@ -1074,8 +1070,8 @@ describe('UserManagement Service', () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/service/user-management.service.ts": {
-    "contents": "import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+    "contents": "import { computed, inject, Injectable, signal } from '@angular/core';
+import { HttpClient, HttpResponse, httpResource } from '@angular/common/http';
 import {
   map,
   Observable,
@@ -1107,12 +1103,45 @@ export type PartialUpdateRestUserManagement = RestOf<PartialUpdateUserManagement
 export type EntityResponseType = HttpResponse<IUserManagement>;
 export type EntityArrayResponseType = HttpResponse<IUserManagement[]>;
 
-@Injectable({ providedIn: 'root' })
-export class UserManagementService {
-    protected readonly http = inject(HttpClient);
-    protected readonly applicationConfigService = inject(ApplicationConfigService);
+@Injectable()
+export class UserManagementsService {
+  readonly userManagementsParams = signal<Record<string, string | number | boolean | readonly (string | number | boolean)[]> | undefined>(undefined);
+  protected readonly applicationConfigService = inject(ApplicationConfigService);
+  protected readonly resourceUrl = this.applicationConfigService.getEndpointFor('api/admin/users');
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  readonly userManagementsResource = httpResource<RestUserManagement[]>(() => {
+    const params = this.userManagementsParams();
+    if (!params) {
+      return undefined;
+    }
+    return { url: this.resourceUrl, params };
+  });
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  readonly userManagements = computed(() => (this.userManagementsResource.value() ?? [])
+    .map(item => this.convertDateFromServer(item))
+    .map(item => this.convertUserManagementFromServer(item))
+  );
 
-    protected resourceUrl = this.applicationConfigService.getEndpointFor('api/admin/users');
+  protected convertDateFromServer(restUserManagement: RestUserManagement): IUserManagement {
+    return {
+      ...restUserManagement,
+      createdDate: restUserManagement.createdDate ? dayjs(restUserManagement.createdDate) : undefined,
+      lastModifiedDate: restUserManagement.lastModifiedDate ? dayjs(restUserManagement.lastModifiedDate) : undefined,
+    };
+  }
+
+  protected convertUserManagementFromServer(restUserManagement: RestUserManagement): IUserManagement {
+    return {
+      ...restUserManagement,
+      authorities: restUserManagement.authorities?.map(authority => ({ name: authority as unknown as string })),
+    };
+  }
+
+}
+
+@Injectable({ providedIn: 'root' })
+export class UserManagementService extends UserManagementsService {
+    protected readonly http = inject(HttpClient);
 
     create(userManagement: NewUserManagement): Observable<EntityResponseType> {
         let copy = this.convertDateFromClient(userManagement);
@@ -1194,14 +1223,6 @@ export class UserManagementService {
         };
     }
 
-    protected convertDateFromServer(restUserManagement: RestUserManagement): IUserManagement {
-        return {
-            ...restUserManagement,
-            createdDate: restUserManagement.createdDate ? dayjs(restUserManagement.createdDate) : undefined,
-            lastModifiedDate: restUserManagement.lastModifiedDate ? dayjs(restUserManagement.lastModifiedDate) : undefined,
-        }
-    }
-
   protected convertResponseFromServer(res: HttpResponse<RestUserManagement>): HttpResponse<IUserManagement> {
     return res.clone({
       body: res.body ? this.convertDateFromServer(res.body) : null,
@@ -1219,13 +1240,6 @@ export class UserManagementService {
       ...userManagement,
       authorities: userManagement.authorities?.map(authority => authority.name),
     };
-  }
-
-  protected convertUserManagementFromServer(restUserManagement: RestUserManagement): IUserManagement {
-    return {
-      ...restUserManagement,
-      authorities: restUserManagement.authorities?.map(authority => ({ name: authority as unknown as string })),
-    }
   }
 
   protected convertUserManagementResponseFromServer(res: HttpResponse<RestUserManagement>): HttpResponse<IUserManagement> {
