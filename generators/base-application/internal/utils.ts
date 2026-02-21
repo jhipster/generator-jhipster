@@ -241,7 +241,9 @@ export function createUserManagementEntity(
     entityTranslationKey: 'userManagement',
   };
 
-  addOrExtendFields(userManagement.fields!, getAuditFields());
+  if (!application.databaseTypeCassandra) {
+    addOrExtendFields(userManagement.fields!, getAuditFields());
+  }
 
   if (application.generateBuiltInAuthorityEntity) {
     addOrExtendRelationships(userManagement.relationships!, [

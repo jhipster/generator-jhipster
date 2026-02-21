@@ -31,9 +31,9 @@ import { DATE_FORMAT } from 'app/config/input.constants';
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 import { sampleWithRequiredData, sampleWithNewData, sampleWithPartialData, sampleWithFullData } from '../<%= entityFileName %>.test-samples';
 
-import { <%= entityAngularName %>Service<% if (anyFieldIsDateDerived) { %>, Rest<%= entityAngularName %><% } %> } from './<%= entityFileName %>.service';
+import { <%= entityAngularName %>Service<% if (builtInUserManagement || anyFieldIsDateDerived) { %>, Rest<%= entityAngularName %><% } %> } from './<%= entityFileName %>.service';
 
-const requireRestSample: <% if (anyFieldIsDateDerived) { %>Rest<% } else { %>I<% } %><%= entityAngularName %> = {
+const requireRestSample: <% if (builtInUserManagement || anyFieldIsDateDerived) { %>Rest<% } else { %>I<% } %><%= entityAngularName %> = {
   ...sampleWithRequiredData,
 <%_ fields.forEach((field) => { _%>
 <%_ if (field.fieldTypeLocalDate) { _%>
@@ -42,6 +42,9 @@ const requireRestSample: <% if (anyFieldIsDateDerived) { %>Rest<% } else { %>I<%
   <%= field.fieldName %>: sampleWithRequiredData.<%= field.fieldName %>?.toJSON(),
 <%_ } _%>
 <%_ }) _%>
+<%_ if (builtInUserManagement) { _%>
+  authorities: null,
+<%_ } _%>
 };
 
 describe('<%= entityAngularName %> Service', () => {

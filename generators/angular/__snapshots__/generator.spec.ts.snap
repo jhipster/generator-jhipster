@@ -876,6 +876,7 @@ const requireRestSample: RestUserManagement = {
   ...sampleWithRequiredData,
   createdDate: sampleWithRequiredData.createdDate?.toJSON(),
   lastModifiedDate: sampleWithRequiredData.lastModifiedDate?.toJSON(),
+  authorities: null,
 };
 
 describe('UserManagement Service', () => {
@@ -1092,6 +1093,7 @@ type RestOf<T extends IUserManagement | NewUserManagement> =
   {
   createdDate?: string | null;
   lastModifiedDate?: string | null;
+    authorities?: string[] | null;
   };
 
 export type RestUserManagement = RestOf<IUserManagement>;
@@ -1118,23 +1120,16 @@ export class UserManagementsService {
   });
   // eslint-disable-next-line @typescript-eslint/member-ordering
   readonly userManagements = computed(() => (this.userManagementsResource.value() ?? [])
-    .map(item => this.convertDateFromServer(item))
-    .map(item => this.convertUserManagementFromServer(item))
+    .map(item => this.convertValueFromServer(item))
   );
 
-  protected convertDateFromServer(restUserManagement: RestUserManagement): IUserManagement {
+  protected convertValueFromServer(restUserManagement: RestUserManagement): IUserManagement {
     return {
       ...restUserManagement,
       createdDate: restUserManagement.createdDate ? dayjs(restUserManagement.createdDate) : undefined,
       lastModifiedDate: restUserManagement.lastModifiedDate ? dayjs(restUserManagement.lastModifiedDate) : undefined,
-    };
-  }
-
-  protected convertUserManagementFromServer(restUserManagement: RestUserManagement): IUserManagement {
-    return {
-      ...restUserManagement,
       authorities: restUserManagement.authorities?.map(authority => ({ name: authority as unknown as string })),
-    };
+    }
   }
 
 }
@@ -1144,18 +1139,15 @@ export class UserManagementService extends UserManagementsService {
     protected readonly http = inject(HttpClient);
 
     create(userManagement: NewUserManagement): Observable<EntityResponseType> {
-        let copy = this.convertDateFromClient(userManagement);
-        copy = this.convertUserManagementFromClient(userManagement);
+        const copy = this.convertValueFromClient(userManagement);
         return this.http.post<RestUserManagement>(this.resourceUrl,
                  copy ,
                 { observe: 'response' })
-        .pipe(map(res => this.convertResponseFromServer(res)))
-        .pipe(map(res => this.convertUserManagementResponseFromServer(res)));
+        .pipe(map(res => this.convertResponseFromServer(res)));
     }
 
     update(userManagement: IUserManagement): Observable<EntityResponseType> {
-        let copy = this.convertDateFromClient(userManagement);
-        copy = this.convertUserManagementFromClient(userManagement);
+        const copy = this.convertValueFromClient(userManagement);
         return this.http.put<RestUserManagement>(\`\${this.resourceUrl}/\${encodeURIComponent(this.getUserManagementIdentifier(userManagement))}\`,
                  copy ,
                 { observe: 'response' })
@@ -1163,26 +1155,22 @@ export class UserManagementService extends UserManagementsService {
     }
 
     partialUpdate(userManagement: PartialUpdateUserManagement): Observable<EntityResponseType> {
-        let copy = this.convertDateFromClient(userManagement);
-        copy = this.convertUserManagementFromClient(userManagement);
+        const copy = this.convertValueFromClient(userManagement);
         return this.http.patch<RestUserManagement>(\`\${this.resourceUrl}/\${encodeURIComponent(this.getUserManagementIdentifier(userManagement))}\`,
                  copy ,
                 { observe: 'response' })
-        .pipe(map(res => this.convertResponseFromServer(res)))
-        .pipe(map(res => this.convertUserManagementResponseFromServer(res)));
+        .pipe(map(res => this.convertResponseFromServer(res)));
     }
 
     find(id: number): Observable<EntityResponseType> {
         return this.http.get<RestUserManagement>(\`\${this.resourceUrl}/\${encodeURIComponent(id)}\`, { observe: 'response' })
-            .pipe(map(res => this.convertResponseFromServer(res)))
-            .pipe(map(res => this.convertUserManagementResponseFromServer(res)));
+            .pipe(map(res => this.convertResponseFromServer(res)));
     }
 
     query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
         return this.http.get<RestUserManagement[]>(this.resourceUrl, { params: options, observe: 'response' })
-            .pipe(map(res => this.convertResponseArrayFromServer(res)))
-            .pipe(map(res => this.convertUserManagementResponseArrayFromServer(res)));
+            .pipe(map(res => this.convertResponseArrayFromServer(res)));
     }
 
     delete(id: number): Observable<HttpResponse<{}>> {
@@ -1215,42 +1203,24 @@ export class UserManagementService extends UserManagementsService {
         return userManagementCollection;
     }
 
-    protected convertDateFromClient<T extends IUserManagement | NewUserManagement | PartialUpdateUserManagement>(userManagement: T): RestOf<T> {
-        return {
-            ...userManagement,
-        createdDate: userManagement.createdDate?.toJSON() ?? null,
-        lastModifiedDate: userManagement.lastModifiedDate?.toJSON() ?? null,
-        };
-    }
+  protected convertValueFromClient<T extends IUserManagement | NewUserManagement | PartialUpdateUserManagement>(userManagement: T): RestOf<T> {
+    return {
+      ...userManagement,
+    createdDate: userManagement.createdDate?.toJSON() ?? null,
+    lastModifiedDate: userManagement.lastModifiedDate?.toJSON() ?? null,
+      authorities: userManagement.authorities?.map(authority => authority.name),
+    };
+  }
 
   protected convertResponseFromServer(res: HttpResponse<RestUserManagement>): HttpResponse<IUserManagement> {
     return res.clone({
-      body: res.body ? this.convertDateFromServer(res.body) : null,
+      body: res.body ? this.convertValueFromServer(res.body) : null,
     });
   }
 
   protected convertResponseArrayFromServer(res: HttpResponse<RestUserManagement[]>): HttpResponse<IUserManagement[]> {
     return res.clone({
-      body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
-    });
-  }
-
-  protected convertUserManagementFromClient<T extends IUserManagement | NewUserManagement | PartialUpdateUserManagement>(userManagement: T): any {
-    return {
-      ...userManagement,
-      authorities: userManagement.authorities?.map(authority => authority.name),
-    };
-  }
-
-  protected convertUserManagementResponseFromServer(res: HttpResponse<RestUserManagement>): HttpResponse<IUserManagement> {
-    return res.clone({
-      body: res.body ? this.convertUserManagementFromServer(res.body) : null,
-    });
-  }
-
-  protected convertUserManagementResponseArrayFromServer(res: HttpResponse<RestUserManagement[]>): HttpResponse<IUserManagement[]> {
-    return res.clone({
-      body: res.body ? res.body.map(item => this.convertUserManagementFromServer(item)) : null,
+      body: res.body ? res.body.map(item => this.convertValueFromServer(item)) : null,
     });
   }
 }

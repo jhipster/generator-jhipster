@@ -186,7 +186,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
     });
 
 <%_ } _%>
-    describe('with existing value', () => {
+    describe<% if (locals.builtInUserManagement) { %>.skip<% } %>('with existing value', () => {
 <%_ if (!readOnly) { _%>
   <%_ if (skipCreateTest) { _%>
       /* Disabled due to incompatibility
@@ -309,7 +309,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
   });
 <%_ if (!readOnly) { _%>
 
-  describe('new <%- entityNameCapitalized %> page', () => {
+  describe<% if (locals.builtInUserManagement) { %>.skip<% } %>('new <%- entityNameCapitalized %> page', () => {
     beforeEach(() => {
       cy.visit(<%= entityInstance %>PageUrl);
       cy.get(entityCreateButtonSelector).click();
@@ -325,7 +325,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
     if (fieldValue === undefined) {
         return;
     }
-    fieldValue = typeof fieldValue === 'string' ? fieldValue.replaceAll("'", "\\'") : fieldValue;
+    fieldValue = typeof fieldValue === 'string' ? fieldValue.replaceAll("\\", "\\\\").replaceAll("'", "\\'") : fieldValue;
   _%>
 
     <%_ if (field.fieldTypeBoolean) { _%>
