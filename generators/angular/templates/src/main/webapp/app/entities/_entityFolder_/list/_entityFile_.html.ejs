@@ -80,7 +80,7 @@ _%>
                         <div class="d-flex">
                             <span>__jhiTranslateTag__('<%- field.propertyTranslationKey %>')</span>
   <%_ if (fieldSupportsSortBy) { _%>
-                        <% if (searchEngineAny && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>@if (!currentSearch) {<% } %>
+                        <% if (searchEngineAny && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>@if (!currentSearch()) {<% } %>
                             <fa-icon class="p-1" icon="sort" />
                         <% if (searchEngineAny && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>}<% } %>
   <%_ } _%>

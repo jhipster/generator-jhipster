@@ -23,9 +23,17 @@ import { describe, it } from 'esmocha';
 
 import { expect } from 'chai';
 
-import { customCamelCase } from './string-utils.ts';
+import { customCamelCase, pluralize } from './string-utils.ts';
 
 describe('jdl - StringUtils', () => {
+  describe('pluralize', () => {
+    it('should keep it as it is when force is false', () => {
+      expect(pluralize('UserData', { force: false })).to.equal('UserData');
+    });
+    it('should append an "s" when force is true', () => {
+      expect(pluralize('UserData', { force: true })).to.equal('UserDatas');
+    });
+  });
   describe('customCamelCase', () => {
     describe('when passing a valid string', () => {
       describe('with only one letter', () => {

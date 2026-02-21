@@ -400,7 +400,7 @@ public class <%= entityClass %>Resource {
 <%_ } _%>
 
     /**
-     * {@code GET  /<%= entityApiUrl %>} : get all the <%= entityInstancePlural %>.
+     * {@code GET  /<%= entityApiUrl %>} : get all the <%= entityNamePluralHumanized %>.
      *
 <%_ if (!paginationNo) { _%>
      * @param pageable the pagination information.
@@ -416,7 +416,7 @@ public class <%= entityClass %>Resource {
 <%_ } else if (fieldsContainNoOwnerOneToOne) { _%>
      * @param filter the filter of the request.
 <%_ } _%>
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of <%= entityInstancePlural %> in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of <%= entityNamePluralHumanized %> in body.
      */
 <%_ if (reactive) { _%>
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -433,8 +433,8 @@ public class <%= entityClass %>Resource {
 
 <%_ if (!jpaMetamodelFiltering && reactive && paginationNo) { _%>
     /**
-     * {@code GET  /<%= entityApiUrl %>} : get all the <%= entityInstancePlural %> as a stream.
-     * @return the {@link Flux} of <%= entityInstancePlural %>.
+     * {@code GET  /<%= entityApiUrl %>} : get all the <%= entityNamePluralHumanized %> as a stream.
+     * @return the {@link Flux} of <%= entityNamePluralHumanized %>.
      */
     @GetMapping(value = "", produces = MediaType.APPLICATION_NDJSON_VALUE)
   <%_ if (databaseTypeSql && isUsingMapsId && !viaService) { _%>

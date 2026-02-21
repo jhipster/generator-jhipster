@@ -25,7 +25,7 @@ _%>
 import { MockInstance, afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import {
   ComponentFixture, TestBed,
 <%_ if (!readOnly) { _%>
@@ -35,7 +35,7 @@ import {
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faEye, faPencilAlt, faPlus, faSort, faSortDown, faSortUp, faSync, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faPencilAlt, faPlus<% if (searchEngineAny) { %>, faSearch<% } %>, faSort, faSortDown, faSortUp, faSync, faTimes } from '@fortawesome/free-solid-svg-icons';
 <%_ if (enableTranslation) { _%>
 import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
@@ -56,7 +56,10 @@ import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %
 
 import { <%= entityAngularName %> } from './<%= entityFileName %>';
 
+vitest.useFakeTimers();
+
 describe('<%= entityAngularName %> Management Component', () => {
+  let httpMock: HttpTestingController;
     let comp: <%= entityAngularName %>;
     let fixture: ComponentFixture<<%= entityAngularName %>>;
     let service: <%= entityAngularName %>Service;
@@ -104,41 +107,30 @@ describe('<%= entityAngularName %> Management Component', () => {
         service = TestBed.inject(<%= entityAngularName %>Service);
         routerNavigateSpy = <%= clientTestFramework %>.spyOn(comp.router, 'navigate');
 
-        <%= clientTestFramework %>
-          .spyOn(service, 'query')
-          .mockReturnValueOnce(
-            of(
-              new HttpResponse({
-                body: [<%- testEntityPrimaryKey %>],
-                headers: new HttpHeaders({
-                  link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
-                }),
-              }),
-            ),
-          )
-          .mockReturnValueOnce(
-            of(
-              new HttpResponse({
-                body: [<%- testEntityPrimaryKey2 %>],
-                headers: new HttpHeaders({
-                  link: '<http://localhost/api/foo?page=0&size=20>; rel="prev",<http://localhost/api/foo?page=2&size=20>; rel="next"',
-                }),
-              }),
-            ),
-          );
-
     const library = TestBed.inject(FaIconLibrary);
-    library.addIcons(faEye, faPencilAlt, faPlus, faSort, faSortDown, faSortUp, faSync, faTimes);
+    library.addIcons(faEye, faPencilAlt, faPlus<% if (searchEngineAny) { %>, faSearch<% } %>, faSort, faSortDown, faSortUp, faSync, faTimes);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
-    it('should call load all on init', () => {
-        // WHEN
-        comp.ngOnInit();
+  afterEach(() => {
+    TestBed.resetTestingModule();
+    httpMock.verify();
+  });
 
-        // THEN
-        expect(service.query).toHaveBeenCalled();
-        expect(comp.<%= entityInstancePlural %>()[0]).toEqual(expect.objectContaining(<%- testEntityPrimaryKey %>));
-    });
+  it('should call load all on init', async () => {
+    // WHEN
+    TestBed.tick();
+    const req = httpMock.expectOne({ method: 'GET' });
+    req.flush(
+      [<%- testEntityPrimaryKey %>],
+      { headers: { link: '<http://localhost/api/foo?page=1&size=20>; rel="next"' } },
+    );
+    await vitest.runAllTimersAsync();
+
+    // THEN
+    expect(service.<%- entityInstancePlural %>Resource.isLoading()).toEqual(false);
+    expect(comp.<%- entityInstancePlural %>()[0]).toEqual(expect.objectContaining(<%- testEntityPrimaryKey %>));
+  });
 
     describe('track<%= primaryKey.nameCapitalized %>', () => {
         it('should forward to <%= entityInstance %>Service', () => {
@@ -173,35 +165,54 @@ describe('<%= entityAngularName %> Management Component', () => {
     });
 <%_ } _%>
 
-    it('should calculate the sort attribute for an id', () => {
-        // WHEN
-        comp.ngOnInit();
-
-        // THEN
-        expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ sort: ['<%- primaryKey.fields.map(field => field.fieldName).join(',') %>,<%= order %>'] }));
-    });
-<%_ if (paginationInfiniteScroll) { _%>
-
-  it('should infinite scroll', () => {
-    // GIVEN
-    comp.loadNextPage();
-    comp.loadNextPage();
-    comp.loadNextPage();
+  it('should calculate the sort attribute for an id', () => {
+    // WHEN
+    TestBed.tick();
+    httpMock.expectOne({ method: 'GET' });
 
     // THEN
-    expect(service.query).toHaveBeenCalledTimes(3);
-    expect(service.query).toHaveBeenNthCalledWith(2, expect.objectContaining({ page: '1' }));
-    expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ page: '2' }));
+    expect(service.<%- entityInstancePlural %>Params()).toMatchObject(expect.objectContaining({ sort: ['<%- primaryKey.fields.map(field => field.fieldName).join(',') %>,<%= order %>'] }));
+  });
+<%_ if (paginationInfiniteScroll) { _%>
+
+  it('should infinite scroll', async () => {
+    // GIVEN
+    TestBed.tick();
+    let req = httpMock.expectOne({ method: 'GET' });
+    req.flush([<%- testEntityPrimaryKey %>], { headers: { link: '<http://localhost/api/foo?page=1&size=20>; rel="next"' } });
+    await vitest.runAllTimersAsync();
+    expect(comp.<%- entityInstancePlural %>().length).toEqual(1);
+    expect(comp.<%- entityInstancePlural %>()[0]).toEqual(expect.objectContaining(<%- testEntityPrimaryKey %>));
+
+    // WHEN
+    comp.loadNextPage();
+    TestBed.tick();
+    expect(service.<%- entityInstancePlural %>Params()).toMatchObject(expect.objectContaining({ page: '1' }));
+    req = httpMock.expectOne({ method: 'GET' });
+    req.flush([<%- testEntityPrimaryKey2 %>], { headers: { link: '<http://localhost/api/foo?page=0&size=20>; rel="prev",<http://localhost/api/foo?page=2&size=20>; rel="next"' } });
+    await vitest.runAllTimersAsync();
+    expect(comp.<%- entityInstancePlural %>().length).toEqual(2);
+    expect(comp.<%- entityInstancePlural %>()[1]).toEqual(expect.objectContaining(<%- testEntityPrimaryKey2 %>));
+
+    comp.loadNextPage();
+    TestBed.tick();
+    expect(service.<%- entityInstancePlural %>Params()).toMatchObject(expect.objectContaining({ page: '2' }));
+    req = httpMock.expectOne({ method: 'GET' });
+    req.flush([<%- testEntityPrimaryKey2 %>], { headers: { link: '<http://localhost/api/foo?page=0&size=20>; rel="prev",<http://localhost/api/foo?page=2&size=20>; rel="next"' } });
+    await vitest.runAllTimersAsync();
+    expect(comp.<%- entityInstancePlural %>().length).toEqual(2);
+    expect(comp.<%- entityInstancePlural %>()[1]).toEqual(expect.objectContaining(<%- testEntityPrimaryKey2 %>));
   });
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
 
   it('should calculate the filter attribute', () => {
     // WHEN
-    comp.ngOnInit();
+    TestBed.tick();
+    httpMock.expectOne({ method: 'GET' });
 
     // THEN
-    expect(service.query).toHaveBeenLastCalledWith(expect.objectContaining({ 'someId.in': ['dc4279ea-cfb9-11ec-9d64-0242ac120002'] }));
+    expect(service.<%- entityInstancePlural %>Params()).toMatchObject(expect.objectContaining({ 'someId.in': ['dc4279ea-cfb9-11ec-9d64-0242ac120002'] }));
   });
 <%_ } _%>
 <%_ if (!readOnly) { _%>

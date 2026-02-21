@@ -74,7 +74,7 @@ import {
 <%_ } _%>
   DEFAULT_SORT_DATA
 } from 'app/config/navigation.constants';
-import { EntityArrayResponseType, <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
+import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
 <%_ if (!readOnly) { _%>
 import { <%= entityAngularName %>DeleteDialog } from '../delete/<%= entityFileName %>-delete-dialog';
 <%_ } _%>
@@ -136,8 +136,7 @@ export class <%= componentName %> implements OnInit {
 
 <%_ } _%>
     subscription: Subscription | null = null;
-    <%= entityInstancePlural %> = signal<I<%= entityAngularName %>[]>([]);
-    isLoading = signal(false);
+    readonly <%- entityInstancePlural %> = signal<I<%= entityAngularName %>[]>([]);
 
     sortState = sortStateSignal({});
 <%_ if (searchEngineAny) { _%>
@@ -160,6 +159,8 @@ export class <%= componentName %> implements OnInit {
 
     readonly router = inject(Router);
     protected readonly <%= entityInstance %>Service = inject(<%= entityAngularName %>Service);
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    readonly isLoading = this.<%= entityInstance %>Service.<%= entityInstancePlural %>Resource.isLoading;
     protected readonly activatedRoute = inject(ActivatedRoute);
     protected readonly sortService = inject(SortService);
 <%_ if (paginationInfiniteScroll) { _%>
@@ -171,6 +172,20 @@ export class <%= componentName %> implements OnInit {
 <%_ if (!readOnly) { _%>
     protected modalService = inject(NgbModal);
 <%_ } _%>
+
+  constructor() {
+<%_ if (!paginationNo) { _%>
+    effect(() => {
+      const headers = this.<%= entityInstance %>Service.<%= entityInstancePlural %>Resource.headers();
+      if (headers) {
+        this.fillComponentAttributesFromResponseHeader(headers);
+      }
+    });
+<%_ } _%>
+    effect(() => {
+      this.<%- entityInstancePlural %>.<% if (paginationInfiniteScroll) { %>update(<%- entityInstancePlural %> => <% } else { %>set(<% } %>this.fillComponentAttributesFromResponseBody([...this.<%- entityInstance %>Service.<%- entityInstancePlural %>()]<% if (paginationInfiniteScroll) { %>, <%- entityInstancePlural %><% } %>));
+    });
+  }
 <%_ if (primaryKey) { _%>
 
     track<%= primaryKey.nameCapitalized %> = (item: I<%= entityAngularName %>): <%= primaryKey.tsType %> => this.<%= entityInstance %>Service.get<%= entityAngularName %>Identifier(item);
@@ -188,8 +203,6 @@ export class <%= componentName %> implements OnInit {
         tap(() => {
           if (this.<%= entityInstancePlural %>().length === 0) {
             this.load();
-          } else {
-            this.<%= entityInstancePlural %>.set(this.refineData(this.<%= entityInstancePlural %>()));
           }
         }),
 <%_ } _%>
@@ -201,9 +214,9 @@ export class <%= componentName %> implements OnInit {
     }
 
 <%_ if (paginationInfiniteScroll) { _%>
-    reset(): void {
-      this.<%= entityInstancePlural %>.set([]);
-    }
+  reset(): void {
+    this.<%- entityInstancePlural %>.set([]);
+  }
 
     loadNextPage(): void {
       this.load();
@@ -258,9 +271,9 @@ export class <%= componentName %> implements OnInit {
     }
 
 <%_ } _%>
-    load(): void {
-      this.queryBackend().subscribe((res: EntityArrayResponseType) => this.onResponseSuccess(res));
-    }
+  load(): void {
+    this.queryBackend();
+  }
 
     navigateToWithComponentValues(event: SortState): void {
       this.handleNavigation(<% if (paginationPagination) { %>this.page(), <% } %>event<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngineAny) { %>, this.currentSearch()<% } %>);
@@ -294,18 +307,6 @@ export class <%= componentName %> implements OnInit {
 <%_ } _%>
     }
 
-    protected onResponseSuccess(response: EntityArrayResponseType): void {
-<%_ if (!paginationNo) { _%>
-      this.fillComponentAttributesFromResponseHeader(response.headers);
-<%_ } _%>
-      const dataFromBody = this.fillComponentAttributesFromResponseBody(response.body);
-<%_ if (paginationNo) { _%>
-      this.<%= entityInstancePlural %>.set(this.refineData(dataFromBody));
-<%_ } else { _%>
-      this.<%= entityInstancePlural %>.set(dataFromBody);
-<%_ } _%>
-    }
-
 <%_ if (paginationNo) { _%>
     protected refineData(data: I<%= entityAngularName %>[]): I<%= entityAngularName %>[] {
       const { predicate, order } = this.sortState();
@@ -313,27 +314,25 @@ export class <%= componentName %> implements OnInit {
     }
 
 <%_ } _%>
-    protected fillComponentAttributesFromResponseBody(data: I<%= entityAngularName %>[] | null): I<%= entityAngularName %>[] {
+  protected fillComponentAttributesFromResponseBody(data: I<%= entityAngularName %>[]<% if (paginationInfiniteScroll) { %>, currentValue: I<%= entityAngularName %>[]<% } %>): I<%= entityAngularName %>[] {
 <%_ if (paginationInfiniteScroll) { _%>
-      // If there is previous link, data is a infinite scroll pagination content.
-      if (this.links().prev) {
-        const <%= entityInstancePlural %>New = this.<%= entityInstancePlural %>();
-        if (data) {
-          for (const d of data) {
+    const <%= entityInstancePlural %>New = [...currentValue];
+    for (const d of data) {
   <%_ if (primaryKey) { _%>
-            if (!<%= entityInstancePlural %>New.some(op => op.<%= primaryKey.name %> === d.<%= primaryKey.name %>)) {
+      if (!<%= entityInstancePlural %>New.some(op => op.<%= primaryKey.name %> === d.<%= primaryKey.name %>)) {
   <%_ } _%>
-              <%= entityInstancePlural %>New.push(d);
+        <%= entityInstancePlural %>New.push(d);
   <%_ if (primaryKey) { _%>
-            }
-  <%_ } _%>
-          }
-        }
-        return <%= entityInstancePlural %>New;
       }
-<%_ } _%>
-      return data ?? [];
+  <%_ } _%>
     }
+    return <%= entityInstancePlural %>New;
+<%_ } else if (paginationNo) { _%>
+    return this.refineData(data);
+<%_ } else { _%>
+    return data;
+<%_ } _%>
+  }
 
 <%_ if (!paginationNo) { _%>
     protected fillComponentAttributesFromResponseHeader(headers: HttpHeaders): void {
@@ -350,8 +349,7 @@ export class <%= componentName %> implements OnInit {
     }
 
 <%_ } _%>
-    protected queryBackend(): Observable<EntityArrayResponseType> {
-      this.isLoading.set(true);
+    protected queryBackend(): void {
 <%_ if (paginationPagination) { _%>
       const pageToLoad: number = this.page();
 <%_ } _%>
@@ -385,21 +383,7 @@ export class <%= componentName %> implements OnInit {
       }
 
 <%_ } _%>
-<%_ if (searchEngineAny) { _%>
-      if (this.currentSearch() && this.currentSearch() !== '') {
-        return this.<%= entityInstance %>Service.search(queryObject)
-          .pipe(
-            finalize(() => this.isLoading.set(false))
-          );
-      } else {
-<%_ } _%>
-        return this.<%= entityInstance %>Service.query(queryObject)
-          .pipe(
-            finalize(() => this.isLoading.set(false))
-          );
-<%_ if (searchEngineAny) { _%>
-      }
-<%_ } _%>
+      this.<%- entityInstance %>Service.<%- entityInstancePlural %>Params.set(queryObject);
     }
 
     protected handleNavigation(<% if (paginationPagination) { %>page: number, <% } %>sortState: SortState<% if (jpaMetamodelFiltering && paginationPagination) { %>, filterOptions?: IFilterOption[]<% } %><% if (searchEngineAny) { %>, currentSearch?: string<% } %>): void {
