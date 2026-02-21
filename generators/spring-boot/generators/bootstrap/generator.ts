@@ -99,9 +99,9 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
         }
         if (application.generateInMemoryUserCredentials) {
           mutateData(dockerApplicationEnvironment as any, {
-            SPRING_SECURITY_USER_NAME: 'admin',
-            SPRING_SECURITY_USER_PASSWORD: 'admin',
-            SPRING_SECURITY_USER_ROLES: 'ADMIN,USER',
+            SPRING_SECURITY_USER_NAME: application.defaultAdminUsername,
+            SPRING_SECURITY_USER_PASSWORD: application.defaultAdminPassword,
+            SPRING_SECURITY_USER_ROLES: application.defaultAdminRoles.join(','),
           });
         }
 

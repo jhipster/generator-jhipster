@@ -1,4 +1,7 @@
 user_id;authority_name
-<%= user.liquibaseFakeData[0].id %>;ROLE_ADMIN
-<%= user.liquibaseFakeData[0].id %>;ROLE_USER
-<%= user.liquibaseFakeData[1].id %>;ROLE_USER
+<%_ for (const role of defaultAdminRoles) { _%>
+<%= user.liquibaseFakeData[0].id %>;ROLE_<%- role %>
+<%_ } _%>
+<%_ for (const role of defaultUserRoles) { _%>
+<%= user.liquibaseFakeData[1].id %>;ROLE_<%- role %>
+<%_ } _%>
