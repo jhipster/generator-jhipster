@@ -345,7 +345,7 @@ export class <%= componentName %> implements OnInit {
     const <%= entityInstancePlural %>New = [...currentValue];
     for (const d of data) {
   <%_ if (primaryKey) { _%>
-      if (!<%= entityInstancePlural %>New.some(op => op.<%= primaryKey.name %> === d.<%= primaryKey.name %>)) {
+      if (!<%= entityInstancePlural %>New.some(op => op.<% if (builtInUserManagement) { %>login<% } else { %><%= primaryKey.name %><% } %> === d.<% if (builtInUserManagement) { %>login<% } else { %><%= primaryKey.name %><% } %>)) {
   <%_ } _%>
         <%= entityInstancePlural %>New.push(d);
   <%_ if (primaryKey) { _%>

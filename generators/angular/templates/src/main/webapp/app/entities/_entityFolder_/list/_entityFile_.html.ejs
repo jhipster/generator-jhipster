@@ -249,7 +249,7 @@ _%>
     _%>
                             <button type="submit"
                                     [routerLink]="['/<%= relationship.otherEntity.entityPage %>']"
-                                    [queryParams]="{ 'filter[<%= relationship.otherEntityRelationshipName %>Id.in]': <%= entityInstance %>.<%= primaryKey.name %> }"
+                                    [queryParams]="{ 'filter[<%= relationship.otherEntityRelationshipName %>Id.in]': <%= entityInstance %>.<% if (builtInUserManagement) { %>login<% } else { %><%= primaryKey.name %><% } %> }"
                                     class="btn btn-info btn-sm"
                                     data-cy="filterOtherEntityButton">
                                 <fa-icon icon="eye" />
