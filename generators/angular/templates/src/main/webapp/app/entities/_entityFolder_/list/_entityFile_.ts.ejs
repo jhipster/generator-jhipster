@@ -179,7 +179,7 @@ export class <%= componentName %> implements OnInit {
 <%_ } _%>
 <%_ if (primaryKey) { _%>
 <%_ if (builtInUserManagement) { _%>
-    trackIdentity = (item: I<%= entityAngularName %>): <%= primaryKey.tsType %> => item.id!;
+    trackIdentity = (item: I<%= entityAngularName %>): string => item.login!;
 <%_ } else { _%>
     track<%= primaryKey.nameCapitalized %> = (item: I<%= entityAngularName %>): <%= primaryKey.tsType %> => this.<%= entityInstance %>Service.get<%= entityAngularName %>Identifier(item);
 <%_ } _%>
@@ -336,7 +336,7 @@ export class <%= componentName %> implements OnInit {
         if (data) {
           for (const d of data) {
   <%_ if (primaryKey) { _%>
-            if (!<%= entityInstancePlural %>New.some(op => op.<%= primaryKey.name %> === d.<%= primaryKey.name %>)) {
+            if (!<%= entityInstancePlural %>New.some(op => op.<% if (builtInUserManagement) { %>login<% } else { %><%= primaryKey.name %><% } %> === d.<% if (builtInUserManagement) { %>login<% } else { %><%= primaryKey.name %><% } %>)) {
   <%_ } _%>
               <%= entityInstancePlural %>New.push(d);
   <%_ if (primaryKey) { _%>

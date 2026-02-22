@@ -147,7 +147,7 @@ _%>
 <%_
 const primaryKeyField = builtInUserManagement ? 'login' : primaryKey.name;
 const routerLink = ` [routerLink]="['/${ entityPage }', ${entityInstance}.${primaryKeyField}, 'view']"`;
-for (field of fields.filter(field => !field.hidden)) {
+for (field of fields.filter(field => !field.hidden && !field.hideListView)) {
     const fieldName = field.fieldName;
     const fieldType = field.fieldType;
 _%>
@@ -250,7 +250,7 @@ _%>
     _%>
                             <button type="submit"
                                     [routerLink]="['/<%= relationship.otherEntity.entityPage %>']"
-                                    [queryParams]="{ 'filter[<%= relationship.otherEntityRelationshipName %>Id.in]': <%= entityInstance %>.<%= primaryKey.name %> }"
+                                    [queryParams]="{ 'filter[<%= relationship.otherEntityRelationshipName %>Id.in]': <%= entityInstance %>.<% if (builtInUserManagement) { %>login<% } else { %><%= primaryKey.name %><% } %> }"
                                     class="btn btn-info btn-sm"
                                     data-cy="filterOtherEntityButton">
                                 <fa-icon icon="eye" />
