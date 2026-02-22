@@ -59,12 +59,15 @@ export type PartialUpdate<%= entityAngularName %> = Partial<I<%= entityAngularNa
 <%_ } _%>
 
 <%_ const entityRestName = anyFieldIsDateDerived ? `Rest${entityAngularName}` : `I${entityAngularName}`; _%>
-<%_ if (anyFieldIsDateDerived) { _%>
+<%_ if (builtInUserManagement || anyFieldIsDateDerived) { _%>
 type RestOf<T extends I<%= entityAngularName %><% if (!readOnly) { %> | New<%= entityAngularName %><% } %>> =
   Omit<T, '<%- fields.filter(field => field.fieldTypeTemporal).map(field => field.fieldName).join("' | '") %>'> &
   {
   <%_ for (const field of fields.filter(field => field.fieldTypeTemporal)) { _%>
   <%= field.fieldName %>?: string | null;
+  <%_ } _%>
+  <%_ if (builtInUserManagement) { _%>
+    authorities?: string[] | null;
   <%_ } _%>
   };
 
@@ -100,27 +103,20 @@ export class <%- entityAngularNamePlural %>Service {
   });
   // eslint-disable-next-line @typescript-eslint/member-ordering
   readonly <%- entityInstancePlural %> = computed(() => (this.<%- entityInstancePlural %>Resource.value() ?? [])
-    <% if (anyFieldIsDateDerived) { %>.map(item => this.convertDateFromServer(item))<% } %>
-    <% if (builtInUserManagement) { %>.map(item => this.convertUserManagementFromServer(item))<% } %>
+    <% if (builtInUserManagement || anyFieldIsDateDerived) { %>.map(item => this.convertValueFromServer(item))<% } %>
   );
-<%_ if (anyFieldIsDateDerived) { _%>
+<%_ if (builtInUserManagement || anyFieldIsDateDerived) { _%>
 
-  protected convertDateFromServer(rest<%- entityAngularName %>: <%- entityRestName %>): I<%- entityAngularName %> {
+  protected convertValueFromServer(rest<%= entityAngularName %>: <%= entityRestName %>): I<%= entityAngularName %> {
     return {
       ...rest<%- entityAngularName %>,
   <%_ for (const field of fields.filter(field => field.fieldTypeTemporal)) { _%>
       <%- field.fieldName %>: rest<%- entityAngularName %>.<%- field.fieldName %> ? dayjs(rest<%- entityAngularName %>.<%- field.fieldName %>) : undefined,
   <%_ } _%>
-    };
-  }
-
-<%_ } _%>
-<%_ if (builtInUserManagement) { _%>
-  protected convertUserManagementFromServer(rest<%- entityAngularName %>: <%- entityRestName %>): I<%- entityAngularName %> {
-    return {
-      ...rest<%- entityAngularName %>,
+  <%_ if (builtInUserManagement) { _%>
       authorities: rest<%- entityAngularName %>.authorities?.map(authority => ({ name: authority as unknown as string })),
-    };
+  <%_ } _%>
+    }
   }
 
 <%_ } _%>
@@ -132,27 +128,20 @@ export class <%- entityAngularName %>Service extends <%- entityAngularNamePlural
 
 <%_ if (!readOnly) { _%>
     create(<%= entityInstance %>: New<%= entityAngularName %>): Observable<EntityResponseType> {
-    <%_ if (anyFieldIsDateDerived) { _%>
-        <%= builtInUserManagement ? 'let' : 'const' %> copy = this.convertDateFromClient(<%= entityInstance %>);
-    <%_ } _%>
-    <%_ if (builtInUserManagement) { _%>
-        copy = this.convertUserManagementFromClient(<%= entityInstance %>);
+    <%_ if (builtInUserManagement || anyFieldIsDateDerived) { _%>
+        const copy = this.convertValueFromClient(<%= entityInstance %>);
     <%_ } _%>
         return this.http.post<<%= entityRestName %>>(this.resourceUrl,
                 <% if (anyFieldIsDateDerived || builtInUserManagement) { %> copy <% } else { %> <%= entityInstance %> <% } %>,
                 { observe: 'response' })
-        <% if (anyFieldIsDateDerived) { %>.pipe(map(res => this.convertResponseFromServer(res)))<% } %>
-        <% if (builtInUserManagement) { %>.pipe(map(res => this.convertUserManagementResponseFromServer(res)))<% } %>;
+        <% if (builtInUserManagement || anyFieldIsDateDerived) { %>.pipe(map(res => this.convertResponseFromServer(res)))<% } %>;
     }
 <%_ } _%>
 <%_ if (!readOnly && updatableEntity) { _%>
 
     update(<%= entityInstance %>: I<%= entityAngularName %>): Observable<EntityResponseType> {
-    <%_ if (anyFieldIsDateDerived) { _%>
-        <%= builtInUserManagement ? 'let' : 'const' %> copy = this.convertDateFromClient(<%= entityInstance %>);
-    <%_ } _%>
-    <%_ if (builtInUserManagement) { _%>
-        copy = this.convertUserManagementFromClient(<%= entityInstance %>);
+    <%_ if (builtInUserManagement || anyFieldIsDateDerived) { _%>
+        const copy = this.convertValueFromClient(<%= entityInstance %>);
     <%_ } _%>
         return this.http.put<<%= entityRestName %>>(`${this.resourceUrl}/${encodeURIComponent(this.get<%= entityAngularName %>Identifier(<%= entityInstance %>))}`,
                 <% if (anyFieldIsDateDerived || builtInUserManagement) { %> copy <% } else { %> <%= entityInstance %> <% } %>,
@@ -161,31 +150,25 @@ export class <%- entityAngularName %>Service extends <%- entityAngularNamePlural
     }
 
     partialUpdate(<%= entityInstance %>: PartialUpdate<%= entityAngularName %>): Observable<EntityResponseType> {
-    <%_ if (anyFieldIsDateDerived) { _%>
-        <%= builtInUserManagement ? 'let' : 'const' %> copy = this.convertDateFromClient(<%= entityInstance %>);
-    <%_ } _%>
-    <%_ if (builtInUserManagement) { _%>
-        copy = this.convertUserManagementFromClient(<%= entityInstance %>);
+    <%_ if (builtInUserManagement || anyFieldIsDateDerived) { _%>
+        const copy = this.convertValueFromClient(<%= entityInstance %>);
     <%_ } _%>
         return this.http.patch<<%= entityRestName %>>(`${this.resourceUrl}/${encodeURIComponent(this.get<%= entityAngularName %>Identifier(<%= entityInstance %>))}`,
                 <% if (anyFieldIsDateDerived || builtInUserManagement) { %> copy <% } else { %> <%= entityInstance %> <% } %>,
                 { observe: 'response' })
-        <% if (anyFieldIsDateDerived) { %>.pipe(map(res => this.convertResponseFromServer(res)))<% } %>
-        <% if (builtInUserManagement) { %>.pipe(map(res => this.convertUserManagementResponseFromServer(res)))<% } %>;
+        <% if (anyFieldIsDateDerived || builtInUserManagement) { %>.pipe(map(res => this.convertResponseFromServer(res)))<% } %>;
     }
 <%_ } _%>
 
     find(<%= primaryKey.name %>: <%= tsKeyType %>): Observable<EntityResponseType> {
         return this.http.get<<%= entityRestName %>>(`${this.resourceUrl}/${encodeURIComponent(<%= primaryKey.name %>)}`, { observe: 'response' })
-            <% if (anyFieldIsDateDerived) { %>.pipe(map(res => this.convertResponseFromServer(res)))<% } %>
-            <% if (builtInUserManagement) { %>.pipe(map(res => this.convertUserManagementResponseFromServer(res)))<% } %>;
+            <% if (anyFieldIsDateDerived || builtInUserManagement) { %>.pipe(map(res => this.convertResponseFromServer(res)))<% } %>;
     }
 
     query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
         return this.http.get<<%= entityRestName %>[]>(this.resourceUrl, { params: options, observe: 'response' })
-            <% if (anyFieldIsDateDerived) { %>.pipe(map(res => this.convertResponseArrayFromServer(res)))<% } %>
-            <% if (builtInUserManagement) { %>.pipe(map(res => this.convertUserManagementResponseArrayFromServer(res)))<% } %>;
+            <% if (anyFieldIsDateDerived || builtInUserManagement) { %>.pipe(map(res => this.convertResponseArrayFromServer(res)))<% } %>;
     }
 
 <%_ if (!readOnly) { _%>
@@ -199,8 +182,7 @@ export class <%- entityAngularName %>Service extends <%- entityAngularNamePlural
         const options = createRequestOption(req);
         return this.http.get<<%= entityRestName %>[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
             .pipe(
-              <% if (anyFieldIsDateDerived) { %>map(res => this.convertResponseArrayFromServer(res)), <% } %>
-              <% if (builtInUserManagement) { %>.pipe(map(res => this.convertUserManagementResponseArrayFromServer(res)))<% } %>
+              <% if (anyFieldIsDateDerived || builtInUserManagement) { %>map(res => this.convertResponseArrayFromServer(res)), <% } %>
               catchError(() => scheduled([new HttpResponse<I<%= entityAngularName %>[]>()], asapScheduler)),
             );
     }
@@ -231,51 +213,33 @@ export class <%- entityAngularName %>Service extends <%- entityAngularNamePlural
         return <%= entityInstance %>Collection;
     }
 
-<%_ if (anyFieldIsDateDerived) { _%>
-    protected convertDateFromClient<T extends I<%= entityAngularName %><% if (!readOnly) { %> | New<%= entityAngularName %><% } %><% if (!readOnly && updatableEntity) { %> | PartialUpdate<%= entityAngularName %><% } %>>(<%= entityInstance %>: T): RestOf<T> {
-        return {
-            ...<%= entityInstance %>,
-    <%_ for (const field of fields) { _%>
-        <%_ if (field.fieldTypeTimed) { _%>
-        <%= field.fieldName %>: <%= entityInstance %>.<%= field.fieldName %>?.toJSON() ?? null,
-        <%_ } _%>
-        <%_ if (field.fieldTypeLocalDate) { _%>
-        <%= field.fieldName %>: <%= entityInstance %>.<%= field.fieldName %>?.format(DATE_FORMAT) ?? null,
-        <%_ } _%>
+<%_ if (builtInUserManagement || anyFieldIsDateDerived) { _%>
+  protected convertValueFromClient<T extends I<%= entityAngularName %><% if (!readOnly) { %> | New<%= entityAngularName %><% } %><% if (!readOnly && updatableEntity) { %> | PartialUpdate<%= entityAngularName %><% } %>>(<%= entityInstance %>: T): RestOf<T> {
+    return {
+      ...<%= entityInstance %>,
+  <%_ for (const field of fields) { _%>
+    <%_ if (field.fieldTypeTimed) { _%>
+    <%= field.fieldName %>: <%= entityInstance %>.<%= field.fieldName %>?.toJSON() ?? null,
     <%_ } _%>
-        };
-    }
+    <%_ if (field.fieldTypeLocalDate) { _%>
+    <%= field.fieldName %>: <%= entityInstance %>.<%= field.fieldName %>?.format(DATE_FORMAT) ?? null,
+    <%_ } _%>
+  <%_ } _%>
+  <%_ if (builtInUserManagement) { _%>
+      authorities: <%= entityInstance %>.authorities?.map(authority => authority.name),
+  <%_ } _%>
+    };
+  }
 
   protected convertResponseFromServer(res: HttpResponse<<%= entityRestName %>>): HttpResponse<I<%= entityAngularName %>> {
     return res.clone({
-      body: res.body ? this.convertDateFromServer(res.body) : null,
+      body: res.body ? this.convertValueFromServer(res.body) : null,
     });
   }
 
   protected convertResponseArrayFromServer(res: HttpResponse<<%= entityRestName %>[]>): HttpResponse<I<%= entityAngularName %>[]> {
     return res.clone({
-      body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
-    });
-  }
-<%_ } _%>
-<%_ if (builtInUserManagement) { _%>
-
-  protected convertUserManagementFromClient<T extends I<%= entityAngularName %><% if (!readOnly) { %> | New<%= entityAngularName %><% } %><% if (!readOnly && updatableEntity) { %> | PartialUpdate<%= entityAngularName %><% } %>>(<%= entityInstance %>: T): any {
-    return {
-      ...<%= entityInstance %>,
-      authorities: <%= entityInstance %>.authorities?.map(authority => authority.name),
-    };
-  }
-
-  protected convertUserManagementResponseFromServer(res: HttpResponse<<%= entityRestName %>>): HttpResponse<I<%= entityAngularName %>> {
-    return res.clone({
-      body: res.body ? this.convertUserManagementFromServer(res.body) : null,
-    });
-  }
-
-  protected convertUserManagementResponseArrayFromServer(res: HttpResponse<<%= entityRestName %>[]>): HttpResponse<I<%= entityAngularName %>[]> {
-    return res.clone({
-      body: res.body ? res.body.map(item => this.convertUserManagementFromServer(item)) : null,
+      body: res.body ? res.body.map(item => this.convertValueFromServer(item)) : null,
     });
   }
 <%_ } _%>

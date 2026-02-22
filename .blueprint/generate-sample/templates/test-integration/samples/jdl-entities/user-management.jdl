@@ -1,0 +1,2 @@
+@SkipClient(false)
+entity UserManagement

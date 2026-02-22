@@ -199,18 +199,22 @@ function getAuditFields(): (BaseField & Partial<BaseApplicationField>)[] {
 
 export function createUserManagementEntity(
   this: BaseApplicationGenerator,
-  customUserManagementData: Partial<ApplicationEntity> = {},
+  {
+    fields: customUserManagementFields = [],
+    relationships: customUserManagementRelationships = [],
+    ...customUserManagementData
+  }: Partial<ApplicationEntity> = {},
   application: BaseApplicationApplication<EntityAll>,
 ): Partial<ApplicationEntity> {
   const user = createUserEntity.call(this, {}, application);
   for (const field of user.fields ?? []) {
     // Login is used as the id field in rest api.
     if (field.fieldName === 'login') {
+      field.fakerTemplate = '{{internet.username}}';
       field.id = true;
     } else if (field.fieldName === 'id') {
       field.id = false;
       field.hidden = true;
-      field.fieldValidateRules = [Validations.REQUIRED];
       // Set id type fallback since it's not id anymore and will not be calculated.
       field.fieldType = field.fieldType ?? getDatabaseTypeData(application.databaseType!).defaultPrimaryKeyType;
     } else if (field.fieldName === 'imageUrl') {
@@ -241,7 +245,12 @@ export function createUserManagementEntity(
     entityTranslationKey: 'userManagement',
   };
 
-  addOrExtendFields(userManagement.fields!, getAuditFields());
+  addOrExtendFields(userManagement.fields!, customUserManagementFields);
+  addOrExtendRelationships(userManagement.relationships!, customUserManagementRelationships);
+
+  if (!application.databaseTypeCassandra) {
+    addOrExtendFields(userManagement.fields!, getAuditFields());
+  }
 
   if (application.generateBuiltInAuthorityEntity) {
     addOrExtendRelationships(userManagement.relationships!, [
