@@ -147,7 +147,7 @@ _%>
 <%_
 const primaryKeyField = builtInUserManagement ? 'login' : primaryKey.name;
 const routerLink = ` [routerLink]="['/${ entityPage }', ${entityInstance}.${primaryKeyField}, 'view']"`;
-for (field of fields.filter(field => !field.hidden && !field.hideListView)) {
+for (field of fields.filter(field => !field.hidden)) {
     const fieldName = field.fieldName;
     const fieldType = field.fieldType;
 _%>
