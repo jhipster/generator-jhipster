@@ -199,7 +199,11 @@ function getAuditFields(): (BaseField & Partial<BaseApplicationField>)[] {
 
 export function createUserManagementEntity(
   this: BaseApplicationGenerator,
-  customUserManagementData: Partial<ApplicationEntity> = {},
+  {
+    fields: customUserManagementFields = [],
+    relationships: customUserManagementRelationships = [],
+    ...customUserManagementData
+  }: Partial<ApplicationEntity> = {},
   application: BaseApplicationApplication<EntityAll>,
 ): Partial<ApplicationEntity> {
   const user = createUserEntity.call(this, {}, application);
@@ -240,6 +244,9 @@ export function createUserManagementEntity(
     entityRestLayer: true,
     entityTranslationKey: 'userManagement',
   };
+
+  addOrExtendFields(userManagement.fields!, customUserManagementFields);
+  addOrExtendRelationships(userManagement.relationships!, customUserManagementRelationships);
 
   if (!application.databaseTypeCassandra) {
     addOrExtendFields(userManagement.fields!, getAuditFields());
