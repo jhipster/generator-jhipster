@@ -20,6 +20,8 @@ package <%= packageName %>.security;
 
 <%_ if (authenticationTypeJwt) { _%>
 import static <%= packageName %>.security.SecurityUtils.USER_ID_CLAIM;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 <%_ } _%>
 
 import org.junit.jupiter.api.AfterEach;
@@ -33,6 +35,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 <%_ if (authenticationTypeJwt) { _%>
 import java.time.Instant;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -132,7 +135,9 @@ class SecurityUtilsUnitTest {
     @Test
     void testGetCurrentUserJWT() {
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", "token"));
+        Jwt jwtMock = mock(Jwt.class);
+        when(jwtMock.getTokenValue()).thenReturn("token");
+        securityContext.setAuthentication(new JwtAuthenticationToken(jwtMock));
         SecurityContextHolder.setContext(securityContext);
         Optional<String> jwt = SecurityUtils.getCurrentUserJWT();
         assertThat(jwt).contains("token");
