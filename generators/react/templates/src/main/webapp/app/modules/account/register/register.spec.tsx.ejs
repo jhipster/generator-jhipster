@@ -20,7 +20,7 @@
 import { shallow } from 'enzyme';
 import axios from 'axios';
 
-import configureStore from 'redux-mock-store';
+import { configureStore } from '@reduxjs/toolkit';
 import { spy, sandbox } from 'sinon';
 
 import { RegisterPage } from 'app/modules/account/register/register';
@@ -30,13 +30,12 @@ describe('RegisterComponent', () => {
   describe('RegisterPage', () => {
     let mountedWrapper;
     let localSandbox;
-    const mockStore = configureStore();
     const handleRegisterSpy = spy();
 
     const wrapper = () => {
       localSandbox = sandbox.create();
       const initialState = {};
-      // const store = mockStore(initialState);
+      // const store = configureStore({ reducer: () => ({ initialState }) });
       const props = {
         handleRegister: handleRegisterSpy,
         reset: spy(),

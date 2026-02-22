@@ -64,7 +64,6 @@
     "postcss-loader": "8.2.1",
     "postcss-rtlcss": "5.7.1",
     "react-infinite-scroll-component": "6.1.1",
-    "redux-mock-store": "1.5.5",
     "rimraf": "6.1.3",
     "sass": "1.77.6",
     "sass-loader": "16.0.7",

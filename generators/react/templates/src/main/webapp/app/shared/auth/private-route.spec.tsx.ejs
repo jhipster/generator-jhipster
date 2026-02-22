@@ -4,7 +4,7 @@ import { render } from '@testing-library/react';
 <%_ if (enableTranslation) { _%>
 import { TranslatorContext } from 'react-jhipster';
 <%_ } _%>
-import configureStore from 'redux-mock-store';
+import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 
 import { Authority } from 'app/shared/jhipster/constants';
@@ -21,9 +21,12 @@ describe('private-route component', () => {
   });
 <%_ } _%>
 
-  const mockStore = configureStore();
   const wrapper = (Elem: JSX.Element, authentication) => {
-    const store = mockStore({ authentication });
+    const store = configureStore({
+      reducer: {
+        authentication: () => authentication,
+      },
+    });
     return render(
       <Provider store={store}>
         <MemoryRouter>{Elem}</MemoryRouter>
