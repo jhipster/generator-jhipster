@@ -24,9 +24,9 @@ import React, { useEffect } from 'react';
 import React from 'react';
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 <%_ } else { _%>
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 <%_ } _%>
 import { Translate } from 'react-jhipster';
 import { Row, Col, Alert } from 'reactstrap';

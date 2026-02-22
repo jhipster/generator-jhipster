@@ -118,7 +118,7 @@ translate('global', { min:20, max: 50, pattern: '^[a-zA-Z0-9]*$',
         it('should translate tsx file', () => {
           const body = `
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Translate } from 'react-jhipster';
 import { Row, Col, Alert } from 'reactstrap';
 
@@ -210,7 +210,7 @@ export default Home;
           expect(replaceReactTranslations(body, extension)).toMatchInlineSnapshot(`
 "
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import { Row, Col, Alert } from 'reactstrap';
 

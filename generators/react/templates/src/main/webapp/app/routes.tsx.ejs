@@ -17,10 +17,7 @@
  limitations under the License.
 -%>
 import React, { Suspense } from 'react';
-import { Route } from 'react-router';
-<% if (communicationSpringWebsocket) { %>
-import { useLocation } from 'react-router-dom';
-<% } %>
+import { Route<% if (communicationSpringWebsocket) { %>, useLocation<% } %> } from 'react-router';
 <%_ if (applicationTypeGateway && microfrontend) { _%>
 import { importRemote } from '@module-federation/utilities';
 <%_ } _%>

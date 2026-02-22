@@ -20,7 +20,7 @@ import React, { useState, useEffect } from 'react';
 <%_ if (paginationInfiniteScroll) { _%>
 import InfiniteScroll from 'react-infinite-scroll-component';
 <%_ } _%>
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { Button, <% if (searchEngineAny) { %>Input, InputGroup, FormGroup, Form, Row, Col, <% } %>Table } from 'reactstrap';
 import {
 <%_ if (anyFieldIsBlobDerived) { _%>

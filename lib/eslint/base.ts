@@ -40,7 +40,7 @@ const baseConfig: ConfigObject = {
         'newlines-between': 'always',
         pathGroups: [
           { pattern: '{esmocha,vitest,jest}', group: 'builtin', position: 'before' },
-          { pattern: '{react,reactstrap,react-jhipster,react-router-dom,vue,vue-i18n,vue-router}', group: 'builtin', position: 'after' },
+          { pattern: '{react,reactstrap,react-jhipster,react-router,vue,vue-i18n,vue-router}', group: 'builtin', position: 'after' },
           { pattern: '@angular/**', group: 'builtin', position: 'after' },
           { pattern: '{app,@}/**', group: 'parent', position: 'before' },
         ],
