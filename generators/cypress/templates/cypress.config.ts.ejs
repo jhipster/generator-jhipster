@@ -33,9 +33,6 @@ export default defineConfig({
   scrollBehavior: 'center',
 <%_ } _%>
   expose: {
-<%_ if (cypressCoverage && !cypressCoverageWebpack) { _%>
-    CYPRESS_COVERAGE: Boolean(process.env.CYPRESS_COVERAGE),
-<%_ } _%>
     adminUsername: '<%- defaultAdminUsername %>',
     adminPassword: '<%- defaultAdminPassword %>',
     username: '<%- defaultUserUsername %>',
@@ -51,6 +48,9 @@ export default defineConfig({
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.
     async setupNodeEvents(on, config) {
+<%_ if (cypressCoverage && !cypressCoverageWebpack) { _%>
+      config.expose.CYPRESS_COVERAGE = config.env.CYPRESS_COVERAGE;
+<%_ } _%>
       return (await import('./<%= this.relativeDir(clientRootDir, cypressDir) %>plugins/index')).default(on, config);
     },
     baseUrl: 'http://localhost:<%= gatewayServerPort || serverPort %>/',
