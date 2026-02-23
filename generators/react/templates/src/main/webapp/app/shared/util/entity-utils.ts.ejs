@@ -16,7 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import pick from 'lodash/pick';
 import { IPaginationBaseState, ISortBaseState } from 'react-jhipster';
 import { SORT } from 'app/shared/util/pagination.constants';
 
@@ -30,7 +29,7 @@ import { SORT } from 'app/shared/util/pagination.constants';
 export const cleanEntity = entity => {
   const keysToKeep = Object.keys(entity).filter(k => !(entity[k] instanceof Object) || (entity[k].id !== '' && entity[k].id !== -1));
 
-  return pick(entity, keysToKeep);
+  return Object.fromEntries(keysToKeep.map(key => [key, entity[key]]));
 };
 
 /**
