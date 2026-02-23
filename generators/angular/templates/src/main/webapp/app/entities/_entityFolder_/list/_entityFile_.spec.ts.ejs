@@ -183,10 +183,12 @@ describe('<%= entityAngularName %> Management Component', () => {
 <%_ } _%>
 <%_ if (builtInUserManagement) { _%>
     describe('trackIdentity', () => {
-        it('should return login for user management', () => {
+        it('should forward to <%= entityInstance %>Service.get<%= entityAngularName %>Identifier', () => {
             const entity = { login: 'testuser' };
+            <%= clientTestFramework %>.spyOn(service, 'get<%= entityAngularName %>Identifier').and.returnValue('testuser');
             const login = comp.trackIdentity(entity);
-            expect(login).toBe(entity.login);
+            expect(service.get<%= entityAngularName %>Identifier).toHaveBeenCalledWith(entity);
+            expect(login).toBe('testuser');
         });
     });
 <%_ } else { _%>
