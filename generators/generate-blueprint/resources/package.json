@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "eslint": "9.39.2",
+    "eslint": "10.0.1",
     "globals": "17.3.0",
     "vitest": "4.0.18"
   },
