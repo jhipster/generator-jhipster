@@ -112,6 +112,7 @@ export function createUserEntity(
       fieldValidateRulesPattern: LOGIN_REGEX_JS,
       fieldValidateRulesPatternJava: LOGIN_REGEX,
       builtIn: true,
+      fakerTemplate: '{{internet.username}}',
     },
     {
       fieldName: 'firstName',
@@ -119,6 +120,7 @@ export function createUserEntity(
       fieldValidateRules: [Validations.MAXLENGTH],
       fieldValidateRulesMaxlength: 50,
       builtIn: true,
+      fakerTemplate: '{{person.firstName}}',
     },
     {
       fieldName: 'lastName',
@@ -126,6 +128,7 @@ export function createUserEntity(
       fieldValidateRules: [Validations.MAXLENGTH],
       fieldValidateRulesMaxlength: 50,
       builtIn: true,
+      fakerTemplate: '{{person.lastName}}',
     },
     {
       fieldName: 'email',
@@ -134,6 +137,7 @@ export function createUserEntity(
       fieldValidateRulesMinlength: 5,
       fieldValidateRulesMaxlength: 191,
       builtIn: true,
+      fakerTemplate: '{{internet.email}}',
     },
     ...(application.enableTranslation
       ? [
@@ -210,7 +214,6 @@ export function createUserManagementEntity(
   for (const field of user.fields ?? []) {
     // Login is used as the id field in rest api.
     if (field.fieldName === 'login') {
-      field.fakerTemplate = '{{internet.username}}';
       field.id = true;
     } else if (field.fieldName === 'id') {
       field.id = false;

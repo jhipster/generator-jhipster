@@ -19,7 +19,7 @@
 <div class="d-flex justify-content-center">
   <div class="col-8">
     <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-      <h2 id="myUserLabel" data-cy="userManagementCreateUpdateHeading">__jhiTranslateTag__('userManagement.home.createOrEditLabel')</h2>
+      <h2 id="myUserLabel" data-cy="UserManagementCreateUpdateHeading">__jhiTranslateTag__('userManagement.home.createOrEditLabel')</h2>
 
       <<%= jhiPrefixDashed %>-alert-error />
 
@@ -30,7 +30,7 @@
 
       <div class="mb-3">
         <label class="form-label" for="field_login">__jhiTranslateTag__('userManagement.login')</label>
-        <input type="text" id="field_login" class="form-control" name="login" formControlName="login" />
+        <input type="text" id="field_login" class="form-control" name="login" formControlName="login" data-cy="login" />
 
       @let loginRef = editForm.get('login')!;
       @if (loginRef.invalid && (loginRef.dirty || loginRef.touched)) {
@@ -55,7 +55,7 @@
 
       <div class="mb-3">
         <label class="form-label" for="field_firstName">__jhiTranslateTag__('userManagement.firstName')</label>
-        <input type="text" id="field_firstName" class="form-control" name="firstName" formControlName="firstName" />
+        <input type="text" id="field_firstName" class="form-control" name="firstName" formControlName="firstName" data-cy="firstName" />
 
       @let firstNameRef = editForm.get('firstName')!;
       @if (firstNameRef.invalid && (firstNameRef.dirty || firstNameRef.touched)) {
@@ -70,7 +70,7 @@
 
       <div class="mb-3">
         <label class="form-label" for="field_lastName">__jhiTranslateTag__('userManagement.lastName')</label>
-        <input type="text" id="field_lastName" class="form-control" name="lastName" formControlName="lastName" />
+        <input type="text" id="field_lastName" class="form-control" name="lastName" formControlName="lastName" data-cy="lastName" />
 
       @let lastNameRef = editForm.get('lastName')!;
       @if (lastNameRef.invalid && (lastNameRef.dirty || lastNameRef.touched)) {
@@ -85,7 +85,7 @@
 
       <div class="mb-3">
         <label class="form-label" for="field_email">__jhiTranslateTag__('userManagement.email')</label>
-        <input type="email" id="field_email" class="form-control" name="email" formControlName="email" />
+        <input type="email" id="field_email" class="form-control" name="email" formControlName="email" data-cy="email" />
 
       @let emailRef = editForm.get('email')!;
       @if (emailRef.invalid && (emailRef.dirty || emailRef.touched)) {
@@ -122,6 +122,7 @@
             id="activated"
             name="activated"
             formControlName="activated"
+            data-cy="activated"
           />
           <span>__jhiTranslateTag__('userManagement.activated')</span>
         </label>
@@ -131,7 +132,7 @@
     @if (languages && languages.length > 0) {
       <div class="mb-3">
         <label class="form-label" for="langKey">__jhiTranslateTag__('userManagement.langKey')</label>
-        <select class="form-control" id="langKey" name="langKey" formControlName="langKey">
+        <select class="form-control" id="langKey" name="langKey" formControlName="langKey"  data-cy="langKey" >
         @for (language of languages; track $index) {
           <option [value]="language">{{ language | findLanguageFromKey }}</option>
         }

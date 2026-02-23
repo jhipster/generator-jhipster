@@ -15,6 +15,8 @@ import {
 } from '../../support/entity';
 <%_
 
+const customUserManagementPages = builtInUserManagement && userManagement.skipClient && userManagement.generateEntityCypress;
+const entitiesUserManagementPages = builtInUserManagement && !userManagement.skipClient;
 const baseApi = entityApi + 'api/';
 
 const entityFakeData = generateFakeData('cypress');
@@ -48,7 +50,7 @@ _%>
 
 describe('<%- entityNameCapitalized %> e2e test', () => {
 
-  const <%= entityInstance %>PageUrl = '/<%= entityPage %>';
+  const <%= entityInstance %>PageUrl = '<%= customUserManagementPages ? '/admin' : '' %>/<%= entityPage %>';
   const <%= entityInstance %>PageUrlPattern = new RegExp('/<%= entityPage %>(\\?.*)?$');
   let username: string;
   let password: string;
@@ -152,7 +154,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
 
   it('<%- entityNamePlural %> menu should load <%- entityNamePlural %> page', () => {
     cy.visit('/');
-    cy.clickOnEntityMenuItem('<%= entityPage %>');
+    cy.clickOn<%= customUserManagementPages ? 'Admin' : 'Entity' %>MenuItem('<%= entityPage %>');
     cy.wait('@entitiesRequest').then(({ response }) => {
       if (response?.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
@@ -309,7 +311,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
   });
 <%_ if (!readOnly) { _%>
 
-  describe<% if (locals.builtInUserManagement) { %>.skip<% } %>('new <%- entityNameCapitalized %> page', () => {
+  describe<% if (entitiesUserManagementPages) { %>.skip<% } %>('new <%- entityNameCapitalized %> page', () => {
     beforeEach(() => {
       cy.visit(<%= entityInstance %>PageUrl);
       cy.get(entityCreateButtonSelector).click();
@@ -322,6 +324,9 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
     const fieldName = field.fieldName;
     const fieldIsEnum = field.fieldIsEnum;
     let fieldValue = !entityFakeData ? field.generateFakeData('cypress') : entityFakeData[field.fieldName];
+    if (customUserManagementPages && (fieldName === 'langKey' || fieldName === 'activated')) {
+      return;
+    }
     if (fieldValue === undefined) {
         return;
     }

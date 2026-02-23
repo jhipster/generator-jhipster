@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>
-      <span id="user-management-page-heading" data-cy="userManagementPageHeading">{{ t$('userManagement.home.title') }}</span>
+      <span id="user-management-page-heading" data-cy="<%- userManagement.entityNameCapitalized %>Heading">{{ t$('userManagement.home.title') }}</span>
 
       <div class="d-flex justify-content-end">
         <button class="btn btn-info me-2" @click="handleSyncList" :disabled="isLoading">

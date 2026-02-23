@@ -18,7 +18,7 @@
 -%>
 <div>
   <h2>
-    <span id="user-management-page-heading" data-cy="userManagementPageHeading">__jhiTranslateTag__('userManagement.home.title')</span>
+    <span id="user-management-page-heading" data-cy="<%- userManagement.entityNameCapitalized %>Heading">__jhiTranslateTag__('userManagement.home.title')</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading()">
@@ -72,7 +72,7 @@
       </thead>
       <tbody>
       @for (user of users(); track trackIdentity(user)) {
-        <tr>
+        <tr data-cy="entityTable">
           <td>
             <a [routerLink]="['./', user.login, 'view']">{{ user.id }}</a>
           </td>

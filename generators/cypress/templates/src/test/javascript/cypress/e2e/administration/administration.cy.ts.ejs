@@ -18,7 +18,7 @@
 -%>
 import { entityConfirmDeleteButtonSelector, entityCreateCancelButtonSelector, entityCreateSaveButtonSelector, entityDeleteButtonSelector, entityDetailsBackButtonSelector, entityDetailsButtonSelector, entityEditButtonSelector } from 'support/entity';
 import {
-<%_ if (generateUserManagement && userManagement.skipClient) { _%>
+<%_ if (generateUserManagement && !userManagement.generateEntityCypress) { _%>
   userManagementPageHeadingSelector,
 <%_ } _%>
 <%_ if (withAdminUi) { _%>
@@ -46,7 +46,7 @@ describe('/admin', () => {
     cy.visit('');
   });
 
-<%_ if (generateUserManagement && userManagement.skipClient) { _%>
+<%_ if (generateUserManagement && !userManagement.generateEntityCypress) { _%>
   describe('/user-management', () => {
     it('should load the page', () => {
       cy.clickOnAdminMenuItem('user-management');

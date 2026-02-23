@@ -125,7 +125,7 @@ export const UserManagement = () => {
 
   return (
     <div>
-      <h2 id="user-management-page-heading" data-cy="userManagementPageHeading">
+      <h2 id="user-management-page-heading" data-cy="<%- userManagement.entityNameCapitalized %>Heading">
         <Translate contentKey="userManagement.home.title">Users</Translate>
         <div className="d-flex justify-content-end">
           <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>

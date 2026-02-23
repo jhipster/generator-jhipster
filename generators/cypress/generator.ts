@@ -155,10 +155,12 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
 
   get postPreparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
-      prepareForTemplates({ entity }) {
+      prepareForTemplates({ application, entity }) {
         mutateData(entity, {
           workaroundEntityCannotBeEmpty: false,
           workaroundInstantReactiveMariaDB: false,
+          generateEntityCypress: ({ builtInUserManagement, skipClient }) =>
+            !skipClient || (builtInUserManagement && application.clientFrameworkAngular),
         });
       },
     });
@@ -222,7 +224,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
 
       async writeCypressEntityFiles({ application, entities }) {
         for (const entity of entities.filter(
-          entity => !entity.skipClient && !entity.embedded && !entity.builtInUser && !entity.entityClientModelOnly,
+          entity => entity.generateEntityCypress && !entity.embedded && !entity.builtInUser && !entity.entityClientModelOnly,
         )) {
           const context = { ...application, ...entity };
           await this.writeFiles({

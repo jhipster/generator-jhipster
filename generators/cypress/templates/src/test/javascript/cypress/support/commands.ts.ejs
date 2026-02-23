@@ -77,7 +77,9 @@ export const submitInitResetPasswordSelector = '[data-cy="submit"]';
 <%_ } _%>
 
 // Administration
-export const userManagementPageHeadingSelector = '[data-cy="userManagementPageHeading"]';
+<%_ if (generateUserManagement && !userManagement.generateEntityCypress) { _%>
+export const userManagementPageHeadingSelector = '[data-cy="<%- userManagement.entityNameCapitalized %>Heading"]';
+<%_ } _%>
 export const swaggerFrameSelector = 'iframe[data-cy="swagger-frame"]';
 export const swaggerPageSelector = '[id="swagger-ui"]';
 <%_ if (withAdminUi) { _%>
