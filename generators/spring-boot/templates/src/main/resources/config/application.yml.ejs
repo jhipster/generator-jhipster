@@ -362,7 +362,32 @@ spring:
             client-id: web_app
             client-secret: web_app
     <%_ } _%>
-            scope: openid, profile, email, offline_access # last one for refresh tokens
+            <%_ // ===================================================================
+                # JHipster Issue #30206 - Keycloak 26.1.0+ SSO session bug
+                # CVE-2025-12110: Keycloak doesn't invalidate offline sessions when 
+                # offline_access scope is removed from client
+                #
+                # Solution: Conditional scope based on OIDC provider
+                # - Keycloak: exclude offline_access (prevents session bug)
+                # - Other providers (Okta, Auth0, etc.): include offline_access (required for refresh tokens)
+                # ===================================================================
+                
+                # Determine if using Keycloak
+                # By default, JHipster uses Keycloak for development, but can be overridden
+                const isKeycloak = !(applicationConfig && 
+                                   applicationConfig['auth-oidc-provider'] && 
+                                   applicationConfig['auth-oidc-provider'] !== 'keycloak');
+                
+                if (isKeycloak) {
+                    // Keycloak configuration - exclude offline_access to prevent session bug
+                    // Users should upgrade to Keycloak 26.3.0+ for the official fix
+            -%>
+            scope: openid, profile, email
+            <%_ } else { 
+                    // Non-Keycloak providers (Okta, Auth0, etc.) - include offline_access for refresh tokens
+            -%>
+            scope: openid, profile, email, offline_access # offline_access required for refresh tokens with Okta/Auth0
+            <%_ } _%>
   <%_ } _%>
   <%_ if (authenticationTypeJwt) { _%>
     oauth2:
