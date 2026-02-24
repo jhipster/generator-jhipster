@@ -2,7 +2,6 @@ import { defineComponent, inject, ref, type Ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
-import numeral from 'numeral';
 
 import { useDateFormat } from '@/shared/composables'
 import <%=jhiPrefixCapitalized%>MetricsModal from './metrics-modal.vue';
@@ -97,10 +96,10 @@ export default defineComponent({
       return input;
     },
     formatNumber1(value: any): any {
-      return numeral(value).format('0,0');
+      return new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(value);
     },
     formatNumber2(value: any): any {
-      return numeral(value).format('0,00');
+      return new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
     },
     convertMillisecondsToDuration(ms) {
       const times = {
