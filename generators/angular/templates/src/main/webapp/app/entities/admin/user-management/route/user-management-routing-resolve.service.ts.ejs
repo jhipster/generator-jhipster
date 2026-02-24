@@ -1,0 +1,65 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { inject } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { of, EMPTY, Observable } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
+
+import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
+import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
+
+const <%= entityInstance %>Resolve = (route: ActivatedRouteSnapshot): Observable<null | I<%= entityAngularName %>> => {
+<%_ if (builtInUserManagement) { _%>
+  const login = route.params['login'];
+  if (login) {
+    return inject(<%= entityAngularName %>Service)
+      .find(login)
+      .pipe(
+        mergeMap((<%= entityInstance %>: HttpResponse<I<%= entityAngularName %>>) => {
+          if (<%= entityInstance %>.body) {
+            return of(<%= entityInstance %>.body);
+          } else {
+            inject(Router).navigate(['404']);
+            return EMPTY;
+          }
+        }),
+      );
+  }
+<%_ } else { _%>
+  const id = route.params['<%= primaryKey.name %>'];
+  if (id) {
+    return inject(<%= entityAngularName %>Service)
+      .find(id)
+      .pipe(
+        mergeMap((<%= entityInstance %>: HttpResponse<I<%= entityAngularName %>>) => {
+          if (<%= entityInstance %>.body) {
+            return of(<%= entityInstance %>.body);
+          } else {
+            inject(Router).navigate(['404']);
+            return EMPTY;
+          }
+        }),
+      );
+  }
+<%_ } _%>
+  return of(null);
+};
+
+export default <%= entityInstance %>Resolve;

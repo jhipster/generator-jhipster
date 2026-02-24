@@ -1,0 +1,218 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<%_
+let searchType = 'Search';
+if (paginationPagination || paginationInfiniteScroll) {
+    searchType = 'SearchWithPagination';
+}
+_%>
+import { computed, inject, Injectable, signal } from '@angular/core';
+import { HttpClient, HttpResponse, httpResource } from '@angular/common/http';
+import {
+  map,
+  Observable<% if (!generateBuiltInAuthorityEntity) { %>, of<% } %>,
+<%_ if (searchEngineAny) { _%>
+  asapScheduler,
+  scheduled,
+<%_ } _%>
+} from 'rxjs';
+<%_ if (!generateBuiltInAuthorityEntity) { _%>
+import { Authority } from 'app/shared/jhipster/constants';
+<%_ } _%>
+
+<%_ if (searchEngineAny) { _%>
+import { catchError } from 'rxjs/operators';
+<%_ } _%>
+
+import dayjs from 'dayjs/esm';
+
+import { isPresent } from 'app/core/util/operators';
+<%_ if (anyFieldIsLocalDate) { _%>
+import { DATE_FORMAT } from 'app/config/input.constants';
+<%_ } _%>
+import { ApplicationConfigService } from 'app/core/config/application-config.service';
+import { createRequestOption } from 'app/core/request/request-util';
+<%_ if (searchEngineAny) { _%>
+import { <%= searchType %> } from 'app/core/request/request.model';
+<%_ } _%>
+import { User, IUser } from '../user-management.model';
+import type { NewUser } from '../user-management.model';
+
+export type PartialUpdateUser = Partial<IUser> & Pick<IUser, 'login'>;
+
+type RestOf<T extends IUser | NewUser> =
+  Omit<T, '<%- fields.filter(field => field.fieldTypeTemporal).map(field => field.fieldName).join("' | '") %>'> &
+  {
+  <%_ for (const field of fields.filter(field => field.fieldTypeTemporal)) { _%>
+  <%= field.fieldName %>?: string | null;
+  <%_ } _%>
+  authorities?: string[] | null;
+  };
+
+export type RestUser = RestOf<IUser>;
+export type NewRestUser = RestOf<NewUser>;
+export type PartialUpdateRestUser = RestOf<PartialUpdateUser>;
+
+export type EntityResponseType = HttpResponse<IUser>;
+export type EntityArrayResponseType = HttpResponse<IUser[]>;
+
+@Injectable()
+export class UsersService {
+  readonly usersParams = signal<Record<string, string | number | boolean | readonly (string | number | boolean)[]> | undefined>(undefined);
+  protected readonly applicationConfigService = inject(ApplicationConfigService);
+  protected readonly resourceUrl = this.applicationConfigService.getEndpointFor('api/users'<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>, '<%- microserviceName.toLowerCase() %>'<% } %>);
+<%_ if (searchEngineAny) { _%>
+  protected readonly resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/users/_search'<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>, '<%- microserviceName.toLowerCase() %>'<% } %>);
+<%_ } _%>
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  readonly usersResource = httpResource<RestUser[]>(() => {
+    const params = this.usersParams();
+    if (!params) {
+      return undefined;
+    }
+    return { url: <% if (searchEngineAny) { %>params.query ? this.resourceSearchUrl : <% } %>this.resourceUrl, params };
+  });
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  readonly users = computed(() => (this.usersResource.value() ?? []).map(item => this.convertValueFromServer(item)));
+
+  protected convertValueFromServer(restUser: RestUser): IUser {
+    return {
+      ...restUser,
+  <%_ for (const field of fields.filter(field => field.fieldTypeTemporal)) { _%>
+      <%- field.fieldName %>: restUser.<%- field.fieldName %> ? dayjs(restUser.<%- field.fieldName %>) : undefined,
+  <%_ } _%>
+      authorities: restUser.authorities?.map(authority => ({ name: authority as unknown as string })),
+    };
+  }
+}
+
+@Injectable({ providedIn: 'root' })
+export class UserManagementService extends UsersService {
+    protected readonly http = inject(HttpClient);
+
+    create(user: NewUser): Observable<EntityResponseType> {
+        const copy = this.convertValueFromClient(user);
+        return this.http.post<RestUser>(this.resourceUrl, copy, { observe: 'response' })
+            .pipe(map(res => this.convertResponseFromServer(res)));
+    }
+
+    update(user: IUser): Observable<EntityResponseType> {
+        const copy = this.convertValueFromClient(user);
+        return this.http.put<RestUser>(`${this.resourceUrl}/${encodeURIComponent(this.getUserIdentifier(user))}`, copy, { observe: 'response' })
+            .pipe(map(res => this.convertUserManagementResponseFromServer(res)));
+    }
+
+    partialUpdate(user: PartialUpdateUser): Observable<EntityResponseType> {
+        const copy = this.convertValueFromClient(user);
+        return this.http.patch<RestUser>(`${this.resourceUrl}/${encodeURIComponent(this.getUserIdentifier(user))}`, copy, { observe: 'response' })
+            .pipe(map(res => this.convertResponseFromServer(res)));
+    }
+
+    find(login: string): Observable<EntityResponseType> {
+        return this.http.get<RestUser>(`${this.resourceUrl}/${encodeURIComponent(login)}`, { observe: 'response' })
+            .pipe(map(res => this.convertUserManagementResponseFromServer(res)));
+    }
+
+    query(req?: any): Observable<EntityArrayResponseType> {
+        const options = createRequestOption(req);
+        return this.http.get<RestUser[]>(this.resourceUrl, { params: options, observe: 'response' })
+            .pipe(map(res => this.convertResponseArrayFromServer(res)));
+    }
+
+    delete(login: string): Observable<HttpResponse<{}>> {
+        return this.http.delete(`${this.resourceUrl}/${encodeURIComponent(login)}`, { observe: 'response' });
+    }
+
+<%_ if (searchEngineAny) { _%>
+    search(req: <%= searchType %>): Observable<EntityArrayResponseType> {
+        const options = createRequestOption(req);
+        return this.http.get<RestUser[]>(this.resourceSearchUrl, { params: options, observe: 'response' })
+            .pipe(
+              map(res => this.convertResponseArrayFromServer(res)),
+              catchError(() => scheduled([new HttpResponse<IUser[]>()], asapScheduler)),
+            );
+    }
+<%_ } _%>
+
+    getUserIdentifier(user: Pick<IUser, 'login'>): string {
+        return user.login;
+    }
+
+    compareUser(o1: Pick<IUser, 'login'> | null, o2: Pick<IUser, 'login'> | null): boolean {
+        return o1 && o2 ? this.getUserIdentifier(o1) === this.getUserIdentifier(o2) : o1 === o2;
+    }
+
+    authorities(): Observable<string[]> {
+  <%_ if (generateBuiltInAuthorityEntity) { _%>
+        return this.http
+          .get<{ name: string }[]>(this.applicationConfigService.getEndpointFor('api/authorities'))
+          .pipe(map(authorities => authorities.map(a => a.name)));
+  <%_ } else { _%>
+        return of([Authority.ADMIN, Authority.USER]);
+  <%_ } _%>
+    }
+
+    addUserToCollectionIfMissing<Type extends Pick<IUser, 'login'>>(userCollection: Type[], ...usersToCheck: (Type | null | undefined)[]): Type[] {
+        const users: Type[] = usersToCheck.filter(isPresent);
+        if (users.length > 0) {
+            const userCollectionIdentifiers = userCollection.map(userItem => this.getUserIdentifier(userItem));
+            const usersToAdd = users.filter(userItem => {
+                const userIdentifier = this.getUserIdentifier(userItem);
+                if (userCollectionIdentifiers.includes(userIdentifier)) {
+                    return false;
+                }
+                userCollectionIdentifiers.push(userIdentifier);
+                return true;
+            });
+            return [...usersToAdd, ...userCollection];
+        }
+        return userCollection;
+    }
+
+  protected convertValueFromClient<T extends IUser | NewUser | PartialUpdateUser>(user: T): RestOf<T> {
+    return {
+      ...user,
+  <%_ for (const field of fields) { _%>
+    <%_ if (field.fieldTypeTimed) { _%>
+    <%= field.fieldName %>: user.<%= field.fieldName %>?.toJSON() ?? null,
+    <%_ } _%>
+    <%_ if (field.fieldTypeLocalDate) { _%>
+    <%= field.fieldName %>: user.<%= field.fieldName %>?.format(DATE_FORMAT) ?? null,
+    <%_ } _%>
+  <%_ } _%>
+      authorities: user.authorities?.map(authority => authority.name),
+    };
+  }
+
+  protected convertResponseFromServer(res: HttpResponse<RestUser>): HttpResponse<IUser> {
+    return res.clone({
+      body: res.body ? this.convertValueFromServer(res.body) : null,
+    });
+  }
+
+  protected convertUserManagementResponseFromServer(res: HttpResponse<RestUser>): HttpResponse<IUser> {
+    return this.convertResponseFromServer(res);
+  }
+
+  protected convertResponseArrayFromServer(res: HttpResponse<RestUser[]>): HttpResponse<IUser[]> {
+    return res.clone({
+      body: res.body ? res.body.map(item => this.convertValueFromServer(item)) : null,
+    });
+  }
+}

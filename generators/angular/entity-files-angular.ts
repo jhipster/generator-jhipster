@@ -36,6 +36,31 @@ export const builtInFiles = asWriteEntityFilesSection({
   service: [entityServiceFiles],
 });
 
+const userManagementEntityFiles = clientApplicationTemplatesBlock({
+  templates: [
+    'entities/admin/user-management/list/user-management.html',
+    'entities/admin/user-management/list/user-management.ts',
+    'entities/admin/user-management/list/user-management.spec.ts',
+    'entities/admin/user-management/update/user-management-update.html',
+    'entities/admin/user-management/update/user-management-update.ts',
+    'entities/admin/user-management/update/user-management-update.spec.ts',
+    'entities/admin/user-management/update/user-management-form.service.ts',
+    'entities/admin/user-management/update/user-management-form.service.spec.ts',
+    'entities/admin/user-management/detail/user-management-detail.html',
+    'entities/admin/user-management/detail/user-management-detail.ts',
+    'entities/admin/user-management/detail/user-management-detail.spec.ts',
+    'entities/admin/user-management/delete/user-management-delete-dialog.html',
+    'entities/admin/user-management/delete/user-management-delete-dialog.ts',
+    'entities/admin/user-management/delete/user-management-delete-dialog.spec.ts',
+    'entities/admin/user-management/service/user-management.service.ts',
+    'entities/admin/user-management/service/user-management.service.spec.ts',
+    'entities/admin/user-management/user-management.model.ts',
+    'entities/admin/user-management/user-management.routes.ts',
+    'entities/admin/user-management/route/user-management-routing-resolve.service.ts',
+    'entities/admin/user-management/route/user-management-routing-resolve.service.spec.ts',
+  ],
+});
+
 export const angularFiles = {
   model: [entityModelFiles],
   service: [entityServiceFiles],
@@ -87,10 +112,10 @@ export const writeEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularAp
       });
 
       if (application.generateUserManagement && application.userManagement!.skipClient) {
-        // Use standard entity templates for User Management
+        // Use dedicated User Management entity templates
         const userManagementEntity = application.userManagement!;
         await this.writeFiles({
-          sections: angularFiles,
+          sections: { model: [entityModelFiles], service: [entityServiceFiles], client: [userManagementEntityFiles] },
           context: {
             ...application,
             ...userManagementEntity,
@@ -98,14 +123,14 @@ export const writeEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularAp
             i18nKeyPrefix: 'userManagement',
             entityFileName: 'user-management',
             entityFolderName: 'admin/user-management',
-            entityPage: 'admin/user-management',
+            entityPage: 'entities/admin/user-management',
           },
         });
       }
     } else if (entity.builtInUserManagement) {
-      // UserManagement entity should use standard entity templates
+      // UserManagement entity uses dedicated User Management templates
       await this.writeFiles({
-        sections: angularFiles,
+        sections: { model: [entityModelFiles], service: [entityServiceFiles], client: [userManagementEntityFiles] },
         context: {
           ...application,
           ...entity,
