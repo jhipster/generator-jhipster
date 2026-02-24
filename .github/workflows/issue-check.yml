@@ -60,11 +60,9 @@ jobs:
         with:
           path: generator-jhipster
           fetch-depth: 2
+      - uses: ./generator-jhipster/.github/actions/setup-default-node-java
       - uses: jhipster/actions/setup-runner@v1
         with:
-          node-version: ${{ steps.setup.outputs.node-version }}
-          java-version: ${{ steps.setup.outputs.java-version }}
-          npm-version: ${{ steps.setup.outputs.npm-version }}
           maven-cache: true
           gradle-cache: true
           binary-dir: ${{ github.workspace }}/generator-jhipster/bin
