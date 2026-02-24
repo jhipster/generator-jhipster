@@ -36,7 +36,7 @@
     "copy-webpack-plugin": "13.0.1",
     "css-loader": "7.1.4",
     "css-minimizer-webpack-plugin": "7.0.4",
-    "eslint": "10.0.1",
+    "eslint": "10.0.2",
     "eslint-plugin-prettier": "5.5.5",
     "eslint-plugin-vue": "10.8.0",
     "flush-promises": "1.0.2",
