@@ -42,7 +42,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
 import { AlertError } from 'app/shared/alert/alert-error';
 import { Alert } from 'app/shared/alert/alert';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { NgbPagination } from '@ng-bootstrap/ng-bootstrap/pagination';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
 import { TranslateModule } from '@ngx-translate/core';
@@ -50,6 +49,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { sortStateSignal, SortDirective, SortByDirective, type SortState, SortService } from 'app/shared/sort';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
 <%_ if (paginationPagination) { _%>
+import { NgbPagination } from '@ng-bootstrap/ng-bootstrap/pagination';
 import { ItemCount } from 'app/shared/pagination';
 <%_ } _%>
 <%_ if (searchEngine) { _%>
@@ -100,7 +100,6 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
       FormsModule,
 <%_ } _%>
       FontAwesomeModule,
-      NgbPagination,
       AlertError,
       Alert,
       SortDirective,
@@ -122,6 +121,7 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
       Filter,
 <%_ } _%>
 <%_ if (paginationPagination) { _%>
+      NgbPagination,
       ItemCount,
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
