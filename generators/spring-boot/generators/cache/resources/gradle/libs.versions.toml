@@ -1,6 +1,6 @@
 [libraries]
 # caffeine
-typesafe = { module = 'com.typesafe:config', version = '1.4.5' }
+typesafe = { module = 'com.typesafe:config', version = '1.4.6' }
 
 # TODO drop when Spring Boot updates to a v4 supported version
 infinispan = { module = 'org.infinispan:infinispan-bom', version = '16.1.0' }
