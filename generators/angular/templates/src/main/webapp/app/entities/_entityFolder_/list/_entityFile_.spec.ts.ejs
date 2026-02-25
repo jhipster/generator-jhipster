@@ -24,7 +24,6 @@ _%>
 <%_ if (clientTestFrameworkVitest) { _%>
 import { MockInstance, afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import {
   ComponentFixture, TestBed,
@@ -40,15 +39,9 @@ import { faEye, faPencilAlt, faPlus<% if (searchEngineAny) { %>, faSearch<% } %>
 import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 import {
-<%_ if (!paginationInfiniteScroll) { _%>
-  delay,
-<%_ } _%>
   of,
 <%_ if (!readOnly) { _%>
   Subject,
-<%_ } _%>
-<%_ if (!paginationInfiniteScroll) { _%>
-  throwError,
 <%_ } _%>
 } from 'rxjs';
 <%_ if (!readOnly) { _%>
@@ -265,63 +258,50 @@ describe('<%= entityAngularName %> Management Component', () => {
 <%_ if (!paginationInfiniteScroll) { _%>
 
   it('should cancel previous load when new load is triggered', async () => {
-    <%= clientTestFramework %>.useFakeTimers();
-    // GIVEN
-    const firstResponse = new HttpResponse({
-      body: [<%- testEntityPrimaryKey %>],
-      headers: new HttpHeaders(),
-    });
-    const secondResponse = new HttpResponse({
-      body: [<%- testEntityPrimaryKey2 %>],
-      headers: new HttpHeaders(),
-    });
-
-    // Reset the spy from beforeEach and set up delayed responses
-    <%= clientTestFramework %>.spyOn(service, 'query')
-      .mockReturnValueOnce(of(firstResponse).pipe(delay(200)))  // Slow response
-      .mockReturnValueOnce(of(secondResponse).pipe(delay(10))); // Fast response
-
-    comp.ngOnInit();
-
-    // WHEN - trigger two loads in quick succession
+    // WHEN - trigger two loads (on init, one extra) in quick succession
     comp.load();
-    comp.load();
+    TestBed.tick();
 
-    // Advance time to complete fast response but not slow one
-    await <%= clientTestFramework %>.advanceTimersByTimeAsync(50);
+    // THEN - should cancels the first in-flight request; flushing it has no effect
+    const [firstReq, secondReq] = httpMock.match({ method: 'GET' });
+    firstReq.flush(
+      [<%- testEntityPrimaryKey %>],
+      { headers: { link: '<http://localhost/api/foo?page=1&size=20>; rel="next"' } },
+    );
+    secondReq.flush(
+      [<%- testEntityPrimaryKey2 %>],
+      { headers: { link: '<http://localhost/api/foo?page=1&size=20>; rel="next"' } },
+    );
+    await vitest.runAllTimersAsync();
 
     // THEN - only the latest (second) response should be applied
     expect(comp.<%= entityInstancePlural %>()).toEqual([<%- testEntityPrimaryKey2 %>]);
     expect(comp.<%= entityInstancePlural %>()).not.toContain(expect.objectContaining(<%- testEntityPrimaryKey %>));
-    <%= clientTestFramework %>.useRealTimers();
   });
 
-  it('should keep subscription alive after HTTP error', () => {
-    // GIVEN
-    const successResponse = new HttpResponse({
-      body: [<%- testEntityPrimaryKey %>],
-      headers: new HttpHeaders(),
-    });
+  it('should keep subscription alive after HTTP error', async () => {
+    // GIVEN - first load triggers an HTTP error
+    TestBed.tick();
+    const errorReq = httpMock.expectOne({ method: 'GET' });
+    errorReq.flush('error', { status: 500, statusText: 'Server Error' });
+    await vitest.runAllTimersAsync();
 
-    // Reset the spy from beforeEach and simulate error then success
-    <%= clientTestFramework %>.spyOn(service, 'query')
-      .mockReset()
-      .mockReturnValueOnce(throwError(() => new Error('HTTP Error')))
-      .mockReturnValueOnce(of(successResponse));
-
-    comp.ngOnInit();
-
-    // WHEN - first implicit load triggers an error
-    // Verify loading state was reset
+    // THEN - loading state was reset and list is empty
     expect(comp.isLoading()).toBe(false);
-    expect(comp.<%= entityInstancePlural %>()).toEqual([]);
+    expect(comp.<%- entityInstancePlural %>()).toEqual([]);
 
     // WHEN - second load should still work
     comp.load();
+    TestBed.tick();
+    const successReq = httpMock.expectOne({ method: 'GET' });
+    successReq.flush(
+      [<%- testEntityPrimaryKey %>],
+      { headers: { link: '<http://localhost/api/foo?page=1&size=20>; rel="next"' } },
+    );
+    await vitest.runAllTimersAsync();
 
     // THEN - subscription is still alive and second load succeeds
-    expect(service.query).toHaveBeenCalledTimes(2);
-    expect(comp.<%= entityInstancePlural %>()).toEqual([<%- testEntityPrimaryKey %>]);
+    expect(comp.<%- entityInstancePlural %>()[0]).toEqual(expect.objectContaining(<%- testEntityPrimaryKey %>));
   });
 <%_ } _%>
 });
