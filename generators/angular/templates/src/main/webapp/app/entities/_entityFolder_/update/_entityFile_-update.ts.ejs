@@ -33,7 +33,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateDirective } from 'app/shared/language';
 import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap/datepicker';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
 import { AlertError } from 'app/shared/alert/alert-error';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -64,7 +65,7 @@ import { <%- importedType %> } from '<%- importedPath %>';
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-update',
     templateUrl: './<%= entityFileName %>-update.html',
     imports: [<%_ if (enableTranslation) { _%>
-TranslateDirective, TranslateModule,<%_ } _%>NgbModule, FontAwesomeModule, AlertError, ReactiveFormsModule],
+TranslateDirective, TranslateModule,<%_ } _%>NgbInputDatepicker, NgbTooltip, FontAwesomeModule, AlertError, ReactiveFormsModule],
 })
 export class <%= entityAngularName %>Update implements OnInit {
     isSaving = signal(false);

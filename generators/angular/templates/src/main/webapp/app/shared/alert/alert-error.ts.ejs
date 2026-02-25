@@ -19,7 +19,7 @@
 import { Component, inject, OnDestroy, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAlert } from '@ng-bootstrap/ng-bootstrap/alert';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
@@ -32,7 +32,7 @@ import { getMessageFromHeaders } from 'app/shared/jhipster/headers';
 @Component({
   selector: '<%= jhiPrefixDashed %>-alert-error',
   templateUrl: './alert-error.html',
-  imports: [NgbModule],
+  imports: [NgbAlert],
 })
 export class AlertError implements OnDestroy {
   alerts = signal<AlertModel[]>([]);

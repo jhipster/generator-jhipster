@@ -23,13 +23,13 @@ import { TranslateDirective } from 'app/shared/language';
 import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbProgressbar } from '@ng-bootstrap/ng-bootstrap/progressbar';
 import { GarbageCollector } from 'app/admin/metrics/metrics.model';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-metrics-garbagecollector',
   templateUrl: './metrics-garbagecollector.html',
-  imports: [NgbModule, DecimalPipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
+  imports: [NgbProgressbar, DecimalPipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
 })
 export class MetricsGarbageCollector {
   /**

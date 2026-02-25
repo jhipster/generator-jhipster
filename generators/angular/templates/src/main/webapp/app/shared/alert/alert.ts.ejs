@@ -17,14 +17,14 @@
  limitations under the License.
 -%>
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAlert } from '@ng-bootstrap/ng-bootstrap/alert';
 
 import { AlertService, AlertModel } from 'app/core/util/alert.service';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-alert',
   templateUrl: './alert.html',
-  imports: [NgbModule],
+  imports: [NgbAlert],
 })
 export class Alert implements OnInit, OnDestroy {
   alerts = signal<AlertModel[]>([]);

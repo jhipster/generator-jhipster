@@ -36,13 +36,13 @@ import { HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute, Data, ParamMap, Router, RouterLink } from '@angular/router';
 import { combineLatest<%_ if (!readOnly) { _%>, filter<%_ } _%>, finalize, Observable, Subscription, tap } from 'rxjs';
 <%_ if (!readOnly) { _%>
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
 <%_ } _%>
 
 import { AlertError } from 'app/shared/alert/alert-error';
 import { Alert } from 'app/shared/alert/alert';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbPagination } from '@ng-bootstrap/ng-bootstrap/pagination';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
 import { TranslateModule } from '@ngx-translate/core';
@@ -100,7 +100,7 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
       FormsModule,
 <%_ } _%>
       FontAwesomeModule,
-      NgbModule,
+      NgbPagination,
       AlertError,
       Alert,
       SortDirective,

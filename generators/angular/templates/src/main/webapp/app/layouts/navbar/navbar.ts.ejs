@@ -26,7 +26,8 @@ import { StateStorageService } from 'app/core/auth/state-storage.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableI18nRTL) { _%>
 <%_ } _%>
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap/collapse';
+import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap/dropdown';
 import HasAnyAuthorityDirective from 'app/shared/auth/has-any-authority.directive'
 <%_ if (enableTranslation) { _%>
 import { LANGUAGES } from 'app/config/language.constants';
@@ -53,7 +54,10 @@ import NavbarItem from './navbar-item.model';
     RouterLink,
     RouterLinkActive,
     FontAwesomeModule,
-    NgbModule,
+    NgbCollapse,
+    NgbDropdown,
+    NgbDropdownMenu,
+    NgbDropdownToggle,
     HasAnyAuthorityDirective,
 <%_ if (enableTranslation) { _%>
     ActiveMenuDirective,

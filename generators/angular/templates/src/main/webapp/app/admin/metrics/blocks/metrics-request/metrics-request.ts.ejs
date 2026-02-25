@@ -23,7 +23,7 @@ import { TranslateDirective } from 'app/shared/language';
 import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbProgressbar } from '@ng-bootstrap/ng-bootstrap/progressbar';
 import { HttpServerRequests } from 'app/admin/metrics/metrics.model';
 import { filterNaN } from 'app/core/util/operators';
 
@@ -31,7 +31,7 @@ import { filterNaN } from 'app/core/util/operators';
   selector: '<%= jhiPrefixDashed %>-metrics-request',
   templateUrl: './metrics-request.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgbModule, KeyValuePipe, DecimalPipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
+  imports: [NgbProgressbar, KeyValuePipe, DecimalPipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
 })
 export class MetricsRequest {
   /**

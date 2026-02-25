@@ -23,7 +23,7 @@ import { HttpResponse<%_ if (!locals.databaseTypeCassandra) { %>, HttpHeaders <%
 <%_ if (!locals.databaseTypeCassandra) { _%>
 import { combineLatest } from 'rxjs';
 <%_ } _%>
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AlertError } from 'app/shared/alert/alert-error';
@@ -32,7 +32,7 @@ import { Alert } from 'app/shared/alert/alert';
 import { TranslateDirective } from 'app/shared/language';
 import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbPagination } from '@ng-bootstrap/ng-bootstrap/pagination';
 <%_ if (!locals.databaseTypeCassandra) { _%>
 import { SortDirective, SortByDirective, sortStateSignal, SortService, SortState } from 'app/shared/sort';
 import { ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
@@ -53,7 +53,7 @@ import UserManagementDeleteDialog from '../delete/user-management-delete-dialog'
     FontAwesomeModule,
     AlertError,
     Alert,
-    NgbModule,
+    NgbPagination,
 <%_ if (enableTranslation) { _%>
     TranslateDirective,
     TranslateModule,
