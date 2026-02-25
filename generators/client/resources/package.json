@@ -12,7 +12,7 @@
     "cypress-monocart-coverage": "1.0.1",
     "eslint-plugin-cypress": "6.1.0",
     "lighthouse": "13.0.3",
-    "nyc": "17.1.0",
+    "nyc": "18.0.0",
     "swagger-ui-dist": "5.31.2"
   },
   "packageManager": "npm@11"
