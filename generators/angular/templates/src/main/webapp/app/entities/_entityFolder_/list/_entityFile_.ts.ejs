@@ -29,13 +29,12 @@
 
   const componentName = entityAngularName;
 _%>
-import { Component, computed, DestroyRef, effect, inject, OnInit, signal, WritableSignal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, computed, effect, inject, OnInit, signal, WritableSignal } from '@angular/core';
 <%_ if (!paginationNo) { _%>
 import { HttpHeaders } from '@angular/common/http';
 <%_ } _%>
 import { ActivatedRoute, Data, ParamMap, Router, RouterLink } from '@angular/router';
-import { <%_ if (!paginationInfiniteScroll) { _%>catchError, <%_ } _%>combineLatest<%_ if (!readOnly) { _%>, filter<%_ } _%><%_ if (!paginationInfiniteScroll) { _%>, EMPTY<%_ } _%>, finalize, Observable<%_ if (!paginationInfiniteScroll) { _%>, Subject<%_ } _%><%_ if (!paginationInfiniteScroll) { _%>, switchMap<%_ } _%>, tap } from 'rxjs';
+import { combineLatest<%_ if (!readOnly) { _%>, filter<%_ } _%>, finalize, Observable, Subscription, tap } from 'rxjs';
 <%_ if (!readOnly) { _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 <%_ } _%>
@@ -164,7 +163,6 @@ export class <%= componentName %> implements OnInit {
     readonly isLoading = this.<%= entityInstance %>Service.<%= entityInstancePlural %>Resource.isLoading;
     protected readonly activatedRoute = inject(ActivatedRoute);
     protected readonly sortService = inject(SortService);
-    protected readonly destroyRef = inject(DestroyRef);
 <%_ if (paginationInfiniteScroll) { _%>
     protected parseLinks = inject(ParseLinks);
 <%_ } _%>
@@ -194,19 +192,7 @@ export class <%= componentName %> implements OnInit {
 <%_ } _%>
 
     ngOnInit(): void {
-<%_ if (!paginationInfiniteScroll) { _%>
-      this.loadTrigger$.pipe(
-        switchMap(() => this.queryBackend().pipe(
-          catchError(() => {
-            this.isLoading.set(false);
-            return EMPTY;
-          })
-        )),
-        takeUntilDestroyed(this.destroyRef)
-      ).subscribe((res: EntityArrayResponseType) => this.onResponseSuccess(res));
-
-<%_ } _%>
-      combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
+      this.subscription = combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
         tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
 <%_ if (paginationInfiniteScroll) { _%>
         tap(() => this.reset()),
@@ -220,13 +206,10 @@ export class <%= componentName %> implements OnInit {
           }
         }),
 <%_ } _%>
-        takeUntilDestroyed(this.destroyRef)
       ).subscribe();
 
 <% if (jpaMetamodelFiltering && paginationPagination) { %>
-      this.filters.filterChanges.pipe(
-        takeUntilDestroyed(this.destroyRef)
-      ).subscribe(filterOptions => this.handleNavigation(1, this.sortState(), filterOptions));
+      this.filters.filterChanges.subscribe(filterOptions => this.handleNavigation(1, this.sortState(), filterOptions));
 <%_ } _%>
     }
 
@@ -288,9 +271,9 @@ export class <%= componentName %> implements OnInit {
     }
 
 <%_ } _%>
-    load(): void {
-      this.queryBackend();
-    }
+  load(): void {
+    this.queryBackend();
+  }
 
     navigateToWithComponentValues(event: SortState): void {
       this.handleNavigation(<% if (paginationPagination) { %>this.page(), <% } %>event<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngineAny) { %>, this.currentSearch()<% } %>);
