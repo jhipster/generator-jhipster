@@ -25,7 +25,7 @@
     "@module-federation/enhanced": "2.0.1",
     "@pinia/testing": "1.0.3",
     "@tsconfig/node18": "18.2.6",
-    "@types/node": "22.19.11",
+    "@types/node": "22.19.12",
     "@types/sinon": "21.0.0",
     "@vitejs/plugin-vue": "6.0.4",
     "@vue/test-utils": "2.4.6",
