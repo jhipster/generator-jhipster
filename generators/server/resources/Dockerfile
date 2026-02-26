@@ -52,7 +52,7 @@ LABEL ALIAS=sonar
 FROM hashicorp/consul:1.22.3
 LABEL ALIAS=consul
 
-FROM prom/prometheus:v3.9.1
+FROM prom/prometheus:v3.10.0
 LABEL ALIAS=prometheus
 
 FROM prom/alertmanager:v0.31.1
