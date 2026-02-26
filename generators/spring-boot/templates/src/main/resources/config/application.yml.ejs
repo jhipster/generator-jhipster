@@ -352,22 +352,18 @@ spring:
       client:
         provider:
           oidc:
-            issuer-uri: http://localhost:9080/realms/jhipster
+            issuer-uri: <%= authenticationType === 'oauth2' ? 'http://localhost:9080/realms/jhipster' : '' %>
         registration:
           oidc:
-    <%_ if (applicationTypeMicroservice) { _%>
-            client-id: internal
-            client-secret: internal
-    <%_ } else { _%>
             client-id: web_app
             client-secret: web_app
-    <%_ } _%>
-<%_ if (applicationTypeMicroservice) { _%>
-            scope: openid, profile, email
-<%_ } else if (clientId === 'web_app') { _%>
-            scope: openid, profile, email
-<%_ } else { _%>
-            scope: openid, profile, email, offline_access
+            scope: <%= getOidcScopes().join(',') %>
+<%_ if (authenticationType === 'oauth2') { _%>
+            <%_ const keycloakConfig = _configureKeycloakClient(); _%>
+            <%_ if (keycloakConfig.requiresExplicitOfflineAccess) { _%>
+            # Keycloak 26+ specific configuration
+            provider: keycloak-26-plus
+            <%_ } _%>
 <%_ } _%>
   <%_ } _%>
   <%_ if (authenticationTypeJwt) { _%>
@@ -378,6 +374,28 @@ spring:
           authorities-claim-name: auth
   <%_ } _%>
 <%_ } _%>
+
+<%_ if (authenticationType === 'oauth2') { _%>
+---
+spring:
+  config:
+    activate:
+      on-profile: keycloak-26-plus
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak-26-plus:
+            issuer-uri: http://localhost:9080/realms/jhipster
+            user-name-attribute: preferred_username
+        registration:
+          oidc:
+            scope: openid,profile,email
+            # offline_access excluded by default for Keycloak 26+
+            # Add if your client requires it and it's configured in Keycloak
+            # scope: openid,profile,email,offline_access
+<%_ } _%>
+
   task:
     execution:
       thread-name-prefix: <%= dasherizedBaseName %>-task-
