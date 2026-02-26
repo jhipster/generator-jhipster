@@ -128,10 +128,59 @@ describe('<%= entityAngularName %> Management Component', () => {
     await vitest.runAllTimersAsync();
 
     // THEN
-    expect(service.<%- entityInstancePlural %>Resource.isLoading()).toEqual(false);
+    expect(comp.isLoading()).toEqual(false);
     expect(comp.<%- entityInstancePlural %>()[0]).toEqual(expect.objectContaining(<%- testEntityPrimaryKey %>));
   });
 
+<%_ if (paginationPagination) { _%>
+  it('should cancel previous requests when loading a new page', async () => {
+    // WHEN
+    TestBed.tick();
+    const req = httpMock.expectOne({ method: 'GET' });
+    await vitest.runAllTimersAsync();
+
+    comp.page.set(3);
+    comp.load();
+    await vitest.runAllTimersAsync();
+    const req2 = httpMock.expectOne({ method: 'GET' });
+    req2.flush(
+      [<%- testEntityPrimaryKey %>],
+      { headers: { link: '<http://localhost/api/foo?page=1&size=20>; rel="next"' } },
+    );
+    await vitest.runAllTimersAsync();
+
+    // THEN
+    expect(req.cancelled).toBeTruthy();
+    expect(comp.isLoading()).toEqual(false);
+    expect(comp.<%- entityInstancePlural %>()[0]).toEqual(expect.objectContaining(<%- testEntityPrimaryKey %>));
+  });
+
+  it('should not fail on resource error state', async () => {
+    // GIVEN - first load triggers an HTTP error
+    TestBed.tick();
+    const errorReq = httpMock.expectOne({ method: 'GET' });
+    errorReq.flush('error', { status: 500, statusText: 'Server Error' });
+    await vitest.runAllTimersAsync();
+
+    // THEN - loading state was reset and list is empty
+    expect(comp.isLoading()).toBe(false);
+    expect(comp.<%- entityInstancePlural %>()).toEqual([]);
+
+    // WHEN - second load should still work
+    comp.load();
+    TestBed.tick();
+    const successReq = httpMock.expectOne({ method: 'GET' });
+    successReq.flush(
+      [<%- testEntityPrimaryKey %>],
+      { headers: { link: '<http://localhost/api/foo?page=1&size=20>; rel="next"' } },
+    );
+    await vitest.runAllTimersAsync();
+
+    // THEN - subscription is still alive and second load succeeds
+    expect(comp.<%- entityInstancePlural %>()[0]).toEqual(expect.objectContaining(<%- testEntityPrimaryKey %>));
+  });
+
+<%_ } _%>
     describe('track<%= primaryKey.nameCapitalized %>', () => {
         it('should forward to <%= entityInstance %>Service', () => {
             const entity = <%- tsPrimaryKeySamples[0] %>;

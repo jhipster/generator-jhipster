@@ -524,7 +524,54 @@ describe('UserManagement Management Component', () => {
     await vitest.runAllTimersAsync();
 
     // THEN
-    expect(service.userManagementsResource.isLoading()).toEqual(false);
+    expect(comp.isLoading()).toEqual(false);
+    expect(comp.userManagements()[0]).toEqual(expect.objectContaining({login: 'Pattie.Kertzmann'}));
+  });
+
+  it('should cancel previous requests when loading a new page', async () => {
+    // WHEN
+    TestBed.tick();
+    const req = httpMock.expectOne({ method: 'GET' });
+    await vitest.runAllTimersAsync();
+
+    comp.page.set(3);
+    comp.load();
+    await vitest.runAllTimersAsync();
+    const req2 = httpMock.expectOne({ method: 'GET' });
+    req2.flush(
+      [{login: 'Pattie.Kertzmann'}],
+      { headers: { link: '<http://localhost/api/foo?page=1&size=20>; rel="next"' } },
+    );
+    await vitest.runAllTimersAsync();
+
+    // THEN
+    expect(req.cancelled).toBeTruthy();
+    expect(comp.isLoading()).toEqual(false);
+    expect(comp.userManagements()[0]).toEqual(expect.objectContaining({login: 'Pattie.Kertzmann'}));
+  });
+
+  it('should not fail on resource error state', async () => {
+    // GIVEN - first load triggers an HTTP error
+    TestBed.tick();
+    const errorReq = httpMock.expectOne({ method: 'GET' });
+    errorReq.flush('error', { status: 500, statusText: 'Server Error' });
+    await vitest.runAllTimersAsync();
+
+    // THEN - loading state was reset and list is empty
+    expect(comp.isLoading()).toBe(false);
+    expect(comp.userManagements()).toEqual([]);
+
+    // WHEN - second load should still work
+    comp.load();
+    TestBed.tick();
+    const successReq = httpMock.expectOne({ method: 'GET' });
+    successReq.flush(
+      [{login: 'Pattie.Kertzmann'}],
+      { headers: { link: '<http://localhost/api/foo?page=1&size=20>; rel="next"' } },
+    );
+    await vitest.runAllTimersAsync();
+
+    // THEN - subscription is still alive and second load succeeds
     expect(comp.userManagements()[0]).toEqual(expect.objectContaining({login: 'Pattie.Kertzmann'}));
   });
 
@@ -683,7 +730,11 @@ export class UserManagement implements OnInit {
       }
     });
     effect(() => {
-      this.userManagements.set(this.fillComponentAttributesFromResponseBody([...this.userManagementService.userManagements()]));
+      if (this.userManagementService.userManagementsResource.hasValue()) {
+        this.userManagements.set(this.fillComponentAttributesFromResponseBody([...this.userManagementService.userManagements()]));
+      } else {
+        this.userManagements.set([]);
+      }
     });
   }
 

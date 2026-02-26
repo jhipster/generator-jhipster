@@ -183,7 +183,13 @@ export class <%= componentName %> implements OnInit {
     });
 <%_ } _%>
     effect(() => {
-      this.<%- entityInstancePlural %>.<% if (paginationInfiniteScroll) { %>update(<%- entityInstancePlural %> => <% } else { %>set(<% } %>this.fillComponentAttributesFromResponseBody([...this.<%- entityInstance %>Service.<%- entityInstancePlural %>()]<% if (paginationInfiniteScroll) { %>, <%- entityInstancePlural %><% } %>));
+      if (this.<%- entityInstance %>Service.<%- entityInstancePlural %>Resource.hasValue()) {
+        this.<%- entityInstancePlural %>.<% if (paginationInfiniteScroll) { %>update(<%- entityInstancePlural %> => <% } else { %>set(<% } %>this.fillComponentAttributesFromResponseBody([...this.<%- entityInstance %>Service.<%- entityInstancePlural %>()]<% if (paginationInfiniteScroll) { %>, <%- entityInstancePlural %><% } %>));
+<%_ if (!paginationInfiniteScroll) { _%>
+      } else {
+        this.<%- entityInstancePlural %>.set([]);
+<%_ } _%>
+      }
     });
   }
 <%_ if (primaryKey) { _%>
