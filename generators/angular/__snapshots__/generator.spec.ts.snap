@@ -5,119 +5,135 @@ exports[`generator - angular builtIn UserManagementEntity should match snapshot 
   "src/main/webapp/app/entities/admin/user-management/delete/user-management-delete-dialog.html": {
     "contents": "@if (userManagement) {
 <form name="deleteForm" (ngSubmit)="confirmDelete(userManagement.login!)">
-    <div class="modal-header">
-        <h4 class="modal-title" data-cy="userManagementDeleteDialogHeading">Confirm delete operation</h4>
-    </div>
+  <div class="modal-header">
+    <h4 class="modal-title" data-cy="userManagementDeleteDialogHeading">
+      Confirm delete operation
+    </h4>
+  </div>
 
-    <div class="modal-body">
-        <jhi-alert-error />
-        <p id="jhi-delete-userManagement-heading">Are you sure you want to delete user {{ userManagement.login }}?</p>
-    </div>
+  <div class="modal-body">
+    <jhi-alert-error />
+    <p id="jhi-delete-userManagement-heading">
+      Are you sure you want to delete user {{ userManagement.login }}?
+    </p>
+  </div>
 
-    <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
-            <fa-icon icon="ban" />&nbsp;<span>Cancel</span>
-        </button>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      data-dismiss="modal"
+      (click)="cancel()"
+    >
+      <fa-icon icon="ban" />&nbsp;<span>Cancel</span>
+    </button>
 
-        <button id="jhi-confirm-delete-userManagement" data-cy="entityConfirmDeleteButton" type="submit" class="btn btn-danger">
-            <fa-icon icon="times" />&nbsp;<span>Delete</span>
-        </button>
-    </div>
+    <button
+      id="jhi-confirm-delete-userManagement"
+      data-cy="entityConfirmDeleteButton"
+      type="submit"
+      class="btn btn-danger"
+    >
+      <fa-icon icon="times" />&nbsp;<span>Delete</span>
+    </button>
+  </div>
 </form>
 }
 ",
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/delete/user-management-delete-dialog.spec.ts": {
-    "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpResponse } from '@angular/common/http';
-import { of } from 'rxjs';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap/modal';
+    "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from "vitest";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { HttpResponse } from "@angular/common/http";
+import { of } from "rxjs";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap/modal";
 
-import { UserManagementService } from '../service/user-management.service';
+import { UserManagementService } from "../service/user-management.service";
 
-import { UserManagementDeleteDialog } from './user-management-delete-dialog';
+import { UserManagementDeleteDialog } from "./user-management-delete-dialog";
 
-describe('UserManagement Management Delete Component', () => {
-    let comp: UserManagementDeleteDialog;
-    let fixture: ComponentFixture<UserManagementDeleteDialog>;
-    let service: UserManagementService;
-    let mockActiveModal: NgbActiveModal;
+describe("UserManagement Management Delete Component", () => {
+  let comp: UserManagementDeleteDialog;
+  let fixture: ComponentFixture<UserManagementDeleteDialog>;
+  let service: UserManagementService;
+  let mockActiveModal: NgbActiveModal;
 
-    beforeEach(() => {
-        TestBed.configureTestingModule({
-            providers: [NgbActiveModal]
-        });
-        fixture = TestBed.createComponent(UserManagementDeleteDialog);
-        comp = fixture.componentInstance;
-        service = TestBed.inject(UserManagementService);
-        mockActiveModal = TestBed.inject(NgbActiveModal);
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [NgbActiveModal],
     });
+    fixture = TestBed.createComponent(UserManagementDeleteDialog);
+    comp = fixture.componentInstance;
+    service = TestBed.inject(UserManagementService);
+    mockActiveModal = TestBed.inject(NgbActiveModal);
+  });
 
-  describe('confirmDelete', () => {
-    it('should call delete service on confirmDelete', () => {
+  describe("confirmDelete", () => {
+    it("should call delete service on confirmDelete", () => {
       // GIVEN
-      vitest.spyOn(service, 'delete').mockReturnValue(of(new HttpResponse({ body: {} })));
-      vitest.spyOn(mockActiveModal, 'close');
+      vitest
+        .spyOn(service, "delete")
+        .mockReturnValue(of(new HttpResponse({ body: {} })));
+      vitest.spyOn(mockActiveModal, "close");
 
       // WHEN
-      comp.confirmDelete('ABC');
+      comp.confirmDelete("ABC");
 
       // THEN
-      expect(service.delete).toHaveBeenCalledWith('ABC');
-      expect(mockActiveModal.close).toHaveBeenCalledWith('deleted');
+      expect(service.delete).toHaveBeenCalledWith("ABC");
+      expect(mockActiveModal.close).toHaveBeenCalledWith("deleted");
     });
 
-        it('should not call delete service on clear', () => {
-            // GIVEN
-            vitest.spyOn(service, 'delete');
-            vitest.spyOn(mockActiveModal, 'close');
-            vitest.spyOn(mockActiveModal, 'dismiss');
+    it("should not call delete service on clear", () => {
+      // GIVEN
+      vitest.spyOn(service, "delete");
+      vitest.spyOn(mockActiveModal, "close");
+      vitest.spyOn(mockActiveModal, "dismiss");
 
-            // WHEN
-            comp.cancel();
+      // WHEN
+      comp.cancel();
 
-            // THEN
-            expect(service.delete).not.toHaveBeenCalled();
-            expect(mockActiveModal.close).not.toHaveBeenCalled();
-            expect(mockActiveModal.dismiss).toHaveBeenCalled();
-        });
+      // THEN
+      expect(service.delete).not.toHaveBeenCalled();
+      expect(mockActiveModal.close).not.toHaveBeenCalled();
+      expect(mockActiveModal.dismiss).toHaveBeenCalled();
     });
+  });
 });
 ",
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/delete/user-management-delete-dialog.ts": {
-    "contents": "import { Component, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap/modal';
+    "contents": "import { Component, inject } from "@angular/core";
+import { FormsModule } from "@angular/forms";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap/modal";
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { AlertError } from 'app/shared/alert/alert-error';
-import { IUserManagement } from '../user-management.model';
-import { UserManagementService } from '../service/user-management.service';
-import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { AlertError } from "app/shared/alert/alert-error";
+import { IUserManagement } from "../user-management.model";
+import { UserManagementService } from "../service/user-management.service";
+import { ITEM_DELETED_EVENT } from "app/config/navigation.constants";
 
 @Component({
-    templateUrl: './user-management-delete-dialog.html',
-    imports: [FormsModule, FontAwesomeModule, AlertError],
+  templateUrl: "./user-management-delete-dialog.html",
+  imports: [FormsModule, FontAwesomeModule, AlertError],
 })
 export class UserManagementDeleteDialog {
-    userManagement?: IUserManagement;
+  userManagement?: IUserManagement;
 
-    protected userManagementService = inject(UserManagementService);
-    protected activeModal = inject(NgbActiveModal);
+  protected userManagementService = inject(UserManagementService);
+  protected activeModal = inject(NgbActiveModal);
 
-    cancel(): void {
-        this.activeModal.dismiss();
-    }
+  cancel(): void {
+    this.activeModal.dismiss();
+  }
 
-    confirmDelete(login: string): void {
-        this.userManagementService.delete(login).subscribe(() => {
-            this.activeModal.close(ITEM_DELETED_EVENT);
-        });
-    }
+  confirmDelete(login: string): void {
+    this.userManagementService.delete(login).subscribe(() => {
+      this.activeModal.close(ITEM_DELETED_EVENT);
+    });
+  }
 }
 ",
     "stateCleared": "modified",
@@ -125,11 +141,11 @@ export class UserManagementDeleteDialog {
   "src/main/webapp/app/entities/admin/user-management/detail/user-management-detail.html": {
     "contents": "<div class="d-flex justify-content-center">
   <div class="col-8">
-  @if (userManagement(); as userManagementRef) {
+    @if (userManagement(); as userManagementRef) {
     <div>
       <h2 data-cy="userManagementDetailsHeading"><span>User</span></h2>
 
-      <hr>
+      <hr />
 
       <jhi-alert-error />
 
@@ -162,7 +178,9 @@ export class UserManagementDeleteDialog {
         </dd>
         <dt><span>Created date</span></dt>
         <dd>
-          <span>{{ userManagementRef.createdDate | formatMediumDatetime }}</span>
+          <span
+            >{{ userManagementRef.createdDate | formatMediumDatetime }}</span
+          >
         </dd>
         <dt><span>Modified by</span></dt>
         <dd>
@@ -170,20 +188,27 @@ export class UserManagementDeleteDialog {
         </dd>
         <dt><span>Modified date</span></dt>
         <dd>
-          <span>{{ userManagementRef.lastModifiedDate | formatMediumDatetime }}</span>
+          <span
+            >{{ userManagementRef.lastModifiedDate | formatMediumDatetime
+            }}</span
+          >
         </dd>
       </dl>
 
-      <button type="submit"
-          (click)="previousState()"
-          class="btn btn-info"
-          data-cy="entityDetailsBackButton">
+      <button
+        type="submit"
+        (click)="previousState()"
+        class="btn btn-info"
+        data-cy="entityDetailsBackButton"
+      >
         <fa-icon icon="arrow-left" />&nbsp;<span>Back</span>
       </button>
 
-      <button type="button"
-          [routerLink]="['/user-management', userManagementRef.login, 'edit']"
-          class="btn btn-primary">
+      <button
+        type="button"
+        [routerLink]="['/user-management', userManagementRef.login, 'edit']"
+        class="btn btn-primary"
+      >
         <fa-icon icon="pencil-alt" />&nbsp;<span>Edit</span>
       </button>
     </div>
@@ -194,18 +219,17 @@ export class UserManagementDeleteDialog {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/detail/user-management-detail.spec.ts": {
-    "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter, withComponentInputBinding } from '@angular/router';
-import { RouterTestingHarness } from '@angular/router/testing';
-import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faArrowLeft, faPencilAlt } from '@fortawesome/free-solid-svg-icons';
-import { of } from 'rxjs';
+    "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from "vitest";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { provideRouter, withComponentInputBinding } from "@angular/router";
+import { RouterTestingHarness } from "@angular/router/testing";
+import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
+import { faArrowLeft, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import { of } from "rxjs";
 
+import { UserManagementDetail } from "./user-management-detail";
 
-import { UserManagementDetail } from './user-management-detail';
-
-describe('UserManagement Management Detail Component', () => {
+describe("UserManagement Management Detail Component", () => {
   let comp: UserManagementDetail;
   let fixture: ComponentFixture<UserManagementDetail>;
 
@@ -215,12 +239,17 @@ describe('UserManagement Management Detail Component', () => {
         provideRouter(
           [
             {
-              path: '**',
-              loadComponent: () => import('./user-management-detail').then(m => m.UserManagementDetail),
-              resolve: { userManagement: () => of({login: 'Pattie.Kertzmann'}) },
+              path: "**",
+              loadComponent: () =>
+                import("./user-management-detail").then(
+                  (m) => m.UserManagementDetail,
+                ),
+              resolve: {
+                userManagement: () => of({ login: "Pattie.Kertzmann" }),
+              },
             },
           ],
-          withComponentInputBinding()
+          withComponentInputBinding(),
         ),
       ],
     });
@@ -234,275 +263,328 @@ describe('UserManagement Management Detail Component', () => {
     comp = fixture.componentInstance;
   });
 
-  describe('OnInit', () => {
-    it('should load userManagement on init', async () => {
+  describe("OnInit", () => {
+    it("should load userManagement on init", async () => {
       const harness = await RouterTestingHarness.create();
-      const instance = await harness.navigateByUrl('/', UserManagementDetail);
+      const instance = await harness.navigateByUrl("/", UserManagementDetail);
 
       // THEN
-      expect(instance.userManagement()).toEqual(expect.objectContaining({login: 'Pattie.Kertzmann'}));
+      expect(instance.userManagement()).toEqual(
+        expect.objectContaining({ login: "Pattie.Kertzmann" }),
+      );
     });
   });
 
-  describe('PreviousState', () => {
-    it('should navigate to previous state', () => {
-      vitest.spyOn(window.history, 'back');
+  describe("PreviousState", () => {
+    it("should navigate to previous state", () => {
+      vitest.spyOn(window.history, "back");
       comp.previousState();
       expect(globalThis.history.back).toHaveBeenCalled();
     });
   });
-
 });
 ",
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/detail/user-management-detail.ts": {
-    "contents": "import { Component, input } from '@angular/core';
-import { RouterLink } from '@angular/router';
+    "contents": "import { Component, input } from "@angular/core";
+import { RouterLink } from "@angular/router";
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { Alert } from 'app/shared/alert/alert';
-import { AlertError } from 'app/shared/alert/alert-error';
-import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
-import { IUserManagement } from '../user-management.model';
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { Alert } from "app/shared/alert/alert";
+import { AlertError } from "app/shared/alert/alert-error";
+import {
+  DurationPipe,
+  FormatMediumDatetimePipe,
+  FormatMediumDatePipe,
+} from "app/shared/date";
+import { IUserManagement } from "../user-management.model";
 
 @Component({
-    selector: 'jhi-user-management-detail',
-    templateUrl: './user-management-detail.html',
-    imports: [
-      FontAwesomeModule,
-      Alert,
-      AlertError,
-      RouterLink,
-      FormatMediumDatetimePipe,
-    ],
+  selector: "jhi-user-management-detail",
+  templateUrl: "./user-management-detail.html",
+  imports: [
+    FontAwesomeModule,
+    Alert,
+    AlertError,
+    RouterLink,
+    FormatMediumDatetimePipe,
+  ],
 })
 export class UserManagementDetail {
-    userManagement = input<IUserManagement | null>(null);
+  userManagement = input<IUserManagement | null>(null);
 
-
-
-    previousState(): void {
-        globalThis.history.back();
-    }
-
+  previousState(): void {
+    globalThis.history.back();
+  }
 }
 ",
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/list/user-management.html": {
     "contents": "<div>
-    <h2 id="page-heading" data-cy="UserManagementHeading">
-        <span>Users</span>
+  <h2 id="page-heading" data-cy="UserManagementHeading">
+    <span>Users</span>
 
-        <div class="d-flex justify-content-end">
-            <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading()">
-                <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined" />
-                <span>Refresh list</span>
-            </button>
+    <div class="d-flex justify-content-end">
+      <button
+        class="btn btn-info me-2"
+        (click)="load()"
+        [disabled]="isLoading()"
+      >
+        <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined" />
+        <span>Refresh list</span>
+      </button>
 
-            <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-user-management" [routerLink]="['/user-management/new']">
-                <fa-icon icon="plus" />
-                <span >Create a new user</span>
-            </button>
-        </div>
-    </h2>
-
-    <jhi-alert-error />
-
-    <jhi-alert />
-
-
-@if (userManagements().length === 0) {
-    <div class="alert alert-warning" id="no-result">
-        <span>No user found</span>
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-user-management"
+        [routerLink]="['/user-management/new']"
+      >
+        <fa-icon icon="plus" />
+        <span>Create a new user</span>
+      </button>
     </div>
-} @else {
-    <div class="table-responsive table-entities" id="entities">
-        <table class="table table-striped" aria-describedby="page-heading">
-            <thead>
-                <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
-                    <th scope="col" jhiSortBy="login">
-                        <div class="d-flex">
-                            <span>Login</span>
-                        
-                            <fa-icon class="p-1" icon="sort" />
-                        
-                        </div>
-                    </th>
-                    <th scope="col" jhiSortBy="email">
-                        <div class="d-flex">
-                            <span>Email</span>
-                        
-                            <fa-icon class="p-1" icon="sort" />
-                        
-                        </div>
-                    </th>
-                    <th scope="col" jhiSortBy="activated">
-                        <div class="d-flex">
-                            <span>Activated</span>
-                        
-                            <fa-icon class="p-1" icon="sort" />
-                        
-                        </div>
-                    </th>
-                    <th scope="col" jhiSortBy="createdBy">
-                        <div class="d-flex">
-                            <span>Created by</span>
-                        
-                            <fa-icon class="p-1" icon="sort" />
-                        
-                        </div>
-                    </th>
-                    <th scope="col" jhiSortBy="createdDate">
-                        <div class="d-flex">
-                            <span>Created date</span>
-                        
-                            <fa-icon class="p-1" icon="sort" />
-                        
-                        </div>
-                    </th>
-                    <th scope="col" jhiSortBy="lastModifiedBy">
-                        <div class="d-flex">
-                            <span>Modified by</span>
-                        
-                            <fa-icon class="p-1" icon="sort" />
-                        
-                        </div>
-                    </th>
-                    <th scope="col" jhiSortBy="lastModifiedDate">
-                        <div class="d-flex">
-                            <span>Modified date</span>
-                        
-                            <fa-icon class="p-1" icon="sort" />
-                        
-                        </div>
-                    </th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-            @for (userManagement of userManagements(); track trackLogin(userManagement)) {
-                <tr data-cy="entityTable">
-                    <td><a [routerLink]="['/user-management', userManagement.login, 'view']">{{ userManagement.login }}</a></td>
-                    <td>{{ userManagement.email }}</td>
-                    <td>{{ userManagement.activated }}</td>
-                    <td>{{ userManagement.createdBy }}</td>
-                    <td>{{ userManagement.createdDate | formatMediumDatetime }}</td>
-                    <td>{{ userManagement.lastModifiedBy }}</td>
-                    <td>{{ userManagement.lastModifiedDate | formatMediumDatetime }}</td>
-                    <td class="text-end">
-                        <div class="btn-group">
-                            <a [routerLink]="['/user-management', userManagement.login, 'view']"
-                               class="btn btn-info btn-sm" data-cy="entityDetailsButton">
-                                <fa-icon icon="eye" />
-                                <span class="d-none d-md-inline">View</span>
-                            </a>
+  </h2>
 
-                            <a [routerLink]="['/user-management', userManagement.login, 'edit']"
-                               class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                                <fa-icon icon="pencil-alt" />
-                                <span class="d-none d-md-inline">Edit</span>
-                            </a>
+  <jhi-alert-error />
 
-                            <button type="submit" (click)="delete(userManagement)"
-                                    class="btn btn-danger btn-sm"
-                                    data-cy="entityDeleteButton">
-                                <fa-icon icon="times" />
-                                <span class="d-none d-md-inline">Delete</span>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            }
-            </tbody>
-        </table>
+  <jhi-alert />
+
+  @if (userManagements().length === 0) {
+  <div class="alert alert-warning" id="no-result">
+    <span>No user found</span>
+  </div>
+  } @else {
+  <div class="table-responsive table-entities" id="entities">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr
+          jhiSort
+          [(sortState)]="sortState"
+          (sortChange)="navigateToWithComponentValues($event)"
+        >
+          <th scope="col" jhiSortBy="login">
+            <div class="d-flex">
+              <span>Login</span>
+
+              <fa-icon class="p-1" icon="sort" />
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="email">
+            <div class="d-flex">
+              <span>Email</span>
+
+              <fa-icon class="p-1" icon="sort" />
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="activated">
+            <div class="d-flex">
+              <span>Activated</span>
+
+              <fa-icon class="p-1" icon="sort" />
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="createdBy">
+            <div class="d-flex">
+              <span>Created by</span>
+
+              <fa-icon class="p-1" icon="sort" />
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="createdDate">
+            <div class="d-flex">
+              <span>Created date</span>
+
+              <fa-icon class="p-1" icon="sort" />
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="lastModifiedBy">
+            <div class="d-flex">
+              <span>Modified by</span>
+
+              <fa-icon class="p-1" icon="sort" />
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="lastModifiedDate">
+            <div class="d-flex">
+              <span>Modified date</span>
+
+              <fa-icon class="p-1" icon="sort" />
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (userManagement of userManagements(); track
+        trackLogin(userManagement)) {
+        <tr data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/user-management', userManagement.login, 'view']"
+              >{{ userManagement.login }}</a
+            >
+          </td>
+          <td>{{ userManagement.email }}</td>
+          <td>{{ userManagement.activated }}</td>
+          <td>{{ userManagement.createdBy }}</td>
+          <td>{{ userManagement.createdDate | formatMediumDatetime }}</td>
+          <td>{{ userManagement.lastModifiedBy }}</td>
+          <td>{{ userManagement.lastModifiedDate | formatMediumDatetime }}</td>
+          <td class="text-end">
+            <div class="btn-group">
+              <a
+                [routerLink]="['/user-management', userManagement.login, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye" />
+                <span class="d-none d-md-inline">View</span>
+              </a>
+
+              <a
+                [routerLink]="['/user-management', userManagement.login, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt" />
+                <span class="d-none d-md-inline">Edit</span>
+              </a>
+
+              <button
+                type="submit"
+                (click)="delete(userManagement)"
+                class="btn btn-danger btn-sm"
+                data-cy="entityDeleteButton"
+              >
+                <fa-icon icon="times" />
+                <span class="d-none d-md-inline">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  } @if (userManagements().length > 0) {
+  <div>
+    <div class="d-flex justify-content-center">
+      <jhi-item-count
+        [params]="{ page: page(), totalItems: totalItems(), itemsPerPage: itemsPerPage() }"
+      />
     </div>
-}
-@if (userManagements().length > 0) {
-    <div>
-        <div class="d-flex justify-content-center">
-            <jhi-item-count [params]="{ page: page(), totalItems: totalItems(), itemsPerPage: itemsPerPage() }" />
-        </div>
 
-        <div class="d-flex justify-content-center">
-            <ngb-pagination [collectionSize]="totalItems()" [page]="page()" [pageSize]="itemsPerPage()" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="navigateToPage($event)" />
-        </div>
+    <div class="d-flex justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems()"
+        [page]="page()"
+        [pageSize]="itemsPerPage()"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="navigateToPage($event)"
+      />
     </div>
-}
+  </div>
+  }
 </div>
 ",
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/list/user-management.spec.ts": {
-    "contents": "import { MockInstance, afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
+    "contents": "import {
+  MockInstance,
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vitest,
+} from "vitest";
+import { HttpHeaders, HttpResponse } from "@angular/common/http";
 import {
-  ComponentFixture, TestBed,
-  inject,
-} from '@angular/core/testing';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
+  provideHttpClientTesting,
+  HttpTestingController,
+} from "@angular/common/http/testing";
+import { ComponentFixture, TestBed, inject } from "@angular/core/testing";
+import { ActivatedRoute, convertToParamMap } from "@angular/router";
 
-import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faEye, faPencilAlt, faPlus, faSort, faSortDown, faSortUp, faSync, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
 import {
-  of,
-  Subject,
-} from 'rxjs';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
+  faEye,
+  faPencilAlt,
+  faPlus,
+  faSort,
+  faSortDown,
+  faSortUp,
+  faSync,
+  faTimes,
+} from "@fortawesome/free-solid-svg-icons";
+import { of, Subject } from "rxjs";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
 
-import { sampleWithRequiredData } from '../user-management.test-samples';
-import { UserManagementService } from '../service/user-management.service';
+import { sampleWithRequiredData } from "../user-management.test-samples";
+import { UserManagementService } from "../service/user-management.service";
 
-import { UserManagement } from './user-management';
+import { UserManagement } from "./user-management";
 
 vitest.useFakeTimers();
 
-describe('UserManagement Management Component', () => {
+describe("UserManagement Management Component", () => {
   let httpMock: HttpTestingController;
-    let comp: UserManagement;
-    let fixture: ComponentFixture<UserManagement>;
-    let service: UserManagementService;
-    let routerNavigateSpy: MockInstance;
+  let comp: UserManagement;
+  let fixture: ComponentFixture<UserManagement>;
+  let service: UserManagementService;
+  let routerNavigateSpy: MockInstance;
 
-    beforeEach(() => {
-        TestBed.configureTestingModule({
-            providers: [
-                provideHttpClientTesting(),
-                {
-                    provide: ActivatedRoute,
-                    useValue: {
-                        data: of({
-                            defaultSort: 'login,asc',
-                        }),
-                        queryParamMap: of(
-                            convertToParamMap({
-                                page: '1',
-                                size: '1',
-                                sort: 'login,desc',
-                            })
-                        ),
-                        snapshot: {
-                            queryParams: {},
-                            queryParamMap: convertToParamMap({
-                                page: '1',
-                                size: '1',
-                                sort: 'login,desc',
-                            }),
-                        },
-                    }
-                }
-            ]
-        });
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        provideHttpClientTesting(),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            data: of({
+              defaultSort: "login,asc",
+            }),
+            queryParamMap: of(
+              convertToParamMap({
+                page: "1",
+                size: "1",
+                sort: "login,desc",
+              }),
+            ),
+            snapshot: {
+              queryParams: {},
+              queryParamMap: convertToParamMap({
+                page: "1",
+                size: "1",
+                sort: "login,desc",
+              }),
+            },
+          },
+        },
+      ],
+    });
 
-        fixture = TestBed.createComponent(UserManagement);
-        comp = fixture.componentInstance;
-        service = TestBed.inject(UserManagementService);
-        routerNavigateSpy = vitest.spyOn(comp.router, 'navigate');
+    fixture = TestBed.createComponent(UserManagement);
+    comp = fixture.componentInstance;
+    service = TestBed.inject(UserManagementService);
+    routerNavigateSpy = vitest.spyOn(comp.router, "navigate");
 
     const library = TestBed.inject(FaIconLibrary);
-    library.addIcons(faEye, faPencilAlt, faPlus, faSort, faSortDown, faSortUp, faSync, faTimes);
+    library.addIcons(
+      faEye,
+      faPencilAlt,
+      faPlus,
+      faSort,
+      faSortDown,
+      faSortUp,
+      faSync,
+      faTimes,
+    );
     httpMock = TestBed.inject(HttpTestingController);
   });
 
@@ -511,48 +593,54 @@ describe('UserManagement Management Component', () => {
     httpMock.verify();
   });
 
-  it('should call load all on init', async () => {
+  it("should call load all on init", async () => {
     // WHEN
     TestBed.tick();
-    const req = httpMock.expectOne({ method: 'GET' });
-    req.flush(
-      [{login: 'Pattie.Kertzmann'}],
-      { headers: { link: '<http://localhost/api/foo?page=1&size=20>; rel="next"' } },
-    );
+    const req = httpMock.expectOne({ method: "GET" });
+    req.flush([{ login: "Pattie.Kertzmann" }], {
+      headers: {
+        link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
+      },
+    });
     await vitest.runAllTimersAsync();
 
     // THEN
     expect(comp.isLoading()).toEqual(false);
-    expect(comp.userManagements()[0]).toEqual(expect.objectContaining({login: 'Pattie.Kertzmann'}));
+    expect(comp.userManagements()[0]).toEqual(
+      expect.objectContaining({ login: "Pattie.Kertzmann" }),
+    );
   });
 
-  it('should cancel previous requests when loading a new page', async () => {
+  it("should cancel previous requests when loading a new page", async () => {
     // WHEN
     TestBed.tick();
-    const req = httpMock.expectOne({ method: 'GET' });
+    const req = httpMock.expectOne({ method: "GET" });
     await vitest.runAllTimersAsync();
 
     comp.page.set(3);
     comp.load();
     await vitest.runAllTimersAsync();
-    const req2 = httpMock.expectOne({ method: 'GET' });
-    req2.flush(
-      [{login: 'Pattie.Kertzmann'}],
-      { headers: { link: '<http://localhost/api/foo?page=1&size=20>; rel="next"' } },
-    );
+    const req2 = httpMock.expectOne({ method: "GET" });
+    req2.flush([{ login: "Pattie.Kertzmann" }], {
+      headers: {
+        link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
+      },
+    });
     await vitest.runAllTimersAsync();
 
     // THEN
     expect(req.cancelled).toBeTruthy();
     expect(comp.isLoading()).toEqual(false);
-    expect(comp.userManagements()[0]).toEqual(expect.objectContaining({login: 'Pattie.Kertzmann'}));
+    expect(comp.userManagements()[0]).toEqual(
+      expect.objectContaining({ login: "Pattie.Kertzmann" }),
+    );
   });
 
-  it('should not fail on resource error state', async () => {
+  it("should not fail on resource error state", async () => {
     // GIVEN - first load triggers an HTTP error
     TestBed.tick();
-    const errorReq = httpMock.expectOne({ method: 'GET' });
-    errorReq.flush('error', { status: 500, statusText: 'Server Error' });
+    const errorReq = httpMock.expectOne({ method: "GET" });
+    errorReq.flush("error", { status: 500, statusText: "Server Error" });
     await vitest.runAllTimersAsync();
 
     // THEN - loading state was reset and list is empty
@@ -562,58 +650,68 @@ describe('UserManagement Management Component', () => {
     // WHEN - second load should still work
     comp.load();
     TestBed.tick();
-    const successReq = httpMock.expectOne({ method: 'GET' });
-    successReq.flush(
-      [{login: 'Pattie.Kertzmann'}],
-      { headers: { link: '<http://localhost/api/foo?page=1&size=20>; rel="next"' } },
-    );
+    const successReq = httpMock.expectOne({ method: "GET" });
+    successReq.flush([{ login: "Pattie.Kertzmann" }], {
+      headers: {
+        link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
+      },
+    });
     await vitest.runAllTimersAsync();
 
     // THEN - subscription is still alive and second load succeeds
-    expect(comp.userManagements()[0]).toEqual(expect.objectContaining({login: 'Pattie.Kertzmann'}));
+    expect(comp.userManagements()[0]).toEqual(
+      expect.objectContaining({ login: "Pattie.Kertzmann" }),
+    );
   });
 
-    describe('trackLogin', () => {
-        it('should forward to userManagementService', () => {
-            const entity = {login: 'Pattie.Kertzmann'};
-            vitest.spyOn(service, 'getUserManagementIdentifier');
-            const login = comp.trackLogin(entity);
-            expect(service.getUserManagementIdentifier).toHaveBeenCalledWith(entity);
-            expect(login).toBe(entity.login);
-        });
+  describe("trackLogin", () => {
+    it("should forward to userManagementService", () => {
+      const entity = { login: "Pattie.Kertzmann" };
+      vitest.spyOn(service, "getUserManagementIdentifier");
+      const login = comp.trackLogin(entity);
+      expect(service.getUserManagementIdentifier).toHaveBeenCalledWith(entity);
+      expect(login).toBe(entity.login);
     });
+  });
 
-    it('should calculate the sort attribute for a non-id attribute', () => {
-        // WHEN
-        comp.navigateToWithComponentValues({ predicate: 'non-existing-column', order: 'asc' });
-
-        // THEN
-        expect(routerNavigateSpy).toHaveBeenLastCalledWith(expect.anything(),
-          expect.objectContaining({
-            queryParams: expect.objectContaining({
-                sort: ['non-existing-column,asc']
-              })
-          }));
-    });
-
-    it('should load a page', () => {
-        // WHEN
-        comp.navigateToPage(1);
-
-        // THEN
-        expect(routerNavigateSpy).toHaveBeenCalled();
-    });
-
-  it('should calculate the sort attribute for an id', () => {
+  it("should calculate the sort attribute for a non-id attribute", () => {
     // WHEN
-    TestBed.tick();
-    httpMock.expectOne({ method: 'GET' });
+    comp.navigateToWithComponentValues({
+      predicate: "non-existing-column",
+      order: "asc",
+    });
 
     // THEN
-    expect(service.userManagementsParams()).toMatchObject(expect.objectContaining({ sort: ['login,desc'] }));
+    expect(routerNavigateSpy).toHaveBeenLastCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        queryParams: expect.objectContaining({
+          sort: ["non-existing-column,asc"],
+        }),
+      }),
+    );
   });
 
-  describe('delete', () => {
+  it("should load a page", () => {
+    // WHEN
+    comp.navigateToPage(1);
+
+    // THEN
+    expect(routerNavigateSpy).toHaveBeenCalled();
+  });
+
+  it("should calculate the sort attribute for an id", () => {
+    // WHEN
+    TestBed.tick();
+    httpMock.expectOne({ method: "GET" });
+
+    // THEN
+    expect(service.userManagementsParams()).toMatchObject(
+      expect.objectContaining({ sort: ["login,desc"] }),
+    );
+  });
+
+  describe("delete", () => {
     let ngbModal: NgbModal;
     let deleteModalMock: any;
 
@@ -622,25 +720,25 @@ describe('UserManagement Management Component', () => {
       // NgbModal is not a singleton using TestBed.inject.
       // ngbModal = TestBed.inject(NgbModal);
       ngbModal = (comp as any).modalService;
-      vitest.spyOn(ngbModal, 'open').mockReturnValue(deleteModalMock);
+      vitest.spyOn(ngbModal, "open").mockReturnValue(deleteModalMock);
     });
 
-    it('on confirm should call load', inject([], () => {
+    it("on confirm should call load", inject([], () => {
       // GIVEN
-      vitest.spyOn(comp, 'load');
+      vitest.spyOn(comp, "load");
 
       // WHEN
       comp.delete(sampleWithRequiredData);
-      deleteModalMock.closed.next('deleted');
+      deleteModalMock.closed.next("deleted");
 
       // THEN
       expect(ngbModal.open).toHaveBeenCalled();
       expect(comp.load).toHaveBeenCalled();
     }));
 
-    it('on dismiss should call load', inject([], () => {
+    it("on dismiss should call load", inject([], () => {
       // GIVEN
-      vitest.spyOn(comp, 'load');
+      vitest.spyOn(comp, "load");
 
       // WHEN
       comp.delete(sampleWithRequiredData);
@@ -656,174 +754,230 @@ describe('UserManagement Management Component', () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/list/user-management.ts": {
-    "contents": "import { Component, computed, effect, inject, OnInit, signal, WritableSignal } from '@angular/core';
-import { HttpHeaders } from '@angular/common/http';
-import { ActivatedRoute, Data, ParamMap, Router, RouterLink } from '@angular/router';
-import { combineLatest, filter, finalize, Observable, Subscription, tap } from 'rxjs';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
+    "contents": "import {
+  Component,
+  computed,
+  effect,
+  inject,
+  OnInit,
+  signal,
+  WritableSignal,
+  untracked,
+} from "@angular/core";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { HttpHeaders } from "@angular/common/http";
+import {
+  ActivatedRoute,
+  Data,
+  ParamMap,
+  Router,
+  RouterLink,
+} from "@angular/router";
+import { combineLatest, filter, Subscription, tap } from "rxjs";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
 
-import { AlertError } from 'app/shared/alert/alert-error';
-import { Alert } from 'app/shared/alert/alert';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { sortStateSignal, SortDirective, SortByDirective, type SortState, SortService } from 'app/shared/sort';
-import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
-import { NgbPagination } from '@ng-bootstrap/ng-bootstrap/pagination';
-import { ItemCount } from 'app/shared/pagination';
-import { FormsModule } from '@angular/forms';
-import { IUserManagement } from '../user-management.model';
+import { AlertError } from "app/shared/alert/alert-error";
+import { Alert } from "app/shared/alert/alert";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import {
+  sortStateSignal,
+  SortDirective,
+  SortByDirective,
+  type SortState,
+  SortService,
+} from "app/shared/sort";
+import {
+  DurationPipe,
+  FormatMediumDatetimePipe,
+  FormatMediumDatePipe,
+} from "app/shared/date";
+import { NgbPagination } from "@ng-bootstrap/ng-bootstrap/pagination";
+import { ItemCount } from "app/shared/pagination";
+import { FormsModule } from "@angular/forms";
+import { IUserManagement } from "../user-management.model";
 
 import {
   ITEMS_PER_PAGE,
   PAGE_HEADER,
   TOTAL_COUNT_RESPONSE_HEADER,
-} from 'app/config/pagination.constants';
+} from "app/config/pagination.constants";
 import {
   SORT,
   ITEM_DELETED_EVENT,
-  DEFAULT_SORT_DATA
-} from 'app/config/navigation.constants';
-import { UserManagementService } from '../service/user-management.service';
-import { UserManagementDeleteDialog } from '../delete/user-management-delete-dialog';
+  DEFAULT_SORT_DATA,
+} from "app/config/navigation.constants";
+import { UserManagementService } from "../service/user-management.service";
+import { UserManagementDeleteDialog } from "../delete/user-management-delete-dialog";
 
 @Component({
-    selector: 'jhi-user-management',
-    templateUrl: './user-management.html',
-    imports: [
-      RouterLink,
-      FormsModule,
-      FontAwesomeModule,
-      AlertError,
-      Alert,
-      SortDirective,
-      SortByDirective,
-      FormatMediumDatetimePipe,
-      NgbPagination,
-      ItemCount,
-    ],
+  selector: "jhi-user-management",
+  templateUrl: "./user-management.html",
+  imports: [
+    RouterLink,
+    FormsModule,
+    FontAwesomeModule,
+    AlertError,
+    Alert,
+    SortDirective,
+    SortByDirective,
+    FormatMediumDatetimePipe,
+    NgbPagination,
+    ItemCount,
+  ],
 })
 export class UserManagement implements OnInit {
+  subscription: Subscription | null = null;
+  readonly userManagements = signal<IUserManagement[]>([]);
 
-    subscription: Subscription | null = null;
-    readonly userManagements = signal<IUserManagement[]>([]);
-
-    sortState = sortStateSignal({});
+  sortState = sortStateSignal({});
 
   itemsPerPage = signal(ITEMS_PER_PAGE);
   totalItems = signal(0);
   page = signal(1);
 
-    readonly router = inject(Router);
-    protected readonly userManagementService = inject(UserManagementService);
-    // eslint-disable-next-line @typescript-eslint/member-ordering
-    readonly isLoading = this.userManagementService.userManagementsResource.isLoading;
-    protected readonly activatedRoute = inject(ActivatedRoute);
-    protected readonly sortService = inject(SortService);
-    protected modalService = inject(NgbModal);
+  readonly router = inject(Router);
+  protected readonly userManagementService = inject(UserManagementService);
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  readonly isLoading =
+    this.userManagementService.userManagementsResource.isLoading;
+  protected readonly activatedRoute = inject(ActivatedRoute);
+  protected readonly sortService = inject(SortService);
+  protected modalService = inject(NgbModal);
 
   constructor() {
     effect(() => {
-      const headers = this.userManagementService.userManagementsResource.headers();
+      const headers =
+        this.userManagementService.userManagementsResource.headers();
       if (headers) {
         this.fillComponentAttributesFromResponseHeader(headers);
       }
     });
     effect(() => {
       if (this.userManagementService.userManagementsResource.hasValue()) {
-        this.userManagements.set(this.fillComponentAttributesFromResponseBody([...this.userManagementService.userManagements()]));
+        this.userManagements.set(
+          this.fillComponentAttributesFromResponseBody([
+            ...this.userManagementService.userManagements(),
+          ]),
+        );
       } else {
         this.userManagements.set([]);
       }
     });
   }
 
-    trackLogin = (item: IUserManagement): string => this.userManagementService.getUserManagementIdentifier(item);
+  trackLogin = (item: IUserManagement): string =>
+    this.userManagementService.getUserManagementIdentifier(item);
 
-    ngOnInit(): void {
-      this.subscription = combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
-        tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
+  ngOnInit(): void {
+    this.subscription = combineLatest([
+      this.activatedRoute.queryParamMap,
+      this.activatedRoute.data,
+    ])
+      .pipe(
+        tap(([params, data]) =>
+          this.fillComponentAttributeFromRoute(params, data),
+        ),
         tap(() => this.load()),
-      ).subscribe();
+      )
+      .subscribe();
+  }
 
-    }
-
-
-    delete(userManagement: IUserManagement): void {
-      const modalRef = this.modalService.open(UserManagementDeleteDialog, { size: 'lg', backdrop: 'static' });
-      modalRef.componentInstance.userManagement = userManagement;
-      // unsubscribe not needed because closed completes on modal close
-      modalRef.closed
-        .pipe(
-          filter(reason => reason === ITEM_DELETED_EVENT),
-          tap(() => this.load())
-        ).subscribe();
-    }
+  delete(userManagement: IUserManagement): void {
+    const modalRef = this.modalService.open(UserManagementDeleteDialog, {
+      size: "lg",
+      backdrop: "static",
+    });
+    modalRef.componentInstance.userManagement = userManagement;
+    // unsubscribe not needed because closed completes on modal close
+    modalRef.closed
+      .pipe(
+        filter((reason) => reason === ITEM_DELETED_EVENT),
+        tap(() => this.load()),
+      )
+      .subscribe();
+  }
 
   load(): void {
     this.queryBackend();
   }
 
-    navigateToWithComponentValues(event: SortState): void {
-      this.handleNavigation(this.page(), event);
-    }
+  navigateToWithComponentValues(event: SortState): void {
+    this.handleNavigation(this.page(), event);
+  }
 
-    navigateToPage(page: number): void {
-      this.handleNavigation(page, this.sortState());
-    }
+  navigateToPage(page: number): void {
+    this.handleNavigation(page, this.sortState());
+  }
 
-    protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
-      const page = params.get(PAGE_HEADER);
-      this.page.set(+ (page ?? 1));
-      this.sortState.set(this.sortService.parseSortParam(params.get(SORT) ?? data[DEFAULT_SORT_DATA]));
-    }
+  protected fillComponentAttributeFromRoute(
+    params: ParamMap,
+    data: Data,
+  ): void {
+    const page = params.get(PAGE_HEADER);
+    this.page.set(+(page ?? 1));
+    this.sortState.set(
+      this.sortService.parseSortParam(
+        params.get(SORT) ?? data[DEFAULT_SORT_DATA],
+      ),
+    );
+  }
 
-  protected fillComponentAttributesFromResponseBody(data: IUserManagement[]): IUserManagement[] {
+  protected fillComponentAttributesFromResponseBody(
+    data: IUserManagement[],
+  ): IUserManagement[] {
     return data;
   }
 
-    protected fillComponentAttributesFromResponseHeader(headers: HttpHeaders): void {
-      this.totalItems.set(Number(headers.get(TOTAL_COUNT_RESPONSE_HEADER)));
-    }
+  protected fillComponentAttributesFromResponseHeader(
+    headers: HttpHeaders,
+  ): void {
+    this.totalItems.set(Number(headers.get(TOTAL_COUNT_RESPONSE_HEADER)));
+  }
 
-    protected queryBackend(): void {
-      const pageToLoad: number = this.page();
-      const queryObject: any  = {
-        page: pageToLoad - 1,
-        size: this.itemsPerPage(),
-        sort: this.sortService.buildSortParam(this.sortState()),
-      };
-      this.userManagementService.userManagementsParams.set(queryObject);
-    }
+  protected queryBackend(): void {
+    const pageToLoad: number = this.page();
+    const queryObject: any = {
+      page: pageToLoad - 1,
+      size: this.itemsPerPage(),
+      sort: this.sortService.buildSortParam(this.sortState()),
+    };
+    this.userManagementService.userManagementsParams.set(queryObject);
+  }
 
-    protected handleNavigation(page: number, sortState: SortState): void {
-      const queryParamsObj= {
-        page,
-        size: this.itemsPerPage(),
-        sort: this.sortService.buildSortParam(sortState),
-      };
+  protected handleNavigation(page: number, sortState: SortState): void {
+    const queryParamsObj = {
+      page,
+      size: this.itemsPerPage(),
+      sort: this.sortService.buildSortParam(sortState),
+    };
 
-
-      this.router.navigate(['./'], {
-        relativeTo: this.activatedRoute,
-        queryParams: queryParamsObj,
-      });
-    }
+    this.router.navigate(["./"], {
+      relativeTo: this.activatedRoute,
+      queryParams: queryParamsObj,
+    });
+  }
 }
 ",
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/route/user-management-routing-resolve.service.spec.ts": {
-    "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-import { TestBed } from '@angular/core/testing';
-import { HttpResponse } from '@angular/common/http';
-import { ActivatedRouteSnapshot, ActivatedRoute, Router, convertToParamMap } from '@angular/router';
-import { of } from 'rxjs';
+    "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from "vitest";
+import { TestBed } from "@angular/core/testing";
+import { HttpResponse } from "@angular/common/http";
+import {
+  ActivatedRouteSnapshot,
+  ActivatedRoute,
+  Router,
+  convertToParamMap,
+} from "@angular/router";
+import { of } from "rxjs";
 
-import { IUserManagement } from '../user-management.model';
-import { UserManagementService } from '../service/user-management.service';
+import { IUserManagement } from "../user-management.model";
+import { UserManagementService } from "../service/user-management.service";
 
-import userManagementResolve from './user-management-routing-resolve.service';
+import userManagementResolve from "./user-management-routing-resolve.service";
 
-describe('UserManagement routing resolve service', () => {
+describe("UserManagement routing resolve service", () => {
   let mockRouter: Router;
   let mockActivatedRouteSnapshot: ActivatedRouteSnapshot;
   let service: UserManagementService;
@@ -842,25 +996,27 @@ describe('UserManagement routing resolve service', () => {
       ],
     });
     mockRouter = TestBed.inject(Router);
-    vitest.spyOn(mockRouter, 'navigate');
+    vitest.spyOn(mockRouter, "navigate");
     mockActivatedRouteSnapshot = TestBed.inject(ActivatedRoute).snapshot;
     service = TestBed.inject(UserManagementService);
   });
 
-  describe('resolve', () => {
-    it('should return IUserManagement returned by find', async () => {
+  describe("resolve", () => {
+    it("should return IUserManagement returned by find", async () => {
       // GIVEN
-      service.find = vitest.fn(login => of(new HttpResponse({ body: { login } })));
-      mockActivatedRouteSnapshot.params = { login: 'ABC' };
+      service.find = vitest.fn((login) =>
+        of(new HttpResponse({ body: { login } })),
+      );
+      mockActivatedRouteSnapshot.params = { login: "ABC" };
 
       // WHEN
-      await new Promise<void>(resolve => {
+      await new Promise<void>((resolve) => {
         TestBed.runInInjectionContext(() => {
           userManagementResolve(mockActivatedRouteSnapshot).subscribe({
             next(result) {
               // THEN
-              expect(service.find).toHaveBeenCalledWith('ABC');
-              expect(result).toEqual({ login: 'ABC' });
+              expect(service.find).toHaveBeenCalledWith("ABC");
+              expect(result).toEqual({ login: "ABC" });
               resolve();
             },
           });
@@ -868,13 +1024,13 @@ describe('UserManagement routing resolve service', () => {
       });
     });
 
-    it('should return null if id is not provided', async () => {
+    it("should return null if id is not provided", async () => {
       // GIVEN
       service.find = vitest.fn();
       mockActivatedRouteSnapshot.params = {};
 
       // WHEN
-      await new Promise<void>(resolve => {
+      await new Promise<void>((resolve) => {
         TestBed.runInInjectionContext(() => {
           userManagementResolve(mockActivatedRouteSnapshot).subscribe({
             next(result) {
@@ -888,19 +1044,21 @@ describe('UserManagement routing resolve service', () => {
       });
     });
 
-    it('should route to 404 page if data not found in server', async () => {
+    it("should route to 404 page if data not found in server", async () => {
       // GIVEN
-      vitest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse<IUserManagement>({ body: null })));
-      mockActivatedRouteSnapshot.params = { login: 'ABC' };
+      vitest
+        .spyOn(service, "find")
+        .mockReturnValue(of(new HttpResponse<IUserManagement>({ body: null })));
+      mockActivatedRouteSnapshot.params = { login: "ABC" };
 
       // WHEN
-      await new Promise<void>(resolve => {
+      await new Promise<void>((resolve) => {
         TestBed.runInInjectionContext(() => {
           userManagementResolve(mockActivatedRouteSnapshot).subscribe({
             complete() {
               // THEN
-              expect(service.find).toHaveBeenCalledWith('ABC');
-              expect(mockRouter.navigate).toHaveBeenCalledWith(['404']);
+              expect(service.find).toHaveBeenCalledWith("ABC");
+              expect(mockRouter.navigate).toHaveBeenCalledWith(["404"]);
               resolve();
             },
           });
@@ -913,17 +1071,19 @@ describe('UserManagement routing resolve service', () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/route/user-management-routing-resolve.service.ts": {
-    "contents": "import { inject } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
-import { of, EMPTY, Observable } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+    "contents": "import { inject } from "@angular/core";
+import { HttpResponse } from "@angular/common/http";
+import { ActivatedRouteSnapshot, Router } from "@angular/router";
+import { of, EMPTY, Observable } from "rxjs";
+import { mergeMap } from "rxjs/operators";
 
-import { IUserManagement } from '../user-management.model';
-import { UserManagementService } from '../service/user-management.service';
+import { IUserManagement } from "../user-management.model";
+import { UserManagementService } from "../service/user-management.service";
 
-const userManagementResolve = (route: ActivatedRouteSnapshot): Observable<null | IUserManagement> => {
-  const login = route.params['login'];
+const userManagementResolve = (
+  route: ActivatedRouteSnapshot,
+): Observable<null | IUserManagement> => {
+  const login = route.params["login"];
   if (login) {
     return inject(UserManagementService)
       .find(login)
@@ -932,7 +1092,7 @@ const userManagementResolve = (route: ActivatedRouteSnapshot): Observable<null |
           if (userManagement.body) {
             return of(userManagement.body);
           } else {
-            inject(Router).navigate(['404']);
+            inject(Router).navigate(["404"]);
             return EMPTY;
           }
         }),
@@ -946,14 +1106,25 @@ export default userManagementResolve;
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/service/user-management.service.spec.ts": {
-    "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-import { TestBed } from '@angular/core/testing';
-import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
+    "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from "vitest";
+import { TestBed } from "@angular/core/testing";
+import {
+  provideHttpClientTesting,
+  HttpTestingController,
+} from "@angular/common/http/testing";
 
-import { IUserManagement } from '../user-management.model';
-import { sampleWithRequiredData, sampleWithNewData, sampleWithPartialData, sampleWithFullData } from '../user-management.test-samples';
+import { IUserManagement } from "../user-management.model";
+import {
+  sampleWithRequiredData,
+  sampleWithNewData,
+  sampleWithPartialData,
+  sampleWithFullData,
+} from "../user-management.test-samples";
 
-import { UserManagementService, RestUserManagement } from './user-management.service';
+import {
+  UserManagementService,
+  RestUserManagement,
+} from "./user-management.service";
 
 const requireRestSample: RestUserManagement = {
   ...sampleWithRequiredData,
@@ -962,237 +1133,286 @@ const requireRestSample: RestUserManagement = {
   authorities: null,
 };
 
-describe('UserManagement Service', () => {
-    let service: UserManagementService;
-    let httpMock: HttpTestingController;
-    let expectedResult: IUserManagement | IUserManagement[] | boolean | null;
+describe("UserManagement Service", () => {
+  let service: UserManagementService;
+  let httpMock: HttpTestingController;
+  let expectedResult: IUserManagement | IUserManagement[] | boolean | null;
 
-    beforeEach(() => {
-        TestBed.configureTestingModule({
-            providers: [
-                provideHttpClientTesting()
-            ]
-        });
-        expectedResult = null;
-        service = TestBed.inject(UserManagementService);
-        httpMock = TestBed.inject(HttpTestingController);
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [provideHttpClientTesting()],
+    });
+    expectedResult = null;
+    service = TestBed.inject(UserManagementService);
+    httpMock = TestBed.inject(HttpTestingController);
+  });
+
+  describe("Service methods", () => {
+    it("should find an element", () => {
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
+
+      service.find("ABC").subscribe((resp) => (expectedResult = resp.body));
+
+      const req = httpMock.expectOne({ method: "GET" });
+      req.flush(returnedFromService);
+      expect(expectedResult).toMatchObject(expected);
     });
 
-    describe('Service methods', () => {
-        it('should find an element', () => {
-            const returnedFromService = { ...requireRestSample };
-            const expected = { ...sampleWithRequiredData };
+    it("should create a UserManagement", () => {
+      const userManagement = { ...sampleWithNewData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
 
-            service.find('ABC').subscribe(resp => expectedResult = resp.body);
+      service
+        .create(userManagement)
+        .subscribe((resp) => (expectedResult = resp.body));
 
-            const req = httpMock.expectOne({ method: 'GET' });
-            req.flush(returnedFromService);
-            expect(expectedResult).toMatchObject(expected);
-        });
-
-        it('should create a UserManagement', () => {
-            const userManagement = { ...sampleWithNewData };
-            const returnedFromService = { ...requireRestSample };
-            const expected = { ...sampleWithRequiredData };
-
-            service.create(userManagement).subscribe(resp => expectedResult = resp.body);
-
-            const req = httpMock.expectOne({ method: 'POST' });
-            req.flush(returnedFromService);
-            expect(expectedResult).toMatchObject(expected);
-        });
-
-        it('should update a UserManagement', () => {
-            const userManagement = { ...sampleWithRequiredData };
-            const returnedFromService = { ...requireRestSample };
-            const expected = { ...sampleWithRequiredData };
-
-            service.update(userManagement).subscribe(resp => expectedResult = resp.body);
-
-            const req = httpMock.expectOne({ method: 'PUT' });
-            req.flush(returnedFromService);
-            expect(expectedResult).toMatchObject(expected);
-        });
-
-        it('should partial update a UserManagement', () => {
-            const patchObject = { ...sampleWithPartialData };
-            const returnedFromService = { ...requireRestSample };
-            const expected = { ...sampleWithRequiredData }
-
-            service.partialUpdate(patchObject).subscribe(resp => expectedResult = resp.body);
-
-            const req = httpMock.expectOne({ method: 'PATCH' });
-            req.flush(returnedFromService);
-            expect(expectedResult).toMatchObject(expected);
-        });
-
-        it('should return a list of UserManagement', () => {
-            const returnedFromService = { ...requireRestSample };
-
-            const expected = { ...sampleWithRequiredData };
-
-            service.query().subscribe(resp => expectedResult = resp.body);
-
-            const req = httpMock.expectOne({ method: 'GET' });
-            req.flush([returnedFromService]);
-            httpMock.verify();
-            expect(expectedResult).toMatchObject([expected]);
-        });
-
-        it('should delete a UserManagement', () => {
-            const expected = true;
-
-            service.delete('ABC').subscribe(resp => expectedResult = resp.ok);
-
-            const req = httpMock.expectOne({ method: 'DELETE' });
-            req.flush({ status: 200 });
-            expect(expectedResult).toBe(expected);
-        });
-
-
-        describe('addUserManagementToCollectionIfMissing', () => {
-            it('should add a UserManagement to an empty array', () => {
-                const userManagement: IUserManagement = sampleWithRequiredData;
-                expectedResult = service.addUserManagementToCollectionIfMissing([], userManagement);
-                expect(expectedResult).toEqual([userManagement]);
-            });
-
-            it('should not add a UserManagement to an array that contains it', () => {
-                const userManagement: IUserManagement = sampleWithRequiredData;
-                const userManagementCollection: IUserManagement[] = [{
-                    ...userManagement,
-                }, sampleWithPartialData];
-                expectedResult = service.addUserManagementToCollectionIfMissing(userManagementCollection, userManagement);
-                expect(expectedResult).toHaveLength(2);
-            });
-
-            it("should add a UserManagement to an array that doesn't contain it", () => {
-                const userManagement: IUserManagement = sampleWithRequiredData;
-                const userManagementCollection: IUserManagement[] = [sampleWithPartialData];
-                expectedResult = service.addUserManagementToCollectionIfMissing(userManagementCollection, userManagement);
-                expect(expectedResult).toHaveLength(2);
-                expect(expectedResult).toContain(userManagement);
-            });
-
-            it('should add only unique UserManagement to an array', () => {
-                const userManagementArray: IUserManagement[] = [sampleWithRequiredData, sampleWithPartialData, sampleWithFullData];
-                const userManagementCollection: IUserManagement[] = [sampleWithRequiredData];
-                expectedResult = service.addUserManagementToCollectionIfMissing(userManagementCollection, ...userManagementArray);
-                expect(expectedResult).toHaveLength(3);
-            });
-
-            it('should accept varargs', () => {
-                const userManagement: IUserManagement = sampleWithRequiredData;
-                const userManagement2: IUserManagement = sampleWithPartialData;
-                expectedResult = service.addUserManagementToCollectionIfMissing([], userManagement, userManagement2);
-                expect(expectedResult).toEqual([userManagement, userManagement2]);
-            });
-
-            it('should accept null and undefined values', () => {
-                const userManagement: IUserManagement = sampleWithRequiredData;
-                expectedResult = service.addUserManagementToCollectionIfMissing([], null, userManagement, undefined);
-                expect(expectedResult).toEqual([userManagement]);
-            });
-
-            it('should return initial array if no UserManagement is added', () => {
-                const userManagementCollection: IUserManagement[] = [sampleWithRequiredData];
-                expectedResult = service.addUserManagementToCollectionIfMissing(userManagementCollection, undefined, null);
-                expect(expectedResult).toEqual(userManagementCollection);
-            });
-        });
-
-        describe('compareUserManagement', () => {
-            it('should return true if both entities are null', () => {
-                const entity1 = null;
-                const entity2 = null;
-
-                const compareResult = service.compareUserManagement(entity1, entity2);
-
-                expect(compareResult).toEqual(true);
-            });
-
-            it('should return false if one entity is null', () => {
-                const entity1 = {login: 'Pattie.Kertzmann'};
-                const entity2 = null;
-
-                const compareResult1 = service.compareUserManagement(entity1, entity2);
-                const compareResult2 = service.compareUserManagement(entity2, entity1);
-
-                expect(compareResult1).toEqual(false);
-                expect(compareResult2).toEqual(false);
-            });
-
-            it('should return false if primaryKey differs', () => {
-                const entity1 = {login: 'Pattie.Kertzmann'};
-                const entity2 = {login: 'Betsy.Schiller33'};
-
-                const compareResult1 = service.compareUserManagement(entity1, entity2);
-                const compareResult2 = service.compareUserManagement(entity2, entity1);
-
-                expect(compareResult1).toEqual(false);
-                expect(compareResult2).toEqual(false);
-            });
-
-            it('should return false if primaryKey matches', () => {
-                const entity1 = {login: 'Pattie.Kertzmann'};
-                const entity2 = {login: 'Pattie.Kertzmann'};
-
-                const compareResult1 = service.compareUserManagement(entity1, entity2);
-                const compareResult2 = service.compareUserManagement(entity2, entity1);
-
-                expect(compareResult1).toEqual(true);
-                expect(compareResult2).toEqual(true);
-            });
-        });
+      const req = httpMock.expectOne({ method: "POST" });
+      req.flush(returnedFromService);
+      expect(expectedResult).toMatchObject(expected);
     });
 
-    afterEach(() => {
-        httpMock.verify();
+    it("should update a UserManagement", () => {
+      const userManagement = { ...sampleWithRequiredData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
+
+      service
+        .update(userManagement)
+        .subscribe((resp) => (expectedResult = resp.body));
+
+      const req = httpMock.expectOne({ method: "PUT" });
+      req.flush(returnedFromService);
+      expect(expectedResult).toMatchObject(expected);
     });
+
+    it("should partial update a UserManagement", () => {
+      const patchObject = { ...sampleWithPartialData };
+      const returnedFromService = { ...requireRestSample };
+      const expected = { ...sampleWithRequiredData };
+
+      service
+        .partialUpdate(patchObject)
+        .subscribe((resp) => (expectedResult = resp.body));
+
+      const req = httpMock.expectOne({ method: "PATCH" });
+      req.flush(returnedFromService);
+      expect(expectedResult).toMatchObject(expected);
+    });
+
+    it("should return a list of UserManagement", () => {
+      const returnedFromService = { ...requireRestSample };
+
+      const expected = { ...sampleWithRequiredData };
+
+      service.query().subscribe((resp) => (expectedResult = resp.body));
+
+      const req = httpMock.expectOne({ method: "GET" });
+      req.flush([returnedFromService]);
+      httpMock.verify();
+      expect(expectedResult).toMatchObject([expected]);
+    });
+
+    it("should delete a UserManagement", () => {
+      const expected = true;
+
+      service.delete("ABC").subscribe((resp) => (expectedResult = resp.ok));
+
+      const req = httpMock.expectOne({ method: "DELETE" });
+      req.flush({ status: 200 });
+      expect(expectedResult).toBe(expected);
+    });
+
+    describe("addUserManagementToCollectionIfMissing", () => {
+      it("should add a UserManagement to an empty array", () => {
+        const userManagement: IUserManagement = sampleWithRequiredData;
+        expectedResult = service.addUserManagementToCollectionIfMissing(
+          [],
+          userManagement,
+        );
+        expect(expectedResult).toEqual([userManagement]);
+      });
+
+      it("should not add a UserManagement to an array that contains it", () => {
+        const userManagement: IUserManagement = sampleWithRequiredData;
+        const userManagementCollection: IUserManagement[] = [
+          {
+            ...userManagement,
+          },
+          sampleWithPartialData,
+        ];
+        expectedResult = service.addUserManagementToCollectionIfMissing(
+          userManagementCollection,
+          userManagement,
+        );
+        expect(expectedResult).toHaveLength(2);
+      });
+
+      it("should add a UserManagement to an array that doesn't contain it", () => {
+        const userManagement: IUserManagement = sampleWithRequiredData;
+        const userManagementCollection: IUserManagement[] = [
+          sampleWithPartialData,
+        ];
+        expectedResult = service.addUserManagementToCollectionIfMissing(
+          userManagementCollection,
+          userManagement,
+        );
+        expect(expectedResult).toHaveLength(2);
+        expect(expectedResult).toContain(userManagement);
+      });
+
+      it("should add only unique UserManagement to an array", () => {
+        const userManagementArray: IUserManagement[] = [
+          sampleWithRequiredData,
+          sampleWithPartialData,
+          sampleWithFullData,
+        ];
+        const userManagementCollection: IUserManagement[] = [
+          sampleWithRequiredData,
+        ];
+        expectedResult = service.addUserManagementToCollectionIfMissing(
+          userManagementCollection,
+          ...userManagementArray,
+        );
+        expect(expectedResult).toHaveLength(3);
+      });
+
+      it("should accept varargs", () => {
+        const userManagement: IUserManagement = sampleWithRequiredData;
+        const userManagement2: IUserManagement = sampleWithPartialData;
+        expectedResult = service.addUserManagementToCollectionIfMissing(
+          [],
+          userManagement,
+          userManagement2,
+        );
+        expect(expectedResult).toEqual([userManagement, userManagement2]);
+      });
+
+      it("should accept null and undefined values", () => {
+        const userManagement: IUserManagement = sampleWithRequiredData;
+        expectedResult = service.addUserManagementToCollectionIfMissing(
+          [],
+          null,
+          userManagement,
+          undefined,
+        );
+        expect(expectedResult).toEqual([userManagement]);
+      });
+
+      it("should return initial array if no UserManagement is added", () => {
+        const userManagementCollection: IUserManagement[] = [
+          sampleWithRequiredData,
+        ];
+        expectedResult = service.addUserManagementToCollectionIfMissing(
+          userManagementCollection,
+          undefined,
+          null,
+        );
+        expect(expectedResult).toEqual(userManagementCollection);
+      });
+    });
+
+    describe("compareUserManagement", () => {
+      it("should return true if both entities are null", () => {
+        const entity1 = null;
+        const entity2 = null;
+
+        const compareResult = service.compareUserManagement(entity1, entity2);
+
+        expect(compareResult).toEqual(true);
+      });
+
+      it("should return false if one entity is null", () => {
+        const entity1 = { login: "Pattie.Kertzmann" };
+        const entity2 = null;
+
+        const compareResult1 = service.compareUserManagement(entity1, entity2);
+        const compareResult2 = service.compareUserManagement(entity2, entity1);
+
+        expect(compareResult1).toEqual(false);
+        expect(compareResult2).toEqual(false);
+      });
+
+      it("should return false if primaryKey differs", () => {
+        const entity1 = { login: "Pattie.Kertzmann" };
+        const entity2 = { login: "Betsy.Schiller33" };
+
+        const compareResult1 = service.compareUserManagement(entity1, entity2);
+        const compareResult2 = service.compareUserManagement(entity2, entity1);
+
+        expect(compareResult1).toEqual(false);
+        expect(compareResult2).toEqual(false);
+      });
+
+      it("should return false if primaryKey matches", () => {
+        const entity1 = { login: "Pattie.Kertzmann" };
+        const entity2 = { login: "Pattie.Kertzmann" };
+
+        const compareResult1 = service.compareUserManagement(entity1, entity2);
+        const compareResult2 = service.compareUserManagement(entity2, entity1);
+
+        expect(compareResult1).toEqual(true);
+        expect(compareResult2).toEqual(true);
+      });
+    });
+  });
+
+  afterEach(() => {
+    httpMock.verify();
+  });
 });
 ",
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/service/user-management.service.ts": {
-    "contents": "import { computed, inject, Injectable, signal } from '@angular/core';
-import { HttpClient, HttpResponse, httpResource } from '@angular/common/http';
-import {
-  map,
-  Observable,
-} from 'rxjs';
+    "contents": "import { computed, inject, Injectable, signal } from "@angular/core";
+import { HttpClient, HttpResponse, httpResource } from "@angular/common/http";
+import { map, Observable } from "rxjs";
 
+import dayjs from "dayjs/esm";
 
-import dayjs from 'dayjs/esm';
+import { isPresent } from "app/core/util/operators";
+import { ApplicationConfigService } from "app/core/config/application-config.service";
+import { createRequestOption } from "app/core/request/request-util";
+import { IUserManagement, NewUserManagement } from "../user-management.model";
 
-import { isPresent } from 'app/core/util/operators';
-import { ApplicationConfigService } from 'app/core/config/application-config.service';
-import { createRequestOption } from 'app/core/request/request-util';
-import { IUserManagement, NewUserManagement } from '../user-management.model';
+export type PartialUpdateUserManagement = Partial<IUserManagement> &
+  Pick<IUserManagement, "login">;
 
-export type PartialUpdateUserManagement = Partial<IUserManagement> & Pick<IUserManagement, 'login'>;
-
-type RestOf<T extends IUserManagement | NewUserManagement> =
-  Omit<T, 'createdDate' | 'lastModifiedDate'> &
-  {
+type RestOf<T extends IUserManagement | NewUserManagement> = Omit<
+  T,
+  "createdDate" | "lastModifiedDate"
+> & {
   createdDate?: string | null;
   lastModifiedDate?: string | null;
-    authorities?: string[] | null;
-  };
+  authorities?: string[] | null;
+};
 
 export type RestUserManagement = RestOf<IUserManagement>;
 
 export type NewRestUserManagement = RestOf<NewUserManagement>;
 
-export type PartialUpdateRestUserManagement = RestOf<PartialUpdateUserManagement>;
+export type PartialUpdateRestUserManagement =
+  RestOf<PartialUpdateUserManagement>;
 
 export type EntityResponseType = HttpResponse<IUserManagement>;
 export type EntityArrayResponseType = HttpResponse<IUserManagement[]>;
 
 @Injectable()
 export class UserManagementsService {
-  readonly userManagementsParams = signal<Record<string, string | number | boolean | readonly (string | number | boolean)[]> | undefined>(undefined);
-  protected readonly applicationConfigService = inject(ApplicationConfigService);
-  protected readonly resourceUrl = this.applicationConfigService.getEndpointFor('api/admin/users');
+  readonly userManagementsParams = signal<
+    | Record<
+        string,
+        string | number | boolean | readonly (string | number | boolean)[]
+      >
+    | undefined
+  >(undefined);
+  protected readonly applicationConfigService = inject(
+    ApplicationConfigService,
+  );
+  protected readonly resourceUrl =
+    this.applicationConfigService.getEndpointFor("api/admin/users");
   // eslint-disable-next-line @typescript-eslint/member-ordering
   readonly userManagementsResource = httpResource<RestUserManagement[]>(() => {
     const params = this.userManagementsParams();
@@ -1202,108 +1422,166 @@ export class UserManagementsService {
     return { url: this.resourceUrl, params };
   });
   // eslint-disable-next-line @typescript-eslint/member-ordering
-  readonly userManagements = computed(() => (this.userManagementsResource.value() ?? [])
-    .map(item => this.convertValueFromServer(item))
+  readonly userManagements = computed(() =>
+    (this.userManagementsResource.value() ?? []).map((item) =>
+      this.convertValueFromServer(item),
+    ),
   );
 
-  protected convertValueFromServer(restUserManagement: RestUserManagement): IUserManagement {
+  protected convertValueFromServer(
+    restUserManagement: RestUserManagement,
+  ): IUserManagement {
     return {
       ...restUserManagement,
-      createdDate: restUserManagement.createdDate ? dayjs(restUserManagement.createdDate) : undefined,
-      lastModifiedDate: restUserManagement.lastModifiedDate ? dayjs(restUserManagement.lastModifiedDate) : undefined,
-      authorities: restUserManagement.authorities?.map(authority => ({ name: authority as unknown as string })),
-    }
+      createdDate: restUserManagement.createdDate
+        ? dayjs(restUserManagement.createdDate)
+        : undefined,
+      lastModifiedDate: restUserManagement.lastModifiedDate
+        ? dayjs(restUserManagement.lastModifiedDate)
+        : undefined,
+      authorities: restUserManagement.authorities?.map((authority) => ({
+        name: authority as unknown as string,
+      })),
+    };
   }
-
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class UserManagementService extends UserManagementsService {
-    protected readonly http = inject(HttpClient);
+  protected readonly http = inject(HttpClient);
 
-    create(userManagement: NewUserManagement): Observable<EntityResponseType> {
-        const copy = this.convertValueFromClient(userManagement);
-        return this.http.post<RestUserManagement>(this.resourceUrl,
-                 copy ,
-                { observe: 'response' })
-        .pipe(map(res => this.convertResponseFromServer(res)));
+  create(userManagement: NewUserManagement): Observable<EntityResponseType> {
+    const copy = this.convertValueFromClient(userManagement);
+    return this.http
+      .post<RestUserManagement>(this.resourceUrl, copy, { observe: "response" })
+      .pipe(map((res) => this.convertResponseFromServer(res)));
+  }
+
+  update(userManagement: IUserManagement): Observable<EntityResponseType> {
+    const copy = this.convertValueFromClient(userManagement);
+    return this.http
+      .put<RestUserManagement>(
+        \`\${this.resourceUrl}/\${encodeURIComponent(this.getUserManagementIdentifier(userManagement))}\`,
+        copy,
+        { observe: "response" },
+      )
+      .pipe(map((res) => this.convertResponseFromServer(res)));
+  }
+
+  partialUpdate(
+    userManagement: PartialUpdateUserManagement,
+  ): Observable<EntityResponseType> {
+    const copy = this.convertValueFromClient(userManagement);
+    return this.http
+      .patch<RestUserManagement>(
+        \`\${this.resourceUrl}/\${encodeURIComponent(this.getUserManagementIdentifier(userManagement))}\`,
+        copy,
+        { observe: "response" },
+      )
+      .pipe(map((res) => this.convertResponseFromServer(res)));
+  }
+
+  find(login: string): Observable<EntityResponseType> {
+    return this.http
+      .get<RestUserManagement>(
+        \`\${this.resourceUrl}/\${encodeURIComponent(login)}\`,
+        { observe: "response" },
+      )
+      .pipe(map((res) => this.convertResponseFromServer(res)));
+  }
+
+  query(req?: any): Observable<EntityArrayResponseType> {
+    const options = createRequestOption(req);
+    return this.http
+      .get<
+        RestUserManagement[]
+      >(this.resourceUrl, { params: options, observe: "response" })
+      .pipe(map((res) => this.convertResponseArrayFromServer(res)));
+  }
+
+  delete(login: string): Observable<HttpResponse<{}>> {
+    return this.http.delete(
+      \`\${this.resourceUrl}/\${encodeURIComponent(login)}\`,
+      { observe: "response" },
+    );
+  }
+
+  getUserManagementIdentifier(
+    userManagement: Pick<IUserManagement, "login">,
+  ): string {
+    return userManagement.login;
+  }
+
+  compareUserManagement(
+    o1: Pick<IUserManagement, "login"> | null,
+    o2: Pick<IUserManagement, "login"> | null,
+  ): boolean {
+    return o1 && o2
+      ? this.getUserManagementIdentifier(o1) ===
+          this.getUserManagementIdentifier(o2)
+      : o1 === o2;
+  }
+
+  addUserManagementToCollectionIfMissing<
+    Type extends Pick<IUserManagement, "login">,
+  >(
+    userManagementCollection: Type[],
+    ...userManagementsToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const userManagements: Type[] = userManagementsToCheck.filter(isPresent);
+    if (userManagements.length > 0) {
+      const userManagementCollectionIdentifiers = userManagementCollection.map(
+        (userManagementItem) =>
+          this.getUserManagementIdentifier(userManagementItem),
+      );
+      const userManagementsToAdd = userManagements.filter(
+        (userManagementItem) => {
+          const userManagementIdentifier =
+            this.getUserManagementIdentifier(userManagementItem);
+          if (
+            userManagementCollectionIdentifiers.includes(
+              userManagementIdentifier,
+            )
+          ) {
+            return false;
+          }
+          userManagementCollectionIdentifiers.push(userManagementIdentifier);
+          return true;
+        },
+      );
+      return [...userManagementsToAdd, ...userManagementCollection];
     }
+    return userManagementCollection;
+  }
 
-    update(userManagement: IUserManagement): Observable<EntityResponseType> {
-        const copy = this.convertValueFromClient(userManagement);
-        return this.http.put<RestUserManagement>(\`\${this.resourceUrl}/\${encodeURIComponent(this.getUserManagementIdentifier(userManagement))}\`,
-                 copy ,
-                { observe: 'response' })
-        .pipe(map(res => this.convertResponseFromServer(res)));
-    }
-
-    partialUpdate(userManagement: PartialUpdateUserManagement): Observable<EntityResponseType> {
-        const copy = this.convertValueFromClient(userManagement);
-        return this.http.patch<RestUserManagement>(\`\${this.resourceUrl}/\${encodeURIComponent(this.getUserManagementIdentifier(userManagement))}\`,
-                 copy ,
-                { observe: 'response' })
-        .pipe(map(res => this.convertResponseFromServer(res)));
-    }
-
-    find(login: string): Observable<EntityResponseType> {
-        return this.http.get<RestUserManagement>(\`\${this.resourceUrl}/\${encodeURIComponent(login)}\`, { observe: 'response' })
-            .pipe(map(res => this.convertResponseFromServer(res)));
-    }
-
-    query(req?: any): Observable<EntityArrayResponseType> {
-        const options = createRequestOption(req);
-        return this.http.get<RestUserManagement[]>(this.resourceUrl, { params: options, observe: 'response' })
-            .pipe(map(res => this.convertResponseArrayFromServer(res)));
-    }
-
-    delete(login: string): Observable<HttpResponse<{}>> {
-        return this.http.delete(\`\${this.resourceUrl}/\${encodeURIComponent(login)}\`, { observe: 'response' });
-    }
-
-
-    getUserManagementIdentifier(userManagement: Pick<IUserManagement, 'login'>): string {
-        return userManagement.login;
-    }
-
-    compareUserManagement(o1: Pick<IUserManagement, 'login'> | null, o2: Pick<IUserManagement, 'login'> | null): boolean {
-        return o1 && o2 ? this.getUserManagementIdentifier(o1) === this.getUserManagementIdentifier(o2) : o1 === o2;
-    }
-
-    addUserManagementToCollectionIfMissing<Type extends Pick<IUserManagement, 'login'>>(userManagementCollection: Type[], ...userManagementsToCheck: (Type | null | undefined)[]): Type[] {
-        const userManagements: Type[] = userManagementsToCheck.filter(isPresent);
-        if (userManagements.length > 0) {
-            const userManagementCollectionIdentifiers = userManagementCollection.map(userManagementItem => this.getUserManagementIdentifier(userManagementItem));
-            const userManagementsToAdd = userManagements.filter(userManagementItem => {
-                const userManagementIdentifier = this.getUserManagementIdentifier(userManagementItem);
-                if (userManagementCollectionIdentifiers.includes(userManagementIdentifier)) {
-                    return false;
-                }
-                userManagementCollectionIdentifiers.push(userManagementIdentifier);
-                return true;
-            });
-            return [...userManagementsToAdd, ...userManagementCollection];
-        }
-        return userManagementCollection;
-    }
-
-  protected convertValueFromClient<T extends IUserManagement | NewUserManagement | PartialUpdateUserManagement>(userManagement: T): RestOf<T> {
+  protected convertValueFromClient<
+    T extends IUserManagement | NewUserManagement | PartialUpdateUserManagement,
+  >(userManagement: T): RestOf<T> {
     return {
       ...userManagement,
-    createdDate: userManagement.createdDate?.toJSON() ?? null,
-    lastModifiedDate: userManagement.lastModifiedDate?.toJSON() ?? null,
-      authorities: userManagement.authorities?.map(authority => authority.name),
+      createdDate: userManagement.createdDate?.toJSON() ?? null,
+      lastModifiedDate: userManagement.lastModifiedDate?.toJSON() ?? null,
+      authorities: userManagement.authorities?.map(
+        (authority) => authority.name,
+      ),
     };
   }
 
-  protected convertResponseFromServer(res: HttpResponse<RestUserManagement>): HttpResponse<IUserManagement> {
+  protected convertResponseFromServer(
+    res: HttpResponse<RestUserManagement>,
+  ): HttpResponse<IUserManagement> {
     return res.clone({
       body: res.body ? this.convertValueFromServer(res.body) : null,
     });
   }
 
-  protected convertResponseArrayFromServer(res: HttpResponse<RestUserManagement[]>): HttpResponse<IUserManagement[]> {
+  protected convertResponseArrayFromServer(
+    res: HttpResponse<RestUserManagement[]>,
+  ): HttpResponse<IUserManagement[]> {
     return res.clone({
-      body: res.body ? res.body.map(item => this.convertValueFromServer(item)) : null,
+      body: res.body
+        ? res.body.map((item) => this.convertValueFromServer(item))
+        : null,
     });
   }
 }
@@ -1311,23 +1589,26 @@ export class UserManagementService extends UserManagementsService {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-form.service.spec.ts": {
-    "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-import { TestBed } from '@angular/core/testing';
+    "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from "vitest";
+import { TestBed } from "@angular/core/testing";
 
-import { sampleWithRequiredData, sampleWithNewData } from '../user-management.test-samples';
+import {
+  sampleWithRequiredData,
+  sampleWithNewData,
+} from "../user-management.test-samples";
 
-import { UserManagementFormService } from './user-management-form.service';
+import { UserManagementFormService } from "./user-management-form.service";
 
-describe('UserManagement Form Service', () => {
+describe("UserManagement Form Service", () => {
   let service: UserManagementFormService;
 
   beforeEach(() => {
     service = TestBed.inject(UserManagementFormService);
   });
 
-  describe('Service methods', () => {
-    describe('createUserManagementFormGroup', () => {
-      it('should create a new form with FormControl', () => {
+  describe("Service methods", () => {
+    describe("createUserManagementFormGroup", () => {
+      it("should create a new form with FormControl", () => {
         const formGroup = service.createUserManagementFormGroup();
 
         expect(formGroup.controls).toEqual(
@@ -1343,39 +1624,44 @@ describe('UserManagement Form Service', () => {
             createdDate: expect.any(Object),
             lastModifiedBy: expect.any(Object),
             lastModifiedDate: expect.any(Object),
-          })
+          }),
         );
       });
 
-      it('passing IUserManagement should create a new form with FormGroup', () => {
-        const formGroup = service.createUserManagementFormGroup(sampleWithRequiredData);
+      it("passing IUserManagement should create a new form with FormGroup", () => {
+        const formGroup = service.createUserManagementFormGroup(
+          sampleWithRequiredData,
+        );
 
-        expect(formGroup.controls).toEqual(expect.objectContaining({
-          id: expect.any(Object),
-          login: expect.any(Object),
-          firstName: expect.any(Object),
-          lastName: expect.any(Object),
-          email: expect.any(Object),
-          imageUrl: expect.any(Object),
-          activated: expect.any(Object),
-          createdBy: expect.any(Object),
-          createdDate: expect.any(Object),
-          lastModifiedBy: expect.any(Object),
-          lastModifiedDate: expect.any(Object),
-        }));
+        expect(formGroup.controls).toEqual(
+          expect.objectContaining({
+            id: expect.any(Object),
+            login: expect.any(Object),
+            firstName: expect.any(Object),
+            lastName: expect.any(Object),
+            email: expect.any(Object),
+            imageUrl: expect.any(Object),
+            activated: expect.any(Object),
+            createdBy: expect.any(Object),
+            createdDate: expect.any(Object),
+            lastModifiedBy: expect.any(Object),
+            lastModifiedDate: expect.any(Object),
+          }),
+        );
       });
     });
 
-    describe('getUserManagement', () => {
-      it('should return NewUserManagement for default UserManagement initial value', () => {
-        const formGroup = service.createUserManagementFormGroup(sampleWithNewData);
+    describe("getUserManagement", () => {
+      it("should return NewUserManagement for default UserManagement initial value", () => {
+        const formGroup =
+          service.createUserManagementFormGroup(sampleWithNewData);
 
         const userManagement = service.getUserManagement(formGroup);
 
         expect(userManagement).toMatchObject(sampleWithNewData);
       });
 
-      it('should return NewUserManagement for empty UserManagement initial value', () => {
+      it("should return NewUserManagement for empty UserManagement initial value", () => {
         const formGroup = service.createUserManagementFormGroup();
 
         const userManagement = service.getUserManagement(formGroup);
@@ -1383,8 +1669,10 @@ describe('UserManagement Form Service', () => {
         expect(userManagement).toMatchObject({});
       });
 
-      it('should return IUserManagement', () => {
-        const formGroup = service.createUserManagementFormGroup(sampleWithRequiredData);
+      it("should return IUserManagement", () => {
+        const formGroup = service.createUserManagementFormGroup(
+          sampleWithRequiredData,
+        );
 
         const userManagement = service.getUserManagement(formGroup);
 
@@ -1397,173 +1685,189 @@ describe('UserManagement Form Service', () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-form.service.ts": {
-    "contents": "import { Injectable } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+    "contents": "import { Injectable } from "@angular/core";
+import { FormGroup, FormControl, Validators } from "@angular/forms";
 
-import dayjs from 'dayjs/esm';
-import { DATE_TIME_FORMAT } from 'app/config/input.constants';
-import { IUserManagement, NewUserManagement } from '../user-management.model';
+import dayjs from "dayjs/esm";
+import { DATE_TIME_FORMAT } from "app/config/input.constants";
+import { IUserManagement, NewUserManagement } from "../user-management.model";
 
 /**
  * A partial Type with required key is used as form input.
  */
-type PartialWithRequiredKeyOf<T extends { login: unknown }> = Partial<Omit<T, 'login'>> & { login: T['login'] };
+type PartialWithRequiredKeyOf<T extends { login: unknown }> = Partial<
+  Omit<T, "login">
+> & { login: T["login"] };
 
 /**
  * Type for createFormGroup and resetForm argument.
  * It accepts IUserManagement for edit and NewUserManagementFormGroupInput for create.
  */
-type UserManagementFormGroupInput = IUserManagement | PartialWithRequiredKeyOf<NewUserManagement>;
+type UserManagementFormGroupInput =
+  | IUserManagement
+  | PartialWithRequiredKeyOf<NewUserManagement>;
 
 /**
  * Type that converts some properties for forms.
  */
-type FormValueOf<T extends IUserManagement | NewUserManagement> = Omit<T, 'createdDate' | 'lastModifiedDate'> & {
+type FormValueOf<T extends IUserManagement | NewUserManagement> = Omit<
+  T,
+  "createdDate" | "lastModifiedDate"
+> & {
   createdDate?: string | null;
   lastModifiedDate?: string | null;
 };
 
-type UserManagementFormRawValue =  FormValueOf<IUserManagement>;
+type UserManagementFormRawValue = FormValueOf<IUserManagement>;
 
-type NewUserManagementFormRawValue =  FormValueOf<NewUserManagement>;
+type NewUserManagementFormRawValue = FormValueOf<NewUserManagement>;
 
-type UserManagementFormDefaults = Pick<NewUserManagement, 'login' | 'activated' | 'createdDate' | 'lastModifiedDate'>;
+type UserManagementFormDefaults = Pick<
+  NewUserManagement,
+  "login" | "activated" | "createdDate" | "lastModifiedDate"
+>;
 
 type UserManagementFormGroupContent = {
-  id: FormControl<UserManagementFormRawValue['id']>;
-  login: FormControl<UserManagementFormRawValue['login'] | NewUserManagement['login']>;
-  firstName: FormControl<UserManagementFormRawValue['firstName']>;
-  lastName: FormControl<UserManagementFormRawValue['lastName']>;
-  email: FormControl<UserManagementFormRawValue['email']>;
-  imageUrl: FormControl<UserManagementFormRawValue['imageUrl']>;
-  activated: FormControl<UserManagementFormRawValue['activated']>;
-  createdBy: FormControl<UserManagementFormRawValue['createdBy']>;
-  createdDate: FormControl<UserManagementFormRawValue['createdDate']>;
-  lastModifiedBy: FormControl<UserManagementFormRawValue['lastModifiedBy']>;
-  lastModifiedDate: FormControl<UserManagementFormRawValue['lastModifiedDate']>;
+  id: FormControl<UserManagementFormRawValue["id"]>;
+  login: FormControl<
+    UserManagementFormRawValue["login"] | NewUserManagement["login"]
+  >;
+  firstName: FormControl<UserManagementFormRawValue["firstName"]>;
+  lastName: FormControl<UserManagementFormRawValue["lastName"]>;
+  email: FormControl<UserManagementFormRawValue["email"]>;
+  imageUrl: FormControl<UserManagementFormRawValue["imageUrl"]>;
+  activated: FormControl<UserManagementFormRawValue["activated"]>;
+  createdBy: FormControl<UserManagementFormRawValue["createdBy"]>;
+  createdDate: FormControl<UserManagementFormRawValue["createdDate"]>;
+  lastModifiedBy: FormControl<UserManagementFormRawValue["lastModifiedBy"]>;
+  lastModifiedDate: FormControl<UserManagementFormRawValue["lastModifiedDate"]>;
 };
 
 export type UserManagementFormGroup = FormGroup<UserManagementFormGroupContent>;
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class UserManagementFormService {
-  createUserManagementFormGroup(userManagement?: UserManagementFormGroupInput): UserManagementFormGroup {
+  createUserManagementFormGroup(
+    userManagement?: UserManagementFormGroupInput,
+  ): UserManagementFormGroup {
     const userManagementRawValue =
-      this.convertUserManagementToUserManagementRawValue(
-        {
-          ...this.getFormDefaults(),
-          ...userManagement ?? { login: null },
-        }
-      )
-    ;
-
+      this.convertUserManagementToUserManagementRawValue({
+        ...this.getFormDefaults(),
+        ...(userManagement ?? { login: null }),
+      });
     return new FormGroup<UserManagementFormGroupContent>({
-      id: new FormControl(
-        userManagementRawValue.id,
-      ),
+      id: new FormControl(userManagementRawValue.id),
       login: new FormControl(
-        { value: userManagementRawValue.login, disabled: userManagementRawValue.login !== null },
+        {
+          value: userManagementRawValue.login,
+          disabled: userManagementRawValue.login !== null,
+        },
         {
           nonNullable: true,
           validators: [
             Validators.required,
             Validators.maxLength(50),
-            Validators.pattern(String.raw\`^[a-zA-Z0-9!$&*+=?^_\\\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$\`),
+            Validators.pattern(
+              String.raw\`^[a-zA-Z0-9!$&*+=?^_\\\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$\`,
+            ),
           ],
-        }
+        },
       ),
-      firstName: new FormControl(
-        userManagementRawValue.firstName,
-        {
-          validators: [
-            Validators.maxLength(50),
-          ],
-        }
-      ),
-      lastName: new FormControl(
-        userManagementRawValue.lastName,
-        {
-          validators: [
-            Validators.maxLength(50),
-          ],
-        }
-      ),
-      email: new FormControl(
-        userManagementRawValue.email,
-        {
-          validators: [
-            Validators.required,
-            Validators.minLength(5),
-            Validators.maxLength(191),
-          ],
-        }
-      ),
-      imageUrl: new FormControl(
-        userManagementRawValue.imageUrl,
-        {
-          validators: [
-            Validators.maxLength(256),
-          ],
-        }
-      ),
-      activated: new FormControl(
-        userManagementRawValue.activated,
-      ),
-      createdBy: new FormControl(
-        userManagementRawValue.createdBy,
-      ),
-      createdDate: new FormControl(
-        userManagementRawValue.createdDate,
-      ),
-      lastModifiedBy: new FormControl(
-        userManagementRawValue.lastModifiedBy,
-      ),
+      firstName: new FormControl(userManagementRawValue.firstName, {
+        validators: [Validators.maxLength(50)],
+      }),
+      lastName: new FormControl(userManagementRawValue.lastName, {
+        validators: [Validators.maxLength(50)],
+      }),
+      email: new FormControl(userManagementRawValue.email, {
+        validators: [
+          Validators.required,
+          Validators.minLength(5),
+          Validators.maxLength(191),
+        ],
+      }),
+      imageUrl: new FormControl(userManagementRawValue.imageUrl, {
+        validators: [Validators.maxLength(256)],
+      }),
+      activated: new FormControl(userManagementRawValue.activated),
+      createdBy: new FormControl(userManagementRawValue.createdBy),
+      createdDate: new FormControl(userManagementRawValue.createdDate),
+      lastModifiedBy: new FormControl(userManagementRawValue.lastModifiedBy),
       lastModifiedDate: new FormControl(
         userManagementRawValue.lastModifiedDate,
       ),
     });
   }
 
-  getUserManagement(form: UserManagementFormGroup): IUserManagement | NewUserManagement {
-    return this.convertUserManagementRawValueToUserManagement(form.getRawValue() as UserManagementFormRawValue | NewUserManagementFormRawValue);
+  getUserManagement(
+    form: UserManagementFormGroup,
+  ): IUserManagement | NewUserManagement {
+    return this.convertUserManagementRawValueToUserManagement(
+      form.getRawValue() as
+        | UserManagementFormRawValue
+        | NewUserManagementFormRawValue,
+    );
   }
 
-  resetForm(form: UserManagementFormGroup, userManagement: UserManagementFormGroupInput): void {
+  resetForm(
+    form: UserManagementFormGroup,
+    userManagement: UserManagementFormGroupInput,
+  ): void {
     const userManagementRawValue =
-      this.convertUserManagementToUserManagementRawValue(
-        {...this.getFormDefaults(), ...userManagement }
-      )
-    ;
+      this.convertUserManagementToUserManagementRawValue({
+        ...this.getFormDefaults(),
+        ...userManagement,
+      });
     form.reset({
       ...userManagementRawValue,
-      login: { value: userManagementRawValue.login, disabled: userManagementRawValue.login !== null },
+      login: {
+        value: userManagementRawValue.login,
+        disabled: userManagementRawValue.login !== null,
+      },
     });
   }
 
   private getFormDefaults(): UserManagementFormDefaults {
-      const currentTime = dayjs();
+    const currentTime = dayjs();
 
     return {
-        login: null,
-        activated: false,
-        createdDate: currentTime,
-        lastModifiedDate: currentTime,
+      login: null,
+      activated: false,
+      createdDate: currentTime,
+      lastModifiedDate: currentTime,
     };
   }
 
-  private convertUserManagementRawValueToUserManagement(rawUserManagement: UserManagementFormRawValue | NewUserManagementFormRawValue): IUserManagement | NewUserManagement {
+  private convertUserManagementRawValueToUserManagement(
+    rawUserManagement:
+      | UserManagementFormRawValue
+      | NewUserManagementFormRawValue,
+  ): IUserManagement | NewUserManagement {
     return {
       ...rawUserManagement,
       createdDate: dayjs(rawUserManagement.createdDate, DATE_TIME_FORMAT),
-      lastModifiedDate: dayjs(rawUserManagement.lastModifiedDate, DATE_TIME_FORMAT),
+      lastModifiedDate: dayjs(
+        rawUserManagement.lastModifiedDate,
+        DATE_TIME_FORMAT,
+      ),
     };
   }
 
-  private convertUserManagementToUserManagementRawValue(userManagement: IUserManagement | (Partial<NewUserManagement> & UserManagementFormDefaults)): UserManagementFormRawValue | PartialWithRequiredKeyOf<NewUserManagementFormRawValue> {
+  private convertUserManagementToUserManagementRawValue(
+    userManagement:
+      | IUserManagement
+      | (Partial<NewUserManagement> & UserManagementFormDefaults),
+  ):
+    | UserManagementFormRawValue
+    | PartialWithRequiredKeyOf<NewUserManagementFormRawValue> {
     return {
       ...userManagement,
-      createdDate: userManagement.createdDate ? userManagement.createdDate.format(DATE_TIME_FORMAT) : undefined,
-      lastModifiedDate: userManagement.lastModifiedDate ? userManagement.lastModifiedDate.format(DATE_TIME_FORMAT) : undefined,
+      createdDate: userManagement.createdDate
+        ? userManagement.createdDate.format(DATE_TIME_FORMAT)
+        : undefined,
+      lastModifiedDate: userManagement.lastModifiedDate
+        ? userManagement.lastModifiedDate.format(DATE_TIME_FORMAT)
+        : undefined,
     };
   }
 }
@@ -1572,367 +1876,462 @@ export class UserManagementFormService {
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.html": {
     "contents": "<div class="d-flex justify-content-center">
-    <div class="col-8">
-        <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
-            <h2 id="jhi-user-management-heading" data-cy="UserManagementCreateUpdateHeading">Create or edit a user</h2>
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-user-management-heading"
+        data-cy="UserManagementCreateUpdateHeading"
+      >
+        Create or edit a user
+      </h2>
 
-            <div>
-                <jhi-alert-error />
+      <div>
+        <jhi-alert-error />
 
-            
-                @let loginRef = editForm.get('login')!;
-                <div class="mb-3">
-                    <label class="form-label" for="field_login">Login</label>
-                    <input type="text" class="form-control" name="login" id="field_login" data-cy="login"
-                           formControlName="login" [readonly]="editForm.get('login')!.disabled"/>
-                @if (loginRef.invalid && (loginRef.dirty || loginRef.touched)) {
-                    <div>
-                    @if (editForm.get('login')?.errors?.required) {
-                        <small class="form-text text-danger">This field is required.</small>
-                    }
-                    @if (editForm.get('login')?.errors?.maxlength) {
-                        <small class="form-text text-danger">This field cannot be longer than 50 characters.</small>
-                    }
-                    @if (editForm.get('login')?.errors?.pattern) {
-                        <small class="form-text text-danger">This field should follow pattern for Login.</small>
-                    }
-                    </div>
-                }
-                </div>
-            
-
-            
-                @let firstNameRef = editForm.get('firstName')!;
-                <div class="mb-3">
-                    <label class="form-label" for="field_firstName">First name</label>
-                    <input type="text" class="form-control" name="firstName" id="field_firstName" data-cy="firstName"
-                           formControlName="firstName"/>
-                @if (firstNameRef.invalid && (firstNameRef.dirty || firstNameRef.touched)) {
-                    <div>
-                    @if (editForm.get('firstName')?.errors?.maxlength) {
-                        <small class="form-text text-danger">This field cannot be longer than 50 characters.</small>
-                    }
-                    </div>
-                }
-                </div>
-            
-
-            
-                @let lastNameRef = editForm.get('lastName')!;
-                <div class="mb-3">
-                    <label class="form-label" for="field_lastName">Last name</label>
-                    <input type="text" class="form-control" name="lastName" id="field_lastName" data-cy="lastName"
-                           formControlName="lastName"/>
-                @if (lastNameRef.invalid && (lastNameRef.dirty || lastNameRef.touched)) {
-                    <div>
-                    @if (editForm.get('lastName')?.errors?.maxlength) {
-                        <small class="form-text text-danger">This field cannot be longer than 50 characters.</small>
-                    }
-                    </div>
-                }
-                </div>
-            
-
-            
-                @let emailRef = editForm.get('email')!;
-                <div class="mb-3">
-                    <label class="form-label" for="field_email">Email</label>
-                    <input type="text" class="form-control" name="email" id="field_email" data-cy="email"
-                           formControlName="email"/>
-                @if (emailRef.invalid && (emailRef.dirty || emailRef.touched)) {
-                    <div>
-                    @if (editForm.get('email')?.errors?.required) {
-                        <small class="form-text text-danger">This field is required.</small>
-                    }
-                    @if (editForm.get('email')?.errors?.minlength) {
-                        <small class="form-text text-danger">This field is required to be at least 5 characters.</small>
-                    }
-                    @if (editForm.get('email')?.errors?.maxlength) {
-                        <small class="form-text text-danger">This field cannot be longer than 191 characters.</small>
-                    }
-                    </div>
-                }
-                </div>
-            
-
-            @if (editForm.controls.activated.value !== null) {
-                
-                <div class="mb-3">
-                    <label class="form-label" for="field_activated">Activated</label>
-                    <input type="checkbox" class="form-check" name="activated" id="field_activated"
-                           data-cy="activated" formControlName="activated" />
-                </div>
+        @let loginRef = editForm.get('login')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_login">Login</label>
+          <input
+            type="text"
+            class="form-control"
+            name="login"
+            id="field_login"
+            data-cy="login"
+            formControlName="login"
+            [readonly]="editForm.get('login')!.disabled"
+          />
+          @if (loginRef.invalid && (loginRef.dirty || loginRef.touched)) {
+          <div>
+            @if (editForm.get('login')?.errors?.required) {
+            <small class="form-text text-danger">This field is required.</small>
+            } @if (editForm.get('login')?.errors?.maxlength) {
+            <small class="form-text text-danger"
+              >This field cannot be longer than 50 characters.</small
+            >
+            } @if (editForm.get('login')?.errors?.pattern) {
+            <small class="form-text text-danger"
+              >This field should follow pattern for Login.</small
+            >
             }
+          </div>
+          }
+        </div>
 
-            @if (editForm.controls.createdBy.value !== null) {
-                
-                <div class="mb-3">
-                    <label class="form-label" for="field_createdBy">Created by</label>
-                    <input type="text" class="form-control" name="createdBy" id="field_createdBy" data-cy="createdBy"
-                           formControlName="createdBy" [readonly]="true"/>
-                </div>
+        @let firstNameRef = editForm.get('firstName')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_firstName">First name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="firstName"
+            id="field_firstName"
+            data-cy="firstName"
+            formControlName="firstName"
+          />
+          @if (firstNameRef.invalid && (firstNameRef.dirty ||
+          firstNameRef.touched)) {
+          <div>
+            @if (editForm.get('firstName')?.errors?.maxlength) {
+            <small class="form-text text-danger"
+              >This field cannot be longer than 50 characters.</small
+            >
             }
+          </div>
+          }
+        </div>
 
-            @if (editForm.controls.createdDate.value !== null) {
-                
-                <div class="mb-3">
-                    <label class="form-label" for="field_createdDate">Created date</label>
-                    <div class="d-flex">
-                        <input id="field_createdDate" data-cy="createdDate" type="datetime-local" class="form-control" name="createdDate" formControlName="createdDate" placeholder="YYYY-MM-DD HH:mm" [readonly]="true"/>
-                    </div>
-                </div>
+        @let lastNameRef = editForm.get('lastName')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_lastName">Last name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="lastName"
+            id="field_lastName"
+            data-cy="lastName"
+            formControlName="lastName"
+          />
+          @if (lastNameRef.invalid && (lastNameRef.dirty ||
+          lastNameRef.touched)) {
+          <div>
+            @if (editForm.get('lastName')?.errors?.maxlength) {
+            <small class="form-text text-danger"
+              >This field cannot be longer than 50 characters.</small
+            >
             }
+          </div>
+          }
+        </div>
 
-            @if (editForm.controls.lastModifiedBy.value !== null) {
-                
-                <div class="mb-3">
-                    <label class="form-label" for="field_lastModifiedBy">Modified by</label>
-                    <input type="text" class="form-control" name="lastModifiedBy" id="field_lastModifiedBy" data-cy="lastModifiedBy"
-                           formControlName="lastModifiedBy" [readonly]="true"/>
-                </div>
+        @let emailRef = editForm.get('email')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_email">Email</label>
+          <input
+            type="text"
+            class="form-control"
+            name="email"
+            id="field_email"
+            data-cy="email"
+            formControlName="email"
+          />
+          @if (emailRef.invalid && (emailRef.dirty || emailRef.touched)) {
+          <div>
+            @if (editForm.get('email')?.errors?.required) {
+            <small class="form-text text-danger">This field is required.</small>
+            } @if (editForm.get('email')?.errors?.minlength) {
+            <small class="form-text text-danger"
+              >This field is required to be at least 5 characters.</small
+            >
+            } @if (editForm.get('email')?.errors?.maxlength) {
+            <small class="form-text text-danger"
+              >This field cannot be longer than 191 characters.</small
+            >
             }
+          </div>
+          }
+        </div>
 
-            @if (editForm.controls.lastModifiedDate.value !== null) {
-                
-                <div class="mb-3">
-                    <label class="form-label" for="field_lastModifiedDate">Modified date</label>
-                    <div class="d-flex">
-                        <input id="field_lastModifiedDate" data-cy="lastModifiedDate" type="datetime-local" class="form-control" name="lastModifiedDate" formControlName="lastModifiedDate" placeholder="YYYY-MM-DD HH:mm" [readonly]="true"/>
-                    </div>
-                </div>
-            }
-            </div>
+        @if (editForm.controls.activated.value !== null) {
 
-            <div>
-                <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
-                    <fa-icon icon="ban" />&nbsp;<span>Cancel</span>
-                </button>
+        <div class="mb-3">
+          <label class="form-label" for="field_activated">Activated</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="activated"
+            id="field_activated"
+            data-cy="activated"
+            formControlName="activated"
+          />
+        </div>
+        } @if (editForm.controls.createdBy.value !== null) {
 
-                <button type="submit" id="save-entity" data-cy="entityCreateSaveButton" [disabled]="editForm.invalid || isSaving()" class="btn btn-primary">
-                    <fa-icon icon="save" />&nbsp;<span>Save</span>
-                </button>
-            </div>
-        </form>
-    </div>
+        <div class="mb-3">
+          <label class="form-label" for="field_createdBy">Created by</label>
+          <input
+            type="text"
+            class="form-control"
+            name="createdBy"
+            id="field_createdBy"
+            data-cy="createdBy"
+            formControlName="createdBy"
+            [readonly]="true"
+          />
+        </div>
+        } @if (editForm.controls.createdDate.value !== null) {
+
+        <div class="mb-3">
+          <label class="form-label" for="field_createdDate">Created date</label>
+          <div class="d-flex">
+            <input
+              id="field_createdDate"
+              data-cy="createdDate"
+              type="datetime-local"
+              class="form-control"
+              name="createdDate"
+              formControlName="createdDate"
+              placeholder="YYYY-MM-DD HH:mm"
+              [readonly]="true"
+            />
+          </div>
+        </div>
+        } @if (editForm.controls.lastModifiedBy.value !== null) {
+
+        <div class="mb-3">
+          <label class="form-label" for="field_lastModifiedBy"
+            >Modified by</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="lastModifiedBy"
+            id="field_lastModifiedBy"
+            data-cy="lastModifiedBy"
+            formControlName="lastModifiedBy"
+            [readonly]="true"
+          />
+        </div>
+        } @if (editForm.controls.lastModifiedDate.value !== null) {
+
+        <div class="mb-3">
+          <label class="form-label" for="field_lastModifiedDate"
+            >Modified date</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_lastModifiedDate"
+              data-cy="lastModifiedDate"
+              type="datetime-local"
+              class="form-control"
+              name="lastModifiedDate"
+              formControlName="lastModifiedDate"
+              placeholder="YYYY-MM-DD HH:mm"
+              [readonly]="true"
+            />
+          </div>
+        </div>
+        }
+      </div>
+
+      <div>
+        <button
+          type="button"
+          id="cancel-save"
+          data-cy="entityCreateCancelButton"
+          class="btn btn-secondary"
+          (click)="previousState()"
+        >
+          <fa-icon icon="ban" />&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving()"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save" />&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
 ",
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.spec.ts": {
-    "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-import { HttpResponse } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
-import { of, Subject, from } from 'rxjs';
+    "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from "vitest";
+import { HttpResponse } from "@angular/common/http";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { ActivatedRoute } from "@angular/router";
+import { of, Subject, from } from "rxjs";
 
-import { UserManagementFormService } from './user-management-form.service';
-import { UserManagementService } from '../service/user-management.service';
-import { IUserManagement } from '../user-management.model';
+import { UserManagementFormService } from "./user-management-form.service";
+import { UserManagementService } from "../service/user-management.service";
+import { IUserManagement } from "../user-management.model";
 
-import { UserManagementUpdate } from './user-management-update';
+import { UserManagementUpdate } from "./user-management-update";
 
-describe('UserManagement Management Update Component', () => {
-    let comp: UserManagementUpdate;
-    let fixture: ComponentFixture<UserManagementUpdate>;
-    let activatedRoute: ActivatedRoute;
-    let userManagementFormService: UserManagementFormService;
-    let userManagementService: UserManagementService;
+describe("UserManagement Management Update Component", () => {
+  let comp: UserManagementUpdate;
+  let fixture: ComponentFixture<UserManagementUpdate>;
+  let activatedRoute: ActivatedRoute;
+  let userManagementFormService: UserManagementFormService;
+  let userManagementService: UserManagementService;
 
-    beforeEach(() => {
-        TestBed.configureTestingModule({
-            providers: [
-              provideHttpClientTesting(),
-              {
-                provide: ActivatedRoute,
-                useValue: {
-                  params: from([{}]),
-                },
-              },
-            ]
-        });
-
-        fixture = TestBed.createComponent(UserManagementUpdate);
-        activatedRoute = TestBed.inject(ActivatedRoute);
-        userManagementFormService = TestBed.inject(UserManagementFormService);
-        userManagementService = TestBed.inject(UserManagementService);
-
-        comp = fixture.componentInstance;
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        provideHttpClientTesting(),
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            params: from([{}]),
+          },
+        },
+      ],
     });
 
-    describe('ngOnInit', () => {
-        it('should update editForm', () => {
-            const userManagement: IUserManagement = {login: 'Betsy.Schiller33'};
+    fixture = TestBed.createComponent(UserManagementUpdate);
+    activatedRoute = TestBed.inject(ActivatedRoute);
+    userManagementFormService = TestBed.inject(UserManagementFormService);
+    userManagementService = TestBed.inject(UserManagementService);
 
-            activatedRoute.data = of({ userManagement });
-            comp.ngOnInit();
+    comp = fixture.componentInstance;
+  });
 
-            expect(comp.userManagement).toEqual(userManagement);
-        });
+  describe("ngOnInit", () => {
+    it("should update editForm", () => {
+      const userManagement: IUserManagement = { login: "Betsy.Schiller33" };
+
+      activatedRoute.data = of({ userManagement });
+      comp.ngOnInit();
+
+      expect(comp.userManagement).toEqual(userManagement);
+    });
+  });
+
+  describe("save", () => {
+    it("should call update service on save for existing entity", () => {
+      // GIVEN
+      const saveSubject = new Subject<HttpResponse<IUserManagement>>();
+      const userManagement = { login: "Pattie.Kertzmann" };
+      vitest
+        .spyOn(userManagementFormService, "getUserManagement")
+        .mockReturnValue(userManagement);
+      vitest
+        .spyOn(userManagementService, "update")
+        .mockReturnValue(saveSubject);
+      vitest.spyOn(comp, "previousState");
+      activatedRoute.data = of({ userManagement });
+      comp.ngOnInit();
+
+      // WHEN
+      comp.save();
+      expect(comp.isSaving()).toEqual(true);
+      saveSubject.next(new HttpResponse({ body: userManagement }));
+      saveSubject.complete();
+
+      // THEN
+      expect(userManagementFormService.getUserManagement).toHaveBeenCalled();
+      expect(comp.previousState).toHaveBeenCalled();
+      expect(userManagementService.update).toHaveBeenCalledWith(
+        expect.objectContaining(userManagement),
+      );
+      expect(comp.isSaving()).toEqual(false);
     });
 
-    describe('save', () => {
-        it('should call update service on save for existing entity', () => {
-            // GIVEN
-            const saveSubject = new Subject<HttpResponse<IUserManagement>>();
-            const userManagement = {login: 'Pattie.Kertzmann'};
-            vitest.spyOn(userManagementFormService, 'getUserManagement').mockReturnValue(userManagement);
-            vitest.spyOn(userManagementService, 'update').mockReturnValue(saveSubject);
-            vitest.spyOn(comp, 'previousState');
-            activatedRoute.data = of({ userManagement });
-            comp.ngOnInit();
+    it("should call create service on save for new entity", () => {
+      // GIVEN
+      const saveSubject = new Subject<HttpResponse<IUserManagement>>();
+      const userManagement = { login: "Pattie.Kertzmann" };
+      vitest
+        .spyOn(userManagementFormService, "getUserManagement")
+        .mockReturnValue({ login: null });
+      vitest
+        .spyOn(userManagementService, "create")
+        .mockReturnValue(saveSubject);
+      vitest.spyOn(comp, "previousState");
+      activatedRoute.data = of({ userManagement: null });
+      comp.ngOnInit();
 
-            // WHEN
-            comp.save();
-            expect(comp.isSaving()).toEqual(true);
-            saveSubject.next(new HttpResponse({ body: userManagement }));
-            saveSubject.complete();
+      // WHEN
+      comp.save();
+      expect(comp.isSaving()).toEqual(true);
+      saveSubject.next(new HttpResponse({ body: userManagement }));
+      saveSubject.complete();
 
-            // THEN
-            expect(userManagementFormService.getUserManagement).toHaveBeenCalled();
-            expect(comp.previousState).toHaveBeenCalled();
-            expect(userManagementService.update).toHaveBeenCalledWith(expect.objectContaining(userManagement));
-            expect(comp.isSaving()).toEqual(false);
-        });
-
-        it('should call create service on save for new entity', () => {
-            // GIVEN
-            const saveSubject = new Subject<HttpResponse<IUserManagement>>();
-            const userManagement = {login: 'Pattie.Kertzmann'};
-            vitest.spyOn(userManagementFormService, 'getUserManagement').mockReturnValue({ login: null });
-            vitest.spyOn(userManagementService, 'create').mockReturnValue(saveSubject);
-            vitest.spyOn(comp, 'previousState');
-            activatedRoute.data = of({ userManagement: null });
-            comp.ngOnInit();
-
-            // WHEN
-            comp.save();
-            expect(comp.isSaving()).toEqual(true);
-            saveSubject.next(new HttpResponse({ body: userManagement }));
-            saveSubject.complete();
-
-            // THEN
-            expect(userManagementFormService.getUserManagement).toHaveBeenCalled();
-            expect(userManagementService.create).toHaveBeenCalled();
-            expect(comp.isSaving()).toEqual(false);
-            expect(comp.previousState).toHaveBeenCalled();
-        });
-
-        it('should set isSaving to false on error', () => {
-            // GIVEN
-            const saveSubject = new Subject<HttpResponse<IUserManagement>>();
-            const userManagement = {login: 'Pattie.Kertzmann'};
-            vitest.spyOn(userManagementService, 'update').mockReturnValue(saveSubject);
-            vitest.spyOn(comp, 'previousState');
-            activatedRoute.data = of({ userManagement });
-            comp.ngOnInit();
-
-            // WHEN
-            comp.save();
-            expect(comp.isSaving()).toEqual(true);
-            saveSubject.error('This is an error!');
-
-            // THEN
-            expect(userManagementService.update).toHaveBeenCalled();
-            expect(comp.isSaving()).toEqual(false);
-            expect(comp.previousState).not.toHaveBeenCalled();
-        });
+      // THEN
+      expect(userManagementFormService.getUserManagement).toHaveBeenCalled();
+      expect(userManagementService.create).toHaveBeenCalled();
+      expect(comp.isSaving()).toEqual(false);
+      expect(comp.previousState).toHaveBeenCalled();
     });
 
+    it("should set isSaving to false on error", () => {
+      // GIVEN
+      const saveSubject = new Subject<HttpResponse<IUserManagement>>();
+      const userManagement = { login: "Pattie.Kertzmann" };
+      vitest
+        .spyOn(userManagementService, "update")
+        .mockReturnValue(saveSubject);
+      vitest.spyOn(comp, "previousState");
+      activatedRoute.data = of({ userManagement });
+      comp.ngOnInit();
+
+      // WHEN
+      comp.save();
+      expect(comp.isSaving()).toEqual(true);
+      saveSubject.error("This is an error!");
+
+      // THEN
+      expect(userManagementService.update).toHaveBeenCalled();
+      expect(comp.isSaving()).toEqual(false);
+      expect(comp.previousState).not.toHaveBeenCalled();
+    });
+  });
 });
 ",
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.ts": {
-    "contents": "import { Component, inject, signal, OnInit } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+    "contents": "import { Component, inject, signal, OnInit } from "@angular/core";
+import { HttpResponse } from "@angular/common/http";
+import { ActivatedRoute } from "@angular/router";
+import { Observable } from "rxjs";
+import { finalize } from "rxjs/operators";
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { AlertError } from 'app/shared/alert/alert-error';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { AlertError } from "app/shared/alert/alert-error";
+import { ReactiveFormsModule } from "@angular/forms";
 
-import { UserManagementFormService, UserManagementFormGroup } from './user-management-form.service';
-import { IUserManagement } from '../user-management.model';
-import { UserManagementService } from '../service/user-management.service';
+import {
+  UserManagementFormService,
+  UserManagementFormGroup,
+} from "./user-management-form.service";
+import { IUserManagement } from "../user-management.model";
+import { UserManagementService } from "../service/user-management.service";
 
 @Component({
-    selector: 'jhi-user-management-update',
-    templateUrl: './user-management-update.html',
-    imports: [FontAwesomeModule, AlertError, ReactiveFormsModule],
+  selector: "jhi-user-management-update",
+  templateUrl: "./user-management-update.html",
+  imports: [FontAwesomeModule, AlertError, ReactiveFormsModule],
 })
 export class UserManagementUpdate implements OnInit {
-    isSaving = signal(false);
-    userManagement: IUserManagement | null = null;
+  isSaving = signal(false);
+  userManagement: IUserManagement | null = null;
 
+  protected userManagementService = inject(UserManagementService);
+  protected userManagementFormService = inject(UserManagementFormService);
+  protected activatedRoute = inject(ActivatedRoute);
 
-    protected userManagementService = inject(UserManagementService);
-    protected userManagementFormService = inject(UserManagementFormService);
-    protected activatedRoute = inject(ActivatedRoute);
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  editForm: UserManagementFormGroup =
+    this.userManagementFormService.createUserManagementFormGroup();
 
-    // eslint-disable-next-line @typescript-eslint/member-ordering
-    editForm: UserManagementFormGroup = this.userManagementFormService.createUserManagementFormGroup();
+  ngOnInit(): void {
+    this.activatedRoute.data.subscribe(({ userManagement }) => {
+      this.userManagement = userManagement;
+      if (userManagement) {
+        this.updateForm(userManagement);
+      }
+    });
+  }
 
+  previousState(): void {
+    globalThis.history.back();
+  }
 
-    ngOnInit(): void {
-        this.activatedRoute.data.subscribe(({ userManagement }) => {
-            this.userManagement = userManagement;
-            if (userManagement) {
-                this.updateForm(userManagement);
-            }
-
-        });
+  save(): void {
+    this.isSaving.set(true);
+    const userManagement = this.userManagementFormService.getUserManagement(
+      this.editForm,
+    );
+    if (userManagement.login === null) {
+      this.subscribeToSaveResponse(
+        this.userManagementService.create(userManagement),
+      );
+    } else {
+      this.subscribeToSaveResponse(
+        this.userManagementService.update(userManagement),
+      );
     }
+  }
 
+  protected subscribeToSaveResponse(
+    result: Observable<HttpResponse<IUserManagement>>,
+  ): void {
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+      next: () => this.onSaveSuccess(),
+      error: () => this.onSaveError(),
+    });
+  }
 
-    previousState(): void {
-        globalThis.history.back();
-    }
+  protected onSaveSuccess(): void {
+    this.previousState();
+  }
 
-    save(): void {
-        this.isSaving.set(true);
-        const userManagement = this.userManagementFormService.getUserManagement(this.editForm);
-        if (userManagement.login === null) {
-            this.subscribeToSaveResponse(this.userManagementService.create(userManagement));
-        } else {
-            this.subscribeToSaveResponse(this.userManagementService.update(userManagement));
-        }
-    }
+  protected onSaveError(): void {
+    // Api for inheritance.
+  }
 
-    protected subscribeToSaveResponse(result: Observable<HttpResponse<IUserManagement>>): void {
-        result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
-            next: () => this.onSaveSuccess(),
-            error: () => this.onSaveError()
-        });
-    }
+  protected onSaveFinalize(): void {
+    this.isSaving.set(false);
+  }
 
-    protected onSaveSuccess(): void {
-        this.previousState();
-    }
-
-    protected onSaveError(): void {
-        // Api for inheritance.
-    }
-
-    protected onSaveFinalize(): void {
-        this.isSaving.set(false);
-    }
-
-    protected updateForm(userManagement: IUserManagement): void {
-        this.userManagement = userManagement;
-        this.userManagementFormService.resetForm(this.editForm, userManagement);
-    }
-
+  protected updateForm(userManagement: IUserManagement): void {
+    this.userManagement = userManagement;
+    this.userManagementFormService.resetForm(this.editForm, userManagement);
+  }
 }
 ",
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/user-management.model.ts": {
-    "contents": "
-import dayjs from 'dayjs/esm';
-import { IAuthority } from 'app/entities/admin/authority/authority.model';
+    "contents": "import dayjs from "dayjs/esm";
+import { IAuthority } from "app/entities/admin/authority/authority.model";
 
 export interface IUserManagement {
   id?: number | null;
@@ -1948,58 +2347,70 @@ export interface IUserManagement {
   lastModifiedDate?: dayjs.Dayjs | null;
 }
 
-export type NewUserManagement = Omit<IUserManagement, 'login'> & { login: null };
+export type NewUserManagement = Omit<IUserManagement, "login"> & {
+  login: null;
+};
 ",
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/user-management.routes.ts": {
-    "contents": "import { Routes } from '@angular/router';
+    "contents": "import { Routes } from "@angular/router";
 
-import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
-import UserManagementResolve from './route/user-management-routing-resolve.service';
-import { ASC } from 'app/config/navigation.constants';
+import { UserRouteAccessService } from "app/core/auth/user-route-access.service";
+import UserManagementResolve from "./route/user-management-routing-resolve.service";
+import { ASC } from "app/config/navigation.constants";
 
 const userManagementRoute: Routes = [
   {
-    path: '',
-    loadComponent: () => import('./list/user-management').then(m => m.UserManagement),
+    path: "",
+    loadComponent: () =>
+      import("./list/user-management").then((m) => m.UserManagement),
     data: {
-      authorities: ['ROLE_ADMIN'],
+      authorities: ["ROLE_ADMIN"],
     },
     canActivate: [UserRouteAccessService],
   },
   {
-    path: ':login/view',
-    loadComponent: () => import('./detail/user-management-detail').then(m => m.UserManagementDetail),
+    path: ":login/view",
+    loadComponent: () =>
+      import("./detail/user-management-detail").then(
+        (m) => m.UserManagementDetail,
+      ),
     resolve: {
-      userManagement: UserManagementResolve
+      userManagement: UserManagementResolve,
     },
     data: {
-      authorities: ['ROLE_ADMIN'],
+      authorities: ["ROLE_ADMIN"],
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
   },
   {
-    path: 'new',
-    loadComponent: () => import('./update/user-management-update').then(m => m.UserManagementUpdate),
+    path: "new",
+    loadComponent: () =>
+      import("./update/user-management-update").then(
+        (m) => m.UserManagementUpdate,
+      ),
     resolve: {
-      userManagement: UserManagementResolve
+      userManagement: UserManagementResolve,
     },
     data: {
-      authorities: ['ROLE_ADMIN'],
+      authorities: ["ROLE_ADMIN"],
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
   },
   {
-    path: ':login/edit',
-    loadComponent: () => import('./update/user-management-update').then(m => m.UserManagementUpdate),
+    path: ":login/edit",
+    loadComponent: () =>
+      import("./update/user-management-update").then(
+        (m) => m.UserManagementUpdate,
+      ),
     resolve: {
-      userManagement: UserManagementResolve
+      userManagement: UserManagementResolve,
     },
     data: {
-      authorities: ['ROLE_ADMIN'],
+      authorities: ["ROLE_ADMIN"],
     },
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
   },
 ];
 
@@ -2008,41 +2419,44 @@ export default userManagementRoute;
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/user-management.test-samples.ts": {
-    "contents": "import dayjs from 'dayjs/esm';
+    "contents": "import dayjs from "dayjs/esm";
 
-
-import { IUserManagement, NewUserManagement } from './user-management.model';
+import { IUserManagement, NewUserManagement } from "./user-management.model";
 
 export const sampleWithRequiredData: IUserManagement = {
-  login: 'Rickey.Sauer',
-  email: 'Linwood5@hotmail.com'};
+  login: "Rickey.Sauer",
+  email: "Linwood5@hotmail.com",
+};
 
 export const sampleWithPartialData: IUserManagement = {
   id: 2737,
-  login: 'Hector_Klein32',
-  firstName: 'Monty',
-  lastName: 'Mitchell',
-  email: 'Guadalupe.Franey@gmail.com',
-  imageUrl: 'mash meanwhile youthfully',
+  login: "Hector_Klein32",
+  firstName: "Monty",
+  lastName: "Mitchell",
+  email: "Guadalupe.Franey@gmail.com",
+  imageUrl: "mash meanwhile youthfully",
   activated: false,
-  lastModifiedDate: dayjs('2019-12-31T10:49')};
+  lastModifiedDate: dayjs("2019-12-31T10:49"),
+};
 
 export const sampleWithFullData: IUserManagement = {
   id: 26558,
-  login: 'Cecelia72',
-  firstName: 'Letha',
-  lastName: 'Bode',
-  email: 'Samuel_Altenwerth65@hotmail.com',
-  imageUrl: 'ew nor',
+  login: "Cecelia72",
+  firstName: "Letha",
+  lastName: "Bode",
+  email: "Samuel_Altenwerth65@hotmail.com",
+  imageUrl: "ew nor",
   activated: false,
-  createdBy: 'pure',
-  createdDate: dayjs('2019-12-31T13:56'),
-  lastModifiedBy: 'broadly',
-  lastModifiedDate: dayjs('2019-12-31T19:41')};
+  createdBy: "pure",
+  createdDate: dayjs("2019-12-31T13:56"),
+  lastModifiedBy: "broadly",
+  lastModifiedDate: dayjs("2019-12-31T19:41"),
+};
 
 export const sampleWithNewData: NewUserManagement = {
-  email: 'Joannie82@yahoo.com',
-  login: null};
+  email: "Joannie82@yahoo.com",
+  login: null,
+};
 
 Object.freeze(sampleWithNewData);
 Object.freeze(sampleWithRequiredData);
