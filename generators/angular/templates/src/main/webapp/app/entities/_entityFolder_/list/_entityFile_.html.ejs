@@ -142,7 +142,7 @@ _%>
                 </tr>
             </thead>
             <tbody<% if (paginationInfiniteScroll) { %> infinite-scroll (scrolled)="loadNextPage()" [infiniteScrollDisabled]="!hasMorePage()" [infiniteScrollDistance]="0"<% } %>>
-            @for (<%= entityInstance %> of <%= entityInstancePlural %>(); track <% if (builtInUserManagement) { %>trackIdentity<% } else { %>track<%= primaryKey.nameCapitalized %><% } %>(<%= entityInstance %>)) {
+            @for (<%= entityInstance %> of <%= entityInstancePlural %>(); track track<%= primaryKey.nameCapitalized %>(<%= entityInstance %>)) {
                 <tr data-cy="entityTable">
 <%_
 const primaryKeyField = builtInUserManagement ? 'login' : primaryKey.name;

@@ -196,11 +196,7 @@ export class <%= componentName %> implements OnInit {
       this.<%- entityInstancePlural %>.<% if (paginationInfiniteScroll) { %>update(<%- entityInstancePlural %> => <% } else { %>set(<% } %>this.fillComponentAttributesFromResponseBody([...this.<%- entityInstance %>Service.<%- entityInstancePlural %>()]<% if (paginationInfiniteScroll) { %>, <%- entityInstancePlural %><% } %>));
     });
 <%_ if (primaryKey) { _%>
-<%_ if (builtInUserManagement) { _%>
-    trackIdentity = (item: I<%= entityAngularName %>): string => this.<%= entityInstance %>Service.get<%= entityAngularName %>Identifier(item);
-<%_ } else { _%>
-    track<%= primaryKey.nameCapitalized %> = (item: I<%= entityAngularName %>): <%= primaryKey.tsType %> => this.<%= entityInstance %>Service.get<%= entityAngularName %>Identifier(item);
-<%_ } _%>
+    track<%= primaryKey.nameCapitalized %> = (item: I<%= entityAngularName %>): <% if (builtInUserManagement) { %>string<% } else { %><%= primaryKey.tsType %><% } %> => this.<%= entityInstance %>Service.get<%= entityAngularName %>Identifier(item);
 <%_ } _%>
 <%_ if (builtInUserManagement) { _%>
 

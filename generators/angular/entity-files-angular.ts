@@ -128,9 +128,9 @@ export const writeEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularAp
         });
       }
     } else if (entity.builtInUserManagement) {
-      // UserManagement entity uses dedicated User Management templates
+      // UserManagement entity uses standard entity templates for consistency
       await this.writeFiles({
-        sections: { model: [entityModelFiles], service: [entityServiceFiles], client: [userManagementEntityFiles] },
+        sections: { model: [entityModelFiles], service: [entityServiceFiles], client: angularFiles.client },
         context: {
           ...application,
           ...entity,
