@@ -102,10 +102,12 @@ export function getCredentials(): Credentials {
  * Perform a JWT-based login via the API, then store the token in session storage
  * so subsequent page navigations are authenticated.
  */
+let jwtToken: string | undefined;
+
 export async function login(page: Page, username: string, password: string): Promise<void> {
   const context = page.context();
   // Warm up the session cookie / CSRF
-  const warmup = await context.request.get('/api/account', { failOnStatusCode: false });
+  await context.request.get('/api/account', { failOnStatusCode: false });
 
   const response = await context.request.post('/api/authenticate', {
     data: { username, password },
@@ -113,6 +115,7 @@ export async function login(page: Page, username: string, password: string): Pro
 
   const body = await response.json();
   const token = body.id_token;
+  jwtToken = token;
 
   // Inject the token into session storage before navigating
   await context.addInitScript((tokenVal) => {
@@ -126,9 +129,36 @@ export async function login(page: Page, username: string, password: string): Pro
 
 /**
  * Create an authenticated API request context for direct API calls.
+ * Wraps the base request context to inject the Authorization Bearer header.
  */
 export async function authenticatedRequest(page: Page): Promise<APIRequestContext> {
-  return page.context().request;
+  const baseRequest = page.context().request;
+  if (!jwtToken) {
+    return baseRequest;
+  }
+  return new Proxy(baseRequest as any, {
+    get(target, prop, receiver) {
+      if (['get', 'post', 'put', 'patch', 'delete', 'head'].includes(prop as string)) {
+        return (url: any, options?: any) => {
+          const headers = {
+            ...(options?.headers ?? {}),
+            Authorization: `Bearer ${jwtToken}`,
+          };
+          return target[prop as keyof typeof target](url, { ...options, headers });
+        };
+      }
+      if (prop === 'fetch') {
+        return (input: any, init?: any) => {
+          const headers = {
+            ...(init?.headers ?? {}),
+            Authorization: `Bearer ${jwtToken}`,
+          };
+          return target[prop as keyof typeof target](input, { ...init, headers });
+        };
+      }
+      return Reflect.get(target, prop, receiver);
+    },
+  }) as APIRequestContext;
 }
 <%_ } else if (authenticationTypeSession) { _%>
 /**
@@ -154,7 +184,47 @@ export async function login(page: Page, username: string, password: string): Pro
  * Create an authenticated API request that includes the XSRF token.
  */
 export async function authenticatedRequest(page: Page): Promise<APIRequestContext> {
-  return page.context().request;
+  const context = page.context();
+  const baseRequest = context.request;
+
+  // Retrieve XSRF token from cookies
+  const cookies = await context.cookies();
+  const xsrfCookie = cookies.find(c => c.name === 'XSRF-TOKEN');
+  const xsrfToken = xsrfCookie?.value;
+
+  // If there is no XSRF token, fall back to the base request context.
+  if (!xsrfToken) {
+    return baseRequest;
+  }
+
+  // Wrap the base request context to inject the XSRF header on state-changing requests.
+  const proxiedRequest = new Proxy(baseRequest as any, {
+    get(target, prop, receiver) {
+      if (prop === 'post' || prop === 'put' || prop === 'patch' || prop === 'delete') {
+        return (url: any, options?: any) => {
+          const headers = {
+            ...(options?.headers ?? {}),
+            'X-XSRF-TOKEN': xsrfToken,
+          };
+          return target[prop](url, { ...options, headers });
+        };
+      }
+
+      if (prop === 'fetch') {
+        return (input: any, init?: any) => {
+          const headers = {
+            ...(init?.headers ?? {}),
+            'X-XSRF-TOKEN': xsrfToken,
+          };
+          return target[prop](input, { ...init, headers });
+        };
+      }
+
+      return Reflect.get(target, prop, receiver);
+    },
+  });
+
+  return proxiedRequest as APIRequestContext;
 }
 <%_ } else if (authenticationTypeOauth2) { _%>
 /**

@@ -21,6 +21,7 @@ import {
 import {
   getCredentials,
   login,
+  authenticatedRequest,
   clickOn<%= builtInUserManagement && userManagement.skipClient && userManagement.generateEntityPlaywright ? 'Admin' : 'Entity' %>MenuItem,
 } from '../../support/commands';
 <%_
@@ -85,8 +86,9 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
   /* Disabled due to incompatibility
   <%_ } _%>
   test.beforeEach(async ({ page }) => {
+    const request = await authenticatedRequest(page);
   <%_ for (otherEntity of requiredOtherEntities) { _%>
-    const <%= otherEntity.entityInstance %>Response = await page.context().request.post('/<%= baseApi + otherEntity.entityApiUrl %>', {
+    const <%= otherEntity.entityInstance %>Response = await request.post('/<%= baseApi + otherEntity.entityApiUrl %>', {
       data: <%- JSON.stringify(this.generateTestEntity(otherEntity.fields.filter(f => !f.autoGenerate))) %>,
     });
     <%= otherEntity.entityInstance %> = await <%= otherEntity.entityInstance %>Response.json();
@@ -99,7 +101,8 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
 <%_ } _%>
   test.afterEach(async ({ page }) => {
     if (<%= entityInstance %>) {
-      await page.context().request.delete(`/<%= baseApi + entityApiUrl %>/${<%= entityInstance %>.<%= primaryKey.name %>}`);
+      const request = await authenticatedRequest(page);
+      await request.delete(`/<%= baseApi + entityApiUrl %>/${<%= entityInstance %>.<%= primaryKey.name %>}`);
       <%= entityInstance %> = undefined;
     }
   });
@@ -109,9 +112,10 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
   /* Disabled due to incompatibility
   <%_ } _%>
   test.afterEach(async ({ page }) => {
+    const request = await authenticatedRequest(page);
   <%_ for (otherEntity of requiredOtherEntities) { _%>
     if (<%= otherEntity.entityInstance %>) {
-      await page.context().request.delete(`/<%= baseApi + otherEntity.entityApiUrl %>/${<%= otherEntity.entityInstance %>.<%= otherEntity.primaryKey.name %>}`);
+      await request.delete(`/<%= baseApi + otherEntity.entityApiUrl %>/${<%= otherEntity.entityInstance %>.<%= otherEntity.primaryKey.name %>}`);
       <%= otherEntity.entityInstance %> = undefined;
     }
   <%_ } _%>
@@ -169,7 +173,8 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
       /* Disabled due to incompatibility
   <%_ } _%>
       test.beforeEach(async ({ page }) => {
-        const createResponse = await page.context().request.post('/<%= baseApi + entityApiUrl %>', {
+        const request = await authenticatedRequest(page);
+        const createResponse = await request.post('/<%= baseApi + entityApiUrl %>', {
   <%_ if (requiredRelationships.length > 0) { _%>
           data: {
             ...<%= entityInstance %>Sample,
@@ -184,7 +189,7 @@ test.describe('<%- entityNameCapitalized %> e2e test', () => {
         <%= entityInstance %> = await createResponse.json();
 
         // Intercept the entities list request and return our entity
-        await page.route('/<%= baseApi + entityApiUrl %>?(\\?*|)', async route => {
+        await page.route(new RegExp('/<%= baseApi + entityApiUrl %>(\\?.*)?$'), async route => {
           await route.fulfill({
             status: 200,
   <%_ if (!paginationNo) { _%>

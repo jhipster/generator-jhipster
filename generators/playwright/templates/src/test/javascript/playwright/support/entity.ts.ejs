@@ -17,8 +17,12 @@
  limitations under the License.
 -%>
 import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import type { Page } from '@playwright/test';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Entity selectors
 export const entityTableSelector = '[data-cy="entityTable"]';

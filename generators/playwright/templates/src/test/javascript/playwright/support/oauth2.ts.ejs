@@ -62,9 +62,10 @@ async function keycloakLogin(page: Page, redirectUrl: string, username: string, 
     throw new Error('Could not find login form action URL in Keycloak response');
   }
   const formUrl = formActionMatch[1].replace(/&amp;/g, '&');
+  const resolvedFormUrl = new URL(formUrl, redirectUrl).toString();
 
   // Submit credentials
-  await request.post(formUrl, {
+  await request.post(resolvedFormUrl, {
     form: { username, password },
     maxRedirects: 0,
     failOnStatusCode: false,
