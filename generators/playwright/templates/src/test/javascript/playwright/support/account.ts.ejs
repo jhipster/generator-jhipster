@@ -1,0 +1,21 @@
+import type { Page } from '@playwright/test';
+
+export type Account = Record<string, string | boolean | number>;
+
+/**
+ * Retrieve the current user account via the API.
+ */
+export async function getAccount(page: Page): Promise<Account> {
+  const response = await page.context().request.get('/api/account');
+  return response.json() as Promise<Account>;
+}
+
+/**
+ * Save/update the current user account via the API.
+ */
+export async function saveAccount(page: Page, account: Account): Promise<number> {
+  const response = await page.context().request.post('/api/account', {
+    data: account,
+  });
+  return response.status();
+}
