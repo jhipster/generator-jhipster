@@ -108,6 +108,16 @@
     "webpack-notifier": "<%= nodeDependencies['webpack-notifier'] %>",
     "workbox-webpack-plugin": "<%= nodeDependencies['workbox-webpack-plugin'] %>"
   },
+  "overrides": {
+    "react-redux-loading-bar": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "react-jhipster": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    }
+  },
   "engines": {
     "node": ">=<%= nodeVersion %>"
   },

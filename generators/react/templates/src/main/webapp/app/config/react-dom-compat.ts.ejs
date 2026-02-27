@@ -1,0 +1,36 @@
+/**
+ * Compatibility shim for React 19.
+ *
+ * React 19 removed ReactDOM.findDOMNode, but some third-party libraries
+ * (e.g. react-transition-group used by reactstrap) still rely on it.
+ * This polyfill provides a basic implementation so those libraries continue
+ * to work until they are updated or replaced.
+ *
+ * This file MUST be imported before any library that uses findDOMNode.
+ */
+import * as ReactDOM from 'react-dom';
+
+if (typeof (ReactDOM as any).findDOMNode !== 'function') {
+  (ReactDOM as any).findDOMNode = (componentOrElement: any): Element | null | Text => {
+    if (componentOrElement == null) {
+      return null;
+    }
+    // If it's already a DOM node, return it directly
+    if ((componentOrElement as Element).nodeType != null) {
+      return componentOrElement as Element;
+    }
+    // For class component instances, try to find the underlying DOM node
+    // via the internal fiber, falling back to null.
+    if (componentOrElement._reactInternals || componentOrElement._reactInternalFiber) {
+      const fiber = componentOrElement._reactInternals ?? componentOrElement._reactInternalFiber;
+      let node = fiber;
+      while (node) {
+        if (node.stateNode instanceof Element || node.stateNode instanceof Text) {
+          return node.stateNode;
+        }
+        node = node.child;
+      }
+    }
+    return null;
+  };
+}

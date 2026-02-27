@@ -21,7 +21,7 @@ describe('private-route component', () => {
   });
 <%_ } _%>
 
-  const wrapper = (Elem: JSX.Element, authentication) => {
+  const wrapper = (Elem: React.JSX.Element, authentication) => {
     const store = configureStore({
       reducer: {
         authentication: () => authentication,

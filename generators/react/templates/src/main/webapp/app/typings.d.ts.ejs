@@ -16,6 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+/// <reference types="react" />
+
 declare const VERSION: string;
 declare const SERVER_API_URL: string;
 declare const DEVELOPMENT: string;
@@ -32,12 +34,12 @@ declare module '*.json' {
   <%_ for (const remote of microfrontends) { _%>
 
 declare module '@<%= remote.lowercaseBaseName %>/entities-routes' {
-  const _default: () => JSX.Element;
+  const _default: () => React.JSX.Element;
   export default _default;
 }
 
 declare module '@<%= remote.lowercaseBaseName %>/entities-menu' {
-  const _default: () => JSX.Element;
+  const _default: () => React.JSX.Element;
   export default _default;
 }
   <%_ } _%>

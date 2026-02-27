@@ -16,6 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+// Polyfill findDOMNode for libraries that still depend on it (e.g. reactstrap via react-transition-group).
+// findDOMNode was removed in React 19 but some third-party libraries have not yet been updated.
+import 'app/config/react-dom-compat';
+
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
@@ -41,7 +45,7 @@ setupAxiosInterceptors(() => actions.clearAuthentication('login.error.unauthoriz
 
 loadIcons();
 
-const rootEl = document.getElementById('root');
+const rootEl = document.getElementById('root')!;
 const root = createRoot(rootEl);
 
 const render = Component =>

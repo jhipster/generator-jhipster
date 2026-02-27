@@ -53,6 +53,7 @@ export const files = asWriteFilesSection({
         'routes.tsx',
         'setup-tests.ts',
         'typings.d.ts',
+        'config/react-dom-compat.ts',
         'config/constants.ts',
         'config/dayjs.ts',
         'config/axios-interceptor.ts',

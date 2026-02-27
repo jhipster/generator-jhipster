@@ -388,6 +388,9 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
   "clientRoot/src/app/config/notification-middleware.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/config/react-dom-compat.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/config/store.ts": {
     "stateCleared": "modified",
   },
@@ -1168,6 +1171,9 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
     "stateCleared": "modified",
   },
   "clientRoot/src/app/config/notification-middleware.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/config/react-dom-compat.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/config/store.ts": {
@@ -1994,6 +2000,9 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "clientRoot/src/app/config/notification-middleware.ts": {
     "stateCleared": "modified",
   },
+  "clientRoot/src/app/config/react-dom-compat.ts": {
+    "stateCleared": "modified",
+  },
   "clientRoot/src/app/config/store.ts": {
     "stateCleared": "modified",
   },
@@ -2789,6 +2798,9 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/notification-middleware.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/react-dom-compat.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/store.ts": {
@@ -3603,6 +3615,9 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/notification-middleware.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/react-dom-compat.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/store.ts": {
@@ -4486,6 +4501,9 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
   "src/main/webapp/app/config/notification-middleware.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/config/react-dom-compat.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/config/store.ts": {
     "stateCleared": "modified",
   },
@@ -5276,6 +5294,9 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/notification-middleware.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/config/react-dom-compat.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/store.ts": {
