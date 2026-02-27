@@ -21,11 +21,11 @@ import { existsSync } from 'node:fs';
 import pathjs from 'node:path';
 
 import chalk from 'chalk';
-import normalize from 'normalize-path';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 
 import { monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.ts';
 import { createBase64Secret, stringHashCode } from '../../lib/utils/index.ts';
+import { normalizePath as normalize } from '../../lib/utils/path.ts';
 import { createFaker } from '../base-application/support/index.ts';
 import type {
   Deployment as BaseDeployment,

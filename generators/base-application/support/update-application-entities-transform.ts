@@ -4,9 +4,9 @@ import { basename, join } from 'node:path';
 import { loadFile } from 'mem-fs';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { Minimatch } from 'minimatch';
-import normalizePath from 'normalize-path';
 import { transform } from 'p-transform';
 
+import { normalizePath } from '../../../lib/utils/path.ts';
 import { GENERATOR_JHIPSTER } from '../../generator-constants.ts';
 
 export const updateApplicationEntitiesTransform = ({

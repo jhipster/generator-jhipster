@@ -17,4 +17,9 @@
  * limitations under the License.
  */
 
+/**
+ * Normalize path separators to forward slashes (replaces backslashes).
+ */
+export const normalizePath = (path: string): string => path.replace(/\\/g, '/');
+
 export const normalizePathEnd = (directory: string): string => (!directory || directory.endsWith('/') ? directory : `${directory}/`);
