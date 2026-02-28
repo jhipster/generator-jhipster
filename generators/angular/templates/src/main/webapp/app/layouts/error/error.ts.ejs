@@ -31,7 +31,7 @@ import { TranslateModule } from '@ngx-translate/core';
   templateUrl: './error.html',
 })
 export default class Error implements OnInit<% if (enableTranslation) { %>, OnDestroy<% } %> {
-  errorMessage = signal<string | undefined>(undefined);
+  readonly errorMessage = signal<string | undefined>(undefined);
 <%_ if (enableTranslation) { _%>
   errorKey?: string;
   langChangeSubscription?: Subscription;

@@ -34,9 +34,9 @@ import { MetricsModalThreads } from '../metrics-modal-threads/metrics-modal-thre
   imports: [NgbProgressbar, DecimalPipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
 })
 export class JvmThreads {
-  threads = input<Thread[] | undefined>();
+  readonly threads = input<Thread[] | undefined>();
 
-  threadStats = computed(() => {
+  readonly threadStats = computed(() => {
     const stats = {
       threadDumpAll: 0,
       threadDumpRunnable: 0,

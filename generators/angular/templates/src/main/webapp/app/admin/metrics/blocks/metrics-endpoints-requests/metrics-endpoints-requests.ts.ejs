@@ -30,10 +30,10 @@ export class MetricsEndpointsRequests {
   /**
    * Object containing service related metrics
    */
-  endpointsRequestsMetrics = input<Services>();
+  readonly endpointsRequestsMetrics = input<Services>();
 
   /**
    * Boolean field saying if the metrics are in the process of being updated
    */
-  updating = input<boolean>();
+  readonly updating = input<boolean>();
 }

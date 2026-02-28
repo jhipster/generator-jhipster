@@ -32,8 +32,8 @@ import { ActivateService } from './activate.service';
   templateUrl: './activate.html',
 })
 export default class Activate implements OnInit {
-  error = signal(false);
-  success = signal(false);
+  readonly error = signal(false);
+  readonly success = signal(false);
 
   private readonly activateService = inject(ActivateService);
   private readonly route = inject(ActivatedRoute);

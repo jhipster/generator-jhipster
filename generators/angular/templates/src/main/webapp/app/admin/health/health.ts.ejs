@@ -36,7 +36,7 @@ import HealthModal from './modal/health-modal';
   imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>FontAwesomeModule, KeyValuePipe],
 })
 export default class Health implements OnInit {
-  health = signal<HealthModel | null>(null);
+  readonly health = signal<HealthModel | null>(null);
 
   private readonly modalService = inject(NgbModal);
   private readonly healthService = inject(HealthService);

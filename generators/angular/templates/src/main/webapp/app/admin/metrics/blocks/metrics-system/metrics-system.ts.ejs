@@ -32,12 +32,12 @@ export class MetricsSystem {
   /**
    * Object containing thread related metrics
    */
-  systemMetrics = input<ProcessMetrics>();
+  readonly systemMetrics = input<ProcessMetrics>();
 
   /**
    * Boolean field saying if the metrics are in the process of being updated
    */
-  updating = input<boolean>();
+  readonly updating = input<boolean>();
 
   convertMillisecondsToDuration(ms: number): string {
     const times = {

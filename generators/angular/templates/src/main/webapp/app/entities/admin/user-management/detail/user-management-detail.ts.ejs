@@ -33,5 +33,5 @@ import { User } from '../user-management.model';
   imports: [RouterLink, FontAwesomeModule, DatePipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
 })
 export default class UserManagementDetail {
-  user = input<User | null>(null);
+  readonly user = input<User | null>(null);
 }

@@ -42,7 +42,7 @@ const initialAccount: Account = {} as Account;
   templateUrl: './settings.html',
 })
 export default class Settings implements OnInit {
-  success = signal(false);
+  readonly success = signal(false);
 <%_ if (enableTranslation) { _%>
   languages = LANGUAGES;
 <%_ } _%>

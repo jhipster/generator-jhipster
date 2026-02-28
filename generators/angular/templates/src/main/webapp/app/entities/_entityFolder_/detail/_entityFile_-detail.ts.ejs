@@ -66,7 +66,7 @@ import { DataUtils } from 'app/core/util/data-util.service';
     ],
 })
 export class <%= entityAngularName %>Detail {
-    <%= entityInstance %> = input<I<%= entityAngularName %> | null>(null);
+    readonly <%= entityInstance %> = input<I<%= entityAngularName %> | null>(null);
 
 <%_ if (anyFieldIsBlobDerived) { _%>
     protected dataUtils = inject(DataUtils);

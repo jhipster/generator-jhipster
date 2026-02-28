@@ -141,21 +141,21 @@ export class <%= componentName %> implements OnInit {
 
     sortState = sortStateSignal({});
 <%_ if (searchEngineAny) { _%>
-    currentSearch = signal('');
+    readonly currentSearch = signal('');
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
     filters: IFilterOptions = new FilterOptions();
 <%_ } _%>
 
 <%_ if (paginationPagination) { _%>
-  itemsPerPage = signal(ITEMS_PER_PAGE);
-  totalItems = signal(0);
-  page = signal(1);
+  readonly itemsPerPage = signal(ITEMS_PER_PAGE);
+  readonly totalItems = signal(0);
+  readonly page = signal(1);
 <%_ } else if (paginationInfiniteScroll) { _%>
-    itemsPerPage = signal(ITEMS_PER_PAGE);
-    links: WritableSignal<Record<string, undefined | Record<string, string | undefined>>> = signal({});
-    hasMorePage = computed(() => !!this.links().next);
-    isFirstFetch = computed(() => Object.keys(this.links()).length === 0);
+    readonly itemsPerPage = signal(ITEMS_PER_PAGE);
+    readonly links: WritableSignal<Record<string, undefined | Record<string, string | undefined>>> = signal({});
+    readonly hasMorePage = computed(() => !!this.links().next);
+    readonly isFirstFetch = computed(() => Object.keys(this.links()).length === 0);
 <%_ } _%>
 
   readonly router = inject(Router);

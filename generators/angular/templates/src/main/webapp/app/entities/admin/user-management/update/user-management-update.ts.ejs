@@ -48,8 +48,8 @@ export default class UserManagementUpdate implements OnInit {
 <%_ if (enableTranslation) { _%>
   languages = LANGUAGES;
 <%_ } _%>
-  authorities = signal<string[]>([]);
-  isSaving = signal(false);
+  readonly authorities = signal<string[]>([]);
+  readonly isSaving = signal(false);
 
   editForm = new FormGroup({
     id: new FormControl(userTemplate.id),

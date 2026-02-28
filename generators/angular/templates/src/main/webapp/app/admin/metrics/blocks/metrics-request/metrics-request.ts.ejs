@@ -37,12 +37,12 @@ export class MetricsRequest {
   /**
    * Object containing http request related metrics
    */
-  requestMetrics = input<HttpServerRequests>();
+  readonly requestMetrics = input<HttpServerRequests>();
 
   /**
    * Boolean field saying if the metrics are in the process of being updated
    */
-  updating = input<boolean>();
+  readonly updating = input<boolean>();
 
   filterNaN = (n: number): number => filterNaN(n);
 }

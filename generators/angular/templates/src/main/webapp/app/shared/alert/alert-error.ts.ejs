@@ -35,7 +35,7 @@ import { getMessageFromHeaders } from 'app/shared/jhipster/headers';
   imports: [NgbAlert],
 })
 export class AlertError implements OnDestroy {
-  alerts = signal<AlertModel[]>([]);
+  readonly alerts = signal<AlertModel[]>([]);
   errorListener: Subscription;
   httpErrorListener: Subscription;
 

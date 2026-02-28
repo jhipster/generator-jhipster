@@ -35,10 +35,10 @@ export class MetricsGarbageCollector {
   /**
    * Object containing garbage collector related metrics
    */
-  garbageCollectorMetrics = input<GarbageCollector>();
+  readonly garbageCollectorMetrics = input<GarbageCollector>();
 
   /**
    * Boolean field saying if the metrics are in the process of being updated
    */
-  updating = input<boolean>();
+  readonly updating = input<boolean>();
 }

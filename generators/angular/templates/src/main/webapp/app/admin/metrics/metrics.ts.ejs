@@ -53,9 +53,9 @@ import { MetricsSystem } from './blocks/metrics-system/metrics-system';
   ],
 })
 export default class Metrics implements OnInit {
-  metrics = signal<MetricsModel | undefined>(undefined);
-  threads = signal<Thread[] | undefined>(undefined);
-  updatingMetrics = signal(true);
+  readonly metrics = signal<MetricsModel | undefined>(undefined);
+  readonly threads = signal<Thread[] | undefined>(undefined);
+  readonly updatingMetrics = signal(true);
 
   private readonly metricsService = inject(MetricsService);
 

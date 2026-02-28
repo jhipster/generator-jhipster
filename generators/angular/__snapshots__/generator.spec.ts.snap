@@ -312,7 +312,7 @@ import { IUserManagement } from "../user-management.model";
   ],
 })
 export class UserManagementDetail {
-  userManagement = input<IUserManagement | null>(null);
+  readonly userManagement = input<IUserManagement | null>(null);
 
   previousState(): void {
     globalThis.history.back();
@@ -831,9 +831,9 @@ export class UserManagement implements OnInit {
 
   sortState = sortStateSignal({});
 
-  itemsPerPage = signal(ITEMS_PER_PAGE);
-  totalItems = signal(0);
-  page = signal(1);
+  readonly itemsPerPage = signal(ITEMS_PER_PAGE);
+  readonly totalItems = signal(0);
+  readonly page = signal(1);
 
   readonly router = inject(Router);
   protected readonly userManagementService = inject(UserManagementService);
@@ -2260,7 +2260,7 @@ import { UserManagementService } from "../service/user-management.service";
   imports: [FontAwesomeModule, AlertError, ReactiveFormsModule],
 })
 export class UserManagementUpdate implements OnInit {
-  isSaving = signal(false);
+  readonly isSaving = signal(false);
   userManagement: IUserManagement | null = null;
 
   protected userManagementService = inject(UserManagementService);

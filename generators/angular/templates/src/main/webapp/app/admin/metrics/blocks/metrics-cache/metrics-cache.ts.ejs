@@ -41,7 +41,7 @@ export class MetricsCache {
   /**
    * Boolean field saying if the metrics are in the process of being updated
    */
-  updating = input<boolean>();
+  readonly updating = input<boolean>();
 
   filterNaN = (n: number): number => filterNaN(n);
 }

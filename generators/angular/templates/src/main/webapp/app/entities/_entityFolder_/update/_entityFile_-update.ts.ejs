@@ -79,7 +79,7 @@ import { <%- importedType %> } from '<%- importedPath %>';
 TranslateDirective, TranslateModule,<%_ } _%>FontAwesomeModule, AlertError, ReactiveFormsModule<%_ if (anyFieldHasTypeLocalDate) { _%>, NgbInputDatepicker<%_ } _%><%_ if (anyFieldHasDocumentation) { _%>, NgbTooltip<%_ } _%>],
 })
 export class <%= entityAngularName %>Update implements OnInit {
-    isSaving = signal(false);
+    readonly isSaving = signal(false);
     <%= entityInstance %>: I<%= entityAngularName %> | null = null;
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
     <%- this._.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);

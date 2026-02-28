@@ -27,7 +27,7 @@ import { AlertService, AlertModel } from 'app/core/util/alert.service';
   imports: [NgbAlert],
 })
 export class Alert implements OnInit, OnDestroy {
-  alerts = signal<AlertModel[]>([]);
+  readonly alerts = signal<AlertModel[]>([]);
 
   private readonly alertService = inject(AlertService);
 
