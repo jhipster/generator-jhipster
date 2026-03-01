@@ -32,7 +32,7 @@ import { AccountService } from 'app/core/auth/account.service';
   imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>ReactiveFormsModule<% if (generateUserManagement) { %>, RouterLink<% } %>],
   templateUrl: './login.html',
 })
-export default class LoginComponent implements OnInit, AfterViewInit {
+export default class Login implements OnInit, AfterViewInit {
   username = viewChild.required<ElementRef>('username');
 
   readonly authenticationError = signal(false);
