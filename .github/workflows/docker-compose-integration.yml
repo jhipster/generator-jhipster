@@ -91,7 +91,7 @@ jobs:
       - run: ${{ matrix.cmd-e2e }}
         id: e2e
       - name: Upload cypress screenshots
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: always() && steps.e2e.outcome == 'failure'
         with:
           name: screenshots-${{ matrix.name }}
