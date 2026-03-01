@@ -52,7 +52,7 @@ describe('generator - server - support - needles', () => {
       });
 
       describe('when applied', () => {
-        const fileRegexp = /config\/ApplicationProperties.java/;
+        const fileRegexp = /config\/ApplicationProperties.java$/;
         const property = 'private Foo foo;';
         const propertyGetter = `
 

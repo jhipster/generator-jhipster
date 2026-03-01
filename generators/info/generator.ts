@@ -146,7 +146,7 @@ export default class InfoGenerator extends BaseCoreGenerator<
     try {
       const foundEntities = getEntitiesFromDir(this.destinationPath(JHIPSTER_CONFIG_DIR));
       for (const entity of foundEntities) {
-        const entityJson = this.readDestinationJSON(this.destinationPath(JHIPSTER_CONFIG_DIR, `${entity}.json`));
+        const entityJson = this.readDestinationJSON(this.destinationPath(JHIPSTER_CONFIG_DIR, `${entity}.json`)) as Entity;
         if (entityJson) {
           entities.set(entity, entityJson);
         }

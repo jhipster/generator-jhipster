@@ -24,12 +24,11 @@ import { relative as posixRelative } from 'node:path/posix';
 import { requireNamespace } from '@yeoman/namespace';
 import type { GeneratorMeta } from '@yeoman/types';
 import chalk from 'chalk';
-import type { Data as TemplateData, Options as TemplateOptions } from 'ejs';
 import latestVersion from 'latest-version';
 import { get, kebabCase, merge, mergeWith, set, snakeCase } from 'lodash-es';
-import type { CopyOptions } from 'mem-fs-editor';
 import semver, { lt as semverLessThan } from 'semver';
 import { simpleGit } from 'simple-git';
+import type { PackageJson } from 'type-fest';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import type Environment from 'yeoman-environment';
 import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-generator';
@@ -690,7 +689,22 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * Reads a resource file from the generator
    */
   readResource(path: string): string | null {
-    return this.fs.read(this.templatePath('../resources', path));
+    return this.fs.read(this.resourcesPath(path));
+  }
+
+  /**
+   * Join a path to the source root.
+   * @param dest - path parts
+   * @return joined path
+   */
+  resourcesPath(...dest: string[]): string {
+    const filepath = join(...dest);
+
+    if (isAbsolute(filepath)) {
+      return filepath;
+    }
+
+    return this.templatePath('../resources', filepath);
   }
 
   /**
@@ -811,15 +825,23 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
    * @param source
    * @param destination - destination
    * @param data - template data
-   * @param options - options passed to ejs render
    * @param copyOptions
    */
-  writeFile(source: string, destination: string, data: TemplateData = this, options?: TemplateOptions, copyOptions: CopyOptions = {}) {
+  writeFile(
+    source: string,
+    destination: string,
+    data: Parameters<CoreGenerator['renderTemplate']>[2] = this,
+    copyOptions: Parameters<CoreGenerator['renderTemplate']>[3] = {},
+  ) {
     // Convert to any because ejs types doesn't support string[] https://github.com/DefinitelyTyped/DefinitelyTyped/pull/63315
 
     const root: any = this.jhipsterTemplatesFolders ?? this.templatePath();
     try {
-      return this.renderTemplate(source, destination, data, { root, ...options }, { noGlob: true, ...copyOptions });
+      return this.renderTemplate(source, destination, data, {
+        noGlob: true,
+        ...copyOptions,
+        transformOptions: { root, ...copyOptions.transformOptions },
+      });
     } catch (error) {
       throw new Error(`Error writing file ${source} to ${destination}: ${error}`, { cause: error });
     }
@@ -994,21 +1016,25 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             useAsync = false;
           }
 
-          const renderOptions = {
+          const transformOptions = {
             ...options?.renderOptions,
             // Set root for ejs to lookup for partials.
             root: templatesRoots,
             // ejs caching cause problem https://github.com/jhipster/generator-jhipster/pull/20757
             cache: false,
           };
-          const copyOptions = { noGlob: true };
+          const copyOptions = { noGlob: true, transformOptions };
           if (appendEjs) {
             sourceFileFrom = `${sourceFileFrom}.ejs`;
           }
-          if (useAsync) {
-            await this.renderTemplateAsync(sourceFileFrom, targetFile, templateData, renderOptions, copyOptions);
+          if (noEjs && useAsync) {
+            await this.copyTemplateAsync(sourceFileFrom, targetFile, copyOptions);
+          } else if (noEjs) {
+            this.copyTemplate(sourceFileFrom, targetFile, copyOptions);
+          } else if (useAsync) {
+            await this.renderTemplateAsync(sourceFileFrom, targetFile, templateData, copyOptions);
           } else {
-            this.renderTemplate(sourceFileFrom, targetFile, templateData, renderOptions, copyOptions);
+            this.renderTemplate(sourceFileFrom, targetFile, templateData, copyOptions);
           }
         }
       } catch (error) {
@@ -1302,11 +1328,17 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
   }
 
-  loadNodeDependenciesFromPackageJson(
-    destination: Record<string, string>,
-    packageJsonFile: string = this.templatePath('../resources/package.json'),
-  ): void {
-    const { devDependencies, dependencies } = this.fs.readJSON(packageJsonFile, {});
+  readResourcesPackageJson(
+    packageJsonFile: string = 'package.json',
+  ): Omit<PackageJson.PackageJsonStandard, 'dependencies' | 'devDependencies'> &
+    Record<'dependencies' | 'devDependencies', Record<string, string>> {
+    packageJsonFile = this.resourcesPath(packageJsonFile);
+    const packageJson = this.fs.readJSON(packageJsonFile, {}) as any;
+    return { ...packageJson, devDependencies: { ...packageJson.devDependencies }, dependencies: { ...packageJson.dependencies } };
+  }
+
+  loadNodeDependenciesFromPackageJson(destination: Record<string, string>, packageJsonFile?: string): void {
+    const { devDependencies, dependencies } = this.readResourcesPackageJson(packageJsonFile);
     this.loadNodeDependencies(destination, { ...devDependencies, ...dependencies });
   }
 

@@ -210,7 +210,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
           const {
             dependencies: { rxjs },
             devDependencies: { webpack: webpackVersion, 'browser-sync': browserSyncVersion },
-          } = this.fs.readJSON(this.fetchFromInstalledJHipster('angular', 'resources', 'package.json'));
+          } = this.readResourcesPackageJson(this.fetchFromInstalledJHipster('angular', 'resources', 'package.json'));
 
           this.packageJson.merge({
             devDependencies: {
@@ -226,7 +226,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
         if (applications.some(app => app.clientFrameworkReact)) {
           const {
             devDependencies: { 'browser-sync': browserSyncVersion },
-          } = this.fs.readJSON(this.fetchFromInstalledJHipster('react', 'resources', 'package.json'));
+          } = this.readResourcesPackageJson(this.fetchFromInstalledJHipster('react', 'resources', 'package.json'));
 
           this.packageJson.merge({
             overrides: {

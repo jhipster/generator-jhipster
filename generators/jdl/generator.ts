@@ -21,7 +21,7 @@ import { extname } from 'node:path';
 
 import { upperFirst } from 'lodash-es';
 import { type Store as MemFs, create as createMemFs } from 'mem-fs';
-import { type MemFsEditor, create as createMemFsEditor } from 'mem-fs-editor';
+import { type MemFsEditor, type MemFsEditorFile, create as createMemFsEditor } from 'mem-fs-editor';
 
 import { downloadJdlFile } from '../../cli/download.ts';
 import EnvironmentBuilder from '../../cli/environment-builder.ts';
@@ -48,7 +48,7 @@ const toJdlFile = (file: string): string => {
   return file;
 };
 
-type ApplicationWithEntitiesAndPath = ApplicationWithEntities & { folder?: string; sharedFs?: MemFs };
+type ApplicationWithEntitiesAndPath = ApplicationWithEntities & { folder?: string; sharedFs?: MemFs<MemFsEditorFile> };
 
 export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
   jdlFiles?: string[];

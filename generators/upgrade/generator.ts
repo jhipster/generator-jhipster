@@ -312,7 +312,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
   }
 
   getPackageJsonVersion() {
-    return this.readDestinationJSON('package.json').devDependencies?.['generator-jhipster'];
+    return this.readResourcesPackageJson(this.destinationPath('package.json'))?.devDependencies?.['generator-jhipster'];
   }
 
   isV7(version: string): boolean {
