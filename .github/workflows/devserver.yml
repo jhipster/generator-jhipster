@@ -110,7 +110,7 @@ jobs:
           ./npmw install
           ./npmw run e2e:devserver --if-present
       - name: 'E2E: Store failure screenshots'
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: always() && steps.e2e.outcome == 'failure'
         with:
           name: screenshots-${{ matrix.job-name }}
