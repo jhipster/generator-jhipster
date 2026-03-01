@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import React, { useEffect } from 'react';
-import { Button, Col, Row } from 'reactstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import { Translate, translate, ValidatedField, ValidatedForm, isEmail } from 'react-jhipster';
 import { toast } from 'react-toastify';
 
@@ -121,7 +121,7 @@ export const SettingsPage = () => {
               ))}
             </ValidatedField>
 <%_ } _%>
-            <Button color="primary" type="submit" data-cy="submit">
+            <Button variant="primary" type="submit" data-cy="submit">
               <Translate contentKey="settings.form.button">Save</Translate>
             </Button>
           </ValidatedForm>

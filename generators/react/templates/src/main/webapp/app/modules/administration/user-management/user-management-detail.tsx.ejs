@@ -18,7 +18,7 @@
 -%>
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router';
-import { Button, Row, Badge } from 'reactstrap';
+import { Button, Row, Badge } from 'react-bootstrap';
 import { Translate, TextFormat } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
@@ -51,9 +51,9 @@ export const UserManagementDetail = () => {
             <span>{user.login}</span>&nbsp;
             {
               user.activated ? (
-              <Badge color="success"><Translate contentKey="userManagement.activated">Activated</Translate></Badge>
+              <Badge bg="success"><Translate contentKey="userManagement.activated">Activated</Translate></Badge>
               ) : (
-              <Badge color="danger"><Translate contentKey="userManagement.deactivated">Deactivated</Translate></Badge>
+              <Badge bg="danger"><Translate contentKey="userManagement.deactivated">Deactivated</Translate></Badge>
               )
             }
           </dd>
@@ -82,7 +82,7 @@ export const UserManagementDetail = () => {
                 user.authorities?.map(
                   (authority, i) => (
                     <li key={`user-auth-${i}`}>
-                      <Badge color="info">{authority}</Badge>
+                      <Badge bg="info">{authority}</Badge>
                     </li>
                   )
                 )
@@ -91,7 +91,7 @@ export const UserManagementDetail = () => {
           </dd>
         </dl>
       </Row>
-      <Button tag={Link} to="/admin/user-management" replace color="info" data-cy="entityDetailsBackButton">
+      <Button as={Link as any} to="/admin/user-management" replace variant="info" data-cy="entityDetailsBackButton">
         <FontAwesomeIcon icon={faArrowLeft} />{' '}
         <span className="d-none d-md-inline">
           <Translate contentKey="entity.action.back">Back</Translate>

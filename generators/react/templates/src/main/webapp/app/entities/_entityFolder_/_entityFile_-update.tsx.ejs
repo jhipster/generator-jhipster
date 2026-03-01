@@ -23,8 +23,8 @@ import {
   Row,
   Col,
   FormText,
-  <% if (anyFieldHasDocumentation) { %>UncontrolledTooltip,<% } %>
-} from 'reactstrap';
+  <% if (anyFieldHasDocumentation) { %>OverlayTrigger, Tooltip,<% } %>
+} from 'react-bootstrap';
 import {
   isNumber,
   Translate,
@@ -289,13 +289,15 @@ _%>
         />
   <%_ } _%>
   <%_ if (field.documentation) { _%>
-          <UncontrolledTooltip target="<%= fieldName %>Label">
+          <OverlayTrigger overlay={<Tooltip>
     <%_ if (enableTranslation) { _%>
             <Translate contentKey="<%= i18nKeyPrefix %>.help.<%= fieldName %>"/>
     <%_ } else { _%>
             <%= field.documentation %>
     <%_ } _%>
-          </UncontrolledTooltip>
+          </Tooltip>}>
+            <span id="<%= fieldName %>Label" className="d-inline-block">?</span>
+          </OverlayTrigger>
   <%_ } _%>
 <%_ } _%>
 <%_ for (const rel of persistableRelationships.filter(rel => !rel.otherEntity.embedded)) {
@@ -362,12 +364,12 @@ _%>
           </ValidatedField>
   <%_ } _%>
 <%_ } _%>
-          <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/<%= entityPage %>" replace color="info">
+          <Button as={Link as any} id="cancel-save" data-cy="entityCreateCancelButton" to="/<%= entityPage %>" replace variant="info">
             <FontAwesomeIcon icon="arrow-left" />&nbsp;
             <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
           </Button>
           &nbsp;
-          <Button color="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
+          <Button variant="primary" id="save-entity" data-cy="entityCreateSaveButton" type="submit" disabled={updating}>
             <FontAwesomeIcon icon="save" />&nbsp;
             <Translate contentKey="entity.action.save">Save</Translate>
           </Button>

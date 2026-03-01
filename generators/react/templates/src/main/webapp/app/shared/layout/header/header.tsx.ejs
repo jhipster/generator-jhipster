@@ -18,14 +18,12 @@
 -%>
 import './header.scss';
 
-import React, { useState<% if (enableI18nRTL) { %>, useEffect<% } %> } from 'react';
+import React<% if (enableI18nRTL) { %>, { useEffect }<% } %> from 'react';
 import { Translate<% if (enableTranslation) { %>, Storage<% } %> } from 'react-jhipster';
 import {
   Navbar,
   Nav,
-  NavbarToggler,
-  Collapse
-} from 'reactstrap';
+} from 'react-bootstrap';
 import LoadingBar from 'react-redux-loading-bar';
 
 import { Home, Brand } from './header-components';
@@ -47,13 +45,11 @@ export interface IHeaderProps {
 }
 
 const Header = (props: IHeaderProps) => {
-  const [menuOpen, setMenuOpen] = useState(false);
 
 <%_ if (enableTranslation) { _%>
   const dispatch = useAppDispatch();
 
-  const handleLocaleChange = event => {
-    const langKey = event.target.value;
+  const handleLocaleChange = langKey => {
     Storage.session.set('locale', langKey);
     dispatch(setLocale(langKey));
   }
@@ -71,7 +67,7 @@ const Header = (props: IHeaderProps) => {
     </div>
   );
 
-  const toggleMenu = () => setMenuOpen(!menuOpen);
+
 
   /* jhipster-needle-add-element-to-menu - JHipster will add new menu items here */
 
@@ -79,11 +75,11 @@ const Header = (props: IHeaderProps) => {
     <div id="app-header">
       {renderDevRibbon()}
       <LoadingBar className="loading-bar"/>
-      <Navbar data-cy="navbar" <% if (clientThemeNone || !clientThemeVariantLight) { %>dark<% } else { %>light<% } %> expand="md" fixed="top" className="<%_ if (clientThemeNone) { _%>jh-navbar<%_ } else { _%>bg-<%= clientThemeVariant %><%_ } _%>">
-        <NavbarToggler aria-label="Menu" onClick={toggleMenu} />
+      <Navbar data-cy="navbar" <% if (clientThemeNone || !clientThemeVariantLight) { %>data-bs-theme="dark"<% } else { %>data-bs-theme="light"<% } %> expand="md" fixed="top" className="<%_ if (clientThemeNone) { _%>jh-navbar<%_ } else { _%>bg-<%= clientThemeVariant %><%_ } _%>" collapseOnSelect>
+        <Navbar.Toggle aria-controls="header-tabs" aria-label="Menu" />
         <Brand />
-        <Collapse isOpen={menuOpen} navbar>
-          <Nav id="header-tabs" className="ms-auto" navbar>
+        <Navbar.Collapse id="header-tabs">
+          <Nav className="ms-auto">
             <Home />
             {props.isAuthenticated && <EntitiesMenu />}
             {props.isAuthenticated && props.isAdmin &&
@@ -93,7 +89,7 @@ const Header = (props: IHeaderProps) => {
           <%_ } _%>
             <AccountMenu isAuthenticated={props.isAuthenticated} />
           </Nav>
-        </Collapse>
+        </Navbar.Collapse>
       </Navbar>
     </div>
   );

@@ -21,7 +21,7 @@ import React, { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 <%_ } _%>
 import { Link, useLocation, useNavigate } from 'react-router';
-import { Button, <% if (searchEngineAny) { %>Input, InputGroup, FormGroup, Form, Row, Col, <% } %>Table } from 'reactstrap';
+import { Button, <% if (searchEngineAny) { %>FormControl, InputGroup, Form, Row, Col, <% } %>Table } from 'react-bootstrap';
 import {
 <%_ if (anyFieldIsBlobDerived) { _%>
   <%_ if (anyFieldHasFileBasedContentType) { _%>
@@ -327,7 +327,7 @@ export const <%= entityReactName %> = () => {
       <h2 id="<%= entityFileName %>-heading" data-cy="<%- entityNameCapitalized %>Heading">
         <Translate contentKey="<%= i18nKeyPrefix %>.home.title"><%= entityNamePluralHumanized %></Translate>
         <div className="d-flex justify-content-end">
-          <Button className="me-2" color="info" onClick={handleSyncList} disabled={loading}>
+          <Button className="me-2" variant="info" onClick={handleSyncList} disabled={loading}>
             <FontAwesomeIcon icon="sync" spin={loading} /> <Translate contentKey="<%= i18nKeyPrefix %>.home.refreshListLabel">Refresh List</Translate>
           </Button>
 <%_ if (!readOnly) { _%>
@@ -343,10 +343,9 @@ export const <%= entityReactName %> = () => {
 <%_ if (searchEngineAny) { _%>
       <Row>
         <Col sm="12">
-          <Form onSubmit={startSearching}>
-            <FormGroup>
+           <Form onSubmit={startSearching}>
               <InputGroup>
-                <Input type="text" name="search" defaultValue={search} onChange={handleSearch}
+                <FormControl type="text" name="search" defaultValue={search} onChange={handleSearch}
               placeholder=<% if (enableTranslation) { %>{translate('<%= i18nKeyPrefix %>.home.search')}<% } else { %>"Search"<% } %>/>
                 <Button className="input-group-addon">
                   <FontAwesomeIcon icon="search" />
@@ -355,8 +354,7 @@ export const <%= entityReactName %> = () => {
                   <FontAwesomeIcon icon="trash" />
                 </Button>
               </InputGroup>
-            </FormGroup>
-          </Form>
+           </Form>
         </Col>
       </Row>
 <%_ } _%>
@@ -388,7 +386,7 @@ export const <%= entityReactName %> = () => {
                   <%= entityInstance %>List.map(<%= entityInstance %> => (
                   <tr key={`entity-${<%= entityInstance %>.<%= primaryKey.name %>}`} data-cy="entityTable">
                     <td>
-                      <Button tag={Link} to={`/<%= entityPage %>/${<%= entityInstance %>.<%= primaryKey.name %>}`} color="link" size="sm">
+                      <Button as={Link as any} to={`/<%= entityPage %>/${<%= entityInstance %>.<%= primaryKey.name %>}`} variant="link" size="sm">
                         {<%= entityInstance %>.<%= primaryKey.name %>}
                       </Button>
                     </td>
@@ -479,14 +477,14 @@ _%>
 <%_ } _%>
                       <td className="text-end">
                         <div className="btn-group flex-btn-group-container">
-                          <Button tag={Link} to={`/<%= entityPage %>/${<%= entityInstance %>.<%= primaryKey.name %>}`} color="info" size="sm" data-cy="entityDetailsButton">
+                          <Button as={Link as any} to={`/<%= entityPage %>/${<%= entityInstance %>.<%= primaryKey.name %>}`} variant="info" size="sm" data-cy="entityDetailsButton">
                             <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
                           </Button>
 <%_ if (!readOnly) { _%>
-                          <Button tag={Link} to={`/<%= entityPage %>/${<%= entityInstance %>.<%= primaryKey.name %>}/edit<%_ if (paginationPagination) { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="primary" size="sm" data-cy="entityEditButton">
+                          <Button as={Link as any} to={`/<%= entityPage %>/${<%= entityInstance %>.<%= primaryKey.name %>}/edit<%_ if (paginationPagination) { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} variant="primary" size="sm" data-cy="entityEditButton">
                             <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                           </Button>
-                          <Button onClick={() => <% if (entityInstance !== 'window' ) { %>window.<% } %>location.href=`/<%= entityPage %>/${<%= entityInstance %>.<%= primaryKey.name %>}/delete<%_ if (paginationPagination) { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} color="danger" size="sm" data-cy="entityDeleteButton">
+                          <Button onClick={() => <% if (entityInstance !== 'window' ) { %>window.<% } %>location.href=`/<%= entityPage %>/${<%= entityInstance %>.<%= primaryKey.name %>}/delete<%_ if (paginationPagination) { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} variant="danger" size="sm" data-cy="entityDeleteButton">
                             <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
                           </Button>
 <%_ } _%>

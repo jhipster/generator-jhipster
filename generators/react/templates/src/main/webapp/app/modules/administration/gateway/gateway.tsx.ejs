@@ -19,7 +19,7 @@
 import React, { useEffect } from 'react';
 import { Translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Badge, Table, Button } from 'reactstrap';
+import { Badge, Table, Button } from 'react-bootstrap';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { getGatewayRoutes } from '../administration.reducer';
@@ -52,19 +52,19 @@ export const GatewayPage = () => {
     if (info) {
       <%_ if (serviceDiscoveryConsul) { _%>
       if (info.checks && info.checks.filter(check => check.status === 'PASSING').length === info.checks.length) {
-        return <Badge color="success">UP</Badge>;
+        return <Badge bg="success">UP</Badge>;
       } else {
-        return <Badge color="danger">DOWN</Badge>;
+        return <Badge bg="danger">DOWN</Badge>;
       }
       <%_ } else { _%>
       if (info.status === 'UP') {
-        return <Badge color="success">{info.status}</Badge>;
+        return <Badge bg="success">{info.status}</Badge>;
       } else {
-        return <Badge color="danger">{info.status}</Badge>;
+        return <Badge bg="danger">{info.status}</Badge>;
       }
       <%_ } _%>
     } else {
-      return <Badge color="warning">?</Badge>;
+      return <Badge bg="warning">?</Badge>;
     }
   };
 

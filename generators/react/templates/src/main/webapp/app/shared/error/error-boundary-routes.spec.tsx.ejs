@@ -4,11 +4,11 @@ import { render } from '@testing-library/react';
 
 import ErrorBoundaryRoutes from './error-boundary-routes';
 
-const ErrorComp = (): JSX.Element => {
+const ErrorComp = (): React.JSX.Element => {
   throw new Error('test');
 };
 
-const NoErrorComp = (): JSX.Element => {
+const NoErrorComp = (): React.JSX.Element => {
   return <div>No error</div>;
 };
 

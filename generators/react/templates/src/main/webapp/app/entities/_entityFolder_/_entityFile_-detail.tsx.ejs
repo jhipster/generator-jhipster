@@ -18,7 +18,7 @@
 -%>
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router';
-import { Button, <% if (anyFieldHasDocumentation) { %>UncontrolledTooltip, <% } %>Row, Col } from 'reactstrap';
+import { Button, <% if (anyFieldHasDocumentation) { %>OverlayTrigger, Tooltip, <% } %>Row, Col } from 'react-bootstrap';
 import {
   Translate,
 <%_ if (anyFieldIsBlobDerived) { _%>
@@ -71,13 +71,15 @@ _%>
                 </Translate>
               </span>
   <%_ if (field.documentation) { _%>
-              <UncontrolledTooltip target="<%= fieldName %>">
+              <OverlayTrigger overlay={<Tooltip>
     <%_ if (enableTranslation) { _%>
                 <Translate contentKey="<%= i18nKeyPrefix %>.help.<%= fieldName %>"/>
     <%_ } else { _%>
                 <%= field.documentation %>
     <%_ } _%>
-              </UncontrolledTooltip>
+              </Tooltip>}>
+                <span id="<%= fieldName %>" className="d-inline-block">?</span>
+              </OverlayTrigger>
   <%_ } _%>
             </dt>
             <dd>
@@ -156,10 +158,10 @@ _%>
   <%_ } _%>
 <%_ } _%>
           </dl>
-        <Button tag={Link} to="/<%= entityPage %>" replace color="info" data-cy="entityDetailsBackButton">
+        <Button as={Link as any} to="/<%= entityPage %>" replace variant="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
         </Button>&nbsp;
-        <Button tag={Link} to={`/<%= entityPage %>/${<%= entityInstance %>Entity.<%= primaryKey.name %>}/edit`} replace color="primary">
+        <Button as={Link as any} to={`/<%= entityPage %>/${<%= entityInstance %>Entity.<%= primaryKey.name %>}/edit`} replace variant="primary">
           <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
         </Button>
       </Col>

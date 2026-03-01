@@ -279,12 +279,20 @@ ${comment}
         source.mergeClientPackageJson!({
           overrides: {
             'browser-sync': nodeDependencies['browser-sync'],
+            'react-redux-loading-bar': {
+              react: '$react',
+              'react-dom': '$react-dom',
+            },
           },
         });
         if (application.clientRootDir) {
           this.packageJson.merge({
             overrides: {
               'browser-sync': application.nodeDependencies['browser-sync'],
+              'react-redux-loading-bar': {
+                react: '$react',
+                'react-dom': '$react-dom',
+              },
             },
           });
         }
