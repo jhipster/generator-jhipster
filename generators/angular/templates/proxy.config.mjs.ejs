@@ -13,7 +13,7 @@ export default {
     ws: true,
   },
 <%_ } _%>
-  '^/(api|management|v3/api-docs<% if (locals.databaseTypeSql && locals.devDatabaseTypeH2Any) { %>|h2-console<% } %><% if (authenticationTypeOauth2) { %>|oauth2|login<% } %><% if (authenticationTypeSession) { %>|login<% } %><% if (applicationTypeGateway || applicationTypeMicroservice) { %>|services<% } %>)': {
+  '^/(api|management|v3/api-docs<% if (locals.databaseTypeSql && locals.devDatabaseTypeH2Any) { %>|h2-console<% } %><% if (authenticationTypeOauth2) { %>|oauth2|login$<% } %><% if (authenticationTypeSession) { %>|login$<% } %><% if (applicationTypeGateway || applicationTypeMicroservice) { %>|services<% } %>)': {
 <%_ if (clientBundlerEsbuild) { _%>
     target: `http://${backendHost}:${backendPort}`,
 <%_ } else { _%>
