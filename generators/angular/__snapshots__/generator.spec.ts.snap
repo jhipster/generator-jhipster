@@ -7936,6 +7936,12 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/entities/admin/user-management/service/user-management.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/admin/user-management/update/user-management-form.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/update/user-management-form.service.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.html": {
     "stateCleared": "modified",
   },
@@ -8501,6 +8507,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
       "application": "Application[jhipster]",
       "control": "TaskParameter[control]",
       "entities": [
+        "Entity[UserManagement]",
         "Entity[Authority]",
         "Entity[Simple]",
         "Entity[Microservice]",
