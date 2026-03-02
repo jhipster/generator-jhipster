@@ -301,7 +301,6 @@ export const files = asWriteFilesSection({
         'core/util/operators.ts',
 
         // config
-        'config/uib-pagination.config.ts',
         'config/dayjs.ts',
         'config/datepicker-adapter.ts',
         'config/font-awesome-icons.ts',
