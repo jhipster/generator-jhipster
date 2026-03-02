@@ -2884,9 +2884,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientRoot/src/app/config/pagination.constants.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/config/uib-pagination.config.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/core/auth/account.model.ts": {
     "stateCleared": "modified",
   },
@@ -4067,9 +4064,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/config/translation.config.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/config/uib-pagination.config.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/core/auth/account.model.ts": {
     "stateCleared": "modified",
   },
@@ -5164,9 +5158,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientRoot/src/app/config/pagination.constants.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/config/uib-pagination.config.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/core/auth/account.model.ts": {
     "stateCleared": "modified",
   },
@@ -6204,9 +6195,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/translation.config.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/uib-pagination.config.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/auth/account.model.ts": {
@@ -7536,9 +7524,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/config/translation.config.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/config/uib-pagination.config.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/core/auth/account.model.ts": {
     "stateCleared": "modified",
   },
@@ -8714,9 +8699,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "src/main/webapp/app/config/pagination.constants.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/config/uib-pagination.config.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/core/auth/account.model.ts": {
     "stateCleared": "modified",
   },
@@ -9728,9 +9710,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "stateCleared": "modified",
   },
   "src/main/webapp/app/config/pagination.constants.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/config/uib-pagination.config.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/auth/account.model.ts": {

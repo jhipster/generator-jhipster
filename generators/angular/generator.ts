@@ -329,6 +329,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
               !application.microfrontend || !application.applicationTypeMicroservice,
               `${application.clientSrcDir}app/entities/entity-navbar-items.ts`,
             ],
+            `${application.clientSrcDir}app/config/uib-pagination.config.ts`,
           ],
           '8.0.0-beta.1': [
             `${application.clientRootDir}jest.js`,
