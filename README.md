@@ -1,12 +1,14 @@
 [![Logo][jhipster-image]][jhipster-url]
 
-[![NPM version][npm-image]][npm-url] [![Downloads][npmcharts-image]][npmcharts-url] [![Gitter][gitter-badge-image]][gitter-badge-url] [![Known Vulnerabilities][snyk-image]][snyk-url] [![Package Health][health-image]][health-url]
+[![NPM version][npm-image]][npm-url] [![Downloads][npmcharts-image]][npmcharts-url] [![Gitter][gitter-badge-image]][gitter-badge-url] [![Known Vulnerabilities][snyk-image]][snyk-url] [![Package Health][health-image]][health-url] 
 
 [![Generator Build Status][github-actions-generator-image]][github-actions-url] [![Angular Build Status][github-actions-angular-image]][github-actions-url] [![React Build Status][github-actions-react-image]][github-actions-url] [![Vue Build Status][github-actions-vue-image]][github-actions-url] [![Revved up by Develocity](https://img.shields.io/badge/Revved%20up%20by-Develocity-06A0CE?logo=Gradle&labelColor=02303A)](https://ge.jhipster.tech/scans)
 
+[![Gurubase](https://img.shields.io/badge/Gurubase-Ask%20JHipster%20Guru-006BFF)](https://gurubase.io/g/jhipster)
+
 Greetings, Java Hipster!
 
-Full documentation and information is available on our website at [https://www.jhipster.tech][jhipster-url].
+Full documentation and information is available on our website at [https://www.jhipster.tech][jhipster-url]. You can also [ask JHipster Guru](https://gurubase.io/g/jhipster) if you want to use AI to answer your JHipster questions.
 
 Please read our [guidelines](/CONTRIBUTING.md#submitting-an-issue) before submitting an issue. If your issue is a bug, please use the bug template pre-populated [here][issue-template]. For feature requests and queries you can use [this template][feature-template]. If you have found a potential security issue, please read our security policy and contact us privately first: https://github.com/jhipster/generator-jhipster/security/policy
 
