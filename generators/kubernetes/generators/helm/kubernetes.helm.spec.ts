@@ -119,6 +119,14 @@ describe('generator - Kubernetes Helm', () => {
     it('create the apply script', () => {
       runResult.assertFile(expectedFiles.applyScript);
     });
+    it('generates Helm 3 only scripts and docs', () => {
+      runResult.assertNoFileContent('./helm/helm-apply.sh', /helm delete --purge/);
+      runResult.assertNoFileContent('./helm/helm-apply.sh', /helm install --name/);
+      runResult.assertNoFileContent('./helm/helm-apply.sh', /helmVersion=/);
+      runResult.assertFileContent('./helm/HELM-README.md', /Helm 3/i);
+      runResult.assertNoFileContent('./helm/HELM-README.md', /tiller/i);
+      runResult.assertNoFileContent('./helm/HELM-README.md', /incubator/);
+    });
   });
 
   describe('gateway and mysql microservice', () => {
