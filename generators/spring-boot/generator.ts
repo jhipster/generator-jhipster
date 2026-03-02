@@ -704,7 +704,6 @@ ${classProperties
       async writeFiles({ application }) {
         return this.writeFiles({
           sections: serverFiles,
-          rootTemplatesPath: ['', '../../java/generators/domain/templates/'],
           context: application,
         });
       },
