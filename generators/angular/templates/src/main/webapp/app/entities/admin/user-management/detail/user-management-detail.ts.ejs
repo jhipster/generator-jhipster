@@ -16,13 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, input } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { Component, input } from '@angular/core';
+
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
-import { TranslateDirective } from 'app/shared/language';
 import { TranslateModule } from '@ngx-translate/core';
+import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
 
 import { User } from '../user-management.model';
@@ -30,8 +30,12 @@ import { User } from '../user-management.model';
 @Component({
   selector: '<%= jhiPrefixDashed %>-user-mgmt-detail',
   templateUrl: './user-management-detail.html',
-  imports: [RouterLink, FontAwesomeModule, DatePipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
+  imports: [FontAwesomeModule, DatePipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
 })
-export default class UserManagementDetail {
-  readonly user = input<User | null>(null);
+export class UserManagementDetail {
+  readonly userManagement = input<User | null>(null);
+
+  previousState(): void {
+    globalThis.history.back();
+  }
 }

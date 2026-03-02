@@ -17,8 +17,8 @@
  limitations under the License.
 -%>
 <div>
-  <h2>
-    <span id="user-management-page-heading" data-cy="<%- userManagement.entityNameCapitalized %>Heading">__jhiTranslateTag__('userManagement.home.title')</span>
+  <h2 id="page-heading" data-cy="<%- userManagement.entityNameCapitalized %>Heading">
+    <span>__jhiTranslateTag__('userManagement.home.title')</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading()">
@@ -26,7 +26,8 @@
         <span>__jhiTranslateTag__('userManagement.home.refreshListLabel')</span>
       </button>
       <button class="btn btn-primary jh-create-entity" [routerLink]="['./new']" data-cy="entityCreateButton">
-        <fa-icon icon="plus" /> <span>__jhiTranslateTag__('userManagement.home.createLabel')</span>
+        <fa-icon icon="plus" />
+        <span>__jhiTranslateTag__('userManagement.home.createLabel')</span>
       </button>
     </div>
   </h2>
@@ -71,58 +72,58 @@
         </tr>
       </thead>
       <tbody>
-      @for (user of users(); track trackIdentity(user)) {
+      @for (userManagement of users(); track trackIdentity(userManagement)) {
         <tr data-cy="entityTable">
           <td>
-            <a [routerLink]="['./', user.login, 'view']">{{ user.id }}</a>
+            <a [routerLink]="['./', userManagement.login, 'view']">{{ userManagement.id }}</a>
           </td>
-          <td>{{ user.login }}</td>
-          <td>{{ user.email }}</td>
+          <td>{{ userManagement.login }}</td>
+          <td>{{ userManagement.email }}</td>
           <td>
-          @if (!user.activated) {
+          @if (!userManagement.activated) {
             <button class="btn btn-danger btn-sm"
-              (click)="setActive(user, true)"
+              (click)="setActive(userManagement, true)"
             >__jhiTranslateTag__('userManagement.deactivated')</button>
           } @else {
             <button class="btn btn-success btn-sm"
-              (click)="setActive(user, false)"
-              [disabled]="!currentAccount() || currentAccount()?.login === user.login"
+              (click)="setActive(userManagement, false)"
+              [disabled]="!currentAccount() || currentAccount()?.login === userManagement.login"
             >__jhiTranslateTag__('userManagement.activated')</button>
           }
           </td>
 <%_ if (enableTranslation) { _%>
-          <td>{{ user.langKey }}</td>
+          <td>{{ userManagement.langKey }}</td>
 <%_ } _%>
           <td>
-          @for (authority of user.authorities; track $index) {
+          @for (authority of userManagement.authorities; track $index) {
             <div>
               <span class="badge bg-info">{{ authority }}</span>
             </div>
           }
           </td>
 <%_ if (!locals.databaseTypeCassandra) { _%>
-          <td>{{ user.createdDate | date: 'dd/MM/yy HH:mm' }}</td>
-          <td>{{ user.lastModifiedBy }}</td>
-          <td>{{ user.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</td>
+          <td>{{ userManagement.createdDate | date: 'dd/MM/yy HH:mm' }}</td>
+          <td>{{ userManagement.lastModifiedBy }}</td>
+          <td>{{ userManagement.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</td>
 <%_ } _%>
           <td class="text-end">
             <div class="btn-group">
-              <button type="submit" [routerLink]="['./', user.login, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+              <button type="submit" [routerLink]="['./', userManagement.login, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                 <fa-icon icon="eye" />
                 <span class="d-none d-md-inline">__jhiTranslateTag__('entity.action.view')</span>
               </button>
 
-              <button type="submit" [routerLink]="['./', user.login, 'edit']" queryParamsHandling="merge" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+              <button type="submit" [routerLink]="['./', userManagement.login, 'edit']" queryParamsHandling="merge" class="btn btn-primary btn-sm" data-cy="entityEditButton">
                 <fa-icon icon="pencil-alt" />
                 <span class="d-none d-md-inline">__jhiTranslateTag__('entity.action.edit')</span>
               </button>
 
               <button
                 type="button"
-                (click)="deleteUser(user)"
+                (click)="deleteUser(userManagement)"
                 class="btn btn-danger btn-sm"
                 data-cy="entityDeleteButton"
-                [disabled]="!currentAccount() || currentAccount()?.login === user.login"
+                [disabled]="!currentAccount() || currentAccount()?.login === userManagement.login"
               >
                 <fa-icon icon="times" />
                 <span class="d-none d-md-inline">__jhiTranslateTag__('entity.action.delete')</span>

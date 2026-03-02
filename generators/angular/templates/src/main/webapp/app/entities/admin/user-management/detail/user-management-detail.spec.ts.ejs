@@ -33,9 +33,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { of } from 'rxjs';
 
 import { Authority } from 'app/shared/jhipster/constants';
-import { User } from '../user-management.model';
 
-import UserManagementDetail from './user-management-detail';
+import { UserManagementDetail } from './user-management-detail';
 
 describe('User Management Detail Component', () => {
   beforeEach(() => {
@@ -46,19 +45,20 @@ describe('User Management Detail Component', () => {
           [
             {
               path: '**',
-              loadComponent: () => import('./user-management-detail'),
+              loadComponent: () => import('./user-management-detail').then(m => m.UserManagementDetail),
               resolve: {
-                user: () => of({
-                  id: <%- tsKeyId %>,
-                  login: 'user',
-                  firstName: 'first',
-                  lastName: 'last',
-                  email: 'first@last.com',
-                  activated: true,
-                  langKey: 'en',
-                  authorities: [Authority.USER],
-                  createdBy: 'admin',
-                }),
+                userManagement: () =>
+                  of({
+                    id: <%- tsKeyId %>,
+                    login: 'user',
+                    firstName: 'first',
+                    lastName: 'last',
+                    email: 'first@last.com',
+                    activated: true,
+                    langKey: 'en',
+                    authorities: [Authority.USER],
+                    createdBy: 'admin',
+                  }),
               },
             },
           ],
@@ -78,7 +78,7 @@ describe('User Management Detail Component', () => {
       const instance = await harness.navigateByUrl('/', UserManagementDetail);
 
       // THEN
-      expect(instance.user()).toEqual(
+      expect(instance.userManagement()).toEqual(
         expect.objectContaining({
           id: <%- tsKeyId %>,
           login: 'user',

@@ -23,7 +23,7 @@ import { map, Observable<% if (generateUserManagement && !generateBuiltInAuthori
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { Pagination } from 'app/core/request/request.model';
-import { IUser } from '../user-management.model';
+import { IUserManagement } from '../user-management.model';
 <%_ if (generateUserManagement && !generateBuiltInAuthorityEntity) { _%>
 import { Authority } from 'app/shared/jhipster/constants';
 <%_ } _%>
@@ -36,22 +36,22 @@ export class UserManagementService {
   private readonly resourceUrl = this.applicationConfigService.getEndpointFor('api/admin/users');
 
 <%_ if (generateUserManagement) { _%>
-  create(user: IUser): Observable<IUser> {
-    return this.http.post<IUser>(this.resourceUrl, user);
+  create(user: IUserManagement): Observable<IUserManagement> {
+    return this.http.post<IUserManagement>(this.resourceUrl, user);
   }
 
-  update(user: IUser): Observable<IUser> {
-    return this.http.put<IUser>(this.resourceUrl, user);
+  update(user: IUserManagement): Observable<IUserManagement> {
+    return this.http.put<IUserManagement>(this.resourceUrl, user);
   }
 
-  find(login: string): Observable<IUser> {
-    return this.http.get<IUser>(`${this.resourceUrl}/${encodeURIComponent(login)}`);
+  find(login: string): Observable<IUserManagement> {
+    return this.http.get<IUserManagement>(`${this.resourceUrl}/${encodeURIComponent(login)}`);
   }
 <%_ } _%>
 
-  query(req?: Pagination): Observable<HttpResponse<IUser[]>> {
+  query(req?: Pagination): Observable<HttpResponse<IUserManagement[]>> {
     const options = createRequestOption(req);
-    return this.http.get<IUser[]>(this.resourceUrl, { params: options, observe: 'response' });
+    return this.http.get<IUserManagement[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
 <%_ if (generateUserManagement) { _%>

@@ -122,8 +122,8 @@ import { ITEM_DELETED_EVENT } from "app/config/navigation.constants";
 export class UserManagementDeleteDialog {
   userManagement?: IUserManagement;
 
-  protected userManagementService = inject(UserManagementService);
-  protected activeModal = inject(NgbActiveModal);
+  protected readonly userManagementService = inject(UserManagementService);
+  protected readonly activeModal = inject(NgbActiveModal);
 
   cancel(): void {
     this.activeModal.dismiss();

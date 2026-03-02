@@ -33,9 +33,9 @@ import { of } from 'rxjs';
 
 import { AccountService } from 'app/core/auth/account.service';
 import { UserManagementService } from '../service/user-management.service';
-import { User } from '../user-management.model';
+import { IUserManagement } from '../user-management.model';
 
-import UserManagement from './user-management';
+import { UserManagement } from './user-management';
 
 describe('User Management Component', () => {
   let comp: UserManagement;
@@ -78,7 +78,7 @@ describe('User Management Component', () => {
       <%= clientTestFramework %>.spyOn(service, 'query').mockReturnValue(
         of(
           new HttpResponse({
-            body: [new User(<%- tsKeyId %>)],
+            body: [{ id: <%- tsKeyId %> } as IUserManagement],
             headers,
           }),
         ),
@@ -97,7 +97,7 @@ describe('User Management Component', () => {
     it('should update user and call load all', inject([], () => {
       // GIVEN
       const headers = new HttpHeaders().append('link', 'link;link');
-      const user = new User(<%- tsKeyId %>);
+      const user = { id: <%- tsKeyId %> } as IUserManagement;
       <%= clientTestFramework %>.spyOn(service, 'query').mockReturnValue(
         of(
           new HttpResponse({

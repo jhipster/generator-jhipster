@@ -61,8 +61,8 @@ export const angularFiles = {
         'entities/_entityFolder_/update/_entityFile_-form.service.spec.ts',
         'entities/_entityFolder_/update/_entityFile_-update.html',
         'entities/_entityFolder_/update/_entityFile_-update.spec.ts',
-        'entities/_entityFolder_/delete/_entityFile_-delete-dialog.html',
         'entities/_entityFolder_/update/_entityFile_-update.ts',
+        'entities/_entityFolder_/delete/_entityFile_-delete-dialog.html',
         'entities/_entityFolder_/delete/_entityFile_-delete-dialog.ts',
         'entities/_entityFolder_/delete/_entityFile_-delete-dialog.spec.ts',
       ],
@@ -85,9 +85,9 @@ export const userManagementFiles = asWriteEntityFilesSection({
         'entities/admin/user-management/update/user-management-update.html',
         'entities/admin/user-management/update/user-management-update.spec.ts',
         'entities/admin/user-management/update/user-management-update.ts',
-        'entities/admin/user-management/delete/user-management-delete-dialog.html',
-        'entities/admin/user-management/delete/user-management-delete-dialog.spec.ts',
-        'entities/admin/user-management/delete/user-management-delete-dialog.ts',
+        'entities/_entityFolder_/delete/_entityFile_-delete-dialog.html',
+        'entities/_entityFolder_/delete/_entityFile_-delete-dialog.ts',
+        'entities/_entityFolder_/delete/_entityFile_-delete-dialog.spec.ts',
         'entities/admin/user-management/service/user-management.service.spec.ts',
         'entities/admin/user-management/service/user-management.service.ts',
       ],
@@ -114,13 +114,7 @@ export const writeEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularAp
       if (application.generateUserManagement && application.userManagement!.skipClient) {
         await this.writeFiles({
           sections: userManagementFiles,
-          context: {
-            ...application,
-            ...entity,
-            i18nKeyPrefix: 'userManagement',
-            entityFileName: 'user-management',
-            entityFolderPrefix: 'admin',
-          },
+          context: { ...application, ...application.userManagement },
         });
       }
     } else {
