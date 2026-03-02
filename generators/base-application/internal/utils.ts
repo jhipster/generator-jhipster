@@ -232,7 +232,7 @@ export function createUserManagementEntity(
   const userManagement = {
     ...user,
     name: 'UserManagement',
-    skipClient: true,
+    skipClient: !application.clientFrameworkAngular,
     skipServer: true,
     changelogDate: formatDateForChangelog(creationTimestamp),
     clientRootFolder: 'admin',
