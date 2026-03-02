@@ -99,13 +99,13 @@ export default class AppGenerator extends BaseApplicationGenerator<CommonEntity,
   get composingComponent() {
     return this.asComposingComponentTaskGroup({
       /**
-       * Composing with others generators, must be executed after `configuring` priority to let others
+       * Composing with others generators must be executed after `configuring` priority to let others
        * generators `configuring` priority to run.
        *
        * Composing in different tasks the result would be:
        * - composeCommon (app) -> initializing (common) -> prompting (common) -> ... -> composeServer (app) -> initializing (server) -> ...
        *
-       * This behaviour allows a more consistent blueprint support.
+       * This behavior allows a more consistent blueprint support.
        */
       async composeCommon() {
         await this.composeWithJHipster('common');
