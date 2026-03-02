@@ -88,12 +88,6 @@ export type EntityArrayResponseType = HttpResponse<I<%= entityAngularName %>[]>;
 @Injectable()
 export class <%- entityAngularNamePlural %>Service {
   readonly <%- entityInstancePlural %>Params = signal<Record<string, string | number | boolean | readonly (string | number | boolean)[]> | undefined>(undefined);
-  protected readonly applicationConfigService = inject(ApplicationConfigService);
-  protected readonly resourceUrl = this.applicationConfigService.getEndpointFor('api/<%- entityApiUrl %>'<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>, '<%- microserviceName.toLowerCase() %>'<% } %>);
-<%_ if (searchEngineAny) { _%>
-  protected readonly resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/<%- entityApiUrl %>/_search'<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>, '<%- microserviceName.toLowerCase() %>'<% } %>);
-<%_ } _%>
-  // eslint-disable-next-line @typescript-eslint/member-ordering
   readonly <%- entityInstancePlural %>Resource = httpResource<<%- entityRestName %>[]>(() => {
     const params = this.<%- entityInstancePlural %>Params();
     if (!params) {
@@ -101,10 +95,14 @@ export class <%- entityAngularNamePlural %>Service {
     }
     return { url: <% if (searchEngineAny) { %>params.query ? this.resourceSearchUrl : <% } %>this.resourceUrl, params };
   });
-  // eslint-disable-next-line @typescript-eslint/member-ordering
   readonly <%- entityInstancePlural %> = computed(() => (this.<%- entityInstancePlural %>Resource.value() ?? [])
     <% if (builtInUserManagement || anyFieldIsDateDerived) { %>.map(item => this.convertValueFromServer(item))<% } %>
   );
+  protected readonly applicationConfigService = inject(ApplicationConfigService);
+  protected readonly resourceUrl = this.applicationConfigService.getEndpointFor('api/<%- entityApiUrl %>'<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>, '<%- microserviceName.toLowerCase() %>'<% } %>);
+<%_ if (searchEngineAny) { _%>
+  protected readonly resourceSearchUrl = this.applicationConfigService.getEndpointFor('api/<%- entityApiUrl %>/_search'<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>, '<%- microserviceName.toLowerCase() %>'<% } %>);
+<%_ } _%>
 <%_ if (builtInUserManagement || anyFieldIsDateDerived) { _%>
 
   protected convertValueFromServer(rest<%= entityAngularName %>: <%= entityRestName %>): I<%= entityAngularName %> {

@@ -1408,12 +1408,6 @@ export class UserManagementsService {
       >
     | undefined
   >(undefined);
-  protected readonly applicationConfigService = inject(
-    ApplicationConfigService,
-  );
-  protected readonly resourceUrl =
-    this.applicationConfigService.getEndpointFor("api/admin/users");
-  // eslint-disable-next-line @typescript-eslint/member-ordering
   readonly userManagementsResource = httpResource<RestUserManagement[]>(() => {
     const params = this.userManagementsParams();
     if (!params) {
@@ -1421,12 +1415,16 @@ export class UserManagementsService {
     }
     return { url: this.resourceUrl, params };
   });
-  // eslint-disable-next-line @typescript-eslint/member-ordering
   readonly userManagements = computed(() =>
     (this.userManagementsResource.value() ?? []).map((item) =>
       this.convertValueFromServer(item),
     ),
   );
+  protected readonly applicationConfigService = inject(
+    ApplicationConfigService,
+  );
+  protected readonly resourceUrl =
+    this.applicationConfigService.getEndpointFor("api/admin/users");
 
   protected convertValueFromServer(
     restUserManagement: RestUserManagement,
