@@ -19,7 +19,7 @@
 <%_
   const idType = user.primaryKey.tsType;
 _%>
-export interface IUser {
+export interface IUserManagement {
   id: <%= idType %> | null;
   login?: string;
   firstName?: string | null;
@@ -34,7 +34,7 @@ export interface IUser {
   lastModifiedDate?: Date;
 }
 
-export class User implements IUser {
+export class User implements IUserManagement {
   constructor(
     public id: <%= idType %> | null,
     public login?: string,

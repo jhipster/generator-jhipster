@@ -42,8 +42,8 @@ import { ItemCount } from 'app/shared/pagination';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import { UserManagementService } from '../service/user-management.service';
-import { User } from '../user-management.model';
-import UserManagementDeleteDialog from '../delete/user-management-delete-dialog';
+import { IUserManagement } from '../user-management.model';
+import { UserManagementDeleteDialog } from '../delete/user-management-delete-dialog';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-user-mgmt',
@@ -66,9 +66,9 @@ import UserManagementDeleteDialog from '../delete/user-management-delete-dialog'
 <%_ } _%>
   ],
 })
-export default class UserManagement implements OnInit {
+export class UserManagement implements OnInit {
   readonly currentAccount = inject(AccountService).account;
-  readonly users = signal<User[] | null>(null);
+  readonly users = signal<IUserManagement[] | null>(null);
   readonly isLoading = signal(false);
 <%_ if (!locals.databaseTypeCassandra) { _%>
   readonly totalItems = signal(0);
@@ -93,17 +93,17 @@ export default class UserManagement implements OnInit {
 <%_ } _%>
   }
 
-  setActive(user: User, isActivated: boolean): void {
-    this.userService.update({ ...user, activated: isActivated }).subscribe(() => this.loadAll());
+  setActive(userManagement: IUserManagement, isActivated: boolean): void {
+    this.userService.update({ ...userManagement, activated: isActivated }).subscribe(() => this.loadAll());
   }
 
-  trackIdentity(item: User): <%= user.primaryKey.tsType %> {
+  trackIdentity(item: IUserManagement): <%= user.primaryKey.tsType %> {
     return item.id!;
   }
 
-  deleteUser(user: User): void {
+  deleteUser(userManagement: IUserManagement): void {
     const modalRef = this.modalService.open(UserManagementDeleteDialog, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.user = user;
+    modalRef.componentInstance.userManagement = userManagement;
     // unsubscribe not needed because closed completes on modal close
     modalRef.closed.subscribe(reason => {
       if (reason === 'deleted') {
@@ -121,7 +121,7 @@ export default class UserManagement implements OnInit {
         sort: this.sortService.buildSortParam(this.sortState(), 'id'),
       }<% } %>)
       .subscribe({
-        next: (res: HttpResponse<User[]>) => {
+        next: (res: HttpResponse<IUserManagement[]>) => {
           this.isLoading.set(false);
           this.onSuccess(res.body<% if (!locals.databaseTypeCassandra) { %>, res.headers<% } %>);
         },
@@ -150,7 +150,7 @@ export default class UserManagement implements OnInit {
   }
 <%_ } _%>
 
-  private onSuccess(users: User[] | null<% if (!locals.databaseTypeCassandra) { %>, headers: HttpHeaders<% } %>): void {
+  private onSuccess(users: IUserManagement[] | null<% if (!locals.databaseTypeCassandra) { %>, headers: HttpHeaders<% } %>): void {
 <%_ if (!locals.databaseTypeCassandra) { _%>
     this.totalItems.set(Number(headers.get(TOTAL_COUNT_RESPONSE_HEADER)));
 <%_ } _%>

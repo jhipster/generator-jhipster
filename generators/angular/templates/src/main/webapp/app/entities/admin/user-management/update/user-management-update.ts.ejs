@@ -27,24 +27,24 @@ import { FindLanguageFromKeyPipe, TranslateDirective } from 'app/shared/language
 import { TranslateModule } from '@ngx-translate/core';
 import { LANGUAGES } from 'app/config/language.constants';
 <%_ } _%>
-import { IUser } from '../user-management.model';
+import { IUserManagement } from '../user-management.model';
 import { UserManagementService } from '../service/user-management.service';
 
-const userTemplate = {} as IUser;
+const userTemplate = {} as IUserManagement;
 
-const newUser: IUser = {
+const newUser: IUserManagement = {
 <%_ if (enableTranslation) { _%>
   langKey: '<%= nativeLanguage %>',
 <%_ } _%>
   activated: true,
-} as IUser;
+} as IUserManagement;
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-user-mgmt-update',
+  selector: '<%= jhiPrefixDashed %>-user-management-update',
   templateUrl: './user-management-update.html',
   imports: [<%_ if (enableTranslation) { _%>FindLanguageFromKeyPipe, TranslateDirective, TranslateModule, <%_ } _%>FontAwesomeModule, AlertError, ReactiveFormsModule],
 })
-export default class UserManagementUpdate implements OnInit {
+export class UserManagementUpdate implements OnInit {
 <%_ if (enableTranslation) { _%>
   languages = LANGUAGES;
 <%_ } _%>

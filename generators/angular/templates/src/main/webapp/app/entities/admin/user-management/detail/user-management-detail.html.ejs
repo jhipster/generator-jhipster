@@ -18,17 +18,17 @@
 -%>
 <div class="d-flex justify-content-center">
   <div class="col-8">
-  @if (user(); as userRef) {
+  @if (userManagement(); as userManagementRef) {
     <div>
       <h2 data-cy="userManagementDetailsHeading">
-        <span>__jhiTranslateTag__('userManagement.detail.title')</span> [<strong>{{ userRef.login }}</strong>]
+        <span>__jhiTranslateTag__('userManagement.detail.title')</span> [<strong>{{ userManagementRef.login }}</strong>]
       </h2>
 
       <dl class="row-md jh-entity-details">
         <dt><span>__jhiTranslateTag__('userManagement.login')</span></dt>
         <dd>
-          <span>{{ userRef.login }}</span>
-        @if (userRef.activated) {
+          <span>{{ userManagementRef.login }}</span>
+        @if (userManagementRef.activated) {
           <span class="badge bg-success">__jhiTranslateTag__('userManagement.activated')</span>
         } @else {
           <span class="badge bg-danger">__jhiTranslateTag__('userManagement.deactivated')</span>
@@ -36,35 +36,35 @@
         </dd>
 
         <dt><span>__jhiTranslateTag__('userManagement.firstName')</span></dt>
-        <dd>{{ userRef.firstName }}</dd>
+        <dd>{{ userManagementRef.firstName }}</dd>
 
         <dt><span>__jhiTranslateTag__('userManagement.lastName')</span></dt>
-        <dd>{{ userRef.lastName }}</dd>
+        <dd>{{ userManagementRef.lastName }}</dd>
 
         <dt><span>__jhiTranslateTag__('userManagement.email')</span></dt>
-        <dd>{{ userRef.email }}</dd>
+        <dd>{{ userManagementRef.email }}</dd>
 <%_ if (enableTranslation) { _%>
 
         <dt><span>__jhiTranslateTag__('userManagement.langKey')</span></dt>
-        <dd>{{ userRef.langKey }}</dd>
+        <dd>{{ userManagementRef.langKey }}</dd>
 <%_ } _%>
 
         <dt><span>__jhiTranslateTag__('userManagement.createdBy')</span></dt>
-        <dd>{{ userRef.createdBy }}</dd>
+        <dd>{{ userManagementRef.createdBy }}</dd>
 
         <dt><span>__jhiTranslateTag__('userManagement.createdDate')</span></dt>
-        <dd>{{ userRef.createdDate | date: 'dd/MM/yy HH:mm' }}</dd>
+        <dd>{{ userManagementRef.createdDate | date: 'dd/MM/yy HH:mm' }}</dd>
 
         <dt><span>__jhiTranslateTag__('userManagement.lastModifiedBy')</span></dt>
-        <dd>{{ userRef.lastModifiedBy }}</dd>
+        <dd>{{ userManagementRef.lastModifiedBy }}</dd>
 
         <dt><span>__jhiTranslateTag__('userManagement.lastModifiedDate')</span></dt>
-        <dd>{{ userRef.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</dd>
+        <dd>{{ userManagementRef.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</dd>
 
         <dt><span>__jhiTranslateTag__('userManagement.profiles')</span></dt>
         <dd>
           <ul class="list-unstyled">
-          @for (authority of userRef.authorities; track $index) {
+          @for (authority of userManagementRef.authorities; track $index) {
             <li>
               <span class="badge bg-info">{{ authority }}</span>
             </li>
@@ -73,7 +73,7 @@
         </dd>
       </dl>
 
-      <button type="submit" routerLink="../../" class="btn btn-info" data-cy="entityDetailsBackButton">
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
         <fa-icon icon="arrow-left" />&nbsp;<span>__jhiTranslateTag__('entity.action.back')</span>
       </button>
     </div>

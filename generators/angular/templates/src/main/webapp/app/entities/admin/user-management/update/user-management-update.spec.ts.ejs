@@ -31,9 +31,9 @@ import { of } from 'rxjs';
 
 import { Authority } from 'app/shared/jhipster/constants';
 import { UserManagementService } from '../service/user-management.service';
-import { User } from '../user-management.model';
+import { IUserManagement } from '../user-management.model';
 
-import UserManagementUpdate from './user-management-update';
+import { UserManagementUpdate } from './user-management-update';
 
 describe('User Management Update Component', () => {
   let comp: UserManagementUpdate;
@@ -47,7 +47,7 @@ describe('User Management Update Component', () => {
         {
           provide: ActivatedRoute,
           useValue: {
-            data: of({ user: new User(<%- tsKeyId %>, 'user', 'first', 'last', 'first@last.com', true, 'en', [Authority.USER], 'admin') }),
+            data: of({ user: { id: <%- tsKeyId %>, login: 'user', firstName: 'first', lastName: 'last', email: 'first@last.com', activated: true, langKey: 'en', authorities: [Authority.USER], createdBy: 'admin' } as IUserManagement }),
           },
         },
       ],
@@ -77,7 +77,7 @@ describe('User Management Update Component', () => {
   describe('save', () => {
     it('should call update service on save for existing user', inject([], () => {
       // GIVEN
-      const entity = { id: <%- tsKeyId %> };
+      const entity = { id: <%- tsKeyId %> } as IUserManagement;
       <%= clientTestFramework %>.spyOn(service, 'update').mockReturnValue(of(entity));
       comp.editForm.patchValue(entity);
       // WHEN
@@ -90,7 +90,7 @@ describe('User Management Update Component', () => {
 
     it('should call create service on save for new user', inject([], () => {
       // GIVEN
-      const entity = { login: 'foo' } as User;
+      const entity = { login: 'foo' } as IUserManagement;
       <%= clientTestFramework %>.spyOn(service, 'create').mockReturnValue(of(entity));
       comp.editForm.patchValue(entity);
       // WHEN

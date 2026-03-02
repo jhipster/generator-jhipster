@@ -29,7 +29,7 @@ import { provideHttpClientTesting, HttpTestingController } from '@angular/common
 <%_ if (generateBuiltInAuthorityEntity) { _%>
 import { Authority } from 'app/shared/jhipster/constants';
 <%_ } _%>
-import { User } from '../user-management.model';
+import { IUserManagement } from '../user-management.model';
 
 import { UserManagementService } from './user-management.service';
 
@@ -59,7 +59,7 @@ describe('User Service', () => {
       });
 
       const req = httpMock.expectOne({ method: 'GET' });
-      req.flush(new User(<%- tsKeyId %>, 'user'));
+      req.flush({ id: <%- tsKeyId %>, login: 'user' } as IUserManagement);
       expect(expectedResult).toEqual('user');
     });
 
