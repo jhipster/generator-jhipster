@@ -1021,7 +1021,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             // Set root for ejs to lookup for partials.
             root: templatesRoots,
             // ejs caching cause problem https://github.com/jhipster/generator-jhipster/pull/20757
-            cache: false,
+            cache: true,
           };
           const copyOptions = { noGlob: true, transformOptions };
           if (appendEjs) {
