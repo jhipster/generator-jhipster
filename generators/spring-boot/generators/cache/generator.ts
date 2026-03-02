@@ -237,15 +237,6 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
               },
             ],
           });
-        } else if (application.cacheProviderInfinispan) {
-          source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
-            annotations: [
-              {
-                package: 'org.springframework.boot.cache.test.autoconfigure',
-                annotation: 'AutoConfigureCache',
-              },
-            ],
-          });
         }
       },
       sonar({ application, source }) {
