@@ -232,10 +232,8 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
           this.packageJson.merge({
             overrides: {
               'browser-sync': browserSyncVersion,
-              'react-redux-loading-bar': {
-                react: reactVersion,
-                'react-dom': reactDomVersion,
-              },
+              react: reactVersion,
+              'react-dom': reactDomVersion,
             },
           });
         }
