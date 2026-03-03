@@ -37,7 +37,7 @@
     "autoprefixer": "10.4.27",
     "browser-sync": "3.0.4",
     "browser-sync-webpack-plugin": "2.4.0",
-    "copy-webpack-plugin": "13.0.1",
+    "copy-webpack-plugin": "14.0.0",
     "css-loader": "7.1.4",
     "css-minimizer-webpack-plugin": "7.0.4",
     "eslint": "9.39.2",
