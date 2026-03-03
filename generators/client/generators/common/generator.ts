@@ -38,10 +38,11 @@ export default class CommonGenerator extends BaseApplicationGenerator {
             clientApplicationTemplatesBlock({
               templates: [
                 'shared/jhipster/constants.ts',
-                'shared/jhipster/problem-details.ts',
-                'shared/jhipster/headers.ts',
-                'shared/jhipster/error.constants.ts',
                 'shared/jhipster/data-utils.ts',
+                'shared/jhipster/error.constants.ts',
+                'shared/jhipster/headers.ts',
+                'shared/jhipster/link-header.ts',
+                'shared/jhipster/problem-details.ts',
               ],
             }),
           ],
