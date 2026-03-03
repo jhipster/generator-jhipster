@@ -83,8 +83,8 @@ export default class BootstrapGenerator extends JavaSimpleApplicationGenerator {
         )?.toString();
         const applicationJavaDependencies = this.prepareDependencies(
           {
-            ...getPomVersionProperties(pomFile!),
-            ...getGradleLibsVersionsProperties(gradleLibsVersions!),
+            ...getPomVersionProperties(pomFile),
+            ...getGradleLibsVersionsProperties(gradleLibsVersions),
           },
           'java',
         );
@@ -92,8 +92,8 @@ export default class BootstrapGenerator extends JavaSimpleApplicationGenerator {
         mutateData(application.javaDependencies, applicationJavaDependencies);
       },
       prepareJavaApplication({ application, source }) {
-        source.hasJavaProperty = (property: string) => application.javaProperties![property] !== undefined;
-        source.hasJavaManagedProperty = (property: string) => application.javaManagedProperties![property] !== undefined;
+        source.hasJavaProperty = (property: string) => application.javaProperties[property] !== undefined;
+        source.hasJavaManagedProperty = (property: string) => application.javaManagedProperties[property] !== undefined;
         source.editJUnitPlatformProperties = properties =>
           this.editFile(
             `${application.srcTestResources}junit-platform.properties`,

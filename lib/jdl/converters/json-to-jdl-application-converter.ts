@@ -40,5 +40,5 @@ export function convertApplicationsToJDL({ applications, jdl }: JHipsterYoRcCont
 }
 
 export function convertApplicationToJDL(application: RawJDLJSONApplication, runtime: JDLRuntime): JDLApplication {
-  return createJDLApplication(application![GENERATOR_NAME], runtime);
+  return createJDLApplication(application[GENERATOR_NAME], runtime);
 }

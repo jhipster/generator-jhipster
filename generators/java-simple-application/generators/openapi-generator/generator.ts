@@ -69,7 +69,7 @@ export default class OpenapiGeneratorGenerator extends JavaApplicationGenerator 
               {
                 groupId: 'org.openapitools',
                 artifactId: 'jackson-databind-nullable',
-                version: javaDependencies!['jackson-databind-nullable'],
+                version: javaDependencies['jackson-databind-nullable'],
               },
             ],
           },
@@ -77,7 +77,7 @@ export default class OpenapiGeneratorGenerator extends JavaApplicationGenerator 
             condition: addOpenapiGeneratorPlugin,
             mavenDefinition: {
               properties: [
-                { property: 'openapi-generator-maven-plugin.version', value: javaDependencies!['openapi-generator-maven-plugin'] },
+                { property: 'openapi-generator-maven-plugin.version', value: javaDependencies['openapi-generator-maven-plugin'] },
               ],
               plugins: [{ groupId: 'org.openapitools', artifactId: 'openapi-generator-maven-plugin' }],
               pluginManagement: [
@@ -125,7 +125,7 @@ export default class OpenapiGeneratorGenerator extends JavaApplicationGenerator 
               {
                 libraryName: 'openapi-generator',
                 module: 'org.openapitools:openapi-generator-gradle-plugin',
-                version: javaDependencies!['gradle-openapi-generator'],
+                version: javaDependencies['gradle-openapi-generator'],
                 scope: 'implementation',
               },
             ]);

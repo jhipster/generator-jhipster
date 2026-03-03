@@ -60,9 +60,9 @@ export default class CodeQualityGenerator extends JavaSimpleApplicationGenerator
         const { javaDependencies } = application;
         source.addMavenDefinition!({
           properties: [
-            { property: 'checkstyle.version', value: javaDependencies!.checkstyle },
-            { property: 'maven-checkstyle-plugin.version', value: javaDependencies!['maven-checkstyle-plugin'] },
-            { property: 'nohttp-checkstyle.version', value: javaDependencies!['nohttp-checkstyle'] },
+            { property: 'checkstyle.version', value: javaDependencies.checkstyle },
+            { property: 'maven-checkstyle-plugin.version', value: javaDependencies['maven-checkstyle-plugin'] },
+            { property: 'nohttp-checkstyle.version', value: javaDependencies['nohttp-checkstyle'] },
           ],
           plugins: [{ groupId: 'org.apache.maven.plugins', artifactId: 'maven-checkstyle-plugin' }],
           pluginManagement: [
@@ -105,30 +105,30 @@ export default class CodeQualityGenerator extends JavaSimpleApplicationGenerator
       checkstyleGradle({ application, source }) {
         if (!application.buildToolGradle) return;
         const { javaDependencies } = application;
-        source.addGradleDependencyCatalogVersions!([{ name: 'checkstyle', version: javaDependencies!.checkstyle }]);
+        source.addGradleDependencyCatalogVersions!([{ name: 'checkstyle', version: javaDependencies.checkstyle }]);
         source.addGradleBuildSrcDependencyCatalogLibraries?.([
           {
             libraryName: 'sonarqube-plugin',
             module: 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin',
-            version: javaDependencies!['gradle-sonarqube'],
+            version: javaDependencies['gradle-sonarqube'],
             scope: 'implementation',
           },
           {
             libraryName: 'spotless-plugin',
             module: 'com.diffplug.spotless:spotless-plugin-gradle',
-            version: javaDependencies!['spotless-gradle-plugin'],
+            version: javaDependencies['spotless-gradle-plugin'],
             scope: 'implementation',
           },
           {
             libraryName: 'modernizer-plugin',
             module: 'com.github.andygoossens:gradle-modernizer-plugin',
-            version: javaDependencies!['gradle-modernizer-plugin'],
+            version: javaDependencies['gradle-modernizer-plugin'],
             scope: 'implementation',
           },
           {
             libraryName: 'nohttp-plugin',
             module: 'io.spring.nohttp:nohttp-gradle',
-            version: javaDependencies!['nohttp-checkstyle'],
+            version: javaDependencies['nohttp-checkstyle'],
             scope: 'implementation',
           },
         ]);
@@ -138,7 +138,7 @@ export default class CodeQualityGenerator extends JavaSimpleApplicationGenerator
         if (!application.buildToolMaven) return;
         const { javaDependencies } = application;
         source.addMavenDefinition!({
-          properties: [{ property: 'jacoco-maven-plugin.version', value: javaDependencies!['jacoco-maven-plugin'] }],
+          properties: [{ property: 'jacoco-maven-plugin.version', value: javaDependencies['jacoco-maven-plugin'] }],
           plugins: [{ groupId: 'org.jacoco', artifactId: 'jacoco-maven-plugin' }],
           pluginManagement: [
             {
@@ -194,7 +194,7 @@ export default class CodeQualityGenerator extends JavaSimpleApplicationGenerator
       jacocoGradle({ application, source }) {
         if (!application.buildToolGradle) return;
         const { javaDependencies } = application;
-        source.addGradleDependencyCatalogVersions!([{ name: 'jacoco', version: javaDependencies!['jacoco-maven-plugin'] }]);
+        source.addGradleDependencyCatalogVersions!([{ name: 'jacoco', version: javaDependencies['jacoco-maven-plugin'] }]);
         (source as CommonSource).addSonarProperties?.([
           { key: 'sonar.coverage.jacoco.xmlReportPaths', value: `${application.temporaryDir}reports/jacoco/test/jacocoTestReport.xml` },
           { key: 'sonar.java.codeCoveragePlugin', value: 'jacoco' },
@@ -208,7 +208,7 @@ export default class CodeQualityGenerator extends JavaSimpleApplicationGenerator
         if (!application.buildToolMaven) return;
         const { javaDependencies } = application;
         source.addMavenDefinition!({
-          properties: [{ property: 'spotless-maven-plugin.version', value: javaDependencies!['spotless-maven-plugin'] }],
+          properties: [{ property: 'spotless-maven-plugin.version', value: javaDependencies['spotless-maven-plugin'] }],
           plugins: [{ groupId: 'com.diffplug.spotless', artifactId: 'spotless-maven-plugin' }],
           pluginManagement: [
             {
@@ -241,8 +241,8 @@ export default class CodeQualityGenerator extends JavaSimpleApplicationGenerator
         const { javaDependencies } = application;
         source.addMavenDefinition!({
           properties: [
-            { property: 'properties-maven-plugin.version', value: javaDependencies!['properties-maven-plugin'] },
-            { property: 'sonar-maven-plugin.version', value: javaDependencies!['sonar-maven-plugin'] },
+            { property: 'properties-maven-plugin.version', value: javaDependencies['properties-maven-plugin'] },
+            { property: 'sonar-maven-plugin.version', value: javaDependencies['sonar-maven-plugin'] },
           ],
           plugins: [
             { groupId: 'org.codehaus.mojo', artifactId: 'properties-maven-plugin' },
@@ -282,7 +282,7 @@ export default class CodeQualityGenerator extends JavaSimpleApplicationGenerator
         if (!application.buildToolMaven) return;
         const { javaDependencies, databaseTypeCassandra, packageName } = application;
         source.addMavenDefinition!({
-          properties: [{ property: 'modernizer-maven-plugin.version', value: javaDependencies!['modernizer-maven-plugin'] }],
+          properties: [{ property: 'modernizer-maven-plugin.version', value: javaDependencies['modernizer-maven-plugin'] }],
           plugins: [{ groupId: 'org.gaul', artifactId: 'modernizer-maven-plugin' }],
           pluginManagement: [
             {

@@ -65,8 +65,8 @@ export default class JibGenerator extends JavaSimpleApplicationGenerator {
         const { cacheProviderHazelcast, cacheProviderInfinispan } = application as SpringBootApplication;
         source.addMavenDefinition?.({
           properties: [
-            { property: 'jib-maven-plugin.version', value: javaDependencies!['jib-maven-plugin'] },
-            { property: 'jib-maven-plugin.image', value: dockerContainers!.javaJre },
+            { property: 'jib-maven-plugin.version', value: javaDependencies['jib-maven-plugin'] },
+            { property: 'jib-maven-plugin.image', value: dockerContainers.javaJre },
             { property: 'jib-maven-plugin.architecture', value: 'amd64' },
           ],
           plugins: [{ groupId: 'com.google.cloud.tools', artifactId: 'jib-maven-plugin' }],
@@ -143,7 +143,7 @@ export default class JibGenerator extends JavaSimpleApplicationGenerator {
     <dependency>
         <groupId>com.google.cloud.tools</groupId>
         <artifactId>jib-spring-boot-extension-maven</artifactId>
-        <version>${application.javaDependencies!['jib-spring-boot-extension-maven']}</version>
+        <version>${application.javaDependencies['jib-spring-boot-extension-maven']}</version>
     </dependency>
 </dependencies>
 `
@@ -161,7 +161,7 @@ export default class JibGenerator extends JavaSimpleApplicationGenerator {
           {
             libraryName: 'jib-plugin',
             module: 'com.google.cloud.tools:jib-gradle-plugin',
-            version: javaDependencies!['gradle-jib'],
+            version: javaDependencies['gradle-jib'],
             scope: 'implementation',
           },
         ]);

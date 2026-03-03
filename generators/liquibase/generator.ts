@@ -345,7 +345,7 @@ export default class LiquibaseGenerator<
 
         const { javaDependencies } = application;
         const shouldAddProperty = (property: string, value: string) => {
-          return value && !source.hasJavaProperty?.(property) && application.javaManagedProperties![property] !== value;
+          return value && !source.hasJavaProperty?.(property) && application.javaManagedProperties[property] !== value;
         };
         const checkProperty = (property: string) => {
           if (!source.hasJavaManagedProperty?.(property) && !source.hasJavaProperty?.(property)) {

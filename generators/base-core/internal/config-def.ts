@@ -27,7 +27,7 @@ export function loadConfig(
         if (!source) {
           switch (def.scope) {
             case 'context': {
-              source = (this as CoreGenerator).context!;
+              source = (this as CoreGenerator).context;
               break;
             }
             case 'blueprint': {

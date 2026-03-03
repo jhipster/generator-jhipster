@@ -373,13 +373,13 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
         } else {
           const springBootDependencies = application.springBoot4 ? springBootDependencies4 : springBootDependencies3;
           application.springBootDependencies = this.prepareDependencies(springBootDependencies.versions, 'java');
-          application.javaDependencies!['spring-boot'] = application.springBootDependencies['spring-boot-dependencies'];
-          Object.assign(application.javaManagedProperties!, springBootDependencies.properties);
-          application.javaDependencies!.liquibase = application.javaManagedProperties!['liquibase.version']!;
+          application.javaDependencies['spring-boot'] = application.springBootDependencies['spring-boot-dependencies'];
+          Object.assign(application.javaManagedProperties, springBootDependencies.properties);
+          application.javaDependencies.liquibase = application.javaManagedProperties['liquibase.version']!;
         }
       },
       prepareForTemplates({ application }) {
-        const SPRING_BOOT_VERSION = application.springBootDependencies!['spring-boot-dependencies'];
+        const SPRING_BOOT_VERSION = application.springBootDependencies['spring-boot-dependencies'];
         application.addSpringMilestoneRepository =
           (application.backendType ?? 'Java') === 'Java' &&
           (ADD_SPRING_MILESTONE_REPOSITORY || SPRING_BOOT_VERSION.includes('M') || SPRING_BOOT_VERSION.includes('RC'));
@@ -794,7 +794,7 @@ ${classProperties
       addSpringdoc({ application, source }) {
         const springdocDependency = `springdoc-openapi-starter-${application.reactive ? 'webflux' : 'webmvc'}-api`;
         source.addJavaDependencies?.([
-          { groupId: 'org.springdoc', artifactId: springdocDependency, version: application.javaDependencies!.springdoc },
+          { groupId: 'org.springdoc', artifactId: springdocDependency, version: application.javaDependencies.springdoc },
         ]);
         if (application.reactive) {
           source.addAllowBlockingCallsInside?.({ classPath: 'org.springdoc.core.service.OpenAPIService', method: 'build' });
@@ -848,13 +848,13 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
             {
               pluginName: 'gradle-git-properties',
               id: 'com.gorylenko.gradle-git-properties',
-              version: application.javaDependencies!['gradle-git-properties'],
+              version: application.javaDependencies['gradle-git-properties'],
               addToBuild: true,
             },
             {
               pluginName: 'spring-boot',
               id: 'org.springframework.boot',
-              version: application.javaDependencies!['spring-boot'],
+              version: application.javaDependencies['spring-boot'],
               addToBuild: true,
             },
           ]);

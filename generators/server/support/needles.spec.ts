@@ -37,7 +37,7 @@ describe('generator - server - support - needles', () => {
 
     describe('insertContentIntoApplicationProperties needle', () => {
       it('with a non existing needle', () => {
-        const application = runResult.application!;
+        const application = runResult.application;
         expect(() => {
           // @ts-expect-error invalid needle
           insertContentIntoApplicationProperties.call(runResult.generator, application, { foo: 'foo' });

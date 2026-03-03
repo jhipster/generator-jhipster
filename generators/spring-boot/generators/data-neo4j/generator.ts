@@ -186,7 +186,7 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
               {
                 groupId: 'eu.michael-simons.neo4j',
                 artifactId: 'neo4j-migrations-spring-boot-starter',
-                version: application.javaDependencies!['neo4j-migrations-spring-boot-starter'],
+                version: application.javaDependencies['neo4j-migrations-spring-boot-starter'],
               },
             ],
           },
