@@ -345,32 +345,21 @@ spring:
     representation:
       uuid: standard
 <%_ } _%>
-<%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
+<%_ if (authenticationTypeOauth2) { _%>
   security:
-  <%_ if (authenticationTypeOauth2) { _%>
     oauth2:
       client:
-        provider:
-          oidc:
-            issuer-uri: http://localhost:9080/realms/jhipster
         registration:
           oidc:
-    <%_ if (applicationTypeMicroservice) { _%>
-            client-id: internal
-            client-secret: internal
-    <%_ } else { _%>
-            client-id: web_app
-            client-secret: web_app
-    <%_ } _%>
-            scope: openid, profile, email, offline_access # last one for refresh tokens
-  <%_ } _%>
-  <%_ if (authenticationTypeJwt) { _%>
+            scope: openid, profile
+<%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
+  security:
     oauth2:
       resourceserver:
         jwt:
           authority-prefix: ''
           authorities-claim-name: auth
-  <%_ } _%>
 <%_ } _%>
   task:
     execution:

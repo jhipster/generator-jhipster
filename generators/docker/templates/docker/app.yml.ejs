@@ -25,41 +25,12 @@ services:
 <%_ for (const [key, value] of Object.entries(dockerApplicationEnvironment)) { _%>
       - <%- key %>=<%- value %>
 <%_ } _%>
-<%_ if (databaseTypeNeo4j) { _%>
-      - SPRING_NEO4J_URI=bolt://neo4j:7687
-  <%_ if (databaseMigrationLiquibase) { _%>
-      - SPRING_LIQUIBASE_URL=jdbc:neo4j:bolt://neo4j:7687
-  <%_ } _%>
-<%_ } _%>
-<%_ if (databaseTypeCouchbase) { _%>
-      - SPRING_COUCHBASE_CONNECTION_STRING=couchbase
-      - JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME=<%= baseName %>
-<%_ } _%>
 <%_ if (cacheProviderMemcached) { _%>
       - JHIPSTER_CACHE_MEMCACHED_SERVERS=memcached:11211
 <%_ } _%>
 <%_ if (cacheProviderRedis) { _%>
       - JHIPSTER_CACHE_REDIS_SERVER=redis://redis:6379
       - JHIPSTER_CACHE_REDIS_CLUSTER=false
-<%_ } _%>
-<%_ if (authenticationTypeOauth2) { _%>
-      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
-  <%_ if (applicationTypeGateway || applicationTypeMonolith) { _%>
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
-  <%_ } _%>
-  <%_ if (applicationTypeMicroservice) { _%>
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
-  <%_ } _%>
-<%_ } _%>
-<%_ if (databaseTypeCassandra) { _%>
-      - SPRING_CASSANDRA_CONTACTPOINTS=cassandra
-<%_ } _%>
-<%_ if (databaseTypeCassandra) { _%>
-      - JHIPSTER_SLEEP=10 # Let migration complete
-<%_ } else if (databaseTypeCouchbase) { _%>
-      - JHIPSTER_SLEEP=20 # Let database to start
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
