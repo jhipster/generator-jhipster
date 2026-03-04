@@ -21,6 +21,7 @@ import { defaults } from 'lodash-es';
 import { Validations, databaseTypes, fieldTypes } from '../../../lib/jhipster/index.ts';
 import type { Field as BaseField } from '../../../lib/jhipster/types/field.ts';
 import type { EntityAll, EntityAll as ApplicationEntity, UserEntity } from '../../../lib/types/application-all.d.ts';
+import { type MutateDataParam, mutateData } from '../../../lib/utils/object.ts';
 import { formatDateForChangelog } from '../../base/support/timestamp.ts';
 import { LOGIN_REGEX, LOGIN_REGEX_JS } from '../../generator-constants.ts';
 import { getDatabaseTypeData } from '../../server/support/database.ts';
@@ -211,21 +212,6 @@ export function createUserManagementEntity(
   application: BaseApplicationApplication<EntityAll>,
 ): Partial<ApplicationEntity> {
   const user = createUserEntity.call(this, {}, application);
-  for (const field of user.fields ?? []) {
-    // Login is used as the id field in rest api.
-    if (field.fieldName === 'login') {
-      field.id = true;
-    } else if (field.fieldName === 'id') {
-      field.id = false;
-      field.hidden = true;
-      // Set id type fallback since it's not id anymore and will not be calculated.
-      field.fieldType = field.fieldType ?? getDatabaseTypeData(application.databaseType!).defaultPrimaryKeyType;
-    } else if (field.fieldName === 'imageUrl') {
-      field.hidden = true;
-    } else if (field.fieldName === 'firstName' || field.fieldName === 'lastName') {
-      field.hideListView = true;
-    }
-  }
 
   const creationTimestamp = new Date(this.jhipsterConfig.creationTimestamp ?? Date.now());
   creationTimestamp.setMinutes(creationTimestamp.getMinutes() + 1);
@@ -248,8 +234,34 @@ export function createUserManagementEntity(
     entityTranslationKey: 'userManagement',
   };
 
-  addOrExtendFields(userManagement.fields!, customUserManagementFields);
-  addOrExtendRelationships(userManagement.relationships!, customUserManagementRelationships);
+  mutateFields(userManagement.fields!, [
+    { fieldName: 'login', id: true },
+    {
+      fieldName: 'id',
+      hidden: true,
+      id: false,
+      // Set id type fallback since it's not id anymore and will not be calculated.
+      fieldType: ({ fieldType }) => fieldType ?? getDatabaseTypeData(application.databaseType!).defaultPrimaryKeyType,
+    },
+    { fieldName: 'firstName', hideListView: true },
+    { fieldName: 'lastName', hideListView: true },
+  ]);
+
+  if (user.hasImageField) {
+    mutateFields(userManagement.fields!, [{ fieldName: 'imageUrl', hidden: true }]);
+  }
+
+  if (application.enableTranslation) {
+    const langKeyFieldValues = (application.languages as string[])?.map(lang => lang)?.join(',');
+    mutateFields(userManagement.fields!, [
+      {
+        fieldName: 'langKey',
+        skipServer: true,
+        fieldType: 'Languages',
+        fieldValues: langKeyFieldValues,
+      },
+    ]);
+  }
 
   if (!application.databaseTypeCassandra) {
     addOrExtendFields(userManagement.fields!, getAuditFields());
@@ -266,6 +278,9 @@ export function createUserManagementEntity(
       },
     ]);
   }
+
+  addOrExtendFields(userManagement.fields!, customUserManagementFields);
+  addOrExtendRelationships(userManagement.relationships!, customUserManagementRelationships);
 
   return userManagement;
 }
@@ -329,6 +344,17 @@ export function createAuthorityEntity(
   return authorityEntity;
 }
 
+function mutateFields<const F extends BaseField = BaseField>(fields: F[], fieldsToMutate: MutateDataParam<F>[]): void {
+  for (const fieldToMutate of fieldsToMutate) {
+    const { fieldName: fieldNameToMutate } = fieldToMutate;
+    const field = fields.find(field => field.fieldName === fieldNameToMutate);
+    if (!field) {
+      throw new Error(`Field with name ${fieldNameToMutate} not found`);
+    }
+    mutateData(field, { __override__: true, ...fieldToMutate });
+  }
+}
+
 function addOrExtendFields<const F extends BaseField = BaseField>(
   fields: F[],
   fieldsToAdd: ({ fieldName: string; id?: boolean } & Partial<F>)[],
@@ -337,7 +363,7 @@ function addOrExtendFields<const F extends BaseField = BaseField>(
     const { fieldName: newFieldName, id } = fieldToAdd;
     let field = fields.find(field => field.fieldName === newFieldName);
     if (field) {
-      defaults(field, fieldToAdd);
+      Object.assign(field, fieldToAdd);
     } else {
       field = { ...fieldToAdd } as F;
       if (id) {

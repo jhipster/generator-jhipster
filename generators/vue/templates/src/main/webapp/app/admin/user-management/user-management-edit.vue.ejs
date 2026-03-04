@@ -2,11 +2,11 @@
   <div class="d-flex justify-content-center">
     <div class="col-8">
       <form name="editForm" novalidate @submit.prevent="save()" v-if="userAccount">
-        <h2 id="myUserLabel" data-cy="userManagementCreateUpdateHeading">{{ t$('userManagement.home.createOrEditLabel') }}</h2>
+        <h2 id="myUserLabel" data-cy="UserManagementCreateUpdateHeading">{{ t$('userManagement.home.createOrEditLabel') }}</h2>
         <div>
           <div class="mb-3" :hidden="!userAccount.id">
             <label>{{ t$('global.field.id') }}</label>
-            <input type="text" class="form-control" name="id" v-model="userAccount.id" readonly />
+            <input type="text" class="form-control" name="id" data-cy="id" v-model="userAccount.id" readonly />
           </div>
 
           <div class="mb-3">
@@ -15,6 +15,7 @@
               type="text"
               class="form-control"
               name="login"
+              data-cy="login"
               :class="{ 'is-valid': !v$.userAccount.login.$invalid, 'is-invalid': v$.userAccount.login.$invalid }"
               v-model="v$.userAccount.login.$model"
             />
@@ -37,6 +38,7 @@
               class="form-control"
               id="firstName"
               name="firstName"
+              data-cy="firstName"
               :placeholder="t$('settings.form[\'firstname.placeholder\']')"
               :class="{ 'is-valid': !v$.userAccount.firstName.$invalid, 'is-invalid': v$.userAccount.firstName.$invalid }"
               v-model="v$.userAccount.firstName.$model"
@@ -55,6 +57,7 @@
               class="form-control"
               id="lastName"
               name="lastName"
+              data-cy="lastName"
               :placeholder="t$('settings.form[\'lastname.placeholder\']')"
               :class="{ 'is-valid': !v$.userAccount.lastName.$invalid, 'is-invalid': v$.userAccount.lastName.$invalid }"
               v-model="v$.userAccount.lastName.$model"
@@ -73,6 +76,7 @@
               class="form-control"
               id="email"
               name="email"
+              data-cy="email"
               :placeholder="t$('global.form[\'email.placeholder\']')"
               :class="{ 'is-valid': !v$.userAccount.email.$invalid, 'is-invalid': v$.userAccount.email.$invalid }"
               v-model="v$.userAccount.email.$model"
@@ -103,6 +107,7 @@
                 type="checkbox"
                 id="activated"
                 name="activated"
+                data-cy="activated"
                 v-model="userAccount.activated"
               />
               <span>{{ t$('userManagement.activated') }}</span>
@@ -112,14 +117,14 @@
 <%_ if (enableTranslation) { _%>
           <div class="mb-3" v-if="languages && Object.keys(languages).length > 0">
             <label for="langKey">{{ t$('userManagement.langKey') }}</label>
-            <select class="form-control" id="langKey" name="langKey" v-model="userAccount.langKey">
+            <select class="form-control" id="langKey" name="langKey" data-cy="langKey" v-model="userAccount.langKey">
               <option v-for="(language, key) in languages" :value="key" :key="key">{{ language.name }}</option>
             </select>
           </div>
 <%_ } _%>
           <div class="mb-3">
             <label>{{ t$('userManagement.profiles') }}</label>
-            <select class="form-control" multiple name="authority" v-model="userAccount.authorities">
+            <select class="form-control" multiple name="authority" data-cy="profiles" v-model="userAccount.authorities">
               <option v-for="authority of authorities" :value="authority" :key="authority">{{ authority }}</option>
             </select>
           </div>

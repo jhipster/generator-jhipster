@@ -149,7 +149,7 @@ export default class DomainGenerator extends JavaApplicationGenerator {
         if (!this.generateEnums) return;
 
         for (const entity of entities.filter(entity => !entity.skipServer)) {
-          for (const field of entity.fields.filter(field => field.fieldIsEnum)) {
+          for (const field of entity.fields.filter(field => field.fieldIsEnum && !field.skipServer)) {
             const enumInfo = {
               ...application,
               ...getEnumInfo(field, entity.clientRootFolder),

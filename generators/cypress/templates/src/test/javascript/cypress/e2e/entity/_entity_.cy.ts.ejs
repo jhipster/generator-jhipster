@@ -16,7 +16,7 @@ import {
 <%_
 
 const customUserManagementPages = builtInUserManagement && userManagement.skipClient && userManagement.generateEntityCypress;
-const entitiesUserManagementPages = builtInUserManagement && !userManagement.skipClient;
+const skipUserManagementCreatePage = builtInUserManagement && (!userManagement.skipClient || clientFrameworkReact);
 const baseApi = entityApi + 'api/';
 
 const entityFakeData = generateFakeData('cypress');
@@ -311,7 +311,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
   });
 <%_ if (!readOnly) { _%>
 
-  describe<% if (entitiesUserManagementPages) { %>.skip<% } %>('new <%- entityNameCapitalized %> page', () => {
+  describe<% if (skipUserManagementCreatePage) { %>.skip<% } %>('new <%- entityNameCapitalized %> page', () => {
     beforeEach(() => {
       cy.visit(<%= entityInstance %>PageUrl);
       cy.get(entityCreateButtonSelector).click();
