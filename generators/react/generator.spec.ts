@@ -55,7 +55,7 @@ describe(`generator - ${clientFramework}`, () => {
       });
 
       it('should match application snapshot', () => {
-        const application = runResult.application!;
+        const application = runResult.application;
         expect(application).toMatchSnapshot({
           addLanguageCallbacks: expect.any(Array),
           customizeTemplatePaths: expect.any(Array),

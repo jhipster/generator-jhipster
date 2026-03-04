@@ -97,7 +97,7 @@ export default class MavenGenerator extends JavaSimpleApplicationGenerator {
         source.addMavenProperty = properties => {
           properties = Array.isArray(properties) ? properties : [properties];
           for (const property of properties) {
-            javaProperties![property.property] = property.value!;
+            javaProperties[property.property] = property.value!;
             this.pomStorage.addProperty(property);
           }
         };

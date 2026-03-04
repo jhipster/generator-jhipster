@@ -136,7 +136,7 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
         const junitJupiterVersion = '5.13.3';
         if (springBootJunitJupiterVersion && gt(springBootJunitJupiterVersion, junitJupiterVersion)) {
           throw new Error(
-            `Spring Boot provides junit-jupiter.version=${application.javaManagedProperties!['junit-jupiter.version']}, which is compatible with Cucumber. Custom version can be dropped.`,
+            `Spring Boot provides junit-jupiter.version=${application.javaManagedProperties['junit-jupiter.version']}, which is compatible with Cucumber. Custom version can be dropped.`,
           );
         }
         source.addJavaProperty?.({ property: 'junit-jupiter.version', value: junitJupiterVersion });
@@ -148,7 +148,7 @@ export default class CucumberGenerator extends JavaApplicationGenerator {
             {
               groupId: 'io.cucumber',
               artifactId: 'cucumber-bom',
-              version: javaDependencies!['cucumber-bom'],
+              version: javaDependencies['cucumber-bom'],
               type: 'pom',
               scope: 'import',
             },

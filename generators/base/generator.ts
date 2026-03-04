@@ -227,7 +227,7 @@ export default class BaseGenerator<
               assert(cleanup, 'cleanupFiles requires cleanup object');
             } else {
               cleanup = oldVersionOrCleanup;
-              oldVersion = this.jhipsterOldVersion!;
+              oldVersion = this.jhipsterOldVersion;
             }
             await Promise.all(
               Object.entries(cleanup).map(async ([version, files]) => {

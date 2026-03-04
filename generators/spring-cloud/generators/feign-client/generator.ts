@@ -71,7 +71,7 @@ export default class FeignClientGenerator extends SpringBootApplicationGenerator
         if ((applicationTypeMicroservice || applicationTypeGateway) && reactive) {
           const groupId = 'com.playtika.reactivefeign';
           source.addJavaDependencies?.([
-            { groupId, artifactId: 'feign-reactor-bom', type: 'pom', scope: 'import', version: javaDependencies!['feign-reactor-bom'] },
+            { groupId, artifactId: 'feign-reactor-bom', type: 'pom', scope: 'import', version: javaDependencies['feign-reactor-bom'] },
             { groupId, artifactId: 'feign-reactor-cloud' },
             { groupId, artifactId: 'feign-reactor-spring-configuration' },
             { groupId, artifactId: 'feign-reactor-webclient' },

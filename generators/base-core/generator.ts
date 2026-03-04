@@ -528,7 +528,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
             if (!this.blueprintStorage) {
               throw new Error('Blueprint storage is not initialized');
             }
-            this.blueprintStorage!.set(optionName, optionValue);
+            this.blueprintStorage.set(optionName, optionValue);
             break;
           }
           case 'generator': {
@@ -536,7 +536,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
             break;
           }
           case 'context': {
-            this.context![optionName] = optionValue;
+            this.context[optionName] = optionValue;
             break;
           }
           default: {
@@ -585,7 +585,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
               break;
             }
             case 'context': {
-              this.context![argumentName] = convertedValue;
+              this.context[argumentName] = convertedValue;
               break;
             }
             case 'storage': {

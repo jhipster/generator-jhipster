@@ -49,19 +49,19 @@ export const getTestcontainerSupport = ({
         testcontainerClassInitialization: `// You are required to accept EULA license for SQL server containers
                 // Refer to https://java.testcontainers.org/modules/databases/mssqlserver/
                 //.acceptLicense()`,
-        testcontainerDockerImageName: dockerContainers!.mssql,
+        testcontainerDockerImageName: dockerContainers.mssql,
       },
       mysql: {
         testcontainerClass: 'MySQLContainer',
         testcontainerClassPackage: 'org.testcontainers.containers',
         testcontainerClassInitialization: '.withConfigurationOverride("conf/mysql")',
-        testcontainerDockerImageName: dockerContainers!.mysql,
+        testcontainerDockerImageName: dockerContainers.mysql,
       },
       postgresql: {
         testcontainerClass: 'PostgreSQLContainer',
         testcontainerClassPackage: `org.testcontainers.${springBoot4 ? 'postgresql' : 'containers'}`,
         testcontainerClassInitialization: '',
-        testcontainerDockerImageName: dockerContainers!.postgresql,
+        testcontainerDockerImageName: dockerContainers.postgresql,
       },
     }[databaseType] ?? {
       testcontainerClass: undefined,

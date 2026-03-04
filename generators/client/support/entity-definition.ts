@@ -111,10 +111,10 @@ const generateEntityClientFields = (
     const relationshipType = relationship.relationshipType;
     if (relationshipType === 'one-to-many' || relationshipType === 'many-to-many') {
       fieldType = `I${relationship.otherEntity.entityAngularName}[]`;
-      fieldName = relationship.relationshipFieldNamePlural!;
+      fieldName = relationship.relationshipFieldNamePlural;
     } else {
       fieldType = `I${relationship.otherEntity.entityAngularName}`;
-      fieldName = relationship.relationshipFieldName!;
+      fieldName = relationship.relationshipFieldName;
     }
     if (nullable) {
       fieldType += ' | null';

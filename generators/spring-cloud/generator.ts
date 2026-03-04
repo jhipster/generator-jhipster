@@ -107,7 +107,7 @@ export default class SpringCloudGenerator extends SpringCloudApplicationGenerato
                 artifactId: 'spring-cloud-dependencies',
                 type: 'pom',
                 scope: 'import',
-                version: application.javaDependencies!['spring-cloud-dependencies'],
+                version: application.javaDependencies['spring-cloud-dependencies'],
               },
             ],
           },

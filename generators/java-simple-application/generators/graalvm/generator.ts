@@ -64,7 +64,7 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
         });
       },
       load({ application }) {
-        this.loadJavaDependenciesFromGradleCatalog(application.javaDependencies!);
+        this.loadJavaDependenciesFromGradleCatalog(application.javaDependencies);
       },
       async packageJson({ application }) {
         const { buildToolGradle, packageJsonScripts } = application;
@@ -168,7 +168,7 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
           addToBuild: true,
           pluginName: 'graalvm',
           id: 'org.graalvm.buildtools.native',
-          version: javaDependencies!.nativeBuildTools!,
+          version: javaDependencies.nativeBuildTools,
         });
 
         source.applyFromGradle!({ script: 'gradle/native.gradle' });
@@ -183,7 +183,7 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
           mavenDefinition({
             graalvmReachabilityMetadata,
             reactive,
-            nativeBuildToolsVersion: javaDependencies!.nativeBuildTools!,
+            nativeBuildToolsVersion: javaDependencies.nativeBuildTools,
             databaseTypeSql,
             userLanguage: nativeLanguageDefinition.languageTag,
             languages: languagesDefinition?.map(def => def.languageTag) ?? [nativeLanguageDefinition.languageTag],

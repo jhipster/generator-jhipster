@@ -62,7 +62,7 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
         }
       },
       loadDependabot({ application }) {
-        this.loadJavaDependenciesFromGradleCatalog(application.javaDependencies!, true);
+        this.loadJavaDependenciesFromGradleCatalog(application.javaDependencies, true);
       },
       addNeedles({ source, application }) {
         if (application.cacheProviderEhcache || application.cacheProviderCaffeine || application.cacheProviderRedis) {
@@ -168,7 +168,7 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
     return this.asPostWritingTaskGroup({
       dependencies({ application, source }) {
         if (application.cacheProviderInfinispan) {
-          source.overrideProperty!({ property: 'infinispan.version', value: application.javaDependencies!.infinispan });
+          source.overrideProperty!({ property: 'infinispan.version', value: application.javaDependencies.infinispan });
         }
       },
       applyGradleScript({ source, application }) {
