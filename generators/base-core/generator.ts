@@ -646,7 +646,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
           case 'context': {
             storage = {
               getPath: (path: string) => get(this.context, path),
-              setPath: (path: string, value: any) => set(this.context!, path, value),
+              setPath: (path: string, value: any) => set(this.context, path, value),
             };
             break;
           }

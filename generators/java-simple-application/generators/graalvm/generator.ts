@@ -79,7 +79,7 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
               'native-package-dev': './mvnw package -B -ntp -Pnative,dev,webapp -DskipTests',
               'native-start': './target/native-executable --spring.profiles.active=e2e,secret-samples,prod',
             };
-        Object.assign(packageJsonScripts!, {
+        Object.assign(packageJsonScripts, {
           'native-e2e': 'concurrently -k -s first -n application,e2e -c red,blue npm:native-start npm:e2e:headless',
           ...scripts,
         });

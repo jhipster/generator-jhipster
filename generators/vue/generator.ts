@@ -283,7 +283,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
           '8.6.1': ['.eslintrc.json', '.eslintignore'],
           '8.7.4': [
             [
-              application.microfrontend!,
+              application.microfrontend,
               `${application.srcMainWebapp}microfrontends/entities-menu-test.vue`,
               `${application.srcMainWebapp}microfrontends/entities-menu-component-test.ts`,
               `${application.srcMainWebapp}microfrontends/entities-router-test.ts`,

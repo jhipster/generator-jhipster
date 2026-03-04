@@ -42,7 +42,7 @@ export default class JibGenerator extends JavaSimpleApplicationGenerator {
           blocks: [
             { path: `${dockerServicesDir}jib/`, templates: ['entrypoint.sh'] },
             {
-              condition: () => application.buildToolGradle!,
+              condition: () => application.buildToolGradle,
               templates: [`${GRADLE_BUILD_SRC_MAIN_DIR}/jhipster.docker-conventions.gradle`],
             },
           ],

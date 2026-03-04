@@ -120,11 +120,11 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
           }
         }
         await control.cleanupFiles({
-          '8.9.1': [[application.cacheProviderInfinispan!, `${application.javaPackageSrcDir}config/CacheFactoryConfiguration.java`]],
+          '8.9.1': [[application.cacheProviderInfinispan, `${application.javaPackageSrcDir}config/CacheFactoryConfiguration.java`]],
           '9.0.0-alpha.0': [`${GRADLE_BUILD_SRC_MAIN_DIR}/jhipster.spring-cache-conventions.gradle`],
           '9.0.0-beta.1': [
             [
-              application.cacheProviderRedis!,
+              application.cacheProviderRedis,
               `${application.javaPackageSrcDir}config/RedisTestContainersSpringContextCustomizerFactory.java`,
               `${application.javaPackageSrcDir}config/EmbeddedRedis.java`,
               `${application.srcTestResources}META-INF/spring.factories`,

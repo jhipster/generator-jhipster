@@ -86,7 +86,7 @@ export default class JavascriptGenerator extends JavascriptSimpleApplicationGene
       mergePackageJson({ application, source }) {
         const { packageJsonNodeEngine, dasherizedBaseName, projectDescription, packageJsonScripts, clientPackageJsonScripts } = application;
 
-        this.packageJson.merge({ scripts: packageJsonScripts! });
+        this.packageJson.merge({ scripts: packageJsonScripts });
 
         this.packageJson.defaults({
           name: dasherizedBaseName,

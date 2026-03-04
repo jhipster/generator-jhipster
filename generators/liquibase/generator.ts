@@ -434,7 +434,7 @@ export default class LiquibaseGenerator<
               // eslint-disable-next-line no-template-curly-in-string
               version: '${liquibase.version}',
               additionalContent: mavenPlugin({
-                backendTypeSpringBoot: application.backendTypeSpringBoot!,
+                backendTypeSpringBoot: application.backendTypeSpringBoot,
                 hibernateNamingPhysicalStrategy: application.hibernateNamingPhysicalStrategy,
                 hibernateNamingImplicitStrategy: application.hibernateNamingImplicitStrategy,
                 packageName: application.packageName!,

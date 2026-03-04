@@ -217,7 +217,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
         if (this.options.skipPriorities?.includes?.(PRIORITY_NAMES.POST_WRITING)) return;
 
         for (const addLanguageCallback of application.addLanguageCallbacks) {
-          addLanguageCallback(application.languagesToGenerateDefinition!, application.languagesDefinition);
+          addLanguageCallback(application.languagesToGenerateDefinition, application.languagesDefinition);
         }
       },
     });
