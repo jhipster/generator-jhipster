@@ -108,7 +108,6 @@
     "check-types": "tsc -p tsconfig.spec.json",
     "clean": "rimraf dist",
     "compile": "tsc",
-    "completion": "tabtab install --name jhipster --auto",
     "copy-files": "cpy \"**\" \"!**/*.(js|cjs|mjs|ts|cts|mts|snap)\" \"!**/__*/*\" \"../dist/generators\" --cwd=generators --dot",
     "copy-types": "cpy \"**/*.d.(|c|m)ts\" \"../dist/generators\" --cwd=generators && cpy \"**/*.d.(|c|m)ts\" \"../dist/lib\" --cwd=lib",
     "ejslint": "ejslint generators/**/*.ejs",
