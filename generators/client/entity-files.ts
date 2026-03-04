@@ -20,6 +20,7 @@ import { getEnumInfo } from '../base-application/support/index.ts';
 import type CoreGenerator from '../base-core/generator.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.ts';
 
+import { isClientField } from './support/filter-entities.ts';
 import type { Application as ClientApplication, Entity as ClientEntity } from './types.d.ts';
 
 export async function addEnumerationFiles(
@@ -27,7 +28,7 @@ export async function addEnumerationFiles(
   { application, entity }: { application: ClientApplication; entity: ClientEntity },
 ) {
   for (const field of entity.fields) {
-    if (field.fieldIsEnum) {
+    if (field.fieldIsEnum && isClientField(field)) {
       const { enumFileName } = field;
       const enumInfo = {
         ...getEnumInfo(field, entity.clientRootFolder),

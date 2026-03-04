@@ -155,12 +155,11 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
 
   get postPreparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
-      prepareForTemplates({ application, entity }) {
+      prepareForTemplates({ entity }) {
         mutateData(entity, {
           workaroundEntityCannotBeEmpty: false,
           workaroundInstantReactiveMariaDB: false,
-          generateEntityCypress: ({ builtInUserManagement, skipClient }) =>
-            !skipClient || (builtInUserManagement && application.clientFrameworkAngular),
+          generateEntityCypress: ({ builtInUserManagement, skipClient }) => !skipClient || builtInUserManagement,
         });
       },
     });

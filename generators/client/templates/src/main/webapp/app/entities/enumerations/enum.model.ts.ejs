@@ -18,6 +18,6 @@
 -%>
 export enum <%= enumName %> {
 <% enumValues.forEach((enumValue, index) => { %>
-  <%= enumValue.name %> = '<%= enumValue.value %>'<% if (index < enumValues.length - 1) { %>,<% } %>
+  <%- enumValue.name.includes('-') ? `'${enumValue.name}'` : enumValue.name %> = '<%= enumValue.value %>'<% if (index < enumValues.length - 1) { %>,<% } %>
 <% }); %>
 }

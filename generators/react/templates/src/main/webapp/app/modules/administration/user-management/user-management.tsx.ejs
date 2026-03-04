@@ -162,7 +162,7 @@ export const UserManagement = () => {
         </thead>
         <tbody>
           {users.map((user, i) => (
-            <tr id={user.login} key={`user-${i}`}>
+            <tr id={user.login} key={`user-${i}`} data-cy="entityTable">
               <td>
                 <Button tag={Link} to={user.login} color="link" size="sm">
                   {user.id}
