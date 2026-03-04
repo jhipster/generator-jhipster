@@ -241,7 +241,7 @@ export function createUserManagementEntity(
       hidden: true,
       id: false,
       // Set id type fallback since it's not id anymore and will not be calculated.
-      fieldType: ({ fieldType }) => fieldType ?? getDatabaseTypeData(application.databaseType!).defaultPrimaryKeyType,
+      fieldType: ({ fieldType }) => fieldType ?? getDatabaseTypeData(application.databaseType).defaultPrimaryKeyType,
     },
     { fieldName: 'firstName', hideListView: true },
     { fieldName: 'lastName', hideListView: true },

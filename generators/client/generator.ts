@@ -241,7 +241,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
         if (!application.clientFrameworkBuiltIn) {
           return;
         }
-        const packageJsonStorage = this.createStorage(this.destinationPath(application.clientRootDir!, 'package.json'));
+        const packageJsonStorage = this.createStorage(this.destinationPath(application.clientRootDir, 'package.json'));
         const scriptsStorage = packageJsonStorage.createStorage('scripts');
 
         const devDependencies = packageJsonStorage.createStorage('devDependencies');

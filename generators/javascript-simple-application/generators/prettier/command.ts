@@ -19,7 +19,7 @@
 import type { JHipsterCommandDefinition } from '../../../../lib/command/index.ts';
 import gitCommand from '../../../git/command.ts';
 
-const { monorepository } = gitCommand.configs!;
+const { monorepository } = gitCommand.configs;
 
 const command = {
   configs: {

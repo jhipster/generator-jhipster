@@ -242,7 +242,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
   get postWriting() {
     return this.asPostWritingTaskGroup({
       packageJson({ application }) {
-        const clientPackageJson = this.createStorage(this.destinationPath(application.clientRootDir!, 'package.json'));
+        const clientPackageJson = this.createStorage(this.destinationPath(application.clientRootDir, 'package.json'));
         clientPackageJson.merge({
           devDependencies: {
             cypress: application.nodeDependencies.cypress,

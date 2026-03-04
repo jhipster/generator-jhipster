@@ -39,7 +39,7 @@ export default class CodeQualityGenerator extends JavaSimpleApplicationGenerator
           blocks: [
             { templates: ['checkstyle.xml'] },
             {
-              condition: () => application.buildToolGradle!,
+              condition: () => application.buildToolGradle,
               templates: [`${GRADLE_BUILD_SRC_MAIN_DIR}/jhipster.code-quality-conventions.gradle`],
             },
           ],
