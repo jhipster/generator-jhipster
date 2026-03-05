@@ -16,7 +16,7 @@ import {
 <%_
 
 const customUserManagementPages = builtInUserManagement && userManagement.skipClient && userManagement.generateEntityCypress;
-const skipUserManagementCreatePage = builtInUserManagement && (!userManagement.skipClient || clientFrameworkReact);
+const skipUserManagementCreatePage = builtInUserManagement && (!userManagement.skipClient || clientFrameworkReact || graalvmSupport);
 const baseApi = entityApi + 'api/';
 
 const entityFakeData = generateFakeData('cypress');
