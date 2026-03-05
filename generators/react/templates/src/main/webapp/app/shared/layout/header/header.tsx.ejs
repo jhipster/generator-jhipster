@@ -79,7 +79,7 @@ const Header = (props: IHeaderProps) => {
         <Navbar.Toggle aria-controls="header-tabs" aria-label="Menu" />
         <Brand />
         <Navbar.Collapse id="header-tabs">
-          <Nav className="ms-auto" navbar>
+          <Nav className="ms-auto">
             <Home />
             {props.isAuthenticated && <EntitiesMenu />}
             {props.isAuthenticated && props.isAdmin &&
