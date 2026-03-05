@@ -1032,6 +1032,30 @@ exports[`git-changes generators/spring-boot/generators/data-relational/index.ts 
 }
 `;
 
+exports[`git-changes generators/spring-boot/generators/graalvm/index.ts should match changes snapshot 1`] = `
+{
+  "angular": false,
+  "angularWorkflow": false,
+  "base": false,
+  "ci": false,
+  "client": false,
+  "common": false,
+  "devBlueprint": false,
+  "devserverWorkflow": false,
+  "e2e": false,
+  "generateBlueprint": false,
+  "graalvm": false,
+  "java": true,
+  "react": false,
+  "reactWorkflow": false,
+  "sonarPr": false,
+  "springBootDefaults": false,
+  "vue": false,
+  "vueWorkflow": false,
+  "workspaces": false,
+}
+`;
+
 exports[`git-changes generators/spring-boot/generators/jwt/index.ts should match changes snapshot 1`] = `
 {
   "angular": false,

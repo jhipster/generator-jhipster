@@ -137,42 +137,6 @@ exports[`generator - java-simple-application:graalvm with default options should
       ],
     },
   ],
-  "addNativeHint": [
-    {
-      "publicMethods": [
-        "java.util.Locale.class",
-      ],
-      "resources": [
-        "i18n/**",
-      ],
-    },
-  ],
-  "editJavaFile": [
-    [
-      "src/main/java/com/mycompany/myapp/JhipsterApp.java",
-      {
-        "annotations": [
-          {
-            "annotation": "ImportRuntimeHints",
-            "package": "org.springframework.context.annotation",
-            "parameters": [Function],
-          },
-        ],
-      },
-    ],
-    [
-      "src/main/java/com/mycompany/myapp//web/rest/errors/FieldErrorVM.java",
-      {
-        "annotations": [
-          {
-            "annotation": "RegisterReflectionForBinding",
-            "package": "org.springframework.aot.hint.annotation",
-            "parameters": [Function],
-          },
-        ],
-      },
-    ],
-  ],
 }
 `;
 
@@ -186,55 +150,10 @@ exports[`generator - java-simple-application:graalvm with default options should
       "version": "'NATIVE-BUILD-TOOLS-VERSION'",
     },
   ],
-  "addNativeHint": [
-    {
-      "publicMethods": [
-        "java.util.Locale.class",
-      ],
-      "resources": [
-        "i18n/**",
-      ],
-    },
-  ],
   "applyFromGradle": [
     {
       "script": "gradle/native.gradle",
     },
-  ],
-  "editJavaFile": [
-    [
-      "src/main/java/com/mycompany/myapp/JhipsterApp.java",
-      {
-        "annotations": [
-          {
-            "annotation": "ImportRuntimeHints",
-            "package": "org.springframework.context.annotation",
-            "parameters": [Function],
-          },
-        ],
-      },
-    ],
-    [
-      "src/main/java/com/mycompany/myapp//web/rest/errors/FieldErrorVM.java",
-      {
-        "annotations": [
-          {
-            "annotation": "RegisterReflectionForBinding",
-            "package": "org.springframework.aot.hint.annotation",
-            "parameters": [Function],
-          },
-        ],
-      },
-    ],
-    [
-      "src/test/java/com/mycompany/myapp//TechnicalStructureTest.java",
-      {
-        "staticImports": [
-          "com.tngtech.archunit.core.domain.JavaClass.Predicates.simpleNameEndingWith",
-        ],
-      },
-      [Function],
-    ],
   ],
 }
 `;
@@ -242,9 +161,6 @@ exports[`generator - java-simple-application:graalvm with default options should
 exports[`generator - java-simple-application:graalvm with default options should match files snapshot 1`] = `
 {
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/NativeConfiguration.java": {
     "stateCleared": "modified",
   },
 }
@@ -256,9 +172,6 @@ exports[`generator - java-simple-application:graalvm with default options should
     "stateCleared": "modified",
   },
   "gradle/native.gradle": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/NativeConfiguration.java": {
     "stateCleared": "modified",
   },
 }

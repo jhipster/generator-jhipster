@@ -1238,6 +1238,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/spring-boot/generators/data-relational/templates/template-file-spring-boot:data-relational.ejs": {
     "stateCleared": "modified",
   },
+  "generators/spring-boot/generators/graalvm/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/graalvm/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/graalvm/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/graalvm/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/spring-boot/generators/graalvm/templates/template-file-spring-boot:graalvm.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/spring-boot/generators/jwt/command.js": {
     "stateCleared": "modified",
   },

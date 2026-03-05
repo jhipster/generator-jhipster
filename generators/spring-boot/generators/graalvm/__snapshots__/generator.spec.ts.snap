@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`generator - spring-boot:graalvm with defaults options should call source snapshot 1`] = `
+{
+  "addNativeHint": [
+    {
+      "publicMethods": [
+        "java.util.Locale.class",
+        "java.util.Calendar[].class",
+      ],
+      "resources": [
+        "i18n/**",
+      ],
+    },
+  ],
+  "editJavaFile": [
+    [
+      "src/main/java/com/mycompany/myapp/JhipsterApp.java",
+      {
+        "annotations": [
+          {
+            "annotation": "ImportRuntimeHints",
+            "package": "org.springframework.context.annotation",
+            "parameters": [Function],
+          },
+        ],
+      },
+    ],
+    [
+      "src/main/java/com/mycompany/myapp//web/rest/errors/FieldErrorVM.java",
+      {
+        "annotations": [
+          {
+            "annotation": "RegisterReflectionForBinding",
+            "package": "org.springframework.aot.hint.annotation",
+            "parameters": [Function],
+          },
+        ],
+      },
+    ],
+  ],
+}
+`;
+
+exports[`generator - spring-boot:graalvm with defaults options should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/NativeConfiguration.java": {
+    "stateCleared": "modified",
+  },
+}
+`;
