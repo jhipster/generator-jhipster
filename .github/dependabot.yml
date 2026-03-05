@@ -161,6 +161,12 @@ updates:
           - '@fortawesome/*'
       react:
         patterns:
+          - '@types/react'
+          - '@types/react-dom'
+          - 'react'
+          - 'react-dom'
+      redux:
+        patterns:
           - '@reduxjs/*'
           - '*-redux'
           - 'redux'
