@@ -16,7 +16,7 @@ import {
 <%_
 
 const customUserManagementPages = builtInUserManagement && userManagement.skipClient && userManagement.generateEntityCypress;
-const skipUserManagementCreatePage = builtInUserManagement && (!userManagement.skipClient || clientFrameworkReact || graalvmSupport);
+const skipUserManagementCreatePage = builtInUserManagement && (!userManagement.skipClient || clientFrameworkReact);
 const baseApi = entityApi + 'api/';
 
 const entityFakeData = generateFakeData('cypress');
@@ -26,6 +26,7 @@ const otherEntities = this._.uniq(Object.values(differentRelationships).filter(r
 // We cannot generate a required entity with relationship with required relationships.
 const skipCreateTest =
   (
+    graalvmSupport ||
     !cypressBootstrapEntities ||
     requiredRelationships.some(rel => rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.derived) ||
     requiredRelationships.some(rel => rel.otherEntity.builtInUser || rel.otherEntity === this.entity) ||
