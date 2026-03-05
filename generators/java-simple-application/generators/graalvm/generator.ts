@@ -138,6 +138,7 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
             common: [{ templates: ['README.md.jhi.native'] }],
             config: [
               javaMainPackageTemplatesBlock({
+                condition: ctx => ctx.backendTypeSpringBoot,
                 templates: ['config/NativeConfiguration.java'],
               }),
             ],

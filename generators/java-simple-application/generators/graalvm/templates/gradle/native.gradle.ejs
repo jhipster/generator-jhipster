@@ -27,7 +27,7 @@ processTestAot {
   jvmArgs += ["-XX:+AllowRedefinitionToAddDeleteMethods"]
 }
 <%_ if (!reactive && databaseTypeSql) { _%>
-  <%_ if (devDatabaseTypeH2Any) { _%>
+  <%_ if (backendTypeSpringBoot && devDatabaseTypeH2Any) { _%>
 
 processResources {
   filesMatching("**/application-dev.yml") {

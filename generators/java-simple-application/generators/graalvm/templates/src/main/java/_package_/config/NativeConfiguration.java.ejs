@@ -1,8 +1,13 @@
 package <%=packageName%>.config;
 
+import java.util.Calendar;
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
+import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
+@RegisterReflectionForBinding({ Calendar[].class })
 public class NativeConfiguration {
 
     public static class JHipsterNativeRuntimeHints implements RuntimeHintsRegistrar {
