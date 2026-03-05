@@ -9,7 +9,7 @@
     "bootswatch": "5.3.8",
     "path-browserify": "1.0.1",
     "react": "19.2.4",
-    "react-bootstrap": "2.10.9",
+    "react-bootstrap": "2.10.10",
     "react-dom": "19.2.4",
     "react-hook-form": "7.71.2",
     "react-jhipster": "github:jhipster/react-jhipster#main",
