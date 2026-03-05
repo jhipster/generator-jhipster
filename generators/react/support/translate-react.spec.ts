@@ -120,7 +120,7 @@ translate('global', { min:20, max: 50, pattern: '^[a-zA-Z0-9]*$',
 import React from 'react';
 import { Link } from 'react-router';
 import { Translate } from 'react-jhipster';
-import { Row, Col, Alert } from 'reactstrap';
+import { Row, Col, Alert } from 'react-bootstrap';
 
 import { useAppSelector } from 'app/config/store';
 
@@ -212,7 +212,7 @@ export default Home;
 import React from 'react';
 import { Link } from 'react-router';
 
-import { Row, Col, Alert } from 'reactstrap';
+import { Row, Col, Alert } from 'react-bootstrap';
 
 import { useAppSelector } from 'app/config/store';
 

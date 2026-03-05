@@ -18,7 +18,7 @@
 -%>
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'react-bootstrap';
 import { Translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -36,21 +36,20 @@ export const UserManagementDeleteDialog = () => {
     dispatch(getUser(login));
   }, []);
 
-  const handleClose = event => {
-    event.stopPropagation();
+  const handleClose = () => {
     navigate('/admin/user-management');
   };
 
   const user = useAppSelector(state => state.userManagement.user);
 
-  const confirmDelete = event => {
+  const confirmDelete = () => {
     dispatch(deleteUser(user.login));
-    handleClose(event);
+    handleClose();
   };
 
   return (
-    <Modal isOpen toggle={handleClose}>
-      <ModalHeader toggle={handleClose} data-cy="userManagementDeleteDialogHeading">
+    <Modal show onHide={handleClose}>
+      <ModalHeader data-cy="userManagementDeleteDialogHeading" closeButton>
         <Translate contentKey="entity.delete.title">Confirm delete operation</Translate>
       </ModalHeader>
       <ModalBody>
@@ -59,12 +58,12 @@ export const UserManagementDeleteDialog = () => {
         </Translate>
       </ModalBody>
       <ModalFooter>
-        <Button color="secondary" onClick={handleClose}>
+        <Button variant="secondary" onClick={handleClose}>
           <FontAwesomeIcon icon={faBan} />
           &nbsp;
           <Translate contentKey="entity.action.cancel">Cancel</Translate>
         </Button>
-        <Button color="danger" onClick={confirmDelete} data-cy="entityConfirmDeleteButton">
+        <Button variant="danger" onClick={confirmDelete} data-cy="entityConfirmDeleteButton">
           <FontAwesomeIcon icon={faTrash} />
           &nbsp;
           <Translate contentKey="entity.action.delete">Delete</Translate>

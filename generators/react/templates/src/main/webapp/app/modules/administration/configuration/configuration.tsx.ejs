@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import React, { useState, useEffect } from 'react';
-import { Table, Input, Row, Col, Badge } from 'reactstrap';
+import { Table, FormControl, Row, Col, Badge } from 'react-bootstrap';
 import { Translate } from 'react-jhipster';
 
 import { getConfigurations, getEnv } from '../administration.reducer';
@@ -63,7 +63,7 @@ export const ConfigurationPage = () => {
       <span>
         <Translate contentKey="configuration.filter">Filter</Translate>
       </span>{' '}
-      <Input type="search" value={filter} onChange={changeFilter} name="search" id="search" />
+      <FormControl type="search" value={filter} onChange={changeFilter} name="search" id="search" />
       <label>Spring configuration</label>
       <Table className="table table-striped table-bordered table-responsive d-table">
         <thead>

@@ -32,12 +32,12 @@ declare module '*.json' {
   <%_ for (const remote of microfrontends) { _%>
 
 declare module '@<%= remote.lowercaseBaseName %>/entities-routes' {
-  const _default: () => JSX.Element;
+  const _default: () => import('react').React.JSX.Element;
   export default _default;
 }
 
 declare module '@<%= remote.lowercaseBaseName %>/entities-menu' {
-  const _default: () => JSX.Element;
+  const _default: () => import('react').React.JSX.Element;
   export default _default;
 }
   <%_ } _%>

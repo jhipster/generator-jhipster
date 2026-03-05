@@ -789,6 +789,10 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
     {
       "overrides": {
         "browser-sync": "BROWSER_SYNC_VERSION",
+        "react-redux-loading-bar": {
+          "react": "$react",
+          "react-dom": "$react-dom",
+        },
       },
     },
   ],
@@ -1607,6 +1611,10 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
     {
       "overrides": {
         "browser-sync": "BROWSER_SYNC_VERSION",
+        "react-redux-loading-bar": {
+          "react": "$react",
+          "react-dom": "$react-dom",
+        },
       },
     },
   ],
@@ -2412,6 +2420,10 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
     {
       "overrides": {
         "browser-sync": "BROWSER_SYNC_VERSION",
+        "react-redux-loading-bar": {
+          "react": "$react",
+          "react-dom": "$react-dom",
+        },
       },
     },
     {
@@ -3227,6 +3239,10 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
     {
       "overrides": {
         "browser-sync": "BROWSER_SYNC_VERSION",
+        "react-redux-loading-bar": {
+          "react": "$react",
+          "react-dom": "$react-dom",
+        },
       },
     },
     {
@@ -4108,6 +4124,10 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
     {
       "overrides": {
         "browser-sync": "BROWSER_SYNC_VERSION",
+        "react-redux-loading-bar": {
+          "react": "$react",
+          "react-dom": "$react-dom",
+        },
       },
     },
   ],
@@ -4902,6 +4922,10 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
     {
       "overrides": {
         "browser-sync": "BROWSER_SYNC_VERSION",
+        "react-redux-loading-bar": {
+          "react": "$react",
+          "react-dom": "$react-dom",
+        },
       },
     },
   ],
@@ -5691,6 +5715,10 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
     {
       "overrides": {
         "browser-sync": "BROWSER_SYNC_VERSION",
+        "react-redux-loading-bar": {
+          "react": "$react",
+          "react-dom": "$react-dom",
+        },
       },
     },
   ],

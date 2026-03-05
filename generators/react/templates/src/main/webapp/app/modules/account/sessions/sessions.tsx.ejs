@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import React, { useEffect } from 'react';
-import { Alert, Table, Button } from 'reactstrap';
+import { Alert, Table, Button } from 'react-bootstrap';
 import { Translate } from 'react-jhipster';
 
 import { getSession } from 'app/shared/reducers/authentication';
@@ -55,7 +55,7 @@ export const SessionsPage = () => {
       </h2>
 
       {updateSuccess && (
-        <Alert color="success">
+        <Alert variant="success">
           <Translate contentKey="sessions.messages.success">
             <strong>Session invalidated!</strong>
           </Translate>
@@ -63,7 +63,7 @@ export const SessionsPage = () => {
       )}
 
       {updateFailure && (
-        <Alert color="danger">
+        <Alert variant="danger">
           <Translate contentKey="sessions.messages.error">
             <span>
               <strong>An error has occurred!</strong> The session could not be invalidated.
@@ -72,7 +72,7 @@ export const SessionsPage = () => {
         </Alert>
       )}
 
-      <Button color="primary" onClick={refreshList}>
+      <Button variant="primary" onClick={refreshList}>
         Refresh
       </Button>
 
@@ -100,7 +100,7 @@ export const SessionsPage = () => {
                 <td>{s.userAgent}</td>
                 <td>{s.tokenDate}</td>
                 <td>
-                  <Button color="primary" onClick={doSessionInvalidation(s.series)}>
+                  <Button variant="primary" onClick={doSessionInvalidation(s.series)}>
                     <Translate contentKey="sessions.table.button">Invalidate</Translate>
                   </Button>
                 </td>

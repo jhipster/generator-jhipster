@@ -18,7 +18,7 @@
 -%>
 import React, { useState, useEffect } from 'react';
 import { Translate } from 'react-jhipster';
-import { Table, Badge, Col, Row, Button } from 'reactstrap';
+import { Table, Badge, Col, Row, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSync, faEye } from '@fortawesome/free-solid-svg-icons';
 
@@ -93,7 +93,7 @@ export const HealthPage = () => {
                   <tr key={configPropIndex}>
                     <td>{configPropKey}</td>
                     <td>
-                      <Badge color={getBadgeType(data[configPropKey].status)}>{data[configPropKey].status}</Badge>
+                      <Badge bg={getBadgeType(data[configPropKey].status)}>{data[configPropKey].status}</Badge>
                     </td>
                     <td>
                       {data[configPropKey].details && (

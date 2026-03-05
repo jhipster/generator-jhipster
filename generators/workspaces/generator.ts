@@ -225,12 +225,15 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
 
         if (applications.some(app => app.clientFrameworkReact)) {
           const {
+            dependencies: { react: reactVersion, 'react-dom': reactDomVersion },
             devDependencies: { 'browser-sync': browserSyncVersion },
           } = this.readResourcesPackageJson(this.fetchFromInstalledJHipster('react', 'resources', 'package.json'));
 
           this.packageJson.merge({
             overrides: {
               'browser-sync': browserSyncVersion,
+              react: reactVersion,
+              'react-dom': reactDomVersion,
             },
           });
         }

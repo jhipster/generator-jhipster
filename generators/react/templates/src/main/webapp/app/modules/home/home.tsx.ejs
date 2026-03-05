@@ -29,7 +29,7 @@ import { useLocation, useNavigate } from 'react-router';
 import { Link } from 'react-router';
 <%_ } _%>
 import { Translate } from 'react-jhipster';
-import { Row, Col, Alert } from 'reactstrap';
+import { Row, Col, Alert } from 'react-bootstrap';
 
 <%_ if (authenticationTypeOauth2) { _%>
 import { getLoginUrl, REDIRECT_URL } from 'app/shared/util/url-utils';
@@ -62,13 +62,13 @@ export const Home = () => {
         {
           (account?.login) ? (
             <div>
-              <Alert color="success">
+              <Alert variant="success">
                 <Translate contentKey="home.logged.message" interpolate={{ username: account.login }}>You are logged in as user {account.login}.</Translate>
               </Alert>
             </div>
           ) : (
             <div>
-              <Alert color="warning">
+              <Alert variant="warning">
                 <Translate contentKey="global.messages.info.authenticated.prefix">If you want to </Translate>
                 <% if (!enableTranslation) { %><span>&nbsp;</span><% } %>
 <%_ if (authenticationTypeOauth2) { _%>
@@ -92,7 +92,7 @@ export const Home = () => {
               </Alert>
 
 <%_ if (generateUserManagement) { _%>
-              <Alert color="warning">
+              <Alert variant="warning">
                 <Translate contentKey="global.messages.info.register.noaccount">You do not have an account yet?</Translate>&nbsp;
                 <Link to="/account/register" className="alert-link"><Translate contentKey="global.messages.info.register.link">Register a new account</Translate></Link>
               </Alert>
