@@ -67,6 +67,14 @@ const command = {
       choices: applicationTypesChoices,
       scope: 'storage',
     },
+    serverPort: {
+      description: 'Server port to use',
+      cli: {
+        type: Number,
+      },
+      default: 8080,
+      scope: 'storage',
+    },
   },
   import: [
     'jhipster:base-application:bootstrap',

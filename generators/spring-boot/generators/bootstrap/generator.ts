@@ -96,7 +96,15 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
           mutateData(dockerApplicationEnvironment as any, {
             SPRING_SECURITY_REMEMBER_ME_KEY: application.rememberMeKey,
           });
+        } else if (application.authenticationTypeOauth2) {
+          const clientId = application.applicationTypeMicroservice ? 'internal' : 'web_app';
+          mutateData(dockerApplicationEnvironment as any, {
+            SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI: 'http://keycloak:9080/realms/jhipster',
+            SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID: clientId,
+            SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET: clientId,
+          });
         }
+
         if (application.generateInMemoryUserCredentials) {
           mutateData(dockerApplicationEnvironment as any, {
             SPRING_SECURITY_USER_NAME: application.defaultAdminUsername,
@@ -139,6 +147,23 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
           mutateData(dockerApplicationEnvironment as any, {
             SPRING_COUCHBASE_USERNAME: 'Administrator',
             SPRING_COUCHBASE_PASSWORD: 'password',
+            SPRING_COUCHBASE_CONNECTION_STRING: 'couchbase',
+            JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME: application.baseName,
+            JHIPSTER_SLEEP: '20', // Let database to start
+          });
+        } else if (application.databaseTypeNeo4j) {
+          mutateData(dockerApplicationEnvironment as any, {
+            SPRING_NEO4J_URI: 'bolt://neo4j:7687',
+          });
+          if (application.databaseMigrationLiquibase) {
+            mutateData(dockerApplicationEnvironment as any, {
+              SPRING_LIQUIBASE_URL: 'jdbc:neo4j:bolt://neo4j:7687',
+            });
+          }
+        } else if (application.databaseTypeCassandra) {
+          mutateData(dockerApplicationEnvironment as any, {
+            SPRING_CASSANDRA_CONTACTPOINTS: 'cassandra',
+            JHIPSTER_SLEEP: '10', // Let migration complete
           });
         }
       },

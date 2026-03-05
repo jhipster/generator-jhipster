@@ -233,10 +233,6 @@ services:
   app:
     image: jhipster
     environment:
-      - SPRING_NEO4J_URI=bolt://neo4j:7687
-      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
       - SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650
       - SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://pulsar:8080
     ports:
@@ -341,9 +337,6 @@ services:
   app:
     image: jhipster
     environment:
-      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
     ports:
       - 127.0.0.1:8080:8080
@@ -659,9 +652,6 @@ services:
     image: jhipster
     environment:
       - JHIPSTER_CACHE_MEMCACHED_SERVERS=memcached:11211
-      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
     healthcheck:
       test:
         - CMD
@@ -762,11 +752,6 @@ services:
   app:
     image: jhipster
     environment:
-      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
-      - SPRING_CASSANDRA_CONTACTPOINTS=cassandra
-      - JHIPSTER_SLEEP=10
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
       - SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650
       - SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://pulsar:8080
@@ -1131,10 +1116,7 @@ name: jhipster
 services:
   app:
     image: jhipster
-    environment:
-      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
+    environment: null
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
@@ -1224,10 +1206,6 @@ services:
   app:
     image: jhipster
     environment:
-      - SPRING_NEO4J_URI=bolt://neo4j:7687
-      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
       - SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://pulsar:6650
       - SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://pulsar:8080
@@ -1466,9 +1444,6 @@ services:
   app:
     image: jhipster
     environment:
-      - SPRING_COUCHBASE_CONNECTION_STRING=couchbase
-      - JHIPSTER_DATABASE_COUCHBASE_BUCKET_NAME=jhipster
-      - JHIPSTER_SLEEP=20
       - SPRING_ELASTICSEARCH_URIS=http://elasticsearch:9200
     ports:
       - 127.0.0.1:8080:8080
