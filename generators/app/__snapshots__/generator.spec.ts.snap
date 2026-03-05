@@ -30,6 +30,7 @@ Options:
   --skip-server                            Skip the server-side application generation
   --skip-user-management                   Skip the user management module during app generation
   --application-type <value>               Application type to generate (choices: "monolith", "gateway", "microservice")
+  --server-port <value>                    Server port to use (default: 8080)
   --prettier-tab-width <value>             Default tab width for prettier (default: 2)
   --monorepository                         Use monorepository
   --skip-commit-hook                       Skip adding husky commit hooks
