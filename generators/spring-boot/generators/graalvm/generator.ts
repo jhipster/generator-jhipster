@@ -47,7 +47,6 @@ export default class GraalvmGenerator extends SpringBootApplicationGenerator {
       async writingTemplateTask({ application }) {
         await this.writeFiles({
           sections: {
-            common: [{ templates: ['README.md.jhi.native'] }],
             config: [
               javaMainPackageTemplatesBlock({
                 templates: ['config/NativeConfiguration.java'],
@@ -67,40 +66,36 @@ export default class GraalvmGenerator extends SpringBootApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       springBootHintsConfiguration({ application, source }) {
-        const { mainClass, javaPackageSrcDir, packageName, backendTypeSpringBoot } = application;
+        const { mainClass, javaPackageSrcDir, packageName } = application;
 
-        if (backendTypeSpringBoot) {
-          source.editJavaFile!(`${javaPackageSrcDir}${mainClass}.java`, {
-            annotations: [
-              {
-                package: 'org.springframework.context.annotation',
-                annotation: 'ImportRuntimeHints',
-                parameters: () => `{ ${packageName}.config.NativeConfiguration.JHipsterNativeRuntimeHints.class }`,
-              },
-            ],
-          });
-        }
+        source.editJavaFile!(`${javaPackageSrcDir}${mainClass}.java`, {
+          annotations: [
+            {
+              package: 'org.springframework.context.annotation',
+              annotation: 'ImportRuntimeHints',
+              parameters: () => `{ ${packageName}.config.NativeConfiguration.JHipsterNativeRuntimeHints.class }`,
+            },
+          ],
+        });
       },
 
       springBootRestErrors({ application, source }) {
-        const { javaPackageSrcDir, backendTypeSpringBoot } = application;
-        if (backendTypeSpringBoot) {
-          source.editJavaFile!(`${javaPackageSrcDir}/web/rest/errors/FieldErrorVM.java`, {
-            annotations: [
-              {
-                package: 'org.springframework.aot.hint.annotation',
-                annotation: 'RegisterReflectionForBinding',
-                parameters: () => '{ FieldErrorVM.class }',
-              },
-            ],
-          });
-        }
+        const { javaPackageSrcDir } = application;
+        source.editJavaFile!(`${javaPackageSrcDir}/web/rest/errors/FieldErrorVM.java`, {
+          annotations: [
+            {
+              package: 'org.springframework.aot.hint.annotation',
+              annotation: 'RegisterReflectionForBinding',
+              parameters: () => '{ FieldErrorVM.class }',
+            },
+          ],
+        });
       },
 
       // workaround for arch error in backend:unit:test caused by gradle's org.graalvm.buildtools.native plugin
       springBootTechnicalStructureTest({ application, source }) {
-        const { buildToolGradle, javaPackageTestDir, backendTypeSpringBoot } = application;
-        if (!buildToolGradle || !backendTypeSpringBoot) return;
+        const { buildToolGradle, javaPackageTestDir } = application;
+        if (!buildToolGradle) return;
         source.editJavaFile!(
           `${javaPackageTestDir}/TechnicalStructureTest.java`,
           {
@@ -116,12 +111,10 @@ export default class GraalvmGenerator extends SpringBootApplicationGenerator {
                 ),
         );
       },
-      nativeHints({ source, application }) {
-        if (!application.backendTypeSpringBoot) return;
-
+      nativeHints({ source }) {
         source.addNativeHint?.({
           // Thymeleaf template
-          publicMethods: ['java.util.Locale.class'],
+          publicMethods: ['java.util.Locale.class', 'java.util.Calendar[].class'],
           resources: ['i18n/**'],
         });
       },
