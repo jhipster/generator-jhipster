@@ -23,9 +23,7 @@ import { isFileStateDeleted, isFileStateModified } from 'mem-fs-editor/state';
 
 import { JavaApplicationGenerator } from '../../../java/generator.ts';
 import { addJavaAnnotation } from '../../../java/support/add-java-annotation.ts';
-import { javaMainPackageTemplatesBlock } from '../../../java/support/files.ts';
 import type { Application as LanguagesApplication } from '../../../languages/index.ts';
-import type { Config as SpringBootConfig, Source as SpringBootSource } from '../../../spring-boot/index.ts';
 
 import { GRAALVM_REACHABILITY_METADATA } from './internal/constants.ts';
 import { mavenDefinition } from './internal/maven-definition.ts';
@@ -39,19 +37,6 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
     if (!this.delegateToBlueprint) {
       await this.dependsOnBootstrap('java');
     }
-  }
-
-  get initializing() {
-    return this.asInitializingTaskGroup({
-      forceConfig() {
-        // Cache is not supported for GraalVM native image
-        (this.jhipsterConfig as SpringBootConfig).cacheProvider ??= 'no';
-      },
-    });
-  }
-
-  get [JavaApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get preparing() {
@@ -136,12 +121,6 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
         await this.writeFiles({
           sections: {
             common: [{ templates: ['README.md.jhi.native'] }],
-            config: [
-              javaMainPackageTemplatesBlock({
-                condition: ctx => ctx.backendTypeSpringBoot,
-                templates: ['config/NativeConfiguration.java'],
-              }),
-            ],
             gradle: [
               {
                 condition: ctx => ctx.buildToolGradle,
@@ -191,66 +170,6 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
             hibernate7: application.springBoot4,
           }),
         );
-      },
-
-      springBootHintsConfiguration({ application, source }) {
-        const { mainClass, javaPackageSrcDir, packageName, backendTypeSpringBoot } = application;
-
-        if (backendTypeSpringBoot) {
-          source.editJavaFile!(`${javaPackageSrcDir}${mainClass}.java`, {
-            annotations: [
-              {
-                package: 'org.springframework.context.annotation',
-                annotation: 'ImportRuntimeHints',
-                parameters: () => `{ ${packageName}.config.NativeConfiguration.JHipsterNativeRuntimeHints.class }`,
-              },
-            ],
-          });
-        }
-      },
-
-      springBootRestErrors({ application, source }) {
-        const { javaPackageSrcDir, backendTypeSpringBoot } = application;
-        if (backendTypeSpringBoot) {
-          source.editJavaFile!(`${javaPackageSrcDir}/web/rest/errors/FieldErrorVM.java`, {
-            annotations: [
-              {
-                package: 'org.springframework.aot.hint.annotation',
-                annotation: 'RegisterReflectionForBinding',
-                parameters: () => '{ FieldErrorVM.class }',
-              },
-            ],
-          });
-        }
-      },
-
-      // workaround for arch error in backend:unit:test caused by gradle's org.graalvm.buildtools.native plugin
-      springBootTechnicalStructureTest({ application, source }) {
-        const { buildToolGradle, javaPackageTestDir, backendTypeSpringBoot } = application;
-        if (!buildToolGradle || !backendTypeSpringBoot) return;
-        source.editJavaFile!(
-          `${javaPackageTestDir}/TechnicalStructureTest.java`,
-          {
-            staticImports: ['com.tngtech.archunit.core.domain.JavaClass.Predicates.simpleNameEndingWith'],
-          },
-          contents =>
-            contents.includes('__BeanFactoryRegistrations')
-              ? contents
-              : contents.replace(
-                  '.ignoreDependency(belongToAnyOf',
-                  `.ignoreDependency(simpleNameEndingWith("_BeanFactoryRegistrations"), alwaysTrue())
-    .ignoreDependency(belongToAnyOf`,
-                ),
-        );
-      },
-      nativeHints({ source, application }) {
-        if (!application.backendTypeSpringBoot) return;
-
-        (source as SpringBootSource).addNativeHint?.({
-          // Thymeleaf template
-          publicMethods: ['java.util.Locale.class'],
-          resources: ['i18n/**'],
-        });
       },
     });
   }

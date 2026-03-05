@@ -146,6 +146,7 @@ type GeneratorsByNamespace = {
   'jhipster:spring-boot:data-mongodb': import('./spring-boot/generators/data-mongodb/generator.ts').default;
   'jhipster:spring-boot:data-neo4j': import('./spring-boot/generators/data-neo4j/generator.ts').default;
   'jhipster:spring-boot:data-relational': import('./spring-boot/generators/data-relational/generator.ts').default;
+  'jhipster:spring-boot:graalvm': import('./spring-boot/generators/graalvm/generator.ts').default;
   'jhipster:spring-boot:jwt': import('./spring-boot/generators/jwt/generator.ts').default;
   'jhipster:spring-boot:liquibase': import('./spring-boot/generators/liquibase/generator.ts').default;
   'jhipster:spring-boot:oauth2': import('./spring-boot/generators/oauth2/generator.ts').default;
