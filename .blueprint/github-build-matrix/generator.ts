@@ -47,13 +47,13 @@ export default class extends BaseGenerator {
                 disabled: !generateBlueprint,
               },
               graalvm: {
-                disabled: !graalvm,
+                disabled: !(hasWorkflowChanges || java || graalvm || e2e),
               },
             };
             break;
           }
           case 'graalvm': {
-            if (hasWorkflowChanges || java || graalvm) {
+            if (hasWorkflowChanges || java || graalvm || e2e) {
               const { samples, warnings } = await getGithubSamplesGroup(this.templatePath('../samples/'), this.workflow);
               matrix = samples;
               if (warnings.length) {
