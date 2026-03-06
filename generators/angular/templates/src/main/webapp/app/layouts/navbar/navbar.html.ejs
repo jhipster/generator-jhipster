@@ -117,14 +117,6 @@
             </a>
           </li>
 <%_ } _%>
-<%_ if (generateUserManagement && userManagement.skipClient) { _%>
-          <li>
-            <a class="dropdown-item" routerLink="/admin/user-management" routerLinkActive="active" (click)="collapseNavbar()">
-              <fa-icon icon="users" [fixedWidth]="true" />
-              <span>__jhiTranslateTag__('global.menu.admin.userManagement')</span>
-            </a>
-          </li>
-<%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
           <li>
             <a class="dropdown-item" routerLink="/admin/tracker" routerLinkActive="active" (click)="collapseNavbar()">

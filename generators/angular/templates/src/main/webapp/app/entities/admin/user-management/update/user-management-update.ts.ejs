@@ -79,9 +79,9 @@ export class UserManagementUpdate implements OnInit {
   private readonly route = inject(ActivatedRoute);
 
   ngOnInit(): void {
-    this.route.data.subscribe(({ user }) => {
-      if (user) {
-        this.editForm.reset(user);
+    this.route.data.subscribe(({ userManagement }) => {
+      if (userManagement) {
+        this.editForm.reset(userManagement);
       } else {
         this.editForm.reset(newUser);
       }

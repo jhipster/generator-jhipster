@@ -15,7 +15,7 @@ import {
 } from '../../support/entity';
 <%_
 
-const customUserManagementPages = builtInUserManagement && userManagement.skipClient && userManagement.generateEntityCypress;
+const customUserManagementPages = builtInUserManagement && userManagement.skipClient && userManagement.generateEntityCypress && !clientFrameworkAngular;
 const skipUserManagementCreatePage = builtInUserManagement && (!userManagement.skipClient || clientFrameworkReact);
 const baseApi = entityApi + 'api/';
 

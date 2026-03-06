@@ -7714,6 +7714,12 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/entities/admin/user-management/list/user-management.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/admin/user-management/route/user-management-routing-resolve.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/route/user-management-routing-resolve.service.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/admin/user-management/service/user-management.service.spec.ts": {
     "stateCleared": "modified",
   },
@@ -8283,6 +8289,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
         "Entity[Simple]",
         "Entity[Microservice]",
         "Entity[EntityWithCustomId]",
+        "Entity[UserManagement]",
       ],
       "source": "TaskParameter[source]",
     },
