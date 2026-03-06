@@ -34,7 +34,7 @@
     "eslint": "10.0.2",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.5",
-    "folder-hash": "4.1.1",
+    "folder-hash": "4.1.2",
     "globals": "17.4.0",
     "jiti": "2.6.1",
     "jsdom": "28.1.0",
