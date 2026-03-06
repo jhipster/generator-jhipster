@@ -184,7 +184,7 @@
     "@types/debug": "4.1.12",
     "@types/didyoumean": "1.2.3",
     "@types/estree": "1.0.8",
-    "@types/node": "22.19.13",
+    "@types/node": "22.19.15",
     "@types/npmcli__arborist": "6.3.3",
     "@types/pluralize": "0.0.33",
     "@types/semver": "7.7.1",
