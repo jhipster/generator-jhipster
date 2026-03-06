@@ -75,7 +75,10 @@ import {
 <%_ } _%>
   DEFAULT_SORT_DATA
 } from 'app/config/navigation.constants';
-import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
+import { EntityArrayResponseType, <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
+<%_ if (builtInUserManagement) { _%>
+import { AccountService } from 'app/core/auth/account.service';
+<%_ } _%>
 <%_ if (!readOnly) { _%>
 import { <%= entityAngularName %>DeleteDialog } from '../delete/<%= entityFileName %>-delete-dialog';
 <%_ } _%>
@@ -138,6 +141,9 @@ export class <%= componentName %> implements OnInit {
 <%_ } _%>
     subscription: Subscription | null = null;
     readonly <%- entityInstancePlural %> = signal<I<%= entityAngularName %>[]>([]);
+<%_ if (builtInUserManagement) { _%>
+    currentAccount = inject(AccountService).trackCurrentAccount();
+<%_ } _%>
 
     sortState = sortStateSignal({});
 <%_ if (searchEngineAny) { _%>
@@ -187,16 +193,18 @@ export class <%= componentName %> implements OnInit {
     });
 <%_ } _%>
     effect(() => {
-      if (this.<%- entityInstance %>Service.<%- entityInstancePlural %>Resource.hasValue()) {
-        this.<%- entityInstancePlural %>.<% if (paginationInfiniteScroll) { %>update(<%- entityInstancePlural %> => <% } else { %>set(<% } %>this.fillComponentAttributesFromResponseBody([...this.<%- entityInstance %>Service.<%- entityInstancePlural %>()]<% if (paginationInfiniteScroll) { %>, <%- entityInstancePlural %><% } %>));
-<%_ if (!paginationInfiniteScroll) { _%>
-      } else {
-        this.<%- entityInstancePlural %>.set([]);
-<%_ } _%>
-      }
+      this.<%- entityInstancePlural %>.<% if (paginationInfiniteScroll) { %>update(<%- entityInstancePlural %> => <% } else { %>set(<% } %>this.fillComponentAttributesFromResponseBody([...this.<%- entityInstance %>Service.<%- entityInstancePlural %>()]<% if (paginationInfiniteScroll) { %>, <%- entityInstancePlural %><% } %>));
     });
-<% if (jpaMetamodelFiltering && paginationPagination) { %>
+<%_ if (primaryKey) { _%>
+    track<%= primaryKey.nameCapitalized %> = (item: I<%= entityAngularName %>): <% if (builtInUserManagement) { %>string<% } else { %><%= primaryKey.tsType %><% } %> => this.<%= entityInstance %>Service.get<%= entityAngularName %>Identifier(item);
+<%_ } _%>
+<%_ if (builtInUserManagement) { _%>
 
+    setActive(<%= entityInstance %>: I<%= entityAngularName %>, isActivated: boolean): void {
+      this.<%= entityInstance %>Service.update({ ...<%= entityInstance %>, activated: isActivated }).subscribe(() => this.load());
+    }
+<%_ } _%>
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
     effect(() => {
       const filterOptions = this.filterOptions();
       if (filterOptions) {
@@ -209,10 +217,6 @@ export class <%= componentName %> implements OnInit {
 <%_ } _%>
   }
 
-<%_ if (primaryKey) { _%>
-    track<%= primaryKey.nameCapitalized %> = (item: I<%= entityAngularName %>): <%= primaryKey.tsType %> => this.<%= entityInstance %>Service.get<%= entityAngularName %>Identifier(item);
-
-<%_ } _%>
     ngOnInit(): void {
       this.subscription = combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
         tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
@@ -337,7 +341,7 @@ export class <%= componentName %> implements OnInit {
     const <%= entityInstancePlural %>New = [...currentValue];
     for (const d of data) {
   <%_ if (primaryKey) { _%>
-      if (!<%= entityInstancePlural %>New.some(op => op.<%= primaryKey.name %> === d.<%= primaryKey.name %>)) {
+      if (!<%= entityInstancePlural %>New.some(op => op.<% if (builtInUserManagement) { %>login<% } else { %><%= primaryKey.name %><% } %> === d.<% if (builtInUserManagement) { %>login<% } else { %><%= primaryKey.name %><% } %>)) {
   <%_ } _%>
         <%= entityInstancePlural %>New.push(d);
   <%_ if (primaryKey) { _%>

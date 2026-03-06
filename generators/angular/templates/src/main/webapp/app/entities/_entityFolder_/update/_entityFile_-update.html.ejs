@@ -158,6 +158,40 @@ _%>
                 </div>
             <% if (field.autoGenerate) { %>}<% } %>
 <%_ } _%>
+<%_ if (builtInUserManagement) { _%>
+      <div class="mb-3">
+        <label class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="activated"
+            name="activated"
+            formControlName="activated"
+          />
+          <span>__jhiTranslateTag__('userManagement.activated')</span>
+        </label>
+      </div>
+<%_ if (enableTranslation) { _%>
+    @if (languages && languages.length > 0) {
+      <div class="mb-3">
+        <label class="form-label" for="langKey">__jhiTranslateTag__('userManagement.langKey')</label>
+        <select class="form-control" id="langKey" name="langKey" formControlName="langKey">
+        @for (language of languages; track $index) {
+          <option [value]="language">{{ language | findLanguageFromKey }}</option>
+        }
+        </select>
+      </div>
+    }
+<%_ } _%>
+      <div class="mb-3">
+        <label class="form-label" for="field_authority">__jhiTranslateTag__('userManagement.profiles')</label>
+        <select class="form-control" id="field_authority" multiple name="authority" formControlName="authorities">
+        @for (authority of authorities(); track $index) {
+          <option [value]="authority<% if (generateBuiltInAuthorityEntity) { %>.name<% } %>"><% if (generateBuiltInAuthorityEntity) { %>{{ authority.name }}<% } else { %>{{ authority }}<% } %></option>
+        }
+        </select>
+      </div>
+<%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => rel.otherEntity.primaryKey)) {
   const { otherEntity, relationshipName, propertyName, otherEntityField, relationshipRequired } = relationship;
   const otherEntityName = relationship.otherEntityName;

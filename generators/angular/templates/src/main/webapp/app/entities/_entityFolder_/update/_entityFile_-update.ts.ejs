@@ -32,6 +32,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
 import { TranslateModule } from '@ngx-translate/core';
+<%_ if (builtInUserManagement) { _%>
+import { LANGUAGES } from 'app/config/language.constants';
+import { FindLanguageFromKeyPipe } from 'app/shared/language';
+<%_ } _%>
 <%_ } _%>
 <%_ let anyFieldHasTypeLocalDate = false;
   for (const field of fields.filter(field => !field.hidden)) {
@@ -76,11 +80,17 @@ import { <%- importedType %> } from '<%- importedPath %>';
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-update',
     templateUrl: './<%= entityFileName %>-update.html',
     imports: [<%_ if (enableTranslation) { _%>
-TranslateDirective, TranslateModule,<%_ } _%>FontAwesomeModule, AlertError, ReactiveFormsModule<%_ if (anyFieldHasTypeLocalDate) { _%>, NgbInputDatepicker<%_ } _%><%_ if (anyFieldHasDocumentation) { _%>, NgbTooltip<%_ } _%>],
+TranslateDirective, TranslateModule<%_ if (builtInUserManagement) { %>, FindLanguageFromKeyPipe<%_ } _%>,<%_ } _%>FontAwesomeModule, AlertError, ReactiveFormsModule<%_ if (anyFieldHasTypeLocalDate) { _%>, NgbInputDatepicker<%_ } _%><%_ if (anyFieldHasDocumentation) { _%>, NgbTooltip<%_ } _%>],
 })
 export class <%= entityAngularName %>Update implements OnInit {
     readonly isSaving = signal(false);
     <%= entityInstance %>: I<%= entityAngularName %> | null = null;
+<%_ if (builtInUserManagement) { _%>
+    authorities = signal<string[]>([]);
+<%_ if (enableTranslation) { _%>
+    languages: string[] | null = null;
+<%_ } _%>
+<%_ } _%>
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
     <%- this._.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
 <%_ }); _%>
@@ -134,6 +144,12 @@ _%>
                 this.updateForm(<%= entityInstance %>);
             }
 
+<%_ if (builtInUserManagement) { _%>
+            this.<%= entityInstance %>Service.authorities().subscribe(authorities => this.authorities.set(authorities));
+<%_ if (enableTranslation) { _%>
+            this.languages = LANGUAGES;
+<%_ } _%>
+<%_ } _%>
 <%_ if (relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded).length > 0) { _%>
             this.loadRelationshipsOptions();
 <%_ } _%>
@@ -179,7 +195,7 @@ _%>
         this.isSaving.set(true);
         const <%= entityInstance %> = this.<%= entityInstance %>FormService.get<%= entityAngularName %>(this.editForm);
 <%_ if (updatableEntity) { _%>
-        if (<%= entityInstance %>.<%= primaryKey.name %> === null) {
+        if (<%= entityInstance %>.<% if (builtInUserManagement) { %>id<% } else { %><%= primaryKey.name %><% } %> === null) {
 <%_ } _%>
             this.subscribeToSaveResponse(this.<%= entityInstance %>Service.create(<%= entityInstance %>));
 <%_ if (updatableEntity) { _%>

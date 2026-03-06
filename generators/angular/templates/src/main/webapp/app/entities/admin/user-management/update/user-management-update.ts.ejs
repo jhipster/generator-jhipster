@@ -16,105 +16,264 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+<%_
+  const allRelationshipsByEntityNeedingOptions = Object
+    .values(relationshipsByOtherEntity)
+    .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
+    .filter(relationships => relationships.length > 0);
+_%>
+import { Component, inject, signal, OnInit<% if (anyFieldHasImageContentType) { %>, ElementRef<% } %> } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
+import { finalize<% if (relationships.some(rel => rel.persistableRelationship)) { %>, map<% } %> } from 'rxjs/operators';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { AlertError } from 'app/shared/alert/alert-error';
 <%_ if (enableTranslation) { _%>
-import { FindLanguageFromKeyPipe, TranslateDirective } from 'app/shared/language';
+import { TranslateDirective } from 'app/shared/language';
 import { TranslateModule } from '@ngx-translate/core';
+<%_ if (builtInUserManagement) { _%>
 import { LANGUAGES } from 'app/config/language.constants';
+import { FindLanguageFromKeyPipe } from 'app/shared/language';
 <%_ } _%>
-import { IUserManagement } from '../user-management.model';
-import { UserManagementService } from '../service/user-management.service';
-
-const userTemplate = {} as IUserManagement;
-
-const newUser: IUserManagement = {
-<%_ if (enableTranslation) { _%>
-  langKey: '<%= nativeLanguage %>',
 <%_ } _%>
-  activated: true,
-} as IUserManagement;
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AlertError } from 'app/shared/alert/alert-error';
+import { ReactiveFormsModule } from '@angular/forms';
 
-@Component({
-  selector: '<%= jhiPrefixDashed %>-user-management-update',
-  templateUrl: './user-management-update.html',
-  imports: [<%_ if (enableTranslation) { _%>FindLanguageFromKeyPipe, TranslateDirective, TranslateModule, <%_ } _%>FontAwesomeModule, AlertError, ReactiveFormsModule],
-})
-export class UserManagementUpdate implements OnInit {
-<%_ if (enableTranslation) { _%>
-  languages = LANGUAGES;
+import { <%= entityAngularName %>FormService, <%= entityAngularName %>FormGroup } from './<%= entityFileName %>-form.service';
+import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
+import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
+<%_ if (anyFieldIsBlobDerived) { _%>
+import { AlertErrorModel } from 'app/shared/alert/alert-error.model';
+import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
+import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 <%_ } _%>
-  readonly authorities = signal<string[]>([]);
-  readonly isSaving = signal(false);
-
-  editForm = new FormGroup({
-    id: new FormControl(userTemplate.id),
-    login: new FormControl(userTemplate.login, {
-      nonNullable: true,
-      validators: [
-        Validators.required,
-        Validators.minLength(1),
-        Validators.maxLength(50),
-        Validators.pattern('^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$'),
-      ],
-    }),
-    firstName: new FormControl(userTemplate.firstName, { validators: [Validators.maxLength(50)] }),
-    lastName: new FormControl(userTemplate.lastName, { validators: [Validators.maxLength(50)] }),
-    email: new FormControl(userTemplate.email, {
-      nonNullable: true,
-      validators: [Validators.minLength(5), Validators.maxLength(254), Validators.email],
-    }),
-    activated: new FormControl(userTemplate.activated, { nonNullable: true }),
-<%_ if (enableTranslation) { _%>
-    langKey: new FormControl(userTemplate.langKey, { nonNullable: true }),
-<%_ } _%>
-    authorities: new FormControl(userTemplate.authorities, { nonNullable: true }),
-  });
-
-  private readonly userService = inject(UserManagementService);
-  private readonly route = inject(ActivatedRoute);
-
-  ngOnInit(): void {
-    this.route.data.subscribe(({ user }) => {
-      if (user) {
-        this.editForm.reset(user);
-      } else {
-        this.editForm.reset(newUser);
-      }
-    });
-    this.userService.authorities().subscribe(authorities => this.authorities.set(authorities));
-  }
-
-  previousState(): void {
-    globalThis.history.back();
-  }
-
-  save(): void {
-    this.isSaving.set(true);
-    const user = this.editForm.getRawValue();
-    if (user.id === null) {
-      this.userService.create(user).subscribe({
-        next: () => this.onSaveSuccess(),
-        error: () => this.onSaveError(),
-      });
-    } else {
-      this.userService.update(user).subscribe({
-        next: () => this.onSaveSuccess(),
-        error: () => this.onSaveError(),
-      });
+<%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) {
+    const uniqueRel = relationshipsByEntityNeedingOptions[0];
+    if (uniqueRel.otherEntity.entityAngularName !== entityAngularName) {
+_%>
+import { I<%= uniqueRel.otherEntity.entityAngularName %> } from 'app/entities/<%= uniqueRel.otherEntity.entityFolderName %>/<%= uniqueRel.otherEntity.entityFileName %>.model';
+import { <%= uniqueRel.otherEntity.entityAngularName %>Service } from 'app/entities/<%= uniqueRel.otherEntity.entityFolderName %>/service/<%= uniqueRel.otherEntity.entityFileName %>.service';
+<%_
     }
   }
+_%>
+<%_ const enumImports = generateEntityClientEnumImports(fields); _%>
+<%_ enumImports.forEach( (importedPath, importedType) => { _%>
+import { <%- importedType %> } from '<%- importedPath %>';
+<%_ }); _%>
 
-  private onSaveSuccess(): void {
-    this.isSaving.set(false);
-    this.previousState();
-  }
+@Component({
+    selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-update',
+    templateUrl: './<%= entityFileName %>-update.html',
+    imports: [<%_ if (enableTranslation) { _%>
+TranslateDirective, TranslateModule<%_ if (builtInUserManagement) { %>, FindLanguageFromKeyPipe<%_ } _%>,<%_ } _%>NgbModule, FontAwesomeModule, AlertError, ReactiveFormsModule],
+})
+export class <%= entityAngularName %>Update implements OnInit {
+    isSaving = signal(false);
+    <%= entityInstance %>: I<%= entityAngularName %> | null = null;
+<%_ if (builtInUserManagement) { _%>
+    authorities = signal<string[]>([]);
+<%_ if (enableTranslation) { _%>
+    languages: string[] | null = null;
+<%_ } _%>
+<%_ } _%>
+<%_ enumImports.forEach( (importedPath, importedType) => { _%>
+    <%- this._.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
+<%_ }); _%>
 
-  private onSaveError(): void {
-    this.isSaving.set(false);
+<%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
+  <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipOneToOne && rel.otherRelationship); _%>
+  <%_ if (relationshipsByEntityNeedingOptions.length > relationshipsWithCustomUniqueOptions.length) { _%>
+    <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity _%>
+    <%= otherEntity.entityInstancePlural %>SharedCollection = signal<I<%= otherEntity.entityAngularName %>[]>([]);
+  <%_ } _%>
+  <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { _%>
+    <%= relationship.relationshipFieldNamePlural %>Collection = signal<I<%= relationship.otherEntity.entityAngularName %>[]>([]);
+  <%_ } _%>
+<%_ } _%>
+
+<%_ if (anyFieldIsBlobDerived) { _%>
+    protected dataUtils = inject(DataUtils);
+    protected eventManager = inject(EventManager);
+<%_ } _%>
+    protected <%= entityInstance %>Service = inject(<%= entityAngularName %>Service);
+    protected <%= entityInstance %>FormService = inject(<%= entityAngularName %>FormService);
+<%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) {
+    const uniqueRel = relationshipsByEntityNeedingOptions[0];
+    if (uniqueRel.otherEntity.entityAngularName !== entityAngularName) {
+_%>
+    protected <%= uniqueRel.otherEntity.entityInstance %>Service = inject(<%= uniqueRel.otherEntity.entityAngularName %>Service);
+<%_
+    }
   }
+_%>
+<%_ if (anyFieldHasImageContentType) { _%>
+    protected elementRef = inject(ElementRef);
+<%_ } _%>
+    protected activatedRoute = inject(ActivatedRoute);
+
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    editForm: <%= entityAngularName %>FormGroup = this.<%= entityInstance %>FormService.create<%= entityAngularName %>FormGroup();
+
+<%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) {
+      const { otherEntity } = relationshipsByEntityNeedingOptions[0];
+_%>
+
+    compare<%= otherEntity.entityAngularName %> = (o1: I<%= otherEntity.entityAngularName %> | null, o2: I<%= otherEntity.entityAngularName %> | null): boolean =>
+        this.<%= otherEntity.entityInstance %>Service.compare<%= otherEntity.entityAngularName %>(o1, o2);
+<%_ } _%>
+
+    ngOnInit(): void {
+        this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => {
+            this.<%= entityInstance %> = <%= entityInstance %>;
+            if (<%= entityInstance %>) {
+                this.updateForm(<%= entityInstance %>);
+            }
+
+<%_ if (builtInUserManagement) { _%>
+            this.<%= entityInstance %>Service.authorities().subscribe(authorities => this.authorities.set(authorities));
+<%_ if (enableTranslation) { _%>
+            this.languages = LANGUAGES;
+<%_ } _%>
+<%_ } _%>
+<%_ if (relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded).length > 0) { _%>
+            this.loadRelationshipsOptions();
+<%_ } _%>
+        });
+    }
+
+<%_ if (anyFieldIsBlobDerived) { _%>
+    byteSize(base64String: string): string {
+        return this.dataUtils.byteSize(base64String);
+    }
+
+    openFile(base64String: string, contentType: string | null | undefined): void {
+        this.dataUtils.openFile(base64String, contentType);
+    }
+
+    setFileData(event: Event, field: string, isImage: boolean): void {
+        this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
+            error: (err: FileLoadError) =>
+                this.eventManager.broadcast(
+                    new EventWithContent<AlertErrorModel>('<%= frontendAppName %>.error', { <% if (enableTranslation) { %>...err, key: 'error.file.' + err.key<% } else { %>message: err.message<% } %> })
+                )
+        });
+    }
+
+  <%_ if (anyFieldHasImageContentType) { _%>
+    clearInputImage(field: string, fieldContentType: string, idInput: string): void {
+        this.editForm.patchValue({
+            [field]: null,
+            [fieldContentType]: null
+        });
+        if (idInput && this.elementRef.nativeElement.querySelector('#' + idInput)) {
+            this.elementRef.nativeElement.querySelector('#' + idInput).value = null;
+        }
+    }
+  <%_ } _%>
+<%_ } _%>
+
+    previousState(): void {
+        globalThis.history.back();
+    }
+
+    save(): void {
+        this.isSaving.set(true);
+        const <%= entityInstance %> = this.<%= entityInstance %>FormService.get<%= entityAngularName %>(this.editForm);
+<%_ if (updatableEntity) { _%>
+        if (<%= entityInstance %>.<% if (builtInUserManagement) { %>id<% } else { %><%= primaryKey.name %><% } %> === null) {
+<%_ } _%>
+            this.subscribeToSaveResponse(this.<%= entityInstance %>Service.create(<%= entityInstance %>));
+<%_ if (updatableEntity) { _%>
+        } else {
+            this.subscribeToSaveResponse(this.<%= entityInstance %>Service.update(<%= entityInstance %>));
+        }
+<%_ } _%>
+    }
+
+    protected subscribeToSaveResponse(result: Observable<HttpResponse<I<%= entityAngularName %>>>): void {
+        result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
+            next: () => this.onSaveSuccess(),
+            error: () => this.onSaveError()
+        });
+    }
+
+    protected onSaveSuccess(): void {
+        this.previousState();
+    }
+
+    protected onSaveError(): void {
+        // Api for inheritance.
+    }
+
+    protected onSaveFinalize(): void {
+        this.isSaving.set(false);
+    }
+
+    protected updateForm(<%= entityInstance %>: I<%= entityAngularName %>): void {
+        this.<%= entityInstance %> = <%= entityInstance %>;
+        this.<%= entityInstance %>FormService.resetForm(this.editForm, <%= entityInstance %>);
+<%_ if (relationships.filter(rel => rel.persistableRelationship).length > 0) { _%>
+
+  <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
+    <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipOneToOne && rel.otherRelationship); _%>
+    <%_ const relationshipsWithCustomSharedOptions = relationshipsByEntityNeedingOptions.filter(rel => !relationshipsWithCustomUniqueOptions.includes(rel)); _%>
+    <%_ if (relationshipsWithCustomSharedOptions.length > 0) { _%>
+      <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity _%>
+        this.<%= otherEntity.entityInstancePlural %>SharedCollection.set(this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing<I<%= otherEntity.entityAngularName %>>(
+            this.<%= otherEntity.entityInstancePlural %>SharedCollection(),
+      <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
+            <%= relationship.collection ? '...(' : '' %><%= entityInstance %>.<%= relationship.propertyName %><%= relationship.collection ? ' ?? [])' : '' %>,
+      <%_ } _%>
+        ));
+    <%_ } _%>
+    <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { _%>
+      <%_ const otherEntity = relationship.otherEntity _%>
+        this.<%= relationship.relationshipFieldNamePlural %>Collection.set(
+          this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing<I<%= otherEntity.entityAngularName %>>(
+            this.<%= relationship.relationshipFieldNamePlural %>Collection(),
+            <%= relationship.collection ? '...(' : '' %><%= entityInstance %>.<%= relationship.propertyName %><%= relationship.collection ? ' ?? [])' : '' %>,
+          ),
+        );
+    <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
+    }
+
+<%_ if (relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded).length > 0) { _%>
+    protected loadRelationshipsOptions(): void {
+  <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
+    <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipOneToOne && rel.otherRelationship); %>
+    <%_ const relationshipsWithCustomSharedOptions = relationshipsByEntityNeedingOptions.filter(rel => !relationshipsWithCustomUniqueOptions.includes(rel)); %>
+    <%_ const { otherEntity } = relationshipsByEntityNeedingOptions[0] _%>
+    <%_ if (relationshipsWithCustomSharedOptions.length > 0) { _%>
+        this.<%= otherEntity.entityInstance %>Service
+            .query()
+            .pipe(map((res: HttpResponse<I<%= otherEntity.entityAngularName %>[]>) => res.body ?? []))
+            .pipe(map((<%= otherEntity.entityInstancePlural %>: I<%= otherEntity.entityAngularName %>[]) => this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing<I<%= otherEntity.entityAngularName %>>(
+                <%= otherEntity.entityInstancePlural %>,
+      <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
+        <%_ if (relationship.collection) { _%>
+                ...(this.<%= entityInstance %>?.<%= relationship.propertyName %> ?? []),
+        <%_ } else { _%>
+                this.<%= entityInstance %>?.<%= relationship.propertyName %>,
+        <%_ } _%>
+      <%_ } _%>
+            )))
+            .subscribe((<%= otherEntity.entityInstancePlural %>: I<%= otherEntity.entityAngularName %>[]) => (this.<%= otherEntity.entityInstancePlural %>SharedCollection.set(<%= otherEntity.entityInstancePlural %>)));
+    <%_ } _%>
+    <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { %>
+      <%_ const filter = relationship.otherEntity.jpaMetamodelFiltering ? `'${relationship.otherEntityRelationshipName}Id.specified': 'false'` : `filter: '${relationship.otherEntityRelationshipName.toLowerCase()}-is-null'`; _%>
+
+        this.<%= relationship.otherEntityName %>Service
+            .query({<%- filter %>})
+            .pipe(map((res: HttpResponse<I<%= relationship.otherEntity.entityAngularName %>[]>) => res.body ?? []))
+            .pipe(map((<%= otherEntity.entityInstancePlural %>: I<%= otherEntity.entityAngularName %>[]) => this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing<I<%= otherEntity.entityAngularName %>>(<%= otherEntity.entityInstancePlural %>, this.<%= entityInstance %>?.<%= relationship.propertyName %>)))
+            .subscribe((<%= otherEntity.entityInstancePlural %>: I<%= otherEntity.entityAngularName %>[]) => (this.<%= relationship.relationshipFieldNamePlural %>Collection.set(<%= otherEntity.entityInstancePlural %>)));
+      <%_ } _%>
+    <%_ } _%>
+    }
+<%_ } _%>
 }

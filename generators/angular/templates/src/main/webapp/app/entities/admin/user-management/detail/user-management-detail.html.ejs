@@ -18,65 +18,119 @@
 -%>
 <div class="d-flex justify-content-center">
   <div class="col-8">
-  @if (userManagement(); as userManagementRef) {
+  @if (<%= entityInstance %>(); as <%= entityInstance %>Ref) {
     <div>
-      <h2 data-cy="userManagementDetailsHeading">
-        <span>__jhiTranslateTag__('userManagement.detail.title')</span> [<strong>{{ userManagementRef.login }}</strong>]
-      </h2>
+      <h2 data-cy="<%= entityInstance %>DetailsHeading"><span>__jhiTranslateTag__('<%- i18nKeyPrefix %>.detail.title')</span></h2>
+
+      <hr>
+
+      <<%= jhiPrefixDashed %>-alert-error />
+
+      <<%= jhiPrefixDashed %>-alert />
 
       <dl class="row-md jh-entity-details">
-        <dt><span>__jhiTranslateTag__('userManagement.login')</span></dt>
+<%_ for (const field of fields.filter(field => !field.hidden)) {
+    const fieldName = field.fieldName;
+    const fieldType = field.fieldType;
+_%>
+        <dt><span<% if (field.documentation) { if (enableTranslation) { %> [ngbTooltip]="'<%= i18nKeyPrefix %>.help.<%= fieldName %>' | translate"<% } else { %> ngbTooltip="<%= field.documentation %>"<% } } %>>__jhiTranslateTag__('<%- field.propertyTranslationKey %>')</span></dt>
         <dd>
-          <span>{{ userManagementRef.login }}</span>
-        @if (userManagementRef.activated) {
-          <span class="badge bg-success">__jhiTranslateTag__('userManagement.activated')</span>
-        } @else {
-          <span class="badge bg-danger">__jhiTranslateTag__('userManagement.deactivated')</span>
+    <%_ if (field.fieldIsEnum) { _%>
+          <%# TODO: import enum and use its key as label _%>
+          <span>__jhiTranslateTagEnum__('<%= frontendAppName %>.<%= fieldType %>', { "value": "<%= entityInstance %>Ref.<%= fieldName %> ?? 'null'" })</span>
+    <%_ } else if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
+        @if (<%= entityInstance %>Ref.<%= fieldName %>) {
+          <div>
+            <a (click)="openFile(<%= entityInstance %>Ref.<%= fieldName %>, <%= entityInstance %>Ref.<%= fieldName %>ContentType)">
+              <img [src]="'data:' + <%= entityInstance %>Ref.<%= fieldName %>ContentType + ';base64,' + <%= entityInstance %>Ref.<%= fieldName %>" style="max-width: 100%;" alt="<%= entityInstance %>"/>
+            </a>
+            {{ <%= entityInstance %>Ref.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>Ref.<%= fieldName %>) }}
+          </div>
         }
+    <%_ } else if (field.fieldTypeBinary && field.blobContentTypeAny) { _%>
+        @if (<%= entityInstance %>Ref.<%= fieldName %>) {
+          <div>
+            <a (click)="openFile(<%= entityInstance %>Ref.<%= fieldName %>, <%= entityInstance %>Ref.<%= fieldName %>ContentType)">__jhiTranslateTag__('entity.action.open')</a>
+            {{ <%= entityInstance %>Ref.<%= fieldName %>ContentType }}, {{ byteSize(<%= entityInstance %>Ref.<%= fieldName %>) }}
+          </div>
+        }
+    <%_ } else if (field.fieldTypeDuration) { _%>
+          <span>{{ <%= entityInstance %>Ref.<%= fieldName %> | duration }} ({{<%= entityInstance %>Ref.<%= fieldName %> }})</span>
+    <%_ } else if (field.fieldTypeTimed) { _%>
+          <span>{{ <%= entityInstance %>Ref.<%= fieldName %> | formatMediumDatetime }}</span>
+    <%_ } else if (field.fieldTypeLocalDate) { _%>
+          <span>{{ <%= entityInstance %>Ref.<%= fieldName %> | formatMediumDate }}</span>
+    <%_ } else { _%>
+          <span>{{ <%= entityInstance %>Ref.<%= fieldName %> }}</span>
+    <%_ } _%>
         </dd>
-
-        <dt><span>__jhiTranslateTag__('userManagement.firstName')</span></dt>
-        <dd>{{ userManagementRef.firstName }}</dd>
-
-        <dt><span>__jhiTranslateTag__('userManagement.lastName')</span></dt>
-        <dd>{{ userManagementRef.lastName }}</dd>
-
-        <dt><span>__jhiTranslateTag__('userManagement.email')</span></dt>
-        <dd>{{ userManagementRef.email }}</dd>
-<%_ if (enableTranslation) { _%>
-
-        <dt><span>__jhiTranslateTag__('userManagement.langKey')</span></dt>
-        <dd>{{ userManagementRef.langKey }}</dd>
 <%_ } _%>
-
-        <dt><span>__jhiTranslateTag__('userManagement.createdBy')</span></dt>
-        <dd>{{ userManagementRef.createdBy }}</dd>
-
-        <dt><span>__jhiTranslateTag__('userManagement.createdDate')</span></dt>
-        <dd>{{ userManagementRef.createdDate | date: 'dd/MM/yy HH:mm' }}</dd>
-
-        <dt><span>__jhiTranslateTag__('userManagement.lastModifiedBy')</span></dt>
-        <dd>{{ userManagementRef.lastModifiedBy }}</dd>
-
-        <dt><span>__jhiTranslateTag__('userManagement.lastModifiedDate')</span></dt>
-        <dd>{{ userManagementRef.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</dd>
-
-        <dt><span>__jhiTranslateTag__('userManagement.profiles')</span></dt>
+<%_
+for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) {
+    const { persistableRelationship } = relationship;
+    const relationshipName = relationship.relationshipName;
+    const relationshipFieldName = relationship.relationshipFieldName;
+    const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
+    const otherEntityField = relationship.otherEntityField;
+    if (persistableRelationship) {
+_%>
+        <dt><span>__jhiTranslateTag__('<%- relationship.propertyTranslationKey %>')</span></dt>
         <dd>
-          <ul class="list-unstyled">
-          @for (authority of userManagementRef.authorities; track $index) {
-            <li>
-              <span class="badge bg-info">{{ authority }}</span>
-            </li>
-          }
-          </ul>
+    <%_ if (relationship.otherEntityUser) { _%>
+      <%_ if (relationship.collection) { _%>
+        @for (<%= relationshipFieldName %> of <%= entityInstance %>Ref.<%= relationshipFieldNamePlural %>; track $index; let last = $last) {
+          <span>
+            {{ <%= relationshipFieldName %>.<%= otherEntityField %> }}{{ last ? '' : ', ' }}
+          </span>
+        }
+      <%_ } else { _%>
+          <span>{{ <%= entityInstance %>Ref.<%= relationshipFieldName %>?.<%= otherEntityField %> }}</span>
+      <%_ } _%>
+    <%_ } else { _%>
+      <%_ if (relationship.collection) { _%>
+        @for (<%= relationshipFieldName %> of <%= entityInstance %>Ref.<%= relationshipFieldNamePlural %>; track $index; let last = $last) {
+          <span>
+            <a [routerLink]="['/<%= relationship.otherEntity.entityPage %>', <%= relationshipFieldName %>.<%= relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= relationshipFieldName %>?.<%= otherEntityField %> }}</a>{{ last ? '' : ', ' }}
+          </span>
+        }
+      <%_ } else { _%>
+        @if (<%= entityInstance + '()!.' + relationshipFieldName %>) {
+          <div>
+            <a [routerLink]="['/<%= relationship.otherEntity.entityPage %>', <%= entityInstance + '()!.' + relationshipFieldName + '?.' + relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%= entityInstance %>Ref.<%= relationshipFieldName %>?.<%= otherEntityField %> }}</a>
+          </div>
+        }
+      <%_ } _%>
+    <%_ } _%>
         </dd>
+<%_
+    }
+}
+_%>
       </dl>
 
-      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+      <button type="submit"
+          (click)="previousState()"
+          class="btn btn-info"
+          data-cy="entityDetailsBackButton">
         <fa-icon icon="arrow-left" />&nbsp;<span>__jhiTranslateTag__('entity.action.back')</span>
       </button>
+<%_ if (!readOnly && updatableEntity) { _%>
+
+      <button type="button"
+          [routerLink]="['/<%= entityPage %>', <%= entityInstance %>Ref.<% if (builtInUserManagement) { %>login<% } else { %><%= primaryKey.name %><% } %>, 'edit']"
+          class="btn btn-primary">
+        <fa-icon icon="pencil-alt" />&nbsp;<span>__jhiTranslateTag__('entity.action.edit')</span>
+      </button>
+<%_ } _%>
+<%_ if (builtInUserManagement) { _%>
+        <dt><span>__jhiTranslateTag__('userManagement.profiles')</span></dt>
+        <dd>
+        @for (authority of <%= entityInstance %>Ref.authorities; track $index) {
+          <span class="badge bg-info">{{ authority<% if (generateBuiltInAuthorityEntity) { %>.name<% } %> }}</span>
+        }
+        </dd>
+<%_ } _%>
     </div>
-  }
+    }
   </div>
 </div>

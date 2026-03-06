@@ -16,26 +16,70 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { DatePipe } from '@angular/common';
-import { Component, input } from '@angular/core';
-
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-<%_ if (enableTranslation) { _%>
-import { TranslateModule } from '@ngx-translate/core';
-import { TranslateDirective } from 'app/shared/language';
+import { Component, <% if (anyFieldIsBlobDerived) { %>inject, <% } %>input } from '@angular/core';
+<%_ if (entityFileName != 'authority' && updatableEntity) { _%>
+import { RouterLink } from '@angular/router';
 <%_ } _%>
 
-import { User } from '../user-management.model';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { Alert } from 'app/shared/alert/alert';
+import { AlertError } from 'app/shared/alert/alert-error';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
+import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
+import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
+<%_ if (anyFieldIsBlobDerived) { _%>
+import { DataUtils } from 'app/core/util/data-util.service';
+<%_ } _%>
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-user-mgmt-detail',
-  templateUrl: './user-management-detail.html',
-  imports: [FontAwesomeModule, DatePipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
+    selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-detail',
+    templateUrl: './<%= entityFileName %>-detail.html',
+    imports: [
+      FontAwesomeModule,
+      NgbModule,
+      Alert,
+      AlertError,
+<%_ if (enableTranslation) { _%>
+      TranslateDirective,
+      TranslateModule,
+<%_ } _%>
+<%_ if (entityFileName != 'authority' && updatableEntity) { _%>
+      RouterLink,
+<%_ } _%>
+<%_ if (anyFieldIsDuration) { _%>
+      DurationPipe,
+<%_ } _%>
+<%_ if (anyFieldIsTimeDerived) { _%>
+      FormatMediumDatetimePipe,
+<%_ } _%>
+<%_ if (anyFieldIsLocalDate) { _%>
+      FormatMediumDatePipe,
+<%_ } _%>
+    ],
 })
-export class UserManagementDetail {
-  readonly userManagement = input<User | null>(null);
+export class <%= entityAngularName %>Detail {
+    <%= entityInstance %> = input<I<%= entityAngularName %> | null>(null);
 
-  previousState(): void {
-    globalThis.history.back();
-  }
+<%_ if (anyFieldIsBlobDerived) { _%>
+    protected dataUtils = inject(DataUtils);
+<%_ } _%>
+
+<%_ if (anyFieldIsBlobDerived) { _%>
+    byteSize(base64String: string): string {
+        return this.dataUtils.byteSize(base64String);
+    }
+
+    openFile(base64String: string, contentType: string | null | undefined): void {
+        this.dataUtils.openFile(base64String, contentType);
+    }
+<%_ } _%>
+
+    previousState(): void {
+        globalThis.history.back();
+    }
+
 }

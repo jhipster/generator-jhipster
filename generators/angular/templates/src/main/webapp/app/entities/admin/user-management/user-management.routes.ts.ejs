@@ -16,51 +16,61 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { inject } from '@angular/core';
-import { ActivatedRouteSnapshot, ResolveFn, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 
-import { of } from 'rxjs';
+import userResolve from './route/user-management-routing-resolve.service';
 
-import { UserManagementService } from './service/user-management.service';
-import { IUserManagement } from './user-management.model';
-
-export const userManagementResolve: ResolveFn<IUserManagement | null> = (route: ActivatedRouteSnapshot) => {
-  const login = route.paramMap.get('login');
-  if (login) {
-    return inject(UserManagementService).find(login);
-  }
-  return of(null);
-};
-
-const userManagementRoute: Routes = [
+const userRoute: Routes = [
   {
     path: '',
-    loadComponent: () => import('./list/user-management').then(m => m.UserManagement),
+    loadComponent: () => import('./list/user-management').then(m => m.default),
     data: {
       defaultSort: 'id,asc',
+<%_ if (entityAngularReadAuthorities) { _%>
+      authorities: [<%- entityAngularReadAuthorities %>],
+<%_ } _%>
     },
   },
   {
     path: ':login/view',
-    loadComponent: () => import('./detail/user-management-detail').then(m => m.UserManagementDetail),
+    loadComponent: () => import('./detail/user-management-detail').then(m => m.UserDetail),
     resolve: {
-      userManagement: userManagementResolve,
+      user: userResolve
     },
+<%_ if (entityAngularReadAuthorities) { _%>
+    data: {
+      authorities: [<%- entityAngularReadAuthorities %>],
+    },
+<%_ } _%>
   },
+<%_ if (!readOnly) { _%>
   {
     path: 'new',
-    loadComponent: () => import('./update/user-management-update').then(m => m.UserManagementUpdate),
+    loadComponent: () => import('./update/user-management-update').then(m => m.UserUpdate),
     resolve: {
-      user: userManagementResolve,
+      user: userResolve
     },
+<%_ if (entityAngularAuthorities) { _%>
+    data: {
+      authorities: [<%- entityAngularAuthorities %>],
+    },
+<%_ } _%>
   },
+<%_ } _%>
+<%_ if (!readOnly && updatableEntity) { _%>
   {
     path: ':login/edit',
-    loadComponent: () => import('./update/user-management-update').then(m => m.UserManagementUpdate),
+    loadComponent: () => import('./update/user-management-update').then(m => m.UserUpdate),
     resolve: {
-      user: userManagementResolve,
+      user: userResolve
     },
+<%_ if (entityAngularAuthorities) { _%>
+    data: {
+      authorities: [<%- entityAngularAuthorities %>],
+    },
+<%_ } _%>
   },
+<%_ } _%>
 ];
 
-export default userManagementRoute;
+export default userRoute;

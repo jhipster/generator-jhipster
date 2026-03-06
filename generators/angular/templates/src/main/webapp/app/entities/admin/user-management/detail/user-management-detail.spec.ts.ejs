@@ -17,26 +17,35 @@
  limitations under the License.
 -%>
 <%_
-const tsKeyId = user.primaryKey.tsSampleValues[0];
+const tsKeyId = primaryKey.tsSampleValues[0];
+const testEntity = tsPrimaryKeySamples[0];
 _%>
 <%_ if (clientTestFrameworkVitest) { _%>
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 <%_ if (enableTranslation) { _%>
 import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 import { of } from 'rxjs';
 
-import { Authority } from 'app/shared/jhipster/constants';
+<%_ if (anyFieldIsBlobDerived) { _%>
+import { DataUtils } from 'app/core/util/data-util.service';
+<%_ } _%>
 
-import { UserManagementDetail } from './user-management-detail';
+import { <%= entityAngularName %>Detail } from './<%= entityFileName %>-detail';
 
-describe('User Management Detail Component', () => {
+describe('<%= entityAngularName %> Management Detail Component', () => {
+  let comp: <%= entityAngularName %>Detail;
+  let fixture: ComponentFixture<<%= entityAngularName %>Detail>;
+<%_ if (anyFieldIsBlobDerived) { _%>
+  let dataUtils: DataUtils;
+<%_ } _%>
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
@@ -45,52 +54,82 @@ describe('User Management Detail Component', () => {
           [
             {
               path: '**',
-              loadComponent: () => import('./user-management-detail').then(m => m.UserManagementDetail),
-              resolve: {
-                userManagement: () =>
-                  of({
-                    id: <%- tsKeyId %>,
-                    login: 'user',
-                    firstName: 'first',
-                    lastName: 'last',
-                    email: 'first@last.com',
-                    activated: true,
-                    langKey: 'en',
-                    authorities: [Authority.USER],
-                    createdBy: 'admin',
-                  }),
-              },
+              loadComponent: () => import('./<%= entityFileName %>-detail').then(m => m.<%= entityAngularName %>Detail),
+              resolve: { <%= entityInstance %>: () => of(<%- testEntity %>) },
             },
           ],
-          withComponentInputBinding(),
+          withComponentInputBinding()
         ),
       ],
     });
-
     const library = TestBed.inject(FaIconLibrary);
     library.addIcons(faArrowLeft);
+    library.addIcons(faPencilAlt);
+<%_ if (anyFieldIsBlobDerived) { _%>
+    dataUtils = TestBed.inject(DataUtils);
+    <%= clientTestFramework %>.spyOn(window, 'open').mockImplementation(() => null);
+<%_ } _%>
   });
 
-  describe('Construct', () => {
-    it('should call load all on construct', async () => {
-      // WHEN
+  beforeEach(() => {
+    fixture = TestBed.createComponent(<%= entityAngularName %>Detail);
+    comp = fixture.componentInstance;
+  });
+
+  describe('OnInit', () => {
+    it('should load <%= entityInstance %> on init', async () => {
       const harness = await RouterTestingHarness.create();
-      const instance = await harness.navigateByUrl('/', UserManagementDetail);
+      const instance = await harness.navigateByUrl('/', <%= entityAngularName %>Detail);
 
       // THEN
-      expect(instance.userManagement()).toEqual(
-        expect.objectContaining({
-          id: <%- tsKeyId %>,
-          login: 'user',
-          firstName: 'first',
-          lastName: 'last',
-          email: 'first@last.com',
-          activated: true,
-          langKey: 'en',
-          authorities: [Authority.USER],
-          createdBy: 'admin',
-        }),
-      );
+      expect(instance.<%= entityInstance %>()).toEqual(expect.objectContaining(<%- testEntity %>));
     });
   });
+
+  describe('PreviousState', () => {
+    it('should navigate to previous state', () => {
+      <%= clientTestFramework %>.spyOn(window.history, 'back');
+      comp.previousState();
+      expect(globalThis.history.back).toHaveBeenCalled();
+    });
+  });
+
+<%_ if (anyFieldIsBlobDerived) { _%>
+  describe('byteSize', () => {
+    it('should call byteSize from DataUtils', () => {
+      // GIVEN
+      <%= clientTestFramework %>.spyOn(dataUtils, 'byteSize');
+      const fakeBase64 = 'fake base64';
+
+      // WHEN
+      comp.byteSize(fakeBase64);
+
+      // THEN
+      expect(dataUtils.byteSize).toHaveBeenCalledWith(fakeBase64);
+    });
+  });
+
+  describe('openFile', () => {
+    it('should call openFile from DataUtils', () => {
+      const newWindow = { ...window };
+  <%_ if (clientTestFrameworkVitest) { _%>
+      vitest.stubGlobal('open', vitest.fn(() => newWindow));
+  <%_ } else { _%>
+      window.open = <%= clientTestFramework %>.fn(() => newWindow);
+  <%_ } _%>
+      window.onload = <%= clientTestFramework %>.fn(() => newWindow) as any;
+      window.URL.createObjectURL = <%= clientTestFramework %>.fn() as any;
+      // GIVEN
+      <%= clientTestFramework %>.spyOn(dataUtils, 'openFile');
+      const fakeContentType = 'fake content type';
+      const fakeBase64 = 'fake base64';
+
+      // WHEN
+      comp.openFile(fakeBase64, fakeContentType);
+
+      // THEN
+      expect(dataUtils.openFile).toHaveBeenCalledWith(fakeBase64, fakeContentType);
+    });
+  });
+<%_ } _%>
 });
