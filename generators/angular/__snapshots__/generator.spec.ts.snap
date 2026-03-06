@@ -959,6 +959,8 @@ export class UserManagement implements OnInit {
   },
   "src/main/webapp/app/entities/admin/user-management/route/user-management-routing-resolve.service.spec.ts": {
     "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from "vitest";
+
+import { HttpErrorResponse } from "@angular/common/http";
 import { TestBed } from "@angular/core/testing";
 import {
   ActivatedRouteSnapshot,
@@ -966,7 +968,7 @@ import {
   Router,
   convertToParamMap,
 } from "@angular/router";
-import { of } from "rxjs";
+import { lastValueFrom, of, throwError } from "rxjs";
 
 import { IUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
@@ -1040,21 +1042,50 @@ describe("UserManagement routing resolve service", () => {
 
     it("should route to 404 page if data not found in server", async () => {
       // GIVEN
-      vitest.spyOn(service, "find").mockReturnValue(of(null));
+      vitest
+        .spyOn(service, "find")
+        .mockReturnValue(
+          throwError(
+            () =>
+              new HttpErrorResponse({ status: 404, statusText: "Not Found" }),
+          ),
+        );
       mockActivatedRouteSnapshot.params = { login: "ABC" };
 
       // WHEN
-      await new Promise<void>((resolve) => {
-        TestBed.runInInjectionContext(() => {
-          userManagementResolve(mockActivatedRouteSnapshot).subscribe({
-            complete() {
-              // THEN
-              expect(service.find).toHaveBeenCalledWith("ABC");
-              expect(mockRouter.navigate).toHaveBeenCalledWith(["404"]);
-              resolve();
-            },
-          });
-        });
+      await TestBed.runInInjectionContext(async () => {
+        await expect(
+          lastValueFrom(userManagementResolve(mockActivatedRouteSnapshot)),
+        ).rejects.toThrowError("no elements in sequence");
+        // THEN
+        expect(service.find).toHaveBeenCalledWith("ABC");
+        expect(mockRouter.navigate).toHaveBeenCalledWith(["404"]);
+      });
+    });
+
+    it("should route to error page if server returns an error other than 404", async () => {
+      // GIVEN
+      vitest
+        .spyOn(service, "find")
+        .mockReturnValue(
+          throwError(
+            () =>
+              new HttpErrorResponse({
+                status: 500,
+                statusText: "Internal Server Error",
+              }),
+          ),
+        );
+      mockActivatedRouteSnapshot.params = { login: "ABC" };
+
+      // WHEN
+      await TestBed.runInInjectionContext(async () => {
+        await expect(
+          lastValueFrom(userManagementResolve(mockActivatedRouteSnapshot)),
+        ).rejects.toThrowError("no elements in sequence");
+        // THEN
+        expect(service.find).toHaveBeenCalledWith("ABC");
+        expect(mockRouter.navigate).toHaveBeenCalledWith(["error"]);
       });
     });
   });
@@ -1063,10 +1094,12 @@ describe("UserManagement routing resolve service", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/route/user-management-routing-resolve.service.ts": {
-    "contents": "import { inject } from "@angular/core";
+    "contents": "import { HttpErrorResponse } from "@angular/common/http";
+import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, Router } from "@angular/router";
-import { of, EMPTY, Observable } from "rxjs";
-import { mergeMap } from "rxjs/operators";
+
+import { EMPTY, Observable, of } from "rxjs";
+import { catchError } from "rxjs/operators";
 
 import { IUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
@@ -1076,19 +1109,20 @@ const userManagementResolve = (
 ): Observable<null | IUserManagement> => {
   const login = route.params["login"];
   if (login) {
-    return inject(UserManagementService)
-      .find(login)
-      .pipe(
-        mergeMap((userManagement: IUserManagement | null) => {
-          if (userManagement) {
-            return of(userManagement);
-          } else {
-            inject(Router).navigate(["404"]);
-            return EMPTY;
-          }
-        }),
-      );
+    const router = inject(Router);
+    const service = inject(UserManagementService);
+    return service.find(login).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 404) {
+          router.navigate(["404"]);
+        } else {
+          router.navigate(["error"]);
+        }
+        return EMPTY;
+      }),
+    );
   }
+
   return of(null);
 };
 
@@ -1435,16 +1469,14 @@ export class UserManagementsService {
 export class UserManagementService extends UserManagementsService {
   protected readonly http = inject(HttpClient);
 
-  create(
-    userManagement: NewUserManagement,
-  ): Observable<IUserManagement | null> {
+  create(userManagement: NewUserManagement): Observable<IUserManagement> {
     const copy = this.convertValueFromClient(userManagement);
     return this.http
       .post<RestUserManagement>(this.resourceUrl, copy)
       .pipe(map((res) => this.convertResponseFromServer(res)));
   }
 
-  update(userManagement: IUserManagement): Observable<IUserManagement | null> {
+  update(userManagement: IUserManagement): Observable<IUserManagement> {
     const copy = this.convertValueFromClient(userManagement);
     return this.http
       .put<RestUserManagement>(
@@ -1456,7 +1488,7 @@ export class UserManagementService extends UserManagementsService {
 
   partialUpdate(
     userManagement: PartialUpdateUserManagement,
-  ): Observable<IUserManagement | null> {
+  ): Observable<IUserManagement> {
     const copy = this.convertValueFromClient(userManagement);
     return this.http
       .patch<RestUserManagement>(
@@ -1466,7 +1498,7 @@ export class UserManagementService extends UserManagementsService {
       .pipe(map((res) => this.convertResponseFromServer(res)));
   }
 
-  find(login: string): Observable<IUserManagement | null> {
+  find(login: string): Observable<IUserManagement> {
     return this.http
       .get<RestUserManagement>(
         \`\${this.resourceUrl}/\${encodeURIComponent(login)}\`,
@@ -1482,7 +1514,7 @@ export class UserManagementService extends UserManagementsService {
       >(this.resourceUrl, { params: options, observe: "response" })
       .pipe(
         map((res) =>
-          res.clone({ body: this.convertResponseArrayFromServer(res.body) }),
+          res.clone({ body: this.convertResponseArrayFromServer(res.body!) }),
         ),
       );
   }
@@ -1555,15 +1587,15 @@ export class UserManagementService extends UserManagementsService {
   }
 
   protected convertResponseFromServer(
-    res?: RestUserManagement | null,
-  ): IUserManagement | null {
-    return res ? this.convertValueFromServer(res) : null;
+    res: RestUserManagement,
+  ): IUserManagement {
+    return this.convertValueFromServer(res);
   }
 
   protected convertResponseArrayFromServer(
-    res?: RestUserManagement[] | null,
-  ): IUserManagement[] | null {
-    return res ? res.map((item) => this.convertValueFromServer(item)) : null;
+    res: RestUserManagement[],
+  ): IUserManagement[] {
+    return res.map((item) => this.convertValueFromServer(item));
   }
 }
 ",
