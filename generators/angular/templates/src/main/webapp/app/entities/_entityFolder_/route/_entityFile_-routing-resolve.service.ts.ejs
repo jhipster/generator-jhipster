@@ -16,11 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
-import { of, EMPTY, Observable } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+
+import { EMPTY, Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
@@ -28,19 +29,22 @@ import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %
 const <%= entityInstance %>Resolve = (route: ActivatedRouteSnapshot): Observable<null | I<%= entityAngularName %>> => {
   const <%= primaryKey.name %> = route.params['<%= primaryKey.name %>'];
   if (<%= primaryKey.name %>) {
-    return inject(<%= entityAngularName %>Service)
+    const router = inject(Router);
+    const service = inject(<%= entityAngularName %>Service);
+    return service
       .find(<%= primaryKey.name %>)
       .pipe(
-        mergeMap((<%= entityInstance %>: HttpResponse<I<%= entityAngularName %>>) => {
-          if (<%= entityInstance %>.body) {
-            return of(<%= entityInstance %>.body);
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 404) {
+            router.navigate(['404']);
           } else {
-            inject(Router).navigate(['404']);
-            return EMPTY;
+            router.navigate(['error']);
           }
+          return EMPTY; 
         }),
       );
   }
+
   return of(null);
 };
 

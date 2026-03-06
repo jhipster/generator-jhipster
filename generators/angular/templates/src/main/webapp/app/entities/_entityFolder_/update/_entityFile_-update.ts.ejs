@@ -189,7 +189,7 @@ _%>
 <%_ } _%>
     }
 
-    protected subscribeToSaveResponse(result: Observable<HttpResponse<I<%= entityAngularName %>>>): void {
+    protected subscribeToSaveResponse(result: Observable<I<%= entityAngularName %> | null>): void {
         result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
             next: () => this.onSaveSuccess(),
             error: () => this.onSaveError()

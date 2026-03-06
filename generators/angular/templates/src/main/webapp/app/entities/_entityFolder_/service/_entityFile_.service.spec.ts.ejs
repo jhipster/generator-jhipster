@@ -18,6 +18,8 @@
 -%>
 <%_
 const tsKeyId = primaryKey.tsSampleValues[0];
+const requiresRestTypeConversion = (!builtInUserManagement && anyFieldIsDateDerived) || (builtInUserManagement && !userManagement.skipClient);
+const entityRestName = requiresRestTypeConversion ? `Rest${entityAngularName}` : `I${entityAngularName}`;
 _%>
 <%_ if (clientTestFrameworkVitest) { _%>
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
@@ -31,9 +33,9 @@ import { DATE_FORMAT } from 'app/config/input.constants';
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 import { sampleWithRequiredData, sampleWithNewData, sampleWithPartialData, sampleWithFullData } from '../<%= entityFileName %>.test-samples';
 
-import { <%= entityAngularName %>Service<% if (builtInUserManagement || anyFieldIsDateDerived) { %>, Rest<%= entityAngularName %><% } %> } from './<%= entityFileName %>.service';
+import { <%= entityAngularName %>Service<% if (requiresRestTypeConversion) { %>, <%= entityRestName %><% } %> } from './<%= entityFileName %>.service';
 
-const requireRestSample: <% if (builtInUserManagement || anyFieldIsDateDerived) { %>Rest<% } else { %>I<% } %><%= entityAngularName %> = {
+const requireRestSample: <% if (requiresRestTypeConversion) { %><%= entityRestName %><% } else { %>I<%= entityAngularName %><% } %> = {
   ...sampleWithRequiredData,
 <%_ fields.forEach((field) => { _%>
 <%_ if (field.fieldTypeLocalDate) { _%>
@@ -68,7 +70,7 @@ describe('<%= entityAngularName %> Service', () => {
             const returnedFromService = { ...requireRestSample };
             const expected = { ...sampleWithRequiredData };
 
-            service.find(<%- tsKeyId %>).subscribe(resp => expectedResult = resp.body);
+            service.find(<%- tsKeyId %>).subscribe(resp => expectedResult = resp);
 
             const req = httpMock.expectOne({ method: 'GET' });
             req.flush(returnedFromService);
@@ -81,7 +83,7 @@ describe('<%= entityAngularName %> Service', () => {
             const returnedFromService = { ...requireRestSample };
             const expected = { ...sampleWithRequiredData };
 
-            service.create(<%= entityInstance %>).subscribe(resp => expectedResult = resp.body);
+            service.create(<%= entityInstance %>).subscribe(resp => expectedResult = resp);
 
             const req = httpMock.expectOne({ method: 'POST' });
             req.flush(returnedFromService);
@@ -95,7 +97,7 @@ describe('<%= entityAngularName %> Service', () => {
             const returnedFromService = { ...requireRestSample };
             const expected = { ...sampleWithRequiredData };
 
-            service.update(<%= entityInstance %>).subscribe(resp => expectedResult = resp.body);
+            service.update(<%= entityInstance %>).subscribe(resp => expectedResult = resp);
 
             const req = httpMock.expectOne({ method: 'PUT' });
             req.flush(returnedFromService);
@@ -107,7 +109,7 @@ describe('<%= entityAngularName %> Service', () => {
             const returnedFromService = { ...requireRestSample };
             const expected = { ...sampleWithRequiredData }
 
-            service.partialUpdate(patchObject).subscribe(resp => expectedResult = resp.body);
+            service.partialUpdate(patchObject).subscribe(resp => expectedResult = resp);
 
             const req = httpMock.expectOne({ method: 'PATCH' });
             req.flush(returnedFromService);
@@ -132,11 +134,10 @@ describe('<%= entityAngularName %> Service', () => {
         it('should delete a <%= entityAngularName %>', () => {
             const expected = true;
 
-            service.delete(<%- tsKeyId %>).subscribe(resp => expectedResult = resp.ok);
+            service.delete(<%- tsKeyId %>).subscribe();
 
             const req = httpMock.expectOne({ method: 'DELETE' });
             req.flush({ status: 200 });
-            expect(expectedResult).toBe(expected);
         });
 <%_ } _%>
 
