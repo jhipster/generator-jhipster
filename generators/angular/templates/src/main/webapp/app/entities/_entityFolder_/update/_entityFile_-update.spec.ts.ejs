@@ -174,7 +174,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
 <%_ if (updatableEntity) { _%>
         it('should call update service on save for existing entity', () => {
             // GIVEN
-            const saveSubject = new Subject<HttpResponse<I<%= entityAngularName %>>>();
+            const saveSubject = new Subject<I<%= entityAngularName %>>();
             const <%= entityInstance %> = <%- testEntityPrimaryKey0 %>;
             <%= clientTestFramework %>.spyOn(<%= entityInstance %>FormService, 'get<%= entityAngularName %>').mockReturnValue(<%= entityInstance %>);
             <%= clientTestFramework %>.spyOn(<%= entityInstance %>Service, 'update').mockReturnValue(saveSubject);
@@ -185,7 +185,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
             // WHEN
             comp.save();
             expect(comp.isSaving()).toEqual(true);
-            saveSubject.next(new HttpResponse({ body: <%= entityInstance %> }));
+            saveSubject.next(<%= entityInstance %>);
             saveSubject.complete();
 
             // THEN
@@ -198,7 +198,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
 <%_ } _%>
         it('should call create service on save for new entity', () => {
             // GIVEN
-            const saveSubject = new Subject<HttpResponse<I<%= entityAngularName %>>>();
+            const saveSubject = new Subject<I<%= entityAngularName %>>();
             const <%= entityInstance %> = <%- testEntityPrimaryKey0 %>;
             <%= clientTestFramework %>.spyOn(<%= entityInstance %>FormService, 'get<%= entityAngularName %>').mockReturnValue({ <%= primaryKey.name %>: null });
             <%= clientTestFramework %>.spyOn(<%= entityInstance %>Service, 'create').mockReturnValue(saveSubject);
@@ -209,7 +209,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
             // WHEN
             comp.save();
             expect(comp.isSaving()).toEqual(true);
-            saveSubject.next(new HttpResponse({ body: <%= entityInstance %> }));
+            saveSubject.next(<%= entityInstance %>);
             saveSubject.complete();
 
             // THEN
@@ -222,7 +222,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
 
         it('should set isSaving to false on error', () => {
             // GIVEN
-            const saveSubject = new Subject<HttpResponse<I<%= entityAngularName %>>>();
+            const saveSubject = new Subject<I<%= entityAngularName %>>();
             const <%= entityInstance %> = <%- testEntityPrimaryKey0 %>;
             <%= clientTestFramework %>.spyOn(<%= entityInstance %>Service, 'update').mockReturnValue(saveSubject);
             <%= clientTestFramework %>.spyOn(comp, 'previousState');

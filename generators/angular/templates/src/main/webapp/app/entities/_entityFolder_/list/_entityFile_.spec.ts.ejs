@@ -24,7 +24,6 @@ _%>
 <%_ if (clientTestFrameworkVitest) { _%>
 import { MockInstance, afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import {
   ComponentFixture, TestBed,

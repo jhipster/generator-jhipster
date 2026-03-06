@@ -22,10 +22,11 @@ _%>
 <%_ if (clientTestFrameworkVitest) { _%>
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
+
+import { HttpErrorResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { HttpResponse } from '@angular/common/http';
 import { ActivatedRouteSnapshot, ActivatedRoute, Router, convertToParamMap } from '@angular/router';
-import { of } from 'rxjs';
+import { lastValueFrom, of, throwError } from 'rxjs';
 
 import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
 import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
@@ -59,7 +60,7 @@ describe('<%= entityAngularName %> routing resolve service', () => {
   describe('resolve', () => {
     it('should return I<%= entityAngularName %> returned by find', async () => {
       // GIVEN
-      service.find = <%= clientTestFramework %>.fn(<%= primaryKey.name %> => of(new HttpResponse({ body: { <%= primaryKey.name %> } })));
+      service.find = <%= clientTestFramework %>.fn(<%= primaryKey.name %> => of({ <%= primaryKey.name %> }));
       mockActivatedRouteSnapshot.params = { <%= primaryKey.name %>: <%- tsKeyId %> };
 
       // WHEN
@@ -99,21 +100,29 @@ describe('<%= entityAngularName %> routing resolve service', () => {
 
     it('should route to 404 page if data not found in server', async () => {
       // GIVEN
-      <%= clientTestFramework %>.spyOn(service, 'find').mockReturnValue(of(new HttpResponse<I<%= entityAngularName %>>({ body: null })));
+      <%= clientTestFramework %>.spyOn(service, 'find').mockReturnValue(throwError(() => new HttpErrorResponse({ status: 404, statusText: 'Not Found' })));
       mockActivatedRouteSnapshot.params = { <%= primaryKey.name %>: <%- tsKeyId %> };
 
       // WHEN
-      await new Promise<void>(resolve => {
-        TestBed.runInInjectionContext(() => {
-          <%= entityInstance %>Resolve(mockActivatedRouteSnapshot).subscribe({
-            complete() {
-              // THEN
-              expect(service.find).toHaveBeenCalledWith(<%- tsKeyId %>);
-              expect(mockRouter.navigate).toHaveBeenCalledWith(['404']);
-              resolve();
-            },
-          });
-        });
+      await TestBed.runInInjectionContext(async () => {
+        await expect(lastValueFrom(<%= entityInstance %>Resolve(mockActivatedRouteSnapshot))).rejects.toThrowError('no elements in sequence');
+        // THEN
+        expect(service.find).toHaveBeenCalledWith(<%- tsKeyId %>);
+        expect(mockRouter.navigate).toHaveBeenCalledWith(['404']);
+      });
+    });
+
+    it('should route to error page if server returns an error other than 404', async () => {
+      // GIVEN
+      <%= clientTestFramework %>.spyOn(service, 'find').mockReturnValue(throwError(() => new HttpErrorResponse({ status: 500, statusText: 'Internal Server Error' })));
+      mockActivatedRouteSnapshot.params = { <%= primaryKey.name %>: <%- tsKeyId %> };
+
+      // WHEN
+      await TestBed.runInInjectionContext(async () => {
+        await expect(lastValueFrom(<%= entityInstance %>Resolve(mockActivatedRouteSnapshot))).rejects.toThrowError('no elements in sequence');
+        // THEN
+        expect(service.find).toHaveBeenCalledWith(<%- tsKeyId %>);
+        expect(mockRouter.navigate).toHaveBeenCalledWith(['error']);
       });
     });
   });

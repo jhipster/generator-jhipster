@@ -25,7 +25,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
 
-import { User } from '../user-management.model';
+import { IUserManagement } from '../user-management.model';
 
 @Component({
   selector: '<%= jhiPrefixDashed %>-user-mgmt-detail',
@@ -33,7 +33,7 @@ import { User } from '../user-management.model';
   imports: [FontAwesomeModule, DatePipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
 })
 export class UserManagementDetail {
-  readonly userManagement = input<User | null>(null);
+  readonly userManagement = input<IUserManagement | null>(null);
 
   previousState(): void {
     globalThis.history.back();

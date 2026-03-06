@@ -43,11 +43,11 @@ exports[`generator - angular builtIn UserManagementEntity should match snapshot 
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/delete/user-management-delete-dialog.spec.ts": {
-    "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from "vitest";
+    "contents": "import { beforeEach, describe, expect, it, vitest } from "vitest";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { HttpResponse } from "@angular/common/http";
-import { of } from "rxjs";
+
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap/modal";
+import { of } from "rxjs";
 
 import { UserManagementService } from "../service/user-management.service";
 
@@ -72,9 +72,7 @@ describe("UserManagement Management Delete Component", () => {
   describe("confirmDelete", () => {
     it("should call delete service on confirmDelete", () => {
       // GIVEN
-      vitest
-        .spyOn(service, "delete")
-        .mockReturnValue(of(new HttpResponse({ body: {} })));
+      vitest.spyOn(service, "delete").mockReturnValue(of(undefined));
       vitest.spyOn(mockActiveModal, "close");
 
       // WHEN
@@ -503,7 +501,6 @@ export class UserManagementDetail {
   it,
   vitest,
 } from "vitest";
-import { HttpHeaders, HttpResponse } from "@angular/common/http";
 import {
   provideHttpClientTesting,
   HttpTestingController,
@@ -962,15 +959,16 @@ export class UserManagement implements OnInit {
   },
   "src/main/webapp/app/entities/admin/user-management/route/user-management-routing-resolve.service.spec.ts": {
     "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from "vitest";
+
+import { HttpErrorResponse } from "@angular/common/http";
 import { TestBed } from "@angular/core/testing";
-import { HttpResponse } from "@angular/common/http";
 import {
   ActivatedRouteSnapshot,
   ActivatedRoute,
   Router,
   convertToParamMap,
 } from "@angular/router";
-import { of } from "rxjs";
+import { lastValueFrom, of, throwError } from "rxjs";
 
 import { IUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
@@ -1004,9 +1002,7 @@ describe("UserManagement routing resolve service", () => {
   describe("resolve", () => {
     it("should return IUserManagement returned by find", async () => {
       // GIVEN
-      service.find = vitest.fn((login) =>
-        of(new HttpResponse({ body: { login } })),
-      );
+      service.find = vitest.fn((login) => of({ login }));
       mockActivatedRouteSnapshot.params = { login: "ABC" };
 
       // WHEN
@@ -1048,21 +1044,48 @@ describe("UserManagement routing resolve service", () => {
       // GIVEN
       vitest
         .spyOn(service, "find")
-        .mockReturnValue(of(new HttpResponse<IUserManagement>({ body: null })));
+        .mockReturnValue(
+          throwError(
+            () =>
+              new HttpErrorResponse({ status: 404, statusText: "Not Found" }),
+          ),
+        );
       mockActivatedRouteSnapshot.params = { login: "ABC" };
 
       // WHEN
-      await new Promise<void>((resolve) => {
-        TestBed.runInInjectionContext(() => {
-          userManagementResolve(mockActivatedRouteSnapshot).subscribe({
-            complete() {
-              // THEN
-              expect(service.find).toHaveBeenCalledWith("ABC");
-              expect(mockRouter.navigate).toHaveBeenCalledWith(["404"]);
-              resolve();
-            },
-          });
-        });
+      await TestBed.runInInjectionContext(async () => {
+        await expect(
+          lastValueFrom(userManagementResolve(mockActivatedRouteSnapshot)),
+        ).rejects.toThrowError("no elements in sequence");
+        // THEN
+        expect(service.find).toHaveBeenCalledWith("ABC");
+        expect(mockRouter.navigate).toHaveBeenCalledWith(["404"]);
+      });
+    });
+
+    it("should route to error page if server returns an error other than 404", async () => {
+      // GIVEN
+      vitest
+        .spyOn(service, "find")
+        .mockReturnValue(
+          throwError(
+            () =>
+              new HttpErrorResponse({
+                status: 500,
+                statusText: "Internal Server Error",
+              }),
+          ),
+        );
+      mockActivatedRouteSnapshot.params = { login: "ABC" };
+
+      // WHEN
+      await TestBed.runInInjectionContext(async () => {
+        await expect(
+          lastValueFrom(userManagementResolve(mockActivatedRouteSnapshot)),
+        ).rejects.toThrowError("no elements in sequence");
+        // THEN
+        expect(service.find).toHaveBeenCalledWith("ABC");
+        expect(mockRouter.navigate).toHaveBeenCalledWith(["error"]);
       });
     });
   });
@@ -1071,11 +1094,12 @@ describe("UserManagement routing resolve service", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/route/user-management-routing-resolve.service.ts": {
-    "contents": "import { inject } from "@angular/core";
-import { HttpResponse } from "@angular/common/http";
+    "contents": "import { HttpErrorResponse } from "@angular/common/http";
+import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, Router } from "@angular/router";
-import { of, EMPTY, Observable } from "rxjs";
-import { mergeMap } from "rxjs/operators";
+
+import { EMPTY, Observable, of } from "rxjs";
+import { catchError } from "rxjs/operators";
 
 import { IUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
@@ -1085,19 +1109,20 @@ const userManagementResolve = (
 ): Observable<null | IUserManagement> => {
   const login = route.params["login"];
   if (login) {
-    return inject(UserManagementService)
-      .find(login)
-      .pipe(
-        mergeMap((userManagement: HttpResponse<IUserManagement>) => {
-          if (userManagement.body) {
-            return of(userManagement.body);
-          } else {
-            inject(Router).navigate(["404"]);
-            return EMPTY;
-          }
-        }),
-      );
+    const router = inject(Router);
+    const service = inject(UserManagementService);
+    return service.find(login).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 404) {
+          router.navigate(["404"]);
+        } else {
+          router.navigate(["error"]);
+        }
+        return EMPTY;
+      }),
+    );
   }
+
   return of(null);
 };
 
@@ -1152,7 +1177,7 @@ describe("UserManagement Service", () => {
       const returnedFromService = { ...requireRestSample };
       const expected = { ...sampleWithRequiredData };
 
-      service.find("ABC").subscribe((resp) => (expectedResult = resp.body));
+      service.find("ABC").subscribe((resp) => (expectedResult = resp));
 
       const req = httpMock.expectOne({ method: "GET" });
       req.flush(returnedFromService);
@@ -1166,7 +1191,7 @@ describe("UserManagement Service", () => {
 
       service
         .create(userManagement)
-        .subscribe((resp) => (expectedResult = resp.body));
+        .subscribe((resp) => (expectedResult = resp));
 
       const req = httpMock.expectOne({ method: "POST" });
       req.flush(returnedFromService);
@@ -1180,7 +1205,7 @@ describe("UserManagement Service", () => {
 
       service
         .update(userManagement)
-        .subscribe((resp) => (expectedResult = resp.body));
+        .subscribe((resp) => (expectedResult = resp));
 
       const req = httpMock.expectOne({ method: "PUT" });
       req.flush(returnedFromService);
@@ -1194,7 +1219,7 @@ describe("UserManagement Service", () => {
 
       service
         .partialUpdate(patchObject)
-        .subscribe((resp) => (expectedResult = resp.body));
+        .subscribe((resp) => (expectedResult = resp));
 
       const req = httpMock.expectOne({ method: "PATCH" });
       req.flush(returnedFromService);
@@ -1217,11 +1242,10 @@ describe("UserManagement Service", () => {
     it("should delete a UserManagement", () => {
       const expected = true;
 
-      service.delete("ABC").subscribe((resp) => (expectedResult = resp.ok));
+      service.delete("ABC").subscribe();
 
       const req = httpMock.expectOne({ method: "DELETE" });
       req.flush({ status: 200 });
-      expect(expectedResult).toBe(expected);
     });
 
     describe("addUserManagementToCollectionIfMissing", () => {
@@ -1396,9 +1420,6 @@ export type NewRestUserManagement = RestOf<NewUserManagement>;
 export type PartialUpdateRestUserManagement =
   RestOf<PartialUpdateUserManagement>;
 
-export type EntityResponseType = HttpResponse<IUserManagement>;
-export type EntityArrayResponseType = HttpResponse<IUserManagement[]>;
-
 @Injectable()
 export class UserManagementsService {
   readonly userManagementsParams = signal<
@@ -1448,59 +1469,59 @@ export class UserManagementsService {
 export class UserManagementService extends UserManagementsService {
   protected readonly http = inject(HttpClient);
 
-  create(userManagement: NewUserManagement): Observable<EntityResponseType> {
+  create(userManagement: NewUserManagement): Observable<IUserManagement> {
     const copy = this.convertValueFromClient(userManagement);
     return this.http
-      .post<RestUserManagement>(this.resourceUrl, copy, { observe: "response" })
+      .post<RestUserManagement>(this.resourceUrl, copy)
       .pipe(map((res) => this.convertResponseFromServer(res)));
   }
 
-  update(userManagement: IUserManagement): Observable<EntityResponseType> {
+  update(userManagement: IUserManagement): Observable<IUserManagement> {
     const copy = this.convertValueFromClient(userManagement);
     return this.http
       .put<RestUserManagement>(
         \`\${this.resourceUrl}/\${encodeURIComponent(this.getUserManagementIdentifier(userManagement))}\`,
         copy,
-        { observe: "response" },
       )
       .pipe(map((res) => this.convertResponseFromServer(res)));
   }
 
   partialUpdate(
     userManagement: PartialUpdateUserManagement,
-  ): Observable<EntityResponseType> {
+  ): Observable<IUserManagement> {
     const copy = this.convertValueFromClient(userManagement);
     return this.http
       .patch<RestUserManagement>(
         \`\${this.resourceUrl}/\${encodeURIComponent(this.getUserManagementIdentifier(userManagement))}\`,
         copy,
-        { observe: "response" },
       )
       .pipe(map((res) => this.convertResponseFromServer(res)));
   }
 
-  find(login: string): Observable<EntityResponseType> {
+  find(login: string): Observable<IUserManagement> {
     return this.http
       .get<RestUserManagement>(
         \`\${this.resourceUrl}/\${encodeURIComponent(login)}\`,
-        { observe: "response" },
       )
       .pipe(map((res) => this.convertResponseFromServer(res)));
   }
 
-  query(req?: any): Observable<EntityArrayResponseType> {
+  query(req?: any): Observable<HttpResponse<IUserManagement[]>> {
     const options = createRequestOption(req);
     return this.http
       .get<
         RestUserManagement[]
       >(this.resourceUrl, { params: options, observe: "response" })
-      .pipe(map((res) => this.convertResponseArrayFromServer(res)));
+      .pipe(
+        map((res) =>
+          res.clone({ body: this.convertResponseArrayFromServer(res.body!) }),
+        ),
+      );
   }
 
-  delete(login: string): Observable<HttpResponse<{}>> {
-    return this.http.delete(
+  delete(login: string): Observable<undefined> {
+    return this.http.delete<undefined>(
       \`\${this.resourceUrl}/\${encodeURIComponent(login)}\`,
-      { observe: "response" },
     );
   }
 
@@ -1566,21 +1587,15 @@ export class UserManagementService extends UserManagementsService {
   }
 
   protected convertResponseFromServer(
-    res: HttpResponse<RestUserManagement>,
-  ): HttpResponse<IUserManagement> {
-    return res.clone({
-      body: res.body ? this.convertValueFromServer(res.body) : null,
-    });
+    res: RestUserManagement,
+  ): IUserManagement {
+    return this.convertValueFromServer(res);
   }
 
   protected convertResponseArrayFromServer(
-    res: HttpResponse<RestUserManagement[]>,
-  ): HttpResponse<IUserManagement[]> {
-    return res.clone({
-      body: res.body
-        ? res.body.map((item) => this.convertValueFromServer(item))
-        : null,
-    });
+    res: RestUserManagement[],
+  ): IUserManagement[] {
+    return res.map((item) => this.convertValueFromServer(item));
   }
 }
 ",
@@ -2154,7 +2169,7 @@ describe("UserManagement Management Update Component", () => {
   describe("save", () => {
     it("should call update service on save for existing entity", () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<IUserManagement>>();
+      const saveSubject = new Subject<IUserManagement>();
       const userManagement = { login: "Pattie.Kertzmann" };
       vitest
         .spyOn(userManagementFormService, "getUserManagement")
@@ -2169,7 +2184,7 @@ describe("UserManagement Management Update Component", () => {
       // WHEN
       comp.save();
       expect(comp.isSaving()).toEqual(true);
-      saveSubject.next(new HttpResponse({ body: userManagement }));
+      saveSubject.next(userManagement);
       saveSubject.complete();
 
       // THEN
@@ -2183,7 +2198,7 @@ describe("UserManagement Management Update Component", () => {
 
     it("should call create service on save for new entity", () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<IUserManagement>>();
+      const saveSubject = new Subject<IUserManagement>();
       const userManagement = { login: "Pattie.Kertzmann" };
       vitest
         .spyOn(userManagementFormService, "getUserManagement")
@@ -2198,7 +2213,7 @@ describe("UserManagement Management Update Component", () => {
       // WHEN
       comp.save();
       expect(comp.isSaving()).toEqual(true);
-      saveSubject.next(new HttpResponse({ body: userManagement }));
+      saveSubject.next(userManagement);
       saveSubject.complete();
 
       // THEN
@@ -2210,7 +2225,7 @@ describe("UserManagement Management Update Component", () => {
 
     it("should set isSaving to false on error", () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<IUserManagement>>();
+      const saveSubject = new Subject<IUserManagement>();
       const userManagement = { login: "Pattie.Kertzmann" };
       vitest
         .spyOn(userManagementService, "update")
@@ -2299,7 +2314,7 @@ export class UserManagementUpdate implements OnInit {
   }
 
   protected subscribeToSaveResponse(
-    result: Observable<HttpResponse<IUserManagement>>,
+    result: Observable<IUserManagement | null>,
   ): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
       next: () => this.onSaveSuccess(),

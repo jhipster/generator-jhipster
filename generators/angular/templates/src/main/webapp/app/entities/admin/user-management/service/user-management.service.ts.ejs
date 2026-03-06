@@ -16,9 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { map, Observable<% if (generateUserManagement && !generateBuiltInAuthorityEntity) { %>, of<% } %> } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+
+import { Observable, map<% if (generateUserManagement && !generateBuiltInAuthorityEntity) { %>, of<% } %> } from 'rxjs';
 
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
@@ -55,8 +56,8 @@ export class UserManagementService {
   }
 
 <%_ if (generateUserManagement) { _%>
-  delete(login: string): Observable<{}> {
-    return this.http.delete(`${this.resourceUrl}/${encodeURIComponent(login)}`);
+  delete(login: string): Observable<undefined> {
+    return this.http.delete<undefined>(`${this.resourceUrl}/${encodeURIComponent(login)}`);
   }
 
   authorities(): Observable<string[]> {
