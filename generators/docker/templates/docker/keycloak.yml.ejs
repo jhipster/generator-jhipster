@@ -16,16 +16,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%
+const keycloakVersion = jhipsterConfig.keycloakVersion || '25.0.0';
+const majorVersion = parseInt(keycloakVersion.split('.')[0], 10);
+const isKeycloak26OrLater = majorVersion >= 26;
+%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 name: <%= baseName.toLowerCase() %>
 services:
   keycloak:
-    image: <%- dockerContainers.keycloak %>
-    command: 'start-dev --import-realm'
+    image: quay.io/keycloak/keycloak:<%= keycloakVersion %>
+    command: <%= isKeycloak26OrLater ? 'start-dev --import-realm --http-port=9080 --https-port=9443 --http-management-port=9990 --health-enabled=true' : 'start-dev --import-realm' %>
     volumes:
       - ./realm-config:/opt/keycloak/data/import
       - ./realm-config/keycloak-health-check.sh:/opt/keycloak/health-check.sh
     environment:
+<%_ if (isKeycloak26OrLater) { _%>
       - KC_DB=dev-file
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
@@ -34,13 +40,19 @@ services:
       - KC_HTTPS_PORT=9443
       - KC_HEALTH_ENABLED=true
       - KC_HTTP_MANAGEMENT_PORT=9990
+<%_ } else { _%>
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - DB_VENDOR=h2
+      - KC_FEATURES=scripts
+<%_ } _%>
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
       - 127.0.0.1:9080:9080
       - 127.0.0.1:9443:9443
     healthcheck:
-      test: 'bash /opt/keycloak/health-check.sh'
+      test: <%= isKeycloak26OrLater ? '["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/9990 && echo -e \\"GET /health/ready HTTP/1.1\\\\n\\\\n\\" >&3 && cat <&3 | grep -q \\"UP\\"]"' : "'bash /opt/keycloak/health-check.sh'" %>
       interval: 5s
       timeout: 5s
       # Increased retries due to slow Keycloak startup in GitHub Actions using MacOS
