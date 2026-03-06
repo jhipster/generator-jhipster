@@ -256,12 +256,12 @@ _%>
             type="select"
           >
           <%_ const enumPrefix = frontendAppName + '.'+ fieldType; _%>
-          {<%= this._.lowerFirst(fieldType) %>Values.map(<%= this._.lowerFirst(fieldType) %> => (
-              <option value={<%= this._.lowerFirst(fieldType) %>} key={<%= this._.lowerFirst(fieldType) %>}>
+          {<%= this._.lowerFirst(fieldType) %>Values.map(<%= this._.lowerFirst(fieldType) %>Value => (
+              <option value={<%= this._.lowerFirst(fieldType) %>Value} key={<%= this._.lowerFirst(fieldType) %>Value}>
       <%_ if (enableTranslation) { _%>
-                {translate("<%= enumPrefix %>."+<%= this._.lowerFirst(fieldType) %>)}
+                {translate("<%= enumPrefix %>."+<%= this._.lowerFirst(fieldType) %>Value)}
       <%_ } else { _%>
-                {<%= this._.lowerFirst(fieldType) %>}
+                {<%= this._.lowerFirst(fieldType) %>Value}
       <%_ } _%>
               </option>))}
           </ValidatedField>
