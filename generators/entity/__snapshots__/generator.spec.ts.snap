@@ -115,6 +115,7 @@ exports[`generator - entity with default configuration should match source calls
       "control": "TaskParameter[control]",
       "entities": [
         "Entity[Foo]",
+        "Entity[UserManagement]",
       ],
       "source": "TaskParameter[source]",
     },
@@ -259,6 +260,7 @@ exports[`generator - entity with enableTranslation disabled should match source 
       "control": "TaskParameter[control]",
       "entities": [
         "Entity[Foo]",
+        "Entity[UserManagement]",
       ],
       "source": "TaskParameter[source]",
     },

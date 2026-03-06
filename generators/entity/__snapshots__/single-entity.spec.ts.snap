@@ -8,6 +8,7 @@ exports[`generator - entity --single-entity when regenerating with default confi
       "control": "TaskParameter[control]",
       "entities": [
         "Entity[Foo]",
+        "Entity[UserManagement]",
       ],
       "source": "TaskParameter[source]",
     },
