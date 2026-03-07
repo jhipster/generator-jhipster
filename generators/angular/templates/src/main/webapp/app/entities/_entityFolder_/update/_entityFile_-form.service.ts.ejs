@@ -135,7 +135,7 @@ _%>
             Validators.max(<%= field.fieldValidateRulesMax %>),
     <%_ } _%>
     <%_ if (field.fieldValidationPattern) { _%>
-            Validators.pattern('<%- field.fieldValidateRulesPatternAngular %>'),
+            Validators.pattern('<%- field.fieldValidateRulesPatternAngular %>'), // NOSONAR
     <%_ } _%>
           ],
         }
