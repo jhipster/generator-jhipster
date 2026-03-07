@@ -1240,12 +1240,10 @@ describe("UserManagement Service", () => {
     });
 
     it("should delete a UserManagement", () => {
-      const expected = true;
-
       service.delete("ABC").subscribe();
 
-      const req = httpMock.expectOne({ method: "DELETE" });
-      req.flush({ status: 200 });
+      const requests = httpMock.match({ method: "DELETE" });
+      expect(requests.length).toBe(1);
     });
 
     describe("addUserManagementToCollectionIfMissing", () => {
