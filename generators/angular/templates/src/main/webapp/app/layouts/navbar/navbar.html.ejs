@@ -52,8 +52,9 @@
           display="dynamic"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
+          data-cy="entity"
         >
-          <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu" data-cy="entity">
+          <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
             <span>
               <fa-icon icon="th-list" />
               <span>__jhiTranslateTag__('global.menu.entities.main')</span>
@@ -98,8 +99,9 @@
         display="dynamic"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
+        data-cy="adminMenu"
       >
-        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu" data-cy="adminMenu">
+        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
           <span>
             <fa-icon icon="users-cog" />
             <span>__jhiTranslateTag__('global.menu.admin.main')</span>
@@ -112,14 +114,6 @@
             <a class="dropdown-item" routerLink="/admin/gateway" routerLinkActive="active" (click)="collapseNavbar()">
               <fa-icon icon="road" [fixedWidth]="true" />
               <span>__jhiTranslateTag__('global.menu.admin.gateway')</span>
-            </a>
-          </li>
-<%_ } _%>
-<%_ if (generateUserManagement && userManagement.skipClient) { _%>
-          <li>
-            <a class="dropdown-item" routerLink="/admin/user-management" routerLinkActive="active" (click)="collapseNavbar()">
-              <fa-icon icon="users" [fixedWidth]="true" />
-              <span>__jhiTranslateTag__('global.menu.admin.userManagement')</span>
             </a>
           </li>
 <%_ } _%>
@@ -198,9 +192,9 @@
       </li>
     }
 <%_ } _%>
-      <li ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <li ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" data-cy="accountMenu">
         @let accountRef = account();
-        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu" data-cy="accountMenu">
+        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
         @if (!accountRef?.imageUrl) {
           <span>
             <fa-icon icon="user" />

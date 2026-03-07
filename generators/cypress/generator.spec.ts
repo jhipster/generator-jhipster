@@ -107,28 +107,28 @@ describe(`generator - ${generator}`, () => {
               `${cypressAdminRoot}cypress/e2e/administration/administration.cy.ts`,
               "  describe('/metrics', () => {\n" +
                 "    it('should load the page', () => {\n" +
-                "      cy.clickOnAdminMenuItem('metrics');\n" +
+                "      cy.clickOnAdminMenuItem('admin/metrics');\n" +
                 "      cy.get(metricsPageHeadingSelector).should('be.visible');\n" +
                 '    });\n' +
                 '  });\n' +
                 '\n' +
                 "  describe('/health', () => {\n" +
                 "    it('should load the page', () => {\n" +
-                "      cy.clickOnAdminMenuItem('health');\n" +
+                "      cy.clickOnAdminMenuItem('admin/health');\n" +
                 "      cy.get(healthPageHeadingSelector).should('be.visible');\n" +
                 '    });\n' +
                 '  });\n' +
                 '\n' +
                 "  describe('/logs', () => {\n" +
                 "    it('should load the page', () => {\n" +
-                "      cy.clickOnAdminMenuItem('logs');\n" +
+                "      cy.clickOnAdminMenuItem('admin/logs');\n" +
                 "      cy.get(logsPageHeadingSelector).should('be.visible');\n" +
                 '    });\n' +
                 '  });\n' +
                 '\n' +
                 "  describe('/configuration', () => {\n" +
                 "    it('should load the page', () => {\n" +
-                "      cy.clickOnAdminMenuItem('configuration');\n" +
+                "      cy.clickOnAdminMenuItem('admin/configuration');\n" +
                 "      cy.get(configurationPageHeadingSelector).should('be.visible');\n" +
                 '    });\n' +
                 '  });',

@@ -15,7 +15,7 @@ import {
 } from '../../support/entity';
 <%_
 
-const customUserManagementPages = builtInUserManagement && userManagement.skipClient && userManagement.generateEntityCypress;
+const customUserManagementPages = builtInUserManagement && userManagement.skipClient && userManagement.generateEntityCypress && !clientFrameworkAngular;
 const skipUserManagementCreatePage = builtInUserManagement && (!userManagement.skipClient || clientFrameworkReact);
 const baseApi = entityApi + 'api/';
 
@@ -157,7 +157,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
 
   it('<%- entityNamePlural %> menu should load <%- entityNamePlural %> page', () => {
     cy.visit('/');
-    cy.clickOn<%= customUserManagementPages ? 'Admin' : 'Entity' %>MenuItem('<%= entityPage %>');
+    cy.clickOn<%= adminEntity ? 'Admin' : 'Entity' %>MenuItem('<%= customUserManagementPages ? 'admin/' : '' %><%= entityPage %>');
     cy.wait('@entitiesRequest').then(({ response }) => {
       if (response?.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
@@ -327,9 +327,6 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
     const fieldName = field.fieldName;
     const fieldIsEnum = field.fieldIsEnum;
     let fieldValue = !entityFakeData ? field.generateFakeData('cypress') : entityFakeData[field.fieldName];
-    if (customUserManagementPages && (fieldName === 'langKey' || fieldName === 'activated')) {
-      return;
-    }
     if (fieldValue === undefined) {
         return;
     }
@@ -337,9 +334,9 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
   _%>
 
     <%_ if (field.fieldTypeBoolean) { _%>
-      cy.get(`[data-cy="<%= fieldName %>"]`).should('not.be.checked');
+      cy.get(`[data-cy="<%= fieldName %>"]`).should('<%- field.fieldTsDefaultValue === 'true' ? '' : 'not.' %>be.checked');
       cy.get(`[data-cy="<%= fieldName %>"]`).click();
-      cy.get(`[data-cy="<%= fieldName %>"]`).should('be.checked');
+      cy.get(`[data-cy="<%= fieldName %>"]`).should('<%- field.fieldTsDefaultValue === 'true' ? 'not.' : '' %>be.checked');
 
     <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
       cy.setFieldImageAsBytesOfEntity('<%= fieldName %>', 'integration-test.png', 'image/png');

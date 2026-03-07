@@ -46,28 +46,28 @@ describe('/admin', () => {
 <%_ if (withAdminUi) { _%>
   describe('/metrics', () => {
     it('should load the page', () => {
-      cy.clickOnAdminMenuItem('metrics');
+      cy.clickOnAdminMenuItem('admin/metrics');
       cy.get(metricsPageHeadingSelector).should('be.visible');
     });
   });
 
   describe('/health', () => {
     it('should load the page', () => {
-      cy.clickOnAdminMenuItem('health');
+      cy.clickOnAdminMenuItem('admin/health');
       cy.get(healthPageHeadingSelector).should('be.visible');
     });
   });
 
   describe('/logs', () => {
     it('should load the page', () => {
-      cy.clickOnAdminMenuItem('logs');
+      cy.clickOnAdminMenuItem('admin/logs');
       cy.get(logsPageHeadingSelector).should('be.visible');
     });
   });
 
   describe('/configuration', () => {
     it('should load the page', () => {
-      cy.clickOnAdminMenuItem('configuration');
+      cy.clickOnAdminMenuItem('admin/configuration');
       cy.get(configurationPageHeadingSelector).should('be.visible');
     });
   });
@@ -77,7 +77,7 @@ describe('/admin', () => {
     it('should load the page', () => {
       cy.getManagementInfo().then(info => {
         if (info.activeProfiles.includes('api-docs')) {
-          cy.clickOnAdminMenuItem('docs');
+          cy.clickOnAdminMenuItem('admin/docs');
           cy.get(swaggerFrameSelector).should('be.visible').then(() => {
             // Wait iframe to load
             cy.wait(500); // eslint-disable-line cypress/no-unnecessary-waiting
@@ -96,7 +96,7 @@ describe('/admin', () => {
 
   describe('/tracker', () => {
     it('should load the page', () => {
-      cy.clickOnAdminMenuItem('tracker');
+      cy.clickOnAdminMenuItem('admin/tracker');
       cy.get('[data-cy="trackerPageHeading"]').should('be.visible');
       cy.get('[data-cy="trackerTable"] > tbody > tr').should('have.length', 1)
     });
