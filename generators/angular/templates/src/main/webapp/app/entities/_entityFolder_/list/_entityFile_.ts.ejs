@@ -29,13 +29,13 @@
 
   const componentName = entityAngularName;
 _%>
-import { Component, computed, effect, inject, OnInit, signal, WritableSignal, untracked } from '@angular/core';
+import { Component, computed, effect, inject, signal, WritableSignal, untracked } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 <%_ if (!paginationNo) { _%>
 import { HttpHeaders } from '@angular/common/http';
 <%_ } _%>
 import { ActivatedRoute, Data, ParamMap, Router, RouterLink } from '@angular/router';
-import { combineLatest<%_ if (!readOnly) { _%>, filter<%_ } _%>, Subscription, tap } from 'rxjs';
+import { combineLatest<%_ if (!readOnly) { _%>, filter<%_ } _%>, map, tap } from 'rxjs';
 <%_ if (!readOnly) { _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
 <%_ } _%>
@@ -130,13 +130,12 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 <%_ } _%>
     ],
 })
-export class <%= componentName %> implements OnInit {
+export class <%= componentName %> {
 
 <%_ if (notSortableFieldsAfterSearch) { _%>
     private static readonly NOT_SORTABLE_FIELDS_AFTER_SEARCH = [<%- notSortableFieldsAfterSearch %>];
 
 <%_ } _%>
-    subscription: Subscription | null = null;
     readonly <%- entityInstancePlural %> = signal<I<%= entityAngularName %>[]>([]);
 
     sortState = sortStateSignal({});
@@ -163,6 +162,12 @@ export class <%= componentName %> implements OnInit {
   // eslint-disable-next-line @typescript-eslint/member-ordering
   readonly isLoading = this.<%= entityInstance %>Service.<%= entityInstancePlural %>Resource.isLoading;
   protected readonly activatedRoute = inject(ActivatedRoute);
+  protected readonly activatedRouteState = toSignal(
+    combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
+      map(([queryParamMap, data]) => ({ queryParamMap, data })),
+    ),
+    { initialValue: { queryParamMap: this.activatedRoute.snapshot.queryParamMap, data: this.activatedRoute.snapshot.data } },
+  );
   protected readonly sortService = inject(SortService);
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
   protected readonly filterOptions = toSignal(this.filters.filterChanges);
@@ -195,6 +200,23 @@ export class <%= componentName %> implements OnInit {
 <%_ } _%>
       }
     });
+    effect(() => {
+      const activatedRouteState = this.activatedRouteState();
+      untracked(() => {
+        // Only watch for route changes. Other signals should be ignored.
+        this.fillComponentAttributeFromRoute(activatedRouteState.queryParamMap, activatedRouteState.data);
+<%_ if (paginationInfiniteScroll) { _%>
+        this.reset();
+<%_ } _%>
+<%_ if (paginationNo && searchEngineNo && !jpaMetamodelFiltering) { _%>
+        // if (this.<%= entityInstancePlural %>().length === 0) {
+<%_ } _%>
+          this.load();
+<%_ if (paginationNo && searchEngineNo && !jpaMetamodelFiltering) { _%>
+        // }
+<%_ } _%>
+      });
+    });
 <% if (jpaMetamodelFiltering && paginationPagination) { %>
 
     effect(() => {
@@ -210,35 +232,18 @@ export class <%= componentName %> implements OnInit {
   }
 
 <%_ if (primaryKey) { _%>
-    track<%= primaryKey.nameCapitalized %> = (item: I<%= entityAngularName %>): <%= primaryKey.tsType %> => this.<%= entityInstance %>Service.get<%= entityAngularName %>Identifier(item);
+  track<%= primaryKey.nameCapitalized %> = (item: I<%= entityAngularName %>): <%= primaryKey.tsType %> => this.<%= entityInstance %>Service.get<%= entityAngularName %>Identifier(item);
 
 <%_ } _%>
-    ngOnInit(): void {
-      this.subscription = combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
-        tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
-<%_ if (paginationInfiniteScroll) { _%>
-        tap(() => this.reset()),
-<%_ } _%>
-<%_ if (!paginationNo || searchEngineAny || jpaMetamodelFiltering) { _%>
-        tap(() => this.load()),
-<%_ } else { _%>
-        tap(() => {
-          if (this.<%= entityInstancePlural %>().length === 0) {
-            this.load();
-          }
-        }),
-<%_ } _%>
-      ).subscribe();
-    }
-
 <%_ if (paginationInfiniteScroll) { _%>
   reset(): void {
     this.<%- entityInstancePlural %>.set([]);
+    this.links.set({});
   }
 
-    loadNextPage(): void {
-      this.load();
-    }
+  loadNextPage(): void {
+    this.load();
+  }
 
 <%_ } _%>
 <%_ if (searchEngineAny) { _%>
