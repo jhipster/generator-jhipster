@@ -88,7 +88,7 @@ describe('<%= entityAngularName %> Management Detail Component', () => {
 
   describe('PreviousState', () => {
     it('should navigate to previous state', () => {
-      <%= clientTestFramework %>.spyOn(window.history, 'back');
+      <%= clientTestFramework %>.spyOn(globalThis.history, 'back');
       comp.previousState();
       expect(globalThis.history.back).toHaveBeenCalled();
     });
