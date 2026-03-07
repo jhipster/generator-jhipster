@@ -96,6 +96,24 @@ export default class SpringCloudGenerator extends SpringCloudApplicationGenerato
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
+  get writing() {
+    return this.asWritingTaskGroup({
+      async writingTasks({ application, source }) {
+        // Genera solo il template per ZookeeperConfig.java
+        if (this.jhipsterConfig.serviceDiscoveryType === 'zookeeper') {
+          this.template(
+            'src/main/java/package/config/ZookeeperConfig.java.ejs',
+            `src/main/java/${this.packageFolder}/config/ZookeeperConfig.java`
+          );
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.writing);
+  }
+
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addJHipsterBomDependencies({ application, source }) {
@@ -137,6 +155,15 @@ export default class SpringCloudGenerator extends SpringCloudApplicationGenerato
             dependencies: [
               { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-consul-config' },
               { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-consul-discovery' },
+            ],
+          },
+          // Aggiungi il blocco per Zookeeper (coerente con Eureka e Consul)
+          {
+            condition: this.jhipsterConfig.serviceDiscoveryType === 'zookeeper',
+            dependencies: [
+              { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-zookeeper-discovery' },
+              { groupId: 'org.apache.curator', artifactId: 'curator-framework', version: '5.4.0' },
+              { groupId: 'org.springframework.cloud', artifactId: 'spring-cloud-starter-loadbalancer' },
             ],
           },
         );
