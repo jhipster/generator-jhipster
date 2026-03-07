@@ -1781,7 +1781,7 @@ export class UserManagementFormService {
             Validators.required,
             Validators.maxLength(50),
             Validators.pattern(
-              String.raw\`^[a-zA-Z0-9!$&*+=?^_\\\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$\`,
+              "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
             ),
           ],
         },

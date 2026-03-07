@@ -1,0 +1,40 @@
+diff --git a/generators/angular/generator.ts b/generators/angular/generator.ts
+index 4474676..14483f3 100644
+--- a/generators/angular/generator.ts
++++ b/generators/angular/generator.ts
+@@ -282,6 +282,10 @@ export default class AngularGenerator extends AngularApplicationGenerator {
+             return returnValue;
+           },
+         });
++        field.fieldValidateRulesPatternAngular ??= field.fieldValidateRulesPattern
++          ?.replace(/\\\\/g, '\\')
++          .replace(/\\/g, '\\\\')
++          .replace(/'/g, "\\'");
+       },
+     });
+   }
+diff --git a/generators/angular/templates/src/main/webapp/app/entities/_entityFolder_/update/_entityFile_-form.service.ts.ejs b/generators/angular/templates/src/main/webapp/app/entities/_entityFolder_/update/_entityFile_-form.service.ts.ejs
+index b574853..4718868 100644
+--- a/generators/angular/templates/src/main/webapp/app/entities/_entityFolder_/update/_entityFile_-form.service.ts.ejs
++++ b/generators/angular/templates/src/main/webapp/app/entities/_entityFolder_/update/_entityFile_-form.service.ts.ejs
+@@ -135,7 +135,7 @@ _%>
+             Validators.max(<%= field.fieldValidateRulesMax %>),
+     <%_ } _%>
+     <%_ if (field.fieldValidationPattern) { _%>
+-            Validators.pattern(String.raw`<%- field.fieldValidateRulesPattern.replace(/\\\\/g, '\\').replace(/`/g, '\\`') %>`),
++            Validators.pattern('<%- field.fieldValidateRulesPatternAngular %>'),
+     <%_ } _%>
+           ],
+         }
+diff --git a/generators/angular/types.d.ts b/generators/angular/types.d.ts
+index 98ebd16..e3e8957 100644
+--- a/generators/angular/types.d.ts
++++ b/generators/angular/types.d.ts
+@@ -28,6 +28,7 @@ export type { Config, Options, Relationship, Source } from '../client/types.d.ts
+ export type Field = ClientField & {
+   fieldTsDefaultValue?: string;
+   defaultValue?: string;
++  fieldValidateRulesPatternAngular?: string;
+ };
+ 
+ export interface Entity<F extends Field = Field, R extends ClientRelationship = ClientRelationship> extends ClientEntity<F, R> {
