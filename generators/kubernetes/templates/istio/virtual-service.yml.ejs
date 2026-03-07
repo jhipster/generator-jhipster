@@ -15,3 +15,27 @@ spec:
     retries:
       attempts: 3
       perTryTimeout: 2s
+    headers:
+      request:
+        set:
+          x-forwarded-proto: https
+      response:
+        set:
+          Strict-Transport-Security: "max-age=31536000; includeSubDomains"
+    corsPolicy:
+      allowOrigins:
+      - exact: "https://<%= app.baseName.toLowerCase() %>"
+      allowMethods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - OPTIONS
+      allowHeaders:
+      - Authorization
+      - Content-Type
+      - X-Requested-With
+      exposeHeaders:
+      - Authorization
+      - Content-Length
+      allowCredentials: true

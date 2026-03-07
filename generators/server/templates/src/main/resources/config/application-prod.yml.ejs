@@ -1,0 +1,28 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${OAUTH2_ISSUER_URI:https://keycloak.example.com/realms/myrealm}
+          jwk-set-uri: ${OAUTH2_JWK_SET_URI:https://keycloak.example.com/realms/myrealm/protocol/openid-connect/certs}
+          audience: ${OAUTH2_AUDIENCE:<%= app.baseName %>-api}
+  
+  cloud:
+    gateway:
+      routes:
+      - id: <%= app.baseName.toLowerCase() %>
+        uri: lb://<%= app.baseName.toLowerCase() %>
+        predicates:
+        - Path=/api/**
+        filters:
+        - PreserveHeader=Authorization
+        - PreserveHeader=X-Forwarded-For
+        - PreserveHeader=X-Forwarded-Proto
+
+server:
+  forward-headers-strategy: framework
+  
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG

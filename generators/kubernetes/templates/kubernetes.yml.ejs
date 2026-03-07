@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: <%= app.baseName.toLowerCase() %>
+  namespace: <%= kubernetesNamespace %>
+  labels:
+    app: <%= app.baseName.toLowerCase() %>
+spec:
+  replicas: <%= kubernetesReplicas %>
+  selector:
+    matchLabels:
+      app: <%= app.baseName.toLowerCase() %>
+  template:
+    metadata:
+      labels:
+        app: <%= app.baseName.toLowerCase() %>
+      annotations:
+        sidecar.istio.io/inject: "true"
+        proxy.istio.io/config: |
+          holdApplicationUntilProxyStarts: true
+          proxyMetadata:
+            ISTIO_META_DNS_CAPTURE: "true"
+    spec:
+      serviceAccountName: <%= app.baseName.toLowerCase() %>
+      containers:
+      - name: <%= app.baseName.toLowerCase() %>
+        image: <%= dockerPushCommand %>/<%= app.baseName.toLowerCase() %>:<%= dockerImageVersion %>
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "prod,kubernetes"
+        - name: OAUTH2_ISSUER_URI
+          valueFrom:
+            secretKeyRef:
+              name: <%= app.baseName.toLowerCase() %>-oauth2
+              key: issuer-uri
+        - name: OAUTH2_JWK_SET_URI
+          valueFrom:
+            secretKeyRef:
+              name: <%= app.baseName.toLowerCase() %>-oauth2
+              key: jwk-set-uri
+        - name: OAUTH2_AUDIENCE
+          valueFrom:
+            secretKeyRef:
+              name: <%= app.baseName.toLowerCase() %>-oauth2
+              key: audience
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: <%= app.baseName.toLowerCase() %>
+              topologyKey: kubernetes.io/hostname
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: <%= app.baseName.toLowerCase() %>
+  namespace: <%= kubernetesNamespace %>
+  labels:
+    app: <%= app.baseName.toLowerCase() %>
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+    name: http
+  selector:
+    app: <%= app.baseName.toLowerCase() %>
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: <%= app.baseName.toLowerCase() %>-oauth2
+  namespace: <%= kubernetesNamespace %>
+type: Opaque
+stringData:
+  issuer-uri: "https://keycloak.example.com/realms/myrealm"
+  jwk-set-uri: "https://keycloak.example.com/realms/myrealm/protocol/openid-connect/certs"
+  audience: "<%= app.baseName %>-api"
