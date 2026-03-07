@@ -1,0 +1,8 @@
+spring:
+  cloud:
+    zookeeper:
+      connect-string: ${ZOOKEEPER_ADDR:localhost:2181}
+      discovery:
+        enabled: true
+        instance-host: ${ZOOKEEPER_HOST:localhost}
+        register: true
