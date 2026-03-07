@@ -1845,7 +1845,7 @@ export class UserManagementFormService {
 
     return {
       login: null,
-      activated: false,
+      activated: true,
       createdDate: currentTime,
       lastModifiedDate: currentTime,
     };
