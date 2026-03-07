@@ -31,38 +31,38 @@ import {
 } from './commands';
 
 Cypress.Commands.add('clickOnLoginItem', () => {
-  cy.get(navbarSelector).get(accountMenuSelector).click();
-  return cy.get(navbarSelector).get(accountMenuSelector).get(loginItemSelector).click();
+  cy.get(navbarSelector).find(accountMenuSelector).click();
+  return cy.get(navbarSelector).find(accountMenuSelector).find(loginItemSelector).click();
 });
 
 Cypress.Commands.add('clickOnLogoutItem', () => {
-  cy.get(navbarSelector).get(accountMenuSelector).click();
-  return cy.get(navbarSelector).get(accountMenuSelector).get(logoutItemSelector).click();
+  cy.get(navbarSelector).find(accountMenuSelector).click();
+  return cy.get(navbarSelector).find(accountMenuSelector).find(logoutItemSelector).click();
 });
 
 Cypress.Commands.add('clickOnRegisterItem', () => {
-  cy.get(navbarSelector).get(accountMenuSelector).click();
-  return cy.get(navbarSelector).get(accountMenuSelector).get(registerItemSelector).click();
+  cy.get(navbarSelector).find(accountMenuSelector).click();
+  return cy.get(navbarSelector).find(accountMenuSelector).find(registerItemSelector).click();
 });
 
 Cypress.Commands.add('clickOnSettingsItem', () => {
-  cy.get(navbarSelector).get(accountMenuSelector).click();
-  return cy.get(navbarSelector).get(accountMenuSelector).get(settingsItemSelector).click();
+  cy.get(navbarSelector).find(accountMenuSelector).click();
+  return cy.get(navbarSelector).find(accountMenuSelector).find(settingsItemSelector).click();
 });
 
 Cypress.Commands.add('clickOnPasswordItem', () => {
-  cy.get(navbarSelector).get(accountMenuSelector).click();
-  return cy.get(navbarSelector).get(accountMenuSelector).get(passwordItemSelector).click();
+  cy.get(navbarSelector).find(accountMenuSelector).click();
+  return cy.get(navbarSelector).find(accountMenuSelector).find(passwordItemSelector).click();
 });
 
 Cypress.Commands.add('clickOnAdminMenuItem', (item: string) => {
-  cy.get(navbarSelector).get(adminMenuSelector).click();
-  return cy.get(navbarSelector).get(adminMenuSelector).get(`.dropdown-item[href="/admin/${item}"]`).click();
+  cy.get(navbarSelector).find(adminMenuSelector).click();
+  return cy.get(navbarSelector).find(adminMenuSelector).find(`.dropdown-item[href="/${item}"]`).click();
 });
 
 Cypress.Commands.add('clickOnEntityMenuItem', (entityName: string) => {
-  cy.get(navbarSelector).get(entityItemSelector).click();
-  return cy.get(navbarSelector).get(entityItemSelector).get(`.dropdown-item[href="/${entityName}"]`).click(<% if(clientFrameworkAngular) { %>{ force: true }<% } %>);
+  cy.get(navbarSelector).find(entityItemSelector).click();
+  return cy.get(navbarSelector).find(entityItemSelector).find(`.dropdown-item[href="/${entityName}"]`).click(<% if(clientFrameworkAngular) { %>{ force: true }<% } %>);
 });
 
 declare global {
