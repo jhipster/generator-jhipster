@@ -62,7 +62,11 @@ Cypress.Commands.add('clickOnAdminMenuItem', (item: string) => {
 
 Cypress.Commands.add('clickOnEntityMenuItem', (entityName: string) => {
   cy.get(navbarSelector).find(entityItemSelector).click();
+<%_ if (!applicationTypeMonolith && clientFrameworkAngular) { // Check angular microfrontends for non updated menus _%>
+  return cy.get(navbarSelector).find(entityItemSelector).get(`.dropdown-item[href="/${entityName}"]`).click(<% if(clientFrameworkAngular) { %>{ force: true }<% } %>);
+<%_ } else { _%>
   return cy.get(navbarSelector).find(entityItemSelector).find(`.dropdown-item[href="/${entityName}"]`).click(<% if(clientFrameworkAngular) { %>{ force: true }<% } %>);
+<%_ } _%>
 });
 
 declare global {
