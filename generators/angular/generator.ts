@@ -281,11 +281,11 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             }
             return returnValue;
           },
+          fieldValidateRulesPatternAngular: ({ fieldValidateRulesPattern }) => fieldValidateRulesPattern
+            ?.replace(/\\\\/g, '\\')
+            .replace(/\\/g, '\\\\')
+            .replace(/'/g, "\\'"),
         });
-        field.fieldValidateRulesPatternAngular ??= field.fieldValidateRulesPattern
-          ?.replace(/\\\\/g, '\\')
-          .replace(/\\/g, '\\\\')
-          .replace(/'/g, "\\'");
       },
     });
   }
