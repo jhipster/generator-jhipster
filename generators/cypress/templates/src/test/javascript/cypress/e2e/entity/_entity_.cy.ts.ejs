@@ -157,7 +157,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
 
   it('<%- entityNamePlural %> menu should load <%- entityNamePlural %> page', () => {
     cy.visit('/');
-    cy.clickOn<%= adminEntity ? 'Admin' : 'Entity' %>MenuItem('<%= customUserManagementPages ? 'admin/' : '' %><%= entityPage %>');
+    cy.clickOn<%= adminEntity && applicationTypeMonolith ? 'Admin' : 'Entity' %>MenuItem('<%= customUserManagementPages ? 'admin/' : '' %><%= entityPage %>');
     cy.wait('@entitiesRequest').then(({ response }) => {
       if (response?.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
