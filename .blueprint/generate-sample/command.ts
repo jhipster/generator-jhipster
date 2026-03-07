@@ -40,7 +40,7 @@ const command = {
           gen.entitiesSample = 'document';
         }
       },
-      choices: ['sql', 'sqllight', 'micro', 'sqlfull', 'none', 'neo4j', 'mongodb', 'document', 'cassandra', 'couchbase'],
+      choices: ['sql', 'sqllight', 'micro', 'sqlfull', 'none', 'neo4j', 'mongodb', 'document', 'cassandra', 'couchbase', 'json-clob'],
       scope: 'generator',
     },
     global: {

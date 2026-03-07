@@ -1,0 +1,19 @@
+{
+  "applications": "*",
+  "changelogDate": "20240101000000",
+  "clientRootFolder": "",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "geo_data",
+  "fields": [
+    { "fieldName": "name", "fieldType": "String", "fieldValidateRules": ["required"] },
+    { "fieldName": "geoJson", "fieldType": "byte[]", "fieldTypeBlobContent": "json", "fieldValidateRules": [] }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "GeoData",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "no"
+}
