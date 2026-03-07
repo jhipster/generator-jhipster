@@ -20,7 +20,7 @@ import { ApplicationConfig, LOCALE_ID, importProvidersFrom, inject } from '@angu
 import { Title } from '@angular/platform-browser';
 import { Router, RouterFeatures, TitleStrategy, provideRouter, withComponentInputBinding, withDebugTracing, withNavigationErrorHandler, NavigationError } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { provideHttpClient, withInterceptorsFromDi, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 <%_ if (authenticationTypeJwt) { _%>
 import { authInterceptor } from 'app/core/interceptor/auth.interceptor';
 <%_ } _%>
@@ -66,7 +66,7 @@ export const appConfig: ApplicationConfig = {
 <%_ if (enableTranslation) { _%>
     importProvidersFrom(TranslationModule),
 <%_ } _%>
-    provideHttpClient(withInterceptors([<%_ if (authenticationTypeJwt) { _%>authInterceptor, <%_ } _%>authExpiredInterceptor, errorHandlerInterceptor, notificationInterceptor]), withInterceptorsFromDi()),
+    provideHttpClient(withInterceptors([<%_ if (authenticationTypeJwt) { _%>authInterceptor, <%_ } _%>authExpiredInterceptor, errorHandlerInterceptor, notificationInterceptor])),
     Title,
     { provide: LOCALE_ID, useValue: '<%= angularLocaleId %>' },
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
