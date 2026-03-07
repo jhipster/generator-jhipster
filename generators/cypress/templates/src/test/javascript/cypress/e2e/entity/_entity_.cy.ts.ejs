@@ -327,9 +327,6 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
     const fieldName = field.fieldName;
     const fieldIsEnum = field.fieldIsEnum;
     let fieldValue = !entityFakeData ? field.generateFakeData('cypress') : entityFakeData[field.fieldName];
-    if (customUserManagementPages && (fieldName === 'langKey' || fieldName === 'activated')) {
-      return;
-    }
     if (fieldValue === undefined) {
         return;
     }
