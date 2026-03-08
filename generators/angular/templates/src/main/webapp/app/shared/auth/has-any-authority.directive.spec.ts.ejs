@@ -40,7 +40,6 @@ class TestHasAnyAuthorityDirective {
 }
 
 describe('HasAnyAuthorityDirective tests', () => {
-  let mockAccountService: AccountService;
   let currentAccount: WritableSignal<Account | null>;
   let hasAnyAuthority: Mock;
 
@@ -62,8 +61,6 @@ describe('HasAnyAuthorityDirective tests', () => {
         },
       ],
     });
-
-    mockAccountService = TestBed.inject(AccountService);
   });
 
   describe('set <%= jhiPrefix %>HasAnyAuthority', () => {
