@@ -226,7 +226,6 @@ export function createUserManagementEntity(
     entityAngularName: 'UserManagement',
     entityApiUrl: 'admin/users',
     entityFileName: 'user-management',
-    entityPage: 'user-management',
     ...customUserManagementData,
     adminEntity: true,
     builtInUser: false,
@@ -234,6 +233,10 @@ export function createUserManagementEntity(
     entityRestLayer: true,
     entityTranslationKey: 'userManagement',
   };
+
+  mutateData(userManagement, {
+    entityPage: ({ skipClient }) => (skipClient && !application.clientFrameworkAngular ? 'admin/user-management' : undefined),
+  });
 
   mutateFields(userManagement.fields!, [
     { fieldName: 'login', id: true },

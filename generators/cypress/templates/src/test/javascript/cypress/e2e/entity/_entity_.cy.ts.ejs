@@ -15,7 +15,6 @@ import {
 } from '../../support/entity';
 <%_
 
-const customUserManagementPages = builtInUserManagement && userManagement.skipClient && userManagement.generateEntityCypress;
 const skipUserManagementCreatePage = builtInUserManagement && (!userManagement.skipClient || clientFrameworkReact);
 const baseApi = entityApi + 'api/';
 
@@ -53,7 +52,7 @@ _%>
 
 describe('<%- entityNameCapitalized %> e2e test', () => {
 
-  const <%= entityInstance %>PageUrl = '<%= customUserManagementPages ? '/admin' : '' %>/<%= entityPage %>';
+  const <%= entityInstance %>PageUrl = '/<%= entityPage %>';
   const <%= entityInstance %>PageUrlPattern = new RegExp('/<%= entityPage %>(\\?.*)?$');
   let username: string;
   let password: string;
@@ -157,7 +156,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
 
   it('<%- entityNamePlural %> menu should load <%- entityNamePlural %> page', () => {
     cy.visit('/');
-    cy.clickOn<%= adminEntity && !applicationTypeMicroservice ? 'Admin' : 'Entity' %>MenuItem('<%= customUserManagementPages ? 'admin/' : '' %><%= entityPage %>');
+    cy.clickOn<%= adminEntity && !applicationTypeMicroservice ? 'Admin' : 'Entity' %>MenuItem('<%= entityPage %>');
     cy.wait('@entitiesRequest').then(({ response }) => {
       if (response?.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
@@ -327,9 +326,6 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
     const fieldName = field.fieldName;
     const fieldIsEnum = field.fieldIsEnum;
     let fieldValue = !entityFakeData ? field.generateFakeData('cypress') : entityFakeData[field.fieldName];
-    if (customUserManagementPages && (fieldName === 'langKey' || fieldName === 'activated')) {
-      return;
-    }
     if (fieldValue === undefined) {
         return;
     }
