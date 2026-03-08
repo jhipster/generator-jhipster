@@ -166,7 +166,7 @@ describe('<%= entityAngularName %> Management Update Component', () => {
             expect(comp.<% if (!relationshipsWithCustomUniqueOptions.includes(relationship)) { %><%= otherEntity.entityInstancePlural %>Shared<% } else { %><%= relationship.relationshipFieldNamePlural %><% } %>Collection()).toContainEqual(<%= relationship.relationshipName %>);
   <%_ } _%>
 <%_ } _%>
-            expect(comp.<%= entityInstance %>).toEqual(<%= entityInstance %>);
+            expect(comp.<%= entityInstance %>()).toEqual(<%= entityInstance %>);
         });
     });
 

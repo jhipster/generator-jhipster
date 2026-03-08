@@ -22,7 +22,7 @@
     .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
     .filter(relationships => relationships.length > 0);
 _%>
-import { Component, inject, signal, OnInit<% if (anyFieldHasImageContentType) { %>, ElementRef<% } %> } from '@angular/core';
+import { Component, effect, inject, signal, OnInit<% if (anyFieldHasImageContentType) { %>, ElementRef<% } %> } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -80,7 +80,7 @@ TranslateDirective, TranslateModule,<%_ } _%>FontAwesomeModule, AlertError, Reac
 })
 export class <%= entityAngularName %>Update implements OnInit {
     readonly isSaving = signal(false);
-    <%= entityInstance %>: I<%= entityAngularName %> | null = null;
+    readonly <%= entityInstance %> = signal<I<%= entityAngularName %> | null>(null);
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
     <%- this._.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
 <%_ }); _%>
@@ -127,9 +127,9 @@ _%>
         this.<%= otherEntity.entityInstance %>Service.compare<%= otherEntity.entityAngularName %>(o1, o2);
 <%_ } _%>
 
-    ngOnInit(): void {
-        this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => {
-            this.<%= entityInstance %> = <%= entityInstance %>;
+    constructor() {
+        effect(() => {
+            const <%= entityInstance %> = this.<%= entityInstance %>();
             if (<%= entityInstance %>) {
                 this.updateForm(<%= entityInstance %>);
             }
@@ -137,6 +137,12 @@ _%>
 <%_ if (relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded).length > 0) { _%>
             this.loadRelationshipsOptions();
 <%_ } _%>
+        });
+    }
+
+    ngOnInit(): void {
+        this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => {
+            this.<%= entityInstance %>.set(<%= entityInstance %>);
         });
     }
 
@@ -218,12 +224,14 @@ _%>
     <%_ const relationshipsWithCustomSharedOptions = relationshipsByEntityNeedingOptions.filter(rel => !relationshipsWithCustomUniqueOptions.includes(rel)); _%>
     <%_ if (relationshipsWithCustomSharedOptions.length > 0) { _%>
       <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity _%>
-        this.<%= otherEntity.entityInstancePlural %>SharedCollection.set(this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing<I<%= otherEntity.entityAngularName %>>(
-            this.<%= otherEntity.entityInstancePlural %>SharedCollection(),
+        this.<%= otherEntity.entityInstancePlural %>SharedCollection.update(<%= otherEntity.entityInstance %> =>
+            this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing<I<%= otherEntity.entityAngularName %>>(
+              <%= otherEntity.entityInstance %>,
       <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
-            <%= relationship.collection ? '...(' : '' %><%= entityInstance %>.<%= relationship.propertyName %><%= relationship.collection ? ' ?? [])' : '' %>,
+              <%= relationship.collection ? '...(' : '' %><%= entityInstance %>.<%= relationship.propertyName %><%= relationship.collection ? ' ?? [])' : '' %>,
       <%_ } _%>
-        ));
+            ),
+        );
     <%_ } _%>
     <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { _%>
       <%_ const otherEntity = relationship.otherEntity _%>
