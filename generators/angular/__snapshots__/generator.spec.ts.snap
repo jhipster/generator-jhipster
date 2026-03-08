@@ -850,15 +850,11 @@ export class UserManagement implements OnInit {
       }
     });
     effect(() => {
-      if (this.userManagementService.userManagementsResource.hasValue()) {
-        this.userManagements.set(
-          this.fillComponentAttributesFromResponseBody([
-            ...this.userManagementService.userManagements(),
-          ]),
-        );
-      } else {
-        this.userManagements.set([]);
-      }
+      this.userManagements.set(
+        this.fillComponentAttributesFromResponseBody([
+          ...this.userManagementService.userManagements(),
+        ]),
+      );
     });
   }
 
@@ -1434,10 +1430,15 @@ export class UserManagementsService {
     }
     return { url: this.resourceUrl, params };
   });
+  /**
+   * This signal holds the list of userManagement that have been fetched. It is updated when the userManagementsResource emits a new value.
+   * In case of error while fetching the userManagements, the signal is set to an empty array.
+   */
   readonly userManagements = computed(() =>
-    (this.userManagementsResource.value() ?? []).map((item) =>
-      this.convertValueFromServer(item),
-    ),
+    (this.userManagementsResource.hasValue()
+      ? this.userManagementsResource.value()
+      : []
+    ).map((item) => this.convertValueFromServer(item)),
   );
   protected readonly applicationConfigService = inject(
     ApplicationConfigService,
