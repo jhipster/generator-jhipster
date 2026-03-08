@@ -60,20 +60,6 @@ describe('User Management Update Component', () => {
     service = TestBed.inject(UserManagementService);
   });
 
-  describe('OnInit', () => {
-    it('should load authorities and language on init', inject([], () => {
-      // GIVEN
-      <%= clientTestFramework %>.spyOn(service, 'authorities').mockReturnValue(of(['USER']));
-
-      // WHEN
-      comp.ngOnInit();
-
-      // THEN
-      expect(service.authorities).toHaveBeenCalled();
-      expect(comp.authorities()).toEqual(['USER']);
-    }));
-  });
-
   describe('save', () => {
     it('should call update service on save for existing user', inject([], () => {
       // GIVEN

@@ -28,7 +28,11 @@ import { LANGUAGES } from 'app/config/language.constants';
 <%_ } _%>
 import { AlertError } from 'app/shared/alert/alert-error';
 import { FindLanguageFromKeyPipe, TranslateDirective } from 'app/shared/language';
+<%_ if (generateBuiltInAuthorityEntity) { _%>
 import { AuthoritiesService } from '../../authority/service/authority.service';
+<%_ } else { _%>
+import { Authority } from 'app/shared/jhipster/constants';
+<%_ } _%>
 import { LANGUAGES } from 'app/config/language.constants';
 import { UserManagementService } from '../service/user-management.service';
 import { IUserManagement } from '../user-management.model';
@@ -52,6 +56,9 @@ export class UserManagementUpdate implements OnInit {
   languages = LANGUAGES;
 <%_ } _%>
   readonly isSaving = signal(false);
+<%_ if (!generateBuiltInAuthorityEntity) { _%>
+  readonly authorities = signal([Authority.ADMIN, Authority.USER]);
+<%_ } _%>
 
   editForm = new FormGroup({
     id: new FormControl(userTemplate.id),
@@ -77,15 +84,19 @@ export class UserManagementUpdate implements OnInit {
     authorities: new FormControl(userTemplate.authorities, { nonNullable: true }),
   });
 
+<%_ if (generateBuiltInAuthorityEntity) { _%>
   protected readonly authoritiesService = inject(AuthoritiesService);
   // eslint-disable-next-line @typescript-eslint/member-ordering
   readonly authorities = computed(() => this.authoritiesService.authorities().map(authority => authority.name));
+<%_ } _%>
   private readonly userService = inject(UserManagementService);
   private readonly route = inject(ActivatedRoute);
+<%_ if (generateBuiltInAuthorityEntity) { _%>
 
   constructor() {
     this.authoritiesService.authoritiesParams.set({});
   }
+<%_ } _%>
 
   ngOnInit(): void {
     this.route.data.subscribe(({ userManagement }) => {
