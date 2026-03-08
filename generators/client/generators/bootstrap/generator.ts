@@ -130,7 +130,7 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
       securityHardening({ application }) {
         for (const [key, value] of Object.entries(application)) {
           if (typeof value === 'string' && !key.startsWith('java')) {
-            (application as any)[key] = value.replace(/\${/g, '') as any;
+            (application as any)[key] = value.replace(/\$\{(?![\w.-]+\})/g, '') as any;
           }
         }
       },
@@ -148,7 +148,7 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
           for (const object of [entity, ...(entity.fields ?? []), ...(entity.relationships ?? []), entity.primaryKey].filter(Boolean)) {
             for (const [key, value] of Object.entries(object as any)) {
               if (typeof value === 'string' && !key.startsWith('java')) {
-                (object as any)[key] = value.replace(/\${/g, '') as any;
+                (object as any)[key] = value.replace(/\$\{(?![\w.-]+\})/g, '') as any;
               }
             }
           }
