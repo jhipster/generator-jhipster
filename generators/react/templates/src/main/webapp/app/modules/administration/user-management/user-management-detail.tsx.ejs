@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import React, { useEffect } from 'react';
+import React, { Activity, useEffect } from 'react';
 import { Link, useParams } from 'react-router';
 import { Button, Row, Badge } from 'react-bootstrap';
 import { Translate, TextFormat } from 'react-jhipster';
@@ -70,11 +70,19 @@ export const UserManagementDetail = () => {
           <dt><Translate contentKey="userManagement.createdBy">Created By</Translate></dt>
           <dd>{user.createdBy}</dd>
           <dt><Translate contentKey="userManagement.createdDate">Created Date</Translate></dt>
-          <dd>{user.createdDate && <TextFormat value={user.createdDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid />}</dd>
+          <dd>
+            <Activity mode={user.createdDate ? 'visible' : 'hidden'}>
+              <TextFormat value={user.createdDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid />
+            </Activity>
+          </dd>
           <dt><Translate contentKey="userManagement.lastModifiedBy">Last Modified By</Translate></dt>
           <dd>{user.lastModifiedBy}</dd>
           <dt><Translate contentKey="userManagement.lastModifiedDate">Last Modified Date</Translate></dt>
-          <dd>{user.lastModifiedDate && <TextFormat value={user.lastModifiedDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid />}</dd>
+          <dd>
+            <Activity mode={user.lastModifiedDate ? 'visible' : 'hidden'}>
+              <TextFormat value={user.lastModifiedDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid />
+            </Activity>
+          </dd>
           <dt><Translate contentKey="userManagement.profiles">Profiles</Translate></dt>
           <dd>
             <ul className="list-unstyled">

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import React from 'react';
+import React, { Activity } from 'react';
 import { Translate, translate, ValidatedField } from 'react-jhipster';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert, Row, Col, Form } from 'react-bootstrap';
 import { Link } from 'react-router';
@@ -53,13 +53,13 @@ const LoginModal = (props: ILoginModalProps) => {
           <ModalBody>
             <Row>
               <Col md="12">
-                { loginError &&
+                <Activity mode={loginError ? 'visible' : 'hidden'}>
                   <Alert variant="danger" data-cy="loginError">
                     <Translate contentKey="login.messages.error.authentication">
                       <strong>Failed to sign in!</strong> Please check your credentials and try again.
                     </Translate>
                   </Alert>
-                }
+                </Activity>
               </Col>
               <Col md="12">
                 <ValidatedField

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import React, { useState, useEffect } from 'react';
+import React, { Activity, useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { Button, Table, Badge } from 'react-bootstrap';
 import {
@@ -194,13 +194,15 @@ export const UserManagement = () => {
               </td>
 <%_ if (!databaseTypeCassandra) { _%>
               <td>
-                {user.createdDate && <TextFormat value={user.createdDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid />}
+                <Activity mode={user.createdDate ? 'visible' : 'hidden'}>
+                  <TextFormat value={user.createdDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid />
+                </Activity>
               </td>
               <td>{user.lastModifiedBy}</td>
               <td>
-                {user.lastModifiedDate && (
+                <Activity mode={user.lastModifiedDate ? 'visible' : 'hidden'}>
                   <TextFormat value={user.lastModifiedDate} type="date" format={APP_DATE_FORMAT} blankOnInvalid />
-                )}
+                </Activity>
               </td>
 <%_ } _%>
               <td className="text-end">

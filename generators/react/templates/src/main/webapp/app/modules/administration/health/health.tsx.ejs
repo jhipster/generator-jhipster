@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import React, { useState, useEffect } from 'react';
+import React, { Activity, useState, useEffect } from 'react';
 import { Translate } from 'react-jhipster';
 import { Table, Badge, Col, Row, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -96,11 +96,11 @@ export const HealthPage = () => {
                       <Badge bg={getBadgeType(data[configPropKey].status)}>{data[configPropKey].status}</Badge>
                     </td>
                     <td>
-                      {data[configPropKey].details && (
+                      <Activity mode={data[configPropKey].details ? 'visible' : 'hidden'}>
                         <a onClick={getSystemHealthInfo(configPropKey, data[configPropKey])}>
                           <FontAwesomeIcon icon={faEye} />
                         </a>
-                      )}
+                      </Activity>
                     </td>
                   </tr>
                 ),
