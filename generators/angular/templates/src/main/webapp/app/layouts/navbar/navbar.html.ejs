@@ -31,7 +31,7 @@
     aria-controls="navbarResponsive"
     aria-expanded="false"
     aria-label="Toggle navigation"
-    (click)="toggleNavbar()"
+    (click)="isNavbarCollapsed.update(isNavbarCollapsed => !isNavbarCollapsed)"
   >
     <fa-icon icon="bars" />
   </a>
