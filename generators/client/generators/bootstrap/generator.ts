@@ -124,4 +124,40 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
   get [ClientApplicationGenerator.DEFAULT]() {
     return this.default;
   }
+
+  get writing() {
+    return this.asWritingTaskGroup({
+      securityHardening({ application }) {
+        for (const [key, value] of Object.entries(application)) {
+          if (typeof value === 'string' && !key.startsWith('java')) {
+            (application as any)[key] = value.replace(/\${/g, '') as any;
+          }
+        }
+      },
+    });
+  }
+
+  get [ClientApplicationGenerator.WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.writing);
+  }
+
+  get writingEntities() {
+    return this.asWritingEntitiesTaskGroup({
+      securityHardening({ entities }) {
+        for (const entity of entities) {
+          for (const object of [entity, ...(entity.fields ?? []), ...(entity.relationships ?? []), entity.primaryKey].filter(Boolean)) {
+            for (const [key, value] of Object.entries(object as any)) {
+              if (typeof value === 'string' && !key.startsWith('java')) {
+                (object as any)[key] = value.replace(/\${/g, '') as any;
+              }
+            }
+          }
+        }
+      },
+    });
+  }
+
+  get [ClientApplicationGenerator.WRITING_ENTITIES]() {
+    return this.delegateTasksToBlueprint(() => this.writingEntities);
+  }
 }
