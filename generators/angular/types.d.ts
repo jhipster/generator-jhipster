@@ -28,6 +28,7 @@ export type { Config, Options, Relationship, Source } from '../client/types.d.ts
 export type Field = ClientField & {
   fieldTsDefaultValue?: string;
   defaultValue?: string;
+  fieldValidateRulesPatternAngular?: string;
 };
 
 export interface Entity<F extends Field = Field, R extends ClientRelationship = ClientRelationship> extends ClientEntity<F, R> {
