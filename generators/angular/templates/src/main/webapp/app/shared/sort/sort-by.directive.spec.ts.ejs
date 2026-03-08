@@ -48,7 +48,7 @@ class TestSortByDirective {
   sortState = sortStateSignal({ predicate: 'name' });
   transition = <%= clientTestFramework %>.fn();
 
-  private library = inject(FaIconLibrary);
+  private readonly library = inject(FaIconLibrary);
 
   constructor() {
     this.library.addIconPacks(fas);
