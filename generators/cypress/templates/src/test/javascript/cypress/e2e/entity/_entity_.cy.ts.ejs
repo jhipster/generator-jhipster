@@ -157,7 +157,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
 
   it('<%- entityNamePlural %> menu should load <%- entityNamePlural %> page', () => {
     cy.visit('/');
-    cy.clickOn<%= customUserManagementPages ? 'Admin' : 'Entity' %>MenuItem('<%= entityPage %>');
+    cy.clickOn<%= adminEntity && !applicationTypeMicroservice ? 'Admin' : 'Entity' %>MenuItem('<%= customUserManagementPages ? 'admin/' : '' %><%= entityPage %>');
     cy.wait('@entitiesRequest').then(({ response }) => {
       if (response?.body.length === 0) {
         cy.get(entityTableSelector).should('not.exist');
@@ -337,9 +337,9 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
   _%>
 
     <%_ if (field.fieldTypeBoolean) { _%>
-      cy.get(`[data-cy="<%= fieldName %>"]`).should('not.be.checked');
+      cy.get(`[data-cy="<%= fieldName %>"]`).should('<%- field.fieldTsDefaultValue === 'true' ? '' : 'not.' %>be.checked');
       cy.get(`[data-cy="<%= fieldName %>"]`).click();
-      cy.get(`[data-cy="<%= fieldName %>"]`).should('be.checked');
+      cy.get(`[data-cy="<%= fieldName %>"]`).should('<%- field.fieldTsDefaultValue === 'true' ? 'not.' : '' %>be.checked');
 
     <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
       cy.setFieldImageAsBytesOfEntity('<%= fieldName %>', 'integration-test.png', 'image/png');

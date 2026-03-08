@@ -167,6 +167,7 @@ export function createUserEntity(
       fieldType: TYPE_BOOLEAN,
       builtIn: true,
       autoGenerate: true,
+      defaultValue: true,
     },
   ] as BaseApplicationField[]);
 
