@@ -145,9 +145,6 @@ export default class Navbar implements OnInit {
     this.router.navigate(['']);
   }
 
-  toggleNavbar(): void {
-    this.isNavbarCollapsed.update(isNavbarCollapsed => !isNavbarCollapsed);
-  }
 <%_ if (applicationTypeGateway && microfrontend) { _%>
 
   loadMicrofrontendsEntities(): void {
