@@ -1744,7 +1744,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
     "entityNamePluralHumanized": "User Managements",
     "entityNamePluralizedAndSpinalCased": "user-managements",
     "entityPackage": undefined,
-    "entityPage": "user-management",
+    "entityPage": undefined,
     "entityPersistenceLayer": false,
     "entityReadAuthority": undefined,
     "entityRestLayer": true,
