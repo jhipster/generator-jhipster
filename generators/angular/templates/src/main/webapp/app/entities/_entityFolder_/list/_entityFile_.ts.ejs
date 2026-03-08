@@ -187,13 +187,11 @@ export class <%= componentName %> implements OnInit {
     });
 <%_ } _%>
     effect(() => {
-      if (this.<%- entityInstance %>Service.<%- entityInstancePlural %>Resource.hasValue()) {
-        this.<%- entityInstancePlural %>.<% if (paginationInfiniteScroll) { %>update(<%- entityInstancePlural %> => <% } else { %>set(<% } %>this.fillComponentAttributesFromResponseBody([...this.<%- entityInstance %>Service.<%- entityInstancePlural %>()]<% if (paginationInfiniteScroll) { %>, <%- entityInstancePlural %><% } %>));
-<%_ if (!paginationInfiniteScroll) { _%>
-      } else {
-        this.<%- entityInstancePlural %>.set([]);
+<%_ if (paginationInfiniteScroll) { _%>
+      this.<%- entityInstancePlural %>.update(<%- entityInstancePlural %> => this.fillComponentAttributesFromResponseBody([...this.<%- entityInstance %>Service.<%- entityInstancePlural %>()], <%- entityInstancePlural %>));
+<%_ } else { _%>
+      this.<%- entityInstancePlural %>.set(this.fillComponentAttributesFromResponseBody([...this.<%- entityInstance %>Service.<%- entityInstancePlural %>()]));
 <%_ } _%>
-      }
     });
 <% if (jpaMetamodelFiltering && paginationPagination) { %>
 
