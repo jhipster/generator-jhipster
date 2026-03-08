@@ -169,8 +169,8 @@ export class <%- entityAngularName %>Service extends <%- entityAngularNamePlural
     }
 
 <%_ if (!readOnly) { _%>
-    delete(<%= primaryKey.name %>: <%= tsKeyType %>): Observable<undefined> {
-        return this.http.delete<undefined>(`${this.resourceUrl}/${encodeURIComponent(<%= primaryKey.name %>)}`);
+    delete(<%= primaryKey.name %>: <%= tsKeyType %>): Observable<{}> {
+        return this.http.delete<{}>(`${this.resourceUrl}/${encodeURIComponent(<%= primaryKey.name %>)}`);
     }
 
 <%_ } _%>

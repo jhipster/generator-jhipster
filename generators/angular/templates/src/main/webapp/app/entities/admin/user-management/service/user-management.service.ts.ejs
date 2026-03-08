@@ -56,8 +56,8 @@ export class UserManagementService {
   }
 
 <%_ if (generateUserManagement) { _%>
-  delete(login: string): Observable<undefined> {
-    return this.http.delete<undefined>(`${this.resourceUrl}/${encodeURIComponent(login)}`);
+  delete(login: string): Observable<{}> {
+    return this.http.delete<{}>(`${this.resourceUrl}/${encodeURIComponent(login)}`);
   }
 
   authorities(): Observable<string[]> {

@@ -72,7 +72,7 @@ describe("UserManagement Management Delete Component", () => {
   describe("confirmDelete", () => {
     it("should call delete service on confirmDelete", () => {
       // GIVEN
-      vitest.spyOn(service, "delete").mockReturnValue(of(undefined));
+      vitest.spyOn(service, "delete").mockReturnValue(of({}));
       vitest.spyOn(mockActiveModal, "close");
 
       // WHEN
@@ -1517,8 +1517,8 @@ export class UserManagementService extends UserManagementsService {
       );
   }
 
-  delete(login: string): Observable<undefined> {
-    return this.http.delete<undefined>(
+  delete(login: string): Observable<{}> {
+    return this.http.delete<{}>(
       \`\${this.resourceUrl}/\${encodeURIComponent(login)}\`,
     );
   }

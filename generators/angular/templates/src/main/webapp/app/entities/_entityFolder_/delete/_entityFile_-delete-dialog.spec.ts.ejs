@@ -50,7 +50,7 @@ describe('<%= entityAngularName %> Management Delete Component', () => {
   describe('confirmDelete', () => {
     it('should call delete service on confirmDelete', () => {
       // GIVEN
-      <%= clientTestFramework %>.spyOn(service, 'delete').mockReturnValue(of(undefined));
+      <%= clientTestFramework %>.spyOn(service, 'delete').mockReturnValue(of({}));
       <%= clientTestFramework %>.spyOn(mockActiveModal, 'close');
 
       // WHEN
