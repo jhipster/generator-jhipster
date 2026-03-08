@@ -16,19 +16,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { AlertError } from 'app/shared/alert/alert-error';
 <%_ if (enableTranslation) { _%>
-import { FindLanguageFromKeyPipe, TranslateDirective } from 'app/shared/language';
 import { TranslateModule } from '@ngx-translate/core';
+
 import { LANGUAGES } from 'app/config/language.constants';
 <%_ } _%>
-import { IUserManagement } from '../user-management.model';
+import { AlertError } from 'app/shared/alert/alert-error';
+import { FindLanguageFromKeyPipe, TranslateDirective } from 'app/shared/language';
+import { AuthoritiesService } from '../../authority/service/authority.service';
+import { LANGUAGES } from 'app/config/language.constants';
 import { UserManagementService } from '../service/user-management.service';
+import { IUserManagement } from '../user-management.model';
 
 const userTemplate = {} as IUserManagement;
 
@@ -48,7 +51,6 @@ export class UserManagementUpdate implements OnInit {
 <%_ if (enableTranslation) { _%>
   languages = LANGUAGES;
 <%_ } _%>
-  readonly authorities = signal<string[]>([]);
   readonly isSaving = signal(false);
 
   editForm = new FormGroup({
@@ -75,8 +77,15 @@ export class UserManagementUpdate implements OnInit {
     authorities: new FormControl(userTemplate.authorities, { nonNullable: true }),
   });
 
+  protected readonly authoritiesService = inject(AuthoritiesService);
+  // eslint-disable-next-line @typescript-eslint/member-ordering
+  readonly authorities = computed(() => this.authoritiesService.authorities().map(authority => authority.name));
   private readonly userService = inject(UserManagementService);
   private readonly route = inject(ActivatedRoute);
+
+  constructor() {
+    this.authoritiesService.authoritiesParams.set({});
+  }
 
   ngOnInit(): void {
     this.route.data.subscribe(({ userManagement }) => {
@@ -86,7 +95,6 @@ export class UserManagementUpdate implements OnInit {
         this.editForm.reset(newUser);
       }
     });
-    this.userService.authorities().subscribe(authorities => this.authorities.set(authorities));
   }
 
   previousState(): void {
