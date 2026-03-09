@@ -153,7 +153,7 @@ export default class VueGenerator extends ClientApplicationGenerator {
               entityFileName,
               entityNameHumanized,
               entityPage,
-              entityTranslationKeyMenu,
+              entityTranslationKeyMenuPath,
               entityAngularName,
               readOnly,
             } = entity;
@@ -227,7 +227,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
                 needle: 'add-entity-to-menu',
                 contentToAdd: `<b-dropdown-item to="/${entityPage}">
   <font-awesome-icon icon="asterisk" />
-  <span>${enableTranslation ? `{{ $t('global.menu.entities.${entityTranslationKeyMenu}') }}` : entityNameHumanized}</span>
+  <span>${enableTranslation ? `{{ $t('${entityTranslationKeyMenuPath}') }}` : entityNameHumanized}</span>
 </b-dropdown-item>`,
                 contentToCheck: `<b-dropdown-item to="/${entityPage}">`,
               }),

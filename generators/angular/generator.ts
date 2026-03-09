@@ -163,7 +163,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
   route: '/${entity.entityPage}',${
     application.enableTranslation
       ? `
-  translationKey: 'global.menu.entities.${entity.entityTranslationKey}',`
+  translationKey: '${entity.entityTranslationKeyMenuPath}',`
       : ''
   }
   },`,
