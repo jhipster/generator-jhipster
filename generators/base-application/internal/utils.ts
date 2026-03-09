@@ -231,6 +231,7 @@ export function createUserManagementEntity(
     builtInUser: false,
     builtInUserManagement: true,
     entityRestLayer: true,
+    entityTranslationKeyMenuPath: 'userManagement.home.title',
     entityTranslationKey: 'userManagement',
   };
 

@@ -147,7 +147,7 @@ ${comment}
               entityFileName,
               entityPage,
               entityUrl,
-              entityTranslationKeyMenu,
+              entityTranslationKeyMenuPath,
               entityNameHumanized,
             } = entity;
 
@@ -156,7 +156,7 @@ ${comment}
               createNeedleCallback({
                 needle: 'add-entity-to-menu',
                 contentToAdd: `<MenuItem icon="asterisk" to="/${entityPage}">
-  ${application.enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${entityNameHumanized}`}
+  ${application.enableTranslation ? `<Translate contentKey="${entityTranslationKeyMenuPath}" />` : `${entityNameHumanized}`}
 </MenuItem>`,
               }),
             );
