@@ -76,6 +76,7 @@ describe(`generator - ${generator}`, () => {
         [
           {
             name: 'Foo',
+            // eslint-disable-next-line no-template-curly-in-string
             annotations: { entityProperty: '${foo}' },
             fields: [{ fieldName: 'myField', fieldType: 'String' }],
           },
@@ -84,7 +85,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should strip ${ from entity properties', () => {
-      expect(runResult.entities?.['Foo']?.entityProperty).not.toContain('${');
+      expect(runResult.entities?.Foo?.entityProperty).not.toContain('${');
     });
   });
 });
