@@ -93,7 +93,11 @@ export class <%- entityAngularNamePlural %>Service {
     }
     return { url: <% if (searchEngineAny) { %>params.query ? this.resourceSearchUrl : <% } %>this.resourceUrl, params };
   });
-  readonly <%- entityInstancePlural %> = computed(() => (this.<%- entityInstancePlural %>Resource.value() ?? [])
+  /**
+   * This signal holds the list of <%- entityInstance %> that have been fetched. It is updated when the <%- entityInstancePlural %>Resource emits a new value.
+   * In case of error while fetching the <%- entityInstancePlural %>, the signal is set to an empty array.
+   */
+  readonly <%- entityInstancePlural %> = computed(() => (this.<%- entityInstancePlural %>Resource.hasValue() ? this.<%- entityInstancePlural %>Resource.value() : [])
     <% if (requiresRestTypeConversion) { %>.map(item => this.convertValueFromServer(item))<% } %>
   );
   protected readonly applicationConfigService = inject(ApplicationConfigService);

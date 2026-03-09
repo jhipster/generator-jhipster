@@ -19,15 +19,12 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 
-import { Observable, map<% if (generateUserManagement && !generateBuiltInAuthorityEntity) { %>, of<% } %> } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { Pagination } from 'app/core/request/request.model';
 import { IUserManagement } from '../user-management.model';
-<%_ if (generateUserManagement && !generateBuiltInAuthorityEntity) { _%>
-import { Authority } from 'app/shared/jhipster/constants';
-<%_ } _%>
 
 @Injectable({ providedIn: 'root' })
 export class UserManagementService {
@@ -54,20 +51,10 @@ export class UserManagementService {
     const options = createRequestOption(req);
     return this.http.get<IUserManagement[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
-
 <%_ if (generateUserManagement) { _%>
+
   delete(login: string): Observable<undefined> {
     return this.http.delete<undefined>(`${this.resourceUrl}/${encodeURIComponent(login)}`);
-  }
-
-  authorities(): Observable<string[]> {
-  <%_ if (generateBuiltInAuthorityEntity) { _%>
-    return this.http
-      .get<{ name: string }[]>(this.applicationConfigService.getEndpointFor('api/authorities'))
-      .pipe(map(authorities => authorities.map(a => a.name)));
-  <%_ } else { _%>
-    return of([Authority.ADMIN, Authority.USER]);
-  <%_ } _%>
   }
 <%_ } _%>
 }
