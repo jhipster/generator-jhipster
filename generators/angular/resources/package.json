@@ -16,8 +16,8 @@
     "tslib": "2.8.1"
   },
   "devDependencies": {
-    "@angular-architects/module-federation": "21.2.0",
-    "@angular-architects/module-federation-runtime": "21.2.0",
+    "@angular-architects/module-federation": "21.2.1",
+    "@angular-architects/module-federation-runtime": "21.2.1",
     "@angular-builders/custom-esbuild": "21.0.3",
     "@angular-builders/custom-webpack": "21.0.3",
     "@angular/build": "21.2.1",
