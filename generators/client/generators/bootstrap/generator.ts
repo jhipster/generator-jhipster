@@ -118,40 +118,31 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
           await preparePostEntityClientDerivedProperties(entity);
         }
       },
-    });
-  }
-
-  get [ClientApplicationGenerator.DEFAULT]() {
-    return this.default;
-  }
-
-  get writing() {
-    return this.asWritingTaskGroup({
-      securityHardening({ application }) {
-        for (const [key, value] of Object.entries(application)) {
-          const descriptor = Object.getOwnPropertyDescriptor(application, key);
-          if (typeof value === 'string' && !key.startsWith('java') && descriptor?.writable) {
-            (application as any)[key] = value.replace(/\${/g, '') as any;
-          }
-        }
-      },
-    });
-  }
-
-  get [ClientApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
-  }
-
-  get writingEntities() {
-    return this.asWritingEntitiesTaskGroup({
       securityHardening({ entities }) {
+        const stripTemplateLiteral = (value: unknown) => (typeof value === 'string' ? value.replace(/\$\{[^}]*\}/g, '') : value);
+        const sanitizeKeys = (object: any, keys: string[]) => {
+          for (const key of keys) {
+            if (typeof object[key] === 'string') {
+              object[key] = stripTemplateLiteral(object[key]);
+            }
+          }
+        };
         for (const entity of entities) {
-          for (const object of [entity, ...(entity.fields ?? []), ...(entity.relationships ?? []), entity.primaryKey].filter(Boolean)) {
-            for (const [key, value] of Object.entries(object as any)) {
-              const descriptor = Object.getOwnPropertyDescriptor(object, key);
-              if (typeof value === 'string' && !key.startsWith('java') && descriptor?.writable) {
-                (object as any)[key] = value.replace(/\${/g, '') as any;
-              }
+          // Sanitize user-controlled annotation properties spread onto the entity
+          if (entity.annotations) {
+            sanitizeKeys(entity, Object.keys(entity.annotations));
+          }
+          for (const field of entity.fields ?? []) {
+            // Sanitize user-controlled option properties spread onto the field
+            if (field.options) {
+              sanitizeKeys(field, Object.keys(field.options));
+            }
+            // Sanitize the validation pattern and its framework-specific derivatives
+            sanitizeKeys(field, ['fieldValidateRulesPattern', 'fieldValidateRulesPatternAngular', 'fieldValidateRulesPatternReact']);
+          }
+          for (const relationship of entity.relationships ?? []) {
+            if (relationship.options) {
+              sanitizeKeys(relationship, Object.keys(relationship.options));
             }
           }
         }
@@ -159,7 +150,7 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
     });
   }
 
-  get [ClientApplicationGenerator.WRITING_ENTITIES]() {
-    return this.delegateTasksToBlueprint(() => this.writingEntities);
+  get [ClientApplicationGenerator.DEFAULT]() {
+    return this.default;
   }
 }
