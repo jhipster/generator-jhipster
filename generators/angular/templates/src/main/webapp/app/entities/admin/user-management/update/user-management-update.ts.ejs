@@ -29,7 +29,7 @@ import { LANGUAGES } from 'app/config/language.constants';
 import { AlertError } from 'app/shared/alert/alert-error';
 import { FindLanguageFromKeyPipe, TranslateDirective } from 'app/shared/language';
 <%_ if (generateBuiltInAuthorityEntity) { _%>
-import { AuthoritiesService } from '../../authority/service/authority.service';
+import { AuthorityService } from '../../authority/service/authority.service';
 <%_ } else { _%>
 import { Authority } from 'app/shared/jhipster/constants';
 <%_ } _%>
@@ -85,16 +85,16 @@ export class UserManagementUpdate implements OnInit {
   });
 
 <%_ if (generateBuiltInAuthorityEntity) { _%>
-  protected readonly authoritiesService = inject(AuthoritiesService);
+  protected readonly authorityService = inject(AuthorityService);
   // eslint-disable-next-line @typescript-eslint/member-ordering
-  readonly authorities = computed(() => this.authoritiesService.authorities().map(authority => authority.name));
+  readonly authorities = computed(() => this.authorityService.authorities().map(authority => authority.name));
 <%_ } _%>
   private readonly userService = inject(UserManagementService);
   private readonly route = inject(ActivatedRoute);
 <%_ if (generateBuiltInAuthorityEntity) { _%>
 
   constructor() {
-    this.authoritiesService.authoritiesParams.set({});
+    this.authorityService.authoritiesParams.set({});
   }
 <%_ } _%>
 
