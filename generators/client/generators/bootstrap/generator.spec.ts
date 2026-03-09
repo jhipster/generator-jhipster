@@ -65,4 +65,26 @@ describe(`generator - ${generator}`, () => {
   });
 
   testBootstrapEntities(generator);
+
+  describe('security hardening', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig(
+        {
+          skipServer: true,
+          skipUserManagement: true,
+        },
+        [
+          {
+            name: 'Foo',
+            annotations: { entityProperty: '${foo}' },
+            fields: [{ fieldName: 'myField', fieldType: 'String' }],
+          },
+        ],
+      );
+    });
+
+    it('should strip ${ from entity properties', () => {
+      expect(runResult.entities?.['Foo']?.entityProperty).not.toContain('${');
+    });
+  });
 });

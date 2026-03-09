@@ -131,7 +131,7 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
         for (const [key, value] of Object.entries(application)) {
           const descriptor = Object.getOwnPropertyDescriptor(application, key);
           if (typeof value === 'string' && !key.startsWith('java') && descriptor?.writable) {
-            (application as any)[key] = value.replace(/\$\{(?![\w.-]+\})/g, '') as any;
+            (application as any)[key] = value.replace(/\${/g, '') as any;
           }
         }
       },
@@ -150,7 +150,7 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
             for (const [key, value] of Object.entries(object as any)) {
               const descriptor = Object.getOwnPropertyDescriptor(object, key);
               if (typeof value === 'string' && !key.startsWith('java') && descriptor?.writable) {
-                (object as any)[key] = value.replace(/\$\{(?![\w.-]+\})/g, '') as any;
+                (object as any)[key] = value.replace(/\${/g, '') as any;
               }
             }
           }
