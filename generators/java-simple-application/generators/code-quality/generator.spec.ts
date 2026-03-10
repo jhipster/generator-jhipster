@@ -49,7 +49,17 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should not override existing maven properties when loading sonar properties', () => {
-      const sonarMavenDefinition = result.sourceCallsArg.addMavenDefinition.find(definition =>
+      type MavenPluginDefinition = {
+        groupId?: string;
+        artifactId?: string;
+        additionalContent?: string;
+      };
+      type MavenDefinition = {
+        pluginManagement?: MavenPluginDefinition[];
+      };
+
+      const mavenDefinitions = result.sourceCallsArg.addMavenDefinition as MavenDefinition[];
+      const sonarMavenDefinition = mavenDefinitions.find(definition =>
         definition.pluginManagement?.some(
           plugin => plugin.groupId === 'org.codehaus.mojo' && plugin.artifactId === 'properties-maven-plugin',
         ),
