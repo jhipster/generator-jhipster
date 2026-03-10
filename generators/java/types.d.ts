@@ -50,6 +50,7 @@ export type Field = BaseApplicationField &
     javaValueSample1?: string;
     javaValueSample2?: string;
     fieldValidateRulesPatternJava?: string;
+    javaFieldValidatorsPartial?: string;
   };
 
 export interface Relationship extends BaseApplicationRelationship, JavaAddedRelationshipProperties, Property {
