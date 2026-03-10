@@ -288,7 +288,7 @@ export function prepareCommonFieldForTemplates(
   generator: CoreGenerator,
 ): BaseApplicationField {
   mutateData(field, mutateField);
-  field.blobContentTypeText = field.blobContentTypeText || field.blobContentTypeJson;
+  field.blobContentTypeText = field.blobContentTypeText || field.fieldTypeBlobContent === JSON;
 
   defaults(field, {
     entity: entityWithConfig,

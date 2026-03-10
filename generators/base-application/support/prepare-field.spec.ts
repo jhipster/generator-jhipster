@@ -71,7 +71,6 @@ describe('generator - base-application - support - prepareField', () => {
         );
 
         expect(preparedField.blobContentTypeText).to.equal(true);
-        expect(preparedField.blobContentTypeJson).to.equal(true);
         expect(preparedField.fieldWithContentType).to.equal(false);
       });
     });

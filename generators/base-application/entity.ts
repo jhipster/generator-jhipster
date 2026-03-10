@@ -79,7 +79,6 @@ type BaseApplicationAddedFieldProperties = DerivedPropertiesOnlyOf<'fieldType', 
     blobContentTypeText?: boolean;
     blobContentTypeImage?: boolean;
     blobContentTypeAny?: boolean;
-    blobContentTypeJson?: boolean;
 
     fieldTypeBytes?: boolean;
     // Derived properties
