@@ -218,9 +218,9 @@ _%>
     <%_ const relationshipsWithCustomSharedOptions = relationshipsByEntityNeedingOptions.filter(rel => !relationshipsWithCustomUniqueOptions.includes(rel)); _%>
     <%_ if (relationshipsWithCustomSharedOptions.length > 0) { _%>
       <%_ const otherEntity = relationshipsByEntityNeedingOptions[0].otherEntity _%>
-        this.<%= otherEntity.entityInstancePlural %>SharedCollection.update(<%= otherEntity.entityInstance %> =>
+        this.<%= otherEntity.entityInstancePlural %>SharedCollection.update(<%= otherEntity.entityInstancePlural %> =>
             this.<%= otherEntity.entityInstance %>Service.add<%= otherEntity.entityAngularName %>ToCollectionIfMissing<I<%= otherEntity.entityAngularName %>>(
-                <%= otherEntity.entityInstance %>,
+                <%= otherEntity.entityInstancePlural %>,
       <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
                 <%= relationship.collection ? '...(' : '' %><%= entityInstance %>.<%= relationship.propertyName %><%= relationship.collection ? ' ?? [])' : '' %>,
       <%_ } _%>
