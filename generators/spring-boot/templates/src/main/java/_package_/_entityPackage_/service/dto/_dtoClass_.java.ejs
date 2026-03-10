@@ -84,7 +84,7 @@ public class <%- dtoClass %> implements Serializable {
   _%>
   <%_ if (field) { _%>
     <%_ if (property.fieldValidate) { _%>
-    <%- include('/_global_partials_entity_/field_validators', {field, reactive}); -%>
+    <%- field.javaFieldValidatorsPartial %>
     <%_ } _%>
   <%_ } _%>
   <%_ if (relationship && relationship.relationshipRequired) { _%>
