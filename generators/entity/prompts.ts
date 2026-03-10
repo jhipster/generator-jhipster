@@ -57,7 +57,7 @@ const {
   LOCAL_TIME,
 } = CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
-const { ANY, IMAGE, TEXT } = BlobTypes;
+const { ANY, IMAGE, TEXT, JSON } = BlobTypes;
 
 const {
   Validations: { PATTERN, MINBYTES, MAXBYTES, MINLENGTH, MAXLENGTH, MIN, MAX, REQUIRED, UNIQUE },
@@ -550,7 +550,12 @@ async function askForField(this: EntityGenerator) {
       choices: answers => [
         { value: IMAGE, name: 'An image' },
         { value: ANY, name: 'A binary file' },
-        ...(answers.fieldType === BYTES ? [{ value: TEXT, name: 'A CLOB (Text field)' }] : []),
+        ...(answers.fieldType === BYTES
+          ? [
+              { value: TEXT, name: 'A CLOB (Text field)' },
+              { value: JSON, name: 'A CLOB (JSON field)' },
+            ]
+          : []),
       ],
       default: 0,
     },
@@ -579,7 +584,7 @@ async function askForField(this: EntityGenerator) {
             value: UNIQUE,
           },
         ];
-        if (response.fieldType === STRING || response.fieldTypeBlobContent === TEXT) {
+        if (response.fieldType === STRING || [TEXT, JSON].includes(response.fieldTypeBlobContent)) {
           return [
             ...opts,
             {
@@ -663,7 +668,7 @@ async function askForField(this: EntityGenerator) {
         response.fieldValidate === true &&
         response.fieldValidateRules.includes(MINBYTES) &&
         response.fieldType === BYTES &&
-        response.fieldTypeBlobContent !== TEXT,
+        ![TEXT, JSON].includes(response.fieldTypeBlobContent),
       type: 'input',
       name: 'fieldValidateRulesMinbytes',
       message: 'What is the minimum byte size of your field?',
@@ -675,7 +680,7 @@ async function askForField(this: EntityGenerator) {
         response.fieldValidate === true &&
         response.fieldValidateRules.includes(MAXBYTES) &&
         response.fieldType === BYTES &&
-        response.fieldTypeBlobContent !== TEXT,
+        ![TEXT, JSON].includes(response.fieldTypeBlobContent),
       type: 'input',
       name: 'fieldValidateRulesMaxbytes',
       message: 'What is the maximum byte size of your field?',

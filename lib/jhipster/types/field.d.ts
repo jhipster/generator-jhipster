@@ -27,7 +27,7 @@ type FieldEnum = {
 };
 
 type FieldBlob = {
-  fieldTypeBlobContent: 'image' | 'any' | 'text';
+  fieldTypeBlobContent: 'image' | 'any' | 'text' | 'json';
 };
 
 export type Field = Partial<FieldEnum> &
