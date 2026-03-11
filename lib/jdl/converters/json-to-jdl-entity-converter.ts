@@ -97,6 +97,7 @@ function convertJSONToJDLField(field: JSONField): JDLField {
     name: lowerFirst(field.fieldName),
     type: field.fieldType,
     comment: field.documentation,
+    options: field.options,
   });
   addValidations(jdlField, field);
   return jdlField;

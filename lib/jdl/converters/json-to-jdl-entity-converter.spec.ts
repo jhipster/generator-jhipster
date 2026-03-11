@@ -87,6 +87,25 @@ describe('jdl - JSONToJDLEntityConverter', () => {
           expect(jdlObject.entities.Employee.fields.salary.validations.max.value).eq(1000000);
           expect(jdlObject.entities.Employee.fields.employeeId.validations).to.be.empty;
         });
+        it('should parse field options', () => {
+          const entities = new Map<string, any>([
+            [
+              'TestEntity',
+              {
+                fields: [
+                  { fieldName: 'myId', fieldType: 'Long', options: { id: true } },
+                  { fieldName: 'customField', fieldType: 'String', options: { customAnnotation: 'customValue' } },
+                  { fieldName: 'noOptionsField', fieldType: 'String' },
+                ],
+                relationships: [],
+              },
+            ],
+          ]);
+          const result = convertEntitiesToJDL(entities);
+          expect(result.entities.TestEntity.fields.myId.options).to.deep.equal({ id: true });
+          expect(result.entities.TestEntity.fields.customField.options).to.deep.equal({ customAnnotation: 'customValue' });
+          expect(result.entities.TestEntity.fields.noOptionsField.options).to.deep.equal({});
+        });
         it('should parse enums', () => {
           const languageEnum = jdlObject.getEnum('Language');
           if (!languageEnum) {
