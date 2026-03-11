@@ -36,6 +36,7 @@ entity Country (country) {
   /**
    * The country Id
    */
+  @Id
   countryId Long
   countryName String
 }
@@ -47,7 +48,9 @@ entity Department (department) {
  * The Employee entity.
  */
 entity Employee (emp) {
+  @Id
   employeeId Long
+  @CustomAnnotation("customValue")
   employeeUuid UUID
   /**
    * The firstname attribute.
@@ -154,6 +157,7 @@ entity Country (country) {
   /**
    * The country Id
    */
+  @Id
   countryId Long
   countryName String
 }
@@ -165,7 +169,9 @@ entity Department (department) {
  * The Employee entity.
  */
 entity Employee (emp) {
+  @Id
   employeeId Long
+  @CustomAnnotation("customValue")
   employeeUuid UUID
   /**
    * The firstname attribute.
