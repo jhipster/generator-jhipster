@@ -52,7 +52,7 @@
     "sass": "1.70.0",
     "sass-loader": "16.0.7",
     "sinon": "21.0.2",
-    "terser-webpack-plugin": "5.3.17",
+    "terser-webpack-plugin": "5.4.0",
     "ts-loader": "9.5.4",
     "typescript": "5.9.3",
     "typescript-eslint": "8.57.0",
