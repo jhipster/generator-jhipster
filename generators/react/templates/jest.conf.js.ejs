@@ -23,7 +23,6 @@ export default {
   coveragePathIgnorePatterns: ['<rootDir>/<%= this.relativeDir(clientRootDir, clientTestDir) %>'],
   moduleNameMapper: mapTypescriptAliasToJestAlias({
     '\\.(css|scss)$': 'identity-obj-proxy',
-    sinon: import.meta.resolve('sinon/pkg/sinon.js'),
   }),
   reporters: [
     'default',
