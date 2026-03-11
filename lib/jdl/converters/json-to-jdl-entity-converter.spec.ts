@@ -209,6 +209,45 @@ describe('jdl - JSONToJDLEntityConverter', () => {
           expect(relationship!.commentInFrom).to.equal('Another side of the same relationship');
           expect(relationship!.commentInTo).to.equal('A relationship');
         });
+        it('should parse destination-side relationship options', () => {
+          const entities = new Map<string, any>([
+            [
+              'EntityA',
+              {
+                fields: [{ fieldName: 'name', fieldType: 'String' }],
+                relationships: [
+                  {
+                    relationshipType: 'one-to-many',
+                    relationshipName: 'entityB',
+                    otherEntityName: 'entityB',
+                    relationshipSide: 'left',
+                    otherEntityRelationshipName: 'entityA',
+                  },
+                ],
+              },
+            ],
+            [
+              'EntityB',
+              {
+                fields: [{ fieldName: 'name', fieldType: 'String' }],
+                relationships: [
+                  {
+                    relationshipType: 'many-to-one',
+                    relationshipName: 'entityA',
+                    otherEntityName: 'entityA',
+                    relationshipSide: 'right',
+                    otherEntityRelationshipName: 'entityB',
+                    options: { destAnnotation: true },
+                  },
+                ],
+              },
+            ],
+          ]);
+          const result = convertEntitiesToJDL(entities);
+          const relationship = result.relationships.getOneToMany('OneToMany_EntityA{entityB}_EntityB{entityA}');
+          expect(relationship).not.to.be.undefined;
+          expect(relationship!.options.destination).to.deep.equal({ destAnnotation: true });
+        });
         it('should parse required relationships in owner', () => {
           const relationship = jdlObject.relationships.getManyToOne('ManyToOne_Employee{department(foo)}_Department{employee}');
           if (!relationship) {
