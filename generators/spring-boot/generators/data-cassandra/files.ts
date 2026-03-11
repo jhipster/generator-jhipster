@@ -58,8 +58,6 @@ export const cassandraFiles = asWriteFilesSection<JavaApplication>({
       templates: [
         'CassandraKeyspaceIT.java',
         'config/CassandraTestContainer.java',
-        'config/CassandraTestContainersSpringContextCustomizerFactory.java',
-        'config/EmbeddedCassandra.java',
       ],
     },
   ],
