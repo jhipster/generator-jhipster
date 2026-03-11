@@ -173,7 +173,7 @@ export default class CoreGenerator<
 
     if (!this.options.help) {
       /* Force config to use 'generator-jhipster' namespace. */
-      this._config = this._getStorage('generator-jhipster');
+      this._config = this._getStorage('generator-jhipster', { transform: this.features.configTransform });
 
       /* JHipster config using proxy mode used as a plain object instead of using get/set. */
       this.jhipsterConfig = this.config.createProxy() as Config;
