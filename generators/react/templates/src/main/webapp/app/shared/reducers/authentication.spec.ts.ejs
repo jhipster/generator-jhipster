@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 import axios from 'axios';
-import sinon from 'sinon';
 <%_ if (authenticationTypeJwt) { _%>
 import { Storage } from 'react-jhipster';
 <%_ } _%>
@@ -210,7 +209,7 @@ describe('Authentication reducer tests', () => {
       store = configureStore({
         reducer: (state = [], action) => [...state, action],
       });
-      axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.get = jest.fn().mockResolvedValue(resolvedObject);
     });
 
     it('dispatches GET_SESSION_PENDING and GET_SESSION_FULFILLED actions', async () => {
@@ -227,7 +226,7 @@ describe('Authentication reducer tests', () => {
 
     it('dispatches LOGOUT actions', async () => {
     <%_ if (!authenticationTypeJwt) { _%>
-      axios.post = sinon.stub().returns(Promise.resolve({}));
+      axios.post = jest.fn().mockResolvedValue({});
 
       const result = await logoutServer()(dispatch, getState, extra);
 
@@ -252,7 +251,7 @@ describe('Authentication reducer tests', () => {
 <%_ if (!authenticationTypeOauth2) { _%>
     it('dispatches LOGIN, GET_SESSION and SET_LOCALE success and request actions', async () => {
       const loginResponse = { headers: { authorization: 'auth' } };
-      axios.post = sinon.stub().returns(Promise.resolve(loginResponse));
+      axios.post = jest.fn().mockResolvedValue(loginResponse);
 
       const result = await authenticate('test', 'test')(dispatch, getState, extra);
 
@@ -280,7 +279,7 @@ describe('Authentication reducer tests', () => {
     it('clears the session token on clearAuthToken', async () => {
       const AUTH_TOKEN_KEY = '<%= jhiPrefixDashed %>-authenticationToken';
       const loginResponse = { headers: { authorization: 'Bearer TestToken' } };
-      axios.post = sinon.stub().returns(Promise.resolve(loginResponse));
+      axios.post = jest.fn().mockResolvedValue(loginResponse);
 
       await store.dispatch(login('test', 'test'));
       expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe('TestToken');
@@ -292,7 +291,7 @@ describe('Authentication reducer tests', () => {
     it('clears the local storage token on clearAuthToken', async () => {
       const AUTH_TOKEN_KEY = '<%= jhiPrefixDashed %>-authenticationToken';
       const loginResponse = { headers: { authorization: 'Bearer TestToken' } };
-      axios.post = sinon.stub().returns(Promise.resolve(loginResponse));
+      axios.post = jest.fn().mockResolvedValue(loginResponse);
 
       await store.dispatch(login('user', 'user', true));
       expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe(undefined);

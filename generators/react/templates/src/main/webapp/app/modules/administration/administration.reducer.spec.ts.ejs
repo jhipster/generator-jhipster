@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 import axios from 'axios';
-import sinon from 'sinon';
 
 import administration, {
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
@@ -267,8 +266,8 @@ describe('Administration reducer tests', () => {
     const dispatch = jest.fn();
     const extra = {};
     beforeEach(() => {
-      axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
-      axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.get = jest.fn().mockResolvedValue(resolvedObject);
+      axios.post = jest.fn().mockResolvedValue(resolvedObject);
     });
 <%_ } _%>
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>

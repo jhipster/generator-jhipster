@@ -23,7 +23,6 @@ _%>
 import axios from 'axios';
 
 import { configureStore } from '@reduxjs/toolkit';
-import sinon from 'sinon';
 <%_ if (paginationInfiniteScroll) { _%>
 import { getPageNumberFromLinkHeader } from 'app/shared/jhipster/link-header';
 <%_ } _%>
@@ -276,11 +275,11 @@ describe('Entities reducer tests', () => {
       store = configureStore({
         reducer: (state = [], action) => [...state, action],
       });
-      axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
-      axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
-      axios.put = sinon.stub().returns(Promise.resolve(resolvedObject));
-      axios.patch = sinon.stub().returns(Promise.resolve(resolvedObject));
-      axios.delete = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.get = jest.fn().mockResolvedValue(resolvedObject);
+      axios.post = jest.fn().mockResolvedValue(resolvedObject);
+      axios.put = jest.fn().mockResolvedValue(resolvedObject);
+      axios.patch = jest.fn().mockResolvedValue(resolvedObject);
+      axios.delete = jest.fn().mockResolvedValue(resolvedObject);
     });
 
     it('dispatches FETCH_<%= entityActionName %>_LIST actions', async () => {
