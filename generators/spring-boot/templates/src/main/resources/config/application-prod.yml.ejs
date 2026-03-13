@@ -129,7 +129,7 @@ spring:
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
   cassandra:
-    contact-points: localhost
+    contact-points: 127.0.0.1
     compression: LZ4
     keyspace-name: <%- cassandraKeyspaceName %>
     local-datacenter: datacenter1
