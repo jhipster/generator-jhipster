@@ -27,7 +27,7 @@
     "@tsconfig/node18": "18.2.6",
     "@types/node": "22.19.15",
     "@types/sinon": "21.0.0",
-    "@vitejs/plugin-vue": "6.0.4",
+    "@vitejs/plugin-vue": "6.0.5",
     "@vue/test-utils": "2.4.6",
     "@vue/tsconfig": "0.9.0",
     "autoprefixer": "10.4.27",
