@@ -126,8 +126,8 @@
     "update-snapshots": "esmocha test generators cli .blueprint lib/jdl lib --forbid-only --update-snapshot --enable-source-maps"
   },
   "dependencies": {
-    "@eslint/core": "1.1.0",
-    "@eslint/js": "9.39.2",
+    "@eslint/core": "1.1.1",
+    "@eslint/js": "10.0.1",
     "@faker-js/faker": "10.3.0",
     "@iarna/toml": "3.0.0",
     "@types/ejs": "3.1.5",
@@ -145,7 +145,7 @@
     "dockerfile-ast": "0.7.1",
     "dot-properties": "1.1.1",
     "ejs": "5.0.1",
-    "eslint": "9.39.2",
+    "eslint": "10.0.3",
     "eslint-plugin-import-x": "4.16.1",
     "eslint-plugin-unused-imports": "4.4.1",
     "execa": "9.6.1",
