@@ -19,21 +19,19 @@
 <%_
 const tsKeyId = primaryKey.tsSampleValues[0];
 _%>
-import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { shallowMount, type MountingOptions } from '@vue/test-utils';
-import sinon, { type SinonStubbedInstance } from 'sinon';
 import { type RouteLocation } from 'vue-router';
 
 import <%= entityAngularName %>Details from './<%= entityFileName %>-details.vue';
-import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 import AlertService from '@/shared/alert/alert.service';
 
 type <%= entityAngularName %>DetailsComponentType = InstanceType<typeof <%= entityAngularName %>Details>;
 
 let route: Partial<RouteLocation>;
-const routerGoMock = vitest.fn();
+const routerGoMock = vi.fn();
 
-vitest.mock('vue-router', () => ({
+vi.mock('vue-router', () => ({
   useRoute: () => route,
   useRouter: () => ({ go: routerGoMock }),
 }));
@@ -44,23 +42,25 @@ describe('Component Tests', () => {
   let alertService: AlertService;
 
   afterEach(() => {
-    vitest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   describe('<%= entityAngularName %> Management Detail Component', () => {
-    let <%= entityInstance %>ServiceStub: SinonStubbedInstance<<%= entityAngularName %>Service>;
+    let <%= entityInstance %>ServiceStub: any;
     let mountOptions: MountingOptions<<%= entityAngularName %>DetailsComponentType>['global'];
 
     beforeEach(() => {
       route = {};
-      <%= entityInstance %>ServiceStub = sinon.createStubInstance<<%= entityAngularName %>Service>(<%= entityAngularName %>Service);
+      <%= entityInstance %>ServiceStub = {
+        find: vi.fn(),
+      };
 
       alertService = new AlertService({
 <%_ if (enableTranslation) { _%>
-        i18n: { t: vitest.fn() } as any,
+        i18n: { t: vi.fn() } as any,
 <%_ } _%>
         toast: {
-          show: vitest.fn(),
+          show: vi.fn(),
         } as any,
       });
 
@@ -79,7 +79,7 @@ describe('Component Tests', () => {
     describe('Navigate to details', () => {
       it('Should call load all on init', async () => {
         // GIVEN
-        <%= entityInstance %>ServiceStub.find.resolves(<%= entityInstance %>Sample);
+        <%= entityInstance %>ServiceStub.find.mockResolvedValue(<%= entityInstance %>Sample);
         route = {
           params: {
             <%= entityInstance %>Id: '' + <%- tsKeyId %>,
@@ -97,7 +97,7 @@ describe('Component Tests', () => {
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
-        <%= entityInstance %>ServiceStub.find.resolves(<%= entityInstance %>Sample);
+        <%= entityInstance %>ServiceStub.find.mockResolvedValue(<%= entityInstance %>Sample);
         const wrapper = shallowMount(<%= entityAngularName %>Details, { global: mountOptions });
         const comp = wrapper.vm;
         await comp.$nextTick();

@@ -20,9 +20,8 @@
 const tsKeyId = primaryKey.tsSampleValues[0];
 const enumImports = this.generateEntityClientEnumImports(fields.filter(field => !field.id));
 _%>
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import axios from 'axios';
-import sinon from 'sinon'
 <%_ if (anyFieldIsDateDerived) { _%>
 import dayjs from 'dayjs';
 <%_ } _%>
@@ -46,11 +45,11 @@ const error = {
 };
 
 const axiosStub = {
-  get: sinon.stub(axios, 'get'),
-  post: sinon.stub(axios, 'post'),
-  put: sinon.stub(axios, 'put'),
-  patch: sinon.stub(axios, 'patch'),
-  delete: sinon.stub(axios, 'delete'),
+  get: vi.spyOn(axios, 'get'),
+  post: vi.spyOn(axios, 'post'),
+  put: vi.spyOn(axios, 'put'),
+  patch: vi.spyOn(axios, 'patch'),
+  delete: vi.spyOn(axios, 'delete'),
 };
 
 describe('Service Tests', () => {
@@ -103,7 +102,7 @@ describe('Service Tests', () => {
   <%_ } _%>
 <%_ }) _%>
         }, elemDefault);
-        axiosStub.get.resolves({ data: returnedFromService });
+        axiosStub.get.mockResolvedValue({ data: returnedFromService });
 
         return service
           .find(<%- tsKeyId %>).then((res) => {
@@ -112,7 +111,7 @@ describe('Service Tests', () => {
       });
 
       it('should not find an element', async () => {
-        axiosStub.get.rejects(error);
+        axiosStub.get.mockRejectedValue(error);
         return service.find(<%- tsKeyId %>)
           .then()
           .catch(err => {
@@ -142,14 +141,14 @@ describe('Service Tests', () => {
   <%_ }) _%>
           }, returnedFromService);
 
-          axiosStub.post.resolves({ data: returnedFromService });
+          axiosStub.post.mockResolvedValue({ data: returnedFromService });
           return service.create({}).then((res) => {
             expect(res).toMatchObject(expected);
         });
       });
 
       it('should not create a <%= entityAngularName %>', async () => {
-        axiosStub.post.rejects(error);
+        axiosStub.post.mockRejectedValue(error);
 
         return service.create({})
           .then()
@@ -188,7 +187,7 @@ describe('Service Tests', () => {
     <%_ } _%>
   <%_ }) _%>
           }, returnedFromService);
-          axiosStub.put.resolves({ data: returnedFromService });
+          axiosStub.put.mockResolvedValue({ data: returnedFromService });
 
           return service.update(expected).then((res) => {
             expect(res).toMatchObject(expected);
@@ -196,7 +195,7 @@ describe('Service Tests', () => {
       });
 
       it('should not update a <%= entityAngularName %>', async () => {
-        axiosStub.put.rejects(error);
+        axiosStub.put.mockRejectedValue(error);
 
         return service.update({})
           .then()
@@ -237,7 +236,7 @@ describe('Service Tests', () => {
     <%_ } _%>
   <%_ }) _%>
           }, returnedFromService);
-          axiosStub.patch.resolves({ data: returnedFromService });
+          axiosStub.patch.mockResolvedValue({ data: returnedFromService });
 
           return service.partialUpdate(patchObject).then((res) => {
             expect(res).toMatchObject(expected);
@@ -245,7 +244,7 @@ describe('Service Tests', () => {
       });
 
       it('should not partial update a <%= entityAngularName %>', async () => {
-          axiosStub.patch.rejects(error);
+          axiosStub.patch.mockRejectedValue(error);
 
           return service.partialUpdate({})
             .then()
@@ -284,14 +283,14 @@ describe('Service Tests', () => {
   <%_ } _%>
 <%_ }) _%>
         }, returnedFromService);
-        axiosStub.get.resolves([returnedFromService]);
+        axiosStub.get.mockResolvedValue([returnedFromService]);
         return service.retrieve(<% if (!paginationNo) { %>{ sort: {}, page: 0, size: 10 }<% } %>).then((res) => {
           expect(res).toContainEqual(expected);
         });
       });
 
       it('should not return a list of <%= entityAngularName %>', async () => {
-        axiosStub.get.rejects(error);
+        axiosStub.get.mockRejectedValue(error);
 
         return service.retrieve()
           .then()
@@ -302,14 +301,14 @@ describe('Service Tests', () => {
 
 <%_ if (!readOnly) { _%>
       it('should delete a <%= entityAngularName %>', async () => {
-          axiosStub.delete.resolves({ok: true});
+          axiosStub.delete.mockResolvedValue({ok: true});
           return service.delete(<%- tsKeyId %>).then((res) => {
               expect(res.ok).toBeTruthy();
           });
       });
 
       it('should not delete a <%= entityAngularName %>', async () => {
-        axiosStub.delete.rejects(error);
+        axiosStub.delete.mockRejectedValue(error);
 
         return service.delete(<%- tsKeyId %>)
           .then()
