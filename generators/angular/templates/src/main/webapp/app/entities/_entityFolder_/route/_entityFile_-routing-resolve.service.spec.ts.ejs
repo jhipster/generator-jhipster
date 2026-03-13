@@ -105,7 +105,7 @@ describe('<%= entityAngularName %> routing resolve service', () => {
 
       // WHEN
       await TestBed.runInInjectionContext(async () => {
-        await expect(lastValueFrom(<%= entityInstance %>Resolve(mockActivatedRouteSnapshot))).rejects.toThrowError('no elements in sequence');
+        await expect(lastValueFrom(<%= entityInstance %>Resolve(mockActivatedRouteSnapshot))).rejects.toThrow('no elements in sequence');
         // THEN
         expect(service.find).toHaveBeenCalledWith(<%- tsKeyId %>);
         expect(mockRouter.navigate).toHaveBeenCalledWith(['404']);
@@ -119,7 +119,7 @@ describe('<%= entityAngularName %> routing resolve service', () => {
 
       // WHEN
       await TestBed.runInInjectionContext(async () => {
-        await expect(lastValueFrom(<%= entityInstance %>Resolve(mockActivatedRouteSnapshot))).rejects.toThrowError('no elements in sequence');
+        await expect(lastValueFrom(<%= entityInstance %>Resolve(mockActivatedRouteSnapshot))).rejects.toThrow('no elements in sequence');
         // THEN
         expect(service.find).toHaveBeenCalledWith(<%- tsKeyId %>);
         expect(mockRouter.navigate).toHaveBeenCalledWith(['error']);
