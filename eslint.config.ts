@@ -21,7 +21,7 @@ export default defineConfig(
       },
     },
   },
-  { ignores: ['dist'] },
+  { ignores: ['dist', 'docs'] },
   js.configs.recommended,
   jhipster.base,
   {
