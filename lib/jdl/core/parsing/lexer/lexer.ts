@@ -34,7 +34,7 @@ export const buildTokens = (tokens: { applicationTokens: TokenParam; deploymentT
   const { applicationTokens, deploymentTokens } = tokens;
   const _tokens: Record<string, TokenType> = {};
 
-  const { BUILT_IN_ENTITY } = relationshipOptions;
+  const { BUILT_IN_ENTITY, CASCADE } = relationshipOptions;
 
   function createTokenFromConfig(config: ITokenConfig) {
     const newToken = createTokenFromConfigCreator(config);
@@ -108,6 +108,7 @@ export const buildTokens = (tokens: { applicationTokens: TokenParam; deploymentT
   // Relationship-related
   createTokenFromConfig({ name: 'RELATIONSHIP', pattern: 'relationship' });
   createTokenFromConfig({ name: 'BUILT_IN_ENTITY', pattern: BUILT_IN_ENTITY });
+  createTokenFromConfig({ name: 'CASCADE', pattern: CASCADE });
 
   // Category For the relationship type key names
   RelationshipTypeTokens.tokens.forEach(token => {
