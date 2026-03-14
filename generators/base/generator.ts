@@ -586,8 +586,8 @@ export default class BaseGenerator<
   }
 
   /**
-   * @protected
    * Composes with blueprint generators, if any.
+   * @protected
    */
   protected async composeWithBlueprints() {
     if (this.fromBlueprint) {
@@ -667,8 +667,8 @@ export default class BaseGenerator<
   }
 
   /**
-   * @private
    * Configure blueprints.
+   * @private
    */
   async #configureBlueprints(): Promise<string[]> {
     try {
@@ -762,8 +762,8 @@ export default class BaseGenerator<
   }
 
   /**
-   * @private
    * Try to retrieve the package.json of the blueprint used, as an object.
+   * @private
    * @param {string} blueprintPkgName - generator name
    * @return {object} packageJson - retrieved package.json as an object or undefined if not found
    */
@@ -782,8 +782,8 @@ export default class BaseGenerator<
   }
 
   /**
-   * @private
    * Try to retrieve the version of the blueprint used.
+   * @private
    * @param {string} blueprintPkgName - generator name
    * @return {string} version - retrieved version or empty string if not found
    */
