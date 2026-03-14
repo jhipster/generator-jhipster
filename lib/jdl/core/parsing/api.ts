@@ -19,7 +19,6 @@
 
 import type { CstNode, IRecognitionException } from 'chevrotain';
 import { EOF } from 'chevrotain';
-import { uniq } from 'lodash-es';
 
 import type { JDLRuntime } from '../types/runtime.ts';
 
@@ -79,20 +78,4 @@ function throwErrorAboutInvalidToken(parserError: IRecognitionException) {
 
 function throwSyntaxError(errors: IRecognitionException[]) {
   throw Error(errors.map(error => `${error.message}\n\tat line: ${error.token.startLine}, column: ${error.token.startColumn}`).join('\n'));
-}
-
-// A more complete example can be found here:
-// https://github.com/SAP/chevrotain/blob/master/examples/parser/content_assist/official_feature_content_assist.js#L134
-export function getSyntacticAutoCompleteSuggestions(input: string, runtime: JDLRuntime, options?: ParseOptions) {
-  const lexResult = runtime.lexer.tokenize(input);
-
-  // ".input" is a setter which will reset the parsers' internal state.
-  runtime.parser.input = lexResult.tokens;
-
-  const syntacticSuggestions = runtime.parser.computeContentAssist(options?.startRule ?? 'prog', lexResult.tokens);
-
-  // Each suggestion includes additional information such as the "Rule Stack" at suggestion point.
-  // This may be handy for advanced implementations, e.g: different logic for suggesting a NAME token in an entity
-  // or a field. But it is irrelevant in the scope of the POC.
-  return uniq(syntacticSuggestions.map(suggestion => suggestion.nextTokenType));
 }
