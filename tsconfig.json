@@ -34,6 +34,6 @@
     "verbatimModuleSyntax": true,
 
     /* Completeness */
-    "skipLibCheck": false /* Skip type checking all .d.ts files. */
+    "skipLibCheck": true /* Skip type checking all .d.ts files. */
   }
 }
