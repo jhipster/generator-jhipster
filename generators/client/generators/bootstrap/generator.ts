@@ -118,6 +118,35 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
           await preparePostEntityClientDerivedProperties(entity);
         }
       },
+      securityHardening({ entities }) {
+        const stripTemplateLiteral = (value: unknown) => (typeof value === 'string' ? value.replace(/\$\{[^}]*\}/g, '') : value);
+        const sanitizeKeys = (object: any, keys: string[]) => {
+          for (const key of keys) {
+            if (typeof object[key] === 'string') {
+              object[key] = stripTemplateLiteral(object[key]);
+            }
+          }
+        };
+        for (const entity of entities) {
+          // Sanitize user-controlled annotation properties spread onto the entity
+          if (entity.annotations) {
+            sanitizeKeys(entity, Object.keys(entity.annotations));
+          }
+          for (const field of entity.fields ?? []) {
+            // Sanitize user-controlled option properties spread onto the field
+            if (field.options) {
+              sanitizeKeys(field, Object.keys(field.options));
+            }
+            // Sanitize the validation pattern and its framework-specific derivatives
+            sanitizeKeys(field, ['fieldValidateRulesPattern', 'fieldValidateRulesPatternAngular', 'fieldValidateRulesPatternReact']);
+          }
+          for (const relationship of entity.relationships ?? []) {
+            if (relationship.options) {
+              sanitizeKeys(relationship, Object.keys(relationship.options));
+            }
+          }
+        }
+      },
     });
   }
 

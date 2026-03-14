@@ -65,4 +65,44 @@ describe(`generator - ${generator}`, () => {
   });
 
   testBootstrapEntities(generator);
+
+  describe('security hardening', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig(
+          {
+            skipServer: true,
+            skipUserManagement: true,
+          },
+          [
+            {
+              name: 'Foo',
+              // eslint-disable-next-line no-template-curly-in-string
+              annotations: { entityProperty: '${foo}' },
+              fields: [
+                {
+                  fieldName: 'myField',
+                  fieldType: 'String',
+                  // eslint-disable-next-line no-template-curly-in-string
+                  fieldValidateRulesPattern: '${injected}',
+                  // eslint-disable-next-line no-template-curly-in-string
+                  options: { fieldProperty: '${foot}' },
+                },
+              ],
+            },
+          ],
+        )
+        .withSkipWritingPriorities();
+    });
+
+    it('should be applied', () => {
+      expect(runResult.entities?.Foo).toMatchObject(
+        expect.objectContaining({
+          entityProperty: '',
+          fields: expect.arrayContaining([expect.objectContaining({ fieldProperty: '', fieldValidateRulesPattern: '' })]),
+        }),
+      );
+    });
+  });
 });
