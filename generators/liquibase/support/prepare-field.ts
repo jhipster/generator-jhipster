@@ -30,7 +30,7 @@ const { CommonDBTypes, RelationalOnlyDBTypes, BlobTypes } = fieldTypes;
 
 const { ZONED_DATE_TIME, INSTANT } = CommonDBTypes;
 const { BYTES } = RelationalOnlyDBTypes;
-const { TEXT } = BlobTypes;
+const { TEXT, JSON } = BlobTypes;
 
 const liquibaseFieldTypeByFieldType = {
   [fieldTypesValues.INTEGER]: 'integer',
@@ -62,7 +62,7 @@ function parseLiquibaseColumnType(field: LiquibaseField): LiquibaseColumnType {
     return `varchar(${field.fieldValidateRulesMaxlength || 255})` as 'varchar';
   }
 
-  if (liquibaseColumnType === '${blobType}' && field.fieldTypeBlobContent === TEXT) {
+  if (liquibaseColumnType === '${blobType}' && [TEXT, JSON].includes(field.fieldTypeBlobContent as any)) {
     return liquibaseFieldTypeByFieldType[fieldTypesValues.TEXT_BLOB];
   }
 
@@ -117,7 +117,7 @@ export default function prepareField(application: LiquibaseApplication<Liquibase
     },
     shouldDropDefaultValue: data =>
       !data.liquibaseDefaultValueAttributeValue && (data.fieldType === ZONED_DATE_TIME || data.fieldType === INSTANT),
-    shouldCreateContentType: data => data.fieldType === BYTES && data.fieldTypeBlobContent !== TEXT,
+    shouldCreateContentType: data => data.fieldType === BYTES && ![TEXT, JSON].includes(data.fieldTypeBlobContent as any),
     columnRequired: data => data.nullable === false || (data.fieldValidate === true && data.fieldValidateRules?.includes('required')),
     nullable: data => !data.columnRequired,
     liquibaseGenerateFakeData: true,

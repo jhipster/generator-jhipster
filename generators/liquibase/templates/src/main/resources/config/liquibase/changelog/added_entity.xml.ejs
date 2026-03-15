@@ -109,7 +109,7 @@ _%>
                   usePreparedStatements="true">
   <%_ for (field of fields) { _%>
             <column name="<%= field.columnName %>" type="<%= field.loadColumnType %>"/>
-    <%_ if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') { _%>
+    <%_ if (field.fieldType === 'byte[]' && !['text', 'json'].includes(field.fieldTypeBlobContent)) { _%>
             <column name="<%= field.columnName %>_content_type" type="string"/>
     <%_ } _%>
   <%_ } _%>

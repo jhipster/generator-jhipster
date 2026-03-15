@@ -33,7 +33,7 @@ const {
   Validations: { MINLENGTH, MAXLENGTH, PATTERN, REQUIRED, UNIQUE },
 } = validations;
 
-const { TEXT } = BlobTypes;
+const { TEXT, JSON } = BlobTypes;
 const { BOOLEAN, BIG_DECIMAL, DOUBLE, DURATION, FLOAT, INSTANT, INTEGER, LOCAL_DATE, LONG, STRING, UUID, ZONED_DATE_TIME, LOCAL_TIME } =
   CommonDBTypes;
 const { BYTES, BYTE_BUFFER } = RelationalOnlyDBTypes;
@@ -217,9 +217,9 @@ function generateFakeDataForField(
         data = data.slice(0, -3);
       }
     }
-  } else if (field.fieldTypeBinary && field.fieldTypeBlobContent !== TEXT) {
+  } else if (field.fieldTypeBinary && ![TEXT, JSON].includes(field.fieldTypeBlobContent as any)) {
     data = '../fake-data/blob/hipster.png';
-  } else if (field.fieldTypeBinary && field.fieldTypeBlobContent === TEXT) {
+  } else if (field.fieldTypeBinary && [TEXT, JSON].includes(field.fieldTypeBlobContent as any)) {
     data = '../fake-data/blob/hipster.txt';
   } else if (field.fieldType === STRING) {
     data = field.id ? faker.string.uuid() : faker.helpers.fake(fakeStringTemplateForFieldName((field as DatabaseProperty).columnName!));
@@ -288,6 +288,7 @@ export function prepareCommonFieldForTemplates(
   generator: CoreGenerator,
 ): BaseApplicationField {
   mutateData(field, mutateField);
+  field.blobContentTypeText = field.blobContentTypeText || field.fieldTypeBlobContent === JSON;
 
   defaults(field, {
     entity: entityWithConfig,
@@ -302,7 +303,8 @@ export function prepareCommonFieldForTemplates(
     field.enumValues = getEnumValuesWithCustomValues(field.fieldValues!);
   }
 
-  field.fieldWithContentType = (fieldType === BYTES || fieldType === BYTE_BUFFER) && field.fieldTypeBlobContent !== TEXT;
+  field.fieldWithContentType =
+    (fieldType === BYTES || fieldType === BYTE_BUFFER) && ![TEXT, JSON].includes(field.fieldTypeBlobContent as any);
   if (field.fieldWithContentType) {
     field.contentTypeFieldName = `${field.fieldName}ContentType`;
   }
