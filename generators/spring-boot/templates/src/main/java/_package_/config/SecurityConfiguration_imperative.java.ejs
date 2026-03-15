@@ -99,6 +99,7 @@ import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthen
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2 && !applicationTypeMicroservice) { _%>
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.boot.restclient.RestTemplateBuilder;
 import <%= packageName %>.security.oauth2.CustomClaimConverter;
@@ -351,7 +352,14 @@ public class SecurityConfiguration {
 
     @Bean
     JwtDecoder jwtDecoder(<%_ if (!applicationTypeMicroservice) { _%>ClientRegistrationRepository clientRegistrationRepository, RestTemplateBuilder restTemplateBuilder<%_ } _%>) {
+  <%_ if (!applicationTypeMicroservice) { _%>
+        ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId("oidc");
+        NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withJwkSetUri(clientRegistration.getProviderDetails().getJwkSetUri())
+            .restOperations(restTemplateBuilder.build())
+            .build();
+  <%_ } else { _%>
         NimbusJwtDecoder jwtDecoder = JwtDecoders.fromOidcIssuerLocation(issuerUri);
+  <%_ } _%>
 
         OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());
         OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
