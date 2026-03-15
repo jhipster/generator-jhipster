@@ -98,10 +98,14 @@ import org.springframework.security.web.csrf.*;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 <%_ } _%>
-<%_ if (authenticationTypeOauth2 && !applicationTypeMicroservice) { _%>
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+<%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.boot.restclient.RestTemplateBuilder;
+import org.springframework.web.client.RestOperations;
+import java.time.Duration;
+  <%_ if (!applicationTypeMicroservice) { _%>
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import <%= packageName %>.security.oauth2.CustomClaimConverter;
+  <%_ } _%>
 <%_ } _%>
 <%_ if(!skipClient) { _%>
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
@@ -350,8 +354,10 @@ public class SecurityConfiguration {
   <%_ } _%>
 
     @Bean
-    JwtDecoder jwtDecoder(<%_ if (!applicationTypeMicroservice) { _%>ClientRegistrationRepository clientRegistrationRepository, RestTemplateBuilder restTemplateBuilder<%_ } _%>) {
-        NimbusJwtDecoder jwtDecoder = JwtDecoders.fromOidcIssuerLocation(issuerUri);
+    JwtDecoder jwtDecoder(<%_ if (!applicationTypeMicroservice) { _%>ClientRegistrationRepository clientRegistrationRepository, <%_ } _%>RestTemplateBuilder restTemplateBuilder) {
+        NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withIssuerLocation(issuerUri)
+            .restOperations(restTemplate(restTemplateBuilder))
+            .build();
 
         OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());
         OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
@@ -363,6 +369,13 @@ public class SecurityConfiguration {
   <%_ } _%>
 
         return jwtDecoder;
+    }
+
+    private RestOperations restTemplate(RestTemplateBuilder restTemplateBuilder) {
+        return restTemplateBuilder
+            .connectTimeout(Duration.ofSeconds(10))
+            .readTimeout(Duration.ofSeconds(10))
+            .build();
     }
 <%_ } _%>
 <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
