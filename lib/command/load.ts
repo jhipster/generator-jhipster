@@ -3,7 +3,7 @@ import { applyDerivedProperty } from '../utils/derived-property.ts';
 import type { CommandConfigScope, JHipsterConfigs } from './types.ts';
 
 const filteredScopeEntries = (commandsConfigs: JHipsterConfigs, scopes: CommandConfigScope[]) =>
-  Object.entries(commandsConfigs).filter(([_key, def]) => scopes.includes(def.scope!));
+  Object.entries(commandsConfigs).filter(([_key, def]) => scopes.includes(def.scope));
 
 function loadConfigIntoContext<Context>(
   this: Context,
