@@ -265,6 +265,7 @@ export default class CodeQualityGenerator extends JavaSimpleApplicationGenerator
                             <files>
                                 <file>sonar-project.properties</file>
                             </files>
+                            <override>false</override>
                         </configuration>
                     </execution>
                 </executions>`,
