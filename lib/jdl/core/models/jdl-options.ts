@@ -44,7 +44,7 @@ export default class JDLOptions {
   getOptions(): AbstractJDLOption[] {
     const options: any[] = [];
     Object.values(this.options).forEach(item => {
-      if (item.getType && item.getType() === 'UNARY') {
+      if (item.getType?.() === 'UNARY') {
         options.push(item);
         return;
       }
