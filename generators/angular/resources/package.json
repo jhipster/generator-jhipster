@@ -9,7 +9,7 @@
     "@stomp/rx-stomp": "2.3.0",
     "bootstrap": "5.3.8",
     "bootswatch": "5.3.8",
-    "ngx-cookie-service": "21.1.0",
+    "ngx-cookie-service": "21.3.1",
     "ngx-infinite-scroll": "21.0.0",
     "rxjs": "7.8.2",
     "sockjs-client": "1.6.1",
