@@ -1,4 +1,4 @@
-import { removeUnusedImports } from 'java-lint';
+import { removeUnusedImports } from '../../java/support/index.ts';
 
 export default ({ fileContents }: { fileContents: string }): { result: string } | { error: string } => {
   try {
