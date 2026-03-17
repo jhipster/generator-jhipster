@@ -86,7 +86,7 @@ describe('jdl - JDLLexer', () => {
     });
 
     it('should lex a simple invalid JDL text', () => {
-      expect(lexingResult.tokens).toHaveLength(9, 'All 9 tokens should have been lexed even though "@@@" caused a syntax error');
+      expect(lexingResult.tokens).toHaveLength(9);
     });
   });
 });
