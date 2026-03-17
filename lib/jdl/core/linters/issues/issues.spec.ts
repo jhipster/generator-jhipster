@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { beforeEach, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { beforeEach, describe, expect, it } from 'esmocha';
 
 import { relationshipTypes } from '../../basic-types/index.ts';
 import { rulesNames } from '../rules.ts';
@@ -40,7 +38,7 @@ describe('jdl - Issues', () => {
 
     describe('when there is no issue', () => {
       it('should return 0', () => {
-        expect(issues.getNumberOfIssues()).to.equal(0);
+        expect(issues.getNumberOfIssues()).toBe(0);
       });
     });
     describe('when there are issues', () => {
@@ -75,7 +73,7 @@ describe('jdl - Issues', () => {
       });
 
       it('should return the total amount', () => {
-        expect(issues.getNumberOfIssues()).to.equal(4);
+        expect(issues.getNumberOfIssues()).toBe(4);
       });
     });
   });
@@ -88,7 +86,7 @@ describe('jdl - Issues', () => {
 
     describe('when there is no issue', () => {
       it('should return 0', () => {
-        expect(issues.getNumberOfEntityIssues()).to.equal(0);
+        expect(issues.getNumberOfEntityIssues()).toBe(0);
       });
     });
     describe('when there are issues', () => {
@@ -102,7 +100,7 @@ describe('jdl - Issues', () => {
       });
 
       it('should return the total amount', () => {
-        expect(issues.getNumberOfEntityIssues()).to.equal(1);
+        expect(issues.getNumberOfEntityIssues()).toBe(1);
       });
     });
   });
@@ -115,7 +113,7 @@ describe('jdl - Issues', () => {
 
     describe('when there is no issue', () => {
       it('should return 0', () => {
-        expect(issues.getNumberOfEnumIssues()).to.equal(0);
+        expect(issues.getNumberOfEnumIssues()).toBe(0);
       });
     });
     describe('when there are issues', () => {
@@ -129,7 +127,7 @@ describe('jdl - Issues', () => {
       });
 
       it('should return the total amount', () => {
-        expect(issues.getNumberOfEnumIssues()).to.equal(1);
+        expect(issues.getNumberOfEnumIssues()).toBe(1);
       });
     });
   });
@@ -142,7 +140,7 @@ describe('jdl - Issues', () => {
 
     describe('when there is no issue', () => {
       it('should return 0', () => {
-        expect(issues.getNumberOfFieldIssues()).to.equal(0);
+        expect(issues.getNumberOfFieldIssues()).toBe(0);
       });
     });
     describe('when there are issues', () => {
@@ -157,7 +155,7 @@ describe('jdl - Issues', () => {
       });
 
       it('should return the total amount', () => {
-        expect(issues.getNumberOfFieldIssues()).to.equal(1);
+        expect(issues.getNumberOfFieldIssues()).toBe(1);
       });
     });
   });
@@ -170,7 +168,7 @@ describe('jdl - Issues', () => {
 
     describe('when there is no issue', () => {
       it('should return 0', () => {
-        expect(issues.getNumberOfRelationshipIssues()).to.equal(0);
+        expect(issues.getNumberOfRelationshipIssues()).toBe(0);
       });
     });
     describe('when there are issues', () => {
@@ -186,7 +184,7 @@ describe('jdl - Issues', () => {
       });
 
       it('should return the total amount', () => {
-        expect(issues.getNumberOfRelationshipIssues()).to.equal(1);
+        expect(issues.getNumberOfRelationshipIssues()).toBe(1);
       });
     });
   });
@@ -199,7 +197,7 @@ describe('jdl - Issues', () => {
 
     describe('when there is no issue', () => {
       it('should return an empty object', () => {
-        expect(issues.getIssues()).to.deep.equal({
+        expect(issues.getIssues()).toEqual({
           entities: [],
           enums: [],
           fields: [],
@@ -241,7 +239,7 @@ describe('jdl - Issues', () => {
       });
 
       it('should return the object containing the issues', () => {
-        expect(issues.getIssues()).to.deep.equal({
+        expect(issues.getIssues()).toEqual({
           entities: [entityIssue],
           enums: [enumIssue],
           fields: [fieldIssue],

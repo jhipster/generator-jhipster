@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect as jestExpect, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, expect as jestExpect, it } from 'esmocha';
 
 import { unaryOptions } from './index.ts';
 
@@ -27,12 +25,12 @@ describe('jdl - UnaryOptions', () => {
   describe('exists', () => {
     describe('when checking for a valid unary option', () => {
       it('should return true', () => {
-        expect(unaryOptions.exists(unaryOptions.SKIP_CLIENT)).to.be.true;
+        expect(unaryOptions.exists(unaryOptions.SKIP_CLIENT)).toBe(true);
       });
     });
     describe('when checking for an invalid unary option', () => {
       it('should return false', () => {
-        expect(unaryOptions.exists('NOTHING')).to.be.false;
+        expect(unaryOptions.exists('NOTHING')).toBe(false);
       });
     });
   });
@@ -40,7 +38,7 @@ describe('jdl - UnaryOptions', () => {
     describe('when not passing a function', () => {
       it('should fail', () => {
         // @ts-expect-error invalid argument
-        expect(() => unaryOptions.forEach()).to.throw(/^A function has to be passed to loop over the unary options\.$/);
+        expect(() => unaryOptions.forEach()).toThrow(/^A function has to be passed to loop over the unary options\.$/);
       });
     });
     describe('when passing a function', () => {

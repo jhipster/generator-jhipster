@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect as jestExpect, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, expect as jestExpect, it } from 'esmocha';
 
 import applicationOptions from '../../../jhipster/application-options.ts';
 import { binaryOptions } from '../built-in-options/index.ts';
@@ -43,7 +41,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should return false', () => {
-        expect(application.hasConfigurationOption(OptionNames.BASE_NAME)).to.be.false;
+        expect(application.hasConfigurationOption(OptionNames.BASE_NAME)).toBe(false);
       });
     });
     describe('when the application has the option', () => {
@@ -55,7 +53,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should return true', () => {
-        expect(application.hasConfigurationOption(OptionNames.BASE_NAME)).to.be.true;
+        expect(application.hasConfigurationOption(OptionNames.BASE_NAME)).toBe(true);
       });
     });
   });
@@ -69,7 +67,7 @@ describe('jdl - JDLApplication', () => {
 
       it('should fail', () => {
         // @ts-expect-error invalid api test
-        expect(() => application.setConfigurationOption()).to.throw(/^An option has to be passed to set an option\.$/);
+        expect(() => application.setConfigurationOption()).toThrow(/^An option has to be passed to set an option\.$/);
       });
     });
     describe('when setting a new option', () => {
@@ -81,7 +79,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should add it', () => {
-        expect(application.hasConfigurationOption(OptionNames.BASE_NAME)).to.be.true;
+        expect(application.hasConfigurationOption(OptionNames.BASE_NAME)).toBe(true);
       });
     });
     describe('when setting an already present option', () => {
@@ -94,7 +92,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should replace its value', () => {
-        expect(application.getConfigurationOptionValue(OptionNames.BASE_NAME)).to.equal('application2');
+        expect(application.getConfigurationOptionValue(OptionNames.BASE_NAME)).toBe('application2');
       });
     });
   });
@@ -108,7 +106,7 @@ describe('jdl - JDLApplication', () => {
 
       it('should fail', () => {
         // @ts-expect-error invalid api test
-        expect(() => application.getConfigurationOptionValue()).to.throw(/^An option name has to be passed to get a value\.$/);
+        expect(() => application.getConfigurationOptionValue()).toThrow(/^An option name has to be passed to get a value\.$/);
       });
     });
     describe('when the application does not have the option', () => {
@@ -119,7 +117,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should return undefined', () => {
-        expect(application.getConfigurationOptionValue(OptionNames.BASE_NAME)).to.be.undefined;
+        expect(application.getConfigurationOptionValue(OptionNames.BASE_NAME)).toBeUndefined();
       });
     });
     describe('when the application has the option', () => {
@@ -131,7 +129,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should return its value', () => {
-        expect(application.getConfigurationOptionValue(OptionNames.BASE_NAME)).to.equal('application');
+        expect(application.getConfigurationOptionValue(OptionNames.BASE_NAME)).toBe('application');
       });
     });
   });
@@ -145,7 +143,7 @@ describe('jdl - JDLApplication', () => {
 
       it('should not do anything', () => {
         // @ts-expect-error invalid api test
-        expect(() => application.forEachConfigurationOption()).not.to.throw();
+        expect(() => application.forEachConfigurationOption()).not.toThrow();
       });
     });
     describe('when passing a function', () => {
@@ -163,7 +161,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should iterate over the options', () => {
-        expect(result).to.equal('baseName is toto and jhiPrefix is prefix');
+        expect(result).toBe('baseName is toto and jhiPrefix is prefix');
       });
     });
   });
@@ -177,7 +175,7 @@ describe('jdl - JDLApplication', () => {
 
       it('should fail', () => {
         // @ts-expect-error invalid api test
-        expect(() => application.addEntityName()).to.throw(/^An entity name has to be passed so as to be added to the application\.$/);
+        expect(() => application.addEntityName()).toThrow(/^An entity name has to be passed so as to be added to the application\.$/);
       });
     });
     describe('when passing an entity name', () => {
@@ -191,7 +189,7 @@ describe('jdl - JDLApplication', () => {
         });
 
         it('should add it', () => {
-          expect(entityNames.length).to.equal(1);
+          expect(entityNames.length).toBe(1);
         });
       });
       describe('that has already been added', () => {
@@ -205,7 +203,7 @@ describe('jdl - JDLApplication', () => {
         });
 
         it('should not add it', () => {
-          expect(entityNames.length).to.equal(1);
+          expect(entityNames.length).toBe(1);
         });
       });
     });
@@ -229,7 +227,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should not alter the entity names', () => {
-        expect(entityNames.length).to.equal(2);
+        expect(entityNames.length).toBe(2);
       });
     });
     describe('when passing an empty list', () => {
@@ -250,7 +248,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should not alter the entity names', () => {
-        expect(entityNames.length).to.equal(2);
+        expect(entityNames.length).toBe(2);
       });
     });
     describe('when passing entity names', () => {
@@ -270,7 +268,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should update the entity names', () => {
-        expect(application.getEntityNames().length).to.equal(3);
+        expect(application.getEntityNames().length).toBe(3);
       });
     });
   });
@@ -284,7 +282,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should return an empty list', () => {
-        expect(entityNames.length).to.equal(0);
+        expect(entityNames.length).toBe(0);
       });
     });
     describe('when there are entities', () => {
@@ -302,7 +300,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should return the entity list', () => {
-        expect(entityNames.length).to.equal(2);
+        expect(entityNames.length).toBe(2);
       });
     });
   });
@@ -348,7 +346,7 @@ describe('jdl - JDLApplication', () => {
 
       it('should fail', () => {
         // @ts-expect-error invalid api test
-        expect(() => application.addOption()).to.throw(/^Can't add a nil option\.$/);
+        expect(() => application.addOption()).toThrow(/^Can't add a nil option\.$/);
       });
     });
     describe('when passing an option', () => {
@@ -367,7 +365,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should add it', () => {
-        expect(result).to.include('paginate * with infinite-scroll except D');
+        expect(result).toContain('paginate * with infinite-scroll except D');
       });
     });
   });
@@ -380,7 +378,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should return 0', () => {
-        expect(application.getOptionQuantity()).to.equal(0);
+        expect(application.getOptionQuantity()).toBe(0);
       });
     });
     describe('when there are options', () => {
@@ -405,7 +403,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should return the exact number of options', () => {
-        expect(application.getOptionQuantity()).to.equal(2);
+        expect(application.getOptionQuantity()).toBe(2);
       });
     });
   });
@@ -418,7 +416,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should stringify the application object', () => {
-        expect(jdlApplication.toString()).to.equal(`application {
+        expect(jdlApplication.toString()).toBe(`application {
   config {
     jhipsterVersion "4.9.0"
   }
@@ -433,7 +431,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should export the entity names', () => {
-        expect(jdlApplication.toString()).to.equal(
+        expect(jdlApplication.toString()).toBe(
           `application {
   config {}
 
@@ -452,7 +450,7 @@ describe('jdl - JDLApplication', () => {
         });
 
         it('should stringify it quoted', () => {
-          expect(result).to.include('jhipsterVersion "6.5.1"');
+          expect(result).toContain('jhipsterVersion "6.5.1"');
         });
       });
       describe('when it is quoted', () => {
@@ -464,7 +462,7 @@ describe('jdl - JDLApplication', () => {
         });
 
         it('should not stringify it again', () => {
-          expect(result).to.include('jhipsterVersion "6.5.1"');
+          expect(result).toContain('jhipsterVersion "6.5.1"');
         });
       });
     });
@@ -478,7 +476,7 @@ describe('jdl - JDLApplication', () => {
         });
 
         it('should stringify it quoted', () => {
-          expect(result).to.include('jwtSecretKey "ASTUPIDLYLONGWORD="');
+          expect(result).toContain('jwtSecretKey "ASTUPIDLYLONGWORD="');
         });
       });
       describe('when it is quoted', () => {
@@ -490,7 +488,7 @@ describe('jdl - JDLApplication', () => {
         });
 
         it('should not stringify it again', () => {
-          expect(result).to.include('jwtSecretKey "ASTUPIDLYLONGWORD="');
+          expect(result).toContain('jwtSecretKey "ASTUPIDLYLONGWORD="');
         });
       });
     });
@@ -504,7 +502,7 @@ describe('jdl - JDLApplication', () => {
         });
 
         it('should stringify it quoted', () => {
-          expect(result).to.include('rememberMeKey "ASTUPIDLYLONGWORD="');
+          expect(result).toContain('rememberMeKey "ASTUPIDLYLONGWORD="');
         });
       });
       describe('when it is quoted', () => {
@@ -516,7 +514,7 @@ describe('jdl - JDLApplication', () => {
         });
 
         it('should not stringify it again', () => {
-          expect(result).to.include('rememberMeKey "ASTUPIDLYLONGWORD="');
+          expect(result).toContain('rememberMeKey "ASTUPIDLYLONGWORD="');
         });
       });
     });
@@ -530,7 +528,7 @@ describe('jdl - JDLApplication', () => {
         });
 
         it('should not stringify it', () => {
-          expect(result).not.to.include('entitySuffix');
+          expect(result).not.toContain('entitySuffix');
         });
       });
       describe('with a value', () => {
@@ -542,7 +540,7 @@ describe('jdl - JDLApplication', () => {
         });
 
         it('should not stringify it', () => {
-          expect(result).to.include('entitySuffix Entity');
+          expect(result).toContain('entitySuffix Entity');
         });
       });
     });
@@ -556,7 +554,7 @@ describe('jdl - JDLApplication', () => {
         });
 
         it('should not stringify it', () => {
-          expect(result).not.to.include('dtoSuffix');
+          expect(result).not.toContain('dtoSuffix');
         });
       });
       describe('with a value', () => {
@@ -568,7 +566,7 @@ describe('jdl - JDLApplication', () => {
         });
 
         it('should not stringify it', () => {
-          expect(result).to.include('dtoSuffix DTO');
+          expect(result).toContain('dtoSuffix DTO');
         });
       });
     });
@@ -582,7 +580,7 @@ describe('jdl - JDLApplication', () => {
         });
 
         it('should not stringify it', () => {
-          expect(result).not.to.include('clientThemeVariant');
+          expect(result).not.toContain('clientThemeVariant');
         });
       });
       describe('with a value', () => {
@@ -594,7 +592,7 @@ describe('jdl - JDLApplication', () => {
         });
 
         it('should not stringify it', () => {
-          expect(result).to.include('clientThemeVariant aVariant');
+          expect(result).toContain('clientThemeVariant aVariant');
         });
       });
     });
@@ -607,7 +605,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should not stringify it', () => {
-        expect(result).not.to.include('packageFolder');
+        expect(result).not.toContain('packageFolder');
       });
     });
     describe('when there are options', () => {
@@ -637,7 +635,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should add the options', () => {
-        expect(result).to.equal(`application {
+        expect(result).toBe(`application {
   config {}
 
   entities A, B, C

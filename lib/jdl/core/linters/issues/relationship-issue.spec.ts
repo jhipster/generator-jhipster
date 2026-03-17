@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { describe, expect, it } from 'esmocha';
 
 import RelationshipIssue from './relationship-issue.ts';
 
@@ -28,22 +26,22 @@ describe('jdl - RelationshipIssue', () => {
     describe('when not passing any arg', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => new RelationshipIssue()).to.throw(/^An issue must at least have a rule name\.$/);
+        expect(() => new RelationshipIssue()).toThrow(/^An issue must at least have a rule name\.$/);
       });
     });
     describe('when not passing a rule name', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => new RelationshipIssue()).to.throw(/^An issue must at least have a rule name\.$/);
+        expect(() => new RelationshipIssue()).toThrow(/^An issue must at least have a rule name\.$/);
 
         // @ts-expect-error
-        expect(() => new RelationshipIssue({})).to.throw(/^An issue must at least have a rule name\.$/);
+        expect(() => new RelationshipIssue({})).toThrow(/^An issue must at least have a rule name\.$/);
       });
     });
     describe('when not passing a source', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => new RelationshipIssue({ ruleName: 'Toto', to: 'to', type: 'type' })).to.throw(
+        expect(() => new RelationshipIssue({ ruleName: 'Toto', to: 'to', type: 'type' })).toThrow(
           /^A relationship's source, destination & type must be passed\.$/,
         );
       });
@@ -51,7 +49,7 @@ describe('jdl - RelationshipIssue', () => {
     describe('when not passing a destination', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => new RelationshipIssue({ ruleName: 'Toto', source: 'source', type: 'type' })).to.throw(
+        expect(() => new RelationshipIssue({ ruleName: 'Toto', source: 'source', type: 'type' })).toThrow(
           /^A relationship's source, destination & type must be passed\.$/,
         );
       });
@@ -60,7 +58,7 @@ describe('jdl - RelationshipIssue', () => {
   describe('when not passing a type', () => {
     it('should fail', () => {
       // @ts-expect-error
-      expect(() => new RelationshipIssue({ ruleName: 'Toto', source: 'source', to: 'to' })).to.throw(
+      expect(() => new RelationshipIssue({ ruleName: 'Toto', source: 'source', to: 'to' })).toThrow(
         /^A relationship's source, destination & type must be passed\.$/,
       );
     });

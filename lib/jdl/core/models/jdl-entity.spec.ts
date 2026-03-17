@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import { JDLEntity } from './index.ts';
 import JDLField from './jdl-field.ts';
@@ -32,7 +30,7 @@ describe('jdl - JDLEntity', () => {
         expect(() => {
           // @ts-expect-error
           new JDLEntity();
-        }).to.throw('The entity name is mandatory to create an entity.');
+        }).toThrow('The entity name is mandatory to create an entity.');
       });
     });
     describe('when not passing the name', () => {
@@ -40,7 +38,7 @@ describe('jdl - JDLEntity', () => {
         expect(() => {
           // @ts-expect-error
           new JDLEntity({ name: null, comment: 'My entity' });
-        }).to.throw('The entity name is mandatory to create an entity.');
+        }).toThrow('The entity name is mandatory to create an entity.');
       });
     });
     describe('when not passing the table name', () => {
@@ -51,7 +49,7 @@ describe('jdl - JDLEntity', () => {
       });
 
       it('should not use any value', () => {
-        expect(entity.tableName).to.equal(undefined);
+        expect(entity.tableName).toBe(undefined);
       });
     });
     describe('when passing arguments', () => {
@@ -77,10 +75,10 @@ describe('jdl - JDLEntity', () => {
       });
 
       it('should create a new instance', () => {
-        expect(entity.name).to.equal(args.name);
-        expect(entity.tableName).to.equal(args.tableName);
-        expect(entity.comment).to.equal(args.comment);
-        expect(entity.fields).to.deep.eq(args.fields);
+        expect(entity.name).toBe(args.name);
+        expect(entity.tableName).toBe(args.tableName);
+        expect(entity.comment).toBe(args.comment);
+        expect(entity.fields).toEqual(args.fields);
       });
     });
   });
@@ -100,7 +98,7 @@ describe('jdl - JDLEntity', () => {
           expect(() => {
             // @ts-expect-error invalid api test
             entity.addField(null);
-          }).to.throw(/^Can't add nil field to the JDL entity\.$/);
+          }).toThrow(/^Can't add nil field to the JDL entity\.$/);
         });
       });
     });
@@ -113,7 +111,7 @@ describe('jdl - JDLEntity', () => {
 
       it('should work', () => {
         entity.addField(validField);
-        expect(entity.fields).to.deep.eq({ myField: validField });
+        expect(entity.fields).toEqual({ myField: validField });
       });
     });
   });
@@ -129,7 +127,7 @@ describe('jdl - JDLEntity', () => {
       });
 
       it('should not alter the entity', () => {
-        expect(entity.toString()).to.equal('entity Toto');
+        expect(entity.toString()).toBe('entity Toto');
       });
     });
     describe('when passing fields', () => {
@@ -152,7 +150,7 @@ describe('jdl - JDLEntity', () => {
       });
 
       it('should alter the entity', () => {
-        expect(entity.toString()).to.equal(`entity Toto {
+        expect(entity.toString()).toBe(`entity Toto {
   tata String
   titi Integer
 }`);
@@ -171,7 +169,7 @@ describe('jdl - JDLEntity', () => {
 
       it('should fail', () => {
         // @ts-expect-error FIXME
-        expect(() => entity.forEachField()).to.throw();
+        expect(() => entity.forEachField()).toThrow();
       });
     });
     describe('when passing a function', () => {
@@ -200,7 +198,7 @@ describe('jdl - JDLEntity', () => {
       });
 
       it('should iterate over the fields', () => {
-        expect(result).to.equal('ab');
+        expect(result).toBe('ab');
       });
     });
   });
@@ -218,7 +216,7 @@ describe('jdl - JDLEntity', () => {
       });
 
       it('should stringify its content', () => {
-        expect(entity.toString()).to.equal(`entity ${args.name} (${args.tableName})`);
+        expect(entity.toString()).toBe(`entity ${args.name} (${args.tableName})`);
       });
     });
     describe('with a table name not equal to the name (snakecase)', () => {
@@ -234,7 +232,7 @@ describe('jdl - JDLEntity', () => {
       });
 
       it('should export it', () => {
-        expect(entity.toString()).to.equal(`entity ${args.name} (MyTableName)`);
+        expect(entity.toString()).toBe(`entity ${args.name} (MyTableName)`);
       });
     });
     describe('without fields', () => {
@@ -251,7 +249,7 @@ describe('jdl - JDLEntity', () => {
       });
 
       it('should stringify its content', () => {
-        expect(entity.toString()).to.equal(
+        expect(entity.toString()).toBe(
           `/**
  * ${args.comment}
  */
@@ -286,7 +284,7 @@ entity ${args.name} (${args.tableName})`,
       it('should stringify its content', () => {
         entity.addField(field1);
         entity.addField(field2);
-        expect(entity.toString()).to.equal(
+        expect(entity.toString()).toBe(
           `/**
  * ${entity.comment}
  */

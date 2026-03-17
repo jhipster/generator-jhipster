@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect as jestExpect, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, expect as jestExpect, it } from 'esmocha';
 
 import { binaryOptions } from './index.ts';
 
@@ -52,7 +50,7 @@ describe('jdl - BinaryOptions', () => {
   describe('exists', () => {
     describe('when checking for a valid binary option', () => {
       it('should return true', () => {
-        expect(binaryOptions.exists(binaryOptions.Options.DTO, binaryOptions.Values.dto.MAPSTRUCT)).to.be.true;
+        expect(binaryOptions.exists(binaryOptions.Options.DTO, binaryOptions.Values.dto.MAPSTRUCT)).toBe(true);
       });
     });
   });
@@ -60,7 +58,7 @@ describe('jdl - BinaryOptions', () => {
     describe('when not passing a function', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => binaryOptions.forEach()).to.throw(/^A function has to be passed to loop over the binary options\.$/);
+        expect(() => binaryOptions.forEach()).toThrow(/^A function has to be passed to loop over the binary options\.$/);
       });
     });
     describe('when passing a function', () => {

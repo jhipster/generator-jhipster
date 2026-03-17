@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect as jestExpect, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, expect as jestExpect, it } from 'esmocha';
 
 import { JDLEnum } from './index.ts';
 
@@ -30,14 +28,14 @@ describe('jdl - JDLEnum', () => {
         expect(() => {
           // @ts-expect-error
           new JDLEnum();
-        }).to.throw("The enum's name must be passed to create an enum.");
+        }).toThrow("The enum's name must be passed to create an enum.");
       });
     });
     describe('when not passing a name', () => {
       it('should fail', () => {
         expect(() => {
           new JDLEnum({ values: [{ key: 'ABC' }], comment: 'My enumeration.' });
-        }).to.throw("The enum's name must be passed to create an enum.");
+        }).toThrow("The enum's name must be passed to create an enum.");
       });
     });
     describe('when passing arguments', () => {
@@ -55,7 +53,7 @@ describe('jdl - JDLEnum', () => {
     });
 
     it('should return the values separated by a comma', () => {
-      expect(result).to.equal('A (aaaa),B');
+      expect(result).toBe('A (aaaa),B');
     });
   });
   describe('getValueJavadocs', () => {
@@ -96,7 +94,7 @@ describe('jdl - JDLEnum', () => {
       });
 
       it('should stringify the enum', () => {
-        expect(jdlEnum.toString()).to.equal(
+        expect(jdlEnum.toString()).toBe(
           `/**
  * ${jdlEnum.comment}
  */
@@ -120,7 +118,7 @@ enum ${jdlEnum.name} {
       });
 
       it('should stringify the enum', () => {
-        expect(jdlEnum.toString()).to.equal(
+        expect(jdlEnum.toString()).toBe(
           `/**
  * ${jdlEnum.comment}
  */

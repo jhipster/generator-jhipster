@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import { createRuntime } from '../../runtime.ts';
 
@@ -41,27 +39,27 @@ describe('jdl - JDLLexer', () => {
     });
 
     it('should not fail', () => {
-      expect(lexingResult.errors).to.be.empty;
+      expect(lexingResult.errors).toHaveLength(0);
     });
 
     it('should lex a simple valid JDL text', () => {
       const tokens = lexingResult.tokens;
-      expect(tokens.length).to.equal(15);
-      expect(tokens[0].image).to.equal('entity');
-      expect(tokens[1].image).to.equal('JobHistory');
-      expect(tokens[2].image).to.equal('{');
-      expect(tokens[3].image).to.equal('startDate');
-      expect(tokens[4].image).to.equal('ZonedDateTime');
-      expect(tokens[5].image).to.equal(',');
-      expect(tokens[6].image).to.equal('endDate');
-      expect(tokens[7].image).to.equal('ZonedDateTime');
-      expect(tokens[8].image).to.equal(',');
-      expect(tokens[9].image).to.equal('language');
-      expect(tokens[10].image).to.equal('Language');
-      expect(tokens[11].image).to.equal(',');
-      expect(tokens[12].image).to.equal('positionDuration');
-      expect(tokens[13].image).to.equal('Duration');
-      expect(tokens[14].image).to.equal('}');
+      expect(tokens.length).toBe(15);
+      expect(tokens[0].image).toBe('entity');
+      expect(tokens[1].image).toBe('JobHistory');
+      expect(tokens[2].image).toBe('{');
+      expect(tokens[3].image).toBe('startDate');
+      expect(tokens[4].image).toBe('ZonedDateTime');
+      expect(tokens[5].image).toBe(',');
+      expect(tokens[6].image).toBe('endDate');
+      expect(tokens[7].image).toBe('ZonedDateTime');
+      expect(tokens[8].image).toBe(',');
+      expect(tokens[9].image).toBe('language');
+      expect(tokens[10].image).toBe('Language');
+      expect(tokens[11].image).toBe(',');
+      expect(tokens[12].image).toBe('positionDuration');
+      expect(tokens[13].image).toBe('Duration');
+      expect(tokens[14].image).toBe('}');
     });
   });
 
@@ -80,15 +78,15 @@ describe('jdl - JDLLexer', () => {
 
     it('should report the errors', () => {
       const errors = lexingResult.errors;
-      expect(errors).to.have.lengthOf(1);
-      expect(errors[0].line).to.equal(4);
-      expect(errors[0].column).to.equal(6);
-      expect(errors[0].message).to.include('#');
-      expect(errors[0].message).to.include('skipped 3 characters');
+      expect(errors).toHaveLength(1);
+      expect(errors[0].line).toBe(4);
+      expect(errors[0].column).toBe(6);
+      expect(errors[0].message).toContain('#');
+      expect(errors[0].message).toContain('skipped 3 characters');
     });
 
     it('should lex a simple invalid JDL text', () => {
-      expect(lexingResult.tokens).to.have.lengthOf(9, 'All 9 tokens should have been lexed even though "@@@" caused a syntax error');
+      expect(lexingResult.tokens).toHaveLength(9, 'All 9 tokens should have been lexed even though "@@@" caused a syntax error');
     });
   });
 });

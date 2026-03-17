@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import JDLEnumValue from './jdl-enum-value.ts';
 
@@ -28,7 +26,7 @@ describe('jdl - JDLEnumValue', () => {
     describe('when not passing an enum value name', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => new JDLEnumValue()).to.throw(/^The enum value name has to be passed to create an enum\.$/);
+        expect(() => new JDLEnumValue()).toThrow(/^The enum value name has to be passed to create an enum\.$/);
       });
     });
   });
@@ -41,7 +39,7 @@ describe('jdl - JDLEnumValue', () => {
       });
 
       it('should omit it', () => {
-        expect(enumValue.toString()).to.equal('FRENCH');
+        expect(enumValue.toString()).toBe('FRENCH');
       });
     });
     describe('with a specified enum value', () => {
@@ -52,7 +50,7 @@ describe('jdl - JDLEnumValue', () => {
       });
 
       it('should include it', () => {
-        expect(enumValue.toString()).to.equal('FRENCH (frenchy)');
+        expect(enumValue.toString()).toBe('FRENCH (frenchy)');
       });
     });
   });

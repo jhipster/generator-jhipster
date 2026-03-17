@@ -17,11 +17,10 @@
  * limitations under the License.
  */
 
-import { beforeEach, describe, expect as jestExpect, it } from 'esmocha';
+import { beforeEach, describe, expect, expect as jestExpect, it } from 'esmocha';
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { expect } from 'chai';
 import helpers from 'yeoman-test';
 
 import deploymentOptions from '../../../jhipster/deployment-options.ts';
@@ -45,7 +44,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
           expect(() => {
             // @ts-expect-error empty parameter not authorized
             exportDeployments();
-          }).to.throw(/^Deployments have to be passed to be exported\.$/);
+          }).toThrow(/^Deployments have to be passed to be exported\.$/);
         });
       });
     });
@@ -69,7 +68,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
         });
 
         it('should return the exported deployments', () => {
-          expect(returned).to.have.lengthOf(2);
+          expect(returned).toHaveLength(2);
         });
         describe('for the first deployment', () => {
           let content: any;
@@ -84,7 +83,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
           });
 
           it('should format it', () => {
-            expect(content['generator-jhipster']).not.to.be.undefined;
+            expect(content['generator-jhipster']).not.toBeUndefined();
             const config = content['generator-jhipster'];
             jestExpect(config).toMatchInlineSnapshot(`
 {
@@ -116,7 +115,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
           });
 
           it('should format it', () => {
-            expect(content['generator-jhipster']).not.to.be.undefined;
+            expect(content['generator-jhipster']).not.toBeUndefined();
             const config = content['generator-jhipster'];
             jestExpect(config).toMatchInlineSnapshot(`
 {

@@ -17,11 +17,9 @@
  * limitations under the License.
  */
 
-import { beforeEach, describe, expect as jestExpect, it } from 'esmocha';
+import { beforeEach, describe, expect, expect as jestExpect, it } from 'esmocha';
 import fs, { readFileSync } from 'node:fs';
 import path from 'node:path';
-
-import { expect } from 'chai';
 
 import { getDefaultRuntime } from '../../jdl-config/jhipster-jdl-config.ts';
 import { basicHelpers as helpers, createJHipsterConfigFiles } from '../../testing/index.ts';
@@ -232,7 +230,7 @@ paginate Country with pager
     describe('when there is no yo-rc file in the passed directory', () => {
       describe('with no JHipster app', () => {
         it('does not fail', () => {
-          expect(() => convertToJDL(runtime)).not.to.throw();
+          expect(() => convertToJDL(runtime)).not.toThrow();
         });
       });
       describe('with several JHipster apps', () => {

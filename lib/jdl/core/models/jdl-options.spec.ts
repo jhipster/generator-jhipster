@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { afterEach, before, describe, expect as jestExpect, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { afterEach, before, describe, expect, expect as jestExpect, it } from 'esmocha';
 
 import { binaryOptions, unaryOptions } from '../built-in-options/index.ts';
 
@@ -40,7 +38,7 @@ describe('jdl - JDLOptions', () => {
         expect(() => {
           // @ts-expect-error invalid api test
           options.addOption(null);
-        }).to.throw(/^Can't add nil option.$/);
+        }).toThrow(/^Can't add nil option.$/);
       });
     });
     describe('when passing a valid option', () => {
@@ -62,8 +60,8 @@ describe('jdl - JDLOptions', () => {
 
       describe('that has not been added before', () => {
         it('should add it', () => {
-          expect(options.getOptions()[0]).to.deep.eq(option1);
-          expect(options.getOptions()[1]).to.deep.eq(option2);
+          expect(options.getOptions()[0]).toEqual(option1);
+          expect(options.getOptions()[1]).toEqual(option2);
         });
       });
 
@@ -75,10 +73,10 @@ describe('jdl - JDLOptions', () => {
         });
 
         it('should not duplicate it', () => {
-          expect(options.getOptions().length).to.equal(2);
+          expect(options.getOptions().length).toBe(2);
         });
         it('should merge the entity names and excluded names', () => {
-          expect(options.getOptions()[0]).to.deep.eq(
+          expect(options.getOptions()[0]).toEqual(
             new JDLUnaryOption({
               name: unaryOptions.SKIP_CLIENT,
               entityNames: new Set(['A', 'B', 'C', 'J']),
@@ -92,7 +90,7 @@ describe('jdl - JDLOptions', () => {
   describe('has', () => {
     describe('with an invalid input', () => {
       it('should return false', () => {
-        expect(new JDLOptions().has()).to.be.false;
+        expect(new JDLOptions().has()).toBe(false);
       });
     });
     describe('with a valid input', () => {
@@ -109,8 +107,8 @@ describe('jdl - JDLOptions', () => {
             entityNames: new Set(['A']),
           }),
         );
-        expect(options.has(unaryOptions.SKIP_CLIENT)).to.be.true;
-        expect(options.has(unaryOptions.SKIP_SERVER)).to.be.false;
+        expect(options.has(unaryOptions.SKIP_CLIENT)).toBe(true);
+        expect(options.has(unaryOptions.SKIP_SERVER)).toBe(false);
       });
     });
   });
@@ -122,7 +120,7 @@ describe('jdl - JDLOptions', () => {
     });
 
     it('should return the number of options', () => {
-      expect(options.size()).to.equal(0);
+      expect(options.size()).toBe(0);
       options.addOption(
         new JDLUnaryOption({
           name: unaryOptions.SKIP_CLIENT,
@@ -130,7 +128,7 @@ describe('jdl - JDLOptions', () => {
           excludedNames: new Set(['M']),
         }),
       );
-      expect(options.size()).to.equal(1);
+      expect(options.size()).toBe(1);
     });
   });
   describe('forEach', () => {
@@ -189,12 +187,12 @@ describe('jdl - JDLOptions', () => {
     describe('when passing an invalid name', () => {
       it('should return an empty array', () => {
         // @ts-expect-error invalid api test
-        expect(jdlOptions.getOptionsForName()).to.be.empty;
+        expect(jdlOptions.getOptionsForName()).toHaveLength(0);
       });
     });
     describe('when checking for an absent option', () => {
       it('should return an empty array', () => {
-        expect(jdlOptions.getOptionsForName(unaryOptions.SKIP_CLIENT)).to.be.empty;
+        expect(jdlOptions.getOptionsForName(unaryOptions.SKIP_CLIENT)).toHaveLength(0);
       });
     });
     describe('when checking for a present option', () => {
@@ -221,8 +219,8 @@ describe('jdl - JDLOptions', () => {
       });
 
       it('should return it', () => {
-        expect(jdlOptions.getOptionsForName(unaryOptions.SKIP_CLIENT)).to.deep.equal([option1]);
-        expect(jdlOptions.getOptionsForName(binaryOptions.Options.SERVICE)).to.deep.equal([option2, option3]);
+        expect(jdlOptions.getOptionsForName(unaryOptions.SKIP_CLIENT)).toEqual([option1]);
+        expect(jdlOptions.getOptionsForName(binaryOptions.Options.SERVICE)).toEqual([option2, option3]);
       });
     });
   });
@@ -249,12 +247,12 @@ describe('jdl - JDLOptions', () => {
 
     describe('when not passing an indentation level', () => {
       it('should stringify the options without indent', () => {
-        expect(options.toString()).to.equal('skipClient A, B, C, J except M, N, O\nskipServer D');
+        expect(options.toString()).toBe('skipClient A, B, C, J except M, N, O\nskipServer D');
       });
     });
     describe('when passing an indentation level', () => {
       it('should stringify the options with indent', () => {
-        expect(options.toString(2)).to.equal('  skipClient A, B, C, J except M, N, O\n  skipServer D');
+        expect(options.toString(2)).toBe('  skipClient A, B, C, J except M, N, O\n  skipServer D');
       });
     });
   });

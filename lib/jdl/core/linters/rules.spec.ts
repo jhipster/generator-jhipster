@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { describe, expect, it } from 'esmocha';
 
 import { getRule, rules, rulesNames } from './rules.ts';
 
@@ -28,20 +26,20 @@ describe('jdl - Rules', () => {
     describe('when not passing a rule name', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => getRule(undefined)).to.throw(/^A rule name has to be passed to get a rule\.$/);
+        expect(() => getRule(undefined)).toThrow(/^A rule name has to be passed to get a rule\.$/);
       });
     });
     describe('when passing a rule name', () => {
       describe('of an absent rule', () => {
         it('should return undefined', () => {
           // @ts-expect-error
-          expect(getRule('toto')).to.be.undefined;
+          expect(getRule('toto')).toBeUndefined();
         });
       });
       (Object.keys(rulesNames) as (keyof typeof rulesNames)[]).forEach(ruleName => {
         describe(`for rule name ${ruleName}`, () => {
           it('should return the corresponding rule', () => {
-            expect(getRule(ruleName)).to.deep.equal(rules[ruleName]);
+            expect(getRule(ruleName)).toEqual(rules[ruleName]);
           });
         });
       });

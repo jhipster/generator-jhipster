@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect as jestExpect, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, expect as jestExpect, it } from 'esmocha';
 
 import { relationshipTypes } from '../../core/basic-types/index.ts';
 import { relationshipOptions } from '../../core/built-in-options/index.ts';
@@ -34,14 +32,14 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
   describe('convert', () => {
     describe('when not passing any relationship', () => {
       it('should return an empty map', () => {
-        expect(convert([]).size).to.equal(0);
-        expect(convert([], ['A', 'B']).size).to.equal(0);
+        expect(convert([]).size).toBe(0);
+        expect(convert([], ['A', 'B']).size).toBe(0);
       });
     });
     describe('when not passing any entity name', () => {
       it('should return an empty map', () => {
-        expect(convert(undefined, []).size).to.equal(0);
-        expect(convert([], []).size).to.equal(0);
+        expect(convert(undefined, []).size).toBe(0);
+        expect(convert([], []).size).toBe(0);
       });
     });
     describe('when passing relationships and entity names', () => {
@@ -347,7 +345,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             `);
           });
           it('should not add the relationship for the destination entity', () => {
-            expect(relationshipFromDestinationToSource).to.be.undefined;
+            expect(relationshipFromDestinationToSource).toBeUndefined();
           });
         });
         describe('for a One-to-Many relationship', () => {
@@ -407,7 +405,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             `);
           });
           it('should not add the relationship for the destination entity', () => {
-            expect(relationshipFromDestinationToSource).to.be.undefined;
+            expect(relationshipFromDestinationToSource).toBeUndefined();
           });
         });
         describe('for a Many-to-Many relationship', () => {

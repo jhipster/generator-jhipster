@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import { KEYWORD, NAME } from './shared-tokens.ts';
 import createTokenFromConfig from './token-creator.ts';
@@ -29,7 +27,7 @@ describe('jdl - TokenCreator', () => {
     describe('when not passing a config', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => createTokenFromConfig()).to.throw(/^Can't create a token without the proper config\.$/);
+        expect(() => createTokenFromConfig()).toThrow(/^Can't create a token without the proper config\.$/);
       });
     });
     describe('when passing a config', () => {
@@ -41,10 +39,10 @@ describe('jdl - TokenCreator', () => {
         });
 
         it('should use the passed name', () => {
-          expect(token.name).to.equal('MY_TOKEN');
+          expect(token.name).toBe('MY_TOKEN');
         });
         it('should set an empty list as categories', () => {
-          expect(token.CATEGORIES).to.deep.equal([]);
+          expect(token.CATEGORIES).toEqual([]);
         });
       });
       describe('when the pattern is a keyword', () => {
@@ -55,10 +53,10 @@ describe('jdl - TokenCreator', () => {
         });
 
         it('should set the longer alternative attribute', () => {
-          expect(token.LONGER_ALT).to.equal(NAME);
+          expect(token.LONGER_ALT).toBe(NAME);
         });
         it('should set the categories list', () => {
-          expect(token.CATEGORIES).to.deep.equal([KEYWORD]);
+          expect(token.CATEGORIES).toEqual([KEYWORD]);
         });
       });
       describe('if there is no label but a pattern', () => {
@@ -69,7 +67,7 @@ describe('jdl - TokenCreator', () => {
         });
 
         it('should set a label from the pattern', () => {
-          expect(token.LABEL).to.equal("'pattern'");
+          expect(token.LABEL).toBe("'pattern'");
         });
       });
     });

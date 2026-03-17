@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect as jestExpect, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, expect as jestExpect, it } from 'esmocha';
 
 import fieldTypes from '../../../jhipster/field-types.ts';
 import { validations } from '../../core/built-in-options/index.ts';
@@ -41,7 +39,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
     describe('when not passing a JDL object', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => convert()).to.throw(/^A JDL Object must be passed to convert JDL fields to JSON\.$/);
+        expect(() => convert()).toThrow(/^A JDL Object must be passed to convert JDL fields to JSON\.$/);
       });
     });
     describe('when passing a JDL object', () => {
