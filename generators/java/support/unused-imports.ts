@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-import { Language, Parser, type Node } from 'web-tree-sitter';
+import { Language, type Node, Parser } from 'web-tree-sitter';
 
 let parserPromise: Promise<Parser> | null = null;
 
