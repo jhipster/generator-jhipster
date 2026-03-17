@@ -17,10 +17,9 @@
  * limitations under the License.
  */
 
-import { beforeEach, describe, expect as jestExpect, it } from 'esmocha';
+import { beforeEach, describe, expect, expect as jestExpect, it } from 'esmocha';
 import fs from 'node:fs';
 
-import { expect } from 'chai';
 import helpers from 'yeoman-test';
 
 import { JDLEntity } from '../../core/models/index.ts';
@@ -44,7 +43,7 @@ describe('jdl - JDLExporter', () => {
           expect(() => {
             // @ts-expect-error
             exportToJDL();
-          }).to.throw(/^A JDLObject has to be passed to be exported\.$/);
+          }).toThrow(/^A JDLObject has to be passed to be exported\.$/);
         });
       });
     });
@@ -67,10 +66,10 @@ describe('jdl - JDLExporter', () => {
         });
 
         it('should export the JDL to the passed path', () => {
-          expect(fileExistence).to.be.true;
+          expect(fileExistence).toBe(true);
         });
         it('should write the JDL inside the file', () => {
-          expect(jdlContent).to.equal('entity Toto\n');
+          expect(jdlContent).toBe('entity Toto\n');
         });
       });
       describe('without a path', () => {
@@ -92,10 +91,10 @@ describe('jdl - JDLExporter', () => {
           });
 
           it('should export the JDL to the default one', () => {
-            expect(fileExistence).to.be.true;
+            expect(fileExistence).toBe(true);
           });
           it('should write the JDL inside the file', () => {
-            expect(jdlContent).to.equal('entity Toto\n');
+            expect(jdlContent).toBe('entity Toto\n');
           });
         });
         describe('exports application', () => {

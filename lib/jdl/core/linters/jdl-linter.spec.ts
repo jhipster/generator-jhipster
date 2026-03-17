@@ -17,10 +17,9 @@
  * limitations under the License.
  */
 
-import { beforeEach, describe, expect as jestExpect, it } from 'esmocha';
+import { beforeEach, describe, expect, expect as jestExpect, it } from 'esmocha';
 import { readFileSync, writeFileSync } from 'node:fs';
 
-import { expect } from 'chai';
 import helpers from 'yeoman-test';
 
 import { createJDLLinterFromContent, getTestFile } from '../__test-support__/index.ts';
@@ -53,7 +52,7 @@ describe('jdl - JDLLinter', () => {
     describe('when not passing a file', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => createJDLLinterFromFile(undefined)).to.throw(/^A JDL file must be passed to create a new JDL linter\.$/);
+        expect(() => createJDLLinterFromFile(undefined)).toThrow(/^A JDL file must be passed to create a new JDL linter\.$/);
       });
     });
     describe('when passing a file', () => {
@@ -65,7 +64,7 @@ describe('jdl - JDLLinter', () => {
       });
 
       it('should not fail', () => {
-        expect(() => createJDLLinterFromFile(path)).not.to.throw();
+        expect(() => createJDLLinterFromFile(path)).not.toThrow();
       });
     });
   });
@@ -73,12 +72,12 @@ describe('jdl - JDLLinter', () => {
     describe('when not passing a content', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => createJDLLinterFromContent(undefined)).to.throw(/^A JDL content must be passed to create a new JDL linter\.$/);
+        expect(() => createJDLLinterFromContent(undefined)).toThrow(/^A JDL content must be passed to create a new JDL linter\.$/);
       });
     });
     describe('when passing a content', () => {
       it('should not fail', () => {
-        expect(() => createJDLLinterFromContent('entity A')).not.to.throw();
+        expect(() => createJDLLinterFromContent('entity A')).not.toThrow();
       });
     });
   });
@@ -96,8 +95,8 @@ describe('jdl - JDLLinter', () => {
       });
 
       it('reports the issue', () => {
-        expect(reportedIssues.getNumberOfIssues()).to.equal(1);
-        expect(issue.ruleName).to.equal('ENT_SHORTER_DECL');
+        expect(reportedIssues.getNumberOfIssues()).toBe(1);
+        expect(issue.ruleName).toBe('ENT_SHORTER_DECL');
       });
     });
     describe('when checking for duplicated', () => {
@@ -116,9 +115,9 @@ describe('jdl - JDLLinter', () => {
         });
 
         it('reports the issues', () => {
-          expect(reportedIssues.getNumberOfIssues()).to.equal(2);
-          expect(issueForA.ruleName).to.equal('ENT_DUPLICATED');
-          expect(issueForB.ruleName).to.equal('ENT_DUPLICATED');
+          expect(reportedIssues.getNumberOfIssues()).toBe(2);
+          expect(issueForA.ruleName).toBe('ENT_DUPLICATED');
+          expect(issueForB.ruleName).toBe('ENT_DUPLICATED');
         });
       });
       describe('fields', () => {
@@ -136,9 +135,9 @@ describe('jdl - JDLLinter', () => {
         });
 
         it('reports the issues', () => {
-          expect(reportedIssues.getNumberOfIssues()).to.equal(2);
-          expect(issueForAa.ruleName).to.equal('FLD_DUPLICATED');
-          expect(issueForBb.ruleName).to.equal('FLD_DUPLICATED');
+          expect(reportedIssues.getNumberOfIssues()).toBe(2);
+          expect(issueForAa.ruleName).toBe('FLD_DUPLICATED');
+          expect(issueForBb.ruleName).toBe('FLD_DUPLICATED');
         });
       });
       describe('enums', () => {
@@ -154,8 +153,8 @@ describe('jdl - JDLLinter', () => {
         });
 
         it('reports the issues', () => {
-          expect(reportedIssues.getNumberOfIssues()).to.equal(1);
-          expect(issueForA.ruleName).to.equal('ENUM_DUPLICATED');
+          expect(reportedIssues.getNumberOfIssues()).toBe(1);
+          expect(issueForA.ruleName).toBe('ENUM_DUPLICATED');
         });
       });
     });
@@ -174,9 +173,9 @@ describe('jdl - JDLLinter', () => {
       });
 
       it('reports the issues', () => {
-        expect(reportedIssues.getNumberOfIssues()).to.equal(2);
-        expect(issueFor2.ruleName).to.equal('ENUM_UNUSED');
-        expect(issueFor3.ruleName).to.equal('ENUM_UNUSED');
+        expect(reportedIssues.getNumberOfIssues()).toBe(2);
+        expect(issueFor2.ruleName).toBe('ENUM_UNUSED');
+        expect(issueFor3.ruleName).toBe('ENUM_UNUSED');
       });
     });
     describe('when checking for collapsible relationships', () => {
@@ -196,7 +195,7 @@ describe('jdl - JDLLinter', () => {
       });
 
       it('reports the issues', () => {
-        expect(reportedIssues.getNumberOfIssues()).to.equal(3);
+        expect(reportedIssues.getNumberOfIssues()).toBe(3);
         jestExpect(issueForAToB).toMatchInlineSnapshot(`
 RelationshipIssue {
   "from": "A",

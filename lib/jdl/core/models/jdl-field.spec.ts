@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import { validations } from '../built-in-options/index.ts';
 
@@ -37,7 +35,7 @@ describe('jdl - JDLField', () => {
         expect(() => {
           // @ts-expect-error invalid api test
           new JDLField();
-        }).to.throw('The field name and type are mandatory to create a field.');
+        }).toThrow('The field name and type are mandatory to create a field.');
       });
     });
     describe('when not passing the name', () => {
@@ -45,7 +43,7 @@ describe('jdl - JDLField', () => {
         expect(() => {
           // @ts-expect-error invalid api test
           new JDLField({ name: null, type: 'String' });
-        }).to.throw('The field name and type are mandatory to create a field.');
+        }).toThrow('The field name and type are mandatory to create a field.');
       });
     });
     describe('when not passing the type', () => {
@@ -53,7 +51,7 @@ describe('jdl - JDLField', () => {
         expect(() => {
           // @ts-expect-error invalid api test
           new JDLField({ name: 'abc', type: null });
-        }).to.throw('The field name and type are mandatory to create a field.');
+        }).toThrow('The field name and type are mandatory to create a field.');
       });
     });
   });
@@ -74,7 +72,7 @@ describe('jdl - JDLField', () => {
           expect(() => {
             // @ts-expect-error invalid api test
             field.addValidation(null);
-          }).to.throw(/^Can't add a nil JDL validation to the JDL field\.$/);
+          }).toThrow(/^Can't add a nil JDL validation to the JDL field\.$/);
         });
       });
     });
@@ -88,8 +86,8 @@ describe('jdl - JDLField', () => {
 
       it('should add it', () => {
         field.forEachValidation(validation => {
-          expect(validation.name).to.equal(MIN);
-          expect(validation.value).to.equal(42);
+          expect(validation.name).toBe(MIN);
+          expect(validation.value).toBe(42);
         });
       });
     });
@@ -107,7 +105,7 @@ describe('jdl - JDLField', () => {
 
       it('should fail', () => {
         // @ts-expect-error invalid api test
-        expect(() => field.forEachValidation()).to.throw();
+        expect(() => field.forEachValidation()).toThrow();
       });
     });
     describe('when passing a function', () => {
@@ -132,7 +130,7 @@ describe('jdl - JDLField', () => {
       });
 
       it('should iterate over the fields', () => {
-        expect(result).to.equal('requiredmin');
+        expect(result).toBe('requiredmin');
       });
     });
   });
@@ -150,7 +148,7 @@ describe('jdl - JDLField', () => {
       });
 
       it('should stringify the fields', () => {
-        expect(field.toString()).to.equal(`${args.name} ${args.type}`);
+        expect(field.toString()).toBe(`${args.name} ${args.type}`);
       });
     });
     describe('without any validation', () => {
@@ -167,7 +165,7 @@ describe('jdl - JDLField', () => {
       });
 
       it('should stringify the fields', () => {
-        expect(field.toString()).to.equal(`/**\n * ${args.comment}\n */\n${args.name} ${args.type}`);
+        expect(field.toString()).toBe(`/**\n * ${args.comment}\n */\n${args.name} ${args.type}`);
       });
     });
     describe('with everything', () => {
@@ -192,7 +190,7 @@ describe('jdl - JDLField', () => {
       });
 
       it('should stringify the field', () => {
-        expect(field.toString()).to.equal(
+        expect(field.toString()).toBe(
           `/**\n * ${args.comment}\n */\n` +
             `${args.name} ${args.type} ${args.validations[0].name} ` +
             `${args.validations[1].name}(${args.validations[1].value})`,

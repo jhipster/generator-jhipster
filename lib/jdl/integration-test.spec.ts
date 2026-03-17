@@ -17,9 +17,8 @@
  * limitations under the License.
  */
 
-import { beforeEach, describe, expect as jestExpect, it } from 'esmocha';
+import { beforeEach, describe, expect, expect as jestExpect, it } from 'esmocha';
 
-import { expect } from 'chai';
 import helpers from 'yeoman-test';
 
 import { APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
@@ -57,7 +56,7 @@ describe('jdl - integration tests', () => {
     });
 
     it('should keep the same JDL content', () => {
-      expect(writtenContent.toString()).to.equal(originalContent.toString());
+      expect(writtenContent.toString()).toBe(originalContent.toString());
     });
   });
 

@@ -17,10 +17,8 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 import fs from 'node:fs';
-
-import { expect } from 'chai';
 
 import { APPLICATION_TYPE_MICROSERVICE } from '../../core/application-types.ts';
 import { getTestFile } from '../core/__test-support__/index.ts';
@@ -45,7 +43,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
     describe('when not passing entities', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => convertEntitiesToJDL()).to.throw('Entities have to be passed to be converted.');
+        expect(() => convertEntitiesToJDL()).toThrow('Entities have to be passed to be converted.');
       });
     });
     describe('when passing entities', () => {
@@ -67,25 +65,25 @@ describe('jdl - JSONToJDLEntityConverter', () => {
 
       describe('when parsing a JSON entity to JDL', () => {
         it('should parse entity documentation', () => {
-          expect(jdlObject.entities.Employee.comment).eq('The Employee entity.');
+          expect(jdlObject.entities.Employee.comment).toBe('The Employee entity.');
         });
         it('should parse tableName', () => {
-          expect(jdlObject.entities.Employee.tableName).eq('emp');
+          expect(jdlObject.entities.Employee.tableName).toBe('emp');
         });
         it('should parse mandatory fields', () => {
-          expect(jdlObject.entities.Country.fields.countryId.type).eq('Long');
-          expect(jdlObject.entities.Country.fields.countryName.type).eq('String');
+          expect(jdlObject.entities.Country.fields.countryId.type).toBe('Long');
+          expect(jdlObject.entities.Country.fields.countryName.type).toBe('String');
         });
         it('should parse field documentation', () => {
-          expect(jdlObject.entities.Country.fields.countryId.comment).eq('The country Id');
-          expect(jdlObject.entities.Country.fields.countryName.comment).to.be.undefined;
+          expect(jdlObject.entities.Country.fields.countryId.comment).toBe('The country Id');
+          expect(jdlObject.entities.Country.fields.countryName.comment).toBeUndefined();
         });
         it('should parse validations', () => {
-          expect(jdlObject.entities.Department.fields.departmentName.validations.required.name).eq('required');
-          expect(jdlObject.entities.Department.fields.departmentName.validations.required.value).to.be.undefined;
-          expect(jdlObject.entities.Employee.fields.salary.validations.min.value).eq(10000);
-          expect(jdlObject.entities.Employee.fields.salary.validations.max.value).eq(1000000);
-          expect(jdlObject.entities.Employee.fields.employeeId.validations).to.be.empty;
+          expect(jdlObject.entities.Department.fields.departmentName.validations.required.name).toBe('required');
+          expect(jdlObject.entities.Department.fields.departmentName.validations.required.value).toBeUndefined();
+          expect(jdlObject.entities.Employee.fields.salary.validations.min.value).toBe(10000);
+          expect(jdlObject.entities.Employee.fields.salary.validations.max.value).toBe(1000000);
+          expect(jdlObject.entities.Employee.fields.employeeId.validations).toEqual({});
         });
         it('should parse field options', () => {
           const entities = new Map<string, any>([
@@ -102,102 +100,102 @@ describe('jdl - JSONToJDLEntityConverter', () => {
             ],
           ]);
           const result = convertEntitiesToJDL(entities);
-          expect(result.entities.TestEntity.fields.myId.options).to.deep.equal({ id: true });
-          expect(result.entities.TestEntity.fields.customField.options).to.deep.equal({ customAnnotation: 'customValue' });
-          expect(result.entities.TestEntity.fields.noOptionsField.options).to.deep.equal({});
+          expect(result.entities.TestEntity.fields.myId.options).toEqual({ id: true });
+          expect(result.entities.TestEntity.fields.customField.options).toEqual({ customAnnotation: 'customValue' });
+          expect(result.entities.TestEntity.fields.noOptionsField.options).toEqual({});
         });
         it('should parse enums', () => {
           const languageEnum = jdlObject.getEnum('Language');
           if (!languageEnum) {
             throw new Error('Language enum not found');
           }
-          expect(languageEnum.name).eq('Language');
-          expect(languageEnum.values.has('FRENCH')).to.be.true;
-          expect(languageEnum.values.get('FRENCH')?.value).to.equal('french');
-          expect(languageEnum.values.has('ENGLISH')).to.be.true;
-          expect(languageEnum.values.has('SPANISH')).to.be.true;
+          expect(languageEnum.name).toBe('Language');
+          expect(languageEnum.values.has('FRENCH')).toBe(true);
+          expect(languageEnum.values.get('FRENCH')?.value).toBe('french');
+          expect(languageEnum.values.has('ENGLISH')).toBe(true);
+          expect(languageEnum.values.has('SPANISH')).toBe(true);
         });
         it('should parse options', () => {
           expect(
             // @ts-expect-error FIXME
             jdlObject.getOptions().filter(option => option.name === DTO && option.value === MAPSTRUCT && option.entityNames.has('Employee'))
               .length,
-          ).to.equal(1);
+          ).toBe(1);
           expect(
             jdlObject.getOptions().filter(
               option =>
                 // @ts-expect-error FIXME
                 option.name === PAGINATION && option.value === pagination['INFINITE-SCROLL'] && option.entityNames.has('Employee'),
             ).length,
-          ).to.equal(1);
+          ).toBe(1);
           expect(
             jdlObject
               .getOptions()
               // @ts-expect-error FIXME
               .filter(option => option.name === SERVICE && option.value === SERVICE_CLASS && option.entityNames.has('Employee')).length,
-          ).to.equal(1);
+          ).toBe(1);
           expect(
             jdlObject
               .getOptions()
               // @ts-expect-error FIXME
               .filter(option => option.name === SEARCH && option.value === ELASTICSEARCH && option.entityNames.has('Employee')).length,
-          ).to.equal(1);
+          ).toBe(1);
           expect(
             jdlObject.getOptions().filter(
               option =>
                 // @ts-expect-error FIXME
                 option.name === APPLICATION_TYPE_MICROSERVICE && option.value === 'mymicroservice' && option.entityNames.has('Employee'),
             ).length,
-          ).to.equal(1);
+          ).toBe(1);
           expect(
             jdlObject
               .getOptions()
               // @ts-expect-error FIXME
               .filter(option => option.name === ANGULAR_SUFFIX && option.value === 'myentities' && option.entityNames.has('Employee'))
               .length,
-          ).to.equal(1);
+          ).toBe(1);
           expect(
             jdlObject.getOptions().filter(option => option.name === unaryOptions.NO_FLUENT_METHOD && option.entityNames.has('Employee'))
               .length,
-          ).to.equal(1);
+          ).toBe(1);
           expect(
             jdlObject.getOptions().filter(option => option.name === unaryOptions.FILTER && option.entityNames.has('Employee')).length,
-          ).to.equal(1);
+          ).toBe(1);
           expect(
             jdlObject.getOptions().filter(option => option.name === unaryOptions.READ_ONLY && option.entityNames.has('Employee')).length,
-          ).to.equal(1);
+          ).toBe(1);
           expect(
             jdlObject.getOptions().filter(option => option.name === unaryOptions.EMBEDDED && option.entityNames.has('Employee')).length,
-          ).to.equal(1);
+          ).toBe(1);
         });
       });
 
       describe('when parsing JSON entities to JDL', () => {
         it('should parse unidirectional OneToOne relationships', () => {
-          expect(jdlObject.relationships.getOneToOne('OneToOne_Department{location}_Location')).not.to.be.undefined;
+          expect(jdlObject.relationships.getOneToOne('OneToOne_Department{location}_Location')).not.toBeUndefined();
         });
         it('should parse bidirectional OneToOne relationships', () => {
-          expect(jdlObject.relationships.getOneToOne('OneToOne_Country{region}_Region{country}')).not.to.be.undefined;
+          expect(jdlObject.relationships.getOneToOne('OneToOne_Country{region}_Region{country}')).not.toBeUndefined();
         });
         it('should parse bidirectional ManyToOne relationships', () => {
-          expect(jdlObject.relationships.getManyToOne('ManyToOne_Employee{department(foo)}_Department{employee}')).not.to.be.undefined;
+          expect(jdlObject.relationships.getManyToOne('ManyToOne_Employee{department(foo)}_Department{employee}')).not.toBeUndefined();
         });
         it('should parse bidirectional OneToMany relationships', () => {
-          expect(jdlObject.relationships.getOneToMany('OneToMany_Employee{job}_Job{employee}')).not.to.be.undefined;
+          expect(jdlObject.relationships.getOneToMany('OneToMany_Employee{job}_Job{employee}')).not.toBeUndefined();
         });
         it('should parse unidirectional ManyToOne relationships', () => {
-          expect(jdlObject.relationships.getManyToOne('ManyToOne_Employee{manager}_Employee')).not.to.be.undefined;
+          expect(jdlObject.relationships.getManyToOne('ManyToOne_Employee{manager}_Employee')).not.toBeUndefined();
         });
         it('should parse ManyToMany relationships', () => {
-          expect(jdlObject.relationships.getManyToMany('ManyToMany_Job{task(title)}_Task{job}')).not.to.be.undefined;
+          expect(jdlObject.relationships.getManyToMany('ManyToMany_Job{task(title)}_Task{job}')).not.toBeUndefined();
         });
         it('should parse comments in relationships for owner', () => {
           const relationship = jdlObject.relationships.getManyToOne('ManyToOne_Employee{department(foo)}_Department{employee}');
           if (!relationship) {
             throw new Error('Relationship not found');
           }
-          expect(relationship.commentInFrom).to.equal('Another side of the same relationship');
-          expect(relationship.commentInTo).to.equal('A relationship');
+          expect(relationship.commentInFrom).toBe('Another side of the same relationship');
+          expect(relationship.commentInTo).toBe('A relationship');
         });
         it('should parse comments in relationships for owned', () => {
           const entities = new Map([
@@ -206,8 +204,8 @@ describe('jdl - JSONToJDLEntityConverter', () => {
           ]);
           const jdlObject = convertEntitiesToJDL(entities);
           const relationship = jdlObject.relationships.getManyToOne('ManyToOne_Employee{department(foo)}_Department{employee}');
-          expect(relationship!.commentInFrom).to.equal('Another side of the same relationship');
-          expect(relationship!.commentInTo).to.equal('A relationship');
+          expect(relationship!.commentInFrom).toBe('Another side of the same relationship');
+          expect(relationship!.commentInTo).toBe('A relationship');
         });
         it('should parse destination-side relationship options', () => {
           const entities = new Map<string, any>([
@@ -245,24 +243,24 @@ describe('jdl - JSONToJDLEntityConverter', () => {
           ]);
           const result = convertEntitiesToJDL(entities);
           const relationship = result.relationships.getOneToMany('OneToMany_EntityA{entityB}_EntityB{entityA}');
-          expect(relationship).not.to.be.undefined;
-          expect(relationship!.options.destination).to.deep.equal({ destAnnotation: true });
+          expect(relationship).not.toBeUndefined();
+          expect(relationship!.options.destination).toEqual({ destAnnotation: true });
         });
         it('should parse required relationships in owner', () => {
           const relationship = jdlObject.relationships.getManyToOne('ManyToOne_Employee{department(foo)}_Department{employee}');
           if (!relationship) {
             throw new Error('Relationship not found');
           }
-          expect(relationship.isInjectedFieldInFromRequired).to.be.undefined;
-          expect(relationship.isInjectedFieldInToRequired).to.be.true;
+          expect(relationship.isInjectedFieldInFromRequired).toBeUndefined();
+          expect(relationship.isInjectedFieldInToRequired).toBe(true);
         });
         it('should parse required relationships in owned', () => {
           const relationship = jdlObject.relationships.getManyToMany('ManyToMany_Job{task(title)}_Task{job}');
           if (!relationship) {
             throw new Error('Relationship not found');
           }
-          expect(relationship.isInjectedFieldInToRequired).to.be.true;
-          expect(relationship.isInjectedFieldInFromRequired).to.be.undefined;
+          expect(relationship.isInjectedFieldInToRequired).toBe(true);
+          expect(relationship.isInjectedFieldInFromRequired).toBeUndefined();
         });
       });
 
@@ -276,7 +274,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
             });
 
             it('should parse relationships to the JHipster managed User entity', () => {
-              expect(jdlObject.relationships.getOneToOne('OneToOne_Country{user}_User')).not.to.be.undefined;
+              expect(jdlObject.relationships.getOneToOne('OneToOne_Country{user}_User')).not.toBeUndefined();
             });
           });
         });
@@ -288,7 +286,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
           });
 
           it('should parse the tableName', () => {
-            expect(jdlObject.entities.CassBankAccount.tableName).eq('cassBankAccount');
+            expect(jdlObject.entities.CassBankAccount.tableName).toBe('cassBankAccount');
           });
         });
       });
@@ -296,8 +294,9 @@ describe('jdl - JSONToJDLEntityConverter', () => {
       describe('when parsing relationships with options', () => {
         describe('such as builtInEntity', () => {
           it('should accept it', () => {
-            expect(jdlObject.relationships.getOneToOne('OneToOne_Country{region}_Region{country}')?.options.global[BUILT_IN_ENTITY]).to.be
-              .true;
+            expect(jdlObject.relationships.getOneToOne('OneToOne_Country{region}_Region{country}')?.options.global[BUILT_IN_ENTITY]).toBe(
+              true,
+            );
           });
         });
       });
@@ -317,7 +316,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
       });
 
       it('should not fail', () => {
-        expect(() => convertEntitiesToJDL(entities)).not.to.throw();
+        expect(() => convertEntitiesToJDL(entities)).not.toThrow();
       });
     });
     describe('when parsing relationships including the Authority entity', () => {
@@ -335,7 +334,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
       });
 
       it('should not fail', () => {
-        expect(() => convertEntitiesToJDL(entities)).not.to.throw();
+        expect(() => convertEntitiesToJDL(entities)).not.toThrow();
       });
     });
   });

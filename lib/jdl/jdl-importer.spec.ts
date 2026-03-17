@@ -17,11 +17,9 @@
  * limitations under the License.
  */
 
-import { after, before, describe, expect as jestExpect, it } from 'esmocha';
+import { after, before, describe, expect, expect as jestExpect, it } from 'esmocha';
 import { rmSync } from 'node:fs';
 import path from 'node:path';
-
-import { expect } from 'chai';
 
 import { APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
 import clientFrameworkTypes from '../jhipster/client-framework-types.ts';
@@ -38,7 +36,7 @@ describe('jdl - JDLImporter', () => {
     describe('when not passing files', () => {
       it('should fail', () => {
         // @ts-expect-error should not be empty
-        expect(() => createImporterFromFiles()).to.throw(/^Files must be passed to create a new JDL importer\.$/);
+        expect(() => createImporterFromFiles()).toThrow(/^Files must be passed to create a new JDL importer\.$/);
       });
     });
   });
@@ -46,7 +44,7 @@ describe('jdl - JDLImporter', () => {
     describe('when not passing any content', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => createImporterFromContent()).to.throw(/^A JDL content must be passed to create a new JDL importer\.$/);
+        expect(() => createImporterFromContent()).toThrow(/^A JDL content must be passed to create a new JDL importer\.$/);
       });
     });
   });
@@ -110,7 +108,7 @@ relationship OneToOne {
       });
 
       it('should not fail', () => {
-        expect(() => importer.import()).not.to.throw();
+        expect(() => importer.import()).not.toThrow();
       });
     });
     describe('when parsing one JDL application and entities', () => {
@@ -122,18 +120,18 @@ relationship OneToOne {
       });
 
       it('should return the import state', () => {
-        expect(returned.exportedEntities).to.have.lengthOf(1);
-        expect(returned.exportedApplications).to.have.lengthOf(1);
-        expect(returned.exportedDeployments).to.have.lengthOf(0);
+        expect(returned.exportedEntities).toHaveLength(1);
+        expect(returned.exportedApplications).toHaveLength(1);
+        expect(returned.exportedDeployments).toHaveLength(0);
       });
       it('should return the corresponding exportedApplicationsWithEntities', () => {
         returned.exportedApplications.forEach((application: any) => {
           const applicationConfig = application['generator-jhipster'];
           const entityNames = applicationConfig.entities || [];
           const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
-          expect(applicationConfig).to.be.eql(applicationWithEntities.config);
-          expect(applicationWithEntities.entities.map((entity: any) => entity.name)).to.be.eql(entityNames);
-          expect(returned.exportedEntities.filter((entity: any) => entityNames.includes(entity.name))).to.be.eql(
+          expect(applicationConfig).toEqual(applicationWithEntities.config);
+          expect(applicationWithEntities.entities.map((entity: any) => entity.name)).toEqual(entityNames);
+          expect(returned.exportedEntities.filter((entity: any) => entityNames.includes(entity.name))).toEqual(
             applicationWithEntities.entities,
           );
         });
@@ -149,23 +147,23 @@ relationship OneToOne {
       });
 
       it('should return the import state', () => {
-        expect(returned.exportedEntities).to.have.lengthOf(1);
-        expect(returned.exportedApplications).to.have.lengthOf(2);
-        expect(Object.keys(returned.exportedApplicationsWithEntities).length).to.equal(2);
-        expect(returned.exportedDeployments).to.have.lengthOf(0);
+        expect(returned.exportedEntities).toHaveLength(1);
+        expect(returned.exportedApplications).toHaveLength(2);
+        expect(Object.keys(returned.exportedApplicationsWithEntities).length).toBe(2);
+        expect(returned.exportedDeployments).toHaveLength(0);
       });
       it('should export the application contents', () => {
-        expect(returned.exportedApplicationsWithEntities[APPLICATION_NAMES[0]].entities).to.have.lengthOf(0);
-        expect(returned.exportedApplicationsWithEntities[APPLICATION_NAMES[1]].entities).to.have.lengthOf(1);
+        expect(returned.exportedApplicationsWithEntities[APPLICATION_NAMES[0]].entities).toHaveLength(0);
+        expect(returned.exportedApplicationsWithEntities[APPLICATION_NAMES[1]].entities).toHaveLength(1);
       });
       it('should return the corresponding exportedApplicationsWithEntities', () => {
         returned.exportedApplications.forEach((application: any) => {
           const applicationConfig = application['generator-jhipster'];
           const entityNames = applicationConfig.entities || [];
           const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
-          expect(applicationConfig).to.be.eql(applicationWithEntities.config);
-          expect(applicationWithEntities.entities.map((entity: any) => entity.name)).to.be.eql(entityNames);
-          expect(returned.exportedEntities.filter((entity: any) => entityNames.includes(entity.name))).to.be.eql(
+          expect(applicationConfig).toEqual(applicationWithEntities.config);
+          expect(applicationWithEntities.entities.map((entity: any) => entity.name)).toEqual(entityNames);
+          expect(returned.exportedEntities.filter((entity: any) => entityNames.includes(entity.name))).toEqual(
             applicationWithEntities.entities,
           );
         });
@@ -194,18 +192,18 @@ relationship OneToOne {
       });
 
       it('should return the import state', () => {
-        expect(returned.exportedEntities).to.have.lengthOf(1);
-        expect(returned.exportedApplications).to.have.lengthOf(1);
-        expect(returned.exportedDeployments).to.have.lengthOf(0);
+        expect(returned.exportedEntities).toHaveLength(1);
+        expect(returned.exportedApplications).toHaveLength(1);
+        expect(returned.exportedDeployments).toHaveLength(0);
       });
       it('should return the corresponding exportedApplicationsWithEntities', () => {
         returned.exportedApplications.forEach((application: any) => {
           const applicationConfig = application['generator-jhipster'];
           const entityNames = applicationConfig.entities || [];
           const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
-          expect(applicationConfig).to.be.eql(applicationWithEntities.config);
-          expect(applicationWithEntities.entities.map((entity: any) => entity.name)).to.be.eql(entityNames);
-          expect(returned.exportedEntities.filter((entity: any) => entityNames.includes(entity.name))).to.be.eql(
+          expect(applicationConfig).toEqual(applicationWithEntities.config);
+          expect(applicationWithEntities.entities.map((entity: any) => entity.name)).toEqual(entityNames);
+          expect(returned.exportedEntities.filter((entity: any) => entityNames.includes(entity.name))).toEqual(
             applicationWithEntities.entities,
           );
         });
@@ -220,8 +218,8 @@ relationship OneToOne {
       });
 
       it('should return the import state', () => {
-        expect(returned.exportedEntities).to.have.lengthOf(1);
-        expect(returned.exportedApplications).to.have.lengthOf(1);
+        expect(returned.exportedEntities).toHaveLength(1);
+        expect(returned.exportedApplications).toHaveLength(1);
       });
 
       it('should return the corresponding exportedApplicationsWithEntities', () => {
@@ -229,9 +227,9 @@ relationship OneToOne {
           const applicationConfig = application['generator-jhipster'];
           const entityNames = applicationConfig.entities || [];
           const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
-          expect(applicationConfig).to.be.eql(applicationWithEntities.config);
-          expect(applicationWithEntities.entities.map((entity: any) => entity.name)).to.be.eql(entityNames);
-          expect(returned.exportedEntities.filter((entity: any) => entityNames.includes(entity.name))).to.be.eql(
+          expect(applicationConfig).toEqual(applicationWithEntities.config);
+          expect(applicationWithEntities.entities.map((entity: any) => entity.name)).toEqual(entityNames);
+          expect(returned.exportedEntities.filter((entity: any) => entityNames.includes(entity.name))).toEqual(
             applicationWithEntities.entities,
           );
         });
@@ -257,8 +255,8 @@ relationship OneToOne {
       });
 
       it('should generate correct import state', () => {
-        expect(importState.exportedApplications.length).to.eql(3);
-        expect(importState.exportedEntities.length).to.eql(4);
+        expect(importState.exportedApplications.length).toEqual(3);
+        expect(importState.exportedEntities.length).toEqual(4);
       });
 
       it('should return the corresponding exportedApplicationsWithEntities', () => {
@@ -266,9 +264,9 @@ relationship OneToOne {
           const applicationConfig = application['generator-jhipster'];
           const entityNames = applicationConfig.entities || [];
           const applicationWithEntities = importState.exportedApplicationsWithEntities[applicationConfig.baseName];
-          expect(applicationConfig).to.be.eql(applicationWithEntities.config);
-          expect(applicationWithEntities.entities.map((entity: any) => entity.name)).to.be.eql(entityNames);
-          expect(importState.exportedEntities.filter((entity: any) => entityNames.includes(entity.name))).to.be.eql(
+          expect(applicationConfig).toEqual(applicationWithEntities.config);
+          expect(applicationWithEntities.entities.map((entity: any) => entity.name)).toEqual(entityNames);
+          expect(importState.exportedEntities.filter((entity: any) => entityNames.includes(entity.name))).toEqual(
             applicationWithEntities.entities,
           );
         });
@@ -301,20 +299,20 @@ relationship OneToOne {
       });
 
       it('sets the options', () => {
-        expect(returned.exportedEntities[0].annotations.service).to.equal('serviceClass');
-        expect(returned.exportedEntities[0].annotations.dto).to.equal('mapstruct');
-        expect(returned.exportedEntities[0].annotations.skipClient).to.be.true;
-        expect(returned.exportedEntities[0].annotations.myCustomUnaryOption).to.be.true;
-        expect(returned.exportedEntities[0].annotations.myCustomBinaryOption).to.equal('customValue');
-        expect(returned.exportedEntities[1].annotations.pagination).to.equal('pagination');
-        expect(returned.exportedEntities[1].annotations.dto).to.equal('mapstruct');
-        expect(returned.exportedEntities[1].annotations.service).to.equal('serviceClass');
-        expect(returned.exportedEntities[2].annotations.skipClient).to.be.true;
-        expect(returned.exportedEntities[2].annotations.filter).to.be.true;
-        expect(returned.exportedEntities[2].annotations.pagination).to.equal('pagination');
-        expect(returned.exportedEntities[2].annotations.myCustomBinaryOption).to.equal('customValue2');
-        expect(returned.exportedEntities[0].fields[0].options.id).to.be.true;
-        expect(returned.exportedEntities[0].fields[0].options.multiValue).to.deep.equal(['value1', 'value2', 'value3']);
+        expect(returned.exportedEntities[0].annotations.service).toBe('serviceClass');
+        expect(returned.exportedEntities[0].annotations.dto).toBe('mapstruct');
+        expect(returned.exportedEntities[0].annotations.skipClient).toBe(true);
+        expect(returned.exportedEntities[0].annotations.myCustomUnaryOption).toBe(true);
+        expect(returned.exportedEntities[0].annotations.myCustomBinaryOption).toBe('customValue');
+        expect(returned.exportedEntities[1].annotations.pagination).toBe('pagination');
+        expect(returned.exportedEntities[1].annotations.dto).toBe('mapstruct');
+        expect(returned.exportedEntities[1].annotations.service).toBe('serviceClass');
+        expect(returned.exportedEntities[2].annotations.skipClient).toBe(true);
+        expect(returned.exportedEntities[2].annotations.filter).toBe(true);
+        expect(returned.exportedEntities[2].annotations.pagination).toBe('pagination');
+        expect(returned.exportedEntities[2].annotations.myCustomBinaryOption).toBe('customValue2');
+        expect(returned.exportedEntities[0].fields[0].options.id).toBe(true);
+        expect(returned.exportedEntities[0].fields[0].options.multiValue).toEqual(['value1', 'value2', 'value3']);
       });
     });
     describe('when parsing a JDL with a pattern validation', () => {
@@ -330,7 +328,7 @@ relationship OneToOne {
       });
 
       it('escapes the back-slash in the returned object', () => {
-        expect(returned.exportedEntities[0].fields[0].fieldValidateRulesPattern).to.equal(String.raw`^[^@\s]+@[^@\s]+\.[^@\s]+$`);
+        expect(returned.exportedEntities[0].fields[0].fieldValidateRulesPattern).toBe(String.raw`^[^@\s]+@[^@\s]+\.[^@\s]+$`);
       });
     });
     describe('when parsing a JDL with a pattern validation containing a quote', () => {
@@ -346,7 +344,7 @@ relationship OneToOne {
       });
 
       it('escapes the quote', () => {
-        expect(returned.exportedEntities[0].fields[0].fieldValidateRulesPattern.includes(String.raw`\'`)).to.be.true;
+        expect(returned.exportedEntities[0].fields[0].fieldValidateRulesPattern.includes(String.raw`\'`)).toBe(true);
       });
     });
     describe('when parsing JDL applications and deployment config', () => {
@@ -396,7 +394,7 @@ relationship OneToOne {
       });
 
       it('should export them', () => {
-        expect(importState.exportedEntities[0].fields[0].fieldValues).to.equal(
+        expect(importState.exportedEntities[0].fields[0].fieldValues).toBe(
           'ARCHIVE (archive),DEV (development),INTEGRATION (integration),PROD (production),TEST (test),UAT (uat),NON_PROD (nonProd)',
         );
       });
@@ -434,7 +432,7 @@ relationship ManyToMany {
         });
 
         it('should not fail', () => {
-          expect(() => importer.import()).not.to.throw();
+          expect(() => importer.import()).not.toThrow();
         });
       });
       describe('when parsing one JDL application and entities', () => {
@@ -455,18 +453,18 @@ ${entities}`,
         });
 
         it('should return the import state', () => {
-          expect(returned.exportedEntities).to.have.lengthOf(2);
-          expect(returned.exportedApplications).to.have.lengthOf(1);
-          expect(returned.exportedDeployments).to.have.lengthOf(0);
+          expect(returned.exportedEntities).toHaveLength(2);
+          expect(returned.exportedApplications).toHaveLength(1);
+          expect(returned.exportedDeployments).toHaveLength(0);
         });
         it('should return the corresponding exportedApplicationsWithEntities', () => {
           returned.exportedApplications.forEach((application: any) => {
             const applicationConfig = application['generator-jhipster'];
             const entityNames = applicationConfig.entities || [];
             const applicationWithEntities = returned.exportedApplicationsWithEntities[applicationConfig.baseName];
-            expect(applicationConfig).to.be.eql(applicationWithEntities.config);
-            expect(applicationWithEntities.entities.map((entity: any) => entity.name)).to.be.eql(entityNames);
-            expect(returned.exportedEntities.filter((entity: any) => entityNames.includes(entity.name))).to.be.eql(
+            expect(applicationConfig).toEqual(applicationWithEntities.config);
+            expect(applicationWithEntities.entities.map((entity: any) => entity.name)).toEqual(entityNames);
+            expect(returned.exportedEntities.filter((entity: any) => entityNames.includes(entity.name))).toEqual(
               applicationWithEntities.entities,
             );
             jestExpect(applicationWithEntities.entities).toMatchSnapshot();
@@ -505,7 +503,7 @@ relationship OneToMany {
       });
 
       it('should not generate a bidirectional one-to-many relationship', () => {
-        expect(importState.exportedEntities[0].relationships).to.have.length(1);
+        expect(importState.exportedEntities[0].relationships).toHaveLength(1);
       });
     });
     describe('when having the use-options', () => {
@@ -533,15 +531,15 @@ use mapstruct, elasticsearch for A, B except C`;
       });
 
       it('should add the options', () => {
-        expect(importState.exportedEntities[0].dto).to.equal('mapstruct');
-        expect(importState.exportedEntities[1].dto).to.equal('mapstruct');
-        expect(importState.exportedEntities[2].dto).not.to.equal('mapstruct');
-        expect(importState.exportedEntities[0].service).to.equal('serviceImpl');
-        expect(importState.exportedEntities[1].service).to.equal('serviceImpl');
-        expect(importState.exportedEntities[2].service).not.to.equal('serviceImpl');
-        expect(importState.exportedEntities[0].searchEngine).to.equal('elasticsearch');
-        expect(importState.exportedEntities[1].searchEngine).to.equal('elasticsearch');
-        expect(importState.exportedEntities[2].searchEngine).not.to.equal('elasticsearch');
+        expect(importState.exportedEntities[0].dto).toBe('mapstruct');
+        expect(importState.exportedEntities[1].dto).toBe('mapstruct');
+        expect(importState.exportedEntities[2].dto).not.toBe('mapstruct');
+        expect(importState.exportedEntities[0].service).toBe('serviceImpl');
+        expect(importState.exportedEntities[1].service).toBe('serviceImpl');
+        expect(importState.exportedEntities[2].service).not.toBe('serviceImpl');
+        expect(importState.exportedEntities[0].searchEngine).toBe('elasticsearch');
+        expect(importState.exportedEntities[1].searchEngine).toBe('elasticsearch');
+        expect(importState.exportedEntities[2].searchEngine).not.toBe('elasticsearch');
       });
     });
     describe('when parsing a JDL content with invalid tokens', () => {
@@ -568,7 +566,7 @@ entity A
       });
 
       it('should report it', () => {
-        expect(caughtError.message).to.equal(
+        expect(caughtError.message).toBe(
           "MismatchedTokenException: Found an invalid token 'unknownOption', at line: 5 and column: 5.\n\tPlease make sure your JDL content does not use invalid characters, keywords or options.",
         );
       });

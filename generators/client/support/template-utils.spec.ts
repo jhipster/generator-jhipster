@@ -1,6 +1,4 @@
-import { describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { describe, expect, it } from 'esmocha';
 
 import { entityOptions } from '../../../lib/jhipster/index.ts';
 
@@ -38,8 +36,9 @@ describe('generator - client - support - template-utils', () => {
 
       it('return only imports for relevant relationships for fields', () => {
         const imports = generateEntityClientImports(relationships as any, NO_DTO);
-        expect(imports).to.have.all.keys('IEntityA', 'IEntityB');
-        expect(imports.size).to.eql(2);
+        expect(imports.has('IEntityA')).toBe(true);
+        expect(imports.has('IEntityB')).toBe(true);
+        expect(imports.size).toEqual(2);
       });
     });
 
@@ -63,8 +62,9 @@ describe('generator - client - support - template-utils', () => {
       describe('when called with 2 distinct relationships without dto option', () => {
         it('return a Map with 2 imports', () => {
           const imports = generateEntityClientImports(relationships as any, NO_DTO);
-          expect(imports).to.have.all.keys('IUser', 'IAnEntity');
-          expect(imports.size).to.eql(relationships.length);
+          expect(imports.has('IUser')).toBe(true);
+          expect(imports.has('IAnEntity')).toBe(true);
+          expect(imports.size).toEqual(relationships.length);
         });
       });
       describe('when called with 2 identical relationships without dto option', () => {
@@ -86,8 +86,8 @@ describe('generator - client - support - template-utils', () => {
         ];
         it('return a Map with 1 import', () => {
           const imports = generateEntityClientImports(relationships as any, NO_DTO);
-          expect(imports).to.have.key('IUser');
-          expect(imports.size).to.eql(1);
+          expect(imports.has('IUser')).toBe(true);
+          expect(imports.size).toEqual(1);
         });
       });
     });
@@ -96,17 +96,17 @@ describe('generator - client - support - template-utils', () => {
   describe('generateTestEntityId', () => {
     describe('when called with int', () => {
       it('return 123', () => {
-        expect(generateTestEntityId('Integer')).to.equal(123);
+        expect(generateTestEntityId('Integer')).toBe(123);
       });
     });
     describe('when called with String', () => {
       it("return 'ABC'", () => {
-        expect(generateTestEntityId('String')).to.equal("'ABC'");
+        expect(generateTestEntityId('String')).toBe("'ABC'");
       });
     });
     describe('when called with UUID', () => {
       it("return '9fec3727-3421-4967-b213-ba36557ca194'", () => {
-        expect(generateTestEntityId('UUID')).to.equal("'9fec3727-3421-4967-b213-ba36557ca194'");
+        expect(generateTestEntityId('UUID')).toBe("'9fec3727-3421-4967-b213-ba36557ca194'");
       });
     });
   });

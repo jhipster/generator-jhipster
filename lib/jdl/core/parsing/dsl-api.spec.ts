@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import { createRuntime } from '../runtime.ts';
 
@@ -37,8 +35,8 @@ describe('jdl - JDL DSL API', () => {
       });
 
       it('should return an AST', () => {
-        expect(ast.entities).to.have.lengthOf(1);
-        expect(ast.entities[0]).to.deep.equal({
+        expect(ast.entities).toHaveLength(1);
+        expect(ast.entities[0]).toEqual({
           name: 'A',
           tableName: undefined,
           annotations: [{ optionName: 'service', optionValue: 'serviceClass', type: 'BINARY' }],
@@ -64,11 +62,11 @@ describe('jdl - JDL DSL API', () => {
       });
 
       it('should throw an error with the offset information', () => {
-        expect(parseInvalidToken).to.throw('offset: 7');
+        expect(parseInvalidToken).toThrow('offset: 7');
       });
 
       it('should throw an error with the unexpected character', () => {
-        expect(parseInvalidToken).to.throw('±');
+        expect(parseInvalidToken).toThrow('±');
       });
     });
 
@@ -81,11 +79,18 @@ describe('jdl - JDL DSL API', () => {
         });
 
         it('should throw an error with position information', () => {
-          expect(parseWrongClosingBraces).to.throw().and.to.have.property('message').that.includes('line: 1').that.includes('column: 17');
+          let errorMessage = '';
+          try {
+            parseWrongClosingBraces();
+          } catch (error: any) {
+            errorMessage = error?.message ?? '';
+          }
+          expect(errorMessage).toContain('line: 1');
+          expect(errorMessage).toContain('column: 17');
         });
 
         it('should throw an error with typeof MismatchTokenException', () => {
-          expect(parseWrongClosingBraces).to.throw('MismatchedTokenException');
+          expect(parseWrongClosingBraces).toThrow('MismatchedTokenException');
         });
       });
 
@@ -97,14 +102,14 @@ describe('jdl - JDL DSL API', () => {
         });
 
         it('should throw an error with typeof MismatchTokenException', () => {
-          expect(parseMissingClosingBraces).to.throw('MismatchedTokenException');
+          expect(parseMissingClosingBraces).toThrow('MismatchedTokenException');
         });
 
         it('should throw an error without any location information', () => {
           // The 'EOF' token that is found instead of the expected '}' is a virtual token
           // It has no location information to report, An error (api.js) handler may choose
           // to manually add the last line/column in that case.
-          expect(parseMissingClosingBraces).to.not.throw('line: 1');
+          expect(parseMissingClosingBraces).not.toThrow('line: 1');
         });
       });
     });
@@ -113,7 +118,7 @@ describe('jdl - JDL DSL API', () => {
       it('should throw an error', () => {
         // lower case entityName first char
         const invalidInput = 'entity person { }';
-        expect(() => parse(invalidInput, jdlRuntime)).to.throw(/.+\/\^\[A-Z][^]+line: 1.+column: 8/);
+        expect(() => parse(invalidInput, jdlRuntime)).toThrow(/.+\/\^\[A-Z][^]+line: 1.+column: 8/);
       });
     });
   });

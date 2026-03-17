@@ -17,9 +17,8 @@
  * limitations under the License.
  */
 
-import { beforeEach, describe, expect as jestExpect, it } from 'esmocha';
+import { beforeEach, describe, expect, expect as jestExpect, it } from 'esmocha';
 
-import { expect } from 'chai';
 import helpers from 'yeoman-test';
 
 import { APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
@@ -46,7 +45,7 @@ describe('jdl - JHipsterEntityExporter', () => {
           expect(() => {
             // @ts-expect-error
             exportEntities();
-          }).to.throw('Entities have to be passed to be exported.');
+          }).toThrow('Entities have to be passed to be exported.');
         });
       });
     });
@@ -89,7 +88,7 @@ describe('jdl - JHipsterEntityExporter', () => {
         });
 
         it('should return the exported entities', () => {
-          expect(returned).to.deep.equal(entities);
+          expect(returned).toEqual(entities);
         });
       });
       describe('when not exporting entities', () => {
@@ -108,7 +107,7 @@ describe('jdl - JHipsterEntityExporter', () => {
           jestExpect(returned).toMatchInlineSnapshot('[]');
         });
         it('should not create a .jhipster folder', () => {
-          expect(doesDirectoryExist('.jhipster')).to.be.false;
+          expect(doesDirectoryExist('.jhipster')).toBe(false);
         });
       });
       describe('when exporting the same entity', () => {
@@ -487,9 +486,9 @@ describe('jdl - JHipsterEntityExporter', () => {
             });
 
             it('should return every entity', () => {
-              expect(returnedContent.length).to.be.equal(7);
+              expect(returnedContent.length).toBe(7);
               ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach(entityName => {
-                expect(returnedContent.filter(entity => entity.name === entityName) !== undefined).to.be.true;
+                expect(returnedContent.filter(entity => entity.name === entityName) !== undefined).toBe(true);
               });
             });
           });
@@ -567,7 +566,7 @@ describe('jdl - JHipsterEntityExporter', () => {
             });
 
             it('should return the entities that should be inside the microservice', () => {
-              expect(returnedContent.length).to.be.equal(2);
+              expect(returnedContent.length).toBe(2);
             });
           });
         });

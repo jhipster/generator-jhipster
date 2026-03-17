@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
 import databaseTypes from '../../../jhipster/database-types.ts';
@@ -48,7 +46,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
     describe('when not passing a JDL object', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => createValidator()).to.throw(/^A JDL object must be passed to check for business errors.$/);
+        expect(() => createValidator()).toThrow(/^A JDL object must be passed to check for business errors.$/);
       });
     });
   });
@@ -83,7 +81,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
         it('should not fail', () => {
           expect(() => {
             validator.checkForErrors();
-          }).not.to.throw();
+          }).not.toThrow();
         });
       });
     });
@@ -122,7 +120,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
       it('should fail', () => {
         expect(() => {
           validator.checkForErrors();
-        }).to.throw("The validation 'min' isn't supported for the type 'String'.");
+        }).toThrow("The validation 'min' isn't supported for the type 'String'.");
       });
     });
     describe('when the source entity of a relationship is missing', () => {
@@ -156,7 +154,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
       it('should fail', () => {
         expect(() => {
           validator.checkForErrors();
-        }).to.throw(
+        }).toThrow(
           "In the relationship between Source and Valid, Source is not declared. If 'Valid' is a built-in entity declare like 'Source to Valid with builtInEntity'.",
         );
       });
@@ -200,7 +198,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
         it('should not fail', () => {
           expect(() => {
             validator.checkForErrors();
-          }).not.to.throw();
+          }).not.toThrow();
         });
       });
       describe('if it is not the User entity', () => {
@@ -234,7 +232,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
         it('should fail', () => {
           expect(() => {
             checker.checkForErrors();
-          }).to.throw(
+          }).toThrow(
             "In the relationship between Source and Other, Other is not declared. If 'Other' is a built-in entity declare like 'Source to Other with builtInEntity'.",
           );
         });
@@ -319,7 +317,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
       it('should fail', () => {
         expect(() => {
           validator.checkForErrors();
-        }).to.throw("Entities for the ManyToMany relationship from 'B' to 'C' do not belong to the same application.");
+        }).toThrow("Entities for the ManyToMany relationship from 'B' to 'C' do not belong to the same application.");
       });
     });
     describe('when having DTOs without services', () => {
@@ -355,7 +353,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
       it('should not fail', () => {
         expect(() => {
           validator.checkForErrors();
-        }).not.to.throw();
+        }).not.toThrow();
       });
     });
     describe('when having DTOs with services', () => {
@@ -408,7 +406,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
       it('should not fail', () => {
         expect(() => {
           validator.checkForErrors();
-        }).not.to.throw();
+        }).not.toThrow();
       });
     });
     describe('when having a relationship with the User entity as source', () => {
@@ -445,7 +443,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
       });
 
       it('should not fail', () => {
-        expect(() => validator.checkForErrors()).not.to.throw();
+        expect(() => validator.checkForErrors()).not.toThrow();
       });
     });
     describe('when having a relationship with the User entity as destination', () => {
@@ -482,7 +480,7 @@ describe('jdl - JDLWithApplicationValidator', () => {
       });
 
       it('should not fail', () => {
-        expect(() => validator.checkForErrors()).not.to.throw();
+        expect(() => validator.checkForErrors()).not.toThrow();
       });
     });
   });
