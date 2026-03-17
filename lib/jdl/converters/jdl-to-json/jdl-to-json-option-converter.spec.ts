@@ -17,13 +17,9 @@
  * limitations under the License.
  */
 
-import { after, before, describe, expect as jestExpect, it } from 'esmocha';
+import { after, before, describe, esmocha, expect as jestExpect, it } from 'esmocha';
 
-import { expect, use as chaiUse } from 'chai';
-import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-
-chaiUse(sinonChai);
+import { expect } from 'chai';
 
 import { binaryOptions, unaryOptions } from '../../core/built-in-options/index.ts';
 import { JDLEntity } from '../../core/models/index.ts';
@@ -154,10 +150,10 @@ describe('jdl - JDLToJSONOptionConverter', () => {
       });
       describe('when setting the DTO option without the service option', () => {
         let convertedOptions: ReturnType<typeof convert>['get'];
-        let loggerSpy: ReturnType<typeof sinon.spy>;
+        let loggerSpy: ReturnType<typeof esmocha.spyOn>;
 
         before(() => {
-          loggerSpy = sinon.spy(logger, 'info');
+          loggerSpy = esmocha.spyOn(logger, 'info');
           const jdlObject = new JDLObject();
           const entityA = new JDLEntity({
             name: 'A',
@@ -177,11 +173,11 @@ describe('jdl - JDLToJSONOptionConverter', () => {
         });
 
         after(() => {
-          loggerSpy.restore();
+          loggerSpy.mockRestore();
         });
 
         it('should log the automatic setting of the option', () => {
-          expect(loggerSpy.getCall(0).args[0]).to.equal(
+          expect(loggerSpy.mock.calls[0]?.[0]).to.equal(
             "The dto option is set for A, the 'serviceClass' value for the 'service' is gonna be set for this entity if " +
               'no other value has been set.',
           );
@@ -197,10 +193,10 @@ describe('jdl - JDLToJSONOptionConverter', () => {
       });
       describe('when setting the filtering option without the service option', () => {
         let convertedOptions: ReturnType<typeof convert>['get'];
-        let loggerSpy: ReturnType<typeof sinon.spy>;
+        let loggerSpy: ReturnType<typeof esmocha.spyOn>;
 
         before(() => {
-          loggerSpy = sinon.spy(logger, 'info');
+          loggerSpy = esmocha.spyOn(logger, 'info');
           const jdlObject = new JDLObject();
           const entityA = new JDLEntity({
             name: 'A',
@@ -219,11 +215,11 @@ describe('jdl - JDLToJSONOptionConverter', () => {
         });
 
         after(() => {
-          loggerSpy.restore();
+          loggerSpy.mockRestore();
         });
 
         it('should log the automatic setting of the option', () => {
-          expect(loggerSpy.getCall(0).args[0]).to.equal(
+          expect(loggerSpy.mock.calls[0]?.[0]).to.equal(
             "The filter option is set for A, the 'serviceClass' value for the 'service' is gonna be set for this " +
               'entity if no other value has been set.',
           );

@@ -17,12 +17,11 @@
  * limitations under the License.
  */
 
-import { after, afterEach, before, beforeEach, describe, expect as jestExpect, it } from 'esmocha';
+import { after, afterEach, before, beforeEach, describe, esmocha, expect as jestExpect, it } from 'esmocha';
 import assert from 'node:assert';
 import fs from 'node:fs';
 
 import { expect } from 'chai';
-import sinon from 'sinon';
 
 import { createBlueprintFiles, defaultHelpers as helpers } from '../lib/testing/index.ts';
 
@@ -125,31 +124,31 @@ describe('cli - EnvironmentBuilder', () => {
   });
 
   describe('createDefaultBuilder', () => {
-    let createSpy: sinon.SinonSpy;
-    let _lookupJHipsterSpy: sinon.SinonSpy;
-    let _loadBlueprintsSpy: sinon.SinonSpy;
-    let _lookupBlueprintsSpy: sinon.SinonSpy;
+    let createSpy: ReturnType<typeof esmocha.spyOn>;
+    let _lookupJHipsterSpy: ReturnType<typeof esmocha.spyOn>;
+    let _loadBlueprintsSpy: ReturnType<typeof esmocha.spyOn>;
+    let _lookupBlueprintsSpy: ReturnType<typeof esmocha.spyOn>;
 
     beforeEach(async () => {
       await helpers.prepareTemporaryDir();
-      createSpy = sinon.spy(EnvironmentBuilder, 'create');
-      _lookupJHipsterSpy = sinon.spy(EnvironmentBuilder.prototype, '_lookupJHipster');
-      _loadBlueprintsSpy = sinon.spy(EnvironmentBuilder.prototype, '_loadBlueprints');
-      _lookupBlueprintsSpy = sinon.spy(EnvironmentBuilder.prototype, '_lookupBlueprints');
+      createSpy = esmocha.spyOn(EnvironmentBuilder, 'create');
+      _lookupJHipsterSpy = esmocha.spyOn(EnvironmentBuilder.prototype, '_lookupJHipster');
+      _loadBlueprintsSpy = esmocha.spyOn(EnvironmentBuilder.prototype, '_loadBlueprints');
+      _lookupBlueprintsSpy = esmocha.spyOn(EnvironmentBuilder.prototype, '_lookupBlueprints');
       // Use localOnly to lookup at local node_modules only to improve lookup speed.
       await EnvironmentBuilder.createDefaultBuilder();
     });
     afterEach(() => {
-      createSpy.restore();
-      _lookupJHipsterSpy.restore();
-      _loadBlueprintsSpy.restore();
-      _lookupBlueprintsSpy.restore();
+      createSpy.mockRestore();
+      _lookupJHipsterSpy.mockRestore();
+      _loadBlueprintsSpy.mockRestore();
+      _lookupBlueprintsSpy.mockRestore();
     });
     it('should call create, _lookupJHipster, _loadBlueprints and _lookupBlueprints', () => {
-      expect(createSpy.callCount).to.be.equal(1);
-      expect(_lookupJHipsterSpy.callCount).to.be.equal(1);
-      expect(_loadBlueprintsSpy.callCount).to.be.equal(1);
-      expect(_lookupBlueprintsSpy.callCount).to.be.equal(1);
+      expect(createSpy.mock.calls.length).to.be.equal(1);
+      expect(_lookupJHipsterSpy.mock.calls.length).to.be.equal(1);
+      expect(_loadBlueprintsSpy.mock.calls.length).to.be.equal(1);
+      expect(_lookupBlueprintsSpy.mock.calls.length).to.be.equal(1);
     });
   });
 
