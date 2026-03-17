@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { afterEach, before, describe, expect, expect as jestExpect, it } from 'esmocha';
+import { afterEach, before, describe, expect, it } from 'esmocha';
 
 import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
 import { createJDLApplication } from '../__test-support__/index.ts';
@@ -226,7 +226,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should use each entity name', () => {
-        jestExpect(result).toMatchInlineSnapshot(`
+        expect(result).toMatchInlineSnapshot(`
 [
   "A",
   "B",
@@ -341,7 +341,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should return them in an array', () => {
-        jestExpect(returnedEntities).toMatchInlineSnapshot(`
+        expect(returnedEntities).toMatchInlineSnapshot(`
 [
   JDLEntity {
     "annotations": {},
@@ -435,7 +435,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should use each entity name', () => {
-        jestExpect(result).toMatchInlineSnapshot(`
+        expect(result).toMatchInlineSnapshot(`
 [
   "A",
   "B",
@@ -591,7 +591,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should use each enum name', () => {
-        jestExpect(result).toMatchInlineSnapshot(`
+        expect(result).toMatchInlineSnapshot(`
 [
   "A",
   "B",
@@ -737,7 +737,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should use each relationship', () => {
-        jestExpect(result).toMatchInlineSnapshot(`
+        expect(result).toMatchInlineSnapshot(`
 [
   "OneToOne",
   "OneToMany",
@@ -884,7 +884,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should use each option', () => {
-        jestExpect(result).toMatchInlineSnapshot(`
+        expect(result).toMatchInlineSnapshot(`
 [
   "skipClient",
   "skipServer",

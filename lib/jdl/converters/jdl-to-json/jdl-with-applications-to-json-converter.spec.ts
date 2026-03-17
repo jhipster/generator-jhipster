@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { after, before, describe, esmocha, expect as jestExpect, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { after, before, describe, esmocha, expect, it } from 'esmocha';
 
 import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
 import fieldTypes from '../../../jhipster/field-types.ts';
@@ -59,7 +57,7 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
           expect(() => {
             // @ts-expect-error
             convert();
-          }).to.throw(/^The JDL object is mandatory\.$/);
+          }).toThrow(/^The JDL object is mandatory\.$/);
         });
       });
     });
@@ -81,11 +79,11 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
       });
 
       it('should return a map with two applications', () => {
-        expect(result.size).to.equal(2);
+        expect(result.size).toBe(2);
         // @ts-expect-error FIXME
-        expect(result.get('app1').length).to.equal(0);
+        expect(result.get('app1').length).toBe(0);
         // @ts-expect-error FIXME
-        expect(result.get('app2').length).to.equal(1);
+        expect(result.get('app2').length).toBe(1);
       });
     });
     describe('when passing a JDL object without entities', () => {
@@ -100,7 +98,7 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
 
       it('should return a map with no entity', () => {
         result.forEach(entities => {
-          expect(entities.length).to.equal(0);
+          expect(entities.length).toBe(0);
         });
       });
     });
@@ -136,10 +134,10 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
         });
 
         it('should not convert built-in entities', () => {
-          expect(builtInEntitiesAreConverted).to.be.true;
+          expect(builtInEntitiesAreConverted).toBe(true);
         });
         it('should convert custom entities', () => {
-          expect(customEntitiesAreConverted).to.be.true;
+          expect(customEntitiesAreConverted).toBe(true);
         });
       });
       describe('with no field, no option and no relationship', () => {
@@ -161,7 +159,7 @@ describe('jdl - JDLWithApplicationsToJSONConverter', () => {
         });
 
         it('should convert the entity', () => {
-          jestExpect(convertedEntity).toMatchInlineSnapshot(`
+          expect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": undefined,
   "annotations": {},
@@ -269,7 +267,7 @@ JSONEntity {
         });
 
         it('should convert the entity', () => {
-          jestExpect(convertedEntity).toMatchInlineSnapshot(`
+          expect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": "suffix",
   "annotations": {},
@@ -329,13 +327,13 @@ JSONEntity {
         });
 
         it('should log the automatic setting of the option', () => {
-          expect(loggerSpy.mock.calls[0]?.[0]).to.equal(
+          expect(loggerSpy.mock.calls[0]?.[0]).toBe(
             "The dto option is set for A, the 'serviceClass' value for the 'service' is gonna be set for this entity if " +
               'no other value has been set.',
           );
         });
         it('should set the service option to serviceClass', () => {
-          jestExpect(convertedEntity).toMatchInlineSnapshot(`
+          expect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": undefined,
   "annotations": {},
@@ -393,13 +391,13 @@ JSONEntity {
         });
 
         it('should log the automatic setting of the option', () => {
-          expect(loggerSpy.mock.calls[0]?.[0]).to.equal(
+          expect(loggerSpy.mock.calls[0]?.[0]).toBe(
             "The filter option is set for A, the 'serviceClass' value for the 'service' is gonna be set for this " +
               'entity if no other value has been set.',
           );
         });
         it('should set the service option to serviceClass', () => {
-          jestExpect(convertedEntity).toMatchInlineSnapshot(`
+          expect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": undefined,
   "annotations": {},
@@ -453,7 +451,7 @@ JSONEntity {
         });
 
         it('should prevent the entities from being searched', () => {
-          jestExpect(convertedEntity).toMatchInlineSnapshot(`
+          expect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": undefined,
   "annotations": {},
@@ -511,7 +509,7 @@ JSONEntity {
           });
 
           it('should convert them', () => {
-            jestExpect(convertedEntity).toMatchInlineSnapshot(`
+            expect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": undefined,
   "annotations": {},
@@ -586,7 +584,7 @@ JSONEntity {
           });
 
           it('should convert them', () => {
-            jestExpect(convertedEntity).toMatchInlineSnapshot(`
+            expect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": undefined,
   "annotations": {},
@@ -655,7 +653,7 @@ JSONEntity {
           });
 
           it('should convert them', () => {
-            jestExpect(convertedEntity).toMatchInlineSnapshot(`
+            expect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": undefined,
   "annotations": {},
@@ -713,7 +711,7 @@ JSONEntity {
           });
 
           it('should convert them', () => {
-            jestExpect(convertedEntity).toMatchInlineSnapshot(`
+            expect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": undefined,
   "annotations": {},
@@ -826,7 +824,7 @@ JSONEntity {
           });
 
           it('should convert them', () => {
-            jestExpect(convertedEntity).toMatchInlineSnapshot(`
+            expect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": undefined,
   "annotations": {},
@@ -916,7 +914,7 @@ JSONEntity {
           });
 
           it('should convert them', () => {
-            jestExpect(convertedEntity).toMatchInlineSnapshot(`
+            expect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": undefined,
   "annotations": {},
@@ -1006,7 +1004,7 @@ JSONEntity {
           });
 
           it('should convert them', () => {
-            jestExpect(relationshipsForA).toMatchInlineSnapshot(`
+            expect(relationshipsForA).toMatchInlineSnapshot(`
               [
                 {
                   "otherEntityName": "b",
@@ -1038,7 +1036,7 @@ JSONEntity {
                 },
               ]
             `);
-            jestExpect(relationshipsForB).toMatchInlineSnapshot(`
+            expect(relationshipsForB).toMatchInlineSnapshot(`
               [
                 {
                   "otherEntityName": "a",
@@ -1106,7 +1104,7 @@ JSONEntity {
             });
 
             it('should convert them', () => {
-              jestExpect(convertedRelationship).toMatchInlineSnapshot(`
+              expect(convertedRelationship).toMatchInlineSnapshot(`
                 {
                   "options": {
                     "custom": 42,
@@ -1153,7 +1151,7 @@ JSONEntity {
             });
 
             it('should convert them', () => {
-              jestExpect(convertedRelationship).toMatchInlineSnapshot(`
+              expect(convertedRelationship).toMatchInlineSnapshot(`
                 {
                   "otherEntityName": "b",
                   "otherEntityRelationshipName": "a",
@@ -1196,7 +1194,7 @@ JSONEntity {
           });
 
           it('should convert them', () => {
-            jestExpect(relationshipsForA).toMatchInlineSnapshot(`
+            expect(relationshipsForA).toMatchInlineSnapshot(`
               [
                 {
                   "otherEntityName": "b",
@@ -1208,7 +1206,7 @@ JSONEntity {
                 },
               ]
             `);
-            jestExpect(relationshipsForB).toMatchInlineSnapshot(`
+            expect(relationshipsForB).toMatchInlineSnapshot(`
               [
                 {
                   "otherEntityName": "a",
@@ -1252,7 +1250,7 @@ JSONEntity {
           });
 
           it('should convert them', () => {
-            jestExpect(relationshipsForA).toMatchInlineSnapshot(`
+            expect(relationshipsForA).toMatchInlineSnapshot(`
               [
                 {
                   "documentation": "A to B",
@@ -1264,7 +1262,7 @@ JSONEntity {
                 },
               ]
             `);
-            jestExpect(relationshipsForB).toMatchInlineSnapshot(`
+            expect(relationshipsForB).toMatchInlineSnapshot(`
               [
                 {
                   "documentation": "A to B but in the destination",
@@ -1306,7 +1304,7 @@ JSONEntity {
             });
 
             it('should add the relationship for the source entity', () => {
-              jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+              expect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
                 {
                   "otherEntityName": "b",
                   "relationshipName": "b",
@@ -1316,7 +1314,7 @@ JSONEntity {
               `);
             });
             it('should not add the relationship for the destination entity', () => {
-              expect(relationshipFromDestinationToSource).to.be.undefined;
+              expect(relationshipFromDestinationToSource).toBeUndefined();
             });
           });
           describe('for a One-to-Many relationship', () => {
@@ -1346,7 +1344,7 @@ JSONEntity {
             });
 
             it('should add the relationship for the source entity', () => {
-              jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+              expect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
                 {
                   "otherEntityName": "b",
                   "relationshipName": "b",
@@ -1356,7 +1354,7 @@ JSONEntity {
               `);
             });
             it('should add the relationship for the destination entity', () => {
-              jestExpect(relationshipFromDestinationToSource).toBeUndefined();
+              expect(relationshipFromDestinationToSource).toBeUndefined();
             });
           });
           describe('for a Many-to-One relationship', () => {
@@ -1386,7 +1384,7 @@ JSONEntity {
             });
 
             it('should add the relationship for the source entity', () => {
-              jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+              expect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
                 {
                   "otherEntityName": "b",
                   "relationshipName": "b",
@@ -1396,7 +1394,7 @@ JSONEntity {
               `);
             });
             it('should not add the relationship for the destination entity', () => {
-              expect(relationshipFromDestinationToSource).to.be.undefined;
+              expect(relationshipFromDestinationToSource).toBeUndefined();
             });
           });
           describe('for a Many-to-Many relationship', () => {
@@ -1426,7 +1424,7 @@ JSONEntity {
             });
 
             it('should add the relationship for the source entity', () => {
-              jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+              expect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
                 {
                   "otherEntityName": "b",
                   "relationshipName": "b",
@@ -1436,7 +1434,7 @@ JSONEntity {
               `);
             });
             it('should add the relationship for the destination entity', () => {
-              jestExpect(relationshipFromDestinationToSource).toBeUndefined();
+              expect(relationshipFromDestinationToSource).toBeUndefined();
             });
           });
         });
@@ -1469,7 +1467,7 @@ JSONEntity {
             });
 
             it('should add it for the source entity', () => {
-              jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+              expect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
                 {
                   "otherEntityField": "name",
                   "otherEntityName": "b",
@@ -1481,7 +1479,7 @@ JSONEntity {
               `);
             });
             it('should ignore it for the destination entity', () => {
-              jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+              expect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
                 {
                   "otherEntityField": "name",
                   "otherEntityName": "a",
@@ -1521,7 +1519,7 @@ JSONEntity {
             });
 
             it('should ignore it for the source entity', () => {
-              jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+              expect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
                 {
                   "otherEntityField": "name",
                   "otherEntityName": "b",
@@ -1533,7 +1531,7 @@ JSONEntity {
               `);
             });
             it('should add it for the destination entity', () => {
-              jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+              expect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
                 {
                   "otherEntityField": "name",
                   "otherEntityName": "a",
@@ -1573,7 +1571,7 @@ JSONEntity {
             });
 
             it('should add it for the source entity', () => {
-              jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+              expect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
                 {
                   "otherEntityField": "name",
                   "otherEntityName": "b",
@@ -1585,7 +1583,7 @@ JSONEntity {
               `);
             });
             it('should ignore it for the source entity', () => {
-              jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+              expect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
                 {
                   "otherEntityField": "name",
                   "otherEntityName": "a",
@@ -1625,7 +1623,7 @@ JSONEntity {
             });
 
             it('should add it for the source entity', () => {
-              jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+              expect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
                 {
                   "otherEntityField": "name",
                   "otherEntityName": "b",
@@ -1637,7 +1635,7 @@ JSONEntity {
               `);
             });
             it('should add it for the destination entity', () => {
-              jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+              expect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
                 {
                   "otherEntityField": "name",
                   "otherEntityName": "a",
@@ -1727,7 +1725,7 @@ JSONEntity {
         });
 
         it('should set them', () => {
-          jestExpect(convertedEntitiesForTataApplication).toMatchInlineSnapshot(`
+          expect(convertedEntitiesForTataApplication).toMatchInlineSnapshot(`
 [
   JSONEntity {
     "angularJSSuffix": undefined,
@@ -1801,7 +1799,7 @@ JSONEntity {
   },
 ]
 `);
-          jestExpect(convertedEntitiesForTutuApplication).toMatchInlineSnapshot(`
+          expect(convertedEntitiesForTutuApplication).toMatchInlineSnapshot(`
 [
   JSONEntity {
     "angularJSSuffix": undefined,

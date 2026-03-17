@@ -1,8 +1,6 @@
 import js from '@eslint/js';
 import { type Config, defineConfig } from 'eslint/config';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
-// @ts-ignore: missing types
-import chai from 'eslint-plugin-chai-friendly';
 import imports from 'eslint-plugin-import-x';
 import n from 'eslint-plugin-n';
 import prettier from 'eslint-plugin-prettier/recommended';
@@ -105,10 +103,6 @@ export default defineConfig(
         },
       ],
     },
-  },
-  {
-    ...(chai.configs.recommendedFlat as Config),
-    files: ['jdl/**/*.spec.{js,ts}'],
   },
   prettier,
 );

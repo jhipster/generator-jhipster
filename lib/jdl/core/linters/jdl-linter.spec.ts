@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { beforeEach, describe, expect, expect as jestExpect, it } from 'esmocha';
+import { beforeEach, describe, expect, it } from 'esmocha';
 import { readFileSync, writeFileSync } from 'node:fs';
 
 import helpers from 'yeoman-test';
@@ -196,7 +196,7 @@ describe('jdl - JDLLinter', () => {
 
       it('reports the issues', () => {
         expect(reportedIssues.getNumberOfIssues()).toBe(3);
-        jestExpect(issueForAToB).toMatchInlineSnapshot(`
+        expect(issueForAToB).toMatchInlineSnapshot(`
 RelationshipIssue {
   "from": "A",
   "ruleName": "REL_INDIVIDUAL_DECL",
@@ -204,7 +204,7 @@ RelationshipIssue {
   "type": "OneToMany",
 }
 `);
-        jestExpect(issueForBToC).toMatchInlineSnapshot(`
+        expect(issueForBToC).toMatchInlineSnapshot(`
 RelationshipIssue {
   "from": "B",
   "ruleName": "REL_INDIVIDUAL_DECL",
@@ -212,7 +212,7 @@ RelationshipIssue {
   "type": "OneToMany",
 }
 `);
-        jestExpect(issueForAToC).toMatchInlineSnapshot(`
+        expect(issueForAToC).toMatchInlineSnapshot(`
 RelationshipIssue {
   "from": "A",
   "ruleName": "REL_INDIVIDUAL_DECL",

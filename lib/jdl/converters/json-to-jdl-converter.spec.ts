@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { beforeEach, describe, expect, expect as jestExpect, it } from 'esmocha';
+import { beforeEach, describe, expect, it } from 'esmocha';
 import fs, { readFileSync } from 'node:fs';
 import path from 'node:path';
 
@@ -81,7 +81,7 @@ describe('jdl - JSONToJDLConverter', () => {
         });
 
         it('should write a JDL file with the application', () => {
-          jestExpect(jdlFileContent).toMatchInlineSnapshot(`
+          expect(jdlFileContent).toMatchInlineSnapshot(`
 "application {
   config {
     applicationType microservice
@@ -126,7 +126,7 @@ describe('jdl - JSONToJDLConverter', () => {
         });
 
         it('should export apps & entities', () => {
-          jestExpect(jdlFileContent).toMatchInlineSnapshot(`
+          expect(jdlFileContent).toMatchInlineSnapshot(`
 "application {
   config {
     applicationType microservice
@@ -246,7 +246,7 @@ paginate Country with pager
         });
 
         it('should export each app', () => {
-          jestExpect(jdlFileContent).toMatchInlineSnapshot(`
+          expect(jdlFileContent).toMatchInlineSnapshot(`
 "application {
   config {
     applicationType microservice
@@ -378,7 +378,7 @@ noFluentMethod Region, Country, Location
       });
 
       it('should output it to the output file', () => {
-        jestExpect(readFileSync(file, 'utf-8')).toMatchInlineSnapshot(`
+        expect(readFileSync(file, 'utf-8')).toMatchInlineSnapshot(`
 "application {
   config {
     baseName jhipster
@@ -412,7 +412,7 @@ noFluentMethod Region, Country, Location
       });
 
       it('should write a JDL file with the application', () => {
-        jestExpect(jdl).toMatch(/microfrontends \[foo, bar\]/);
+        expect(jdl).toMatch(/microfrontends \[foo, bar\]/);
       });
     });
     describe('with nullish attributes', () => {

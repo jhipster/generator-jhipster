@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, expect as jestExpect, it } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 
 import fieldTypes from '../../../jhipster/field-types.ts';
 import { validations } from '../../core/built-in-options/index.ts';
@@ -64,7 +64,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
         });
 
         it('should convert them', () => {
-          jestExpect(convertedField).toMatchInlineSnapshot(`
+          expect(convertedField).toMatchInlineSnapshot(`
 {
   "fieldName": "firstField",
   "fieldType": "String",
@@ -109,7 +109,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
           });
 
           it('should convert them', () => {
-            jestExpect(convertedFields).toMatchInlineSnapshot(`
+            expect(convertedFields).toMatchInlineSnapshot(`
 [
   {
     "fieldName": "anyBlobField",
@@ -156,7 +156,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
         });
 
         it('should convert them', () => {
-          jestExpect(convertedField).toMatchInlineSnapshot(`
+          expect(convertedField).toMatchInlineSnapshot(`
 {
   "fieldName": "enumField",
   "fieldType": "CustomEnum",
@@ -191,7 +191,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
         });
 
         it('should convert them', () => {
-          jestExpect(convertedField).toMatchInlineSnapshot(`
+          expect(convertedField).toMatchInlineSnapshot(`
 {
   "fieldName": "enumField",
   "fieldType": "CustomEnum",
@@ -227,7 +227,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
         });
 
         it('should convert them', () => {
-          jestExpect(convertedField).toMatchInlineSnapshot(`
+          expect(convertedField).toMatchInlineSnapshot(`
 {
   "documentation": "The best field",
   "fieldName": "firstField",
@@ -313,7 +313,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
         });
 
         it('should convert them', () => {
-          jestExpect(convertedFields).toMatchInlineSnapshot(`
+          expect(convertedFields).toMatchInlineSnapshot(`
 [
   {
     "fieldName": "stringField",
@@ -378,7 +378,7 @@ describe('jdl - JDLToJSONFieldConverter', () => {
         });
 
         it('should convert them', () => {
-          jestExpect(convertedField).toMatchInlineSnapshot(`
+          expect(convertedField).toMatchInlineSnapshot(`
 {
   "documentation": "The best field",
   "fieldName": "firstField",

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { after, before, describe, expect, expect as jestExpect, it } from 'esmocha';
+import { after, before, describe, expect, it } from 'esmocha';
 
 import { JDLEnum } from './index.ts';
 import JDLEnums from './jdl-enums.ts';
@@ -128,7 +128,7 @@ describe('jdl - JDLEnums', () => {
       });
 
       it('should use each enum name', () => {
-        jestExpect(result).toMatchInlineSnapshot(`
+        expect(result).toMatchInlineSnapshot(`
 [
   "A",
   "B",

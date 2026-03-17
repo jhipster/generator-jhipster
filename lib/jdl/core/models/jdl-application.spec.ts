@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, expect as jestExpect, it } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 
 import applicationOptions from '../../../jhipster/application-options.ts';
 import { binaryOptions } from '../built-in-options/index.ts';
@@ -327,7 +327,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('uses each entity name', () => {
-        jestExpect(result).toMatchInlineSnapshot(`
+        expect(result).toMatchInlineSnapshot(`
 [
   "A",
   "B",

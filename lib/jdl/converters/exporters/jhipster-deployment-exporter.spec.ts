@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { beforeEach, describe, expect, expect as jestExpect, it } from 'esmocha';
+import { beforeEach, describe, expect, it } from 'esmocha';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -85,7 +85,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
           it('should format it', () => {
             expect(content['generator-jhipster']).not.toBeUndefined();
             const config = content['generator-jhipster'];
-            jestExpect(config).toMatchInlineSnapshot(`
+            expect(config).toMatchInlineSnapshot(`
 {
   "appsFolders": [
     "tata",
@@ -117,7 +117,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
           it('should format it', () => {
             expect(content['generator-jhipster']).not.toBeUndefined();
             const config = content['generator-jhipster'];
-            jestExpect(config).toMatchInlineSnapshot(`
+            expect(config).toMatchInlineSnapshot(`
 {
   "appsFolders": [
     "tata",

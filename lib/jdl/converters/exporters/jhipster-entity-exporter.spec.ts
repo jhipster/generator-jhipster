@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { beforeEach, describe, expect, expect as jestExpect, it } from 'esmocha';
+import { beforeEach, describe, expect, it } from 'esmocha';
 
 import helpers from 'yeoman-test';
 
@@ -104,7 +104,7 @@ describe('jdl - JHipsterEntityExporter', () => {
           });
         });
         it('should return an empty list', () => {
-          jestExpect(returned).toMatchInlineSnapshot('[]');
+          expect(returned).toMatchInlineSnapshot('[]');
         });
         it('should not create a .jhipster folder', () => {
           expect(doesDirectoryExist('.jhipster')).toBe(false);
@@ -148,7 +148,7 @@ describe('jdl - JHipsterEntityExporter', () => {
         });
 
         it('should return the exported entities', () => {
-          jestExpect(returned).toMatchInlineSnapshot(`
+          expect(returned).toMatchInlineSnapshot(`
 [
   {
     "applications": [],
@@ -283,7 +283,7 @@ describe('jdl - JHipsterEntityExporter', () => {
           });
 
           it('should return the exported entities', () => {
-            jestExpect(returned).toMatchInlineSnapshot(`
+            expect(returned).toMatchInlineSnapshot(`
 [
   {
     "applications": "*",

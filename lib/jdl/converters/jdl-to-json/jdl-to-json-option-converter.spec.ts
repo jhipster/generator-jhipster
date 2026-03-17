@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { after, before, describe, esmocha, expect as jestExpect, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { after, before, describe, esmocha, expect, it } from 'esmocha';
 
 import { binaryOptions, unaryOptions } from '../../core/built-in-options/index.ts';
 import { JDLEntity } from '../../core/models/index.ts';
@@ -35,7 +33,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
     describe('when not passing a JDL option holder', () => {
       it('should fail', () => {
         // @ts-expect-error empty parameter not allowed
-        expect(() => convert()).to.throw(/^A JDL object or application must be passed to convert JDL options to JSON\.$/);
+        expect(() => convert()).toThrow(/^A JDL object or application must be passed to convert JDL options to JSON\.$/);
       });
     });
     describe('when passing a JDL option holder', () => {
@@ -48,7 +46,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
         });
 
         it('should return an empty map', () => {
-          expect(returned.size).to.equal(0);
+          expect(returned.size).toBe(0);
         });
       });
       describe('with options', () => {
@@ -129,7 +127,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
         });
 
         it('should convert the options', () => {
-          jestExpect(convertedOptions).toMatchInlineSnapshot(`
+          expect(convertedOptions).toMatchInlineSnapshot(`
 {
   "angularJSSuffix": "suffix",
   "clientRootFolder": "../core/client_root_folder",
@@ -177,13 +175,13 @@ describe('jdl - JDLToJSONOptionConverter', () => {
         });
 
         it('should log the automatic setting of the option', () => {
-          expect(loggerSpy.mock.calls[0]?.[0]).to.equal(
+          expect(loggerSpy.mock.calls[0]?.[0]).toBe(
             "The dto option is set for A, the 'serviceClass' value for the 'service' is gonna be set for this entity if " +
               'no other value has been set.',
           );
         });
         it('should set the service option to serviceClass', () => {
-          jestExpect(convertedOptions).toMatchInlineSnapshot(`
+          expect(convertedOptions).toMatchInlineSnapshot(`
 {
   "dto": "mapstruct",
   "service": "serviceClass",
@@ -219,13 +217,13 @@ describe('jdl - JDLToJSONOptionConverter', () => {
         });
 
         it('should log the automatic setting of the option', () => {
-          expect(loggerSpy.mock.calls[0]?.[0]).to.equal(
+          expect(loggerSpy.mock.calls[0]?.[0]).toBe(
             "The filter option is set for A, the 'serviceClass' value for the 'service' is gonna be set for this " +
               'entity if no other value has been set.',
           );
         });
         it('should set the service option to serviceClass', () => {
-          jestExpect(convertedOptions).toMatchInlineSnapshot(`
+          expect(convertedOptions).toMatchInlineSnapshot(`
 {
   "jpaMetamodelFiltering": true,
   "service": "serviceClass",
@@ -257,7 +255,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
         });
 
         it('should prevent the entities from being searched', () => {
-          jestExpect(convertedOptions).toMatchInlineSnapshot(`
+          expect(convertedOptions).toMatchInlineSnapshot(`
 {
   "searchEngine": "no",
 }

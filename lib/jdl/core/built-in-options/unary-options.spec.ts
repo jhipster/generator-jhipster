@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, expect as jestExpect, it } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 
 import { unaryOptions } from './index.ts';
 
@@ -50,7 +50,7 @@ describe('jdl - UnaryOptions', () => {
       });
 
       it('should loop over the unary options', () => {
-        jestExpect(result).toMatchInlineSnapshot(`
+        expect(result).toMatchInlineSnapshot(`
 [
   "skipClient",
   "skipServer",
