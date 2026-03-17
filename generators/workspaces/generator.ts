@@ -79,7 +79,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
         if (existsSync(this.destinationPath('docker-compose'))) {
           this.workspacesConfig.dockerCompose = true;
         }
-        this.workspacesConfig.appsFolders = [...new Set([...(this.workspacesConfig.packages ?? []), ...this.appsFolders!])];
+        this.workspacesConfig.appsFolders = [...new Set([...(this.workspacesConfig.packages ?? []), ...this.appsFolders])];
         delete this.workspacesConfig.packages;
       },
     });
@@ -107,7 +107,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
         if (typeof this.generateApplications === 'function') {
           await this.generateApplications.call(this);
         } else {
-          for (const appName of this.appsFolders!) {
+          for (const appName of this.appsFolders) {
             await this.composeWithJHipster(this.entrypointGenerator ?? this.generateWith, {
               generatorOptions: { destinationRoot: this.destinationPath(appName) },
             });

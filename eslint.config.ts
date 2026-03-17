@@ -45,6 +45,7 @@ export default defineConfig(
       '@typescript-eslint/no-floating-promises': 'error',
       '@typescript-eslint/prefer-optional-chain': 'error',
       '@typescript-eslint/consistent-type-definitions': 'off',
+      '@typescript-eslint/no-unnecessary-type-assertion': 'error',
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
