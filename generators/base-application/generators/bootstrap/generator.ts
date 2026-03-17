@@ -43,6 +43,7 @@ import { createAuthorityEntity, createUserEntity, createUserManagementEntity } f
 import {
   addFakerToEntity,
   derivedPrimaryKeyProperties,
+  formatDateForChangelog,
   loadEntitiesAnnotations,
   loadEntitiesOtherSide,
   prepareCommonFieldForTemplates,
@@ -189,7 +190,7 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
 
   get configuringEachEntity() {
     return this.asConfiguringEachEntityTaskGroup({
-      configureEntity({ entityStorage, entityConfig }) {
+      configureEntity({ application, entityName, entityStorage, entityConfig }) {
         entityStorage.defaults({ fields: [], relationships: [], annotations: {} });
 
         for (const field of entityConfig.fields!.filter(field => field.fieldType === 'byte[]')) {
@@ -202,7 +203,17 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
           delete entityConfig.changelogDate;
         }
         if (!entityConfig.annotations!.changelogDate) {
-          entityConfig.annotations!.changelogDate = this.nextTimestamp();
+          if (
+            (entityName === 'UserManagement' && application.generateUserManagement) ||
+            (entityName === 'User' && application.generateBuiltInUserEntity) ||
+            (entityName === 'Authority' && application.generateBuiltInAuthorityEntity)
+          ) {
+            const creationTimestamp = new Date(this.jhipsterConfig.creationTimestamp ?? Date.now());
+            creationTimestamp.setMinutes(creationTimestamp.getMinutes() + { User: 0, UserManagement: 1, Authority: 2 }[entityName]);
+            entityConfig.annotations!.changelogDate = formatDateForChangelog(creationTimestamp);
+          } else {
+            entityConfig.annotations!.changelogDate = this.nextTimestamp();
+          }
           entityStorage.save();
         }
       },
