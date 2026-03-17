@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect as jestExpect, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, expect as jestExpect, it } from 'esmocha';
 
 import { JDLEntity } from '../../core/models/index.ts';
 
@@ -30,12 +28,12 @@ describe('jdl - JDLToJSONBasicEntityConverter', () => {
     describe('when not passing JDL entities', () => {
       it('should fail', () => {
         // @ts-expect-error empty parameter not allowed
-        expect(() => convert()).to.throw(/^JDL entities must be passed to get the basic entity information\.$/);
+        expect(() => convert()).toThrow(/^JDL entities must be passed to get the basic entity information\.$/);
       });
     });
     describe('when passing an empty array', () => {
       it('should return an empty map', () => {
-        expect(convert([])).to.deep.equal(new Map());
+        expect(convert([])).toEqual(new Map());
       });
     });
     describe('when passing JDL entities', () => {
@@ -61,10 +59,10 @@ describe('jdl - JDLToJSONBasicEntityConverter', () => {
         });
 
         it('should convert built-in entities', () => {
-          expect(builtInEntitiesAreConverted).to.be.true;
+          expect(builtInEntitiesAreConverted).toBe(true);
         });
         it('should convert custom entities', () => {
-          expect(customEntitiesAreConverted).to.be.true;
+          expect(customEntitiesAreConverted).toBe(true);
         });
       });
       describe('with no field, no option and no relationship', () => {

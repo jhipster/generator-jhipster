@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { after, before, describe, esmocha, expect as jestExpect, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { after, before, describe, esmocha, expect, expect as jestExpect, it } from 'esmocha';
 
 import fieldTypes from '../../../jhipster/field-types.ts';
 import { relationshipTypes } from '../../core/basic-types/index.ts';
@@ -51,7 +49,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
           expect(() => {
             // @ts-expect-error
             convert(undefined, 'toto');
-          }).to.throw(/^The JDL object and its application's name are mandatory\.$/);
+          }).toThrow(/^The JDL object and its application's name are mandatory\.$/);
         });
       });
       describe('such as no application name', () => {
@@ -59,7 +57,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
           expect(() => {
             // @ts-expect-error
             convert(new JDLObject());
-          }).to.throw(/^The JDL object and its application's name are mandatory\.$/);
+          }).toThrow(/^The JDL object and its application's name are mandatory\.$/);
         });
       });
     });
@@ -72,7 +70,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
       });
 
       it('should return a list with no entity', () => {
-        expect(result.get('toto')?.length).to.equal(0);
+        expect(result.get('toto')?.length).toBe(0);
       });
     });
     describe('when passing a JDL object with entities', () => {
@@ -102,10 +100,10 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
         });
 
         it('should convert built-in entities', () => {
-          expect(builtInEntitiesAreConverted).to.be.true;
+          expect(builtInEntitiesAreConverted).toBe(true);
         });
         it('should convert custom entities', () => {
-          expect(customEntitiesAreConverted).to.be.true;
+          expect(customEntitiesAreConverted).toBe(true);
         });
       });
       describe('with no field, no option and no relationship', () => {
@@ -286,7 +284,7 @@ JSONEntity {
         });
 
         it('should log the automatic setting of the option', () => {
-          expect(loggerSpy.mock.calls[0]?.[0]).to.equal(
+          expect(loggerSpy.mock.calls[0]?.[0]).toBe(
             "The dto option is set for A, the 'serviceClass' value for the 'service' is gonna be set for this entity if " +
               'no other value has been set.',
           );
@@ -347,7 +345,7 @@ JSONEntity {
         });
 
         it('should log the automatic setting of the option', () => {
-          expect(loggerSpy.mock.calls[0]?.[0]).to.equal(
+          expect(loggerSpy.mock.calls[0]?.[0]).toBe(
             "The filter option is set for A, the 'serviceClass' value for the 'service' is gonna be set for this " +
               'entity if no other value has been set.',
           );
@@ -1225,7 +1223,7 @@ JSONEntity {
               `);
             });
             it('should not add the relationship for the destination entity', () => {
-              expect(relationshipFromDestinationToSource).to.be.undefined;
+              expect(relationshipFromDestinationToSource).toBeUndefined();
             });
           });
           describe('for a One-to-Many relationship', () => {
@@ -1297,7 +1295,7 @@ JSONEntity {
               `);
             });
             it('should not add the relationship for the destination entity', () => {
-              expect(relationshipFromDestinationToSource).to.be.undefined;
+              expect(relationshipFromDestinationToSource).toBeUndefined();
             });
           });
           describe('for a Many-to-Many relationship', () => {
