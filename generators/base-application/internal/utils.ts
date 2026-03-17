@@ -46,7 +46,7 @@ export function createUserEntity(
   customUserData: Partial<UserEntity> = {},
   application: BaseApplicationApplication<BaseApplicationEntity>,
 ): Partial<UserEntity> {
-  if ((customUserData.relationships?.length ?? 0) > 0) {
+  if (customUserData.relationships?.length) {
     this.log.warn('Relationships on the User entity side will be disregarded');
   }
   if (customUserData.fields?.some(field => field.fieldName !== 'id')) {
@@ -292,7 +292,7 @@ export function createAuthorityEntity(
   customAuthorityData: Partial<ApplicationEntity> = {},
   application: BaseApplicationApplication<BaseApplicationEntity>,
 ): Partial<ApplicationEntity> {
-  if ((customAuthorityData.relationships?.length ?? 0) > 0) {
+  if (customAuthorityData.relationships?.length) {
     this.log.warn(`Relationships on the ${authorityEntityName} entity side will be disregarded`);
   }
   if (customAuthorityData.fields?.some(field => field.fieldName !== 'name')) {
