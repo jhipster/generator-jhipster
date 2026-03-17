@@ -46,14 +46,11 @@ export function createUserEntity(
   customUserData: Partial<UserEntity> = {},
   application: BaseApplicationApplication<BaseApplicationEntity>,
 ): Partial<UserEntity> {
-  const userEntityDefinition = this.getEntityConfig('User')?.getAll() as Partial<UserEntity>;
-  if (userEntityDefinition) {
-    if (userEntityDefinition.relationships && userEntityDefinition.relationships.length > 0) {
-      this.log.warn('Relationships on the User entity side will be disregarded');
-    }
-    if (userEntityDefinition.fields?.some(field => field.fieldName !== 'id')) {
-      this.log.warn('Fields on the User entity side (other than id) will be disregarded');
-    }
+  if (customUserData.relationships?.length) {
+    this.log.warn('Relationships on the User entity side will be disregarded');
+  }
+  if (customUserData.fields?.some(field => field.fieldName !== 'id')) {
+    this.log.warn('Fields on the User entity side (other than id) will be disregarded');
   }
 
   const creationTimestamp = new Date(this.jhipsterConfig.creationTimestamp ?? Date.now());
@@ -66,7 +63,7 @@ export function createUserEntity(
     changelogDate: formatDateForChangelog(creationTimestamp),
     entityTableName: `${application.jhiTablePrefix}_user`,
     relationships: [],
-    fields: userEntityDefinition ? userEntityDefinition.fields || [] : [],
+    fields: customUserData.fields ?? [],
     dto: 'any',
     dtoMapstruct: true,
     dtoAny: true,
@@ -295,14 +292,11 @@ export function createAuthorityEntity(
   customAuthorityData: Partial<ApplicationEntity> = {},
   application: BaseApplicationApplication<BaseApplicationEntity>,
 ): Partial<ApplicationEntity> {
-  const entityDefinition = this.getEntityConfig(authorityEntityName)?.getAll() as Partial<ApplicationEntity>;
-  if (entityDefinition) {
-    if (entityDefinition.relationships && entityDefinition.relationships.length > 0) {
-      this.log.warn(`Relationships on the ${authorityEntityName} entity side will be disregarded`);
-    }
-    if (entityDefinition.fields?.some(field => field.fieldName !== 'name')) {
-      this.log.warn(`Fields on the ${authorityEntityName} entity side (other than name) will be disregarded`);
-    }
+  if (customAuthorityData.relationships?.length) {
+    this.log.warn(`Relationships on the ${authorityEntityName} entity side will be disregarded`);
+  }
+  if (customAuthorityData.fields?.some(field => field.fieldName !== 'name')) {
+    this.log.warn(`Fields on the ${authorityEntityName} entity side (other than name) will be disregarded`);
   }
 
   const creationTimestamp = new Date(this.jhipsterConfig.creationTimestamp ?? Date.now());
@@ -317,7 +311,7 @@ export function createAuthorityEntity(
     adminEntity: true,
     entityTableName: `${application.jhiTablePrefix}_authority`,
     relationships: [],
-    fields: entityDefinition ? entityDefinition.fields || [] : [],
+    fields: customAuthorityData.fields ?? [],
     builtInAuthority: true,
     skipClient: !application.backendTypeSpringBoot || application.clientFrameworkReact || application.clientFrameworkVue,
     searchEngine: 'no',

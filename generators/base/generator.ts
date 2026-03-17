@@ -92,7 +92,7 @@ export default class BaseGenerator<
     this.fromBlueprint = this.rootGeneratorName() !== 'generator-jhipster';
 
     if (this.fromBlueprint) {
-      this.blueprintStorage = this._getStorage();
+      this.blueprintStorage = this._getStorage(undefined, { transform: this.features.configTransform });
       this.blueprintConfig = this.blueprintStorage.createProxy();
 
       // jhipsterContext is the original generator

@@ -25,7 +25,8 @@ import { PRIORITY_NAMES } from '../base-core/priorities.ts';
 import type { GenericTask } from '../base-core/types.ts';
 import type GeneratorsByNamespace from '../types.ts';
 
-import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from './support/index.ts';
+import { sanitizeConfigForNodeApplications } from './support/config-hardening.ts';
+import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SANITIZATION_KEY, CONTEXT_DATA_SOURCE_KEY } from './support/index.ts';
 import type { SimpleTaskTypes } from './tasks.ts';
 import type {
   Application as BaseSimpleApplicationApplication,
@@ -69,7 +70,25 @@ export default class BaseSimpleApplicationGenerator<
   Tasks extends SimpleTaskTypes<Application, Source> = SimpleTaskTypes<Application, Source>,
 > extends BaseGenerator<Config, Options, Source, Features, Tasks> {
   constructor(args?: string[], options?: Options, features?: Features) {
-    super(args, options, { storeJHipsterVersion: true, storeBlueprintVersion: true, ...features } as Features);
+    super(args, options, {
+      storeJHipsterVersion: true,
+      storeBlueprintVersion: true,
+      configTransform: (...args) => {
+        const configTransform = this.getContextData(CONTEXT_DATA_SANITIZATION_KEY, {
+          factory: () => (config: Record<string, any>, configKey?: string | undefined) => {
+            const cleanups = sanitizeConfigForNodeApplications(config, { depth: -1, keyPath: configKey });
+            for (const [key, { oldValue, newValue }] of Object.entries(cleanups)) {
+              this.log.warn(
+                `The configuration property '${key}' contained a template literal which has been sanitized for security hardening. Original value: '${oldValue}', new value: '${newValue}'`,
+              );
+            }
+            return config;
+          },
+        });
+        return configTransform(...args);
+      },
+      ...features,
+    } as Features);
   }
 
   override get context(): Application {
