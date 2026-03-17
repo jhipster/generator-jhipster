@@ -19,10 +19,7 @@
 
 import { before, describe, expect as jestExpect, it } from 'esmocha';
 
-import { expect, use as chaiUse } from 'chai';
-import sinonChai from 'sinon-chai';
-
-chaiUse(sinonChai);
+import { expect } from 'chai';
 
 import { JDLEntity } from '../../core/models/index.ts';
 
