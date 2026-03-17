@@ -17,13 +17,13 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, expect as jestExpect, it } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 
 import { binaryOptions } from './index.ts';
 
 describe('jdl - BinaryOptions', () => {
   it('should match values', () => {
-    jestExpect(binaryOptions.Values).toMatchInlineSnapshot(`
+    expect(binaryOptions.Values).toMatchInlineSnapshot(`
 {
   "dto": {
     "MAPSTRUCT": "mapstruct",
@@ -70,7 +70,7 @@ describe('jdl - BinaryOptions', () => {
       });
 
       it('should iterate over them', () => {
-        jestExpect(result).toMatchInlineSnapshot(`
+        expect(result).toMatchInlineSnapshot(`
 [
   "dto",
   "service",

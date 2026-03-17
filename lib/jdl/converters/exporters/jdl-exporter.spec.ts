@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { beforeEach, describe, expect, expect as jestExpect, it } from 'esmocha';
+import { beforeEach, describe, expect, it } from 'esmocha';
 import fs from 'node:fs';
 
 import helpers from 'yeoman-test';
@@ -109,7 +109,7 @@ describe('jdl - JDLExporter', () => {
             });
 
             it('should export the JDL and match snapshot', () => {
-              jestExpect(exportToJDL(jdlObject)).toMatchInlineSnapshot(`
+              expect(exportToJDL(jdlObject)).toMatchInlineSnapshot(`
 "application {
   config {
     clientFramework no

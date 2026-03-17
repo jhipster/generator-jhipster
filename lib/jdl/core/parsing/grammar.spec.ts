@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, expect as jestExpect, it } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 
 import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
 import { relationshipTypes } from '../basic-types/index.ts';
@@ -51,7 +51,7 @@ MAX = 43`);
       });
 
       it('should parse them', () => {
-        jestExpect(constants).toMatchInlineSnapshot(`
+        expect(constants).toMatchInlineSnapshot(`
 {
   "MAX": "43",
   "MIN": "42",
@@ -68,7 +68,7 @@ MAX = 43`);
       });
 
       it('should parse them', () => {
-        jestExpect(constants).toMatchInlineSnapshot(`
+        expect(constants).toMatchInlineSnapshot(`
 {
   "MIN": "42.42",
 }
@@ -86,7 +86,7 @@ MAX = 43`);
       });
 
       it('should parse it', () => {
-        jestExpect(application).toMatchInlineSnapshot(`
+        expect(application).toMatchInlineSnapshot(`
 {
   "config": {},
   "entities": [],
@@ -115,7 +115,7 @@ MAX = 43`);
         });
 
         it('should parse it', () => {
-          jestExpect(application).toMatchInlineSnapshot(`
+          expect(application).toMatchInlineSnapshot(`
 {
   "config": {
     "applicationType": "monolith",
@@ -145,7 +145,7 @@ MAX = 43`);
         });
 
         it('should parse it', () => {
-          jestExpect(application).toMatchInlineSnapshot(`
+          expect(application).toMatchInlineSnapshot(`
 {
   "config": {
     "baseName": "toto",
@@ -175,7 +175,7 @@ MAX = 43`);
         });
 
         it('should parse it', () => {
-          jestExpect(application).toMatchInlineSnapshot(`
+          expect(application).toMatchInlineSnapshot(`
 {
   "config": {
     "blueprints": [
@@ -218,7 +218,7 @@ application {
       });
 
       it('should parse them', () => {
-        jestExpect(applications).toMatchInlineSnapshot(`
+        expect(applications).toMatchInlineSnapshot(`
 [
   {
     "config": {
@@ -411,7 +411,7 @@ entity C
       });
 
       it('should parse it', () => {
-        jestExpect(parsedEntity).toMatchInlineSnapshot(`
+        expect(parsedEntity).toMatchInlineSnapshot(`
 {
   "annotations": [],
   "body": [],
@@ -431,7 +431,7 @@ entity C
       });
 
       it('should parse it', () => {
-        jestExpect(parsedEntity).toMatchInlineSnapshot(`
+        expect(parsedEntity).toMatchInlineSnapshot(`
 {
   "annotations": [],
   "body": [],
@@ -475,7 +475,7 @@ entity A`);
       });
 
       it('should parse it', () => {
-        jestExpect(parsedEntity).toMatchInlineSnapshot(`
+        expect(parsedEntity).toMatchInlineSnapshot(`
 {
   "annotations": [
     {
@@ -531,7 +531,7 @@ entity A`);
         });
 
         it('should parse it', () => {
-          jestExpect(parsedEntity).toMatchInlineSnapshot(`
+          expect(parsedEntity).toMatchInlineSnapshot(`
 {
   "annotations": [],
   "body": [],
@@ -555,7 +555,7 @@ entity A`);
         });
 
         it('should parse it', () => {
-          jestExpect(parsedEntity).toMatchInlineSnapshot(`
+          expect(parsedEntity).toMatchInlineSnapshot(`
 {
   "annotations": [],
   "body": [],
@@ -585,7 +585,7 @@ entity A`);
         });
 
         it('should parse it', () => {
-          jestExpect(parsedEntity).toMatchInlineSnapshot(`
+          expect(parsedEntity).toMatchInlineSnapshot(`
 {
   "annotations": [
     {
@@ -632,7 +632,7 @@ entity A`);
           });
 
           it('should parse it', () => {
-            jestExpect(parsedEntity).toMatchInlineSnapshot(`
+            expect(parsedEntity).toMatchInlineSnapshot(`
 {
   "annotations": [],
   "body": [
@@ -1056,7 +1056,7 @@ entity A {
       });
 
       it('should parse them', () => {
-        jestExpect(parsedEnum).toMatchInlineSnapshot(`
+        expect(parsedEnum).toMatchInlineSnapshot(`
 {
   "documentation": null,
   "name": "MyEnum",
@@ -1090,7 +1090,7 @@ entity A {
       });
 
       it('should parse them', () => {
-        jestExpect(parsedEnum).toMatchInlineSnapshot(`
+        expect(parsedEnum).toMatchInlineSnapshot(`
 {
   "documentation": null,
   "name": "MyEnum",
@@ -1129,7 +1129,7 @@ entity A {
       });
 
       it('should parse it', () => {
-        jestExpect(parsedEnum).toMatchInlineSnapshot(`
+        expect(parsedEnum).toMatchInlineSnapshot(`
 {
   "documentation": null,
   "name": "MyEnum",
@@ -1170,7 +1170,7 @@ entity A {
       });
 
       it('should parse it', () => {
-        jestExpect(parsedEnum).toMatchInlineSnapshot(`
+        expect(parsedEnum).toMatchInlineSnapshot(`
 {
   "documentation": "country enum",
   "name": "MyEnum",
@@ -1225,7 +1225,7 @@ entity A {
       });
 
       it('should parse it', () => {
-        jestExpect(parsedEnum).toMatchInlineSnapshot(`
+        expect(parsedEnum).toMatchInlineSnapshot(`
 {
   "documentation": "country enum",
   "name": "MyEnum",
@@ -1281,7 +1281,7 @@ entity A {
       });
 
       it('should parse it', () => {
-        jestExpect(parsedEnum).toMatchInlineSnapshot(`
+        expect(parsedEnum).toMatchInlineSnapshot(`
 {
   "documentation": null,
   "name": "MyEnum",
@@ -1335,7 +1335,7 @@ entity A {
         });
 
         it('should parse it', () => {
-          jestExpect(parsedEnum).toMatchInlineSnapshot(`
+          expect(parsedEnum).toMatchInlineSnapshot(`
 {
   "documentation": null,
   "name": "MyEnum",
@@ -1372,7 +1372,7 @@ entity A {
         });
 
         it('should parse it', () => {
-          jestExpect(parsedEnum).toMatchInlineSnapshot(`
+          expect(parsedEnum).toMatchInlineSnapshot(`
 {
   "documentation": null,
   "name": "MyEnum",
@@ -1419,7 +1419,7 @@ entity A {
       });
 
       it('should parse them', () => {
-        jestExpect(relationship).toMatchInlineSnapshot(`
+        expect(relationship).toMatchInlineSnapshot(`
 {
   "cardinality": "OneToOne",
   "from": {
@@ -1618,7 +1618,7 @@ entity A {
         });
 
         it('should add them', () => {
-          jestExpect(relationships).toMatchInlineSnapshot(`
+          expect(relationships).toMatchInlineSnapshot(`
 [
   {
     "cardinality": "OneToOne",
@@ -1699,7 +1699,7 @@ entity A {
         });
 
         it('should parse them', () => {
-          jestExpect(relationships).toMatchInlineSnapshot(`
+          expect(relationships).toMatchInlineSnapshot(`
 [
   {
     "cardinality": "OneToOne",
@@ -1737,7 +1737,7 @@ entity A {
         });
 
         it('should parse them', () => {
-          jestExpect(relationships).toMatchInlineSnapshot(`
+          expect(relationships).toMatchInlineSnapshot(`
 [
   {
     "cardinality": "OneToOne",
@@ -1775,7 +1775,7 @@ entity A {
         });
 
         it('should parse them', () => {
-          jestExpect(relationships).toMatchInlineSnapshot(`
+          expect(relationships).toMatchInlineSnapshot(`
 [
   {
     "cardinality": "OneToOne",
@@ -1822,7 +1822,7 @@ entity A {
         });
 
         it('should add the exclusions', () => {
-          jestExpect(parsedOption).toMatchInlineSnapshot(`
+          expect(parsedOption).toMatchInlineSnapshot(`
 {
   "excluded": [
     "A",
@@ -1863,7 +1863,7 @@ entity A {
           });
 
           it('should parse it', () => {
-            jestExpect(parsedOption).toMatchInlineSnapshot(`
+            expect(parsedOption).toMatchInlineSnapshot(`
 {
   "client": {
     "excluded": [],
@@ -1884,7 +1884,7 @@ entity A {
           });
 
           it('should parse it', () => {
-            jestExpect(parsedOption).toMatchInlineSnapshot(`
+            expect(parsedOption).toMatchInlineSnapshot(`
 {
   ""../../toto"": {
     "excluded": [],
@@ -1906,7 +1906,7 @@ entity A {
         });
 
         it('should add the exclusions', () => {
-          jestExpect(parsedOption).toMatchInlineSnapshot(`
+          expect(parsedOption).toMatchInlineSnapshot(`
 {
   "mapstruct": {
     "excluded": [
@@ -1968,7 +1968,7 @@ entity A {
       });
 
       it("should parse it as '*'", () => {
-        jestExpect(parsedOption).toMatchInlineSnapshot(`
+        expect(parsedOption).toMatchInlineSnapshot(`
 {
   "client": {
     "excluded": [],
@@ -1989,7 +1989,7 @@ entity A {
       });
 
       it('should parse it', () => {
-        jestExpect(parsedOption).toMatchInlineSnapshot(`
+        expect(parsedOption).toMatchInlineSnapshot(`
 {
   "client": {
     "excluded": [],
@@ -2040,7 +2040,7 @@ entity A {
         });
 
         it('should parse it', () => {
-          jestExpect(parsedDeployment).toMatchInlineSnapshot(`
+          expect(parsedDeployment).toMatchInlineSnapshot(`
 {
   "kubernetesStorageClassName": "",
 }
@@ -2061,7 +2061,7 @@ entity A {
         });
 
         it('should parse it', () => {
-          jestExpect(parsedDeployment).toMatchInlineSnapshot(`
+          expect(parsedDeployment).toMatchInlineSnapshot(`
 {
   "kubernetesStorageClassName": "SetValue",
 }

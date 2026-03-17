@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { after, afterEach, before, beforeEach, describe, esmocha, expect, expect as jestExpect, it } from 'esmocha';
+import { after, afterEach, before, beforeEach, describe, esmocha, expect, it } from 'esmocha';
 import assert from 'node:assert';
 import fs from 'node:fs';
 
@@ -346,13 +346,13 @@ describe('cli - EnvironmentBuilder', () => {
       });
 
       it('should load sharedOptions', () => {
-        jestExpect(envBuilder.getEnvironment().sharedOptions.fooBar).toMatchObject(jestExpect.arrayContaining(['fooValue']));
+        expect(envBuilder.getEnvironment().sharedOptions.fooBar).toMatchObject(expect.arrayContaining(['fooValue']));
         expect(envBuilder.getEnvironment().sharedOptions.single).toBe(true);
       });
 
       it('should merge sharedOptions', () => {
-        jestExpect(envBuilder.getEnvironment().sharedOptions.fooBar).toMatchObject(jestExpect.arrayContaining(['fooValue']));
-        jestExpect(envBuilder.getEnvironment().sharedOptions.fooBar).toMatchObject(jestExpect.arrayContaining(['barValue']));
+        expect(envBuilder.getEnvironment().sharedOptions.fooBar).toMatchObject(expect.arrayContaining(['fooValue']));
+        expect(envBuilder.getEnvironment().sharedOptions.fooBar).toMatchObject(expect.arrayContaining(['barValue']));
       });
     });
   });

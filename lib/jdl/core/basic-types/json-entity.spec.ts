@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, expect as jestExpect, it } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 
 import JSONEntity from './json-entity.ts';
 
@@ -49,7 +49,7 @@ describe('jdl - JSONEntity', () => {
       });
 
       it('should set default values', () => {
-        jestExpect(entity).toMatchInlineSnapshot(`
+        expect(entity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": undefined,
   "annotations": {},
@@ -102,7 +102,7 @@ JSONEntity {
       });
 
       it('should use them', () => {
-        jestExpect(entity).toMatchInlineSnapshot(`
+        expect(entity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": "yes",
   "annotations": {},
@@ -287,7 +287,7 @@ JSONEntity {
       });
 
       it('should set them', () => {
-        jestExpect(jsonEntity).toMatchInlineSnapshot(`
+        expect(jsonEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": undefined,
   "annotations": {},

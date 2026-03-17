@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { after, before, describe, expect, expect as jestExpect, it } from 'esmocha';
+import { after, before, describe, expect, it } from 'esmocha';
 import { rmSync } from 'node:fs';
 import path from 'node:path';
 
@@ -60,7 +60,7 @@ relationship OneToMany {
 `,
           { applicationName: 'MyApp', databaseType: databaseTypes.SQL },
         ).import();
-        jestExpect(importState.exportedEntities[0].relationships?.[0].relationshipWithBuiltInEntity).toBe(true);
+        expect(importState.exportedEntities[0].relationships?.[0].relationshipWithBuiltInEntity).toBe(true);
       });
     });
     describe('when not parsing applications', () => {
@@ -87,7 +87,7 @@ relationship OneToMany {
       });
 
       it('should return the final state', () => {
-        jestExpect(returned).toMatchSnapshot();
+        expect(returned).toMatchSnapshot();
       });
     });
     describe('when passing an existing application config', () => {
@@ -244,7 +244,7 @@ relationship OneToOne {
       });
 
       it('should export the application contents', () => {
-        jestExpect(contents).toMatchSnapshot();
+        expect(contents).toMatchSnapshot();
       });
     });
     describe('when parsing multiple JDL files with applications and entities', () => {
@@ -356,7 +356,7 @@ relationship OneToOne {
       });
 
       it('should export the application & deployment contents', () => {
-        jestExpect(importState).toMatchSnapshot();
+        expect(importState).toMatchSnapshot();
       });
     });
     describe('when parsing deployment config', () => {
@@ -378,7 +378,7 @@ relationship OneToOne {
       });
 
       it('should export the deployment contents', () => {
-        jestExpect(contents).toMatchSnapshot();
+        expect(contents).toMatchSnapshot();
       });
     });
     describe('when parsing entities and enums with custom values', () => {
@@ -467,7 +467,7 @@ ${entities}`,
             expect(returned.exportedEntities.filter((entity: any) => entityNames.includes(entity.name))).toEqual(
               applicationWithEntities.entities,
             );
-            jestExpect(applicationWithEntities.entities).toMatchSnapshot();
+            expect(applicationWithEntities.entities).toMatchSnapshot();
           });
         });
       });
@@ -481,7 +481,7 @@ ${entities}`,
       });
 
       it('should return the blueprints attributes in the application', () => {
-        jestExpect(importState.exportedApplications).toMatchSnapshot();
+        expect(importState.exportedApplications).toMatchSnapshot();
       });
     });
     describe('when choosing neo4j as database type', () => {
@@ -590,7 +590,7 @@ relationship OneToOne {
       });
 
       it('should export them', () => {
-        jestExpect(relationshipOnSource).toMatchInlineSnapshot(`
+        expect(relationshipOnSource).toMatchInlineSnapshot(`
           {
             "options": {
               "notId": "value",
@@ -604,7 +604,7 @@ relationship OneToOne {
             "relationshipWithBuiltInEntity": true,
           }
         `);
-        jestExpect(relationshipOnDestination).toMatchInlineSnapshot(`
+        expect(relationshipOnDestination).toMatchInlineSnapshot(`
           {
             "options": {
               "builtInEntity": true,
@@ -630,7 +630,7 @@ relationship OneToOne {
 `,
         );
         const importState = importer.import();
-        jestExpect(importState.exportedApplications[0]['generator-jhipster'].microfrontends).toMatchInlineSnapshot(`
+        expect(importState.exportedApplications[0]['generator-jhipster'].microfrontends).toMatchInlineSnapshot(`
           [
             {
               "baseName": "foo",
@@ -653,7 +653,7 @@ relationship OneToOne {
 `,
         );
         const importState = importer.import();
-        jestExpect(importState.exportedApplications[0]['generator-jhipster'].clientFramework).toBe(NO_CLIENT_FRAMEWORK);
+        expect(importState.exportedApplications[0]['generator-jhipster'].clientFramework).toBe(NO_CLIENT_FRAMEWORK);
       });
     });
   });

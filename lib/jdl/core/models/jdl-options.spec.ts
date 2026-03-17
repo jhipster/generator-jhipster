@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { afterEach, before, describe, expect, expect as jestExpect, it } from 'esmocha';
+import { afterEach, before, describe, expect, it } from 'esmocha';
 
 import { binaryOptions, unaryOptions } from '../built-in-options/index.ts';
 
@@ -164,7 +164,7 @@ describe('jdl - JDLOptions', () => {
       });
 
       it('should use each option', () => {
-        jestExpect(result).toMatchInlineSnapshot(`
+        expect(result).toMatchInlineSnapshot(`
 [
   "skipClient",
   "skipServer",

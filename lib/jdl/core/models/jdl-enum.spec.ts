@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, expect as jestExpect, it } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 
 import { JDLEnum } from './index.ts';
 
@@ -71,7 +71,7 @@ describe('jdl - JDLEnum', () => {
     });
 
     it('returns the comments by enum value', () => {
-      jestExpect(result).toMatchInlineSnapshot(`
+      expect(result).toMatchInlineSnapshot(`
 {
   "A": "first comment",
   "B": "second comment",

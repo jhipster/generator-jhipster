@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, expect as jestExpect, it } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 
 import { relationshipTypes } from '../basic-types/index.ts';
 
@@ -446,7 +446,7 @@ describe('jdl - JDLRelationships', () => {
       });
 
       it('should use each relationship', () => {
-        jestExpect(result).toMatchInlineSnapshot(`
+        expect(result).toMatchInlineSnapshot(`
 [
   {
     "from": "Abc",

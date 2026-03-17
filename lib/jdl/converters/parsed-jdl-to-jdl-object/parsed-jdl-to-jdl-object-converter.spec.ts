@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, expect as jestExpect, it } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
 import fieldTypes from '../../../jhipster/field-types.ts';
@@ -495,7 +495,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         });
 
         it('should parse it', () => {
-          jestExpect(parsedConfig).toMatchInlineSnapshot(`
+          expect(parsedConfig).toMatchInlineSnapshot(`
 JDLApplication {
   "config": JDLApplicationConfiguration {
     "namespace": undefined,
@@ -549,7 +549,7 @@ JDLApplication {
           delete deployment.appsFolders;
           delete deployment.clusteredDbApps;
 
-          jestExpect(deployment).toMatchInlineSnapshot(`
+          expect(deployment).toMatchInlineSnapshot(`
 JDLDeployment {
   "deploymentType": "docker-compose",
   "directoryPath": "../",
@@ -674,7 +674,7 @@ JDLDeployment {
         });
 
         it('should add the application entities in the application object', () => {
-          jestExpect(entityNames).toMatchInlineSnapshot(`
+          expect(entityNames).toMatchInlineSnapshot(`
 [
   "BankAccount",
 ]
@@ -731,7 +731,7 @@ JDLDeployment {
           });
 
           it('should set the annotations as options', () => {
-            jestExpect(entityA.annotations).toMatchInlineSnapshot(`
+            expect(entityA.annotations).toMatchInlineSnapshot(`
 {
   "dto": "mapstruct",
   "myCustomBinaryOption": "customValue",
@@ -740,7 +740,7 @@ JDLDeployment {
   "skipClient": true,
 }
 `);
-            jestExpect(entityB.annotations).toMatchInlineSnapshot(`
+            expect(entityB.annotations).toMatchInlineSnapshot(`
 {
   "dto": "mapstruct",
   "myCustomUnaryOption": true,
@@ -748,7 +748,7 @@ JDLDeployment {
   "service": "serviceClass",
 }
 `);
-            jestExpect(entityC.annotations).toMatchInlineSnapshot(`
+            expect(entityC.annotations).toMatchInlineSnapshot(`
 {
   "filter": true,
   "myCustomBinaryOption": "customValue2",
@@ -757,12 +757,12 @@ JDLDeployment {
 }
 `);
             expect(fieldAnnotation).toEqual(true);
-            jestExpect(relationshipAnnotationOnSource).toMatchInlineSnapshot(`
+            expect(relationshipAnnotationOnSource).toMatchInlineSnapshot(`
 {
   "annotationOnSource": "toto",
 }
 `);
-            jestExpect(relationshipAnnotationOnDestination).toMatchInlineSnapshot(`
+            expect(relationshipAnnotationOnDestination).toMatchInlineSnapshot(`
 {
   "annotationOnDestination": true,
 }
@@ -792,7 +792,7 @@ JDLDeployment {
           });
 
           it('should set the annotations as options with lower-case letters first', () => {
-            jestExpect(entityA.annotations).toMatchInlineSnapshot(`
+            expect(entityA.annotations).toMatchInlineSnapshot(`
 {
   "dto": "mapstruct",
   "myCustomBinaryOption": "customValue",
@@ -801,7 +801,7 @@ JDLDeployment {
   "skipClient": true,
 }
 `);
-            jestExpect(entityB.annotations).toMatchInlineSnapshot(`
+            expect(entityB.annotations).toMatchInlineSnapshot(`
 {
   "dto": "mapstruct",
   "myCustomUnaryOption": true,
@@ -809,7 +809,7 @@ JDLDeployment {
   "service": "serviceClass",
 }
 `);
-            jestExpect(entityC.annotations).toMatchInlineSnapshot(`
+            expect(entityC.annotations).toMatchInlineSnapshot(`
 {
   "filter": true,
   "myCustomBinaryOption": "customValue2",
@@ -818,12 +818,12 @@ JDLDeployment {
 }
 `);
             expect(fieldAnnotation).toEqual(true);
-            jestExpect(relationshipAnnotationOnSource).toMatchInlineSnapshot(`
+            expect(relationshipAnnotationOnSource).toMatchInlineSnapshot(`
 {
   "annotationOnSource": true,
 }
 `);
-            jestExpect(relationshipAnnotationOnDestination).toMatchInlineSnapshot(`
+            expect(relationshipAnnotationOnDestination).toMatchInlineSnapshot(`
 {
   "annotationOnDestination": true,
 }
@@ -849,21 +849,21 @@ JDLDeployment {
 
         describe('correctly should set the options', () => {
           it('should set the annotations as options with lower-case letters first', () => {
-            jestExpect(entityA.annotations).toMatchInlineSnapshot(`
+            expect(entityA.annotations).toMatchInlineSnapshot(`
 {
   "dto": "mapstruct",
   "service": "serviceClass",
   "skipClient": true,
 }
 `);
-            jestExpect(entityB.annotations).toMatchInlineSnapshot(`
+            expect(entityB.annotations).toMatchInlineSnapshot(`
 {
   "dto": "mapstruct",
   "paginate": "pagination",
   "service": "serviceClass",
 }
 `);
-            jestExpect(entityC.annotations).toMatchInlineSnapshot(`
+            expect(entityC.annotations).toMatchInlineSnapshot(`
 {
   "embedded": true,
   "filter": true,

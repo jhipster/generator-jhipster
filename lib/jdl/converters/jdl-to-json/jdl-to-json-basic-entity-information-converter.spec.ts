@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect, expect as jestExpect, it } from 'esmocha';
+import { before, describe, expect, it } from 'esmocha';
 
 import { JDLEntity } from '../../core/models/index.ts';
 
@@ -81,7 +81,7 @@ describe('jdl - JDLToJSONBasicEntityConverter', () => {
         });
 
         it('should convert the entity', () => {
-          jestExpect(convertedEntity).toMatchInlineSnapshot(`
+          expect(convertedEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": undefined,
   "annotations": {},

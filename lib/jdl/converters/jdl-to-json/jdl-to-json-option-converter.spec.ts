@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { after, before, describe, esmocha, expect, expect as jestExpect, it } from 'esmocha';
+import { after, before, describe, esmocha, expect, it } from 'esmocha';
 
 import { binaryOptions, unaryOptions } from '../../core/built-in-options/index.ts';
 import { JDLEntity } from '../../core/models/index.ts';
@@ -127,7 +127,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
         });
 
         it('should convert the options', () => {
-          jestExpect(convertedOptions).toMatchInlineSnapshot(`
+          expect(convertedOptions).toMatchInlineSnapshot(`
 {
   "angularJSSuffix": "suffix",
   "clientRootFolder": "../core/client_root_folder",
@@ -181,7 +181,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
           );
         });
         it('should set the service option to serviceClass', () => {
-          jestExpect(convertedOptions).toMatchInlineSnapshot(`
+          expect(convertedOptions).toMatchInlineSnapshot(`
 {
   "dto": "mapstruct",
   "service": "serviceClass",
@@ -223,7 +223,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
           );
         });
         it('should set the service option to serviceClass', () => {
-          jestExpect(convertedOptions).toMatchInlineSnapshot(`
+          expect(convertedOptions).toMatchInlineSnapshot(`
 {
   "jpaMetamodelFiltering": true,
   "service": "serviceClass",
@@ -255,7 +255,7 @@ describe('jdl - JDLToJSONOptionConverter', () => {
         });
 
         it('should prevent the entities from being searched', () => {
-          jestExpect(convertedOptions).toMatchInlineSnapshot(`
+          expect(convertedOptions).toMatchInlineSnapshot(`
 {
   "searchEngine": "no",
 }
