@@ -1,4 +1,4 @@
-import type { ConfigObject } from '@eslint/core';
+import type { Config } from 'eslint/config';
 import imports from 'eslint-plugin-import-x';
 import unusedImports from 'eslint-plugin-unused-imports';
 
@@ -6,7 +6,7 @@ import unusedImports from 'eslint-plugin-unused-imports';
  * Config applied to transformed source in generation process.
  * Rules must be compatible with auto fix to be applied.
  */
-const baseConfig: ConfigObject = {
+const baseConfig: Config = {
   plugins: {
     'unused-imports': unusedImports,
     ...imports.flatConfigs.recommended.plugins,
@@ -58,6 +58,6 @@ const baseConfig: ConfigObject = {
       },
     ],
   },
-} as const satisfies ConfigObject;
+} as const satisfies Config;
 
 export default baseConfig;
