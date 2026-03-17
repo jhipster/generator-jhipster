@@ -505,7 +505,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   #parseJHipsterConfigs(configs: JHipsterConfigs = {}, common = false) {
     Object.entries(configs).forEach(([optionName, configDesc]) => {
       const optionsDesc = convertConfigToOption(optionName, configDesc);
-      if (!optionsDesc || !optionsDesc.type || (common && configDesc.scope === 'generator')) return;
+      if (!optionsDesc?.type || (common && configDesc.scope === 'generator')) return;
 
       let optionValue;
       const { name, type } = optionsDesc;
