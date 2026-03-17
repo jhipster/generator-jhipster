@@ -441,7 +441,9 @@ export default class LiquibaseGenerator<
                 srcMainResources: application.srcMainResources,
                 authenticationTypeOauth2: application.authenticationTypeOauth2,
                 devDatabaseTypeH2Any: relationalApplication.devDatabaseTypeH2Any!,
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 driver: liquibasePluginJdbcDriver!,
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 hibernateDialect: liquibasePluginHibernateDialect!,
                 defaultSchemaName: application.liquibaseDefaultSchemaName,
                 // eslint-disable-next-line no-template-curly-in-string

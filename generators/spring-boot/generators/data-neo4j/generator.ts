@@ -19,7 +19,6 @@
 
 import { javaMainPackageTemplatesBlock } from '../../../java/support/files.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';
-import type { Source as SpringBootSource } from '../../index.ts';
 import type { Application as SpringDataRelationalApplication } from '../data-relational/types.d.ts';
 
 import cleanupTask from './cleanup.ts';
@@ -162,7 +161,7 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addTestSpringFactory({ source, application }) {
-        (source as SpringBootSource).addTestSpringFactory?.({
+        source.addTestSpringFactory?.({
           key: 'org.springframework.test.context.ContextCustomizerFactory',
           value: `${application.packageName}.config.Neo4jTestContainersSpringContextCustomizerFactory`,
         });

@@ -176,7 +176,7 @@ export default class CoreGenerator<
       this._config = this._getStorage('generator-jhipster', { transform: this.features.configTransform });
 
       /* JHipster config using proxy mode used as a plain object instead of using get/set. */
-      this.jhipsterConfig = this.config.createProxy() as Config;
+      this.jhipsterConfig = this.config.createProxy();
 
       /* Options parsing must be executed after forcing jhipster storage namespace and after sharedData have been populated */
       this.#parseJHipsterConfigs(baseCommand.configs);
@@ -217,7 +217,7 @@ export default class CoreGenerator<
    * JHipster config with default values fallback
    */
   get jhipsterConfigWithDefaults(): Readonly<Config> {
-    return removeFieldsWithNullishValues(this.config.getAll()) as Config;
+    return removeFieldsWithNullishValues(this.config.getAll());
   }
 
   /**
@@ -596,7 +596,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
               if (!this.blueprintStorage) {
                 throw new Error('Blueprint storage is not initialized');
               }
-              this.blueprintStorage!.set(argumentName, convertedValue);
+              this.blueprintStorage.set(argumentName, convertedValue);
               break;
             }
           }
@@ -1199,7 +1199,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     let originalContent: string | undefined | null;
     try {
-      originalContent = this.readDestination(filePath) as string;
+      originalContent = this.readDestination(filePath);
     } catch {
       // null return should be treated like an error.
     }

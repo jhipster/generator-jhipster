@@ -29,7 +29,7 @@ export function loadDockerDependenciesTask<const G extends BaseCoreGenerator>(
   { context }: { context: { dockerContainers?: Record<string, string> } },
 ) {
   context.dockerContainers ??= {};
-  const dockerfile = this.readTemplate(this.fetchFromInstalledJHipster('server/resources/Dockerfile')) as string;
+  const dockerfile = this.readTemplate(this.fetchFromInstalledJHipster('server/resources/Dockerfile'));
   mutateData(context.dockerContainers, this.prepareDependencies(getDockerfileContainers(dockerfile), 'docker'));
 }
 

@@ -82,7 +82,7 @@ export default class SpringCloudGenerator extends SpringCloudApplicationGenerato
         )?.toString();
         const applicationJavaDependencies = this.prepareDependencies(
           {
-            ...getGradleLibsVersionsProperties(gradleLibsVersions!),
+            ...getGradleLibsVersionsProperties(gradleLibsVersions),
           },
           'java',
         );

@@ -213,7 +213,7 @@ export const askForOptionalItems = asPromptingTask(async function askForOptional
       .map(property => [property, (this.jhipsterConfig as any)[property]] as [string, any])
       .filter(([, value]) => value !== undefined)
       .map(([key, value]) => `${key}:${value}`)
-      .filter(Boolean) as string[];
+      .filter(Boolean);
 
     choices.forEach(choice => {
       choice.checked = selectedChoices.includes(choice.value);
