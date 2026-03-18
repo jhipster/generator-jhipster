@@ -41,6 +41,17 @@ const { STRING: TYPE_STRING, BOOLEAN: TYPE_BOOLEAN, INSTANT: TYPE_INSTANT } = Co
 
 const authorityEntityName = 'Authority';
 
+export const getChangelogDateForBuiltInEntities = (
+  creationTimestamp: number = Date.now(),
+): { User: string; UserManagement: string; Authority: string } => {
+  const date = new Date(creationTimestamp);
+  return {
+    User: formatDateForChangelog(date),
+    UserManagement: formatDateForChangelog(new Date(date.getTime() + 1 * 60000)),
+    Authority: formatDateForChangelog(new Date(date.getTime() + 2 * 60000)),
+  };
+};
+
 export function createUserEntity(
   this: BaseApplicationGenerator,
   customUserData: Partial<UserEntity> = {},
@@ -53,14 +64,13 @@ export function createUserEntity(
     this.log.warn('Fields on the User entity side (other than id) will be disregarded');
   }
 
-  const creationTimestamp = new Date(this.jhipsterConfig.creationTimestamp ?? Date.now());
   const cassandraOrNoDatabase = application.databaseTypeNo || application.databaseTypeCassandra;
   const hasImageField = !cassandraOrNoDatabase;
   // Create entity definition for built-in entity to make easier to deal with relationships.
   const user: Partial<UserEntity> = {
     name: 'User',
     builtIn: true,
-    changelogDate: formatDateForChangelog(creationTimestamp),
+    changelogDate: getChangelogDateForBuiltInEntities(this.jhipsterConfig.creationTimestamp).User,
     entityTableName: `${application.jhiTablePrefix}_user`,
     relationships: [],
     fields: customUserData.fields ?? [],
@@ -211,14 +221,12 @@ export function createUserManagementEntity(
 ): Partial<ApplicationEntity> {
   const user = createUserEntity.call(this, {}, application);
 
-  const creationTimestamp = new Date(this.jhipsterConfig.creationTimestamp ?? Date.now());
-  creationTimestamp.setMinutes(creationTimestamp.getMinutes() + 1);
   const userManagement = {
     ...user,
     name: 'UserManagement',
     skipClient: true,
     skipServer: true,
-    changelogDate: formatDateForChangelog(creationTimestamp),
+    changelogDate: getChangelogDateForBuiltInEntities(this.jhipsterConfig.creationTimestamp).UserManagement,
     clientRootFolder: 'admin',
     entityAngularName: 'UserManagement',
     entityApiUrl: 'admin/users',
@@ -299,15 +307,13 @@ export function createAuthorityEntity(
     this.log.warn(`Fields on the ${authorityEntityName} entity side (other than name) will be disregarded`);
   }
 
-  const creationTimestamp = new Date(this.jhipsterConfig.creationTimestamp ?? Date.now());
-  creationTimestamp.setMinutes(creationTimestamp.getMinutes() + 2);
   // Create entity definition for built-in entity to make easier to deal with relationships.
   const authorityEntity: Partial<ApplicationEntity> = {
     name: authorityEntityName,
     entitySuffix: '',
     clientRootFolder: 'admin',
     builtIn: true,
-    changelogDate: formatDateForChangelog(creationTimestamp),
+    changelogDate: getChangelogDateForBuiltInEntities(this.jhipsterConfig.creationTimestamp).Authority,
     adminEntity: true,
     entityTableName: `${application.jhiTablePrefix}_authority`,
     relationships: [],
