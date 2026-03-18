@@ -1,4 +1,4 @@
-import type { HandleCommandTypes } from '../../lib/command/index.ts';
+import type { CommandTypeMap } from '../../lib/command/index.ts';
 import type { addIconImport, addItemToMenu, addRoute } from '../angular/support/needles.ts';
 import type {
   Application as CommonApplication,
@@ -17,7 +17,7 @@ import type { ClientAddedApplicationProperties } from './application.ts';
 import type command from './command.ts';
 import type { Entity } from './entity.ts';
 
-type Command = HandleCommandTypes<typeof command>;
+type Command = CommandTypeMap<typeof command>;
 
 export * from './entity.ts';
 

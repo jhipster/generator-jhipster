@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { HandleCommandTypes } from '../../../../lib/command/types.ts';
+import type { CommandTypeMap } from '../../../../lib/command/types.ts';
 import type { Entity as BaseApplicationEntity } from '../../../base-application/types.ts';
 import type {
   Application as SpringBootApplication,
@@ -30,7 +30,7 @@ import type {
 
 import type command from './command.ts';
 
-type CommandTypes = HandleCommandTypes<typeof command>;
+type CommandTypes = CommandTypeMap<typeof command>;
 
 export type Config = SpringBootConfig & CommandTypes['Config'];
 export type Options = SpringBootOptions & CommandTypes['Options'];
