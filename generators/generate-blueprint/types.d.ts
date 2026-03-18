@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { HandleCommandTypes } from '../../lib/command/types.ts';
+import type { CommandTypeMap } from '../../lib/command/types.ts';
 import type { Options as GitOptions } from '../git/types.d.ts';
 import type {
   Application as BaseSimpleApplicationApplication,
@@ -28,7 +28,7 @@ import type command from './command.ts';
 
 export type { Features } from '../base-simple-application/types.d.ts';
 
-type Command = HandleCommandTypes<typeof command>;
+type Command = CommandTypeMap<typeof command>;
 
 export type Application = Command['Application'] &
   BaseSimpleApplicationApplication & {

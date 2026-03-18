@@ -28,7 +28,7 @@ import type { Entity as LanguagesEntity, Field as LanguagesField, Relationship a
 
 import { getTypescriptType } from './support/types-utils.ts';
 
-// DerivedPropertiesOnlyOf<'fieldTsType', FieldTsType> &
+// DerivedBooleanPropertiesOf<'fieldTsType', FieldTsType> &
 type ClientAddedFieldProperties = {
   tsType: string;
   hidden?: boolean;

@@ -1,4 +1,4 @@
-import type { HandleCommandTypes } from '../../lib/command/types.ts';
+import type { CommandTypeMap } from '../../lib/command/types.ts';
 import type {
   Entity as BaseApplicationEntity,
   Field as BaseApplicationField,
@@ -20,7 +20,7 @@ import type { LiquibaseColumnType, LiquibaseLoadColumnType } from './support/pre
 
 export type Features = BaseEntityChangesFeatures;
 
-type Command = HandleCommandTypes<typeof command>;
+type Command = CommandTypeMap<typeof command>;
 
 export type Config = BaseEntityChangesConfig & Command['Config'];
 
