@@ -25,7 +25,7 @@ import { NAME } from './lexer/shared-tokens.ts';
 const noopCst = undefined as unknown as CstNode;
 
 export default class JDLParser extends CstParser {
-  private tokens: Record<string, TokenType>;
+  private readonly tokens: Record<string, TokenType>;
 
   constructor(tokens: Record<string, TokenType>) {
     super(tokens, { outputCst: true } as any);
