@@ -39,11 +39,15 @@ import { mutateApplication } from '../../application.ts';
 import { mutateRelationship, mutateRelationshipWithEntity } from '../../entity.ts';
 import BaseApplicationGenerator from '../../index.ts';
 import { convertFieldBlobType, getBlobContentType, isFieldBinaryType, isFieldBlobType } from '../../internal/types/field-types.ts';
-import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from '../../internal/utils.ts';
+import {
+  createAuthorityEntity,
+  createUserEntity,
+  createUserManagementEntity,
+  getChangelogDateForBuiltInEntities,
+} from '../../internal/utils.ts';
 import {
   addFakerToEntity,
   derivedPrimaryKeyProperties,
-  formatDateForChangelog,
   loadEntitiesAnnotations,
   loadEntitiesOtherSide,
   prepareCommonFieldForTemplates,
@@ -208,9 +212,7 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
             (entityName === 'User' && application.generateBuiltInUserEntity) ||
             (entityName === 'Authority' && application.generateBuiltInAuthorityEntity)
           ) {
-            const creationTimestamp = new Date(this.jhipsterConfig.creationTimestamp ?? Date.now());
-            creationTimestamp.setMinutes(creationTimestamp.getMinutes() + { User: 0, UserManagement: 1, Authority: 2 }[entityName]);
-            entityConfig.annotations!.changelogDate = formatDateForChangelog(creationTimestamp);
+            entityConfig.annotations!.changelogDate = getChangelogDateForBuiltInEntities(this.jhipsterConfig.creationTimestamp)[entityName];
           } else {
             entityConfig.annotations!.changelogDate = this.nextTimestamp();
           }
