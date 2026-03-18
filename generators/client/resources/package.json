@@ -13,7 +13,7 @@
     "eslint-plugin-cypress": "6.2.0",
     "lighthouse": "13.0.3",
     "nyc": "18.0.0",
-    "swagger-ui-dist": "5.32.0"
+    "swagger-ui-dist": "5.32.1"
   },
   "packageManager": "npm@11"
 }
