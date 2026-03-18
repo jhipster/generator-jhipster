@@ -5,6 +5,12 @@ import { Language, type Node, Parser } from 'web-tree-sitter';
 
 let parserPromise: Promise<Parser> | null = null;
 
+/**
+ * Returns a singleton promise that initialises and caches the tree-sitter Java parser.
+ * The WebAssembly binaries are loaded lazily on the first call.
+ *
+ * @returns a promise resolving to the configured tree-sitter {@link Parser}
+ */
 const getParser = (): Promise<Parser> => {
   if (!parserPromise) {
     parserPromise = (async () => {
@@ -23,6 +29,12 @@ const getParser = (): Promise<Parser> => {
   return parserPromise;
 };
 
+/**
+ * Recursively finds the last (rightmost) identifier text in a tree-sitter node.
+ *
+ * @param node the tree-sitter node to search
+ * @returns the text of the last identifier, or `null` if none was found
+ */
 const getLastIdentifier = (node: Node): string | null => {
   if (node.type === 'identifier') return node.text;
   let lastId: string | null = null;
@@ -37,6 +49,12 @@ const getLastIdentifier = (node: Node): string | null => {
   return lastId;
 };
 
+/**
+ * Recursively collects all identifier texts from a tree-sitter node and its descendants.
+ *
+ * @param node the tree-sitter node to traverse
+ * @returns an array of all identifier texts found in the subtree
+ */
 const getAllIdentifiers = (node: Node): string[] => {
   if (node.type === 'identifier') return [node.text];
   const ids: string[] = [];
@@ -46,6 +64,12 @@ const getAllIdentifiers = (node: Node): string[] => {
   return ids;
 };
 
+/**
+ * Extracts the package name from the root node of a parsed Java compilation unit.
+ *
+ * @param root the root tree-sitter node of the compilation unit
+ * @returns the package name as a dot-separated string, or `null` if no package declaration is present
+ */
 const getPackageName = (root: Node): string | null => {
   for (let i = 0; i < root.childCount; i++) {
     const child = root.child(i)!;
@@ -61,6 +85,13 @@ const getPackageName = (root: Node): string | null => {
   return null;
 };
 
+/**
+ * Recursively collects all identifiers and type identifiers referenced in a tree-sitter node,
+ * skipping `import_declaration` and `package_declaration` subtrees.
+ *
+ * @param node the tree-sitter node to traverse
+ * @returns a {@link Set} of identifier texts that are used within the given node
+ */
 const collectUsedIdentifiers = (node: Node): Set<string> => {
   const ids = new Set<string>();
   if (node.type === 'import_declaration' || node.type === 'package_declaration') {
@@ -77,6 +108,15 @@ const collectUsedIdentifiers = (node: Node): Set<string> => {
   return ids;
 };
 
+/**
+ * Removes unused import declarations from Java source code.
+ * Wildcard imports are always kept. A non-wildcard import is considered unused when its
+ * last identifier is not referenced elsewhere in the file, or when its package matches
+ * the file's own package declaration.
+ *
+ * @param content the Java source file content
+ * @returns the source content with unused imports removed
+ */
 export const removeUnusedImports = async (content: string): Promise<string> => {
   const parser = await getParser();
   const tree = parser.parse(content);
