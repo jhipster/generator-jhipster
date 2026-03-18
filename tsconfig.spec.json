@@ -5,7 +5,7 @@
   "compilerOptions": {
     "noEmit": true,
     "noImplicitAny": true,
-    "types": [],
+    "types": ["emscripten"],
     // Disable for test files that have type-checking variables
     "noUnusedLocals": false,
     "noUnusedParameters": false
