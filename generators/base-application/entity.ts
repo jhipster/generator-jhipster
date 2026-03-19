@@ -227,8 +227,7 @@ export const mutateRelationshipWithEntity = {
   otherEntityField: data => data.otherEntity?.primaryKey?.name,
   // let ownerSide true when type is 'many-to-one' for convenience.
   // means that this side should control the reference.
-  ownerSide: data =>
-    Boolean(data.otherEntity.embedded || data.relationshipManyToOne || (data.relationshipLeftSide && !data.relationshipOneToMany)),
+  ownerSide: data => data.otherEntity.embedded || data.relationshipManyToOne || (data.relationshipLeftSide && !data.relationshipOneToMany),
   persistableRelationship: ({ ownerSide }) => ownerSide!,
   otherEntityUser: ({ otherEntityName }) => otherEntityName.toLowerCase() === 'user',
 } satisfies MutateDataParam<RelationshipWithEntity<Relationship, Entity>>;

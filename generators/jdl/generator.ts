@@ -126,7 +126,7 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
           this.jdlContents.push(this.inline);
         }
         for (const jdlFile of this.jdlFiles ?? []) {
-          this.jdlContents.push(this.readDestination(jdlFile)?.toString() ?? '');
+          this.jdlContents.push(this.readDestination(jdlFile) ?? '');
         }
       },
       async parseJDL() {
