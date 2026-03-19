@@ -180,7 +180,7 @@
     "yeoman-generator": "8.1.2"
   },
   "devDependencies": {
-    "@types/debug": "4.1.12",
+    "@types/debug": "4.1.13",
     "@types/didyoumean": "1.2.3",
     "@types/emscripten": "1.41.5",
     "@types/node": "22.19.15",
