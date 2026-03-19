@@ -49,7 +49,6 @@ import type {
   Config as KubernetesConfig,
   Deployment as KubernetesDeployment,
   Options as KubernetesOptions,
-  Source as KubernetesSource,
   WorkspacesApplication as KubernetesWorkspacesApplication,
 } from './types.ts';
 
@@ -62,8 +61,7 @@ export class BaseKubernetesGenerator extends BaseWorkspacesGenerator<
   KubernetesDeployment,
   KubernetesWorkspacesApplication,
   KubernetesConfig,
-  KubernetesOptions,
-  KubernetesSource
+  KubernetesOptions
 > {}
 
 export default class KubernetesGenerator extends BaseKubernetesGenerator {

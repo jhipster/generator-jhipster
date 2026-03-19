@@ -57,18 +57,11 @@ import {
   prepareRelationship,
   stringifyApplicationData,
 } from '../../support/index.ts';
-import type {
-  Application as BaseApplicationApplication,
-  Config as BaseApplicationConfig,
-  Entity as BaseApplicationEntity,
-  Options as BaseApplicationOptions,
-} from '../../types.ts';
+import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../types.ts';
 
 export default class BootstrapBaseApplicationGenerator extends BaseApplicationGenerator<
   BaseApplicationEntity,
-  BaseApplicationApplication<BaseApplicationEntity>,
-  BaseApplicationConfig,
-  BaseApplicationOptions
+  BaseApplicationApplication<BaseApplicationEntity>
 > {
   async beforeQueue() {
     if (!this.fromBlueprint) {

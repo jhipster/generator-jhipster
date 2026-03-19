@@ -44,6 +44,7 @@ export default defineConfig(
       '@typescript-eslint/prefer-optional-chain': 'error',
       '@typescript-eslint/consistent-type-definitions': 'off',
       '@typescript-eslint/no-unnecessary-type-assertion': 'error',
+      '@typescript-eslint/no-unnecessary-type-arguments': 'error',
       '@typescript-eslint/prefer-readonly': 'error',
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-unused-vars': 'off',

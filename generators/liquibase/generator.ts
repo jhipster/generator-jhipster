@@ -69,7 +69,6 @@ import type {
   Application as LiquibaseApplication,
   Config as LiquibaseConfig,
   Entity as LiquibaseEntity,
-  Features as LiquibaseFeatures,
   Field as LiquibaseField,
   Options as LiquibaseOptions,
   Source as LiquibaseSource,
@@ -80,9 +79,9 @@ const {
 } = fieldTypes;
 
 export default class LiquibaseGenerator<
-  Entity extends LiquibaseEntity = LiquibaseEntity<LiquibaseField>,
+  Entity extends LiquibaseEntity = LiquibaseEntity,
   Application extends LiquibaseApplication<Entity> = LiquibaseApplication<Entity>,
-> extends BaseEntityChangesGenerator<Entity, Application, LiquibaseConfig, LiquibaseOptions, LiquibaseSource, LiquibaseFeatures> {
+> extends BaseEntityChangesGenerator<Entity, Application, LiquibaseConfig, LiquibaseOptions, LiquibaseSource> {
   numberOfRows!: number;
   databaseChangelogs: BaseChangelog<Entity>[] = [];
   injectBuildTool = true;
