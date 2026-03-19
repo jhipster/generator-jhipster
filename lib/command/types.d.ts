@@ -46,10 +46,10 @@ export type DerivedBooleanPropertiesOf<Property extends string, Choices extends 
  * // { clientFrameworkAngular: boolean; clientFrameworkNo: boolean; clientFramework: 'angular' | 'no'; clientFrameworkAny: boolean }
  * ```
  */
-export type DerivedPropertiesOf<Property extends string, Choices extends string> = Simplify<
+export type DerivedPropertiesOf<Property extends string, Choices extends string, IsArray extends boolean = false> = Simplify<
   {
     [K in Choices as `${Property}${Capitalize<NormalizeChoiceKey<K>>}`]: boolean;
-  } & Record<Property, Choices | undefined> &
+  } & Record<Property, IsArray extends true ? Choices[] | undefined : Choices | undefined> &
     Record<`${Property}Any`, boolean>
 >;
 
@@ -122,7 +122,7 @@ export type CommandConfigDefault<ConfigContext> =
   | ((this: ConfigContext | void, ctx: any) => string | boolean | number | readonly string[]);
 
 /** Raw CLI option type accepted by yeoman-generator, extended with `Object` support. */
-type CliSpecType = CliOptionSpec['type'] | typeof Object;
+type CliSpecType = CliOptionSpec['type'] | typeof Object | typeof Array;
 
 /**
  * Ordered tuple of choices for a config property.
@@ -227,6 +227,9 @@ type ParsableConfig = {
   readonly cli?: {
     readonly type: CliSpecType;
   };
+  readonly internal?: {
+    readonly type: CliSpecType;
+  };
   readonly choices?: JHipsterChoices;
 } & ScopedConfig;
 
@@ -313,8 +316,14 @@ type ExplodeChoicesToDerivedProperties<U extends ParsableConfigs> = {
       ? K extends infer StringKey
         ? StringKey extends string
           ? NormalizeChoices<RequiredChoices['choices']> extends infer NormalizedChoices
-            ? // @ts-expect-error Mapped tuple type is loose https://github.com/microsoft/TypeScript/issues/27995
-              Simplify<DerivedPropertiesOf<StringKey, NormalizedChoices[number]>>
+            ? Simplify<
+                DerivedPropertiesOf<
+                  StringKey,
+                  // @ts-expect-error Mapped tuple type is loose https://github.com/microsoft/TypeScript/issues/27995
+                  NormalizedChoices[number],
+                  ExtractConfigType<U[K]> extends ArrayConstructor ? true : false
+                >
+              >
             : never
           : never
         : never
@@ -329,7 +338,9 @@ type ExplodeChoicesToDerivedProperties<U extends ParsableConfigs> = {
  */
 type ResolveConfigTypes<U extends ParsableConfigs> = Simplify<{
   -readonly [K in keyof U]?: U[K] extends Record<'choices', JHipsterChoices>
-    ? TupleToUnion<NormalizeChoices<U[K]['choices']>>
+    ? ExtractConfigType<U[K]> extends ArrayConstructor
+      ? TupleToUnion<NormalizeChoices<U[K]['choices']>>[]
+      : TupleToUnion<NormalizeChoices<U[K]['choices']>>
     : UnwrapPrimitive<UnwrapConstructor<ExtractConfigType<U[K]>>> extends infer T
       ? T extends undefined
         ? unknown
