@@ -20,7 +20,8 @@
 CREATE TABLE IF NOT EXISTS <%= entityInstance %> (
 <%_ for (const field of fields) {
   const fieldName = field.fieldName;
-  const fieldNameUnderscored = field.fieldNameUnderscored; _%>
+  const fieldNameUnderscored = field.fieldNameUnderscored;
+_%>
   <%_ if (field.fieldTypeUUID) { _%>
     <%= fieldName %> uuid,
   <%_ } else if (field.fieldTypeString || field.fieldIsEnum) { _%>

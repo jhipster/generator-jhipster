@@ -23,7 +23,7 @@ describe('Account Service test suite', () => {
   beforeEach(() => {
     localStorage.clear();
 <%_ if (authenticationTypeJwt) { _%>
-    localStorage.setItem('<%=jhiPrefixDashed %>-authenticationToken', 'token');
+    localStorage.setItem('<%= jhiPrefixDashed %>-authenticationToken', 'token');
 <%_ } %>
     axiosStub.get.mockReset();
     resetStore(store);

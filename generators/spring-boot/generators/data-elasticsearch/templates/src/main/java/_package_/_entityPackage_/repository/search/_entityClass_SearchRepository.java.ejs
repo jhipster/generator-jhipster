@@ -41,7 +41,7 @@ import co.elastic.clients.elasticsearch._types.query_dsl.QueryStringQuery;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.data.elasticsearch.core.SearchHit;
-import org.springframework.data.elasticsearch.repository.<% if (reactive) {%>Reactive<% } %>ElasticsearchRepository;
+import org.springframework.data.elasticsearch.repository.<% if (reactive) { %>Reactive<% } %>ElasticsearchRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -61,7 +61,7 @@ import static org.springframework.data.elasticsearch.client.elc.QueryBuilders.qu
 /**
  * Spring Data Elasticsearch repository for the {@link <%= persistClass %>} entity.
  */
-public interface <%= entityClass %>SearchRepository extends <% if (reactive) {%>Reactive<% } %>ElasticsearchRepository<<%= persistClass %>, <%= primaryKey.type %>>, <%= entityClass %>SearchRepositoryInternal {
+public interface <%= entityClass %>SearchRepository extends <% if (reactive) { %>Reactive<% } %>ElasticsearchRepository<<%= persistClass %>, <%= primaryKey.type %>>, <%= entityClass %>SearchRepositoryInternal {
 }
 <%_ if (reactive) { _%>
 
@@ -84,7 +84,7 @@ class <%= entityClass %>SearchRepositoryInternalImpl implements <%= entityClass 
         NativeQuery nativeQuery = new NativeQuery(QueryStringQuery.of(qs -> qs.query(query))._toQuery());
   <%_ if (!paginationNo) { _%>
         nativeQuery.setPageable(pageable);
-  <%_ }_%>
+  <%_ } _%>
         return search(nativeQuery);
     }
 

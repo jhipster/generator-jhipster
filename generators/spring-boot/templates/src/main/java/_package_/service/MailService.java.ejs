@@ -41,9 +41,7 @@ import reactor.core.publisher.Mono;
 <%_ } else { _%>
 import org.springframework.scheduling.annotation.Async;
 <%_ } _%>
-<%_
-    const localSendEmailFromTemplateApi = reactive ? 'sendEmailFromTemplate' : 'sendEmailFromTemplateSync';
-_%>
+<%_ const localSendEmailFromTemplateApi = reactive ? 'sendEmailFromTemplate' : 'sendEmailFromTemplateSync'; _%>
 
 /**
  * Service for sending emails asynchronously.

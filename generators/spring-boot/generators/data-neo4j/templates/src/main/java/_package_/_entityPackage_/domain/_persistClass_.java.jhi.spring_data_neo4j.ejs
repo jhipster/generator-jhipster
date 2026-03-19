@@ -43,14 +43,14 @@ import org.springframework.data.neo4j.core.schema.Relationship;
     @GeneratedValue(UUIDStringGenerator.class)
     <%_ } _%>
   <%_ } else { _%>
-    @Property("<%=field.fieldNameUnderscored %>")
+    @Property("<%= field.fieldNameUnderscored %>")
   <%_ } _%>
 <&_ } -&>
 <%_ } -%>
 
 <%_ for (const field of fields.filter(field => field.fieldWithContentType)) { _%>
 <&_ if (fragment.field<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection) { -&>
-    @Property("<%=field.fieldNameUnderscored %>_content_type")
+    @Property("<%= field.fieldNameUnderscored %>_content_type")
 <&_ } -&>
 <%_ } -%>
 

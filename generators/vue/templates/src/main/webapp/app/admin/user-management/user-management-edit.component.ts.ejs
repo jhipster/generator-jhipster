@@ -46,7 +46,7 @@ const validations: any = {
 };
 
 export default defineComponent({
-  name: '<%=jhiPrefixCapitalized%>UserManagementEdit',
+  name: '<%= jhiPrefixCapitalized %>UserManagementEdit',
   validations,
   setup() {
     const route = useRoute();
@@ -130,7 +130,7 @@ export default defineComponent({
       const message = getMessageFromHeaders(res.headers);
 <%_ if (enableTranslation) { _%>
       return message.alertKey ? this.t$(message.alertKey, { param: message.param }) : message.alertMessage;
-<%_ } else {_%>
+<%_ } else { _%>
       return message.alertMessage!;
 <%_ } _%>
     },

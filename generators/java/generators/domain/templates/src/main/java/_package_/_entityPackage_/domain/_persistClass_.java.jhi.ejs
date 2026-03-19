@@ -139,7 +139,8 @@ public class <%= persistClass %> <&- fragments.extendsSection() -&>implements Se
 <%_
 // An embedded entity should not reference entities that embed it, unless the other entities are also embedded
 for (relationship of relationships) {
-  if (typeof relationship.fieldApiDescription) { _%>
+  if (typeof relationship.fieldApiDescription) {
+_%>
 <%- relationship.relationshipJavadoc %>
     <%_ if (!dtoMapstruct && relationship.relationshipApiDescription) { _%>
     @Schema(description = "<%- relationship.relationshipApiDescription %>")
@@ -225,9 +226,7 @@ for (relationship of relationships) {
 <%_ } _%>
 
 <&- fragments.classAdditionalFieldsMethodsSection('\n\n') -&>
-<%_
-for (const relationship of relationships) {
-_%>
+<%_ for (const relationship of relationships) { _%>
   <%_ if (relationship.collection) { _%>
     public Set<<%= relationship.otherEntity.persistClass %>> <%- relationship.propertySupplierName %>() {
         return this.<%= relationship.relationshipFieldNamePlural %>;
@@ -366,7 +365,8 @@ _%>
             "<%= primaryKey.name %>=" + <%- primaryKey.propertySupplierName %>() +
 <%_ } _%>
 <%_ for (const field of fields.filter(field => !field.id && !field.transient)) {
-  const isNumeric = field.fieldTypeNumeric; _%>
+  const isNumeric = field.fieldTypeNumeric;
+_%>
             ", <%= field.fieldName %>=<% if (! isNumeric) { %>'<% } %>" + <%- field.propertySupplierName %>() <% if (! isNumeric) { %>+ "'" <% } %>+
   <%_ if (field.fieldWithContentType) { _%>
             ", <%= field.fieldName %>ContentType='" + <%- field.propertySupplierName %>ContentType() + "'" +
@@ -374,7 +374,8 @@ _%>
 <%_ } _%>
 <%_ for (const relationship of relationships) { _%>
   <%_ if (relationship.otherEntity.embedded) {
-    if (relationship.relationshipManyToOne) { _%>
+    if (relationship.relationshipManyToOne) {
+_%>
             ", <%= relationship.relationshipFieldName %>='" + <%= relationship.propertySupplierName %>() + "'" +
     <%_ } else if (relationship.relationshipOneToOne && relationship.ownerSide) { _%>
             ", <%= relationship.relationshipFieldName %>='" + <%= relationship.propertySupplierName %>() + "'" +

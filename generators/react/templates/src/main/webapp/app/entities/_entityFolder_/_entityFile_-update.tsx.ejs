@@ -163,7 +163,8 @@ _%>
 <%_ for (field of fields.filter(field => !field.id)) {
     const fieldName = field.fieldName;
 
-    if (field.fieldTypeTimed) { _%>
+    if (field.fieldTypeTimed) {
+_%>
           <%= fieldName %>: displayDefaultDateTime(),
     <%_ } _%>
 <%_ } _%>
@@ -172,14 +173,16 @@ _%>
 <%_ for (field of fields.filter(field => !field.id)) {
     const fieldName = field.fieldName;
   if (field.fieldIsEnum) {
-    const enumValues = field.enumValues;_%>
+    const enumValues = field.enumValues;
+_%>
 <%= fieldName %>: '<%= enumValues[0].name %>',
   <%_ } _%>
 <%_ } _%>
           ...<%= entityInstance %>Entity,
 <%_ for (field of fields.filter(field => !field.id)) {
     const fieldName = field.fieldName;
-  if (field.fieldTypeTimed) { _%>
+  if (field.fieldTypeTimed) {
+_%>
           <%= fieldName %>: convertDateTimeFromServer(<%= entityInstance %>Entity.<%= fieldName %>),
   <%_ } _%>
 <%_ } _%>
@@ -187,7 +190,8 @@ _%>
     const otherEntityPkName = rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.name || 'id';
     const relationshipFieldName = rel.relationshipFieldName;
     const relationshipFieldNamePlural = rel.relationshipFieldNamePlural;
-  if (!rel.collection) { _%>
+  if (!rel.collection) {
+_%>
           <%= relationshipFieldName %>: <%= entityInstance %>Entity?.<%= relationshipFieldName %>?.<%= otherEntityPkName %>,
   <%_ } else { _%>
           <%= relationshipFieldNamePlural %>: <%= entityInstance %>Entity?.<%= relationshipFieldNamePlural %>?.map(e => e.<%= otherEntityPkName %>.toString()),
@@ -221,7 +225,8 @@ _%>
     const fieldName = field.fieldName;
     const fieldNameHumanized = field.fieldNameHumanized;
 
-    if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
+    if (field.fieldTypeBinary && !field.blobContentTypeText) {
+_%>
           <ValidatedBlobField
   <%_ } else { _%>
           <ValidatedField
@@ -252,7 +257,7 @@ _%>
             placeholder="HH:mm"
             <%- include('react_validators'); %>
           />
-  <%_ } else if (field.fieldIsEnum) {_%>
+  <%_ } else if (field.fieldIsEnum) { _%>
             type="select"
           >
           <%_ const enumPrefix = frontendAppName + '.'+ fieldType; _%>
@@ -271,7 +276,7 @@ _%>
           />
   <%_ } else if (field.fieldTypeBinary) { _%>
     <%_ if (!field.blobContentTypeText) { _%>
-            <%_ if (field.blobContentTypeImage) {_%>
+            <%_ if (field.blobContentTypeImage) { _%>
             isImage accept="image/*"
             <%_ } else { _%>
             openActionLabel={translate('entity.action.open')}
@@ -308,7 +313,8 @@ _%>
     const relationshipFieldNamePlural = rel.relationshipFieldNamePlural;
     const otherEntityField = rel.otherEntityField;
     const relationshipRequired = rel.relationshipRequired;
-    const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
+    const translationKey = `${i18nKeyPrefix}.${relationshipName}`;
+_%>
   <%_ if (!rel.collection) { _%>
           <ValidatedField
             id="<%= entityFileName %>-<%= relationshipName %>"

@@ -144,14 +144,14 @@ export default defineComponent({
         await <%= entityInstance %>Service().delete(removeId.value);
   <%_ if (enableTranslation) { _%>
         const message = t$('<%= i18nAlertHeaderPrefix %>.deleted', { param : removeId.value }).toString();
-  <%_ } else {_%>
+  <%_ } else { _%>
         const message = 'A <%= entityAngularName %> is deleted with identifier ' + removeId.value;
   <%_ } _%>
         alertService.showInfo(message, { variant: 'danger' });
         removeId.value = null;
   <%_ if (paginationInfiniteScroll) { _%>
         clear();
-  <%_ } else {_%>
+  <%_ } else { _%>
         retrieve<%= entityAngularName %>s();
   <%_ } _%>
         closeDialog();

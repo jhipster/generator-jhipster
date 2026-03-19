@@ -72,8 +72,8 @@ export default defineComponent({
 
     const logout = async () => {
 <%_ if (authenticationTypeJwt) { _%>
-      localStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
-      sessionStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
+      localStorage.removeItem('<%= jhiPrefixDashed %>-authenticationToken');
+      sessionStorage.removeItem('<%= jhiPrefixDashed %>-authenticationToken');
       store.logout();
       if (router.currentRoute.value.path !== '/') {
         router.push('/');

@@ -35,7 +35,7 @@
           max: { value: <%= field.fieldValidateRulesMax %>, message: translate('entity.validation.max', { max: <%= field.fieldValidateRulesMax %> }) },
   <%_ } _%>
   <%_ if (field.fieldValidationPattern) { _%>
-          pattern: { value: /<%= field.fieldValidateRulesPatternReact%>/, message: translate('entity.validation.pattern', { pattern: '<%= field.fieldValidateRulesPatternReact.replace(/\\/g, '\\\\')%>' }) },
+          pattern: { value: /<%= field.fieldValidateRulesPatternReact %>/, message: translate('entity.validation.pattern', { pattern: '<%= field.fieldValidateRulesPatternReact.replace(/\\/g, '\\\\') %>' }) },
   <%_ } _%>
   <%_ if (field.fieldTypeNumeric) { _%>
           validate: v => isNumber(v) || translate('entity.validation.number'),

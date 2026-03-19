@@ -46,10 +46,10 @@ logSummary() {
   <%_ } _%>
   <%_ if (kubernetesServiceTypeIngress) { _%>
     <%_ appConfigs.forEach((appConfig) =>  { _%>
-      <%_ if (appConfig.applicationTypeGateway) {_%>
+      <%_ if (appConfig.applicationTypeGateway) { _%>
         echo "Gateway - http://<%= appConfig.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>"
       <%_ } _%>
-      <%_ if (appConfig.applicationTypeMonolith) {_%>
+      <%_ if (appConfig.applicationTypeMonolith) { _%>
         echo "<%= appConfig.baseName %> - http://<%= appConfig.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>"
       <%_ } _%>
     <%_ }) _%>
@@ -76,7 +76,7 @@ default() {
 <%_ if (!kubernetesNamespaceDefault) { _%>
     kubectl apply -f namespace.yml
 <%_ } _%> <%_ if (istio) { _%>
-    kubectl label namespace <%-kubernetesNamespace%> istio-injection=enabled --overwrite=true
+    kubectl label namespace <%- kubernetesNamespace %> istio-injection=enabled --overwrite=true
 <%_ } _%>
 <%_ if (useKeycloak) { _%>
     <%_ if (ingressTypeGke) { _%>

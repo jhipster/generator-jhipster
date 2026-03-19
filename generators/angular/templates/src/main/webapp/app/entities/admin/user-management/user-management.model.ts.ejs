@@ -16,9 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-  const idType = user.primaryKey.tsType;
-_%>
+<%_ const idType = user.primaryKey.tsType; _%>
 export interface IUserManagement {
   login: string;
   id?: <%= idType %> | null;

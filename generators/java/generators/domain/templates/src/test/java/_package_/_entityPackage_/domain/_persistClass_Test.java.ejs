@@ -38,7 +38,7 @@ class <%= persistClass %>Test {
     @Test
     void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(<%= persistClass %>.class);
-<%_if (!embedded) { _%>
+<%_ if (!embedded) { _%>
         <%= persistClass %> <%= persistInstance %>1 = get<%= persistClass %>Sample1();
         <%= persistClass %> <%= persistInstance %>2 = new <%= persistClass %>();
         assertThat(<%= persistInstance %>1).isNotEqualTo(<%= persistInstance %>2);
@@ -50,7 +50,7 @@ class <%= persistClass %>Test {
         assertThat(<%= persistInstance %>1).isNotEqualTo(<%= persistInstance %>2);
 <%_ } _%>
     }
-<%_if (!updatableEntity) { _%>
+<%_ if (!updatableEntity) { _%>
 
     @Test
     void hashCodeVerifier() {

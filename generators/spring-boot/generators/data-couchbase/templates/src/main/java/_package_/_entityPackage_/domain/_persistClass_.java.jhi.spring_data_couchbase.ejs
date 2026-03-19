@@ -76,7 +76,7 @@ import java.util.stream.Collectors;
 <&_ } -&>
 <%_ } -%>
 
-<%_/* for (const relationship of relationships) { _%>
+<%_ /* for (const relationship of relationships) { _%>
 <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
   <%_ if (relationship.relationshipOneToMany) { _%>
     <%_ if (!relationship.otherEntity.embedded) { _%>
@@ -97,7 +97,7 @@ import java.util.stream.Collectors;
 
 <&_ } -&>
 <%_ } -%>
-<% Commented out until N1qlJoin support is fixed */%>
+<% Commented out until N1qlJoin support is fixed */ %>
 
 <&_ if (fragment.classAdditionalRelationshipsSection) { -&>
     <%_ for (const relationship of relationships) { _%>

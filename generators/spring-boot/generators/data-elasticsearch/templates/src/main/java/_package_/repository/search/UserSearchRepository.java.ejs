@@ -29,7 +29,7 @@ import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryStringQuery;
 import org.springframework.data.elasticsearch.core.SearchHit;
-import org.springframework.data.elasticsearch.repository.<% if (reactive) {%>Reactive<% } %>ElasticsearchRepository;
+import org.springframework.data.elasticsearch.repository.<% if (reactive) { %>Reactive<% } %>ElasticsearchRepository;
 <%_ if (reactive) { _%>
 
 import reactor.core.publisher.Flux;
@@ -51,7 +51,7 @@ import static org.springframework.data.elasticsearch.client.elc.QueryBuilders.qu
 /**
  * Spring Data Elasticsearch repository for the <%= user.persistClass %> entity.
  */
-public interface UserSearchRepository extends <% if (reactive) {%>Reactive<% } %>ElasticsearchRepository<<%= user.persistClass %>, <%= user.primaryKey.type %>>, UserSearchRepositoryInternal {
+public interface UserSearchRepository extends <% if (reactive) { %>Reactive<% } %>ElasticsearchRepository<<%= user.persistClass %>, <%= user.primaryKey.type %>>, UserSearchRepositoryInternal {
 }
 <%_ if (reactive) { _%>
 

@@ -21,7 +21,7 @@ package <%= entityAbsolutePackage %>.repository;
 import java.util.function.BiFunction;
 <%_ if (anyFieldIsBigDecimal) { _%>
 import java.math.BigDecimal;
-<%_} if (anyFieldIsInstant) { _%>
+<%_ } if (anyFieldIsInstant) { _%>
 import java.time.Instant;
 <%_ } if (anyFieldIsLocalDate) { _%>
 import java.time.LocalDate;
@@ -69,7 +69,8 @@ import <%= entityAbsolutePackage %>.repository.rowmapper.ColumnConverter;
 import tech.jhipster.service.ConditionBuilder;
 <%_ } _%>
 <% relationships.forEach(rel => {
-  if (rel.relationshipManyToMany && rel.ownerSide) { _%>
+  if (rel.relationshipManyToMany && rel.ownerSide) {
+_%>
 import <%= rel.otherEntity.entityAbsolutePackage %>.domain.<%= rel.otherEntity.persistClass %>;
   <%_ } _%>
 <%_ }); _%>
@@ -116,10 +117,10 @@ class <%= entityClass %>RepositoryInternalImpl extends SimpleR2dbcRepository<<%=
 _%>
     private final static EntityManager.LinkTable <%= rel.relationshipName %>Link = new EntityManager.LinkTable("<%= rel.joinTable.name %>", "<%= entityTableName %>_<%= primaryKey.hibernateSnakeCaseName %>", "<%= rel.joinColumnNames[0] %>");
 <%_ }
-}); _%>
+});
+_%>
 
-    public <%= entityClass %>RepositoryInternalImpl(R2dbcEntityTemplate template, EntityManager entityManager<%_
-            reactiveUniqueEntityTypes.forEach(element => { _%>, <%= element %>RowMapper <%= element.toLowerCase() %>Mapper<%_ }); _%>, R2dbcEntityOperations entityOperations,
+    public <%= entityClass %>RepositoryInternalImpl(R2dbcEntityTemplate template, EntityManager entityManager<%_ reactiveUniqueEntityTypes.forEach(element => { _%>, <%= element %>RowMapper <%= element.toLowerCase() %>Mapper<%_ }); _%>, R2dbcEntityOperations entityOperations,
         R2dbcConverter converter<% if (jpaMetamodelFiltering && reactive) { %>,
         ColumnConverter columnConverter<% } %>) {
         super(new MappingRelationalEntityInformation(converter.getMappingContext().getRequiredPersistentEntity(<%= persistClass %>.class)), entityOperations, converter);
@@ -164,7 +165,7 @@ _%>
         Comparison whereClause = Conditions.isEqual(entityTable.column("<%= primaryKey.fields[0].columnName %>"), Conditions.just(StringUtils.wrap(id.toString(), "'")));
 <%_ } else { _%>
         Comparison whereClause = Conditions.isEqual(entityTable.column("<%= primaryKey.fields[0].columnName %>"), Conditions.just(id.toString()));
-<%_ }_%>
+<%_ } _%>
         return createQuery(null, whereClause).one();
     }
 
@@ -209,7 +210,8 @@ _%>
     protected <S extends <%= persistClass %>> Mono<S> updateRelations(S entity) {
   <%_ relationships.filter(rel => {
     return (rel.relationshipManyToMany && rel.ownerSide);
-   }).forEach(function(rel, idx) { _%>
+   }).forEach(function(rel, idx) {
+_%>
     <%_ if (idx === 0) { _%>
         Mono<Void> result = entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.<%- primaryKey.propertySupplierName %>(), entity.<%= rel.propertySupplierName %>().stream().map(<%= rel.otherEntity.persistClass %>::<%- rel.otherEntity.primaryKey.propertySupplierName %>)).then();
     <%_ } else { _%>
@@ -228,10 +230,11 @@ _%>
     protected Mono<Void> deleteRelations(<%= primaryKey.type %> entityId) {
   <%_ relationships.filter(rel => {
       return (rel.relationshipManyToMany && rel.ownerSide);
-    }).forEach(function(rel, idx) { _%>
+    }).forEach(function(rel, idx) {
+_%>
     <%_ if (idx === 0) { _%>
         return entityManager.deleteFromLinkTable(<%= rel.relationshipName %>Link, entityId)
-    <%_} else { _%>
+    <%_ } else { _%>
             .and(entityManager.deleteFromLinkTable(<%= rel.relationshipName %>Link, entityId))
     <%_ } _%>
   <%_ }); %>;
@@ -257,7 +260,8 @@ _%>
 <%_
 fields.forEach((field) => {
   if (field.transient) return;
-  if (field.filterableField) { _%>
+  if (field.filterableField) {
+_%>
             if (criteria.<%- field.propertyFilterSupplierName %>() != null) {
                 builder.buildFilterConditionForField(criteria.<%- field.propertyFilterSupplierName %>(), entityTable.column("<%= field.columnName %>"));
             }

@@ -330,7 +330,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
         return;
     }
     fieldValue = typeof fieldValue === 'string' ? fieldValue.replaceAll("\\", "\\\\").replaceAll("'", "\\'") : fieldValue;
-  _%>
+_%>
 
     <%_ if (field.fieldTypeBoolean) { _%>
       cy.get(`[data-cy="<%= fieldName %>"]`).should('<%- field.fieldTsDefaultValue === 'true' ? '' : 'not.' %>be.checked');
@@ -353,8 +353,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
 
     <%_ } _%>
   <%_ }); _%>
-  <%_ for (relationship of requiredRelationships) {
-  _%>
+  <%_ for (relationship of requiredRelationships) { _%>
        cy.get(`[data-cy="<%= relationship.relationshipFieldName %>"]`).select(<%= relationship.collection ? '[0]' : '1' %>);
   <%_ } _%>
 
