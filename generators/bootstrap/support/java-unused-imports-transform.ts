@@ -9,6 +9,14 @@ import { addLineNumbers } from '../internal/transform-utils.ts';
 
 import javaLintWorker from './java-lint-worker.ts';
 
+/**
+ * Creates a mem-fs passthrough transform that removes unused import declarations from
+ * every modified `.java` file in the virtual file system.
+ *
+ * @param options transform options
+ * @param options.ignoreErrors when `true`, parse errors are logged as warnings instead of being thrown
+ * @returns a passthrough stream transform that processes modified Java files
+ */
 export const createRemoveUnusedImportsTransform = async function (
   this: CoreGenerator,
   options: {

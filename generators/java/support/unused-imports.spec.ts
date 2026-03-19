@@ -1,8 +1,6 @@
 import { describe, expect, it } from 'esmocha';
 
-import { parse } from 'java-parser';
-
-import { collectGlobalIdentifiersNodes, removeUnusedImports } from './unused-imports.ts';
+import { removeUnusedImports } from './unused-imports.ts';
 
 const source = `package my.java.project;
 
@@ -23,29 +21,9 @@ public class HelloWorldExample {
 `;
 
 describe('java-lint', () => {
-  it('collectGlobalIdentifiersNodes', () => {
-    expect(collectGlobalIdentifiersNodes(parse(source))).toMatchInlineSnapshot(`
-      [
-        "HelloWorldExample",
-        "main",
-        "args",
-        "Used1",
-        "arguments",
-        "List",
-        "Used2",
-        "System",
-        "out",
-        "println",
-        "java",
-        "util",
-        "Arrays",
-        "asList",
-      ]
-    `);
-  });
   describe('removeUnusedImports', () => {
-    it('should remove unused imports', () => {
-      expect(removeUnusedImports(source)).toMatchInlineSnapshot(`
+    it('should remove unused imports', async () => {
+      expect(await removeUnusedImports(source)).toMatchInlineSnapshot(`
         "package my.java.project;
 
         import java.util.*;
@@ -64,9 +42,9 @@ describe('java-lint', () => {
       `);
     });
 
-    it('should remove same package imports', () => {
+    it('should remove same package imports', async () => {
       expect(
-        removeUnusedImports(`package my.java.project;
+        await removeUnusedImports(`package my.java.project;
 
 import my.java.project.Used1;
 import my.java.project.Used2;
@@ -94,9 +72,9 @@ public class HelloWorldExample {
       `);
     });
 
-    it('should not fail with emptyStatement', () => {
+    it('should not fail with emptyStatement', async () => {
       expect(
-        removeUnusedImports(`package my.java.project;
+        await removeUnusedImports(`package my.java.project;
 
 import my.java.project.Used1;;
 
@@ -111,9 +89,9 @@ public class HelloWorldExample {}
       `);
     });
 
-    it('should not remove import static when', () => {
+    it('should not remove import static when', async () => {
       expect(
-        removeUnusedImports(`package my.java.project;
+        await removeUnusedImports(`package my.java.project;
 
 import static org.mockito.Mockito.when;
 
