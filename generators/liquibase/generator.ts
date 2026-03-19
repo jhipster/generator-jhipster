@@ -109,7 +109,7 @@ export default class LiquibaseGenerator<
       },
       liquibaseNeo4j({ application }) {
         // TODO drop hardcoded version
-        if (application.databaseTypeNeo4j && application.javaManagedProperties['liquibase.version'] === '5.0.1') {
+        if (application.databaseTypeNeo4j && application.javaManagedProperties['liquibase.version'] === '5.0.2') {
           application.javaDependencies['liquibase-neo4j'] = '5.0.0';
         }
       },
