@@ -1,12 +1,12 @@
 {
-    "tracker": {
-        "title": "Gerçek zamanlı kullanıcı işlemleri",
-        "table": {
-            "userlogin": "Kullanıcı",
-            "ipaddress": "IP Adresi",
-            "userAgent": "Kullanıcı bilgisi",
-            "page": "Mevcut sayfa",
-            "time": "Zaman"
-        }
+  "tracker": {
+    "title": "Gerçek zamanlı kullanıcı işlemleri",
+    "table": {
+      "userlogin": "Kullanıcı",
+      "ipaddress": "IP Adresi",
+      "userAgent": "Kullanıcı bilgisi",
+      "page": "Mevcut sayfa",
+      "time": "Zaman"
     }
+  }
 }

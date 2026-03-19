@@ -17,10 +17,10 @@ plugins:
 
 overrides:
   # java rules:
-  - files: "*.java"
+  - files: '*.java'
     options:
       tabWidth: 4
   # xml rules:
-  - files: "*.xml"
+  - files: '*.xml'
     options:
       tabWidth: 4

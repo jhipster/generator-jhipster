@@ -1,15 +1,15 @@
 {
-    "gateway": {
-      "title": "שער (Gateway)",
-      "routes": {
-        "title": "נתיבים נוכחיים",
-        "url": "כתובת URL",
-        "service": "שירות",
-        "servers": "שרתים זמינים",
-        "error": "אזהרה: אין שרתים זמינים!"
-      },
-      "refresh": {
-        "button": "רענן"
-      }
+  "gateway": {
+    "title": "שער (Gateway)",
+    "routes": {
+      "title": "נתיבים נוכחיים",
+      "url": "כתובת URL",
+      "service": "שירות",
+      "servers": "שרתים זמינים",
+      "error": "אזהרה: אין שרתים זמינים!"
+    },
+    "refresh": {
+      "button": "רענן"
     }
+  }
 }

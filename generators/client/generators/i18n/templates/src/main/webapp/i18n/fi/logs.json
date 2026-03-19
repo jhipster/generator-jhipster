@@ -1,11 +1,11 @@
 {
-    "logs": {
-        "title": "Logit",
-        "nbloggers": "Yhteensä {{ total }} logittajaa.",
-        "filter": "Suodatin",
-        "table": {
-            "name": "Nimi",
-            "level": "Taso"
-        }
+  "logs": {
+    "title": "Logit",
+    "nbloggers": "Yhteensä {{ total }} logittajaa.",
+    "filter": "Suodatin",
+    "table": {
+      "name": "Nimi",
+      "level": "Taso"
     }
+  }
 }
