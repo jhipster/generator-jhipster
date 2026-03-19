@@ -46,7 +46,7 @@ const validations: any = {
 };
 
 export default defineComponent({
-  name: '<%= jhiPrefixCapitalized %>UserManagementEdit',
+  name: '<%- jhiPrefixCapitalized %>UserManagementEdit',
   validations,
   setup() {
     const route = useRoute();
@@ -106,7 +106,7 @@ export default defineComponent({
           });
       } else {
 <%_ if (!enableTranslation) { _%>
-        this.userAccount.langKey = this.userAccount.langKey ?? '<%= nativeLanguage %>';
+        this.userAccount.langKey = this.userAccount.langKey ?? '<%- nativeLanguage %>';
 <%_ } _%>
         this.userManagementService
           .create(this.userAccount)

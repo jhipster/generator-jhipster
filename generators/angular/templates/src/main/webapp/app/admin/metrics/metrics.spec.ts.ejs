@@ -63,8 +63,8 @@ describe('Metrics', () => {
       } as unknown as MetricsModel;
       const threadDump = { threads: [{ threadName: 'thread 1' } as Thread] } as ThreadDump;
 
-      <%= clientTestFramework %>.spyOn(service, 'getMetrics').mockReturnValue(of(metrics));
-      <%= clientTestFramework %>.spyOn(service, 'threadDump').mockReturnValue(of(threadDump));
+      <%- clientTestFramework %>.spyOn(service, 'getMetrics').mockReturnValue(of(metrics));
+      <%- clientTestFramework %>.spyOn(service, 'threadDump').mockReturnValue(of(threadDump));
 
       // WHEN
       comp.ngOnInit();

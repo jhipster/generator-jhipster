@@ -16,17 +16,17 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: ServiceAccount
 metadata:
   name: jhipster-prometheus-sa
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
 metadata:
   name: jhipster-prometheus-role
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
 rules:
 - apiGroups: [""]
   resources:
@@ -45,7 +45,7 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
 metadata:
   name: jhipster-prometheus-rb
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -58,22 +58,22 @@ apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
 metadata:
   name: jhipster-prometheus
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
 spec:
   replicas: 1
   serviceAccountName: jhipster-prometheus-sa
   serviceMonitorSelector:
     matchLabels:
-      team: <%= kubernetesNamespace %>
+      team: <%- kubernetesNamespace %>
   resources:
     requests:
       memory: 400Mi
 ---
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: Service
 metadata:
   name: jhipster-prometheus
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
 spec:
   ports:
   - name: web

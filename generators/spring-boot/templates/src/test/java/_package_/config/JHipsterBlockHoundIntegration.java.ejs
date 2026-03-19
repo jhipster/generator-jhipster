@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.config;
+package <%- packageName %>.config;
 
 import reactor.blockhound.BlockHound;
 import reactor.blockhound.integration.BlockHoundIntegration;
@@ -26,8 +26,8 @@ public class JHipsterBlockHoundIntegration implements BlockHoundIntegration {
     public void applyTo(BlockHound.Builder builder) {
         builder.allowBlockingCallsInside("java.util.UUID", "randomUUID");
         builder.allowBlockingCallsInside("org.springframework.validation.beanvalidation.SpringValidatorAdapter", "validate");
-        builder.allowBlockingCallsInside("<%= packageName %>.service.MailService", "sendEmailFromTemplate");
-        builder.allowBlockingCallsInside("<%= packageName %>.security.DomainUserDetailsService", "createSpringSecurityUser");
+        builder.allowBlockingCallsInside("<%- packageName %>.service.MailService", "sendEmailFromTemplate");
+        builder.allowBlockingCallsInside("<%- packageName %>.security.DomainUserDetailsService", "createSpringSecurityUser");
 <%_ if (databaseTypeCouchbase) { _%>
         builder.allowBlockingCallsInside("org.springframework.data.couchbase.core.convert.MappingCouchbaseConverter", "read");
         builder.allowBlockingCallsInside("com.github.couchmove.repository.CouchbaseRepositoryImpl", "lambda$query$2");

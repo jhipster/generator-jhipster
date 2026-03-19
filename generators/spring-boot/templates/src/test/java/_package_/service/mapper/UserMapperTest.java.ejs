@@ -16,14 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.service.mapper;
+package <%- packageName %>.service.mapper;
 
-import <%= user.entityAbsoluteClass %>;
-import <%= packageName %>.security.AuthoritiesConstants;
-import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
-import <%= packageName %>.service.dto.<%= user.dtoClass %>;
+import <%- user.entityAbsoluteClass %>;
+import <%- packageName %>.security.AuthoritiesConstants;
+import <%- packageName %>.service.dto.<%- user.adminUserDto %>;
+import <%- packageName %>.service.dto.<%- user.dtoClass %>;
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
-import <%= packageName %>.domain.Authority;
+import <%- packageName %>.domain.Authority;
 <%_ } else { _%>
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
@@ -56,17 +56,17 @@ class UserMapperTest {
 <%_ if (databaseTypeCouchbase) { _%>
     private static final String DEFAULT_ID = DEFAULT_LOGIN;
 <%_ } else { _%>
-    private static final <%= user.primaryKey.type %> DEFAULT_ID = <%- user.primaryKey.javaSampleValues[0] %>;
+    private static final <%- user.primaryKey.type %> DEFAULT_ID = <%- user.primaryKey.javaSampleValues[0] %>;
 <%_ } _%>
 
     private UserMapper userMapper;
-    private <%= user.persistClass %> user;
-    private <%= user.adminUserDto %> userDto;
+    private <%- user.persistClass %> user;
+    private <%- user.adminUserDto %> userDto;
 
     @BeforeEach
     void init() {
         userMapper = new UserMapper();
-        user = new <%= user.persistClass %>();
+        user = new <%- user.persistClass %>();
         user.setLogin(DEFAULT_LOGIN);
 <%_ if (!authenticationTypeOauth2) { _%>
         user.setPassword(RandomStringUtils.insecure().nextAlphanumeric(60));
@@ -96,12 +96,12 @@ class UserMapperTest {
         user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
 <%_ } _%>
 
-        userDto = new <%= user.adminUserDto %>(user);
+        userDto = new <%- user.adminUserDto %>(user);
     }
 
     @Test
     void testUserToUserDTO() {
-        <%= user.adminUserDto %> convertedUserDto = userMapper.userToAdminUserDTO(user);
+        <%- user.adminUserDto %> convertedUserDto = userMapper.userToAdminUserDTO(user);
 
         assertThat(convertedUserDto.getId()).isEqualTo(user.getId());
         assertThat(convertedUserDto.getLogin()).isEqualTo(user.getLogin());
@@ -124,7 +124,7 @@ class UserMapperTest {
 
     @Test
     void testUserDTOtoUser() {
-        <%= user.persistClass %> convertedUser = userMapper.userDTOToUser(userDto);
+        <%- user.persistClass %> convertedUser = userMapper.userDTOToUser(userDto);
 
         assertThat(convertedUser.getId()).isEqualTo(userDto.getId());
         assertThat(convertedUser.getLogin()).isEqualTo(userDto.getLogin());
@@ -147,22 +147,22 @@ class UserMapperTest {
 
     @Test
     void usersToUserDTOsShouldMapOnlyNonNullUsers() {
-        List<<%= user.persistClass %>> users = new ArrayList<>();
+        List<<%- user.persistClass %>> users = new ArrayList<>();
         users.add(user);
         users.add(null);
 
-        List<<%= user.dtoClass %>> userDTOS = userMapper.usersToUserDTOs(users);
+        List<<%- user.dtoClass %>> userDTOS = userMapper.usersToUserDTOs(users);
 
         assertThat(userDTOS).isNotEmpty().size().isEqualTo(1);
     }
 
     @Test
     void userDTOsToUsersShouldMapOnlyNonNullUsers() {
-        List<<%= user.adminUserDto %>> usersDto = new ArrayList<>();
+        List<<%- user.adminUserDto %>> usersDto = new ArrayList<>();
         usersDto.add(userDto);
         usersDto.add(null);
 
-        List<<%= user.persistClass %>> users = userMapper.userDTOsToUsers(usersDto);
+        List<<%- user.persistClass %>> users = userMapper.userDTOsToUsers(usersDto);
 
         assertThat(users).isNotEmpty().size().isEqualTo(1);
     }
@@ -173,10 +173,10 @@ class UserMapperTest {
         authoritiesAsString.add("ADMIN");
         userDto.setAuthorities(authoritiesAsString);
 
-        List<<%= user.adminUserDto %>> usersDto = new ArrayList<>();
+        List<<%- user.adminUserDto %>> usersDto = new ArrayList<>();
         usersDto.add(userDto);
 
-        List<<%= user.persistClass %>> users = userMapper.userDTOsToUsers(usersDto);
+        List<<%- user.persistClass %>> users = userMapper.userDTOsToUsers(usersDto);
 
         assertThat(users).isNotEmpty().size().isEqualTo(1);
         assertThat(users.get(0).getAuthorities()).isNotNull();
@@ -193,10 +193,10 @@ class UserMapperTest {
     void userDTOsToUsersMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities() {
         userDto.setAuthorities(null);
 
-        List<<%= user.adminUserDto %>> usersDto = new ArrayList<>();
+        List<<%- user.adminUserDto %>> usersDto = new ArrayList<>();
         usersDto.add(userDto);
 
-        List<<%= user.persistClass %>> users = userMapper.userDTOsToUsers(usersDto);
+        List<<%- user.persistClass %>> users = userMapper.userDTOsToUsers(usersDto);
 
         assertThat(users).isNotEmpty().size().isEqualTo(1);
         assertThat(users.get(0).getAuthorities()).isNotNull();
@@ -205,7 +205,7 @@ class UserMapperTest {
 
     @Test
     void userDTOToUserMapWithAuthoritiesStringShouldReturnUserWithAuthorities() {
-        <%= user.persistClass %> convertedUser = userMapper.userDTOToUser(userDto);
+        <%- user.persistClass %> convertedUser = userMapper.userDTOToUser(userDto);
 
         assertThat(convertedUser).isNotNull();
         assertThat(convertedUser.getAuthorities()).isNotNull();
@@ -221,7 +221,7 @@ class UserMapperTest {
     void userDTOToUserMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities() {
         userDto.setAuthorities(null);
 
-        <%= user.persistClass %> persistUser = userMapper.userDTOToUser(userDto);
+        <%- user.persistClass %> persistUser = userMapper.userDTOToUser(userDto);
 
         assertThat(persistUser).isNotNull();
         assertThat(persistUser.getAuthorities()).isNotNull();

@@ -28,7 +28,7 @@ import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 @NgModule({
   imports: [
     TranslateModule.forChild({
-      loader: provideTranslateHttpLoader({ prefix: 'services/<%= lowercaseBaseName %>/i18n/', suffix: `.json?_=${I18N_HASH}` }),
+      loader: provideTranslateHttpLoader({ prefix: 'services/<%- lowercaseBaseName %>/i18n/', suffix: `.json?_=${I18N_HASH}` }),
       isolate: false,
       extend: true,
     }),
@@ -72,9 +72,9 @@ export class TranslationModule {
   private readonly stateStorageService = inject(StateStorageService);
 
   constructor() {
-    this.translateService.setFallbackLang('<%= nativeLanguage %>');
+    this.translateService.setFallbackLang('<%- nativeLanguage %>');
     // if the user has changed the language and navigates away from the application and back to it, then use the previously chosen language
-    const langKey = this.stateStorageService.getLocale() ?? '<%= nativeLanguage %>';
+    const langKey = this.stateStorageService.getLocale() ?? '<%- nativeLanguage %>';
     this.translateService.use(langKey);
   }
 }

@@ -277,7 +277,7 @@ describe('Authentication reducer tests', () => {
       });
     });
     it('clears the session token on clearAuthToken', async () => {
-      const AUTH_TOKEN_KEY = '<%= jhiPrefixDashed %>-authenticationToken';
+      const AUTH_TOKEN_KEY = '<%- jhiPrefixDashed %>-authenticationToken';
       const loginResponse = { headers: { authorization: 'Bearer TestToken' } };
       axios.post = jest.fn().mockResolvedValue(loginResponse);
 
@@ -289,7 +289,7 @@ describe('Authentication reducer tests', () => {
       expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe(undefined);
     });
     it('clears the local storage token on clearAuthToken', async () => {
-      const AUTH_TOKEN_KEY = '<%= jhiPrefixDashed %>-authenticationToken';
+      const AUTH_TOKEN_KEY = '<%- jhiPrefixDashed %>-authenticationToken';
       const loginResponse = { headers: { authorization: 'Bearer TestToken' } };
       axios.post = jest.fn().mockResolvedValue(loginResponse);
 

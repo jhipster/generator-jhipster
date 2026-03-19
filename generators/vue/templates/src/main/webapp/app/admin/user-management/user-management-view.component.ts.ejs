@@ -9,7 +9,7 @@ import UserManagementService from './user-management.service';
 import { useAlertService } from '@/shared/alert/alert.service';
 
 export default defineComponent({
-  name: '<%= jhiPrefixCapitalized %>UserManagementView',
+  name: '<%- jhiPrefixCapitalized %>UserManagementView',
   setup() {
     const route = useRoute();
     const { formatDateLong: formatDate } = useDateFormat();

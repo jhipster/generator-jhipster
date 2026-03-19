@@ -36,8 +36,8 @@ org:
   neo4j:
     migrations:
       locations-to-scan:
-      packages-to-scan: <%= packageName %>.config.neo4j
-      installed-by: <%= baseName %>
+      packages-to-scan: <%- packageName %>.config.neo4j
+      installed-by: <%- baseName %>
 
 <%_ } _%>
 <%_ if (serviceDiscoveryEureka) { _%>
@@ -45,14 +45,14 @@ eureka:
   client:
     enabled: false
   instance:
-    appname: <%= baseName %>
-    instanceId: <%= baseName %>:${spring.application.instance-id:${random.value}}
+    appname: <%- baseName %>
+    instanceId: <%- baseName %>:${spring.application.instance-id:${random.value}}
 <%_ } _%>
 
 <%_ if (databaseTypeMongodb) { _%>
 mongock:
   migration-scan-package:
-    - <%= packageName %>.config.dbmigrations
+    - <%- packageName %>.config.dbmigrations
   mongo-db:
     read-concern: local
     write-concern:
@@ -62,7 +62,7 @@ mongock:
 <%_ } _%>
 spring:
   application:
-    name: <%= baseName %>
+    name: <%- baseName %>
 <%_ if (applicationTypeGateway) { _%>
   autoconfigure:
     exclude:
@@ -90,16 +90,16 @@ spring:
     stream:
       bindings:
         testStringSupplier-out-0:
-          destination: <%= dasherizedBaseName %>
+          destination: <%- dasherizedBaseName %>
         testStringConsumer-in-0:
-          destination: <%= dasherizedBaseName %>
+          destination: <%- dasherizedBaseName %>
 <%_ } _%>
 <%_ if (databaseMigrationLiquibase) { _%>
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: test
 <%_ } _%>
-  jackson<%= springBoot4 ? '2' : '' %>:
+  jackson<%- springBoot4 ? '2' : '' %>:
     serialization:
       write-durations-as-timestamps: false
 <%_ if (databaseTypeCassandra) { _%>
@@ -146,13 +146,13 @@ spring:
 <%_ } _%>
   task:
     execution:
-      thread-name-prefix: <%= dasherizedBaseName %>-task-
+      thread-name-prefix: <%- dasherizedBaseName %>-task-
       pool:
         core-size: 1
         max-size: 50
         queue-capacity: 10000
     scheduling:
-      thread-name-prefix: <%= dasherizedBaseName %>-scheduling-
+      thread-name-prefix: <%- dasherizedBaseName %>-scheduling-
       pool:
         size: 20
   thymeleaf:
@@ -170,10 +170,10 @@ server:
 jhipster:
 <%_ if (!skipClient) { _%>
   clientApp:
-    name: "<%= locals.frontendAppName %>"
+    name: "<%- locals.frontendAppName %>"
 <%_ } _%>
   mail:
-    from: <%= baseName %>@localhost.com
+    from: <%- baseName %>@localhost.com
     base-url: http://127.0.0.1:8080
   logging:
     # To test json console appender
@@ -188,7 +188,7 @@ jhipster:
     authentication:
       jwt:
         # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
-        base64-secret: <%= jwtSecretKey %>
+        base64-secret: <%- jwtSecretKey %>
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 86400
@@ -197,7 +197,7 @@ jhipster:
   security:
     remember-me:
       # security key (this key should be unique for your application, and kept secret)
-      key: <%= rememberMeKey %>
+      key: <%- rememberMeKey %>
 <%_ } _%>
 
 # ===================================================================

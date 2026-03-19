@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= entityAbsolutePackage %>.service.mapper;
+package <%- entityAbsolutePackage %>.service.mapper;
 
 <%_
   const getOriginalField = field => field.originalField || field;
@@ -42,12 +42,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 <%_ } _%>
 
-import <%= entityAbsoluteClass %>;
-import <%= entityAbsolutePackage %>.service.dto.<%= dtoClass %>;
+import <%- entityAbsoluteClass %>;
+import <%- entityAbsolutePackage %>.service.dto.<%- dtoClass %>;
 
 <%_ for (const otherEntity of this._.uniq(dtoRelationships.map(relationship => relationship.otherEntity).filter(otherEntity => otherEntity.entityClass !== entityClass))) { _%>
-import <%= otherEntity.entityAbsoluteClass %>;
-import <%= otherEntity.entityAbsolutePackage %>.service.dto.<%= otherEntity.dtoClass %>;
+import <%- otherEntity.entityAbsoluteClass %>;
+import <%- otherEntity.entityAbsolutePackage %>.service.dto.<%- otherEntity.dtoClass %>;
 <%_ } _%>
 
 import org.mapstruct.*;
@@ -58,10 +58,10 @@ import java.util.UUID;
 <%_ } _%>
 
 /**
- * Mapper for the entity {@link <%= persistClass %>} and its DTO {@link <%= dtoClass %>}.
+ * Mapper for the entity {@link <%- persistClass %>} and its DTO {@link <%- dtoClass %>}.
  */
 @Mapper(componentModel = "spring")
-public interface <%= entityClass %>Mapper extends EntityMapper<<%= dtoClass %>, <%= persistClass %>> {
+public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, <%- persistClass %>> {
 <%_ if (!embedded) { _%>
   <%_ var renMapAnotEnt = false; /*Render Mapping Annotation during Entity to DTO conversion?*/ _%>
   <%_ for (relationship of dtoRelationships) { _%>
@@ -70,62 +70,62 @@ public interface <%= entityClass %>Mapper extends EntityMapper<<%= dtoClass %>, 
       let qualifiedByName = relationship.otherEntity.entityInstance + this._.upperFirst(relationship.otherEntityField);
       qualifiedByName = qualifiedByName + (relationship.collection ? 'Set' : '');
     _%>
-    @Mapping(target = "<%= relationship.propertyName %>", source = "<%= relationship.propertyName %>", qualifiedByName="<%= qualifiedByName %>")
+    @Mapping(target = "<%- relationship.propertyName %>", source = "<%- relationship.propertyName %>", qualifiedByName="<%- qualifiedByName %>")
   <%_ } _%>
   <%_ for (const field of fields.filter(field => field.mapstructExpression)) {
       renMapAnotEnt = true; _%>
-    @Mapping( target = "<%= field.propertyName %>", expression = "<%- field.mapstructExpression %>")
+    @Mapping( target = "<%- field.propertyName %>", expression = "<%- field.mapstructExpression %>")
   <%_ } _%>
   <%_ if (renMapAnotEnt) { _%>
-    <%= dtoClass %> toDto(<%= persistClass %> s);
+    <%- dtoClass %> toDto(<%- persistClass %> s);
   <%_ } _%>
 
   <%_ var renMapAnotDto = false;  /*Render Mapping Annotation during DTO to Entity conversion?*/ _%>
   <%_ if(primaryKey.ids.length > 1) { _%>
     <%_ renMapAnotDto = true; _%>
     <%_ for (const id of primaryKey.ids) { _%>
-    @Mapping(target = "id.<%= id.name %>", source = "<%= id.nameDotted %>")
+    @Mapping(target = "id.<%- id.name %>", source = "<%- id.nameDotted %>")
     <%_ } _%>
   <%_ } _%>
   <%_ for (relationship of dtoRelationships) { _%>
     <%_ if (!relationship.ownerSide) { _%>
       <%_ renMapAnotDto = true; _%>
-    @Mapping(target = "<%= relationship.propertyName %>", ignore = true)
+    @Mapping(target = "<%- relationship.propertyName %>", ignore = true)
     <%_ }
     if (relationship.collection && fluentMethods) {
       renMapAnotDto = true; _%>
-    @Mapping(target = "remove<%= relationship.relationshipNameCapitalized %>", ignore = true)
+    @Mapping(target = "remove<%- relationship.relationshipNameCapitalized %>", ignore = true)
     <%_ } _%>
   <%_ } _%>
   <%_ if (renMapAnotDto) { _%>
-    <%= persistClass %> toEntity(<%= dtoClass %> <%= dtoInstance %>);
+    <%- persistClass %> toEntity(<%- dtoClass %> <%- dtoInstance %>);
   <%_ } _%>
   <%_ for (const {otherEntity, relatedField, collection} of otherEntitiesFields) { _%>
     <%_ const mapperName = otherEntity.entityInstance + this._.upperFirst(relatedField.propertyName); _%>
 
-    @Named("<%= mapperName %>")
+    @Named("<%- mapperName %>")
     @BeanMapping(ignoreByDefault = true)
     <%_ for (const field of otherEntity.primaryKey.fields) { _%>
-    @Mapping(target = "<%= field.propertyName %>", source = "<%= field.propertyName %>")
+    @Mapping(target = "<%- field.propertyName %>", source = "<%- field.propertyName %>")
     <%_ } _%>
     <%_ if (!relatedField.id) { _%>
       <%_ if (relatedField.mapstructExpression) { _%>
-    @Mapping(target = "<%= relatedField.propertyName %>", expression = "<%- relatedField.mapstructExpression %>")
+    @Mapping(target = "<%- relatedField.propertyName %>", expression = "<%- relatedField.mapstructExpression %>")
       <%_ } else { _%>
-    @Mapping(target = "<%= relatedField.propertyName %>", source = "<%= relatedField.propertyName %>")
+    @Mapping(target = "<%- relatedField.propertyName %>", source = "<%- relatedField.propertyName %>")
       <%_ } _%>
     <%_ } _%>
       <%_ if (relatedField.mapstructExpression) { _%>
-    <%- otherEntity.dtoClass %> toDto<%= this._.upperFirst(mapperName) %>(<%- otherEntity.persistClass %> s);
+    <%- otherEntity.dtoClass %> toDto<%- this._.upperFirst(mapperName) %>(<%- otherEntity.persistClass %> s);
     <%_ } else { _%>
-    <%- otherEntity.dtoClass %> toDto<%= this._.upperFirst(mapperName) %>(<%- otherEntity.persistClass %> <%= otherEntity.persistInstance %>);
+    <%- otherEntity.dtoClass %> toDto<%- this._.upperFirst(mapperName) %>(<%- otherEntity.persistClass %> <%- otherEntity.persistInstance %>);
       <%_ } _%>
     <%_ if (collection) { %>
       <%_ const collectionMapperName = otherEntity.entityInstance + this._.upperFirst(relatedField.propertyName) + 'Set'; _%>
 
-    @Named("<%= collectionMapperName %>")
-    default Set<<%- otherEntity.dtoClass %>> toDto<%= this._.upperFirst(mapperName) %>Set(Set<<%- otherEntity.persistClass %>> <%= otherEntity.persistInstance %>) {
-        return <%= otherEntity.persistInstance %>.stream().map(this:: toDto<%= this._.upperFirst(mapperName) %>).collect(Collectors.toSet());
+    @Named("<%- collectionMapperName %>")
+    default Set<<%- otherEntity.dtoClass %>> toDto<%- this._.upperFirst(mapperName) %>Set(Set<<%- otherEntity.persistClass %>> <%- otherEntity.persistInstance %>) {
+        return <%- otherEntity.persistInstance %>.stream().map(this:: toDto<%- this._.upperFirst(mapperName) %>).collect(Collectors.toSet());
     }
     <%_ } _%>
   <%_ } _%>

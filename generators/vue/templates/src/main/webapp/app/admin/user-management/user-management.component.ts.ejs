@@ -10,7 +10,7 @@ import { getMessageFromHeaders } from '@/shared/jhipster/headers';
 import UserManagementService from './user-management.service';
 
 export default defineComponent({
-  name: '<%= jhiPrefixCapitalized %>UserManagementComponent',
+  name: '<%- jhiPrefixCapitalized %>UserManagementComponent',
   setup() {
     const alertService = inject('alertService', () => useAlertService(), true);
     const { formatDateShort: formatDate } = useDateFormat();

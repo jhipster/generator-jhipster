@@ -4,13 +4,13 @@ import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
 import { useDateFormat } from '@/shared/composables'
-import <%= jhiPrefixCapitalized %>MetricsModal from './metrics-modal.vue';
+import <%- jhiPrefixCapitalized %>MetricsModal from './metrics-modal.vue';
 import MetricsService from './metrics.service';
 
 export default defineComponent({
-  name: '<%= jhiPrefixCapitalized %>Metrics',
+  name: '<%- jhiPrefixCapitalized %>Metrics',
   components: {
-    'metrics-modal': <%= jhiPrefixCapitalized %>MetricsModal,
+    'metrics-modal': <%- jhiPrefixCapitalized %>MetricsModal,
   },
   setup() {
     const { formatDate } = useDateFormat();

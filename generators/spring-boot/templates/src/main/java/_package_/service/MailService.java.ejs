@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.service;
+package <%- packageName %>.service;
 
-import <%= user.entityAbsoluteClass %>;
+import <%- user.entityAbsoluteClass %>;
 
 import tech.jhipster.config.JHipsterProperties;
 
@@ -121,7 +121,7 @@ public class MailService {
 <%_ if (!reactive) { _%>
     @Async
 <%_ } _%>
-    public void sendEmailFromTemplate(<%= user.persistClass %> user, String templateName, String titleKey) {
+    public void sendEmailFromTemplate(<%- user.persistClass %> user, String templateName, String titleKey) {
 <%_ if (reactive) { _%>
         Mono.defer(() -> {
             sendEmailFromTemplateSync(user, templateName, titleKey);
@@ -132,7 +132,7 @@ public class MailService {
 <%_ } _%>
     }
 
-    private void sendEmailFromTemplateSync(<%= user.persistClass %> user, String templateName, String titleKey) {
+    private void sendEmailFromTemplateSync(<%- user.persistClass %> user, String templateName, String titleKey) {
         if (user.getEmail() == null) {
             LOG.debug("Email doesn't exist for user '{}'", user.getLogin());
             return;
@@ -150,7 +150,7 @@ public class MailService {
 <%_ if (!reactive) { _%>
     @Async
 <%_ } _%>
-    public void sendActivationEmail(<%= user.persistClass %> user) {
+    public void sendActivationEmail(<%- user.persistClass %> user) {
         LOG.debug("Sending activation email to '{}'", user.getEmail());
         <%- localSendEmailFromTemplateApi %>(user, "mail/activationEmail", "email.activation.title");
     }
@@ -158,7 +158,7 @@ public class MailService {
 <%_ if (!reactive) { _%>
     @Async
 <%_ } _%>
-    public void sendCreationEmail(<%= user.persistClass %> user) {
+    public void sendCreationEmail(<%- user.persistClass %> user) {
         LOG.debug("Sending creation email to '{}'", user.getEmail());
         <%- localSendEmailFromTemplateApi %>(user, "mail/creationEmail", "email.activation.title");
     }
@@ -166,7 +166,7 @@ public class MailService {
 <%_ if (!reactive) { _%>
     @Async
 <%_ } _%>
-    public void sendPasswordResetMail(<%= user.persistClass %> user) {
+    public void sendPasswordResetMail(<%- user.persistClass %> user) {
         LOG.debug("Sending password reset email to '{}'", user.getEmail());
         <%- localSendEmailFromTemplateApi %>(user, "mail/passwordResetEmail", "email.reset.title");
     }

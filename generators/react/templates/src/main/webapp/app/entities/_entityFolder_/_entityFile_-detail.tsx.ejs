@@ -41,9 +41,9 @@ import { DurationFormat } from 'app/shared/DurationFormat';
 <%_ } _%>
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-import { getEntity } from './<%= entityFileName %>.reducer';
+import { getEntity } from './<%- entityFileName %>.reducer';
 
-export const <%= entityReactName %>Detail = () => {
+export const <%- entityReactName %>Detail = () => {
   const dispatch = useAppDispatch();
 
   const { id } = useParams<'id'>();
@@ -52,12 +52,12 @@ export const <%= entityReactName %>Detail = () => {
     dispatch(getEntity(id));
   }, []);
 
-  const <%= entityInstance %>Entity = useAppSelector(state => state.<%= entityReactState %>.entity);
+  const <%- entityInstance %>Entity = useAppSelector(state => state.<%- entityReactState %>.entity);
   return (
     <Row>
       <Col md="8">
-        <h2 data-cy="<%= entityInstance %>DetailsHeading">
-          <Translate contentKey="<%= i18nKeyPrefix %>.detail.title"><%- entityNameCapitalized %></Translate>
+        <h2 data-cy="<%- entityInstance %>DetailsHeading">
+          <Translate contentKey="<%- i18nKeyPrefix %>.detail.title"><%- entityNameCapitalized %></Translate>
         </h2>
           <dl className="jh-entity-details">
 <%_ for (field of fields) {
@@ -65,53 +65,53 @@ export const <%= entityReactName %>Detail = () => {
   const fieldNameHumanized = field.fieldNameHumanized;
 _%>
             <dt>
-              <span id="<%= fieldName %>">
-                <Translate contentKey="<%= field.propertyTranslationKey %>">
-                  <%= fieldNameHumanized %>
+              <span id="<%- fieldName %>">
+                <Translate contentKey="<%- field.propertyTranslationKey %>">
+                  <%- fieldNameHumanized %>
                 </Translate>
               </span>
   <%_ if (field.documentation) { _%>
               <OverlayTrigger overlay={<Tooltip>
     <%_ if (enableTranslation) { _%>
-                <Translate contentKey="<%= i18nKeyPrefix %>.help.<%= fieldName %>"/>
+                <Translate contentKey="<%- i18nKeyPrefix %>.help.<%- fieldName %>"/>
     <%_ } else { _%>
-                <%= field.documentation %>
+                <%- field.documentation %>
     <%_ } _%>
               </Tooltip>}>
-                <span id="<%= fieldName %>" className="d-inline-block">?</span>
+                <span id="<%- fieldName %>" className="d-inline-block">?</span>
               </OverlayTrigger>
   <%_ } _%>
             </dt>
             <dd>
   <%_ if (field.fieldTypeBoolean) { _%>
-              {<%= entityInstance %>Entity.<%= fieldName %> ? 'true' : 'false'}
+              {<%- entityInstance %>Entity.<%- fieldName %> ? 'true' : 'false'}
   <%_ } else if (field.fieldTypeTimed) { _%>
-              {<%= entityInstance %>Entity.<%= fieldName %> ? <TextFormat value={<%= entityInstance %>Entity.<%= fieldName %>} type="date" format={APP_DATE_FORMAT} />: null}
+              {<%- entityInstance %>Entity.<%- fieldName %> ? <TextFormat value={<%- entityInstance %>Entity.<%- fieldName %>} type="date" format={APP_DATE_FORMAT} />: null}
   <%_ } else if (field.fieldTypeDuration) { _%>
-              {<%= entityInstance %>Entity.<%= fieldName %> ? <DurationFormat value={<%= entityInstance %>Entity.<%= fieldName %>} />: null} ({<%= entityInstance %>Entity.<%= fieldName %>})
+              {<%- entityInstance %>Entity.<%- fieldName %> ? <DurationFormat value={<%- entityInstance %>Entity.<%- fieldName %>} />: null} ({<%- entityInstance %>Entity.<%- fieldName %>})
   <%_ } else if (field.fieldTypeLocalDate) { _%>
-              {<%= entityInstance %>Entity.<%= fieldName %> ? <TextFormat value={<%= entityInstance %>Entity.<%= fieldName %>} type="date" format={APP_LOCAL_DATE_FORMAT} />: null}
+              {<%- entityInstance %>Entity.<%- fieldName %> ? <TextFormat value={<%- entityInstance %>Entity.<%- fieldName %>} type="date" format={APP_LOCAL_DATE_FORMAT} />: null}
   <%_ } else if (field.fieldTypeBinary) { _%>
     <%_ if (!field.blobContentTypeText) { _%>
-                {<%= entityInstance %>Entity.<%= fieldName %> ? (
+                {<%- entityInstance %>Entity.<%- fieldName %> ? (
                   <div>
-                    {<%= entityInstance %>Entity.<%= fieldName %>ContentType ? (
-                      <a onClick={openFile(<%= entityInstance %>Entity.<%= fieldName %>ContentType, <%= entityInstance %>Entity.<%= fieldName %>)}>
+                    {<%- entityInstance %>Entity.<%- fieldName %>ContentType ? (
+                      <a onClick={openFile(<%- entityInstance %>Entity.<%- fieldName %>ContentType, <%- entityInstance %>Entity.<%- fieldName %>)}>
         <%_ if (field.blobContentTypeImage) { _%>
-                        <img src={`data:${<%= entityInstance %>Entity.<%= fieldName %>ContentType};base64,${<%= entityInstance %>Entity.<%= fieldName %>}`} style={{ maxHeight: '30px' }} />
+                        <img src={`data:${<%- entityInstance %>Entity.<%- fieldName %>ContentType};base64,${<%- entityInstance %>Entity.<%- fieldName %>}`} style={{ maxHeight: '30px' }} />
         <%_ } else { _%>
                         <Translate contentKey="entity.action.open">Open</Translate>&nbsp;
         <%_ } _%>
                       </a>
                     ) : null}
-                    <span>{<%= entityInstance %>Entity.<%= fieldName %>ContentType}, {byteSize(<%= entityInstance %>Entity.<%= fieldName %>)}</span>
+                    <span>{<%- entityInstance %>Entity.<%- fieldName %>ContentType}, {byteSize(<%- entityInstance %>Entity.<%- fieldName %>)}</span>
                   </div>
                 ) : null}
     <%_ } else { _%>
-                {<%= entityInstance %>Entity.<%= field.fieldName %>}
+                {<%- entityInstance %>Entity.<%- field.fieldName %>}
     <%_ } _%>
   <%_ } else { _%>
-            {<%= entityInstance %>Entity.<%= field.fieldName %>}
+            {<%- entityInstance %>Entity.<%- field.fieldName %>}
   <%_ } _%>
             </dd>
 <%_ } _%>
@@ -125,44 +125,44 @@ _%>
 _%>
   <%_ if (relationship.persistableRelationship) { _%>
             <dt>
-              <Translate contentKey="<%= i18nKeyPrefix %>.<%= relationshipName %>">
-                <%= relationshipNameHumanized %>
+              <Translate contentKey="<%- i18nKeyPrefix %>.<%- relationshipName %>">
+                <%- relationshipNameHumanized %>
               </Translate>
             </dt>
             <dd>
     <%_ if (relationship.otherEntityUser) { _%>
       <%_ if (relationship.relationshipManyToMany) { _%>
     {
-      (<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>) ?
-          (<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.map((val, i) =>
-              <span key={val.<%= otherEntityPkName %>}><a>{val.<%= otherEntityField %>}</a>{(<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %> && i === <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
+      (<%- entityInstance %>Entity.<%- relationshipFieldNamePlural %>) ?
+          (<%- entityInstance %>Entity.<%- relationshipFieldNamePlural %>.map((val, i) =>
+              <span key={val.<%- otherEntityPkName %>}><a>{val.<%- otherEntityField %>}</a>{(<%- entityInstance %>Entity.<%- relationshipFieldNamePlural %> && i === <%- entityInstance %>Entity.<%- relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
           )
       ) : null
     }
       <%_ } else { _%>
-                {(<%= entityInstance + "Entity." + relationshipFieldName %>) ? <%= entityInstance + "Entity." + relationshipFieldName + "." + otherEntityField %> : ''}
+                {(<%- entityInstance + "Entity." + relationshipFieldName %>) ? <%- entityInstance + "Entity." + relationshipFieldName + "." + otherEntityField %> : ''}
       <%_ } _%>
     <%_ } else { _%>
       <%_ if (relationship.relationshipManyToMany) { _%>
     {
-        (<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>) ?
-            (<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.map((val, i) =>
-                <span key={val.<%= otherEntityPkName %>}><a>{val.<%= otherEntityField %>}</a>{(<%= entityInstance %>Entity.<%= relationshipFieldNamePlural %> && i === <%= entityInstance %>Entity.<%= relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
+        (<%- entityInstance %>Entity.<%- relationshipFieldNamePlural %>) ?
+            (<%- entityInstance %>Entity.<%- relationshipFieldNamePlural %>.map((val, i) =>
+                <span key={val.<%- otherEntityPkName %>}><a>{val.<%- otherEntityField %>}</a>{(<%- entityInstance %>Entity.<%- relationshipFieldNamePlural %> && i === <%- entityInstance %>Entity.<%- relationshipFieldNamePlural %>.length - 1) ? '' : ', '}</span>
             )
         ) : null
     }
       <%_ } else { _%>
-                {(<%= entityInstance + "Entity." + relationshipFieldName %>) ? <%= entityInstance + "Entity." + relationshipFieldName + "." + otherEntityField %> : ''}
+                {(<%- entityInstance + "Entity." + relationshipFieldName %>) ? <%- entityInstance + "Entity." + relationshipFieldName + "." + otherEntityField %> : ''}
       <%_ } _%>
     <%_ } _%>
             </dd>
   <%_ } _%>
 <%_ } _%>
           </dl>
-        <Button as={Link as any} to="/<%= entityPage %>" replace variant="info" data-cy="entityDetailsBackButton">
+        <Button as={Link as any} to="/<%- entityPage %>" replace variant="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
         </Button>&nbsp;
-        <Button as={Link as any} to={`/<%= entityPage %>/${<%= entityInstance %>Entity.<%= primaryKey.name %>}/edit`} replace variant="primary">
+        <Button as={Link as any} to={`/<%- entityPage %>/${<%- entityInstance %>Entity.<%- primaryKey.name %>}/edit`} replace variant="primary">
           <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
         </Button>
       </Col>
@@ -170,4 +170,4 @@ _%>
   );
 };
 
-export default <%= entityReactName %>Detail;
+export default <%- entityReactName %>Detail;

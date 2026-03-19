@@ -16,25 +16,25 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.web.rest;
+package <%- packageName %>.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import <%= packageName %>.IntegrationTest;
+import <%- packageName %>.IntegrationTest;
 <%_ if (databaseTypeSql && reactive) { _%>
-import <%= packageName %>.config.Constants;
+import <%- packageName %>.config.Constants;
 <%_ } _%>
-import <%= user.entityAbsoluteClass %>;
-import <%= packageName %>.repository.UserRepository;
+import <%- user.entityAbsoluteClass %>;
+import <%- packageName %>.repository.UserRepository;
 <%_ if (!requiresDeleteAllUsers) { _%>
-import <%= packageName %>.service.UserService;
+import <%- packageName %>.service.UserService;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
-import <%= packageName %>.repository.search.UserSearchRepository;
+import <%- packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
-import <%= packageName %>.security.AuthoritiesConstants;
+import <%- packageName %>.security.AuthoritiesConstants;
 <%_ if (databaseTypeSql && reactive) { _%>
-import <%= packageName %>.repository.EntityManager;
+import <%- packageName %>.repository.EntityManager;
 <%_ } _%>
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,7 +60,7 @@ import org.springframework.security.test.context.TestSecurityContextHolder;
 <%_ } _%>
 import org.springframework.security.test.context.support.WithMockUser;
 <%_ if (reactive) { _%>
-import <%= packageName %>.service.dto.<%= user.dtoClass %>;
+import <%- packageName %>.service.dto.<%- user.dtoClass %>;
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } else { _%>
 import org.springframework.test.web.servlet.MockMvc;
@@ -104,7 +104,7 @@ class PublicUserResourceIT {
 
 <%_ const DEFAULT_USER = {firstName: 'john', lastName: 'doe'}; _%>
 <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-    private static final String DEFAULT_<%= field.fieldName.toUpperCase() %> = "<%= DEFAULT_USER [field.fieldName] %>";
+    private static final String DEFAULT_<%- field.fieldName.toUpperCase() %> = "<%- DEFAULT_USER [field.fieldName] %>";
 <%_ } _%>
 
     @Autowired
@@ -117,9 +117,9 @@ class PublicUserResourceIT {
 <%_ if (searchEngineElasticsearch) { _%>
 
     /**
-     * This repository is mocked in the <%= packageName %>.repository.search test package.
+     * This repository is mocked in the <%- packageName %>.repository.search test package.
      *
-     * @see <%= packageName %>.repository.search.UserSearchRepositoryMockConfiguration
+     * @see <%- packageName %>.repository.search.UserSearchRepositoryMockConfiguration
      */
     @Autowired
     private UserSearchRepository mockUserSearchRepository;
@@ -138,7 +138,7 @@ class PublicUserResourceIT {
     private MockMvc restUserMockMvc;
 
 <%_ } _%>
-    private <%= user.persistClass %> user;
+    private <%- user.persistClass %> user;
 <%_ if (!databaseTypeCassandra && !requiresDeleteAllUsers) { _%>
     private Long numberOfUsers;
 
@@ -201,7 +201,7 @@ class PublicUserResourceIT {
             .jsonPath(String.format("$.[?(@.id == <%- primaryKey.typeNumeric ? '%d' : "'%s'" %>)].login", user.getId())).isEqualTo(user.getLogin())
             .jsonPath(String.format("$.[?(@.id == <%- primaryKey.typeNumeric ? '%d' : "'%s'" %>)].keys()", user.getId())).isEqualTo(Set.of("id", "login"))
   <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-            .jsonPath(String.format("$.[?(@.id == <%- primaryKey.typeNumeric ? '%d' : "'%s'" %>)].<%= field.fieldName %>", user.getId())).isEqualTo(user.<%- field.propertySupplierName %>())
+            .jsonPath(String.format("$.[?(@.id == <%- primaryKey.typeNumeric ? '%d' : "'%s'" %>)].<%- field.fieldName %>", user.getId())).isEqualTo(user.<%- field.propertySupplierName %>())
   <%_ } _%>
             .jsonPath("$.[*].email").doesNotHaveJsonPath()
   <%_ if (!databaseTypeCassandra) { _%>
@@ -216,7 +216,7 @@ class PublicUserResourceIT {
             .andExpect(jsonPath(String.format("$.[?(@.id == <%- primaryKey.typeNumeric ? '%d' : "'%s'" %>)].login", user.getId())).value(user.getLogin()))
             .andExpect(jsonPath(String.format("$.[?(@.id == <%- primaryKey.typeNumeric ? '%d' : "'%s'" %>)].keys()", user.getId())).value(Set.of("id", "login")))
   <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-            .andExpect(jsonPath(String.format("$.[?(@.id == <%- primaryKey.typeNumeric ? '%d' : "'%s'" %>)].<%= field.fieldName %>", user.getId())).value(user.<%- field.propertySupplierName %>()))
+            .andExpect(jsonPath(String.format("$.[?(@.id == <%- primaryKey.typeNumeric ? '%d' : "'%s'" %>)].<%- field.fieldName %>", user.getId())).value(user.<%- field.propertySupplierName %>()))
   <%_ } _%>
             .andExpect(jsonPath("$.[*].email").doesNotHaveJsonPath())
   <%_ if (!databaseTypeCassandra) { _%>

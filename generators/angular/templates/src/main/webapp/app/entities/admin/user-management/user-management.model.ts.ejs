@@ -19,7 +19,7 @@
 <%_ const idType = user.primaryKey.tsType; _%>
 export interface IUserManagement {
   login: string;
-  id?: <%= idType %> | null;
+  id?: <%- idType %> | null;
   firstName?: string | null;
   lastName?: string | null;
   email?: string;
@@ -35,7 +35,7 @@ export interface IUserManagement {
 export class User implements IUserManagement {
   constructor(
     public login: string,
-    public id?: <%= idType %> | null,
+    public id?: <%- idType %> | null,
     public firstName?: string | null,
     public lastName?: string | null,
     public email?: string,

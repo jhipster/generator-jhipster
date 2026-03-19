@@ -13,7 +13,7 @@ describe('Axios interceptor', () => {
 
   it('should use localStorage to provide bearer', () => {
 <%_ if (authenticationTypeJwt) { _%>
-    localStorage.setItem('<%= jhiPrefixDashed %>-authenticationToken', 'auth');
+    localStorage.setItem('<%- jhiPrefixDashed %>-authenticationToken', 'auth');
 <%_ } _%>
     const result = setupAxiosConfig.onRequestSuccess(() => console.log('A problem occurred'));
 
@@ -25,7 +25,7 @@ describe('Axios interceptor', () => {
 
   it('should use sessionStorage to provide bearer', () => {
 <%_ if (authenticationTypeJwt) { _%>
-    sessionStorage.setItem('<%= jhiPrefixDashed %>-authenticationToken', 'auth');
+    sessionStorage.setItem('<%- jhiPrefixDashed %>-authenticationToken', 'auth');
 <%_ } _%>
     const result = setupAxiosConfig.onRequestSuccess(() => console.log('A problem occurred'));
 

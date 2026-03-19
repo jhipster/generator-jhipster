@@ -37,7 +37,7 @@ logging:
     tech.jhipster: DEBUG
     org.hibernate.SQL: DEBUG
 <%_ if (packageName !== 'tech.jhipster') { _%>
-    <%= packageName %>: DEBUG
+    <%- packageName %>: DEBUG
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
     org.neo4j.driver: WARN
@@ -77,8 +77,8 @@ org:
   neo4j:
     migrations:
       locations-to-scan:
-      packages-to-scan: <%= packageName %>.config.neo4j
-      installed-by: <%= baseName %>
+      packages-to-scan: <%- packageName %>.config.neo4j
+      installed-by: <%- baseName %>
 <%_ } _%>
 spring:
   devtools:
@@ -94,7 +94,7 @@ spring:
       profiles:
         active: dev
 <%_ } _%>
-  jackson<%= springBoot4 ? '2' : '' %>:
+  jackson<%- springBoot4 ? '2' : '' %>:
     serialization:
       indent-output: true
 <%_ if (databaseTypeNeo4j) { _%>
@@ -126,7 +126,7 @@ spring:
     config:
       uri: http://admin:${jhipster.registry.password}@localhost:8761/config
       # name of the config server's property source (file.yml) that we want to use
-      name: <%= baseName %>
+      name: <%- baseName %>
       profile: dev
       label: main # toggle to switch to a different version of the configuration as stored in git
       # it can be set to any label, branch or commit of the configuration source Git repository
@@ -159,13 +159,13 @@ spring:
 <%_ if (databaseTypeMongodb && !springBoot4) { _%>
   data:
     mongodb:
-      uri: mongodb://localhost:27017/<%= baseName %>
+      uri: mongodb://localhost:27017/<%- baseName %>
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
   cassandra:
     contact-points: localhost
     compression: LZ4
-    keyspace-name: <%= baseName %>
+    keyspace-name: <%- baseName %>
     local-datacenter: datacenter1
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
@@ -195,7 +195,7 @@ spring:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
 <%_ if (databaseTypeMongodb && springBoot4) { _%>
   mongodb:
-    uri: mongodb://localhost:27017/<%= baseName %>
+    uri: mongodb://localhost:27017/<%- baseName %>
 <%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
   r2dbc:
@@ -205,7 +205,7 @@ spring:
     cache: false
 
 server:
-  port: <%= serverPort %>
+  port: <%- serverPort %>
   # make sure requests the proxy uri instead of the server one
   forward-headers-strategy: native
 
@@ -230,8 +230,8 @@ jhipster:
 <%_ if (databaseTypeCouchbase) { _%>
   database:
     couchbase:
-      bucket-name: <%= baseName %>
-      scope-name: <%= camelizedBaseName %>
+      bucket-name: <%- baseName %>
+      scope-name: <%- camelizedBaseName %>
 <%_ } _%>
 <%_ if (!cacheProviderNo) { _%>
   cache: # Cache configuration
@@ -288,9 +288,9 @@ jhipster:
   cors:
     # Allow Ionic for JHipster by default (* no longer allowed in Spring Boot 2.4+)
   <%_ if (microfrontend) { _%>
-    # Ports <%= devServerPort + 1 %>-<%= devServerPort + 9 %> are allowed for microfrontend development
+    # Ports <%- devServerPort + 1 %>-<%- devServerPort + 9 %> are allowed for microfrontend development
   <%_ } _%>
-    allowed-origins: "http://localhost:8100,https://localhost:8100<%_ if (devServerPortProxy) { _%>,http://localhost:<%= devServerPortProxy %>,https://localhost:<%= devServerPortProxy %><%_ } _%><%_ if (!skipClient) { _%>,http://localhost:<%= devServerPort %>,https://localhost:<%= devServerPort %><%_ if (microfrontend) { for (let port = 1; port < 10; port++) { _%>,http://localhost:<%= devServerPort + port %>,https://localhost:<%= devServerPort + port %><%_ } _%><%_ } } _%>"
+    allowed-origins: "http://localhost:8100,https://localhost:8100<%_ if (devServerPortProxy) { _%>,http://localhost:<%- devServerPortProxy %>,https://localhost:<%- devServerPortProxy %><%_ } _%><%_ if (!skipClient) { _%>,http://localhost:<%- devServerPort %>,https://localhost:<%- devServerPort %><%_ if (microfrontend) { for (let port = 1; port < 10; port++) { _%>,http://localhost:<%- devServerPort + port %>,https://localhost:<%- devServerPort + port %><%_ } _%><%_ } } _%>"
     # Enable CORS when running in GitHub Codespaces
     allowed-origin-patterns: 'https://*.githubpreview.dev'
     allowed-methods: "*"
@@ -323,7 +323,7 @@ jhipster:
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
   mail: # specific JHipster mail property, for standard properties see MailProperties
-    base-url: http://127.0.0.1:<%= serverPort %>
+    base-url: http://127.0.0.1:<%- serverPort %>
 <%_ } _%>
   logging:
     use-json-format: false # By default, logs are not in Json format

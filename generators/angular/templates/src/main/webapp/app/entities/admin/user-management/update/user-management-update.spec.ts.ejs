@@ -62,7 +62,7 @@ describe('User Management Update Component', () => {
     it('should call update service on save for existing user', inject([], () => {
       // GIVEN
       const entity = { id: <%- tsKeyId %> } as IUserManagement;
-      <%= clientTestFramework %>.spyOn(service, 'update').mockReturnValue(of(entity));
+      <%- clientTestFramework %>.spyOn(service, 'update').mockReturnValue(of(entity));
       comp.editForm.patchValue(entity);
       // WHEN
       comp.save();
@@ -75,7 +75,7 @@ describe('User Management Update Component', () => {
     it('should call create service on save for new user', inject([], () => {
       // GIVEN
       const entity = { login: 'foo' } as IUserManagement;
-      <%= clientTestFramework %>.spyOn(service, 'create').mockReturnValue(of(entity));
+      <%- clientTestFramework %>.spyOn(service, 'create').mockReturnValue(of(entity));
       comp.editForm.patchValue(entity);
       // WHEN
       comp.save();

@@ -17,9 +17,9 @@
  limitations under the License.
 -%>
 {
-  "name": "<%= dasherizedBaseName %>",
+  "name": "<%- dasherizedBaseName %>",
   "version": "0.0.0",
-  "description": "<%= projectDescription %>",
+  "description": "<%- projectDescription %>",
   "private": true,
   "license": "UNLICENSED",
   "cacheDirectories": [
@@ -27,67 +27,67 @@
   ],
   "type": "module",
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "<%= nodeDependencies['@fortawesome/fontawesome-svg-core'] %>",
-    "@fortawesome/free-solid-svg-icons": "<%= nodeDependencies['@fortawesome/free-solid-svg-icons'] %>",
-    "@fortawesome/vue-fontawesome": "<%= nodeDependencies['@fortawesome/vue-fontawesome'] %>",
-    "@vuelidate/core": "<%= nodeDependencies['@vuelidate/core'] %>",
-    "@vuelidate/validators": "<%= nodeDependencies['@vuelidate/validators'] %>",
-    "@vueuse/core": "<%= nodeDependencies['@vueuse/core'] %>",
-    "axios": "<%= nodeDependencies['axios'] %>",
-    "bootstrap": "<%= nodeDependencies['bootstrap'] %>",
-    "bootstrap-vue-next": "<%= nodeDependencies['bootstrap-vue-next'] %>",
+    "@fortawesome/fontawesome-svg-core": "<%- nodeDependencies['@fortawesome/fontawesome-svg-core'] %>",
+    "@fortawesome/free-solid-svg-icons": "<%- nodeDependencies['@fortawesome/free-solid-svg-icons'] %>",
+    "@fortawesome/vue-fontawesome": "<%- nodeDependencies['@fortawesome/vue-fontawesome'] %>",
+    "@vuelidate/core": "<%- nodeDependencies['@vuelidate/core'] %>",
+    "@vuelidate/validators": "<%- nodeDependencies['@vuelidate/validators'] %>",
+    "@vueuse/core": "<%- nodeDependencies['@vueuse/core'] %>",
+    "axios": "<%- nodeDependencies['axios'] %>",
+    "bootstrap": "<%- nodeDependencies['bootstrap'] %>",
+    "bootstrap-vue-next": "<%- nodeDependencies['bootstrap-vue-next'] %>",
 <%_ if (!clientThemeNone) { _%>
-    "bootswatch": "<%= nodeDependencies['bootswatch'] %>",
+    "bootswatch": "<%- nodeDependencies['bootswatch'] %>",
 <%_ } _%>
-    "dayjs": "<%= nodeDependencies['dayjs'] %>",
+    "dayjs": "<%- nodeDependencies['dayjs'] %>",
 <%_ if (communicationSpringWebsocket) { _%>
     "@stomp/rx-stomp": null,
-    "js-cookie": "<%= nodeDependencies['js-cookie'] %>",
+    "js-cookie": "<%- nodeDependencies['js-cookie'] %>",
     "sockjs-client": null,
     "rxjs": null,
 <%_ } _%>
-    "pinia": "<%= nodeDependencies.pinia %>",
-    "vue": "<%= nodeDependencies['vue'] %>",
+    "pinia": "<%- nodeDependencies.pinia %>",
+    "vue": "<%- nodeDependencies['vue'] %>",
 <%_ if (enableTranslation) { _%>
     "deepmerge": null,
-    "vue-i18n": "<%= nodeDependencies['vue-i18n'] %>",
+    "vue-i18n": "<%- nodeDependencies['vue-i18n'] %>",
 <%_ } _%>
-    "vue-router": "<%= nodeDependencies['vue-router'] %>"
+    "vue-router": "<%- nodeDependencies['vue-router'] %>"
   },
   "devDependencies": {
 <%_ if (enableI18nRTL) { _%>
-    "postcss-rtlcss": "<%= nodeDependencies['postcss-rtlcss'] %>",
+    "postcss-rtlcss": "<%- nodeDependencies['postcss-rtlcss'] %>",
 <%_ } _%>
     "@eslint/js": null,
-    "@pinia/testing": "<%= nodeDependencies['@pinia/testing'] %>",
-    "@types/node": "<%= nodeDependencies['@types/node'] %>",
+    "@pinia/testing": "<%- nodeDependencies['@pinia/testing'] %>",
+    "@types/node": "<%- nodeDependencies['@types/node'] %>",
     "@tsconfig/node18": null,
-    "@vitejs/plugin-vue": "<%= nodeDependencies['@vitejs/plugin-vue'] %>",
-    "@vitest/coverage-v8": "<%= nodeDependencies.vitest %>",
-    "@vue/test-utils": "<%= nodeDependencies['@vue/test-utils'] %>",
+    "@vitejs/plugin-vue": "<%- nodeDependencies['@vitejs/plugin-vue'] %>",
+    "@vitest/coverage-v8": "<%- nodeDependencies.vitest %>",
+    "@vue/test-utils": "<%- nodeDependencies['@vue/test-utils'] %>",
     "@vue/tsconfig": null,
-    "axios-mock-adapter": "<%= nodeDependencies['axios-mock-adapter'] %>",
-    "autoprefixer": "<%= nodeDependencies['autoprefixer'] %>",
-    "happy-dom": "<%= nodeDependencies['happy-dom'] %>",
-    "postcss-import": "<%= nodeDependencies['postcss-import'] %>",
-    "postcss-url": "<%= nodeDependencies['postcss-url'] %>",
-    "rimraf": "<%= nodeDependencies['rimraf'] %>",
-    "sass": "<%= nodeDependencies['sass'] %>",
-    "swagger-ui-dist": "<%= nodeDependencies['swagger-ui-dist'] %>",
-    "eslint": "<%= nodeDependencies['eslint'] %>",
+    "axios-mock-adapter": "<%- nodeDependencies['axios-mock-adapter'] %>",
+    "autoprefixer": "<%- nodeDependencies['autoprefixer'] %>",
+    "happy-dom": "<%- nodeDependencies['happy-dom'] %>",
+    "postcss-import": "<%- nodeDependencies['postcss-import'] %>",
+    "postcss-url": "<%- nodeDependencies['postcss-url'] %>",
+    "rimraf": "<%- nodeDependencies['rimraf'] %>",
+    "sass": "<%- nodeDependencies['sass'] %>",
+    "swagger-ui-dist": "<%- nodeDependencies['swagger-ui-dist'] %>",
+    "eslint": "<%- nodeDependencies['eslint'] %>",
     "eslint-config-prettier": null,
-    "eslint-plugin-prettier": "<%= nodeDependencies['eslint-plugin-prettier'] %>",
-    "eslint-plugin-vue": "<%= nodeDependencies['eslint-plugin-vue'] %>",
+    "eslint-plugin-prettier": "<%- nodeDependencies['eslint-plugin-prettier'] %>",
+    "eslint-plugin-vue": "<%- nodeDependencies['eslint-plugin-vue'] %>",
     "jiti": null,
-    "typescript": "<%= nodeDependencies['typescript'] %>",
+    "typescript": "<%- nodeDependencies['typescript'] %>",
     "typescript-eslint": null,
     "vite": null,
-    "vitest": "<%= nodeDependencies.vitest %>",
+    "vitest": "<%- nodeDependencies.vitest %>",
     "vite-plugin-static-copy": null,
-    "vitest-sonar-reporter": "<%= nodeDependencies['vitest-sonar-reporter'] %>"
+    "vitest-sonar-reporter": "<%- nodeDependencies['vitest-sonar-reporter'] %>"
   },
   "engines": {
-    "node": ">=<%= nodeVersion %>"
+    "node": ">=<%- nodeVersion %>"
   },
   "config": {
     "default_environment": "prod"
@@ -95,8 +95,8 @@
   "scripts": {
     "build": "<%- nodePackageManager %> run webapp:prod --",
     "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'<% if(!skipServer) { %> npm:backend:start<% } %>",
-    "cleanup": "rimraf <%= this.relativeDir(clientRootDir, temporaryDir) %>",
-    "clean-www": "rimraf <%= this.relativeDir(clientRootDir, clientDistDir) %>",
+    "cleanup": "rimraf <%- this.relativeDir(clientRootDir, temporaryDir) %>",
+    "clean-www": "rimraf <%- this.relativeDir(clientRootDir, clientDistDir) %>",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "serve": "<%- nodePackageManager %> run start --",

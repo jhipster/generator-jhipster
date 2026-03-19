@@ -93,7 +93,7 @@ jobs:
                 <%_ if (ciCdIntegrationsHeroku) { _%>
             - run:
                 name: Deploy to Heroku
-                command: './mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>'
+                command: './mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%- herokuAppName %>'
                 <%_ } _%>
             <%_ } else if (buildToolGradle) { _%>
                 <%_ if (ciCdIntegrationsHeroku) { _%>
@@ -104,20 +104,20 @@ jobs:
             <%_ } _%>
             <%_ if (cypressTests) {
                 const commented = '# '; _%>
-            <%= commented %>- run:
-            <%= commented %>    name: 'E2E: Package'
-            <%= commented %>    command: <%- nodePackageManager %> run ci:e2e:package
-            <%= commented %>- run:
-            <%= commented %>    name: 'E2E: Prepare'
-            <%= commented %>    command: <%- nodePackageManager %> run ci:e2e:prepare
-            <%= commented %>- run:
-            <%= commented %>    name: 'E2E: Run'
-            <%= commented %>    command: <%- nodePackageManager %> run ci:e2e:run
+            <%- commented %>- run:
+            <%- commented %>    name: 'E2E: Package'
+            <%- commented %>    command: <%- nodePackageManager %> run ci:e2e:package
+            <%- commented %>- run:
+            <%- commented %>    name: 'E2E: Prepare'
+            <%- commented %>    command: <%- nodePackageManager %> run ci:e2e:prepare
+            <%- commented %>- run:
+            <%- commented %>    name: 'E2E: Run'
+            <%- commented %>    command: <%- nodePackageManager %> run ci:e2e:run
             <%_ if(cypressTests) { _%>
-            <%= commented %>    environment:
-            <%= commented %>      CYPRESS_ENABLE_RECORD: <%= ciCdIntegrationsCypressDashboard %>
+            <%- commented %>    environment:
+            <%- commented %>      CYPRESS_ENABLE_RECORD: <%- ciCdIntegrationsCypressDashboard %>
             <%_ } _%>
-            <%= commented %>- run:
-            <%= commented %>    name: 'E2E: Teardown'
-            <%= commented %>    command: <%- nodePackageManager %> run ci:e2e:teardown
+            <%- commented %>- run:
+            <%- commented %>    name: 'E2E: Teardown'
+            <%- commented %>    command: <%- nodePackageManager %> run ci:e2e:teardown
             <%_ } _%>

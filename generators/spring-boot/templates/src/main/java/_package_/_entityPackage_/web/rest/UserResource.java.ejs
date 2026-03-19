@@ -16,19 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.web.rest;
+package <%- packageName %>.web.rest;
 
-import <%= packageName %>.config.Constants;
-import <%= user.entityAbsoluteClass %>;
-import <%= packageName %>.repository.UserRepository;
-import <%= packageName %>.security.AuthoritiesConstants;
-import <%= packageName %>.service.MailService;
+import <%- packageName %>.config.Constants;
+import <%- user.entityAbsoluteClass %>;
+import <%- packageName %>.repository.UserRepository;
+import <%- packageName %>.security.AuthoritiesConstants;
+import <%- packageName %>.service.MailService;
 import org.springframework.data.domain.Sort;
-import <%= packageName %>.service.UserService;
-import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
-import <%= packageName %>.web.rest.errors.BadRequestAlertException;
-import <%= packageName %>.web.rest.errors.EmailAlreadyUsedException;
-import <%= packageName %>.web.rest.errors.LoginAlreadyUsedException;
+import <%- packageName %>.service.UserService;
+import <%- packageName %>.service.dto.<%- user.adminUserDto %>;
+import <%- packageName %>.web.rest.errors.BadRequestAlertException;
+import <%- packageName %>.web.rest.errors.EmailAlreadyUsedException;
+import <%- packageName %>.web.rest.errors.LoginAlreadyUsedException;
 
 import tech.jhipster.web.util.HeaderUtil;
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
@@ -88,7 +88,7 @@ import java.util.stream.StreamSupport;
 /**
  * REST controller for managing users.
  * <p>
- * This class accesses the {@link <%= user.entityAbsoluteClass %>} entity, and needs to fetch its collection of authorities.
+ * This class accesses the {@link <%- user.entityAbsoluteClass %>} entity, and needs to fetch its collection of authorities.
  * <p>
  * For a normal use-case, it would be better to have an eager relationship between User and Authority,
  * and send everything to the client side: there would be no View Model and DTO, a lot less code, and an outer-join
@@ -131,7 +131,7 @@ public class UserResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserResource.class);
 
-    @Value("${jhipster.clientApp.name:<%= camelizedBaseName %>}")
+    @Value("${jhipster.clientApp.name:<%- camelizedBaseName %>}")
     private String applicationName;
 
     private final UserService userService;
@@ -162,7 +162,7 @@ public class UserResource {
      */
     @PostMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public <% if (reactive) { %>Mono<ResponseEntity<<%= user.persistClass %>>><% } else { %>ResponseEntity<<%= user.persistClass %>><% } %> createUser(@Valid @RequestBody <%= user.adminUserDto %> userDTO)<% if (!reactive) { %> throws URISyntaxException<% } %> {
+    public <% if (reactive) { %>Mono<ResponseEntity<<%- user.persistClass %>>><% } else { %>ResponseEntity<<%- user.persistClass %>><% } %> createUser(@Valid @RequestBody <%- user.adminUserDto %> userDTO)<% if (!reactive) { %> throws URISyntaxException<% } %> {
         LOG.debug("REST request to save User : {}", userDTO);
 
         if (userDTO.getId() != null) {
@@ -202,7 +202,7 @@ public class UserResource {
         } else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
             throw new EmailAlreadyUsedException();
         } else {
-            <%= user.persistClass %> newUser = userService.createUser(userDTO);
+            <%- user.persistClass %> newUser = userService.createUser(userDTO);
             mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/admin/users/" + newUser.getLogin()))
                 .headers(HeaderUtil.createAlert(applicationName, <% if (enableTranslation) { %> "userManagement.created"<% } else { %> "A user is created with identifier " + newUser.getLogin()<% } %>, newUser.getLogin()))
@@ -222,7 +222,7 @@ public class UserResource {
     @PutMapping({ "/users", "/users/{login}" })
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
 <%_ if (reactive) { _%>
-    public Mono<ResponseEntity<<%= user.adminUserDto %>>> updateUser(@PathVariable(name = "login", required = false) @Pattern(regexp = Constants.LOGIN_REGEX) String login, @Valid @RequestBody <%= user.adminUserDto %> userDTO) {
+    public Mono<ResponseEntity<<%- user.adminUserDto %>>> updateUser(@PathVariable(name = "login", required = false) @Pattern(regexp = Constants.LOGIN_REGEX) String login, @Valid @RequestBody <%- user.adminUserDto %> userDTO) {
         LOG.debug("REST request to update User : {}", userDTO);
         return userRepository.findOneByEmailIgnoreCase(userDTO.getEmail())
             .filter(user -> !user.getId().equals(userDTO.getId()))
@@ -247,9 +247,9 @@ public class UserResource {
                 .body(user)
             );
 <%_ } else { _%>
-    public ResponseEntity<<%= user.adminUserDto %>> updateUser(@PathVariable(name = "login", required = false) @Pattern(regexp = Constants.LOGIN_REGEX) String login, @Valid @RequestBody <%= user.adminUserDto %> userDTO) {
+    public ResponseEntity<<%- user.adminUserDto %>> updateUser(@PathVariable(name = "login", required = false) @Pattern(regexp = Constants.LOGIN_REGEX) String login, @Valid @RequestBody <%- user.adminUserDto %> userDTO) {
         LOG.debug("REST request to update User : {}", userDTO);
-        Optional<<%= user.persistClass %>> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+        Optional<<%- user.persistClass %>> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.orElseThrow().getId().equals(userDTO.getId()))) {
             throw new EmailAlreadyUsedException();
         }
@@ -257,7 +257,7 @@ public class UserResource {
         if (existingUser.isPresent() && (!existingUser.orElseThrow().getId().equals(userDTO.getId()))) {
             throw new LoginAlreadyUsedException();
         }
-        Optional<<%= user.adminUserDto %>> updatedUser = userService.updateUser(userDTO);
+        Optional<<%- user.adminUserDto %>> updatedUser = userService.updateUser(userDTO);
 
         return ResponseUtil.wrapOrNotFound(updatedUser,
             HeaderUtil.createAlert(applicationName, <% if (enableTranslation) { %>"userManagement.updated"<% } else { %>"A user is updated with identifier " + userDTO.getLogin()<% } %>, userDTO.getLogin()));
@@ -277,7 +277,7 @@ public class UserResource {
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
   <%_ if (reactive) { _%>
-    public Mono<ResponseEntity<Flux<<%= user.adminUserDto %>>>> getAllUsers(@org.springdoc.core.annotations.ParameterObject ServerHttpRequest request, @org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+    public Mono<ResponseEntity<Flux<<%- user.adminUserDto %>>>> getAllUsers(@org.springdoc.core.annotations.ParameterObject ServerHttpRequest request, @org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get all User for an admin");
         if (!onlyContainsAllowedProperties(pageable)) {
             return Mono.just(ResponseEntity.badRequest().build());
@@ -294,13 +294,13 @@ public class UserResource {
             )
             .map(headers -> ResponseEntity.ok().headers(headers).body(userService.getAllManagedUsers(pageable)));
   <%_ } else { _%>
-    public ResponseEntity<List<<%= user.adminUserDto %>>> getAllUsers(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<<%- user.adminUserDto %>>> getAllUsers(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get all User for an admin");
         if (!onlyContainsAllowedProperties(pageable)) {
             return ResponseEntity.badRequest().build();
         }
 
-        final Page<<%= user.adminUserDto %>> page = userService.getAllManagedUsers(pageable);
+        final Page<<%- user.adminUserDto %>> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
   <%_ } _%>
@@ -311,7 +311,7 @@ public class UserResource {
     }
 
 <%_ } else { /* Cassandra */ _%>
-    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= user.adminUserDto %>> getAllUsers() {
+    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%- user.adminUserDto %>> getAllUsers() {
         LOG.debug("REST request to get all User for an admin");
         return userService.getAllManagedUsers();
     }
@@ -327,17 +327,17 @@ public class UserResource {
     @GetMapping("/users/{login}")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
 <%_ if (reactive) { _%>
-    public Mono<<%= user.adminUserDto %>> getUser(@PathVariable("login") String login) {
+    public Mono<<%- user.adminUserDto %>> getUser(@PathVariable("login") String login) {
         LOG.debug("REST request to get User : {}", login);
         return userService.getUserWithAuthoritiesByLogin(login)
-            .map(<%= user.adminUserDto %>::new)
+            .map(<%- user.adminUserDto %>::new)
             .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
 <%_ } else { _%>
-    public ResponseEntity<<%= user.adminUserDto %>> getUser(@PathVariable("login") @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
+    public ResponseEntity<<%- user.adminUserDto %>> getUser(@PathVariable("login") @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
         LOG.debug("REST request to get User : {}", login);
         return ResponseUtil.wrapOrNotFound(
             userService.getUserWithAuthoritiesByLogin(login)
-                .map(<%= user.adminUserDto %>::new));
+                .map(<%- user.adminUserDto %>::new));
 <%_ } _%>
     }
 

@@ -25,16 +25,16 @@ import dayjs from 'dayjs/esm';
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
 
-import { I<%= entityAngularName %><% if (!readOnly && primaryKey) { %>, New<%= entityAngularName %><% } %> } from './<%= entityFileName %>.model';
+import { I<%- entityAngularName %><% if (!readOnly && primaryKey) { %>, New<%- entityAngularName %><% } %> } from './<%- entityFileName %>.model';
 
-export const sampleWithRequiredData: I<%= entityAngularName %> = <%- tsSampleWithRequiredData %>;
+export const sampleWithRequiredData: I<%- entityAngularName %> = <%- tsSampleWithRequiredData %>;
 
-export const sampleWithPartialData: I<%= entityAngularName %> = <%- tsSampleWithPartialData %>;
+export const sampleWithPartialData: I<%- entityAngularName %> = <%- tsSampleWithPartialData %>;
 
-export const sampleWithFullData: I<%= entityAngularName %> = <%- tsSampleWithFullData %>;
+export const sampleWithFullData: I<%- entityAngularName %> = <%- tsSampleWithFullData %>;
 <%_ if (!readOnly && primaryKey) { _%>
 
-export const sampleWithNewData: New<%= entityAngularName %> = <%- tsSampleWithNewData %>;
+export const sampleWithNewData: New<%- entityAngularName %> = <%- tsSampleWithNewData %>;
 
 Object.freeze(sampleWithNewData);
 <%_ } _%>

@@ -24,18 +24,18 @@ error.message=Wiadomość:
 
 <%_ if (generateUserManagement) { _%>
 # Activation email
-email.activation.title=Aktywacja konta <%= baseName %>
+email.activation.title=Aktywacja konta <%- baseName %>
 email.activation.greeting=Drogi {0}
-email.activation.text1=Twoje konto <%= baseName %> zostało utworzone, proszę kliknij poniższy link aktywacyjny:
+email.activation.text1=Twoje konto <%- baseName %> zostało utworzone, proszę kliknij poniższy link aktywacyjny:
 email.activation.text2=Z uszanowaniem,
-email.signature=<%= baseName %>.
+email.signature=<%- baseName %>.
 
 # Creation email
-email.creation.text1=Twoje konto <%= baseName %> zostało utworzone, kliknij poniższy link by uzyskać dostęp do niego:
+email.creation.text1=Twoje konto <%- baseName %> zostało utworzone, kliknij poniższy link by uzyskać dostęp do niego:
 
 # Reset email
-email.reset.title=<%= baseName %> reset hasła
+email.reset.title=<%- baseName %> reset hasła
 email.reset.greeting=Drogi {0}
-email.reset.text1=Dla Twojego <%= baseName %> konta wysłano prośbę o zresetowanie hasła, kliknij w poniższy link aby kontynuować:
+email.reset.text1=Dla Twojego <%- baseName %> konta wysłano prośbę o zresetowanie hasła, kliknij w poniższy link aby kontynuować:
 email.reset.text2=Z uszanowaniem,
 <%_ } _%>

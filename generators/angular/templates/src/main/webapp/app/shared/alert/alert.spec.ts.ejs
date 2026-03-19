@@ -36,8 +36,8 @@ describe('Alert Component', () => {
         {
           provide: AlertService,
           useValue: {
-            clear: <%= clientTestFramework %>.fn(),
-            get: <%= clientTestFramework %>.fn(),
+            clear: <%- clientTestFramework %>.fn(),
+            get: <%- clientTestFramework %>.fn(),
           },
         },
       ],

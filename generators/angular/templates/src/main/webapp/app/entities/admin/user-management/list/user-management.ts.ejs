@@ -46,7 +46,7 @@ import { IUserManagement } from '../user-management.model';
 import { UserManagementDeleteDialog } from '../delete/user-management-delete-dialog';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-user-mgmt',
+  selector: '<%- jhiPrefixDashed %>-user-mgmt',
   templateUrl: './user-management.html',
   imports: [
     RouterLink,
@@ -97,7 +97,7 @@ export class UserManagement implements OnInit {
     this.userService.update({ ...userManagement, activated: isActivated }).subscribe(() => this.loadAll());
   }
 
-  trackIdentity(item: IUserManagement): <%= user.primaryKey.tsType %> {
+  trackIdentity(item: IUserManagement): <%- user.primaryKey.tsType %> {
     return item.id!;
   }
 

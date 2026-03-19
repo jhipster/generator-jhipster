@@ -7,9 +7,9 @@ You will need to push your image to a registry. If you have not done so, use the
 ```
 <%_ for (const app of appConfigs) { _%>
   <%_ if (app.baseName.toLowerCase() !== app.targetImageName) { _%>
-$ docker image tag <%= app.baseName.toLowerCase() %> <%= app.targetImageName %>
+$ docker image tag <%- app.baseName.toLowerCase() %> <%- app.targetImageName %>
   <%_ } _%>
-$ <%= dockerPushCommand %> <%= app.targetImageName %>
+$ <%- dockerPushCommand %> <%- app.targetImageName %>
 <%_ } _%>
 ```
 
@@ -42,7 +42,7 @@ Use these commands to find your application's IP addresses:
 ```
   <%_ for (const app of appConfigs) { _%>
     <%_ if (app.applicationTypeGateway || app.applicationTypeMonolith) { _%>
-$ kubectl get svc <%= app.baseName.toLowerCase() %><%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
+$ kubectl get svc <%- app.baseName.toLowerCase() %><%- kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
     <%_ } _%>
   <%_ } _%>
 <%_ } _%>
@@ -53,7 +53,7 @@ $ kubectl get svc <%= app.baseName.toLowerCase() %><%= kubernetesNamespace === '
 You can scale your apps using:
 
 ```
-kubectl scale deployment <app-name> --replicas <replica-count><%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
+kubectl scale deployment <app-name> --replicas <replica-count><%- kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
 ## Zero-downtime deployments
@@ -61,7 +61,7 @@ kubectl scale deployment <app-name> --replicas <replica-count><%= kubernetesName
 The default way to update a running app in kubernetes, is to deploy a new image tag to your docker registry and then deploy it using:
 
 ```
-kubectl set image deployment/<app-name>-app <app-name>=<new-image> <%= kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
+kubectl set image deployment/<app-name>-app <app-name>=<new-image> <%- kubernetesNamespace === 'default' ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
 Using livenessProbes and readinessProbe allow you to tell Kubernetes about the state of your applications, in order to ensure availability of your services. You will need a minimum of two replicas for every application deployment if you want to have zero-downtime.
@@ -79,13 +79,13 @@ Generator is also packaged with [Prometheus operator by CoreOS](https://github.c
 Application metrics can be explored in Prometheus through:
 
 ```
-kubectl get svc jhipster-prometheus<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
+kubectl get svc jhipster-prometheus<%- kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
 Also the visualisation can be explored in Grafana which is pre-configured with a dashboard view. You can find the service details by running:
 
 ```
-kubectl get svc jhipster-grafana<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
+kubectl get svc jhipster-grafana<%- kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
 * If you have chosen *Ingress*, then you should be able to access Grafana using the given ingress domain.
@@ -100,19 +100,19 @@ kubectl get svc jhipster-grafana<%= kubernetesNamespaceDefault ? '' : ` -n ${kub
 The registry is deployed using a headless service in Kubernetes, so the primary service has no IP address, and cannot get a node port. You can create a secondary service for any type, using:
 
 ```
-kubectl expose service jhipster-registry --type=NodePort --name=exposed-registry<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
+kubectl expose service jhipster-registry --type=NodePort --name=exposed-registry<%- kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
 And explore the details using:
 
 ```
-kubectl get svc exposed-registry<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
+kubectl get svc exposed-registry<%- kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
 For scaling the JHipster registry, use:
 
 ```
-kubectl scale statefulset jhipster-registry --replicas 3<%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
+kubectl scale statefulset jhipster-registry --replicas 3<%- kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 <%_ } _%>
 
@@ -174,7 +174,7 @@ When running the `jhipster k8s` generator, it will prompt for a root FQDN (fully
 It might take up to 15 minutes for the Let's Encrypt certificates to be issued. Use the following command to check the status:
 
 ```
-kubectl describe certificate keycloak-ssl <%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
+kubectl describe certificate keycloak-ssl <%- kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
 ```
 
 You need to look for the following two events to determine success:
@@ -214,7 +214,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 The k8s sub-generator configures Let's Encrypt staging environment, which is not trusted by browsers and Java applications by default. In the Kubernetes descriptors, the staging CAs are added to the applications truststore and registry truststore. Note that cert-manager issues a temporary certificate first, but the applications and registry don't trust the ad-hoc CA, and will fail the startup until the Let's Encrypt certificate is ready and updated in the ingress service. You will see the application pod STATUS as Error and CrashLoopBackOff during the multiple startup attempts. You can check the certificate status with the following command:
 
 ```
-kubectl describe certificate keycloak-ssl <%= kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
+kubectl describe certificate keycloak-ssl <%- kubernetesNamespaceDefault ? '' : ` -n ${kubernetesNamespace}` %>
 ```
   <%_ } _%>
 <%_ } _%>

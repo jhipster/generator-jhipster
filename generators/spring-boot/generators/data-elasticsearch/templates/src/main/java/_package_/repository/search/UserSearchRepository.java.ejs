@@ -16,10 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.repository.search;
+package <%- packageName %>.repository.search;
 
-import <%= user.entityAbsoluteClass %>;
-import <%= packageName %>.repository.<%= user.entityClass %>Repository;
+import <%- user.entityAbsoluteClass %>;
+import <%- packageName %>.repository.<%- user.entityClass %>Repository;
 
 <%_ if (reactive) { _%>
 import org.springframework.data.elasticsearch.client.elc.ReactiveElasticsearchTemplate;
@@ -49,14 +49,14 @@ import java.util.UUID;
 import static org.springframework.data.elasticsearch.client.elc.QueryBuilders.queryStringQuery;
 
 /**
- * Spring Data Elasticsearch repository for the <%= user.persistClass %> entity.
+ * Spring Data Elasticsearch repository for the <%- user.persistClass %> entity.
  */
-public interface UserSearchRepository extends <% if (reactive) { %>Reactive<% } %>ElasticsearchRepository<<%= user.persistClass %>, <%= user.primaryKey.type %>>, UserSearchRepositoryInternal {
+public interface UserSearchRepository extends <% if (reactive) { %>Reactive<% } %>ElasticsearchRepository<<%- user.persistClass %>, <%- user.primaryKey.type %>>, UserSearchRepositoryInternal {
 }
 <%_ if (reactive) { _%>
 
 interface UserSearchRepositoryInternal {
-    Flux<<%= user.persistClass %>> search(String query);
+    Flux<<%- user.persistClass %>> search(String query);
 }
 
 class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
@@ -68,27 +68,27 @@ class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
     }
 
     @Override
-    public Flux<<%= user.persistClass %>> search(String query) {
+    public Flux<<%- user.persistClass %>> search(String query) {
         NativeQuery nativeQuery = new NativeQuery(QueryStringQuery.of(qs -> qs.query(query))._toQuery());
-        return reactiveElasticsearchTemplate.search(nativeQuery, <%= user.persistClass %>.class).map(SearchHit::getContent);
+        return reactiveElasticsearchTemplate.search(nativeQuery, <%- user.persistClass %>.class).map(SearchHit::getContent);
     }
 }
 <%_ } else { _%>
 
 interface UserSearchRepositoryInternal {
-    Stream<<%= user.persistClass %>> search(String query);
+    Stream<<%- user.persistClass %>> search(String query);
 
     @Async
     <%_ if (databaseTypeSql) { _%>
     @Transactional
     <%_ } _%>
-    void index(<%= user.persistClass %> entity);
+    void index(<%- user.persistClass %> entity);
 
     @Async
     <%_ if (databaseTypeSql) { _%>
     @Transactional
     <%_ } _%>
-    void deleteFromIndex(<%= user.persistClass %> entity);
+    void deleteFromIndex(<%- user.persistClass %> entity);
 }
 
 class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
@@ -102,21 +102,21 @@ class UserSearchRepositoryInternalImpl implements UserSearchRepositoryInternal {
     }
 
     @Override
-    public Stream<<%= user.persistClass %>> search(String query) {
+    public Stream<<%- user.persistClass %>> search(String query) {
         NativeQuery nativeQuery = new NativeQuery(QueryStringQuery.of(qs -> qs.query(query))._toQuery());
         return elasticsearchTemplate
-            .search(nativeQuery, <%= user.persistClass %>.class)
+            .search(nativeQuery, <%- user.persistClass %>.class)
             .map(SearchHit::getContent)
             .stream();
     }
 
     @Override
-    public void index(<%= user.persistClass %> entity) {
+    public void index(<%- user.persistClass %> entity) {
         repository.findById(entity.getId()).ifPresent(elasticsearchTemplate::save);
     }
 
     @Override
-    public void deleteFromIndex(<%= user.persistClass %> entity) {
+    public void deleteFromIndex(<%- user.persistClass %> entity) {
         elasticsearchTemplate.delete(entity);
     }
 }

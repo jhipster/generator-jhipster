@@ -28,7 +28,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ProfileService } from './profile.service';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-page-ribbon',
+  selector: '<%- jhiPrefixDashed %>-page-ribbon',
   template: `
     @if (ribbonEnvSignal?.(); as ribbonEnv) {
       <div class="ribbon">

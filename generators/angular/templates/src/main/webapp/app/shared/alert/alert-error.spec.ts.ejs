@@ -68,28 +68,28 @@ describe('Alert Error Component', () => {
   describe('Error Handling', () => {
     it('should display an alert on status 0', () => {
       // GIVEN
-      eventManager.broadcast({ name: '<%= frontendAppName %>.httpError', content: { status: 0 } });
+      eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: { status: 0 } });
       // THEN
       expect(comp.alerts().length).toBe(1);
-      expect(comp.alerts()[0].<%= mainAlertField %>).toBe(<% if (enableTranslation) { %>'error.server.not.reachable'<% } else { %>'Server not reachable'<% } %>);
+      expect(comp.alerts()[0].<%- mainAlertField %>).toBe(<% if (enableTranslation) { %>'error.server.not.reachable'<% } else { %>'Server not reachable'<% } %>);
     });
 
     it('should display an alert on status 404', () => {
       // GIVEN
-      eventManager.broadcast({ name: '<%= frontendAppName %>.httpError', content: { status: 404 } });
+      eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: { status: 404 } });
       // THEN
       expect(comp.alerts().length).toBe(1);
-      expect(comp.alerts()[0].<%= mainAlertField %>).toBe(<% if (enableTranslation) { %>'error.url.not.found'<% } else { %>'Not found'<% } %>);
+      expect(comp.alerts()[0].<%- mainAlertField %>).toBe(<% if (enableTranslation) { %>'error.url.not.found'<% } else { %>'Not found'<% } %>);
     });
 
     it('should display an alert on generic error', () => {
       // GIVEN
-      eventManager.broadcast({ name: '<%= frontendAppName %>.httpError', content: { error: { message: 'Error Message' } } });
-      eventManager.broadcast({ name: '<%= frontendAppName %>.httpError', content: { error: 'Second Error Message' } });
+      eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: { error: { message: 'Error Message' } } });
+      eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: { error: 'Second Error Message' } });
       // THEN
       expect(comp.alerts().length).toBe(2);
-      expect(comp.alerts()[0].<%= mainAlertField %>).toBe('Error Message');
-      expect(comp.alerts()[1].<%= mainAlertField %>).toBe('Second Error Message');
+      expect(comp.alerts()[0].<%- mainAlertField %>).toBe('Error Message');
+      expect(comp.alerts()[1].<%- mainAlertField %>).toBe('Second Error Message');
     });
 
     it('should display an alert on status 400 for generic error', () => {
@@ -107,10 +107,10 @@ describe('Alert Error Component', () => {
           message: 'error.validation',
         },
       });
-      eventManager.broadcast({ name: '<%= frontendAppName %>.httpError', content: response });
+      eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: response });
       // THEN
       expect(comp.alerts().length).toBe(1);
-      expect(comp.alerts()[0].<%= mainAlertField %>).toBe('error.validation');
+      expect(comp.alerts()[0].<%- mainAlertField %>).toBe('error.validation');
     });
 
     it('should display an alert on status 400 for generic error without message', () => {
@@ -121,10 +121,10 @@ describe('Alert Error Component', () => {
         status: 400,
         error: 'Bad Request',
       });
-      eventManager.broadcast({ name: '<%= frontendAppName %>.httpError', content: response });
+      eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: response });
       // THEN
       expect(comp.alerts().length).toBe(1);
-      expect(comp.alerts()[0].<%= mainAlertField %>).toBe('Bad Request');
+      expect(comp.alerts()[0].<%- mainAlertField %>).toBe('Bad Request');
     });
 
     it('should display an alert on status 400 for invalid parameters', () => {
@@ -143,10 +143,10 @@ describe('Alert Error Component', () => {
           fieldErrors: [{ objectName: 'foo', field: 'minField', message: 'Min' }],
         },
       });
-      eventManager.broadcast({ name: '<%= frontendAppName %>.httpError', content: response });
+      eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: response });
       // THEN
       expect(comp.alerts().length).toBe(1);
-      expect(comp.alerts()[0].<%= mainAlertField %>).toBe(<% if (enableTranslation) { %>'error.Size'<% } else { %>'Error on field "MinField"'<% } %>);
+      expect(comp.alerts()[0].<%- mainAlertField %>).toBe(<% if (enableTranslation) { %>'error.Size'<% } else { %>'Error on field "MinField"'<% } %>);
     });
 
     it('should display an alert on status 400 for error headers', () => {
@@ -161,10 +161,10 @@ describe('Alert Error Component', () => {
           message: 'error.validation',
         },
       });
-      eventManager.broadcast({ name: '<%= frontendAppName %>.httpError', content: response });
+      eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: response });
       // THEN
       expect(comp.alerts().length).toBe(1);
-      expect(comp.alerts()[0].<%= mainAlertField %>).toBe('header.error');
+      expect(comp.alerts()[0].<%- mainAlertField %>).toBe('header.error');
     });
 
     it('should display an alert on status 500 with detail', () => {
@@ -180,10 +180,10 @@ describe('Alert Error Component', () => {
           detail: 'Detailed error message',
         },
       });
-      eventManager.broadcast({ name: '<%= frontendAppName %>.httpError', content: response });
+      eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: response });
       // THEN
       expect(comp.alerts().length).toBe(1);
-      expect(comp.alerts()[0].<%= mainAlertField %>).toBe(<% if (enableTranslation) { %>'error.http.500'<% } else { %>'Detailed error message'<% } %>);
+      expect(comp.alerts()[0].<%- mainAlertField %>).toBe(<% if (enableTranslation) { %>'error.http.500'<% } else { %>'Detailed error message'<% } %>);
     });
   });
 });

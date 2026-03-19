@@ -18,11 +18,11 @@
 -%>
 {
   "extends": "./tsconfig",
-  "include": ["<%= this.relativeDir(clientRootDir, clientSrcDir) %>app", "<%= this.relativeDir(clientRootDir, clientSrcDir) %>microfrontends"],
+  "include": ["<%- this.relativeDir(clientRootDir, clientSrcDir) %>app", "<%- this.relativeDir(clientRootDir, clientSrcDir) %>microfrontends"],
   "exclude": [],
   "compilerOptions": {
     "paths": {
-      "app/*": ["<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/*"]
+      "app/*": ["<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/*"]
    },
     "types": ["jest", "webpack-env"]
   }

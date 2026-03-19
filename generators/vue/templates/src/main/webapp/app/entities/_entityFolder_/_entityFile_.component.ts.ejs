@@ -6,18 +6,18 @@ import { useI18n } from 'vue-i18n';
 import { useIntersectionObserver } from '@vueuse/core';
 <%_ } _%>
 
-import { type I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
+import { type I<%- entityAngularName %> } from '@/shared/model/<%- entityModelFileName %>.model';
 <%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>
 <%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
 import { useDateFormat } from '@/shared/composables'
 <%_ } _%>
-import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
+import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
 import { useAlertService } from '@/shared/alert/alert.service';
 
 export default defineComponent({
-  name: '<%= entityAngularName %>',
+  name: '<%- entityAngularName %>',
   setup() {
 <%_ if (enableTranslation) { _%>
     const { t: t$} = useI18n();
@@ -28,7 +28,7 @@ export default defineComponent({
 <%_ if (anyFieldIsBlobDerived || paginationInfiniteScroll) { _%>
     const dataUtils = useDataUtils();
 <%_ } _%>
-    const <%= entityInstance %>Service = inject('<%= entityInstance %>Service', () => new <%= entityAngularName %>Service());
+    const <%- entityInstance %>Service = inject('<%- entityInstance %>Service', () => new <%- entityAngularName %>Service());
     const alertService = inject('alertService', () => useAlertService(), true);
 
 <%_ if (searchEngineAny) { _%>
@@ -46,7 +46,7 @@ export default defineComponent({
     const links: Ref<any> = ref({});
 <%_ } _%>
 
-    const <%= entityInstancePlural %>: Ref<I<%= entityAngularName %>[]> = ref([]);
+    const <%- entityInstancePlural %>: Ref<I<%- entityAngularName %>[]> = ref([]);
 
     const isFetching = ref(false);
 
@@ -59,7 +59,7 @@ export default defineComponent({
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
       links.value = {};
-      <%= entityInstancePlural %>.value = [];
+      <%- entityInstancePlural %>.value = [];
 <%_ } _%>
     };
 <%_ if (!paginationNo) { _%>
@@ -73,7 +73,7 @@ export default defineComponent({
     };
 <%_ } _%>
 
-    const retrieve<%= entityAngularName %>s = async () => {
+    const retrieve<%- entityAngularName %>s = async () => {
       isFetching.value = true;
       try {
 <%_ if (!paginationNo) { _%>
@@ -85,10 +85,10 @@ export default defineComponent({
 <%_ } _%>
 <%_ if (searchEngineAny) { _%>
         const res = currentSearch.value ?
-          (await <%= entityInstance %>Service().search(currentSearch.value<%_ if (!paginationNo) { _%>, paginationQuery<%_ } _%>)) :
-          (await <%= entityInstance %>Service().retrieve(<%_ if (!paginationNo) { _%>paginationQuery<%_ } _%>));
+          (await <%- entityInstance %>Service().search(currentSearch.value<%_ if (!paginationNo) { _%>, paginationQuery<%_ } _%>)) :
+          (await <%- entityInstance %>Service().retrieve(<%_ if (!paginationNo) { _%>paginationQuery<%_ } _%>));
 <%_ } else { _%>
-        const res = await <%= entityInstance %>Service().retrieve(<%_ if (!paginationNo) { _%>paginationQuery<%_ } _%>);
+        const res = await <%- entityInstance %>Service().retrieve(<%_ if (!paginationNo) { _%>paginationQuery<%_ } _%>);
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
         totalItems.value = Number(res.headers['x-total-count']);
@@ -96,9 +96,9 @@ export default defineComponent({
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
         links.value = dataUtils.parseLinks(res.headers?.['link']);
-        <%= entityInstancePlural %>.value.push(...(res.data ?? []));
+        <%- entityInstancePlural %>.value.push(...(res.data ?? []));
 <%_ } else { _%>
-        <%= entityInstancePlural %>.value = res.data;
+        <%- entityInstancePlural %>.value = res.data;
 <%_ } _%>
       } catch (err) {
         alertService.showHttpError(err.response);
@@ -111,12 +111,12 @@ export default defineComponent({
 <%_ if (paginationInfiniteScroll) { _%>
       clear();
 <%_ } else { _%>
-      retrieve<%= entityAngularName %>s();
+      retrieve<%- entityAngularName %>s();
 <%_ } _%>
     };
 
     onMounted(async () => {
-      await retrieve<%= entityAngularName %>s();
+      await retrieve<%- entityAngularName %>s();
     });
 
 <%_ if (searchEngineAny) { _%>
@@ -125,34 +125,34 @@ export default defineComponent({
         return clear();
       }
       currentSearch.value = query;
-      retrieve<%= entityAngularName %>s();
+      retrieve<%- entityAngularName %>s();
     };
 <%_ } _%>
 <%_ if (!readOnly) { _%>
 
     const removeId: Ref<<%- primaryKey.tsType %>> = ref(null);
     const removeEntity = ref<any>(null);
-    const prepareRemove = (instance: I<%= entityAngularName %>) => {
-      removeId.value = instance.<%= primaryKey.name %>;
+    const prepareRemove = (instance: I<%- entityAngularName %>) => {
+      removeId.value = instance.<%- primaryKey.name %>;
       removeEntity.value.show();
     };
     const closeDialog = () => {
       removeEntity.value.hide();
     };
-    const remove<%= entityAngularName %> = async () => {
+    const remove<%- entityAngularName %> = async () => {
       try {
-        await <%= entityInstance %>Service().delete(removeId.value);
+        await <%- entityInstance %>Service().delete(removeId.value);
   <%_ if (enableTranslation) { _%>
-        const message = t$('<%= i18nAlertHeaderPrefix %>.deleted', { param : removeId.value }).toString();
+        const message = t$('<%- i18nAlertHeaderPrefix %>.deleted', { param : removeId.value }).toString();
   <%_ } else { _%>
-        const message = 'A <%= entityAngularName %> is deleted with identifier ' + removeId.value;
+        const message = 'A <%- entityAngularName %> is deleted with identifier ' + removeId.value;
   <%_ } _%>
         alertService.showInfo(message, { variant: 'danger' });
         removeId.value = null;
   <%_ if (paginationInfiniteScroll) { _%>
         clear();
   <%_ } else { _%>
-        retrieve<%= entityAngularName %>s();
+        retrieve<%- entityAngularName %>s();
   <%_ } _%>
         closeDialog();
       } catch (error) {
@@ -178,9 +178,9 @@ export default defineComponent({
     });
 
     // Whenever the data resets or page changes, switch to the new page.
-    watch([<%= entityInstancePlural %>, page], async ([data, page], [_prevData, prevPage]) => {
+    watch([<%- entityInstancePlural %>, page], async ([data, page], [_prevData, prevPage]) => {
       if (data.length === 0 || page !== prevPage) {
-        await retrieve<%= entityAngularName %>s();
+        await retrieve<%- entityAngularName %>s();
       }
     });
 
@@ -210,7 +210,7 @@ export default defineComponent({
     watch([propOrder, reverse], async () => {
       if (page.value === 1) {
         // first page, retrieve new data
-        await retrieve<%= entityAngularName %>s();
+        await retrieve<%- entityAngularName %>s();
       } else {
         // reset the pagination
         clear();
@@ -219,16 +219,16 @@ export default defineComponent({
 
     // Whenever page changes, switch to the new page.
     watch(page, async () => {
-      await retrieve<%= entityAngularName %>s();
+      await retrieve<%- entityAngularName %>s();
     });
   <%_ } _%>
 <%_ } _%>
 
     return {
-      <%= entityInstancePlural %>,
+      <%- entityInstancePlural %>,
       handleSyncList,
       isFetching,
-      retrieve<%= entityAngularName %>s,
+      retrieve<%- entityAngularName %>s,
       clear,
 <%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
       ...dateFormat,
@@ -241,7 +241,7 @@ export default defineComponent({
       removeEntity,
       prepareRemove,
       closeDialog,
-      remove<%= entityAngularName %>,
+      remove<%- entityAngularName %>,
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
       itemsPerPage,

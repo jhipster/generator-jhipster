@@ -68,7 +68,7 @@ export const appConfig: ApplicationConfig = {
 <%_ } _%>
     provideHttpClient(withInterceptors([<%_ if (authenticationTypeJwt) { _%>authInterceptor, <%_ } _%>authExpiredInterceptor, errorHandlerInterceptor, notificationInterceptor])),
     Title,
-    { provide: LOCALE_ID, useValue: '<%= angularLocaleId %>' },
+    { provide: LOCALE_ID, useValue: '<%- angularLocaleId %>' },
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
 <%_ if (enableI18nRTL) { _%>
     FindLanguageFromKeyPipe,

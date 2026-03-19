@@ -65,15 +65,15 @@ describe('User Management Component', () => {
     comp = fixture.componentInstance;
     service = TestBed.inject(UserManagementService);
     mockAccountService = TestBed.inject(AccountService);
-    mockAccountService.isAuthenticated = <%= clientTestFramework %>.fn(() => false);
-    mockAccountService.identity = <%= clientTestFramework %>.fn(() => of(null));
+    mockAccountService.isAuthenticated = <%- clientTestFramework %>.fn(() => false);
+    mockAccountService.identity = <%- clientTestFramework %>.fn(() => of(null));
   });
 
   describe('OnInit', () => {
     it('should call load all on init', inject([], () => {
       // GIVEN
       const headers = new HttpHeaders().append('link', 'link;link');
-      <%= clientTestFramework %>.spyOn(service, 'query').mockReturnValue(
+      <%- clientTestFramework %>.spyOn(service, 'query').mockReturnValue(
         of(
           new HttpResponse({
             body: [{ id: <%- tsKeyId %> } as IUserManagement],
@@ -96,7 +96,7 @@ describe('User Management Component', () => {
       // GIVEN
       const headers = new HttpHeaders().append('link', 'link;link');
       const user = { id: <%- tsKeyId %> } as IUserManagement;
-      <%= clientTestFramework %>.spyOn(service, 'query').mockReturnValue(
+      <%- clientTestFramework %>.spyOn(service, 'query').mockReturnValue(
         of(
           new HttpResponse({
             body: [user],
@@ -104,7 +104,7 @@ describe('User Management Component', () => {
           }),
         ),
       );
-      <%= clientTestFramework %>.spyOn(service, 'update').mockReturnValue(of(user));
+      <%- clientTestFramework %>.spyOn(service, 'update').mockReturnValue(of(user));
 
       // WHEN
       comp.setActive(user, true);

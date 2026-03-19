@@ -3,8 +3,8 @@ kind: Config
 build:
   artifacts:
 <%_ appConfigs.forEach((appConfig) =>  { _%>
-  - image: <%= appConfig.targetImageName %>
-    context: <%= `${directoryPath + appConfig.appFolder}` %>
+  - image: <%- appConfig.targetImageName %>
+    context: <%- `${directoryPath + appConfig.appFolder}` %>
     jib: {}
 <%_ }) _%>
   tagPolicy:

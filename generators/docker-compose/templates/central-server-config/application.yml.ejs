@@ -25,7 +25,7 @@ jhipster:
   security:
     authentication:
       jwt:
-        base64-secret: <%= jwtSecretKey %>
+        base64-secret: <%- jwtSecretKey %>
 <%_ if (monitoringPrometheus) { _%>
 management:
   prometheus:

@@ -18,20 +18,20 @@
 -%>
 long databaseSizeBeforeUpdate = getRepositoryCount();
 
-// Update the <%= entityInstance %> using partial update
-<%= persistClass %> partialUpdated<%= persistClass %> = new <%= persistClass %>();
-partialUpdated<%= persistClass %>.<%- primaryKey.propertyConsumerName %>(<%= persistInstance %>.<%- primaryKey.propertySupplierName %>());
+// Update the <%- entityInstance %> using partial update
+<%- persistClass %> partialUpdated<%- persistClass %> = new <%- persistClass %>();
+partialUpdated<%- persistClass %>.<%- primaryKey.propertyConsumerName %>(<%- persistInstance %>.<%- primaryKey.propertySupplierName %>());
 <%_ fieldsToUpdate = fields.filter(field => field.includeField) %>
 <%_ if (fluentMethods && fieldsToUpdate.length > 0) { _%>
-    partialUpdated<%= persistClass %><% for (field of fieldsToUpdate) { %>
-        .<%= field.fieldName %>(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>)<% if (field.fieldWithContentType) { %>
-            .<%= field.fieldName %>ContentType(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)<% } %><% } %>;
+    partialUpdated<%- persistClass %><% for (field of fieldsToUpdate) { %>
+        .<%- field.fieldName %>(<%- 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>)<% if (field.fieldWithContentType) { %>
+            .<%- field.fieldName %>ContentType(<%- 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)<% } %><% } %>;
 <%_ } else { _%>
   <%_ for (field of fieldsToUpdate) { _%>
     <%_ if (field.includeField) { %>
-    partialUpdated<%= persistClass %>.<%- field.propertyConsumerName %>(<%= field.updateWithValue %>);
+    partialUpdated<%- persistClass %>.<%- field.propertyConsumerName %>(<%- field.updateWithValue %>);
       <%_ if (field.fieldWithContentType) { _%>
-        partialUpdated<%= persistClass %>.<%- field.propertyConsumerName %>ContentType(<%= field.updateWithValue %>_CONTENT_TYPE);
+        partialUpdated<%- persistClass %>.<%- field.propertyConsumerName %>ContentType(<%- field.updateWithValue %>_CONTENT_TYPE);
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
@@ -40,20 +40,20 @@ partialUpdated<%= persistClass %>.<%- primaryKey.propertyConsumerName %>(<%= per
 <%_ if (reactive) { _%>
 webTestClient
 .patch()
-.uri(ENTITY_API_URL_ID, partialUpdated<%= persistClass %>.<%- primaryKey.propertySupplierName %>())
+.uri(ENTITY_API_URL_ID, partialUpdated<%- persistClass %>.<%- primaryKey.propertySupplierName %>())
 .contentType(MediaType.valueOf("application/merge-patch+json"))
-.bodyValue(om.writeValueAsBytes(<%= 'partialUpdated' + persistClass %>))
+.bodyValue(om.writeValueAsBytes(<%- 'partialUpdated' + persistClass %>))
 .exchange()
 .expectStatus()
 .isOk();
 <%_ } else { _%>
-rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, partialUpdated<%= persistClass %>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
+rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, partialUpdated<%- persistClass %>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
 .contentType("application/merge-patch+json")
-.content(om.writeValueAsBytes(<%= 'partialUpdated' + persistClass %>)))
+.content(om.writeValueAsBytes(<%- 'partialUpdated' + persistClass %>)))
 .andExpect(status().isOk());
 <%_ } _%>
 
-// Validate the <%= entityClass %> in the database
+// Validate the <%- entityClass %> in the database
 <%_ if (databaseTypeCouchbase) { _%>
 SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
 <%_ } _%>

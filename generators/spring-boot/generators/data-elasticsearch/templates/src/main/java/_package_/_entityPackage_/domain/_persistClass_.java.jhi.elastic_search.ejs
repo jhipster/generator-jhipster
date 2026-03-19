@@ -21,7 +21,7 @@
  EJS fragments will process % delimiter tags in the template and & delimiter tags during the merge process.
 -%>
 <&_ if (fragment.annotationSection) { -&>
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "<%= entityInstance.toLowerCase() %>")
+@org.springframework.data.elasticsearch.annotations.Document(indexName = "<%- entityInstance.toLowerCase() %>")
 <&_ } -&>
 
 <%_ for (const field of fields) { -%>

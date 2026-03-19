@@ -18,51 +18,51 @@
 -%><%
 let helpBlocks = 0; %>
 {
-    "<%= frontendAppName %>": {
-        "<%= entityTranslationKey %>" : {
+    "<%- frontendAppName %>": {
+        "<%- entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityNameHumanized %>",
+                "title": "<%- entityNameHumanized %>",
                 "refreshListLabel": "Refresh list",
 <%_ if (!readOnly) { _%>
-                "createLabel": "Dodaj <%= entityNameHumanized %>",
-                "createOrEditLabel": "Dodaj lub edytuj: <%= entityNameHumanized %>",
+                "createLabel": "Dodaj <%- entityNameHumanized %>",
+                "createOrEditLabel": "Dodaj lub edytuj: <%- entityNameHumanized %>",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "Szukaj <%= entityNameHumanized %>",
+                "search": "Szukaj <%- entityNameHumanized %>",
 <%_ } _%>
-                "notFound": "No <%= entityNamePluralHumanized %> found"
+                "notFound": "No <%- entityNamePluralHumanized %> found"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "Utworzono nowy obiekt typu <%= entityNameHumanized %> z identyfikatorem {{ param }}",
-            "updated": "Uaktualniono obiekt typu <%= entityNameHumanized %> z identyfikatorem {{ param }}",
-            "deleted": "Usunięto obiekt typu <%= entityNameHumanized %> z identyfikatorem {{ param }}",
+            "created": "Utworzono nowy obiekt typu <%- entityNameHumanized %> z identyfikatorem {{ param }}",
+            "updated": "Uaktualniono obiekt typu <%- entityNameHumanized %> z identyfikatorem {{ param }}",
+            "deleted": "Usunięto obiekt typu <%- entityNameHumanized %> z identyfikatorem {{ param }}",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "Czy na pewno chcesz usunąć <%= entityNameHumanized %> {{ id }}?"
+                "question": "Czy na pewno chcesz usunąć <%- entityNameHumanized %> {{ id }}?"
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityNameHumanized %>"
+                "title": "<%- entityNameHumanized %>"
             }<% for (idx in fields) {
             if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
-            "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
-            "<%= relationships[idx].relationshipName %>": "<%= relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
+            "<%- fields[idx].fieldName %>": "<%- fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%- relationships[idx].relationshipName %>": "<%- relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
             "help": {<% for (idx in fields) {
                 if (fields[idx].documentation) {
                     --helpBlocks; %>
-                "<%= fields[idx].fieldName %>": "<%= fields[idx].documentation %>"<% if (helpBlocks > 0) { %>,<% }
+                "<%- fields[idx].fieldName %>": "<%- fields[idx].documentation %>"<% if (helpBlocks > 0) { %>,<% }
                 }
             } %>
             }<% } %>
         }
     }
 <%_ if (microserviceAppName && !readOnly) { _%>,
-    "<%= microserviceAppName %>": {
-        "<%= entityTranslationKey %>" : {
-            "created": "Utworzono nowy obiekt typu <%= entityNameHumanized %> z identyfikatorem {{ param }}",
-            "updated": "Uaktualniono obiekt typu <%= entityNameHumanized %> z identyfikatorem {{ param }}",
-            "deleted": "Usunięto obiekt typu <%= entityNameHumanized %> z identyfikatorem {{ param }}"
+    "<%- microserviceAppName %>": {
+        "<%- entityTranslationKey %>" : {
+            "created": "Utworzono nowy obiekt typu <%- entityNameHumanized %> z identyfikatorem {{ param }}",
+            "updated": "Uaktualniono obiekt typu <%- entityNameHumanized %> z identyfikatorem {{ param }}",
+            "deleted": "Usunięto obiekt typu <%- entityNameHumanized %> z identyfikatorem {{ param }}"
         }
     }
 <%_ } _%>
