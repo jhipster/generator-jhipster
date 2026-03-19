@@ -1,31 +1,31 @@
 {
-    "userManagement": {
-        "home": {
-            "title": "ユーザーの一覧",
-            "refreshListLabel": "リストの更新",
-            "createLabel": "新しいユーザーの作成",
-            "createOrEditLabel": "ユーザーの作成または編集"
-        },
-        "created": "新しいユーザーがID {{ param }} で作成されました。",
-        "updated": "ID {{ param }} のユーザーが更新されました。",
-        "deleted": "ID {{ param }} のユーザーが削除されました。",
-        "delete": {
-            "question": "ユーザー {{ login }} を削除してよろしいですか?"
-        },
-        "detail": {
-            "title": "ユーザー"
-        },
-        "login": "ログイン",
-        "firstName": "名",
-        "lastName": "姓",
-        "email": "メールアドレス",
-        "activated": "有効",
-        "deactivated": "無効",
-        "profiles": "プロファイル",
-        "langKey": "言語",
-        "createdBy": "作成者",
-        "createdDate": "作成日",
-        "lastModifiedBy": "更新者",
-        "lastModifiedDate": "更新日"
-    }
+  "userManagement": {
+    "home": {
+      "title": "ユーザーの一覧",
+      "refreshListLabel": "リストの更新",
+      "createLabel": "新しいユーザーの作成",
+      "createOrEditLabel": "ユーザーの作成または編集"
+    },
+    "created": "新しいユーザーがID {{ param }} で作成されました。",
+    "updated": "ID {{ param }} のユーザーが更新されました。",
+    "deleted": "ID {{ param }} のユーザーが削除されました。",
+    "delete": {
+      "question": "ユーザー {{ login }} を削除してよろしいですか?"
+    },
+    "detail": {
+      "title": "ユーザー"
+    },
+    "login": "ログイン",
+    "firstName": "名",
+    "lastName": "姓",
+    "email": "メールアドレス",
+    "activated": "有効",
+    "deactivated": "無効",
+    "profiles": "プロファイル",
+    "langKey": "言語",
+    "createdBy": "作成者",
+    "createdDate": "作成日",
+    "lastModifiedBy": "更新者",
+    "lastModifiedDate": "更新日"
+  }
 }

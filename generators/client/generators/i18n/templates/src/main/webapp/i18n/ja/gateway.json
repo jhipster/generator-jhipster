@@ -1,15 +1,15 @@
 {
-    "gateway": {
-        "title": "ゲートウェイ",
-        "routes": {
-            "title": "現在のルート",
-            "url": "URL",
-            "service": "サービス",
-            "servers": "使用可能なサーバ",
-            "error": "警告:使用可能なサーバがありません!"
-        },
-        "refresh": {
-            "button": "リフレッシュ"
-        }
+  "gateway": {
+    "title": "ゲートウェイ",
+    "routes": {
+      "title": "現在のルート",
+      "url": "URL",
+      "service": "サービス",
+      "servers": "使用可能なサーバ",
+      "error": "警告:使用可能なサーバがありません!"
+    },
+    "refresh": {
+      "button": "リフレッシュ"
     }
+  }
 }

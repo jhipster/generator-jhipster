@@ -1,12 +1,12 @@
 {
-    "tracker": {
-        "title": "उपयोगकर्ता की वास्तविक समय गतिविधियों",
-        "table": {
-            "userlogin": "उपयोगकर्ता",
-            "ipaddress": "IP Address",
-            "userAgent": "उपयोगकर्ता प्रतिनिधि",
-            "page": "वर्तमान पृष्ठ",
-            "time": "समय"
-        }
+  "tracker": {
+    "title": "उपयोगकर्ता की वास्तविक समय गतिविधियों",
+    "table": {
+      "userlogin": "उपयोगकर्ता",
+      "ipaddress": "IP Address",
+      "userAgent": "उपयोगकर्ता प्रतिनिधि",
+      "page": "वर्तमान पृष्ठ",
+      "time": "समय"
     }
+  }
 }

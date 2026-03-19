@@ -1,12 +1,12 @@
 {
-    "tracker": {
-        "title": "فعالیت های لحظه‌ای کاربر",
-        "table": {
-            "userlogin": "کاربر",
-            "ipaddress": "IP آدرس",
-            "userAgent": "User agent",
-            "page": "صفحه جاری",
-            "time": "وقت"
-        }
+  "tracker": {
+    "title": "فعالیت های لحظه‌ای کاربر",
+    "table": {
+      "userlogin": "کاربر",
+      "ipaddress": "IP آدرس",
+      "userAgent": "User agent",
+      "page": "صفحه جاری",
+      "time": "وقت"
     }
+  }
 }
