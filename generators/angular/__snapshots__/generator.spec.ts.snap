@@ -756,7 +756,6 @@ describe("UserManagement Management Component", () => {
   computed,
   effect,
   inject,
-  OnInit,
   signal,
   WritableSignal,
   untracked,
@@ -770,7 +769,7 @@ import {
   Router,
   RouterLink,
 } from "@angular/router";
-import { combineLatest, filter, Subscription, tap } from "rxjs";
+import { combineLatest, filter, map, tap } from "rxjs";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap/modal";
 
 import { AlertError } from "app/shared/alert/alert-error";
@@ -822,8 +821,7 @@ import { UserManagementDeleteDialog } from "../delete/user-management-delete-dia
     ItemCount,
   ],
 })
-export class UserManagement implements OnInit {
-  subscription: Subscription | null = null;
+export class UserManagement {
   readonly userManagements = signal<IUserManagement[]>([]);
 
   sortState = sortStateSignal({});
@@ -838,6 +836,12 @@ export class UserManagement implements OnInit {
   readonly isLoading =
     this.userManagementService.userManagementsResource.isLoading;
   protected readonly activatedRoute = inject(ActivatedRoute);
+  protected readonly activatedRouteState = toSignal(
+    combineLatest([
+      this.activatedRoute.queryParamMap,
+      this.activatedRoute.data,
+    ]).pipe(map(([queryParamMap, data]) => ({ queryParamMap, data }))),
+  );
   protected readonly sortService = inject(SortService);
   protected modalService = inject(NgbModal);
 
@@ -856,24 +860,23 @@ export class UserManagement implements OnInit {
         ]),
       );
     });
+    effect(() => {
+      const activatedRouteState = this.activatedRouteState();
+      if (activatedRouteState) {
+        // Only watch for route changes. Other signals should be ignored.
+        untracked(() => {
+          this.fillComponentAttributeFromRoute(
+            activatedRouteState.queryParamMap,
+            activatedRouteState.data,
+          );
+          this.load();
+        });
+      }
+    });
   }
 
   trackLogin = (item: IUserManagement): string =>
     this.userManagementService.getUserManagementIdentifier(item);
-
-  ngOnInit(): void {
-    this.subscription = combineLatest([
-      this.activatedRoute.queryParamMap,
-      this.activatedRoute.data,
-    ])
-      .pipe(
-        tap(([params, data]) =>
-          this.fillComponentAttributeFromRoute(params, data),
-        ),
-        tap(() => this.load()),
-      )
-      .subscribe();
-  }
 
   delete(userManagement: IUserManagement): void {
     const modalRef = this.modalService.open(UserManagementDeleteDialog, {
