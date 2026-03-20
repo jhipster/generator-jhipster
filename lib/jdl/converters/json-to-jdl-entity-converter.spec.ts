@@ -308,9 +308,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
         entities = new Map([
           [
             'TestEntity',
-            JSON.parse(
-              fs.readFileSync(getTestFile('json_to_jdl_converter', 'with_user', '.jhipster', 'TestEntity.json'), 'utf-8').toString(),
-            ),
+            JSON.parse(fs.readFileSync(getTestFile('json_to_jdl_converter', 'with_user', '.jhipster', 'TestEntity.json'), 'utf-8')),
           ],
         ]);
       });
@@ -326,9 +324,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
         entities = new Map([
           [
             'TestEntity',
-            JSON.parse(
-              fs.readFileSync(getTestFile('json_to_jdl_converter', 'with_authority', '.jhipster', 'TestEntity.json'), 'utf-8').toString(),
-            ),
+            JSON.parse(fs.readFileSync(getTestFile('json_to_jdl_converter', 'with_authority', '.jhipster', 'TestEntity.json'), 'utf-8')),
           ],
         ]);
       });
@@ -341,5 +337,5 @@ describe('jdl - JSONToJDLEntityConverter', () => {
 });
 
 function readJsonEntity(entityName: string) {
-  return JSON.parse(fs.readFileSync(getTestFile('jhipster_app', '.jhipster', `${entityName}.json`), 'utf-8').toString());
+  return JSON.parse(fs.readFileSync(getTestFile('jhipster_app', '.jhipster', `${entityName}.json`), 'utf-8'));
 }

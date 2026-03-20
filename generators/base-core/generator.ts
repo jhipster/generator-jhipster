@@ -1322,7 +1322,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       gradleCatalog = gradleCatalog ? this.jhipsterTemplatePath(tomlFile) : this.templatePath(tomlFile);
     }
 
-    const gradleLibsVersions = this.readTemplate(gradleCatalog)?.toString();
+    const gradleLibsVersions = this.readTemplate(gradleCatalog);
     if (gradleLibsVersions) {
       Object.assign(javaDependencies, this.prepareDependencies(getGradleLibsVersionsProperties(gradleLibsVersions), 'java'));
     }

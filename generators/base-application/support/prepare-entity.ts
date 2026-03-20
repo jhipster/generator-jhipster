@@ -125,6 +125,7 @@ export default function prepareEntity(entityWithConfig: BaseApplicationEntity, g
 
   if (entityWithConfig.changelogDate) {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-conversion
       entityWithConfig.changelogDateForRecent = parseChangelog(String(entityWithConfig.changelogDate));
     } catch (error: unknown) {
       throw new Error(`Error parsing changelog date for entity ${entityName}: ${(error as Error).message}`, { cause: error });

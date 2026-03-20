@@ -62,7 +62,7 @@ describe('jdl - JDLExporter', () => {
           );
           exportToJDL(jdlObject, PATH);
           fileExistence = fs.statSync(PATH).isFile();
-          jdlContent = fs.readFileSync(PATH, 'utf-8').toString();
+          jdlContent = fs.readFileSync(PATH, 'utf-8');
         });
 
         it('should export the JDL to the passed path', () => {
@@ -87,7 +87,7 @@ describe('jdl - JDLExporter', () => {
             );
             exportToJDL(jdlObject);
             fileExistence = fs.statSync(DEFAULT_PATH).isFile();
-            jdlContent = fs.readFileSync(DEFAULT_PATH, 'utf-8').toString();
+            jdlContent = fs.readFileSync(DEFAULT_PATH, 'utf-8');
           });
 
           it('should export the JDL to the default one', () => {
