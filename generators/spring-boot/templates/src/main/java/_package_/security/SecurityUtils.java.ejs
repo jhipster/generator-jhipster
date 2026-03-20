@@ -144,8 +144,8 @@ public final class SecurityUtils {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
   <%_ } _%>
-            .filter(authentication -> authentication.getCredentials() instanceof String)
-            .map(authentication -> (String) authentication.getCredentials());
+            .filter(authentication -> authentication.getCredentials() instanceof Jwt)
+            .map(authentication -> ((Jwt) authentication.getCredentials()).getTokenValue());
     }
   <%_ if (user) { _%>
 
