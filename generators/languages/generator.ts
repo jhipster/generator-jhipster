@@ -34,7 +34,6 @@ import type {
   Config as LanguagesConfig,
   Entity as LanguagesEntity,
   Options as LanguagesOptions,
-  Source as LanguagesSource,
 } from './types.ts';
 
 const { NO: NO_CLIENT_FRAMEWORK, ANGULAR } = clientFrameworkTypes;
@@ -46,8 +45,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
   LanguagesEntity,
   LanguagesApplication<LanguagesEntity>,
   LanguagesConfig,
-  LanguagesOptions,
-  LanguagesSource
+  LanguagesOptions
 > {
   askForMoreLanguages!: boolean;
   askForNativeLanguage!: boolean;

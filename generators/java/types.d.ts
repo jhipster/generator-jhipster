@@ -111,13 +111,12 @@ type SpringApplication = {
   generateSpringAuditor: boolean;
 };
 
-export type Application<E extends BaseApplicationEntity<BaseApplicationField, BaseApplicationRelationship> = Entity<Field, Relationship>> =
-  BaseApplicationApplication<E> &
-    JavaSimpleApplicationApplication &
-    JavaAddedApplicationProperties &
-    GradleApplication &
-    SpringApplication &
-    LanguagesApplication &
-    DatabaseApplication;
+export type Application<E extends BaseApplicationEntity = Entity> = BaseApplicationApplication<E> &
+  JavaSimpleApplicationApplication &
+  JavaAddedApplicationProperties &
+  GradleApplication &
+  SpringApplication &
+  LanguagesApplication &
+  DatabaseApplication;
 
 export type Source = BaseApplicationSource & JavaSimpleApplicationSource;

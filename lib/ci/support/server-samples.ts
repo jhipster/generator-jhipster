@@ -1,9 +1,7 @@
-import type { ConfigAll } from '../../types/command-all.ts';
-
 import { MatrixGateway, MatrixMicroservice, MatrixMonolith, ReactiveMatrix } from './application-samples.ts';
 import { type Matrix, type MatrixInput, buildSamplesFromMatrix, extendFilteredMatrix, extendMatrix, fromMatrix } from './matrix-utils.ts';
 
-export const buildServerMatrix = (matrix: MatrixInput<ConfigAll> = {}): Matrix<ConfigAll> => {
+export const buildServerMatrix = (matrix: MatrixInput = {}): Matrix => {
   let serverMatrix = extendMatrix(
     {
       ...fromMatrix({
