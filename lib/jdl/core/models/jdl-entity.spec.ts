@@ -193,7 +193,7 @@ describe('jdl - JDLEntity', () => {
         );
         result = '';
         entity.forEachField(field => {
-          result += `${field.name}`;
+          result += field.name;
         });
       });
 

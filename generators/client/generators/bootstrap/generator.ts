@@ -80,7 +80,7 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
           entityPage: ({ microserviceName, entityFileName }) =>
             microserviceName && application.microfrontend && application.applicationTypeMicroservice
               ? `${microserviceName.toLowerCase()}/${entityFileName}`
-              : `${entityFileName}`,
+              : entityFileName,
         });
       },
     });

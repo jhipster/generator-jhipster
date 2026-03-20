@@ -125,7 +125,7 @@ describe('jdl - JDLField', () => {
         });
         result = '';
         field.forEachValidation(validation => {
-          result += `${validation.name}`;
+          result += validation.name;
         });
       });
 

@@ -397,7 +397,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator<Base
       this.log.warn('If you forgot to generate the Docker image for this application, please run:');
       this.log.log(chalk.red(warningMessage));
     } else {
-      this.log.verboseInfo(`${chalk.bold.green('Docker Compose configuration successfully generated!')}`);
+      this.log.verboseInfo(chalk.bold.green('Docker Compose configuration successfully generated!'));
     }
   }
 
