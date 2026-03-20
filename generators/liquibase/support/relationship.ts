@@ -88,7 +88,7 @@ export function prepareRelationshipForLiquibase({
   mutateData(relationship, {
     __override__: false,
     columnDataType: (data: any) => data.otherEntity.columnType,
-    columnRequired: data => data.nullable === false || data.relationshipRequired,
+    columnRequired: data => !data.nullable || data.relationshipRequired,
     liquibaseGenerateFakeData: data => data.columnRequired && data.persistableRelationship && !data.collection,
   });
 

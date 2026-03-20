@@ -283,7 +283,7 @@ function getInjectedFieldInSourceEntity(relationship: JSONRelationship): string 
 }
 
 function addEntityOptionsToJDL(entity: JSONEntity, entityName: string): void {
-  if (entity.fluentMethods === false) {
+  if (!entity.fluentMethods) {
     addUnaryOptionToJDL(NO_FLUENT_METHOD, entityName);
   }
   [DTO, PAGINATION, SERVICE].forEach(option => {

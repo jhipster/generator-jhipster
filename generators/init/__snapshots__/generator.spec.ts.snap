@@ -10,10 +10,10 @@ Options:
   --remove-needles              Remove needles, needles are used by entity and language generators to inject code
   --skip-git                    Skip git repository initialization
   --force-git                   Force commit to git repository
-  --commit-msg <value>          Commit changes (implies forceGit)
+  --commit-msg [value]          Commit changes (implies forceGit)
   --monorepository              Use monorepository
-  --base-name <value>           Application base name
-  --prettier-tab-width <value>  Default tab width for prettier (default: 2)
+  --base-name [value]           Application base name
+  --prettier-tab-width [value]  Default tab width for prettier (default: 2)
   --skip-commit-hook            Skip adding husky commit hooks
   -h, --help                    display help for command
 "

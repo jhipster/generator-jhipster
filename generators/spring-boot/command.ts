@@ -141,7 +141,7 @@ const command = {
         message: 'Do you want to generate a feign client?',
         when: ({ reactive }) =>
           [APPLICATION_TYPE_MICROSERVICE].includes(gen.jhipsterConfigWithDefaults.applicationType) &&
-          (reactive ?? gen.jhipsterConfigWithDefaults.reactive) === false,
+          !(reactive ?? gen.jhipsterConfigWithDefaults.reactive),
       }),
       jdl: {
         type: 'boolean',

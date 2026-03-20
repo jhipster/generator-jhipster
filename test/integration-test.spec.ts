@@ -144,7 +144,7 @@ describe('integration-test', () => {
             }
           }
           if (clientFrameworkNo) {
-            if (config.skipClient === false) {
+            if (!config.skipClient) {
               if (fixSamples) {
                 delete config.skipClient;
                 writeConfig();

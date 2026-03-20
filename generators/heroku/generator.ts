@@ -545,7 +545,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
   ): Promise<{ stdout: string; stderr: string; exitCode: number }> {
     const { verboseInfo, ...spawnOptions } = opt;
     const child = this.spawnCommand(`heroku ${command}`, { stdio: 'pipe', reject: false, ...spawnOptions });
-    if (opt.stdio !== 'pipe' || verboseInfo === false) {
+    if (opt.stdio !== 'pipe' || !verboseInfo) {
       return (await child) as any;
     }
     return (await this.printChildOutput(child)) as any;
@@ -557,7 +557,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
   ): Promise<{ stdout: string; stderr: string; exitCode: number }> {
     const { verboseInfo, ...spawnOptions } = opt;
     const child = this.spawn('heroku', args, { stdio: 'pipe', reject: false, ...spawnOptions });
-    if (spawnOptions.stdio !== 'pipe' || verboseInfo === false) {
+    if (spawnOptions.stdio !== 'pipe' || !verboseInfo) {
       return (await child) as any;
     }
     return (await this.printChildOutput(child)) as any;
