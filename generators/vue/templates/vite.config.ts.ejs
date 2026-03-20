@@ -107,7 +107,7 @@ let config = defineConfig({
       ].map(res => [
         res,
         {
-          target: 'http://localhost:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
+          target: 'http://localhost:<%- applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
 <%_ if (communicationSpringWebsocket) { _%>
           ws: res === '/websocket',
 <%_ } _%>
@@ -126,18 +126,18 @@ config = mergeConfig(config, {
   },
   plugins: [
     federation({
-      name: '<%= lowercaseBaseName %>',
+      name: '<%- lowercaseBaseName %>',
   <%_ if (applicationTypeGateway) { _%>
       remotes: {
     <%_ for (const remote of microfrontends) { _%>
-        '@<%= remote.lowercaseBaseName %>': `/<%= remote.endpointPrefix %>/assets/remoteEntry.js`,
+        '@<%- remote.lowercaseBaseName %>': `/<%- remote.endpointPrefix %>/assets/remoteEntry.js`,
   <%_ } _%>
       },
   <%_ } _%>
   <%_ if (applicationTypeMicroservice) { _%>
       exposes: {
-        './entities-router': './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/router/entities',
-        './entities-menu': './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entities-menu.vue',
+        './entities-router': './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/router/entities',
+        './entities-menu': './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entities-menu.vue',
       },
   <%_ } _%>
       shared: {
@@ -152,19 +152,19 @@ config = mergeConfig(config, {
         'vue-router': {},
         pinia: {},
         '@/shared/jhipster/constants': {
-          packagePath: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/shared/jhipster/constants',
+          packagePath: './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/shared/jhipster/constants',
   <%_ if (applicationTypeGateway) { _%>
           version: sharedAppVersion,
   <%_ } _%>
         },
         '@/shared/alert/alert.service': {
-          packagePath: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/shared/alert/alert.service',
+          packagePath: './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/shared/alert/alert.service',
   <%_ if (applicationTypeGateway) { _%>
           version: sharedAppVersion,
   <%_ } _%>
         },
         '@/locale/translation.service': {
-          packagePath: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/locale/translation.service',
+          packagePath: './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/locale/translation.service',
   <%_ if (applicationTypeGateway) { _%>
           version: sharedAppVersion,
   <%_ } _%>

@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.domain;
+package <%- packageName %>.domain;
 
-import <%= packageName %>.config.Constants;
+import <%- packageName %>.config.Constants;
 
 <%_ if (databaseTypeCouchbase) { _%>
 import org.springframework.data.couchbase.core.mapping.Field;
@@ -70,7 +70,7 @@ import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.IdAttribute;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.couchbase.repository.Collection;
-import static <%= packageName %>.domain.User.TYPE_NAME;
+import static <%- packageName %>.domain.User.TYPE_NAME;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
 import org.springframework.data.elasticsearch.annotations.FieldType;
@@ -96,7 +96,7 @@ import java.util.UUID;
 <%_ } _%>
 
 <%_ if (databaseTypeCouchbase) { _%>
-import static <%= packageName %>.config.Constants.ID_DELIMITER;
+import static <%- packageName %>.config.Constants.ID_DELIMITER;
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.USE_ATTRIBUTES;
 
 <%_ } _%>
@@ -107,16 +107,16 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
   <%_ if (!reactive) { _%>
 @Entity
   <%_ } _%>
-@Table(<% if (!reactive) { %>name = <% } %>"<%= user.entityTableName %>")
+@Table(<% if (!reactive) { %>name = <% } %>"<%- user.entityTableName %>")
 <%_ } _%>
 <%_ if (enableHibernateCache) { _%>
 @Cache(usage = CacheConcurrencyStrategy.<% if (!cacheProviderInfinispan) { %>NONSTRICT_<% } %>READ_WRITE)
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
-@org.springframework.data.mongodb.core.mapping.Document(collection = "<%= jhiTablePrefix %>_user")
+@org.springframework.data.mongodb.core.mapping.Document(collection = "<%- jhiTablePrefix %>_user")
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
-@Node("<%= user.entityTableName %>")
+@Node("<%- user.entityTableName %>")
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
 @Document
@@ -134,7 +134,7 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_ if (searchEngineElasticsearch) { _%>
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "user")
 <%_ } _%>
-public class <%= user.persistClass %><% if (generateSpringAuditor) { %> extends AbstractAuditingEntity<<%= user.primaryKey.type %>><% } %> implements Serializable<% if (databaseTypeSql && reactive && requiresPersistableImplementation) { %>, Persistable<<% if (user.primaryKey.hasUUID) { %>UUID<% } else { %>String<% } %>><% } %> {
+public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends AbstractAuditingEntity<<%- user.primaryKey.type %>><% } %> implements Serializable<% if (databaseTypeSql && reactive && requiresPersistableImplementation) { %>, Persistable<<% if (user.primaryKey.hasUUID) { %>UUID<% } else { %>String<% } %>><% } %> {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -191,7 +191,7 @@ public class <%= user.persistClass %><% if (generateSpringAuditor) { %> extends 
     @org.springframework.data.elasticsearch.annotations.Field(type = FieldType.Keyword)
   <%_ } _%>
 <%_ } _%>
-    private <%= user.primaryKey.type %> id;
+    private <%- user.primaryKey.type %> id;
 
     @NotNull
     @Pattern(regexp = Constants.LOGIN_REGEX)
@@ -398,7 +398,7 @@ public class <%= user.persistClass %><% if (generateSpringAuditor) { %> extends 
 <%_ if (databaseTypeSql && !reactive) { _%>
     @ManyToMany
     @JoinTable(
-        name = "<%= user.entityTableName %>_authority",
+        name = "<%- user.entityTableName %>_authority",
         joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
   <%_ if (enableHibernateCache) {
@@ -435,11 +435,11 @@ public class <%= user.persistClass %><% if (generateSpringAuditor) { %> extends 
     private boolean isPersisted;
 <%_ } _%>
 
-    public <%= user.primaryKey.type %> getId() {
+    public <%- user.primaryKey.type %> getId() {
         return id;
     }
 
-    public void setId(<%= user.primaryKey.type %> id) {
+    public void setId(<%- user.primaryKey.type %> id) {
         this.id = id;
     }
 
@@ -562,7 +562,7 @@ public class <%= user.persistClass %><% if (generateSpringAuditor) { %> extends 
         return !isPersisted;
     }
 
-    public <%= user.persistClass %> setIsPersisted() {
+    public <%- user.persistClass %> setIsPersisted() {
         this.isPersisted = true;
         return this;
     }
@@ -573,10 +573,10 @@ public class <%= user.persistClass %><% if (generateSpringAuditor) { %> extends 
         if (this == o) {
             return true;
         }
-        if (!(o instanceof <%= user.persistClass %>)) {
+        if (!(o instanceof <%- user.persistClass %>)) {
             return false;
         }
-        return id != null && id.equals(((<%= user.persistClass %>) o).id);
+        return id != null && id.equals(((<%- user.persistClass %>) o).id);
     }
 
     @Override
@@ -588,7 +588,7 @@ public class <%= user.persistClass %><% if (generateSpringAuditor) { %> extends 
     // prettier-ignore
     @Override
     public String toString() {
-        return "<%= user.persistClass %>{" +
+        return "<%- user.persistClass %>{" +
             "login='" + login + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +

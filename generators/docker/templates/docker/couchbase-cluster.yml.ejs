@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: <%= baseName.toLowerCase() %>
+name: <%- baseName.toLowerCase() %>
 services:
   couchbase:
     build:
@@ -33,13 +33,13 @@ services:
       - 127.0.0.1:11210:11210
     environment:
       - TYPE=MASTER
-      - BUCKET=<%= baseName %>
+      - BUCKET=<%- baseName %>
   couchbase-node:
     build:
       context: .
       dockerfile: couchbase/Couchbase.Dockerfile
     environment:
       - TYPE=WORKER
-      - BUCKET=<%= baseName %>
-      - COUCHBASE_MASTER=<%= baseName.toLowerCase() %>-couchbase
+      - BUCKET=<%- baseName %>
+      - COUCHBASE_MASTER=<%- baseName.toLowerCase() %>-couchbase
       - AUTO_REBALANCE=false

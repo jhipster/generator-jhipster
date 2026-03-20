@@ -22,7 +22,7 @@ import dayjs from 'dayjs/esm';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap/datepicker';
 import { provideRouter } from '@angular/router';
-import locale from '@angular/common/locales/<%= angularLocaleId %>';
+import locale from '@angular/common/locales/<%- angularLocaleId %>';
 import appRoutes from './app.routes';
 
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
@@ -36,8 +36,8 @@ import { TrackerService } from './core/tracker/tracker.service';
 <%_ } _%>
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-app',
-  template: '<<%= jhiPrefixDashed %>-main />',
+  selector: '<%- jhiPrefixDashed %>-app',
+  template: '<<%- jhiPrefixDashed %>-main />',
   imports: [
     Main,
   ],

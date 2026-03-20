@@ -17,51 +17,51 @@
  limitations under the License.
 -%><% let helpBlocks = 0; %>
 {
-    "<%= frontendAppName %>": {
-        "<%= entityTranslationKey %>" : {
+    "<%- frontendAppName %>": {
+        "<%- entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityNamePluralHumanized %>",
+                "title": "<%- entityNamePluralHumanized %>",
                 "refreshListLabel": "Refresh list",
 <%_ if (!readOnly) { _%>
-                "createLabel": "కొత్త <%= entityNameHumanized %> సృష్టించండి",
-                "createOrEditLabel": "<%= entityNameHumanized %> సృష్టించండి లేదా సవరించండి",
+                "createLabel": "కొత్త <%- entityNameHumanized %> సృష్టించండి",
+                "createOrEditLabel": "<%- entityNameHumanized %> సృష్టించండి లేదా సవరించండి",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "<%= entityNameHumanized %> కొరకు శోధించండి",
+                "search": "<%- entityNameHumanized %> కొరకు శోధించండి",
 <%_ } _%>
-                "notFound": "No <%= entityNamePluralHumanized %> found"
+                "notFound": "No <%- entityNamePluralHumanized %> found"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "{{ param }} ఐడీ తో ఒక కొత్త <%= entityNameHumanized %> సృష్టించబడినది",
-            "updated": "{{ param }} ఐడీ తో ఒక కొత్త <%= entityNameHumanized %> సవరించబడినది",
-            "deleted": "{{ param }} ఐడీ తో ఒక కొత్త <%= entityNameHumanized %> తొలగించబడినది",
+            "created": "{{ param }} ఐడీ తో ఒక కొత్త <%- entityNameHumanized %> సృష్టించబడినది",
+            "updated": "{{ param }} ఐడీ తో ఒక కొత్త <%- entityNameHumanized %> సవరించబడినది",
+            "deleted": "{{ param }} ఐడీ తో ఒక కొత్త <%- entityNameHumanized %> తొలగించబడినది",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "మీరు <%= entityNameHumanized %> {{ id }} ఖచ్చితంగా తొలగించాలనుకుంటున్నారా?"
+                "question": "మీరు <%- entityNameHumanized %> {{ id }} ఖచ్చితంగా తొలగించాలనుకుంటున్నారా?"
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityNameHumanized %>"
+                "title": "<%- entityNameHumanized %>"
             }<% for (idx in fields) {
             if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
-            "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
-            "<%= relationships[idx].relationshipName %>": "<%= relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
+            "<%- fields[idx].fieldName %>": "<%- fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%- relationships[idx].relationshipName %>": "<%- relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
             "help": {<% for (idx in fields) {
                 if (fields[idx].documentation) {
                     --helpBlocks; %>
-                "<%= fields[idx].fieldName %>": "<%= fields[idx].documentation %>"<% if (helpBlocks > 0) { %>,<% }
+                "<%- fields[idx].fieldName %>": "<%- fields[idx].documentation %>"<% if (helpBlocks > 0) { %>,<% }
                 }
             } %>
             }<% } %>
         }
     }
 <%_ if (microserviceAppName && !readOnly) { _%>,
-    "<%= microserviceAppName %>": {
-        "<%= entityTranslationKey %>" : {
-            "created": "{{ param }} ఐడీ తో ఒక కొత్త <%= entityNameHumanized %> సృష్టించబడినది",
-            "updated": "{{ param }} ఐడీ తో ఒక కొత్త <%= entityNameHumanized %> సవరించబడినది",
-            "deleted": "{{ param }} ఐడీ తో ఒక కొత్త <%= entityNameHumanized %> తొలగించబడినది"
+    "<%- microserviceAppName %>": {
+        "<%- entityTranslationKey %>" : {
+            "created": "{{ param }} ఐడీ తో ఒక కొత్త <%- entityNameHumanized %> సృష్టించబడినది",
+            "updated": "{{ param }} ఐడీ తో ఒక కొత్త <%- entityNameHumanized %> సవరించబడినది",
+            "deleted": "{{ param }} ఐడీ తో ఒక కొత్త <%- entityNameHumanized %> తొలగించబడినది"
         }
     }
 <%_ } _%>

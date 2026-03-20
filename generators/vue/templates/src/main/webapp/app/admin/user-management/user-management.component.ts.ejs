@@ -10,7 +10,7 @@ import { getMessageFromHeaders } from '@/shared/jhipster/headers';
 import UserManagementService from './user-management.service';
 
 export default defineComponent({
-  name: '<%=jhiPrefixCapitalized%>UserManagementComponent',
+  name: '<%- jhiPrefixCapitalized %>UserManagementComponent',
   setup() {
     const alertService = inject('alertService', () => useAlertService(), true);
     const { formatDateShort: formatDate } = useDateFormat();
@@ -27,7 +27,7 @@ export default defineComponent({
     const reverse = ref(false);
 <%_ } _%>
     const isLoading = ref(false);
-    const removeId: Ref<<%- user.primaryKey.tsType _%>> = ref(null);
+    const removeId: Ref<<%- user.primaryKey.tsType %>> = ref(null);
     const users: Ref<any[]> = ref([]);
 <%_ if (!databaseTypeCassandra) { _%>
     const totalItems = ref(0);

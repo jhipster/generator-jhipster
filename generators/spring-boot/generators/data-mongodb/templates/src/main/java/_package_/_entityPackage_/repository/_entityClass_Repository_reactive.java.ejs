@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= entityAbsolutePackage %>.repository;
+package <%- entityAbsolutePackage %>.repository;
 
-import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
+import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
 <%_ if (!paginationNo || implementsEagerLoadApis) { _%>
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
@@ -39,24 +39,24 @@ import java.util.UUID;
 <%_ } _%>
 
 /**
- * <%= springDataDescription %> repository for the <%= persistClass %> entity.
+ * <%- springDataDescription %> repository for the <%- persistClass %> entity.
  */
 @SuppressWarnings("unused")
 @Repository
-public interface <%= entityClass %>Repository extends ReactiveMongoRepository<<%= persistClass %>, <%= primaryKey.type %>> {
+public interface <%- entityClass %>Repository extends ReactiveMongoRepository<<%- persistClass %>, <%- primaryKey.type %>> {
 
 <%_ if (!paginationNo) { _%>
-    Flux<<%= persistClass %>> findAllBy(Pageable pageable);
+    Flux<<%- persistClass %>> findAllBy(Pageable pageable);
 <%_ } _%>
 <%_ if (implementsEagerLoadApis) { _%>
 
-    @Query("<%= (databaseTypeMongodb) ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
-    Flux<<%= persistClass %>> findAllWithEagerRelationships(Pageable pageable);
+    @Query("<%- (databaseTypeMongodb) ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
+    Flux<<%- persistClass %>> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query("<%= (databaseTypeMongodb) ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
-    Flux<<%= persistClass %>> findAllWithEagerRelationships();
+    @Query("<%- (databaseTypeMongodb) ? '{}' : '#{#n1ql.selectEntity} WHERE #{#n1ql.filter}' %>")
+    Flux<<%- persistClass %>> findAllWithEagerRelationships();
 
     @Query("<%- (databaseTypeMongodb) ? "{'id': ?0}" : "#{#n1ql.selectEntity} USE KEYS $1 WHERE #{#n1ql.filter}" %>")
-    Mono<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
+    Mono<<%- persistClass %>> findOneWithEagerRelationships(<%- primaryKey.type %> id);
 <%_ } _%>
 }

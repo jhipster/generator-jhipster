@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-export const MESSAGE_ALERT_HEADER_NAME = '<%= messageHeaderNameAlert %>';
-export const MESSAGE_ERROR_HEADER_NAME = '<%= messageHeaderNameError %>';
-export const MESSAGE_PARAM_HEADER_NAME = '<%= messageHeaderNameParam %>';
+export const MESSAGE_ALERT_HEADER_NAME = '<%- messageHeaderNameAlert %>';
+export const MESSAGE_ERROR_HEADER_NAME = '<%- messageHeaderNameError %>';
+export const MESSAGE_PARAM_HEADER_NAME = '<%- messageHeaderNameParam %>';
 <%_ if (authenticationUsesCsrf) { _%>
 export const CSRF_TOKEN_HEADER_NAME = 'X-XSRF-TOKEN';
 export const CSRF_TOKEN_COOKIE_NAME = 'XSRF-TOKEN';

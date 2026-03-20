@@ -10,29 +10,29 @@ jobs:
       run:
         working-directory: ${{ github.workspace }}/app
     steps:
-      - uses: <%= githubActions['actions/checkout'] %>
+      - uses: <%- githubActions['actions/checkout'] %>
         with:
-          path: generator-jhipster-<%= baseName %>
-      - uses: <%= githubActions['jhipster/actions/setup-runner'] %>
+          path: generator-jhipster-<%- baseName %>
+      - uses: <%- githubActions['jhipster/actions/setup-runner'] %>
         with:
           node-version: 24
-          binary-dir: ${{ github.workspace }}/generator-jhipster-<%= baseName %>/cli/
-      - uses: <%= githubActions['jhipster/actions/cache-npm-dependencies'] %>
+          binary-dir: ${{ github.workspace }}/generator-jhipster-<%- baseName %>/cli/
+      - uses: <%- githubActions['jhipster/actions/cache-npm-dependencies'] %>
         with:
-          generator-path: generator-jhipster-<%= baseName %>
+          generator-path: generator-jhipster-<%- baseName %>
         if: always()
       - run: cli.cjs generate-sample --all
         continue-on-error: true
       - run: npm run backend:build-cache --workspaces
         continue-on-error: true
-      - uses: <%= githubActions['jhipster/actions/save-cache'] %>
+      - uses: <%- githubActions['jhipster/actions/save-cache'] %>
         if: always()
         with:
           key: ${{ github.run_id }}
           npm: true
           maven: true
           gradle: true
-      - uses: <%= githubActions['jhipster/actions/restore-cache'] %>
+      - uses: <%- githubActions['jhipster/actions/restore-cache'] %>
         with:
           npm: true
           maven: true

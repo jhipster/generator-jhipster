@@ -4,12 +4,12 @@ import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
 import HealthService from './health.service';
-import <%=jhiPrefixCapitalized%>HealthModal from './health-modal.vue';
+import <%- jhiPrefixCapitalized %>HealthModal from './health-modal.vue';
 
 export default defineComponent({
-  name: '<%=jhiPrefixCapitalized%>Health',
+  name: '<%- jhiPrefixCapitalized %>Health',
   components: {
-    'health-modal': <%=jhiPrefixCapitalized%>HealthModal,
+    'health-modal': <%- jhiPrefixCapitalized %>HealthModal,
   },
   setup() {
     const healthService = inject('healthService', () => new HealthService(), true);

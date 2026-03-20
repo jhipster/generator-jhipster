@@ -17,40 +17,40 @@
  limitations under the License.
 -%>
 {
-    "<%= frontendAppName %>": {
-        "<%= entityTranslationKey %>" : {
+    "<%- frontendAppName %>": {
+        "<%- entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityNamePluralHumanized %>",
+                "title": "<%- entityNamePluralHumanized %>",
                 "refreshListLabel": "Refresh list",
 <%_ if (!readOnly) { _%>
-                "createLabel": "Create a new <%= entityNameHumanized %>",
-                "createOrEditLabel": "Create or edit a <%= entityNameHumanized %>",
+                "createLabel": "Create a new <%- entityNameHumanized %>",
+                "createOrEditLabel": "Create or edit a <%- entityNameHumanized %>",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "Search for <%= entityNameHumanized %>",
+                "search": "Search for <%- entityNameHumanized %>",
 <%_ } _%>
-                "notFound": "No <%= entityNamePluralHumanized %> found"
+                "notFound": "No <%- entityNamePluralHumanized %> found"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "A new <%= entityNameHumanized %> is created with identifier {{ param }}",
-            "updated": "A <%= entityNameHumanized %> is updated with identifier {{ param }}",
-            "deleted": "A <%= entityNameHumanized %> is deleted with identifier {{ param }}",
+            "created": "A new <%- entityNameHumanized %> is created with identifier {{ param }}",
+            "updated": "A <%- entityNameHumanized %> is updated with identifier {{ param }}",
+            "deleted": "A <%- entityNameHumanized %> is deleted with identifier {{ param }}",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "Are you sure you want to delete <%= entityNameHumanized %> {{ id }}?"
+                "question": "Are you sure you want to delete <%- entityNameHumanized %> {{ id }}?"
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityNameHumanized %>"
+                "title": "<%- entityNameHumanized %>"
             }
 <%_ for (const field of fields) { -%>
             ,
-            "<%= field.fieldName %>": "<%= field.fieldNameHumanized %>"
+            "<%- field.fieldName %>": "<%- field.fieldNameHumanized %>"
 <%_ } -%>
 <% for (const relationship of relationships) { -%>
             ,
-            "<%= relationship.relationshipName %>": "<%= relationship.relationshipNameHumanized %>"
+            "<%- relationship.relationshipName %>": "<%- relationship.relationshipNameHumanized %>"
 <%_ } -%>
 <%_ const fieldsWithDoc = fields.filter(field => field.documentation); -%>
 <%_ if (fieldsWithDoc.length > 0) { -%>
@@ -58,7 +58,7 @@
             ,
             "help": {
   <%_ for (const field of fieldsWithDoc) { _%>
-                "<%= field.fieldName %>": "<%= field.documentation %>"<% if (field !== lastField) { %>,<% } %>
+                "<%- field.fieldName %>": "<%- field.documentation %>"<% if (field !== lastField) { %>,<% } %>
   <%_ } _%>
             }
 <%_ } _%>
@@ -66,11 +66,11 @@
     }
 <%_ if (microserviceAppName && !readOnly) { -%>
     ,
-    "<%= microserviceAppName %>": {
-        "<%= entityTranslationKey %>" : {
-            "created": "A new <%= entityNameHumanized %> is created with identifier {{ param }}",
-            "updated": "A <%= entityNameHumanized %> is updated with identifier {{ param }}",
-            "deleted": "A <%= entityNameHumanized %> is deleted with identifier {{ param }}"
+    "<%- microserviceAppName %>": {
+        "<%- entityTranslationKey %>" : {
+            "created": "A new <%- entityNameHumanized %> is created with identifier {{ param }}",
+            "updated": "A <%- entityNameHumanized %> is updated with identifier {{ param }}",
+            "deleted": "A <%- entityNameHumanized %> is deleted with identifier {{ param }}"
         }
     }
 <%_ } _%>

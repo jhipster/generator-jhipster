@@ -10,9 +10,9 @@ in the cluster. Follow [this link](https://knative.dev/docs/install/) for instru
 ```
 <%_ for (const app of appConfigs) { _%>
   <%_ if (app.baseName.toLowerCase() !== app.targetImageName) { _%>
-    $ docker image tag <%= app.baseName.toLowerCase() %> <%= app.targetImageName %>
+    $ docker image tag <%- app.baseName.toLowerCase() %> <%- app.targetImageName %>
   <%_ } _%>
-$ <%= dockerPushCommand %> <%= app.targetImageName %>
+$ <%- dockerPushCommand %> <%- app.targetImageName %>
 <%_ } _%>
 ```
 * This generator uses k8s generator for most of the part, except the core microservices apps that are (k)native.

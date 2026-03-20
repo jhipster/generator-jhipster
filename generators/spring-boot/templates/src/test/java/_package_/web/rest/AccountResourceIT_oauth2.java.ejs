@@ -16,15 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.web.rest;
+package <%- packageName %>.web.rest;
 
-import static <%= packageName %>.test.util.OAuth2TestUtil.TEST_USER_LOGIN;
-import static <%= packageName %>.test.util.OAuth2TestUtil.registerAuthenticationToken;
+import static <%- packageName %>.test.util.OAuth2TestUtil.TEST_USER_LOGIN;
+import static <%- packageName %>.test.util.OAuth2TestUtil.registerAuthenticationToken;
 <%_ if (reactive) { _%>
-import static <%= packageName %>.test.util.OAuth2TestUtil.authenticationToken;
+import static <%- packageName %>.test.util.OAuth2TestUtil.authenticationToken;
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.*;
 <%_ } else { _%>
-import static <%= packageName %>.test.util.OAuth2TestUtil.testAuthenticationToken;
+import static <%- packageName %>.test.util.OAuth2TestUtil.testAuthenticationToken;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
   <%_ if (searchEngineElasticsearch) { _%>
@@ -32,10 +32,10 @@ import static org.mockito.Mockito.*;
   <%_ } _%>
 <%_ } _%>
 
-import <%= packageName %>.IntegrationTest;
-import <%= packageName %>.security.AuthoritiesConstants;
+import <%- packageName %>.IntegrationTest;
+import <%- packageName %>.security.AuthoritiesConstants;
 <%_ if (syncUserWithIdp) { _%>
-import <%= packageName %>.repository.UserRepository;
+import <%- packageName %>.repository.UserRepository;
 <%_ } _%>
 
 import org.junit.jupiter.api.Test;

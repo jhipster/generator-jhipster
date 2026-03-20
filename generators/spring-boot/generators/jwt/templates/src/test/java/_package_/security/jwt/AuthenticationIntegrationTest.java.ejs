@@ -1,19 +1,19 @@
-package <%= packageName %>.security.jwt;
+package <%- packageName %>.security.jwt;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import <%= packageName %>.config.SecurityConfiguration;
-import <%= packageName %>.config.SecurityJwtConfiguration;
-import <%= packageName %>.config.WebConfigurer;
-import <%= packageName %>.management.SecurityMetersService;
+import <%- packageName %>.config.SecurityConfiguration;
+import <%- packageName %>.config.SecurityJwtConfiguration;
+import <%- packageName %>.config.WebConfigurer;
+import <%- packageName %>.management.SecurityMetersService;
 <%_ if (!applicationTypeMicroservice) { _%>
-import <%= packageName %>.web.rest.AuthenticateController;
+import <%- packageName %>.web.rest.AuthenticateController;
 <%_ } _%>
 <%_ if (reactive && generateBuiltInUserEntity) { _%>
-import <%= packageName %>.repository.UserRepository;
+import <%- packageName %>.repository.UserRepository;
 <%_ } _%>
 
 import tech.jhipster.config.JHipsterProperties;

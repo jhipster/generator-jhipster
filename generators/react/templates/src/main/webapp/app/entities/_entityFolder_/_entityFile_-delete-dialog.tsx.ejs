@@ -23,9 +23,9 @@ import { Translate } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { getEntity, deleteEntity } from './<%= entityFileName %>.reducer';
+import { getEntity, deleteEntity } from './<%- entityFileName %>.reducer';
 
-export const <%= entityReactName %>DeleteDialog = () => {
+export const <%- entityReactName %>DeleteDialog = () => {
   const dispatch = useAppDispatch();
 <%_ if (paginationPagination) { _%>
   const pageLocation = useLocation();
@@ -40,11 +40,11 @@ export const <%= entityReactName %>DeleteDialog = () => {
     setLoadModal(true);
   }, []);
 
-  const <%= entityInstance %>Entity = useAppSelector(state => state.<%= entityReactState %>.entity);
-  const updateSuccess = useAppSelector(state => state.<%= entityReactState %>.updateSuccess);
+  const <%- entityInstance %>Entity = useAppSelector(state => state.<%- entityReactState %>.entity);
+  const updateSuccess = useAppSelector(state => state.<%- entityReactState %>.updateSuccess);
 
   const handleClose = () => {
-    navigate('/<%= entityPage %>'<%_ if (paginationPagination) { _%> + pageLocation.search<%_ } _%>);
+    navigate('/<%- entityPage %>'<%_ if (paginationPagination) { _%> + pageLocation.search<%_ } _%>);
   };
 
   useEffect(() => {
@@ -55,14 +55,14 @@ export const <%= entityReactName %>DeleteDialog = () => {
   }, [updateSuccess]);
 
   const confirmDelete = () => {
-    dispatch(deleteEntity(<%= entityInstance %>Entity.<%= primaryKey.name %>));
+    dispatch(deleteEntity(<%- entityInstance %>Entity.<%- primaryKey.name %>));
   }
 
   return (
     <Modal show onHide={handleClose}>
-    <ModalHeader data-cy="<%= entityInstance %>DeleteDialogHeading" closeButton><Translate contentKey="entity.delete.title">Confirm delete operation</Translate></ModalHeader>
-    <ModalBody id="<%= i18nKeyPrefix %>.delete.question">
-      <Translate contentKey="<%= i18nKeyPrefix %>.delete.question" interpolate={{ id: <%= entityInstance %>Entity.<%= primaryKey.name %> }}>
+    <ModalHeader data-cy="<%- entityInstance %>DeleteDialogHeading" closeButton><Translate contentKey="entity.delete.title">Confirm delete operation</Translate></ModalHeader>
+    <ModalBody id="<%- i18nKeyPrefix %>.delete.question">
+      <Translate contentKey="<%- i18nKeyPrefix %>.delete.question" interpolate={{ id: <%- entityInstance %>Entity.<%- primaryKey.name %> }}>
           Are you sure you want to delete this <%- entityNameCapitalized %>?
       </Translate>
     </ModalBody>
@@ -71,7 +71,7 @@ export const <%= entityReactName %>DeleteDialog = () => {
         <FontAwesomeIcon icon="ban" />&nbsp;
         <Translate contentKey="entity.action.cancel">Cancel</Translate>
       </Button>
-      <Button id="<%= jhiPrefixDashed %>-confirm-delete-<%= entityInstance %>" data-cy="entityConfirmDeleteButton" variant="danger" onClick={confirmDelete}>
+      <Button id="<%- jhiPrefixDashed %>-confirm-delete-<%- entityInstance %>" data-cy="entityConfirmDeleteButton" variant="danger" onClick={confirmDelete}>
         <FontAwesomeIcon icon="trash" />&nbsp;
         <Translate contentKey="entity.action.delete">Delete</Translate>
       </Button>
@@ -80,4 +80,4 @@ export const <%= entityReactName %>DeleteDialog = () => {
   );
 };
 
-export default <%= entityReactName %>DeleteDialog;
+export default <%- entityReactName %>DeleteDialog;

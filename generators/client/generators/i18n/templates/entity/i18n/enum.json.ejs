@@ -17,10 +17,10 @@
  limitations under the License.
 -%>
 {
-    "<%= frontendAppName %>": {
-        "<%= enumName %>" : {
+    "<%- frontendAppName %>": {
+        "<%- enumName %>" : {
             "null": ""<% enumValues.forEach(enumValue => { %>,
-            "<%= enumValue.name %>": "<%= enumValue.value %>"<% }); %>
+            "<%- enumValue.name %>": "<%- enumValue.value %>"<% }); %>
         }
     }
 }

@@ -60,10 +60,10 @@ export default <% if (cypressCoverage) { %>async <% } %>(on: Cypress.PluginEvent
   on('task', {
     lighthouse: lighthouse(async (lighthouseReport) => {
       const { default: ReportGenerator } = await import('lighthouse/report/generator/report-generator');
-      if (!existsSync('<%= cypressTemporaryDir %>')) {
-        mkdirSync('<%= cypressTemporaryDir %>', { recursive: true });
+      if (!existsSync('<%- cypressTemporaryDir %>')) {
+        mkdirSync('<%- cypressTemporaryDir %>', { recursive: true });
       }
-      writeFileSync('<%= cypressTemporaryDir %>lhreport.html', ReportGenerator.generateReport(lighthouseReport.lhr, 'html'));
+      writeFileSync('<%- cypressTemporaryDir %>lhreport.html', ReportGenerator.generateReport(lighthouseReport.lhr, 'html'));
     }),
     pa11y: pa11y(),
   });

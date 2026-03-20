@@ -32,86 +32,86 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import dayjs from 'dayjs/esm';
 import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 <%_ } _%>
-import { I<%= entityAngularName %>, New<%= entityAngularName %> } from '../<%= entityFileName %>.model';
+import { I<%- entityAngularName %>, New<%- entityAngularName %> } from '../<%- entityFileName %>.model';
 
 /**
  * A partial Type with required key is used as form input.
  */
-type PartialWithRequiredKeyOf<T extends { <%= primaryKey.name %>: unknown }> = Partial<Omit<T, '<%= primaryKey.name %>'>> & { <%= primaryKey.name %>: T['<%= primaryKey.name %>'] };
+type PartialWithRequiredKeyOf<T extends { <%- primaryKey.name %>: unknown }> = Partial<Omit<T, '<%- primaryKey.name %>'>> & { <%- primaryKey.name %>: T['<%- primaryKey.name %>'] };
 
 /**
  * Type for createFormGroup and resetForm argument.
- * It accepts I<%= entityAngularName %> for edit and New<%= entityAngularName %>FormGroupInput for create.
+ * It accepts I<%- entityAngularName %> for edit and New<%- entityAngularName %>FormGroupInput for create.
  */
-type <%= entityAngularName %>FormGroupInput = I<%= entityAngularName %> | PartialWithRequiredKeyOf<New<%= entityAngularName %>>;
+type <%- entityAngularName %>FormGroupInput = I<%- entityAngularName %> | PartialWithRequiredKeyOf<New<%- entityAngularName %>>;
 <%_ if (anyFieldIsTimeDerived) { _%>
 
 /**
  * Type that converts some properties for forms.
  */
-type FormValueOf<T extends I<%= entityAngularName %> | New<%= entityAngularName %>> = Omit<T, '<%- fields.filter(field => field.fieldTypeTimed).map(field => field.fieldName).join("' | '") %>'> & {
+type FormValueOf<T extends I<%- entityAngularName %> | New<%- entityAngularName %>> = Omit<T, '<%- fields.filter(field => field.fieldTypeTimed).map(field => field.fieldName).join("' | '") %>'> & {
   <%_ for (const field of fields.filter(field => field.fieldTypeTimed)) { _%>
-  <%= field.fieldName %>?: string | null;
+  <%- field.fieldName %>?: string | null;
   <%_ } _%>
 };
 
-type <%= entityAngularName %>FormRawValue =  FormValueOf<I<%= entityAngularName %>>;
+type <%- entityAngularName %>FormRawValue =  FormValueOf<I<%- entityAngularName %>>;
 
-type New<%= entityAngularName %>FormRawValue =  FormValueOf<New<%= entityAngularName %>>;
+type New<%- entityAngularName %>FormRawValue =  FormValueOf<New<%- entityAngularName %>>;
 <%_ } _%>
 <%_ if (containDefaultProperties) { _%>
 
-type <%= entityAngularName %>FormDefaults = Pick<New<%= entityAngularName %>, '<%- formDefaultProperties.join("' | '") %>'>;
+type <%- entityAngularName %>FormDefaults = Pick<New<%- entityAngularName %>, '<%- formDefaultProperties.join("' | '") %>'>;
 <%_ } _%>
 
-type <%= entityAngularName %>FormGroupContent = {
+type <%- entityAngularName %>FormGroupContent = {
 <%_ for (field of fields) {
       const { fieldName } = field;
 _%>
-  <%= fieldName %>: FormControl<<%= entityFormName %>['<%= fieldName %>']<% if (field.id) { %> | New<%= entityAngularName %>['<%= fieldName %>']<% } %>>;
+  <%- fieldName %>: FormControl<<%- entityFormName %>['<%- fieldName %>']<% if (field.id) { %> | New<%- entityAngularName %>['<%- fieldName %>']<% } %>>;
   <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-  <%= fieldName %>ContentType: FormControl<<%= entityFormName %>['<%= fieldName %>ContentType']>;
+  <%- fieldName %>ContentType: FormControl<<%- entityFormName %>['<%- fieldName %>ContentType']>;
   <%_ } _%>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(relationship => relationship.persistableRelationship)) {
       const { propertyName } = relationship;
 _%>
-  <%= propertyName %>: FormControl<<%= entityFormName %>['<%= propertyName %>']>;
+  <%- propertyName %>: FormControl<<%- entityFormName %>['<%- propertyName %>']>;
 <%_ } _%>
 };
 
-export type <%= entityAngularName %>FormGroup = FormGroup<<%= entityAngularName %>FormGroupContent>;
+export type <%- entityAngularName %>FormGroup = FormGroup<<%- entityAngularName %>FormGroupContent>;
 
 @Injectable({ providedIn: 'root' })
-export class <%= entityAngularName %>FormService {
-  create<%= entityAngularName %>FormGroup(<%= entityInstance %>?: <%= entityAngularName %>FormGroupInput): <%= entityAngularName %>FormGroup {
-    const <%= entityInstance %>RawValue =
+export class <%- entityAngularName %>FormService {
+  create<%- entityAngularName %>FormGroup(<%- entityInstance %>?: <%- entityAngularName %>FormGroupInput): <%- entityAngularName %>FormGroup {
+    const <%- entityInstance %>RawValue =
 <%_ if (anyFieldIsTimeDerived) { _%>
-      this.convert<%= entityAngularName %>To<%= entityAngularName %>RawValue(
+      this.convert<%- entityAngularName %>To<%- entityAngularName %>RawValue(
 <%_ } _%>
 <%_ if (containDefaultProperties) { _%>
         {
           ...this.getFormDefaults(),
-          ...<%= entityInstance %> ?? { <%= primaryKey.name %>: null },
+          ...<%- entityInstance %> ?? { <%- primaryKey.name %>: null },
         }
 <%_ } else { _%>
-        <%= entityInstance %> ?? { <%= primaryKey.name %>: null }
+        <%- entityInstance %> ?? { <%- primaryKey.name %>: null }
 <%_ } _%>
 <%_ if (anyFieldIsTimeDerived) { _%>
       )
 <%_ } _%>
     ;
 
-    return new FormGroup<<%= entityAngularName %>FormGroupContent>({
+    return new FormGroup<<%- entityAngularName %>FormGroupContent>({
 <%_ for (const field of fields) {
       const { fieldName, fieldValidationRequired, fieldValidationMinLength, fieldValidationMaxLength, fieldValidationMin, fieldValidationMax, fieldValidationPattern } = field;
       const usesValidators = fieldValidationRequired || fieldValidationMinLength || fieldValidationMaxLength || fieldValidationMin || fieldValidationMax || fieldValidationPattern || field.id;
 _%>
-      <%= fieldName %>: new FormControl(
+      <%- fieldName %>: new FormControl(
   <%_ if (field.id) { _%>
-        { value: <%= entityInstance %>RawValue.<%= fieldName %>, disabled: <% if (field.autoGenerate) { %>true<% } else { %><%= entityInstance %>RawValue.<%= fieldName %> !== null<% } %> },
+        { value: <%- entityInstance %>RawValue.<%- fieldName %>, disabled: <% if (field.autoGenerate) { %>true<% } else { %><%- entityInstance %>RawValue.<%- fieldName %> !== null<% } %> },
   <%_ } else { _%>
-        <%= entityInstance %>RawValue.<%= fieldName %>,
+        <%- entityInstance %>RawValue.<%- fieldName %>,
   <%_ } _%>
   <%_ if (usesValidators) { _%>
         {
@@ -123,16 +123,16 @@ _%>
             Validators.required,
     <%_ } _%>
     <%_ if (field.fieldValidationMinLength) { _%>
-            Validators.minLength(<%= field.fieldValidateRulesMinlength %>),
+            Validators.minLength(<%- field.fieldValidateRulesMinlength %>),
     <%_ } _%>
     <%_ if (field.fieldValidationMaxLength) { _%>
-            Validators.maxLength(<%= field.fieldValidateRulesMaxlength %>),
+            Validators.maxLength(<%- field.fieldValidateRulesMaxlength %>),
     <%_ } _%>
     <%_ if (field.fieldValidationMin) { _%>
-            Validators.min(<%= field.fieldValidateRulesMin %>),
+            Validators.min(<%- field.fieldValidateRulesMin %>),
     <%_ } _%>
     <%_ if (field.fieldValidationMax) { _%>
-            Validators.max(<%= field.fieldValidateRulesMax %>),
+            Validators.max(<%- field.fieldValidateRulesMax %>),
     <%_ } _%>
     <%_ if (field.fieldValidationPattern) { _%>
             Validators.pattern('<%- field.fieldValidateRulesPatternAngular %>'), // NOSONAR
@@ -142,14 +142,14 @@ _%>
   <%_ } _%>
       ),
   <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-      <%= fieldName %>ContentType: new FormControl(<%= entityInstance %>RawValue.<%= fieldName %>ContentType),
+      <%- fieldName %>ContentType: new FormControl(<%- entityInstance %>RawValue.<%- fieldName %>ContentType),
   <%_ } _%>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(relationship => relationship.persistableRelationship)) {
       const { relationshipRequired, propertyName, collection } = relationship;
 _%>
-      <%= propertyName %>: new FormControl(
-        <%= entityInstance %>RawValue.<%= propertyName %><% if (collection) { %> ?? []<% } %>
+      <%- propertyName %>: new FormControl(
+        <%- entityInstance %>RawValue.<%- propertyName %><% if (collection) { %> ?? []<% } %>
   <%_ if (!collection && relationshipRequired) { _%>
         , {
           validators: [Validators.required],
@@ -160,38 +160,38 @@ _%>
     });
   }
 
-  get<%= entityAngularName %>(form: <%= entityAngularName %>FormGroup):<% if (updatableEntity) { %> I<%= entityAngularName %> |<% } %> New<%= entityAngularName %> {
+  get<%- entityAngularName %>(form: <%- entityAngularName %>FormGroup):<% if (updatableEntity) { %> I<%- entityAngularName %> |<% } %> New<%- entityAngularName %> {
 <%_ if (anyFieldIsTimeDerived) { _%>
-    return this.convert<%= entityAngularName %>RawValueTo<%= entityAngularName %>(form.getRawValue() as <%= entityAngularName %>FormRawValue | New<%= entityAngularName %>FormRawValue);
+    return this.convert<%- entityAngularName %>RawValueTo<%- entityAngularName %>(form.getRawValue() as <%- entityAngularName %>FormRawValue | New<%- entityAngularName %>FormRawValue);
 <%_ } else { _%>
-    return form.getRawValue() as<% if (updatableEntity) { %> I<%= entityAngularName %> |<% } %> New<%= entityAngularName %>;
+    return form.getRawValue() as<% if (updatableEntity) { %> I<%- entityAngularName %> |<% } %> New<%- entityAngularName %>;
 <%_ } _%>
   }
 
-  resetForm(form: <%= entityAngularName %>FormGroup, <%= entityInstance %>: <%= entityAngularName %>FormGroupInput): void {
-    const <%= entityInstance %>RawValue =
+  resetForm(form: <%- entityAngularName %>FormGroup, <%- entityInstance %>: <%- entityAngularName %>FormGroupInput): void {
+    const <%- entityInstance %>RawValue =
 <%_ if (anyFieldIsTimeDerived) { _%>
-      this.convert<%= entityAngularName %>To<%= entityAngularName %>RawValue(
+      this.convert<%- entityAngularName %>To<%- entityAngularName %>RawValue(
 <%_ } _%>
 <%_ if (containDefaultProperties) { _%>
-        {...this.getFormDefaults(), ...<%= entityInstance %> }
+        {...this.getFormDefaults(), ...<%- entityInstance %> }
 <%_ } else { _%>
-        <%= entityInstance %>
+        <%- entityInstance %>
 <%_ } _%>
 <%_ if (anyFieldIsTimeDerived) { _%>
       )
 <%_ } _%>
     ;
     form.reset({
-      ...<%= entityInstance %>RawValue,
+      ...<%- entityInstance %>RawValue,
 <%_ for (const field of fields.filter(field => field.id)) { _%>
-      <%= field.fieldName %>: { value: <%= entityInstance %>RawValue.<%= field.fieldName %>, disabled: <% if (field.autoGenerate) { %>true<% } else { %><%= entityInstance %>RawValue.<%= field.fieldName %> !== null<% } %> },
+      <%- field.fieldName %>: { value: <%- entityInstance %>RawValue.<%- field.fieldName %>, disabled: <% if (field.autoGenerate) { %>true<% } else { %><%- entityInstance %>RawValue.<%- field.fieldName %> !== null<% } %> },
 <%_ } _%>
     });
   }
 <%_ if (containDefaultProperties) { _%>
 
-  private getFormDefaults(): <%= entityAngularName %>FormDefaults {
+  private getFormDefaults(): <%- entityAngularName %>FormDefaults {
   <%_ if (fields.some(field => field.fieldTypeTimed)) { _%>
       const currentTime = dayjs();
   <%_ } _%>
@@ -201,14 +201,14 @@ _%>
         const { fieldName, fieldTypeBoolean, fieldTypeTimed } = field;
   _%>
     <%_ if (field.fieldTsDefaultValue) { _%>
-        <%= fieldName %>: <%- field.fieldTsDefaultValue %>,
+        <%- fieldName %>: <%- field.fieldTsDefaultValue %>,
     <%_ } else { _%>
       <%_ if (field.id) { _%>
-        <%= fieldName %>: null,
+        <%- fieldName %>: null,
       <%_ } else if (fieldTypeBoolean) { _%>
-        <%= fieldName %>: false,
+        <%- fieldName %>: false,
       <%_ } else if (fieldTypeTimed) { _%>
-        <%= fieldName %>: currentTime,
+        <%- fieldName %>: currentTime,
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
@@ -216,7 +216,7 @@ _%>
         const { propertyName, collection } = relationship;
   _%>
     <%_ if (collection) { _%>
-      <%= propertyName %>: [],
+      <%- propertyName %>: [],
     <%_ } _%>
   <%_ } _%>
     };
@@ -224,34 +224,34 @@ _%>
 <%_ } _%>
 <%_ if (anyFieldIsTimeDerived) { _%>
 
-  private convert<%= entityAngularName %>RawValueTo<%= entityAngularName %>(raw<%= entityAngularName %>: <%= entityAngularName %>FormRawValue | New<%= entityAngularName %>FormRawValue): I<%= entityAngularName %> | New<%= entityAngularName %> {
+  private convert<%- entityAngularName %>RawValueTo<%- entityAngularName %>(raw<%- entityAngularName %>: <%- entityAngularName %>FormRawValue | New<%- entityAngularName %>FormRawValue): I<%- entityAngularName %> | New<%- entityAngularName %> {
     return {
-      ...raw<%= entityAngularName %>,
+      ...raw<%- entityAngularName %>,
 <%_ for (field of fields) {
       const { fieldName, fieldTypeTimed } = field;
 _%>
   <%_ if (fieldTypeTimed) { _%>
-      <%= fieldName %>: dayjs(raw<%= entityAngularName %>.<%= fieldName %>, DATE_TIME_FORMAT),
+      <%- fieldName %>: dayjs(raw<%- entityAngularName %>.<%- fieldName %>, DATE_TIME_FORMAT),
   <%_ } _%>
 <%_ } _%>
     };
   }
 
-  private convert<%= entityAngularName %>To<%= entityAngularName %>RawValue(<%= entityInstance %>: I<%= entityAngularName %> | (Partial<New<%= entityAngularName %>> & <%= entityAngularName %>FormDefaults)): <%= entityAngularName %>FormRawValue | PartialWithRequiredKeyOf<New<%= entityAngularName %>FormRawValue> {
+  private convert<%- entityAngularName %>To<%- entityAngularName %>RawValue(<%- entityInstance %>: I<%- entityAngularName %> | (Partial<New<%- entityAngularName %>> & <%- entityAngularName %>FormDefaults)): <%- entityAngularName %>FormRawValue | PartialWithRequiredKeyOf<New<%- entityAngularName %>FormRawValue> {
     return {
-      ...<%= entityInstance %>,
+      ...<%- entityInstance %>,
 <%_ for (field of fields) {
       const { fieldName, fieldTypeTimed } = field;
 _%>
   <%_ if (fieldTypeTimed) { _%>
-      <%= fieldName %>: <%= entityInstance %>.<%= fieldName %> ? <%= entityInstance %>.<%= fieldName %>.format(DATE_TIME_FORMAT) : undefined,
+      <%- fieldName %>: <%- entityInstance %>.<%- fieldName %> ? <%- entityInstance %>.<%- fieldName %>.format(DATE_TIME_FORMAT) : undefined,
   <%_ } _%>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(({ persistableRelationship }) => persistableRelationship)) {
       const { propertyName, collection } = relationship;
 _%>
   <%_ if (collection) { _%>
-      <%= propertyName %>: <%= entityInstance %>.<%= propertyName %> ?? [],
+      <%- propertyName %>: <%- entityInstance %>.<%- propertyName %> ?? [],
   <%_ } _%>
 <%_ } _%>
     };

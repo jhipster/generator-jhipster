@@ -34,51 +34,51 @@
         Nenhum = 'Nenhuma';
         encontrado = 'encontrada';
     } _%>
-    "<%= frontendAppName %>": {
-        "<%= entityTranslationKey %>" : {
+    "<%- frontendAppName %>": {
+        "<%- entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityNamePluralHumanized %>",
+                "title": "<%- entityNamePluralHumanized %>",
                 "refreshListLabel": "Atualizar lista",
 <%_ if (!readOnly) { _%>
-                "createLabel": "Criar <%= novo %> <%= entityNameHumanized %>",
-                "createOrEditLabel": "Criar ou editar <%= entityNameHumanized %>",
+                "createLabel": "Criar <%- novo %> <%- entityNameHumanized %>",
+                "createOrEditLabel": "Criar ou editar <%- entityNameHumanized %>",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "Pesquisar por <%= entityNameHumanized %>",
+                "search": "Pesquisar por <%- entityNameHumanized %>",
 <%_ } _%>
-                "notFound": "<%= Nenhum %> <%= entityNameHumanized %> <%= encontrado %>"
+                "notFound": "<%- Nenhum %> <%- entityNameHumanized %> <%- encontrado %>"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "<%= Um %> <%= novo %> <%= entityNameHumanized %> foi <%= criado %> com o identificador {{ param }}",
-            "updated": "<%= Um %> <%= entityNameHumanized %> foi <%= atualizado %> com o identificador {{ param }}",
-            "deleted": "<%= Um %> <%= entityNameHumanized %> foi <%= excluido %> com o identificador {{ param }}",
+            "created": "<%- Um %> <%- novo %> <%- entityNameHumanized %> foi <%- criado %> com o identificador {{ param }}",
+            "updated": "<%- Um %> <%- entityNameHumanized %> foi <%- atualizado %> com o identificador {{ param }}",
+            "deleted": "<%- Um %> <%- entityNameHumanized %> foi <%- excluido %> com o identificador {{ param }}",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "Tem certeza de que deseja excluir <%= entityNameHumanized %> {{ id }}?"
+                "question": "Tem certeza de que deseja excluir <%- entityNameHumanized %> {{ id }}?"
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityNameHumanized %>"
+                "title": "<%- entityNameHumanized %>"
             }<% for (idx in fields) {
             if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
-            "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
-            "<%= relationships[idx].relationshipName %>": "<%= relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
+            "<%- fields[idx].fieldName %>": "<%- fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%- relationships[idx].relationshipName %>": "<%- relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
             "help": {<% for (idx in fields) {
                 if (fields[idx].documentation) {
                     --helpBlocks; %>
-                "<%= fields[idx].fieldName %>": "<%= fields[idx].documentation %>"<% if (helpBlocks > 0) { %>,<% }
+                "<%- fields[idx].fieldName %>": "<%- fields[idx].documentation %>"<% if (helpBlocks > 0) { %>,<% }
                 }
             } %>
             }<% } %>
         }
     }
 <%_ if (microserviceAppName && !readOnly) { _%>,
-    "<%= microserviceAppName %>": {
-        "<%= entityTranslationKey %>" : {
-            "created": "<%= Um %> <%= novo %> <%= entityNameHumanized %> foi <%= criado %> com o identificador {{ param }}",
-            "updated": "<%= Um %> <%= entityNameHumanized %> foi <%= atualizado %> com o identificador {{ param }}",
-            "deleted": "<%= Um %> <%= entityNameHumanized %> foi <%= excluido %> com o identificador {{ param }}"
+    "<%- microserviceAppName %>": {
+        "<%- entityTranslationKey %>" : {
+            "created": "<%- Um %> <%- novo %> <%- entityNameHumanized %> foi <%- criado %> com o identificador {{ param }}",
+            "updated": "<%- Um %> <%- entityNameHumanized %> foi <%- atualizado %> com o identificador {{ param }}",
+            "deleted": "<%- Um %> <%- entityNameHumanized %> foi <%- excluido %> com o identificador {{ param }}"
         }
     }
 <%_ } _%>

@@ -23,11 +23,11 @@
 <&_ if (fragment.introSection) { -&>
   <%_ if (applicationTypeGateway || applicationTypeMicroservice) { _%>
 
-This is a "<%= applicationType %>" application intended to be part of a microservice architecture, please refer to the [Doing microservices with JHipster][] page of the documentation for more information.
+This is a "<%- applicationType %>" application intended to be part of a microservice architecture, please refer to the [Doing microservices with JHipster][] page of the documentation for more information.
   <%_ } _%>
   <%_ if (serviceDiscoveryAny) { _%>
 
-This application is configured for Service Discovery and Configuration with <% if (serviceDiscoveryEureka) { %>the JHipster-Registry<% } %><% if (serviceDiscoveryConsul) { %>Consul<% } %>. On launch, it will refuse to start if it is not able to connect to <% if (serviceDiscoveryEureka) { %>the JHipster-Registry at [http://localhost:8761](http://localhost:8761)<% } %><% if (serviceDiscoveryConsul) { %>Consul at [http://localhost:8500](http://localhost:8500)<% } %>.<% if (serviceDiscoveryEureka) { %> For more information, read our documentation on [JHipster Registry](<%= documentationArchiveUrl %>/jhipster-registry/).<% } %><% if (serviceDiscoveryConsul) { %> For more information, read our documentation on [Consul][<%= documentationArchiveUrl %>/consul/).<% } %>
+This application is configured for Service Discovery and Configuration with <% if (serviceDiscoveryEureka) { %>the JHipster-Registry<% } %><% if (serviceDiscoveryConsul) { %>Consul<% } %>. On launch, it will refuse to start if it is not able to connect to <% if (serviceDiscoveryEureka) { %>the JHipster-Registry at [http://localhost:8761](http://localhost:8761)<% } %><% if (serviceDiscoveryConsul) { %>Consul at [http://localhost:8500](http://localhost:8500)<% } %>.<% if (serviceDiscoveryEureka) { %> For more information, read our documentation on [JHipster Registry](<%- documentationArchiveUrl %>/jhipster-registry/).<% } %><% if (serviceDiscoveryConsul) { %> For more information, read our documentation on [Consul][<%- documentationArchiveUrl %>/consul/).<% } %>
   <%_ } _%>
 
 <&_ } -&>
@@ -38,7 +38,7 @@ Node is required for generation and recommended for development. `package.json` 
 In the project root, JHipster generates configuration files for tools like git, prettier, eslint, husky, and others that are well known and you can find references in the web.
 
   <%_ if (backendTypeJavaAny) { %>
-`/src/*` structure follows default <%= backendType %> structure.
+`/src/*` structure follows default <%- backendType %> structure.
 
   <%_ } _%>
 - `.yo-rc.json` - Yeoman configuration file
@@ -130,7 +130,7 @@ Create an OIDC App in Okta to get a `{clientId}` and `{clientSecret}`. To do thi
 
 Create a `ROLE_ADMIN` and `ROLE_USER` group and add users into them. Modify e2e tests to use this account when running integration tests.
 <%_ if (!skipClient) { _%>
-You'll need to change credentials in `<%= locals.clientTestDir %>e2e/account/account.spec.ts` and `<%= locals.clientTestDir %>e2e/admin/administration.spec.ts`.
+You'll need to change credentials in `<%- locals.clientTestDir %>e2e/account/account.spec.ts` and `<%- locals.clientTestDir %>e2e/admin/administration.spec.ts`.
 <%_ } _%>
 
 Navigate to **API** > **Authorization Servers**, click the **Authorization Servers** tab and edit the default one. Click the **Claims** tab and **Add Claim**. Name it "groups", and include it in the ID Token. Set the value type to "Groups" and set the filter to be a Regex of `.*`.
@@ -217,7 +217,7 @@ To launch your application's tests, run:
 <&_ if (fragment.productionSection) { -&>
 ### Packaging as jar
 
-To build the final jar and optimize the <%= baseName %> application for production, run:
+To build the final jar and optimize the <%- baseName %> application for production, run:
 
 ```bash
 <%_ if (buildToolMaven) { _%>
@@ -242,7 +242,7 @@ java -jar build/libs/*.jar
 <%_ } _%>
 ```
 
-<% if (!skipClient) { %>Then navigate to [http://localhost:<%= serverPort %>](http://localhost:<%= serverPort %>) in your browser.
+<% if (!skipClient) { %>Then navigate to [http://localhost:<%- serverPort %>](http://localhost:<%- serverPort %>) in your browser.
 <% } %>
 Refer to [Using JHipster in production][] for more details.
 
@@ -355,10 +355,10 @@ Then run:
 docker compose -f <%- dockerServicesDir %>app.yml up -d
 ```
 
-For more information refer to [Docker and Docker-Compose](<%= documentationArchiveUrl %>/docker-compose/), this page also contains information on the Docker Compose sub-generator (`jhipster docker-compose`), which is able to generate Docker configurations for one or several JHipster applications.
+For more information refer to [Docker and Docker-Compose](<%- documentationArchiveUrl %>/docker-compose/), this page also contains information on the Docker Compose sub-generator (`jhipster docker-compose`), which is able to generate Docker configurations for one or several JHipster applications.
 
 ## Continuous Integration (optional)
 
-To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration](<%= documentationArchiveUrl %>/setting-up-ci/) page for more information.
+To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration](<%- documentationArchiveUrl %>/setting-up-ci/) page for more information.
 
 <&_ } -&>

@@ -16,38 +16,39 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= entityAbsolutePackage %>.service.dto;
+package <%- entityAbsolutePackage %>.service.dto;
 
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
-import <%= packageName %>.web.rest.TestUtil;
+import <%- packageName %>.web.rest.TestUtil;
 <%_
 let id1;
 let id2;
 if (!embedded) {
     id1 = primaryKey.javaSampleValues[0];
     id2 = primaryKey.javaSampleValues[1];
-} %>
+}
+%>
 <%_ if (primaryKey && primaryKey.hasUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
 
-class <%= dtoClass %>Test {
+class <%- dtoClass %>Test {
 
     @Test
     void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(<%= dtoClass %>.class);
-<%_if (!embedded) { _%>
-        <%= dtoClass %> <%= dtoInstance %>1 = new <%= dtoClass %>();
-        <%= dtoInstance %>1.<%- primaryKey.propertyConsumerName %>(<%- id1 %>);
-        <%= dtoClass %> <%= dtoInstance %>2 = new <%= dtoClass %>();
-        assertThat(<%= dtoInstance %>1).isNotEqualTo(<%= dtoInstance %>2);
-        <%= dtoInstance %>2.<%- primaryKey.propertyConsumerName %>(<%= dtoInstance %>1.<%- primaryKey.propertySupplierName %>());
-        assertThat(<%= dtoInstance %>1).isEqualTo(<%= dtoInstance %>2);
-        <%= dtoInstance %>2.<%- primaryKey.propertyConsumerName %>(<%- id2 %>);
-        assertThat(<%= dtoInstance %>1).isNotEqualTo(<%= dtoInstance %>2);
-        <%= dtoInstance %>1.<%- primaryKey.propertyConsumerName %>(null);
-        assertThat(<%= dtoInstance %>1).isNotEqualTo(<%= dtoInstance %>2);
+        TestUtil.equalsVerifier(<%- dtoClass %>.class);
+<%_ if (!embedded) { _%>
+        <%- dtoClass %> <%- dtoInstance %>1 = new <%- dtoClass %>();
+        <%- dtoInstance %>1.<%- primaryKey.propertyConsumerName %>(<%- id1 %>);
+        <%- dtoClass %> <%- dtoInstance %>2 = new <%- dtoClass %>();
+        assertThat(<%- dtoInstance %>1).isNotEqualTo(<%- dtoInstance %>2);
+        <%- dtoInstance %>2.<%- primaryKey.propertyConsumerName %>(<%- dtoInstance %>1.<%- primaryKey.propertySupplierName %>());
+        assertThat(<%- dtoInstance %>1).isEqualTo(<%- dtoInstance %>2);
+        <%- dtoInstance %>2.<%- primaryKey.propertyConsumerName %>(<%- id2 %>);
+        assertThat(<%- dtoInstance %>1).isNotEqualTo(<%- dtoInstance %>2);
+        <%- dtoInstance %>1.<%- primaryKey.propertyConsumerName %>(null);
+        assertThat(<%- dtoInstance %>1).isNotEqualTo(<%- dtoInstance %>2);
 <%_ } _%>
     }
 }

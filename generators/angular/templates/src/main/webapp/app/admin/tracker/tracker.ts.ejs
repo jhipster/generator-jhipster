@@ -28,7 +28,7 @@ import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-tracker',
+  selector: '<%- jhiPrefixDashed %>-tracker',
   imports: [DatePipe<%_ if (enableTranslation) { _%>
 , TranslateDirective, TranslateModule<%_ } _%>],
   templateUrl: './tracker.html',

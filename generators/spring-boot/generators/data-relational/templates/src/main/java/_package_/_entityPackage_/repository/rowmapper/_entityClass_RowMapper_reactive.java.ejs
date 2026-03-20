@@ -16,11 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= entityAbsolutePackage %>.repository.rowmapper;
+package <%- entityAbsolutePackage %>.repository.rowmapper;
 
 <%_ if (anyFieldIsBigDecimal) { _%>
 import java.math.BigDecimal;
-<%_} if (anyFieldIsInstant) { _%>
+<%_ } if (anyFieldIsInstant) { _%>
 import java.time.Instant;
 <%_ } if (anyFieldIsLocalDate) { _%>
 import java.time.LocalDate;
@@ -37,45 +37,46 @@ import java.util.function.BiFunction;
 
 import org.springframework.stereotype.Service;
 
-import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
+import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
 <%_ for (const enumField of uniqueEnums) { _%>
 import <%- entityAbsolutePackage %>.domain.enumeration.<%- enumField.fieldType %>;
 <%_ } _%>
 <%_ if (packageName !== entityAbsolutePackage) { _%>
-import <%= packageName %>.repository.rowmapper.ColumnConverter;
+import <%- packageName %>.repository.rowmapper.ColumnConverter;
 <%_ } _%>
 
 import io.r2dbc.spi.Row;
 
 /**
- * Converter between {@link Row} to {@link <%= persistClass %>}, with proper type conversions.
+ * Converter between {@link Row} to {@link <%- persistClass %>}, with proper type conversions.
  */
 @Service
-public class <%= entityClass %>RowMapper implements BiFunction<Row, String, <%= persistClass %>> {
+public class <%- entityClass %>RowMapper implements BiFunction<Row, String, <%- persistClass %>> {
     private final ColumnConverter converter;
-    public <%= entityClass %>RowMapper(ColumnConverter converter) {
+    public <%- entityClass %>RowMapper(ColumnConverter converter) {
         this.converter = converter;
     }
 
     /**
      * Take a {@link Row} and a column prefix, and extract all the fields.
-     * @return the {@link <%= persistClass %>} stored in the database.
+     * @return the {@link <%- persistClass %>} stored in the database.
      */
     @Override
-    public <%= persistClass %> apply(Row row, String prefix) {
-        <%= persistClass %> entity = new <%= persistClass %>();
+    public <%- persistClass %> apply(Row row, String prefix) {
+        <%- persistClass %> entity = new <%- persistClass %>();
 <%_ fields.filter(field => !field.transient).forEach(function(field) {
   let fieldType = field.fieldType;
   if (field.blobContentTypeText) {
     fieldType = 'String';
   }
-  if (field.fieldTypeBytes && !field.blobContentTypeText) { _%>
-        entity.<%- field.propertyConsumerName %>ContentType(converter.fromRow(row, prefix + "_<%= field.fieldNameAsDatabaseColumn %>_content_type", String.class));
+  if (field.fieldTypeBytes && !field.blobContentTypeText) {
+_%>
+        entity.<%- field.propertyConsumerName %>ContentType(converter.fromRow(row, prefix + "_<%- field.fieldNameAsDatabaseColumn %>_content_type", String.class));
   <%_ } _%>
-        entity.<%- field.propertyConsumerName %>(converter.fromRow(row, prefix + "_<%= field.fieldNameAsDatabaseColumn %>", <%= fieldType %>.class));
+        entity.<%- field.propertyConsumerName %>(converter.fromRow(row, prefix + "_<%- field.fieldNameAsDatabaseColumn %>", <%- fieldType %>.class));
 <%_ }); _%>
 <%_ reactiveRegularEagerRelations.forEach(function(rel) { _%>
-        entity.<%- rel.propertyConsumerName %>Id(converter.fromRow(row, prefix + "_<%= rel.joinColumnNames[0] %>", <%= rel.otherEntity.primaryKey.type %>.class));
+        entity.<%- rel.propertyConsumerName %>Id(converter.fromRow(row, prefix + "_<%- rel.joinColumnNames[0] %>", <%- rel.otherEntity.primaryKey.type %>.class));
 <%_ }); _%>
         return entity;
     }

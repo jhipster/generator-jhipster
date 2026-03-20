@@ -17,51 +17,51 @@
  limitations under the License.
 -%><% let helpBlocks = 0; %>
 {
-    "<%= frontendAppName %>": {
-        "<%= entityTranslationKey %>" : {
+    "<%- frontendAppName %>": {
+        "<%- entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityNamePluralHumanized %>",
+                "title": "<%- entityNamePluralHumanized %>",
                 "refreshListLabel": "Refresh list",
 <%_ if (!readOnly) { _%>
-                "createLabel": "නව <%= entityNameHumanized %> එකක් සාදන්න",
-                "createOrEditLabel": "<%= entityNameHumanized %> සාදන්න හෝ සංස්කරණය කරන්න",
+                "createLabel": "නව <%- entityNameHumanized %> එකක් සාදන්න",
+                "createOrEditLabel": "<%- entityNameHumanized %> සාදන්න හෝ සංස්කරණය කරන්න",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "<%= entityNameHumanized %> සඳහා සොයන්න",
+                "search": "<%- entityNameHumanized %> සඳහා සොයන්න",
 <%_ } _%>
-                "notFound": "<%= entityNamePluralHumanized %> හමු නොවීය"
+                "notFound": "<%- entityNamePluralHumanized %> හමු නොවීය"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "{{ param }} හඳුනාගැනීමෙන් නව <%= entityNameHumanized %> සාදනු ලැබේ",
-            "updated": "{{ param }} හඳුනාගැනීමෙන් <%= entityNameHumanized %> යාවත්කාලීන වේ",
-            "deleted": "{{ param }} හඳුනාගැනීමෙන් <%= entityNameHumanized %> මකා දමනු ලැබේ",
+            "created": "{{ param }} හඳුනාගැනීමෙන් නව <%- entityNameHumanized %> සාදනු ලැබේ",
+            "updated": "{{ param }} හඳුනාගැනීමෙන් <%- entityNameHumanized %> යාවත්කාලීන වේ",
+            "deleted": "{{ param }} හඳුනාගැනීමෙන් <%- entityNameHumanized %> මකා දමනු ලැබේ",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "<%= entityNameHumanized %> {{ id }} මකා දැමීමට ඔබට විශ්වාසද?"
+                "question": "<%- entityNameHumanized %> {{ id }} මකා දැමීමට ඔබට විශ්වාසද?"
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityNameHumanized %>"
+                "title": "<%- entityNameHumanized %>"
             }<% for (idx in fields) {
             if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
-            "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
-            "<%= relationships[idx].relationshipName %>": "<%= relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
+            "<%- fields[idx].fieldName %>": "<%- fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%- relationships[idx].relationshipName %>": "<%- relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
             "help": {<% for (idx in fields) {
                 if (fields[idx].documentation) {
                     --helpBlocks; %>
-                "<%= fields[idx].fieldName %>": "<%= fields[idx].documentation %>"<% if (helpBlocks > 0) { %>,<% }
+                "<%- fields[idx].fieldName %>": "<%- fields[idx].documentation %>"<% if (helpBlocks > 0) { %>,<% }
                 }
             } %>
             }<% } %>
         }
     }
 <%_ if (microserviceAppName && !readOnly) { _%>,
-    "<%= microserviceAppName %>": {
-        "<%= entityTranslationKey %>" : {
-            "created": "{{ param }} හඳුනාගැනීමෙන් නව <%= entityNameHumanized %> සාදනු ලැබේ",
-            "updated": "{{ param }} හඳුනාගැනීමෙන් <%= entityNameHumanized %> යාවත්කාලීන වේ",
-            "deleted": "{{ param }} හඳුනාගැනීමෙන් <%= entityNameHumanized %> මකා දමනු ලැබේ"
+    "<%- microserviceAppName %>": {
+        "<%- entityTranslationKey %>" : {
+            "created": "{{ param }} හඳුනාගැනීමෙන් නව <%- entityNameHumanized %> සාදනු ලැබේ",
+            "updated": "{{ param }} හඳුනාගැනීමෙන් <%- entityNameHumanized %> යාවත්කාලීන වේ",
+            "deleted": "{{ param }} හඳුනාගැනීමෙන් <%- entityNameHumanized %> මකා දමනු ලැබේ"
         }
     }
 <%_ } _%>

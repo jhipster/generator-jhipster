@@ -19,13 +19,13 @@
 # This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/reference/config/networking/gateway/ for a more secure 'https' config
 # using certificates and prefer that for production use
-apiVersion: <%= KUBERNETES_ISTIO_NETWORKING_API_VERSION %>
+apiVersion: <%- KUBERNETES_ISTIO_NETWORKING_API_VERSION %>
 kind: Gateway
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-gateway
-  namespace: <%= kubernetesNamespace %>
+  name: <%- app.baseName.toLowerCase() %>-gateway
+  namespace: <%- kubernetesNamespace %>
   labels:
-    gateway: <%= app.baseName.toLowerCase() %>-gateway
+    gateway: <%- app.baseName.toLowerCase() %>-gateway
     istio: ingressgateway
 spec:
   selector:
@@ -36,49 +36,49 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - <%= app.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>
+    - <%- app.baseName.toLowerCase() %>.<%- kubernetesNamespace %>.<%- ingressDomain %>
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - <%= app.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>
+    - <%- app.baseName.toLowerCase() %>.<%- kubernetesNamespace %>.<%- ingressDomain %>
 ---
-apiVersion: <%= KUBERNETES_ISTIO_NETWORKING_API_VERSION %>
+apiVersion: <%- KUBERNETES_ISTIO_NETWORKING_API_VERSION %>
 kind: VirtualService
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-gw-virtualservice
-  namespace: <%= kubernetesNamespace %>
+  name: <%- app.baseName.toLowerCase() %>-gw-virtualservice
+  namespace: <%- kubernetesNamespace %>
   labels:
-    service: <%= app.baseName.toLowerCase() %>-gw-virtualservice
+    service: <%- app.baseName.toLowerCase() %>-gw-virtualservice
 spec:
   hosts:
-  - <%= app.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>
+  - <%- app.baseName.toLowerCase() %>.<%- kubernetesNamespace %>.<%- ingressDomain %>
   gateways:
-  - <%= app.baseName.toLowerCase() %>-gateway
+  - <%- app.baseName.toLowerCase() %>-gateway
   http:
 <%_ if (!app.serviceDiscoveryAny) { _%>
   <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(config => { _%>
   - match:
     - uri:
-        prefix: /services/<%= config.baseName.toLowerCase() %>/
+        prefix: /services/<%- config.baseName.toLowerCase() %>/
     rewrite:
       uri: /
     route:
     - destination:
-        host: <%= config.baseName.toLowerCase() %>-knative
+        host: <%- config.baseName.toLowerCase() %>-knative
       headers:
         request:
           add:
-            Knative-Serving-Namespace: <%= kubernetesNamespace %>
-            Knative-Serving-Revision: <%= config.baseName.toLowerCase() %>-knative
+            Knative-Serving-Namespace: <%- kubernetesNamespace %>
+            Knative-Serving-Revision: <%- config.baseName.toLowerCase() %>-knative
   <%_ }); _%>
 <%_ } _%>
   - route:
     - destination:
-        host: <%= app.baseName.toLowerCase() %>-knative
+        host: <%- app.baseName.toLowerCase() %>-knative
       headers:
         request:
           add:
-            Knative-Serving-Namespace: <%= kubernetesNamespace %>
-            Knative-Serving-Revision: <%= app.baseName.toLowerCase() %>-knative
+            Knative-Serving-Namespace: <%- kubernetesNamespace %>
+            Knative-Serving-Revision: <%- app.baseName.toLowerCase() %>-knative

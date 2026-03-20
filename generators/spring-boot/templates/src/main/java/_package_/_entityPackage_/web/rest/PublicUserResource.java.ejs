@@ -16,13 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.web.rest;
+package <%- packageName %>.web.rest;
 
 <%_ if (searchEngineElasticsearch) { _%>
-import <%= packageName %>.repository.search.UserSearchRepository;
+import <%- packageName %>.repository.search.UserSearchRepository;
 <%_ } else if (searchEngineCouchbase) { _%>
-import <%= packageName %>.repository.UserRepository;
-import <%= packageName %>.domain.User;
+import <%- packageName %>.repository.UserRepository;
+import <%- packageName %>.domain.User;
   <%_ if (!reactive) { _%>
 import java.util.stream.StreamSupport;
   <%_ } _%>
@@ -33,8 +33,8 @@ import org.springframework.data.domain.Sort;
 import java.util.Collections;
   <%_ } _%>
 <%_ } _%>
-import <%= packageName %>.service.UserService;
-import <%= packageName %>.service.dto.<%= user.dtoClass %>;
+import <%- packageName %>.service.UserService;
+import <%- packageName %>.service.dto.<%- user.dtoClass %>;
 
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
 import tech.jhipster.web.util.PaginationUtil;
@@ -64,7 +64,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.ForwardedHeaderUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-<%_ } else {_%>
+<%_ } else { _%>
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 <%_ } _%>
 
@@ -125,7 +125,7 @@ public class PublicUserResource {
     @GetMapping("/users")
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
   <%_ if (reactive) { _%>
-    public Mono<ResponseEntity<Flux<<%= user.dtoClass %>>>> getAllPublicUsers(ServerHttpRequest request, @org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+    public Mono<ResponseEntity<Flux<<%- user.dtoClass %>>>> getAllPublicUsers(ServerHttpRequest request, @org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get all public User names");
     <%_ if (!authenticationTypeOauth2) { _%>
         if (!onlyContainsAllowedProperties(pageable)) {
@@ -139,7 +139,7 @@ public class PublicUserResource {
             .map(headers -> ResponseEntity.ok().headers(headers).body(userService.getAllPublicUsers(pageable)));
     }
   <%_ } else { _%>
-    public ResponseEntity<List<<%= user.dtoClass %>>> getAllPublicUsers(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<<%- user.dtoClass %>>> getAllPublicUsers(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get all public User names");
     <%_ if (!authenticationTypeOauth2) { _%>
         if (!onlyContainsAllowedProperties(pageable)) {
@@ -147,7 +147,7 @@ public class PublicUserResource {
         }
     <%_ } _%>
 
-        final Page<<%= user.dtoClass %>> page = userService.getAllPublicUsers(pageable);
+        final Page<<%- user.dtoClass %>> page = userService.getAllPublicUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -159,7 +159,7 @@ public class PublicUserResource {
   <%_ } _%>
 
 <%_ } else { /* Cassandra */ _%>
-    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= user.dtoClass %>> getAllPublicUsers() {
+    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%- user.dtoClass %>> getAllPublicUsers() {
         return userService.getAllPublicUsers();
     }
 
@@ -174,23 +174,23 @@ public class PublicUserResource {
      * @return the result of the search.
      */
     @GetMapping("/users/_search/{query}")
-    public <% if(reactive) { %>Mono<<% } %>List<<%= user.dtoClass %>><% if(reactive) { %>><% } %> search(@PathVariable("query") String query) {
+    public <% if(reactive) { %>Mono<<% } %>List<<%- user.dtoClass %>><% if(reactive) { %>><% } %> search(@PathVariable("query") String query) {
   <%_ if (searchEngineElasticsearch) { _%>
     <%_ if (reactive) { _%>
-        return userSearchRepository.search(query).map(<%= user.dtoClass %>::new).collectList();
+        return userSearchRepository.search(query).map(<%- user.dtoClass %>::new).collectList();
     <%_ } else { _%>
         return StreamSupport
             .stream(userSearchRepository.search(query).spliterator(), false)
-            .map(<%= user.dtoClass %>::new)
+            .map(<%- user.dtoClass %>::new)
             .toList();
     <%_ } _%>
   <%_ } else { _%>
      <%_ if (reactive) { _%>
-        return userRepository.search(query).map(<%= user.dtoClass %>::new).collectList();
+        return userRepository.search(query).map(<%- user.dtoClass %>::new).collectList();
      <%_ } else { _%>
         return StreamSupport
             .stream(userRepository.search(query).spliterator(), false)
-            .map(<%= user.dtoClass %>::new)
+            .map(<%- user.dtoClass %>::new)
             .toList();
      <%_ } _%>
   <%_ } _%>

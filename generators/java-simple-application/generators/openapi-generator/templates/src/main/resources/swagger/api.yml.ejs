@@ -20,12 +20,12 @@
 # This file will be used at compile time to generate Spring-MVC endpoint stubs using openapi-generator
 openapi: "3.0.1"
 info:
-  title: "<%= baseName %>"
+  title: "<%- baseName %>"
   version: 0.0.1
 servers:
-  - url: http://localhost:<%= serverPort %>/api
+  - url: http://localhost:<%- serverPort %>/api
     description: Development server
-  - url: https://localhost:<%= serverPort %>/api
+  - url: https://localhost:<%- serverPort %>/api
     description: Development server with TLS Profile
 paths: {}
 components:

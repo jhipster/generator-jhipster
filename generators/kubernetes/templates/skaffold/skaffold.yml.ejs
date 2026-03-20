@@ -2,9 +2,9 @@ apiVersion: skaffold/v1
 kind: Config
 build:
   artifacts:
-<%_appConfigs.forEach((appConfig) =>  { _%>
-  - image: <%= appConfig.targetImageName %>
-    context: <%= `${directoryPath + appConfig.appFolder}` %>
+<%_ appConfigs.forEach((appConfig) =>  { _%>
+  - image: <%- appConfig.targetImageName %>
+    context: <%- `${directoryPath + appConfig.appFolder}` %>
     jib: {}
 <%_ }) _%>
   tagPolicy:

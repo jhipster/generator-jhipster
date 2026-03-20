@@ -16,12 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= entityAbsolutePackage %>.repository;
+package <%- entityAbsolutePackage %>.repository;
 
 import java.util.function.BiFunction;
 <%_ if (anyFieldIsBigDecimal) { _%>
 import java.math.BigDecimal;
-<%_} if (anyFieldIsInstant) { _%>
+<%_ } if (anyFieldIsInstant) { _%>
 import java.time.Instant;
 <%_ } if (anyFieldIsLocalDate) { _%>
 import java.time.LocalDate;
@@ -62,15 +62,16 @@ import org.springframework.data.relational.repository.support.MappingRelationalE
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.r2dbc.core.RowsFetchSpec;
 
-import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
+import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
 <%_ if (jpaMetamodelFiltering && reactive) { _%>
-import <%= entityAbsolutePackage %>.domain.criteria.<%= entityClass %>Criteria;
-import <%= entityAbsolutePackage %>.repository.rowmapper.ColumnConverter;
+import <%- entityAbsolutePackage %>.domain.criteria.<%- entityClass %>Criteria;
+import <%- entityAbsolutePackage %>.repository.rowmapper.ColumnConverter;
 import tech.jhipster.service.ConditionBuilder;
 <%_ } _%>
 <% relationships.forEach(rel => {
-  if (rel.relationshipManyToMany && rel.ownerSide) { _%>
-import <%= rel.otherEntity.entityAbsolutePackage %>.domain.<%= rel.otherEntity.persistClass %>;
+  if (rel.relationshipManyToMany && rel.ownerSide) {
+_%>
+import <%- rel.otherEntity.entityAbsolutePackage %>.domain.<%- rel.otherEntity.persistClass %>;
   <%_ } _%>
 <%_ }); _%>
 <%_ for (const enumField of uniqueEnums) { _%>
@@ -78,56 +79,56 @@ import <%- entityAbsolutePackage %>.domain.enumeration.<%- enumField.fieldType %
 <%_ } _%>
 
 <%_ [...reactiveOtherEntities, locals].forEach(otherEntity => { _%>
-import <%= otherEntity.entityAbsolutePackage %>.repository.rowmapper.<%= otherEntity.entityClass %>RowMapper;
+import <%- otherEntity.entityAbsolutePackage %>.repository.rowmapper.<%- otherEntity.entityClass %>RowMapper;
   <%_ if (otherEntity.entityPackage !== entityPackage) { _%>
-import <%= otherEntity.entityAbsolutePackage %>.repository.<%= otherEntity.entityClass %>SqlHelper;
+import <%- otherEntity.entityAbsolutePackage %>.repository.<%- otherEntity.entityClass %>SqlHelper;
   <%_ } _%>
 <%_ }); _%>
 <%_ if (packageName !== entityAbsolutePackage) { _%>
-import <%= packageName %>.repository.EntityManager;
+import <%- packageName %>.repository.EntityManager;
 <%_ } _%>
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * <%= springDataDescription %> custom repository implementation for the <%= persistClass %> entity.
+ * <%- springDataDescription %> custom repository implementation for the <%- persistClass %> entity.
  */
 @SuppressWarnings("unused")
-class <%= entityClass %>RepositoryInternalImpl extends SimpleR2dbcRepository<<%= persistClass %>, <%= primaryKey.type %>> implements <%= entityClass %>RepositoryInternal {
+class <%- entityClass %>RepositoryInternalImpl extends SimpleR2dbcRepository<<%- persistClass %>, <%- primaryKey.type %>> implements <%- entityClass %>RepositoryInternal {
     private final DatabaseClient db;
     private final R2dbcEntityTemplate r2dbcEntityTemplate;
     private final EntityManager entityManager;
 
 <%_ reactiveUniqueEntityTypes.forEach(element => { _%>
-    private final <%= element %>RowMapper <%= element.toLowerCase() %>Mapper;
+    private final <%- element %>RowMapper <%- element.toLowerCase() %>Mapper;
 <%_ }); _%>
 <%_ if (jpaMetamodelFiltering && reactive) { _%>
     private final ColumnConverter columnConverter;
 <%_ } _%>
 
-    private final static Table entityTable = Table.aliased("<%= entityTableName %>", EntityManager.ENTITY_ALIAS);
+    private final static Table entityTable = Table.aliased("<%- entityTableName %>", EntityManager.ENTITY_ALIAS);
 <%_ reactiveEagerRelations.forEach(rel => { _%>
-    private final static Table <%= rel.relationshipName %>Table = Table.aliased("<%= rel.otherEntity.entityTableName %>", "<%= rel.relationshipSqlSafeName %>");
+    private final static Table <%- rel.relationshipName %>Table = Table.aliased("<%- rel.otherEntity.entityTableName %>", "<%- rel.relationshipSqlSafeName %>");
 <%_ }); _%>
 
 <%_ relationships.forEach(rel => {
   if (rel.shouldWriteJoinTable) {
 _%>
-    private final static EntityManager.LinkTable <%= rel.relationshipName %>Link = new EntityManager.LinkTable("<%= rel.joinTable.name %>", "<%= entityTableName %>_<%= primaryKey.hibernateSnakeCaseName %>", "<%= rel.joinColumnNames[0] %>");
+    private final static EntityManager.LinkTable <%- rel.relationshipName %>Link = new EntityManager.LinkTable("<%- rel.joinTable.name %>", "<%- entityTableName %>_<%- primaryKey.hibernateSnakeCaseName %>", "<%- rel.joinColumnNames[0] %>");
 <%_ }
-}); _%>
+});
+_%>
 
-    public <%= entityClass %>RepositoryInternalImpl(R2dbcEntityTemplate template, EntityManager entityManager<%_
-            reactiveUniqueEntityTypes.forEach(element => { _%>, <%= element %>RowMapper <%= element.toLowerCase() %>Mapper<%_ }); _%>, R2dbcEntityOperations entityOperations,
+    public <%- entityClass %>RepositoryInternalImpl(R2dbcEntityTemplate template, EntityManager entityManager<%_ reactiveUniqueEntityTypes.forEach(element => { _%>, <%- element %>RowMapper <%- element.toLowerCase() %>Mapper<%_ }); _%>, R2dbcEntityOperations entityOperations,
         R2dbcConverter converter<% if (jpaMetamodelFiltering && reactive) { %>,
         ColumnConverter columnConverter<% } %>) {
-        super(new MappingRelationalEntityInformation(converter.getMappingContext().getRequiredPersistentEntity(<%= persistClass %>.class)), entityOperations, converter);
+        super(new MappingRelationalEntityInformation(converter.getMappingContext().getRequiredPersistentEntity(<%- persistClass %>.class)), entityOperations, converter);
         this.db = template.getDatabaseClient();
         this.r2dbcEntityTemplate = template;
         this.entityManager = entityManager;
 <%_ reactiveUniqueEntityTypes.forEach(element => { _%>
-        this.<%= element.toLowerCase() %>Mapper = <%= element.toLowerCase() %>Mapper;
+        this.<%- element.toLowerCase() %>Mapper = <%- element.toLowerCase() %>Mapper;
 <%_ }); _%>
 <%_ if (jpaMetamodelFiltering && reactive) { _%>
         this.columnConverter = columnConverter;
@@ -135,70 +136,70 @@ _%>
     }
 
     @Override
-    public Flux<<%= persistClass %>> findAllBy(Pageable pageable) {
+    public Flux<<%- persistClass %>> findAllBy(Pageable pageable) {
         return createQuery(pageable, null).all();
     }
 
-    RowsFetchSpec<<%= persistClass %>> createQuery(Pageable pageable, Condition whereClause) {
-        List<Expression> columns = <%= entityClass %>SqlHelper.getColumns(entityTable, EntityManager.ENTITY_ALIAS);
+    RowsFetchSpec<<%- persistClass %>> createQuery(Pageable pageable, Condition whereClause) {
+        List<Expression> columns = <%- entityClass %>SqlHelper.getColumns(entityTable, EntityManager.ENTITY_ALIAS);
 <%_ reactiveEagerRelations.forEach(rel => { _%>
-        columns.addAll(<%= rel.otherEntity.entityNameCapitalized %>SqlHelper.getColumns(<%= rel.relationshipName %>Table, "<%= rel.relationshipName %>"));
+        columns.addAll(<%- rel.otherEntity.entityNameCapitalized %>SqlHelper.getColumns(<%- rel.relationshipName %>Table, "<%- rel.relationshipName %>"));
 <%_ }); _%>
         SelectFromAndJoin<% if (reactiveEagerRelations.length > 0) { %>Condition<% } %> selectFrom = Select.builder().select(columns).from(entityTable)
 <%_ reactiveEagerRelations.forEach(rel => { _%>
-            .leftOuterJoin(<%= rel.relationshipName %>Table).on(Column.create("<%= rel.joinColumnNames[0] %>", entityTable)).equals(Column.create("<%= rel.otherEntity.primaryKey.fields[0].columnName %>", <%= rel.relationshipName %>Table))
+            .leftOuterJoin(<%- rel.relationshipName %>Table).on(Column.create("<%- rel.joinColumnNames[0] %>", entityTable)).equals(Column.create("<%- rel.otherEntity.primaryKey.fields[0].columnName %>", <%- rel.relationshipName %>Table))
 <%_ }); _%>;
         // we do not support Criteria here for now as of https://github.com/jhipster/generator-jhipster/issues/18269
-        String select = entityManager.createSelect(selectFrom, <%= persistClass %>.class, pageable, whereClause);
+        String select = entityManager.createSelect(selectFrom, <%- persistClass %>.class, pageable, whereClause);
         return db.sql(select).map(this::process);
     }
 
     @Override
-    public Flux<<%= persistClass %>> findAll() {
+    public Flux<<%- persistClass %>> findAll() {
         return findAllBy(null);
     }
 
     @Override
-    public Mono<<%= persistClass %>> findById(<%= primaryKey.type %> id) {
+    public Mono<<%- persistClass %>> findById(<%- primaryKey.type %> id) {
 <%_ if (primaryKey.type != 'Long') { _%>
-        Comparison whereClause = Conditions.isEqual(entityTable.column("<%= primaryKey.fields[0].columnName %>"), Conditions.just(StringUtils.wrap(id.toString(), "'")));
+        Comparison whereClause = Conditions.isEqual(entityTable.column("<%- primaryKey.fields[0].columnName %>"), Conditions.just(StringUtils.wrap(id.toString(), "'")));
 <%_ } else { _%>
-        Comparison whereClause = Conditions.isEqual(entityTable.column("<%= primaryKey.fields[0].columnName %>"), Conditions.just(id.toString()));
-<%_ }_%>
+        Comparison whereClause = Conditions.isEqual(entityTable.column("<%- primaryKey.fields[0].columnName %>"), Conditions.just(id.toString()));
+<%_ } _%>
         return createQuery(null, whereClause).one();
     }
 
 <%_ if (implementsEagerLoadApis) { _%>
 
     @Override
-    public Mono<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id) {
+    public Mono<<%- persistClass %>> findOneWithEagerRelationships(<%- primaryKey.type %> id) {
         return findById(id);
     }
 
     @Override
-    public Flux<<%= persistClass %>> findAllWithEagerRelationships() {
+    public Flux<<%- persistClass %>> findAllWithEagerRelationships() {
         return findAll();
     }
 
     @Override
-    public Flux<<%= persistClass %>> findAllWithEagerRelationships(Pageable page) {
+    public Flux<<%- persistClass %>> findAllWithEagerRelationships(Pageable page) {
         return findAllBy(page);
     }
 
 <%_ } _%>
-    private <%= persistClass %> process(Row row, RowMetadata metadata) {
-        <%= persistClass %> entity = <%= entityClass.toLowerCase() %>Mapper.apply(row, "e");
+    private <%- persistClass %> process(Row row, RowMetadata metadata) {
+        <%- persistClass %> entity = <%- entityClass.toLowerCase() %>Mapper.apply(row, "e");
 <%_ reactiveEagerRelations.forEach(rel => { _%>
-        entity.<%= rel.propertyConsumerName %>(<%= rel.otherEntity.entityNameCapitalized.toLowerCase() %>Mapper.apply(row, "<%= rel.relationshipName %>"));
+        entity.<%- rel.propertyConsumerName %>(<%- rel.otherEntity.entityNameCapitalized.toLowerCase() %>Mapper.apply(row, "<%- rel.relationshipName %>"));
 <%_ }); _%>
         return entity;
     }
 
     @Override
-    public <S extends <%= persistClass %>> Mono<S> save(S entity) {
+    public <S extends <%- persistClass %>> Mono<S> save(S entity) {
 <%_ if (isUsingMapsId) { _%>
-        if (entity.<%- primaryKey.propertySupplierName %>() == null && entity.<%= mapsIdAssoc.propertySupplierName %>() != null) {
-            entity.<%- primaryKey.propertyConsumerName %>(entity.<%= mapsIdAssoc.propertySupplierName %>().<%- mapsIdAssoc.otherEntity.primaryKey.propertySupplierName %>());
+        if (entity.<%- primaryKey.propertySupplierName %>() == null && entity.<%- mapsIdAssoc.propertySupplierName %>() != null) {
+            entity.<%- primaryKey.propertyConsumerName %>(entity.<%- mapsIdAssoc.propertySupplierName %>().<%- mapsIdAssoc.otherEntity.primaryKey.propertySupplierName %>());
             return entityManager.insert(entity);
         }
 <%_ } _%>
@@ -206,66 +207,69 @@ _%>
     }
 
 <%_ if (containsBagRelationships) { _%>
-    protected <S extends <%= persistClass %>> Mono<S> updateRelations(S entity) {
+    protected <S extends <%- persistClass %>> Mono<S> updateRelations(S entity) {
   <%_ relationships.filter(rel => {
     return (rel.relationshipManyToMany && rel.ownerSide);
-   }).forEach(function(rel, idx) { _%>
+   }).forEach(function(rel, idx) {
+_%>
     <%_ if (idx === 0) { _%>
-        Mono<Void> result = entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.<%- primaryKey.propertySupplierName %>(), entity.<%= rel.propertySupplierName %>().stream().map(<%= rel.otherEntity.persistClass %>::<%- rel.otherEntity.primaryKey.propertySupplierName %>)).then();
+        Mono<Void> result = entityManager.updateLinkTable(<%- rel.relationshipName %>Link, entity.<%- primaryKey.propertySupplierName %>(), entity.<%- rel.propertySupplierName %>().stream().map(<%- rel.otherEntity.persistClass %>::<%- rel.otherEntity.primaryKey.propertySupplierName %>)).then();
     <%_ } else { _%>
-        result = result.and(entityManager.updateLinkTable(<%= rel.relationshipName %>Link, entity.<%- primaryKey.propertySupplierName %>(), entity.<%= rel.propertySupplierName %>().stream().map(<%= rel.otherEntity.persistClass %>::<%- rel.otherEntity.primaryKey.propertySupplierName %>)));
+        result = result.and(entityManager.updateLinkTable(<%- rel.relationshipName %>Link, entity.<%- primaryKey.propertySupplierName %>(), entity.<%- rel.propertySupplierName %>().stream().map(<%- rel.otherEntity.persistClass %>::<%- rel.otherEntity.primaryKey.propertySupplierName %>)));
     <%_ } _%>
   <%_ }); _%>
         return result.thenReturn(entity);
     }
 
     @Override
-    public Mono<Void> deleteById(<%= primaryKey.type %> entityId) {
+    public Mono<Void> deleteById(<%- primaryKey.type %> entityId) {
         return deleteRelations(entityId)
             .then(super.deleteById(entityId));
     }
 
-    protected Mono<Void> deleteRelations(<%= primaryKey.type %> entityId) {
+    protected Mono<Void> deleteRelations(<%- primaryKey.type %> entityId) {
   <%_ relationships.filter(rel => {
       return (rel.relationshipManyToMany && rel.ownerSide);
-    }).forEach(function(rel, idx) { _%>
+    }).forEach(function(rel, idx) {
+_%>
     <%_ if (idx === 0) { _%>
-        return entityManager.deleteFromLinkTable(<%= rel.relationshipName %>Link, entityId)
-    <%_} else { _%>
-            .and(entityManager.deleteFromLinkTable(<%= rel.relationshipName %>Link, entityId))
+        return entityManager.deleteFromLinkTable(<%- rel.relationshipName %>Link, entityId)
+    <%_ } else { _%>
+            .and(entityManager.deleteFromLinkTable(<%- rel.relationshipName %>Link, entityId))
     <%_ } _%>
   <%_ }); %>;
         }
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering && reactive) { _%>
     @Override
-    public Flux<<%= persistClass %>> findByCriteria(<%= entityClass %>Criteria <%= entityInstance %>Criteria, Pageable page) {
-        return createQuery(page, buildConditions(<%= entityInstance %>Criteria)).all();
+    public Flux<<%- persistClass %>> findByCriteria(<%- entityClass %>Criteria <%- entityInstance %>Criteria, Pageable page) {
+        return createQuery(page, buildConditions(<%- entityInstance %>Criteria)).all();
     }
 
     @Override
-    public Mono<Long> countByCriteria(<%= entityClass %>Criteria criteria) {
+    public Mono<Long> countByCriteria(<%- entityClass %>Criteria criteria) {
         return findByCriteria(criteria, null)
                     .collectList()
                         .map(collectedList -> collectedList != null ? (long) collectedList.size() : (long) 0);
     }
 
-    private Condition buildConditions(<%= entityClass %>Criteria criteria) {
+    private Condition buildConditions(<%- entityClass %>Criteria criteria) {
         ConditionBuilder builder = new ConditionBuilder(this.columnConverter);
         List<Condition> allConditions = new ArrayList<Condition>();
         if (criteria != null) {
 <%_
 fields.forEach((field) => {
   if (field.transient) return;
-  if (field.filterableField) { _%>
+  if (field.filterableField) {
+_%>
             if (criteria.<%- field.propertyFilterSupplierName %>() != null) {
-                builder.buildFilterConditionForField(criteria.<%- field.propertyFilterSupplierName %>(), entityTable.column("<%= field.columnName %>"));
+                builder.buildFilterConditionForField(criteria.<%- field.propertyFilterSupplierName %>(), entityTable.column("<%- field.columnName %>"));
             }
 <%_ } _%>
 <%_ }); _%>
 <%_ reactiveEagerRelations.forEach((relationship) => { _%>
             if (criteria.<%- relationship.propertyFilterSupplierName %>() != null) {
-                builder.buildFilterConditionForField(criteria.<%- relationship.propertyFilterSupplierName %>(), <%= relationship.relationshipName %>Table.column("<%= relationship.otherEntity.primaryKey.ownFields[0].columnName %>"));
+                builder.buildFilterConditionForField(criteria.<%- relationship.propertyFilterSupplierName %>(), <%- relationship.relationshipName %>Table.column("<%- relationship.otherEntity.primaryKey.ownFields[0].columnName %>"));
             }
 <%_ }); _%>
         }

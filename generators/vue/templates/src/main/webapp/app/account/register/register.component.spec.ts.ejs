@@ -37,7 +37,7 @@ describe('Register Component', () => {
   let register: RegisterComponentType;
   const filledRegisterAccount = {
     email: 'jhi@pster.net',
-    langKey: '<%= nativeLanguage %>',
+    langKey: '<%- nativeLanguage %>',
     login: 'jhi',
     password: 'jhipster',
   };
@@ -50,7 +50,7 @@ describe('Register Component', () => {
       global: {
         plugins: [createTestingPinia()],
         provide: {
-          currentLanguage: computed(() => '<%= nativeLanguage %>'),
+          currentLanguage: computed(() => '<%- nativeLanguage %>'),
         },
       },
     });
@@ -83,7 +83,7 @@ describe('Register Component', () => {
 
     expect(axiosStub.post).toHaveBeenCalledWith('api/register', {
       email: 'jhi@pster.net',
-      langKey: '<%= nativeLanguage %>',
+      langKey: '<%- nativeLanguage %>',
       login: 'jhi',
       password: 'jhipster',
     });
@@ -101,7 +101,7 @@ describe('Register Component', () => {
     register.register();
     await register.$nextTick();
 
-    expect(axiosStub.post).toHaveBeenCalledWith('api/register', { email: 'jhi@pster.net', langKey: '<%= nativeLanguage %>', login: 'jhi', password: 'jhipster' });
+    expect(axiosStub.post).toHaveBeenCalledWith('api/register', { email: 'jhi@pster.net', langKey: '<%- nativeLanguage %>', login: 'jhi', password: 'jhipster' });
     await register.$nextTick();
     expect(register.success).toBe(null);
     expect(register.error).toBe(null);
@@ -117,7 +117,7 @@ describe('Register Component', () => {
     register.register();
     await register.$nextTick();
 
-    expect(axiosStub.post).toHaveBeenCalledWith('api/register', { email: 'jhi@pster.net', langKey: '<%= nativeLanguage %>', login: 'jhi', password: 'jhipster' });
+    expect(axiosStub.post).toHaveBeenCalledWith('api/register', { email: 'jhi@pster.net', langKey: '<%- nativeLanguage %>', login: 'jhi', password: 'jhipster' });
     await register.$nextTick();
     expect(register.success).toBe(null);
     expect(register.error).toBe(null);
@@ -133,7 +133,7 @@ describe('Register Component', () => {
     register.register();
     await register.$nextTick();
 
-    expect(axiosStub.post).toHaveBeenCalledWith('api/register', { email: 'jhi@pster.net', langKey: '<%= nativeLanguage %>', login: 'jhi', password: 'jhipster' });
+    expect(axiosStub.post).toHaveBeenCalledWith('api/register', { email: 'jhi@pster.net', langKey: '<%- nativeLanguage %>', login: 'jhi', password: 'jhipster' });
     await register.$nextTick();
     expect(register.success).toBe(null);
     expect(register.errorEmailExists).toBe(null);

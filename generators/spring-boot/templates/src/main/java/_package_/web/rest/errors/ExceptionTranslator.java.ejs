@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.web.rest.errors;
+package <%- packageName %>.web.rest.errors;
 
 import static org.springframework.core.annotation.AnnotatedElementUtils.findMergedAnnotation;
 
@@ -118,7 +118,7 @@ _%>
 
     private static final Logger LOG = LoggerFactory.getLogger(ExceptionTranslator.class);
 
-    @Value("${jhipster.clientApp.name:<%= camelizedBaseName %>}")
+    @Value("${jhipster.clientApp.name:<%- camelizedBaseName %>}")
     private String applicationName;
 
     private final Environment env;
@@ -129,7 +129,7 @@ _%>
 
     @ExceptionHandler
     <%_ if (reactive) { _%>@Override<%_ } _%>
-    public <%- returnType %> handleAnyException(Throwable ex, <%= requestClass %> request
+    public <%- returnType %> handleAnyException(Throwable ex, <%- requestClass %> request
     ) {
         LOG.debug("Converting Exception to Problem Details:", ex);
         ProblemDetailWithCause pdCause = wrapAndCustomizeProblem(ex, request);
@@ -140,8 +140,8 @@ _%>
     @Nullable
     @Override
     protected <%- returnType %> handleExceptionInternal(
-            Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, <%= requestEntityRequestClass %> request) {
-        body = body == null ? wrapAndCustomizeProblem((Throwable) ex, (<%= requestClass %>) request) : body;
+            Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, <%- requestEntityRequestClass %> request) {
+        body = body == null ? wrapAndCustomizeProblem((Throwable) ex, (<%- requestClass %>) request) : body;
     <%_ if (reactive) { _%>
         if (request.getResponse().isCommitted()) {
             return Mono.error(ex);
@@ -152,17 +152,17 @@ _%>
     <%_ } _%>
     }
 
-    protected ProblemDetailWithCause wrapAndCustomizeProblem(Throwable ex, <%= requestClass %> request) {
+    protected ProblemDetailWithCause wrapAndCustomizeProblem(Throwable ex, <%- requestClass %> request) {
         return customizeProblem(getProblemDetailWithCause(ex), ex, request);
     }
 
     private ProblemDetailWithCause getProblemDetailWithCause(Throwable ex) {
 <%_ if (!skipUserManagement) { _%>
-        if(ex instanceof <%= packageName %>.service.UsernameAlreadyUsedException)
+        if(ex instanceof <%- packageName %>.service.UsernameAlreadyUsedException)
             return (ProblemDetailWithCause) new LoginAlreadyUsedException().getBody();
-        if(ex instanceof <%= packageName %>.service.EmailAlreadyUsedException)
+        if(ex instanceof <%- packageName %>.service.EmailAlreadyUsedException)
             return (ProblemDetailWithCause) new EmailAlreadyUsedException().getBody();
-        if(ex instanceof <%= packageName %>.service.InvalidPasswordException)
+        if(ex instanceof <%- packageName %>.service.InvalidPasswordException)
             return (ProblemDetailWithCause) new InvalidPasswordException().getBody();
 
         <%_ if (reactive) { _%>
@@ -180,7 +180,7 @@ _%>
         return ProblemDetailWithCauseBuilder.instance().withStatus(toStatus(ex).value()).build();
     }
 
-    protected ProblemDetailWithCause customizeProblem(ProblemDetailWithCause problem, Throwable err, <%= requestClass %> request) {
+    protected ProblemDetailWithCause customizeProblem(ProblemDetailWithCause problem, Throwable err, <%- requestClass %> request) {
         if (problem.getStatus() <= 0) problem.setStatus(toStatus(err));
 
         if (problem.getType() == null || problem.getType().equals(URI.create("about:blank"))) problem.setType(getMappedType(err));
@@ -226,7 +226,7 @@ _%>
             .stream()
             .map(f ->
                 new FieldErrorVM(
-                    f.getObjectName().replaceFirst("<%= dtoSuffix %>$", ""),
+                    f.getObjectName().replaceFirst("<%- dtoSuffix %>$", ""),
                     f.getField(),
                     StringUtils.isNotBlank(f.getDefaultMessage()) ? f.getDefaultMessage() : f.getCode()
                 )
@@ -240,7 +240,7 @@ _%>
     }
 
 <%_ if (!reactive) { _%>
-    private String extractURI(<%= requestClass %> request) {
+    private String extractURI(<%- requestClass %> request) {
         HttpServletRequest nativeRequest = request.getNativeRequest(HttpServletRequest.class);
         return nativeRequest != null ? nativeRequest.getRequestURI() : StringUtils.EMPTY;
     }
@@ -314,7 +314,7 @@ _%>
         return null;
     }
 
-    private URI getPathValue(<%= requestClass %> request) {
+    private URI getPathValue(<%- requestClass %> request) {
         if(request == null) return URI.create("about:blank");
         return <% if (reactive) { %> request.getRequest().getURI()<% } else { %> URI.create(extractURI(request))<% } %>;
     }
@@ -340,7 +340,7 @@ _%>
     }
 <%_ } _%>
 
-    public Optional<ProblemDetailWithCause> buildCause(final Throwable throwable, <%= requestClass %> request) {
+    public Optional<ProblemDetailWithCause> buildCause(final Throwable throwable, <%- requestClass %> request) {
         if(throwable != null && isCasualChainEnabled()) {
             return Optional.of(customizeProblem(getProblemDetailWithCause(throwable), throwable, request));
         }
@@ -355,7 +355,7 @@ _%>
     private boolean containsPackageName(String message) {
 
         // This list is for sure not complete
-        return <% if (springBoot4) { %> Strings.CS<% } else { %> StringUtils<% } %>.containsAny(message, "org.", "java.", "net.", "jakarta.", "javax.", "com.", "io.", "de.", "<%= packageName %>");
+        return <% if (springBoot4) { %> Strings.CS<% } else { %> StringUtils<% } %>.containsAny(message, "org.", "java.", "net.", "jakarta.", "javax.", "com.", "io.", "de.", "<%- packageName %>");
     }
 
 }

@@ -28,7 +28,7 @@ import { getAccount } from 'app/shared/reducers/authentication';
 describe('Settings reducer tests', () => {
 <%_ if (enableTranslation) { _%>
   beforeAll(() => {
-    TranslatorContext.registerTranslations('<%= nativeLanguage %>', {});
+    TranslatorContext.registerTranslations('<%- nativeLanguage %>', {});
   });
 
 <%_ } _%>

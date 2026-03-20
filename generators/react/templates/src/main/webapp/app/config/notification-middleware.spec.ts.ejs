@@ -180,7 +180,7 @@ describe('Notification Middleware', () => {
 
 <%_ if (enableTranslation) { _%>
   beforeAll(() => {
-    TranslatorContext.registerTranslations('<%= nativeLanguage %>', {});
+    TranslatorContext.registerTranslations('<%- nativeLanguage %>', {});
   });
 
 <%_ } _%>

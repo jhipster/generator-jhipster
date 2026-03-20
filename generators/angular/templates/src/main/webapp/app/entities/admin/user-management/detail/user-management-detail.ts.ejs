@@ -28,7 +28,7 @@ import { TranslateDirective } from 'app/shared/language';
 import { IUserManagement } from '../user-management.model';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-user-mgmt-detail',
+  selector: '<%- jhiPrefixDashed %>-user-mgmt-detail',
   templateUrl: './user-management-detail.html',
   imports: [FontAwesomeModule, DatePipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
 })

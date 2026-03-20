@@ -16,41 +16,41 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= entityAbsolutePackage %>.web.rest;
+package <%- entityAbsolutePackage %>.web.rest;
 
 <%_ const viaService = !serviceNo; _%>
 <%_ if (!dtoMapstruct || serviceNo) { _%>
-import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
+import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
 <%_ } _%>
-import <%= entityAbsolutePackage %>.repository.<%= entityClass %>Repository;
+import <%- entityAbsolutePackage %>.repository.<%- entityClass %>Repository;
 <%_ if (!serviceNo) { _%>
-import <%= entityAbsolutePackage %>.service.<%= entityClass %>Service;
+import <%- entityAbsolutePackage %>.service.<%- entityClass %>Service;
 <%_ } else { _%>
   <%_ if (isUsingMapsId === true) { _%>
-import <%= entityAbsolutePackage %>.repository.<%= mapsIdAssoc.otherEntity.entityNameCapitalized %>Repository;
+import <%- entityAbsolutePackage %>.repository.<%- mapsIdAssoc.otherEntity.entityNameCapitalized %>Repository;
   <%_ } _%>
   <%_ if (searchEngineElasticsearch) { _%>
-import <%= entityAbsolutePackage %>.repository.search.<%= entityClass %>SearchRepository;
+import <%- entityAbsolutePackage %>.repository.search.<%- entityClass %>SearchRepository;
   <%_ } _%>
 <%_ } _%>
 <%_ if (saveUserSnapshot) { _%>
-import <%= entityAbsolutePackage %>.repository.UserRepository;
+import <%- entityAbsolutePackage %>.repository.UserRepository;
 <%_ } _%>
-import <%= packageName %>.web.rest.errors.BadRequestAlertException;
+import <%- packageName %>.web.rest.errors.BadRequestAlertException;
 <%_ if (searchEngineElasticsearch) { _%>
-import <%= packageName %>.web.rest.errors.ElasticsearchExceptionMapper;
+import <%- packageName %>.web.rest.errors.ElasticsearchExceptionMapper;
 <%_ } _%>
 <%_ if (dtoMapstruct) { _%>
-import <%= entityAbsolutePackage %>.service.dto.<%= dtoClass %>;
+import <%- entityAbsolutePackage %>.service.dto.<%- dtoClass %>;
   <%_ if (serviceNo) { _%>
-import <%= entityAbsolutePackage %>.service.mapper.<%= entityClass %>Mapper;
+import <%- entityAbsolutePackage %>.service.mapper.<%- entityClass %>Mapper;
   <%_ } _%>
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering && !reactive) { _%>
-import <%= entityAbsolutePackage %>.service.criteria.<%= entityClass %>Criteria;
-import <%= entityAbsolutePackage %>.service.<%= entityClass %>QueryService;
+import <%- entityAbsolutePackage %>.service.criteria.<%- entityClass %>Criteria;
+import <%- entityAbsolutePackage %>.service.<%- entityClass %>QueryService;
 <%_ } else if (jpaMetamodelFiltering && reactive) { _%>
-import <%= entityAbsolutePackage %>.domain.criteria.<%= entityClass %>Criteria;
+import <%- entityAbsolutePackage %>.domain.criteria.<%- entityClass %>Criteria;
 <%_ } _%>
 
 import tech.jhipster.web.util.HeaderUtil;
@@ -131,25 +131,25 @@ import java.util.stream.StreamSupport;
 <%_ } _%>
 
 /**
- * REST controller for managing {@link <%= entityAbsoluteClass %>}.
+ * REST controller for managing {@link <%- entityAbsoluteClass %>}.
  */
 @RestController
-@RequestMapping("/api/<%= entityApiUrl %>")
+@RequestMapping("/api/<%- entityApiUrl %>")
 <%_ if (databaseTypeSql && !viaService && !saveUserSnapshot) { _%>
 @Transactional
 <%_ } _%>
-public class <%= entityClass %>Resource {
+public class <%- entityClass %>Resource {
 
-    private static final Logger LOG = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
+    private static final Logger LOG = LoggerFactory.getLogger(<%- entityClass %>Resource.class);
 <%_ if (!readOnly) { _%>
 
   <%_ let entityName = entityInstance;
   if (clientRootFolder && !skipUiGrouping) {
     entityName = this._.camelCase(`${clientRootFolder}${entityClass}`);
   } _%>
-    private static final String ENTITY_NAME = "<%= entityName %>";
+    private static final String ENTITY_NAME = "<%- entityName %>";
 
-    @Value("${jhipster.clientApp.name:<%= camelizedBaseName %>}")
+    @Value("${jhipster.clientApp.name:<%- camelizedBaseName %>}")
     private String applicationName;
 <%_ } _%>
     <%_
@@ -161,54 +161,54 @@ public class <%= entityClass %>Resource {
 <%_ if (!readOnly) { _%>
 
     /**
-     * {@code POST  /<%= entityApiUrl %>} : Create a new <%= entityInstance %>.
+     * {@code POST  /<%- entityApiUrl %>} : Create a new <%- entityInstance %>.
      *
-     * @param <%= instanceName %> the <%= instanceName %> to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new <%= instanceName %>, or with status {@code 400 (Bad Request)} if the <%= entityInstance %> has already an ID.
+     * @param <%- instanceName %> the <%- instanceName %> to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new <%- instanceName %>, or with status {@code 400 (Bad Request)} if the <%- entityInstance %> has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
   <%_ if (entitySpringPreAuthorize) { _%>
     @PreAuthorize("<%- entitySpringPreAuthorize %>")
   <%_ } _%>
-    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%= instanceType %>><% if (reactive) { %>><% } %> create<%= entityClass %>(<% if (anyPropertyHasValidation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
-        LOG.debug("REST request to save <%= entityClass %> : {}", <%= instanceName %>);
+    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%- instanceType %>><% if (reactive) { %>><% } %> create<%- entityClass %>(<% if (anyPropertyHasValidation) { %>@Valid <% } %>@RequestBody <%- instanceType %> <%- instanceName %>) throws URISyntaxException {
+        LOG.debug("REST request to save <%- entityClass %> : {}", <%- instanceName %>);
   <%_ if (primaryKey.autoGenerate) { _%>
-        if (<%= instanceName %>.<%- primaryKey.propertySupplierName %>() != null) {
-            throw new BadRequestAlertException("A new <%= entityInstance %> cannot already have an ID", ENTITY_NAME, "idexists");
+        if (<%- instanceName %>.<%- primaryKey.propertySupplierName %>() != null) {
+            throw new BadRequestAlertException("A new <%- entityInstance %> cannot already have an ID", ENTITY_NAME, "idexists");
         }
   <%_ } else if (!reactive) { _%>
-        if (<%= entityInstance %>Repository.existsById(<%- instanceName %>.<%- primaryKey.propertySupplierName %>())) {
+        if (<%- entityInstance %>Repository.existsById(<%- instanceName %>.<%- primaryKey.propertySupplierName %>())) {
             throw new BadRequestAlertException("<%- entityInstance %> already exists", ENTITY_NAME, "idexists");
         }
   <%_ } _%>
   <%_ if (isUsingMapsId) { _%>
-        if (Objects.isNull(<%= instanceName %>.<%= mapsIdAssoc.propertySupplierName %>())) {
+        if (Objects.isNull(<%- instanceName %>.<%- mapsIdAssoc.propertySupplierName %>())) {
             throw new BadRequestAlertException("Invalid association value provided", ENTITY_NAME, "null");
         }
   <%_ } _%>
   <%_ if (saveUserSnapshot) { _%>
     <% for (const userRelationship of relationships.filter(rel => rel.otherEntity.builtInUser)) { %>
       <%_ if (userRelationship.collection) { _%>
-        if (<%= instanceName %>.<%= userRelationship.propertySupplierName %>() != null) {
+        if (<%- instanceName %>.<%- userRelationship.propertySupplierName %>() != null) {
             // Save users in case they are new and only exist in gateway
-            userRepository.saveAll(<%= instanceName %>.<%= userRelationship.propertySupplierName %>());
+            userRepository.saveAll(<%- instanceName %>.<%- userRelationship.propertySupplierName %>());
         }
       <%_ } else { _%>
-        if (<%= instanceName %>.<%= userRelationship.propertySupplierName %>() != null) {
+        if (<%- instanceName %>.<%- userRelationship.propertySupplierName %>() != null) {
             // Save user in case it's new and only exists in gateway
-            userRepository.save(<%= instanceName %>.<%= userRelationship.propertySupplierName %>());
+            userRepository.save(<%- instanceName %>.<%- userRelationship.propertySupplierName %>());
         }
       <%_ } _%>
     <% } %>
   <%_ } _%>
   <%_ if (!isUsingMapsId) { _%>
     <%_ for (field of primaryKey.fields.filter(f => f.autoGenerateByService)) { _%>
-        <%= instanceName %>.<%- field.propertyConsumerName %>(UUID.randomUUID());
+        <%- instanceName %>.<%- field.propertyConsumerName %>(UUID.randomUUID());
     <%_ } _%>
   <%_ } _%>
   <%_ if (!primaryKey.autoGenerate && reactive) { _%>
-        return <%= entityInstance %>Repository
+        return <%- entityInstance %>Repository
             .existsById(<%- instanceName %>.<%- primaryKey.propertySupplierName %>())
             .flatMap(exists -> {
                 if (exists) {
@@ -220,13 +220,13 @@ public class <%= entityClass %>Resource {
   <%_ } _%>
   <%_ if (reactive) { _%>
     <%_ if (!serviceNo) { _%>
-        return <%= entityInstance %>Service
-            .save(<%= instanceName %>)
+        return <%- entityInstance %>Service
+            .save(<%- instanceName %>)
     <%_ } _%>
             .map(result -> {
                 try {
-                    return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.<%- primaryKey.propertySupplierName %>()))
-                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.<%- primaryKey.propertySupplierName %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
+                    return ResponseEntity.created(new URI("/api/<%- entityApiUrl %>/" + result.<%- primaryKey.propertySupplierName %>()))
+                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, result.<%- primaryKey.propertySupplierName %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
                         .body(result);
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
@@ -237,10 +237,10 @@ public class <%= entityClass %>Resource {
     <%_ } _%>
   <%_ } else { _%>
     <%_ if (!serviceNo) { _%>
-        <%- restInstance %> = <%= entityInstance %>Service.save(<%= instanceName %>);
+        <%- restInstance %> = <%- entityInstance %>Service.save(<%- instanceName %>);
     <%_ } _%>
-        return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + <%- restInstance %>.<%- primaryKey.propertySupplierName %>()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%- restInstance %>.<%- primaryKey.propertySupplierName %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
+        return ResponseEntity.created(new URI("/api/<%- entityApiUrl %>/" + <%- restInstance %>.<%- primaryKey.propertySupplierName %>()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, <%- restInstance %>.<%- primaryKey.propertySupplierName %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
             .body(<%- restInstance %>);
   <%_ } _%>
     }
@@ -248,40 +248,40 @@ public class <%= entityClass %>Resource {
 <%_ if (!readOnly && updatableEntity) { _%>
 
     /**
-     * {@code PUT  /<%= entityApiUrl %>/:<%= primaryKey.name %>} : Updates an existing <%= entityInstance %>.
+     * {@code PUT  /<%- entityApiUrl %>/:<%- primaryKey.name %>} : Updates an existing <%- entityInstance %>.
      *
-     * @param <%= primaryKey.name %> the id of the <%= instanceName %> to save.
-     * @param <%= instanceName %> the <%= instanceName %> to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated <%= instanceName %>,
-     * or with status {@code 400 (Bad Request)} if the <%= instanceName %> is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the <%= instanceName %> couldn't be updated.
+     * @param <%- primaryKey.name %> the id of the <%- instanceName %> to save.
+     * @param <%- instanceName %> the <%- instanceName %> to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated <%- instanceName %>,
+     * or with status {@code 400 (Bad Request)} if the <%- instanceName %> is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the <%- instanceName %> couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/{<%= primaryKey.name %>}")
+    @PutMapping("/{<%- primaryKey.name %>}")
   <%_ if (entitySpringPreAuthorize) { _%>
     @PreAuthorize("<%- entitySpringPreAuthorize %>")
   <%_ } _%>
-    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%= instanceType %>><% if (reactive) { %>><% } %> update<%= entityClass %>(
-        @PathVariable(value = "<%= primaryKey.name %>", required = false) final <%= primaryKey.type %> <%= primaryKey.name %>,
-        <% if (anyPropertyHasValidation) { %>@Valid <% } %>@RequestBody <%= restClass %> <%= restInstance %>
+    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%- instanceType %>><% if (reactive) { %>><% } %> update<%- entityClass %>(
+        @PathVariable(value = "<%- primaryKey.name %>", required = false) final <%- primaryKey.type %> <%- primaryKey.name %>,
+        <% if (anyPropertyHasValidation) { %>@Valid <% } %>@RequestBody <%- restClass %> <%- restInstance %>
     ) throws URISyntaxException {
-        LOG.debug("REST request to update <%= entityClass %> : {}, {}", <%= primaryKey.name %>, <%= instanceName %>);
-        if (<%= instanceName %>.<%- primaryKey.propertySupplierName %>() == null) {
+        LOG.debug("REST request to update <%- entityClass %> : {}, {}", <%- primaryKey.name %>, <%- instanceName %>);
+        if (<%- instanceName %>.<%- primaryKey.propertySupplierName %>() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(<%= primaryKey.name %>, <%= instanceName %>.<%- primaryKey.propertySupplierName %>())) {
+        if (!Objects.equals(<%- primaryKey.name %>, <%- instanceName %>.<%- primaryKey.propertySupplierName %>())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
   <%_ if (reactive) { _%>
-        return <%= entityInstance %>Repository
-            .existsById(<%= primaryKey.name %>)
+        return <%- entityInstance %>Repository
+            .existsById(<%- primaryKey.name %>)
             .flatMap(exists -> {
                 if (!exists) {
                     return Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
                 }
   <%_ } else { _%>
-        if (!<%= entityInstance %>Repository.existsById(<%= primaryKey.name %>)) {
+        if (!<%- entityInstance %>Repository.existsById(<%- primaryKey.name %>)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
   <%_ } _%>
@@ -289,14 +289,14 @@ public class <%= entityClass %>Resource {
   <%_ if (saveUserSnapshot) { _%>
     <% for (const userRelationship of relationships.filter(rel => rel.otherEntity.builtInUser)) { %>
       <%_ if (userRelationship.collection) { _%>
-        if (<%= instanceName %>.<%= userRelationship.propertySupplierName %>() != null) {
+        if (<%- instanceName %>.<%- userRelationship.propertySupplierName %>() != null) {
             // Save users in case they are new and only exist in gateway
-            userRepository.saveAll(<%= instanceName %>.<%= userRelationship.propertySupplierName %>());
+            userRepository.saveAll(<%- instanceName %>.<%- userRelationship.propertySupplierName %>());
         }
       <%_ } else { _%>
-        if (<%= instanceName %>.<%= userRelationship.propertySupplierName %>() != null) {
+        if (<%- instanceName %>.<%- userRelationship.propertySupplierName %>() != null) {
             // Save user in case it's new and only exists in gateway
-            userRepository.save(<%= instanceName %>.<%= userRelationship.propertySupplierName %>());
+            userRepository.save(<%- instanceName %>.<%- userRelationship.propertySupplierName %>());
         }
       <%_ } _%>
     <% } %>
@@ -306,59 +306,59 @@ public class <%= entityClass %>Resource {
   <%_ } _%>
   <%_ if (reactive) { _%>
     <%_ if (!serviceNo) { _%>
-            return <%= entityInstance %>Service
-                .update(<%= restInstance %>)
+            return <%- entityInstance %>Service
+                .update(<%- restInstance %>)
     <%_ } _%>
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
                 .map(result -> ResponseEntity.ok()
-                    .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, result.<%- primaryKey.propertySupplierName %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
+                    .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, result.<%- primaryKey.propertySupplierName %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
                     .body(result)
                 );
         });
   <%_ } else { _%>
     <%_ if (!serviceNo) { _%>
-        <%- restInstance %> = <%= entityInstance %>Service.update(<%= restInstance %>);
+        <%- restInstance %> = <%- entityInstance %>Service.update(<%- restInstance %>);
     <%_ } _%>
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%- restInstance %>.<%- primaryKey.propertySupplierName %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, <%- restInstance %>.<%- primaryKey.propertySupplierName %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
             .body(<%- restInstance %>);
   <%_ } _%>
     }
 
     /**
-     * {@code PATCH  /<%= entityApiUrl %>/:<%= primaryKey.name %>} : Partial updates given fields of an existing <%= entityInstance %>, field will ignore if it is null
+     * {@code PATCH  /<%- entityApiUrl %>/:<%- primaryKey.name %>} : Partial updates given fields of an existing <%- entityInstance %>, field will ignore if it is null
      *
-     * @param <%= primaryKey.name %> the id of the <%= instanceName %> to save.
-     * @param <%= instanceName %> the <%= instanceName %> to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated <%= instanceName %>,
-     * or with status {@code 400 (Bad Request)} if the <%= instanceName %> is not valid,
-     * or with status {@code 404 (Not Found)} if the <%= instanceName %> is not found,
-     * or with status {@code 500 (Internal Server Error)} if the <%= instanceName %> couldn't be updated.
+     * @param <%- primaryKey.name %> the id of the <%- instanceName %> to save.
+     * @param <%- instanceName %> the <%- instanceName %> to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated <%- instanceName %>,
+     * or with status {@code 400 (Bad Request)} if the <%- instanceName %> is not valid,
+     * or with status {@code 404 (Not Found)} if the <%- instanceName %> is not found,
+     * or with status {@code 500 (Internal Server Error)} if the <%- instanceName %> couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/{<%= primaryKey.name %>}", consumes = {"application/json", "application/merge-patch+json"})
+    @PatchMapping(value = "/{<%- primaryKey.name %>}", consumes = {"application/json", "application/merge-patch+json"})
   <%_ if (entitySpringPreAuthorize) { _%>
     @PreAuthorize("<%- entitySpringPreAuthorize %>")
   <%_ } _%>
-    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%= instanceType %>><% if (reactive) { %>><% } %> partialUpdate<%= entityClass %>(
-        @PathVariable(value = "<%= primaryKey.name %>", required = false) final <%= primaryKey.type %> <%= primaryKey.name %>,
-        <% if (anyPropertyHasValidation) { %>@NotNull <% } %>@RequestBody <%= instanceType %> <%= instanceName %>
+    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%- instanceType %>><% if (reactive) { %>><% } %> partialUpdate<%- entityClass %>(
+        @PathVariable(value = "<%- primaryKey.name %>", required = false) final <%- primaryKey.type %> <%- primaryKey.name %>,
+        <% if (anyPropertyHasValidation) { %>@NotNull <% } %>@RequestBody <%- instanceType %> <%- instanceName %>
     ) throws URISyntaxException {
-        LOG.debug("REST request to partial update <%= entityClass %> partially : {}, {}", <%= primaryKey.name %>, <%= instanceName %>);
-        if (<%= instanceName %>.<%- primaryKey.propertySupplierName %>() == null) {
+        LOG.debug("REST request to partial update <%- entityClass %> partially : {}, {}", <%- primaryKey.name %>, <%- instanceName %>);
+        if (<%- instanceName %>.<%- primaryKey.propertySupplierName %>() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(<%= primaryKey.name %>, <%= instanceName %>.<%- primaryKey.propertySupplierName %>())) {
+        if (!Objects.equals(<%- primaryKey.name %>, <%- instanceName %>.<%- primaryKey.propertySupplierName %>())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
   <%_ if (reactive) { _%>
-        return <%= entityInstance %>Repository.existsById(<%= primaryKey.name %>).flatMap(exists -> {
+        return <%- entityInstance %>Repository.existsById(<%- primaryKey.name %>).flatMap(exists -> {
             if (!exists) {
                 return Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
             }
   <%_ } else { _%>
-        if (!<%= entityInstance %>Repository.existsById(<%= primaryKey.name %>)) {
+        if (!<%- entityInstance %>Repository.existsById(<%- primaryKey.name %>)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
   <%_ } _%>
@@ -366,14 +366,14 @@ public class <%= entityClass %>Resource {
   <%_ if (saveUserSnapshot) { _%>
     <% for (const userRelationship of relationships.filter(rel => rel.otherEntity.builtInUser)) { %>
       <%_ if (userRelationship.collection) { _%>
-        if (<%= instanceName %>.<%= userRelationship.propertySupplierName %>() != null) {
+        if (<%- instanceName %>.<%- userRelationship.propertySupplierName %>() != null) {
             // Save users in case they are new and only exist in gateway
-            userRepository.saveAll(<%= instanceName %>.<%= userRelationship.propertySupplierName %>());
+            userRepository.saveAll(<%- instanceName %>.<%- userRelationship.propertySupplierName %>());
         }
       <%_ } else { _%>
-        if (<%= instanceName %>.<%= userRelationship.propertySupplierName %>() != null) {
+        if (<%- instanceName %>.<%- userRelationship.propertySupplierName %>() != null) {
             // Save user in case it's new and only exists in gateway
-            userRepository.save(<%= instanceName %>.<%= userRelationship.propertySupplierName %>());
+            userRepository.save(<%- instanceName %>.<%- userRelationship.propertySupplierName %>());
         }
       <%_ } _%>
     <% } %>
@@ -384,21 +384,21 @@ public class <%= entityClass %>Resource {
             return result
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
                 .map(res -> ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, res.<%- primaryKey.propertySupplierName %>()<% if (primaryKey.type !== 'String') { %>.toString()<% } %>))
+                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, res.<%- primaryKey.propertySupplierName %>()<% if (primaryKey.type !== 'String') { %>.toString()<% } %>))
                 .body(res)
             );
         });
   <%_ } else { _%>
             return ResponseUtil.wrapOrNotFound(
                 result,
-                HeaderUtil.createEntityUpdateAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, <%= instanceName %>.<%- primaryKey.propertySupplierName %>()<% if (primaryKey.type !== 'String') { %>.toString()<% } %>)
+                HeaderUtil.createEntityUpdateAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, <%- instanceName %>.<%- primaryKey.propertySupplierName %>()<% if (primaryKey.type !== 'String') { %>.toString()<% } %>)
             );
   <%_ } _%>
     }
 <%_ } _%>
 
     /**
-     * {@code GET  /<%= entityApiUrl %>} : get all the <%= entityNamePluralHumanized %>.
+     * {@code GET  /<%- entityApiUrl %>} : get all the <%- entityNamePluralHumanized %>.
      *
 <%_ if (!paginationNo) { _%>
      * @param pageable the pagination information.
@@ -414,7 +414,7 @@ public class <%= entityClass %>Resource {
 <%_ } else if (fieldsContainNoOwnerOneToOne) { _%>
      * @param filter the filter of the request.
 <%_ } _%>
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of <%= entityNamePluralHumanized %> in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of <%- entityNamePluralHumanized %> in body.
      */
 <%_ if (reactive) { _%>
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -431,8 +431,8 @@ public class <%= entityClass %>Resource {
 
 <%_ if (!jpaMetamodelFiltering && reactive && paginationNo) { _%>
     /**
-     * {@code GET  /<%= entityApiUrl %>} : get all the <%= entityNamePluralHumanized %> as a stream.
-     * @return the {@link Flux} of <%= entityNamePluralHumanized %>.
+     * {@code GET  /<%- entityApiUrl %>} : get all the <%- entityNamePluralHumanized %> as a stream.
+     * @return the {@link Flux} of <%- entityNamePluralHumanized %>.
      */
     @GetMapping(value = "", produces = MediaType.APPLICATION_NDJSON_VALUE)
   <%_ if (databaseTypeSql && isUsingMapsId && !viaService) { _%>
@@ -441,21 +441,21 @@ public class <%= entityClass %>Resource {
 <%_ if (entitySpringReadPreAuthorize) { _%>
     @PreAuthorize("<%- entitySpringReadPreAuthorize %>")
 <%_ } _%>
-    public Flux<<%= instanceType %>> getAll<%= entityClassPlural %>AsStream() {
-        LOG.debug("REST request to get all <%= entityClassPlural %> as a stream");
+    public Flux<<%- instanceType %>> getAll<%- entityClassPlural %>AsStream() {
+        LOG.debug("REST request to get all <%- entityClassPlural %> as a stream");
   <%_ if (viaService) { _%>
-        return <%= entityInstance %>Service.findAll();
+        return <%- entityInstance %>Service.findAll();
   <%_ } else { _%>
-        return <%= entityInstance %>Repository.findAll()<%_ if (dtoMapstruct) { _%>.map(<%= entityToDtoReference %>)<%_ } _%>;
+        return <%- entityInstance %>Repository.findAll()<%_ if (dtoMapstruct) { _%>.map(<%- entityToDtoReference %>)<%_ } _%>;
   <%_ } _%>
     }
 
 <%_ } _%>
     /**
-     * {@code GET  /<%= entityApiUrl %>/:id} : get the "id" <%= entityInstance %>.
+     * {@code GET  /<%- entityApiUrl %>/:id} : get the "id" <%- entityInstance %>.
      *
-     * @param id the id of the <%= instanceName %> to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the <%= instanceName %>, or with status {@code 404 (Not Found)}.
+     * @param id the id of the <%- instanceName %> to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the <%- instanceName %>, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
 <%_ if (databaseTypeSql && isUsingMapsId && !viaService) { _%>
@@ -464,47 +464,47 @@ public class <%= entityClass %>Resource {
 <%_ if (entitySpringReadPreAuthorize) { _%>
     @PreAuthorize("<%- entitySpringReadPreAuthorize %>")
 <%_ } _%>
-    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%= instanceType %>><% if (reactive) { %>><% } %> get<%= entityClass %>(@PathVariable("id") <%= primaryKey.type %> id) {
-        LOG.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../_partials_entity_/get_template', {viaService, returnDirectly:false, implementsEagerLoadApis}); -%>
-        return ResponseUtil.wrapOrNotFound(<%= instanceName %>);
+    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%- instanceType %>><% if (reactive) { %>><% } %> get<%- entityClass %>(@PathVariable("id") <%- primaryKey.type %> id) {
+        LOG.debug("REST request to get <%- entityClass %> : {}", id);<%- include('../../_partials_entity_/get_template', {viaService, returnDirectly:false, implementsEagerLoadApis}); -%>
+        return ResponseUtil.wrapOrNotFound(<%- instanceName %>);
     }
 <%_ if (!readOnly) { _%>
 
     /**
-     * {@code DELETE  /<%= entityApiUrl %>/:id} : delete the "id" <%= entityInstance %>.
+     * {@code DELETE  /<%- entityApiUrl %>/:id} : delete the "id" <%- entityInstance %>.
      *
-     * @param id the id of the <%= instanceName %> to delete.
+     * @param id the id of the <%- instanceName %> to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
   <%_ if (entitySpringPreAuthorize) { _%>
     @PreAuthorize("<%- entitySpringPreAuthorize %>")
   <%_ } _%>
-    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<Void><% if (reactive) { %>><% } %> delete<%= entityClass %>(@PathVariable("id") <%= primaryKey.type %> id) {
-        LOG.debug("REST request to delete <%= entityClass %> : {}", id);
+    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<Void><% if (reactive) { %>><% } %> delete<%- entityClass %>(@PathVariable("id") <%- primaryKey.type %> id) {
+        LOG.debug("REST request to delete <%- entityClass %> : {}", id);
 <%- include('../../_partials_entity_/delete_template', {viaService: viaService, fromResource: true}); -%>
   <%_ if (reactive) { _%>
     <%_ if (databaseTypeCouchbase) { _%>
             .then(Mono.just(ResponseEntity.noContent()
-                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, id<% if (primaryKey.type !== 'String') { %>.toString()<% } %>)).build())
+                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, id<% if (primaryKey.type !== 'String') { %>.toString()<% } %>)).build())
             );
     <%_ } else { %>
             .then(Mono.just(ResponseEntity.noContent()
-                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, id<% if (primaryKey.type !== 'String') { %>.toString()<% } %>)).build())
+                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, id<% if (primaryKey.type !== 'String') { %>.toString()<% } %>)).build())
         );
     <%_ } _%>
   <%_ } else { _%>
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%= enableTranslation %>, ENTITY_NAME, id<% if (!primaryKey.fields[0].fieldTypeString) { %>.toString()<% } %>)).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, id<% if (!primaryKey.fields[0].fieldTypeString) { %>.toString()<% } %>)).build();
   <%_ } _%>
     }
 <%_ } _%>
 <%_ if (searchEngineAny) { _%>
 
     /**
-     * {@code SEARCH  /<%= entityApiUrl %>/_search?query=:query} : search for the <%= entityInstance %> corresponding
+     * {@code SEARCH  /<%- entityApiUrl %>/_search?query=:query} : search for the <%- entityInstance %> corresponding
      * to the query.
      *
-     * @param query the query of the <%= entityInstance %> search.
+     * @param query the query of the <%- entityInstance %> search.
   <%_ if (!paginationNo) { _%>
      * @param pageable the pagination information.
     <%_ if (reactive) { _%>

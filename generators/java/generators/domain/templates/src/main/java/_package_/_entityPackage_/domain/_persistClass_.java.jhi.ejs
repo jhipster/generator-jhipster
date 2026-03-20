@@ -47,7 +47,7 @@
 <%_ } _%>
   });
 -&>
-package <%= entityAbsolutePackage %>.domain;
+package <%- entityAbsolutePackage %>.domain;
 
 <&- fragments.staticImportSection() -&>
 <&- fragments.importSection() -&>
@@ -88,14 +88,14 @@ import java.util.Objects;
 <%_ } _%>
 
 <%_ for (const otherEntity of otherEntities.filter(otherEntity => otherEntity.entityPackage !== entityPackage)) { _%>
-import <%= otherEntity.entityAbsoluteClass %>;
+import <%- otherEntity.entityAbsoluteClass %>;
 <%_ } _%>
 
 <%_ if (entityJavadoc) { _%>
 <%- entityJavadoc %>
 <%_ } else { _%>
 /**
- * A <%= persistClass %>.
+ * A <%- persistClass %>.
  */
 <%_ } _%>
 <%_ if (!dtoMapstruct && entityApiDescription) { _%>
@@ -103,14 +103,14 @@ import <%= otherEntity.entityAbsoluteClass %>;
 <%_ } _%>
 <&- fragments.annotationSection() -&>
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class <%= persistClass %> <&- fragments.extendsSection() -&>implements Serializable<&- fragments.additionalInterfacesSection() -&> {
+public class <%- persistClass %> <&- fragments.extendsSection() -&>implements Serializable<&- fragments.additionalInterfacesSection() -&> {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
 <%_ if (!embedded && primaryKey.composite) { _%>
     @Id
-    private <%= primaryKey.type %> <%= primaryKey.name %>;
+    private <%- primaryKey.type %> <%- primaryKey.name %>;
 
 <%_ } _%>
 <&- fragments.classStaticFieldsSection() -&>
@@ -125,11 +125,11 @@ public class <%= persistClass %> <&- fragments.extendsSection() -&>implements Se
     @Schema(description = "<%- field.fieldApiDescription %>"<% if (field.fieldValidationRequired) { %>, required = true<% } %>)
   <%_ } _%>
 <&- fragments.field<%- field.fieldNameCapitalized %>AnnotationSection() -&>
-    private <%= field.javaFieldType %> <%= field.fieldName %>;
+    private <%- field.javaFieldType %> <%- field.fieldName %>;
 
   <%_ if (field.fieldWithContentType) { _%>
 <&- fragments.field<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection() -&>
-    private String <%= field.fieldName %>ContentType;
+    private String <%- field.fieldName %>ContentType;
 
   <%_ } _%>
 <&_ } -&>
@@ -139,7 +139,8 @@ public class <%= persistClass %> <&- fragments.extendsSection() -&>implements Se
 <%_
 // An embedded entity should not reference entities that embed it, unless the other entities are also embedded
 for (relationship of relationships) {
-  if (typeof relationship.fieldApiDescription) { _%>
+  if (typeof relationship.fieldApiDescription) {
+_%>
 <%- relationship.relationshipJavadoc %>
     <%_ if (!dtoMapstruct && relationship.relationshipApiDescription) { _%>
     @Schema(description = "<%- relationship.relationshipApiDescription %>")
@@ -150,34 +151,34 @@ for (relationship of relationships) {
     <%_ if (relationship.ignoreOtherSideProperty) { _%>
     @JsonIgnoreProperties(value = {
         <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
-        "<%= otherRelationship.propertyName %>",
+        "<%- otherRelationship.propertyName %>",
         <%_ }); _%>
     }, allowSetters = true)
     <%_ } _%>
-    private Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.relationshipFieldNamePlural %> = new HashSet<>();
+    private Set<<%- relationship.otherEntity.persistClass %>> <%- relationship.relationshipFieldNamePlural %> = new HashSet<>();
 
   <%_ } else if (relationship.relationshipManyToOne) { _%>
     <%_ if (relationship.ignoreOtherSideProperty) { _%>
     @JsonIgnoreProperties(value = {
       <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
-        "<%= otherRelationship.propertyName %>",
+        "<%- otherRelationship.propertyName %>",
       <%_ }); _%>
     }, allowSetters = true)
     <%_ } _%>
-    private <%= relationship.otherEntity.persistClass %> <%= relationship.relationshipFieldName %>;
+    private <%- relationship.otherEntity.persistClass %> <%- relationship.relationshipFieldName %>;
 
   <%_ } else if (relationship.relationshipManyToMany) { _%>
     <%_ if (relationship.ignoreOtherSideProperty) { _%>
     @JsonIgnoreProperties(value = {
       <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
-        "<%= otherRelationship.propertyName %>",
+        "<%- otherRelationship.propertyName %>",
       <%_ }); _%>
     }, allowSetters = true)
     <%_ } _%>
-    private Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.relationshipFieldNamePlural %> = new HashSet<>();
+    private Set<<%- relationship.otherEntity.persistClass %>> <%- relationship.relationshipFieldNamePlural %> = new HashSet<>();
 
   <%_ } else { _%>
-    private <%= relationship.otherEntity.persistClass %> <%= relationship.relationshipFieldName %>;
+    private <%- relationship.otherEntity.persistClass %> <%- relationship.relationshipFieldName %>;
   <%_ } _%>
 
 <%_ } _%>
@@ -187,119 +188,117 @@ for (relationship of relationships) {
 <&- fragments.field<%- field.fieldNameCapitalized %>CustomMethodsSection() -&>
 <&_ if (!fragments.field<%- field.fieldNameCapitalized %>CustomMethodsSection()) { -&>
 
-    public <%= field.javaFieldType %> <%- field.propertySupplierName %>() {
-        return this.<%= field.fieldName %>;
+    public <%- field.javaFieldType %> <%- field.propertySupplierName %>() {
+        return this.<%- field.fieldName %>;
     }
   <%_ if (fluentMethods) { _%>
 
-    public <%= persistClass %> <%= field.fieldName %>(<%= field.javaFieldType %> <%= field.fieldName %>) {
-        this.<%- field.propertyConsumerName %>(<%= field.fieldName %>);
+    public <%- persistClass %> <%- field.fieldName %>(<%- field.javaFieldType %> <%- field.fieldName %>) {
+        this.<%- field.propertyConsumerName %>(<%- field.fieldName %>);
         return this;
     }
   <%_ } _%>
 
   <&- fragments.field<%- field.fieldNameCapitalized %>CustomSetSection() -&>
   <&_ if (!fragments.field<%- field.fieldNameCapitalized %>CustomSetSection()) { -&>
-    public void <%- field.propertyConsumerName %>(<%= field.javaFieldType %> <%= field.fieldName %>) {
-        this.<%= field.fieldName %> = <%= field.fieldName %>;
+    public void <%- field.propertyConsumerName %>(<%- field.javaFieldType %> <%- field.fieldName %>) {
+        this.<%- field.fieldName %> = <%- field.fieldName %>;
     }
   <&_ } -&>
   <%_ if (field.fieldWithContentType) { _%>
 
     public String <%- field.propertySupplierName %>ContentType() {
-        return this.<%= field.fieldName %>ContentType;
+        return this.<%- field.fieldName %>ContentType;
     }
     <%_ if (fluentMethods) { _%>
 
-    public <%= persistClass %> <%= field.fieldName %>ContentType(String <%= field.fieldName %>ContentType) {
-        this.<%= field.fieldName %>ContentType = <%= field.fieldName %>ContentType;
+    public <%- persistClass %> <%- field.fieldName %>ContentType(String <%- field.fieldName %>ContentType) {
+        this.<%- field.fieldName %>ContentType = <%- field.fieldName %>ContentType;
         return this;
     }
     <%_ } _%>
 
-    public void <%- field.propertyConsumerName %>ContentType(String <%= field.fieldName %>ContentType) {
-        this.<%= field.fieldName %>ContentType = <%= field.fieldName %>ContentType;
+    public void <%- field.propertyConsumerName %>ContentType(String <%- field.fieldName %>ContentType) {
+        this.<%- field.fieldName %>ContentType = <%- field.fieldName %>ContentType;
     }
   <%_ } _%>
 <&_ } -&>
 <%_ } _%>
 
 <&- fragments.classAdditionalFieldsMethodsSection('\n\n') -&>
-<%_
-for (const relationship of relationships) {
-_%>
+<%_ for (const relationship of relationships) { _%>
   <%_ if (relationship.collection) { _%>
-    public Set<<%= relationship.otherEntity.persistClass %>> <%- relationship.propertySupplierName %>() {
-        return this.<%= relationship.relationshipFieldNamePlural %>;
+    public Set<<%- relationship.otherEntity.persistClass %>> <%- relationship.propertySupplierName %>() {
+        return this.<%- relationship.relationshipFieldNamePlural %>;
     }
 
   <%_ } else { _%>
-    public <%= relationship.otherEntity.persistClass %> get<%= relationship.relationshipNameCapitalized %>() {
-        return this.<%= relationship.relationshipFieldName %>;
+    public <%- relationship.otherEntity.persistClass %> get<%- relationship.relationshipNameCapitalized %>() {
+        return this.<%- relationship.relationshipFieldName %>;
     }
 
   <%_ } _%>
 <&- fragments.relationship<%- relationship.relationshipNameCapitalized %>CustomSetSection() -&>
 <&_ if (!fragments.relationship<%- relationship.relationshipNameCapitalized %>CustomSetSection()) { -&>
   <%_ if (relationship.collection) { _%>
-    public void <%- relationship.propertyConsumerName %>(Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.otherEntity.entityInstancePlural %>) {
+    public void <%- relationship.propertyConsumerName %>(Set<<%- relationship.otherEntity.persistClass %>> <%- relationship.otherEntity.entityInstancePlural %>) {
     <%_ if (relationship.otherRelationship && relationship.relationshipUpdateBackReference) { _%>
-        if (this.<%= relationship.relationshipFieldNamePlural %> != null) {
+        if (this.<%- relationship.relationshipFieldNamePlural %> != null) {
       <%_ if (relationship.otherRelationship.collection) { _%>
-            this.<%= relationship.relationshipFieldNamePlural %>.forEach(i -> i.remove<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
+            this.<%- relationship.relationshipFieldNamePlural %>.forEach(i -> i.remove<%- relationship.otherRelationship.relationshipNameCapitalized %>(this));
       <%_ } else { _%>
-            this.<%= relationship.relationshipFieldNamePlural %>.forEach(i -> i.<%- relationship.otherRelationship.propertyConsumerName %>(null));
+            this.<%- relationship.relationshipFieldNamePlural %>.forEach(i -> i.<%- relationship.otherRelationship.propertyConsumerName %>(null));
       <%_ } _%>
         }
-        if (<%= relationship.otherEntity.entityInstancePlural %> != null) {
+        if (<%- relationship.otherEntity.entityInstancePlural %> != null) {
       <%_ if (relationship.otherRelationship.collection) { _%>
-            <%= relationship.otherEntity.entityInstancePlural %>.forEach(i -> i.add<%= relationship.otherRelationship.relationshipNameCapitalized %>(this));
+            <%- relationship.otherEntity.entityInstancePlural %>.forEach(i -> i.add<%- relationship.otherRelationship.relationshipNameCapitalized %>(this));
       <%_ } else { _%>
-            <%= relationship.otherEntity.entityInstancePlural %>.forEach(i -> i.<%- relationship.otherRelationship.propertyConsumerName %>(this));
+            <%- relationship.otherEntity.entityInstancePlural %>.forEach(i -> i.<%- relationship.otherRelationship.propertyConsumerName %>(this));
       <%_ } _%>
         }
     <%_ } _%>
-        this.<%= relationship.relationshipFieldNamePlural %> = <%= relationship.otherEntity.entityInstancePlural %>;
+        this.<%- relationship.relationshipFieldNamePlural %> = <%- relationship.otherEntity.entityInstancePlural %>;
     }
   <%_ } else { _%>
-    public void <%- relationship.propertyConsumerName %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
+    public void <%- relationship.propertyConsumerName %>(<%- relationship.otherEntity.persistClass %> <%- relationship.otherEntityName %>) {
     <%_ if (relationship.otherRelationship && relationship.relationshipUpdateBackReference) { _%>
-        if (this.<%= relationship.relationshipFieldName %> != null) {
+        if (this.<%- relationship.relationshipFieldName %> != null) {
       <%_ if (relationship.otherRelationship.collection) { _%>
-            this.<%= relationship.relationshipFieldName %>.remove<%= relationship.otherRelationship.relationshipNameCapitalized %>(this);
+            this.<%- relationship.relationshipFieldName %>.remove<%- relationship.otherRelationship.relationshipNameCapitalized %>(this);
       <%_ } else { _%>
-            this.<%= relationship.relationshipFieldName %>.<%- relationship.otherRelationship.propertyConsumerName %>(null);
+            this.<%- relationship.relationshipFieldName %>.<%- relationship.otherRelationship.propertyConsumerName %>(null);
       <%_ } _%>
         }
-        if (<%= relationship.otherEntityName %> != null) {
+        if (<%- relationship.otherEntityName %> != null) {
       <%_ if (relationship.otherRelationship.collection) { _%>
-            <%= relationship.otherEntityName %>.add<%= relationship.otherRelationship.relationshipNameCapitalized %>(this);
+            <%- relationship.otherEntityName %>.add<%- relationship.otherRelationship.relationshipNameCapitalized %>(this);
       <%_ } else { _%>
-            <%= relationship.otherEntityName %>.<%- relationship.otherRelationship.propertyConsumerName %>(this);
+            <%- relationship.otherEntityName %>.<%- relationship.otherRelationship.propertyConsumerName %>(this);
       <%_ } _%>
         }
     <%_ } _%>
-        this.<%= relationship.relationshipFieldName %> = <%= relationship.otherEntityName %>;
+        this.<%- relationship.relationshipFieldName %> = <%- relationship.otherEntityName %>;
     }
   <%_ } _%>
 <&_ } -&>
     <%_ if (fluentMethods) { _%>
       <%_ if (relationship.collection) { _%>
 
-    public <%= persistClass %> <%= relationship.relationshipFieldNamePlural %>(Set<<%= relationship.otherEntity.persistClass %>> <%= relationship.otherEntity.entityInstancePlural %>) {
-        this.<%- relationship.propertyConsumerName %>(<%= relationship.otherEntity.entityInstancePlural %>);
+    public <%- persistClass %> <%- relationship.relationshipFieldNamePlural %>(Set<<%- relationship.otherEntity.persistClass %>> <%- relationship.otherEntity.entityInstancePlural %>) {
+        this.<%- relationship.propertyConsumerName %>(<%- relationship.otherEntity.entityInstancePlural %>);
         return this;
     }
 
 <&- fragments.relationship<%- relationship.relationshipNameCapitalized %>CustomAddSection() -&>
 <&_ if (!fragments.relationship<%- relationship.relationshipNameCapitalized %>CustomAddSection()) { -&>
-    public <%= persistClass %> add<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
-        this.<%= relationship.relationshipFieldNamePlural %>.add(<%= relationship.otherEntityName %>);
+    public <%- persistClass %> add<%- relationship.relationshipNameCapitalized %>(<%- relationship.otherEntity.persistClass %> <%- relationship.otherEntityName %>) {
+        this.<%- relationship.relationshipFieldNamePlural %>.add(<%- relationship.otherEntityName %>);
       <%_ if (relationship.otherRelationship && relationship.relationshipUpdateBackReference) { _%>
         <%_ if (relationship.otherRelationship.collection) { _%>
-        <%= relationship.otherEntityName %>.<%- relationship.otherRelationship.propertySupplierName %>().add(this);
+        <%- relationship.otherEntityName %>.<%- relationship.otherRelationship.propertySupplierName %>().add(this);
         <%_ } else { _%>
-        <%= relationship.otherEntityName %>.<%- relationship.otherRelationship.propertyConsumerName %>(this);
+        <%- relationship.otherEntityName %>.<%- relationship.otherRelationship.propertyConsumerName %>(this);
         <%_ } _%>
       <%_ } _%>
         return this;
@@ -308,13 +307,13 @@ _%>
 
 <&- fragments.relationship<%- relationship.relationshipNameCapitalized %>CustomRemoveSection() -&>
 <&_ if (!fragments.relationship<%- relationship.relationshipNameCapitalized %>CustomRemoveSection()) { -&>
-    public <%= persistClass %> remove<%= relationship.relationshipNameCapitalized %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
-        this.<%= relationship.relationshipFieldNamePlural %>.remove(<%= relationship.otherEntityName %>);
+    public <%- persistClass %> remove<%- relationship.relationshipNameCapitalized %>(<%- relationship.otherEntity.persistClass %> <%- relationship.otherEntityName %>) {
+        this.<%- relationship.relationshipFieldNamePlural %>.remove(<%- relationship.otherEntityName %>);
       <%_ if (relationship.otherRelationship && relationship.relationshipUpdateBackReference) { _%>
         <%_ if (relationship.otherRelationship.collection) { _%>
-        <%= relationship.otherEntityName %>.<%- relationship.otherRelationship.propertySupplierName %>().remove(this);
+        <%- relationship.otherEntityName %>.<%- relationship.otherRelationship.propertySupplierName %>().remove(this);
         <%_ } else { _%>
-        <%= relationship.otherEntityName %>.<%- relationship.otherRelationship.propertyConsumerName %>(null);
+        <%- relationship.otherEntityName %>.<%- relationship.otherRelationship.propertyConsumerName %>(null);
         <%_ } _%>
       <%_ } _%>
         return this;
@@ -322,8 +321,8 @@ _%>
 <&_ } -&>
       <%_ } else { _%>
 
-    public <%= persistClass %> <%= relationship.relationshipFieldName %>(<%= relationship.otherEntity.persistClass %> <%= relationship.otherEntityName %>) {
-        this.<%- relationship.propertyConsumerName %>(<%= relationship.otherEntityName %>);
+    public <%- persistClass %> <%- relationship.relationshipFieldName %>(<%- relationship.otherEntity.persistClass %> <%- relationship.otherEntityName %>) {
+        this.<%- relationship.propertyConsumerName %>(<%- relationship.otherEntityName %>);
         return this;
     }
       <%_ } _%>
@@ -338,11 +337,11 @@ _%>
         if (this == o) {
             return true;
         }
-        if (!(o instanceof <%= persistClass %>)) {
+        if (!(o instanceof <%- persistClass %>)) {
             return false;
         }
 <%_ if (!embedded) { _%>
-        return <%- primaryKey.propertySupplierName %>() != null && <%- primaryKey.propertySupplierName %>().equals(((<%= persistClass %>) o).<%- primaryKey.propertySupplierName %>());
+        return <%- primaryKey.propertySupplierName %>() != null && <%- primaryKey.propertySupplierName %>().equals(((<%- persistClass %>) o).<%- primaryKey.propertySupplierName %>());
 <%_ } else { _%>
         return false;
 <%_ } _%>
@@ -361,23 +360,25 @@ _%>
     // prettier-ignore
     @Override
     public String toString() {
-        return "<%= persistClass %>{" +
+        return "<%- persistClass %>{" +
 <%_ if (!embedded) { _%>
-            "<%= primaryKey.name %>=" + <%- primaryKey.propertySupplierName %>() +
+            "<%- primaryKey.name %>=" + <%- primaryKey.propertySupplierName %>() +
 <%_ } _%>
 <%_ for (const field of fields.filter(field => !field.id && !field.transient)) {
-  const isNumeric = field.fieldTypeNumeric; _%>
-            ", <%= field.fieldName %>=<% if (! isNumeric) { %>'<% } %>" + <%- field.propertySupplierName %>() <% if (! isNumeric) { %>+ "'" <% } %>+
+  const isNumeric = field.fieldTypeNumeric;
+_%>
+            ", <%- field.fieldName %>=<% if (! isNumeric) { %>'<% } %>" + <%- field.propertySupplierName %>() <% if (! isNumeric) { %>+ "'" <% } %>+
   <%_ if (field.fieldWithContentType) { _%>
-            ", <%= field.fieldName %>ContentType='" + <%- field.propertySupplierName %>ContentType() + "'" +
+            ", <%- field.fieldName %>ContentType='" + <%- field.propertySupplierName %>ContentType() + "'" +
   <%_ } _%>
 <%_ } _%>
 <%_ for (const relationship of relationships) { _%>
   <%_ if (relationship.otherEntity.embedded) {
-    if (relationship.relationshipManyToOne) { _%>
-            ", <%= relationship.relationshipFieldName %>='" + <%= relationship.propertySupplierName %>() + "'" +
+    if (relationship.relationshipManyToOne) {
+_%>
+            ", <%- relationship.relationshipFieldName %>='" + <%- relationship.propertySupplierName %>() + "'" +
     <%_ } else if (relationship.relationshipOneToOne && relationship.ownerSide) { _%>
-            ", <%= relationship.relationshipFieldName %>='" + <%= relationship.propertySupplierName %>() + "'" +
+            ", <%- relationship.relationshipFieldName %>='" + <%- relationship.propertySupplierName %>() + "'" +
     <%_ } _%>
   <%_ } _%>
 <%_ } _%>

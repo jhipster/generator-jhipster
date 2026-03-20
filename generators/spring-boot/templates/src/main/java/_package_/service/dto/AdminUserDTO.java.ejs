@@ -16,13 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.service.dto;
+package <%- packageName %>.service.dto;
 
-import <%= packageName %>.config.Constants;
+import <%- packageName %>.config.Constants;
 <% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>
-import <%= packageName %>.domain.Authority;<% } %>
+import <%- packageName %>.domain.Authority;<% } %>
 <%_ if (!databaseTypeNo) { _%>
-import <%= user.entityAbsoluteClass %>;
+import <%- user.entityAbsoluteClass %>;
 <%_ } _%>
 
 import java.io.Serial;
@@ -42,11 +42,11 @@ import java.util.stream.Collectors;
 /**
  * A DTO representing a user, with his authorities.
  */
-public class <%= user.adminUserDto %> implements Serializable {
+public class <%- user.adminUserDto %> implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private <%= user.primaryKey.type %> id;
+    private <%- user.primaryKey.type %> id;
 
     @NotBlank
     @Pattern(regexp = Constants.LOGIN_REGEX)
@@ -86,11 +86,11 @@ public class <%= user.adminUserDto %> implements Serializable {
     private Set<String> authorities;
 
 <%_ if (!databaseTypeNo) { _%>
-    public <%= user.adminUserDto %>() {
+    public <%- user.adminUserDto %>() {
         // Empty constructor needed for Jackson.
     }
 
-    public <%= user.adminUserDto %>(<%= user.persistClass %> user) {
+    public <%- user.adminUserDto %>(<%- user.persistClass %> user) {
         this.id = user.getId();
         this.login = user.getLogin();
         this.firstName = user.getFirstName();
@@ -117,11 +117,11 @@ public class <%= user.adminUserDto %> implements Serializable {
     }
 
 <%_ } _%>
-    public <%= user.primaryKey.type %> getId() {
+    public <%- user.primaryKey.type %> getId() {
         return id;
     }
 
-    public void setId(<%= user.primaryKey.type %> id) {
+    public void setId(<%- user.primaryKey.type %> id) {
         this.id = id;
     }
 
@@ -228,7 +228,7 @@ public class <%= user.adminUserDto %> implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
-        return "<%= user.adminUserDto %>{" +
+        return "<%- user.adminUserDto %>{" +
             "login='" + login + '\'' +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +

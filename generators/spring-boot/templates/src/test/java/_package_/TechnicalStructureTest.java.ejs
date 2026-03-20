@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>;
+package <%- packageName %>;
 
 import com.tngtech.archunit.core.importer.ImportOption.DoNotIncludeTests;
 import com.tngtech.archunit.junit.AnalyzeClasses;
@@ -32,7 +32,7 @@ import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
   const hasDomainLayer = !databaseTypeNo;
   const hasConstants = !skipUserManagement || databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j;
 _%>
-@AnalyzeClasses(packagesOf = <%= mainClass %>.class, importOptions = DoNotIncludeTests.class)
+@AnalyzeClasses(packagesOf = <%- mainClass %>.class, importOptions = DoNotIncludeTests.class)
 class TechnicalStructureTest {
 
     // prettier-ignore
@@ -63,11 +63,11 @@ class TechnicalStructureTest {
         .whereLayer("Domain").mayOnlyBeAccessedByLayers("Persistence", "Service", "Security", "Web", "Config")
 <%_ } _%>
 
-        .ignoreDependency(belongToAnyOf(<%= mainClass %>.class), alwaysTrue())
+        .ignoreDependency(belongToAnyOf(<%- mainClass %>.class), alwaysTrue())
         .ignoreDependency(alwaysTrue(), belongToAnyOf(
 <%_ if (hasConstants) { _%>
-            <%= packageName %>.config.Constants.class,
+            <%- packageName %>.config.Constants.class,
 <%_ } _%>
-            <%= packageName %>.config.ApplicationProperties.class
+            <%- packageName %>.config.ApplicationProperties.class
         ));
 }

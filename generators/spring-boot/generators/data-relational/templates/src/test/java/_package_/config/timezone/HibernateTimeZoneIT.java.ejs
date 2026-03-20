@@ -16,11 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.config.timezone;
+package <%- packageName %>.config.timezone;
 
-import <%= packageName %>.IntegrationTest;
-import <%= packageName %>.repository.timezone.DateTimeWrapper;
-import <%= packageName %>.repository.timezone.DateTimeWrapperRepository;
+import <%- packageName %>.IntegrationTest;
+import <%- packageName %>.repository.timezone.DateTimeWrapper;
+import <%- packageName %>.repository.timezone.DateTimeWrapperRepository;
 
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -177,7 +177,7 @@ class HibernateTimeZoneIT {
     }
 
     private String generateSqlRequest(String fieldName, long id) {
-        return format("SELECT %s FROM <%= jhiTablePrefix %>_date_time_wrapper where id=%d", fieldName, id);
+        return format("SELECT %s FROM <%- jhiTablePrefix %>_date_time_wrapper where id=%d", fieldName, id);
     }
 
     private void assertThatValueFromSqlRowSetIsEqualToExpectedValue(SqlRowSet sqlRowSet, String expectedValue) {

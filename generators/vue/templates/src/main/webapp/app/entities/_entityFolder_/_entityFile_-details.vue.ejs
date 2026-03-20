@@ -6,7 +6,8 @@
                 <dl class="row-md jh-entity-details">
 <%_ for (field of fields.filter(field => !field.id)) {
     const fieldName = field.fieldName;
-    const fieldType = field.fieldType;_%>
+    const fieldType = field.fieldType;
+_%>
                     <dt>
                         <span>{{ t$('<%= i18nKeyPrefix %>.<%= fieldName %>') }}</span>
                     </dt>
@@ -16,7 +17,7 @@
   <%_ } else if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
                         <div v-if="<%= entityInstance %>.<%= fieldName %>">
                             <a @click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">
-                                <img :src="'data:' + <%=entityInstance %>.<%= fieldName %>ContentType + ';base64,' + <%= entityInstance %>.<%= fieldName %>" style="max-width: 100%;" alt="<%=entityInstance %>"/>
+                                <img :src="'data:' + <%= entityInstance %>.<%= fieldName %>ContentType + ';base64,' + <%= entityInstance %>.<%= fieldName %>" style="max-width: 100%;" alt="<%= entityInstance %>"/>
                             </a>
                             {{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}
                         </div>
@@ -28,7 +29,7 @@
   <%_ } else if (field.fieldTypeDuration) { _%>
                         <span>{{formatDuration(<%= entityInstance %>.<%= fieldName %>)}} ({{<%= entityInstance %>.<%= fieldName %>}})</span>
   <%_ } else if (field.fieldTypeTimed) { _%>
-                        <span v-if="<%= entityInstance %>.<%=fieldName %>">{{formatDateLong(<%= entityInstance %>.<%=fieldName %>)}}</span>
+                        <span v-if="<%= entityInstance %>.<%= fieldName %>">{{formatDateLong(<%= entityInstance %>.<%= fieldName %>)}}</span>
   <%_ } else { _%>
                         <span>{{<%= entityInstance %>.<%= fieldName %>}}</span>
   <%_ } _%>
@@ -53,7 +54,7 @@ _%>
                             {{<%= relationshipFieldName %>.<%= otherEntityField %>}}
                         </span>
       <%_ } else { _%>
-                        {{<%= entityInstance + "." + relationshipFieldName %> ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField%> : ''}}
+                        {{<%= entityInstance + "." + relationshipFieldName %> ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %> : ''}}
       <%_ } _%>
     <%_ } else { _%>
       <%_ if (relationship.relationshipManyToMany) { _%>

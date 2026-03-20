@@ -23,8 +23,8 @@
 <&_ if (fragment.testingSection) { -&>
 #### E2E tests
 
-UI end-to-end tests are powered by [Cypress][]. They're located in [<%= cypressDir %>](<%= cypressDir %>)
-and can be run by starting Spring Boot in one terminal (`<%= nodePackageManagerCommand %> run app:start`) and running the tests (`<%= nodePackageManagerCommand %> run e2e`) in a second one.
+UI end-to-end tests are powered by [Cypress][]. They're located in [<%- cypressDir %>](<%- cypressDir %>)
+and can be run by starting Spring Boot in one terminal (`<%- nodePackageManagerCommand %> run app:start`) and running the tests (`<%- nodePackageManagerCommand %> run e2e`) in a second one.
 
 Before running Cypress tests, it's possible to specify user credentials by overriding the `CYPRESS_E2E_USERNAME` and `CYPRESS_E2E_PASSWORD` environment variables.
 
@@ -37,11 +37,11 @@ See Cypress documentation for setting OS [environment variables](https://docs.cy
 
 #### Lighthouse audits
 
-You can execute automated [Lighthouse audits](https://developer.chrome.com/docs/lighthouse/overview) with [cypress-audit](https://github.com/mfrachet/cypress-audit) by running `<%= nodePackageManagerCommand %> run e2e:cypress:audits`.
+You can execute automated [Lighthouse audits](https://developer.chrome.com/docs/lighthouse/overview) with [cypress-audit](https://github.com/mfrachet/cypress-audit) by running `<%- nodePackageManagerCommand %> run e2e:cypress:audits`.
 
 You should only run the audits when your application is packaged with the production profile.
 
-The Lighthouse report is created in `<%= cypressTemporaryDir %>lhreport.html`.
+The Lighthouse report is created in `<%- cypressTemporaryDir %>lhreport.html`.
 <%_ if (cypressCoverage) { _%>
 
 ### E2E Webapp Code Coverage
@@ -52,20 +52,20 @@ When using Cypress, you can generate code coverage report by running your dev se
 Build your Angular application with instrumented code:
 
 ```bash
-<%= nodePackageManagerCommand %> run webapp:instrumenter
+<%- nodePackageManagerCommand %> run webapp:instrumenter
 ```
 
 <%_ } _%>
 Start your backend without compiling frontend:
 
 ```bash
-<%= nodePackageManagerCommand %> run backend:start
+<%- nodePackageManagerCommand %> run backend:start
 ```
 
 Start your Cypress end to end testing:
 
 ```bash
-<%= nodePackageManagerCommand %> run e2e --configuration coverage
+<%- nodePackageManagerCommand %> run e2e --configuration coverage
 ```
 
 The coverage report is generated under `<%- temporaryDir %>/cypress-coverage` folder.

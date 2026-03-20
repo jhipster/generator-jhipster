@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.config.neo4j;
+package <%- packageName %>.config.neo4j;
 
 import ac.simons.neo4j.migrations.core.JavaBasedMigration;
 import ac.simons.neo4j.migrations.core.MigrationContext;
@@ -61,8 +61,8 @@ final class Neo4jMigrations {
             JavaType type = om.getTypeFactory().
                 constructMapType(Map.class, String.class, Object.class);
 
-            String userLabel = "<%= jhiTablePrefix %>_user";
-            String authorityLabel = "<%= jhiTablePrefix %>_authority";
+            String userLabel = "<%- jhiTablePrefix %>_user";
+            String authorityLabel = "<%- jhiTablePrefix %>_authority";
 
             String query = String.format(
                     "CREATE (u:%s) SET u = $user WITH u " +

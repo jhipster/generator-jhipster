@@ -16,10 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>;
+package <%- packageName %>;
 
-import <%= packageName %>.config.ApplicationProperties;
-import <%= packageName %>.config.CRLFLogConverter;
+import <%- packageName %>.config.ApplicationProperties;
+import <%- packageName %>.config.CRLFLogConverter;
 
 import tech.jhipster.config.DefaultProfileUtil;
 import tech.jhipster.config.JHipsterConstants;
@@ -47,18 +47,18 @@ import org.springframework.boot.h2console.autoconfigure.H2ConsoleAutoConfigurati
 
 @SpringBootApplication(<% if (devDatabaseTypeH2Any) { %>exclude = { H2ConsoleAutoConfiguration.class }<% } %>)
 @EnableConfigurationProperties({<% if (databaseMigrationLiquibase) { %>LiquibaseProperties.class, <% } %>ApplicationProperties.class})
-public class <%= mainClass %> {
+public class <%- mainClass %> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(<%= mainClass %>.class);
+    private static final Logger LOG = LoggerFactory.getLogger(<%- mainClass %>.class);
 
     private final Environment env;
 
-    public <%= mainClass %>(Environment env) {
+    public <%- mainClass %>(Environment env) {
         this.env = env;
     }
 
     /**
-     * Initializes <%= baseName %>.
+     * Initializes <%- baseName %>.
      * <p>
      * Spring profiles can be configured with a program argument --spring.profiles.active=your-active-profile
      * <p>
@@ -102,7 +102,7 @@ public class <%= mainClass %> {
         }
 
 <%_ } _%>
-        var app = new SpringApplication(<%= mainClass %>.class);
+        var app = new SpringApplication(<%- mainClass %>.class);
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
         logApplicationStartup(env);

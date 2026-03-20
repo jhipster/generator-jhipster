@@ -27,7 +27,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ActivateService } from './activate.service';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-activate',
+  selector: '<%- jhiPrefixDashed %>-activate',
   imports: [RouterLink<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
   templateUrl: './activate.html',
 })

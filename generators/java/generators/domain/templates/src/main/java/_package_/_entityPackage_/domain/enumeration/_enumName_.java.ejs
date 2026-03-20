@@ -16,18 +16,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= entityAbsolutePackage %>.domain.enumeration;
+package <%- entityAbsolutePackage %>.domain.enumeration;
 
 <%_ if (enumJavadoc) { _%>
 <%- enumJavadoc %>
 <%_ } else { _%>
 /**
- * The <%= enumName %> enumeration.
+ * The <%- enumName %> enumeration.
  */
 <%_ } _%>
-public enum <%= enumName %> {
+public enum <%- enumName %> {
 <%_ if (withoutCustomValues) { _%>
-<%= enumValues.map(enumValue => `${enumValue.comment && `\n${enumValue.comment}\n` || ''}    ${enumValue.name}`).join(', ') %>
+<%- enumValues.map(enumValue => `${enumValue.comment && `\n${enumValue.comment}\n` || ''}    ${enumValue.name}`).join(', ') %>
 <%_ } else {
   // The following code redefines the variable state to be 'without CustomValue' when name equals value.
   withoutCustomValues = enumValues.every(({name, value}) => name === value);
@@ -36,12 +36,12 @@ public enum <%= enumName %> {
 
   enumValues.forEach((enumWithCustomValue, index) => {
     if (enumWithCustomValue.comment){ _%>
-<%= enumWithCustomValue.comment %>
+<%- enumWithCustomValue.comment %>
   <%_ } 
   if (enumWithCustomValue.name === enumWithCustomValue.value) { _%>
-    <%= enumWithCustomValue.name %><% if (index < enumValues.length - 1) { %>,<% } else { %>;<% } %>
+    <%- enumWithCustomValue.name %><% if (index < enumValues.length - 1) { %>,<% } else { %>;<% } %>
   <%_ } else { _%>
-    <%= enumWithCustomValue.name %>("<%= enumWithCustomValue.value %>")<% if (index < enumValues.length - 1) { %>,<% } else { %>;<% } %>
+    <%- enumWithCustomValue.name %>("<%- enumWithCustomValue.value %>")<% if (index < enumValues.length - 1) { %>,<% } else { %>;<% } %>
     <%_ }
   });
     _%>
@@ -49,10 +49,10 @@ public enum <%= enumName %> {
     private<% if (withCustomValues) { %> final<% } %> String value;
 
     <%_ if (withSomeCustomValues) { _%>
-    <%= enumName %>() {}
+    <%- enumName %>() {}
     <%_ } _%>
 
-    <%= enumName %>(String value) {
+    <%- enumName %>(String value) {
         this.value = value;
     }
 

@@ -16,14 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.config;
+package <%- packageName %>.config;
 
-import <%= packageName %>.security.AuthoritiesConstants;
+import <%- packageName %>.security.AuthoritiesConstants;
 <%_ if (authenticationTypeOauth2) { _%>
 import static org.springframework.security.oauth2.core.oidc.StandardClaimNames.PREFERRED_USERNAME;
 
-import <%= packageName %>.security.SecurityUtils;
-import <%= packageName %>.security.oauth2.AudienceValidator;
+import <%- packageName %>.security.SecurityUtils;
+import <%- packageName %>.security.oauth2.AudienceValidator;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverter;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,7 +37,7 @@ import tech.jhipster.config.JHipsterProperties;
 import org.springframework.boot.security.autoconfigure.SecurityProperties;
 <%_ } _%>
 <%_ if (!skipClient) { _%>
-import <%= packageName %>.web.filter.SpaWebFilter;
+import <%- packageName %>.web.filter.SpaWebFilter;
 <%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

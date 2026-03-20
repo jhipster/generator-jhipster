@@ -4,9 +4,9 @@ import axios from 'axios';
 import { Subject, type Subscription } from 'rxjs';
 import { createMemoryHistory, createRouter, type Router } from 'vue-router';
 
-import <%=jhiPrefixCapitalized%>Tracker from './tracker.vue';
+import <%- jhiPrefixCapitalized %>Tracker from './tracker.vue';
 
-type <%=jhiPrefixCapitalized%>TrackerComponentType = InstanceType<typeof <%=jhiPrefixCapitalized%>Tracker>;
+type <%- jhiPrefixCapitalized %>TrackerComponentType = InstanceType<typeof <%- jhiPrefixCapitalized %>Tracker>;
 
 let router: Router;
 
@@ -14,9 +14,9 @@ const axiosStub = {
   get: vi.spyOn(axios, 'get'),
 };
 
-describe('<%=jhiPrefixCapitalized%>Tracker', () => {
+describe('<%- jhiPrefixCapitalized %>Tracker', () => {
   let wrapper: any;
-  let trackerView: <%=jhiPrefixCapitalized%>TrackerComponentType;
+  let trackerView: <%- jhiPrefixCapitalized %>TrackerComponentType;
 
   let subject: Subject<any>;
   let subscription: Subscription;
@@ -37,7 +37,7 @@ describe('<%=jhiPrefixCapitalized%>Tracker', () => {
 
     router = createRouter({ history: createMemoryHistory(), routes: [] });
 
-    wrapper = shallowMount(<%=jhiPrefixCapitalized%>Tracker, {
+    wrapper = shallowMount(<%- jhiPrefixCapitalized %>Tracker, {
       global: {
         plugins: [router],
         stubs: {

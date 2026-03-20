@@ -25,7 +25,7 @@ import { type RouteLocation } from 'vue-router';
 import dayjs from 'dayjs';
 import { DATE_TIME_LONG_FORMAT } from '@/shared/composables/date-format';
 <%_ } _%>
-import <%= entityAngularName %>Update from './<%= entityFileName %>-update.vue';
+import <%- entityAngularName %>Update from './<%- entityFileName %>-update.vue';
 import AlertService from '@/shared/alert/alert.service';
 
 <%_
@@ -35,7 +35,7 @@ import AlertService from '@/shared/alert/alert.service';
     .filter(relationships => relationships.length > 0);
 _%>
 
-type <%= entityAngularName %>UpdateComponentType = InstanceType<typeof <%= entityAngularName %>Update>;
+type <%- entityAngularName %>UpdateComponentType = InstanceType<typeof <%- entityAngularName %>Update>;
 
 let route: Partial<RouteLocation>;
 const routerGoMock = vi.fn();
@@ -45,25 +45,25 @@ vi.mock('vue-router', () => ({
   useRouter: () => ({ go: routerGoMock }),
 }));
 
-const <%= entityInstance %>Sample = { <%= primaryKey.name %>: <%- tsKeyId %> };
+const <%- entityInstance %>Sample = { <%- primaryKey.name %>: <%- tsKeyId %> };
 
 describe('Component Tests', () => {
-  let mountOptions: MountingOptions<<%= entityAngularName %>UpdateComponentType>['global'];
+  let mountOptions: MountingOptions<<%- entityAngularName %>UpdateComponentType>['global'];
   let alertService: AlertService;
 
-  describe('<%= entityAngularName %> Management Update Component', () => {
-    let comp: <%= entityAngularName %>UpdateComponentType;
-    let <%= entityInstance %>ServiceStub: any;
+  describe('<%- entityAngularName %> Management Update Component', () => {
+    let comp: <%- entityAngularName %>UpdateComponentType;
+    let <%- entityInstance %>ServiceStub: any;
 
     beforeEach(() => {
       route = {};
-      <%= entityInstance %>ServiceStub = {
+      <%- entityInstance %>ServiceStub = {
         retrieve: vi.fn(),
         find: vi.fn(),
         update: vi.fn(),
         create: vi.fn(),
       };
-      <%= entityInstance %>ServiceStub.retrieve.mockResolvedValueOnce([]);
+      <%- entityInstance %>ServiceStub.retrieve.mockResolvedValueOnce([]);
 
       alertService = new AlertService({
 <%_ if (enableTranslation) { _%>
@@ -84,14 +84,14 @@ describe('Component Tests', () => {
         },
         provide: {
           alertService,
-          <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
+          <%- entityInstance %>Service: () => <%- entityInstance %>ServiceStub,
 <%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
   <% if (relationship.otherEntityUser && (generateBuiltInUserEntity)) { %>
             userService: () => ({
                 retrieve: vi.fn().mockResolvedValue({}),
               }),
   <%_ } else if (relationship.otherEntity.entityAngularName !== entityAngularName) { _%>
-            <%= relationship.otherEntity.entityInstance %>Service: () => ({
+            <%- relationship.otherEntity.entityInstance %>Service: () => ({
                 retrieve: vi.fn().mockResolvedValue({}),
               }),
   <%_ } _%>
@@ -107,7 +107,7 @@ describe('Component Tests', () => {
 <%_ if (anyFieldIsTimeDerived) { _%>
     describe('load', () => {
       beforeEach(() => {
-        const wrapper = shallowMount(<%= entityAngularName %>Update, { global: mountOptions });
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
         comp = wrapper.vm;
       });
       it('Should convert date from string', () => {
@@ -130,34 +130,34 @@ describe('Component Tests', () => {
     describe('save', () => {
       it('Should call update service on save for existing entity', async () => {
         // GIVEN
-        const wrapper = shallowMount(<%= entityAngularName %>Update, { global: mountOptions });
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
         comp = wrapper.vm;
-        comp.<%= entityInstance %> = <%= entityInstance %>Sample;
-        <%= entityInstance %>ServiceStub.update.mockResolvedValue(<%= entityInstance %>Sample);
+        comp.<%- entityInstance %> = <%- entityInstance %>Sample;
+        <%- entityInstance %>ServiceStub.update.mockResolvedValue(<%- entityInstance %>Sample);
 
         // WHEN
         comp.save();
         await comp.$nextTick();
 
         // THEN
-        expect(<%= entityInstance %>ServiceStub.update).toHaveBeenCalledWith(<%= entityInstance %>Sample);
+        expect(<%- entityInstance %>ServiceStub.update).toHaveBeenCalledWith(<%- entityInstance %>Sample);
         expect(comp.isSaving).toEqual(false);
       });
 
       it('Should call create service on save for new entity', async () => {
         // GIVEN
         const entity = {};
-        <%= entityInstance %>ServiceStub.create.mockResolvedValue(entity);
-        const wrapper = shallowMount(<%= entityAngularName %>Update, { global: mountOptions });
+        <%- entityInstance %>ServiceStub.create.mockResolvedValue(entity);
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
         comp = wrapper.vm;
-        comp.<%= entityInstance %> = entity;
+        comp.<%- entityInstance %> = entity;
 
         // WHEN
         comp.save();
         await comp.$nextTick();
 
         // THEN
-        expect(<%= entityInstance %>ServiceStub.create).toHaveBeenCalledWith(entity);
+        expect(<%- entityInstance %>ServiceStub.create).toHaveBeenCalledWith(entity);
         expect(comp.isSaving).toEqual(false);
       });
     });
@@ -165,28 +165,28 @@ describe('Component Tests', () => {
     describe('Before route enter', () => {
       it('Should retrieve data', async () => {
         // GIVEN
-        <%= entityInstance %>ServiceStub.find.mockResolvedValue(<%= entityInstance %>Sample);
-        <%= entityInstance %>ServiceStub.retrieve.mockResolvedValue([<%= entityInstance %>Sample]);
+        <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %>Sample);
+        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue([<%- entityInstance %>Sample]);
 
         // WHEN
         route = {
           params: {
-            <%= entityInstance %>Id: '' + <%= entityInstance %>Sample.<%- primaryKey.name %>,
+            <%- entityInstance %>Id: '' + <%- entityInstance %>Sample.<%- primaryKey.name %>,
           },
         };
-        const wrapper = shallowMount(<%= entityAngularName %>Update, { global: mountOptions });
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
         comp = wrapper.vm;
         await comp.$nextTick();
 
         // THEN
-        expect(comp.<%= entityInstance %>).toMatchObject(<%= entityInstance %>Sample);
+        expect(comp.<%- entityInstance %>).toMatchObject(<%- entityInstance %>Sample);
       });
     });
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
-        <%= entityInstance %>ServiceStub.find.mockResolvedValue(<%= entityInstance %>Sample);
-        const wrapper = shallowMount(<%= entityAngularName %>Update, { global: mountOptions });
+        <%- entityInstance %>ServiceStub.find.mockResolvedValue(<%- entityInstance %>Sample);
+        const wrapper = shallowMount(<%- entityAngularName %>Update, { global: mountOptions });
         comp = wrapper.vm;
         await comp.$nextTick();
 

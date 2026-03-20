@@ -34,12 +34,12 @@ import { <%- importedType %> } from '<%- importedPath %>';
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
 
-export interface I<%= entityReactName %> {
+export interface I<%- entityReactName %> {
     <%_ variablesWithTypes.forEach(variablesWithType => { _%>
     <%- variablesWithType %>;
     <%_ }); _%>
 }
 
-export const defaultValue:  Readonly<I<%= entityReactName %>> = {
+export const defaultValue:  Readonly<I<%- entityReactName %>> = {
 <% for (idx in defaultVariablesValues) { %><%- defaultVariablesValues[idx] %><% } %>
 };
