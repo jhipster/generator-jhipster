@@ -20,21 +20,21 @@ import { beforeAll, describe, expect, it } from 'vitest';
 
 import { defaultHelpers as helpers, result } from 'generator-jhipster/testing';
 
-const SUB_GENERATOR = '<%= subGenerator %>';
+const SUB_GENERATOR = '<%- subGenerator %>';
 <%_ if (customGenerator) { _%>
-const SUB_GENERATOR_NAMESPACE = `jhipster-<%= application.baseName %>:${SUB_GENERATOR}`;
+const SUB_GENERATOR_NAMESPACE = `jhipster-<%- application.baseName %>:${SUB_GENERATOR}`;
 <%_ } else { _%>
 const BLUEPRINT_NAMESPACE = `jhipster:${SUB_GENERATOR}`;
 <%_ } _%>
 
-describe('SubGenerator <%= subGenerator %> of <%= application.baseName %> JHipster blueprint', () => {
+describe('SubGenerator <%- subGenerator %> of <%- application.baseName %> JHipster blueprint', () => {
   describe('run', () => {
     beforeAll(async function() {
       await helpers
 <%_ if (subGenerator === 'jdl') { _%>
         .runJDL('application { }')
 <%_ } else { _%>
-        .run(<%= customGenerator ? 'SUB_GENERATOR_NAMESPACE' : 'BLUEPRINT_NAMESPACE' %>)
+        .run(<%- customGenerator ? 'SUB_GENERATOR_NAMESPACE' : 'BLUEPRINT_NAMESPACE' %>)
 <%_ } _%>
         .withJHipsterConfig()
         .withOptions({

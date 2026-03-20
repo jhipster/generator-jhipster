@@ -42,7 +42,7 @@ dependencies {
   // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 
-project.ext.diffChangelogFile = "<%= srcMainResources %>config/liquibase/changelog/" + new Date().format("yyyyMMddHHmmss") + "_changelog.xml"
+project.ext.diffChangelogFile = "<%- srcMainResources %>config/liquibase/changelog/" + new Date().format("yyyyMMddHHmmss") + "_changelog.xml"
 if (!project.hasProperty("runList")) {
  project.ext.runList = "main"
 }
@@ -50,21 +50,21 @@ if (!project.hasProperty("runList")) {
 liquibase {
   activities {
     main {
-      driver "<%= devJdbcDriver %>"
+      driver "<%- devJdbcDriver %>"
       url "<%- devLiquibaseUrl %>"
       username "<%- devDatabaseUsername %>"
 <%_ if (devDatabasePassword) { _%>
       password "<%- devDatabasePassword %>"
 <%_ } _%>
-      changelogFile "<%= srcMainResources %>config/liquibase/master.xml"
+      changelogFile "<%- srcMainResources %>config/liquibase/master.xml"
 <%_ if (liquibaseDefaultSchemaName) { _%>
       defaultSchemaName "<%- liquibaseDefaultSchemaName %>"
 <%_ } _%>
       logLevel "debug"
-      classpath "<%= srcMainResources %>"
+      classpath "<%- srcMainResources %>"
     }
     diffLog {
-      driver "<%= devJdbcDriver %>"
+      driver "<%- devJdbcDriver %>"
       url "<%- devLiquibaseUrl %>"
       username "<%- devDatabaseUsername %>"
 <%_ if (devDatabasePassword) { _%>
@@ -72,7 +72,7 @@ liquibase {
 <%_ } _%>
       changelogFile project.ext.diffChangelogFile
 <%_ if (!reactive && backendTypeSpringBoot) { _%>
-      referenceUrl "hibernate:spring:<%= packageName %>.domain?dialect=<%= devHibernateDialect %>&hibernate.physical_naming_strategy=<%= locals.hibernateNamingPhysicalStrategy %>&hibernate.implicit_naming_strategy=<%= locals.hibernateNamingImplicitStrategy %>"
+      referenceUrl "hibernate:spring:<%- packageName %>.domain?dialect=<%- devHibernateDialect %>&hibernate.physical_naming_strategy=<%- locals.hibernateNamingPhysicalStrategy %>&hibernate.implicit_naming_strategy=<%- locals.hibernateNamingImplicitStrategy %>"
 <%_ } _%>
 <%_ if (liquibaseDefaultSchemaName) { _%>
       defaultSchemaName "<%- liquibaseDefaultSchemaName %>"

@@ -20,7 +20,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title><%= baseName %> - Swagger UI</title>
+    <title><%- baseName %> - Swagger UI</title>
     <base href="/swagger-ui/" />
     <link rel="stylesheet" type="text/css" href="./swagger-ui.css" />
     <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
@@ -56,7 +56,7 @@
         }
 <%_ } else { _%>
         const getBearerToken = () => {
-          let authToken = localStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%= jhiPrefixDashed %>-authenticationToken');
+          let authToken = localStorage.getItem('<%- jhiPrefixDashed %>-authenticationToken') || sessionStorage.getItem('<%- jhiPrefixDashed %>-authenticationToken');
           if (authToken) {
 <%_ if (clientFrameworkAngular || clientFrameworkReact) { _%>
             authToken = JSON.parse(authToken);

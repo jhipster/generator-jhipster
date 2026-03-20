@@ -19,13 +19,13 @@
 @import 'bootstrap-variables';
 @import 'bootstrap/scss/functions';
 <%_ if (!clientThemeNone) { _%>
-@import 'bootswatch/dist/<%= clientTheme %>/variables';
+@import 'bootswatch/dist/<%- clientTheme %>/variables';
 <%_ } _%>
 @import 'bootstrap/scss/variables';
 // Import Bootstrap source files from node_modules
 @import 'bootstrap/scss/bootstrap';
 <%_ if (!clientThemeNone) { _%>
-@import 'bootswatch/dist/<%= clientTheme %>/bootswatch';
+@import 'bootswatch/dist/<%- clientTheme %>/bootswatch';
 <%_ } _%>
 @import 'bootstrap-vue-next/dist/bootstrap-vue-next.css';
 
@@ -153,7 +153,7 @@ Generic styles
 }
 
 .hand,
-[<%= jhiPrefix.toLowerCase() %>sortby] {
+[<%- jhiPrefix.toLowerCase() %>sortby] {
   cursor: pointer;
 }
 

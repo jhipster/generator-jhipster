@@ -32,39 +32,39 @@
     </div>
   </h2>
 
-  <<%= jhiPrefixDashed %>-alert-error />
+  <<%- jhiPrefixDashed %>-alert-error />
 
-  <<%= jhiPrefixDashed %>-alert />
+  <<%- jhiPrefixDashed %>-alert />
 
 @if (users()) {
   <div class="table-responsive">
     <table class="table table-striped" aria-describedby="user-management-page-heading">
       <thead>
-        <tr<% if (!locals.databaseTypeCassandra) { %> <%= jhiPrefix %>Sort [(sortState)]="sortState" (sortChange)="transition($event)"<% } %>>
-          <th scope="col"<% if (!locals.databaseTypeCassandra) { %> <%= jhiPrefix %>SortBy="id"<% } %>>
+        <tr<% if (!locals.databaseTypeCassandra) { %> <%- jhiPrefix %>Sort [(sortState)]="sortState" (sortChange)="transition($event)"<% } %>>
+          <th scope="col"<% if (!locals.databaseTypeCassandra) { %> <%- jhiPrefix %>SortBy="id"<% } %>>
             <span>__jhiTranslateTag__('global.field.id')</span><% if (locals.databaseType !== 'cassandra') { %> <fa-icon icon="sort" /><% } %>
           </th>
-          <th scope="col"<% if (!locals.databaseTypeCassandra) { %> <%= jhiPrefix %>SortBy="login"<% } %>>
+          <th scope="col"<% if (!locals.databaseTypeCassandra) { %> <%- jhiPrefix %>SortBy="login"<% } %>>
             <span>__jhiTranslateTag__('userManagement.login')</span><% if (locals.databaseType !== 'cassandra') { %> <fa-icon icon="sort" /><% } %>
           </th>
-          <th scope="col"<% if (!locals.databaseTypeCassandra) { %> <%= jhiPrefix %>SortBy="email"<% } %>>
+          <th scope="col"<% if (!locals.databaseTypeCassandra) { %> <%- jhiPrefix %>SortBy="email"<% } %>>
             <span>__jhiTranslateTag__('userManagement.email')</span><% if (locals.databaseType !== 'cassandra') { %> <fa-icon icon="sort" /><% } %>
           </th>
           <th scope="col"></th>
 <%_ if (enableTranslation) { _%>
-          <th scope="col"<% if (!locals.databaseTypeCassandra) { %> <%= jhiPrefix %>SortBy="langKey"<% } %>>
+          <th scope="col"<% if (!locals.databaseTypeCassandra) { %> <%- jhiPrefix %>SortBy="langKey"<% } %>>
             <span>__jhiTranslateTag__('userManagement.langKey')</span><% if (locals.databaseType !== 'cassandra') { %> <fa-icon icon="sort" /><% } %>
           </th>
 <%_ } _%>
           <th scope="col"><span>__jhiTranslateTag__('userManagement.profiles')</span></th>
 <%_ if (!locals.databaseTypeCassandra) { _%>
-          <th scope="col" <%= jhiPrefix %>SortBy="createdDate">
+          <th scope="col" <%- jhiPrefix %>SortBy="createdDate">
             <span>__jhiTranslateTag__('userManagement.createdDate')</span> <fa-icon icon="sort" />
           </th>
-          <th scope="col" <%= jhiPrefix %>SortBy="lastModifiedBy">
+          <th scope="col" <%- jhiPrefix %>SortBy="lastModifiedBy">
             <span>__jhiTranslateTag__('userManagement.lastModifiedBy')</span> <fa-icon icon="sort" />
           </th>
-          <th scope="col" <%= jhiPrefix %>SortBy="lastModifiedDate">
+          <th scope="col" <%- jhiPrefix %>SortBy="lastModifiedDate">
             <span>__jhiTranslateTag__('userManagement.lastModifiedDate')</span> <fa-icon icon="sort" />
           </th>
 <%_ } _%>
@@ -139,7 +139,7 @@
 
   <div>
     <div class="d-flex justify-content-center">
-      <<%= jhiPrefixDashed %>-item-count [params]="{ page: page(), totalItems: totalItems(), itemsPerPage: itemsPerPage() }" />
+      <<%- jhiPrefixDashed %>-item-count [params]="{ page: page(), totalItems: totalItems(), itemsPerPage: itemsPerPage() }" />
     </div>
 
     <div class="d-flex justify-content-center">
