@@ -83,10 +83,10 @@ _%>
                         </div>
     <%_ } else if (field.blobContentTypeText) { _%>
                         <textarea class="<%- fieldInputClass %>" name="<%- fieldName %>" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>"
-                            :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model="v$.<%- fieldName %>.$model" <% if (field.fieldValidate === true && field.fieldValidateRules.includes('required')) { %> required<% } %>></textarea>
+                            :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model="v$.<%- fieldName %>.$model" <% if (field.fieldValidate && field.fieldValidateRules.includes('required')) { %> required<% } %>></textarea>
     <%_ } else { _%>
                         <input type="<%- field.htmlInputType %>" class="<%- fieldInputClass %>" name="<%- fieldName %>" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>"
-                            :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model<% if (field.htmlInputType === 'number') { %>.number<% } %>="v$.<%- fieldName %>.$model" <% if (field.fieldValidate === true && field.fieldValidateRules.includes('required')) { %> required<% } %>/>
+                            :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model<% if (field.htmlInputType === 'number') { %>.number<% } %>="v$.<%- fieldName %>.$model" <% if (field.fieldValidate && field.fieldValidateRules.includes('required')) { %> required<% } %>/>
       <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
                         <input type="hidden" class="<%- fieldInputClass %>" name="<%- fieldName %>ContentType" id="<%- entityFileName %>-<%- fieldName %>ContentType"
                             v-model="<%- entityInstance %>.<%- fieldName %>ContentType" />

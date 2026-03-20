@@ -30,7 +30,7 @@ import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
 import <%- entityAbsolutePackage %>.domain.criteria.<%- entityClass %>Criteria;
 <%_ } _%>
 import <%- entityAbsolutePackage %>.repository.<%- entityClass %>Repository;
-<%_ if (isUsingMapsId === true) { _%>
+<%_ if (isUsingMapsId) { _%>
 import <%- entityAbsolutePackage %>.repository.<%- mapsIdAssoc.otherEntity.entityNameCapitalized %>Repository;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
