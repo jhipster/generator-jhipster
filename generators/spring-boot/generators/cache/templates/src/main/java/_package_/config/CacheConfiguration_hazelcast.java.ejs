@@ -142,12 +142,12 @@ public class CacheConfiguration {
             config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
             config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(false);
         }
-      <%_ } _%>
+<%_ } _%>
         config.setManagementCenterConfig(new ManagementCenterConfig());
         config.addMapConfig(initializeDefaultMapConfig(jHipsterProperties));
-  <%_ if (enableHibernateCache) { _%>
+<%_ if (enableHibernateCache) { _%>
         config.addMapConfig(initializeDomainMapConfig(jHipsterProperties));
-  <%_ } _%>
+<%_ } _%>
         return Hazelcast.newHazelcastInstance(config);
     }
 

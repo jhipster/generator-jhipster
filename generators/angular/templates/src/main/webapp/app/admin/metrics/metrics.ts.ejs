@@ -40,7 +40,10 @@ import { MetricsSystem } from './blocks/metrics-system/metrics-system';
   templateUrl: './metrics.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    <%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>
+<%_ if (enableTranslation) { _%>
+    TranslateDirective,
+    TranslateModule,
+<%_ } _%>
     FontAwesomeModule,
     JvmMemory,
     JvmThreads,

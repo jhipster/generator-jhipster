@@ -185,14 +185,14 @@ public class PublicUserResource {
             .toList();
     <%_ } _%>
   <%_ } else { _%>
-     <%_ if (reactive) { _%>
+    <%_ if (reactive) { _%>
         return userRepository.search(query).map(<%- user.dtoClass %>::new).collectList();
-     <%_ } else { _%>
+    <%_ } else { _%>
         return StreamSupport
             .stream(userRepository.search(query).spliterator(), false)
             .map(<%- user.dtoClass %>::new)
             .toList();
-     <%_ } _%>
+    <%_ } _%>
   <%_ } _%>
     }
 <%_ } _%>

@@ -31,10 +31,10 @@ logSummary(){
   <%_ if (istio) { _%>
     <%_ appConfigs.forEach((appConfig) =>  { _%>
       <%_ if (appConfig.applicationTypeGateway) { _%>
-        echo "Gateway - http://<%= appConfig.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>"
+        echo "Gateway - http://<%- appConfig.baseName.toLowerCase() %>.<%- kubernetesNamespace %>.<%- ingressDomain %>"
       <%_ } _%>
       <%_ if (appConfig.applicationTypeMonolith) { _%>
-        echo "<%= appConfig.baseName %> - http://<%= appConfig.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>"
+        echo "<%- appConfig.baseName %> - http://<%- appConfig.baseName.toLowerCase() %>.<%- kubernetesNamespace %>.<%- ingressDomain %>"
       <%_ } _%>
     <%_ }) _%>
     <%_ if (istio) { _%>

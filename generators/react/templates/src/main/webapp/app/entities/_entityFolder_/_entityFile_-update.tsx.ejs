@@ -86,16 +86,16 @@ export const <%- entityReactName %>Update = () => {
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
 
-  <%_ otherEntityActions.forEach(val => { _%>
+<%_ otherEntityActions.forEach(val => { _%>
   const <%- val.instance %> = useAppSelector(state => state.<%- val.reducer %>);
-  <%_ }) _%>
+<%_ }) _%>
   const <%- entityInstance %>Entity = useAppSelector(state => state.<%- entityReactState %>.entity);
   const loading = useAppSelector(state => state.<%- entityReactState %>.loading);
   const updating = useAppSelector(state => state.<%- entityReactState %>.updating);
   const updateSuccess = useAppSelector(state => state.<%- entityReactState %>.updateSuccess);
-  <%_ enumImports.forEach( (importedPath, importedType) => { _%>
+<%_ enumImports.forEach( (importedPath, importedType) => { _%>
   const <%- this._.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
-  <%_ }); _%>
+<%_ }); _%>
 
   const handleClose = () => {
     navigate('/<%- entityPage %>'<%_ if (paginationPagination) { _%> + location.search<%_ } _%>);
@@ -166,7 +166,7 @@ _%>
     if (field.fieldTypeTimed) {
 _%>
           <%- fieldName %>: displayDefaultDateTime(),
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
         }
       : {
@@ -260,14 +260,14 @@ _%>
   <%_ } else if (field.fieldIsEnum) { _%>
             type="select"
           >
-          <%_ const enumPrefix = frontendAppName + '.'+ fieldType; _%>
+    <%_ const enumPrefix = frontendAppName + '.'+ fieldType; _%>
           {<%- this._.lowerFirst(fieldType) %>Values.map(<%- this._.lowerFirst(fieldType) %> => (
               <option value={<%- this._.lowerFirst(fieldType) %>} key={<%- this._.lowerFirst(fieldType) %>}>
-      <%_ if (enableTranslation) { _%>
+    <%_ if (enableTranslation) { _%>
                 {translate("<%- enumPrefix %>."+<%- this._.lowerFirst(fieldType) %>)}
-      <%_ } else { _%>
+    <%_ } else { _%>
                 {<%- this._.lowerFirst(fieldType) %>}
-      <%_ } _%>
+    <%_ } _%>
               </option>))}
           </ValidatedField>
   <%_ } else if (field.fieldTypeNumeric) { _%>
@@ -276,11 +276,11 @@ _%>
           />
   <%_ } else if (field.fieldTypeBinary) { _%>
     <%_ if (!field.blobContentTypeText) { _%>
-            <%_ if (field.blobContentTypeImage) { _%>
+      <%_ if (field.blobContentTypeImage) { _%>
             isImage accept="image/*"
-            <%_ } else { _%>
+      <%_ } else { _%>
             openActionLabel={translate('entity.action.open')}
-            <%_ } _%>
+      <%_ } _%>
             <%- include('react_validators'); %>
           />
     <%_ } else { _%>
@@ -320,15 +320,15 @@ _%>
             id="<%- entityFileName %>-<%- relationshipName %>"
             name="<%- relationshipFieldName %>"
             data-cy="<%- relationshipFieldName %>"
-      <%_ if (enableTranslation) { _%>
+    <%_ if (enableTranslation) { _%>
             label={translate('<%- translationKey %>')}
-      <%_ } else { _%>
+    <%_ } else { _%>
             label="<%- relationshipNameHumanized %>"
-      <%_ } _%>
+    <%_ } _%>
             type="select"
-      <%_ if (relationshipRequired) { _%>
+    <%_ if (relationshipRequired) { _%>
             required
-      <%_ } _%>
+    <%_ } _%>
           >
               <option value="" key="0" />
               {
@@ -346,11 +346,11 @@ _%>
     <%_ } _%>
   <%_ } else { _%>
           <ValidatedField
-        <%_ if (enableTranslation) { _%>
+    <%_ if (enableTranslation) { _%>
             label={translate('<%- i18nKeyPrefix %>.<%- relationshipName %>')}
-        <%_ } else { _%>
+    <%_ } else { _%>
             label="<%- relationshipNameHumanized %>"
-        <%_ } _%>
+    <%_ } _%>
             id="<%- entityFileName %>-<%- relationshipName %>"
             data-cy="<%- relationshipFieldName %>"
             type="select"

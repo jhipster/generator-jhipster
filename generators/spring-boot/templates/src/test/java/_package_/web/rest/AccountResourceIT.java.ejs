@@ -260,11 +260,11 @@ class AccountResourceIT {
         accountWebTestClient.get().uri("/api/account")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
-    <%_ if (authenticationTypeSession) { _%>
+  <%_ if (authenticationTypeSession) { _%>
             .expectStatus().isEqualTo(HttpStatus.OK);
-    <%_ } else { _%>
+  <%_ } else { _%>
             .expectStatus().isEqualTo(HttpStatus.UNAUTHORIZED);
-    <%_ } _%>
+  <%_ } _%>
 <%_ } else { _%>
     void testGetUnknownAccount() throws Exception {
         restAccountMockMvc.perform(get("/api/account")
@@ -335,9 +335,9 @@ class AccountResourceIT {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsBytes(invalidUser))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
-        <%_ if (databaseTypeCouchbase) { _%>
+  <%_ if (databaseTypeCouchbase) { _%>
             .andDo(exportTestSecurityContext())
-        <%_ } _%>
+  <%_ } _%>
             .andExpect(status().isBadRequest());
 <%_ } else { _%>
         accountWebTestClient.post().uri("/api/register")
@@ -473,9 +473,9 @@ class AccountResourceIT {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsBytes(secondUser))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
-        <%_ if (databaseTypeCouchbase) { _%>
+  <%_ if (databaseTypeCouchbase) { _%>
             .andDo(exportTestSecurityContext())
-        <%_ } _%>
+  <%_ } _%>
             .andExpect(status().isCreated());
 <%_ } _%>
 
@@ -828,9 +828,9 @@ class AccountResourceIT {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsBytes(userDTO))<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
-        <%_ if (databaseTypeCouchbase) { _%>
+  <%_ if (databaseTypeCouchbase) { _%>
             .andDo(exportTestSecurityContext())
-        <%_ } _%>
+  <%_ } _%>
             .andExpect(status().isBadRequest());
 <%_ } _%>
 
@@ -987,7 +987,7 @@ class AccountResourceIT {
         restAccountMockMvc.perform(post("/api/account/change-password")
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(new PasswordChangeDTO("1"+currentPassword, "new password")))
-            <%_ if (authenticationUsesCsrf) { _%>
+  <%_ if (authenticationUsesCsrf) { _%>
             .with(csrf())<%_ } _%>)
             .andExpect(status().isBadRequest());
 <%_ } _%>
@@ -1028,7 +1028,7 @@ class AccountResourceIT {
         restAccountMockMvc.perform(post("/api/account/change-password")
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, "new password")))
-            <%_ if (authenticationUsesCsrf) { _%>
+  <%_ if (authenticationUsesCsrf) { _%>
             .with(csrf())<%_ } _%>)
             .andExpect(status().isOk());
 <%_ } _%>
@@ -1070,7 +1070,7 @@ class AccountResourceIT {
         restAccountMockMvc.perform(post("/api/account/change-password")
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, newPassword)))
-            <%_ if (authenticationUsesCsrf) { _%>
+  <%_ if (authenticationUsesCsrf) { _%>
             .with(csrf())<%_ } _%>)
             .andExpect(status().isBadRequest());
 <%_ } _%>
@@ -1112,7 +1112,7 @@ class AccountResourceIT {
         restAccountMockMvc.perform(post("/api/account/change-password")
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, newPassword)))
-            <%_ if (authenticationUsesCsrf) { _%>
+  <%_ if (authenticationUsesCsrf) { _%>
             .with(csrf())<%_ } _%>)
             .andExpect(status().isBadRequest());
 <%_ } _%>
@@ -1152,7 +1152,7 @@ class AccountResourceIT {
         restAccountMockMvc.perform(post("/api/account/change-password")
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, "")))
-            <%_ if (authenticationUsesCsrf) { _%>
+  <%_ if (authenticationUsesCsrf) { _%>
             .with(csrf())<%_ } _%>)
             .andExpect(status().isBadRequest());
 <%_ } _%>
@@ -1260,7 +1260,7 @@ class AccountResourceIT {
         persistentTokenRepository.delete(token);
         userService.deleteUser("invalidate-session")<%- reactorBlock %>;
     }
-    <%_ } _%>
+<%_ } _%>
 
     @Test
 <%_ if (databaseTypeSql && !reactive) { _%>
@@ -1289,7 +1289,7 @@ class AccountResourceIT {
 <%_ } else { _%>
         restAccountMockMvc.perform(post("/api/account/reset-password/init")
             .content("password-reset@example.com")
-            <%_ if (authenticationUsesCsrf) { _%>
+  <%_ if (authenticationUsesCsrf) { _%>
             .with(csrf())<%_ } _%>)
             .andExpect(status().isOk());
 <%_ } _%>
@@ -1324,7 +1324,7 @@ class AccountResourceIT {
 <%_ } else { _%>
         restAccountMockMvc.perform(post("/api/account/reset-password/init")
             .content("password-reset-upper-case@EXAMPLE.COM")
-            <%_ if (authenticationUsesCsrf) { _%>
+  <%_ if (authenticationUsesCsrf) { _%>
             .with(csrf())<%_ } _%>)
             .andExpect(status().isOk());
 <%_ } _%>

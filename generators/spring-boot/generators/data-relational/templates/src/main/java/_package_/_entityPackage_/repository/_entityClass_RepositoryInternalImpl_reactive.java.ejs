@@ -265,13 +265,13 @@ _%>
             if (criteria.<%- field.propertyFilterSupplierName %>() != null) {
                 builder.buildFilterConditionForField(criteria.<%- field.propertyFilterSupplierName %>(), entityTable.column("<%- field.columnName %>"));
             }
-<%_ } _%>
-<%_ }); _%>
-<%_ reactiveEagerRelations.forEach((relationship) => { _%>
+    <%_ } _%>
+  <%_ }); _%>
+  <%_ reactiveEagerRelations.forEach((relationship) => { _%>
             if (criteria.<%- relationship.propertyFilterSupplierName %>() != null) {
                 builder.buildFilterConditionForField(criteria.<%- relationship.propertyFilterSupplierName %>(), <%- relationship.relationshipName %>Table.column("<%- relationship.otherEntity.primaryKey.ownFields[0].columnName %>"));
             }
-<%_ }); _%>
+  <%_ }); _%>
         }
         return builder.buildConditions();
     }

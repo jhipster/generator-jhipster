@@ -405,7 +405,7 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
         if (cacheProviderInfinispan) {
   _%>
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-        <%_ } else { _%>
+    <%_ } else { _%>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
         <%_ }
   }

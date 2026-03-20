@@ -192,10 +192,10 @@ class UserServiceIT {
     @MockitoBean
     private DateTimeProvider dateTimeProvider;
 <%_ } _%>
-    <%_ if (!databaseTypeNo) { _%>
+<%_ if (!databaseTypeNo) { _%>
 
     private <%- user.persistClass %> user;
-    <%_ } _%>
+<%_ } _%>
 
 <%_ if (authenticationTypeOauth2) { _%>
     private Map<String, Object> userDetails;
@@ -266,9 +266,9 @@ class UserServiceIT {
         persistentTokenRepository.deleteAll();
 <%_ } _%>
 <%_ if (requiresDeleteAllUsers) { _%>
-    <%_ if (databaseTypeSql && reactive) { _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
         userRepository.deleteAllUserAuthorities()<%- reactorBlock %>;
-    <%_ } _%>
+  <%_ } _%>
         userRepository.deleteAll()<%- reactorBlock %>;
 <%_ } else { _%>
         userService.deleteUser(DEFAULT_LOGIN)<%- reactorBlock %>;

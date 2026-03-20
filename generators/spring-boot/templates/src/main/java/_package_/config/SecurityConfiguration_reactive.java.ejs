@@ -215,16 +215,16 @@ public class SecurityConfiguration {
         http
             .securityMatcher(new NegatedServerWebExchangeMatcher(new OrServerWebExchangeMatcher(
                 pathMatchers(
-  <%_ if (clientBundlerVite) { _%>
+<%_ if (clientBundlerVite) { _%>
                     "/assets/**",
-  <%_ } else if (clientBundlerEsbuild) { _%>
+<%_ } else if (clientBundlerEsbuild) { _%>
                     "/content/**",
                     "/resources/**",
-  <%_ } else { _%>
+<%_ } else { _%>
                     "/app/**",
                     "/i18n/**",
                     "/content/**",
-  <%_ } _%>
+<%_ } _%>
                     "/swagger-ui/**"
                 )
             )))
@@ -393,7 +393,7 @@ public class SecurityConfiguration {
 
     @Bean
     ReactiveJwtDecoder jwtDecoder(<%_ if (!applicationTypeMicroservice) { _%>ReactiveClientRegistrationRepository registrations<%_ } _%>) {
-    <%_ if (applicationTypeMicroservice) { _%>
+  <%_ if (applicationTypeMicroservice) { _%>
         NimbusReactiveJwtDecoder jwtDecoder = (NimbusReactiveJwtDecoder) ReactiveJwtDecoders.fromOidcIssuerLocation(issuerUri);
 
         OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());
@@ -404,7 +404,7 @@ public class SecurityConfiguration {
 
         return jwtDecoder;
     }
-    <%_ } else { _%>
+  <%_ } else { _%>
 
         Mono<ClientRegistration> clientRegistration = registrations.findByRegistrationId("oidc");
 
@@ -472,7 +472,7 @@ public class SecurityConfiguration {
             }
         };
     }
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationTypeSession) { _%>
     private Mono<Void> onAuthenticationError(WebFilterExchange exchange, AuthenticationException e) {

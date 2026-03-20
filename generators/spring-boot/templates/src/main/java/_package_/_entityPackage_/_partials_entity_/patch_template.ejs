@@ -34,15 +34,15 @@ _%>
 <%- returnPrefix %> <%- entityInstance %>Repository.findById(<%- instanceName %>.<%- primaryKey.propertySupplierName %>())
   <%_ if (dtoMapstruct || fields.filter(field => !field.id && !field.transient).length > 0) { _%>
     .map(existing<%- entityClass %> -> {
-  <%_ if (dtoMapstruct) { _%>
+    <%_ if (dtoMapstruct) { _%>
        <%- mapper %>.partialUpdate(existing<%- entityClass %>, <%- instanceName %>);
-  <%_ } else { _%>
-    <%_ for (const field of fields.filter(field => !field.id && !field.transient)) { _%>
+    <%_ } else { _%>
+      <%_ for (const field of fields.filter(field => !field.id && !field.transient)) { _%>
         updateIfPresent(existing<%- entityClass %>::<%- field.propertyConsumerName %>, <%- instanceName %>.<%- field.propertySupplierName %>());
-      <%_ if (field.fieldWithContentType) { _%>
+        <%_ if (field.fieldWithContentType) { _%>
         updateIfPresent(existing<%- entityClass %>::<%- field.propertyConsumerName %>ContentType, <%- instanceName %>.<%- field.propertySupplierName %>ContentType());
-      <%_ } _%>
-    <%_ } %>
+        <%_ } _%>
+      <%_ } %>
   <% } %>
     return existing<%- entityClass %>;
     })

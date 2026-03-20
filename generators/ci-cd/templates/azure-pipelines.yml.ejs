@@ -72,12 +72,12 @@ _%>
     env:
       SNYK_TOKEN: $(SNYK_TOKEN)
 <%_ } _%>
-  <%_ if (!skipServer) { _%>
-    <%_ if (buildToolMaven) { _%>
+<%_ if (!skipServer) { _%>
+  <%_ if (buildToolMaven) { _%>
   - script: chmod +x mvnw
-    <%_ } else if (buildToolGradle) { _%>
+  <%_ } else if (buildToolGradle) { _%>
   - script: chmod +x gradlew
-    <%_ } _%>
+  <%_ } _%>
   - task: Npm@1
     inputs:
       command: 'custom'
@@ -90,7 +90,7 @@ _%>
       searchFolder: '$(Build.SourcesDirectory)/<%- temporaryDir %>test-results'
     condition: succeededOrFailed()
     displayName: 'TESTS: publish test results'
-  <%_ } _%>
+<%_ } _%>
 <%_ if (!skipClient) { _%>
   - task: Npm@1
     inputs:

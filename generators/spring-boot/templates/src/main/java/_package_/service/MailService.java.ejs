@@ -147,25 +147,25 @@ public class MailService {
     }
 <%_ if (!authenticationTypeOauth2) { _%>
 
-<%_ if (!reactive) { _%>
+  <%_ if (!reactive) { _%>
     @Async
-<%_ } _%>
+  <%_ } _%>
     public void sendActivationEmail(<%- user.persistClass %> user) {
         LOG.debug("Sending activation email to '{}'", user.getEmail());
         <%- localSendEmailFromTemplateApi %>(user, "mail/activationEmail", "email.activation.title");
     }
 
-<%_ if (!reactive) { _%>
+  <%_ if (!reactive) { _%>
     @Async
-<%_ } _%>
+  <%_ } _%>
     public void sendCreationEmail(<%- user.persistClass %> user) {
         LOG.debug("Sending creation email to '{}'", user.getEmail());
         <%- localSendEmailFromTemplateApi %>(user, "mail/creationEmail", "email.activation.title");
     }
 
-<%_ if (!reactive) { _%>
+  <%_ if (!reactive) { _%>
     @Async
-<%_ } _%>
+  <%_ } _%>
     public void sendPasswordResetMail(<%- user.persistClass %> user) {
         LOG.debug("Sending password reset email to '{}'", user.getEmail());
         <%- localSendEmailFromTemplateApi %>(user, "mail/passwordResetEmail", "email.reset.title");

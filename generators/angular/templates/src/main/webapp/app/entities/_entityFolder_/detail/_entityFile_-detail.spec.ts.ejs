@@ -48,7 +48,9 @@ describe('<%- entityAngularName %> Management Detail Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
+<%_ if (enableTranslation) { _%>
+      imports: [TranslateModule.forRoot()],
+<%_ } _%>
       providers: [
         provideRouter(
           [

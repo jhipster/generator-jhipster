@@ -131,7 +131,7 @@ config = mergeConfig(config, {
       remotes: {
     <%_ for (const remote of microfrontends) { _%>
         '@<%- remote.lowercaseBaseName %>': `/<%- remote.endpointPrefix %>/assets/remoteEntry.js`,
-  <%_ } _%>
+    <%_ } _%>
       },
   <%_ } _%>
   <%_ if (applicationTypeMicroservice) { _%>

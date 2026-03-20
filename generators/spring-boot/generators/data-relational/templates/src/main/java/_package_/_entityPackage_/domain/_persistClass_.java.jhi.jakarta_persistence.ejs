@@ -79,7 +79,7 @@ import org.hibernate.type.SqlTypes;
 <&_ if (fragment.field<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection) { -&>
     @Column(
         name = "<%- field.fieldNameAsDatabaseColumn %>_content_type"
-        <%_ if (field.fieldValidationRequired) { %>, nullable = false<% } _%>
+  <%_ if (field.fieldValidationRequired) { %>, nullable = false<% } _%>
     )
 <&_ } -&>
 <%_ } -%>
@@ -90,49 +90,49 @@ import org.hibernate.type.SqlTypes;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "<%- relationship.otherEntityRelationshipName %>")
   <%_ } else if (relationship.relationshipManyToOne) { -%>
     @ManyToOne(<% if (relationship.relationshipRequired) { %>optional = false<% } else { %>fetch = FetchType.LAZY<% } %>)
+    <%_ if (relationship.relationshipValidate && relationship.relationshipRequired) { _%>
+    @NotNull
+    <%_ } _%>
+  <%_ } else if (relationship.relationshipManyToMany) { -%>
+    @ManyToMany(fetch = FetchType.LAZY<% if (!relationship.ownerSide) { %>, mappedBy = "<%- relationship.otherRelationship.propertyName %>"<% } %>)
+    <%_ if (relationship.ownerSide) { _%>
       <%_ if (relationship.relationshipValidate && relationship.relationshipRequired) { _%>
     @NotNull
       <%_ } _%>
-  <%_ } else if (relationship.relationshipManyToMany) { -%>
-    @ManyToMany(fetch = FetchType.LAZY<% if (!relationship.ownerSide) { %>, mappedBy = "<%- relationship.otherRelationship.propertyName %>"<% } %>)
-      <%_ if (relationship.ownerSide) { _%>
-        <%_ if (relationship.relationshipValidate && relationship.relationshipRequired) { _%>
-    @NotNull
-        <%_ } _%>
     @JoinTable(name = "<%- relationship.joinTable.name %>",
                joinColumns = <%- primaryKey.fields.length > 1 ? '{' : '' %>
-                   <%_ primaryKey.fields.forEach((field, idx) => { _%>
+        <%_ primaryKey.fields.forEach((field, idx) => { _%>
                    <%- idx === 0 ? '' : ',' %>@JoinColumn(name = "<%- `${entityTableName}_${field.columnName}` %>")
-                   <%_ }); _%>
+        <%_ }); _%>
                <%- primaryKey.fields.length > 1 ? '}' : '' %>,
                inverseJoinColumns = <%- relationship.otherEntity.primaryKey.fields.length > 1 ? '{' : '' %>
-                   <%_ relationship.otherEntity.primaryKey.fields.forEach((field, idx) => { _%>
+        <%_ relationship.otherEntity.primaryKey.fields.forEach((field, idx) => { _%>
                    <%- idx === 0 ? '' : ',' %>@JoinColumn(name = "<%- `${relationship.columnName}_${field.columnName}` %>"))
-                   <%_ }); _%>
-               <%- relationship.otherEntity.primaryKey.fields.length > 1 ? '}' : '' %>
-      <%_ } _%>
-  <%_ } else { -%>
-      <%_ if (relationship.ignoreOtherSideProperty) { -%>
-    @JsonIgnoreProperties(value = {
-        <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
-        "<%- otherRelationship.propertyName %>",
         <%_ }); _%>
+               <%- relationship.otherEntity.primaryKey.fields.length > 1 ? '}' : '' %>
+    <%_ } _%>
+  <%_ } else { -%>
+    <%_ if (relationship.ignoreOtherSideProperty) { -%>
+    @JsonIgnoreProperties(value = {
+      <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
+        "<%- otherRelationship.propertyName %>",
+      <%_ }); _%>
     }, allowSetters = true)
-      <%_ } _%>
-      <%_ if (relationship.ownerSide) { -%>
+    <%_ } _%>
+    <%_ if (relationship.ownerSide) { -%>
     @OneToOne(fetch = FetchType.LAZY<% if (relationship.relationshipRequired) { %>, optional = false<% } %>)
-        <%_ if (relationship.relationshipValidate && relationship.relationshipRequired) { _%>
+      <%_ if (relationship.relationshipValidate && relationship.relationshipRequired) { _%>
     @NotNull
-        <%_ } _%>
-        <%_ if (relationship.id) { %>
+      <%_ } _%>
+      <%_ if (relationship.id) { %>
     @MapsId
     @JoinColumn(name = "<%- relationship.otherEntity.primaryKey.fields[0].columnName %>")
-        <%_ } else { _%>
-    @JoinColumn(unique = true)
-        <%_ } _%>
       <%_ } else { _%>
+    @JoinColumn(unique = true)
+      <%_ } _%>
+    <%_ } else { _%>
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "<%- relationship.otherEntityRelationshipName %>")
-      <%_ } -%>
+    <%_ } -%>
   <%_ } -%>
 <&_ } -&>
 <%_ } -%>

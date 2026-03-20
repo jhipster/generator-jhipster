@@ -267,9 +267,9 @@ public class UserResource {
     /**
      * {@code GET /admin/users} : get all users with all the details - calling this are only allowed for the administrators.
      *<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { %>
-<%_ if (reactive) { _%>
+  <%_ if (reactive) { _%>
      * @param request a {@link ServerHttpRequest} request.
-<%_ } _%>
+  <%_ } _%>
      * @param pageable the pagination information.<% } %>
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body all users.
      */

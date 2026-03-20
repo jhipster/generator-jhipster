@@ -25,10 +25,10 @@ import { configureStore, createReducer } from '@reduxjs/toolkit';
 import authentication, {
   getSession,
   getAccount,
-  <%_ if (!authenticationTypeOauth2) { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
   authenticate,
   login,<% } %>
-  <%_ if (!authenticationTypeJwt) { _%>
+<%_ if (!authenticationTypeJwt) { _%>
   logoutServer,<% } %>
   clearAuthentication,
   logout,<% if (authenticationTypeJwt) { %>
@@ -145,15 +145,15 @@ describe('Authentication reducer tests', () => {
 
   describe('Other cases', () => {
     it('should properly reset the current state when a logout is requested', () => {
-      <%_ if (authenticationTypeOauth2) { _%>const payload = { data: { logoutUrl: 'http://localhost:8080/logout' } };<%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>const payload = { data: { logoutUrl: 'http://localhost:8080/logout' } };<%_ } _%>
       const toTest = authentication(undefined,
-      <%_ if (authenticationTypeJwt) { _%>
+<%_ if (authenticationTypeJwt) { _%>
       logoutSession()
-      <%_ } else if (authenticationTypeOauth2) { _%>
+<%_ } else if (authenticationTypeOauth2) { _%>
       { type: logoutServer.fulfilled.type, payload }
-      <%_ } else { _%>
+<%_ } else { _%>
       { type: logoutServer.fulfilled.type }
-      <%_ } _%>
+<%_ } _%>
       );
       expect(toTest).toMatchObject({
         loading: false,
@@ -225,7 +225,7 @@ describe('Authentication reducer tests', () => {
     });
 
     it('dispatches LOGOUT actions', async () => {
-    <%_ if (!authenticationTypeJwt) { _%>
+<%_ if (!authenticationTypeJwt) { _%>
       axios.post = jest.fn().mockResolvedValue({});
 
       const result = await logoutServer()(dispatch, getState, extra);
@@ -237,10 +237,10 @@ describe('Authentication reducer tests', () => {
         }),
       );
       expect(logoutServer.fulfilled.match(result)).toBe(true);
-    <%_ } else { _%>
+<%_ } else { _%>
       await store.dispatch(logout());
       expect(store.getState()).toEqual([expect.any(Object), expect.objectContaining(logoutSession())]);
-    <%_ } _%>
+<%_ } _%>
     });
 
     it('dispatches CLEAR_AUTH actions', async () => {

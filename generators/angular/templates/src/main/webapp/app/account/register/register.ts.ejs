@@ -70,7 +70,9 @@ export default class Register implements AfterViewInit {
     }),
   });
 
-  <%_ if (enableTranslation) { _%>private readonly translateService = inject(TranslateService);<%_ } _%>
+<%_ if (enableTranslation) { _%>
+  private readonly translateService = inject(TranslateService);
+<%_ } _%>
   private readonly registerService = inject(RegisterService);
 
   ngAfterViewInit(): void {

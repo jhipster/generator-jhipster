@@ -128,9 +128,9 @@ export class <%- entityAngularName %>Service extends <%- entityAngularNamePlural
 
 <%_ if (!readOnly) { _%>
     create(<%- entityInstance %>: New<%- entityAngularName %>): Observable<I<%- entityAngularName %>> {
-    <%_ if (requiresRestTypeConversion) { _%>
+  <%_ if (requiresRestTypeConversion) { _%>
         const copy = this.convertValueFromClient(<%- entityInstance %>);
-    <%_ } _%>
+  <%_ } _%>
         return this.http.post<<%- entityRestName %>>(
           this.resourceUrl,
           <% if (requiresRestTypeConversion) { %> copy <% } else { %> <%- entityInstance %> <% } %>
@@ -141,9 +141,9 @@ export class <%- entityAngularName %>Service extends <%- entityAngularNamePlural
 <%_ if (!readOnly && updatableEntity) { _%>
 
     update(<%- entityInstance %>: I<%- entityAngularName %>): Observable<I<%- entityAngularName %>> {
-    <%_ if (requiresRestTypeConversion) { _%>
+  <%_ if (requiresRestTypeConversion) { _%>
         const copy = this.convertValueFromClient(<%- entityInstance %>);
-    <%_ } _%>
+  <%_ } _%>
         return this.http.put<<%- entityRestName %>>(`${this.resourceUrl}/${encodeURIComponent(this.get<%- entityAngularName %>Identifier(<%- entityInstance %>))}`,
                 <% if (requiresRestTypeConversion) { %> copy <% } else { %> <%- entityInstance %> <% } %>,
                 )
@@ -151,9 +151,9 @@ export class <%- entityAngularName %>Service extends <%- entityAngularNamePlural
     }
 
     partialUpdate(<%- entityInstance %>: PartialUpdate<%- entityAngularName %>): Observable<I<%- entityAngularName %>> {
-    <%_ if (requiresRestTypeConversion) { _%>
+  <%_ if (requiresRestTypeConversion) { _%>
         const copy = this.convertValueFromClient(<%- entityInstance %>);
-    <%_ } _%>
+  <%_ } _%>
         return this.http.patch<<%- entityRestName %>>(`${this.resourceUrl}/${encodeURIComponent(this.get<%- entityAngularName %>Identifier(<%- entityInstance %>))}`,
                 <% if (requiresRestTypeConversion) { %> copy <% } else { %> <%- entityInstance %> <% } %>,
                 )

@@ -60,9 +60,9 @@ a:not([href]):not([tabindex]):hover.dropdown-item {
 <%_ } _%>
 
 a:hover {
-  <%_ if (clientThemeNone) { _%>
+<%_ if (clientThemeNone) { _%>
   color: #533f03;
-  <%_ } _%>
+<%_ } _%>
   /* make sure browsers use the pointer cursor for anchors, even with no href */
   cursor: pointer;
 }
@@ -89,7 +89,7 @@ Main page styles
   display: inline-block;
   width: 347px;
   height: 497px;
-  background: url("/content/images/<%= hipster %>.svg") no-repeat center top;
+  background: url("/content/images/<%- hipster %>.svg") no-repeat center top;
   background-size: contain;
 }
 
@@ -101,7 +101,7 @@ only screen and (min-device-pixel-ratio: 2),
 only screen and (min-resolution: 192dpi),
 only screen and (min-resolution: 2dppx) {
     .hipster {
-        background: url("/content/images/<%= hipster %>.svg") no-repeat center top;
+        background: url("/content/images/<%- hipster %>.svg") no-repeat center top;
         background-size: contain;
     }
 }

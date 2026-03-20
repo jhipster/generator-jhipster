@@ -530,7 +530,7 @@ _%>
 }
 _%>
 <%_ ['DEFAULT_', 'UPDATED_'].forEach((fieldStatus) => { _%>
-<%_ const createInstance = fieldStatus === 'UPDATED_' ? `updated${persistClass}` : persistInstance; _%>
+  <%_ const createInstance = fieldStatus === 'UPDATED_' ? `updated${persistClass}` : persistInstance; _%>
     /**
      * Create an <% if (fieldStatus === 'UPDATED_') { %>updated <% } %>entity for this test.
      *
@@ -618,7 +618,7 @@ _%>
       <%_ } else { _%>
         <%- createInstance %>.<%- relationship.propertyConsumerName %>(<%- otherEntityName %>);
       <%_ } _%>
-        <%_ alreadyGeneratedEntities.push(otherEntityName) _%>
+      <%_ alreadyGeneratedEntities.push(otherEntityName) _%>
     <%_ } _%>
   <%_ } _%>
         return <%- createInstance %>;
@@ -954,7 +954,7 @@ _%>
         assertThat(<%- entityInstance %>List).hasSize(1);
         <%- persistClass %> test<%- entityClass %> = <%- entityInstance %>List.get(0);
 
-<%_ if (reactive && databaseTypeSql) { _%>
+  <%_ if (reactive && databaseTypeSql) { _%>
         // Test fails because reactive api returns an empty object instead of null
         // assert<%- persistClass %>AllPropertiesEquals(<%- persistInstance %>, test<%- entityClass %>);
         assert<%- persistClass %>UpdatableFieldsEquals(<%- persistInstance %>, test<%- entityClass %>);
@@ -1159,8 +1159,8 @@ _%>
             "<%- searchBy.fieldName %>.specified=false"
         );
     }
-      <%_ } _%>
-      <%_ if (searchBy.fieldTypeString) { _%>
+    <%_ } _%>
+    <%_ if (searchBy.fieldTypeString) { _%>
     @Test<%- transactionalAnnotation %>
     void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>ContainsSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
@@ -1355,12 +1355,12 @@ _%>
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody()
-      <%_ if(reactive) { _%>
+    <%_ if(reactive) { _%>
                 .jsonPath("$")
                 .value(is(1));
-      <%_ } else { _%>
+    <%_ } else { _%>
                 .json("1");
-      <%_ } _%>
+    <%_ } _%>
     }
   <%_ } else { _%>
     private void default<%- entityClass %>ShouldBeFound(String filter) throws Exception {
@@ -1374,9 +1374,9 @@ _%>
             }[primaryKey.type] || '';
             _%>
             .andExpect(jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- persistInstance %>.<%- primaryKey.propertySupplierName %>()<%- primaryKeyConversion %>)))<% fieldsToTest.forEach((field) => { %>
-    <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
+      <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
             .andExpect(jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)))
-    <%_ } _%>
+      <%_ } _%>
             .andExpect(jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<%
     if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
     if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
@@ -1425,12 +1425,12 @@ _%>
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
-      <%_ if(reactive) { _%>
+    <%_ if(reactive) { _%>
             .jsonPath("$")
             .value(is(0));
-      <%_ } else { _%>
+    <%_ } else { _%>
             .json("0");
-      <%_ } _%>
+    <%_ } _%>
     }
   <%_ } else { _%>
     private void default<%- entityClass %>ShouldNotBeFound(String filter) throws Exception {
@@ -1829,7 +1829,7 @@ _%>
         <%- persistInstance %>.<%- primaryKey.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
     <%_ } _%>
   <%_ } _%>
-              <%_ if (!databaseTypeCouchbase) { _%>  inserted<%- persistClass %> = <%_ } _%><%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
+  <%_ if (!databaseTypeCouchbase) { _%>  inserted<%- persistClass %> = <%_ } _%><%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
   <%_ if (searchEngineElasticsearch) { _%>
         <%- entityInstance %>Repository.save(<%- persistInstance %>)<%- callBlock %>;
         <%- entityInstance %>SearchRepository.save(<%- persistInstance %>)<%- callBlock %>;
@@ -1900,9 +1900,9 @@ _%>
   <%_ } _%>
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeCassandra) { _%>
             <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- idValue %>))<%- !reactive ? ')' : '' %><%_ } _%><% for (field of fieldsToTest) { %>
-  <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
+    <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
             <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))<%- !reactive ? ')' : '' %>
-  <%_ } _%>
+    <%_ } _%>
             <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<%
   if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
@@ -1954,7 +1954,7 @@ _%>
     }
 
     protected void assertPersisted<%- persistClass %>ToMatchUpdatableProperties(<%- persistClass %> expected<%- persistClass %>) {
-      <%_ if (reactive && databaseTypeSql) { _%>
+<%_ if (reactive && databaseTypeSql) { _%>
         // Test fails because reactive api returns an empty object instead of null
         // assert<%- persistClass %>AllUpdatablePropertiesEquals(expected<%- persistClass %>, getPersisted<%- persistClass %>(expected<%- persistClass %>));
         assert<%- persistClass %>UpdatableFieldsEquals(expected<%- persistClass %>, getPersisted<%- persistClass %>(expected<%- persistClass %>));

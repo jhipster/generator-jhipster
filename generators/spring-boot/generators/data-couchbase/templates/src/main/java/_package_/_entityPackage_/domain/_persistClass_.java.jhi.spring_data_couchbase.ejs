@@ -29,32 +29,32 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <&_ } -&>
 
 <&_ if (fragment.importSection) { -&>
-  <%_ if (!embedded) { _%>
+<%_ if (!embedded) { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.repository.Collection;
 import org.springframework.data.annotation.TypeAlias;
-  <%_ } _%>
+<%_ } _%>
 import org.springframework.data.couchbase.core.mapping.Field;
-  <%_ if (relationships.length > 0) { _%>
+<%_ if (relationships.length > 0) { _%>
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.stream.Collectors;
-  <%_ } _%>
+<%_ } _%>
 <&_ } -&>
 
 <&_ if (fragment.annotationSection) { -&>
-  <%_ if (!embedded) { _%>
+<%_ if (!embedded) { _%>
 @Document
 @TypeAlias(TYPE_NAME)
 @Collection(TYPE_NAME)
-  <%_ } _%>
+<%_ } _%>
 <&_ } -&>
 
 <&_ if (fragment.classStaticFieldsSection) { -&>
-  <%_ if (!embedded) { _%>
+<%_ if (!embedded) { _%>
     public static final String TYPE_NAME = "<%- entityInstance %>";
-  <%_ } _%>
+<%_ } _%>
 <&_ } -&>
 
 <%_ for (const field of fields) { _%>
@@ -100,19 +100,19 @@ import java.util.stream.Collectors;
 <% Commented out until N1qlJoin support is fixed */ %>
 
 <&_ if (fragment.classAdditionalRelationshipsSection) { -&>
-    <%_ for (const relationship of relationships) { _%>
-      <%_ if (!relationship.id && !relationship.otherEntity.embedded) { _%>
-        <%_ if (relationship.collection) { _%>
+<%_ for (const relationship of relationships) { _%>
+  <%_ if (!relationship.id && !relationship.otherEntity.embedded) { _%>
+    <%_ if (relationship.collection) { _%>
     @JsonIgnore
     @Field("<%- relationship.relationshipFieldNamePlural %>")
     private Set<String> <%- relationship.relationshipFieldName %>Ids = new HashSet<>();
-        <%_ } else if (relationship.ownerSide) { _%>
+    <%_ } else if (relationship.ownerSide) { _%>
     @JsonIgnore
     @Field("<%- relationship.relationshipFieldName %>")
     private <%- relationship.otherEntity.primaryKey.type %> <%- relationship.relationshipFieldName %>Id;
-        <%_ } _%>
-      <%_ } _%>
     <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
 <&_ } -&>
 
 <%_ for (const relationship of relationships) { _%>
@@ -171,18 +171,18 @@ import java.util.stream.Collectors;
 <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>CustomAddSection) { -&>
     public <%- persistClass %> add<%- relationship.relationshipNameCapitalized %>(<%- relationship.otherEntity.persistClass %> <%- relationship.otherEntityName %>) {
         this.<%- relationship.relationshipFieldNamePlural %>.add(<%- relationship.otherEntityName %>);
-      <%_ if (!relationship.otherEntity.embedded || embedded && relationship.ownerSide) { _%>
-        <%_ if (!relationship.otherEntity.embedded) { _%>
+  <%_ if (!relationship.otherEntity.embedded || embedded && relationship.ownerSide) { _%>
+    <%_ if (!relationship.otherEntity.embedded) { _%>
         this.<%- relationship.relationshipFieldName %>Ids.add(<%- relationship.otherEntityName %>.<%- relationship.otherEntity.primaryKey.propertySupplierName %>());
-        <%_ } _%>
-        <%_ if (relationship.otherRelationship) { _%>
-          <%_ if (!relationship.otherRelationship.collection) { _%>
+    <%_ } _%>
+    <%_ if (relationship.otherRelationship) { _%>
+      <%_ if (!relationship.otherRelationship.collection) { _%>
         <%- relationship.otherEntityName %>.<%- relationship.otherRelationship.propertyConsumerName %>(this);
-          <%_ } else if (relationship.otherRelationship.relationshipNamePlural && !relationship.otherEntityUser && relationship.otherRelationship.collection) { _%>
+      <%_ } else if (relationship.otherRelationship.relationshipNamePlural && !relationship.otherEntityUser && relationship.otherRelationship.collection) { _%>
         <%- relationship.otherEntityName %>.<%- relationship.otherRelationship.propertySupplierName %>().add(this);
-          <%_ } _%>
-        <%_ } _%>
       <%_ } _%>
+    <%_ } _%>
+  <%_ } _%>
         return this;
     }
 <&_ } -&>
@@ -192,18 +192,18 @@ import java.util.stream.Collectors;
 <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>CustomRemoveSection) { -&>
     public <%- persistClass %> remove<%- relationship.relationshipNameCapitalized %>(<%- relationship.otherEntity.persistClass %> <%- relationship.otherEntityName %>) {
         this.<%- relationship.relationshipFieldNamePlural %>.remove(<%- relationship.otherEntityName %>);
-      <%_ if (!relationship.otherEntity.embedded || (embedded && relationship.ownerSide)) { _%>
-        <%_ if (!relationship.otherEntity.embedded) { _%>
+  <%_ if (!relationship.otherEntity.embedded || (embedded && relationship.ownerSide)) { _%>
+    <%_ if (!relationship.otherEntity.embedded) { _%>
         this.<%- relationship.relationshipFieldName %>Ids.remove(<%- relationship.otherEntityName %>.<%- relationship.otherEntity.primaryKey.propertySupplierName %>());
-        <%_ } _%>
-        <%_ if (relationship.otherRelationship) { _%>
-          <%_ if (!relationship.otherRelationship.collection) { _%>
+    <%_ } _%>
+    <%_ if (relationship.otherRelationship) { _%>
+      <%_ if (!relationship.otherRelationship.collection) { _%>
         <%- relationship.otherEntityName %>.<%- relationship.otherRelationship.propertyConsumerName %>(null);
-          <%_ } else if (!relationship.otherEntityUser && relationship.otherRelationship.collection) { _%>
+      <%_ } else if (!relationship.otherEntityUser && relationship.otherRelationship.collection) { _%>
         <%- relationship.otherEntityName %>.<%- relationship.otherRelationship.propertySupplierName %>().remove(this);
-          <%_ } _%>
-        <%_ } _%>
       <%_ } _%>
+    <%_ } _%>
+  <%_ } _%>
         return this;
     }
 <&_ } -&>

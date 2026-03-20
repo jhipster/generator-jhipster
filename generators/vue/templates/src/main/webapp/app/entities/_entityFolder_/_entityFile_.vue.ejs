@@ -46,13 +46,13 @@
                 <tr>
                     <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%- primaryKey.name %>')"<% } %>><span>{{ t$('global.field.id') }}</span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator><% } %></th>
 <%_ for (field of fields.filter(field => !field.id)) { _%>
-                    <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%= field.fieldName %>')"<% } %>><span>{{ t$('<%= `${i18nKeyPrefix}.${field.fieldName}` %>') }}</span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%= field.fieldName %>'"></jhi-sort-indicator><% } %></th>
+                    <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%- field.fieldName %>')"<% } %>><span>{{ t$('<%- `${i18nKeyPrefix}.${field.fieldName}` %>') }}</span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%- field.fieldName %>'"></jhi-sort-indicator><% } %></th>
 <%_ } _%>
 <%_ for (relationship of relationships) { _%>
   <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) {
     const fieldName = "." + relationship.otherEntityField;
 _%>
-                    <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%= relationship.relationshipName + (fieldName) %>')"<% } %>><span>{{ t$('<%= `${i18nKeyPrefix}.${relationship.relationshipName}` %>') }}</span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%= relationship.relationshipName + (fieldName) %>'"></jhi-sort-indicator><% } %></th>
+                    <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%- relationship.relationshipName + (fieldName) %>')"<% } %>><span>{{ t$('<%- `${i18nKeyPrefix}.${relationship.relationshipName}` %>') }}</span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%- relationship.relationshipName + (fieldName) %>'"></jhi-sort-indicator><% } %></th>
   <%_ } _%>
 <%_ } _%>
                     <th scope="col"></th>
@@ -70,8 +70,8 @@ _%>
 _%>
   <%_ if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
                     <td>
-                        <a v-if="<%= entityInstance %>.<%= fieldName %>" @click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)">
-                            <img :src="'data:' + <%= entityInstance %>.<%= fieldName %>ContentType + ';base64,' + <%= entityInstance %>.<%= fieldName %>" style="max-height: 30px;" alt="<%= entityInstance %>"/>
+                        <a v-if="<%- entityInstance %>.<%- fieldName %>" @click="openFile(<%- entityInstance %>.<%- fieldName %>ContentType, <%- entityInstance %>.<%- fieldName %>)">
+                            <img :src="'data:' + <%- entityInstance %>.<%- fieldName %>ContentType + ';base64,' + <%- entityInstance %>.<%- fieldName %>" style="max-height: 30px;" alt="<%- entityInstance %>"/>
                         </a>
                         <span v-if="<%- entityInstance %>.<%- fieldName %>">{{<%- entityInstance %>.<%- fieldName %>ContentType}}, {{byteSize(<%- entityInstance %>.<%- fieldName %>)}}</span>
                     </td>
@@ -83,11 +83,11 @@ _%>
   <%_ } else if (field.fieldIsEnum) { _%>
                     <td><% if (enableTranslation) { %>{{ t$('<%- frontendAppName %>.<%- fieldType %>.' + <%- entityInstance %>.<%- fieldName %>) }}<% } else { %>{{ <%- entityInstance %>.<%- fieldName %> }}<% } %></td>
   <%_ } else if (field.fieldTypeDuration) { _%>
-                    <td>{{formatDuration(<%= entityInstance %>.<%= fieldName %>)}}</td>
+                    <td>{{formatDuration(<%- entityInstance %>.<%- fieldName %>)}}</td>
   <%_ } else if (field.fieldTypeTimed) { _%>
-                    <td>{{formatDateShort(<%= entityInstance %>.<%= fieldName %>) || ''}}</td>
+                    <td>{{formatDateShort(<%- entityInstance %>.<%- fieldName %>) || ''}}</td>
   <%_ } else { _%>
-                    <td>{{<%= entityInstance %>.<%= fieldName %>}}</td>
+                    <td>{{<%- entityInstance %>.<%- fieldName %>}}</td>
   <%_ } _%>
 <%_ } _%>
 <%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) {
@@ -96,17 +96,17 @@ _%>
     const otherEntityName = relationship.otherEntityName;
     const otherEntityField = relationship.otherEntityField;
 _%>
-    <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
+  <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
                     <td>
-      <%_ if (relationship.otherEntityUser) { _%>
-        <%_ if (relationship.relationshipManyToMany) { _%>
+    <%_ if (relationship.otherEntityUser) { _%>
+      <%_ if (relationship.relationshipManyToMany) { _%>
                         <span v-for="(<%- relationshipFieldName %>, i) in <%- entityInstance %>.<%- relationshipFieldNamePlural %>" :key="<%- relationshipFieldName %>.<%- primaryKey.name %>">{{i > 0 ? ', ' : ''}}
                             {{<%- relationshipFieldName %>.<%- otherEntityField %>}}
                         </span>
-        <%_ } else { _%>
-                        {{<%= entityInstance + "." + relationshipFieldName %> ? <%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %> : ''}}
-        <%_ } _%>
       <%_ } else { _%>
+                        {{<%- entityInstance + "." + relationshipFieldName %> ? <%- entityInstance + "." + relationshipFieldName + "." + otherEntityField %> : ''}}
+      <%_ } _%>
+    <%_ } else { _%>
       <%_ if (relationship.relationshipManyToMany) { _%>
                         <span v-for="(<%- relationshipFieldName %>, i) in <%- entityInstance %>.<%- relationshipFieldNamePlural %>" :key="<%- relationshipFieldName %>.<%- primaryKey.name %>">{{i > 0 ? ', ' : ''}}
                             <router-link class="form-control-static" :to="{name: '<%- relationship.otherEntity.entityAngularName %>View', params: {<%- otherEntityName %>Id: <%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %>}}">{{<%- relationshipFieldName + "." + otherEntityField %>}}</router-link>
@@ -122,17 +122,17 @@ _%>
 <%_ } _%>
                     <td class="text-end">
                         <div class="btn-group">
-  <%_ if (authenticationTypeSession) { _%>
+<%_ if (authenticationTypeSession) { _%>
                             <router-link :to="{name: '<%- entityAngularName %>View', params: {<%- entityInstance %>Id: <%- entityInstance %>.<%- primaryKey.name %>}}" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
-  <%_ } else { _%>
+<%_ } else { _%>
                             <router-link :to="{name: '<%- entityAngularName %>View', params: {<%- entityInstance %>Id: <%- entityInstance %>.<%- primaryKey.name %>}}" custom v-slot="{ navigate }">
                                 <button @click="navigate" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
-  <%_ } _%>
+<%_ } _%>
                                     <font-awesome-icon icon="eye"></font-awesome-icon>
                                     <span class="d-none d-md-inline">{{ t$('entity.action.view') }}</span>
-  <%_ if (!authenticationTypeSession) { _%>
+<%_ if (!authenticationTypeSession) { _%>
                                 </button>
-  <%_ } _%>
+<%_ } _%>
                             </router-link>
 <%_ if (!readOnly) { _%>
   <%_ if (authenticationTypeSession) { _%>
@@ -185,7 +185,7 @@ _%>
 <%_ } _%>
 <%_ if (!databaseTypeCassandra) { _%>
   <%_ if (paginationPagination) { _%>
-        <div v-show="<%= entityInstancePlural %>?.length > 0">
+        <div v-show="<%- entityInstancePlural %>?.length > 0">
             <div class="d-flex justify-content-center">
                 <jhi-item-count :page="page" :total="queryCount" :items-per-page="itemsPerPage"></jhi-item-count>
             </div>

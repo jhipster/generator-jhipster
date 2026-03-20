@@ -179,7 +179,7 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering && reactive) { _%>
 
-    <%_ if (!serviceImpl) { _%>
+  <%_ if (!serviceImpl) { _%>
     /**
     * Find <%- entityInstancePlural %> by Criteria.
     *
@@ -188,20 +188,20 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
     <%_ } _%>
     * @return the list of entities.
     */
-    <%_ } _%>
-    <%_ if (serviceImpl) { _%>
+  <%_ } _%>
+  <%_ if (serviceImpl) { _%>
     @Override
-    <%_ } _%>
-    <%_ if (databaseTypeSql) { _%>
+  <%_ } _%>
+  <%_ if (databaseTypeSql) { _%>
     @Transactional(readOnly = true)
-    <%_ } _%>
+  <%_ } _%>
     public <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- instanceType %>> findByCriteria(<%- entityClass %>Criteria criteria<% if (!paginationNo) { %>, Pageable pageable<% } %>) {
         LOG.debug("Request to get all <%- entityClassPlural %> by Criteria");
-    <%_ if (paginationNo) { _%>
+  <%_ if (paginationNo) { _%>
         return <%- entityInstance %>Repository.findByCriteria(criteria, null)<% if (dtoMapstruct) { %>.map(<%- entityToDtoReference %>)<% } %>;
-    <%_ } else { _%>
+  <%_ } else { _%>
         return <%- entityInstance %>Repository.findByCriteria(criteria, pageable)<% if (dtoMapstruct) { %>.map(<%- entityToDtoReference %>)<% } %>;
-    <%_ } _%>
+  <%_ } _%>
     }
 
     /**
@@ -267,7 +267,7 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
     @Transactional(readOnly = true)
-    <%_ } _%>
+<%_ } _%>
     public <%- optionalOrMono %><<%- instanceType %>> findOne(<%- primaryKey.type %> id) {
         LOG.debug("Request to get <%- entityClass %> : {}", id);<%- include('../../_partials_entity_/get_template', {viaService: false, returnDirectly:true, implementsEagerLoadApis}); -%>
     }

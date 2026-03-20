@@ -60,12 +60,12 @@ import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
 <%_ if (!paginationNo) { %>
 import {
   ITEMS_PER_PAGE,
-<%_ if (paginationPagination) { _%>
+  <%_ if (paginationPagination) { _%>
   PAGE_HEADER,
-<%_ } _%>
-<%_ if (paginationPagination) { _%>
+  <%_ } _%>
+  <%_ if (paginationPagination) { _%>
   TOTAL_COUNT_RESPONSE_HEADER,
-<%_ } _%>
+  <%_ } _%>
 } from 'app/config/pagination.constants';
 <%_ } _%>
 import {
@@ -361,7 +361,7 @@ export class <%- componentName %> implements OnInit {
       } else {
         this.links.set({});
       }
-    <%_ } _%>
+  <%_ } _%>
     }
 
 <%_ } _%>

@@ -35,9 +35,9 @@ import org.springframework.data.elasticsearch.repository.<% if (reactive) { %>Re
 import reactor.core.publisher.Flux;
 <%_ } else { _%>
 import org.springframework.scheduling.annotation.Async;
-    <%_ if (databaseTypeSql) { _%>
+  <%_ if (databaseTypeSql) { _%>
 import org.springframework.transaction.annotation.Transactional;
-    <%_ } _%>
+  <%_ } _%>
 
 import java.util.stream.Stream;
 <%_ } _%>
@@ -79,15 +79,15 @@ interface UserSearchRepositoryInternal {
     Stream<<%- user.persistClass %>> search(String query);
 
     @Async
-    <%_ if (databaseTypeSql) { _%>
+  <%_ if (databaseTypeSql) { _%>
     @Transactional
-    <%_ } _%>
+  <%_ } _%>
     void index(<%- user.persistClass %> entity);
 
     @Async
-    <%_ if (databaseTypeSql) { _%>
+  <%_ if (databaseTypeSql) { _%>
     @Transactional
-    <%_ } _%>
+  <%_ } _%>
     void deleteFromIndex(<%- user.persistClass %> entity);
 }
 

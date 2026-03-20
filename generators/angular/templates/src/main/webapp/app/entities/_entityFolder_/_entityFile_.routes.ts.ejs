@@ -56,11 +56,11 @@ const <%- entityInstance %>Route: Routes = [
     resolve: {
       <%- entityInstance %>: <%- entityAngularName %>Resolve
     },
-<%_ if (entityAngularAuthorities) { _%>
+  <%_ if (entityAngularAuthorities) { _%>
     data: {
       authorities: [<%- entityAngularAuthorities %>],
     },
-<%_ } _%>
+  <%_ } _%>
     canActivate: [UserRouteAccessService]
   },
 <%_ } _%>
@@ -71,11 +71,11 @@ const <%- entityInstance %>Route: Routes = [
     resolve: {
       <%- entityInstance %>: <%- entityAngularName %>Resolve
     },
-<%_ if (entityAngularAuthorities) { _%>
+  <%_ if (entityAngularAuthorities) { _%>
     data: {
       authorities: [<%- entityAngularAuthorities %>],
     },
-<%_ } _%>
+  <%_ } _%>
     canActivate: [UserRouteAccessService]
   },
 <%_ } _%>

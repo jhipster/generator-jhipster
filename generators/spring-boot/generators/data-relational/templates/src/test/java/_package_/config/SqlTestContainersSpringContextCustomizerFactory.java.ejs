@@ -53,12 +53,12 @@ public class SqlTestContainersSpringContextCustomizerFactory implements ContextC
                 ConfigurableListableBeanFactory beanFactory = context.getBeanFactory();
                 TestPropertyValues testValues = TestPropertyValues.empty();
                 EmbeddedSQL sqlAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedSQL.class);
-    <%_ if (prodDatabaseType !== devDatabaseType) { _%>
+<%_ if (prodDatabaseType !== devDatabaseType) { _%>
                 boolean usingTestProdProfile = Arrays.asList(context.getEnvironment().getActiveProfiles()).contains("test" + JHipsterConstants.SPRING_PROFILE_PRODUCTION);
                 if (null != sqlAnnotation && usingTestProdProfile) {
-    <%_ } else { _%>
+<%_ } else { _%>
                 if (null != sqlAnnotation) {
-    <%_ } _%>
+<%_ } _%>
                     log.debug("detected the EmbeddedSQL annotation on class {}", testClass.getName());
                     log.info("Warming up the sql database");
                     if (null == prodTestcontainer) {
@@ -73,16 +73,16 @@ public class SqlTestContainersSpringContextCustomizerFactory implements ContextC
                             throw new RuntimeException(e);
                         }
                     }
-    <%_ if (reactive) { _%>
+<%_ if (reactive) { _%>
                     testValues = testValues.and("spring.r2dbc.url=" + prodTestcontainer.getTestContainer().getJdbcUrl().replace("jdbc", "r2dbc")<% if (prodDatabaseTypeMariadb) { %>.replace("mariadb", "mysql")<% } else if (prodDatabaseTypeMssql) { %>.replace(";encrypt=false", "")<% } %> + "<%- prodDatabaseExtraOptions %>");
                     testValues = testValues.and("spring.r2dbc.username=" + prodTestcontainer.getTestContainer().getUsername());
                     testValues = testValues.and("spring.r2dbc.password=" + prodTestcontainer.getTestContainer().getPassword());
                     testValues = testValues.and("spring.liquibase.url=" + prodTestcontainer.getTestContainer().getJdbcUrl()  + "<%- prodDatabaseExtraOptions %>");
-    <%_ } else { _%>
+<%_ } else { _%>
                     testValues = testValues.and("spring.datasource.url=" + prodTestcontainer.getTestContainer().getJdbcUrl() + "<%- prodDatabaseExtraOptions %>");
                     testValues = testValues.and("spring.datasource.username=" + prodTestcontainer.getTestContainer().getUsername());
                     testValues = testValues.and("spring.datasource.password=" + prodTestcontainer.getTestContainer().getPassword());
-    <%_ } _%>
+<%_ } _%>
                 }
                 testValues.applyTo(context);
             }

@@ -28,7 +28,7 @@ _%>
      *  Get all the <%- entityInstancePlural %> where <%- relationship.relationshipNameCapitalized %> is {@code null}.
      *  @return the list of entities.
      */
-  <%_ if (databaseTypeSql) { _%>
+    <%_ if (databaseTypeSql) { _%>
     @Transactional(readOnly = true) <% } %>
     public <%- reactiveSql ? 'Flux' : 'List' %><<%- instanceType %>> findAllWhere<%- relationship.relationshipNameCapitalized %>IsNull() {
         LOG.debug("Request to get all <%- entityInstancePlural %> where <%- relationship.relationshipNameCapitalized %> is null");

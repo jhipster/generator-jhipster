@@ -52,7 +52,7 @@ You will only need to run this command when dependencies change in [package.json
 
 We use <%- nodePackageManager %> scripts and <&- fragments.customCliSection(' ') &><%- clientBundlerName %> as our build system.
 
-  <%_ if (locals.cacheProviderRedis || locals.cacheProviderHazelcast || locals.cacheProviderMemcached) { _%>
+<%_ if (locals.cacheProviderRedis || locals.cacheProviderHazelcast || locals.cacheProviderMemcached) { _%>
 If you are using <%- cacheProvider %> as a cache, you will have to launch a cache server.
 To start your cache server, run:
 
@@ -60,7 +60,7 @@ To start your cache server, run:
 docker compose -f src/main/docker/<%- locals.cacheProviderHazelcast ? 'hazelcast-management-center' : cacheProvider %>.yml up -d
 ```
 
-    <%_ if (cacheProviderRedis) { _%>
+  <%_ if (cacheProviderRedis) { _%>
 
 The cache can also be turned off by adding to the `application.yml`:
 
@@ -73,8 +73,8 @@ spring:
 See [here](https://docs.spring.io/spring-boot/reference/io/caching.html#io.caching.provider.none) for details.
 
 **WARNING**: If you're using the second level Hibernate cache and disabling the Spring cache, you have to disable the second level Hibernate cache as well since they are using the same CacheManager.
-    <%_ } _%>
   <%_ } _%>
+<%_ } _%>
 
 Run the following commands in two separate terminals to create a blissful development experience where your browser
 auto-refreshes when files change on your hard drive.
@@ -94,7 +94,7 @@ The `<%- nodePackageManagerCommand %> run` command will list all the scripts ava
 
 JHipster ships with PWA (Progressive Web App) support, and it's turned off by default. One of the main components of a PWA is a service worker.
 
-  <%_ if (!clientFrameworkAngular) { _%>
+<%_ if (!clientFrameworkAngular) { _%>
 The service worker initialization code is commented out by default. To enable it, uncomment the following code in `<%- clientSrcDir %>index.html`:
 
 ```html
@@ -108,8 +108,8 @@ The service worker initialization code is commented out by default. To enable it
 ```
 
 Note: [Workbox](https://developer.chrome.com/docs/workbox) powers JHipster's service worker. It dynamically generates the `service-worker.js` file.
-  <%_ } _%>
-  <%_ if (clientFrameworkAngular) { _%>
+<%_ } _%>
+<%_ if (clientFrameworkAngular) { _%>
 The service worker initialization code is disabled by default. To enable it, uncomment the following code in `<%- clientSrcDir %>app/app.config.ts`:
 
 ```typescript
@@ -132,7 +132,7 @@ To benefit from TypeScript type definitions from [DefinitelyTyped](https://defin
 ```
 
 Then you would import the JS and CSS files specified in library's installation instructions so that [<%- clientBundlerName %>][] knows about them:
-  <%_ if (clientFrameworkAngular) { _%>
+<%_ if (clientFrameworkAngular) { _%>
 Edit [<%- clientSrcDir %>app/app.config.ts](<%- clientSrcDir %>app/app.config.ts) file:
 
 ```typescript
@@ -145,7 +145,7 @@ Edit [<%- clientSrcDir %>content/scss/vendor.scss](<%- clientSrcDir %>content/sc
 @import 'leaflet/dist/leaflet.css';
 ```
 
-  <%_ } _%>
+<%_ } _%>
 Note: There are still a few other things remaining to do for Leaflet that we won't detail here.
 
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development](https://www.jhipster.tech/development/).

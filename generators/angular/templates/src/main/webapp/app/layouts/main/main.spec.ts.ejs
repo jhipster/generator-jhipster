@@ -86,13 +86,13 @@ describe('Main', () => {
 <%_ } _%>
     router = TestBed.inject(Router);
     document = TestBed.inject(DOCUMENT);
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     langChangeSubject = new Subject<LangChangeEvent>();
     Object.defineProperty(translateService, 'onLangChange', {
       value: langChangeSubject,
       writable: true,
     });
-    <%_ } _%>
+<%_ } _%>
   });
 
   describe('page title', () => {

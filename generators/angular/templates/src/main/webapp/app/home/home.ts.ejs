@@ -19,12 +19,12 @@
 import { Component, inject, signal, effect } from '@angular/core';
 <%_ if (generateUserManagement || !authenticationTypeOauth2) { _%>
 import {
-<%_ if (!authenticationTypeOauth2) { _%>
+  <%_ if (!authenticationTypeOauth2) { _%>
   Router,
-<%_ } _%>
-<%_ if (generateUserManagement) { _%>
+  <%_ } _%>
+  <%_ if (generateUserManagement) { _%>
   RouterLink,
-<%_ } _%>
+  <%_ } _%>
 } from '@angular/router';
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>

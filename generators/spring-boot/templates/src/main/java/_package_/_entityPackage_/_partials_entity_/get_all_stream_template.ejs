@@ -33,8 +33,8 @@ if (!paginationNo) {
 for (const relationship of relationships) {
   if (relationship.relationshipOneToOne && !relationship.ownerSide) {
 %>
-        if ("<%= relationship.relationshipName.toLowerCase() %>-is-null".equals(filter)) {
-            LOG.debug("REST request to get all <%= entityClass %>s where <%= relationship.relationshipName %> is null");
+        if ("<%- relationship.relationshipName.toLowerCase() %>-is-null".equals(filter)) {
+            LOG.debug("REST request to get all <%- entityClass %>s where <%- relationship.relationshipName %> is null");
     <%_ if (viaService) { _%>
             return <%- toResponseEntityPrefix %><%- entityInstance %>Service.findAllWhere<%- relationship.relationshipNameCapitalized %>IsNull()<% if (reactiveSql) { %>.collectList()<% } %><%- toResponseEntityPostfix %>;
     <%_ } else { _%>

@@ -40,7 +40,7 @@ _%>
         <addNotNullConstraint tableName="<%- entityTableName %>"
             columnName="<%- field.columnName %>"
             columnDataType="<%- field.columnType %>"/>
-        <%_ if (field.shouldCreateContentType) { _%>
+      <%_ if (field.shouldCreateContentType) { _%>
         <addNotNullConstraint tableName="<%- entityTableName %>"
             columnName="<%- field.columnName %>_content_type"
             columnDataType="varchar(255)"/>
@@ -55,11 +55,11 @@ _%>
         Removed the default value for the fields for entity <%- entityClass %>.
     -->
     <changeSet id="<%- changelogDate %>-fields-remove-default-value" author="jhipster">
-    <%_ for (field of removedDefaultValueFields) { _%>
+  <%_ for (field of removedDefaultValueFields) { _%>
         <dropDefaultValue tableName="<%- entityTableName %>"
             columnName="<%- field.columnName %>"
             columnDataType="<%- field.columnType %>"/>
-    <%_ } _%>
+  <%_ } _%>
     </changeSet>
 <% } _%>
 <%_ if (addedDefaultValueFields && addedDefaultValueFields.length) { _%>
@@ -67,12 +67,12 @@ _%>
         Added the default value for the fields for entity <%- entityClass %>.
     -->
     <changeSet id="<%- changelogDate %>-fields-add-default-value" author="jhipster">
-    <%_ for (field of addedDefaultValueFields) { _%>
+  <%_ for (field of addedDefaultValueFields) { _%>
         <addDefaultValue tableName="<%- entityTableName %>"
             columnName="<%- field.columnName %>"
             columnDataType="<%- field.columnType %>"
             <%- this.createDefaultValueLiquibaseAttribute(field) -%>/>
-    <%_ } _%>
+  <%_ } _%>
     </changeSet>
 <% } _%>
 <%_ if (hasRelationshipConstraint) { _%>
@@ -108,9 +108,9 @@ _%>
         Added the relationship constraints for entity <%- entityClass %>.
     -->
     <changeSet id="<%- changelogDate %>-relationship-foreign-keys" author="jhipster">
-    <%_ for (relationship of addedRelationships) { _%>
+  <%_ for (relationship of addedRelationships) { _%>
 <%- include('./add_relationship_constraints', { entity, relationship, prodDatabaseType }) -%>
-    <%_ } _%>
+  <%_ } _%>
     </changeSet>
 <%_ } _%>
 </databaseChangeLog>

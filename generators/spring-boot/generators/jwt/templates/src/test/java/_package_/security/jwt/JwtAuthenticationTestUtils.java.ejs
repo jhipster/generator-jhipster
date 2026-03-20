@@ -29,12 +29,12 @@ public class JwtAuthenticationTestUtils {
 
     public static final String BEARER = "Bearer ";
 
-<%_ if (!springBoot4) { _%>
+  <%_ if (!springBoot4) { _%>
     @Bean
     private HandlerMappingIntrospector mvcHandlerMappingIntrospector() {
         return new HandlerMappingIntrospector();
     }
-<%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 <%_ if (applicationTypeMicroservice && !reactive) { _%>
 

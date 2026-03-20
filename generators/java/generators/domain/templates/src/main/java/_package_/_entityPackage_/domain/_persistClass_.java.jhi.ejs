@@ -150,9 +150,9 @@ _%>
   <%_ if (relationship.relationshipOneToMany) { _%>
     <%_ if (relationship.ignoreOtherSideProperty) { _%>
     @JsonIgnoreProperties(value = {
-        <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
+      <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
         "<%- otherRelationship.propertyName %>",
-        <%_ }); _%>
+      <%_ }); _%>
     }, allowSetters = true)
     <%_ } _%>
     private Set<<%- relationship.otherEntity.persistClass %>> <%- relationship.relationshipFieldNamePlural %> = new HashSet<>();
@@ -282,8 +282,8 @@ _%>
     }
   <%_ } _%>
 <&_ } -&>
-    <%_ if (fluentMethods) { _%>
-      <%_ if (relationship.collection) { _%>
+  <%_ if (fluentMethods) { _%>
+    <%_ if (relationship.collection) { _%>
 
     public <%- persistClass %> <%- relationship.relationshipFieldNamePlural %>(Set<<%- relationship.otherEntity.persistClass %>> <%- relationship.otherEntity.entityInstancePlural %>) {
         this.<%- relationship.propertyConsumerName %>(<%- relationship.otherEntity.entityInstancePlural %>);
@@ -319,14 +319,14 @@ _%>
         return this;
     }
 <&_ } -&>
-      <%_ } else { _%>
+    <%_ } else { _%>
 
     public <%- persistClass %> <%- relationship.relationshipFieldName %>(<%- relationship.otherEntity.persistClass %> <%- relationship.otherEntityName %>) {
         this.<%- relationship.propertyConsumerName %>(<%- relationship.otherEntityName %>);
         return this;
     }
-      <%_ } _%>
     <%_ } _%>
+  <%_ } _%>
 
 <%_ } _%>
 <&- fragments.classAdditionalRelationshipsMethodsSection() -&>

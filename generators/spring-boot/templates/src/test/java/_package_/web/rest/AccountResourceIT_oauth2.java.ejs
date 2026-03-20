@@ -122,9 +122,9 @@ class AccountResourceIT {
     @AfterEach
     void cleanup() {
         // Remove syncUserWithIdp users
-    <%_ if (databaseTypeSql && reactive) { _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
         userRepository.deleteAllUserAuthorities()<%- reactorBlock %>;
-    <%_ } _%>
+  <%_ } _%>
         userRepository.deleteAll()<%- reactorBlock %>;
     }
 

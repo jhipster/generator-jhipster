@@ -74,12 +74,12 @@ couchbase-operator:
       adminSecret: couchbase-secret
     servers:
       default:
-    <%_ if (kubernetesUseDynamicStorage) { _%>
+  <%_ if (kubernetesUseDynamicStorage) { _%>
         volumeMounts:
           default: pvc-default
           data: pvc-data
           index: pvc-index
-    <%_ } _%>
+  <%_ } _%>
         services:
           - data
           - query
@@ -93,7 +93,7 @@ couchbase-operator:
       indexStorageSetting: plasma
       indexer:
         storageMode: plasma
-    <%_ if (kubernetesUseDynamicStorage) { _%>
+  <%_ if (kubernetesUseDynamicStorage) { _%>
     volumeClaimTemplates:
       - metadata:
           name: pvc-default
@@ -116,5 +116,5 @@ couchbase-operator:
           resources:
             requests:
               storage: 1Gi
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>

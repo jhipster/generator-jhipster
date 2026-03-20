@@ -51,15 +51,15 @@ export class LazyTranslationModule {
 @NgModule({
   imports: [
     TranslateModule.forRoot({
-      <%_ if (clientBundlerEsbuild) { _%>
+<%_ if (clientBundlerEsbuild) { _%>
       loader: {
         provide: TranslateLoader,
         useFactory: translatePartialLoader,
         deps: [HttpClient],
       },
-      <%_ } else { _%>
+<%_ } else { _%>
       loader: provideTranslateHttpLoader({ prefix: './i18n/', suffix: `.json?_=${I18N_HASH}` }),
-      <%_ } _%>
+<%_ } _%>
       missingTranslationHandler: {
         provide: MissingTranslationHandler,
         useFactory: missingTranslationHandler,
