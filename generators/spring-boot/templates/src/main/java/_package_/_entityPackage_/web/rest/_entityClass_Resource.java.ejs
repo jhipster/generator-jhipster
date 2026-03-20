@@ -26,7 +26,7 @@ import <%- entityAbsolutePackage %>.repository.<%- entityClass %>Repository;
 <%_ if (!serviceNo) { _%>
 import <%- entityAbsolutePackage %>.service.<%- entityClass %>Service;
 <%_ } else { _%>
-  <%_ if (isUsingMapsId === true) { _%>
+  <%_ if (isUsingMapsId) { _%>
 import <%- entityAbsolutePackage %>.repository.<%- mapsIdAssoc.otherEntity.entityNameCapitalized %>Repository;
   <%_ } _%>
   <%_ if (searchEngineElasticsearch) { _%>

@@ -35,7 +35,7 @@ _%>
                     <div class="mb-3">
                         <label class="form-control-label" for="<%- entityFileName %>">{{ t$('<%- translationKey %>') }}</label>
   <%_ if (field.fieldIsEnum) { _%>
-                        <select class="form-control" name="<%- fieldName %>" :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model="v$.<%- fieldName %>.$model" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>" <% if (field.fieldValidate === true && field.fieldValidateRules.includes('required')) { %> required<% } %>>
+                        <select class="form-control" name="<%- fieldName %>" :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model="v$.<%- fieldName %>.$model" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>" <% if (field.fieldValidate && field.fieldValidateRules.includes('required')) { %> required<% } %>>
     <%_ const enumPrefix = frontendAppName + '.'+ fieldType; _%>
                             <option v-for="<%- this._.lowerFirst(fieldType) %> in <%- this._.lowerFirst(fieldType) %>Values" :key="<%- this._.lowerFirst(fieldType) %>" :value="<%- this._.lowerFirst(fieldType) %>" :label="t$('<%- enumPrefix %>.'+<%- this._.lowerFirst(fieldType) %>)">{{ <%- this._.lowerFirst(fieldType) %> }}</option>
 
@@ -101,10 +101,10 @@ _%>
                         </div>
     <%_ } else if (field.blobContentTypeText) { _%>
                         <textarea class="<%- fieldInputClass %>" name="<%- fieldName %>" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>"
-                            :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model="v$.<%- fieldName %>.$model" <% if (field.fieldValidate === true && field.fieldValidateRules.includes('required')) { %> required<% } %>></textarea>
+                            :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model="v$.<%- fieldName %>.$model" <% if (field.fieldValidate && field.fieldValidateRules.includes('required')) { %> required<% } %>></textarea>
     <%_ } else { _%>
                         <input type="<%- fieldInputType %>" class="<%- fieldInputClass %>" name="<%- fieldName %>" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>"
-                            :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model<% if (fieldInputType === 'number') { %>.number<% } %>="v$.<%- fieldName %>.$model" <% if (field.fieldValidate === true && field.fieldValidateRules.includes('required')) { %> required<% } %>/>
+                            :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model<% if (fieldInputType === 'number') { %>.number<% } %>="v$.<%- fieldName %>.$model" <% if (field.fieldValidate && field.fieldValidateRules.includes('required')) { %> required<% } %>/>
       <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
                         <input type="hidden" class="<%- fieldInputClass %>" name="<%- fieldName %>ContentType" id="<%- entityFileName %>-<%- fieldName %>ContentType"
                             v-model="<%- entityInstance %>.<%- fieldName %>ContentType" />

@@ -302,13 +302,13 @@ function addEntityOptionsToJDL(entity: JSONEntity, entityName: string): void {
   if (entity.microserviceName !== undefined) {
     addBinaryOptionToJDL(MICROSERVICE, entity.microserviceName, entityName);
   }
-  if (entity.jpaMetamodelFiltering === true) {
+  if (entity.jpaMetamodelFiltering) {
     addUnaryOptionToJDL(FILTER, entityName);
   }
-  if (entity.readOnly === true) {
+  if (entity.readOnly) {
     addUnaryOptionToJDL(READ_ONLY, entityName);
   }
-  if (entity.embedded === true) {
+  if (entity.embedded) {
     addUnaryOptionToJDL(EMBEDDED, entityName);
   }
   if (entity.clientRootFolder) {

@@ -32,7 +32,7 @@ package <%- entityAbsolutePackage %>.service.mapper;
     )
     .flat();
   otherEntitiesFields.forEach(a => {
-    a.collection = a.collection || otherEntitiesFields.some(b => a.otherEntity === b.otherEntity && getOriginalField(a.relatedField) === getOriginalField(b.relatedField) && b.collection === true)
+    a.collection = a.collection || otherEntitiesFields.some(b => a.otherEntity === b.otherEntity && getOriginalField(a.relatedField) === getOriginalField(b.relatedField) && b.collection)
   });
   otherEntitiesFields = this._.uniqWith(otherEntitiesFields, (a, b) => a.otherEntity === b.otherEntity && a.collection === b.collection && getOriginalField(a.relatedField) === getOriginalField(b.relatedField));
 _%>
