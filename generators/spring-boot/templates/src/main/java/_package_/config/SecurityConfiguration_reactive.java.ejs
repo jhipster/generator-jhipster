@@ -151,6 +151,12 @@ public class SecurityConfiguration {
 <%_ if (authenticationTypeOauth2) { _%>
     @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
     private String issuerUri;
+
+    @Value("${jhipster.security.oauth2.jwk-connect-timeout:500}")
+    private int jwkConnectTimeout;
+
+    @Value("${jhipster.security.oauth2.jwk-read-timeout:5000}")
+    private int jwkReadTimeout;
   <%_ if (!applicationTypeMicroservice) { _%>
 
     private final ReactiveClientRegistrationRepository clientRegistrationRepository;
@@ -396,6 +402,9 @@ public class SecurityConfiguration {
     <%_ if (applicationTypeMicroservice) { _%>
         NimbusReactiveJwtDecoder jwtDecoder = (NimbusReactiveJwtDecoder) ReactiveJwtDecoders.fromOidcIssuerLocation(issuerUri);
 
+        // Configure custom timeout for JWK retrieval to handle slow networks
+        jwtDecoder.setResourceRetriever(new com.nimbusds.jose.proc.DefaultResourceRetriever(jwkConnectTimeout, jwkReadTimeout));
+
         OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());
         OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
         OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
@@ -417,6 +426,10 @@ public class SecurityConfiguration {
 
     private ReactiveJwtDecoder createJwtDecoder(String issuerUri, String jwkSetUri, String userInfoUri) {
         NimbusReactiveJwtDecoder jwtDecoder = new NimbusReactiveJwtDecoder(jwkSetUri);
+
+        // Configure custom timeout for JWK retrieval to handle slow networks
+        jwtDecoder.setResourceRetriever(new com.nimbusds.jose.proc.DefaultResourceRetriever(jwkConnectTimeout, jwkReadTimeout));
+
         OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());
         OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
         OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
