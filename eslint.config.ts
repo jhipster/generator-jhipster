@@ -40,6 +40,7 @@ export default defineConfig(
     },
     rules: {
       '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/no-unnecessary-template-expression': 'error',
       '@typescript-eslint/no-floating-promises': 'error',
       '@typescript-eslint/prefer-optional-chain': 'error',
       '@typescript-eslint/no-unnecessary-type-conversion': 'error',

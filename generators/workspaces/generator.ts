@@ -277,6 +277,6 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
   }
 
   createWorkspacesScript(...scripts: string[]) {
-    return Object.fromEntries(scripts.map(script => [`${script}`, `npm run ${script} --workspaces --if-present`]));
+    return Object.fromEntries(scripts.map(script => [script, `npm run ${script} --workspaces --if-present`]));
   }
 }

@@ -187,7 +187,7 @@ export default class KubernetesGenerator extends BaseKubernetesGenerator {
                 app.targetImageName
               }`;
             }
-            this.log.verboseInfo(`  ${chalk.cyan(`${runCommand}`)} in ${this.workspacePath(app.appFolder!)}`);
+            this.log.verboseInfo(`  ${chalk.cyan(runCommand)} in ${this.workspacePath(app.appFolder!)}`);
           }
         }
         this.log.log('\nYou can deploy all your apps by running the following kubectl command:');
