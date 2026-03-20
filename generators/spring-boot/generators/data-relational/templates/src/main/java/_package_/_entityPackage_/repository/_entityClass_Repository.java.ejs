@@ -68,13 +68,13 @@ public interface <%= entityClass %>Repository extends <% if (containsBagRelation
     default List<<%= persistClass %>> findAllWithEagerRelationships() {
         return <% if (containsBagRelationships) { %>this.fetchBagRelationships(<% } %>
             this.<% if (containsToOneEagerRelationship) { %>findAllWithToOneRelationships<% } else { %>findAll<% } %>()
-        <%  if (containsBagRelationships) { %>)<% } %>;
+        <% if (containsBagRelationships) { %>)<% } %>;
     }
 
     default Page<<%= persistClass %>> findAllWithEagerRelationships(Pageable pageable) {
         return <% if (containsBagRelationships) { %>this.fetchBagRelationships(<% } %>
             this.<% if (containsToOneEagerRelationship) { %>findAllWithToOneRelationships<% } else { %>findAll<% } %>(pageable)
-        <%  if (containsBagRelationships) { %>)<% } %>;
+        <% if (containsBagRelationships) { %>)<% } %>;
     }
   <%_ if (containsToOneEagerRelationship) { _%>
 

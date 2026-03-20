@@ -18,9 +18,7 @@
 -%>
 package <%= entityAbsolutePackage %>.web.rest;
 
-<%_
-const viaService = !serviceNo;
-_%>
+<%_ const viaService = !serviceNo; _%>
 <%_ if (!dtoMapstruct || serviceNo) { _%>
 import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
 <%_ } _%>

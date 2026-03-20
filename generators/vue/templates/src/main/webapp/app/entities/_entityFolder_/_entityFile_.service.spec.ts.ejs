@@ -27,7 +27,7 @@ import dayjs from 'dayjs';
 <%_ } _%>
 
 <%_ if (anyFieldIsLocalDate || anyFieldIsInstant || anyFieldIsZonedDateTime) { _%>
-import { <%_ if (anyFieldIsLocalDate) { _%>DATE_FORMAT,<%_ } if (anyFieldIsInstant || anyFieldIsZonedDateTime) {_%> DATE_TIME_FORMAT<%_ } _%> } from '@/shared/composables/date-format';
+import { <%_ if (anyFieldIsLocalDate) { _%>DATE_FORMAT,<%_ } if (anyFieldIsInstant || anyFieldIsZonedDateTime) { _%> DATE_TIME_FORMAT<%_ } _%> } from '@/shared/composables/date-format';
 <%_ } _%>
 import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
 import { <%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
@@ -68,7 +68,8 @@ describe('Service Tests', () => {
       elemDefault = new <%= entityAngularName %>(
         <%- primaryKey.tsSampleValues[0] %>,
 <%_ fields.filter(field => !field.id).forEach((field) => {
-    const fieldType = field.fieldType; _%>
+    const fieldType = field.fieldType;
+_%>
   <%_ if (field.fieldIsEnum) { _%>
         '<%= field.enumValues[0].name %>',
   <%_ } else if (field.fieldTypeBoolean) { _%>
