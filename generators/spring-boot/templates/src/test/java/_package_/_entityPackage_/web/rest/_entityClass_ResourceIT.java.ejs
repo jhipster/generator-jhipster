@@ -73,13 +73,15 @@ import <%= entityAbsolutePackage %>.domain.<%= relationship.otherEntity.persistC
           imported.push(relationship.otherEntity.entityNameCapitalized);
     }
   }
-} _%>
+}
+_%>
 <%_
 if(jpaMetamodelFiltering && reactive) {
   filterTestableRelationships.forEach(relationship => { _%>
 import <%= entityAbsolutePackage %>.repository.<%= relationship.otherEntity.entityNameCapitalized %>Repository;
 <%_ });
- } _%>
+ }
+_%>
 <%_ if (hasUserRepository) { _%>
 import <%= user.entityAbsolutePackage %>.repository.UserRepository;
 <%_ } _%>
@@ -246,7 +248,8 @@ import static org.awaitility.Awaitility.await;
   if (field.fieldIsEnum) { _%>
 import <%= entityAbsolutePackage %>.domain.enumeration.<%= field.fieldType %>;
 <%_ }
-} _%>
+}
+_%>
 /**
  * Integration tests for the {@link <%= entityClass %>Resource} REST controller.
  */
@@ -349,7 +352,8 @@ class <%= entityClass %>ResourceIT {
           '" field "' + field.fieldName + '" with pattern "' + field.fieldValidateRulesPattern +
           '" in file "' + entityClass + 'ResourceIT" where equal, added symbol "B" to second value.');
       }
-    } _%>
+    }
+_%>
 
     private static final String <%= defaultValueName %> = "<%- sampleTextString %>";
     private static final String <%= updatedValueName %> = "<%- updatedTextString %>";
@@ -518,13 +522,15 @@ class <%= entityClass %>ResourceIT {
     private <%= persistClass %> inserted<%= persistClass %>;
 
 <%_ if(jpaMetamodelFiltering && reactive) {
-filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach((relationship) => { _%>
+filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach((relationship) => {
+_%>
     @Autowired
     private <%= relationship.otherEntity.persistClass %>Repository <%= relationship.otherEntity.persistInstance %>Repository;
 <%_ });
-}_%>
+}
+_%>
 <%_ ['DEFAULT_', 'UPDATED_'].forEach((fieldStatus) => { _%>
-<%_  const createInstance = fieldStatus === 'UPDATED_' ? `updated${persistClass}` : persistInstance; _%>
+<%_ const createInstance = fieldStatus === 'UPDATED_' ? `updated${persistClass}` : persistInstance; _%>
     /**
      * Create an <% if (fieldStatus === 'UPDATED_') { %>updated <% } %>entity for this test.
      *
@@ -548,7 +554,7 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
     <%_ } _%>;
     <%_ if (!anyRelationshipIsRequired) { _%>
     }
-    <%_  return; _%>
+    <%_ return; _%>
     <%_ } _%>
   <%_ } else { _%>
         <%= persistClass %> <%= createInstance %> = new <%= persistClass %>();
@@ -572,7 +578,8 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
     const relationshipValidate = relationship.relationshipValidate;
     const otherEntityName = relationship.otherEntityName;
     const mapsIdUse = relationship.id;
-    if ((relationshipValidate !== null && relationshipValidate && !relationship.otherEntity.hasCyclicRequiredRelationship) || mapsIdUse) { _%>
+    if ((relationshipValidate !== null && relationshipValidate && !relationship.otherEntity.hasCyclicRequiredRelationship) || mapsIdUse) {
+  _%>
         // Add required entity
       <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
         <%_ if (relationship.otherEntityUser) { /* TODO or other entity has no unique fields */ _%>
@@ -637,7 +644,8 @@ _%>
         <%= rel.otherEntity.entityNameCapitalized %>ResourceIT.deleteEntities(em);
     <%_ alreadyGeneratedDeletionCalls.push(rel.otherEntityName);
     }
-  }); _%>
+  });
+    _%>
     }
 
 <%_ } _%>
@@ -806,7 +814,8 @@ _%>
       const otherEntity = relationship.otherEntity;
       const otherEntityName = relationship.otherEntityName;
       const mapsIdUse = relationship.id;
-      if (mapsIdUse) { _%>
+      if (mapsIdUse) {
+    _%>
         // Add a new parent entity
         <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
         <%= relationship.otherEntity.persistClass %> <%= otherEntityName %> = <%= relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<% if (!relationship.otherEntityUser) { _%>Updated<%_ } %>Entity(<% if (databaseTypeSql && otherEntity.anyRelationshipIsRequired) { %>em<% } %>);
@@ -871,7 +880,8 @@ _%>
       let required = false;
       if (!field.fieldTypeBytes && field.fieldValidate && field.fieldValidationRequired) {
         required = true;
-      } _%>
+      }
+    _%>
       <%_ if (required) { _%>
 
     @Test<%= transactionalAnnotation %>
@@ -1111,7 +1121,7 @@ _%>
   <%_ } _%>
     }
 
-  <%_ fieldsToTest.forEach((searchBy) => { /* we can't filter by all the fields. */_%>
+  <%_ fieldsToTest.forEach((searchBy) => { /* we can't filter by all the fields. */ _%>
     <%_ if (searchBy.filterableField) { _%>
 
     @Test<%= transactionalAnnotation %>

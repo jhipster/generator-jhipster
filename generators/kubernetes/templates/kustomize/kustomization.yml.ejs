@@ -6,8 +6,7 @@ namespace: <%= kubernetesNamespace %>
 <%_ } _%>
 
 resources:
-<%_
-if (!kubernetesNamespaceDefault) { _%>
+<%_ if (!kubernetesNamespaceDefault) { _%>
 - namespace.yml
 <%_ } _%>
 # Individual apps
@@ -58,7 +57,8 @@ const appOut = appName.concat('-', suffix); _%>
 - messagebroker-<%= suffix %>/kafka.yml
 <%_ } _%>
 <%_ if (monitoringPrometheus) {
-  const monitOut = 'monitoring'.concat('-', suffix); _%>
+  const monitOut = 'monitoring'.concat('-', suffix);
+_%>
 # monitoring prometheus
 - <%= monitOut %>/jhipster-prometheus-cr.yml
 - <%= monitOut %>/jhipster-prometheus-crd.yml
@@ -80,7 +80,8 @@ const appOut = appName.concat('-', suffix); _%>
 - <%= registryOut %>/application-configmap.yml
 <%_ } _%>
 <%_ if (istio) {
-  const istioOut = 'istio'.concat('-', suffix); _%>
+  const istioOut = 'istio'.concat('-', suffix);
+_%>
 # istio
 - <%= istioOut %>/grafana-gateway.yml
 - <%= istioOut %>/zipkin-gateway.yml
@@ -89,7 +90,8 @@ const appOut = appName.concat('-', suffix); _%>
 
 patchesJson6902:
 <%_ if (istio) {
-  const patchOut = 'patch'.concat('-', suffix); _%>
+  const patchOut = 'patch'.concat('-', suffix);
+_%>
 - target:
     version: v1
     kind: Namespace

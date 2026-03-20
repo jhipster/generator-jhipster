@@ -29,10 +29,12 @@
         <%_ if (field.shouldCreateContentType) { _%>
             <column name="<%= field.columnName %>_content_type" type="varchar(255)"/>
         <%_ }
-    } // End for (field of addedFields) _%>
+    } // End for (field of addedFields)
+        _%>
         </addColumn>
     <%_ for (field of addedFields) {
-        if (field.shouldDropDefaultValue) { _%>
+        if (field.shouldDropDefaultValue) {
+    _%>
         <dropDefaultValue tableName="<%= entity.entityTableName %>" columnName="<%= field.columnName %>" columnDataType="${datetimeType}"/>
         <%_ } _%>
     <%_ } _%>
@@ -68,7 +70,7 @@
         }
     }
     if (hasRelationShips || hasJoinRelationShips) {
- _%>
+_%>
 
     <!--
         Added relationships to the entity <%= entity.entityClass %>.
@@ -79,7 +81,8 @@
             <%_
             for (relationship of addedRelationships) {
                 if (relationship.shouldWriteRelationship && !relationshipsToRecreateForeignKeysOnly.includes(relationship)) {
-                    for (const otherEntityPkField of relationship.otherEntity.primaryKey.fields) { _%>
+                    for (const otherEntityPkField of relationship.otherEntity.primaryKey.fields) {
+            _%>
                 <column name="<%= relationship.columnName %>_<%= otherEntityPkField.columnName %>" type="<%= otherEntityPkField.columnType %>"/>
                     <%_ } _%>
                 <%_ } _%>
@@ -132,7 +135,7 @@ if (removedRelationships && removedRelationships.length) {
     }
     /* ======== Start removed relationships should be written ======== */
     if (hasRelationShips || hasJoinRelationShips) {
-     _%>
+_%>
 
     <!--
         Dropped relationships to the entity <%= entity.entityClass %>.
@@ -150,37 +153,44 @@ if (removedRelationships && removedRelationships.length) {
             }
 
             if (hasRelationshipWithFieldUpdates) {
-            /* ======== End dropForeignKeyConstraint ======== */ _%>
+            /* ======== End dropForeignKeyConstraint ======== */
+        _%>
         <dropColumn tableName="<%= entity.entityTableName %>">
         <%_
             /* ======== Start drop relationship columns ======== */
             for (relationship of removedRelationships) {
                 if (relationship.shouldWriteRelationship && !relationshipsToRecreateForeignKeysOnly.includes(relationship)) {
-                    for (const otherEntityPkField of relationship.otherEntity.primaryKey.fields) { _%>
+                    for (const otherEntityPkField of relationship.otherEntity.primaryKey.fields) {
+        _%>
             <column name="<%= relationship.columnName %>_<%= otherEntityPkField.columnName %>"/>
                     <%_ } _%>
         <%_    }
             }
-            /* ======== End drop relationship column ======== */ _%>
+            /* ======== End drop relationship column ======== */
+        _%>
         </dropColumn>
         <%_
             }
         }
-        /* ======== End hasRelationShips ======== */ _%>
+        /* ======== End hasRelationShips ======== */
+        _%>
         <%_
         /* ======== Start for joinTable ======== */
         for (relationship of removedRelationships) {
-            if (relationship.shouldWriteJoinTable) { _%>
+            if (relationship.shouldWriteJoinTable) {
+        _%>
         <dropTable cascadeConstraints="true" tableName="<%= relationship.joinTable.name %>"/>
             <%_ }
         }
-        /* ======== End for joinTable ======== */ _%>
+        /* ======== End for joinTable ======== */
+            _%>
     </changeSet>
     <%_
     }
     /* ======== End removed relationships should be written ======== */
 }
-/* ======== End removed relationships exists ======== */ _%>
+/* ======== End removed relationships exists ======== */
+    _%>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
 

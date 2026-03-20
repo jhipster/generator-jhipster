@@ -43,7 +43,8 @@ public enum <%= enumName %> {
   <%_ } else { _%>
     <%= enumWithCustomValue.name %>("<%= enumWithCustomValue.value %>")<% if (index < enumValues.length - 1) { %>,<% } else { %>;<% } %>
     <%_ }
-  }); _%>
+  });
+    _%>
   <%_ if (!withoutCustomValues) { _%>
     private<% if (withCustomValues) { %> final<% } %> String value;
 

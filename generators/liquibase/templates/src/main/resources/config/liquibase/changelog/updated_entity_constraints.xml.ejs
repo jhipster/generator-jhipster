@@ -21,7 +21,8 @@
 const entityTableName = entity.entityTableName;
 const entityClass = entity.entityClass;
 const name = entity.name;
-if (hasFieldConstraint) { _%>
+if (hasFieldConstraint) {
+_%>
 
     <!--
         Added the field constraints for entity <%= entityClass %>.
@@ -45,7 +46,8 @@ if (hasFieldConstraint) { _%>
             columnDataType="varchar(255)"/>
     <%_    }
         }
-    } _%>
+    }
+    _%>
     </changeSet>
 <% } _%>
 <%_ if (removedDefaultValueFields && removedDefaultValueFields.length) { _%>
@@ -96,7 +98,8 @@ if (hasFieldConstraint) { _%>
             columnName="<%= relationshipData.columnName %>_id"
             columnDataType="<%= relationshipData.columnDataType %>"/>
     <%_ }
-     } _%>
+     }
+    _%>
     </changeSet>
 <%_ } _%>
 <%_ if (addedRelationships && addedRelationships.length) { %>

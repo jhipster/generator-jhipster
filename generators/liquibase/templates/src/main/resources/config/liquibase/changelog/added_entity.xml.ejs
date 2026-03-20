@@ -50,20 +50,23 @@
                 && !relationship.id) {
         relationship.otherEntity.primaryKey.fields.forEach(idField => {
         const uniqueConstraintName = relationship.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, relationship.columnName + '_' + idField.columnName, entity.prodDatabaseType) : null;
-         _%>
+_%>
             <column name="<%= relationship.columnName %>_<%= idField.columnName %>" type="<%= idField.columnType %>">
                 <constraints nullable="<%= !relationship.columnRequired %>"<% if (uniqueConstraintName) { %> unique="true" uniqueConstraintName="<%= uniqueConstraintName %>"<% } %> />
             </column>
         <%_ });
     }
-} _%>
+}
+        _%>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
 <%_ for (const field of fields) {
-    if (field.shouldDropDefaultValue) { _%>
+    if (field.shouldDropDefaultValue) {
+_%>
         <dropDefaultValue tableName="<%= entity.entityTableName %>" columnName="<%= field.columnName %>" columnDataType="${datetimeType}"/>
 <%_ }
-} _%>
+}
+_%>
     </changeSet>
 <%_ const joinTableRelations = relationships.filter(rel => rel.shouldWriteJoinTable);
     if(joinTableRelations.length > 0) {
