@@ -49,15 +49,15 @@
 _%>
 
 <%_ for (const bean of beans) { _%>
-    private final <%= bean.class %> <%= bean.instance %>;
+    private final <%- bean.class %> <%- bean.instance %>;
 
 <%_ } _%>
-    public <%= constructorName %>(
+    public <%- constructorName %>(
 <%_ for (const bean of beans) { _%>
-        <%= bean.class %> <%= bean.instance %><% if (bean !== beans[beans.length -1]) { %>,<% } %>
+        <%- bean.class %> <%- bean.instance %><% if (bean !== beans[beans.length -1]) { %>,<% } %>
 <%_ } _%>
     ) {
 <%_ for (const bean of beans) { _%>
-        this.<%= bean.instance %> = <%= bean.instance %>;
+        this.<%- bean.instance %> = <%- bean.instance %>;
 <%_ } _%>
     }

@@ -25,29 +25,29 @@ for (const relationship of relationships) { if (relationship.relationshipOneToOn
 _%>
 
     /**
-     *  Get all the <%= entityInstancePlural %> where <%= relationship.relationshipNameCapitalized %> is {@code null}.
+     *  Get all the <%- entityInstancePlural %> where <%- relationship.relationshipNameCapitalized %> is {@code null}.
      *  @return the list of entities.
      */
   <%_ if (databaseTypeSql) { _%>
     @Transactional(readOnly = true) <% } %>
-    public <%= reactiveSql ? 'Flux' : 'List' %><<%= instanceType %>> findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull() {
-        LOG.debug("Request to get all <%= entityInstancePlural %> where <%= relationship.relationshipNameCapitalized %> is null");
+    public <%- reactiveSql ? 'Flux' : 'List' %><<%- instanceType %>> findAllWhere<%- relationship.relationshipNameCapitalized %>IsNull() {
+        LOG.debug("Request to get all <%- entityInstancePlural %> where <%- relationship.relationshipNameCapitalized %> is null");
     <%_ if (reactiveSql) { _%>
-        return <%= entityInstance %>Repository.findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull()<%_ if (dtoMapstruct) { _%>
-             .map(<%= entityToDtoReference %>)<%_ } _%>;
+        return <%- entityInstance %>Repository.findAllWhere<%- relationship.relationshipNameCapitalized %>IsNull()<%_ if (dtoMapstruct) { _%>
+             .map(<%- entityToDtoReference %>)<%_ } _%>;
     <%_ } else if (reactive) { _%>
-        return <%= entityInstance %>Repository
+        return <%- entityInstance %>Repository
             .findAll()
-            .filter(<%= entityInstance %> -> <%= entityInstance %>.<%= relationship.propertySupplierName %>() == null)
+            .filter(<%- entityInstance %> -> <%- entityInstance %>.<%- relationship.propertySupplierName %>() == null)
       <%_ if (dtoMapstruct) { _%>
-            .map(<%= entityToDtoReference %>)
+            .map(<%- entityToDtoReference %>)
       <%_ } _%>;
     <%_ } else { _%>
         return StreamSupport
-            .stream(<%= entityInstance %>Repository.findAll().spliterator(), false)
-            .filter(<%= entityInstance %> -> <%= entityInstance %>.<%= relationship.propertySupplierName %>() == null)
+            .stream(<%- entityInstance %>Repository.findAll().spliterator(), false)
+            .filter(<%- entityInstance %> -> <%- entityInstance %>.<%- relationship.propertySupplierName %>() == null)
       <%_ if (dtoMapstruct) { _%>
-            .map(<%= entityToDtoReference %>)
+            .map(<%- entityToDtoReference %>)
             .collect(Collectors.toCollection(LinkedList::new));
       <%_ } else { _%>
             .toList();

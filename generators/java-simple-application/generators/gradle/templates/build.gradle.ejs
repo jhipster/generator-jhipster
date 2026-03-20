@@ -24,14 +24,14 @@ plugins {
     // jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
 }
 
-group = "<%= packageName %>"
+group = "<%- packageName %>"
 version = "0.0.1-SNAPSHOT"
 
 description = ""
 
 java {
-    sourceCompatibility=<%= javaVersion %>
-    targetCompatibility=<%= javaVersion %>
+    sourceCompatibility=<%- javaVersion %>
+    targetCompatibility=<%- javaVersion %>
 }
 assert System.properties["java.specification.version"] == <%- javaCompatibleVersions.map(ver => `"${ver}"`).join(' || '); %>
 

@@ -42,7 +42,7 @@ logSummary() {
         echo "#####################################################"
         echo "Please find the below useful endpoints,"
   <%_ if (monitoringPrometheus) { _%>
-        echo "JHipster Grafana - http://jhipster-grafana.<%= kubernetesNamespace %>.<%= ingressDomain %>"
+        echo "JHipster Grafana - http://jhipster-grafana.<%- kubernetesNamespace %>.<%- ingressDomain %>"
   <%_ } _%>
   <%_ if (kubernetesServiceTypeIngress) { _%>
     <%_ appConfigs.forEach((appConfig) =>  { _%>
@@ -54,17 +54,17 @@ logSummary() {
       <%_ } _%>
     <%_ }) _%>
     <%_ if (istio) { _%>
-        echo "Zipkin - http://zipkin.istio-system.<%= ingressDomain %>"
-        echo "Grafana - http://grafana.istio-system.<%= ingressDomain %>"
-        echo "Kiali - http://kiali.istio-system.<%= ingressDomain %>"
+        echo "Zipkin - http://zipkin.istio-system.<%- ingressDomain %>"
+        echo "Grafana - http://grafana.istio-system.<%- ingressDomain %>"
+        echo "Kiali - http://kiali.istio-system.<%- ingressDomain %>"
     <%_ } _%>
   <%_ } _%>
   <%_ if (useKeycloak) { _%>
       <%_ if (ingressTypeGke) { _%>
-        echo "Keycloak - https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>"
+        echo "Keycloak - https://keycloak.<%- kubernetesNamespace %>.<%- ingressDomain %>"
       <%_ } _%>
       <%_ if (ingressTypeNginx) { _%>
-        echo "Keycloak - http://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>"
+        echo "Keycloak - http://keycloak.<%- kubernetesNamespace %>.<%- ingressDomain %>"
       <%_ } _%>
   <%_ } _%>
         echo "#####################################################"

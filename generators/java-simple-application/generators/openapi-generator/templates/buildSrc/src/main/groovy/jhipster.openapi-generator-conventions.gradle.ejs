@@ -24,12 +24,12 @@ openApiGenerate {
     generatorName = "spring"
     inputSpec = "$rootDir/src/main/resources/swagger/api.yml".toString()
     outputDir = "$buildDir/openapi".toString()
-    apiPackage = "<%= packageName %>.web.api"
-    modelPackage = "<%= packageName %>.service.api.dto"
+    apiPackage = "<%- packageName %>.web.api"
+    modelPackage = "<%- packageName %>.service.api.dto"
     apiFilesConstrainedTo = [""]
     modelFilesConstrainedTo = [""]
     supportingFilesConstrainedTo = ["ApiUtil.java"]
-    configOptions = [delegatePattern: "true", title: "<%= dasherizedBaseName %>"<% if (reactive) { %>, reactive: "true"<% } %>, useSpringBoot3: "true"]
+    configOptions = [delegatePattern: "true", title: "<%- dasherizedBaseName %>"<% if (reactive) { %>, reactive: "true"<% } %>, useSpringBoot3: "true"]
     validateSpec = true
     importMappings = [Problem:"org.springframework.http.ProblemDetail"]
 }

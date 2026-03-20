@@ -19,29 +19,29 @@
 <%- include('/liquibase-changelog-header') -%>
 
 <%_ fields.filter(field => field.liquibaseCustomSequenceGenerator).forEach((field, idx) => { _%>
-    <changeSet id="<%= changelogDate %>-seq-<%- idx %>" author="jhipster">
+    <changeSet id="<%- changelogDate %>-seq-<%- idx %>" author="jhipster">
         <createSequence sequenceName="<%- field.liquibaseSequenceGeneratorName %>" startValue="1050" incrementBy="50"/>
     </changeSet>
 
 <%_ }); _%>
     <!--
-        Added the entity <%= entity.entityClass %>.
+        Added the entity <%- entity.entityClass %>.
     -->
-    <changeSet id="<%= changelogDate %>-1" author="jhipster">
-        <createTable tableName="<%= entity.entityTableName %>"<%- this.formatAsLiquibaseRemarks(entity.documentation, true) %>>
+    <changeSet id="<%- changelogDate %>-1" author="jhipster">
+        <createTable tableName="<%- entity.entityTableName %>"<%- this.formatAsLiquibaseRemarks(entity.documentation, true) %>>
 <%_ for (field of fields) { _%>
-            <column name="<%= field.columnName %>" type="<%= field.columnType %>"<%- this.createDefaultValueLiquibaseAttribute(field, true) -%><%- this.formatAsLiquibaseRemarks(field.documentation, true) %><% if (field.id && field.liquibaseAutoIncrement) { %> autoIncrement="true" startWith="1500"<%_ } %>>
+            <column name="<%- field.columnName %>" type="<%- field.columnType %>"<%- this.createDefaultValueLiquibaseAttribute(field, true) -%><%- this.formatAsLiquibaseRemarks(field.documentation, true) %><% if (field.id && field.liquibaseAutoIncrement) { %> autoIncrement="true" startWith="1500"<%_ } %>>
     <%_ if (field.id) { _%>
                 <constraints primaryKey="true" nullable="false"/>
     <%_ } else if (field.unique) { _%>
-                <constraints nullable="<%= !field.columnRequired %>" unique="true" uniqueConstraintName="<%= field.uniqueConstraintName %>" />
+                <constraints nullable="<%- !field.columnRequired %>" unique="true" uniqueConstraintName="<%- field.uniqueConstraintName %>" />
     <%_ } else { _%>
-                <constraints nullable="<%= !field.columnRequired %>" />
+                <constraints nullable="<%- !field.columnRequired %>" />
     <%_ } _%>
             </column>
     <%_ if (field.shouldCreateContentType) { _%>
-            <column name="<%= field.columnName %>_content_type" type="varchar(255)">
-                <constraints nullable="<%= !field.columnRequired %>" />
+            <column name="<%- field.columnName %>_content_type" type="varchar(255)">
+                <constraints nullable="<%- !field.columnRequired %>" />
             </column>
     <%_ } _%>
 <%_ } _%>
@@ -72,23 +72,23 @@ _%>
     if(joinTableRelations.length > 0) {
 _%>
 
-    <changeSet id="<%= changelogDate %>-1-relations" author="jhipster">
+    <changeSet id="<%- changelogDate %>-1-relations" author="jhipster">
     <%_ for (relationship of joinTableRelations) { _%>
 
-        <createTable tableName="<%= relationship.joinTable.name %>">
+        <createTable tableName="<%- relationship.joinTable.name %>">
         <%_ for (field of relationship.otherEntity.primaryKey.fields) { _%>
-            <column name="<%= relationship.columnName %>_<%= field.columnName %>" type="<%= field.columnType %>">
+            <column name="<%- relationship.columnName %>_<%- field.columnName %>" type="<%- field.columnType %>">
                 <constraints nullable="false"/>
             </column>
         <%_ } _%>
         <%_ for (field of entity.primaryKey.fields) { _%>
-            <column name="<%= entity.entityTableName %>_<%= field.columnName %>" type="<%= field.columnType %>">
+            <column name="<%- entity.entityTableName %>_<%- field.columnName %>" type="<%- field.columnType %>">
                 <constraints nullable="false"/>
             </column>
         <%_ } _%>
         </createTable>
 
-        <addPrimaryKey columnNames="<%= entity.primaryKey.fields.map(field => `${entity.entityTableName}_${field.columnName}`).join(', ') %>, <%= relationship.otherEntity.primaryKey.fields.map(field => `${relationship.columnName}_${field.columnName}`).join(', ') %>" tableName="<%= relationship.joinTable.name %>"/>
+        <addPrimaryKey columnNames="<%- entity.primaryKey.fields.map(field => `${entity.entityTableName}_${field.columnName}`).join(', ') %>, <%- relationship.otherEntity.primaryKey.fields.map(field => `${relationship.columnName}_${field.columnName}`).join(', ') %>" tableName="<%- relationship.joinTable.name %>"/>
     <%_ } _%>
     </changeSet>
 <%_ } _%>
@@ -104,21 +104,21 @@ _%>
           This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
           Spring Boot configuration key.
     -->
-    <changeSet id="<%= changelogDate %>-1-data" author="jhipster" context="faker">
+    <changeSet id="<%- changelogDate %>-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/<%= !entity.incrementalChangelog ? entity.entityTableName : databaseChangelog.changelogDate + '_entity_' + entity.entityTableName %>.csv"
+                  file="config/liquibase/fake-data/<%- !entity.incrementalChangelog ? entity.entityTableName : databaseChangelog.changelogDate + '_entity_' + entity.entityTableName %>.csv"
                   separator=";"
-                  tableName="<%= entity.entityTableName %>"
+                  tableName="<%- entity.entityTableName %>"
                   usePreparedStatements="true">
   <%_ for (field of fields) { _%>
-            <column name="<%= field.columnName %>" type="<%= field.loadColumnType %>"/>
+            <column name="<%- field.columnName %>" type="<%- field.loadColumnType %>"/>
     <%_ if (field.fieldType === 'byte[]' && field.fieldTypeBlobContent !== 'text') { _%>
-            <column name="<%= field.columnName %>_content_type" type="string"/>
+            <column name="<%- field.columnName %>_content_type" type="string"/>
     <%_ } _%>
   <%_ } _%>
   <%_ for (relationship of relationships.filter(relationship => !relationship.id && relationship.columnRequired && relationship.persistableRelationship && !relationship.collection)) { _%>
       <%_ for (field of relationship.otherEntity.primaryKey.fields) { _%>
-            <column name="<%= relationship.columnName %>_<%= field.columnName %>" type="<%= field.loadColumnType %>"/>
+            <column name="<%- relationship.columnName %>_<%- field.columnName %>" type="<%- field.loadColumnType %>"/>
     <%_ } _%>
   <%_ } _%>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
