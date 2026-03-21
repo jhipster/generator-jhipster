@@ -9,8 +9,13 @@ import ts from 'typescript-eslint';
 
 import jhipster from './lib/eslint/index.ts';
 
+const tsFiles = ['**/*.ts', '**/*.mts', '**/*.cts'];
+const jsFiles = ['**/*.js', '**/*.cjs', '**/*.mjs'];
+const jsTsFiles = [...jsFiles, ...tsFiles];
+
 export default defineConfig(
   {
+    files: jsTsFiles,
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',
@@ -18,18 +23,24 @@ export default defineConfig(
         ...globals.node,
       },
     },
+    rules: {
+      ...js.configs.recommended.rules,
+    },
   },
   { ignores: ['dist', 'docs'] },
-  js.configs.recommended,
-  jhipster.base,
   {
+    files: jsTsFiles,
+    ...jhipster.base,
+  },
+  {
+    files: jsTsFiles,
     plugins: { n },
     rules: {
       'n/prefer-node-protocol': 'error',
     },
   },
   {
-    files: ['**/*.ts'],
+    files: tsFiles,
     ...ts.configs.recommended[0],
     ...ts.configs.stylistic[0],
     languageOptions: {
@@ -63,6 +74,7 @@ export default defineConfig(
     },
   },
   {
+    files: jsTsFiles,
     ...(imports.flatConfigs.recommended as Config),
     ...(imports.flatConfigs.typescript as Config),
     languageOptions: {
@@ -82,6 +94,7 @@ export default defineConfig(
     },
   },
   {
+    files: jsTsFiles,
     rules: {
       eqeqeq: ['error', 'smart'],
       'no-use-before-define': ['error', 'nofunc'],
