@@ -16,9 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-const tsKeyId = primaryKey.tsSampleValues[0];
-_%>
+<%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
 <%_ if (clientTestFrameworkVitest) { _%>
 import { beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
@@ -27,31 +25,31 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap/modal';
 import { of } from 'rxjs';
 
-import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
+import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
 
-import { <%= entityAngularName %>DeleteDialog } from './<%= entityFileName %>-delete-dialog';
+import { <%- entityAngularName %>DeleteDialog } from './<%- entityFileName %>-delete-dialog';
 
-describe('<%= entityAngularName %> Management Delete Component', () => {
-  let comp: <%= entityAngularName %>DeleteDialog;
-  let fixture: ComponentFixture<<%= entityAngularName %>DeleteDialog>;
-  let service: <%= entityAngularName %>Service;
+describe('<%- entityAngularName %> Management Delete Component', () => {
+  let comp: <%- entityAngularName %>DeleteDialog;
+  let fixture: ComponentFixture<<%- entityAngularName %>DeleteDialog>;
+  let service: <%- entityAngularName %>Service;
   let mockActiveModal: NgbActiveModal;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [NgbActiveModal],
     });
-    fixture = TestBed.createComponent(<%= entityAngularName %>DeleteDialog);
+    fixture = TestBed.createComponent(<%- entityAngularName %>DeleteDialog);
     comp = fixture.componentInstance;
-    service = TestBed.inject(<%= entityAngularName %>Service);
+    service = TestBed.inject(<%- entityAngularName %>Service);
     mockActiveModal = TestBed.inject(NgbActiveModal);
   });
 
   describe('confirmDelete', () => {
     it('should call delete service on confirmDelete', () => {
       // GIVEN
-      <%= clientTestFramework %>.spyOn(service, 'delete').mockReturnValue(of(undefined));
-      <%= clientTestFramework %>.spyOn(mockActiveModal, 'close');
+      <%- clientTestFramework %>.spyOn(service, 'delete').mockReturnValue(of(undefined));
+      <%- clientTestFramework %>.spyOn(mockActiveModal, 'close');
 
       // WHEN
       comp.confirmDelete(<%- tsKeyId %>);
@@ -63,9 +61,9 @@ describe('<%= entityAngularName %> Management Delete Component', () => {
 
     it('should not call delete service on clear', () => {
       // GIVEN
-      <%= clientTestFramework %>.spyOn(service, 'delete');
-      <%= clientTestFramework %>.spyOn(mockActiveModal, 'close');
-      <%= clientTestFramework %>.spyOn(mockActiveModal, 'dismiss');
+      <%- clientTestFramework %>.spyOn(service, 'delete');
+      <%- clientTestFramework %>.spyOn(mockActiveModal, 'close');
+      <%- clientTestFramework %>.spyOn(mockActiveModal, 'dismiss');
 
       // WHEN
       comp.cancel();

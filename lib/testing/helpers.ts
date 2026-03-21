@@ -325,9 +325,9 @@ class JHipsterRunContext extends RunContext<BaseCoreGenerator> {
           return target[name];
         },
         set(target: any, property: string, value: any) {
-          if (except.includes(property as string)) {
+          if (except.includes(property)) {
             if (target[property]) {
-              throw new Error(`Cannot set ${property as string} mock`);
+              throw new Error(`Cannot set ${property} mock`);
             }
             target[property] = defaultMockFactory(value);
           }
@@ -533,7 +533,7 @@ class JHipsterTest extends YeomanTest {
     const isRunJHipster = (opt: any): opt is RunJHipster | undefined =>
       envOptions === undefined && (opt === undefined || 'useMock' in opt || 'useDefaultMocks' in opt || 'prepareEnvironment' in opt);
     if (isRunJHipster(settings)) {
-      return this.run(generatorSpec).withJHipsterContextOptions(settings!);
+      return this.run(generatorSpec).withJHipsterContextOptions(settings);
     }
 
     return this.run(getGenerator(generatorSpec), settings, envOptions).withJHipsterGenerators().withCommandName();

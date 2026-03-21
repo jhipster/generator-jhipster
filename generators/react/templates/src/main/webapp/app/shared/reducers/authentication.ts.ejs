@@ -27,7 +27,7 @@ import { AppThunk } from 'app/config/store';
 <% if (enableTranslation) { %>import { setLocale } from 'app/shared/reducers/locale';<% } %>
 
 <%_ if (authenticationTypeJwt) { _%>
-const AUTH_TOKEN_KEY = '<%= jhiPrefixDashed %>-authenticationToken';
+const AUTH_TOKEN_KEY = '<%- jhiPrefixDashed %>-authenticationToken';
 <%_ } _%>
 
 export const initialState = {

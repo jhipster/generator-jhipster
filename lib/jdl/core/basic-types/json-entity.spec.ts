@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect as jestExpect, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import JSONEntity from './json-entity.ts';
 
@@ -30,7 +28,7 @@ describe('jdl - JSONEntity', () => {
         expect(() => {
           // @ts-expect-error invalid argument
           new JSONEntity();
-        }).to.throw(/^At least an entity name must be passed\.$/);
+        }).toThrow(/^At least an entity name must be passed\.$/);
       });
     });
     describe('when not passing an entity name', () => {
@@ -38,7 +36,7 @@ describe('jdl - JSONEntity', () => {
         expect(() => {
           // @ts-expect-error invalid argument
           new JSONEntity({});
-        }).to.throw(/^At least an entity name must be passed\.$/);
+        }).toThrow(/^At least an entity name must be passed\.$/);
       });
     });
     describe('when only passing an entity name', () => {
@@ -51,7 +49,7 @@ describe('jdl - JSONEntity', () => {
       });
 
       it('should set default values', () => {
-        jestExpect(entity).toMatchInlineSnapshot(`
+        expect(entity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": undefined,
   "annotations": {},
@@ -104,7 +102,7 @@ JSONEntity {
       });
 
       it('should use them', () => {
-        jestExpect(entity).toMatchInlineSnapshot(`
+        expect(entity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": "yes",
   "annotations": {},
@@ -151,7 +149,7 @@ JSONEntity {
       });
 
       it('should do nothing', () => {
-        expect(entity.fields).to.deep.equal([]);
+        expect(entity.fields).toEqual([]);
       });
     });
     describe('when passing something', () => {
@@ -161,7 +159,7 @@ JSONEntity {
       });
 
       it('should add it', () => {
-        expect(entity.fields).to.deep.equal([42]);
+        expect(entity.fields).toEqual([42]);
       });
     });
   });
@@ -181,7 +179,7 @@ JSONEntity {
       });
 
       it('should do nothing', () => {
-        expect(entity.fields).to.deep.equal([]);
+        expect(entity.fields).toEqual([]);
       });
     });
     describe('when passing something', () => {
@@ -191,7 +189,7 @@ JSONEntity {
       });
 
       it('should add it', () => {
-        expect(entity.fields).to.deep.equal([42, 43]);
+        expect(entity.fields).toEqual([42, 43]);
       });
     });
   });
@@ -211,7 +209,7 @@ JSONEntity {
       });
 
       it('should do nothing', () => {
-        expect(entity.relationships).to.deep.equal([]);
+        expect(entity.relationships).toEqual([]);
       });
     });
     describe('when passing something', () => {
@@ -221,7 +219,7 @@ JSONEntity {
       });
 
       it('should add it', () => {
-        expect(entity.relationships).to.deep.equal([42]);
+        expect(entity.relationships).toEqual([42]);
       });
     });
   });
@@ -241,7 +239,7 @@ JSONEntity {
       });
 
       it('should do nothing', () => {
-        expect(entity.relationships).to.deep.equal([]);
+        expect(entity.relationships).toEqual([]);
       });
     });
     describe('when passing something', () => {
@@ -251,7 +249,7 @@ JSONEntity {
       });
 
       it('should add it', () => {
-        expect(entity.relationships).to.deep.equal([42, 43]);
+        expect(entity.relationships).toEqual([42, 43]);
       });
     });
   });
@@ -271,7 +269,7 @@ JSONEntity {
       });
 
       it('should not modify the object', () => {
-        expect(touchedJSONEntity).to.deep.equal(originalJSONEntity);
+        expect(touchedJSONEntity).toEqual(originalJSONEntity);
       });
     });
     describe('when passing options', () => {
@@ -289,7 +287,7 @@ JSONEntity {
       });
 
       it('should set them', () => {
-        jestExpect(jsonEntity).toMatchInlineSnapshot(`
+        expect(jsonEntity).toMatchInlineSnapshot(`
 JSONEntity {
   "angularJSSuffix": undefined,
   "annotations": {},

@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: <%= baseName.toLowerCase() %>
+name: <%- baseName.toLowerCase() %>
 services:
   couchbase:
     build:
@@ -32,11 +32,11 @@ services:
       - 127.0.0.1:8094:8094
       - 127.0.0.1:11210:11210
     environment:
-      - BUCKET=<%= baseName %>
+      - BUCKET=<%- baseName %>
     healthcheck:
       test: ['CMD-SHELL', 'curl -f "http://localhost:8091/ui/index.html" && sleep 20']
       interval: 5s
       timeout: 25s
       retries: 10
     # volumes:
-    #   - ~/volumes/jhipster/<%= baseName.toLowerCase() %>/couchbase/:/opt/couchbase/var
+    #   - ~/volumes/jhipster/<%- baseName.toLowerCase() %>/couchbase/:/opt/couchbase/var

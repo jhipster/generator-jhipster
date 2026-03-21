@@ -26,21 +26,21 @@ logSummary(){
         echo "#####################################################"
         echo "Please find the below useful endpoints,"
   <%_ if (monitoringPrometheus) { _%>
-        echo "JHipster Grafana - http://jhipster-grafana.<%= kubernetesNamespace %>.<%= ingressDomain %>"
+        echo "JHipster Grafana - http://jhipster-grafana.<%- kubernetesNamespace %>.<%- ingressDomain %>"
   <%_ } _%>
   <%_ if (istio) { _%>
     <%_ appConfigs.forEach((appConfig) =>  { _%>
-      <%_ if (appConfig.applicationTypeGateway) {_%>
+      <%_ if (appConfig.applicationTypeGateway) { _%>
         echo "Gateway - http://<%= appConfig.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>"
       <%_ } _%>
-      <%_ if (appConfig.applicationTypeMonolith) {_%>
+      <%_ if (appConfig.applicationTypeMonolith) { _%>
         echo "<%= appConfig.baseName %> - http://<%= appConfig.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>"
       <%_ } _%>
     <%_ }) _%>
     <%_ if (istio) { _%>
-        echo "Jaeger - http://jaeger.istio-system.<%= ingressDomain %>"
-        echo "Grafana - http://grafana.istio-system.<%= ingressDomain %>"
-        echo "Kiali - http://kiali.istio-system.<%= ingressDomain %>"
+        echo "Jaeger - http://jaeger.istio-system.<%- ingressDomain %>"
+        echo "Grafana - http://grafana.istio-system.<%- ingressDomain %>"
+        echo "Kiali - http://kiali.istio-system.<%- ingressDomain %>"
     <%_ } _%>
   <%_ } _%>
         echo "#####################################################"
@@ -55,7 +55,7 @@ kubectl apply -f namespace.yml
 kubectl apply -f registry-${suffix}/
 <%_ } _%>
 <%_ if (istio) { _%>
-kubectl label namespace <%-kubernetesNamespace%> istio-injection=enabled --overwrite=true
+kubectl label namespace <%- kubernetesNamespace %> istio-injection=enabled --overwrite=true
 <%_ } _%>
 <%_ appConfigs.forEach((appConfig) =>  { _%>
 kubectl apply -f <%- appConfig.baseName.toLowerCase() %>-${suffix}/

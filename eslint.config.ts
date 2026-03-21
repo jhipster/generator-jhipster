@@ -1,8 +1,6 @@
 import js from '@eslint/js';
 import { type Config, defineConfig } from 'eslint/config';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
-// @ts-ignore: missing types
-import chai from 'eslint-plugin-chai-friendly';
 import imports from 'eslint-plugin-import-x';
 import n from 'eslint-plugin-n';
 import prettier from 'eslint-plugin-prettier/recommended';
@@ -21,7 +19,7 @@ export default defineConfig(
       },
     },
   },
-  { ignores: ['dist'] },
+  { ignores: ['dist', 'docs'] },
   js.configs.recommended,
   jhipster.base,
   {
@@ -42,8 +40,14 @@ export default defineConfig(
     },
     rules: {
       '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/no-unnecessary-template-expression': 'error',
       '@typescript-eslint/no-floating-promises': 'error',
+      '@typescript-eslint/prefer-optional-chain': 'error',
+      '@typescript-eslint/no-unnecessary-type-conversion': 'error',
       '@typescript-eslint/consistent-type-definitions': 'off',
+      '@typescript-eslint/no-unnecessary-type-assertion': 'error',
+      '@typescript-eslint/no-unnecessary-type-arguments': 'error',
+      '@typescript-eslint/prefer-readonly': 'error',
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
@@ -103,10 +107,6 @@ export default defineConfig(
         },
       ],
     },
-  },
-  {
-    ...(chai.configs.recommendedFlat as Config),
-    files: ['jdl/**/*.spec.{js,ts}'],
   },
   prettier,
 );

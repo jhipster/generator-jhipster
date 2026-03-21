@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect as jestExpect, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
 import { relationshipTypes } from '../basic-types/index.ts';
@@ -53,7 +51,7 @@ MAX = 43`);
       });
 
       it('should parse them', () => {
-        jestExpect(constants).toMatchInlineSnapshot(`
+        expect(constants).toMatchInlineSnapshot(`
 {
   "MAX": "43",
   "MIN": "42",
@@ -70,7 +68,7 @@ MAX = 43`);
       });
 
       it('should parse them', () => {
-        jestExpect(constants).toMatchInlineSnapshot(`
+        expect(constants).toMatchInlineSnapshot(`
 {
   "MIN": "42.42",
 }
@@ -88,7 +86,7 @@ MAX = 43`);
       });
 
       it('should parse it', () => {
-        jestExpect(application).toMatchInlineSnapshot(`
+        expect(application).toMatchInlineSnapshot(`
 {
   "config": {},
   "entities": [],
@@ -117,7 +115,7 @@ MAX = 43`);
         });
 
         it('should parse it', () => {
-          jestExpect(application).toMatchInlineSnapshot(`
+          expect(application).toMatchInlineSnapshot(`
 {
   "config": {
     "applicationType": "monolith",
@@ -147,7 +145,7 @@ MAX = 43`);
         });
 
         it('should parse it', () => {
-          jestExpect(application).toMatchInlineSnapshot(`
+          expect(application).toMatchInlineSnapshot(`
 {
   "config": {
     "baseName": "toto",
@@ -177,7 +175,7 @@ MAX = 43`);
         });
 
         it('should parse it', () => {
-          jestExpect(application).toMatchInlineSnapshot(`
+          expect(application).toMatchInlineSnapshot(`
 {
   "config": {
     "blueprints": [
@@ -220,7 +218,7 @@ application {
       });
 
       it('should parse them', () => {
-        jestExpect(applications).toMatchInlineSnapshot(`
+        expect(applications).toMatchInlineSnapshot(`
 [
   {
     "config": {
@@ -275,7 +273,7 @@ entity C
         });
 
         it('should parse them', () => {
-          expect(application.entities).to.deep.equal(['A', 'B', 'C']);
+          expect(application.entities).toEqual(['A', 'B', 'C']);
         });
       });
       describe('with exclusions', () => {
@@ -298,7 +296,7 @@ entity C
           });
 
           it('should parse the list', () => {
-            expect(application.entities).to.deep.equal(['B', 'C']);
+            expect(application.entities).toEqual(['B', 'C']);
           });
         });
         describe("using the '*' keyword", () => {
@@ -320,7 +318,7 @@ entity C
           });
 
           it('should parse the list', () => {
-            expect(application.entities).to.deep.equal(['B', 'C']);
+            expect(application.entities).toEqual(['B', 'C']);
           });
         });
       });
@@ -347,7 +345,7 @@ entity C
       });
 
       it('should parse them', () => {
-        expect(application.options).to.deep.equal({
+        expect(application.options).toEqual({
           readOnly: {
             list: ['B'],
             excluded: [],
@@ -388,7 +386,7 @@ entity C
       });
 
       it('should parse them', () => {
-        expect(application.useOptions).to.deep.equal([
+        expect(application.useOptions).toEqual([
           {
             excluded: [],
             list: ['A'],
@@ -413,7 +411,7 @@ entity C
       });
 
       it('should parse it', () => {
-        jestExpect(parsedEntity).toMatchInlineSnapshot(`
+        expect(parsedEntity).toMatchInlineSnapshot(`
 {
   "annotations": [],
   "body": [],
@@ -433,7 +431,7 @@ entity C
       });
 
       it('should parse it', () => {
-        jestExpect(parsedEntity).toMatchInlineSnapshot(`
+        expect(parsedEntity).toMatchInlineSnapshot(`
 {
   "annotations": [],
   "body": [],
@@ -457,7 +455,7 @@ entity C
         });
 
         it('should produce the same result', () => {
-          expect(firstDeclaration).to.deep.equal(secondDeclaration);
+          expect(firstDeclaration).toEqual(secondDeclaration);
         });
       });
     });
@@ -477,7 +475,7 @@ entity A`);
       });
 
       it('should parse it', () => {
-        jestExpect(parsedEntity).toMatchInlineSnapshot(`
+        expect(parsedEntity).toMatchInlineSnapshot(`
 {
   "annotations": [
     {
@@ -533,7 +531,7 @@ entity A`);
         });
 
         it('should parse it', () => {
-          jestExpect(parsedEntity).toMatchInlineSnapshot(`
+          expect(parsedEntity).toMatchInlineSnapshot(`
 {
   "annotations": [],
   "body": [],
@@ -557,7 +555,7 @@ entity A`);
         });
 
         it('should parse it', () => {
-          jestExpect(parsedEntity).toMatchInlineSnapshot(`
+          expect(parsedEntity).toMatchInlineSnapshot(`
 {
   "annotations": [],
   "body": [],
@@ -587,7 +585,7 @@ entity A`);
         });
 
         it('should parse it', () => {
-          jestExpect(parsedEntity).toMatchInlineSnapshot(`
+          expect(parsedEntity).toMatchInlineSnapshot(`
 {
   "annotations": [
     {
@@ -612,7 +610,7 @@ entity A`);
  entity A
  `,
             );
-          }).to.throw();
+          }).toThrow();
         });
       });
     });
@@ -634,7 +632,7 @@ entity A`);
           });
 
           it('should parse it', () => {
-            jestExpect(parsedEntity).toMatchInlineSnapshot(`
+            expect(parsedEntity).toMatchInlineSnapshot(`
 {
   "annotations": [],
   "body": [
@@ -667,7 +665,7 @@ entity A`);
   name String
 }
 `);
-            }).to.throw();
+            }).toThrow();
           });
         });
       });
@@ -686,7 +684,7 @@ entity A`);
           });
 
           it('should parse it', () => {
-            expect(parsedEntity.body?.[0].validations).to.deep.equal([
+            expect(parsedEntity.body?.[0].validations).toEqual([
               {
                 key: REQUIRED,
                 value: '',
@@ -709,7 +707,7 @@ entity A`);
             });
 
             it('should parse it', () => {
-              expect(parsedEntity.body?.[0].validations).to.deep.equal([
+              expect(parsedEntity.body?.[0].validations).toEqual([
                 {
                   key: MINLENGTH,
                   value: '0',
@@ -731,7 +729,7 @@ entity A`);
             });
 
             it('should parse it', () => {
-              expect(parsedEntity.body?.[0].validations).to.deep.equal([
+              expect(parsedEntity.body?.[0].validations).toEqual([
                 {
                   key: MINLENGTH,
                   value: '0.01',
@@ -755,7 +753,7 @@ entity A`);
             });
 
             it('should parse it', () => {
-              expect(parsedEntity.body?.[0].validations).to.deep.equal([
+              expect(parsedEntity.body?.[0].validations).toEqual([
                 {
                   key: MAXLENGTH,
                   value: '42',
@@ -777,7 +775,7 @@ entity A`);
             });
 
             it('should parse it', () => {
-              expect(parsedEntity.body?.[0].validations).to.deep.equal([
+              expect(parsedEntity.body?.[0].validations).toEqual([
                 {
                   key: MAXLENGTH,
                   value: '42.01',
@@ -800,7 +798,7 @@ entity A`);
           });
 
           it('should parse it', () => {
-            expect(parsedEntity.body?.[0].validations).to.deep.equal([
+            expect(parsedEntity.body?.[0].validations).toEqual([
               {
                 key: PATTERN,
                 value: String.raw`[A-Za-z]\d`,
@@ -822,7 +820,7 @@ entity A`);
           });
 
           it('should parse it', () => {
-            expect(parsedEntity.body?.[0].validations).to.deep.equal([
+            expect(parsedEntity.body?.[0].validations).toEqual([
               {
                 key: UNIQUE,
                 value: '',
@@ -845,7 +843,7 @@ entity A`);
             });
 
             it('should parse it', () => {
-              expect(parsedEntity.body?.[0].validations).to.deep.equal([
+              expect(parsedEntity.body?.[0].validations).toEqual([
                 {
                   key: MIN,
                   value: '0',
@@ -867,7 +865,7 @@ entity A`);
             });
 
             it('should parse it', () => {
-              expect(parsedEntity.body?.[0].validations).to.deep.equal([
+              expect(parsedEntity.body?.[0].validations).toEqual([
                 {
                   key: MIN,
                   value: '0.01',
@@ -891,7 +889,7 @@ entity A`);
             });
 
             it('should parse it', () => {
-              expect(parsedEntity.body?.[0].validations).to.deep.equal([
+              expect(parsedEntity.body?.[0].validations).toEqual([
                 {
                   key: MAX,
                   value: '0',
@@ -913,7 +911,7 @@ entity A`);
             });
 
             it('should parse it', () => {
-              expect(parsedEntity.body?.[0].validations).to.deep.equal([
+              expect(parsedEntity.body?.[0].validations).toEqual([
                 {
                   key: MAX,
                   value: '0.01',
@@ -937,7 +935,7 @@ entity A`);
             });
 
             it('should parse it', () => {
-              expect(parsedEntity.body?.[0].validations).to.deep.equal([
+              expect(parsedEntity.body?.[0].validations).toEqual([
                 {
                   key: MINBYTES,
                   value: '0',
@@ -959,7 +957,7 @@ entity A`);
             });
 
             it('should parse it', () => {
-              expect(parsedEntity.body?.[0].validations).to.deep.equal([
+              expect(parsedEntity.body?.[0].validations).toEqual([
                 {
                   key: MINBYTES,
                   value: '0.01',
@@ -983,7 +981,7 @@ entity A`);
             });
 
             it('should parse it', () => {
-              expect(parsedEntity.body?.[0].validations).to.deep.equal([
+              expect(parsedEntity.body?.[0].validations).toEqual([
                 {
                   key: MAXBYTES,
                   value: '0',
@@ -1005,7 +1003,7 @@ entity A`);
             });
 
             it('should parse it', () => {
-              expect(parsedEntity.body?.[0].validations).to.deep.equal([
+              expect(parsedEntity.body?.[0].validations).toEqual([
                 {
                   key: MAXBYTES,
                   value: '0.01',
@@ -1029,7 +1027,7 @@ entity A {
           });
 
           it('should parse it', () => {
-            expect(parsedEntity.body?.[0].validations).to.deep.equal([
+            expect(parsedEntity.body?.[0].validations).toEqual([
               {
                 key: MAXBYTES,
                 value: 'MAX',
@@ -1058,7 +1056,7 @@ entity A {
       });
 
       it('should parse them', () => {
-        jestExpect(parsedEnum).toMatchInlineSnapshot(`
+        expect(parsedEnum).toMatchInlineSnapshot(`
 {
   "documentation": null,
   "name": "MyEnum",
@@ -1092,7 +1090,7 @@ entity A {
       });
 
       it('should parse them', () => {
-        jestExpect(parsedEnum).toMatchInlineSnapshot(`
+        expect(parsedEnum).toMatchInlineSnapshot(`
 {
   "documentation": null,
   "name": "MyEnum",
@@ -1131,7 +1129,7 @@ entity A {
       });
 
       it('should parse it', () => {
-        jestExpect(parsedEnum).toMatchInlineSnapshot(`
+        expect(parsedEnum).toMatchInlineSnapshot(`
 {
   "documentation": null,
   "name": "MyEnum",
@@ -1172,7 +1170,7 @@ entity A {
       });
 
       it('should parse it', () => {
-        jestExpect(parsedEnum).toMatchInlineSnapshot(`
+        expect(parsedEnum).toMatchInlineSnapshot(`
 {
   "documentation": "country enum",
   "name": "MyEnum",
@@ -1227,7 +1225,7 @@ entity A {
       });
 
       it('should parse it', () => {
-        jestExpect(parsedEnum).toMatchInlineSnapshot(`
+        expect(parsedEnum).toMatchInlineSnapshot(`
 {
   "documentation": "country enum",
   "name": "MyEnum",
@@ -1283,7 +1281,7 @@ entity A {
       });
 
       it('should parse it', () => {
-        jestExpect(parsedEnum).toMatchInlineSnapshot(`
+        expect(parsedEnum).toMatchInlineSnapshot(`
 {
   "documentation": null,
   "name": "MyEnum",
@@ -1337,7 +1335,7 @@ entity A {
         });
 
         it('should parse it', () => {
-          jestExpect(parsedEnum).toMatchInlineSnapshot(`
+          expect(parsedEnum).toMatchInlineSnapshot(`
 {
   "documentation": null,
   "name": "MyEnum",
@@ -1374,7 +1372,7 @@ entity A {
         });
 
         it('should parse it', () => {
-          jestExpect(parsedEnum).toMatchInlineSnapshot(`
+          expect(parsedEnum).toMatchInlineSnapshot(`
 {
   "documentation": null,
   "name": "MyEnum",
@@ -1408,7 +1406,7 @@ entity A {
         });
 
         it('should parse it', () => {
-          expect(relationship.cardinality).to.equal(relationshipType);
+          expect(relationship.cardinality).toBe(relationshipType);
         });
       });
     });
@@ -1421,7 +1419,7 @@ entity A {
       });
 
       it('should parse them', () => {
-        jestExpect(relationship).toMatchInlineSnapshot(`
+        expect(relationship).toMatchInlineSnapshot(`
 {
   "cardinality": "OneToOne",
   "from": {
@@ -1453,10 +1451,10 @@ entity A {
         });
 
         it('should add it', () => {
-          expect(relationship.from.injectedField).to.equal('b');
+          expect(relationship.from.injectedField).toBe('b');
         });
         it('should set the field requirement to false', () => {
-          expect(relationship.from.required).to.be.false;
+          expect(relationship.from.required).toBe(false);
         });
       });
       describe('that is required', () => {
@@ -1468,10 +1466,10 @@ entity A {
         });
 
         it('should add it', () => {
-          expect(relationship.from.injectedField).to.equal('b');
+          expect(relationship.from.injectedField).toBe('b');
         });
         it('should set the field requirement to true', () => {
-          expect(relationship.from.required).to.be.true;
+          expect(relationship.from.required).toBe(true);
         });
       });
     });
@@ -1485,10 +1483,10 @@ entity A {
         });
 
         it('should add it', () => {
-          expect(relationship.to.injectedField).to.equal('a');
+          expect(relationship.to.injectedField).toBe('a');
         });
         it('should set the field requirement to false', () => {
-          expect(relationship.to.required).to.be.false;
+          expect(relationship.to.required).toBe(false);
         });
       });
       describe('that is required', () => {
@@ -1500,10 +1498,10 @@ entity A {
         });
 
         it('should add it', () => {
-          expect(relationship.to.injectedField).to.equal('a');
+          expect(relationship.to.injectedField).toBe('a');
         });
         it('should set the field requirement to true', () => {
-          expect(relationship.to.required).to.be.true;
+          expect(relationship.to.required).toBe(true);
         });
       });
     });
@@ -1517,16 +1515,16 @@ entity A {
         });
 
         it('should add it in the source', () => {
-          expect(relationship.from.injectedField).to.equal('b');
+          expect(relationship.from.injectedField).toBe('b');
         });
         it('should set the source field requirement to false', () => {
-          expect(relationship.from.required).to.be.false;
+          expect(relationship.from.required).toBe(false);
         });
         it('should add it in the destination', () => {
-          expect(relationship.to.injectedField).to.equal('a');
+          expect(relationship.to.injectedField).toBe('a');
         });
         it('should set the destination field requirement to false', () => {
-          expect(relationship.to.required).to.be.false;
+          expect(relationship.to.required).toBe(false);
         });
       });
       describe('with them being required', () => {
@@ -1538,10 +1536,10 @@ entity A {
         });
 
         it('should set the source field requirement to true', () => {
-          expect(relationship.from.required).to.be.true;
+          expect(relationship.from.required).toBe(true);
         });
         it('should set the destination field requirement to true', () => {
-          expect(relationship.to.required).to.be.true;
+          expect(relationship.to.required).toBe(true);
         });
       });
     });
@@ -1554,7 +1552,7 @@ entity A {
       });
 
       it('should add it', () => {
-        expect(relationship.from.injectedField).to.equal('b(name)');
+        expect(relationship.from.injectedField).toBe('b(name)');
       });
     });
     describe('with an explicit join field in the destination', () => {
@@ -1566,7 +1564,7 @@ entity A {
       });
 
       it('should add it', () => {
-        expect(relationship.to.injectedField).to.equal('a(name)');
+        expect(relationship.to.injectedField).toBe('a(name)');
       });
     });
     describe('with an explicit join field in both sides', () => {
@@ -1578,10 +1576,10 @@ entity A {
       });
 
       it('should add it in the source', () => {
-        expect(relationship.from.injectedField).to.equal('b(name)');
+        expect(relationship.from.injectedField).toBe('b(name)');
       });
       it('should add it in the destination', () => {
-        expect(relationship.to.injectedField).to.equal('a(name)');
+        expect(relationship.to.injectedField).toBe('a(name)');
       });
     });
     describe('with a method', () => {
@@ -1593,7 +1591,7 @@ entity A {
       });
 
       it('should add it', () => {
-        expect(relationship.options).to.deep.equal({
+        expect(relationship.options).toEqual({
           global: [
             {
               optionName: 'builtInEntity',
@@ -1620,7 +1618,7 @@ entity A {
         });
 
         it('should add them', () => {
-          jestExpect(relationships).toMatchInlineSnapshot(`
+          expect(relationships).toMatchInlineSnapshot(`
 [
   {
     "cardinality": "OneToOne",
@@ -1701,7 +1699,7 @@ entity A {
         });
 
         it('should parse them', () => {
-          jestExpect(relationships).toMatchInlineSnapshot(`
+          expect(relationships).toMatchInlineSnapshot(`
 [
   {
     "cardinality": "OneToOne",
@@ -1739,7 +1737,7 @@ entity A {
         });
 
         it('should parse them', () => {
-          jestExpect(relationships).toMatchInlineSnapshot(`
+          expect(relationships).toMatchInlineSnapshot(`
 [
   {
     "cardinality": "OneToOne",
@@ -1777,7 +1775,7 @@ entity A {
         });
 
         it('should parse them', () => {
-          jestExpect(relationships).toMatchInlineSnapshot(`
+          expect(relationships).toMatchInlineSnapshot(`
 [
   {
     "cardinality": "OneToOne",
@@ -1824,7 +1822,7 @@ entity A {
         });
 
         it('should add the exclusions', () => {
-          jestExpect(parsedOption).toMatchInlineSnapshot(`
+          expect(parsedOption).toMatchInlineSnapshot(`
 {
   "excluded": [
     "A",
@@ -1846,7 +1844,7 @@ entity A {
           });
 
           it('should parse it', () => {
-            expect(parsedOption).to.deep.equal({
+            expect(parsedOption).toEqual({
               list: ['A'],
               excluded: [],
             });
@@ -1865,7 +1863,7 @@ entity A {
           });
 
           it('should parse it', () => {
-            jestExpect(parsedOption).toMatchInlineSnapshot(`
+            expect(parsedOption).toMatchInlineSnapshot(`
 {
   "client": {
     "excluded": [],
@@ -1886,7 +1884,7 @@ entity A {
           });
 
           it('should parse it', () => {
-            jestExpect(parsedOption).toMatchInlineSnapshot(`
+            expect(parsedOption).toMatchInlineSnapshot(`
 {
   ""../../toto"": {
     "excluded": [],
@@ -1908,7 +1906,7 @@ entity A {
         });
 
         it('should add the exclusions', () => {
-          jestExpect(parsedOption).toMatchInlineSnapshot(`
+          expect(parsedOption).toMatchInlineSnapshot(`
 {
   "mapstruct": {
     "excluded": [
@@ -1935,7 +1933,7 @@ entity A {
             });
 
             it(`should parse ${value} value`, () => {
-              expect(parsedOption).to.deep.equal({
+              expect(parsedOption).toEqual({
                 list: ['A'],
                 excluded: [],
               });
@@ -1953,7 +1951,7 @@ entity A {
           });
 
           it('should parse it', () => {
-            expect(parsedOption).to.deep.equal({
+            expect(parsedOption).toEqual({
               list: ['A'],
               excluded: [],
             });
@@ -1970,7 +1968,7 @@ entity A {
       });
 
       it("should parse it as '*'", () => {
-        jestExpect(parsedOption).toMatchInlineSnapshot(`
+        expect(parsedOption).toMatchInlineSnapshot(`
 {
   "client": {
     "excluded": [],
@@ -1991,7 +1989,7 @@ entity A {
       });
 
       it('should parse it', () => {
-        jestExpect(parsedOption).toMatchInlineSnapshot(`
+        expect(parsedOption).toMatchInlineSnapshot(`
 {
   "client": {
     "excluded": [],
@@ -2014,7 +2012,7 @@ entity A {
           });
 
           it('should parse it', () => {
-            expect(parsedOptions).to.deep.equal([
+            expect(parsedOptions).toEqual([
               {
                 excluded: [],
                 list: ['A'],
@@ -2042,7 +2040,7 @@ entity A {
         });
 
         it('should parse it', () => {
-          jestExpect(parsedDeployment).toMatchInlineSnapshot(`
+          expect(parsedDeployment).toMatchInlineSnapshot(`
 {
   "kubernetesStorageClassName": "",
 }
@@ -2063,7 +2061,7 @@ entity A {
         });
 
         it('should parse it', () => {
-          jestExpect(parsedDeployment).toMatchInlineSnapshot(`
+          expect(parsedDeployment).toMatchInlineSnapshot(`
 {
   "kubernetesStorageClassName": "SetValue",
 }

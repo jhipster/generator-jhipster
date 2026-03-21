@@ -24,22 +24,23 @@ jobs:
         name: "Gradle Wrapper Validation"
         runs-on: ubuntu-latest
         steps:
-            - uses: <%= githubActions['actions/checkout'] %>
+            - uses: <%- githubActions['actions/checkout'] %>
             - uses: gradle/wrapper-validation-action@v1
 <%_ } _%>
     pipeline:
-        name: <%= baseName %> pipeline
+        name: <%- baseName %> pipeline
         runs-on: ubuntu-latest
         if: "!contains(github.event.head_commit.message, '[ci skip]') && !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.pull_request.title, '[skip ci]') && !contains(github.event.pull_request.title, '[ci skip]')"
         timeout-minutes: 40
         env:
 <%_ if (!skipClient) { _%>
-            NODE_VERSION: <%= nodeVersion %>
+            NODE_VERSION: <%- nodeVersion %>
 <%_ } _%>
 <%_ if (!skipServer) { _%>
             SPRING_OUTPUT_ANSI_ENABLED: DETECT
 <%_ }
-if (!databaseTypeNo && !skipServer ) { _%>
+if (!databaseTypeNo && !skipServer ) {
+_%>
             SPRING_JPA_SHOW_SQL: false
 <%_ } _%>
 <%_ if (!skipClient) { _%>
@@ -52,19 +53,21 @@ if (!databaseTypeNo && !skipServer ) { _%>
             GRADLE_DEVELOCITY_ACCESS_KEY: ${{ secrets.GRADLE_DEVELOCITY_ACCESS_KEY }}
 <%_ } _%>
         steps:
-            - uses: <%= githubActions['actions/checkout'] %>
+            - uses: <%- githubActions['actions/checkout'] %>
 <%_ if (!skipClient) { _%>
-            - uses: <%= githubActions['actions/setup-node'] %>
+            - uses: <%- githubActions['actions/setup-node'] %>
               with:
-                  node-version: <%= nodeVersion %>
+                  node-version: <%- nodeVersion %>
 <%_ }
-if (!skipServer) { _%>
-            - uses: <%= githubActions['actions/setup-java'] %>
+if (!skipServer) {
+_%>
+            - uses: <%- githubActions['actions/setup-java'] %>
               with:
                   distribution: 'temurin'
-                  java-version: <%= javaVersion %>
+                  java-version: <%- javaVersion %>
 <%_ }
-if (!skipClient) { _%>
+if (!skipClient) {
+_%>
             - name: Install Node.js packages
               run: <%- nodePackageManager %> install
 <%_ } _%>
@@ -106,9 +109,9 @@ if (!skipClient) { _%>
               run: |
                   if [ ! -z "$SONAR_TOKEN" ]; then
     <%_ if (buildToolMaven) { _%>
-                      ./mvnw -ntp initialize sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %>
+                      ./mvnw -ntp initialize sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%- sonarOrga %> <% } %>-Dsonar.host.url=<%- sonarUrl %>
     <%_ } else if (buildToolGradle) { _%>
-                      ./gradlew sonarqube --no-daemon <% if (sonarOrga) { %>-Dsonar.organization=<%= sonarOrga %> <% } %>-Dsonar.host.url=<%= sonarUrl %>
+                      ./gradlew sonarqube --no-daemon <% if (sonarOrga) { %>-Dsonar.organization=<%- sonarOrga %> <% } %>-Dsonar.host.url=<%- sonarUrl %>
     <%_ } _%>
                   else
                       echo No SONAR_TOKEN, skipping...
@@ -120,7 +123,8 @@ if (!skipClient) { _%>
 <%_ } else { _%>
               run: <%- nodePackageManager %> run build
 <%_ }
-if (ciCdIntegrationsHeroku) { _%>
+if (ciCdIntegrationsHeroku) {
+_%>
             - name: Deploy to Heroku
               if: github.event_name == 'push' && github.ref == 'refs/heads/main'
               env:
@@ -128,7 +132,7 @@ if (ciCdIntegrationsHeroku) { _%>
               run: |
                   if [ ! -z "$HEROKU_API_KEY" ]; then
     <%_ if (buildToolMaven) { _%>
-                      ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%= herokuAppName %>
+                      ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%- herokuAppName %>
     <%_ } else if (buildToolGradle) { _%>
                       ./gradlew deployHeroku --no-daemon
     <%_ } _%>
@@ -143,25 +147,26 @@ if (ciCdIntegrationsHeroku) { _%>
                   GIT_TAG=:${GITHUB_REF#refs/tags/}
                   DOCKER_TAG=${GIT_TAG#:refs/heads/main}
     <%_ if (buildToolMaven) { _%>
-                  ./mvnw -ntp jib:build -Djib.to.image=<%= dockerImage %>${DOCKER_TAG} -Djib.to.auth.username="${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_PASSWORD }}" -Pprod
+                  ./mvnw -ntp jib:build -Djib.to.image=<%- dockerImage %>${DOCKER_TAG} -Djib.to.auth.username="${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_PASSWORD }}" -Pprod
     <%_ } else if (buildToolGradle) { _%>
-                  ./gradlew jib -Djib.to.image=<%= dockerImage %>${DOCKER_TAG} -Djib.to.auth.username="${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_PASSWORD }}" -Pprod
+                  ./gradlew jib -Djib.to.image=<%- dockerImage %>${DOCKER_TAG} -Djib.to.auth.username="${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_PASSWORD }}" -Pprod
     <%_ } _%>
 <%_ } _%>
 <%_ if (cypressTests) {
-  const commented = applicationTypeGateway ? '# ' : ''; _%>
-            <%= commented %>- name: 'E2E: Package'
-            <%= commented %>  run: <%- nodePackageManager %> run ci:e2e:package
-            <%= commented %>- name: 'E2E: Prepare'
-            <%= commented %>  run: <%- nodePackageManager %> run ci:e2e:prepare
-            <%= commented %>- name: 'E2E: Run'
-            <%= commented %>  run: <%- nodePackageManager %> run ci:e2e:run
+  const commented = applicationTypeGateway ? '# ' : '';
+_%>
+            <%- commented %>- name: 'E2E: Package'
+            <%- commented %>  run: <%- nodePackageManager %> run ci:e2e:package
+            <%- commented %>- name: 'E2E: Prepare'
+            <%- commented %>  run: <%- nodePackageManager %> run ci:e2e:prepare
+            <%- commented %>- name: 'E2E: Run'
+            <%- commented %>  run: <%- nodePackageManager %> run ci:e2e:run
     <%_ if(cypressTests) { _%>
-            <%= commented %>  env:
-            <%= commented %>    CYPRESS_ENABLE_RECORD: <%= ciCdIntegrationsCypressDashboard %>
-            <%= commented %>    CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
-            <%= commented %>    CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+            <%- commented %>  env:
+            <%- commented %>    CYPRESS_ENABLE_RECORD: <%- ciCdIntegrationsCypressDashboard %>
+            <%- commented %>    CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
+            <%- commented %>    CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
     <%_ } _%>
-            <%= commented %>- name: 'E2E: Teardown'
-            <%= commented %>  run: <%- nodePackageManager %> run ci:e2e:teardown
+            <%- commented %>- name: 'E2E: Teardown'
+            <%- commented %>  run: <%- nodePackageManager %> run ci:e2e:teardown
 <%_ } _%>

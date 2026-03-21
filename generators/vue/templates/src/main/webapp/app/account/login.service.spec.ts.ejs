@@ -1,18 +1,17 @@
-import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import LoginService from './login.service';
 import axios from 'axios';
-import sinon from 'sinon';
 
 const axiosStub = {
-  get: sinon.stub(axios, 'get'),
-  post: sinon.stub(axios, 'post'),
+  get: vi.spyOn(axios, 'get'),
+  post: vi.spyOn(axios, 'post'),
 };
 
 describe('Login Service test suite', () => {
   let loginService: LoginService;
 
   beforeEach(() => {
-    loginService = new LoginService(<% if (!authenticationTypeOauth2) { %>{ emit: vitest.fn() }<% } %>);
+    loginService = new LoginService(<% if (!authenticationTypeOauth2) { %>{ emit: vi.fn() }<% } %>);
   });
 
 <%_ if (authenticationTypeOauth2) { _%>
@@ -57,17 +56,17 @@ describe('Login Service test suite', () => {
   });
 
   it('should build url for login behind client proxy', () => {
-    const loc = {href: '', port: '<%= serverPort %>', hostname: 'localhost', pathname: '/'};
+    const loc = {href: '', port: '<%- serverPort %>', hostname: 'localhost', pathname: '/'};
 
     loginService.login(loc);
 
-    expect(loc.href).toBe('//localhost:<%= serverPort %>/oauth2/authorization/oidc');
+    expect(loc.href).toBe('//localhost:<%- serverPort %>/oauth2/authorization/oidc');
   });
 <%_ } _%>
 
   it('should call global logout when asked to', () => {
     loginService.logout();
 
-    expect(axiosStub.post.calledWith('api/logout')).toBeTruthy();
+    expect(axiosStub.post).toHaveBeenCalledWith('api/logout');
   });
 });

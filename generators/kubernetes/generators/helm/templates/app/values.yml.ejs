@@ -1,7 +1,7 @@
 <%_ if (app.prodDatabaseTypeMysql) { _%>
 mysql:
   enabled: true
-  mysqlDatabase: <%= app.baseName.toLowerCase() %>
+  mysqlDatabase: <%- app.baseName.toLowerCase() %>
   mysqlAllowEmptyPassword: true
   <%_ if (istio) { _%>
   podAnnotations:
@@ -13,8 +13,8 @@ mysql:
 <%_ } else if (app.prodDatabaseTypePostgresql) { _%>
 postgresql:
   enabled: true
-  postgresqlUsername: <%= app.baseName.toLowerCase() %>
-  postgresqlDatabase: <%= app.baseName %>
+  postgresqlUsername: <%- app.baseName.toLowerCase() %>
+  postgresqlDatabase: <%- app.baseName %>
   <%_ if (istio) { _%>
   master:
     podAnnotations:
@@ -29,7 +29,7 @@ mariadb:
   replication:
     enabled: false
   db:
-    name: <%= app.baseName.toLowerCase() %>
+    name: <%- app.baseName.toLowerCase() %>
   <%_ if (istio) { _%>
   master:
     annotations:
@@ -52,21 +52,21 @@ couchbase-operator:
   enabled: true
   buckets:
     default: nil
-    <%= app.baseName.toLowerCase() %>:
-      replicas: <%= app.dbPeerCount - 1 %>
+    <%- app.baseName.toLowerCase() %>:
+      replicas: <%- app.dbPeerCount - 1 %>
   users:
-    <%= app.baseName.toLowerCase() %>:
+    <%- app.baseName.toLowerCase() %>:
       authSecret: couchbase-secret
       authDomain: local
       roles:
         - name: bucket_admin
-          bucket: <%= app.baseName.toLowerCase() %>
+          bucket: <%- app.baseName.toLowerCase() %>
         - name: bucket_full_access
-          bucket: <%= app.baseName.toLowerCase() %>
+          bucket: <%- app.baseName.toLowerCase() %>
         - name: fts_admin
-          bucket: <%= app.baseName.toLowerCase() %>
+          bucket: <%- app.baseName.toLowerCase() %>
         - name: fts_searcher
-          bucket: <%= app.baseName.toLowerCase() %>
+          bucket: <%- app.baseName.toLowerCase() %>
   cluster:
     antiAffinity: true
     image: <%- dockerContainers.couchbase %>
@@ -85,7 +85,7 @@ couchbase-operator:
           - query
           - index
           - search
-        size: <%= app.dbPeerCount %>
+        size: <%- app.dbPeerCount %>
     cluster:
       dataServiceMemoryQuota: 500Mi
       indexServiceMemoryQuota: 300Mi
@@ -98,21 +98,21 @@ couchbase-operator:
       - metadata:
           name: pvc-default
         spec:
-          storageClassName: <%= kubernetesStorageClassName %>
+          storageClassName: <%- kubernetesStorageClassName %>
           resources:
             requests:
               storage: 1Gi
       - metadata:
           name: pvc-data
         spec:
-          storageClassName: <%= kubernetesStorageClassName %>
+          storageClassName: <%- kubernetesStorageClassName %>
           resources:
             requests:
               storage: 1Gi
       - metadata:
           name: pvc-index
         spec:
-          storageClassName: <%= kubernetesStorageClassName %>
+          storageClassName: <%- kubernetesStorageClassName %>
           resources:
             requests:
               storage: 1Gi

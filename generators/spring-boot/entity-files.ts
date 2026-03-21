@@ -211,20 +211,15 @@ export function writeFiles() {
     }),
 
     writeServerFiles: asWritingEntitiesTask<SpringBootEntity, SpringBootApplication>(async function ({ application, entities }) {
-      const rootTemplatesPath = application.reactive
-        ? ['reactive', '', '../../server/templates/', '../../java/generators/domain/templates/']
-        : ['', '../../server/templates/', '../../java/generators/domain/templates/'];
       for (const entity of entities.filter(entity => !entity.skipServer)) {
         if (entity.builtInUser) {
           await this.writeFiles({
             sections: userFiles,
-            rootTemplatesPath,
             context: { ...application, ...entity },
           });
         } else {
           await this.writeFiles({
             sections: serverFiles,
-            rootTemplatesPath,
             context: { ...application, ...entity },
           });
         }

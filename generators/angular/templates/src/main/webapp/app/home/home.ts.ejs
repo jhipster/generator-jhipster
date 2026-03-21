@@ -43,7 +43,7 @@ import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-home',
+  selector: '<%- jhiPrefixDashed %>-home',
   templateUrl: './home.html',
   styleUrl: './home.scss',
   imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%><%_ if (generateUserManagement) { _%>RouterLink<%_ } _%>],

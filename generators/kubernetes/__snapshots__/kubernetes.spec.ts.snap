@@ -16228,7 +16228,6 @@ spec:
         configMap:
           name: jhipster-grafana-dashboard
       restartPolicy: OnFailure
-
 ",
     "stateCleared": "modified",
   },
@@ -16698,7 +16697,6 @@ spec:
 kind: Namespace
 metadata:
   name: mynamespace
-
 ",
     "stateCleared": "modified",
   },
@@ -17390,7 +17388,6 @@ spec:
 kind: Namespace
 metadata:
   name: mynamespace
-
 ",
     "stateCleared": "modified",
   },
@@ -20189,7 +20186,6 @@ patchesJson6902:
 kind: Namespace
 metadata:
   name: jhipsternamespace
-
 ",
     "stateCleared": "modified",
   },
@@ -20909,7 +20905,6 @@ patchesJson6902:
 kind: Namespace
 metadata:
   name: jhipsternamespace
-
 ",
     "stateCleared": "modified",
   },

@@ -65,7 +65,7 @@ const { ANGULAR, VUE } = clientFrameworkTypes;
 const generateEntityClientFields = (
   primaryKey: PrimaryKey,
   fields: ClientField[],
-  relationships: RelationshipWithEntity<ClientRelationship, ClientEntity<ClientField>>[],
+  relationships: RelationshipWithEntity<ClientRelationship, ClientEntity>[],
   _dto: any,
   customDateType = 'dayjs.Dayjs',
   embedded = false,

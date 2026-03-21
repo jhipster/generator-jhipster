@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= entityAbsolutePackage %>.domain;
+package <%- entityAbsolutePackage %>.domain;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,7 +28,7 @@ import static <%- packageName %>.domain.AssertUtils.bigDecimalCompareTo;
 import static <%- packageName %>.domain.AssertUtils.zonedDataTimeSameInstant;
 <%_ } _%>
 
-public class <%= persistClass %>Asserts {
+public class <%- persistClass %>Asserts {
 
     /**
      * Asserts that the entity has all properties (fields/relationships) set.
@@ -61,7 +61,7 @@ public class <%= persistClass %>Asserts {
      */
     public static void assert<%- persistClass %>MapsIdRelationshipPersistedValue(<%- persistClass %> entityToPersist, <%- persistClass %> persisted) {
         // Validate the id for MapsId, the ids must be same
-        assertThat(entityToPersist.<%= primaryKey.relationships[0].propertySupplierName %>().<%- primaryKey.propertySupplierName %>()).isEqualTo(persisted.<%- primaryKey.propertySupplierName %>());
+        assertThat(entityToPersist.<%- primaryKey.relationships[0].propertySupplierName %>().<%- primaryKey.propertySupplierName %>()).isEqualTo(persisted.<%- primaryKey.propertySupplierName %>());
     }
 <%_ } _%>
 

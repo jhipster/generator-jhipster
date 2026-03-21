@@ -41,13 +41,13 @@ const userTemplate = {} as IUserManagement;
 
 const newUser: IUserManagement = {
 <%_ if (enableTranslation) { _%>
-  langKey: '<%= nativeLanguage %>',
+  langKey: '<%- nativeLanguage %>',
 <%_ } _%>
   activated: true,
 } as IUserManagement;
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-user-management-update',
+  selector: '<%- jhiPrefixDashed %>-user-management-update',
   templateUrl: './user-management-update.html',
   imports: [<%_ if (enableTranslation) { _%>FindLanguageFromKeyPipe, TranslateDirective, TranslateModule, <%_ } _%>FontAwesomeModule, AlertError, ReactiveFormsModule],
 })

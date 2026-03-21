@@ -19,13 +19,13 @@
 @import 'bootstrap-variables';
 @import 'bootstrap/scss/functions';
 <%_ if (!clientThemeNone) { _%>
-@import 'bootswatch/dist/<%= clientTheme %>/variables';
+@import 'bootswatch/dist/<%- clientTheme %>/variables';
 <%_ } _%>
 @import 'bootstrap/scss/variables';
 // Import Bootstrap source files from node_modules
 @import 'bootstrap/scss/bootstrap';
 <%_ if (!clientThemeNone) { _%>
-@import 'bootswatch/dist/<%= clientTheme %>/bootswatch';
+@import 'bootswatch/dist/<%- clientTheme %>/bootswatch';
 <%_ } _%>
 @import 'bootstrap-vue-next/dist/bootstrap-vue-next.css';
 
@@ -89,7 +89,7 @@ Main page styles
   display: inline-block;
   width: 347px;
   height: 497px;
-  background: url("/content/images/<%=hipster%>.svg") no-repeat center top;
+  background: url("/content/images/<%= hipster %>.svg") no-repeat center top;
   background-size: contain;
 }
 
@@ -101,7 +101,7 @@ only screen and (min-device-pixel-ratio: 2),
 only screen and (min-resolution: 192dpi),
 only screen and (min-resolution: 2dppx) {
     .hipster {
-        background: url("/content/images/<%=hipster%>.svg") no-repeat center top;
+        background: url("/content/images/<%= hipster %>.svg") no-repeat center top;
         background-size: contain;
     }
 }
@@ -153,7 +153,7 @@ Generic styles
 }
 
 .hand,
-[<%= jhiPrefix.toLowerCase() %>sortby] {
+[<%- jhiPrefix.toLowerCase() %>sortby] {
   cursor: pointer;
 }
 

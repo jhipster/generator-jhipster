@@ -26,16 +26,16 @@ import { AccountService } from 'app/core/auth/account.service';
  *
  * @howToUse
  * ```
- *     <some-element *<%= jhiPrefix %>HasAnyAuthority="'ROLE_ADMIN'">...</some-element>
+ *     <some-element *<%- jhiPrefix %>HasAnyAuthority="'ROLE_ADMIN'">...</some-element>
  *
- *     <some-element *<%= jhiPrefix %>HasAnyAuthority="['ROLE_ADMIN', 'ROLE_USER']">...</some-element>
+ *     <some-element *<%- jhiPrefix %>HasAnyAuthority="['ROLE_ADMIN', 'ROLE_USER']">...</some-element>
  * ```
  */
 @Directive({
-  selector: '[<%= jhiPrefix %>HasAnyAuthority]',
+  selector: '[<%- jhiPrefix %>HasAnyAuthority]',
 })
 export default class HasAnyAuthorityDirective {
-  readonly authorities = input<string | string[]>([], { alias: '<%= jhiPrefix %>HasAnyAuthority' });
+  readonly authorities = input<string | string[]>([], { alias: '<%- jhiPrefix %>HasAnyAuthority' });
 
   private readonly templateRef = inject(TemplateRef<any>);
   private readonly viewContainerRef = inject(ViewContainerRef);

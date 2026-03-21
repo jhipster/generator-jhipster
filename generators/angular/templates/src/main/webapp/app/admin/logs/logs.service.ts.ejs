@@ -28,11 +28,11 @@ export class LogsService {
   private readonly http = inject(HttpClient);
   private readonly applicationConfigService = inject(ApplicationConfigService);
 
-  changeLevel(name: string, configuredLevel: Level<%= applicationTypeGateway && gatewayServicesApiAvailable ? ', service?: string' : '' %>): Observable<{}> {
-    return this.http.post(this.applicationConfigService.getEndpointFor(`management/loggers/${name}`<%= applicationTypeGateway && gatewayServicesApiAvailable ? ', service' : '' %>), { configuredLevel });
+  changeLevel(name: string, configuredLevel: Level<%- applicationTypeGateway && gatewayServicesApiAvailable ? ', service?: string' : '' %>): Observable<{}> {
+    return this.http.post(this.applicationConfigService.getEndpointFor(`management/loggers/${name}`<%- applicationTypeGateway && gatewayServicesApiAvailable ? ', service' : '' %>), { configuredLevel });
   }
 
-  findAll(<%= applicationTypeGateway && gatewayServicesApiAvailable ? 'service?: string' : '' %>): Observable<LoggersResponse> {
-    return this.http.get<LoggersResponse>(this.applicationConfigService.getEndpointFor('management/loggers'<%= applicationTypeGateway && gatewayServicesApiAvailable ? ', service' : '' %>));
+  findAll(<%- applicationTypeGateway && gatewayServicesApiAvailable ? 'service?: string' : '' %>): Observable<LoggersResponse> {
+    return this.http.get<LoggersResponse>(this.applicationConfigService.getEndpointFor('management/loggers'<%- applicationTypeGateway && gatewayServicesApiAvailable ? ', service' : '' %>));
   }
 }

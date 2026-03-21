@@ -15,54 +15,53 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
--%><%
-let helpBlocks = 0; %>
+-%><% let helpBlocks = 0; %>
 {
-    "<%= frontendAppName %>": {
-        "<%= entityTranslationKey %>" : {
+    "<%- frontendAppName %>": {
+        "<%- entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityNamePluralHumanized %>",
+                "title": "<%- entityNamePluralHumanized %>",
                 "refreshListLabel": "Refresh list",
 <%_ if (!readOnly) { _%>
-                "createLabel": "Δημιουργήστε ένα νέο <%= entityNameHumanized %>",
-                "createOrEditLabel": "Δημιουργήστε η επεξεργαστείτε ένα <%= entityNameHumanized %>",
+                "createLabel": "Δημιουργήστε ένα νέο <%- entityNameHumanized %>",
+                "createOrEditLabel": "Δημιουργήστε η επεξεργαστείτε ένα <%- entityNameHumanized %>",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "Αναζήτηση για <%= entityNameHumanized %>",
+                "search": "Αναζήτηση για <%- entityNameHumanized %>",
 <%_ } _%>
-                "notFound": "No <%= entityNamePluralHumanized %> found"
+                "notFound": "No <%- entityNamePluralHumanized %> found"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "Ένα νέο <%= entityNameHumanized %> έχει δημιουργηθεί με αναγνωριστικό {{ param }}",
-            "updated": "Ένα <%= entityNameHumanized %> έχει ενημερωθεί με αναγνωριστικό {{ param }}",
-            "deleted": "Ένα <%= entityNameHumanized %> έχει διαγραφτεί με αναγνωριστικό {{ param }}",
+            "created": "Ένα νέο <%- entityNameHumanized %> έχει δημιουργηθεί με αναγνωριστικό {{ param }}",
+            "updated": "Ένα <%- entityNameHumanized %> έχει ενημερωθεί με αναγνωριστικό {{ param }}",
+            "deleted": "Ένα <%- entityNameHumanized %> έχει διαγραφτεί με αναγνωριστικό {{ param }}",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "Είστε βέβαιοι όταν θέλετε να διαγράψετε το ακόλουθο <%= entityNameHumanized %> {{ id }};"
+                "question": "Είστε βέβαιοι όταν θέλετε να διαγράψετε το ακόλουθο <%- entityNameHumanized %> {{ id }};"
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityNameHumanized %>"
+                "title": "<%- entityNameHumanized %>"
             }<% for (idx in fields) {
             if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
-            "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
-            "<%= relationships[idx].relationshipName %>": "<%= relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
+            "<%- fields[idx].fieldName %>": "<%- fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%- relationships[idx].relationshipName %>": "<%- relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
             "help": {<% for (idx in fields) {
                 if (fields[idx].documentation) {
                     --helpBlocks; %>
-                "<%= fields[idx].fieldName %>": "<%= fields[idx].documentation %>"<% if (helpBlocks > 0) { %>,<% }
+                "<%- fields[idx].fieldName %>": "<%- fields[idx].documentation %>"<% if (helpBlocks > 0) { %>,<% }
                 }
             } %>
             }<% } %>
         }
     }
 <%_ if (microserviceAppName && !readOnly) { _%>,
-    "<%= microserviceAppName %>": {
-        "<%= entityTranslationKey %>" : {
-            "created": "Ένα νέο <%= entityNameHumanized %> έχει δημιουργηθεί με αναγνωριστικό {{ param }}",
-            "updated": "Ένα <%= entityNameHumanized %> έχει ενημερωθεί με αναγνωριστικό {{ param }}",
-            "deleted": "Ένα <%= entityNameHumanized %> έχει διαγραφτεί με αναγνωριστικό {{ param }}"
+    "<%- microserviceAppName %>": {
+        "<%- entityTranslationKey %>" : {
+            "created": "Ένα νέο <%- entityNameHumanized %> έχει δημιουργηθεί με αναγνωριστικό {{ param }}",
+            "updated": "Ένα <%- entityNameHumanized %> έχει ενημερωθεί με αναγνωριστικό {{ param }}",
+            "deleted": "Ένα <%- entityNameHumanized %> έχει διαγραφτεί με αναγνωριστικό {{ param }}"
         }
     }
 <%_ } _%>

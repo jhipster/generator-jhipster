@@ -20,10 +20,10 @@ import { defineConfig } from 'cypress';
 
 export default defineConfig({
   video: false,
-  fixturesFolder: '<%= this.relativeDir(clientRootDir, cypressDir) %>fixtures',
-  screenshotsFolder: '<%= this.relativeDir(clientRootDir, cypressTemporaryDir) %>screenshots',
-  downloadsFolder: '<%= this.relativeDir(clientRootDir, cypressTemporaryDir) %>downloads',
-  videosFolder: '<%= this.relativeDir(clientRootDir, cypressTemporaryDir) %>videos',
+  fixturesFolder: '<%- this.relativeDir(clientRootDir, cypressDir) %>fixtures',
+  screenshotsFolder: '<%- this.relativeDir(clientRootDir, cypressTemporaryDir) %>screenshots',
+  downloadsFolder: '<%- this.relativeDir(clientRootDir, cypressTemporaryDir) %>downloads',
+  videosFolder: '<%- this.relativeDir(clientRootDir, cypressTemporaryDir) %>videos',
   chromeWebSecurity: true,
   viewportWidth: 1200,
   viewportHeight: 720,
@@ -39,7 +39,7 @@ export default defineConfig({
     password: '<%- defaultUserPassword %>',
 <%_ if (authenticationTypeJwt) { _%>
     authenticationUrl: '/api/authenticate',
-    jwtStorageName: '<%= jhiPrefixDashed %>-authenticationToken',
+    jwtStorageName: '<%- jhiPrefixDashed %>-authenticationToken',
 <%_ } else if (authenticationTypeSession) { _%>
     authenticationUrl: '/api/authentication',
 <%_ } _%>
@@ -51,11 +51,11 @@ export default defineConfig({
 <%_ if (cypressCoverage && !cypressCoverageWebpack) { _%>
       config.expose.CYPRESS_COVERAGE = config.env.CYPRESS_COVERAGE;
 <%_ } _%>
-      return (await import('./<%= this.relativeDir(clientRootDir, cypressDir) %>plugins/index')).default(on, config);
+      return (await import('./<%- this.relativeDir(clientRootDir, cypressDir) %>plugins/index')).default(on, config);
     },
-    baseUrl: 'http://localhost:<%= gatewayServerPort || serverPort %>/',
-    specPattern: '<%= this.relativeDir(clientRootDir, cypressDir) %>e2e/**/*.cy.ts',
-    supportFile: '<%= this.relativeDir(clientRootDir, cypressDir) %>support/index.ts',
+    baseUrl: 'http://localhost:<%- gatewayServerPort || serverPort %>/',
+    specPattern: '<%- this.relativeDir(clientRootDir, cypressDir) %>e2e/**/*.cy.ts',
+    supportFile: '<%- this.relativeDir(clientRootDir, cypressDir) %>support/index.ts',
     experimentalRunAllSpecs: true,
   },
 });

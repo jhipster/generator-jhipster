@@ -10,7 +10,7 @@ interface IOwnProps extends PathRouteProps {
   children: React.ReactNode;
 }
 
-export const PrivateRoute = ({ children, hasAnyAuthorities = [], ...rest }: IOwnProps) => {
+const PrivateRoute = ({ children, hasAnyAuthorities = [], ...rest }: IOwnProps) => {
   const isAuthenticated = useAppSelector(state => state.authentication.isAuthenticated);
   const sessionHasBeenFetched = useAppSelector(state => state.authentication.sessionHasBeenFetched);
   const account = useAppSelector(state => state.authentication.account);
@@ -42,7 +42,7 @@ export const PrivateRoute = ({ children, hasAnyAuthorities = [], ...rest }: IOwn
   return (
     <Navigate
       to={{
-        pathname: '<%_ if (authenticationTypeOauth2) { _%>/sign-in<%_ } else {_%>/login<%_ } _%>',
+        pathname: '<%_ if (authenticationTypeOauth2) { _%>/sign-in<%_ } else { _%>/login<%_ } _%>',
         search: pageLocation.search,
       }}
       replace

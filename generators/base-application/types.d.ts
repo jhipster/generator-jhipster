@@ -1,4 +1,4 @@
-import type { HandleCommandTypes } from '../../lib/command/types.ts';
+import type { CommandTypeMap } from '../../lib/command/types.ts';
 import type {
   Application as JavascriptSimpleApplicationApplication,
   Config as JavascriptSimpleApplicationConfig,
@@ -12,7 +12,7 @@ import type { OptionWithDerivedProperties } from './internal/types/application-o
 
 export type * from './entity.ts';
 
-type Command = HandleCommandTypes<typeof bootstrapCommand>;
+type Command = CommandTypeMap<typeof bootstrapCommand>;
 
 export type Config = JavascriptSimpleApplicationConfig &
   Command['Config'] & {

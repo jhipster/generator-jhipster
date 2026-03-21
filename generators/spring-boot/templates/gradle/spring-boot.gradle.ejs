@@ -55,7 +55,7 @@ if (project.hasProperty("zipkin")) {
 defaultTasks "bootRun"
 
 springBoot {
-    mainClass = "<%= packageName %>.<%= mainClass %>"
+    mainClass = "<%- packageName %>.<%- mainClass %>"
 }
 
 test {

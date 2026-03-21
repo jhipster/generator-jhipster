@@ -52,7 +52,7 @@ describe('Alert Service Test', () => {
     translateService = TestBed.inject(TranslateService);
     translateService.setFallbackLang('en');
 <%_ } _%>
-    <%= clientTestFramework %>.useFakeTimers();
+    <%- clientTestFramework %>.useFakeTimers();
     extAlerts = [];
   });
 
@@ -186,7 +186,7 @@ describe('Alert Service Test', () => {
 
     expect(service.get().length).toBe(1);
 
-    <%= clientTestFramework %>.advanceTimersByTime(6000);
+    <%- clientTestFramework %>.advanceTimersByTime(6000);
 
     expect(service.get().length).toBe(0);
   });

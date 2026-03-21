@@ -46,8 +46,8 @@ _%>
 <%_ if (generateBuiltInUserEntity) {
         const idField = user.primaryKey.fields[0];
 _%>
-        <createTable tableName="<%= user.entityTableName %>">
-            <column name="id" type="<%= idField.columnType %>"<% if (idField.liquibaseAutoIncrement) { %> autoIncrement="true" startWith="1050"<% } %>>
+        <createTable tableName="<%- user.entityTableName %>">
+            <column name="id" type="<%- idField.columnType %>"<% if (idField.liquibaseAutoIncrement) { %> autoIncrement="true" startWith="1050"<% } %>>
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="login" type="varchar(50)">
@@ -83,14 +83,14 @@ _%>
             <column name="last_modified_date" type="timestamp"/>
         </createTable>
 
-        <createTable tableName="<%= jhiTablePrefix %>_authority">
+        <createTable tableName="<%- jhiTablePrefix %>_authority">
             <column name="name" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
         </createTable>
 
-        <createTable tableName="<%= user.entityTableName %>_authority">
-            <column name="user_id" type="<%= idField.columnType %>">
+        <createTable tableName="<%- user.entityTableName %>_authority">
+            <column name="user_id" type="<%- idField.columnType %>">
                 <constraints nullable="false"/>
             </column>
             <column name="authority_name" type="varchar(50)">
@@ -98,14 +98,14 @@ _%>
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="user_id, authority_name" tableName="<%= user.entityTableName %>_authority"/>
+        <addPrimaryKey columnNames="user_id, authority_name" tableName="<%- user.entityTableName %>_authority"/>
   <%_ if (authenticationTypeSession) { _%>
 
-        <createTable tableName="<%= jhiTablePrefix %>_persistent_token">
+        <createTable tableName="<%- jhiTablePrefix %>_persistent_token">
             <column name="series" type="varchar(20)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="user_id" type="<%= idField.columnType %>"/>
+            <column name="user_id" type="<%- idField.columnType %>"/>
             <column name="token_value" type="varchar(20)">
                 <constraints nullable="false" />
             </column>
@@ -116,35 +116,35 @@ _%>
   <%_ } _%>
 
         <addForeignKeyConstraint baseColumnNames="authority_name"
-                                 baseTableName="<%= user.entityTableName %>_authority"
+                                 baseTableName="<%- user.entityTableName %>_authority"
                                  constraintName="fk_authority_name"
                                  referencedColumnNames="name"
-                                 referencedTableName="<%= jhiTablePrefix %>_authority"/>
+                                 referencedTableName="<%- jhiTablePrefix %>_authority"/>
 
         <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="<%= user.entityTableName %>_authority"
+                                 baseTableName="<%- user.entityTableName %>_authority"
                                  constraintName="fk_user_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="<%= user.entityTableName %>"/>
+                                 referencedTableName="<%- user.entityTableName %>"/>
 
   <%_ if (generateUserManagement) { _%>
         <addNotNullConstraint   columnName="password_hash"
                                 columnDataType="varchar(60)"
-                                tableName="<%= user.entityTableName %>"/>
+                                tableName="<%- user.entityTableName %>"/>
   <%_ } _%>
   <%_ if (authenticationTypeSession) { _%>
 
         <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="<%= jhiTablePrefix %>_persistent_token"
+                                 baseTableName="<%- jhiTablePrefix %>_persistent_token"
                                  constraintName="fk_user_persistent_token"
                                  referencedColumnNames="id"
-                                 referencedTableName="<%= user.entityTableName %>"/>
+                                 referencedTableName="<%- user.entityTableName %>"/>
   <%_ } _%>
   <%_ if (generateBuiltInAuthorityEntity) { _%>
         <loadData
                   file="config/liquibase/data/authority.csv"
                   separator=";"
-                  tableName="<%= jhiTablePrefix %>_authority"
+                  tableName="<%- jhiTablePrefix %>_authority"
                   usePreparedStatements="true">
             <column name="name" type="string"/>
         </loadData>
@@ -153,10 +153,10 @@ _%>
         <loadData
                   file="config/liquibase/data/user.csv"
                   separator=";"
-                  tableName="<%= user.entityTableName %>"
+                  tableName="<%- user.entityTableName %>"
                   usePreparedStatements="true">
     <%_ if (prodDatabaseTypePostgresql) { _%>
-            <column name="id" type="<%= idField.loadColumnType %>"/>
+            <column name="id" type="<%- idField.loadColumnType %>"/>
     <%_ } _%>
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
@@ -164,19 +164,19 @@ _%>
         <loadData
                   file="config/liquibase/data/user_authority.csv"
                   separator=";"
-                  tableName="<%= jhiTablePrefix %>_user_authority"
+                  tableName="<%- jhiTablePrefix %>_user_authority"
                   usePreparedStatements="true">
-            <column name="user_id" type="<%= idField.loadColumnType %>"/>
+            <column name="user_id" type="<%- idField.loadColumnType %>"/>
         </loadData>
   <%_ } _%>
-        <dropDefaultValue tableName="<%= user.entityTableName %>" columnName="created_date" columnDataType="${datetimeType}"/>
+        <dropDefaultValue tableName="<%- user.entityTableName %>" columnName="created_date" columnDataType="${datetimeType}"/>
 <%_ } _%>
     </changeSet>
 
     <changeSet author="jhipster" id="00000000000002" context="test">
-        <createTable tableName="<%= jhiTablePrefix %>_date_time_wrapper">
+        <createTable tableName="<%- jhiTablePrefix %>_date_time_wrapper">
             <column <% if (isAutoIncrementDB) { _%> autoIncrement="true" <%_ } %> name="id" type="BIGINT">
-                <constraints primaryKey="true" primaryKeyName="<%= jhiTablePrefix %>_date_time_wrapperPK"/>
+                <constraints primaryKey="true" primaryKeyName="<%- jhiTablePrefix %>_date_time_wrapperPK"/>
             </column>
             <column name="instant" type="timestamp"/>
             <column name="local_date_time" type="timestamp"/>

@@ -23,7 +23,7 @@ export default class extends BaseGenerator {
         const useChanges = this.eventName === 'pull_request';
         const changes = await getGitChanges({ allTrue: !useChanges });
         const { base, common, devBlueprint, client, e2e, generateBlueprint, graalvm, java, workspaces, springBootDefaults } = changes;
-        const hasWorkflowChanges = Boolean((changes as Record<string, boolean>)[`${this.workflow}Workflow`]);
+        const hasWorkflowChanges = (changes as Record<string, boolean>)[`${this.workflow}Workflow`];
 
         let matrix: GitHubMatrixGroup = {};
         let convertToGitHubMatrixInclude = true;

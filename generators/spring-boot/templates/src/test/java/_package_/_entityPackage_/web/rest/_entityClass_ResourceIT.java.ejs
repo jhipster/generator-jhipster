@@ -16,10 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= entityAbsolutePackage %>.web.rest;
+package <%- entityAbsolutePackage %>.web.rest;
 
-import static <%= entityAbsolutePackage %>.domain.<%= persistClass %>Asserts.*;
-import static <%= packageName %>.web.rest.TestUtil.createUpdateProxyForBean;
+import static <%- entityAbsolutePackage %>.domain.<%- persistClass %>Asserts.*;
+import static <%- packageName %>.web.rest.TestUtil.createUpdateProxyForBean;
 <%_
 var filterTestableRelationships = (reactive ? reactiveEagerRelations : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
 const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
@@ -57,10 +57,10 @@ if (databaseTypeSql && !reactive) {
 
 _%>
 <%_ if (entityAbsolutePackage !== packageName) { _%>
-import <%= packageName %>.web.rest.TestUtil;
+import <%- packageName %>.web.rest.TestUtil;
 <% } %>
-import <%= packageName %>.IntegrationTest;
-import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
+import <%- packageName %>.IntegrationTest;
+import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
 <%_
 var imported = [];
 for (relationship of relationships) { // import entities in required relationships
@@ -68,40 +68,42 @@ for (relationship of relationships) { // import entities in required relationshi
   const isUsingMapsIdL1 = relationship.id;
   if (!imported.includes(relationship.otherEntity.entityNameCapitalized)) {
     if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) { _%>
-import <%= entityAbsolutePackage %>.domain.<%= relationship.otherEntity.persistClass %>;
+import <%- entityAbsolutePackage %>.domain.<%- relationship.otherEntity.persistClass %>;
 <%_
           imported.push(relationship.otherEntity.entityNameCapitalized);
     }
   }
-} _%>
+}
+_%>
 <%_
 if(jpaMetamodelFiltering && reactive) {
   filterTestableRelationships.forEach(relationship => { _%>
-import <%= entityAbsolutePackage %>.repository.<%= relationship.otherEntity.entityNameCapitalized %>Repository;
+import <%- entityAbsolutePackage %>.repository.<%- relationship.otherEntity.entityNameCapitalized %>Repository;
 <%_ });
- } _%>
+ }
+_%>
 <%_ if (hasUserRepository) { _%>
-import <%= user.entityAbsolutePackage %>.repository.UserRepository;
+import <%- user.entityAbsolutePackage %>.repository.UserRepository;
 <%_ } _%>
-import <%= entityAbsolutePackage %>.repository.<%= entityClass %>Repository;
+import <%- entityAbsolutePackage %>.repository.<%- entityClass %>Repository;
 <%_ if (databaseTypeSql && reactive) { _%>
-import <%= packageName %>.repository.EntityManager;
+import <%- packageName %>.repository.EntityManager;
 <%_ } _%>
 <%_ if (isUsingMapsId && (!dtoMapstruct && serviceNo)) { _%>
-import <%= entityAbsolutePackage %>.repository.<%= mapsIdAssoc?.otherEntity?.entityNameCapitalized %>Repository;
+import <%- entityAbsolutePackage %>.repository.<%- mapsIdAssoc?.otherEntity?.entityNameCapitalized %>Repository;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
-import <%= entityAbsolutePackage %>.repository.search.<%= entityClass %>SearchRepository;
+import <%- entityAbsolutePackage %>.repository.search.<%- entityClass %>SearchRepository;
 <%_ } _%>
 <%_ if (!serviceNo && implementsEagerLoadApis) { _%>
-import <%= entityAbsolutePackage %>.service.<%= entityClass %>Service;
+import <%- entityAbsolutePackage %>.service.<%- entityClass %>Service;
 <%_ } _%>
 <%_ if (dtoMapstruct) { _%>
-import <%= entityAbsolutePackage %>.service.dto.<%= dtoClass %>;
-import <%= entityAbsolutePackage %>.service.mapper.<%= entityClass %>Mapper;
+import <%- entityAbsolutePackage %>.service.dto.<%- dtoClass %>;
+import <%- entityAbsolutePackage %>.service.mapper.<%- entityClass %>Mapper;
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering && !reactive) { _%>
-import <%= entityAbsolutePackage %>.service.criteria.<%= entityClass %>Criteria;
+import <%- entityAbsolutePackage %>.service.criteria.<%- entityClass %>Criteria;
 <%_ } _%>
 import com.fasterxml.jackson.databind.ObjectMapper;
 <%_ if (searchEngineElasticsearch) { _%>
@@ -215,10 +217,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 <%_ } _%>
 
 <%_ if (anyFieldIsBigDecimal) { _%>
-import static <%= packageName %>.web.rest.TestUtil.sameNumber;
+import static <%- packageName %>.web.rest.TestUtil.sameNumber;
 <%_ } _%>
 <%_ if (anyFieldIsZonedDateTime) { _%>
-import static <%= packageName %>.web.rest.TestUtil.sameInstant;
+import static <%- packageName %>.web.rest.TestUtil.sameInstant;
 <%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -244,11 +246,12 @@ import static org.awaitility.Awaitility.await;
 <%_ } _%>
 <%_ for (const field of fields.filter(field => !field.transient)) {
   if (field.fieldIsEnum) { _%>
-import <%= entityAbsolutePackage %>.domain.enumeration.<%= field.fieldType %>;
+import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 <%_ }
-} _%>
+}
+_%>
 /**
- * Integration tests for the {@link <%= entityClass %>Resource} REST controller.
+ * Integration tests for the {@link <%- entityClass %>Resource} REST controller.
  */
 @IntegrationTest
 <%_ if (skipJunitTests) { _%>
@@ -263,7 +266,7 @@ import <%= entityAbsolutePackage %>.domain.enumeration.<%= field.fieldType %>;
 @AutoConfigureMockMvc
 <%_ } _%>
 @WithMockUser<% if (entityAuthority) { %>(authorities = {"<%- entityAuthority %>"})<% } %>
-class <%= entityClass %>ResourceIT {
+class <%- entityClass %>ResourceIT {
 <%_ if (fieldsToTest.some(field => field.fieldTypeLocalTime)) { _%>
 
     private static final DateTimeFormatter LOCAL_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -349,110 +352,111 @@ class <%= entityClass %>ResourceIT {
           '" field "' + field.fieldName + '" with pattern "' + field.fieldValidateRulesPattern +
           '" in file "' + entityClass + 'ResourceIT" where equal, added symbol "B" to second value.');
       }
-    } _%>
+    }
+_%>
 
-    private static final String <%= defaultValueName %> = "<%- sampleTextString %>";
-    private static final String <%= updatedValueName %> = "<%- updatedTextString %>";
+    private static final String <%- defaultValueName %> = "<%- sampleTextString %>";
+    private static final String <%- updatedValueName %> = "<%- updatedTextString %>";
   <%_ } else if (field.fieldTypeInteger) { _%>
 
-    private static final Integer <%= defaultValueName %> = <%= defaultValue %>;
-    private static final Integer <%= updatedValueName %> = <%= updatedValue %>;
+    private static final Integer <%- defaultValueName %> = <%- defaultValue %>;
+    private static final Integer <%- updatedValueName %> = <%- updatedValue %>;
     <%_ if (needsSmallerValueName) { _%>
-    private static final Integer <%= smallerValueName %> = <%= defaultValue %> - 1;
+    private static final Integer <%- smallerValueName %> = <%- defaultValue %> - 1;
     <%_ } _%>
   <%_ } else if (field.fieldTypeLong) { _%>
 
-    private static final Long <%= defaultValueName %> = <%= defaultValue %>L;
-    private static final Long <%= updatedValueName %> = <%= updatedValue %>L;
+    private static final Long <%- defaultValueName %> = <%- defaultValue %>L;
+    private static final Long <%- updatedValueName %> = <%- updatedValue %>L;
     <%_ if (needsSmallerValueName) { _%>
-    private static final Long <%= smallerValueName %> = <%= defaultValue %>L - 1L;
+    private static final Long <%- smallerValueName %> = <%- defaultValue %>L - 1L;
     <%_ } _%>
   <%_ } else if (field.fieldTypeFloat) { _%>
 
-    private static final <%= fieldType %> <%= defaultValueName %> = <%= defaultValue %>F;
-    private static final <%= fieldType %> <%= updatedValueName %> = <%= updatedValue %>F;
+    private static final <%- fieldType %> <%- defaultValueName %> = <%- defaultValue %>F;
+    private static final <%- fieldType %> <%- updatedValueName %> = <%- updatedValue %>F;
     <%_ if (needsSmallerValueName) { _%>
-    private static final <%= fieldType %> <%= smallerValueName %> = <%= defaultValue %>F - 1F;
+    private static final <%- fieldType %> <%- smallerValueName %> = <%- defaultValue %>F - 1F;
     <%_ } _%>
   <%_ } else if (field.fieldTypeDouble) { _%>
 
-    private static final <%= fieldType %> <%= defaultValueName %> = <%= defaultValue %>D;
-    private static final <%= fieldType %> <%= updatedValueName %> = <%= updatedValue %>D;
+    private static final <%- fieldType %> <%- defaultValueName %> = <%- defaultValue %>D;
+    private static final <%- fieldType %> <%- updatedValueName %> = <%- updatedValue %>D;
     <%_ if (needsSmallerValueName) { _%>
-    private static final <%= fieldType %> <%= smallerValueName %> = <%= defaultValue %>D - 1D;
+    private static final <%- fieldType %> <%- smallerValueName %> = <%- defaultValue %>D - 1D;
     <%_ } _%>
   <%_ } else if (field.fieldTypeBigDecimal) { _%>
 
-    private static final BigDecimal <%= defaultValueName %> = new BigDecimal(<%= defaultValue %>);
-    private static final BigDecimal <%= updatedValueName %> = new BigDecimal(<%= updatedValue %>);
+    private static final BigDecimal <%- defaultValueName %> = new BigDecimal(<%- defaultValue %>);
+    private static final BigDecimal <%- updatedValueName %> = new BigDecimal(<%- updatedValue %>);
     <%_ if (needsSmallerValueName) { _%>
-    private static final BigDecimal <%= smallerValueName %> = new BigDecimal(<%= defaultValue %> - 1);
+    private static final BigDecimal <%- smallerValueName %> = new BigDecimal(<%- defaultValue %> - 1);
     <%_ } _%>
   <%_ } else if (field.fieldTypeUUID) { _%>
 
-    private static final UUID <%= defaultValueName %> = UUID.randomUUID();
-    private static final UUID <%= updatedValueName %> = UUID.randomUUID();
+    private static final UUID <%- defaultValueName %> = UUID.randomUUID();
+    private static final UUID <%- updatedValueName %> = UUID.randomUUID();
   <%_ } else if (field.fieldTypeLocalDate) { _%>
 
-    private static final LocalDate <%= defaultValueName %> = LocalDate.ofEpochDay(0L);
-    private static final LocalDate <%= updatedValueName %> = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate <%- defaultValueName %> = LocalDate.ofEpochDay(0L);
+    private static final LocalDate <%- updatedValueName %> = LocalDate.now(ZoneId.systemDefault());
     <%_ if (needsSmallerValueName) { _%>
-    private static final LocalDate <%= smallerValueName %> = LocalDate.ofEpochDay(-1L);
+    private static final LocalDate <%- smallerValueName %> = LocalDate.ofEpochDay(-1L);
     <%_ } _%>
   <%_ } else if (field.fieldTypeInstant) { _%>
 
-    private static final Instant <%= defaultValueName %> = Instant.ofEpochMilli(0L);
-    private static final Instant <%= updatedValueName %> = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private static final Instant <%- defaultValueName %> = Instant.ofEpochMilli(0L);
+    private static final Instant <%- updatedValueName %> = Instant.now().truncatedTo(ChronoUnit.MILLIS);
     <%_ if (needsSmallerValueName) { _%>
-    private static final Instant <%= smallerValueName %> = Instant.ofEpochMilli(-1L);
+    private static final Instant <%- smallerValueName %> = Instant.ofEpochMilli(-1L);
     <%_ } _%>
   <%_ } else if (field.fieldTypeZonedDateTime) { _%>
 
-    private static final ZonedDateTime <%= defaultValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
-    private static final ZonedDateTime <%= updatedValueName %> = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+    private static final ZonedDateTime <%- defaultValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime <%- updatedValueName %> = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
     <%_ if (needsSmallerValueName) { _%>
-    private static final ZonedDateTime <%= smallerValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
+    private static final ZonedDateTime <%- smallerValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
     <%_ } _%>
   <%_ } else if (field.fieldTypeLocalTime) { _%>
 
-    private static final LocalTime <%= defaultValueName %> = LocalTime.NOON;
-    private static final LocalTime <%= updatedValueName %> = LocalTime.MAX.withNano(0);
+    private static final LocalTime <%- defaultValueName %> = LocalTime.NOON;
+    private static final LocalTime <%- updatedValueName %> = LocalTime.MAX.withNano(0);
     <%_ if (needsSmallerValueName) { _%>
-    private static final LocalTime <%= smallerValueName %> = LocalTime.MIN;
+    private static final LocalTime <%- smallerValueName %> = LocalTime.MIN;
     <%_ } _%>
   <%_ } else if (field.fieldTypeDuration) { _%>
 
-    private static final Duration <%= defaultValueName %> = Duration.ofHours(6);
-    private static final Duration <%= updatedValueName %> = Duration.ofHours(12);
+    private static final Duration <%- defaultValueName %> = Duration.ofHours(6);
+    private static final Duration <%- updatedValueName %> = Duration.ofHours(12);
     <%_ if (needsSmallerValueName) { _%>
-    private static final Duration <%= smallerValueName %> = Duration.ofHours(5);
+    private static final Duration <%- smallerValueName %> = Duration.ofHours(5);
     <%_ } _%>
   <%_ } else if (field.fieldTypeBoolean) { _%>
 
-    private static final Boolean <%= defaultValueName %> = false;
-    private static final Boolean <%= updatedValueName %> = true;
+    private static final Boolean <%- defaultValueName %> = false;
+    private static final Boolean <%- updatedValueName %> = true;
   <%_ } else if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
 
     <%_ if (!databaseTypeCassandra) { _%>
-    private static final byte[] <%= defaultValueName %> = TestUtil.createByteArray(1, "0");
-    private static final byte[] <%= updatedValueName %> = TestUtil.createByteArray(1, "1");
+    private static final byte[] <%- defaultValueName %> = TestUtil.createByteArray(1, "0");
+    private static final byte[] <%- updatedValueName %> = TestUtil.createByteArray(1, "1");
     <%_ } else { _%>
-    private static final ByteBuffer <%= defaultValueName %> = ByteBuffer.wrap(TestUtil.createByteArray(1, "0"));
-    private static final ByteBuffer <%= updatedValueName %> = ByteBuffer.wrap(TestUtil.createByteArray(1, "1"));
+    private static final ByteBuffer <%- defaultValueName %> = ByteBuffer.wrap(TestUtil.createByteArray(1, "0"));
+    private static final ByteBuffer <%- updatedValueName %> = ByteBuffer.wrap(TestUtil.createByteArray(1, "1"));
     <%_ } _%>
-    private static final String <%= defaultValueName %>_CONTENT_TYPE = "image/jpg";
-    private static final String <%= updatedValueName %>_CONTENT_TYPE = "image/png";
+    private static final String <%- defaultValueName %>_CONTENT_TYPE = "image/jpg";
+    private static final String <%- updatedValueName %>_CONTENT_TYPE = "image/png";
   <%_ } else if (isEnum) { _%>
 
-    private static final <%= fieldType %> <%= defaultValueName %> = <%= fieldType %>.<%= enumValue1.name %>;
-    private static final <%= fieldType %> <%= updatedValueName %> = <%= fieldType %>.<%= enumValue2.name %>;
+    private static final <%- fieldType %> <%- defaultValueName %> = <%- fieldType %>.<%- enumValue1.name %>;
+    private static final <%- fieldType %> <%- updatedValueName %> = <%- fieldType %>.<%- enumValue2.name %>;
   <%_ } _%>
 <%_ } _%>
 
-    private static final String ENTITY_API_URL = "/api/<%= entityApiUrl %>";
-    private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{<%= primaryKey.name %>}";
+    private static final String ENTITY_API_URL = "/api/<%- entityApiUrl %>";
+    private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{<%- primaryKey.name %>}";
 <%_ if (searchEngineAny) { _%>
-    private static final String ENTITY_SEARCH_API_URL = "/api/<%= entityApiUrl %>/_search";
+    private static final String ENTITY_SEARCH_API_URL = "/api/<%- entityApiUrl %>/_search";
 <%_ } _%>
 <%_ if (!embedded && (primaryKey.hasLong || primaryKey.hasInteger)) { _%>
 
@@ -470,10 +474,10 @@ class <%= entityClass %>ResourceIT {
     private ObjectMapper om;
 
     @Autowired
-    private <%= entityClass %>Repository <%= entityInstance %>Repository;
+    private <%- entityClass %>Repository <%- entityInstance %>Repository;
 <%_ if (isUsingMapsId && (!dtoMapstruct && serviceNo) && mapsIdAssoc?.otherEntity?.entityNameCapitalized !== 'User') { _%>
     @Autowired
-    private <%= mapsIdAssoc?.otherEntity?.entityNameCapitalized %>Repository <%= mapsIdAssoc?.otherEntity?.entityInstance %>Repository;
+    private <%- mapsIdAssoc?.otherEntity?.entityNameCapitalized %>Repository <%- mapsIdAssoc?.otherEntity?.entityInstance %>Repository;
 <%_ } _%>
 <%_ if (hasUserRepository) { _%>
 
@@ -483,22 +487,22 @@ class <%= entityClass %>ResourceIT {
 <%_ if (implementsEagerLoadApis) { _%>
 
     @Mock
-    private <%= entityClass %>Repository <%= entityInstance %>RepositoryMock;
+    private <%- entityClass %>Repository <%- entityInstance %>RepositoryMock;
 <%_ } _%>
 <%_ if (dtoMapstruct) { _%>
 
     @Autowired
-    private <%= entityClass %>Mapper <%= entityInstance %>Mapper;
+    private <%- entityClass %>Mapper <%- entityInstance %>Mapper;
 <%_ } if (!serviceNo) { _%>
   <%_ if (implementsEagerLoadApis) { _%>
 
     @Mock
-    private <%= entityClass %>Service <%= entityInstance %>ServiceMock;
+    private <%- entityClass %>Service <%- entityInstance %>ServiceMock;
   <%_ } _%>
 <%_ } if (searchEngineElasticsearch) { _%>
 
     @Autowired
-    private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;
+    private <%- entityClass %>SearchRepository <%- entityInstance %>SearchRepository;
 <%_ } _%>
 <%_ if (databaseTypeSql) { _%>
 
@@ -510,58 +514,60 @@ class <%= entityClass %>ResourceIT {
 <%_ if (reactive) { _%>
     private WebTestClient webTestClient;
 <%_ } else { _%>
-    private MockMvc rest<%= entityClass %>MockMvc;
+    private MockMvc rest<%- entityClass %>MockMvc;
 <%_ } _%>
 
-    private <%= persistClass %> <%= persistInstance %>;
+    private <%- persistClass %> <%- persistInstance %>;
 
-    private <%= persistClass %> inserted<%= persistClass %>;
+    private <%- persistClass %> inserted<%- persistClass %>;
 
 <%_ if(jpaMetamodelFiltering && reactive) {
-filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach((relationship) => { _%>
+filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach((relationship) => {
+_%>
     @Autowired
-    private <%= relationship.otherEntity.persistClass %>Repository <%= relationship.otherEntity.persistInstance %>Repository;
+    private <%- relationship.otherEntity.persistClass %>Repository <%- relationship.otherEntity.persistInstance %>Repository;
 <%_ });
-}_%>
+}
+_%>
 <%_ ['DEFAULT_', 'UPDATED_'].forEach((fieldStatus) => { _%>
-<%_  const createInstance = fieldStatus === 'UPDATED_' ? `updated${persistClass}` : persistInstance; _%>
+<%_ const createInstance = fieldStatus === 'UPDATED_' ? `updated${persistClass}` : persistInstance; _%>
     /**
      * Create an <% if (fieldStatus === 'UPDATED_') { %>updated <% } %>entity for this test.
      *
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static <%= persistClass %> create<% if (fieldStatus === 'UPDATED_') { _%>Updated<%_ } %>Entity(<% if (databaseTypeSql && anyRelationshipIsRequired) { %>EntityManager em<% } %>) {
+    public static <%- persistClass %> create<% if (fieldStatus === 'UPDATED_') { _%>Updated<%_ } %>Entity(<% if (databaseTypeSql && anyRelationshipIsRequired) { %>EntityManager em<% } %>) {
   <%_ if (fluentMethods) { _%>
-        <% if (!anyRelationshipIsRequired) { %>return <% } else { %><%= persistClass %> <%= createInstance %> = <% } %>new <%= persistClass %>()
+        <% if (!anyRelationshipIsRequired) { %>return <% } else { %><%- persistClass %> <%- createInstance %> = <% } %>new <%- persistClass %>()
     <%_ if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
-            .<%= primaryKey.name %>(UUID.randomUUID())
+            .<%- primaryKey.name %>(UUID.randomUUID())
     <%_ } _%>
     <%_ if (primaryKey.typeString && !isUsingMapsId && !primaryKey.autoGenerate) { _%>
-            .<%= primaryKey.name %>(UUID.randomUUID().toString())
+            .<%- primaryKey.name %>(UUID.randomUUID().toString())
     <%_ } _%>
     <%_ for (field of fieldsToTest) { _%>
-            .<%= field.fieldName %>(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>)
+            .<%- field.fieldName %>(<%- fieldStatus + field.fieldNameUnderscored.toUpperCase() %>)
       <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            .<%= field.fieldName %>ContentType(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)
+            .<%- field.fieldName %>ContentType(<%- fieldStatus + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)
       <%_ } _%>
     <%_ } _%>;
     <%_ if (!anyRelationshipIsRequired) { _%>
     }
-    <%_  return; _%>
+    <%_ return; _%>
     <%_ } _%>
   <%_ } else { _%>
-        <%= persistClass %> <%= createInstance %> = new <%= persistClass %>();
+        <%- persistClass %> <%- createInstance %> = new <%- persistClass %>();
     <%_ if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
-        <%= createInstance %>.<%= primaryKey.fields[0].propertySupplierName %>(UUID.randomUUID());
+        <%- createInstance %>.<%- primaryKey.fields[0].propertySupplierName %>(UUID.randomUUID());
     <%_ } _%>
     <%_ if (primaryKey.typeString && !isUsingMapsId && !primaryKey.autoGenerate) { _%>
-        <%= createInstance %>.<%= primaryKey.fields[0].propertySupplierName %>(UUID.randomUUID().toString());
+        <%- createInstance %>.<%- primaryKey.fields[0].propertySupplierName %>(UUID.randomUUID().toString());
     <%_ } _%>
     <%_ for (field of fieldsToTest) { _%>
-        <%= createInstance %>.<%- field.propertyConsumerName %>(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>);
+        <%- createInstance %>.<%- field.propertyConsumerName %>(<%- fieldStatus + field.fieldNameUnderscored.toUpperCase() %>);
       <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-        <%= createInstance %>.<%- field.propertyConsumerName %>ContentType(<%= fieldStatus + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
+        <%- createInstance %>.<%- field.propertyConsumerName %>ContentType(<%- fieldStatus + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
@@ -572,49 +578,50 @@ filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach(
     const relationshipValidate = relationship.relationshipValidate;
     const otherEntityName = relationship.otherEntityName;
     const mapsIdUse = relationship.id;
-    if ((relationshipValidate !== null && relationshipValidate && !relationship.otherEntity.hasCyclicRequiredRelationship) || mapsIdUse) { _%>
+    if ((relationshipValidate !== null && relationshipValidate && !relationship.otherEntity.hasCyclicRequiredRelationship) || mapsIdUse) {
+  _%>
         // Add required entity
       <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
         <%_ if (relationship.otherEntityUser) { /* TODO or other entity has no unique fields */ _%>
-        <%= relationship.otherEntity.persistClass %> <%= otherEntityName %> = <%= createEntityPrefix %><%= relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<% if (databaseTypeSql && otherEntity.anyRelationshipIsRequired) { %>em<% } %>)<%= createEntityPostfix %>;
+        <%- relationship.otherEntity.persistClass %> <%- otherEntityName %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<% if (databaseTypeSql && otherEntity.anyRelationshipIsRequired) { %>em<% } %>)<%- createEntityPostfix %>;
           <%_ if (databaseTypeSql && !reactive) { _%>
-        em.persist(<%= otherEntityName %>);
+        em.persist(<%- otherEntityName %>);
         em.flush();
           <%_ } _%>
           <%_ if (databaseTypeMongodb) { _%>
-        <%= otherEntityName %>.<%- primaryKey.propertyConsumerName %>("fixed-id-for-tests");
+        <%- otherEntityName %>.<%- primaryKey.propertyConsumerName %>("fixed-id-for-tests");
           <%_ } _%>
         <%_ } else { _%>
-        <%= relationship.otherEntity.persistClass %> <%= otherEntityName %>;
+        <%- relationship.otherEntity.persistClass %> <%- otherEntityName %>;
           <%_ if (databaseTypeSql && !reactive) { _%>
             <%_ if (!isUsingMapsId || fieldStatus !== "UPDATED_") { _%>
-        if (TestUtil.findAll(em, <%= relationship.otherEntity.persistClass %>.class).isEmpty()) {
+        if (TestUtil.findAll(em, <%- relationship.otherEntity.persistClass %>.class).isEmpty()) {
             <%_ } _%>
-            <%= otherEntityName %> = <%= createEntityPrefix %><%= relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (relationship.otherEntity.anyRelationshipIsRequired) { %>em<% } %>)<%= createEntityPostfix %>;
-            em.persist(<%= otherEntityName %>);
+            <%- otherEntityName %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (relationship.otherEntity.anyRelationshipIsRequired) { %>em<% } %>)<%- createEntityPostfix %>;
+            em.persist(<%- otherEntityName %>);
             em.flush();
             <%_ if (!isUsingMapsId || fieldStatus !== "UPDATED_") { _%>
         } else {
-            <%= otherEntityName %> = TestUtil.findAll(em, <%= relationship.otherEntity.persistClass %>.class).get(0);
+            <%- otherEntityName %> = TestUtil.findAll(em, <%- relationship.otherEntity.persistClass %>.class).get(0);
         }
             <%_ } _%>
           <%_ } else { _%>
-        <%= otherEntityName %> = <%= createEntityPrefix %><%= relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (databaseType === 'sql' && otherEntity.anyRelationshipIsRequired) { %>em<% } %>)<%= createEntityPostfix %>;
+        <%- otherEntityName %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (databaseType === 'sql' && otherEntity.anyRelationshipIsRequired) { %>em<% } %>)<%- createEntityPostfix %>;
           <%_ } _%>
           <%_ if (databaseTypeMongodb) { _%>
-        <%= otherEntityName %>.<%- primaryKey.propertyConsumerName %>("fixed-id-for-tests");
+        <%- otherEntityName %>.<%- primaryKey.propertyConsumerName %>("fixed-id-for-tests");
           <%_ } _%>
         <%_ } _%>
       <%_ } _%>
       <%_ if (relationship.relationshipManyToMany || relationship.relationshipOneToMany) { _%>
-        <%= createInstance %>.<%- relationship.propertySupplierName %>().add(<%= otherEntityName %>);
+        <%- createInstance %>.<%- relationship.propertySupplierName %>().add(<%- otherEntityName %>);
       <%_ } else { _%>
-        <%= createInstance %>.<%- relationship.propertyConsumerName %>(<%= otherEntityName %>);
+        <%- createInstance %>.<%- relationship.propertyConsumerName %>(<%- otherEntityName %>);
       <%_ } _%>
         <%_ alreadyGeneratedEntities.push(otherEntityName) _%>
     <%_ } _%>
   <%_ } _%>
-        return <%= createInstance %>;
+        return <%- createInstance %>;
     }
 <%_ }); _%>
 
@@ -625,19 +632,20 @@ _%>
         try {
   <%_ relationships.forEach(function(rel) {
     if (rel.shouldWriteJoinTable) { _%>
-                em.deleteAll("<%= rel.joinTable.name %>").block();
+                em.deleteAll("<%- rel.joinTable.name %>").block();
     <%_ } _%>
   <%_ }); _%>
-                em.deleteAll(<%= persistClass %>.class).block();
+                em.deleteAll(<%- persistClass %>.class).block();
         } catch (Exception e) {
             // It can fail, if other entities are still referring this - it will be removed later.
         }
   <%_ relationships.forEach(function(rel) {
     if ((rel.relationshipValidate || rel.id) && !alreadyGeneratedDeletionCalls.includes(rel.otherEntityName)) { _%>
-        <%= rel.otherEntity.entityNameCapitalized %>ResourceIT.deleteEntities(em);
+        <%- rel.otherEntity.entityNameCapitalized %>ResourceIT.deleteEntities(em);
     <%_ alreadyGeneratedDeletionCalls.push(rel.otherEntityName);
     }
-  }); _%>
+  });
+    _%>
     }
 
 <%_ } _%>
@@ -650,17 +658,17 @@ _%>
 <%_ } _%>
     @BeforeEach
     void initTest() {
-        <%= persistInstance %> = createEntity(<% if (databaseTypeSql && anyRelationshipIsRequired) { %>em<% } %>);
+        <%- persistInstance %> = createEntity(<% if (databaseTypeSql && anyRelationshipIsRequired) { %>em<% } %>);
     }
 
     @AfterEach
     void cleanup() {
-        if (inserted<%= persistClass %> != null) {
-            <%= entityInstance %>Repository.delete(inserted<%= persistClass %>)<%= reactorBlock %>;
+        if (inserted<%- persistClass %> != null) {
+            <%- entityInstance %>Repository.delete(inserted<%- persistClass %>)<%- reactorBlock %>;
 <%_ if (searchEngineElasticsearch) { _%>
-            <%= entityInstance %>SearchRepository.delete(inserted<%= persistClass %>)<%= reactorBlock %>;
+            <%- entityInstance %>SearchRepository.delete(inserted<%- persistClass %>)<%- reactorBlock %>;
 <%_ } _%>
-            inserted<%= persistClass %> = null;
+            inserted<%- persistClass %> = null;
         }
 <%_ if (databaseTypeSql && reactive) { _%>
         deleteEntities(em);
@@ -674,27 +682,27 @@ _%>
     }
 <%_ if (!readOnly) { _%>
 
-    @Test<%= transactionalAnnotation %>
-    void create<%= entityClass %>() throws Exception {
+    @Test<%- transactionalAnnotation %>
+    void create<%- entityClass %>() throws Exception {
         long databaseSizeBeforeCreate = getRepositoryCount();
   <%_ if (searchEngineElasticsearch) { _%>
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
   <%_ } _%>
   <%_
       // overwrite the id field again with null
       // the create method here is supposed to be used for other tests as well,
       // which may expect an id to be set (at least in the reactive stack)
       if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
-        <%= persistInstance %>.<%- primaryKey.propertyConsumerName %>(null);
+        <%- persistInstance %>.<%- primaryKey.propertyConsumerName %>(null);
   <%_ } _%>
-        // Create the <%= entityClass %>
+        // Create the <%- entityClass %>
   <%_ if (dtoMapstruct) { _%>
-        <%= dtoClass %> <%= dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);
+        <%- dtoClass %> <%- dtoInstance %> = <%- entityInstance %>Mapper.toDto(<%- persistInstance %>);
   <%_ } _%>
   <%_ if (reactive) { _%>
         var returned<%- restClass %> = webTestClient.post().uri(ENTITY_API_URL)
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(<%= restInstance %>))
+            .bodyValue(om.writeValueAsBytes(<%- restInstance %>))
             .exchange()
             .expectStatus()
             .isCreated()
@@ -703,14 +711,14 @@ _%>
             .getResponseBody();
   <%_ } else { _%>
         var returned<%- restClass %> = om.readValue(
-            rest<%= entityClass %>MockMvc
+            rest<%- entityClass %>MockMvc
                 .perform(
                   post(ENTITY_API_URL)
     <%_ if (authenticationUsesCsrf) { _%>
                   .with(csrf())
     <%_ } _%>
                   .contentType(MediaType.APPLICATION_JSON)
-                  .content(om.writeValueAsBytes(<%= restInstance %>))
+                  .content(om.writeValueAsBytes(<%- restInstance %>))
                 )
                 .andExpect(status().isCreated())
                 .andReturn()
@@ -720,98 +728,99 @@ _%>
         );
   <%_ } _%>
 
-        // Validate the <%= entityClass %> in the database
+        // Validate the <%- entityClass %> in the database
   <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
         assertIncrementedRepositoryCount(databaseSizeBeforeCreate);
   <%_ if (dtoMapstruct) { _%>
-        var returned<%- persistClass %> = <%= entityInstance %>Mapper.toEntity(returned<%- dtoClass %>);
+        var returned<%- persistClass %> = <%- entityInstance %>Mapper.toEntity(returned<%- dtoClass %>);
   <%_ } _%>
         assert<%- persistClass %>UpdatableFieldsEquals(returned<%- persistClass %>, getPersisted<%- persistClass %>(returned<%- persistClass %>));
   <%_ if (searchEngineElasticsearch) { _%>
 
         await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
-            int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+            int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
             assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore + 1);
         });
   <%_ } _%>
   <%_ if (primaryKey.derived) { _%>
 
-        assert<%- persistClass %>MapsIdRelationshipPersistedValue(<%= persistInstance %>, returned<%- persistClass %>);
+        assert<%- persistClass %>MapsIdRelationshipPersistedValue(<%- persistInstance %>, returned<%- persistClass %>);
   <%_ } _%>
 
-        inserted<%= persistClass %> = returned<%- persistClass %>;
+        inserted<%- persistClass %> = returned<%- persistClass %>;
     }
 
-    @Test<%= transactionalAnnotation %>
-    void create<%= entityClass %>WithExistingId() throws Exception {
-        // Create the <%= entityClass %> with an existing ID
+    @Test<%- transactionalAnnotation %>
+    void create<%- entityClass %>WithExistingId() throws Exception {
+        // Create the <%- entityClass %> with an existing ID
   <%_ if ((primaryKey.typeUUID && databaseTypeSql) || !primaryKey.autoGenerate) { _%>
-        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
   <%_ } else { _%>
-        <%= persistInstance %>.<%- primaryKey.propertyConsumerName %>(<% if (primaryKey.typeUUID) { %>UUID.randomUUID()<% } else if (primaryKey.typeLong) { %>1L<% } else if (primaryKey.typeInteger) { %>1<% } else { %>"existing_id"<% } %>);
+        <%- persistInstance %>.<%- primaryKey.propertyConsumerName %>(<% if (primaryKey.typeUUID) { %>UUID.randomUUID()<% } else if (primaryKey.typeLong) { %>1L<% } else if (primaryKey.typeInteger) { %>1<% } else { %>"existing_id"<% } %>);
   <%_ } _%>
   <%_ if (dtoMapstruct) { _%>
-        <%= dtoClass %> <%= dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);
+        <%- dtoClass %> <%- dtoInstance %> = <%- entityInstance %>Mapper.toDto(<%- persistInstance %>);
   <%_ } _%>
 
         long databaseSizeBeforeCreate = getRepositoryCount();
   <%_ if (searchEngineElasticsearch) { _%>
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
   <%_ } _%>
 
         // An entity with an existing ID cannot be created, so this API call must fail
   <%_ if (reactive) { _%>
         webTestClient.post().uri(ENTITY_API_URL)
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(<%= restInstance %>))
+            .bodyValue(om.writeValueAsBytes(<%- restInstance %>))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc
+        rest<%- entityClass %>MockMvc
             .perform(
                 post(ENTITY_API_URL)
     <%_ if (authenticationUsesCsrf) { _%>
                 .with(csrf())
     <%_ } _%>
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsBytes(<%= restInstance %>))
+                .content(om.writeValueAsBytes(<%- restInstance %>))
             )
             .andExpect(status().isBadRequest());
   <%_ } _%>
 
-        // Validate the <%= entityClass %> in the database
+        // Validate the <%- entityClass %> in the database
   <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
         assertSameRepositoryCount(databaseSizeBeforeCreate);
   <%_ if (searchEngineElasticsearch) { _%>
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
   <%_ } _%>
     }
 
   <%_ if (databaseTypeSql && isUsingMapsId) { _%>
-    @Test<%= transactionalAnnotation %>
-    void update<%= entityClass %>MapsIdAssociationWithNewId() throws Exception {
+    @Test<%- transactionalAnnotation %>
+    void update<%- entityClass %>MapsIdAssociationWithNewId() throws Exception {
         // Initialize the database
-        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
     <%_ const alreadyGeneratedEntities = []; _%>
         long databaseSizeBeforeCreate = getRepositoryCount();
     <%_ if (searchEngineElasticsearch) { _%>
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
     <%_ } _%>
     <%_ for (relationship of relationships) {
       const otherEntity = relationship.otherEntity;
       const otherEntityName = relationship.otherEntityName;
       const mapsIdUse = relationship.id;
-      if (mapsIdUse) { _%>
+      if (mapsIdUse) {
+    _%>
         // Add a new parent entity
         <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
-        <%= relationship.otherEntity.persistClass %> <%= otherEntityName %> = <%= relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<% if (!relationship.otherEntityUser) { _%>Updated<%_ } %>Entity(<% if (databaseTypeSql && otherEntity.anyRelationshipIsRequired) { %>em<% } %>);
+        <%- relationship.otherEntity.persistClass %> <%- otherEntityName %> = <%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<% if (!relationship.otherEntityUser) { _%>Updated<%_ } %>Entity(<% if (databaseTypeSql && otherEntity.anyRelationshipIsRequired) { %>em<% } %>);
           <%_ if (databaseTypeSql && !reactive) { _%>
-        em.persist(<%= otherEntityName %>);
+        em.persist(<%- otherEntityName %>);
         em.flush();
           <%_ } _%>
         <%_ } _%>
@@ -819,36 +828,36 @@ _%>
       <%_ } _%>
     <%_ break; } _%>
 
-        // Load the <%= entityInstance %>
-        <%= persistClass %> updated<%= persistClass %> = <%= entityInstance %>Repository.findById(<%= persistInstance %>.<%- primaryKey.propertySupplierName %>())<%= reactive ? '.block()' : '.orElseThrow()' %>;
-        assertThat(updated<%= persistClass %>).isNotNull();
+        // Load the <%- entityInstance %>
+        <%- persistClass %> updated<%- persistClass %> = <%- entityInstance %>Repository.findById(<%- persistInstance %>.<%- primaryKey.propertySupplierName %>())<%- reactive ? '.block()' : '.orElseThrow()' %>;
+        assertThat(updated<%- persistClass %>).isNotNull();
     <%_ if (databaseTypeSql && !reactive) { _%>
-        // Disconnect from session so that the updates on updated<%= persistClass %> are not directly saved in db
-        em.detach(updated<%= persistClass %>);
+        // Disconnect from session so that the updates on updated<%- persistClass %> are not directly saved in db
+        em.detach(updated<%- persistClass %>);
     <%_ } _%>
 
-        // Update the <%= mapsIdAssoc?.otherEntity?.entityNameCapitalized %> with new association value
-        updated<%= persistClass %>.<%= mapsIdAssoc?.propertyConsumerName %>(<%= alreadyGeneratedEntities.pop() %>);
+        // Update the <%- mapsIdAssoc?.otherEntity?.entityNameCapitalized %> with new association value
+        updated<%- persistClass %>.<%- mapsIdAssoc?.propertyConsumerName %>(<%- alreadyGeneratedEntities.pop() %>);
     <%_ if (dtoMapstruct) { _%>
-        <%= dtoClass %> updated<%= dtoClass %> = <%= entityInstance %>Mapper.toDto(updated<%= persistClass %>);
-        assertThat(updated<%= dtoClass %>).isNotNull();
+        <%- dtoClass %> updated<%- dtoClass %> = <%- entityInstance %>Mapper.toDto(updated<%- persistClass %>);
+        assertThat(updated<%- dtoClass %>).isNotNull();
     <%_ } _%>
 
         // Update the entity
     <%_ if (reactive) { _%>
-        webTestClient.put().uri(ENTITY_API_URL_ID, <%_ if (dtoMapstruct) { _%>updated<%= dtoClass %> <%_ } else { _%> updated<%= persistClass %> <%_ } _%>.<%- primaryKey.propertySupplierName %>())
+        webTestClient.put().uri(ENTITY_API_URL_ID, <%_ if (dtoMapstruct) { _%>updated<%- dtoClass %> <%_ } else { _%> updated<%- persistClass %> <%_ } _%>.<%- primaryKey.propertySupplierName %>())
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(<%_ if (dtoMapstruct) { _%>updated<%= dtoClass %> <%_ } else { _%> updated<%= persistClass %> <%_ } _%>))
+            .bodyValue(om.writeValueAsBytes(<%_ if (dtoMapstruct) { _%>updated<%- dtoClass %> <%_ } else { _%> updated<%- persistClass %> <%_ } _%>))
             .exchange()
             .expectStatus().isOk();
     <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%_ if (dtoMapstruct) { _%>updated<%= dtoClass %> <%_ } else { _%> updated<%= persistClass %> <%_ } _%>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
+        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%_ if (dtoMapstruct) { _%>updated<%- dtoClass %> <%_ } else { _%> updated<%- persistClass %> <%_ } _%>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
             .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(<%_ if (dtoMapstruct) { _%>updated<%= dtoClass %> <%_ } else { _%> updated<%= persistClass %> <%_ } _%>)))
+            .content(om.writeValueAsBytes(<%_ if (dtoMapstruct) { _%>updated<%- dtoClass %> <%_ } else { _%> updated<%- persistClass %> <%_ } _%>)))
             .andExpect(status().isOk());
     <%_ } _%>
 
-        // Validate the <%= entityClass %> in the database
+        // Validate the <%- entityClass %> in the database
     <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
     <%_ } _%>
@@ -858,10 +867,10 @@ _%>
          * Validate the id for MapsId, the ids must be same
          * Uncomment the following line for assertion. However, please note that there is a known issue and uncommenting will fail the test.
          * Please look at https://github.com/jhipster/generator-jhipster/issues/9100. You can modify this test as necessary.
-         * assertThat(test<%= entityClass %>.<%- primaryKey.propertySupplierName %>()).isEqualTo(test<%= entityClass %>.<%= mapsIdAssoc?.propertySupplierName %>().<%- primaryKey.propertySupplierName %>());
+         * assertThat(test<%- entityClass %>.<%- primaryKey.propertySupplierName %>()).isEqualTo(test<%- entityClass %>.<%- mapsIdAssoc?.propertySupplierName %>().<%- primaryKey.propertySupplierName %>());
          */
     <%_ if (searchEngineElasticsearch) { _%>
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
     <%_ } _%>
     }
@@ -871,31 +880,32 @@ _%>
       let required = false;
       if (!field.fieldTypeBytes && field.fieldValidate && field.fieldValidationRequired) {
         required = true;
-      } _%>
+      }
+    _%>
       <%_ if (required) { _%>
 
-    @Test<%= transactionalAnnotation %>
-    void check<%= field.fieldInJavaBeanMethod %>IsRequired() throws Exception {
+    @Test<%- transactionalAnnotation %>
+    void check<%- field.fieldInJavaBeanMethod %>IsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
         <%_ if (searchEngineElasticsearch) { _%>
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
         <%_ } _%>
         // set the field null
-        <%= persistInstance %>.<%- field.propertyConsumerName %>(null);
+        <%- persistInstance %>.<%- field.propertyConsumerName %>(null);
 
-        // Create the <%= entityClass %>, which fails.<% if (dtoMapstruct) { %>
-        <%= dtoClass %> <%= dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);<% } %>
+        // Create the <%- entityClass %>, which fails.<% if (dtoMapstruct) { %>
+        <%- dtoClass %> <%- dtoInstance %> = <%- entityInstance %>Mapper.toDto(<%- persistInstance %>);<% } %>
 
         <%_ if (reactive) { _%>
         webTestClient.post().uri(ENTITY_API_URL)
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(<%= restInstance %>))
+            .bodyValue(om.writeValueAsBytes(<%- restInstance %>))
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(post(ENTITY_API_URL)<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
+        rest<%- entityClass %>MockMvc.perform(post(ENTITY_API_URL)<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
             .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(<%= restInstance %>)))
+            .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isBadRequest());
         <%_ } _%>
         <%_ if (databaseTypeCouchbase) { _%>
@@ -906,7 +916,7 @@ _%>
         assertSameRepositoryCount(databaseSizeBeforeTest);
         <%_ if (searchEngineElasticsearch) { _%>
 
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
         <%_ } _%>
     }
@@ -916,76 +926,76 @@ _%>
 <%_ } _%>
 <%_ if (!jpaMetamodelFiltering && reactive && paginationNo) { _%>
 
-    @Test<%= transactionalAnnotation %>
-    void getAll<%= entityClassPlural %>AsStream() {
+    @Test<%- transactionalAnnotation %>
+    void getAll<%- entityClassPlural %>AsStream() {
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
+        <%- persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
     <%_ } _%>
   <%_ } _%>
-        <%= entityInstance %>Repository.save(<%= persistInstance %>)<%= callBlock %>;
+        <%- entityInstance %>Repository.save(<%- persistInstance %>)<%- callBlock %>;
 
-        List<<%= persistClass %>> <%= entityInstance %>List = webTestClient.get().uri(ENTITY_API_URL)
+        List<<%- persistClass %>> <%- entityInstance %>List = webTestClient.get().uri(ENTITY_API_URL)
             .accept(MediaType.APPLICATION_NDJSON)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_NDJSON)
-            .returnResult(<%= restClass %>.class)
+            .returnResult(<%- restClass %>.class)
             .getResponseBody()
   <%_ if (dtoMapstruct) { _%>
-            .map(<%= entityInstance %>Mapper::toEntity)
+            .map(<%- entityInstance %>Mapper::toEntity)
   <%_ } _%>
-            .filter(<%= persistInstance %>::equals)
+            .filter(<%- persistInstance %>::equals)
             .collectList()
             .block(Duration.ofSeconds(5));
 
-        assertThat(<%= entityInstance %>List).isNotNull();
-        assertThat(<%= entityInstance %>List).hasSize(1);
-        <%= persistClass %> test<%= entityClass %> = <%= entityInstance %>List.get(0);
+        assertThat(<%- entityInstance %>List).isNotNull();
+        assertThat(<%- entityInstance %>List).hasSize(1);
+        <%- persistClass %> test<%- entityClass %> = <%- entityInstance %>List.get(0);
 
 <%_ if (reactive && databaseTypeSql) { _%>
         // Test fails because reactive api returns an empty object instead of null
-        // assert<%- persistClass %>AllPropertiesEquals(<%= persistInstance %>, test<%= entityClass %>);
-        assert<%- persistClass %>UpdatableFieldsEquals(<%= persistInstance %>, test<%= entityClass %>);
+        // assert<%- persistClass %>AllPropertiesEquals(<%- persistInstance %>, test<%- entityClass %>);
+        assert<%- persistClass %>UpdatableFieldsEquals(<%- persistInstance %>, test<%- entityClass %>);
   <%_ } else { _%>
-        assert<%- persistClass %>AllPropertiesEquals(<%= persistInstance %>, test<%= entityClass %>);
+        assert<%- persistClass %>AllPropertiesEquals(<%- persistInstance %>, test<%- entityClass %>);
   <%_ } _%>
     }
 <%_ } _%>
 
-    @Test<%= transactionalAnnotation %>
-    void getAll<%= entityClassPlural %>() <% if (!reactive) { %>throws Exception <% } %>{
+    @Test<%- transactionalAnnotation %>
+    void getAll<%- entityClassPlural %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
 <%_ if (!primaryKey.derived) { _%>
   <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
+        <%- persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
   <%_ } _%>
 <%_ } _%>
-        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
-        // Get all the <%= entityInstance %>List
+        // Get all the <%- entityInstance %>List
 <%_ if (reactive) { _%>
-        webTestClient.get().uri(ENTITY_API_URL + "?sort=<%= primaryKey.name %>,desc")
+        webTestClient.get().uri(ENTITY_API_URL + "?sort=<%- primaryKey.name %>,desc")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
 <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL<% if (!databaseTypeCassandra) { %> + "?sort=<%= primaryKey.name %>,desc"<% } %>))
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL<% if (!databaseTypeCassandra) { %> + "?sort=<%- primaryKey.name %>,desc"<% } %>))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
 <%_ } _%>
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeCassandra) { _%>
-            <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%= primaryKey.name %>").value(hasItem(<%= idValue %>))<%= !reactive ? ')' : '' %><%_ } _%><% for (field of fieldsToTest) { %>
+            <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- idValue %>))<%- !reactive ? ')' : '' %><%_ } _%><% for (field of fieldsToTest) { %>
   <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%= field.fieldName %>ContentType").value(hasItem(<%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))<%= !reactive ? ')' : '' %>
+            <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))<%- !reactive ? ')' : '' %>
   <%_ } _%>
-            <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%= field.fieldName %>").value(hasItem(<%
+            <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<%
   if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
+  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
   if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%
     if (databaseTypeCassandra) { %>.array()<% } %>)<% } else
   if (field.fieldTypeLong) { %>.intValue()<% } else
@@ -999,15 +1009,15 @@ _%>
     !field.fieldTypeBoolean &&
     !field.fieldTypeInteger &&
     !field.fieldTypeDouble
-  ) { %>.toString()<% } %>))<%= !reactive ? ')' : '' %><%_ } _%>;
+  ) { %>.toString()<% } %>))<%- !reactive ? ')' : '' %><%_ } _%>;
     }
 <% if (implementsEagerLoadApis && !databaseTypeNeo4j && !databaseTypeCouchbase) { %>
     @SuppressWarnings({"unchecked"})
-    void getAll<%= entityClassPlural %>WithEagerRelationshipsIsEnabled() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%- entityClassPlural %>WithEagerRelationshipsIsEnabled() <% if (!reactive) { %>throws Exception <% } %>{
   <%_ if (!serviceNo) { _%>
-        when(<%= entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(<% if (reactive) { %>Flux.empty()<% } else { %>new PageImpl(new ArrayList<>())<% }%>);
+        when(<%- entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(<% if (reactive) { %>Flux.empty()<% } else { %>new PageImpl(new ArrayList<>())<% }%>);
   <%_ } else { _%>
-        when(<%= entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(<% if (reactive) { %>Flux.empty()<% } else { %>new PageImpl(new ArrayList<>())<% }%>);
+        when(<%- entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(<% if (reactive) { %>Flux.empty()<% } else { %>new PageImpl(new ArrayList<>())<% }%>);
   <%_ } _%>
 
   <%_ if (reactive) { _%>
@@ -1015,23 +1025,23 @@ _%>
             .exchange()
             .expectStatus().isOk();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?eagerload=true"))
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?eagerload=true"))
             .andExpect(status().isOk());
   <%_ } _%>
 
   <%_ if (!serviceNo) { _%>
-        verify(<%= entityInstance %>ServiceMock, times(1)).findAllWithEagerRelationships(any());
+        verify(<%- entityInstance %>ServiceMock, times(1)).findAllWithEagerRelationships(any());
   <%_ } else { _%>
-        verify(<%= entityInstance %>RepositoryMock, times(1)).findAllWithEagerRelationships(any());
+        verify(<%- entityInstance %>RepositoryMock, times(1)).findAllWithEagerRelationships(any());
   <%_ } _%>
     }
 
     @SuppressWarnings({"unchecked"})
-    void getAll<%= entityClassPlural %>WithEagerRelationshipsIsNotEnabled() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%- entityClassPlural %>WithEagerRelationshipsIsNotEnabled() <% if (!reactive) { %>throws Exception <% } %>{
   <%_ if (!serviceNo) { _%>
-        when(<%= entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(<% if (reactive) { %>Flux.empty()<% } else { %>new PageImpl(new ArrayList<>())<% }%>);
+        when(<%- entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(<% if (reactive) { %>Flux.empty()<% } else { %>new PageImpl(new ArrayList<>())<% }%>);
   <%_ } else { _%>
-        when(<%= entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(<% if (reactive) { %>Flux.empty()<% } else { %>new PageImpl(new ArrayList<>())<% }%>);
+        when(<%- entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(<% if (reactive) { %>Flux.empty()<% } else { %>new PageImpl(new ArrayList<>())<% }%>);
   <%_ } _%>
 
   <%_ if (reactive) { _%>
@@ -1039,45 +1049,45 @@ _%>
             .exchange()
             .expectStatus().isOk();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?eagerload=false"))
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?eagerload=false"))
             .andExpect(status().isOk());
   <%_ } _%>
-        verify(<%= entityInstance %>RepositoryMock, times(1)).findAll<% if (reactive) { %>WithEagerRelationships(any()<% } else { %>(any(Pageable.class)<% } %>);
+        verify(<%- entityInstance %>RepositoryMock, times(1)).findAll<% if (reactive) { %>WithEagerRelationships(any()<% } else { %>(any(Pageable.class)<% } %>);
     }
 <%_ } _%>
 
-    @Test<%= transactionalAnnotation %>
-    void get<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
+    @Test<%- transactionalAnnotation %>
+    void get<%- entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
 <%_ if (!primaryKey.derived) { _%>
   <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
+        <%- persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
   <%_ } _%>
 <%_ } _%>
-        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
-        // Get the <%= entityInstance %>
+        // Get the <%- entityInstance %>
 <%_ if (reactive) { _%>
-        webTestClient.get().uri(ENTITY_API_URL_ID, <%= persistInstance %>.<%- primaryKey.propertySupplierName %>())
+        webTestClient.get().uri(ENTITY_API_URL_ID, <%- persistInstance %>.<%- primaryKey.propertySupplierName %>())
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
 <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL_ID, <%= persistInstance %>.<%- primaryKey.propertySupplierName %>()))
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL_ID, <%- persistInstance %>.<%- primaryKey.propertySupplierName %>()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
 <%_ } _%>
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeCassandra) { _%>
-            <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.<%= primaryKey.name %>").value(<%= reactive ? 'is(' : '' %><%= idValue %>))<%_ } _%><% for (field of fieldsToTest) { %>
+            <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.<%- primaryKey.name %>").value(<%- reactive ? 'is(' : '' %><%- idValue %>))<%_ } _%><% for (field of fieldsToTest) { %>
   <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.<%= field.fieldName %>ContentType").value(<%= reactive ? 'is(' : '' %><%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))
+            <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.<%- field.fieldName %>ContentType").value(<%- reactive ? 'is(' : '' %><%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))
   <%_ } _%>
-            <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.<%= field.fieldName %>").value(<%= reactive ? 'is(' : '' %><%
+            <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.<%- field.fieldName %>").value(<%- reactive ? 'is(' : '' %><%
   if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
+  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
   if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%
     if (databaseTypeCassandra) { %>.array()<% } %>)<% } else
   if (field.fieldTypeLong) { %>.intValue()<% } else
@@ -1095,83 +1105,83 @@ _%>
     }
 <%_ if (jpaMetamodelFiltering) { %>
 
-    @Test<%= transactionalAnnotation %>
-    void get<%= entityClassPlural %>ByIdFiltering() <% if (!reactive) { %>throws Exception <% } %>{
+    @Test<%- transactionalAnnotation %>
+    void get<%- entityClassPlural %>ByIdFiltering() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
-        <%= primaryKey.type %> id = <%= persistInstance %>.<%- primaryKey.propertySupplierName %>();
+        <%- primaryKey.type %> id = <%- persistInstance %>.<%- primaryKey.propertySupplierName %>();
 
-        default<%= entityClass %>Filtering("<%= primaryKey.name %>.equals=" + id, "<%= primaryKey.name %>.notEquals=" + id);
+        default<%- entityClass %>Filtering("<%- primaryKey.name %>.equals=" + id, "<%- primaryKey.name %>.notEquals=" + id);
 
   <%_ if (primaryKey.typeLong || primaryKey.typeInteger) { _%>
-        default<%= entityClass %>Filtering("<%= primaryKey.name %>.greaterThanOrEqual=" + id, "<%= primaryKey.name %>.greaterThan=" + id);
+        default<%- entityClass %>Filtering("<%- primaryKey.name %>.greaterThanOrEqual=" + id, "<%- primaryKey.name %>.greaterThan=" + id);
 
-        default<%= entityClass %>Filtering("<%= primaryKey.name %>.lessThanOrEqual=" + id, "<%= primaryKey.name %>.lessThan=" + id);
+        default<%- entityClass %>Filtering("<%- primaryKey.name %>.lessThanOrEqual=" + id, "<%- primaryKey.name %>.lessThan=" + id);
   <%_ } _%>
     }
 
-  <%_ fieldsToTest.forEach((searchBy) => { /* we can't filter by all the fields. */_%>
+  <%_ fieldsToTest.forEach((searchBy) => { /* we can't filter by all the fields. */ _%>
     <%_ if (searchBy.filterableField) { _%>
 
-    @Test<%= transactionalAnnotation %>
-    void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
+    @Test<%- transactionalAnnotation %>
+    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> equals to
-        default<%= entityClass %>Filtering(
-            "<%= searchBy.fieldName %>.equals=" + <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>,
-            "<%= searchBy.fieldName %>.equals=" + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
+        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> equals to
+        default<%- entityClass %>Filtering(
+            "<%- searchBy.fieldName %>.equals=" + <%- 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>,
+            "<%- searchBy.fieldName %>.equals=" + <%- 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
         );
     }
 
-    @Test<%= transactionalAnnotation %>
-    void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsInShouldWork() <% if (!reactive) { %>throws Exception <% } %>{
+    @Test<%- transactionalAnnotation %>
+    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsInShouldWork() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> in
-        default<%= entityClass %>Filtering(
-            "<%= searchBy.fieldName %>.in=" + <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %> + "," + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>,
-            "<%= searchBy.fieldName %>.in=" + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
+        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> in
+        default<%- entityClass %>Filtering(
+            "<%- searchBy.fieldName %>.in=" + <%- 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %> + "," + <%- 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>,
+            "<%- searchBy.fieldName %>.in=" + <%- 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
         );
     }
 
-    @Test<%= transactionalAnnotation %>
-    void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsNullOrNotNull() <% if (!reactive) { %>throws Exception <% } %>{
+    @Test<%- transactionalAnnotation %>
+    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsNullOrNotNull() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is not null
-        default<%= entityClass %>Filtering(
-            "<%= searchBy.fieldName %>.specified=true",
-            "<%= searchBy.fieldName %>.specified=false"
+        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> is not null
+        default<%- entityClass %>Filtering(
+            "<%- searchBy.fieldName %>.specified=true",
+            "<%- searchBy.fieldName %>.specified=false"
         );
     }
       <%_ } _%>
       <%_ if (searchBy.fieldTypeString) { _%>
-    @Test<%= transactionalAnnotation %>
-    void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>ContainsSomething() <% if (!reactive) { %>throws Exception <% } %>{
+    @Test<%- transactionalAnnotation %>
+    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>ContainsSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> contains
-        default<%= entityClass %>Filtering(
-            "<%= searchBy.fieldName %>.contains=" + <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>,
-            "<%= searchBy.fieldName %>.contains=" + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
+        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> contains
+        default<%- entityClass %>Filtering(
+            "<%- searchBy.fieldName %>.contains=" + <%- 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>,
+            "<%- searchBy.fieldName %>.contains=" + <%- 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
         );
     }
 
-    @Test<%= transactionalAnnotation %>
-    void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>NotContainsSomething() <% if (!reactive) { %>throws Exception <% } %>{
+    @Test<%- transactionalAnnotation %>
+    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>NotContainsSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> does not contain
-        default<%= entityClass %>Filtering(
-            "<%= searchBy.fieldName %>.doesNotContain=" + <%= 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>,
-            "<%= searchBy.fieldName %>.doesNotContain=" + <%= 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>
+        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> does not contain
+        default<%- entityClass %>Filtering(
+            "<%- searchBy.fieldName %>.doesNotContain=" + <%- 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>,
+            "<%- searchBy.fieldName %>.doesNotContain=" + <%- 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>
         );
     }
 
@@ -1193,51 +1203,51 @@ _%>
       }
     _%>
 
-    @Test<%= transactionalAnnotation %>
-    void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsGreaterThanOrEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
+    @Test<%- transactionalAnnotation %>
+    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsGreaterThanOrEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is greater than or equal to
-        default<%= entityClass %>Filtering(
-            "<%= searchBy.fieldName %>.greaterThanOrEqual=" + <%= defaultValue %>,
-            "<%= searchBy.fieldName %>.greaterThanOrEqual=" + <%= biggerValue %>
+        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> is greater than or equal to
+        default<%- entityClass %>Filtering(
+            "<%- searchBy.fieldName %>.greaterThanOrEqual=" + <%- defaultValue %>,
+            "<%- searchBy.fieldName %>.greaterThanOrEqual=" + <%- biggerValue %>
         );
     }
 
-    @Test<%= transactionalAnnotation %>
-    void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsLessThanOrEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
+    @Test<%- transactionalAnnotation %>
+    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsLessThanOrEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is less than or equal to
-        default<%= entityClass %>Filtering(
-            "<%= searchBy.fieldName %>.lessThanOrEqual=" + <%= defaultValue %>,
-            "<%= searchBy.fieldName %>.lessThanOrEqual=" + <%= smallerValue %>
+        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> is less than or equal to
+        default<%- entityClass %>Filtering(
+            "<%- searchBy.fieldName %>.lessThanOrEqual=" + <%- defaultValue %>,
+            "<%- searchBy.fieldName %>.lessThanOrEqual=" + <%- smallerValue %>
         );
     }
 
-    @Test<%= transactionalAnnotation %>
-    void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsLessThanSomething() <% if (!reactive) { %>throws Exception <% } %>{
+    @Test<%- transactionalAnnotation %>
+    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsLessThanSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is less than
-        default<%= entityClass %>Filtering(
-            "<%= searchBy.fieldName %>.lessThan=" + <%= biggerValue %>,
-            "<%= searchBy.fieldName %>.lessThan=" + <%= defaultValue %>
+        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> is less than
+        default<%- entityClass %>Filtering(
+            "<%- searchBy.fieldName %>.lessThan=" + <%- biggerValue %>,
+            "<%- searchBy.fieldName %>.lessThan=" + <%- defaultValue %>
         );
     }
 
-    @Test<%= transactionalAnnotation %>
-    void getAll<%= entityClassPlural %>By<%= searchBy.fieldInJavaBeanMethod %>IsGreaterThanSomething() <% if (!reactive) { %>throws Exception <% } %>{
+    @Test<%- transactionalAnnotation %>
+    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsGreaterThanSomething() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
-        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
-        // Get all the <%= entityInstance %>List where <%= searchBy.fieldName %> is greater than
-        default<%= entityClass %>Filtering(
-          "<%= searchBy.fieldName %>.greaterThan=" + <%= smallerValue %>,
-          "<%= searchBy.fieldName %>.greaterThan=" + <%= defaultValue %>
+        // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> is greater than
+        default<%- entityClass %>Filtering(
+          "<%- searchBy.fieldName %>.greaterThan=" + <%- smallerValue %>,
+          "<%- searchBy.fieldName %>.greaterThan=" + <%- defaultValue %>
         );
     }
 
@@ -1245,48 +1255,48 @@ _%>
   <%_ }); _%>
   <%_ filterTestableRelationships.forEach((relationship) => { _%>
 
-    @Test<%= transactionalAnnotation %>
-    void getAll<%= entityClassPlural %>By<%= relationship.relationshipNameCapitalized %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
+    @Test<%- transactionalAnnotation %>
+    void getAll<%- entityClassPlural %>By<%- relationship.relationshipNameCapitalized %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
     <%_ if ((relationship.relationshipValidate && relationship.relationshipOneToOne) || relationship.id) { _%>
         // Get already existing entity
-        <%= relationship.otherEntity.persistClass %> <%= relationship.relationshipFieldName %> = <%= persistInstance %>.<%= relationship.propertySupplierName %>();
+        <%- relationship.otherEntity.persistClass %> <%- relationship.relationshipFieldName %> = <%- persistInstance %>.<%- relationship.propertySupplierName %>();
     <%_ } else { _%>
       <%_ if (databaseTypeSql && !reactive) { _%>
-        <%= relationship.otherEntity.persistClass %> <%= relationship.relationshipFieldName %>;
-        if (TestUtil.findAll(em, <%= relationship.otherEntity.persistClass %>.class).isEmpty()) {
-            <%= entityInstance %>Repository.saveAndFlush(<%= persistInstance %>);
-            <%= relationship.relationshipFieldName %> = <%= createEntityPrefix %><%= relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<% if (relationship.otherEntity.anyRelationshipIsRequired) { %>em<% } %>);
+        <%- relationship.otherEntity.persistClass %> <%- relationship.relationshipFieldName %>;
+        if (TestUtil.findAll(em, <%- relationship.otherEntity.persistClass %>.class).isEmpty()) {
+            <%- entityInstance %>Repository.saveAndFlush(<%- persistInstance %>);
+            <%- relationship.relationshipFieldName %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<% if (relationship.otherEntity.anyRelationshipIsRequired) { %>em<% } %>);
         } else {
-            <%= relationship.relationshipFieldName %> = TestUtil.findAll(em, <%= relationship.otherEntity.persistClass %>.class).get(0);
+            <%- relationship.relationshipFieldName %> = TestUtil.findAll(em, <%- relationship.otherEntity.persistClass %>.class).get(0);
         }
       <%_ } else { _%>
-        <%= relationship.otherEntity.persistClass %> <%= relationship.relationshipFieldName %> = <%= relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<% if (relationship.otherEntity.anyRelationshipIsRequired) { %>em<% } %>);
+        <%- relationship.otherEntity.persistClass %> <%- relationship.relationshipFieldName %> = <%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<% if (relationship.otherEntity.anyRelationshipIsRequired) { %>em<% } %>);
       <%_ } _%>
       <%_ if(reactive) { _%>
-        <%= relationship.otherEntity.persistInstance %>Repository.<%= saveMethod %>(<%= relationship.relationshipFieldName %>)<%= callBlock %>;
+        <%- relationship.otherEntity.persistInstance %>Repository.<%- saveMethod %>(<%- relationship.relationshipFieldName %>)<%- callBlock %>;
       <%_ } else { _%>
-        em.persist(<%= relationship.relationshipFieldName %>);
+        em.persist(<%- relationship.relationshipFieldName %>);
         em.flush();
       <%_ } _%>
       <%_ if (!reactive && (relationship.relationshipManyToMany || relationship.relationshipOneToMany)) { _%>
-        <%= persistInstance %>.add<%= relationship.relationshipNameCapitalized %>(<%= relationship.relationshipFieldName %>);
+        <%- persistInstance %>.add<%- relationship.relationshipNameCapitalized %>(<%- relationship.relationshipFieldName %>);
       <%_ } else if (!reactive) { _%>
-        <%= persistInstance %>.<%= relationship.propertyConsumerName %>(<%= relationship.relationshipFieldName %>);
+        <%- persistInstance %>.<%- relationship.propertyConsumerName %>(<%- relationship.relationshipFieldName %>);
         <%_ if (!relationship.ownerSide) { _%>
-        <%= relationship.relationshipFieldName %>.<%= relationship.otherRelationship.propertyConsumerName %>(<%= persistInstance %>);
+        <%- relationship.relationshipFieldName %>.<%- relationship.otherRelationship.propertyConsumerName %>(<%- persistInstance %>);
         <%_ } _%>
       <%_ } else { _%>
-        <%= relationship.otherEntity.primaryKey.type %> <%= relationship.relationshipFieldName %>Id = <%= relationship.relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.propertySupplierName %>();
-        <%= persistInstance %>.<%- relationship.propertyConsumerName %>Id(<%= relationship.relationshipFieldName %>Id);
-        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        <%- relationship.otherEntity.primaryKey.type %> <%- relationship.relationshipFieldName %>Id = <%- relationship.relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.propertySupplierName %>();
+        <%- persistInstance %>.<%- relationship.propertyConsumerName %>Id(<%- relationship.relationshipFieldName %>Id);
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
       <%_ } _%>
     <%_ } _%>
     <%_ if(!reactive) { _%>
-        <%= entityInstance %>Repository.saveAndFlush(<%= persistInstance %>);
-        <%= relationship.otherEntity.primaryKey.type %> <%= relationship.relationshipFieldName %>Id = <%= relationship.relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.propertySupplierName %>();
+        <%- entityInstance %>Repository.saveAndFlush(<%- persistInstance %>);
+        <%- relationship.otherEntity.primaryKey.type %> <%- relationship.relationshipFieldName %>Id = <%- relationship.relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.propertySupplierName %>();
     <%_ } _%>
-        // Get all the <%= entityInstance %>List where <%= relationship.relationshipFieldName %> equals to <%= relationship.relationshipFieldName %>Id
-        default<%= entityClass %>ShouldBeFound("<%= relationship.relationshipFieldName %>Id.equals=" + <%= relationship.relationshipFieldName %>Id);
+        // Get all the <%- entityInstance %>List where <%- relationship.relationshipFieldName %> equals to <%- relationship.relationshipFieldName %>Id
+        default<%- entityClass %>ShouldBeFound("<%- relationship.relationshipFieldName %>Id.equals=" + <%- relationship.relationshipFieldName %>Id);
 
     <%_
     const initInvalidPrimaryKey = {
@@ -1295,35 +1305,35 @@ _%>
         'UUID' : 'UUID.randomUUID()'
     }[relationship.otherEntity.primaryKey.type];
     _%>
-        // Get all the <%= entityInstance %>List where <%= relationship.relationshipFieldName %> equals to <%- initInvalidPrimaryKey %>
-        default<%= entityClass %>ShouldNotBeFound("<%= relationship.relationshipFieldName %>Id.equals=" + <%- initInvalidPrimaryKey %>);
+        // Get all the <%- entityInstance %>List where <%- relationship.relationshipFieldName %> equals to <%- initInvalidPrimaryKey %>
+        default<%- entityClass %>ShouldNotBeFound("<%- relationship.relationshipFieldName %>Id.equals=" + <%- initInvalidPrimaryKey %>);
     }
 
   <%_ }); _%>
-    private void default<%= entityClass %>Filtering (String shouldBeFound, String shouldNotBeFound) <% if (!reactive) { %>throws Exception <% } %>{
-        default<%= entityClass %>ShouldBeFound(shouldBeFound);
-        default<%= entityClass %>ShouldNotBeFound(shouldNotBeFound);
+    private void default<%- entityClass %>Filtering (String shouldBeFound, String shouldNotBeFound) <% if (!reactive) { %>throws Exception <% } %>{
+        default<%- entityClass %>ShouldBeFound(shouldBeFound);
+        default<%- entityClass %>ShouldNotBeFound(shouldNotBeFound);
     }
 
     /**
      * Executes the search, and checks that the default entity is returned.
      */
   <%_ if (reactive) { _%>
-    private void default<%= entityClass %>ShouldBeFound(String filter) {
-        webTestClient.get().uri(ENTITY_API_URL + "?sort=<%= primaryKey.name %>,desc&" + filter)
+    private void default<%- entityClass %>ShouldBeFound(String filter) {
+        webTestClient.get().uri(ENTITY_API_URL + "?sort=<%- primaryKey.name %>,desc&" + filter)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
-            .jsonPath("$.[*].<%= primaryKey.name %>").value(hasItem(<%= idValue %>))<% for (field of fieldsToTest) { %>
+            .jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- idValue %>))<% for (field of fieldsToTest) { %>
       <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            .jsonPath("$.[*].<%= field.fieldName %>ContentType").value(hasItem(<%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))
+            .jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))
       <%_ } _%>
-            .jsonPath("$.[*].<%= field.fieldName %>").value(hasItem(<% if
+            .jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if
       (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
       if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-      if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
+      if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
       if (field.fieldTypeBinary && !field.blobContentTypeText) { %><% if (databaseTypeCassandra) { %>.array()<% } %>)<% } else
       if (field.fieldTypeLong) { %>.intValue()<% } else
       if (field.fieldTypeFloat) { %>.doubleValue()<% } else
@@ -1339,7 +1349,7 @@ _%>
       ) { %>.toString()<% } %>))<%_ } _%>;
 
         // Check, that the count call also returns 1
-        webTestClient.get().uri(ENTITY_API_URL + "/count?sort=<%= primaryKey.name %>,desc&" + filter)
+        webTestClient.get().uri(ENTITY_API_URL + "/count?sort=<%- primaryKey.name %>,desc&" + filter)
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -1353,8 +1363,8 @@ _%>
       <%_ } _%>
     }
   <%_ } else { _%>
-    private void default<%= entityClass %>ShouldBeFound(String filter) throws Exception {
-        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=<%= primaryKey.name %>,desc&" + filter))
+    private void default<%- entityClass %>ShouldBeFound(String filter) throws Exception {
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=<%- primaryKey.name %>,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             <%_
@@ -1363,14 +1373,14 @@ _%>
                 'UUID' : '.toString()'
             }[primaryKey.type] || '';
             _%>
-            .andExpect(jsonPath("$.[*].<%= primaryKey.name %>").value(hasItem(<%= persistInstance %>.<%- primaryKey.propertySupplierName %>()<%= primaryKeyConversion %>)))<% fieldsToTest.forEach((field) => { %>
+            .andExpect(jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- persistInstance %>.<%- primaryKey.propertySupplierName %>()<%- primaryKeyConversion %>)))<% fieldsToTest.forEach((field) => { %>
     <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            .andExpect(jsonPath("$.[*].<%= field.fieldName %>ContentType").value(hasItem(<%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)))
     <%_ } _%>
-            .andExpect(jsonPath("$.[*].<%= field.fieldName %>").value(hasItem(<%
+            .andExpect(jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<%
     if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
     if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-    if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
+    if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
     if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%
       if (databaseTypeCassandra) { %>.array()<% } %>)<% } else
     if (field.fieldTypeLong) { %>.intValue()<% } else
@@ -1387,7 +1397,7 @@ _%>
     ) { %>.toString()<% } %>)))<% }); %>;
 
         // Check, that the count call also returns 1
-        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL + "/count?sort=<%= primaryKey.name %>,desc&" + filter))
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "/count?sort=<%- primaryKey.name %>,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().string("1"));
@@ -1398,8 +1408,8 @@ _%>
      * Executes the search, and checks that the default entity is not returned.
      */
   <%_ if (reactive) { _%>
-    private void default<%= entityClass %>ShouldNotBeFound(String filter) {
-        webTestClient.get().uri(ENTITY_API_URL + "?sort=<%= primaryKey.name %>,desc&" + filter)
+    private void default<%- entityClass %>ShouldNotBeFound(String filter) {
+        webTestClient.get().uri(ENTITY_API_URL + "?sort=<%- primaryKey.name %>,desc&" + filter)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
@@ -1409,7 +1419,7 @@ _%>
             .jsonPath("$").isEmpty();
 
         // Check, that the count call also returns 0
-        webTestClient.get().uri(ENTITY_API_URL + "/count?sort=<%= primaryKey.name %>,desc&" + filter)
+        webTestClient.get().uri(ENTITY_API_URL + "/count?sort=<%- primaryKey.name %>,desc&" + filter)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
@@ -1423,15 +1433,15 @@ _%>
       <%_ } _%>
     }
   <%_ } else { _%>
-    private void default<%= entityClass %>ShouldNotBeFound(String filter) throws Exception {
-        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=<%= primaryKey.name %>,desc&" + filter))
+    private void default<%- entityClass %>ShouldNotBeFound(String filter) throws Exception {
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=<%- primaryKey.name %>,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$").isArray())
             .andExpect(jsonPath("$").isEmpty());
 
         // Check, that the count call also returns 0
-        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL + "/count?sort=<%= primaryKey.name %>,desc&" + filter))
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "/count?sort=<%- primaryKey.name %>,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().string("0"));
@@ -1439,208 +1449,208 @@ _%>
   <%_ } _%>
 
 <%_ } _%>
-    @Test<%= transactionalAnnotation %>
-    void getNonExisting<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
-        // Get the <%= entityInstance %>
+    @Test<%- transactionalAnnotation %>
+    void getNonExisting<%- entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
+        // Get the <%- entityInstance %>
 <%_ if (reactive) { _%>
         webTestClient.get().uri(ENTITY_API_URL_ID, <% if (primaryKey.typeInteger) { %>Integer.MAX_VALUE<% } else if (primaryKey.typeLong || primaryKey.typeString) { %>Long.MAX_VALUE<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID().toString()<% } %>)
             .accept(MediaType.APPLICATION_PROBLEM_JSON)
             .exchange()
             .expectStatus().isNotFound();
 <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(get(ENTITY_API_URL_ID, <% if (primaryKey.typeInteger) { %>Integer.MAX_VALUE<% } else if (primaryKey.typeLong || primaryKey.typeString) { %>Long.MAX_VALUE<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID().toString()<% } %>))
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL_ID, <% if (primaryKey.typeInteger) { %>Integer.MAX_VALUE<% } else if (primaryKey.typeLong || primaryKey.typeString) { %>Long.MAX_VALUE<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID().toString()<% } %>))
             .andExpect(status().isNotFound());
 <%_ } _%>
     }
 <%_ if (!readOnly && updatableEntity) { _%>
 
-    @Test<%= transactionalAnnotation %>
-    void putExisting<%= entityClass %>() throws Exception {
+    @Test<%- transactionalAnnotation %>
+    void putExisting<%- entityClass %>() throws Exception {
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
+        <%- persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
     <%_ } _%>
   <%_ } _%>
-        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
         long databaseSizeBeforeUpdate = getRepositoryCount();
   <%_ if (searchEngineElasticsearch) { _%>
-        <%= entityInstance %>SearchRepository.save(<%= persistInstance %>)<%= callBlock %>;
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        <%- entityInstance %>SearchRepository.save(<%- persistInstance %>)<%- callBlock %>;
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
   <%_ } _%>
 
-        // Update the <%= entityInstance %>
-        <%= persistClass %> updated<%= persistClass %> = <%= entityInstance %>Repository.findById(<%= persistInstance %>.<%- primaryKey.propertySupplierName %>())<%= reactive ? '.block()' : '.orElseThrow()' %>;
+        // Update the <%- entityInstance %>
+        <%- persistClass %> updated<%- persistClass %> = <%- entityInstance %>Repository.findById(<%- persistInstance %>.<%- primaryKey.propertySupplierName %>())<%- reactive ? '.block()' : '.orElseThrow()' %>;
   <%_ if (databaseTypeSql && !reactive) { _%>
-        // Disconnect from session so that the updates on updated<%= persistClass %> are not directly saved in db
-        em.detach(updated<%= persistClass %>);
+        // Disconnect from session so that the updates on updated<%- persistClass %> are not directly saved in db
+        em.detach(updated<%- persistClass %>);
   <%_ } _%>
   <%_ if (fluentMethods && fieldsToTest.length > 0) { _%>
-        updated<%= persistClass %><% for (field of fieldsToTest) { %>
-            .<%= field.fieldName %>(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>)<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>
-            .<%= field.fieldName %>ContentType(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)<% } %><% } %>;
+        updated<%- persistClass %><% for (field of fieldsToTest) { %>
+            .<%- field.fieldName %>(<%- 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>)<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>
+            .<%- field.fieldName %>ContentType(<%- 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)<% } %><% } %>;
   <%_ } else { _%>
     <%_ for (field of fieldsToTest) { _%>
-        updated<%= persistClass %>.<%- field.propertyConsumerName %>(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>);
+        updated<%- persistClass %>.<%- field.propertyConsumerName %>(<%- 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>);
       <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-        updated<%= persistClass %>.<%- field.propertyConsumerName %>ContentType(<%= 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
+        updated<%- persistClass %>.<%- field.propertyConsumerName %>ContentType(<%- 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
   <%_ if (dtoMapstruct) { _%>
-        <%= dtoClass %> <%= dtoInstance %> = <%= entityInstance %>Mapper.toDto(updated<%= persistClass %>);
+        <%- dtoClass %> <%- dtoInstance %> = <%- entityInstance %>Mapper.toDto(updated<%- persistClass %>);
   <%_ } _%>
 
   <%_ if (reactive) { _%>
-        webTestClient.put().uri(ENTITY_API_URL_ID, <%= (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>.<%- primaryKey.propertySupplierName %>())
+        webTestClient.put().uri(ENTITY_API_URL_ID, <%- (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>.<%- primaryKey.propertySupplierName %>())
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(<%= (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>))
+            .bodyValue(om.writeValueAsBytes(<%- (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>))
             .exchange()
             .expectStatus().isOk();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%= (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
+        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
             .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(<%= (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>)))
+            .content(om.writeValueAsBytes(<%- (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>)))
             .andExpect(status().isOk());
   <%_ } _%>
 
-        // Validate the <%= entityClass %> in the database
+        // Validate the <%- entityClass %> in the database
   <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
-        assertPersisted<%- persistClass %>ToMatchAllProperties(updated<%= persistClass %>);
+        assertPersisted<%- persistClass %>ToMatchAllProperties(updated<%- persistClass %>);
 
   <%_ if (searchEngineElasticsearch) { _%>
         await().atMost(5, TimeUnit.SECONDS).untilAsserted(() -> {
-            int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+            int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
             assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
-            List<<%= persistClass %>> <%= entityInstance %>SearchList = Streamable.of(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>).toList();
-            <%= persistClass %> test<%= entityClass %>Search = <%= entityInstance %>SearchList.get(searchDatabaseSizeAfter - 1);
+            List<<%- persistClass %>> <%- entityInstance %>SearchList = Streamable.of(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>).toList();
+            <%- persistClass %> test<%- entityClass %>Search = <%- entityInstance %>SearchList.get(searchDatabaseSizeAfter - 1);
 
     <%_ if (reactive && databaseTypeSql) { _%>
             // Test fails because reactive api returns an empty object instead of null
-            // assert<%- persistClass %>AllPropertiesEquals(test<%= entityClass %>Search, updated<%= persistClass %>);
-            assert<%- persistClass %>UpdatableFieldsEquals(test<%= entityClass %>Search, updated<%= persistClass %>);
+            // assert<%- persistClass %>AllPropertiesEquals(test<%- entityClass %>Search, updated<%- persistClass %>);
+            assert<%- persistClass %>UpdatableFieldsEquals(test<%- entityClass %>Search, updated<%- persistClass %>);
     <%_ } else { _%>
-            assert<%- persistClass %>AllPropertiesEquals(test<%= entityClass %>Search, updated<%= persistClass %>);
+            assert<%- persistClass %>AllPropertiesEquals(test<%- entityClass %>Search, updated<%- persistClass %>);
     <%_ } _%>
       });
   <%_ } _%>
     }
 
-    @Test<%= transactionalAnnotation %>
-    void putNonExisting<%= entityClass %>() throws Exception {
+    @Test<%- transactionalAnnotation %>
+    void putNonExisting<%- entityClass %>() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
   <%_ if (searchEngineElasticsearch) { _%>
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
   <%_ } _%>
-        <%= persistInstance %>.<%- primaryKey.propertyConsumerName %>(<%- primaryKey.javaValueGenerator %>);
+        <%- persistInstance %>.<%- primaryKey.propertyConsumerName %>(<%- primaryKey.javaValueGenerator %>);
 
   <%_ if (dtoMapstruct) { _%>
-        // Create the <%= entityClass %>
-        <%= dtoClass %> <%= dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);
+        // Create the <%- entityClass %>
+        <%- dtoClass %> <%- dtoInstance %> = <%- entityInstance %>Mapper.toDto(<%- persistInstance %>);
 
   <%_ } _%>
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
   <%_ if (reactive) { _%>
-        webTestClient.put().uri(ENTITY_API_URL_ID, <%= restInstance %>.<%- primaryKey.propertySupplierName %>())
+        webTestClient.put().uri(ENTITY_API_URL_ID, <%- restInstance %>.<%- primaryKey.propertySupplierName %>())
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(<%= restInstance %>))
+            .bodyValue(om.writeValueAsBytes(<%- restInstance %>))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%= restInstance %>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
+        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- restInstance %>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
             .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(<%= restInstance %>)))
+            .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isBadRequest());
   <%_ } _%>
 
-        // Validate the <%= entityClass %> in the database
+        // Validate the <%- entityClass %> in the database
   <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
   <%_ if (searchEngineElasticsearch) { _%>
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
 
   <%_ } _%>
     }
 
-    @Test<%= transactionalAnnotation %>
-    void putWithIdMismatch<%= entityClass %>() throws Exception {
+    @Test<%- transactionalAnnotation %>
+    void putWithIdMismatch<%- entityClass %>() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
   <%_ if (searchEngineElasticsearch) { _%>
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
   <%_ } _%>
-        <%= persistInstance %>.<%- primaryKey.propertyConsumerName %>(<%- primaryKey.javaValueGenerator %>);
+        <%- persistInstance %>.<%- primaryKey.propertyConsumerName %>(<%- primaryKey.javaValueGenerator %>);
 
   <%_ if (dtoMapstruct) { _%>
-        // Create the <%= entityClass %>
-        <%= dtoClass %> <%= dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);
+        // Create the <%- entityClass %>
+        <%- dtoClass %> <%- dtoInstance %> = <%- entityInstance %>Mapper.toDto(<%- persistInstance %>);
 
   <%_ } _%>
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
   <%_ if (reactive) { _%>
         webTestClient.put().uri(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(<%= restInstance %>))
+            .bodyValue(om.writeValueAsBytes(<%- restInstance %>))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
+        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
             .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(<%= restInstance %>)))
+            .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isBadRequest());
   <%_ } _%>
 
-        // Validate the <%= entityClass %> in the database
+        // Validate the <%- entityClass %> in the database
   <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
   <%_ if (searchEngineElasticsearch) { _%>
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
   <%_ } _%>
     }
 
-    @Test<%= transactionalAnnotation %>
-    void putWithMissingIdPathParam<%= entityClass %>() throws Exception {
+    @Test<%- transactionalAnnotation %>
+    void putWithMissingIdPathParam<%- entityClass %>() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
   <%_ if (searchEngineElasticsearch) { _%>
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
   <%_ } _%>
-        <%= persistInstance %>.<%- primaryKey.propertyConsumerName %>(<%- primaryKey.javaValueGenerator %>);
+        <%- persistInstance %>.<%- primaryKey.propertyConsumerName %>(<%- primaryKey.javaValueGenerator %>);
 
   <%_ if (dtoMapstruct) { _%>
-        // Create the <%= entityClass %>
-        <%= dtoClass %> <%= dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);
+        // Create the <%- entityClass %>
+        <%- dtoClass %> <%- dtoInstance %> = <%- entityInstance %>Mapper.toDto(<%- persistInstance %>);
 
   <%_ } _%>
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
   <%_ if (reactive) { _%>
         webTestClient.put().uri(ENTITY_API_URL)
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(<%= restInstance %>))
+            .bodyValue(om.writeValueAsBytes(<%- restInstance %>))
             .exchange()
             .expectStatus().isEqualTo(405);
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(put(ENTITY_API_URL)<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
+        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL)<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
             .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(<%= restInstance %>)))
+            .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isMethodNotAllowed());
   <%_ } _%>
 
-        // Validate the <%= entityClass %> in the database
+        // Validate the <%- entityClass %> in the database
   <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
   <%_ if (searchEngineElasticsearch) { _%>
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
   <%_ } _%>
     }
@@ -1654,156 +1664,156 @@ _%>
       return { includeField, updateWithValue, testWithConstant, ...field};
     };
   _%>
-    @Test<%= transactionalAnnotation %>
-    void partialUpdate<%= entityClass %>WithPatch() throws Exception {
+    @Test<%- transactionalAnnotation %>
+    void partialUpdate<%- entityClass %>WithPatch() throws Exception {
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
+        <%- persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
     <%_ } _%>
   <%_ } _%>
-        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
   <%_ const fieldsToIncludeInPartialPatchTest = fieldsToTest.map(field => prepareFieldForPatchTest(field, () => faker.datatype.boolean())); _%>
 <%- include('/_global_partials_entity_/it_patch_update.partial.java.ejs', {fields: fieldsToIncludeInPartialPatchTest, saveMethod, callBlock, callListBlock}); -%>
 
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
         assert<%- persistClass %>UpdatableFieldsEquals(
-            createUpdateProxyForBean(partialUpdated<%= persistClass %>, <%= persistInstance %>),
-            getPersisted<%- persistClass %>(<%= persistInstance %>)
+            createUpdateProxyForBean(partialUpdated<%- persistClass %>, <%- persistInstance %>),
+            getPersisted<%- persistClass %>(<%- persistInstance %>)
         );
     }
 
-    @Test<%= transactionalAnnotation %>
-    void fullUpdate<%= entityClass %>WithPatch() throws Exception {
+    @Test<%- transactionalAnnotation %>
+    void fullUpdate<%- entityClass %>WithPatch() throws Exception {
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
+        <%- persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
     <%_ } _%>
   <%_ } _%>
-        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
   <% const fieldsToIncludeInFullPatchTest = fieldsToTest.map(field => prepareFieldForPatchTest(field, () => true)); %>
 <%- include('/_global_partials_entity_/it_patch_update.partial.java.ejs', {fields: fieldsToIncludeInFullPatchTest, saveMethod, callBlock, callListBlock}); -%>
 
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
         assert<%- persistClass %>UpdatableFieldsEquals(
-            partialUpdated<%= persistClass %>,
-            getPersisted<%- persistClass %>(partialUpdated<%= persistClass %>)
+            partialUpdated<%- persistClass %>,
+            getPersisted<%- persistClass %>(partialUpdated<%- persistClass %>)
         );
     }
 
-    @Test<%= transactionalAnnotation %>
-    void patchNonExisting<%= entityClass %>() throws Exception {
+    @Test<%- transactionalAnnotation %>
+    void patchNonExisting<%- entityClass %>() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
   <%_ if (searchEngineElasticsearch) { _%>
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
   <%_ } _%>
-        <%= persistInstance %>.<%- primaryKey.propertyConsumerName %>(<%- primaryKey.javaValueGenerator %>);
+        <%- persistInstance %>.<%- primaryKey.propertyConsumerName %>(<%- primaryKey.javaValueGenerator %>);
 
   <%_ if (dtoMapstruct) { _%>
-            // Create the <%= entityClass %>
-            <%= dtoClass %> <%= dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);
+            // Create the <%- entityClass %>
+            <%- dtoClass %> <%- dtoInstance %> = <%- entityInstance %>Mapper.toDto(<%- persistInstance %>);
 
   <%_ } _%>
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
   <%_ if (reactive) { _%>
-        webTestClient.patch().uri(ENTITY_API_URL_ID, <%= restInstance %>.<%- primaryKey.propertySupplierName %>())
+        webTestClient.patch().uri(ENTITY_API_URL_ID, <%- restInstance %>.<%- primaryKey.propertySupplierName %>())
             .contentType(MediaType.valueOf("application/merge-patch+json"))
-            .bodyValue(om.writeValueAsBytes(<%= restInstance %>))
+            .bodyValue(om.writeValueAsBytes(<%- restInstance %>))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%= restInstance %>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
+        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- restInstance %>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
             .contentType("application/merge-patch+json")
-            .content(om.writeValueAsBytes(<%= restInstance %>)))
+            .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isBadRequest());
   <%_ } _%>
 
-        // Validate the <%= entityClass %> in the database
+        // Validate the <%- entityClass %> in the database
   <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
   <%_ if (searchEngineElasticsearch) { _%>
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
   <%_ } _%>
     }
 
-    @Test<%= transactionalAnnotation %>
-    void patchWithIdMismatch<%= entityClass %>() throws Exception {
+    @Test<%- transactionalAnnotation %>
+    void patchWithIdMismatch<%- entityClass %>() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
   <%_ if (searchEngineElasticsearch) { _%>
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
   <%_ } _%>
-        <%= persistInstance %>.<%- primaryKey.propertyConsumerName %>(<%- primaryKey.javaValueGenerator %>);
+        <%- persistInstance %>.<%- primaryKey.propertyConsumerName %>(<%- primaryKey.javaValueGenerator %>);
 
   <%_ if (dtoMapstruct) { _%>
-            // Create the <%= entityClass %>
-            <%= dtoClass %> <%= dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);
+            // Create the <%- entityClass %>
+            <%- dtoClass %> <%- dtoInstance %> = <%- entityInstance %>Mapper.toDto(<%- persistInstance %>);
 
   <%_ } _%>
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
   <%_ if (reactive) { _%>
         webTestClient.patch().uri(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)
             .contentType(MediaType.valueOf("application/merge-patch+json"))
-            .bodyValue(om.writeValueAsBytes(<%= restInstance %>))
+            .bodyValue(om.writeValueAsBytes(<%- restInstance %>))
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
+        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
             .contentType("application/merge-patch+json")
-            .content(om.writeValueAsBytes(<%= restInstance %>)))
+            .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isBadRequest());
   <%_ } _%>
 
-        // Validate the <%= entityClass %> in the database
+        // Validate the <%- entityClass %> in the database
   <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
   <%_ if (searchEngineElasticsearch) { _%>
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
   <%_ } _%>
     }
 
-    @Test<%= transactionalAnnotation %>
-    void patchWithMissingIdPathParam<%= entityClass %>() throws Exception {
+    @Test<%- transactionalAnnotation %>
+    void patchWithMissingIdPathParam<%- entityClass %>() throws Exception {
         long databaseSizeBeforeUpdate = getRepositoryCount();
   <%_ if (searchEngineElasticsearch) { _%>
-      int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+      int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
   <%_ } _%>
-        <%= persistInstance %>.<%- primaryKey.propertyConsumerName %>(<%- primaryKey.javaValueGenerator %>);
+        <%- persistInstance %>.<%- primaryKey.propertyConsumerName %>(<%- primaryKey.javaValueGenerator %>);
 
   <%_ if (dtoMapstruct) { _%>
-            // Create the <%= entityClass %>
-            <%= dtoClass %> <%= dtoInstance %> = <%= entityInstance %>Mapper.toDto(<%= persistInstance %>);
+            // Create the <%- entityClass %>
+            <%- dtoClass %> <%- dtoInstance %> = <%- entityInstance %>Mapper.toDto(<%- persistInstance %>);
 
   <%_ } _%>
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
   <%_ if (reactive) { _%>
         webTestClient.patch().uri(ENTITY_API_URL)
             .contentType(MediaType.valueOf("application/merge-patch+json"))
-            .bodyValue(om.writeValueAsBytes(<%= restInstance %>))
+            .bodyValue(om.writeValueAsBytes(<%- restInstance %>))
             .exchange()
             .expectStatus().isEqualTo(405);
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(patch(ENTITY_API_URL)<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
+        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL)<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
             .contentType("application/merge-patch+json")
-            .content(om.writeValueAsBytes(<%= restInstance %>)))
+            .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isMethodNotAllowed());
   <%_ } _%>
 
-        // Validate the <%= entityClass %> in the database
+        // Validate the <%- entityClass %> in the database
   <%_ if (databaseTypeCouchbase) { _%>
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
   <%_ } _%>
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
   <%_ if (searchEngineElasticsearch) { _%>
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore);
   <%_ } _%>
 
@@ -1811,34 +1821,34 @@ _%>
 <%_ } _%>
 <%_ if (!readOnly) { _%>
 
-    @Test<%= transactionalAnnotation %>
-    void delete<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
+    @Test<%- transactionalAnnotation %>
+    void delete<%- entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.<%- primaryKey.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
+        <%- persistInstance %>.<%- primaryKey.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
     <%_ } _%>
   <%_ } _%>
-              <%_ if (!databaseTypeCouchbase) { _%>  inserted<%= persistClass %> = <%_ } _%><%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+              <%_ if (!databaseTypeCouchbase) { _%>  inserted<%- persistClass %> = <%_ } _%><%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
   <%_ if (searchEngineElasticsearch) { _%>
-        <%= entityInstance %>Repository.save(<%= persistInstance %>)<%= callBlock %>;
-        <%= entityInstance %>SearchRepository.save(<%= persistInstance %>)<%= callBlock %>;
+        <%- entityInstance %>Repository.save(<%- persistInstance %>)<%- callBlock %>;
+        <%- entityInstance %>SearchRepository.save(<%- persistInstance %>)<%- callBlock %>;
   <%_ } _%>
 
         long databaseSizeBeforeDelete = getRepositoryCount();
   <%_ if (searchEngineElasticsearch) { _%>
-        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
         assertThat(searchDatabaseSizeBefore).isEqualTo(databaseSizeBeforeDelete);
   <%_ } _%>
 
-        // Delete the <%= entityInstance %>
+        // Delete the <%- entityInstance %>
   <%_ if (reactive) { _%>
-        webTestClient.delete().uri(ENTITY_API_URL_ID, <%= persistInstance %>.<%- primaryKey.propertySupplierName %>())
+        webTestClient.delete().uri(ENTITY_API_URL_ID, <%- persistInstance %>.<%- primaryKey.propertySupplierName %>())
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isNoContent();
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(delete(ENTITY_API_URL_ID, <%= persistInstance %>.<%- primaryKey.propertySupplierName %>()<% if (primaryKey.typeUUID && databaseTypeSql) { %>.toString()<% } %>)<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
+        rest<%- entityClass %>MockMvc.perform(delete(ENTITY_API_URL_ID, <%- persistInstance %>.<%- primaryKey.propertySupplierName %>()<% if (primaryKey.typeUUID && databaseTypeSql) { %>.toString()<% } %>)<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
   <%_ } _%>
@@ -1849,7 +1859,7 @@ _%>
   <%_ } _%>
         assertDecrementedRepositoryCount(databaseSizeBeforeDelete);
   <%_ if (searchEngineElasticsearch) { _%>
-        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%= entityInstance %>SearchRepository.findAll()<%= callListBlock %>);
+        int searchDatabaseSizeAfter = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
         assertThat(searchDatabaseSizeAfter).isEqualTo(searchDatabaseSizeBefore-1);
   <%_ } _%>
 
@@ -1860,43 +1870,43 @@ _%>
   <%_ if (searchEngineCouchbase) { _%>
     @Timeout(value = 15, unit = TimeUnit.MINUTES)
   <%_ } _%>
-    @Test<%= transactionalAnnotation %>
-    void search<%= entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
+    @Test<%- transactionalAnnotation %>
+    void search<%- entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
-        <%= persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
+        <%- persistInstance %>.<%- field.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
     <%_ } _%>
   <%_ } _%>
-        inserted<%= persistClass %> = <%= entityInstance %>Repository.<%= saveMethod %>(<%= persistInstance %>)<%= callBlock %>;
+        inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
   <%_ if (searchEngineElasticsearch) { _%>
-        <%= entityInstance %>SearchRepository.save(<%= persistInstance %>)<%= callBlock %>;
+        <%- entityInstance %>SearchRepository.save(<%- persistInstance %>)<%- callBlock %>;
   <%_ } else if (searchEngineCouchbase) { _%>
-        // Wait for the <%= entityInstance %> to be indexed
-        TestUtil.retryUntilNotEmpty(() -> <%= entityInstance %>Repository.search("id:" + <%= entityInstance %>.<%- primaryKey.propertySupplierName %>())<% if (reactive) { %>.collectList().block()<% } %>);
+        // Wait for the <%- entityInstance %> to be indexed
+        TestUtil.retryUntilNotEmpty(() -> <%- entityInstance %>Repository.search("id:" + <%- entityInstance %>.<%- primaryKey.propertySupplierName %>())<% if (reactive) { %>.collectList().block()<% } %>);
   <%_ } _%>
 
-        // Search the <%= entityInstance %>
+        // Search the <%- entityInstance %>
   <%_ if (reactive) { _%>
-        webTestClient.get().uri(ENTITY_SEARCH_API_URL + "?query=id:" + <%= persistInstance %>.<%- primaryKey.propertySupplierName %>())
+        webTestClient.get().uri(ENTITY_SEARCH_API_URL + "?query=id:" + <%- persistInstance %>.<%- primaryKey.propertySupplierName %>())
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
   <%_ } else { _%>
-        rest<%= entityClass %>MockMvc.perform(get(ENTITY_SEARCH_API_URL + "?query=id:" + <%= persistInstance %>.<%- primaryKey.propertySupplierName %>()))
+        rest<%- entityClass %>MockMvc.perform(get(ENTITY_SEARCH_API_URL + "?query=id:" + <%- persistInstance %>.<%- primaryKey.propertySupplierName %>()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
   <%_ } _%>
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeCassandra) { _%>
-            <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%= primaryKey.name %>").value(hasItem(<%= idValue %>))<%= !reactive ? ')' : '' %><%_ } _%><% for (field of fieldsToTest) { %>
+            <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- idValue %>))<%- !reactive ? ')' : '' %><%_ } _%><% for (field of fieldsToTest) { %>
   <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%= field.fieldName %>ContentType").value(hasItem(<%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))<%= !reactive ? ')' : '' %>
+            <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))<%- !reactive ? ')' : '' %>
   <%_ } _%>
-            <%= !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%= field.fieldName %>").value(hasItem(<%
+            <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<%
   if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%= 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
+  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
   if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%
     if (databaseTypeCassandra) { %>.array()<% } %>)<% } else
   if (field.fieldTypeLong) { %>.intValue()<% } else
@@ -1909,12 +1919,12 @@ _%>
     !field.fieldTypeBoolean &&
     !field.fieldTypeInteger &&
     !field.fieldTypeDouble
-  ) { %>.toString()<% } %>))<%= !reactive ? ')' : '' %><%_ } _%>;
+  ) { %>.toString()<% } %>))<%- !reactive ? ')' : '' %><%_ } _%>;
     }
 <%_ } _%>
 
     protected long getRepositoryCount() {
-        return <%= entityInstance %>Repository.count()<%= callBlock %>;
+        return <%- entityInstance %>Repository.count()<%- callBlock %>;
     }
 
     protected void assertIncrementedRepositoryCount(long countBefore) {
@@ -1930,7 +1940,7 @@ _%>
     }
 
     protected <%- persistClass %> getPersisted<%- persistClass %>(<%- persistClass %> <%- entityInstance %>) {
-        return <%= entityInstance %>Repository.findById(<%- entityInstance %>.<%- primaryKey.propertySupplierName %>()).<%- reactive ? 'block()' : 'orElseThrow()' %>;
+        return <%- entityInstance %>Repository.findById(<%- entityInstance %>.<%- primaryKey.propertySupplierName %>()).<%- reactive ? 'block()' : 'orElseThrow()' %>;
     }
 
     protected void assertPersisted<%- persistClass %>ToMatchAllProperties(<%- persistClass %> expected<%- persistClass %>) {

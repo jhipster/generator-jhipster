@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import JDLValidation from '../../core/models/jdl-validation.ts';
 
@@ -36,19 +34,19 @@ describe('jdl - ValidationValidator', () => {
     describe('when not passing anything', () => {
       it('should fail', () => {
         // @ts-expect-error invalid api test
-        expect(() => validator.validate()).to.throw(/^No validation\.$/);
+        expect(() => validator.validate()).toThrow(/^No validation\.$/);
       });
     });
     describe('when passing a validation', () => {
       describe('with all its required attributes', () => {
         it('should not fail', () => {
-          expect(() => validator.validate({ name: 'required' })).not.to.throw();
+          expect(() => validator.validate({ name: 'required' })).not.toThrow();
         });
       });
       describe('without any of its required attributes', () => {
         it('should fail', () => {
           // @ts-expect-error invalid api test
-          expect(() => validator.validate({})).to.throw(/^The validation attribute name was not found\.$/);
+          expect(() => validator.validate({})).toThrow(/^The validation attribute name was not found\.$/);
         });
       });
       describe('when passing an invalid name for a validation', () => {
@@ -63,7 +61,7 @@ describe('jdl - ValidationValidator', () => {
         });
 
         it('should fail', () => {
-          expect(() => validator.validate(validation)).to.throw(/^The validation toto doesn't exist\.$/);
+          expect(() => validator.validate(validation)).toThrow(/^The validation toto doesn't exist\.$/);
         });
       });
       describe('when not passing a value when required', () => {
@@ -78,7 +76,7 @@ describe('jdl - ValidationValidator', () => {
         });
 
         it('should fail', () => {
-          expect(() => validator.validate(validation)).to.throw(/^The validation min requires a value\.$/);
+          expect(() => validator.validate(validation)).toThrow(/^The validation min requires a value\.$/);
         });
       });
       describe('when passing a decimal value for a numeric validation', () => {
@@ -91,7 +89,7 @@ describe('jdl - ValidationValidator', () => {
                   value: 0.001,
                 }),
               ),
-            ).to.throw(/^Decimal values are forbidden for the minlength validation.$/);
+            ).toThrow(/^Decimal values are forbidden for the minlength validation.$/);
           });
         });
         describe('such as maxlength', () => {
@@ -103,7 +101,7 @@ describe('jdl - ValidationValidator', () => {
                   value: 0.001,
                 }),
               ),
-            ).to.throw(/^Decimal values are forbidden for the maxlength validation.$/);
+            ).toThrow(/^Decimal values are forbidden for the maxlength validation.$/);
           });
         });
         describe('such as minbytes', () => {
@@ -115,7 +113,7 @@ describe('jdl - ValidationValidator', () => {
                   value: 0.001,
                 }),
               ),
-            ).to.throw(/^Decimal values are forbidden for the minbytes validation.$/);
+            ).toThrow(/^Decimal values are forbidden for the minbytes validation.$/);
           });
         });
         describe('such as maxbytes', () => {
@@ -127,7 +125,7 @@ describe('jdl - ValidationValidator', () => {
                   value: 0.001,
                 }),
               ),
-            ).to.throw(/^Decimal values are forbidden for the maxbytes validation.$/);
+            ).toThrow(/^Decimal values are forbidden for the maxbytes validation.$/);
           });
         });
       });

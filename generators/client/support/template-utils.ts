@@ -87,7 +87,7 @@ export const generateEntityClientEnumImports = (fields: BaseApplicationField[], 
   for (const field of fields) {
     const { enumFileName, fieldType } = field;
     if (field.fieldIsEnum && (!uniqueEnums[fieldType] || (uniqueEnums[fieldType] && field.fieldValues?.length !== 0))) {
-      const importType = `${fieldType}`;
+      const importType = fieldType;
       const basePath = clientFramework === VUE ? '@' : 'app';
       const modelPath = clientFramework === ANGULAR ? 'entities' : 'shared/model';
       const importPath = `${basePath}/${modelPath}/enumerations/${enumFileName}.model`;

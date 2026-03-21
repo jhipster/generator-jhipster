@@ -49,19 +49,19 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
 <%_ } _%>
 
 <%_ if (!readOnly) { _%>
-import { sampleWithRequiredData } from '../<%= entityFileName %>.test-samples';
+import { sampleWithRequiredData } from '../<%- entityFileName %>.test-samples';
 <%_ } _%>
-import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
+import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
 
-import { <%= entityAngularName %> } from './<%= entityFileName %>';
+import { <%- entityAngularName %> } from './<%- entityFileName %>';
 
 vitest.useFakeTimers();
 
-describe('<%= entityAngularName %> Management Component', () => {
+describe('<%- entityAngularName %> Management Component', () => {
   let httpMock: HttpTestingController;
-    let comp: <%= entityAngularName %>;
-    let fixture: ComponentFixture<<%= entityAngularName %>>;
-    let service: <%= entityAngularName %>Service;
+    let comp: <%- entityAngularName %>;
+    let fixture: ComponentFixture<<%- entityAngularName %>>;
+    let service: <%- entityAngularName %>Service;
     let routerNavigateSpy: MockInstance;
 
     beforeEach(() => {
@@ -101,10 +101,10 @@ describe('<%= entityAngularName %> Management Component', () => {
             ]
         });
 
-        fixture = TestBed.createComponent(<%= entityAngularName %>);
+        fixture = TestBed.createComponent(<%- entityAngularName %>);
         comp = fixture.componentInstance;
-        service = TestBed.inject(<%= entityAngularName %>Service);
-        routerNavigateSpy = <%= clientTestFramework %>.spyOn(comp.router, 'navigate');
+        service = TestBed.inject(<%- entityAngularName %>Service);
+        routerNavigateSpy = <%- clientTestFramework %>.spyOn(comp.router, 'navigate');
 
     const library = TestBed.inject(FaIconLibrary);
     library.addIcons(faEye, faPencilAlt, faPlus<% if (searchEngineAny) { %>, faSearch<% } %>, faSort, faSortDown, faSortUp, faSync, faTimes);
@@ -180,13 +180,13 @@ describe('<%= entityAngularName %> Management Component', () => {
   });
 
 <%_ } _%>
-    describe('track<%= primaryKey.nameCapitalized %>', () => {
-        it('should forward to <%= entityInstance %>Service', () => {
+    describe('track<%- primaryKey.nameCapitalized %>', () => {
+        it('should forward to <%- entityInstance %>Service', () => {
             const entity = <%- tsPrimaryKeySamples[0] %>;
-            <%= clientTestFramework %>.spyOn(service, 'get<%= entityAngularName %>Identifier');
-            const <%= primaryKey.name %> = comp.track<%= primaryKey.nameCapitalized %>(entity);
-            expect(service.get<%= entityAngularName %>Identifier).toHaveBeenCalledWith(entity);
-            expect(<%= primaryKey.name %>).toBe(entity.<%= primaryKey.name %>);
+            <%- clientTestFramework %>.spyOn(service, 'get<%- entityAngularName %>Identifier');
+            const <%- primaryKey.name %> = comp.track<%- primaryKey.nameCapitalized %>(entity);
+            expect(service.get<%- entityAngularName %>Identifier).toHaveBeenCalledWith(entity);
+            expect(<%- primaryKey.name %>).toBe(entity.<%- primaryKey.name %>);
         });
     });
 
@@ -219,7 +219,7 @@ describe('<%= entityAngularName %> Management Component', () => {
     httpMock.expectOne({ method: 'GET' });
 
     // THEN
-    expect(service.<%- entityInstancePlural %>Params()).toMatchObject(expect.objectContaining({ sort: ['<%- primaryKey.fields.map(field => field.fieldName).join(',') %>,<%= order %>'] }));
+    expect(service.<%- entityInstancePlural %>Params()).toMatchObject(expect.objectContaining({ sort: ['<%- primaryKey.fields.map(field => field.fieldName).join(',') %>,<%- order %>'] }));
   });
 <%_ if (paginationInfiniteScroll) { _%>
 
@@ -274,12 +274,12 @@ describe('<%= entityAngularName %> Management Component', () => {
       // NgbModal is not a singleton using TestBed.inject.
       // ngbModal = TestBed.inject(NgbModal);
       ngbModal = (comp as any).modalService;
-      <%= clientTestFramework %>.spyOn(ngbModal, 'open').mockReturnValue(deleteModalMock);
+      <%- clientTestFramework %>.spyOn(ngbModal, 'open').mockReturnValue(deleteModalMock);
     });
 
     it('on confirm should call load', inject([], () => {
       // GIVEN
-      <%= clientTestFramework %>.spyOn(comp, 'load');
+      <%- clientTestFramework %>.spyOn(comp, 'load');
 
       // WHEN
       comp.delete(sampleWithRequiredData);
@@ -292,7 +292,7 @@ describe('<%= entityAngularName %> Management Component', () => {
 
     it('on dismiss should call load', inject([], () => {
       // GIVEN
-      <%= clientTestFramework %>.spyOn(comp, 'load');
+      <%- clientTestFramework %>.spyOn(comp, 'load');
 
       // WHEN
       comp.delete(sampleWithRequiredData);

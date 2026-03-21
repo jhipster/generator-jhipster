@@ -15,54 +15,53 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
--%><%
-let helpBlocks = 0; %>
+-%><% let helpBlocks = 0; %>
 {
-    "<%= frontendAppName %>": {
-        "<%= entityTranslationKey %>" : {
+    "<%- frontendAppName %>": {
+        "<%- entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityNamePluralHumanized %>",
+                "title": "<%- entityNamePluralHumanized %>",
                 "refreshListLabel": "Refresh list",
 <%_ if (!readOnly) { _%>
-                "createLabel": "Vytvořit <%= entityNameHumanized %>",
-                "createOrEditLabel": "Vytvořit nebo upravit <%= entityNameHumanized %>",
+                "createLabel": "Vytvořit <%- entityNameHumanized %>",
+                "createOrEditLabel": "Vytvořit nebo upravit <%- entityNameHumanized %>",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "Vyhledat <%= entityNameHumanized %>",
+                "search": "Vyhledat <%- entityNameHumanized %>",
 <%_ } _%>
-                "notFound": "No <%= entityNamePluralHumanized %> found"
+                "notFound": "No <%- entityNamePluralHumanized %> found"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "Byl vytvořen potomek entity <%= entityNameHumanized %> s identifikátorem {{ param }}",
-            "updated": "Potomek entity <%= entityNameHumanized %> s identifikátorem {{ param }} byl upravený.",
-            "deleted": "Potomek entity <%= entityNameHumanized %> s identifikátorem {{ param }} bol smazaný.",
+            "created": "Byl vytvořen potomek entity <%- entityNameHumanized %> s identifikátorem {{ param }}",
+            "updated": "Potomek entity <%- entityNameHumanized %> s identifikátorem {{ param }} byl upravený.",
+            "deleted": "Potomek entity <%- entityNameHumanized %> s identifikátorem {{ param }} bol smazaný.",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "Jste si jisti, že chcete smazat <%= entityNameHumanized %> {{ id }}?"
+                "question": "Jste si jisti, že chcete smazat <%- entityNameHumanized %> {{ id }}?"
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityNameHumanized %>"
+                "title": "<%- entityNameHumanized %>"
             }<% for (idx in fields) {
             if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
-            "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
-            "<%= relationships[idx].relationshipName %>": "<%= relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
+            "<%- fields[idx].fieldName %>": "<%- fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%- relationships[idx].relationshipName %>": "<%- relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
             "help": {<% for (idx in fields) {
                 if (fields[idx].documentation) {
                     --helpBlocks; %>
-                "<%= fields[idx].fieldName %>": "<%= fields[idx].documentation %>"<% if (helpBlocks > 0) { %>,<% }
+                "<%- fields[idx].fieldName %>": "<%- fields[idx].documentation %>"<% if (helpBlocks > 0) { %>,<% }
                 }
             } %>
             }<% } %>
         }
     }
 <%_ if (microserviceAppName && !readOnly) { _%>,
-    "<%= microserviceAppName %>": {
-        "<%= entityTranslationKey %>" : {
-            "created": "Byl vytvořen potomek entity <%= entityNameHumanized %> s identifikátorem {{ param }}",
-            "updated": "Potomek entity <%= entityNameHumanized %> s identifikátorem {{ param }} byl upravený.",
-            "deleted": "Potomek entity <%= entityNameHumanized %> s identifikátorem {{ param }} bol smazaný."
+    "<%- microserviceAppName %>": {
+        "<%- entityTranslationKey %>" : {
+            "created": "Byl vytvořen potomek entity <%- entityNameHumanized %> s identifikátorem {{ param }}",
+            "updated": "Potomek entity <%- entityNameHumanized %> s identifikátorem {{ param }} byl upravený.",
+            "deleted": "Potomek entity <%- entityNameHumanized %> s identifikátorem {{ param }} bol smazaný."
         }
     }
 <%_ } _%>

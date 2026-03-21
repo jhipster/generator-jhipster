@@ -1,13 +1,13 @@
-package <%= packageName %>.security.jwt;
+package <%- packageName %>.security.jwt;
 
-import static <%= packageName %>.security.jwt.JwtAuthenticationTestUtils.*;
+import static <%- packageName %>.security.jwt.JwtAuthenticationTestUtils.*;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 <%_ if (reactive) { %>
-import <%= packageName %>.IntegrationTest;
+import <%- packageName %>.IntegrationTest;
 import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.test.web.reactive.server.WebTestClient;
 

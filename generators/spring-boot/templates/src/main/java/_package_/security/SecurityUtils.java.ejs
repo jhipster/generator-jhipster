@@ -16,10 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.security;
+package <%- packageName %>.security;
 <%_ if (generateAuthenticationApi && (authenticationTypeOauth2 || authenticationTypeJwt)) { _%>
 
-import <%= packageName %>.config.Constants;
+import <%- packageName %>.config.Constants;
 <%_ } _%>
 
 import org.springframework.security.core.Authentication;
@@ -154,7 +154,7 @@ public final class SecurityUtils {
      *
      * @return the Id of the current user.
      */
-    public static <%- optionalOrMono %><<%= user.primaryKey.type %>> getCurrentUserId() {
+    public static <%- optionalOrMono %><<%- user.primaryKey.type %>> getCurrentUserId() {
     <%_ if (reactive) { _%>
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)

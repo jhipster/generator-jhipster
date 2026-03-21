@@ -29,7 +29,7 @@ import { SessionsService } from './sessions.service';
 import { Account } from 'app/core/auth/account.model';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-sessions',
+  selector: '<%- jhiPrefixDashed %>-sessions',
   imports: [DatePipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
   templateUrl: './sessions.html',
 })

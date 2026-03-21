@@ -50,6 +50,7 @@ export type Field = BaseApplicationField &
     javaValueSample1?: string;
     javaValueSample2?: string;
     fieldValidateRulesPatternJava?: string;
+    javaFieldValidatorsPartial?: string;
   };
 
 export interface Relationship extends BaseApplicationRelationship, JavaAddedRelationshipProperties, Property {
@@ -110,13 +111,12 @@ type SpringApplication = {
   generateSpringAuditor: boolean;
 };
 
-export type Application<E extends BaseApplicationEntity<BaseApplicationField, BaseApplicationRelationship> = Entity<Field, Relationship>> =
-  BaseApplicationApplication<E> &
-    JavaSimpleApplicationApplication &
-    JavaAddedApplicationProperties &
-    GradleApplication &
-    SpringApplication &
-    LanguagesApplication &
-    DatabaseApplication;
+export type Application<E extends BaseApplicationEntity = Entity> = BaseApplicationApplication<E> &
+  JavaSimpleApplicationApplication &
+  JavaAddedApplicationProperties &
+  GradleApplication &
+  SpringApplication &
+  LanguagesApplication &
+  DatabaseApplication;
 
 export type Source = BaseApplicationSource & JavaSimpleApplicationSource;

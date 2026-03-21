@@ -17,10 +17,10 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: <%= baseName.toLowerCase() %>
+name: <%- baseName.toLowerCase() %>
 services:
   app:
-    image: <%= baseName.toLowerCase() %>
+    image: <%- baseName.toLowerCase() %>
     environment:
 <%_ for (const [key, value] of Object.entries(dockerApplicationEnvironment)) { _%>
       - <%- key %>=<%- value %>
@@ -49,10 +49,10 @@ services:
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
-      - 127.0.0.1:<%= serverPort %>:<%= serverPort %>
+      - 127.0.0.1:<%- serverPort %>:<%- serverPort %>
 <%_ } _%>
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:<%= serverPort %>/management/health']
+      test: ['CMD', 'curl', '-f', 'http://localhost:<%- serverPort %>/management/health']
       interval: 5s
       timeout: 5s
       retries: 40

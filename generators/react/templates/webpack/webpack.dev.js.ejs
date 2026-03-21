@@ -35,10 +35,10 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
   devtool: 'cheap-module-source-map', // https://reactjs.org/docs/cross-origin-errors.html
   mode: ENV,
   entry: [
-    './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/<%= microfrontend ? 'main' : 'index' %>'
+    './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/<%- microfrontend ? 'main' : 'index' %>'
   ],
   output: {
-    path: utils.root('<%= this.relativeDir(clientRootDir, clientDistDir) %>'),
+    path: utils.root('<%- this.relativeDir(clientRootDir, clientDistDir) %>'),
     filename: '[name].[contenthash:8].js',
     chunkFilename: '[name].[chunkhash:8].chunk.js'
   },
@@ -74,11 +74,11 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
     ]
   },
   devServer: {
-    hot: <%= !microfrontend %>,
+    hot: <%- !microfrontend %>,
     static: {
-      directory: './<%= this.relativeDir(clientRootDir, clientDistDir) %>',
+      directory: './<%- this.relativeDir(clientRootDir, clientDistDir) %>',
     },
-    port: <%= devServerPort %>,
+    port: <%- devServerPort %>,
     proxy: [{
       context: [
         '/api',
@@ -92,14 +92,14 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
         '/login',
 <%_ } _%>
       ],
-      target: `http${options.tls ? 's' : ''}://localhost:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>`,
+      target: `http${options.tls ? 's' : ''}://localhost:<%- applicationTypeMicroservice ? gatewayServerPort : serverPort %>`,
       secure: false,
       changeOrigin: options.tls
     }<% if (communicationSpringWebsocket) { %>,{
       context: [
         '/websocket'
       ],
-      target: 'ws://127.0.0.1:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
+      target: 'ws://127.0.0.1:<%- applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
       ws: true
     }<% } %>],
     historyApiFallback: true
@@ -117,7 +117,7 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
         host: 'localhost',
         port: <%- devServerPortProxy %>,
         proxy: {
-          target: `http${options.tls ? 's' : ''}://localhost:${options.watch ? '<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>' : '<%= devServerPort %>'}`,
+          target: `http${options.tls ? 's' : ''}://localhost:${options.watch ? '<%- applicationTypeMicroservice ? gatewayServerPort : serverPort %>' : '<%- devServerPort %>'}`,
           ws: true,
           proxyOptions: {
               changeOrigin: false  //pass the Host header to the backend unchanged https://github.com/Browsersync/browser-sync/issues/430
@@ -139,7 +139,7 @@ module.exports = async (options) => webpackMerge(await commonConfig({ env: ENV }
       reload: false
     }),
     new WebpackNotifierPlugin({
-      title: '<%= humanizedBaseName %>',
+      title: '<%- humanizedBaseName %>',
       contentImage: path.join(__dirname, 'logo-jhipster.png')
     })
   ].filter(Boolean)

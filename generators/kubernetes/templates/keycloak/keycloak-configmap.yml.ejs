@@ -1,8 +1,8 @@
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: ConfigMap
 metadata:
   name: keycloak-config
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
 #common configuration shared between all applications
 data:
   jhipster-realm.json: |
@@ -1027,8 +1027,8 @@ data:
         {
           "id": "6e8deddb-b4d6-4e2e-b389-b397d3f74fcd",
           "clientId": "web_app",
-          "rootUrl": "http://localhost:<%= entryPort %>",
-          "adminUrl": "http://localhost:<%= entryPort %>",
+          "rootUrl": "http://localhost:<%- entryPort %>",
+          "adminUrl": "http://localhost:<%- entryPort %>",
           "surrogateAuthRequired": false,
           "enabled": true,
           "alwaysDisplayInConsole": false,

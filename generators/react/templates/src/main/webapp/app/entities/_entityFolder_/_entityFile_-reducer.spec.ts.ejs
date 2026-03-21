@@ -23,7 +23,6 @@ _%>
 import axios from 'axios';
 
 import { configureStore } from '@reduxjs/toolkit';
-import sinon from 'sinon';
 <%_ if (paginationInfiniteScroll) { _%>
 import { getPageNumberFromLinkHeader } from 'app/shared/jhipster/link-header';
 <%_ } _%>
@@ -43,9 +42,9 @@ import reducer, {
   partialUpdateEntity,
 <%_ } _%>
   reset
-} from './<%= entityFileName %>.reducer';
+} from './<%- entityFileName %>.reducer';
 import { EntityState } from 'app/shared/reducers/reducer.utils';
-import { I<%= entityReactName %>, defaultValue } from 'app/shared/model/<%= entityModelFileName %>.model';
+import { I<%- entityReactName %>, defaultValue } from 'app/shared/model/<%- entityModelFileName %>.model';
 
 describe('Entities reducer tests', () => {
 
@@ -57,7 +56,7 @@ describe('Entities reducer tests', () => {
     }
   }
 
-  const initialState: EntityState<I<%= entityReactName %>> = {
+  const initialState: EntityState<I<%- entityReactName %>> = {
     loading: false,
     errorMessage: null,
     entities: [],
@@ -276,14 +275,14 @@ describe('Entities reducer tests', () => {
       store = configureStore({
         reducer: (state = [], action) => [...state, action],
       });
-      axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
-      axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
-      axios.put = sinon.stub().returns(Promise.resolve(resolvedObject));
-      axios.patch = sinon.stub().returns(Promise.resolve(resolvedObject));
-      axios.delete = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.get = jest.fn().mockResolvedValue(resolvedObject);
+      axios.post = jest.fn().mockResolvedValue(resolvedObject);
+      axios.put = jest.fn().mockResolvedValue(resolvedObject);
+      axios.patch = jest.fn().mockResolvedValue(resolvedObject);
+      axios.delete = jest.fn().mockResolvedValue(resolvedObject);
     });
 
-    it('dispatches FETCH_<%= entityActionName %>_LIST actions', async () => {
+    it('dispatches FETCH_<%- entityActionName %>_LIST actions', async () => {
       const arg = {};
 
       const result = await getEntities(arg)(dispatch, getState, extra);
@@ -297,7 +296,7 @@ describe('Entities reducer tests', () => {
       expect(getEntities.fulfilled.match(result)).toBe(true);
     });
 <%_ if (searchEngineAny) { _%>
-    it('dispatches SEARCH_<%= entityActionNamePlural %> actions', async () => {
+    it('dispatches SEARCH_<%- entityActionNamePlural %> actions', async () => {
       const arg = {};
 
       const result = await searchEntities(arg)(dispatch, getState, extra);
@@ -312,7 +311,7 @@ describe('Entities reducer tests', () => {
     });
 <%_ } _%>
 
-    it('dispatches FETCH_<%= entityActionName %> actions', async () => {
+    it('dispatches FETCH_<%- entityActionName %> actions', async () => {
       const arg = 42666;
 
       const result = await getEntity(arg)(dispatch, getState, extra);
@@ -327,7 +326,7 @@ describe('Entities reducer tests', () => {
     });
 
 <%_ if (!readOnly) { _%>
-    it('dispatches CREATE_<%= entityActionName %> actions', async () => {
+    it('dispatches CREATE_<%- entityActionName %> actions', async () => {
       const arg = <%- tsPrimaryKeySamples[1] %>;
 
       const result = await createEntity(arg)(dispatch, getState, extra);
@@ -341,7 +340,7 @@ describe('Entities reducer tests', () => {
       expect(createEntity.fulfilled.match(result)).toBe(true);
     });
 
-    it('dispatches UPDATE_<%= entityActionName %> actions', async () => {
+    it('dispatches UPDATE_<%- entityActionName %> actions', async () => {
       const arg = <%- tsPrimaryKeySamples[1] %>;
 
       const result = await updateEntity(arg)(dispatch, getState, extra);
@@ -355,7 +354,7 @@ describe('Entities reducer tests', () => {
       expect(updateEntity.fulfilled.match(result)).toBe(true);
     });
 
-    it('dispatches PARTIAL_UPDATE_<%= entityActionName %> actions', async () => {
+    it('dispatches PARTIAL_UPDATE_<%- entityActionName %> actions', async () => {
       const arg = { <%- primaryKey.name %>: <%- primaryKey.tsSampleValues[0] %> };
 
       const result = await partialUpdateEntity(arg)(dispatch, getState, extra);
@@ -369,7 +368,7 @@ describe('Entities reducer tests', () => {
       expect(partialUpdateEntity.fulfilled.match(result)).toBe(true);
     });
 
-    it('dispatches DELETE_<%= entityActionName %> actions', async () => {
+    it('dispatches DELETE_<%- entityActionName %> actions', async () => {
       const arg = 42666;
 
       const result = await deleteEntity(arg)(dispatch, getState, extra);

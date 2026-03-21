@@ -30,7 +30,7 @@ import { EventManager, EventWithContent } from 'app/core/util/event-manager.serv
 import { getMessageFromHeaders } from 'app/shared/jhipster/headers';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-alert-error',
+  selector: '<%- jhiPrefixDashed %>-alert-error',
   templateUrl: './alert-error.html',
   imports: [NgbAlert],
 })
@@ -46,12 +46,12 @@ export class AlertError implements OnDestroy {
 <% } %>
 
   constructor() {
-    this.errorListener = this.eventManager.subscribe('<%= frontendAppName %>.error', (response: EventWithContent<unknown> | string) => {
+    this.errorListener = this.eventManager.subscribe('<%- frontendAppName %>.error', (response: EventWithContent<unknown> | string) => {
       const errorResponse = (response as EventWithContent<AlertErrorModel>).content;
       this.addErrorAlert(errorResponse.message<% if (enableTranslation) { %>, errorResponse.key, errorResponse.params<% } %>);
     });
 
-    this.httpErrorListener = this.eventManager.subscribe('<%= frontendAppName %>.httpError', (response: EventWithContent<unknown> | string) => {
+    this.httpErrorListener = this.eventManager.subscribe('<%- frontendAppName %>.httpError', (response: EventWithContent<unknown> | string) => {
       this.handleHttpError(response);
     });
   }
@@ -137,7 +137,7 @@ export class AlertError implements OnDestroy {
       const convertedField: string = fieldError.field.replaceAll(/\[\d*\]/g, '[]');
       const fieldName: string =
 <%_ if (enableTranslation) { _%>
-        this.translateService.instant(`<%= frontendAppName %>.${fieldError.objectName as string}.${convertedField}`);
+        this.translateService.instant(`<%- frontendAppName %>.${fieldError.objectName as string}.${convertedField}`);
 <%_ } else { _%>
         convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
 <%_ } _%>

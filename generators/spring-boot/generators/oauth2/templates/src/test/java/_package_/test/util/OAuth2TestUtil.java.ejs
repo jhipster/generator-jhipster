@@ -17,10 +17,10 @@
  limitations under the License.
 -%>
 <%_ const reactivePrefix = reactive ? 'Reactive' : ''; _%>
-package <%= packageName %>.test.util;
+package <%- packageName %>.test.util;
 
-import <%= packageName %>.security.AuthoritiesConstants;
-import <%= packageName %>.security.SecurityUtils;
+import <%- packageName %>.security.AuthoritiesConstants;
+import <%- packageName %>.security.SecurityUtils;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -31,7 +31,7 @@ import java.util.Map;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.<%= reactivePrefix %>OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.<%- reactivePrefix %>OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
@@ -90,7 +90,7 @@ public class OAuth2TestUtil {
         return new OAuth2AuthenticationToken(user, user.getAuthorities(), "oidc");
     }
 
-    public static OAuth2AuthenticationToken registerAuthenticationToken(<%= reactivePrefix %>OAuth2AuthorizedClientService authorizedClientService, ClientRegistration clientRegistration, OAuth2AuthenticationToken authentication) {
+    public static OAuth2AuthenticationToken registerAuthenticationToken(<%- reactivePrefix %>OAuth2AuthorizedClientService authorizedClientService, ClientRegistration clientRegistration, OAuth2AuthenticationToken authentication) {
         Map<String, Object> userDetails = authentication.getPrincipal().getAttributes();
 
         OAuth2AccessToken token = new OAuth2AccessToken(TokenType.BEARER, "Token", (Instant)userDetails.get("auth_time"), (Instant)userDetails.get("exp"));

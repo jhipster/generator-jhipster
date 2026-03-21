@@ -211,7 +211,8 @@ sourceSets {
 
 gatling {
     includes = ["**/*Test*.java"]
-}",
+}
+",
     "stateCleared": "modified",
   },
   "src/test/gatling/conf/gatling.conf": {

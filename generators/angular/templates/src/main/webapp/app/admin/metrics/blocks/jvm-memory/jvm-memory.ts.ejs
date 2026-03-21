@@ -27,7 +27,7 @@ import { NgbProgressbar } from '@ng-bootstrap/ng-bootstrap/progressbar';
 import { JvmMetrics } from 'app/admin/metrics/metrics.model';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-jvm-memory',
+  selector: '<%- jhiPrefixDashed %>-jvm-memory',
   templateUrl: './jvm-memory.html',
   imports: [NgbProgressbar, KeyValuePipe, DecimalPipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
 })

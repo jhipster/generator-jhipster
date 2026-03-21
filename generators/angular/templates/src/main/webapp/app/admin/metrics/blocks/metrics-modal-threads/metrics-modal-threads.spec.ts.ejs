@@ -316,7 +316,7 @@ describe('MetricsModalThreads', () => {
   describe('dismiss', () => {
     it('should call dismiss function for modal on dismiss', () => {
       // GIVEN
-      <%= clientTestFramework %>.spyOn(mockActiveModal, 'dismiss');
+      <%- clientTestFramework %>.spyOn(mockActiveModal, 'dismiss');
 
       // WHEN
       comp.dismiss();

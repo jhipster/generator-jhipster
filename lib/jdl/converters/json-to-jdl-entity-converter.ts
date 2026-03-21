@@ -97,6 +97,7 @@ function convertJSONToJDLField(field: JSONField): JDLField {
     name: lowerFirst(field.fieldName),
     type: field.fieldType,
     comment: field.documentation,
+    options: field.options,
   });
   addValidations(jdlField, field);
   return jdlField;
@@ -216,6 +217,12 @@ function getRelationship(relationship: JSONRelationship, entityName: string) {
     isInjectedFieldInToRequired: destinationSideAttributes.injectedFieldInDestinationIsRequired ?? false,
     commentInTo: destinationSideAttributes.commentForDestinationEntity,
   };
+  if (destinationSideAttributes.optionsForDestinationEntity) {
+    relationshipConfiguration.options = {
+      ...relationshipConfiguration.options,
+      destination: destinationSideAttributes.optionsForDestinationEntity,
+    };
+  }
   return new JDLRelationship(relationshipConfiguration);
 }
 
@@ -252,6 +259,7 @@ function getDestinationEntitySideAttributes(
     injectedFieldInDestinationEntity,
     injectedFieldInDestinationIsRequired,
     commentForDestinationEntity,
+    optionsForDestinationEntity: foundDestinationSideEntity.options,
   };
 }
 

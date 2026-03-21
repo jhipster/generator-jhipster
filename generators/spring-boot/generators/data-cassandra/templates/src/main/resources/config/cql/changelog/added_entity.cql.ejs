@@ -17,42 +17,43 @@
  limitations under the License.
 -%>
 
-CREATE TABLE IF NOT EXISTS <%= entityInstance %> (
+CREATE TABLE IF NOT EXISTS <%- entityInstance %> (
 <%_ for (const field of fields) {
   const fieldName = field.fieldName;
-  const fieldNameUnderscored = field.fieldNameUnderscored; _%>
+  const fieldNameUnderscored = field.fieldNameUnderscored;
+_%>
   <%_ if (field.fieldTypeUUID) { _%>
-    <%= fieldName %> uuid,
+    <%- fieldName %> uuid,
   <%_ } else if (field.fieldTypeString || field.fieldIsEnum) { _%>
-    <%= fieldName %> text,
+    <%- fieldName %> text,
   <%_ } else if (field.fieldTypeInteger) { _%>
-    <%= fieldName %> int,
+    <%- fieldName %> int,
   <%_ } else if (field.fieldTypeLong) { _%>
-    <%= fieldName %> bigint,
+    <%- fieldName %> bigint,
   <%_ } else if (field.fieldTypeFloat) { _%>
-    <%= fieldName %> float,
+    <%- fieldName %> float,
   <%_ } else if (field.fieldTypeDouble) { _%>
-    <%= fieldName %> double,
+    <%- fieldName %> double,
   <%_ } else if (field.fieldTypeBigDecimal) { _%>
-    <%= fieldName %> decimal,
+    <%- fieldName %> decimal,
   <%_ } else if (field.fieldTypeLocalDate) { _%>
-    <%= fieldName %> date,
+    <%- fieldName %> date,
   <%_ } else if (field.fieldTypeInstant) { _%>
-    <%= fieldName %> timestamp,
+    <%- fieldName %> timestamp,
   <%_ } else if (field.fieldTypeDuration) { _%>
-    <%= fieldName %> text,
+    <%- fieldName %> text,
   <%_ } else if (field.fieldTypeZonedDateTime) { _%>
-    <%= fieldName %> tuple<timestamp,varchar>,
+    <%- fieldName %> tuple<timestamp,varchar>,
   <%_ } else if (field.fieldTypeLocalTime) { _%>
-    <%= fieldName %> time,
+    <%- fieldName %> time,
   <%_ } else if (field.fieldTypeBoolean) { _%>
-    <%= fieldName %> boolean,
+    <%- fieldName %> boolean,
   <%_ } else if (field.fieldTypeByteBuffer) { _%>
     <%_ if (!field.blobContentTypeText) { _%>
-    <%= fieldName %> blob,
-    <%= fieldNameUnderscored %>_content_type text,
+    <%- fieldName %> blob,
+    <%- fieldNameUnderscored %>_content_type text,
     <%_ } else { _%>
-    <%= fieldName %> text,
+    <%- fieldName %> text,
     <%_ } _%>
   <%_ } _%>
 <%_ } _%>

@@ -53,7 +53,7 @@ for (const otherEntity of otherEntitiesWithPersistableRelationship) {
     });
   if (otherEntity.builtInUser) {
 _%>
-import { I<%= otherEntity.entityAngularName %> } from 'app/shared/model/user.model';
+import { I<%- otherEntity.entityAngularName %> } from 'app/shared/model/user.model';
     <%_ if (authenticationTypeOauth2) { _%>
 import { getUsers } from 'app/shared/reducers/user-management';
     <%_ } else { _%>
@@ -61,12 +61,12 @@ import { getUsers } from 'app/modules/administration/user-management/user-manage
     <%_ } _%>
   <%_ } else { _%>
     <%_ if (otherEntity.entityAngularName !== entityReactName) { _%>
-import { I<%= otherEntity.entityAngularName %> } from 'app/shared/model/<%= otherEntity.entityModelFileName %>.model';
+import { I<%- otherEntity.entityAngularName %> } from 'app/shared/model/<%- otherEntity.entityModelFileName %>.model';
     <%_ } _%>
-import { getEntities as get<%= otherEntity.entityNamePlural %> } from 'app/entities/<%= otherEntity.entityFolderName %>/<%= otherEntity.entityFileName %>.reducer';
+import { getEntities as get<%- otherEntity.entityNamePlural %> } from 'app/entities/<%- otherEntity.entityFolderName %>/<%- otherEntity.entityFileName %>.reducer';
   <%_ } _%>
 <%_ } _%>
-import { I<%= entityReactName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
+import { I<%- entityReactName %> } from 'app/shared/model/<%- entityModelFileName %>.model';
 <%_ const enumImports = this.generateEntityClientEnumImports(fields); _%>
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
@@ -76,9 +76,9 @@ import {
   updateEntity,
   createEntity,
   reset
-} from './<%= entityFileName %>.reducer';
+} from './<%- entityFileName %>.reducer';
 
-export const <%= entityReactName %>Update = () => {
+export const <%- entityReactName %>Update = () => {
   const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
@@ -87,18 +87,18 @@ export const <%= entityReactName %>Update = () => {
   const isNew = id === undefined;
 
   <%_ otherEntityActions.forEach(val => { _%>
-  const <%= val.instance %> = useAppSelector(state => state.<%= val.reducer %>);
+  const <%- val.instance %> = useAppSelector(state => state.<%- val.reducer %>);
   <%_ }) _%>
-  const <%= entityInstance %>Entity = useAppSelector(state => state.<%= entityReactState %>.entity);
-  const loading = useAppSelector(state => state.<%= entityReactState %>.loading);
-  const updating = useAppSelector(state => state.<%= entityReactState %>.updating);
-  const updateSuccess = useAppSelector(state => state.<%= entityReactState %>.updateSuccess);
+  const <%- entityInstance %>Entity = useAppSelector(state => state.<%- entityReactState %>.entity);
+  const loading = useAppSelector(state => state.<%- entityReactState %>.loading);
+  const updating = useAppSelector(state => state.<%- entityReactState %>.updating);
+  const updateSuccess = useAppSelector(state => state.<%- entityReactState %>.updateSuccess);
   <%_ enumImports.forEach( (importedPath, importedType) => { _%>
   const <%- this._.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
   <%_ }); _%>
 
   const handleClose = () => {
-    navigate('/<%= entityPage %>'<%_ if (paginationPagination) { _%> + location.search<%_ } _%>);
+    navigate('/<%- entityPage %>'<%_ if (paginationPagination) { _%> + location.search<%_ } _%>);
   }
 
   useEffect(() => {
@@ -115,7 +115,7 @@ export const <%= entityReactName %>Update = () => {
 <%_ } _%>
 
 <%_ otherEntityActions.forEach(val => { _%>
-    dispatch(<%= val.action %>({}));
+    dispatch(<%- val.action %>({}));
 <%_ }) _%>
   }, []);
 
@@ -130,22 +130,22 @@ export const <%= entityReactName %>Update = () => {
     const fieldName = field.fieldName;
 _%>
   <%_ if (field.fieldTypeTimed)  { _%>
-    values.<%= fieldName %> = convertDateTimeToServer(values.<%= fieldName %>);
+    values.<%- fieldName %> = convertDateTimeToServer(values.<%- fieldName %>);
   <%_ } else if (field.fieldTypeNumeric) { _%>
-    if (values.<%= fieldName %> !== undefined && typeof values.<%= fieldName %> !== 'number') {
-      values.<%= fieldName %> = Number(values.<%= fieldName %>);
+    if (values.<%- fieldName %> !== undefined && typeof values.<%- fieldName %> !== 'number') {
+      values.<%- fieldName %> = Number(values.<%- fieldName %>);
     }
   <%_ } _%>
 <%_ } _%>
 
     const entity = {
-      ...<%= entityInstance %>Entity,
+      ...<%- entityInstance %>Entity,
       ...values,
 <%_ for (const rel of persistableRelationships.filter(rel => !rel.otherEntity.embedded)) { _%>
   <%_ if (rel.collection) { _%>
-      <%= rel.propertyName %>: mapIdList(values.<%= rel.propertyName %>),
+      <%- rel.propertyName %>: mapIdList(values.<%- rel.propertyName %>),
   <%_ } else { _%>
-      <%= rel.propertyName %>: <%= rel.otherEntity.entityInstancePlural %>.find(it => it.<%= rel.otherEntity.primaryKey.name %>.toString() === values.<%= rel.propertyName %>?.toString()),
+      <%- rel.propertyName %>: <%- rel.otherEntity.entityInstancePlural %>.find(it => it.<%- rel.otherEntity.primaryKey.name %>.toString() === values.<%- rel.propertyName %>?.toString()),
   <%_ } _%>
 <%_ } _%>
     }
@@ -163,8 +163,9 @@ _%>
 <%_ for (field of fields.filter(field => !field.id)) {
     const fieldName = field.fieldName;
 
-    if (field.fieldTypeTimed) { _%>
-          <%= fieldName %>: displayDefaultDateTime(),
+    if (field.fieldTypeTimed) {
+_%>
+          <%- fieldName %>: displayDefaultDateTime(),
     <%_ } _%>
 <%_ } _%>
         }
@@ -172,25 +173,28 @@ _%>
 <%_ for (field of fields.filter(field => !field.id)) {
     const fieldName = field.fieldName;
   if (field.fieldIsEnum) {
-    const enumValues = field.enumValues;_%>
-<%= fieldName %>: '<%= enumValues[0].name %>',
+    const enumValues = field.enumValues;
+_%>
+<%- fieldName %>: '<%- enumValues[0].name %>',
   <%_ } _%>
 <%_ } _%>
-          ...<%= entityInstance %>Entity,
+          ...<%- entityInstance %>Entity,
 <%_ for (field of fields.filter(field => !field.id)) {
     const fieldName = field.fieldName;
-  if (field.fieldTypeTimed) { _%>
-          <%= fieldName %>: convertDateTimeFromServer(<%= entityInstance %>Entity.<%= fieldName %>),
+  if (field.fieldTypeTimed) {
+_%>
+          <%- fieldName %>: convertDateTimeFromServer(<%- entityInstance %>Entity.<%- fieldName %>),
   <%_ } _%>
 <%_ } _%>
 <%_ for (const rel of persistableRelationships.filter(rel => !rel.otherEntity.embedded)) {
     const otherEntityPkName = rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.name || 'id';
     const relationshipFieldName = rel.relationshipFieldName;
     const relationshipFieldNamePlural = rel.relationshipFieldNamePlural;
-  if (!rel.collection) { _%>
-          <%= relationshipFieldName %>: <%= entityInstance %>Entity?.<%= relationshipFieldName %>?.<%= otherEntityPkName %>,
+  if (!rel.collection) {
+_%>
+          <%- relationshipFieldName %>: <%- entityInstance %>Entity?.<%- relationshipFieldName %>?.<%- otherEntityPkName %>,
   <%_ } else { _%>
-          <%= relationshipFieldNamePlural %>: <%= entityInstance %>Entity?.<%= relationshipFieldNamePlural %>?.map(e => e.<%= otherEntityPkName %>.toString()),
+          <%- relationshipFieldNamePlural %>: <%- entityInstance %>Entity?.<%- relationshipFieldNamePlural %>?.map(e => e.<%- otherEntityPkName %>.toString()),
   <%_ } _%>
 <%_ } _%>
         };
@@ -199,8 +203,8 @@ _%>
     <div>
     <Row className="justify-content-center">
       <Col md="8">
-        <h2 id="<%= i18nKeyPrefix %>.home.createOrEditLabel" data-cy="<%- entityNameCapitalized %>CreateUpdateHeading">
-          <Translate contentKey="<%= i18nKeyPrefix %>.home.createOrEditLabel">Create or edit a <%- entityNameCapitalized %></Translate>
+        <h2 id="<%- i18nKeyPrefix %>.home.createOrEditLabel" data-cy="<%- entityNameCapitalized %>CreateUpdateHeading">
+          <Translate contentKey="<%- i18nKeyPrefix %>.home.createOrEditLabel">Create or edit a <%- entityNameCapitalized %></Translate>
         </h2>
       </Col>
     </Row>
@@ -210,9 +214,9 @@ _%>
         <ValidatedForm defaultValues={defaultValues()} onSubmit={saveEntity} >
           { !isNew &&
             <ValidatedField
-              name="<%= primaryKey.fields[0].fieldName %>" required readOnly
-              id="<%= entityFileName %>-<%= primaryKey.fields[0].fieldName %>"
-              label={translate('<%= primaryKey.fields[0].propertyTranslationKey %>')}
+              name="<%- primaryKey.fields[0].fieldName %>" required readOnly
+              id="<%- entityFileName %>-<%- primaryKey.fields[0].fieldName %>"
+              label={translate('<%- primaryKey.fields[0].propertyTranslationKey %>')}
               validate={{ required: true }}
             />
           }
@@ -221,19 +225,20 @@ _%>
     const fieldName = field.fieldName;
     const fieldNameHumanized = field.fieldNameHumanized;
 
-    if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
+    if (field.fieldTypeBinary && !field.blobContentTypeText) {
+_%>
           <ValidatedBlobField
   <%_ } else { _%>
           <ValidatedField
   <%_ } _%>
   <%_ if (enableTranslation) { _%>
-            label={translate('<%= field.propertyTranslationKey %>')}
+            label={translate('<%- field.propertyTranslationKey %>')}
   <%_ } else { _%>
-            label="<%= fieldNameHumanized %>"
+            label="<%- fieldNameHumanized %>"
   <%_ } _%>
-            id="<%= entityFileName %>-<%= fieldName %>"
-            name="<%= fieldName %>"
-            data-cy="<%= fieldName %>"
+            id="<%- entityFileName %>-<%- fieldName %>"
+            name="<%- fieldName %>"
+            data-cy="<%- fieldName %>"
   <%_ if (field.fieldTypeBoolean) { _%>
             check
             type="checkbox"
@@ -252,16 +257,16 @@ _%>
             placeholder="HH:mm"
             <%- include('react_validators'); %>
           />
-  <%_ } else if (field.fieldIsEnum) {_%>
+  <%_ } else if (field.fieldIsEnum) { _%>
             type="select"
           >
           <%_ const enumPrefix = frontendAppName + '.'+ fieldType; _%>
-          {<%= this._.lowerFirst(fieldType) %>Values.map(<%= this._.lowerFirst(fieldType) %> => (
-              <option value={<%= this._.lowerFirst(fieldType) %>} key={<%= this._.lowerFirst(fieldType) %>}>
+          {<%- this._.lowerFirst(fieldType) %>Values.map(<%- this._.lowerFirst(fieldType) %> => (
+              <option value={<%- this._.lowerFirst(fieldType) %>} key={<%- this._.lowerFirst(fieldType) %>}>
       <%_ if (enableTranslation) { _%>
-                {translate("<%= enumPrefix %>."+<%= this._.lowerFirst(fieldType) %>)}
+                {translate("<%- enumPrefix %>."+<%- this._.lowerFirst(fieldType) %>)}
       <%_ } else { _%>
-                {<%= this._.lowerFirst(fieldType) %>}
+                {<%- this._.lowerFirst(fieldType) %>}
       <%_ } _%>
               </option>))}
           </ValidatedField>
@@ -271,7 +276,7 @@ _%>
           />
   <%_ } else if (field.fieldTypeBinary) { _%>
     <%_ if (!field.blobContentTypeText) { _%>
-            <%_ if (field.blobContentTypeImage) {_%>
+            <%_ if (field.blobContentTypeImage) { _%>
             isImage accept="image/*"
             <%_ } else { _%>
             openActionLabel={translate('entity.action.open')}
@@ -291,12 +296,12 @@ _%>
   <%_ if (field.documentation) { _%>
           <OverlayTrigger overlay={<Tooltip>
     <%_ if (enableTranslation) { _%>
-            <Translate contentKey="<%= i18nKeyPrefix %>.help.<%= fieldName %>"/>
+            <Translate contentKey="<%- i18nKeyPrefix %>.help.<%- fieldName %>"/>
     <%_ } else { _%>
-            <%= field.documentation %>
+            <%- field.documentation %>
     <%_ } _%>
           </Tooltip>}>
-            <span id="<%= fieldName %>Label" className="d-inline-block">?</span>
+            <span id="<%- fieldName %>Label" className="d-inline-block">?</span>
           </OverlayTrigger>
   <%_ } _%>
 <%_ } _%>
@@ -308,16 +313,17 @@ _%>
     const relationshipFieldNamePlural = rel.relationshipFieldNamePlural;
     const otherEntityField = rel.otherEntityField;
     const relationshipRequired = rel.relationshipRequired;
-    const translationKey = `${i18nKeyPrefix}.${relationshipName}`; _%>
+    const translationKey = `${i18nKeyPrefix}.${relationshipName}`;
+_%>
   <%_ if (!rel.collection) { _%>
           <ValidatedField
-            id="<%= entityFileName %>-<%= relationshipName %>"
-            name="<%= relationshipFieldName %>"
-            data-cy="<%= relationshipFieldName %>"
+            id="<%- entityFileName %>-<%- relationshipName %>"
+            name="<%- relationshipFieldName %>"
+            data-cy="<%- relationshipFieldName %>"
       <%_ if (enableTranslation) { _%>
-            label={translate('<%= translationKey %>')}
+            label={translate('<%- translationKey %>')}
       <%_ } else { _%>
-            label="<%= relationshipNameHumanized %>"
+            label="<%- relationshipNameHumanized %>"
       <%_ } _%>
             type="select"
       <%_ if (relationshipRequired) { _%>
@@ -326,11 +332,11 @@ _%>
           >
               <option value="" key="0" />
               {
-                <%= rel.otherEntity.entityInstancePlural %> ? <%= rel.otherEntity.entityInstancePlural %>.map(otherEntity =>
+                <%- rel.otherEntity.entityInstancePlural %> ? <%- rel.otherEntity.entityInstancePlural %>.map(otherEntity =>
                   <option
-                    value={otherEntity.<%= otherEntityPkName %>}
-                    key={otherEntity.<%= otherEntityPkName %>}>
-                    {otherEntity.<%= otherEntityField %>}
+                    value={otherEntity.<%- otherEntityPkName %>}
+                    key={otherEntity.<%- otherEntityPkName %>}>
+                    {otherEntity.<%- otherEntityField %>}
                   </option>
                 ) : null
               }
@@ -341,30 +347,30 @@ _%>
   <%_ } else { _%>
           <ValidatedField
         <%_ if (enableTranslation) { _%>
-            label={translate('<%= i18nKeyPrefix %>.<%= relationshipName %>')}
+            label={translate('<%- i18nKeyPrefix %>.<%- relationshipName %>')}
         <%_ } else { _%>
-            label="<%= relationshipNameHumanized %>"
+            label="<%- relationshipNameHumanized %>"
         <%_ } _%>
-            id="<%= entityFileName %>-<%= relationshipName %>"
-            data-cy="<%= relationshipFieldName %>"
+            id="<%- entityFileName %>-<%- relationshipName %>"
+            data-cy="<%- relationshipFieldName %>"
             type="select"
             multiple
-            name="<%= relationshipFieldNamePlural %>"
+            name="<%- relationshipFieldNamePlural %>"
             >
               <option value="" key="0" />
               {
-                (<%= rel.otherEntity.entityInstancePlural %>) ? <%= rel.otherEntity.entityInstancePlural %>.map(otherEntity =>
+                (<%- rel.otherEntity.entityInstancePlural %>) ? <%- rel.otherEntity.entityInstancePlural %>.map(otherEntity =>
                 <option
-                    value={otherEntity.<%= otherEntityPkName %>}
-                    key={otherEntity.<%= otherEntityPkName %>}>
-                    {otherEntity.<%= otherEntityField %>}
+                    value={otherEntity.<%- otherEntityPkName %>}
+                    key={otherEntity.<%- otherEntityPkName %>}>
+                    {otherEntity.<%- otherEntityField %>}
                 </option>
                 ) : null
               }
           </ValidatedField>
   <%_ } _%>
 <%_ } _%>
-          <Button as={Link as any} id="cancel-save" data-cy="entityCreateCancelButton" to="/<%= entityPage %>" replace variant="info">
+          <Button as={Link as any} id="cancel-save" data-cy="entityCreateCancelButton" to="/<%- entityPage %>" replace variant="info">
             <FontAwesomeIcon icon="arrow-left" />&nbsp;
             <span className="d-none d-md-inline" ><Translate contentKey="entity.action.back">Back</Translate></span>
           </Button>
@@ -381,4 +387,4 @@ _%>
   );
 };
 
-export default <%= entityReactName %>Update;
+export default <%- entityReactName %>Update;

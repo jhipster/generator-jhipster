@@ -81,10 +81,10 @@ public class <%- dtoClass %> implements Serializable {
   const field = property.fieldName ? property : undefined;
   const relationship = property.relationshipName ? property : undefined;
   const required = field && field.fieldValidate && field.fieldValidationRequired;
-  _%>
+_%>
   <%_ if (field) { _%>
     <%_ if (property.fieldValidate) { _%>
-    <%- include('/_global_partials_entity_/field_validators', {field, reactive}); -%>
+    <%- field.javaFieldValidatorsPartial %>
     <%_ } _%>
   <%_ } _%>
   <%_ if (relationship && relationship.relationshipRequired) { _%>
@@ -102,7 +102,7 @@ public class <%- dtoClass %> implements Serializable {
     private String <%- property.propertyName %>ContentType;
   <%_ }
 }
-_%>
+  _%>
 
 <%_ for (property of restProperties) { _%>
     public <%- property.propertyDtoJavaType %> <%- property.propertySupplierName %>() {
@@ -159,7 +159,8 @@ _%>
     public String toString() {
         return "<%- dtoClass %>{" +
 <%_ for ([idx, property] of restProperties.entries()) {
-  const isQuoted = property.fieldName && !property.fieldTypeNumeric _%>
+  const isQuoted = property.fieldName && !property.fieldTypeNumeric
+_%>
             "<%- idx === 0 ? '' : ', ' %><%- property.propertyName %>=<% if (isQuoted) { %>'<% } %>" + <%- property.propertySupplierName %>() <% if (isQuoted) { %>+ "'" <% } %>+
 <%_ } _%>
             "}";

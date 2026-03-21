@@ -71,7 +71,7 @@ const command = {
           } else if (!gen.jhipsterConfig.databaseType) {
             throw new Error(`Could not detect databaseType for database ${value}`);
           }
-          if (value !== value) {
+          if (value !== databaseType) {
             gen.jhipsterConfig.devDatabaseType = value;
             gen.jhipsterConfig.prodDatabaseType = value;
           }

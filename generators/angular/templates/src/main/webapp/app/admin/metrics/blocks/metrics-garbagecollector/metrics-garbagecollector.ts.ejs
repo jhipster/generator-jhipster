@@ -27,7 +27,7 @@ import { NgbProgressbar } from '@ng-bootstrap/ng-bootstrap/progressbar';
 import { GarbageCollector } from 'app/admin/metrics/metrics.model';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-metrics-garbagecollector',
+  selector: '<%- jhiPrefixDashed %>-metrics-garbagecollector',
   templateUrl: './metrics-garbagecollector.html',
   imports: [NgbProgressbar, DecimalPipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
 })

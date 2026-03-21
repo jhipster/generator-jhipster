@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.domain;
+package <%- packageName %>.domain;
 
 <%_ if (databaseTypeCassandra) { _%>
 import com.datastax.oss.driver.api.mapper.annotations.Entity;
@@ -50,7 +50,7 @@ import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.IdAttribute;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.couchbase.repository.Collection;
-import static <%= packageName %>.domain.Authority.TYPE_NAME;
+import static <%- packageName %>.domain.Authority.TYPE_NAME;
 <%_ } _%>
 
 <%_ if (databaseTypeSql) { _%>
@@ -70,24 +70,24 @@ import java.time.Instant;
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
 
-import static <%= packageName %>.config.Constants.ID_DELIMITER;
+import static <%- packageName %>.config.Constants.ID_DELIMITER;
 import static org.springframework.data.couchbase.core.mapping.id.GenerationStrategy.USE_ATTRIBUTES;
 <%_ } _%>
 
 /**
  * Persistent tokens are used by Spring Security to automatically log in users.
  *
- * @see <%= packageName %>.security.PersistentTokenRememberMeServices
+ * @see <%- packageName %>.security.PersistentTokenRememberMeServices
  */
 <%_ if (databaseTypeSql) { _%>
 @Entity
-@Table(name = "<%= jhiTablePrefix %>_persistent_token")
+@Table(name = "<%- jhiTablePrefix %>_persistent_token")
 <%_ } _%>
 <%_ if (enableHibernateCache) { _%>
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
-@Document(collection = "<%= jhiTablePrefix %>_persistent_token")
+@Document(collection = "<%- jhiTablePrefix %>_persistent_token")
 <%_ } _%>
 <%_ if (databaseTypeCouchbase) { _%>
 @Document
@@ -184,7 +184,7 @@ public class PersistentToken implements Serializable {
   <%_ if (databaseTypeNeo4j) { _%>
     @Relationship(value = "HAS_PERSISTENT_TOKEN", direction = Relationship.Direction.INCOMING)
   <%_ } _%>
-    private <%= user.persistClass %> user;
+    private <%- user.persistClass %> user;
 <%_ } _%>
 
     public String getSeries() {
@@ -232,11 +232,11 @@ public class PersistentToken implements Serializable {
     }
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
 
-    public <%= user.persistClass %> getUser() {
+    public <%- user.persistClass %> getUser() {
         return user;
     }
 
-    public void setUser(<%= user.persistClass %> user) {
+    public void setUser(<%- user.persistClass %> user) {
         this.user = user;
     }
 <%_ } else if (databaseTypeCassandra || databaseTypeCouchbase) { _%>

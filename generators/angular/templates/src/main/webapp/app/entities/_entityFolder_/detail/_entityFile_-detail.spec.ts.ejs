@@ -37,11 +37,11 @@ import { of } from 'rxjs';
 import { DataUtils } from 'app/core/util/data-util.service';
 <%_ } _%>
 
-import { <%= entityAngularName %>Detail } from './<%= entityFileName %>-detail';
+import { <%- entityAngularName %>Detail } from './<%- entityFileName %>-detail';
 
-describe('<%= entityAngularName %> Management Detail Component', () => {
-  let comp: <%= entityAngularName %>Detail;
-  let fixture: ComponentFixture<<%= entityAngularName %>Detail>;
+describe('<%- entityAngularName %> Management Detail Component', () => {
+  let comp: <%- entityAngularName %>Detail;
+  let fixture: ComponentFixture<<%- entityAngularName %>Detail>;
 <%_ if (anyFieldIsBlobDerived) { _%>
   let dataUtils: DataUtils;
 <%_ } _%>
@@ -54,8 +54,8 @@ describe('<%= entityAngularName %> Management Detail Component', () => {
           [
             {
               path: '**',
-              loadComponent: () => import('./<%= entityFileName %>-detail').then(m => m.<%= entityAngularName %>Detail),
-              resolve: { <%= entityInstance %>: () => of(<%- testEntity %>) },
+              loadComponent: () => import('./<%- entityFileName %>-detail').then(m => m.<%- entityAngularName %>Detail),
+              resolve: { <%- entityInstance %>: () => of(<%- testEntity %>) },
             },
           ],
           withComponentInputBinding()
@@ -67,28 +67,28 @@ describe('<%= entityAngularName %> Management Detail Component', () => {
     library.addIcons(faPencilAlt);
 <%_ if (anyFieldIsBlobDerived) { _%>
     dataUtils = TestBed.inject(DataUtils);
-    <%= clientTestFramework %>.spyOn(window, 'open').mockImplementation(() => null);
+    <%- clientTestFramework %>.spyOn(window, 'open').mockImplementation(() => null);
 <%_ } _%>
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(<%= entityAngularName %>Detail);
+    fixture = TestBed.createComponent(<%- entityAngularName %>Detail);
     comp = fixture.componentInstance;
   });
 
   describe('OnInit', () => {
-    it('should load <%= entityInstance %> on init', async () => {
+    it('should load <%- entityInstance %> on init', async () => {
       const harness = await RouterTestingHarness.create();
-      const instance = await harness.navigateByUrl('/', <%= entityAngularName %>Detail);
+      const instance = await harness.navigateByUrl('/', <%- entityAngularName %>Detail);
 
       // THEN
-      expect(instance.<%= entityInstance %>()).toEqual(expect.objectContaining(<%- testEntity %>));
+      expect(instance.<%- entityInstance %>()).toEqual(expect.objectContaining(<%- testEntity %>));
     });
   });
 
   describe('PreviousState', () => {
     it('should navigate to previous state', () => {
-      <%= clientTestFramework %>.spyOn(globalThis.history, 'back');
+      <%- clientTestFramework %>.spyOn(globalThis.history, 'back');
       comp.previousState();
       expect(globalThis.history.back).toHaveBeenCalled();
     });
@@ -98,7 +98,7 @@ describe('<%= entityAngularName %> Management Detail Component', () => {
   describe('byteSize', () => {
     it('should call byteSize from DataUtils', () => {
       // GIVEN
-      <%= clientTestFramework %>.spyOn(dataUtils, 'byteSize');
+      <%- clientTestFramework %>.spyOn(dataUtils, 'byteSize');
       const fakeBase64 = 'fake base64';
 
       // WHEN
@@ -115,12 +115,12 @@ describe('<%= entityAngularName %> Management Detail Component', () => {
   <%_ if (clientTestFrameworkVitest) { _%>
       vitest.stubGlobal('open', vitest.fn(() => newWindow));
   <%_ } else { _%>
-      window.open = <%= clientTestFramework %>.fn(() => newWindow);
+      window.open = <%- clientTestFramework %>.fn(() => newWindow);
   <%_ } _%>
-      window.onload = <%= clientTestFramework %>.fn(() => newWindow) as any;
-      window.URL.createObjectURL = <%= clientTestFramework %>.fn() as any;
+      window.onload = <%- clientTestFramework %>.fn(() => newWindow) as any;
+      window.URL.createObjectURL = <%- clientTestFramework %>.fn() as any;
       // GIVEN
-      <%= clientTestFramework %>.spyOn(dataUtils, 'openFile');
+      <%- clientTestFramework %>.spyOn(dataUtils, 'openFile');
       const fakeContentType = 'fake content type';
       const fakeBase64 = 'fake base64';
 

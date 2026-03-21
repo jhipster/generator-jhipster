@@ -34,11 +34,11 @@ jib {
         }
     }
     to {
-        image = "<%= baseName.toLowerCase() %>:latest"
+        image = "<%- baseName.toLowerCase() %>:latest"
     }
     container {
         entrypoint = ["bash", "-c", "/entrypoint.sh"]
-        ports = ["<%= serverPort %>"<% if (cacheProviderHazelcast) { %>, "5701/udp" <% } %>]
+        ports = ["<%- serverPort %>"<% if (cacheProviderHazelcast) { %>, "5701/udp" <% } %>]
         environment = [
 <%_ if (cacheProviderInfinispan) { _%>
             JAVA_OPTS: "-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true",
@@ -50,7 +50,7 @@ jib {
         user = 1000
     }
     extraDirectories {
-      paths = file("<%= dockerServicesDir %>jib")
+      paths = file("<%- dockerServicesDir %>jib")
       permissions = ["/entrypoint.sh": "755"]
     }
 }

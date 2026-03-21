@@ -19,14 +19,14 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-app
-  namespace: <%= kubernetesNamespace %>
+  name: <%- app.baseName.toLowerCase() %>-app
+  namespace: <%- kubernetesNamespace %>
   labels:
-    team: <%= kubernetesNamespace %>
+    team: <%- kubernetesNamespace %>
 spec:
   selector:
     matchLabels:
-      app: <%= app.baseName.toLowerCase() %>
+      app: <%- app.baseName.toLowerCase() %>
   endpoints:
   - port: web
     path: /prometheusMetrics

@@ -23,16 +23,16 @@ import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
-import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
+import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
+import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
 
-const <%= entityInstance %>Resolve = (route: ActivatedRouteSnapshot): Observable<null | I<%= entityAngularName %>> => {
-  const <%= primaryKey.name %> = route.params['<%= primaryKey.name %>'];
-  if (<%= primaryKey.name %>) {
+const <%- entityInstance %>Resolve = (route: ActivatedRouteSnapshot): Observable<null | I<%- entityAngularName %>> => {
+  const <%- primaryKey.name %> = route.params['<%- primaryKey.name %>'];
+  if (<%- primaryKey.name %>) {
     const router = inject(Router);
-    const service = inject(<%= entityAngularName %>Service);
+    const service = inject(<%- entityAngularName %>Service);
     return service
-      .find(<%= primaryKey.name %>)
+      .find(<%- primaryKey.name %>)
       .pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === 404) {
@@ -48,4 +48,4 @@ const <%= entityInstance %>Resolve = (route: ActivatedRouteSnapshot): Observable
   return of(null);
 };
 
-export default <%= entityInstance %>Resolve;
+export default <%- entityInstance %>Resolve;

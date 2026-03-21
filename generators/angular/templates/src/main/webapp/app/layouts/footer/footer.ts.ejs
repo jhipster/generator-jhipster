@@ -22,7 +22,7 @@ import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-footer',
+  selector: '<%- jhiPrefixDashed %>-footer',
   templateUrl: './footer.html',
 <%_ if (enableTranslation) { _%>
   imports: [TranslateDirective],

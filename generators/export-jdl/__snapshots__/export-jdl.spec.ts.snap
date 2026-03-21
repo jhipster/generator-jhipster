@@ -36,6 +36,7 @@ entity Country (country) {
   /**
    * The country Id
    */
+  @Id
   countryId Long
   countryName String
 }
@@ -47,7 +48,9 @@ entity Department (department) {
  * The Employee entity.
  */
 entity Employee (emp) {
+  @Id
   employeeId Long
+  @CustomAnnotation("customValue")
   employeeUuid UUID
   /**
    * The firstname attribute.
@@ -94,7 +97,7 @@ relationship OneToOne {
   JobHistory{employee} to Employee
 }
 relationship OneToMany {
-  Department{employee required} to Employee{department(foo)}
+  Department{employee required} to @DestinationAnnotation Employee{department(foo)}
   Employee{job} to Job{employee}
 }
 relationship ManyToOne {
@@ -154,6 +157,7 @@ entity Country (country) {
   /**
    * The country Id
    */
+  @Id
   countryId Long
   countryName String
 }
@@ -165,7 +169,9 @@ entity Department (department) {
  * The Employee entity.
  */
 entity Employee (emp) {
+  @Id
   employeeId Long
+  @CustomAnnotation("customValue")
   employeeUuid UUID
   /**
    * The firstname attribute.
@@ -212,7 +218,7 @@ relationship OneToOne {
   JobHistory{employee} to Employee
 }
 relationship OneToMany {
-  Department{employee required} to Employee{department(foo)}
+  Department{employee required} to @DestinationAnnotation Employee{department(foo)}
   Employee{job} to Job{employee}
 }
 relationship ManyToOne {

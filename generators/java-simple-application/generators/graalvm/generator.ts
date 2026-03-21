@@ -94,7 +94,7 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
             filter: file =>
               !isFileStateDeleted(file) &&
               isFileStateModified(file) &&
-              file.path.startsWith(this.destinationPath(application.srcTestJava!)) &&
+              file.path.startsWith(this.destinationPath(application.srcTestJava)) &&
               extname(file.path) === '.java',
             refresh: false,
           },

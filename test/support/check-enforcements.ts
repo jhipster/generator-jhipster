@@ -16,11 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { before, describe, it } from 'esmocha';
 import assert from 'node:assert';
 import { opendirSync, readFileSync, writeFileSync } from 'node:fs';
 import path, { basename } from 'node:path';
-
-import { before, describe, it } from 'mocha';
 
 import { getGeneratorFolder } from '../../lib/utils/get-generator.ts';
 
@@ -100,7 +99,7 @@ export default function checkEnforcements({ client }: { client?: boolean }, gene
       });
     templateFiles.forEach(templateFile => {
       const reference = basename(templateFile, '.ejs').replaceAll(
-        /_(reactive|imperative|caffeine|ehcache|hazelcast|infinispan|memcached|redis|prodonly|devprod).java/g,
+        /_(reactive|imperative|caffeine|ehcache|hazelcast|infinispan|memcached|redis|prodonly|devprod)(.java)?$/g,
         '_',
       );
       it(`${templateFile} must have referenced with ${reference}`, () => {

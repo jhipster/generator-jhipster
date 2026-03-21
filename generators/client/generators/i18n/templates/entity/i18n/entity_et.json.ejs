@@ -15,54 +15,53 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
--%><%
-let helpBlocks = 0; %>
+-%><% let helpBlocks = 0; %>
 {
-    "<%= frontendAppName %>": {
-        "<%= entityTranslationKey %>" : {
+    "<%- frontendAppName %>": {
+        "<%- entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityNamePluralHumanized %>",
+                "title": "<%- entityNamePluralHumanized %>",
                 "refreshListLabel": "Värskenda nimekirja",
 <%_ if (!readOnly) { _%>
-                "createLabel": "Lisa uus <%= entityNameHumanized %>",
-                "createOrEditLabel": "Lisa või muuda <%= entityNameHumanized %>",
+                "createLabel": "Lisa uus <%- entityNameHumanized %>",
+                "createOrEditLabel": "Lisa või muuda <%- entityNameHumanized %>",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "Otsi <%= entityNameHumanized %>",
+                "search": "Otsi <%- entityNameHumanized %>",
 <%_ } _%>
-                "notFound": "Ei leitud ühtegi <%= entityNamePluralHumanized %>"
+                "notFound": "Ei leitud ühtegi <%- entityNamePluralHumanized %>"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "Uus <%= entityNameHumanized %> on loodud identifikaatoriga {{ param }}",
-            "updated": "<%= entityNameHumanized %> identifikaatoriga {{ param }} on muudetud",
-            "deleted": "<%= entityNameHumanized %> identifikaatoriga {{ param }} on kustutatud",
+            "created": "Uus <%- entityNameHumanized %> on loodud identifikaatoriga {{ param }}",
+            "updated": "<%- entityNameHumanized %> identifikaatoriga {{ param }} on muudetud",
+            "deleted": "<%- entityNameHumanized %> identifikaatoriga {{ param }} on kustutatud",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "Kas olete kindel, et soovite kustutada <%= entityNameHumanized %> {{ id }}?"
+                "question": "Kas olete kindel, et soovite kustutada <%- entityNameHumanized %> {{ id }}?"
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityNameHumanized %>"
+                "title": "<%- entityNameHumanized %>"
             }<% for (idx in fields) {
             if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
-            "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
-            "<%= relationships[idx].relationshipName %>": "<%= relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
+            "<%- fields[idx].fieldName %>": "<%- fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%- relationships[idx].relationshipName %>": "<%- relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
             "help": {<% for (idx in fields) {
                 if (fields[idx].documentation) {
                     --helpBlocks; %>
-                "<%= fields[idx].fieldName %>": "<%= fields[idx].documentation %>"<% if (helpBlocks > 0) { %>,<% }
+                "<%- fields[idx].fieldName %>": "<%- fields[idx].documentation %>"<% if (helpBlocks > 0) { %>,<% }
                 }
             } %>
             }<% } %>
         }
     }
 <%_ if (microserviceAppName && !readOnly) { _%>,
-    "<%= microserviceAppName %>": {
-        "<%= entityTranslationKey %>" : {
-            "created": "Uus <%= entityNameHumanized %> on loodud identifikaatoriga {{ param }}",
-            "updated": "<%= entityNameHumanized %> identifikaatoriga {{ param }} on muudetud",
-            "deleted": "<%= entityNameHumanized %> identifikaatoriga {{ param }} on kustutatud"
+    "<%- microserviceAppName %>": {
+        "<%- entityTranslationKey %>" : {
+            "created": "Uus <%- entityNameHumanized %> on loodud identifikaatoriga {{ param }}",
+            "updated": "<%- entityNameHumanized %> identifikaatoriga {{ param }} on muudetud",
+            "deleted": "<%- entityNameHumanized %> identifikaatoriga {{ param }} on kustutatud"
         }
     }
 <%_ } _%>

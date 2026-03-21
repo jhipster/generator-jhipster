@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { afterEach, before, describe, expect as jestExpect, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { afterEach, before, describe, expect, it } from 'esmocha';
 
 import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
 import { createJDLApplication } from '../__test-support__/index.ts';
@@ -49,7 +47,7 @@ describe('jdl - JDLObject', () => {
           expect(() => {
             // @ts-expect-error
             object.addApplication(null);
-          }).to.throw(/^Can't add nil application\.$/);
+          }).toThrow(/^Can't add nil application\.$/);
         });
       });
     });
@@ -66,7 +64,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should work', () => {
-        expect(addedApplication).to.equal(originalApplication);
+        expect(addedApplication).toBe(originalApplication);
       });
     });
   });
@@ -79,7 +77,7 @@ describe('jdl - JDLObject', () => {
 
     describe('when having no application', () => {
       it('should return 0', () => {
-        expect(jdlObject.getApplicationQuantity()).to.equal(0);
+        expect(jdlObject.getApplicationQuantity()).toBe(0);
       });
     });
 
@@ -96,7 +94,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should return the number of applications', () => {
-        expect(jdlObject.getApplicationQuantity()).to.equal(1);
+        expect(jdlObject.getApplicationQuantity()).toBe(1);
       });
     });
   });
@@ -111,7 +109,7 @@ describe('jdl - JDLObject', () => {
 
       it('should return undefined', () => {
         // @ts-expect-error
-        expect(jdlObject.getApplication()).to.be.undefined;
+        expect(jdlObject.getApplication()).toBeUndefined();
       });
     });
     describe("when passing an application's name", () => {
@@ -124,7 +122,7 @@ describe('jdl - JDLObject', () => {
         });
 
         it('should return undefined', () => {
-          expect(jdlObject.getApplication('tata')).to.be.undefined;
+          expect(jdlObject.getApplication('tata')).toBeUndefined();
         });
       });
 
@@ -137,7 +135,7 @@ describe('jdl - JDLObject', () => {
         });
 
         it('should return undefined', () => {
-          expect(jdlObject.getApplication('toto')).not.to.be.undefined;
+          expect(jdlObject.getApplication('toto')).not.toBeUndefined();
         });
       });
     });
@@ -151,7 +149,7 @@ describe('jdl - JDLObject', () => {
           expect(() => {
             // @ts-expect-error
             object.addDeployment(null);
-          }).to.throw(/^Can't add nil deployment\.$/);
+          }).toThrow(/^Can't add nil deployment\.$/);
         });
       });
     });
@@ -170,7 +168,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should work', () => {
-        expect(object.deployments[application.deploymentType]).to.deep.eq(application);
+        expect(object.deployments[application.deploymentType]).toEqual(application);
       });
     });
   });
@@ -183,7 +181,7 @@ describe('jdl - JDLObject', () => {
 
     describe('when having no deployment', () => {
       it('should return 0', () => {
-        expect(jdlObject.getDeploymentQuantity()).to.equal(0);
+        expect(jdlObject.getDeploymentQuantity()).toBe(0);
       });
     });
 
@@ -199,7 +197,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should return the number of applications', () => {
-        expect(jdlObject.getDeploymentQuantity()).to.equal(1);
+        expect(jdlObject.getDeploymentQuantity()).toBe(1);
       });
     });
   });
@@ -228,7 +226,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should use each entity name', () => {
-        jestExpect(result).toMatchInlineSnapshot(`
+        expect(result).toMatchInlineSnapshot(`
 [
   "A",
   "B",
@@ -246,7 +244,7 @@ describe('jdl - JDLObject', () => {
           expect(() => {
             // @ts-expect-error
             object.addEntity(null);
-          }).to.throw(/^Can't add nil entity\.$/);
+          }).toThrow(/^Can't add nil entity\.$/);
         });
       });
     });
@@ -265,7 +263,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should work', () => {
-        expect(object.entities[entity.name]).to.deep.eq(entity);
+        expect(object.entities[entity.name]).toEqual(entity);
       });
     });
     describe('when adding an entity with the same name', () => {
@@ -290,7 +288,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should replace the former one', () => {
-        expect(object.entities[entity.name]).to.deep.eq(entity2);
+        expect(object.entities[entity.name]).toEqual(entity2);
       });
     });
   });
@@ -307,13 +305,13 @@ describe('jdl - JDLObject', () => {
         expect(() => {
           // @ts-expect-error testing invalid input
           jdlObject.getEntity();
-        }).to.throw('An entity name must be passed so as to be retrieved.');
+        }).toThrow('An entity name must be passed so as to be retrieved.');
       });
     });
 
     describe('when passing a name', () => {
       it('should return the entity', () => {
-        expect(jdlObject.getEntity('A')).not.to.be.undefined;
+        expect(jdlObject.getEntity('A')).not.toBeUndefined();
       });
     });
   });
@@ -326,7 +324,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should return an empty array', () => {
-        expect(object.getEntities()).to.deep.equal([]);
+        expect(object.getEntities()).toEqual([]);
       });
     });
     describe('when there are entities', () => {
@@ -343,7 +341,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should return them in an array', () => {
-        jestExpect(returnedEntities).toMatchInlineSnapshot(`
+        expect(returnedEntities).toMatchInlineSnapshot(`
 [
   JDLEntity {
     "annotations": {},
@@ -366,7 +364,7 @@ describe('jdl - JDLObject', () => {
 
     describe('when having no entity', () => {
       it('should return 0', () => {
-        expect(jdlObject.getEntityQuantity()).to.equal(0);
+        expect(jdlObject.getEntityQuantity()).toBe(0);
       });
     });
 
@@ -380,7 +378,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should return the number of entities', () => {
-        expect(jdlObject.getEntityQuantity()).to.equal(1);
+        expect(jdlObject.getEntityQuantity()).toBe(1);
       });
     });
   });
@@ -397,7 +395,7 @@ describe('jdl - JDLObject', () => {
 
     describe('when having no entity', () => {
       it('should return an empty list', () => {
-        expect(jdlObject.getEntityNames()).to.be.empty;
+        expect(jdlObject.getEntityNames()).toHaveLength(0);
       });
     });
     describe('when having entities', () => {
@@ -408,7 +406,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should return the entity names', () => {
-        expect(jdlObject.getEntityNames()).to.deep.equal(['A', 'B', 'C']);
+        expect(jdlObject.getEntityNames()).toEqual(['A', 'B', 'C']);
       });
     });
   });
@@ -437,7 +435,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should use each entity name', () => {
-        jestExpect(result).toMatchInlineSnapshot(`
+        expect(result).toMatchInlineSnapshot(`
 [
   "A",
   "B",
@@ -455,7 +453,7 @@ describe('jdl - JDLObject', () => {
           expect(() => {
             // @ts-expect-error
             object.addEnum(null);
-          }).to.throw(/^Can't add nil enum\.$/);
+          }).toThrow(/^Can't add nil enum\.$/);
         });
       });
     });
@@ -470,7 +468,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should work', () => {
-        expect(object.getEnum(enumObject.name)).to.deep.eq(enumObject);
+        expect(object.getEnum(enumObject.name)).toEqual(enumObject);
       });
     });
     describe('when adding an enum with the same name', () => {
@@ -487,7 +485,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should replace the old one', () => {
-        expect(object.getEnum(enumObject.name)).to.deep.equal(enumObject2);
+        expect(object.getEnum(enumObject.name)).toEqual(enumObject2);
       });
     });
   });
@@ -500,7 +498,7 @@ describe('jdl - JDLObject', () => {
 
     describe('when fetching an absent enum', () => {
       it('should return null', () => {
-        expect(object.getEnum('A')).to.be.undefined;
+        expect(object.getEnum('A')).toBeUndefined();
       });
     });
     describe('when fetching an existing enum', () => {
@@ -512,7 +510,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should return it', () => {
-        expect(object.getEnum(jdlEnum.name)).to.deep.equal(jdlEnum);
+        expect(object.getEnum(jdlEnum.name)).toEqual(jdlEnum);
       });
     });
   });
@@ -525,7 +523,7 @@ describe('jdl - JDLObject', () => {
 
     describe('when fetching an absent enum', () => {
       it('should return false', () => {
-        expect(object.hasEnum('A')).to.be.false;
+        expect(object.hasEnum('A')).toBe(false);
       });
     });
     describe('when fetching an existing enum', () => {
@@ -537,7 +535,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should return true', () => {
-        expect(object.hasEnum(jdlEnum.name)).to.be.true;
+        expect(object.hasEnum(jdlEnum.name)).toBe(true);
       });
     });
   });
@@ -550,7 +548,7 @@ describe('jdl - JDLObject', () => {
 
     describe('when having no enum', () => {
       it('should return 0', () => {
-        expect(jdlObject.getEnumQuantity()).to.equal(0);
+        expect(jdlObject.getEnumQuantity()).toBe(0);
       });
     });
 
@@ -564,7 +562,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should return the number of enums', () => {
-        expect(jdlObject.getEnumQuantity()).to.equal(1);
+        expect(jdlObject.getEnumQuantity()).toBe(1);
       });
     });
   });
@@ -593,7 +591,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should use each enum name', () => {
-        jestExpect(result).toMatchInlineSnapshot(`
+        expect(result).toMatchInlineSnapshot(`
 [
   "A",
   "B",
@@ -611,7 +609,7 @@ describe('jdl - JDLObject', () => {
           expect(() => {
             // @ts-expect-error
             object.addRelationship(null);
-          }).to.throw(/^Can't add nil relationship\.$/);
+          }).toThrow(/^Can't add nil relationship\.$/);
         });
       });
       describe('such as an incomplete relationship', () => {
@@ -625,7 +623,7 @@ describe('jdl - JDLObject', () => {
                 injectedFieldInFrom: 'something',
               }),
             );
-          }).to.throw('Source and destination entities must be passed to create a relationship.');
+          }).toThrow('Source and destination entities must be passed to create a relationship.');
         });
       });
     });
@@ -646,7 +644,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should work', () => {
-        expect(object.relationships.getManyToMany(relationship.getId())).to.deep.eq(relationship);
+        expect(object.relationships.getManyToMany(relationship.getId())).toEqual(relationship);
       });
     });
     describe('when adding twice the same relationship', () => {
@@ -666,7 +664,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it("doesn't do anything", () => {
-        expect(object.relationships.manyToManyQuantity()).to.equal(1);
+        expect(object.relationships.manyToManyQuantity()).toBe(1);
       });
     });
   });
@@ -679,7 +677,7 @@ describe('jdl - JDLObject', () => {
 
     describe('when having no relationship', () => {
       it('should return 0', () => {
-        expect(jdlObject.getRelationshipQuantity()).to.equal(0);
+        expect(jdlObject.getRelationshipQuantity()).toBe(0);
       });
     });
 
@@ -696,7 +694,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should return the number of relationships', () => {
-        expect(jdlObject.getRelationshipQuantity()).to.equal(1);
+        expect(jdlObject.getRelationshipQuantity()).toBe(1);
       });
     });
   });
@@ -739,7 +737,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should use each relationship', () => {
-        jestExpect(result).toMatchInlineSnapshot(`
+        expect(result).toMatchInlineSnapshot(`
 [
   "OneToOne",
   "OneToMany",
@@ -757,7 +755,7 @@ describe('jdl - JDLObject', () => {
           expect(() => {
             // @ts-expect-error
             object.addOption(null);
-          }).to.throw(/^Can't add nil option\.$/);
+          }).toThrow(/^Can't add nil option\.$/);
         });
       });
       describe('such as an empty object', () => {
@@ -765,7 +763,7 @@ describe('jdl - JDLObject', () => {
           expect(() => {
             // @ts-expect-error
             object.addOption({});
-          }).to.throw(/^Can't add nil option\.$/);
+          }).toThrow(/^Can't add nil option\.$/);
         });
       });
     });
@@ -789,12 +787,12 @@ describe('jdl - JDLObject', () => {
     describe('when passing an invalid name', () => {
       it('should return an empty array', () => {
         // @ts-expect-error testing invalid input
-        expect(jdlObject.getOptionsForName()).to.be.empty;
+        expect(jdlObject.getOptionsForName()).toHaveLength(0);
       });
     });
     describe('when checking for an absent option', () => {
       it('should return an empty array', () => {
-        expect(jdlObject.getOptionsForName(unaryOptions.SKIP_CLIENT)).to.be.empty;
+        expect(jdlObject.getOptionsForName(unaryOptions.SKIP_CLIENT)).toHaveLength(0);
       });
     });
     describe('when checking for a present option', () => {
@@ -821,8 +819,8 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should return it', () => {
-        expect(jdlObject.getOptionsForName(unaryOptions.SKIP_CLIENT)).to.deep.equal([option1]);
-        expect(jdlObject.getOptionsForName(binaryOptions.Options.SERVICE)).to.deep.equal([option2, option3]);
+        expect(jdlObject.getOptionsForName(unaryOptions.SKIP_CLIENT)).toEqual([option1]);
+        expect(jdlObject.getOptionsForName(binaryOptions.Options.SERVICE)).toEqual([option2, option3]);
       });
     });
   });
@@ -835,7 +833,7 @@ describe('jdl - JDLObject', () => {
 
     describe('when having no option', () => {
       it('should return 0', () => {
-        expect(jdlObject.getOptionQuantity()).to.equal(0);
+        expect(jdlObject.getOptionQuantity()).toBe(0);
       });
     });
 
@@ -849,7 +847,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should return the number of options', () => {
-        expect(jdlObject.getOptionQuantity()).to.equal(1);
+        expect(jdlObject.getOptionQuantity()).toBe(1);
       });
     });
   });
@@ -886,7 +884,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should use each option', () => {
-        jestExpect(result).toMatchInlineSnapshot(`
+        expect(result).toMatchInlineSnapshot(`
 [
   "skipClient",
   "skipServer",
@@ -905,7 +903,7 @@ describe('jdl - JDLObject', () => {
 
       it('should return false', () => {
         // @ts-expect-error testing invalid input
-        expect(jdlObject.hasOption()).to.be.false;
+        expect(jdlObject.hasOption()).toBe(false);
       });
     });
     describe('when passing an option name', () => {
@@ -922,12 +920,12 @@ describe('jdl - JDLObject', () => {
 
       describe('for an absent option', () => {
         it('should return false', () => {
-          expect(jdlObject.hasOption('toto')).to.be.false;
+          expect(jdlObject.hasOption('toto')).toBe(false);
         });
       });
       describe('for an existing option', () => {
         it('should return false', () => {
-          expect(jdlObject.hasOption(unaryOptions.READ_ONLY)).to.be.true;
+          expect(jdlObject.hasOption(unaryOptions.READ_ONLY)).toBe(true);
         });
       });
     });
@@ -947,7 +945,7 @@ describe('jdl - JDLObject', () => {
         });
 
         it('should return true', () => {
-          expect(jdlObject.isEntityInMicroservice('A')).to.be.true;
+          expect(jdlObject.isEntityInMicroservice('A')).toBe(true);
         });
       });
 
@@ -963,7 +961,7 @@ describe('jdl - JDLObject', () => {
         });
 
         it('should return true', () => {
-          expect(jdlObject.isEntityInMicroservice('A')).to.be.true;
+          expect(jdlObject.isEntityInMicroservice('A')).toBe(true);
         });
       });
     });
@@ -979,7 +977,7 @@ describe('jdl - JDLObject', () => {
       });
 
       it('should return false', () => {
-        expect(jdlObject.isEntityInMicroservice('B')).to.be.false;
+        expect(jdlObject.isEntityInMicroservice('B')).toBe(false);
       });
     });
   });
@@ -1034,7 +1032,7 @@ describe('jdl - JDLObject', () => {
     });
 
     it('should stringify the JDL object', () => {
-      expect(object.toString()).to.equal(
+      expect(object.toString()).toBe(
         `${application.toString()}
 
 ${deployment.toString()}

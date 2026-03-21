@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import * as defaultApplicationOptions from './default-application-options.ts';
 
@@ -40,31 +38,31 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
 
       it('should set the application type to monolith', () => {
-        expect(options.applicationType).to.equal('monolith');
+        expect(options.applicationType).toBe('monolith');
       });
       it('should set the server port to 8080', () => {
-        expect(options.serverPort).to.equal(8080);
+        expect(options.serverPort).toBe(8080);
       });
       it('should set the authentication type to jwt', () => {
-        expect(options.authenticationType).to.equal('jwt');
+        expect(options.authenticationType).toBe('jwt');
       });
       it('should set the cache provider to ehcache', () => {
-        expect(options.cacheProvider).to.equal('ehcache');
+        expect(options.cacheProvider).toBe('ehcache');
       });
       it('should set the user management skipping option to false', () => {
-        expect(options.skipUserManagement).to.be.false;
+        expect(options.skipUserManagement).toBe(false);
       });
       it('should set the client framework option to angular', () => {
-        expect(options.clientFramework).to.equal('angular');
+        expect(options.clientFramework).toBe('angular');
       });
       it('should set the client theme option to none', () => {
-        expect(options.clientTheme).to.equal('none');
+        expect(options.clientTheme).toBe('none');
       });
       it('should set the client theme variant option to undefined', () => {
-        expect(options.clientThemeVariant).to.be.undefined;
+        expect(options.clientThemeVariant).toBeUndefined();
       });
       it('should set withAdminUI option to true', () => {
-        expect(options.withAdminUi).to.be.true;
+        expect(options.withAdminUi).toBe(true);
       });
     });
     describe('when passing a custom client theme and no variant', () => {
@@ -77,7 +75,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
 
       it('should set the client theme variant to the primary', () => {
-        expect(clientThemeVariantOption).to.equal('primary');
+        expect(clientThemeVariantOption).toBe('primary');
       });
     });
     describe('when the authentication type is oauth2', () => {
@@ -90,7 +88,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
 
       it('should set the user management skipping option to true', () => {
-        expect(skipUserManagementOption).to.be.true;
+        expect(skipUserManagementOption).toBe(true);
       });
     });
     describe('when passing custom options', () => {
@@ -104,7 +102,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
 
       it('should ignore the application type', () => {
-        expect(options.applicationType).to.equal('monolith');
+        expect(options.applicationType).toBe('monolith');
       });
     });
   });
@@ -117,40 +115,40 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
 
       it('should set the application type to gateway', () => {
-        expect(options.applicationType).to.equal('gateway');
+        expect(options.applicationType).toBe('gateway');
       });
       it('should set the server port to 8080', () => {
-        expect(options.serverPort).to.equal(8080);
+        expect(options.serverPort).toBe(8080);
       });
       it('should set the authentication type to jwt', () => {
-        expect(options.authenticationType).to.equal('jwt');
+        expect(options.authenticationType).toBe('jwt');
       });
       it('should set the cache provider to no', () => {
-        expect(options.cacheProvider).to.equal('no');
+        expect(options.cacheProvider).toBe('no');
       });
       it('should disable hibernate cache', () => {
-        expect(options.enableHibernateCache).to.be.false;
+        expect(options.enableHibernateCache).toBe(false);
       });
       it('should set the user management skipping option to false', () => {
-        expect(options.skipUserManagement).to.be.false;
+        expect(options.skipUserManagement).toBe(false);
       });
       it('should set the client framework option to angular', () => {
-        expect(options.clientFramework).to.equal('angular');
+        expect(options.clientFramework).toBe('angular');
       });
       it('should set the client theme option to none', () => {
-        expect(options.clientTheme).to.equal('none');
+        expect(options.clientTheme).toBe('none');
       });
       it('should set the client theme variant option to undefined', () => {
-        expect(options.clientThemeVariant).to.be.undefined;
+        expect(options.clientThemeVariant).toBeUndefined();
       });
       it('should set the withAdminUi option to true', () => {
-        expect(options.withAdminUi).to.be.true;
+        expect(options.withAdminUi).toBe(true);
       });
       it('should set the service discovery type to consul', () => {
-        expect(options.serviceDiscoveryType).to.equal('consul');
+        expect(options.serviceDiscoveryType).toBe('consul');
       });
       it('should set the reactive to true', () => {
-        expect(options.reactive).to.be.true;
+        expect(options.reactive).toBe(true);
       });
     });
     describe('when the service discovery type option is no', () => {
@@ -163,7 +161,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
 
       it('should set it to no', () => {
-        expect(serviceDiscoveryTypeOption).to.be.equal('no');
+        expect(serviceDiscoveryTypeOption).toBe('no');
       });
     });
     describe('when passing a custom client theme and no variant', () => {
@@ -176,7 +174,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
 
       it('should set the client theme variant to the primary', () => {
-        expect(clientThemeVariantOption).to.equal('primary');
+        expect(clientThemeVariantOption).toBe('primary');
       });
     });
     describe('when the authentication type is oauth2', () => {
@@ -189,7 +187,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
 
       it('should set the user management skipping option to true', () => {
-        expect(skipUserManagementOption).to.be.true;
+        expect(skipUserManagementOption).toBe(true);
       });
     });
     describe('when passing custom options', () => {
@@ -203,7 +201,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
 
       it('should ignore the application type', () => {
-        expect(options.applicationType).to.equal('gateway');
+        expect(options.applicationType).toBe('gateway');
       });
     });
   });
@@ -216,37 +214,37 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
 
       it('should set the application type to microservice', () => {
-        expect(options.applicationType).to.equal('microservice');
+        expect(options.applicationType).toBe('microservice');
       });
       it('should set the server port to 8081', () => {
-        expect(options.serverPort).to.equal(8081);
+        expect(options.serverPort).toBe(8081);
       });
       it('should set the authentication type to jwt', () => {
-        expect(options.authenticationType).to.equal('jwt');
+        expect(options.authenticationType).toBe('jwt');
       });
       it('should set the cache provider to hazelcast', () => {
-        expect(options.cacheProvider).to.equal('hazelcast');
+        expect(options.cacheProvider).toBe('hazelcast');
       });
       it('should set the user management skipping option to true', () => {
-        expect(options.skipUserManagement).to.be.true;
+        expect(options.skipUserManagement).toBe(true);
       });
       it('should set the service discovery type option to consul', () => {
-        expect(options.serviceDiscoveryType).to.equal('consul');
+        expect(options.serviceDiscoveryType).toBe('consul');
       });
       it('should set the client skipping option to true', () => {
-        expect(options.clientFramework).to.equal('no');
+        expect(options.clientFramework).toBe('no');
       });
       it('should unset the client theme option', () => {
-        expect(options.clientTheme).to.be.undefined;
+        expect(options.clientTheme).toBeUndefined();
       });
       it('should unset the client theme variant option', () => {
-        expect(options.clientThemeVariant).to.be.undefined;
+        expect(options.clientThemeVariant).toBeUndefined();
       });
       it('should unset the withAdminUi option', () => {
-        expect(options.withAdminUi).to.be.false;
+        expect(options.withAdminUi).toBe(false);
       });
       it('should unset the server skipping option', () => {
-        expect(options.skipServer).to.be.undefined;
+        expect(options.skipServer).toBeUndefined();
       });
     });
     describe('when the service discovery type option is no', () => {
@@ -259,7 +257,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
 
       it('should set it to no', () => {
-        expect(serviceDiscoveryTypeOption).to.equal('no');
+        expect(serviceDiscoveryTypeOption).toBe('no');
       });
     });
     describe('when passing custom options', () => {
@@ -278,25 +276,25 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
 
       it('should ignore the application type option', () => {
-        expect(options.applicationType).to.equal('microservice');
+        expect(options.applicationType).toBe('microservice');
       });
       it('should not ignore the client skipping option', () => {
-        expect(options.skipClient).to.be.false;
+        expect(options.skipClient).toBe(false);
       });
       it('should not remove the client framework option', () => {
-        expect(options.clientFramework).to.equal('react');
+        expect(options.clientFramework).toBe('react');
       });
       it('should remove the client theme option', () => {
-        expect(options.clientTheme).to.equal('something');
+        expect(options.clientTheme).toBe('something');
       });
       it('should remove the client theme variant option', () => {
-        expect(options.clientThemeVariant).to.equal('dark');
+        expect(options.clientThemeVariant).toBe('dark');
       });
       it('should remove the withAdminUi option', () => {
-        expect(options.withAdminUi).to.be.false;
+        expect(options.withAdminUi).toBe(false);
       });
       it('should not remove the server skipping option', () => {
-        expect(options.skipServer).not.to.be.undefined;
+        expect(options.skipServer).not.toBeUndefined();
       });
     });
   });
@@ -309,46 +307,46 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
 
       it('should set the base name option to jhipster', () => {
-        expect(options.baseName).to.equal('jhipster');
+        expect(options.baseName).toBe('jhipster');
       });
       it('should set the build tool option to maven', () => {
-        expect(options.buildTool).to.equal('maven');
+        expect(options.buildTool).toBe('maven');
       });
       it('should set the database type option to sql', () => {
-        expect(options.databaseType).to.equal('sql');
+        expect(options.databaseType).toBe('sql');
       });
       it('should set the development database type option to the same that production database', () => {
-        expect(options.devDatabaseType).to.equal(options.prodDatabaseType);
+        expect(options.devDatabaseType).toBe(options.prodDatabaseType);
       });
       it('should set the hibernate cache enabling option to true', () => {
-        expect(options.enableHibernateCache).to.be.true;
+        expect(options.enableHibernateCache).toBe(true);
       });
       it('should set the swagger codegen enabling option to false', () => {
-        expect(options.enableSwaggerCodegen).to.be.false;
+        expect(options.enableSwaggerCodegen).toBe(false);
       });
       it('should set the translation enabling option to true', () => {
-        expect(options.enableTranslation).to.be.true;
+        expect(options.enableTranslation).toBe(true);
       });
       it('should set the jhipster prefix option to jhi', () => {
-        expect(options.jhiPrefix).to.equal('jhi');
+        expect(options.jhiPrefix).toBe('jhi');
       });
       it('should set the languages option to an empty array', () => {
-        expect(options.languages).to.be.eql([]);
+        expect(options.languages).toEqual([]);
       });
       it('should set the package name to com.mycompany.myapp', () => {
-        expect(options.packageName).to.equal('com.mycompany.myapp');
+        expect(options.packageName).toBe('com.mycompany.myapp');
       });
       it('should set the production database type option to postgresql', () => {
-        expect(options.prodDatabaseType).to.equal('postgresql');
+        expect(options.prodDatabaseType).toBe('postgresql');
       });
       it('should set the search engine option to no', () => {
-        expect(options.searchEngine).to.be.equal('no');
+        expect(options.searchEngine).toBe('no');
       });
       it('should set the test frameworks option to nothing', () => {
-        expect(options.testFrameworks).to.have.lengthOf(0);
+        expect(options.testFrameworks).toHaveLength(0);
       });
       it('should set the websocket option to no', () => {
-        expect(options.websocket).to.be.equal('no');
+        expect(options.websocket).toBe('no');
       });
     });
     describe('when there is no package name option but only a package folder', () => {
@@ -361,7 +359,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
 
       it('should set the package name accordingly', () => {
-        expect(packageNameOption).to.equal('a.b.c.d');
+        expect(packageNameOption).toBe('a.b.c.d');
       });
     });
     describe('when the client framework option is angular', () => {
@@ -374,7 +372,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
 
       it('should set the option to angular', () => {
-        expect(clientFrameworkOption).to.equal('angular');
+        expect(clientFrameworkOption).toBe('angular');
       });
     });
     describe('when the database type option is MongoDB', () => {
@@ -388,7 +386,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
 
       it('should set the enableHibernateCache option to false', () => {
-        expect(enableHibernateCacheOption).to.be.false;
+        expect(enableHibernateCacheOption).toBe(false);
       });
     });
     describe('when the database type option is couchbase', () => {
@@ -402,7 +400,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
 
       it('should set the enableHibernateCache option to false', () => {
-        expect(enableHibernateCacheOption).to.be.false;
+        expect(enableHibernateCacheOption).toBe(false);
       });
     });
     describe('when the database type option is cassandra', () => {
@@ -416,7 +414,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
 
       it('should set the enableHibernateCache option to false', () => {
-        expect(enableHibernateCacheOption).to.be.false;
+        expect(enableHibernateCacheOption).toBe(false);
       });
     });
     describe('when the reactive option is set', () => {
@@ -429,7 +427,7 @@ describe('jdl - DefaultApplicationOptions', () => {
       });
 
       it('should set the cache provider option to no', () => {
-        expect(cacheProviderOption).to.equal('no');
+        expect(cacheProviderOption).toBe('no');
       });
     });
     describe('when the cache option is set to ehcache', () => {
@@ -438,7 +436,7 @@ describe('jdl - DefaultApplicationOptions', () => {
           getDefaultConfigForNewApplication({
             cacheProvider: 'ehcache',
           }).enableHibernateCache,
-        ).to.equal(true);
+        ).toBe(true);
       });
     });
     describe('when the cache option is set to memcached', () => {
@@ -447,7 +445,7 @@ describe('jdl - DefaultApplicationOptions', () => {
           getDefaultConfigForNewApplication({
             cacheProvider: 'memcached',
           }).enableHibernateCache,
-        ).to.equal(false);
+        ).toBe(false);
       });
     });
   });

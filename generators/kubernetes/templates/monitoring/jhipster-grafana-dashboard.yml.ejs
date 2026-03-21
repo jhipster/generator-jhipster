@@ -16,11 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: ConfigMap
 metadata:
   name: jhipster-grafana-dashboard
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
 data:
   deployment-dashboard.json: |
     {
@@ -2299,11 +2299,11 @@ data:
         "url": "http://jhipster-prometheus:9090"
     }
 ---
-apiVersion: <%= KUBERNETES_BATCH_API_VERSION %>
+apiVersion: <%- KUBERNETES_BATCH_API_VERSION %>
 kind: Job
 metadata:
   name: jhipster-grafana-dashboard
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
   labels:
     job: jhipster-grafana-dashboard
 spec:
@@ -2365,4 +2365,3 @@ spec:
         configMap:
           name: jhipster-grafana-dashboard
       restartPolicy: OnFailure
-

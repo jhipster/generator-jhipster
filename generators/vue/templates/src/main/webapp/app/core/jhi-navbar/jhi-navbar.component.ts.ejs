@@ -26,8 +26,8 @@ export default defineComponent({
     'entities-menu': EntitiesMenu,
 <%_ if (applicationTypeGateway && microfrontend) { _%>
   <%_ for (const remote of microfrontends) { _%>
-    '<%= remote.lowercaseBaseName %>-menu': defineAsyncComponent(() => {
-      return loadRemote<any>('<%= remote.lowercaseBaseName %>/entities-menu')
+    '<%- remote.lowercaseBaseName %>-menu': defineAsyncComponent(() => {
+      return loadRemote<any>('<%- remote.lowercaseBaseName %>/entities-menu')
         .catch(() => import('@/core/error/error-loading.vue'));
     }),
   <%_ } _%>
@@ -72,8 +72,8 @@ export default defineComponent({
 
     const logout = async () => {
 <%_ if (authenticationTypeJwt) { _%>
-      localStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
-      sessionStorage.removeItem('<%=jhiPrefixDashed %>-authenticationToken');
+      localStorage.removeItem('<%- jhiPrefixDashed %>-authenticationToken');
+      sessionStorage.removeItem('<%- jhiPrefixDashed %>-authenticationToken');
       store.logout();
       if (router.currentRoute.value.path !== '/') {
         router.push('/');

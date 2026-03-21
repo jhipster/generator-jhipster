@@ -32,14 +32,14 @@ import { TranslateDirective } from 'app/shared/language';
 import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
-import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
+import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
 <%_ if (anyFieldIsBlobDerived) { _%>
 import { DataUtils } from 'app/core/util/data-util.service';
 <%_ } _%>
 
 @Component({
-    selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-detail',
-    templateUrl: './<%= entityFileName %>-detail.html',
+    selector: '<%- jhiPrefixDashed %>-<%- entityFileName %>-detail',
+    templateUrl: './<%- entityFileName %>-detail.html',
     imports: [
       FontAwesomeModule,
 <%_ if (anyFieldHasDocumentation) { _%>
@@ -65,8 +65,8 @@ import { DataUtils } from 'app/core/util/data-util.service';
 <%_ } _%>
     ],
 })
-export class <%= entityAngularName %>Detail {
-    readonly <%= entityInstance %> = input<I<%= entityAngularName %> | null>(null);
+export class <%- entityAngularName %>Detail {
+    readonly <%- entityInstance %> = input<I<%- entityAngularName %> | null>(null);
 
 <%_ if (anyFieldIsBlobDerived) { _%>
     protected dataUtils = inject(DataUtils);

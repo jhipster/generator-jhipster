@@ -5,7 +5,7 @@ cucumber-bom = { module = 'io.cucumber:cucumber-bom', version = '7.34.3' }
 
 mongock-bom = { module = 'io.mongock:mongock-bom', version = '5.5.1' }
 
-neo4j-migrations-spring-boot-starter = { module = 'eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter', version = '3.2.1' }
+neo4j-migrations-spring-boot-starter = { module = 'eu.michael-simons.neo4j:neo4j-migrations-spring-boot-starter', version = '3.3.0' }
 
 # Cassandra
 lz4-java = { module = 'at.yawk.lz4:lz4-java', version = '1.10.4' }
@@ -26,7 +26,7 @@ gradle-liquibase = { id = 'org.liquibase.gradle', version = '3.1.0' }
 
 gradle-sonarqube = { id = 'org.sonarqube', version = '7.2.3.7755' }
 
-spotless-gradle-plugin = { id = 'com.diffplug.spotless', version = '8.3.0' }
+spotless-gradle-plugin = { id = 'com.diffplug.spotless', version = '8.4.0' }
 
 gradle-modernizer-plugin = { id = 'com.github.andygoossens.gradle-modernizer-plugin', version = '1.12.0' }
 
@@ -34,7 +34,7 @@ gradle-develocity = { id = 'com.gradle.develocity', version = '4.3.2' }
 
 common-custom-user-data-gradle-plugin = { id = 'com.gradle.common-custom-user-data-gradle-plugin', version = '2.4.0' }
 
-gatling-gradle = { id = 'io.gatling.gradle', version = '3.15.0' }
+gatling-gradle = { id = 'io.gatling.gradle', version = '3.15.0.1' }
 
 gradle-openapi-generator = { id = 'org.openapi.generator', version = '7.20.0' }
 

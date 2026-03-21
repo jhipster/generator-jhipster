@@ -20,18 +20,17 @@
 const tsKeyId = primaryKey.tsSampleValues[0];
 const enumImports = this.generateEntityClientEnumImports(fields.filter(field => !field.id));
 _%>
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import axios from 'axios';
-import sinon from 'sinon'
 <%_ if (anyFieldIsDateDerived) { _%>
 import dayjs from 'dayjs';
 <%_ } _%>
 
 <%_ if (anyFieldIsLocalDate || anyFieldIsInstant || anyFieldIsZonedDateTime) { _%>
-import { <%_ if (anyFieldIsLocalDate) { _%>DATE_FORMAT,<%_ } if (anyFieldIsInstant || anyFieldIsZonedDateTime) {_%> DATE_TIME_FORMAT<%_ } _%> } from '@/shared/composables/date-format';
+import { <%_ if (anyFieldIsLocalDate) { _%>DATE_FORMAT,<%_ } if (anyFieldIsInstant || anyFieldIsZonedDateTime) { _%> DATE_TIME_FORMAT<%_ } _%> } from '@/shared/composables/date-format';
 <%_ } _%>
-import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
-import { <%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
+import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
+import { <%- entityAngularName %> } from '@/shared/model/<%- entityModelFileName %>.model';
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
@@ -46,32 +45,33 @@ const error = {
 };
 
 const axiosStub = {
-  get: sinon.stub(axios, 'get'),
-  post: sinon.stub(axios, 'post'),
-  put: sinon.stub(axios, 'put'),
-  patch: sinon.stub(axios, 'patch'),
-  delete: sinon.stub(axios, 'delete'),
+  get: vi.spyOn(axios, 'get'),
+  post: vi.spyOn(axios, 'post'),
+  put: vi.spyOn(axios, 'put'),
+  patch: vi.spyOn(axios, 'patch'),
+  delete: vi.spyOn(axios, 'delete'),
 };
 
 describe('Service Tests', () => {
-  describe('<%= entityAngularName %> Service', () => {
-    let service: <%= entityAngularName %>Service;
+  describe('<%- entityAngularName %> Service', () => {
+    let service: <%- entityAngularName %>Service;
     let elemDefault;
 <%_ if (anyFieldIsDateDerived) { _%>
     let currentDate: Date;
 <%_ } _%>
 
     beforeEach(() => {
-      service = new <%= entityAngularName %>Service();
+      service = new <%- entityAngularName %>Service();
 <%_ if (anyFieldIsDateDerived) { _%>
       currentDate = new Date();
 <%_ } _%>
-      elemDefault = new <%= entityAngularName %>(
+      elemDefault = new <%- entityAngularName %>(
         <%- primaryKey.tsSampleValues[0] %>,
 <%_ fields.filter(field => !field.id).forEach((field) => {
-    const fieldType = field.fieldType; _%>
+    const fieldType = field.fieldType;
+_%>
   <%_ if (field.fieldIsEnum) { _%>
-        '<%= field.enumValues[0].name %>',
+        '<%- field.enumValues[0].name %>',
   <%_ } else if (field.fieldTypeBoolean) { _%>
         false,
   <%_ } else if (field.fieldTypeDuration) { _%>
@@ -97,13 +97,13 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign({
 <%_ fields.filter(field => !field.id).forEach((field) => { _%>
   <%_ if (field.fieldTypeLocalDate) { _%>
-          <%= field.fieldName%>: dayjs(currentDate).format(DATE_FORMAT),
+          <%- field.fieldName%>: dayjs(currentDate).format(DATE_FORMAT),
   <%_ } else if (field.fieldTypeTimed) { _%>
-          <%= field.fieldName%>: dayjs(currentDate).format(DATE_TIME_FORMAT),
+          <%- field.fieldName%>: dayjs(currentDate).format(DATE_TIME_FORMAT),
   <%_ } _%>
 <%_ }) _%>
         }, elemDefault);
-        axiosStub.get.resolves({ data: returnedFromService });
+        axiosStub.get.mockResolvedValue({ data: returnedFromService });
 
         return service
           .find(<%- tsKeyId %>).then((res) => {
@@ -112,7 +112,7 @@ describe('Service Tests', () => {
       });
 
       it('should not find an element', async () => {
-        axiosStub.get.rejects(error);
+        axiosStub.get.mockRejectedValue(error);
         return service.find(<%- tsKeyId %>)
           .then()
           .catch(err => {
@@ -121,35 +121,35 @@ describe('Service Tests', () => {
       });
 
 <%_ if (!readOnly) { _%>
-      it('should create a <%= entityAngularName %>', async () => {
+      it('should create a <%- entityAngularName %>', async () => {
         const returnedFromService = Object.assign({
-          <%= primaryKey.name %>: <%- primaryKey.tsSampleValues[0] %>,
+          <%- primaryKey.name %>: <%- primaryKey.tsSampleValues[0] %>,
   <%_ fields.filter(field => !field.id).forEach((field) => { _%>
     <%_ if (field.fieldTypeLocalDate) { _%>
-          <%= field.fieldName%>: dayjs(currentDate).format(DATE_FORMAT),
+          <%- field.fieldName%>: dayjs(currentDate).format(DATE_FORMAT),
     <%_ } else if (field.fieldTypeTimed) { _%>
-          <%= field.fieldName%>: dayjs(currentDate).format(DATE_TIME_FORMAT),
+          <%- field.fieldName%>: dayjs(currentDate).format(DATE_TIME_FORMAT),
     <%_ } _%>
   <%_ }) _%>
         }, elemDefault);
         const expected = Object.assign({
   <%_ fields.filter(field => !field.id).forEach((field) => { _%>
     <%_ if (field.fieldTypeLocalDate) { _%>
-          <%= field.fieldName%>: currentDate,
+          <%- field.fieldName%>: currentDate,
     <%_ } else if (field.fieldTypeTimed) { _%>
-          <%= field.fieldName%>: currentDate,
+          <%- field.fieldName%>: currentDate,
     <%_ } _%>
   <%_ }) _%>
           }, returnedFromService);
 
-          axiosStub.post.resolves({ data: returnedFromService });
+          axiosStub.post.mockResolvedValue({ data: returnedFromService });
           return service.create({}).then((res) => {
             expect(res).toMatchObject(expected);
         });
       });
 
-      it('should not create a <%= entityAngularName %>', async () => {
-        axiosStub.post.rejects(error);
+      it('should not create a <%- entityAngularName %>', async () => {
+        axiosStub.post.mockRejectedValue(error);
 
         return service.create({})
           .then()
@@ -158,23 +158,23 @@ describe('Service Tests', () => {
           });
       });
 
-      it('should update a <%= entityAngularName %>', async () => {
+      it('should update a <%- entityAngularName %>', async () => {
         const returnedFromService = Object.assign({
   <%_ fields.filter(field => !field.id).forEach((field) => { _%>
     <%_ if (field.fieldTypeBoolean) { _%>
-          <%= field.fieldName%>: true,
+          <%- field.fieldName%>: true,
     <%_ } else if (field.fieldTypeDuration) { _%>
-          <%= field.fieldName%>: 'PT2S',
+          <%- field.fieldName%>: 'PT2S',
     <%_ } else if (field.fieldTypeNumeric) { _%>
-          <%= field.fieldName%>: 1,
+          <%- field.fieldName%>: 1,
     <%_ } else if (field.fieldTypeCharSequence) { _%>
-          <%= field.fieldName%>: 'BBBBBB',
+          <%- field.fieldName%>: 'BBBBBB',
     <%_ } else if (field.fieldTypeLocalDate) { _%>
-          <%= field.fieldName%>: dayjs(currentDate).format(DATE_FORMAT),
+          <%- field.fieldName%>: dayjs(currentDate).format(DATE_FORMAT),
     <%_ } else if (field.fieldTypeTimed) { _%>
-          <%= field.fieldName%>: dayjs(currentDate).format(DATE_TIME_FORMAT),
+          <%- field.fieldName%>: dayjs(currentDate).format(DATE_TIME_FORMAT),
     <%_ } else { _%>
-          <%= field.fieldName%>: 'BBBBBB',
+          <%- field.fieldName%>: 'BBBBBB',
     <%_ } _%>
   <%_ }) _%>
           }, elemDefault);
@@ -182,21 +182,21 @@ describe('Service Tests', () => {
           const expected = Object.assign({
   <%_ fields.filter(field => !field.id).forEach((field) => { _%>
     <%_ if (field.fieldTypeLocalDate) { _%>
-          <%= field.fieldName%>: currentDate,
+          <%- field.fieldName%>: currentDate,
     <%_ } else if (field.fieldTypeTimed) { _%>
-          <%= field.fieldName%>: currentDate,
+          <%- field.fieldName%>: currentDate,
     <%_ } _%>
   <%_ }) _%>
           }, returnedFromService);
-          axiosStub.put.resolves({ data: returnedFromService });
+          axiosStub.put.mockResolvedValue({ data: returnedFromService });
 
           return service.update(expected).then((res) => {
             expect(res).toMatchObject(expected);
         });
       });
 
-      it('should not update a <%= entityAngularName %>', async () => {
-        axiosStub.put.rejects(error);
+      it('should not update a <%- entityAngularName %>', async () => {
+        axiosStub.put.mockRejectedValue(error);
 
         return service.update({})
           .then()
@@ -206,46 +206,46 @@ describe('Service Tests', () => {
       });
 
   <% const fieldsToIncludeInPartialPatchTest = fields.filter(field => !field.id && !field.transient && faker.datatype.boolean()); %>
-      it('should partial update a <%= entityAngularName %>', async () => {
+      it('should partial update a <%- entityAngularName %>', async () => {
           const patchObject = Object.assign({
   <%_ fieldsToIncludeInPartialPatchTest.filter(field => !field.id).forEach((field) => { _%>
     <%_ if (field.fieldTypeBoolean) { _%>
-                  <%= field.fieldName%>: true,
+                  <%- field.fieldName%>: true,
     <%_ } else if (field.fieldTypeDuration) { _%>
-                  <%= field.fieldName%>: 'PT2S',
+                  <%- field.fieldName%>: 'PT2S',
     <%_ } else if (field.fieldTypeNumeric) { _%>
-                  <%= field.fieldName%>: 1,
+                  <%- field.fieldName%>: 1,
     <%_ } else if (field.fieldTypeCharSequence) { _%>
-                  <%= field.fieldName%>: 'BBBBBB',
+                  <%- field.fieldName%>: 'BBBBBB',
     <%_ } else if (field.fieldTypeLocalDate) { _%>
-                  <%= field.fieldName%>: dayjs(currentDate).format(DATE_FORMAT),
+                  <%- field.fieldName%>: dayjs(currentDate).format(DATE_FORMAT),
     <%_ } else if (field.fieldTypeTimed) { _%>
-                  <%= field.fieldName%>: dayjs(currentDate).format(DATE_TIME_FORMAT),
+                  <%- field.fieldName%>: dayjs(currentDate).format(DATE_TIME_FORMAT),
     <%_ } else { _%>
-                  <%= field.fieldName%>: 'BBBBBB',
+                  <%- field.fieldName%>: 'BBBBBB',
     <%_ } _%>
   <%_ }) _%>
-          }, new <%= entityAngularName %>())
+          }, new <%- entityAngularName %>())
           const returnedFromService = Object.assign(patchObject, elemDefault);
 
           const expected = Object.assign({
   <%_ fields.filter(field => !field.id).forEach((field) => { _%>
     <%_ if (field.fieldTypeLocalDate) { _%>
-                  <%= field.fieldName%>: currentDate,
+                  <%- field.fieldName%>: currentDate,
     <%_ } else if (field.fieldTypeTimed) { _%>
-                  <%= field.fieldName%>: currentDate,
+                  <%- field.fieldName%>: currentDate,
     <%_ } _%>
   <%_ }) _%>
           }, returnedFromService);
-          axiosStub.patch.resolves({ data: returnedFromService });
+          axiosStub.patch.mockResolvedValue({ data: returnedFromService });
 
           return service.partialUpdate(patchObject).then((res) => {
             expect(res).toMatchObject(expected);
           });
       });
 
-      it('should not partial update a <%= entityAngularName %>', async () => {
-          axiosStub.patch.rejects(error);
+      it('should not partial update a <%- entityAngularName %>', async () => {
+          axiosStub.patch.mockRejectedValue(error);
 
           return service.partialUpdate({})
             .then()
@@ -255,43 +255,43 @@ describe('Service Tests', () => {
       });
 
 <%_ } _%>
-      it('should return a list of <%= entityAngularName %>', async () => {
+      it('should return a list of <%- entityAngularName %>', async () => {
         const returnedFromService = Object.assign({
 <%_ fields.filter(field => !field.id).forEach((field) => { _%>
   <%_ if (field.fieldTypeBoolean) { _%>
-          <%= field.fieldName%>: true,
+          <%- field.fieldName%>: true,
   <%_ } else if (field.fieldTypeDuration) { _%>
-          <%= field.fieldName%>: 'PT2S',
+          <%- field.fieldName%>: 'PT2S',
   <%_ } else if (field.fieldTypeNumeric) { _%>
-          <%= field.fieldName%>: 1,
+          <%- field.fieldName%>: 1,
   <%_ } else if (field.fieldTypeCharSequence) { _%>
-          <%= field.fieldName%>: 'BBBBBB',
+          <%- field.fieldName%>: 'BBBBBB',
   <%_ } else if (field.fieldTypeLocalDate) { _%>
-          <%= field.fieldName%>: dayjs(currentDate).format(DATE_FORMAT),
+          <%- field.fieldName%>: dayjs(currentDate).format(DATE_FORMAT),
   <%_ } else if (field.fieldTypeTimed) { _%>
-          <%= field.fieldName%>: dayjs(currentDate).format(DATE_TIME_FORMAT),
+          <%- field.fieldName%>: dayjs(currentDate).format(DATE_TIME_FORMAT),
   <%_ } else { /* (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate' */ _%>
-          <%= field.fieldName%>: 'BBBBBB',
+          <%- field.fieldName%>: 'BBBBBB',
   <%_ } _%>
 <%_ }) _%>
         }, elemDefault);
         const expected = Object.assign({
 <%_ fields.filter(field => !field.id).forEach((field) => { _%>
   <%_ if (field.fieldTypeLocalDate) { _%>
-          <%= field.fieldName%>: currentDate,
+          <%- field.fieldName%>: currentDate,
   <%_ } else if (field.fieldTypeTimed) { _%>
-          <%= field.fieldName%>: currentDate,
+          <%- field.fieldName%>: currentDate,
   <%_ } _%>
 <%_ }) _%>
         }, returnedFromService);
-        axiosStub.get.resolves([returnedFromService]);
+        axiosStub.get.mockResolvedValue([returnedFromService]);
         return service.retrieve(<% if (!paginationNo) { %>{ sort: {}, page: 0, size: 10 }<% } %>).then((res) => {
           expect(res).toContainEqual(expected);
         });
       });
 
-      it('should not return a list of <%= entityAngularName %>', async () => {
-        axiosStub.get.rejects(error);
+      it('should not return a list of <%- entityAngularName %>', async () => {
+        axiosStub.get.mockRejectedValue(error);
 
         return service.retrieve()
           .then()
@@ -301,15 +301,15 @@ describe('Service Tests', () => {
       });
 
 <%_ if (!readOnly) { _%>
-      it('should delete a <%= entityAngularName %>', async () => {
-          axiosStub.delete.resolves({ok: true});
+      it('should delete a <%- entityAngularName %>', async () => {
+          axiosStub.delete.mockResolvedValue({ok: true});
           return service.delete(<%- tsKeyId %>).then((res) => {
               expect(res.ok).toBeTruthy();
           });
       });
 
-      it('should not delete a <%= entityAngularName %>', async () => {
-        axiosStub.delete.rejects(error);
+      it('should not delete a <%- entityAngularName %>', async () => {
+        axiosStub.delete.mockRejectedValue(error);
 
         return service.delete(<%- tsKeyId %>)
           .then()

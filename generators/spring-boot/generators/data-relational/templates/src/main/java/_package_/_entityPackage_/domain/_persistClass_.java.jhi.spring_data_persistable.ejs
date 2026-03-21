@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 <&_ } -&>
 
 <&_ if (fragment.additionalInterfacesSection) { -&>
-, Persistable<<%= primaryKey.type %>>
+, Persistable<<%- primaryKey.type %>>
 <&_ } -&>
 
 <&_ if (fragment.classAdditionalFieldsSection) { -&>
@@ -46,8 +46,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 <&_ if (fragment.classAdditionalFieldsMethodsSection) { -&>
 <%_ if (primaryKey.name !== 'id') { -%>
     @Override
-    public <%= primaryKey.type %> getId() {
-        return this.<%= primaryKey.name %>;
+    public <%- primaryKey.type %> getId() {
+        return this.<%- primaryKey.name %>;
     }
  <%_ } -%>
 
@@ -60,7 +60,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
         return !this.isPersisted;
     }
 
-    public <%= persistClass %> setIsPersisted() {
+    public <%- persistClass %> setIsPersisted() {
         this.isPersisted = true;
         return this;
     }

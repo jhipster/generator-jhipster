@@ -28,7 +28,7 @@ import { LoginService } from 'app/login/login.service';
 import { AccountService } from 'app/core/auth/account.service';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-login',
+  selector: '<%- jhiPrefixDashed %>-login',
   imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>ReactiveFormsModule<% if (generateUserManagement) { %>, RouterLink<% } %>],
   templateUrl: './login.html',
 })

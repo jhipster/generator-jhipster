@@ -91,7 +91,7 @@ exports[`mutation object test expects mutateRelationshipWithEntity to match snap
 {
   "otherEntityField": undefined,
   "otherEntityUser": false,
-  "ownerSide": true,
-  "persistableRelationship": true,
+  "ownerSide": "relationshipManyToOne",
+  "persistableRelationship": "relationshipManyToOne",
 }
 `;

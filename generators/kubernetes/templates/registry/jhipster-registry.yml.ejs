@@ -30,20 +30,20 @@
 #   This will create new replicas with the correct CLUSTER_SIZE which is mandatory so that all Eureka server can connect directly to all the others.
 #   Then delete the previous replica pods one by one so that they can be recreated with the correct CLUSTER_SIZE configuration.
 #   `kubectl delete pod jhipster-registry-0`, `kubectl delete pod jhipster-registry-1`
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: Secret
 metadata:
   name: registry-secret
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
 type: Opaque
 data:
-  registry-admin-password: <%= adminPasswordBase64 %> # base64 encoded "<%= adminPassword %>"
+  registry-admin-password: <%- adminPasswordBase64 %> # base64 encoded "<%- adminPassword %>"
 ---
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: Service
 metadata:
   name: jhipster-registry
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
   labels:
     app: jhipster-registry
 spec:
@@ -55,11 +55,11 @@ spec:
   selector:
     app: jhipster-registry
 ---
-apiVersion: <%= KUBERNETES_STATEFULSET_API_VERSION %>
+apiVersion: <%- KUBERNETES_STATEFULSET_API_VERSION %>
 kind: StatefulSet
 metadata:
   name: jhipster-registry
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
 spec:
   # added to circumvent kustomize bug
   volumeClaimTemplates: []
@@ -128,13 +128,13 @@ spec:
   <%_ if (useKeycloak) { _%>
         <%_ if (ingressTypeGke) { _%>
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI
-          value: https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>/realms/jhipster
+          value: https://keycloak.<%- kubernetesNamespace %>.<%- ingressDomain %>/realms/jhipster
         # Custom trustStore required when using Let's Encrypt staging
         - name: JAVA_OPTS
           value: "-Djavax.net.ssl.trustStore=/etc/pki/java/cacerts -Djavax.net.ssl.trustStorePassword=123456"
         <%_ } else { _%>
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI
-          value: http://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>/realms/jhipster
+          value: http://keycloak.<%- kubernetesNamespace %>.<%- ingressDomain %>/realms/jhipster
         <%_ } _%>
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID
           value: jhipster-registry

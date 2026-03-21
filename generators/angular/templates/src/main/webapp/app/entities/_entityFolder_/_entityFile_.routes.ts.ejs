@@ -19,13 +19,13 @@
 import { Routes } from '@angular/router';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
-import <%= entityAngularName %>Resolve from './route/<%= entityFileName %>-routing-resolve.service';
+import <%- entityAngularName %>Resolve from './route/<%- entityFileName %>-routing-resolve.service';
 import { ASC } from 'app/config/navigation.constants';
 
-const <%= entityInstance %>Route: Routes = [
+const <%- entityInstance %>Route: Routes = [
   {
     path: '',
-    loadComponent: () => import('./list/<%= entityFileName %>').then(m => m.<%= entityAngularName %>),
+    loadComponent: () => import('./list/<%- entityFileName %>').then(m => m.<%- entityAngularName %>),
     data: {
 <%_ if (primaryKey.typeLong && primaryKey.autoGenerate) { _%>
       defaultSort: '<%- primaryKey.name %>,' + ASC,
@@ -37,10 +37,10 @@ const <%= entityInstance %>Route: Routes = [
     canActivate: [UserRouteAccessService],
   },
   {
-    path: ':<%= primaryKey.name %>/view',
-    loadComponent: () => import('./detail/<%= entityFileName %>-detail').then(m => m.<%= entityAngularName %>Detail),
+    path: ':<%- primaryKey.name %>/view',
+    loadComponent: () => import('./detail/<%- entityFileName %>-detail').then(m => m.<%- entityAngularName %>Detail),
     resolve: {
-      <%= entityInstance %>: <%= entityAngularName %>Resolve
+      <%- entityInstance %>: <%- entityAngularName %>Resolve
     },
 <%_ if (entityAngularReadAuthorities) { _%>
     data: {
@@ -52,9 +52,9 @@ const <%= entityInstance %>Route: Routes = [
 <%_ if (!readOnly) { _%>
   {
     path: 'new',
-    loadComponent: () => import('./update/<%= entityFileName %>-update').then(m => m.<%= entityAngularName %>Update),
+    loadComponent: () => import('./update/<%- entityFileName %>-update').then(m => m.<%- entityAngularName %>Update),
     resolve: {
-      <%= entityInstance %>: <%= entityAngularName %>Resolve
+      <%- entityInstance %>: <%- entityAngularName %>Resolve
     },
 <%_ if (entityAngularAuthorities) { _%>
     data: {
@@ -66,10 +66,10 @@ const <%= entityInstance %>Route: Routes = [
 <%_ } _%>
 <%_ if (!readOnly && updatableEntity) { _%>
   {
-    path: ':<%= primaryKey.name %>/edit',
-    loadComponent: () => import('./update/<%= entityFileName %>-update').then(m => m.<%= entityAngularName %>Update),
+    path: ':<%- primaryKey.name %>/edit',
+    loadComponent: () => import('./update/<%- entityFileName %>-update').then(m => m.<%- entityAngularName %>Update),
     resolve: {
-      <%= entityInstance %>: <%= entityAngularName %>Resolve
+      <%- entityInstance %>: <%- entityAngularName %>Resolve
     },
 <%_ if (entityAngularAuthorities) { _%>
     data: {
@@ -81,4 +81,4 @@ const <%= entityInstance %>Route: Routes = [
 <%_ } _%>
 ];
 
-export default <%= entityInstance %>Route;
+export default <%- entityInstance %>Route;

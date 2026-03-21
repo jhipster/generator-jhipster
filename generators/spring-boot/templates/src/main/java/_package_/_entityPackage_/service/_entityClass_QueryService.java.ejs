@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= entityAbsolutePackage %>.service;
+package <%- entityAbsolutePackage %>.service;
 
 <%_
 const serviceClassName = entityClass + 'QueryService';
@@ -41,66 +41,66 @@ import org.springframework.transaction.annotation.Transactional;
 
 import tech.jhipster.service.QueryService;
 
-import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
-import <%= entityAbsolutePackage %>.domain.*; // for static metamodels
-import <%= entityAbsolutePackage %>.repository.<%= entityClass %>Repository;
+import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
+import <%- entityAbsolutePackage %>.domain.*; // for static metamodels
+import <%- entityAbsolutePackage %>.repository.<%- entityClass %>Repository;
 <%_ if (searchEngineElasticsearch) { _%>
-import <%= entityAbsolutePackage %>.repository.search.<%= entityClass %>SearchRepository;
+import <%- entityAbsolutePackage %>.repository.search.<%- entityClass %>SearchRepository;
 <%_ } _%>
-import <%= entityAbsolutePackage %>.service.criteria.<%= entityClass %>Criteria;
+import <%- entityAbsolutePackage %>.service.criteria.<%- entityClass %>Criteria;
 <%_ if (dtoMapstruct) { _%>
-import <%= entityAbsolutePackage %>.service.dto.<%= dtoClass %>;
-import <%= entityAbsolutePackage %>.service.mapper.<%= entityClass %>Mapper;
+import <%- entityAbsolutePackage %>.service.dto.<%- dtoClass %>;
+import <%- entityAbsolutePackage %>.service.mapper.<%- entityClass %>Mapper;
 <%_ } _%>
 
 /**
- * Service for executing complex queries for {@link <%= persistClass %>} entities in the database.
- * The main input is a {@link <%= entityClass %>Criteria} which gets converted to {@link Specification},
+ * Service for executing complex queries for {@link <%- persistClass %>} entities in the database.
+ * The main input is a {@link <%- entityClass %>Criteria} which gets converted to {@link Specification},
  * in a way that all the filters must apply.
- * It returns a {@link <% if (paginationNo) { %>List<% } else { %>Page<% } %>} of {@link <%= instanceType %>} which fulfills the criteria.
+ * It returns a {@link <% if (paginationNo) { %>List<% } else { %>Page<% } %>} of {@link <%- instanceType %>} which fulfills the criteria.
  */
 @Service
 <%_ if (databaseTypeSql) { _%>
 @Transactional(readOnly = true)
 <%_ } _%>
-public class <%= serviceClassName %> extends QueryService<<%= persistClass %>> {
+public class <%- serviceClassName %> extends QueryService<<%- persistClass %>> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(<%= serviceClassName %>.class);
+    private static final Logger LOG = LoggerFactory.getLogger(<%- serviceClassName %>.class);
 <%- include('../_partials_entity_/inject_template', {viaService: false, constructorName: serviceClassName, queryService: false, isUsingMapsId: false, mapsIdAssoc: null, isController: false}); -%>
 <%_ if (paginationNo) { _%>
 
     /**
-     * Return a {@link List} of {@link <%= instanceType %>} which matches the criteria from the database.
+     * Return a {@link List} of {@link <%- instanceType %>} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public List<<%= instanceType %>> findByCriteria(<%= criteria %> criteria) {
+    public List<<%- instanceType %>> findByCriteria(<%- criteria %> criteria) {
         LOG.debug("find by criteria : {}", criteria);
-        final Specification<<%= persistClass %>> specification = createSpecification(criteria);
+        final Specification<<%- persistClass %>> specification = createSpecification(criteria);
   <%_ if (dtoMapstruct) { _%>
-        return <%= entityListToDto %>(<% if (containsBagRelationships) { %><%= repository %>.fetchBagRelationships(<% } %><%= repository %>.findAll(specification)<% if (containsBagRelationships) { %>)<% } %>);
+        return <%- entityListToDto %>(<% if (containsBagRelationships) { %><%- repository %>.fetchBagRelationships(<% } %><%- repository %>.findAll(specification)<% if (containsBagRelationships) { %>)<% } %>);
   <%_ } else { _%>
-        return <% if (containsBagRelationships) { %><%= repository %>.fetchBagRelationships(<% } %><%= repository %>.findAll(specification)<% if (containsBagRelationships) { %>)<% } %>;
+        return <% if (containsBagRelationships) { %><%- repository %>.fetchBagRelationships(<% } %><%- repository %>.findAll(specification)<% if (containsBagRelationships) { %>)<% } %>;
   <%_ } _%>
     }
 <%_ } else { _%>
 
     /**
-     * Return a {@link Page} of {@link <%= instanceType %>} which matches the criteria from the database.
+     * Return a {@link Page} of {@link <%- instanceType %>} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @param page The page, which should be returned.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public Page<<%= instanceType %>> findByCriteria(<%= criteria %> criteria, Pageable page) {
+    public Page<<%- instanceType %>> findByCriteria(<%- criteria %> criteria, Pageable page) {
         LOG.debug("find by criteria : {}, page: {}", criteria, page);
-        final Specification<<%= persistClass %>> specification = createSpecification(criteria);
+        final Specification<<%- persistClass %>> specification = createSpecification(criteria);
   <%_ if (dtoMapstruct) { _%>
-        return <% if (containsBagRelationships) { %><%= repository %>.fetchBagRelationships(<% } %><%= repository %>.findAll(specification, page)<% if (containsBagRelationships) { %>)<% } %>
-            .map(<%= entityToDtoReference %>);
+        return <% if (containsBagRelationships) { %><%- repository %>.fetchBagRelationships(<% } %><%- repository %>.findAll(specification, page)<% if (containsBagRelationships) { %>)<% } %>
+            .map(<%- entityToDtoReference %>);
   <%_ } else { _%>
-        return <% if (containsBagRelationships) { %><%= repository %>.fetchBagRelationships(<% } %><%= repository %>.findAll(specification, page)<% if (containsBagRelationships) { %>)<% } %>;
+        return <% if (containsBagRelationships) { %><%- repository %>.fetchBagRelationships(<% } %><%- repository %>.findAll(specification, page)<% if (containsBagRelationships) { %>)<% } %>;
   <%_ } _%>
     }
 <%_ } _%>
@@ -111,33 +111,45 @@ public class <%= serviceClassName %> extends QueryService<<%= persistClass %>> {
      * @return the number of matching entities.
      */
     @Transactional(readOnly = true)
-    public long countByCriteria(<%= criteria %> criteria) {
+    public long countByCriteria(<%- criteria %> criteria) {
         LOG.debug("count by criteria : {}", criteria);
-        final Specification<<%= persistClass %>> specification = createSpecification(criteria);
-        return <%= repository %>.count(specification);
+        final Specification<<%- persistClass %>> specification = createSpecification(criteria);
+        return <%- repository %>.count(specification);
     }
 
     /**
-     * Function to convert {@link <%= criteria %>} to a {@link Specification}
+     * Function to convert {@link <%- criteria %>} to a {@link Specification}
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching {@link Specification} of the entity.
      */
     protected Specification<<%= persistClass %>> createSpecification(<%= criteria %> criteria) {
         Specification<<%= persistClass %>> specification = Specification.unrestricted();
+<%_ const eagerRelationships = relationships.filter(rel => rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide === true));
+if (eagerRelationships.length > 0) {
+_%>
+        specification = specification.and((root, query, builder) -> {
+            if (Long.class != query.getResultType()) {
+<%_ for (const relationship of eagerRelationships) { _%>
+            root.fetch(<%= persistClass %>_.<%= relationship.propertyName %>, JoinType.LEFT);
+<%_ } _%>
+            }
+            return null;
+        });
+<%_ } _%>
         if (criteria != null) {
             // This has to be called first, because the distinct method returns null
-            specification = Specification.allOf(
+            specification = specification.and(Specification.allOf(
                 Boolean.TRUE.equals(criteria.getDistinct()) ? distinct(criteria.getDistinct()) : Specification.unrestricted()
 <%_ for (const field of fields.filter(field => !field.transient && field.filterableField)) { _%>
                 ,
-                <%= field.fieldJavaBuildSpecification %>(criteria.<%- field.propertyFilterSupplierName %>(), <%= persistClass %>_.<%= field.fieldName %>)
+                <%- field.fieldJavaBuildSpecification %>(criteria.<%- field.propertyFilterSupplierName %>(), <%- persistClass %>_.<%- field.fieldName %>)
 <%_ } _%>
 <%_ for (const relationship of relationships) { _%>
                 ,
                 buildSpecification(criteria.<%- relationship.propertyFilterSupplierName %>(),
-                    root -> root.join(<%= persistClass %>_.<%= relationship.propertyName %>, JoinType.LEFT).get(<%= relationship.otherEntity.persistClass %>_.<%= relationship.otherEntity.primaryKey.name %>))
+                    root -> root.join(<%- persistClass %>_.<%- relationship.propertyName %>, JoinType.LEFT).get(<%- relationship.otherEntity.persistClass %>_.<%- relationship.otherEntity.primaryKey.name %>))
 <%_ } _%>
-            );
+            ));
         }
         return specification;
     }

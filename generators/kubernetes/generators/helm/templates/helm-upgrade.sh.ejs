@@ -33,4 +33,3 @@ helm upgrade --install <%- appConfig.baseName.toLowerCase() %> ./<%- appConfig.b
 <%_ if (istio && kubernetesServiceTypeIngress) { _%>
 kubectl apply -f istio-${suffix}/
 <%_ } _%>
-

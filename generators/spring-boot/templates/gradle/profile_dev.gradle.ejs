@@ -20,7 +20,7 @@
 sourceSets {
     test {
         java {
-            exclude '<%= packageFolder %>/config/DatabaseTestcontainer.java'
+            exclude '<%- packageFolder %>/config/DatabaseTestcontainer.java'
         }
     }
 }
@@ -51,15 +51,15 @@ task webapp(type: NpmTask) {
         .withPropertyName('build.gradle')
         .withPathSensitivity(PathSensitivity.RELATIVE)
     inputs.files(<%- javaNodeBuildPaths.filter(file => !file.endsWith('/')).map(file => `'${file}'`).join(', ') %>)
-        .withPropertyName('<%= clientFramework %>-build')
+        .withPropertyName('<%- clientFramework %>-build')
         .withPathSensitivity(PathSensitivity.RELATIVE)
     <%_ for (const file of javaNodeBuildPaths.filter(file => file.endsWith('/'))) { _%>
-    inputs.dir("<%= file %>")
-        .withPropertyName("<%= file %>")
+    inputs.dir("<%- file %>")
+        .withPropertyName("<%- file %>")
         .withPathSensitivity(PathSensitivity.RELATIVE)
     <%_ } _%>
 
-    outputs.dir("<%= clientDistDir %>")
+    outputs.dir("<%- clientDistDir %>")
         .withPropertyName("webapp-build-dir")
 
     dependsOn(npmInstall)

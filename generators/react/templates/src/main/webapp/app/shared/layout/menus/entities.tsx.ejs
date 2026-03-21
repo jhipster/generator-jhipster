@@ -28,9 +28,9 @@ const EntitiesMenuItems = React.lazy(() => import('app/entities/menu').catch(() 
 
   <%_ if (applicationTypeGateway) { _%>
     <%_ for (const remote of microfrontends) { _%>
-const <%= remote.capitalizedBaseName %>EntitiesMenuItems = React.lazy(async () => importRemote<any>({
-  url: `./services/<%= remote.lowercaseBaseName %>`,
-  scope: '<%= remote.lowercaseBaseName %>',
+const <%- remote.capitalizedBaseName %>EntitiesMenuItems = React.lazy(async () => importRemote<any>({
+  url: `./services/<%- remote.lowercaseBaseName %>`,
+  scope: '<%- remote.lowercaseBaseName %>',
   module: './entities-menu',
 }).catch(() => import('app/shared/error/error-loading')));
 
@@ -55,7 +55,7 @@ export const EntitiesMenu = () => (
   <%_ if (applicationTypeGateway) { _%>
     <%_ for (const remote of microfrontends) { _%>
     <Suspense fallback={<div>loading...</div>}>
-      <<%= remote.capitalizedBaseName %>EntitiesMenuItems />
+      <<%- remote.capitalizedBaseName %>EntitiesMenuItems />
     </Suspense>
     <%_ } _%>
   <%_ } _%>

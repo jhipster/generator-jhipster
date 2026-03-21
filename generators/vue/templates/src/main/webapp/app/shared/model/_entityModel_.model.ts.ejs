@@ -34,13 +34,13 @@ import { type <%- importedType %> } from '<%- importedPath %>';
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
 import { type <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
-export interface I<%= entityAngularName %> {
+export interface I<%- entityAngularName %> {
     <%_ variablesWithTypes.forEach(variablesWithType => { _%>
     <%- variablesWithType %>;
     <%_ }); _%>
 }
 
-export class <%= entityAngularName %> implements I<%= entityAngularName %> {
+export class <%- entityAngularName %> implements I<%- entityAngularName %> {
     constructor(<% variablesWithTypes.forEach(variablesWithType => { %>
         public <%- variablesWithType %>,<% }); %>
     ) {<% for (idx in defaultVariablesValues) { %>

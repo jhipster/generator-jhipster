@@ -17,11 +17,9 @@
  * limitations under the License.
  */
 
-import { after, before, describe, it } from 'esmocha';
+import { after, before, describe, expect, it } from 'esmocha';
 import fs from 'node:fs';
 import path from 'node:path';
-
-import { expect } from 'chai';
 
 import { getPackageRoot } from '../../../index.ts';
 import { getTestFile } from '../__test-support__/index.ts';
@@ -34,17 +32,17 @@ describe('jdl - FileUtils', () => {
       describe('with a nil file path', () => {
         it('should return false', () => {
           // @ts-expect-error
-          expect(doesFileExist()).to.be.false;
+          expect(doesFileExist()).toBe(false);
         });
       });
       describe('with an invalid file path', () => {
         it('should return false', () => {
-          expect(doesFileExist('someInvalidPath')).to.be.false;
+          expect(doesFileExist('someInvalidPath')).toBe(false);
         });
       });
       describe('with a valid file path', () => {
         it('should return true', () => {
-          expect(doesFileExist(getTestFile('MyEntity.json'))).to.be.true;
+          expect(doesFileExist(getTestFile('MyEntity.json'))).toBe(true);
         });
       });
     });
@@ -54,17 +52,17 @@ describe('jdl - FileUtils', () => {
       describe('with a nil directory path', () => {
         it('return false', () => {
           // @ts-expect-error
-          expect(doesDirectoryExist()).to.be.false;
+          expect(doesDirectoryExist()).toBe(false);
         });
       });
       describe('with an invalid directory path', () => {
         it('should return false', () => {
-          expect(doesDirectoryExist(path.join(import.meta.dirname, 'invalid-folder'))).to.be.false;
+          expect(doesDirectoryExist(path.join(import.meta.dirname, 'invalid-folder'))).toBe(false);
         });
       });
       describe('with a valid directory path', () => {
         it('should return true', () => {
-          expect(doesDirectoryExist(import.meta.dirname)).to.be.true;
+          expect(doesDirectoryExist(import.meta.dirname)).toBe(true);
         });
       });
     });
@@ -75,7 +73,7 @@ describe('jdl - FileUtils', () => {
         expect(() => {
           // @ts-expect-error
           createFolderIfItDoesNotExist();
-        }).to.throw(/^A directory must be passed to be created\.$/);
+        }).toThrow(/^A directory must be passed to be created\.$/);
       });
     });
     describe('when passing a directory that does not yet exist', () => {
@@ -88,14 +86,14 @@ describe('jdl - FileUtils', () => {
       });
 
       it('should create it', () => {
-        expect(fs.statSync('./here').isDirectory()).to.be.true;
+        expect(fs.statSync('./here').isDirectory()).toBe(true);
       });
     });
     describe('when passing a file that exists', () => {
       it('should fail', () => {
         expect(() => {
           createFolderIfItDoesNotExist(path.join(getPackageRoot(), 'package.json'));
-        }).to.throw(/^The directory to create '.*?package\.json' is a file\.$/);
+        }).toThrow(/^The directory to create '.*?package\.json' is a file\.$/);
       });
     });
     describe('when passing a directory that exists', () => {
@@ -104,7 +102,7 @@ describe('jdl - FileUtils', () => {
       });
 
       it('should do nothing', () => {
-        expect(fs.statSync('./test').isDirectory()).to.be.true;
+        expect(fs.statSync('./test').isDirectory()).toBe(true);
       });
     });
     describe('when passing a path that does not contain more than one directory', () => {
@@ -119,9 +117,9 @@ describe('jdl - FileUtils', () => {
       });
 
       it('should create the folder structure recursively', () => {
-        expect(fs.statSync('toto').isDirectory()).to.be.true;
-        expect(fs.statSync(path.join('toto', 'titi')).isDirectory()).to.be.true;
-        expect(fs.statSync(path.join('toto', 'titi', 'tutu')).isDirectory()).to.be.true;
+        expect(fs.statSync('toto').isDirectory()).toBe(true);
+        expect(fs.statSync(path.join('toto', 'titi')).isDirectory()).toBe(true);
+        expect(fs.statSync(path.join('toto', 'titi', 'tutu')).isDirectory()).toBe(true);
       });
     });
   });

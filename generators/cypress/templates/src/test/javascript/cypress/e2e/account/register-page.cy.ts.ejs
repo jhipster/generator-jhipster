@@ -27,9 +27,9 @@ import {
 } from '../../support/commands';
 
 <% const registerPage = clientFrameworkVue ? '/register' : '/account/register'; _%>
-describe('<%= registerPage %>', () => {
+describe('<%- registerPage %>', () => {
   beforeEach(() => {
-    cy.visit('<%= registerPage %>');
+    cy.visit('<%- registerPage %>');
   });
 
   beforeEach(() => {
@@ -39,7 +39,7 @@ describe('<%= registerPage %>', () => {
   it('should be accessible through menu', () => {
     cy.visit('');
     cy.clickOnRegisterItem();
-    cy.url().should('match', /<%= registerPage.replace(/\//g, '\\/') %>$/);
+    cy.url().should('match', /<%- registerPage.replace(/\//g, '\\/') %>$/);
   });
 
   it('should load the register page', () => {
@@ -121,8 +121,8 @@ describe('<%= registerPage %>', () => {
   });
 
   it('register a valid user', () => {
-    const randomEmail = '<%= faker.internet.email() %>';
-    const randomUsername = '<%= faker.internet.username() %>';
+    const randomEmail = '<%- faker.internet.email() %>';
+    const randomUsername = '<%- faker.internet.username() %>';
     cy.get(usernameRegisterSelector).type(randomUsername);
     cy.get(emailRegisterSelector).type(randomEmail);
     cy.get(firstPasswordRegisterSelector).type('jondoe');

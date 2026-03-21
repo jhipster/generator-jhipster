@@ -103,9 +103,9 @@ function defaults(): Pick<JDLEntity, 'fields' | 'annotations'> {
 function formatFieldObjects(jdlFieldObjects: Record<string, JDLField>): string {
   let string = '';
   Object.keys(jdlFieldObjects).forEach(jdlField => {
-    string += `${formatFieldObject(jdlFieldObjects[jdlField])}`;
+    string += formatFieldObject(jdlFieldObjects[jdlField]);
   });
-  string = `${string.slice(0, string.length - 1)}`;
+  string = string.slice(0, string.length - 1);
   return string;
 }
 

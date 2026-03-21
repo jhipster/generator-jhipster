@@ -16,11 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
+apiVersion: <%- KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
   name: jhipster-kafka
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
 spec:
   replicas: 1
   selector:
@@ -44,7 +44,7 @@ spec:
         - name: KAFKA_PROCESS_ROLES
           value: broker,controller
         - name: KAFKA_ADVERTISED_LISTENERS
-          value: 'PLAINTEXT://jhipster-kafka.<%= kubernetesNamespace %>.svc.cluster.local:9092'
+          value: 'PLAINTEXT://jhipster-kafka.<%- kubernetesNamespace %>.svc.cluster.local:9092'
         - name: KAFKA_LISTENERS
           value: PLAINTEXT://:9092,CONTROLLER://localhost:9093
         - name: KAFKA_CONTROLLER_LISTENER_NAMES
@@ -67,11 +67,11 @@ spec:
             memory: "1Gi"
             cpu: "1"
 ---
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: Service
 metadata:
   name: jhipster-kafka
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
 spec:
   selector:
     app: jhipster-kafka

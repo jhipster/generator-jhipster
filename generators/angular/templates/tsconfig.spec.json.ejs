@@ -18,10 +18,10 @@
 -%>
 {
   "extends": "./tsconfig.json",
-  "include": ["<%= this.relativeDir(clientRootDir, clientSrcDir) %>**/*.ts"],
+  "include": ["<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.ts"],
   "compilerOptions": {
     "composite": true,
-    "outDir": "<%= this.relativeDir(clientRootDir, temporaryDir) %>out-tsc/spec",
+    "outDir": "<%- this.relativeDir(clientRootDir, temporaryDir) %>out-tsc/spec",
     "types": ["node"]
   }
 }

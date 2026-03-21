@@ -21,13 +21,13 @@ on: [push, pull_request]
 permissions:
   contents: read
 jobs:
-  <%= baseName %>:
+  <%- baseName %>:
     name: npm-test
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: <%= githubActions['actions/checkout'] %>
-      - uses: <%= githubActions['actions/setup-node'] %>
+      - uses: <%- githubActions['actions/checkout'] %>
+      - uses: <%- githubActions['actions/setup-node'] %>
         with:
           node-version: <%- nodeVersion.split('.', 2)[0] %>
           cache: 'npm'

@@ -1,11 +1,11 @@
 {
-    "logs": {
-        "title": "Log",
-        "nbloggers": "Ada {{ total }} logger.",
-        "filter": "Filter",
-        "table": {
-            "name": "Nama",
-            "level": "Level"
-        }
+  "logs": {
+    "title": "Log",
+    "nbloggers": "Ada {{ total }} logger.",
+    "filter": "Filter",
+    "table": {
+      "name": "Nama",
+      "level": "Level"
     }
+  }
 }

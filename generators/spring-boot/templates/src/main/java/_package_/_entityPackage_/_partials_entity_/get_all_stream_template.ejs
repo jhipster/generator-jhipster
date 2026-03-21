@@ -31,33 +31,34 @@ if (!paginationNo) {
   }
 }
 for (const relationship of relationships) {
-  if (relationship.relationshipOneToOne && !relationship.ownerSide) { %>
+  if (relationship.relationshipOneToOne && !relationship.ownerSide) {
+%>
         if ("<%= relationship.relationshipName.toLowerCase() %>-is-null".equals(filter)) {
             LOG.debug("REST request to get all <%= entityClass %>s where <%= relationship.relationshipName %> is null");
     <%_ if (viaService) { _%>
-            return <%- toResponseEntityPrefix %><%= entityInstance %>Service.findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull()<% if (reactiveSql) { %>.collectList()<% } %><%= toResponseEntityPostfix %>;
+            return <%- toResponseEntityPrefix %><%- entityInstance %>Service.findAllWhere<%- relationship.relationshipNameCapitalized %>IsNull()<% if (reactiveSql) { %>.collectList()<% } %><%- toResponseEntityPostfix %>;
     <%_ } else { _%>
       <%_ if (reactiveSql) { _%>
-            return <%- toResponseEntityPrefix %><%= entityInstance %>Repository
-                .findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull()
+            return <%- toResponseEntityPrefix %><%- entityInstance %>Repository
+                .findAllWhere<%- relationship.relationshipNameCapitalized %>IsNull()
         <%_ if (dtoMapstruct) { _%>
-                .map(<%= entityToDtoReference %>)
+                .map(<%- entityToDtoReference %>)
         <%_ } _%>
-                .collectList()<%= toResponseEntityPostfix %>;
+                .collectList()<%- toResponseEntityPostfix %>;
       <%_ } else if (reactive) { _%>
-            return <%- toResponseEntityPrefix %><%= entityInstance %>Repository
+            return <%- toResponseEntityPrefix %><%- entityInstance %>Repository
                 .findAll()
-                .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationship.relationshipNameCapitalized %>() == null)
+                .filter(<%- entityInstance %> -> <%- entityInstance %>.get<%- relationship.relationshipNameCapitalized %>() == null)
         <%_ if (dtoMapstruct) { _%>
-                .map(<%= entityToDtoReference %>)
+                .map(<%- entityToDtoReference %>)
         <%_ } _%>
-                .collectList()<%= toResponseEntityPostfix %>;
+                .collectList()<%- toResponseEntityPostfix %>;
       <%_ } else { _%>
             return <%- toResponseEntityPrefix %>StreamSupport
-                .stream(<%= entityInstance %>Repository.findAll().spliterator(), false)
-                .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationship.relationshipNameCapitalized %>() == null)
+                .stream(<%- entityInstance %>Repository.findAll().spliterator(), false)
+                .filter(<%- entityInstance %> -> <%- entityInstance %>.get<%- relationship.relationshipNameCapitalized %>() == null)
         <%_ if (dtoMapstruct) { _%>
-                .map(<%= entityToDtoReference %>)
+                .map(<%- entityToDtoReference %>)
         <%_ } _%>
         <%_ if (!paginationNo) { _%>
                 .toList(), HttpStatus.OK);
