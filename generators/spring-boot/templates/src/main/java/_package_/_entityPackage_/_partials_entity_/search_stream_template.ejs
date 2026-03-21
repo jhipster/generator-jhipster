@@ -45,7 +45,7 @@ const entityToDtoReference = mapper + '::' + 'toDto';
         } catch (RuntimeException e) {
     <% if (searchEngineElasticsearch && fromResource) { %>
             throw ElasticsearchExceptionMapper.mapException(e);
-    <%_ } else { _%>
+<%_ } else { _%>
             throw e;
     <% } %>
         }

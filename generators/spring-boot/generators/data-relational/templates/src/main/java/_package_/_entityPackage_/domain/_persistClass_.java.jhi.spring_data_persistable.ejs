@@ -49,7 +49,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
     public <%- primaryKey.type %> getId() {
         return this.<%- primaryKey.name %>;
     }
- <%_ } -%>
+<%_ } -%>
 
     @org.springframework.data.annotation.Transient
 <%_ if (!reactive) { _%>

@@ -84,9 +84,9 @@ const Header = (props: IHeaderProps) => {
             {props.isAuthenticated && <EntitiesMenu />}
             {props.isAuthenticated && props.isAdmin &&
             <AdminMenu showOpenAPI={props.isOpenAPIEnabled} <% if (devDatabaseTypeH2Any) { %> showDatabase={!props.isInProduction} <%_ } _%> />}
-          <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
             <LocaleMenu currentLocale={props.currentLocale} onClick={handleLocaleChange} />
-          <%_ } _%>
+<%_ } _%>
             <AccountMenu isAuthenticated={props.isAuthenticated} />
           </Nav>
         </Navbar.Collapse>

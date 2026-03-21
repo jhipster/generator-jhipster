@@ -90,16 +90,16 @@ _%>
 <%_ if (!skipServer) { _%>
             - name: Run backend test
               run: |
-    <%_ if (buildToolMaven) { _%>
+  <%_ if (buildToolMaven) { _%>
                   chmod +x mvnw
-    <%_ } else if (buildToolGradle) { _%>
+  <%_ } else if (buildToolGradle) { _%>
                   chmod +x gradlew
-    <%_ } _%>
+  <%_ } _%>
                   <%- nodePackageManager %> run ci:backend:test
-    <%_ if (!skipClient) { _%>
+  <%_ if (!skipClient) { _%>
             - name: Run frontend test
               run: <%- nodePackageManager %> run ci:frontend:test
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 <%_ if (ciCdIntegrationsSonar) { _%>
             - name: Analyze code with SonarQube
@@ -108,11 +108,11 @@ _%>
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
               run: |
                   if [ ! -z "$SONAR_TOKEN" ]; then
-    <%_ if (buildToolMaven) { _%>
+  <%_ if (buildToolMaven) { _%>
                       ./mvnw -ntp initialize sonar:sonar <% if (sonarOrga) { %>-Dsonar.organization=<%- sonarOrga %> <% } %>-Dsonar.host.url=<%- sonarUrl %>
-    <%_ } else if (buildToolGradle) { _%>
+  <%_ } else if (buildToolGradle) { _%>
                       ./gradlew sonarqube --no-daemon <% if (sonarOrga) { %>-Dsonar.organization=<%- sonarOrga %> <% } %>-Dsonar.host.url=<%- sonarUrl %>
-    <%_ } _%>
+  <%_ } _%>
                   else
                       echo No SONAR_TOKEN, skipping...
                   fi
@@ -131,11 +131,11 @@ _%>
                   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
               run: |
                   if [ ! -z "$HEROKU_API_KEY" ]; then
-    <%_ if (buildToolMaven) { _%>
+  <%_ if (buildToolMaven) { _%>
                       ./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%- herokuAppName %>
-    <%_ } else if (buildToolGradle) { _%>
+  <%_ } else if (buildToolGradle) { _%>
                       ./gradlew deployHeroku --no-daemon
-    <%_ } _%>
+  <%_ } _%>
                   else
                       echo No HEROKU_API_KEY, skipping...
                   fi
@@ -146,11 +146,11 @@ _%>
               run: |
                   GIT_TAG=:${GITHUB_REF#refs/tags/}
                   DOCKER_TAG=${GIT_TAG#:refs/heads/main}
-    <%_ if (buildToolMaven) { _%>
+  <%_ if (buildToolMaven) { _%>
                   ./mvnw -ntp jib:build -Djib.to.image=<%- dockerImage %>${DOCKER_TAG} -Djib.to.auth.username="${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_PASSWORD }}" -Pprod
-    <%_ } else if (buildToolGradle) { _%>
+  <%_ } else if (buildToolGradle) { _%>
                   ./gradlew jib -Djib.to.image=<%- dockerImage %>${DOCKER_TAG} -Djib.to.auth.username="${{ secrets.DOCKER_USERNAME }}" -Djib.to.auth.password="${{ secrets.DOCKER_PASSWORD }}" -Pprod
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 <%_ if (cypressTests) {
   const commented = applicationTypeGateway ? '# ' : '';
@@ -161,12 +161,12 @@ _%>
             <%- commented %>  run: <%- nodePackageManager %> run ci:e2e:prepare
             <%- commented %>- name: 'E2E: Run'
             <%- commented %>  run: <%- nodePackageManager %> run ci:e2e:run
-    <%_ if(cypressTests) { _%>
+  <%_ if(cypressTests) { _%>
             <%- commented %>  env:
             <%- commented %>    CYPRESS_ENABLE_RECORD: <%- ciCdIntegrationsCypressDashboard %>
             <%- commented %>    CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
             <%- commented %>    CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-    <%_ } _%>
+  <%_ } _%>
             <%- commented %>- name: 'E2E: Teardown'
             <%- commented %>  run: <%- nodePackageManager %> run ci:e2e:teardown
 <%_ } _%>

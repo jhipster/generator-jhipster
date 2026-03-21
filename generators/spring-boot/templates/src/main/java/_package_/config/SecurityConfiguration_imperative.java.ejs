@@ -133,7 +133,7 @@ public class SecurityConfiguration {
 
     @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
     private String issuerUri;
-    <%_ } _%>
+<%_ } _%>
 
     public SecurityConfiguration(<% if (devDatabaseTypeH2Any) { %>Environment env, <% } %><% if (authenticationTypeSession && generateUserManagement) { %>RememberMeServices rememberMeServices, <% } %> JHipsterProperties jHipsterProperties) {
 <%_ if (devDatabaseTypeH2Any) { _%>
@@ -314,7 +314,7 @@ public class SecurityConfiguration {
         jwtAuthenticationConverter.setPrincipalClaimName(PREFERRED_USERNAME);
         return jwtAuthenticationConverter;
     }
-    <%_ if (!applicationTypeMicroservice) { _%>
+  <%_ if (!applicationTypeMicroservice) { _%>
 
     OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
         final OidcUserService delegate = new OidcUserService();

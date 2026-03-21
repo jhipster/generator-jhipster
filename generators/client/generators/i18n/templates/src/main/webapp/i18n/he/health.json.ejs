@@ -29,22 +29,22 @@
         "error": "שגיאה"
       },
       "indicator": {
-  <%_ if (messageBrokerAny) { _%>
+<%_ if (messageBrokerAny) { _%>
         "binders": "מתווך הודעות",
-  <%_ } _%>
-  <%_ if (applicationTypeGateway || serviceDiscoveryAny) { _%>
+<%_ } _%>
+<%_ if (applicationTypeGateway || serviceDiscoveryAny) { _%>
         "discoveryComposite": "רכיב גילוי שירותים (Discovery Composite)",
         "refreshScope": "רענון שירותים (Microservice Refresh Scope)",
         "clientConfigServer": "שרת תצורת שירותים (Microservice Config Server)",
         "hystrix": "Hystrix",
-    <%_ if (serviceDiscoveryConsul) { _%>
+  <%_ if (serviceDiscoveryConsul) { _%>
         "consul": "Consul",<% } else if (reactive) { %>
         "reactiveDiscoveryClients": "לקוחות גילוי שירותים (Reactive Discovery Clients)",
-    <%_ } _%>
   <%_ } _%>
-  <%_ if (cacheProviderHazelcast) { _%>
+<%_ } _%>
+<%_ if (cacheProviderHazelcast) { _%>
         "hazelcast": "Hazelcast",
-  <%_ } _%>
+<%_ } _%>
         "diskSpace": "שטח דיסק",
             "ssl": "SSL",
         "mail": "דוא\"ל",
@@ -66,9 +66,9 @@
       "status": {
         "UNKNOWN": "לא ידוע",
         "UP": "פעיל",
-  <%_ if (clientFrameworkAngular) { _%>
+<%_ if (clientFrameworkAngular) { _%>
         "OUT_OF_SERVICE": "לא זמין",
-  <%_ } _%>
+<%_ } _%>
         "DOWN": "מושבת"
       }
     }

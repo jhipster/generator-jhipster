@@ -270,8 +270,8 @@ _%>
             .pipe(map((res: HttpResponse<I<%- relationship.otherEntity.entityAngularName %>[]>) => res.body ?? []))
             .pipe(map((<%- otherEntity.entityInstancePlural %>: I<%- otherEntity.entityAngularName %>[]) => this.<%- otherEntity.entityInstance %>Service.add<%- otherEntity.entityAngularName %>ToCollectionIfMissing<I<%- otherEntity.entityAngularName %>>(<%- otherEntity.entityInstancePlural %>, this.<%- entityInstance %>?.<%- relationship.propertyName %>)))
             .subscribe((<%- otherEntity.entityInstancePlural %>: I<%- otherEntity.entityAngularName %>[]) => (this.<%- relationship.relationshipFieldNamePlural %>Collection.set(<%- otherEntity.entityInstancePlural %>)));
-      <%_ } _%>
     <%_ } _%>
+  <%_ } _%>
     }
 <%_ } _%>
 }

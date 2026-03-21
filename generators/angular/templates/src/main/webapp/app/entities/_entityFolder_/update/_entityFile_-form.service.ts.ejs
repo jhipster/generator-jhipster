@@ -230,10 +230,10 @@ _%>
 <%_ for (field of fields) {
       const { fieldName, fieldTypeTimed } = field;
 _%>
-  <%_ if (fieldTypeTimed) { _%>
+    <%_ if (fieldTypeTimed) { _%>
       <%- fieldName %>: dayjs(raw<%- entityAngularName %>.<%- fieldName %>, DATE_TIME_FORMAT),
+    <%_ } _%>
   <%_ } _%>
-<%_ } _%>
     };
   }
 
@@ -243,17 +243,17 @@ _%>
 <%_ for (field of fields) {
       const { fieldName, fieldTypeTimed } = field;
 _%>
-  <%_ if (fieldTypeTimed) { _%>
+    <%_ if (fieldTypeTimed) { _%>
       <%- fieldName %>: <%- entityInstance %>.<%- fieldName %> ? <%- entityInstance %>.<%- fieldName %>.format(DATE_TIME_FORMAT) : undefined,
+    <%_ } _%>
   <%_ } _%>
-<%_ } _%>
 <%_ for (const relationship of relationships.filter(({ persistableRelationship }) => persistableRelationship)) {
       const { propertyName, collection } = relationship;
 _%>
-  <%_ if (collection) { _%>
+    <%_ if (collection) { _%>
       <%- propertyName %>: <%- entityInstance %>.<%- propertyName %> ?? [],
+    <%_ } _%>
   <%_ } _%>
-<%_ } _%>
     };
   }
 <%_ } _%>

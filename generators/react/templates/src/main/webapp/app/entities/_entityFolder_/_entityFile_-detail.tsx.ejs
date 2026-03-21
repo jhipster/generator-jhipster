@@ -97,11 +97,11 @@ _%>
                   <div>
                     {<%- entityInstance %>Entity.<%- fieldName %>ContentType ? (
                       <a onClick={openFile(<%- entityInstance %>Entity.<%- fieldName %>ContentType, <%- entityInstance %>Entity.<%- fieldName %>)}>
-        <%_ if (field.blobContentTypeImage) { _%>
+      <%_ if (field.blobContentTypeImage) { _%>
                         <img src={`data:${<%- entityInstance %>Entity.<%- fieldName %>ContentType};base64,${<%- entityInstance %>Entity.<%- fieldName %>}`} style={{ maxHeight: '30px' }} />
-        <%_ } else { _%>
+      <%_ } else { _%>
                         <Translate contentKey="entity.action.open">Open</Translate>&nbsp;
-        <%_ } _%>
+      <%_ } _%>
                       </a>
                     ) : null}
                     <span>{<%- entityInstance %>Entity.<%- fieldName %>ContentType}, {byteSize(<%- entityInstance %>Entity.<%- fieldName %>)}</span>

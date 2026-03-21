@@ -42,7 +42,7 @@ node {
 <%- indent %>        sh "./mvnw -ntp checkstyle:check"
 <%- indent %>    }
 
-    <%_ if (!skipClient) { _%>
+  <%_ if (!skipClient) { _%>
 <%- indent %>    stage('install tools') {
 <%- indent %>        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm@install-node-and-npm"
 <%- indent %>    }
@@ -50,8 +50,8 @@ node {
 <%- indent %>    stage('npm install') {
 <%- indent %>        sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm"
 <%- indent %>    }
-    <%_ } _%>
-    <%_ if (ciCdIntegrationsSnyk) { _%>
+  <%_ } _%>
+  <%_ if (ciCdIntegrationsSnyk) { _%>
 <%- indent %>    stage('Install Snyk CLI') {
 <%- indent %>       sh """
 <%- indent %>           curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \" | tr -d ' ')
@@ -64,7 +64,7 @@ node {
 <%- indent %>    stage('Snyk monitor') {
 <%- indent %>       sh './snyk monitor --all-projects'
 <%- indent %>    }
-    <%_ } _%>
+  <%_ } _%>
 <%- indent %>    stage('backend tests') {
 <%- indent %>        try {
 <%- indent %>            sh "./mvnw -ntp verify -P-webapp"
@@ -75,15 +75,15 @@ node {
 <%- indent %>        }
 <%- indent %>    }
 
-    <%_ if (!skipClient) { _%>
+  <%_ if (!skipClient) { _%>
 <%- indent %>    stage('frontend tests') {
 <%- indent %>        try {
-        <%_ if (insideDocker) { _%>
+    <%_ if (insideDocker) { _%>
 <%- indent %>           sh "npm install"
 <%- indent %>           sh "npm test"
-        <%_ } else { _%>
+    <%_ } else { _%>
 <%- indent %>            sh "./mvnw -ntp com.github.eirslett:frontend-maven-plugin:<%- nodePackageManager %> -Dfrontend.<%- nodePackageManager %>.arguments='run test'"
-        <%_ } _%>
+    <%_ } _%>
 <%- indent %>        } catch(err) {
 <%- indent %>            throw err
 <%- indent %>        } finally {
@@ -91,14 +91,14 @@ node {
 <%- indent %>        }
 <%- indent %>    }
 
-    <%_ } _%>
-    <%_ if (ciCdIntegrationsHeroku) { _%>
+  <%_ } _%>
+  <%_ if (ciCdIntegrationsHeroku) { _%>
 <%- indent %>    stage('package and deploy') {
 <%- indent %>        sh "./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%- herokuAppName %>"
-    <%_ } else { _%>
+  <%_ } else { _%>
 <%- indent %>    stage('packaging') {
 <%- indent %>        sh "./mvnw -ntp verify -P-webapp <% if (ciCdIntegrationsDeploy) { %>deploy <% } %>-Pprod -DskipTests"
-    <%_ } _%>
+  <%_ } _%>
 <%- indent %>        archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
 <%- indent %>    }
 <%_ } else if (buildToolGradle) { _%>
@@ -110,12 +110,12 @@ node {
 <%- indent %>        sh "./gradlew checkstyleNohttp --no-daemon"
 <%- indent %>    }
 
-    <%_ if (!skipClient) { _%>
+  <%_ if (!skipClient) { _%>
 <%- indent %>    stage('npm install') {
 <%- indent %>        sh "./gradlew <%- nodePackageManager %>_install -PnodeInstall --no-daemon"
 <%- indent %>    }
-    <%_ } _%>
-    <%_ if (ciCdIntegrationsSnyk) { _%>
+  <%_ } _%>
+  <%_ if (ciCdIntegrationsSnyk) { _%>
 <%- indent %>    stage('Install Snyk CLI') {
 <%- indent %>       sh """
 <%- indent %>           curl -Lo ./snyk $(curl -s https://api.github.com/repos/snyk/snyk/releases/latest | grep "browser_download_url.*snyk-linux" | cut -d ':' -f 2,3 | tr -d \" | tr -d ' ')
@@ -128,7 +128,7 @@ node {
 <%- indent %>    stage('Snyk monitor') {
 <%- indent %>       sh './snyk monitor --all-projects'
 <%- indent %>    }
-    <%_ } _%>
+  <%_ } _%>
 <%- indent %>    stage('backend tests') {
 <%- indent %>        try {
 <%- indent %>            sh "./gradlew test integrationTest -PnodeInstall --no-daemon"
@@ -139,7 +139,7 @@ node {
 <%- indent %>        }
 <%- indent %>    }
 
-    <%_ if (!skipClient) { _%>
+  <%_ if (!skipClient) { _%>
 <%- indent %>    stage('frontend tests') {
 <%- indent %>        try {
 <%- indent %>            sh "./gradlew <%- nodePackageManager %>_run_test -PnodeInstall --no-daemon"
@@ -150,27 +150,27 @@ node {
 <%- indent %>        }
 <%- indent %>    }
 
-    <%_ } _%>
+  <%_ } _%>
 <%- indent %>    stage('packaging') {
 <%- indent %>        sh "./gradlew bootJar -x test -Pprod -PnodeInstall --no-daemon"
 <%- indent %>        archiveArtifacts artifacts: '**/build/libs/*.jar', fingerprint: true
 <%- indent %>    }
 
-    <%_ if (ciCdIntegrationsHeroku) { _%>
+  <%_ if (ciCdIntegrationsHeroku) { _%>
 <%- indent %>    stage('deployment') {
 <%- indent %>        sh "./gradlew deployHeroku --no-daemon"
 <%- indent %>    }
 
-     <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 <%_ if (ciCdIntegrationsSonar) { _%>
 <%- indent %>    stage('quality analysis') {
 <%- indent %>        withSonarQubeEnv('<%- sonarName %>') {
-    <%_ if (buildToolMaven) { _%>
+  <%_ if (buildToolMaven) { _%>
 <%- indent %>            sh "./mvnw -ntp initialize sonar:sonar"
-    <%_ } else if (buildToolGradle) { _%>
+  <%_ } else if (buildToolGradle) { _%>
 <%- indent %>            sh "./gradlew sonarqube --no-daemon"
-    <%_ } _%>
+  <%_ } _%>
 <%- indent %>        }
 <%- indent %>    }
 <%_ } _%>
@@ -182,13 +182,13 @@ node {
 <%- gitLabIndent %>    def dockerImage
 <%- gitLabIndent %>    stage('publish docker') {
 <%- gitLabIndent %>        // A pre-requisite to this step is to setup authentication to the docker registry
-    <%_ if (buildToolMaven) { _%>
+  <%_ if (buildToolMaven) { _%>
 <%- gitLabIndent %>        // https://github.com/GoogleContainerTools/jib/tree/master/jib-maven-plugin#authentication-methods
 <%- gitLabIndent %>        sh "./mvnw -ntp -Pprod verify jib:build"
-    <%_ } else if (buildToolGradle) { _%>
+  <%_ } else if (buildToolGradle) { _%>
 <%- gitLabIndent %>        // https://github.com/GoogleContainerTools/jib/tree/master/jib-gradle-plugin#authentication-methods
 <%- gitLabIndent %>        sh "./gradlew bootJar jib -Pprod -PnodeInstall --no-daemon"
-    <%_ } _%>
+  <%_ } _%>
 <%- gitLabIndent %>    }
 <%_ } _%>
 <%_ if (sendBuildToGitlab) { _%>

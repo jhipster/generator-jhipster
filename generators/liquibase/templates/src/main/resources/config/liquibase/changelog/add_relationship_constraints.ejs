@@ -40,12 +40,12 @@ _%>
                                  constraintName="<%- constraintName %>"
                                  referencedColumnNames="<%- referencedColumnNames %>"
                                  referencedTableName="<%- relationship.otherEntity.entityTableName %>"
-        <%_ if (onDelete) { _%>
+  <%_ if (onDelete) { _%>
                                  onDelete="<%- onDelete %>"
-        <%_ } _%>
-        <%_ if (onUpdate) { _%>
+  <%_ } _%>
+  <%_ if (onUpdate) { _%>
                                  onUpdate="<%- onUpdate %>"
-        <%_ } _%>
+  <%_ } _%>
                                  />
 <%_ } else if (relationship.shouldWriteJoinTable) { _%>
 
@@ -54,12 +54,12 @@ _%>
                                  constraintName="<%- relationship.joinTable.constraintName %>"
                                  referencedColumnNames="<%- entity.primaryKey.fields.map(field => field.columnName).join(', ') %>"
                                  referencedTableName="<%- entity.entityTableName %>"
-        <%_ if (onDelete) { _%>
+  <%_ if (onDelete) { _%>
                                  onDelete="<%- onDelete %>"
-        <%_ } _%>
-        <%_ if (onUpdate) { _%>
+  <%_ } _%>
+  <%_ if (onUpdate) { _%>
                                  onUpdate="<%- onUpdate %>"
-        <%_ } _%>
+  <%_ } _%>
                                  />
 
         <addForeignKeyConstraint baseColumnNames="<%- relationship.otherEntity.primaryKey.fields.map(field => relationship.columnName + '_' + field.columnName).join(', ') %>"
@@ -70,12 +70,12 @@ _%>
         <%_ if (relationship.otherRelationship) { 
             // User object is not supporting this right now
         _%>
-            <%_ if (relationship.otherRelationship.onDelete) { _%>
+    <%_ if (relationship.otherRelationship.onDelete) { _%>
                                  onDelete="<%- relationship.otherRelationship.onDelete %>"
-            <%_ } _%>
-            <%_ if (relationship.otherRelationship.onUpdate) { _%>
+    <%_ } _%>
+    <%_ if (relationship.otherRelationship.onUpdate) { _%>
                                  onUpdate="<%- relationship.otherRelationship.onUpdate %>"
-            <%_ } _%>
-        <%_ } _%>
+    <%_ } _%>
+  <%_ } _%>
                                  />
 <%_ } _%>

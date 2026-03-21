@@ -34,7 +34,9 @@ describe('Activate', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
+<%_ if (enableTranslation) { _%>
+      imports: [TranslateModule.forRoot()],
+<%_ } _%>
       providers: [
         {
           provide: ActivatedRoute,

@@ -89,17 +89,17 @@ _%>
 <%_ } _%>
 
 <&_ if (fragment.classAdditionalRelationshipsSection) { -&>
-    <%_ for (const relationship of relationships) { _%>
-      <%_ if (relationship.ownerSide && !relationship.collection && !relationship.id) { _%>
+<%_ for (const relationship of relationships) { _%>
+  <%_ if (relationship.ownerSide && !relationship.collection && !relationship.id) { _%>
     @Column("<%- relationship.joinColumnNames[0] %>")
     private <%- relationship.otherEntity.primaryKey.type %> <%- relationship.relationshipFieldName %>Id;
-      <%_ } _%>
-    <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
 <&_ } -&>
 
 <&_ if (fragment.classAdditionalRelationshipsMethodsSection) { -&>
-    <%_ for (const relationship of relationships) { _%>
-      <%_ if (relationship.ownerSide && !relationship.collection && !relationship.id) { _%>
+<%_ for (const relationship of relationships) { _%>
+  <%_ if (relationship.ownerSide && !relationship.collection && !relationship.id) { _%>
 
     public <%- relationship.otherEntity.primaryKey.type %> <%- relationship.propertySupplierName %>Id() {
         return this.<%- relationship.relationshipFieldName %>Id;
@@ -108,6 +108,6 @@ _%>
     public void <%- relationship.propertyConsumerName %>Id(<%- relationship.otherEntity.primaryKey.type %> <%- relationship.otherEntityName %>) {
         this.<%- relationship.relationshipFieldName %>Id = <%- relationship.otherEntityName %>;
     }
-      <%_ } _%>
-    <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
 <&_ } -&>

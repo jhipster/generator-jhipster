@@ -160,9 +160,9 @@ describe('Alert Service test suite', () => {
   });
 
   it('should show error toast when http status = 404', () => {
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     const translationKey = 'error.http.404';
-    <%_ } _%>
+<%_ } _%>
     const message = 'The page does not exist.';
     const httpErrorResponse = {
       status: 404,
@@ -200,7 +200,7 @@ describe('Alert Service test suite', () => {
       },
     };
 
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     // GIVEN
     translationStub.mockReturnValueOnce(message);
 <%_ } _%>

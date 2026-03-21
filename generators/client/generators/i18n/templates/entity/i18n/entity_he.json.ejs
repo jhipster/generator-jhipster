@@ -22,49 +22,49 @@
         "home": {
           "title": "<%- entityNamePluralHumanized %>",
           "refreshListLabel": "רענן רשימה",
-  <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
           "createLabel": "צור חדש <%- entityNameHumanized %>",
           "createOrEditLabel": "צור או ערוך <%- entityNameHumanized %>",
-  <%_ } _%>
-  <%_ if (locals.searchEngineAny) { _%>
+<%_ } _%>
+<%_ if (locals.searchEngineAny) { _%>
           "search": "חפש <%- entityNameHumanized %>",
-  <%_ } _%>
+<%_ } _%>
           "notFound": "לא נמצאו <%- entityNamePluralHumanized %>"
         },
-  <%_ if (!microserviceAppName && !readOnly) { _%>
+<%_ if (!microserviceAppName && !readOnly) { _%>
         "created": "<%- entityNameHumanized %> חדש נוצר עם מזהה {{ param }}",
         "updated": "<%- entityNameHumanized %> עודכן עם מזהה {{ param }}",
         "deleted": "<%- entityNameHumanized %> נמחק עם מזהה {{ param }}",
-  <%_ } _%>
-  <%_ if (!readOnly) { _%>
+<%_ } _%>
+<%_ if (!readOnly) { _%>
         "delete": {
           "question": "האם אתה בטוח שברצונך למחוק את <%- entityNameHumanized %> {{ id }}?"
         },
-  <%_ } _%>
+<%_ } _%>
         "detail": {
           "title": "<%- entityNameHumanized %>"
         }
-  <%_ for (const field of fields) { -%>
+<%_ for (const field of fields) { -%>
         ,
         "<%- field.fieldName %>": "<%- field.fieldNameHumanized %>"
-  <%_ } -%>
+<%_ } -%>
   <% for (const relationship of relationships) { -%>
         ,
         "<%- relationship.relationshipName %>": "<%- relationship.relationshipNameHumanized %>"
-  <%_ } -%>
-  <%_ const fieldsWithDoc = fields.filter(field => field.documentation); -%>
-  <%_ if (fieldsWithDoc.length > 0) { -%>
-    <%_ const lastField = fieldsWithDoc[fieldsWithDoc.length - 1]; -%>
+<%_ } -%>
+<%_ const fieldsWithDoc = fields.filter(field => field.documentation); -%>
+<%_ if (fieldsWithDoc.length > 0) { -%>
+  <%_ const lastField = fieldsWithDoc[fieldsWithDoc.length - 1]; -%>
         ,
         "help": {
-    <%_ for (const field of fieldsWithDoc) { _%>
+  <%_ for (const field of fieldsWithDoc) { _%>
           "<%- field.fieldName %>": "<%- field.documentation %>"<% if (field !== lastField) { %>,<% } %>
-    <%_ } _%>
-        }
   <%_ } _%>
+        }
+<%_ } _%>
       }
     }
-  <%_ if (microserviceAppName && !readOnly) { -%>
+<%_ if (microserviceAppName && !readOnly) { -%>
     ,
     "<%- microserviceAppName %>": {
       "<%- entityTranslationKey %>": {
@@ -73,5 +73,5 @@
         "deleted": "<%- entityNameHumanized %> נמחק עם מזהה {{ param }}"
       }
     }
-  <%_ } _%>
+<%_ } _%>
 }

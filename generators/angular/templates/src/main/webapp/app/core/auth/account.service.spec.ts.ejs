@@ -65,11 +65,11 @@ describe('Account Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
       imports: [
         TranslateModule.forRoot(),
       ],
-      <%_ } _%>
+<%_ } _%>
       providers: [
         provideHttpClientTesting(),
         {

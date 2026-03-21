@@ -46,9 +46,9 @@ import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 <%_ if (reactive) { _%>
-<%_ if (!skipUserManagement) { _%>
+  <%_ if (!skipUserManagement) { _%>
 import org.springframework.security.core.AuthenticationException;
-<%_ } _%>
+  <%_ } _%>
 import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.http.MediaType;
@@ -128,7 +128,7 @@ _%>
     }
 
     @ExceptionHandler
-    <%_ if (reactive) { _%>@Override<%_ } _%>
+<%_ if (reactive) { _%>@Override<%_ } _%>
     public <%- returnType %> handleAnyException(Throwable ex, <%- requestClass %> request
     ) {
         LOG.debug("Converting Exception to Problem Details:", ex);
@@ -142,14 +142,14 @@ _%>
     protected <%- returnType %> handleExceptionInternal(
             Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, <%- requestEntityRequestClass %> request) {
         body = body == null ? wrapAndCustomizeProblem((Throwable) ex, (<%- requestClass %>) request) : body;
-    <%_ if (reactive) { _%>
+<%_ if (reactive) { _%>
         if (request.getResponse().isCommitted()) {
             return Mono.error(ex);
         }
         return Mono.just(new ResponseEntity<>(body, updateContentType(headers), HttpStatusCode.valueOf(((ProblemDetailWithCause) body).getStatus())));
-    <%_ } else { _%>
+<%_ } else { _%>
         return super.handleExceptionInternal(ex, body, headers, statusCode, request);
-    <%_ } _%>
+<%_ } _%>
     }
 
     protected ProblemDetailWithCause wrapAndCustomizeProblem(Throwable ex, <%- requestClass %> request) {
@@ -165,7 +165,7 @@ _%>
         if(ex instanceof <%- packageName %>.service.InvalidPasswordException)
             return (ProblemDetailWithCause) new InvalidPasswordException().getBody();
 
-        <%_ if (reactive) { _%>
+  <%_ if (reactive) { _%>
         if (ex instanceof AuthenticationException) {
             // Ensure no information about existing users is revealed via failed authentication attempts
             return ProblemDetailWithCauseBuilder.instance()
@@ -173,7 +173,7 @@ _%>
                 .withTitle("Unauthorized")
                 .withDetail("Invalid credentials").build();
         }
-        <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
         if(ex instanceof ErrorResponseException exp && exp.getBody() instanceof ProblemDetailWithCause problemDetailWithCause)
             return problemDetailWithCause;
@@ -271,15 +271,15 @@ _%>
     private String getMappedMessageKey(Throwable err) {
         if(err instanceof MethodArgumentNotValidException) {
             return ErrorConstants.ERR_VALIDATION;
-    <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
+<%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
         } else if(err instanceof ConcurrencyFailureException
                 || err.getCause() instanceof ConcurrencyFailureException) {
             return ErrorConstants.ERR_CONCURRENCY_FAILURE;
-    <%_ } _%>
-    <%_ if (reactive) { _%>
+<%_ } _%>
+<%_ if (reactive) { _%>
         } else if (err instanceof WebExchangeBindException) {
             return ErrorConstants.ERR_VALIDATION;
-    <%_ } _%>
+<%_ } _%>
         }
         return null;
     }
@@ -293,9 +293,9 @@ _%>
         Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
         if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
             if (err instanceof HttpMessageConversionException) return "Unable to convert http message";
-    <%_ if (!databaseTypeNo) { _%>
+<%_ if (!databaseTypeNo) { _%>
             if (err instanceof DataAccessException) return "Failure during data access";
-    <%_ } _%>
+<%_ } _%>
             if (containsPackageName(err.getMessage())) return "Unexpected runtime exception";
         }
         return err.getCause() != null ? err.getCause().getMessage() : err.getMessage();
@@ -304,13 +304,13 @@ _%>
     private HttpStatus getMappedStatus(Throwable err) {
         // Where we disagree with Spring defaults
         if (err instanceof AccessDeniedException) return HttpStatus.FORBIDDEN;
-    <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
+<%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
         if(err instanceof ConcurrencyFailureException) return HttpStatus.CONFLICT;
-    <%_ } _%>
+<%_ } _%>
         if(err instanceof BadCredentialsException) return HttpStatus.UNAUTHORIZED;
-    <%_ if (reactive) { _%>
+<%_ if (reactive) { _%>
         if (err instanceof UsernameNotFoundException) return HttpStatus.UNAUTHORIZED;
-    <%_ } _%>
+<%_ } _%>
         return null;
     }
 

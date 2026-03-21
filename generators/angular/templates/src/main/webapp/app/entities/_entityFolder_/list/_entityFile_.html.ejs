@@ -25,13 +25,13 @@
                 <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined" />
                 <span>__jhiTranslateTag__('<%- i18nKeyPrefix %>.home.refreshListLabel')</span>
             </button>
-            <%_ if (!readOnly) { _%>
+<%_ if (!readOnly) { _%>
 
             <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-<%- entityUrl %>" [routerLink]="['/<%- entityPage %>/new']">
                 <fa-icon icon="plus" />
                 <span <% if (searchEngineAny) { %>class="hidden-sm-down" <% } %>>__jhiTranslateTag__('<%- i18nKeyPrefix %>.home.createLabel')</span>
             </button>
-            <%_ } _%>
+<%_ } _%>
         </div>
     </h2>
 
@@ -114,7 +114,7 @@ for (field of fields.filter(field => !field.hidden && !field.hideListView)) {
     const fieldName = field.fieldName;
     const fieldType = field.fieldType;
 _%>
-    <%_ if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
+  <%_ if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
                     <td>
                     @if (<%- entityInstance %>.<%- fieldName %>) {
                         <a (click)="openFile(<%- entityInstance %>.<%- fieldName %>, <%- entityInstance %>.<%- fieldName %>ContentType)">
@@ -123,63 +123,63 @@ _%>
                         <span>{{ <%- entityInstance %>.<%- fieldName %>ContentType }}, {{ byteSize(<%- entityInstance %>.<%- fieldName %>) }}</span>
                     }
                     </td>
-    <%_ } else if (field.fieldTypeBinary && field.blobContentTypeAny) { _%>
+  <%_ } else if (field.fieldTypeBinary && field.blobContentTypeAny) { _%>
                     <td>
                     @if (<%- entityInstance %>.<%- fieldName %>) {
                         <a (click)="openFile(<%- entityInstance %>.<%- fieldName %>, <%- entityInstance %>.<%- fieldName %>ContentType)">__jhiTranslateTag__('entity.action.open')</a>
                         <span>{{ <%- entityInstance %>.<%- fieldName %>ContentType }}, {{ byteSize(<%- entityInstance %>.<%- fieldName %>) }}</span>
                     }
                     </td>
-    <%_ } else if (field.fieldIsEnum) { _%>
+  <%_ } else if (field.fieldIsEnum) { _%>
                     <%# TODO: import enum and use its key as label _%>
                     <td<% if (field.id) { %>><a<%- routerLink %><% } %>>__jhiTranslateTagEnum__('<%- frontendAppName %>.<%- fieldType %>', { "value": "<%- entityInstance %>.<%- fieldName %> ?? 'null'" })<% if (field.id) { %></a><% } %></td>
-    <%_ } else if (field.fieldTypeTimed) { _%>
+  <%_ } else if (field.fieldTypeTimed) { _%>
                     <td>{{ <%- entityInstance %>.<%- fieldName %> | formatMediumDatetime }}</td>
-    <%_ } else if (field.fieldTypeLocalDate) { _%>
+  <%_ } else if (field.fieldTypeLocalDate) { _%>
                     <td>{{ <%- entityInstance %>.<%- fieldName %> | formatMediumDate }}</td>
-    <%_ } else if (field.fieldTypeDuration) { _%>
+  <%_ } else if (field.fieldTypeDuration) { _%>
                     <td title="{{ <%- entityInstance %>.<%- fieldName %> }}">{{ <%- entityInstance %>.<%- fieldName %> | duration }}</td>
-    <%_ } else { _%>
+  <%_ } else { _%>
                     <td<% if (field.id) { %>><a<%- routerLink %><% } %>>{{ <%- entityInstance %>.<%- fieldName %> }}<% if (field.id) { %></a><% } %></td>
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) {
     const relationshipFieldName = relationship.relationshipFieldName;
     const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
     const otherEntityField = relationship.otherEntityField;
 _%>
-    <%_ if (relationship.persistableRelationship && (!relationship.collection || paginationNo)) { _%>
+  <%_ if (relationship.persistableRelationship && (!relationship.collection || paginationNo)) { _%>
                     <td>
-        <%_ if (relationship.otherEntityUser) { _%>
-            <%_ if (relationship.collection) { _%>
+    <%_ if (relationship.otherEntityUser) { _%>
+      <%_ if (relationship.collection) { _%>
                     @for (<%- relationshipFieldName %> of <%- entityInstance %>.<%- relationshipFieldNamePlural %>; track $index; let last = $last) {
                         <span>{{ <%- relationshipFieldName %>.<%- otherEntityField %> }}{{ last ? '' : ', ' }}</span>
                     }
-            <%_ } else { _%>
+      <%_ } else { _%>
                         {{ <%- entityInstance %>.<%- relationshipFieldName %>?.<%- otherEntityField %> }}
-            <%_ } _%>
-        <%_ } else { _%>
-            <%_ if (relationship.collection) { _%>
+      <%_ } _%>
+    <%_ } else { _%>
+      <%_ if (relationship.collection) { _%>
                     @for (<%- relationshipFieldName %> of <%- entityInstance %>.<%- relationshipFieldNamePlural %>; track $index; let last = $last) {
                         <span>
                             <a class="form-control-static" [routerLink]="['/<%- relationship.otherEntity.entityPage %>', <%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%- relationshipFieldName %>.<%- otherEntityField %> }}</a>{{ last ? '' : ', ' }}
                         </span>
                     }
-            <%_ } else { _%>
+      <%_ } else { _%>
                     @if (<%- entityInstance + "." + relationshipFieldName %>) {
                         <div>
                             <a [routerLink]="['/<%- relationship.otherEntity.entityPage %>', <%- entityInstance %>.<%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%- entityInstance %>.<%- relationshipFieldName %>.<%- otherEntityField %> }}</a>
                         </div>
                     }
-            <%_ } _%>
-        <%_ } _%>
-                    </td>
+      <%_ } _%>
     <%_ } _%>
+                    </td>
+  <%_ } _%>
 <%_ } _%>
                     <td class="text-end">
                         <div class="btn-group">
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
-    <%_ if (relationship.otherEntity.jpaMetamodelFiltering && relationship.otherEntity.paginationPagination && relationship.collection && !relationship.persistableRelationship) { _%>
+  <%_ if (relationship.otherEntity.jpaMetamodelFiltering && relationship.otherEntity.paginationPagination && relationship.collection && !relationship.persistableRelationship) { _%>
                             <button type="submit"
                                     [routerLink]="['/<%- relationship.otherEntity.entityPage %>']"
                                     [queryParams]="{ 'filter[<%- relationship.otherEntityRelationshipName %>Id.in]': <%- entityInstance %>.<%- primaryKey.name %> }"
@@ -188,7 +188,7 @@ _%>
                                 <fa-icon icon="eye" />
                                 <span class="d-none d-md-inline">__jhiTranslateTagPipe__('entity.action.show', { "otherEntity": "<%- relationship.propertyTranslationKey %>" })</span>
                             </button>
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
                             <a [routerLink]="['/<%- entityPage %>', <%- entityInstance %>.<%- primaryKey.name %>, 'view']"
                                class="btn btn-info btn-sm" data-cy="entityDetailsButton">

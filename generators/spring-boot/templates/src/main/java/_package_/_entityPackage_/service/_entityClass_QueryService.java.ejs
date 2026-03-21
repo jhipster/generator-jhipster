@@ -122,16 +122,16 @@ public class <%- serviceClassName %> extends QueryService<<%- persistClass %>> {
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching {@link Specification} of the entity.
      */
-    protected Specification<<%= persistClass %>> createSpecification(<%= criteria %> criteria) {
-        Specification<<%= persistClass %>> specification = Specification.unrestricted();
+    protected Specification<<%- persistClass %>> createSpecification(<%- criteria %> criteria) {
+        Specification<<%- persistClass %>> specification = Specification.unrestricted();
 <%_ const eagerRelationships = relationships.filter(rel => rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide === true));
 if (eagerRelationships.length > 0) {
 _%>
         specification = specification.and((root, query, builder) -> {
             if (Long.class != query.getResultType()) {
-<%_ for (const relationship of eagerRelationships) { _%>
-            root.fetch(<%= persistClass %>_.<%= relationship.propertyName %>, JoinType.LEFT);
-<%_ } _%>
+  <%_ for (const relationship of eagerRelationships) { _%>
+            root.fetch(<%- persistClass %>_.<%- relationship.propertyName %>, JoinType.LEFT);
+  <%_ } _%>
             }
             return null;
         });

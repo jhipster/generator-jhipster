@@ -52,9 +52,9 @@ export default defineComponent({
     const <%- relationship.otherEntity.entityInstancePlural %>: Ref<I<%- relationship.otherEntity.entityAngularName %>[]> = ref([]);
   <%_ } _%>
 <%_ } _%>
-    <%_ enumImports.forEach( (importedPath, importedType) => { _%>
+<%_ enumImports.forEach( (importedPath, importedType) => { _%>
     const <%- this._.lowerFirst(importedType) %>Values: Ref<string[]> = ref(Object.keys(<%- importedType %>));
-    <%_ }); _%>
+<%_ }); _%>
     const isSaving = ref(false);
     const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
 
@@ -86,17 +86,17 @@ _%>
 <%_ if (relationships.length > 0) { _%>
 
     const initRelationships = () => {
-<%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
-  <%_ if (relationship.otherEntity.builtInUser) { _%>
+  <%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
+    <%_ if (relationship.otherEntity.builtInUser) { _%>
       userService().retrieve().then((res) => {
         <%- relationship.otherEntity.entityInstancePlural %>.value = res.data;
       });
-  <%_ } else { _%>
+    <%_ } else { _%>
       <%- relationship.otherEntity.entityInstance %>Service().retrieve().then((res) => {
         <%- relationship.otherEntity.entityInstancePlural %>.value = res.data;
       });
+    <%_ } _%>
   <%_ } _%>
-<%_ } _%>
     };
 
     initRelationships();
@@ -151,9 +151,9 @@ _%>
       alertService,
       <%- entityInstance %>,
       previousState,
-    <%_ enumImports.forEach( (importedPath, importedType) => { _%>
+<%_ enumImports.forEach( (importedPath, importedType) => { _%>
       <%- this._.lowerFirst(importedType) %>Values,
-    <%_ }); _%>
+<%_ }); _%>
       isSaving,
       currentLanguage,
 <%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
@@ -172,15 +172,15 @@ _%>
     };
   },
   created(): void {
-    <%_ if (relationshipsContainManyToOne) { _%>
+<%_ if (relationshipsContainManyToOne) { _%>
     <%_
       for (relationship of relationships) {
       if (relationship.collection && relationship.persistableRelationship) {
       const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
     _%>
     this.<%- entityInstance %>.<%- relationshipFieldNamePlural %> = [];
-    <%_ } } _%>
-    <%_ } _%>
+  <%_ } } _%>
+<%_ } _%>
   },
   methods: {
     save() : void {
@@ -218,7 +218,7 @@ _%>
       }
     },
 
-  <%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>
+<%_ if (anyFieldIsBlobDerived && anyFieldHasImageContentType) { _%>
     clearInputImage(field, fieldContentType, idInput) : void {
       if (this.<%- entityInstance %> && field && fieldContentType) {
         if (Object.prototype.hasOwnProperty.call(this.<%- entityInstance %>, field)) {
@@ -233,14 +233,14 @@ _%>
       }
     },
 
-  <%_ } _%>
-  <%_ if (relationshipsContainManyToOne) { _%>
+<%_ } _%>
+<%_ if (relationshipsContainManyToOne) { _%>
     getSelected(selectedVals, option, pkField = 'id') : any {
       if (selectedVals) {
         return selectedVals.find(value => option[pkField] === value[pkField]) ?? option;
       }
       return option;
     },
-  <%_ } _%>
+<%_ } _%>
   },
 });

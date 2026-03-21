@@ -21,20 +21,20 @@
  EJS fragments will process % delimiter tags in the template and & delimiter tags during the merge process.
 -%>
 <&_ if (fragment.importSection) { -&>
-  <%_ if (!embedded) { _%>
+<%_ if (!embedded) { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-  <%_ } _%>
+<%_ } _%>
 import org.springframework.data.mongodb.core.mapping.Field;
-  <%_ if (!reactive && relationships.length > 0) { _%>
+<%_ if (!reactive && relationships.length > 0) { _%>
 import org.springframework.data.mongodb.core.mapping.DBRef;
-  <%_ } _%>
+<%_ } _%>
 <&_ } -&>
 
 <&_ if (fragment.annotationSection) { -&>
-  <%_ if (!embedded) { _%>
+<%_ if (!embedded) { _%>
 @Document(collection = "<%- entityTableName %>")
-  <%_ } _%>
+<%_ } _%>
 <&_ } -&>
 
 <%_ for (const field of fields) { _%>

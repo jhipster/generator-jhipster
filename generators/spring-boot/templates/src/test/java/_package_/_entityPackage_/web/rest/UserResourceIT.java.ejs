@@ -276,9 +276,9 @@ class UserResourceIT {
     @AfterEach
     void cleanupAndCheck() {
 <%_ if (requiresDeleteAllUsers) { _%>
-    <%_ if (databaseTypeSql && reactive) { _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
         userRepository.deleteAllUserAuthorities()<%- reactorBlock %>;
-    <%_ } _%>
+  <%_ } _%>
         userRepository.deleteAll()<%- reactorBlock %>;
 <%_ } else { _%>
         userService.deleteUser(DEFAULT_LOGIN)<%- reactorBlock %>;

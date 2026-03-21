@@ -45,9 +45,9 @@ import org.springframework.boot.webflux.autoconfigure.ResourceHandlerRegistratio
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 <%_ if (reactive) { _%>
-    <%_ if (!skipClient) { _%>
+  <%_ if (!skipClient) { _%>
 import org.springframework.context.annotation.Profile;
-    <%_ } _%>
+  <%_ } _%>
 import org.springframework.core.annotation.Order;
 <%_ } _%>
 <%_ if (reactive && !databaseTypeNo) { _%>
@@ -76,13 +76,13 @@ import tech.jhipster.web.rest.errors.ReactiveWebExceptionHandler;
 <%_ if (!reactive) { _%>
 
 import jakarta.servlet.*;
-    <%_ if (!skipClient) { _%>
+  <%_ if (!skipClient) { _%>
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
 import static java.net.URLDecoder.decode;
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 <%_ if (reactive && !skipClient) { _%>
 

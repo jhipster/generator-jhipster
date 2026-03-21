@@ -40,7 +40,7 @@ public enum <%- enumName %> {
   <%_ } 
   if (enumWithCustomValue.name === enumWithCustomValue.value) { _%>
     <%- enumWithCustomValue.name %><% if (index < enumValues.length - 1) { %>,<% } else { %>;<% } %>
-  <%_ } else { _%>
+    <%_ } else { _%>
     <%- enumWithCustomValue.name %>("<%- enumWithCustomValue.value %>")<% if (index < enumValues.length - 1) { %>,<% } else { %>;<% } %>
     <%_ }
   });

@@ -26,18 +26,18 @@ const enumImports = this.generateEntityClientEnumImports(fields.filter(field => 
 import dayjs from 'dayjs';
 <%_ } _%>
 <%_ typeImports.forEach( (importedPath, importedType) => { _%>
-    <%_ if (importedType !== `I${entityReactName}`) { _%>
+  <%_ if (importedType !== `I${entityReactName}`) { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
-    <%_ } _%>
+  <%_ } _%>
 <%_ }); _%>
 <%_ enumImports.forEach( (importedPath, importedType) => { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
 <%_ }); _%>
 
 export interface I<%- entityReactName %> {
-    <%_ variablesWithTypes.forEach(variablesWithType => { _%>
+<%_ variablesWithTypes.forEach(variablesWithType => { _%>
     <%- variablesWithType %>;
-    <%_ }); _%>
+<%_ }); _%>
 }
 
 export const defaultValue:  Readonly<I<%- entityReactName %>> = {

@@ -142,7 +142,7 @@ module.exports = async (config, options, targetOptions) => {
       // (see the `jhipster.cors` common JHipster property in the `application-*.yml` configurations)
       SERVER_API_URL: JSON.stringify(environment.SERVER_API_URL),
     }),
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     new MergeJsonWebpackPlugin({
       output: {
         groupBy: [
@@ -150,7 +150,7 @@ module.exports = async (config, options, targetOptions) => {
         ],
       },
     })
-    <%_ } _%>
+<%_ } _%>
   );
 
   config = merge(

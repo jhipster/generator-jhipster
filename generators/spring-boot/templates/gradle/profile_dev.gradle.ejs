@@ -53,11 +53,11 @@ task webapp(type: NpmTask) {
     inputs.files(<%- javaNodeBuildPaths.filter(file => !file.endsWith('/')).map(file => `'${file}'`).join(', ') %>)
         .withPropertyName('<%- clientFramework %>-build')
         .withPathSensitivity(PathSensitivity.RELATIVE)
-    <%_ for (const file of javaNodeBuildPaths.filter(file => file.endsWith('/'))) { _%>
+  <%_ for (const file of javaNodeBuildPaths.filter(file => file.endsWith('/'))) { _%>
     inputs.dir("<%- file %>")
         .withPropertyName("<%- file %>")
         .withPathSensitivity(PathSensitivity.RELATIVE)
-    <%_ } _%>
+  <%_ } _%>
 
     outputs.dir("<%- clientDistDir %>")
         .withPropertyName("webapp-build-dir")

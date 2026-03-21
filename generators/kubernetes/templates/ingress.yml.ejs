@@ -21,25 +21,25 @@ kind: Ingress
 metadata:
   name: <%- app.baseName.toLowerCase() %>
   namespace: <%- kubernetesNamespace %>
-  <%_ if (useKeycloak && ingressTypeGke) { _%>
+<%_ if (useKeycloak && ingressTypeGke) { _%>
   annotations:
     kubernetes.io/ingress.allow-http: "true"
     kubernetes.io/ingress.global-static-ip-name: <%- app.baseName.toLowerCase() %>-ip
     cert-manager.io/issuer: letsencrypt-staging
     acme.cert-manager.io/http01-edit-in-place: "true"
     cert-manager.io/issue-temporary-certificate: "true"
-  <%_ } _%>
+<%_ } _%>
 spec:
-  <%_ if (ingressTypeNginx) { _%>
+<%_ if (ingressTypeNginx) { _%>
   ingressClassName: nginx
-  <%_ } _%>
+<%_ } _%>
   rules:
-  <%_ if (ingressDomain) { _%>
+<%_ if (ingressDomain) { _%>
   - host: <%- app.baseName.toLowerCase() %>.<%- kubernetesNamespace %>.<%- ingressDomain %>
     http:
-  <%_ } else { _%>
+<%_ } else { _%>
   - http:
-  <%_ } _%>
+<%_ } _%>
       paths:
       - path: /<%- ingressTypeNginx ? "" : "*" %>
         pathType: <%- ingressTypeNginx ? "Prefix" : "ImplementationSpecific" %>
@@ -48,8 +48,8 @@ spec:
             name: <%- app.baseName.toLowerCase() %>
             port:
               name: http
-      <%_ if (!app.serviceDiscoveryAny) { _%>
-        <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(config => { _%>
+<%_ if (!app.serviceDiscoveryAny) { _%>
+  <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(config => { _%>
       - path: /services/<%- config.baseName.toLowerCase() %>/<%- ingressTypeNginx ? "" : "*" %>
         pathType: Prefix
         backend:
@@ -57,8 +57,8 @@ spec:
             name: <%- config.baseName.toLowerCase() %>
             port:
               name: http
-        <%_ }); _%>
-      <%_ } _%>
+  <%_ }); _%>
+<%_ } _%>
 <%_ if (useKeycloak) { _%>
   - host: keycloak.<%- kubernetesNamespace %>.<%- ingressDomain %>
     http:

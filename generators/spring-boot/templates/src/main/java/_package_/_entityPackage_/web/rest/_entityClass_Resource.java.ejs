@@ -438,9 +438,9 @@ public class <%- entityClass %>Resource {
   <%_ if (databaseTypeSql && isUsingMapsId && !viaService) { _%>
     @Transactional(readOnly = true)
   <%_ } _%>
-<%_ if (entitySpringReadPreAuthorize) { _%>
+  <%_ if (entitySpringReadPreAuthorize) { _%>
     @PreAuthorize("<%- entitySpringReadPreAuthorize %>")
-<%_ } _%>
+  <%_ } _%>
     public Flux<<%- instanceType %>> getAll<%- entityClassPlural %>AsStream() {
         LOG.debug("REST request to get all <%- entityClassPlural %> as a stream");
   <%_ if (viaService) { _%>

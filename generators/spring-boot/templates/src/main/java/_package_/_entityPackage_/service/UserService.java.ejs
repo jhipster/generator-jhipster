@@ -54,9 +54,9 @@ import org.slf4j.LoggerFactory;
 <%_ } _%>
 <%_ if (cacheProviderAny) { _%>
 import org.springframework.cache.CacheManager;
-<%_ if (databaseTypeCouchbase) { _%>
+  <%_ if (databaseTypeCouchbase) { _%>
 import org.springframework.cache.annotation.CacheEvict;
-<%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
   <%_ if (!reactive) { _%>

@@ -48,14 +48,14 @@ The Lighthouse report is created in `<%- cypressTemporaryDir %>lhreport.html`.
 
 When using Cypress, you can generate code coverage report by running your dev server with instrumented code:
 
-<%_ if (cypressCoverageWebpack) { _%>
+  <%_ if (cypressCoverageWebpack) { _%>
 Build your Angular application with instrumented code:
 
 ```bash
 <%- nodePackageManagerCommand %> run webapp:instrumenter
 ```
 
-<%_ } _%>
+  <%_ } _%>
 Start your backend without compiling frontend:
 
 ```bash
