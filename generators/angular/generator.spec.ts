@@ -2,6 +2,7 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
 import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
+import type { Entity } from '../../lib/jhipster/types/entity.ts';
 import {
   buildClientSamples,
   defaultHelpers as helpers,
@@ -18,6 +19,11 @@ const generator = basename(import.meta.dirname);
 
 const { ANGULAR: clientFramework } = clientFrameworkTypes;
 const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr' as const, 'en' as const] };
+const jsonBlobEntity = {
+  name: 'JsonBlob',
+  changelogDate: '20220129025419',
+  fields: [{ fieldName: 'payload', fieldType: 'byte[]', fieldTypeBlobContent: 'json' }],
+} satisfies Entity;
 
 const testSamples = buildClientSamples(commonConfig);
 
@@ -229,6 +235,25 @@ describe(`generator - ${clientFramework}`, () => {
 
     it('should match snapshot for UserManagement files', () => {
       expect(runResult.getSnapshot('**/entities/admin/user-management/**')).toMatchSnapshot();
+    });
+  });
+
+  describe('json blob content type', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ ...commonConfig, applicationType: 'monolith', authenticationType: 'jwt' }, [jsonBlobEntity])
+        .withSharedApplication({ gatewayServicesApiAvailable: false })
+        .withSharedApplication({ getWebappTranslation: () => 'translations' })
+        .withMockedSource()
+        .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
+    });
+
+    it('should render json blobs as textarea inputs', () => {
+      const updateFile = `${CLIENT_MAIN_SRC_DIR}app/entities/json-blob/update/json-blob-update.html`;
+      runResult.assertFileContent(updateFile, 'name="payload" id="field_payload" data-cy="payload"');
+      runResult.assertFileContent(updateFile, '<textarea class="form-control" name="payload"');
+      runResult.assertNoFileContent(updateFile, 'id="file_payload"');
     });
   });
 });

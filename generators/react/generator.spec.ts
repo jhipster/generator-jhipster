@@ -2,6 +2,7 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
 import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
+import type { Entity } from '../../lib/jhipster/types/entity.ts';
 import { buildClientSamples, defaultHelpers as helpers, entitiesClientSamples as entities, runResult } from '../../lib/testing/index.ts';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
 import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
@@ -14,6 +15,11 @@ const generator = basename(import.meta.dirname);
 
 const { REACT: clientFramework } = clientFrameworkTypes;
 const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr', 'en'] };
+const jsonBlobEntity = {
+  name: 'JsonBlob',
+  changelogDate: '20220129025419',
+  fields: [{ fieldName: 'payload', fieldType: 'byte[]', fieldTypeBlobContent: 'json' }],
+} satisfies Entity;
 
 const testSamples = buildClientSamples(commonConfig);
 
@@ -224,6 +230,27 @@ describe(`generator - ${clientFramework}`, () => {
         `${CLIENT_MAIN_SRC_DIR}app/entities/menu.tsx`,
         /<MenuItem icon="asterisk" to="\/entityPage">\n( *)Router Name\n( *)<\/MenuItem>/,
       );
+    });
+  });
+
+  describe('json blob content type', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ ...commonConfig, applicationType: 'monolith', authenticationType: 'jwt' }, [jsonBlobEntity])
+        .withSharedApplication({
+          gatewayServicesApiAvailable: false,
+          getWebappTranslation: () => 'translations',
+        })
+        .withMockedSource()
+        .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
+    });
+
+    it('should render json blobs as textarea fields instead of file inputs', () => {
+      const updateFile = `${CLIENT_MAIN_SRC_DIR}app/entities/json-blob/json-blob-update.tsx`;
+      runResult.assertFileContent(updateFile, 'name="payload"');
+      runResult.assertFileContent(updateFile, 'type="textarea"');
+      runResult.assertNoFileContent(updateFile, 'ValidatedBlobField');
     });
   });
 });
