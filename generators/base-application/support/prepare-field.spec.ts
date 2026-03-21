@@ -55,7 +55,7 @@ describe('generator - base-application - support - prepareField', () => {
 
         convertFieldBlobType(field);
 
-        expect(field).to.deep.include({
+        expect(field).toMatchObject({
           fieldType: 'TextBlob',
           fieldTypeBlobContent: 'json',
         });
@@ -68,8 +68,8 @@ describe('generator - base-application - support - prepareField', () => {
           defaultGenerator as any,
         );
 
-        expect(preparedField.blobContentTypeText).to.equal(true);
-        expect(preparedField.fieldWithContentType).to.equal(false);
+        expect(preparedField.blobContentTypeText).toBe(true);
+        expect(preparedField.fieldWithContentType).toBe(false);
       });
     });
   });
