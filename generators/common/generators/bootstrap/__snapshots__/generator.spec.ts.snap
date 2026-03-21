@@ -309,6 +309,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
         "autoGenerate": true,
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "entity": Any<Object>,
         "fieldIsEnum": false,
@@ -375,6 +376,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
       {
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "entity": Any<Object>,
         "fieldIsEnum": false,
@@ -573,6 +575,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
       {
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "builtIn": true,
         "entity": Any<Object>,
@@ -777,6 +780,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
         "autoGenerate": true,
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "entity": Any<Object>,
         "fieldIsEnum": false,
@@ -843,6 +847,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
       {
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "entity": Any<Object>,
         "fieldIsEnum": false,
@@ -1044,6 +1049,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
       {
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "builtIn": true,
         "entity": Any<Object>,
@@ -1113,6 +1119,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
       {
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "builtIn": true,
         "entity": Any<Object>,
@@ -1190,6 +1197,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
       {
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "builtIn": true,
         "entity": Any<Object>,
@@ -1262,6 +1270,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
       {
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "builtIn": true,
         "entity": Any<Object>,
@@ -1334,6 +1343,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
       {
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "builtIn": true,
         "entity": Any<Object>,
@@ -1410,6 +1420,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
       {
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "builtIn": true,
         "entity": Any<Object>,
@@ -1481,6 +1492,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
       {
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "builtIn": true,
         "entity": Any<Object>,
@@ -1553,6 +1565,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
         "autoGenerate": true,
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "builtIn": true,
         "defaultValue": true,
@@ -1765,6 +1778,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
       {
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "builtIn": true,
         "entity": Any<Object>,
@@ -1835,6 +1849,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
       {
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "builtIn": true,
         "entity": Any<Object>,
@@ -1913,6 +1928,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
       {
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "builtIn": true,
         "entity": Any<Object>,
@@ -1986,6 +2002,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
       {
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "builtIn": true,
         "entity": Any<Object>,
@@ -2059,6 +2076,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
       {
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "builtIn": true,
         "entity": Any<Object>,
@@ -2135,6 +2153,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
       {
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "builtIn": true,
         "entity": Any<Object>,
@@ -2210,6 +2229,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
       {
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "builtIn": true,
         "entity": Any<Object>,
@@ -2283,6 +2303,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
         "autoGenerate": true,
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "builtIn": true,
         "defaultValue": true,
@@ -2351,6 +2372,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
         "autoGenerate": true,
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "entity": Any<Object>,
         "fieldIsEnum": false,
@@ -2418,6 +2440,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
         "autoGenerate": true,
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "entity": Any<Object>,
         "fieldIsEnum": false,
@@ -2485,6 +2508,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
         "autoGenerate": true,
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "entity": Any<Object>,
         "fieldIsEnum": false,
@@ -2552,6 +2576,7 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
         "autoGenerate": true,
         "blobContentTypeAny": false,
         "blobContentTypeImage": false,
+        "blobContentTypeJson": false,
         "blobContentTypeText": false,
         "entity": Any<Object>,
         "fieldIsEnum": false,
