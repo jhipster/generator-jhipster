@@ -22,28 +22,28 @@ const typeImports = this.generateEntityClientImports(relationships, dto);
 const defaultVariablesValues = this.generateEntityClientFieldDefaultValues(fields.filter(field => !field.id));
 const enumImports = this.generateEntityClientEnumImports(fields.filter(field => !field.id));
 %>
-<%_ typeImports.forEach( (importedPath, importedType) => {
+<%_ for (const [importedType, importedPath] of typeImports) {
   importedPath = importedPath.replace('core/user/user.model', 'shared/model/user.model');
   importedPath = importedPath.replace('app/', '@/');
 _%>
   <%_ if (importedType !== "I".concat(entityAngularName)) { _%>
 import { type <%- importedType %> } from '<%- importedPath %>';
   <%_ } _%>
-<%_ }); _%>
+<%_ } _%>
 
-<%_ enumImports.forEach( (importedPath, importedType) => { _%>
+<%_ for (const [importedType, importedPath] of enumImports) { _%>
 import { type <%- importedType %> } from '<%- importedPath %>';
-<%_ }); _%>
+<%_ } _%>
 export interface I<%- entityAngularName %> {
-<%_ variablesWithTypes.forEach(variablesWithType => { _%>
+<%_ for (const variablesWithType of variablesWithTypes) { _%>
     <%- variablesWithType %>;
-<%_ }); _%>
+<%_ } _%>
 }
 
 export class <%- entityAngularName %> implements I<%- entityAngularName %> {
-    constructor(<% variablesWithTypes.forEach(variablesWithType => { %>
-        public <%- variablesWithType %>,<% }); %>
-    ) {<% for (idx in defaultVariablesValues) { %>
-        <%- defaultVariablesValues[idx] %><% } %>
+    constructor(<% for (const variablesWithType of variablesWithTypes) { %>
+        public <%- variablesWithType %>,<% } %>
+    ) {<% for (const defaultVariablesValue of Object.values(defaultVariablesValues)) { %>
+        <%- defaultVariablesValue %><% } %>
     }
 }

@@ -32,11 +32,11 @@ helm uninstall ${cs} 2>/dev/null
 helm dep up ./${cs}-${suffix}
 helm install ${cs} ./${cs}-${suffix} --replace --namespace <%- kubernetesNamespace %>
 fi
-<%_ appConfigs.forEach((appConfig) =>  { _%>
+<%_ for (const appConfig of appConfigs) { _%>
 helm uninstall <%- appConfig.baseName.toLowerCase() %> 2>/dev/null
 helm dep up ./<%- appConfig.baseName.toLowerCase() %>-${suffix}
 helm install <%- appConfig.baseName.toLowerCase() %>  ./<%- appConfig.baseName.toLowerCase() %>-${suffix} --replace --namespace <%- kubernetesNamespace %>
-<%_ }) _%>
+<%_ } _%>
 
 <%_ if (istio && kubernetesServiceTypeIngress) { _%>
 kubectl apply -f istio-${suffix}/

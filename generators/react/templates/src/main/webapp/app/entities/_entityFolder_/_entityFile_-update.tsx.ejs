@@ -68,9 +68,9 @@ import { getEntities as get<%- otherEntity.entityNamePlural %> } from 'app/entit
 <%_ } _%>
 import { I<%- entityReactName %> } from 'app/shared/model/<%- entityModelFileName %>.model';
 <%_ const enumImports = this.generateEntityClientEnumImports(fields); _%>
-<%_ enumImports.forEach( (importedPath, importedType) => { _%>
+<%_ for (const [importedType, importedPath] of enumImports) { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
-<%_ }); _%>
+<%_ } _%>
 import {
   getEntity,
   updateEntity,
@@ -86,16 +86,16 @@ export const <%- entityReactName %>Update = () => {
   const { id } = useParams<'id'>();
   const isNew = id === undefined;
 
-<%_ otherEntityActions.forEach(val => { _%>
+<%_ for (const val of otherEntityActions) { _%>
   const <%- val.instance %> = useAppSelector(state => state.<%- val.reducer %>);
-<%_ }) _%>
+<%_ } _%>
   const <%- entityInstance %>Entity = useAppSelector(state => state.<%- entityReactState %>.entity);
   const loading = useAppSelector(state => state.<%- entityReactState %>.loading);
   const updating = useAppSelector(state => state.<%- entityReactState %>.updating);
   const updateSuccess = useAppSelector(state => state.<%- entityReactState %>.updateSuccess);
-<%_ enumImports.forEach( (importedPath, importedType) => { _%>
+<%_ for (const [importedType, importedPath] of enumImports) { _%>
   const <%- this._.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
-<%_ }); _%>
+<%_ } _%>
 
   const handleClose = () => {
     navigate('/<%- entityPage %>'<%_ if (paginationPagination) { _%> + location.search<%_ } _%>);
@@ -114,9 +114,9 @@ export const <%- entityReactName %>Update = () => {
     }
 <%_ } _%>
 
-<%_ otherEntityActions.forEach(val => { _%>
+<%_ for (const val of otherEntityActions) { _%>
     dispatch(<%- val.action %>({}));
-<%_ }) _%>
+<%_ } _%>
   }, []);
 
   useEffect(() => {

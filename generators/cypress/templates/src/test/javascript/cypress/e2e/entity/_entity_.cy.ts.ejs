@@ -322,12 +322,12 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
 
     <% if (skipCreateTest) { %>// Reason: <%- reason %><% } %>
     it<%- skipCreateTest %>('should create an instance of <%- entityNameCapitalized %>', () => {
-  <%_ fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden && !field.readonly).forEach((field) => {
+  <%_ for (const field of fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden && !field.readonly)) {
     const fieldName = field.fieldName;
     const fieldIsEnum = field.fieldIsEnum;
     let fieldValue = !entityFakeData ? field.generateFakeData('cypress') : entityFakeData[field.fieldName];
     if (fieldValue === undefined) {
-        return;
+        continue;
     }
     fieldValue = typeof fieldValue === 'string' ? fieldValue.replaceAll("\\", "\\\\").replaceAll("'", "\\'") : fieldValue;
 _%>
@@ -352,7 +352,7 @@ _%>
       cy.get(`[data-cy="<%- fieldName %>"]`).invoke('val').should('match', new RegExp('<%- fieldValue %>'));
 
     <%_ } _%>
-  <%_ }); _%>
+  <%_ } _%>
   <%_ for (relationship of requiredRelationships) { _%>
        cy.get(`[data-cy="<%- relationship.relationshipFieldName %>"]`).select(<%- relationship.collection ? '[0]' : '1' %>);
   <%_ } _%>
