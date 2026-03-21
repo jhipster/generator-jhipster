@@ -57,6 +57,7 @@ export const BlobTypes = {
   IMAGE: 'image',
   ANY: 'any',
   TEXT: 'text',
+  JSON: 'json',
 } as const;
 
 const CommonDBValidations = {

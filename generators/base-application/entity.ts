@@ -14,6 +14,8 @@ import { pluralize } from '../../lib/utils/string-utils.ts';
 import { isFieldEnumType } from './internal/types/field-types.ts';
 import type { FakerWithRandexp } from './support/faker.ts';
 
+const { IMAGE, ANY, TEXT, JSON } = BlobTypes;
+
 type Property = {
   propertyName: string;
 
@@ -120,7 +122,7 @@ export const mutateField = {
   fieldIsEnum: data => isFieldEnumType(data),
   ...buildMutateDataForProperty('fieldType', Object.values(fieldTypesValues), { anyData: true }),
   fieldTypeBytes: ({ fieldTypeByte }) => fieldTypeByte,
-  ...buildMutateDataForProperty('fieldTypeBlobContent', Object.values(BlobTypes), { prefix: 'blobContentType' }),
+  ...buildMutateDataForProperty('fieldTypeBlobContent', [IMAGE, ANY, TEXT, JSON], { prefix: 'blobContentType', anyData: true }),
 
   path: ({ fieldName }) => [fieldName],
   propertyName: ({ fieldName }) => fieldName,

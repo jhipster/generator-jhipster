@@ -19,6 +19,7 @@ exports[`mutation object test expects mutateField to match snapshot 1`] = `
 {
   "blobContentTypeAny": false,
   "blobContentTypeImage": false,
+  "blobContentTypeJson": false,
   "blobContentTypeText": false,
   "fieldIsEnum": true,
   "fieldNameCapitalized": "FieldName",

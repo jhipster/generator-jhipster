@@ -22,6 +22,7 @@ import { beforeEach, describe, expect, it } from 'esmocha';
 import { getConfigWithDefaults } from '../../../lib/jhipster/default-application-options.ts';
 import BaseGenerator from '../../base/index.ts';
 import { formatDateForChangelog } from '../../base/support/index.ts';
+import { convertFieldBlobType } from '../internal/types/field-types.ts';
 
 import prepareEntityForTemplates, { loadRequiredConfigIntoEntity } from './prepare-entity.ts';
 import { getEnumValuesWithCustomValues, prepareCommonFieldForTemplates } from './prepare-field.ts';
@@ -45,6 +46,30 @@ describe('generator - base-application - support - prepareField', () => {
       });
       it('should prepare path correctly', () => {
         expect(field.path).toEqual(['name']);
+      });
+    });
+
+    describe('when fieldTypeBlobContent is json', () => {
+      it('should convert byte[] into TextBlob and keep json marker', () => {
+        const field: any = { fieldType: 'byte[]', fieldTypeBlobContent: 'json' };
+
+        convertFieldBlobType(field);
+
+        expect(field).toMatchObject({
+          fieldType: 'TextBlob',
+          fieldTypeBlobContent: 'json',
+        });
+      });
+
+      it('should treat json-clob as text-like blob data', () => {
+        const preparedField = prepareCommonFieldForTemplates(
+          defaultEntity,
+          { fieldName: 'payload', fieldType: 'TextBlob', fieldTypeBlobContent: 'json' } as any,
+          defaultGenerator as any,
+        );
+
+        expect(preparedField.blobContentTypeText).toBe(true);
+        expect(preparedField.fieldWithContentType).toBe(false);
       });
     });
   });

@@ -90,7 +90,10 @@ const generateEntityClientFields = (
       tsType = 'number';
     } else if (([TYPE_STRING, TYPE_UUID, TYPE_DURATION, TYPE_BYTES, TYPE_BYTE_BUFFER, TYPE_TIME] as string[]).includes(fieldType)) {
       tsType = 'string';
-      if (([TYPE_BYTES, TYPE_BYTE_BUFFER] as string[]).includes(fieldType) && field.fieldTypeBlobContent !== 'text') {
+      if (
+        ([TYPE_BYTES, TYPE_BYTE_BUFFER] as string[]).includes(fieldType) &&
+        !['text', 'json'].includes(field.fieldTypeBlobContent ?? '')
+      ) {
         variablesWithTypes.push(`${fieldName}ContentType?: ${nullable ? 'string | null' : 'string'}`);
       }
     } else if (([TYPE_LOCAL_DATE, TYPE_INSTANT, TYPE_ZONED_DATE_TIME] as string[]).includes(fieldType)) {
