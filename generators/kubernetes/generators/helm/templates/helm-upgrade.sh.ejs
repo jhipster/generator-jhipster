@@ -25,10 +25,10 @@ if [ -d "${cs}-${suffix}" ]; then
 helm dep up ./${cs}-${suffix}
 helm upgrade --install ${cs} ./${cs}-${suffix} --namespace <%- kubernetesNamespace %>
 fi
-<%_ appConfigs.forEach((appConfig, index) =>  { _%>
+<%_ for (const appConfig of appConfigs) { _%>
 helm dep up ./<%- appConfig.baseName.toLowerCase() %>-${suffix}
 helm upgrade --install <%- appConfig.baseName.toLowerCase() %> ./<%- appConfig.baseName.toLowerCase() %>-${suffix} --namespace <%- kubernetesNamespace %>
-<%_ }) _%>
+<%_ } _%>
 
 <%_ if (istio && kubernetesServiceTypeIngress) { _%>
 kubectl apply -f istio-${suffix}/
