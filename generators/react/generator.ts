@@ -119,8 +119,9 @@ export default class ReactGenerator extends ClientApplicationGenerator<
         };
 
         source.addClientStyle = ({ style, comment }) => {
-          comment = comment
-            ? `/* ==========================================================================
+          comment =
+            comment ?
+              `/* ==========================================================================
 ${comment}
 ========================================================================== */
 `
@@ -195,9 +196,8 @@ ${comment}
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
       react({ application, entity }) {
-        entity.entityReactState = application.applicationTypeMonolith
-          ? entity.entityInstance
-          : `${application.lowercaseBaseName}.${entity.entityInstance}`;
+        entity.entityReactState =
+          application.applicationTypeMonolith ? entity.entityInstance : `${application.lowercaseBaseName}.${entity.entityInstance}`;
       },
     });
   }

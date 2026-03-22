@@ -97,19 +97,19 @@ export default class JibGenerator extends JavaSimpleApplicationGenerator {
         </entrypoint>
         <ports>
             <port>${serverPort}</port>${
-              cacheProviderHazelcast
-                ? `
+              cacheProviderHazelcast ?
+                `
             <port>5701/udp</port>
 `
-                : ''
+              : ''
             }
         </ports>
         <environment>${
-          cacheProviderInfinispan
-            ? `
+          cacheProviderInfinispan ?
+            `
             <JAVA_OPTS>-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true</JAVA_OPTS>
 `
-            : ''
+          : ''
         }
             <SPRING_OUTPUT_ANSI_ENABLED>ALWAYS</SPRING_OUTPUT_ANSI_ENABLED>
             <JHIPSTER_SLEEP>0</JHIPSTER_SLEEP>
@@ -126,19 +126,19 @@ export default class JibGenerator extends JavaSimpleApplicationGenerator {
             </permission>
         </permissions>
     </extraDirectories>${
-      application.backendTypeSpringBoot
-        ? `
+      application.backendTypeSpringBoot ?
+        `
     <pluginExtensions>
         <pluginExtension>
             <implementation>com.google.cloud.tools.jib.maven.extension.springboot.JibSpringBootExtension</implementation>
         </pluginExtension>
     </pluginExtensions>
 `
-        : ''
+      : ''
     }
 </configuration>${
-                application.backendTypeSpringBoot
-                  ? `
+                application.backendTypeSpringBoot ?
+                  `
 <dependencies>
     <dependency>
         <groupId>com.google.cloud.tools</groupId>
@@ -147,7 +147,7 @@ export default class JibGenerator extends JavaSimpleApplicationGenerator {
     </dependency>
 </dependencies>
 `
-                  : ''
+                : ''
               }
 `,
             },

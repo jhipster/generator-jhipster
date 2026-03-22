@@ -789,8 +789,9 @@ export default class LiquibaseGenerator<
 
     for (let rowNumber = 0; rowNumber < this.numberOfRows; rowNumber++) {
       const rowData: Record<string, any> = {};
-      const fields: LiquibaseField[] = databaseChangelog.newEntity
-        ? // generate id fields first to improve reproducibility
+      const fields: LiquibaseField[] =
+        databaseChangelog.newEntity ?
+          // generate id fields first to improve reproducibility
           [...entityChanges.fields.filter(f => f.id), ...entityChanges.fields.filter(f => !f.id)]
         : [...entityChanges.allFields.filter(f => f.id), ...entityChanges.addedFields.filter(f => !f.id)];
       fields.forEach(field => {

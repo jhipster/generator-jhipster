@@ -126,9 +126,9 @@ export function replaceTranslations({
   getWebappTranslation: GetWebappTranslationCallback;
 }) {
   const regex =
-    type === 'ts'
-      ? /(?:this.)?(t\$|i18n.t)\((?<key>[^),]*)(?:,\s*{(?<data>[^)]*)})?\)\.toString\(\)/g
-      : /t\$\((?<key>[^),]*)(?:,\s*{(?<data>[^)]*)})?\)/g;
+    type === 'ts' ?
+      /(?:this.)?(t\$|i18n.t)\((?<key>[^),]*)(?:,\s*{(?<data>[^)]*)})?\)\.toString\(\)/g
+    : /t\$\((?<key>[^),]*)(?:,\s*{(?<data>[^)]*)})?\)/g;
   return content.replaceAll(regex, (_complete, ...args) => {
     const groups: Record<string, string> = args.pop();
     const key = groups.key.slice(1, -1).replaceAll(String.raw`\'`, "'");

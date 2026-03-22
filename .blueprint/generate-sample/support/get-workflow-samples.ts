@@ -16,13 +16,13 @@ export const getWorkflowSamples = (workflows: string[] = WORKFLOW_NAMES): Record
       Object.fromEntries(
         (JSON.parse(readFileSync(join(testIntegrationFolder, `workflow-samples/${workflow}.json`)).toString()) as WorkflowSamples).include
           .map(sample =>
-            isDaily(workflow)
-              ? {
-                  ...sample,
-                  name: `${DAILY_PREFIX}${sample.name}`,
-                  'app-sample': `${DAILY_PREFIX}${sample['app-sample'] ?? sample.name}`,
-                }
-              : sample,
+            isDaily(workflow) ?
+              {
+                ...sample,
+                name: `${DAILY_PREFIX}${sample.name}`,
+                'app-sample': `${DAILY_PREFIX}${sample['app-sample'] ?? sample.name}`,
+              }
+            : sample,
           )
           .map(sample => [sample.name, sample]),
       ),

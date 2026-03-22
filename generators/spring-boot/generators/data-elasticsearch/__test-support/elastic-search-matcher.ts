@@ -7,8 +7,8 @@ const expectedElasticsearchFiles = () => [`${JAVA_DOCKER_DIR}elasticsearch.yml`]
 
 const expectedElasticsearchUserFiles = () => {
   const application = runResult.application;
-  return application?.generateBuiltInUserEntity
-    ? [`${SERVER_MAIN_SRC_DIR}${application.packageFolder}/repository/search/UserSearchRepository.java`]
+  return application?.generateBuiltInUserEntity ?
+      [`${SERVER_MAIN_SRC_DIR}${application.packageFolder}/repository/search/UserSearchRepository.java`]
     : [];
 };
 

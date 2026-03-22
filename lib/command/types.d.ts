@@ -82,11 +82,11 @@ type DerivedPropertiesWithChoice<P extends string, V extends string, C extends s
  * ```
  */
 export type InferredDerivedPropertiesUnion<Choices extends [...string[]], Property extends string> = ValueOf<{
-  [Index in Exclude<keyof Choices, keyof any[]>]: Choices[Index] extends infer Choice
-    ? Choice extends string
-      ? DerivedPropertiesWithChoice<Property, Choice, Choices[number]>
-      : never
-    : never;
+  [Index in Exclude<keyof Choices, keyof any[]>]: Choices[Index] extends infer Choice ?
+    Choice extends string ?
+      DerivedPropertiesWithChoice<Property, Choice, Choices[number]>
+    : never
+  : never;
 }>;
 
 /** Union of all valid scopes for a command configuration entry. */
@@ -271,23 +271,23 @@ type ScopedCommandConfigs<D extends ParsableCommand, S extends ScopeOrUndefined>
  * and `internal.type` in priority order. Returns `undefined` if none is set.
  */
 type ExtractConfigType<C extends ParsableConfig> =
-  C extends Record<'type', CliSpecType>
-    ? C['type']
-    : C extends Record<'cli', Record<'type', CliSpecType>>
-      ? C['cli']['type']
-      : C extends Record<'internal', Record<'type', CliSpecType>>
-        ? C['internal']['type']
-        : undefined;
+  C extends Record<'type', CliSpecType> ? C['type']
+  : C extends Record<'cli', Record<'type', CliSpecType>> ? C['cli']['type']
+  : C extends Record<'internal', Record<'type', CliSpecType>> ? C['internal']['type']
+  : undefined;
 
 /** Converts wrapper types (`Boolean`, `String`, `Number`) to their primitive equivalents. */
-type UnwrapPrimitive<T> = T extends Boolean ? boolean : T extends String ? string : T extends Number ? number : T;
+type UnwrapPrimitive<T> =
+  T extends Boolean ? boolean
+  : T extends String ? string
+  : T extends Number ? number
+  : T;
 
 /** Extracts the string value from a choice entry that is either a bare string or a `{ value: string }` object. */
-type ExtractChoiceValue<Choice extends string | { value: string }> = Choice extends string
-  ? Choice
-  : Choice extends { value: string }
-    ? Choice['value']
-    : never;
+type ExtractChoiceValue<Choice extends string | { value: string }> =
+  Choice extends string ? Choice
+  : Choice extends { value: string } ? Choice['value']
+  : never;
 
 /**
  * Normalises a choices tuple so that every element is a plain string value.
@@ -311,24 +311,24 @@ type NormalizeChoices<Choices extends readonly [...(string | { value: string })[
  * ```
  */
 type ExplodeChoicesToDerivedProperties<U extends ParsableConfigs> = {
-  [K in keyof U]: U[K] extends infer RequiredChoices
-    ? RequiredChoices extends { choices: any }
-      ? K extends infer StringKey
-        ? StringKey extends string
-          ? NormalizeChoices<RequiredChoices['choices']> extends infer NormalizedChoices
-            ? Simplify<
-                DerivedPropertiesOf<
-                  StringKey,
-                  // @ts-expect-error Mapped tuple type is loose https://github.com/microsoft/TypeScript/issues/27995
-                  NormalizedChoices[number],
-                  ExtractConfigType<U[K]> extends ArrayConstructor ? true : false
-                >
+  [K in keyof U]: U[K] extends infer RequiredChoices ?
+    RequiredChoices extends { choices: any } ?
+      K extends infer StringKey ?
+        StringKey extends string ?
+          NormalizeChoices<RequiredChoices['choices']> extends infer NormalizedChoices ?
+            Simplify<
+              DerivedPropertiesOf<
+                StringKey,
+                // @ts-expect-error Mapped tuple type is loose https://github.com/microsoft/TypeScript/issues/27995
+                NormalizedChoices[number],
+                ExtractConfigType<U[K]> extends ArrayConstructor ? true : false
               >
-            : never
+            >
           : never
         : never
       : never
-    : never;
+    : never
+  : never;
 };
 
 /**
@@ -337,25 +337,25 @@ type ExplodeChoicesToDerivedProperties<U extends ParsableConfigs> = {
  * Properties without a resolvable type become `unknown`.
  */
 type ResolveConfigTypes<U extends ParsableConfigs> = Simplify<{
-  -readonly [K in keyof U]?: U[K] extends Record<'choices', JHipsterChoices>
-    ? ExtractConfigType<U[K]> extends ArrayConstructor
-      ? TupleToUnion<NormalizeChoices<U[K]['choices']>>[]
-      : TupleToUnion<NormalizeChoices<U[K]['choices']>>
-    : UnwrapPrimitive<UnwrapConstructor<ExtractConfigType<U[K]>>> extends infer T
-      ? T extends undefined
-        ? unknown
-        : T
-      : never;
+  -readonly [K in keyof U]?: U[K] extends Record<'choices', JHipsterChoices> ?
+    ExtractConfigType<U[K]> extends ArrayConstructor ?
+      TupleToUnion<NormalizeChoices<U[K]['choices']>>[]
+    : TupleToUnion<NormalizeChoices<U[K]['choices']>>
+  : UnwrapPrimitive<UnwrapConstructor<ExtractConfigType<U[K]>>> extends infer T ?
+    T extends undefined ?
+      unknown
+    : T
+  : never;
 }>;
 
 /** Returns D if its `choices` presence matches C, otherwise `never` */
-type FilterByHasChoices<D, C extends boolean> = D extends { choices: JHipsterChoices }
-  ? C extends true
-    ? D
+type FilterByHasChoices<D, C extends boolean> =
+  D extends { choices: JHipsterChoices } ?
+    C extends true ?
+      D
     : never
-  : C extends true
-    ? never
-    : D;
+  : C extends true ? never
+  : D;
 
 /**
  * Filter configs map keeping only entries that do (C=true) or do not (C=false) have choices
@@ -376,27 +376,27 @@ type FilterConfigsByChoices<D extends ParsableConfigs, C extends boolean> = {
  * ```
  */
 export type ExportApplicationPropertiesFromCommand<C extends ParsableCommand> =
-  ScopedCommandConfigs<C, 'storage' | 'context'> extends infer Merged
-    ? Merged extends ParsableConfigs
-      ? // Add value inference to properties with choices
-        // ? ResolveConfigTypes<FilterConfigsByChoices<F, false>> & ValueOf<ExplodeChoicesToDerivedPropertiesWithInference<FilterConfigsByChoices<F, true>>>
-        Simplify<
-          ResolveConfigTypes<FilterConfigsByChoices<Merged, false>> &
-            MergeUnion<ValueOf<ExplodeChoicesToDerivedProperties<FilterConfigsByChoices<Merged, true>>>>
-        >
-      : never
-    : never;
+  ScopedCommandConfigs<C, 'storage' | 'context'> extends infer Merged ?
+    Merged extends ParsableConfigs ?
+      // Add value inference to properties with choices
+      // ? ResolveConfigTypes<FilterConfigsByChoices<F, false>> & ValueOf<ExplodeChoicesToDerivedPropertiesWithInference<FilterConfigsByChoices<F, true>>>
+      Simplify<
+        ResolveConfigTypes<FilterConfigsByChoices<Merged, false>> &
+          MergeUnion<ValueOf<ExplodeChoicesToDerivedProperties<FilterConfigsByChoices<Merged, true>>>>
+      >
+    : never
+  : never;
 
 /**
  * Extracts config properties from command `C` filtered to scope `S`, resolving each entry to its
  * TypeScript type via `ResolveConfigTypes`. Returns `Record<string, never>` when no matching configs exist.
  */
 type ExportScopedPropertiesFromCommand<C extends ParsableCommand, S extends ScopeOrUndefined> =
-  ScopedCommandConfigs<C, S> extends infer Merged
-    ? Merged extends ParsableConfigs
-      ? ResolveConfigTypes<Merged>
-      : Record<string, never>
-    : Record<string, never>;
+  ScopedCommandConfigs<C, S> extends infer Merged ?
+    Merged extends ParsableConfigs ?
+      ResolveConfigTypes<Merged>
+    : Record<string, never>
+  : Record<string, never>;
 
 /** Extracts `storage`-scoped config properties from command `C` as a typed object. */
 export type ExportStoragePropertiesFromCommand<C extends ParsableCommand> = ExportScopedPropertiesFromCommand<C, 'storage'>;

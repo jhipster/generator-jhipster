@@ -32,9 +32,8 @@ export default class extends BaseGenerator {
    */
   addSampleToCodeWorkspace(samplePath?: string) {
     this.editFile(this.getCodeWorkspacePath(), { create: true }, content => {
-      const data: { folders: { path: string }[]; settings: Record<string, unknown>; launch: Record<string, unknown> } = content
-        ? JSON.parse(content)
-        : {};
+      const data: { folders: { path: string }[]; settings: Record<string, unknown>; launch: Record<string, unknown> } =
+        content ? JSON.parse(content) : {};
       merge(data, {
         folders: [
           {

@@ -103,8 +103,9 @@ export default class ServerGenerator extends JavaApplicationGenerator {
 
         let applicationWaitTimeout = WAIT_TIMEOUT * (application.applicationTypeGateway ? 2 : 1);
         applicationWaitTimeout = application.authenticationTypeOauth2 ? applicationWaitTimeout * 2 : applicationWaitTimeout;
-        const applicationEndpoint = application.applicationTypeMicroservice
-          ? `http-get://127.0.0.1:${application.gatewayServerPort}/${application.endpointPrefix}/management/health/readiness`
+        const applicationEndpoint =
+          application.applicationTypeMicroservice ?
+            `http-get://127.0.0.1:${application.gatewayServerPort}/${application.endpointPrefix}/management/health/readiness`
           : 'http-get://127.0.0.1:$npm_package_config_backend_port/management/health';
         scriptsStorage.set({
           'ci:server:await': `echo "Waiting for server at port $npm_package_config_backend_port to start" && wait-on -t ${applicationWaitTimeout} ${applicationEndpoint} && echo "Server at port $npm_package_config_backend_port started"`,
