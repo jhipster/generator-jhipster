@@ -88,9 +88,8 @@ export default class DomainGenerator extends JavaApplicationGenerator {
       },
       prepareEntity({ entity, relationship }) {
         if (entity.dtoMapstruct) {
-          relationship.propertyDtoJavaType = relationship.collection
-            ? `Set<${relationship.otherEntity.dtoClass}>`
-            : relationship.otherEntity.dtoClass;
+          relationship.propertyDtoJavaType =
+            relationship.collection ? `Set<${relationship.otherEntity.dtoClass}>` : relationship.otherEntity.dtoClass;
         }
       },
     });

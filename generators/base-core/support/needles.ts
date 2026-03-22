@@ -139,8 +139,9 @@ export const checkContentIn = (contentToCheck: string | RegExp, content: string,
 
   let re: RegExp;
   if (typeof contentToCheck === 'string') {
-    const pattern = ignoreWhitespaces
-      ? convertToPrettierExpressions(escapeRegExp(contentToCheck))
+    const pattern =
+      ignoreWhitespaces ?
+        convertToPrettierExpressions(escapeRegExp(contentToCheck))
       : contentToCheck
           .split('\n')
           .map(line => String.raw`\s*${escapeRegExp(line)}`)

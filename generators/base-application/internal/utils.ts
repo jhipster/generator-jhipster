@@ -147,28 +147,28 @@ export function createUserEntity(
       builtIn: true,
       fakerTemplate: '{{internet.email}}',
     },
-    ...(application.enableTranslation
-      ? [
-          {
-            fieldName: 'langKey',
-            fieldType: TYPE_STRING,
-            fieldValidateRules: [Validations.MAXLENGTH],
-            fieldValidateRulesMaxlength: 10,
-            builtIn: true,
-          },
-        ]
-      : []),
-    ...(hasImageField
-      ? [
-          {
-            fieldName: 'imageUrl',
-            fieldType: TYPE_STRING,
-            fieldValidateRules: [Validations.MAXLENGTH],
-            fieldValidateRulesMaxlength: 256,
-            builtIn: true,
-          },
-        ]
-      : []),
+    ...(application.enableTranslation ?
+      [
+        {
+          fieldName: 'langKey',
+          fieldType: TYPE_STRING,
+          fieldValidateRules: [Validations.MAXLENGTH],
+          fieldValidateRulesMaxlength: 10,
+          builtIn: true,
+        },
+      ]
+    : []),
+    ...(hasImageField ?
+      [
+        {
+          fieldName: 'imageUrl',
+          fieldType: TYPE_STRING,
+          fieldValidateRules: [Validations.MAXLENGTH],
+          fieldValidateRulesMaxlength: 256,
+          builtIn: true,
+        },
+      ]
+    : []),
     {
       fieldName: 'activated',
       fieldType: TYPE_BOOLEAN,

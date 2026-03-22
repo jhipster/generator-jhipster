@@ -99,11 +99,11 @@ export default class OpenapiGeneratorGenerator extends JavaApplicationGenerator 
                             <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
                             <skipValidateSpec>false</skipValidateSpec>
                             <configOptions>${
-                              application.reactive
-                                ? `
+                              application.reactive ?
+                                `
                                 <reactive>true</reactive>
 `
-                                : ''
+                              : ''
                             }
                                 <delegatePattern>true</delegatePattern>
                                 <title>${application.dasherizedBaseName}</title>

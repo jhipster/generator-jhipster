@@ -287,26 +287,26 @@ export const testBlueprintSupport = (
         .withMockedGenerators([`jhipster-foo-sbs:${generatorName}`])
         .withJHipsterConfig(
           {},
-          entity
-            ? [
-                {
-                  name: 'One',
-                  fields: [{ fieldName: 'id', fieldType: 'Long' }],
-                  relationships: [{ relationshipName: 'relationship', otherEntityName: 'Two', relationshipType: 'many-to-one' }],
-                },
-                {
-                  name: 'Two',
-                  fields: [
-                    { fieldName: 'id', fieldType: 'Long' },
-                    { fieldName: 'name', fieldType: 'String' },
-                  ],
-                  relationships: [
-                    { relationshipName: 'relationship1', otherEntityName: 'One', relationshipType: 'many-to-one' },
-                    { relationshipName: 'relationship2', otherEntityName: 'Two', relationshipType: 'many-to-one' },
-                  ],
-                },
-              ]
-            : undefined,
+          entity ?
+            [
+              {
+                name: 'One',
+                fields: [{ fieldName: 'id', fieldType: 'Long' }],
+                relationships: [{ relationshipName: 'relationship', otherEntityName: 'Two', relationshipType: 'many-to-one' }],
+              },
+              {
+                name: 'Two',
+                fields: [
+                  { fieldName: 'id', fieldType: 'Long' },
+                  { fieldName: 'name', fieldType: 'String' },
+                ],
+                relationships: [
+                  { relationshipName: 'relationship1', otherEntityName: 'One', relationshipType: 'many-to-one' },
+                  { relationshipName: 'relationship2', otherEntityName: 'Two', relationshipType: 'many-to-one' },
+                ],
+              },
+            ]
+          : undefined,
         )
         .commitFiles()
         .withOptions({ blueprint: ['foo-sbs'] })

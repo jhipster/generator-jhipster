@@ -65,8 +65,8 @@ export function isReservedClassName(keyword: string) {
 }
 
 export function isReservedTableName(keyword: string, databaseType: string) {
-  return databaseType.toUpperCase() === 'SQL'
-    ? isReserved(keyword, 'MYSQL') || isReserved(keyword, 'POSTGRESQL') || isReserved(keyword, 'ORACLE') || isReserved(keyword, 'MSSQL')
+  return databaseType.toUpperCase() === 'SQL' ?
+      isReserved(keyword, 'MYSQL') || isReserved(keyword, 'POSTGRESQL') || isReserved(keyword, 'ORACLE') || isReserved(keyword, 'MSSQL')
     : isReserved(keyword, databaseType);
 }
 

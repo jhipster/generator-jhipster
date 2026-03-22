@@ -21,13 +21,13 @@ export function prepareRelationshipForDatabase({
     columnName: ({ relationshipName }) => hibernateSnakeCase(relationshipName),
     shouldWriteJoinTable: ({ ownerSide, relationshipManyToMany }) => application.databaseTypeSql && relationshipManyToMany && ownerSide,
     joinTable: ({ shouldWriteJoinTable, relationshipName }) =>
-      shouldWriteJoinTable
-        ? {
-            name: getJoinTableName(entity.entityTableName, relationshipName, {
-              prodDatabaseType: application.prodDatabaseType,
-            }).value,
-          }
-        : undefined,
+      shouldWriteJoinTable ?
+        {
+          name: getJoinTableName(entity.entityTableName, relationshipName, {
+            prodDatabaseType: application.prodDatabaseType,
+          }).value,
+        }
+      : undefined,
   });
 }
 

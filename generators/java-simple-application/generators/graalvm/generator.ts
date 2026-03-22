@@ -43,9 +43,8 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
     return this.asPreparingTaskGroup({
       loading({ applicationDefaults }) {
         applicationDefaults({
-          graalvmReachabilityMetadata: this.useVersionPlaceholders
-            ? 'GRAALVM_REACHABILITY_METADATA_VERSION'
-            : GRAALVM_REACHABILITY_METADATA,
+          graalvmReachabilityMetadata:
+            this.useVersionPlaceholders ? 'GRAALVM_REACHABILITY_METADATA_VERSION' : GRAALVM_REACHABILITY_METADATA,
         });
       },
       load({ application }) {
@@ -53,8 +52,9 @@ export default class GraalvmGenerator extends JavaApplicationGenerator {
       },
       async packageJson({ application }) {
         const { buildToolGradle, packageJsonScripts } = application;
-        const scripts = buildToolGradle
-          ? {
+        const scripts =
+          buildToolGradle ?
+            {
               'native-package': './gradlew nativeCompile -Pnative -Pprod -x test -x integrationTest',
               'native-package-dev': './gradlew nativeCompile -Pnative -Pdev -x test -x integrationTest',
               'native-start': './build/native/nativeCompile/native-executable --spring.profiles.active=e2e,secret-samples,prod',

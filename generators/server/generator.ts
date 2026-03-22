@@ -160,10 +160,12 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
           entityConfig.prodDatabaseType ?? application.prodDatabaseType ?? entityConfig.databaseType ?? application.databaseType;
         const entityTableName = entityConfig.entityTableName ?? hibernateSnakeCase(entityName);
         const fixedEntityTableName =
-          (isReservedTableName(entityTableName, databaseType) || (devDatabaseTypeH2Any && isReservedH2Keyword(entityTableName))) &&
-          jhiTablePrefix
-            ? `${jhiTablePrefix}_${entityTableName}`
-            : entityTableName;
+          (
+            (isReservedTableName(entityTableName, databaseType) || (devDatabaseTypeH2Any && isReservedH2Keyword(entityTableName))) &&
+            jhiTablePrefix
+          ) ?
+            `${jhiTablePrefix}_${entityTableName}`
+          : entityTableName;
         if (fixedEntityTableName !== entityTableName) {
           entityConfig.entityTableName = fixedEntityTableName;
         }
