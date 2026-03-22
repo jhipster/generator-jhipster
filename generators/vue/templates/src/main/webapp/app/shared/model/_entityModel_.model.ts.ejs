@@ -22,7 +22,7 @@ const typeImports = this.generateEntityClientImports(relationships, dto);
 const defaultVariablesValues = this.generateEntityClientFieldDefaultValues(fields.filter(field => !field.id));
 const enumImports = this.generateEntityClientEnumImports(fields.filter(field => !field.id));
 %>
-<%_ for (const [importedType, importedPath] of typeImports) {
+<%_ for (let [importedType, importedPath] of typeImports) {
   importedPath = importedPath.replace('core/user/user.model', 'shared/model/user.model');
   importedPath = importedPath.replace('app/', '@/');
 _%>
