@@ -27,8 +27,6 @@ const listOrFlux = (reactive) ? 'Flux' : 'List';
 const pageOrFlux = (reactive) ? 'Flux' : 'Page';
 const mapper = entityInstance  + 'Mapper';
 const entityToDtoReference = mapper + '::'+ 'toDto';
-const repository = entityInstance  + 'Repository';
-
 _%>
 <%_ if (serviceImpl) { _%>
 import <%- entityAbsolutePackage %>.service.<%- entityClass %>Service;

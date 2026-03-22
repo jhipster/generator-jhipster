@@ -110,7 +110,7 @@ public class <%- persistClass %>Asserts {
     <%_ } -%>
   <%_ } -%>
         ;
-<%_ } else { _%>
+<%_ } else { _%>
         // empty method
 <%_ } _%>
 
@@ -130,7 +130,7 @@ public class <%- persistClass %>Asserts {
             .satisfies(a -> assertThat(a.<%- relationship.propertySupplierName %>()).as("check <%- relationship.propertyName %>").isEqualTo(expected.<%- relationship.propertySupplierName %>()))
   <%_ } _%>
         ;
-<%_ } else { _%>
+<%_ } else { _%>
         // empty method
 <%_ } _%>
     }

@@ -11,8 +11,6 @@
                     </div>
 <%_ for (field of fields.filter(field => !field.id)) {
   const fieldName = field.fieldName;
-  const fieldNameHumanized = field.fieldNameHumanized;
-  const fieldType = field.fieldType;
   const fieldTypeBlobContent = field.fieldTypeBlobContent;
   let fieldInputType = 'text';
   let fieldInputClass = 'form-control';
@@ -125,8 +123,6 @@ _%>
 <%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) {
   const otherEntityName = relationship.otherEntityName;
   const relationshipName = relationship.relationshipName;
-  const relationshipNameHumanized = relationship.relationshipNameHumanized;
-  const relationshipFieldName = relationship.relationshipFieldName;
   const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
   const otherEntityField = relationship.otherEntityField;
   const relationshipRequired = relationship.relationshipRequired;
