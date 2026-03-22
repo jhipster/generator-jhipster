@@ -18,6 +18,7 @@
  */
 
 import { validations } from '../../core/built-in-options/index.ts';
+import type { ValidationType } from '../../core/built-in-options/validations.ts';
 import type JDLValidation from '../../core/models/jdl-validation.ts';
 
 import Validator from './validator.ts';
@@ -48,7 +49,7 @@ function checkForInvalidName(jdlValidation: JDLValidation) {
 }
 
 function checkForRequiredValue(jdlValidation: JDLValidation) {
-  if (jdlValidation.value == null && needsValue(jdlValidation.name)) {
+  if (jdlValidation.value == null && needsValue(jdlValidation.name as ValidationType)) {
     throw new Error(`The validation ${jdlValidation.name} requires a value.`);
   }
 }
