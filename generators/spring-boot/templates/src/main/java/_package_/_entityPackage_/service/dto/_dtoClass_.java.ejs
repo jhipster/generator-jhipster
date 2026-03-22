@@ -75,7 +75,7 @@ import <%- `${otherEntity.entityAbsolutePackage}.service.dto.${otherEntity.dtoCl
 public class <%- dtoClass %> implements Serializable {
 
 <%_ for (property of restProperties) { _%>
-  <%_ if (typeof property.propertyJavadoc) { _%>
+  <%_ if (property.propertyJavadoc) { _%>
 <%- property.propertyJavadoc %>
   <%_ }
   const field = property.fieldName ? property : undefined;
