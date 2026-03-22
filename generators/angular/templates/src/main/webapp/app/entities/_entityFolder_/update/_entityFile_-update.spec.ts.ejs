@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 <%_
-const tsKeyId = primaryKey.tsSampleValues[0];
 const allRelationshipsByEntityNeedingOptions = Object
   .values(relationshipsByOtherEntity)
   .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))

@@ -67,9 +67,7 @@ describe('Service Tests', () => {
 <%_ } _%>
       elemDefault = new <%- entityAngularName %>(
         <%- primaryKey.tsSampleValues[0] %>,
-<%_ for (const field of fields.filter(field => !field.id)) {
-    const fieldType = field.fieldType;
-_%>
+<%_ for (const field of fields.filter(field => !field.id)) { _%>
   <%_ if (field.fieldIsEnum) { _%>
         '<%- field.enumValues[0].name %>',
   <%_ } else if (field.fieldTypeBoolean) { _%>
