@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%# Returns a string of all react validators required for the input field. -%>
-<%_ if (field.fieldValidate === true) { _%>
+<%_ if (field.fieldValidate) { _%>
         validate={{
   <%_ if (field.fieldValidationRequired && !field.fieldTypeBoolean) { _%>
           required: { value: true, message: translate('entity.validation.required') },

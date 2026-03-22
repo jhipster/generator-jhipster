@@ -82,7 +82,7 @@ export const askForMicroserviceJson = asPromptingTask<EntityGenerator>(async fun
       default: true,
     },
     {
-      when: response => response.useMicroserviceJson === true || databaseType === NO_DATABASE,
+      when: response => response.useMicroserviceJson || databaseType === NO_DATABASE,
       type: 'input',
       name: 'microservicePath',
       message: 'Enter the path to the microservice root directory:',
@@ -562,7 +562,7 @@ async function askForField(this: EntityGenerator) {
       default: false,
     },
     {
-      when: response => response.fieldValidate === true,
+      when: response => response.fieldValidate,
       type: 'checkbox',
       name: 'fieldValidateRules',
       message: 'Which validation rules do you want to add?',
@@ -613,7 +613,7 @@ async function askForField(this: EntityGenerator) {
       default: [REQUIRED],
     },
     {
-      when: response => response.fieldValidate === true && response.fieldValidateRules.includes('minlength'),
+      when: response => response.fieldValidate && response.fieldValidateRules.includes('minlength'),
       type: 'input',
       name: 'fieldValidateRulesMinlength',
       validate: input => (inputIsNumber(input) ? true : 'Minimum length must be a positive number'),
@@ -621,7 +621,7 @@ async function askForField(this: EntityGenerator) {
       default: '0',
     },
     {
-      when: response => response.fieldValidate === true && response.fieldValidateRules.includes('maxlength'),
+      when: response => response.fieldValidate && response.fieldValidateRules.includes('maxlength'),
       type: 'input',
       name: 'fieldValidateRulesMaxlength',
       validate: input => (inputIsNumber(input) ? true : 'Maximum length must be a positive number'),
@@ -629,7 +629,7 @@ async function askForField(this: EntityGenerator) {
       default: '20',
     },
     {
-      when: response => response.fieldValidate === true && response.fieldValidateRules.includes('min'),
+      when: response => response.fieldValidate && response.fieldValidateRules.includes('min'),
       type: 'input',
       name: 'fieldValidateRulesMin',
       message: 'What is the minimum of your field?',
@@ -644,7 +644,7 @@ async function askForField(this: EntityGenerator) {
       default: '0',
     },
     {
-      when: response => response.fieldValidate === true && response.fieldValidateRules.includes('max'),
+      when: response => response.fieldValidate && response.fieldValidateRules.includes('max'),
       type: 'input',
       name: 'fieldValidateRulesMax',
       message: 'What is the maximum of your field?',
@@ -660,7 +660,7 @@ async function askForField(this: EntityGenerator) {
     },
     {
       when: response =>
-        response.fieldValidate === true &&
+        response.fieldValidate &&
         response.fieldValidateRules.includes(MINBYTES) &&
         response.fieldType === BYTES &&
         response.fieldTypeBlobContent !== TEXT,
@@ -672,7 +672,7 @@ async function askForField(this: EntityGenerator) {
     },
     {
       when: response =>
-        response.fieldValidate === true &&
+        response.fieldValidate &&
         response.fieldValidateRules.includes(MAXBYTES) &&
         response.fieldType === BYTES &&
         response.fieldTypeBlobContent !== TEXT,
@@ -683,7 +683,7 @@ async function askForField(this: EntityGenerator) {
       default: '5000000',
     },
     {
-      when: response => response.fieldValidate === true && response.fieldValidateRules.includes('pattern'),
+      when: response => response.fieldValidate && response.fieldValidateRules.includes('pattern'),
       type: 'input',
       name: 'fieldValidateRulesPattern',
       message: 'What is the regular expression pattern you want to apply on your field?',
@@ -835,7 +835,7 @@ async function askForRelationship(this: EntityGenerator, ...args: any[]) {
       default: false,
     },
     {
-      when: response => response.relationshipValidate === true,
+      when: response => response.relationshipValidate,
       type: 'checkbox',
       name: 'relationshipValidateRules',
       message: 'Which validation rules do you want to add?',
