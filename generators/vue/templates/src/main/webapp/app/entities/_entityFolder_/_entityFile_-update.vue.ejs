@@ -127,6 +127,7 @@ _%>
   const otherEntityField = relationship.otherEntityField;
   const relationshipRequired = relationship.relationshipRequired;
   const translationKey = `${i18nKeyPrefix}.${relationshipName}`;
+  const relationshipFieldName = relationship.relationshipFieldName;
 _%>
   <%_ if (!relationship.collection && relationship.persistableRelationship) { _%>
                     <div class="mb-3">
