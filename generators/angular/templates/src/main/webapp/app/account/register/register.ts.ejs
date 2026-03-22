@@ -34,7 +34,15 @@ import PasswordStrengthBar from '../password/password-strength-bar/password-stre
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-register',
-  imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>RouterLink, ReactiveFormsModule, PasswordStrengthBar],
+  imports: [
+<%_ if (enableTranslation) { _%>
+    TranslateDirective,
+    TranslateModule, 
+<%_ } _%>
+    RouterLink,
+    ReactiveFormsModule,
+    PasswordStrengthBar,
+  ],
   templateUrl: './register.html',
 })
 export default class Register implements AfterViewInit {

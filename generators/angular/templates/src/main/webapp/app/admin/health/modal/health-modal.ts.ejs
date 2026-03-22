@@ -29,7 +29,13 @@ import { HealthKey, HealthDetails } from '../health.model';
 @Component({
   selector: '<%- jhiPrefixDashed %>-health-modal',
   templateUrl: './health-modal.html',
-  imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>KeyValuePipe],
+  imports: [
+<%_ if (enableTranslation) { _%>
+    TranslateDirective,
+    TranslateModule, 
+<%_ } _%>
+    KeyValuePipe,
+  ],
 })
 export default class HealthModal {
   health?: { key: HealthKey; value: HealthDetails };

@@ -175,7 +175,7 @@ _%>
 
     <changeSet author="jhipster" id="00000000000002" context="test">
         <createTable tableName="<%- jhiTablePrefix %>_date_time_wrapper">
-            <column <% if (isAutoIncrementDB) { _%> autoIncrement="true" <%_ } %> name="id" type="BIGINT">
+            <column<% if (isAutoIncrementDB) { %> autoIncrement="true"<% } %> name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="<%- jhiTablePrefix %>_date_time_wrapperPK"/>
             </column>
             <column name="instant" type="timestamp"/>

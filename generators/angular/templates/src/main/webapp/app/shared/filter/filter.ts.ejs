@@ -8,7 +8,13 @@ import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-filter',
-  imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>FontAwesomeModule],
+  imports: [
+<%_ if (enableTranslation) { _%>
+    TranslateDirective,
+    TranslateModule,
+<%_ } _%>
+    FontAwesomeModule,
+  ],
   templateUrl: './filter.html',
 })
 export default class Filter {

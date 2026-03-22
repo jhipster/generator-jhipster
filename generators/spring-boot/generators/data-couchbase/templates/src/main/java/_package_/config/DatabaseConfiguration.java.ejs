@@ -47,7 +47,7 @@ import org.springframework.data.couchbase.core.mapping.event.ValidatingCouchbase
 <%_ if (!reactive) { _%>
 import org.springframework.data.couchbase.repository.auditing.EnableCouchbaseAuditing;
 <%_ } _%>
-import org.springframework.data.couchbase.repository.config.Enable<%_ if (reactive) { _%>Reactive<% } %>CouchbaseRepositories;
+import org.springframework.data.couchbase.repository.config.Enable<% if (reactive) { %>Reactive<% } %>CouchbaseRepositories;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
@@ -66,8 +66,12 @@ import reactor.core.publisher.Flux;
 @Configuration
 @EnableConfigurationProperties(CouchbaseProperties.class)
 @Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)
-@Enable<% if (reactive) { %>Reactive<% } %>CouchbaseRepositories(basePackages = "<%- packageName %>.repository"<%_ if (searchEngineElasticsearch) { %>,
-    includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>CouchbaseRepository.class)<%_ } _%>)
+@Enable<% if (reactive) { %>Reactive<% } %>CouchbaseRepositories(
+<%_ if (searchEngineElasticsearch) { %>
+    includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>CouchbaseRepository.class),
+<%_ } _%>
+    basePackages = "<%- packageName %>.repository"
+)
 <%_ if (!reactive) { _%>
 @EnableCouchbaseAuditing(auditorAwareRef = "springSecurityAuditorAware", dateTimeProviderRef = "")
 <%_ } _%>

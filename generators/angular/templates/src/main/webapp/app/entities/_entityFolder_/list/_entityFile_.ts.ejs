@@ -35,7 +35,14 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { HttpHeaders } from '@angular/common/http';
 <%_ } _%>
 import { ActivatedRoute, Data, ParamMap, Router, RouterLink } from '@angular/router';
-import { combineLatest<%_ if (!readOnly) { _%>, filter<%_ } _%>, Subscription, tap } from 'rxjs';
+import {
+  combineLatest,
+<%_ if (!readOnly) { _%>
+  filter,
+<%_ } _%>
+  Subscription,
+  tap,
+} from 'rxjs';
 <%_ if (!readOnly) { _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
 <%_ } _%>
@@ -407,7 +414,7 @@ export class <%- componentName %> implements OnInit {
       this.links.set({});
 
 <%_ } _%>
-      const queryParamsObj<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>: any<%_ } _%> = {
+      const queryParamsObj<% if (jpaMetamodelFiltering && paginationPagination) { %>: any<% } %> = {
 <%_ if (searchEngineAny) { _%>
         search: currentSearch,
 <%_ } _%>

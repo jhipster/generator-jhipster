@@ -46,7 +46,15 @@ import { Account } from 'app/core/auth/account.model';
   selector: '<%- jhiPrefixDashed %>-home',
   templateUrl: './home.html',
   styleUrl: './home.scss',
-  imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%><%_ if (generateUserManagement) { _%>RouterLink<%_ } _%>],
+  imports: [
+<%_ if (enableTranslation) { _%>
+    TranslateDirective,
+    TranslateModule,
+<%_ } _%>
+<%_ if (generateUserManagement) { _%>
+    RouterLink,
+<%_ } _%>
+  ],
 })
 export default class Home {
   public readonly account = inject(AccountService).account;

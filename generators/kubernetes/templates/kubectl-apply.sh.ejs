@@ -75,7 +75,8 @@ default() {
     suffix=k8s
 <%_ if (!kubernetesNamespaceDefault) { _%>
     kubectl apply -f namespace.yml
-<%_ } _%> <%_ if (istio) { _%>
+<%_ } _%>
+<%_ if (istio) { _%>
     kubectl label namespace <%- kubernetesNamespace %> istio-injection=enabled --overwrite=true
 <%_ } _%>
 <%_ if (useKeycloak) { _%>
@@ -91,7 +92,8 @@ default() {
 <%_ } _%>
 <%_ if (useKafka) { _%>
     kubectl apply -f messagebroker-${suffix}/
-<%_ } _%> <%_ if (monitoringPrometheus) { _%>
+<%_ } _%>
+<%_ if (monitoringPrometheus) { _%>
     kubectl apply -f monitoring-${suffix}/jhipster-prometheus-crd.yml
     until [ $(kubectl get crd prometheuses.monitoring.coreos.com 2>>/dev/null | wc -l) -ge 2 ]; do
         echo "Waiting for the custom resource prometheus operator to get initialised";

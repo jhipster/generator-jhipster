@@ -51,14 +51,16 @@ import org.springframework.data.domain.Persistable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Field;
-<%_ } _%> <%_ if (databaseTypeNeo4j) { _%>
+<%_ } _%>
+<%_ if (databaseTypeNeo4j) { _%>
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.schema.Relationship;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
-<%_ } _%> <%_ if (reactive && databaseTypeCassandra) { _%>
+<%_ } _%>
+<%_ if (reactive && databaseTypeCassandra) { _%>
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
