@@ -9,8 +9,8 @@ import ts from 'typescript-eslint';
 
 import jhipster from './lib/eslint/index.ts';
 
-const tsFiles = ['**/*.ts', '**/*.mts', '**/*.cts'];
-const jsFiles = ['**/*.js', '**/*.cjs', '**/*.mjs'];
+const tsFiles = ['**/*.{ts,mts,cts}'];
+const jsFiles = ['**/*.{js,cjs,mjs}'];
 const jsTsFiles = [...jsFiles, ...tsFiles];
 
 export default defineConfig(
