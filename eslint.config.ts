@@ -1,6 +1,7 @@
 import js from '@eslint/js';
 import { type Config, defineConfig } from 'eslint/config';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
+import ejs from 'eslint-plugin-ejs-templates';
 import imports from 'eslint-plugin-import-x';
 import n from 'eslint-plugin-n';
 import prettier from 'eslint-plugin-prettier/recommended';
@@ -122,4 +123,19 @@ export default defineConfig(
     },
   },
   prettier,
+  ejs.configs.base,
+  {
+    files: ['**/*.ejs'],
+    rules: {
+      'ejs-templates/prefer-raw': 'error',
+      // 'ejs-templates/prefer-slurping-codeonly': 'error',
+      // 'ejs-templates/experimental-prefer-slurp-multiline': 'error',
+      // 'ejs-templates/prefer-single-line-tags': 'error',
+      // 'ejs-templates/slurp-newline': 'error',
+      'ejs-templates/indent': 'error',
+
+      'prettier/prettier': 'off',
+      ...js.configs.recommended.rules,
+    },
+  },
 );
