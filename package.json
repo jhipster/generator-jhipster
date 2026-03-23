@@ -188,7 +188,7 @@
     "@types/pluralize": "0.0.33",
     "@types/semver": "7.7.1",
     "cpy-cli": "7.0.0",
-    "diff": "8.0.3",
+    "diff": "8.0.4",
     "ejs-lint": "2.0.1",
     "eslint-config-prettier": "10.1.8",
     "eslint-import-resolver-typescript": "4.4.4",
