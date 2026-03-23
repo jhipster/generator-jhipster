@@ -45,14 +45,14 @@ logSummary() {
         echo "JHipster Grafana - http://jhipster-grafana.<%- kubernetesNamespace %>.<%- ingressDomain %>"
   <%_ } _%>
   <%_ if (kubernetesServiceTypeIngress) { _%>
-    <%_ for (const appConfig of appConfigs) { _%>
+    <%_ appConfigs.forEach((appConfig) =>  { _%>
       <%_ if (appConfig.applicationTypeGateway) { _%>
         echo "Gateway - http://<%- appConfig.baseName.toLowerCase() %>.<%- kubernetesNamespace %>.<%- ingressDomain %>"
       <%_ } _%>
       <%_ if (appConfig.applicationTypeMonolith) { _%>
         echo "<%- appConfig.baseName %> - http://<%- appConfig.baseName.toLowerCase() %>.<%- kubernetesNamespace %>.<%- ingressDomain %>"
       <%_ } _%>
-    <%_ } _%>
+    <%_ }) _%>
     <%_ if (istio) { _%>
         echo "Zipkin - http://zipkin.istio-system.<%- ingressDomain %>"
         echo "Grafana - http://grafana.istio-system.<%- ingressDomain %>"
@@ -86,9 +86,9 @@ default() {
 <%_ } _%>
 <%_ if (serviceDiscoveryEureka || serviceDiscoveryConsul) { _%>
     kubectl apply -f registry-${suffix}/
-<%_ } _%> <%_ for (const appConfig of appConfigs) { _%>
+<%_ } _%> <%_ appConfigs.forEach((appConfig) =>  { _%>
     kubectl apply -f <%- appConfig.baseName.toLowerCase() %>-${suffix}/
-<%_ } _%>
+<%_ }) _%>
 <%_ if (useKafka) { _%>
     kubectl apply -f messagebroker-${suffix}/
 <%_ } _%> <%_ if (monitoringPrometheus) { _%>

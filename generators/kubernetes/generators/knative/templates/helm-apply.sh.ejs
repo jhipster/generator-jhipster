@@ -41,7 +41,7 @@ helm install ${cs} ./${cs}-${suffix} --replace --namespace <%- kubernetesNamespa
 helm install --name ${cs} ./${cs}-${suffix} --replace --namespace <%- kubernetesNamespace %>
     fi
 fi
-<%_ for (const appConfig of appConfigs) { _%>
+<%_ appConfigs.forEach((appConfig) =>  { _%>
     if [ $helmVersion -eq 1 ]; then
 helm uninstall <%- appConfig.baseName.toLowerCase() %> 2>/dev/null
     else
@@ -53,4 +53,4 @@ helm install <%- appConfig.baseName.toLowerCase() %>  ./<%- appConfig.baseName.t
     else
 helm install --name <%- appConfig.baseName.toLowerCase() %>  ./<%- appConfig.baseName.toLowerCase() %>-${suffix} --replace --namespace <%- kubernetesNamespace %>
     fi
-<%_ } _%>
+<%_ }) _%>

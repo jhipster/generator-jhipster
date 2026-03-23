@@ -77,9 +77,9 @@ import <%- entityAbsolutePackage %>.domain.<%- relationship.otherEntity.persistC
 _%>
 <%_
 if(jpaMetamodelFiltering && reactive) {
-  for (const relationship of filterTestableRelationships) { _%>
+  filterTestableRelationships.forEach(relationship => { _%>
 import <%- entityAbsolutePackage %>.repository.<%- relationship.otherEntity.entityNameCapitalized %>Repository;
-<%_ }
+<%_ });
  }
 _%>
 <%_ if (hasUserRepository) { _%>
@@ -522,14 +522,14 @@ _%>
     private <%- persistClass %> inserted<%- persistClass %>;
 
 <%_ if(jpaMetamodelFiltering && reactive) {
-for (const relationship of filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser)) {
+filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser).forEach((relationship) => {
 _%>
     @Autowired
     private <%- relationship.otherEntity.persistClass %>Repository <%- relationship.otherEntity.persistInstance %>Repository;
-<%_ }
+<%_ });
 }
 _%>
-<%_ for (const fieldStatus of ['DEFAULT_', 'UPDATED_']) { _%>
+<%_ ['DEFAULT_', 'UPDATED_'].forEach((fieldStatus) => { _%>
   <%_ const createInstance = fieldStatus === 'UPDATED_' ? `updated${persistClass}` : persistInstance; _%>
     /**
      * Create an <% if (fieldStatus === 'UPDATED_') { %>updated <% } %>entity for this test.
@@ -554,7 +554,7 @@ _%>
     <%_ } _%>;
     <%_ if (!anyRelationshipIsRequired) { _%>
     }
-    <%_ continue; _%>
+    <%_ return; _%>
     <%_ } _%>
   <%_ } else { _%>
         <%- persistClass %> <%- createInstance %> = new <%- persistClass %>();
@@ -623,28 +623,28 @@ _%>
   <%_ } _%>
         return <%- createInstance %>;
     }
-<%_ } _%>
+<%_ }); _%>
 
 <%_ if (databaseTypeSql && reactive) {
   const alreadyGeneratedDeletionCalls = [];
 _%>
     public static void deleteEntities(EntityManager em) {
         try {
-  <%_ for (const rel of relationships) {
+  <%_ relationships.forEach(function(rel) {
     if (rel.shouldWriteJoinTable) { _%>
                 em.deleteAll("<%- rel.joinTable.name %>").block();
     <%_ } _%>
-  <%_ } _%>
+  <%_ }); _%>
                 em.deleteAll(<%- persistClass %>.class).block();
         } catch (Exception e) {
             // It can fail, if other entities are still referring this - it will be removed later.
         }
-  <%_ for (const rel of relationships) {
+  <%_ relationships.forEach(function(rel) {
     if ((rel.relationshipValidate || rel.id) && !alreadyGeneratedDeletionCalls.includes(rel.otherEntityName)) { _%>
         <%- rel.otherEntity.entityNameCapitalized %>ResourceIT.deleteEntities(em);
     <%_ alreadyGeneratedDeletionCalls.push(rel.otherEntityName);
     }
-  }
+  });
     _%>
     }
 
@@ -1121,7 +1121,7 @@ _%>
   <%_ } _%>
     }
 
-  <%_ for (const searchBy of fieldsToTest) { /* we can't filter by all the fields. */ _%>
+  <%_ fieldsToTest.forEach((searchBy) => { /* we can't filter by all the fields. */ _%>
     <%_ if (searchBy.filterableField) { _%>
 
     @Test<%- transactionalAnnotation %>
@@ -1252,8 +1252,8 @@ _%>
     }
 
     <%_ } _%>
-  <%_ } _%>
-  <%_ for (const relationship of filterTestableRelationships) { _%>
+  <%_ }); _%>
+  <%_ filterTestableRelationships.forEach((relationship) => { _%>
 
     @Test<%- transactionalAnnotation %>
     void getAll<%- entityClassPlural %>By<%- relationship.relationshipNameCapitalized %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
@@ -1309,7 +1309,7 @@ _%>
         default<%- entityClass %>ShouldNotBeFound("<%- relationship.relationshipFieldName %>Id.equals=" + <%- initInvalidPrimaryKey %>);
     }
 
-  <%_ } _%>
+  <%_ }); _%>
     private void default<%- entityClass %>Filtering (String shouldBeFound, String shouldNotBeFound) <% if (!reactive) { %>throws Exception <% } %>{
         default<%- entityClass %>ShouldBeFound(shouldBeFound);
         default<%- entityClass %>ShouldNotBeFound(shouldNotBeFound);
@@ -1373,7 +1373,7 @@ _%>
                 'UUID' : '.toString()'
             }[primaryKey.type] || '';
             _%>
-            .andExpect(jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- persistInstance %>.<%- primaryKey.propertySupplierName %>()<%- primaryKeyConversion %>)))<% for (const field of fieldsToTest) { %>
+            .andExpect(jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- persistInstance %>.<%- primaryKey.propertySupplierName %>()<%- primaryKeyConversion %>)))<% fieldsToTest.forEach((field) => { %>
       <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
             .andExpect(jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)))
       <%_ } _%>
@@ -1394,7 +1394,7 @@ _%>
       !field.fieldTypeBoolean &&
       !field.fieldTypeInteger &&
       !field.fieldTypeDouble
-    ) { %>.toString()<% } %>)))<% } %>;
+    ) { %>.toString()<% } %>)))<% }); %>;
 
         // Check, that the count call also returns 1
         rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "/count?sort=<%- primaryKey.name %>,desc&" + filter))

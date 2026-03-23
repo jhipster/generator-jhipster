@@ -37,13 +37,13 @@ import { <%- entityAngularName %>Service<% if (requiresRestTypeConversion) { %>,
 
 const requireRestSample: <% if (requiresRestTypeConversion) { %><%- entityRestName %><% } else { %>I<%- entityAngularName %><% } %> = {
   ...sampleWithRequiredData,
-<%_ for (const field of fields) { _%>
+<%_ fields.forEach((field) => { _%>
   <%_ if (field.fieldTypeLocalDate) { _%>
   <%- field.fieldName %>: sampleWithRequiredData.<%- field.fieldName %>?.format(DATE_FORMAT),
   <%_ } else if (field.fieldTypeTimed) { _%>
   <%- field.fieldName %>: sampleWithRequiredData.<%- field.fieldName %>?.toJSON(),
   <%_ } _%>
-<%_ } _%>
+<%_ }) _%>
 <%_ if (builtInUserManagement) { _%>
   authorities: null,
 <%_ } _%>

@@ -30,9 +30,9 @@ import { type I<%- relationship.otherEntity.entityAngularName %> } from '@/share
 import { type I<%- entityAngularName %>, <%- entityAngularName %> } from '@/shared/model/<%- entityModelFileName %>.model';
 import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
 <%_ const enumImports = this.generateEntityClientEnumImports(fields); _%>
-<%_ for (const [importedType, importedPath] of enumImports) { _%>
+<%_ enumImports.forEach( (importedPath, importedType) => { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
-<%_ } _%>
+<%_ }); _%>
 
 export default defineComponent({
   name: '<%- entityAngularName %>Update',
@@ -52,9 +52,9 @@ export default defineComponent({
     const <%- relationship.otherEntity.entityInstancePlural %>: Ref<I<%- relationship.otherEntity.entityAngularName %>[]> = ref([]);
   <%_ } _%>
 <%_ } _%>
-<%_ for (const [importedType, importedPath] of enumImports) { _%>
+<%_ enumImports.forEach( (importedPath, importedType) => { _%>
     const <%- this._.lowerFirst(importedType) %>Values: Ref<string[]> = ref(Object.keys(<%- importedType %>));
-<%_ } _%>
+<%_ }); _%>
     const isSaving = ref(false);
     const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? '<%- nativeLanguage %>'), true);
 
@@ -151,9 +151,9 @@ _%>
       alertService,
       <%- entityInstance %>,
       previousState,
-<%_ for (const [importedType, importedPath] of enumImports) { _%>
+<%_ enumImports.forEach( (importedPath, importedType) => { _%>
       <%- this._.lowerFirst(importedType) %>Values,
-<%_ } _%>
+<%_ }); _%>
       isSaving,
       currentLanguage,
 <%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>

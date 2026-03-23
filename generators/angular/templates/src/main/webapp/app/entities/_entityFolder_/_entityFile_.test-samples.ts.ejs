@@ -21,9 +21,9 @@
 import dayjs from 'dayjs/esm';
 <%_ } _%>
 
-<%_ for (const [importedType, importedPath] of enumImports) { _%>
+<%_ enumImports.forEach( (importedPath, importedType) => { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
-<%_ } _%>
+<%_ }); _%>
 
 import { I<%- entityAngularName %><% if (!readOnly && primaryKey) { %>, New<%- entityAngularName %><% } %> } from './<%- entityFileName %>.model';
 

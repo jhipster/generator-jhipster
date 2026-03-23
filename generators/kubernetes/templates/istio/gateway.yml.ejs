@@ -58,7 +58,7 @@ spec:
   - <%- app.baseName.toLowerCase() %>-gateway
   http:
 <%_ if (!app.serviceDiscoveryAny) { _%>
-  <%_ for (const config of appConfigs.filter(config => config.baseName !== app.baseName)) { _%>
+  <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(config => { _%>
   - match:
     - uri:
         prefix: /services/<%- config.baseName.toLowerCase() %>/
@@ -67,7 +67,7 @@ spec:
     route:
     - destination:
         host: <%- config.baseName.toLowerCase() %>
-  <%_ } _%>
+  <%_ }); _%>
 <%_ } _%>
   - route:
     - destination:

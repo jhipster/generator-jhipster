@@ -18,12 +18,12 @@
 -%>
 <%- include('/liquibase-changelog-header') -%>
 
-<%_ for (const [idx, field] of fields.filter(field => field.liquibaseCustomSequenceGenerator).entries()) { _%>
+<%_ fields.filter(field => field.liquibaseCustomSequenceGenerator).forEach((field, idx) => { _%>
     <changeSet id="<%- changelogDate %>-seq-<%- idx %>" author="jhipster">
         <createSequence sequenceName="<%- field.liquibaseSequenceGeneratorName %>" startValue="1050" incrementBy="50"/>
     </changeSet>
 
-<%_ } _%>
+<%_ }); _%>
     <!--
         Added the entity <%- entity.entityClass %>.
     -->
@@ -48,13 +48,13 @@
 <%_ for (relationship of relationships) {
     if ((relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true))
                 && !relationship.id) {
-        for (const idField of relationship.otherEntity.primaryKey.fields) {
+        relationship.otherEntity.primaryKey.fields.forEach(idField => {
         const uniqueConstraintName = relationship.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, relationship.columnName + '_' + idField.columnName, entity.prodDatabaseType) : null;
 _%>
             <column name="<%- relationship.columnName %>_<%- idField.columnName %>" type="<%- idField.columnType %>">
                 <constraints nullable="<%- !relationship.columnRequired %>"<% if (uniqueConstraintName) { %> unique="true" uniqueConstraintName="<%- uniqueConstraintName %>"<% } %> />
             </column>
-        <%_ }
+        <%_ });
     }
 }
         _%>

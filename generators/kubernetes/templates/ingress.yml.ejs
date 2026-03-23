@@ -49,7 +49,7 @@ spec:
             port:
               name: http
 <%_ if (!app.serviceDiscoveryAny) { _%>
-  <%_ for (const config of appConfigs.filter(config => config.baseName !== app.baseName)) { _%>
+  <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(config => { _%>
       - path: /services/<%- config.baseName.toLowerCase() %>/<%- ingressTypeNginx ? "" : "*" %>
         pathType: Prefix
         backend:
@@ -57,7 +57,7 @@ spec:
             name: <%- config.baseName.toLowerCase() %>
             port:
               name: http
-  <%_ } _%>
+  <%_ }); _%>
 <%_ } _%>
 <%_ if (useKeycloak) { _%>
   - host: keycloak.<%- kubernetesNamespace %>.<%- ingressDomain %>

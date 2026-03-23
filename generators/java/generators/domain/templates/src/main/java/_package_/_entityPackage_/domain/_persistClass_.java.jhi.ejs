@@ -150,9 +150,9 @@ _%>
   <%_ if (relationship.relationshipOneToMany) { _%>
     <%_ if (relationship.ignoreOtherSideProperty) { _%>
     @JsonIgnoreProperties(value = {
-      <%_ for (const otherRelationship of relationship.otherEntity.relationships) { _%>
+      <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
         "<%- otherRelationship.propertyName %>",
-      <%_ } _%>
+      <%_ }); _%>
     }, allowSetters = true)
     <%_ } _%>
     private Set<<%- relationship.otherEntity.persistClass %>> <%- relationship.relationshipFieldNamePlural %> = new HashSet<>();
@@ -160,9 +160,9 @@ _%>
   <%_ } else if (relationship.relationshipManyToOne) { _%>
     <%_ if (relationship.ignoreOtherSideProperty) { _%>
     @JsonIgnoreProperties(value = {
-      <%_ for (const otherRelationship of relationship.otherEntity.relationships) { _%>
+      <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
         "<%- otherRelationship.propertyName %>",
-      <%_ } _%>
+      <%_ }); _%>
     }, allowSetters = true)
     <%_ } _%>
     private <%- relationship.otherEntity.persistClass %> <%- relationship.relationshipFieldName %>;
@@ -170,9 +170,9 @@ _%>
   <%_ } else if (relationship.relationshipManyToMany) { _%>
     <%_ if (relationship.ignoreOtherSideProperty) { _%>
     @JsonIgnoreProperties(value = {
-      <%_ for (const otherRelationship of relationship.otherEntity.relationships) { _%>
+      <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
         "<%- otherRelationship.propertyName %>",
-      <%_ } _%>
+      <%_ }); _%>
     }, allowSetters = true)
     <%_ } _%>
     private Set<<%- relationship.otherEntity.persistClass %>> <%- relationship.relationshipFieldNamePlural %> = new HashSet<>();

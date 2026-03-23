@@ -72,7 +72,7 @@ public interface <%- entityClass %>Repository extends JHipsterCouchbaseRepositor
         " FROM #{#n1ql.bucket}.#{#n1ql.scope}.#{#n1ql.collection} b";
 
     String JOIN = <%
-        for (const [index, relationship] of notEmbeddedRelationships.entries()) {
+        notEmbeddedRelationships.forEach(function (relationship, index) {
           if (!relationship.collection) { %>
             " LEFT JOIN `<%- relationship.otherEntity.entityInstance %>` `<%- relationship.relationshipFieldName %>` ON KEYS b.`<%- relationship.relationshipFieldName %>`"<%
           } else { %>
@@ -81,7 +81,7 @@ public interface <%- entityClass %>Repository extends JHipsterCouchbaseRepositor
           if (index < notEmbeddedRelationships.length - 1) { %>
             + <%
           }
-        } %>;
+        }); %>;
 
     String WHERE = " WHERE b.type = '" + TYPE_NAME + "'";
 

@@ -12,7 +12,7 @@ resources:
 # Individual apps
 <%_
 const suffix = 'k8s';
-for (const appConfig of appConfigs) {
+appConfigs.forEach((appConfig) =>  {
 const appName = appConfig.baseName.toLowerCase();
 const appOut = appName.concat('-', suffix); _%>
 - <%- appOut %>/<%- appName %>-deployment.yml
@@ -40,7 +40,7 @@ const appOut = appName.concat('-', suffix); _%>
 - <%- appOut %>/<%- appName %>-destination-rule.yml
 - <%- appOut %>/<%- appName %>-virtual-service.yml
   <%_ } _%>
-<%_ } _%>
+<%_ }) _%>
 <%_ if (useKeycloak) { _%>
   <%_ if (ingressTypeGke) { _%>
 # cert-manager

@@ -68,9 +68,9 @@ import { <%- uniqueRel.otherEntity.entityAngularName %>Service } from 'app/entit
   }
 _%>
 <%_ const enumImports = generateEntityClientEnumImports(fields); _%>
-<%_ for (const [importedType, importedPath] of enumImports) { _%>
+<%_ enumImports.forEach( (importedPath, importedType) => { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
-<%_ } _%>
+<%_ }); _%>
 
 @Component({
     selector: '<%- jhiPrefixDashed %>-<%- entityFileName %>-update',
@@ -81,9 +81,9 @@ TranslateDirective, TranslateModule,<%_ } _%>FontAwesomeModule, AlertError, Reac
 export class <%- entityAngularName %>Update implements OnInit {
     readonly isSaving = signal(false);
     <%- entityInstance %>: I<%- entityAngularName %> | null = null;
-<%_ for (const [importedType, importedPath] of enumImports) { _%>
+<%_ enumImports.forEach( (importedPath, importedType) => { _%>
     <%- this._.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
-<%_ } _%>
+<%_ }); _%>
 
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
   <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipOneToOne && rel.otherRelationship); _%>

@@ -34,7 +34,7 @@ public enum <%- enumName %> {
   withCustomValues = enumValues.every(({name, value}) => name !== value);
   withSomeCustomValues = !withoutCustomValues && !withCustomValues;
 
-  for (const [index, enumWithCustomValue] of enumValues.entries()) {
+  enumValues.forEach((enumWithCustomValue, index) => {
     if (enumWithCustomValue.comment){ _%>
 <%- enumWithCustomValue.comment %>
   <%_ } 
@@ -43,7 +43,7 @@ public enum <%- enumName %> {
     <%_ } else { _%>
     <%- enumWithCustomValue.name %>("<%- enumWithCustomValue.value %>")<% if (index < enumValues.length - 1) { %>,<% } else { %>;<% } %>
     <%_ }
-  }
+  });
     _%>
   <%_ if (!withoutCustomValues) { _%>
     private<% if (withCustomValues) { %> final<% } %> String value;

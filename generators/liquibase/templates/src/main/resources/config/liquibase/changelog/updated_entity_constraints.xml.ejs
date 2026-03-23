@@ -82,7 +82,8 @@ _%>
     -->
     <changeSet id="<%- changelogDate %>-relationship-constraints" author="jhipster">
     <%_
-    for (const relationshipData of addedRelationships) {
+    for (idx in addedRelationships) {
+        const relationshipData = addedRelationships[idx];
         if (relationshipData.unique) {
             const idField = relationship.otherEntity.primaryKey.ownFields[0];
             const uniqueConstraintName = relationshipData.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, relationshipData.columnName + '_' + idField.columnName, entity.prodDatabaseType) : null;

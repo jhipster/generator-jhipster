@@ -101,22 +101,22 @@ import org.hibernate.type.SqlTypes;
       <%_ } _%>
     @JoinTable(name = "<%- relationship.joinTable.name %>",
                joinColumns = <%- primaryKey.fields.length > 1 ? '{' : '' %>
-        <%_ for (const [idx, field] of primaryKey.fields.entries()) { _%>
+        <%_ primaryKey.fields.forEach((field, idx) => { _%>
                    <%- idx === 0 ? '' : ',' %>@JoinColumn(name = "<%- `${entityTableName}_${field.columnName}` %>")
-        <%_ } _%>
+        <%_ }); _%>
                <%- primaryKey.fields.length > 1 ? '}' : '' %>,
                inverseJoinColumns = <%- relationship.otherEntity.primaryKey.fields.length > 1 ? '{' : '' %>
-        <%_ for (const [idx, field] of relationship.otherEntity.primaryKey.fields.entries()) { _%>
+        <%_ relationship.otherEntity.primaryKey.fields.forEach((field, idx) => { _%>
                    <%- idx === 0 ? '' : ',' %>@JoinColumn(name = "<%- `${relationship.columnName}_${field.columnName}` %>"))
-        <%_ } _%>
+        <%_ }); _%>
                <%- relationship.otherEntity.primaryKey.fields.length > 1 ? '}' : '' %>
     <%_ } _%>
   <%_ } else { -%>
     <%_ if (relationship.ignoreOtherSideProperty) { -%>
     @JsonIgnoreProperties(value = {
-      <%_ for (const otherRelationship of relationship.otherEntity.relationships) { _%>
+      <%_ relationship.otherEntity.relationships.forEach(otherRelationship => { _%>
         "<%- otherRelationship.propertyName %>",
-      <%_ } _%>
+      <%_ }); _%>
     }, allowSetters = true)
     <%_ } _%>
     <%_ if (relationship.ownerSide) { -%>

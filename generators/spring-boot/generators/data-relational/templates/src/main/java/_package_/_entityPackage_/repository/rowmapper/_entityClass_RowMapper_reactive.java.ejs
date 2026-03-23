@@ -64,7 +64,7 @@ public class <%- entityClass %>RowMapper implements BiFunction<Row, String, <%- 
     @Override
     public <%- persistClass %> apply(Row row, String prefix) {
         <%- persistClass %> entity = new <%- persistClass %>();
-<%_ for (const field of fields.filter(field => !field.transient)) {
+<%_ fields.filter(field => !field.transient).forEach(function(field) {
   let fieldType = field.fieldType;
   if (field.blobContentTypeText) {
     fieldType = 'String';
@@ -74,10 +74,10 @@ _%>
         entity.<%- field.propertyConsumerName %>ContentType(converter.fromRow(row, prefix + "_<%- field.fieldNameAsDatabaseColumn %>_content_type", String.class));
   <%_ } _%>
         entity.<%- field.propertyConsumerName %>(converter.fromRow(row, prefix + "_<%- field.fieldNameAsDatabaseColumn %>", <%- fieldType %>.class));
-<%_ } _%>
-<%_ for (const rel of reactiveRegularEagerRelations) { _%>
+<%_ }); _%>
+<%_ reactiveRegularEagerRelations.forEach(function(rel) { _%>
         entity.<%- rel.propertyConsumerName %>Id(converter.fromRow(row, prefix + "_<%- rel.joinColumnNames[0] %>", <%- rel.otherEntity.primaryKey.type %>.class));
-<%_ } _%>
+<%_ }); _%>
         return entity;
     }
 

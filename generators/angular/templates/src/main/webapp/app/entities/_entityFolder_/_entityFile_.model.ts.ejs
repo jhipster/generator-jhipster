@@ -25,9 +25,9 @@ import dayjs from 'dayjs/esm';
 _%>
 import { I<%- otherEntity.entityAngularName %> } from 'app/entities/<%- otherEntity.entityClientRootFolder %><%- otherEntity.entityFolderName %>/<%- otherEntity.entityFileName %>.model';
 <%_ } _%>
-<%_ for (const [importedType, importedPath] of enumImports) { _%>
+<%_ enumImports.forEach((importedPath, importedType) => { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
-<%_ } _%>
+<%_ }); _%>
 
 export interface I<%- entityAngularName %> {
 <%_ for (const field of fields) {

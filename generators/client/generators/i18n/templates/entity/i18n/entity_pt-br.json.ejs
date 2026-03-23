@@ -60,14 +60,14 @@
 <%_ } _%>
             "detail": {
                 "title": "<%- entityNameHumanized %>"
-            }<% for (const field of fields) {
-            if (typeof field.documentation !== 'undefined') ++helpBlocks; %>,
-            "<%- field.fieldName %>": "<%- field.fieldNameHumanized %>"<% } %><% for (const relationship of relationships) { %>,
-            "<%- relationship.relationshipName %>": "<%- relationship.relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
-            "help": {<% for (const field of fields) {
-                if (field.documentation) {
+            }<% for (idx in fields) {
+            if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
+            "<%- fields[idx].fieldName %>": "<%- fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
+            "<%- relationships[idx].relationshipName %>": "<%- relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
+            "help": {<% for (idx in fields) {
+                if (fields[idx].documentation) {
                     --helpBlocks; %>
-                "<%- field.fieldName %>": "<%- field.documentation %>"<% if (helpBlocks > 0) { %>,<% }
+                "<%- fields[idx].fieldName %>": "<%- fields[idx].documentation %>"<% if (helpBlocks > 0) { %>,<% }
                 }
             } %>
             }<% } %>

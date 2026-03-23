@@ -19,8 +19,8 @@
 {
     "<%- frontendAppName %>": {
         "<%- enumName %>" : {
-            "null": ""<% for (const enumValue of enumValues) { %>,
-            "<%- enumValue.name %>": "<%- enumValue.value %>"<% } %>
+            "null": ""<% enumValues.forEach(enumValue => { %>,
+            "<%- enumValue.name %>": "<%- enumValue.value %>"<% }); %>
         }
     }
 }
