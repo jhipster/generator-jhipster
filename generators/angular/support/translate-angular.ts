@@ -122,14 +122,14 @@ const tagTranslation = (
   { enableTranslation, jhiPrefix }: ReplacerOptions,
   { key, parsedInterpolate, prefix, suffix }: JHITranslateConverterOptions,
 ) => {
-  const translatedValueInterpolate = parsedInterpolate
-    ? Object.fromEntries(Object.entries(parsedInterpolate).map(([key, value]) => [key, `{{ ${value} }}`]))
-    : undefined;
+  const translatedValueInterpolate =
+    parsedInterpolate ? Object.fromEntries(Object.entries(parsedInterpolate).map(([key, value]) => [key, `{{ ${value} }}`])) : undefined;
   const translatedValue = escapeHtmlTranslationValue(getWebappTranslation(key, translatedValueInterpolate));
 
   if (enableTranslation) {
-    const translateValuesAttr = parsedInterpolate
-      ? ` [translateValues]="{ ${Object.entries(parsedInterpolate)
+    const translateValuesAttr =
+      parsedInterpolate ?
+        ` [translateValues]="{ ${Object.entries(parsedInterpolate)
           .map(([key, value]) => `${key}: ${value}`)
           .join(', ')} }"`
       : '';
@@ -154,8 +154,9 @@ const validationTagTranslation = (
   const translatedValue = escapeHtmlTranslationValue(getWebappTranslation(key, parsedInterpolate));
 
   if (enableTranslation) {
-    const translateValuesAttr = parsedInterpolate
-      ? ` [translateValues]="{ ${Object.entries(parsedInterpolate)
+    const translateValuesAttr =
+      parsedInterpolate ?
+        ` [translateValues]="{ ${Object.entries(parsedInterpolate)
           .map(([key, value]) => `${key}: '${value}'`)
           .join(', ')} }"`
       : '';

@@ -87,9 +87,9 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
         mutateData(entity, languagesMutateEntity, {
           i18nKeyPrefix: data => data.i18nKeyPrefix ?? `${application.frontendAppName}.${data.entityTranslationKey}`,
           i18nAlertHeaderPrefix: data =>
-            (data.i18nAlertHeaderPrefix ?? data.microserviceAppName)
-              ? `${data.microserviceAppName}.${data.entityTranslationKey}`
-              : data.i18nKeyPrefix,
+            (data.i18nAlertHeaderPrefix ?? data.microserviceAppName) ?
+              `${data.microserviceAppName}.${data.entityTranslationKey}`
+            : data.i18nKeyPrefix,
         });
       },
     });

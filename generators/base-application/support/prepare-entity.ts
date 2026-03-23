@@ -248,13 +248,13 @@ export function prepareEntityPrimaryKeyForTemplates(
               return idCount === 1 ? field.fieldName : `${relationship.relationshipName}${field.fieldNameCapitalized}`;
             },
             get fieldNameCapitalized() {
-              return idCount === 1
-                ? field.fieldNameCapitalized
+              return idCount === 1 ?
+                  field.fieldNameCapitalized
                 : `${relationship.relationshipNameCapitalized}${field.fieldNameCapitalized}`;
             },
             get columnName() {
-              return idCount === 1
-                ? (field as FieldAll).columnName
+              return idCount === 1 ?
+                  (field as FieldAll).columnName
                 : `${hibernateSnakeCase(relationship.relationshipName)}_${(field as FieldAll).columnName}`;
             },
           }));

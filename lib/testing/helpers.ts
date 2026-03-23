@@ -150,9 +150,8 @@ const createFiles = (workspaceFolder: string, configuration: Record<string, unkn
     throw new Error('baseName is required');
   }
   workspaceFolder = workspaceFolder ? normalizePathEnd(workspaceFolder) : workspaceFolder;
-  const entityFiles = entities
-    ? Object.fromEntries(entities?.map(entity => [`${workspaceFolder}${JHIPSTER_CONFIG_DIR}/${entity.name}.json`, entity]))
-    : {};
+  const entityFiles =
+    entities ? Object.fromEntries(entities?.map(entity => [`${workspaceFolder}${JHIPSTER_CONFIG_DIR}/${entity.name}.json`, entity])) : {};
   configuration = { entities: entities?.map(e => e.name), ...configuration };
   return {
     [`${workspaceFolder}.yo-rc.json`]: { 'generator-jhipster': configuration },

@@ -57,12 +57,12 @@ export default function checkEnforcements({ client }: { client?: boolean }, gene
           [
             ['src/main/webapp', '<%= clientSrcDir %>'],
             ['src/test/javascript', '<%= clientTestDir %>'],
-            ...(client
-              ? [
-                  [' jhiTranslate', ' <%= jhiPrefix %>Translate'],
-                  [' Java ', ' <%= backendType %> '],
-                ]
-              : []),
+            ...(client ?
+              [
+                [' jhiTranslate', ' <%= jhiPrefix %>Translate'],
+                [' Java ', ' <%= backendType %> '],
+              ]
+            : []),
           ].forEach(([notExpected, replacement]) => {
             const regex = new RegExp(notExpected, 'g');
             const regexSeparator = new RegExp(`${notExpected}/`, 'g');

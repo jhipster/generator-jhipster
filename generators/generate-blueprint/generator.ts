@@ -360,8 +360,9 @@ export default class extends BaseSimpleApplicationGenerator<
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const { jhipsterPackageJson } = application;
         const exactDependency = {
-          'generator-jhipster': this.options.linkJhipsterDependency
-            ? `file:${this.relativeDir(this.destinationRoot(), getPackageRoot())}`
+          'generator-jhipster':
+            this.options.linkJhipsterDependency ?
+              `file:${this.relativeDir(this.destinationRoot(), getPackageRoot())}`
             : jhipsterPackageJson.version,
         };
         const caretDependency = {
@@ -474,8 +475,8 @@ To begin to work:
   }
 
   validateModuleName(input: string): boolean | string {
-    return /^[a-zA-Z0-9-]+$/.test(input)
-      ? true
-      : 'Your blueprint name is mandatory, cannot contain special characters or a blank space, using the default name instead';
+    return /^[a-zA-Z0-9-]+$/.test(input) ? true : (
+        'Your blueprint name is mandatory, cannot contain special characters or a blank space, using the default name instead'
+      );
   }
 }

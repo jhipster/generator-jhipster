@@ -130,16 +130,16 @@ export const buildSamplesFromMatrix = (
   { commonConfig = {} }: { commonConfig?: Record<string, unknown> } = {},
 ): Record<string, Record<string, unknown>> =>
   sortKeys(
-    commonConfig
-      ? Object.fromEntries(
-          Object.entries(samples).map(([name, sample]) => [
-            name,
-            {
-              ...sample,
-              ...commonConfig,
-            },
-          ]),
-        )
-      : samples,
+    commonConfig ?
+      Object.fromEntries(
+        Object.entries(samples).map(([name, sample]) => [
+          name,
+          {
+            ...sample,
+            ...commonConfig,
+          },
+        ]),
+      )
+    : samples,
     { deep: true },
   );

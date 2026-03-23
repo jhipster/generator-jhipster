@@ -169,8 +169,9 @@ export default class BaseGenerator<
           },
           get jhipsterOldVersion(): string | null {
             if (jhipsterOldVersion === undefined) {
-              jhipsterOldVersion = existsSync(generator.config.path)
-                ? (JSON.parse(readFileSync(generator.config.path, 'utf-8'))[GENERATOR_JHIPSTER]?.jhipsterVersion ?? null)
+              jhipsterOldVersion =
+                existsSync(generator.config.path) ?
+                  (JSON.parse(readFileSync(generator.config.path, 'utf-8'))[GENERATOR_JHIPSTER]?.jhipsterVersion ?? null)
                 : null;
             }
             return jhipsterOldVersion;
@@ -309,10 +310,10 @@ export default class BaseGenerator<
         const configChanges = Object.fromEntries(
           keys
             .filter(key =>
-              Array.isArray(newConfig[key])
-                ? newConfig[key].length === oldConfig[key].length &&
-                  newConfig[key].find((element, index) => element !== oldConfig[key][index])
-                : newConfig[key] !== oldConfig[key],
+              Array.isArray(newConfig[key]) ?
+                newConfig[key].length === oldConfig[key].length &&
+                newConfig[key].find((element, index) => element !== oldConfig[key][index])
+              : newConfig[key] !== oldConfig[key],
             )
             .map(key => [key, { newValue: newConfig[key], oldValue: oldConfig[key] }]),
         );
