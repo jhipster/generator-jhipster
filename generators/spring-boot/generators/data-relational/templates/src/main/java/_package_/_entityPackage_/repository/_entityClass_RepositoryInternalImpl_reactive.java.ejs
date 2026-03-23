@@ -68,22 +68,22 @@ import <%- entityAbsolutePackage %>.domain.criteria.<%- entityClass %>Criteria;
 import <%- entityAbsolutePackage %>.repository.rowmapper.ColumnConverter;
 import tech.jhipster.service.ConditionBuilder;
 <%_ } _%>
-<% relationships.forEach(rel => {
+<% for (const rel of relationships) {
   if (rel.relationshipManyToMany && rel.ownerSide) {
 _%>
 import <%- rel.otherEntity.entityAbsolutePackage %>.domain.<%- rel.otherEntity.persistClass %>;
   <%_ } _%>
-<%_ }); _%>
+<%_ } _%>
 <%_ for (const enumField of uniqueEnums) { _%>
 import <%- entityAbsolutePackage %>.domain.enumeration.<%- enumField.fieldType %>;
 <%_ } _%>
 
-<%_ [...reactiveOtherEntities, locals].forEach(otherEntity => { _%>
+<%_ for (const otherEntity of [...reactiveOtherEntities, locals]) { _%>
 import <%- otherEntity.entityAbsolutePackage %>.repository.rowmapper.<%- otherEntity.entityClass %>RowMapper;
   <%_ if (otherEntity.entityPackage !== entityPackage) { _%>
 import <%- otherEntity.entityAbsolutePackage %>.repository.<%- otherEntity.entityClass %>SqlHelper;
   <%_ } _%>
-<%_ }); _%>
+<%_ } _%>
 <%_ if (packageName !== entityAbsolutePackage) { _%>
 import <%- packageName %>.repository.EntityManager;
 <%_ } _%>
@@ -100,36 +100,36 @@ class <%- entityClass %>RepositoryInternalImpl extends SimpleR2dbcRepository<<%-
     private final R2dbcEntityTemplate r2dbcEntityTemplate;
     private final EntityManager entityManager;
 
-<%_ reactiveUniqueEntityTypes.forEach(element => { _%>
+<%_ for (const element of reactiveUniqueEntityTypes) { _%>
     private final <%- element %>RowMapper <%- element.toLowerCase() %>Mapper;
-<%_ }); _%>
+<%_ } _%>
 <%_ if (jpaMetamodelFiltering && reactive) { _%>
     private final ColumnConverter columnConverter;
 <%_ } _%>
 
     private final static Table entityTable = Table.aliased("<%- entityTableName %>", EntityManager.ENTITY_ALIAS);
-<%_ reactiveEagerRelations.forEach(rel => { _%>
+<%_ for (const rel of reactiveEagerRelations) { _%>
     private final static Table <%- rel.relationshipName %>Table = Table.aliased("<%- rel.otherEntity.entityTableName %>", "<%- rel.relationshipSqlSafeName %>");
-<%_ }); _%>
+<%_ } _%>
 
-<%_ relationships.forEach(rel => {
+<%_ for (const rel of relationships) {
   if (rel.shouldWriteJoinTable) {
 _%>
     private final static EntityManager.LinkTable <%- rel.relationshipName %>Link = new EntityManager.LinkTable("<%- rel.joinTable.name %>", "<%- entityTableName %>_<%- primaryKey.hibernateSnakeCaseName %>", "<%- rel.joinColumnNames[0] %>");
 <%_ }
-});
+}
 _%>
 
-    public <%- entityClass %>RepositoryInternalImpl(R2dbcEntityTemplate template, EntityManager entityManager<%_ reactiveUniqueEntityTypes.forEach(element => { _%>, <%- element %>RowMapper <%- element.toLowerCase() %>Mapper<%_ }); _%>, R2dbcEntityOperations entityOperations,
+    public <%- entityClass %>RepositoryInternalImpl(R2dbcEntityTemplate template, EntityManager entityManager<%_ for (const element of reactiveUniqueEntityTypes) { _%>, <%- element %>RowMapper <%- element.toLowerCase() %>Mapper<%_ } _%>, R2dbcEntityOperations entityOperations,
         R2dbcConverter converter<% if (jpaMetamodelFiltering && reactive) { %>,
         ColumnConverter columnConverter<% } %>) {
         super(new MappingRelationalEntityInformation(converter.getMappingContext().getRequiredPersistentEntity(<%- persistClass %>.class)), entityOperations, converter);
         this.db = template.getDatabaseClient();
         this.r2dbcEntityTemplate = template;
         this.entityManager = entityManager;
-<%_ reactiveUniqueEntityTypes.forEach(element => { _%>
+<%_ for (const element of reactiveUniqueEntityTypes) { _%>
         this.<%- element.toLowerCase() %>Mapper = <%- element.toLowerCase() %>Mapper;
-<%_ }); _%>
+<%_ } _%>
 <%_ if (jpaMetamodelFiltering && reactive) { _%>
         this.columnConverter = columnConverter;
 <%_ } _%>
@@ -142,13 +142,13 @@ _%>
 
     RowsFetchSpec<<%- persistClass %>> createQuery(Pageable pageable, Condition whereClause) {
         List<Expression> columns = <%- entityClass %>SqlHelper.getColumns(entityTable, EntityManager.ENTITY_ALIAS);
-<%_ reactiveEagerRelations.forEach(rel => { _%>
+<%_ for (const rel of reactiveEagerRelations) { _%>
         columns.addAll(<%- rel.otherEntity.entityNameCapitalized %>SqlHelper.getColumns(<%- rel.relationshipName %>Table, "<%- rel.relationshipName %>"));
-<%_ }); _%>
+<%_ } _%>
         SelectFromAndJoin<% if (reactiveEagerRelations.length > 0) { %>Condition<% } %> selectFrom = Select.builder().select(columns).from(entityTable)
-<%_ reactiveEagerRelations.forEach(rel => { _%>
+<%_ for (const rel of reactiveEagerRelations) { _%>
             .leftOuterJoin(<%- rel.relationshipName %>Table).on(Column.create("<%- rel.joinColumnNames[0] %>", entityTable)).equals(Column.create("<%- rel.otherEntity.primaryKey.fields[0].columnName %>", <%- rel.relationshipName %>Table))
-<%_ }); _%>;
+<%_ } _%>;
         // we do not support Criteria here for now as of https://github.com/jhipster/generator-jhipster/issues/18269
         String select = entityManager.createSelect(selectFrom, <%- persistClass %>.class, pageable, whereClause);
         return db.sql(select).map(this::process);
@@ -189,9 +189,9 @@ _%>
 <%_ } _%>
     private <%- persistClass %> process(Row row, RowMetadata metadata) {
         <%- persistClass %> entity = <%- entityClass.toLowerCase() %>Mapper.apply(row, "e");
-<%_ reactiveEagerRelations.forEach(rel => { _%>
+<%_ for (const rel of reactiveEagerRelations) { _%>
         entity.<%- rel.propertyConsumerName %>(<%- rel.otherEntity.entityNameCapitalized.toLowerCase() %>Mapper.apply(row, "<%- rel.relationshipName %>"));
-<%_ }); _%>
+<%_ } _%>
         return entity;
     }
 
@@ -208,16 +208,16 @@ _%>
 
 <%_ if (containsBagRelationships) { _%>
     protected <S extends <%- persistClass %>> Mono<S> updateRelations(S entity) {
-  <%_ relationships.filter(rel => {
+  <%_ for (const [idx, rel] of relationships.filter(rel => {
     return (rel.relationshipManyToMany && rel.ownerSide);
-   }).forEach(function(rel, idx) {
+   }).entries()) {
 _%>
     <%_ if (idx === 0) { _%>
         Mono<Void> result = entityManager.updateLinkTable(<%- rel.relationshipName %>Link, entity.<%- primaryKey.propertySupplierName %>(), entity.<%- rel.propertySupplierName %>().stream().map(<%- rel.otherEntity.persistClass %>::<%- rel.otherEntity.primaryKey.propertySupplierName %>)).then();
     <%_ } else { _%>
         result = result.and(entityManager.updateLinkTable(<%- rel.relationshipName %>Link, entity.<%- primaryKey.propertySupplierName %>(), entity.<%- rel.propertySupplierName %>().stream().map(<%- rel.otherEntity.persistClass %>::<%- rel.otherEntity.primaryKey.propertySupplierName %>)));
     <%_ } _%>
-  <%_ }); _%>
+  <%_ } _%>
         return result.thenReturn(entity);
     }
 
@@ -228,16 +228,16 @@ _%>
     }
 
     protected Mono<Void> deleteRelations(<%- primaryKey.type %> entityId) {
-  <%_ relationships.filter(rel => {
+  <%_ for (const [idx, rel] of relationships.filter(rel => {
       return (rel.relationshipManyToMany && rel.ownerSide);
-    }).forEach(function(rel, idx) {
+    }).entries()) {
 _%>
     <%_ if (idx === 0) { _%>
         return entityManager.deleteFromLinkTable(<%- rel.relationshipName %>Link, entityId)
     <%_ } else { _%>
             .and(entityManager.deleteFromLinkTable(<%- rel.relationshipName %>Link, entityId))
     <%_ } _%>
-  <%_ }); %>;
+  <%_ } %>;
         }
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering && reactive) { _%>
@@ -258,20 +258,20 @@ _%>
         List<Condition> allConditions = new ArrayList<Condition>();
         if (criteria != null) {
 <%_
-fields.forEach((field) => {
-  if (field.transient) return;
+for (const field of fields) {
+  if (field.transient) continue;
   if (field.filterableField) {
 _%>
             if (criteria.<%- field.propertyFilterSupplierName %>() != null) {
                 builder.buildFilterConditionForField(criteria.<%- field.propertyFilterSupplierName %>(), entityTable.column("<%- field.columnName %>"));
             }
     <%_ } _%>
-  <%_ }); _%>
-  <%_ reactiveEagerRelations.forEach((relationship) => { _%>
+  <%_ } _%>
+  <%_ for (const relationship of reactiveEagerRelations) { _%>
             if (criteria.<%- relationship.propertyFilterSupplierName %>() != null) {
                 builder.buildFilterConditionForField(criteria.<%- relationship.propertyFilterSupplierName %>(), <%- relationship.relationshipName %>Table.column("<%- relationship.otherEntity.primaryKey.ownFields[0].columnName %>"));
             }
-  <%_ }); _%>
+  <%_ } _%>
         }
         return builder.buildConditions();
     }

@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 export enum <%- enumName %> {
-<% enumValues.forEach((enumValue, index) => { %>
+<% for (const [index, enumValue] of enumValues.entries()) { %>
   <%- enumValue.name.includes('-') ? `'${enumValue.name}'` : enumValue.name %> = '<%- enumValue.value %>'<% if (index < enumValues.length - 1) { %>,<% } %>
-<% }); %>
+<% } %>
 }
