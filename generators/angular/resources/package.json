@@ -31,7 +31,7 @@
     "browser-sync-webpack-plugin": "2.4.0",
     "copy-webpack-plugin": "14.0.0",
     "deepmerge": "4.3.1",
-    "eslint": "10.0.3",
+    "eslint": "10.1.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.5",
     "folder-hash": "4.1.2",
