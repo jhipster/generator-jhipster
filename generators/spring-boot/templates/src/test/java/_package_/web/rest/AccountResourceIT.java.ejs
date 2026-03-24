@@ -16,6 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ const reactiveBlockOrElseNull = reactive ? '.block()' : '.orElse(null)'; _%>
+<%_ const reactiveBlockOrElseThrow = reactive ? '.block()' : '.orElseThrow()'; _%>
 package <%- packageName %>.web.rest;
 
 import <%- packageName %>.IntegrationTest;
@@ -667,7 +669,7 @@ class AccountResourceIT {
         Optional<<%- user.persistClass %>> userDup = userRepository.findOne<% if (databaseTypeSql) { %>WithAuthorities<% } %>ByLogin("badguy")<% if (reactive) { %>.blockOptional()<% } %>;
         assertThat(userDup).isPresent();
         assertThat(userDup.orElseThrow().getAuthorities()).hasSize(1)
-            .containsExactly(<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>authorityRepository.findById(AuthoritiesConstants.USER).<% if (reactive) { %>block<% } else { %>orElseThrow<% } %>()<% } %><% if (databaseTypeCassandra || databaseTypeCouchbase) { %>AuthoritiesConstants.USER<% } %>);
+            .containsExactly(<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>authorityRepository.findById(AuthoritiesConstants.USER).<%- reactiveBlockOrElseThrow %><% } %><% if (databaseTypeCassandra || databaseTypeCouchbase) { %>AuthoritiesConstants.USER<% } %>);
 
         userService.deleteUser("badguy")<%- reactorBlock %>;
     }
@@ -702,7 +704,7 @@ class AccountResourceIT {
             .andExpect(status().isOk());
 <%_ } _%>
 
-        user = userRepository.findOneByLogin(user.getLogin())<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
+        user = userRepository.findOneByLogin(user.getLogin())<%- reactiveBlockOrElseNull %>;
         assertThat(user.isActivated()).isTrue();
 
         userService.deleteUser("activate-account")<%- reactorBlock %>;
@@ -769,7 +771,7 @@ class AccountResourceIT {
             .andExpect(status().isOk());
 <%_ } _%>
 
-        <%- user.persistClass %> updatedUser = userRepository.findOne<% if (databaseTypeSql) { %>WithAuthorities<% } %>ByLogin(user.getLogin())<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
+        <%- user.persistClass %> updatedUser = userRepository.findOne<% if (databaseTypeSql) { %>WithAuthorities<% } %>ByLogin(user.getLogin())<%- reactiveBlockOrElseNull %>;
         assertThat(updatedUser.getFirstName()).isEqualTo(userDTO.getFirstName());
         assertThat(updatedUser.getLastName()).isEqualTo(userDTO.getLastName());
         assertThat(updatedUser.getEmail()).isEqualTo(userDTO.getEmail());
@@ -899,7 +901,7 @@ class AccountResourceIT {
             .andExpect(status().isBadRequest());
 <%_ } _%>
 
-        <%- user.persistClass %> updatedUser = userRepository.findOneByLogin("save-existing-email")<%_ if (reactive) { _%>.block()<% } else { %>.orElseThrow()<% } %>;
+        <%- user.persistClass %> updatedUser = userRepository.findOneByLogin("save-existing-email")<%- reactiveBlockOrElseThrow %>;
         assertThat(updatedUser.getEmail()).isEqualTo("save-existing-email@example.com");
 
         userService.deleteUser("save-existing-email")<%- reactorBlock %>;
@@ -952,7 +954,7 @@ class AccountResourceIT {
             .andExpect(status().isOk());
 <%_ } _%>
 
-        <%- user.persistClass %> updatedUser = userRepository.findOneByLogin("save-existing-email-and-login")<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
+        <%- user.persistClass %> updatedUser = userRepository.findOneByLogin("save-existing-email-and-login")<%- reactiveBlockOrElseNull %>;
         assertThat(updatedUser.getEmail()).isEqualTo("save-existing-email-and-login@example.com");
 
         userService.deleteUser("save-existing-email-and-login")<%- reactorBlock %>;
@@ -988,11 +990,13 @@ class AccountResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(new PasswordChangeDTO("1"+currentPassword, "new password")))
   <%_ if (authenticationUsesCsrf) { _%>
-            .with(csrf())<%_ } _%>)
+            .with(csrf())
+  <%_ } _%>
+        )
             .andExpect(status().isBadRequest());
 <%_ } _%>
 
-        <%- user.persistClass %> updatedUser = userRepository.findOneByLogin("change-password-wrong-existing-password")<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
+        <%- user.persistClass %> updatedUser = userRepository.findOneByLogin("change-password-wrong-existing-password")<%- reactiveBlockOrElseNull %>;
         assertThat(passwordEncoder.matches("new password", updatedUser.getPassword())).isFalse();
         assertThat(passwordEncoder.matches(currentPassword, updatedUser.getPassword())).isTrue();
 
@@ -1029,11 +1033,12 @@ class AccountResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, "new password")))
   <%_ if (authenticationUsesCsrf) { _%>
-            .with(csrf())<%_ } _%>)
+            .with(csrf())
+  <%_ } _%>)
             .andExpect(status().isOk());
 <%_ } _%>
 
-        <%- user.persistClass %> updatedUser = userRepository.findOneByLogin("change-password")<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
+        <%- user.persistClass %> updatedUser = userRepository.findOneByLogin("change-password")<%- reactiveBlockOrElseNull %>;
         assertThat(passwordEncoder.matches("new password", updatedUser.getPassword())).isTrue();
 
         userService.deleteUser("change-password")<%- reactorBlock %>;
@@ -1071,11 +1076,13 @@ class AccountResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, newPassword)))
   <%_ if (authenticationUsesCsrf) { _%>
-            .with(csrf())<%_ } _%>)
+            .with(csrf())
+  <%_ } _%>
+        )
             .andExpect(status().isBadRequest());
 <%_ } _%>
 
-        <%- user.persistClass %> updatedUser = userRepository.findOneByLogin("change-password-too-small")<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
+        <%- user.persistClass %> updatedUser = userRepository.findOneByLogin("change-password-too-small")<%- reactiveBlockOrElseNull %>;
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
 
         userService.deleteUser("change-password-too-small")<%- reactorBlock %>;
@@ -1113,11 +1120,13 @@ class AccountResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, newPassword)))
   <%_ if (authenticationUsesCsrf) { _%>
-            .with(csrf())<%_ } _%>)
+            .with(csrf())
+  <%_ } _%>
+        )
             .andExpect(status().isBadRequest());
 <%_ } _%>
 
-        <%- user.persistClass %> updatedUser = userRepository.findOneByLogin("change-password-too-long")<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
+        <%- user.persistClass %> updatedUser = userRepository.findOneByLogin("change-password-too-long")<%- reactiveBlockOrElseNull %>;
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
 
         userService.deleteUser("change-password-too-long")<%- reactorBlock %>;
@@ -1153,11 +1162,13 @@ class AccountResourceIT {
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(new PasswordChangeDTO(currentPassword, "")))
   <%_ if (authenticationUsesCsrf) { _%>
-            .with(csrf())<%_ } _%>)
+            .with(csrf())
+  <%_ } _%>
+        )
             .andExpect(status().isBadRequest());
 <%_ } _%>
 
-        <%- user.persistClass %> updatedUser = userRepository.findOneByLogin("change-password-empty")<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
+        <%- user.persistClass %> updatedUser = userRepository.findOneByLogin("change-password-empty")<%- reactiveBlockOrElseNull %>;
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
 
         userService.deleteUser("change-password-empty")<%- reactorBlock %>;
@@ -1252,7 +1263,11 @@ class AccountResourceIT {
 
         assertThat(persistentTokenRepository.findByUser(user)).hasSize(1);
 
-        restAccountMockMvc.perform(delete("/api/account/sessions/invalidate-session")<%_ if (authenticationUsesCsrf) { _%>.with(csrf())<%_ } _%>)
+        restAccountMockMvc.perform(delete("/api/account/sessions/invalidate-session")
+  <%_ if (authenticationUsesCsrf) { _%>
+            .with(csrf())
+  <%_ } _%>
+        )
             .andExpect(status().isOk());
 
         assertThat(persistentTokenRepository.findByUser(user)).isEmpty();
@@ -1290,7 +1305,9 @@ class AccountResourceIT {
         restAccountMockMvc.perform(post("/api/account/reset-password/init")
             .content("password-reset@example.com")
   <%_ if (authenticationUsesCsrf) { _%>
-            .with(csrf())<%_ } _%>)
+            .with(csrf())
+  <%_ } _%>
+        )
             .andExpect(status().isOk());
 <%_ } _%>
 
@@ -1325,7 +1342,9 @@ class AccountResourceIT {
         restAccountMockMvc.perform(post("/api/account/reset-password/init")
             .content("password-reset-upper-case@EXAMPLE.COM")
   <%_ if (authenticationUsesCsrf) { _%>
-            .with(csrf())<%_ } _%>)
+            .with(csrf())
+  <%_ } _%>
+        )
             .andExpect(status().isOk());
 <%_ } _%>
 
@@ -1387,7 +1406,7 @@ class AccountResourceIT {
             .andExpect(status().isOk());
 <%_ } _%>
 
-        <%- user.persistClass %> updatedUser = userRepository.findOneByLogin(user.getLogin())<%_ if (reactive) { _%>.block()<% } else { %>.orElse(null)<% } %>;
+        <%- user.persistClass %> updatedUser = userRepository.findOneByLogin(user.getLogin())<%- reactiveBlockOrElseNull %>;
         assertThat(passwordEncoder.matches(keyAndPassword.getNewPassword(), updatedUser.getPassword())).isTrue();
 
         userService.deleteUser("finish-password-reset")<%- reactorBlock %>;
@@ -1431,7 +1450,7 @@ class AccountResourceIT {
             .andExpect(status().isBadRequest());
 <%_ } _%>
 
-        <%- user.persistClass %> updatedUser = userRepository.findOneByLogin(user.getLogin())<%_ if (!reactive) { _%>.orElse(null)<% } else { %>.block()<% } %>;
+        <%- user.persistClass %> updatedUser = userRepository.findOneByLogin(user.getLogin())<%- reactiveBlockOrElseNull %>;
         assertThat(passwordEncoder.matches(keyAndPassword.getNewPassword(), updatedUser.getPassword())).isFalse();
 
         userService.deleteUser("finish-password-reset-too-small")<%- reactorBlock %>;
