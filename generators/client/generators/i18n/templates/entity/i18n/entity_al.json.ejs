@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ let helpBlocks = 0; _%>
+<%_ const fieldsWithDocumentation = fields.filter(field => field.documentation); _%>
 {
     "<%- frontendAppName %>": {
         "<%- entityTranslationKey %>" : {
@@ -44,17 +44,20 @@
 <%_ } _%>
             "detail": {
                 "title": "<%- entityNameHumanized %>"
-            }<%for (const field of fields) {
-            if (typeof field.documentation !== 'undefined') ++helpBlocks; %>,
-            "<%- field.fieldName %>": "<%- field.fieldNameHumanized %>"<% } %><% for (const relationship of relationships) { %>,
-            "<%- relationship.relationshipName %>": "<%- relationship.relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
-            "help": {<% for (const field of fields) {
-                if (field.documentation) {
-                    --helpBlocks; %>
-                "<%- field.fieldName %>": "<%- field.documentation %>"<% if (helpBlocks > 0) { %>,<% }
-                }
-            } %>
-            }<% } %>
+            }
+<%_ for (const field of fields) { _%>,
+            "<%- field.fieldName %>": "<%- field.fieldNameHumanized %>"
+<%_ } _%>
+<%_ for (const relationship of relationships) { _%>,
+            "<%- relationship.relationshipName %>": "<%- relationship.relationshipNameHumanized %>"
+<%_ } _%>
+<%_ if (fieldsWithDocumentation.length > 0) { _%>,
+            "help": {
+  <%_ for (const [key, field] of Object.entries(fieldsWithDocumentation)) { _%>
+                "<%- field.fieldName %>": "<%- field.documentation %>"<% if (key < fieldsWithDocumentation.length - 1) { %>,<% } %>
+  <%_ } _%>
+            }
+<%_ } _%>
         }
     }
 <%_ if (microserviceAppName && !readOnly) { _%>,
