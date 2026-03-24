@@ -49,7 +49,16 @@ const newUser: IUserManagement = {
 @Component({
   selector: '<%- jhiPrefixDashed %>-user-management-update',
   templateUrl: './user-management-update.html',
-  imports: [<%_ if (enableTranslation) { _%>FindLanguageFromKeyPipe, TranslateDirective, TranslateModule, <%_ } _%>FontAwesomeModule, AlertError, ReactiveFormsModule],
+  imports: [
+<%_ if (enableTranslation) { _%>
+    FindLanguageFromKeyPipe,
+    TranslateDirective,
+    TranslateModule,
+<%_ } _%>
+    FontAwesomeModule,
+    AlertError,
+    ReactiveFormsModule,
+  ],
 })
 export class UserManagementUpdate implements OnInit {
 <%_ if (enableTranslation) { _%>

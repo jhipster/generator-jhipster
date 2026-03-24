@@ -38,7 +38,15 @@ const initialAccount: Account = {} as Account;
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-settings',
-  imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, FindLanguageFromKeyPipe, <%_ } _%>AlertError, ReactiveFormsModule],
+  imports: [
+<%_ if (enableTranslation) { _%>
+    TranslateDirective,
+    TranslateModule,
+    FindLanguageFromKeyPipe,
+<%_ } _%>
+    AlertError,
+    ReactiveFormsModule,
+  ],
   templateUrl: './settings.html',
 })
 export default class Settings implements OnInit {

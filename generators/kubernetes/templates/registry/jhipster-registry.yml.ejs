@@ -89,7 +89,7 @@ spec:
         # StatefulSet specific configuration
         # Registry configuration
         - name: SPRING_PROFILES_ACTIVE
-          value: prod,k8s<%_ if (useKeycloak) { _%>,oauth2<% } %>
+          value: prod,k8s<% if (useKeycloak) { %>,oauth2<% } %>
         - name: SPRING_SECURITY_USER_PASSWORD
           valueFrom:
             secretKeyRef:

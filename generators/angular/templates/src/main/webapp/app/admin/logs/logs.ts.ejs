@@ -17,7 +17,12 @@
  limitations under the License.
 -%>
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { finalize<%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>, map<%_ } _%> } from 'rxjs/operators';
+import {
+  finalize,
+<%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
+  map,
+<%_ } _%>
+} from 'rxjs/operators';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
@@ -39,7 +44,17 @@ import { GatewayRoutesService } from '../gateway/gateway-routes.service';
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
   providers: [GatewayRoutesService],
 <%_ } _%>
-  imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>FontAwesomeModule, FormsModule, SortDirective, SortByDirective, SlicePipe],
+  imports: [
+<%_ if (enableTranslation) { _%>
+    TranslateDirective,
+    TranslateModule, 
+<%_ } _%>
+    FontAwesomeModule,
+    FormsModule,
+    SortDirective,
+    SortByDirective,
+    SlicePipe,
+  ],
 })
 export default class Logs implements OnInit {
   readonly loggers = signal<Log[] | undefined>(undefined);

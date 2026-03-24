@@ -32,7 +32,15 @@ import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
     templateUrl: './<%- entityFileName %>-delete-dialog.html',
-    imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>FormsModule, FontAwesomeModule, AlertError],
+    imports: [
+<%_ if (enableTranslation) { _%>
+      TranslateDirective,
+      TranslateModule, 
+<%_ } _%>
+      FormsModule,
+      FontAwesomeModule,
+      AlertError,
+    ],
 })
 export class <%- entityAngularName %>DeleteDialog {
     <%- entityInstance %>?: I<%- entityAngularName %>;
