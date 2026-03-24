@@ -311,7 +311,9 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
         LOG.debug("Request to search <%- entityClassPlural %> for query {}", query);<%- include('../../_partials_entity_/search_stream_template', {viaService: false, fromResource: false}); -%>
   <%_ } else { _%>
         LOG.debug("Request to search for a page of <%- entityClassPlural %> for query {}", query);
-        return <%- entityInstance %><% if (searchEngineElasticsearch) { %>Search<% } %>Repository.search(query, pageable)<%_ if (!dtoMapstruct) { _%>;<% } else { %>
+        return <%- entityInstance %><% if (searchEngineElasticsearch) { %>Search<% } %>Repository.search(query, pageable)
+    <%_ if (!dtoMapstruct) { _%>;
+    <%_ } else { _%>
             .map(<%- entityToDtoReference %>);
   <%_ } } _%>
     }

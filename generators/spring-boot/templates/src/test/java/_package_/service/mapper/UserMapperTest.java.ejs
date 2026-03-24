@@ -142,7 +142,11 @@ class UserMapperTest {
         assertThat(convertedUser.getLastModifiedBy()).isEqualTo(userDto.getLastModifiedBy());
         assertThat(convertedUser.getLastModifiedDate()).isEqualTo(userDto.getLastModifiedDate());
 <%_ } _%>
-        assertThat(convertedUser.getAuthorities())<% if (!databaseTypeCassandra && !databaseTypeCouchbase) { %>.extracting("name")<%_ } _%>.containsExactly(AuthoritiesConstants.USER);
+        assertThat(convertedUser.getAuthorities())
+<%_ if (!databaseTypeCassandra && !databaseTypeCouchbase) { _%>
+            .extracting("name")
+<%_ } _%>
+            .containsExactly(AuthoritiesConstants.USER);
     }
 
     @Test

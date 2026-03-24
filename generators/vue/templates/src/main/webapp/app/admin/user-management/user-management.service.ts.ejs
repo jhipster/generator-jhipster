@@ -23,8 +23,12 @@ export default class UserManagementService {
     return axios.delete(`api/admin/users/${userId}`);
   }
 
-  retrieve(<%_ if (!databaseTypeCassandra) { _%>req?: any <%_ } _%>): Promise<any> {
-    return axios.get(`api/admin/users<%_ if (!databaseTypeCassandra) { _%>?${buildPaginationQueryOpts(req)}<%_ } _%>`);
+  retrieve(
+<%_ if (!databaseTypeCassandra) { _%>
+    req?: any 
+<%_ } _%>
+  ): Promise<any> {
+    return axios.get(`api/admin/users<% if (!databaseTypeCassandra) { %>?${buildPaginationQueryOpts(req)}<% } %>`);
   }
 
   retrieveAuthorities(): Promise<any> {

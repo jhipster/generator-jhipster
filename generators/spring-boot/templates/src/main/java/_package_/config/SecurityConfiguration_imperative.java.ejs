@@ -153,7 +153,7 @@ public class SecurityConfiguration {
 <%_ } _%>
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http)<%_ if (!springBoot4) { _%> throws Exception<%_ } _%> {
+    public SecurityFilterChain filterChain(HttpSecurity http)<% if (!springBoot4) { %> throws Exception<% } %> {
         http
 <%_ if (!applicationTypeMicroservice) { _%>
             .cors(withDefaults())
@@ -350,7 +350,11 @@ public class SecurityConfiguration {
   <%_ } _%>
 
     @Bean
-    JwtDecoder jwtDecoder(<%_ if (!applicationTypeMicroservice) { _%>ClientRegistrationRepository clientRegistrationRepository, RestTemplateBuilder restTemplateBuilder<%_ } _%>) {
+    JwtDecoder jwtDecoder(
+  <%_ if (!applicationTypeMicroservice) { _%>
+        ClientRegistrationRepository clientRegistrationRepository,
+        RestTemplateBuilder restTemplateBuilder
+  <%_ } _%>) {
         NimbusJwtDecoder jwtDecoder = JwtDecoders.fromOidcIssuerLocation(issuerUri);
 
         OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());

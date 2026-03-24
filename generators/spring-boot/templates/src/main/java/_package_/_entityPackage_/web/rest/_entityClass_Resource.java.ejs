@@ -445,7 +445,11 @@ _%><%- include('../../_partials_entity_/inject_template', {readOnly: readOnly, v
   <%_ if (viaService) { _%>
         return <%- entityInstance %>Service.findAll();
   <%_ } else { _%>
-        return <%- entityInstance %>Repository.findAll()<%_ if (dtoMapstruct) { _%>.map(<%- entityToDtoReference %>)<%_ } _%>;
+        return <%- entityInstance %>Repository
+            .findAll()
+    <%_ if (dtoMapstruct) { _%>
+            .map(<%- entityToDtoReference %>)
+    <%_ } _%>;
   <%_ } _%>
     }
 

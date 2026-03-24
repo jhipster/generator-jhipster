@@ -85,10 +85,23 @@ export default defineComponent({
 <%_ } _%>
 <%_ if (searchEngineAny) { _%>
         const res = currentSearch.value ?
-          (await <%- entityInstance %>Service().search(currentSearch.value<%_ if (!paginationNo) { _%>, paginationQuery<%_ } _%>)) :
-          (await <%- entityInstance %>Service().retrieve(<%_ if (!paginationNo) { _%>paginationQuery<%_ } _%>));
+          (await <%- entityInstance %>Service().search(
+            currentSearch.value,
+  <%_ if (!paginationNo) { _%>
+            paginationQuery,
+  <%_ } _%>
+          )) :
+          (await <%- entityInstance %>Service().retrieve(
+  <%_ if (!paginationNo) { _%>
+            paginationQuery
+  <%_ } _%>
+          ));
 <%_ } else { _%>
-        const res = await <%- entityInstance %>Service().retrieve(<%_ if (!paginationNo) { _%>paginationQuery<%_ } _%>);
+        const res = await <%- entityInstance %>Service().retrieve(
+  <%_ if (!paginationNo) { _%>
+          paginationQuery,
+  <%_ } _%>
+        );
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
         totalItems.value = Number(res.headers['x-total-count']);

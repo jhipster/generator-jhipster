@@ -49,7 +49,12 @@ export type AuthenticationState = Readonly<typeof initialState>;
 
 // Actions
 
-export const getSession = (): AppThunk => <% if (enableTranslation) { %>async<% } %> (dispatch<%_ if (enableTranslation) { _%>, getState<%_ } _%>) => {
+export const getSession = (): AppThunk => <% if (enableTranslation) { %>async<% } %> (
+  dispatch,
+<%_ if (enableTranslation) { _%>
+  getState,
+<%_ } _%>
+) => {
 <%_ if (enableTranslation) { _%>
   await dispatch(getAccount());
 

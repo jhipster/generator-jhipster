@@ -128,7 +128,9 @@ _%>
     }
 
     @ExceptionHandler
-<%_ if (reactive) { _%>@Override<%_ } _%>
+<%_ if (reactive) { _%>
+    @Override
+<%_ } _%>
     public <%- returnType %> handleAnyException(Throwable ex, <%- requestClass %> request
     ) {
         LOG.debug("Converting Exception to Problem Details:", ex);
