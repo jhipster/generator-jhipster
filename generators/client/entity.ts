@@ -31,13 +31,32 @@ import { getTypescriptType } from './support/types-utils.ts';
 // DerivedBooleanPropertiesOf<'fieldTsType', FieldTsType> &
 type ClientAddedFieldProperties = {
   tsType: string;
+  htmlInputType: string;
   hidden?: boolean;
   hideListView?: boolean;
+};
+
+const htmlInputTypeForTsType: Record<string, string> = {
+  number: 'number',
+  boolean: 'checkbox',
+  'dayjs.Dayjs': 'datetime-local',
 };
 
 export const mutateField = {
   __override__: false,
   tsType: ({ fieldType, fieldIsEnum }) => (fieldIsEnum ? fieldType : getTypescriptType(fieldType)),
+  htmlInputType: ({ fieldIsEnum, fieldTypeLocalTime, tsType, fieldTypeBinary, blobContentTypeText }) => {
+    if (fieldIsEnum) {
+      return 'select';
+    }
+    if (fieldTypeLocalTime) {
+      return 'time';
+    }
+    if (fieldTypeBinary && !blobContentTypeText) {
+      return 'hidden';
+    }
+    return htmlInputTypeForTsType[tsType] ?? 'text';
+  },
 
   // ...buildMutateDataForProperty('tsType', fieldTsTypes, { prefix: 'fieldTsType' }),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Field>, ClientAddedFieldProperties>;
