@@ -497,11 +497,11 @@ public class UserService {
     public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%- user.adminUserDto %>> updateUser(<%- user.adminUserDto %> userDTO) {
     <%_ if (reactive) { _%>
         return userRepository.findById(userDTO.getId())
-<%_ if (databaseTypeSql || databaseTypeMongodb) { _%>
+      <%_ if (databaseTypeSql || databaseTypeMongodb) { _%>
             .flatMap
-<%_ } else { _%>
+      <%_ } else { _%>
             .map
-<%_ } %>(user -> {
+      <%_ } %>(user -> {
     <%_ } else { _%>
         return Optional.of(userRepository
             .findById(userDTO.getId()))

@@ -217,14 +217,17 @@ export const <%- entityReactName %>Slice = createEntitySlice({
             entities: loadMoreDataWhenScrolled(state.entities, data, links),
   <%_ } _%>
 <%_ } else { _%>
-            entities: data<% if (paginationNo) { _%>.sort((a, b) => {
-              if (!action.meta?.arg?.sort) {
-                return 1;
-              }
-              const order = action.meta.arg.sort.split(',')[1];
-              const predicate = action.meta.arg.sort.split(',')[0];
-              return order === ASC ? (a[predicate] < b[predicate] ? -1 : 1) : b[predicate] < a[predicate] ? -1 : 1;
-            })<% } %>,
+            entities: data
+  <% if (paginationNo) { _%>
+              .sort((a, b) => {
+                if (!action.meta?.arg?.sort) {
+                  return 1;
+                }
+                const order = action.meta.arg.sort.split(',')[1];
+                const predicate = action.meta.arg.sort.split(',')[0];
+                return order === ASC ? (a[predicate] < b[predicate] ? -1 : 1) : b[predicate] < a[predicate] ? -1 : 1;
+              })
+  <%_ } _%>,
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
   <%_ if (!databaseTypeCassandra) { _%>
