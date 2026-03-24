@@ -89,7 +89,7 @@ _%>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
   <%_ if (relationship.persistableRelationship && (!relationship.collection || paginationNo)) {
-    const fieldName = "." + relationship.otherEntityField;
+    const fieldName = `.${relationship.otherEntityField}`;
     const { fieldSupportsSortBy: relatedFieldSupportsSortBy } = relationship.relatedField;
   _%>
                     <th scope="col"<% if (relatedFieldSupportsSortBy) { %> <%- jhiPrefix %>SortBy="<%- relationship.relationshipName + (fieldName) %>"<% } %>>
@@ -109,7 +109,7 @@ _%>
             @for (<%- entityInstance %> of <%- entityInstancePlural %>(); track track<%- primaryKey.nameCapitalized %>(<%- entityInstance %>)) {
                 <tr data-cy="entityTable">
 <%_
-const routerLink = ` [routerLink]="['/${ entityPage }', ${entityInstance}.${primaryKey.name}, 'view']"`;
+const routerLink = ` [routerLink]="['/${entityPage}', ${entityInstance}.${primaryKey.name}, 'view']"`;
 for (field of fields.filter(field => !field.hidden && !field.hideListView)) {
     const fieldName = field.fieldName;
     const fieldType = field.fieldType;
@@ -166,7 +166,7 @@ _%>
                         </span>
                     }
       <%_ } else { _%>
-                    @if (<%- entityInstance + "." + relationshipFieldName %>) {
+                    @if (<%- `${entityInstance}.${relationshipFieldName}` %>) {
                         <div>
                             <a [routerLink]="['/<%- relationship.otherEntity.entityPage %>', <%- entityInstance %>.<%- relationshipFieldName %>.<%- relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%- entityInstance %>.<%- relationshipFieldName %>.<%- otherEntityField %> }}</a>
                         </div>

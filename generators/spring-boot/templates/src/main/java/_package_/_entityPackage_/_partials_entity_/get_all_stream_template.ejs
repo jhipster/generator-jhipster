@@ -17,8 +17,8 @@
  limitations under the License.
 -%>
 <%
-const mapper = entityInstance  + 'Mapper';
-const entityToDtoReference = mapper + '::' + 'toDto';
+const mapper = `${entityInstance}Mapper`;
+const entityToDtoReference = `${mapper}::` + 'toDto';
 const reactiveSql = (databaseTypeSql && reactive);
 let toResponseEntityPrefix = '';
 let toResponseEntityPostfix = '';

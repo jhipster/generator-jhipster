@@ -153,8 +153,8 @@ import java.time.Instant;
  * <%- springDataDescription %> repository for the {@link <%- user.persistClass %>} entity.
  */
 <%_
-    let optionalOrMono = reactive ? 'Mono' : 'Optional';
-    let listOrFlux = reactive ? 'Flux' : 'List';
+    const optionalOrMono = reactive ? 'Mono' : 'Optional';
+    const listOrFlux = reactive ? 'Flux' : 'List';
 _%>
 <%_ if ((databaseTypeSql && !reactive) || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
 @Repository

@@ -49,7 +49,7 @@
     if ((relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true))
                 && !relationship.id) {
         for (const idField of relationship.otherEntity.primaryKey.fields) {
-        const uniqueConstraintName = relationship.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, relationship.columnName + '_' + idField.columnName, entity.prodDatabaseType) : null;
+        const uniqueConstraintName = relationship.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, `${relationship.columnName}_${idField.columnName}`, entity.prodDatabaseType) : null;
 _%>
             <column name="<%- relationship.columnName %>_<%- idField.columnName %>" type="<%- idField.columnType %>">
                 <constraints nullable="<%- !relationship.columnRequired %>"<% if (uniqueConstraintName) { %> unique="true" uniqueConstraintName="<%- uniqueConstraintName %>"<% } %> />
@@ -106,7 +106,7 @@ _%>
     -->
     <changeSet id="<%- changelogDate %>-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/<%- !entity.incrementalChangelog ? entity.entityTableName : databaseChangelog.changelogDate + '_entity_' + entity.entityTableName %>.csv"
+                  file="config/liquibase/fake-data/<%- !entity.incrementalChangelog ? entity.entityTableName : `${databaseChangelog.changelogDate}_entity_${entity.entityTableName}` %>.csv"
                   separator=";"
                   tableName="<%- entity.entityTableName %>"
                   usePreparedStatements="true">

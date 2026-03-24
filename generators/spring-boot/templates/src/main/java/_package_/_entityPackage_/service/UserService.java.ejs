@@ -129,7 +129,7 @@ public class UserService {
     private final UserSearchRepository userSearchRepository;
   <%_ } _%>
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
-    <%_ if (authenticationTypeSession  && !reactive) { _%>
+    <%_ if (authenticationTypeSession && !reactive) { _%>
 
     private final PersistentTokenRepository persistentTokenRepository;
     <%_ } _%>
@@ -818,7 +818,7 @@ public class UserService {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOne<% if (databaseTypeSql) { %>WithAuthorities<% } %>ByLogin);
     }
   <%_ } _%>
-  <%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession  && !reactive) { _%>
+  <%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
 
     /**
      * Persistent Token are used for providing automatic authentication, they should be automatically deleted after

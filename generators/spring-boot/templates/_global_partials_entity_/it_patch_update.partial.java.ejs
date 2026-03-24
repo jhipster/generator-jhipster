@@ -21,11 +21,11 @@ long databaseSizeBeforeUpdate = getRepositoryCount();
 // Update the <%- entityInstance %> using partial update
 <%- persistClass %> partialUpdated<%- persistClass %> = new <%- persistClass %>();
 partialUpdated<%- persistClass %>.<%- primaryKey.propertyConsumerName %>(<%- persistInstance %>.<%- primaryKey.propertySupplierName %>());
-<%_ fieldsToUpdate = fields.filter(field => field.includeField) %>
+<%_ fieldsToUpdate = fields.filter(field => field.includeField); %>
 <%_ if (fluentMethods && fieldsToUpdate.length > 0) { _%>
     partialUpdated<%- persistClass %><% for (field of fieldsToUpdate) { %>
-        .<%- field.fieldName %>(<%- 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>)<% if (field.fieldWithContentType) { %>
-            .<%- field.fieldName %>ContentType(<%- 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)<% } %><% } %>;
+        .<%- field.fieldName %>(<%- `UPDATED_${field.fieldNameUnderscored.toUpperCase()}` %>)<% if (field.fieldWithContentType) { %>
+            .<%- field.fieldName %>ContentType(<%- `UPDATED_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE)<% } %><% } %>;
 <%_ } else { _%>
   <%_ for (field of fieldsToUpdate) { _%>
     <%_ if (field.includeField) { %>
@@ -42,14 +42,14 @@ webTestClient
 .patch()
 .uri(ENTITY_API_URL_ID, partialUpdated<%- persistClass %>.<%- primaryKey.propertySupplierName %>())
 .contentType(MediaType.valueOf("application/merge-patch+json"))
-.bodyValue(om.writeValueAsBytes(<%- 'partialUpdated' + persistClass %>))
+.bodyValue(om.writeValueAsBytes(<%- `partialUpdated${persistClass}` %>))
 .exchange()
 .expectStatus()
 .isOk();
 <%_ } else { _%>
 rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, partialUpdated<%- persistClass %>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
 .contentType("application/merge-patch+json")
-.content(om.writeValueAsBytes(<%- 'partialUpdated' + persistClass %>)))
+.content(om.writeValueAsBytes(<%- `partialUpdated${persistClass}` %>)))
 .andExpect(status().isOk());
 <%_ } _%>
 

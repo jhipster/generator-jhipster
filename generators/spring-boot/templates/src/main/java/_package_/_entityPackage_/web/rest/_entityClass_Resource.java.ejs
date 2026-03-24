@@ -154,9 +154,9 @@ public class <%- entityClass %>Resource {
 <%_ } _%>
 <%_ const instanceType = restClass;
     const instanceName = restInstance;
-    const mapper = entityInstance  + 'Mapper';
-    const entityToDtoReference = mapper + '::' + 'toDto';
-_%><%- include('../../_partials_entity_/inject_template', {readOnly: readOnly, viaService: viaService, constructorName: entityClass + 'Resource', queryService: jpaMetamodelFiltering, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true, reactive: reactive}); -%>
+    const mapper = `${entityInstance}Mapper`;
+    const entityToDtoReference = `${mapper}::` + 'toDto';
+_%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService, constructorName: `${entityClass}Resource`, queryService: jpaMetamodelFiltering, isUsingMapsId, mapsIdAssoc, isController: true, reactive }); -%>
 <%_ if (!readOnly) { _%>
 
     /**
@@ -215,7 +215,7 @@ _%><%- include('../../_partials_entity_/inject_template', {readOnly: readOnly, v
                 }
   <%_ } _%>
   <%_ if (serviceNo) { _%>
-<%- include(`/_global_partials_entity_/save_template_${reactive ? 'reactive' : 'imperative'}`, {saveNewEntityOperation: true, returnDirectly: false}); -%>
+<%- include(`/_global_partials_entity_/save_template_${reactive ? 'reactive' : 'imperative'}`, { saveNewEntityOperation: true, returnDirectly: false }); -%>
   <%_ } _%>
   <%_ if (reactive) { _%>
     <%_ if (!serviceNo) { _%>
@@ -301,7 +301,7 @@ _%><%- include('../../_partials_entity_/inject_template', {readOnly: readOnly, v
     <% } %>
   <%_ } _%>
   <%_ if (serviceNo) { _%>
-<%- include(`/_global_partials_entity_/save_template_${reactive ? 'reactive' : 'imperative'}`, {saveNewEntityOperation: false, returnDirectly: false}); -%>
+<%- include(`/_global_partials_entity_/save_template_${reactive ? 'reactive' : 'imperative'}`, { saveNewEntityOperation: false, returnDirectly: false }); -%>
   <%_ } _%>
   <%_ if (reactive) { _%>
     <%_ if (!serviceNo) { _%>
@@ -378,7 +378,7 @@ _%><%- include('../../_partials_entity_/inject_template', {readOnly: readOnly, v
     <% } %>
   <%_ } _%>
 
-            <%- include('../../_partials_entity_/patch_template', {isService: false, viaService: viaService}); -%>
+            <%- include('../../_partials_entity_/patch_template', { isService: false, viaService }); -%>
   <%_ if (reactive) { _%>
             return result
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
@@ -426,7 +426,7 @@ _%><%- include('../../_partials_entity_/inject_template', {readOnly: readOnly, v
 <%_ if (entitySpringReadPreAuthorize) { _%>
     @PreAuthorize("<%- entitySpringReadPreAuthorize %>")
 <%_ } _%>
-<%- include('../../_partials_entity_/get_all_template', {viaService}); -%>
+<%- include('../../_partials_entity_/get_all_template', { viaService }); -%>
 
 <%_ if (!jpaMetamodelFiltering && reactive && paginationNo) { _%>
     /**
@@ -468,7 +468,7 @@ _%><%- include('../../_partials_entity_/inject_template', {readOnly: readOnly, v
     @PreAuthorize("<%- entitySpringReadPreAuthorize %>")
 <%_ } _%>
     public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%- instanceType %>><% if (reactive) { %>><% } %> get<%- entityClass %>(@PathVariable("id") <%- primaryKey.type %> id) {
-        LOG.debug("REST request to get <%- entityClass %> : {}", id);<%- include('../../_partials_entity_/get_template', {viaService, returnDirectly:false, implementsEagerLoadApis}); -%>
+        LOG.debug("REST request to get <%- entityClass %> : {}", id);<%- include('../../_partials_entity_/get_template', { viaService, returnDirectly:false, implementsEagerLoadApis }); -%>
         return ResponseUtil.wrapOrNotFound(<%- instanceName %>);
     }
 <%_ if (!readOnly) { _%>
@@ -485,7 +485,7 @@ _%><%- include('../../_partials_entity_/inject_template', {readOnly: readOnly, v
   <%_ } _%>
     public <% if (reactive) { %>Mono<<% } %>ResponseEntity<Void><% if (reactive) { %>><% } %> delete<%- entityClass %>(@PathVariable("id") <%- primaryKey.type %> id) {
         LOG.debug("REST request to delete <%- entityClass %> : {}", id);
-<%- include('../../_partials_entity_/delete_template', {viaService: viaService, fromResource: true}); -%>
+<%- include('../../_partials_entity_/delete_template', { viaService, fromResource: true }); -%>
   <%_ if (reactive) { _%>
     <%_ if (databaseTypeCouchbase) { _%>
             .then(Mono.just(ResponseEntity.noContent()
@@ -520,7 +520,7 @@ _%><%- include('../../_partials_entity_/inject_template', {readOnly: readOnly, v
   <%_ if (entitySpringReadPreAuthorize) { _%>
     @PreAuthorize("<%- entitySpringReadPreAuthorize %>")
   <%_ } _%>
-<%- include('../../_partials_entity_/search_template', {viaService}); -%>
+<%- include('../../_partials_entity_/search_template', { viaService }); -%>
 <%_ } _%>
 <%_ if (updatableEntity && !viaService && !dtoMapstruct && fields.some(field => !field.id && !field.transient)) { _%>
 

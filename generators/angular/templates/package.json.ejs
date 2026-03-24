@@ -43,10 +43,10 @@
 <%_ if (!clientThemeNone) { _%>
     "bootswatch": "<%- nodeDependencies.bootswatch %>",
 <%_ } _%>
-    "dayjs": "<%- nodeDependencies['dayjs'] %>",
+    "dayjs": "<%- nodeDependencies.dayjs %>",
     "ngx-infinite-scroll": "<%- nodeDependencies['ngx-infinite-scroll'] %>",
-    "rxjs": "<%- nodeDependencies['rxjs'] %>",
-    "tslib": "<%- nodeDependencies['tslib'] %>"
+    "rxjs": "<%- nodeDependencies.rxjs %>",
+    "tslib": "<%- nodeDependencies.tslib %>"
   },
   "devDependencies": {
 <%_ if (skipServer) { _%>
@@ -67,7 +67,7 @@
     "@types/node": "<%- nodeDependencies['@types/node'] %>",
     "angular-eslint": "<%- nodeDependencies['angular-eslint'] %>",
     "browser-sync": "<%- nodeDependencies['browser-sync'] %>",
-    "eslint": "<%- nodeDependencies['eslint'] %>",
+    "eslint": "<%- nodeDependencies.eslint %>",
     "eslint-config-prettier": "<%- nodeDependencies['eslint-config-prettier'] %>",
     "eslint-plugin-prettier": "<%- nodeDependencies['eslint-plugin-prettier'] %>",
     "globals": "<%- nodeDependencies.globals %>",
@@ -76,9 +76,9 @@
 <%_ if (enableI18nRTL) { _%>
     "postcss-rtlcss": "<%- nodeDependencies['postcss-rtlcss'] %>",
 <%_ } _%>
-    "rimraf": "<%- nodeDependencies['rimraf'] %>",
+    "rimraf": "<%- nodeDependencies.rimraf %>",
     "swagger-ui-dist": "<%- nodeDependencies['swagger-ui-dist'] %>",
-    "typescript": "<%- nodeDependencies['typescript'] %>",
+    "typescript": "<%- nodeDependencies.typescript %>",
     "typescript-eslint": "<%- nodeDependencies['typescript-eslint'] %>",
     "vitest": null,
     "vitest-sonar-reporter": null

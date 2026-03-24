@@ -33,7 +33,7 @@ const proxyConfig = require('./proxy.conf');
 
 module.exports = async (config, options, targetOptions) => {
 <%_ if (enableTranslation) { _%>
-  const languagesHash = await hashElement(path.resolve(__dirname, '<%- this.relativeDir(clientRootDir + 'webpack/', clientSrcDir) %>i18n'), {
+  const languagesHash = await hashElement(path.resolve(__dirname, '<%- this.relativeDir(`${clientRootDir}webpack/`, clientSrcDir) %>i18n'), {
     algo: 'md5',
     encoding: 'hex',
     files: { include: ['*.json'] },

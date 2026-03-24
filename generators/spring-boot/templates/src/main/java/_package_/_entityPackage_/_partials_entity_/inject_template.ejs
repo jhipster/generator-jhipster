@@ -19,32 +19,32 @@
 <%_
   const beans = [];
   if (viaService) {
-    beans.push({class: `${entityClass}Service`, instance: `${entityInstance}Service`});
+    beans.push({ class: `${entityClass}Service`, instance: `${entityInstance}Service` });
     if (!readOnly) {
-      beans.push({class: `${entityClass}Repository`, instance: `${entityInstance}Repository`});
+      beans.push({ class: `${entityClass}Repository`, instance: `${entityInstance}Repository` });
     }
     if (queryService && !reactive) {
-      beans.push({class: `${entityClass}QueryService`, instance: `${entityInstance}QueryService`});
+      beans.push({ class: `${entityClass}QueryService`, instance: `${entityInstance}QueryService` });
     }
     if (isUsingMapsId && !isController) {
       const mapsIdRepoInstance = `${mapsIdAssoc.otherEntity.entityInstance}Repository`;
-      beans.push({class: `${mapsIdAssoc.otherEntity.entityNameCapitalized}Repository`, instance: mapsIdRepoInstance});
+      beans.push({ class: `${mapsIdAssoc.otherEntity.entityNameCapitalized}Repository`, instance: mapsIdRepoInstance });
     }
   } else {
-    beans.push({class: `${entityClass}Repository`, instance: `${entityInstance}Repository`});
+    beans.push({ class: `${entityClass}Repository`, instance: `${entityInstance}Repository` });
     if (dtoMapstruct) {
-      beans.push({class: `${entityClass}Mapper`, instance: `${entityInstance}Mapper`});
+      beans.push({ class: `${entityClass}Mapper`, instance: `${entityInstance}Mapper` });
     }
     if (searchEngineElasticsearch) {
-      beans.push({class: `${entityClass}SearchRepository`, instance: `${entityInstance}SearchRepository`});
+      beans.push({ class: `${entityClass}SearchRepository`, instance: `${entityInstance}SearchRepository` });
     }
     if (isUsingMapsId) {
       const mapsIdRepoInstance = `${mapsIdAssoc.otherEntity.entityInstance}Repository`;
-      beans.push({class: `${mapsIdAssoc.otherEntity.entityNameCapitalized}Repository`, instance: mapsIdRepoInstance});
+      beans.push({ class: `${mapsIdAssoc.otherEntity.entityNameCapitalized}Repository`, instance: mapsIdRepoInstance });
     }
   }
   if (saveUserSnapshot && (viaService || constructorName.endsWith('Resource'))) {
-    beans.push({class: 'UserRepository', instance: 'userRepository'});
+    beans.push({ class: 'UserRepository', instance: 'userRepository' });
   }
 _%>
 
@@ -54,7 +54,7 @@ _%>
 <%_ } _%>
     public <%- constructorName %>(
 <%_ for (const bean of beans) { _%>
-        <%- bean.class %> <%- bean.instance %><% if (bean !== beans[beans.length -1]) { %>,<% } %>
+        <%- bean.class %> <%- bean.instance %><% if (bean !== beans[beans.length - 1]) { %>,<% } %>
 <%_ } _%>
     ) {
 <%_ for (const bean of beans) { _%>

@@ -83,7 +83,7 @@ _%>
   <%_ for (const relationshipData of addedRelationships) {
         if (relationshipData.unique) {
             const idField = relationship.otherEntity.primaryKey.ownFields[0];
-            const uniqueConstraintName = relationshipData.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, relationshipData.columnName + '_' + idField.columnName, entity.prodDatabaseType) : null;
+            const uniqueConstraintName = relationshipData.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, `${relationshipData.columnName}_${idField.columnName}`, entity.prodDatabaseType) : null;
   _%>
         <addUniqueConstraint tableName="<%- entityTableName %>"
             columnNames="<%- relationshipData.columnName %>_id"

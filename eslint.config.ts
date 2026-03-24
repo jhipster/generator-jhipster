@@ -1,4 +1,5 @@
 import js from '@eslint/js';
+import stylistic from '@stylistic/eslint-plugin';
 import { type Config, defineConfig } from 'eslint/config';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import ejs from 'eslint-plugin-ejs-templates';
@@ -8,6 +9,7 @@ import prettier from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 import ts from 'typescript-eslint';
 
+import { jsRules } from './lib/eslint/base.ts';
 import jhipster from './lib/eslint/index.ts';
 
 const tsFiles = ['**/*.{ts,mts,cts}'];
@@ -127,16 +129,32 @@ export default defineConfig(
   ejs.configs.base,
   {
     files: ['**/*.ejs'],
+    plugins: {
+      '@stylistic': stylistic,
+    },
     rules: {
       'ejs-templates/prefer-raw': 'error',
       // 'ejs-templates/prefer-slurping-codeonly': 'error',
       // 'ejs-templates/experimental-prefer-slurp-multiline': 'error',
       // 'ejs-templates/prefer-single-line-tags': 'error',
       // 'ejs-templates/slurp-newline': 'error',
-      'ejs-templates/indent': 'error',
 
       'prettier/prettier': 'off',
       ...js.configs.recommended.rules,
+      ...jsRules,
+      'prefer-destructuring': 'off',
+      'prefer-const': 'off',
+      eqeqeq: 'off',
+      '@stylistic/no-multi-spaces': 'error',
+      '@stylistic/comma-spacing': 'error',
+      '@stylistic/object-curly-spacing': ['error', 'always'],
+      '@stylistic/space-infix-ops': 'error',
+      '@stylistic/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: 'never' }],
+      '@stylistic/semi': 'error',
+      '@stylistic/comma-dangle': ['error', 'always-multiline'],
+      '@stylistic/template-curly-spacing': 'error',
+
+      'ejs-templates/indent': 'error',
     },
   },
 );
