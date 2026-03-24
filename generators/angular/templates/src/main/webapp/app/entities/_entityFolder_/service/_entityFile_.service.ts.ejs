@@ -16,11 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-let searchType = 'Search';
-if (paginationPagination || paginationInfiniteScroll) {
-    searchType = 'SearchWithPagination';
-}
+<%_ const searchType = paginationPagination || paginationInfiniteScroll ? 'SearchWithPagination' : 'Search';
 const requiresRestTypeConversion = (!builtInUserManagement && anyFieldIsDateDerived) || (builtInUserManagement && !userManagement.skipClient);
 const entityRestName = requiresRestTypeConversion ? `Rest${entityAngularName}` : `I${entityAngularName}`;
 _%>
