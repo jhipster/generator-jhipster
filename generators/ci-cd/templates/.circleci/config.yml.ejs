@@ -102,8 +102,9 @@ jobs:
                 command: './gradlew deployHeroku --no-daemon'
   <%_ } _%>
 <%_ } _%>
-            <%_ if (cypressTests) {
-                const commented = '# '; _%>
+<%_ if (cypressTests) {
+                const commented = '# ';
+_%>
             <%- commented %>- run:
             <%- commented %>    name: 'E2E: Package'
             <%- commented %>    command: <%- nodePackageManager %> run ci:e2e:package

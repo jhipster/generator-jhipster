@@ -642,10 +642,10 @@ _%>
   <%_ for (const rel of relationships) {
     if ((rel.relationshipValidate || rel.id) && !alreadyGeneratedDeletionCalls.includes(rel.otherEntityName)) { _%>
         <%- rel.otherEntity.entityNameCapitalized %>ResourceIT.deleteEntities(em);
-    <%_ alreadyGeneratedDeletionCalls.push(rel.otherEntityName);
+  <%_ alreadyGeneratedDeletionCalls.push(rel.otherEntityName);
     }
   }
-    _%>
+  _%>
     }
 
 <%_ } _%>
@@ -1367,12 +1367,11 @@ _%>
         rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?sort=<%- primaryKey.name %>,desc&" + filter))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            <%_
-            const primaryKeyConversion = {
+    <%_ const primaryKeyConversion = {
                 'Long' : '.intValue()',
                 'UUID' : '.toString()'
             }[primaryKey.type] || '';
-            _%>
+    _%>
             .andExpect(jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- persistInstance %>.<%- primaryKey.propertySupplierName %>()<%- primaryKeyConversion %>)))<% for (const field of fieldsToTest) { %>
       <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
             .andExpect(jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)))

@@ -100,9 +100,9 @@ _%>
   <%_ if (property.fieldWithContentType) { _%>
 
     private String <%- property.propertyName %>ContentType;
-  <%_ }
+<%_ }
 }
-  _%>
+_%>
 <%_ for (property of restProperties) { _%>
 
     public <%- property.propertyDtoJavaType %> <%- property.propertySupplierName %>() {

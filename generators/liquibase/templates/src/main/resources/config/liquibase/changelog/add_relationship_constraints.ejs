@@ -67,9 +67,9 @@ _%>
                                  constraintName="<%- relationship.joinTable.otherConstraintName %>"
                                  referencedColumnNames="<%- relationship.otherEntity.primaryKey.fields.map(field => field.columnName).join(', ') %>"
                                  referencedTableName="<%- relationship.otherEntity.entityTableName %>"
-        <%_ if (relationship.otherRelationship) { 
+  <%_ if (relationship.otherRelationship) { 
             // User object is not supporting this right now
-        _%>
+  _%>
     <%_ if (relationship.otherRelationship.onDelete) { _%>
                                  onDelete="<%- relationship.otherRelationship.onDelete %>"
     <%_ } _%>
