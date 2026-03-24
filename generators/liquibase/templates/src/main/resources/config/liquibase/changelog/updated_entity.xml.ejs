@@ -28,13 +28,13 @@
             <column name="<%- field.columnName %>" type="<%- field.columnType %>"<%- this.createDefaultValueLiquibaseAttribute(field, true) -%><%- this.formatAsLiquibaseRemarks(field.documentation, true) %>/>
     <%_ if (field.shouldCreateContentType) { _%>
             <column name="<%- field.columnName %>_content_type" type="varchar(255)"/>
-        <%_ }
+  <%_ }
     } // End for (field of addedFields)
-        _%>
+  _%>
         </addColumn>
-    <%_ for (field of addedFields) {
+  <%_ for (field of addedFields) {
         if (field.shouldDropDefaultValue) {
-    _%>
+  _%>
         <dropDefaultValue tableName="<%- entity.entityTableName %>" columnName="<%- field.columnName %>" columnDataType="${datetimeType}"/>
     <%_ } _%>
   <%_ } _%>
@@ -78,22 +78,21 @@ _%>
     <changeSet id="<%- changelogDate %>-1-add-relationships" author="jhipster">
     <%_ if (hasRelationShips && hasRelationshipWithFieldUpdates) { _%>
         <addColumn tableName="<%- entity.entityTableName %>">
-            <%_
-            for (relationship of addedRelationships) {
+      <%_ for (relationship of addedRelationships) {
                 if (relationship.shouldWriteRelationship && !relationshipsToRecreateForeignKeysOnly.includes(relationship)) {
                     for (const otherEntityPkField of relationship.otherEntity.primaryKey.fields) {
-            _%>
+      _%>
                 <column name="<%- relationship.columnName %>_<%- otherEntityPkField.columnName %>" type="<%- otherEntityPkField.columnType %>"/>
           <%_ } _%>
         <%_ } _%>
       <%_ } _%>
         </addColumn>
     <%_ } _%>
-        <%_ const joinTableRelations = addedRelationships
+    <%_ const joinTableRelations = addedRelationships
                 .filter(rel => rel.shouldWriteJoinTable)
                 .filter(rel => !relationshipsToRecreateForeignKeysOnly.includes(rel));
             if(joinTableRelations.length > 0) {
-        _%>
+    _%>
       <%_ for (relationship of joinTableRelations) { _%>
 
         <createTable tableName="<%- relationship.joinTable.name %>">
@@ -141,20 +140,19 @@ _%>
         Dropped relationships to the entity <%- entity.entityClass %>.
     -->
     <changeSet id="<%- changelogDate %>-1-drop-relationships" author="jhipster">
-        <%_
-        /* ======== Start hasRelationShips ======== */
+    <%_ /* ======== Start hasRelationShips ======== */
         if (hasRelationShips) {
             /* ======== Start dropForeignKeyConstraint ======== */
             for (relationship of removedRelationships) {
                 if (relationship.shouldWriteRelationship) {
-        _%>
+    _%>
         <dropForeignKeyConstraint baseTableName="<%- entity.entityTableName %>" constraintName="<%- this.getFKConstraintName(entity.entityTableName, relationship.relationshipName, prodDatabaseType) %>"/>
-        <%_    }
+      <%_ }
             }
 
             if (hasRelationshipWithFieldUpdates) {
             /* ======== End dropForeignKeyConstraint ======== */
-        _%>
+      _%>
         <dropColumn tableName="<%- entity.entityTableName %>">
         <%_
             /* ======== Start drop relationship columns ======== */
@@ -169,28 +167,25 @@ _%>
             /* ======== End drop relationship column ======== */
         _%>
         </dropColumn>
-        <%_
-            }
+    <%_ }
         }
         /* ======== End hasRelationShips ======== */
-        _%>
-        <%_
-        /* ======== Start for joinTable ======== */
+    _%>
+    <%_ /* ======== Start for joinTable ======== */
         for (relationship of removedRelationships) {
             if (relationship.shouldWriteJoinTable) {
-        _%>
+    _%>
         <dropTable cascadeConstraints="true" tableName="<%- relationship.joinTable.name %>"/>
-            <%_ }
+    <%_ }
         }
         /* ======== End for joinTable ======== */
-            _%>
+    _%>
     </changeSet>
-    <%_
-    }
+<%_ }
     /* ======== End removed relationships should be written ======== */
 }
 /* ======== End removed relationships exists ======== */
-    _%>
+_%>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
 

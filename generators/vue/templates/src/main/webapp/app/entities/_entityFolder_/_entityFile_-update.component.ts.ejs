@@ -173,11 +173,10 @@ _%>
   },
   created(): void {
 <%_ if (relationshipsContainManyToOne) { _%>
-    <%_
-      for (relationship of relationships) {
+  <%_ for (relationship of relationships) {
       if (relationship.collection && relationship.persistableRelationship) {
       const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
-    _%>
+  _%>
     this.<%- entityInstance %>.<%- relationshipFieldNamePlural %> = [];
   <%_ } } _%>
 <%_ } _%>

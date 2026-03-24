@@ -152,12 +152,11 @@ public class <%- entityClass %>Resource {
     @Value("${jhipster.clientApp.name:<%- camelizedBaseName %>}")
     private String applicationName;
 <%_ } _%>
-    <%_
-    const instanceType = restClass;
+<%_ const instanceType = restClass;
     const instanceName = restInstance;
     const mapper = entityInstance  + 'Mapper';
     const entityToDtoReference = mapper + '::' + 'toDto';
-    _%><%- include('../../_partials_entity_/inject_template', {readOnly: readOnly, viaService: viaService, constructorName: entityClass + 'Resource', queryService: jpaMetamodelFiltering, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true, reactive: reactive}); -%>
+_%><%- include('../../_partials_entity_/inject_template', {readOnly: readOnly, viaService: viaService, constructorName: entityClass + 'Resource', queryService: jpaMetamodelFiltering, isUsingMapsId: isUsingMapsId, mapsIdAssoc: mapsIdAssoc, isController: true, reactive: reactive}); -%>
 <%_ if (!readOnly) { _%>
 
     /**

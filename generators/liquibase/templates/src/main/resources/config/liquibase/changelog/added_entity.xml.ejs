@@ -54,10 +54,10 @@ _%>
             <column name="<%- relationship.columnName %>_<%- idField.columnName %>" type="<%- idField.columnType %>">
                 <constraints nullable="<%- !relationship.columnRequired %>"<% if (uniqueConstraintName) { %> unique="true" uniqueConstraintName="<%- uniqueConstraintName %>"<% } %> />
             </column>
-        <%_ }
+<%_ }
     }
 }
-        _%>
+_%>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
 <%_ for (const field of fields) {

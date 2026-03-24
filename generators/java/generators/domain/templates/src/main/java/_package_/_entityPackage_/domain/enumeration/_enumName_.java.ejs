@@ -37,14 +37,15 @@ public enum <%- enumName %> {
   for (const [index, enumWithCustomValue] of enumValues.entries()) {
     if (enumWithCustomValue.comment){ _%>
 <%- enumWithCustomValue.comment %>
-  <%_ } 
-  if (enumWithCustomValue.name === enumWithCustomValue.value) { _%>
+    <%_ } 
+  if (enumWithCustomValue.name === enumWithCustomValue.value) {
+    _%>
     <%- enumWithCustomValue.name %><% if (index < enumValues.length - 1) { %>,<% } else { %>;<% } %>
     <%_ } else { _%>
     <%- enumWithCustomValue.name %>("<%- enumWithCustomValue.value %>")<% if (index < enumValues.length - 1) { %>,<% } else { %>;<% } %>
-    <%_ }
+  <%_ }
   }
-    _%>
+  _%>
   <%_ if (!withoutCustomValues) { _%>
     private<% if (withCustomValues) { %> final<% } %> String value;
 
