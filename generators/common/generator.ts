@@ -39,6 +39,7 @@ export default class CommonGenerator extends BaseApplicationGenerator<
   CommonApplication,
   CommonConfig,
   CommonOptions,
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
   CommonSource
 > {
   async beforeQueue() {

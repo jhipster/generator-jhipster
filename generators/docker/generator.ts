@@ -40,6 +40,7 @@ import type {
 // Splitting this generator into bootstrap generator (only injects docker support) and jhipster(adds docker service based on spring-boot implementation) should be considered.
 type Application = DockerApplication & SpringDataRelationalApplication<any> & SpringBootApplication<any>;
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
 export default class DockerGenerator extends BaseApplicationGenerator<Application, DockerConfig, DockerOptions, DockerSource> {
   hasServicesFile = false;
 

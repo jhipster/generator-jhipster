@@ -6,4 +6,5 @@ export type JSONField = Field & Record<string, any>;
 
 export type JSONRelationship = Relationship & Record<string, any>;
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
 export type JSONEntity = Entity<JSONField, JSONRelationship> & Record<string, any>;

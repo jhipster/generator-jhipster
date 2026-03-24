@@ -29,12 +29,9 @@ import { isReservedH2Keyword } from '../spring-boot/generators/data-relational/s
 import { hibernateSnakeCase } from './support/index.ts';
 import type {
   Application as ServerApplication,
-  Config as ServerConfig,
   Entity as ServerEntity,
   Field as ServerField,
-  Options as ServerOptions,
   Relationship as ServerRelationship,
-  Source as ServerSource,
 } from './types.ts';
 
 const { SUPPORTED_VALIDATION_RULES } = validations;
@@ -53,13 +50,7 @@ const {
 const { NO: NO_PAGINATION } = PaginationTypes;
 const { NO: NO_SERVICE } = ServiceTypes;
 
-export default class JHipsterServerGenerator extends BaseApplicationGenerator<
-  ServerEntity,
-  ServerApplication,
-  ServerConfig,
-  ServerOptions,
-  ServerSource
-> {
+export default class JHipsterServerGenerator extends BaseApplicationGenerator<ServerEntity, ServerApplication> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

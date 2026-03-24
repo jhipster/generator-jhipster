@@ -43,6 +43,7 @@ const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
 const { REACT } = clientFrameworkTypes;
 
 export default class ReactGenerator extends ClientApplicationGenerator<
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
   ClientEntity<ClientField & { fieldValidateRulesPatternReact?: string }> & { entityReactState?: string }
 > {
   async beforeQueue() {

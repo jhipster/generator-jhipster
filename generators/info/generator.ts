@@ -35,6 +35,7 @@ import { replaceSensitiveConfig } from './support/utils.ts';
 const isInfoCommand = (commandName: string): true | undefined => commandName === 'info' || undefined;
 
 export default class InfoGenerator extends BaseCoreGenerator<
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
   CoreConfig & { appsFolders?: string[]; baseName?: string; packages?: string[] }
 > {
   constructor(args?: string[], options?: CoreOptions, features?: CoreFeatures) {

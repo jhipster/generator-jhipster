@@ -53,6 +53,7 @@ const defaultPublishedFiles = ['generators', '!**/__*', '!**/*.snap', '!**/*.spe
 export default class extends BaseSimpleApplicationGenerator<
   GenerateBlueprintApplication,
   GenerateBlueprintConfig,
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
   GenerateBlueprintOptions
 > {
   recreatePackageLock!: boolean;

@@ -24,7 +24,7 @@ export type BaseChangelogData = {
   fields: Field[];
   addedFields: any[];
   removedFields: any[];
-  relationships: RelationshipWithEntity<BaseApplicationRelationship, BaseApplicationEntity<Field>>[];
+  relationships: RelationshipWithEntity<BaseApplicationRelationship, BaseApplicationEntity>[];
   addedRelationships: any[];
   removedRelationships: any[];
   relationshipsToRecreateForeignKeysOnly: any[];

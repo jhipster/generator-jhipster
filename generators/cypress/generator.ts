@@ -38,6 +38,7 @@ const { ANGULAR } = clientFrameworkTypes;
 
 const WAIT_TIMEOUT = 3 * 60000;
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
 export default class CypressGenerator extends BaseApplicationGenerator<CypressEntity, CypressApplication, CypressConfig> {
   angularSchematic = false;
 

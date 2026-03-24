@@ -50,6 +50,7 @@ const toJdlFile = (file: string): string => {
 
 type ApplicationWithEntitiesAndPath = ApplicationWithEntities & { folder?: string; sharedFs?: MemFs<MemFsEditorFile> };
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
 export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
   jdlFiles?: string[];
   inline?: string;

@@ -17,7 +17,6 @@
  * limitations under the License.
  */
 import { transformContents } from '@yeoman/transform';
-import type { MemFsEditorFile } from 'mem-fs-editor';
 import sortKeys from 'sort-keys';
 import type File from 'vinyl';
 
@@ -25,7 +24,7 @@ const sortJsonFileContent = (contents: Exclude<File['contents'], null>) =>
   Buffer.from(`${JSON.stringify(sortKeys(JSON.parse(contents.toString('utf8')), { deep: true }), null, 2)}\n`);
 
 export default function createSortConfigFilesTransform(pattern = '**/{.yo-rc.json,.jhipster/*.json}') {
-  return transformContents<MemFsEditorFile>(contents => sortJsonFileContent(contents!), {
+  return transformContents(contents => sortJsonFileContent(contents), {
     filter: file => Boolean(file.contents),
     pattern,
   });

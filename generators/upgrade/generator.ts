@@ -47,6 +47,7 @@ const DEFAULT_NON_INTERACTIVE_OPTIONS = {
 };
 const DEFAULT_MERGE_OPTIONS = ['--strategy', 'ours'];
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
 export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, UpgradeOptions> {
   requiredPackage = GENERATOR_JHIPSTER;
   createEnvBuilder!: typeof EnvironmentBuilder.createDefaultBuilder;

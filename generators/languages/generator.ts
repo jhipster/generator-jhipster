@@ -45,6 +45,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
   LanguagesEntity,
   LanguagesApplication<LanguagesEntity>,
   LanguagesConfig,
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
   LanguagesOptions
 > {
   askForMoreLanguages!: boolean;

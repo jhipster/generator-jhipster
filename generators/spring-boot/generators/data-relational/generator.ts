@@ -48,6 +48,7 @@ export default class SqlGenerator extends BaseApplicationGenerator<
   SpringDataRelationalApplication,
   SpringDataRelationalConfig,
   SpringDataRelationalOptions,
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
   SpringDataRelationalSource
 > {
   async beforeQueue() {
