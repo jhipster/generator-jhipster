@@ -1693,7 +1693,7 @@ _%>
   <%_ } _%>
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
-  <% const fieldsToIncludeInFullPatchTest = fieldsToTest.map(field => prepareFieldForPatchTest(field, () => true)); %>
+  <%_ const fieldsToIncludeInFullPatchTest = fieldsToTest.map(field => prepareFieldForPatchTest(field, () => true)); _%>
 <%- include('/_global_partials_entity_/it_patch_update.partial.java.ejs', {fields: fieldsToIncludeInFullPatchTest, saveMethod, callBlock, callListBlock}); -%>
 
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
