@@ -81,7 +81,7 @@ TranslateDirective, TranslateModule,<%_ } _%>FontAwesomeModule, AlertError, Reac
 export class <%- entityAngularName %>Update implements OnInit {
     readonly isSaving = signal(false);
     <%- entityInstance %>: I<%- entityAngularName %> | null = null;
-<%_ for (const [importedType, importedPath] of enumImports) { _%>
+<%_ for (const [importedType] of enumImports) { _%>
     <%- this._.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
 <%_ } _%>
 

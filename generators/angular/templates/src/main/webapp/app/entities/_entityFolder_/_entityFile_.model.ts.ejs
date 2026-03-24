@@ -30,8 +30,9 @@ import { <%- importedType %> } from '<%- importedPath %>';
 <%_ } _%>
 
 export interface I<%- entityAngularName %> {
+<%# TODO - handle required fields (and thus non-nullable) - currently all fields are optional and nullable) #%>
 <%_ for (const field of fields) {
-      const { fieldName, fieldValidationRequired, id } = field;
+      const { fieldName/* , fieldValidationRequired */, id } = field;
       const tsType = `${field.fieldIsEnum ? 'keyof typeof ' : ''}${field.tsType}`;
 _%>
   <%- fieldName %><% if (!id /* && !fieldValidationRequired */) { %>?<% } %>: <%- tsType %><% if (!id /* && !fieldValidationRequired */) { %> | null<% } %>;

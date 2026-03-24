@@ -23,7 +23,6 @@
   ];
   const containDefaultProperties = formDefaultProperties.length > 0;
   const entityFormName = anyFieldIsTimeDerived ? `${entityAngularName}FormRawValue` : `I${entityAngularName}`;
-  const newEntityFormName = anyFieldIsTimeDerived ? `New${entityAngularName}FormRawValue` : `New${entityAngularName}`;
 _%>
 import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';

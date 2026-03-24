@@ -139,7 +139,7 @@ public class <%- persistClass %> <&- fragments.extendsSection() -&>implements Se
 <%_
 // An embedded entity should not reference entities that embed it, unless the other entities are also embedded
 for (relationship of relationships) {
-  if (typeof relationship.fieldApiDescription) {
+  if (relationship.relationshipApiDescription) {
 _%>
 <%- relationship.relationshipJavadoc %>
     <%_ if (!dtoMapstruct && relationship.relationshipApiDescription) { _%>

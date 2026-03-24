@@ -16,10 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-    let entityActionName = entityInstance.toUpperCase();
-    let entityActionNamePlural = entityInstancePlural.toUpperCase();
-_%>
 import axios from 'axios';
 import { createAsyncThunk, isFulfilled, isPending, isRejected } from '@reduxjs/toolkit';
 <%_ if (paginationInfiniteScroll) { _%>

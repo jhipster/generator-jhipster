@@ -52,7 +52,7 @@ export default defineComponent({
     const <%- relationship.otherEntity.entityInstancePlural %>: Ref<I<%- relationship.otherEntity.entityAngularName %>[]> = ref([]);
   <%_ } _%>
 <%_ } _%>
-<%_ for (const [importedType, importedPath] of enumImports) { _%>
+<%_ for (const [importedType] of enumImports) { _%>
     const <%- this._.lowerFirst(importedType) %>Values: Ref<string[]> = ref(Object.keys(<%- importedType %>));
 <%_ } _%>
     const isSaving = ref(false);
@@ -151,7 +151,7 @@ _%>
       alertService,
       <%- entityInstance %>,
       previousState,
-<%_ for (const [importedType, importedPath] of enumImports) { _%>
+<%_ for (const [importedType] of enumImports) { _%>
       <%- this._.lowerFirst(importedType) %>Values,
 <%_ } _%>
       isSaving,
