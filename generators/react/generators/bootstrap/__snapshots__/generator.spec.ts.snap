@@ -220,6 +220,8 @@ exports[`generator - react:bootstrap bootstrapping default config should prepare
   "prodDatabaseTypePostgresql": true,
   "projectDescription": "Description for JHipster",
   "projectVersion": undefined,
+  "reactBootstrapBsTheme": "dark",
+  "reactBootstrapVariant": "dark",
   "reactive": false,
   "rememberMeKey": undefined,
   "removeNeedles": undefined,
