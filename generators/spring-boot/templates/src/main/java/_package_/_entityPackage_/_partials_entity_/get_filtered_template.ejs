@@ -33,8 +33,11 @@ _%>
     public <%- reactiveSql ? 'Flux' : 'List' %><<%- instanceType %>> findAllWhere<%- relationship.relationshipNameCapitalized %>IsNull() {
         LOG.debug("Request to get all <%- entityInstancePlural %> where <%- relationship.relationshipNameCapitalized %> is null");
     <%_ if (reactiveSql) { _%>
-        return <%- entityInstance %>Repository.findAllWhere<%- relationship.relationshipNameCapitalized %>IsNull()<%_ if (dtoMapstruct) { _%>
-             .map(<%- entityToDtoReference %>)<%_ } _%>;
+        return <%- entityInstance %>Repository
+            .findAllWhere<%- relationship.relationshipNameCapitalized %>IsNull()
+      <%_ if (dtoMapstruct) { _%>
+            .map(<%- entityToDtoReference %>)
+      <%_ } _%>;
     <%_ } else if (reactive) { _%>
         return <%- entityInstance %>Repository
             .findAll()

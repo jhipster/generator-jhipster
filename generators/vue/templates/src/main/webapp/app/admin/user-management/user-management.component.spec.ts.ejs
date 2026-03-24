@@ -64,7 +64,7 @@ describe('UserManagement Component', () => {
       await userManagement.$nextTick();
 
       // THEN
-      expect(axiosStub.get).toHaveBeenCalledWith(`api/admin/users<%_ if (!databaseTypeCassandra) { _%>?sort=id,asc&page=0&size=20<%_ } _%>`);
+      expect(axiosStub.get).toHaveBeenCalledWith(`api/admin/users<% if (!databaseTypeCassandra) { %>?sort=id,asc&page=0&size=20<% } %>`);
     });
   });
 
@@ -79,7 +79,7 @@ describe('UserManagement Component', () => {
 
       // THEN
       expect(axiosStub.put).toHaveBeenCalledWith(`api/admin/users`, { id: <%- tsKeyId %>, activated: true });
-      expect(axiosStub.get).toHaveBeenCalledWith(`api/admin/users<%_ if (!databaseTypeCassandra) { _%>?sort=id,asc&page=0&size=20<%_ } _%>`);
+      expect(axiosStub.get).toHaveBeenCalledWith(`api/admin/users<% if (!databaseTypeCassandra) { %>?sort=id,asc&page=0&size=20<% } %>`);
     });
   });
 
@@ -100,7 +100,7 @@ describe('UserManagement Component', () => {
 
       // THEN
       expect(axiosStub.delete).toHaveBeenCalledWith('api/admin/users/' + <%- tsKeyId %>);
-      expect(axiosStub.get).toHaveBeenCalledWith(`api/admin/users<%_ if (!databaseTypeCassandra) { _%>?sort=id,asc&page=0&size=20<%_ } _%>`);
+      expect(axiosStub.get).toHaveBeenCalledWith(`api/admin/users<% if (!databaseTypeCassandra) { %>?sort=id,asc&page=0&size=20<% } %>`);
     });
   });
 <%_ if (!databaseTypeCassandra) { _%>

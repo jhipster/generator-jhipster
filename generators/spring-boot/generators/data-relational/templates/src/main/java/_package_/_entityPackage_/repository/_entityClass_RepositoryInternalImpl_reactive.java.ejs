@@ -120,9 +120,18 @@ _%>
 }
 _%>
 
-    public <%- entityClass %>RepositoryInternalImpl(R2dbcEntityTemplate template, EntityManager entityManager<%_ for (const element of reactiveUniqueEntityTypes) { _%>, <%- element %>RowMapper <%- element.toLowerCase() %>Mapper<%_ } _%>, R2dbcEntityOperations entityOperations,
-        R2dbcConverter converter<% if (jpaMetamodelFiltering && reactive) { %>,
-        ColumnConverter columnConverter<% } %>) {
+    public <%- entityClass %>RepositoryInternalImpl(
+        R2dbcEntityTemplate template,
+        EntityManager entityManager
+<%_ for (const element of reactiveUniqueEntityTypes) { _%>
+        , <%- element %>RowMapper <%- element.toLowerCase() %>Mapper
+<%_ } _%>
+        , R2dbcEntityOperations entityOperations
+        , R2dbcConverter converter
+<%_ if (jpaMetamodelFiltering && reactive) { _%>
+        , ColumnConverter columnConverter
+<%_ } _%>
+    ) {
         super(new MappingRelationalEntityInformation(converter.getMappingContext().getRequiredPersistentEntity(<%- persistClass %>.class)), entityOperations, converter);
         this.db = template.getDatabaseClient();
         this.r2dbcEntityTemplate = template;

@@ -497,7 +497,11 @@ public class UserService {
     public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%- user.adminUserDto %>> updateUser(<%- user.adminUserDto %> userDTO) {
     <%_ if (reactive) { _%>
         return userRepository.findById(userDTO.getId())
-            .<%_ if (databaseTypeSql || databaseTypeMongodb) { _%>flatMap<% } else { %>map<% } %>(user -> {
+<%_ if (databaseTypeSql || databaseTypeMongodb) { _%>
+            .flatMap
+<%_ } else { _%>
+            .map
+<%_ } %>(user -> {
     <%_ } else { _%>
         return Optional.of(userRepository
             .findById(userDTO.getId()))
@@ -866,7 +870,13 @@ public class UserService {
       <%_ } _%>
     public Flux<<%- user.persistClass %>> removeNotActivatedUsersReactively() {
         return userRepository
-            .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(<%_ if (databaseTypeSql) { _%>LocalDateTime.ofInstant(Instant.now().minus(3, ChronoUnit.DAYS), ZoneOffset.UTC)<%_ } else { _%>Instant.now().minus(3, ChronoUnit.DAYS)<%_ } _%>)
+            .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(
+      <%_ if (databaseTypeSql) { _%>
+                LocalDateTime.ofInstant(Instant.now().minus(3, ChronoUnit.DAYS), ZoneOffset.UTC)
+      <%_ } else { _%>
+                Instant.now().minus(3, ChronoUnit.DAYS)
+      <%_ } _%>
+            )
             .flatMap(user -> userRepository.delete(user).thenReturn(user))
       <%_ if (searchEngineElasticsearch) { _%>
             .flatMap(user -> userSearchRepository.delete(user).thenReturn(user))
