@@ -33,13 +33,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateDirective } from 'app/shared/language';
 import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
-<%_ let anyFieldHasTypeLocalDate = false;
-  for (const field of fields.filter(field => !field.hidden)) {
-    if (field.fieldTypeLocalDate) {
-        anyFieldHasTypeLocalDate = true;
-    }
-  }
-_%>
+<%_ const anyFieldHasTypeLocalDate = fields.some(field => !field.hidden && field.fieldTypeLocalDate); _%>
 <%_ if (anyFieldHasTypeLocalDate) { _%>
 import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap/datepicker';
 <%_ } _%>

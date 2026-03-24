@@ -17,12 +17,7 @@
  limitations under the License.
 -%>
 package <%- packageName %>.web.rest;
-<%_
-let saveMethod = 'save';
-if (!reactive && databaseTypeSql) {
-    saveMethod = 'saveAndFlush';
-}
-_%>
+<%_ const saveMethod = !reactive && databaseTypeSql ? 'saveAndFlush' : 'save'; _%>
 import <%- packageName %>.IntegrationTest;
 
 <%_ if (databaseTypeSql && reactive) { _%>

@@ -13,23 +13,8 @@
   const fieldName = field.fieldName;
   const fieldType = field.fieldType;
   const fieldTypeBlobContent = field.fieldTypeBlobContent;
-  let fieldInputType = 'text';
   let fieldInputClass = 'form-control';
   const translationKey = `${i18nKeyPrefix}.${fieldName}`;
-  if (field.fieldTypeNumeric) {
-    fieldInputType = 'number';
-  } else if (field.fieldTypeLocalDate) {
-    fieldInputType = 'date';
-  } else if (field.fieldTypeTimed) {
-    fieldInputType = 'datetime-local';
-  } else if (field.fieldTypeLocalTime) {
-    fieldInputType = 'time';
-  } else if (field.fieldTypeBoolean) {
-    fieldInputType = 'checkbox';
-    fieldInputClass = 'form-check';
-  } else if (field.fieldTypeBinary && !field.blobContentTypeText) {
-    fieldInputType = 'hidden';
-  }
 _%>
                     <div class="mb-3">
                         <label class="form-control-label" for="<%- entityFileName %>">{{ t$('<%- translationKey %>') }}</label>
@@ -102,8 +87,8 @@ _%>
                         <textarea class="<%- fieldInputClass %>" name="<%- fieldName %>" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>"
                             :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model="v$.<%- fieldName %>.$model" <% if (field.fieldValidate === true && field.fieldValidateRules.includes('required')) { %> required<% } %>></textarea>
     <%_ } else { _%>
-                        <input type="<%- fieldInputType %>" class="<%- fieldInputClass %>" name="<%- fieldName %>" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>"
-                            :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model<% if (fieldInputType === 'number') { %>.number<% } %>="v$.<%- fieldName %>.$model" <% if (field.fieldValidate === true && field.fieldValidateRules.includes('required')) { %> required<% } %>/>
+                        <input type="<%- field.htmlInputType %>" class="<%- fieldInputClass %>" name="<%- fieldName %>" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>"
+                            :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model<% if (field.htmlInputType === 'number') { %>.number<% } %>="v$.<%- fieldName %>.$model" <% if (field.fieldValidate === true && field.fieldValidateRules.includes('required')) { %> required<% } %>/>
       <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
                         <input type="hidden" class="<%- fieldInputClass %>" name="<%- fieldName %>ContentType" id="<%- entityFileName %>-<%- fieldName %>ContentType"
                             v-model="<%- entityInstance %>.<%- fieldName %>ContentType" />
