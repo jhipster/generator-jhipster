@@ -16,8 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-  const beans = [];
+<%_ const beans = [];
   if (viaService) {
     beans.push({class: `${entityClass}Service`, instance: `${entityInstance}Service`});
     if (!readOnly) {

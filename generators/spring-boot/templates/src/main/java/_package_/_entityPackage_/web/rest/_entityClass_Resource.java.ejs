@@ -146,7 +146,8 @@ public class <%- entityClass %>Resource {
   <%_ let entityName = entityInstance;
   if (clientRootFolder && !skipUiGrouping) {
     entityName = this._.camelCase(`${clientRootFolder}${entityClass}`);
-  } _%>
+  }
+  _%>
     private static final String ENTITY_NAME = "<%- entityName %>";
 
     @Value("${jhipster.clientApp.name:<%- camelizedBaseName %>}")

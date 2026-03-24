@@ -16,8 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-const tsKeyId = primaryKey.tsSampleValues[0];
+<%_ const tsKeyId = primaryKey.tsSampleValues[0];
 const enumImports = this.generateEntityClientEnumImports(fields.filter(field => !field.id));
 _%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -101,9 +100,9 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign({
 <%_ for (const field of fields.filter(field => !field.id)) { _%>
   <%_ if (field.fieldTypeLocalDate) { _%>
-          <%- field.fieldName%>: dayjs(currentDate).format(DATE_FORMAT),
+          <%- field.fieldName %>: dayjs(currentDate).format(DATE_FORMAT),
   <%_ } else if (field.fieldTypeTimed) { _%>
-          <%- field.fieldName%>: dayjs(currentDate).format(DATE_TIME_FORMAT),
+          <%- field.fieldName %>: dayjs(currentDate).format(DATE_TIME_FORMAT),
   <%_ } _%>
 <%_ } _%>
         }, elemDefault);
@@ -130,18 +129,18 @@ describe('Service Tests', () => {
           <%- primaryKey.name %>: <%- primaryKey.tsSampleValues[0] %>,
   <%_ for (const field of fields.filter(field => !field.id)) { _%>
     <%_ if (field.fieldTypeLocalDate) { _%>
-          <%- field.fieldName%>: dayjs(currentDate).format(DATE_FORMAT),
+          <%- field.fieldName %>: dayjs(currentDate).format(DATE_FORMAT),
     <%_ } else if (field.fieldTypeTimed) { _%>
-          <%- field.fieldName%>: dayjs(currentDate).format(DATE_TIME_FORMAT),
+          <%- field.fieldName %>: dayjs(currentDate).format(DATE_TIME_FORMAT),
     <%_ } _%>
   <%_ } _%>
         }, elemDefault);
         const expected = Object.assign({
   <%_ for (const field of fields.filter(field => !field.id)) { _%>
     <%_ if (field.fieldTypeLocalDate) { _%>
-          <%- field.fieldName%>: currentDate,
+          <%- field.fieldName %>: currentDate,
     <%_ } else if (field.fieldTypeTimed) { _%>
-          <%- field.fieldName%>: currentDate,
+          <%- field.fieldName %>: currentDate,
     <%_ } _%>
   <%_ } _%>
           }, returnedFromService);
@@ -166,19 +165,19 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign({
   <%_ for (const field of fields.filter(field => !field.id)) { _%>
     <%_ if (field.fieldTypeBoolean) { _%>
-          <%- field.fieldName%>: true,
+          <%- field.fieldName %>: true,
     <%_ } else if (field.fieldTypeDuration) { _%>
-          <%- field.fieldName%>: 'PT2S',
+          <%- field.fieldName %>: 'PT2S',
     <%_ } else if (field.fieldTypeNumeric) { _%>
-          <%- field.fieldName%>: 1,
+          <%- field.fieldName %>: 1,
     <%_ } else if (field.fieldTypeCharSequence) { _%>
-          <%- field.fieldName%>: 'BBBBBB',
+          <%- field.fieldName %>: 'BBBBBB',
     <%_ } else if (field.fieldTypeLocalDate) { _%>
-          <%- field.fieldName%>: dayjs(currentDate).format(DATE_FORMAT),
+          <%- field.fieldName %>: dayjs(currentDate).format(DATE_FORMAT),
     <%_ } else if (field.fieldTypeTimed) { _%>
-          <%- field.fieldName%>: dayjs(currentDate).format(DATE_TIME_FORMAT),
+          <%- field.fieldName %>: dayjs(currentDate).format(DATE_TIME_FORMAT),
     <%_ } else { _%>
-          <%- field.fieldName%>: 'BBBBBB',
+          <%- field.fieldName %>: 'BBBBBB',
     <%_ } _%>
   <%_ } _%>
           }, elemDefault);
@@ -186,9 +185,9 @@ describe('Service Tests', () => {
           const expected = Object.assign({
   <%_ for (const field of fields.filter(field => !field.id)) { _%>
     <%_ if (field.fieldTypeLocalDate) { _%>
-          <%- field.fieldName%>: currentDate,
+          <%- field.fieldName %>: currentDate,
     <%_ } else if (field.fieldTypeTimed) { _%>
-          <%- field.fieldName%>: currentDate,
+          <%- field.fieldName %>: currentDate,
     <%_ } _%>
   <%_ } _%>
           }, returnedFromService);
@@ -214,19 +213,19 @@ describe('Service Tests', () => {
           const patchObject = Object.assign({
   <%_ for (const field of fieldsToIncludeInPartialPatchTest.filter(field => !field.id)) { _%>
     <%_ if (field.fieldTypeBoolean) { _%>
-                  <%- field.fieldName%>: true,
+                  <%- field.fieldName %>: true,
     <%_ } else if (field.fieldTypeDuration) { _%>
-                  <%- field.fieldName%>: 'PT2S',
+                  <%- field.fieldName %>: 'PT2S',
     <%_ } else if (field.fieldTypeNumeric) { _%>
-                  <%- field.fieldName%>: 1,
+                  <%- field.fieldName %>: 1,
     <%_ } else if (field.fieldTypeCharSequence) { _%>
-                  <%- field.fieldName%>: 'BBBBBB',
+                  <%- field.fieldName %>: 'BBBBBB',
     <%_ } else if (field.fieldTypeLocalDate) { _%>
-                  <%- field.fieldName%>: dayjs(currentDate).format(DATE_FORMAT),
+                  <%- field.fieldName %>: dayjs(currentDate).format(DATE_FORMAT),
     <%_ } else if (field.fieldTypeTimed) { _%>
-                  <%- field.fieldName%>: dayjs(currentDate).format(DATE_TIME_FORMAT),
+                  <%- field.fieldName %>: dayjs(currentDate).format(DATE_TIME_FORMAT),
     <%_ } else { _%>
-                  <%- field.fieldName%>: 'BBBBBB',
+                  <%- field.fieldName %>: 'BBBBBB',
     <%_ } _%>
   <%_ } _%>
           }, new <%- entityAngularName %>())
@@ -235,9 +234,9 @@ describe('Service Tests', () => {
           const expected = Object.assign({
   <%_ for (const field of fields.filter(field => !field.id)) { _%>
     <%_ if (field.fieldTypeLocalDate) { _%>
-                  <%- field.fieldName%>: currentDate,
+                  <%- field.fieldName %>: currentDate,
     <%_ } else if (field.fieldTypeTimed) { _%>
-                  <%- field.fieldName%>: currentDate,
+                  <%- field.fieldName %>: currentDate,
     <%_ } _%>
   <%_ } _%>
           }, returnedFromService);
@@ -263,28 +262,28 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign({
 <%_ for (const field of fields.filter(field => !field.id)) { _%>
   <%_ if (field.fieldTypeBoolean) { _%>
-          <%- field.fieldName%>: true,
+          <%- field.fieldName %>: true,
   <%_ } else if (field.fieldTypeDuration) { _%>
-          <%- field.fieldName%>: 'PT2S',
+          <%- field.fieldName %>: 'PT2S',
   <%_ } else if (field.fieldTypeNumeric) { _%>
-          <%- field.fieldName%>: 1,
+          <%- field.fieldName %>: 1,
   <%_ } else if (field.fieldTypeCharSequence) { _%>
-          <%- field.fieldName%>: 'BBBBBB',
+          <%- field.fieldName %>: 'BBBBBB',
   <%_ } else if (field.fieldTypeLocalDate) { _%>
-          <%- field.fieldName%>: dayjs(currentDate).format(DATE_FORMAT),
+          <%- field.fieldName %>: dayjs(currentDate).format(DATE_FORMAT),
   <%_ } else if (field.fieldTypeTimed) { _%>
-          <%- field.fieldName%>: dayjs(currentDate).format(DATE_TIME_FORMAT),
+          <%- field.fieldName %>: dayjs(currentDate).format(DATE_TIME_FORMAT),
   <%_ } else { /* (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'any' || (fieldType === 'byte[]' || fieldType === 'ByteBuffer') && fieldTypeBlobContent === 'image' || fieldType === 'LocalDate' */ _%>
-          <%- field.fieldName%>: 'BBBBBB',
+          <%- field.fieldName %>: 'BBBBBB',
   <%_ } _%>
 <%_ } _%>
         }, elemDefault);
         const expected = Object.assign({
 <%_ for (const field of fields.filter(field => !field.id)) { _%>
   <%_ if (field.fieldTypeLocalDate) { _%>
-          <%- field.fieldName%>: currentDate,
+          <%- field.fieldName %>: currentDate,
   <%_ } else if (field.fieldTypeTimed) { _%>
-          <%- field.fieldName%>: currentDate,
+          <%- field.fieldName %>: currentDate,
   <%_ } _%>
 <%_ } _%>
         }, returnedFromService);

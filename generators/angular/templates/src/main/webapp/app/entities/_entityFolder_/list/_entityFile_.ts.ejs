@@ -16,8 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-  const notSortableFieldsAfterSearchArray = searchEngineNo ? [] : fields
+<%_ const notSortableFieldsAfterSearchArray = searchEngineNo ? [] : fields
       .filter(field => !field.hidden && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal);
 
   const notSortableFieldsAfterSearchFieldNames = notSortableFieldsAfterSearchArray

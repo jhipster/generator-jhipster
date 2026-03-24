@@ -28,8 +28,7 @@ import { DATE_TIME_LONG_FORMAT } from '@/shared/composables/date-format';
 import <%- entityAngularName %>Update from './<%- entityFileName %>-update.vue';
 import AlertService from '@/shared/alert/alert.service';
 
-<%_
-  const allRelationshipsThatNeedSelectOptions = Object
+<%_ const allRelationshipsThatNeedSelectOptions = Object
     .values(relationshipsByOtherEntity)
     .map(relationships => relationships.filter(rel => rel.persistableRelationship))
     .filter(relationships => relationships.length > 0);

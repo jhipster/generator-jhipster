@@ -415,8 +415,7 @@ _%>
     <%_ } else if (fieldIsEnum && enableTranslation) { _%>
                       <Translate contentKey={`<%- frontendAppName %>.<%- fieldType %>.${<%- entityInstance %>.<%- fieldName %>}`} />
     <%_ } else if (field.fieldTypeBinary) { _%>
-      <%_
-        // blobFields
+      <%_ // blobFields
         if (!field.blobContentTypeText) {
       _%>
                         {<%- entityInstance %>.<%- fieldName %> ? (

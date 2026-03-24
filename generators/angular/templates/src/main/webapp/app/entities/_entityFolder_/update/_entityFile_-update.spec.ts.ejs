@@ -16,8 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-const allRelationshipsByEntityNeedingOptions = Object
+<%_ const allRelationshipsByEntityNeedingOptions = Object
   .values(relationshipsByOtherEntity)
   .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
   .filter(relationships => relationships.length > 0);

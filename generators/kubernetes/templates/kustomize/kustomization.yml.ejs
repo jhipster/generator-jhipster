@@ -10,11 +10,11 @@ resources:
 - namespace.yml
 <%_ } _%>
 # Individual apps
-<%_
-const suffix = 'k8s';
+<%_ const suffix = 'k8s';
 for (const appConfig of appConfigs) {
 const appName = appConfig.baseName.toLowerCase();
-const appOut = appName.concat('-', suffix); _%>
+const appOut = appName.concat('-', suffix);
+_%>
 - <%- appOut %>/<%- appName %>-deployment.yml
 - <%- appOut %>/<%- appName %>-service.yml
   <%_ if (!appConfig.databaseTypeNo) { _%>
@@ -70,7 +70,8 @@ _%>
 <%_ } _%>
 # service discovery eureka/consul
 <%_ if (serviceDiscoveryEureka) {
-  const registryOut = 'registry'.concat('-', suffix); _%>
+  const registryOut = 'registry'.concat('-', suffix);
+_%>
 - <%- registryOut %>/jhipster-registry.yml
 - <%- registryOut %>/application-configmap.yml
 <%_ }  else if (serviceDiscoveryConsul) {
