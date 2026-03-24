@@ -45,7 +45,14 @@ import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons'
 <%_ if (anyFieldIsInstant || anyFieldIsZonedDateTime || anyFieldIsLocalDate) { _%>
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 <%_ } _%>
-import { ASC, DESC<%_ if (!paginationNo) { _%>, ITEMS_PER_PAGE<%_ } _%>, SORT } from 'app/shared/util/pagination.constants';
+import {
+  ASC,
+  DESC,
+<%_ if (!paginationNo) { _%>
+  ITEMS_PER_PAGE,
+<%_ } _%>
+  SORT,
+} from 'app/shared/util/pagination.constants';
 <%_ if (paginationNo) { _%>
 import { overrideSortStateWithQueryParams } from 'app/shared/util/entity-utils';
 <%_ } else { _%>
@@ -246,7 +253,7 @@ export const <%- entityReactName %> = () => {
 <%_ } else { _%>
     sortEntities();
 <%_ } _%>
-  }, [<% if (paginationInfiniteScroll) { %>sorting<% } else if (paginationPagination) { %>paginationState.activePage, paginationState.order, paginationState.sort<% } else { %>sortState.order, sortState.sort<% } %><%_ if (searchEngineAny) { _%>, search<% } %>]);
+  }, [<% if (paginationInfiniteScroll) { %>sorting<% } else if (paginationPagination) { %>paginationState.activePage, paginationState.order, paginationState.sort<% } else { %>sortState.order, sortState.sort<% } %><% if (searchEngineAny) { %>, search<% } %>]);
 
 <%_ if (paginationPagination) { _%>
   useEffect(() => {
@@ -482,10 +489,10 @@ _%>
                             <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
                           </Button>
 <%_ if (!readOnly) { _%>
-                          <Button as={Link as any} to={`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}/edit<%_ if (paginationPagination) { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} variant="primary" size="sm" data-cy="entityEditButton">
+                          <Button as={Link as any} to={`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}/edit<% if (paginationPagination) { %>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<% } %>`} variant="primary" size="sm" data-cy="entityEditButton">
                             <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                           </Button>
-                          <Button onClick={() => <% if (entityInstance !== 'window' ) { %>window.<% } %>location.href=`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}/delete<%_ if (paginationPagination) { _%>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<%_ } _%>`} variant="danger" size="sm" data-cy="entityDeleteButton">
+                          <Button onClick={() => <% if (entityInstance !== 'window' ) { %>window.<% } %>location.href=`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}/delete<% if (paginationPagination) { %>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<% } %>`} variant="danger" size="sm" data-cy="entityDeleteButton">
                             <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
                           </Button>
 <%_ } _%>

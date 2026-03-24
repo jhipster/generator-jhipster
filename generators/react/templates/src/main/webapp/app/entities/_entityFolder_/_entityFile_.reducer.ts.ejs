@@ -53,7 +53,14 @@ const apiSearchUrl = '<%- entityApi %>api/<%- entityApiUrl %>/_search';
 <%_ if (searchEngineAny) { _%>
 export const searchEntities = createAsyncThunk(
   '<%- entityInstance %>/search_entity',
-  async ({ query<%_ if (!paginationNo) { _%>, page, size, sort<%_ } _%> }: IQueryParams) => {
+  async ({
+    query,
+  <%_ if (!paginationNo) { _%>
+    page,
+    size,
+    sort,
+  <%_ } _%>
+  }: IQueryParams) => {
   <%_ if (!paginationNo) { _%>
     const requestUrl = `${apiSearchUrl}?query=${query}${sort ? `&page=${page}&size=${size}&sort=${sort}` : ''}`;
   <%_ } else { _%>
@@ -67,7 +74,13 @@ export const searchEntities = createAsyncThunk(
 <%_ } _%>
 export const getEntities = createAsyncThunk(
   '<%- entityInstance %>/fetch_entity_list',
-  async ({ <%_ if(!paginationNo) { _%>page, size, <%_ } _%>sort }: IQueryParams) => {
+  async ({
+<%_ if(!paginationNo) { _%>
+    page,
+    size,
+<%_ } _%>
+    sort,
+  }: IQueryParams) => {
 <%_ if (!paginationNo) { _%>
     const requestUrl = `${apiUrl}?${sort ? `page=${page}&size=${size}&sort=${sort}&` : ''}cacheBuster=${Date.now()}`;
 <%_ } else { _%>
@@ -90,7 +103,12 @@ export const getEntity = createAsyncThunk(
 <%_ if (!readOnly) { _%>
 export const createEntity = createAsyncThunk(
   '<%- entityInstance %>/create_entity',
-  async (entity: I<%- entityReactName %><%_ if (!paginationInfiniteScroll) { _%>, thunkAPI<%_ } _%>) => {
+  async (
+    entity: I<%- entityReactName %>,
+  <%_ if (!paginationInfiniteScroll) { _%>
+    thunkAPI,
+  <%_ } _%>
+  ) => {
   <%_ if (!paginationInfiniteScroll) { _%>
     const result = await axios.post<I<%- entityReactName %>>(apiUrl, cleanEntity(entity));
     thunkAPI.dispatch(getEntities({}));
@@ -104,7 +122,12 @@ export const createEntity = createAsyncThunk(
 
 export const updateEntity = createAsyncThunk(
   '<%- entityInstance %>/update_entity',
-  async (entity: I<%- entityReactName %><%_ if (!paginationInfiniteScroll) { _%>, thunkAPI<%_ } _%>) => {
+  async (
+    entity: I<%- entityReactName %>,
+  <%_ if (!paginationInfiniteScroll) { _%>
+    thunkAPI,
+  <%_ } _%>
+  ) => {
   <%_ if (!paginationInfiniteScroll) { _%>
     const result = await axios.put<I<%- entityReactName %>>(`${apiUrl}/${entity.<%- primaryKey.name %>}`, cleanEntity(entity));
     thunkAPI.dispatch(getEntities({}));
@@ -118,7 +141,12 @@ export const updateEntity = createAsyncThunk(
 
 export const partialUpdateEntity = createAsyncThunk(
   '<%- entityInstance %>/partial_update_entity',
-  async (entity: I<%- entityReactName %><%_ if (!paginationInfiniteScroll) { _%>, thunkAPI<%_ } _%>) => {
+  async (
+    entity: I<%- entityReactName %>,
+  <%_ if (!paginationInfiniteScroll) { _%>
+    thunkAPI,
+  <%_ } _%>
+  ) => {
   <%_ if (!paginationInfiniteScroll) { _%>
     const result = await axios.patch<I<%- entityReactName %>>(`${apiUrl}/${entity.<%- primaryKey.name %>}`, cleanEntity(entity));
     thunkAPI.dispatch(getEntities({}));
@@ -132,7 +160,12 @@ export const partialUpdateEntity = createAsyncThunk(
 
 export const deleteEntity = createAsyncThunk(
   '<%- entityInstance %>/delete_entity',
-  async (id: string | number<%_ if (!paginationInfiniteScroll) { _%>, thunkAPI<%_ } _%>) => {
+  async (
+    id: string | number,
+  <%_ if (!paginationInfiniteScroll) { _%>
+    thunkAPI,
+  <%_ } _%>
+  ) => {
     const requestUrl = `${apiUrl}/${id}`;
   <%_ if (!paginationInfiniteScroll) { _%>
     const result = await axios.delete<I<%- entityReactName %>>(requestUrl);
@@ -184,14 +217,14 @@ export const <%- entityReactName %>Slice = createEntitySlice({
             entities: loadMoreDataWhenScrolled(state.entities, data, links),
   <%_ } _%>
 <%_ } else { _%>
-            entities: data<%_ if (paginationNo) { _%>.sort((a, b) => {
+            entities: data<% if (paginationNo) { _%>.sort((a, b) => {
               if (!action.meta?.arg?.sort) {
                 return 1;
               }
               const order = action.meta.arg.sort.split(',')[1];
               const predicate = action.meta.arg.sort.split(',')[0];
               return order === ASC ? (a[predicate] < b[predicate] ? -1 : 1) : b[predicate] < a[predicate] ? -1 : 1;
-            })<%_ } _%>,
+            })<% } %>,
 <%_ } _%>
 <%_ if (!paginationNo) { _%>
   <%_ if (!databaseTypeCassandra) { _%>

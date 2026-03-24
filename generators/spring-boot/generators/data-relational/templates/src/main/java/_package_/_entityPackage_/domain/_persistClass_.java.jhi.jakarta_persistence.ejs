@@ -79,7 +79,9 @@ import org.hibernate.type.SqlTypes;
 <&_ if (fragment.field<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection) { -&>
     @Column(
         name = "<%- field.fieldNameAsDatabaseColumn %>_content_type"
-  <%_ if (field.fieldValidationRequired) { %>, nullable = false<% } _%>
+  <%_ if (field.fieldValidationRequired) { _%>
+        , nullable = false
+  <%_ } _%>
     )
 <&_ } -&>
 <%_ } -%>

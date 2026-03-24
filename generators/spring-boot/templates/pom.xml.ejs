@@ -351,7 +351,7 @@
             </activation>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev<%_ if (databaseMigrationLiquibase) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
+                <spring.profiles.active>dev<% if (databaseMigrationLiquibase) { %>${profile.no-liquibase}<% } %></spring.profiles.active>
             </properties>
         </profile>
 <%_ } _%>
@@ -362,7 +362,7 @@
             </activation>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev${profile.tls}<%_ if (databaseMigrationLiquibase) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
+                <spring.profiles.active>dev${profile.tls}<% if (databaseMigrationLiquibase) { %>${profile.no-liquibase}<% } %></spring.profiles.active>
                 <profile.test>test,testdev</profile.test>
             </properties>
             <dependencies>
@@ -377,7 +377,7 @@
             <id>prod</id>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>prod${profile.api-docs}${profile.tls}${profile.e2e}<%_ if (databaseMigrationLiquibase) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
+                <spring.profiles.active>prod${profile.api-docs}${profile.tls}${profile.e2e}<% if (databaseMigrationLiquibase) { %>${profile.no-liquibase}<% } %></spring.profiles.active>
                 <profile.test>test,testprod</profile.test>
             </properties>
             <build>

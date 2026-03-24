@@ -98,7 +98,7 @@ export const <%- entityReactName %>Update = () => {
 <%_ } _%>
 
   const handleClose = () => {
-    navigate('/<%- entityPage %>'<%_ if (paginationPagination) { _%> + location.search<%_ } _%>);
+    navigate('/<%- entityPage %>'<% if (paginationPagination) { %> + location.search<% } %>);
   }
 
   useEffect(() => {
