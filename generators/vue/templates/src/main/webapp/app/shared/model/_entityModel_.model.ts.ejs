@@ -16,11 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<% const variablesWithTypes = this.generateEntityClientFields(primaryKey, fields.filter(field => !field.id), relationships, dto, customDateType = 'Date', embedded);
+<%_ const variablesWithTypes = this.generateEntityClientFields(primaryKey, fields.filter(field => !field.id), relationships, dto, customDateType = 'Date', embedded);
 const typeImports = this.generateEntityClientImports(relationships, dto);
 const defaultVariablesValues = this.generateEntityClientFieldDefaultValues(fields.filter(field => !field.id));
 const enumImports = this.generateEntityClientEnumImports(fields.filter(field => !field.id));
-%>
+_%>
 <%_ for (let [importedType, importedPath] of typeImports) {
   importedPath = importedPath.replace('core/user/user.model', 'shared/model/user.model');
   importedPath = importedPath.replace('app/', '@/');

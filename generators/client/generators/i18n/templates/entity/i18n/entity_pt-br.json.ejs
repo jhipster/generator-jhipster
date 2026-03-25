@@ -26,16 +26,17 @@
     let excluido = 'excluído';
     let Nenhum = 'Nenhum';
     let encontrado = 'encontrado';
-    if (entityI18nVariant === 'female') {
-        Um = 'Uma';
+_%>
+<%_ if (entityI18nVariant === 'female') { _%>
+  <%_ Um = 'Uma';
         novo = 'nova';
         criado = 'criada';
         atualizado = 'atualizada';
         excluido = 'excluída';
         Nenhum = 'Nenhuma';
         encontrado = 'encontrada';
-    }
-_%>
+  _%>
+<%_ } _%>
     "<%- frontendAppName %>": {
         "<%- entityTranslationKey %>" : {
             "home": {

@@ -23,11 +23,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import <%- packageName %>.web.rest.TestUtil;
 <%_ let id1;
 let id2;
-if (!embedded) {
-    id1 = primaryKey.javaSampleValues[0];
+_%>
+<%_ if (!embedded) { _%>
+  <%_ id1 = primaryKey.javaSampleValues[0];
     id2 = primaryKey.javaSampleValues[1];
-}
-%>
+  _%>
+<%_ } %>
 <%_ if (primaryKey && primaryKey.hasUUID) { _%>
 import java.util.UUID;
 <%_ } _%>

@@ -18,13 +18,7 @@
 -%>
 package <%- entityAbsolutePackage %>.service<% if (serviceImpl) { %>.impl<% } %>;
 
-<%_
-const serviceClassName = serviceImpl ? `${entityClass}ServiceImpl` : `${entityClass}Service`;
-const instanceType = restClass;
-const instanceName = restInstance;
-const optionalOrMono = (reactive) ? 'Mono' : 'Optional';
-const listOrFlux = (reactive) ? 'Flux' : 'List';
-const pageOrFlux = (reactive) ? 'Flux' : 'Page';
+<%_ const serviceClassName = serviceImpl ? `${entityClass}ServiceImpl` : `${entityClass}Service`;
 const mapper = `${entityInstance}Mapper`;
 const entityToDtoReference = `${mapper}::` + 'toDto';
 _%>
@@ -100,15 +94,15 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
     /**
      * Save a <%- entityInstance %>.
      *
-     * @param <%- instanceName %> the entity to save.
+     * @param <%- restInstance %> the entity to save.
      * @return the persisted entity.
      */
 <%_ } _%>
 <%_ if (serviceImpl) { _%>
     @Override
 <%_ } _%>
-    public <% if (reactive) { %>Mono<<% } %><%- instanceType %><% if (reactive) { %>><% } %> save(<%- instanceType %> <%- instanceName %>) {
-        LOG.debug("Request to save <%- entityClass %> : {}", <%- instanceName %>);
+    public <% if (reactive) { %>Mono<<% } %><%- restClass %><% if (reactive) { %>><% } %> save(<%- restClass %> <%- restInstance %>) {
+        LOG.debug("Request to save <%- entityClass %> : {}", <%- restInstance %>);
 <%- include(`/_global_partials_entity_/save_template_${reactive ? 'reactive' : 'imperative'}`, { saveNewEntityOperation: true, returnDirectly: true }); -%>
     }
 <%_ if (updatableEntity) { _%>
@@ -117,15 +111,15 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
     /**
      * Update a <%- entityInstance %>.
      *
-     * @param <%- instanceName %> the entity to save.
+     * @param <%- restInstance %> the entity to save.
      * @return the persisted entity.
     */
   <%_ } _%>
   <%_ if (serviceImpl) { _%>
     @Override
   <%_ } _%>
-    public <% if (reactive) { %>Mono<<% } %><%- instanceType %><% if (reactive) { %>><% } %> update(<%- instanceType %> <%- instanceName %>) {
-        LOG.debug("Request to update <%- entityClass %> : {}", <%- instanceName %>);
+    public <% if (reactive) { %>Mono<<% } %><%- restClass %><% if (reactive) { %>><% } %> update(<%- restClass %> <%- restInstance %>) {
+        LOG.debug("Request to update <%- entityClass %> : {}", <%- restInstance %>);
 <%- include(`/_global_partials_entity_/save_template_${reactive ? 'reactive' : 'imperative'}`, { saveNewEntityOperation: false, returnDirectly: true }); -%>
     }
 
@@ -133,15 +127,15 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
     /**
      * Partially update a <%- entityInstance %>.
      *
-     * @param <%- instanceName %> the entity to update partially.
+     * @param <%- restInstance %> the entity to update partially.
      * @return the persisted entity.
      */
   <%_ } _%>
   <%_ if (serviceImpl) { _%>
     @Override
   <%_ } _%>
-    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%- instanceType %>> partialUpdate(<%- instanceType %> <%- instanceName %>) {
-        LOG.debug("Request to partially update <%- entityClass %> : {}", <%- instanceName %>);
+    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%- restClass %>> partialUpdate(<%- restClass %> <%- restInstance %>) {
+        LOG.debug("Request to partially update <%- entityClass %> : {}", <%- restInstance %>);
 <%- include('../../_partials_entity_/patch_template', { isService: true, viaService: false }); -%>
     }
 <%_ } _%>
@@ -163,7 +157,7 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
   <%_ if (databaseTypeSql) { _%>
     @Transactional(readOnly = true)
   <%_ } _%>
-    public <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- instanceType %>> findAll(<% if (!paginationNo) { %>Pageable pageable<% } %>) {
+    public <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findAll(<% if (!paginationNo) { %>Pageable pageable<% } %>) {
         LOG.debug("Request to get all <%- entityClassPlural %>");
   <%_ if (paginationNo) { _%>
         return <%- entityInstance %>Repository.findAll()<% if (dtoMapstruct) { %><% if (!reactive) { %>.stream()<% } %>
@@ -193,7 +187,7 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
   <%_ if (databaseTypeSql) { _%>
     @Transactional(readOnly = true)
   <%_ } _%>
-    public <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- instanceType %>> findByCriteria(<%- entityClass %>Criteria criteria<% if (!paginationNo) { %>, Pageable pageable<% } %>) {
+    public <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findByCriteria(<%- entityClass %>Criteria criteria<% if (!paginationNo) { %>, Pageable pageable<% } %>) {
         LOG.debug("Request to get all <%- entityClassPlural %> by Criteria");
   <%_ if (paginationNo) { _%>
         return <%- entityInstance %>Repository.findByCriteria(criteria, null)<% if (dtoMapstruct) { %>.map(<%- entityToDtoReference %>)<% } %>;
@@ -222,7 +216,7 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
      * @return the list of entities.
      */
   <%_ } _%>
-    public <%- pageOrFlux %><<%- instanceType %>> findAllWithEagerRelationships(Pageable pageable) {
+    public <%- pageOrFlux %><<%- restClass %>> findAllWithEagerRelationships(Pageable pageable) {
         return <%- entityInstance %>Repository.findAllWithEagerRelationships(pageable)<% if (!dtoMapstruct) { %>;<% } else { %>.map(<%- entityToDtoReference %>);<% } %>
     }
 <%_ } _%>
@@ -266,7 +260,7 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
 <%_ if (databaseTypeSql) { _%>
     @Transactional(readOnly = true)
 <%_ } _%>
-    public <%- optionalOrMono %><<%- instanceType %>> findOne(<%- primaryKey.type %> id) {
+    public <%- optionalOrMono %><<%- restClass %>> findOne(<%- primaryKey.type %> id) {
         LOG.debug("Request to get <%- entityClass %> : {}", id);<%- include('../../_partials_entity_/get_template', { viaService: false, returnDirectly:true, implementsEagerLoadApis }); -%>
     }
 
@@ -306,7 +300,7 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
   <%_ if (databaseTypeSql) { _%>
     @Transactional(readOnly = true)
   <%_ } _%>
-    public <% if (!paginationNo) { %><%- pageOrFlux %><<%- instanceType %><% } else { %><%- listOrFlux %><<%- instanceType %><% } %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>) {
+    public <% if (!paginationNo) { %><%- pageOrFlux %><<%- restClass %><% } else { %><%- listOrFlux %><<%- restClass %><% } %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>) {
   <%_ if (paginationNo) { _%>
         LOG.debug("Request to search <%- entityClassPlural %> for query {}", query);<%- include('../../_partials_entity_/search_stream_template', { viaService: false, fromResource: false }); -%>
   <%_ } else { _%>

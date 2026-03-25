@@ -51,7 +51,7 @@
 <%_ for (relationship of relationships) { _%>
   <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) {
     const fieldName = `.${relationship.otherEntityField}`;
-_%>
+  _%>
                     <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%- relationship.relationshipName + (fieldName) %>')"<% } %>><span>{{ t$('<%- `${i18nKeyPrefix}.${relationship.relationshipName}` %>') }}</span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%- relationship.relationshipName + (fieldName) %>'"></jhi-sort-indicator><% } %></th>
   <%_ } _%>
 <%_ } _%>

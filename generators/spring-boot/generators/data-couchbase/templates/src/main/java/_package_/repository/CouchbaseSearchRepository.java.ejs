@@ -38,10 +38,6 @@ import java.util.List;
 /**
  * Couchbase specific {@link org.springframework.data.repository.Repository} interface for search queries.
  */
-<%_
-    const listOrFlux = reactive ? 'Flux' : 'List';
-    const pageOrFlux = reactive ? 'Flux' : 'Page';
-_%>
 @NoRepositoryBean
 public interface CouchbaseSearchRepository<T, ID> extends JHipsterCouchbaseRepository<T, ID> {
 

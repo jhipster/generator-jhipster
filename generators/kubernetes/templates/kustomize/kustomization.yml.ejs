@@ -75,7 +75,8 @@ _%>
 - <%- registryOut %>/jhipster-registry.yml
 - <%- registryOut %>/application-configmap.yml
 <%_ } else if (serviceDiscoveryConsul) {
-    const registryOut = 'registry'.concat('-', suffix);_%>
+    const registryOut = 'registry'.concat('-', suffix);
+_%>
 - <%- registryOut %>/consul.yml
 - <%- registryOut %>/consul-config-loader.yml
 - <%- registryOut %>/application-configmap.yml

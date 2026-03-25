@@ -132,12 +132,15 @@ export default defineConfig(
     plugins: {
       '@stylistic': stylistic,
     },
+    linterOptions: {
+      reportUnusedDisableDirectives: 'error',
+    },
     rules: {
       'ejs-templates/prefer-raw': 'error',
-      // 'ejs-templates/prefer-slurping-codeonly': 'error',
-      // 'ejs-templates/experimental-prefer-slurp-multiline': 'error',
-      // 'ejs-templates/prefer-single-line-tags': 'error',
-      // 'ejs-templates/slurp-newline': 'error',
+      'ejs-templates/prefer-slurping-codeonly': 'error',
+      'ejs-templates/experimental-prefer-slurp-multiline': 'error',
+      'ejs-templates/prefer-single-line-tags': ['error', { mode: 'braces' }],
+      'ejs-templates/slurp-newline': 'error',
 
       'prettier/prettier': 'off',
       ...js.configs.recommended.rules,
@@ -155,6 +158,7 @@ export default defineConfig(
       '@stylistic/template-curly-spacing': 'error',
 
       'ejs-templates/indent': 'error',
+      'ejs-templates/format': 'error',
     },
   },
 );

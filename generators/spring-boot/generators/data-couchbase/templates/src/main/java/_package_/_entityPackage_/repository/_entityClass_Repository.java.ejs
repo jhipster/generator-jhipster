@@ -1,3 +1,4 @@
+<%# eslint-disable -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -51,11 +52,6 @@ import static <%- entityAbsoluteClass %>.TYPE_NAME;
 <%_ if (!implementsEagerLoadApis) { _%>
 @SuppressWarnings("unused")
 <%_ } _%>
-<%_
-    const optionalOrMono = reactive ? 'Mono' : 'Optional';
-    const listOrFlux = reactive ? 'Flux' : 'List';
-    const pageOrFlux = reactive ? 'Flux' : 'Page';
-_%>
 @Repository
 public interface <%- entityClass %>Repository extends JHipsterCouchbaseRepository<<%- persistClass %>, <%- primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%- persistClass %>><% } %><% if (searchEngineAny) { %>, CouchbaseSearchRepository<<%- persistClass %>, <%- primaryKey.type %>><% } %> {
 <%_ const notEmbeddedRelationships = relationships.filter(relationship => !relationship.otherEntity.embedded);

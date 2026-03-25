@@ -16,13 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<% const optionalOrMono = (reactive) ? 'Mono' : 'Optional';
-    const instanceType = `${optionalOrMono}<${restClass}>`;
-    const instanceName = restInstance;
+<%_ const instanceType = `${optionalOrMono}<${restClass}>`;
     const mapper = `${entityInstance}Mapper`;
     const entityToDtoReference = `${mapper}::toDto`;
-    const returnPrefix = returnDirectly ? 'return' : `${instanceType} ${instanceName} =`;
-%>
+    const returnPrefix = returnDirectly ? 'return' : `${instanceType} ${restInstance} =`;
+_%>
 <%_ if (!viaService) { _%>
         <%- returnPrefix %> <%- entityInstance %>Repository.<% if (implementsEagerLoadApis) { %>findOneWithEagerRelationships(id)<% } else { %>findById(id)<% } %><% if (!dtoMapstruct) { %>;<% } else { %>
             .map(<%- entityToDtoReference %>);<% } %>

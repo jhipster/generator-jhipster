@@ -16,9 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-const instanceType = restClass;
-const mapper = `${entityInstance}Mapper`;
+<%_ const mapper = `${entityInstance}Mapper`;
 const entityToDtoReference = `${mapper}::` + 'toDto';
 const reactiveSql = (databaseTypeSql && reactive);
 for (const relationship of relationships) { if (relationship.relationshipOneToOne && !relationship.ownerSide) {
@@ -30,7 +28,7 @@ _%>
      */
     <%_ if (databaseTypeSql) { _%>
     @Transactional(readOnly = true) <% } %>
-    public <%- reactiveSql ? 'Flux' : 'List' %><<%- instanceType %>> findAllWhere<%- relationship.relationshipNameCapitalized %>IsNull() {
+    public <%- reactiveSql ? 'Flux' : 'List' %><<%- restClass %>> findAllWhere<%- relationship.relationshipNameCapitalized %>IsNull() {
         LOG.debug("Request to get all <%- entityInstancePlural %> where <%- relationship.relationshipNameCapitalized %> is null");
     <%_ if (reactiveSql) { _%>
         return <%- entityInstance %>Repository

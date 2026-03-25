@@ -41,8 +41,7 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 <%_ } _%>
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 
-<%_
-const otherEntityActions = new Set();
+<%_ const otherEntityActions = new Set();
 
 for (const otherEntity of otherEntitiesWithPersistableRelationship) {
     otherEntityActions.add({
