@@ -102,7 +102,7 @@ export const prompts = () => {
       message: 'Comma separated additional sub-generators.',
       validate: (input: string) => {
         if (input) {
-          return /^([\w,-:]*)$/.test(input) ? true : 'Please provide valid generator names (must match ([w,-:]*))';
+          return /^([\w,:-]*)$/.test(input) ? true : 'Please provide valid generator names (must match ([\\w,:-]*))';
         }
         return true;
       },
