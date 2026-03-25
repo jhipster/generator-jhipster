@@ -65,8 +65,7 @@
                         <router-link :to="{name: '<%- entityAngularName %>View', params: {<%- entityInstance %>Id: <%- entityInstance %>.<%- primaryKey.name %>}}">{{<%- entityInstance %>.<%- primaryKey.name %>}}</router-link>
                     </td>
 <%_ for (field of fields.filter(field => !field.id)) {
-    const fieldName = field.fieldName;
-    const fieldType = field.fieldType;
+    const { fieldName, fieldType } = field;
 _%>
   <%_ if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
                     <td>
@@ -91,10 +90,7 @@ _%>
   <%_ } _%>
 <%_ } _%>
 <%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) {
-    const relationshipFieldName = relationship.relationshipFieldName;
-    const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
-    const otherEntityName = relationship.otherEntityName;
-    const otherEntityField = relationship.otherEntityField;
+    const { relationshipFieldName, relationshipFieldNamePlural, otherEntityName, otherEntityField } = relationship;
 _%>
   <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
                     <td>

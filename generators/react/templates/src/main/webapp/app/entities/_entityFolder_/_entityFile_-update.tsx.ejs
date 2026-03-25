@@ -126,7 +126,7 @@ export const <%- entityReactName %>Update = () => {
 
   const saveEntity = values => {
 <%_ for (field of fields) {
-    const fieldName = field.fieldName;
+    const { fieldName } = field;
 _%>
   <%_ if (field.fieldTypeTimed) { _%>
     values.<%- fieldName %> = convertDateTimeToServer(values.<%- fieldName %>);
@@ -160,7 +160,7 @@ _%>
     isNew
       ? {
 <%_ for (field of fields.filter(field => !field.id)) {
-    const fieldName = field.fieldName;
+    const { fieldName } = field;
 
     if (field.fieldTypeTimed) {
 _%>
@@ -170,16 +170,16 @@ _%>
         }
       : {
 <%_ for (field of fields.filter(field => !field.id)) {
-    const fieldName = field.fieldName;
+    const { fieldName } = field;
   if (field.fieldIsEnum) {
-    const enumValues = field.enumValues;
+    const { enumValues } = field;
 _%>
 <%- fieldName %>: '<%- enumValues[0].name %>',
   <%_ } _%>
 <%_ } _%>
           ...<%- entityInstance %>Entity,
 <%_ for (field of fields.filter(field => !field.id)) {
-    const fieldName = field.fieldName;
+    const { fieldName } = field;
   if (field.fieldTypeTimed) {
 _%>
           <%- fieldName %>: convertDateTimeFromServer(<%- entityInstance %>Entity.<%- fieldName %>),
@@ -187,8 +187,8 @@ _%>
 <%_ } _%>
 <%_ for (const rel of persistableRelationships.filter(rel => !rel.otherEntity.embedded)) {
     const otherEntityPkName = rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.name || 'id';
-    const relationshipFieldName = rel.relationshipFieldName;
-    const relationshipFieldNamePlural = rel.relationshipFieldNamePlural;
+    const { relationshipFieldName } = rel;
+    const { relationshipFieldNamePlural } = rel;
   if (!rel.collection) {
 _%>
           <%- relationshipFieldName %>: <%- entityInstance %>Entity?.<%- relationshipFieldName %>?.<%- otherEntityPkName %>,
@@ -220,9 +220,7 @@ _%>
             />
           }
 <%_ for (field of fields.filter(field => !field.id)) {
-    const fieldType = field.fieldType;
-    const fieldName = field.fieldName;
-    const fieldNameHumanized = field.fieldNameHumanized;
+    const { fieldType, fieldName, fieldNameHumanized } = field;
 
     if (field.fieldTypeBinary && !field.blobContentTypeText) {
 _%>
@@ -306,12 +304,12 @@ _%>
 <%_ } _%>
 <%_ for (const rel of persistableRelationships.filter(rel => !rel.otherEntity.embedded)) {
     const otherEntityPkName = rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.name || 'id';
-    const relationshipName = rel.relationshipName;
-    const relationshipNameHumanized = rel.relationshipNameHumanized;
-    const relationshipFieldName = rel.relationshipFieldName;
-    const relationshipFieldNamePlural = rel.relationshipFieldNamePlural;
-    const otherEntityField = rel.otherEntityField;
-    const relationshipRequired = rel.relationshipRequired;
+    const { relationshipName } = rel;
+    const { relationshipNameHumanized } = rel;
+    const { relationshipFieldName } = rel;
+    const { relationshipFieldNamePlural } = rel;
+    const { otherEntityField } = rel;
+    const { relationshipRequired } = rel;
     const translationKey = `${i18nKeyPrefix}.${relationshipName}`;
 _%>
   <%_ if (!rel.collection) { _%>

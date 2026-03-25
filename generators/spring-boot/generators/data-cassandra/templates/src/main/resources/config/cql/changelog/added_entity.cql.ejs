@@ -19,8 +19,7 @@
 
 CREATE TABLE IF NOT EXISTS <%- entityInstance %> (
 <%_ for (const field of fields) {
-  const fieldName = field.fieldName;
-  const fieldNameUnderscored = field.fieldNameUnderscored;
+  const { fieldName, fieldNameUnderscored } = field;
 _%>
   <%_ if (field.fieldTypeUUID) { _%>
     <%- fieldName %> uuid,

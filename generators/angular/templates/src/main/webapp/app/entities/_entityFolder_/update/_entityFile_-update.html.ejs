@@ -24,11 +24,7 @@
             <div>
                 <<%- jhiPrefixDashed %>-alert-error />
 <%_ for (const field of fields.filter(field => !field.hidden)) {
-  const fieldName = field.fieldName;
-  const fieldNameHumanized = field.fieldNameHumanized;
-  const fieldType = field.fieldType;
-  const fieldTypeBlobContent = field.fieldTypeBlobContent;
-  const readonly = field.readonly;
+  const { fieldName, fieldNameHumanized, fieldType, fieldTypeBlobContent, readonly } = field;
 _%>
 
             <% if (field.autoGenerate) { %>@if (editForm.controls.<%- field.fieldName %>.value !== null) {<% } %>
@@ -147,10 +143,7 @@ _%>
             <% if (field.autoGenerate) { %>}<% } %>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => rel.otherEntity.primaryKey)) {
-  const { otherEntity, relationshipName, propertyName, otherEntityField, relationshipRequired } = relationship;
-  const otherEntityName = relationship.otherEntityName;
-  const relationshipFieldName = relationship.relationshipFieldName;
-  const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
+  const { otherEntity, relationshipName, propertyName, otherEntityField, relationshipRequired, otherEntityName, relationshipFieldName, relationshipFieldNamePlural } = relationship;
 _%>
   <%_ if (relationship.persistableRelationship && !relationship.collection) { _%>
 

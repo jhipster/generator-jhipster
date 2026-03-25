@@ -66,8 +66,7 @@ export default defineComponent({
       try {
         const res = await <%- entityInstance %>Service().find(<%- entityInstance %><%- primaryKey.nameCapitalized %>);
 <%_ for (field of fields.filter(field => !field.id)) {
-            const fieldName = field.fieldName;
-            const fieldType = field.fieldType;
+            const { fieldName, fieldType } = field;
             if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType)) {
 _%>
         res.<%- fieldName %> = new Date(res.<%- fieldName %>);
@@ -173,7 +172,7 @@ _%>
 <%_ if (relationshipsContainManyToOne) { _%>
   <%_ for (relationship of relationships) {
       if (relationship.collection && relationship.persistableRelationship) {
-      const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
+      const { relationshipFieldNamePlural } = relationship;
   _%>
     this.<%- entityInstance %>.<%- relationshipFieldNamePlural %> = [];
   <%_ } } _%>
