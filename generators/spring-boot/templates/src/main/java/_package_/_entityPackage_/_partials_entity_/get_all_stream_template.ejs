@@ -1,4 +1,4 @@
-<%# eslint-disable -%>
+<%# eslint-disable ejs-templates/prefer-single-line-tags -- template should be simplified -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -17,8 +17,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%
-const mapper = `${entityInstance}Mapper`;
+<%_ const mapper = `${entityInstance}Mapper`;
 const entityToDtoReference = `${mapper}::` + 'toDto';
 const reactiveSql = (databaseTypeSql && reactive);
 let toResponseEntityPrefix = '';
@@ -33,7 +32,7 @@ if (!paginationNo) {
 }
 for (const relationship of relationships) {
   if (relationship.relationshipOneToOne && !relationship.ownerSide) {
-%>
+_%>
         if ("<%- relationship.relationshipName.toLowerCase() %>-is-null".equals(filter)) {
             LOG.debug("REST request to get all <%- entityClass %>s where <%- relationship.relationshipName %> is null");
     <%_ if (viaService) { _%>
