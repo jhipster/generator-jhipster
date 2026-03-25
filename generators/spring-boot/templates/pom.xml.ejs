@@ -225,8 +225,8 @@
                                 <version>[${maven.version},)</version>
                             </requireMavenVersion>
                             <requireJavaVersion>
-                                <message>You are running an incompatible version of Java. JHipster supports JDK <%- javaCompatibleVersions[0] %> to <%- javaCompatibleVersions[javaCompatibleVersions.length -1] %>.</message>
-                                <version><%- javaCompatibleVersions.map(version => parseInt(version)).map(version => `[${version},${version +1})`).join(',') %></version>
+                                <message>You are running an incompatible version of Java. JHipster supports JDK <%- javaCompatibleVersions[0] %> to <%- javaCompatibleVersions[javaCompatibleVersions.length - 1] %>.</message>
+                                <version><%- javaCompatibleVersions.map(version => parseInt(version)).map(version => `[${version},${version + 1})`).join(',') %></version>
                             </requireJavaVersion>
                         </rules>
                     </configuration>

@@ -27,11 +27,11 @@ package <%- entityAbsolutePackage %>.service.mapper;
     .map(otherEntity =>
       dtoRelationships
         .filter(relationship => relationship.otherEntity == otherEntity)
-        .map(({relatedField, collection}) => ({otherEntity, relatedField, collection}))
+        .map(({ relatedField, collection }) => ({ otherEntity, relatedField, collection })),
     )
     .flat();
   for (const a of otherEntitiesFields) {
-    a.collection = a.collection || otherEntitiesFields.some(b => a.otherEntity === b.otherEntity && getOriginalField(a.relatedField) === getOriginalField(b.relatedField) && b.collection === true)
+    a.collection = a.collection || otherEntitiesFields.some(b => a.otherEntity === b.otherEntity && getOriginalField(a.relatedField) === getOriginalField(b.relatedField) && b.collection === true);
   }
   otherEntitiesFields = this._.uniqWith(otherEntitiesFields, (a, b) => a.otherEntity === b.otherEntity && a.collection === b.collection && getOriginalField(a.relatedField) === getOriginalField(b.relatedField));
 _%>
@@ -62,7 +62,7 @@ import java.util.UUID;
 @Mapper(componentModel = "spring")
 public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, <%- persistClass %>> {
 <%_ if (!embedded) { _%>
-  <%_ var renMapAnotEnt = false; /*Render Mapping Annotation during Entity to DTO conversion?*/ _%>
+  <%_ let renMapAnotEnt = false; /*Render Mapping Annotation during Entity to DTO conversion?*/ _%>
   <%_ for (relationship of dtoRelationships) { _%>
     <%_ renMapAnotEnt = true;
       let qualifiedByName = relationship.otherEntity.entityInstance + this._.upperFirst(relationship.otherEntityField);
@@ -79,7 +79,7 @@ public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, 
     <%- dtoClass %> toDto(<%- persistClass %> s);
   <%_ } _%>
 
-  <%_ var renMapAnotDto = false;  /*Render Mapping Annotation during DTO to Entity conversion?*/ _%>
+  <%_ let renMapAnotDto = false; /*Render Mapping Annotation during DTO to Entity conversion?*/ _%>
   <%_ if(primaryKey.ids.length > 1) { _%>
     <%_ renMapAnotDto = true; _%>
     <%_ for (const id of primaryKey.ids) { _%>
@@ -100,7 +100,7 @@ public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, 
   <%_ if (renMapAnotDto) { _%>
     <%- persistClass %> toEntity(<%- dtoClass %> <%- dtoInstance %>);
   <%_ } _%>
-  <%_ for (const {otherEntity, relatedField, collection} of otherEntitiesFields) { _%>
+  <%_ for (const { otherEntity, relatedField, collection } of otherEntitiesFields) { _%>
     <%_ const mapperName = otherEntity.entityInstance + this._.upperFirst(relatedField.propertyName); _%>
 
     @Named("<%- mapperName %>")
@@ -121,7 +121,7 @@ public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, 
     <%- otherEntity.dtoClass %> toDto<%- this._.upperFirst(mapperName) %>(<%- otherEntity.persistClass %> <%- otherEntity.persistInstance %>);
     <%_ } _%>
     <%_ if (collection) { %>
-      <%_ const collectionMapperName = otherEntity.entityInstance + this._.upperFirst(relatedField.propertyName) + 'Set'; _%>
+      <%_ const collectionMapperName = `${otherEntity.entityInstance + this._.upperFirst(relatedField.propertyName)}Set`; _%>
 
     @Named("<%- collectionMapperName %>")
     default Set<<%- otherEntity.dtoClass %>> toDto<%- this._.upperFirst(mapperName) %>Set(Set<<%- otherEntity.persistClass %>> <%- otherEntity.persistInstance %>) {

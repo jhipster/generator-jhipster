@@ -140,7 +140,7 @@ _%>
       ) : null
     }
       <%_ } else { _%>
-                {(<%- entityInstance + "Entity." + relationshipFieldName %>) ? <%- entityInstance + "Entity." + relationshipFieldName + "." + otherEntityField %> : ''}
+                {(<%- `${entityInstance}Entity.${relationshipFieldName}` %>) ? <%- `${entityInstance}Entity.${relationshipFieldName}.${otherEntityField}` %> : ''}
       <%_ } _%>
     <%_ } else { _%>
       <%_ if (relationship.relationshipManyToMany) { _%>
@@ -152,7 +152,7 @@ _%>
         ) : null
     }
       <%_ } else { _%>
-                {(<%- entityInstance + "Entity." + relationshipFieldName %>) ? <%- entityInstance + "Entity." + relationshipFieldName + "." + otherEntityField %> : ''}
+                {(<%- `${entityInstance}Entity.${relationshipFieldName}` %>) ? <%- `${entityInstance}Entity.${relationshipFieldName}.${otherEntityField}` %> : ''}
       <%_ } _%>
     <%_ } _%>
             </dd>

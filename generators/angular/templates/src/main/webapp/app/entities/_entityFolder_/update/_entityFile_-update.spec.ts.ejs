@@ -125,7 +125,7 @@ describe('<%- entityAngularName %> Management Update Component', () => {
 
   <%_ } _%>
   <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { %>
-    <%_ const otherEntity = relationship.otherEntity _%>
+    <%_ const otherEntity = relationship.otherEntity; _%>
         it('should call <%- relationship.propertyName %> query and add missing value', () => {
                 const <%- entityInstance %> : I<%- entityAngularName %> = <%- testEntityPrimaryKey1 %>;
                 const <%- relationship.propertyName %> : I<%- otherEntity.entityAngularName %> = <%- otherEntity.tsPrimaryKeySamples[0] %>;
@@ -150,7 +150,7 @@ describe('<%- entityAngularName %> Management Update Component', () => {
             const <%- entityInstance %>: I<%- entityAngularName %> = <%- testEntityPrimaryKey1 %>;
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
   <%_ for (const relationship of relationshipsByEntityNeedingOptions) { _%>
-    <%_ const otherEntity = relationship.otherEntity _%>
+    <%_ const otherEntity = relationship.otherEntity; _%>
             const <%- relationship.relationshipName %>: I<%- otherEntity.entityAngularName %> = <%- otherEntity.tsPrimaryKeySamples[0] %>;
             <%- entityInstance %>.<%- relationship.propertyName %> = <%- relationship.collection ? `[${relationship.relationshipName}]` : relationship.relationshipName %>;
   <%_ } _%>
@@ -162,7 +162,7 @@ describe('<%- entityAngularName %> Management Update Component', () => {
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
   <%_ const relationshipsWithCustomUniqueOptions = relationshipsByEntityNeedingOptions.filter(rel => rel.relationshipOneToOne && rel.otherRelationship); _%>
   <%_ for (const relationship of relationshipsByEntityNeedingOptions) { _%>
-    <%_ const otherEntity = relationship.otherEntity _%>
+    <%_ const otherEntity = relationship.otherEntity; _%>
             expect(comp.<% if (!relationshipsWithCustomUniqueOptions.includes(relationship)) { %><%- otherEntity.entityInstancePlural %>Shared<% } else { %><%- relationship.relationshipFieldNamePlural %><% } %>Collection()).toContainEqual(<%- relationship.relationshipName %>);
   <%_ } _%>
 <%_ } _%>

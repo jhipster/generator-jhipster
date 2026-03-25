@@ -118,7 +118,7 @@ public class PersistentToken implements Serializable {
 
     @IdAttribute
 <%_ } _%>
-<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j)  { _%>
+<%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
     @Id
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>

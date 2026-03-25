@@ -179,6 +179,7 @@
     "yeoman-generator": "8.1.2"
   },
   "devDependencies": {
+    "@stylistic/eslint-plugin": "5.10.0",
     "@types/debug": "4.1.13",
     "@types/didyoumean": "1.2.3",
     "@types/emscripten": "1.41.5",

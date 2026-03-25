@@ -461,7 +461,7 @@ _%>
                         ) : null
                       }
       <%_ } else { _%>
-                      {<%- entityInstance + "." + relationshipFieldName %> ? <%- entityInstance + "." + relationshipFieldName + "." + otherEntityField %> : ''}
+                      {<%- `${entityInstance}.${relationshipFieldName}` %> ? <%- `${entityInstance}.${relationshipFieldName}.${otherEntityField}` %> : ''}
       <%_ } _%>
     <%_ } else { _%>
       <%_ if (relationship.relationshipManyToMany) { _%>
@@ -473,9 +473,9 @@ _%>
                           ) : null
                         }
       <%_ } else { _%>
-                        {<%- entityInstance + "." + relationshipFieldName %> ?
-                        <Link to={`/<%- otherEntity.entityPage %>/${<%- entityInstance + "." + relationshipFieldName + "." + otherEntityPkName + "}" %>`}>
-                          {<%- entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}
+                        {<%- `${entityInstance}.${relationshipFieldName}` %> ?
+                        <Link to={`/<%- otherEntity.entityPage %>/${<%- `${entityInstance}.${relationshipFieldName}.${otherEntityPkName}}` %>`}>
+                          {<%- `${entityInstance}.${relationshipFieldName}.${otherEntityField}` %>}
                         </Link> : ''}
     <%_ } _%>
   <%_ } _%>

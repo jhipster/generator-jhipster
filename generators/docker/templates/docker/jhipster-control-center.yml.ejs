@@ -48,7 +48,7 @@
 # - In Eureka mode, the ports are in the jhipster-registry.yml file.
 
 
-<%_ let discoveryProfile = serviceDiscoveryAny ? 'none' : 'static'; _%>
+<%_ const discoveryProfile = serviceDiscoveryAny ? 'none' : 'static'; _%>
 name: <%- baseName.toLowerCase() %>
 services:
   jhipster-control-center:

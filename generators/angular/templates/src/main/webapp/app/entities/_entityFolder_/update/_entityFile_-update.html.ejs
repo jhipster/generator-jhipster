@@ -37,7 +37,7 @@ _%>
                     <label class="form-label" for="field_<%- fieldName %>"<% if (field.documentation) { if (enableTranslation) { %> [ngbTooltip]="'<%- i18nKeyPrefix %>.help.<%- fieldName %>' | translate"<% } else { %> ngbTooltip="<%- field.documentation %>"<% } } %>>__jhiTranslateTag__('<%- field.propertyTranslationKey %>')</label>
   <%_ if (field.fieldIsEnum) { _%>
                     <select class="form-control" name="<%- fieldName %>" formControlName="<%- fieldName %>" id="field_<%- fieldName %>" data-cy="<%- fieldName %>">
-    <%_ const enumPrefix = frontendAppName + '.'+ fieldType; _%>
+    <%_ const enumPrefix = `${frontendAppName}.${fieldType}`; _%>
                         <option [ngValue]="null"><% if (enableTranslation) { %>{{ '<%- enumPrefix %>.null' | translate }}<% } %></option>
                     @for (<%- this._.lowerFirst(fieldType) %> of <%- this._.lowerFirst(fieldType) %>Values; track $index) {
                         <option [value]="<%- this._.lowerFirst(fieldType) %>">__jhiTranslatePipeEnum__('<%- enumPrefix %>', { "value": "<%- this._.lowerFirst(fieldType) %>" })</option>

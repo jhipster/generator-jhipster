@@ -30,7 +30,7 @@ public class <%- entityClass %>SqlHelper {
     public static List<Expression> getColumns(Table table, String columnPrefix) {
         List<Expression> columns = new ArrayList<>();
 <%_ for (const field of fields.filter(field => !field.transient)) {
-    let col = field.fieldNameAsDatabaseColumn;
+    const col = field.fieldNameAsDatabaseColumn;
 _%>
         columns.add(Column.aliased("<%- col %>", table, columnPrefix + "_<%- col %>"));
   <%_ if ((field.fieldTypeBinary) && !field.blobContentTypeText) { _%>

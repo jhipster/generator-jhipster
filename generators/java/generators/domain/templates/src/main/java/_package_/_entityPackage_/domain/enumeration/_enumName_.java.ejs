@@ -30,8 +30,8 @@ public enum <%- enumName %> {
 <%- enumValues.map(enumValue => `${enumValue.comment && `\n${enumValue.comment}\n` || ''}    ${enumValue.name}`).join(', ') %>
 <%_ } else {
   // The following code redefines the variable state to be 'without CustomValue' when name equals value.
-  withoutCustomValues = enumValues.every(({name, value}) => name === value);
-  withCustomValues = enumValues.every(({name, value}) => name !== value);
+  withoutCustomValues = enumValues.every(({ name, value }) => name === value);
+  withCustomValues = enumValues.every(({ name, value }) => name !== value);
   withSomeCustomValues = !withoutCustomValues && !withCustomValues;
 
   for (const [index, enumWithCustomValue] of enumValues.entries()) {

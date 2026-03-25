@@ -25,7 +25,7 @@ const enumImports = this.generateEntityClientEnumImports(fields.filter(field => 
   importedPath = importedPath.replace('core/user/user.model', 'shared/model/user.model');
   importedPath = importedPath.replace('app/', '@/');
 _%>
-  <%_ if (importedType !== "I".concat(entityAngularName)) { _%>
+  <%_ if (importedType !== 'I'.concat(entityAngularName)) { _%>
 import { type <%- importedType %> } from '<%- importedPath %>';
   <%_ } _%>
 <%_ } _%>

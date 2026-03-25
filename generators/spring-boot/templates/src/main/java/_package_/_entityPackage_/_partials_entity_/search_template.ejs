@@ -18,22 +18,22 @@
 -%>
 <%_ const instanceType = restClass;
   const listOrFlux = reactive ? 'Flux' : 'List';
-  const mapper = entityInstance + 'Mapper';
-  const entityToDtoReference = mapper + '::' + 'toDto';
-  const entityListToDtoListReference = mapper + '.' + 'toDto';
+  const mapper = `${entityInstance}Mapper`;
+  const entityToDtoReference = `${mapper}::` + 'toDto';
+  const entityListToDtoListReference = `${mapper}.` + 'toDto';
 if (paginationNo) { %>
     public <% if (reactive) { %>Mono<<% } %>List<<%- instanceType %>><% if (reactive) { %>><% } %> search<%- entityClassPlural %>(@RequestParam("query") String query) {
-        LOG.debug("REST request to search <%- entityClassPlural %> for query {}", query);<%- include('search_stream_template', {viaService: viaService, fromResource: true}); -%>
+        LOG.debug("REST request to search <%- entityClassPlural %> for query {}", query);<%- include('search_stream_template', { viaService, fromResource: true }); -%>
 <% } else { %>
     public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%- listOrFlux %><<%- instanceType %>>><% if (reactive) { %>><% } %> search<%- entityClassPlural %>(@RequestParam("query") String query, @org.springdoc.core.annotations.ParameterObject Pageable pageable<% if (reactive) { %>, ServerHttpRequest request<% } %>) {
         LOG.debug("REST request to search for a page of <%- entityClassPlural %> for query {}", query);
   <%_ if (reactive) { _%>
         return <%- entityInstance %><%- viaService ?
-                'Service.' + (searchEngineElasticsearch ? 'searchCount' : 'countAll') :
-                (searchEngineElasticsearch ? 'Search' : '') + 'Repository.count' %>()
+                `Service.${searchEngineElasticsearch ? 'searchCount' : 'countAll'}` :
+                `${searchEngineElasticsearch ? 'Search' : ''}Repository.count`; %>()
             .map(total -> new PageImpl<>(new ArrayList<>(), pageable, total))
             .map(page -> PaginationUtil.generatePaginationHttpHeaders(ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders()), page))
-            .map(headers -> ResponseEntity.ok().headers(headers).body(<%- entityInstance %><%- viaService ? 'Service' : (searchEngineElasticsearch ? 'Search' : '') + 'Repository' %>.search(query, pageable)<% if (!viaService && dtoMapstruct) { %>.map(<%- entityToDtoReference %>)<% } %>));
+            .map(headers -> ResponseEntity.ok().headers(headers).body(<%- entityInstance %><%- viaService ? 'Service' : `${searchEngineElasticsearch ? 'Search' : ''}Repository` %>.search(query, pageable)<% if (!viaService && dtoMapstruct) { %>.map(<%- entityToDtoReference %>)<% } %>));
   <%_ } else { _%>
         try {
     <%_ if (viaService) { _%>

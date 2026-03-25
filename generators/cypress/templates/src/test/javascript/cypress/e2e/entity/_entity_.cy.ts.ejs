@@ -16,7 +16,7 @@ import {
 <%_
 
 const skipUserManagementCreatePage = builtInUserManagement && (!userManagement.skipClient || clientFrameworkReact);
-const baseApi = entityApi + 'api/';
+const baseApi = `${entityApi}api/`;
 
 const entityFakeData = generateFakeData('cypress');
 const requiredRelationships = relationships.filter(rel => rel.relationshipRequired || rel.id);
@@ -329,7 +329,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
     if (fieldValue === undefined) {
         continue;
     }
-    fieldValue = typeof fieldValue === 'string' ? fieldValue.replaceAll("\\", "\\\\").replaceAll("'", "\\'") : fieldValue;
+    fieldValue = typeof fieldValue === 'string' ? fieldValue.replaceAll('\\', '\\\\').replaceAll("'", "\\'") : fieldValue;
 _%>
 
     <%_ if (field.fieldTypeBoolean) { _%>

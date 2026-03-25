@@ -41,8 +41,8 @@ spec:
   - http:
 <%_ } _%>
       paths:
-      - path: /<%- ingressTypeNginx ? "" : "*" %>
-        pathType: <%- ingressTypeNginx ? "Prefix" : "ImplementationSpecific" %>
+      - path: /<%- ingressTypeNginx ? '' : '*' %>
+        pathType: <%- ingressTypeNginx ? 'Prefix' : 'ImplementationSpecific' %>
         backend:
           service:
             name: <%- app.baseName.toLowerCase() %>
@@ -50,7 +50,7 @@ spec:
               name: http
 <%_ if (!app.serviceDiscoveryAny) { _%>
   <%_ for (const config of appConfigs.filter(config => config.baseName !== app.baseName)) { _%>
-      - path: /services/<%- config.baseName.toLowerCase() %>/<%- ingressTypeNginx ? "" : "*" %>
+      - path: /services/<%- config.baseName.toLowerCase() %>/<%- ingressTypeNginx ? '' : '*' %>
         pathType: Prefix
         backend:
           service:
@@ -63,8 +63,8 @@ spec:
   - host: keycloak.<%- kubernetesNamespace %>.<%- ingressDomain %>
     http:
       paths:
-        - path: /<%- ingressTypeNginx ? "" : "*" %>
-          pathType:  <%- ingressTypeNginx ? "Prefix" : "ImplementationSpecific" %>
+        - path: /<%- ingressTypeNginx ? '' : '*' %>
+          pathType:  <%- ingressTypeNginx ? 'Prefix' : 'ImplementationSpecific' %>
           backend:
             service:
               name: keycloak

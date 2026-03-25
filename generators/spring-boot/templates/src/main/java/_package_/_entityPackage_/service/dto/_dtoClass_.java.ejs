@@ -159,7 +159,7 @@ _%>
     public String toString() {
         return "<%- dtoClass %>{" +
 <%_ for ([idx, property] of restProperties.entries()) {
-  const isQuoted = property.fieldName && !property.fieldTypeNumeric
+  const isQuoted = property.fieldName && !property.fieldTypeNumeric;
 _%>
             "<%- idx === 0 ? '' : ', ' %><%- property.propertyName %>=<% if (isQuoted) { %>'<% } %>" + <%- property.propertySupplierName %>() <% if (isQuoted) { %>+ "'" <% } %>+
 <%_ } _%>

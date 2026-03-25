@@ -52,13 +52,13 @@ import static <%- entityAbsoluteClass %>.TYPE_NAME;
 @SuppressWarnings("unused")
 <%_ } _%>
 <%_
-    let optionalOrMono = reactive ? 'Mono' : 'Optional';
-    let listOrFlux = reactive ? 'Flux' : 'List';
-    let pageOrFlux = reactive ? 'Flux' : 'Page';
+    const optionalOrMono = reactive ? 'Mono' : 'Optional';
+    const listOrFlux = reactive ? 'Flux' : 'List';
+    const pageOrFlux = reactive ? 'Flux' : 'Page';
 _%>
 @Repository
 public interface <%- entityClass %>Repository extends JHipsterCouchbaseRepository<<%- persistClass %>, <%- primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%- persistClass %>><% } %><% if (searchEngineAny) { %>, CouchbaseSearchRepository<<%- persistClass %>, <%- primaryKey.type %>><% } %> {
-<%_ var notEmbeddedRelationships = relationships.filter(relationship => !relationship.otherEntity.embedded)
+<%_ const notEmbeddedRelationships = relationships.filter(relationship => !relationship.otherEntity.embedded);
   if (notEmbeddedRelationships.length !== 0) {
 %>
     String SELECT = "SELECT meta(b).id as __id, meta(b).cas as __cas, b.*" + <%

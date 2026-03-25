@@ -17,9 +17,9 @@
  limitations under the License.
 -%>
 <%_
-const mapper = entityInstance  + 'Mapper';
-const dtoToEntity = mapper + '.' + 'toEntity';
-const entityToDtoReference = mapper + '::' + 'toDto';
+const mapper = `${entityInstance}Mapper`;
+const dtoToEntity = `${mapper}.` + 'toEntity';
+const entityToDtoReference = `${mapper}::` + 'toDto';
 _%>
         return <%- entityInstance %>Repository.save(<% if (dtoMapstruct) { %><%- dtoToEntity %>(<% } %><%- restInstance %><% if (dtoMapstruct) { %>)<% } -%><% if (!saveNewEntityOperation && requiresPersistableImplementation) { %>.setIsPersisted()<% } %>)
 <%_ if (searchEngineElasticsearch) { %>

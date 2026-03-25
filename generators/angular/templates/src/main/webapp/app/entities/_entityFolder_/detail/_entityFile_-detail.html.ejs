@@ -92,9 +92,9 @@ _%>
           </span>
         }
       <%_ } else { _%>
-        @if (<%- entityInstance + '()!.' + relationshipFieldName %>) {
+        @if (<%- `${entityInstance}()!.${relationshipFieldName}` %>) {
           <div>
-            <a [routerLink]="['/<%- relationship.otherEntity.entityPage %>', <%- entityInstance + '()!.' + relationshipFieldName + '?.' + relationship.otherEntity.primaryKey.name %>, 'view']">{{ <%- entityInstance %>Ref.<%- relationshipFieldName %>?.<%- otherEntityField %> }}</a>
+            <a [routerLink]="['/<%- relationship.otherEntity.entityPage %>', <%- `${entityInstance}()!.${relationshipFieldName}?.${relationship.otherEntity.primaryKey.name}` %>, 'view']">{{ <%- entityInstance %>Ref.<%- relationshipFieldName %>?.<%- otherEntityField %> }}</a>
           </div>
         }
       <%_ } _%>

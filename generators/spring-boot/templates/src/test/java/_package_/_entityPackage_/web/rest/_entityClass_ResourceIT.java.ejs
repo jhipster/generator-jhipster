@@ -21,7 +21,7 @@ package <%- entityAbsolutePackage %>.web.rest;
 import static <%- entityAbsolutePackage %>.domain.<%- persistClass %>Asserts.*;
 import static <%- packageName %>.web.rest.TestUtil.createUpdateProxyForBean;
 <%_
-var filterTestableRelationships = (reactive ? reactiveEagerRelations : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
+const filterTestableRelationships = (reactive ? reactiveEagerRelations : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
 const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
 const hasUserRepository =
   (requiresDeleteAllUsers && hasRelationshipWithBuiltInUser) ||
@@ -31,8 +31,8 @@ const hasUserRepository =
 let callBlock = '';
 let callListBlock = '';
 if (reactive) {
-  callBlock = ".block()";
-  callListBlock = ".collectList().block()";
+  callBlock = '.block()';
+  callListBlock = '.collectList().block()';
 }
 let saveMethod = 'save';
 if (!reactive && databaseTypeSql) {
@@ -46,9 +46,9 @@ if (databaseTypeSql && reactive) {
 }
 let idValue = `${persistInstance}.${primaryKey.propertySupplierName}()`;
 if (primaryKey.typeLong || primaryKey.typeInteger) {
-  idValue = idValue + '.intValue()';
+  idValue = `${idValue}.intValue()`;
 } else if (primaryKey.typeUUID) {
-  idValue = idValue + '.toString()';
+  idValue = `${idValue}.toString()`;
 }
 let transactionalAnnotation = '';
 if (databaseTypeSql && !reactive) {
@@ -62,7 +62,7 @@ import <%- packageName %>.web.rest.TestUtil;
 import <%- packageName %>.IntegrationTest;
 import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
 <%_
-var imported = [];
+const imported = [];
 for (relationship of relationships) { // import entities in required relationships
   const relationshipValidate = relationship.relationshipValidate;
   const isUsingMapsIdL1 = relationship.id;
@@ -272,9 +272,9 @@ class <%- entityClass %>ResourceIT {
     private static final DateTimeFormatter LOCAL_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
 <%_ } _%>
 <%_ for (field of fieldsToTest) {
-  const defaultValueName = 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase();
-  const updatedValueName = 'UPDATED_' + field.fieldNameUnderscored.toUpperCase();
-  const smallerValueName = 'SMALLER_' + field.fieldNameUnderscored.toUpperCase();
+  const defaultValueName = `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}`;
+  const updatedValueName = `UPDATED_${field.fieldNameUnderscored.toUpperCase()}`;
+  const smallerValueName = `SMALLER_${field.fieldNameUnderscored.toUpperCase()}`;
   const needsSmallerValueName = jpaMetamodelFiltering && field.filterableField
         && (field.fieldTypeNumeric || field.fieldTypeDuration || field.fieldTypeLocalDate || field.fieldTypeZonedDateTime);
 
@@ -315,8 +315,8 @@ class <%- entityClass %>ResourceIT {
 
   if (field.fieldTypeString || field.blobContentTypeText) {
     // Generate Strings, using the min and max string length if they are configured
-    let sampleTextString = "";
-    let updatedTextString = "";
+    let sampleTextString = '';
+    let updatedTextString = '';
     let sampleTextLength = 10;
     if (field.fieldValidateRulesMinlength > sampleTextLength) {
       sampleTextLength = field.fieldValidateRulesMinlength;
@@ -325,8 +325,8 @@ class <%- entityClass %>ResourceIT {
       sampleTextLength = field.fieldValidateRulesMaxlength;
     }
     for (let i = 0; i < sampleTextLength; i++) {
-      sampleTextString += "A";
-      updatedTextString += "B";
+      sampleTextString += 'A';
+      updatedTextString += 'B';
     }
     if (field.fieldValidateRulesPattern !== undefined) {
       // Generate Strings, using pattern
@@ -342,15 +342,15 @@ class <%- entityClass %>ResourceIT {
           updatedTextString = value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
         }
       } catch (error) {
-        this.log.warn('Error generating test value for entity "' + entityClass +
-          '" field "' + field.fieldName + '" with pattern "' + field.fieldValidateRulesPattern +
-          '", generating default values for this field. Detailed error message: "' + error.message + '".');
+        this.log.warn(`Error generating test value for entity "${entityClass 
+          }" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern 
+          }", generating default values for this field. Detailed error message: "${error.message}".`);
       }
       if (sampleTextString === updatedTextString) {
-        updatedTextString = updatedTextString + "B";
-        this.log.warn('Randomly generated first and second test values for entity "' + entityClass +
-          '" field "' + field.fieldName + '" with pattern "' + field.fieldValidateRulesPattern +
-          '" in file "' + entityClass + 'ResourceIT" where equal, added symbol "B" to second value.');
+        updatedTextString = `${updatedTextString}B`;
+        this.log.warn(`Randomly generated first and second test values for entity "${entityClass 
+          }" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern 
+          }" in file "${entityClass}ResourceIT" where equal, added symbol "B" to second value.`);
       }
     }
 _%>
@@ -594,13 +594,13 @@ _%>
         <%_ } else { _%>
         <%- relationship.otherEntity.persistClass %> <%- otherEntityName %>;
           <%_ if (databaseTypeSql && !reactive) { _%>
-            <%_ if (!isUsingMapsId || fieldStatus !== "UPDATED_") { _%>
+            <%_ if (!isUsingMapsId || fieldStatus !== 'UPDATED_') { _%>
         if (TestUtil.findAll(em, <%- relationship.otherEntity.persistClass %>.class).isEmpty()) {
             <%_ } _%>
             <%- otherEntityName %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (relationship.otherEntity.anyRelationshipIsRequired) { %>em<% } %>)<%- createEntityPostfix %>;
             em.persist(<%- otherEntityName %>);
             em.flush();
-            <%_ if (!isUsingMapsId || fieldStatus !== "UPDATED_") { _%>
+            <%_ if (!isUsingMapsId || fieldStatus !== 'UPDATED_') { _%>
         } else {
             <%- otherEntityName %> = TestUtil.findAll(em, <%- relationship.otherEntity.persistClass %>.class).get(0);
         }
@@ -618,7 +618,7 @@ _%>
       <%_ } else { _%>
         <%- createInstance %>.<%- relationship.propertyConsumerName %>(<%- otherEntityName %>);
       <%_ } _%>
-      <%_ alreadyGeneratedEntities.push(otherEntityName) _%>
+      <%_ alreadyGeneratedEntities.push(otherEntityName); _%>
     <%_ } _%>
   <%_ } _%>
         return <%- createInstance %>;
@@ -824,7 +824,7 @@ _%>
         em.flush();
           <%_ } _%>
         <%_ } _%>
-        <%_ alreadyGeneratedEntities.push(otherEntityName) _%>
+        <%_ alreadyGeneratedEntities.push(otherEntityName); _%>
       <%_ } _%>
     <%_ break; } _%>
 
@@ -1024,12 +1024,12 @@ _%>
 <%_ } _%>
 <%_ for (field of fieldsToTest) { _%>
   <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))<%- !reactive ? ')' : '' %>
+            <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE))<%- !reactive ? ')' : '' %>
   <%_ } _%>
             <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<%
   if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
+  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><%
   if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%
     if (databaseTypeCassandra) { %>.array()<% } %>)<% } else
   if (field.fieldTypeLong) { %>.intValue()<% } else
@@ -1119,12 +1119,12 @@ _%>
 <%_ } _%>
 <%_ for (field of fieldsToTest) { _%>
   <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.<%- field.fieldName %>ContentType").value(<%- reactive ? 'is(' : '' %><%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))
+            <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.<%- field.fieldName %>ContentType").value(<%- reactive ? 'is(' : '' %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE))
   <%_ } _%>
             <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.<%- field.fieldName %>").value(<%- reactive ? 'is(' : '' %><%
   if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
+  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><%
   if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%
     if (databaseTypeCassandra) { %>.array()<% } %>)<% } else
   if (field.fieldTypeLong) { %>.intValue()<% } else
@@ -1169,8 +1169,8 @@ _%>
 
         // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> equals to
         default<%- entityClass %>Filtering(
-            "<%- searchBy.fieldName %>.equals=" + <%- 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>,
-            "<%- searchBy.fieldName %>.equals=" + <%- 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
+            "<%- searchBy.fieldName %>.equals=" + <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %>,
+            "<%- searchBy.fieldName %>.equals=" + <%- `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}` %>
         );
     }
 
@@ -1181,8 +1181,8 @@ _%>
 
         // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> in
         default<%- entityClass %>Filtering(
-            "<%- searchBy.fieldName %>.in=" + <%- 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %> + "," + <%- 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>,
-            "<%- searchBy.fieldName %>.in=" + <%- 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
+            "<%- searchBy.fieldName %>.in=" + <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %> + "," + <%- `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}` %>,
+            "<%- searchBy.fieldName %>.in=" + <%- `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}` %>
         );
     }
 
@@ -1206,8 +1206,8 @@ _%>
 
         // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> contains
         default<%- entityClass %>Filtering(
-            "<%- searchBy.fieldName %>.contains=" + <%- 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>,
-            "<%- searchBy.fieldName %>.contains=" + <%- 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>
+            "<%- searchBy.fieldName %>.contains=" + <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %>,
+            "<%- searchBy.fieldName %>.contains=" + <%- `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}` %>
         );
     }
 
@@ -1218,25 +1218,25 @@ _%>
 
         // Get all the <%- entityInstance %>List where <%- searchBy.fieldName %> does not contain
         default<%- entityClass %>Filtering(
-            "<%- searchBy.fieldName %>.doesNotContain=" + <%- 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase() %>,
-            "<%- searchBy.fieldName %>.doesNotContain=" + <%- 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase() %>
+            "<%- searchBy.fieldName %>.doesNotContain=" + <%- `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}` %>,
+            "<%- searchBy.fieldName %>.doesNotContain=" + <%- `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}` %>
         );
     }
 
     <%_ }
     // the range criteria
     if (searchBy.fieldTypeNumeric || searchBy.fieldTypeDuration || searchBy.fieldTypeLocalDate || searchBy.fieldTypeZonedDateTime) {
-      var defaultValue = 'DEFAULT_' + searchBy.fieldNameUnderscored.toUpperCase();
-      var biggerValue = 'UPDATED_' + searchBy.fieldNameUnderscored.toUpperCase();
-      var smallerValue = 'SMALLER_' + searchBy.fieldNameUnderscored.toUpperCase();
+      const defaultValue = `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}`;
+      let biggerValue = `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}`;
+      const smallerValue = `SMALLER_${searchBy.fieldNameUnderscored.toUpperCase()}`;
       if (searchBy.fieldValidate && searchBy.fieldValidationMax) {
           // if maximum is specified the updated variable is smaller than the default one!
         if (searchBy.fieldTypeBigDecimal) {
-              biggerValue = '(' + defaultValue + '.add(BigDecimal.ONE))';
+              biggerValue = `(${defaultValue}.add(BigDecimal.ONE))`;
         } else if (searchBy.fieldTypeDuration || searchBy.fieldTypeLocalDate || searchBy.fieldTypeZonedDateTime) {
-              biggerValue = '(' + defaultValue + '.plus(1, ChronoUnit.DAYS))';
+              biggerValue = `(${defaultValue}.plus(1, ChronoUnit.DAYS))`;
         } else {
-              biggerValue = '(' + defaultValue + ' + 1)';
+              biggerValue = `(${defaultValue} + 1)`;
         }
       }
     _%>
@@ -1339,8 +1339,8 @@ _%>
     <%_
     const initInvalidPrimaryKey = {
         'String' : '"invalid-id"',
-        'Long' : '(' + relationship.relationshipFieldName + 'Id + 1)',
-        'UUID' : 'UUID.randomUUID()'
+        'Long' : `(${relationship.relationshipFieldName}Id + 1)`,
+        'UUID' : 'UUID.randomUUID()',
     }[relationship.otherEntity.primaryKey.type];
     _%>
         // Get all the <%- entityInstance %>List where <%- relationship.relationshipFieldName %> equals to <%- initInvalidPrimaryKey %>
@@ -1366,12 +1366,12 @@ _%>
             .expectBody()
             .jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- idValue %>))<% for (field of fieldsToTest) { %>
       <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            .jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))
+            .jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE))
       <%_ } _%>
             .jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if
       (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
       if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-      if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
+      if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><%
       if (field.fieldTypeBinary && !field.blobContentTypeText) { %><% if (databaseTypeCassandra) { %>.array()<% } %>)<% } else
       if (field.fieldTypeLong) { %>.intValue()<% } else
       if (field.fieldTypeFloat) { %>.doubleValue()<% } else
@@ -1408,17 +1408,17 @@ _%>
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
     <%_ const primaryKeyConversion = {
                 'Long' : '.intValue()',
-                'UUID' : '.toString()'
+                'UUID' : '.toString()',
             }[primaryKey.type] || '';
     _%>
             .andExpect(jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- persistInstance %>.<%- primaryKey.propertySupplierName %>()<%- primaryKeyConversion %>)))<% for (const field of fieldsToTest) { %>
       <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            .andExpect(jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE)))
       <%_ } _%>
             .andExpect(jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<%
     if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
     if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-    if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
+    if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><%
     if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%
       if (databaseTypeCassandra) { %>.array()<% } %>)<% } else
     if (field.fieldTypeLong) { %>.intValue()<% } else
@@ -1526,13 +1526,13 @@ _%>
   <%_ } _%>
   <%_ if (fluentMethods && fieldsToTest.length > 0) { _%>
         updated<%- persistClass %><% for (field of fieldsToTest) { %>
-            .<%- field.fieldName %>(<%- 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>)<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>
-            .<%- field.fieldName %>ContentType(<%- 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE)<% } %><% } %>;
+            .<%- field.fieldName %>(<%- `UPDATED_${field.fieldNameUnderscored.toUpperCase()}` %>)<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>
+            .<%- field.fieldName %>ContentType(<%- `UPDATED_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE)<% } %><% } %>;
   <%_ } else { _%>
     <%_ for (field of fieldsToTest) { _%>
-        updated<%- persistClass %>.<%- field.propertyConsumerName %>(<%- 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>);
+        updated<%- persistClass %>.<%- field.propertyConsumerName %>(<%- `UPDATED_${field.fieldNameUnderscored.toUpperCase()}` %>);
       <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-        updated<%- persistClass %>.<%- field.propertyConsumerName %>ContentType(<%- 'UPDATED_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE);
+        updated<%- persistClass %>.<%- field.propertyConsumerName %>ContentType(<%- `UPDATED_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE);
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
@@ -1541,15 +1541,15 @@ _%>
   <%_ } _%>
 
   <%_ if (reactive) { _%>
-        webTestClient.put().uri(ENTITY_API_URL_ID, <%- (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>.<%- primaryKey.propertySupplierName %>())
+        webTestClient.put().uri(ENTITY_API_URL_ID, <%- (dtoMapstruct ? dtoInstance : `updated${persistClass}`) %>.<%- primaryKey.propertySupplierName %>())
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(<%- (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>))
+            .bodyValue(om.writeValueAsBytes(<%- (dtoMapstruct ? dtoInstance : `updated${persistClass}`) %>))
             .exchange()
             .expectStatus().isOk();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
+        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- (dtoMapstruct ? dtoInstance : `updated${persistClass}`) %>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
             .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(<%- (dtoMapstruct ? dtoInstance : 'updated' + persistClass) %>)))
+            .content(om.writeValueAsBytes(<%- (dtoMapstruct ? dtoInstance : `updated${persistClass}`) %>)))
             .andExpect(status().isOk());
   <%_ } _%>
 
@@ -1699,7 +1699,7 @@ _%>
       const fieldNameUnderscoreUppercased = field.fieldNameUnderscored.toUpperCase();
       const updateWithValue = includeField ? `UPDATED_${fieldNameUnderscoreUppercased}` : 'null';
       const testWithConstant = includeField ? `UPDATED_${fieldNameUnderscoreUppercased}` : `DEFAULT_${fieldNameUnderscoreUppercased}`;
-      return { includeField, updateWithValue, testWithConstant, ...field};
+      return { includeField, updateWithValue, testWithConstant, ...field };
     };
   _%>
     @Test<%- transactionalAnnotation %>
@@ -1713,7 +1713,7 @@ _%>
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
   <%_ const fieldsToIncludeInPartialPatchTest = fieldsToTest.map(field => prepareFieldForPatchTest(field, () => faker.datatype.boolean())); _%>
-<%- include('/_global_partials_entity_/it_patch_update.partial.java.ejs', {fields: fieldsToIncludeInPartialPatchTest, saveMethod, callBlock, callListBlock}); -%>
+<%- include('/_global_partials_entity_/it_patch_update.partial.java.ejs', { fields: fieldsToIncludeInPartialPatchTest, saveMethod, callBlock, callListBlock }); -%>
 
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
         assert<%- persistClass %>UpdatableFieldsEquals(
@@ -1733,7 +1733,7 @@ _%>
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
   <%_ const fieldsToIncludeInFullPatchTest = fieldsToTest.map(field => prepareFieldForPatchTest(field, () => true)); _%>
-<%- include('/_global_partials_entity_/it_patch_update.partial.java.ejs', {fields: fieldsToIncludeInFullPatchTest, saveMethod, callBlock, callListBlock}); -%>
+<%- include('/_global_partials_entity_/it_patch_update.partial.java.ejs', { fields: fieldsToIncludeInFullPatchTest, saveMethod, callBlock, callListBlock }); -%>
 
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
         assert<%- persistClass %>UpdatableFieldsEquals(
@@ -1944,12 +1944,12 @@ _%>
   <%_ } _%>
   <%_ for (field of fieldsToTest) { _%>
     <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-            <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))<%- !reactive ? ')' : '' %>
+            <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE))<%- !reactive ? ')' : '' %>
     <%_ } _%>
             <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<%
   if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %><%
+  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><%
   if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%
     if (databaseTypeCassandra) { %>.array()<% } %>)<% } else
   if (field.fieldTypeLong) { %>.intValue()<% } else
