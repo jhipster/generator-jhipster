@@ -38,7 +38,7 @@ LABEL ALIAS=hazelcast
 
 FROM memcached:1.6.41-alpine
 
-FROM redis:8.6.1
+FROM redis:8.6.2
 
 FROM apache/kafka-native:4.2.0
 LABEL ALIAS=kafka
