@@ -18,9 +18,7 @@
 -%>
 package <%- entityAbsolutePackage %>.service;
 
-<%_
-const serviceClassName = `${entityClass}QueryService`;
-const instanceType = restClass;
+<%_ const serviceClassName = `${entityClass}QueryService`;
 const mapper = `${entityInstance}Mapper`;
 const entityListToDto = `${mapper}.` + 'toDto';
 const entityToDtoReference = `${mapper}::` + 'toDto';
@@ -57,7 +55,7 @@ import <%- entityAbsolutePackage %>.service.mapper.<%- entityClass %>Mapper;
  * Service for executing complex queries for {@link <%- persistClass %>} entities in the database.
  * The main input is a {@link <%- entityClass %>Criteria} which gets converted to {@link Specification},
  * in a way that all the filters must apply.
- * It returns a {@link <% if (paginationNo) { %>List<% } else { %>Page<% } %>} of {@link <%- instanceType %>} which fulfills the criteria.
+ * It returns a {@link <% if (paginationNo) { %>List<% } else { %>Page<% } %>} of {@link <%- restClass %>} which fulfills the criteria.
  */
 @Service
 <%_ if (databaseTypeSql) { _%>
@@ -70,12 +68,12 @@ public class <%- serviceClassName %> extends QueryService<<%- persistClass %>> {
 <%_ if (paginationNo) { _%>
 
     /**
-     * Return a {@link List} of {@link <%- instanceType %>} which matches the criteria from the database.
+     * Return a {@link List} of {@link <%- restClass %>} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public List<<%- instanceType %>> findByCriteria(<%- criteria %> criteria) {
+    public List<<%- restClass %>> findByCriteria(<%- criteria %> criteria) {
         LOG.debug("find by criteria : {}", criteria);
         final Specification<<%- persistClass %>> specification = createSpecification(criteria);
   <%_ if (dtoMapstruct) { _%>
@@ -87,13 +85,13 @@ public class <%- serviceClassName %> extends QueryService<<%- persistClass %>> {
 <%_ } else { _%>
 
     /**
-     * Return a {@link Page} of {@link <%- instanceType %>} which matches the criteria from the database.
+     * Return a {@link Page} of {@link <%- restClass %>} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @param page The page, which should be returned.
      * @return the matching entities.
      */
     @Transactional(readOnly = true)
-    public Page<<%- instanceType %>> findByCriteria(<%- criteria %> criteria, Pageable page) {
+    public Page<<%- restClass %>> findByCriteria(<%- criteria %> criteria, Pageable page) {
         LOG.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<<%- persistClass %>> specification = createSpecification(criteria);
   <%_ if (dtoMapstruct) { _%>

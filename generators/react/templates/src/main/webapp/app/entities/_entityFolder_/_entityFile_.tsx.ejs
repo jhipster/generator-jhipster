@@ -398,9 +398,7 @@ export const <%- entityReactName %> = () => {
                       </Button>
                     </td>
 <%_ for (field of fields) {
-  const fieldType = field.fieldType;
-  const fieldName = field.fieldName;
-  const fieldIsEnum = field.fieldIsEnum;
+  const { fieldType, fieldName, fieldIsEnum } = field;
 _%>
   <%_ if (fieldName !== primaryKey.name) { _%>
                     <td>
@@ -443,11 +441,9 @@ _%>
   <%_ } _%>
 <%_ } _%>
 <%_ for (relationship of relationships) {
-  const otherEntity = relationship.otherEntity;
-  const relationshipFieldName = relationship.relationshipFieldName;
-  const relationshipFieldNamePlural = relationship.relationshipFieldNamePlural;
+  const { otherEntity, relationshipFieldName, relationshipFieldNamePlural } = relationship;
   const otherEntityPkName = relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.name || 'id';
-  const otherEntityField = relationship.otherEntityField;
+  const { otherEntityField } = relationship;
 _%>
   <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
                     <td>

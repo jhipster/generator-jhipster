@@ -17,8 +17,7 @@
  limitations under the License.
 -%>
 <%- include('/liquibase-changelog-header') -%>
-<%_ const entityTableName = entity.entityTableName;
-const entityClass = entity.entityClass;
+<%_ const { entityTableName, entityClass } = entity;
 if (hasFieldConstraint) {
 _%>
 

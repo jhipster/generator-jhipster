@@ -170,7 +170,7 @@ _%>
 
     @Override
     public Mono<<%- persistClass %>> findById(<%- primaryKey.type %> id) {
-<%_ if (primaryKey.type != 'Long') { _%>
+<%_ if (primaryKey.type !== 'Long') { _%>
         Comparison whereClause = Conditions.isEqual(entityTable.column("<%- primaryKey.fields[0].columnName %>"), Conditions.just(StringUtils.wrap(id.toString(), "'")));
 <%_ } else { _%>
         Comparison whereClause = Conditions.isEqual(entityTable.column("<%- primaryKey.fields[0].columnName %>"), Conditions.just(id.toString()));
@@ -217,10 +217,7 @@ _%>
 
 <%_ if (containsBagRelationships) { _%>
     protected <S extends <%- persistClass %>> Mono<S> updateRelations(S entity) {
-  <%_ for (const [idx, rel] of relationships.filter(rel => {
-    return (rel.relationshipManyToMany && rel.ownerSide);
-   }).entries()) {
-  _%>
+  <%_ for (const [idx, rel] of relationships.filter(rel => rel.relationshipManyToMany && rel.ownerSide).entries()) { _%>
     <%_ if (idx === 0) { _%>
         Mono<Void> result = entityManager.updateLinkTable(<%- rel.relationshipName %>Link, entity.<%- primaryKey.propertySupplierName %>(), entity.<%- rel.propertySupplierName %>().stream().map(<%- rel.otherEntity.persistClass %>::<%- rel.otherEntity.primaryKey.propertySupplierName %>)).then();
     <%_ } else { _%>
@@ -237,10 +234,7 @@ _%>
     }
 
     protected Mono<Void> deleteRelations(<%- primaryKey.type %> entityId) {
-  <%_ for (const [idx, rel] of relationships.filter(rel => {
-      return (rel.relationshipManyToMany && rel.ownerSide);
-    }).entries()) {
-  _%>
+  <%_ for (const [idx, rel] of relationships.filter(rel => rel.relationshipManyToMany && rel.ownerSide).entries()) { _%>
     <%_ if (idx === 0) { _%>
         return entityManager.deleteFromLinkTable(<%- rel.relationshipName %>Link, entityId)
     <%_ } else { _%>

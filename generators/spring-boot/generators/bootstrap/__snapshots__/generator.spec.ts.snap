@@ -222,6 +222,7 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": Any<Object>,
   "packageName": "com.mycompany.myapp",
+  "pageOrFlux": "Page",
   "pkType": undefined,
   "prettierExtensions": Any<Array>,
   "prettierFolders": Any<Array>,

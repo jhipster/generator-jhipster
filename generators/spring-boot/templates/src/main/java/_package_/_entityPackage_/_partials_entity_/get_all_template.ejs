@@ -16,9 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-    const instanceType = restClass;
-    const mapper = `${entityInstance}Mapper`;
+<%_ const mapper = `${entityInstance}Mapper`;
     const entityListToDtoListReference = `${mapper}.` + 'toDto';
     const entityToDtoReference = `${mapper}::` + 'toDto';
     const reactiveEntityToDto = (dtoMapstruct && !viaService) ? `.map(${entityToDtoReference})` : '';
@@ -26,14 +24,14 @@
     const reactivePagination = reactive && !paginationNo;
 _%>
 <%_ if (jpaMetamodelFiltering) { _%>
-    public <% if (reactiveNoPagination) { %>Flux<<%- instanceType %>><% } else if (reactivePagination) { %>Mono<ResponseEntity<List<<%- instanceType %>>>><% } else { %>ResponseEntity<List<<%- instanceType %>>><% } %> getAll<%- entityClassPlural %>(<%- entityClass %>Criteria criteria<% if (!paginationNo) { %>, @org.springdoc.core.annotations.ParameterObject Pageable pageable<% if (reactive) { %>, ServerHttpRequest request<% } %><% } %>) {
+    public <% if (reactiveNoPagination) { %>Flux<<%- restClass %>><% } else if (reactivePagination) { %>Mono<ResponseEntity<List<<%- restClass %>>>><% } else { %>ResponseEntity<List<<%- restClass %>>><% } %> getAll<%- entityClassPlural %>(<%- entityClass %>Criteria criteria<% if (!paginationNo) { %>, @org.springdoc.core.annotations.ParameterObject Pageable pageable<% if (reactive) { %>, ServerHttpRequest request<% } %><% } %>) {
         LOG.debug("REST request to get <%- entityClassPlural %> by criteria: {}", criteria);
   <% if(!reactive) { %>
     <%_ if (paginationNo) { _%>
-        List<<%- instanceType %>> entityList = <%- entityInstance %>QueryService.findByCriteria(criteria);
+        List<<%- restClass %>> entityList = <%- entityInstance %>QueryService.findByCriteria(criteria);
         return ResponseEntity.ok().body(entityList);
     <%_ } else { _%>
-        Page<<%- instanceType %>> page = <%- entityInstance %>QueryService.findByCriteria(criteria, pageable);
+        Page<<%- restClass %>> page = <%- entityInstance %>QueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (!reactive) { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } else { %>ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders())<% } %>, page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     <%_ } _%>
@@ -74,7 +72,7 @@ _%>
     }
 <%_ } else { _%>
   <%_ if (paginationNo) { _%>
-    public <% if (reactive) { %>Mono<<% } %>List<<%- instanceType %>><% if (reactive) { %>><% } %> getAll<%- entityClassPlural %>(<% if (fieldsContainNoOwnerOneToOne) { %>@RequestParam(name = "filter", required = false) String filter<% } %><% if (implementsEagerLoadApis && fieldsContainNoOwnerOneToOne) { %>,<% } %><% if (implementsEagerLoadApis) { %>@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload<% } %>) {<%- include('get_all_stream_template', { viaService }); -%>
+    public <% if (reactive) { %>Mono<<% } %>List<<%- restClass %>><% if (reactive) { %>><% } %> getAll<%- entityClassPlural %>(<% if (fieldsContainNoOwnerOneToOne) { %>@RequestParam(name = "filter", required = false) String filter<% } %><% if (implementsEagerLoadApis && fieldsContainNoOwnerOneToOne) { %>,<% } %><% if (implementsEagerLoadApis) { %>@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload<% } %>) {<%- include('get_all_stream_template', { viaService }); -%>
         LOG.debug("REST request to get all <%- entityClassPlural %>");
     <%_ if (viaService) { _%>
         return <%- entityInstance %>Service.findAll()<% if (reactive) { %>.collectList()<% } %>;
@@ -95,7 +93,7 @@ _%>
             return <%- entityInstance %>Repository.findAll()<% if (reactive) { %>.collectList()<% } %>;
     <%_ } _%>
   <%_ } else { _%>
-    public <% if (reactive) { %>Mono<ResponseEntity<List<<%- instanceType %>>>><% } else { %>ResponseEntity<List<<%- instanceType %>>><% } %> getAll<%- entityClassPlural %>(@org.springdoc.core.annotations.ParameterObject Pageable pageable<% if (reactive) { %>, ServerHttpRequest request<% } %><% if (fieldsContainNoOwnerOneToOne) { %>, @RequestParam(name = "filter", required = false) String filter<% } %><% if (implementsEagerLoadApis) { %>, @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload<% } %>) {<%- include('get_all_stream_template', { viaService }); -%>
+    public <% if (reactive) { %>Mono<ResponseEntity<List<<%- restClass %>>>><% } else { %>ResponseEntity<List<<%- restClass %>>><% } %> getAll<%- entityClassPlural %>(@org.springdoc.core.annotations.ParameterObject Pageable pageable<% if (reactive) { %>, ServerHttpRequest request<% } %><% if (fieldsContainNoOwnerOneToOne) { %>, @RequestParam(name = "filter", required = false) String filter<% } %><% if (implementsEagerLoadApis) { %>, @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload<% } %>) {<%- include('get_all_stream_template', { viaService }); -%>
         LOG.debug("REST request to get a page of <%- entityClassPlural %>");
     <%_ if (reactive) { _%>
         return <%- entityInstance %><%- viaService ? 'Service.countAll' : 'Repository.count' %>().zipWith(<%- entityInstance %><%- viaService ? 'Service.findAll' : 'Repository.findAllBy' %>(pageable)<%- reactiveEntityToDto %>.collectList())
@@ -110,7 +108,7 @@ _%>
                 );
     <%_ } else { _%>
       <%_ if (implementsEagerLoadApis) { _%>
-        Page<<%- instanceType %>> page;
+        Page<<%- restClass %>> page;
         if (eagerload) {
             page = <%- entityInstance %><%- viaService ? 'Service' : 'Repository' %>.findAllWithEagerRelationships(pageable)<%- reactiveEntityToDto %>;
         } else {
@@ -118,7 +116,7 @@ _%>
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (reactive) { %>ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders())<% } else { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } %>, page);
       <%_ } else { _%>
-        Page<<%- instanceType %>> page = <%- entityInstance %><%- viaService ? 'Service' : 'Repository' %>.findAll(pageable)<%- reactiveEntityToDto %>;
+        Page<<%- restClass %>> page = <%- entityInstance %><%- viaService ? 'Service' : 'Repository' %>.findAll(pageable)<%- reactiveEntityToDto %>;
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<% if (reactive) { %>ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders())<% } else { %>ServletUriComponentsBuilder.fromCurrentRequest()<% } %>, page);
       <%_ } _%>
         return ResponseEntity.ok().headers(headers).body(page.getContent());

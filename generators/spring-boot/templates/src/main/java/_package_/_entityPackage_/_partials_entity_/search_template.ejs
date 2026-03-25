@@ -1,3 +1,4 @@
+<%# eslint-disable -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -16,16 +17,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const instanceType = restClass;
-  const listOrFlux = reactive ? 'Flux' : 'List';
-  const mapper = `${entityInstance}Mapper`;
+<%_ const mapper = `${entityInstance}Mapper`;
   const entityToDtoReference = `${mapper}::` + 'toDto';
   const entityListToDtoListReference = `${mapper}.` + 'toDto';
-if (paginationNo) { %>
-    public <% if (reactive) { %>Mono<<% } %>List<<%- instanceType %>><% if (reactive) { %>><% } %> search<%- entityClassPlural %>(@RequestParam("query") String query) {
+if (paginationNo) {
+_%>
+    public <% if (reactive) { %>Mono<<% } %>List<<%- restClass %>><% if (reactive) { %>><% } %> search<%- entityClassPlural %>(@RequestParam("query") String query) {
         LOG.debug("REST request to search <%- entityClassPlural %> for query {}", query);<%- include('search_stream_template', { viaService, fromResource: true }); -%>
 <% } else { %>
-    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%- listOrFlux %><<%- instanceType %>>><% if (reactive) { %>><% } %> search<%- entityClassPlural %>(@RequestParam("query") String query, @org.springdoc.core.annotations.ParameterObject Pageable pageable<% if (reactive) { %>, ServerHttpRequest request<% } %>) {
+    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%- listOrFlux %><<%- restClass %>>><% if (reactive) { %>><% } %> search<%- entityClassPlural %>(@RequestParam("query") String query, @org.springdoc.core.annotations.ParameterObject Pageable pageable<% if (reactive) { %>, ServerHttpRequest request<% } %>) {
         LOG.debug("REST request to search for a page of <%- entityClassPlural %> for query {}", query);
   <%_ if (reactive) { _%>
         return <%- entityInstance %><%- viaService ?
@@ -37,7 +37,7 @@ if (paginationNo) { %>
   <%_ } else { _%>
         try {
     <%_ if (viaService) { _%>
-            Page<<%- instanceType %>> page = <%- entityInstance %>Service.search(query, pageable);
+            Page<<%- restClass %>> page = <%- entityInstance %>Service.search(query, pageable);
     <%_ } else { _%>
             Page<<%- persistClass %>> page = <%- entityInstance %><% if (searchEngineElasticsearch) { %>Search<% } %>Repository.search(query, pageable);
     <%_ } _%>

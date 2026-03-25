@@ -152,10 +152,6 @@ import java.time.Instant;
 /**
  * <%- springDataDescription %> repository for the {@link <%- user.persistClass %>} entity.
  */
-<%_
-    const optionalOrMono = reactive ? 'Mono' : 'Optional';
-    const listOrFlux = reactive ? 'Flux' : 'List';
-_%>
 <%_ if ((databaseTypeSql && !reactive) || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
 @Repository
 public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepository<<%- user.persistClass %>, <%- user.primaryKey.type %>><% } %><% if (reactive && !databaseTypeCouchbase) { %>Reactive<% } %><% if (databaseTypeMongodb) { %>MongoRepository<<%- user.persistClass %>, String><% } %><% if (databaseTypeNeo4j) { %>Neo4jRepository<<%- user.persistClass %>, String><% } %><% if (databaseTypeCouchbase) { %>JHipsterCouchbaseRepository<<%- user.persistClass %>, String><% } %><% if (searchEngineCouchbase) { %>, CouchbaseSearchRepository<<%- user.persistClass %>, String><% } %> {
