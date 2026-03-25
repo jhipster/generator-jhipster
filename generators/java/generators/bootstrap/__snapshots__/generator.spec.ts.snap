@@ -222,6 +222,7 @@ exports[`generator - java:bootstrap bootstrapping default config should prepare 
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": Any<Object>,
   "packageName": "com.mycompany.myapp",
+  "pageOrFlux": "Page",
   "pkType": undefined,
   "prettierExtensions": Any<Array>,
   "prettierFolders": Any<Array>,
