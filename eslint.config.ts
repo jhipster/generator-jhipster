@@ -129,15 +129,14 @@ export default defineConfig(
     files: ['**/*.ejs'],
     rules: {
       'ejs-templates/prefer-raw': 'error',
-      // 'ejs-templates/prefer-single-line-tags': ['error', { mode: 'braces' }],
-      'ejs-templates/prefer-slurping-codeonly': 'error',
+      // 'ejs-templates/prefer-slurping-codeonly': 'error',
       // 'ejs-templates/experimental-prefer-slurp-multiline': 'error',
-      'ejs-templates/slurp-newline': 'error',
+      // 'ejs-templates/prefer-single-line-tags': 'error',
+      // 'ejs-templates/slurp-newline': 'error',
+      'ejs-templates/indent': 'error',
 
       'prettier/prettier': 'off',
       ...js.configs.recommended.rules,
-
-      'ejs-templates/indent': 'error',
     },
   },
 );
