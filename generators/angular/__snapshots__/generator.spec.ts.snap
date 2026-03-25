@@ -243,7 +243,7 @@ describe("UserManagement Management Detail Component", () => {
                   (m) => m.UserManagementDetail,
                 ),
               resolve: {
-                userManagement: () => of({ login: "Pattie.Kertzmann" }),
+                userManagement: () => of({ login: "Oswald.Kertzmann" }),
               },
             },
           ],
@@ -268,7 +268,7 @@ describe("UserManagement Management Detail Component", () => {
 
       // THEN
       expect(instance.userManagement()).toEqual(
-        expect.objectContaining({ login: "Pattie.Kertzmann" }),
+        expect.objectContaining({ login: "Oswald.Kertzmann" }),
       );
     });
   });
@@ -594,7 +594,7 @@ describe("UserManagement Management Component", () => {
     // WHEN
     TestBed.tick();
     const req = httpMock.expectOne({ method: "GET" });
-    req.flush([{ login: "Pattie.Kertzmann" }], {
+    req.flush([{ login: "Oswald.Kertzmann" }], {
       headers: {
         link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
       },
@@ -604,7 +604,7 @@ describe("UserManagement Management Component", () => {
     // THEN
     expect(comp.isLoading()).toEqual(false);
     expect(comp.userManagements()[0]).toEqual(
-      expect.objectContaining({ login: "Pattie.Kertzmann" }),
+      expect.objectContaining({ login: "Oswald.Kertzmann" }),
     );
   });
 
@@ -618,7 +618,7 @@ describe("UserManagement Management Component", () => {
     comp.load();
     await vitest.runAllTimersAsync();
     const req2 = httpMock.expectOne({ method: "GET" });
-    req2.flush([{ login: "Pattie.Kertzmann" }], {
+    req2.flush([{ login: "Oswald.Kertzmann" }], {
       headers: {
         link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
       },
@@ -629,7 +629,7 @@ describe("UserManagement Management Component", () => {
     expect(req.cancelled).toBeTruthy();
     expect(comp.isLoading()).toEqual(false);
     expect(comp.userManagements()[0]).toEqual(
-      expect.objectContaining({ login: "Pattie.Kertzmann" }),
+      expect.objectContaining({ login: "Oswald.Kertzmann" }),
     );
   });
 
@@ -648,7 +648,7 @@ describe("UserManagement Management Component", () => {
     comp.load();
     TestBed.tick();
     const successReq = httpMock.expectOne({ method: "GET" });
-    successReq.flush([{ login: "Pattie.Kertzmann" }], {
+    successReq.flush([{ login: "Oswald.Kertzmann" }], {
       headers: {
         link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
       },
@@ -657,13 +657,13 @@ describe("UserManagement Management Component", () => {
 
     // THEN - subscription is still alive and second load succeeds
     expect(comp.userManagements()[0]).toEqual(
-      expect.objectContaining({ login: "Pattie.Kertzmann" }),
+      expect.objectContaining({ login: "Oswald.Kertzmann" }),
     );
   });
 
   describe("trackLogin", () => {
     it("should forward to userManagementService", () => {
-      const entity = { login: "Pattie.Kertzmann" };
+      const entity = { login: "Oswald.Kertzmann" };
       vitest.spyOn(service, "getUserManagementIdentifier");
       const login = comp.trackLogin(entity);
       expect(service.getUserManagementIdentifier).toHaveBeenCalledWith(entity);
@@ -1342,7 +1342,7 @@ describe("UserManagement Service", () => {
       });
 
       it("should return false if one entity is null", () => {
-        const entity1 = { login: "Pattie.Kertzmann" };
+        const entity1 = { login: "Oswald.Kertzmann" };
         const entity2 = null;
 
         const compareResult1 = service.compareUserManagement(entity1, entity2);
@@ -1353,8 +1353,8 @@ describe("UserManagement Service", () => {
       });
 
       it("should return false if primaryKey differs", () => {
-        const entity1 = { login: "Pattie.Kertzmann" };
-        const entity2 = { login: "Betsy.Schiller33" };
+        const entity1 = { login: "Oswald.Kertzmann" };
+        const entity2 = { login: "Beth.Schiller33" };
 
         const compareResult1 = service.compareUserManagement(entity1, entity2);
         const compareResult2 = service.compareUserManagement(entity2, entity1);
@@ -1364,8 +1364,8 @@ describe("UserManagement Service", () => {
       });
 
       it("should return false if primaryKey matches", () => {
-        const entity1 = { login: "Pattie.Kertzmann" };
-        const entity2 = { login: "Pattie.Kertzmann" };
+        const entity1 = { login: "Oswald.Kertzmann" };
+        const entity2 = { login: "Oswald.Kertzmann" };
 
         const compareResult1 = service.compareUserManagement(entity1, entity2);
         const compareResult2 = service.compareUserManagement(entity2, entity1);
@@ -2156,7 +2156,7 @@ describe("UserManagement Management Update Component", () => {
 
   describe("ngOnInit", () => {
     it("should update editForm", () => {
-      const userManagement: IUserManagement = { login: "Betsy.Schiller33" };
+      const userManagement: IUserManagement = { login: "Beth.Schiller33" };
 
       activatedRoute.data = of({ userManagement });
       comp.ngOnInit();
@@ -2169,7 +2169,7 @@ describe("UserManagement Management Update Component", () => {
     it("should call update service on save for existing entity", () => {
       // GIVEN
       const saveSubject = new Subject<IUserManagement>();
-      const userManagement = { login: "Pattie.Kertzmann" };
+      const userManagement = { login: "Oswald.Kertzmann" };
       vitest
         .spyOn(userManagementFormService, "getUserManagement")
         .mockReturnValue(userManagement);
@@ -2198,7 +2198,7 @@ describe("UserManagement Management Update Component", () => {
     it("should call create service on save for new entity", () => {
       // GIVEN
       const saveSubject = new Subject<IUserManagement>();
-      const userManagement = { login: "Pattie.Kertzmann" };
+      const userManagement = { login: "Oswald.Kertzmann" };
       vitest
         .spyOn(userManagementFormService, "getUserManagement")
         .mockReturnValue({ login: null });
@@ -2225,7 +2225,7 @@ describe("UserManagement Management Update Component", () => {
     it("should set isSaving to false on error", () => {
       // GIVEN
       const saveSubject = new Subject<IUserManagement>();
-      const userManagement = { login: "Pattie.Kertzmann" };
+      const userManagement = { login: "Oswald.Kertzmann" };
       vitest
         .spyOn(userManagementService, "update")
         .mockReturnValue(saveSubject);
@@ -2437,15 +2437,15 @@ import { IUserManagement, NewUserManagement } from "./user-management.model";
 
 export const sampleWithRequiredData: IUserManagement = {
   login: "Rickey.Sauer",
-  email: "Linwood5@hotmail.com",
+  email: "Lia5@hotmail.com",
 };
 
 export const sampleWithPartialData: IUserManagement = {
   id: 2737,
-  login: "Hector_Klein32",
-  firstName: "Monty",
+  login: "Guillermo_Klein32",
+  firstName: "Mitchel",
   lastName: "Mitchell",
-  email: "Guadalupe.Franey@gmail.com",
+  email: "Gordon.Franey@gmail.com",
   imageUrl: "mash meanwhile youthfully",
   activated: false,
   lastModifiedDate: dayjs("2019-12-31T10:49"),
@@ -2453,8 +2453,8 @@ export const sampleWithPartialData: IUserManagement = {
 
 export const sampleWithFullData: IUserManagement = {
   id: 26558,
-  login: "Cecelia72",
-  firstName: "Letha",
+  login: "Catherine72",
+  firstName: "Lenore",
   lastName: "Bode",
   email: "Samuel_Altenwerth65@hotmail.com",
   imageUrl: "ew nor",
@@ -2466,7 +2466,7 @@ export const sampleWithFullData: IUserManagement = {
 };
 
 export const sampleWithNewData: NewUserManagement = {
-  email: "Joannie82@yahoo.com",
+  email: "Jevon82@yahoo.com",
   login: null,
 };
 
