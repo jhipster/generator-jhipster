@@ -762,10 +762,10 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
       "unique": true,
       "uniqueConstraintName": "ux_jhi_user__login",
       "uniqueValue": [
-        "Jacob_Senger",
-        "Mae36",
+        "Isaac_Senger",
+        "Mac36",
         "Ken.Dietrich20",
-        "Gabriel.Rath49",
+        "Gabrielle.Rath49",
       ],
     },
     {
@@ -1414,14 +1414,14 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
   id: 5440,
   login: 'Ken.Dietrich20'}",
   "tsSampleWithNewData": "{
-  login: 'Gabriel.Rath49',
+  login: 'Gabrielle.Rath49',
   id: null}",
   "tsSampleWithPartialData": "{
   id: 966,
-  login: 'Jacob_Senger'}",
+  login: 'Isaac_Senger'}",
   "tsSampleWithRequiredData": "{
   id: 24814,
-  login: 'Mae36'}",
+  login: 'Mac36'}",
   "uniqueEnums": [],
   "updatableEntity": true,
   "useMicroserviceJson": false,
