@@ -537,7 +537,7 @@ _%>
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static <%- persistClass %> create<% if (fieldStatus === 'UPDATED_') { _%>Updated<%_ } %>Entity(<% if (databaseTypeSql && anyRelationshipIsRequired) { %>EntityManager em<% } %>) {
+    public static <%- persistClass %> create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (databaseTypeSql && anyRelationshipIsRequired) { %>EntityManager em<% } %>) {
   <%_ if (fluentMethods) { _%>
         <% if (!anyRelationshipIsRequired) { %>return <% } else { %><%- persistClass %> <%- createInstance %> = <% } %>new <%- persistClass %>()
     <%_ if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
@@ -818,7 +818,7 @@ _%>
     _%>
         // Add a new parent entity
         <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
-        <%- relationship.otherEntity.persistClass %> <%- otherEntityName %> = <%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<% if (!relationship.otherEntityUser) { _%>Updated<%_ } %>Entity(<% if (databaseTypeSql && otherEntity.anyRelationshipIsRequired) { %>em<% } %>);
+        <%- relationship.otherEntity.persistClass %> <%- otherEntityName %> = <%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<% if (!relationship.otherEntityUser) { %>Updated<% } %>Entity(<% if (databaseTypeSql && otherEntity.anyRelationshipIsRequired) { %>em<% } %>);
           <%_ if (databaseTypeSql && !reactive) { _%>
         em.persist(<%- otherEntityName %>);
         em.flush();
@@ -845,15 +845,47 @@ _%>
 
         // Update the entity
     <%_ if (reactive) { _%>
-        webTestClient.put().uri(ENTITY_API_URL_ID, <%_ if (dtoMapstruct) { _%>updated<%- dtoClass %> <%_ } else { _%> updated<%- persistClass %> <%_ } _%>.<%- primaryKey.propertySupplierName %>())
+        webTestClient.put().uri(
+          ENTITY_API_URL_ID, 
+      <%_ if (dtoMapstruct) { _%>
+          updated<%- dtoClass %> 
+      <%_ } else { _%>
+          updated<%- persistClass %> 
+      <%_ } _%>
+            .<%- primaryKey.propertySupplierName %>()
+        )
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(om.writeValueAsBytes(<%_ if (dtoMapstruct) { _%>updated<%- dtoClass %> <%_ } else { _%> updated<%- persistClass %> <%_ } _%>))
+            .bodyValue(om.writeValueAsBytes(
+      <%_ if (dtoMapstruct) { _%>
+                updated<%- dtoClass %> 
+      <%_ } else { _%>
+                updated<%- persistClass %> 
+      <%_ } _%>
+            ))
             .exchange()
             .expectStatus().isOk();
     <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%_ if (dtoMapstruct) { _%>updated<%- dtoClass %> <%_ } else { _%> updated<%- persistClass %> <%_ } _%>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
+        rest<%- entityClass %>MockMvc.perform(put(
+            ENTITY_API_URL_ID, 
+      <%_ if (dtoMapstruct) { _%>
+            updated<%- dtoClass %> 
+      <%_ } else { _%>
+            updated<%- persistClass %> 
+      <%_ } _%>
+                .<%- primaryKey.propertySupplierName %>()
+        )
+      <%_ if (authenticationUsesCsrf) { _%>
+            .with(csrf())
+      <%_ } _%>
             .contentType(MediaType.APPLICATION_JSON)
-            .content(om.writeValueAsBytes(<%_ if (dtoMapstruct) { _%>updated<%- dtoClass %> <%_ } else { _%> updated<%- persistClass %> <%_ } _%>)))
+            .content(om.writeValueAsBytes(
+      <%_ if (dtoMapstruct) { _%>
+                updated<%- dtoClass %> 
+      <%_ } else { _%>
+                updated<%- persistClass %> 
+      <%_ } _%>
+            ))
+        )
             .andExpect(status().isOk());
     <%_ } _%>
 
@@ -988,7 +1020,9 @@ _%>
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
 <%_ } _%>
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeCassandra) { _%>
-            <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- idValue %>))<%- !reactive ? ')' : '' %><%_ } _%><% for (field of fieldsToTest) { %>
+            <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- idValue %>))<%- !reactive ? ')' : '' %>
+<%_ } _%>
+<%_ for (field of fieldsToTest) { _%>
   <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
             <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))<%- !reactive ? ')' : '' %>
   <%_ } _%>
@@ -1009,7 +1043,8 @@ _%>
     !field.fieldTypeBoolean &&
     !field.fieldTypeInteger &&
     !field.fieldTypeDouble
-  ) { %>.toString()<% } %>))<%- !reactive ? ')' : '' %><%_ } _%>;
+  ) { %>.toString()<% } %>))<%- !reactive ? ')' : '' %>
+<%_ } _%>;
     }
 <% if (implementsEagerLoadApis && !databaseTypeNeo4j && !databaseTypeCouchbase) { %>
     @SuppressWarnings({"unchecked"})
@@ -1080,7 +1115,9 @@ _%>
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
 <%_ } _%>
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeCassandra) { _%>
-            <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.<%- primaryKey.name %>").value(<%- reactive ? 'is(' : '' %><%- idValue %>))<%_ } _%><% for (field of fieldsToTest) { %>
+            <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.<%- primaryKey.name %>").value(<%- reactive ? 'is(' : '' %><%- idValue %>))
+<%_ } _%>
+<%_ for (field of fieldsToTest) { _%>
   <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
             <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.<%- field.fieldName %>ContentType").value(<%- reactive ? 'is(' : '' %><%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))
   <%_ } _%>
@@ -1101,7 +1138,8 @@ _%>
     !field.fieldTypeBoolean &&
     !field.fieldTypeInteger &&
     !field.fieldTypeDouble
-  ) { %>.toString()<% } %>))<%_ } _%>;
+  ) { %>.toString()<% } %>))
+<%_ } _%>;
     }
 <%_ if (jpaMetamodelFiltering) { %>
 
@@ -1346,7 +1384,8 @@ _%>
         !field.fieldTypeBoolean &&
         !field.fieldTypeInteger &&
         !field.fieldTypeDouble
-      ) { %>.toString()<% } %>))<%_ } _%>;
+      ) { %>.toString()<% } %>))
+    <%_ } _%>;
 
         // Check, that the count call also returns 1
         webTestClient.get().uri(ENTITY_API_URL + "/count?sort=<%- primaryKey.name %>,desc&" + filter)
@@ -1828,7 +1867,10 @@ _%>
         <%- persistInstance %>.<%- primaryKey.propertyConsumerName %>(<%- field.fieldJavaValueGenerator %>);
     <%_ } _%>
   <%_ } _%>
-  <%_ if (!databaseTypeCouchbase) { _%>  inserted<%- persistClass %> = <%_ } _%><%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
+  <%_ if (!databaseTypeCouchbase) { _%>
+        inserted<%- persistClass %> = 
+  <%_ } _%>
+        <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
   <%_ if (searchEngineElasticsearch) { _%>
         <%- entityInstance %>Repository.save(<%- persistInstance %>)<%- callBlock %>;
         <%- entityInstance %>SearchRepository.save(<%- persistInstance %>)<%- callBlock %>;
@@ -1898,7 +1940,9 @@ _%>
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
   <%_ } _%>
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeCassandra) { _%>
-            <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- idValue %>))<%- !reactive ? ')' : '' %><%_ } _%><% for (field of fieldsToTest) { %>
+            <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- idValue %>))<%- !reactive ? ')' : '' %>
+  <%_ } _%>
+  <%_ for (field of fieldsToTest) { _%>
     <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
             <%- !reactive ? '.andExpect(' : '.' %>jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- 'DEFAULT_' + field.fieldNameUnderscored.toUpperCase() %>_CONTENT_TYPE))<%- !reactive ? ')' : '' %>
     <%_ } _%>
@@ -1918,7 +1962,8 @@ _%>
     !field.fieldTypeBoolean &&
     !field.fieldTypeInteger &&
     !field.fieldTypeDouble
-  ) { %>.toString()<% } %>))<%- !reactive ? ')' : '' %><%_ } _%>;
+  ) { %>.toString()<% } %>))<%- !reactive ? ')' : '' %>
+  <%_ } _%>;
     }
 <%_ } _%>
 
