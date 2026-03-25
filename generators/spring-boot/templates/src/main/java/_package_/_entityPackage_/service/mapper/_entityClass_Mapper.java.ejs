@@ -26,7 +26,7 @@ package <%- entityAbsolutePackage %>.service.mapper;
     .filter(otherEntity => dtoRelationships.some(relationship => relationship.otherEntity === otherEntity))
     .map(otherEntity =>
       dtoRelationships
-        .filter(relationship => relationship.otherEntity == otherEntity)
+        .filter(relationship => relationship.otherEntity === otherEntity)
         .map(({ relatedField, collection }) => ({ otherEntity, relatedField, collection })),
     )
     .flat();

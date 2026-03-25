@@ -170,7 +170,7 @@ _%>
 
     @Override
     public Mono<<%- persistClass %>> findById(<%- primaryKey.type %> id) {
-<%_ if (primaryKey.type != 'Long') { _%>
+<%_ if (primaryKey.type !== 'Long') { _%>
         Comparison whereClause = Conditions.isEqual(entityTable.column("<%- primaryKey.fields[0].columnName %>"), Conditions.just(StringUtils.wrap(id.toString(), "'")));
 <%_ } else { _%>
         Comparison whereClause = Conditions.isEqual(entityTable.column("<%- primaryKey.fields[0].columnName %>"), Conditions.just(id.toString()));

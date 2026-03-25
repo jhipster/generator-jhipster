@@ -64,14 +64,14 @@ export const generateEntityClientImports = (
   relevantRelationships.forEach(relationship => {
     const importType = `I${relationship.otherEntity.entityAngularName}`;
     let importPath: string;
+    const prefix = clientFramework === VUE ? '@' : 'app';
+    const modelPath = clientFramework === ANGULAR ? 'entities' : 'shared/model';
     if (relationship.otherEntity?.builtInUser) {
-      importPath = clientFramework === ANGULAR ? 'app/entities/user/user.model' : 'app/shared/model/user.model';
+      importPath = `${prefix}/${modelPath}/user.model`;
     } else {
-      importPath =
-        clientFramework === ANGULAR ?
-          `app/entities/${normalizePathEnd(relationship.otherEntity.clientRootFolder)}${relationship.otherEntity.entityFileName}.model`
-        : `app/shared/model/${normalizePathEnd(relationship.otherEntity.clientRootFolder)}${relationship.otherEntity.entityFileName}.model`;
+      importPath = `${prefix}/${modelPath}/${normalizePathEnd(relationship.otherEntity.clientRootFolder)}${relationship.otherEntity.entityFileName}.model`;
     }
+
     typeImports.set(importType, importPath);
   });
   return typeImports;

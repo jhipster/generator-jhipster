@@ -26,7 +26,7 @@
 
 <%_ for (const field of fields) { -%>
   <&_ if (fragment.field<%- field.fieldNameCapitalized %>AnnotationSection) { -&>
-  <%_ if (field.id && field.fieldName != 'id') { _%>
+  <%_ if (field.id && field.fieldName !== 'id') { _%>
     @org.springframework.data.annotation.Id
   <%_ } _%>
   <%_ if (field.fieldIsEnum) { _%>
