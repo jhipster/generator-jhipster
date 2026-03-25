@@ -187,8 +187,7 @@ _%>
 <%_ } _%>
 <%_ for (const rel of persistableRelationships.filter(rel => !rel.otherEntity.embedded)) {
     const otherEntityPkName = rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.name || 'id';
-    const { relationshipFieldName } = rel;
-    const { relationshipFieldNamePlural } = rel;
+    const { relationshipFieldName, relationshipFieldNamePlural } = rel;
   if (!rel.collection) {
 _%>
           <%- relationshipFieldName %>: <%- entityInstance %>Entity?.<%- relationshipFieldName %>?.<%- otherEntityPkName %>,
@@ -304,12 +303,7 @@ _%>
 <%_ } _%>
 <%_ for (const rel of persistableRelationships.filter(rel => !rel.otherEntity.embedded)) {
     const otherEntityPkName = rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.name || 'id';
-    const { relationshipName } = rel;
-    const { relationshipNameHumanized } = rel;
-    const { relationshipFieldName } = rel;
-    const { relationshipFieldNamePlural } = rel;
-    const { otherEntityField } = rel;
-    const { relationshipRequired } = rel;
+    const { relationshipName, relationshipNameHumanized, relationshipFieldName, relationshipFieldNamePlural, otherEntityField, relationshipRequired } = rel;
     const translationKey = `${i18nKeyPrefix}.${relationshipName}`;
 _%>
   <%_ if (!rel.collection) { _%>
