@@ -18,8 +18,7 @@
 -%>
 package <%- entityAbsolutePackage %>.service.mapper;
 
-<%_
-  const getOriginalField = field => field.originalField || field;
+<%_ const getOriginalField = field => field.originalField || field;
   const uuidMapMethod = restProperties.some(property => property.relatedField?.fieldTypeUUID);
   const byteMapMethod = restProperties.some(property => property.relatedField?.fieldTypeBytes);
   const dtoRelationships = restProperties.filter(property => property.relationshipName && !property.otherEntity.embedded);
@@ -65,15 +64,15 @@ public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, 
 <%_ if (!embedded) { _%>
   <%_ var renMapAnotEnt = false; /*Render Mapping Annotation during Entity to DTO conversion?*/ _%>
   <%_ for (relationship of dtoRelationships) { _%>
-    <%_
-      renMapAnotEnt = true;
+    <%_ renMapAnotEnt = true;
       let qualifiedByName = relationship.otherEntity.entityInstance + this._.upperFirst(relationship.otherEntityField);
       qualifiedByName = qualifiedByName + (relationship.collection ? 'Set' : '');
     _%>
     @Mapping(target = "<%- relationship.propertyName %>", source = "<%- relationship.propertyName %>", qualifiedByName="<%- qualifiedByName %>")
   <%_ } _%>
   <%_ for (const field of fields.filter(field => field.mapstructExpression)) {
-      renMapAnotEnt = true; _%>
+      renMapAnotEnt = true;
+  _%>
     @Mapping( target = "<%- field.propertyName %>", expression = "<%- field.mapstructExpression %>")
   <%_ } _%>
   <%_ if (renMapAnotEnt) { _%>
@@ -93,7 +92,8 @@ public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, 
     @Mapping(target = "<%- relationship.propertyName %>", ignore = true)
     <%_ }
     if (relationship.collection && fluentMethods) {
-      renMapAnotDto = true; _%>
+      renMapAnotDto = true;
+    _%>
     @Mapping(target = "remove<%- relationship.relationshipNameCapitalized %>", ignore = true)
     <%_ } _%>
   <%_ } _%>

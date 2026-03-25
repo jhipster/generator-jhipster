@@ -11,8 +11,7 @@ import useDataUtils from '@/shared/data/data-utils.service';
 import { useValidation<% if (anyFieldIsTimeDerived) { %>, useDateFormat<% } %> } from '@/shared/composables';
 import { useAlertService } from '@/shared/alert/alert.service';
 
-<%_
-  const allRelationshipsThatNeedSelectOptions = Object
+<%_ const allRelationshipsThatNeedSelectOptions = Object
     .values(relationshipsByOtherEntity)
     .map(relationships => relationships.filter(rel => rel.persistableRelationship))
     .filter(relationships => relationships.length > 0);
@@ -66,8 +65,7 @@ export default defineComponent({
     const retrieve<%- entityAngularName %> = async <%- entityInstance %><%- primaryKey.nameCapitalized %> => {
       try {
         const res = await <%- entityInstance %>Service().find(<%- entityInstance %><%- primaryKey.nameCapitalized %>);
-<%_
-        for (field of fields.filter(field => !field.id)) {
+<%_ for (field of fields.filter(field => !field.id)) {
             const fieldName = field.fieldName;
             const fieldType = field.fieldType;
             if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType)) {
@@ -191,7 +189,7 @@ _%>
           this.alertService.showInfo(
 <%_ if (enableTranslation) { _%>
             this.t$('<%- i18nAlertHeaderPrefix %>.updated', { 'param' : param.<%- primaryKey.name %> })
-<%_ } else {_%>
+<%_ } else { _%>
             'A <%- entityAngularName %> is updated with identifier ' + param.<%- primaryKey.name %>
 <%_ } _%>
           );
@@ -206,7 +204,7 @@ _%>
           this.alertService.showSuccess(
 <%_ if (enableTranslation) { _%>
             this.t$('<%- i18nAlertHeaderPrefix %>.created', { param: param.<%- primaryKey.name %> }).toString()
-<%_ } else {_%>
+<%_ } else { _%>
             'A <%- entityAngularName %> is created with identifier ' + param.<%- primaryKey.name %>
 <%_ } _%>
           );

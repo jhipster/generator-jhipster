@@ -21,8 +21,7 @@ package <%- entityAbsolutePackage %>.service.dto;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import <%- packageName %>.web.rest.TestUtil;
-<%_
-let id1;
+<%_ let id1;
 let id2;
 if (!embedded) {
     id1 = primaryKey.javaSampleValues[0];

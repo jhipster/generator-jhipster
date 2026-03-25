@@ -220,7 +220,7 @@ _%>
   <%_ for (const [idx, rel] of relationships.filter(rel => {
     return (rel.relationshipManyToMany && rel.ownerSide);
    }).entries()) {
-_%>
+  _%>
     <%_ if (idx === 0) { _%>
         Mono<Void> result = entityManager.updateLinkTable(<%- rel.relationshipName %>Link, entity.<%- primaryKey.propertySupplierName %>(), entity.<%- rel.propertySupplierName %>().stream().map(<%- rel.otherEntity.persistClass %>::<%- rel.otherEntity.primaryKey.propertySupplierName %>)).then();
     <%_ } else { _%>
@@ -240,7 +240,7 @@ _%>
   <%_ for (const [idx, rel] of relationships.filter(rel => {
       return (rel.relationshipManyToMany && rel.ownerSide);
     }).entries()) {
-_%>
+  _%>
     <%_ if (idx === 0) { _%>
         return entityManager.deleteFromLinkTable(<%- rel.relationshipName %>Link, entityId)
     <%_ } else { _%>

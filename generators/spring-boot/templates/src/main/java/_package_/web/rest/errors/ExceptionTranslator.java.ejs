@@ -97,8 +97,7 @@ import java.util.Optional;
 <%_ } _%>
 public class ExceptionTranslator extends ResponseEntityExceptionHandler <% if (reactive) { %> implements ExceptionTranslation <% } %>{
 
-<%_
-let returnType;
+<%_ let returnType;
 let requestClass;
 let requestEntityRequestClass;
 if (reactive) {

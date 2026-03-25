@@ -43,8 +43,7 @@
     <property name="floatType" value="float4" dbms="postgresql"/>
     <property name="clobType" value="clob" dbms="postgresql"/>
   <%_ if (reactive) { _%>
-    <%_
-      // hibernate/liquibase maps Blob type to oid by default https://liquibase.jira.com/browse/CORE-1863
+    <%_ // hibernate/liquibase maps Blob type to oid by default https://liquibase.jira.com/browse/CORE-1863
       // r2dbc-postgresql doesn't support mapping Blob to oid https://github.com/pgjdbc/r2dbc-postgresql/issues/255
     _%>
     <property name="blobType" value="bytea" dbms="postgresql"/>

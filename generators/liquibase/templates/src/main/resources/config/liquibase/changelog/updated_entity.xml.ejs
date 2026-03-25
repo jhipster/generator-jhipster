@@ -114,8 +114,7 @@ _%>
     </changeSet>
   <%_ } _%>
 <%_ } _%>
-<%_
-/* ======== Start removed relationships exists ======== */
+<%_ /* ======== Start removed relationships exists ======== */
 if (removedRelationships && removedRelationships.length) {
     let hasRelationShips = false;
     let hasJoinRelationShips = false;
@@ -154,15 +153,14 @@ _%>
             /* ======== End dropForeignKeyConstraint ======== */
       _%>
         <dropColumn tableName="<%- entity.entityTableName %>">
-        <%_
-            /* ======== Start drop relationship columns ======== */
+        <%_ /* ======== Start drop relationship columns ======== */
             for (relationship of removedRelationships) {
                 if (relationship.shouldWriteRelationship && !relationshipsToRecreateForeignKeysOnly.includes(relationship)) {
                     for (const otherEntityPkField of relationship.otherEntity.primaryKey.fields) {
         _%>
             <column name="<%- relationship.columnName %>_<%- otherEntityPkField.columnName %>"/>
             <%_ } _%>
-        <%_    }
+        <%_ }
             }
             /* ======== End drop relationship column ======== */
         _%>

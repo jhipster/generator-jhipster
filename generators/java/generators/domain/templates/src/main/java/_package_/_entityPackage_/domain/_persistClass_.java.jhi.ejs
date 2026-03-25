@@ -136,8 +136,7 @@ public class <%- persistClass %> <&- fragments.extendsSection() -&>implements Se
 <%_ } _%>
 <&- fragments.classAdditionalFieldsSection() -&>
 
-<%_
-// An embedded entity should not reference entities that embed it, unless the other entities are also embedded
+<%_ // An embedded entity should not reference entities that embed it, unless the other entities are also embedded
 for (relationship of relationships) {
   if (relationship.relationshipApiDescription) {
 _%>
@@ -375,7 +374,7 @@ _%>
 <%_ for (const relationship of relationships) { _%>
   <%_ if (relationship.otherEntity.embedded) {
     if (relationship.relationshipManyToOne) {
-_%>
+  _%>
             ", <%- relationship.relationshipFieldName %>='" + <%- relationship.propertySupplierName %>() + "'" +
     <%_ } else if (relationship.relationshipOneToOne && relationship.ownerSide) { _%>
             ", <%- relationship.relationshipFieldName %>='" + <%- relationship.propertySupplierName %>() + "'" +

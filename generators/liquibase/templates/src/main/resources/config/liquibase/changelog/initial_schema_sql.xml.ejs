@@ -25,8 +25,7 @@
     </changeSet>
 
 <%_ } _%>
-<%_
-  if (generateBuiltInUserEntity) {
+<%_ if (generateBuiltInUserEntity) {
     const idField = user.primaryKey.fields[0];
     if (idField.liquibaseCustomSequenceGenerator) {
 _%>
@@ -34,8 +33,7 @@ _%>
         <createSequence sequenceName="<%- idField.liquibaseSequenceGeneratorName %>" startValue="1050" incrementBy="50"/>
     </changeSet>
 
-<%_
-    }
+<%_ }
   }
 _%>
     <!--
