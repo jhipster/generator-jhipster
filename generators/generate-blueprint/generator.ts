@@ -142,6 +142,9 @@ export default class extends BaseSimpleApplicationGenerator<
             js: false,
           });
         }
+        if (this.jhipsterConfig.ts) {
+          this.config.set('js', false);
+        }
       },
     });
   }
@@ -167,7 +170,7 @@ export default class extends BaseSimpleApplicationGenerator<
   get loading() {
     return this.asLoadingTaskGroup({
       async loading({ applicationDefaults }) {
-        applicationDefaults({ commands: () => [], typescriptEslint: false });
+        applicationDefaults({ commands: () => [], typescriptEslint: () => Boolean(this.jhipsterConfig.ts) });
       },
     });
   }
@@ -196,7 +199,7 @@ export default class extends BaseSimpleApplicationGenerator<
       prepare({ application }) {
         const { cli, cliName, baseName } = application;
         application.githubRepository = this.jhipsterConfig.githubRepository ?? `jhipster/generator-jhipster-${baseName}`;
-        application.blueprintMjsExtension = application.js ? 'js' : 'mjs';
+        application.blueprintMjsExtension = application.ts ? 'ts' : application.js ? 'js' : 'mjs';
         if (cli) {
           application.cliName = cliName ?? `jhipster-${baseName}`;
         }
@@ -315,15 +318,16 @@ export default class extends BaseSimpleApplicationGenerator<
           mainDependencies,
           this.fetchFromInstalledJHipster('generate-blueprint/resources/package.json'),
         );
+        const isTypeScript = Boolean(application.ts);
         this.packageJson.merge({
           name: `generator-jhipster-${application.baseName}`,
           keywords: ['yeoman-generator', 'jhipster-blueprint', BLUEPRINT_API_VERSION],
-          files: defaultPublishedFiles,
+          files: isTypeScript ? defaultPublishedFiles.map(f => f.replace('.?(c|m)js', '.?(c|m)(j|t)s')) : defaultPublishedFiles,
           scripts: {
             ejslint: 'ejslint generators/**/*.ejs',
             lint: 'eslint .',
             'lint-fix': 'npm run ejslint && npm run lint -- --fix',
-            pretest: 'npm run prettier-check && npm run lint',
+            pretest: isTypeScript ? 'npm run prettier-check && npm run lint && tsc' : 'npm run prettier-check && npm run lint',
             test: 'vitest run',
             'update-snapshot': 'vitest run --update',
             vitest: 'vitest',
@@ -335,6 +339,7 @@ export default class extends BaseSimpleApplicationGenerator<
             globals: mainDependencies.globals,
             vitest: mainDependencies.vitest,
             prettier: mainDependencies.prettier,
+            ...(isTypeScript ? { typescript: mainDependencies.typescript } : {}),
             /*
              * yeoman-test version is loaded through generator-jhipster peer dependency.
              * generator-jhipster uses a fixed version, blueprints must set a compatible range.
@@ -349,11 +354,15 @@ export default class extends BaseSimpleApplicationGenerator<
       addCliToPackageJson({ application }) {
         const { cli, cliName } = application;
         if (!cli || !cliName || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
+        const isTypeScript = Boolean(application.ts);
+        const publishedFiles = isTypeScript
+          ? defaultPublishedFiles.map(f => f.replace('.?(c|m)js', '.?(c|m)(j|t)s'))
+          : defaultPublishedFiles;
         this.packageJson.merge({
           bin: {
             [cliName]: 'cli/cli.cjs',
           },
-          files: ['cli', ...defaultPublishedFiles],
+          files: ['cli', ...publishedFiles],
         });
       },
       addGeneratorJHipsterDependency({ application }) {

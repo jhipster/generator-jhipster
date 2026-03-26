@@ -5,6 +5,15 @@ import BaseCoreGenerator from 'generator-jhipster/generators/base-core';
 import { getGithubSamplesGroup } from 'generator-jhipster/testing';
 
 export default class extends BaseCoreGenerator {
+<%_ if (blueprintMjsExtension === 'ts') { _%>
+  samplesFolder: string | undefined;
+  samplesGroup!: string;
+  sampleName!: string;
+  all!: boolean;
+  sampleType!: string;
+  sampleFile!: string;
+  generatorOptions: any;
+<%_ } else { _%>
   /** @type {string | undefined} */
   samplesFolder;
   /** @type {string} */
@@ -19,6 +28,7 @@ export default class extends BaseCoreGenerator {
   sampleFile;
   /** @type {any} */
   generatorOptions;
+<%_ } _%>
 
   get [BaseCoreGenerator.WRITING]() {
     return this.asWritingTaskGroup({

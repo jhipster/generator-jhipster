@@ -55,6 +55,31 @@ describe(`generator - ${generator}`, () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
     });
+    describe('ts option', () => {
+      before(async () => {
+        await helpers.runJHipster(generator).withJHipsterConfig({ ts: true }).withMockedGenerators(mockedGenerators);
+      });
+      it('should compose with init generator', () => {
+        runResult.assertGeneratorComposedOnce('jhipster:init');
+      });
+      it('should write files and match snapshot', () => {
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
+      });
+    });
+    describe('ts option with sub-generators', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withJHipsterConfig({ ts: true, subGenerators: ['app'], generators: { app: { sbs: true, priorities: ['writing'] } } })
+          .withMockedGenerators(mockedGenerators);
+      });
+      it('should write .ts files for generators', () => {
+        runResult.assertFile(['generators/app/index.ts', 'generators/app/command.ts', 'generators/app/generator.ts']);
+      });
+      it('should write files and match snapshot', () => {
+        expect(runResult.getStateSnapshot()).toMatchSnapshot();
+      });
+    });
     describe('local-blueprint option', () => {
       before(async () => {
         await helpers.runJHipster(generator).withOptions({ localBlueprint: true }).withMockedGenerators(mockedGenerators);
