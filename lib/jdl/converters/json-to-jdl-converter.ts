@@ -70,6 +70,7 @@ export function convertToJDL(runtime: JDLRuntime, directory = '.', output: strin
 }
 
 export function convertSingleContentToJDL(
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
   yoRcFileContent: YoRcJHipsterApplicationContent<Record<string, any>>,
   runtime: JDLRuntime,
   entities?: Map<string, JSONEntity>,
@@ -85,6 +86,7 @@ function getJDLObjectFromMultipleApplications(directory: string, runtime: JDLRun
   let jdlObject = new JDLObject();
   subDirectories.forEach(subDirectory => {
     const applicationDirectory = path.join(directory, subDirectory);
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
     const yoRcFileContent = readYoRcFile<YoRcJHipsterApplicationConfigValue>(applicationDirectory);
     let entities = new Map<string, JSONEntity>();
     if (doesDirectoryExist(path.join(applicationDirectory, '.jhipster'))) {

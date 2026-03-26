@@ -21,6 +21,7 @@ import BaseSimpleApplicationGenerator from '../base-simple-application/index.ts'
 import { files, readme } from './files.ts';
 import type { Application as InitApplication, Config as InitConfig, Options as InitOptions } from './types.ts';
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
 export default class InitGenerator extends BaseSimpleApplicationGenerator<InitApplication, InitConfig, InitOptions> {
   generateReadme = true;
 

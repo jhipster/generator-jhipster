@@ -71,6 +71,7 @@ export class SpringBootApplicationGenerator extends BaseApplicationGenerator<
   SpringBootApplication,
   SpringBootConfig,
   SpringBootOptions,
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
   SpringBootSource
 > {}
 

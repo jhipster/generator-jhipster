@@ -33,6 +33,7 @@ export default class GatewayGenerator extends BaseApplicationGenerator<
   SpringCloudApplication<SpringCloudEntity>,
   SpringCloudConfig,
   SpringCloudOptions,
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
   SpringCloudSource
 > {
   async beforeQueue() {

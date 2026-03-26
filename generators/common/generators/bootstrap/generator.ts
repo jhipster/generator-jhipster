@@ -21,14 +21,9 @@ import { mutateData } from '../../../../lib/utils/object.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { mutateApplication } from '../../application.ts';
 import { mutateEntity as commonMutateEntity, mutateField as commonMutateField } from '../../entity.ts';
-import type {
-  Application as CommonApplication,
-  Config as CommonConfig,
-  Entity as CommonEntity,
-  Options as CommonOptions,
-} from '../../types.ts';
+import type { Application as CommonApplication, Entity as CommonEntity } from '../../types.ts';
 
-export default class BootstrapGenerator extends BaseApplicationGenerator<CommonEntity, CommonApplication, CommonConfig, CommonOptions> {
+export default class BootstrapGenerator extends BaseApplicationGenerator<CommonEntity, CommonApplication> {
   customLifecycle = true;
 
   async beforeQueue() {

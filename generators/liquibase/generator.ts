@@ -81,6 +81,7 @@ const {
 export default class LiquibaseGenerator<
   Entity extends LiquibaseEntity = LiquibaseEntity,
   Application extends LiquibaseApplication<Entity> = LiquibaseApplication<Entity>,
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
 > extends BaseEntityChangesGenerator<Entity, Application, LiquibaseConfig, LiquibaseOptions, LiquibaseSource> {
   numberOfRows!: number;
   databaseChangelogs: BaseChangelog<Entity>[] = [];

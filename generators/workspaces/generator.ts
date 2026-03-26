@@ -26,6 +26,7 @@ import type { Config as ProjectNameConfig } from '../project-name/types.d.ts';
 
 import type { Config as WorkspacesConfig, Options as WorkspacesOptions, WorkspacesApplication } from './types.ts';
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
 export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, WorkspacesApplication, WorkspacesConfig, WorkspacesOptions> {
   dockerCompose!: boolean;
   generateWorkspaces!: boolean;

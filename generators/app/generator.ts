@@ -27,6 +27,7 @@ import { getDefaultAppName } from '../project-name/support/index.ts';
 import cleanupOldFilesTask from './cleanup.ts';
 import { checkNode } from './support/index.ts';
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
 export default class AppGenerator extends BaseApplicationGenerator<CommonEntity, CommonApplication, CommonConfig> {
   async beforeQueue() {
     if (!this.fromBlueprint) {

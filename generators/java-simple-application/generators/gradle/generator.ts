@@ -51,6 +51,7 @@ import type {
 
 const { PRE_CONFLICTS_QUEUE } = QUEUES;
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
 export default class GradleGenerator extends BaseSimpleApplicationGenerator<GradleApplication, GradleConfig, GradleOptions, GradleSource> {
   gradleVersionFromWrapper: string | undefined;
 

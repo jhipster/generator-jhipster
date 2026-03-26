@@ -53,6 +53,7 @@ import type {
 
 const { isReservedClassName } = reservedKeywords;
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
 export default class EntityGenerator extends BaseApplicationGenerator<EntityEntity, EntityApplication, EntityConfig, EntityOptions> {
   name!: string;
   application: any = {};

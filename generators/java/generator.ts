@@ -30,6 +30,7 @@ import type {
 /**
  * Utility class with types.
  */
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
 export class JavaApplicationGenerator extends BaseApplicationGenerator<JavaEntity, JavaApplication, JavaConfig, JavaOptions, JavaSource> {}
 
 export default class JavaGenerator extends JavaApplicationGenerator {

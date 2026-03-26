@@ -20,6 +20,7 @@ import type { ConflicterFile } from '@yeoman/conflicter';
 import { transformFileField } from '@yeoman/transform';
 
 const createForceWriteConfigFilesTransform = () =>
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
   transformFileField<'conflicter', ConflicterFile>('conflicter', 'force', { pattern: '**/.jhipster/*.json' });
 
 export default createForceWriteConfigFilesTransform;

@@ -34,6 +34,7 @@ export class JavascriptSimpleApplicationGenerator extends BaseSimpleApplicationG
   JavascriptApplication,
   JavascriptConfig,
   JavascriptOptions,
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
   JavascriptSource
 > {}
 

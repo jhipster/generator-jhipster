@@ -22,19 +22,9 @@ import { mutateApplicationLoading, mutateApplicationPreparing } from '../../appl
 import { mutateEntity as languagesMutateEntity } from '../../entity.ts';
 import { CONTEXT_DATA_SUPPORTED_LANGUAGES } from '../../support/constants.ts';
 import { type Language, supportedLanguages } from '../../support/languages.ts';
-import type {
-  Application as LanguagesApplication,
-  Config as LanguagesConfig,
-  Entity as LanguagesEntity,
-  Options as LanguagesOptions,
-} from '../../types.ts';
+import type { Application as LanguagesApplication, Entity as LanguagesEntity } from '../../types.ts';
 
-export default class BootstrapGenerator extends BaseApplicationGenerator<
-  LanguagesEntity,
-  LanguagesApplication<LanguagesEntity>,
-  LanguagesConfig,
-  LanguagesOptions
-> {
+export default class BootstrapGenerator extends BaseApplicationGenerator<LanguagesEntity, LanguagesApplication<LanguagesEntity>> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

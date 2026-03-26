@@ -22,6 +22,7 @@ import { importJDLTransform } from '../../support/import-jdl-transform.ts';
 
 import type { Config as JdlBootstrapConfig, Options as JdlBootstrapOptions } from './types.ts';
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
 export default class JdlBootstrapGenerator extends BaseGenerator<JdlBootstrapConfig, JdlBootstrapOptions> {
   async beforeQueue() {
     if (!this.fromBlueprint) {

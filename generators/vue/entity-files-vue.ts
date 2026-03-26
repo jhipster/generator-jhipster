@@ -18,7 +18,7 @@
  */
 import { asPostWritingEntitiesTask, asWriteFilesSection, asWritingEntitiesTask } from '../base-application/support/index.ts';
 import { clientApplicationTemplatesBlock, filterEntitiesForClient } from '../client/support/index.ts';
-import type { Application as ClientApplication, Entity as ClientEntity, Source as ClientSource } from '../client/types.ts';
+import type { Application as ClientApplication, Entity as ClientEntity } from '../client/types.ts';
 
 export const entityFiles = asWriteFilesSection({
   client: [
@@ -66,16 +66,18 @@ export const writeEntityFiles = asWritingEntitiesTask<ClientEntity, ClientApplic
   }
 });
 
-export const postWriteEntityFiles = asPostWritingEntitiesTask<ClientEntity, ClientApplication, ClientSource>(
-  async function postWriteEntityFiles({ application, entities, source }) {
-    source.addEntitiesToClient({
-      application,
-      entities: (application.filterEntitiesForClient ?? (entities => entities))(entities).filter(
-        entity => !entity.builtInUser && !entity.embedded,
-      ),
-    });
-  },
-);
+export const postWriteEntityFiles = asPostWritingEntitiesTask<ClientEntity, ClientApplication>(async function postWriteEntityFiles({
+  application,
+  entities,
+  source,
+}) {
+  source.addEntitiesToClient({
+    application,
+    entities: (application.filterEntitiesForClient ?? (entities => entities))(entities).filter(
+      entity => !entity.builtInUser && !entity.embedded,
+    ),
+  });
+});
 
 export const cleanupEntitiesFiles = asWritingEntitiesTask<ClientEntity, ClientApplication>(function cleanupEntitiesFiles({
   application,

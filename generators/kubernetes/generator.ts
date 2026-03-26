@@ -45,24 +45,14 @@ import {
   askForPersistentStorage,
   askForStorageClassName,
 } from './prompts.ts';
-import type {
-  Config as KubernetesConfig,
-  Deployment as KubernetesDeployment,
-  Options as KubernetesOptions,
-  WorkspacesApplication as KubernetesWorkspacesApplication,
-} from './types.ts';
+import type { Deployment as KubernetesDeployment } from './types.ts';
 
 const { MAVEN } = buildToolTypes;
 
 /**
  * Temporary base class for Kubernetes generators.
  */
-export class BaseKubernetesGenerator extends BaseWorkspacesGenerator<
-  KubernetesDeployment,
-  KubernetesWorkspacesApplication,
-  KubernetesConfig,
-  KubernetesOptions
-> {}
+export class BaseKubernetesGenerator extends BaseWorkspacesGenerator<KubernetesDeployment> {}
 
 export default class KubernetesGenerator extends BaseKubernetesGenerator {
   async beforeQueue() {

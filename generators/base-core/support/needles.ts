@@ -20,7 +20,6 @@ import assert from 'node:assert';
 
 import { transformContents } from '@yeoman/transform';
 import { escapeRegExp, kebabCase } from 'lodash-es';
-import type { MemFsEditorFile } from 'mem-fs-editor';
 
 import type { CascatedEditFileCallback, EditFileCallback } from '../api.ts';
 import type CoreGenerator from '../index.ts';
@@ -361,7 +360,7 @@ export function createBaseNeedle<Generator extends CoreGenerator = CoreGenerator
 }
 
 export const createNeedleTransform = () =>
-  transformContents<MemFsEditorFile>(content => {
+  transformContents(content => {
     if (content) {
       let contentAsString = content.toString();
       const positions = getNeedlesPositions(contentAsString);

@@ -34,6 +34,7 @@ export type JDLJSONMicrofrontend = {
 };
 
 export type PostProcessedJDLJSONApplication = JDLJSONApplication<
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
   {
     blueprints?: JDLJSONBlueprint[];
     microfrontends?: JDLJSONMicrofrontend[];
@@ -41,6 +42,7 @@ export type PostProcessedJDLJSONApplication = JDLJSONApplication<
 >;
 
 export type RawJDLJSONApplication = JDLJSONApplication<
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
   {
     entityNames?: string;
     blueprints?: string[];

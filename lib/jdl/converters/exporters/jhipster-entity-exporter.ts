@@ -74,6 +74,7 @@ function updateEntities(applicationPath: string): JSONEntity[] {
 
 function updateEntityToGenerateWithExistingOne(applicationPath: string, entity: JDLJSONEntity): JSONEntity {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-arguments
     const fileOnDisk = readEntityFile<JSONEntity>(applicationPath, entity.name);
     if (!entity.annotations?.changelogDate && fileOnDisk?.annotations?.changelogDate) {
       entity.annotations = entity.annotations || {};

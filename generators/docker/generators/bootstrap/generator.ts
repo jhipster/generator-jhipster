@@ -18,19 +18,9 @@
  */
 import BaseSimpleApplicationGenerator from '../../../base-simple-application/index.ts';
 import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
-import type {
-  Application as DockerApplication,
-  Config as DockerConfig,
-  Options as DockerOptions,
-  Source as DockerSource,
-} from '../../types.ts';
+import type { Application as DockerApplication } from '../../types.ts';
 
-export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<
-  DockerApplication,
-  DockerConfig,
-  DockerOptions,
-  DockerSource
-> {
+export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<DockerApplication> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
