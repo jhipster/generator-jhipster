@@ -18,7 +18,7 @@
 -%>
 
 import { configureStore } from '@reduxjs/toolkit';
-import * as toastify from 'react-toastify'; // synthetic default import doesn't work here due to mocking.
+import { toast } from 'react-toastify';
 <%_ if (enableTranslation) { _%>
 import { TranslatorContext } from 'react-jhipster';
 <%_ } _%>
@@ -27,6 +27,13 @@ import { ProblemWithMessageType } from 'app/shared/jhipster/problem-details';
 import { INVALID_PASSWORD_TYPE } from 'app/shared/jhipster/constants';
 
 import notificationMiddleware from './notification-middleware';
+
+jest.mock('react-toastify', () => ({
+  toast: {
+    error: jest.fn(),
+    success: jest.fn(),
+  },
+}));
 
 describe('Notification Middleware', () => {
   let store: ReturnType<typeof makeStore>;
@@ -186,8 +193,7 @@ describe('Notification Middleware', () => {
 <%_ } _%>
   beforeEach(() => {
     store = makeStore();
-    jest.spyOn(toastify.toast, 'error');
-    jest.spyOn(toastify.toast, 'success');
+    jest.clearAllMocks();
     // ignore console errors
     jest.spyOn(globalThis.console, 'error').mockImplementation();
   });
@@ -198,68 +204,68 @@ describe('Notification Middleware', () => {
 
   it('should not trigger a toast message but should return action', () => {
     expect(store.dispatch(DEFAULT).payload).toEqual('foo');
-    expect(toastify.toast.error).not.toHaveBeenCalled();
-    expect(toastify.toast.success).not.toHaveBeenCalled();
+    expect(toast.error).not.toHaveBeenCalled();
+    expect(toast.success).not.toHaveBeenCalled();
   });
 
   it('should trigger a success toast message for header alerts', () => {
     expect(store.dispatch(HEADER_SUCCESS).payload.status).toEqual(201);
-    expect(toastify.toast.success).toHaveBeenCalledWith(expect.stringContaining('foo.created'));
+    expect(toast.success).toHaveBeenCalledWith(expect.stringContaining('foo.created'));
   });
 
   it('should trigger an error toast message and return error', () => {
     expect(store.dispatch(DEFAULT_ERROR).error.message).toEqual('foo');
-    expect(toastify.toast.error).toHaveBeenCalledWith('foo');
+    expect(toast.error).toHaveBeenCalledWith('foo');
   });
 
   it('should trigger an error toast message and return error for generic message', () => {
     expect(store.dispatch(GENERIC_ERROR).error.response.data.message).toEqual('Error');
-    expect(toastify.toast.error).toHaveBeenCalledWith('Error');
+    expect(toast.error).toHaveBeenCalledWith('Error');
   });
 
   it('should trigger an error toast message and return error for 400 response code', () => {
     expect(store.dispatch(VALIDATION_ERROR).error.response.data.message).toEqual('error.validation');
-    expect(toastify.toast.error).toHaveBeenCalledWith(expect.stringContaining(<% if (enableTranslation) { %>'error.Size'<% } else { %>'Error on field "MinField"'<% } %>));
+    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining(<% if (enableTranslation) { %>'error.Size'<% } else { %>'Error on field "MinField"'<% } %>));
   });
 
   it('should trigger an error toast message and return error for 404 response code', () => {
     expect(store.dispatch(NOT_FOUND_ERROR).error.response.data.message).toEqual('Not found');
-    expect(toastify.toast.error).toHaveBeenCalledWith(expect.stringContaining(<% if (enableTranslation) { %>'error.url.not.found'<% } else { %>'Not found'<% } %>));
+    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining(<% if (enableTranslation) { %>'error.url.not.found'<% } else { %>'Not found'<% } %>));
   });
 
   it('should trigger an error toast message and return error for 0 response code', () => {
     expect(store.dispatch(NO_SERVER_ERROR).error.response.status).toEqual(0);
-    expect(toastify.toast.error).toHaveBeenCalledWith(expect.stringContaining(<% if (enableTranslation) { %>'error.server.not.reachable'<% } else { %>'Server not reachable'<% } %>));
+    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining(<% if (enableTranslation) { %>'error.server.not.reachable'<% } else { %>'Server not reachable'<% } %>));
   });
 
   it('should trigger an error toast message and return error for headers containing errors', () => {
     expect(store.dispatch(HEADER_ERRORS).error.response.status).toEqual(400);
-    expect(toastify.toast.error).toHaveBeenCalledWith(expect.stringContaining('foo.creation'));
+    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining('foo.creation'));
   });
 
   it('should not trigger an error toast message and return error for 401 response code', () => {
     expect(store.dispatch(LOGIN_REJECTED_ERROR).error.response.status).toEqual(401);
-    expect(toastify.toast.error).not.toHaveBeenCalled();
-    expect(toastify.toast.success).not.toHaveBeenCalled();
+    expect(toast.error).not.toHaveBeenCalled();
+    expect(toast.success).not.toHaveBeenCalled();
   });
 
   it('should trigger an error toast message and return error for 400 response code', () => {
     expect(store.dispatch(TITLE_ERROR).error.response.status).toEqual(400);
-    expect(toastify.toast.error).toHaveBeenCalledWith('Incorrect password');
+    expect(toast.error).toHaveBeenCalledWith('Incorrect password');
   });
 
   it('should trigger an error toast message and return error for string in data', () => {
     expect(store.dispatch(STRING_DATA_ERROR).error.response.status).toEqual(400);
-    expect(toastify.toast.error).toHaveBeenCalledWith('Incorrect password string');
+    expect(toast.error).toHaveBeenCalledWith('Incorrect password string');
   });
 
   it('should trigger an error toast message and return error for unknown 400 error', () => {
     expect(store.dispatch(UNKNOWN_400_ERROR).error.response.status).toEqual(400);
-    expect(toastify.toast.error).toHaveBeenCalledWith('Unknown error!');
+    expect(toast.error).toHaveBeenCalledWith('Unknown error!');
   });
 
   it('should trigger an error toast message and return error for unknown error', () => {
     expect(store.dispatch(UNKNOWN_ERROR).error.isAxiosError).toEqual(true);
-    expect(toastify.toast.error).toHaveBeenCalledWith('Unknown error!');
+    expect(toast.error).toHaveBeenCalledWith('Unknown error!');
   });
 });
