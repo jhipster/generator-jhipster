@@ -33,9 +33,14 @@ import command from './command.<%- blueprintMjsExtension %>';
 
 <%_ if (application.dynamic) { _%>
 // eslint-disable-next-line import/prefer-default-export
+<%_ if (blueprintMjsExtension === 'ts') { _%>
+export async function createGenerator(env: any) {
+  let <%- generatorClass %>Generator: typeof import('generator-jhipster/generators/<%- jhipsterGenerator %>').default;
+<%_ } else { _%>
 export async function createGenerator(env) {
   /** @type {typeof import('generator-jhipster/generators/<%- jhipsterGenerator %>').default} */
   let <%- generatorClass %>Generator;
+<%_ } _%>
   try {
     // Try to use locally installed generator-jhipster
     <%- generatorClass %>Generator = (await import('generator-jhipster/generators/<%- jhipsterGenerator %>')).default;
@@ -49,7 +54,11 @@ export async function createGenerator(env) {
 <%_ } else { _%>
 export default class extends <%- generatorClass %>Generator {
 <%_ } _%>
+<%_ if (blueprintMjsExtension === 'ts') { _%>
+  constructor(args: string[], opts: Record<string, unknown>, features: Record<string, unknown>) {
+<%_ } else { _%>
   constructor(args, opts, features) {
+<%_ } _%>
     super(args, opts, {
       ...features,
 

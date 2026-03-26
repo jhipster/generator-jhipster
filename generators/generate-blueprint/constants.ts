@@ -31,6 +31,7 @@ export const SUB_GENERATORS = 'subGenerators';
 export const ADDITIONAL_SUB_GENERATORS = 'additionalSubGenerators';
 export const DYNAMIC = 'dynamic';
 export const JS = 'js';
+export const TS = 'ts';
 export const LOCAL_BLUEPRINT_OPTION = 'localBlueprint';
 export const CLI_OPTION = 'cli';
 
@@ -44,7 +45,8 @@ export const WRITTEN = 'written';
  */
 export const defaultConfig = ({ config = {} }: { config?: any } = {}) => ({
   [DYNAMIC]: false,
-  [JS]: !config[LOCAL_BLUEPRINT_OPTION],
+  [JS]: !config[LOCAL_BLUEPRINT_OPTION] && !config[TS],
+  [TS]: false,
   [LOCAL_BLUEPRINT_OPTION]: false,
   [CLI_OPTION]: !config[LOCAL_BLUEPRINT_OPTION],
   [SUB_GENERATORS]: [] as string[],
@@ -69,6 +71,7 @@ export const allGeneratorsConfig = () => ({
   [ADDITIONAL_SUB_GENERATORS]: '',
   [DYNAMIC]: false,
   [JS]: true,
+  [TS]: false,
   generators: Object.fromEntries(lookupGeneratorsNamespaces().map(subGenerator => [subGenerator, allSubGeneratorConfig(subGenerator)])),
 });
 

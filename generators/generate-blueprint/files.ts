@@ -21,8 +21,55 @@ import { asWriteFilesSection } from '../base-application/support/index.ts';
 import { LOCAL_BLUEPRINT_OPTION } from './constants.ts';
 import type { Application as GenerateBlueprintApplication, TemplateData } from './types.ts';
 
+/**
+ * Helper to map .mjs source templates to the appropriate destination extension.
+ * When TypeScript is enabled, .mjs files are written as .ts; otherwise they keep .mjs.
+ */
+const blueprintFile = (sourceFile: string) => ({
+  sourceFile,
+  destinationFile: (ctx: GenerateBlueprintApplication) =>
+    ctx.blueprintMjsExtension === 'ts' ? sourceFile.replace(/\.mjs$/, '.ts') : sourceFile,
+});
+
 export const files = asWriteFilesSection<GenerateBlueprintApplication>({
   baseFiles: [
+    {
+      condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION],
+      templates: [
+        '.github/workflows/generator.yml',
+        '.gitignore.jhi.blueprint',
+        '.prettierignore.jhi.blueprint',
+        'eslint.config.ts.jhi.blueprint',
+        'README.md',
+        'tsconfig.json',
+        'vitest.config.ts',
+        'vitest.test-setup.ts',
+        blueprintFile('.blueprint/cli/commands.mjs'),
+        blueprintFile('.blueprint/generate-sample/command.mjs'),
+        blueprintFile('.blueprint/generate-sample/generator.mjs'),
+        blueprintFile('.blueprint/generate-sample/index.mjs'),
+        // Always write cli for devBlueprint usage
+        'cli/cli.cjs',
+        { sourceFile: 'cli/cli-customizations.cjs', override: false },
+      ],
+    },
+    {
+      condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION] && ctx.githubWorkflows,
+      templates: [
+        blueprintFile('.blueprint/github-build-matrix/command.mjs'),
+        blueprintFile('.blueprint/github-build-matrix/generator.mjs'),
+        blueprintFile('.blueprint/github-build-matrix/generator.spec.mjs'),
+        blueprintFile('.blueprint/github-build-matrix/index.mjs'),
+      ],
+    },
+    {
+      condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION] && ctx.githubWorkflows && !ctx.skipWorkflows,
+      templates: ['.github/workflows/build-cache.yml', '.github/workflows/samples.yml'],
+    },
+    {
+      condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION] && !ctx.sampleWritten,
+      templates: ['.blueprint/generate-sample/templates/samples/sample.jdl'],
+    },
     {
       condition: ctx => ctx.commands.length > 0,
       templates: ['cli/commands.cjs'],

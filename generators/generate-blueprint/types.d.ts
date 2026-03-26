@@ -35,6 +35,7 @@ export type Application = Command['Application'] &
     blueprintMjsExtension: string;
     commands: string[];
     blueprintsPath: string;
+    ts?: boolean;
   };
 
 export type Config = Command['Config'] & BaseSimpleApplicationConfig;
