@@ -47,7 +47,7 @@ export class ProfileService {
         };
         if (activeProfiles && response['display-ribbon-on-profiles']) {
           const displayRibbonOnProfiles = response['display-ribbon-on-profiles'].split(',');
-          const ribbonProfiles = displayRibbonOnProfiles.filter(profile => activeProfiles?.includes(profile));
+          const ribbonProfiles = displayRibbonOnProfiles.filter(profile => activeProfiles.includes(profile));
           if (ribbonProfiles.length > 0) {
             profileInfo.ribbonEnv = ribbonProfiles[0];
           }
