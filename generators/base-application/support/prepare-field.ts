@@ -147,7 +147,7 @@ function generateFakeDataForField(
   ] as const) {
     if (prop in field && typeof field[prop] === 'string') {
       try {
-        field[prop] = parseInt(field[prop], 10);
+        field[prop] = Number.parseInt(field[prop], 10);
       } catch {
         throw new Error(`Error parsing ${prop} for field ${field.fieldName}`);
       }

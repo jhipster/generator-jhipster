@@ -316,7 +316,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
   }
 
   isV7(version: string): boolean {
-    return version.includes('.') && parseInt(version.split('.', 2)[0], 10) < 8;
+    return version.includes('.') && Number.parseInt(version.split('.', 2)[0], 10) < 8;
   }
 
   async runNonInteractive(inherit = true) {
