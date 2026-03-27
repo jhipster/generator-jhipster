@@ -1,6 +1,7 @@
 import { basename, join } from 'path';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { getGithubSamplesGroups, defaultHelpers as helpers, runResult } from 'generator-jhipster/testing';
+import { getGithubSamplesGroups } from 'generator-jhipster/ci';
+import { defaultHelpers as helpers, runResult } from 'generator-jhipster/testing';
 
 const generator = basename(import.meta.dirname);
 

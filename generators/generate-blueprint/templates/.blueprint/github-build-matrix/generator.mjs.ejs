@@ -1,6 +1,6 @@
 import { join } from 'node:path';
 import BaseCoreGenerator from 'generator-jhipster/generators/base-core';
-import { convertToGitHubMatrix, getGithubOutputFile, getGithubSamplesGroup, setGithubTaskOutput } from 'generator-jhipster/testing';
+import { convertToGitHubMatrix, getGithubOutputFile, getGithubSamplesGroup, setGithubTaskOutput } from 'generator-jhipster/ci';
 
 export default class extends BaseCoreGenerator {
   /** @type {string} */
@@ -11,7 +11,7 @@ export default class extends BaseCoreGenerator {
   matrix;
 
   get [BaseCoreGenerator.WRITING]() {
-    return this.asWritingTaskGroup({
+    return this.asAnyTaskGroup({
       async buildMatrix() {
         const { samplesGroup = 'samples' } = this;
         const templatePath = this.templatePath('../../generate-sample/templates/');
