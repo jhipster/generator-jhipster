@@ -207,13 +207,12 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
   const needleIndent = needleIndex - needleLineIndex;
 
   if (typeof contentToAdd === 'function') {
-    const newContent = contentToAdd(content, {
+    return contentToAdd(content, {
       needleIndex,
       needleLineIndex,
       needleIndent,
       indentPrefix: ' '.repeat(needleIndent),
     });
-    return newContent;
   }
   contentToAdd = Array.isArray(contentToAdd) ? contentToAdd : [contentToAdd];
   if (autoIndent) {
@@ -244,8 +243,7 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
     contentToAdd = contentToAdd.map(line => (line.length > identToRemove ? line.slice(identToRemove) : ''));
   }
 
-  const newContent = `${beforeContent}${contentToAdd.join('\n')}\n${afterContent}`;
-  return newContent;
+  return `${beforeContent}${contentToAdd.join('\n')}\n${afterContent}`;
 };
 
 /**
