@@ -505,10 +505,10 @@ export default class LiquibaseGenerator<
         }
 
         const { liquibase: liquibaseVersion, 'gradle-liquibase': gradleLiquibaseVersion } = application.javaDependencies;
-        if (!liquibaseVersion) {
-          this.log.warn('liquibaseVersion is required by gradle-liquibase-plugin, make sure to add it to your dependencies');
-        } else {
+        if (liquibaseVersion) {
           source.addGradleProperty?.({ property: 'liquibaseVersion', value: liquibaseVersion });
+        } else {
+          this.log.warn('liquibaseVersion is required by gradle-liquibase-plugin, make sure to add it to your dependencies');
         }
 
         source.addGradleProperty?.({ property: 'liquibaseTaskPrefix', value: 'liquibase' });

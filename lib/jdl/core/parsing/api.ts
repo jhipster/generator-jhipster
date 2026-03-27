@@ -64,14 +64,14 @@ function throwParserError(errors: IRecognitionException[]) {
   }
   const errorMessage = `${parserError.name}: ${parserError.message}`;
   const { token } = parserError;
-  const errorMessageLocation = token.tokenType !== EOF ? `\n\tat line: ${token.startLine}, column: ${token.startColumn}` : '';
+  const errorMessageLocation = token.tokenType === EOF ? '' : `\n\tat line: ${token.startLine}, column: ${token.startColumn}`;
   throw Error(`${errorMessage}${errorMessageLocation}`);
 }
 
 function throwErrorAboutInvalidToken(parserError: IRecognitionException) {
   const { token } = parserError;
   const errorMessageBeginning = `Found an invalid token '${token.image}'`;
-  const errorMessageLocation = token.tokenType !== EOF ? `, at line: ${token.startLine} and column: ${token.startColumn}` : '';
+  const errorMessageLocation = token.tokenType === EOF ? '' : `, at line: ${token.startLine} and column: ${token.startColumn}`;
   const errorMessageComplement = 'Please make sure your JDL content does not use invalid characters, keywords or options.';
   throw Error(`${parserError.name}: ${errorMessageBeginning}${errorMessageLocation}.\n\t${errorMessageComplement}`);
 }
