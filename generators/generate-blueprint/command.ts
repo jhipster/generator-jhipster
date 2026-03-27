@@ -27,6 +27,7 @@ import {
   LINK_JHIPSTER_DEPENDENCY,
   LOCAL_BLUEPRINT_OPTION,
   SUB_GENERATORS,
+  TS,
 } from './constants.ts';
 
 const command = {
@@ -132,6 +133,13 @@ const command = {
     },
     [JS]: {
       description: 'Use js extension',
+      cli: {
+        type: Boolean,
+      },
+      scope: 'storage',
+    },
+    [TS]: {
+      description: 'Use TypeScript (.ts) extension for generated blueprints',
       cli: {
         type: Boolean,
       },

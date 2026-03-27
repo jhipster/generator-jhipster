@@ -21,6 +21,16 @@ import { asWriteFilesSection } from '../base-application/support/index.ts';
 import { LOCAL_BLUEPRINT_OPTION } from './constants.ts';
 import type { Application as GenerateBlueprintApplication, TemplateData } from './types.ts';
 
+/**
+ * Helper to map .mjs source templates to the appropriate destination extension.
+ * When TypeScript is enabled, .mjs files are written as .ts; otherwise they keep .mjs.
+ */
+const blueprintFile = (sourceFile: string) => ({
+  sourceFile,
+  destinationFile: (ctx: GenerateBlueprintApplication) =>
+    ctx.blueprintMjsExtension === 'ts' ? sourceFile.replace(/\.mjs$/, '.ts') : sourceFile,
+});
+
 export const files = asWriteFilesSection<GenerateBlueprintApplication>({
   baseFiles: [
     {
@@ -34,10 +44,10 @@ export const files = asWriteFilesSection<GenerateBlueprintApplication>({
         'tsconfig.json',
         'vitest.config.ts',
         'vitest.test-setup.ts',
-        '.blueprint/cli/commands.mjs',
-        '.blueprint/generate-sample/command.mjs',
-        '.blueprint/generate-sample/generator.mjs',
-        '.blueprint/generate-sample/index.mjs',
+        blueprintFile('.blueprint/cli/commands.mjs'),
+        blueprintFile('.blueprint/generate-sample/command.mjs'),
+        blueprintFile('.blueprint/generate-sample/generator.mjs'),
+        blueprintFile('.blueprint/generate-sample/index.mjs'),
         // Always write cli for devBlueprint usage
         'cli/cli.cjs',
         { sourceFile: 'cli/cli-customizations.cjs', override: false },
@@ -46,10 +56,10 @@ export const files = asWriteFilesSection<GenerateBlueprintApplication>({
     {
       condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION] && ctx.githubWorkflows,
       templates: [
-        '.blueprint/github-build-matrix/command.mjs',
-        '.blueprint/github-build-matrix/generator.mjs',
-        '.blueprint/github-build-matrix/generator.spec.mjs',
-        '.blueprint/github-build-matrix/index.mjs',
+        blueprintFile('.blueprint/github-build-matrix/command.mjs'),
+        blueprintFile('.blueprint/github-build-matrix/generator.mjs'),
+        blueprintFile('.blueprint/github-build-matrix/generator.spec.mjs'),
+        blueprintFile('.blueprint/github-build-matrix/index.mjs'),
       ],
     },
     {

@@ -1,3 +1,45 @@
+<%_ if (blueprintMjsExtension === 'ts') { _%>
+/* tsconfig.json is provided for ui autocomplete support, jhipster types are experimental */
+{
+  "include": [".blueprint/**/*.ts", "./cli", "./generators", "*.ts"],
+  "compilerOptions": {
+    /* Language and Environment */
+    "target": "es2024" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+    "lib": ["ESNext"] /* Specify a set of bundled library declaration files that describe the target runtime environment. */,
+    "types": ["node"],
+
+    /* Modules */
+    "module": "preserve" /* Specify what module code is generated. */,
+    "rootDir": "./" /* Specify the root folder within your source files. */,
+    "resolveJsonModule": true,
+
+    /* JavaScript Support */
+    "allowJs": true /* Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files. */,
+
+    /* Emit */
+    "outDir": "./dist" /* Specify an output folder for all emitted files. */,
+    "noEmit": true,
+
+    /* Interop Constraints */
+    "allowSyntheticDefaultImports": true /* Allow 'import x from y' when a module doesn't have a default export. */,
+    "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
+    "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
+    "isolatedModules": true /* Ensure that each file can be safely transpiled independently. */,
+
+    /* Type Checking */
+    "strict": true /* Enable all strict type-checking options. */,
+    "noUnusedLocals": true /* Report errors on unused local variables. */,
+    "noUnusedParameters": true /* Report errors on unused parameters. */,
+    "rewriteRelativeImportExtensions": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    "noImplicitAny": false,
+
+    /* Completeness */
+    "skipLibCheck": true /* Skip type checking all .d.ts files. */
+  }
+}
+<%_ } else { _%>
 /* tsconfig.json is provided for ui autocomplete support, jhipster types are experimental */
 {
   "compilerOptions": {
@@ -29,3 +71,4 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   }
 }
+<%_ } _%>

@@ -16,6 +16,29 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (blueprintMjsExtension === 'ts') { _%>
+import { asCommand } from 'generator-jhipster';
+
+export default asCommand({
+  configs: {
+    samplesFolder: {
+      description: 'Samples folder',
+      cli: {
+        type: String,
+      },
+      scope: 'generator',
+    },
+    samplesGroup: {
+      description: 'Samples Group',
+      argument: {
+        type: String,
+      },
+      default: 'samples',
+      scope: 'generator',
+    },
+  },
+});
+<%_ } else { _%>
 /**
  * @type {import('generator-jhipster').JHipsterCommandDefinition}
  */
@@ -40,3 +63,4 @@ const command = {
 };
 
 export default command;
+<%_ } _%>

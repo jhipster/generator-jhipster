@@ -3,12 +3,18 @@ import BaseCoreGenerator from 'generator-jhipster/generators/base-core';
 import { convertToGitHubMatrix, getGithubOutputFile, getGithubSamplesGroup, setGithubTaskOutput } from 'generator-jhipster/testing';
 
 export default class extends BaseCoreGenerator {
+<%_ if (blueprintMjsExtension === 'ts') { _%>
+  samplesFolder!: string;
+  samplesGroup!: string;
+  matrix!: object;
+<%_ } else { _%>
   /** @type {string} */
   samplesFolder;
   /** @type {string} */
   samplesGroup;
   /** @type {object} */
   matrix;
+<%_ } _%>
 
   get [BaseCoreGenerator.WRITING]() {
     return this.asWritingTaskGroup({
