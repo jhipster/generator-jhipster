@@ -66,17 +66,28 @@ export const mutateApplication = {
   backendTypeSpringBoot: ({ backendType }) => backendType === 'Java',
   backendTypeJavaAny: ({ backendTypeSpringBoot }) => backendTypeSpringBoot,
 
-  temporaryDir: ({ backendType, buildTool }) => {
-    if (['Java'].includes(backendType!)) {
-      return buildTool === 'gradle' ? 'build/' : 'target/';
+  temporaryDir: app => {
+    const buildTool = app.buildTool ?? (!app.skipServer && app.backendTypeJavaAny ? 'maven' : undefined);
+    switch (buildTool) {
+      case 'maven':
+        return 'target/';
+      case 'gradle':
+        return 'build/';
+      default:
+        return 'temp/';
     }
-    return 'temp/';
   },
-  clientDistDir: ({ backendType, temporaryDir, buildTool }) => {
-    if (['Java'].includes(backendType!)) {
-      return `${temporaryDir}${buildTool === 'gradle' ? 'resources/main/' : 'classes/'}static/`;
+  clientDistDir: app => {
+    const buildTool = app.buildTool ?? (!app.skipServer && app.backendTypeJavaAny ? 'maven' : undefined);
+    const temporaryDir = app.temporaryDir;
+    switch (buildTool) {
+      case 'maven':
+        return `${temporaryDir}classes/static/`;
+      case 'gradle':
+        return `${temporaryDir}resources/main/static/`;
+      default:
+        return 'dist/';
     }
-    return 'dist/';
   },
 
   authenticationTypeSession: data => data.authenticationType === 'session',
