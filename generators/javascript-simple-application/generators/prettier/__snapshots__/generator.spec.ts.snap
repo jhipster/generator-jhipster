@@ -19,7 +19,7 @@ useTabs: false
 arrowParens: avoid
 bracketSameLine: false
 overrides:
-  - files: "*.html"
+  - files: src/main/webapp/**/*.html
     options:
       parser: angular
 plugins:
@@ -109,7 +109,7 @@ useTabs: false
 arrowParens: avoid
 bracketSameLine: false
 overrides:
-  - files: "*.html"
+  - files: src/main/webapp/**/*.html
     options:
       parser: angular
 plugins:
@@ -152,7 +152,7 @@ useTabs: false
 arrowParens: avoid
 bracketSameLine: false
 overrides:
-  - files: "*.html"
+  - files: src/main/webapp/**/*.html
     options:
       parser: angular
 plugins:

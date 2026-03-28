@@ -3523,6 +3523,18 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
       },
     },
   ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "src/**/*.html",
+          "options": {
+            "parser": "angular",
+          },
+        },
+      ],
+    },
+  ],
 }
 `;
 
@@ -4791,6 +4803,18 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
       },
     },
   ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "src/**/*.html",
+          "options": {
+            "parser": "angular",
+          },
+        },
+      ],
+    },
+  ],
 }
 `;
 
@@ -5837,6 +5861,18 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
       },
     },
   ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "src/**/*.html",
+          "options": {
+            "parser": "angular",
+          },
+        },
+      ],
+    },
+  ],
 }
 `;
 
@@ -6881,6 +6917,18 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
         "browser-sync": "BROWSER_SYNC_VERSION",
         "webpack": "WEBPACK_VERSION",
       },
+    },
+  ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "src/main/webapp/**/*.html",
+          "options": {
+            "parser": "angular",
+          },
+        },
+      ],
     },
   ],
 }
@@ -8327,6 +8375,18 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
       },
     },
   ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "src/main/webapp/**/*.html",
+          "options": {
+            "parser": "angular",
+          },
+        },
+      ],
+    },
+  ],
 }
 `;
 
@@ -9340,6 +9400,18 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
         "@angular/build": null,
         "tinyglobby": null,
       },
+    },
+  ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "src/main/webapp/**/*.html",
+          "options": {
+            "parser": "angular",
+          },
+        },
+      ],
     },
   ],
 }
@@ -10365,6 +10437,18 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
         "@angular/build": null,
         "tinyglobby": null,
       },
+    },
+  ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "src/main/webapp/**/*.html",
+          "options": {
+            "parser": "angular",
+          },
+        },
+      ],
     },
   ],
 }

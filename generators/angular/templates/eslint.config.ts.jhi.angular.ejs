@@ -124,7 +124,7 @@ import angular from 'angular-eslint';
     },
   },
   {
-    files: ['**/*.html'],
+    files: ['<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.html'],
     extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
     rules: {
       '@angular-eslint/template/click-events-have-key-events': 'off',

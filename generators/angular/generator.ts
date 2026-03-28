@@ -384,6 +384,13 @@ export default class AngularGenerator extends AngularApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      addPrettierConfig({ application, source }) {
+        source.mergePrettierConfig?.({
+          overrides: [
+            { files: `${this.relativeDir(application.clientRootDir, application.clientSrcDir)}**/*.html`, options: { parser: 'angular' } },
+          ],
+        });
+      },
       clientBundler({ application, source }) {
         const { clientBundlerEsbuild, enableTranslation, nodeDependencies } = application;
         if (clientBundlerEsbuild) {
