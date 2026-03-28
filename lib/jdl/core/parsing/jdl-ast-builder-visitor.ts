@@ -758,7 +758,7 @@ function getBinaryOptionFromContext(
 ) {
   const entityListWithOptionValue: string[] = visitor.visit(context.entityList);
   const optionValue = entityListWithOptionValue[entityListWithOptionValue.length - 1];
-  const list = entityListWithOptionValue.slice(0, entityListWithOptionValue.length - 1);
+  const list = entityListWithOptionValue.slice(0, -1);
 
   let excluded = [];
   if (context.exclusion) {

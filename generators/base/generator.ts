@@ -175,9 +175,9 @@ export default class BaseGenerator<
                 : null;
             }
             jhipsterOldVersion ??=
-              existsSync(generator.config.path)
-                ? (JSON.parse(readFileSync(generator.config.path, 'utf-8'))[GENERATOR_JHIPSTER]?.jhipsterVersion ?? null)
-                : null;
+              existsSync(generator.config.path) ?
+                (JSON.parse(readFileSync(generator.config.path, 'utf-8'))[GENERATOR_JHIPSTER]?.jhipsterVersion ?? null)
+              : null;
             return jhipsterOldVersion;
           },
           get environmentHasDockerCompose(): boolean {
