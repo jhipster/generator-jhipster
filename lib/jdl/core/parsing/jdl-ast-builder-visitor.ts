@@ -198,7 +198,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       let optionValue: unknown;
       switch (tokenType.name) {
         case 'INTEGER':
-          optionValue = parseInt(valueImage, 10);
+          optionValue = Number.parseInt(valueImage, 10);
           break;
         case 'DECIMAL':
           optionValue = parseFloat(valueImage);

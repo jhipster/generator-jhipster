@@ -50,15 +50,15 @@ export const askForServerSideOpts = asPromptingTask(async function (this: Spring
         message: `Which ${chalk.yellow('*type*')} of database would you like to use?`,
         choices: () => {
           const opts: Array<{ value: string; name: string }> = [];
-          if (!reactive) {
+          if (reactive) {
             opts.push({
               value: SQL,
-              name: 'SQL (H2, PostgreSQL, MySQL, MariaDB, Oracle, MSSQL)',
+              name: 'SQL (H2, PostgreSQL, MySQL, MariaDB, MSSQL)',
             });
           } else {
             opts.push({
               value: SQL,
-              name: 'SQL (H2, PostgreSQL, MySQL, MariaDB, MSSQL)',
+              name: 'SQL (H2, PostgreSQL, MySQL, MariaDB, Oracle, MSSQL)',
             });
           }
           opts.push({

@@ -72,7 +72,7 @@ function createUnknownJDLConfigurationOption(
   if (typeof value === 'boolean') {
     type = 'boolean';
   } else if (/^\d+$/.test(value as string)) {
-    value = parseInt(value as string, 10);
+    value = Number.parseInt(value as string, 10);
     type = 'integer';
   } else if (Array.isArray(value)) {
     type = 'list';

@@ -229,13 +229,13 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
 
           if (!relationship.relationshipSide) {
             // Try to create relationshipSide based on best bet.
-            if (relationship.ownerSide !== undefined) {
-              relationship.relationshipSide = relationship.ownerSide ? 'left' : 'right';
-            } else {
+            if (relationship.ownerSide === undefined) {
               // Missing ownerSide (one-to-many/many-to-one relationships) depends on the otherSide existence.
               const unidirectionalRelationship = !relationship.otherEntityRelationshipName;
               const bidirectionalOneToManySide = !unidirectionalRelationship && relationship.relationshipType === 'one-to-many';
               relationship.relationshipSide = unidirectionalRelationship || bidirectionalOneToManySide ? 'left' : 'right';
+            } else {
+              relationship.relationshipSide = relationship.ownerSide ? 'left' : 'right';
             }
           }
 

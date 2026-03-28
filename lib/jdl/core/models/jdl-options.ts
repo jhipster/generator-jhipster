@@ -106,9 +106,9 @@ function addBinaryOption(options: Record<string, any>, optionToAdd: JDLBinaryOpt
     options[name] = {
       [value]: optionToAdd,
     };
-  } else if (!options[name][value]) {
-    options[name][value] = optionToAdd;
-  } else {
+  } else if (options[name][value]) {
     options[name][value].addEntitiesFromAnotherOption(optionToAdd);
+  } else {
+    options[name][value] = optionToAdd;
   }
 }

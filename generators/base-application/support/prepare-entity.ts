@@ -465,10 +465,10 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
     .map(relationship => [relationship.otherEntity.entityNameCapitalized, relationship] as const)
     .reduce(
       (relationshipsByOtherEntity, [type, relationship]) => {
-        if (!relationshipsByOtherEntity[type]) {
-          relationshipsByOtherEntity[type] = [relationship];
-        } else {
+        if (relationshipsByOtherEntity[type]) {
           relationshipsByOtherEntity[type].push(relationship);
+        } else {
+          relationshipsByOtherEntity[type] = [relationship];
         }
         return relationshipsByOtherEntity;
       },
