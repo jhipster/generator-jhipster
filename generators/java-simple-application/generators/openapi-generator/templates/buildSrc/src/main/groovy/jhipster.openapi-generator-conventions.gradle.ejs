@@ -23,7 +23,7 @@ plugins {
 openApiGenerate {
     generatorName = "spring"
     inputSpec = "$rootDir/src/main/resources/swagger/api.yml".toString()
-    outputDir = "$buildDir/openapi".toString()
+    outputDir = layout.buildDirectory.dir("openapi").get().asFile.toString()
     apiPackage = "<%- packageName %>.web.api"
     modelPackage = "<%- packageName %>.service.api.dto"
     apiFilesConstrainedTo = [""]
@@ -37,9 +37,9 @@ openApiGenerate {
 sourceSets {
     main {
         java {
-            srcDir(file("${project.buildDir.path}/openapi/src/main/java"))
+            srcDir(layout.buildDirectory.dir("openapi/src/main/java"))
         }
     }
 }
 
-compileJava.dependsOn("openApiGenerate")
+tasks.named('compileJava').configure { dependsOn("openApiGenerate") }

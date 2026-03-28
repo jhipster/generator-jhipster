@@ -83,16 +83,16 @@ test {
 <%_ } _%>
 }
 
-check.dependsOn(integrationTest)
+tasks.named('check').configure { dependsOn(tasks.named('integrationTest')) }
 
-task testReport(type: TestReport) {
-    destinationDirectory = file("$buildDir/reports/tests")
+tasks.register('testReport', TestReport) {
+    destinationDirectory = layout.buildDirectory.dir("reports/tests")
     testResults.from(test)
 }
 
-task integrationTestReport(type: TestReport) {
-    destinationDirectory = file("$buildDir/reports/tests")
-    testResults.from(integrationTest)
+tasks.register('integrationTestReport', TestReport) {
+    destinationDirectory = layout.buildDirectory.dir("reports/tests")
+    testResults.from(tasks.named('integrationTest'))
 }
 
 gitProperties {
@@ -104,9 +104,9 @@ tasks.named('generateGitProperties') {
   outputs.doNotCacheIf("Task is always executed") { true }
 }
 
-task cleanResources(type: Delete) {
+tasks.register('cleanResources', Delete) {
     delete "build/resources"
 }
 
-compileJava.dependsOn(processResources)
-processResources.dependsOn(bootBuildInfo)
+tasks.named('compileJava').configure { dependsOn(tasks.named('processResources')) }
+tasks.named('processResources').configure { dependsOn(tasks.named('bootBuildInfo')) }

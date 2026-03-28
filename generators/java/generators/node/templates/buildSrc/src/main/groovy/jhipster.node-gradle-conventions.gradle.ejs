@@ -28,7 +28,7 @@ if (project.hasProperty("nodeInstall")) {
 }
 
 <%_ if (!skipClient) { _%>
-task webapp_test(type: NpmTask) {
+def webapp_test = tasks.register('webapp_test', NpmTask) {
     inputs.property('appVersion', project.version)
     inputs.files("build.gradle")
         .withPropertyName('build.gradle')
@@ -53,6 +53,6 @@ task webapp_test(type: NpmTask) {
     args = ["run", "webapp:test"]
 }
 
-test.dependsOn(webapp_test)
+tasks.named('test').configure { dependsOn(webapp_test) }
 
 <%_ } _%>
