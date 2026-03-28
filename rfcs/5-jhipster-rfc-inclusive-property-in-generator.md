@@ -29,7 +29,7 @@ Basically, options should always be inclusive and follow this simple rules:
 For example, let's say that we want to remove the jhipster `skipClient` option in the jdl syntax by an option that would be compliant with this spec:
 
 - A JDL `application`, defined without any `generateClient` attribute declaration will generate a frontend for that app (use of reasonable default).
-- A JDL `application`, defined with any `generateClient` attribute declaration will take the end user's choice into consideration (if `generateClient: false` is set, the frontend won't be generated.
+- A JDL `application`, defined with any `generateClient` attribute declaration will take the end user's choice into consideration (if `generateClient: false` is set, the frontend won't be generated).
 
 ## Reference-level explanation
 
