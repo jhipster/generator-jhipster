@@ -60,7 +60,7 @@ Which version of JHipster are you using, is it a regression?
 
 <!-- What OS are you on? is this a problem with all browsers or only IE8? -->
 
-- [ ] Tickets opened without reproduction steps or that doesn't follows the template recommendation will be **closed**.
+- [ ] Tickets opened without reproduction steps or that doesn't follow the template recommendation will be **closed**.
 - [ ] Checking this box is mandatory (this is just to show you read everything)
 
 <!-- Love JHipster? Please consider supporting our collective:
