@@ -22,7 +22,7 @@ about: Report a problem with JHipster itself.
   </pre>
   </details>
 
-<!-- Uncomment if there is a incremental JDL
+<!-- Uncomment if there is an incremental JDL
   <details>
   <summary>JDL definitions (incremental)</summary>
   <pre>
