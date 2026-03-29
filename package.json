@@ -177,9 +177,6 @@
     "yeoman-environment": "6.0.0",
     "yeoman-generator": "8.1.2"
   },
-  "optionalDependencies": {
-    "tree-sitter-java-orchard": "0.5.6"
-  },
   "devDependencies": {
     "@stylistic/eslint-plugin": "5.10.0",
     "@types/debug": "4.1.13",
@@ -209,6 +206,9 @@
     "yeoman-test": {
       "optional": true
     }
+  },
+  "optionalDependencies": {
+    "tree-sitter-java-orchard": "0.5.6"
   },
   "engines": {
     "node": "^22.18.0 || >=24.11.0",
