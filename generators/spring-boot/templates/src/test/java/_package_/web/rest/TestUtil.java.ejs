@@ -149,22 +149,15 @@ public final class TestUtil {
         }
 
         private static BigDecimal asDecimal(Number item) {
-            if (item == null) {
-                return null;
-            }
-            if (item instanceof BigDecimal) {
-                return (BigDecimal) item;
-            } else if (item instanceof Long) {
-                return BigDecimal.valueOf((Long) item);
-            } else if (item instanceof Integer) {
-                return BigDecimal.valueOf((Integer) item);
-            } else if (item instanceof Double) {
-                return BigDecimal.valueOf((Double) item);
-            } else if (item instanceof Float) {
-                return BigDecimal.valueOf((Float) item);
-            } else {
-                return BigDecimal.valueOf(item.doubleValue());
-            }
+            return switch (item) {
+                case null -> null;
+                case BigDecimal bigDecimal -> bigDecimal;
+                case Long l -> BigDecimal.valueOf(l);
+                case Integer i -> BigDecimal.valueOf(i);
+                case Double v -> BigDecimal.valueOf(v);
+                case Float v -> BigDecimal.valueOf(v);
+                default -> BigDecimal.valueOf(item.doubleValue());
+            };
         }
     }
 
