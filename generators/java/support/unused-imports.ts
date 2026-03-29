@@ -8,7 +8,11 @@ let parserPromise: Promise<Parser> | null = null;
 const resolveJavaGrammarWasm = (): string => {
   const bundled = fileURLToPath(new URL('tree-sitter-java_orchard.wasm', import.meta.url));
   if (existsSync(bundled)) return bundled;
-  return fileURLToPath(import.meta.resolve('tree-sitter-java-orchard/tree-sitter-java_orchard.wasm'));
+  try {
+    return fileURLToPath(import.meta.resolve('tree-sitter-java-orchard/tree-sitter-java_orchard.wasm'));
+  } catch {
+    throw new Error(`tree-sitter-java_orchard.wasm not found at ${bundled} and tree-sitter-java-orchard package is not installed`);
+  }
 };
 
 /**
