@@ -135,12 +135,10 @@ export default function prepareField(
     }).value;
   }
 
-  if (field.fieldValidateRulesPatternJava === undefined) {
-    field.fieldValidateRulesPatternJava =
-      field.fieldValidateRulesPattern ?
-        field.fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/"/g, String.raw`\"`)
-      : field.fieldValidateRulesPattern;
-  }
+  field.fieldValidateRulesPatternJava ??=
+    field.fieldValidateRulesPattern ?
+      field.fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/"/g, String.raw`\"`)
+    : field.fieldValidateRulesPattern;
 
   if (field.blobContentTypeText) {
     field.javaFieldType = 'String';

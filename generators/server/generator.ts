@@ -97,9 +97,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
       configureGateway({ application, entityConfig }) {
         if (application.applicationTypeGateway) {
           entityConfig.databaseType ??= application.databaseType;
-          if (entityConfig.clientRootFolder === undefined) {
-            entityConfig.clientRootFolder = entityConfig.skipUiGrouping ? '' : entityConfig.microserviceName;
-          }
+          entityConfig.clientRootFolder ??= entityConfig.skipUiGrouping ? '' : entityConfig.microserviceName;
         }
       },
       configureEntitySearchEngine({ application, entityConfig }) {

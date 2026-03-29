@@ -50,7 +50,7 @@ export default class extends BaseGenerator {
           configurations: [],
         },
       });
-      if (samplePath && !data.folders.find(folder => folder.path === samplePath)) {
+      if (samplePath && !data.folders.some(folder => folder.path === samplePath)) {
         data.folders.push({
           path: samplePath,
         });

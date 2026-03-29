@@ -64,7 +64,7 @@ export default class JDLOptions {
     if (!optionName) {
       return false;
     }
-    return !!this.options[optionName] || this.getOptions().filter(option => option.name === optionName).length !== 0;
+    return !!this.options[optionName] || this.getOptions().some(option => option.name === optionName);
   }
 
   size(): number {
