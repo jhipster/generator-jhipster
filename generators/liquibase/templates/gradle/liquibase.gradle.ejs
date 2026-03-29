@@ -78,7 +78,7 @@ liquibase {
       defaultSchemaName "<%- liquibaseDefaultSchemaName %>"
 <%_ } _%>
       logLevel "debug"
-      classpath "$buildDir/classes/java/main"
+      classpath layout.buildDirectory.dir("classes/java/main").get().asFile.absolutePath
 <%_ if (authenticationTypeOauth2) { _%>
       excludeObjects "oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token"
 <%_ } _%>
@@ -88,8 +88,8 @@ liquibase {
   runList = project.ext.runList
 }
 
-liquibaseDiff.dependsOn(compileJava)
-liquibaseDiffChangelog.dependsOn(compileJava)
+tasks.named('liquibaseDiff').configure { dependsOn(tasks.named('compileJava')) }
+tasks.named('liquibaseDiffChangelog').configure { dependsOn(tasks.named('compileJava')) }
 <%_ if (backendTypeSpringBoot) { _%>
 
 ext {
