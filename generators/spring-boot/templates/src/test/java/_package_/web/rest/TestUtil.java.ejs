@@ -73,9 +73,7 @@ public final class TestUtil {
      */
     public static byte[] createByteArray(int size, String data) {
         byte[] byteArray = new byte[size];
-        for (int i = 0; i < size; i++) {
-            byteArray[i] = Byte.parseByte(data, 2);
-        }
+        Arrays.fill(byteArray, Byte.parseByte(data, 2));
         return byteArray;
     }
 <%_ if (databaseTypeCouchbase) { _%>
