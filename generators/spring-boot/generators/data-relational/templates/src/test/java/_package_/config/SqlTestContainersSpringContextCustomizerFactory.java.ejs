@@ -41,7 +41,7 @@ import org.springframework.boot.test.util.TestPropertyValues;
 
 public class SqlTestContainersSpringContextCustomizerFactory implements ContextCustomizerFactory {
 
-    private Logger log = LoggerFactory.getLogger(SqlTestContainersSpringContextCustomizerFactory.class);
+    private final Logger log = LoggerFactory.getLogger(SqlTestContainersSpringContextCustomizerFactory.class);
 
     private static SqlTestContainer prodTestcontainer;
 

@@ -183,13 +183,13 @@ class UserMapperTest {
         List<<%- user.persistClass %>> users = userMapper.userDTOsToUsers(usersDto);
 
         assertThat(users).isNotEmpty().size().isEqualTo(1);
-        assertThat(users.get(0).getAuthorities()).isNotNull();
-        assertThat(users.get(0).getAuthorities()).isNotEmpty();
+        assertThat(users.getFirst().getAuthorities()).isNotNull();
+        assertThat(users.getFirst().getAuthorities()).isNotEmpty();
 <%_ if (databaseTypeSql || databaseTypeMongodb) { _%>
-        assertThat(users.get(0).getAuthorities().iterator().next().getName()).isEqualTo("ADMIN");
+        assertThat(users.getFirst().getAuthorities().iterator().next().getName()).isEqualTo("ADMIN");
 <%_ } _%>
 <%_ if (databaseTypeCassandra || databaseTypeCouchbase) { _%>
-        assertThat(users.get(0).getAuthorities().iterator().next()).isEqualTo("ADMIN");
+        assertThat(users.getFirst().getAuthorities().iterator().next()).isEqualTo("ADMIN");
 <%_ } _%>
     }
 
@@ -203,8 +203,8 @@ class UserMapperTest {
         List<<%- user.persistClass %>> users = userMapper.userDTOsToUsers(usersDto);
 
         assertThat(users).isNotEmpty().size().isEqualTo(1);
-        assertThat(users.get(0).getAuthorities()).isNotNull();
-        assertThat(users.get(0).getAuthorities()).isEmpty();
+        assertThat(users.getFirst().getAuthorities()).isNotNull();
+        assertThat(users.getFirst().getAuthorities()).isEmpty();
     }
 
     @Test
