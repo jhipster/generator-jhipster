@@ -20,7 +20,7 @@
 name: Issue Check
 on:
   issues:
-    types: [reopened, labeled]
+    types: [labeled]
   workflow_dispatch:
     inputs:
       issue:
