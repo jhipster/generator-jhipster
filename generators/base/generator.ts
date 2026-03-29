@@ -168,12 +168,6 @@ export default class BaseGenerator<
             }
           },
           get jhipsterOldVersion(): string | null {
-            if (jhipsterOldVersion === undefined) {
-              jhipsterOldVersion =
-                existsSync(generator.config.path) ?
-                  (JSON.parse(readFileSync(generator.config.path, 'utf-8'))[GENERATOR_JHIPSTER]?.jhipsterVersion ?? null)
-                : null;
-            }
             jhipsterOldVersion ??=
               existsSync(generator.config.path) ?
                 (JSON.parse(readFileSync(generator.config.path, 'utf-8'))[GENERATOR_JHIPSTER]?.jhipsterVersion ?? null)
