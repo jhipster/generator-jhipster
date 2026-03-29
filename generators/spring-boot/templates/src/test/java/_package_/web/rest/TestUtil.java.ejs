@@ -18,13 +18,11 @@
 -%>
 package <%- packageName %>.web.rest;
 
-import java.lang.reflect.Method;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
-import org.springframework.cglib.proxy.MethodProxy;
 <%_ if (!reactive) { _%>
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.format.support.DefaultFormattingConversionService;
@@ -39,6 +37,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
 <%_ if (databaseTypeSql) { _%>
 import java.util.List;
 
