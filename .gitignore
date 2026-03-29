@@ -27,6 +27,7 @@ test/**/*.png
 jdl/**/*.png
 test-integration/**/*.png
 /dist
+**/*.wasm
 # allow customizations without having a dirty tree
 .devcontainer
 
