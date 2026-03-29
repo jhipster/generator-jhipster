@@ -12,20 +12,18 @@ let parserPromise: Promise<Parser> | null = null;
  * @returns a promise resolving to the configured tree-sitter {@link Parser}
  */
 const getParser = (): Promise<Parser> => {
-  if (!parserPromise) {
-    parserPromise = (async () => {
-      const treeSitterWasmPath = fileURLToPath(import.meta.resolve('web-tree-sitter/web-tree-sitter.wasm'));
-      await Parser.init({ locateFile: () => treeSitterWasmPath });
+  parserPromise ??= (async () => {
+    const treeSitterWasmPath = fileURLToPath(import.meta.resolve('web-tree-sitter/web-tree-sitter.wasm'));
+    await Parser.init({ locateFile: () => treeSitterWasmPath });
 
-      const javaGrammarWasmPath = fileURLToPath(new URL('tree-sitter-java_orchard.wasm', import.meta.url));
-      const javaWasmBytes = readFileSync(javaGrammarWasmPath);
-      const Java = await Language.load(javaWasmBytes);
+    const javaGrammarWasmPath = fileURLToPath(new URL('tree-sitter-java_orchard.wasm', import.meta.url));
+    const javaWasmBytes = readFileSync(javaGrammarWasmPath);
+    const Java = await Language.load(javaWasmBytes);
 
-      const parser = new Parser();
-      parser.setLanguage(Java);
-      return parser;
-    })();
-  }
+    const parser = new Parser();
+    parser.setLanguage(Java);
+    return parser;
+  })();
   return parserPromise;
 };
 

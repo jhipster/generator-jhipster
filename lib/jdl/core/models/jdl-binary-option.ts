@@ -43,7 +43,7 @@ export default class JDLBinaryOption extends AbstractJDLOption {
 
   toString(): string {
     const entityNames = join(this.entityNames, ', ');
-    entityNames.slice(1, entityNames.length - 1);
+    entityNames.slice(1, -1);
     let optionName = this.name;
     if (this.name === BinaryOptions.Options.PAGINATION) {
       optionName = 'paginate';
