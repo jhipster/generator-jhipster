@@ -169,7 +169,6 @@
     "simple-git": "3.33.0",
     "sort-keys": "6.0.0",
     "tinyglobby": "0.2.15",
-    "tree-sitter-java-orchard": "0.5.6",
     "type-fest": "5.5.0",
     "typescript": "5.9.3",
     "typescript-eslint": "8.57.1",
@@ -177,6 +176,9 @@
     "yaml": "2.8.3",
     "yeoman-environment": "6.0.0",
     "yeoman-generator": "8.1.2"
+  },
+  "optionalDependencies": {
+    "tree-sitter-java-orchard": "0.5.6"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "5.10.0",
