@@ -75,7 +75,7 @@ if (foo2.databaseTypeSql) {
 
 const foo3: OptionsWithDerivedProperties<{
   databaseType: ['sql', 'no', 'cassandra', 'couchbase', 'mongodb', 'neo4j'],
-  messageBroker: ['no', 'kafka', 'pular'],
+  messageBroker: ['no', 'kafka', 'pulsar'],
 }>;
 foo3.databaseTypeSql
  */
