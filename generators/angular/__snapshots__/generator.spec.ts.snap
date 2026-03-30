@@ -363,53 +363,39 @@ export class UserManagementDetail {
           [(sortState)]="sortState"
           (sortChange)="navigateToWithComponentValues($event)"
         >
-          <th scope="col" jhiSortBy="login">
+          <th scope="col">
             <div class="d-flex">
               <span>Login</span>
-
-              <fa-icon class="p-1" icon="sort" />
             </div>
           </th>
-          <th scope="col" jhiSortBy="email">
+          <th scope="col">
             <div class="d-flex">
               <span>Email</span>
-
-              <fa-icon class="p-1" icon="sort" />
             </div>
           </th>
-          <th scope="col" jhiSortBy="activated">
+          <th scope="col">
             <div class="d-flex">
               <span>Activated</span>
-
-              <fa-icon class="p-1" icon="sort" />
             </div>
           </th>
-          <th scope="col" jhiSortBy="createdBy">
+          <th scope="col">
             <div class="d-flex">
               <span>Created by</span>
-
-              <fa-icon class="p-1" icon="sort" />
             </div>
           </th>
-          <th scope="col" jhiSortBy="createdDate">
+          <th scope="col">
             <div class="d-flex">
               <span>Created date</span>
-
-              <fa-icon class="p-1" icon="sort" />
             </div>
           </th>
-          <th scope="col" jhiSortBy="lastModifiedBy">
+          <th scope="col">
             <div class="d-flex">
               <span>Modified by</span>
-
-              <fa-icon class="p-1" icon="sort" />
             </div>
           </th>
-          <th scope="col" jhiSortBy="lastModifiedDate">
+          <th scope="col">
             <div class="d-flex">
               <span>Modified date</span>
-
-              <fa-icon class="p-1" icon="sort" />
             </div>
           </th>
           <th scope="col"></th>
