@@ -124,6 +124,4 @@ export default function prepareField(
       prodDatabaseType: entityProdDatabaseType,
     }).value;
   }
-
-  field.fieldSupportsSortBy = !field.transient;
 }
