@@ -19,8 +19,8 @@
 import { before, describe, expect, it } from 'esmocha';
 import { basename, resolve } from 'node:path';
 
-import { defaultHelpers as helpers, runResult } from '../../../../lib/testing/index.ts';
 import type { Entity } from '../../../../lib/jhipster/types/entity.ts';
+import { defaultHelpers as helpers, runResult } from '../../../../lib/testing/index.ts';
 import { testBootstrapEntities } from '../../../../test/support/bootstrap-tests.ts';
 import { shouldSupportFeatures } from '../../../../test/support/tests.ts';
 
