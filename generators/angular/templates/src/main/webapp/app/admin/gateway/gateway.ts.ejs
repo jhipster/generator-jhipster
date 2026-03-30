@@ -28,7 +28,7 @@ import { GatewayRoutesService } from './gateway-routes.service';
 import { GatewayRoute } from './gateway-route.model';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-gateway',
+  selector: '<%- jhiPrefixDashed %>-gateway',
   templateUrl: './gateway.html',
   providers: [GatewayRoutesService],
   imports: [KeyValuePipe, FontAwesomeModule<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
@@ -46,7 +46,7 @@ export default class Gateway implements OnInit {
   refresh(): void {
     this.updatingRoutes = true;
     this.gatewayRoutesService.findAll().subscribe(gatewayRoutes => {
-      <%_ if (locals.serviceDiscoveryConsul) { _%>
+<%_ if (locals.serviceDiscoveryConsul) { _%>
       this.gatewayRoutes = gatewayRoutes.map(gatewayRoute => {
         gatewayRoute.serviceInstances = gatewayRoute.serviceInstances.map(serviceInstance => {
           if (serviceInstance?.healthService?.checks) {
@@ -63,9 +63,9 @@ export default class Gateway implements OnInit {
         });
         return gatewayRoute;
       });
-      <%_ } else { _%>
+<%_ } else { _%>
       this.gatewayRoutes = gatewayRoutes;
-      <%_ } _%>
+<%_ } _%>
       this.updatingRoutes = false;
     });
   }

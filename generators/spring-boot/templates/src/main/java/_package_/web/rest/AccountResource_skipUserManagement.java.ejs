@@ -16,11 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.web.rest;
+package <%- packageName %>.web.rest;
 
-import <%= packageName %>.security.SecurityUtils;
+import <%- packageName %>.security.SecurityUtils;
 <%_ if (generateBuiltInAuthorityEntity) { _%>
-import <%= packageName %>.domain.Authority;
+import <%- packageName %>.domain.Authority;
 
 <%_ } _%>
 
@@ -43,7 +43,7 @@ import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.UserDetails;
   <%_ } else { _%>
-import <%= packageName %>.security.SecurityUtils;
+import <%- packageName %>.security.SecurityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
   <%_ } _%>
 <%_ } _%>

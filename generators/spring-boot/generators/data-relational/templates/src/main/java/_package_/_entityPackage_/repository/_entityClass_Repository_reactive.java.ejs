@@ -16,11 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= entityAbsolutePackage %>.repository;
+package <%- entityAbsolutePackage %>.repository;
 
-import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
+import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
 <%_ if (jpaMetamodelFiltering) { _%>
-import <%= entityAbsolutePackage %>.domain.criteria.<%= entityClass %>Criteria;
+import <%- entityAbsolutePackage %>.domain.criteria.<%- entityClass %>Criteria;
 <%_ } _%>
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
@@ -35,83 +35,84 @@ import java.util.UUID;
 <%_ } _%>
 
 /**
- * <%= springDataDescription %> repository for the <%= persistClass %> entity.
+ * <%- springDataDescription %> repository for the <%- persistClass %> entity.
  */
 @SuppressWarnings("unused")
 @Repository
-public interface <%= entityClass %>Repository extends ReactiveCrudRepository<<%= persistClass %>, <%= primaryKey.type %>>, <%= entityClass %>RepositoryInternal {
+public interface <%- entityClass %>Repository extends ReactiveCrudRepository<<%- persistClass %>, <%- primaryKey.type %>>, <%- entityClass %>RepositoryInternal {
 
 <%_ if (!paginationNo) { _%>
-    Flux<<%= persistClass %>> findAllBy(Pageable pageable);
+    Flux<<%- persistClass %>> findAllBy(Pageable pageable);
 <%_ } _%>
 <%_ if (implementsEagerLoadApis) { _%>
 
     @Override
-    Mono<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
+    Mono<<%- persistClass %>> findOneWithEagerRelationships(<%- primaryKey.type %> id);
 
     @Override
-    Flux<<%= persistClass %>> findAllWithEagerRelationships();
+    Flux<<%- persistClass %>> findAllWithEagerRelationships();
 
     @Override
-    Flux<<%= persistClass %>> findAllWithEagerRelationships(Pageable page);
+    Flux<<%- persistClass %>> findAllWithEagerRelationships(Pageable page);
 
 <%_ } _%>
 <%_ for (const relationship of relationships) {
-    let ownerSide = relationship.ownerSide; _%>
+    const { ownerSide } = relationship;
+_%>
   <%_ if (relationship.relationshipManyToOne || (relationship.relationshipOneToOne && ownerSide)) { _%>
 
-    @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.<%= relationship.joinColumnNames[0] %> = :id")
-    Flux<<%= persistClass %>> findBy<%= relationship.relationshipNameCapitalized %>(<%= primaryKey.type %> id);
+    @Query("SELECT * FROM <%- entityTableName %> entity WHERE entity.<%- relationship.joinColumnNames[0] %> = :id")
+    Flux<<%- persistClass %>> findBy<%- relationship.relationshipNameCapitalized %>(<%- primaryKey.type %> id);
 
-    @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.<%= relationship.joinColumnNames[0] %> IS NULL")
-    Flux<<%= persistClass %>> findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull();
+    @Query("SELECT * FROM <%- entityTableName %> entity WHERE entity.<%- relationship.joinColumnNames[0] %> IS NULL")
+    Flux<<%- persistClass %>> findAllWhere<%- relationship.relationshipNameCapitalized %>IsNull();
   <%_ } else if (relationship.shouldWriteJoinTable) { _%>
 
-    @Query("SELECT entity.* FROM <%= entityTableName %> entity JOIN <%= relationship.joinTable.name %> joinTable ON entity.<%= primaryKey.fields[0].columnName %> = joinTable.<%= relationship.joinColumnNames[0] %> WHERE joinTable.<%= relationship.joinColumnNames[0] %> = :id")
-    Flux<<%= persistClass %>> findBy<%= relationship.relationshipNameCapitalized %>(<%= primaryKey.type %> id);
+    @Query("SELECT entity.* FROM <%- entityTableName %> entity JOIN <%- relationship.joinTable.name %> joinTable ON entity.<%- primaryKey.fields[0].columnName %> = joinTable.<%- relationship.joinColumnNames[0] %> WHERE joinTable.<%- relationship.joinColumnNames[0] %> = :id")
+    Flux<<%- persistClass %>> findBy<%- relationship.relationshipNameCapitalized %>(<%- primaryKey.type %> id);
   <%_ } else if (relationship.relationshipOneToOne && !ownerSide) { _%>
 
-    @Query("SELECT * FROM <%= entityTableName %> entity WHERE entity.<%= primaryKey.fields[0].columnName %> not in (select <%= relationship.joinColumnNames[0]%> from <%= relationship.otherEntity.entityTableName %>)")
-    Flux<<%= persistClass %>> findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull();
+    @Query("SELECT * FROM <%- entityTableName %> entity WHERE entity.<%- primaryKey.fields[0].columnName %> not in (select <%- relationship.joinColumnNames[0] %> from <%- relationship.otherEntity.entityTableName %>)")
+    Flux<<%- persistClass %>> findAllWhere<%- relationship.relationshipNameCapitalized %>IsNull();
   <%_ } _%>
 <%_ } _%>
 
     @Override
-    <S extends <%= persistClass %>> Mono<S> save(S entity);
+    <S extends <%- persistClass %>> Mono<S> save(S entity);
 
     @Override
-    Flux<<%= persistClass %>> findAll();
+    Flux<<%- persistClass %>> findAll();
 
     @Override
-    Mono<<%= persistClass %>> findById(<%= primaryKey.type %> id);
+    Mono<<%- persistClass %>> findById(<%- primaryKey.type %> id);
 
     @Override
-    Mono<Void> deleteById(<%= primaryKey.type %> id);
+    Mono<Void> deleteById(<%- primaryKey.type %> id);
 }
 
-interface <%= entityClass %>RepositoryInternal {
-    <S extends <%= persistClass %>> Mono<S> save(S entity);
+interface <%- entityClass %>RepositoryInternal {
+    <S extends <%- persistClass %>> Mono<S> save(S entity);
 
-    Flux<<%= persistClass %>> findAllBy(Pageable pageable);
+    Flux<<%- persistClass %>> findAllBy(Pageable pageable);
 
-    Flux<<%= persistClass %>> findAll();
+    Flux<<%- persistClass %>> findAll();
 
-    Mono<<%= persistClass %>> findById(<%= primaryKey.type %> id);
+    Mono<<%- persistClass %>> findById(<%- primaryKey.type %> id);
     // this is not supported at the moment because of https://github.com/jhipster/generator-jhipster/issues/18269
-    // Flux<<%= persistClass %>> findAllBy(Pageable pageable, Criteria criteria);
+    // Flux<<%- persistClass %>> findAllBy(Pageable pageable, Criteria criteria);
 <%_ if (jpaMetamodelFiltering) { _%>
-    Flux<<%= persistClass %>> findByCriteria(<%= entityClass %>Criteria criteria, Pageable pageable);
+    Flux<<%- persistClass %>> findByCriteria(<%- entityClass %>Criteria criteria, Pageable pageable);
 
-    Mono<Long> countByCriteria(<%= entityClass %>Criteria criteria);
+    Mono<Long> countByCriteria(<%- entityClass %>Criteria criteria);
 <%_ } _%>
 <%_ if (implementsEagerLoadApis) { _%>
 
-    Mono<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
+    Mono<<%- persistClass %>> findOneWithEagerRelationships(<%- primaryKey.type %> id);
 
-    Flux<<%= persistClass %>> findAllWithEagerRelationships();
+    Flux<<%- persistClass %>> findAllWithEagerRelationships();
 
-    Flux<<%= persistClass %>> findAllWithEagerRelationships(Pageable page);
+    Flux<<%- persistClass %>> findAllWithEagerRelationships(Pageable page);
 
-    Mono<Void> deleteById(<%= primaryKey.type %> id);
+    Mono<Void> deleteById(<%- primaryKey.type %> id);
 <%_ } _%>
 }

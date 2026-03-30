@@ -104,10 +104,10 @@ export default class I18NGenerator extends ClientApplicationGenerator {
     return this.asDefaultTaskGroup({
       languagesToGenerate({ application }) {
         this.languagesToGenerate =
-          application.enableTranslation && application.languagesToGenerateDefinition
-            ? application.languagesToGenerateDefinition
-            : // Generate native language + English as fallback, ensuring no duplicates if native language is English. Translation will fallback to English if a translation is missing for the native language.
-              [...new Set([application.nativeLanguage, 'en'])].map(lang => findLanguageForTag(lang, application.supportedLanguages)!);
+          application.enableTranslation && application.languagesToGenerateDefinition ?
+            application.languagesToGenerateDefinition
+            // Generate native language + English as fallback, ensuring no duplicates if native language is English. Translation will fallback to English if a translation is missing for the native language.
+          : [...new Set([application.nativeLanguage, 'en'])].map(lang => findLanguageForTag(lang, application.supportedLanguages)!);
       },
       async loadNativeLanguage({ application }) {
         application.translations = application.translations ?? {};

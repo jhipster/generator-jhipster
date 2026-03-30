@@ -16,14 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.security;
+package <%- packageName %>.security;
 
 import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (authenticationTypeOauth2) { _%>
 import static org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames.ID_TOKEN;
 <%_ } _%>
 <%_ if (authenticationTypeJwt) { _%>
-import static <%= packageName %>.security.SecurityUtils.USER_ID_CLAIM;
+import static <%- packageName %>.security.SecurityUtils.USER_ID_CLAIM;
 <%_ } _%>
 
 import org.junit.jupiter.api.AfterEach;
@@ -54,7 +54,7 @@ import java.util.Collection;
 class SecurityUtilsUnitTest {
 
     @Test
-    void testgetCurrentUserLogin() {
+    void testGetCurrentUserLogin() {
         String login = SecurityUtils.getCurrentUserLogin()
             .contextWrite(ReactiveSecurityContextHolder.withAuthentication(new UsernamePasswordAuthenticationToken("admin", "admin")))
             .block();
@@ -63,7 +63,7 @@ class SecurityUtilsUnitTest {
 <%_ if (authenticationTypeJwt) { _%>
 
     @Test
-    void testgetCurrentUserJWT() {
+    void testGetCurrentUserJWT() {
         String jwt = SecurityUtils.getCurrentUserJWT()
             .contextWrite(ReactiveSecurityContextHolder.withAuthentication(new UsernamePasswordAuthenticationToken("admin", "token")))
             .block();

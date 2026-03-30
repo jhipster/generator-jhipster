@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 
-package <%= packageName %>.config;
+package <%- packageName %>.config;
 
 import org.springframework.context.annotation.Configuration;
 <%_ if (searchEngineElasticsearch) { _%>
@@ -39,9 +39,9 @@ import org.springframework.transaction.<% if (reactive) { %>Reactive<% } %>Trans
 
 @Configuration
 <%_ if (searchEngineElasticsearch) { _%>
-@Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories(basePackages = "<%= packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>Neo4jRepository.class))
+@Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories(basePackages = "<%- packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>Neo4jRepository.class))
 <%_ } else { _%>
-@Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories("<%= packageName %>.repository")
+@Enable<% if (reactive) { %>Reactive<% } %>Neo4jRepositories("<%- packageName %>.repository")
 <%_ } _%>
 public class DatabaseConfiguration {
 <%_ if (reactive) { _%>

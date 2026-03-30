@@ -15,54 +15,57 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
--%><%
-let helpBlocks = 0; %>
+-%>
+<%_ const fieldsWithDocumentation = fields.filter(field => field.documentation); _%>
 {
-    "<%= frontendAppName %>": {
-        "<%= entityTranslationKey %>" : {
+    "<%- frontendAppName %>": {
+        "<%- entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityNamePluralHumanized %>",
+                "title": "<%- entityNamePluralHumanized %>",
                 "refreshListLabel": "Refresh list",
 <%_ if (!readOnly) { _%>
-                "createLabel": "Thêm mới một <%= entityNameHumanized %>",
-                "createOrEditLabel": "Thêm mới hoặc cập nhật <%= entityNameHumanized %>",
+                "createLabel": "Thêm mới một <%- entityNameHumanized %>",
+                "createOrEditLabel": "Thêm mới hoặc cập nhật <%- entityNameHumanized %>",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "Tìm <%= entityNameHumanized %>",
+                "search": "Tìm <%- entityNameHumanized %>",
 <%_ } _%>
-                "notFound": "No <%= entityNamePluralHumanized %> found"
+                "notFound": "No <%- entityNamePluralHumanized %> found"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "Một <%= entityNameHumanized %> mới được tạo với định danh {{ param }}",
-            "updated": "Một <%= entityNameHumanized %> cập nhật với định danh {{ param }}",
-            "deleted": "Một <%= entityNameHumanized %> đã xóa với định danh {{ param }}",
+            "created": "Một <%- entityNameHumanized %> mới được tạo với định danh {{ param }}",
+            "updated": "Một <%- entityNameHumanized %> cập nhật với định danh {{ param }}",
+            "deleted": "Một <%- entityNameHumanized %> đã xóa với định danh {{ param }}",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "Bạn có chắc là muốn xóa <%= entityNameHumanized %> {{ id }}?"
+                "question": "Bạn có chắc là muốn xóa <%- entityNameHumanized %> {{ id }}?"
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityNameHumanized %>"
-            }<% for (idx in fields) {
-            if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
-            "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
-            "<%= relationships[idx].relationshipName %>": "<%= relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
-            "help": {<% for (idx in fields) {
-                if (fields[idx].documentation) {
-                    --helpBlocks; %>
-                "<%= fields[idx].fieldName %>": "<%= fields[idx].documentation %>"<% if (helpBlocks > 0) { %>,<% }
-                }
-            } %>
-            }<% } %>
+                "title": "<%- entityNameHumanized %>"
+            }
+<%_ for (const field of fields) { _%>,
+            "<%- field.fieldName %>": "<%- field.fieldNameHumanized %>"
+<%_ } _%>
+<%_ for (const relationship of relationships) { _%>,
+            "<%- relationship.relationshipName %>": "<%- relationship.relationshipNameHumanized %>"
+<%_ } _%>
+<%_ if (fieldsWithDocumentation.length > 0) { _%>,
+            "help": {
+  <%_ for (const [key, field] of Object.entries(fieldsWithDocumentation)) { _%>
+                "<%- field.fieldName %>": "<%- field.documentation %>"<% if (key < fieldsWithDocumentation.length - 1) { %>,<% } %>
+  <%_ } _%>
+            }
+<%_ } _%>
         }
     }
 <%_ if (microserviceAppName && !readOnly) { _%>,
-    "<%= microserviceAppName %>": {
-        "<%= entityTranslationKey %>" : {
-            "created": "Một <%= entityNameHumanized %> mới được tạo với định danh {{ param }}",
-            "updated": "Một <%= entityNameHumanized %> cập nhật với định danh {{ param }}",
-            "deleted": "Một <%= entityNameHumanized %> đã xóa với định danh {{ param }}"
+    "<%- microserviceAppName %>": {
+        "<%- entityTranslationKey %>" : {
+            "created": "Một <%- entityNameHumanized %> mới được tạo với định danh {{ param }}",
+            "updated": "Một <%- entityNameHumanized %> cập nhật với định danh {{ param }}",
+            "deleted": "Một <%- entityNameHumanized %> đã xóa với định danh {{ param }}"
         }
     }
 <%_ } _%>

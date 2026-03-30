@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.repository;
+package <%- packageName %>.repository;
 
 import org.springframework.data.couchbase.repository.Query;
 import com.couchbase.client.java.query.QueryScanConsistency;
@@ -38,14 +38,10 @@ import java.util.List;
 /**
  * Couchbase specific {@link org.springframework.data.repository.Repository} interface for search queries.
  */
-<%_
-    let listOrFlux = reactive ? 'Flux' : 'List';
-    let pageOrFlux = reactive ? 'Flux' : 'Page';
-_%>
 @NoRepositoryBean
 public interface CouchbaseSearchRepository<T, ID> extends JHipsterCouchbaseRepository<T, ID> {
 
-    String SEARCH_CONDITION = "SEARCH(b, #{T(<%= packageName %>.repository.CouchbaseSearchRepository).searchQuery([0]).toString()})";
+    String SEARCH_CONDITION = "SEARCH(b, #{T(<%- packageName %>.repository.CouchbaseSearchRepository).searchQuery([0]).toString()})";
 
     static SearchQuery searchQuery(String queryString) {
         List<String> ids = new LinkedList<>();
@@ -67,25 +63,25 @@ public interface CouchbaseSearchRepository<T, ID> extends JHipsterCouchbaseRepos
     }
 
     @ScanConsistency(query = QueryScanConsistency.NOT_BOUNDED)
-    default <%= listOrFlux %><T> search(String queryString) {
+    default <%- listOrFlux %><T> search(String queryString) {
         return findAllById(toIds(searchIds(queryString)));
     }
 
     @ScanConsistency(query = QueryScanConsistency.NOT_BOUNDED)
-    default <%= pageOrFlux %><T> search(String queryString, Pageable pageable) {
-    <%_ if (reactive) { _%>
+    default <%- pageOrFlux %><T> search(String queryString, Pageable pageable) {
+<%_ if (reactive) { _%>
         return findAllById(toIds(searchIds(queryString, pageable)));
-    <%_ } else { _%>
+<%_ } else { _%>
         Page<T> page = searchIds(queryString, pageable);
         return new PageImpl<>(findAllById(toIds(page.getContent())), pageable, page.getTotalElements());
-    <%_ } _%>
+<%_ } _%>
     }
 
     @Query(FIND_IDS_QUERY + " AND " + SEARCH_CONDITION)
     @ScanConsistency(query = QueryScanConsistency.NOT_BOUNDED)
-    <%= listOrFlux %><T> searchIds(String queryString);
+    <%- listOrFlux %><T> searchIds(String queryString);
 
     @Query(FIND_IDS_QUERY + " AND " + SEARCH_CONDITION)
     @ScanConsistency(query = QueryScanConsistency.NOT_BOUNDED)
-    <%= pageOrFlux %><T> searchIds(String queryString, Pageable pageable);
+    <%- pageOrFlux %><T> searchIds(String queryString, Pageable pageable);
 }

@@ -34,8 +34,8 @@ import { SortState, sortStateSignal } from './sort-state';
   template: `
     <table>
       <thead>
-        <tr <%= jhiPrefix %>Sort [(sortState)]="sortState" (sortChange)="transition($event)">
-          <th <%= jhiPrefix %>SortBy="name">
+        <tr <%- jhiPrefix %>Sort [(sortState)]="sortState" (sortChange)="transition($event)">
+          <th <%- jhiPrefix %>SortBy="name">
             ID
             <fa-icon [icon]="'sort'" />
           </th>
@@ -46,7 +46,7 @@ import { SortState, sortStateSignal } from './sort-state';
 })
 class TestSortByDirective {
   sortState = sortStateSignal({ predicate: 'name' });
-  transition = <%= clientTestFramework %>.fn();
+  transition = <%- clientTestFramework %>.fn();
 
   private readonly library = inject(FaIconLibrary);
 
@@ -76,7 +76,7 @@ describe('Directive: SortByDirective', () => {
     fixture.detectChanges();
 
     // THEN
-    expect(sortByDirective.<%= jhiPrefix %>SortBy()).toEqual('name');
+    expect(sortByDirective.<%- jhiPrefix %>SortBy()).toEqual('name');
     expect(sortByDirective.iconComponent()?.icon()).toEqual(faSort.iconName);
   });
 
@@ -89,7 +89,7 @@ describe('Directive: SortByDirective', () => {
     fixture.detectChanges();
 
     // THEN
-    expect(sortByDirective.<%= jhiPrefix %>SortBy()).toEqual('name');
+    expect(sortByDirective.<%- jhiPrefix %>SortBy()).toEqual('name');
     expect(sortByDirective.iconComponent()?.icon()).toEqual(faSortUp.iconName);
   });
 
@@ -102,7 +102,7 @@ describe('Directive: SortByDirective', () => {
     fixture.detectChanges();
 
     // THEN
-    expect(sortByDirective.<%= jhiPrefix %>SortBy()).toEqual('name');
+    expect(sortByDirective.<%- jhiPrefix %>SortBy()).toEqual('name');
     expect(sortByDirective.iconComponent()?.icon()).toEqual(faSortDown.iconName);
   });
 
@@ -115,14 +115,14 @@ describe('Directive: SortByDirective', () => {
     fixture.detectChanges();
 
     // THEN
-    expect(sortByDirective.<%= jhiPrefix %>SortBy()).toEqual('name');
+    expect(sortByDirective.<%- jhiPrefix %>SortBy()).toEqual('name');
     expect(sortByDirective.iconComponent()?.icon()).toEqual(faSort.iconName);
   });
 
   it('multiple clicks at same component, should call SortDirective sort', () => {
     // GIVEN
     const sortDirective = tableHead.injector.get(SortDirective as Type<SortDirective>);
-    sortDirective.sort = <%= clientTestFramework %>.fn();
+    sortDirective.sort = <%- clientTestFramework %>.fn();
 
     // WHEN
     fixture.detectChanges();

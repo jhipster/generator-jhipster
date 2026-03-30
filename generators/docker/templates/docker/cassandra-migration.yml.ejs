@@ -16,11 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-name: <%= baseName.toLowerCase() %>
+name: <%- baseName.toLowerCase() %>
 services:
   cassandra-migration:
     environment:
-      - CASSANDRA_CONTACT_POINT=<%= baseName.toLowerCase() %>-cassandra
+      - CASSANDRA_CONTACT_POINT=<%- baseName.toLowerCase() %>-cassandra
       - USER=docker-cassandra-migration
       # - DEBUG_LOG=1 # uncomment to show debug logs during the migration process
       - CREATE_KEYSPACE_SCRIPT=create-keyspace.cql

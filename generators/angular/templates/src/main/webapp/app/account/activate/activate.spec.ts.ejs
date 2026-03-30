@@ -34,7 +34,9 @@ describe('Activate', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
+<%_ if (enableTranslation) { _%>
+      imports: [TranslateModule.forRoot()],
+<%_ } _%>
       providers: [
         {
           provide: ActivatedRoute,
@@ -50,7 +52,7 @@ describe('Activate', () => {
   });
 
   it('calls activate.get with the key from params', inject([ActivateService], (service: ActivateService) => {
-    <%= clientTestFramework %>.spyOn(service, 'get').mockReturnValue(of());
+    <%- clientTestFramework %>.spyOn(service, 'get').mockReturnValue(of());
 
     comp.ngOnInit();
 
@@ -58,7 +60,7 @@ describe('Activate', () => {
   }));
 
   it('should set success to true upon successful activation', inject([ActivateService], (service: ActivateService) => {
-    <%= clientTestFramework %>.spyOn(service, 'get').mockReturnValue(of({}));
+    <%- clientTestFramework %>.spyOn(service, 'get').mockReturnValue(of({}));
 
     comp.ngOnInit();
 
@@ -67,7 +69,7 @@ describe('Activate', () => {
   }));
 
   it('should set error to true upon activation failure', inject([ActivateService], (service: ActivateService) => {
-    <%= clientTestFramework %>.spyOn(service, 'get').mockReturnValue(throwError(Error));
+    <%- clientTestFramework %>.spyOn(service, 'get').mockReturnValue(throwError(Error));
 
     comp.ngOnInit();
 

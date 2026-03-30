@@ -38,8 +38,6 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<C
       loadDependabotVersions({ applicationDefaults }) {
         applicationDefaults({
           githubActions: () => ({}),
-          // TODO: fix type
-          // @ts-ignore
           ciCdIntegrations: () => [],
         });
       },

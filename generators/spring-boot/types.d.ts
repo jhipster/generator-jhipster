@@ -1,4 +1,4 @@
-import type { HandleCommandTypes } from '../../lib/command/types.ts';
+import type { CommandTypeMap } from '../../lib/command/types.ts';
 import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.ts';
 import type { Entity as BaseApplicationEntity, RelationshipWithEntity } from '../base-application/types.ts';
 import type { Config as CommonConfig } from '../common/types.d.ts';
@@ -28,8 +28,8 @@ import type cacheCommand from './generators/cache/command.ts';
 import type springBootDependencies4 from './resources/spring-boot-dependencies-4.ts';
 import type springBootDependencies3 from './resources/spring-boot-dependencies.ts';
 
-type Command = HandleCommandTypes<typeof command>;
-type CacheCommand = HandleCommandTypes<typeof cacheCommand>;
+type Command = CommandTypeMap<typeof command>;
+type CacheCommand = CommandTypeMap<typeof cacheCommand>;
 
 export type SpringBootModule = keyof (typeof springBootDependencies3)['modules'] | keyof (typeof springBootDependencies4)['modules'];
 

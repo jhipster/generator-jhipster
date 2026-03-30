@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { after, before, describe, expect as jestExpect, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { after, before, describe, expect, it } from 'esmocha';
 
 import { JDLEnum } from './index.ts';
 import JDLEnums from './jdl-enums.ts';
@@ -36,7 +34,7 @@ describe('jdl - JDLEnums', () => {
       it('should fail', () => {
         expect(() => {
           jdlEnums.add(new JDLEnum({ name: '' }));
-        }).to.throw("The enum's name must be passed to create an enum.");
+        }).toThrow("The enum's name must be passed to create an enum.");
       });
     });
     describe('when adding an invalid element', () => {
@@ -44,14 +42,14 @@ describe('jdl - JDLEnums', () => {
         expect(() => {
           // @ts-expect-error invalid api test
           jdlEnums.add();
-        }).to.throw(/^Can't add a nil JDL enum to the JDL enums\.$/);
+        }).toThrow(/^Can't add a nil JDL enum to the JDL enums\.$/);
       });
     });
     describe('when adding a valid enum', () => {
       it('should not fail', () => {
         expect(() => {
           jdlEnums.add(new JDLEnum({ name: 'A' }));
-        }).not.to.throw();
+        }).not.toThrow();
       });
     });
   });
@@ -64,7 +62,7 @@ describe('jdl - JDLEnums', () => {
 
     describe('when fetching an absent enum', () => {
       it('should return null', () => {
-        expect(jdlEnums.get('A')).to.be.undefined;
+        expect(jdlEnums.get('A')).toBeUndefined();
       });
     });
     describe('when fetching an existing enum', () => {
@@ -76,7 +74,7 @@ describe('jdl - JDLEnums', () => {
       });
 
       it('should return it', () => {
-        expect(jdlEnums.get(jdlEnum.name)).to.deep.equal(jdlEnum);
+        expect(jdlEnums.get(jdlEnum.name)).toEqual(jdlEnum);
       });
     });
   });
@@ -89,7 +87,7 @@ describe('jdl - JDLEnums', () => {
 
     describe('when fetching an absent enum', () => {
       it('should return false', () => {
-        expect(jdlEnums.has('A')).to.be.false;
+        expect(jdlEnums.has('A')).toBe(false);
       });
     });
     describe('when fetching an existing enum', () => {
@@ -101,7 +99,7 @@ describe('jdl - JDLEnums', () => {
       });
 
       it('should return true', () => {
-        expect(jdlEnums.has(jdlEnum.name)).to.be.true;
+        expect(jdlEnums.has(jdlEnum.name)).toBe(true);
       });
     });
   });
@@ -130,7 +128,7 @@ describe('jdl - JDLEnums', () => {
       });
 
       it('should use each enum name', () => {
-        jestExpect(result).toMatchInlineSnapshot(`
+        expect(result).toMatchInlineSnapshot(`
 [
   "A",
   "B",
@@ -148,7 +146,7 @@ describe('jdl - JDLEnums', () => {
 
     describe('when there is no element', () => {
       it('should return 0', () => {
-        expect(jdlEnums.size()).to.equal(0);
+        expect(jdlEnums.size()).toBe(0);
       });
     });
     describe('when there are enums', () => {
@@ -162,7 +160,7 @@ describe('jdl - JDLEnums', () => {
       });
 
       it('should return the number of enums', () => {
-        expect(jdlEnums.size()).to.equal(3);
+        expect(jdlEnums.size()).toBe(3);
       });
     });
     describe('when adding twice the same enum', () => {
@@ -172,7 +170,7 @@ describe('jdl - JDLEnums', () => {
       });
 
       it('should count it as one enum', () => {
-        expect(jdlEnums.size()).to.equal(1);
+        expect(jdlEnums.size()).toBe(1);
       });
     });
   });
@@ -185,7 +183,7 @@ describe('jdl - JDLEnums', () => {
 
     describe('when there is no enum', () => {
       it('should return an empty string', () => {
-        expect(jdlEnums.toString()).to.equal('');
+        expect(jdlEnums.toString()).toBe('');
       });
     });
     describe('when there is at least one enum', () => {
@@ -195,7 +193,7 @@ describe('jdl - JDLEnums', () => {
       });
 
       it('should return a stringified version of enums', () => {
-        expect(jdlEnums.toString()).to.equal(`enum A {
+        expect(jdlEnums.toString()).toBe(`enum A {
   AA,
   AB
 }

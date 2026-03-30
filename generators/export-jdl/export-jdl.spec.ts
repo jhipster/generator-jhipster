@@ -81,6 +81,7 @@ const files = {
         relationshipType: 'many-to-one',
         otherEntityField: 'foo',
         otherEntityRelationshipName: 'employee',
+        options: { destinationAnnotation: true },
       },
       {
         relationshipType: 'one-to-many',

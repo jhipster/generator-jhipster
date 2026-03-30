@@ -27,7 +27,7 @@ import { AppThunk } from 'app/config/store';
 <% if (enableTranslation) { %>import { setLocale } from 'app/shared/reducers/locale';<% } %>
 
 <%_ if (authenticationTypeJwt) { _%>
-const AUTH_TOKEN_KEY = '<%= jhiPrefixDashed %>-authenticationToken';
+const AUTH_TOKEN_KEY = '<%- jhiPrefixDashed %>-authenticationToken';
 <%_ } _%>
 
 export const initialState = {
@@ -49,7 +49,12 @@ export type AuthenticationState = Readonly<typeof initialState>;
 
 // Actions
 
-export const getSession = (): AppThunk => <% if (enableTranslation) { %>async<% } %> (dispatch<%_ if (enableTranslation) { _%>, getState<%_ } _%>) => {
+export const getSession = (): AppThunk => <% if (enableTranslation) { %>async<% } %> (
+  dispatch,
+<%_ if (enableTranslation) { _%>
+  getState,
+<%_ } _%>
+) => {
 <%_ if (enableTranslation) { _%>
   await dispatch(getAccount());
 
@@ -150,14 +155,14 @@ export const AuthenticationSlice = createSlice({
   name: 'authentication',
   initialState: initialState as AuthenticationState,
   reducers: {
-    <%_ if (authenticationTypeJwt) { _%>
+<%_ if (authenticationTypeJwt) { _%>
     logoutSession() {
       return {
         ...initialState,
         showModalLogin: true,
       };
     },
-    <%_ } _%>
+<%_ } _%>
     authError(state, action) {
       return {
         ...state,
@@ -180,7 +185,7 @@ export const AuthenticationSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      <%_ if (!authenticationTypeOauth2) { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
       .addCase(authenticate.rejected, (state, action) => ({
         ...initialState,
         errorMessage: action.error.message,
@@ -194,15 +199,15 @@ export const AuthenticationSlice = createSlice({
         showModalLogin: false,
         loginSuccess: true,
       }))
-      <%_ } _%>
+<%_ } _%>
       .addCase(getAccount.rejected, (state, action) => ({
         ...state,
         loading: false,
         isAuthenticated: false,
         sessionHasBeenFetched: true,
-        <%_ if (!authenticationTypeOauth2) { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
         showModalLogin: true,
-        <%_ } _%>
+<%_ } _%>
         errorMessage: action.error.message,
       }))
       .addCase(getAccount.fulfilled, (state, action) => {
@@ -215,21 +220,21 @@ export const AuthenticationSlice = createSlice({
           account: action.payload.data,
         };
       })
-      <%_ if (!authenticationTypeJwt) { _%>
+<%_ if (!authenticationTypeJwt) { _%>
       .addCase(logoutServer.fulfilled, (<% if (authenticationTypeOauth2) { %>state, action<% } %>) => ({
         ...initialState,
-        <%_ if (!authenticationTypeOauth2) { _%>
+  <%_ if (!authenticationTypeOauth2) { _%>
         showModalLogin: true
-        <%_ } else { _%>
+  <%_ } else { _%>
         logoutUrl: action.payload.data.logoutUrl
-        <%_ } _%>
+  <%_ } _%>
       }))
-      <%_ } _%>
-      <%_ if (!authenticationTypeOauth2) { _%>
+<%_ } _%>
+<%_ if (!authenticationTypeOauth2) { _%>
       .addCase(authenticate.pending, state => {
         state.loading = true;
       })
-      <%_ } _%>
+<%_ } _%>
       .addCase(getAccount.pending, state => {
         state.loading = true;
       });

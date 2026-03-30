@@ -173,10 +173,10 @@ export default class CoreGenerator<
 
     if (!this.options.help) {
       /* Force config to use 'generator-jhipster' namespace. */
-      this._config = this._getStorage('generator-jhipster');
+      this._config = this._getStorage('generator-jhipster', { transform: this.features.configTransform });
 
       /* JHipster config using proxy mode used as a plain object instead of using get/set. */
-      this.jhipsterConfig = this.config.createProxy() as Config;
+      this.jhipsterConfig = this.config.createProxy();
 
       /* Options parsing must be executed after forcing jhipster storage namespace and after sharedData have been populated */
       this.#parseJHipsterConfigs(baseCommand.configs);
@@ -217,7 +217,7 @@ export default class CoreGenerator<
    * JHipster config with default values fallback
    */
   get jhipsterConfigWithDefaults(): Readonly<Config> {
-    return removeFieldsWithNullishValues(this.config.getAll()) as Config;
+    return removeFieldsWithNullishValues(this.config.getAll());
   }
 
   /**
@@ -505,7 +505,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   #parseJHipsterConfigs(configs: JHipsterConfigs = {}, common = false) {
     Object.entries(configs).forEach(([optionName, configDesc]) => {
       const optionsDesc = convertConfigToOption(optionName, configDesc);
-      if (!optionsDesc || !optionsDesc.type || (common && configDesc.scope === 'generator')) return;
+      if (!optionsDesc?.type || (common && configDesc.scope === 'generator')) return;
 
       let optionValue;
       const { name, type } = optionsDesc;
@@ -596,7 +596,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
               if (!this.blueprintStorage) {
                 throw new Error('Blueprint storage is not initialized');
               }
-              this.blueprintStorage!.set(argumentName, convertedValue);
+              this.blueprintStorage.set(argumentName, convertedValue);
               break;
             }
           }
@@ -1199,7 +1199,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     let originalContent: string | undefined | null;
     try {
-      originalContent = this.readDestination(filePath) as string;
+      originalContent = this.readDestination(filePath);
     } catch {
       // null return should be treated like an error.
     }
@@ -1322,7 +1322,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       gradleCatalog = gradleCatalog ? this.jhipsterTemplatePath(tomlFile) : this.templatePath(tomlFile);
     }
 
-    const gradleLibsVersions = this.readTemplate(gradleCatalog)?.toString();
+    const gradleLibsVersions = this.readTemplate(gradleCatalog);
     if (gradleLibsVersions) {
       Object.assign(javaDependencies, this.prepareDependencies(getGradleLibsVersionsProperties(gradleLibsVersions), 'java'));
     }

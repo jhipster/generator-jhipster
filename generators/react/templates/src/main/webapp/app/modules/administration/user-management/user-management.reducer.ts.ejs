@@ -121,9 +121,9 @@ export const UserManagementSlice = createSlice({
       .addMatcher(isFulfilled(getUsers, getUsersAsAdmin), (state, action) => {
         state.loading = false;
         state.users = action.payload.data;
-      <%_ if (!databaseTypeCassandra) { _%>
+<%_ if (!databaseTypeCassandra) { _%>
         state.totalItems = Number.parseInt(action.payload.headers['x-total-count'], 10);
-      <%_ } _%>
+<%_ } _%>
       })
       .addMatcher(isFulfilled(createUser, updateUser), (state, action) => {
         state.updating = false;

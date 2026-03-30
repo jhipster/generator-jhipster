@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.config;
+package <%- packageName %>.config;
 
-import <%= packageName %>.security.*;
+import <%- packageName %>.security.*;
 import tech.jhipster.config.JHipsterProperties;
 
 import org.springframework.context.annotation.Bean;
@@ -42,7 +42,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 <%_ } _%>
 <%_ if (!skipClient) { _%>
-import <%= packageName %>.web.filter.SpaWebFilter;
+import <%- packageName %>.web.filter.SpaWebFilter;
 <%_ } _%>
 <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>
 import jakarta.servlet.http.HttpServletRequest;
@@ -58,8 +58,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ if (authenticationTypeOauth2) { _%>
 import static org.springframework.security.oauth2.core.oidc.StandardClaimNames.PREFERRED_USERNAME;
 
-import <%= packageName %>.security.oauth2.AudienceValidator;
-import <%= packageName %>.security.SecurityUtils;
+import <%- packageName %>.security.oauth2.AudienceValidator;
+import <%- packageName %>.security.SecurityUtils;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -101,7 +101,7 @@ import org.springframework.security.oauth2.server.resource.web.access.BearerToke
 <%_ if (authenticationTypeOauth2 && !applicationTypeMicroservice) { _%>
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.boot.restclient.RestTemplateBuilder;
-import <%= packageName %>.security.oauth2.CustomClaimConverter;
+import <%- packageName %>.security.oauth2.CustomClaimConverter;
 <%_ } _%>
 <%_ if(!skipClient) { _%>
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
@@ -133,7 +133,7 @@ public class SecurityConfiguration {
 
     @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}")
     private String issuerUri;
-    <%_ } _%>
+<%_ } _%>
 
     public SecurityConfiguration(<% if (devDatabaseTypeH2Any) { %>Environment env, <% } %><% if (authenticationTypeSession && generateUserManagement) { %>RememberMeServices rememberMeServices, <% } %> JHipsterProperties jHipsterProperties) {
 <%_ if (devDatabaseTypeH2Any) { _%>
@@ -153,7 +153,7 @@ public class SecurityConfiguration {
 <%_ } _%>
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http)<%_ if (!springBoot4) { _%> throws Exception<%_ } _%> {
+    public SecurityFilterChain filterChain(HttpSecurity http)<% if (!springBoot4) { %> throws Exception<% } %> {
         http
 <%_ if (!applicationTypeMicroservice) { _%>
             .cors(withDefaults())
@@ -314,7 +314,7 @@ public class SecurityConfiguration {
         jwtAuthenticationConverter.setPrincipalClaimName(PREFERRED_USERNAME);
         return jwtAuthenticationConverter;
     }
-    <%_ if (!applicationTypeMicroservice) { _%>
+  <%_ if (!applicationTypeMicroservice) { _%>
 
     OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
         final OidcUserService delegate = new OidcUserService();
@@ -350,7 +350,11 @@ public class SecurityConfiguration {
   <%_ } _%>
 
     @Bean
-    JwtDecoder jwtDecoder(<%_ if (!applicationTypeMicroservice) { _%>ClientRegistrationRepository clientRegistrationRepository, RestTemplateBuilder restTemplateBuilder<%_ } _%>) {
+    JwtDecoder jwtDecoder(
+  <%_ if (!applicationTypeMicroservice) { _%>
+        ClientRegistrationRepository clientRegistrationRepository,
+        RestTemplateBuilder restTemplateBuilder
+  <%_ } _%>) {
         NimbusJwtDecoder jwtDecoder = JwtDecoders.fromOidcIssuerLocation(issuerUri);
 
         OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());

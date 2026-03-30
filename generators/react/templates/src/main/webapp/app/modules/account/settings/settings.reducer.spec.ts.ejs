@@ -18,7 +18,6 @@
 -%>
 import { configureStore } from '@reduxjs/toolkit';
 import axios from 'axios';
-import sinon from 'sinon';
 <%_ if (enableTranslation) { _%>
 import { TranslatorContext } from 'react-jhipster';
 <%_ } _%>
@@ -29,7 +28,7 @@ import { getAccount } from 'app/shared/reducers/authentication';
 describe('Settings reducer tests', () => {
 <%_ if (enableTranslation) { _%>
   beforeAll(() => {
-    TranslatorContext.registerTranslations('<%= nativeLanguage %>', {});
+    TranslatorContext.registerTranslations('<%- nativeLanguage %>', {});
   });
 
 <%_ } _%>
@@ -96,8 +95,8 @@ describe('Settings reducer tests', () => {
       store = configureStore({
         reducer: (state = [], action) => [...state, action],
       });
-      axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
-      axios.post = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.get = jest.fn().mockResolvedValue(resolvedObject);
+      axios.post = jest.fn().mockResolvedValue(resolvedObject);
     });
 
     it('dispatches UPDATE_ACCOUNT_PENDING and UPDATE_ACCOUNT_FULFILLED actions', async () => {

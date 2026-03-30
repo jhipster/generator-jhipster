@@ -53,7 +53,7 @@ describe('Error component', () => {
     route = {};
     authenticated = ref(false);
 <%_ if (authenticationTypeOauth2) { _%>
-    loginService = { login: vitest.fn(), logout: vitest.fn() };
+    loginService = { login: vi.fn(), logout: vi.fn() };
 <%_ } _%>
     mountOptions = {
       global: {

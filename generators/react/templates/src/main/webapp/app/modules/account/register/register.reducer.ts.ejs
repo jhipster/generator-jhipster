@@ -60,11 +60,11 @@ export const RegisterSlice = createSlice({
       .addCase(handleRegister.fulfilled, () => ({
         ...initialState,
         registrationSuccess: true,
-        <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
         successMessage: 'register.messages.success',
-        <%_ } else { _%>
+<%_ } else { _%>
         successMessage: 'Registration saved! Please check your email for confirmation.'
-        <%_ } _%>
+<%_ } _%>
       }));
   },
 });

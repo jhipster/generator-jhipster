@@ -18,7 +18,7 @@
 -%>
 {
     "global": {
-        "title": "<%= capitalizedBaseName %>",
+        "title": "<%- capitalizedBaseName %>",
         "browsehappy": "Sizning brauzeringiz <strong>eski</strong>. Iltimos, <a href=\"http://browsehappy.com/?locale=ru\">yangilang</a>.",
         "menu": {
             "home": "Bosh sahifa",
@@ -159,7 +159,7 @@
         "idnull": "Noto`g`ri ID",
         "idinvalid": "Invalid Id",
         "idnotfound": "ID cannot be found",
- <%_ if (searchEngineElasticsearch) { _%>
+<%_ if (searchEngineElasticsearch) { _%>
         "querySyntaxError": "Invalid search query",
 <%_ } _%>
         "file": {

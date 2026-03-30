@@ -112,7 +112,7 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
         // springBoot4 is prepared in preparing phase of spring-boot generator
         loadDockerElasticsearchVersion.call(this, {
           springBoot4: application.springBoot4,
-          dockerContainers: application.dockerContainers!,
+          dockerContainers: application.dockerContainers,
         });
       },
     });
@@ -162,8 +162,8 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
           dtoMapstruct: ({ dto }) => dto === 'mapstruct' || dto === 'any',
           dtoAny: ({ dto }) => dto && dto !== 'no',
-          restClass: ({ dtoAny, dtoClass, persistClass }) => (dtoAny ? dtoClass! : persistClass!),
-          restInstance: ({ dtoAny, dtoInstance, persistInstance }) => (dtoAny ? dtoInstance! : persistInstance!),
+          restClass: ({ dtoAny, dtoClass, persistClass }) => (dtoAny ? dtoClass! : persistClass),
+          restInstance: ({ dtoAny, dtoInstance, persistInstance }) => (dtoAny ? dtoInstance! : persistInstance),
         });
         loadRequiredConfigDerivedProperties(entity);
       },

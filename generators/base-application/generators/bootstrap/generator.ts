@@ -39,7 +39,12 @@ import { mutateApplication } from '../../application.ts';
 import { mutateRelationship, mutateRelationshipWithEntity } from '../../entity.ts';
 import BaseApplicationGenerator from '../../index.ts';
 import { convertFieldBlobType, getBlobContentType, isFieldBinaryType, isFieldBlobType } from '../../internal/types/field-types.ts';
-import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from '../../internal/utils.ts';
+import {
+  createAuthorityEntity,
+  createUserEntity,
+  createUserManagementEntity,
+  getChangelogDateForBuiltInEntities,
+} from '../../internal/utils.ts';
 import {
   addFakerToEntity,
   derivedPrimaryKeyProperties,
@@ -52,18 +57,11 @@ import {
   prepareRelationship,
   stringifyApplicationData,
 } from '../../support/index.ts';
-import type {
-  Application as BaseApplicationApplication,
-  Config as BaseApplicationConfig,
-  Entity as BaseApplicationEntity,
-  Options as BaseApplicationOptions,
-} from '../../types.ts';
+import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../types.ts';
 
 export default class BootstrapBaseApplicationGenerator extends BaseApplicationGenerator<
   BaseApplicationEntity,
-  BaseApplicationApplication<BaseApplicationEntity>,
-  BaseApplicationConfig,
-  BaseApplicationOptions
+  BaseApplicationApplication<BaseApplicationEntity>
 > {
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -189,7 +187,7 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
 
   get configuringEachEntity() {
     return this.asConfiguringEachEntityTaskGroup({
-      configureEntity({ entityStorage, entityConfig }) {
+      configureEntity({ application, entityName, entityStorage, entityConfig }) {
         entityStorage.defaults({ fields: [], relationships: [], annotations: {} });
 
         for (const field of entityConfig.fields!.filter(field => field.fieldType === 'byte[]')) {
@@ -202,7 +200,15 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
           delete entityConfig.changelogDate;
         }
         if (!entityConfig.annotations!.changelogDate) {
-          entityConfig.annotations!.changelogDate = this.nextTimestamp();
+          if (
+            (entityName === 'UserManagement' && application.generateUserManagement) ||
+            (entityName === 'User' && application.generateBuiltInUserEntity) ||
+            (entityName === 'Authority' && application.generateBuiltInAuthorityEntity)
+          ) {
+            entityConfig.annotations!.changelogDate = getChangelogDateForBuiltInEntities(this.jhipsterConfig.creationTimestamp)[entityName];
+          } else {
+            entityConfig.annotations!.changelogDate = this.nextTimestamp();
+          }
           entityStorage.save();
         }
       },
@@ -223,13 +229,13 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
 
           if (!relationship.relationshipSide) {
             // Try to create relationshipSide based on best bet.
-            if (relationship.ownerSide !== undefined) {
-              relationship.relationshipSide = relationship.ownerSide ? 'left' : 'right';
-            } else {
+            if (relationship.ownerSide === undefined) {
               // Missing ownerSide (one-to-many/many-to-one relationships) depends on the otherSide existence.
               const unidirectionalRelationship = !relationship.otherEntityRelationshipName;
               const bidirectionalOneToManySide = !unidirectionalRelationship && relationship.relationshipType === 'one-to-many';
               relationship.relationshipSide = unidirectionalRelationship || bidirectionalOneToManySide ? 'left' : 'right';
+            } else {
+              relationship.relationshipSide = relationship.ownerSide ? 'left' : 'right';
             }
           }
 

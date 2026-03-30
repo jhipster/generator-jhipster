@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 
-package <%= packageName %>.config;
+package <%- packageName %>.config;
 
 import io.mongock.runner.springboot.EnableMongock;
 import tech.jhipster.config.JHipsterConstants;
@@ -52,9 +52,9 @@ import java.util.List;
 @Configuration
 @EnableMongock
 <%_ if (searchEngineElasticsearch) { _%>
-@Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories(basePackages = "<%= packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>MongoRepository.class))
+@Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories(basePackages = "<%- packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>MongoRepository.class))
 <%_ } else { _%>
-@Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories("<%= packageName %>.repository")
+@Enable<% if (reactive) { %>Reactive<% } %>MongoRepositories("<%- packageName %>.repository")
 <%_ } _%>
 @Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)
 <%_ if (reactive) { _%>

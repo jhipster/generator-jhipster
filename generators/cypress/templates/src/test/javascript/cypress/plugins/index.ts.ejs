@@ -29,7 +29,7 @@
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 <%_ if (cypressAudit) { _%>
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { lighthouse, pa11y, prepareAudit } from 'cypress-audit';
 <%_ } _%>
 
@@ -60,10 +60,10 @@ export default <% if (cypressCoverage) { %>async <% } %>(on: Cypress.PluginEvent
   on('task', {
     lighthouse: lighthouse(async (lighthouseReport) => {
       const { default: ReportGenerator } = await import('lighthouse/report/generator/report-generator');
-      if (!existsSync('<%= cypressTemporaryDir %>')) {
-        mkdirSync('<%= cypressTemporaryDir %>', { recursive: true });
+      if (!existsSync('<%- cypressTemporaryDir %>')) {
+        mkdirSync('<%- cypressTemporaryDir %>', { recursive: true });
       }
-      writeFileSync('<%= cypressTemporaryDir %>lhreport.html', ReportGenerator.generateReport(lighthouseReport.lhr, 'html'));
+      writeFileSync('<%- cypressTemporaryDir %>lhreport.html', ReportGenerator.generateReport(lighthouseReport.lhr, 'html'));
     }),
     pa11y: pa11y(),
   });

@@ -21,20 +21,20 @@
  EJS fragments will process % delimiter tags in the template and & delimiter tags during the merge process.
 -%>
 <&_ if (fragment.importSection) { -&>
-  <%_ if (!embedded) { _%>
+<%_ if (!embedded) { _%>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-  <%_ } _%>
+<%_ } _%>
 import org.springframework.data.mongodb.core.mapping.Field;
-  <%_ if (!reactive && relationships.length > 0) { _%>
+<%_ if (!reactive && relationships.length > 0) { _%>
 import org.springframework.data.mongodb.core.mapping.DBRef;
-  <%_ } _%>
+<%_ } _%>
 <&_ } -&>
 
 <&_ if (fragment.annotationSection) { -&>
-  <%_ if (!embedded) { _%>
-@Document(collection = "<%= entityTableName %>")
-  <%_ } _%>
+<%_ if (!embedded) { _%>
+@Document(collection = "<%- entityTableName %>")
+<%_ } _%>
 <&_ } -&>
 
 <%_ for (const field of fields) { _%>
@@ -42,14 +42,14 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
   <%_ if (field.id && !embedded) { _%>
     @Id
   <%_ } else { _%>
-    @Field("<%= field.fieldNameUnderscored %>")
+    @Field("<%- field.fieldNameUnderscored %>")
   <%_ } _%>
 <&_ } -&>
 <%_ } -%>
 
 <%_ for (const field of fields.filter(field => field.fieldWithContentType)) { _%>
 <&_ if (fragment.field<%- field.fieldNameCapitalized %>ContentTypeAnnotationSection) { -&>
-    @Field("<%= field.fieldNameUnderscored %>_content_type")
+    @Field("<%- field.fieldNameUnderscored %>_content_type")
 <&_ } -&>
 <%_ } -%>
 
@@ -59,18 +59,18 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
     @DBRef
   <%_ } _%>
   <%_ if (relationship.relationshipOneToMany) { _%>
-    @Field("<%= relationship.relationshipFieldName %>")
+    @Field("<%- relationship.relationshipFieldName %>")
   <%_ } else if (relationship.relationshipManyToOne) { _%>
     <%_ if (!relationship.otherEntity.embedded) { _%>
-    @Field("<%= relationship.relationshipFieldName %>")
+    @Field("<%- relationship.relationshipFieldName %>")
     <%_ } _%>
 
   <%_ } else if (relationship.relationshipManyToMany) { _%>
-    @Field("<%= relationship.relationshipFieldNamePlural %>")
+    @Field("<%- relationship.relationshipFieldNamePlural %>")
   <%_ } else { _%>
     <%_ if (!relationship.otherEntity.embedded) { _%>
       <%_ if (relationship.ownerSide) { _%>
-    @Field("<%= relationship.relationshipFieldName %>")
+    @Field("<%- relationship.relationshipFieldName %>")
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>

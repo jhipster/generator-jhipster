@@ -18,7 +18,7 @@
 -%>
 {
     "global": {
-        "title": "<%= capitalizedBaseName %>",
+        "title": "<%- capitalizedBaseName %>",
         "browsehappy": "Ju po përdorni një browser të <strong>vjetëruar</strong>. Ju lutem <a href=\"http://browsehappy.com/?locale=en\">përditësoni browserin tuan</a> për të përmirësuar eksperiencën tuaj.",
         "menu": {
             "home": "Kreu",
@@ -159,7 +159,7 @@
         "idnull": "ID e pavlefshme",
         "idinvalid": "Invalid Id",
         "idnotfound": "ID cannot be found",
- <%_ if (searchEngineElasticsearch) { _%>
+<%_ if (searchEngineElasticsearch) { _%>
         "querySyntaxError": "Invalid search query",
 <%_ } _%>
         "file": {

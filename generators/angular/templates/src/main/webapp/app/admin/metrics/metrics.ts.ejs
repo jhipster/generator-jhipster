@@ -36,11 +36,14 @@ import { MetricsRequest } from './blocks/metrics-request/metrics-request';
 import { MetricsSystem } from './blocks/metrics-system/metrics-system';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-metrics',
+  selector: '<%- jhiPrefixDashed %>-metrics',
   templateUrl: './metrics.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    <%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>
+<%_ if (enableTranslation) { _%>
+    TranslateDirective,
+    TranslateModule,
+<%_ } _%>
     FontAwesomeModule,
     JvmMemory,
     JvmThreads,

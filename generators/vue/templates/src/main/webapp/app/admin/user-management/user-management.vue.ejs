@@ -7,7 +7,7 @@
         <button class="btn btn-info me-2" @click="handleSyncList" :disabled="isLoading">
           <font-awesome-icon icon="sync" :spin="isLoading"></font-awesome-icon> <span>{{ t$('userManagement.home.refreshListLabel') }}</span>
         </button>
-        <router-link custom v-slot="{ navigate }" :to="{name: '<%= jhiPrefixCapitalized %>UserCreate'}">
+        <router-link custom v-slot="{ navigate }" :to="{name: '<%- jhiPrefixCapitalized %>UserCreate'}">
           <button @click="navigate" class="btn btn-primary jh-create-entity" data-cy="entityCreateButton">
             <font-awesome-icon icon="plus"></font-awesome-icon> <span>{{ t$('userManagement.home.createLabel') }}</span>
           </button>
@@ -37,7 +37,7 @@
         <tbody v-if ="users">
           <tr v-for="user in users" :key="user.id" :id="user.login" data-cy="entityTable">
             <td>
-              <router-link :to="{name: '<%= jhiPrefixCapitalized %>UserView', params: {userId: user.login}}">{{user.id}}</router-link></td>
+              <router-link :to="{name: '<%- jhiPrefixCapitalized %>UserView', params: {userId: user.login}}">{{user.id}}</router-link></td>
             <td>{{user.login}}</td>
             <td class="jhi-user-email">{{user.email}}</td>
             <td>
@@ -59,13 +59,13 @@
 <%_ } _%>
             <td class="text-end">
               <div class="btn-group">
-                <router-link :to="{name: '<%= jhiPrefixCapitalized %>UserView', params: {userId: user.login}}" custom v-slot="{ navigate }">
+                <router-link :to="{name: '<%- jhiPrefixCapitalized %>UserView', params: {userId: user.login}}" custom v-slot="{ navigate }">
                   <button @click="navigate" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
                     <font-awesome-icon icon="eye"></font-awesome-icon>
                     <span class="d-none d-md-inline">{{ t$('entity.action.view') }}</span>
                   </button>
                 </router-link>
-                <router-link :to="{name: '<%= jhiPrefixCapitalized %>UserEdit', params: {userId: user.login}}" custom v-slot="{ navigate }">
+                <router-link :to="{name: '<%- jhiPrefixCapitalized %>UserEdit', params: {userId: user.login}}" custom v-slot="{ navigate }">
                   <button @click="navigate" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">
                     <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                     <span class="d-none d-md-inline">{{ t$('entity.action.edit') }}</span>
@@ -82,7 +82,7 @@
       </table>
       <b-modal ref="removeUser" id="removeUser" :title="t$('entity.delete.title')" @ok="deleteUser()" data-cy="userManagementDeleteDialogHeading">
           <div class="modal-body">
-              <p id="<%= jhiPrefixDashed %>-delete-user-heading">{{ t$('userManagement.delete.question', { 'login': removeId}) }}</p>
+              <p id="<%- jhiPrefixDashed %>-delete-user-heading">{{ t$('userManagement.delete.question', { 'login': removeId}) }}</p>
           </div>
           <template #footer>
             <div>

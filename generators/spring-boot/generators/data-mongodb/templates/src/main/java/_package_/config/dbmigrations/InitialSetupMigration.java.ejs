@@ -16,12 +16,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.config.dbmigrations;
+package <%- packageName %>.config.dbmigrations;
 
-import <%= packageName %>.domain.Authority;
-import <%= user.entityAbsoluteClass %>;
-import <%= packageName %>.security.AuthoritiesConstants;
-import <%= packageName %>.config.Constants;
+import <%- packageName %>.domain.Authority;
+import <%- user.entityAbsoluteClass %>;
+import <%- packageName %>.security.AuthoritiesConstants;
+import <%- packageName %>.config.Constants;
 
 import io.mongock.api.annotations.ChangeUnit;
 import io.mongock.api.annotations.Execution;
@@ -75,14 +75,14 @@ public class InitialSetupMigration {
 <%_ if (generateUserManagement) { _%>
 
     private void addUsers(Authority userAuthority, Authority adminAuthority) {
-        <%= user.persistClass %> user = createUser(userAuthority);
+        <%- user.persistClass %> user = createUser(userAuthority);
         template.save(user);
-        <%= user.persistClass %> admin = createAdmin(adminAuthority, userAuthority);
+        <%- user.persistClass %> admin = createAdmin(adminAuthority, userAuthority);
         template.save(admin);
     }
 
-    private <%= user.persistClass %> createUser(Authority userAuthority) {
-        <%= user.persistClass %> userUser = new <%= user.persistClass %>();
+    private <%- user.persistClass %> createUser(Authority userAuthority) {
+        <%- user.persistClass %> userUser = new <%- user.persistClass %>();
         userUser.setId("user-2");
         userUser.setLogin("user");
         userUser.setPassword("$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K");
@@ -90,15 +90,15 @@ public class InitialSetupMigration {
         userUser.setLastName("User");
         userUser.setEmail("user@localhost");
         userUser.setActivated(true);
-        userUser.setLangKey("<%= nativeLanguage %>");
+        userUser.setLangKey("<%- nativeLanguage %>");
         userUser.setCreatedBy(Constants.SYSTEM);
         userUser.setCreatedDate(Instant.now());
         userUser.getAuthorities().add(userAuthority);
         return userUser;
     }
 
-    private <%= user.persistClass %> createAdmin(Authority adminAuthority, Authority userAuthority) {
-        <%= user.persistClass %> adminUser = new <%= user.persistClass %>();
+    private <%- user.persistClass %> createAdmin(Authority adminAuthority, Authority userAuthority) {
+        <%- user.persistClass %> adminUser = new <%- user.persistClass %>();
         adminUser.setId("user-1");
         adminUser.setLogin("admin");
         adminUser.setPassword("$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC");
@@ -106,7 +106,7 @@ public class InitialSetupMigration {
         adminUser.setLastName("Administrator");
         adminUser.setEmail("admin@localhost");
         adminUser.setActivated(true);
-        adminUser.setLangKey("<%= nativeLanguage %>");
+        adminUser.setLangKey("<%- nativeLanguage %>");
         adminUser.setCreatedBy(Constants.SYSTEM);
         adminUser.setCreatedDate(Instant.now());
         adminUser.getAuthorities().add(adminAuthority);

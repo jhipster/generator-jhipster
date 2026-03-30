@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { HandleCommandTypes } from '../../lib/command/types.ts';
+import type { CommandTypeMap } from '../../lib/command/types.ts';
 import type {
   Application as BaseApplicationApplication,
   Config as BaseApplicationConfig,
@@ -27,7 +27,7 @@ import type {
 
 import type command from './command.ts';
 
-type Command = HandleCommandTypes<typeof command>;
+type Command = CommandTypeMap<typeof command>;
 
 type HerokuOptions = {
   skipBuild: boolean;

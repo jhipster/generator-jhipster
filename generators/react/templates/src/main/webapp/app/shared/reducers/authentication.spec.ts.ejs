@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 import axios from 'axios';
-import sinon from 'sinon';
 <%_ if (authenticationTypeJwt) { _%>
 import { Storage } from 'react-jhipster';
 <%_ } _%>
@@ -26,10 +25,10 @@ import { configureStore, createReducer } from '@reduxjs/toolkit';
 import authentication, {
   getSession,
   getAccount,
-  <%_ if (!authenticationTypeOauth2) { _%>
+<%_ if (!authenticationTypeOauth2) { _%>
   authenticate,
   login,<% } %>
-  <%_ if (!authenticationTypeJwt) { _%>
+<%_ if (!authenticationTypeJwt) { _%>
   logoutServer,<% } %>
   clearAuthentication,
   logout,<% if (authenticationTypeJwt) { %>
@@ -146,15 +145,17 @@ describe('Authentication reducer tests', () => {
 
   describe('Other cases', () => {
     it('should properly reset the current state when a logout is requested', () => {
-      <%_ if (authenticationTypeOauth2) { _%>const payload = { data: { logoutUrl: 'http://localhost:8080/logout' } };<%_ } _%>
+<%_ if (authenticationTypeOauth2) { _%>
+      const payload = { data: { logoutUrl: 'http://localhost:8080/logout' } };
+<%_ } _%>
       const toTest = authentication(undefined,
-      <%_ if (authenticationTypeJwt) { _%>
+<%_ if (authenticationTypeJwt) { _%>
       logoutSession()
-      <%_ } else if (authenticationTypeOauth2) { _%>
+<%_ } else if (authenticationTypeOauth2) { _%>
       { type: logoutServer.fulfilled.type, payload }
-      <%_ } else { _%>
+<%_ } else { _%>
       { type: logoutServer.fulfilled.type }
-      <%_ } _%>
+<%_ } _%>
       );
       expect(toTest).toMatchObject({
         loading: false,
@@ -210,7 +211,7 @@ describe('Authentication reducer tests', () => {
       store = configureStore({
         reducer: (state = [], action) => [...state, action],
       });
-      axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.get = jest.fn().mockResolvedValue(resolvedObject);
     });
 
     it('dispatches GET_SESSION_PENDING and GET_SESSION_FULFILLED actions', async () => {
@@ -226,8 +227,8 @@ describe('Authentication reducer tests', () => {
     });
 
     it('dispatches LOGOUT actions', async () => {
-    <%_ if (!authenticationTypeJwt) { _%>
-      axios.post = sinon.stub().returns(Promise.resolve({}));
+<%_ if (!authenticationTypeJwt) { _%>
+      axios.post = jest.fn().mockResolvedValue({});
 
       const result = await logoutServer()(dispatch, getState, extra);
 
@@ -238,10 +239,10 @@ describe('Authentication reducer tests', () => {
         }),
       );
       expect(logoutServer.fulfilled.match(result)).toBe(true);
-    <%_ } else { _%>
+<%_ } else { _%>
       await store.dispatch(logout());
       expect(store.getState()).toEqual([expect.any(Object), expect.objectContaining(logoutSession())]);
-    <%_ } _%>
+<%_ } _%>
     });
 
     it('dispatches CLEAR_AUTH actions', async () => {
@@ -252,7 +253,7 @@ describe('Authentication reducer tests', () => {
 <%_ if (!authenticationTypeOauth2) { _%>
     it('dispatches LOGIN, GET_SESSION and SET_LOCALE success and request actions', async () => {
       const loginResponse = { headers: { authorization: 'auth' } };
-      axios.post = sinon.stub().returns(Promise.resolve(loginResponse));
+      axios.post = jest.fn().mockResolvedValue(loginResponse);
 
       const result = await authenticate('test', 'test')(dispatch, getState, extra);
 
@@ -278,9 +279,9 @@ describe('Authentication reducer tests', () => {
       });
     });
     it('clears the session token on clearAuthToken', async () => {
-      const AUTH_TOKEN_KEY = '<%= jhiPrefixDashed %>-authenticationToken';
+      const AUTH_TOKEN_KEY = '<%- jhiPrefixDashed %>-authenticationToken';
       const loginResponse = { headers: { authorization: 'Bearer TestToken' } };
-      axios.post = sinon.stub().returns(Promise.resolve(loginResponse));
+      axios.post = jest.fn().mockResolvedValue(loginResponse);
 
       await store.dispatch(login('test', 'test'));
       expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe('TestToken');
@@ -290,9 +291,9 @@ describe('Authentication reducer tests', () => {
       expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe(undefined);
     });
     it('clears the local storage token on clearAuthToken', async () => {
-      const AUTH_TOKEN_KEY = '<%= jhiPrefixDashed %>-authenticationToken';
+      const AUTH_TOKEN_KEY = '<%- jhiPrefixDashed %>-authenticationToken';
       const loginResponse = { headers: { authorization: 'Bearer TestToken' } };
-      axios.post = sinon.stub().returns(Promise.resolve(loginResponse));
+      axios.post = jest.fn().mockResolvedValue(loginResponse);
 
       await store.dispatch(login('user', 'user', true));
       expect(Storage.session.get(AUTH_TOKEN_KEY)).toBe(undefined);

@@ -1,8 +1,8 @@
-package <%= packageName %>.security.jwt;
+package <%- packageName %>.security.jwt;
 
-import static <%= packageName %>.security.SecurityUtils.AUTHORITIES_CLAIM;
-import static <%= packageName %>.security.SecurityUtils.JWT_ALGORITHM;
-import static <%= packageName %>.security.AuthoritiesConstants.ADMIN;
+import static <%- packageName %>.security.SecurityUtils.AUTHORITIES_CLAIM;
+import static <%- packageName %>.security.SecurityUtils.JWT_ALGORITHM;
+import static <%- packageName %>.security.AuthoritiesConstants.ADMIN;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;
@@ -29,12 +29,12 @@ public class JwtAuthenticationTestUtils {
 
     public static final String BEARER = "Bearer ";
 
-<%_ if (!springBoot4) { _%>
+  <%_ if (!springBoot4) { _%>
     @Bean
     private HandlerMappingIntrospector mvcHandlerMappingIntrospector() {
         return new HandlerMappingIntrospector();
     }
-<%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 <%_ if (applicationTypeMicroservice && !reactive) { _%>
 

@@ -302,13 +302,13 @@ export default class CodeQualityGenerator extends JavaSimpleApplicationGenerator
                 </executions>
                 <configuration>
                   <javaVersion>\${java.version}</javaVersion>${
-                    databaseTypeCassandra
-                      ? `
+                    databaseTypeCassandra ?
+                      `
                   <ignoreClassNamePatterns>
                       <ignoreClassNamePattern>${packageName}.domain.PersistentTokenHelper__MapperGenerated</ignoreClassNamePattern>
                       <ignoreClassNamePattern>${packageName}.domain.UserHelper__MapperGenerated</ignoreClassNamePattern>
                   </ignoreClassNamePatterns>`
-                      : ''
+                    : ''
                   }
                 </configuration>`,
             },

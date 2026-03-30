@@ -28,8 +28,17 @@ import { LoginService } from 'app/login/login.service';
 import { AccountService } from 'app/core/auth/account.service';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-login',
-  imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>ReactiveFormsModule<% if (generateUserManagement) { %>, RouterLink<% } %>],
+  selector: '<%- jhiPrefixDashed %>-login',
+  imports: [
+<%_ if (enableTranslation) { _%>
+    TranslateDirective,
+    TranslateModule,
+<%_ } _%>
+    ReactiveFormsModule,
+<%_ if (generateUserManagement) { _%>
+    RouterLink,
+<%_ } _%>
+  ],
   templateUrl: './login.html',
 })
 export default class Login implements OnInit, AfterViewInit {

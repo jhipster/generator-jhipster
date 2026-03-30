@@ -240,7 +240,7 @@ export default class extends BaseSimpleApplicationGenerator<
             (priority: string) => ({
               name: priority,
               asTaskGroup: `as${upperFirst(priority)}TaskGroup`,
-              constant: `${snakeCase(priority).toUpperCase()}`,
+              constant: snakeCase(priority).toUpperCase(),
             }),
           );
           const customGenerator = !lookupGeneratorsNamespaces().includes(generator);
@@ -329,12 +329,12 @@ export default class extends BaseSimpleApplicationGenerator<
             vitest: 'vitest',
           },
           devDependencies: {
-            'ejs-lint': `${mainDependencies['ejs-lint']}`,
-            eslint: `${mainDependencies.eslint}`,
-            jiti: `${mainDependencies.jiti}`,
-            globals: `${mainDependencies.globals}`,
+            'ejs-lint': mainDependencies['ejs-lint'],
+            eslint: mainDependencies.eslint,
+            jiti: mainDependencies.jiti,
+            globals: mainDependencies.globals,
             vitest: mainDependencies.vitest,
-            prettier: `${mainDependencies.prettier}`,
+            prettier: mainDependencies.prettier,
             /*
              * yeoman-test version is loaded through generator-jhipster peer dependency.
              * generator-jhipster uses a fixed version, blueprints must set a compatible range.
@@ -360,9 +360,10 @@ export default class extends BaseSimpleApplicationGenerator<
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const { jhipsterPackageJson } = application;
         const exactDependency = {
-          'generator-jhipster': this.options.linkJhipsterDependency
-            ? `file:${this.relativeDir(this.destinationRoot(), getPackageRoot())}`
-            : `${jhipsterPackageJson.version}`,
+          'generator-jhipster':
+            this.options.linkJhipsterDependency ?
+              `file:${this.relativeDir(this.destinationRoot(), getPackageRoot())}`
+            : jhipsterPackageJson.version,
         };
         const caretDependency = {
           'generator-jhipster': `^${jhipsterPackageJson.version}`,
@@ -474,8 +475,8 @@ To begin to work:
   }
 
   validateModuleName(input: string): boolean | string {
-    return /^[a-zA-Z0-9-]+$/.test(input)
-      ? true
-      : 'Your blueprint name is mandatory, cannot contain special characters or a blank space, using the default name instead';
+    return /^[a-zA-Z0-9-]+$/.test(input) ? true : (
+        'Your blueprint name is mandatory, cannot contain special characters or a blank space, using the default name instead'
+      );
   }
 }

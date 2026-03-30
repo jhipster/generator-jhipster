@@ -36,5 +36,5 @@ export const baseNameConfigExists = (baseName?: string) =>
  */
 export const allNewApplications = (applications: ApplicationWithEntities[]) => {
   if (applications.length < 2) return !baseNameConfigExists();
-  return !applications.find(application => baseNameConfigExists(application.config.baseName));
+  return !applications.some(application => baseNameConfigExists(application.config.baseName));
 };

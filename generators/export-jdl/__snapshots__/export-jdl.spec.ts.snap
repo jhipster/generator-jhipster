@@ -97,7 +97,7 @@ relationship OneToOne {
   JobHistory{employee} to Employee
 }
 relationship OneToMany {
-  Department{employee required} to Employee{department(foo)}
+  Department{employee required} to @DestinationAnnotation Employee{department(foo)}
   Employee{job} to Job{employee}
 }
 relationship ManyToOne {
@@ -218,7 +218,7 @@ relationship OneToOne {
   JobHistory{employee} to Employee
 }
 relationship OneToMany {
-  Department{employee required} to Employee{department(foo)}
+  Department{employee required} to @DestinationAnnotation Employee{department(foo)}
   Employee{job} to Job{employee}
 }
 relationship ManyToOne {

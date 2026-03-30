@@ -26,7 +26,7 @@ import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-error',
+  selector: '<%- jhiPrefixDashed %>-error',
   <% if (enableTranslation) { %>imports: [TranslateDirective, TranslateModule],<% } %>
   templateUrl: './error.html',
 })

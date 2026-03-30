@@ -8,7 +8,7 @@ import { lookupCommandsConfigs } from './lookup-commands-configs.ts';
 const jhipsterConfigsWithJDL = await lookupCommandsConfigs({ filter: config => Boolean(config.jdl) });
 
 describe('jdl options', () => {
-  const jdlConfigs = Object.entries(jhipsterConfigsWithJDL!);
+  const jdlConfigs = Object.entries(jhipsterConfigsWithJDL);
 
   it('jdl configs names should match snapshot', () => {
     expect(jdlConfigs.map(([name]) => name)).toMatchInlineSnapshot(`

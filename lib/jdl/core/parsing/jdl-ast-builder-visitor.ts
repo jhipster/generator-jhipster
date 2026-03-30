@@ -198,7 +198,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       let optionValue: unknown;
       switch (tokenType.name) {
         case 'INTEGER':
-          optionValue = parseInt(valueImage, 10);
+          optionValue = Number.parseInt(valueImage, 10);
           break;
         case 'DECIMAL':
           optionValue = parseFloat(valueImage);
@@ -321,9 +321,8 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       context: Record<'from' | 'to' | 'annotationOnSourceSide' | 'annotationOnDestinationSide' | 'relationshipOptions', CstNode[]>,
     ) {
       const optionsForTheSourceSide = context.annotationOnSourceSide ? context.annotationOnSourceSide.map(this.visit, this) : [];
-      const optionsForTheDestinationSide = context.annotationOnDestinationSide
-        ? context.annotationOnDestinationSide.map(this.visit, this)
-        : [];
+      const optionsForTheDestinationSide =
+        context.annotationOnDestinationSide ? context.annotationOnDestinationSide.map(this.visit, this) : [];
 
       const from = this.visit(context.from);
       const to = this.visit(context.to);
@@ -759,7 +758,7 @@ function getBinaryOptionFromContext(
 ) {
   const entityListWithOptionValue: string[] = visitor.visit(context.entityList);
   const optionValue = entityListWithOptionValue[entityListWithOptionValue.length - 1];
-  const list = entityListWithOptionValue.slice(0, entityListWithOptionValue.length - 1);
+  const list = entityListWithOptionValue.slice(0, -1);
 
   let excluded = [];
   if (context.exclusion) {

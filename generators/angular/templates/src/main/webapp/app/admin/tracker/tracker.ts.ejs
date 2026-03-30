@@ -28,9 +28,14 @@ import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-tracker',
-  imports: [DatePipe<%_ if (enableTranslation) { _%>
-, TranslateDirective, TranslateModule<%_ } _%>],
+  selector: '<%- jhiPrefixDashed %>-tracker',
+  imports: [
+    DatePipe,
+<%_ if (enableTranslation) { _%>
+    TranslateDirective,
+    TranslateModule,
+<%_ } _%>
+  ],
   templateUrl: './tracker.html',
 })
 export default class Tracker implements OnInit, OnDestroy {

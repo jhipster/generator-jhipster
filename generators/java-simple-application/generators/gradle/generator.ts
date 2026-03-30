@@ -84,7 +84,7 @@ export default class GradleGenerator extends BaseSimpleApplicationGenerator<Grad
     return this.asPreparingTaskGroup({
       loadGradleVersion({ application }) {
         const propFile = this.readTemplate(this.jhipsterTemplatePath('gradle/wrapper/gradle-wrapper.properties'));
-        this.gradleVersionFromWrapper = propFile?.toString().match(/gradle-(\d+\.\d+(?:\.\d+)?)-/)?.[1];
+        this.gradleVersionFromWrapper = propFile?.match(/gradle-(\d+\.\d+(?:\.\d+)?)-/)?.[1];
         if (!this.gradleVersionFromWrapper) {
           throw new Error('Could not determine Gradle version from gradle-wrapper.properties');
         }

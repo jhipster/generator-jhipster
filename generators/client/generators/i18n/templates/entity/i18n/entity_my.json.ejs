@@ -15,54 +15,57 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
--%><%
-let helpBlocks = 0; %>
+-%>
+<%_ const fieldsWithDocumentation = fields.filter(field => field.documentation); _%>
 {
-    "<%= frontendAppName %>": {
-        "<%= entityTranslationKey %>" : {
+    "<%- frontendAppName %>": {
+        "<%- entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityNamePluralHumanized %>",
+                "title": "<%- entityNamePluralHumanized %>",
                 "refreshListLabel": "Refresh list",
 <%_ if (!readOnly) { _%>
-                "createLabel": "<%= entityNameHumanized %> အသစ်ထည့်မည်",
-                "createOrEditLabel": "<%= entityNameHumanized %> အသစ်ထည့်ခြင်း (သို့) ပြုပြင်ခြင်း",
+                "createLabel": "<%- entityNameHumanized %> အသစ်ထည့်မည်",
+                "createOrEditLabel": "<%- entityNameHumanized %> အသစ်ထည့်ခြင်း (သို့) ပြုပြင်ခြင်း",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "ရှာဖွေရန် <%= entityNameHumanized %>",
+                "search": "ရှာဖွေရန် <%- entityNameHumanized %>",
 <%_ } _%>
-                "notFound": "No <%= entityNamePluralHumanized %> found"
+                "notFound": "No <%- entityNamePluralHumanized %> found"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "{{ param }} အိုင်ဒီဖြင့် <%= entityNameHumanized %> အသစ်တစ်ခုအား ထည့်ပြီးပါပြီ။",
-            "updated": "{{ param }} အိုင်ဒီဖြင့် <%= entityNameHumanized %> တစ်ခုအား ပြုပြင်ပြီးပါပြီ။",
-            "deleted": "{{ param }} အိုင်ဒီဖြင့် <%= entityNameHumanized %> တစ်ခုအား ဖျက်ပြီးပါပြီ။",
+            "created": "{{ param }} အိုင်ဒီဖြင့် <%- entityNameHumanized %> အသစ်တစ်ခုအား ထည့်ပြီးပါပြီ။",
+            "updated": "{{ param }} အိုင်ဒီဖြင့် <%- entityNameHumanized %> တစ်ခုအား ပြုပြင်ပြီးပါပြီ။",
+            "deleted": "{{ param }} အိုင်ဒီဖြင့် <%- entityNameHumanized %> တစ်ခုအား ဖျက်ပြီးပါပြီ။",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "<%= entityNameHumanized %> {{ id }} အား ဖျက်ပါမည်။ သေချာပါသလား?"
+                "question": "<%- entityNameHumanized %> {{ id }} အား ဖျက်ပါမည်။ သေချာပါသလား?"
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityNameHumanized %>"
-            }<% for (idx in fields) {
-            if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
-            "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
-            "<%= relationships[idx].relationshipName %>": "<%= relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
-            "help": {<% for (idx in fields) {
-                if (fields[idx].documentation) {
-                    --helpBlocks; %>
-                "<%= fields[idx].fieldName %>": "<%= fields[idx].documentation %>"<% if (helpBlocks > 0) { %>,<% }
-                }
-            } %>
-            }<% } %>
+                "title": "<%- entityNameHumanized %>"
+            }
+<%_ for (const field of fields) { _%>,
+            "<%- field.fieldName %>": "<%- field.fieldNameHumanized %>"
+<%_ } _%>
+<%_ for (const relationship of relationships) { _%>,
+            "<%- relationship.relationshipName %>": "<%- relationship.relationshipNameHumanized %>"
+<%_ } _%>
+<%_ if (fieldsWithDocumentation.length > 0) { _%>,
+            "help": {
+  <%_ for (const [key, field] of Object.entries(fieldsWithDocumentation)) { _%>
+                "<%- field.fieldName %>": "<%- field.documentation %>"<% if (key < fieldsWithDocumentation.length - 1) { %>,<% } %>
+  <%_ } _%>
+            }
+<%_ } _%>
         }
     }
 <%_ if (microserviceAppName && !readOnly) { _%>,
-    "<%= microserviceAppName %>": {
-        "<%= entityTranslationKey %>" : {
-            "created": "{{ param }} အိုင်ဒီဖြင့် <%= entityNameHumanized %> အသစ်တစ်ခုအား ထည့်ပြီးပါပြီ။",
-            "updated": "{{ param }} အိုင်ဒီဖြင့် <%= entityNameHumanized %> တစ်ခုအား ပြုပြင်ပြီးပါပြီ။",
-            "deleted": "{{ param }} အိုင်ဒီဖြင့် <%= entityNameHumanized %> တစ်ခုအား ဖျက်ပြီးပါပြီ။"
+    "<%- microserviceAppName %>": {
+        "<%- entityTranslationKey %>" : {
+            "created": "{{ param }} အိုင်ဒီဖြင့် <%- entityNameHumanized %> အသစ်တစ်ခုအား ထည့်ပြီးပါပြီ။",
+            "updated": "{{ param }} အိုင်ဒီဖြင့် <%- entityNameHumanized %> တစ်ခုအား ပြုပြင်ပြီးပါပြီ။",
+            "deleted": "{{ param }} အိုင်ဒီဖြင့် <%- entityNameHumanized %> တစ်ခုအား ဖျက်ပြီးပါပြီ။"
         }
     }
 <%_ } _%>

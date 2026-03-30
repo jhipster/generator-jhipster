@@ -16,10 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.security;
+package <%- packageName %>.security;
 
 <%_ if (authenticationTypeJwt) { _%>
-import static <%= packageName %>.security.SecurityUtils.USER_ID_CLAIM;
+import static <%- packageName %>.security.SecurityUtils.USER_ID_CLAIM;
 <%_ } _%>
 
 import org.junit.jupiter.api.AfterEach;

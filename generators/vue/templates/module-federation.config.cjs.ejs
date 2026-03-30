@@ -33,7 +33,7 @@ const shareDependencies = ({ skipList = [] } = {}) =>
 
 /** @type {import('@module-federation/runtime').Options} */
 module.exports = {
-  name: '<%= lowercaseBaseName %>',
+  name: '<%- lowercaseBaseName %>',
 <%_ if (applicationTypeMicroservice) { _%>
   exposes: {
     './entities-router': './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/router/entities.ts',

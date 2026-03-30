@@ -110,7 +110,7 @@ export const AdministrationSlice = createSlice({
   name: 'administration',
   initialState: initialState as AdministrationState,
   reducers: {
-    <%_ if (communicationSpringWebsocket) { _%>
+<%_ if (communicationSpringWebsocket) { _%>
     websocketActivityMessage(state, action) {
       // filter out activities from the same session
       const uniqueActivities = state.tracker.activities.filter(activity => activity.sessionId !== action.payload.sessionId);
@@ -118,20 +118,20 @@ export const AdministrationSlice = createSlice({
       const activities = [...uniqueActivities, action.payload].filter(activity => activity.page !== 'logout');
       state.tracker = { activities };
     },
-    <%_ } _%>
+<%_ } _%>
   },
-  extraReducers(<%_ if (withAdminUi || (applicationTypeGateway && gatewayServicesApiAvailable)) { _%>builder<%_ } _%>) {
+  extraReducers(<% if (withAdminUi || (applicationTypeGateway && gatewayServicesApiAvailable)) { %>builder<% } %>) {
 <%_ if (withAdminUi || (applicationTypeGateway && gatewayServicesApiAvailable)) { _%>
     builder
-      <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
+  <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
       .addCase(getGatewayRoutes.fulfilled, (state, action) => {
         state.loading = false;
         state.gateway = {
           routes: action.payload.data
         };
       })
-      <%_ } _%>
-      <%_ if (withAdminUi) { _%>
+  <%_ } _%>
+  <%_ if (withAdminUi) { _%>
       .addCase(getSystemHealth.fulfilled, (state, action) => {
         state.loading = false;
         state.health = action.payload.data;
@@ -164,20 +164,20 @@ export const AdministrationSlice = createSlice({
           env: action.payload.data,
         };
       })
-      <%_ } _%>
+  <%_ } _%>
       .addMatcher(
         isPending(
-          <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
+  <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
           getGatewayRoutes,
-          <%_ } _%>
-          <%_ if (withAdminUi) { _%>
+  <%_ } _%>
+  <%_ if (withAdminUi) { _%>
           getSystemHealth,
           getSystemMetrics,
           getSystemThreadDump,
           getLoggers,
           getConfigurations,
           getEnv
-          <%_ } _%>
+  <%_ } _%>
         ),
         state => {
           state.errorMessage = null;
@@ -186,17 +186,17 @@ export const AdministrationSlice = createSlice({
       )
       .addMatcher(
         isRejected(
-          <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
+  <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
           getGatewayRoutes,
-          <%_ } _%>
-          <%_ if (withAdminUi) { _%>
+  <%_ } _%>
+  <%_ if (withAdminUi) { _%>
           getSystemHealth,
           getSystemMetrics,
           getSystemThreadDump,
           getLoggers,
           getConfigurations,
           getEnv
-          <%_ } _%>
+  <%_ } _%>
         ),
         (state, action) => {
           state.errorMessage = action.error.message;

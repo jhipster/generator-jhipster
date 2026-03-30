@@ -248,7 +248,7 @@ export default class BaseApplicationGenerator<
   getEntityConfig(entityName: string, create = false): Storage | undefined {
     const entityPath = this.getEntityConfigPath(entityName);
     if (!create && !this.fs.exists(entityPath)) return undefined;
-    return this.createStorage(entityPath);
+    return this.createStorage(entityPath, { transform: this.features.configTransform });
   }
 
   /**

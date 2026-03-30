@@ -30,7 +30,7 @@ import { ConfigurationService } from './configuration.service';
 import { Bean, PropertySource } from './configuration.model';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-configuration',
+  selector: '<%- jhiPrefixDashed %>-configuration',
   templateUrl: './configuration.html',
   imports: [FontAwesomeModule, FormsModule, SortDirective, SortByDirective, KeyValuePipe, JsonPipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
 })

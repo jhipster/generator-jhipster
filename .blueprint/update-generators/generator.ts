@@ -49,8 +49,8 @@ export default class UpdateGeneratorsGenerator extends BaseCoreGenerator {
 
           const generateImport = (key: string) =>
             `${/[:-]/.test(key) ? `'${key}'` : key}: import('./${relativePath}generator.ts').default;`;
-          return parts === 2
-            ? [generateImport(namespace.replace('jhipster:', '')), generateImport(namespace)]
+          return parts === 2 ?
+              [generateImport(namespace.replace('jhipster:', '')), generateImport(namespace)]
             : [generateImport(namespace)];
         });
 

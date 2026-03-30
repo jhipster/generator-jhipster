@@ -1,4 +1,4 @@
-import { before, beforeEach, describe, expect, expect as jestExpect, it } from 'esmocha';
+import { before, beforeEach, describe, expect, it } from 'esmocha';
 
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { createJHipsterLogger } from '../../lib/utils/index.ts';
@@ -30,7 +30,7 @@ describe('generator - base-core', () => {
           type: String,
         },
       });
-      jestExpect(base.jdlFiles).toBe(undefined);
+      expect(base.jdlFiles).toBe(undefined);
     });
     it('undefined positional arguments', async () => {
       const base = new Dummy([], { positionalArguments: [], env: await helpers.createTestEnv() });
@@ -39,7 +39,7 @@ describe('generator - base-core', () => {
           type: String,
         },
       });
-      jestExpect(base.jdlFiles).toBe(undefined);
+      expect(base.jdlFiles).toBe(undefined);
     });
     it('undefined argument', async () => {
       const base = new Dummy([undefined], { env: await helpers.createTestEnv() });
@@ -48,7 +48,7 @@ describe('generator - base-core', () => {
           type: String,
         },
       });
-      jestExpect(base.jdlFiles).toBe(undefined);
+      expect(base.jdlFiles).toBe(undefined);
     });
     it('undefined positional arguments', async () => {
       const base = new Dummy([], { positionalArguments: [undefined], env: await helpers.createTestEnv() });
@@ -57,7 +57,7 @@ describe('generator - base-core', () => {
           type: String,
         },
       });
-      jestExpect(base.jdlFiles).toBe(undefined);
+      expect(base.jdlFiles).toBe(undefined);
     });
     it('string arguments', async () => {
       const base = new Dummy(['foo'], { env: await helpers.createTestEnv() });
@@ -66,7 +66,7 @@ describe('generator - base-core', () => {
           type: String,
         },
       });
-      jestExpect(base.jdlFiles).toBe('foo');
+      expect(base.jdlFiles).toBe('foo');
     });
     it('vararg arguments', async () => {
       const base = new Dummy(['bar', 'foo'], { env: await helpers.createTestEnv() });
@@ -78,9 +78,9 @@ describe('generator - base-core', () => {
           type: Array,
         },
       });
-      jestExpect(base.first).toBe('bar');
-      jestExpect(base.jdlFiles).toHaveLength(1);
-      jestExpect(base.jdlFiles[0]).toMatch('foo');
+      expect(base.first).toBe('bar');
+      expect(base.jdlFiles).toHaveLength(1);
+      expect(base.jdlFiles[0]).toMatch('foo');
     });
     it('vararg arguments using positionalArguments', async () => {
       const base = new Dummy([], { positionalArguments: ['bar', ['foo']], env: await helpers.createTestEnv() });
@@ -92,9 +92,9 @@ describe('generator - base-core', () => {
           type: Array,
         },
       });
-      jestExpect(base.first).toBe('bar');
-      jestExpect(base.jdlFiles).toHaveLength(1);
-      jestExpect(base.jdlFiles[0]).toBe('foo');
+      expect(base.first).toBe('bar');
+      expect(base.jdlFiles).toHaveLength(1);
+      expect(base.jdlFiles[0]).toBe('foo');
     });
   });
   describe('editPropertiesFile', () => {

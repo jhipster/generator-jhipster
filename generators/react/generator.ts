@@ -119,8 +119,9 @@ export default class ReactGenerator extends ClientApplicationGenerator<
         };
 
         source.addClientStyle = ({ style, comment }) => {
-          comment = comment
-            ? `/* ==========================================================================
+          comment =
+            comment ?
+              `/* ==========================================================================
 ${comment}
 ========================================================================== */
 `
@@ -156,7 +157,7 @@ ${comment}
               createNeedleCallback({
                 needle: 'add-entity-to-menu',
                 contentToAdd: `<MenuItem icon="asterisk" to="/${entityPage}">
-  ${application.enableTranslation ? `<Translate contentKey="${entityTranslationKeyMenuPath}" />` : `${entityNameHumanized}`}
+  ${application.enableTranslation ? `<Translate contentKey="${entityTranslationKeyMenuPath}" />` : entityNameHumanized}
 </MenuItem>`,
               }),
             );
@@ -195,9 +196,8 @@ ${comment}
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
       react({ application, entity }) {
-        entity.entityReactState = application.applicationTypeMonolith
-          ? entity.entityInstance
-          : `${application.lowercaseBaseName}.${entity.entityInstance}`;
+        entity.entityReactState =
+          application.applicationTypeMonolith ? entity.entityInstance : `${application.lowercaseBaseName}.${entity.entityInstance}`;
       },
     });
   }

@@ -27,7 +27,7 @@ export default defineComponent({
     const loadLanguage = async () => {
       if (microfrontendI18n) {
         const languageToLoad = currentLanguage.value;
-        await translationService.loadTranslations({ currentLanguage: languageToLoad, urlPrefix: '<%= endpointPrefix %>/', hash: I18N_HASH });
+        await translationService.loadTranslations({ currentLanguage: languageToLoad, urlPrefix: '<%- endpointPrefix %>/', hash: I18N_HASH });
       }
     };
 

@@ -1,6 +1,6 @@
-package <%= packageName %>.security.jwt;
+package <%- packageName %>.security.jwt;
 
-import static <%= packageName %>.security.jwt.JwtAuthenticationTestUtils.*;
+import static <%- packageName %>.security.jwt.JwtAuthenticationTestUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.micrometer.core.instrument.Counter;
@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 <%_ if (reactive) { _%>
-import <%= packageName %>.IntegrationTest;
+import <%- packageName %>.IntegrationTest;
 import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.test.web.reactive.server.WebTestClient;
 

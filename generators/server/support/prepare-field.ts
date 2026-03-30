@@ -115,13 +115,13 @@ export default function prepareField(
   if (field.fieldNameAsDatabaseColumn === undefined) {
     const fieldNameUnderscored = snakeCase(field.fieldName);
     if (isReservedTableName(fieldNameUnderscored, entityProdDatabaseType ?? entityWithConfig.databaseType)) {
-      if (!application.jhiTablePrefix) {
+      if (application.jhiTablePrefix) {
+        field.fieldNameAsDatabaseColumn = `${application.jhiTablePrefix}_${fieldNameUnderscored}`;
+      } else {
         generator.log.warn(
           `The field name '${fieldNameUnderscored}' is regarded as a reserved keyword, but you have defined an empty jhiPrefix. This might lead to a non-working application.`,
         );
         field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
-      } else {
-        field.fieldNameAsDatabaseColumn = `${application.jhiTablePrefix}_${fieldNameUnderscored}`;
       }
     } else {
       field.fieldNameAsDatabaseColumn = fieldNameUnderscored;
@@ -135,11 +135,10 @@ export default function prepareField(
     }).value;
   }
 
-  if (field.fieldValidateRulesPatternJava === undefined) {
-    field.fieldValidateRulesPatternJava = field.fieldValidateRulesPattern
-      ? field.fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/"/g, String.raw`\"`)
-      : field.fieldValidateRulesPattern;
-  }
+  field.fieldValidateRulesPatternJava ??=
+    field.fieldValidateRulesPattern ?
+      field.fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/"/g, String.raw`\"`)
+    : field.fieldValidateRulesPattern;
 
   if (field.blobContentTypeText) {
     field.javaFieldType = 'String';

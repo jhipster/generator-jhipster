@@ -15,54 +15,57 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
--%><%
-let helpBlocks = 0; %>
+-%>
+<%_ const fieldsWithDocumentation = fields.filter(field => field.documentation); _%>
 {
-    "<%= frontendAppName %>": {
-        "<%= entityTranslationKey %>" : {
+    "<%- frontendAppName %>": {
+        "<%- entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityClassPlural %>",
+                "title": "<%- entityClassPlural %>",
                 "refreshListLabel": "Refresh list",
 <%_ if (!readOnly) { _%>
-                "createLabel": "Genera un nuovo <%= entityNameHumanized %>",
-                "createOrEditLabel": "Genera o modifica un <%= entityNameHumanized %>",
+                "createLabel": "Genera un nuovo <%- entityNameHumanized %>",
+                "createOrEditLabel": "Genera o modifica un <%- entityNameHumanized %>",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "Cerca <%= entityNameHumanized %>",
+                "search": "Cerca <%- entityNameHumanized %>",
 <%_ } _%>
-                "notFound": "No <%= entityNamePluralHumanized %> found"
+                "notFound": "No <%- entityNamePluralHumanized %> found"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "&Egrave; stato generato un nuovo <%= entityNameHumanized %> con identificatore {{ param }}",
-            "updated": "&Egrave; stato aggiornato <%= entityNameHumanized %> identificato da {{ param }}",
-            "deleted": "&Egrave; stato eliminato <%= entityNameHumanized %> con identificatore {{ param }}",
+            "created": "&Egrave; stato generato un nuovo <%- entityNameHumanized %> con identificatore {{ param }}",
+            "updated": "&Egrave; stato aggiornato <%- entityNameHumanized %> identificato da {{ param }}",
+            "deleted": "&Egrave; stato eliminato <%- entityNameHumanized %> con identificatore {{ param }}",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "Sei sicuro di volere eliminare <%= entityNameHumanized %> {{ id }}?"
+                "question": "Sei sicuro di volere eliminare <%- entityNameHumanized %> {{ id }}?"
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityNameHumanized %>"
-            }<% for (idx in fields) {
-            if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
-            "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
-            "<%= relationships[idx].relationshipName %>": "<%= relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
-            "help": {<% for (idx in fields) {
-                if (fields[idx].documentation) {
-                    --helpBlocks; %>
-                "<%= fields[idx].fieldName %>": "<%= fields[idx].documentation %>"<% if (helpBlocks > 0) { %>,<% }
-                }
-            } %>
-            }<% } %>
+                "title": "<%- entityNameHumanized %>"
+            }
+<%_ for (const field of fields) { _%>,
+            "<%- field.fieldName %>": "<%- field.fieldNameHumanized %>"
+<%_ } _%>
+<%_ for (const relationship of relationships) { _%>,
+            "<%- relationship.relationshipName %>": "<%- relationship.relationshipNameHumanized %>"
+<%_ } _%>
+<%_ if (fieldsWithDocumentation.length > 0) { _%>,
+            "help": {
+  <%_ for (const [key, field] of Object.entries(fieldsWithDocumentation)) { _%>
+                "<%- field.fieldName %>": "<%- field.documentation %>"<% if (key < fieldsWithDocumentation.length - 1) { %>,<% } %>
+  <%_ } _%>
+            }
+<%_ } _%>
         }
     }
 <%_ if (microserviceAppName && !readOnly) { _%>,
-    "<%= microserviceAppName %>": {
-        "<%= entityTranslationKey %>" : {
-            "created": "&Egrave; stato generato un nuovo <%= entityNameHumanized %> con identificatore { param }}",
-            "updated": "&Egrave; stato aggiornato <%= entityNameHumanized %> identificato da {{ param }}",
-            "deleted": "&Egrave; stato eliminato <%= entityNameHumanized %> con identificatore {{ param }}"
+    "<%- microserviceAppName %>": {
+        "<%- entityTranslationKey %>" : {
+            "created": "&Egrave; stato generato un nuovo <%- entityNameHumanized %> con identificatore { param }}",
+            "updated": "&Egrave; stato aggiornato <%- entityNameHumanized %> identificato da {{ param }}",
+            "deleted": "&Egrave; stato eliminato <%- entityNameHumanized %> con identificatore {{ param }}"
         }
     }
 <%_ } _%>

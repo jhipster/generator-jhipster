@@ -81,7 +81,7 @@ export default class TemplateFile {
         .replace(/^(\r\n|\n|\r)+/, '');
       if (this._debug.enabled) {
         this._debug(`${this.filePath}`);
-        this._debug(`${JSON.stringify(data)}`);
+        this._debug(JSON.stringify(data));
         this._debug('======');
         this._debug(rendered);
         this._debug('======');

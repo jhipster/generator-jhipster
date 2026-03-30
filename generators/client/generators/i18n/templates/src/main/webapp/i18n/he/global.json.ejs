@@ -18,7 +18,7 @@
 -%>
 {
     "global": {
-      "title": "<%= capitalizedBaseName %>",
+      "title": "<%- capitalizedBaseName %>",
       "browsehappy": "אתה משתמש בדפדפן <strong>מיושן</strong>. אנא <a href=\"http://browsehappy.com/?locale=he\">שדרג את הדפדפן שלך</a> כדי לשפר את חוויית השימוש.",
       "menu": {
         "home": "דף הבית",
@@ -38,9 +38,9 @@
         },
         "admin": {
           "main": "ניהול",
-  <%_ if (applicationTypeGateway) { _%>
+<%_ if (applicationTypeGateway) { _%>
           "gateway": "שער (Gateway)",
-  <%_ } _%>
+<%_ } _%>
           "userManagement": "ניהול משתמשים",
           "tracker": "מעקב משתמשים",
           "metrics": "מדדים",
@@ -159,9 +159,9 @@
       "idnull": "מזהה לא תקין",
       "idinvalid": "מזהה לא תקין",
       "idnotfound": "לא ניתן למצוא את המזהה",
-  <%_ if (searchEngineElasticsearch) { _%>
+<%_ if (searchEngineElasticsearch) { _%>
       "querySyntaxError": "שאילתת חיפוש לא תקינה",
-  <%_ } _%>
+<%_ } _%>
       "file": {
         "could.not.extract": "לא ניתן היה לחלץ את הקובץ",
         "not.image": "ציפינו לקובץ תמונה אך התקבל \"{{ fileType }}\""

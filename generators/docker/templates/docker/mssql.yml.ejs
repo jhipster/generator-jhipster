@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: <%= baseName.toLowerCase() %>
+name: <%- baseName.toLowerCase() %>
 services:
   mssql:
     image: <%- dockerContainers.mssql %>
@@ -27,7 +27,7 @@ services:
       - ACCEPT_EULA=Y
       - MSSQL_PID=Express
       - SA_PASSWORD=yourStrong(!)Password
-      - MSSQL_DATABASE=<%= baseName %>
+      - MSSQL_DATABASE=<%- baseName %>
       - MSSQL_SLEEP=15
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix

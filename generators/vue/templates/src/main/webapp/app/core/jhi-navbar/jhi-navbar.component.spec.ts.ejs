@@ -33,7 +33,7 @@ import { useLoginModal } from '@/account/login-modal';
 import JhiNavbar from './jhi-navbar.vue';
 <%_ if (applicationTypeGateway && microfrontend) { _%>
 
-vitest.mock('@module-federation/enhanced/runtime', () => ({
+vi.mock('@module-federation/enhanced/runtime', () => ({
   loadRemote: vitest.fn(() => Promise.reject(new Error('Test only'))),
 }));
 <%_ } _%>
@@ -60,7 +60,7 @@ describe('JhiNavbar', () => {
   beforeEach(() => {
     router = createRouter();
 <%_ if (authenticationUsesCsrf) { _%>
-    loginService = { login: vitest.fn(), logout: vitest.fn() };
+    loginService = { login: vi.fn(), logout: vi.fn() };
 <%_ } _%>
     const wrapper = shallowMount(JhiNavbar, {
       global: {

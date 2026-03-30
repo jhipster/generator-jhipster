@@ -52,7 +52,7 @@ plugins {
 }
 
 develocity {
-    server = "<%= gradleDevelocityHost %>"
+    server = "<%- gradleDevelocityHost %>"
     buildScan {
         captureTaskInputFiles = true
         uploadInBackground = System.getenv("CI") == null // adjust to your CI provider
@@ -65,8 +65,8 @@ buildCache {
     remote(HttpBuildCache) {
         push = true
         enabled = false // Disabled as this might not always desired
-        url = '<%= gradleDevelocityHost %>/cache/' // note the trailing slash!
+        url = '<%- gradleDevelocityHost %>/cache/' // note the trailing slash!
     }
 }
 <%_ } _%>
-rootProject.name = "<%= dasherizedBaseName %>"
+rootProject.name = "<%- dasherizedBaseName %>"

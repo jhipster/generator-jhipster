@@ -18,35 +18,35 @@
 -%>
 
 {
-  "name": "<%= dasherizedBaseName %>",
+  "name": "<%- dasherizedBaseName %>",
   "version": "0.0.1-SNAPSHOT",
-  "description": "<%= projectDescription %>",
+  "description": "<%- projectDescription %>",
   "private": true,
   "license": "UNLICENSED",
   "type": "module",
   "dependencies": {
-    "@angular/common": "<%= nodeDependencies['@angular/common'] %>",
-    "@angular/compiler": "<%= nodeDependencies['@angular/common'] %>",
-    "@angular/core": "<%= nodeDependencies['@angular/common'] %>",
-    "@angular/forms": "<%= nodeDependencies['@angular/common'] %>",
-    "@angular/localize": "<%= nodeDependencies['@angular/common'] %>",
-    "@angular/platform-browser": "<%= nodeDependencies['@angular/common'] %>",
-    "@angular/router": "<%= nodeDependencies['@angular/common'] %>",
-    "@fortawesome/angular-fontawesome": "<%= nodeDependencies['@fortawesome/angular-fontawesome'] %>",
-    "@fortawesome/free-solid-svg-icons": "<%= nodeDependencies['@fortawesome/free-solid-svg-icons'] %>",
-    "@ng-bootstrap/ng-bootstrap": "<%= nodeDependencies['@ng-bootstrap/ng-bootstrap'] %>",
+    "@angular/common": "<%- nodeDependencies['@angular/common'] %>",
+    "@angular/compiler": "<%- nodeDependencies['@angular/common'] %>",
+    "@angular/core": "<%- nodeDependencies['@angular/common'] %>",
+    "@angular/forms": "<%- nodeDependencies['@angular/common'] %>",
+    "@angular/localize": "<%- nodeDependencies['@angular/common'] %>",
+    "@angular/platform-browser": "<%- nodeDependencies['@angular/common'] %>",
+    "@angular/router": "<%- nodeDependencies['@angular/common'] %>",
+    "@fortawesome/angular-fontawesome": "<%- nodeDependencies['@fortawesome/angular-fontawesome'] %>",
+    "@fortawesome/free-solid-svg-icons": "<%- nodeDependencies['@fortawesome/free-solid-svg-icons'] %>",
+    "@ng-bootstrap/ng-bootstrap": "<%- nodeDependencies['@ng-bootstrap/ng-bootstrap'] %>",
 <%_ if (enableTranslation) { _%>
-    "@ngx-translate/core": "<%= nodeDependencies['@ngx-translate/core'] %>",
-    "@ngx-translate/http-loader": "<%= nodeDependencies['@ngx-translate/http-loader'] %>",
+    "@ngx-translate/core": "<%- nodeDependencies['@ngx-translate/core'] %>",
+    "@ngx-translate/http-loader": "<%- nodeDependencies['@ngx-translate/http-loader'] %>",
 <%_ } _%>
-    "bootstrap": "<%= nodeDependencies.bootstrap %>",
+    "bootstrap": "<%- nodeDependencies.bootstrap %>",
 <%_ if (!clientThemeNone) { _%>
-    "bootswatch": "<%= nodeDependencies.bootswatch %>",
+    "bootswatch": "<%- nodeDependencies.bootswatch %>",
 <%_ } _%>
-    "dayjs": "<%= nodeDependencies['dayjs'] %>",
-    "ngx-infinite-scroll": "<%= nodeDependencies['ngx-infinite-scroll'] %>",
-    "rxjs": "<%= nodeDependencies['rxjs'] %>",
-    "tslib": "<%= nodeDependencies['tslib'] %>"
+    "dayjs": "<%- nodeDependencies.dayjs %>",
+    "ngx-infinite-scroll": "<%- nodeDependencies['ngx-infinite-scroll'] %>",
+    "rxjs": "<%- nodeDependencies.rxjs %>",
+    "tslib": "<%- nodeDependencies.tslib %>"
   },
   "devDependencies": {
 <%_ if (skipServer) { _%>
@@ -54,37 +54,37 @@
 <%_ } _%>
 <%_ if (microfrontend) { _%>
   <%_ if (applicationTypeGateway) { _%>
-    "@angular-architects/module-federation-runtime": "<%= nodeDependencies['@angular-architects/module-federation-runtime'] %>",
+    "@angular-architects/module-federation-runtime": "<%- nodeDependencies['@angular-architects/module-federation-runtime'] %>",
   <%_ } _%>
-    "@angular-architects/module-federation": "<%= nodeDependencies['@angular-architects/module-federation'] %>",
+    "@angular-architects/module-federation": "<%- nodeDependencies['@angular-architects/module-federation'] %>",
 <%_ } _%>
-    "@vitest/coverage-v8": "<%= nodeDependencies.vitest %>",
-    "@angular/build": "<%= nodeDependencies['@angular/cli'] %>",
-    "@angular/cli": "<%= nodeDependencies['@angular/cli'] %>",
-    "@angular/compiler-cli": "<%= nodeDependencies['@angular/common'] %>",
-    "@angular/service-worker": "<%= nodeDependencies['@angular/common'] %>",
+    "@vitest/coverage-v8": "<%- nodeDependencies.vitest %>",
+    "@angular/build": "<%- nodeDependencies['@angular/cli'] %>",
+    "@angular/cli": "<%- nodeDependencies['@angular/cli'] %>",
+    "@angular/compiler-cli": "<%- nodeDependencies['@angular/common'] %>",
+    "@angular/service-worker": "<%- nodeDependencies['@angular/common'] %>",
     "@eslint/js": null,
-    "@types/node": "<%= nodeDependencies['@types/node'] %>",
-    "angular-eslint": "<%= nodeDependencies['angular-eslint'] %>",
-    "browser-sync": "<%= nodeDependencies['browser-sync'] %>",
-    "eslint": "<%= nodeDependencies['eslint'] %>",
-    "eslint-config-prettier": "<%= nodeDependencies['eslint-config-prettier'] %>",
-    "eslint-plugin-prettier": "<%= nodeDependencies['eslint-plugin-prettier'] %>",
-    "globals": "<%= nodeDependencies.globals %>",
+    "@types/node": "<%- nodeDependencies['@types/node'] %>",
+    "angular-eslint": "<%- nodeDependencies['angular-eslint'] %>",
+    "browser-sync": "<%- nodeDependencies['browser-sync'] %>",
+    "eslint": "<%- nodeDependencies.eslint %>",
+    "eslint-config-prettier": "<%- nodeDependencies['eslint-config-prettier'] %>",
+    "eslint-plugin-prettier": "<%- nodeDependencies['eslint-plugin-prettier'] %>",
+    "globals": "<%- nodeDependencies.globals %>",
     "jiti": null,
     "jsdom": null,
 <%_ if (enableI18nRTL) { _%>
-    "postcss-rtlcss": "<%= nodeDependencies['postcss-rtlcss'] %>",
+    "postcss-rtlcss": "<%- nodeDependencies['postcss-rtlcss'] %>",
 <%_ } _%>
-    "rimraf": "<%= nodeDependencies['rimraf'] %>",
-    "swagger-ui-dist": "<%= nodeDependencies['swagger-ui-dist'] %>",
-    "typescript": "<%= nodeDependencies['typescript'] %>",
-    "typescript-eslint": "<%= nodeDependencies['typescript-eslint'] %>",
+    "rimraf": "<%- nodeDependencies.rimraf %>",
+    "swagger-ui-dist": "<%- nodeDependencies['swagger-ui-dist'] %>",
+    "typescript": "<%- nodeDependencies.typescript %>",
+    "typescript-eslint": "<%- nodeDependencies['typescript-eslint'] %>",
     "vitest": null,
     "vitest-sonar-reporter": null
   },
   "engines": {
-    "node": ">=<%= nodeVersion %>"
+    "node": ">=<%- nodeVersion %>"
   },
   "config": {
     "default_environment": "prod"
@@ -92,8 +92,8 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "<%- nodePackageManager %> run lint -- --fix",
-    "cleanup": "rimraf <%= this.relativeDir(clientRootDir, temporaryDir) %>",
-    "clean-www": "rimraf <%= this.relativeDir(clientRootDir, clientDistDir) %>",
+    "cleanup": "rimraf <%- this.relativeDir(clientRootDir, temporaryDir) %>",
+    "clean-www": "rimraf <%- this.relativeDir(clientRootDir, clientDistDir) %>",
     "start": "ng serve<% if (!microfrontend) { %> --hmr<% } %>",
     "start-tls": "<%- nodePackageManager %> run webapp:dev-ssl",
 <%_ if (skipServer) { _%>

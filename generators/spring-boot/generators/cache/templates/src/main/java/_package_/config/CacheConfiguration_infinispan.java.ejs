@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.config;
+package <%- packageName %>.config;
 
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
@@ -112,7 +112,7 @@ public class CacheConfiguration {
                 return () -> GlobalConfigurationBuilder
                     .defaultClusteredBuilder().transport().defaultTransport()
                     .addProperty("configurationFile", jHipsterProperties.getCache().getInfinispan().getConfigFile())
-                    .clusterName("infinispan-<%= baseName %>-cluster")
+                    .clusterName("infinispan-<%- baseName %>-cluster")
                     .jmx().enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
                     .serialization().marshaller(new JBossUserMarshaller())
                     .build();
@@ -120,7 +120,7 @@ public class CacheConfiguration {
                 return () -> GlobalConfigurationBuilder
                     .defaultClusteredBuilder().transport()
                     .transport(new JGroupsTransport())
-                    .clusterName("infinispan-<%= baseName %>-cluster")
+                    .clusterName("infinispan-<%- baseName %>-cluster")
                     .jmx().enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
                     .serialization().marshaller(new JBossUserMarshaller())
                     .build();
@@ -128,7 +128,7 @@ public class CacheConfiguration {
                 return () -> GlobalConfigurationBuilder
                     .defaultClusteredBuilder().transport()
                     .transport(new JGroupsTransport(getTransportChannel()))
-                    .clusterName("infinispan-<%= baseName %>-cluster")
+                    .clusterName("infinispan-<%- baseName %>-cluster")
                     .jmx().enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
                     .serialization().marshaller(new JBossUserMarshaller())
                     .build();
@@ -137,7 +137,7 @@ public class CacheConfiguration {
             return () -> GlobalConfigurationBuilder
                     .defaultClusteredBuilder().transport().defaultTransport()
                     .addProperty("configurationFile", jHipsterProperties.getCache().getInfinispan().getConfigFile())
-                    .clusterName("infinispan-<%= baseName %>-cluster")
+                    .clusterName("infinispan-<%- baseName %>-cluster")
                     .jmx().enabled(jHipsterProperties.getCache().getInfinispan().isStatsEnabled())
                     .serialization().marshaller(new JBossUserMarshaller())
                     .build();
@@ -224,7 +224,7 @@ public class CacheConfiguration {
                 .simpleCache(true).transaction().transactionMode(TransactionMode.NON_TRANSACTIONAL).expiration().maxIdle(60000).template(true).build());
 
 <%_ if (generateBuiltInUserEntity) { _%>
-            Stream.of(<%= packageName %>.repository.UserRepository.USERS_BY_LOGIN_CACHE, <%= packageName %>.repository.UserRepository.USERS_BY_EMAIL_CACHE)
+            Stream.of(<%- packageName %>.repository.UserRepository.USERS_BY_LOGIN_CACHE, <%- packageName %>.repository.UserRepository.USERS_BY_EMAIL_CACHE)
                 .forEach(cacheName -> manager.defineConfiguration(cacheName, new ConfigurationBuilder().clustering()
                     .cacheMode(CacheMode.INVALIDATION_SYNC)
                     .statistics()

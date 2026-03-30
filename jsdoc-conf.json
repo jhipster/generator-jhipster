@@ -4,13 +4,13 @@
   },
   "source": {
     "include": [
-      "generators/cleanup.js",
-      "generators/docker-base.js",
-      "generators/docker-prompts.js",
-      "generators/generator-base.js",
-      "generators/generator-base-private.js",
-      "generators/generator-constants.js",
-      "generators/utils.js"
+      "dist/generators/app/cleanup.js",
+      "dist/generators/base-workspaces/internal/docker-base.js",
+      "dist/generators/base-workspaces/internal/docker-prompts.js",
+      "dist/generators/base/generator.js",
+      "dist/generators/base-core/generator.js",
+      "dist/generators/generator-constants.js",
+      "dist/lib/utils/index.js"
     ]
   },
   "plugins": [],

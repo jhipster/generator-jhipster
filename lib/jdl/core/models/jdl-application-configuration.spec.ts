@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import applicationOptions from '../../../jhipster/application-options.ts';
 
@@ -39,7 +37,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
 
       it('should return false', () => {
         // @ts-expect-error invalid api test
-        expect(configuration.hasOption()).to.be.false;
+        expect(configuration.hasOption()).toBe(false);
       });
     });
     describe('when the configuration does not have the option', () => {
@@ -50,7 +48,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
       });
 
       it('should return false', () => {
-        expect(configuration.hasOption(OptionNames.BASE_NAME)).to.be.false;
+        expect(configuration.hasOption(OptionNames.BASE_NAME)).toBe(false);
       });
     });
     describe('when the configuration has the option', () => {
@@ -62,7 +60,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
       });
 
       it('should return true', () => {
-        expect(configuration.hasOption(OptionNames.BASE_NAME)).to.be.true;
+        expect(configuration.hasOption(OptionNames.BASE_NAME)).toBe(true);
       });
     });
   });
@@ -76,7 +74,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
 
       it('should fail', () => {
         // @ts-expect-error invalid api test
-        expect(() => configuration.getOption()).to.throw(/^An option name has to be passed to get the option\.$/);
+        expect(() => configuration.getOption()).toThrow(/^An option name has to be passed to get the option\.$/);
       });
     });
     describe('when the configuration does not have the option', () => {
@@ -87,7 +85,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
       });
 
       it('should return undefined', () => {
-        expect(configuration.getOption(OptionNames.BASE_NAME)).to.be.undefined;
+        expect(configuration.getOption(OptionNames.BASE_NAME)).toBeUndefined();
       });
     });
     describe('when the configuration has the option', () => {
@@ -99,7 +97,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
       });
 
       it('should return its value', () => {
-        expect(configuration.getOption(OptionNames.BASE_NAME)).to.deep.equal(
+        expect(configuration.getOption(OptionNames.BASE_NAME)).toEqual(
           new StringJDLApplicationConfigurationOption(OptionNames.BASE_NAME, 'application'),
         );
       });
@@ -115,7 +113,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
 
       it('should fail', () => {
         // @ts-expect-error invalid api test
-        expect(() => configuration.setOption()).to.throw(/^An option has to be passed to set an option\.$/);
+        expect(() => configuration.setOption()).toThrow(/^An option has to be passed to set an option\.$/);
       });
     });
     describe('when setting a new option', () => {
@@ -127,7 +125,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
       });
 
       it('should add it', () => {
-        expect(createdConfiguration.hasOption(OptionNames.BASE_NAME)).to.be.true;
+        expect(createdConfiguration.hasOption(OptionNames.BASE_NAME)).toBe(true);
       });
     });
     describe('when setting an already present option', () => {
@@ -140,7 +138,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
       });
 
       it('should replace its value', () => {
-        expect(createdConfiguration.getOption(OptionNames.BASE_NAME)?.getValue()).to.equal('application2');
+        expect(createdConfiguration.getOption(OptionNames.BASE_NAME)?.getValue()).toBe('application2');
       });
     });
   });
@@ -154,7 +152,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
 
       it('should not do anything', () => {
         // @ts-expect-error invalid api test
-        expect(() => configuration.forEachOption()).not.to.throw();
+        expect(() => configuration.forEachOption()).not.toThrow();
       });
     });
     describe('when passing a function', () => {
@@ -172,7 +170,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
       });
 
       it('should iterate over the options', () => {
-        expect(result).to.equal('baseName is toto and jhiPrefix is prefix');
+        expect(result).toBe('baseName is toto and jhiPrefix is prefix');
       });
     });
   });
@@ -186,12 +184,12 @@ describe('jdl - JDLApplicationConfiguration', () => {
 
       describe('when not passing an indentation', () => {
         it('should stringify it without indentation', () => {
-          expect(configuration.toString()).to.equal('config {}');
+          expect(configuration.toString()).toBe('config {}');
         });
       });
       describe('when passing an indentation', () => {
         it('should stringify it with indentation', () => {
-          expect(configuration.toString(2)).to.equal('  config {}');
+          expect(configuration.toString(2)).toBe('  config {}');
         });
       });
     });
@@ -206,7 +204,7 @@ describe('jdl - JDLApplicationConfiguration', () => {
 
       describe('when not passing an indentation', () => {
         it('should stringify it without indentation', () => {
-          expect(configuration.toString()).to.equal(`config {
+          expect(configuration.toString()).toBe(`config {
 baseName toto
 jhiPrefix prefix
 }`);
@@ -214,7 +212,7 @@ jhiPrefix prefix
       });
       describe('when passing an indentation', () => {
         it('should stringify it with indentation', () => {
-          expect(configuration.toString(2)).to.equal(`  config {
+          expect(configuration.toString(2)).toBe(`  config {
     baseName toto
     jhiPrefix prefix
   }`);
@@ -231,7 +229,7 @@ jhiPrefix prefix
         });
 
         it('should not stringify it', () => {
-          expect(configuration.toString()).not.to.include('dtoSuffix');
+          expect(configuration.toString()).not.toContain('dtoSuffix');
         });
       });
       describe('with a value', () => {
@@ -243,7 +241,7 @@ jhiPrefix prefix
         });
 
         it('should stringify it', () => {
-          expect(configuration.toString()).to.include('dtoSuffix DTO');
+          expect(configuration.toString()).toContain('dtoSuffix DTO');
         });
       });
     });
@@ -257,7 +255,7 @@ jhiPrefix prefix
         });
 
         it('should not stringify it', () => {
-          expect(configuration.toString()).not.to.include('entitySuffix');
+          expect(configuration.toString()).not.toContain('entitySuffix');
         });
       });
       describe('with a value', () => {
@@ -269,7 +267,7 @@ jhiPrefix prefix
         });
 
         it('should stringify it', () => {
-          expect(configuration.toString()).to.include('entitySuffix suffix');
+          expect(configuration.toString()).toContain('entitySuffix suffix');
         });
       });
     });
@@ -283,7 +281,7 @@ jhiPrefix prefix
         });
 
         it('should not stringify it', () => {
-          expect(configuration.toString()).not.to.include('clientThemeVariant');
+          expect(configuration.toString()).not.toContain('clientThemeVariant');
         });
       });
       describe('with a value', () => {
@@ -295,7 +293,7 @@ jhiPrefix prefix
         });
 
         it('should stringify it', () => {
-          expect(configuration.toString()).to.include('clientThemeVariant primary');
+          expect(configuration.toString()).toContain('clientThemeVariant primary');
         });
       });
     });
@@ -308,7 +306,7 @@ jhiPrefix prefix
       });
 
       it('should not stringify it', () => {
-        expect(configuration.toString()).not.to.include('packageFolder');
+        expect(configuration.toString()).not.toContain('packageFolder');
       });
     });
   });

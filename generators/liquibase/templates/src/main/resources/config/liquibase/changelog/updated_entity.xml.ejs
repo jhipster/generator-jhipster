@@ -1,3 +1,4 @@
+<%# eslint-disable -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -20,34 +21,36 @@
 <%_ if (addedFields && addedFields.length) { _%>
 
     <!--
-        Added columns to the entity <%= entity.entityClass %>.
+        Added columns to the entity <%- entity.entityClass %>.
     -->
-    <changeSet id="<%= changelogDate %>-1-add-columns" author="jhipster">
-        <addColumn tableName="<%= entity.entityTableName %>">
-    <%_ for (field of addedFields) { _%>
-            <column name="<%= field.columnName %>" type="<%= field.columnType %>"<%- this.createDefaultValueLiquibaseAttribute(field, true) -%><%- this.formatAsLiquibaseRemarks(field.documentation, true) %>/>
-        <%_ if (field.shouldCreateContentType) { _%>
-            <column name="<%= field.columnName %>_content_type" type="varchar(255)"/>
-        <%_ }
-    } // End for (field of addedFields) _%>
+    <changeSet id="<%- changelogDate %>-1-add-columns" author="jhipster">
+        <addColumn tableName="<%- entity.entityTableName %>">
+  <%_ for (field of addedFields) { _%>
+            <column name="<%- field.columnName %>" type="<%- field.columnType %>"<%- this.createDefaultValueLiquibaseAttribute(field, true) -%><%- this.formatAsLiquibaseRemarks(field.documentation, true) %>/>
+    <%_ if (field.shouldCreateContentType) { _%>
+            <column name="<%- field.columnName %>_content_type" type="varchar(255)"/>
+  <%_ }
+    } // End for (field of addedFields)
+  _%>
         </addColumn>
-    <%_ for (field of addedFields) {
-        if (field.shouldDropDefaultValue) { _%>
-        <dropDefaultValue tableName="<%= entity.entityTableName %>" columnName="<%= field.columnName %>" columnDataType="${datetimeType}"/>
-        <%_ } _%>
+  <%_ for (field of addedFields) {
+        if (field.shouldDropDefaultValue) {
+  _%>
+        <dropDefaultValue tableName="<%- entity.entityTableName %>" columnName="<%- field.columnName %>" columnDataType="${datetimeType}"/>
     <%_ } _%>
+  <%_ } _%>
     </changeSet>
 <%_ } _%>
 <%_ if (removedFields && removedFields.length) { _%>
 
     <!--
-        Dropped columns to the entity <%= entity.entityClass %>.
+        Dropped columns to the entity <%- entity.entityClass %>.
     -->
-    <changeSet id="<%= changelogDate %>-1-drop-columns" author="jhipster">
-        <dropColumn tableName="<%= entity.entityTableName %>">
-    <%_ for (field of removedFields) { _%>
-            <column name="<%= field.columnName %>"/>
-    <%_ } _%>
+    <changeSet id="<%- changelogDate %>-1-drop-columns" author="jhipster">
+        <dropColumn tableName="<%- entity.entityTableName %>">
+  <%_ for (field of removedFields) { _%>
+            <column name="<%- field.columnName %>"/>
+  <%_ } _%>
         </dropColumn>
     </changeSet>
 <%_ } _%>
@@ -68,52 +71,51 @@
         }
     }
     if (hasRelationShips || hasJoinRelationShips) {
- _%>
+_%>
 
     <!--
-        Added relationships to the entity <%= entity.entityClass %>.
+        Added relationships to the entity <%- entity.entityClass %>.
     -->
-    <changeSet id="<%= changelogDate %>-1-add-relationships" author="jhipster">
-        <%_ if (hasRelationShips && hasRelationshipWithFieldUpdates) { _%>
-        <addColumn tableName="<%= entity.entityTableName %>">
-            <%_
-            for (relationship of addedRelationships) {
+    <changeSet id="<%- changelogDate %>-1-add-relationships" author="jhipster">
+    <%_ if (hasRelationShips && hasRelationshipWithFieldUpdates) { _%>
+        <addColumn tableName="<%- entity.entityTableName %>">
+      <%_ for (relationship of addedRelationships) {
                 if (relationship.shouldWriteRelationship && !relationshipsToRecreateForeignKeysOnly.includes(relationship)) {
-                    for (const otherEntityPkField of relationship.otherEntity.primaryKey.fields) { _%>
-                <column name="<%= relationship.columnName %>_<%= otherEntityPkField.columnName %>" type="<%= otherEntityPkField.columnType %>"/>
-                    <%_ } _%>
-                <%_ } _%>
-            <%_ } _%>
-        </addColumn>
+                    for (const otherEntityPkField of relationship.otherEntity.primaryKey.fields) {
+      _%>
+                <column name="<%- relationship.columnName %>_<%- otherEntityPkField.columnName %>" type="<%- otherEntityPkField.columnType %>"/>
+          <%_ } _%>
         <%_ } _%>
-        <%_ const joinTableRelations = addedRelationships
+      <%_ } _%>
+        </addColumn>
+    <%_ } _%>
+    <%_ const joinTableRelations = addedRelationships
                 .filter(rel => rel.shouldWriteJoinTable)
                 .filter(rel => !relationshipsToRecreateForeignKeysOnly.includes(rel));
             if(joinTableRelations.length > 0) {
-        _%>
-            <%_ for (relationship of joinTableRelations) { _%>
+    _%>
+      <%_ for (relationship of joinTableRelations) { _%>
 
-        <createTable tableName="<%= relationship.joinTable.name %>">
-                <%_ for (field of relationship.otherEntity.primaryKey.fields) { _%>
-            <column name="<%= relationship.columnName %>_<%= field.columnName %>" type="<%= field.columnType %>">
+        <createTable tableName="<%- relationship.joinTable.name %>">
+        <%_ for (field of relationship.otherEntity.primaryKey.fields) { _%>
+            <column name="<%- relationship.columnName %>_<%- field.columnName %>" type="<%- field.columnType %>">
                 <constraints nullable="false"/>
             </column>
-                <%_ } _%>
-                <%_ for (field of entity.primaryKey.fields) { _%>
-            <column name="<%= entity.entityTableName %>_<%= field.columnName %>" type="<%= field.columnType %>">
+        <%_ } _%>
+        <%_ for (field of entity.primaryKey.fields) { _%>
+            <column name="<%- entity.entityTableName %>_<%- field.columnName %>" type="<%- field.columnType %>">
                 <constraints nullable="false"/>
             </column>
-                <%_ } _%>
+        <%_ } _%>
         </createTable>
 
-        <addPrimaryKey columnNames="<%= entity.primaryKey.fields.map(field => `${entity.entityTableName}_${field.columnName}`).join(', ') %>, <%= relationship.otherEntity.primaryKey.fields.map(field => `${relationship.columnName}_${field.columnName}`).join(', ') %>" tableName="<%= relationship.joinTable.name %>"/>
-            <%_ } _%>
-        <%_ } _%>
-    </changeSet>
+        <addPrimaryKey columnNames="<%- entity.primaryKey.fields.map(field => `${entity.entityTableName}_${field.columnName}`).join(', ') %>, <%- relationship.otherEntity.primaryKey.fields.map(field => `${relationship.columnName}_${field.columnName}`).join(', ') %>" tableName="<%- relationship.joinTable.name %>"/>
+      <%_ } _%>
     <%_ } _%>
+    </changeSet>
+  <%_ } _%>
 <%_ } _%>
-<%_
-/* ======== Start removed relationships exists ======== */
+<%_ /* ======== Start removed relationships exists ======== */
 if (removedRelationships && removedRelationships.length) {
     let hasRelationShips = false;
     let hasJoinRelationShips = false;
@@ -132,55 +134,57 @@ if (removedRelationships && removedRelationships.length) {
     }
     /* ======== Start removed relationships should be written ======== */
     if (hasRelationShips || hasJoinRelationShips) {
-     _%>
+_%>
 
     <!--
-        Dropped relationships to the entity <%= entity.entityClass %>.
+        Dropped relationships to the entity <%- entity.entityClass %>.
     -->
-    <changeSet id="<%= changelogDate %>-1-drop-relationships" author="jhipster">
-        <%_
-        /* ======== Start hasRelationShips ======== */
+    <changeSet id="<%- changelogDate %>-1-drop-relationships" author="jhipster">
+    <%_ /* ======== Start hasRelationShips ======== */
         if (hasRelationShips) {
             /* ======== Start dropForeignKeyConstraint ======== */
             for (relationship of removedRelationships) {
                 if (relationship.shouldWriteRelationship) {
-        _%>
-        <dropForeignKeyConstraint baseTableName="<%= entity.entityTableName %>" constraintName="<%= this.getFKConstraintName(entity.entityTableName, relationship.relationshipName, prodDatabaseType) %>"/>
-        <%_    }
+    _%>
+        <dropForeignKeyConstraint baseTableName="<%- entity.entityTableName %>" constraintName="<%- this.getFKConstraintName(entity.entityTableName, relationship.relationshipName, prodDatabaseType) %>"/>
+      <%_ }
             }
 
             if (hasRelationshipWithFieldUpdates) {
-            /* ======== End dropForeignKeyConstraint ======== */ _%>
-        <dropColumn tableName="<%= entity.entityTableName %>">
-        <%_
-            /* ======== Start drop relationship columns ======== */
+            /* ======== End dropForeignKeyConstraint ======== */
+      _%>
+        <dropColumn tableName="<%- entity.entityTableName %>">
+        <%_ /* ======== Start drop relationship columns ======== */
             for (relationship of removedRelationships) {
                 if (relationship.shouldWriteRelationship && !relationshipsToRecreateForeignKeysOnly.includes(relationship)) {
-                    for (const otherEntityPkField of relationship.otherEntity.primaryKey.fields) { _%>
-            <column name="<%= relationship.columnName %>_<%= otherEntityPkField.columnName %>"/>
-                    <%_ } _%>
-        <%_    }
+                    for (const otherEntityPkField of relationship.otherEntity.primaryKey.fields) {
+        _%>
+            <column name="<%- relationship.columnName %>_<%- otherEntityPkField.columnName %>"/>
+            <%_ } _%>
+        <%_ }
             }
-            /* ======== End drop relationship column ======== */ _%>
+            /* ======== End drop relationship column ======== */
+        _%>
         </dropColumn>
-        <%_
-            }
+    <%_ }
         }
-        /* ======== End hasRelationShips ======== */ _%>
-        <%_
-        /* ======== Start for joinTable ======== */
+        /* ======== End hasRelationShips ======== */
+    _%>
+    <%_ /* ======== Start for joinTable ======== */
         for (relationship of removedRelationships) {
-            if (relationship.shouldWriteJoinTable) { _%>
-        <dropTable cascadeConstraints="true" tableName="<%= relationship.joinTable.name %>"/>
-            <%_ }
+            if (relationship.shouldWriteJoinTable) {
+    _%>
+        <dropTable cascadeConstraints="true" tableName="<%- relationship.joinTable.name %>"/>
+    <%_ }
         }
-        /* ======== End for joinTable ======== */ _%>
+        /* ======== End for joinTable ======== */
+    _%>
     </changeSet>
-    <%_
-    }
+<%_ }
     /* ======== End removed relationships should be written ======== */
 }
-/* ======== End removed relationships exists ======== */ _%>
+/* ======== End removed relationships exists ======== */
+_%>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
 
