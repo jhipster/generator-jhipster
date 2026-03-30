@@ -179,6 +179,8 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
       prepareFieldsForTemplates({ application, entity, field }) {
         if (application.databaseTypeAny) {
           prepareServerFieldForTemplates(application, entity, field, this);
+        } else if (entity.entityDomainLayer) {
+          field.javaFieldType = field.blobContentTypeText ? 'String' : field.fieldType;
         }
       },
     });
