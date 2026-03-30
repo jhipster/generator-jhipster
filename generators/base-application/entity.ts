@@ -10,6 +10,7 @@ import type { Relationship as BaseRelationship } from '../../lib/jhipster/types/
 import { buildMutateDataForProperty } from '../../lib/utils/derived-property.ts';
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
 import { pluralize } from '../../lib/utils/string-utils.ts';
+import { formatDocAsApiDescription } from '../java/support/doc.ts';
 
 import { isFieldEnumType } from './internal/types/field-types.ts';
 import type { FakerWithRandexp } from './support/faker.ts';
@@ -41,7 +42,7 @@ type BaseApplicationAddedFieldProperties = DerivedBooleanPropertiesOf<'fieldType
     fieldTranslationKey?: string;
     propertyTranslationKey?: string;
 
-    fieldApiDescription?: string;
+    fieldApiDescription: string | undefined;
 
     enumFileName?: string;
     enumValues?: { name: string; value: string }[];
@@ -125,6 +126,8 @@ export const mutateField = {
   path: ({ fieldName }) => [fieldName],
   propertyName: ({ fieldName }) => fieldName,
   ...mutateProperty,
+  fieldApiDescription: ({ documentation }) => (documentation ? formatDocAsApiDescription(documentation) : undefined),
+  propertyApiDescription: ({ fieldApiDescription }) => fieldApiDescription,
 
   fieldNameCapitalized: ({ fieldName }) => upperFirst(fieldName),
   fieldNameUnderscored: ({ fieldName }) => snakeCase(fieldName),

@@ -20,6 +20,7 @@ exports[`mutation object test expects mutateField to match snapshot 1`] = `
   "blobContentTypeAny": false,
   "blobContentTypeImage": false,
   "blobContentTypeText": false,
+  "fieldApiDescription": "documentation",
   "fieldIsEnum": true,
   "fieldNameCapitalized": "FieldName",
   "fieldNameHumanized": "Field Name",
@@ -60,6 +61,7 @@ exports[`mutation object test expects mutateField to match snapshot 1`] = `
   "path": [
     "fieldName",
   ],
+  "propertyApiDescription": "documentation",
   "propertyName": "fieldName",
   "propertyNameCapitalized": "FieldName",
   "propertyNameUpperSnakeCase": "FIELD_NAME",
