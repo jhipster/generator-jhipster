@@ -42,7 +42,7 @@ dependencies {
   // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 
-project.ext.diffChangelogFile = "<%= srcMainResources %>config/liquibase/changelog/" + new Date().format("yyyyMMddHHmmss") + "_changelog.xml"
+project.ext.diffChangelogFile = "<%- srcMainResources %>config/liquibase/changelog/" + new Date().format("yyyyMMddHHmmss") + "_changelog.xml"
 if (!project.hasProperty("runList")) {
  project.ext.runList = "main"
 }
@@ -50,21 +50,21 @@ if (!project.hasProperty("runList")) {
 liquibase {
   activities {
     main {
-      driver "<%= devJdbcDriver %>"
+      driver "<%- devJdbcDriver %>"
       url "<%- devLiquibaseUrl %>"
       username "<%- devDatabaseUsername %>"
 <%_ if (devDatabasePassword) { _%>
       password "<%- devDatabasePassword %>"
 <%_ } _%>
-      changelogFile "<%= srcMainResources %>config/liquibase/master.xml"
+      changelogFile "<%- srcMainResources %>config/liquibase/master.xml"
 <%_ if (liquibaseDefaultSchemaName) { _%>
       defaultSchemaName "<%- liquibaseDefaultSchemaName %>"
 <%_ } _%>
       logLevel "debug"
-      classpath "<%= srcMainResources %>"
+      classpath "<%- srcMainResources %>"
     }
     diffLog {
-      driver "<%= devJdbcDriver %>"
+      driver "<%- devJdbcDriver %>"
       url "<%- devLiquibaseUrl %>"
       username "<%- devDatabaseUsername %>"
 <%_ if (devDatabasePassword) { _%>
@@ -72,13 +72,13 @@ liquibase {
 <%_ } _%>
       changelogFile project.ext.diffChangelogFile
 <%_ if (!reactive && backendTypeSpringBoot) { _%>
-      referenceUrl "hibernate:spring:<%= packageName %>.domain?dialect=<%= devHibernateDialect %>&hibernate.physical_naming_strategy=<%= locals.hibernateNamingPhysicalStrategy %>&hibernate.implicit_naming_strategy=<%= locals.hibernateNamingImplicitStrategy %>"
+      referenceUrl "hibernate:spring:<%- packageName %>.domain?dialect=<%- devHibernateDialect %>&hibernate.physical_naming_strategy=<%- locals.hibernateNamingPhysicalStrategy %>&hibernate.implicit_naming_strategy=<%- locals.hibernateNamingImplicitStrategy %>"
 <%_ } _%>
 <%_ if (liquibaseDefaultSchemaName) { _%>
       defaultSchemaName "<%- liquibaseDefaultSchemaName %>"
 <%_ } _%>
       logLevel "debug"
-      classpath "$buildDir/classes/java/main"
+      classpath layout.buildDirectory.dir("classes/java/main").get().asFile.absolutePath
 <%_ if (authenticationTypeOauth2) { _%>
       excludeObjects "oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token"
 <%_ } _%>
@@ -88,8 +88,8 @@ liquibase {
   runList = project.ext.runList
 }
 
-liquibaseDiff.dependsOn(compileJava)
-liquibaseDiffChangelog.dependsOn(compileJava)
+tasks.named('liquibaseDiff').configure { dependsOn(tasks.named('compileJava')) }
+tasks.named('liquibaseDiffChangelog').configure { dependsOn(tasks.named('compileJava')) }
 <%_ if (backendTypeSpringBoot) { _%>
 
 ext {

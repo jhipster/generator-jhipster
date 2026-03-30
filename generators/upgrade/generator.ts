@@ -109,10 +109,10 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
           if ((this.jhipsterConfig.blueprints ?? []).length > 0) {
             const errorMessage =
               'Upgrade does not support upgrading a v7 project with blueprints. Please use the jhipster-migrate blueprint.';
-            if (!this.skipChecks) {
-              throw new Error(errorMessage);
-            } else {
+            if (this.skipChecks) {
               this.log.warn(errorMessage);
+            } else {
+              throw new Error(errorMessage);
             }
           }
         }
@@ -316,7 +316,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
   }
 
   isV7(version: string): boolean {
-    return version.includes('.') && parseInt(version.split('.', 2)[0], 10) < 8;
+    return version.includes('.') && Number.parseInt(version.split('.', 2)[0], 10) < 8;
   }
 
   async runNonInteractive(inherit = true) {

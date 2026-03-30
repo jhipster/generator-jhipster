@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.web.rest.errors;
+package <%- packageName %>.web.rest.errors;
 
 <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
 import org.springframework.dao.ConcurrencyFailureException;
@@ -41,7 +41,7 @@ public class ExceptionTranslatorTestController {
 <%_ } _%>
 
     @PostMapping("/method-argument")
-    public void methodArgument(@Valid @RequestBody Test<%= dtoSuffix %> test<%= dtoSuffix %>) {
+    public void methodArgument(@Valid @RequestBody Test<%- dtoSuffix %> test<%- dtoSuffix %>) {
         // empty method
     }
 
@@ -75,7 +75,7 @@ public class ExceptionTranslatorTestController {
         throw new RuntimeException();
     }
 
-    public static class Test<%= dtoSuffix %> {
+    public static class Test<%- dtoSuffix %> {
 
         @NotNull<% if (reactive) { %>(message = "must not be null")<% } %>
         private String test;

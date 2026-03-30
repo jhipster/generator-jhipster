@@ -16,50 +16,47 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%
-const instanceType = restClass;
-const instanceName = restInstance;
-const returnType = reactive ? 'Mono' : 'Optional'
-const mapOrFlatMap = reactive ? 'flatMap' : 'map'
-const returnPrefix = (isService) ? 'return' : returnType + '<' + instanceType + '> result =';
-const mapper = entityInstance  + 'Mapper';
+<%_ const returnType = reactive ? 'Mono' : 'Optional';
+const mapOrFlatMap = reactive ? 'flatMap' : 'map';
+const returnPrefix = (isService) ? 'return' : `${returnType}<${restClass}> result =`;
+const mapper = `${entityInstance}Mapper`;
 _%>
 <%_ if (viaService) { _%>
   <%_ if (reactive) { _%>
-    Mono<<%= instanceType %>> result = <%= entityInstance %>Service.partialUpdate(<%= instanceName %>);
+    Mono<<%- restClass %>> result = <%- entityInstance %>Service.partialUpdate(<%- restInstance %>);
   <%_ } else { _%>
-    Optional<<%= instanceType %>> result = <%= entityInstance %>Service.partialUpdate(<%= instanceName %>);
+    Optional<<%- restClass %>> result = <%- entityInstance %>Service.partialUpdate(<%- restInstance %>);
   <%_ } _%>
 <%_ } else { %>
-<%- returnPrefix %> <%= entityInstance %>Repository.findById(<%= instanceName %>.<%- primaryKey.propertySupplierName %>())
+<%- returnPrefix %> <%- entityInstance %>Repository.findById(<%- restInstance %>.<%- primaryKey.propertySupplierName %>())
   <%_ if (dtoMapstruct || fields.filter(field => !field.id && !field.transient).length > 0) { _%>
-    .map(existing<%= entityClass %> -> {
-  <%_ if (dtoMapstruct) { _%>
-       <%= mapper %>.partialUpdate(existing<%= entityClass %>, <%= instanceName %>);
-  <%_ } else { _%>
-    <%_ for (const field of fields.filter(field => !field.id && !field.transient)) { _%>
-        updateIfPresent(existing<%= entityClass %>::<%- field.propertyConsumerName %>, <%= instanceName %>.<%- field.propertySupplierName %>());
-      <%_ if (field.fieldWithContentType) { _%>
-        updateIfPresent(existing<%= entityClass %>::<%- field.propertyConsumerName %>ContentType, <%= instanceName %>.<%- field.propertySupplierName %>ContentType());
-      <%_ } _%>
-    <%_ } %>
+    .map(existing<%- entityClass %> -> {
+    <%_ if (dtoMapstruct) { _%>
+       <%- mapper %>.partialUpdate(existing<%- entityClass %>, <%- restInstance %>);
+    <%_ } else { _%>
+      <%_ for (const field of fields.filter(field => !field.id && !field.transient)) { _%>
+        updateIfPresent(existing<%- entityClass %>::<%- field.propertyConsumerName %>, <%- restInstance %>.<%- field.propertySupplierName %>());
+        <%_ if (field.fieldWithContentType) { _%>
+        updateIfPresent(existing<%- entityClass %>::<%- field.propertyConsumerName %>ContentType, <%- restInstance %>.<%- field.propertySupplierName %>ContentType());
+        <%_ } _%>
+      <%_ } %>
   <% } %>
-    return existing<%= entityClass %>;
+    return existing<%- entityClass %>;
     })
   <%_ } %>
-  .<%= mapOrFlatMap %>(<%= entityInstance %>Repository::save)
+  .<%- mapOrFlatMap %>(<%- entityInstance %>Repository::save)
   <%_ if (searchEngineElasticsearch) { _%>
-    .<%= mapOrFlatMap %>(saved<%= entityClass %> -> {
+    .<%- mapOrFlatMap %>(saved<%- entityClass %> -> {
     <%_ if(reactive) { %>
-        <%= entityInstance %>SearchRepository.save(saved<%= entityClass %>);
-        return Mono.just(saved<%= entityClass %>);
+        <%- entityInstance %>SearchRepository.save(saved<%- entityClass %>);
+        return Mono.just(saved<%- entityClass %>);
     <%_ } else { %>
-        <%= entityInstance %>SearchRepository.index(saved<%= entityClass %>);
-        return saved<%= entityClass %>;
+        <%- entityInstance %>SearchRepository.index(saved<%- entityClass %>);
+        return saved<%- entityClass %>;
     <%_ } %>
       })
   <%_ } _%>
   <%_ if (dtoMapstruct) { _%>
-   .map(<%= mapper %>::toDto)
+   .map(<%- mapper %>::toDto)
   <%_ } _%>;
 <%_ } %>

@@ -69,15 +69,13 @@ export const pickFields = (source: Record<string | number, any>, fields: (string
 
 export type MutateDataParam<T extends object> = Simplify<
   OmitIndexSignature<{
-    [Key in keyof (T & { __override__?: boolean })]?: Key extends '__override__'
-      ? boolean
-      : Key extends ReadonlyKeysOf<T>
-        ? never
-        : Key extends keyof T
-          ? T[Key] extends Function
-            ? (ctx: T) => T[Key]
-            : T[Key] | ((ctx: T) => T[Key])
-          : never;
+    [Key in keyof (T & { __override__?: boolean })]?: Key extends '__override__' ? boolean
+    : Key extends ReadonlyKeysOf<T> ? never
+    : Key extends keyof T ?
+      T[Key] extends Function ?
+        (ctx: T) => T[Key]
+      : T[Key] | ((ctx: T) => T[Key])
+    : never;
   }>
 >;
 

@@ -63,6 +63,7 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
     },
   ],
   "packageName": "com.mycompany.myapp",
+  "pageOrFlux": "Page",
   "reactive": false,
   "reactorBlock": "",
   "reactorBlockOptional": "",

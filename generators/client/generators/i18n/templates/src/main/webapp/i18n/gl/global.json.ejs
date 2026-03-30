@@ -18,7 +18,7 @@
 -%>
 {
     "global": {
-        "title": "<%= capitalizedBaseName %>",
+        "title": "<%- capitalizedBaseName %>",
         "browsehappy": "Está a utilizar un navegador <strong>non actualizado</strong>. Por favor <a href=\"http://browsehappy.com/?locale=en\">actualice o seu navegador</a> para mellorar a súa experiencia.",
         "menu": {
             "home": "Inicio",
@@ -159,7 +159,7 @@
         "idnull": "Invalid ID",
         "idinvalid": "Invalid Id",
         "idnotfound": "ID cannot be found",
- <%_ if (searchEngineElasticsearch) { _%>
+<%_ if (searchEngineElasticsearch) { _%>
         "querySyntaxError": "Invalid search query",
 <%_ } _%>
         "file": {

@@ -19,11 +19,11 @@
 # This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
-apiVersion: <%= KUBERNETES_ISTIO_NETWORKING_API_VERSION %>
+apiVersion: <%- KUBERNETES_ISTIO_NETWORKING_API_VERSION %>
 kind: Gateway
 metadata:
   name: jhipster-grafana-gateway
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
 spec:
   selector:
     istio: ingressgateway
@@ -33,22 +33,22 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - jhipster-grafana.<%= kubernetesNamespace %>.<%= ingressDomain %>
+    - jhipster-grafana.<%- kubernetesNamespace %>.<%- ingressDomain %>
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - jhipster-grafana.<%= kubernetesNamespace %>.<%= ingressDomain %>
+    - jhipster-grafana.<%- kubernetesNamespace %>.<%- ingressDomain %>
 ---
-apiVersion: <%= KUBERNETES_ISTIO_NETWORKING_API_VERSION %>
+apiVersion: <%- KUBERNETES_ISTIO_NETWORKING_API_VERSION %>
 kind: VirtualService
 metadata:
   name: jhipster-grafana-gw-virtualservice
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
 spec:
   hosts:
-  - jhipster-grafana.<%= kubernetesNamespace %>.<%= ingressDomain %>
+  - jhipster-grafana.<%- kubernetesNamespace %>.<%- ingressDomain %>
   gateways:
   - jhipster-grafana-gateway
   http:

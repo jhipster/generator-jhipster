@@ -55,7 +55,7 @@ export const keywordsForType = (type: string): readonly string[] =>
   (ReservedWords as Record<string, readonly string[]>)[type.toUpperCase()];
 
 export function isReserved(keyword?: string, type?: string) {
-  return !!keyword && !!type && !!keywordsForType(type)?.includes(keyword.toUpperCase());
+  return !!keyword && !!type && keywordsForType(type)?.includes(keyword.toUpperCase());
 }
 
 export function isReservedClassName(keyword: string) {
@@ -65,8 +65,8 @@ export function isReservedClassName(keyword: string) {
 }
 
 export function isReservedTableName(keyword: string, databaseType: string) {
-  return databaseType.toUpperCase() === 'SQL'
-    ? isReserved(keyword, 'MYSQL') || isReserved(keyword, 'POSTGRESQL') || isReserved(keyword, 'ORACLE') || isReserved(keyword, 'MSSQL')
+  return databaseType.toUpperCase() === 'SQL' ?
+      isReserved(keyword, 'MYSQL') || isReserved(keyword, 'POSTGRESQL') || isReserved(keyword, 'ORACLE') || isReserved(keyword, 'MSSQL')
     : isReserved(keyword, databaseType);
 }
 

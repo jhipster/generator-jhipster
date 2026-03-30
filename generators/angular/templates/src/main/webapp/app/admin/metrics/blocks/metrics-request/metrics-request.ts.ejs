@@ -28,7 +28,7 @@ import { HttpServerRequests } from 'app/admin/metrics/metrics.model';
 import { filterNaN } from 'app/core/util/operators';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-metrics-request',
+  selector: '<%- jhiPrefixDashed %>-metrics-request',
   templateUrl: './metrics-request.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NgbProgressbar, KeyValuePipe, DecimalPipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],

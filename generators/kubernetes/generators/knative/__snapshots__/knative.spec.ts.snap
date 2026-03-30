@@ -123,7 +123,6 @@ dependencies:
   },
   "knative/csvc-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
-
 ",
     "stateCleared": "modified",
   },
@@ -1204,7 +1203,6 @@ dependencies:
   },
   "knative/csvc-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
-
 ",
     "stateCleared": "modified",
   },
@@ -2061,7 +2059,6 @@ dependencies:
   },
   "knative/csvc-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
-
 ",
     "stateCleared": "modified",
   },
@@ -3111,7 +3108,6 @@ dependencies:
   },
   "knative/csvc-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
-
 ",
     "stateCleared": "modified",
   },
@@ -4021,7 +4017,6 @@ dependencies:
   },
   "knative/csvc-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
-
 ",
     "stateCleared": "modified",
   },
@@ -5844,7 +5839,6 @@ prometheus/grafana customisation
 {{- define "grafana.fullname" -}}
 {{- default "jhipster-grafana" -}}
 {{- end -}}
-
 ",
     "stateCleared": "modified",
   },
@@ -8876,7 +8870,6 @@ spec:
 kind: Namespace
 metadata:
   name: mynamespace
-
 ",
     "stateCleared": "modified",
   },
@@ -8988,7 +8981,6 @@ dependencies:
   },
   "knative/csvc-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
-
 ",
     "stateCleared": "modified",
   },
@@ -9673,7 +9665,6 @@ spec:
 kind: Namespace
 metadata:
   name: mynamespace
-
 ",
     "stateCleared": "modified",
   },
@@ -9784,7 +9775,6 @@ dependencies:
   },
   "knative/csvc-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
-
 ",
     "stateCleared": "modified",
   },
@@ -10522,7 +10512,6 @@ spec:
 kind: Namespace
 metadata:
   name: jhipsternamespace
-
 ",
     "stateCleared": "modified",
   },
@@ -18887,7 +18876,6 @@ spec:
         configMap:
           name: jhipster-grafana-dashboard
       restartPolicy: OnFailure
-
 ",
     "stateCleared": "modified",
   },
@@ -19422,7 +19410,6 @@ spec:
 kind: Namespace
 metadata:
   name: mynamespace
-
 ",
     "stateCleared": "modified",
   },
@@ -20147,7 +20134,6 @@ spec:
 kind: Namespace
 metadata:
   name: mynamespace
-
 ",
     "stateCleared": "modified",
   },
@@ -20925,7 +20911,6 @@ logSummary
 kind: Namespace
 metadata:
   name: jhipsternamespace
-
 ",
     "stateCleared": "modified",
   },

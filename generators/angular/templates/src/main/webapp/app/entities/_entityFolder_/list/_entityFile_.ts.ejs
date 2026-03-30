@@ -16,8 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-  const notSortableFieldsAfterSearchArray = searchEngineNo ? [] : fields
+<%_ const notSortableFieldsAfterSearchArray = searchEngineNo ? [] : fields
       .filter(field => !field.hidden && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal);
 
   const notSortableFieldsAfterSearchFieldNames = notSortableFieldsAfterSearchArray
@@ -35,7 +34,14 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { HttpHeaders } from '@angular/common/http';
 <%_ } _%>
 import { ActivatedRoute, Data, ParamMap, Router, RouterLink } from '@angular/router';
-import { combineLatest<%_ if (!readOnly) { _%>, filter<%_ } _%>, Subscription, tap } from 'rxjs';
+import {
+  combineLatest,
+<%_ if (!readOnly) { _%>
+  filter,
+<%_ } _%>
+  Subscription,
+  tap,
+} from 'rxjs';
 <%_ if (!readOnly) { _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
 <%_ } _%>
@@ -56,16 +62,16 @@ import { ItemCount } from 'app/shared/pagination';
 <%_ if (searchEngine) { _%>
 import { FormsModule } from '@angular/forms';
 <%_ } _%>
-import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
+import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
 <%_ if (!paginationNo) { %>
 import {
   ITEMS_PER_PAGE,
-<%_ if (paginationPagination) { _%>
+  <%_ if (paginationPagination) { _%>
   PAGE_HEADER,
-<%_ } _%>
-<%_ if (paginationPagination) { _%>
+  <%_ } _%>
+  <%_ if (paginationPagination) { _%>
   TOTAL_COUNT_RESPONSE_HEADER,
-<%_ } _%>
+  <%_ } _%>
 } from 'app/config/pagination.constants';
 <%_ } _%>
 import {
@@ -75,9 +81,9 @@ import {
 <%_ } _%>
   DEFAULT_SORT_DATA
 } from 'app/config/navigation.constants';
-import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
+import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
 <%_ if (!readOnly) { _%>
-import { <%= entityAngularName %>DeleteDialog } from '../delete/<%= entityFileName %>-delete-dialog';
+import { <%- entityAngularName %>DeleteDialog } from '../delete/<%- entityFileName %>-delete-dialog';
 <%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
 import { DataUtils } from 'app/core/util/data-util.service';
@@ -93,8 +99,8 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 <%_ } _%>
 
 @Component({
-    selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>',
-    templateUrl: './<%= entityFileName %>.html',
+    selector: '<%- jhiPrefixDashed %>-<%- entityFileName %>',
+    templateUrl: './<%- entityFileName %>.html',
     imports: [
       RouterLink,
 <%_ if (searchEngine) { _%>
@@ -130,14 +136,14 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 <%_ } _%>
     ],
 })
-export class <%= componentName %> implements OnInit {
+export class <%- componentName %> implements OnInit {
 
 <%_ if (notSortableFieldsAfterSearch) { _%>
     private static readonly NOT_SORTABLE_FIELDS_AFTER_SEARCH = [<%- notSortableFieldsAfterSearch %>];
 
 <%_ } _%>
     subscription: Subscription | null = null;
-    readonly <%- entityInstancePlural %> = signal<I<%= entityAngularName %>[]>([]);
+    readonly <%- entityInstancePlural %> = signal<I<%- entityAngularName %>[]>([]);
 
     sortState = sortStateSignal({});
 <%_ if (searchEngineAny) { _%>
@@ -159,9 +165,9 @@ export class <%= componentName %> implements OnInit {
 <%_ } _%>
 
   readonly router = inject(Router);
-  protected readonly <%= entityInstance %>Service = inject(<%= entityAngularName %>Service);
+  protected readonly <%- entityInstance %>Service = inject(<%- entityAngularName %>Service);
   // eslint-disable-next-line @typescript-eslint/member-ordering
-  readonly isLoading = this.<%= entityInstance %>Service.<%= entityInstancePlural %>Resource.isLoading;
+  readonly isLoading = this.<%- entityInstance %>Service.<%- entityInstancePlural %>Resource.isLoading;
   protected readonly activatedRoute = inject(ActivatedRoute);
   protected readonly sortService = inject(SortService);
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
@@ -180,7 +186,7 @@ export class <%= componentName %> implements OnInit {
   constructor() {
 <%_ if (!paginationNo) { _%>
     effect(() => {
-      const headers = this.<%= entityInstance %>Service.<%= entityInstancePlural %>Resource.headers();
+      const headers = this.<%- entityInstance %>Service.<%- entityInstancePlural %>Resource.headers();
       if (headers) {
         this.fillComponentAttributesFromResponseHeader(headers);
       }
@@ -208,7 +214,7 @@ export class <%= componentName %> implements OnInit {
   }
 
 <%_ if (primaryKey) { _%>
-    track<%= primaryKey.nameCapitalized %> = (item: I<%= entityAngularName %>): <%= primaryKey.tsType %> => this.<%= entityInstance %>Service.get<%= entityAngularName %>Identifier(item);
+    track<%- primaryKey.nameCapitalized %> = (item: I<%- entityAngularName %>): <%- primaryKey.tsType %> => this.<%- entityInstance %>Service.get<%- entityAngularName %>Identifier(item);
 
 <%_ } _%>
     ngOnInit(): void {
@@ -221,7 +227,7 @@ export class <%= componentName %> implements OnInit {
         tap(() => this.load()),
 <%_ } else { _%>
         tap(() => {
-          if (this.<%= entityInstancePlural %>().length === 0) {
+          if (this.<%- entityInstancePlural %>().length === 0) {
             this.load();
           }
         }),
@@ -247,7 +253,7 @@ export class <%= componentName %> implements OnInit {
       this.currentSearch.set(query);
   <%_ if (notSortableFieldsAfterSearch) { _%>
       const { predicate } = this.sortState();
-      if (query && predicate && <%= componentName %>.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(predicate)) {
+      if (query && predicate && <%- componentName %>.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(predicate)) {
         this.navigateToWithComponentValues(this.getDefaultSortState());
         return;
       }
@@ -275,9 +281,9 @@ export class <%= componentName %> implements OnInit {
 
 <%_ } _%>
 <%_ if (!readOnly) { _%>
-    delete(<%= entityInstance %>: I<%= entityAngularName %>): void {
-      const modalRef = this.modalService.open(<%= entityAngularName %>DeleteDialog, { size: 'lg', backdrop: 'static' });
-      modalRef.componentInstance.<%= entityInstance %> = <%= entityInstance %>;
+    delete(<%- entityInstance %>: I<%- entityAngularName %>): void {
+      const modalRef = this.modalService.open(<%- entityAngularName %>DeleteDialog, { size: 'lg', backdrop: 'static' });
+      modalRef.componentInstance.<%- entityInstance %> = <%- entityInstance %>;
       // unsubscribe not needed because closed completes on modal close
       modalRef.closed
         .pipe(
@@ -315,7 +321,7 @@ export class <%= componentName %> implements OnInit {
         this.currentSearch.set(params.get('search') as string);
   <%_ if (notSortableFieldsAfterSearch) { _%>
           const { predicate } = this.sortState();
-          if (predicate && <%= componentName %>.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(predicate)) {
+          if (predicate && <%- componentName %>.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(predicate)) {
             this.sortState.set({});
           }
   <%_ } _%>
@@ -324,25 +330,25 @@ export class <%= componentName %> implements OnInit {
     }
 
 <%_ if (paginationNo) { _%>
-    protected refineData(data: I<%= entityAngularName %>[]): I<%= entityAngularName %>[] {
+    protected refineData(data: I<%- entityAngularName %>[]): I<%- entityAngularName %>[] {
       const { predicate, order } = this.sortState();
       return predicate && order ? data.sort(this.sortService.startSort({ predicate, order })) : data;
     }
 
 <%_ } _%>
-  protected fillComponentAttributesFromResponseBody(data: I<%= entityAngularName %>[]<% if (paginationInfiniteScroll) { %>, currentValue: I<%= entityAngularName %>[]<% } %>): I<%= entityAngularName %>[] {
+  protected fillComponentAttributesFromResponseBody(data: I<%- entityAngularName %>[]<% if (paginationInfiniteScroll) { %>, currentValue: I<%- entityAngularName %>[]<% } %>): I<%- entityAngularName %>[] {
 <%_ if (paginationInfiniteScroll) { _%>
-    const <%= entityInstancePlural %>New = [...currentValue];
+    const <%- entityInstancePlural %>New = [...currentValue];
     for (const d of data) {
   <%_ if (primaryKey) { _%>
-      if (!<%= entityInstancePlural %>New.some(op => op.<%= primaryKey.name %> === d.<%= primaryKey.name %>)) {
+      if (!<%- entityInstancePlural %>New.some(op => op.<%- primaryKey.name %> === d.<%- primaryKey.name %>)) {
   <%_ } _%>
-        <%= entityInstancePlural %>New.push(d);
+        <%- entityInstancePlural %>New.push(d);
   <%_ if (primaryKey) { _%>
       }
   <%_ } _%>
     }
-    return <%= entityInstancePlural %>New;
+    return <%- entityInstancePlural %>New;
 <%_ } else if (paginationNo) { _%>
     return this.refineData(data);
 <%_ } else { _%>
@@ -361,7 +367,7 @@ export class <%= componentName %> implements OnInit {
       } else {
         this.links.set({});
       }
-    <%_ } _%>
+  <%_ } _%>
     }
 
 <%_ } _%>
@@ -407,7 +413,7 @@ export class <%= componentName %> implements OnInit {
       this.links.set({});
 
 <%_ } _%>
-      const queryParamsObj<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>: any<%_ } _%> = {
+      const queryParamsObj<% if (jpaMetamodelFiltering && paginationPagination) { %>: any<% } %> = {
 <%_ if (searchEngineAny) { _%>
         search: currentSearch,
 <%_ } _%>

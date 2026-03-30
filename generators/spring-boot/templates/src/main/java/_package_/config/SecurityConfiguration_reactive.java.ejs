@@ -16,14 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.config;
+package <%- packageName %>.config;
 
-import <%= packageName %>.security.AuthoritiesConstants;
+import <%- packageName %>.security.AuthoritiesConstants;
 <%_ if (authenticationTypeOauth2) { _%>
 import static org.springframework.security.oauth2.core.oidc.StandardClaimNames.PREFERRED_USERNAME;
 
-import <%= packageName %>.security.SecurityUtils;
-import <%= packageName %>.security.oauth2.AudienceValidator;
+import <%- packageName %>.security.SecurityUtils;
+import <%- packageName %>.security.oauth2.AudienceValidator;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverter;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,7 +37,7 @@ import tech.jhipster.config.JHipsterProperties;
 import org.springframework.boot.security.autoconfigure.SecurityProperties;
 <%_ } _%>
 <%_ if (!skipClient) { _%>
-import <%= packageName %>.web.filter.SpaWebFilter;
+import <%- packageName %>.web.filter.SpaWebFilter;
 <%_ } _%>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -215,16 +215,16 @@ public class SecurityConfiguration {
         http
             .securityMatcher(new NegatedServerWebExchangeMatcher(new OrServerWebExchangeMatcher(
                 pathMatchers(
-  <%_ if (clientBundlerVite) { _%>
+<%_ if (clientBundlerVite) { _%>
                     "/assets/**",
-  <%_ } else if (clientBundlerEsbuild) { _%>
+<%_ } else if (clientBundlerEsbuild) { _%>
                     "/content/**",
                     "/resources/**",
-  <%_ } else { _%>
+<%_ } else { _%>
                     "/app/**",
                     "/i18n/**",
                     "/content/**",
-  <%_ } _%>
+<%_ } _%>
                     "/swagger-ui/**"
                 )
             )))
@@ -319,7 +319,8 @@ public class SecurityConfiguration {
 <%_ } else if (authenticationTypeJwt) { _%>
             .httpBasic(basic -> basic.disable())
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()));
-<%_ } else { _%>;<%_ } _%>
+<%_ } else { _%>;
+<%_ } _%>
         return http.build();
     }
 
@@ -392,8 +393,12 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    ReactiveJwtDecoder jwtDecoder(<%_ if (!applicationTypeMicroservice) { _%>ReactiveClientRegistrationRepository registrations<%_ } _%>) {
-    <%_ if (applicationTypeMicroservice) { _%>
+    ReactiveJwtDecoder jwtDecoder(
+  <%_ if (!applicationTypeMicroservice) { _%>
+        ReactiveClientRegistrationRepository registrations
+  <%_ } _%>
+    ) {
+  <%_ if (applicationTypeMicroservice) { _%>
         NimbusReactiveJwtDecoder jwtDecoder = (NimbusReactiveJwtDecoder) ReactiveJwtDecoders.fromOidcIssuerLocation(issuerUri);
 
         OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());
@@ -404,7 +409,7 @@ public class SecurityConfiguration {
 
         return jwtDecoder;
     }
-    <%_ } else { _%>
+  <%_ } else { _%>
 
         Mono<ClientRegistration> clientRegistration = registrations.findByRegistrationId("oidc");
 
@@ -472,7 +477,7 @@ public class SecurityConfiguration {
             }
         };
     }
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationTypeSession) { _%>
     private Mono<Void> onAuthenticationError(WebFilterExchange exchange, AuthenticationException e) {

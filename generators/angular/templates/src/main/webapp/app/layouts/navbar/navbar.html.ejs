@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<nav data-cy="navbar" class="navbar navbar-<% if (clientThemeNone || clientThemeVariantPrimary) { %>dark<% } else { %><%= clientThemeVariant %><% } %> navbar-expand-md <% if (clientThemeNone) { %>bg-dark<% } else { %>bg-<%= clientThemeVariant %><% } %>">
+<nav data-cy="navbar" class="navbar navbar-<% if (clientThemeNone || clientThemeVariantPrimary) { %>dark<% } else { %><%- clientThemeVariant %><% } %> navbar-expand-md <% if (clientThemeNone) { %>bg-dark<% } else { %>bg-<%- clientThemeVariant %><% } %>">
   <div class="container-fluid">
   <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
     <span class="logo-img"></span>
@@ -64,12 +64,12 @@
             <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
 <%_ if (applicationTypeGateway && microfrontend) { _%>
   <%_ for (const remote of microfrontends) { _%>
-          @if (<%= remote.lowercaseBaseName %>EntityNavbarItems().length === 0) {
+          @if (<%- remote.lowercaseBaseName %>EntityNavbarItems().length === 0) {
             <li>
-              <span class="dropdown-item">Failed to load <%= remote.lowercaseBaseName %> entities</span>
+              <span class="dropdown-item">Failed to load <%- remote.lowercaseBaseName %> entities</span>
             </li>
           }
-          @for (entityNavbarItem of <%= remote.lowercaseBaseName %>EntityNavbarItems(); track $index) {
+          @for (entityNavbarItem of <%- remote.lowercaseBaseName %>EntityNavbarItems(); track $index) {
             <li>
               <a
                 class="dropdown-item"
@@ -81,7 +81,7 @@
                 <fa-icon icon="asterisk" [fixedWidth]="true" />
                 <span
     <%_ if (enableTranslation) { _%>
-               [<%= jhiPrefix %>Translate]="entityNavbarItem.translationKey"
+               [<%- jhiPrefix %>Translate]="entityNavbarItem.translationKey"
     <%_ } _%>
                 >{{entityNavbarItem.name}}</span>
               </a>
@@ -93,7 +93,7 @@
         </li>
       }
       <li
-        *<%= jhiPrefix %>HasAnyAuthority="'ROLE_ADMIN'"
+        *<%- jhiPrefix %>HasAnyAuthority="'ROLE_ADMIN'"
         ngbDropdown
         class="nav-item dropdown pointer"
         display="dynamic"
@@ -185,7 +185,7 @@
         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="languagesnavBarDropdown">
         @for (language of languages; track $index) {
           <li>
-            <a class="dropdown-item" [<%= jhiPrefix %>ActiveMenu]="language" href="javascript:void(0);" (click)="changeLanguage(language);collapseNavbar();">{{ language | findLanguageFromKey }}</a>
+            <a class="dropdown-item" [<%- jhiPrefix %>ActiveMenu]="language" href="javascript:void(0);" (click)="changeLanguage(language);collapseNavbar();">{{ language | findLanguageFromKey }}</a>
           </li>
         }
         </ul>

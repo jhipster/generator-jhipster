@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { describe, expect, it } from 'esmocha';
 
 import relationshipTypes, { relationshipTypeExists } from './relationship-types.ts';
 
@@ -27,13 +25,13 @@ describe('jdl - RelationshipTypes', () => {
   describe('exists', () => {
     describe('when checking for a valid unary relationship type', () => {
       it('should return true', () => {
-        expect(relationshipTypeExists(relationshipTypes.MANY_TO_ONE)).to.be.true;
+        expect(relationshipTypeExists(relationshipTypes.MANY_TO_ONE)).toBe(true);
       });
     });
     describe('when checking for an invalid relationship type', () => {
       it('should return false', () => {
         // @ts-expect-error
-        expect(relationshipTypeExists('NOTHING')).to.be.false;
+        expect(relationshipTypeExists('NOTHING')).toBe(false);
       });
     });
   });

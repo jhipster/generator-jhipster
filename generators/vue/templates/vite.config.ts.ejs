@@ -17,7 +17,8 @@
  limitations under the License.
 -%>
 import { fileURLToPath, URL } from 'node:url';
-import { normalizePath } from 'vite'
+import path from 'node:path';
+import { normalizePath } from 'vite';
 
 import {
 <%_ if (microfrontend && clientBundlerVite) { _%>
@@ -37,6 +38,7 @@ const sharedAppVersion = '0.0.0';
 
 const { getAbsoluteFSPath } = await import('swagger-ui-dist');
 const swaggerUiPath = getAbsoluteFSPath();
+const webappDir = fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>/', import.meta.url));
 
 // eslint-disable-next-line prefer-const
 let config = defineConfig({
@@ -52,6 +54,10 @@ let config = defineConfig({
             normalizePath(fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/index.html', import.meta.url))),
           ],
           dest: 'swagger-ui',
+          rename: (name, ext, srcPath) => {
+            const rel = path.relative(webappDir, path.dirname(srcPath)).replace(/^(\.\.\/)+/, '');
+            return '../'.repeat(rel === '.' ? 0 : rel.split('/').length) + `${name}.${ext}`;
+          },
         },
       ],
     }),
@@ -107,7 +113,7 @@ let config = defineConfig({
       ].map(res => [
         res,
         {
-          target: 'http://localhost:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
+          target: 'http://localhost:<%- applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
 <%_ if (communicationSpringWebsocket) { _%>
           ws: res === '/websocket',
 <%_ } _%>
@@ -126,18 +132,18 @@ config = mergeConfig(config, {
   },
   plugins: [
     federation({
-      name: '<%= lowercaseBaseName %>',
+      name: '<%- lowercaseBaseName %>',
   <%_ if (applicationTypeGateway) { _%>
       remotes: {
     <%_ for (const remote of microfrontends) { _%>
-        '@<%= remote.lowercaseBaseName %>': `/<%= remote.endpointPrefix %>/assets/remoteEntry.js`,
-  <%_ } _%>
+        '@<%- remote.lowercaseBaseName %>': `/<%- remote.endpointPrefix %>/assets/remoteEntry.js`,
+    <%_ } _%>
       },
   <%_ } _%>
   <%_ if (applicationTypeMicroservice) { _%>
       exposes: {
-        './entities-router': './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/router/entities',
-        './entities-menu': './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entities-menu.vue',
+        './entities-router': './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/router/entities',
+        './entities-menu': './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entities-menu.vue',
       },
   <%_ } _%>
       shared: {
@@ -152,19 +158,19 @@ config = mergeConfig(config, {
         'vue-router': {},
         pinia: {},
         '@/shared/jhipster/constants': {
-          packagePath: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/shared/jhipster/constants',
+          packagePath: './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/shared/jhipster/constants',
   <%_ if (applicationTypeGateway) { _%>
           version: sharedAppVersion,
   <%_ } _%>
         },
         '@/shared/alert/alert.service': {
-          packagePath: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/shared/alert/alert.service',
+          packagePath: './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/shared/alert/alert.service',
   <%_ if (applicationTypeGateway) { _%>
           version: sharedAppVersion,
   <%_ } _%>
         },
         '@/locale/translation.service': {
-          packagePath: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/locale/translation.service',
+          packagePath: './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/locale/translation.service',
   <%_ if (applicationTypeGateway) { _%>
           version: sharedAppVersion,
   <%_ } _%>

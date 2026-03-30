@@ -18,7 +18,7 @@
 -%>
 {
     "global": {
-        "title": "<%= capitalizedBaseName %>",
+        "title": "<%- capitalizedBaseName %>",
         "browsehappy": "Вие използвате <strong>остарял</strong> уеб браузър. Моля <a href=\"http://browsehappy.com/?locale=en\">обновете вашия браузър</a> за да подобрите работата му.",
         "menu": {
             "home": "Начална страница",
@@ -159,7 +159,7 @@
         "idnull": "Невалидно ID",
         "idinvalid": "Invalid Id",
         "idnotfound": "ID cannot be found",
- <%_ if (searchEngineElasticsearch) { _%>
+<%_ if (searchEngineElasticsearch) { _%>
         "querySyntaxError": "Invalid search query",
 <%_ } _%>
         "file": {

@@ -16,9 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-const tsKeyId = user.primaryKey.tsSampleValues[0];
-_%>
+<%_ const tsKeyId = user.primaryKey.tsSampleValues[0]; _%>
 <%_ if (clientTestFrameworkVitest) { _%>
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
@@ -42,7 +40,9 @@ describe('User Management Update Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
+<%_ if (enableTranslation) { _%>
+      imports: [TranslateModule.forRoot()],
+<%_ } _%>
       providers: [
         {
           provide: ActivatedRoute,
@@ -64,7 +64,7 @@ describe('User Management Update Component', () => {
     it('should call update service on save for existing user', inject([], () => {
       // GIVEN
       const entity = { id: <%- tsKeyId %> } as IUserManagement;
-      <%= clientTestFramework %>.spyOn(service, 'update').mockReturnValue(of(entity));
+      <%- clientTestFramework %>.spyOn(service, 'update').mockReturnValue(of(entity));
       comp.editForm.patchValue(entity);
       // WHEN
       comp.save();
@@ -77,7 +77,7 @@ describe('User Management Update Component', () => {
     it('should call create service on save for new user', inject([], () => {
       // GIVEN
       const entity = { login: 'foo' } as IUserManagement;
-      <%= clientTestFramework %>.spyOn(service, 'create').mockReturnValue(of(entity));
+      <%- clientTestFramework %>.spyOn(service, 'create').mockReturnValue(of(entity));
       comp.editForm.patchValue(entity);
       // WHEN
       comp.save();

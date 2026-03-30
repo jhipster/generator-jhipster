@@ -54,8 +54,8 @@ eureka:
     instance-info-replication-interval-seconds: 10
     registry-fetch-interval-seconds: 10
   instance:
-    appname: <%= baseName.toLowerCase() %>
-    instanceId: <%= baseName.toLowerCase() %>:${spring.application.instance-id:${random.value}}
+    appname: <%- baseName.toLowerCase() %>
+    instanceId: <%- baseName.toLowerCase() %>:${spring.application.instance-id:${random.value}}
     lease-renewal-interval-in-seconds: 5
     lease-expiration-duration-in-seconds: 10
     status-page-url-path: ${management.endpoints.web.base-path}/info
@@ -167,20 +167,20 @@ management:
 <%_ if (databaseTypeMongodb) { _%>
 mongock:
   migration-scan-package:
-    - <%= packageName %>.config.dbmigrations
+    - <%- packageName %>.config.dbmigrations
 
 <%_ } _%>
 spring:
   application:
-    name: <%= baseName %>
+    name: <%- baseName %>
 <%_ if (serviceDiscoveryConsul || applicationTypeGateway) { _%>
   cloud:
   <%_ if (serviceDiscoveryConsul) { _%>
     consul:
       discovery:
         healthCheckPath: /management/health
-        instanceId: <%= baseName.toLowerCase() %>:${spring.application.instance-id:${random.value}}
-        service-name: <%= baseName.toLowerCase() %>
+        instanceId: <%- baseName.toLowerCase() %>:${spring.application.instance-id:${random.value}}
+        service-name: <%- baseName.toLowerCase() %>
       config:
         watch:
           enabled: false
@@ -191,15 +191,15 @@ spring:
       client:
         simple:
           instances:
-            <%= lowercaseBaseName %>:
-              - instanceId: <%= lowercaseBaseName %>1
+            <%- lowercaseBaseName %>:
+              - instanceId: <%- lowercaseBaseName %>1
                 host: localhost
-                port: <%= serverPort %>
+                port: <%- serverPort %>
       <%_ for (const ms of locals.gatewayRoutes ?? []) { _%>
-            <%= ms.route %>:
-              - instanceId: <%= ms.route %>1
-                host: <%= ms.host %>
-                port: <%= ms.serverPort %>
+            <%- ms.route %>:
+              - instanceId: <%- ms.route %>1
+                host: <%- ms.host %>
+                port: <%- ms.serverPort %>
       <%_ } _%>
     <%_ } _%>
     gateway:
@@ -230,17 +230,17 @@ spring:
     <%_ } _%>
     <%_ if (!serviceDiscoveryAny) { _%>
           routes:
-            - id: <%= lowercaseBaseName %>_route
-              uri: lb://<%= lowercaseBaseName %>
+            - id: <%- lowercaseBaseName %>_route
+              uri: lb://<%- lowercaseBaseName %>
               predicates:
-                - Path=/services/<%= lowercaseBaseName %>/**
+                - Path=/services/<%- lowercaseBaseName %>/**
               filters:
                 - StripPrefix=2
       <%_ for (const ms of locals.gatewayRoutes ?? []) { _%>
-            - id: <%= ms.route %>_route
-              uri: lb://<%= ms.route %>
+            - id: <%- ms.route %>_route
+              uri: lb://<%- ms.route %>
               predicates:
-                - Path=/services/<%= ms.route %>/**
+                - Path=/services/<%- ms.route %>/**
               filters:
         <%_ if (!reactive && authenticationTypeOauth2) { _%>
                 - TokenRelay
@@ -265,14 +265,14 @@ spring:
 <%_ } _%>
   profiles:
     # The commented value for `active` can be replaced with valid Spring profiles to load.
-    # Otherwise, it will be filled in by <%= buildTool %> when building the JAR file
+    # Otherwise, it will be filled in by <%- buildTool %> when building the JAR file
     # Either way, it can be overridden by `--spring.profiles.active` value passed in the commandline or `-Dspring.profiles.active` set in `JAVA_OPTS`
     active: '@spring.profiles.active@'
     group:
       dev:
         - secret-samples
 <%_ for (const profile of devActiveProfiles) { _%>
-        - <%= profile %>
+        - <%- profile %>
 <%_ } _%>
         - api-docs
         # Uncomment to activate TLS for the dev profile
@@ -280,7 +280,7 @@ spring:
 <%_ if (prodActiveProfiles.length > 0) { _%>
       prod:
   <%_ for (const profile of prodActiveProfiles) { _%>
-        - <%= profile %>
+        - <%- profile %>
   <%_ } _%>
 <%_ } _%>
   jmx:
@@ -316,7 +316,7 @@ spring:
     <%_ if (cacheProviderHazelcast) { _%>
       hibernate.cache.region.factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
       hibernate.cache.use_minimal_puts: true
-      hibernate.cache.hazelcast.instance_name: <%= baseName %>
+      hibernate.cache.hazelcast.instance_name: <%- baseName %>
       hibernate.cache.hazelcast.use_lite_member: true
     <%_ } else if (cacheProviderInfinispan) { _%>
       hibernate.cache.region.factory_class: infinispan
@@ -330,8 +330,8 @@ spring:
     hibernate:
       ddl-auto: none
       naming:
-        physical-strategy: <%= locals.hibernateNamingPhysicalStrategy %>
-        implicit-strategy: <%= locals.hibernateNamingImplicitStrategy %>
+        physical-strategy: <%- locals.hibernateNamingPhysicalStrategy %>
+        implicit-strategy: <%- locals.hibernateNamingImplicitStrategy %>
 <%_ } _%>
   messages:
     basename: i18n/messages
@@ -363,13 +363,13 @@ spring:
 <%_ } _%>
   task:
     execution:
-      thread-name-prefix: <%= dasherizedBaseName %>-task-
+      thread-name-prefix: <%- dasherizedBaseName %>-task-
       pool:
         core-size: 2
         max-size: 50
         queue-capacity: 10000
     scheduling:
-      thread-name-prefix: <%= dasherizedBaseName %>-scheduling-
+      thread-name-prefix: <%- dasherizedBaseName %>-scheduling-
       pool:
         size: 2
   thymeleaf:
@@ -401,7 +401,7 @@ info:
 jhipster:
 <%_ if (!skipClient) { _%>
   clientApp:
-    name: "<%= locals.frontendAppName %>"
+    name: "<%- locals.frontendAppName %>"
   # By default CORS is disabled. Uncomment to enable.
   # cors:
   #   allowed-origins: "http://localhost:8100,http://localhost:9000"
@@ -416,12 +416,12 @@ jhipster:
   #   max-age: 1800
 <%_ } _%>
   mail:
-    from: <%= baseName %>@localhost
+    from: <%- baseName %>@localhost
   api-docs:
     default-include-pattern: /api/**
     management-include-pattern: /management/**
-    title: <%= humanizedBaseName %> API
-    description: <%= humanizedBaseName %> API documentation
+    title: <%- humanizedBaseName %> API
+    description: <%- humanizedBaseName %> API documentation
     version: 0.0.1
     terms-of-service-url:
     contact-name:
@@ -431,11 +431,11 @@ jhipster:
     license-url:
   security:
 <%_ if(!skipClient) { _%>
-    <%_ if (clientTheme !== 'none') { _%>
+  <%_ if (clientTheme !== 'none') { _%>
     content-security-policy: "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com data:"
-    <%_ } else { _%>
+  <%_ } else { _%>
     content-security-policy: "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:"
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
     oauth2:

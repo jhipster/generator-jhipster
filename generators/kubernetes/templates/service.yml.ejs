@@ -16,28 +16,28 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: Service
 metadata:
-  name: <%= app.baseName.toLowerCase() %>
-  namespace: <%= kubernetesNamespace %>
+  name: <%- app.baseName.toLowerCase() %>
+  namespace: <%- kubernetesNamespace %>
   labels:
-    app: <%= app.baseName.toLowerCase() %>
+    app: <%- app.baseName.toLowerCase() %>
 spec:
   selector:
-    app: <%= app.baseName.toLowerCase() %>
+    app: <%- app.baseName.toLowerCase() %>
 <%_ if (app.applicationTypeMonolith || app.applicationTypeGateway) { _%>
   <%_ if (!kubernetesServiceTypeIngress) { _%>
-  type: <%= kubernetesServiceType %>
+  type: <%- kubernetesServiceType %>
   <%_ } else { _%>
-  type: <%= ingressTypeGke ? 'NodePort' : 'ClusterIP' %>
+  type: <%- ingressTypeGke ? 'NodePort' : 'ClusterIP' %>
   <%_ } _%>
 <%_ } _%>
   ports:
   - name: http
 <%_ if (!app.serviceDiscoveryAny) { _%>
     port: 80
-    targetPort: <%= app.serverPort %>
+    targetPort: <%- app.serverPort %>
 <%_ } else { _%>
-    port: <%= app.serverPort %>
+    port: <%- app.serverPort %>
 <%_ } _%>

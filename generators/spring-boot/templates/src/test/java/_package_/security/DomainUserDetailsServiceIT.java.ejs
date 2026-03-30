@@ -16,19 +16,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-const callBlock = reactive ? '.block()' : '';
-const callBlockOptional = reactive ? '.blockOptional()' : '';
-_%>
-package <%= packageName %>.security;
+<%_ const callBlock = reactive ? '.block()' : ''; _%>
+package <%- packageName %>.security;
 
-import <%= packageName %>.IntegrationTest;
+import <%- packageName %>.IntegrationTest;
 <%_ if (databaseTypeSql && reactive) { _%>
-import <%= packageName %>.config.Constants;
+import <%- packageName %>.config.Constants;
 <%_ } _%>
-import <%= user.entityAbsoluteClass %>;
-import <%= packageName %>.repository.UserRepository;
-import <%= packageName %>.service.UserService;
+import <%- user.entityAbsoluteClass %>;
+import <%- packageName %>.repository.UserRepository;
+import <%- packageName %>.service.UserService;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.AfterEach;
@@ -87,8 +84,8 @@ class DomainUserDetailsServiceIT {
     @Qualifier("userDetailsService")
     private <% if (reactive) { %>Reactive<% } %>UserDetailsService domainUserDetailsService;
 
-    public <%= user.persistClass %> getUserOne() {
-        <%= user.persistClass %> userOne = new <%= user.persistClass %>();
+    public <%- user.persistClass %> getUserOne() {
+        <%- user.persistClass %> userOne = new <%- user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         userOne.setId(UUID.randomUUID().toString());
 <%_ } _%>
@@ -105,8 +102,8 @@ class DomainUserDetailsServiceIT {
         return userOne;
     }
 
-    public <%= user.persistClass %> getUserTwo() {
-        <%= user.persistClass %> userTwo = new <%= user.persistClass %>();
+    public <%- user.persistClass %> getUserTwo() {
+        <%- user.persistClass %> userTwo = new <%- user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         userTwo.setId(UUID.randomUUID().toString());
 <%_ } _%>
@@ -123,8 +120,8 @@ class DomainUserDetailsServiceIT {
         return userTwo;
     }
 
-    public <%= user.persistClass %> getUserThree() {
-        <%= user.persistClass %> userThree = new <%= user.persistClass %>();
+    public <%- user.persistClass %> getUserThree() {
+        <%- user.persistClass %> userThree = new <%- user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         userThree.setId(UUID.randomUUID().toString());
 <%_ } _%>

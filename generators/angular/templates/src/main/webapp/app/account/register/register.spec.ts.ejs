@@ -68,9 +68,9 @@ describe('Register', () => {
   it('should update success to true after creating an account', inject(
     [RegisterService<% if (enableTranslation) { %>, TranslateService<% } %>],
     (service: RegisterService<% if (enableTranslation) { %>, mockTranslateService: TranslateService<% } %>) => {
-      <%= clientTestFramework %>.spyOn(service, 'save').mockReturnValue(of({}));
+      <%- clientTestFramework %>.spyOn(service, 'save').mockReturnValue(of({}));
 <%_ if (enableTranslation) { _%>
-      <%= clientTestFramework %>.spyOn(mockTranslateService, 'getCurrentLang').mockReturnValue('<%= nativeLanguage %>');
+      <%- clientTestFramework %>.spyOn(mockTranslateService, 'getCurrentLang').mockReturnValue('<%- nativeLanguage %>');
 <%_ } _%>
       comp.registerForm.patchValue({
         password: 'password',
@@ -83,7 +83,7 @@ describe('Register', () => {
         email: '',
         password: 'password',
         login: '',
-        langKey: '<%= nativeLanguage %>',
+        langKey: '<%- nativeLanguage %>',
       });
       expect(comp.success()).toBe(true);
       expect(comp.errorUserExists()).toBe(false);
@@ -96,7 +96,7 @@ describe('Register', () => {
     [RegisterService],
     (service: RegisterService) => {
       const err = { status: 400, error: { type: LOGIN_ALREADY_USED_TYPE } };
-      <%= clientTestFramework %>.spyOn(service, 'save').mockReturnValue(throwError(() => err));
+      <%- clientTestFramework %>.spyOn(service, 'save').mockReturnValue(throwError(() => err));
       comp.registerForm.patchValue({
         password: 'password',
         confirmPassword: 'password',
@@ -114,7 +114,7 @@ describe('Register', () => {
     [RegisterService],
     (service: RegisterService) => {
       const err = { status: 400, error: { type: EMAIL_ALREADY_USED_TYPE } };
-      <%= clientTestFramework %>.spyOn(service, 'save').mockReturnValue(throwError(() => err));
+      <%- clientTestFramework %>.spyOn(service, 'save').mockReturnValue(throwError(() => err));
       comp.registerForm.patchValue({
         password: 'password',
         confirmPassword: 'password',
@@ -132,7 +132,7 @@ describe('Register', () => {
     [RegisterService],
     (service: RegisterService) => {
       const err = { status: 503 };
-      <%= clientTestFramework %>.spyOn(service, 'save').mockReturnValue(throwError(() => err));
+      <%- clientTestFramework %>.spyOn(service, 'save').mockReturnValue(throwError(() => err));
       comp.registerForm.patchValue({
         password: 'password',
         confirmPassword: 'password',

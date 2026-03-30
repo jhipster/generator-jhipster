@@ -16,32 +16,32 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.service;
+package <%- packageName %>.service;
 
-import <%= packageName %>.config.Constants;
+import <%- packageName %>.config.Constants;
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
-import <%= packageName %>.domain.Authority;
+import <%- packageName %>.domain.Authority;
 <%_ } _%>
 <%_ if (!databaseTypeNo) { _%>
-import <%= user.entityAbsoluteClass %>;
+import <%- user.entityAbsoluteClass %>;
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
-import <%= packageName %>.repository.AuthorityRepository;
+import <%- packageName %>.repository.AuthorityRepository;
     <%_ if (authenticationTypeSession && !reactive) { _%>
-import <%= packageName %>.repository.PersistentTokenRepository;
+import <%- packageName %>.repository.PersistentTokenRepository;
     <%_ } _%>
   <%_ } _%>
-import <%= packageName %>.repository.UserRepository;
+import <%- packageName %>.repository.UserRepository;
   <%_ if (searchEngineElasticsearch) { _%>
-import <%= packageName %>.repository.search.UserSearchRepository;
+import <%- packageName %>.repository.search.UserSearchRepository;
   <%_ } _%>
   <%_ if (!authenticationTypeOauth2) { _%>
-import <%= packageName %>.security.AuthoritiesConstants;
+import <%- packageName %>.security.AuthoritiesConstants;
   <%_ } _%>
-import <%= packageName %>.security.SecurityUtils;
+import <%- packageName %>.security.SecurityUtils;
 <%_ } _%>
-import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
+import <%- packageName %>.service.dto.<%- user.adminUserDto %>;
 <%_ if (!databaseTypeNo) { _%>
-import <%= packageName %>.service.dto.<%= user.dtoClass %>;
+import <%- packageName %>.service.dto.<%- user.dtoClass %>;
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>
 
@@ -54,9 +54,9 @@ import org.slf4j.LoggerFactory;
 <%_ } _%>
 <%_ if (cacheProviderAny) { _%>
 import org.springframework.cache.CacheManager;
-<%_ if (databaseTypeCouchbase) { _%>
+  <%_ if (databaseTypeCouchbase) { _%>
 import org.springframework.cache.annotation.CacheEvict;
-<%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
   <%_ if (!reactive) { _%>
@@ -129,7 +129,7 @@ public class UserService {
     private final UserSearchRepository userSearchRepository;
   <%_ } _%>
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
-    <%_ if (authenticationTypeSession  && !reactive) { _%>
+    <%_ if (authenticationTypeSession && !reactive) { _%>
 
     private final PersistentTokenRepository persistentTokenRepository;
     <%_ } _%>
@@ -164,7 +164,7 @@ public class UserService {
     <%_ if (databaseTypeSql && reactive) { _%>
     @Transactional
     <%_ } _%>
-    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= user.persistClass %>> activateRegistration(String key) {
+    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%- user.persistClass %>> activateRegistration(String key) {
         LOG.debug("Activating user for activation key {}", key);
         return userRepository.findOneByActivationKey(key)
             .<% if (reactive) { %>flatMap<% } else { %>map<% } %>(user -> {
@@ -200,7 +200,7 @@ public class UserService {
     <%_ if (databaseTypeSql && reactive) { _%>
     @Transactional
     <%_ } _%>
-    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= user.persistClass %>> completePasswordReset(String newPassword, String key) {
+    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%- user.persistClass %>> completePasswordReset(String newPassword, String key) {
         LOG.debug("Reset user password for reset key {}", key);
         return userRepository
             .findOneByResetKey(key)
@@ -234,9 +234,9 @@ public class UserService {
     <%_ if (databaseTypeSql && reactive) { _%>
     @Transactional
     <%_ } _%>
-    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= user.persistClass %>> requestPasswordReset(String mail) {
+    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%- user.persistClass %>> requestPasswordReset(String mail) {
         return userRepository.findOneByEmailIgnoreCase(mail)
-            .filter(<%= user.persistClass %>::isActivated)
+            .filter(<%- user.persistClass %>::isActivated)
     <%_ if (reactive) { _%>
             .publishOn(Schedulers.boundedElastic())
             .map(user -> {
@@ -264,7 +264,7 @@ public class UserService {
     <%_ if (databaseTypeSql && reactive) { _%>
     @Transactional
     <%_ } _%>
-    public <% if (reactive) { %>Mono<<%= user.persistClass %>><% } else { %><%= user.persistClass %><% } %> registerUser(<%= user.adminUserDto %> userDTO, String password) {
+    public <% if (reactive) { %>Mono<<%- user.persistClass %>><% } else { %><%- user.persistClass %><% } %> registerUser(<%- user.adminUserDto %> userDTO, String password) {
     <%_ if (reactive) { _%>
         return userRepository.findOneByLogin(userDTO.getLogin().toLowerCase())
             .flatMap(existingUser -> {
@@ -290,7 +290,7 @@ public class UserService {
             })
             .publishOn(Schedulers.boundedElastic())
             .then(Mono.fromCallable(() -> {
-                <%= user.persistClass %> newUser = new <%= user.persistClass %>();
+                <%- user.persistClass %> newUser = new <%- user.persistClass %>();
       <%_ if (databaseTypeCassandra) { _%>
                 newUser.setId(UUID.randomUUID().toString());
       <%_ } _%>
@@ -347,7 +347,7 @@ public class UserService {
                 throw new EmailAlreadyUsedException();
             }
         });
-        <%= user.persistClass %> newUser = new <%= user.persistClass %>();
+        <%- user.persistClass %> newUser = new <%- user.persistClass %>();
       <%_ if (databaseTypeCassandra) { _%>
         newUser.setId(UUID.randomUUID().toString());
       <%_ } _%>
@@ -389,7 +389,7 @@ public class UserService {
     }
 
     <%_ if (!reactive) { _%>
-    private boolean removeNonActivatedUser(<%= user.persistClass %> existingUser) {
+    private boolean removeNonActivatedUser(<%- user.persistClass %> existingUser) {
         if (existingUser.isActivated()) {
             return false;
         }
@@ -407,8 +407,8 @@ public class UserService {
     <%_ if (databaseTypeSql && reactive) { _%>
     @Transactional
     <%_ } _%>
-    public <% if (reactive) { %>Mono<<%= user.persistClass %>><% } else { %><%= user.persistClass %><% } %> createUser(<%= user.adminUserDto %> userDTO) {
-        <%= user.persistClass %> user = new <%= user.persistClass %>();
+    public <% if (reactive) { %>Mono<<%- user.persistClass %>><% } else { %><%- user.persistClass %><% } %> createUser(<%- user.adminUserDto %> userDTO) {
+        <%- user.persistClass %> user = new <%- user.persistClass %>();
     <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
     <%_ } _%>
@@ -494,10 +494,14 @@ public class UserService {
     <%_ if (databaseTypeSql && reactive) { _%>
     @Transactional
     <%_ } _%>
-    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= user.adminUserDto %>> updateUser(<%= user.adminUserDto %> userDTO) {
+    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%- user.adminUserDto %>> updateUser(<%- user.adminUserDto %> userDTO) {
     <%_ if (reactive) { _%>
         return userRepository.findById(userDTO.getId())
-            .<%_ if (databaseTypeSql || databaseTypeMongodb) { _%>flatMap<% } else { %>map<% } %>(user -> {
+      <%_ if (databaseTypeSql || databaseTypeMongodb) { _%>
+            .flatMap
+      <%_ } else { _%>
+            .map
+      <%_ } %>(user -> {
     <%_ } else { _%>
         return Optional.of(userRepository
             .findById(userDTO.getId()))
@@ -573,7 +577,7 @@ public class UserService {
                 return user;
             })
     <%_ } _%>
-            .map(<%= user.adminUserDto %>::new);
+            .map(<%- user.adminUserDto %>::new);
     }
 
     <%_ if (databaseTypeCouchbase && cacheProviderAny) { _%>
@@ -669,7 +673,7 @@ public class UserService {
   <%_ if (reactive) { _%>
     <%_ if (databaseTypeSql && authenticationTypeOauth2) { _%>
     @Transactional
-    public Mono<<%= user.persistClass %>> saveUser(<%= user.persistClass %> user) {
+    public Mono<<%- user.persistClass %>> saveUser(<%- user.persistClass %> user) {
         return saveUser(user, false);
     }
 
@@ -677,7 +681,7 @@ public class UserService {
     <%_ if (databaseTypeSql) { _%>
     @Transactional
     <%_ } _%>
-    <% if (!databaseTypeSql) { %>private <% } else { %>public <% } %>Mono<<%= user.persistClass %>> saveUser(<%= user.persistClass %> user<% if (databaseTypeSql && authenticationTypeOauth2) { %>, boolean forceCreate<% } %>) {
+    <% if (!databaseTypeSql) { %>private <% } else { %>public <% } %>Mono<<%- user.persistClass %>> saveUser(<%- user.persistClass %> user<% if (databaseTypeSql && authenticationTypeOauth2) { %>, boolean forceCreate<% } %>) {
     <%_ if (databaseTypeCassandra) { _%>
         return userRepository.save(user);
     <%_ } else { _%>
@@ -692,7 +696,7 @@ public class UserService {
                 // Saving the relationship can be done in an entity callback
                 // once https://github.com/spring-projects/spring-data-r2dbc/issues/215 is done
         <%_ if (authenticationTypeOauth2) { _%>
-                Mono<<%= user.persistClass %>> persistedUser;
+                Mono<<%- user.persistClass %>> persistedUser;
                 if (forceCreate) {
                     persistedUser = userRepository.create(user);
                 } else {
@@ -760,15 +764,15 @@ public class UserService {
     @Transactional(readOnly = true)
   <%_ } _%>
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
-    public <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%= user.adminUserDto %>> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findAll<% if (reactive) { %><% if (databaseTypeSql) { %>WithAuthorities<% } else { %>By<% if (!databaseTypeCouchbase) { %>IdNotNull<% }}} %>(pageable).map(<%= user.adminUserDto %>::new);
+    public <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%- user.adminUserDto %>> getAllManagedUsers(Pageable pageable) {
+        return userRepository.findAll<% if (reactive) { %><% if (databaseTypeSql) { %>WithAuthorities<% } else { %>By<% if (!databaseTypeCouchbase) { %>IdNotNull<% }}} %>(pageable).map(<%- user.adminUserDto %>::new);
     }
 
     <%_ if (databaseTypeSql) { _%>
     @Transactional(readOnly = true)
     <%_ } _%>
-    public <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%= user.dtoClass %>> getAllPublicUsers(Pageable pageable) {
-        return userRepository.findAllBy<% if (!databaseTypeCouchbase) { %>IdNotNullAnd<% } %>ActivatedIsTrue(pageable).map(<%= user.dtoClass %>::new);
+    public <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%- user.dtoClass %>> getAllPublicUsers(Pageable pageable) {
+        return userRepository.findAllBy<% if (!databaseTypeCouchbase) { %>IdNotNullAnd<% } %>ActivatedIsTrue(pageable).map(<%- user.dtoClass %>::new);
     }
 
     <%_ if (reactive) { _%>
@@ -781,16 +785,16 @@ public class UserService {
     }
     <%_ } _%>
   <%_ } else { /* Cassandra */ _%>
-    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= user.adminUserDto %>> getAllManagedUsers() {
+    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%- user.adminUserDto %>> getAllManagedUsers() {
         return userRepository.findAll()<% if (!reactive) { %>.stream()<% } %>
-            .map(<%= user.adminUserDto %>::new)<% if (!reactive) { %>
+            .map(<%- user.adminUserDto %>::new)<% if (!reactive) { %>
             .toList()<% } %>;
     }
 
-    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%= user.dtoClass %>> getAllPublicUsers() {
+    public <% if (reactive) { %>Flux<% } else { %>List<% } %><<%- user.dtoClass %>> getAllPublicUsers() {
         return userRepository.findAll()<% if (!reactive) { %>.stream()<% } %>
             .filter(user -> user.isActivated())
-            .map(<%= user.dtoClass %>::new)<% if (!reactive) { %>
+            .map(<%- user.dtoClass %>::new)<% if (!reactive) { %>
             .toList()<% } %>;
     }
   <%_ } _%>
@@ -798,7 +802,7 @@ public class UserService {
   <%_ if (databaseTypeSql) { _%>
     @Transactional(readOnly = true)
   <%_ } _%>
-    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= user.persistClass %>> getUserWithAuthoritiesByLogin(String login) {
+    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%- user.persistClass %>> getUserWithAuthoritiesByLogin(String login) {
   <%_ if (databaseTypeSql) { _%>
         return userRepository.findOneWithAuthoritiesByLogin(login);
   <%_ } else { /* MongoDB, Couchbase and Cassandra */ _%>
@@ -810,11 +814,11 @@ public class UserService {
     <%_ if (databaseTypeSql) { _%>
     @Transactional(readOnly = true)
     <%_ } _%>
-    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= user.persistClass %>> getUserWithAuthorities() {
+    public <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%- user.persistClass %>> getUserWithAuthorities() {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOne<% if (databaseTypeSql) { %>WithAuthorities<% } %>ByLogin);
     }
   <%_ } _%>
-  <%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession  && !reactive) { _%>
+  <%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
 
     /**
      * Persistent Token are used for providing automatic authentication, they should be automatically deleted after
@@ -827,7 +831,7 @@ public class UserService {
         LocalDate now = LocalDate.now();
         persistentTokenRepository.findByTokenDateBefore(now.minusMonths(1)).forEach(token -> {
             LOG.debug("Deleting token {}", token.getSeries());<% if (databaseType === 'sql') { %>
-            <%= user.persistClass %> user = token.getUser();
+            <%- user.persistClass %> user = token.getUser();
             user.getPersistentTokens().remove(token);<% } %>
             persistentTokenRepository.delete(token);
         });
@@ -864,9 +868,15 @@ public class UserService {
       <%_ if (databaseTypeSql) { _%>
     @Transactional
       <%_ } _%>
-    public Flux<<%= user.persistClass %>> removeNotActivatedUsersReactively() {
+    public Flux<<%- user.persistClass %>> removeNotActivatedUsersReactively() {
         return userRepository
-            .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(<%_ if (databaseTypeSql) { _%>LocalDateTime.ofInstant(Instant.now().minus(3, ChronoUnit.DAYS), ZoneOffset.UTC)<%_ } else { _%>Instant.now().minus(3, ChronoUnit.DAYS)<%_ } _%>)
+            .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(
+      <%_ if (databaseTypeSql) { _%>
+                LocalDateTime.ofInstant(Instant.now().minus(3, ChronoUnit.DAYS), ZoneOffset.UTC)
+      <%_ } else { _%>
+                Instant.now().minus(3, ChronoUnit.DAYS)
+      <%_ } _%>
+            )
             .flatMap(user -> userRepository.delete(user).thenReturn(user))
       <%_ if (searchEngineElasticsearch) { _%>
             .flatMap(user -> userSearchRepository.delete(user).thenReturn(user))
@@ -893,7 +903,7 @@ public class UserService {
   <%_ } _%>
   <%_ if (authenticationTypeOauth2) { _%>
 
-    private <% if (reactive) { %>Mono<<%= user.persistClass %>><% } else { %><%= user.persistClass %><% } %> syncUserWithIdP(Map<String, Object> details, <%= user.persistClass %> user) {
+    private <% if (reactive) { %>Mono<<%- user.persistClass %>><% } else { %><%- user.persistClass %><% } %> syncUserWithIdP(Map<String, Object> details, <%- user.persistClass %> user) {
         // save authorities in to sync user roles/groups between IdP and JHipster's local database
     <%_ if (reactive) { _%>
         Collection<String> userAuthorities =
@@ -953,7 +963,7 @@ public class UserService {
             }
         }
         // save account in to sync users between IdP and JHipster's local database
-        Optional<<%= user.persistClass %>> existingUser = userRepository.findOneByLogin(user.getLogin());
+        Optional<<%- user.persistClass %>> existingUser = userRepository.findOneByLogin(user.getLogin());
         if (existingUser.isPresent()) {
             // if IdP sends last updated information, use it to determine if an update should happen
             if (details.get("updated_at") != null) {
@@ -1001,7 +1011,7 @@ public class UserService {
   <%_ if (databaseTypeSql) { _%>
     @Transactional
   <%_ } _%>
-    public <% if (reactive) { %>Mono<<%= user.adminUserDto %>><% } else { %><%= user.adminUserDto %><% } %> getUserFromAuthentication(AbstractAuthenticationToken authToken) {
+    public <% if (reactive) { %>Mono<<%- user.adminUserDto %>><% } else { %><%- user.adminUserDto %><% } %> getUserFromAuthentication(AbstractAuthenticationToken authToken) {
         Map<String, Object> attributes;
         if (authToken instanceof OAuth2AuthenticationToken) {
             attributes = ((OAuth2AuthenticationToken) authToken).getPrincipal().getAttributes();
@@ -1010,7 +1020,7 @@ public class UserService {
         } else {
             throw new IllegalArgumentException("AuthenticationToken is not OAuth2 or JWT!");
         }
-        <%= databaseTypeNo ? user.adminUserDto : user.persistClass %> user = getUser(attributes);
+        <%- databaseTypeNo ? user.adminUserDto : user.persistClass %> user = getUser(attributes);
         user.setAuthorities(authToken.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
@@ -1026,15 +1036,15 @@ public class UserService {
         return <% if (reactive) { %>Mono.just(user)<% } else { %>user<% } %>;
   <%_ } else { _%>
     <%_ if (reactive) { _%>
-        return syncUserWithIdP(attributes, user).flatMap(u -> Mono.just(new <%= user.adminUserDto %>(u)));
+        return syncUserWithIdP(attributes, user).flatMap(u -> Mono.just(new <%- user.adminUserDto %>(u)));
     <%_ } else { _%>
-        return new <%= user.adminUserDto %>(syncUserWithIdP(attributes, user));
+        return new <%- user.adminUserDto %>(syncUserWithIdP(attributes, user));
     <%_ } _%>
   <%_ } _%>
     }
 
-    private static <%= databaseTypeNo ? user.adminUserDto : user.persistClass %> getUser(Map<String, Object> details) {
-        <%= databaseTypeNo ? user.adminUserDto : user.persistClass %> user = new <%= databaseTypeNo ? user.adminUserDto : user.persistClass %>();
+    private static <%- databaseTypeNo ? user.adminUserDto : user.persistClass %> getUser(Map<String, Object> details) {
+        <%- databaseTypeNo ? user.adminUserDto : user.persistClass %> user = new <%- databaseTypeNo ? user.adminUserDto : user.persistClass %>();
         Boolean activated = Boolean.TRUE;
         String sub = String.valueOf(details.get("sub"));
         String username = null;
@@ -1096,7 +1106,7 @@ public class UserService {
 <%_ } _%>
 <%_ if (cacheProviderAny && !databaseTypeNo) { _%>
 
-    private void clearUserCaches(<%= user.persistClass %> user) {
+    private void clearUserCaches(<%- user.persistClass %> user) {
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evictIfPresent(user.getLogin());
         if (user.getEmail() != null) {
             Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evictIfPresent(user.getEmail());

@@ -1,6 +1,6 @@
 import { kebabCase, lowerFirst, snakeCase, startCase, upperFirst } from 'lodash-es';
 
-import type { DerivedPropertiesOnlyOf } from '../../lib/command/types.ts';
+import type { DerivedBooleanPropertiesOf } from '../../lib/command/types.ts';
 import type { FieldType } from '../../lib/jhipster/field-types.ts';
 import { BlobTypes, fieldTypesValues } from '../../lib/jhipster/field-types.ts';
 import { type ValidationType, validationTypes } from '../../lib/jhipster/index.ts';
@@ -30,8 +30,8 @@ const mutateProperty = {
   propertyNameUpperSnakeCase: ({ propertyName }) => snakeCase(propertyName).toUpperCase(),
 } as const satisfies MutateDataParam<Property>;
 
-type BaseApplicationAddedFieldProperties = DerivedPropertiesOnlyOf<'fieldType', FieldType> &
-  DerivedPropertiesOnlyOf<'fieldValidation', ValidationType> & {
+type BaseApplicationAddedFieldProperties = DerivedBooleanPropertiesOf<'fieldType', FieldType> &
+  DerivedBooleanPropertiesOf<'fieldValidation', ValidationType> & {
     path?: string[];
 
     fieldNameCapitalized: string;
@@ -147,7 +147,7 @@ export type DerivedField<E extends Entity = Entity, F extends Field = Entity['fi
   derivedEntity: E;
 };
 
-type BaseApplicationAddedRelationshipProperties = DerivedPropertiesOnlyOf<
+type BaseApplicationAddedRelationshipProperties = DerivedBooleanPropertiesOf<
   'relationship',
   'LeftSide' | 'RightSide' | 'ManyToOne' | 'OneToMany' | 'OneToOne' | 'ManyToMany'
 > &
@@ -227,8 +227,7 @@ export const mutateRelationshipWithEntity = {
   otherEntityField: data => data.otherEntity?.primaryKey?.name,
   // let ownerSide true when type is 'many-to-one' for convenience.
   // means that this side should control the reference.
-  ownerSide: data =>
-    Boolean(data.otherEntity.embedded || data.relationshipManyToOne || (data.relationshipLeftSide && !data.relationshipOneToMany)),
+  ownerSide: data => data.otherEntity.embedded || data.relationshipManyToOne || (data.relationshipLeftSide && !data.relationshipOneToMany),
   persistableRelationship: ({ ownerSide }) => ownerSide!,
   otherEntityUser: ({ otherEntityName }) => otherEntityName.toLowerCase() === 'user',
 } satisfies MutateDataParam<RelationshipWithEntity<Relationship, Entity>>;

@@ -16,14 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.client;
+package <%- packageName %>.client;
 
 <%_ if (authenticationTypeOauth2) { _%>
 import org.springframework.context.annotation.Bean;
 
 import feign.RequestInterceptor;
 
-import <%= packageName %>.client.AuthorizationHeaderUtil;
+import <%- packageName %>.client.AuthorizationHeaderUtil;
 
 public class OAuth2InterceptedFeignConfiguration {
 

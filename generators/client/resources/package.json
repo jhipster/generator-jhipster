@@ -1,19 +1,19 @@
 {
   "dependencies": {
-    "dayjs": "1.11.19"
+    "dayjs": "1.11.20"
   },
   "devDependencies": {
-    "@cypress/code-coverage": "4.0.1",
+    "@cypress/code-coverage": "4.0.3",
     "@cypress/schematic": "5.0.0",
     "babel-loader": "10.1.1",
     "babel-plugin-istanbul": "7.0.1",
-    "cypress": "15.11.0",
+    "cypress": "15.13.0",
     "cypress-audit": "1.1.0",
     "cypress-monocart-coverage": "1.0.1",
-    "eslint-plugin-cypress": "6.2.0",
+    "eslint-plugin-cypress": "6.2.1",
     "lighthouse": "13.0.3",
     "nyc": "18.0.0",
-    "swagger-ui-dist": "5.32.0"
+    "swagger-ui-dist": "5.32.1"
   },
   "packageManager": "npm@11"
 }

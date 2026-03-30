@@ -52,7 +52,7 @@ describe('Alert Service Test', () => {
     translateService = TestBed.inject(TranslateService);
     translateService.setFallbackLang('en');
 <%_ } _%>
-    <%= clientTestFramework %>.useFakeTimers();
+    <%- clientTestFramework %>.useFakeTimers();
     extAlerts = [];
   });
 
@@ -186,7 +186,7 @@ describe('Alert Service Test', () => {
 
     expect(service.get().length).toBe(1);
 
-    <%= clientTestFramework %>.advanceTimersByTime(6000);
+    <%- clientTestFramework %>.advanceTimersByTime(6000);
 
     expect(service.get().length).toBe(0);
   });
@@ -272,7 +272,7 @@ describe('Alert Service Test', () => {
     );
   });
 
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
 
   it('should produce a info message with translated message if key exists', () => {
     translateService.setTranslation('en', {
@@ -304,5 +304,5 @@ describe('Alert Service Test', () => {
     );
   });
 
-  <%_ } _%>
+<%_ } _%>
 });

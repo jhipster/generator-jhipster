@@ -6,13 +6,13 @@ import EntitiesMenu from './entities-menu.vue';
 type EntitiesMenuComponentType = InstanceType<typeof EntitiesMenu>;
 
 const currentLanguage = 'en';
-vitest.mock('../../i18n/en/en.js', () => ({ default: {} }));
+vi.mock('../../i18n/en/en.js', () => ({ default: {} }));
 
 describe('EntitiesMenu', () => {
   let translationService;
 
   beforeEach(() => {
-    translationService = { loadTranslations: vitest.fn() };
+    translationService = { loadTranslations: vi.fn() };
   });
 
   describe('using microfrontendI18n', () => {

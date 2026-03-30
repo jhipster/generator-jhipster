@@ -259,6 +259,8 @@ exports[`generator - vue:bootstrap bootstrapping default config should prepare a
   "upperFirstCamelCaseBaseName": "Jhipster",
   "user": Any<Object>,
   "userManagement": Any<Object>,
+  "vueBootstrapBsTheme": "dark",
+  "vueBootstrapVariant": "dark",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": "no",
   "withAdminUi": true,

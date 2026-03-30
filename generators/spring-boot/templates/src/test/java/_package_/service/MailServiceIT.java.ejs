@@ -16,11 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.service;
+package <%- packageName %>.service;
 
-import <%= packageName %>.config.Constants;
-import <%= packageName %>.IntegrationTest;
-import <%= user.entityAbsoluteClass %>;
+import <%- packageName %>.config.Constants;
+import <%- packageName %>.IntegrationTest;
+import <%- user.entityAbsoluteClass %>;
 import tech.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -146,7 +146,7 @@ class MailServiceIT {
 
     @Test
     void testSendEmailFromTemplate() throws Exception {
-        <%= user.persistClass %> user = new <%= user.persistClass %>();
+        <%- user.persistClass %> user = new <%- user.persistClass %>();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
@@ -163,7 +163,7 @@ class MailServiceIT {
 
     @Test
     void testSendActivationEmail() throws Exception {
-        <%= user.persistClass %> user = new <%= user.persistClass %>();
+        <%- user.persistClass %> user = new <%- user.persistClass %>();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
@@ -178,7 +178,7 @@ class MailServiceIT {
 
     @Test
     void testCreationEmail() throws Exception {
-        <%= user.persistClass %> user = new <%= user.persistClass %>();
+        <%- user.persistClass %> user = new <%- user.persistClass %>();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
@@ -193,7 +193,7 @@ class MailServiceIT {
 
     @Test
     void testSendPasswordResetMail() throws Exception {
-        <%= user.persistClass %> user = new <%= user.persistClass %>();
+        <%- user.persistClass %> user = new <%- user.persistClass %>();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
@@ -219,7 +219,7 @@ class MailServiceIT {
 
     @Test
     void testSendLocalizedEmailForAllSupportedLanguages() throws Exception {
-        <%= user.persistClass %> user = new <%= user.persistClass %>();
+        <%- user.persistClass %> user = new <%- user.persistClass %>();
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
         for (String langKey : languages) {

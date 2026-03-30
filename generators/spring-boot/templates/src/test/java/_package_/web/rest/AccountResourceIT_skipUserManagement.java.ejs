@@ -16,23 +16,23 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.web.rest;
+package <%- packageName %>.web.rest;
 
 import static org.hamcrest.Matchers.hasItem;
 <%_ if (authenticationTypeJwt) { _%>
-import static <%= packageName %>.security.jwt.JwtAuthenticationTestUtils.createValidTokenForUser;
+import static <%- packageName %>.security.jwt.JwtAuthenticationTestUtils.createValidTokenForUser;
 import org.springframework.beans.factory.annotation.Value;
   <%_ if (!reactive) { _%>
-import static <%= packageName %>.security.jwt.JwtAuthenticationTestUtils.BEARER;
+import static <%- packageName %>.security.jwt.JwtAuthenticationTestUtils.BEARER;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
   <%_ } _%>
 <%_ } _%>
 
 <%_ if (reactive && searchEngineElasticsearch) { _%>
-import <%= packageName %>.repository.search.UserSearchRepository;
+import <%- packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
-import <%= packageName %>.IntegrationTest;
-import <%= packageName %>.security.AuthoritiesConstants;
+import <%- packageName %>.IntegrationTest;
+import <%- packageName %>.security.AuthoritiesConstants;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ if (reactive) { _%>

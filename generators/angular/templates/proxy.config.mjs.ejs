@@ -1,5 +1,5 @@
 const backendHost = '127.0.0.1';
-const backendPort = <%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>;
+const backendPort = <%- applicationTypeMicroservice ? gatewayServerPort : serverPort %>;
 
 <%_ if (clientBundlerEsbuild) { _%>
 /**

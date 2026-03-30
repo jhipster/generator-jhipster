@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import { validations } from '../built-in-options/index.ts';
 
@@ -40,8 +38,8 @@ describe('jdl - JDLValidation', () => {
       });
 
       it("should default on the 'required' validation", () => {
-        expect(validation.name).to.equal('required');
-        expect(validation.value).to.equal('');
+        expect(validation.name).toBe('required');
+        expect(validation.value).toBe('');
       });
     });
     describe('when passing arguments', () => {
@@ -55,8 +53,8 @@ describe('jdl - JDLValidation', () => {
       });
 
       it('should use them', () => {
-        expect(validation.name).to.equal('min');
-        expect(validation.value).to.equal(42);
+        expect(validation.name).toBe('min');
+        expect(validation.value).toBe(42);
       });
     });
   });
@@ -70,7 +68,7 @@ describe('jdl - JDLValidation', () => {
       });
 
       it('should stringify its content', () => {
-        expect(validation.toString()).to.equal('required');
+        expect(validation.toString()).toBe('required');
       });
     });
     describe('with a value', () => {
@@ -86,7 +84,7 @@ describe('jdl - JDLValidation', () => {
       });
 
       it('should stringify its content', () => {
-        expect(validation.toString()).to.equal(`${args.name}(${args.value})`);
+        expect(validation.toString()).toBe(`${args.name}(${args.value})`);
       });
     });
     describe('when exporting a regexp pattern', () => {
@@ -96,7 +94,7 @@ describe('jdl - JDLValidation', () => {
             name: PATTERN,
             value: '[A-z0-9]',
           }).toString(),
-        ).to.equal('pattern(/[A-z0-9]/)');
+        ).toBe('pattern(/[A-z0-9]/)');
       });
     });
   });

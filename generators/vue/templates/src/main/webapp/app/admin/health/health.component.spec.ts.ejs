@@ -1,7 +1,6 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
-import sinon from 'sinon';
 
 import Health from './health.vue';
 import HealthService from './health.service';
@@ -9,14 +8,14 @@ import HealthService from './health.service';
 type HealthComponentType = InstanceType<typeof Health>;
 
 const axiosStub = {
-  get: sinon.stub(axios, 'get'),
+  get: vi.spyOn(axios, 'get'),
 };
 
 describe('Health Component', () => {
   let health: HealthComponentType;
 
   beforeEach(() => {
-    axiosStub.get.resolves({});
+    axiosStub.get.mockResolvedValue({});
     const wrapper = shallowMount(Health, {
       global: {
         stubs: {
@@ -65,27 +64,27 @@ describe('Health Component', () => {
   describe('refresh', () => {
     it('should call refresh on init', async () => {
       // GIVEN
-      axiosStub.get.resolves({});
+      axiosStub.get.mockResolvedValue({});
 
       // WHEN
       health.refresh();
       await health.$nextTick();
 
       // THEN
-      expect(axiosStub.get.calledWith('management/health')).toBeTruthy();
+      expect(axiosStub.get).toHaveBeenCalledWith('management/health');
       await health.$nextTick();
       expect(health.updatingHealth).toEqual(false);
     });
     it('should handle a 503 on refreshing health data', async () => {
       // GIVEN
-      axiosStub.get.rejects({});
+      axiosStub.get.mockRejectedValue({});
 
       // WHEN
       health.refresh();
       await health.$nextTick();
 
       // THEN
-      expect(axiosStub.get.calledWith('management/health')).toBeTruthy();
+      expect(axiosStub.get).toHaveBeenCalledWith('management/health');
       await health.$nextTick();
       expect(health.updatingHealth).toEqual(false);
     });

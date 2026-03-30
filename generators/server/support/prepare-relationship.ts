@@ -16,18 +16,18 @@ export function prepareRelationshipForDatabase({
   relationship: DatabaseRelationship;
 }) {
   // Database properties are used by liquibase and spring-boot there is no inheritance between them.
-  mutateData(relationship as DatabaseRelationship, {
+  mutateData(relationship, {
     // DB properties
     columnName: ({ relationshipName }) => hibernateSnakeCase(relationshipName),
     shouldWriteJoinTable: ({ ownerSide, relationshipManyToMany }) => application.databaseTypeSql && relationshipManyToMany && ownerSide,
     joinTable: ({ shouldWriteJoinTable, relationshipName }) =>
-      shouldWriteJoinTable
-        ? {
-            name: getJoinTableName(entity.entityTableName, relationshipName, {
-              prodDatabaseType: application.prodDatabaseType,
-            }).value,
-          }
-        : undefined,
+      shouldWriteJoinTable ?
+        {
+          name: getJoinTableName(entity.entityTableName, relationshipName, {
+            prodDatabaseType: application.prodDatabaseType,
+          }).value,
+        }
+      : undefined,
   });
 }
 

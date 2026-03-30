@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= entityAbsolutePackage %>.repository;
+package <%- entityAbsolutePackage %>.repository;
 
-import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
+import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
 <%_ if (reactive && !paginationNo) { _%>
 import org.springframework.data.domain.Pageable;
 <%_ } _%>
@@ -33,12 +33,12 @@ import java.util.UUID;
 <%_ } _%>
 
 /**
- * <%= springDataDescription %> repository for the <%= persistClass %> entity.
+ * <%- springDataDescription %> repository for the <%- persistClass %> entity.
  */
 @Repository
-public interface <%= entityClass %>Repository extends <% if (reactive) { %>Reactive<% } %>Neo4jRepository<<%= persistClass %>, <%= primaryKey.type %>> {
+public interface <%- entityClass %>Repository extends <% if (reactive) { %>Reactive<% } %>Neo4jRepository<<%- persistClass %>, <%- primaryKey.type %>> {
 <%_ if (reactive && !paginationNo) { _%>
 
-    Flux<<%= persistClass %>> findAllBy(Pageable pageable);
+    Flux<<%- persistClass %>> findAllBy(Pageable pageable);
 <%_ } _%>
 }

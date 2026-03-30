@@ -1,22 +1,21 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
-import sinon from 'sinon';
 
 import Configuration from './configuration.vue';
 
 type ConfigurationComponentType = InstanceType<typeof Configuration>;
 
 const axiosStub = {
-  get: sinon.stub(axios, 'get'),
+  get: vi.spyOn(axios, 'get'),
 };
 
 describe('Configuration Component', () => {
   let configuration: ConfigurationComponentType;
 
   beforeEach(() => {
-    axiosStub.get.reset();
-    axiosStub.get.resolves({
+    axiosStub.get.mockReset();
+    axiosStub.get.mockResolvedValue({
       data: { contexts: [{ beans: [{ prefix: 'A' }, { prefix: 'B' }] }], propertySources: [{ properties: { key1: { value: 'value' } } }] },
     });
     const wrapper = shallowMount(Configuration, {
@@ -42,8 +41,8 @@ describe('Configuration Component', () => {
       await configuration.$nextTick();
 
       // THEN
-      expect(axiosStub.get.calledWith('management/env')).toBeTruthy();
-      expect(axiosStub.get.calledWith('management/configprops')).toBeTruthy();
+      expect(axiosStub.get).toHaveBeenCalledWith('management/env');
+      expect(axiosStub.get).toHaveBeenCalledWith('management/configprops');
     });
   });
 

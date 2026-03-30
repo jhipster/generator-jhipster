@@ -17,7 +17,12 @@
  limitations under the License.
 -%>
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { finalize<%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>, map<%_ } _%> } from 'rxjs/operators';
+import {
+  finalize,
+<%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
+  map,
+<%_ } _%>
+} from 'rxjs/operators';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
@@ -34,12 +39,22 @@ import { GatewayRoutesService } from '../gateway/gateway-routes.service';
 <%_ } _%>
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-logs',
+  selector: '<%- jhiPrefixDashed %>-logs',
   templateUrl: './logs.html',
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
   providers: [GatewayRoutesService],
 <%_ } _%>
-  imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>FontAwesomeModule, FormsModule, SortDirective, SortByDirective, SlicePipe],
+  imports: [
+<%_ if (enableTranslation) { _%>
+    TranslateDirective,
+    TranslateModule, 
+<%_ } _%>
+    FontAwesomeModule,
+    FormsModule,
+    SortDirective,
+    SortByDirective,
+    SlicePipe,
+  ],
 })
 export default class Logs implements OnInit {
   readonly loggers = signal<Log[] | undefined>(undefined);
@@ -66,7 +81,7 @@ export default class Logs implements OnInit {
 
   private readonly logsService = inject(LogsService);
   private readonly sortService = inject(SortService);
-  <%= applicationTypeGateway && gatewayServicesApiAvailable ? 'private readonly gatewayRoutesService = inject(GatewayRoutesService);' : '' %>
+  <%- applicationTypeGateway && gatewayServicesApiAvailable ? 'private readonly gatewayRoutesService = inject(GatewayRoutesService);' : '' %>
 
   ngOnInit(): void {
     this.findAndExtractLoggers();
@@ -76,7 +91,7 @@ export default class Logs implements OnInit {
   }
 
   changeLevel(name: string, level: Level): void {
-    this.logsService.changeLevel(name, level<%= applicationTypeGateway && gatewayServicesApiAvailable ? ', this.selectedService' : '' %>).subscribe(() => this.findAndExtractLoggers());
+    this.logsService.changeLevel(name, level<%- applicationTypeGateway && gatewayServicesApiAvailable ? ', this.selectedService' : '' %>).subscribe(() => this.findAndExtractLoggers());
   }
 
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
@@ -89,7 +104,7 @@ export default class Logs implements OnInit {
   private findAndExtractLoggers(): void {
     this.isLoading.set(true);
     this.logsService
-      .findAll(<%= applicationTypeGateway && gatewayServicesApiAvailable ? 'this.selectedService' : '' %>)
+      .findAll(<%- applicationTypeGateway && gatewayServicesApiAvailable ? 'this.selectedService' : '' %>)
       .pipe(
         finalize(() => {
           this.isLoading.set(false);

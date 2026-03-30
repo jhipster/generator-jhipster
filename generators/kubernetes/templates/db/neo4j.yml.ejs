@@ -17,11 +17,11 @@
  limitations under the License.
 -%>
 <%_ if (kubernetesUseDynamicStorage) { _%>
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: PersistentVolumeClaim
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-neo4j-pvc
-  namespace: <%= kubernetesNamespace %>
+  name: <%- app.baseName.toLowerCase() %>-neo4j-pvc
+  namespace: <%- kubernetesNamespace %>
 spec:
   accessModes:
   - ReadWriteOnce
@@ -29,36 +29,36 @@ spec:
     requests:
       storage: 2Gi
   <%_ if (kubernetesStorageClassName) { _%>
-  storageClassName: <%= kubernetesStorageClassName %>
+  storageClassName: <%- kubernetesStorageClassName %>
   <%_ } _%>
 ---
 <%_ } _%>
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: Secret
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-neo4j
-  namespace: <%= kubernetesNamespace %>
+  name: <%- app.baseName.toLowerCase() %>-neo4j
+  namespace: <%- kubernetesNamespace %>
   labels:
-    app: <%= app.baseName.toLowerCase() %>-neo4j
+    app: <%- app.baseName.toLowerCase() %>-neo4j
 type: Opaque
 data:
-  neo4j-password: <%= Buffer.from(dbRandomPassword).toString('base64') %>
+  neo4j-password: <%- Buffer.from(dbRandomPassword).toString('base64') %>
 ---
-apiVersion: <%= KUBERNETES_STATEFULSET_API_VERSION %>
+apiVersion: <%- KUBERNETES_STATEFULSET_API_VERSION %>
 kind: StatefulSet
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-neo4j
-  namespace: <%= kubernetesNamespace %>
+  name: <%- app.baseName.toLowerCase() %>-neo4j
+  namespace: <%- kubernetesNamespace %>
 spec:
-  serviceName: <%= app.baseName.toLowerCase() %>-neo4j
+  serviceName: <%- app.baseName.toLowerCase() %>-neo4j
   replicas: 1
   selector:
     matchLabels:
-      app: <%= app.baseName.toLowerCase() %>-neo4j
+      app: <%- app.baseName.toLowerCase() %>-neo4j
   template:
     metadata:
       labels:
-        app: <%= app.baseName.toLowerCase() %>-neo4j
+        app: <%- app.baseName.toLowerCase() %>-neo4j
 <%_ if (istio) { _%>
       annotations:
         sidecar.istio.io/inject: "false"
@@ -68,7 +68,7 @@ spec:
       - name: data
 <%_ if (kubernetesUseDynamicStorage) { _%>
         persistentVolumeClaim:
-          claimName: <%= app.baseName.toLowerCase() %>-neo4j-pvc
+          claimName: <%- app.baseName.toLowerCase() %>-neo4j-pvc
 <%_ } else { _%>
         emptyDir: {}
 <%_ } _%>
@@ -92,14 +92,14 @@ spec:
             memory: "1Gi"
             cpu: "1"
 ---
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: Service
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-neo4j
-  namespace: <%= kubernetesNamespace %>
+  name: <%- app.baseName.toLowerCase() %>-neo4j
+  namespace: <%- kubernetesNamespace %>
 spec:
   selector:
-    app: <%= app.baseName.toLowerCase() %>-neo4j
+    app: <%- app.baseName.toLowerCase() %>-neo4j
   ports:
     - name: web
       port: 7474

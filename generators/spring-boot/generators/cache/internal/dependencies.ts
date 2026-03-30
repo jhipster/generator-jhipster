@@ -112,14 +112,14 @@ export const getCacheProviderJavaDefinition: (
             artifactId: 'hazelcast-spring',
             version: javaDependencies['hazelcast-spring'],
           },
-          ...(springBoot4
-            ? [
-                {
-                  groupId: 'org.springframework.boot',
-                  artifactId: 'spring-boot-starter-hazelcast',
-                },
-              ]
-            : []),
+          ...(springBoot4 ?
+            [
+              {
+                groupId: 'org.springframework.boot',
+                artifactId: 'spring-boot-starter-hazelcast',
+              },
+            ]
+          : []),
         ],
       },
       hibernateCache: {

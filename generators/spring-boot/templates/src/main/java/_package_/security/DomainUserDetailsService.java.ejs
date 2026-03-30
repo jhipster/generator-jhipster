@@ -16,13 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.security;
+package <%- packageName %>.security;
 
-import <%= user.entityAbsoluteClass %>;
+import <%- user.entityAbsoluteClass %>;
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
-import <%= packageName %>.domain.Authority;
+import <%- packageName %>.domain.Authority;
 <%_ } _%>
-import <%= packageName %>.repository.UserRepository;
+import <%- packageName %>.repository.UserRepository;
 import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,7 +89,7 @@ public class DomainUserDetailsService implements <% if (reactive) { %>Reactive<%
 
     }
 
-    private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, <%= user.persistClass %> user) {
+    private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, <%- user.persistClass %> user) {
         if (!user.isActivated()) {
             throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
         }
@@ -114,14 +114,14 @@ public class DomainUserDetailsService implements <% if (reactive) { %>Reactive<%
 
     public static class UserWithId extends org.springframework.security.core.userdetails.User {
 
-        private final <%= user.primaryKey.type %> id;
+        private final <%- user.primaryKey.type %> id;
 
-        public UserWithId(String login, String password, Collection<? extends GrantedAuthority> authorities, <%= user.primaryKey.type %> id) {
+        public UserWithId(String login, String password, Collection<? extends GrantedAuthority> authorities, <%- user.primaryKey.type %> id) {
             super(login, password, authorities);
             this.id = id;
         }
 
-        public <%= user.primaryKey.type %> getId() {
+        public <%- user.primaryKey.type %> getId() {
             return id;
         }
 
@@ -135,7 +135,7 @@ public class DomainUserDetailsService implements <% if (reactive) { %>Reactive<%
             return super.hashCode();
         }
 
-        public static UserWithId fromUser(<%= user.persistClass %> user) {
+        public static UserWithId fromUser(<%- user.persistClass %> user) {
             return new UserWithId(
                 user.getLogin(),
                 user.getPassword(),

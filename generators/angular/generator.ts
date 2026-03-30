@@ -161,10 +161,10 @@ export default class AngularGenerator extends AngularApplicationGenerator {
                   content: `{
   name: '${entity.entityAngularName}',
   route: '/${entity.entityPage}',${
-    application.enableTranslation
-      ? `
+    application.enableTranslation ?
+      `
   translationKey: '${entity.entityTranslationKeyMenuPath}',`
-      : ''
+    : ''
   }
   },`,
                 })),
@@ -397,8 +397,9 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           });
         } else {
           source.mergeClientPackageJson!({
-            dependencies: enableTranslation
-              ? {
+            dependencies:
+              enableTranslation ?
+                {
                   '@ngx-translate/http-loader': null,
                 }
               : {},

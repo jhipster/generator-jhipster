@@ -21,6 +21,7 @@ import { basename, resolve } from 'node:path';
 
 import { defaultHelpers as helpers, result } from '../../../../lib/testing/index.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.ts';
+import { CONTEXT_DATA_SANITIZATION_KEY } from '../../support/constants.ts';
 
 import Generator from './index.ts';
 
@@ -45,6 +46,45 @@ describe(`generator - ${generator}`, () => {
 
     it('should compose with generators', () => {
       expect(result.composedMockedGenerators).toMatchInlineSnapshot(`[]`);
+    });
+  });
+
+  describe('security hardening', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        // eslint-disable-next-line no-template-curly-in-string
+        .withJHipsterConfig({ applicationProperty: '${injected}' } as any)
+        .withSkipWritingPriorities();
+    });
+
+    it('should be applied to application config', () => {
+      expect(result.application).toMatchObject(
+        expect.objectContaining({
+          applicationProperty: '',
+        }),
+      );
+    });
+  });
+
+  describe('custom security hardening', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        // eslint-disable-next-line no-template-curly-in-string
+        .withJHipsterConfig({ applicationProperty: '${injected}' } as any)
+        .withTask('initializing', function () {
+          this.getContextData(CONTEXT_DATA_SANITIZATION_KEY, { replacement: (data: any) => ({ ...data, applicationProperty: 'foo' }) });
+        })
+        .withSkipWritingPriorities();
+    });
+
+    it('should be applied to application config', () => {
+      expect(result.application).toMatchObject(
+        expect.objectContaining({
+          applicationProperty: 'foo',
+        }),
+      );
     });
   });
 });

@@ -4,6 +4,7 @@ printWidth: 140
 singleQuote: true
 tabWidth: 2
 useTabs: false
+experimentalTernaries: true
 
 # js and ts rules:
 arrowParens: avoid
@@ -17,10 +18,10 @@ plugins:
 
 overrides:
   # java rules:
-  - files: "*.java"
+  - files: '*.java'
     options:
       tabWidth: 4
   # xml rules:
-  - files: "*.xml"
+  - files: '*.xml'
     options:
       tabWidth: 4

@@ -18,7 +18,7 @@
 -%>
 {
     "global": {
-        "title": "<%= capitalizedBaseName %>",
+        "title": "<%- capitalizedBaseName %>",
         "browsehappy": "Käytät <strong>vanhentunutta</strong> selainta. Ole hyvä ja <a href=\"http://browsehappy.com/?locale=en\">päivitä selaimesi</a> parempaa käyttökokemusta varten.",
         "menu": {
             "home": "Etusivu",
@@ -159,7 +159,7 @@
         "idnull": "ID virheellinen",
         "idinvalid": "Invalid Id",
         "idnotfound": "ID cannot be found",
- <%_ if (searchEngineElasticsearch) { _%>
+<%_ if (searchEngineElasticsearch) { _%>
         "querySyntaxError": "Invalid search query",
 <%_ } _%>
         "file": {

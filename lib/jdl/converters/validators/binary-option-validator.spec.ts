@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import JDLBinaryOption from '../../core/models/jdl-binary-option.ts';
 
@@ -36,24 +34,24 @@ describe('jdl - BinaryOptionValidator', () => {
     describe('when not passing anything', () => {
       it('should fail', () => {
         // @ts-expect-error invalid api test
-        expect(() => validator.validate()).to.throw(/^No binary option\.$/);
+        expect(() => validator.validate()).toThrow(/^No binary option\.$/);
       });
     });
     it('should fail', () => {
       // @ts-expect-error invalid api test
-      expect(() => validator.validate({})).to.throw(
+      expect(() => validator.validate({})).toThrow(
         /^The binary option attributes name, entityNames, excludedNames, getType, value were not found\.$/,
       );
     });
     describe('when passing a binary option', () => {
       describe('with all its required attributes', () => {
         it('should not fail', () => {
-          expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'mapstruct' }))).not.to.throw();
+          expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'mapstruct' }))).not.toThrow();
         });
       });
       describe('with an invalid value', () => {
         it('should fail', () => {
-          expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'toto' }))).to.throw(
+          expect(() => validator.validate(new JDLBinaryOption({ name: 'dto', value: 'toto' }))).toThrow(
             /^The 'dto' option is not valid for value 'toto'\.$/,
           );
         });

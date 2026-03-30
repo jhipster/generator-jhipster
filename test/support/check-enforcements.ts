@@ -16,11 +16,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { before, describe, it } from 'esmocha';
 import assert from 'node:assert';
 import { opendirSync, readFileSync, writeFileSync } from 'node:fs';
 import path, { basename } from 'node:path';
-
-import { before, describe, it } from 'mocha';
 
 import { getGeneratorFolder } from '../../lib/utils/get-generator.ts';
 
@@ -58,12 +57,12 @@ export default function checkEnforcements({ client }: { client?: boolean }, gene
           [
             ['src/main/webapp', '<%= clientSrcDir %>'],
             ['src/test/javascript', '<%= clientTestDir %>'],
-            ...(client
-              ? [
-                  [' jhiTranslate', ' <%= jhiPrefix %>Translate'],
-                  [' Java ', ' <%= backendType %> '],
-                ]
-              : []),
+            ...(client ?
+              [
+                [' jhiTranslate', ' <%= jhiPrefix %>Translate'],
+                [' Java ', ' <%= backendType %> '],
+              ]
+            : []),
           ].forEach(([notExpected, replacement]) => {
             const regex = new RegExp(notExpected, 'g');
             const regexSeparator = new RegExp(`${notExpected}/`, 'g');

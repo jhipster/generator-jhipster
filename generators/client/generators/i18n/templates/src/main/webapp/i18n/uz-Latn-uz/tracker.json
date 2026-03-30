@@ -1,12 +1,12 @@
 {
-    "tracker": {
-        "title": "Foydalanuvchining joriy faolligi",
-        "table": {
-            "userlogin": "Foydalanuvchi",
-            "ipaddress": "IP adres",
-            "userAgent": "User agent",
-            "page": "Joriy sahifa",
-            "time": "Sana"
-        }
+  "tracker": {
+    "title": "Foydalanuvchining joriy faolligi",
+    "table": {
+      "userlogin": "Foydalanuvchi",
+      "ipaddress": "IP adres",
+      "userAgent": "User agent",
+      "page": "Joriy sahifa",
+      "time": "Sana"
     }
+  }
 }

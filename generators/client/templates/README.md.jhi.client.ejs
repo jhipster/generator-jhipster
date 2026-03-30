@@ -26,10 +26,9 @@
    customCliSection: 1,
  });
 _&>
-<%_
-let clientPackageMngrName = 'Npm';
-let clientPackageMngrAdd = 'install --save --save-exact';
-let clientPackageMngrAddDev = 'install --save-dev --save-exact';
+<%_ const clientPackageMngrName = 'Npm';
+const clientPackageMngrAdd = 'install --save --save-exact';
+const clientPackageMngrAddDev = 'install --save-dev --save-exact';
 -%>
 <&_ if (fragment.developmentSection) { -&>
 <%_ if (locals.useNpmWrapper) { _%>
@@ -47,20 +46,20 @@ After installing Node, you should be able to run the following command to instal
 You will only need to run this command when dependencies change in [package.json](package.json).
 
 ```bash
-<%= nodePackageManagerCommand %> install
+<%- nodePackageManagerCommand %> install
 ```
 
-We use <%- nodePackageManager %> scripts and <&- fragments.customCliSection(' ') &><%= clientBundlerName %> as our build system.
+We use <%- nodePackageManager %> scripts and <&- fragments.customCliSection(' ') &><%- clientBundlerName %> as our build system.
 
-  <%_ if (locals.cacheProviderRedis || locals.cacheProviderHazelcast || locals.cacheProviderMemcached) { _%>
-If you are using <%= cacheProvider %> as a cache, you will have to launch a cache server.
+<%_ if (locals.cacheProviderRedis || locals.cacheProviderHazelcast || locals.cacheProviderMemcached) { _%>
+If you are using <%- cacheProvider %> as a cache, you will have to launch a cache server.
 To start your cache server, run:
 
 ```bash
-docker compose -f src/main/docker/<%= locals.cacheProviderHazelcast ? 'hazelcast-management-center' : cacheProvider %>.yml up -d
+docker compose -f src/main/docker/<%- locals.cacheProviderHazelcast ? 'hazelcast-management-center' : cacheProvider %>.yml up -d
 ```
 
-    <%_ if (cacheProviderRedis) { _%>
+  <%_ if (cacheProviderRedis) { _%>
 
 The cache can also be turned off by adding to the `application.yml`:
 
@@ -73,29 +72,29 @@ spring:
 See [here](https://docs.spring.io/spring-boot/reference/io/caching.html#io.caching.provider.none) for details.
 
 **WARNING**: If you're using the second level Hibernate cache and disabling the Spring cache, you have to disable the second level Hibernate cache as well since they are using the same CacheManager.
-    <%_ } _%>
   <%_ } _%>
+<%_ } _%>
 
 Run the following commands in two separate terminals to create a blissful development experience where your browser
 auto-refreshes when files change on your hard drive.
 
 ```bash
-<%= nodePackageManagerCommand %> run backend:start
-<%= nodePackageManagerCommand %> run start
+<%- nodePackageManagerCommand %> run backend:start
+<%- nodePackageManagerCommand %> run start
 ```
 
-<%= clientPackageMngrName %> is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
-specifying a newer version in [package.json](package.json). You can also run `<%= nodePackageManagerCommand %> update` and `<%= nodePackageManagerCommand %> install` to manage dependencies.
-Add the `help` flag on any command to see how you can use it. For example, `<%= nodePackageManagerCommand %> help update`.
+<%- clientPackageMngrName %> is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
+specifying a newer version in [package.json](package.json). You can also run `<%- nodePackageManagerCommand %> update` and `<%- nodePackageManagerCommand %> install` to manage dependencies.
+Add the `help` flag on any command to see how you can use it. For example, `<%- nodePackageManagerCommand %> help update`.
 
-The `<%= nodePackageManagerCommand %> run` command will list all the scripts available to run for this project.
+The `<%- nodePackageManagerCommand %> run` command will list all the scripts available to run for this project.
 
 ### PWA Support
 
 JHipster ships with PWA (Progressive Web App) support, and it's turned off by default. One of the main components of a PWA is a service worker.
 
-  <%_ if (!clientFrameworkAngular) { _%>
-The service worker initialization code is commented out by default. To enable it, uncomment the following code in `<%= clientSrcDir %>index.html`:
+<%_ if (!clientFrameworkAngular) { _%>
+The service worker initialization code is commented out by default. To enable it, uncomment the following code in `<%- clientSrcDir %>index.html`:
 
 ```html
 <script>
@@ -108,9 +107,9 @@ The service worker initialization code is commented out by default. To enable it
 ```
 
 Note: [Workbox](https://developer.chrome.com/docs/workbox) powers JHipster's service worker. It dynamically generates the `service-worker.js` file.
-  <%_ } _%>
-  <%_ if (clientFrameworkAngular) { _%>
-The service worker initialization code is disabled by default. To enable it, uncomment the following code in `<%= clientSrcDir %>app/app.config.ts`:
+<%_ } _%>
+<%_ if (clientFrameworkAngular) { _%>
+The service worker initialization code is disabled by default. To enable it, uncomment the following code in `<%- clientSrcDir %>app/app.config.ts`:
 
 ```typescript
 ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
@@ -122,30 +121,30 @@ ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
 For example, to add [Leaflet](https://leafletjs.com/) library as a runtime dependency of your application, you would run the following command:
 
 ```bash
-<%= nodePackageManagerCommand %> <%= clientPackageMngrAdd %> leaflet
+<%- nodePackageManagerCommand %> <%- clientPackageMngrAdd %> leaflet
 ```
 
 To benefit from TypeScript type definitions from [DefinitelyTyped](https://definitelytyped.org/) repository in development, you would run the following command:
 
 ```bash
-<%= nodePackageManagerCommand %> <%= clientPackageMngrAddDev %> @types/leaflet
+<%- nodePackageManagerCommand %> <%- clientPackageMngrAddDev %> @types/leaflet
 ```
 
-Then you would import the JS and CSS files specified in library's installation instructions so that [<%= clientBundlerName %>][] knows about them:
-  <%_ if (clientFrameworkAngular) { _%>
-Edit [<%= clientSrcDir %>app/app.config.ts](<%= clientSrcDir %>app/app.config.ts) file:
+Then you would import the JS and CSS files specified in library's installation instructions so that [<%- clientBundlerName %>][] knows about them:
+<%_ if (clientFrameworkAngular) { _%>
+Edit [<%- clientSrcDir %>app/app.config.ts](<%- clientSrcDir %>app/app.config.ts) file:
 
 ```typescript
 import 'leaflet/dist/leaflet.js';
 ```
 
-Edit [<%= clientSrcDir %>content/scss/vendor.scss](<%= clientSrcDir %>content/scss/vendor.scss) file:
+Edit [<%- clientSrcDir %>content/scss/vendor.scss](<%- clientSrcDir %>content/scss/vendor.scss) file:
 
 ```typescript
 @import 'leaflet/dist/leaflet.css';
 ```
 
-  <%_ } _%>
+<%_ } _%>
 Note: There are still a few other things remaining to do for Leaflet that we won't detail here.
 
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development](https://www.jhipster.tech/development/).
@@ -160,9 +159,9 @@ Start gateway from source:
 
 ```bash
 cd gateway
-<%= nodePackageManagerCommand %> run docker:db:up # start database if necessary
-<%= nodePackageManagerCommand %> run docker:others:up # start service discovery and authentication service if necessary
-<%= nodePackageManagerCommand %> run app:start # alias for ./(mvnw|gradlew)
+<%- nodePackageManagerCommand %> run docker:db:up # start database if necessary
+<%- nodePackageManagerCommand %> run docker:others:up # start service discovery and authentication service if necessary
+<%- nodePackageManagerCommand %> run app:start # alias for ./(mvnw|gradlew)
 ```
 
 Microfrontend's `build-watch` script is configured to watch and compile microfrontend's sources and synchronizes with gateway's frontend.
@@ -170,16 +169,16 @@ Start it using:
 
 ```bash
 cd microfrontend
-<%= nodePackageManagerCommand %> run docker:db:up # start database if necessary
-<%= nodePackageManagerCommand %> run build-watch
+<%- nodePackageManagerCommand %> run docker:db:up # start database if necessary
+<%- nodePackageManagerCommand %> run build-watch
 ```
 
 It's possible to run microfrontend's frontend standalone using:
 
 ```bash
 cd microfrontend
-<%= nodePackageManagerCommand %> run docker:db:up # start database if necessary
-<%= nodePackageManagerCommand %> watch # alias for `npm start` and `npm run backend:start` in parallel
+<%- nodePackageManagerCommand %> run docker:db:up # start database if necessary
+<%- nodePackageManagerCommand %> watch # alias for `npm start` and `npm run backend:start` in parallel
 ```
 
 <%_ } -%>
@@ -188,10 +187,10 @@ cd microfrontend
 <&_ if (fragment.testingSection) { -&>
 ### Client tests
 
-Unit tests are run by <%= clientTestFrameworkName %>. They're located near components and can be run with:
+Unit tests are run by <%- clientTestFrameworkName %>. They're located near components and can be run with:
 
 ```bash
-<%= nodePackageManagerCommand %> test
+<%- nodePackageManagerCommand %> test
 ```
 <&_ } -&>
 <&_ if (fragment.referenceSection) { -&>

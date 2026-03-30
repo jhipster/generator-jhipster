@@ -18,7 +18,7 @@
 -%>
 {
     "global": {
-        "title": "<%= capitalizedBaseName %>",
+        "title": "<%- capitalizedBaseName %>",
         "browsehappy": "您的瀏覽器已經<strong>過時</strong>，建議您<a href=\"http://browsehappy.com/?locale=en\">升級瀏覽器</a>，以便有更好的體驗。",
         "menu": {
             "home": "首頁",
@@ -159,7 +159,7 @@
         "idnull": "無效的 ID",
         "idinvalid": "無效的 ID",
         "idnotfound": "找不到對應的 ID",
- <%_ if (searchEngineElasticsearch) { _%>
+<%_ if (searchEngineElasticsearch) { _%>
         "querySyntaxError": "Invalid search query",
 <%_ } _%>
         "file": {

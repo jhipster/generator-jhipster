@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { describe, expect, it } from 'esmocha';
 
 import databaseTypes from './database-types.ts';
 
@@ -30,14 +28,14 @@ describe('jdl - DatabaseTypes', () => {
     describe('when not passing anything', () => {
       it('should return false', () => {
         // @ts-expect-error invalid argument
-        expect(databaseTypes.isSql()).to.be.false;
+        expect(databaseTypes.isSql()).toBe(false);
       });
     });
     describe('when passing a SQL database type', () => {
       [SQL, MYSQL, POSTGRESQL, ORACLE, MARIADB, MSSQL].forEach(databaseType => {
         describe(`such as ${databaseType}`, () => {
           it('should return true', () => {
-            expect(databaseTypes.isSql(databaseType)).to.be.true;
+            expect(databaseTypes.isSql(databaseType)).toBe(true);
           });
         });
       });
@@ -46,7 +44,7 @@ describe('jdl - DatabaseTypes', () => {
       [MONGODB, CASSANDRA, COUCHBASE, NO].forEach(databaseType => {
         describe(`such as ${databaseType}`, () => {
           it('should return false', () => {
-            expect(databaseTypes.isSql(databaseType)).to.be.false;
+            expect(databaseTypes.isSql(databaseType)).toBe(false);
           });
         });
       });

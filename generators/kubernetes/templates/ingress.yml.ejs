@@ -16,55 +16,55 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: <%= KUBERNETES_INGRESS_API_VERSION %>
+apiVersion: <%- KUBERNETES_INGRESS_API_VERSION %>
 kind: Ingress
 metadata:
-  name: <%= app.baseName.toLowerCase() %>
-  namespace: <%= kubernetesNamespace %>
-  <%_ if (useKeycloak && ingressTypeGke) { _%>
+  name: <%- app.baseName.toLowerCase() %>
+  namespace: <%- kubernetesNamespace %>
+<%_ if (useKeycloak && ingressTypeGke) { _%>
   annotations:
     kubernetes.io/ingress.allow-http: "true"
-    kubernetes.io/ingress.global-static-ip-name: <%= app.baseName.toLowerCase()%>-ip
+    kubernetes.io/ingress.global-static-ip-name: <%- app.baseName.toLowerCase() %>-ip
     cert-manager.io/issuer: letsencrypt-staging
     acme.cert-manager.io/http01-edit-in-place: "true"
     cert-manager.io/issue-temporary-certificate: "true"
-  <%_ } _%>
+<%_ } _%>
 spec:
-  <%_ if (ingressTypeNginx) { _%>
+<%_ if (ingressTypeNginx) { _%>
   ingressClassName: nginx
-  <%_ } _%>
+<%_ } _%>
   rules:
-  <%_ if (ingressDomain) { _%>
-  - host: <%= app.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>
+<%_ if (ingressDomain) { _%>
+  - host: <%- app.baseName.toLowerCase() %>.<%- kubernetesNamespace %>.<%- ingressDomain %>
     http:
-  <%_ } else { _%>
+<%_ } else { _%>
   - http:
-  <%_ } _%>
+<%_ } _%>
       paths:
-      - path: /<%= ingressTypeNginx ? "" : "*" %>
-        pathType: <%= ingressTypeNginx ? "Prefix" : "ImplementationSpecific" %>
+      - path: /<%- ingressTypeNginx ? '' : '*' %>
+        pathType: <%- ingressTypeNginx ? 'Prefix' : 'ImplementationSpecific' %>
         backend:
           service:
-            name: <%= app.baseName.toLowerCase() %>
+            name: <%- app.baseName.toLowerCase() %>
             port:
               name: http
-      <%_ if (!app.serviceDiscoveryAny) { _%>
-        <%_ appConfigs.filter(config => config.baseName !== app.baseName).forEach(config => { _%>
-      - path: /services/<%= config.baseName.toLowerCase() %>/<%= ingressTypeNginx ? "" : "*" %>
+<%_ if (!app.serviceDiscoveryAny) { _%>
+  <%_ for (const config of appConfigs.filter(config => config.baseName !== app.baseName)) { _%>
+      - path: /services/<%- config.baseName.toLowerCase() %>/<%- ingressTypeNginx ? '' : '*' %>
         pathType: Prefix
         backend:
           service:
-            name: <%= config.baseName.toLowerCase() %>
+            name: <%- config.baseName.toLowerCase() %>
             port:
               name: http
-        <%_ }); _%>
-      <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
 <%_ if (useKeycloak) { _%>
-  - host: keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
+  - host: keycloak.<%- kubernetesNamespace %>.<%- ingressDomain %>
     http:
       paths:
-        - path: /<%= ingressTypeNginx ? "" : "*" %>
-          pathType:  <%= ingressTypeNginx ? "Prefix" : "ImplementationSpecific" %>
+        - path: /<%- ingressTypeNginx ? '' : '*' %>
+          pathType:  <%- ingressTypeNginx ? 'Prefix' : 'ImplementationSpecific' %>
           backend:
             service:
               name: keycloak
@@ -74,6 +74,6 @@ spec:
   tls:
     - secretName: keycloak-ssl
       hosts:
-        - keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
+        - keycloak.<%- kubernetesNamespace %>.<%- ingressDomain %>
   <%_ } _%>
 <%_ } _%>

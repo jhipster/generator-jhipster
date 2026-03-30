@@ -18,7 +18,7 @@
 -%>
 {
     "global": {
-        "title": "<%= capitalizedBaseName %>",
+        "title": "<%- capitalizedBaseName %>",
         "browsehappy": "Koristite <strong>zastareli</strong> pretraživač. Molimo vas <a href=\"http://browsehappy.com/?locale=en\">nadogradite pretraživač</a> kako biste poboljšali Vaše iskustvo.",
         "menu": {
             "home": "Početna stranica",
@@ -157,7 +157,7 @@
         "idnull": "Invalid ID",
         "idinvalid": "Invalid Id",
         "idnotfound": "ID cannot be found",
- <%_ if (searchEngineElasticsearch) { _%>
+<%_ if (searchEngineElasticsearch) { _%>
         "querySyntaxError": "Invalid search query",
 <%_ } _%>
         "file": {

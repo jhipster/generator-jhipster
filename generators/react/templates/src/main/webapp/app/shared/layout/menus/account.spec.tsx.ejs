@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 
 <%_ if (authenticationTypeOauth2) { _%>
@@ -26,26 +26,28 @@ import { getLoginUrl } from 'app/shared/util/url-utils';
 import { AccountMenu } from './account';
 
 describe('AccountMenu', () => {
-  let mountedWrapper;
+  let mountedWrapper: string | undefined;
 
-  const authenticatedWrapper = () => {
+  const authenticatedWrapper = async () => {
     if (!mountedWrapper) {
       const { container } = render(
         <MemoryRouter>
           <AccountMenu isAuthenticated />
         </MemoryRouter>,
       );
+      await waitFor(() => expect(container.querySelector('.dropdown-menu')).not.toBeNull());
       mountedWrapper = container.innerHTML;
     }
     return mountedWrapper;
   };
-  const guestWrapper = () => {
+  const guestWrapper = async () => {
     if (!mountedWrapper) {
-      const { container } = (mountedWrapper = render(
+      const { container } = render(
         <MemoryRouter>
           <AccountMenu />
         </MemoryRouter>,
-      ));
+      );
+      await waitFor(() => expect(container.querySelector('.dropdown-menu')).not.toBeNull());
       mountedWrapper = container.innerHTML;
     }
     return mountedWrapper;
@@ -55,17 +57,15 @@ describe('AccountMenu', () => {
     mountedWrapper = undefined;
   });
 
-  // All tests will go here
-
-  it('Renders a authenticated AccountMenu component', () => {
-    const html = authenticatedWrapper();
+  it('Renders a authenticated AccountMenu component', async () => {
+    const html = await authenticatedWrapper();
 
     expect(html).not.toContain('/login');
     expect(html).toContain('/logout');
   });
 
-  it('Renders a guest AccountMenu component', () => {
-    const html = guestWrapper();
+  it('Renders a guest AccountMenu component', async () => {
+    const html = await guestWrapper();
 
 <%_ if (!authenticationTypeOauth2) { _%>
     expect(html).toContain('/login');

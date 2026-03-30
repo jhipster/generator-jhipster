@@ -16,22 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= entityAbsolutePackage %>.service;
+package <%- entityAbsolutePackage %>.service;
 
-<%_
-const instanceType = restClass;
-const instanceName = restInstance;
-const optionalOrMono = (reactive) ? 'Mono' : 'Optional';
-const listOrFlux = (reactive) ? 'Flux' : 'List';
-const pageOrFlux = (reactive) ? 'Flux' : 'Page';
-_%>
 <%_ if (dtoMapstruct) { _%>
-import <%= entityAbsolutePackage %>.service.dto.<%= dtoClass %>;
+import <%- entityAbsolutePackage %>.service.dto.<%- dtoClass %>;
 <%_ } else { _%>
-import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
+import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering && reactive) { _%>
-import <%= entityAbsolutePackage %>.domain.criteria.<%= entityClass %>Criteria;
+import <%- entityAbsolutePackage %>.domain.criteria.<%- entityClass %>Criteria;
 <%_ } _%>
 <%_ if (!paginationNo || implementsEagerLoadApis) { _%>
 
@@ -56,85 +49,85 @@ import java.util.UUID;
 <%_ } _%>
 
 /**
- * Service Interface for managing {@link <%= entityAbsoluteClass %>}.
+ * Service Interface for managing {@link <%- entityAbsoluteClass %>}.
  */
-public interface <%= entityClass %>Service {
+public interface <%- entityClass %>Service {
 
     /**
-     * Save a <%= entityInstance %>.
+     * Save a <%- entityInstance %>.
      *
-     * @param <%= instanceName %> the entity to save.
+     * @param <%- restInstance %> the entity to save.
      * @return the persisted entity.
      */
-    <% if (reactive) { %>Mono<<% } %><%= instanceType %><% if (reactive) { %>><% } %> save(<%= instanceType %> <%= instanceName %>);
+    <% if (reactive) { %>Mono<<% } %><%- restClass %><% if (reactive) { %>><% } %> save(<%- restClass %> <%- restInstance %>);
 
     /**
-     * Updates a <%= entityInstance %>.
+     * Updates a <%- entityInstance %>.
      *
-     * @param <%= instanceName %> the entity to update.
+     * @param <%- restInstance %> the entity to update.
      * @return the persisted entity.
      */
-     <% if (reactive) { %>Mono<<% } %><%= instanceType %><% if (reactive) { %>><% } %> update(<%= instanceType %> <%= instanceName %>);
+     <% if (reactive) { %>Mono<<% } %><%- restClass %><% if (reactive) { %>><% } %> update(<%- restClass %> <%- restInstance %>);
 
     /**
-     * Partially updates a <%= entityInstance %>.
+     * Partially updates a <%- entityInstance %>.
      *
-     * @param <%= instanceName %> the entity to update partially.
+     * @param <%- restInstance %> the entity to update partially.
      * @return the persisted entity.
      */
-    <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%= instanceType %>> partialUpdate(<%= instanceType %> <%= instanceName %>);
+    <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%- restClass %>> partialUpdate(<%- restClass %> <%- restInstance %>);
 <%_ if (!jpaMetamodelFiltering) { _%>
 
     /**
-     * Get all the <%= entityInstancePlural %>.
+     * Get all the <%- entityInstancePlural %>.
      *<% if (!paginationNo) { %>
      * @param pageable the pagination information.<% } %>
      * @return the list of entities.
      */
-    <% if (paginationNo) { %><%= listOrFlux %><% } else { %><%= pageOrFlux %><% } %><<%= instanceType %>> findAll(<% if (!paginationNo) { %>Pageable pageable<% } %>);
+    <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findAll(<% if (!paginationNo) { %>Pageable pageable<% } %>);
 
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering && reactive) { _%>
       /**
-      * Find <%= entityInstancePlural %> by criteria.
+      * Find <%- entityInstancePlural %> by criteria.
       *<% if (!paginationNo) { %>
       * @param pageable the pagination information.<% } %>
       * @return the list of entities.
       */
-      <% if (paginationNo) { %><%= listOrFlux %><% } else { %><%= pageOrFlux %><% } %><<%= instanceType %>> findByCriteria(<%= entityClass %>Criteria criteria<% if (!paginationNo) { %>, Pageable pageable<% } %>);
+      <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findByCriteria(<%- entityClass %>Criteria criteria<% if (!paginationNo) { %>, Pageable pageable<% } %>);
 
       /**
-      * Find the count of <%= entityInstancePlural %> by criteria.
+      * Find the count of <%- entityInstancePlural %> by criteria.
       * @param criteria filtering criteria
-      * @return the count of <%= entityInstancePlural %>
+      * @return the count of <%- entityInstancePlural %>
       */
-      public Mono<Long> countByCriteria(<%= entityClass %>Criteria criteria);
+      public Mono<Long> countByCriteria(<%- entityClass %>Criteria criteria);
 <%_ } _%>
 
 <%_ for (const relationship of relationships) { _%>
   <%_ if (relationship.relationshipOneToOne && !relationship.ownerSide) { _%>
     /**
-     * Get all the <%= restClass %> where <%= relationship.relationshipNameCapitalized %> is {@code null}.
+     * Get all the <%- restClass %> where <%- relationship.relationshipNameCapitalized %> is {@code null}.
      *
-     * @return the {@link <%= listOrFlux %>} of entities.
+     * @return the {@link <%- listOrFlux %>} of entities.
      */
-    <%= listOrFlux %><<%= instanceType %>> findAllWhere<%= relationship.relationshipNameCapitalized %>IsNull();
+    <%- listOrFlux %><<%- restClass %>> findAllWhere<%- relationship.relationshipNameCapitalized %>IsNull();
   <%_ } _%>
 <%_ } _%>
 
 <%_ if (implementsEagerLoadApis) { _%>
     /**
-     * Get all the <%= entityInstancePlural %> with eager load of many-to-many relationships.
+     * Get all the <%- entityInstancePlural %> with eager load of many-to-many relationships.
      *
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    <%= pageOrFlux %><<%= instanceType %>> findAllWithEagerRelationships(Pageable pageable);
+    <%- pageOrFlux %><<%- restClass %>> findAllWithEagerRelationships(Pageable pageable);
 
 <%_ } _%>
 <%_ if (reactive) { _%>
     /**
-    * Returns the number of <%= entityInstancePlural %> available.
+    * Returns the number of <%- entityInstancePlural %> available.
     * @return the number of entities in the database.
     *
     */
@@ -142,7 +135,7 @@ public interface <%= entityClass %>Service {
   <%_ if (searchEngineElasticsearch) { _%>
 
     /**
-    * Returns the number of <%= entityInstancePlural %> available in search repository.
+    * Returns the number of <%- entityInstancePlural %> available in search repository.
     *
     */
     Mono<Long> searchCount();
@@ -151,26 +144,26 @@ public interface <%= entityClass %>Service {
 <%_ } _%>
 
     /**
-     * Get the "id" <%= entityInstance %>.
+     * Get the "id" <%- entityInstance %>.
      *
      * @param id the id of the entity.
      * @return the entity.
      */
-    <%= optionalOrMono %><<%= instanceType %>> findOne(<%= primaryKey.type %> id);
+    <%- optionalOrMono %><<%- restClass %>> findOne(<%- primaryKey.type %> id);
 
     /**
-     * Delete the "id" <%= entityInstance %>.
+     * Delete the "id" <%- entityInstance %>.
      *
      * @param id the id of the entity.
 <%_ if (reactive) { _%>
      * @return a Mono to signal the deletion
 <%_ } _%>
      */
-    <%- reactive ? 'Mono<Void>' : 'void' %> delete(<%= primaryKey.type %> id);
+    <%- reactive ? 'Mono<Void>' : 'void' %> delete(<%- primaryKey.type %> id);
 <%_ if (searchEngineAny) { _%>
 
     /**
-     * Search for the <%= entityInstance %> corresponding to the query.
+     * Search for the <%- entityInstance %> corresponding to the query.
      *
      * @param query the query of the search.
   <%_ if (!paginationNo) { _%>
@@ -179,6 +172,6 @@ public interface <%= entityClass %>Service {
   <%_ } _%>
      * @return the list of entities.
      */
-    <% if (!paginationNo) { %><%= pageOrFlux %><<%= instanceType %><% } else { %><%= listOrFlux %><<%= instanceType %><% } %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>);
+    <% if (!paginationNo) { %><%- pageOrFlux %><<%- restClass %><% } else { %><%- listOrFlux %><<%- restClass %><% } %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>);
 <%_ } _%>
 }

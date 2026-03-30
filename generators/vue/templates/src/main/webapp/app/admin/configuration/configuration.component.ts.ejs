@@ -7,7 +7,7 @@ import { orderAndFilterBy } from '@/shared/computables';
 import ConfigurationService from './configuration.service';
 
 export default defineComponent({
-  name: '<%=jhiPrefixCapitalized%>Configuration',
+  name: '<%- jhiPrefixCapitalized %>Configuration',
   setup() {
     const configurationService = inject('configurationService', () => new ConfigurationService(), true);
 

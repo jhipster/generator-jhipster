@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect as jestExpect, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import { relationshipTypes } from '../../core/basic-types/index.ts';
 import { relationshipOptions } from '../../core/built-in-options/index.ts';
@@ -34,14 +32,14 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
   describe('convert', () => {
     describe('when not passing any relationship', () => {
       it('should return an empty map', () => {
-        expect(convert([]).size).to.equal(0);
-        expect(convert([], ['A', 'B']).size).to.equal(0);
+        expect(convert([]).size).toBe(0);
+        expect(convert([], ['A', 'B']).size).toBe(0);
       });
     });
     describe('when not passing any entity name', () => {
       it('should return an empty map', () => {
-        expect(convert(undefined, []).size).to.equal(0);
-        expect(convert([], []).size).to.equal(0);
+        expect(convert(undefined, []).size).toBe(0);
+        expect(convert([], []).size).toBe(0);
       });
     });
     describe('when passing relationships and entity names', () => {
@@ -87,7 +85,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
         });
 
         it('should convert them', () => {
-          jestExpect(relationshipsForA).toMatchInlineSnapshot(`
+          expect(relationshipsForA).toMatchInlineSnapshot(`
             [
               {
                 "otherEntityName": "b",
@@ -119,7 +117,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
               },
             ]
           `);
-          jestExpect(relationshipsForB).toMatchInlineSnapshot(`
+          expect(relationshipsForB).toMatchInlineSnapshot(`
             [
               {
                 "otherEntityName": "a",
@@ -177,7 +175,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
 
           it('should convert them', () => {
-            jestExpect(convertedRelationship).toMatchInlineSnapshot(`
+            expect(convertedRelationship).toMatchInlineSnapshot(`
               {
                 "options": {
                   "custom": 42,
@@ -214,7 +212,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
 
           it('should convert them', () => {
-            jestExpect(convertedRelationship).toMatchInlineSnapshot(`
+            expect(convertedRelationship).toMatchInlineSnapshot(`
               {
                 "otherEntityName": "b",
                 "otherEntityRelationshipName": "a",
@@ -247,7 +245,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
         });
 
         it('should convert them', () => {
-          jestExpect(relationshipsForA).toMatchInlineSnapshot(`
+          expect(relationshipsForA).toMatchInlineSnapshot(`
             [
               {
                 "otherEntityName": "b",
@@ -259,7 +257,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
               },
             ]
           `);
-          jestExpect(relationshipsForB).toMatchInlineSnapshot(`
+          expect(relationshipsForB).toMatchInlineSnapshot(`
             [
               {
                 "otherEntityName": "a",
@@ -293,7 +291,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
         });
 
         it('should convert them', () => {
-          jestExpect(relationshipsForA).toMatchInlineSnapshot(`
+          expect(relationshipsForA).toMatchInlineSnapshot(`
             [
               {
                 "documentation": "A to B",
@@ -305,7 +303,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
               },
             ]
           `);
-          jestExpect(relationshipsForB).toMatchInlineSnapshot(`
+          expect(relationshipsForB).toMatchInlineSnapshot(`
             [
               {
                 "documentation": "A to B but in the destination",
@@ -337,7 +335,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
 
           it('should add the relationship for the source entity', () => {
-            jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+            expect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
               {
                 "otherEntityName": "b",
                 "relationshipName": "b",
@@ -347,7 +345,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             `);
           });
           it('should not add the relationship for the destination entity', () => {
-            expect(relationshipFromDestinationToSource).to.be.undefined;
+            expect(relationshipFromDestinationToSource).toBeUndefined();
           });
         });
         describe('for a One-to-Many relationship', () => {
@@ -367,7 +365,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
 
           it('should add the relationship for the source entity', () => {
-            jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+            expect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
               {
                 "otherEntityName": "b",
                 "relationshipName": "b",
@@ -377,7 +375,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             `);
           });
           it('should add the relationship for the destination entity', () => {
-            jestExpect(relationshipFromDestinationToSource).toBeUndefined();
+            expect(relationshipFromDestinationToSource).toBeUndefined();
           });
         });
         describe('for a Many-to-One relationship', () => {
@@ -397,7 +395,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
 
           it('should add the relationship for the source entity', () => {
-            jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+            expect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
               {
                 "otherEntityName": "b",
                 "relationshipName": "b",
@@ -407,7 +405,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             `);
           });
           it('should not add the relationship for the destination entity', () => {
-            expect(relationshipFromDestinationToSource).to.be.undefined;
+            expect(relationshipFromDestinationToSource).toBeUndefined();
           });
         });
         describe('for a Many-to-Many relationship', () => {
@@ -427,7 +425,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
 
           it('should add the relationship for the source entity', () => {
-            jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+            expect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
               {
                 "otherEntityName": "b",
                 "relationshipName": "b",
@@ -437,7 +435,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             `);
           });
           it('should add the relationship for the destination entity', () => {
-            jestExpect(relationshipFromDestinationToSource).toBeUndefined();
+            expect(relationshipFromDestinationToSource).toBeUndefined();
           });
         });
       });
@@ -459,7 +457,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
 
           it('should add the relationship for the source entity', () => {
-            jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+            expect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
               {
                 "otherEntityName": "b",
                 "otherEntityRelationshipName": "a",
@@ -470,7 +468,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             `);
           });
           it('should add the relationship for the destination entity', () => {
-            jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+            expect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
               {
                 "otherEntityName": "a",
                 "relationshipName": "a",
@@ -497,7 +495,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
 
           it('should add the relationship for the source entity', () => {
-            jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+            expect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
               {
                 "otherEntityName": "b",
                 "otherEntityRelationshipName": "a",
@@ -508,7 +506,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             `);
           });
           it('should add the relationship for the destination entity', () => {
-            jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+            expect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
               {
                 "otherEntityName": "a",
                 "relationshipName": "a",
@@ -535,7 +533,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
 
           it('should add the relationship for the source entity', () => {
-            jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+            expect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
               {
                 "otherEntityName": "b",
                 "otherEntityRelationshipName": "a",
@@ -546,7 +544,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             `);
           });
           it('should add the relationship for the destination entity', () => {
-            jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+            expect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
               {
                 "otherEntityName": "a",
                 "relationshipName": "a",
@@ -573,7 +571,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
 
           it('should add the relationship for the source entity', () => {
-            jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+            expect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
               {
                 "otherEntityName": "b",
                 "otherEntityRelationshipName": "a",
@@ -584,7 +582,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             `);
           });
           it('should add the relationship for the destination entity', () => {
-            jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+            expect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
               {
                 "otherEntityName": "a",
                 "relationshipName": "a",
@@ -614,7 +612,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
 
           it('should add it for the source entity', () => {
-            jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+            expect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
               {
                 "otherEntityField": "name",
                 "otherEntityName": "b",
@@ -626,7 +624,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             `);
           });
           it('should ignore it for the destination entity', () => {
-            jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+            expect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
               {
                 "otherEntityField": "name",
                 "otherEntityName": "a",
@@ -656,7 +654,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
 
           it('should ignore it for the source entity', () => {
-            jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+            expect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
               {
                 "otherEntityField": "name",
                 "otherEntityName": "b",
@@ -668,7 +666,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             `);
           });
           it('should add it for the destination entity', () => {
-            jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+            expect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
               {
                 "otherEntityField": "name",
                 "otherEntityName": "a",
@@ -698,7 +696,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
 
           it('should add it for the source entity', () => {
-            jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+            expect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
               {
                 "otherEntityField": "name",
                 "otherEntityName": "b",
@@ -710,7 +708,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             `);
           });
           it('should ignore it for the source entity', () => {
-            jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+            expect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
               {
                 "otherEntityField": "name",
                 "otherEntityName": "a",
@@ -740,7 +738,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
 
           it('should add it for the source entity', () => {
-            jestExpect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
+            expect(relationshipFromSourceToDestination).toMatchInlineSnapshot(`
               {
                 "otherEntityField": "name",
                 "otherEntityName": "b",
@@ -752,7 +750,7 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
             `);
           });
           it('should add it for the destination entity', () => {
-            jestExpect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
+            expect(relationshipFromDestinationToSource).toMatchInlineSnapshot(`
               {
                 "otherEntityField": "name",
                 "otherEntityName": "a",

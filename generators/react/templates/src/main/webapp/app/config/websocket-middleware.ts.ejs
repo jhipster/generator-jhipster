@@ -86,7 +86,7 @@ const connect = () => {
   headers[CSRF_TOKEN_HEADER_NAME] = encodeCsrfToken(cookie.read(CSRF_TOKEN_COOKIE_NAME));
 <%_ } else { _%>
   let url = '//' + loc.host + baseHref + '/websocket/tracker';
-  const authToken = Storage.local.get('<%= jhiPrefixDashed %>-authenticationToken') || Storage.session.get('<%= jhiPrefixDashed %>-authenticationToken');
+  const authToken = Storage.local.get('<%- jhiPrefixDashed %>-authenticationToken') || Storage.session.get('<%- jhiPrefixDashed %>-authenticationToken');
   if (authToken) {
     url += '?access_token=' + authToken;
   }

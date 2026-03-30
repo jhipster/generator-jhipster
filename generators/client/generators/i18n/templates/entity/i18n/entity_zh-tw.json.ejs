@@ -15,54 +15,57 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
--%><%
-let helpBlocks = 0; %>
+-%>
+<%_ const fieldsWithDocumentation = fields.filter(field => field.documentation); _%>
 {
-    "<%= frontendAppName %>": {
-        "<%= entityTranslationKey %>" : {
+    "<%- frontendAppName %>": {
+        "<%- entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityNamePluralHumanized %>",
+                "title": "<%- entityNamePluralHumanized %>",
                 "refreshListLabel": "Refresh list",
 <%_ if (!readOnly) { _%>
-                "createLabel": "建立一筆新的 <%= entityNameHumanized %>",
-                "createOrEditLabel": "建立或編輯 <%= entityNameHumanized %>",
+                "createLabel": "建立一筆新的 <%- entityNameHumanized %>",
+                "createOrEditLabel": "建立或編輯 <%- entityNameHumanized %>",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "搜尋 <%= entityNameHumanized %>",
+                "search": "搜尋 <%- entityNameHumanized %>",
 <%_ } _%>
-                "notFound": "No <%= entityNamePluralHumanized %> found"
+                "notFound": "No <%- entityNamePluralHumanized %> found"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "新的 <%= entityNameHumanized %> 建立成功，識別碼為 {{ param }}",
-            "updated": "識別碼為 {{ param }} 的 <%= entityNameHumanized %> 更新成功",
-            "deleted": "識別碼為 {{ param }} 的 <%= entityNameHumanized %> 刪除成功",
+            "created": "新的 <%- entityNameHumanized %> 建立成功，識別碼為 {{ param }}",
+            "updated": "識別碼為 {{ param }} 的 <%- entityNameHumanized %> 更新成功",
+            "deleted": "識別碼為 {{ param }} 的 <%- entityNameHumanized %> 刪除成功",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "您確定要刪除 <%= entityNameHumanized %> {{ id }} 嗎?"
+                "question": "您確定要刪除 <%- entityNameHumanized %> {{ id }} 嗎?"
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityNameHumanized %>"
-            }<% for (idx in fields) {
-            if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
-            "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
-            "<%= relationships[idx].relationshipName %>": "<%= relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
-            "help": {<% for (idx in fields) {
-                if (fields[idx].documentation) {
-                    --helpBlocks; %>
-                "<%= fields[idx].fieldName %>": "<%= fields[idx].documentation %>"<% if (helpBlocks > 0) { %>,<% }
-                }
-            } %>
-            }<% } %>
+                "title": "<%- entityNameHumanized %>"
+            }
+<%_ for (const field of fields) { _%>,
+            "<%- field.fieldName %>": "<%- field.fieldNameHumanized %>"
+<%_ } _%>
+<%_ for (const relationship of relationships) { _%>,
+            "<%- relationship.relationshipName %>": "<%- relationship.relationshipNameHumanized %>"
+<%_ } _%>
+<%_ if (fieldsWithDocumentation.length > 0) { _%>,
+            "help": {
+  <%_ for (const [key, field] of Object.entries(fieldsWithDocumentation)) { _%>
+                "<%- field.fieldName %>": "<%- field.documentation %>"<% if (key < fieldsWithDocumentation.length - 1) { %>,<% } %>
+  <%_ } _%>
+            }
+<%_ } _%>
         }
     }
 <%_ if (microserviceAppName && !readOnly) { _%>,
-    "<%= microserviceAppName %>": {
-        "<%= entityTranslationKey %>" : {
-            "created": "新的 <%= entityNameHumanized %> 建立成功，識別碼為 {{ param }}",
-            "updated": "識別碼為 {{ param }} 的 <%= entityNameHumanized %> 更新成功",
-            "deleted": "識別碼為 {{ param }} 的 <%= entityNameHumanized %> 刪除成功"
+    "<%- microserviceAppName %>": {
+        "<%- entityTranslationKey %>" : {
+            "created": "新的 <%- entityNameHumanized %> 建立成功，識別碼為 {{ param }}",
+            "updated": "識別碼為 {{ param }} 的 <%- entityNameHumanized %> 更新成功",
+            "deleted": "識別碼為 {{ param }} 的 <%- entityNameHumanized %> 刪除成功"
         }
     }
 <%_ } _%>

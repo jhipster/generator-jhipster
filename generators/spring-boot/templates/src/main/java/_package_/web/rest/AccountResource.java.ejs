@@ -16,24 +16,24 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.web.rest;
+package <%- packageName %>.web.rest;
 
 <%_ if (authenticationTypeSession && !reactive) { _%>
-import <%= packageName %>.domain.PersistentToken;
-import <%= packageName %>.repository.PersistentTokenRepository;
+import <%- packageName %>.domain.PersistentToken;
+import <%- packageName %>.repository.PersistentTokenRepository;
 <%_ } _%>
 <%_ if (!reactive) { _%>
-import <%= user.entityAbsoluteClass %>;
+import <%- user.entityAbsoluteClass %>;
 <%_ } _%>
-import <%= packageName %>.repository.UserRepository;
-import <%= packageName %>.security.SecurityUtils;
-import <%= packageName %>.service.MailService;
-import <%= packageName %>.service.UserService;
-import <%= packageName %>.service.dto.PasswordChangeDTO;
-import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
-import <%= packageName %>.web.rest.errors.*;
-import <%= packageName %>.web.rest.vm.KeyAndPasswordVM;
-import <%= packageName %>.web.rest.vm.ManagedUserVM;
+import <%- packageName %>.repository.UserRepository;
+import <%- packageName %>.security.SecurityUtils;
+import <%- packageName %>.service.MailService;
+import <%- packageName %>.service.UserService;
+import <%- packageName %>.service.dto.PasswordChangeDTO;
+import <%- packageName %>.service.dto.<%- user.adminUserDto %>;
+import <%- packageName %>.web.rest.errors.*;
+import <%- packageName %>.web.rest.vm.KeyAndPasswordVM;
+import <%- packageName %>.web.rest.vm.ManagedUserVM;
 
 import java.security.Principal;
 import org.apache.commons.lang3.StringUtils;
@@ -75,19 +75,19 @@ public class AccountResource {
     private final UserService userService;
 
     private final MailService mailService;
-  <%_ if (authenticationTypeSession && !reactive) { _%>
+<%_ if (authenticationTypeSession && !reactive) { _%>
 
     private final PersistentTokenRepository persistentTokenRepository;
-  <%_ } _%>
+<%_ } _%>
 
     public AccountResource(UserRepository userRepository, UserService userService, MailService mailService<% if (authenticationTypeSession && !reactive) { %>, PersistentTokenRepository persistentTokenRepository<% } %>) {
 
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
-  <%_ if (authenticationTypeSession && !reactive) { _%>
+<%_ if (authenticationTypeSession && !reactive) { _%>
         this.persistentTokenRepository = persistentTokenRepository;
-  <%_ } _%>
+<%_ } _%>
     }
 
     /**
@@ -104,14 +104,14 @@ public class AccountResource {
         if (isPasswordLengthInvalid(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
-  <%_ if (reactive) { _%>
+<%_ if (reactive) { _%>
         return userService.registerUser(managedUserVM, managedUserVM.getPassword())
             .doOnSuccess(mailService::sendActivationEmail)
             .then();
-  <%_ } else { _%>
-        <%= user.persistClass %> user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
+<%_ } else { _%>
+        <%- user.persistClass %> user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
         mailService.sendActivationEmail(user);
-  <%_ } _%>
+<%_ } _%>
     }
 
     /**
@@ -122,19 +122,19 @@ public class AccountResource {
      */
     @GetMapping("/activate")
     public <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> activateAccount(@RequestParam(value = "key") String key) {
-  <%_ if (reactive) { _%>
+<%_ if (reactive) { _%>
         return userService.activateRegistration(key)
             .switchIfEmpty(Mono.error(new AccountResourceException("No user was found for this activation key")))
             .then();
-  <%_ } else { _%>
-        Optional<<%= user.persistClass %>> user = userService.activateRegistration(key);
+<%_ } else { _%>
+        Optional<<%- user.persistClass %>> user = userService.activateRegistration(key);
         if (!user.isPresent()) {
             throw new AccountResourceException("No user was found for this activation key");
         }
-  <%_ } _%>
+<%_ } _%>
     }
 
-  <%_ if (!authenticationTypeJwt) { _%>
+<%_ if (!authenticationTypeJwt) { _%>
     /**
      * {@code GET  /authenticate} : check if the user is authenticated.
      *
@@ -147,7 +147,7 @@ public class AccountResource {
         return ResponseEntity.status(principal == null ? HttpStatus.UNAUTHORIZED : HttpStatus.NO_CONTENT).build();
     }
 
-  <%_ } _%>
+<%_ } _%>
     /**
      * {@code GET  /account} : get the current user.
      *
@@ -157,12 +157,12 @@ public class AccountResource {
     @GetMapping("/account")
     public <%- wrapMono(user.adminUserDto) %> getAccount() {
         return userService.getUserWithAuthorities()
-            .map(<%= user.adminUserDto %>::new)
-  <%_ if (reactive) { _%>
+            .map(<%- user.adminUserDto %>::new)
+<%_ if (reactive) { _%>
             .switchIfEmpty(Mono.error(new AccountResourceException("User could not be found")));
-  <%_ } else { _%>
+<%_ } else { _%>
             .orElseThrow(() -> new AccountResourceException("User could not be found"));
-  <%_ } _%>
+<%_ } _%>
     }
 
     /**
@@ -173,8 +173,8 @@ public class AccountResource {
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the user login wasn't found.
      */
     @PostMapping("/account")
-  <%_ if (reactive) { _%>
-    public Mono<Void> saveAccount(@Valid @RequestBody <%= user.adminUserDto %> userDTO) {
+<%_ if (reactive) { _%>
+    public Mono<Void> saveAccount(@Valid @RequestBody <%- user.adminUserDto %> userDTO) {
         return SecurityUtils.getCurrentUserLogin()
             .switchIfEmpty(Mono.error(new AccountResourceException("Current user login not found")))
             .flatMap(userLogin -> userRepository.findOneByEmailIgnoreCase(userDTO.getEmail())
@@ -189,20 +189,20 @@ public class AccountResource {
                 .switchIfEmpty(Mono.error(new AccountResourceException("User could not be found")))
                 .flatMap(user -> userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
                     userDTO.getLangKey()<% if (user.hasImageField) { %>, userDTO.getImageUrl()<% } %>));
-  <%_ } else { _%>
-    public void saveAccount(@Valid @RequestBody <%= user.adminUserDto %> userDTO) {
+<%_ } else { _%>
+    public void saveAccount(@Valid @RequestBody <%- user.adminUserDto %> userDTO) {
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
-        Optional<<%= user.persistClass %>> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
+        Optional<<%- user.persistClass %>> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.orElseThrow().getLogin().equalsIgnoreCase(userLogin))) {
             throw new EmailAlreadyUsedException();
         }
-        Optional<<%= user.persistClass %>> user = userRepository.findOneByLogin(userLogin);
+        Optional<<%- user.persistClass %>> user = userRepository.findOneByLogin(userLogin);
         if (!user.isPresent()) {
             throw new AccountResourceException("User could not be found");
         }
         userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
             userDTO.getLangKey()<% if (user.hasImageField) { %>, userDTO.getImageUrl()<% } %>);
-  <%_ } _%>
+<%_ } _%>
     }
 
     /**
@@ -218,7 +218,7 @@ public class AccountResource {
         }
         <% if (reactive) { %>return <% } %>userService.changePassword(passwordChangeDto.getCurrentPassword(), passwordChangeDto.getNewPassword());
     }
-  <%_ if (authenticationTypeSession && !reactive) { _%>
+<%_ if (authenticationTypeSession && !reactive) { _%>
 
     /**
      * {@code GET  /account/sessions} : get the current open sessions.
@@ -261,15 +261,15 @@ public class AccountResource {
             .ifPresent(u ->
                 persistentTokenRepository.findByUser(u).stream()
                     .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))
-    <%_ if (databaseTypeSql || databaseTypeMongodb) { _%>
+  <%_ if (databaseTypeSql || databaseTypeMongodb) { _%>
                     .findAny().ifPresent(t -> persistentTokenRepository.deleteById(decodedSeries)));
-    <%_ } else if (databaseTypeCouchbase) { _%>
+  <%_ } else if (databaseTypeCouchbase) { _%>
                     .findAny().ifPresent(t -> persistentTokenRepository.deleteBySeries(decodedSeries)));
-    <%_ } else { _%>
+  <%_ } else { _%>
                     .findAny().ifPresent(persistentTokenRepository::delete));
-    <%_ } _%>
-    }
   <%_ } _%>
+    }
+<%_ } _%>
 
     /**
      * {@code POST   /account/reset-password/init} : Send an email to reset the password of the user.
@@ -277,7 +277,7 @@ public class AccountResource {
      * @param mail the mail of the user.
      */
     @PostMapping(path = "/account/reset-password/init")
-  <%_ if (reactive) { _%>
+<%_ if (reactive) { _%>
     public Mono<Void> requestPasswordReset(@RequestBody String mail) {
         return userService
             .requestPasswordReset(mail)
@@ -291,9 +291,9 @@ public class AccountResource {
                 }
             })
             .then();
-  <%_ } else { _%>
+<%_ } else { _%>
     public void requestPasswordReset(@RequestBody String mail) {
-        Optional<<%= user.persistClass %>> user = userService.requestPasswordReset(mail);
+        Optional<<%- user.persistClass %>> user = userService.requestPasswordReset(mail);
         if (user.isPresent()) {
             mailService.sendPasswordResetMail(user.orElseThrow());
         } else {
@@ -301,7 +301,7 @@ public class AccountResource {
             // but log that an invalid attempt has been made
             LOG.warn("Password reset requested for non existing mail");
         }
-  <%_ } _%>
+<%_ } _%>
     }
 
     /**
@@ -316,18 +316,18 @@ public class AccountResource {
         if (isPasswordLengthInvalid(keyAndPassword.getNewPassword())) {
             throw new InvalidPasswordException();
         }
-  <%_ if (reactive) { _%>
+<%_ if (reactive) { _%>
         return userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey())
             .switchIfEmpty(Mono.error(new AccountResourceException("No user was found for this reset key")))
             .then();
-  <%_ } else { _%>
-        Optional<<%= user.persistClass %>> user =
+<%_ } else { _%>
+        Optional<<%- user.persistClass %>> user =
             userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
 
         if (!user.isPresent()) {
             throw new AccountResourceException("No user was found for this reset key");
         }
-  <%_ } _%>
+<%_ } _%>
     }
 
     private static boolean isPasswordLengthInvalid(String password) {

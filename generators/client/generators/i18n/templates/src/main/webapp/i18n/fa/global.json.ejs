@@ -18,7 +18,7 @@
 -%>
 {
     "global": {
-        "title": "<%= capitalizedBaseName %>",
+        "title": "<%- capitalizedBaseName %>",
         "browsehappy": "شما از مرورگر <strong>قدیمی</strong> استفاده می‌کنید. لطفا <a href=\"http://browsehappy.com/?locale=en\">مرورگر خود را به روز کنید</a>",
         "menu": {
             "home": "خانه",
@@ -159,7 +159,7 @@
         "idnull": "Invalid ID",
         "idinvalid": "Invalid Id",
         "idnotfound": "ID cannot be found",
- <%_ if (searchEngineElasticsearch) { _%>
+<%_ if (searchEngineElasticsearch) { _%>
         "querySyntaxError": "Invalid search query",
 <%_ } _%>
         "file": {

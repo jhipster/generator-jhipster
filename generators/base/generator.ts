@@ -92,7 +92,7 @@ export default class BaseGenerator<
     this.fromBlueprint = this.rootGeneratorName() !== 'generator-jhipster';
 
     if (this.fromBlueprint) {
-      this.blueprintStorage = this._getStorage();
+      this.blueprintStorage = this._getStorage(undefined, { transform: this.features.configTransform });
       this.blueprintConfig = this.blueprintStorage.createProxy();
 
       // jhipsterContext is the original generator
@@ -168,17 +168,16 @@ export default class BaseGenerator<
             }
           },
           get jhipsterOldVersion(): string | null {
-            if (jhipsterOldVersion === undefined) {
-              jhipsterOldVersion = existsSync(generator.config.path)
-                ? (JSON.parse(readFileSync(generator.config.path, 'utf-8').toString())[GENERATOR_JHIPSTER]?.jhipsterVersion ?? null)
-                : null;
-            }
+            jhipsterOldVersion ??=
+              existsSync(generator.config.path) ?
+                (JSON.parse(readFileSync(generator.config.path, 'utf-8'))[GENERATOR_JHIPSTER]?.jhipsterVersion ?? null)
+              : null;
             return jhipsterOldVersion;
           },
           get environmentHasDockerCompose(): boolean {
             if (environmentHasDockerCompose === undefined) {
               const commandReturn = execaCommandSync('docker compose version', { reject: false, stdio: 'pipe' });
-              environmentHasDockerCompose = !commandReturn || !commandReturn.failed; // TODO looks to be a bug on ARM MaCs and execaCommandSync, does not return anything, assuming mac users are smart and install docker.
+              environmentHasDockerCompose = !commandReturn?.failed; // TODO looks to be a bug on ARM MaCs and execaCommandSync, does not return anything, assuming mac users are smart and install docker.
             }
             return environmentHasDockerCompose;
           },
@@ -309,10 +308,10 @@ export default class BaseGenerator<
         const configChanges = Object.fromEntries(
           keys
             .filter(key =>
-              Array.isArray(newConfig[key])
-                ? newConfig[key].length === oldConfig[key].length &&
-                  newConfig[key].find((element, index) => element !== oldConfig[key][index])
-                : newConfig[key] !== oldConfig[key],
+              Array.isArray(newConfig[key]) ?
+                newConfig[key].length === oldConfig[key].length &&
+                newConfig[key].find((element, index) => element !== oldConfig[key][index])
+              : newConfig[key] !== oldConfig[key],
             )
             .map(key => [key, { newValue: newConfig[key], oldValue: oldConfig[key] }]),
         );
@@ -586,8 +585,8 @@ export default class BaseGenerator<
   }
 
   /**
-   * @protected
    * Composes with blueprint generators, if any.
+   * @protected
    */
   protected async composeWithBlueprints() {
     if (this.fromBlueprint) {
@@ -667,8 +666,8 @@ export default class BaseGenerator<
   }
 
   /**
-   * @private
    * Configure blueprints.
+   * @private
    */
   async #configureBlueprints(): Promise<string[]> {
     try {
@@ -762,8 +761,8 @@ export default class BaseGenerator<
   }
 
   /**
-   * @private
    * Try to retrieve the package.json of the blueprint used, as an object.
+   * @private
    * @param {string} blueprintPkgName - generator name
    * @return {object} packageJson - retrieved package.json as an object or undefined if not found
    */
@@ -782,8 +781,8 @@ export default class BaseGenerator<
   }
 
   /**
-   * @private
    * Try to retrieve the version of the blueprint used.
+   * @private
    * @param {string} blueprintPkgName - generator name
    * @return {string} version - retrieved version or empty string if not found
    */

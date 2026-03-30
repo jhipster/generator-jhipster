@@ -26,26 +26,34 @@ import { TranslateDirective } from 'app/shared/language';
 import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 import { AlertError } from 'app/shared/alert/alert-error';
-import { I<%= entityAngularName %> } from '../<%= entityFileName %>.model';
-import { <%= entityAngularName %>Service } from '../service/<%= entityFileName %>.service';
+import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
+import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
 import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
-    templateUrl: './<%= entityFileName %>-delete-dialog.html',
-    imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>FormsModule, FontAwesomeModule, AlertError],
+    templateUrl: './<%- entityFileName %>-delete-dialog.html',
+    imports: [
+<%_ if (enableTranslation) { _%>
+      TranslateDirective,
+      TranslateModule, 
+<%_ } _%>
+      FormsModule,
+      FontAwesomeModule,
+      AlertError,
+    ],
 })
-export class <%= entityAngularName %>DeleteDialog {
-    <%= entityInstance %>?: I<%= entityAngularName %>;
+export class <%- entityAngularName %>DeleteDialog {
+    <%- entityInstance %>?: I<%- entityAngularName %>;
 
-    protected readonly <%= entityInstance %>Service = inject(<%= entityAngularName %>Service);
+    protected readonly <%- entityInstance %>Service = inject(<%- entityAngularName %>Service);
     protected readonly activeModal = inject(NgbActiveModal);
 
     cancel(): void {
         this.activeModal.dismiss();
     }
 
-    confirmDelete(<%= primaryKey.name %>: <%= tsKeyType %>): void {
-        this.<%= entityInstance %>Service.delete(<%= primaryKey.name %>).subscribe(() => {
+    confirmDelete(<%- primaryKey.name %>: <%- tsKeyType %>): void {
+        this.<%- entityInstance %>Service.delete(<%- primaryKey.name %>).subscribe(() => {
             this.activeModal.close(ITEM_DELETED_EVENT);
         });
     }

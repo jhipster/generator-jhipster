@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { HandleCommandTypes } from '../../lib/command/types.ts';
+import type { CommandTypeMap } from '../../lib/command/types.ts';
 import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.ts';
 import type {
   Config as BaseWorkspacesConfig,
@@ -32,9 +32,9 @@ import type { helmConstants, kubernetesConstants } from './support/constants.ts'
 
 type KubernetesDeployment = typeof kubernetesConstants & typeof helmConstants & {};
 
-type Command = HandleCommandTypes<typeof command>;
+type Command = CommandTypeMap<typeof command>;
 
-type BootstrapCommand = HandleCommandTypes<typeof bootstrapCommand>;
+type BootstrapCommand = CommandTypeMap<typeof bootstrapCommand>;
 
 export type Config = Command['Config'] & BootstrapCommand['Config'] & BaseWorkspacesConfig;
 

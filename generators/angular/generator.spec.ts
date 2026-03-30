@@ -111,26 +111,26 @@ describe(`generator - ${clientFramework}`, () => {
           prettierExtensions: expect.any(Array),
           prettierFolders: expect.any(Array),
           supportedLanguages: expect.any(Array),
-          ...(application?.generateBuiltInUserEntity
-            ? {
-                user: expect.any(Object),
-              }
-            : {}),
-          ...(application?.generateBuiltInAuthorityEntity
-            ? {
-                authority: expect.any(Object),
-              }
-            : {}),
-          ...(application?.generateUserManagement
-            ? {
-                userManagement: expect.any(Object),
-              }
-            : {}),
-          ...(application?.enableTranslation
-            ? {
-                languagesToGenerateDefinition: expect.any(Array),
-              }
-            : {}),
+          ...(application?.generateBuiltInUserEntity ?
+            {
+              user: expect.any(Object),
+            }
+          : {}),
+          ...(application?.generateBuiltInAuthorityEntity ?
+            {
+              authority: expect.any(Object),
+            }
+          : {}),
+          ...(application?.generateUserManagement ?
+            {
+              userManagement: expect.any(Object),
+            }
+          : {}),
+          ...(application?.enableTranslation ?
+            {
+              languagesToGenerateDefinition: expect.any(Array),
+            }
+          : {}),
         });
       });
 

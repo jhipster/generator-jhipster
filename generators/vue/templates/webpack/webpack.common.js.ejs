@@ -1,5 +1,5 @@
 'use strict';
-const path = require('path');
+const path = require('node:path');
 const { merge } = require('webpack-merge');
 const { VueLoaderPlugin } = require('vue-loader');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -20,7 +20,7 @@ function resolve(dir = '') {
 module.exports = async (env, options) => {
   const development = options.mode === 'development';
 <%_ if (enableTranslation) { _%>
-  const languagesHash = await hashElement(resolve('<%= this.relativeDir(clientRootDir, clientSrcDir) %>i18n'), {
+  const languagesHash = await hashElement(resolve('<%- this.relativeDir(clientRootDir, clientSrcDir) %>i18n'), {
     algo: 'md5',
     encoding: 'hex',
     files: { include: ['*.json'] },
@@ -37,16 +37,16 @@ module.exports = async (env, options) => {
       },
 <%_ } _%>
       entry: {
-        app: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/<%= microfrontend ? 'index' : 'main' %>.ts',
+        app: './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/<%- microfrontend ? 'index' : 'main' %>.ts',
       },
       output: {
-        path: resolve('<%= this.relativeDir(clientRootDir, clientDistDir) %>'),
+        path: resolve('<%- this.relativeDir(clientRootDir, clientDistDir) %>'),
       },
       resolve: {
         extensions: ['.ts', '.js', '.vue', '.json'],
         alias: {
           vue$: 'vue/dist/vue.esm-bundler.js',
-          '@': resolve('<%= this.relativeDir(clientRootDir, clientSrcDir) %>app'),
+          '@': resolve('<%- this.relativeDir(clientRootDir, clientSrcDir) %>app'),
         },
       },
       devServer: {
@@ -54,9 +54,9 @@ module.exports = async (env, options) => {
         hot: config.dev.hotReload,
 <%_ } _%>
         static: {
-          directory: './<%= this.relativeDir(clientRootDir, clientDistDir) %>',
+          directory: './<%- this.relativeDir(clientRootDir, clientDistDir) %>',
         },
-        port: <%= devServerPort %>,
+        port: <%- devServerPort %>,
         proxy: [
           {
             context: [
@@ -71,7 +71,7 @@ module.exports = async (env, options) => {
 <%_ } _%>
               '/auth'
             ],
-            target: 'http://localhost:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
+            target: 'http://localhost:<%- applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
             secure: false,
           },
 <%_ if (communicationSpringWebsocket) { _%>
@@ -79,7 +79,7 @@ module.exports = async (env, options) => {
             context: [
               '/websocket'
             ],
-            target: 'ws://localhost:<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
+            target: 'ws://localhost:<%- applicationTypeMicroservice ? gatewayServerPort : serverPort %>',
             ws: true
           }
 <%_ } _%>
@@ -89,7 +89,7 @@ module.exports = async (env, options) => {
       cache: {
         // 1. Set cache type to filesystem
         type: 'filesystem',
-        cacheDirectory: resolve('<%= this.relativeDir(clientRootDir, temporaryDir) %>webpack'),
+        cacheDirectory: resolve('<%- this.relativeDir(clientRootDir, temporaryDir) %>webpack'),
         buildDependencies: {
           // 2. Add your config as buildDependency to get cache invalidation on config change
           config: [
@@ -144,7 +144,7 @@ module.exports = async (env, options) => {
         }),
         new HtmlWebpackPlugin({
           base: '/',
-          template: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>index.html',
+          template: './<%- this.relativeDir(clientRootDir, clientSrcDir) %>index.html',
         }),
         new VueLoaderPlugin(),
         new CopyWebpackPlugin({
@@ -160,15 +160,15 @@ module.exports = async (env, options) => {
               from: path.join(path.dirname(require.resolve('axios/package.json')), 'dist/axios.min.js'),
               to: 'swagger-ui/',
             },
-            { from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/', to: 'swagger-ui/' },
-            { from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>content/', to: 'content/' },
-            { from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>favicon.ico', to: 'favicon.ico' },
+            { from: './<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/', to: 'swagger-ui/' },
+            { from: './<%- this.relativeDir(clientRootDir, clientSrcDir) %>content/', to: 'content/' },
+            { from: './<%- this.relativeDir(clientRootDir, clientSrcDir) %>favicon.ico', to: 'favicon.ico' },
             {
-              from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>manifest.webapp',
+              from: './<%- this.relativeDir(clientRootDir, clientSrcDir) %>manifest.webapp',
               to: 'manifest.webapp',
             },
             // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
-            { from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>robots.txt', to: 'robots.txt' },
+            { from: './<%- this.relativeDir(clientRootDir, clientSrcDir) %>robots.txt', to: 'robots.txt' },
           ],
         })<% if (enableTranslation) { %>,
         new MergeJsonWebpackPlugin({

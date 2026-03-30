@@ -31,9 +31,16 @@ import { HealthModel, HealthDetails, HealthStatus } from './health.model';
 import HealthModal from './modal/health-modal';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-health',
+  selector: '<%- jhiPrefixDashed %>-health',
   templateUrl: './health.html',
-  imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>FontAwesomeModule, KeyValuePipe],
+  imports: [
+<%_ if (enableTranslation) { _%>
+    TranslateDirective,
+    TranslateModule, 
+<%_ } _%>
+    FontAwesomeModule,
+    KeyValuePipe,
+  ],
 })
 export default class Health implements OnInit {
   readonly health = signal<HealthModel | null>(null);

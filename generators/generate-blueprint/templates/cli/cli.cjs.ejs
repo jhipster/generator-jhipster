@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { dirname, basename, join } = require('path');
+const { dirname, basename, join } = require('node:path');
 const { version, bin } = require('../package.json');
 
 // Get package name to use as namespace.
@@ -23,7 +23,7 @@ const blueprint = packageFolderName.startsWith('jhipster-') ? `generator-${packa
       [blueprint]: version,
     },
     printBlueprintLogo: () => {
-      console.log('===================== JHipster <%= humanizedBaseName %> =====================');
+      console.log('===================== JHipster <%- humanizedBaseName %> =====================');
       console.log('');
     },
     lookups: [{ packagePaths: [packagePath] }],

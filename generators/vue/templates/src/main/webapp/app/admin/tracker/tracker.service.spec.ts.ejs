@@ -18,17 +18,17 @@ describe('Tracker Service', () => {
   beforeEach(() => {
     router = createRouter({ history: createMemoryHistory(), routes: [] });
     vitest.spyOn(router.currentRoute, 'value', 'get').mockReturnValue({ fullPath: '/' } as any);
-    router.afterEach = vitest.fn();
+    router.afterEach = vi.fn();
     authenticated = ref(false);
 
     const watch$ = new Subject<any>();
 
     mockStomp = {
-      publish: vitest.fn(),
-      watch: vitest.fn().mockReturnValue(watch$),
-      configure: vitest.fn(),
-      activate: vitest.fn(),
-      deactivate: vitest.fn(),
+      publish: vi.fn(),
+      watch: vi.fn().mockReturnValue(watch$),
+      configure: vi.fn(),
+      activate: vi.fn(),
+      deactivate: vi.fn(),
       connectionState$: new Subject<any>(),
     };
 

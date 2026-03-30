@@ -29,7 +29,7 @@ import { Thread, ThreadState } from 'app/admin/metrics/metrics.model';
 import { MetricsModalThreads } from '../metrics-modal-threads/metrics-modal-threads';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-jvm-threads',
+  selector: '<%- jhiPrefixDashed %>-jvm-threads',
   templateUrl: './jvm-threads.html',
   imports: [NgbProgressbar, DecimalPipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
 })

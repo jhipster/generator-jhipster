@@ -995,7 +995,7 @@ exports[`generator - app - --incremental-changelog when creating a new applicati
 
     <changeSet author="jhipster" id="00000000000002" context="test">
         <createTable tableName="jhi_date_time_wrapper">
-            <column  name="id" type="BIGINT">
+            <column name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="jhi_date_time_wrapperPK"/>
             </column>
             <column name="instant" type="timestamp"/>
@@ -1169,7 +1169,7 @@ exports[`generator - app - --incremental-changelog when creating entities with d
 
     <changeSet author="jhipster" id="00000000000002" context="test">
         <createTable tableName="jhi_date_time_wrapper">
-            <column  name="id" type="BIGINT">
+            <column name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="jhi_date_time_wrapperPK"/>
             </column>
             <column name="instant" type="timestamp"/>
@@ -1526,7 +1526,7 @@ exports[`generator - app - --incremental-changelog when incremental liquibase fi
 
     <changeSet author="jhipster" id="00000000000002" context="test">
         <createTable tableName="jhi_date_time_wrapper">
-            <column  name="id" type="BIGINT">
+            <column name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="jhi_date_time_wrapperPK"/>
             </column>
             <column name="instant" type="timestamp"/>
@@ -1727,7 +1727,7 @@ exports[`generator - app - --incremental-changelog when initially creating an ap
 
     <changeSet author="jhipster" id="00000000000002" context="test">
         <createTable tableName="jhi_date_time_wrapper">
-            <column  name="id" type="BIGINT">
+            <column name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="jhi_date_time_wrapperPK"/>
             </column>
             <column name="instant" type="timestamp"/>

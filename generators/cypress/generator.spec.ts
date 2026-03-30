@@ -20,8 +20,8 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
 import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
+import type { Matrix } from '../../lib/testing/index.ts';
 import { AuthenticationTypeMatrix, defaultHelpers as helpers, extendMatrix, fromMatrix, runResult } from '../../lib/testing/index.ts';
-import type { ConfigAll } from '../../lib/types/command-all.ts';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
 
 import Generator from './generator.ts';
@@ -31,7 +31,7 @@ const { ANGULAR, REACT, VUE } = clientFrameworkTypes;
 
 const generator = basename(import.meta.dirname);
 
-const e2eMatrix = extendMatrix<ConfigAll>(
+const e2eMatrix: Matrix = extendMatrix(
   fromMatrix({
     ...AuthenticationTypeMatrix,
     cypressAudit: [false, true],

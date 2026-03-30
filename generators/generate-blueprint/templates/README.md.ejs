@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-# generator-jhipster-<%= baseName %>
+# generator-jhipster-<%- baseName %>
 
-> JHipster blueprint, <%= baseName %> blueprint for JHipster
+> JHipster blueprint, <%- baseName %> blueprint for JHipster
 
 [![NPM version][npm-image]][npm-url]
 [![Generator][github-generator-image]][github-generator-url]
@@ -39,7 +39,7 @@ As this is a [JHipster](https://www.jhipster.tech/) blueprint, we expect you hav
 To install or update this blueprint:
 
 ```bash
-npm install -g generator-jhipster-<%= baseName %>
+npm install -g generator-jhipster-<%- baseName %>
 ```
 
 # Usage
@@ -48,46 +48,46 @@ To use this blueprint, run the below command
 
 <%_ if (cli) { _%>
 ```bash
-<%= cliName %>
+<%- cliName %>
   <%_ if (caret) { _%>
 ```
 
 or
 
 ```bash
-jhipster --blueprints <%= baseName %>
+jhipster --blueprints <%- baseName %>
 ```
   <%_ } _%>
 <%_ } else { _%>
 ```bash
-jhipster --blueprints <%= baseName %>
+jhipster --blueprints <%- baseName %>
 ```
 <%_ } _%>
 
-You can look for updated <%= baseName %> blueprint specific options by running
+You can look for updated <%- baseName %> blueprint specific options by running
 
 ```bash
 <%_ if (cli) { _%>
-<%= cliName %> app --help
+<%- cliName %> app --help
 <%_ } else { _%>
-jhipster app --blueprints <%= baseName %> --help
+jhipster app --blueprints <%- baseName %> --help
 <%_ } _%>
 ```
 
-And looking for `(blueprint option: <%= baseName %>)` like
+And looking for `(blueprint option: <%- baseName %>)` like
 
 ## Pre-release
 
 To use an unreleased version, install it using git.
 
 ```bash
-npm install -g <%= githubRepository %>#main
-jhipster --blueprints <%= baseName %> --skip-jhipster-dependencies
+npm install -g <%- githubRepository %>#main
+jhipster --blueprints <%- baseName %> --skip-jhipster-dependencies
 ```
 
-[npm-image]: https://img.shields.io/npm/v/generator-jhipster-<%= baseName %>.svg
-[npm-url]: https://npmjs.org/package/generator-jhipster-<%= baseName %>
-[github-generator-image]: https://github.com/<%= githubRepository %>/actions/workflows/generator.yml/badge.svg
-[github-generator-url]: https://github.com/<%= githubRepository %>/actions/workflows/generator.yml
-[github-samples-image]: https://github.com/<%= githubRepository %>/actions/workflows/samples.yml/badge.svg
-[github-samples-url]: https://github.com/<%= githubRepository %>/actions/workflows/samples.yml
+[npm-image]: https://img.shields.io/npm/v/generator-jhipster-<%- baseName %>.svg
+[npm-url]: https://npmjs.org/package/generator-jhipster-<%- baseName %>
+[github-generator-image]: https://github.com/<%- githubRepository %>/actions/workflows/generator.yml/badge.svg
+[github-generator-url]: https://github.com/<%- githubRepository %>/actions/workflows/generator.yml
+[github-samples-image]: https://github.com/<%- githubRepository %>/actions/workflows/samples.yml/badge.svg
+[github-samples-url]: https://github.com/<%- githubRepository %>/actions/workflows/samples.yml

@@ -10,17 +10,17 @@ import useDataUtils from '@/shared/data/data-utils.service';
 <%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
 import { useDateFormat } from '@/shared/composables'
 <%_ } _%>
-import { type I<%= entityAngularName %> } from '@/shared/model/<%= entityModelFileName %>.model';
-import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
+import { type I<%- entityAngularName %> } from '@/shared/model/<%- entityModelFileName %>.model';
+import <%- entityAngularName %>Service from './<%- entityFileName %>.service';
 import { useAlertService } from '@/shared/alert/alert.service';
 
 export default defineComponent({
-  name: '<%= entityAngularName %>Details',
+  name: '<%- entityAngularName %>Details',
   setup() {
 <%_ if (anyFieldIsDuration || anyFieldIsTimeDerived) { _%>
     const dateFormat = useDateFormat();
 <%_ } _%>
-    const <%= entityInstance %>Service = inject('<%= entityInstance %>Service', () => new <%= entityAngularName %>Service());
+    const <%- entityInstance %>Service = inject('<%- entityInstance %>Service', () => new <%- entityAngularName %>Service());
     const alertService = inject('alertService', () => useAlertService(), true);
 
 <% if (anyFieldIsBlobDerived) { %>
@@ -30,19 +30,19 @@ export default defineComponent({
     const router = useRouter();
 
     const previousState = () => router.go(-1);
-    const <%= entityInstance %>: Ref<I<%= entityAngularName %>> = ref({});
+    const <%- entityInstance %>: Ref<I<%- entityAngularName %>> = ref({});
 
-    const retrieve<%= entityAngularName %> = async <%= entityInstance %><%= primaryKey.nameCapitalized %> => {
+    const retrieve<%- entityAngularName %> = async <%- entityInstance %><%- primaryKey.nameCapitalized %> => {
       try {
-        const res = await <%= entityInstance %>Service().find(<%= entityInstance %><%= primaryKey.nameCapitalized %>);
-        <%= entityInstance %>.value = res;
+        const res = await <%- entityInstance %>Service().find(<%- entityInstance %><%- primaryKey.nameCapitalized %>);
+        <%- entityInstance %>.value = res;
       } catch (error) {
         alertService.showHttpError(error.response);
       }
     };
 
-    if (route.params?.<%= entityInstance %>Id) {
-      retrieve<%= entityAngularName %>(route.params.<%= entityInstance %>Id);
+    if (route.params?.<%- entityInstance %>Id) {
+      retrieve<%- entityAngularName %>(route.params.<%- entityInstance %>Id);
     }
 
     return {
@@ -50,7 +50,7 @@ export default defineComponent({
       ...dateFormat,
 <%_ } _%>
       alertService,
-      <%= entityInstance %>,
+      <%- entityInstance %>,
 <% if (anyFieldIsBlobDerived) { %>
       ...dataUtils,
 <% } %>

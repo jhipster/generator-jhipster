@@ -1,3 +1,4 @@
+<%# eslint-disable -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -17,15 +18,15 @@
  limitations under the License.
 -%>
 <%_
-let table = [];
+const table = [];
 
 // Generate CSV header
-let header = [];
+const header = [];
 const fieldsToGenerate = [...allFields.filter(f => f.id), ...fields.filter(f => !f.id)].filter(field => field.liquibaseGenerateFakeData);
 for (field of fieldsToGenerate) {
   header.push(field.columnName);
   if (field.shouldCreateContentType) {
-    header.push(field.columnName + '_content_type');
+    header.push(`${field.columnName}_content_type`);
   }
 }
 for (relationship of relationships.filter(relationship => relationship.liquibaseGenerateFakeData)) {
@@ -58,11 +59,10 @@ for (lineNb = 0; lineNb < entity.fakeDataCount; lineNb++) {
   }
 
   for (relationship of relationships.filter(relationship => relationship.liquibaseGenerateFakeData)) {
-    const relationshipType = relationship.relationshipType;
     const otherLiquibaseFakeData = relationship.otherEntity.liquibaseFakeData;
     let relationshipRow = lineNb;
     if (relationship.otherEntity.fakeDataCount > 0 && relationshipRow >= relationship.otherEntity.fakeDataCount && !relationship.unique) {
-      relationshipRow = entity.faker.number.int({min: 1, max: relationship.otherEntity.fakeDataCount}) - 1;
+      relationshipRow = entity.faker.number.int({ min: 1, max: relationship.otherEntity.fakeDataCount }) - 1;
     }
     if (relationshipRow < relationship.otherEntity.fakeDataCount) {
       line.push(otherLiquibaseFakeData[relationshipRow][relationship.otherEntity.primaryKey.name]);
@@ -73,7 +73,7 @@ for (lineNb = 0; lineNb < entity.fakeDataCount; lineNb++) {
   }
 }
 
-let result = table
+const result = table
       .map(line => line.join(';'))
       .join('\n');
 _%>

@@ -16,14 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.repository;
+package <%- packageName %>.repository;
 
-import <%= packageName %>.domain.PersistentToken;
-import <%= user.entityAbsoluteClass %>;
+import <%- packageName %>.domain.PersistentToken;
+import <%- user.entityAbsoluteClass %>;
 import org.springframework.data.couchbase.repository.CouchbaseRepository;
 import java.util.List;
 import java.util.Optional;
-import static <%= packageName %>.config.Constants.ID_DELIMITER;
+import static <%- packageName %>.config.Constants.ID_DELIMITER;
 
 /**
  * Spring Data Couchbase repository for the {@link PersistentToken} entity.
@@ -38,7 +38,7 @@ public interface PersistentTokenRepository extends CouchbaseRepository<Persisten
         deleteById(series);
     }
 
-    default List<PersistentToken> findByUser(<%= user.persistClass %> user) {
+    default List<PersistentToken> findByUser(<%- user.persistClass %> user) {
         return findByLogin(user.getLogin());
     }
 

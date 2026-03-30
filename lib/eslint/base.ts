@@ -1,30 +1,35 @@
-import type { ConfigObject } from '@eslint/core';
+import type { Config } from 'eslint/config';
 import imports from 'eslint-plugin-import-x';
 import unusedImports from 'eslint-plugin-unused-imports';
+
+export const jsRules: Record<string, string | [string, ...any[]]> = {
+  'dot-notation': 'error',
+  eqeqeq: ['error', 'always', { null: 'ignore' }],
+  'no-else-return': 'error',
+  'no-regex-spaces': 'error',
+  'no-useless-computed-key': 'error',
+  'no-useless-return': 'error',
+  'no-var': 'error',
+  'object-shorthand': 'error',
+  'prefer-const': 'error',
+  // TODO object needs to be enabled { array: false, object: true }
+  'prefer-destructuring': ['error', { array: false }],
+  'prefer-object-has-own': 'error',
+  'prefer-object-spread': 'error',
+  'prefer-template': 'error',
+};
 
 /**
  * Config applied to transformed source in generation process.
  * Rules must be compatible with auto fix to be applied.
  */
-const baseConfig: ConfigObject = {
+const baseConfig: Config = {
   plugins: {
     'unused-imports': unusedImports,
     ...imports.flatConfigs.recommended.plugins,
   },
   rules: {
-    'dot-notation': 'error',
-    eqeqeq: ['error', 'always', { null: 'ignore' }],
-    'no-else-return': 'error',
-    'no-regex-spaces': 'error',
-    'no-useless-computed-key': 'error',
-    'no-useless-return': 'error',
-    'no-var': 'error',
-    'object-shorthand': 'error',
-    'prefer-const': 'error',
-    'prefer-destructuring': ['error', { array: false }],
-    'prefer-object-has-own': 'error',
-    'prefer-object-spread': 'error',
-    'prefer-template': 'error',
+    ...jsRules,
 
     // Configure unused-imports rule
     'no-unused-vars': 'off',
@@ -58,6 +63,6 @@ const baseConfig: ConfigObject = {
       },
     ],
   },
-} as const satisfies ConfigObject;
+} as const satisfies Config;
 
 export default baseConfig;

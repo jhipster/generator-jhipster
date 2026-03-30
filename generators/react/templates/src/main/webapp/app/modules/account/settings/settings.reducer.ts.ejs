@@ -19,7 +19,9 @@
 import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 <% if (enableTranslation) { %>import { Storage } from 'react-jhipster';<% } %>
-<%_ if (enableTranslation && enableI18nRTL) { _%>import { isRTL } from 'app/config/translation';<%_ } _%>
+<%_ if (enableTranslation && enableI18nRTL) { _%>
+import { isRTL } from 'app/config/translation';
+<%_ } _%>
 import { getSession } from 'app/shared/reducers/authentication';
 import { AppThunk } from 'app/config/store';
 import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
@@ -79,11 +81,11 @@ export const SettingsSlice = createSlice({
         state.loading = false;
         state.updateSuccess = true;
         state.updateFailure = false;
-        <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
         state.successMessage = 'settings.messages.success';
-        <%_ } else { _%>
+<%_ } else { _%>
         state.successMessage = 'Settings saved!';
-        <%_ } _%>
+<%_ } _%>
       });
   },
 });

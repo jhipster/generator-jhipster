@@ -30,7 +30,7 @@ import { upperFirst } from 'lodash-es';
  */
 export const javaBeanCase = (beanName: string): string => {
   const secondLetter = beanName.charAt(1);
-  if (secondLetter && secondLetter === secondLetter.toUpperCase()) {
+  if (secondLetter === secondLetter?.toUpperCase()) {
     return beanName;
   }
   return upperFirst(beanName);

@@ -139,8 +139,9 @@ export const checkContentIn = (contentToCheck: string | RegExp, content: string,
 
   let re: RegExp;
   if (typeof contentToCheck === 'string') {
-    const pattern = ignoreWhitespaces
-      ? convertToPrettierExpressions(escapeRegExp(contentToCheck))
+    const pattern =
+      ignoreWhitespaces ?
+        convertToPrettierExpressions(escapeRegExp(contentToCheck))
       : contentToCheck
           .split('\n')
           .map(line => String.raw`\s*${escapeRegExp(line)}`)
@@ -206,13 +207,12 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
   const needleIndent = needleIndex - needleLineIndex;
 
   if (typeof contentToAdd === 'function') {
-    const newContent = contentToAdd(content, {
+    return contentToAdd(content, {
       needleIndex,
       needleLineIndex,
       needleIndent,
       indentPrefix: ' '.repeat(needleIndent),
     });
-    return newContent;
   }
   contentToAdd = Array.isArray(contentToAdd) ? contentToAdd : [contentToAdd];
   if (autoIndent) {
@@ -243,8 +243,7 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
     contentToAdd = contentToAdd.map(line => (line.length > identToRemove ? line.slice(identToRemove) : ''));
   }
 
-  const newContent = `${beforeContent}${contentToAdd.join('\n')}\n${afterContent}`;
-  return newContent;
+  return `${beforeContent}${contentToAdd.join('\n')}\n${afterContent}`;
 };
 
 /**

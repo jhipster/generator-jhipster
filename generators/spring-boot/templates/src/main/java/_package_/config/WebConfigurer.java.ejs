@@ -16,10 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.config;
+package <%- packageName %>.config;
 
 <%_ if (reactive) { _%>
-import <%= springBoot4 ? 'tools' : 'com.fasterxml' %>.jackson.databind.ObjectMapper;
+import <%- springBoot4 ? 'tools' : 'com.fasterxml' %>.jackson.databind.ObjectMapper;
 <%_ } _%>
 <%_ if (!skipClient || devDatabaseTypeH2Any) { _%>
 import tech.jhipster.config.JHipsterConstants;
@@ -45,9 +45,9 @@ import org.springframework.boot.webflux.autoconfigure.ResourceHandlerRegistratio
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 <%_ if (reactive) { _%>
-    <%_ if (!skipClient) { _%>
+  <%_ if (!skipClient) { _%>
 import org.springframework.context.annotation.Profile;
-    <%_ } _%>
+  <%_ } _%>
 import org.springframework.core.annotation.Order;
 <%_ } _%>
 <%_ if (reactive && !databaseTypeNo) { _%>
@@ -70,19 +70,19 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 import org.springframework.web.reactive.result.method.HandlerMethodArgumentResolver;
 import org.springframework.web.server.WebExceptionHandler;
-import <%= packageName %>.web.rest.errors.ExceptionTranslator;
+import <%- packageName %>.web.rest.errors.ExceptionTranslator;
 import tech.jhipster.web.rest.errors.ReactiveWebExceptionHandler;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 
 import jakarta.servlet.*;
-    <%_ if (!skipClient) { _%>
+  <%_ if (!skipClient) { _%>
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
 import static java.net.URLDecoder.decode;
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 <%_ if (reactive && !skipClient) { _%>
 
@@ -150,7 +150,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
         if (server instanceof ConfigurableServletWebServerFactory servletWebServer) {
             File root;
             String prefixPath = resolvePathPrefix();
-            root = Path.of(prefixPath + "<%= clientDistDir %>").toFile();
+            root = Path.of(prefixPath + "<%- clientDistDir %>").toFile();
             if (root.exists() && root.isDirectory()) {
                 servletWebServer.setDocumentRoot(root);
             }
@@ -164,7 +164,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
         String fullExecutablePath = decode(this.getClass().getResource("").getPath(), StandardCharsets.UTF_8);
         String rootPath = Path.of(".").toUri().normalize().getPath();
         String extractedPath = fullExecutablePath.replace(rootPath, "");
-        int extractionEndIndex = extractedPath.indexOf("<%= temporaryDir %>");
+        int extractionEndIndex = extractedPath.indexOf("<%- temporaryDir %>");
         if (extractionEndIndex <= 0) {
             return "";
         }

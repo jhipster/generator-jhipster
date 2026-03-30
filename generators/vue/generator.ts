@@ -164,10 +164,10 @@ export default class VueGenerator extends ClientApplicationGenerator {
                 needle: 'jhipster-needle-add-entity-to-router-import',
                 contentToAdd: `const ${entityAngularName} = () => import('@/entities/${entityFolderName}/${entityFileName}.vue');
 const ${entityAngularName}Details = () => import('@/entities/${entityFolderName}/${entityFileName}-details.vue');${
-                  readOnly
-                    ? ''
-                    : `
+                  readOnly ? '' : (
+                    `
 const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/${entityFileName}-update.vue');`
+                  )
                 }`,
                 contentToCheck: `import('@/entities/${entityFolderName}/${entityFileName}.vue');`,
               }),
@@ -189,9 +189,8 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   component: ${entityAngularName}Details,
   meta: { authorities: [Authority.USER] }
 },${
-                  readOnly
-                    ? ''
-                    : `
+                  readOnly ? '' : (
+                    `
 {
   path: '${entityPage}/new',
   name: '${entityAngularName}Create',
@@ -204,6 +203,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   component: ${entityAngularName}Update,
   meta: { authorities: [Authority.USER] }
 },`
+                  )
                 }`,
                 contentToCheck: `path: '${entityFileName}'`,
               }),
@@ -381,12 +381,12 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
               'webpack-dev-server': null,
               'webpack-merge': null,
               'workbox-webpack-plugin': null,
-              ...(enableTranslation
-                ? {
-                    'folder-hash': null,
-                    'merge-jsons-webpack-plugin': null,
-                  }
-                : {}),
+              ...(enableTranslation ?
+                {
+                  'folder-hash': null,
+                  'merge-jsons-webpack-plugin': null,
+                }
+              : {}),
             },
           });
         }

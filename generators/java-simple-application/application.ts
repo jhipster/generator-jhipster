@@ -90,6 +90,7 @@ export type JavaSimpleApplicationPreparingAddedApplicationProperties = {
   listOrFluxClassPath: string;
   reactorBlock: string;
   reactorBlockOptional: string;
+  pageOrFlux: string;
 
   jhipsterDependenciesVersion?: string;
 };
@@ -164,6 +165,7 @@ export const mutateApplicationPreparing = {
   listOrFluxClassPath: ({ reactive }) => (reactive ? 'reactor.core.publisher.Flux' : 'java.util.List'),
   reactorBlock: ({ reactive }) => (reactive ? '.block()' : ''),
   reactorBlockOptional: ({ reactive }) => (reactive ? '.blockOptional()' : ''),
+  pageOrFlux: ({ reactive }) => (reactive ? 'Flux' : 'Page'),
 
   jhipsterDependenciesVersion: JHIPSTER_DEPENDENCIES_VERSION,
 

@@ -18,7 +18,7 @@
 -%>
 {
     "global": {
-        "title": "<%= capitalizedBaseName %>",
+        "title": "<%- capitalizedBaseName %>",
         "browsehappy": "Χρησιμοποείται ένα <strong>απαρχαιωμένο</strong> πρόγραμμα περιήγησης. Παρακαλώ <a href=\"http://browsehappy.com/?locale=en\">αναβαθμίστε το πρόγραμμα περιήγησης σας</a> να βελτιωθεί η εμπειρία σας.",
         "menu": {
             "home": "Home",
@@ -159,7 +159,7 @@
         "idnull": "Invalid ID",
         "idinvalid": "Invalid Id",
         "idnotfound": "ID cannot be found",
- <%_ if (searchEngineElasticsearch) { _%>
+<%_ if (searchEngineElasticsearch) { _%>
         "querySyntaxError": "Invalid search query",
 <%_ } _%>
         "file": {
