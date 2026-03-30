@@ -130,6 +130,9 @@ export default class BaseGenerator<
       const { storeBlueprintVersion, storeJHipsterVersion, queueCommandTasks = true } = this.features;
       if (this.fromBlueprint && storeBlueprintVersion && !this.options.reproducibleTests) {
         try {
+          if (this.blueprintConfig!.blueprintVersion) {
+            this.getContextData(this.getBlueprintOldVersionKey(), { factory: () => this.blueprintConfig!.blueprintVersion });
+          }
           const blueprintPackageJson = JSON.parse(readFileSync(this._meta!.packagePath!, 'utf8'));
           this.blueprintConfig!.blueprintVersion = blueprintPackageJson.version;
         } catch {
@@ -143,6 +146,18 @@ export default class BaseGenerator<
         this._queueCurrentJHipsterCommandTasks();
       }
     });
+  }
+
+  getBlueprintOldVersionKey(): string {
+    return `oldVersion:${this.rootGeneratorName()}`;
+  }
+
+  getBlueprintOldVersion(): string | undefined {
+    try {
+      return this.getContextData(this.getBlueprintOldVersionKey());
+    } catch {
+      return undefined;
+    }
   }
 
   /**
