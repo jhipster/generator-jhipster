@@ -49,20 +49,6 @@ export default class ElasticsearchGenerator extends SpringBootApplicationGenerat
     return this.delegateTasksToBlueprint(() => this.preparingEachEntity);
   }
 
-  get preparingEachEntityField() {
-    return this.asPreparingEachEntityFieldTaskGroup({
-      prepareField({ field }) {
-        mutateData(field, {
-          fieldSupportsSortBy: !field.transient,
-        });
-      },
-    });
-  }
-
-  get [SpringBootApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
-    return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
-  }
-
   get writing() {
     return this.asWritingTaskGroup({
       async cleanup({ application, control }) {
