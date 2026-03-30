@@ -20,12 +20,24 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename, resolve } from 'node:path';
 
 import { defaultHelpers as helpers, runResult } from '../../../../lib/testing/index.ts';
+import type { Entity } from '../../../../lib/jhipster/types/entity.ts';
 import { testBootstrapEntities } from '../../../../test/support/bootstrap-tests.ts';
 import { shouldSupportFeatures } from '../../../../test/support/tests.ts';
 
 import Generator from './generator.ts';
 
 const generator = `${basename(resolve(import.meta.dirname, '../../'))}:${basename(import.meta.dirname)}`;
+const domainEntities: (Entity & { entityDomainLayer?: boolean })[] = [
+  {
+    name: 'DomainEntity',
+    changelogDate: '20220129000300',
+    entityDomainLayer: true,
+    fields: [
+      { fieldName: 'name', fieldType: 'String' },
+      { fieldName: 'description', fieldType: 'byte[]', fieldTypeBlobContent: 'text' },
+    ],
+  },
+];
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
@@ -60,6 +72,21 @@ describe(`generator - ${generator}`, () => {
   },
 }
 `);
+      });
+    });
+
+    describe('databaseType no and domain-layer entity', () => {
+      before(async () => {
+        await helpers.runJHipster(generator).withJHipsterConfig({ databaseType: 'no' }, domainEntities);
+      });
+
+      it('should populate javaFieldType for domain-layer fields', () => {
+        expect(runResult.entities?.DomainEntity.fields).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({ fieldName: 'name', javaFieldType: 'String' }),
+            expect.objectContaining({ fieldName: 'description', javaFieldType: 'String' }),
+          ]),
+        );
       });
     });
   });
