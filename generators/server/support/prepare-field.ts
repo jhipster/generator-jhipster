@@ -21,16 +21,13 @@ import assert from 'node:assert';
 import { snakeCase } from 'lodash-es';
 
 import { databaseTypes, entityOptions, fieldTypes, reservedKeywords } from '../../../lib/jhipster/index.ts';
-import { buildMutateDataForProperty, mutateData } from '../../../lib/utils/index.ts';
 import type CoreGenerator from '../../base-core/generator.ts';
-import { formatDocAsApiDescription, formatDocAsJavaDoc } from '../../java/support/doc.ts';
 import type { Field as LiquibaseField } from '../../liquibase/types.d.ts';
 import type { Field as SpringDataRelationalField } from '../../spring-boot/generators/data-relational/types.d.ts';
 import type { Field as SpringBootField } from '../../spring-boot/types.d.ts';
 import type { Application as ServerApplication, Entity as ServerEntity, Field as ServerField } from '../types.d.ts';
 
 import { getUXConstraintName } from './database.ts';
-import { getJavaValueGeneratorForType } from './templates/field-values.ts';
 
 const { isReservedTableName } = reservedKeywords;
 const { CommonDBTypes } = fieldTypes;
@@ -40,6 +37,7 @@ const { MapperTypes } = entityOptions;
 const { MAPSTRUCT } = MapperTypes;
 const { INTEGER, LONG, UUID } = CommonDBTypes;
 
+/** @deprecated */
 export const prepareMapstructField = (entity: ServerEntity, field: SpringBootField): SpringBootField => {
   if (field.mapstructExpression) {
     assert.equal(entity.dto, MAPSTRUCT, `@MapstructExpression requires an Entity with mapstruct dto [${entity.name}.${field.fieldName}].`);
@@ -51,23 +49,15 @@ export const prepareMapstructField = (entity: ServerEntity, field: SpringBootFie
   return field;
 };
 
+/** @deprecated
+ * TODO move to mutations
+ */
 export default function prepareField(
   application: ServerApplication,
   entityWithConfig: ServerEntity,
   field: ServerField & LiquibaseField & SpringBootField & SpringDataRelationalField,
   generator: CoreGenerator,
 ) {
-  prepareMapstructField(entityWithConfig, field);
-
-  if (field.documentation) {
-    mutateData(field, {
-      __override__: false,
-      fieldJavadoc: formatDocAsJavaDoc(field.documentation, 4),
-      fieldApiDescription: formatDocAsApiDescription(field.documentation),
-      propertyApiDescription: ({ fieldApiDescription }) => fieldApiDescription,
-    });
-  }
-
   const { reactive: entityReactive, prodDatabaseType: entityProdDatabaseType } = entityWithConfig as any;
   if (field.id && entityWithConfig.primaryKey) {
     field.autoGenerate ??= !entityWithConfig.primaryKey.composite && ([INTEGER, LONG, UUID] as string[]).includes(field.fieldType);
@@ -134,36 +124,4 @@ export default function prepareField(
       prodDatabaseType: entityProdDatabaseType,
     }).value;
   }
-
-  field.fieldValidateRulesPatternJava ??=
-    field.fieldValidateRulesPattern ?
-      field.fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/"/g, String.raw`\"`)
-    : field.fieldValidateRulesPattern;
-
-  if (field.blobContentTypeText) {
-    field.javaFieldType = 'String';
-  } else {
-    field.javaFieldType = field.fieldType;
-  }
-
-  mutateData(field, buildMutateDataForProperty('javaFieldType', ['String', 'Integer', 'Long', 'UUID']));
-
-  if (field.fieldTypeInteger || field.fieldTypeLong || field.fieldTypeString || field.fieldTypeUUID) {
-    if (field.fieldTypeInteger) {
-      field.javaValueSample1 = '1';
-      field.javaValueSample2 = '2';
-    } else if (field.fieldTypeLong) {
-      field.javaValueSample1 = '1L';
-      field.javaValueSample2 = '2L';
-    } else if (field.fieldTypeString) {
-      field.javaValueSample1 = `"${field.fieldName}1"`;
-      field.javaValueSample2 = `"${field.fieldName}2"`;
-    } else if (field.fieldTypeUUID) {
-      field.javaValueSample1 = 'UUID.fromString("23d8dc04-a48b-45d9-a01d-4b728f0ad4aa")';
-      field.javaValueSample2 = 'UUID.fromString("ad79f240-3727-46c3-b89f-2cf6ebd74367")';
-    }
-    field.javaValueGenerator = getJavaValueGeneratorForType(field.javaFieldType);
-  }
-
-  field.fieldSupportsSortBy = !field.transient;
 }

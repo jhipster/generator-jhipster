@@ -19,6 +19,7 @@
 import { mutateData } from '../../../../lib/utils/index.ts';
 import { getEnumInfo } from '../../../base-application/support/index.ts';
 import type { Source as CommonSource } from '../../../common/types.d.ts';
+import { mutateValidatedField } from '../../application.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
 import { javaTestPackageTemplatesBlock } from '../../support/index.ts';
 import { isReservedJavaKeyword } from '../../support/reserved-keywords.ts';
@@ -105,59 +106,9 @@ export default class DomainGenerator extends JavaApplicationGenerator {
         entity.skipJunitTests = entity.hasCyclicRequiredRelationship ? 'Cyclic required relationships detected' : undefined;
       },
 
-      validators({ application, entity }) {
+      validators({ entity }) {
         for (const field of entity.fields.filter(f => f.fieldValidate)) {
-          mutateData(field, {
-            javaFieldValidatorsPartial: () => {
-              const validators = [];
-              const MAX_VALUE = 2147483647;
-              const isBlob = field.fieldTypeBytes;
-
-              if (field.fieldValidationRequired && !isBlob) {
-                // reactive tests need a default validation message because lookup is blocking
-                validators.push(`@NotNull${application.reactive ? '(message = "must not be null")' : ''}`);
-              }
-              if (field.fieldValidationMinLength && !field.fieldValidationMaxLength) {
-                validators.push(`@Size(min = ${field.fieldValidateRulesMinlength})`);
-              }
-              if (field.fieldValidationMaxLength && !field.fieldValidationMinLength) {
-                validators.push(`@Size(max = ${field.fieldValidateRulesMaxlength})`);
-              }
-              if (field.fieldValidationMinLength && field.fieldValidationMaxLength) {
-                validators.push(`@Size(min = ${field.fieldValidateRulesMinlength}, max = ${field.fieldValidateRulesMaxlength})`);
-              }
-              // Not supported anymore because the server can't check the size of the blob before downloading it completely.
-              // if (rules.includes('minbytes') && !rules.includes('maxbytes')) {
-              //   validators.push('@Size(min = ' + field.fieldValidateRulesMinbytes + ')');
-              // }
-              // if (rules.includes('maxbytes') && !rules.includes('minbytes')) {
-              //   validators.push('@Size(max = ' + field.fieldValidateRulesMaxbytes + ')');
-              // }
-              // if (rules.includes('minbytes') && rules.includes('maxbytes')) {
-              //   validators.push('@Size(min = ' + field.fieldValidateRulesMinbytes + ', max = ' + field.fieldValidateRulesMaxbytes + ')');
-              // }
-              if (field.fieldValidationMin) {
-                if (field.fieldTypeFloat || field.fieldTypeDouble || field.fieldTypeBigDecimal) {
-                  validators.push(`@DecimalMin(value = "${field.fieldValidateRulesMin}")`);
-                } else {
-                  const isLong = (field.fieldValidateRulesMin ?? 0) > MAX_VALUE || field.fieldTypeLong ? 'L' : '';
-                  validators.push(`@Min(value = ${field.fieldValidateRulesMin}${isLong})`);
-                }
-              }
-              if (field.fieldValidationMax) {
-                if (field.fieldTypeFloat || field.fieldTypeDouble || field.fieldTypeBigDecimal) {
-                  validators.push(`@DecimalMax(value = "${field.fieldValidateRulesMax}")`);
-                } else {
-                  const isLong = (field.fieldValidateRulesMax ?? 0) > MAX_VALUE || field.fieldTypeLong ? 'L' : '';
-                  validators.push(`@Max(value = ${field.fieldValidateRulesMax}${isLong})`);
-                }
-              }
-              if (field.fieldValidationPattern) {
-                validators.push(`@Pattern(regexp = "${field.fieldValidateRulesPatternJava}")`);
-              }
-              return `${validators.join('\n    ')}\n`;
-            },
-          });
+          mutateData(field, mutateValidatedField);
         }
       },
     });

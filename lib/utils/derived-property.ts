@@ -50,7 +50,7 @@ export const applyDerivedProperty = <const Prop extends string>(
 
 export const buildMutateDataForProperty = <
   const P extends string,
-  const Values extends string[],
+  const Values extends readonly string[],
   const PropertyType = Values[number],
   const Prefix extends string = P,
   const S extends string = '',

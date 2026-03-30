@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import assert from 'node:assert';
+
 import { mutateData } from '../../../../lib/utils/object.ts';
 import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';
@@ -172,5 +174,30 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
 
   get [SpringBootApplicationGenerator.POST_PREPARING]() {
     return this.postPreparing;
+  }
+  get preparingEachEntityField() {
+    return this.asPreparingEachEntityFieldTaskGroup({
+      prepareField({ entity, field }) {
+        if (field.mapstructExpression) {
+          assert.equal(
+            entity.dto,
+            'mapstruct',
+            `@MapstructExpression requires an Entity with mapstruct dto [${entity.name}.${field.fieldName}].`,
+          );
+          // Remove from Entity.java and liquibase.
+          field.transient = true;
+          // Disable update form.
+          field.readonly = true;
+        }
+
+        mutateData(field, {
+          fieldSupportsSortBy: !field.transient,
+        });
+      },
+    });
+  }
+
+  get [SpringBootApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+    return this.preparingEachEntityField;
   }
 }
