@@ -90,6 +90,27 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
+  describe('with no database', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig({ databaseType: 'no' }, [
+        {
+          name: 'DomainEntity',
+          fields: [
+            { fieldName: 'name', fieldType: 'String' },
+            { fieldName: 'description', fieldType: 'byte[]', fieldTypeBlobContent: 'text' },
+          ],
+        },
+      ]);
+    });
+
+    it('should render java field types used by domain templates', () => {
+      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/DomainEntity.java', 'private String name;');
+      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/DomainEntity.java', 'private String description;');
+      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/DomainEntity.java', 'public String getName() {');
+      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/DomainEntity.java', 'public String getDescription() {');
+    });
+  });
+
   describe('with entities disabled', () => {
     before(async () => {
       await helpers
