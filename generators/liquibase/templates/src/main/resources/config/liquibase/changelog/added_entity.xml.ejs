@@ -46,7 +46,7 @@
   <%_ } _%>
 <%_ } _%>
 <%_ for (relationship of relationships) {
-    if ((relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide === true))
+    if ((relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide))
                 && !relationship.id) {
         for (const idField of relationship.otherEntity.primaryKey.fields) {
         const uniqueConstraintName = relationship.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, `${relationship.columnName}_${idField.columnName}`, entity.prodDatabaseType) : null;

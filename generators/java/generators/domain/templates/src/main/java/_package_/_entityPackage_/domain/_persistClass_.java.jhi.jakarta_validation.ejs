@@ -31,7 +31,7 @@ import jakarta.validation.constraints.*;
 
 <%_ for (const field of fields) { _%>
 <&_ if (fragment.field<%- field.fieldNameCapitalized %>AnnotationSection) { -&>
-  <%_ if (field.fieldValidate === true) { -%>
+  <%_ if (field.fieldValidate) { -%>
     <%- field.javaFieldValidatorsPartial %>
   <%_ } _%>
 <&_ } -&>

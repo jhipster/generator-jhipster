@@ -27,13 +27,13 @@ Launch all your infrastructure by running: `docker compose up -d`.
 
 ### Additional Services:
 
-<%_ if (useMemcached === true) { _%>
+<%_ if (useMemcached) { _%>
 - [Memcached](http://localhost:11211)
 <%_ } _%>
-<%_ if (useKafka === true) { _%>
+<%_ if (useKafka) { _%>
 - Kafka
 <%_ } _%>
-<%_ if (usePulsar === true) { _%>
+<%_ if (usePulsar) { _%>
 - Pulsar
 <%_ } _%>
 <%_ if (monitoring === 'prometheus') { _%>
