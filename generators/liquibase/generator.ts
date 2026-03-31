@@ -69,7 +69,6 @@ import type {
   Application as LiquibaseApplication,
   Config as LiquibaseConfig,
   Entity as LiquibaseEntity,
-  Features as LiquibaseFeatures,
   Field as LiquibaseField,
   Options as LiquibaseOptions,
   Source as LiquibaseSource,
@@ -80,9 +79,9 @@ const {
 } = fieldTypes;
 
 export default class LiquibaseGenerator<
-  Entity extends LiquibaseEntity = LiquibaseEntity<LiquibaseField>,
+  Entity extends LiquibaseEntity = LiquibaseEntity,
   Application extends LiquibaseApplication<Entity> = LiquibaseApplication<Entity>,
-> extends BaseEntityChangesGenerator<Entity, Application, LiquibaseConfig, LiquibaseOptions, LiquibaseSource, LiquibaseFeatures> {
+> extends BaseEntityChangesGenerator<Entity, Application, LiquibaseConfig, LiquibaseOptions, LiquibaseSource> {
   numberOfRows!: number;
   databaseChangelogs: BaseChangelog<Entity>[] = [];
   injectBuildTool = true;
@@ -109,7 +108,7 @@ export default class LiquibaseGenerator<
       },
       liquibaseNeo4j({ application }) {
         // TODO drop hardcoded version
-        if (application.databaseTypeNeo4j && application.javaManagedProperties['liquibase.version'] === '5.0.1') {
+        if (application.databaseTypeNeo4j && application.javaManagedProperties['liquibase.version'] === '5.0.2') {
           application.javaDependencies['liquibase-neo4j'] = '5.0.0';
         }
       },
@@ -441,7 +440,9 @@ export default class LiquibaseGenerator<
                 srcMainResources: application.srcMainResources,
                 authenticationTypeOauth2: application.authenticationTypeOauth2,
                 devDatabaseTypeH2Any: relationalApplication.devDatabaseTypeH2Any!,
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 driver: liquibasePluginJdbcDriver!,
+                // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
                 hibernateDialect: liquibasePluginHibernateDialect!,
                 defaultSchemaName: application.liquibaseDefaultSchemaName,
                 // eslint-disable-next-line no-template-curly-in-string
@@ -504,10 +505,10 @@ export default class LiquibaseGenerator<
         }
 
         const { liquibase: liquibaseVersion, 'gradle-liquibase': gradleLiquibaseVersion } = application.javaDependencies;
-        if (!liquibaseVersion) {
-          this.log.warn('liquibaseVersion is required by gradle-liquibase-plugin, make sure to add it to your dependencies');
-        } else {
+        if (liquibaseVersion) {
           source.addGradleProperty?.({ property: 'liquibaseVersion', value: liquibaseVersion });
+        } else {
+          this.log.warn('liquibaseVersion is required by gradle-liquibase-plugin, make sure to add it to your dependencies');
         }
 
         source.addGradleProperty?.({ property: 'liquibaseTaskPrefix', value: 'liquibase' });
@@ -788,8 +789,9 @@ export default class LiquibaseGenerator<
 
     for (let rowNumber = 0; rowNumber < this.numberOfRows; rowNumber++) {
       const rowData: Record<string, any> = {};
-      const fields: LiquibaseField[] = databaseChangelog.newEntity
-        ? // generate id fields first to improve reproducibility
+      const fields: LiquibaseField[] =
+        databaseChangelog.newEntity ?
+          // generate id fields first to improve reproducibility
           [...entityChanges.fields.filter(f => f.id), ...entityChanges.fields.filter(f => !f.id)]
         : [...entityChanges.allFields.filter(f => f.id), ...entityChanges.addedFields.filter(f => !f.id)];
       fields.forEach(field => {

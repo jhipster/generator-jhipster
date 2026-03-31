@@ -46,13 +46,13 @@ describe('Auth JWT', () => {
     });
 
     it('should return token from session storage if local storage is empty', () => {
-      sessionStorage.setItem('<%= jhiPrefixDashed %>-authenticationToken', JSON.stringify('sessionStorageToken'));
+      sessionStorage.setItem('<%- jhiPrefixDashed %>-authenticationToken', JSON.stringify('sessionStorageToken'));
       const result = service.getToken();
       expect(result).toEqual('sessionStorageToken');
     });
 
     it('should return token from localstorage storage', () => {
-      localStorage.setItem('<%= jhiPrefixDashed %>-authenticationToken', JSON.stringify('localStorageToken'));
+      localStorage.setItem('<%- jhiPrefixDashed %>-authenticationToken', JSON.stringify('localStorageToken'));
       const result = service.getToken();
       expect(result).toEqual('localStorageToken');
     });
@@ -61,7 +61,7 @@ describe('Auth JWT', () => {
   describe('Login', () => {
     it('should clear session storage and save in local storage when rememberMe is true', () => {
       // GIVEN
-      mockStorageService.storeAuthenticationToken = <%= clientTestFramework %>.fn();
+      mockStorageService.storeAuthenticationToken = <%- clientTestFramework %>.fn();
 
       // WHEN
       service.login({ username: 'John', password: '123', rememberMe: true }).subscribe();
@@ -74,7 +74,7 @@ describe('Auth JWT', () => {
 
     it('should clear local storage and save in session storage when rememberMe is false', () => {
       // GIVEN
-      mockStorageService.storeAuthenticationToken = <%= clientTestFramework %>.fn();
+      mockStorageService.storeAuthenticationToken = <%- clientTestFramework %>.fn();
 
       // WHEN
       service.login({ username: 'John', password: '123', rememberMe: false }).subscribe();
@@ -89,7 +89,7 @@ describe('Auth JWT', () => {
   describe('Logout', () => {
     it('should clear storage', () => {
       // GIVEN
-      mockStorageService.clearAuthenticationToken = <%= clientTestFramework %>.fn();
+      mockStorageService.clearAuthenticationToken = <%- clientTestFramework %>.fn();
 
       // WHEN
       service.logout().subscribe();

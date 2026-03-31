@@ -35,9 +35,9 @@ export const createTranslationsFilter = ({
   fallbackLanguage?: string;
 }) => {
   const pattern =
-    !fallbackLanguage || nativeLanguage === fallbackLanguage
-      ? `**/${clientI18nDir}${nativeLanguage}/*.json`
-      : `**/${clientI18nDir}{${nativeLanguage},${fallbackLanguage}}/*.json`;
+    !fallbackLanguage || nativeLanguage === fallbackLanguage ?
+      `**/${clientI18nDir}${nativeLanguage}/*.json`
+    : `**/${clientI18nDir}{${nativeLanguage},${fallbackLanguage}}/*.json`;
   const minimatch = new Minimatch(pattern);
   return (filePath: string): boolean => minimatch.match(filePath);
 };

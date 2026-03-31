@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: <%= baseName.toLowerCase() %>
+name: <%- baseName.toLowerCase() %>
 services:
   mongodb:
     image: <%- dockerContainers.mongodb %>
@@ -26,7 +26,7 @@ services:
     ports:
       - 127.0.0.1:27017:27017
     # volumes:
-    #   - ~/volumes/jhipster/<%= baseName %>/mongodb/:/data/db/
+    #   - ~/volumes/jhipster/<%- baseName %>/mongodb/:/data/db/
     healthcheck:
       test: ['CMD', 'echo', "'db.runCommand(\"ping\").ok'", '|', 'mongo', 'localhost:27017/test', '--quiet']
       interval: 5s

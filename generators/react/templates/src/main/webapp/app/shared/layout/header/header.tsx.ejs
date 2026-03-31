@@ -27,7 +27,14 @@ import {
 import LoadingBar from 'react-redux-loading-bar';
 
 import { Home, Brand } from './header-components';
-import { AdminMenu, EntitiesMenu, AccountMenu<%_ if (enableTranslation) { _%>, LocaleMenu<%_ } _%>} from '../menus';
+import {
+  AdminMenu,
+  EntitiesMenu,
+  AccountMenu,
+<%_ if (enableTranslation) { _%>
+  LocaleMenu,
+<%_ } _%>
+} from '../menus';
 <%_ if (enableTranslation) { _%>
 import { useAppDispatch } from 'app/config/store';
 import { setLocale } from 'app/shared/reducers/locale';
@@ -75,7 +82,7 @@ const Header = (props: IHeaderProps) => {
     <div id="app-header">
       {renderDevRibbon()}
       <LoadingBar className="loading-bar"/>
-      <Navbar data-cy="navbar" <% if (clientThemeNone || !clientThemeVariantLight) { %>data-bs-theme="dark"<% } else { %>data-bs-theme="light"<% } %> expand="md" fixed="top" className="<%_ if (clientThemeNone) { _%>jh-navbar<%_ } else { _%>bg-<%= clientThemeVariant %><%_ } _%>" collapseOnSelect>
+      <Navbar data-cy="navbar" data-bs-theme="<%- reactBootstrapBsTheme %>" expand="md" fixed="top" className="<% if (clientThemeNone) { %>jh-navbar<% } else { %>bg-<%- reactBootstrapVariant %><% } %>" collapseOnSelect>
         <Navbar.Toggle aria-controls="header-tabs" aria-label="Menu" />
         <Brand />
         <Navbar.Collapse id="header-tabs">
@@ -83,10 +90,10 @@ const Header = (props: IHeaderProps) => {
             <Home />
             {props.isAuthenticated && <EntitiesMenu />}
             {props.isAuthenticated && props.isAdmin &&
-            <AdminMenu showOpenAPI={props.isOpenAPIEnabled} <% if (devDatabaseTypeH2Any) { %> showDatabase={!props.isInProduction} <%_ } _%> />}
-          <%_ if (enableTranslation) { _%>
+            <AdminMenu showOpenAPI={props.isOpenAPIEnabled} <% if (devDatabaseTypeH2Any) { %>showDatabase={!props.isInProduction}<% } %> />}
+<%_ if (enableTranslation) { _%>
             <LocaleMenu currentLocale={props.currentLocale} onClick={handleLocaleChange} />
-          <%_ } _%>
+<%_ } _%>
             <AccountMenu isAuthenticated={props.isAuthenticated} />
           </Nav>
         </Navbar.Collapse>

@@ -50,14 +50,29 @@ export const applyDerivedProperty = <const Prop extends string>(
 
 export const buildMutateDataForProperty = <
   const P extends string,
-  const Values extends string[],
+  const Values extends readonly string[],
   const PropertyType = Values[number],
   const Prefix extends string = P,
   const S extends string = '',
   const IsAny extends boolean = false,
   const IsArray extends boolean = false,
-  const Data extends Partial<Record<P, IsArray extends true ? PropertyType[] : IsAny extends true ? any : PropertyType | undefined>> =
-    Simplify<Partial<Record<P, IsArray extends true ? PropertyType[] : IsAny extends true ? any : PropertyType | undefined>>>,
+  const Data extends Partial<
+    Record<
+      P,
+      IsArray extends true ? PropertyType[]
+      : IsAny extends true ? any
+      : PropertyType | undefined
+    >
+  > = Simplify<
+    Partial<
+      Record<
+        P,
+        IsArray extends true ? PropertyType[]
+        : IsAny extends true ? any
+        : PropertyType | undefined
+      >
+    >
+  >,
 >(
   property: P,
   possibleValues: Values,

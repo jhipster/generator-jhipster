@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.config;
+package <%- packageName %>.config;
 
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Configuration;
@@ -97,15 +97,15 @@ public class CacheConfiguration {
     public JCacheManagerCustomizer cacheManagerCustomizer(javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration) {
         return cm -> {
 <%_ if (generateBuiltInUserEntity) { _%>
-            createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
-            createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
+            createCache(cm, <%- packageName %>.repository.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
+            createCache(cm, <%- packageName %>.repository.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
   <%_ if (enableHibernateCache) { _%>
-            createCache(cm, <%= user.entityAbsoluteClass %>.class.getName(), jcacheConfiguration);
-            createCache(cm, <%= packageName %>.domain.Authority.class.getName(), jcacheConfiguration);
-            createCache(cm, <%= user.entityAbsoluteClass %>.class.getName() + ".authorities", jcacheConfiguration);
+            createCache(cm, <%- user.entityAbsoluteClass %>.class.getName(), jcacheConfiguration);
+            createCache(cm, <%- packageName %>.domain.Authority.class.getName(), jcacheConfiguration);
+            createCache(cm, <%- user.entityAbsoluteClass %>.class.getName() + ".authorities", jcacheConfiguration);
     <%_ if (authenticationTypeSession) { _%>
-            createCache(cm, <%= packageName %>.domain.PersistentToken.class.getName(), jcacheConfiguration);
-            createCache(cm, <%= user.entityAbsoluteClass %>.class.getName() + ".persistentTokens", jcacheConfiguration);
+            createCache(cm, <%- packageName %>.domain.PersistentToken.class.getName(), jcacheConfiguration);
+            createCache(cm, <%- user.entityAbsoluteClass %>.class.getName() + ".persistentTokens", jcacheConfiguration);
     <%_ } _%>
   <%_ } _%>
 <%_ } _%>

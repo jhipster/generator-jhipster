@@ -16,18 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-const tsKeyId = primaryKey.tsSampleValues[0];
-_%>
+<%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
 import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { shallowMount, type MountingOptions } from '@vue/test-utils';
-import sinon, { type SinonStubbedInstance } from 'sinon';
 
-import <%= entityAngularName %> from './<%= entityFileName %>.vue';
-import <%= entityAngularName %>Service from './<%= entityFileName %>.service';
+import <%- entityAngularName %> from './<%- entityFileName %>.vue';
 import AlertService from '@/shared/alert/alert.service';
 
-type <%= entityAngularName %>ComponentType = InstanceType<typeof <%= entityAngularName %>>;
+type <%- entityAngularName %>ComponentType = InstanceType<typeof <%- entityAngularName %>>;
 
 const bModalStub = {
   render: () => {},
@@ -40,20 +36,23 @@ const bModalStub = {
 describe('Component Tests', () => {
   let alertService: AlertService;
 
-  describe('<%= entityAngularName %> Management Component', () => {
-    let <%= entityInstance %>ServiceStub: SinonStubbedInstance<<%= entityAngularName %>Service>;
-    let mountOptions: MountingOptions<<%= entityAngularName %>ComponentType>['global'];
+  describe('<%- entityAngularName %> Management Component', () => {
+    let <%- entityInstance %>ServiceStub: any;
+    let mountOptions: MountingOptions<<%- entityAngularName %>ComponentType>['global'];
 
     beforeEach(() => {
-      <%= entityInstance %>ServiceStub = sinon.createStubInstance<<%= entityAngularName %>Service>(<%= entityAngularName %>Service);
-      <%= entityInstance %>ServiceStub.retrieve.resolves({ headers: {} });
+      <%- entityInstance %>ServiceStub = {
+        retrieve: vi.fn(),
+        delete: vi.fn(),
+      };
+      <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {} });
 
       alertService = new AlertService({
 <%_ if (enableTranslation) { _%>
-        i18n: { t: vitest.fn() } as any,
+        i18n: { t: vi.fn() } as any,
 <%_ } _%>
         toast: {
-          show: vitest.fn(),
+          show: vi.fn(),
         } as any,
       });
 
@@ -77,7 +76,7 @@ describe('Component Tests', () => {
         },
         provide: {
           alertService,
-          <%= entityInstance %>Service: () => <%= entityInstance %>ServiceStub,
+          <%- entityInstance %>Service: () => <%- entityInstance %>ServiceStub,
         }
       };
     });
@@ -85,55 +84,55 @@ describe('Component Tests', () => {
     describe('Mount', () => {
       it('Should call load all on init', async () => {
         // GIVEN
-        <%= entityInstance %>ServiceStub.retrieve.resolves({ headers: {}, data: [{ <%= primaryKey.name %>: <%- tsKeyId %> }] });
+        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [{ <%- primaryKey.name %>: <%- tsKeyId %> }] });
 
         // WHEN
-        const wrapper = shallowMount(<%= entityAngularName %>, { global: mountOptions });
+        const wrapper = shallowMount(<%- entityAngularName %>, { global: mountOptions });
         const comp = wrapper.vm;
         await comp.$nextTick();
 
         // THEN
-        expect(<%= entityInstance %>ServiceStub.retrieve.calledOnce).toBeTruthy();
-        expect(comp.<%= entityInstancePlural %>[0]).toEqual(expect.objectContaining({<%= primaryKey.name %>: <%- tsKeyId %>}));
+        expect(<%- entityInstance %>ServiceStub.retrieve).toHaveBeenCalledOnce();
+        expect(comp.<%- entityInstancePlural %>[0]).toEqual(expect.objectContaining({<%- primaryKey.name %>: <%- tsKeyId %>}));
       });
 <%_ if (!paginationNo) { _%>
 
       it('should calculate the sort attribute for an id', async () => {
         // WHEN
-        const wrapper = shallowMount(<%= entityAngularName %>, { global: mountOptions });
+        const wrapper = shallowMount(<%- entityAngularName %>, { global: mountOptions });
         const comp = wrapper.vm;
         await comp.$nextTick();
 
         // THEN
-        expect(<%= entityInstance %>ServiceStub.retrieve.lastCall.firstArg).toMatchObject({
+        expect(<%- entityInstance %>ServiceStub.retrieve.mock.lastCall?.[0]).toMatchObject({
           sort: ['id,asc'],
         });
       });
 <%_ } _%>
     });
     describe('Handles', () => {
-      let comp: <%= entityAngularName %>ComponentType;
+      let comp: <%- entityAngularName %>ComponentType;
 
       beforeEach(async () => {
-        const wrapper = shallowMount(<%= entityAngularName %>, { global: mountOptions });
+        const wrapper = shallowMount(<%- entityAngularName %>, { global: mountOptions });
         comp = wrapper.vm;
         await comp.$nextTick();
-        <%= entityInstance %>ServiceStub.retrieve.reset();
-        <%= entityInstance %>ServiceStub.retrieve.resolves({ headers: {}, data: [] });
+        <%- entityInstance %>ServiceStub.retrieve.mockReset();
+        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [] });
       });
 <%_ if (!paginationNo) { _%>
 
       it('should load a page', async () => {
         // GIVEN
-        <%= entityInstance %>ServiceStub.retrieve.resolves({ headers: {}, data: [{ <%= primaryKey.name %>: <%- tsKeyId %> }] });
+        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [{ <%- primaryKey.name %>: <%- tsKeyId %> }] });
 
         // WHEN
         comp.page = 2;
         await comp.$nextTick();
 
         // THEN
-        expect(<%= entityInstance %>ServiceStub.retrieve.called).toBeTruthy();
-        expect(comp.<%= entityInstancePlural %>[0]).toEqual(expect.objectContaining({<%= primaryKey.name %>: <%- tsKeyId %>}));
+        expect(<%- entityInstance %>ServiceStub.retrieve).toHaveBeenCalled();
+        expect(comp.<%- entityInstancePlural %>[0]).toEqual(expect.objectContaining({<%- primaryKey.name %>: <%- tsKeyId %>}));
     });
   <%_ if (!paginationInfiniteScroll) { _%>
 
@@ -142,7 +141,7 @@ describe('Component Tests', () => {
         comp.page = 1;
 
         // THEN
-        expect(<%= entityInstance %>ServiceStub.retrieve.called).toBeFalsy();
+        expect(<%- entityInstance %>ServiceStub.retrieve).not.toHaveBeenCalled();
       });
   <%_ } _%>
 
@@ -150,8 +149,8 @@ describe('Component Tests', () => {
         // GIVEN
         comp.page = 2;
         await comp.$nextTick();
-        <%= entityInstance %>ServiceStub.retrieve.reset();
-        <%= entityInstance %>ServiceStub.retrieve.resolves({ headers: {}, data: [{ <%= primaryKey.name %>: <%- tsKeyId %> }] });
+        <%- entityInstance %>ServiceStub.retrieve.mockReset();
+        <%- entityInstance %>ServiceStub.retrieve.mockResolvedValue({ headers: {}, data: [{ <%- primaryKey.name %>: <%- tsKeyId %> }] });
 
         // WHEN
         comp.clear();
@@ -159,8 +158,8 @@ describe('Component Tests', () => {
 
         // THEN
         expect(comp.page).toEqual(1);
-        expect(<%= entityInstance %>ServiceStub.retrieve.callCount).toEqual(1);
-        expect(comp.<%= entityInstancePlural %>[0]).toEqual(expect.objectContaining({<%= primaryKey.name %>: <%- tsKeyId %>}));
+        expect(<%- entityInstance %>ServiceStub.retrieve).toHaveBeenCalledTimes(1);
+        expect(comp.<%- entityInstancePlural %>[0]).toEqual(expect.objectContaining({<%- primaryKey.name %>: <%- tsKeyId %>}));
       });
 
       it('should calculate the sort attribute for a non-id attribute', async () => {
@@ -169,7 +168,7 @@ describe('Component Tests', () => {
         await comp.$nextTick();
 
         // THEN
-        expect(<%= entityInstance %>ServiceStub.retrieve.lastCall.firstArg).toMatchObject({
+        expect(<%- entityInstance %>ServiceStub.retrieve.mock.lastCall?.[0]).toMatchObject({
           sort: ['name,asc', 'id'],
         });
       });
@@ -178,20 +177,20 @@ describe('Component Tests', () => {
 
       it('Should call delete service on confirmDelete', async () => {
         // GIVEN
-        <%= entityInstance %>ServiceStub.delete.resolves({});
+        <%- entityInstance %>ServiceStub.delete.mockResolvedValue({});
 
         // WHEN
-        comp.prepareRemove({<%= primaryKey.name %>: <%- tsKeyId %>});
+        comp.prepareRemove({<%- primaryKey.name %>: <%- tsKeyId %>});
 
-        comp.remove<%= entityAngularName %>();
+        comp.remove<%- entityAngularName %>();
         await comp.$nextTick(); // clear components
 
         // THEN
-        expect(<%= entityInstance %>ServiceStub.delete.called).toBeTruthy();
+        expect(<%- entityInstance %>ServiceStub.delete).toHaveBeenCalled();
 
         // THEN
         await comp.$nextTick(); // handle component clear watch
-        expect(<%= entityInstance %>ServiceStub.retrieve.callCount).toEqual(1);
+        expect(<%- entityInstance %>ServiceStub.retrieve).toHaveBeenCalledTimes(1);
       });
 <%_ } _%>
     });

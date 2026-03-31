@@ -46,12 +46,12 @@ const router = createRouter();
 <%_ if (applicationTypeGateway && microfrontend) { _%>
 export const lazyRoutes = Promise.all([
   <%_ for (const remote of microfrontends) { _%>
-  loadRemote<any>('<%= remote.lowercaseBaseName %>/entities-router')
-    .then(<%= remote.lowercaseBaseName %>Router => {
-      router.addRoute(<%= remote.lowercaseBaseName %>Router.default as RouteRecordRaw);
-      return <%= remote.lowercaseBaseName %>Router.default;
+  loadRemote<any>('<%- remote.lowercaseBaseName %>/entities-router')
+    .then(<%- remote.lowercaseBaseName %>Router => {
+      router.addRoute(<%- remote.lowercaseBaseName %>Router.default as RouteRecordRaw);
+      return <%- remote.lowercaseBaseName %>Router.default;
     }).catch(error => {
-      console.log(`Error loading <%= remote.lowercaseBaseName %> menus. Make sure it's up. ${error}`);
+      console.log(`Error loading <%- remote.lowercaseBaseName %> menus. Make sure it's up. ${error}`);
     }),
   <%_ } _%>
 ]);

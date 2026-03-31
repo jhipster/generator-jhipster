@@ -23,13 +23,13 @@ plugins {
 openApiGenerate {
     generatorName = "spring"
     inputSpec = "$rootDir/src/main/resources/swagger/api.yml".toString()
-    outputDir = "$buildDir/openapi".toString()
-    apiPackage = "<%= packageName %>.web.api"
-    modelPackage = "<%= packageName %>.service.api.dto"
+    outputDir = layout.buildDirectory.dir("openapi").get().asFile.toString()
+    apiPackage = "<%- packageName %>.web.api"
+    modelPackage = "<%- packageName %>.service.api.dto"
     apiFilesConstrainedTo = [""]
     modelFilesConstrainedTo = [""]
     supportingFilesConstrainedTo = ["ApiUtil.java"]
-    configOptions = [delegatePattern: "true", title: "<%= dasherizedBaseName %>"<% if (reactive) { %>, reactive: "true"<% } %>, useSpringBoot3: "true"]
+    configOptions = [delegatePattern: "true", title: "<%- dasherizedBaseName %>"<% if (reactive) { %>, reactive: "true"<% } %>, useSpringBoot3: "true"]
     validateSpec = true
     importMappings = [Problem:"org.springframework.http.ProblemDetail"]
 }
@@ -37,9 +37,9 @@ openApiGenerate {
 sourceSets {
     main {
         java {
-            srcDir(file("${project.buildDir.path}/openapi/src/main/java"))
+            srcDir(layout.buildDirectory.dir("openapi/src/main/java"))
         }
     }
 }
 
-compileJava.dependsOn("openApiGenerate")
+tasks.named('compileJava').configure { dependsOn("openApiGenerate") }

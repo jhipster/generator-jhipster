@@ -1,6 +1,6 @@
 import { kebabCase, lowerFirst, snakeCase, startCase, upperFirst } from 'lodash-es';
 
-import type { DerivedPropertiesOnlyOf } from '../../lib/command/types.ts';
+import type { DerivedBooleanPropertiesOf } from '../../lib/command/types.ts';
 import type { FieldType } from '../../lib/jhipster/field-types.ts';
 import { BlobTypes, fieldTypesValues } from '../../lib/jhipster/field-types.ts';
 import { type ValidationType, validationTypes } from '../../lib/jhipster/index.ts';
@@ -10,6 +10,7 @@ import type { Relationship as BaseRelationship } from '../../lib/jhipster/types/
 import { buildMutateDataForProperty } from '../../lib/utils/derived-property.ts';
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
 import { pluralize } from '../../lib/utils/string-utils.ts';
+import { formatDocAsApiDescription } from '../java/support/doc.ts';
 
 import { isFieldEnumType } from './internal/types/field-types.ts';
 import type { FakerWithRandexp } from './support/faker.ts';
@@ -30,8 +31,8 @@ const mutateProperty = {
   propertyNameUpperSnakeCase: ({ propertyName }) => snakeCase(propertyName).toUpperCase(),
 } as const satisfies MutateDataParam<Property>;
 
-type BaseApplicationAddedFieldProperties = DerivedPropertiesOnlyOf<'fieldType', FieldType> &
-  DerivedPropertiesOnlyOf<'fieldValidation', ValidationType> & {
+type BaseApplicationAddedFieldProperties = DerivedBooleanPropertiesOf<'fieldType', FieldType> &
+  DerivedBooleanPropertiesOf<'fieldValidation', ValidationType> & {
     path?: string[];
 
     fieldNameCapitalized: string;
@@ -41,7 +42,7 @@ type BaseApplicationAddedFieldProperties = DerivedPropertiesOnlyOf<'fieldType', 
     fieldTranslationKey?: string;
     propertyTranslationKey?: string;
 
-    fieldApiDescription?: string;
+    fieldApiDescription: string | undefined;
 
     enumFileName?: string;
     enumValues?: { name: string; value: string }[];
@@ -125,6 +126,8 @@ export const mutateField = {
   path: ({ fieldName }) => [fieldName],
   propertyName: ({ fieldName }) => fieldName,
   ...mutateProperty,
+  fieldApiDescription: ({ documentation }) => (documentation ? formatDocAsApiDescription(documentation) : undefined),
+  propertyApiDescription: ({ fieldApiDescription }) => fieldApiDescription,
 
   fieldNameCapitalized: ({ fieldName }) => upperFirst(fieldName),
   fieldNameUnderscored: ({ fieldName }) => snakeCase(fieldName),
@@ -147,7 +150,7 @@ export type DerivedField<E extends Entity = Entity, F extends Field = Entity['fi
   derivedEntity: E;
 };
 
-type BaseApplicationAddedRelationshipProperties = DerivedPropertiesOnlyOf<
+type BaseApplicationAddedRelationshipProperties = DerivedBooleanPropertiesOf<
   'relationship',
   'LeftSide' | 'RightSide' | 'ManyToOne' | 'OneToMany' | 'OneToOne' | 'ManyToMany'
 > &
@@ -227,8 +230,7 @@ export const mutateRelationshipWithEntity = {
   otherEntityField: data => data.otherEntity?.primaryKey?.name,
   // let ownerSide true when type is 'many-to-one' for convenience.
   // means that this side should control the reference.
-  ownerSide: data =>
-    Boolean(data.otherEntity.embedded || data.relationshipManyToOne || (data.relationshipLeftSide && !data.relationshipOneToMany)),
+  ownerSide: data => data.otherEntity.embedded || data.relationshipManyToOne || (data.relationshipLeftSide && !data.relationshipOneToMany),
   persistableRelationship: ({ ownerSide }) => ownerSide!,
   otherEntityUser: ({ otherEntityName }) => otherEntityName.toLowerCase() === 'user',
 } satisfies MutateDataParam<RelationshipWithEntity<Relationship, Entity>>;

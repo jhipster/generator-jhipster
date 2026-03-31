@@ -125,6 +125,7 @@ export default function prepareEntity(entityWithConfig: BaseApplicationEntity, g
 
   if (entityWithConfig.changelogDate) {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-conversion
       entityWithConfig.changelogDateForRecent = parseChangelog(String(entityWithConfig.changelogDate));
     } catch (error: unknown) {
       throw new Error(`Error parsing changelog date for entity ${entityName}: ${(error as Error).message}`, { cause: error });
@@ -247,13 +248,13 @@ export function prepareEntityPrimaryKeyForTemplates(
               return idCount === 1 ? field.fieldName : `${relationship.relationshipName}${field.fieldNameCapitalized}`;
             },
             get fieldNameCapitalized() {
-              return idCount === 1
-                ? field.fieldNameCapitalized
+              return idCount === 1 ?
+                  field.fieldNameCapitalized
                 : `${relationship.relationshipNameCapitalized}${field.fieldNameCapitalized}`;
             },
             get columnName() {
-              return idCount === 1
-                ? (field as FieldAll).columnName
+              return idCount === 1 ?
+                  (field as FieldAll).columnName
                 : `${hibernateSnakeCase(relationship.relationshipName)}_${(field as FieldAll).columnName}`;
             },
           }));
@@ -464,10 +465,10 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
     .map(relationship => [relationship.otherEntity.entityNameCapitalized, relationship] as const)
     .reduce(
       (relationshipsByOtherEntity, [type, relationship]) => {
-        if (!relationshipsByOtherEntity[type]) {
-          relationshipsByOtherEntity[type] = [relationship];
-        } else {
+        if (relationshipsByOtherEntity[type]) {
           relationshipsByOtherEntity[type].push(relationship);
+        } else {
+          relationshipsByOtherEntity[type] = [relationship];
         }
         return relationshipsByOtherEntity;
       },

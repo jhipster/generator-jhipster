@@ -30,12 +30,12 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId><%= packageName %></groupId>
-    <artifactId><%= dasherizedBaseName %></artifactId>
-    <version><%= projectVersion %></version>
+    <groupId><%- packageName %></groupId>
+    <artifactId><%- dasherizedBaseName %></artifactId>
+    <version><%- projectVersion %></version>
     <packaging>jar</packaging>
-    <name><%= humanizedBaseName %></name>
-    <description><%= projectDescription %></description>
+    <name><%- humanizedBaseName %></name>
+    <description><%- projectDescription %></description>
 
     <properties>
         <!--
@@ -45,13 +45,13 @@
         <spring.profiles.active>dev</spring.profiles.active>
         <maven.version>3.2.5</maven.version>
         <resource.delimiter>@</resource.delimiter>
-        <java.version><%= javaVersion %></java.version>
+        <java.version><%- javaVersion %></java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <start-class><%= packageName %>.<%= mainClass %></start-class>
+        <start-class><%- packageName %>.<%- mainClass %></start-class>
         <argLine>-Xmx1G</argLine>
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
         <run.addResources>false</run.addResources>
@@ -158,10 +158,10 @@
                         <warSourceIncludes>WEB-INF/**,META-INF/**</warSourceIncludes>
                         <failOnMissingWebXml>false</failOnMissingWebXml>
 <%_ if (!skipClient) { _%>
-                        <warSourceDirectory><%= clientDistDir %></warSourceDirectory>
+                        <warSourceDirectory><%- clientDistDir %></warSourceDirectory>
                         <webResources>
                             <resource>
-                                <directory><%= srcMainWebapp %></directory>
+                                <directory><%- srcMainWebapp %></directory>
                                 <includes>
                                     <include>WEB-INF/**</include>
                                 </includes>
@@ -225,8 +225,8 @@
                                 <version>[${maven.version},)</version>
                             </requireMavenVersion>
                             <requireJavaVersion>
-                                <message>You are running an incompatible version of Java. JHipster supports JDK <%= javaCompatibleVersions[0] %> to <%= javaCompatibleVersions[javaCompatibleVersions.length -1] %>.</message>
-                                <version><%= javaCompatibleVersions.map(version => parseInt(version)).map(version => `[${version},${version +1})`).join(',') %></version>
+                                <message>You are running an incompatible version of Java. JHipster supports JDK <%- javaCompatibleVersions[0] %> to <%- javaCompatibleVersions[javaCompatibleVersions.length - 1] %>.</message>
+                                <version><%- javaCompatibleVersions.map(version => parseInt(version)).map(version => `[${version},${version + 1})`).join(',') %></version>
                             </requireJavaVersion>
                         </rules>
                     </configuration>
@@ -351,7 +351,7 @@
             </activation>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev<%_ if (databaseMigrationLiquibase) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
+                <spring.profiles.active>dev<% if (databaseMigrationLiquibase) { %>${profile.no-liquibase}<% } %></spring.profiles.active>
             </properties>
         </profile>
 <%_ } _%>
@@ -362,7 +362,7 @@
             </activation>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>dev${profile.tls}<%_ if (databaseMigrationLiquibase) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
+                <spring.profiles.active>dev${profile.tls}<% if (databaseMigrationLiquibase) { %>${profile.no-liquibase}<% } %></spring.profiles.active>
                 <profile.test>test,testdev</profile.test>
             </properties>
             <dependencies>
@@ -377,7 +377,7 @@
             <id>prod</id>
             <properties>
                 <!-- default Spring profiles -->
-                <spring.profiles.active>prod${profile.api-docs}${profile.tls}${profile.e2e}<%_ if (databaseMigrationLiquibase) { _%>${profile.no-liquibase}<%_ } _%></spring.profiles.active>
+                <spring.profiles.active>prod${profile.api-docs}${profile.tls}${profile.e2e}<% if (databaseMigrationLiquibase) { %>${profile.no-liquibase}<% } %></spring.profiles.active>
                 <profile.test>test,testprod</profile.test>
             </properties>
             <build>
@@ -388,7 +388,7 @@
                         <configuration>
                             <filesets>
                                 <fileset>
-                                    <directory><%= clientDistDir %></directory>
+                                    <directory><%- clientDistDir %></directory>
                                 </fileset>
                             </filesets>
                         </configuration>

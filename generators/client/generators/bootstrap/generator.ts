@@ -78,9 +78,9 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
         mutateData(entity, mutateEntity, {
           __override__: false,
           entityPage: ({ microserviceName, entityFileName }) =>
-            microserviceName && application.microfrontend && application.applicationTypeMicroservice
-              ? `${microserviceName.toLowerCase()}/${entityFileName}`
-              : `${entityFileName}`,
+            microserviceName && application.microfrontend && application.applicationTypeMicroservice ?
+              `${microserviceName.toLowerCase()}/${entityFileName}`
+            : entityFileName,
         });
       },
     });

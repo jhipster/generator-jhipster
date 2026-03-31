@@ -16,38 +16,33 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.web.rest;
-<%_
-let saveMethod = 'save';
-if (!reactive && databaseTypeSql) {
-    saveMethod = 'saveAndFlush';
-}
-_%>
-import <%= packageName %>.IntegrationTest;
+package <%- packageName %>.web.rest;
+<%_ const saveMethod = !reactive && databaseTypeSql ? 'saveAndFlush' : 'save'; _%>
+import <%- packageName %>.IntegrationTest;
 
 <%_ if (databaseTypeSql && reactive) { _%>
-import <%= packageName %>.config.Constants;
+import <%- packageName %>.config.Constants;
 <%_ } _%>
 <%_ if (!databaseTypeCassandra && !databaseTypeCouchbase) { _%>
-import <%= packageName %>.domain.Authority;
+import <%- packageName %>.domain.Authority;
 <%_ } _%>
-import <%= user.entityAbsoluteClass %>;
+import <%- user.entityAbsoluteClass %>;
 <%_ if (databaseTypeSql && reactive) { _%>
-import <%= packageName %>.repository.AuthorityRepository;
+import <%- packageName %>.repository.AuthorityRepository;
 <%_ } _%>
-import <%= packageName %>.repository.UserRepository;
+import <%- packageName %>.repository.UserRepository;
 <%_ if (!requiresDeleteAllUsers) { _%>
-import <%= packageName %>.service.UserService;
+import <%- packageName %>.service.UserService;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
-import <%= packageName %>.repository.search.UserSearchRepository;
+import <%- packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
-import <%= packageName %>.security.AuthoritiesConstants;
-import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
+import <%- packageName %>.security.AuthoritiesConstants;
+import <%- packageName %>.service.dto.<%- user.adminUserDto %>;
 <%_ if (databaseTypeSql && reactive) { _%>
-import <%= packageName %>.repository.EntityManager;
+import <%- packageName %>.repository.EntityManager;
 <%_ } _%>
-import <%= packageName %>.service.mapper.UserMapper;
+import <%- packageName %>.service.mapper.UserMapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -130,7 +125,7 @@ class UserResourceIT {
 <%_ if (databaseTypeCouchbase) { _%>
     private static final String DEFAULT_ID = DEFAULT_LOGIN;
 <%_ } else { _%>
-    private static final <%= user.primaryKey.type %> DEFAULT_ID = <%- user.primaryKey.javaSampleValues[0] %>;
+    private static final <%- user.primaryKey.type %> DEFAULT_ID = <%- user.primaryKey.javaSampleValues[0] %>;
 <%_ } _%>
 
     private static final String DEFAULT_EMAIL = "johndoe@localhost";
@@ -201,7 +196,7 @@ class UserResourceIT {
     private MockMvc restUserMockMvc;
 <%_ } _%>
 
-    private <%= user.persistClass %> user;
+    private <%- user.persistClass %> user;
 
 <%_ if (!databaseTypeCassandra && !requiresDeleteAllUsers) { _%>
     private Long numberOfUsers;
@@ -225,8 +220,8 @@ class UserResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which has a required relationship to the User entity.
      */
-    public static <%= user.persistClass %> createEntity() {
-        <%= user.persistClass %> persistUser = new <%= user.persistClass %>();
+    public static <%- user.persistClass %> createEntity() {
+        <%- user.persistClass %> persistUser = new <%- user.persistClass %>();
 <%_ if (databaseTypeCassandra || (authenticationTypeOauth2 && !databaseTypeCouchbase)) { _%>
         persistUser.setId(UUID.randomUUID().toString());
 <%_ } _%>
@@ -259,8 +254,8 @@ class UserResourceIT {
     /**
      * Setups the database with one user.
      */
-    public static <%= user.persistClass %> initTestUser() {
-        <%= user.persistClass %> persistUser = createEntity();
+    public static <%- user.persistClass %> initTestUser() {
+        <%- user.persistClass %> persistUser = createEntity();
 <%_ if (databaseTypeSql) { _%>
         persistUser.setLogin(DEFAULT_LOGIN);
         persistUser.setEmail(DEFAULT_EMAIL);
@@ -276,9 +271,9 @@ class UserResourceIT {
     @AfterEach
     void cleanupAndCheck() {
 <%_ if (requiresDeleteAllUsers) { _%>
-    <%_ if (databaseTypeSql && reactive) { _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
         userRepository.deleteAllUserAuthorities()<%- reactorBlock %>;
-    <%_ } _%>
+  <%_ } _%>
         userRepository.deleteAll()<%- reactorBlock %>;
 <%_ } else { _%>
         userService.deleteUser(DEFAULT_LOGIN)<%- reactorBlock %>;
@@ -305,7 +300,7 @@ class UserResourceIT {
   <%_ } _%>
     void createUser() throws Exception {
         // Create the User
-        <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
+        <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>();
         userDTO.setLogin(DEFAULT_LOGIN);
         userDTO.setFirstName(DEFAULT_FIRSTNAME);
         userDTO.setLastName(DEFAULT_LASTNAME);
@@ -323,7 +318,7 @@ class UserResourceIT {
             .bodyValue(om.writeValueAsBytes(userDTO))
             .exchange()
             .expectStatus().isCreated()
-            .expectBody(<%= user.adminUserDto %>.class)
+            .expectBody(<%- user.adminUserDto %>.class)
             .returnResult()
             .getResponseBody();
   <%_ } else { _%>
@@ -336,11 +331,11 @@ class UserResourceIT {
                 .andReturn()
                 .getResponse()
                 .getContentAsString(),
-            <%= user.adminUserDto %>.class
+            <%- user.adminUserDto %>.class
         );
   <%_ } _%>
 
-        <%= user.persistClass %> convertedUser = userMapper.userDTOToUser(returned<%- restClass %>);
+        <%- user.persistClass %> convertedUser = userMapper.userDTOToUser(returned<%- restClass %>);
         // Validate the returned User
         assertThat(convertedUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(convertedUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
@@ -360,7 +355,7 @@ class UserResourceIT {
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
 
-        <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
+        <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>();
   <%_ if (databaseTypeCassandra) { _%>
         userDTO.setId(UUID.randomUUID().toString());
   <%_ } else if (databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
@@ -404,14 +399,14 @@ class UserResourceIT {
   <%_ } _%>
     void createUserWithExistingLogin() throws Exception {
         // Initialize the database
-        userRepository.<%= saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<%- saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
   <%_ if (searchEngineElasticsearch) { _%>
         userSearchRepository.save(user)<% if (reactive) { %>.block()<% } %>;
   <%_ } _%>
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
 
-        <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
+        <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>();
         userDTO.setLogin(DEFAULT_LOGIN);// this login should already be used
         userDTO.setFirstName(DEFAULT_FIRSTNAME);
         userDTO.setLastName(DEFAULT_LASTNAME);
@@ -448,14 +443,14 @@ class UserResourceIT {
   <%_ } _%>
     void createUserWithExistingEmail() throws Exception {
         // Initialize the database
-        userRepository.<%= saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<%- saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
   <%_ if (searchEngineElasticsearch) { _%>
         userSearchRepository.save(user)<% if (reactive) { %>.block()<% } %>;
   <%_ } _%>
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
 
-        <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
+        <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>();
         userDTO.setLogin("anotherlogin");
         userDTO.setFirstName(DEFAULT_FIRSTNAME);
         userDTO.setLastName(DEFAULT_LASTNAME);
@@ -492,16 +487,16 @@ class UserResourceIT {
   <%_ } _%>
     void getAllUsers()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
-        userRepository.<% if (databaseTypeSql && reactive && authenticationTypeOauth2) { %>create<% } else { %><%= saveMethod %><% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<% if (databaseTypeSql && reactive && authenticationTypeOauth2) { %>create<% } else { %><%- saveMethod %><% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
         // Get all the users
   <%_ if (reactive) { _%>
-        <%= user.adminUserDto %> foundUser = webTestClient.get().uri("/api/admin/users<% if (user.primaryKey.typeNumeric) { %>?sort=id,desc<% } %>")
+        <%- user.adminUserDto %> foundUser = webTestClient.get().uri("/api/admin/users<% if (user.primaryKey.typeNumeric) { %>?sort=id,desc<% } %>")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .returnResult(<%= user.adminUserDto %>.class).getResponseBody()<% if (!user.primaryKey.typeNumeric) { %>.filter(e -> DEFAULT_LOGIN.equals(e.getLogin()))<% } %>.blockFirst();
+            .returnResult(<%- user.adminUserDto %>.class).getResponseBody()<% if (!user.primaryKey.typeNumeric) { %>.filter(e -> DEFAULT_LOGIN.equals(e.getLogin()))<% } %>.blockFirst();
         assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(foundUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(foundUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
@@ -532,14 +527,14 @@ class UserResourceIT {
   <%_ } _%>
     void getUser()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
-        userRepository.<% if (databaseTypeSql && reactive && authenticationTypeOauth2) { %>create<% } else { %><%= saveMethod %><% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<% if (databaseTypeSql && reactive && authenticationTypeOauth2) { %>create<% } else { %><%- saveMethod %><% } %>(user)<% if (reactive) { %>.block()<% } %>;
 
   <%_ if (searchEngineElasticsearch) { _%>
         userSearchRepository.save(user);
   <%_ } _%>
   <%_ if (cacheProviderAny) { _%>
 
-        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin(), <%= user.persistClass %>.class)).isNull();
+        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin(), <%- user.persistClass %>.class)).isNull();
   <%_ } _%>
 
         // Get the user
@@ -576,7 +571,7 @@ class UserResourceIT {
             assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNotNull();
         }
   <%_ } else if (cacheProviderAny) { _%>
-        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin(), <%= user.persistClass %>.class)).isNotNull();
+        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin(), <%- user.persistClass %>.class)).isNotNull();
   <%_ } _%>
     }
 
@@ -601,14 +596,14 @@ class UserResourceIT {
   <%_ } _%>
     void updateUser() throws Exception {
         // Initialize the database
-        userRepository.<%= saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<%- saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
         int databaseSizeBeforeUpdate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
 
         // Update the user
-        <%= user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>orElseThrow<% } %>();
+        <%- user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>orElseThrow<% } %>();
 
-        <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
+        <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>();
         userDTO.setId(updatedUser.getId());
         userDTO.setLogin(updatedUser.getLogin());
         userDTO.setFirstName(UPDATED_FIRSTNAME);
@@ -644,7 +639,7 @@ class UserResourceIT {
         // Validate the User in the database
         assertPersistedUsers(users -> {
             assertThat(users).hasSize(databaseSizeBeforeUpdate);
-            <%= user.persistClass %> testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().orElseThrow();
+            <%- user.persistClass %> testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().orElseThrow();
             assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
             assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
             assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
@@ -661,14 +656,14 @@ class UserResourceIT {
   <%_ } _%>
     void updateUserLogin() throws Exception {
         // Initialize the database
-        userRepository.<%= saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<%- saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
         int databaseSizeBeforeUpdate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
 
         // Update the user
-        <%= user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>orElseThrow<% } %>();
+        <%- user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>orElseThrow<% } %>();
 
-        <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
+        <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>();
         userDTO.setId(updatedUser.getId());
         userDTO.setLogin(UPDATED_LOGIN);
         userDTO.setFirstName(UPDATED_FIRSTNAME);
@@ -704,7 +699,7 @@ class UserResourceIT {
         // Validate the User in the database
         assertPersistedUsers(users -> {
             assertThat(users).hasSize(databaseSizeBeforeUpdate);
-            <%= user.persistClass %> testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().orElseThrow();
+            <%- user.persistClass %> testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().orElseThrow();
             assertThat(testUser.getLogin()).isEqualTo(UPDATED_LOGIN);
             assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
             assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
@@ -722,12 +717,12 @@ class UserResourceIT {
   <%_ } _%>
     void updateUserExistingEmail() throws Exception {
         // Initialize the database with 2 users
-        userRepository.<%= saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<%- saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
   <%_ if (searchEngineElasticsearch) { _%>
         userSearchRepository.save(user);
   <%_ } _%>
 
-        <%= user.persistClass %> anotherUser = new <%= user.persistClass %>();
+        <%- user.persistClass %> anotherUser = new <%- user.persistClass %>();
   <%_ if (databaseTypeCassandra) { _%>
         anotherUser.setId(UUID.randomUUID().toString());
   <%_ } _%>
@@ -750,9 +745,9 @@ class UserResourceIT {
   <%_ } _%>
 
         // Update the user
-        <%= user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>orElseThrow<% } %>();
+        <%- user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>orElseThrow<% } %>();
 
-        <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
+        <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>();
         userDTO.setId(updatedUser.getId());
         userDTO.setLogin(updatedUser.getLogin());
         userDTO.setFirstName(updatedUser.getFirstName());
@@ -792,12 +787,12 @@ class UserResourceIT {
   <%_ } _%>
     void updateUserExistingLogin() throws Exception {
         // Initialize the database
-        userRepository.<%= saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<%- saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
   <%_ if (searchEngineElasticsearch) { _%>
         userSearchRepository.save(user);
   <%_ } _%>
 
-        <%= user.persistClass %> anotherUser = new <%= user.persistClass %>();
+        <%- user.persistClass %> anotherUser = new <%- user.persistClass %>();
   <%_ if (databaseTypeCassandra) { _%>
         anotherUser.setId(UUID.randomUUID().toString());
   <%_ } _%>
@@ -820,9 +815,9 @@ class UserResourceIT {
   <%_ } _%>
 
         // Update the user
-        <%= user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>orElseThrow<% } %>();
+        <%- user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>orElseThrow<% } %>();
 
-        <%= user.adminUserDto %> userDTO = new <%= user.adminUserDto %>();
+        <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>();
         userDTO.setId(updatedUser.getId());
         userDTO.setLogin("jhipster"); // this login should already be used by anotherUser
         userDTO.setFirstName(updatedUser.getFirstName());
@@ -862,7 +857,7 @@ class UserResourceIT {
   <%_ } _%>
     void deleteUser()<% if (!reactive) { %> throws Exception<% } %> {
         // Initialize the database
-        userRepository.<%= saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<%- saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
         int databaseSizeBeforeDelete = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
 
@@ -880,7 +875,7 @@ class UserResourceIT {
   <%_ } _%>
   <%_ if (cacheProviderAny) { _%>
 
-        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin(), <%= user.persistClass %>.class)).isNull();
+        assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin(), <%- user.persistClass %>.class)).isNull();
   <%_ } _%>
 
         // Validate the database is empty
@@ -890,10 +885,10 @@ class UserResourceIT {
 
     @Test
     void testUserEquals() throws Exception {
-        TestUtil.equalsVerifier(<%= user.persistClass %>.class);
-        <%= user.persistClass %> user1 = new <%= user.persistClass %>();
+        TestUtil.equalsVerifier(<%- user.persistClass %>.class);
+        <%- user.persistClass %> user1 = new <%- user.persistClass %>();
         user1.setId(DEFAULT_ID);
-        <%= user.persistClass %> user2 = new <%= user.persistClass %>();
+        <%- user.persistClass %> user2 = new <%- user.persistClass %>();
         user2.setId(user1.getId());
         assertThat(user1).isEqualTo(user2);
         user2.setId(<%- user.primaryKey.javaSampleValues[1] %>);
@@ -902,7 +897,7 @@ class UserResourceIT {
         assertThat(user1).isNotEqualTo(user2);
     }
 
-    private void assertPersistedUsers(Consumer<List<<%= user.persistClass %>>> userAssertion) {
+    private void assertPersistedUsers(Consumer<List<<%- user.persistClass %>>> userAssertion) {
 <%_ if (databaseTypeCouchbase) { _%>
         // The security filter chain clears the security context after remote calls
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());

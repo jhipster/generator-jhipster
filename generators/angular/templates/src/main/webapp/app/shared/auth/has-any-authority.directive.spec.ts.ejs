@@ -33,7 +33,7 @@ import HasAnyAuthorityDirective from './has-any-authority.directive';
 
 @Component({
   imports: [HasAnyAuthorityDirective],
-  template: `<div *<%= jhiPrefix %>HasAnyAuthority="'ROLE_ADMIN'" #content></div>`,
+  template: `<div *<%- jhiPrefix %>HasAnyAuthority="'ROLE_ADMIN'" #content></div>`,
 })
 class TestHasAnyAuthorityDirective {
   content = viewChild<ElementRef>('content');
@@ -45,7 +45,7 @@ describe('HasAnyAuthorityDirective tests', () => {
 
   beforeEach(() => {
     currentAccount = signal<Account | null>({ activated: true, authorities: [] } as any);
-    hasAnyAuthority = <%= clientTestFramework %>.fn((): boolean => Boolean(currentAccount()));
+    hasAnyAuthority = <%- clientTestFramework %>.fn((): boolean => Boolean(currentAccount()));
 
     TestBed.configureTestingModule({
 <%_ if (enableTranslation) { _%>
@@ -63,7 +63,7 @@ describe('HasAnyAuthorityDirective tests', () => {
     });
   });
 
-  describe('set <%= jhiPrefix %>HasAnyAuthority', () => {
+  describe('set <%- jhiPrefix %>HasAnyAuthority', () => {
     it('should show restricted content to user if user has required role', () => {
       // GIVEN
       const fixture = TestBed.createComponent(TestHasAnyAuthorityDirective);

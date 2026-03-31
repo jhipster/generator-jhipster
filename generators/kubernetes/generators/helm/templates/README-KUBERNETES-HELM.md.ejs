@@ -7,9 +7,9 @@ You will need to push your image to a registry. If you have not done so, use the
 ```
 <%_ for (const app of appConfigs) { _%>
   <%_ if (app.baseName.toLowerCase() !== app.targetImageName) { _%>
-$ docker image tag <%= app.baseName.toLowerCase() %> <%= app.targetImageName %>
+$ docker image tag <%- app.baseName.toLowerCase() %> <%- app.targetImageName %>
   <%_ } _%>
-$ <%= dockerPushCommand %> <%= app.targetImageName %>
+$ <%- dockerPushCommand %> <%- app.targetImageName %>
 <%_ } _%>
 ```
 

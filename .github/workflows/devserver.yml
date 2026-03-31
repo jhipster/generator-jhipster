@@ -99,13 +99,32 @@ jobs:
           JHI_JWT_SECRET_KEY: ${{ matrix.jwt-secret-key }}
       - run: jhipster.cjs info
       #----------------------------------------------------------------------
+      # Detect changes against base commit
+      #----------------------------------------------------------------------
+      - uses: jhipster/actions/compare-sample@v1
+        id: compare
+        if: >-
+          github.event.pull_request &&
+          matrix.skip-compare != 'true' &&
+          !contains(github.event.pull_request.labels.*.name, 'pr: disable-compare')
+        with:
+          generator-path: generator-jhipster
+          cmd: jhipster.cjs generate-sample ${{ matrix.sample }} --skip-jhipster-dependencies --skip-install ${{ matrix.args }}
+        env:
+          # generate-sample uses JHI_FOLDER_APP to generate the application.
+          JHI_FOLDER_APP: ${{ github.workspace }}/base/app
+          JHIPSTER_DEPENDENCIES_VERSION: ${{ matrix.jhipster-bom-cicd-version }}
+          JHI_JWT_SECRET_KEY: ${{ matrix.jwt-secret-key }}
+      #----------------------------------------------------------------------
       # Launch tests
       #----------------------------------------------------------------------
       - uses: jhipster/actions/build-jhipster-bom@v1
+        if: matrix.build-jhipster-bom && steps.compare.outputs.equals != 'true'
         with:
           jhipster-bom-ref: ${{ matrix.jhipster-bom-branch }}
       - name: 'E2E: Run'
         id: e2e
+        if: steps.compare.outputs.equals != 'true'
         run: |
           ./npmw install
           ./npmw run e2e:devserver --if-present

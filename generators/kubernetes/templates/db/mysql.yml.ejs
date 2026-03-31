@@ -17,11 +17,11 @@
  limitations under the License.
 -%>
 <%_ if (kubernetesUseDynamicStorage) { _%>
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: PersistentVolumeClaim
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-mysql-pvc
-  namespace: <%= kubernetesNamespace %>
+  name: <%- app.baseName.toLowerCase() %>-mysql-pvc
+  namespace: <%- kubernetesNamespace %>
 spec:
   accessModes:
   - ReadWriteOnce
@@ -29,24 +29,24 @@ spec:
     requests:
       storage: 2Gi
   <%_ if (kubernetesStorageClassName) { _%>
-  storageClassName: <%= kubernetesStorageClassName %>
+  storageClassName: <%- kubernetesStorageClassName %>
   <%_ } _%>
 ---
 <%_ } _%>
-apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
+apiVersion: <%- KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-mysql
-  namespace: <%= kubernetesNamespace %>
+  name: <%- app.baseName.toLowerCase() %>-mysql
+  namespace: <%- kubernetesNamespace %>
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: <%= app.baseName.toLowerCase() %>-mysql
+      app: <%- app.baseName.toLowerCase() %>-mysql
   template:
     metadata:
       labels:
-        app: <%= app.baseName.toLowerCase() %>-mysql
+        app: <%- app.baseName.toLowerCase() %>-mysql
 <%_ if (istio) { _%>
       annotations:
         sidecar.istio.io/inject: "false"
@@ -56,7 +56,7 @@ spec:
       - name: data
 <%_ if (kubernetesUseDynamicStorage) { _%>
         persistentVolumeClaim:
-          claimName: <%= app.baseName.toLowerCase() %>-mysql-pvc
+          claimName: <%- app.baseName.toLowerCase() %>-mysql-pvc
 <%_ } else { _%>
         emptyDir: {}
 <%_ } _%>
@@ -67,7 +67,7 @@ spec:
         - name: MYSQL_ALLOW_EMPTY_PASSWORD
           value: 'yes'
         - name: MYSQL_DATABASE
-          value: <%= app.baseName.toLowerCase() %>
+          value: <%- app.baseName.toLowerCase() %>
         args:
         - --lower_case_table_names=1
         - --skip-mysqlx
@@ -86,13 +86,13 @@ spec:
             memory: "1Gi"
             cpu: "1"
 ---
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: Service
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-mysql
-  namespace: <%= kubernetesNamespace %>
+  name: <%- app.baseName.toLowerCase() %>-mysql
+  namespace: <%- kubernetesNamespace %>
 spec:
   selector:
-    app: <%= app.baseName.toLowerCase() %>-mysql
+    app: <%- app.baseName.toLowerCase() %>-mysql
   ports:
   - port: 3306

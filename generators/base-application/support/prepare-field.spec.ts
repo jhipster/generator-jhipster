@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { beforeEach, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { beforeEach, describe, expect, it } from 'esmocha';
 
 import { getConfigWithDefaults } from '../../../lib/jhipster/default-application-options.ts';
 import BaseGenerator from '../../base/index.ts';
@@ -46,7 +44,7 @@ describe('generator - base-application - support - prepareField', () => {
         field = prepareCommonFieldForTemplates(defaultEntity, field, defaultGenerator as any);
       });
       it('should prepare path correctly', () => {
-        expect(field.path).to.deep.eq(['name']);
+        expect(field.path).toEqual(['name']);
       });
     });
   });
@@ -55,17 +53,17 @@ describe('generator - base-application - support - prepareField', () => {
     describe('when not passing anything', () => {
       it('should fail', () => {
         // @ts-expect-error testing invalid arguments
-        expect(() => getEnumValuesWithCustomValues()).to.throw(/^Enumeration values must be passed to get the formatted values\.$/);
+        expect(() => getEnumValuesWithCustomValues()).toThrow(/^Enumeration values must be passed to get the formatted values\.$/);
       });
     });
     describe('when passing an empty string', () => {
       it('should fail', () => {
-        expect(() => getEnumValuesWithCustomValues('')).to.throw(/^Enumeration values must be passed to get the formatted values\.$/);
+        expect(() => getEnumValuesWithCustomValues('')).toThrow(/^Enumeration values must be passed to get the formatted values\.$/);
       });
     });
     describe('when passing a string without custom enum values', () => {
       it('should return a formatted list', () => {
-        expect(getEnumValuesWithCustomValues('FRANCE, ENGLAND, ICELAND')).to.deep.equal([
+        expect(getEnumValuesWithCustomValues('FRANCE, ENGLAND, ICELAND')).toEqual([
           { name: 'FRANCE', value: 'FRANCE' },
           { name: 'ENGLAND', value: 'ENGLAND' },
           { name: 'ICELAND', value: 'ICELAND' },
@@ -74,7 +72,7 @@ describe('generator - base-application - support - prepareField', () => {
     });
     describe('when passing a string with some custom enum values', () => {
       it('should return a formatted list', () => {
-        expect(getEnumValuesWithCustomValues('FRANCE(france), ENGLAND, ICELAND (viking_country)')).to.deep.equal([
+        expect(getEnumValuesWithCustomValues('FRANCE(france), ENGLAND, ICELAND (viking_country)')).toEqual([
           { name: 'FRANCE', value: 'france' },
           { name: 'ENGLAND', value: 'ENGLAND' },
           { name: 'ICELAND', value: 'viking_country' },
@@ -83,7 +81,7 @@ describe('generator - base-application - support - prepareField', () => {
     });
     describe('when passing a string custom enum values for each value', () => {
       it('should return a formatted list', () => {
-        expect(getEnumValuesWithCustomValues('FRANCE(france), ENGLAND(england), ICELAND (iceland)')).to.deep.equal([
+        expect(getEnumValuesWithCustomValues('FRANCE(france), ENGLAND(england), ICELAND (iceland)')).toEqual([
           { name: 'FRANCE', value: 'france' },
           { name: 'ENGLAND', value: 'england' },
           { name: 'ICELAND', value: 'iceland' },

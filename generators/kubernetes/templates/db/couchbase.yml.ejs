@@ -17,11 +17,11 @@
  limitations under the License.
 -%>
 <%_ if (kubernetesUseDynamicStorage) { _%>
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: PersistentVolumeClaim
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-mongodb-pvc
-  namespace: <%= kubernetesNamespace %>
+  name: <%- app.baseName.toLowerCase() %>-mongodb-pvc
+  namespace: <%- kubernetesNamespace %>
 spec:
   accessModes:
   - ReadWriteOnce
@@ -29,49 +29,49 @@ spec:
     requests:
       storage: 2Gi
   <%_ if (kubernetesStorageClassName) { _%>
-  storageClassName: <%= kubernetesStorageClassName %>
+  storageClassName: <%- kubernetesStorageClassName %>
   <%_ } _%>
 ---
 <%_ } _%>
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: Secret
 metadata:
   name: ds-secret-ref
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
 data:
   database-admin-user: "YWRtaW4K"
   database-admin-password: "cGFzc3dvcmQK"
 ---
-apiVersion: <%= KUBERNETES_STATEFULSET_API_VERSION %>
+apiVersion: <%- KUBERNETES_STATEFULSET_API_VERSION %>
 kind: StatefulSet
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-couchbase
-  namespace: <%= kubernetesNamespace %>
+  name: <%- app.baseName.toLowerCase() %>-couchbase
+  namespace: <%- kubernetesNamespace %>
 spec:
-  serviceName: <%= app.baseName.toLowerCase() %>-couchbase
-  replicas: <%= app.dbPeerCount %>
+  serviceName: <%- app.baseName.toLowerCase() %>-couchbase
+  replicas: <%- app.dbPeerCount %>
   selector:
     matchLabels:
-      app: <%= app.baseName.toLowerCase() %>-couchbase
+      app: <%- app.baseName.toLowerCase() %>-couchbase
   template:
     metadata:
       labels:
-        app: <%= app.baseName.toLowerCase() %>-couchbase
+        app: <%- app.baseName.toLowerCase() %>-couchbase
 <%_ if (istio) { _%>
       annotations:
         sidecar.istio.io/inject: "false"
 <%_ } _%>
     spec:
       containers:
-      - name: <%= app.baseName.toLowerCase() %>-couchbase
+      - name: <%- app.baseName.toLowerCase() %>-couchbase
         image: <%- dockerContainers.couchbase %>
         env:
         - name: APPLICATION_NAME
-          value: <%= app.baseName.toLowerCase() %>-couchbase
+          value: <%- app.baseName.toLowerCase() %>-couchbase
         - name: BUCKET
-          value: <%= app.baseName.toLowerCase() %>
+          value: <%- app.baseName.toLowerCase() %>
         - name: COUCHBASE_DATABASE
-          value: <%= app.baseName.toLowerCase() %>
+          value: <%- app.baseName.toLowerCase() %>
         - name: COUCHBASE_ADMIN_USER
           valueFrom:
             secretKeyRef:
@@ -87,7 +87,7 @@ spec:
             fieldRef:
               fieldPath: metadata.name
         - name: DB_PEER_COUNT
-          value: "<%= app.dbPeerCount %>"
+          value: "<%- app.dbPeerCount %>"
         ports:
         - containerPort: 8091
           protocol: TCP
@@ -104,14 +104,14 @@ spec:
                 set -x
                 set -m
                 REPLICA_CNT=$(( $DB_PEER_COUNT - 1))
-                CB_POD_NAME=$CB_POD_NAME.<%= app.baseName.toLowerCase() %>-couchbase
-                CB_BASE_POD_NAME=<%= app.baseName.toLowerCase() %>-couchbase-0.<%= app.baseName.toLowerCase() %>-couchbase
+                CB_POD_NAME=$CB_POD_NAME.<%- app.baseName.toLowerCase() %>-couchbase
+                CB_BASE_POD_NAME=<%- app.baseName.toLowerCase() %>-couchbase-0.<%- app.baseName.toLowerCase() %>-couchbase
                 cluster_node=
                 echo "checking if the cluster is already initialized"
-                nc -z -w 1 <%= app.baseName.toLowerCase() %>-couchbase-discovery 8091 2>>/dev/null
+                nc -z -w 1 <%- app.baseName.toLowerCase() %>-couchbase-discovery 8091 2>>/dev/null
 
                 if [ $? -eq 0 ]; then
-                    cluster_node=$(couchbase-cli server-list -u ${COUCHBASE_ADMIN_USER} -p ${COUCHBASE_ADMIN_PASSWORD} -c <%= app.baseName.toLowerCase() %>-couchbase-discovery | tail -1 | cut -d ' ' -f 2)
+                    cluster_node=$(couchbase-cli server-list -u ${COUCHBASE_ADMIN_USER} -p ${COUCHBASE_ADMIN_PASSWORD} -c <%- app.baseName.toLowerCase() %>-couchbase-discovery | tail -1 | cut -d ' ' -f 2)
                 fi
 
                 set -e
@@ -171,7 +171,7 @@ spec:
             port: 8091
             scheme: HTTP
         volumeMounts:
-        - name: <%= app.baseName.toLowerCase() %>-couchbase-data
+        - name: <%- app.baseName.toLowerCase() %>-couchbase-data
           mountPath: /opt/couchbase/var/lib/couchbase/data/
         resources:
           requests:
@@ -185,29 +185,29 @@ spec:
       terminationGracePeriodSeconds: 30
 <%_ if (!kubernetesUseDynamicStorage) { _%>
       volumes:
-      - name: <%= app.baseName.toLowerCase() %>-couchbase-data
+      - name: <%- app.baseName.toLowerCase() %>-couchbase-data
         emptyDir: {}
 <%_ } else { _%>
   volumeClaimTemplates:
   - metadata:
-      name: <%= app.baseName.toLowerCase() %>-couchbase-data
+      name: <%- app.baseName.toLowerCase() %>-couchbase-data
     spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:
         requests:
           storage: 1Gi
   <%_ if (kubernetesStorageClassName !== '') { _%>
-      storageClassName: <%= kubernetesStorageClassName %>
+      storageClassName: <%- kubernetesStorageClassName %>
   <%_ } _%>
 <%_ } _%>
 ---
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: Service
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-couchbase-cluster-srv
-  namespace: <%= kubernetesNamespace %>
+  name: <%- app.baseName.toLowerCase() %>-couchbase-cluster-srv
+  namespace: <%- kubernetesNamespace %>
   labels:
-    app: <%= app.baseName.toLowerCase() %>-couchbase
+    app: <%- app.baseName.toLowerCase() %>-couchbase
 spec:
   ports:
     -
@@ -234,15 +234,15 @@ spec:
   type: ClusterIP
   publishNotReadyAddresses: true
   selector:
-    app: <%= app.baseName.toLowerCase() %>-couchbase
+    app: <%- app.baseName.toLowerCase() %>-couchbase
 ---
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: Service
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-couchbase-discovery
-  namespace: <%= kubernetesNamespace %>
+  name: <%- app.baseName.toLowerCase() %>-couchbase-discovery
+  namespace: <%- kubernetesNamespace %>
   labels:
-    app: <%= app.baseName.toLowerCase() %>-couchbase
+    app: <%- app.baseName.toLowerCase() %>-couchbase
 spec:
   ports:
     -
@@ -252,4 +252,4 @@ spec:
       targetPort: 8091
   type: NodePort
   selector:
-    app: <%= app.baseName.toLowerCase() %>-couchbase
+    app: <%- app.baseName.toLowerCase() %>-couchbase

@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect as jestExpect, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import { relationshipTypes } from '../basic-types/index.ts';
 
@@ -34,7 +32,7 @@ describe('jdl - JDLRelationships', () => {
           expect(() => {
             // @ts-expect-error
             new JDLRelationships().add();
-          }).to.throw('A relationship must be passed so as to be added.');
+          }).toThrow('A relationship must be passed so as to be added.');
         });
       });
     });
@@ -62,7 +60,7 @@ describe('jdl - JDLRelationships', () => {
       });
 
       it('succeeds', () => {
-        expect(relationships.size()).to.equal(2);
+        expect(relationships.size()).toBe(2);
       });
     });
   });
@@ -72,7 +70,7 @@ describe('jdl - JDLRelationships', () => {
         expect(() => {
           // @ts-expect-error
           new JDLRelationships().get('oops', 42);
-        }).to.throw("A valid relationship type must be passed so as to retrieve the relationship, got 'oops'.");
+        }).toThrow("A valid relationship type must be passed so as to retrieve the relationship, got 'oops'.");
       });
     });
     describe('when passing an invalid id', () => {
@@ -80,13 +78,13 @@ describe('jdl - JDLRelationships', () => {
         expect(() => {
           // @ts-expect-error
           new JDLRelationships().get(relationshipTypes.ONE_TO_MANY);
-        }).to.throw('A relationship id must be passed so as to retrieve the relationship.');
+        }).toThrow('A relationship id must be passed so as to retrieve the relationship.');
       });
     });
     describe('when passing valid arguments', () => {
       describe('but there is no relationship', () => {
         it('should return null', () => {
-          expect(new JDLRelationships().get(relationshipTypes.ONE_TO_MANY, '42')).to.be.undefined;
+          expect(new JDLRelationships().get(relationshipTypes.ONE_TO_MANY, '42')).toBeUndefined();
         });
       });
       describe('for an existing relationship', () => {
@@ -105,7 +103,7 @@ describe('jdl - JDLRelationships', () => {
         });
 
         it('should return it', () => {
-          expect(relationships.get(relationship.type, relationship.getId())).to.deep.equal(relationship);
+          expect(relationships.get(relationship.type, relationship.getId())).toEqual(relationship);
         });
       });
     });
@@ -116,13 +114,13 @@ describe('jdl - JDLRelationships', () => {
         expect(() => {
           // @ts-expect-error
           new JDLRelationships().getOneToOne();
-        }).to.throw('A relationship id must be passed so as to retrieve the relationship.');
+        }).toThrow('A relationship id must be passed so as to retrieve the relationship.');
       });
     });
     describe('when passing valid arguments', () => {
       describe('but there is no relationship', () => {
         it('should return null', () => {
-          expect(new JDLRelationships().getOneToOne('42')).to.be.undefined;
+          expect(new JDLRelationships().getOneToOne('42')).toBeUndefined();
         });
       });
       describe('for an existing relationship', () => {
@@ -141,7 +139,7 @@ describe('jdl - JDLRelationships', () => {
         });
 
         it('should return it', () => {
-          expect(relationships.getOneToOne(relationship.getId())).to.deep.equal(relationship);
+          expect(relationships.getOneToOne(relationship.getId())).toEqual(relationship);
         });
       });
     });
@@ -152,13 +150,13 @@ describe('jdl - JDLRelationships', () => {
         expect(() => {
           // @ts-expect-error
           new JDLRelationships().getOneToMany();
-        }).to.throw('A relationship id must be passed so as to retrieve the relationship.');
+        }).toThrow('A relationship id must be passed so as to retrieve the relationship.');
       });
     });
     describe('when passing valid arguments', () => {
       describe('but there is no relationship', () => {
         it('should return null', () => {
-          expect(new JDLRelationships().getOneToMany('42')).to.be.undefined;
+          expect(new JDLRelationships().getOneToMany('42')).toBeUndefined();
         });
       });
       describe('for an existing relationship', () => {
@@ -177,7 +175,7 @@ describe('jdl - JDLRelationships', () => {
         });
 
         it('should return it', () => {
-          expect(relationships.getOneToMany(relationship.getId())).to.deep.equal(relationship);
+          expect(relationships.getOneToMany(relationship.getId())).toEqual(relationship);
         });
       });
     });
@@ -188,13 +186,13 @@ describe('jdl - JDLRelationships', () => {
         expect(() => {
           // @ts-expect-error
           new JDLRelationships().getManyToOne();
-        }).to.throw('A relationship id must be passed so as to retrieve the relationship.');
+        }).toThrow('A relationship id must be passed so as to retrieve the relationship.');
       });
     });
     describe('when passing valid arguments', () => {
       describe('but there is no relationship', () => {
         it('should return null', () => {
-          expect(new JDLRelationships().getManyToOne('42')).to.be.undefined;
+          expect(new JDLRelationships().getManyToOne('42')).toBeUndefined();
         });
       });
       describe('for an existing relationship', () => {
@@ -213,7 +211,7 @@ describe('jdl - JDLRelationships', () => {
         });
 
         it('should return it', () => {
-          expect(relationships.getManyToOne(relationship.getId())).to.deep.equal(relationship);
+          expect(relationships.getManyToOne(relationship.getId())).toEqual(relationship);
         });
       });
     });
@@ -224,13 +222,13 @@ describe('jdl - JDLRelationships', () => {
         expect(() => {
           // @ts-expect-error
           new JDLRelationships().getManyToMany();
-        }).to.throw('A relationship id must be passed so as to retrieve the relationship.');
+        }).toThrow('A relationship id must be passed so as to retrieve the relationship.');
       });
     });
     describe('when passing valid arguments', () => {
       describe('but there is no relationship', () => {
         it('should return null', () => {
-          expect(new JDLRelationships().getManyToMany('42')).to.be.undefined;
+          expect(new JDLRelationships().getManyToMany('42')).toBeUndefined();
         });
       });
       describe('for an existing relationship', () => {
@@ -250,7 +248,7 @@ describe('jdl - JDLRelationships', () => {
         });
 
         it('should return it', () => {
-          expect(relationships.getManyToMany(relationship.getId())).to.deep.equal(relationship);
+          expect(relationships.getManyToMany(relationship.getId())).toEqual(relationship);
         });
       });
     });
@@ -281,13 +279,13 @@ describe('jdl - JDLRelationships', () => {
     });
 
     it('should return the list of each relationship', () => {
-      expect(array).to.deep.eq([relationship1, relationship2]);
+      expect(array).toEqual([relationship1, relationship2]);
     });
   });
   describe('oneToOneQuantity', () => {
     describe('when there is no OtO relationship', () => {
       it('should return 0', () => {
-        expect(new JDLRelationships().oneToOneQuantity()).to.equal(0);
+        expect(new JDLRelationships().oneToOneQuantity()).toBe(0);
       });
     });
     describe('when there are OtO relationships', () => {
@@ -306,14 +304,14 @@ describe('jdl - JDLRelationships', () => {
       });
 
       it('should return the size', () => {
-        expect(relationships.oneToOneQuantity()).to.equal(1);
+        expect(relationships.oneToOneQuantity()).toBe(1);
       });
     });
   });
   describe('oneToManyQuantity', () => {
     describe('when there is no OtM relationship', () => {
       it('should return 0', () => {
-        expect(new JDLRelationships().oneToManyQuantity()).to.equal(0);
+        expect(new JDLRelationships().oneToManyQuantity()).toBe(0);
       });
     });
     describe('when there are OtM relationships', () => {
@@ -332,14 +330,14 @@ describe('jdl - JDLRelationships', () => {
       });
 
       it('should return the size', () => {
-        expect(relationships.oneToManyQuantity()).to.equal(1);
+        expect(relationships.oneToManyQuantity()).toBe(1);
       });
     });
   });
   describe('manyToOneQuantity', () => {
     describe('when there is no MtO relationship', () => {
       it('should return 0', () => {
-        expect(new JDLRelationships().manyToOneQuantity()).to.equal(0);
+        expect(new JDLRelationships().manyToOneQuantity()).toBe(0);
       });
     });
     describe('when there are MtO relationships', () => {
@@ -358,14 +356,14 @@ describe('jdl - JDLRelationships', () => {
       });
 
       it('should return the size', () => {
-        expect(relationships.manyToOneQuantity()).to.equal(1);
+        expect(relationships.manyToOneQuantity()).toBe(1);
       });
     });
   });
   describe('manyToManyQuantity', () => {
     describe('when there is no OtO relationship', () => {
       it('should return 0', () => {
-        expect(new JDLRelationships().manyToManyQuantity()).to.equal(0);
+        expect(new JDLRelationships().manyToManyQuantity()).toBe(0);
       });
     });
     describe('when there are OtO relationships', () => {
@@ -385,7 +383,7 @@ describe('jdl - JDLRelationships', () => {
       });
 
       it('should return the size', () => {
-        expect(relationships.manyToManyQuantity()).to.equal(1);
+        expect(relationships.manyToManyQuantity()).toBe(1);
       });
     });
   });
@@ -397,7 +395,7 @@ describe('jdl - JDLRelationships', () => {
     });
 
     it('should return the number of relationships', () => {
-      expect(relationships.size()).to.equal(0);
+      expect(relationships.size()).toBe(0);
       relationships.add(
         new JDLRelationship({
           from: 'Abc',
@@ -406,7 +404,7 @@ describe('jdl - JDLRelationships', () => {
           type: relationshipTypes.ONE_TO_ONE,
         }),
       );
-      expect(relationships.size()).to.equal(1);
+      expect(relationships.size()).toBe(1);
     });
   });
   describe('forEach', () => {
@@ -448,7 +446,7 @@ describe('jdl - JDLRelationships', () => {
       });
 
       it('should use each relationship', () => {
-        jestExpect(result).toMatchInlineSnapshot(`
+        expect(result).toMatchInlineSnapshot(`
 [
   {
     "from": "Abc",
@@ -468,7 +466,7 @@ describe('jdl - JDLRelationships', () => {
   describe('toString', () => {
     describe('when there is no relationship', () => {
       it('should return an empty string', () => {
-        expect(new JDLRelationships().toString()).to.equal('');
+        expect(new JDLRelationships().toString()).toBe('');
       });
     });
     describe('when having one relationship per type', () => {
@@ -497,7 +495,7 @@ describe('jdl - JDLRelationships', () => {
       });
 
       it('should use the standard string form', () => {
-        expect(relationships.toString()).to.equal(`relationship ${oneToOneRelationship.type} {
+        expect(relationships.toString()).toBe(`relationship ${oneToOneRelationship.type} {
   ${oneToOneRelationship.from}{${oneToOneRelationship.injectedFieldInFrom}} to ${oneToOneRelationship.to}{${oneToOneRelationship.injectedFieldInTo}}
 }
 relationship ${oneToManyRelationship.type} {
@@ -531,7 +529,7 @@ relationship ${oneToManyRelationship.type} {
       });
 
       it('should use the new string form', () => {
-        expect(relationships.toString()).to.equal(`relationship ${oneToOneRelationship1.type} {
+        expect(relationships.toString()).toBe(`relationship ${oneToOneRelationship1.type} {
   ${oneToOneRelationship1.from}{${oneToOneRelationship1.injectedFieldInFrom}} to ${oneToOneRelationship1.to}{${oneToOneRelationship1.injectedFieldInTo}}
   ${oneToOneRelationship2.from}{${oneToOneRelationship2.injectedFieldInFrom}} to ${oneToOneRelationship2.to}{${oneToOneRelationship2.injectedFieldInTo}}
 }`);

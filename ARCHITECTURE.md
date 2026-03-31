@@ -13,9 +13,9 @@ Internally, JHipster uses [Yeoman](https://yeoman.io) as the core. JHipster is t
 - `bin` - jit executable and helper
 - `cli` - (exported) cli implementation
 - `generators/*` - (exported) generators
-  - `command.m[tj]s` - cli options, cli arguments definitions
-  - `generator.m[tj]s` - generator implementation
-  - `index.m[tj]s` - generator exports. Must re-export generator as default export and the command
+  - `command.ts` - cli options, cli arguments definitions
+  - `generator.ts` - generator implementation
+  - `index.ts` - generator exports. Must re-export generator as default export and the command
   - `internal` - non-exported supporting libs
   - `resources` - supporting resources
   - `jdl` - generator's jdl specifications

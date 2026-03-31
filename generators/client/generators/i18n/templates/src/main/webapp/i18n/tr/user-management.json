@@ -1,31 +1,31 @@
 {
-    "userManagement": {
-        "home": {
-            "title": "Kullanıcılar",
-            "refreshListLabel": "Listeyi yenile",
-            "createLabel": "Yeni kullanıcı oluştur",
-            "createOrEditLabel": "Kullanıcı oluştur veya düzenle"
-        },
-        "created": "{{ param }} ID ile yeni bir user eklendi.",
-        "updated": "{{ param }} nolu user güncellendi",
-        "deleted": "{{ param }} nolu user silindi",
-        "delete": {
-            "question": "{{ login }} kullanıcısını silmek istediğinize emin misiniz?"
-        },
-        "detail": {
-            "title": "Kullanıcı"
-        },
-        "login": "Giriş",
-        "firstName": "Ad",
-        "lastName": "Soyad",
-        "email": "Eposta",
-        "activated": "Aktif",
-        "deactivated": "Deaktif",
-        "profiles": "Roller",
-        "langKey": "Dil",
-        "createdBy": "Oluşturan",
-        "createdDate": "Oluşturma tarihi",
-        "lastModifiedBy": "Düzenleyen",
-        "lastModifiedDate": "Düzenleme tarihi"
-    }
+  "userManagement": {
+    "home": {
+      "title": "Kullanıcılar",
+      "refreshListLabel": "Listeyi yenile",
+      "createLabel": "Yeni kullanıcı oluştur",
+      "createOrEditLabel": "Kullanıcı oluştur veya düzenle"
+    },
+    "created": "{{ param }} ID ile yeni bir user eklendi.",
+    "updated": "{{ param }} nolu user güncellendi",
+    "deleted": "{{ param }} nolu user silindi",
+    "delete": {
+      "question": "{{ login }} kullanıcısını silmek istediğinize emin misiniz?"
+    },
+    "detail": {
+      "title": "Kullanıcı"
+    },
+    "login": "Giriş",
+    "firstName": "Ad",
+    "lastName": "Soyad",
+    "email": "Eposta",
+    "activated": "Aktif",
+    "deactivated": "Deaktif",
+    "profiles": "Roller",
+    "langKey": "Dil",
+    "createdBy": "Oluşturan",
+    "createdDate": "Oluşturma tarihi",
+    "lastModifiedBy": "Düzenleyen",
+    "lastModifiedDate": "Düzenleme tarihi"
+  }
 }

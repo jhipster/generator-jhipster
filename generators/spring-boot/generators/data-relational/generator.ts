@@ -123,9 +123,8 @@ export default class SqlGenerator extends BaseApplicationGenerator<
     return this.asPreparingEachEntityRelationshipTaskGroup({
       prepareRelationship({ application, relationship }) {
         if (application.reactive) {
-          relationship.relationshipSqlSafeName = isReservedTableName(relationship.relationshipName, SQL)
-            ? `e_${relationship.relationshipName}`
-            : relationship.relationshipName;
+          relationship.relationshipSqlSafeName =
+            isReservedTableName(relationship.relationshipName, SQL) ? `e_${relationship.relationshipName}` : relationship.relationshipName;
         }
       },
     });
@@ -199,8 +198,9 @@ export default class SqlGenerator extends BaseApplicationGenerator<
           inProfile: devDatabaseTypeH2Any ? 'prod' : undefined,
           javaDependencies,
         });
-        const h2Definitions = devDatabaseTypeH2Any
-          ? getH2MavenDefinition({
+        const h2Definitions =
+          devDatabaseTypeH2Any ?
+            getH2MavenDefinition({
               implementsTestcontainersSupport: Boolean(application.testcontainerClass),
               packageFolder,
             })

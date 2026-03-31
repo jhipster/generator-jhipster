@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import { relationshipTypes } from '../basic-types/index.ts';
 import { relationshipOptions } from '../built-in-options/index.ts';
@@ -38,7 +36,7 @@ describe('jdl - JDLRelationship', () => {
             to: 'Abc2',
             type: relationshipTypes.MANY_TO_MANY,
           });
-        }).to.throw('A valid type and at least one injected field must be passed to create a relationship.');
+        }).toThrow('A valid type and at least one injected field must be passed to create a relationship.');
       });
     });
     describe('when passing an invalid type', () => {
@@ -51,7 +49,7 @@ describe('jdl - JDLRelationship', () => {
             // @ts-expect-error
             type: 'WRONG_TYPE',
           });
-        }).to.throw('A valid type and at least one injected field must be passed to create a relationship.');
+        }).toThrow('A valid type and at least one injected field must be passed to create a relationship.');
       });
     });
     describe('when passing valid args', () => {
@@ -67,10 +65,10 @@ describe('jdl - JDLRelationship', () => {
       });
 
       it('should create the relationship', () => {
-        expect(relationship.to).to.equal('Abc2');
-        expect(relationship.from).to.equal('Abc');
-        expect(relationship.injectedFieldInFrom).to.equal('something');
-        expect(relationship.type).to.equal(relationshipTypes.ONE_TO_ONE);
+        expect(relationship.to).toBe('Abc2');
+        expect(relationship.from).toBe('Abc');
+        expect(relationship.injectedFieldInFrom).toBe('something');
+        expect(relationship.type).toBe(relationshipTypes.ONE_TO_ONE);
       });
     });
     describe('when passing an unidirectional one-to-many relationship', () => {
@@ -87,7 +85,7 @@ describe('jdl - JDLRelationship', () => {
         });
 
         it('should not create a bidirectional relationship', () => {
-          expect(relationship.injectedFieldInTo).to.be.null;
+          expect(relationship.injectedFieldInTo).toBeNull();
         });
       });
     });
@@ -105,7 +103,7 @@ describe('jdl - JDLRelationship', () => {
         });
 
         it('should not create a bidirectional relationship', () => {
-          expect(relationship.injectedFieldInTo).to.be.null;
+          expect(relationship.injectedFieldInTo).toBeNull();
         });
       });
     });
@@ -123,7 +121,7 @@ describe('jdl - JDLRelationship', () => {
         });
 
         it('should not create a bidirectional relationship', () => {
-          expect(relationship.injectedFieldInTo).to.be.null;
+          expect(relationship.injectedFieldInTo).toBeNull();
         });
       });
     });
@@ -141,7 +139,7 @@ describe('jdl - JDLRelationship', () => {
         });
 
         it('should not create a bidirectional relationship', () => {
-          expect(relationship.injectedFieldInTo).to.be.null;
+          expect(relationship.injectedFieldInTo).toBeNull();
         });
       });
     });
@@ -159,7 +157,7 @@ describe('jdl - JDLRelationship', () => {
     });
 
     it('should return an unique representation of the relationship', () => {
-      expect(relationship.getId()).to.equal(
+      expect(relationship.getId()).toBe(
         `${relationship.type}_${relationship.from}{${relationship.injectedFieldInFrom}}_${relationship.to}`,
       );
     });
@@ -183,12 +181,12 @@ describe('jdl - JDLRelationship', () => {
 
     describe('when the option does not exist', () => {
       it('should return false', () => {
-        expect(relationship.hasGlobalOption('toto')).to.be.false;
+        expect(relationship.hasGlobalOption('toto')).toBe(false);
       });
     });
     describe('when the option exists', () => {
       it('should return true', () => {
-        expect(relationship.hasGlobalOption(BUILT_IN_ENTITY)).to.be.true;
+        expect(relationship.hasGlobalOption(BUILT_IN_ENTITY)).toBe(true);
       });
     });
   });
@@ -211,7 +209,7 @@ describe('jdl - JDLRelationship', () => {
     it('should loop over the function for each element', () => {
       relationship.forEachGlobalOption((optionName, optionValue) => {
         // @ts-expect-error FIXME
-        expect(optionValue).to.equal(options.global[optionName]);
+        expect(optionValue).toBe(options.global[optionName]);
       });
     });
   });
@@ -229,7 +227,7 @@ describe('jdl - JDLRelationship', () => {
       });
 
       it('should stringify the relationship', () => {
-        expect(relationship.toString()).to.equal(
+        expect(relationship.toString()).toBe(
           `relationship ${relationship.type} {
   ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}
 }`,
@@ -251,7 +249,7 @@ describe('jdl - JDLRelationship', () => {
       });
 
       it('should stringify the relationship', () => {
-        expect(relationship.toString()).to.equal(
+        expect(relationship.toString()).toBe(
           `relationship ${relationship.type} {
   /**
    * ${relationship.commentInFrom}
@@ -279,7 +277,7 @@ describe('jdl - JDLRelationship', () => {
       });
 
       it('should stringify the relationship', () => {
-        expect(relationship.toString()).to.equal(
+        expect(relationship.toString()).toBe(
           `relationship ${relationship.type} {
   /**
    * ${relationship.commentInFrom}
@@ -303,7 +301,7 @@ describe('jdl - JDLRelationship', () => {
       });
 
       it('should stringify the relationship', () => {
-        expect(relationship.toString()).to.equal(
+        expect(relationship.toString()).toBe(
           `relationship ${relationship.type} {
   ${relationship.from}{${relationship.injectedFieldInFrom}} to
   /**
@@ -327,7 +325,7 @@ describe('jdl - JDLRelationship', () => {
       });
 
       it('should stringify the relationship', () => {
-        expect(relationship.toString()).to.equal(
+        expect(relationship.toString()).toBe(
           `relationship ${relationship.type} {
   ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}
 }`,
@@ -348,7 +346,7 @@ describe('jdl - JDLRelationship', () => {
       });
 
       it('should stringify the relationship', () => {
-        expect(relationship.toString()).to.equal(
+        expect(relationship.toString()).toBe(
           `relationship ${relationship.type} {
   ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}{${relationship.injectedFieldInTo}}
 }`,
@@ -375,7 +373,7 @@ describe('jdl - JDLRelationship', () => {
         });
 
         it('should add them', () => {
-          expect(relationship.toString()).to.equal(
+          expect(relationship.toString()).toBe(
             `relationship ${relationship.type} {
   ${relationship.from}{${relationship.injectedFieldInFrom}} to ${relationship.to}{` +
               `${relationship.injectedFieldInTo}} with ${BUILT_IN_ENTITY}
@@ -402,7 +400,7 @@ describe('jdl - JDLRelationship', () => {
         });
 
         it('should add them', () => {
-          expect(relationship.toString()).to.equal(
+          expect(relationship.toString()).toBe(
             `relationship ${relationship.type} {
   @Id ${relationship.from}{${relationship.injectedFieldInFrom}} to @Id @IdGenerator(sequence) ${relationship.to}{${relationship.injectedFieldInTo}} with ${BUILT_IN_ENTITY}
 }`,

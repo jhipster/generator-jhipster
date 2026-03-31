@@ -69,15 +69,13 @@ export const pickFields = (source: Record<string | number, any>, fields: (string
 
 export type MutateDataParam<T extends object> = Simplify<
   OmitIndexSignature<{
-    [Key in keyof (T & { __override__?: boolean })]?: Key extends '__override__'
-      ? boolean
-      : Key extends ReadonlyKeysOf<T>
-        ? never
-        : Key extends keyof T
-          ? T[Key] extends Function
-            ? (ctx: T) => T[Key]
-            : T[Key] | ((ctx: T) => T[Key])
-          : never;
+    [Key in keyof (T & { __override__?: boolean })]?: Key extends '__override__' ? boolean
+    : Key extends ReadonlyKeysOf<T> ? never
+    : Key extends keyof T ?
+      T[Key] extends Function ?
+        (ctx: T) => T[Key]
+      : T[Key] | ((ctx: T) => T[Key])
+    : never;
   }>
 >;
 
@@ -95,6 +93,11 @@ type MutateDataFunction = ((ctx: any) => any) & { [OverrideMutation]?: boolean }
 
 export const overrideMutateDataProperty = <const T extends MutateDataFunction>(fn: T): T => {
   fn[OverrideMutation] = true;
+  return fn;
+};
+
+export const dontOverrideMutateDataProperty = <const T extends MutateDataFunction>(fn: T): T => {
+  fn[OverrideMutation] = false;
   return fn;
 };
 
@@ -122,7 +125,12 @@ export const mutateData = <const T extends Record<string | number, any>>(context
     const override = mutation.__override__;
     for (const [key, value] of Object.entries(mutation).filter(([key]) => key !== '__override__')) {
       if (typeof value === 'function') {
-        if (override !== false || !(key in context) || context[key] === undefined || value[OverrideMutation] === true) {
+        if (
+          (override !== false && value[OverrideMutation] !== false) ||
+          !(key in context) ||
+          context[key] === undefined ||
+          value[OverrideMutation] === true
+        ) {
           (context as any)[key] = value(context);
         }
       } else if (!(key in context) || context[key] === undefined || override === true) {

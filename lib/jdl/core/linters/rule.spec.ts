@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, beforeEach, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, beforeEach, describe, expect, it } from 'esmocha';
 
 import { ERROR, INFO } from './rule-levels.ts';
 import Rule from './rule.ts';
@@ -29,13 +27,13 @@ describe('jdl - Rule', () => {
     describe('when not passing any arg', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => new Rule()).to.throw(/^A rule must at least have a name\.$/);
+        expect(() => new Rule()).toThrow(/^A rule must at least have a name\.$/);
       });
     });
     describe('when not passing any name', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => new Rule({})).to.throw(/^A rule must at least have a name\.$/);
+        expect(() => new Rule({})).toThrow(/^A rule must at least have a name\.$/);
       });
     });
     describe('when not passing a level', () => {
@@ -47,7 +45,7 @@ describe('jdl - Rule', () => {
       });
 
       it("sets the rule's level to the info one", () => {
-        expect(rule.level).to.equal(INFO);
+        expect(rule.level).toBe(INFO);
       });
     });
   });
@@ -68,12 +66,12 @@ describe('jdl - Rule', () => {
         expect(() => {
           // @ts-expect-error
           rule.compareTo();
-        }).to.throw(/^A rule has to be passed so as to be compared\.$/);
+        }).toThrow(/^A rule has to be passed so as to be compared\.$/);
       });
     });
     describe('when comparing two equal rules', () => {
       it('should return 0', () => {
-        expect(rule.compareTo(otherRule)).to.equal(0);
+        expect(rule.compareTo(otherRule)).toBe(0);
       });
     });
     describe('when the first rule is more important than the other', () => {
@@ -82,7 +80,7 @@ describe('jdl - Rule', () => {
       });
 
       it('should return 1', () => {
-        expect(rule.compareTo(otherRule)).to.equal(1);
+        expect(rule.compareTo(otherRule)).toBe(1);
       });
     });
     describe('when the first rule is less important than the other', () => {
@@ -91,7 +89,7 @@ describe('jdl - Rule', () => {
       });
 
       it('should return 1', () => {
-        expect(rule.compareTo(otherRule)).to.equal(-1);
+        expect(rule.compareTo(otherRule)).toBe(-1);
       });
     });
   });

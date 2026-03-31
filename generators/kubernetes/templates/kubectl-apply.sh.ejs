@@ -42,30 +42,30 @@ logSummary() {
         echo "#####################################################"
         echo "Please find the below useful endpoints,"
   <%_ if (monitoringPrometheus) { _%>
-        echo "JHipster Grafana - http://jhipster-grafana.<%= kubernetesNamespace %>.<%= ingressDomain %>"
+        echo "JHipster Grafana - http://jhipster-grafana.<%- kubernetesNamespace %>.<%- ingressDomain %>"
   <%_ } _%>
   <%_ if (kubernetesServiceTypeIngress) { _%>
-    <%_ appConfigs.forEach((appConfig) =>  { _%>
-      <%_ if (appConfig.applicationTypeGateway) {_%>
-        echo "Gateway - http://<%= appConfig.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>"
+    <%_ for (const appConfig of appConfigs) { _%>
+      <%_ if (appConfig.applicationTypeGateway) { _%>
+        echo "Gateway - http://<%- appConfig.baseName.toLowerCase() %>.<%- kubernetesNamespace %>.<%- ingressDomain %>"
       <%_ } _%>
-      <%_ if (appConfig.applicationTypeMonolith) {_%>
-        echo "<%= appConfig.baseName %> - http://<%= appConfig.baseName.toLowerCase() %>.<%= kubernetesNamespace %>.<%= ingressDomain %>"
+      <%_ if (appConfig.applicationTypeMonolith) { _%>
+        echo "<%- appConfig.baseName %> - http://<%- appConfig.baseName.toLowerCase() %>.<%- kubernetesNamespace %>.<%- ingressDomain %>"
       <%_ } _%>
-    <%_ }) _%>
+    <%_ } _%>
     <%_ if (istio) { _%>
-        echo "Zipkin - http://zipkin.istio-system.<%= ingressDomain %>"
-        echo "Grafana - http://grafana.istio-system.<%= ingressDomain %>"
-        echo "Kiali - http://kiali.istio-system.<%= ingressDomain %>"
+        echo "Zipkin - http://zipkin.istio-system.<%- ingressDomain %>"
+        echo "Grafana - http://grafana.istio-system.<%- ingressDomain %>"
+        echo "Kiali - http://kiali.istio-system.<%- ingressDomain %>"
     <%_ } _%>
   <%_ } _%>
   <%_ if (useKeycloak) { _%>
-      <%_ if (ingressTypeGke) { _%>
-        echo "Keycloak - https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>"
-      <%_ } _%>
-      <%_ if (ingressTypeNginx) { _%>
-        echo "Keycloak - http://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>"
-      <%_ } _%>
+    <%_ if (ingressTypeGke) { _%>
+        echo "Keycloak - https://keycloak.<%- kubernetesNamespace %>.<%- ingressDomain %>"
+    <%_ } _%>
+    <%_ if (ingressTypeNginx) { _%>
+        echo "Keycloak - http://keycloak.<%- kubernetesNamespace %>.<%- ingressDomain %>"
+    <%_ } _%>
   <%_ } _%>
         echo "#####################################################"
 <%_ } _%>
@@ -75,23 +75,26 @@ default() {
     suffix=k8s
 <%_ if (!kubernetesNamespaceDefault) { _%>
     kubectl apply -f namespace.yml
-<%_ } _%> <%_ if (istio) { _%>
-    kubectl label namespace <%-kubernetesNamespace%> istio-injection=enabled --overwrite=true
+<%_ } _%>
+<%_ if (istio) { _%>
+    kubectl label namespace <%- kubernetesNamespace %> istio-injection=enabled --overwrite=true
 <%_ } _%>
 <%_ if (useKeycloak) { _%>
-    <%_ if (ingressTypeGke) { _%>
+  <%_ if (ingressTypeGke) { _%>
     kubectl apply -f cert-manager/
-    <%_ } _%>
+  <%_ } _%>
     kubectl apply -f keycloak-${suffix}/
 <%_ } _%>
 <%_ if (serviceDiscoveryEureka || serviceDiscoveryConsul) { _%>
     kubectl apply -f registry-${suffix}/
-    <%_ } _%> <%_ appConfigs.forEach((appConfig) =>  { _%>
+<%_ } _%>
+<%_ for (const appConfig of appConfigs) { _%>
     kubectl apply -f <%- appConfig.baseName.toLowerCase() %>-${suffix}/
-<%_ }) _%>
+<%_ } _%>
 <%_ if (useKafka) { _%>
     kubectl apply -f messagebroker-${suffix}/
-<%_ } _%> <%_ if (monitoringPrometheus) { _%>
+<%_ } _%>
+<%_ if (monitoringPrometheus) { _%>
     kubectl apply -f monitoring-${suffix}/jhipster-prometheus-crd.yml
     until [ $(kubectl get crd prometheuses.monitoring.coreos.com 2>>/dev/null | wc -l) -ge 2 ]; do
         echo "Waiting for the custom resource prometheus operator to get initialised";

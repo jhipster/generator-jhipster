@@ -51,7 +51,7 @@ export const mutateUserManagementApplication = {
     ),
   generateBuiltInUserEntity: ({ generateUserManagement, syncUserWithIdp }) => Boolean(generateUserManagement || syncUserWithIdp),
   generateBuiltInAuthorityEntity: ({ generateBuiltInUserEntity, databaseType }) =>
-    Boolean(generateBuiltInUserEntity! && databaseType !== 'cassandra'),
+    generateBuiltInUserEntity! && databaseType !== 'cassandra',
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Application<any>>, UserManagementProperties<Entity>>;
 
 export type BaseApplicationAddedApplicationProperties<E extends Entity> = UserManagementProperties<E> & {

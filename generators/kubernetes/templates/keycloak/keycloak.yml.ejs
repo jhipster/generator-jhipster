@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: keycloak
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
   labels:
     app: keycloak
 spec:
@@ -22,7 +22,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: keycloak
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
 spec:
   volumeClaimTemplates: []
   replicas: 2
@@ -47,7 +47,7 @@ spec:
         - name: KC_DB
           value: postgres
         - name: KC_DB_URL_HOST
-          value: keycloak-postgresql.<%= kubernetesNamespace %>.svc.cluster.local
+          value: keycloak-postgresql.<%- kubernetesNamespace %>.svc.cluster.local
         - name: KC_DB_USERNAME
           value: keycloak
         - name: KC_DB_PASSWORD
@@ -59,21 +59,21 @@ spec:
           value: scripts
         - name: KC_PROXY
           value: "edge"
-        <%_ if (ingressTypeGke) { _%>
+<%_ if (ingressTypeGke) { _%>
         - name: KC_HOSTNAME_URL
-          value: https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
+          value: https://keycloak.<%- kubernetesNamespace %>.<%- ingressDomain %>
         - name: KC_HOSTNAME_ADMIN_URL
-          value: https://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
-        <%_ } else { _%>
+          value: https://keycloak.<%- kubernetesNamespace %>.<%- ingressDomain %>
+<%_ } else { _%>
         - name: KC_HOSTNAME_URL
-          value: http://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
+          value: http://keycloak.<%- kubernetesNamespace %>.<%- ingressDomain %>
         - name: KC_HOSTNAME_ADMIN_URL
-          value: http://keycloak.<%= kubernetesNamespace %>.<%= ingressDomain %>
-        <%_ } _%>
+          value: http://keycloak.<%- kubernetesNamespace %>.<%- ingressDomain %>
+<%_ } _%>
         - name: KC_CACHE_STACK
           value: "kubernetes"
         - name: JAVA_OPTS_APPEND
-          value: "-Djgroups.dns.query=keycloak.<%= kubernetesNamespace %>.svc.cluster.local"
+          value: "-Djgroups.dns.query=keycloak.<%- kubernetesNamespace %>.svc.cluster.local"
         ports:
         - name: http
           containerPort: 8080

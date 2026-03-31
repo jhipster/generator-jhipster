@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.config;
+package <%- packageName %>.config;
 
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.FeignClientsConfiguration;
@@ -27,9 +27,9 @@ import org.springframework.context.annotation.Import;
 import reactivefeign.spring.config.EnableReactiveFeignClients;
 <%_ } _%>
 @Configuration
-@EnableFeignClients(basePackages = "<%= packageName %>")
+@EnableFeignClients(basePackages = "<%- packageName %>")
 <%_ if (reactive) { _%>
-@EnableReactiveFeignClients(basePackages = "<%= packageName %>")
+@EnableReactiveFeignClients(basePackages = "<%- packageName %>")
 <%_ } _%>
 @Import(FeignClientsConfiguration.class)
 public class FeignConfiguration {

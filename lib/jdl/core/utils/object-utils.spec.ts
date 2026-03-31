@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { after, before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { after, before, describe, expect, it } from 'esmocha';
 
 import { areEntitiesEqual, merge } from './object-utils.ts';
 
@@ -33,7 +31,7 @@ describe('jdl - ObjectUtils', () => {
       });
 
       it('should return the second one', () => {
-        expect(merged).to.deep.equal({ a: 1 });
+        expect(merged).toEqual({ a: 1 });
       });
     });
     describe('when merging a not-empty object with a nil one', () => {
@@ -44,7 +42,7 @@ describe('jdl - ObjectUtils', () => {
       });
 
       it('should return the first one', () => {
-        expect(merged).to.deep.equal({ a: 1 });
+        expect(merged).toEqual({ a: 1 });
       });
     });
     describe('when merging two not-empty objects', () => {
@@ -63,7 +61,7 @@ describe('jdl - ObjectUtils', () => {
       });
 
       it('should merge them', () => {
-        expect(merged).to.deep.equal({ a: 1, b: 3, c: 4 });
+        expect(merged).toEqual({ a: 1, b: 3, c: 4 });
       });
     });
   });
@@ -85,7 +83,7 @@ describe('jdl - ObjectUtils', () => {
         });
 
         it('should return true', () => {
-          expect(result).to.be.true;
+          expect(result).toBe(true);
         });
       });
       describe('as they have no fields, but only relationships', () => {
@@ -122,7 +120,7 @@ describe('jdl - ObjectUtils', () => {
         });
 
         it('should return true', () => {
-          expect(result).to.be.true;
+          expect(result).toBe(true);
         });
       });
       describe('as they have fields but no relationships', () => {
@@ -161,7 +159,7 @@ describe('jdl - ObjectUtils', () => {
         });
 
         it('should return true', () => {
-          expect(result).to.be.true;
+          expect(result).toBe(true);
         });
       });
       describe('they have both fields and relationships', () => {
@@ -216,7 +214,7 @@ describe('jdl - ObjectUtils', () => {
         });
 
         it('should return true', () => {
-          expect(result).to.be.true;
+          expect(result).toBe(true);
         });
       });
       describe('when one attribute in the object is missing from the other', () => {
@@ -238,7 +236,7 @@ describe('jdl - ObjectUtils', () => {
         });
 
         it('should return true', () => {
-          expect(result).to.be.true;
+          expect(result).toBe(true);
         });
       });
     });
@@ -268,7 +266,7 @@ describe('jdl - ObjectUtils', () => {
         });
 
         it('should return false', () => {
-          expect(result).to.be.false;
+          expect(result).toBe(false);
         });
       });
       describe('as both of them have different fields', () => {
@@ -305,7 +303,7 @@ describe('jdl - ObjectUtils', () => {
         });
 
         it('should return false', () => {
-          expect(result).to.be.false;
+          expect(result).toBe(false);
         });
       });
       describe('as both of them have different relationships', () => {
@@ -352,7 +350,7 @@ describe('jdl - ObjectUtils', () => {
         });
 
         it('should return false', () => {
-          expect(result).to.be.false;
+          expect(result).toBe(false);
         });
       });
       describe('as they do not possess the same number of fields', () => {
@@ -390,7 +388,7 @@ describe('jdl - ObjectUtils', () => {
         });
 
         it('should return false', () => {
-          expect(result).to.be.false;
+          expect(result).toBe(false);
         });
       });
       describe('as they do not have the same number of keys in fields', () => {
@@ -438,7 +436,7 @@ describe('jdl - ObjectUtils', () => {
         });
 
         it('should return false', () => {
-          expect(result).to.be.false;
+          expect(result).toBe(false);
         });
       });
       describe('as they do not possess the same number of relationships', () => {
@@ -489,7 +487,7 @@ describe('jdl - ObjectUtils', () => {
         });
 
         it('should return false', () => {
-          expect(result).to.be.false;
+          expect(result).toBe(false);
         });
         describe('as they do not have the same number of fields in a relationship', () => {
           let result: boolean;
@@ -536,7 +534,7 @@ describe('jdl - ObjectUtils', () => {
           });
 
           it('should return false', () => {
-            expect(result).to.be.false;
+            expect(result).toBe(false);
           });
         });
       });
@@ -569,7 +567,7 @@ describe('jdl - ObjectUtils', () => {
           });
 
           it('should return false', () => {
-            expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+            expect(areEntitiesEqual(firstObject, secondObject)).toBe(false);
           });
         });
         describe('when not having the same pagination option value', () => {
@@ -581,7 +579,7 @@ describe('jdl - ObjectUtils', () => {
           });
 
           it('should return false', () => {
-            expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+            expect(areEntitiesEqual(firstObject, secondObject)).toBe(false);
           });
         });
         describe('when not having the same service option value', () => {
@@ -593,7 +591,7 @@ describe('jdl - ObjectUtils', () => {
           });
 
           it('should return false', () => {
-            expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+            expect(areEntitiesEqual(firstObject, secondObject)).toBe(false);
           });
         });
         describe('when not having the same search engine', () => {
@@ -605,7 +603,7 @@ describe('jdl - ObjectUtils', () => {
           });
 
           it('should return false', () => {
-            expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+            expect(areEntitiesEqual(firstObject, secondObject)).toBe(false);
           });
         });
         describe('when not having the same jpaMetamodelFiltering option value', () => {
@@ -618,7 +616,7 @@ describe('jdl - ObjectUtils', () => {
             });
 
             it('should return true', () => {
-              expect(areEntitiesEqual(firstObject, secondObject)).to.be.true;
+              expect(areEntitiesEqual(firstObject, secondObject)).toBe(true);
             });
           });
           describe('when they have opposite values', () => {
@@ -630,7 +628,7 @@ describe('jdl - ObjectUtils', () => {
             });
 
             it('should return false', () => {
-              expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+              expect(areEntitiesEqual(firstObject, secondObject)).toBe(false);
             });
           });
         });
@@ -695,7 +693,7 @@ describe('jdl - ObjectUtils', () => {
         });
 
         it('should return false', () => {
-          expect(result).to.be.false;
+          expect(result).toBe(false);
         });
       });
       describe('as they do not have the same comments', () => {
@@ -758,7 +756,7 @@ describe('jdl - ObjectUtils', () => {
         });
 
         it('should return false', () => {
-          expect(result).to.be.false;
+          expect(result).toBe(false);
         });
       });
       describe('as they do not have the same number of attributes', () => {
@@ -836,7 +834,7 @@ describe('jdl - ObjectUtils', () => {
         });
 
         it('should return false', () => {
-          expect(areEntitiesEqual(firstObject, secondObject)).to.be.false;
+          expect(areEntitiesEqual(firstObject, secondObject)).toBe(false);
         });
       });
     });

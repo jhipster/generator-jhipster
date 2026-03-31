@@ -18,7 +18,7 @@
 -%>
 {
     "global": {
-        "title": "<%= capitalizedBaseName %>",
+        "title": "<%- capitalizedBaseName %>",
         "browsehappy": "เบราว์เซอร์ที่คุณใช้<strong>เก่าเกินไป</strong>. กรุณา <a href=\"http://browsehappy.com/?locale=en\">อัพเกรดเบราว์เซอร์</a> เพื่อสัมผัสประสบการณ์ที่ดีสำหรับคุณ.",
         "menu": {
             "home": "หน้าหลัก",
@@ -149,7 +149,7 @@
         "idnull": "Invalid ID",
         "idinvalid": "Invalid Id",
         "idnotfound": "ID cannot be found",
- <%_ if (searchEngineElasticsearch) { _%>
+<%_ if (searchEngineElasticsearch) { _%>
         "querySyntaxError": "Invalid search query",
 <%_ } _%>
         "file": {

@@ -33,20 +33,20 @@
 #
 # To check the state of every node
 #   for i in {0..4}; do kubectl exec consul-$i -n yourNamespace -- sh -c 'consul members'; done
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: Secret
 metadata:
   name: gossip-key
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
 type: Opaque
 data:
   gossip-key: SUcwRzF3N2c4QW5YMDA3cUEwWElqMTJG # a 24 chars base64 encoded string
 ---
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: Service
 metadata:
   name: consul-headless
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
   labels:
     app.kubernetes.io/name: consul
     app: consul
@@ -81,7 +81,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: consul-ui
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
   labels:
     app.kubernetes.io/name: consul
     app: consul
@@ -96,11 +96,11 @@ spec:
     app.kubernetes.io/name: consul
     app: consul
 ---
-apiVersion: <%= KUBERNETES_STATEFULSET_API_VERSION %>
+apiVersion: <%- KUBERNETES_STATEFULSET_API_VERSION %>
 kind: StatefulSet
 metadata:
   name: consul
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
   labels:
     app.kubernetes.io/name: consul
     app: consul
@@ -134,7 +134,7 @@ spec:
                     app.kubernetes.io/name: consul
                     app: consul
                 namespaces:
-                  - <%= kubernetesNamespace %>
+                  - <%- kubernetesNamespace %>
                 topologyKey: kubernetes.io/hostname
               weight: 1
         nodeAffinity:
@@ -143,7 +143,7 @@ spec:
         fsGroup: 1001
       containers:
         - name: consul
-          image: <%= dockerContainers.consul %>
+          image: <%- dockerContainers.consul %>
           imagePullPolicy: "IfNotPresent"
           securityContext:
             allowPrivilegeEscalation: false
@@ -179,7 +179,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: CONSUL_RETRY_JOIN
-              value: "consul-headless.<%= kubernetesNamespace %>.svc.cluster.local"
+              value: "consul-headless.<%- kubernetesNamespace %>.svc.cluster.local"
             - name: CONSUL_DISABLE_KEYRING_FILE
               value: "true"
             - name: CONSUL_BOOTSTRAP_EXPECT

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.config;
+package <%- packageName %>.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,7 @@ public interface DatabaseTestcontainer {
 
     @Container
     <%- testcontainerClass %><%- useTestcontainersV1 ? '<?>' : '' %> databaseContainer = <%- useTestcontainersV1 ? `(${testcontainerClass}) ` : '' %>new <%- testcontainerClass %><%- useTestcontainersV1 ? '<>' : '' %>("<%- testcontainerDockerImageName %>")
-        .withDatabaseName("<%= baseName %>")
+        .withDatabaseName("<%- baseName %>")
         <%- testcontainerClassInitialization %>
         .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(DatabaseTestcontainer.class)))
         .withReuse(true);

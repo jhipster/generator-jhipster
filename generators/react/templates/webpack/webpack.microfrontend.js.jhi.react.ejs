@@ -19,8 +19,8 @@
 <&_ if (fragment.moduleFederationSection) { -&>
 <%_ if (applicationTypeMicroservice) { _%>
         exposes: {
-          './entities-menu': './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/menu',
-          './entities-routes': './<%= this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/routes',
+          './entities-menu': './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/menu',
+          './entities-routes': './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/routes',
         },
 <%_ } _%>
         shared: {

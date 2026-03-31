@@ -33,8 +33,16 @@ import { TranslateModule } from '@ngx-translate/core';
 import PasswordStrengthBar from '../password/password-strength-bar/password-strength-bar';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-register',
-  imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>RouterLink, ReactiveFormsModule, PasswordStrengthBar],
+  selector: '<%- jhiPrefixDashed %>-register',
+  imports: [
+<%_ if (enableTranslation) { _%>
+    TranslateDirective,
+    TranslateModule, 
+<%_ } _%>
+    RouterLink,
+    ReactiveFormsModule,
+    PasswordStrengthBar,
+  ],
   templateUrl: './register.html',
 })
 export default class Register implements AfterViewInit {
@@ -70,7 +78,9 @@ export default class Register implements AfterViewInit {
     }),
   });
 
-  <%_ if (enableTranslation) { _%>private readonly translateService = inject(TranslateService);<%_ } _%>
+<%_ if (enableTranslation) { _%>
+  private readonly translateService = inject(TranslateService);
+<%_ } _%>
   private readonly registerService = inject(RegisterService);
 
   ngAfterViewInit(): void {
@@ -87,7 +97,7 @@ export default class Register implements AfterViewInit {
     if (password === confirmPassword) {
       const { login, email } = this.registerForm.getRawValue();
       this.registerService
-        .save({ login, email, password, langKey: <% if (enableTranslation) { %>this.translateService.getCurrentLang()<% } else { %>'<%= nativeLanguage %>'<% } %> })
+        .save({ login, email, password, langKey: <% if (enableTranslation) { %>this.translateService.getCurrentLang()<% } else { %>'<%- nativeLanguage %>'<% } %> })
         .subscribe({ next: () => (this.success.set(true)), error: response => this.processError(response) });
     } else {
       this.doNotMatch.set(true);

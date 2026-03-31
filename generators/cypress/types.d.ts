@@ -1,4 +1,4 @@
-import type { HandleCommandTypes } from '../../lib/command/index.ts';
+import type { CommandTypeMap } from '../../lib/command/index.ts';
 import type {
   Application as JavascriptApplication,
   Config as JavascriptConfig,
@@ -9,7 +9,7 @@ import type {
 export type { Field, Relationship } from '../client/types.ts';
 import type command from './command.ts';
 
-type Command = HandleCommandTypes<typeof command>;
+type Command = CommandTypeMap<typeof command>;
 
 export type Config = JavascriptConfig & Command['Config'];
 

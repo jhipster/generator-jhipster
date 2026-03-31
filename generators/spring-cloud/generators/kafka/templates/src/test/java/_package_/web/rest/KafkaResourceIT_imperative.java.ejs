@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.web.rest;
+package <%- packageName %>.web.rest;
 
-import <%= packageName %>.IntegrationTest;
+import <%- packageName %>.IntegrationTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -53,7 +53,7 @@ import org.springframework.util.MimeTypeUtils;
 @WithMockUser
 @ImportAutoConfiguration(TestChannelBinderConfiguration.class)
 @ActiveProfiles({ "kafka" })
-class <%= upperFirstCamelCaseBaseName %>KafkaResourceIT {
+class <%- upperFirstCamelCaseBaseName %>KafkaResourceIT {
 
     @Autowired
     private MockMvc restMockMvc;
@@ -66,7 +66,7 @@ class <%= upperFirstCamelCaseBaseName %>KafkaResourceIT {
 
     @Test
     void producesMessages() throws Exception {
-        restMockMvc.perform(post("/api/<%= dasherizedBaseName %>-kafka/publish?message=value-produce")<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>).andExpect(status().isOk());
+        restMockMvc.perform(post("/api/<%- dasherizedBaseName %>-kafka/publish?message=value-produce")<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>).andExpect(status().isOk());
         assertThat(output.receive(1000, "binding-out-0").getPayload()).isEqualTo("value-produce".getBytes());
     }
 
@@ -82,7 +82,7 @@ class <%= upperFirstCamelCaseBaseName %>KafkaResourceIT {
         MessageHeaders headers = new MessageHeaders(map);
         Message<String> testMessage = new GenericMessage<>("value-consume", headers);
         MvcResult mvcResult = restMockMvc
-            .perform(get("/api/<%= dasherizedBaseName %>-kafka/register"))
+            .perform(get("/api/<%- dasherizedBaseName %>-kafka/register"))
             .andExpect(status().isOk())
             .andExpect(request().asyncStarted())
             .andReturn();
@@ -91,7 +91,7 @@ class <%= upperFirstCamelCaseBaseName %>KafkaResourceIT {
             Thread.sleep(100);
             String content = mvcResult.getResponse().getContentAsString();
             if (content.contains("data:value-consume")) {
-                restMockMvc.perform(get("/api/<%= dasherizedBaseName %>-kafka/unregister"));
+                restMockMvc.perform(get("/api/<%- dasherizedBaseName %>-kafka/unregister"));
                 return;
             }
         }

@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import { relationshipTypes } from '../../core/basic-types/index.ts';
 import { relationshipOptions } from '../../core/built-in-options/index.ts';
@@ -41,7 +39,7 @@ describe('jdl - RelationshipValidator', () => {
     describe('when not passing anything', () => {
       it('should fail', () => {
         // @ts-expect-error invalid api test
-        expect(() => validator.validate()).to.throw(/^No relationship\.$/);
+        expect(() => validator.validate()).toThrow(/^No relationship\.$/);
       });
     });
     describe('when passing a relationship', () => {
@@ -59,7 +57,7 @@ describe('jdl - RelationshipValidator', () => {
         });
 
         it('should not fail', () => {
-          expect(() => validator.validate(relationship)).not.to.throw();
+          expect(() => validator.validate(relationship)).not.toThrow();
         });
       });
       describe('with an invalid type', () => {
@@ -75,7 +73,7 @@ describe('jdl - RelationshipValidator', () => {
         });
 
         it('should fail', () => {
-          expect(() => validator.validate(relationship)).to.throw(/^The relationship type 'toto' doesn't exist\.$/);
+          expect(() => validator.validate(relationship)).toThrow(/^The relationship type 'toto' doesn't exist\.$/);
         });
       });
       describe('without any injected field', () => {
@@ -90,7 +88,7 @@ describe('jdl - RelationshipValidator', () => {
         });
 
         it('should fail', () => {
-          expect(() => validator.validate(relationship)).to.throw(/^At least one injected field is required\.$/);
+          expect(() => validator.validate(relationship)).toThrow(/^At least one injected field is required\.$/);
         });
       });
       describe(`when using the ${BUILT_IN_ENTITY} option`, () => {
@@ -115,7 +113,7 @@ describe('jdl - RelationshipValidator', () => {
           });
 
           it('should not fail', () => {
-            expect(() => validator.validate(relationship)).not.to.throw();
+            expect(() => validator.validate(relationship)).not.toThrow();
           });
         });
         [ONE_TO_MANY, MANY_TO_MANY, MANY_TO_ONE].forEach(type => {
@@ -139,7 +137,7 @@ describe('jdl - RelationshipValidator', () => {
             });
 
             it('should not fail', () => {
-              expect(() => validator.validate(relationship)).not.to.throw();
+              expect(() => validator.validate(relationship)).not.toThrow();
             });
           });
         });
@@ -159,7 +157,7 @@ describe('jdl - RelationshipValidator', () => {
           });
 
           it('should fail', () => {
-            expect(() => validator.validate(relationship)).to.throw(
+            expect(() => validator.validate(relationship)).toThrow(
               /^Required relationships to the same entity are not supported, for relationship from and to 'A'\.$/,
             );
           });
@@ -179,7 +177,7 @@ describe('jdl - RelationshipValidator', () => {
           });
 
           it('should fail', () => {
-            expect(() => validator.validate(relationship)).to.throw(
+            expect(() => validator.validate(relationship)).toThrow(
               /^In the One-to-One relationship from A to B, the source entity must possess the destination, or you must invert the direction of the relationship\.$/,
             );
           });
@@ -200,7 +198,7 @@ describe('jdl - RelationshipValidator', () => {
           });
 
           it('should not fail', () => {
-            expect(() => validator.validate(relationship)).not.to.throw();
+            expect(() => validator.validate(relationship)).not.toThrow();
           });
         });
       });
@@ -219,7 +217,7 @@ describe('jdl - RelationshipValidator', () => {
             });
 
             it('should not fail', () => {
-              expect(() => validator.validate(relationship)).not.to.throw();
+              expect(() => validator.validate(relationship)).not.toThrow();
             });
           });
         });
@@ -237,7 +235,7 @@ describe('jdl - RelationshipValidator', () => {
             });
 
             it('should not fail', () => {
-              expect(() => validator.validate(relationship)).not.to.throw();
+              expect(() => validator.validate(relationship)).not.toThrow();
             });
           });
           describe('with the User having the injected field', () => {
@@ -254,7 +252,7 @@ describe('jdl - RelationshipValidator', () => {
               });
 
               it('should not fail', () => {
-                expect(() => validator.validate(relationship)).not.to.throw();
+                expect(() => validator.validate(relationship)).not.toThrow();
               });
             });
             describe('as the destination', () => {
@@ -270,7 +268,7 @@ describe('jdl - RelationshipValidator', () => {
               });
 
               it('should fail', () => {
-                expect(() => validator.validate(relationship)).not.to.throw();
+                expect(() => validator.validate(relationship)).not.toThrow();
               });
             });
           });
@@ -289,7 +287,7 @@ describe('jdl - RelationshipValidator', () => {
             });
 
             it('should not fail', () => {
-              expect(() => validator.validate(relationship)).not.to.throw();
+              expect(() => validator.validate(relationship)).not.toThrow();
             });
           });
           describe('with the user being the source', () => {
@@ -305,7 +303,7 @@ describe('jdl - RelationshipValidator', () => {
             });
 
             it('should fail', () => {
-              expect(() => validator.validate(relationship)).not.to.throw();
+              expect(() => validator.validate(relationship)).not.toThrow();
             });
           });
         });

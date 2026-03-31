@@ -23,6 +23,7 @@ import {
   createWebpackUpdateLanguagesNeedleCallback,
 } from '../../../client/support/update-languages.ts';
 import { generateLanguagesWebappOptions } from '../../../languages/support/languages.ts';
+import { mutateApplication } from '../../application.ts';
 
 export default class ReactBootstrapGenerator extends ClientApplicationGenerator {
   async beforeQueue() {
@@ -35,6 +36,9 @@ export default class ReactBootstrapGenerator extends ClientApplicationGenerator 
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      defaults({ applicationDefaults }) {
+        applicationDefaults(mutateApplication);
+      },
       translations({ application }) {
         application.addLanguageCallbacks.push((_newLanguages, allLanguages) => {
           const { enableTranslation, clientSrcDir, clientRootDir, clientI18nDir } = application;

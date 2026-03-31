@@ -40,14 +40,14 @@ export default [
       component: ChangePassword,
       meta: { authorities: [Authority.USER] }
     },
-    <%_ if (authenticationTypeSession) { _%>
+  <%_ if (authenticationTypeSession) { _%>
     {
       path: '/account/sessions',
       name: 'Sessions',
       component: Sessions,
       meta: { authorities: [Authority.USER] }
     },
-    <%_ } _%>
+  <%_ } _%>
     {
       path: '/account/settings',
       name: 'Settings',

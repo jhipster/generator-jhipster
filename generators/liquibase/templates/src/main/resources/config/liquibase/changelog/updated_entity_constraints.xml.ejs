@@ -17,97 +17,95 @@
  limitations under the License.
 -%>
 <%- include('/liquibase-changelog-header') -%>
-<%_
-const entityTableName = entity.entityTableName;
-const entityClass = entity.entityClass;
-const name = entity.name;
-if (hasFieldConstraint) { _%>
+<%_ const { entityTableName, entityClass } = entity;
+if (hasFieldConstraint) {
+_%>
 
     <!--
-        Added the field constraints for entity <%= entityClass %>.
+        Added the field constraints for entity <%- entityClass %>.
     -->
-    <changeSet id="<%= changelogDate %>-fields-constraints" author="jhipster">
-    <%_ for (field of addedFields) {
+    <changeSet id="<%- changelogDate %>-fields-constraints" author="jhipster">
+  <%_ for (field of addedFields) {
         if (field.unique) {
-    _%>
-        <addUniqueConstraint tableName="<%= entityTableName %>"
-            columnNames="<%= field.columnName %>"
-            constraintName="<%= field.uniqueConstraintName %>"/>
+  _%>
+        <addUniqueConstraint tableName="<%- entityTableName %>"
+            columnNames="<%- field.columnName %>"
+            constraintName="<%- field.uniqueConstraintName %>"/>
     <%_ }
         if (field.columnRequired) {
     _%>
-        <addNotNullConstraint tableName="<%= entityTableName %>"
-            columnName="<%= field.columnName %>"
-            columnDataType="<%= field.columnType %>"/>
-        <%_ if (field.shouldCreateContentType) { _%>
-        <addNotNullConstraint tableName="<%= entityTableName %>"
-            columnName="<%= field.columnName %>_content_type"
+        <addNotNullConstraint tableName="<%- entityTableName %>"
+            columnName="<%- field.columnName %>"
+            columnDataType="<%- field.columnType %>"/>
+      <%_ if (field.shouldCreateContentType) { _%>
+        <addNotNullConstraint tableName="<%- entityTableName %>"
+            columnName="<%- field.columnName %>_content_type"
             columnDataType="varchar(255)"/>
-    <%_    }
+  <%_ }
         }
-    } _%>
+    }
+  _%>
     </changeSet>
 <% } _%>
 <%_ if (removedDefaultValueFields && removedDefaultValueFields.length) { _%>
     <!--
-        Removed the default value for the fields for entity <%= entityClass %>.
+        Removed the default value for the fields for entity <%- entityClass %>.
     -->
-    <changeSet id="<%= changelogDate %>-fields-remove-default-value" author="jhipster">
-    <%_ for (field of removedDefaultValueFields) { _%>
-        <dropDefaultValue tableName="<%= entityTableName %>"
-            columnName="<%= field.columnName %>"
-            columnDataType="<%= field.columnType %>"/>
-    <%_ } _%>
+    <changeSet id="<%- changelogDate %>-fields-remove-default-value" author="jhipster">
+  <%_ for (field of removedDefaultValueFields) { _%>
+        <dropDefaultValue tableName="<%- entityTableName %>"
+            columnName="<%- field.columnName %>"
+            columnDataType="<%- field.columnType %>"/>
+  <%_ } _%>
     </changeSet>
 <% } _%>
 <%_ if (addedDefaultValueFields && addedDefaultValueFields.length) { _%>
     <!--
-        Added the default value for the fields for entity <%= entityClass %>.
+        Added the default value for the fields for entity <%- entityClass %>.
     -->
-    <changeSet id="<%= changelogDate %>-fields-add-default-value" author="jhipster">
-    <%_ for (field of addedDefaultValueFields) { _%>
-        <addDefaultValue tableName="<%= entityTableName %>"
-            columnName="<%= field.columnName %>"
-            columnDataType="<%= field.columnType %>"
+    <changeSet id="<%- changelogDate %>-fields-add-default-value" author="jhipster">
+  <%_ for (field of addedDefaultValueFields) { _%>
+        <addDefaultValue tableName="<%- entityTableName %>"
+            columnName="<%- field.columnName %>"
+            columnDataType="<%- field.columnType %>"
             <%- this.createDefaultValueLiquibaseAttribute(field) -%>/>
-    <%_ } _%>
+  <%_ } _%>
     </changeSet>
 <% } _%>
 <%_ if (hasRelationshipConstraint) { _%>
 
     <!--
-        Added the relationship constraints for entity <%= entityClass %>.
+        Added the relationship constraints for entity <%- entityClass %>.
     -->
-    <changeSet id="<%= changelogDate %>-relationship-constraints" author="jhipster">
-    <%_
-    for (idx in addedRelationships) {
-        const relationshipData = addedRelationships[idx];
+    <changeSet id="<%- changelogDate %>-relationship-constraints" author="jhipster">
+  <%_ for (const relationshipData of addedRelationships) {
         if (relationshipData.unique) {
             const idField = relationship.otherEntity.primaryKey.ownFields[0];
-            const uniqueConstraintName = relationshipData.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, relationshipData.columnName + '_' + idField.columnName, entity.prodDatabaseType) : null;
-    _%>
-        <addUniqueConstraint tableName="<%= entityTableName %>"
-            columnNames="<%= relationshipData.columnName %>_id"
-            constraintName="<%= uniqueConstraintName %>"/>
-        <%_ }
-        if (relationshipData.columnRequired) {
-        _%>
-        <addNotNullConstraint tableName="<%= entityTableName %>"
-            columnName="<%= relationshipData.columnName %>_id"
-            columnDataType="<%= relationshipData.columnDataType %>"/>
+            const uniqueConstraintName = relationshipData.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, `${relationshipData.columnName}_${idField.columnName}`, entity.prodDatabaseType) : null;
+  _%>
+        <addUniqueConstraint tableName="<%- entityTableName %>"
+            columnNames="<%- relationshipData.columnName %>_id"
+            constraintName="<%- uniqueConstraintName %>"/>
     <%_ }
-     } _%>
+        if (relationshipData.columnRequired) {
+    _%>
+        <addNotNullConstraint tableName="<%- entityTableName %>"
+            columnName="<%- relationshipData.columnName %>_id"
+            columnDataType="<%- relationshipData.columnDataType %>"/>
+  <%_ }
+     }
+  _%>
     </changeSet>
 <%_ } _%>
 <%_ if (addedRelationships && addedRelationships.length) { %>
 
     <!--
-        Added the relationship constraints for entity <%= entityClass %>.
+        Added the relationship constraints for entity <%- entityClass %>.
     -->
-    <changeSet id="<%= changelogDate %>-relationship-foreign-keys" author="jhipster">
-    <%_ for (relationship of addedRelationships) { _%>
+    <changeSet id="<%- changelogDate %>-relationship-foreign-keys" author="jhipster">
+  <%_ for (relationship of addedRelationships) { _%>
 <%- include('./add_relationship_constraints', { entity, relationship, prodDatabaseType }) -%>
-    <%_ } _%>
+  <%_ } _%>
     </changeSet>
 <%_ } _%>
 </databaseChangeLog>

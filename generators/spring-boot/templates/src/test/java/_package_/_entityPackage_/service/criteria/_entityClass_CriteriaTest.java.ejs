@@ -1,4 +1,4 @@
-package <%- entityAbsolutePackage %>.<%_ if(jpaMetamodelFiltering && reactive) { _%>domain<%_ } else { _%>service<%_ } _%>.criteria;
+package <%- entityAbsolutePackage %>.<% if (jpaMetamodelFiltering && reactive) { %>domain<% } else { %>service<% } %>.criteria;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

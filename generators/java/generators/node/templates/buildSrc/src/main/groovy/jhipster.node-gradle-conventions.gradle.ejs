@@ -4,41 +4,41 @@ plugins {
 
 if (project.hasProperty("nodeInstall")) {
     node {
-        version = "<%= nodeVersion %>"
-        npmVersion = "<%= nodeDependencies.npm %>"
+        version = "<%- nodeVersion %>"
+        npmVersion = "<%- nodeDependencies.npm %>"
         download = true
     }
 
     // Copy local node and npm to a fixed location for npmw
     def deleteOldNpm = tasks.register("deleteOldNpm", Delete) {
-        delete('<%= temporaryDir %>node/lib/node_modules/npm')
+        delete('<%- temporaryDir %>node/lib/node_modules/npm')
     }
     def fixedNode = tasks.register("fixedNode", Copy) {
         from(nodeSetup)
-        into('<%= temporaryDir %>node')
+        into('<%- temporaryDir %>node')
         finalizedBy(deleteOldNpm)
     }
     tasks.named("nodeSetup").configure { finalizedBy(fixedNode) }
 
     def fixedNpm = tasks.register("fixedNpm", Copy) {
         from(npmSetup)
-        into('<%= temporaryDir %>node')
+        into('<%- temporaryDir %>node')
     }
     tasks.named("npmSetup").configure { finalizedBy(fixedNpm) }
 }
 
 <%_ if (!skipClient) { _%>
-task webapp_test(type: NpmTask) {
+def webapp_test = tasks.register('webapp_test', NpmTask) {
     inputs.property('appVersion', project.version)
     inputs.files("build.gradle")
         .withPropertyName('build.gradle')
         .withPathSensitivity(PathSensitivity.RELATIVE)
     inputs.files(<%- javaNodeBuildPaths.filter(file => !file.endsWith('/')).map(file => `'${file}'`).join(', ') %>)
-        .withPropertyName('<%= clientFramework %>-build')
+        .withPropertyName('<%- clientFramework %>-build')
         .withPathSensitivity(PathSensitivity.RELATIVE)
   <%_ for (const file of javaNodeBuildPaths.filter(file => file.endsWith('/'))) { _%>
-    inputs.dir("<%= file %>")
-        .withPropertyName("<%= file %>")
+    inputs.dir("<%- file %>")
+        .withPropertyName("<%- file %>")
         .withPathSensitivity(PathSensitivity.RELATIVE)
   <%_ } _%>
 
@@ -53,6 +53,6 @@ task webapp_test(type: NpmTask) {
     args = ["run", "webapp:test"]
 }
 
-test.dependsOn(webapp_test)
+tasks.named('test').configure { dependsOn(webapp_test) }
 
 <%_ } _%>

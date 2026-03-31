@@ -16,20 +16,20 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: Secret
 metadata:
   name: jhipster-grafana-credentials
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
 data:
   username: amhpcHN0ZXI=
   password: amhpcHN0ZXI=
 ---
-apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
+apiVersion: <%- KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
   name: jhipster-grafana
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
 spec:
   replicas: 1
   selector:
@@ -79,11 +79,11 @@ spec:
         emptyDir: {}
       restartPolicy: Always
 ---
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: Service
 metadata:
   name: jhipster-grafana
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
   labels:
     app: jhipster-grafana
 spec:
@@ -92,7 +92,7 @@ spec:
     port: 3000
     targetPort: 3000
 <%_ if (!kubernetesServiceTypeIngress) { _%>
-  type: <%= kubernetesServiceType %>
+  type: <%- kubernetesServiceType %>
 <%_ } else { _%>
   type: ClusterIP
 <%_ } _%>
@@ -100,15 +100,15 @@ spec:
     app: jhipster-grafana
 ---
 <%_ if (kubernetesServiceTypeIngress && !istio ) { _%>
-apiVersion: <%= KUBERNETES_INGRESS_API_VERSION %>
+apiVersion: <%- KUBERNETES_INGRESS_API_VERSION %>
 kind: Ingress
 metadata:
   name: jhipster-grafana
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
 spec:
   ingressClassName: nginx
   rules:
-  - host: jhipster-grafana.<%= kubernetesNamespace %>.<%= ingressDomain %>
+  - host: jhipster-grafana.<%- kubernetesNamespace %>.<%- ingressDomain %>
     http:
       paths:
       - path: /

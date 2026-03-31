@@ -18,7 +18,12 @@ import type {
 } from '../java-simple-application/types.ts';
 import type { Application as LanguagesApplication } from '../languages/types.ts';
 
-import type { JavaAddedApplicationProperties, JavaAddedFieldProperties, JavaAddedRelationshipProperties } from './application.ts';
+import type {
+  JavaAddedApplicationProperties,
+  JavaAddedFieldProperties,
+  JavaAddedRelationshipProperties,
+  JavaAddedValidatedFieldProperties,
+} from './application.ts';
 
 export type {
   ConditionalJavaDefinition,
@@ -38,19 +43,12 @@ type Property = {
 
 export type Field = BaseApplicationField &
   JavaAddedFieldProperties &
+  JavaAddedValidatedFieldProperties &
   Property & {
-    javaFieldType?: string;
+    // TODO move to spring-boog?
     fieldJavaBuildSpecification?: string;
-    fieldJavadoc?: string;
-    fieldJavaValueGenerator?: string;
-    javaValueGenerator?: string;
-
+    // TODO move to spring-boog?
     propertyJavaCustomFilter?: { type: string; superType: string; fieldType: string };
-
-    javaValueSample1?: string;
-    javaValueSample2?: string;
-    fieldValidateRulesPatternJava?: string;
-    javaFieldValidatorsPartial?: string;
   };
 
 export interface Relationship extends BaseApplicationRelationship, JavaAddedRelationshipProperties, Property {
@@ -111,13 +109,12 @@ type SpringApplication = {
   generateSpringAuditor: boolean;
 };
 
-export type Application<E extends BaseApplicationEntity<BaseApplicationField, BaseApplicationRelationship> = Entity<Field, Relationship>> =
-  BaseApplicationApplication<E> &
-    JavaSimpleApplicationApplication &
-    JavaAddedApplicationProperties &
-    GradleApplication &
-    SpringApplication &
-    LanguagesApplication &
-    DatabaseApplication;
+export type Application<E extends BaseApplicationEntity = Entity> = BaseApplicationApplication<E> &
+  JavaSimpleApplicationApplication &
+  JavaAddedApplicationProperties &
+  GradleApplication &
+  SpringApplication &
+  LanguagesApplication &
+  DatabaseApplication;
 
 export type Source = BaseApplicationSource & JavaSimpleApplicationSource;

@@ -1,10 +1,10 @@
 {
-    "configuration": {
-        "title": "Yapılandırma",
-        "filter": "Filtrele (Ön ek ile)",
-        "table": {
-            "prefix": "Ön ek",
-            "properties": "Özellikler"
-        }
+  "configuration": {
+    "title": "Yapılandırma",
+    "filter": "Filtrele (Ön ek ile)",
+    "table": {
+      "prefix": "Ön ek",
+      "properties": "Özellikler"
     }
+  }
 }

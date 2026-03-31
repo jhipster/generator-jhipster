@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.config;
+package <%- packageName %>.config;
 
 import java.util.List;
 
@@ -58,9 +58,9 @@ public class Neo4jTestContainersSpringContextCustomizerFactory implements Contex
 
                     String boltUrl = neo4jBean.getNeo4jContainer().getBoltUrl();
                     testValues = testValues.and("spring.neo4j.uri=" + boltUrl);
-    <%_ if (databaseMigrationLiquibase) { _%>
+<%_ if (databaseMigrationLiquibase) { _%>
                     testValues = testValues.and("spring.liquibase.url=jdbc:neo4j:" + boltUrl);
-    <%_ } _%>
+<%_ } _%>
                 }
                 testValues.applyTo(context);
             }

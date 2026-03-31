@@ -140,7 +140,6 @@ Kafka customisation
 {{- default "jhipster-kafka" -}}
 {{- end -}}
 
-
 ",
     "stateCleared": "modified",
   },
@@ -181,7 +180,6 @@ helm upgrade --install \${cs} ./\${cs}-\${suffix} --namespace default
 fi
 helm dep up ./samplekafka-\${suffix}
 helm upgrade --install samplekafka ./samplekafka-\${suffix} --namespace default
-
 
 ",
     "stateCleared": "modified",
@@ -511,7 +509,6 @@ dependencies:
   },
   "helm/csvc-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
-
 ",
     "stateCleared": "modified",
   },
@@ -838,7 +835,6 @@ helm dep up ./msmysql-\${suffix}
 helm upgrade --install msmysql ./msmysql-\${suffix} --namespace default
 helm dep up ./mspsql-\${suffix}
 helm upgrade --install mspsql ./mspsql-\${suffix} --namespace default
-
 
 ",
     "stateCleared": "modified",
@@ -1385,7 +1381,6 @@ dependencies:
   },
   "helm/csvc-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
-
 ",
     "stateCleared": "modified",
   },
@@ -1707,7 +1702,6 @@ helm upgrade --install \${cs} ./\${cs}-\${suffix} --namespace default
 fi
 helm dep up ./jhgate-\${suffix}
 helm upgrade --install jhgate ./jhgate-\${suffix} --namespace default
-
 
 ",
     "stateCleared": "modified",
@@ -2048,7 +2042,6 @@ dependencies:
   },
   "helm/csvc-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
-
 ",
     "stateCleared": "modified",
   },
@@ -2375,7 +2368,6 @@ helm dep up ./jhgate-\${suffix}
 helm upgrade --install jhgate ./jhgate-\${suffix} --namespace default
 helm dep up ./msmysql-\${suffix}
 helm upgrade --install msmysql ./msmysql-\${suffix} --namespace default
-
 
 ",
     "stateCleared": "modified",
@@ -2847,7 +2839,6 @@ dependencies:
   },
   "helm/csvc-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
-
 ",
     "stateCleared": "modified",
   },
@@ -3309,7 +3300,6 @@ helm upgrade --install \${cs} ./\${cs}-\${suffix} --namespace default
 fi
 helm dep up ./jhgate-\${suffix}
 helm upgrade --install jhgate ./jhgate-\${suffix} --namespace default
-
 
 ",
     "stateCleared": "modified",
@@ -3790,7 +3780,6 @@ dependencies:
   },
   "helm/csvc-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
-
 ",
     "stateCleared": "modified",
   },
@@ -4132,7 +4121,6 @@ helm dep up ./msmongodb-\${suffix}
 helm upgrade --install msmongodb ./msmongodb-\${suffix} --namespace default
 helm dep up ./msmariadb-\${suffix}
 helm upgrade --install msmariadb ./msmariadb-\${suffix} --namespace default
-
 
 ",
     "stateCleared": "modified",
@@ -5194,7 +5182,6 @@ fi
 helm dep up ./samplemysql-\${suffix}
 helm upgrade --install samplemysql ./samplemysql-\${suffix} --namespace default
 
-
 ",
     "stateCleared": "modified",
   },
@@ -5613,7 +5600,6 @@ prometheus/grafana customisation
 {{- define "grafana.fullname" -}}
 {{- default "jhipster-grafana" -}}
 {{- end -}}
-
 ",
     "stateCleared": "modified",
   },
@@ -8232,7 +8218,6 @@ fi
 helm dep up ./msmysql-\${suffix}
 helm upgrade --install msmysql ./msmysql-\${suffix} --namespace mynamespace
 
-
 ",
     "stateCleared": "modified",
   },
@@ -8413,7 +8398,6 @@ spec:
 kind: Namespace
 metadata:
   name: mynamespace
-
 ",
     "stateCleared": "modified",
   },
@@ -8542,7 +8526,6 @@ dependencies:
   },
   "helm/csvc-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
-
 ",
     "stateCleared": "modified",
   },
@@ -8866,7 +8849,6 @@ fi
 helm dep up ./msmysql-\${suffix}
 helm upgrade --install msmysql ./msmysql-\${suffix} --namespace mynamespace
 
-
 ",
     "stateCleared": "modified",
   },
@@ -9045,7 +9027,6 @@ spec:
 kind: Namespace
 metadata:
   name: mynamespace
-
 ",
     "stateCleared": "modified",
   },
@@ -9173,7 +9154,6 @@ dependencies:
   },
   "helm/csvc-helm/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
-
 ",
     "stateCleared": "modified",
   },
@@ -9497,7 +9477,6 @@ fi
 helm dep up ./jhgate-\${suffix}
 helm upgrade --install jhgate ./jhgate-\${suffix} --namespace jhipsternamespace
 
-
 ",
     "stateCleared": "modified",
   },
@@ -9679,7 +9658,6 @@ spec:
 kind: Namespace
 metadata:
   name: jhipsternamespace
-
 ",
     "stateCleared": "modified",
   },

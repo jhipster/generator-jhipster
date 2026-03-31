@@ -52,9 +52,7 @@ export const overrideSortStateWithQueryParams = (paginationBaseState: ISortBaseS
 };
 
 export const overridePaginationStateWithQueryParams = (paginationBaseState: IPaginationBaseState, locationSearch: string) => {
-  const sortedPaginationState: IPaginationBaseState = <IPaginationBaseState>(
-    overrideSortStateWithQueryParams(paginationBaseState, locationSearch)
-  );
+  const sortedPaginationState: IPaginationBaseState = overrideSortStateWithQueryParams(paginationBaseState, locationSearch) as IPaginationBaseState;
   const params = new URLSearchParams(locationSearch);
   const page = params.get('page');
   if (page) {

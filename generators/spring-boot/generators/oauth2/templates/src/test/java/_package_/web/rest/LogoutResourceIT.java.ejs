@@ -17,11 +17,11 @@
  limitations under the License.
 -%>
 <%_ const reactivePrefix = reactive ? 'Reactive' : ''; _%>
-package <%= packageName %>.web.rest;
+package <%- packageName %>.web.rest;
 
-import static <%= packageName %>.test.util.OAuth2TestUtil.ID_TOKEN;
-import static <%= packageName %>.test.util.OAuth2TestUtil.authenticationToken;
-import static <%= packageName %>.test.util.OAuth2TestUtil.registerAuthenticationToken;
+import static <%- packageName %>.test.util.OAuth2TestUtil.ID_TOKEN;
+import static <%- packageName %>.test.util.OAuth2TestUtil.authenticationToken;
+import static <%- packageName %>.test.util.OAuth2TestUtil.registerAuthenticationToken;
 <%_ if (reactive) { _%>
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.*;
 <%_ } else { _%>
@@ -29,8 +29,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 <%_ } _%>
 
-import <%= packageName %>.IntegrationTest;
-import <%= packageName %>.security.AuthoritiesConstants;
+import <%- packageName %>.IntegrationTest;
+import <%- packageName %>.security.AuthoritiesConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +67,7 @@ class LogoutResourceIT {
     private <% if (!reactive) { %>Web<% } %>ApplicationContext context;
 
     @Autowired
-    private <%= reactivePrefix %>OAuth2AuthorizedClientService authorizedClientService;
+    private <%- reactivePrefix %>OAuth2AuthorizedClientService authorizedClientService;
 
     @Autowired
     private ClientRegistration clientRegistration;

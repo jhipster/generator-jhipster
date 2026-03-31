@@ -126,7 +126,7 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
           this.jdlContents.push(this.inline);
         }
         for (const jdlFile of this.jdlFiles ?? []) {
-          this.jdlContents.push(this.readDestination(jdlFile)?.toString() ?? '');
+          this.jdlContents.push(this.readDestination(jdlFile) ?? '');
         }
       },
       async parseJDL() {
@@ -147,12 +147,12 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
 
         const applicationsWithEntities = Object.values(importState.exportedApplicationsWithEntities);
         this.applications =
-          applicationsWithEntities.length === 1
-            ? applicationsWithEntities
-            : [
-                ...applicationsWithEntities.filter((app: ApplicationWithEntitiesAndPath) => app.config.applicationType === 'gateway'),
-                ...applicationsWithEntities.filter((app: ApplicationWithEntitiesAndPath) => app.config.applicationType !== 'gateway'),
-              ];
+          applicationsWithEntities.length === 1 ?
+            applicationsWithEntities
+          : [
+              ...applicationsWithEntities.filter((app: ApplicationWithEntitiesAndPath) => app.config.applicationType === 'gateway'),
+              ...applicationsWithEntities.filter((app: ApplicationWithEntitiesAndPath) => app.config.applicationType !== 'gateway'),
+            ];
       },
       configure() {
         const nrApplications = this.applications.length;

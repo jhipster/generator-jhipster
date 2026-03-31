@@ -15,14 +15,11 @@ type ConfigWithCreationTimestamp = {
   creationTimestamp?: number;
 };
 
-export const mergeYoRcContent = <
-  const OldConfig extends YoRcFileContent<YoRcConfigValue, string>,
-  const NewConfig extends YoRcFileContent<YoRcConfigValue, string>,
->(
+export const mergeYoRcContent = <const OldConfig extends YoRcFileContent, const NewConfig extends YoRcFileContent>(
   oldConfig: OldConfig,
   newConfig: NewConfig,
 ): Merge<OldConfig, NewConfig> => {
-  const merged: YoRcFileContent<YoRcConfigValue, string> = { [YO_RC_CONFIG_KEY]: {} as YoRcConfigValue };
+  const merged: YoRcFileContent = { [YO_RC_CONFIG_KEY]: {} as YoRcConfigValue };
   for (const ns of new Set([...Object.keys(oldConfig), ...Object.keys(newConfig)])) {
     merged[ns] = { ...oldConfig[ns], ...newConfig[ns] };
   }

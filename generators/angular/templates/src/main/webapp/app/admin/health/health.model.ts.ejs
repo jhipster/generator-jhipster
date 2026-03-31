@@ -19,27 +19,27 @@
 export type HealthStatus = 'UP' | 'DOWN' | 'UNKNOWN' | 'OUT_OF_SERVICE';
 
 export type HealthKey =
-  <%_ if (locals.messageBrokerAny) { _%>
+<%_ if (locals.messageBrokerAny) { _%>
   | 'binders'
-  <%_ } _%>
-  <%_ if (locals.applicationTypeGateway || locals.serviceDiscoveryAny) { _%>
+<%_ } _%>
+<%_ if (locals.applicationTypeGateway || locals.serviceDiscoveryAny) { _%>
   | 'discoveryComposite'
   | 'refreshScope'
   | 'clientConfigServer'
   | 'hystrix'
-  <%_ } _%>
-  <%_ if (locals.serviceDiscoveryConsul) { _%>
+<%_ } _%>
+<%_ if (locals.serviceDiscoveryConsul) { _%>
   | 'consul'
-  <%_ } _%>
+<%_ } _%>
   | 'diskSpace'
   | 'ssl'
   | 'mail'
   | 'ping'
   | 'livenessState'
   | 'readinessState'
-  <%_ if (locals.searchEngineElasticsearch) { _%>
+<%_ if (locals.searchEngineElasticsearch) { _%>
   | 'elasticsearch'
-  <%_ } _%>
+<%_ } _%>
 <%_ if (locals.databaseTypeSql) { _%>
   <%_ if (locals.reactive) { _%>
   | 'r2dbc'

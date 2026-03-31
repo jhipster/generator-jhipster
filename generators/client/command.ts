@@ -30,13 +30,13 @@ const { ANGULAR, REACT, VUE, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
 const microfrontendsToPromptValue = (answer: string | { baseName: string }[]) =>
   Array.isArray(answer) ? answer.map(({ baseName }) => baseName).join(',') : answer;
 const promptValueToMicrofrontends = (answer: string): { baseName: string }[] =>
-  answer
-    ? answer
-        .split(',')
-        .map(baseName => baseName.trim())
-        .filter(Boolean)
-        .map(baseName => ({ baseName }))
-    : [];
+  answer ?
+    answer
+      .split(',')
+      .map(baseName => baseName.trim())
+      .filter(Boolean)
+      .map(baseName => ({ baseName }))
+  : [];
 
 const command = {
   configs: {
@@ -48,9 +48,9 @@ const command = {
       prompt: generator => ({
         type: 'select',
         message: () =>
-          generator.jhipsterConfigWithDefaults.applicationType === APPLICATION_TYPE_MICROSERVICE
-            ? `Which ${chalk.yellow('*framework*')} would you like to use as microfrontend?`
-            : `Which ${chalk.yellow('*framework*')} would you like to use for the client?`,
+          generator.jhipsterConfigWithDefaults.applicationType === APPLICATION_TYPE_MICROSERVICE ?
+            `Which ${chalk.yellow('*framework*')} would you like to use as microfrontend?`
+          : `Which ${chalk.yellow('*framework*')} would you like to use for the client?`,
       }),
       choices: [
         { value: ANGULAR, name: 'Angular' },

@@ -36,7 +36,7 @@ import entitiesReducers from './reducers';
 export default () => {
 <%_ if (microfrontend || applicationTypeGateway) { _%>
   const store = getStore();
-  store.injectReducer('<%= lowercaseBaseName %>', combineReducers(entitiesReducers as ReducersMapObject));
+  store.injectReducer('<%- lowercaseBaseName %>', combineReducers(entitiesReducers as ReducersMapObject));
 <%_ } _%>
   return (
     <div>

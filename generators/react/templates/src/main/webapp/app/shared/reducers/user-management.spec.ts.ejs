@@ -19,7 +19,6 @@
 
 import { configureStore } from '@reduxjs/toolkit';
 import axios from 'axios';
-import sinon from 'sinon';
 
 import userManagement, {
   getUsers,
@@ -69,7 +68,7 @@ describe('User management reducer tests', () => {
       configureStore({
         reducer: (state = [], action) => [...state, action],
       });
-      axios.get = sinon.stub().returns(Promise.resolve(resolvedObject));
+      axios.get = jest.fn().mockResolvedValue(resolvedObject);
     });
 
     it('dispatches FETCH_USERS_PENDING and FETCH_USERS_FULFILLED actions', async () => {

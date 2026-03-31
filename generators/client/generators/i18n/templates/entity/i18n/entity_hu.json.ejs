@@ -15,54 +15,57 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.
--%><%
-let helpBlocks = 0; %>
+-%>
+<%_ const fieldsWithDocumentation = fields.filter(field => field.documentation); _%>
 {
-    "<%= frontendAppName %>": {
-        "<%= entityTranslationKey %>" : {
+    "<%- frontendAppName %>": {
+        "<%- entityTranslationKey %>" : {
             "home": {
-                "title": "<%= entityClassPlural %>",
+                "title": "<%- entityClassPlural %>",
                 "refreshListLabel": "Refresh list",
 <%_ if (!readOnly) { _%>
-                "createLabel": "Egy új <%= entityNameHumanized %> létrehozása",
-                "createOrEditLabel": "Hozzon létre, vagy módosítson <%= entityNameHumanized %>t",
+                "createLabel": "Egy új <%- entityNameHumanized %> létrehozása",
+                "createOrEditLabel": "Hozzon létre, vagy módosítson <%- entityNameHumanized %>t",
 <%_ } _%>
 <%_ if (locals.searchEngineAny) { _%>
-                "search": "<%= entityNameHumanized %> keresése",
+                "search": "<%- entityNameHumanized %> keresése",
 <%_ } _%>
-                "notFound": "No <%= entityNamePluralHumanized %> found"
+                "notFound": "No <%- entityNamePluralHumanized %> found"
             },
 <%_ if (!microserviceAppName && !readOnly) { _%>
-            "created": "Egy új <%= entityNameHumanized %> lett létrehozva {{ param }} azonosítóval",
-            "updated": "A <%= entityNameHumanized %> módosítva lett {{ param }} azonosítóval",
-            "deleted": "A <%= entityNameHumanized %> törölve lett {{ param }} azonosítóval",
+            "created": "Egy új <%- entityNameHumanized %> lett létrehozva {{ param }} azonosítóval",
+            "updated": "A <%- entityNameHumanized %> módosítva lett {{ param }} azonosítóval",
+            "deleted": "A <%- entityNameHumanized %> törölve lett {{ param }} azonosítóval",
 <%_ } _%>
 <%_ if (!readOnly) { _%>
             "delete": {
-                "question": "Biztos benne, hogy törölni szeretné az <%= entityNameHumanized %>t {{ id }} azonosítóval?"
+                "question": "Biztos benne, hogy törölni szeretné az <%- entityNameHumanized %>t {{ id }} azonosítóval?"
             },
 <%_ } _%>
             "detail": {
-                "title": "<%= entityNameHumanized %>"
-            }<% for (idx in fields) {
-            if (typeof fields[idx].documentation !== 'undefined') ++helpBlocks; %>,
-            "<%= fields[idx].fieldName %>": "<%= fields[idx].fieldNameHumanized %>"<% } %><% for (idx in relationships) { %>,
-            "<%= relationships[idx].relationshipName %>": "<%= relationships[idx].relationshipNameHumanized %>"<% } if (helpBlocks > 0) { %>,
-            "help": {<% for (idx in fields) {
-                if (fields[idx].documentation) {
-                    --helpBlocks; %>
-                "<%= fields[idx].fieldName %>": "<%= fields[idx].documentation %>"<% if (helpBlocks > 0) { %>,<% }
-                }
-            } %>
-            }<% } %>
+                "title": "<%- entityNameHumanized %>"
+            }
+<%_ for (const field of fields) { _%>,
+            "<%- field.fieldName %>": "<%- field.fieldNameHumanized %>"
+<%_ } _%>
+<%_ for (const relationship of relationships) { _%>,
+            "<%- relationship.relationshipName %>": "<%- relationship.relationshipNameHumanized %>"
+<%_ } _%>
+<%_ if (fieldsWithDocumentation.length > 0) { _%>,
+            "help": {
+  <%_ for (const [key, field] of Object.entries(fieldsWithDocumentation)) { _%>
+                "<%- field.fieldName %>": "<%- field.documentation %>"<% if (key < fieldsWithDocumentation.length - 1) { %>,<% } %>
+  <%_ } _%>
+            }
+<%_ } _%>
         }
     }
 <%_ if (microserviceAppName && !readOnly) { _%>,
-    "<%= microserviceAppName %>": {
-        "<%= entityTranslationKey %>" : {
-            "created": "Egy új <%= entityNameHumanized %> lett létrehozva {{ param }} azonosítóval",
-            "updated": "A <%= entityNameHumanized %> módosítva lett {{ param }} azonosítóval",
-            "deleted": "A <%= entityNameHumanized %> törölve lett {{ param }} azonosítóval"
+    "<%- microserviceAppName %>": {
+        "<%- entityTranslationKey %>" : {
+            "created": "Egy új <%- entityNameHumanized %> lett létrehozva {{ param }} azonosítóval",
+            "updated": "A <%- entityNameHumanized %> módosítva lett {{ param }} azonosítóval",
+            "deleted": "A <%- entityNameHumanized %> törölve lett {{ param }} azonosítóval"
         }
     }
 <%_ } _%>

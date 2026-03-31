@@ -2,46 +2,45 @@ commonLabels:
   app.kubernetes.io/genereted-by: JHipster
 
 <%_ if (!kubernetesNamespaceDefault) { _%>
-namespace: <%= kubernetesNamespace %>
+namespace: <%- kubernetesNamespace %>
 <%_ } _%>
 
 resources:
-<%_
-if (!kubernetesNamespaceDefault) { _%>
+<%_ if (!kubernetesNamespaceDefault) { _%>
 - namespace.yml
 <%_ } _%>
 # Individual apps
-<%_
-const suffix = 'k8s';
-appConfigs.forEach((appConfig) =>  {
+<%_ const suffix = 'k8s';
+for (const appConfig of appConfigs) {
 const appName = appConfig.baseName.toLowerCase();
-const appOut = appName.concat('-', suffix); _%>
-- <%= appOut %>/<%= appName %>-deployment.yml
-- <%= appOut %>/<%= appName %>-service.yml
+const appOut = appName.concat('-', suffix);
+_%>
+- <%- appOut %>/<%- appName %>-deployment.yml
+- <%- appOut %>/<%- appName %>-service.yml
   <%_ if (!appConfig.databaseTypeNo) { _%>
-- <%= appOut %>/<%= appName %>-<%= appConfig.prodDatabaseType ?? appConfig.databaseType %>.yml
+- <%- appOut %>/<%- appName %>-<%- appConfig.prodDatabaseType ?? appConfig.databaseType %>.yml
   <%_ } _%>
   <%_ if (appConfig.searchEngineElasticsearch) { _%>
-- <%= appOut %>/<%= appName %>-elasticsearch.yml
+- <%- appOut %>/<%- appName %>-elasticsearch.yml
   <%_ } _%>
   <%_ if (appConfig.applicationTypeGateway || appConfig.applicationTypeMonolith) { _%>
     <%_ if (istio) { _%>
-- <%= appOut %>/<%= appName %>-gateway.yml
+- <%- appOut %>/<%- appName %>-gateway.yml
     <%_ } else if (kubernetesServiceTypeIngress) { _%>
-- <%= appOut %>/<%= appName %>-ingress.yml
+- <%- appOut %>/<%- appName %>-ingress.yml
     <%_ } _%>
   <%_ } _%>
   <%_ if (!appConfig.serviceDiscoveryAny && appConfig.authenticationTypeJwt) { _%>
-- <%= appOut %>/jwt-secret.yml
+- <%- appOut %>/jwt-secret.yml
   <%_ } _%>
   <%_ if (monitoringPrometheus) { _%>
-- <%= appOut %>/<%= appName %>-prometheus-sm.yml
+- <%- appOut %>/<%- appName %>-prometheus-sm.yml
   <%_ } _%>
   <%_ if (istio) { _%>
-- <%= appOut %>/<%= appName %>-destination-rule.yml
-- <%= appOut %>/<%= appName %>-virtual-service.yml
+- <%- appOut %>/<%- appName %>-destination-rule.yml
+- <%- appOut %>/<%- appName %>-virtual-service.yml
   <%_ } _%>
-<%_ }) _%>
+<%_ } _%>
 <%_ if (useKeycloak) { _%>
   <%_ if (ingressTypeGke) { _%>
 # cert-manager
@@ -49,92 +48,97 @@ const appOut = appName.concat('-', suffix); _%>
 - cert-manager/letsencrypt-staging-issuer.yml
   <%_ } _%>
 # keycloak
-- keycloak-<%= suffix %>/keycloak-configmap.yml
-- keycloak-<%= suffix %>/keycloak-postgresql.yml
-- keycloak-<%= suffix %>/keycloak.yml
+- keycloak-<%- suffix %>/keycloak-configmap.yml
+- keycloak-<%- suffix %>/keycloak-postgresql.yml
+- keycloak-<%- suffix %>/keycloak.yml
 <%_ } _%>
 <%_ if (useKafka) { _%>
 # messagebroker
-- messagebroker-<%= suffix %>/kafka.yml
+- messagebroker-<%- suffix %>/kafka.yml
 <%_ } _%>
 <%_ if (monitoringPrometheus) {
-  const monitOut = 'monitoring'.concat('-', suffix); _%>
+  const monitOut = 'monitoring'.concat('-', suffix);
+_%>
 # monitoring prometheus
-- <%= monitOut %>/jhipster-prometheus-cr.yml
-- <%= monitOut %>/jhipster-prometheus-crd.yml
-- <%= monitOut %>/jhipster-grafana.yml
-- <%= monitOut %>/jhipster-grafana-dashboard.yml
+- <%- monitOut %>/jhipster-prometheus-cr.yml
+- <%- monitOut %>/jhipster-prometheus-crd.yml
+- <%- monitOut %>/jhipster-grafana.yml
+- <%- monitOut %>/jhipster-grafana-dashboard.yml
   <%_ if (istio) { _%>
-- <%= monitOut %>/jhipster-grafana-gateway.yml
+- <%- monitOut %>/jhipster-grafana-gateway.yml
   <%_ } _%>
 <%_ } _%>
 # service discovery eureka/consul
 <%_ if (serviceDiscoveryEureka) {
-  const registryOut = 'registry'.concat('-', suffix); _%>
-- <%= registryOut %>/jhipster-registry.yml
-- <%= registryOut %>/application-configmap.yml
-<%_ }  else if (serviceDiscoveryConsul) {
-    const registryOut = 'registry'.concat('-', suffix);_%>
-- <%= registryOut %>/consul.yml
-- <%= registryOut %>/consul-config-loader.yml
-- <%= registryOut %>/application-configmap.yml
+  const registryOut = 'registry'.concat('-', suffix);
+_%>
+- <%- registryOut %>/jhipster-registry.yml
+- <%- registryOut %>/application-configmap.yml
+<%_ } else if (serviceDiscoveryConsul) {
+    const registryOut = 'registry'.concat('-', suffix);
+_%>
+- <%- registryOut %>/consul.yml
+- <%- registryOut %>/consul-config-loader.yml
+- <%- registryOut %>/application-configmap.yml
 <%_ } _%>
 <%_ if (istio) {
-  const istioOut = 'istio'.concat('-', suffix); _%>
+  const istioOut = 'istio'.concat('-', suffix);
+_%>
 # istio
-- <%= istioOut %>/grafana-gateway.yml
-- <%= istioOut %>/zipkin-gateway.yml
-- <%= istioOut %>/kiali-gateway.yml
+- <%- istioOut %>/grafana-gateway.yml
+- <%- istioOut %>/zipkin-gateway.yml
+- <%- istioOut %>/kiali-gateway.yml
 <%_ } _%>
 
 patchesJson6902:
 <%_ if (istio) {
-  const patchOut = 'patch'.concat('-', suffix); _%>
+  const patchOut = 'patch'.concat('-', suffix);
+_%>
 - target:
     version: v1
     kind: Namespace
-    name: <%= kubernetesNamespace %>
-  path: <%= patchOut %>/istio-label.yml
+    name: <%- kubernetesNamespace %>
+  path: <%- patchOut %>/istio-label.yml
 - target:
     group: networking.istio.io
     version: v1alpha3
     kind: Gateway
     name: grafana-observability-gateway
-    namespace: <%= kubernetesNamespace %>
-  path: <%= patchOut %>/istio-namespace.yml
+    namespace: <%- kubernetesNamespace %>
+  path: <%- patchOut %>/istio-namespace.yml
 - target:
     group: networking.istio.io
     version: v1alpha3
     name: grafana-gw-virtualservice
     kind: VirtualService
-    namespace: <%= kubernetesNamespace %>
-  path: <%= patchOut %>/istio-namespace.yml
+    namespace: <%- kubernetesNamespace %>
+  path: <%- patchOut %>/istio-namespace.yml
 - target:
     group: networking.istio.io
     version: v1alpha3
     kind: Gateway
     name: kiali-observability-gateway
-    namespace: <%= kubernetesNamespace %>
-  path: <%= patchOut %>/istio-namespace.yml
+    namespace: <%- kubernetesNamespace %>
+  path: <%- patchOut %>/istio-namespace.yml
 - target:
     group: networking.istio.io
     version: v1alpha3
     name: kiali-gw-virtualservice
     kind: VirtualService
-    namespace: <%= kubernetesNamespace %>
-  path: <%= patchOut %>/istio-namespace.yml
+    namespace: <%- kubernetesNamespace %>
+  path: <%- patchOut %>/istio-namespace.yml
 - target:
     group: networking.istio.io
     version: v1alpha3
     kind: Gateway
     name: zipkin-observability-gateway
-    namespace: <%= kubernetesNamespace %>
-  path: <%= patchOut %>/istio-namespace.yml
+    namespace: <%- kubernetesNamespace %>
+  path: <%- patchOut %>/istio-namespace.yml
 - target:
     group: networking.istio.io
     version: v1alpha3
     name: zipkin-gw-virtualservice
     kind: VirtualService
-    namespace: <%= kubernetesNamespace %>
-  path: <%= patchOut %>/istio-namespace.yml
+    namespace: <%- kubernetesNamespace %>
+  path: <%- patchOut %>/istio-namespace.yml
 <%_ } _%>

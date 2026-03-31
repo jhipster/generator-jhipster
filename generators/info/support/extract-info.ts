@@ -1,17 +1,31 @@
+import path from 'node:path';
+
 import { removeFieldsWithNullishValues } from '../../../lib/utils/index.ts';
 import { GENERATOR_JHIPSTER } from '../../generator-constants.ts';
 
 export type InfoFile = { filename: string; content: string; type: 'jdl' | 'yo-rc' | 'entity-jdl' | 'json' };
 
 export type InfoData = {
-  yoRcContent: string | undefined;
-  jdlDefinitions: string | undefined;
-  jdlApplications: number | undefined;
-  jdlEntitiesDefinitions: string | undefined;
+  yoRcContent?: string | undefined;
+  jdlDefinitions?: string | undefined;
+  jdlApplications?: number | undefined;
+  jdlEntitiesDefinitions?: string | undefined;
   yoRcBlank: boolean;
   yoRcValid?: boolean;
   files: InfoFile[];
-  workspacesFolders: string[] | undefined;
+  workspacesFolders?: string[] | undefined;
+};
+
+export const filterData = ({ files, ...data }: InfoData): InfoData => {
+  return {
+    ...data,
+    files: files.filter(
+      file =>
+        // Forbid any package.json file for security reasons.
+        path.basename(file.filename).toLowerCase() !== 'package.json' &&
+        (file.filename === '.yo-rc.json' || file.filename.endsWith('.jdl') || file.filename.match(/\.jhipster\/(\w*)+\.json$/)),
+    ),
+  };
 };
 
 export const extractDataFromInfo = (info: string): InfoData => {
@@ -20,7 +34,7 @@ export const extractDataFromInfo = (info: string): InfoData => {
   let jdlEntitiesDefinitions: string | undefined;
   let jdlDefinitions: string | undefined;
   let jdlApplications: number | undefined;
-  let workspacesFolders;
+  let workspacesFolders: string[] | undefined;
   const files: InfoFile[] = [];
 
   for (const match of info.matchAll(regexp)) {
@@ -71,14 +85,16 @@ export const extractDataFromInfo = (info: string): InfoData => {
     jdlEntitiesDefinitions = undefined;
   }
 
-  return removeFieldsWithNullishValues({
-    yoRcContent,
-    jdlEntitiesDefinitions,
-    jdlDefinitions,
-    yoRcBlank,
-    yoRcValid,
-    files,
-    workspacesFolders,
-    jdlApplications,
-  });
+  return filterData(
+    removeFieldsWithNullishValues({
+      yoRcContent,
+      jdlEntitiesDefinitions,
+      jdlDefinitions,
+      yoRcBlank,
+      yoRcValid,
+      files,
+      workspacesFolders,
+      jdlApplications,
+    }),
+  );
 };

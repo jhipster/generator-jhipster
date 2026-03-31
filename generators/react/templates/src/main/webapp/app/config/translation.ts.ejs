@@ -20,13 +20,13 @@ import { TranslatorContext, Storage } from 'react-jhipster';
 
 import { setLocale } from 'app/shared/reducers/locale';
 
-TranslatorContext.setDefaultLocale('<%= nativeLanguage %>');
+TranslatorContext.setDefaultLocale('<%- nativeLanguage %>');
 TranslatorContext.setRenderInnerTextForMissingKeys(false);
 
 export const languages: any = {
-  <%_ languagesDefinition.forEach((ln) => { _%>
-  '<%= ln.languageTag %>': { name: '<%= ln.displayName %>'<%= ln.rtl ? ', rtl: true' : '' %> },
-  <%_ }); _%>
+<%_ for (const ln of languagesDefinition) { _%>
+  '<%- ln.languageTag %>': { name: '<%- ln.displayName %>'<%- ln.rtl ? ', rtl: true' : '' %> },
+<%_ } _%>
   // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object
 };
 
@@ -41,5 +41,5 @@ export const setTextDirection = (lang: string) => {
 <%_ } _%>
 
 export const registerLocale = store => {
-  store.dispatch(setLocale(Storage.session.get('locale', '<%= nativeLanguage %>')));
+  store.dispatch(setLocale(Storage.session.get('locale', '<%- nativeLanguage %>')));
 };

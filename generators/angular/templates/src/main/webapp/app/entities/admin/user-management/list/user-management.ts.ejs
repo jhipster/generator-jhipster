@@ -17,9 +17,20 @@
  limitations under the License.
 -%>
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { RouterLink<%_ if (!locals.databaseTypeCassandra) { _%>, ActivatedRoute, Router<%_ } _%> } from '@angular/router';
+import {
+  RouterLink,
+<%_ if (!locals.databaseTypeCassandra) { _%>
+  ActivatedRoute,
+  Router,
+<%_ } _%>
+} from '@angular/router';
 import { DatePipe } from '@angular/common';
-import { HttpResponse<%_ if (!locals.databaseTypeCassandra) { %>, HttpHeaders <% } %>} from '@angular/common/http';
+import {
+  HttpResponse,
+<%_ if (!locals.databaseTypeCassandra) { %>
+  HttpHeaders,
+<%_ } _%>
+} from '@angular/common/http';
 <%_ if (!locals.databaseTypeCassandra) { _%>
 import { combineLatest } from 'rxjs';
 <%_ } _%>
@@ -46,7 +57,7 @@ import { IUserManagement } from '../user-management.model';
 import { UserManagementDeleteDialog } from '../delete/user-management-delete-dialog';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-user-mgmt',
+  selector: '<%- jhiPrefixDashed %>-user-mgmt',
   templateUrl: './user-management.html',
   imports: [
     RouterLink,
@@ -97,7 +108,7 @@ export class UserManagement implements OnInit {
     this.userService.update({ ...userManagement, activated: isActivated }).subscribe(() => this.loadAll());
   }
 
-  trackIdentity(item: IUserManagement): <%= user.primaryKey.tsType %> {
+  trackIdentity(item: IUserManagement): <%- user.primaryKey.tsType %> {
     return item.id!;
   }
 

@@ -148,11 +148,11 @@ export default class JavaGenerator extends JavaSimpleApplicationGenerator {
             packageInfoTransform({
               javaRoots: [root],
               javadocs: {
-                ...Object.fromEntries(application.packageInfoJavadocs!.map(doc => [doc.packageName, doc.documentation])),
+                ...Object.fromEntries(application.packageInfoJavadocs.map(doc => [doc.packageName, doc.documentation])),
                 [`${application.packageName}`]: 'Application root.',
                 [`${application.packageName}.config`]: 'Application configuration.',
                 ...Object.fromEntries(
-                  application.entityPackages!.flatMap(pkg => [
+                  application.entityPackages.flatMap(pkg => [
                     [`${pkg}.domain`, 'Domain objects.'],
                     [`${pkg}.repository`, 'Repository layer.'],
                     [`${pkg}.service`, 'Service layer.'],
