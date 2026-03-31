@@ -60,7 +60,7 @@ export default defineConfig(
       '@typescript-eslint/no-unnecessary-type-conversion': 'error',
       '@typescript-eslint/consistent-type-definitions': 'off',
       '@typescript-eslint/no-unnecessary-type-assertion': 'error',
-      '@typescript-eslint/no-unnecessary-type-arguments': 'error',
+      '@typescript-eslint/no-unnecessary-type-arguments': 'off',
       '@typescript-eslint/prefer-readonly': 'error',
       '@typescript-eslint/no-redundant-type-constituents': 'error',
       '@typescript-eslint/no-empty-function': 'off',
