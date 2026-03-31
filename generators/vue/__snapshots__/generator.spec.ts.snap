@@ -835,6 +835,13 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
         "webapp:serve": "npm run vite-serve",
       },
     },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": "JITI_VERSION",
+      },
+    },
   ],
 }
 `;
@@ -1736,6 +1743,13 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
         "webapp:serve": "npm run vite-serve",
       },
     },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": "JITI_VERSION",
+      },
+    },
   ],
 }
 `;
@@ -2612,6 +2626,13 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
         "workbox-webpack-plugin": null,
       },
     },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": "JITI_VERSION",
+      },
+    },
   ],
 }
 `;
@@ -3475,6 +3496,13 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
         "webpack-dev-server": null,
         "webpack-merge": null,
         "workbox-webpack-plugin": null,
+      },
+    },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": "JITI_VERSION",
       },
     },
   ],
@@ -4463,6 +4491,13 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
         "webapp:serve": "npm run vite-serve",
       },
     },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": "JITI_VERSION",
+      },
+    },
   ],
 }
 `;
@@ -5275,6 +5310,13 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
         "webapp:build:prod": "npm run vite-build",
         "webapp:dev": "npm run vite-serve",
         "webapp:serve": "npm run vite-serve",
+      },
+    },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": "JITI_VERSION",
       },
     },
   ],
@@ -6105,6 +6147,13 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
         "webapp:build:prod": "npm run vite-build",
         "webapp:dev": "npm run vite-serve",
         "webapp:serve": "npm run vite-serve",
+      },
+    },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": "JITI_VERSION",
       },
     },
   ],

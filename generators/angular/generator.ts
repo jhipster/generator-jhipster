@@ -25,7 +25,6 @@ import BaseApplicationGenerator from '../base-application/index.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
 import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '../client/support/index.ts';
 import { JAVA_WEBAPP_SOURCES_DIR } from '../index.ts';
-import { writeEslintClientRootConfigFile } from '../javascript-simple-application/generators/eslint/support/tasks.ts';
 import { defaultLanguage } from '../languages/support/index.ts';
 import type { Config as SpringBootConfig } from '../spring-boot/types.d.ts';
 
@@ -95,6 +94,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
   get composing() {
     return this.asComposingTaskGroup({
       async composing() {
+        await this.composeWithJHipster('jhipster:javascript-simple-application:eslint');
         await this.composeWithJHipster('jhipster:client:common');
         if ((this.jhipsterConfigWithDefaults as SpringBootConfig).websocket === 'spring-websocket') {
           await this.composeWithJHipster('jhipster:client:encode-csrf-token');
@@ -362,7 +362,6 @@ export default class AngularGenerator extends AngularApplicationGenerator {
         });
       },
       cleanupOldFilesTask,
-      writeEslintClientRootConfigFile,
       writeFiles,
     });
   }

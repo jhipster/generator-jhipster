@@ -796,6 +796,13 @@ exports[`generator - react gateway-jwt-skipUserManagement(true)-withAdminUi(fals
         },
       },
     },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": undefined,
+      },
+    },
   ],
 }
 `;
@@ -1619,6 +1626,13 @@ exports[`generator - react gateway-oauth2-withAdminUi(true)-skipJhipsterDependen
         },
       },
     },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": undefined,
+      },
+    },
   ],
 }
 `;
@@ -2432,6 +2446,13 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
     {
       "devDependencies": {
         "@module-federation/enhanced": null,
+      },
+    },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": undefined,
       },
     },
   ],
@@ -3252,6 +3273,13 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
     {
       "devDependencies": {
         "@module-federation/enhanced": null,
+      },
+    },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": undefined,
       },
     },
   ],
@@ -4135,6 +4163,13 @@ exports[`generator - react monolith-jwt-skipUserManagement(false)-withAdminUi(tr
         },
       },
     },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": undefined,
+      },
+    },
   ],
 }
 `;
@@ -4934,6 +4969,13 @@ exports[`generator - react monolith-oauth2-withAdminUi(false)-skipJhipsterDepend
         },
       },
     },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": undefined,
+      },
+    },
   ],
 }
 `;
@@ -5726,6 +5768,13 @@ exports[`generator - react monolith-session-skipUserManagement(true)-withAdminUi
           "react": "$react",
           "react-dom": "$react-dom",
         },
+      },
+    },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": undefined,
       },
     },
   ],
