@@ -23,9 +23,14 @@
   "extends": "<%- this.relativeDir(cypressDir, clientRootDir) %>tsconfig.json",
 <%_ } _%>
   "compilerOptions": {
+<%_ if (clientFrameworkVue) { _%>
+    "ignoreDeprecations": "6.0",
+<%_ } _%>
     "baseUrl": "./",
     "sourceMap": false,
+<%_ if (!clientFrameworkVue) { _%>
     "outDir": "<%- this.relativeDir(cypressDir, temporaryDir) %>cypress/tsc",
+<%_ } _%>
     "target": "es2018",
     "types": ["cypress", "node"]
   },
