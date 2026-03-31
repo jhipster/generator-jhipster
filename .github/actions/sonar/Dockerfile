@@ -1,4 +1,4 @@
-# Use the official SonarQube 10.6.0 community image as the base
+# Use the official SonarQube community image as the base
 FROM sonarqube:26.3.0.120487-community
 
 # Define version and plugin JAR name as environment variables
