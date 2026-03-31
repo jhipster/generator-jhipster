@@ -87,7 +87,7 @@ export default class extends BaseCoreGenerator {
   }
 
   getDefaultComposeOptions() {
-    const packageJson = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url)));
+    const packageJson = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), { encoding: 'utf-8' }));
     const projectVersion = `${packageJson.version}-git`;
     return {
       skipJhipsterDependencies: true,
