@@ -76,6 +76,7 @@ const itEntitiesSamplesEntries = fs
   .filter(dirent => dirent.isFile())
   .map(({ name }) => name)
   .map(name => [name, path.join(itEntitiesSamplesPath, name)]);
+const jsonBlobCoverageSamples = ['BankAccount.json', 'MicroserviceBankAccount.json'];
 
 describe('integration-test', () => {
   describe('::application samples', () => {
@@ -211,6 +212,15 @@ describe('integration-test', () => {
       });
       it(`${name} should be ordered`, () => {
         assert.strictEqual(JSON.stringify(entityJson), JSON.stringify(sortKeys(entityJson, { deep: true })));
+      });
+    }
+  });
+
+  describe('::entities samples coverage', () => {
+    for (const sampleName of jsonBlobCoverageSamples) {
+      it(`${sampleName} should cover json blob content type`, () => {
+        const sample = readJsonSync(path.join(itEntitiesSamplesPath, sampleName));
+        assert(sample.fields?.some((field: any) => field.fieldType === 'byte[]' && field.fieldTypeBlobContent === 'json'));
       });
     }
   });

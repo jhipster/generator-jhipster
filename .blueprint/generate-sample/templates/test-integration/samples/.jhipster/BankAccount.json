@@ -17,7 +17,8 @@
     { "fieldName": "active", "fieldType": "Boolean" },
     { "fieldName": "accountType", "fieldType": "BankAccountType", "fieldValues": "CHECKING,SAVINGS,LOAN" },
     { "fieldName": "attachment", "fieldType": "byte[]", "fieldTypeBlobContent": "any" },
-    { "fieldName": "description", "fieldType": "byte[]", "fieldTypeBlobContent": "text" }
+    { "fieldName": "description", "fieldType": "byte[]", "fieldTypeBlobContent": "text" },
+    { "fieldName": "metadata", "fieldType": "byte[]", "fieldTypeBlobContent": "json" }
   ],
   "fluentMethods": true,
   "jpaMetamodelFiltering": true,

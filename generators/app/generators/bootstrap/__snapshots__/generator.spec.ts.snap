@@ -90,6 +90,7 @@ exports[`generator - app:bootstrap with default config should prepare EntityA 1`
       "autoGenerateByService": false,
       "blobContentTypeAny": false,
       "blobContentTypeImage": false,
+      "blobContentTypeJson": false,
       "blobContentTypeText": false,
       "columnName": "id",
       "entity": Any<Object>,
@@ -189,6 +190,7 @@ exports[`generator - app:bootstrap with default config should prepare EntityA 1`
     {
       "blobContentTypeAny": false,
       "blobContentTypeImage": false,
+      "blobContentTypeJson": false,
       "blobContentTypeText": false,
       "columnName": "name",
       "entity": Any<Object>,
@@ -276,6 +278,7 @@ exports[`generator - app:bootstrap with default config should prepare EntityA 1`
     {
       "blobContentTypeAny": false,
       "blobContentTypeImage": false,
+      "blobContentTypeJson": false,
       "blobContentTypeText": false,
       "columnName": "details",
       "entity": Any<Object>,
@@ -583,6 +586,7 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
       "autoGenerateByService": false,
       "blobContentTypeAny": false,
       "blobContentTypeImage": false,
+      "blobContentTypeJson": false,
       "blobContentTypeText": false,
       "builtIn": true,
       "columnName": "id",
@@ -687,6 +691,7 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
     {
       "blobContentTypeAny": false,
       "blobContentTypeImage": false,
+      "blobContentTypeJson": false,
       "blobContentTypeText": false,
       "builtIn": true,
       "columnName": "login",
@@ -791,6 +796,7 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
     {
       "blobContentTypeAny": false,
       "blobContentTypeImage": false,
+      "blobContentTypeJson": false,
       "blobContentTypeText": false,
       "builtIn": true,
       "columnName": "first_name",
@@ -885,6 +891,7 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
     {
       "blobContentTypeAny": false,
       "blobContentTypeImage": false,
+      "blobContentTypeJson": false,
       "blobContentTypeText": false,
       "builtIn": true,
       "columnName": "last_name",
@@ -979,6 +986,7 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
     {
       "blobContentTypeAny": false,
       "blobContentTypeImage": false,
+      "blobContentTypeJson": false,
       "blobContentTypeText": false,
       "builtIn": true,
       "columnName": "email",
@@ -1078,6 +1086,7 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
     {
       "blobContentTypeAny": false,
       "blobContentTypeImage": false,
+      "blobContentTypeJson": false,
       "blobContentTypeText": false,
       "builtIn": true,
       "columnName": "lang_key",
@@ -1171,6 +1180,7 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
     {
       "blobContentTypeAny": false,
       "blobContentTypeImage": false,
+      "blobContentTypeJson": false,
       "blobContentTypeText": false,
       "builtIn": true,
       "columnName": "image_url",
@@ -1265,6 +1275,7 @@ exports[`generator - app:bootstrap with default config should prepare User 1`] =
       "autoGenerate": true,
       "blobContentTypeAny": false,
       "blobContentTypeImage": false,
+      "blobContentTypeJson": false,
       "blobContentTypeText": false,
       "builtIn": true,
       "columnName": "activated",
@@ -1567,6 +1578,7 @@ exports[`generator - app:bootstrap with skipUserManagement should prepare Entity
       "autoGenerateByService": false,
       "blobContentTypeAny": false,
       "blobContentTypeImage": false,
+      "blobContentTypeJson": false,
       "blobContentTypeText": false,
       "columnName": "id",
       "entity": Any<Object>,

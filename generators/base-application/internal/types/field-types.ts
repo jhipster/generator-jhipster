@@ -53,6 +53,10 @@ export function convertFieldBlobType<const F extends BaseApplicationField = Base
       field.fieldTypeBlobContent = undefined;
       break;
     }
+    case 'json': {
+      field.fieldType = 'TextBlob';
+      break;
+    }
     default: {
       // Unknown type is not supported.
       // Fallback to ByteBuffer for cassandra databases.

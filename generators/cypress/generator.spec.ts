@@ -20,6 +20,7 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
 import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
+import type { Entity } from '../../lib/jhipster/types/entity.ts';
 import type { Matrix } from '../../lib/testing/index.ts';
 import { AuthenticationTypeMatrix, defaultHelpers as helpers, extendMatrix, fromMatrix, runResult } from '../../lib/testing/index.ts';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
@@ -60,6 +61,11 @@ const entities = [
     changelogDate: '20220129025419',
   },
 ];
+const jsonBlobEntity = {
+  name: 'JsonBlob',
+  changelogDate: '20220129025420',
+  fields: [{ fieldName: 'payload', fieldType: 'byte[]', fieldTypeBlobContent: 'json' }],
+} satisfies Entity;
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
@@ -144,6 +150,31 @@ describe(`generator - ${generator}`, () => {
           });
         }
       });
+    });
+  });
+
+  describe('json blob content type', () => {
+    before(async () => {
+      await helpers.runJHipster(generator).withJHipsterConfig(
+        {
+          applicationType: 'monolith',
+          authenticationType: 'jwt',
+          clientFramework: ANGULAR,
+          testFrameworks: [CYPRESS],
+          withAdminUi: false,
+          cypressAudit: false,
+          cypressCoverage: false,
+          nativeLanguage: 'en',
+          languages: ['en'],
+        },
+        [jsonBlobEntity],
+      );
+    });
+
+    it('should type json blobs instead of uploading them as files', () => {
+      const cypressEntityFile = 'src/test/javascript/cypress/e2e/entity/json-blob.cy.ts';
+      runResult.assertFileContent(cypressEntityFile, 'cy.get(`[data-cy="payload"]`).type(');
+      runResult.assertNoFileContent(cypressEntityFile, "cy.setFieldImageAsBytesOfEntity('payload'");
     });
   });
 });

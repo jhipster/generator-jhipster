@@ -54,7 +54,7 @@ const { CASSANDRA, COUCHBASE, NEO4J, SQL, MONGODB } = databaseTypes;
 const { INSTANT, ZONED_DATE_TIME, DURATION, LOCAL_DATE, BIG_DECIMAL, LOCAL_TIME } = fieldTypes.CommonDBTypes;
 
 const { BYTES, BYTE_BUFFER } = fieldTypes.RelationalOnlyDBTypes;
-const { IMAGE, TEXT } = fieldTypes.BlobTypes;
+const { IMAGE, TEXT, JSON } = fieldTypes.BlobTypes;
 
 const BASE_TEMPLATE_DATA = {
   primaryKey: undefined,
@@ -446,8 +446,12 @@ export function preparePostEntityCommonDerivedProperties(entity: BaseApplication
     const blobFields = fields.filter(({ fieldType }) => ([BYTES, BYTE_BUFFER] as string[]).includes(fieldType));
     const blobFieldsContentType = sortedUniq(blobFields.map(({ fieldTypeBlobContent }) => fieldTypeBlobContent));
     entity.anyFieldHasImageContentType = blobFieldsContentType.includes(IMAGE);
-    entity.anyFieldHasFileBasedContentType = blobFieldsContentType.some(fieldTypeBlobContent => fieldTypeBlobContent !== TEXT);
-    entity.anyFieldHasTextContentType = blobFieldsContentType.includes(TEXT);
+    entity.anyFieldHasFileBasedContentType = blobFieldsContentType.some(
+      fieldTypeBlobContent => fieldTypeBlobContent !== TEXT && fieldTypeBlobContent !== JSON,
+    );
+    entity.anyFieldHasTextContentType = blobFieldsContentType.some(
+      fieldTypeBlobContent => fieldTypeBlobContent === TEXT || fieldTypeBlobContent === JSON,
+    );
   }
 
   preparePostEntityCommonDerivedPropertiesNotTyped(entity as EntityAll);

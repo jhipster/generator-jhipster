@@ -2,6 +2,7 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
 import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
+import type { Entity } from '../../lib/jhipster/types/entity.ts';
 import { buildClientSamples, defaultHelpers as helpers, entitiesClientSamples as entities, runResult } from '../../lib/testing/index.ts';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.ts';
@@ -12,6 +13,11 @@ const generator = basename(import.meta.dirname);
 
 const { VUE: clientFramework } = clientFrameworkTypes;
 const commonConfig = { clientFramework, nativeLanguage: 'en', languages: ['fr', 'en'] };
+const jsonBlobEntity = {
+  name: 'JsonBlob',
+  changelogDate: '20220129025419',
+  fields: [{ fieldName: 'payload', fieldType: 'byte[]', fieldTypeBlobContent: 'json' }],
+} satisfies Entity;
 
 const testSamples = buildClientSamples(commonConfig);
 
@@ -196,6 +202,25 @@ describe(`generator - ${clientFramework}`, () => {
           });
         }
       });
+    });
+  });
+
+  describe('json blob content type', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ ...commonConfig, applicationType: 'monolith', authenticationType: 'jwt' }, [jsonBlobEntity])
+        .withSharedApplication({ getWebappTranslation: () => 'translations' })
+        .withSharedApplication({ gatewayServicesApiAvailable: false })
+        .withMockedSource()
+        .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
+    });
+
+    it('should render json blobs as textarea inputs', () => {
+      const updateFile = `${CLIENT_MAIN_SRC_DIR}app/entities/json-blob/json-blob-update.vue`;
+      runResult.assertFileContent(updateFile, '<textarea class="form-control" name="payload"');
+      runResult.assertFileContent(updateFile, 'data-cy="payload"');
+      runResult.assertNoFileContent(updateFile, 'ref="file_payload"');
     });
   });
 });
