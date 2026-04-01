@@ -79,7 +79,7 @@ function createUnknownJDLConfigurationOption(
   } else if (typeof value === 'string') {
     type = 'string';
   } else {
-    throw new Error(`Unknown value type for option ${name}`);
+    throw new TypeError(`Unknown value type for option ${name}`);
   }
   return createJDLConfigurationOption(type, name, value, runtime);
 }

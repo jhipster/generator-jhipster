@@ -1071,7 +1071,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             return undefined;
           }
           if (typeof blockPathValue === 'function') {
-            throw new Error(`Block path should be static for ${blockSpecPath}`);
+            throw new TypeError(`Block path should be static for ${blockSpecPath}`);
           }
           const blockPath = resolveCallback(blockFromCallback, blockPathValue);
           const blockTo = resolveCallback(blockToCallback, blockPath) || blockPath;

@@ -91,7 +91,7 @@ const ensureChild = (current: Record<string, any>, ...childPath: (string | ((nod
     } else if (typeof node === 'function') {
       current = node(current);
     } else {
-      throw new Error(`Path section not supported ${node}`);
+      throw new TypeError(`Path section not supported ${node}`);
     }
     if (!current) {
       return undefined;
