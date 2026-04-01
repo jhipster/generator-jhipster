@@ -52,7 +52,8 @@ RUN \
 RUN \
   # install jhipster
   cd /home/jhipster/generator-jhipster && \
-  npm ci && \
+  npm ci --ignore-scripts && \
+  npm run build && \
   npm install -g /home/jhipster/generator-jhipster && \
   # fix jhipster user permissions
   chown -R jhipster:jhipster \
