@@ -1,0 +1,106 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+<&_
+ // Register sections and max allowed fragments, 0 for unlimited.
+  fragments.registerSections({
+<%_ for (const priority of priorities) { _%>
+    <%- priority.name %>Section: 1,
+<%_ } _%>
+  });
+-&>
+<%_ if (!application.dynamic) { _%>
+import <%- generatorClass %>Generator from 'generator-jhipster/generators/<%- jhipsterGenerator %>';
+<%_ } _%>
+<%_ if (priorities.find(priority => priority.name === 'initializing')) { _%>
+import command from './command.<%- blueprintMjsExtension %>';
+<%_ } _%>
+<%_ if (application.dynamic) { _%>
+import type { Environment } from 'yeoman-environment';
+<%_ } _%>
+
+<%_ if (application.dynamic) { _%>
+// eslint-disable-next-line import/prefer-default-export
+export async function createGenerator(env: Environment) {
+  let <%- generatorClass %>Generator: typeof import('generator-jhipster/generators/<%- jhipsterGenerator %>').default;
+  try {
+    // Try to use locally installed generator-jhipster
+    <%- generatorClass %>Generator = (await import('generator-jhipster/generators/<%- jhipsterGenerator %>')).default;
+  } catch {
+    // Fallback to the currently running jhipster.
+    const jhipsterGenerator = 'jhipster:<%- generator %>';
+    <%- generatorClass %>Generator = await env.requireGenerator(jhipsterGenerator);
+  }
+
+  return class extends <%- generatorClass %>Generator {
+<%_ } else { _%>
+export default class extends <%- generatorClass %>Generator {
+<%_ } _%>
+  constructor(args: string | string[], opts: any, features?: any) {
+    super(args, opts, {
+      ...features,
+
+<%_ if (sbs) { _%>
+      sbsBlueprint: true,
+<%_ } else if (!customGenerator) { _%>
+      checkBlueprint: true,
+      // Dropped it once migration is done.
+      jhipster7Migration: true,
+<%_ } _%>
+    });
+  }
+
+<%_ if (!sbs && !customGenerator) { _%>
+  async beforeQueue() {
+    await super.beforeQueue();
+  }
+
+<%_ } _%>
+<% for (const priority of priorities) { %>
+<&- fragments.<%- priority.name %>Section() -&>
+<& if (!fragments.<%- priority.name %>Section()) { -&>
+
+  get [<%- generatorClass %>Generator.<%- priority.constant %>]() {
+    return this.<%- priority.asTaskGroup %>({
+  <%_ if (!sbs && !customGenerator) { _%>
+      ...super.<%- priority.name %>,
+  <%_ } _%>
+      async <%- priority.name %>TemplateTask(
+  <%_ if (priority.name === 'writing') { _%>
+        { application }
+  <%_ } _%>
+      ) {
+  <%_ if (priority.name === 'writing') { _%>
+        await this.writeFiles({
+          sections: {
+            files: [
+              { templates: ['template-file-<%- generator %>'] },
+            ],
+          },
+          context: application,
+        });
+  <%_ } _%>
+      },
+    });
+  }
+<& } -&>
+<% } %>
+};
+<%_ if (application.dynamic) { _%>
+}
+<%_ } _%>

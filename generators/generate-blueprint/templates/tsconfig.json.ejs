@@ -7,14 +7,22 @@
     "types": [],
 
     /* Modules */
+<%_ if (ts) { _%>
+    "module": "preserve" /* Preserve original module syntax for native TypeScript execution. */,
+<%_ } else { _%>
     "module": "node16" /* Specify what module code is generated. */,
+<%_ } _%>
     "rootDir": "./" /* Specify the root folder within your source files. */,
 
     /* JavaScript Support */
     "allowJs": true /* Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files. */,
 
     /* Emit */
+<%_ if (ts) { _%>
+    "noEmit": true /* Disable emitting files from a compilation. */,
+<%_ } else { _%>
     "outDir": "./dist" /* Specify an output folder for all emitted files. */,
+<%_ } _%>
 
     /* Interop Constraints */
     "allowSyntheticDefaultImports": true /* Allow 'import x from y' when a module doesn't have a default export. */,
@@ -24,6 +32,11 @@
     /* Type Checking */
     "strict": true /* Enable all strict type-checking options. */,
     "noImplicitAny": false,
+<%_ if (ts) { _%>
+    "moduleResolution": "bundler",
+    "rewriteRelativeImportExtensions": true,
+    "resolveJsonModule": true,
+<%_ } _%>
 
     /* Completeness */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
