@@ -6,14 +6,14 @@ import { GENERATOR_JHIPSTER } from '../../generator-constants.ts';
 export type InfoFile = { filename: string; content: string; type: 'jdl' | 'yo-rc' | 'entity-jdl' | 'json' };
 
 export type InfoData = {
-  yoRcContent?: string | undefined;
-  jdlDefinitions?: string | undefined;
-  jdlApplications?: number | undefined;
-  jdlEntitiesDefinitions?: string | undefined;
+  yoRcContent?: string;
+  jdlDefinitions?: string;
+  jdlApplications?: number;
+  jdlEntitiesDefinitions?: string;
   yoRcBlank: boolean;
   yoRcValid?: boolean;
   files: InfoFile[];
-  workspacesFolders?: string[] | undefined;
+  workspacesFolders?: string[];
 };
 
 export const filterData = ({ files, ...data }: InfoData): InfoData => {
