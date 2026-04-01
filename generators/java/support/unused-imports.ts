@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 import { Language, type Node, Parser } from 'web-tree-sitter';
@@ -16,7 +16,11 @@ const getParser = (): Promise<Parser> => {
     const treeSitterWasmPath = fileURLToPath(import.meta.resolve('web-tree-sitter/web-tree-sitter.wasm'));
     await Parser.init({ locateFile: () => treeSitterWasmPath });
 
-    const javaGrammarWasmPath = fileURLToPath(import.meta.resolve('tree-sitter-java-orchard/tree-sitter-java_orchard.wasm'));
+    const bundledWasmPath = fileURLToPath(new URL('tree-sitter-java_orchard.wasm', import.meta.url));
+    const javaGrammarWasmPath =
+      existsSync(bundledWasmPath) ? bundledWasmPath : (
+        fileURLToPath(import.meta.resolve('tree-sitter-java-orchard/tree-sitter-java_orchard.wasm'))
+      );
     const javaWasmBytes = readFileSync(javaGrammarWasmPath);
     const Java = await Language.load(javaWasmBytes);
 
