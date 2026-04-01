@@ -341,7 +341,9 @@ ${instructions}`,
 
     if (field.fieldValidateRules !== undefined) {
       if (!Array.isArray(field.fieldValidateRules)) {
-        throw new Error(`fieldValidateRules is not an array in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);
+        throw new TypeError(
+          `fieldValidateRules is not an array in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`,
+        );
       }
       field.fieldValidateRules.forEach(fieldValidateRule => {
         if (!SUPPORTED_VALIDATION_RULES.includes(fieldValidateRule)) {

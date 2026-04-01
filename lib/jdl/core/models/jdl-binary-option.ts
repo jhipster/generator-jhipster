@@ -32,7 +32,7 @@ export default class JDLBinaryOption extends AbstractJDLOption {
   constructor(args: JDLOptionParams & { value: string }) {
     super(args);
     if (typeof args.value !== 'string') {
-      throw new Error('A binary option must have a value.');
+      throw new TypeError('A binary option must have a value.');
     }
     this.value = args.value;
   }
