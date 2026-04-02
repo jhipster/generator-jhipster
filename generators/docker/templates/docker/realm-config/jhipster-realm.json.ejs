@@ -1118,12 +1118,17 @@
         "profile",
         "email"
       ],
+      <% if (keycloakMajorVersion >= 26) { %>
+      "optionalClientScopes": ["offline_access"],
+      <% } else { %>
       "optionalClientScopes": [
         "address",
         "phone",
         "offline_access",
         "microprofile-jwt"
-      ]
+      ],
+      <% } %>
+      "fullScopeAllowed": true
     }
   ],
   "clientScopes": [
@@ -2558,7 +2563,6 @@
     "frontendUrl": "",
     "acr.loa.map": "{}"
   },
-  "keycloakVersion": "23.0.1",
   "userManagedAccessAllowed": false,
   "clientProfiles": {
     "profiles": []
@@ -2623,5 +2627,7 @@
       "notBefore": 0,
       "groups": ["/Users"]
     }
-  ]
+  ],
+  "keycloakVersion": "<%= jhipsterConfig.keycloakVersion || '25.0.0' %>",
+  "keycloakMajorVersion": <%= (jhipsterConfig.keycloakVersion || '25.0.0').split('.')[0] %>
 }
