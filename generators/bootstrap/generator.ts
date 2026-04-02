@@ -39,7 +39,6 @@ import {
   createForceWriteConfigFilesTransform,
   createMultiStepTransform,
   createPrettierTransform,
-  createRemoveUnusedImportsTransform,
   createSortConfigFilesTransform,
   isPrettierConfigFilePath,
 } from './support/index.ts';
@@ -185,10 +184,7 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
     if (!this.skipPrettier) {
       const ignoreErrors = this.options.ignoreErrors || this.upgradeCommand;
       if (!this.skipEslint) {
-        prettierTransforms.push(
-          await createESLintTransform.call(this, { ignoreErrors }),
-          await createRemoveUnusedImportsTransform.call(this, { ignoreErrors }),
-        );
+        prettierTransforms.push(await createESLintTransform.call(this, { ignoreErrors }));
       }
       prettierTransforms.push(
         await createPrettierTransform.call(this, {

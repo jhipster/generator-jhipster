@@ -35,7 +35,7 @@ export const createESLintTransform = async function (
   this: BaseGenerator | void,
   transformOptions: { ignoreErrors?: boolean; poolOptions?: PoolOptions } & Partial<Parameters<typeof eslintWorker>[0]> = {},
 ) {
-  const { extensions = 'js,cjs,mjs,ts,cts,mts,jsx,tsx', ignoreErrors, cwd, poolOptions, recreateEslint } = transformOptions;
+  const { extensions = 'js,cjs,mjs,ts,cts,mts,jsx,tsx,java', ignoreErrors, cwd, poolOptions, recreateEslint } = transformOptions;
   const minimatch = new Minimatch(`**/*.{${extensions}}`, { dot: true });
 
   const pool = new Piscina<Parameters<typeof eslintWorker>[0], ReturnType<typeof eslintWorker>>({
