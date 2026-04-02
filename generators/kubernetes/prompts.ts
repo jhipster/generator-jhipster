@@ -158,7 +158,7 @@ export const askForIngressDomain = asPromptingTask(async function askForIngressD
           if (input.charAt(0) === '.') {
             return 'domain name cannot start with a "."';
           }
-          if (!input.match(/^[\w]+[\w.-]+[\w]{1,}$/)) {
+          if (!input.match(/^\w+[\w.-]+\w+$/)) {
             return 'domain not valid';
           }
 
