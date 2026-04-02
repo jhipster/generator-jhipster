@@ -49,7 +49,7 @@ export const <%- entityReactName %>Detail = () => {
   const { id } = useParams<'id'>();
 
   useEffect(() => {
-    dispatch(getEntity(id));
+    dispatch(getEntity(id!));
   }, []);
 
   const <%- entityInstance %>Entity = useAppSelector(state => state.<%- entityReactState %>.entity);
