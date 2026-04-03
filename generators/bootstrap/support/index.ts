@@ -19,7 +19,6 @@
 export { default as autoCrlfTransform } from './auto-crlf-transform.ts';
 export { default as createForceWriteConfigFilesTransform } from './force-write-config-files-transform.ts';
 export * from './eslint-transform.ts';
-export * from './java-unused-imports-transform.ts';
 export * from './multi-step-transform/index.ts';
 export * from './prettier-support.ts';
 export { default as createSortConfigFilesTransform } from './sort-config-files-transform.ts';

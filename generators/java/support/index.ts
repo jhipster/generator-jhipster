@@ -30,5 +30,4 @@ export { default as packageInfoTransform } from './package-info-transform.ts';
 export * from './package-info-transform.ts';
 export * from './prepare-entity.ts';
 export * from './reserved-keywords.ts';
-export { removeUnusedImports } from './unused-imports.ts';
 export * from './util.ts';
