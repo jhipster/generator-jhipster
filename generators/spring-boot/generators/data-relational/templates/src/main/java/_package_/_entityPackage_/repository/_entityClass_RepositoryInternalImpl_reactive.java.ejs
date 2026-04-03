@@ -68,7 +68,7 @@ import <%- entityAbsolutePackage %>.domain.criteria.<%- entityClass %>Criteria;
 import <%- entityAbsolutePackage %>.repository.rowmapper.ColumnConverter;
 import tech.jhipster.service.ConditionBuilder;
 <%_ } _%>
-<% for (const rel of relationships) {
+<%_ for (const rel of relationships) {
   if (rel.relationshipManyToMany && rel.ownerSide) {
 _%>
 import <%- rel.otherEntity.entityAbsolutePackage %>.domain.<%- rel.otherEntity.persistClass %>;

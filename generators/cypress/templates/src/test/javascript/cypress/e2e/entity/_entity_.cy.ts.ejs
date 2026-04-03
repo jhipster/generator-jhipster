@@ -1,4 +1,4 @@
-<%# eslint-disable -%>
+<%# eslint-disable ejs-templates/prefer-single-line-tags -- template should be simplified -%>
 import {
   entityTableSelector,
   entityDetailsButtonSelector,
@@ -14,11 +14,8 @@ import {
   entityConfirmDeleteButtonSelector,
 <%_ } _%>
 } from '../../support/entity';
-<%_
-
-const skipUserManagementCreatePage = builtInUserManagement && (!userManagement.skipClient || clientFrameworkReact);
+<%_ const skipUserManagementCreatePage = builtInUserManagement && (!userManagement.skipClient || clientFrameworkReact);
 const baseApi = `${entityApi}api/`;
-
 const entityFakeData = generateFakeData('cypress');
 const requiredRelationships = relationships.filter(rel => rel.relationshipRequired || rel.id);
 const requiredOtherEntities = this._.uniq(requiredRelationships.map(rel => rel.otherEntity));
@@ -33,9 +30,7 @@ const skipCreateTest =
     requiredRelationships.map(rel => rel.otherEntity.relationships).flat().some(rel => rel.relationshipRequired) ||
     !entityFakeData
   ) ? '.skip' : '';
-
 const reason = graalvmSupport ? 'graalvm is failing.' : 'cannot create a required entity with relationship with required relationships.';
-
 const sampleFields = fields.filter(f => !f.autoGenerate && !f.nullable);
 
 if (workaroundEntityCannotBeEmpty && sampleFields.length === 0) {
@@ -324,14 +319,13 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
     <% if (skipCreateTest) { %>// Reason: <%- reason %><% } %>
     it<%- skipCreateTest %>('should create an instance of <%- entityNameCapitalized %>', () => {
   <%_ for (const field of fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden && !field.readonly)) {
-    const fieldName = field.fieldName;
-    const fieldIsEnum = field.fieldIsEnum;
+    const { fieldName, fieldIsEnum } = field;
     let fieldValue = !entityFakeData ? field.generateFakeData('cypress') : entityFakeData[field.fieldName];
     if (fieldValue === undefined) {
         continue;
     }
     fieldValue = typeof fieldValue === 'string' ? fieldValue.replaceAll('\\', '\\\\').replaceAll("'", "\\'") : fieldValue;
-_%>
+  _%>
 
     <%_ if (field.fieldTypeBoolean) { _%>
       cy.get(`[data-cy="<%- fieldName %>"]`).should('<%- field.fieldTsDefaultValue === 'true' ? '' : 'not.' %>be.checked');

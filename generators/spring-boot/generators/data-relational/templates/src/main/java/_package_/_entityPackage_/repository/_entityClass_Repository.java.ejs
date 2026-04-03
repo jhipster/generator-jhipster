@@ -1,4 +1,4 @@
-<%# eslint-disable -%>
+<%# eslint-disable ejs-templates/experimental-prefer-slurp-multiline, ejs-templates/format -- template should be simplified -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -63,7 +63,7 @@ public interface <%- entityClass %>Repository extends <% if (containsBagRelation
     default Optional<<%- persistClass %>> findOneWithEagerRelationships(<%- primaryKey.type %> <%- primaryKey.name %>) {
         return <% if (containsBagRelationships) { %>this.fetchBagRelationships(<% } %>
             this.<% if (containsToOneEagerRelationship) { %>findOneWithToOneRelationships<% } else { %>findById<% } %>(<%- primaryKey.name %>)
-        <%  if (containsBagRelationships) { %>)<% } %>;
+        <% if (containsBagRelationships) { %>)<% } %>;
     }
 
     default List<<%- persistClass %>> findAllWithEagerRelationships() {
