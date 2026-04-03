@@ -181,7 +181,7 @@
     "@stylistic/eslint-plugin": "5.10.0",
     "@types/debug": "4.1.13",
     "@types/didyoumean": "1.2.3",
-    "@types/node": "22.19.15",
+    "@types/node": "22.19.17",
     "@types/npmcli__arborist": "6.3.3",
     "@types/pluralize": "0.0.33",
     "@types/semver": "7.7.1",
