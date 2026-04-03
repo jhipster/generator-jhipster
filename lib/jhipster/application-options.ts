@@ -45,7 +45,7 @@ const { CAFFEINE, EHCACHE, HAZELCAST, INFINISPAN, MEMCACHED, REDIS } = cacheType
 
 const NO_CACHE_PROVIDER = cacheTypes.NO;
 
-const { CYPRESS, CUCUMBER, GATLING } = testFrameworkTypes;
+const { CYPRESS, PLAYWRIGHT, CUCUMBER, GATLING } = testFrameworkTypes;
 const { ANGULAR, REACT, VUE, SVELTE, NO } = clientFrameworkTypes;
 const { ELASTICSEARCH } = searchEngineTypes;
 
@@ -218,6 +218,7 @@ export const jhipsterOptionValues = {
   [optionNames.SKIP_USER_MANAGEMENT]: false,
   [optionNames.TEST_FRAMEWORKS]: {
     [CYPRESS]: CYPRESS,
+    [PLAYWRIGHT]: PLAYWRIGHT,
     [CUCUMBER]: CUCUMBER,
     [GATLING]: GATLING,
   },
