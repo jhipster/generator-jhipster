@@ -134,6 +134,7 @@ export default class extends BaseSimpleApplicationGenerator<
     return this.asConfiguringTaskGroup({
       requiredConfig() {
         this.config.defaults(requiredConfig());
+        this.jhipsterConfig.defaultCommand ??= 'generate-blueprint';
       },
       conditionalConfig() {
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) {
