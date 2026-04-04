@@ -38,3 +38,6 @@ nbdist/
 .nb-gradle/
 generators/**/package-lock.json
 generators/**/.gradle
+
+# Local JHipster app output (e.g. integration / manual testing)
+jhipster-keycloak-test/

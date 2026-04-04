@@ -16,155 +16,410 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnInit, signal } from '@angular/core';
-import {
-  RouterLink,
-<%_ if (!locals.databaseTypeCassandra) { _%>
-  ActivatedRoute,
-  Router,
-<%_ } _%>
-} from '@angular/router';
-import { DatePipe } from '@angular/common';
-import {
-  HttpResponse,
-<%_ if (!locals.databaseTypeCassandra) { %>
-  HttpHeaders,
-<%_ } _%>
-} from '@angular/common/http';
-<%_ if (!locals.databaseTypeCassandra) { _%>
-import { combineLatest } from 'rxjs';
-<%_ } _%>
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
+<%_ const notSortableFieldsAfterSearchArray = searchEngineNo ? [] : fields
+      .filter(field => !field.hidden && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal);
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+  const notSortableFieldsAfterSearchFieldNames = notSortableFieldsAfterSearchArray
+      .map(field => field.fieldName);
+
+  const notSortableFieldsAfterSearch = notSortableFieldsAfterSearchArray
+      .map(field => `'${field.fieldName}'`)
+      .join(', ');
+_%>
+import { Component, computed, effect, inject, OnInit, signal, WritableSignal } from '@angular/core';
+<%_ if (!paginationNo) { _%>
+import { HttpHeaders } from '@angular/common/http';
+<%_ } _%>
+import { ActivatedRoute, Data, ParamMap, Router, RouterLink } from '@angular/router';
+import { combineLatest
+<%_ if (!readOnly) { _%>, filter
+<%_ } _%>, finalize, Observable, Subscription, tap } from 'rxjs';
+<%_ if (!readOnly) { _%>
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+<%_ } _%>
+
 import { AlertError } from 'app/shared/alert/alert-error';
 import { Alert } from 'app/shared/alert/alert';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
 import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
-import { NgbPagination } from '@ng-bootstrap/ng-bootstrap/pagination';
-<%_ if (!locals.databaseTypeCassandra) { _%>
-import { SortDirective, SortByDirective, sortStateSignal, SortService, SortState } from 'app/shared/sort';
-import { ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
-import { SORT } from 'app/config/navigation.constants';
+import { sortStateSignal, SortDirective, SortByDirective, type SortState, SortService } from 'app/shared/sort';
+import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
+<%_ if (paginationPagination) { _%>
 import { ItemCount } from 'app/shared/pagination';
 <%_ } _%>
+<%_ if (searchEngine) { _%>
+import { FormsModule } from '@angular/forms';
+<%_ } _%>
+import { IUser } from '../user-management.model';
+<%_ if (!paginationNo) { %>
+import {
+  ITEMS_PER_PAGE,
+  <%_ if (paginationPagination) { _%>
+  PAGE_HEADER,
+  <%_ } _%>
+  <%_ if (paginationPagination) { _%>
+  TOTAL_COUNT_RESPONSE_HEADER,
+  <%_ } _%>
+} from 'app/config/pagination.constants';
+<%_ } _%>
+import {
+  SORT,
+<%_ if (!readOnly) { _%>
+  ITEM_DELETED_EVENT,
+<%_ } _%>
+  DEFAULT_SORT_DATA
+} from 'app/config/navigation.constants';
+import { EntityArrayResponseType, UserManagementService } from '../service/user-management.service';
 import { AccountService } from 'app/core/auth/account.service';
-import { Account } from 'app/core/auth/account.model';
-import { UserManagementService } from '../service/user-management.service';
-import { IUserManagement } from '../user-management.model';
+<%_ if (!readOnly) { _%>
 import { UserManagementDeleteDialog } from '../delete/user-management-delete-dialog';
+<%_ } _%>
+<%_ if (anyFieldIsBlobDerived) { _%>
+import { DataUtils } from 'app/core/util/data-util.service';
+<%_ } _%>
+<%_ if (paginationInfiniteScroll) { _%>
+import { ParseLinks } from 'app/core/util/parse-links.service';
+<%_ } _%>
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+import { Filter, FilterOptions, IFilterOptions, IFilterOption } from 'app/shared/filter';
+<%_ } _%>
+<%_ if (paginationInfiniteScroll) { _%>
+import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
+<%_ } _%>
 
 @Component({
-  selector: '<%- jhiPrefixDashed %>-user-mgmt',
-  templateUrl: './user-management.html',
-  imports: [
-    RouterLink,
-    FontAwesomeModule,
-    AlertError,
-    Alert,
-    NgbPagination,
+    selector: '<%- jhiPrefixDashed %>-user-management',
+    templateUrl: './user-management.html',
+    imports: [
+      RouterLink,
+<%_ if (searchEngine) { _%>
+      FormsModule,
+<%_ } _%>
+      FontAwesomeModule,
+      NgbModule,
+      AlertError,
+      Alert,
+      SortDirective,
+      SortByDirective,
 <%_ if (enableTranslation) { _%>
-    TranslateDirective,
-    TranslateModule,
+      TranslateDirective,
+      TranslateModule,
 <%_ } _%>
-<%_ if (!locals.databaseTypeCassandra) { _%>
-    SortDirective,
-    SortByDirective,
-    ItemCount,
-    DatePipe,
+<%_ if (anyFieldIsDuration) { _%>
+      DurationPipe,
 <%_ } _%>
-  ],
+<%_ if (anyFieldIsTimeDerived) { _%>
+      FormatMediumDatetimePipe,
+<%_ } _%>
+<%_ if (anyFieldIsLocalDate) { _%>
+      FormatMediumDatePipe,
+<%_ } _%>
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+      Filter,
+<%_ } _%>
+<%_ if (paginationPagination) { _%>
+      ItemCount,
+<%_ } _%>
+<%_ if (paginationInfiniteScroll) { _%>
+      InfiniteScrollDirective,
+<%_ } _%>
+    ],
 })
 export class UserManagement implements OnInit {
-  readonly currentAccount = inject(AccountService).account;
-  readonly users = signal<IUserManagement[] | null>(null);
-  readonly isLoading = signal(false);
-<%_ if (!locals.databaseTypeCassandra) { _%>
-  readonly totalItems = signal(0);
-  readonly itemsPerPage = signal(ITEMS_PER_PAGE);
-  readonly page = signal(0);
-  sortState = sortStateSignal({});
+
+<%_ if (notSortableFieldsAfterSearch) { _%>
+    private static readonly NOT_SORTABLE_FIELDS_AFTER_SEARCH = [<%- notSortableFieldsAfterSearch %>];
+
+<%_ } _%>
+    subscription: Subscription | null = null;
+    readonly users = signal<IUser[]>([]);
+    authorities = signal<string[]>([]);
+    currentAccount = inject(AccountService).trackCurrentAccount();
+
+    sortState = sortStateSignal({});
+<%_ if (searchEngineAny) { _%>
+    currentSearch = signal('');
+<%_ } _%>
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+    filters: IFilterOptions = new FilterOptions();
 <%_ } _%>
 
-  private readonly userService = inject(UserManagementService);
-<%_ if (!locals.databaseTypeCassandra) { _%>
-  private readonly activatedRoute = inject(ActivatedRoute);
-  private readonly router = inject(Router);
-  private readonly sortService = inject(SortService);
+<%_ if (paginationPagination) { _%>
+  itemsPerPage = signal(ITEMS_PER_PAGE);
+  totalItems = signal(0);
+  page = signal(1);
+<%_ } else if (paginationInfiniteScroll) { _%>
+    itemsPerPage = signal(ITEMS_PER_PAGE);
+    links: WritableSignal<Record<string, undefined | Record<string, string | undefined>>> = signal({});
+    hasMorePage = computed(() => !!this.links().next);
+    isFirstFetch = computed(() => Object.keys(this.links()).length === 0);
 <%_ } _%>
-  private readonly modalService = inject(NgbModal);
 
-  ngOnInit(): void {
-<%_ if (locals.databaseTypeCassandra) { _%>
-    this.loadAll();
-<%_ } else { _%>
-    this.handleNavigation();
+    readonly router = inject(Router);
+    protected readonly userService = inject(UserManagementService);
+    // eslint-disable-next-line @typescript-eslint/member-ordering
+    readonly isLoading = this.userService.usersResource.isLoading;
+    protected readonly activatedRoute = inject(ActivatedRoute);
+    protected readonly sortService = inject(SortService);
+<%_ if (paginationInfiniteScroll) { _%>
+    protected parseLinks = inject(ParseLinks);
 <%_ } _%>
-  }
+<%_ if (anyFieldIsBlobDerived) { _%>
+    protected dataUtils = inject(DataUtils);
+<%_ } _%>
+<%_ if (!readOnly) { _%>
+    protected modalService = inject(NgbModal);
+<%_ } _%>
 
-  setActive(userManagement: IUserManagement, isActivated: boolean): void {
-    this.userService.update({ ...userManagement, activated: isActivated }).subscribe(() => this.loadAll());
-  }
-
-  trackIdentity(item: IUserManagement): <%- user.primaryKey.tsType %> {
-    return item.id!;
-  }
-
-  deleteUser(userManagement: IUserManagement): void {
-    const modalRef = this.modalService.open(UserManagementDeleteDialog, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.userManagement = userManagement;
-    // unsubscribe not needed because closed completes on modal close
-    modalRef.closed.subscribe(reason => {
-      if (reason === 'deleted') {
-        this.loadAll();
+  constructor() {
+<%_ if (!paginationNo) { _%>
+    effect(() => {
+      const headers = this.userService.usersResource.headers();
+      if (headers) {
+        this.fillComponentAttributesFromResponseHeader(headers);
       }
     });
-  }
-
-  loadAll(): void {
-    this.isLoading.set(true);
-    this.userService
-      .query(<% if (!locals.databaseTypeCassandra) { %>{
-        page: this.page() - 1,
-        size: this.itemsPerPage(),
-        sort: this.sortService.buildSortParam(this.sortState(), 'id'),
-      }<% } %>)
-      .subscribe({
-        next: (res: HttpResponse<IUserManagement[]>) => {
-          this.isLoading.set(false);
-          this.onSuccess(res.body<% if (!locals.databaseTypeCassandra) { %>, res.headers<% } %>);
-        },
-        error: () => this.isLoading.set(false),
-      });
-  }
-
-<%_ if (!locals.databaseTypeCassandra) { _%>
-  transition(sortState?: SortState): void {
-    this.router.navigate(['./'], {
-      relativeTo: this.activatedRoute.parent,
-      queryParams: {
-        page: this.page(),
-        sort: this.sortService.buildSortParam(sortState ?? this.sortState()),
-      },
+<%_ } _%>
+    effect(() => {
+      this.users.<% if (paginationInfiniteScroll) { %>update(users => <% } else { %>set(<% } %>this.fillComponentAttributesFromResponseBody([...this.userService.users()]<% if (paginationInfiniteScroll) { %>, users<% } %>));
     });
   }
 
-  private handleNavigation(): void {
-    combineLatest([this.activatedRoute.data, this.activatedRoute.queryParamMap]).subscribe(([data, params]) => {
+    trackIdentity = (item: IUser): string => this.userService.getUserIdentifier(item);
+
+    loadAuthorities(): void {
+      this.userService.authorities().subscribe(authorities => this.authorities.set(authorities));
+    }
+
+    setActive(user: IUser, isActivated: boolean): void {
+      this.userService.update({ ...user, activated: isActivated }).subscribe(() => this.load());
+    }
+
+    ngOnInit(): void {
+      this.loadAuthorities();
+      this.subscription = combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
+        tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
+<%_ if (paginationInfiniteScroll) { _%>
+        tap(() => this.reset()),
+<%_ } _%>
+<%_ if (!paginationNo || searchEngineAny || jpaMetamodelFiltering) { _%>
+        tap(() => this.load()),
+<%_ } else { _%>
+        tap(() => {
+          if (this.users().length === 0) {
+            this.load();
+          }
+        }),
+<%_ } _%>
+      ).subscribe();
+
+<% if (jpaMetamodelFiltering && paginationPagination) { %>
+      this.filters.filterChanges.subscribe(filterOptions => this.handleNavigation(1, this.sortState(), filterOptions));
+<%_ } _%>
+    }
+
+<%_ if (paginationInfiniteScroll) { _%>
+  reset(): void {
+    this.users.set([]);
+  }
+
+    loadNextPage(): void {
+      this.load();
+    }
+
+<%_ } _%>
+<%_ if (searchEngineAny) { _%>
+    search(query: string): void {
+  <%_ if (paginationPagination) { _%>
+      this.page.set(1);
+  <%_ } _%>
+      this.currentSearch.set(query);
+  <%_ if (notSortableFieldsAfterSearch) { _%>
+      const { predicate } = this.sortState();
+      if (query && predicate && UserManagement.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(predicate)) {
+        this.navigateToWithComponentValues(this.getDefaultSortState());
+        return;
+      }
+  <%_ } _%>
+      this.navigateToWithComponentValues(this.sortState());
+    }
+
+    getDefaultSortState(): SortState {
+  <%_ if (notSortableFieldsAfterSearchFieldNames.includes(primaryKey.name)) { _%>
+      return {};
+  <%_ } else { _%>
+      return this.sortService.parseSortParam(this.activatedRoute.snapshot.data[DEFAULT_SORT_DATA]);
+  <%_ } _%>
+    }
+<%_ } _%>
+
+<%_ if (anyFieldIsBlobDerived) { _%>
+    byteSize(base64String: string): string {
+      return this.dataUtils.byteSize(base64String);
+    }
+
+    openFile(base64String: string, contentType: string | null | undefined): void {
+      return this.dataUtils.openFile(base64String, contentType);
+    }
+
+<%_ } _%>
+<%_ if (!readOnly) { _%>
+    delete(user: IUser): void {
+      const modalRef = this.modalService.open(UserManagementDeleteDialog, { size: 'lg', backdrop: 'static' });
+      modalRef.componentInstance.user = user;
+      // unsubscribe not needed because closed completes on modal close
+      modalRef.closed
+        .pipe(
+          filter(reason => reason === ITEM_DELETED_EVENT),
+          tap(() => this.load())
+        ).subscribe();
+    }
+
+<%_ } _%>
+  load(): void {
+    this.queryBackend();
+  }
+
+    navigateToWithComponentValues(event: SortState): void {
+      this.handleNavigation(<% if (paginationPagination) { %>this.page(), <% } %>event<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngineAny) { %>, this.currentSearch()<% } %>);
+    }
+
+<%_ if (paginationPagination) { _%>
+    navigateToPage(page: number): void {
+      this.handleNavigation(page, this.sortState()<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngineAny) { %>, this.currentSearch()<% } %>);
+    }
+
+<%_ } _%>
+    protected fillComponentAttributeFromRoute(params: ParamMap, data: Data): void {
+<%_ if (paginationPagination) { _%>
       const page = params.get(PAGE_HEADER);
-      this.page.set(+(page ?? 1));
-      this.sortState.set(this.sortService.parseSortParam(params.get(SORT) ?? data.defaultSort));
-      this.loadAll();
-    });
+      this.page.set(+ (page ?? 1));
+<%_ } _%>
+      this.sortState.set(this.sortService.parseSortParam(params.get(SORT) ?? data[DEFAULT_SORT_DATA]));
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+      this.filters.initializeFromParams(params);
+<%_ } _%>
+<%_ if (searchEngineAny) { _%>
+      if (params.has('search') && params.get('search') !== '') {
+        this.currentSearch.set(params.get('search') as string);
+  <%_ if (notSortableFieldsAfterSearch) { _%>
+          const { predicate } = this.sortState();
+          if (predicate && UserManagement.NOT_SORTABLE_FIELDS_AFTER_SEARCH.includes(predicate)) {
+            this.sortState.set({});
+          }
+  <%_ } _%>
+      }
+<%_ } _%>
+    }
+
+<%_ if (paginationNo) { _%>
+    protected refineData(data: IUser[]): IUser[] {
+      const { predicate, order } = this.sortState();
+      return predicate && order ? data.sort(this.sortService.startSort({ predicate, order })) : data;
+    }
+
+<%_ } _%>
+  protected fillComponentAttributesFromResponseBody(data: IUser[]<% if (paginationInfiniteScroll) { %>, currentValue: IUser[]<% } %>): IUser[] {
+<%_ if (paginationInfiniteScroll) { _%>
+    const usersNew = [...currentValue];
+    for (const d of data) {
+      if (!usersNew.some(op => op.login === d.login)) {
+        usersNew.push(d);
+      }
+    }
+    return usersNew;
+<%_ } else if (paginationNo) { _%>
+    return this.refineData(data);
+<%_ } else { _%>
+    return data;
+<%_ } _%>
   }
+
+<%_ if (!paginationNo) { _%>
+    protected fillComponentAttributesFromResponseHeader(headers: HttpHeaders): void {
+  <%_ if (paginationPagination) { _%>
+      this.totalItems.set(Number(headers.get(TOTAL_COUNT_RESPONSE_HEADER)));
+  <%_ } else if (paginationInfiniteScroll) { _%>
+      const linkHeader = headers.get('link');
+      if (linkHeader) {
+        this.links.set(this.parseLinks.parseAll(linkHeader));
+      } else {
+        this.links.set({});
+      }
+  <%_ } _%>
+    }
+
+<%_ } _%>
+    protected queryBackend(): void {
+<%_ if (paginationPagination) { _%>
+      const pageToLoad: number = this.page();
+<%_ } _%>
+      const queryObject<% if ((jpaMetamodelFiltering && paginationPagination) || searchEngine) { %>: any <% } %> = {
+<%_ if (paginationPagination) { _%>
+        page: pageToLoad - 1,
+<%_ } _%>
+<%_ if (!paginationNo) { _%>
+        size: this.itemsPerPage(),
+<%_ } _%>
+<%_ if(implementsEagerLoadApis || containsBagRelationships) { _%>
+        eagerload: true,
+<%_ } _%>
+<%_ if (searchEngineAny) { _%>
+        query: this.currentSearch(),
+<%_ } _%>
+<%_ if (!paginationInfiniteScroll) { _%>
+        sort: this.sortService.buildSortParam(this.sortState()),
+<%_ } _%>
+      };
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+      for (const filterOption of this.filters.filterOptions) {
+        queryObject[filterOption.name] = filterOption.values;
+      }
+<%_ } _%>
+<%_ if (paginationInfiniteScroll) { _%>
+      if (this.hasMorePage()) {
+        Object.assign(queryObject, this.links().next);
+      } else if (this.isFirstFetch()) {
+        Object.assign(queryObject, { sort: this.sortService.buildSortParam(this.sortState()) });
+      }
+
+<%_ } _%>
+      this.userService.usersParams.set(queryObject);
+    }
+
+    protected handleNavigation(<% if (paginationPagination) { %>page: number, <% } %>sortState: SortState<% if (jpaMetamodelFiltering && paginationPagination) { %>, filterOptions?: IFilterOption[]<% } %><% if (searchEngineAny) { %>, currentSearch?: string<% } %>): void {
+<%_ if (paginationInfiniteScroll) { _%>
+      this.links.set({});
+
+<%_ } _%>
+      const queryParamsObj
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>: any
+<%_ } _%> = {
+<%_ if (searchEngineAny) { _%>
+        search: currentSearch,
+<%_ } _%>
+<%_ if (paginationPagination) { _%>
+        page,
+        size: this.itemsPerPage(),
+<%_ } _%>
+        sort: this.sortService.buildSortParam(sortState),
+      };
+
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
+      if (filterOptions) {
+        for (const filterOption of filterOptions) {
+          queryParamsObj[filterOption.nameAsQueryParam()] = filterOption.values;
+        }
+      }
 <%_ } _%>
 
-  private onSuccess(users: IUserManagement[] | null<% if (!locals.databaseTypeCassandra) { %>, headers: HttpHeaders<% } %>): void {
-<%_ if (!locals.databaseTypeCassandra) { _%>
-    this.totalItems.set(Number(headers.get(TOTAL_COUNT_RESPONSE_HEADER)));
-<%_ } _%>
-    this.users.set(users);
-  }
+      this.router.navigate(['./'], {
+        relativeTo: this.activatedRoute,
+        queryParams: queryParamsObj,
+      });
+    }
 }

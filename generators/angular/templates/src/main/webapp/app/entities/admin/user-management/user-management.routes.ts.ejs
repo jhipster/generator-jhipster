@@ -19,17 +19,15 @@
 import { Routes } from '@angular/router';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
-import <%- entityAngularName %>Resolve from './route/<%- entityFileName %>-routing-resolve.service';
-import { ASC } from 'app/config/navigation.constants';
 
-const <%- entityInstance %>Route: Routes = [
+import userResolve from './route/user-management-routing-resolve.service';
+
+const userRoute: Routes = [
   {
     path: '',
-    loadComponent: () => import('./list/<%- entityFileName %>').then(m => m.<%- entityAngularName %>),
+    loadComponent: () => import('./list/user-management').then(m => m.UserManagement),
     data: {
-<%_ if (primaryKey.typeLong && primaryKey.autoGenerate && !builtInUserManagement) { _%>
-      defaultSort: '<%- primaryKey.name %>,' + ASC,
-<%_ } _%>
+      defaultSort: 'id,asc',
 <%_ if (entityAngularReadAuthorities) { _%>
       authorities: [<%- entityAngularReadAuthorities %>],
 <%_ } _%>
@@ -37,48 +35,48 @@ const <%- entityInstance %>Route: Routes = [
     canActivate: [UserRouteAccessService],
   },
   {
-    path: ':<% if (builtInUserManagement) { %>login<% } else { %><%- primaryKey.name %><% } %>/view',
-    loadComponent: () => import('./detail/<%- entityFileName %>-detail').then(m => m.<%- entityAngularName %>Detail),
+    path: ':login/view',
+    loadComponent: () => import('./detail/user-management-detail').then(m => m.UserDetail),
     resolve: {
-      <%- entityInstance %>: <%- entityAngularName %>Resolve
+      user: userResolve
     },
 <%_ if (entityAngularReadAuthorities) { _%>
     data: {
       authorities: [<%- entityAngularReadAuthorities %>],
     },
 <%_ } _%>
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
   },
 <%_ if (!readOnly) { _%>
   {
     path: 'new',
-    loadComponent: () => import('./update/<%- entityFileName %>-update').then(m => m.<%- entityAngularName %>Update),
+    loadComponent: () => import('./update/user-management-update').then(m => m.UserUpdate),
     resolve: {
-      <%- entityInstance %>: <%- entityAngularName %>Resolve
+      user: userResolve
     },
   <%_ if (entityAngularAuthorities) { _%>
     data: {
       authorities: [<%- entityAngularAuthorities %>],
     },
   <%_ } _%>
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
   },
 <%_ } _%>
 <%_ if (!readOnly && updatableEntity) { _%>
   {
-    path: ':<% if (builtInUserManagement) { %>login<% } else { %><%- primaryKey.name %><% } %>/edit',
-    loadComponent: () => import('./update/<%- entityFileName %>-update').then(m => m.<%- entityAngularName %>Update),
+    path: ':login/edit',
+    loadComponent: () => import('./update/user-management-update').then(m => m.UserUpdate),
     resolve: {
-      <%- entityInstance %>: <%- entityAngularName %>Resolve
+      user: userResolve
     },
   <%_ if (entityAngularAuthorities) { _%>
     data: {
       authorities: [<%- entityAngularAuthorities %>],
     },
   <%_ } _%>
-    canActivate: [UserRouteAccessService]
+    canActivate: [UserRouteAccessService],
   },
 <%_ } _%>
 ];
 
-export default <%- entityInstance %>Route;
+export default userRoute;
