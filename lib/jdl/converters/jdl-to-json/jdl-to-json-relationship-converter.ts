@@ -28,7 +28,7 @@ import type { JSONRelationship } from '../../core/types/json-config.ts';
 const {
   Validations: { REQUIRED },
 } = validations;
-const { BUILT_IN_ENTITY } = relationshipOptions;
+const { BUILT_IN_ENTITY, CASCADE } = relationshipOptions;
 
 let convertedRelationships: Map<string, any[]>;
 
@@ -150,6 +150,8 @@ function setOptionsForRelationshipSourceSide(
   relationshipToConvert.forEachGlobalOption((optionName, optionValue) => {
     if (optionName === BUILT_IN_ENTITY) {
       convertedRelationship.relationshipWithBuiltInEntity = optionValue;
+    } else if (optionName === CASCADE) {
+      convertedRelationship.options![optionName] = optionValue;
     } else {
       convertedRelationship.options![optionName] = optionValue;
     }

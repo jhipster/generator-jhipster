@@ -32,7 +32,7 @@ import type { JDLRuntime } from '../types/runtime.ts';
 import deduplicate from '../utils/array-utils.ts';
 import logger from '../utils/objects/logger.ts';
 
-const { BUILT_IN_ENTITY } = relationshipOptions;
+const { BUILT_IN_ENTITY, CASCADE } = relationshipOptions;
 const {
   Validations: { PATTERN, REQUIRED, UNIQUE },
 } = validations;
@@ -377,13 +377,16 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       return context.relationshipOption.map(this.visit, this).reduce((final, current) => [...final, current], []);
     }
 
-    relationshipOption(context: Record<'BUILT_IN_ENTITY', IToken[]>) {
+    relationshipOption(context: Record<'BUILT_IN_ENTITY' | 'CASCADE', IToken[]>) {
       if (context.BUILT_IN_ENTITY) {
         return { optionName: BUILT_IN_ENTITY, type: 'UNARY' };
       }
+      if (context.CASCADE) {
+        return { optionName: CASCADE, type: 'UNARY' };
+      }
 
       /* istanbul ignore next */
-      throw new Error(`No valid relationship option found, expected '${context.BUILT_IN_ENTITY}'.`);
+      throw new Error(`No valid relationship option found, expected '${context.BUILT_IN_ENTITY}' or '${context.CASCADE}'.`);
     }
 
     enumDeclaration(context: Record<'NAME' | 'JAVADOC', IToken[]> & Record<'enumPropList', CstNode[]>) {
