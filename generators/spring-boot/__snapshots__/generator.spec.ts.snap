@@ -219,7 +219,7 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
     "SPRING_DATASOURCE_URL": "jdbc:postgresql://postgresql:5432/jhipster",
     "SPRING_DATASOURCE_USERNAME": undefined,
     "SPRING_LIQUIBASE_URL": "jdbc:postgresql://postgresql:5432/jhipster",
-    "SPRING_PROFILES_ACTIVE": "prod,api-docs",
+    "SPRING_PROFILES_ACTIVE": "prod,api-docs,secret-samples",
     "_JAVA_OPTIONS": "-Xmx512m -Xms256m",
   },
   "dockerContainers": {
@@ -1090,7 +1090,7 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
     "SPRING_DATASOURCE_URL": "jdbc:postgresql://postgresql:5432/jhipster",
     "SPRING_DATASOURCE_USERNAME": undefined,
     "SPRING_LIQUIBASE_URL": "jdbc:postgresql://postgresql:5432/jhipster",
-    "SPRING_PROFILES_ACTIVE": "prod,api-docs",
+    "SPRING_PROFILES_ACTIVE": "prod,api-docs,secret-samples",
     "SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI": "http://keycloak:9080/realms/jhipster",
     "SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID": "web_app",
     "SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET": "web_app",

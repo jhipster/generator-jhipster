@@ -158,7 +158,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
     "SPRING_DATASOURCE_URL": "jdbc:postgresql://postgresql:5432/jhipster",
     "SPRING_DATASOURCE_USERNAME": undefined,
     "SPRING_LIQUIBASE_URL": "jdbc:postgresql://postgresql:5432/jhipster",
-    "SPRING_PROFILES_ACTIVE": "prod,api-docs",
+    "SPRING_PROFILES_ACTIVE": "prod,api-docs,secret-samples",
     "_JAVA_OPTIONS": "-Xmx512m -Xms256m",
   },
   "dockerContainers": Any<Object>,

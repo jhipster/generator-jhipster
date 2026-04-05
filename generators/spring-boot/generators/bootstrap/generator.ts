@@ -74,7 +74,7 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
 
         mutateData(dockerApplicationEnvironment as any, {
           _JAVA_OPTIONS: '-Xmx512m -Xms256m',
-          SPRING_PROFILES_ACTIVE: 'prod,api-docs',
+          SPRING_PROFILES_ACTIVE: 'prod,api-docs,secret-samples',
           MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED: 'true',
         });
 
