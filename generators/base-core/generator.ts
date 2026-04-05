@@ -456,6 +456,13 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     if (!generatorCommand.configs) {
       throw new Error(`Configs not found for generator ${this.options.namespace}`);
     }
+    // added gaurd
+    if (generatorCommand.configs) {
+      this._parseJHipsterArguments(extractArgumentsFromConfigs(generatorCommand.configs));
+    }
+
+    // Parse arguments after configs are fully loaded
+    this._parseJHipsterArguments(extractArgumentsFromConfigs(generatorCommand.configs));
 
     for (const [name, def] of Object.entries(generatorCommand.configs)) {
       def.configure?.(this, (this.options as any)[name]);
@@ -494,8 +501,6 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   #parseJHipsterCommand(commandDef: JHipsterCommandDefinition) {
     if (commandDef.arguments) {
       this._parseJHipsterArguments(commandDef.arguments);
-    } else if (commandDef.configs) {
-      this._parseJHipsterArguments(extractArgumentsFromConfigs(commandDef.configs));
     }
     if (commandDef.configs) {
       this.#parseJHipsterConfigs(commandDef.configs);
