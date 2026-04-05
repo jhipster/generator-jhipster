@@ -38,7 +38,7 @@ import AppRoutes from 'app/routes';
 import { setTextDirection } from './config/translation';
 <%_ } _%>
 
-const baseHref = document.querySelector('base').getAttribute('href').replace(/\/$/, '');
+const baseHref = document.querySelector('base')!.getAttribute('href')!.replace(/\/$/, '');
 
 export const App = () => {
   const dispatch = useAppDispatch();

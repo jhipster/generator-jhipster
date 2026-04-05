@@ -19,13 +19,18 @@
 {
 <%_ if (clientFrameworkVue) { _%>
   "extends": "@vue/tsconfig/tsconfig.dom.json",
-<%_ } else { _%>
+<%_ } else if (clientFrameworkAngular) { _%>
   "extends": "<%- this.relativeDir(cypressDir, clientRootDir) %>tsconfig.json",
 <%_ } _%>
   "compilerOptions": {
+<%_ if (clientFrameworkReact) { _%>
+    "ignoreDeprecations": "6.0",
+<%_ } _%>
     "baseUrl": "./",
     "sourceMap": false,
+<%_ if (!clientFrameworkReact) { _%>
     "outDir": "<%- this.relativeDir(cypressDir, temporaryDir) %>cypress/tsc",
+<%_ } _%>
     "target": "es2018",
     "types": ["cypress", "node"]
   },
