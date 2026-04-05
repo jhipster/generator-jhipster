@@ -9,7 +9,7 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
-  "clientDistDir": "target/classes/static/",
+  "clientDistDir": "dist/",
   "defaultAdminPassword": "admin",
   "defaultAdminRoles": [
     "ADMIN",
@@ -28,6 +28,6 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "serverPort": 8081,
   "srcMain": "src/main/",
   "srcTest": "src/test/",
-  "temporaryDir": "target/",
+  "temporaryDir": "temp/",
 }
 `;
