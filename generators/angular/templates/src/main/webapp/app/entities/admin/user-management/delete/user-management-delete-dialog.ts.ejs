@@ -18,7 +18,7 @@
 -%>
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap/modal';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
@@ -39,8 +39,8 @@ import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 export class <%- entityAngularName %>DeleteDialog {
     <%- entityInstance %>?: I<%- entityAngularName %>;
 
-    protected readonly <%- entityInstance %>Service = inject(<%- entityAngularName %>Service);
-    protected readonly activeModal = inject(NgbActiveModal);
+    protected <%- entityInstance %>Service = inject(<%- entityAngularName %>Service);
+    protected activeModal = inject(NgbActiveModal);
 
     cancel(): void {
         this.activeModal.dismiss();
