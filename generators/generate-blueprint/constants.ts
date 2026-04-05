@@ -31,6 +31,7 @@ export const SUB_GENERATORS = 'subGenerators';
 export const ADDITIONAL_SUB_GENERATORS = 'additionalSubGenerators';
 export const DYNAMIC = 'dynamic';
 export const JS = 'js';
+export const TS = 'ts';
 export const LOCAL_BLUEPRINT_OPTION = 'localBlueprint';
 export const CLI_OPTION = 'cli';
 
@@ -47,15 +48,20 @@ export const requiredConfig = () => ({});
 /**
  * Default config that will be used for templates
  */
-export const defaultConfig = ({ config = {} }: { config?: any } = {}) => ({
-  ...requiredConfig,
-  [DYNAMIC]: false,
-  [JS]: !config[LOCAL_BLUEPRINT_OPTION],
-  [LOCAL_BLUEPRINT_OPTION]: false,
-  [CLI_OPTION]: !config[LOCAL_BLUEPRINT_OPTION],
-  [SUB_GENERATORS]: [] as string[],
-  [ADDITIONAL_SUB_GENERATORS]: '',
-});
+export const defaultConfig = ({ config = {} }: { config?: any } = {}) => {
+  const tsEnabled = config[TS] ?? true;
+
+  return {
+    ...requiredConfig,
+    [DYNAMIC]: false,
+    [JS]: !config[LOCAL_BLUEPRINT_OPTION] && !tsEnabled,
+    [TS]: tsEnabled,
+    [LOCAL_BLUEPRINT_OPTION]: false,
+    [CLI_OPTION]: !config[LOCAL_BLUEPRINT_OPTION],
+    [SUB_GENERATORS]: [] as string[],
+    [ADDITIONAL_SUB_GENERATORS]: '',
+  };
+};
 
 export const defaultSubGeneratorConfig = () => ({
   [SBS]: true,
@@ -75,7 +81,8 @@ export const allGeneratorsConfig = () => ({
   [SUB_GENERATORS]: lookupGeneratorsNamespaces(),
   [ADDITIONAL_SUB_GENERATORS]: '',
   [DYNAMIC]: false,
-  [JS]: true,
+  [JS]: false,
+  [TS]: true,
   generators: Object.fromEntries(lookupGeneratorsNamespaces().map(subGenerator => [subGenerator, allSubGeneratorConfig(subGenerator)])),
 });
 
@@ -109,6 +116,13 @@ export const prompts = () => {
     },
     {
       when: (answers: any) => !answers[LOCAL_BLUEPRINT_OPTION],
+      type: 'confirm',
+      name: TS,
+      message: 'Do you want to use TypeScript for the blueprint?',
+      default: true,
+    },
+    {
+      when: (answers: any) => !answers[LOCAL_BLUEPRINT_OPTION] && !answers[TS],
       type: 'confirm',
       name: CLI_OPTION,
       message: 'Add a cli?',
