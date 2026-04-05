@@ -24,20 +24,16 @@
    endConfigSection: 0,
  });
 _&>
-import globals from 'globals';
+import { defineConfig } from 'eslint/config';
 import prettier from 'eslint-plugin-prettier/recommended';
+import globals from 'globals';
 <%_ if (typescriptEslint) { _%>
 import tseslint from 'typescript-eslint';
-import { defineConfig } from 'eslint/config';
 <%_ } _%>
 <&- fragments.importsSection() -&>
 // jhipster-needle-eslint-add-import - JHipster will add additional import here
 
-<%_ if (typescriptEslint) { _%>
 export default defineConfig(
-<%_ } else { _%>
-export default [
-<%_ } _%>
   {
     languageOptions: {
       globals: {
@@ -55,8 +51,4 @@ export default [
   prettier,
 <%_ } _%>
 <&- fragments.endConfigSection() -&>
-<%_ if (typescriptEslint) { _%>
 );
-<%_ } else { _%>
-];
-<%_ } _%>

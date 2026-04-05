@@ -3522,6 +3522,13 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
         "tinyglobby": null,
       },
     },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": "JITI_VERSION",
+      },
+    },
   ],
 }
 `;
@@ -4790,6 +4797,13 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
         "tinyglobby": null,
       },
     },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": "JITI_VERSION",
+      },
+    },
   ],
 }
 `;
@@ -5836,6 +5850,13 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
         "webpack": "WEBPACK_VERSION",
       },
     },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": "JITI_VERSION",
+      },
+    },
   ],
 }
 `;
@@ -6880,6 +6901,13 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
       "overrides": {
         "browser-sync": "BROWSER_SYNC_VERSION",
         "webpack": "WEBPACK_VERSION",
+      },
+    },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": "JITI_VERSION",
       },
     },
   ],
@@ -8326,6 +8354,13 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
         "tinyglobby": null,
       },
     },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": "JITI_VERSION",
+      },
+    },
   ],
 }
 `;
@@ -9339,6 +9374,13 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
         "@angular-builders/custom-esbuild": null,
         "@angular/build": null,
         "tinyglobby": null,
+      },
+    },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": "JITI_VERSION",
       },
     },
   ],
@@ -10364,6 +10406,13 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
         "@angular-builders/custom-esbuild": null,
         "@angular/build": null,
         "tinyglobby": null,
+      },
+    },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": "JITI_VERSION",
       },
     },
   ],
