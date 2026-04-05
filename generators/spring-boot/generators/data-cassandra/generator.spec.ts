@@ -59,7 +59,7 @@ describe(`generator - ${databaseType}`, () => {
         await helpers
           .runJHipster('server')
           .withJHipsterConfig(sampleConfig, entities)
-          .withMockedSource({ except: ['addTestSpringFactory'] })
+          .withMockedSource()
           .withMockedJHipsterGenerators({
             except: ['jhipster:spring-boot:data-cassandra'],
             filter: filterBasicServerGenerators,
