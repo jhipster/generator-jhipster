@@ -3530,6 +3530,18 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
       },
     },
   ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "src/**/*.html",
+          "options": {
+            "parser": "angular",
+          },
+        },
+      ],
+    },
+  ],
 }
 `;
 
@@ -4805,6 +4817,18 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
       },
     },
   ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "src/**/*.html",
+          "options": {
+            "parser": "angular",
+          },
+        },
+      ],
+    },
+  ],
 }
 `;
 
@@ -5858,6 +5882,18 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
       },
     },
   ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "src/**/*.html",
+          "options": {
+            "parser": "angular",
+          },
+        },
+      ],
+    },
+  ],
 }
 `;
 
@@ -6909,6 +6945,18 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
         "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
         "jiti": "JITI_VERSION",
       },
+    },
+  ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "src/main/webapp/**/*.html",
+          "options": {
+            "parser": "angular",
+          },
+        },
+      ],
     },
   ],
 }
@@ -8362,6 +8410,18 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
       },
     },
   ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "src/main/webapp/**/*.html",
+          "options": {
+            "parser": "angular",
+          },
+        },
+      ],
+    },
+  ],
 }
 `;
 
@@ -9382,6 +9442,18 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
         "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
         "jiti": "JITI_VERSION",
       },
+    },
+  ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "src/main/webapp/**/*.html",
+          "options": {
+            "parser": "angular",
+          },
+        },
+      ],
     },
   ],
 }
@@ -10414,6 +10486,18 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
         "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
         "jiti": "JITI_VERSION",
       },
+    },
+  ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "src/main/webapp/**/*.html",
+          "options": {
+            "parser": "angular",
+          },
+        },
+      ],
     },
   ],
 }
