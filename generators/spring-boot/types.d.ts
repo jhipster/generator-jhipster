@@ -89,6 +89,7 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
 
   reactiveOtherEntities: Set<this>;
   reactiveUniqueEntityTypes: Set<string>;
+  requiresPersistableImplementation?: boolean;
 }
 
 export type Source = JavaSource &
