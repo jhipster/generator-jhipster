@@ -9,16 +9,17 @@ import type {
 
 export const extractArgumentsFromConfigs = (configs: JHipsterConfigs | undefined): JHipsterArgumentsWithChoices => {
   if (!configs) return {};
+
   return Object.fromEntries(
     Object.entries(configs)
-      .filter(([_name, def]) => def.argument)
+      .filter(([_name, def]) => def?.argument)
       .map(([name, def]) => [
         name,
         {
-          description: def.description,
-          scope: def.scope,
-          choices: def.choices,
-          ...def.argument,
+          description: def?.description,
+          scope: def?.scope,
+          choices: def?.choices,
+          ...(def?.argument ?? {}),
         },
       ]),
   ) as JHipsterArgumentsWithChoices;
