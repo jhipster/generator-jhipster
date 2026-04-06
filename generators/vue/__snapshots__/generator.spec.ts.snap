@@ -103,10 +103,10 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
     "USER",
   ],
   "defaultAdminUsername": "admin",
-  "defaultEnvironment": undefined,
-  "defaultEnvironmentAny": false,
+  "defaultEnvironment": "prod",
+  "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
-  "defaultEnvironmentProd": false,
+  "defaultEnvironmentProd": true,
   "defaultPackaging": undefined,
   "defaultPackagingAny": false,
   "defaultPackagingJar": false,
@@ -950,10 +950,10 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
     "USER",
   ],
   "defaultAdminUsername": "admin",
-  "defaultEnvironment": undefined,
-  "defaultEnvironmentAny": false,
+  "defaultEnvironment": "prod",
+  "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
-  "defaultEnvironmentProd": false,
+  "defaultEnvironmentProd": true,
   "defaultPackaging": undefined,
   "defaultPackagingAny": false,
   "defaultPackagingJar": false,
@@ -1857,10 +1857,10 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
     "USER",
   ],
   "defaultAdminUsername": "admin",
-  "defaultEnvironment": undefined,
-  "defaultEnvironmentAny": false,
+  "defaultEnvironment": "prod",
+  "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
-  "defaultEnvironmentProd": false,
+  "defaultEnvironmentProd": true,
   "defaultPackaging": undefined,
   "defaultPackagingAny": false,
   "defaultPackagingJar": false,
@@ -2740,10 +2740,10 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "USER",
   ],
   "defaultAdminUsername": "admin",
-  "defaultEnvironment": undefined,
-  "defaultEnvironmentAny": false,
+  "defaultEnvironment": "prod",
+  "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
-  "defaultEnvironmentProd": false,
+  "defaultEnvironmentProd": true,
   "defaultPackaging": undefined,
   "defaultPackagingAny": false,
   "defaultPackagingJar": false,
@@ -2940,7 +2940,7 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "webappEnumerationsDir": "src/main/webapp/app/shared/model/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
-  "withAdminUi": false,
+  "withAdminUi": true,
   "withGeneratedFlag": undefined,
 }
 `;
@@ -2989,10 +2989,79 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "src/main/webapp/app/account/login.service.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/admin/configuration/configuration.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.vue": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/admin/docs/docs.component.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/docs/docs.vue": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health-modal.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health-modal.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health-modal.vue": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.vue": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.vue": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics-modal.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics-modal.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics-modal.vue": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.component.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.component.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.vue": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/app.component.ts": {
@@ -3613,10 +3682,10 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
     "USER",
   ],
   "defaultAdminUsername": "admin",
-  "defaultEnvironment": undefined,
-  "defaultEnvironmentAny": false,
+  "defaultEnvironment": "prod",
+  "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
-  "defaultEnvironmentProd": false,
+  "defaultEnvironmentProd": true,
   "defaultPackaging": undefined,
   "defaultPackagingAny": false,
   "defaultPackagingJar": false,
@@ -4605,10 +4674,10 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
     "USER",
   ],
   "defaultAdminUsername": "admin",
-  "defaultEnvironment": undefined,
-  "defaultEnvironmentAny": false,
+  "defaultEnvironment": "prod",
+  "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
-  "defaultEnvironmentProd": false,
+  "defaultEnvironmentProd": true,
   "defaultPackaging": undefined,
   "defaultPackagingAny": false,
   "defaultPackagingJar": false,
@@ -5426,10 +5495,10 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
     "USER",
   ],
   "defaultAdminUsername": "admin",
-  "defaultEnvironment": undefined,
-  "defaultEnvironmentAny": false,
+  "defaultEnvironment": "prod",
+  "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
-  "defaultEnvironmentProd": false,
+  "defaultEnvironmentProd": true,
   "defaultPackaging": undefined,
   "defaultPackagingAny": false,
   "defaultPackagingJar": false,

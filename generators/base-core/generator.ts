@@ -18,7 +18,7 @@
  */
 import assert from 'node:assert';
 import { existsSync, rmSync, statSync } from 'node:fs';
-import { basename, extname, isAbsolute, join, join as joinPath, relative } from 'node:path';
+import path, { basename, extname, isAbsolute, join, join as joinPath, relative } from 'node:path';
 import { relative as posixRelative } from 'node:path/posix';
 
 import { requireNamespace } from '@yeoman/namespace';
@@ -339,49 +339,6 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     const { loadCommand = [], skipLoadCommand } = this.features;
 
     this.queueTask({
-      queueName: QUEUES.LOADING_QUEUE,
-      taskName: 'loadCurrentCommand',
-      cancellable: true,
-      async method() {
-        if (!skipLoadCommand) {
-          try {
-            const command = await this.#getCurrentJHipsterCommand();
-            if (!command.configs) return;
-
-            const context = this.context;
-            loadConfig.call(this, command.configs, { application: context });
-            loadDerivedConfig(command.configs, { application: context });
-          } catch {
-            // Ignore non existing command
-          }
-
-          const split = this.options.namespace.split(':');
-          if (split.length === 3 && split[2] === 'bootstrap') {
-            const parentMeta = this.env.getGeneratorMeta(this.options.namespace.replace(':bootstrap', ''));
-            const parentModule: any = await parentMeta?.importModule?.();
-            if (parentModule?.command?.configs) {
-              const context = this.context;
-              if (context) {
-                loadConfig.call(this, parentModule.command.configs, { application: context });
-                loadDerivedConfig(parentModule.command.configs, { application: context });
-              }
-            }
-          }
-        }
-
-        if (loadCommand.length > 0) {
-          const context = this.context;
-          for (const commandToLoad of loadCommand) {
-            if (commandToLoad.configs) {
-              loadConfig.call(this, commandToLoad.configs, { application: context });
-              loadDerivedConfig(commandToLoad.configs, { application: context });
-            }
-          }
-        }
-      },
-    });
-
-    this.queueTask({
       queueName: QUEUES.PREPARING_QUEUE,
       taskName: 'preparingCurrentCommand',
       cancellable: true,
@@ -392,9 +349,30 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
             if (!command.configs) return;
 
             const context = this.context;
+            loadConfig.call(this, command.configs, { application: context });
             loadConfigDefaults(command.configs, { context, scopes: ['blueprint', 'storage', 'context'] });
+            loadDerivedConfig(command.configs, { application: context });
           } catch {
             // Ignore non existing command
+          }
+
+          const split = this.options.namespace.split(':');
+          if (split.length === 3 && split[2] === 'bootstrap') {
+            const parentMeta = this.env.getGeneratorMeta(this.options.namespace.replace(':bootstrap', ''));
+            const parentModule: any = await parentMeta?.importModule?.();
+            let configs = parentModule?.command?.configs;
+            if (parentModule === undefined) {
+              // When testing with mocked generators, parentModule is undefined. Try to get the command from path.
+              configs = (await import(path.join(this.options.resolved!, '../../../index.ts'))).command?.configs;
+            }
+            if (configs) {
+              const context = this.context;
+              if (context) {
+                loadConfig.call(this, configs, { application: context });
+                loadConfigDefaults(configs, { context, scopes: ['blueprint', 'storage', 'context'] });
+                loadDerivedConfig(configs, { application: context });
+              }
+            }
           }
         }
 
@@ -402,7 +380,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
           const context = this.context;
           for (const commandToLoad of loadCommand) {
             if (commandToLoad.configs) {
+              loadConfig.call(this, commandToLoad.configs, { application: context });
               loadConfigDefaults(commandToLoad.configs, { context, scopes: ['blueprint', 'storage', 'context'] });
+              loadDerivedConfig(commandToLoad.configs, { application: context });
             }
           }
         }

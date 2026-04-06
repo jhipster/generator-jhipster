@@ -186,14 +186,6 @@ const command = {
         }
       },
     },
-    databaseType: {
-      cli: {
-        type: String,
-        hide: true,
-      },
-      choices: ['sql', 'mongodb', 'couchbase', 'cassandra', 'neo4j', 'no'],
-      scope: 'storage',
-    },
     databaseMigration: {
       description: 'Database migration',
       cli: {

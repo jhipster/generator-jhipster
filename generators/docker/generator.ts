@@ -50,12 +50,14 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
 
     await this.dependsOnBootstrap('docker');
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrap('common');
+      await this.dependsOnBootstrap('server');
     }
   }
 
-  get preparing() {
-    return this.asPreparingTaskGroup({
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      // Run in the post preparing phase to be able to use the application prepared by every other generators.
+      // This generator is not guaranteed to be run before spring-boot bootstrap, so we should postpone the preparation.
       async dockerServices({ application }) {
         const dockerServices = application.dockerServices;
         if (application.authenticationTypeOauth2) {
@@ -147,8 +149,8 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
-    return this.preparing;
+  get [BaseApplicationGenerator.POST_PREPARING]() {
+    return this.postPreparing;
   }
 
   get writing() {

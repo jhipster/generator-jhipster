@@ -67,7 +67,7 @@ export const mutateApplication = {
   clientThemeAny: ({ clientThemeNone }) => !clientThemeNone,
   clientBundlerName: ctx => (ctx.clientBundlerEsbuild ? 'esbuild' : startCase(ctx.clientBundler)),
   clientTestFrameworkName: ctx => startCase(ctx.clientTestFramework),
-  withAdminUi: ctx => ctx.applicationTypeMicroservice,
+  withAdminUi: ctx => !ctx.applicationTypeMicroservice,
 
   messageHeaderNameAlert: ({ frontendAppName }) => `x-${frontendAppName.toLowerCase()}-alert`,
   messageHeaderNameError: ({ frontendAppName }) => `x-${frontendAppName.toLowerCase()}-error`,

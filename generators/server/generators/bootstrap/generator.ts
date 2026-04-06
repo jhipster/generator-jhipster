@@ -24,6 +24,7 @@ import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { loadRequiredConfigIntoEntity } from '../../../base-application/support/index.ts';
 import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../../base-application/types.d.ts';
 import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../../../base-workspaces/internal/docker-dependencies.ts';
+import prepareSqlApplicationProperties from '../../../spring-boot/generators/data-relational/support/application-properties.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-boot/generators/data-relational/types.d.ts';
 import serverCommand from '../../command.ts';
 import {
@@ -75,6 +76,11 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      sql({ application }) {
+        if (application.databaseType === 'sql') {
+          prepareSqlApplicationProperties({ application: application as any });
+        }
+      },
       properties({ application }) {
         mutateData(application as unknown as SpringDataRelationalApplication, {
           devDatabaseTypeH2Any: ({ devDatabaseType }) => devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory',
@@ -220,9 +226,9 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
           if (entity.primaryKey) {
             entity.resetFakerSeed!(`${application.baseName}post-prepare-server`);
             entity.primaryKey.javaSampleValues ??= [
-              getPrimaryKeyValue(entity.primaryKey, application.databaseType, 1),
-              getPrimaryKeyValue(entity.primaryKey, application.databaseType, 2),
-              getPrimaryKeyValue(entity.primaryKey, application.databaseType, entity.faker!.number.int({ min: 10, max: 100 })),
+              getPrimaryKeyValue(entity.primaryKey, application.databaseType!, 1),
+              getPrimaryKeyValue(entity.primaryKey, application.databaseType!, 2),
+              getPrimaryKeyValue(entity.primaryKey, application.databaseType!, entity.faker!.number.int({ min: 10, max: 100 })),
             ];
           }
         }

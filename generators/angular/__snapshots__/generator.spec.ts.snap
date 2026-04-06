@@ -2584,10 +2584,10 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     "USER",
   ],
   "defaultAdminUsername": "admin",
-  "defaultEnvironment": undefined,
-  "defaultEnvironmentAny": false,
+  "defaultEnvironment": "prod",
+  "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
-  "defaultEnvironmentProd": false,
+  "defaultEnvironmentProd": true,
   "defaultPackaging": undefined,
   "defaultPackagingAny": false,
   "defaultPackagingJar": false,
@@ -3650,10 +3650,10 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "USER",
   ],
   "defaultAdminUsername": "admin",
-  "defaultEnvironment": undefined,
-  "defaultEnvironmentAny": false,
+  "defaultEnvironment": "prod",
+  "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
-  "defaultEnvironmentProd": false,
+  "defaultEnvironmentProd": true,
   "defaultPackaging": undefined,
   "defaultPackagingAny": false,
   "defaultPackagingJar": false,
@@ -4936,10 +4936,10 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "USER",
   ],
   "defaultAdminUsername": "admin",
-  "defaultEnvironment": undefined,
-  "defaultEnvironmentAny": false,
+  "defaultEnvironment": "prod",
+  "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
-  "defaultEnvironmentProd": false,
+  "defaultEnvironmentProd": true,
   "defaultPackaging": undefined,
   "defaultPackagingAny": false,
   "defaultPackagingJar": false,
@@ -6001,10 +6001,10 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "USER",
   ],
   "defaultAdminUsername": "admin",
-  "defaultEnvironment": undefined,
-  "defaultEnvironmentAny": false,
+  "defaultEnvironment": "prod",
+  "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
-  "defaultEnvironmentProd": false,
+  "defaultEnvironmentProd": true,
   "defaultPackaging": undefined,
   "defaultPackagingAny": false,
   "defaultPackagingJar": false,
@@ -6199,7 +6199,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
-  "withAdminUi": false,
+  "withAdminUi": true,
   "withGeneratedFlag": undefined,
 }
 `;
@@ -6237,6 +6237,144 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/WEB-INF/web.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/modal/health-modal.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/modal/health-modal.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/modal/health-modal.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/log.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/jvm-memory/jvm-memory.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/jvm-memory/jvm-memory.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/jvm-threads/jvm-threads.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/jvm-threads/jvm-threads.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-cache/metrics-cache.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-cache/metrics-cache.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-datasource/metrics-datasource.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-datasource/metrics-datasource.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-request/metrics-request.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-request/metrics-request.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-system/metrics-system.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-system/metrics-system.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/app-page-title-strategy.ts": {
@@ -7067,10 +7205,10 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "USER",
   ],
   "defaultAdminUsername": "admin",
-  "defaultEnvironment": undefined,
-  "defaultEnvironmentAny": false,
+  "defaultEnvironment": "prod",
+  "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
-  "defaultEnvironmentProd": false,
+  "defaultEnvironmentProd": true,
   "defaultPackaging": undefined,
   "defaultPackagingAny": false,
   "defaultPackagingJar": false,
@@ -8529,10 +8667,10 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     "USER",
   ],
   "defaultAdminUsername": "admin",
-  "defaultEnvironment": undefined,
-  "defaultEnvironmentAny": false,
+  "defaultEnvironment": "prod",
+  "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
-  "defaultEnvironmentProd": false,
+  "defaultEnvironmentProd": true,
   "defaultPackaging": undefined,
   "defaultPackagingAny": false,
   "defaultPackagingJar": false,
@@ -9563,10 +9701,10 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "USER",
   ],
   "defaultAdminUsername": "admin",
-  "defaultEnvironment": undefined,
-  "defaultEnvironmentAny": false,
+  "defaultEnvironment": "prod",
+  "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
-  "defaultEnvironmentProd": false,
+  "defaultEnvironmentProd": true,
   "defaultPackaging": undefined,
   "defaultPackagingAny": false,
   "defaultPackagingJar": false,

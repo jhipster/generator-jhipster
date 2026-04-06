@@ -26,13 +26,9 @@ import { isFileStateModified } from 'mem-fs-editor/state';
 
 import { loadCommandConfigsIntoApplication, loadCommandConfigsKeysIntoTemplatesContext } from '../../../../lib/command/load.ts';
 import { lookupCommandsConfigs } from '../../../../lib/command/lookup-commands-configs.ts';
-import { packageJson } from '../../../../lib/index.ts';
-import { getConfigWithDefaults } from '../../../../lib/jhipster/default-application-options.ts';
 import type { Entity as BaseEntity } from '../../../../lib/jhipster/types/entity.ts';
-import { mutateData, removeFieldsWithNullishValues } from '../../../../lib/utils/index.ts';
-import { loadDerivedConfig } from '../../../base-core/internal/config-def.ts';
+import { mutateData } from '../../../../lib/utils/index.ts';
 import { isWin32 } from '../../../base-core/support/index.ts';
-import serverCommand from '../../../server/command.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-boot/generators/data-relational/types.ts';
 import type { Application as SpringBootApplication } from '../../../spring-boot/types.ts';
 import { mutateApplication } from '../../application.ts';
@@ -112,26 +108,6 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
           devDatabaseTypeH2Any: undefined,
         });
       },
-      loadNodeDependencies({ application }) {
-        this.loadNodeDependencies(application.nodeDependencies, {
-          prettier: packageJson.dependencies.prettier,
-          'prettier-plugin-java': packageJson.dependencies['prettier-plugin-java'],
-          'prettier-plugin-packagejson': packageJson.dependencies['prettier-plugin-packagejson'],
-        });
-
-        this.loadNodeDependenciesFromPackageJson(
-          application.nodeDependencies,
-          this.fetchFromInstalledJHipster('common', 'resources', 'package.json'),
-        );
-      },
-      loadDefaults({ application, applicationDefaults }) {
-        let { applyDefaults } = this.options;
-        applyDefaults ??= getConfigWithDefaults as any;
-        applicationDefaults(applyDefaults!(application));
-      },
-      serverConfig({ application }) {
-        loadDerivedConfig(serverCommand.configs, { application });
-      },
       loadApplication({ applicationDefaults, application }) {
         applicationDefaults(
           {
@@ -145,13 +121,23 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
           buildToolUnknown: ({ buildTool }) => !['gradle', 'maven'].includes(buildTool!),
         });
       },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.preparing;
+  }
+
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
       /**
        * Avoid having undefined keys in the application object when rendering ejs templates
        */
       async loadApplicationKeys({ application }) {
-        const { applyDefaults = getConfigWithDefaults, commandsConfigs = await lookupCommandsConfigs() } = this.options;
+        // TODO remove this task
+        const { commandsConfigs = await lookupCommandsConfigs() } = this.options;
         loadCommandConfigsIntoApplication({
-          source: applyDefaults(removeFieldsWithNullishValues(this.config.getAll())),
+          source: application,
           application,
           commandsConfigs,
         });
@@ -181,8 +167,8 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
-    return this.preparing;
+  get [BaseApplicationGenerator.POST_PREPARING]() {
+    return this.postPreparing;
   }
 
   get configuringEachEntity() {

@@ -32,7 +32,7 @@ import {
   getTestcontainerSupport,
   javaSqlDatabaseArtifacts,
 } from './internal/dependencies.ts';
-import { getDBCExtraOption, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from './support/index.ts';
+import { getDBCExtraOption, getJdbcUrl, getR2dbcUrl } from './support/index.ts';
 import type {
   Application as SpringDataRelationalApplication,
   Config as SpringDataRelationalConfig,
@@ -76,7 +76,6 @@ export default class SqlGenerator extends BaseApplicationGenerator<
   get preparing() {
     return this.asPreparingTaskGroup({
       async preparing({ application, applicationDefaults }) {
-        prepareSqlApplicationProperties({ application });
         application.devDatabaseExtraOptions = getDBCExtraOption(application.devDatabaseType);
         application.prodDatabaseExtraOptions = getDBCExtraOption(application.prodDatabaseType);
 

@@ -92,10 +92,8 @@ export default class LiquibaseGenerator<
       await this.composeWithBlueprints();
     }
 
-    if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrap('java');
-      await this.dependsOnBootstrap('common');
-    }
+    await this.dependsOnBootstrap('java');
+    await this.dependsOnBootstrap('server');
   }
 
   get preparing() {
