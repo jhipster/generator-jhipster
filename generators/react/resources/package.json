@@ -11,7 +11,7 @@
     "react": "19.2.4",
     "react-bootstrap": "2.10.10",
     "react-dom": "19.2.4",
-    "react-hook-form": "7.72.0",
+    "react-hook-form": "7.72.1",
     "react-jhipster": "1.0.0",
     "react-redux": "9.2.0",
     "react-redux-loading-bar": "5.0.8",
