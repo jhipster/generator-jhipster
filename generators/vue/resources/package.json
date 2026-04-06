@@ -54,7 +54,7 @@
     "ts-loader": "9.5.7",
     "typescript": "6.0.2",
     "typescript-eslint": "8.58.0",
-    "vite": "8.0.3",
+    "vite": "8.0.5",
     "vite-plugin-static-copy": "4.0.1",
     "vitest": "4.1.2",
     "vitest-sonar-reporter": "3.0.0",
