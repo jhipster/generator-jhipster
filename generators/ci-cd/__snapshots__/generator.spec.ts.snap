@@ -229,7 +229,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "imperativeOrReactive": "imperative",
   "incrementalChangelog": undefined,
   "indent": "",
-  "insideDocker": false,
+  "insideDocker": undefined,
   "javaCompatibleVersions": [
     "21",
     "25",
@@ -412,7 +412,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "searchEngineCouchbase": false,
   "searchEngineElasticsearch": false,
   "searchEngineNo": true,
-  "sendBuildToGitlab": false,
+  "sendBuildToGitlab": undefined,
   "serverPort": 8080,
   "serviceDiscovery": "no",
   "serviceDiscoveryAny": false,

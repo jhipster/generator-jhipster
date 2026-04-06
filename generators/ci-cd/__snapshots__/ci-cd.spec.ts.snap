@@ -2020,8 +2020,7 @@ deploy-to-production:
 exports[`generator - CI-CD GitLab CI tests GitLab CI: Maven Angular Yarn inside Docker Autoconfigure should match files snapshot 1`] = `
 {
   ".gitlab-ci.yml": {
-    "contents": "image: jhipster/jhipster:vJHIPSTER_VERSION
-
+    "contents": "
 cache:
     key: "$CI_COMMIT_REF_NAME"
     paths:
@@ -2037,6 +2036,8 @@ stages:
 before_script:
     - export NG_CLI_ANALYTICS="false"
     - export MAVEN_USER_HOME=\`pwd\`/.maven
+    - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:install-node-and-npm@install-node-and-npm -Dmaven.repo.local=$MAVEN_USER_HOME
+    - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dmaven.repo.local=$MAVEN_USER_HOME
 
 nohttp:
     stage: check
@@ -2054,14 +2055,6 @@ maven-compile:
         expire_in: 1 day
 
 maven-test:
-    services:
-        - docker:dind
-
-    variables:
-        # Instruct Testcontainers to use the daemon of DinD.
-        DOCKER_HOST: 'tcp://docker:2375'
-        # Improve performance with overlayfs.
-        DOCKER_DRIVER: overlay2
 
     stage: test
     script:
@@ -2080,8 +2073,7 @@ maven-test:
 frontend-test:
     stage: test
     script:
-        - npm install
-        - npm test
+        - ./mvnw -ntp com.github.eirslett:frontend-maven-plugin:npm -Dfrontend.npm.arguments='run test' -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         reports:
             junit: target/test-results/TESTS-results-jest.xml
