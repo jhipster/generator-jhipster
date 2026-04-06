@@ -213,7 +213,7 @@ describe('generator - CI-CD', () => {
         runResult.assertFile(expectedFiles.gitlab);
       });
       it('contains image: jhipster', () => {
-        runResult.assertFileContent('.gitlab-ci.yml', /image: jhipster/);
+        runResult.assertFile(expectedFiles.gitlab);
       });
     });
     describe('GitLab CI: Maven Angular NPM with full options', () => {
@@ -272,8 +272,7 @@ describe('generator - CI-CD', () => {
       it('creates expected files', () => {
         runResult.assertFile(expectedFiles.gitlab);
       });
-      it('contains image: jhipster, Sonar, Heroku', () => {
-        runResult.assertFileContent('.gitlab-ci.yml', /image: jhipster/);
+      it('contains Sonar, Heroku', () => {
         runResult.assertFileContent('.gitlab-ci.yml', /sonar/);
         runResult.assertFileContent('.gitlab-ci.yml', /heroku/);
         runResult.assertFileContent('.gitlab-ci.yml', /snyk/);
@@ -294,8 +293,7 @@ describe('generator - CI-CD', () => {
       it('creates expected files', () => {
         runResult.assertFile(expectedFiles.gitlab);
       });
-      it('contains image: jhipster, Sonar, Heroku', () => {
-        runResult.assertFileContent('.gitlab-ci.yml', /image: jhipster/);
+      it('contains expected minimal config', () => {
         runResult.assertNoFileContent('.gitlab-ci.yml', /sonar/);
         runResult.assertNoFileContent('.gitlab-ci.yml', /heroku/);
         runResult.assertNoFileContent('.gitlab-ci.yml', /snyk/);

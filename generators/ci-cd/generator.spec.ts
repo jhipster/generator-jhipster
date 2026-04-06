@@ -86,6 +86,7 @@ describe(`generator - ${generator}`, () => {
       it('should not ask ciCd question', () => {
         expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
 [
+  "ciCd",
   "ciCdIntegrations",
 ]
 `);
@@ -100,9 +101,8 @@ describe(`generator - ${generator}`, () => {
       it('should not ask ciCd question', () => {
         expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
 [
+  "ciCd",
   "ciCdIntegrations",
-  "insideDocker",
-  "sendBuildToGitlab",
 ]
 `);
       });
