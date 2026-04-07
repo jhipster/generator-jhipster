@@ -11,7 +11,7 @@
     "cypress-audit": "1.1.0",
     "cypress-monocart-coverage": "1.0.1",
     "eslint-plugin-cypress": "6.2.2",
-    "lighthouse": "13.0.3",
+    "lighthouse": "13.1.0",
     "nyc": "18.0.0",
     "swagger-ui-dist": "5.32.1"
   },
