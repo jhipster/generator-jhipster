@@ -472,6 +472,10 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   }
 
   #parseJHipsterCommand(commandDef: JHipsterCommandDefinition) {
+    // @ts-expect-error removed property.
+    if (!this.skipChecks && commandDef.options) {
+      throw new Error('Options are not supported anymore in JHipster commands, please use configs instead');
+    }
     if (commandDef.arguments) {
       this._parseJHipsterArguments(commandDef.arguments);
     } else if (commandDef.configs) {
