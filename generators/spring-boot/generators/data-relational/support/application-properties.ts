@@ -43,6 +43,12 @@ export default function prepareSqlApplicationProperties({ application }: { appli
   application.devDatabaseTypePostgresql = application.prodDatabaseTypePostgresql && !application.devDatabaseTypeH2Any;
 
   if (!application.databaseTypeSql) {
+    if (application.databaseTypeNeo4j) {
+      application.devDatabaseUsername = '';
+      application.devDatabasePassword = '';
+      application.devJdbcDriver = null;
+      application.devHibernateDialect = null;
+    }
     return;
   }
 

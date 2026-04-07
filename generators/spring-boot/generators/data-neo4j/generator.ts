@@ -19,7 +19,6 @@
 
 import { javaMainPackageTemplatesBlock } from '../../../java/support/files.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';
-import type { Application as SpringDataRelationalApplication } from '../data-relational/types.d.ts';
 
 import cleanupTask from './cleanup.ts';
 import writeTask from './files.ts';
@@ -48,22 +47,6 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
 
   get [SpringBootApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
-  }
-
-  get preparing() {
-    return this.asPreparingTaskGroup({
-      async preparing({ application }) {
-        const relationalApplication = application as SpringDataRelationalApplication;
-        relationalApplication.devDatabaseUsername = '';
-        relationalApplication.devDatabasePassword = '';
-        relationalApplication.devJdbcDriver = null;
-        relationalApplication.devHibernateDialect = null;
-      },
-    });
-  }
-
-  get [SpringBootApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get configuringEachEntity() {
