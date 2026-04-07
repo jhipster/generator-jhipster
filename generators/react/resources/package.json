@@ -69,7 +69,7 @@
     "thread-loader": "4.0.4",
     "ts-jest": "29.4.9",
     "ts-loader": "9.5.7",
-    "typescript": "5.9.3",
+    "typescript": "6.0.2",
     "typescript-eslint": "8.58.0",
     "webpack": "5.105.4",
     "webpack-cli": "7.0.2",
