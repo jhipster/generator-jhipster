@@ -77,7 +77,7 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
   get preparing() {
     return this.asPreparingTaskGroup({
       sql({ application }) {
-        if (application.databaseType === 'sql') {
+        if (application.databaseTypeSql || application.databaseTypeNeo4j) {
           prepareSqlApplicationProperties({ application: application as any });
         }
       },
