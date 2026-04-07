@@ -59,10 +59,6 @@ export default function prepareSqlApplicationProperties({ application }: { appli
   };
 
   application.prodJdbcUrl = getJdbcUrl(application.prodDatabaseType, prodDatabaseOptions);
-  application.prodLiquibaseUrl = getJdbcUrl(application.prodDatabaseType, {
-    ...prodDatabaseOptions,
-    skipExtraOptions: true,
-  });
   if (application.reactive) {
     application.prodR2dbcUrl = getR2dbcUrl(application.prodDatabaseType, prodDatabaseOptions);
   }
@@ -85,25 +81,6 @@ export default function prepareSqlApplicationProperties({ application }: { appli
         prodDatabaseType: application.prodDatabaseType,
       });
 
-      let devLiquibaseOptions;
-      if (application.devDatabaseTypeH2Memory) {
-        devLiquibaseOptions = {
-          protocolSuffix: 'h2:tcp://',
-          localDirectory: 'localhost:18080/mem:',
-        };
-      } else {
-        devLiquibaseOptions = {
-          // eslint-disable-next-line no-template-curly-in-string
-          buildDirectory: application.buildToolGradle ? `./${application.temporaryDir}` : '${project.build.directory}/',
-        };
-      }
-
-      application.devLiquibaseUrl = getJdbcUrl(application.devDatabaseType, {
-        ...devDatabaseOptions,
-        skipExtraOptions: true,
-        ...devLiquibaseOptions,
-      });
-
       if (application.reactive) {
         application.devR2dbcUrl = getR2dbcUrl(application.devDatabaseType, {
           ...devDatabaseOptions,
@@ -118,7 +95,6 @@ export default function prepareSqlApplicationProperties({ application }: { appli
     }
   } else {
     application.devJdbcUrl = application.prodJdbcUrl;
-    application.devLiquibaseUrl = application.prodLiquibaseUrl;
     application.devR2dbcUrl = application.prodR2dbcUrl;
     application.devHibernateDialect = application.prodHibernateDialect;
     application.devJdbcDriver = application.prodJdbcDriver;
@@ -126,7 +102,6 @@ export default function prepareSqlApplicationProperties({ application }: { appli
     application.devDatabasePassword = application.prodDatabasePassword;
     application.devDatabaseName = application.prodDatabaseName;
     application.devJdbcUrl = application.prodJdbcUrl;
-    application.devLiquibaseUrl = application.prodLiquibaseUrl;
     if (application.reactive) {
       application.devR2dbcUrl = application.prodR2dbcUrl;
     }

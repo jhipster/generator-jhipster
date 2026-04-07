@@ -54,7 +54,6 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
     return this.asPreparingTaskGroup({
       async preparing({ application }) {
         const relationalApplication = application as SpringDataRelationalApplication;
-        relationalApplication.devLiquibaseUrl = 'jdbc:neo4j:bolt://localhost:7687';
         relationalApplication.devDatabaseUsername = '';
         relationalApplication.devDatabasePassword = '';
         relationalApplication.devJdbcDriver = null;
