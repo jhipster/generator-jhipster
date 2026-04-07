@@ -106,16 +106,17 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
           liquibaseDefaultSchemaName: '',
           // Generate h2 properties at master.xml for blueprints that uses h2 for tests or others purposes.
           liquibaseAddH2Properties: data => data.devDatabaseTypeH2Any,
-          prodLiquibaseUrl: data =>
-            getJdbcUrl(data.prodDatabaseType, {
-              databaseName: data.prodDatabaseName,
-              hostname: 'localhost',
-              skipExtraOptions: true,
-            }),
-          devLiquibaseUrl: data => {
+          prodLiquibaseUrl: data => {
             if (data.databaseTypeNeo4j) {
               return 'jdbc:neo4j:bolt://localhost:7687';
             }
+            return getJdbcUrl(data.prodDatabaseType, {
+              databaseName: data.prodDatabaseName,
+              hostname: 'localhost',
+              skipExtraOptions: true,
+            });
+          },
+          devLiquibaseUrl: data => {
             if (!data.devDatabaseTypeH2Any) {
               return data.prodLiquibaseUrl;
             }
