@@ -1,4 +1,3 @@
-<%# eslint-disable -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -144,11 +143,10 @@ public class <%- entityClass %>Resource {
     private static final Logger LOG = LoggerFactory.getLogger(<%- entityClass %>Resource.class);
 <%_ if (!readOnly) { _%>
 
-  <%_ let entityName = entityInstance;
-  if (clientRootFolder && !skipUiGrouping) {
-    entityName = this._.camelCase(`${clientRootFolder}${entityClass}`);
-  }
-  _%>
+  <%_ let entityName = entityInstance; _%>
+  <%_ if (clientRootFolder && !skipUiGrouping) { _%>
+    <%_ entityName = this._.camelCase(`${clientRootFolder}${entityClass}`); _%>
+  <%_ } _%>
     private static final String ENTITY_NAME = "<%- entityName %>";
 
     @Value("${jhipster.clientApp.name:<%- camelizedBaseName %>}")
@@ -158,7 +156,7 @@ public class <%- entityClass %>Resource {
     const instanceName = restInstance;
     const mapper = `${entityInstance}Mapper`;
     const entityToDtoReference = `${mapper}::` + 'toDto';
-_%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService, constructorName: `${entityClass}Resource`, queryService: jpaMetamodelFiltering, isUsingMapsId, mapsIdAssoc, isController: true, reactive }); -%>
+_%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService, constructorName: `${entityClass}Resource`, queryService: jpaMetamodelFiltering, isUsingMapsId, mapsIdAssoc, isController: true, reactive }) -%>
 <%_ if (!readOnly) { _%>
 
     /**
@@ -217,7 +215,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
                 }
   <%_ } _%>
   <%_ if (serviceNo) { _%>
-<%- include(`/_global_partials_entity_/save_template_${reactive ? 'reactive' : 'imperative'}`, { saveNewEntityOperation: true, returnDirectly: false }); -%>
+<%- include(`/_global_partials_entity_/save_template_${reactive ? 'reactive' : 'imperative'}`, { saveNewEntityOperation: true, returnDirectly: false }) -%>
   <%_ } _%>
   <%_ if (reactive) { _%>
     <%_ if (!serviceNo) { _%>
@@ -303,7 +301,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
     <% } %>
   <%_ } _%>
   <%_ if (serviceNo) { _%>
-<%- include(`/_global_partials_entity_/save_template_${reactive ? 'reactive' : 'imperative'}`, { saveNewEntityOperation: false, returnDirectly: false }); -%>
+<%- include(`/_global_partials_entity_/save_template_${reactive ? 'reactive' : 'imperative'}`, { saveNewEntityOperation: false, returnDirectly: false }) -%>
   <%_ } _%>
   <%_ if (reactive) { _%>
     <%_ if (!serviceNo) { _%>
@@ -380,7 +378,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
     <% } %>
   <%_ } _%>
 
-            <%- include('../../_partials_entity_/patch_template', { isService: false, viaService }); -%>
+            <%- include('../../_partials_entity_/patch_template', { isService: false, viaService }) -%>
   <%_ if (reactive) { _%>
             return result
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
@@ -428,7 +426,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
 <%_ if (entitySpringReadPreAuthorize) { _%>
     @PreAuthorize("<%- entitySpringReadPreAuthorize %>")
 <%_ } _%>
-<%- include('../../_partials_entity_/get_all_template', { viaService }); -%>
+<%- include('../../_partials_entity_/get_all_template', { viaService }) -%>
 
 <%_ if (!jpaMetamodelFiltering && reactive && paginationNo) { _%>
     /**
@@ -470,7 +468,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
     @PreAuthorize("<%- entitySpringReadPreAuthorize %>")
 <%_ } _%>
     public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%- instanceType %>><% if (reactive) { %>><% } %> get<%- entityClass %>(@PathVariable("id") <%- primaryKey.type %> id) {
-        LOG.debug("REST request to get <%- entityClass %> : {}", id);<%- include('../../_partials_entity_/get_template', { viaService, returnDirectly:false, implementsEagerLoadApis }); -%>
+        LOG.debug("REST request to get <%- entityClass %> : {}", id);<%- include('../../_partials_entity_/get_template', { viaService, returnDirectly: false, implementsEagerLoadApis }) -%>
         return ResponseUtil.wrapOrNotFound(<%- instanceName %>);
     }
 <%_ if (!readOnly) { _%>
@@ -487,7 +485,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
   <%_ } _%>
     public <% if (reactive) { %>Mono<<% } %>ResponseEntity<Void><% if (reactive) { %>><% } %> delete<%- entityClass %>(@PathVariable("id") <%- primaryKey.type %> id) {
         LOG.debug("REST request to delete <%- entityClass %> : {}", id);
-<%- include('../../_partials_entity_/delete_template', { viaService, fromResource: true }); -%>
+<%- include('../../_partials_entity_/delete_template', { viaService, fromResource: true }) -%>
   <%_ if (reactive) { _%>
     <%_ if (databaseTypeCouchbase) { _%>
             .then(Mono.just(ResponseEntity.noContent()
@@ -522,7 +520,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
   <%_ if (entitySpringReadPreAuthorize) { _%>
     @PreAuthorize("<%- entitySpringReadPreAuthorize %>")
   <%_ } _%>
-<%- include('../../_partials_entity_/search_template', { viaService }); -%>
+<%- include('../../_partials_entity_/search_template', { viaService }) -%>
 <%_ } _%>
 <%_ if (updatableEntity && !viaService && !dtoMapstruct && fields.some(field => !field.id && !field.transient)) { _%>
 

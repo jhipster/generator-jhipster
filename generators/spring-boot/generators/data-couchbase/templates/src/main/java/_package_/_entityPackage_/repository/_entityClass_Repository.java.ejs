@@ -1,4 +1,3 @@
-<%# eslint-disable -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -54,30 +53,25 @@ import static <%- entityAbsoluteClass %>.TYPE_NAME;
 <%_ } _%>
 @Repository
 public interface <%- entityClass %>Repository extends JHipsterCouchbaseRepository<<%- persistClass %>, <%- primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%- persistClass %>><% } %><% if (searchEngineAny) { %>, CouchbaseSearchRepository<<%- persistClass %>, <%- primaryKey.type %>><% } %> {
-<%_ const notEmbeddedRelationships = relationships.filter(relationship => !relationship.otherEntity.embedded);
-  if (notEmbeddedRelationships.length !== 0) {
-%>
-    String SELECT = "SELECT meta(b).id as __id, meta(b).cas as __cas, b.*" + <%
-      for (const relationship of notEmbeddedRelationships) {
-          if (relationship.collection) {
-           %> ", ARRAY OBJECT_ADD(item, 'id', meta(item).id) FOR item IN `<%- relationship.relationshipFieldNamePlural %>` END AS `<%- relationship.relationshipFieldNamePlural %>`"  + <%
-          } else {
-           %> ", OBJECT_ADD(`<%- relationship.relationshipFieldName %>`, 'id', meta(`<%- relationship.relationshipFieldName %>`).id) AS `<%- relationship.relationshipFieldName %>`" + <%
-          }
-      } %>
+<%_ const notEmbeddedRelationships = relationships.filter(relationship => !relationship.otherEntity.embedded); _%>
+<%_ if (notEmbeddedRelationships.length !== 0) { %>
+    String SELECT = "SELECT meta(b).id as __id, meta(b).cas as __cas, b.*" + 
+  <% for (const relationship of notEmbeddedRelationships) { _%>
+    <%_ if (relationship.collection) { %> ", ARRAY OBJECT_ADD(item, 'id', meta(item).id) FOR item IN `<%- relationship.relationshipFieldNamePlural %>` END AS `<%- relationship.relationshipFieldNamePlural %>`"  + <% } else { %> ", OBJECT_ADD(`<%- relationship.relationshipFieldName %>`, 'id', meta(`<%- relationship.relationshipFieldName %>`).id) AS `<%- relationship.relationshipFieldName %>`" + 
+    <% } _%>
+  <%_ } %>
         " FROM #{#n1ql.bucket}.#{#n1ql.scope}.#{#n1ql.collection} b";
 
-    String JOIN = <%
-        for (const [index, relationship] of notEmbeddedRelationships.entries()) {
-          if (!relationship.collection) { %>
-            " LEFT JOIN `<%- relationship.otherEntity.entityInstance %>` `<%- relationship.relationshipFieldName %>` ON KEYS b.`<%- relationship.relationshipFieldName %>`"<%
-          } else { %>
-            " LEFT NEST `<%- relationship.otherEntity.entityInstance %>` `<%- relationship.relationshipFieldNamePlural %>` ON KEYS b.`<%- relationship.relationshipFieldNamePlural %>`"<%
-          }
-          if (index < notEmbeddedRelationships.length - 1) { %>
-            + <%
-          }
-        } %>;
+    String JOIN = 
+  <% for (const [index, relationship] of notEmbeddedRelationships.entries()) { _%>
+    <%_ if (!relationship.collection) { %>
+            " LEFT JOIN `<%- relationship.otherEntity.entityInstance %>` `<%- relationship.relationshipFieldName %>` ON KEYS b.`<%- relationship.relationshipFieldName %>`"<% } else { %>
+            " LEFT NEST `<%- relationship.otherEntity.entityInstance %>` `<%- relationship.relationshipFieldNamePlural %>` ON KEYS b.`<%- relationship.relationshipFieldNamePlural %>`"
+    <% } _%>
+    <%_ if (index < notEmbeddedRelationships.length - 1) { %>
+            + 
+    <% } _%>
+  <%_ } %>;
 
     String WHERE = " WHERE b.type = '" + TYPE_NAME + "'";
 
@@ -99,8 +93,8 @@ public interface <%- entityClass %>Repository extends JHipsterCouchbaseRepositor
     <%- listOrFlux %><<%- persistClass %>> findAll();
 
     @Query(SELECT + " USE KEYS $1" + JOIN)
-    <%- optionalOrMono %><<%- persistClass %>> findById(String id);<%
-    } _%>
+    <%- optionalOrMono %><<%- persistClass %>> findById(String id);
+<% } _%>
 
 <%_ if (searchEngineAny && notEmbeddedRelationships.length !== 0) { _%>
     @Query(SELECT + JOIN + WHERE + " AND " + SEARCH_CONDITION)
