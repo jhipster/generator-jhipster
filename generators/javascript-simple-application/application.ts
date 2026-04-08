@@ -22,7 +22,6 @@ import { CLIENT_MAIN_SRC_DIR, RECOMMENDED_NODE_VERSION } from '../generator-cons
 import type { Application as JavascriptSimpleApplicationApplication } from './types.ts';
 
 export type JavascriptSimpleApplicationLoadingAddedApplicationProperties = {
-  nodeDependencies: Record<string, string>;
   /** Root package.json scripts */
   packageJsonScripts: Record<string, string>;
   /** Root package.json scripts */
@@ -50,8 +49,6 @@ export type JavascriptSimpleApplicationAddedApplicationProperties = JavascriptSi
 
 export const mutateApplicationLoading = {
   __override__: false,
-
-  nodeDependencies: () => ({}),
 
   packageJsonScripts: () => ({}),
   clientPackageJsonScripts: () => ({}),

@@ -92,13 +92,17 @@ export default class BaseSimpleApplicationGenerator<
   }
 
   override get context(): Application {
-    return this.getContextData(CONTEXT_DATA_APPLICATION_KEY, {
-      factory: () => ({ nodeDependencies: {}, customizeTemplatePaths: [], user: undefined }) as unknown as Application,
-    });
+    return this.#application;
   }
 
   get #source(): Record<string, any> {
     return this.getContextData(CONTEXT_DATA_SOURCE_KEY, { factory: () => ({}) });
+  }
+
+  get #application(): Application {
+    return this.getContextData(CONTEXT_DATA_APPLICATION_KEY, {
+      factory: () => ({}) as unknown as Application,
+    });
   }
 
   /**
@@ -131,20 +135,30 @@ export default class BaseSimpleApplicationGenerator<
    * @protected
    */
   protected getTaskFirstArgForPriority(priorityName: (typeof PRIORITY_NAMES)[keyof typeof PRIORITY_NAMES]): any {
-    const { source, application, applicationDefaults } = getFirstArgForPriority(priorityName);
+    return this.getApplicationArgForPriority(getFirstArgForPriority(priorityName));
+  }
 
-    const args: Record<string, any> = {};
+  protected getApplicationArgForPriority({
+    source,
+    application,
+    applicationDefaults,
+  }: {
+    source?: boolean;
+    application?: boolean;
+    applicationDefaults?: boolean;
+  }): { application?: any; source?: any; applicationDefaults?: any } {
+    const taskArg: { application?: any; source?: any; applicationDefaults?: any } = {};
     if (application) {
-      args.application = this.context;
-    }
-    if (source) {
-      args.source = this.#source;
+      taskArg.application = this.#application;
     }
     if (applicationDefaults) {
-      args.applicationDefaults = (...args: any[]): void =>
-        mutateData(this.context, ...args.map(data => ({ __override__: false, ...data })));
+      taskArg.applicationDefaults = (...args: any[]): void =>
+        mutateData(this.#application, ...args.map(data => ({ __override__: false, ...data })));
     }
-    return args;
+    if (source) {
+      taskArg.source = this.#source;
+    }
+    return taskArg;
   }
 
   /**

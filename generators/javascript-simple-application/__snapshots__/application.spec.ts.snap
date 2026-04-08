@@ -7,7 +7,6 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "clientSrcDir": "src/main/webapp/",
   "jhipsterPackageJson": "jhipsterPackageJson",
   "jhipsterVersion": "jhipsterVersion",
-  "nodeDependencies": {},
   "nodePackageManager": "npm",
   "nodePackageManagerCommand": "npm",
   "nodeVersion": "nodeVersion",

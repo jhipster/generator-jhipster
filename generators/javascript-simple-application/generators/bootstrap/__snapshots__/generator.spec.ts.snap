@@ -74,7 +74,6 @@ exports[`generator - javascript-simple-application:bootstrap bootstrapping defau
   "skipUserManagement": false,
   "typescriptEslint": true,
   "upperFirstCamelCaseBaseName": "Jhipster",
-  "user": undefined,
   "websocket": "no",
   "withAdminUi": true,
 }

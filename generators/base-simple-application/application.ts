@@ -50,6 +50,8 @@ export type BaseSimpleApplicationPreparingAddedApplicationProperties = {
   projectVersion?: string;
   projectDescription: string;
 
+  nodeDependencies: Record<string, string>;
+
   jhipsterPackageJson: typeof packageJson;
   commandName?: string;
 };
@@ -91,6 +93,8 @@ export const mutateApplicationPreparing = {
   projectDescription: ({ projectDescription, humanizedBaseName }) => projectDescription ?? `Description for ${humanizedBaseName}`,
   documentationArchiveUrl: ({ jhipsterVersion, hipsterDocumentationLink }) =>
     `${hipsterDocumentationLink}documentation-archive/v${jhipsterVersion}`,
+
+  nodeDependencies: () => ({}),
 
   jhipsterPackageJson: packageJson,
   commandName: undefined,
