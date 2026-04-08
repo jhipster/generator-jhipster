@@ -18,7 +18,7 @@
  */
 import { asWriteFilesSection } from '../base-application/support/index.ts';
 
-import { LOCAL_BLUEPRINT_OPTION } from './constants.ts';
+import { LOCAL_BLUEPRINT_OPTION, TS } from './constants.ts';
 import type { Application as GenerateBlueprintApplication, TemplateData } from './types.ts';
 
 export const files = asWriteFilesSection<GenerateBlueprintApplication>({
@@ -34,10 +34,22 @@ export const files = asWriteFilesSection<GenerateBlueprintApplication>({
         'tsconfig.json',
         'vitest.config.ts',
         'vitest.test-setup.ts',
-        '.blueprint/cli/commands.mjs',
-        '.blueprint/generate-sample/command.mjs',
-        '.blueprint/generate-sample/generator.mjs',
-        '.blueprint/generate-sample/index.mjs',
+        {
+          sourceFile: '.blueprint/cli/commands.mjs',
+          destinationFile: ctx => `.blueprint/cli/commands.${ctx[TS] ? 'ts' : 'mjs'}`,
+        },
+        {
+          sourceFile: '.blueprint/generate-sample/command.mjs',
+          destinationFile: ctx => `.blueprint/generate-sample/command.${ctx[TS] ? 'ts' : 'mjs'}`,
+        },
+        {
+          sourceFile: '.blueprint/generate-sample/generator.mjs',
+          destinationFile: ctx => `.blueprint/generate-sample/generator.${ctx[TS] ? 'ts' : 'mjs'}`,
+        },
+        {
+          sourceFile: '.blueprint/generate-sample/index.mjs',
+          destinationFile: ctx => `.blueprint/generate-sample/index.${ctx[TS] ? 'ts' : 'mjs'}`,
+        },
         // Always write cli for devBlueprint usage
         'cli/cli.cjs',
         { sourceFile: 'cli/cli-customizations.cjs', override: false },
@@ -46,10 +58,22 @@ export const files = asWriteFilesSection<GenerateBlueprintApplication>({
     {
       condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION] && ctx.githubWorkflows,
       templates: [
-        '.blueprint/github-build-matrix/command.mjs',
-        '.blueprint/github-build-matrix/generator.mjs',
-        '.blueprint/github-build-matrix/generator.spec.mjs',
-        '.blueprint/github-build-matrix/index.mjs',
+        {
+          sourceFile: '.blueprint/github-build-matrix/command.mjs',
+          destinationFile: ctx => `.blueprint/github-build-matrix/command.${ctx[TS] ? 'ts' : 'mjs'}`,
+        },
+        {
+          sourceFile: '.blueprint/github-build-matrix/generator.mjs',
+          destinationFile: ctx => `.blueprint/github-build-matrix/generator.${ctx[TS] ? 'ts' : 'mjs'}`,
+        },
+        {
+          sourceFile: '.blueprint/github-build-matrix/generator.spec.mjs',
+          destinationFile: ctx => `.blueprint/github-build-matrix/generator.spec.${ctx[TS] ? 'ts' : 'mjs'}`,
+        },
+        {
+          sourceFile: '.blueprint/github-build-matrix/index.mjs',
+          destinationFile: ctx => `.blueprint/github-build-matrix/index.${ctx[TS] ? 'ts' : 'mjs'}`,
+        },
       ],
     },
     {
@@ -73,20 +97,23 @@ export const generatorFiles = asWriteFilesSection<TemplateData>({
       path: 'generators/generator',
       to: ctx => `${ctx.application.blueprintsPath}${ctx.generator.replaceAll(':', '/generators/')}`,
       templates: [
-        { sourceFile: 'index.mjs', destinationFile: ctx => `index.${ctx.blueprintMjsExtension}` },
         {
-          sourceFile: 'command.mjs',
+          sourceFile: ctx => (ctx[TS] ? 'index.mts' : 'index.mjs'),
+          destinationFile: ctx => `index.${ctx.blueprintMjsExtension}`,
+        },
+        {
+          sourceFile: ctx => (ctx[TS] ? 'command.mts' : 'command.mjs'),
           destinationFile: ctx => `command.${ctx.blueprintMjsExtension}`,
           override: data => !data.ignoreExistingGenerators,
         },
         {
-          sourceFile: 'generator.mjs.jhi',
+          sourceFile: ctx => (ctx[TS] ? 'generator.mts.jhi' : 'generator.mjs.jhi'),
           destinationFile: ctx => `generator.${ctx.blueprintMjsExtension}.jhi`,
           override: data => !data.ignoreExistingGenerators,
         },
         {
           condition: data => !data.generator.startsWith('entity') && !data.application[LOCAL_BLUEPRINT_OPTION],
-          sourceFile: 'generator.spec.mjs',
+          sourceFile: ctx => (ctx[TS] ? 'generator.spec.mts' : 'generator.spec.mjs'),
           destinationFile: data => `generator.spec.${data.blueprintMjsExtension}`,
           override: data => !data.ignoreExistingGenerators,
         },

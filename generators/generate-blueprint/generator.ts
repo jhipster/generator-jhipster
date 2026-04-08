@@ -29,8 +29,10 @@ import { BLUEPRINT_API_VERSION } from '../generator-constants.ts';
 import {
   DYNAMIC,
   GENERATE_SNAPSHOTS,
+  JS,
   LOCAL_BLUEPRINT_OPTION,
   PRIORITIES,
+  TS,
   WRITTEN,
   allGeneratorsConfig,
   defaultConfig,
@@ -48,7 +50,7 @@ import type {
   Options as GenerateBlueprintOptions,
 } from './types.ts';
 
-const defaultPublishedFiles = ['generators', '!**/__*', '!**/*.snap', '!**/*.spec.?(c|m)js'];
+const defaultPublishedFiles = ['generators', '!**/__*', '!**/*.snap', '!**/*.spec.?(c|m)?(j|t)s'];
 
 export default class extends BaseSimpleApplicationGenerator<
   GenerateBlueprintApplication,
@@ -139,8 +141,13 @@ export default class extends BaseSimpleApplicationGenerator<
         if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) {
           this.config.defaults({
             [DYNAMIC]: true,
-            js: false,
+            [JS]: false,
+            [TS]: false,
           });
+        }
+        // Ensure only one of JS or TS is true
+        if (this.jhipsterConfig[TS] && this.jhipsterConfig[JS]) {
+          this.config.set(JS, false);
         }
       },
     });
@@ -196,7 +203,11 @@ export default class extends BaseSimpleApplicationGenerator<
       prepare({ application }) {
         const { cli, cliName, baseName } = application;
         application.githubRepository = this.jhipsterConfig.githubRepository ?? `jhipster/generator-jhipster-${baseName}`;
-        application.blueprintMjsExtension = application.js ? 'js' : 'mjs';
+        if (application[TS]) {
+          application.blueprintMjsExtension = 'ts';
+        } else {
+          application.blueprintMjsExtension = application[JS] ? 'js' : 'mjs';
+        }
         if (cli) {
           application.cliName = cliName ?? `jhipster-${baseName}`;
         }
@@ -315,6 +326,22 @@ export default class extends BaseSimpleApplicationGenerator<
           mainDependencies,
           this.fetchFromInstalledJHipster('generate-blueprint/resources/package.json'),
         );
+        const devDependencies: Record<string, string> = {
+          'ejs-lint': mainDependencies['ejs-lint'],
+          eslint: mainDependencies.eslint,
+          jiti: mainDependencies.jiti,
+          globals: mainDependencies.globals,
+          vitest: mainDependencies.vitest,
+          prettier: mainDependencies.prettier,
+          /*
+           * yeoman-test version is loaded through generator-jhipster peer dependency.
+           * generator-jhipster uses a fixed version, blueprints must set a compatible range.
+           */
+          'yeoman-test': '>=10',
+        };
+        if (application[TS]) {
+          devDependencies.typescript = mainDependencies.typescript;
+        }
         this.packageJson.merge({
           name: `generator-jhipster-${application.baseName}`,
           keywords: ['yeoman-generator', 'jhipster-blueprint', BLUEPRINT_API_VERSION],
@@ -323,24 +350,12 @@ export default class extends BaseSimpleApplicationGenerator<
             ejslint: 'ejslint generators/**/*.ejs',
             lint: 'eslint .',
             'lint-fix': 'npm run ejslint && npm run lint -- --fix',
-            pretest: 'npm run prettier-check && npm run lint',
+            pretest: `npm run prettier-check && npm run lint${application[TS] ? ' && tsc --noEmit' : ''}`,
             test: 'vitest run',
             'update-snapshot': 'vitest run --update',
             vitest: 'vitest',
           },
-          devDependencies: {
-            'ejs-lint': mainDependencies['ejs-lint'],
-            eslint: mainDependencies.eslint,
-            jiti: mainDependencies.jiti,
-            globals: mainDependencies.globals,
-            vitest: mainDependencies.vitest,
-            prettier: mainDependencies.prettier,
-            /*
-             * yeoman-test version is loaded through generator-jhipster peer dependency.
-             * generator-jhipster uses a fixed version, blueprints must set a compatible range.
-             */
-            'yeoman-test': '>=10',
-          },
+          devDependencies,
           engines: {
             node: jhipsterPackageJson.engines.node,
           },

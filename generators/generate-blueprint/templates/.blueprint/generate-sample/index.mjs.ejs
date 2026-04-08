@@ -1,2 +1,2 @@
-export { default } from './generator.mjs';
-export { default as command } from './command.mjs';
+export { default } from './generator.<%- ts ? 'ts' : 'mjs' %>';
+export { default as command } from './command.<%- ts ? 'ts' : 'mjs' %>';

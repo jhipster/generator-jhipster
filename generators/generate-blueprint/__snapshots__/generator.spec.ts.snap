@@ -2,16 +2,16 @@
 
 exports[`generator - generate-blueprint with all option should match snapshot 1`] = `
 {
-  ".blueprint/cli/commands.mjs": {
+  ".blueprint/cli/commands.ts": {
     "stateCleared": "modified",
   },
-  ".blueprint/generate-sample/command.mjs": {
+  ".blueprint/generate-sample/command.ts": {
     "stateCleared": "modified",
   },
-  ".blueprint/generate-sample/generator.mjs": {
+  ".blueprint/generate-sample/generator.ts": {
     "stateCleared": "modified",
   },
-  ".blueprint/generate-sample/index.mjs": {
+  ".blueprint/generate-sample/index.ts": {
     "stateCleared": "modified",
   },
   ".blueprint/generate-sample/templates/samples/sample.jdl": {
@@ -32,1423 +32,1423 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "cli/cli.cjs": {
     "stateCleared": "modified",
   },
-  "generators/angular/command.js": {
+  "generators/angular/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/angular/generator.js": {
+  "generators/angular/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/angular/generator.spec.js": {
+  "generators/angular/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/angular/generators/bootstrap/command.js": {
+  "generators/angular/generators/bootstrap/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/angular/generators/bootstrap/generator.js": {
+  "generators/angular/generators/bootstrap/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/angular/generators/bootstrap/generator.spec.js": {
+  "generators/angular/generators/bootstrap/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/angular/generators/bootstrap/index.js": {
+  "generators/angular/generators/bootstrap/index.ts": {
     "stateCleared": "modified",
   },
   "generators/angular/generators/bootstrap/templates/template-file-angular:bootstrap.ejs": {
     "stateCleared": "modified",
   },
-  "generators/angular/index.js": {
+  "generators/angular/index.ts": {
     "stateCleared": "modified",
   },
   "generators/angular/templates/template-file-angular.ejs": {
     "stateCleared": "modified",
   },
-  "generators/app/command.js": {
+  "generators/app/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/app/generator.js": {
+  "generators/app/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/app/generator.spec.js": {
+  "generators/app/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/app/generators/bootstrap/command.js": {
+  "generators/app/generators/bootstrap/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/app/generators/bootstrap/generator.js": {
+  "generators/app/generators/bootstrap/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/app/generators/bootstrap/generator.spec.js": {
+  "generators/app/generators/bootstrap/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/app/generators/bootstrap/index.js": {
+  "generators/app/generators/bootstrap/index.ts": {
     "stateCleared": "modified",
   },
   "generators/app/generators/bootstrap/templates/template-file-app:bootstrap.ejs": {
     "stateCleared": "modified",
   },
-  "generators/app/index.js": {
+  "generators/app/index.ts": {
     "stateCleared": "modified",
   },
   "generators/app/templates/template-file-app.ejs": {
     "stateCleared": "modified",
   },
-  "generators/base-application/command.js": {
+  "generators/base-application/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/base-application/generator.js": {
+  "generators/base-application/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/base-application/generator.spec.js": {
+  "generators/base-application/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/base-application/generators/bootstrap/command.js": {
+  "generators/base-application/generators/bootstrap/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/base-application/generators/bootstrap/generator.js": {
+  "generators/base-application/generators/bootstrap/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/base-application/generators/bootstrap/generator.spec.js": {
+  "generators/base-application/generators/bootstrap/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/base-application/generators/bootstrap/index.js": {
+  "generators/base-application/generators/bootstrap/index.ts": {
     "stateCleared": "modified",
   },
   "generators/base-application/generators/bootstrap/templates/template-file-base-application:bootstrap.ejs": {
     "stateCleared": "modified",
   },
-  "generators/base-application/index.js": {
+  "generators/base-application/index.ts": {
     "stateCleared": "modified",
   },
   "generators/base-application/templates/template-file-base-application.ejs": {
     "stateCleared": "modified",
   },
-  "generators/base-core/command.js": {
+  "generators/base-core/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/base-core/generator.js": {
+  "generators/base-core/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/base-core/generator.spec.js": {
+  "generators/base-core/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/base-core/index.js": {
+  "generators/base-core/index.ts": {
     "stateCleared": "modified",
   },
   "generators/base-core/templates/template-file-base-core.ejs": {
     "stateCleared": "modified",
   },
-  "generators/base-entity-changes/command.js": {
+  "generators/base-entity-changes/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/base-entity-changes/generator.js": {
+  "generators/base-entity-changes/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/base-entity-changes/generator.spec.js": {
+  "generators/base-entity-changes/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/base-entity-changes/index.js": {
+  "generators/base-entity-changes/index.ts": {
     "stateCleared": "modified",
   },
   "generators/base-entity-changes/templates/template-file-base-entity-changes.ejs": {
     "stateCleared": "modified",
   },
-  "generators/base-simple-application/command.js": {
+  "generators/base-simple-application/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/base-simple-application/generator.js": {
+  "generators/base-simple-application/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/base-simple-application/generator.spec.js": {
+  "generators/base-simple-application/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/base-simple-application/generators/bootstrap/command.js": {
+  "generators/base-simple-application/generators/bootstrap/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/base-simple-application/generators/bootstrap/generator.js": {
+  "generators/base-simple-application/generators/bootstrap/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/base-simple-application/generators/bootstrap/generator.spec.js": {
+  "generators/base-simple-application/generators/bootstrap/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/base-simple-application/generators/bootstrap/index.js": {
+  "generators/base-simple-application/generators/bootstrap/index.ts": {
     "stateCleared": "modified",
   },
   "generators/base-simple-application/generators/bootstrap/templates/template-file-base-simple-application:bootstrap.ejs": {
     "stateCleared": "modified",
   },
-  "generators/base-simple-application/index.js": {
+  "generators/base-simple-application/index.ts": {
     "stateCleared": "modified",
   },
   "generators/base-simple-application/templates/template-file-base-simple-application.ejs": {
     "stateCleared": "modified",
   },
-  "generators/base-workspaces/command.js": {
+  "generators/base-workspaces/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/base-workspaces/generator.js": {
+  "generators/base-workspaces/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/base-workspaces/generator.spec.js": {
+  "generators/base-workspaces/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/base-workspaces/generators/bootstrap/command.js": {
+  "generators/base-workspaces/generators/bootstrap/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/base-workspaces/generators/bootstrap/generator.js": {
+  "generators/base-workspaces/generators/bootstrap/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/base-workspaces/generators/bootstrap/generator.spec.js": {
+  "generators/base-workspaces/generators/bootstrap/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/base-workspaces/generators/bootstrap/index.js": {
+  "generators/base-workspaces/generators/bootstrap/index.ts": {
     "stateCleared": "modified",
   },
   "generators/base-workspaces/generators/bootstrap/templates/template-file-base-workspaces:bootstrap.ejs": {
     "stateCleared": "modified",
   },
-  "generators/base-workspaces/index.js": {
+  "generators/base-workspaces/index.ts": {
     "stateCleared": "modified",
   },
   "generators/base-workspaces/templates/template-file-base-workspaces.ejs": {
     "stateCleared": "modified",
   },
-  "generators/base/command.js": {
+  "generators/base/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/base/generator.js": {
+  "generators/base/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/base/generator.spec.js": {
+  "generators/base/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/base/index.js": {
+  "generators/base/index.ts": {
     "stateCleared": "modified",
   },
   "generators/base/templates/template-file-base.ejs": {
     "stateCleared": "modified",
   },
-  "generators/bootstrap/command.js": {
+  "generators/bootstrap/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/bootstrap/generator.js": {
+  "generators/bootstrap/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/bootstrap/generator.spec.js": {
+  "generators/bootstrap/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/bootstrap/index.js": {
+  "generators/bootstrap/index.ts": {
     "stateCleared": "modified",
   },
   "generators/bootstrap/templates/template-file-bootstrap.ejs": {
     "stateCleared": "modified",
   },
-  "generators/ci-cd/command.js": {
+  "generators/ci-cd/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/ci-cd/generator.js": {
+  "generators/ci-cd/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/ci-cd/generator.spec.js": {
+  "generators/ci-cd/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/ci-cd/generators/bootstrap/command.js": {
+  "generators/ci-cd/generators/bootstrap/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/ci-cd/generators/bootstrap/generator.js": {
+  "generators/ci-cd/generators/bootstrap/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/ci-cd/generators/bootstrap/generator.spec.js": {
+  "generators/ci-cd/generators/bootstrap/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/ci-cd/generators/bootstrap/index.js": {
+  "generators/ci-cd/generators/bootstrap/index.ts": {
     "stateCleared": "modified",
   },
   "generators/ci-cd/generators/bootstrap/templates/template-file-ci-cd:bootstrap.ejs": {
     "stateCleared": "modified",
   },
-  "generators/ci-cd/index.js": {
+  "generators/ci-cd/index.ts": {
     "stateCleared": "modified",
   },
   "generators/ci-cd/templates/template-file-ci-cd.ejs": {
     "stateCleared": "modified",
   },
-  "generators/client/command.js": {
+  "generators/client/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/client/generator.js": {
+  "generators/client/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/client/generator.spec.js": {
+  "generators/client/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/client/generators/bootstrap/command.js": {
+  "generators/client/generators/bootstrap/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/client/generators/bootstrap/generator.js": {
+  "generators/client/generators/bootstrap/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/client/generators/bootstrap/generator.spec.js": {
+  "generators/client/generators/bootstrap/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/client/generators/bootstrap/index.js": {
+  "generators/client/generators/bootstrap/index.ts": {
     "stateCleared": "modified",
   },
   "generators/client/generators/bootstrap/templates/template-file-client:bootstrap.ejs": {
     "stateCleared": "modified",
   },
-  "generators/client/generators/common/command.js": {
+  "generators/client/generators/common/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/client/generators/common/generator.js": {
+  "generators/client/generators/common/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/client/generators/common/generator.spec.js": {
+  "generators/client/generators/common/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/client/generators/common/index.js": {
+  "generators/client/generators/common/index.ts": {
     "stateCleared": "modified",
   },
   "generators/client/generators/common/templates/template-file-client:common.ejs": {
     "stateCleared": "modified",
   },
-  "generators/client/generators/encode-csrf-token/command.js": {
+  "generators/client/generators/encode-csrf-token/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/client/generators/encode-csrf-token/generator.js": {
+  "generators/client/generators/encode-csrf-token/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/client/generators/encode-csrf-token/generator.spec.js": {
+  "generators/client/generators/encode-csrf-token/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/client/generators/encode-csrf-token/index.js": {
+  "generators/client/generators/encode-csrf-token/index.ts": {
     "stateCleared": "modified",
   },
   "generators/client/generators/encode-csrf-token/templates/template-file-client:encode-csrf-token.ejs": {
     "stateCleared": "modified",
   },
-  "generators/client/generators/i18n/command.js": {
+  "generators/client/generators/i18n/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/client/generators/i18n/generator.js": {
+  "generators/client/generators/i18n/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/client/generators/i18n/generator.spec.js": {
+  "generators/client/generators/i18n/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/client/generators/i18n/index.js": {
+  "generators/client/generators/i18n/index.ts": {
     "stateCleared": "modified",
   },
   "generators/client/generators/i18n/templates/template-file-client:i18n.ejs": {
     "stateCleared": "modified",
   },
-  "generators/client/index.js": {
+  "generators/client/index.ts": {
     "stateCleared": "modified",
   },
   "generators/client/templates/template-file-client.ejs": {
     "stateCleared": "modified",
   },
-  "generators/common/command.js": {
+  "generators/common/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/common/generator.js": {
+  "generators/common/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/common/generator.spec.js": {
+  "generators/common/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/common/generators/bootstrap/command.js": {
+  "generators/common/generators/bootstrap/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/common/generators/bootstrap/generator.js": {
+  "generators/common/generators/bootstrap/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/common/generators/bootstrap/generator.spec.js": {
+  "generators/common/generators/bootstrap/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/common/generators/bootstrap/index.js": {
+  "generators/common/generators/bootstrap/index.ts": {
     "stateCleared": "modified",
   },
   "generators/common/generators/bootstrap/templates/template-file-common:bootstrap.ejs": {
     "stateCleared": "modified",
   },
-  "generators/common/index.js": {
+  "generators/common/index.ts": {
     "stateCleared": "modified",
   },
   "generators/common/templates/template-file-common.ejs": {
     "stateCleared": "modified",
   },
-  "generators/cypress/command.js": {
+  "generators/cypress/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/cypress/generator.js": {
+  "generators/cypress/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/cypress/generator.spec.js": {
+  "generators/cypress/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/cypress/index.js": {
+  "generators/cypress/index.ts": {
     "stateCleared": "modified",
   },
   "generators/cypress/templates/template-file-cypress.ejs": {
     "stateCleared": "modified",
   },
-  "generators/docker-compose/command.js": {
+  "generators/docker-compose/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/docker-compose/generator.js": {
+  "generators/docker-compose/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/docker-compose/generator.spec.js": {
+  "generators/docker-compose/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/docker-compose/index.js": {
+  "generators/docker-compose/index.ts": {
     "stateCleared": "modified",
   },
   "generators/docker-compose/templates/template-file-docker-compose.ejs": {
     "stateCleared": "modified",
   },
-  "generators/docker/command.js": {
+  "generators/docker/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/docker/generator.js": {
+  "generators/docker/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/docker/generator.spec.js": {
+  "generators/docker/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/docker/generators/bootstrap/command.js": {
+  "generators/docker/generators/bootstrap/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/docker/generators/bootstrap/generator.js": {
+  "generators/docker/generators/bootstrap/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/docker/generators/bootstrap/generator.spec.js": {
+  "generators/docker/generators/bootstrap/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/docker/generators/bootstrap/index.js": {
+  "generators/docker/generators/bootstrap/index.ts": {
     "stateCleared": "modified",
   },
   "generators/docker/generators/bootstrap/templates/template-file-docker:bootstrap.ejs": {
     "stateCleared": "modified",
   },
-  "generators/docker/index.js": {
+  "generators/docker/index.ts": {
     "stateCleared": "modified",
   },
   "generators/docker/templates/template-file-docker.ejs": {
     "stateCleared": "modified",
   },
-  "generators/entities/command.js": {
+  "generators/entities/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/entities/generator.js": {
+  "generators/entities/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/entities/generator.spec.js": {
+  "generators/entities/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/entities/index.js": {
+  "generators/entities/index.ts": {
     "stateCleared": "modified",
   },
   "generators/entities/templates/template-file-entities.ejs": {
     "stateCleared": "modified",
   },
-  "generators/entity/command.js": {
+  "generators/entity/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/entity/generator.js": {
+  "generators/entity/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/entity/index.js": {
+  "generators/entity/index.ts": {
     "stateCleared": "modified",
   },
   "generators/entity/templates/template-file-entity.ejs": {
     "stateCleared": "modified",
   },
-  "generators/export-jdl/command.js": {
+  "generators/export-jdl/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/export-jdl/generator.js": {
+  "generators/export-jdl/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/export-jdl/generator.spec.js": {
+  "generators/export-jdl/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/export-jdl/index.js": {
+  "generators/export-jdl/index.ts": {
     "stateCleared": "modified",
   },
   "generators/export-jdl/templates/template-file-export-jdl.ejs": {
     "stateCleared": "modified",
   },
-  "generators/generate-blueprint/command.js": {
+  "generators/generate-blueprint/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/generate-blueprint/generator.js": {
+  "generators/generate-blueprint/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/generate-blueprint/generator.spec.js": {
+  "generators/generate-blueprint/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/generate-blueprint/index.js": {
+  "generators/generate-blueprint/index.ts": {
     "stateCleared": "modified",
   },
   "generators/generate-blueprint/templates/template-file-generate-blueprint.ejs": {
     "stateCleared": "modified",
   },
-  "generators/git/command.js": {
+  "generators/git/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/git/generator.js": {
+  "generators/git/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/git/generator.spec.js": {
+  "generators/git/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/git/index.js": {
+  "generators/git/index.ts": {
     "stateCleared": "modified",
   },
   "generators/git/templates/template-file-git.ejs": {
     "stateCleared": "modified",
   },
-  "generators/heroku/command.js": {
+  "generators/heroku/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/heroku/generator.js": {
+  "generators/heroku/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/heroku/generator.spec.js": {
+  "generators/heroku/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/heroku/index.js": {
+  "generators/heroku/index.ts": {
     "stateCleared": "modified",
   },
   "generators/heroku/templates/template-file-heroku.ejs": {
     "stateCleared": "modified",
   },
-  "generators/info/command.js": {
+  "generators/info/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/info/generator.js": {
+  "generators/info/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/info/generator.spec.js": {
+  "generators/info/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/info/index.js": {
+  "generators/info/index.ts": {
     "stateCleared": "modified",
   },
   "generators/info/templates/template-file-info.ejs": {
     "stateCleared": "modified",
   },
-  "generators/init/command.js": {
+  "generators/init/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/init/generator.js": {
+  "generators/init/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/init/generator.spec.js": {
+  "generators/init/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/init/index.js": {
+  "generators/init/index.ts": {
     "stateCleared": "modified",
   },
   "generators/init/templates/template-file-init.ejs": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/command.js": {
+  "generators/java-simple-application/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generator.js": {
+  "generators/java-simple-application/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generator.spec.js": {
+  "generators/java-simple-application/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/bootstrap/command.js": {
+  "generators/java-simple-application/generators/bootstrap/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/bootstrap/generator.js": {
+  "generators/java-simple-application/generators/bootstrap/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/bootstrap/generator.spec.js": {
+  "generators/java-simple-application/generators/bootstrap/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/bootstrap/index.js": {
+  "generators/java-simple-application/generators/bootstrap/index.ts": {
     "stateCleared": "modified",
   },
   "generators/java-simple-application/generators/bootstrap/templates/template-file-java-simple-application:bootstrap.ejs": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/build-tool/command.js": {
+  "generators/java-simple-application/generators/build-tool/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/build-tool/generator.js": {
+  "generators/java-simple-application/generators/build-tool/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/build-tool/generator.spec.js": {
+  "generators/java-simple-application/generators/build-tool/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/build-tool/index.js": {
+  "generators/java-simple-application/generators/build-tool/index.ts": {
     "stateCleared": "modified",
   },
   "generators/java-simple-application/generators/build-tool/templates/template-file-java-simple-application:build-tool.ejs": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/code-quality/command.js": {
+  "generators/java-simple-application/generators/code-quality/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/code-quality/generator.js": {
+  "generators/java-simple-application/generators/code-quality/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/code-quality/generator.spec.js": {
+  "generators/java-simple-application/generators/code-quality/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/code-quality/index.js": {
+  "generators/java-simple-application/generators/code-quality/index.ts": {
     "stateCleared": "modified",
   },
   "generators/java-simple-application/generators/code-quality/templates/template-file-java-simple-application:code-quality.ejs": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/graalvm/command.js": {
+  "generators/java-simple-application/generators/graalvm/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/graalvm/generator.js": {
+  "generators/java-simple-application/generators/graalvm/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/graalvm/generator.spec.js": {
+  "generators/java-simple-application/generators/graalvm/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/graalvm/index.js": {
+  "generators/java-simple-application/generators/graalvm/index.ts": {
     "stateCleared": "modified",
   },
   "generators/java-simple-application/generators/graalvm/templates/template-file-java-simple-application:graalvm.ejs": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/gradle/command.js": {
+  "generators/java-simple-application/generators/gradle/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/gradle/generator.js": {
+  "generators/java-simple-application/generators/gradle/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/gradle/generator.spec.js": {
+  "generators/java-simple-application/generators/gradle/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/gradle/index.js": {
+  "generators/java-simple-application/generators/gradle/index.ts": {
     "stateCleared": "modified",
   },
   "generators/java-simple-application/generators/gradle/templates/template-file-java-simple-application:gradle.ejs": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/jib/command.js": {
+  "generators/java-simple-application/generators/jib/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/jib/generator.js": {
+  "generators/java-simple-application/generators/jib/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/jib/generator.spec.js": {
+  "generators/java-simple-application/generators/jib/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/jib/index.js": {
+  "generators/java-simple-application/generators/jib/index.ts": {
     "stateCleared": "modified",
   },
   "generators/java-simple-application/generators/jib/templates/template-file-java-simple-application:jib.ejs": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/maven/command.js": {
+  "generators/java-simple-application/generators/maven/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/maven/generator.js": {
+  "generators/java-simple-application/generators/maven/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/maven/generator.spec.js": {
+  "generators/java-simple-application/generators/maven/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/maven/index.js": {
+  "generators/java-simple-application/generators/maven/index.ts": {
     "stateCleared": "modified",
   },
   "generators/java-simple-application/generators/maven/templates/template-file-java-simple-application:maven.ejs": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/openapi-generator/command.js": {
+  "generators/java-simple-application/generators/openapi-generator/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/openapi-generator/generator.js": {
+  "generators/java-simple-application/generators/openapi-generator/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/openapi-generator/generator.spec.js": {
+  "generators/java-simple-application/generators/openapi-generator/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/generators/openapi-generator/index.js": {
+  "generators/java-simple-application/generators/openapi-generator/index.ts": {
     "stateCleared": "modified",
   },
   "generators/java-simple-application/generators/openapi-generator/templates/template-file-java-simple-application:openapi-generator.ejs": {
     "stateCleared": "modified",
   },
-  "generators/java-simple-application/index.js": {
+  "generators/java-simple-application/index.ts": {
     "stateCleared": "modified",
   },
   "generators/java-simple-application/templates/template-file-java-simple-application.ejs": {
     "stateCleared": "modified",
   },
-  "generators/java/command.js": {
+  "generators/java/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/java/generator.js": {
+  "generators/java/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/java/generator.spec.js": {
+  "generators/java/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/bootstrap/command.js": {
+  "generators/java/generators/bootstrap/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/bootstrap/generator.js": {
+  "generators/java/generators/bootstrap/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/bootstrap/generator.spec.js": {
+  "generators/java/generators/bootstrap/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/bootstrap/index.js": {
+  "generators/java/generators/bootstrap/index.ts": {
     "stateCleared": "modified",
   },
   "generators/java/generators/bootstrap/templates/template-file-java:bootstrap.ejs": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/domain/command.js": {
+  "generators/java/generators/domain/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/domain/generator.js": {
+  "generators/java/generators/domain/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/domain/generator.spec.js": {
+  "generators/java/generators/domain/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/domain/index.js": {
+  "generators/java/generators/domain/index.ts": {
     "stateCleared": "modified",
   },
   "generators/java/generators/domain/templates/template-file-java:domain.ejs": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/gatling/command.js": {
+  "generators/java/generators/gatling/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/gatling/generator.js": {
+  "generators/java/generators/gatling/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/gatling/generator.spec.js": {
+  "generators/java/generators/gatling/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/gatling/index.js": {
+  "generators/java/generators/gatling/index.ts": {
     "stateCleared": "modified",
   },
   "generators/java/generators/gatling/templates/template-file-java:gatling.ejs": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/i18n/command.js": {
+  "generators/java/generators/i18n/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/i18n/generator.js": {
+  "generators/java/generators/i18n/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/i18n/generator.spec.js": {
+  "generators/java/generators/i18n/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/i18n/index.js": {
+  "generators/java/generators/i18n/index.ts": {
     "stateCleared": "modified",
   },
   "generators/java/generators/i18n/templates/template-file-java:i18n.ejs": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/node/command.js": {
+  "generators/java/generators/node/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/node/generator.js": {
+  "generators/java/generators/node/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/node/generator.spec.js": {
+  "generators/java/generators/node/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/node/index.js": {
+  "generators/java/generators/node/index.ts": {
     "stateCleared": "modified",
   },
   "generators/java/generators/node/templates/template-file-java:node.ejs": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/server/command.js": {
+  "generators/java/generators/server/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/server/generator.js": {
+  "generators/java/generators/server/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/server/generator.spec.js": {
+  "generators/java/generators/server/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/java/generators/server/index.js": {
+  "generators/java/generators/server/index.ts": {
     "stateCleared": "modified",
   },
   "generators/java/generators/server/templates/template-file-java:server.ejs": {
     "stateCleared": "modified",
   },
-  "generators/java/index.js": {
+  "generators/java/index.ts": {
     "stateCleared": "modified",
   },
   "generators/java/templates/template-file-java.ejs": {
     "stateCleared": "modified",
   },
-  "generators/javascript-simple-application/command.js": {
+  "generators/javascript-simple-application/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/javascript-simple-application/generator.js": {
+  "generators/javascript-simple-application/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/javascript-simple-application/generator.spec.js": {
+  "generators/javascript-simple-application/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/javascript-simple-application/generators/bootstrap/command.js": {
+  "generators/javascript-simple-application/generators/bootstrap/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/javascript-simple-application/generators/bootstrap/generator.js": {
+  "generators/javascript-simple-application/generators/bootstrap/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/javascript-simple-application/generators/bootstrap/generator.spec.js": {
+  "generators/javascript-simple-application/generators/bootstrap/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/javascript-simple-application/generators/bootstrap/index.js": {
+  "generators/javascript-simple-application/generators/bootstrap/index.ts": {
     "stateCleared": "modified",
   },
   "generators/javascript-simple-application/generators/bootstrap/templates/template-file-javascript-simple-application:bootstrap.ejs": {
     "stateCleared": "modified",
   },
-  "generators/javascript-simple-application/generators/eslint/command.js": {
+  "generators/javascript-simple-application/generators/eslint/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/javascript-simple-application/generators/eslint/generator.js": {
+  "generators/javascript-simple-application/generators/eslint/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/javascript-simple-application/generators/eslint/generator.spec.js": {
+  "generators/javascript-simple-application/generators/eslint/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/javascript-simple-application/generators/eslint/index.js": {
+  "generators/javascript-simple-application/generators/eslint/index.ts": {
     "stateCleared": "modified",
   },
   "generators/javascript-simple-application/generators/eslint/templates/template-file-javascript-simple-application:eslint.ejs": {
     "stateCleared": "modified",
   },
-  "generators/javascript-simple-application/generators/husky/command.js": {
+  "generators/javascript-simple-application/generators/husky/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/javascript-simple-application/generators/husky/generator.js": {
+  "generators/javascript-simple-application/generators/husky/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/javascript-simple-application/generators/husky/generator.spec.js": {
+  "generators/javascript-simple-application/generators/husky/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/javascript-simple-application/generators/husky/index.js": {
+  "generators/javascript-simple-application/generators/husky/index.ts": {
     "stateCleared": "modified",
   },
   "generators/javascript-simple-application/generators/husky/templates/template-file-javascript-simple-application:husky.ejs": {
     "stateCleared": "modified",
   },
-  "generators/javascript-simple-application/generators/prettier/command.js": {
+  "generators/javascript-simple-application/generators/prettier/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/javascript-simple-application/generators/prettier/generator.js": {
+  "generators/javascript-simple-application/generators/prettier/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/javascript-simple-application/generators/prettier/generator.spec.js": {
+  "generators/javascript-simple-application/generators/prettier/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/javascript-simple-application/generators/prettier/index.js": {
+  "generators/javascript-simple-application/generators/prettier/index.ts": {
     "stateCleared": "modified",
   },
   "generators/javascript-simple-application/generators/prettier/templates/template-file-javascript-simple-application:prettier.ejs": {
     "stateCleared": "modified",
   },
-  "generators/javascript-simple-application/index.js": {
+  "generators/javascript-simple-application/index.ts": {
     "stateCleared": "modified",
   },
   "generators/javascript-simple-application/templates/template-file-javascript-simple-application.ejs": {
     "stateCleared": "modified",
   },
-  "generators/jdl/command.js": {
+  "generators/jdl/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/jdl/generator.js": {
+  "generators/jdl/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/jdl/generator.spec.js": {
+  "generators/jdl/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/jdl/generators/bootstrap/command.js": {
+  "generators/jdl/generators/bootstrap/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/jdl/generators/bootstrap/generator.js": {
+  "generators/jdl/generators/bootstrap/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/jdl/generators/bootstrap/generator.spec.js": {
+  "generators/jdl/generators/bootstrap/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/jdl/generators/bootstrap/index.js": {
+  "generators/jdl/generators/bootstrap/index.ts": {
     "stateCleared": "modified",
   },
   "generators/jdl/generators/bootstrap/templates/template-file-jdl:bootstrap.ejs": {
     "stateCleared": "modified",
   },
-  "generators/jdl/index.js": {
+  "generators/jdl/index.ts": {
     "stateCleared": "modified",
   },
   "generators/jdl/templates/template-file-jdl.ejs": {
     "stateCleared": "modified",
   },
-  "generators/kubernetes/command.js": {
+  "generators/kubernetes/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/kubernetes/generator.js": {
+  "generators/kubernetes/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/kubernetes/generator.spec.js": {
+  "generators/kubernetes/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/kubernetes/generators/bootstrap/command.js": {
+  "generators/kubernetes/generators/bootstrap/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/kubernetes/generators/bootstrap/generator.js": {
+  "generators/kubernetes/generators/bootstrap/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/kubernetes/generators/bootstrap/generator.spec.js": {
+  "generators/kubernetes/generators/bootstrap/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/kubernetes/generators/bootstrap/index.js": {
+  "generators/kubernetes/generators/bootstrap/index.ts": {
     "stateCleared": "modified",
   },
   "generators/kubernetes/generators/bootstrap/templates/template-file-kubernetes:bootstrap.ejs": {
     "stateCleared": "modified",
   },
-  "generators/kubernetes/generators/helm/command.js": {
+  "generators/kubernetes/generators/helm/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/kubernetes/generators/helm/generator.js": {
+  "generators/kubernetes/generators/helm/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/kubernetes/generators/helm/generator.spec.js": {
+  "generators/kubernetes/generators/helm/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/kubernetes/generators/helm/index.js": {
+  "generators/kubernetes/generators/helm/index.ts": {
     "stateCleared": "modified",
   },
   "generators/kubernetes/generators/helm/templates/template-file-kubernetes:helm.ejs": {
     "stateCleared": "modified",
   },
-  "generators/kubernetes/generators/knative/command.js": {
+  "generators/kubernetes/generators/knative/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/kubernetes/generators/knative/generator.js": {
+  "generators/kubernetes/generators/knative/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/kubernetes/generators/knative/generator.spec.js": {
+  "generators/kubernetes/generators/knative/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/kubernetes/generators/knative/index.js": {
+  "generators/kubernetes/generators/knative/index.ts": {
     "stateCleared": "modified",
   },
   "generators/kubernetes/generators/knative/templates/template-file-kubernetes:knative.ejs": {
     "stateCleared": "modified",
   },
-  "generators/kubernetes/index.js": {
+  "generators/kubernetes/index.ts": {
     "stateCleared": "modified",
   },
   "generators/kubernetes/templates/template-file-kubernetes.ejs": {
     "stateCleared": "modified",
   },
-  "generators/languages/command.js": {
+  "generators/languages/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/languages/generator.js": {
+  "generators/languages/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/languages/generator.spec.js": {
+  "generators/languages/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/languages/generators/bootstrap/command.js": {
+  "generators/languages/generators/bootstrap/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/languages/generators/bootstrap/generator.js": {
+  "generators/languages/generators/bootstrap/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/languages/generators/bootstrap/generator.spec.js": {
+  "generators/languages/generators/bootstrap/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/languages/generators/bootstrap/index.js": {
+  "generators/languages/generators/bootstrap/index.ts": {
     "stateCleared": "modified",
   },
   "generators/languages/generators/bootstrap/templates/template-file-languages:bootstrap.ejs": {
     "stateCleared": "modified",
   },
-  "generators/languages/index.js": {
+  "generators/languages/index.ts": {
     "stateCleared": "modified",
   },
   "generators/languages/templates/template-file-languages.ejs": {
     "stateCleared": "modified",
   },
-  "generators/liquibase/command.js": {
+  "generators/liquibase/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/liquibase/generator.js": {
+  "generators/liquibase/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/liquibase/generator.spec.js": {
+  "generators/liquibase/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/liquibase/index.js": {
+  "generators/liquibase/index.ts": {
     "stateCleared": "modified",
   },
   "generators/liquibase/templates/template-file-liquibase.ejs": {
     "stateCleared": "modified",
   },
-  "generators/project-name/command.js": {
+  "generators/project-name/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/project-name/generator.js": {
+  "generators/project-name/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/project-name/generator.spec.js": {
+  "generators/project-name/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/project-name/generators/bootstrap/command.js": {
+  "generators/project-name/generators/bootstrap/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/project-name/generators/bootstrap/generator.js": {
+  "generators/project-name/generators/bootstrap/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/project-name/generators/bootstrap/generator.spec.js": {
+  "generators/project-name/generators/bootstrap/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/project-name/generators/bootstrap/index.js": {
+  "generators/project-name/generators/bootstrap/index.ts": {
     "stateCleared": "modified",
   },
   "generators/project-name/generators/bootstrap/templates/template-file-project-name:bootstrap.ejs": {
     "stateCleared": "modified",
   },
-  "generators/project-name/index.js": {
+  "generators/project-name/index.ts": {
     "stateCleared": "modified",
   },
   "generators/project-name/templates/template-file-project-name.ejs": {
     "stateCleared": "modified",
   },
-  "generators/react/command.js": {
+  "generators/react/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/react/generator.js": {
+  "generators/react/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/react/generator.spec.js": {
+  "generators/react/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/react/generators/bootstrap/command.js": {
+  "generators/react/generators/bootstrap/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/react/generators/bootstrap/generator.js": {
+  "generators/react/generators/bootstrap/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/react/generators/bootstrap/generator.spec.js": {
+  "generators/react/generators/bootstrap/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/react/generators/bootstrap/index.js": {
+  "generators/react/generators/bootstrap/index.ts": {
     "stateCleared": "modified",
   },
   "generators/react/generators/bootstrap/templates/template-file-react:bootstrap.ejs": {
     "stateCleared": "modified",
   },
-  "generators/react/index.js": {
+  "generators/react/index.ts": {
     "stateCleared": "modified",
   },
   "generators/react/templates/template-file-react.ejs": {
     "stateCleared": "modified",
   },
-  "generators/server/command.js": {
+  "generators/server/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/server/generator.js": {
+  "generators/server/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/server/generator.spec.js": {
+  "generators/server/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/server/generators/bootstrap/command.js": {
+  "generators/server/generators/bootstrap/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/server/generators/bootstrap/generator.js": {
+  "generators/server/generators/bootstrap/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/server/generators/bootstrap/generator.spec.js": {
+  "generators/server/generators/bootstrap/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/server/generators/bootstrap/index.js": {
+  "generators/server/generators/bootstrap/index.ts": {
     "stateCleared": "modified",
   },
   "generators/server/generators/bootstrap/templates/template-file-server:bootstrap.ejs": {
     "stateCleared": "modified",
   },
-  "generators/server/index.js": {
+  "generators/server/index.ts": {
     "stateCleared": "modified",
   },
   "generators/server/templates/template-file-server.ejs": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/command.js": {
+  "generators/spring-boot/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generator.js": {
+  "generators/spring-boot/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generator.spec.js": {
+  "generators/spring-boot/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/bootstrap/command.js": {
+  "generators/spring-boot/generators/bootstrap/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/bootstrap/generator.js": {
+  "generators/spring-boot/generators/bootstrap/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/bootstrap/generator.spec.js": {
+  "generators/spring-boot/generators/bootstrap/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/bootstrap/index.js": {
+  "generators/spring-boot/generators/bootstrap/index.ts": {
     "stateCleared": "modified",
   },
   "generators/spring-boot/generators/bootstrap/templates/template-file-spring-boot:bootstrap.ejs": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/cache/command.js": {
+  "generators/spring-boot/generators/cache/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/cache/generator.js": {
+  "generators/spring-boot/generators/cache/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/cache/generator.spec.js": {
+  "generators/spring-boot/generators/cache/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/cache/index.js": {
+  "generators/spring-boot/generators/cache/index.ts": {
     "stateCleared": "modified",
   },
   "generators/spring-boot/generators/cache/templates/template-file-spring-boot:cache.ejs": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/cucumber/command.js": {
+  "generators/spring-boot/generators/cucumber/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/cucumber/generator.js": {
+  "generators/spring-boot/generators/cucumber/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/cucumber/generator.spec.js": {
+  "generators/spring-boot/generators/cucumber/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/cucumber/index.js": {
+  "generators/spring-boot/generators/cucumber/index.ts": {
     "stateCleared": "modified",
   },
   "generators/spring-boot/generators/cucumber/templates/template-file-spring-boot:cucumber.ejs": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/data-cassandra/command.js": {
+  "generators/spring-boot/generators/data-cassandra/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/data-cassandra/generator.js": {
+  "generators/spring-boot/generators/data-cassandra/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/data-cassandra/generator.spec.js": {
+  "generators/spring-boot/generators/data-cassandra/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/data-cassandra/index.js": {
+  "generators/spring-boot/generators/data-cassandra/index.ts": {
     "stateCleared": "modified",
   },
   "generators/spring-boot/generators/data-cassandra/templates/template-file-spring-boot:data-cassandra.ejs": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/data-couchbase/command.js": {
+  "generators/spring-boot/generators/data-couchbase/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/data-couchbase/generator.js": {
+  "generators/spring-boot/generators/data-couchbase/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/data-couchbase/generator.spec.js": {
+  "generators/spring-boot/generators/data-couchbase/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/data-couchbase/index.js": {
+  "generators/spring-boot/generators/data-couchbase/index.ts": {
     "stateCleared": "modified",
   },
   "generators/spring-boot/generators/data-couchbase/templates/template-file-spring-boot:data-couchbase.ejs": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/data-elasticsearch/command.js": {
+  "generators/spring-boot/generators/data-elasticsearch/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/data-elasticsearch/generator.js": {
+  "generators/spring-boot/generators/data-elasticsearch/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/data-elasticsearch/generator.spec.js": {
+  "generators/spring-boot/generators/data-elasticsearch/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/data-elasticsearch/index.js": {
+  "generators/spring-boot/generators/data-elasticsearch/index.ts": {
     "stateCleared": "modified",
   },
   "generators/spring-boot/generators/data-elasticsearch/templates/template-file-spring-boot:data-elasticsearch.ejs": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/data-mongodb/command.js": {
+  "generators/spring-boot/generators/data-mongodb/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/data-mongodb/generator.js": {
+  "generators/spring-boot/generators/data-mongodb/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/data-mongodb/generator.spec.js": {
+  "generators/spring-boot/generators/data-mongodb/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/data-mongodb/index.js": {
+  "generators/spring-boot/generators/data-mongodb/index.ts": {
     "stateCleared": "modified",
   },
   "generators/spring-boot/generators/data-mongodb/templates/template-file-spring-boot:data-mongodb.ejs": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/data-neo4j/command.js": {
+  "generators/spring-boot/generators/data-neo4j/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/data-neo4j/generator.js": {
+  "generators/spring-boot/generators/data-neo4j/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/data-neo4j/generator.spec.js": {
+  "generators/spring-boot/generators/data-neo4j/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/data-neo4j/index.js": {
+  "generators/spring-boot/generators/data-neo4j/index.ts": {
     "stateCleared": "modified",
   },
   "generators/spring-boot/generators/data-neo4j/templates/template-file-spring-boot:data-neo4j.ejs": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/data-relational/command.js": {
+  "generators/spring-boot/generators/data-relational/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/data-relational/generator.js": {
+  "generators/spring-boot/generators/data-relational/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/data-relational/generator.spec.js": {
+  "generators/spring-boot/generators/data-relational/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/data-relational/index.js": {
+  "generators/spring-boot/generators/data-relational/index.ts": {
     "stateCleared": "modified",
   },
   "generators/spring-boot/generators/data-relational/templates/template-file-spring-boot:data-relational.ejs": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/graalvm/command.js": {
+  "generators/spring-boot/generators/graalvm/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/graalvm/generator.js": {
+  "generators/spring-boot/generators/graalvm/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/graalvm/generator.spec.js": {
+  "generators/spring-boot/generators/graalvm/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/graalvm/index.js": {
+  "generators/spring-boot/generators/graalvm/index.ts": {
     "stateCleared": "modified",
   },
   "generators/spring-boot/generators/graalvm/templates/template-file-spring-boot:graalvm.ejs": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/jwt/command.js": {
+  "generators/spring-boot/generators/jwt/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/jwt/generator.js": {
+  "generators/spring-boot/generators/jwt/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/jwt/generator.spec.js": {
+  "generators/spring-boot/generators/jwt/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/jwt/index.js": {
+  "generators/spring-boot/generators/jwt/index.ts": {
     "stateCleared": "modified",
   },
   "generators/spring-boot/generators/jwt/templates/template-file-spring-boot:jwt.ejs": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/liquibase/command.js": {
+  "generators/spring-boot/generators/liquibase/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/liquibase/generator.js": {
+  "generators/spring-boot/generators/liquibase/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/liquibase/generator.spec.js": {
+  "generators/spring-boot/generators/liquibase/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/liquibase/index.js": {
+  "generators/spring-boot/generators/liquibase/index.ts": {
     "stateCleared": "modified",
   },
   "generators/spring-boot/generators/liquibase/templates/template-file-spring-boot:liquibase.ejs": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/oauth2/command.js": {
+  "generators/spring-boot/generators/oauth2/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/oauth2/generator.js": {
+  "generators/spring-boot/generators/oauth2/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/oauth2/generator.spec.js": {
+  "generators/spring-boot/generators/oauth2/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/oauth2/index.js": {
+  "generators/spring-boot/generators/oauth2/index.ts": {
     "stateCleared": "modified",
   },
   "generators/spring-boot/generators/oauth2/templates/template-file-spring-boot:oauth2.ejs": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/websocket/command.js": {
+  "generators/spring-boot/generators/websocket/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/websocket/generator.js": {
+  "generators/spring-boot/generators/websocket/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/websocket/generator.spec.js": {
+  "generators/spring-boot/generators/websocket/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/generators/websocket/index.js": {
+  "generators/spring-boot/generators/websocket/index.ts": {
     "stateCleared": "modified",
   },
   "generators/spring-boot/generators/websocket/templates/template-file-spring-boot:websocket.ejs": {
     "stateCleared": "modified",
   },
-  "generators/spring-boot/index.js": {
+  "generators/spring-boot/index.ts": {
     "stateCleared": "modified",
   },
   "generators/spring-boot/templates/template-file-spring-boot.ejs": {
     "stateCleared": "modified",
   },
-  "generators/spring-cloud/command.js": {
+  "generators/spring-cloud/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-cloud/generator.js": {
+  "generators/spring-cloud/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-cloud/generator.spec.js": {
+  "generators/spring-cloud/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-cloud/generators/feign-client/command.js": {
+  "generators/spring-cloud/generators/feign-client/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-cloud/generators/feign-client/generator.js": {
+  "generators/spring-cloud/generators/feign-client/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-cloud/generators/feign-client/generator.spec.js": {
+  "generators/spring-cloud/generators/feign-client/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-cloud/generators/feign-client/index.js": {
+  "generators/spring-cloud/generators/feign-client/index.ts": {
     "stateCleared": "modified",
   },
   "generators/spring-cloud/generators/feign-client/templates/template-file-spring-cloud:feign-client.ejs": {
     "stateCleared": "modified",
   },
-  "generators/spring-cloud/generators/gateway/command.js": {
+  "generators/spring-cloud/generators/gateway/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-cloud/generators/gateway/generator.js": {
+  "generators/spring-cloud/generators/gateway/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-cloud/generators/gateway/generator.spec.js": {
+  "generators/spring-cloud/generators/gateway/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-cloud/generators/gateway/index.js": {
+  "generators/spring-cloud/generators/gateway/index.ts": {
     "stateCleared": "modified",
   },
   "generators/spring-cloud/generators/gateway/templates/template-file-spring-cloud:gateway.ejs": {
     "stateCleared": "modified",
   },
-  "generators/spring-cloud/generators/kafka/command.js": {
+  "generators/spring-cloud/generators/kafka/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-cloud/generators/kafka/generator.js": {
+  "generators/spring-cloud/generators/kafka/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-cloud/generators/kafka/generator.spec.js": {
+  "generators/spring-cloud/generators/kafka/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-cloud/generators/kafka/index.js": {
+  "generators/spring-cloud/generators/kafka/index.ts": {
     "stateCleared": "modified",
   },
   "generators/spring-cloud/generators/kafka/templates/template-file-spring-cloud:kafka.ejs": {
     "stateCleared": "modified",
   },
-  "generators/spring-cloud/generators/pulsar/command.js": {
+  "generators/spring-cloud/generators/pulsar/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-cloud/generators/pulsar/generator.js": {
+  "generators/spring-cloud/generators/pulsar/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-cloud/generators/pulsar/generator.spec.js": {
+  "generators/spring-cloud/generators/pulsar/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/spring-cloud/generators/pulsar/index.js": {
+  "generators/spring-cloud/generators/pulsar/index.ts": {
     "stateCleared": "modified",
   },
   "generators/spring-cloud/generators/pulsar/templates/template-file-spring-cloud:pulsar.ejs": {
     "stateCleared": "modified",
   },
-  "generators/spring-cloud/index.js": {
+  "generators/spring-cloud/index.ts": {
     "stateCleared": "modified",
   },
   "generators/spring-cloud/templates/template-file-spring-cloud.ejs": {
     "stateCleared": "modified",
   },
-  "generators/upgrade/command.js": {
+  "generators/upgrade/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/upgrade/generator.js": {
+  "generators/upgrade/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/upgrade/generator.spec.js": {
+  "generators/upgrade/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/upgrade/index.js": {
+  "generators/upgrade/index.ts": {
     "stateCleared": "modified",
   },
   "generators/upgrade/templates/template-file-upgrade.ejs": {
     "stateCleared": "modified",
   },
-  "generators/vue/command.js": {
+  "generators/vue/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/vue/generator.js": {
+  "generators/vue/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/vue/generator.spec.js": {
+  "generators/vue/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/vue/generators/bootstrap/command.js": {
+  "generators/vue/generators/bootstrap/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/vue/generators/bootstrap/generator.js": {
+  "generators/vue/generators/bootstrap/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/vue/generators/bootstrap/generator.spec.js": {
+  "generators/vue/generators/bootstrap/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/vue/generators/bootstrap/index.js": {
+  "generators/vue/generators/bootstrap/index.ts": {
     "stateCleared": "modified",
   },
   "generators/vue/generators/bootstrap/templates/template-file-vue:bootstrap.ejs": {
     "stateCleared": "modified",
   },
-  "generators/vue/index.js": {
+  "generators/vue/index.ts": {
     "stateCleared": "modified",
   },
   "generators/vue/templates/template-file-vue.ejs": {
     "stateCleared": "modified",
   },
-  "generators/workspaces/command.js": {
+  "generators/workspaces/command.ts": {
     "stateCleared": "modified",
   },
-  "generators/workspaces/generator.js": {
+  "generators/workspaces/generator.spec.ts": {
     "stateCleared": "modified",
   },
-  "generators/workspaces/generator.spec.js": {
+  "generators/workspaces/generator.ts": {
     "stateCleared": "modified",
   },
-  "generators/workspaces/index.js": {
+  "generators/workspaces/index.ts": {
     "stateCleared": "modified",
   },
   "generators/workspaces/templates/template-file-workspaces.ejs": {
@@ -1471,16 +1471,16 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
 
 exports[`generator - generate-blueprint with default config should write files and match snapshot 1`] = `
 {
-  ".blueprint/cli/commands.mjs": {
+  ".blueprint/cli/commands.ts": {
     "stateCleared": "modified",
   },
-  ".blueprint/generate-sample/command.mjs": {
+  ".blueprint/generate-sample/command.ts": {
     "stateCleared": "modified",
   },
-  ".blueprint/generate-sample/generator.mjs": {
+  ".blueprint/generate-sample/generator.ts": {
     "stateCleared": "modified",
   },
-  ".blueprint/generate-sample/index.mjs": {
+  ".blueprint/generate-sample/index.ts": {
     "stateCleared": "modified",
   },
   ".blueprint/generate-sample/templates/samples/sample.jdl": {
