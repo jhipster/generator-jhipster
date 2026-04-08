@@ -37,7 +37,7 @@
     "folder-hash": "4.1.2",
     "globals": "17.4.0",
     "jiti": "2.6.1",
-    "jsdom": "29.0.1",
+    "jsdom": "29.0.2",
     "merge-jsons-webpack-plugin": "2.0.1",
     "postcss-rtlcss": "6.0.0",
     "rimraf": "6.1.3",
