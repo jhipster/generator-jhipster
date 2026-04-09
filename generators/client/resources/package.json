@@ -6,7 +6,7 @@
     "@cypress/code-coverage": "4.0.3",
     "@cypress/schematic": "5.0.0",
     "babel-loader": "10.1.1",
-    "babel-plugin-istanbul": "7.0.1",
+    "babel-plugin-istanbul": "8.0.0",
     "cypress": "15.13.1",
     "cypress-audit": "1.1.0",
     "cypress-monocart-coverage": "1.0.1",
