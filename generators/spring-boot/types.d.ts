@@ -141,14 +141,6 @@ export type Source = JavaSource &
     addEntityToCache?(entry: { entityAbsoluteClass: string; relationships?: { propertyName: string; collection: boolean }[] }): void;
   };
 
-type ImperativeApplication = {
-  reactive: false;
-};
-
-type ReactiveApplication = {
-  reactive: true;
-};
-
 type DatabaseTypeApplication = OptionWithDerivedProperties<'databaseType', ['sql', 'no', 'cassandra', 'couchbase', 'mongodb', 'neo4j']>;
 
 /*
