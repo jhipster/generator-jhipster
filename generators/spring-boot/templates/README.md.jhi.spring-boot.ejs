@@ -362,3 +362,11 @@ For more information refer to [Docker and Docker-Compose](<%- documentationArchi
 To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration](<%- documentationArchiveUrl %>/setting-up-ci/) page for more information.
 
 <&_ } -&>
+<&_ if (fragment.referenceSection) { -&>
+<%_ if (serviceDiscoveryEureka) { _%>
+- [Service Discovery and Configuration with the JHipster-Registry](<%- documentationArchiveUrl %>/microservices-architecture/#jhipster-registry)
+<%_ } _%>
+<%_ if (serviceDiscoveryConsul) { _%>
+- [Service Discovery and Configuration with Consul](<%- documentationArchiveUrl %>/microservices-architecture/#consul)
+<%_ } _%>
+<&_ } -&>

@@ -51,6 +51,8 @@ import type {
   Application as SpringBootApplication,
   Config as SpringBootConfig,
   Entity as SpringBootEntity,
+  Features,
+  Options,
   Options as SpringBootOptions,
   Source as SpringBootSource,
   SpringBootModule,
@@ -76,6 +78,10 @@ export class SpringBootApplicationGenerator extends BaseApplicationGenerator<
 
 export default class SpringBootGenerator extends SpringBootApplicationGenerator {
   fakeKeytool!: boolean;
+
+  constructor(args?: string[], options?: Options, features?: Features) {
+    super(args, options, { ...features, loadCommand: ['jhipster:client'] });
+  }
 
   async beforeQueue() {
     if (!this.fromBlueprint) {

@@ -86,7 +86,7 @@ export type Features = YeomanFeatures & {
    * Queue tasks to load and prepare properties from command.
    * This is useful for bootstrap generator.
    */
-  loadCommand?: JHipsterCommandDefinition[];
+  loadCommand?: JHipsterCommandDefinition[] | string[];
 
   /**
    * Skip load and prepare properties from command.

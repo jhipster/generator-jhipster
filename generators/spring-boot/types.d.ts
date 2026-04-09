@@ -28,6 +28,8 @@ import type cacheCommand from './generators/cache/command.ts';
 import type springBootDependencies4 from './resources/spring-boot-dependencies-4.ts';
 import type springBootDependencies3 from './resources/spring-boot-dependencies.ts';
 
+export type { Features } from '../server/types.d.ts';
+
 type Command = CommandTypeMap<typeof command>;
 type CacheCommand = CommandTypeMap<typeof cacheCommand>;
 

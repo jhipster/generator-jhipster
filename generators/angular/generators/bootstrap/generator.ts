@@ -23,8 +23,13 @@ import {
 } from '../../../client/support/update-languages.ts';
 import { generateLanguagesWebappOptions } from '../../../languages/support/languages.ts';
 import { AngularApplicationGenerator } from '../../generator.ts';
+import type { Features, Options } from '../../types.ts';
 
 export default class BootstrapGenerator extends AngularApplicationGenerator {
+  constructor(args?: string[], options?: Options, features?: Features) {
+    super(args, options, { ...features, loadCommand: ['jhipster:server'] });
+  }
+
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

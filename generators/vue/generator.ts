@@ -22,7 +22,7 @@ import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
 import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.ts';
-import type { Field } from '../base-application/types.ts';
+import type { Features, Field, Options } from '../base-application/types.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
 import { ClientApplicationGenerator } from '../client/generator.ts';
 import {
@@ -44,6 +44,10 @@ const { VUE } = clientFrameworkTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
 
 export default class VueGenerator extends ClientApplicationGenerator {
+  constructor(args?: string[], options?: Options, features?: Features) {
+    super(args, options, { ...features, loadCommand: ['jhipster:server'] });
+  }
+
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

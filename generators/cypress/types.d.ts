@@ -6,7 +6,7 @@ import type {
   Options as JavascriptOptions,
 } from '../client/types.ts';
 
-export type { Field, Relationship } from '../client/types.ts';
+export type { Features, Field, Relationship } from '../client/types.ts';
 import type command from './command.ts';
 
 type Command = CommandTypeMap<typeof command>;

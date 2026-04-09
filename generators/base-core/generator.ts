@@ -18,7 +18,7 @@
  */
 import assert from 'node:assert';
 import { existsSync, rmSync, statSync } from 'node:fs';
-import path, { basename, extname, isAbsolute, join, join as joinPath, relative } from 'node:path';
+import { basename, extname, isAbsolute, join, join as joinPath, relative } from 'node:path';
 import { relative as posixRelative } from 'node:path/posix';
 
 import { requireNamespace } from '@yeoman/namespace';
@@ -202,6 +202,12 @@ export default class CoreGenerator<
     }
   }
 
+  get #commandsToLoad(): Set<string> {
+    return this.getContextData('jhipster:loadedNamespaces', {
+      factory: () => new Set<string>(),
+    });
+  }
+
   get context(): any {
     return undefined;
   }
@@ -338,6 +344,33 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
 
     const { loadCommand = [], skipLoadCommand } = this.features;
 
+    const loadConfigs = (configs: JHipsterConfigs) => {
+      const context = this.context;
+      if (context) {
+        loadConfig.call(this, configs, { application: context });
+        loadConfigDefaults(configs, { context, scopes: ['blueprint', 'storage', 'context'] });
+        loadDerivedConfig(configs, { application: context });
+      }
+    };
+    const loadNamespaceConfigs = async (namespace: string) => {
+      namespace = namespace.includes(':') ? namespace : `jhipster:${namespace}`;
+      const commandsToLoad = this.#commandsToLoad;
+      if (!commandsToLoad.has(namespace)) {
+        commandsToLoad.add(namespace);
+        const commandMeta = this.env.getGeneratorMeta(namespace);
+        const commandModule: any = await commandMeta?.importModule?.();
+        const command = commandModule?.command as JHipsterCommandDefinition | undefined;
+        if (command) {
+          if (command.configs) {
+            loadConfigs(command.configs);
+          }
+          for (const nextNamespace of command.import || []) {
+            await loadNamespaceConfigs(nextNamespace);
+          }
+        }
+      }
+    };
+
     this.queueTask({
       queueName: QUEUES.PREPARING_QUEUE,
       taskName: 'preparingCurrentCommand',
@@ -345,44 +378,44 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       async method() {
         if (!skipLoadCommand) {
           try {
-            const command = await this.#getCurrentJHipsterCommand();
-            if (!command.configs) return;
-
-            const context = this.context;
-            loadConfig.call(this, command.configs, { application: context });
-            loadConfigDefaults(command.configs, { context, scopes: ['blueprint', 'storage', 'context'] });
-            loadDerivedConfig(command.configs, { application: context });
+            const commandsToLoad = this.#commandsToLoad;
+            if (!commandsToLoad.has(this.options.namespace)) {
+              commandsToLoad.add(this.options.namespace);
+              const command = await this.#getCurrentJHipsterCommand();
+              if (command) {
+                if (command.configs) {
+                  loadConfigs(command.configs);
+                }
+                for (const nextNamespace of command.import || []) {
+                  await loadNamespaceConfigs(nextNamespace);
+                }
+              } else {
+                await loadNamespaceConfigs(this.options.namespace);
+              }
+            }
           } catch {
             // Ignore non existing command
           }
 
           const split = this.options.namespace.split(':');
           if (split.length === 3 && split[2] === 'bootstrap') {
-            const parentMeta = this.env.getGeneratorMeta(this.options.namespace.replace(':bootstrap', ''));
-            const parentModule: any = await parentMeta?.importModule?.();
-            let configs = parentModule?.command?.configs;
-            if (parentModule === undefined) {
-              // When testing with mocked generators, parentModule is undefined. Try to get the command from path.
-              configs = (await import(path.join(this.options.resolved!, '../../../index.ts'))).command?.configs;
-            }
-            if (configs) {
-              const context = this.context;
-              if (context) {
-                loadConfig.call(this, configs, { application: context });
-                loadConfigDefaults(configs, { context, scopes: ['blueprint', 'storage', 'context'] });
-                loadDerivedConfig(configs, { application: context });
-              }
-            }
+            await loadNamespaceConfigs(this.options.namespace.replace(':bootstrap', ''));
           }
         }
+      },
+    });
 
+    this.queueTask({
+      queueName: QUEUES.POST_PREPARING_QUEUE,
+      taskName: 'postPreparingCurrentCommand',
+      cancellable: true,
+      async method() {
         if (loadCommand.length > 0) {
-          const context = this.context;
           for (const commandToLoad of loadCommand) {
-            if (commandToLoad.configs) {
-              loadConfig.call(this, commandToLoad.configs, { application: context });
-              loadConfigDefaults(commandToLoad.configs, { context, scopes: ['blueprint', 'storage', 'context'] });
-              loadDerivedConfig(commandToLoad.configs, { application: context });
+            if (typeof commandToLoad === 'string') {
+              await loadNamespaceConfigs(commandToLoad);
+            } else if (commandToLoad.configs) {
+              loadConfigs(commandToLoad.configs);
             }
           }
         }

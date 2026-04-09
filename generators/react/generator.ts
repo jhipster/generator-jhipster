@@ -28,7 +28,7 @@ import {
   generateEntityClientFields as getHydratedEntityClientFields,
   generateEntityClientImports as formatEntityClientImports,
 } from '../client/support/index.ts';
-import type { Entity as ClientEntity, Field as ClientField } from '../client/types.ts';
+import type { Entity as ClientEntity, Features, Field as ClientField, Options } from '../client/types.ts';
 import { JAVA_WEBAPP_SOURCES_DIR } from '../index.ts';
 import type { Config as SpringBootConfig } from '../spring-boot/types.d.ts';
 
@@ -44,6 +44,10 @@ const { REACT } = clientFrameworkTypes;
 export default class ReactGenerator extends ClientApplicationGenerator<
   ClientEntity<ClientField & { fieldValidateRulesPatternReact?: string }> & { entityReactState?: string }
 > {
+  constructor(args?: string[], options?: Options, features?: Features) {
+    super(args, options, { ...features, loadCommand: ['jhipster:server'] });
+  }
+
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

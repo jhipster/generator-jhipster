@@ -24,8 +24,6 @@ import { lowerFirst, upperFirst } from 'lodash-es';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
-import { loadCommandConfigsIntoApplication, loadCommandConfigsKeysIntoTemplatesContext } from '../../../../lib/command/load.ts';
-import { lookupCommandsConfigs } from '../../../../lib/command/lookup-commands-configs.ts';
 import type { Entity as BaseEntity } from '../../../../lib/jhipster/types/entity.ts';
 import { mutateData } from '../../../../lib/utils/index.ts';
 import { isWin32 } from '../../../base-core/support/index.ts';
@@ -130,18 +128,6 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
 
   get postPreparing() {
     return this.asPostPreparingTaskGroup({
-      /**
-       * Avoid having undefined keys in the application object when rendering ejs templates
-       */
-      async loadApplicationKeys({ application }) {
-        // TODO remove this task
-        const { commandsConfigs = await lookupCommandsConfigs() } = this.options;
-        loadCommandConfigsIntoApplication({
-          source: application,
-          application,
-          commandsConfigs,
-        });
-      },
       prepareApplication({ application }) {
         if (application.microfrontends && application.microfrontends.length > 0) {
           application.microfrontends.forEach(microfrontend => {
@@ -442,23 +428,6 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
 
   get default() {
     return this.asDefaultTaskGroup({
-      /**
-       * Avoid having undefined keys in the application object when rendering ejs templates
-       */
-      async loadApplicationKeys({ application }) {
-        if (this.options.commandsConfigs) {
-          // Load keys passed from cli
-          loadCommandConfigsKeysIntoTemplatesContext({
-            templatesContext: application,
-            commandsConfigs: this.options.commandsConfigs,
-          });
-        }
-        // Load keys from main generators
-        loadCommandConfigsKeysIntoTemplatesContext({
-          templatesContext: application,
-          commandsConfigs: await lookupCommandsConfigs(),
-        });
-      },
       task({ application }) {
         const packageJsonFiles = [this.destinationPath('package.json')];
         if (application.clientRootDir) {
