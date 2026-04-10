@@ -104,7 +104,9 @@ const isArrayOfContentToAdd = (value: unknown): value is ContentToAdd[] => {
   return Array.isArray(value) && value.every(item => typeof item === 'object' && 'content' in item);
 };
 
-export const createNeedleRegexp = (needle: string): RegExp => new RegExp(String.raw`(?://|<!--|\{?/\*|#) ${needle}(?: [^$]*)?(?:$)`, 'gm');
+const needleMarkers = `(?:${['//', '<!--', String.raw`\{?/\*`, '#'].join('|')})`;
+export const createNeedleRegexp = (needle: string, start = false): RegExp =>
+  new RegExp(String.raw`${needleMarkers} ${needle}${start ? '-start' : ''}(?: [^\r\n]*)?(?:$)`, 'gm');
 
 type NeedleLinePosition = {
   start: number;
@@ -119,7 +121,7 @@ export const getNeedlesPositions = (content: string, needle = String.raw`jhipste
     if (needlesWhiteList.some(whileList => match![0].includes(whileList))) {
       continue;
     }
-    const needleLineIndex = content.lastIndexOf('\n', match.index) + 1;
+    const needleLineIndex = Math.max(content.lastIndexOf('\n', match.index), content.lastIndexOf('\r\n', match.index)) + 1;
     positions.unshift({ start: needleLineIndex, end: regexp.lastIndex });
   }
   return positions;
@@ -157,7 +159,7 @@ const addNeedlePrefix = (needle: string): string => {
 };
 
 const hasNeedleStart = (content: string, needle: string): boolean => {
-  const regexpStart = new RegExp(`(?://|<!--|\\{?/\\*|#) ${addNeedlePrefix(needle)}-start(?:.*)\n`, 'g');
+  const regexpStart = createNeedleRegexp(needle, true);
   const startMatch = regexpStart.exec(content);
   return Boolean(startMatch);
 };
@@ -186,10 +188,10 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
     throw new Error(`Multiple needles found for ${needle}`);
   }
 
-  const regexpStart = new RegExp(`(?://|<!--|\\{?/\\*|#) ${needle}-start(?:.*)\n`, 'g');
+  const regexpStart = createNeedleRegexp(needle, true);
   const startMatch = regexpStart.exec(content);
   if (startMatch) {
-    const needleLineIndex = content.lastIndexOf('\n', firstMatch.index) + 1;
+    const needleLineIndex = Math.max(content.lastIndexOf('\n', firstMatch.index), content.lastIndexOf('\r\n', firstMatch.index)) + 1;
     content = content.slice(0, startMatch.index + startMatch[0].length) + content.slice(needleLineIndex);
     regexp.lastIndex = 0;
     firstMatch = regexp.exec(content);
