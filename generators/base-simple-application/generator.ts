@@ -105,8 +105,7 @@ export default class BaseSimpleApplicationGenerator<
    * JHipster config with default values fallback
    */
   override get jhipsterConfigWithDefaults(): Readonly<Config> {
-    const configWithDefaults = getConfigWithDefaults(super.jhipsterConfigWithDefaults);
-    return configWithDefaults as Config;
+    return getConfigWithDefaults(super.jhipsterConfigWithDefaults) as Config;
   }
 
   /**

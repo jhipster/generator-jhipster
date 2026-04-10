@@ -19,6 +19,7 @@
 
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
 import type { ConfigAll } from '../types/command-all.ts';
+import { isWin32 } from '../utils/index.ts';
 
 import applicationOptions from './application-options.ts';
 import authenticationTypes from './authentication-types.ts';
@@ -91,14 +92,18 @@ const commonDefaultOptions: ApplicationDefaults = {
 };
 
 export function getConfigWithDefaults(customOptions: ApplicationDefaults = {}): ApplicationDefaults {
-  const applicationType = customOptions.applicationType;
+  const options = { ...customOptions };
+  const applicationType = options.applicationType;
+  if (isWin32) {
+    options.autoCrlf ??= true;
+  }
   if (applicationType === APPLICATION_TYPE_GATEWAY) {
-    return getConfigForGatewayApplication(customOptions);
+    return getConfigForGatewayApplication(options);
   }
   if (applicationType === APPLICATION_TYPE_MICROSERVICE) {
-    return getConfigForMicroserviceApplication(customOptions);
+    return getConfigForMicroserviceApplication(options);
   }
-  return getConfigForMonolithApplication(customOptions);
+  return getConfigForMonolithApplication(options);
 }
 
 function getConfigForClientApplication(options: ApplicationDefaults = {}): ApplicationDefaults {

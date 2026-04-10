@@ -19,7 +19,7 @@
 import chalk from 'chalk';
 import type { ExecaError } from 'execa';
 
-import { isWin32 } from '../../../base-core/support/os.ts';
+import { isWin32 } from '../../../../lib/utils/index.ts';
 import { GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
 

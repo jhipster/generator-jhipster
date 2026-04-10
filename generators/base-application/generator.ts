@@ -19,7 +19,6 @@
 import { upperFirst } from 'lodash-es';
 import type { ComposeOptions, Storage } from 'yeoman-generator';
 
-import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.ts';
 import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.ts';
 import { mutateData } from '../../lib/utils/index.ts';
 import type { GenericTask } from '../base-core/types.ts';
@@ -187,13 +186,6 @@ export default class BaseApplicationGenerator<
 
   get #source(): Record<string, any> {
     return this.getContextData(CONTEXT_DATA_SOURCE_KEY, { factory: () => ({}) });
-  }
-
-  /**
-   * JHipster config with default values fallback
-   */
-  override get jhipsterConfigWithDefaults(): Readonly<Config> {
-    return getConfigWithDefaults(super.jhipsterConfigWithDefaults) as Config;
   }
 
   /**
