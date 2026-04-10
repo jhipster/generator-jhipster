@@ -285,6 +285,22 @@ ${oldContent}`);
         });
       });
     }
+
+    it('should replace content between start and end needles', () => {
+      const content = insertContentBeforeNeedle({
+        content: `// jhipster-needle-a-needle-start
+old content
+// jhipster-needle-a-needle
+`,
+        contentToAdd: 'new content',
+        needle: 'a-needle',
+      });
+
+      expect(content).toBe(`// jhipster-needle-a-needle-start
+new content
+// jhipster-needle-a-needle
+`);
+    });
   });
 
   describe('getNeedlesPositions', () => {
@@ -298,7 +314,7 @@ ${oldContent}`);
 line 3`;
       const positions = getNeedlesPositions(content);
       expect(positions).toHaveLength(1);
-      expect(positions[0]).toMatchObject({ start: 7, end: 30 });
+      expect(positions[0]).toMatchObject({ start: 7, end: 31 });
     });
 
     it('should find a single needle with windows line endings', () => {

@@ -106,11 +106,50 @@ const isArrayOfContentToAdd = (value: unknown): value is ContentToAdd[] => {
 
 const needleMarkers = `(?:${['//', '<!--', String.raw`\{?/\*`, '#'].join('|')})`;
 export const createNeedleRegexp = (needle: string, start = false): RegExp =>
-  new RegExp(String.raw`${needleMarkers} ${needle}${start ? '-start' : ''}(?: [^\r\n]*)?(?:$)`, 'gm');
+  new RegExp(String.raw`${needleMarkers} ${needle}${start ? '-start' : ''}(?: [^\r\n]*)?$`, 'gm');
 
 type NeedleLinePosition = {
+  /**
+   * Position of the needle line start.
+   */
   start: number;
+  /**
+   * Position of the needle next line start or end of content.
+   */
   end: number;
+};
+
+const lineStartBefore = (content: string, index: number): number => {
+  const fromIndex = Math.max(index - 1, 0);
+  const lfIndex = content.lastIndexOf('\n', fromIndex);
+  const crlfIndex = content.lastIndexOf('\r\n', fromIndex);
+
+  if (lfIndex === -1 && crlfIndex === -1) {
+    return 0;
+  }
+
+  return crlfIndex > lfIndex ? crlfIndex + 2 : lfIndex + 1;
+};
+
+const lineStartAfter = (content: string, index: number): number => {
+  const lfIndex = content.indexOf('\n', index);
+  const crlfIndex = content.indexOf('\r\n', index);
+
+  if (lfIndex === -1 && crlfIndex === -1) {
+    throw new Error('Line break not found after needle');
+  }
+
+  return crlfIndex !== -1 && crlfIndex < lfIndex ? crlfIndex + 2 : lfIndex + 1;
+};
+
+const getMatchedNeedleLinePosition = (content: string, index: number): NeedleLinePosition => {
+  const needleLineIndex = lineStartBefore(content, index);
+  try {
+    const nextLineIndex = lineStartAfter(content, index);
+    return { start: needleLineIndex, end: nextLineIndex };
+  } catch {
+    return { start: needleLineIndex, end: content.length };
+  }
 };
 
 export const getNeedlesPositions = (content: string, needle = String.raw`jhipster-needle-(?:[-\w]*)`): NeedleLinePosition[] => {
@@ -121,8 +160,7 @@ export const getNeedlesPositions = (content: string, needle = String.raw`jhipste
     if (needlesWhiteList.some(whileList => match![0].includes(whileList))) {
       continue;
     }
-    const needleLineIndex = Math.max(content.lastIndexOf('\n', match.index), content.lastIndexOf('\r\n', match.index)) + 1;
-    positions.unshift({ start: needleLineIndex, end: regexp.lastIndex });
+    positions.unshift(getMatchedNeedleLinePosition(content, match.index));
   }
   return positions;
 };
@@ -191,8 +229,8 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
   const regexpStart = createNeedleRegexp(needle, true);
   const startMatch = regexpStart.exec(content);
   if (startMatch) {
-    const needleLineIndex = Math.max(content.lastIndexOf('\n', firstMatch.index), content.lastIndexOf('\r\n', firstMatch.index)) + 1;
-    content = content.slice(0, startMatch.index + startMatch[0].length) + content.slice(needleLineIndex);
+    // Remove the content between start and end needles.
+    content = content.slice(0, lineStartAfter(content, startMatch.index)) + content.slice(lineStartBefore(content, firstMatch.index));
     regexp.lastIndex = 0;
     firstMatch = regexp.exec(content);
     if (!firstMatch) {
@@ -202,7 +240,7 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
 
   const needleIndex = firstMatch.index;
 
-  const needleLineIndex = content.lastIndexOf('\n', needleIndex) + 1;
+  const needleLineIndex = lineStartBefore(content, needleIndex);
   const beforeContent = content.slice(0, needleLineIndex);
   const afterContent = content.slice(needleLineIndex);
   const needleIndent = needleIndex - needleLineIndex;
