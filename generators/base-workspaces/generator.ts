@@ -81,7 +81,10 @@ export default abstract class BaseWorkspacesGenerator<
   static readonly PREPARING_WORKSPACES = BaseGenerator.asPriority(PREPARING_WORKSPACES);
 
   constructor(args?: string[], options?: Options, features?: Features) {
-    super(args, options, features);
+    super(args, options, {
+      skipLoadCommand: false,
+      ...features,
+    } as Features);
 
     if (this.options.help) {
       return;

@@ -342,7 +342,10 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       },
     });
 
-    const { loadCommand = [], skipLoadCommand } = this.features;
+    const { loadCommand = [], skipLoadCommand = true } = this.features;
+    if (skipLoadCommand) {
+      return;
+    }
 
     const loadConfigs = (configs: JHipsterConfigs) => {
       const context = this.context;
@@ -376,31 +379,29 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       taskName: 'preparingCurrentCommand',
       cancellable: true,
       async method() {
-        if (!skipLoadCommand) {
-          try {
-            const commandsToLoad = this.#commandsToLoad;
-            if (!commandsToLoad.has(this.options.namespace)) {
-              commandsToLoad.add(this.options.namespace);
-              const command = await this.#getCurrentJHipsterCommand();
-              if (command) {
-                if (command.configs) {
-                  loadConfigs(command.configs);
-                }
-                for (const nextNamespace of command.import || []) {
-                  await loadNamespaceConfigs(nextNamespace);
-                }
-              } else {
-                await loadNamespaceConfigs(this.options.namespace);
+        try {
+          const commandsToLoad = this.#commandsToLoad;
+          if (!commandsToLoad.has(this.options.namespace)) {
+            commandsToLoad.add(this.options.namespace);
+            const command = await this.#getCurrentJHipsterCommand();
+            if (command) {
+              if (command.configs) {
+                loadConfigs(command.configs);
               }
+              for (const nextNamespace of command.import || []) {
+                await loadNamespaceConfigs(nextNamespace);
+              }
+            } else {
+              await loadNamespaceConfigs(this.options.namespace);
             }
-          } catch {
-            // Ignore non existing command
           }
+        } catch {
+          // Ignore non existing command
+        }
 
-          const split = this.options.namespace.split(':');
-          if (split.length === 3 && split[2] === 'bootstrap') {
-            await loadNamespaceConfigs(this.options.namespace.replace(':bootstrap', ''));
-          }
+        const split = this.options.namespace.split(':');
+        if (split.length === 3 && split[2] === 'bootstrap') {
+          await loadNamespaceConfigs(this.options.namespace.replace(':bootstrap', ''));
         }
       },
     });

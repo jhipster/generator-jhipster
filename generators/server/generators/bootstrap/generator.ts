@@ -35,12 +35,7 @@ import {
   preparePostEntityServerDerivedProperties,
   prepareRelationship,
 } from '../../support/index.ts';
-import type {
-  Application as ServerApplication,
-  Entity as ServerEntity,
-  Features as ServerFeatures,
-  Options as ServerOptions,
-} from '../../types.ts';
+import type { Application as ServerApplication, Entity as ServerEntity } from '../../types.ts';
 
 export default class ServerBootstrapGenerator extends BaseApplicationGenerator<ServerEntity, ServerApplication> {
   async beforeQueue() {

@@ -73,6 +73,7 @@ export default class BaseSimpleApplicationGenerator<
     super(args, options, {
       storeJHipsterVersion: true,
       storeBlueprintVersion: true,
+      skipLoadCommand: false,
       configTransform: (...args) => {
         const configTransform = this.getContextData(CONTEXT_DATA_SANITIZATION_KEY, {
           factory: () => (config: Record<string, any>, configKey?: string | undefined) => {

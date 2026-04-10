@@ -250,6 +250,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "javaPackageTestDir": "src/test/java/com/mycompany/myapp/",
   "javaProperties": {},
   "javaVersion": "JAVA_VERSION",
+  "jdlStore": undefined,
   "jhiPrefix": "jhi",
   "jhiPrefixCapitalized": "Jhi",
   "jhiPrefixDashed": "jhi",
