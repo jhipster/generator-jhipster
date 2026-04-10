@@ -101,6 +101,17 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      checkDatabaseCompatibility({ application }) {
+        if (!application.databaseTypeSql && !application.databaseTypeNeo4j) {
+          throw new Error(`Database type ${application.databaseType} is not supported`);
+        }
+
+        if (!application.databaseTypeSql) {
+          // Add sql related derived properties
+          // TODO fix types
+          prepareSqlApplicationProperties({ application: application as any });
+        }
+      },
       preparing({ application, applicationDefaults }) {
         applicationDefaults({
           liquibaseDefaultSchemaName: '',
@@ -141,17 +152,6 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
         // TODO drop hardcoded version
         if (application.databaseTypeNeo4j && application.javaManagedProperties['liquibase.version'] === '5.0.2') {
           application.javaDependencies['liquibase-neo4j'] = '5.0.0';
-        }
-      },
-      checkDatabaseCompatibility({ application }) {
-        if (!application.databaseTypeSql && !application.databaseTypeNeo4j) {
-          throw new Error(`Database type ${application.databaseType} is not supported`);
-        }
-
-        if (!application.databaseTypeSql) {
-          // Add sql related derived properties
-          // TODO fix types
-          prepareSqlApplicationProperties({ application: application as any });
         }
       },
       addNeedles({ source, application }) {

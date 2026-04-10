@@ -388,7 +388,7 @@ class JHipsterRunContext extends RunContext<BaseCoreGenerator> {
     const actualGenerators = allGenerators.filter(gen => !mockedGenerators.includes(gen));
     const prefix = isDistFolder() ? 'dist/' : '';
     const filePatterns = actualGenerators.map(ns => getGeneratorRelativeFolder(ns)).map(path => `${prefix}${path}/index.{j,t}s`);
-    return this.withMockedJHipsterGenerators(mockedGenerators).withLookups({
+    return this.withMockedGenerators(mockedGenerators).withLookups({
       packagePaths: [getPackageRoot()],
       // @ts-expect-error lookups is not exported by @yeoman/types
       lookups: jhipsterGeneratorsLookup,
