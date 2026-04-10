@@ -1,4 +1,4 @@
-<%# eslint-disable -%>
+<%# eslint-disable ejs-templates/prefer-single-line-tags -- template should be simplified -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -17,11 +17,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const relationshipType = relationship.relationshipType,
-relationshipName = relationship.relationshipName,
-ownerSide = relationship.ownerSide,
-onDelete = relationship.onDelete,
-onUpdate = relationship.onUpdate;
+<%_ const { relationshipType, relationshipName, ownerSide, onDelete, onUpdate } = relationship;
 if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide)) {
     const constraintName = this.getFKConstraintName(entity.entityTableName, relationshipName, prodDatabaseType);
     let baseColumnNames;

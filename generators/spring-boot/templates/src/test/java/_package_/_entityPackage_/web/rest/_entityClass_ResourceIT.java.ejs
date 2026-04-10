@@ -1,4 +1,4 @@
-<%# eslint-disable -%>
+<%# eslint-disable ejs-templates/prefer-single-line-tags, ejs-templates/experimental-prefer-slurp-multiline, ejs-templates/format -- template should be simplified -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -21,8 +21,7 @@ package <%- entityAbsolutePackage %>.web.rest;
 
 import static <%- entityAbsolutePackage %>.domain.<%- persistClass %>Asserts.*;
 import static <%- packageName %>.web.rest.TestUtil.createUpdateProxyForBean;
-<%_
-const filterTestableRelationships = (reactive ? reactiveEagerRelations : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
+<%_ const filterTestableRelationships = (reactive ? reactiveEagerRelations : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
 const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
 const hasUserRepository =
   (requiresDeleteAllUsers && hasRelationshipWithBuiltInUser) ||
@@ -55,30 +54,28 @@ let transactionalAnnotation = '';
 if (databaseTypeSql && !reactive) {
   transactionalAnnotation = '\n    @Transactional';
 }
-
 _%>
 <%_ if (entityAbsolutePackage !== packageName) { _%>
 import <%- packageName %>.web.rest.TestUtil;
 <% } %>
 import <%- packageName %>.IntegrationTest;
 import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
-<%_
-const imported = [];
+<%_ const imported = [];
 for (relationship of relationships) { // import entities in required relationships
-  const relationshipValidate = relationship.relationshipValidate;
+  const { relationshipValidate } = relationship;
   const isUsingMapsIdL1 = relationship.id;
   if (!imported.includes(relationship.otherEntity.entityNameCapitalized)) {
-    if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) { _%>
+    if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) {
+_%>
 import <%- entityAbsolutePackage %>.domain.<%- relationship.otherEntity.persistClass %>;
-<%_
-          imported.push(relationship.otherEntity.entityNameCapitalized);
+<%_ imported.push(relationship.otherEntity.entityNameCapitalized);
     }
   }
 }
 _%>
-<%_
-if(jpaMetamodelFiltering && reactive) {
-  for (const relationship of filterTestableRelationships) { _%>
+<%_ if(jpaMetamodelFiltering && reactive) {
+  for (const relationship of filterTestableRelationships) {
+_%>
 import <%- entityAbsolutePackage %>.repository.<%- relationship.otherEntity.entityNameCapitalized %>Repository;
 <%_ }
  }
@@ -246,7 +243,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.awaitility.Awaitility.await;
 <%_ } _%>
 <%_ for (const field of fields.filter(field => !field.transient)) {
-  if (field.fieldIsEnum) { _%>
+  if (field.fieldIsEnum) {
+_%>
 import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 <%_ }
 }
@@ -300,12 +298,12 @@ class <%- entityClass %>ResourceIT {
     }
   }
 
-  const fieldType = field.fieldType;
+  const { fieldType } = field;
   const isEnum = field.fieldIsEnum;
   let enumValue1;
   let enumValue2;
   if (isEnum) {
-    const enumValues = field.enumValues;
+    const { enumValues } = field;
     enumValue1 = enumValues[0];
     if (enumValues.length > 1) {
       enumValue2 = enumValues[1];
@@ -343,14 +341,14 @@ class <%- entityClass %>ResourceIT {
           updatedTextString = value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
         }
       } catch (error) {
-        this.log.warn(`Error generating test value for entity "${entityClass 
-          }" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern 
+        this.log.warn(`Error generating test value for entity "${entityClass
+          }" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern
           }", generating default values for this field. Detailed error message: "${error.message}".`);
       }
       if (sampleTextString === updatedTextString) {
         updatedTextString = `${updatedTextString}B`;
-        this.log.warn(`Randomly generated first and second test values for entity "${entityClass 
-          }" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern 
+        this.log.warn(`Randomly generated first and second test values for entity "${entityClass
+          }" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern
           }" in file "${entityClass}ResourceIT" where equal, added symbol "B" to second value.`);
       }
     }
@@ -572,17 +570,14 @@ _%>
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
-  <%_
-  const alreadyGeneratedEntities = [];
+  <%_ const alreadyGeneratedEntities = [];
   for (relationship of persistableRelationships) {
-    const otherEntity = relationship.otherEntity;
-    const relationshipValidate = relationship.relationshipValidate;
-    const otherEntityName = relationship.otherEntityName;
+    const { otherEntity, relationshipValidate, otherEntityName } = relationship;
     const mapsIdUse = relationship.id;
     if ((relationshipValidate !== null && relationshipValidate && !relationship.otherEntity.hasCyclicRequiredRelationship) || mapsIdUse) {
   _%>
         // Add required entity
-      <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
+      <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) === -1) { _%>
         <%_ if (relationship.otherEntityUser) { /* TODO or other entity has no unique fields */ _%>
         <%- relationship.otherEntity.persistClass %> <%- otherEntityName %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<% if (databaseTypeSql && otherEntity.anyRelationshipIsRequired) { %>em<% } %>)<%- createEntityPostfix %>;
           <%_ if (databaseTypeSql && !reactive) { _%>
@@ -632,7 +627,8 @@ _%>
     public static void deleteEntities(EntityManager em) {
         try {
   <%_ for (const rel of relationships) {
-    if (rel.shouldWriteJoinTable) { _%>
+    if (rel.shouldWriteJoinTable) {
+  _%>
                 em.deleteAll("<%- rel.joinTable.name %>").block();
     <%_ } _%>
   <%_ } _%>
@@ -641,7 +637,8 @@ _%>
             // It can fail, if other entities are still referring this - it will be removed later.
         }
   <%_ for (const rel of relationships) {
-    if ((rel.relationshipValidate || rel.id) && !alreadyGeneratedDeletionCalls.includes(rel.otherEntityName)) { _%>
+    if ((rel.relationshipValidate || rel.id) && !alreadyGeneratedDeletionCalls.includes(rel.otherEntityName)) {
+  _%>
         <%- rel.otherEntity.entityNameCapitalized %>ResourceIT.deleteEntities(em);
   <%_ alreadyGeneratedDeletionCalls.push(rel.otherEntityName);
     }
@@ -689,11 +686,11 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
   <%_ } _%>
-  <%_
-      // overwrite the id field again with null
+  <%_ // overwrite the id field again with null
       // the create method here is supposed to be used for other tests as well,
       // which may expect an id to be set (at least in the reactive stack)
-      if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
+      if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) {
+  _%>
         <%- persistInstance %>.<%- primaryKey.propertyConsumerName %>(null);
   <%_ } _%>
         // Create the <%- entityClass %>
@@ -812,13 +809,12 @@ _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
     <%_ } _%>
     <%_ for (relationship of relationships) {
-      const otherEntity = relationship.otherEntity;
-      const otherEntityName = relationship.otherEntityName;
+      const { otherEntity, otherEntityName } = relationship;
       const mapsIdUse = relationship.id;
       if (mapsIdUse) {
     _%>
         // Add a new parent entity
-        <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) == -1) { _%>
+        <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) === -1) { _%>
         <%- relationship.otherEntity.persistClass %> <%- otherEntityName %> = <%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<% if (!relationship.otherEntityUser) { %>Updated<% } %>Entity(<% if (databaseTypeSql && otherEntity.anyRelationshipIsRequired) { %>em<% } %>);
           <%_ if (databaseTypeSql && !reactive) { _%>
         em.persist(<%- otherEntityName %>);
@@ -936,7 +932,7 @@ _%>
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(post(ENTITY_API_URL)<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
+        rest<%- entityClass %>MockMvc.perform(post(ENTITY_API_URL)<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -1051,9 +1047,9 @@ _%>
     @SuppressWarnings({"unchecked"})
     void getAll<%- entityClassPlural %>WithEagerRelationshipsIsEnabled() <% if (!reactive) { %>throws Exception <% } %>{
   <%_ if (!serviceNo) { _%>
-        when(<%- entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(<% if (reactive) { %>Flux.empty()<% } else { %>new PageImpl(new ArrayList<>())<% }%>);
+        when(<%- entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(<% if (reactive) { %>Flux.empty()<% } else { %>new PageImpl(new ArrayList<>())<% } %>);
   <%_ } else { _%>
-        when(<%- entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(<% if (reactive) { %>Flux.empty()<% } else { %>new PageImpl(new ArrayList<>())<% }%>);
+        when(<%- entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(<% if (reactive) { %>Flux.empty()<% } else { %>new PageImpl(new ArrayList<>())<% } %>);
   <%_ } _%>
 
   <%_ if (reactive) { _%>
@@ -1075,9 +1071,9 @@ _%>
     @SuppressWarnings({"unchecked"})
     void getAll<%- entityClassPlural %>WithEagerRelationshipsIsNotEnabled() <% if (!reactive) { %>throws Exception <% } %>{
   <%_ if (!serviceNo) { _%>
-        when(<%- entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(<% if (reactive) { %>Flux.empty()<% } else { %>new PageImpl(new ArrayList<>())<% }%>);
+        when(<%- entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(<% if (reactive) { %>Flux.empty()<% } else { %>new PageImpl(new ArrayList<>())<% } %>);
   <%_ } else { _%>
-        when(<%- entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(<% if (reactive) { %>Flux.empty()<% } else { %>new PageImpl(new ArrayList<>())<% }%>);
+        when(<%- entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(<% if (reactive) { %>Flux.empty()<% } else { %>new PageImpl(new ArrayList<>())<% } %>);
   <%_ } _%>
 
   <%_ if (reactive) { _%>
@@ -1337,8 +1333,7 @@ _%>
         // Get all the <%- entityInstance %>List where <%- relationship.relationshipFieldName %> equals to <%- relationship.relationshipFieldName %>Id
         default<%- entityClass %>ShouldBeFound("<%- relationship.relationshipFieldName %>Id.equals=" + <%- relationship.relationshipFieldName %>Id);
 
-    <%_
-    const initInvalidPrimaryKey = {
+    <%_ const initInvalidPrimaryKey = {
         'String' : '"invalid-id"',
         'Long' : `(${relationship.relationshipFieldName}Id + 1)`,
         'UUID' : 'UUID.randomUUID()',
@@ -1600,7 +1595,7 @@ _%>
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- restInstance %>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
+        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- restInstance %>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -1694,8 +1689,7 @@ _%>
   <%_ } _%>
     }
 
-  <%_
-    const prepareFieldForPatchTest = (field, includeCb) => {
+  <%_ const prepareFieldForPatchTest = (field, includeCb) => {
       const includeField = includeCb();
       const fieldNameUnderscoreUppercased = field.fieldNameUnderscored.toUpperCase();
       const updateWithValue = includeField ? `UPDATED_${fieldNameUnderscoreUppercased}` : 'null';
@@ -1764,7 +1758,7 @@ _%>
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- restInstance %>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
+        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- restInstance %>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
             .contentType("application/merge-patch+json")
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -1890,7 +1884,7 @@ _%>
             .exchange()
             .expectStatus().isNoContent();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(delete(ENTITY_API_URL_ID, <%- persistInstance %>.<%- primaryKey.propertySupplierName %>()<% if (primaryKey.typeUUID && databaseTypeSql) { %>.toString()<% } %>)<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
+        rest<%- entityClass %>MockMvc.perform(delete(ENTITY_API_URL_ID, <%- persistInstance %>.<%- primaryKey.propertySupplierName %>()<% if (primaryKey.typeUUID && databaseTypeSql) { %>.toString()<% } %>)<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
   <%_ } _%>

@@ -1,4 +1,3 @@
-<%# eslint-disable -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -144,11 +143,7 @@ public class <%- entityClass %>Resource {
     private static final Logger LOG = LoggerFactory.getLogger(<%- entityClass %>Resource.class);
 <%_ if (!readOnly) { _%>
 
-  <%_ let entityName = entityInstance;
-  if (clientRootFolder && !skipUiGrouping) {
-    entityName = this._.camelCase(`${clientRootFolder}${entityClass}`);
-  }
-  _%>
+  <%_ const entityName = clientRootFolder && !skipUiGrouping ? this._.camelCase(`${clientRootFolder}${entityClass}`) : entityInstance; _%>
     private static final String ENTITY_NAME = "<%- entityName %>";
 
     @Value("${jhipster.clientApp.name:<%- camelizedBaseName %>}")
