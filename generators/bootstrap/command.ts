@@ -25,6 +25,7 @@ const command = {
       cli: {
         type: Boolean,
       },
+      default: process.platform === 'win32',
       scope: 'storage',
     },
     removeNeedles: {
