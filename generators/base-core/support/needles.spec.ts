@@ -260,6 +260,30 @@ ${needlePrefix} jhipster-needle-a-needle"
         });
       });
     });
+    for (const [needleSuffix, description] of [
+      ['', 'empty string'],
+      ['\n', 'newline'],
+      [' - foo', 'dash'],
+      ['\r\n', 'carriage return newline'],
+    ]) {
+      const needle = 'a-needle';
+      const contentToAdd = `a bar value
+another bar value`;
+
+      describe(`${description} suffixed needles`, () => {
+        it('should not insert content without a leading space', () => {
+          const oldContent = `// jhipster-needle-${needle}${needleSuffix}`;
+          const content = insertContentBeforeNeedle({
+            content: oldContent,
+            contentToAdd,
+            needle,
+          });
+
+          expect(content).toBe(`${contentToAdd}
+${oldContent}`);
+        });
+      });
+    }
   });
 
   describe('createNeedleCallback', () => {

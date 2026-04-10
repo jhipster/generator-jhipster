@@ -104,8 +104,7 @@ const isArrayOfContentToAdd = (value: unknown): value is ContentToAdd[] => {
   return Array.isArray(value) && value.every(item => typeof item === 'object' && 'content' in item);
 };
 
-export const createNeedleRegexp = (needle: string): RegExp =>
-  new RegExp(String.raw`(?://|<!--|\{?/\*|#) ${needle}(?: [^$\n]*)?(?:$|\n)`, 'g');
+export const createNeedleRegexp = (needle: string): RegExp => new RegExp(String.raw`(?://|<!--|\{?/\*|#) ${needle}(?: [^$]*)?(?:$)`, 'gm');
 
 type NeedleLinePosition = {
   start: number;
