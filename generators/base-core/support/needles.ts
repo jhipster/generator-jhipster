@@ -105,7 +105,7 @@ const isArrayOfContentToAdd = (value: unknown): value is ContentToAdd[] => {
 };
 
 export const createNeedleRegexp = (needle: string): RegExp =>
-  new RegExp(String.raw`(?://|<!--|\{?/\*|#) ${needle}(?: [^$\n]*)?(?:$|\n)`, 'g');
+  new RegExp(String.raw`(?://|<!--|\{?/\*|#) ${needle}(?: [^$\r\n]*)?(?:$|\r?\n)`, 'g');
 
 type NeedleLinePosition = {
   start: number;
@@ -158,7 +158,7 @@ const addNeedlePrefix = (needle: string): string => {
 };
 
 const hasNeedleStart = (content: string, needle: string): boolean => {
-  const regexpStart = new RegExp(`(?://|<!--|\\{?/\\*|#) ${addNeedlePrefix(needle)}-start(?:.*)\n`, 'g');
+  const regexpStart = new RegExp(`(?://|<!--|\\{?/\\*|#) ${addNeedlePrefix(needle)}-start(?:[^\\r\\n]*)\\r?\\n`, 'g');
   const startMatch = regexpStart.exec(content);
   return Boolean(startMatch);
 };
@@ -187,7 +187,7 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
     throw new Error(`Multiple needles found for ${needle}`);
   }
 
-  const regexpStart = new RegExp(`(?://|<!--|\\{?/\\*|#) ${needle}-start(?:.*)\n`, 'g');
+  const regexpStart = new RegExp(`(?://|<!--|\\{?/\\*|#) ${needle}-start(?:[^\\r\\n]*)\\r?\\n`, 'g');
   const startMatch = regexpStart.exec(content);
   if (startMatch) {
     const needleLineIndex = content.lastIndexOf('\n', firstMatch.index) + 1;

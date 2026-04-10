@@ -262,6 +262,32 @@ ${needlePrefix} jhipster-needle-a-needle"
     });
   });
 
+  describe('insertContentBeforeNeedle with CRLF line endings', () => {
+    const needle = 'a-needle';
+    const contentToAdd = 'a bar value';
+
+    it('should insert content when file has CRLF line endings', () => {
+      const content = insertContentBeforeNeedle({
+        content: `first line\r\n        // jhipster-needle-${needle}\r\nlast line\r\n`,
+        contentToAdd,
+        needle,
+      });
+
+      expect(content).toContain(contentToAdd);
+      expect(content).toContain(`// jhipster-needle-${needle}`);
+    });
+
+    it('should insert content when needle line ends with CRLF at end of file', () => {
+      const content = insertContentBeforeNeedle({
+        content: `// jhipster-needle-${needle}\r\n`,
+        contentToAdd,
+        needle,
+      });
+
+      expect(content).toContain(contentToAdd);
+    });
+  });
+
   describe('createNeedleCallback', () => {
     const needle = 'a-needle';
     const contentToAdd = 'content to add';
