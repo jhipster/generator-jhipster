@@ -5,6 +5,7 @@ import type { Application as BaseApplicationApplication, Entity as BaseApplicati
 import type CoreGenerator from '../index.ts';
 import type { Config as BaseCoreConfig } from '../types.d.ts';
 
+/** @deprecated */
 export function loadConfig(
   this: CoreGenerator,
   configsDef: JHipsterConfigs | undefined,
@@ -45,6 +46,7 @@ export function loadConfig(
   }
 }
 
+/** @deprecated */
 export const loadDerivedConfig = (configsDef: JHipsterConfigs, { application }: { application: any }) => {
   for (const [name, def] of Object.entries(configsDef)) {
     if (['storage', 'blueprint', 'context'].includes(def.scope) && def.choices) {
@@ -57,6 +59,7 @@ export const loadDerivedConfig = (configsDef: JHipsterConfigs, { application }: 
   }
 };
 
+/** @deprecated */
 export const loadConfigDefaults = (configsDef: JHipsterConfigs, { context, scopes }: { context: any; scopes: CommandConfigScope[] }) => {
   for (const [name, def] of Object.entries(configsDef)) {
     if (context[name] === undefined) {

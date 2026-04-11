@@ -164,7 +164,7 @@ export type ConfigSpec<ConfigContext> = {
   readonly choices?: JHipsterChoices;
   readonly cli?: CliSpec;
   readonly argument?: JHipsterArgumentConfig;
-  readonly internal?: { type: CommandConfigType };
+  readonly internal?: { alias?: string; type: CommandConfigType };
   readonly prompt?: PromptSpec | ((gen: ConfigContext, config: ConfigSpec<ConfigContext>) => PromptSpec);
   readonly jdl?: Omit<JHipsterOptionDefinition, 'name' | 'knownChoices'>;
   /**

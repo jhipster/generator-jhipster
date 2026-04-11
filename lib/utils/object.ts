@@ -89,7 +89,7 @@ export type MutateDataPropertiesWithRequiredProperties<D extends Record<string, 
 
 const OverrideMutation = Symbol('OverrideMutation');
 
-type MutateDataFunction = ((ctx: any) => any) & { [OverrideMutation]?: boolean };
+export type MutateDataFunction = ((ctx: any) => any) & { [OverrideMutation]?: boolean };
 
 export const overrideMutateDataProperty = <const T extends MutateDataFunction>(fn: T): T => {
   fn[OverrideMutation] = true;

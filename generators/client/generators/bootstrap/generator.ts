@@ -41,20 +41,6 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
     await this.dependsOnBootstrap('common');
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
-      cancel({ application }) {
-        if (application.skipClient) {
-          this.cancelCancellableTasks();
-        }
-      },
-    });
-  }
-
-  get [ClientApplicationGenerator.LOADING]() {
-    return this.loading;
-  }
-
   get preparing() {
     return this.asPreparingTaskGroup({
       loadDefaults({ applicationDefaults }) {

@@ -80,6 +80,7 @@ export const buildMutateDataForProperty = <
     prefix = property as unknown as Prefix,
     suffix = '' as S,
     array,
+    anyCheck,
     valCheck = array ? (data, value) => (data[property] as any)?.includes(value) ?? false : (data, value) => data[property] === value,
   }: {
     prefix?: Prefix;
@@ -88,6 +89,7 @@ export const buildMutateDataForProperty = <
     array?: IsArray;
     /** Set callback argument as any to avoid type mismatch */
     anyData?: IsAny;
+    anyCheck?: (value: any, choices: Values) => boolean;
     /** Callback logic */
     valCheck?: (data: Data, value: any) => boolean;
   } = {},
@@ -96,7 +98,8 @@ export const buildMutateDataForProperty = <
     [K in Values[number] as ReturnType<typeof derivedPropertyName<Prefix, K, S>>]: (data: Data) => boolean;
   }
 > => {
-  return Object.fromEntries(
-    possibleValues.map(value => [derivedPropertyName(prefix, value, suffix), (data: Data) => valCheck(data, value)]),
-  ) as any;
+  return Object.fromEntries([
+    ...possibleValues.map(value => [derivedPropertyName(prefix, value, suffix), (data: Data) => valCheck(data, value)]),
+    ...(anyCheck ? [[derivedPropertyName(prefix, 'any', suffix), (data: Data) => anyCheck(data[property], possibleValues)]] : []),
+  ]);
 };

@@ -81,6 +81,10 @@ const command = {
         { value: 'eureka', name: 'JHipster Registry (legacy, uses Eureka, provides Spring Cloud Config support)' },
         { value: 'no', name: 'No service discovery' },
       ],
+      internal: {
+        alias: 'serviceDiscovery',
+        type: String,
+      },
       scope: 'storage',
     },
     jwtSecretKey: {

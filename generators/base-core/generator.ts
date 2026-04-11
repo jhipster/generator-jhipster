@@ -28,7 +28,7 @@ import latestVersion from 'latest-version';
 import { get, kebabCase, merge, mergeWith, set, snakeCase } from 'lodash-es';
 import semver, { lt as semverLessThan } from 'semver';
 import { simpleGit } from 'simple-git';
-import type { PackageJson } from 'type-fest';
+import type { PackageJson, SetRequired } from 'type-fest';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import type Environment from 'yeoman-environment';
 import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-generator';
@@ -42,9 +42,15 @@ import type {
   ParsableCommand,
 } from '../../lib/command/index.ts';
 import { convertConfigToOption, extractArgumentsFromConfigs } from '../../lib/command/index.ts';
+import {
+  getCommandBlueprintLoadingMutations,
+  getCommandDefaultMutations,
+  getCommandDerivedPropertyMutations,
+} from '../../lib/command/mutations.ts';
 import { packageJson } from '../../lib/index.ts';
 import { CRLF, LF, type Logger, hasCrlf, mutateData, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.ts';
 import baseCommand from '../base/command.ts';
+import type BaseGenerator from '../base/generator.ts';
 import { dockerPlaceholderGenerator } from '../docker/utils.ts';
 import { GENERATOR_JHIPSTER } from '../generator-constants.ts';
 import { getGradleLibsVersionsProperties } from '../java-simple-application/generators/gradle/support/dependabot-gradle.ts';
@@ -59,7 +65,7 @@ import type {
   WriteContext,
   WriteFileOptions,
 } from './api.ts';
-import { convertWriteFileSectionsToBlocks, loadConfig, loadConfigDefaults, loadDerivedConfig } from './internal/index.ts';
+import { convertWriteFileSectionsToBlocks, loadConfig } from './internal/index.ts';
 import { createJHipster7Context } from './internal/jhipster7-context.ts';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.ts';
 import { type NeedleInsertion, createNeedleCallback, joinCallbacks } from './support/index.ts';
@@ -347,52 +353,57 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       return;
     }
 
-    const loadConfigs = (configs: JHipsterConfigs) => {
-      const context = this.context;
-      if (context) {
-        loadConfig.call(this, configs, { application: context });
-        loadConfigDefaults(configs, { context, scopes: ['blueprint', 'storage', 'context'] });
-        loadDerivedConfig(configs, { application: context });
+    const commandWithConfigs = (command: JHipsterCommandDefinition): command is SetRequired<JHipsterCommandDefinition, 'configs'> =>
+      !!command.configs;
+
+    const mergeCommandsConfigs = (commands: JHipsterCommandDefinition[]): JHipsterConfigs => {
+      const mergedConfigs: JHipsterConfigs = {};
+      for (const command of commands.filter(commandWithConfigs)) {
+        Object.assign(mergedConfigs, command.configs);
       }
+      return mergedConfigs;
     };
-    const loadNamespaceConfigs = async (namespace: string) => {
-      namespace = namespace.includes(':') ? namespace : `jhipster:${namespace}`;
-      const commandsToLoad = this.#commandsToLoad;
-      if (!commandsToLoad.has(namespace)) {
-        commandsToLoad.add(namespace);
-        const commandMeta = this.env.getGeneratorMeta(namespace);
-        const commandModule: any = await commandMeta?.importModule?.();
-        const command = commandModule?.command as JHipsterCommandDefinition | undefined;
-        if (command) {
-          if (command.configs) {
-            loadConfigs(command.configs);
-          }
-          for (const nextNamespace of command.import || []) {
-            await loadNamespaceConfigs(nextNamespace);
+
+    const collectNamespaceCommands = async (
+      { loadImports }: { loadImports: boolean },
+      ...namespaces: string[]
+    ): Promise<JHipsterCommandDefinition[]> => {
+      const result: JHipsterCommandDefinition[] = [];
+      for (let namespace of namespaces) {
+        namespace = namespace.includes(':') ? namespace : `jhipster:${namespace}`;
+        const commandsToLoad = this.#commandsToLoad;
+        if (!commandsToLoad.has(namespace)) {
+          commandsToLoad.add(namespace);
+          const commandMeta = this.env.getGeneratorMeta(namespace);
+          const commandModule: any = await commandMeta?.importModule?.();
+          const command = commandModule?.command as JHipsterCommandDefinition | undefined;
+          if (command) {
+            result.push(command as SetRequired<JHipsterCommandDefinition, 'configs'>);
+            if (loadImports) {
+              result.push(...(await collectNamespaceCommands({ loadImports: true }, ...(command.import ?? []))));
+            }
           }
         }
       }
+      return result;
     };
 
+    const directCommands: JHipsterCommandDefinition[] = [];
+    let directCommandsMergedConfigs: JHipsterConfigs = {};
     this.queueTask({
-      queueName: QUEUES.PREPARING_QUEUE,
-      taskName: 'preparingCurrentCommand',
+      queueName: QUEUES.LOADING_QUEUE,
+      taskName: 'loadingCommand',
       cancellable: true,
       async method() {
         try {
           const commandsToLoad = this.#commandsToLoad;
           if (!commandsToLoad.has(this.options.namespace)) {
-            commandsToLoad.add(this.options.namespace);
             const command = await this.#getCurrentJHipsterCommand();
-            if (command) {
-              if (command.configs) {
-                loadConfigs(command.configs);
-              }
-              for (const nextNamespace of command.import || []) {
-                await loadNamespaceConfigs(nextNamespace);
-              }
+            if (command.configs) {
+              commandsToLoad.add(this.options.namespace);
+              directCommands.push(command);
             } else {
-              await loadNamespaceConfigs(this.options.namespace);
+              directCommands.push(...(await collectNamespaceCommands({ loadImports: false }, this.options.namespace)));
             }
           }
         } catch {
@@ -401,24 +412,57 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
 
         const split = this.options.namespace.split(':');
         if (split.length === 3 && split[2] === 'bootstrap') {
-          await loadNamespaceConfigs(this.options.namespace.replace(':bootstrap', ''));
+          const mainNamespace = this.options.namespace.replace(':bootstrap', '');
+          directCommands.push(...(await collectNamespaceCommands({ loadImports: false }, mainNamespace)));
+        }
+
+        directCommandsMergedConfigs = mergeCommandsConfigs(directCommands);
+
+        if (this.blueprintStorage) {
+          mutateData(this.context, getCommandBlueprintLoadingMutations(this as unknown as BaseGenerator, directCommandsMergedConfigs));
         }
       },
     });
 
     this.queueTask({
-      queueName: QUEUES.POST_PREPARING_QUEUE,
-      taskName: 'postPreparingCurrentCommand',
+      queueName: QUEUES.PREPARING_QUEUE,
+      taskName: 'preparingCurrentCommand',
       cancellable: true,
       async method() {
-        if (loadCommand.length > 0) {
-          for (const commandToLoad of loadCommand) {
-            if (typeof commandToLoad === 'string') {
-              await loadNamespaceConfigs(commandToLoad);
-            } else if (commandToLoad.configs) {
-              loadConfigs(commandToLoad.configs);
-            }
-          }
+        mutateData(
+          this.context,
+          getCommandDefaultMutations(directCommandsMergedConfigs),
+          getCommandDerivedPropertyMutations(directCommandsMergedConfigs),
+        );
+
+        const imports = directCommands.map(command => command.import ?? []).flat();
+        if (imports.length > 0 || loadCommand.length > 0) {
+          // Populate imported commands and loadCommand, to allow the generator itself to load them.
+          this.queueTask({
+            queueName: QUEUES.PREPARING_QUEUE,
+            taskName: 'preparingImportedCommand',
+            cancellable: true,
+            async method() {
+              const importedCommandNamespaces = [
+                ...loadCommand.filter(l => typeof l === 'string'),
+                ...loadCommand
+                  .filter(l => typeof l === 'object')
+                  .map(l => l.import ?? [])
+                  .flat(),
+                ...imports,
+              ];
+              const importedCommands = [
+                ...loadCommand.filter(l => typeof l === 'object'),
+                ...(await collectNamespaceCommands({ loadImports: true }, ...importedCommandNamespaces)),
+              ];
+              const mergedImportedConfigs = mergeCommandsConfigs(importedCommands);
+              mutateData(
+                this.context,
+                getCommandDefaultMutations(mergedImportedConfigs),
+                getCommandDerivedPropertyMutations(mergedImportedConfigs),
+              );
+            },
+          });
         }
       },
     });

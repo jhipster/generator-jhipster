@@ -56,11 +56,6 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      cancel() {
-        if (this.jhipsterConfigWithDefaults.cacheProvider === 'no') {
-          this.cancelCancellableTasks();
-        }
-      },
       loadDependabot({ application }) {
         this.loadJavaDependenciesFromGradleCatalog(application.javaDependencies, true);
       },
