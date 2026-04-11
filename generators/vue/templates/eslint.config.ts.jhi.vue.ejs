@@ -22,7 +22,13 @@ import vue from 'eslint-plugin-vue';
 
 <&_ } -&>
 <&_ if (fragment.configSection) { -&>
-  { ignores: ['<%- this.relativeDir(clientRootDir, clientDistDir) %>', '<%- temporaryDir %>'] },
+  { ignores: [
+<%_ if (microfrontend) { _%>
+    '.__mf__temp',
+<%_ } _%>
+    '<%- this.relativeDir(clientRootDir, clientDistDir) %>',
+    '<%- temporaryDir %>',
+  ] },
   js.configs.recommended,
   ...tseslint.configs.recommended.map(config =>
     config.name === 'typescript-eslint/base' ? config : { ...config, files: [ '**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts' ] },

@@ -354,12 +354,17 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
         }
       },
       addMicrofrontendDependencies({ application, source }) {
-        const { clientBundlerVite, clientBundlerWebpack, enableTranslation, microfrontend } = application;
+        const { applicationTypeGateway, clientBundlerVite, clientBundlerWebpack, enableTranslation, microfrontend } = application;
         if (!microfrontend) return;
         if (clientBundlerVite) {
           source.mergeClientPackageJson!({
+            dependencies: applicationTypeGateway
+              ? {
+                  '@module-federation/runtime': null,
+                }
+              : {},
             devDependencies: {
-              '@originjs/vite-plugin-federation': '1.3.6',
+              '@module-federation/vite': null,
             },
           });
         } else if (clientBundlerWebpack) {
@@ -393,6 +398,10 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
             },
           });
         }
+      },
+      addMicrofrontendIgnorePatterns({ application, source }) {
+        if (!application.microfrontend || !application.clientBundlerVite) return;
+        source.addPrettierIgnore?.('.__mf__temp');
       },
       addIndexAsset({ source, application }) {
         if (!application.clientBundlerVite) return;
