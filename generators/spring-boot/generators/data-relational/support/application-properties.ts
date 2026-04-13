@@ -18,6 +18,7 @@
  */
 
 import { databaseTypes } from '../../../../../lib/jhipster/index.ts';
+import { mutateData } from '../../../../../lib/utils/object.ts';
 import type { Application as SpringDataRelationalApplication } from '../types.ts';
 
 import { getDatabaseData } from './database-data.ts';
@@ -81,17 +82,23 @@ export default function prepareSqlApplicationProperties({ application }: { appli
       const devDatabaseOptions = {
         databaseName: application.devDatabaseName,
       };
-      application.devJdbcUrl = getJdbcUrl(application.devDatabaseType, {
-        ...devDatabaseOptions,
-        buildDirectory: `./${application.temporaryDir}`,
-        prodDatabaseType: application.prodDatabaseType,
+      mutateData(application, {
+        devJdbcUrl: data =>
+          getJdbcUrl(data.devDatabaseType, {
+            ...devDatabaseOptions,
+            buildDirectory: `./${data.temporaryDir}`,
+            prodDatabaseType: data.prodDatabaseType,
+          }),
       });
 
       if (application.reactive) {
-        application.devR2dbcUrl = getR2dbcUrl(application.devDatabaseType, {
-          ...devDatabaseOptions,
-          buildDirectory: `./${application.temporaryDir}`,
-          prodDatabaseType: application.prodDatabaseType,
+        mutateData(application, {
+          devR2dbcUrl: data =>
+            getR2dbcUrl(data.devDatabaseType, {
+              ...devDatabaseOptions,
+              buildDirectory: `./${data.temporaryDir}`,
+              prodDatabaseType: data.prodDatabaseType,
+            }),
         });
       }
     } catch (error) {
