@@ -129,7 +129,7 @@ export const createDelayedMutationContext = <T extends object>(options: Omit<Mut
 };
 
 const isMutationContext = <T extends object>(context: T): context is ContextWithMutationOptions<T> => {
-  return context && typeof context === 'object' && MUTATION_CONTEXT_SYMBOL in context;
+  return context && typeof context === 'object' && MUTATION_CONTEXT_SYMBOL in context && context[MUTATION_CONTEXT_SYMBOL] !== undefined;
 };
 
 const createNotYetDefinedProxy = (target: Record<string | number, any>): any =>
@@ -200,7 +200,7 @@ const applyDelayedMutations = (
 
 export const finalizeMutations = (context: any): void => {
   if (isMutationContext(context)) {
-    const { autoDelay = false } = context[MUTATION_CONTEXT_SYMBOL] ?? {};
+    const { autoDelay = false } = context[MUTATION_CONTEXT_SYMBOL];
     while (applyDelayedMutations(context, { defaults: true, autoDelay })) {
       // Apply mutations until there is no more mutation to apply, this is to handle mutations that depend on other mutations.
     }
