@@ -44,6 +44,7 @@ exports[`generator - server:bootstrap bootstrapping default config should prepar
   "clientPackageJsonScripts": Any<Object>,
   "clientRootDir": "",
   "clientSrcDir": "src/main/webapp/",
+  "clientTestDir": "src/test/javascript/",
   "clientTheme": "none",
   "commandName": undefined,
   "communicationSpringWebsocket": undefined,

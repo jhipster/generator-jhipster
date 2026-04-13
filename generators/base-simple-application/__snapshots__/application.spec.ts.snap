@@ -2,6 +2,9 @@
 
 exports[`application mutation test expects mutateApplication to match snapshot 1`] = `
 {
+  "backendType": "Java",
+  "backendTypeJavaAny": true,
+  "backendTypeSpringBoot": true,
   "commandName": undefined,
   "customizeTemplatePaths": [],
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vjhipsterVersion",
@@ -25,6 +28,7 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "jhipsterVersion": "jhipsterVersion",
   "nodeDependencies": {},
   "nodeVersion": "nodeVersion",
-  "projectDescription": "projectDescription",
+  "projectDescription": "Description for humanizedBaseName",
+  "temporaryDir": "temp/",
 }
 `;

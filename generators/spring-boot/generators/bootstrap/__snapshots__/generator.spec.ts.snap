@@ -43,6 +43,7 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
   "clientPackageJsonScripts": Any<Object>,
   "clientRootDir": "",
   "clientSrcDir": "src/main/webapp/",
+  "clientTestDir": "src/test/javascript/",
   "commandName": undefined,
   "communicationSpringWebsocket": undefined,
   "creationTimestamp": 1577836800000,

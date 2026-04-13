@@ -30,12 +30,8 @@ export type CommonAddedApplicationProperties = {
   endpointPrefix?: string;
   authenticationUsesCsrf: boolean;
 
-  devServerPort?: number;
-  serverPort?: number;
-  backendType?: string;
-  backendTypeJavaAny?: boolean;
-  backendTypeSpringBoot?: boolean;
-  temporaryDir?: string;
+  devServerPort: number;
+  serverPort: number;
 
   loginRegex?: string;
 
@@ -62,33 +58,6 @@ export const mutateApplication = {
   srcTest: TEST_DIR,
 
   loginRegex: LOGIN_REGEX,
-  backendType: 'Java',
-  backendTypeSpringBoot: ({ backendType }) => backendType === 'Java',
-  backendTypeJavaAny: ({ backendTypeSpringBoot }) => backendTypeSpringBoot,
-
-  temporaryDir: app => {
-    const buildTool = app.buildTool ?? (!app.skipServer && app.backendTypeJavaAny ? 'maven' : undefined);
-    switch (buildTool) {
-      case 'maven':
-        return 'target/';
-      case 'gradle':
-        return 'build/';
-      default:
-        return 'temp/';
-    }
-  },
-  clientDistDir: app => {
-    const buildTool = app.buildTool ?? (!app.skipServer && app.backendTypeJavaAny ? 'maven' : undefined);
-    const temporaryDir = app.temporaryDir;
-    switch (buildTool) {
-      case 'maven':
-        return `${temporaryDir}classes/static/`;
-      case 'gradle':
-        return `${temporaryDir}resources/main/static/`;
-      default:
-        return 'dist/';
-    }
-  },
 
   authenticationTypeSession: data => data.authenticationType === 'session',
   authenticationTypeJwt: data => data.authenticationType === 'jwt',

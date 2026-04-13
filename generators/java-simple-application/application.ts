@@ -56,6 +56,7 @@ export type JavaSimpleApplicationLoadingAddedApplicationProperties = {
 };
 
 export type JavaSimpleApplicationPreparingAddedApplicationProperties = {
+  buildTool: string;
   javaVersion: string;
   mainClass: string;
 
@@ -117,6 +118,8 @@ export const mutateApplicationLoading = {
 export const mutateApplicationPreparing = {
   __override__: false,
 
+  backendTypeJavaAny: true,
+
   javaVersion: RECOMMENDED_JAVA_VERSION,
   mainClass: ({ baseName }) => getMainClassName({ baseName }),
 
@@ -132,6 +135,31 @@ export const mutateApplicationPreparing = {
 
   javaPackageSrcDir: ({ srcMainJava, packageFolder }) => normalizePathEnd(`${srcMainJava}${packageFolder}`),
   javaPackageTestDir: ({ srcTestJava, packageFolder }) => normalizePathEnd(`${srcTestJava}${packageFolder}`),
+
+  buildTool: 'maven',
+  temporaryDir: ({ buildTool }) => {
+    switch (buildTool) {
+      case 'maven':
+        return 'target/';
+      case 'gradle':
+        return 'build/';
+      default:
+        throw new Error(`Unknown build tool: ${buildTool}`);
+    }
+  },
+  clientRootDir: '',
+  clientSrcDir: ({ srcMainWebapp }) => srcMainWebapp,
+  clientTestDir: ({ srcTestJavascript }) => srcTestJavascript,
+  clientDistDir: ({ buildTool, temporaryDir }) => {
+    switch (buildTool) {
+      case 'maven':
+        return `${temporaryDir}classes/static/`;
+      case 'gradle':
+        return `${temporaryDir}resources/main/static/`;
+      default:
+        return 'dist/';
+    }
+  },
 
   packageInfoJavadocs: overrideMutateDataProperty(({ packageInfoJavadocs, packageName }: Application) => {
     packageInfoJavadocs.push(

@@ -49,16 +49,13 @@ export const mutateUserManagementApplication = {
       data.databaseType !== 'no' &&
       (data.applicationType === 'gateway' || data.anyEntityHasRelationshipWithUser),
     ),
-  generateBuiltInUserEntity: ({ generateUserManagement, syncUserWithIdp }) => Boolean(generateUserManagement || syncUserWithIdp),
+  generateBuiltInUserEntity: ({ generateUserManagement, syncUserWithIdp }) => generateUserManagement || syncUserWithIdp,
   generateBuiltInAuthorityEntity: ({ generateBuiltInUserEntity, databaseType }) =>
     generateBuiltInUserEntity! && databaseType !== 'cassandra',
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Application<any>>, UserManagementProperties<Entity>>;
 
 export type BaseApplicationAddedApplicationProperties<E extends Entity> = UserManagementProperties<E> & {
   javaNodeBuildPaths: string[];
-
-  clientTestDir?: string;
-  clientDistDir?: string;
 
   entitySuffix: string;
   dtoSuffix: string;

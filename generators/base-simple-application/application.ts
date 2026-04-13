@@ -33,19 +33,19 @@ export type BaseSimpleApplicationPreparingAddedApplicationProperties = {
   jhiPrefixCapitalized: string;
   jhiPrefixDashed: string;
 
-  hipsterName?: string;
-  hipsterProductName?: string;
-  hipsterHomePageProductName?: string;
-  hipsterStackOverflowProductName?: string;
-  hipsterBugTrackerProductName?: string;
-  hipsterChatProductName?: string;
-  hipsterTwitterUsername?: string;
-  hipsterDocumentationLink?: string;
-  hipsterTwitterLink?: string;
-  hipsterProjectLink?: string;
-  hipsterStackoverflowLink?: string;
-  hipsterBugTrackerLink?: string;
-  hipsterChatLink?: string;
+  hipsterName: string;
+  hipsterProductName: string;
+  hipsterHomePageProductName: string;
+  hipsterStackOverflowProductName: string;
+  hipsterBugTrackerProductName: string;
+  hipsterChatProductName: string;
+  hipsterTwitterUsername: string;
+  hipsterDocumentationLink: string;
+  hipsterTwitterLink: string;
+  hipsterProjectLink: string;
+  hipsterStackoverflowLink: string;
+  hipsterBugTrackerLink: string;
+  hipsterChatLink: string;
 
   projectVersion?: string;
   projectDescription: string;
@@ -54,6 +54,11 @@ export type BaseSimpleApplicationPreparingAddedApplicationProperties = {
 
   jhipsterPackageJson: typeof packageJson;
   commandName?: string;
+
+  backendType: string;
+  backendTypeJavaAny: boolean;
+  backendTypeSpringBoot: boolean;
+  temporaryDir: string;
 };
 
 export type BaseSimpleApplicationAddedApplicationProperties = BaseSimpleApplicationLoadingAddedApplicationProperties &
@@ -90,7 +95,7 @@ export const mutateApplicationPreparing = {
   hipsterBugTrackerLink: 'https://github.com/jhipster/generator-jhipster/issues?state=open',
   hipsterChatLink: 'https://gitter.im/jhipster/generator-jhipster',
 
-  projectDescription: ({ projectDescription, humanizedBaseName }) => projectDescription ?? `Description for ${humanizedBaseName}`,
+  projectDescription: ({ humanizedBaseName }) => `Description for ${humanizedBaseName}`,
   documentationArchiveUrl: ({ jhipsterVersion, hipsterDocumentationLink }) =>
     `${hipsterDocumentationLink}documentation-archive/v${jhipsterVersion}`,
 
@@ -98,6 +103,11 @@ export const mutateApplicationPreparing = {
 
   jhipsterPackageJson: packageJson,
   commandName: undefined,
+
+  backendType: (_, { delayMarker }) => delayMarker ?? 'Java',
+  backendTypeSpringBoot: ({ backendType }) => backendType === 'Java',
+  backendTypeJavaAny: ({ backendTypeSpringBoot }, { delayMarker }) => delayMarker ?? backendTypeSpringBoot,
+  temporaryDir: (_, { delayMarker }) => delayMarker ?? 'temp/',
 } as const satisfies MutateDataPropertiesWithRequiredProperties<
   MutateDataParam<ProjectNameAddedApplicationProperties & BaseSimpleApplicationAddedApplicationProperties>,
   BaseSimpleApplicationPreparingAddedApplicationProperties

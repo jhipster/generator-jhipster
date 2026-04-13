@@ -31,7 +31,7 @@ import type { Relationship } from '../jhipster/types/relationship.d.ts';
 import type { ApplicationAll } from '../types/application-all.ts';
 import type { ConfigAll as ApplicationConfiguration, OptionsAll } from '../types/command-all.ts';
 import getGenerator, { getGeneratorRelativeFolder } from '../utils/get-generator.ts';
-import { createJHipsterLogger, lookupGeneratorsWithNamespace, normalizePathEnd } from '../utils/index.ts';
+import { createDelayedMutationContext, createJHipsterLogger, lookupGeneratorsWithNamespace, normalizePathEnd } from '../utils/index.ts';
 
 type GeneratorTestOptions = OptionsAll;
 type WithJHipsterGenerators = {
@@ -339,14 +339,17 @@ class JHipsterRunContext extends RunContext<BaseCoreGenerator> {
   }
 
   withSharedApplication(sharedApplication: Record<string, any>): this {
-    this.sharedApplication ??= { nodeDependencies: {}, customizeTemplatePaths: [] };
+    this.sharedApplication ??= createDelayedMutationContext({ autoDelay: true });
     merge(this.sharedApplication, sharedApplication);
     return this.withContextData(CONTEXT_DATA_APPLICATION_KEY, this.sharedApplication);
   }
 
   withMockedNodeDependencies() {
     return this.withSharedApplication({
-      nodeDependencies: new Proxy({}, { get: (_target, prop) => `${snakeCase(prop.toString()).toUpperCase()}_VERSION` }),
+      nodeDependencies: new Proxy(
+        {},
+        { get: (target: any, prop) => (typeof prop === 'symbol' ? target[prop] : `${snakeCase(prop).toUpperCase()}_VERSION`) },
+      ),
     } as unknown as ApplicationAll);
   }
 

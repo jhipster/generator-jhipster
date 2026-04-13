@@ -20,7 +20,7 @@ import { startCase } from 'lodash-es';
 
 import { getFrontendAppName } from '../../lib/utils/basename.ts';
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
-import { CLIENT_TEST_SRC_DIR, LOGIN_REGEX_JS } from '../generator-constants.ts';
+import { LOGIN_REGEX_JS } from '../generator-constants.ts';
 
 import type { GetWebappTranslationCallback } from './translation.ts';
 import type { Application as ClientApplication, Entity as ClientEntity } from './types.ts';
@@ -50,8 +50,6 @@ export const mutateApplication = {
   __override__: false,
   clientI18nDir: data => `${data.clientSrcDir}i18n/`,
   webappLoginRegExp: LOGIN_REGEX_JS,
-  clientDistDir: 'dist/',
-  clientTestDir: ({ clientRootDir }) => `${clientRootDir}${clientRootDir ? 'test/' : CLIENT_TEST_SRC_DIR}`,
   frontendAppName: ({ baseName }) => getFrontendAppName({ baseName }),
   microfrontend: application => {
     if (application.applicationTypeMicroservice) {

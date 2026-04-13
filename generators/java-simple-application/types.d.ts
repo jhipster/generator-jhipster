@@ -28,6 +28,7 @@ import type {
   Source as BaseSimpleApplicationSource,
 } from '../base-simple-application/types.ts';
 import type { JavaAnnotation } from '../java/support/add-java-annotation.ts';
+import type { Application as JavascriptSimpleApplicationApplication } from '../javascript-simple-application/types.ts';
 
 import type { JavaSimpleApplicationAddedApplicationProperties } from './application.ts';
 import type command from './command.ts';
@@ -148,5 +149,6 @@ export type Source = BaseSimpleApplicationSource &
 
 export type Application = Command['Application'] &
   BaseSimpleApplicationApplication &
+  JavascriptSimpleApplicationApplication &
   JavaSimpleApplicationAddedApplicationProperties &
   BuildToolApplication;

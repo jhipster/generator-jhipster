@@ -6,10 +6,6 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "authenticationTypeOauth2": false,
   "authenticationTypeSession": false,
   "authenticationUsesCsrf": false,
-  "backendType": "Java",
-  "backendTypeJavaAny": true,
-  "backendTypeSpringBoot": true,
-  "clientDistDir": "dist/",
   "defaultAdminPassword": "admin",
   "defaultAdminRoles": [
     "ADMIN",
@@ -28,6 +24,5 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "serverPort": 8081,
   "srcMain": "src/main/",
   "srcTest": "src/test/",
-  "temporaryDir": "temp/",
 }
 `;

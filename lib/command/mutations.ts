@@ -44,13 +44,12 @@ export const getCommandDefaultMutations = (
     __override__: false as any,
   };
   for (const [key, def] of scopeConfigs) {
-    if (def.default !== undefined) {
-      mutations[key] = (context: any) => {
-        return typeof def.default === 'function' ? def.default(context) : def.default;
-      };
-    } else {
-      mutations[key] = undefined;
-    }
+    mutations[key] = (context: any, { delayMarker }) => {
+      if (delayMarker) {
+        return delayMarker;
+      }
+      return typeof def.default === 'function' ? def.default(context) : def.default;
+    };
   }
   return mutations;
 };

@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
-import { CLIENT_MAIN_SRC_DIR, RECOMMENDED_NODE_VERSION } from '../generator-constants.ts';
+import { RECOMMENDED_NODE_VERSION } from '../generator-constants.ts';
+import { JAVA_JAVASCRIPT_TEST_DIR, JAVA_WEBAPP_SOURCES_DIR } from '../index.ts';
 
 import type { Application as JavascriptSimpleApplicationApplication } from './types.ts';
 
@@ -42,6 +43,8 @@ export type JavascriptSimpleApplicationPreparingAddedApplicationProperties = {
 
   clientRootDir: string;
   clientSrcDir: string;
+  clientTestDir: string;
+  clientDistDir: string;
 };
 
 export type JavascriptSimpleApplicationAddedApplicationProperties = JavascriptSimpleApplicationLoadingAddedApplicationProperties &
@@ -68,8 +71,10 @@ export const mutateApplicationPreparing = {
   nodePackageManager: 'npm',
   nodePackageManagerCommand: ({ nodePackageManager }) => nodePackageManager,
 
-  clientRootDir: '',
-  clientSrcDir: ({ clientRootDir }) => `${clientRootDir}${clientRootDir ? 'src/' : CLIENT_MAIN_SRC_DIR}`,
+  clientRootDir: (_, { delayMarker }) => delayMarker ?? '',
+  clientDistDir: (_, { delayMarker }) => delayMarker ?? 'dist/',
+  clientTestDir: ({ clientRootDir }) => (clientRootDir === '' ? JAVA_JAVASCRIPT_TEST_DIR : `${clientRootDir}test/`),
+  clientSrcDir: ({ clientRootDir }) => (clientRootDir === '' ? JAVA_WEBAPP_SOURCES_DIR : `${clientRootDir}src/`),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<
   MutateDataParam<JavascriptSimpleApplicationApplication>,
   JavascriptSimpleApplicationPreparingAddedApplicationProperties

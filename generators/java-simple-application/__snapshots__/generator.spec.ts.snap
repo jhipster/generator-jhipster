@@ -28,5 +28,11 @@ exports[`generator - java-simple-application with defaults options should match 
   "package.json": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/package-info.java": {
+    "stateCleared": "modified",
+  },
 }
 `;

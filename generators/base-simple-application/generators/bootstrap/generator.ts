@@ -18,7 +18,7 @@
  */
 import { packageJson } from '../../../../lib/index.ts';
 import { getConfigWithDefaults } from '../../../../lib/jhipster/default-application-options.ts';
-import { removeFieldsWithNullishValues } from '../../../../lib/utils/object.ts';
+import { finalizeMutations, removeFieldsWithNullishValues } from '../../../../lib/utils/object.ts';
 import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
 import BaseSimpleApplicationGenerator from '../../index.ts';
 
@@ -103,5 +103,17 @@ export default class BaseSimpleApplicationBootstrapGenerator extends BaseSimpleA
 
   get [BaseSimpleApplicationGenerator.PREPARING]() {
     return this.preparing;
+  }
+
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      finalizeApplicationMutations({ application }) {
+        finalizeMutations(application);
+      },
+    });
+  }
+
+  get [BaseSimpleApplicationGenerator.POST_PREPARING]() {
+    return this.postPreparing;
   }
 }

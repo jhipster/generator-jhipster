@@ -115,7 +115,7 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
           mutateApplication,
         );
         mutateData(application as unknown as SpringBootApplication, {
-          buildToolUnknown: ({ buildTool }) => !['gradle', 'maven'].includes(buildTool!),
+          buildToolUnknown: ({ buildTool }) => !['gradle', 'maven'].includes(buildTool),
         });
       },
     });

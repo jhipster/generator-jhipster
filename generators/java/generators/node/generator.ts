@@ -44,7 +44,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
         javaNodeBuildPaths.push(srcMainWebapp, 'package-lock.json', 'package.json');
         if (buildToolMaven) {
           // Gradle throws an error if the directory does not exist
-          javaNodeBuildPaths.push(clientDistDir!);
+          javaNodeBuildPaths.push(clientDistDir);
         }
       },
     });
