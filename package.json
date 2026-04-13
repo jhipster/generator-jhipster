@@ -149,7 +149,7 @@
     "eslint-plugin-unused-imports": "4.4.1",
     "execa": "9.6.1",
     "fast-xml-parser": "5.5.11",
-    "globals": "17.4.0",
+    "globals": "17.5.0",
     "isbinaryfile": "5.0.0",
     "latest-version": "9.0.0",
     "lodash-es": "4.18.1",
