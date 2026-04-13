@@ -2,7 +2,7 @@
   "dependencies": {
     "ejs-lint": "2.0.1",
     "eslint": "10.2.0",
-    "globals": "17.4.0",
+    "globals": "17.5.0",
     "vitest": "4.1.4"
   },
   "packageManager": "npm@11"
