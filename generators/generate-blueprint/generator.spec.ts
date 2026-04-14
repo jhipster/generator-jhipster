@@ -43,6 +43,12 @@ describe(`generator - ${generator}`, () => {
       it('should write files and match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
       });
+      it('should match application snapshot', () => {
+        const application = runResult.application;
+        expect(application).toMatchSnapshot({
+          jhipsterPackageJson: expect.any(Object),
+        });
+      });
     });
     describe('all option', () => {
       before(async () => {
@@ -53,6 +59,14 @@ describe(`generator - ${generator}`, () => {
       });
       it('should match snapshot', () => {
         expect(runResult.getStateSnapshot()).toMatchSnapshot();
+      });
+      it('should match application snapshot', () => {
+        const application = runResult.application;
+        expect(application).toMatchSnapshot({
+          jhipsterPackageJson: expect.any(Object),
+          generators: expect.any(Object),
+          subGenerators: expect.any(Array),
+        });
       });
     });
     describe('local-blueprint option', () => {
@@ -70,6 +84,12 @@ describe(`generator - ${generator}`, () => {
   },
 }
 `);
+      });
+      it('should match application snapshot', () => {
+        const application = runResult.application;
+        expect(application).toMatchSnapshot({
+          jhipsterPackageJson: expect.any(Object),
+        });
       });
     });
     describe('local-blueprint option and app generator', () => {
@@ -102,6 +122,12 @@ describe(`generator - ${generator}`, () => {
   },
 }
 `);
+      });
+      it('should match application snapshot', () => {
+        const application = runResult.application;
+        expect(application).toMatchSnapshot({
+          jhipsterPackageJson: expect.any(Object),
+        });
       });
     });
   });

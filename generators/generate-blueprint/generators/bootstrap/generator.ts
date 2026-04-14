@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { defaultConfig } from '../../constants.ts';
 import BlueprintGenerator from '../../index.ts';
 
 export default class BootstrapGenerator extends BlueprintGenerator {
@@ -24,6 +25,7 @@ export default class BootstrapGenerator extends BlueprintGenerator {
       await this.composeWithBlueprints();
     }
 
+    await this.dependsOnBootstrap('base-simple-application', { generatorOptions: { applyDefaults: data => data } });
     await this.dependsOnBootstrap('javascript-simple-application');
     await this.dependsOnBootstrap('ci-cd');
   }
@@ -38,5 +40,31 @@ export default class BootstrapGenerator extends BlueprintGenerator {
 
   get [BlueprintGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      async preparing({ applicationDefaults }) {
+        applicationDefaults(defaultConfig(), {
+          blueprintsPath: data => (data.localBlueprint ? '.blueprint/' : 'generators/'),
+          githubRepository: data => `jhipster/generator-jhipster-${data.baseName}`,
+          blueprintMjsExtension: data => (data.js ? 'js' : 'mjs'),
+          cliName: data => (data.cli ? `jhipster-${data.baseName}` : undefined),
+        });
+      },
+      prepareCommands({ application }) {
+        if (!application.generators) return;
+        for (const generator of Object.keys(application.generators)) {
+          const subGeneratorConfig = this.getSubGeneratorStorage(generator).getAll();
+          if (subGeneratorConfig.command) {
+            application.commands.push(generator);
+          }
+        }
+      },
+    });
+  }
+
+  get [BlueprintGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 }

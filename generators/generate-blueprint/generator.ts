@@ -47,7 +47,9 @@ export class GenerateBlueprintBaseGenerator extends BaseSimpleApplicationGenerat
   GenerateBlueprintConfig,
   GenerateBlueprintOptions
 > {
-  // This class is here to be the default export of the module, so that it can be extended by blueprints without importing the main generator file.
+  getSubGeneratorStorage(subGenerator: string) {
+    return this.config.createStorage<Record<string, any>>(`generators.${subGenerator}`);
+  }
 }
 
 export default class extends GenerateBlueprintBaseGenerator {
@@ -61,9 +63,6 @@ export default class extends GenerateBlueprintBaseGenerator {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
-
-    await this.dependsOnBootstrap('javascript-simple-application');
-    await this.dependsOnBootstrap('ci-cd');
   }
 
   get initializing() {
@@ -152,38 +151,6 @@ export default class extends GenerateBlueprintBaseGenerator {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
-  get preparing() {
-    return this.asPreparingTaskGroup({
-      async preparing({ applicationDefaults }) {
-        applicationDefaults(defaultConfig());
-      },
-      prepareCommands({ application }) {
-        if (!application.generators) return;
-        for (const generator of Object.keys(application.generators)) {
-          const subGeneratorConfig = this.getSubGeneratorStorage(generator).getAll();
-          if (subGeneratorConfig.command) {
-            application.commands.push(generator);
-          }
-        }
-      },
-      preparePath({ application }) {
-        application.blueprintsPath = application[LOCAL_BLUEPRINT_OPTION] ? '.blueprint/' : 'generators/';
-      },
-      prepare({ application }) {
-        const { cli, cliName, baseName } = application;
-        application.githubRepository = this.jhipsterConfig.githubRepository ?? `jhipster/generator-jhipster-${baseName}`;
-        application.blueprintMjsExtension = application.js ? 'js' : 'mjs';
-        if (cli) {
-          application.cliName = cliName ?? `jhipster-${baseName}`;
-        }
-      },
-    });
-  }
-
-  get [BaseSimpleApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
-  }
-
   get writing() {
     return this.asWritingTaskGroup({
       async cleanup({ control }) {
@@ -239,9 +206,5 @@ export default class extends GenerateBlueprintBaseGenerator {
 
   get [BaseSimpleApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
-  }
-
-  getSubGeneratorStorage(subGenerator: string) {
-    return this.config.createStorage<Record<string, any>>(`generators.${subGenerator}`);
   }
 }
