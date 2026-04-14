@@ -21,7 +21,7 @@ import type { OmitIndexSignature, ReadonlyKeysOf, RequiredKeysOf, SetRequired, S
 
 const filterNullishValues = (value: unknown): boolean => value != null;
 
-const MUTATION_CONTEXT_SYMBOL = Symbol('MutationContext');
+const MUTATION_CONTEXT_SYMBOL = '__MutationContext__';
 
 /**
  * Copy and remove null and undefined values
