@@ -16,19 +16,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { rm } from 'node:fs/promises';
 
-import chalk from 'chalk';
 import { camelCase, snakeCase, upperFirst } from 'lodash-es';
 
-import { getPackageRoot } from '../../lib/index.ts';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base-core/priorities.ts';
 import BaseSimpleApplicationGenerator from '../base-simple-application/index.ts';
-import { BLUEPRINT_API_VERSION } from '../generator-constants.ts';
 
 import {
-  DYNAMIC,
-  GENERATE_SNAPSHOTS,
   LOCAL_BLUEPRINT_OPTION,
   PRIORITIES,
   WRITTEN,
@@ -48,17 +42,15 @@ import type {
   Options as GenerateBlueprintOptions,
 } from './types.ts';
 
-const defaultPublishedFiles = ['generators', '!**/__*', '!**/*.snap', '!**/*.spec.?(c|m)js'];
-
-export default class extends BaseSimpleApplicationGenerator<
+export class GenerateBlueprintBaseGenerator extends BaseSimpleApplicationGenerator<
   GenerateBlueprintApplication,
   GenerateBlueprintConfig,
   GenerateBlueprintOptions
 > {
-  recreatePackageLock!: boolean;
-  skipWorkflows!: boolean;
-  ignoreExistingGenerators!: boolean;
-  gitDependency!: string;
+  // This class is here to be the default export of the module, so that it can be extended by blueprints without importing the main generator file.
+}
+
+export default class extends GenerateBlueprintBaseGenerator {
   allGenerators!: boolean;
 
   constructor(args?: string[], options?: GenerateBlueprintOptions, features?: GenerateBlueprintFeatures) {
@@ -135,14 +127,6 @@ export default class extends BaseSimpleApplicationGenerator<
       requiredConfig() {
         this.config.defaults(requiredConfig());
       },
-      conditionalConfig() {
-        if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) {
-          this.config.defaults({
-            [DYNAMIC]: true,
-            js: false,
-          });
-        }
-      },
     });
   }
 
@@ -153,27 +137,19 @@ export default class extends BaseSimpleApplicationGenerator<
   get composing() {
     return this.asComposingTaskGroup({
       async compose() {
-        if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
-        const initGenerator = await this.composeWithJHipster('init');
-        initGenerator.generateReadme = false;
+        if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) {
+          await this.composeWithJHipster('jhipster:generate-blueprint:local');
+        } else {
+          const initGenerator = await this.composeWithJHipster('init');
+          initGenerator.generateReadme = false;
+          await this.composeWithJHipster('jhipster:generate-blueprint:standalone');
+        }
       },
     });
   }
 
   get [BaseSimpleApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
-  }
-
-  get loading() {
-    return this.asLoadingTaskGroup({
-      async loading({ applicationDefaults }) {
-        applicationDefaults({ commands: () => [], typescriptEslint: false });
-      },
-    });
-  }
-
-  get [BaseSimpleApplicationGenerator.LOADING]() {
-    return this.delegateTasksToBlueprint(() => this.loading);
   }
 
   get preparing() {
@@ -219,20 +195,14 @@ export default class extends BaseSimpleApplicationGenerator<
       },
       async writing({ application }) {
         application.sampleWritten = this.jhipsterConfig.sampleWritten;
-        const { skipWorkflows, ignoreExistingGenerators } = this;
         await this.writeFiles({
           sections: files,
-          context: {
-            skipWorkflows,
-            ignoreExistingGenerators,
-            ...application,
-          },
+          context: application,
         });
         this.jhipsterConfig.sampleWritten = true;
       },
       async writingGenerators({ application }) {
         if (!application.generators) return;
-        const { skipWorkflows, ignoreExistingGenerators } = this;
         for (const generator of Object.keys(application.generators)) {
           const subGeneratorStorage = this.getSubGeneratorStorage(generator);
           const subGeneratorConfig = subGeneratorStorage.getAll();
@@ -247,8 +217,6 @@ export default class extends BaseSimpleApplicationGenerator<
           const jhipsterGenerator = customGenerator || subGeneratorConfig.sbs ? 'base-application' : generator;
           const subTemplateData = {
             ...application,
-            skipWorkflows,
-            ignoreExistingGenerators,
             application,
             ...defaultSubGeneratorConfig(),
             ...subGeneratorConfig,
@@ -273,210 +241,7 @@ export default class extends BaseSimpleApplicationGenerator<
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
-  get postWriting() {
-    return this.asPostWritingTaskGroup({
-      upgrade({ application, control }) {
-        if (!application.generators) return;
-        if (!control.isJhipsterVersionLessThan('8.7.2')) return;
-        for (const generator of Object.keys(application.generators)) {
-          const commandFile = `${application.blueprintsPath}${generator}/command.${application.blueprintMjsExtension}`;
-          this.editFile(commandFile, { ignoreNonExisting: true }, content =>
-            content
-              .replace(
-                `/**
- * @type {import('generator-jhipster').JHipsterCommandDefinition}
- */`,
-                `import { asCommand } from 'generator-jhipster';
-`,
-              )
-              .replace('const command = ', 'export default asCommand(')
-              .replace(
-                `
-};`,
-                '});',
-              )
-              .replace('export default command;', ''),
-          );
-
-          const generatorSpec = `${application.blueprintsPath}${generator}/generator.spec.${application.blueprintMjsExtension}`;
-          this.editFile(generatorSpec, { ignoreNonExisting: true }, content =>
-            content.replaceAll(/blueprint: '([\w-]*)'/g, "blueprint: ['$1']"),
-          );
-        }
-      },
-      packageJson({ application }) {
-        if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
-        const { jhipsterPackageJson } = application;
-        const mainDependencies: Record<string, string> = {
-          ...jhipsterPackageJson.dependencies,
-          ...jhipsterPackageJson.devDependencies,
-        } as Record<string, string>;
-        this.loadNodeDependenciesFromPackageJson(
-          mainDependencies,
-          this.fetchFromInstalledJHipster('generate-blueprint/resources/package.json'),
-        );
-        this.packageJson.merge({
-          name: `generator-jhipster-${application.baseName}`,
-          keywords: ['yeoman-generator', 'jhipster-blueprint', BLUEPRINT_API_VERSION],
-          files: defaultPublishedFiles,
-          scripts: {
-            ejslint: 'ejslint generators/**/*.ejs',
-            lint: 'eslint .',
-            'lint-fix': 'npm run ejslint && npm run lint -- --fix',
-            pretest: 'npm run prettier-check && npm run lint',
-            test: 'vitest run',
-            'update-snapshot': 'vitest run --update',
-            vitest: 'vitest',
-          },
-          devDependencies: {
-            'ejs-lint': mainDependencies['ejs-lint'],
-            eslint: mainDependencies.eslint,
-            jiti: mainDependencies.jiti,
-            globals: mainDependencies.globals,
-            vitest: mainDependencies.vitest,
-            prettier: mainDependencies.prettier,
-            /*
-             * yeoman-test version is loaded through generator-jhipster peer dependency.
-             * generator-jhipster uses a fixed version, blueprints must set a compatible range.
-             */
-            'yeoman-test': '>=10',
-          },
-          engines: {
-            node: jhipsterPackageJson.engines.node,
-          },
-        });
-      },
-      addCliToPackageJson({ application }) {
-        const { cli, cliName } = application;
-        if (!cli || !cliName || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
-        this.packageJson.merge({
-          bin: {
-            [cliName]: 'cli/cli.cjs',
-          },
-          files: ['cli', ...defaultPublishedFiles],
-        });
-      },
-      addGeneratorJHipsterDependency({ application }) {
-        if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
-        const { jhipsterPackageJson } = application;
-        const exactDependency = {
-          'generator-jhipster':
-            this.options.linkJhipsterDependency ?
-              `file:${this.relativeDir(this.destinationRoot(), getPackageRoot())}`
-            : jhipsterPackageJson.version,
-        };
-        const caretDependency = {
-          'generator-jhipster': `^${jhipsterPackageJson.version}`,
-        };
-        if (this.jhipsterConfig.dynamic) {
-          this.packageJson.merge({
-            devDependencies: exactDependency,
-            peerDependencies: caretDependency,
-            engines: caretDependency,
-          });
-        } else {
-          this.packageJson.merge({
-            dependencies: this.gitDependency ? { 'generator-jhipster': this.gitDependency } : exactDependency,
-            engines: this.jhipsterConfig.caret ? caretDependency : exactDependency,
-          });
-        }
-      },
-    });
-  }
-
-  get [BaseSimpleApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
-  }
-
-  get postInstall() {
-    return this.asPostInstallTaskGroup({
-      async addSnapshot({ control }) {
-        const { [LOCAL_BLUEPRINT_OPTION]: localBlueprint } = this.jhipsterConfig;
-        const {
-          skipInstall,
-          skipGit,
-          [GENERATE_SNAPSHOTS]: generateSnapshots = !localBlueprint && !skipInstall && !skipGit && !control.existingProject,
-        } = this.options;
-
-        if (this.recreatePackageLock) {
-          await rm(this.destinationPath('package-lock.json'), { force: true });
-          await rm(this.destinationPath('node_modules'), { force: true, recursive: true });
-          await this.spawn('npm', ['install'], { stdio: 'inherit' });
-        }
-
-        if (generateSnapshots) {
-          try {
-            // Generate snapshots to add to git.
-            this.log.verboseInfo(`
-This is a new blueprint, executing '${chalk.yellow('npm run update-snapshot')}' to generate snapshots and commit to git.`);
-            await this.spawn('npm', ['run', 'update-snapshot']);
-          } catch (error) {
-            if (generateSnapshots !== undefined) {
-              // We are forcing to generate snapshots fail the generation.
-              throw error;
-            }
-            this.log.warn('Fail to generate snapshots');
-          }
-        }
-
-        if (control.jhipsterOldVersion) {
-          // Apply prettier and eslint to fix non generated files on upgrade.
-          try {
-            await this.spawn('npm', ['run', 'prettier-format']);
-          } catch {
-            // Ignore error
-          }
-
-          try {
-            await this.spawn('npm', ['run', 'lint-fix']);
-          } catch {
-            // Ignore error
-          }
-        }
-      },
-    });
-  }
-
-  get [BaseSimpleApplicationGenerator.POST_INSTALL]() {
-    return this.delegateTasksToBlueprint(() => this.postInstall);
-  }
-
-  get end() {
-    return this.asEndTaskGroup({
-      end({ application }) {
-        if (this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
-
-        this.log.log(`${chalk.bold.green('##### USAGE #####')}
-To begin to work:
-- launch: ${chalk.yellow.bold('npm install')}
-- link: ${chalk.yellow.bold('npm link')}
-- link JHipster: ${chalk.yellow.bold('npm link generator-jhipster')}
-- test your module in a JHipster project:
-    - create a new directory and go into it
-    - link the blueprint: ${chalk.yellow.bold(`npm link generator-jhipster-${application.baseName}`)}
-    - launch JHipster with flags: ${chalk.yellow.bold(`jhipster --blueprints ${application.baseName}`)}
-- then, come back here, and begin to code!
-`);
-      },
-    });
-  }
-
-  get [BaseSimpleApplicationGenerator.END]() {
-    return this.delegateTasksToBlueprint(() => this.end);
-  }
-
   getSubGeneratorStorage(subGenerator: string) {
     return this.config.createStorage<Record<string, any>>(`generators.${subGenerator}`);
-  }
-
-  validateGitHubName(input: string): boolean | string {
-    if (/^([a-zA-Z0-9]+)(-([a-zA-Z0-9])+)*$/.test(input) && input !== '') return true;
-    return 'Your username is mandatory, cannot contain special characters or a blank space';
-  }
-
-  validateModuleName(input: string): boolean | string {
-    return /^[a-zA-Z0-9-]+$/.test(input) ? true : (
-        'Your blueprint name is mandatory, cannot contain special characters or a blank space, using the default name instead'
-      );
   }
 }

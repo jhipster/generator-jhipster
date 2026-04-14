@@ -42,8 +42,6 @@ export type Config = Command['Config'] & BaseSimpleApplicationConfig;
 export type Options = Command['Options'] & BaseSimpleApplicationOptions & GitOptions;
 
 export type TemplateData = Application & {
-  skipWorkflows: boolean;
-  ignoreExistingGenerators: boolean;
   application: Application;
   generator: string;
   customGenerator: boolean;

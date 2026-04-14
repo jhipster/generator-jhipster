@@ -50,7 +50,7 @@ const command = {
         description: 'Use git dependency (eg: github:jhipster/generator-jhipster#main)',
         type: String,
       },
-      scope: 'generator',
+      scope: 'context',
     },
     cliName: {
       cli: {
@@ -59,26 +59,19 @@ const command = {
       },
       scope: 'storage',
     },
-    recreatePackageLock: {
-      description: 'Recreate package lock',
-      cli: {
-        type: Boolean,
-      },
-      scope: 'generator',
-    },
     skipWorkflows: {
       description: 'Skip github workflows',
       cli: {
         type: Boolean,
       },
-      scope: 'generator',
+      scope: 'context',
     },
     ignoreExistingGenerators: {
       description: 'Ignore existing generators',
       cli: {
         type: Boolean,
       },
-      scope: 'generator',
+      scope: 'context',
     },
     githubRepository: {
       cli: {
@@ -174,7 +167,7 @@ const command = {
       scope: 'storage',
     },
   },
-  import: ['init'],
+  import: ['init', 'jhipster:generate-blueprint:standalone'],
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

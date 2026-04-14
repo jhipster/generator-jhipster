@@ -306,24 +306,27 @@ export const createNeedleCallback = <Generator extends CoreGenerator = CoreGener
   assert(contentToAdd, 'contentToAdd is required');
 
   return function (content, filePath) {
+    if (contentToCheck && checkContentIn(contentToCheck, content, ignoreWhitespaces)) {
+      return content;
+    }
+    const contentHasNeedleStart = hasNeedleStart(content, addNeedlePrefix(needle));
     if (isArrayOfContentToAdd(contentToAdd)) {
-      contentToAdd = contentToAdd.filter(({ content: itemContent, contentToCheck }) => {
-        return !checkContentIn(contentToCheck ?? itemContent, content, ignoreWhitespaces);
-      });
+      if (!contentHasNeedleStart) {
+        contentToAdd = contentToAdd.filter(({ content: itemContent, contentToCheck }) => {
+          return !checkContentIn(contentToCheck ?? itemContent, content, ignoreWhitespaces);
+        });
+      }
       if (contentToAdd.length === 0) {
         return content;
       }
       contentToAdd = contentToAdd.map(({ content }) => content);
-    }
-    if (contentToCheck && checkContentIn(contentToCheck, content, ignoreWhitespaces)) {
-      return content;
     }
     if (typeof contentToAdd !== 'function') {
       if (typeof contentToAdd === 'string' && contentToAdd.startsWith('\n')) {
         contentToAdd = contentToAdd.slice(1);
       }
       contentToAdd = Array.isArray(contentToAdd) ? contentToAdd : [contentToAdd];
-      if (!needle || !hasNeedleStart(content, needle)) {
+      if (!needle || !contentHasNeedleStart) {
         contentToAdd = contentToAdd.filter(eachContent => !checkContentIn(eachContent, content, ignoreWhitespaces));
       }
       if (contentToAdd.length === 0) {

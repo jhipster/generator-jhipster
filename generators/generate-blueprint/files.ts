@@ -24,43 +24,6 @@ import type { Application as GenerateBlueprintApplication, TemplateData } from '
 export const files = asWriteFilesSection<GenerateBlueprintApplication>({
   baseFiles: [
     {
-      condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION],
-      templates: [
-        '.github/workflows/generator.yml',
-        '.gitignore.jhi.blueprint',
-        '.prettierignore.jhi.blueprint',
-        'eslint.config.ts.jhi.blueprint',
-        'README.md',
-        'tsconfig.json',
-        'vitest.config.ts',
-        'vitest.test-setup.ts',
-        '.blueprint/cli/commands.mjs',
-        '.blueprint/generate-sample/command.mjs',
-        '.blueprint/generate-sample/generator.mjs',
-        '.blueprint/generate-sample/index.mjs',
-        // Always write cli for devBlueprint usage
-        'cli/cli.cjs',
-        { sourceFile: 'cli/cli-customizations.cjs', override: false },
-      ],
-    },
-    {
-      condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION] && ctx.githubWorkflows,
-      templates: [
-        '.blueprint/github-build-matrix/command.mjs',
-        '.blueprint/github-build-matrix/generator.mjs',
-        '.blueprint/github-build-matrix/generator.spec.mjs',
-        '.blueprint/github-build-matrix/index.mjs',
-      ],
-    },
-    {
-      condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION] && ctx.githubWorkflows && !ctx.skipWorkflows,
-      templates: ['.github/workflows/build-cache.yml', '.github/workflows/samples.yml'],
-    },
-    {
-      condition: ctx => !ctx[LOCAL_BLUEPRINT_OPTION] && !ctx.sampleWritten,
-      templates: ['.blueprint/generate-sample/templates/samples/sample.jdl'],
-    },
-    {
       condition: ctx => ctx.commands.length > 0,
       templates: ['cli/commands.cjs'],
     },

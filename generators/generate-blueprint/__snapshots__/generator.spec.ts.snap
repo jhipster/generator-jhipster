@@ -488,6 +488,51 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/generate-blueprint/generator.spec.js": {
     "stateCleared": "modified",
   },
+  "generators/generate-blueprint/generators/bootstrap/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/generate-blueprint/generators/bootstrap/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/generate-blueprint/generators/bootstrap/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/generate-blueprint/generators/bootstrap/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/generate-blueprint/generators/bootstrap/templates/template-file-generate-blueprint:bootstrap.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/generate-blueprint/generators/local/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/generate-blueprint/generators/local/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/generate-blueprint/generators/local/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/generate-blueprint/generators/local/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/generate-blueprint/generators/local/templates/template-file-generate-blueprint:local.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/generate-blueprint/generators/standalone/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/generate-blueprint/generators/standalone/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/generate-blueprint/generators/standalone/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/generate-blueprint/generators/standalone/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/generate-blueprint/generators/standalone/templates/template-file-generate-blueprint:standalone.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/generate-blueprint/index.js": {
     "stateCleared": "modified",
   },
