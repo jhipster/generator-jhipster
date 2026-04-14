@@ -34,7 +34,7 @@
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@types/webpack-env": "1.18.8",
-    "autoprefixer": "10.4.27",
+    "autoprefixer": "10.5.0",
     "browser-sync": "3.0.4",
     "browser-sync-webpack-plugin": "2.4.0",
     "copy-webpack-plugin": "14.0.0",
