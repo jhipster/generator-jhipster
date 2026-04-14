@@ -29,7 +29,7 @@
     "@vitejs/plugin-vue": "6.0.5",
     "@vue/test-utils": "2.4.6",
     "@vue/tsconfig": "0.9.1",
-    "autoprefixer": "10.4.27",
+    "autoprefixer": "10.5.0",
     "axios-mock-adapter": "2.1.0",
     "browser-sync-webpack-plugin": "2.4.0",
     "copy-webpack-plugin": "14.0.0",
