@@ -1477,8 +1477,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    */
   createGit(options?: Parameters<typeof simpleGit>[0]) {
     return simpleGit({ baseDir: this.destinationPath(), ...options }).env({
-      ...process.env,
-      LANG: 'en',
+      HOME: process.env.HOME,
+      PATH: process.env.PATH,
+      LANG: 'C',
+      LC_ALL: 'C',
     });
   }
 }
