@@ -47,8 +47,8 @@ export default function prepareSqlApplicationProperties({ application }: { appli
       __override__: false,
       devDatabaseTypeH2Any: data => data.devDatabaseTypeH2Disk || data.devDatabaseTypeH2Memory,
     },
-    data => {
-      if (data.databaseTypeNeo4j) {
+    context => {
+      if (context.databaseTypeNeo4j) {
         return {
           __override__: false,
           devDatabaseUsername: '',
@@ -58,44 +58,47 @@ export default function prepareSqlApplicationProperties({ application }: { appli
         };
       }
 
-      const prodDatabaseData = getDatabaseData(data.prodDatabaseType);
-      const prodDatabaseName = prodDatabaseData.defaultDatabaseName ?? data.baseName;
+      const prodDatabaseData = getDatabaseData(context.prodDatabaseType);
+      const prodDatabaseName = prodDatabaseData.defaultDatabaseName ?? context.baseName;
       return {
         __override__: false,
         prodHibernateDialect: prodDatabaseData.hibernateDialect,
         prodJdbcDriver: prodDatabaseData.jdbcDriver,
-        prodDatabaseUsername: prodDatabaseData.defaultUsername ?? data.baseName,
+        prodDatabaseUsername: prodDatabaseData.defaultUsername ?? context.baseName,
         prodDatabasePassword: prodDatabaseData.defaultPassword ?? '',
         prodDatabaseName,
-        prodJdbcUrl: getJdbcUrl(data.prodDatabaseType, {
-          databaseName: prodDatabaseName,
-          hostname: 'localhost',
-        }),
-        prodR2dbcUrl: getR2dbcUrl(data.prodDatabaseType, {
-          databaseName: prodDatabaseName,
-          hostname: 'localhost',
-        }),
+        prodJdbcUrl: data =>
+          getJdbcUrl(data.prodDatabaseType, {
+            databaseName: data.prodDatabaseName,
+            hostname: 'localhost',
+          }),
+        prodR2dbcUrl: data =>
+          getR2dbcUrl(data.prodDatabaseType, {
+            databaseName: data.prodDatabaseName,
+            hostname: 'localhost',
+          }),
       };
     },
-    data => {
-      if (data.devDatabaseTypeH2Any) {
-        const devDatabaseData = getDatabaseData(data.devDatabaseType);
-        const databaseName = devDatabaseData.defaultDatabaseName ?? data.baseName;
+    context => {
+      if (context.devDatabaseTypeH2Any) {
+        const devDatabaseData = getDatabaseData(context.devDatabaseType);
+        const databaseName = devDatabaseData.defaultDatabaseName ?? context.baseName;
         return {
           __override__: false,
           devHibernateDialect: devDatabaseData.hibernateDialect,
           devJdbcDriver: devDatabaseData.jdbcDriver,
-          devDatabaseUsername: devDatabaseData.defaultUsername ?? data.baseName,
+          devDatabaseUsername: devDatabaseData.defaultUsername ?? context.baseName,
           devDatabasePassword: devDatabaseData.defaultPassword ?? '',
           devDatabaseName: databaseName,
-          devJdbcUrl: getJdbcUrl(data.devDatabaseType, {
-            databaseName,
-            buildDirectory: `./${data.temporaryDir}`,
-            prodDatabaseType: data.prodDatabaseType,
-          }),
+          devJdbcUrl: data =>
+            getJdbcUrl(data.devDatabaseType, {
+              databaseName: data.devDatabaseName,
+              buildDirectory: `./${data.temporaryDir}`,
+              prodDatabaseType: data.prodDatabaseType,
+            }),
           devR2dbcUrl: data =>
             getR2dbcUrl(data.devDatabaseType, {
-              databaseName,
+              databaseName: data.devDatabaseName,
               buildDirectory: `./${data.temporaryDir}`,
               prodDatabaseType: data.prodDatabaseType,
             }),
@@ -103,13 +106,13 @@ export default function prepareSqlApplicationProperties({ application }: { appli
       }
       return {
         __override__: false,
-        devJdbcUrl: data.prodJdbcUrl,
-        devR2dbcUrl: data.prodR2dbcUrl,
-        devHibernateDialect: data.prodHibernateDialect,
-        devJdbcDriver: data.prodJdbcDriver,
-        devDatabaseUsername: data.prodDatabaseUsername,
-        devDatabasePassword: data.prodDatabasePassword,
-        devDatabaseName: data.prodDatabaseName,
+        devJdbcUrl: context.prodJdbcUrl,
+        devR2dbcUrl: context.prodR2dbcUrl,
+        devHibernateDialect: context.prodHibernateDialect,
+        devJdbcDriver: context.devJdbcDriver,
+        devDatabaseUsername: context.devDatabaseUsername,
+        devDatabasePassword: context.devDatabasePassword,
+        devDatabaseName: context.devDatabaseName,
       };
     },
   );
