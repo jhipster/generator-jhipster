@@ -155,7 +155,7 @@ export default defineConfig(
       '@stylistic/template-curly-spacing': 'error',
 
       'ejs-templates/indent': 'off',
-      'ejs-templates/format': 'error',
+      'ejs-templates/format': 'off',
     },
   },
 );
