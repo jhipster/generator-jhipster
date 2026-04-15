@@ -138,7 +138,7 @@ export default defineConfig(
     rules: {
       'ejs-templates/prefer-slurping-codeonly': 'error',
       'ejs-templates/experimental-prefer-slurp-multiline': 'error',
-      'ejs-templates/prefer-single-line-tags': 'error',
+      'ejs-templates/prefer-single-line-tags': 'off',
       'ejs-templates/slurp-newline': 'error',
 
       'prettier/prettier': 'off',
