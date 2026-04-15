@@ -98,7 +98,6 @@ export type MutateDataPropertiesWithRequiredProperties<D extends Record<string, 
 const OverrideMutation = Symbol('OverrideMutation');
 
 export type MutateDataFunction = ((ctx: any, opts: MutateDataCallbackOptions) => any) & { [OverrideMutation]?: boolean };
-type MutateDataOptions = { autoDelay: boolean };
 type MutationContextOptions = {
   autoDelay?: boolean;
   delayContext: Record<string, MutateDataFunction[]>;
@@ -160,7 +159,7 @@ const handleMutateDataCallback = (fn: MutateDataFunction, context: any, { defaul
 
 const applyDelayedMutations = (
   context: ContextWithMutationOptions<object>,
-  opts?: { defaults?: boolean; throwOnDelay?: boolean } & Partial<MutateDataOptions>,
+  opts?: { defaults?: boolean; throwOnDelay?: boolean },
 ): boolean => {
   let mutationApplied = false;
   const delayedContext = context[MUTATION_CONTEXT_SYMBOL].delayContext;
@@ -200,10 +199,10 @@ const applyDelayedMutations = (
 
 export const finalizeMutations = (context: any): void => {
   if (isMutationContext(context)) {
-    const { autoDelay = false } = context[MUTATION_CONTEXT_SYMBOL];
-    while (applyDelayedMutations(context, { defaults: true, autoDelay })) {
+    while (applyDelayedMutations(context, { defaults: true })) {
       // Apply mutations until there is no more mutation to apply, this is to handle mutations that depend on other mutations.
     }
+    context[MUTATION_CONTEXT_SYMBOL].autoDelay = false;
     // In case there is still delayed mutations, it means that some required properties are missing, we throw an error to avoid silent issues.
     applyDelayedMutations(context, { defaults: true, throwOnDelay: true });
     delete context[MUTATION_CONTEXT_SYMBOL];

@@ -80,6 +80,10 @@ export default function prepareSqlApplicationProperties({ application }: { appli
       };
     },
     context => {
+      if (context.databaseTypeNeo4j) {
+        return {};
+      }
+
       if (context.devDatabaseTypeH2Any) {
         const devDatabaseData = getDatabaseData(context.devDatabaseType);
         const databaseName = devDatabaseData.defaultDatabaseName ?? context.baseName;
