@@ -207,7 +207,7 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
   "devHibernateDialect": "org.hibernate.dialect.PostgreSQLDialect",
   "devJdbcDriver": "org.postgresql.Driver",
   "devJdbcUrl": "jdbc:postgresql://localhost:5432/jhipster",
-  "devR2dbcUrl": undefined,
+  "devR2dbcUrl": "r2dbc:postgresql://localhost:5432/jhipster",
   "devServerPort": 4200,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {
@@ -599,6 +599,7 @@ exports[`generator - spring-boot with jwt should match application snapshot 1`] 
   "prodHibernateDialect": "org.hibernate.dialect.PostgreSQLDialect",
   "prodJdbcDriver": "org.postgresql.Driver",
   "prodJdbcUrl": "jdbc:postgresql://localhost:5432/jhipster",
+  "prodR2dbcUrl": "r2dbc:postgresql://localhost:5432/jhipster",
   "projectDescription": "Description for JHipster",
   "projectVersion": "0.0.1-SNAPSHOT",
   "reactive": false,
@@ -1068,7 +1069,7 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
   "devHibernateDialect": "org.hibernate.dialect.PostgreSQLDialect",
   "devJdbcDriver": "org.postgresql.Driver",
   "devJdbcUrl": "jdbc:postgresql://localhost:5432/jhipster",
-  "devR2dbcUrl": undefined,
+  "devR2dbcUrl": "r2dbc:postgresql://localhost:5432/jhipster",
   "devServerPort": 4200,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {
@@ -1463,6 +1464,7 @@ exports[`generator - spring-boot with oauth2 should match application snapshot 1
   "prodHibernateDialect": "org.hibernate.dialect.PostgreSQLDialect",
   "prodJdbcDriver": "org.postgresql.Driver",
   "prodJdbcUrl": "jdbc:postgresql://localhost:5432/jhipster",
+  "prodR2dbcUrl": "r2dbc:postgresql://localhost:5432/jhipster",
   "projectDescription": "Description for JHipster",
   "projectVersion": "0.0.1-SNAPSHOT",
   "reactive": false,

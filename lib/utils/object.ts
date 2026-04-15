@@ -229,12 +229,18 @@ export const finalizeMutations = (context: any): void => {
  *   { __override__: false, prop: () => 'won\'t override' },
  * );
  */
-export function mutateData<T extends Record<string | number, any>>(context: T, ...mutations: MutateDataParam<T>[]): void {
+export function mutateData<T extends Record<string | number, any>>(
+  context: T,
+  ...mutations: (MutateDataParam<T> | ((data: T) => MutateDataParam<T>))[]
+): void {
   if (typeof context !== 'object' || context === null || Array.isArray(context)) {
     throw new Error('Context should be a non null and non array object');
   }
 
-  for (const mutation of mutations) {
+  for (let mutation of mutations) {
+    if (typeof mutation === 'function') {
+      mutation = mutation(context);
+    }
     const override = mutation.__override__;
     const mutationEntries = Object.entries(mutation).filter(([key]) => key !== '__override__');
     if (mutationEntries.length === 0) {
