@@ -106,13 +106,13 @@ export default function prepareSqlApplicationProperties({ application }: { appli
       }
       return {
         __override__: false,
-        devJdbcUrl: context.prodJdbcUrl,
-        devR2dbcUrl: context.prodR2dbcUrl,
-        devHibernateDialect: context.prodHibernateDialect,
-        devJdbcDriver: context.devJdbcDriver,
-        devDatabaseUsername: context.devDatabaseUsername,
-        devDatabasePassword: context.devDatabasePassword,
-        devDatabaseName: context.devDatabaseName,
+        devJdbcUrl: data => data.prodJdbcUrl,
+        devR2dbcUrl: data => data.prodR2dbcUrl,
+        devHibernateDialect: data => data.prodHibernateDialect,
+        devJdbcDriver: data => data.prodJdbcDriver,
+        devDatabaseUsername: data => data.prodDatabaseUsername,
+        devDatabasePassword: data => data.prodDatabasePassword,
+        devDatabaseName: data => data.prodDatabaseName,
       };
     },
   );
