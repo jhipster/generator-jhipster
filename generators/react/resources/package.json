@@ -71,7 +71,7 @@
     "ts-loader": "9.5.7",
     "typescript": "6.0.2",
     "typescript-eslint": "8.58.2",
-    "webpack": "5.106.1",
+    "webpack": "5.106.2",
     "webpack-cli": "7.0.2",
     "webpack-dev-server": "5.2.3",
     "webpack-merge": "6.0.1",
