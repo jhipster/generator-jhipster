@@ -765,7 +765,7 @@ public class UserService {
   <%_ } _%>
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
     public <% if (reactive) { %>Flux<% } else { %>Page<% } %><<%- user.adminUserDto %>> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findAll<% if (reactive) { %><% if (databaseTypeSql) { %>WithAuthorities<% } else { %>By<% if (!databaseTypeCouchbase) { %>IdNotNull<% }}} %>(pageable).map(<%- user.adminUserDto %>::new);
+        return userRepository.findAll<% if (reactive) { %><% if (databaseTypeSql) { %>WithAuthorities<% } else { %>By<% if (!databaseTypeCouchbase) { %>IdNotNull<% } } } %>(pageable).map(<%- user.adminUserDto %>::new);
     }
 
     <%_ if (databaseTypeSql) { _%>

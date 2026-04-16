@@ -518,7 +518,7 @@ _%>
               page={paginationState.activePage}
               total={totalItems}
               itemsPerPage={paginationState.itemsPerPage}
-              <% { if (enableTranslation) { %>i18nEnabled<% }} %>
+              <% if (enableTranslation) { %>i18nEnabled<% } %>
             />
           </div>
           <div className="justify-content-center d-flex">

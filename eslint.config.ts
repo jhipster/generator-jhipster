@@ -150,7 +150,6 @@ export default defineConfig(
         'prefer-destructuring': ['error', { array: false, object: true }],
         '@stylistic/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: 'never' }],
         '@stylistic/comma-dangle': ['error', 'always-multiline'],
-        '@stylistic/block-spacing': 'off',
         '@stylistic/max-statements-per-line': 'off',
         '@stylistic/no-mixed-operators': 'off',
         '@stylistic/semi-spacing': 'off',
