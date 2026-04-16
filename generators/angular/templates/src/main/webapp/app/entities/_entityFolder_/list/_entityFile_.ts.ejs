@@ -382,7 +382,7 @@ export class <%- componentName %> implements OnInit {
 <%_ if (!paginationNo) { _%>
         size: this.itemsPerPage(),
 <%_ } _%>
-<%_ if(implementsEagerLoadApis || containsBagRelationships) { _%>
+<%_ if (implementsEagerLoadApis || containsBagRelationships) { _%>
         eagerload: true,
 <%_ } _%>
 <%_ if (searchEngineAny) { _%>

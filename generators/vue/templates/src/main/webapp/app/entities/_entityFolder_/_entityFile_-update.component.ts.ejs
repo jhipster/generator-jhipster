@@ -67,7 +67,7 @@ export default defineComponent({
         const res = await <%- entityInstance %>Service().find(<%- entityInstance %><%- primaryKey.nameCapitalized %>);
 <%_ for (field of fields.filter(field => !field.id)) {
             const { fieldName, fieldType } = field;
-            if ([ 'Instant', 'ZonedDateTime' ].includes(fieldType)) {
+            if (['Instant', 'ZonedDateTime'].includes(fieldType)) {
 _%>
         res.<%- fieldName %> = new Date(res.<%- fieldName %>);
 <%_ } } _%>

@@ -35,7 +35,7 @@ public enum <%- enumName %> {
   withSomeCustomValues = !withoutCustomValues && !withCustomValues;
 
   for (const [index, enumWithCustomValue] of enumValues.entries()) {
-    if (enumWithCustomValue.comment){
+    if (enumWithCustomValue.comment) {
 _%>
 <%- enumWithCustomValue.comment %>
     <%_ }

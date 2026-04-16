@@ -99,7 +99,7 @@ spec:
   selector:
     app: jhipster-grafana
 ---
-<%_ if (kubernetesServiceTypeIngress && !istio ) { _%>
+<%_ if (kubernetesServiceTypeIngress && !istio) { _%>
 apiVersion: <%- KUBERNETES_INGRESS_API_VERSION %>
 kind: Ingress
 metadata:

@@ -261,7 +261,7 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
     @Transactional(readOnly = true)
 <%_ } _%>
     public <%- optionalOrMono %><<%- restClass %>> findOne(<%- primaryKey.type %> id) {
-        LOG.debug("Request to get <%- entityClass %> : {}", id);<%- include('../../_partials_entity_/get_template', { viaService: false, returnDirectly:true, implementsEagerLoadApis }); -%>
+        LOG.debug("Request to get <%- entityClass %> : {}", id);<%- include('../../_partials_entity_/get_template', { viaService: false, returnDirectly: true, implementsEagerLoadApis }); -%>
     }
 
 <%_ if (!serviceImpl) { _%>

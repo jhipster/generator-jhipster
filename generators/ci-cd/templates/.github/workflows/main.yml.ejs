@@ -39,7 +39,7 @@ jobs:
 <%_ if (!skipServer) { _%>
             SPRING_OUTPUT_ANSI_ENABLED: DETECT
 <%_ }
-if (!databaseTypeNo && !skipServer ) {
+if (!databaseTypeNo && !skipServer) {
 _%>
             SPRING_JPA_SHOW_SQL: false
 <%_ } _%>
@@ -161,7 +161,7 @@ _%>
             <%- commented %>  run: <%- nodePackageManager %> run ci:e2e:prepare
             <%- commented %>- name: 'E2E: Run'
             <%- commented %>  run: <%- nodePackageManager %> run ci:e2e:run
-  <%_ if(cypressTests) { _%>
+  <%_ if (cypressTests) { _%>
             <%- commented %>  env:
             <%- commented %>    CYPRESS_ENABLE_RECORD: <%- ciCdIntegrationsCypressDashboard %>
             <%- commented %>    CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}

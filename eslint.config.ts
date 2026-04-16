@@ -133,10 +133,11 @@ export default defineConfig(
       stylisticBlacklist: true,
       experimental: true,
     },
+    stylistic.configs.customize({
+      jsx: false,
+      semi: true,
+    }),
     {
-      plugins: {
-        '@stylistic': stylistic,
-      },
       rules: {
         'ejs-templates/prefer-single-line-tags': 'off',
         'ejs-templates/prefer-output': 'off',
@@ -147,14 +148,12 @@ export default defineConfig(
         ...js.configs.recommended.rules,
         ...jsRules,
         'prefer-destructuring': ['error', { array: false, object: true }],
-        '@stylistic/no-multi-spaces': 'error',
-        '@stylistic/comma-spacing': 'error',
-        '@stylistic/object-curly-spacing': ['error', 'always'],
-        '@stylistic/space-infix-ops': 'error',
         '@stylistic/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: 'never' }],
-        '@stylistic/semi': 'error',
         '@stylistic/comma-dangle': ['error', 'always-multiline'],
-        '@stylistic/template-curly-spacing': 'error',
+        '@stylistic/block-spacing': 'off',
+        '@stylistic/max-statements-per-line': 'off',
+        '@stylistic/no-mixed-operators': 'off',
+        '@stylistic/semi-spacing': 'off',
 
         'ejs-templates/indent': 'off',
         'ejs-templates/format': 'off',

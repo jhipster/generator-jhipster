@@ -366,7 +366,7 @@ _%>
 <%_ for (const field of fields.filter(field => !field.id && !field.transient)) {
   const isNumeric = field.fieldTypeNumeric;
 _%>
-            ", <%- field.fieldName %>=<% if (! isNumeric) { %>'<% } %>" + <%- field.propertySupplierName %>() <% if (! isNumeric) { %>+ "'" <% } %>+
+            ", <%- field.fieldName %>=<% if (!isNumeric) { %>'<% } %>" + <%- field.propertySupplierName %>() <% if (!isNumeric) { %>+ "'" <% } %>+
   <%_ if (field.fieldWithContentType) { _%>
             ", <%- field.fieldName %>ContentType='" + <%- field.propertySupplierName %>ContentType() + "'" +
   <%_ } _%>

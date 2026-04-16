@@ -43,7 +43,7 @@ env:
 <%_ if (buildToolMaven) { _%>
     - MAVEN_USER_HOME=$HOME/.m2/repository/
 <%_ } _%>
-<%_ if(cypressTests) { _%>
+<%_ if (cypressTests) { _%>
     - CYPRESS_ENABLE_RECORD: <%- ciCdIntegrationsCypressDashboard %>
 <%_ } _%>
 before_install:

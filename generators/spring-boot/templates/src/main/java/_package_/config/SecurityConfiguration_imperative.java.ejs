@@ -103,7 +103,7 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.boot.restclient.RestTemplateBuilder;
 import <%- packageName %>.security.oauth2.CustomClaimConverter;
 <%_ } _%>
-<%_ if(!skipClient) { _%>
+<%_ if (!skipClient) { _%>
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 <%_ } _%>
 <%_ if (authenticationUsesCsrf && !applicationTypeMicroservice) { _%>

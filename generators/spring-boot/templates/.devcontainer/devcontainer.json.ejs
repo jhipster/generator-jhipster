@@ -26,10 +26,10 @@
 
       // Add the IDs of extensions you want installed when the container is created.
       "extensions": [
-<%_ if(clientFrameworkAngular) { _%>
+<%_ if (clientFrameworkAngular) { _%>
         "angular.ng-template",
 <%_ } _%>
-<%_ if(!skipClient) { _%>
+<%_ if (!skipClient) { _%>
         "christian-kohler.npm-intellisense",
         "firsttris.vscode-jest-runner",
         "ms-vscode.vscode-typescript-tslint-plugin",
@@ -44,13 +44,13 @@
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   "forwardPorts": [
-<%_ if(clientFrameworkAngular) { _%>
+<%_ if (clientFrameworkAngular) { _%>
     4200,
 <%_ } _%>
-<%_ if(clientFrameworkReact || clientFrameworkVue) { _%>
+<%_ if (clientFrameworkReact || clientFrameworkVue) { _%>
     9060,
 <%_ } _%>
-<%_ if(!skipClient) { _%>
+<%_ if (!skipClient) { _%>
     3001,
     9000,
 <%_ } _%>

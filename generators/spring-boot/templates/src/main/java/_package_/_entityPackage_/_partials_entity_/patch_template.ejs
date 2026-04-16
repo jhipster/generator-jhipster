@@ -47,7 +47,7 @@ _%>
   .<%- mapOrFlatMap %>(<%- entityInstance %>Repository::save)
   <%_ if (searchEngineElasticsearch) { _%>
     .<%- mapOrFlatMap %>(saved<%- entityClass %> -> {
-    <%_ if(reactive) { %>
+    <%_ if (reactive) { %>
         <%- entityInstance %>SearchRepository.save(saved<%- entityClass %>);
         return Mono.just(saved<%- entityClass %>);
     <%_ } else { %>

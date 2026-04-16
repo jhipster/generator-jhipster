@@ -119,7 +119,7 @@
     "cleanup": "rimraf <%- this.relativeDir(clientRootDir, temporaryDir) %>",
     "clean-www": "rimraf <%- this.relativeDir(clientRootDir, clientDistDir) %>",
     "build": "<%- nodePackageManager %> run webapp:prod --",
-    "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'<% if(!skipServer) { %> npm:backend:start<% } %>",
+    "build-watch": "concurrently 'npm run webapp:build:dev -- --watch'<% if (!skipServer) { %> npm:backend:start<% } %>",
     "jest": "jest --coverage --logHeapUsage --maxWorkers=2 --config jest.conf.js",
     "jest:update": "<%- nodePackageManager %> run jest -- --updateSnapshot",
     "start": "<%- nodePackageManager %> run webapp:dev --",

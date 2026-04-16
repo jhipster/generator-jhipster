@@ -75,7 +75,7 @@ export const searchEntities = createAsyncThunk(
 export const getEntities = createAsyncThunk(
   '<%- entityInstance %>/fetch_entity_list',
   async ({
-<%_ if(!paginationNo) { _%>
+<%_ if (!paginationNo) { _%>
     page,
     size,
 <%_ } _%>

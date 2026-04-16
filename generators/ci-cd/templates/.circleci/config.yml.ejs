@@ -114,7 +114,7 @@ _%>
             <%- commented %>- run:
             <%- commented %>    name: 'E2E: Run'
             <%- commented %>    command: <%- nodePackageManager %> run ci:e2e:run
-  <%_ if(cypressTests) { _%>
+  <%_ if (cypressTests) { _%>
             <%- commented %>    environment:
             <%- commented %>      CYPRESS_ENABLE_RECORD: <%- ciCdIntegrationsCypressDashboard %>
   <%_ } _%>

@@ -26,7 +26,7 @@ _%>
 <%_ if (jpaMetamodelFiltering) { _%>
     public <% if (reactiveNoPagination) { %>Flux<<%- restClass %>><% } else if (reactivePagination) { %>Mono<ResponseEntity<List<<%- restClass %>>>><% } else { %>ResponseEntity<List<<%- restClass %>>><% } %> getAll<%- entityClassPlural %>(<%- entityClass %>Criteria criteria<% if (!paginationNo) { %>, @org.springdoc.core.annotations.ParameterObject Pageable pageable<% if (reactive) { %>, ServerHttpRequest request<% } %><% } %>) {
         LOG.debug("REST request to get <%- entityClassPlural %> by criteria: {}", criteria);
-  <% if(!reactive) { %>
+  <% if (!reactive) { %>
     <%_ if (paginationNo) { _%>
         List<<%- restClass %>> entityList = <%- entityInstance %>QueryService.findByCriteria(criteria);
         return ResponseEntity.ok().body(entityList);
