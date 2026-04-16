@@ -126,37 +126,39 @@ export default defineConfig(
     },
   },
   prettier,
-  ejs.configs.base,
-  {
-    files: ['**/*.ejs'],
-    plugins: {
-      '@stylistic': stylistic,
+  ejs.configs.customize(
+    {
+      html: 'never',
+      prettierBlacklist: true,
+      stylisticBlacklist: true,
+      experimental: true,
     },
-    linterOptions: {
-      reportUnusedDisableDirectives: 'error',
-    },
-    rules: {
-      'ejs-templates/prefer-raw': 'error',
-      'ejs-templates/prefer-slurping-codeonly': 'error',
-      'ejs-templates/experimental-prefer-slurp-multiline': 'error',
-      'ejs-templates/prefer-single-line-tags': ['error', { mode: 'braces' }],
-      'ejs-templates/slurp-newline': 'error',
+    {
+      plugins: {
+        '@stylistic': stylistic,
+      },
+      rules: {
+        'ejs-templates/prefer-single-line-tags': 'off',
+        'ejs-templates/prefer-output': 'off',
+        'ejs-templates/no-global-function-call': 'off',
+        'ejs-templates/output-semi': 'off',
+        'ejs-templates/no-comment-empty-line': 'off',
 
-      'prettier/prettier': 'off',
-      ...js.configs.recommended.rules,
-      ...jsRules,
-      'prefer-destructuring': ['error', { array: false, object: true }],
-      '@stylistic/no-multi-spaces': 'error',
-      '@stylistic/comma-spacing': 'error',
-      '@stylistic/object-curly-spacing': ['error', 'always'],
-      '@stylistic/space-infix-ops': 'error',
-      '@stylistic/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: 'never' }],
-      '@stylistic/semi': 'error',
-      '@stylistic/comma-dangle': ['error', 'always-multiline'],
-      '@stylistic/template-curly-spacing': 'error',
+        ...js.configs.recommended.rules,
+        ...jsRules,
+        'prefer-destructuring': ['error', { array: false, object: true }],
+        '@stylistic/no-multi-spaces': 'error',
+        '@stylistic/comma-spacing': 'error',
+        '@stylistic/object-curly-spacing': ['error', 'always'],
+        '@stylistic/space-infix-ops': 'error',
+        '@stylistic/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: 'never' }],
+        '@stylistic/semi': 'error',
+        '@stylistic/comma-dangle': ['error', 'always-multiline'],
+        '@stylistic/template-curly-spacing': 'error',
 
-      'ejs-templates/indent': 'error',
-      'ejs-templates/format': 'error',
+        'ejs-templates/indent': 'off',
+        'ejs-templates/format': 'off',
+      },
     },
-  },
+  ),
 );
