@@ -242,16 +242,16 @@ _%>
   <%_ } else if (field.fieldTypeTimed) { _%>
             type="datetime-local"
             placeholder="YYYY-MM-DD HH:mm"
-            <%- include('react_validators'); %>
+            <%- include('react_validators') %>
           />
   <%_ } else if (field.fieldTypeLocalDate) { _%>
             type="date"
-            <%- include('react_validators'); %>
+            <%- include('react_validators') %>
           />
   <%_ } else if (field.fieldTypeLocalTime) { _%>
             type="time"
             placeholder="HH:mm"
-            <%- include('react_validators'); %>
+            <%- include('react_validators') %>
           />
   <%_ } else if (field.fieldIsEnum) { _%>
             type="select"
@@ -268,7 +268,7 @@ _%>
           </ValidatedField>
   <%_ } else if (field.fieldTypeNumeric) { _%>
             type="text"
-            <%- include('react_validators'); %>
+            <%- include('react_validators') %>
           />
   <%_ } else if (field.fieldTypeBinary) { _%>
     <%_ if (!field.blobContentTypeText) { _%>
@@ -277,16 +277,16 @@ _%>
       <%_ } else { _%>
             openActionLabel={translate('entity.action.open')}
       <%_ } _%>
-            <%- include('react_validators'); %>
+            <%- include('react_validators') %>
           />
     <%_ } else { _%>
             type="textarea"
-            <%- include('react_validators'); %>
+            <%- include('react_validators') %>
           />
     <%_ } _%>
   <%_ } else { _%>
            type="text"
-           <%- include('react_validators'); %>
+           <%- include('react_validators') %>
         />
   <%_ } _%>
   <%_ if (field.documentation) { _%>

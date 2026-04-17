@@ -142,8 +142,6 @@ export default defineConfig(
         'ejs-templates/prefer-single-line-tags': 'off',
         'ejs-templates/prefer-output': 'off',
         'ejs-templates/no-global-function-call': 'off',
-        'ejs-templates/output-semi': 'off',
-        'ejs-templates/no-comment-empty-line': 'off',
 
         ...js.configs.recommended.rules,
         ...jsRules,
@@ -156,7 +154,6 @@ export default defineConfig(
         '@stylistic/semi-spacing': 'off',
 
         'ejs-templates/indent': 'off',
-        'ejs-templates/format': 'off',
       },
     },
   ),

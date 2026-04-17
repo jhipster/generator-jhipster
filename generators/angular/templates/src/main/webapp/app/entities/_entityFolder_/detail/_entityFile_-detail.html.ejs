@@ -35,7 +35,7 @@ _%>
         <dt><span<% if (field.documentation) { if (enableTranslation) { %> [ngbTooltip]="'<%- i18nKeyPrefix %>.help.<%- fieldName %>' | translate"<% } else { %> ngbTooltip="<%- field.documentation %>"<% } } %>>__jhiTranslateTag__('<%- field.propertyTranslationKey %>')</span></dt>
         <dd>
   <%_ if (field.fieldIsEnum) { _%>
-          <%# TODO: import enum and use its key as label _%>
+          <%# TODO: import enum and use its key as label -%>
           <span>__jhiTranslateTagEnum__('<%- frontendAppName %>.<%- fieldType %>', { "value": "<%- entityInstance %>Ref.<%- fieldName %> ?? 'null'" })</span>
   <%_ } else if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
         @if (<%- entityInstance %>Ref.<%- fieldName %>) {

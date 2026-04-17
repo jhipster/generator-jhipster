@@ -129,7 +129,7 @@ _%>
                     }
                     </td>
   <%_ } else if (field.fieldIsEnum) { _%>
-                    <%# TODO: import enum and use its key as label _%>
+                    <%# TODO: import enum and use its key as label -%>
                     <td<% if (field.id) { %>><a<%- routerLink %><% } %>>__jhiTranslateTagEnum__('<%- frontendAppName %>.<%- fieldType %>', { "value": "<%- entityInstance %>.<%- fieldName %> ?? 'null'" })<% if (field.id) { %></a><% } %></td>
   <%_ } else if (field.fieldTypeTimed) { _%>
                     <td>{{ <%- entityInstance %>.<%- fieldName %> | formatMediumDatetime }}</td>
