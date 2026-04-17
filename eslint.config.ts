@@ -132,6 +132,7 @@ export default defineConfig(
       prettierBlacklist: true,
       stylisticBlacklist: true,
       experimental: true,
+      allowedGlobals: ['wrapMono', 'generateEntityClientEnumImports', 'getOriginalField'],
     },
     stylistic.configs.customize({
       jsx: false,
@@ -141,7 +142,6 @@ export default defineConfig(
       rules: {
         'ejs-templates/prefer-single-line-tags': 'off',
         'ejs-templates/prefer-output': 'off',
-        'ejs-templates/no-global-function-call': 'off',
 
         ...js.configs.recommended.rules,
         ...jsRules,
