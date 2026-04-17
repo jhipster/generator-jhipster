@@ -1,6 +1,6 @@
 # AI agent instructions for generator-jhipster
 
-JHipster is a Yeoman-based code generator (TypeScript, ESM, Node `^22.18.0 || >=24.11.0`) that scaffolds Spring Boot + Angular/React/Vue applications. See `ARCHITECTURE.md`, `BLUEPRINTS.md`, and `DEVELOPMENT.md` for background context.
+JHipster is a Yeoman-based code generator (TypeScript, ESM, Node — see `engines` in `package.json` for the required version) that scaffolds Spring Boot + Angular/React/Vue applications. See `ARCHITECTURE.md`, `BLUEPRINTS.md`, and `DEVELOPMENT.md` for background context.
 
 **Trust order when docs disagree:** `package.json` scripts and the current source tree are the source of truth. Prose docs (including `DEVELOPMENT.md`) may be stale — verify commands against `package.json` before running them.
 
