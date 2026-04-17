@@ -39,7 +39,6 @@ lib/**/app.jdl
 atlassian-ide-plugin.xml
 
 # Editor / IDE — Eclipse / JDT
-/.project
 .project
 .classpath
 .factorypath
