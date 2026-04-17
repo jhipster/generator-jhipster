@@ -30,7 +30,7 @@
 
       <dl class="row-md jh-entity-details">
 <%_ for (const field of fields.filter(field => !field.hidden)) {
-    const { fieldName, fieldType } = field;
+      const { fieldName, fieldType } = field;
 _%>
         <dt><span<% if (field.documentation) { if (enableTranslation) { %> [ngbTooltip]="'<%- i18nKeyPrefix %>.help.<%- fieldName %>' | translate"<% } else { %> ngbTooltip="<%- field.documentation %>"<% } } %>>__jhiTranslateTag__('<%- field.propertyTranslationKey %>')</span></dt>
         <dd>
@@ -65,8 +65,8 @@ _%>
         </dd>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) {
-    const { persistableRelationship, relationshipFieldName, relationshipFieldNamePlural, otherEntityField } = relationship;
-    if (persistableRelationship) {
+      const { persistableRelationship, relationshipFieldName, relationshipFieldNamePlural, otherEntityField } = relationship;
+      if (persistableRelationship) {
 _%>
         <dt><span>__jhiTranslateTag__('<%- relationship.propertyTranslationKey %>')</span></dt>
         <dd>
@@ -97,7 +97,7 @@ _%>
     <%_ } _%>
         </dd>
 <%_ }
-}
+    }
 _%>
       </dl>
 

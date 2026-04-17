@@ -57,7 +57,7 @@ public interface <%- entityClass %>Repository extends ReactiveCrudRepository<<%-
 
 <%_ } _%>
 <%_ for (const relationship of relationships) {
-    const { ownerSide } = relationship;
+      const { ownerSide } = relationship;
 _%>
   <%_ if (relationship.relationshipManyToOne || (relationship.relationshipOneToOne && ownerSide)) { _%>
 

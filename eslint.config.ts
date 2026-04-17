@@ -152,8 +152,6 @@ export default defineConfig(
         '@stylistic/max-statements-per-line': 'off',
         '@stylistic/no-mixed-operators': 'off',
         '@stylistic/semi-spacing': 'off',
-
-        'ejs-templates/indent': 'off',
       },
     },
   ),

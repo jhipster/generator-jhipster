@@ -19,14 +19,14 @@
 <%_ const notSortableFieldsAfterSearchArray = searchEngineNo ? [] : fields
       .filter(field => !field.hidden && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal);
 
-  const notSortableFieldsAfterSearchFieldNames = notSortableFieldsAfterSearchArray
+    const notSortableFieldsAfterSearchFieldNames = notSortableFieldsAfterSearchArray
       .map(field => field.fieldName);
 
-  const notSortableFieldsAfterSearch = notSortableFieldsAfterSearchArray
+    const notSortableFieldsAfterSearch = notSortableFieldsAfterSearchArray
       .map(field => `'${field.fieldName}'`)
       .join(', ');
 
-  const componentName = entityAngularName;
+    const componentName = entityAngularName;
 _%>
 import { Component, computed, effect, inject, OnInit, signal, WritableSignal, untracked } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';

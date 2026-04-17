@@ -17,9 +17,9 @@
  limitations under the License.
 -%>
 <%_ const allRelationshipsByEntityNeedingOptions = Object
-    .values(relationshipsByOtherEntity)
-    .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
-    .filter(relationships => relationships.length > 0);
+      .values(relationshipsByOtherEntity)
+      .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
+      .filter(relationships => relationships.length > 0);
 _%>
 import { Component, inject, signal, OnInit<% if (anyFieldHasImageContentType) { %>, ElementRef<% } %> } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
@@ -51,13 +51,13 @@ import { EventManager, EventWithContent } from 'app/core/util/event-manager.serv
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 <%_ } _%>
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) {
-    const uniqueRel = relationshipsByEntityNeedingOptions[0];
-    if (uniqueRel.otherEntity.entityAngularName !== entityAngularName) {
+      const uniqueRel = relationshipsByEntityNeedingOptions[0];
+      if (uniqueRel.otherEntity.entityAngularName !== entityAngularName) {
 _%>
 import { I<%- uniqueRel.otherEntity.entityAngularName %> } from 'app/entities/<%- uniqueRel.otherEntity.entityFolderName %>/<%- uniqueRel.otherEntity.entityFileName %>.model';
 import { <%- uniqueRel.otherEntity.entityAngularName %>Service } from 'app/entities/<%- uniqueRel.otherEntity.entityFolderName %>/service/<%- uniqueRel.otherEntity.entityFileName %>.service';
 <%_ }
-  }
+    }
 _%>
 <%_ const enumImports = generateEntityClientEnumImports(fields); _%>
 <%_ for (const [importedType, importedPath] of enumImports) { _%>
@@ -108,12 +108,12 @@ export class <%- entityAngularName %>Update implements OnInit {
     protected <%- entityInstance %>Service = inject(<%- entityAngularName %>Service);
     protected <%- entityInstance %>FormService = inject(<%- entityAngularName %>FormService);
 <%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) {
-    const uniqueRel = relationshipsByEntityNeedingOptions[0];
-    if (uniqueRel.otherEntity.entityAngularName !== entityAngularName) {
+      const uniqueRel = relationshipsByEntityNeedingOptions[0];
+      if (uniqueRel.otherEntity.entityAngularName !== entityAngularName) {
 _%>
     protected <%- uniqueRel.otherEntity.entityInstance %>Service = inject(<%- uniqueRel.otherEntity.entityAngularName %>Service);
 <%_ }
-  }
+    }
 _%>
 <%_ if (anyFieldHasImageContentType) { _%>
     protected elementRef = inject(ElementRef);

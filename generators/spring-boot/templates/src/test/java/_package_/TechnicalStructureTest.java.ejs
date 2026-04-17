@@ -28,8 +28,8 @@ import static com.tngtech.archunit.core.domain.JavaClass.Predicates.belongToAnyO
 import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
 
 <%_ const hasClientLayer = feignClient;
-  const hasDomainLayer = !databaseTypeNo;
-  const hasConstants = !skipUserManagement || databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j;
+    const hasDomainLayer = !databaseTypeNo;
+    const hasConstants = !skipUserManagement || databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase || databaseTypeNeo4j;
 _%>
 @AnalyzeClasses(packagesOf = <%- mainClass %>.class, importOptions = DoNotIncludeTests.class)
 class TechnicalStructureTest {

@@ -10,9 +10,9 @@
                                v-model="<%- entityInstance %>.<%- primaryKey.name %>" readonly />
                     </div>
 <%_ for (field of fields.filter(field => !field.id)) {
-  const { fieldName, fieldType, fieldTypeBlobContent } = field;
-  const fieldInputClass = 'form-control';
-  const translationKey = `${i18nKeyPrefix}.${fieldName}`;
+      const { fieldName, fieldType, fieldTypeBlobContent } = field;
+      const fieldInputClass = 'form-control';
+      const translationKey = `${i18nKeyPrefix}.${fieldName}`;
 _%>
                     <div class="mb-3">
                         <label class="form-control-label" for="<%- entityFileName %>">{{ t$('<%- translationKey %>') }}</label>
@@ -105,8 +105,8 @@ _%>
                     </div>
 <%_ } _%>
 <%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) {
-  const { otherEntityName, relationshipName, relationshipFieldName, relationshipFieldNamePlural, otherEntityField, relationshipRequired } = relationship;
-  const translationKey = `${i18nKeyPrefix}.${relationshipName}`;
+      const { otherEntityName, relationshipName, relationshipFieldName, relationshipFieldNamePlural, otherEntityField, relationshipRequired } = relationship;
+      const translationKey = `${i18nKeyPrefix}.${relationshipName}`;
 _%>
   <%_ if (!relationship.collection && relationship.persistableRelationship) { _%>
                     <div class="mb-3">

@@ -98,18 +98,18 @@ import java.util.Optional;
 public class ExceptionTranslator extends ResponseEntityExceptionHandler <% if (reactive) { %> implements ExceptionTranslation <% } %>{
 
 <%_ let returnType;
-let requestClass;
-let requestEntityRequestClass;
+    let requestClass;
+    let requestEntityRequestClass;
 _%>
 <%_ if (reactive) { _%>
   <%_ returnType = 'Mono<ResponseEntity<Object>>';
-    requestClass = 'ServerWebExchange';
-    requestEntityRequestClass = 'ServerWebExchange';
+      requestClass = 'ServerWebExchange';
+      requestEntityRequestClass = 'ServerWebExchange';
   _%>
 <%_ } else {
-    returnType = 'ResponseEntity<Object>';
-    requestClass = 'NativeWebRequest';
-    requestEntityRequestClass = 'WebRequest';
+      returnType = 'ResponseEntity<Object>';
+      requestClass = 'NativeWebRequest';
+      requestEntityRequestClass = 'WebRequest';
 _%>
 <%_ } _%>
     private static final String FIELD_ERRORS_KEY = "fieldErrors";

@@ -19,11 +19,11 @@
 package <%- entityAbsolutePackage %>.service;
 
 <%_ const serviceClassName = `${entityClass}QueryService`;
-const mapper = `${entityInstance}Mapper`;
-const entityListToDto = `${mapper}.` + 'toDto';
-const entityToDtoReference = `${mapper}::` + 'toDto';
-const repository = `${entityInstance}Repository`;
-const criteria = `${entityClass}Criteria`;
+    const mapper = `${entityInstance}Mapper`;
+    const entityListToDto = `${mapper}.` + 'toDto';
+    const entityToDtoReference = `${mapper}::` + 'toDto';
+    const repository = `${entityInstance}Repository`;
+    const criteria = `${entityClass}Criteria`;
 _%>
 import java.util.List;
 
@@ -123,7 +123,7 @@ public class <%- serviceClassName %> extends QueryService<<%- persistClass %>> {
     protected Specification<<%- persistClass %>> createSpecification(<%- criteria %> criteria) {
         Specification<<%- persistClass %>> specification = Specification.unrestricted();
 <%_ const eagerRelationships = relationships.filter(rel => rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide));
-if (eagerRelationships.length > 0) {
+    if (eagerRelationships.length > 0) {
 _%>
         specification = specification.and((root, query, builder) -> {
             if (Long.class != query.getResultType()) {

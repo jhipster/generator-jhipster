@@ -26,15 +26,15 @@
 
 <%_ } _%>
 <%_ if (generateBuiltInUserEntity) {
-    const idField = user.primaryKey.fields[0];
-    if (idField.liquibaseCustomSequenceGenerator) {
+      const idField = user.primaryKey.fields[0];
+      if (idField.liquibaseCustomSequenceGenerator) {
 _%>
     <changeSet id="00000000000000-seq-user" author="jhipster">
         <createSequence sequenceName="<%- idField.liquibaseSequenceGeneratorName %>" startValue="1050" incrementBy="50"/>
     </changeSet>
 
 <%_ }
-  }
+    }
 _%>
     <!--
         JHipster core tables.
@@ -42,7 +42,7 @@ _%>
     -->
     <changeSet id="00000000000001" author="jhipster">
 <%_ if (generateBuiltInUserEntity) {
-        const idField = user.primaryKey.fields[0];
+      const idField = user.primaryKey.fields[0];
 _%>
         <createTable tableName="<%- user.entityTableName %>">
             <column name="id" type="<%- idField.columnType %>"<% if (idField.liquibaseAutoIncrement) { %> autoIncrement="true" startWith="1050"<% } %>>

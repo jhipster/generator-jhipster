@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <%_ const tsKeyId = primaryKey.tsSampleValues[0];
-const enumImports = this.generateEntityClientEnumImports(fields.filter(field => !field.id));
+    const enumImports = this.generateEntityClientEnumImports(fields.filter(field => !field.id));
 _%>
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import axios from 'axios';

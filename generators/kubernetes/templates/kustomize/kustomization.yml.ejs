@@ -11,9 +11,9 @@ resources:
 <%_ } _%>
 # Individual apps
 <%_ const suffix = 'k8s';
-for (const appConfig of appConfigs) {
-const appName = appConfig.baseName.toLowerCase();
-const appOut = appName.concat('-', suffix);
+    for (const appConfig of appConfigs) {
+      const appName = appConfig.baseName.toLowerCase();
+      const appOut = appName.concat('-', suffix);
 _%>
 - <%- appOut %>/<%- appName %>-deployment.yml
 - <%- appOut %>/<%- appName %>-service.yml
@@ -57,7 +57,7 @@ _%>
 - messagebroker-<%- suffix %>/kafka.yml
 <%_ } _%>
 <%_ if (monitoringPrometheus) {
-  const monitOut = 'monitoring'.concat('-', suffix);
+      const monitOut = 'monitoring'.concat('-', suffix);
 _%>
 # monitoring prometheus
 - <%- monitOut %>/jhipster-prometheus-cr.yml
@@ -70,19 +70,19 @@ _%>
 <%_ } _%>
 # service discovery eureka/consul
 <%_ if (serviceDiscoveryEureka) {
-  const registryOut = 'registry'.concat('-', suffix);
+      const registryOut = 'registry'.concat('-', suffix);
 _%>
 - <%- registryOut %>/jhipster-registry.yml
 - <%- registryOut %>/application-configmap.yml
 <%_ } else if (serviceDiscoveryConsul) {
-    const registryOut = 'registry'.concat('-', suffix);
+      const registryOut = 'registry'.concat('-', suffix);
 _%>
 - <%- registryOut %>/consul.yml
 - <%- registryOut %>/consul-config-loader.yml
 - <%- registryOut %>/application-configmap.yml
 <%_ } _%>
 <%_ if (istio) {
-  const istioOut = 'istio'.concat('-', suffix);
+      const istioOut = 'istio'.concat('-', suffix);
 _%>
 # istio
 - <%- istioOut %>/grafana-gateway.yml
@@ -92,7 +92,7 @@ _%>
 
 patchesJson6902:
 <%_ if (istio) {
-  const patchOut = 'patch'.concat('-', suffix);
+      const patchOut = 'patch'.concat('-', suffix);
 _%>
 - target:
     version: v1

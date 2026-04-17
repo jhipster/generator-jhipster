@@ -19,8 +19,8 @@
 package <%- entityAbsolutePackage %>.service<% if (serviceImpl) { %>.impl<% } %>;
 
 <%_ const serviceClassName = serviceImpl ? `${entityClass}ServiceImpl` : `${entityClass}Service`;
-const mapper = `${entityInstance}Mapper`;
-const entityToDtoReference = `${mapper}::` + 'toDto';
+    const mapper = `${entityInstance}Mapper`;
+    const entityToDtoReference = `${mapper}::` + 'toDto';
 _%>
 <%_ if (serviceImpl) { _%>
 import <%- entityAbsolutePackage %>.service.<%- entityClass %>Service;

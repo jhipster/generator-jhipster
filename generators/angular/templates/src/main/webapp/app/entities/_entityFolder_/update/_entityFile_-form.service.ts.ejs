@@ -17,11 +17,11 @@
  limitations under the License.
 -%>
 <%_ const formDefaultProperties = [
-    ...fields.filter(field => field.fieldTypeTimed || field.fieldTypeBoolean || field.id).map(field => field.fieldName),
-    ...relationships.filter(relationship => relationship.collection && relationship.persistableRelationship).map(relationship => relationship.propertyName),
-  ];
-  const containDefaultProperties = formDefaultProperties.length > 0;
-  const entityFormName = anyFieldIsTimeDerived ? `${entityAngularName}FormRawValue` : `I${entityAngularName}`;
+      ...fields.filter(field => field.fieldTypeTimed || field.fieldTypeBoolean || field.id).map(field => field.fieldName),
+      ...relationships.filter(relationship => relationship.collection && relationship.persistableRelationship).map(relationship => relationship.propertyName),
+    ];
+    const containDefaultProperties = formDefaultProperties.length > 0;
+    const entityFormName = anyFieldIsTimeDerived ? `${entityAngularName}FormRawValue` : `I${entityAngularName}`;
 _%>
 import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -226,7 +226,7 @@ _%>
     return {
       ...raw<%- entityAngularName %>,
   <%_ for (field of fields) {
-      const { fieldName, fieldTypeTimed } = field;
+        const { fieldName, fieldTypeTimed } = field;
   _%>
     <%_ if (fieldTypeTimed) { _%>
       <%- fieldName %>: dayjs(raw<%- entityAngularName %>.<%- fieldName %>, DATE_TIME_FORMAT),
@@ -239,14 +239,14 @@ _%>
     return {
       ...<%- entityInstance %>,
   <%_ for (field of fields) {
-      const { fieldName, fieldTypeTimed } = field;
+        const { fieldName, fieldTypeTimed } = field;
   _%>
     <%_ if (fieldTypeTimed) { _%>
       <%- fieldName %>: <%- entityInstance %>.<%- fieldName %> ? <%- entityInstance %>.<%- fieldName %>.format(DATE_TIME_FORMAT) : undefined,
     <%_ } _%>
   <%_ } _%>
   <%_ for (const relationship of relationships.filter(({ persistableRelationship }) => persistableRelationship)) {
-      const { propertyName, collection } = relationship;
+        const { propertyName, collection } = relationship;
   _%>
     <%_ if (collection) { _%>
       <%- propertyName %>: <%- entityInstance %>.<%- propertyName %> ?? [],

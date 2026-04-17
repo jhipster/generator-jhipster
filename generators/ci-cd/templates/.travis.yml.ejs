@@ -94,7 +94,7 @@ script:
   <%_ } _%>
 <%_ } _%>
 <%_ if (cypressTests) {
-    const commented = applicationTypeGateway ? '# ' : '';
+      const commented = applicationTypeGateway ? '# ' : '';
 _%>
   <%- commented %>- <%- nodePackageManager %> run ci:e2e:package
   <%- commented %>- <%- nodePackageManager %> run ci:e2e:prepare

@@ -39,7 +39,7 @@ jobs:
 <%_ if (!skipServer) { _%>
             SPRING_OUTPUT_ANSI_ENABLED: DETECT
 <%_ }
-if (!databaseTypeNo && !skipServer) {
+    if (!databaseTypeNo && !skipServer) {
 _%>
             SPRING_JPA_SHOW_SQL: false
 <%_ } _%>
@@ -59,14 +59,14 @@ _%>
               with:
                   node-version: <%- nodeVersion %>
 <%_ }
-if (!skipServer) {
+    if (!skipServer) {
 _%>
             - uses: <%- githubActions['actions/setup-java'] %>
               with:
                   distribution: 'temurin'
                   java-version: <%- javaVersion %>
 <%_ }
-if (!skipClient) {
+    if (!skipClient) {
 _%>
             - name: Install Node.js packages
               run: <%- nodePackageManager %> install
@@ -123,7 +123,7 @@ _%>
 <%_ } else { _%>
               run: <%- nodePackageManager %> run build
 <%_ }
-if (ciCdIntegrationsHeroku) {
+    if (ciCdIntegrationsHeroku) {
 _%>
             - name: Deploy to Heroku
               if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -153,7 +153,7 @@ _%>
   <%_ } _%>
 <%_ } _%>
 <%_ if (cypressTests) {
-  const commented = applicationTypeGateway ? '# ' : '';
+      const commented = applicationTypeGateway ? '# ' : '';
 _%>
             <%- commented %>- name: 'E2E: Package'
             <%- commented %>  run: <%- nodePackageManager %> run ci:e2e:package

@@ -398,7 +398,7 @@ export const <%- entityReactName %> = () => {
                       </Button>
                     </td>
 <%_ for (field of fields) {
-  const { fieldType, fieldName, fieldIsEnum } = field;
+      const { fieldType, fieldName, fieldIsEnum } = field;
 _%>
   <%_ if (fieldName !== primaryKey.name) { _%>
                     <td>
@@ -414,7 +414,7 @@ _%>
                       <Translate contentKey={`<%- frontendAppName %>.<%- fieldType %>.${<%- entityInstance %>.<%- fieldName %>}`} />
     <%_ } else if (field.fieldTypeBinary) { _%>
       <%_ // blobFields
-        if (!field.blobContentTypeText) {
+          if (!field.blobContentTypeText) {
       _%>
                         {<%- entityInstance %>.<%- fieldName %> ? (
                           <div>
@@ -441,9 +441,9 @@ _%>
   <%_ } _%>
 <%_ } _%>
 <%_ for (relationship of relationships) {
-  const { otherEntity, relationshipFieldName, relationshipFieldNamePlural } = relationship;
-  const otherEntityPkName = relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.name || 'id';
-  const { otherEntityField } = relationship;
+      const { otherEntity, relationshipFieldName, relationshipFieldNamePlural } = relationship;
+      const otherEntityPkName = relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.name || 'id';
+      const { otherEntityField } = relationship;
 _%>
   <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
                     <td>
@@ -473,10 +473,10 @@ _%>
                         <Link to={`/<%- otherEntity.entityPage %>/${<%- `${entityInstance}.${relationshipFieldName}.${otherEntityPkName}}` %>`}>
                           {<%- `${entityInstance}.${relationshipFieldName}.${otherEntityField}` %>}
                         </Link> : ''}
+      <%_ } _%>
     <%_ } _%>
-  <%_ } _%>
                       </td>
-<%_ } _%>
+  <%_ } _%>
 <%_ } _%>
                       <td className="text-end">
                         <div className="btn-group flex-btn-group-container">

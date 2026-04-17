@@ -410,7 +410,7 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
     <%_ } else { _%>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
   <%_ }
-  }
+      }
   _%>
     @BatchSize(size = 20)
 <%_ } _%>

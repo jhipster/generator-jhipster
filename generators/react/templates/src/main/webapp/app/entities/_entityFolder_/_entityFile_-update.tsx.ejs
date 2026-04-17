@@ -43,14 +43,14 @@ import { useAppDispatch, useAppSelector } from 'app/config/store';
 
 <%_ const otherEntityActions = new Set();
 
-for (const otherEntity of otherEntitiesWithPersistableRelationship) {
-    otherEntityActions.add({
-      action: `get${otherEntity.entityNamePlural}`,
-      instance: otherEntity.entityInstancePlural,
-      entity: otherEntity.entityAngularName,
-      reducer: otherEntity.builtInUser ? `userManagement.${otherEntity.entityInstancePlural}` : `${otherEntity.entityReactState}.entities`,
-    });
-  if (otherEntity.builtInUser) {
+    for (const otherEntity of otherEntitiesWithPersistableRelationship) {
+      otherEntityActions.add({
+        action: `get${otherEntity.entityNamePlural}`,
+        instance: otherEntity.entityInstancePlural,
+        entity: otherEntity.entityAngularName,
+        reducer: otherEntity.builtInUser ? `userManagement.${otherEntity.entityInstancePlural}` : `${otherEntity.entityReactState}.entities`,
+      });
+      if (otherEntity.builtInUser) {
 _%>
 import { I<%- otherEntity.entityAngularName %> } from 'app/shared/model/user.model';
     <%_ if (authenticationTypeOauth2) { _%>
@@ -126,7 +126,7 @@ export const <%- entityReactName %>Update = () => {
 
   const saveEntity = values => {
 <%_ for (field of fields) {
-    const { fieldName } = field;
+      const { fieldName } = field;
 _%>
   <%_ if (field.fieldTypeTimed) { _%>
     values.<%- fieldName %> = convertDateTimeToServer(values.<%- fieldName %>);
@@ -160,9 +160,9 @@ _%>
     isNew
       ? {
 <%_ for (field of fields.filter(field => !field.id)) {
-    const { fieldName } = field;
+      const { fieldName } = field;
 
-    if (field.fieldTypeTimed) {
+      if (field.fieldTypeTimed) {
 _%>
           <%- fieldName %>: displayDefaultDateTime(),
   <%_ } _%>
@@ -170,25 +170,25 @@ _%>
         }
       : {
 <%_ for (field of fields.filter(field => !field.id)) {
-    const { fieldName } = field;
-  if (field.fieldIsEnum) {
-    const { enumValues } = field;
+      const { fieldName } = field;
+      if (field.fieldIsEnum) {
+        const { enumValues } = field;
 _%>
 <%- fieldName %>: '<%- enumValues[0].name %>',
   <%_ } _%>
 <%_ } _%>
           ...<%- entityInstance %>Entity,
 <%_ for (field of fields.filter(field => !field.id)) {
-    const { fieldName } = field;
-  if (field.fieldTypeTimed) {
+      const { fieldName } = field;
+      if (field.fieldTypeTimed) {
 _%>
           <%- fieldName %>: convertDateTimeFromServer(<%- entityInstance %>Entity.<%- fieldName %>),
   <%_ } _%>
 <%_ } _%>
 <%_ for (const rel of persistableRelationships.filter(rel => !rel.otherEntity.embedded)) {
-    const otherEntityPkName = rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.name || 'id';
-    const { relationshipFieldName, relationshipFieldNamePlural } = rel;
-  if (!rel.collection) {
+      const otherEntityPkName = rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.name || 'id';
+      const { relationshipFieldName, relationshipFieldNamePlural } = rel;
+      if (!rel.collection) {
 _%>
           <%- relationshipFieldName %>: <%- entityInstance %>Entity?.<%- relationshipFieldName %>?.<%- otherEntityPkName %>,
   <%_ } else { _%>
@@ -219,9 +219,9 @@ _%>
             />
           }
 <%_ for (field of fields.filter(field => !field.id)) {
-    const { fieldType, fieldName, fieldNameHumanized } = field;
+      const { fieldType, fieldName, fieldNameHumanized } = field;
 
-    if (field.fieldTypeBinary && !field.blobContentTypeText) {
+      if (field.fieldTypeBinary && !field.blobContentTypeText) {
 _%>
           <ValidatedBlobField
   <%_ } else { _%>
@@ -302,9 +302,9 @@ _%>
   <%_ } _%>
 <%_ } _%>
 <%_ for (const rel of persistableRelationships.filter(rel => !rel.otherEntity.embedded)) {
-    const otherEntityPkName = rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.name || 'id';
-    const { relationshipName, relationshipNameHumanized, relationshipFieldName, relationshipFieldNamePlural, otherEntityField, relationshipRequired } = rel;
-    const translationKey = `${i18nKeyPrefix}.${relationshipName}`;
+      const otherEntityPkName = rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.name || 'id';
+      const { relationshipName, relationshipNameHumanized, relationshipFieldName, relationshipFieldNamePlural, otherEntityField, relationshipRequired } = rel;
+      const translationKey = `${i18nKeyPrefix}.${relationshipName}`;
 _%>
   <%_ if (!rel.collection) { _%>
           <ValidatedField

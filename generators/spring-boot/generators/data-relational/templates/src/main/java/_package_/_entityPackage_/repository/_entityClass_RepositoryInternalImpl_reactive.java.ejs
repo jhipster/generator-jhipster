@@ -69,7 +69,7 @@ import <%- entityAbsolutePackage %>.repository.rowmapper.ColumnConverter;
 import tech.jhipster.service.ConditionBuilder;
 <%_ } _%>
 <% for (const rel of relationships) {
-  if (rel.relationshipManyToMany && rel.ownerSide) {
+     if (rel.relationshipManyToMany && rel.ownerSide) {
 _%>
 import <%- rel.otherEntity.entityAbsolutePackage %>.domain.<%- rel.otherEntity.persistClass %>;
   <%_ } _%>
@@ -113,11 +113,11 @@ class <%- entityClass %>RepositoryInternalImpl extends SimpleR2dbcRepository<<%-
 <%_ } _%>
 
 <%_ for (const rel of relationships) {
-  if (rel.shouldWriteJoinTable) {
+      if (rel.shouldWriteJoinTable) {
 _%>
     private final static EntityManager.LinkTable <%- rel.relationshipName %>Link = new EntityManager.LinkTable("<%- rel.joinTable.name %>", "<%- entityTableName %>_<%- primaryKey.hibernateSnakeCaseName %>", "<%- rel.joinColumnNames[0] %>");
 <%_ }
-}
+    }
 _%>
 
     public <%- entityClass %>RepositoryInternalImpl(
@@ -261,8 +261,8 @@ _%>
         List<Condition> allConditions = new ArrayList<Condition>();
         if (criteria != null) {
   <%_ for (const field of fields) {
-  if (field.transient) continue;
-  if (field.filterableField) {
+        if (field.transient) continue;
+        if (field.filterableField) {
   _%>
             if (criteria.<%- field.propertyFilterSupplierName %>() != null) {
                 builder.buildFilterConditionForField(criteria.<%- field.propertyFilterSupplierName %>(), entityTable.column("<%- field.columnName %>"));

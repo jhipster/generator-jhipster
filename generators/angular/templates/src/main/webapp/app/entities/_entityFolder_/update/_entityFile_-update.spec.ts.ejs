@@ -17,11 +17,11 @@
  limitations under the License.
 -%>
 <%_ const allRelationshipsByEntityNeedingOptions = Object
-  .values(relationshipsByOtherEntity)
-  .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
-  .filter(relationships => relationships.length > 0);
-const testEntityPrimaryKey0 = tsPrimaryKeySamples[0];
-const testEntityPrimaryKey1 = tsPrimaryKeySamples[1];
+      .values(relationshipsByOtherEntity)
+      .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
+      .filter(relationships => relationships.length > 0);
+    const testEntityPrimaryKey0 = tsPrimaryKeySamples[0];
+    const testEntityPrimaryKey1 = tsPrimaryKeySamples[1];
 _%>
 <%_ if (clientTestFrameworkVitest) { _%>
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';

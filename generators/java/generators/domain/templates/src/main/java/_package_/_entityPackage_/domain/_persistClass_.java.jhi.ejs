@@ -137,8 +137,8 @@ public class <%- persistClass %> <&- fragments.extendsSection() -&>implements Se
 <&- fragments.classAdditionalFieldsSection() -&>
 
 <%_ // An embedded entity should not reference entities that embed it, unless the other entities are also embedded
-for (relationship of relationships) {
-  if (relationship.relationshipApiDescription) {
+    for (relationship of relationships) {
+      if (relationship.relationshipApiDescription) {
 _%>
 <%- relationship.relationshipJavadoc %>
     <%_ if (!dtoMapstruct && relationship.relationshipApiDescription) { _%>
@@ -364,7 +364,7 @@ _%>
             "<%- primaryKey.name %>=" + <%- primaryKey.propertySupplierName %>() +
 <%_ } _%>
 <%_ for (const field of fields.filter(field => !field.id && !field.transient)) {
-  const isNumeric = field.fieldTypeNumeric;
+      const isNumeric = field.fieldTypeNumeric;
 _%>
             ", <%- field.fieldName %>=<% if (!isNumeric) { %>'<% } %>" + <%- field.propertySupplierName %>() <% if (!isNumeric) { %>+ "'" <% } %>+
   <%_ if (field.fieldWithContentType) { _%>
@@ -373,7 +373,7 @@ _%>
 <%_ } _%>
 <%_ for (const relationship of relationships) { _%>
   <%_ if (relationship.otherEntity.embedded) {
-    if (relationship.relationshipManyToOne) {
+        if (relationship.relationshipManyToOne) {
   _%>
             ", <%- relationship.relationshipFieldName %>='" + <%- relationship.propertySupplierName %>() + "'" +
     <%_ } else if (relationship.relationshipOneToOne && relationship.ownerSide) { _%>

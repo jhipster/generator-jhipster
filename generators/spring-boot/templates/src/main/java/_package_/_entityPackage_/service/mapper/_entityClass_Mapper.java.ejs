@@ -19,17 +19,17 @@
 package <%- entityAbsolutePackage %>.service.mapper;
 
 <%_ const getOriginalField = field => field.originalField || field;
-  const uuidMapMethod = restProperties.some(property => property.relatedField?.fieldTypeUUID);
-  const byteMapMethod = restProperties.some(property => property.relatedField?.fieldTypeBytes);
-  const dtoRelationships = restProperties.filter(property => property.relationshipName && !property.otherEntity.embedded);
-  let otherEntitiesFields = otherEntities
-    .filter(otherEntity => dtoRelationships.some(relationship => relationship.otherEntity === otherEntity))
-    .map(otherEntity =>
-      dtoRelationships
-        .filter(relationship => relationship.otherEntity === otherEntity)
-        .map(({ relatedField, collection }) => ({ otherEntity, relatedField, collection })),
-    )
-    .flat();
+    const uuidMapMethod = restProperties.some(property => property.relatedField?.fieldTypeUUID);
+    const byteMapMethod = restProperties.some(property => property.relatedField?.fieldTypeBytes);
+    const dtoRelationships = restProperties.filter(property => property.relationshipName && !property.otherEntity.embedded);
+    let otherEntitiesFields = otherEntities
+      .filter(otherEntity => dtoRelationships.some(relationship => relationship.otherEntity === otherEntity))
+      .map(otherEntity =>
+        dtoRelationships
+          .filter(relationship => relationship.otherEntity === otherEntity)
+          .map(({ relatedField, collection }) => ({ otherEntity, relatedField, collection })),
+      )
+      .flat();
 _%>
 <%_ for (const a of otherEntitiesFields) { _%>
   <%_ a.collection = a.collection || otherEntitiesFields.some(b => a.otherEntity === b.otherEntity && getOriginalField(a.relatedField) === getOriginalField(b.relatedField) && b.collection === true); _%>
@@ -65,13 +65,13 @@ public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, 
   <%_ let renMapAnotEnt = false; /* Render Mapping Annotation during Entity to DTO conversion? */ _%>
   <%_ for (relationship of dtoRelationships) { _%>
     <%_ renMapAnotEnt = true;
-      let qualifiedByName = relationship.otherEntity.entityInstance + this._.upperFirst(relationship.otherEntityField);
-      qualifiedByName = qualifiedByName + (relationship.collection ? 'Set' : '');
+        let qualifiedByName = relationship.otherEntity.entityInstance + this._.upperFirst(relationship.otherEntityField);
+        qualifiedByName = qualifiedByName + (relationship.collection ? 'Set' : '');
     _%>
     @Mapping(target = "<%- relationship.propertyName %>", source = "<%- relationship.propertyName %>", qualifiedByName="<%- qualifiedByName %>")
   <%_ } _%>
   <%_ for (const field of fields.filter(field => field.mapstructExpression)) {
-      renMapAnotEnt = true;
+        renMapAnotEnt = true;
   _%>
     @Mapping( target = "<%- field.propertyName %>", expression = "<%- field.mapstructExpression %>")
   <%_ } _%>
@@ -91,8 +91,8 @@ public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, 
       <%_ renMapAnotDto = true; _%>
     @Mapping(target = "<%- relationship.propertyName %>", ignore = true)
     <%_ }
-    if (relationship.collection && fluentMethods) {
-      renMapAnotDto = true;
+        if (relationship.collection && fluentMethods) {
+          renMapAnotDto = true;
     _%>
     @Mapping(target = "remove<%- relationship.relationshipNameCapitalized %>", ignore = true)
     <%_ } _%>

@@ -18,7 +18,7 @@
 -%>
 <%- include('/liquibase-changelog-header') -%>
 <%_ const { entityTableName, entityClass } = entity;
-if (hasFieldConstraint) {
+    if (hasFieldConstraint) {
 _%>
 
     <!--
@@ -42,8 +42,8 @@ _%>
             columnName="<%- field.columnName %>_content_type"
             columnDataType="varchar(255)"/>
   <%_ }
-        }
-    }
+      }
+      }
   _%>
     </changeSet>
 <% } _%>
@@ -80,8 +80,8 @@ _%>
     <changeSet id="<%- changelogDate %>-relationship-constraints" author="jhipster">
   <%_ for (const relationshipData of addedRelationships) {
         if (relationshipData.unique) {
-            const idField = relationship.otherEntity.primaryKey.ownFields[0];
-            const uniqueConstraintName = relationshipData.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, `${relationshipData.columnName}_${idField.columnName}`, entity.prodDatabaseType) : null;
+          const idField = relationship.otherEntity.primaryKey.ownFields[0];
+          const uniqueConstraintName = relationshipData.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, `${relationshipData.columnName}_${idField.columnName}`, entity.prodDatabaseType) : null;
   _%>
         <addUniqueConstraint tableName="<%- entityTableName %>"
             columnNames="<%- relationshipData.columnName %>_id"
@@ -93,7 +93,7 @@ _%>
             columnName="<%- relationshipData.columnName %>_id"
             columnDataType="<%- relationshipData.columnDataType %>"/>
   <%_ }
-     }
+      }
   _%>
     </changeSet>
 <%_ } _%>

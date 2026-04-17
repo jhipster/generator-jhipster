@@ -74,7 +74,7 @@
             <thead>
                 <tr <%- jhiPrefix %>Sort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
 <%_ for (const field of fields.filter(field => !field.hidden && !field.hideListView)) {
-    const { fieldSupportsSortBy } = field;
+      const { fieldSupportsSortBy } = field;
 _%>
                     <th scope="col"<% if (fieldSupportsSortBy) { %> <%- jhiPrefix %>SortBy="<%- field.fieldName %>"<% } %>>
                         <div class="d-flex">
@@ -89,8 +89,8 @@ _%>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
   <%_ if (relationship.persistableRelationship && (!relationship.collection || paginationNo)) {
-    const fieldName = `.${relationship.otherEntityField}`;
-    const { fieldSupportsSortBy: relatedFieldSupportsSortBy } = relationship.relatedField;
+        const fieldName = `.${relationship.otherEntityField}`;
+        const { fieldSupportsSortBy: relatedFieldSupportsSortBy } = relationship.relatedField;
   _%>
                     <th scope="col"<% if (relatedFieldSupportsSortBy) { %> <%- jhiPrefix %>SortBy="<%- relationship.relationshipName + (fieldName) %>"<% } %>>
                         <div class="d-flex">
@@ -109,8 +109,8 @@ _%>
             @for (<%- entityInstance %> of <%- entityInstancePlural %>(); track track<%- primaryKey.nameCapitalized %>(<%- entityInstance %>)) {
                 <tr data-cy="entityTable">
 <%_ const routerLink = ` [routerLink]="['/${entityPage}', ${entityInstance}.${primaryKey.name}, 'view']"`;
-for (field of fields.filter(field => !field.hidden && !field.hideListView)) {
-    const { fieldName, fieldType } = field;
+    for (field of fields.filter(field => !field.hidden && !field.hideListView)) {
+      const { fieldName, fieldType } = field;
 _%>
   <%_ if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
                     <td>
@@ -142,7 +142,7 @@ _%>
   <%_ } _%>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) {
-    const { relationshipFieldName, relationshipFieldNamePlural, otherEntityField } = relationship;
+      const { relationshipFieldName, relationshipFieldNamePlural, otherEntityField } = relationship;
 _%>
   <%_ if (relationship.persistableRelationship && (!relationship.collection || paginationNo)) { _%>
                     <td>

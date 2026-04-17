@@ -46,26 +46,26 @@
   <%_ } _%>
 <%_ } _%>
 <%_ for (relationship of relationships) {
-    if ((relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide))
-      && !relationship.id) {
-        for (const idField of relationship.otherEntity.primaryKey.fields) {
-        const uniqueConstraintName = relationship.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, `${relationship.columnName}_${idField.columnName}`, entity.prodDatabaseType) : null;
+      if ((relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide))
+        && !relationship.id) {
+          for (const idField of relationship.otherEntity.primaryKey.fields) {
+          const uniqueConstraintName = relationship.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, `${relationship.columnName}_${idField.columnName}`, entity.prodDatabaseType) : null;
 _%>
             <column name="<%- relationship.columnName %>_<%- idField.columnName %>" type="<%- idField.columnType %>">
                 <constraints nullable="<%- !relationship.columnRequired %>"<% if (uniqueConstraintName) { %> unique="true" uniqueConstraintName="<%- uniqueConstraintName %>"<% } %> />
             </column>
 <%_ }
     }
-}
+    }
 _%>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
 <%_ for (const field of fields) {
-    if (field.shouldDropDefaultValue) {
+      if (field.shouldDropDefaultValue) {
 _%>
         <dropDefaultValue tableName="<%- entity.entityTableName %>" columnName="<%- field.columnName %>" columnDataType="${datetimeType}"/>
 <%_ }
-}
+    }
 _%>
     </changeSet>
 <%_ const joinTableRelations = relationships.filter(rel => rel.shouldWriteJoinTable);

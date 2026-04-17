@@ -17,9 +17,9 @@
  limitations under the License.
 -%>
 <%_ const returnType = reactive ? 'Mono' : 'Optional';
-const mapOrFlatMap = reactive ? 'flatMap' : 'map';
-const returnPrefix = (isService) ? 'return' : `${returnType}<${restClass}> result =`;
-const mapper = `${entityInstance}Mapper`;
+    const mapOrFlatMap = reactive ? 'flatMap' : 'map';
+    const returnPrefix = (isService) ? 'return' : `${returnType}<${restClass}> result =`;
+    const mapper = `${entityInstance}Mapper`;
 _%>
 <%_ if (viaService) { _%>
   <%_ if (reactive) { _%>

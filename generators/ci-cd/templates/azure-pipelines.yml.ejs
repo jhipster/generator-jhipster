@@ -39,7 +39,7 @@ jobs:
     displayName: 'TOOLS: install Node.js'
 <%_ } _%>
 <%_ if (cypressTests) {
-  const commented = applicationTypeGateway ? '# ' : '';
+      const commented = applicationTypeGateway ? '# ' : '';
 _%>
   <%- commented %>- task: Bash@3
   <%- commented %>  inputs:
@@ -112,7 +112,7 @@ _%>
     displayName: 'TESTS: packaging'
 <%_ } _%>
 <%_ if (cypressTests) {
-    const commented = applicationTypeGateway ? '# ' : '';
+      const commented = applicationTypeGateway ? '# ' : '';
 _%>
   <%- commented %>- task: Npm@1
   <%- commented %>  inputs:

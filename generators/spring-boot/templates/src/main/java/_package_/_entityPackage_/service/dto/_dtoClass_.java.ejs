@@ -78,9 +78,9 @@ public class <%- dtoClass %> implements Serializable {
   <%_ if (property.propertyJavadoc) { _%>
 <%- property.propertyJavadoc %>
   <%_ }
-  const field = property.fieldName ? property : undefined;
-  const relationship = property.relationshipName ? property : undefined;
-  const required = field && field.fieldValidate && field.fieldValidationRequired;
+      const field = property.fieldName ? property : undefined;
+      const relationship = property.relationshipName ? property : undefined;
+      const required = field && field.fieldValidate && field.fieldValidationRequired;
   _%>
   <%_ if (field) { _%>
     <%_ if (property.fieldValidate) { _%>
@@ -101,7 +101,7 @@ public class <%- dtoClass %> implements Serializable {
 
     private String <%- property.propertyName %>ContentType;
 <%_ }
-}
+    }
 _%>
 <%_ for (property of restProperties) { _%>
 
@@ -159,7 +159,7 @@ _%>
     public String toString() {
         return "<%- dtoClass %>{" +
 <%_ for ([idx, property] of restProperties.entries()) {
-  const isQuoted = property.fieldName && !property.fieldTypeNumeric;
+      const isQuoted = property.fieldName && !property.fieldTypeNumeric;
 _%>
             "<%- idx === 0 ? '' : ', ' %><%- property.propertyName %>=<% if (isQuoted) { %>'<% } %>" + <%- property.propertySupplierName %>() <% if (isQuoted) { %>+ "'" <% } %>+
 <%_ } _%>

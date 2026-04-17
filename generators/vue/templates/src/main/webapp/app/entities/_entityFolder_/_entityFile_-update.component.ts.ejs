@@ -12,10 +12,10 @@ import { useValidation<% if (anyFieldIsTimeDerived) { %>, useDateFormat<% } %> }
 import { useAlertService } from '@/shared/alert/alert.service';
 
 <%_ const allRelationshipsThatNeedSelectOptions = Object
-    .values(relationshipsByOtherEntity)
-    .map(relationships => relationships.filter(rel => rel.persistableRelationship))
-    .filter(relationships => relationships.length > 0);
-  const relationshipsContainManyToOne = relationships.some(rel => !rel.otherEntity.embedded && rel.collection && rel.persistableRelationship);
+      .values(relationshipsByOtherEntity)
+      .map(relationships => relationships.filter(rel => rel.persistableRelationship))
+      .filter(relationships => relationships.length > 0);
+    const relationshipsContainManyToOne = relationships.some(rel => !rel.otherEntity.embedded && rel.collection && rel.persistableRelationship);
 _%>
 
 <%_ for (const [relationship] of Object.values(allRelationshipsThatNeedSelectOptions)) { _%>
@@ -66,8 +66,8 @@ export default defineComponent({
       try {
         const res = await <%- entityInstance %>Service().find(<%- entityInstance %><%- primaryKey.nameCapitalized %>);
 <%_ for (field of fields.filter(field => !field.id)) {
-            const { fieldName, fieldType } = field;
-            if (['Instant', 'ZonedDateTime'].includes(fieldType)) {
+      const { fieldName, fieldType } = field;
+      if (['Instant', 'ZonedDateTime'].includes(fieldType)) {
 _%>
         res.<%- fieldName %> = new Date(res.<%- fieldName %>);
 <%_ } } _%>
@@ -171,8 +171,8 @@ _%>
   created(): void {
 <%_ if (relationshipsContainManyToOne) { _%>
   <%_ for (relationship of relationships) {
-      if (relationship.collection && relationship.persistableRelationship) {
-      const { relationshipFieldNamePlural } = relationship;
+        if (relationship.collection && relationship.persistableRelationship) {
+          const { relationshipFieldNamePlural } = relationship;
   _%>
     this.<%- entityInstance %>.<%- relationshipFieldNamePlural %> = [];
   <%_ } } _%>
