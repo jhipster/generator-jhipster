@@ -188,7 +188,7 @@ AI coding assistants (GitHub Copilot, Claude, Cursor, and similar tools) are wel
 
 When an AI assistant contributes materially to a change (beyond trivial autocomplete):
 
-- **Disclose it** in the pull request description (a short note is enough, e.g. *"Scaffolding and initial tests were generated with GitHub Copilot, then reviewed and adjusted manually."*).
+- **Disclose it** in the pull request description (a short note is enough, e.g. _"Scaffolding and initial tests were generated with GitHub Copilot, then reviewed and adjusted manually."_).
 - **Credit it** in the commit message using a `Co-authored-by:` trailer, for example:
   ```
   Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>

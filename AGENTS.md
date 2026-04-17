@@ -19,12 +19,15 @@ JHipster is a Yeoman-based code generator (TypeScript, ESM, Node `^22.18.0 || >=
 
 Snapshots live next to specs as `*.snap` and are committed. Never hand-edit them — regenerate.
 
+**Always run `npm run prettier:format` (or `npm run lint-fix`) before committing** so changes match the project's Prettier configuration. CI will fail otherwise.
+
 ## Running the generator locally
 
 Two options (see `DEVELOPMENT.md`):
+
 - JIT: `alias jhipster="$PWD/bin/jhipster.cjs"` — no build step needed.
 - Linked build: `npm run build && npm link`; rebuild after changes.
-On generated apps use `jhipster --skip-jhipster-dependencies` plus `npm link generator-jhipster` so the dev version is picked up. `jhipster --install-path` shows which copy is active.
+  On generated apps use `jhipster --skip-jhipster-dependencies` plus `npm link generator-jhipster` so the dev version is picked up. `jhipster --install-path` shows which copy is active.
 
 ## Big-picture architecture
 
@@ -39,7 +42,7 @@ On generated apps use `jhipster --skip-jhipster-dependencies` plus `npm link gen
   - `support/` — exported helpers (part of the public API via `./generators/*/support`).
   - `internal/` — non-exported helpers.
   - `resources/`, `jdl/` — supporting data / JDL specs.
-  Sub-generators nest under `generators/<parent>/generators/<child>/` and are exported via the same pattern.
+    Sub-generators nest under `generators/<parent>/generators/<child>/` and are exported via the same pattern.
 - Priority lifecycle (order matters, see `ARCHITECTURE.md` for full list): `initializing` → `prompting` → `configuring` → `composing` → `loading` → `preparing` → `configuringEachEntity` → `loadingEntities` → `preparingEachEntity` → `preparingEachEntityField` → `preparingEachEntityRelationship` → `default` → `writing` → `writingEntities` → `postWriting` → `install` → `end`. Use the matching `as<Priority>TaskGroup()` helper on the generator to get typed task signatures.
 - Blueprints (`BLUEPRINTS.md`): three flavors — replacement, side-by-side, standalone. `GeneratorBase` handles composition; blueprinted sub-generators are discovered and composed in `beforeQueue`.
 - `lib/` holds shared, **exported** code: `lib/jdl` (Chevrotain-based JDL parser), `lib/testing` (test harness, also importable as `#testing`), `lib/utils`, `lib/eslint`, `lib/ci`. Keep cross-generator logic here, not inside an individual generator.
@@ -61,7 +64,7 @@ On generated apps use `jhipster --skip-jhipster-dependencies` plus `npm link gen
 
 ## AI assistant disclosure
 
-This project expects AI-assisted contributions to be disclosed (see `CONTRIBUTING.md` → *Use of AI coding assistants*). When you act as an AI assistant on this repo:
+This project expects AI-assisted contributions to be disclosed (see `CONTRIBUTING.md` → _Use of AI coding assistants_). When you act as an AI assistant on this repo:
 
 - Add a `Co-authored-by:` trailer to commits you author. Example for GitHub Copilot: `Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>`. Use the equivalent identity for other assistants.
 - When opening a PR on the user's behalf (or drafting a PR description), include a short note stating that an AI assistant contributed and summarizing what it produced.
