@@ -10,6 +10,7 @@ Are you ready to contribute to JHipster? We'd love to have you on board, and we 
 - [Submission Guidelines](#submit)
 - [Coding Rules](#rules)
 - [Git Commit Guidelines](#commit)
+- [Use of AI coding assistants](#ai-assistants)
 
 And don't forget, we also accept [financial contributions to the project](https://www.jhipster.tech/sponsors/) using Open Collective.
 
@@ -180,6 +181,20 @@ or joined the [JHipster team](https://www.jhipster.tech/team/).
   and be polite and helpful to users when answering questions/bug reports and when reviewing PRs.
 - We work on our free time, so we have no obligation nor commitment. Work/life balance is important, so don't
   feel tempted to put in all your free time fixing something.
+
+## <a name="ai-assistants"></a> Use of AI coding assistants
+
+AI coding assistants (GitHub Copilot, Claude, Cursor, and similar tools) are welcome, but their use comes with responsibilities. See [`AGENTS.md`](AGENTS.md) for the instructions these tools should follow when working on this codebase.
+
+When an AI assistant contributes materially to a change (beyond trivial autocomplete):
+
+- **Disclose it** in the pull request description (a short note is enough, e.g. *"Scaffolding and initial tests were generated with GitHub Copilot, then reviewed and adjusted manually."*).
+- **Credit it** in the commit message using a `Co-authored-by:` trailer, for example:
+  ```
+  Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
+  ```
+- **You remain responsible for the change.** Before submitting, you must read, understand, and test the code — including anything the assistant produced. Do not submit AI output you have not verified.
+- **The normal bar still applies.** Tests, lint, type-check, and all other Coding Rules above must pass. AI assistance does not lower the review bar; if anything, reviewers will look more carefully at AI-generated diffs.
 
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
 [feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=FEATURE_REQUEST.md
