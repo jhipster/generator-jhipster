@@ -242,14 +242,12 @@ describe('<%- entityAngularName %> Management Update Component', () => {
 <%_ } _%>
     });
 
-<%_ const trackedRelationships = Object.values(relationshipsByOtherEntity).filter(arr => arr.some(rel => rel.persistableRelationship && !rel.otherEntity.embedded));
-    if (trackedRelationships.length > 0) {
-_%>
+<%_ const trackedRelationships = Object.values(relationshipsByOtherEntity).filter(arr => arr.some(rel => rel.persistableRelationship && !rel.otherEntity.embedded)); _%>
+<%_ if (trackedRelationships.length > 0) { _%>
 
     describe('Compare relationships', () => {
-  <%_ for (const relationship of trackedRelationships) {
-        const { otherEntity } = relationship[0];
-  _%>
+  <%_ for (const relationship of trackedRelationships) { _%>
+    <%_ const { otherEntity } = relationship[0]; _%>
         describe('compare<%- otherEntity.entityAngularName %>', () => {
             it('should forward to <%- otherEntity.entityInstance %>Service', () => {
                 const entity = <%- otherEntity.tsPrimaryKeySamples[0] %>;

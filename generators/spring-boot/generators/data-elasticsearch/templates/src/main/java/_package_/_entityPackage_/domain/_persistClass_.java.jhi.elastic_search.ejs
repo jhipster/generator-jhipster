@@ -54,9 +54,8 @@
 
 <%_ for (const relationship of relationships) { -%>
   <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>AnnotationSection) { -&>
-  <%_ // just break the cycle; in the reactive area, we already have the annotation in place
-      if (!relationship.ownerSide && !reactive) {
-  _%>
+  <%_ // just break the cycle; in the reactive area, we already have the annotation in place _%>
+  <%_ if (!relationship.ownerSide && !reactive) { _%>
         @org.springframework.data.annotation.Transient
     <% } %>
   <&_ } -&>

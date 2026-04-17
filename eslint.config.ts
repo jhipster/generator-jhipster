@@ -140,7 +140,6 @@ export default defineConfig(
     }),
     {
       rules: {
-        'ejs-templates/prefer-single-line-tags': 'off',
         'ejs-templates/prefer-output': 'off',
 
         ...js.configs.recommended.rules,
@@ -150,7 +149,6 @@ export default defineConfig(
         '@stylistic/comma-dangle': ['error', 'always-multiline'],
         '@stylistic/max-statements-per-line': 'off',
         '@stylistic/no-mixed-operators': 'off',
-        '@stylistic/semi-spacing': 'off',
       },
     },
   ),

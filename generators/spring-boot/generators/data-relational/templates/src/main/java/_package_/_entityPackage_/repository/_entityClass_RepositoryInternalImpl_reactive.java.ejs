@@ -68,9 +68,8 @@ import <%- entityAbsolutePackage %>.domain.criteria.<%- entityClass %>Criteria;
 import <%- entityAbsolutePackage %>.repository.rowmapper.ColumnConverter;
 import tech.jhipster.service.ConditionBuilder;
 <%_ } _%>
-<% for (const rel of relationships) {
-     if (rel.relationshipManyToMany && rel.ownerSide) {
-_%>
+<% for (const rel of relationships) { _%>
+  <%_ if (rel.relationshipManyToMany && rel.ownerSide) { _%>
 import <%- rel.otherEntity.entityAbsolutePackage %>.domain.<%- rel.otherEntity.persistClass %>;
   <%_ } _%>
 <%_ } _%>
@@ -112,13 +111,11 @@ class <%- entityClass %>RepositoryInternalImpl extends SimpleR2dbcRepository<<%-
     private final static Table <%- rel.relationshipName %>Table = Table.aliased("<%- rel.otherEntity.entityTableName %>", "<%- rel.relationshipSqlSafeName %>");
 <%_ } _%>
 
-<%_ for (const rel of relationships) {
-      if (rel.shouldWriteJoinTable) {
-_%>
+<%_ for (const rel of relationships) { _%>
+  <%_ if (rel.shouldWriteJoinTable) { _%>
     private final static EntityManager.LinkTable <%- rel.relationshipName %>Link = new EntityManager.LinkTable("<%- rel.joinTable.name %>", "<%- entityTableName %>_<%- primaryKey.hibernateSnakeCaseName %>", "<%- rel.joinColumnNames[0] %>");
-<%_ }
-    }
-_%>
+  <%_ } _%>
+<%_ } _%>
 
     public <%- entityClass %>RepositoryInternalImpl(
         R2dbcEntityTemplate template,
@@ -260,10 +257,9 @@ _%>
         ConditionBuilder builder = new ConditionBuilder(this.columnConverter);
         List<Condition> allConditions = new ArrayList<Condition>();
         if (criteria != null) {
-  <%_ for (const field of fields) {
-        if (field.transient) continue;
-        if (field.filterableField) {
-  _%>
+  <%_ for (const field of fields) { _%>
+    <%_ if (field.transient) continue; _%>
+    <%_ if (field.filterableField) { _%>
             if (criteria.<%- field.propertyFilterSupplierName %>() != null) {
                 builder.buildFilterConditionForField(criteria.<%- field.propertyFilterSupplierName %>(), entityTable.column("<%- field.columnName %>"));
             }

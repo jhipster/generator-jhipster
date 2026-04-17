@@ -70,9 +70,8 @@ public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, 
     _%>
     @Mapping(target = "<%- relationship.propertyName %>", source = "<%- relationship.propertyName %>", qualifiedByName="<%- qualifiedByName %>")
   <%_ } _%>
-  <%_ for (const field of fields.filter(field => field.mapstructExpression)) {
-        renMapAnotEnt = true;
-  _%>
+  <%_ for (const field of fields.filter(field => field.mapstructExpression)) { _%>
+    <%_ renMapAnotEnt = true; _%>
     @Mapping( target = "<%- field.propertyName %>", expression = "<%- field.mapstructExpression %>")
   <%_ } _%>
   <%_ if (renMapAnotEnt) { _%>
@@ -90,10 +89,9 @@ public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, 
     <%_ if (!relationship.ownerSide) { _%>
       <%_ renMapAnotDto = true; _%>
     @Mapping(target = "<%- relationship.propertyName %>", ignore = true)
-    <%_ }
-        if (relationship.collection && fluentMethods) {
-          renMapAnotDto = true;
-    _%>
+    <%_ } _%>
+    <%_ if (relationship.collection && fluentMethods) { _%>
+      <%_ renMapAnotDto = true; _%>
     @Mapping(target = "remove<%- relationship.relationshipNameCapitalized %>", ignore = true)
     <%_ } _%>
   <%_ } _%>

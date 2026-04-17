@@ -4,9 +4,8 @@
             <div v-if="<%- entityInstance %>">
                 <h2 class="jh-entity-heading" data-cy="<%- entityInstance %>DetailsHeading"><span>{{ t$('<%- i18nKeyPrefix %>.detail.title') }}<%- entityAngularName %></span> {{<%- entityInstance %>.<%- primaryKey.name %>}}</h2>
                 <dl class="row-md jh-entity-details">
-<%_ for (field of fields.filter(field => !field.id)) {
-      const { fieldName, fieldType } = field;
-_%>
+<%_ for (field of fields.filter(field => !field.id)) { _%>
+  <%_ const { fieldName, fieldType } = field; _%>
                     <dt>
                         <span>{{ t$('<%- i18nKeyPrefix %>.<%- fieldName %>') }}</span>
                     </dt>
@@ -34,9 +33,8 @@ _%>
   <%_ } _%>
                     </dd>
 <%_ } _%>
-<%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) {
-      const { relationshipName, relationshipFieldName, relationshipFieldNamePlural, otherEntityName, otherEntityField } = relationship;
-_%>
+<%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
+  <%_ const { relationshipName, relationshipFieldName, relationshipFieldNamePlural, otherEntityName, otherEntityField } = relationship; _%>
   <%_ if (relationship.persistableRelationship) { _%>
                     <dt>
                         <span>{{ t$('<%- i18nKeyPrefix %>.<%- relationshipName %>') }}</span>

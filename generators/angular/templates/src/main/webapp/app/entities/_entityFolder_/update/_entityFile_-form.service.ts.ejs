@@ -63,17 +63,15 @@ type <%- entityAngularName %>FormDefaults = Pick<New<%- entityAngularName %>, '<
 <%_ } _%>
 
 type <%- entityAngularName %>FormGroupContent = {
-<%_ for (field of fields) {
-      const { fieldName } = field;
-_%>
+<%_ for (field of fields) { _%>
+  <%_ const { fieldName } = field; _%>
   <%- fieldName %>: FormControl<<%- entityFormName %>['<%- fieldName %>']<% if (field.id) { %> | New<%- entityAngularName %>['<%- fieldName %>']<% } %>>;
   <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
   <%- fieldName %>ContentType: FormControl<<%- entityFormName %>['<%- fieldName %>ContentType']>;
   <%_ } _%>
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(relationship => relationship.persistableRelationship)) {
-      const { propertyName } = relationship;
-_%>
+<%_ for (const relationship of relationships.filter(relationship => relationship.persistableRelationship)) { _%>
+  <%_ const { propertyName } = relationship; _%>
   <%- propertyName %>: FormControl<<%- entityFormName %>['<%- propertyName %>']>;
 <%_ } _%>
 };
@@ -101,10 +99,10 @@ export class <%- entityAngularName %>FormService {
     ;
 
     return new FormGroup<<%- entityAngularName %>FormGroupContent>({
-<%_ for (const field of fields) {
-      const { fieldName, fieldValidationRequired, fieldValidationMinLength, fieldValidationMaxLength, fieldValidationMin, fieldValidationMax, fieldValidationPattern } = field;
+<%_ for (const field of fields) { _%>
+  <%_ const { fieldName, fieldValidationRequired, fieldValidationMinLength, fieldValidationMaxLength, fieldValidationMin, fieldValidationMax, fieldValidationPattern } = field;
       const usesValidators = fieldValidationRequired || fieldValidationMinLength || fieldValidationMaxLength || fieldValidationMin || fieldValidationMax || fieldValidationPattern || field.id;
-_%>
+  _%>
       <%- fieldName %>: new FormControl(
   <%_ if (field.id) { _%>
         { value: <%- entityInstance %>RawValue.<%- fieldName %>, disabled: <% if (field.autoGenerate) { %>true<% } else { %><%- entityInstance %>RawValue.<%- fieldName %> !== null<% } %> },
@@ -143,9 +141,8 @@ _%>
       <%- fieldName %>ContentType: new FormControl(<%- entityInstance %>RawValue.<%- fieldName %>ContentType),
   <%_ } _%>
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(relationship => relationship.persistableRelationship)) {
-      const { relationshipRequired, propertyName, collection } = relationship;
-_%>
+<%_ for (const relationship of relationships.filter(relationship => relationship.persistableRelationship)) { _%>
+  <%_ const { relationshipRequired, propertyName, collection } = relationship; _%>
       <%- propertyName %>: new FormControl(
         <%- entityInstance %>RawValue.<%- propertyName %><% if (collection) { %> ?? []<% } %>
   <%_ if (!collection && relationshipRequired) { _%>
@@ -195,9 +192,8 @@ _%>
   <%_ } _%>
 
     return {
-  <%_ for (field of fields) {
-        const { fieldName, fieldTypeBoolean, fieldTypeTimed } = field;
-  _%>
+  <%_ for (field of fields) { _%>
+    <%_ const { fieldName, fieldTypeBoolean, fieldTypeTimed } = field; _%>
     <%_ if (field.fieldTsDefaultValue) { _%>
         <%- fieldName %>: <%- field.fieldTsDefaultValue %>,
     <%_ } else { _%>
@@ -210,9 +206,8 @@ _%>
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
-  <%_ for (const relationship of relationships.filter(({ persistableRelationship }) => persistableRelationship)) {
-        const { propertyName, collection } = relationship;
-  _%>
+  <%_ for (const relationship of relationships.filter(({ persistableRelationship }) => persistableRelationship)) { _%>
+    <%_ const { propertyName, collection } = relationship; _%>
     <%_ if (collection) { _%>
       <%- propertyName %>: [],
     <%_ } _%>
@@ -225,9 +220,8 @@ _%>
   private convert<%- entityAngularName %>RawValueTo<%- entityAngularName %>(raw<%- entityAngularName %>: <%- entityAngularName %>FormRawValue | New<%- entityAngularName %>FormRawValue): I<%- entityAngularName %> | New<%- entityAngularName %> {
     return {
       ...raw<%- entityAngularName %>,
-  <%_ for (field of fields) {
-        const { fieldName, fieldTypeTimed } = field;
-  _%>
+  <%_ for (field of fields) { _%>
+    <%_ const { fieldName, fieldTypeTimed } = field; _%>
     <%_ if (fieldTypeTimed) { _%>
       <%- fieldName %>: dayjs(raw<%- entityAngularName %>.<%- fieldName %>, DATE_TIME_FORMAT),
     <%_ } _%>
@@ -238,16 +232,14 @@ _%>
   private convert<%- entityAngularName %>To<%- entityAngularName %>RawValue(<%- entityInstance %>: I<%- entityAngularName %> | (Partial<New<%- entityAngularName %>> & <%- entityAngularName %>FormDefaults)): <%- entityAngularName %>FormRawValue | PartialWithRequiredKeyOf<New<%- entityAngularName %>FormRawValue> {
     return {
       ...<%- entityInstance %>,
-  <%_ for (field of fields) {
-        const { fieldName, fieldTypeTimed } = field;
-  _%>
+  <%_ for (field of fields) { _%>
+    <%_ const { fieldName, fieldTypeTimed } = field; _%>
     <%_ if (fieldTypeTimed) { _%>
       <%- fieldName %>: <%- entityInstance %>.<%- fieldName %> ? <%- entityInstance %>.<%- fieldName %>.format(DATE_TIME_FORMAT) : undefined,
     <%_ } _%>
   <%_ } _%>
-  <%_ for (const relationship of relationships.filter(({ persistableRelationship }) => persistableRelationship)) {
-        const { propertyName, collection } = relationship;
-  _%>
+  <%_ for (const relationship of relationships.filter(({ persistableRelationship }) => persistableRelationship)) { _%>
+    <%_ const { propertyName, collection } = relationship; _%>
     <%_ if (collection) { _%>
       <%- propertyName %>: <%- entityInstance %>.<%- propertyName %> ?? [],
     <%_ } _%>

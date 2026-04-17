@@ -64,9 +64,8 @@ public class <%- entityClass %>RowMapper implements BiFunction<Row, String, <%- 
     @Override
     public <%- persistClass %> apply(Row row, String prefix) {
         <%- persistClass %> entity = new <%- persistClass %>();
-<%_ for (const field of fields.filter(field => !field.transient)) {
-      const fieldType = field.blobContentTypeText ? 'String' : field.fieldType;
-_%>
+<%_ for (const field of fields.filter(field => !field.transient)) { _%>
+  <%_ const fieldType = field.blobContentTypeText ? 'String' : field.fieldType; _%>
   <%_ if (field.fieldTypeBytes && !field.blobContentTypeText) { _%>
         entity.<%- field.propertyConsumerName %>ContentType(converter.fromRow(row, prefix + "_<%- field.fieldNameAsDatabaseColumn %>_content_type", String.class));
   <%_ } _%>

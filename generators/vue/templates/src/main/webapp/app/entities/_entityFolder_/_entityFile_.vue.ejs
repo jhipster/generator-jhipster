@@ -49,9 +49,8 @@
                     <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%- field.fieldName %>')"<% } %>><span>{{ t$('<%- `${i18nKeyPrefix}.${field.fieldName}` %>') }}</span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%- field.fieldName %>'"></jhi-sort-indicator><% } %></th>
 <%_ } _%>
 <%_ for (relationship of relationships) { _%>
-  <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) {
-        const fieldName = `.${relationship.otherEntityField}`;
-  _%>
+  <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
+    <%_ const fieldName = `.${relationship.otherEntityField}`; _%>
                     <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%- relationship.relationshipName + (fieldName) %>')"<% } %>><span>{{ t$('<%- `${i18nKeyPrefix}.${relationship.relationshipName}` %>') }}</span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%- relationship.relationshipName + (fieldName) %>'"></jhi-sort-indicator><% } %></th>
   <%_ } _%>
 <%_ } _%>
@@ -64,9 +63,8 @@
                     <td>
                         <router-link :to="{name: '<%- entityAngularName %>View', params: {<%- entityInstance %>Id: <%- entityInstance %>.<%- primaryKey.name %>}}">{{<%- entityInstance %>.<%- primaryKey.name %>}}</router-link>
                     </td>
-<%_ for (field of fields.filter(field => !field.id)) {
-      const { fieldName, fieldType } = field;
-_%>
+<%_ for (field of fields.filter(field => !field.id)) { _%>
+  <%_ const { fieldName, fieldType } = field; _%>
   <%_ if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
                     <td>
                         <a v-if="<%- entityInstance %>.<%- fieldName %>" @click="openFile(<%- entityInstance %>.<%- fieldName %>ContentType, <%- entityInstance %>.<%- fieldName %>)">
@@ -89,9 +87,8 @@ _%>
                     <td>{{<%- entityInstance %>.<%- fieldName %>}}</td>
   <%_ } _%>
 <%_ } _%>
-<%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) {
-      const { relationshipFieldName, relationshipFieldNamePlural, otherEntityName, otherEntityField } = relationship;
-_%>
+<%_ for (relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
+  <%_ const { relationshipFieldName, relationshipFieldNamePlural, otherEntityName, otherEntityField } = relationship; _%>
   <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
                     <td>
     <%_ if (relationship.otherEntityUser) { _%>

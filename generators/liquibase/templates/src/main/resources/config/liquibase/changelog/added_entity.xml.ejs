@@ -45,32 +45,26 @@
             </column>
   <%_ } _%>
 <%_ } _%>
-<%_ for (relationship of relationships) {
-      if ((relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide))
-        && !relationship.id) {
-          for (const idField of relationship.otherEntity.primaryKey.fields) {
-          const uniqueConstraintName = relationship.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, `${relationship.columnName}_${idField.columnName}`, entity.prodDatabaseType) : null;
-_%>
+<%_ for (relationship of relationships) { _%>
+  <%_ if ((relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide)) && !relationship.id) { _%>
+    <%_ for (const idField of relationship.otherEntity.primaryKey.fields) { _%>
+      <%_ const uniqueConstraintName = relationship.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, `${relationship.columnName}_${idField.columnName}`, entity.prodDatabaseType) : null; _%>
             <column name="<%- relationship.columnName %>_<%- idField.columnName %>" type="<%- idField.columnType %>">
                 <constraints nullable="<%- !relationship.columnRequired %>"<% if (uniqueConstraintName) { %> unique="true" uniqueConstraintName="<%- uniqueConstraintName %>"<% } %> />
             </column>
-<%_ }
-    }
-    }
-_%>
+    <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
-<%_ for (const field of fields) {
-      if (field.shouldDropDefaultValue) {
-_%>
+<%_ for (const field of fields) { _%>
+  <%_ if (field.shouldDropDefaultValue) { _%>
         <dropDefaultValue tableName="<%- entity.entityTableName %>" columnName="<%- field.columnName %>" columnDataType="${datetimeType}"/>
-<%_ }
-    }
-_%>
+  <%_ } _%>
+<%_ } _%>
     </changeSet>
-<%_ const joinTableRelations = relationships.filter(rel => rel.shouldWriteJoinTable);
-    if (joinTableRelations.length > 0) {
-_%>
+<%_ const joinTableRelations = relationships.filter(rel => rel.shouldWriteJoinTable); _%>
+<%_ if (joinTableRelations.length > 0) { _%>
 
     <changeSet id="<%- changelogDate %>-1-relations" author="jhipster">
   <%_ for (relationship of joinTableRelations) { _%>

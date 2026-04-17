@@ -17,23 +17,20 @@
  limitations under the License.
 -%>
 <%- include('/liquibase-changelog-header') -%>
-<%_ const { entityTableName, entityClass } = entity;
-    if (hasFieldConstraint) {
-_%>
+<%_ const { entityTableName, entityClass } = entity; _%>
+<%_ if (hasFieldConstraint) { _%>
 
     <!--
         Added the field constraints for entity <%- entityClass %>.
     -->
     <changeSet id="<%- changelogDate %>-fields-constraints" author="jhipster">
-  <%_ for (field of addedFields) {
-        if (field.unique) {
-  _%>
+  <%_ for (field of addedFields) { _%>
+    <%_ if (field.unique) { _%>
         <addUniqueConstraint tableName="<%- entityTableName %>"
             columnNames="<%- field.columnName %>"
             constraintName="<%- field.uniqueConstraintName %>"/>
-    <%_ }
-        if (field.columnRequired) {
-    _%>
+    <%_ } _%>
+    <%_ if (field.columnRequired) { _%>
         <addNotNullConstraint tableName="<%- entityTableName %>"
             columnName="<%- field.columnName %>"
             columnDataType="<%- field.columnType %>"/>
@@ -41,10 +38,9 @@ _%>
         <addNotNullConstraint tableName="<%- entityTableName %>"
             columnName="<%- field.columnName %>_content_type"
             columnDataType="varchar(255)"/>
-  <%_ }
-      }
-      }
-  _%>
+      <%_ } _%>
+    <%_ } _%>
+  <%_ } _%>
     </changeSet>
 <% } _%>
 <%_ if (removedDefaultValueFields && removedDefaultValueFields.length) { _%>
@@ -78,23 +74,21 @@ _%>
         Added the relationship constraints for entity <%- entityClass %>.
     -->
     <changeSet id="<%- changelogDate %>-relationship-constraints" author="jhipster">
-  <%_ for (const relationshipData of addedRelationships) {
-        if (relationshipData.unique) {
-          const idField = relationship.otherEntity.primaryKey.ownFields[0];
+  <%_ for (const relationshipData of addedRelationships) { _%>
+    <%_ if (relationshipData.unique) { _%>
+      <%_ const idField = relationship.otherEntity.primaryKey.ownFields[0];
           const uniqueConstraintName = relationshipData.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, `${relationshipData.columnName}_${idField.columnName}`, entity.prodDatabaseType) : null;
-  _%>
+      _%>
         <addUniqueConstraint tableName="<%- entityTableName %>"
             columnNames="<%- relationshipData.columnName %>_id"
             constraintName="<%- uniqueConstraintName %>"/>
-    <%_ }
-        if (relationshipData.columnRequired) {
-    _%>
+    <%_ } _%>
+    <%_ if (relationshipData.columnRequired) { _%>
         <addNotNullConstraint tableName="<%- entityTableName %>"
             columnName="<%- relationshipData.columnName %>_id"
             columnDataType="<%- relationshipData.columnDataType %>"/>
-  <%_ }
-      }
-  _%>
+    <%_ } _%>
+  <%_ } _%>
     </changeSet>
 <%_ } _%>
 <%_ if (addedRelationships && addedRelationships.length) { %>

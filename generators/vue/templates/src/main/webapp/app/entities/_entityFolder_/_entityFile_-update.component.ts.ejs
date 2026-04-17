@@ -65,10 +65,9 @@ export default defineComponent({
     const retrieve<%- entityAngularName %> = async <%- entityInstance %><%- primaryKey.nameCapitalized %> => {
       try {
         const res = await <%- entityInstance %>Service().find(<%- entityInstance %><%- primaryKey.nameCapitalized %>);
-<%_ for (field of fields.filter(field => !field.id)) {
-      const { fieldName, fieldType } = field;
-      if (['Instant', 'ZonedDateTime'].includes(fieldType)) {
-_%>
+<%_ for (field of fields.filter(field => !field.id)) { _%>
+  <%_ const { fieldName, fieldType } = field; _%>
+  <%_ if (['Instant', 'ZonedDateTime'].includes(fieldType)) { _%>
         res.<%- fieldName %> = new Date(res.<%- fieldName %>);
 <%_ } } _%>
         <%- entityInstance %>.value = res;
@@ -170,10 +169,9 @@ _%>
   },
   created(): void {
 <%_ if (relationshipsContainManyToOne) { _%>
-  <%_ for (relationship of relationships) {
-        if (relationship.collection && relationship.persistableRelationship) {
-          const { relationshipFieldNamePlural } = relationship;
-  _%>
+  <%_ for (relationship of relationships) { _%>
+    <%_ if (relationship.collection && relationship.persistableRelationship) { _%>
+      <%_ const { relationshipFieldNamePlural } = relationship; _%>
     this.<%- entityInstance %>.<%- relationshipFieldNamePlural %> = [];
   <%_ } } _%>
 <%_ } _%>

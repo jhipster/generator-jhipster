@@ -18,9 +18,8 @@
 -%>
 <%- include('/liquibase-changelog-header') -%>
 
-<%_ const { entityTableName } = entity;
-    if (addedFields.length || addedRelationships.length) {
-_%>
+<%_ const { entityTableName } = entity; _%>
+<%_ if (addedFields.length || addedRelationships.length) { _%>
     <changeSet id="<%- changelogDate %>-columns-faker" author="jhipster" context="faker">
     <!--
         Load sample data generated with Faker.js

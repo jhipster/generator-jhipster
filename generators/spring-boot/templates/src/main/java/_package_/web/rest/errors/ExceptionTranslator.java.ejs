@@ -106,11 +106,11 @@ _%>
       requestClass = 'ServerWebExchange';
       requestEntityRequestClass = 'ServerWebExchange';
   _%>
-<%_ } else {
-      returnType = 'ResponseEntity<Object>';
+<%_ } else { _%>
+  <%_ returnType = 'ResponseEntity<Object>';
       requestClass = 'NativeWebRequest';
       requestEntityRequestClass = 'WebRequest';
-_%>
+  _%>
 <%_ } _%>
     private static final String FIELD_ERRORS_KEY = "fieldErrors";
     private static final String MESSAGE_KEY = "message";

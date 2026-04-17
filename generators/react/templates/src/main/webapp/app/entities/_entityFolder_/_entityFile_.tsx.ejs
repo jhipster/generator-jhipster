@@ -397,9 +397,8 @@ export const <%- entityReactName %> = () => {
                         {<%- entityInstance %>.<%- primaryKey.name %>}
                       </Button>
                     </td>
-<%_ for (field of fields) {
-      const { fieldType, fieldName, fieldIsEnum } = field;
-_%>
+<%_ for (field of fields) { _%>
+  <%_ const { fieldType, fieldName, fieldIsEnum } = field; _%>
   <%_ if (fieldName !== primaryKey.name) { _%>
                     <td>
     <%_ if (field.fieldTypeBoolean) { _%>
@@ -413,9 +412,8 @@ _%>
     <%_ } else if (fieldIsEnum && enableTranslation) { _%>
                       <Translate contentKey={`<%- frontendAppName %>.<%- fieldType %>.${<%- entityInstance %>.<%- fieldName %>}`} />
     <%_ } else if (field.fieldTypeBinary) { _%>
-      <%_ // blobFields
-          if (!field.blobContentTypeText) {
-      _%>
+      <%_ // blobFields _%>
+      <%_ if (!field.blobContentTypeText) { _%>
                         {<%- entityInstance %>.<%- fieldName %> ? (
                           <div>
                             {<%- entityInstance %>.<%- fieldName %>ContentType ? (
@@ -440,11 +438,11 @@ _%>
                     </td>
   <%_ } _%>
 <%_ } _%>
-<%_ for (relationship of relationships) {
-      const { otherEntity, relationshipFieldName, relationshipFieldNamePlural } = relationship;
+<%_ for (relationship of relationships) { _%>
+  <%_ const { otherEntity, relationshipFieldName, relationshipFieldNamePlural } = relationship;
       const otherEntityPkName = relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.name || 'id';
       const { otherEntityField } = relationship;
-_%>
+  _%>
   <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
                     <td>
     <%_ if (relationship.otherEntityUser) { _%>

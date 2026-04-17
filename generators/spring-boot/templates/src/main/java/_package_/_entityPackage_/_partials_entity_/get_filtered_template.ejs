@@ -19,8 +19,9 @@
 <%_ const mapper = `${entityInstance}Mapper`;
     const entityToDtoReference = `${mapper}::` + 'toDto';
     const reactiveSql = (databaseTypeSql && reactive);
-    for (const relationship of relationships) { if (relationship.relationshipOneToOne && !relationship.ownerSide) {
 _%>
+<%_ for (const relationship of relationships) { _%>
+  <%_ if (relationship.relationshipOneToOne && !relationship.ownerSide) { _%>
 
     /**
      *  Get all the <%- entityInstancePlural %> where <%- relationship.relationshipNameCapitalized %> is {@code null}.

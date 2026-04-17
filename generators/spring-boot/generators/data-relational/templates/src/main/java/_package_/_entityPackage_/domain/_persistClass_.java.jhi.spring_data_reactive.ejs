@@ -58,10 +58,8 @@ import org.springframework.data.relational.core.mapping.Table;
 <&_ } -&>
 <%_ } -%>
 
-<%_ for (const relationship of relationships) {
-      const reactiveRelationshipWithId = (databaseTypeSql && reactive && !(relationship.relationshipOneToOne
-        && (!relationship.ownerSide || (relationship.ownerSide && relationship.id))));
-_%>
+<%_ for (const relationship of relationships) { _%>
+  <%_ const reactiveRelationshipWithId = (databaseTypeSql && reactive && !(relationship.relationshipOneToOne && (!relationship.ownerSide || (relationship.ownerSide && relationship.id)))); _%>
 <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>CustomSetSection) { -&>
   <%_ if (!relationship.collection && reactiveRelationshipWithId) { _%>
     public void <%- relationship.propertyConsumerName %>(<%- relationship.otherEntity.persistClass %> <%- relationship.otherEntityName %>) {

@@ -23,9 +23,8 @@
 
             <div>
                 <<%- jhiPrefixDashed %>-alert-error />
-<%_ for (const field of fields.filter(field => !field.hidden)) {
-      const { fieldName, fieldNameHumanized, fieldType, fieldTypeBlobContent, readonly } = field;
-_%>
+<%_ for (const field of fields.filter(field => !field.hidden)) { _%>
+  <%_ const { fieldName, fieldNameHumanized, fieldType, fieldTypeBlobContent, readonly } = field; _%>
 
             <% if (field.autoGenerate) { %>@if (editForm.controls.<%- field.fieldName %>.value !== null) {<% } %>
                 <% if (field.fieldTypeBinary && !field.blobContentTypeText || field.fieldValidate) { %>@let <%- fieldName %>Ref = editForm.get('<%- fieldName %>')!;<% } %>
@@ -142,9 +141,8 @@ _%>
                 </div>
             <% if (field.autoGenerate) { %>}<% } %>
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(rel => rel.otherEntity.primaryKey)) {
-      const { otherEntity, relationshipName, propertyName, otherEntityField, relationshipRequired, otherEntityName, relationshipFieldName, relationshipFieldNamePlural } = relationship;
-_%>
+<%_ for (const relationship of relationships.filter(rel => rel.otherEntity.primaryKey)) { _%>
+  <%_ const { otherEntity, relationshipName, propertyName, otherEntityField, relationshipRequired, otherEntityName, relationshipFieldName, relationshipFieldNamePlural } = relationship; _%>
   <%_ if (relationship.persistableRelationship && !relationship.collection) { _%>
 
                 <div class="mb-3">

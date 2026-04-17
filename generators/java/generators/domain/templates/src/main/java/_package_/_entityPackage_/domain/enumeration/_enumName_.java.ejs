@@ -28,25 +28,22 @@ package <%- entityAbsolutePackage %>.domain.enumeration;
 public enum <%- enumName %> {
 <%_ if (withoutCustomValues) { _%>
 <%- enumValues.map(enumValue => `${enumValue.comment && `\n${enumValue.comment}\n` || ''}    ${enumValue.name}`).join(', ') %>
-<%_ } else {
-      // The following code redefines the variable state to be 'without CustomValue' when name equals value.
+<%_ } else { _%>
+  <%_ // The following code redefines the variable state to be 'without CustomValue' when name equals value.
       withoutCustomValues = enumValues.every(({ name, value }) => name === value);
       withCustomValues = enumValues.every(({ name, value }) => name !== value);
       withSomeCustomValues = !withoutCustomValues && !withCustomValues;
-
-      for (const [index, enumWithCustomValue] of enumValues.entries()) {
-        if (enumWithCustomValue.comment) {
-_%>
+  _%>
+  <%_ for (const [index, enumWithCustomValue] of enumValues.entries()) { _%>
+    <%_ if (enumWithCustomValue.comment) { _%>
 <%- enumWithCustomValue.comment %>
-    <%_ }
-        if (enumWithCustomValue.name === enumWithCustomValue.value) {
-    _%>
+    <%_ } _%>
+    <%_ if (enumWithCustomValue.name === enumWithCustomValue.value) { _%>
     <%- enumWithCustomValue.name %><% if (index < enumValues.length - 1) { %>,<% } else { %>;<% } %>
     <%_ } else { _%>
     <%- enumWithCustomValue.name %>("<%- enumWithCustomValue.value %>")<% if (index < enumValues.length - 1) { %>,<% } else { %>;<% } %>
-  <%_ }
-      }
-  _%>
+    <%_ } _%>
+  <%_ } _%>
   <%_ if (!withoutCustomValues) { _%>
     private<% if (withCustomValues) { %> final<% } %> String value;
 

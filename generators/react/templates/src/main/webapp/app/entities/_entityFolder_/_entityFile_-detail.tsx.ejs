@@ -60,9 +60,8 @@ export const <%- entityReactName %>Detail = () => {
           <Translate contentKey="<%- i18nKeyPrefix %>.detail.title"><%- entityNameCapitalized %></Translate>
         </h2>
           <dl className="jh-entity-details">
-<%_ for (field of fields) {
-      const { fieldName, fieldNameHumanized } = field;
-_%>
+<%_ for (field of fields) { _%>
+  <%_ const { fieldName, fieldNameHumanized } = field; _%>
             <dt>
               <span id="<%- fieldName %>">
                 <Translate contentKey="<%- field.propertyTranslationKey %>">
@@ -114,11 +113,11 @@ _%>
   <%_ } _%>
             </dd>
 <%_ } _%>
-<%_ for (relationship of relationships) {
-      const { relationshipName, relationshipFieldName, relationshipFieldNamePlural, relationshipNameHumanized } = relationship;
+<%_ for (relationship of relationships) { _%>
+  <%_ const { relationshipName, relationshipFieldName, relationshipFieldNamePlural, relationshipNameHumanized } = relationship;
       const otherEntityPkName = relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.name || 'id';
       const { otherEntityField } = relationship;
-_%>
+  _%>
   <%_ if (relationship.persistableRelationship) { _%>
             <dt>
               <Translate contentKey="<%- i18nKeyPrefix %>.<%- relationshipName %>">

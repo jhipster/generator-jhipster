@@ -50,15 +50,13 @@ import { AlertErrorModel } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 <%_ } _%>
-<%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) {
-      const uniqueRel = relationshipsByEntityNeedingOptions[0];
-      if (uniqueRel.otherEntity.entityAngularName !== entityAngularName) {
-_%>
+<%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
+  <%_ const uniqueRel = relationshipsByEntityNeedingOptions[0]; _%>
+  <%_ if (uniqueRel.otherEntity.entityAngularName !== entityAngularName) { _%>
 import { I<%- uniqueRel.otherEntity.entityAngularName %> } from 'app/entities/<%- uniqueRel.otherEntity.entityFolderName %>/<%- uniqueRel.otherEntity.entityFileName %>.model';
 import { <%- uniqueRel.otherEntity.entityAngularName %>Service } from 'app/entities/<%- uniqueRel.otherEntity.entityFolderName %>/service/<%- uniqueRel.otherEntity.entityFileName %>.service';
-<%_ }
-    }
-_%>
+  <%_ } _%>
+<%_ } _%>
 <%_ const enumImports = generateEntityClientEnumImports(fields); _%>
 <%_ for (const [importedType, importedPath] of enumImports) { _%>
 import { <%- importedType %> } from '<%- importedPath %>';
@@ -107,14 +105,12 @@ export class <%- entityAngularName %>Update implements OnInit {
 <%_ } _%>
     protected <%- entityInstance %>Service = inject(<%- entityAngularName %>Service);
     protected <%- entityInstance %>FormService = inject(<%- entityAngularName %>FormService);
-<%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) {
-      const uniqueRel = relationshipsByEntityNeedingOptions[0];
-      if (uniqueRel.otherEntity.entityAngularName !== entityAngularName) {
-_%>
+<%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
+  <%_ const uniqueRel = relationshipsByEntityNeedingOptions[0]; _%>
+  <%_ if (uniqueRel.otherEntity.entityAngularName !== entityAngularName) { _%>
     protected <%- uniqueRel.otherEntity.entityInstance %>Service = inject(<%- uniqueRel.otherEntity.entityAngularName %>Service);
-<%_ }
-    }
-_%>
+  <%_ } _%>
+<%_ } _%>
 <%_ if (anyFieldHasImageContentType) { _%>
     protected elementRef = inject(ElementRef);
 <%_ } _%>
@@ -123,9 +119,8 @@ _%>
     // eslint-disable-next-line @typescript-eslint/member-ordering
     editForm: <%- entityAngularName %>FormGroup = this.<%- entityInstance %>FormService.create<%- entityAngularName %>FormGroup();
 
-<%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) {
-      const { otherEntity } = relationshipsByEntityNeedingOptions[0];
-_%>
+<%_ for (const relationshipsByEntityNeedingOptions of allRelationshipsByEntityNeedingOptions) { _%>
+  <%_ const { otherEntity } = relationshipsByEntityNeedingOptions[0]; _%>
 
     compare<%- otherEntity.entityAngularName %> = (o1: I<%- otherEntity.entityAngularName %> | null, o2: I<%- otherEntity.entityAngularName %> | null): boolean =>
         this.<%- otherEntity.entityInstance %>Service.compare<%- otherEntity.entityAngularName %>(o1, o2);

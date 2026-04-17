@@ -29,9 +29,8 @@ public class <%- entityClass %>SqlHelper {
 
     public static List<Expression> getColumns(Table table, String columnPrefix) {
         List<Expression> columns = new ArrayList<>();
-<%_ for (const field of fields.filter(field => !field.transient)) {
-      const col = field.fieldNameAsDatabaseColumn;
-_%>
+<%_ for (const field of fields.filter(field => !field.transient)) { _%>
+  <%_ const col = field.fieldNameAsDatabaseColumn; _%>
         columns.add(Column.aliased("<%- col %>", table, columnPrefix + "_<%- col %>"));
   <%_ if ((field.fieldTypeBinary) && !field.blobContentTypeText) { _%>
         columns.add(Column.aliased("<%- col %>_content_type", table, columnPrefix + "_<%- col %>_content_type"));

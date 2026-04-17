@@ -10,11 +10,11 @@ resources:
 - namespace.yml
 <%_ } _%>
 # Individual apps
-<%_ const suffix = 'k8s';
-    for (const appConfig of appConfigs) {
-      const appName = appConfig.baseName.toLowerCase();
+<%_ const suffix = 'k8s'; _%>
+<%_ for (const appConfig of appConfigs) { _%>
+  <%_ const appName = appConfig.baseName.toLowerCase();
       const appOut = appName.concat('-', suffix);
-_%>
+  _%>
 - <%- appOut %>/<%- appName %>-deployment.yml
 - <%- appOut %>/<%- appName %>-service.yml
   <%_ if (!appConfig.databaseTypeNo) { _%>
@@ -56,9 +56,8 @@ _%>
 # messagebroker
 - messagebroker-<%- suffix %>/kafka.yml
 <%_ } _%>
-<%_ if (monitoringPrometheus) {
-      const monitOut = 'monitoring'.concat('-', suffix);
-_%>
+<%_ if (monitoringPrometheus) { _%>
+  <%_ const monitOut = 'monitoring'.concat('-', suffix); _%>
 # monitoring prometheus
 - <%- monitOut %>/jhipster-prometheus-cr.yml
 - <%- monitOut %>/jhipster-prometheus-crd.yml
@@ -69,21 +68,18 @@ _%>
   <%_ } _%>
 <%_ } _%>
 # service discovery eureka/consul
-<%_ if (serviceDiscoveryEureka) {
-      const registryOut = 'registry'.concat('-', suffix);
-_%>
+<%_ if (serviceDiscoveryEureka) { _%>
+  <%_ const registryOut = 'registry'.concat('-', suffix); _%>
 - <%- registryOut %>/jhipster-registry.yml
 - <%- registryOut %>/application-configmap.yml
-<%_ } else if (serviceDiscoveryConsul) {
-      const registryOut = 'registry'.concat('-', suffix);
-_%>
+<%_ } else if (serviceDiscoveryConsul) { _%>
+  <%_ const registryOut = 'registry'.concat('-', suffix); _%>
 - <%- registryOut %>/consul.yml
 - <%- registryOut %>/consul-config-loader.yml
 - <%- registryOut %>/application-configmap.yml
 <%_ } _%>
-<%_ if (istio) {
-      const istioOut = 'istio'.concat('-', suffix);
-_%>
+<%_ if (istio) { _%>
+  <%_ const istioOut = 'istio'.concat('-', suffix); _%>
 # istio
 - <%- istioOut %>/grafana-gateway.yml
 - <%- istioOut %>/zipkin-gateway.yml
@@ -91,9 +87,8 @@ _%>
 <%_ } _%>
 
 patchesJson6902:
-<%_ if (istio) {
-      const patchOut = 'patch'.concat('-', suffix);
-_%>
+<%_ if (istio) { _%>
+  <%_ const patchOut = 'patch'.concat('-', suffix); _%>
 - target:
     version: v1
     kind: Namespace

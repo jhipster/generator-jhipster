@@ -136,10 +136,9 @@ public class <%- persistClass %> <&- fragments.extendsSection() -&>implements Se
 <%_ } _%>
 <&- fragments.classAdditionalFieldsSection() -&>
 
-<%_ // An embedded entity should not reference entities that embed it, unless the other entities are also embedded
-    for (relationship of relationships) {
-      if (relationship.relationshipApiDescription) {
-_%>
+<%_ // An embedded entity should not reference entities that embed it, unless the other entities are also embedded _%>
+<%_ for (relationship of relationships) { _%>
+  <%_ if (relationship.relationshipApiDescription) { _%>
 <%- relationship.relationshipJavadoc %>
     <%_ if (!dtoMapstruct && relationship.relationshipApiDescription) { _%>
     @Schema(description = "<%- relationship.relationshipApiDescription %>")
@@ -363,18 +362,16 @@ _%>
 <%_ if (!embedded) { _%>
             "<%- primaryKey.name %>=" + <%- primaryKey.propertySupplierName %>() +
 <%_ } _%>
-<%_ for (const field of fields.filter(field => !field.id && !field.transient)) {
-      const isNumeric = field.fieldTypeNumeric;
-_%>
+<%_ for (const field of fields.filter(field => !field.id && !field.transient)) { _%>
+  <%_ const isNumeric = field.fieldTypeNumeric; _%>
             ", <%- field.fieldName %>=<% if (!isNumeric) { %>'<% } %>" + <%- field.propertySupplierName %>() <% if (!isNumeric) { %>+ "'" <% } %>+
   <%_ if (field.fieldWithContentType) { _%>
             ", <%- field.fieldName %>ContentType='" + <%- field.propertySupplierName %>ContentType() + "'" +
   <%_ } _%>
 <%_ } _%>
 <%_ for (const relationship of relationships) { _%>
-  <%_ if (relationship.otherEntity.embedded) {
-        if (relationship.relationshipManyToOne) {
-  _%>
+  <%_ if (relationship.otherEntity.embedded) { _%>
+    <%_ if (relationship.relationshipManyToOne) { _%>
             ", <%- relationship.relationshipFieldName %>='" + <%- relationship.propertySupplierName %>() + "'" +
     <%_ } else if (relationship.relationshipOneToOne && relationship.ownerSide) { _%>
             ", <%- relationship.relationshipFieldName %>='" + <%- relationship.propertySupplierName %>() + "'" +
