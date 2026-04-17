@@ -236,13 +236,22 @@ export const buildCommands = ({
     }
     throw error;
   },
-  defaultCommand = GENERATOR_APP,
+  defaultCommand,
   entrypointGenerator,
   printLogo = printJHipsterLogo,
   printBlueprintLogo = () => {},
   createEnvBuilder,
   silent,
 }: BuildCommands) => {
+  if (!defaultCommand) {
+    try {
+      const yoRcFile = fs.readFileSync('.yo-rc.json', 'utf8');
+      defaultCommand = JSON.parse(yoRcFile)?.['generator-jhipster']?.defaultCommand;
+    } catch {
+      // No .yo-rc.json file or no defaultCommand field, we can ignore it
+    }
+    defaultCommand ??= 'app';
+  }
   /* create commands */
   Object.entries(commands).forEach(([cmdName, opts]) => {
     const { desc, blueprint, argument, options: commandOptions, alias, help: commandHelp, cliOnly, removed, useOptions = {} } = opts;

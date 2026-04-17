@@ -30,7 +30,6 @@ import {
   defaultConfig,
   defaultSubGeneratorConfig,
   prompts,
-  requiredConfig,
   subGeneratorPrompts,
 } from './constants.ts';
 import { files, generatorFiles } from './files.ts';
@@ -119,18 +118,6 @@ export default class extends GenerateBlueprintBaseGenerator {
 
   get [BaseSimpleApplicationGenerator.PROMPTING]() {
     return this.delegateTasksToBlueprint(() => this.prompting);
-  }
-
-  get configuring() {
-    return this.asConfiguringTaskGroup({
-      requiredConfig() {
-        this.config.defaults(requiredConfig());
-      },
-    });
-  }
-
-  get [BaseSimpleApplicationGenerator.CONFIGURING]() {
-    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get composing() {

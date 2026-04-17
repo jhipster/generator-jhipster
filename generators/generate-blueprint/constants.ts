@@ -40,15 +40,9 @@ export const PRIORITIES = 'priorities';
 export const WRITTEN = 'written';
 
 /**
- * Config that needs to be written to config
- */
-export const requiredConfig = () => ({});
-
-/**
  * Default config that will be used for templates
  */
 export const defaultConfig = ({ config = {} }: { config?: any } = {}) => ({
-  ...requiredConfig,
   [DYNAMIC]: false,
   [JS]: !config[LOCAL_BLUEPRINT_OPTION],
   [LOCAL_BLUEPRINT_OPTION]: false,
@@ -71,7 +65,6 @@ const allSubGeneratorConfig = (subGenerator: string) => ({
 });
 
 export const allGeneratorsConfig = () => ({
-  ...requiredConfig,
   [SUB_GENERATORS]: lookupGeneratorsNamespaces(),
   [ADDITIONAL_SUB_GENERATORS]: '',
   [DYNAMIC]: false,

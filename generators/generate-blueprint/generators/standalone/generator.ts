@@ -38,6 +38,18 @@ export default class StandaloneBlueprintGenerator extends GenerateBlueprintBaseG
     await this.dependsOnBootstrap('generate-blueprint');
   }
 
+  get configuring() {
+    return this.asConfiguringTaskGroup({
+      requiredConfig() {
+        this.jhipsterConfig.defaultCommand ??= 'generate-blueprint';
+      },
+    });
+  }
+
+  get [GenerateBlueprintBaseGenerator.CONFIGURING]() {
+    return this.delegateTasksToBlueprint(() => this.configuring);
+  }
+
   get writing() {
     return this.asWritingTaskGroup({
       async writeBlueprintFiles({ application }) {
