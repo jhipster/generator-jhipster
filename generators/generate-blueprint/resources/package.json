@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "ejs-lint": "2.0.1",
-    "eslint": "10.2.0",
+    "eslint": "10.2.1",
     "globals": "17.5.0",
     "vitest": "4.1.4"
   },
