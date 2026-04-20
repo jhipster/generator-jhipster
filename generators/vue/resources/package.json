@@ -40,7 +40,7 @@
     "eslint-plugin-vue": "10.8.0",
     "folder-hash": "4.1.2",
     "happy-dom": "20.9.0",
-    "html-webpack-plugin": "5.6.6",
+    "html-webpack-plugin": "5.6.7",
     "jiti": "2.6.1",
     "merge-jsons-webpack-plugin": "2.0.1",
     "mini-css-extract-plugin": "2.10.2",
