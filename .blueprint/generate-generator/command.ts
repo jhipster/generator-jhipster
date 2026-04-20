@@ -23,7 +23,19 @@ const command = {
     generatorNamespace: {
       argument: {
         type: String,
-        required: true,
+      },
+      prompt: {
+        type: 'input',
+        message: 'The generator namespace (e.g. "foo:bar" for a generator located in generators/foo/generators/bar)',
+        validate: (input: string) => {
+          if (!input) {
+            return 'The generator namespace is required.';
+          }
+          if (!/^[a-z0-9-]+(:[a-z0-9-]+)?$/.test(input)) {
+            return 'The generator namespace must be in the format "foo:bar" (lowercase letters, numbers, and hyphens, separated by colons).';
+          }
+          return true;
+        },
       },
       configure: gen => {
         gen.generatorNamespace = gen.generatorNamespace.replaceAll(':', '/');
