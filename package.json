@@ -154,7 +154,7 @@
     "latest-version": "9.0.0",
     "lodash-es": "4.18.1",
     "mem-fs": "4.1.4",
-    "mem-fs-editor": "12.0.3",
+    "mem-fs-editor": "12.0.4",
     "minimatch": "10.2.5",
     "os-locale": "8.0.0",
     "p-transform": "5.0.1",
