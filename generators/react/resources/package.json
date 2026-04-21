@@ -70,7 +70,7 @@
     "ts-jest": "29.4.9",
     "ts-loader": "9.5.7",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.58.2",
+    "typescript-eslint": "8.59.0",
     "webpack": "5.106.2",
     "webpack-cli": "7.0.2",
     "webpack-dev-server": "5.2.3",
