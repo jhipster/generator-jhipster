@@ -65,7 +65,7 @@
     "simple-progress-webpack-plugin": "2.0.0",
     "source-map-loader": "5.0.0",
     "style-loader": "4.0.0",
-    "terser-webpack-plugin": "5.4.0",
+    "terser-webpack-plugin": "5.5.0",
     "thread-loader": "4.0.4",
     "ts-jest": "29.4.9",
     "ts-loader": "9.5.7",
