@@ -393,6 +393,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/ci-cd/generator.spec.js": {
     "stateCleared": "modified",
   },
+  "generators/ci-cd/generators/azure/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/azure/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/azure/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/azure/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/azure/templates/template-file-ci-cd:azure.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/ci-cd/generators/bootstrap/command.js": {
     "stateCleared": "modified",
   },
@@ -406,6 +421,81 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/ci-cd/generators/bootstrap/templates/template-file-ci-cd:bootstrap.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/circle/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/circle/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/circle/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/circle/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/circle/templates/template-file-ci-cd:circle.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/github/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/github/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/github/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/github/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/github/templates/template-file-ci-cd:github.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/gitlab/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/gitlab/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/gitlab/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/gitlab/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/gitlab/templates/template-file-ci-cd:gitlab.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/jenkins/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/jenkins/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/jenkins/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/jenkins/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/jenkins/templates/template-file-ci-cd:jenkins.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/travis/command.js": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/travis/generator.js": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/travis/generator.spec.js": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/travis/index.js": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/travis/templates/template-file-ci-cd:travis.ejs": {
     "stateCleared": "modified",
   },
   "generators/ci-cd/index.js": {

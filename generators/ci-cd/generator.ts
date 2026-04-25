@@ -16,18 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import chalk from 'chalk';
-
 import type { Config as BaseApplicationConfig } from '../base-application/types.d.ts';
 import BaseApplicationGenerator from '../base-simple-application/index.ts';
-import { createPomStorage } from '../java-simple-application/generators/maven/support/pom-store.ts';
 
+import { applyCiCdDeployConfiguration } from './support/generator.ts';
+import { ciCdGeneratorNamespace } from './support/providers.ts';
 import type { Application as CiCdApplication } from './types.ts';
 
 export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplication> {
-  insideDocker!: boolean;
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -35,29 +31,12 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
 
     await this.dependsOnBootstrap('ci-cd');
 
-    if (!this.delegateToBlueprint) {
-      if (this.options.commandName === 'ci-cd') {
-        const { backendType = 'Java' } = this.jhipsterConfig as BaseApplicationConfig;
-        if (['Java', 'SpringBoot'].includes(backendType)) {
-          await this.dependsOnBootstrap('java');
-        }
-      } else {
-        await this.dependsOnBootstrap('base-application');
+    if (!this.delegateToBlueprint && this.options.commandName === 'ci-cd') {
+      const { backendType = 'Java' } = this.jhipsterConfig as BaseApplicationConfig;
+      if (['Java', 'SpringBoot'].includes(backendType)) {
+        await this.dependsOnBootstrap('java');
       }
     }
-  }
-
-  // Public API method used by the getter and also by Blueprints
-  get initializing() {
-    return this.asInitializingTaskGroup({
-      sayHello() {
-        this.log.log(chalk.white('🚀 Welcome to the JHipster CI/CD Sub-Generator 🚀'));
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.INITIALIZING]() {
-    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get preparing() {
@@ -80,82 +59,24 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
-  // Public API method used by the getter and also by Blueprints
-  get writing() {
-    return this.asWritingTaskGroup({
-      async writeFiles({ application }) {
-        await this.writeFiles({
-          blocks: [
-            {
-              condition: ctx => ctx.ciCdJenkins,
-              templates: [
-                {
-                  sourceFile: 'jenkins/Jenkinsfile',
-                  destinationFile: 'Jenkinsfile',
-                },
-                {
-                  sourceFile: 'jenkins/jenkins.yml',
-                  destinationFile: ctx => `${ctx.dockerServicesDir}jenkins.yml`,
-                },
-                {
-                  sourceFile: 'jenkins/idea.gdsl',
-                  destinationFile: ctx => `${ctx.srcMainResources}idea.gdsl`,
-                },
-              ],
-            },
-            {
-              condition: ctx => ctx.ciCdGitlab,
-              templates: ['.gitlab-ci.yml'],
-            },
-            {
-              condition: ctx => ctx.ciCdCircle,
-              templates: ['.circleci/config.yml'],
-            },
-            {
-              condition: ctx => ctx.ciCdTravis,
-              templates: ['.travis.yml'],
-            },
-            {
-              condition: ctx => ctx.ciCdAzure,
-              templates: ['azure-pipelines.yml'],
-            },
-            {
-              condition: ctx => ctx.ciCdGithub,
-              templates: ['.github/workflows/main.yml'],
-            },
-          ],
-          context: application,
-        });
-
-        if (application.ciCdIntegrations?.includes('publishDocker')) {
-          this.writeFile('docker-registry.yml.ejs', `${application.dockerServicesDir}docker-registry.yml`);
+  get composing() {
+    return this.asComposingTaskGroup({
+      async composeProviders() {
+        for (const ciCd of this.context.ciCd ?? []) {
+          await this.composeWithJHipster(ciCdGeneratorNamespace(ciCd));
         }
       },
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.writing);
+  get [BaseApplicationGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
-  // Public API method used by the getter and also by Blueprints
   get postWriting() {
     return this.asPostWritingTaskGroup({
       postWriting({ application }) {
-        if (application.ciCdIntegrations?.includes('deploy')) {
-          if (application.buildTool === 'maven') {
-            createPomStorage(this, { sortFile: false }).addDistributionManagement({
-              releasesId: application.artifactoryReleasesId!,
-              releasesUrl: application.artifactoryReleasesUrl!,
-              snapshotsId: application.artifactorySnapshotsId!,
-              snapshotsUrl: application.artifactorySnapshotsUrl!,
-            });
-          } else if (application.buildTool === 'gradle') {
-            // TODO: add support here
-            // this.addGradleDistributionManagement(this.artifactoryId, this.artifactoryName);
-            this.log.warn('No support for Artifactory yet, when using Gradle.\n');
-          }
-        }
+        applyCiCdDeployConfiguration(this, application);
       },
     });
   }

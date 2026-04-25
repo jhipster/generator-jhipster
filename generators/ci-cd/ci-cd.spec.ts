@@ -610,6 +610,18 @@ describe('generator - CI-CD', () => {
         runResult.assertFile(expectedFiles.github);
       });
     });
+
+    describe('GitHub Actions: nested generator autoconfigure', () => {
+      before(async () => {
+        await helpers.runJHipster('ci-cd:github').withJHipsterConfig(mavenSample);
+      });
+      it('creates expected files', () => {
+        runResult.assertFile(expectedFiles.github);
+      });
+      it('sets provider in context', () => {
+        expect(runResult.application?.ciCd).toEqual(['github']);
+      });
+    });
   });
 
   //--------------------------------------------------

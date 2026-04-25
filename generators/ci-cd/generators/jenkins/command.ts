@@ -16,6 +16,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import command from './support/command.ts';
+import type { JHipsterCommandDefinition } from '../../../../lib/command/index.ts';
+import command from '../../support/command.ts';
 
-export default command;
+export default {
+  configs: {
+    ...command.configs,
+    ciCd: {
+      default: ['jenkins'],
+      internal: {
+        type: Array,
+      },
+      scope: 'context',
+    },
+  },
+} as const satisfies JHipsterCommandDefinition<any>;

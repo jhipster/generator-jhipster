@@ -16,6 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import command from './support/command.ts';
 
-export default command;
+export const ciCdChoices = [
+  { name: 'GitHub Actions', value: 'github' },
+  { name: 'Jenkins pipeline', value: 'jenkins' },
+  { name: 'GitLab CI', value: 'gitlab' },
+  { name: 'Azure Pipelines', value: 'azure' },
+  { name: 'Travis CI', value: 'travis' },
+  { name: 'CircleCI', value: 'circle' },
+] as const;
+
+export type CiCdProvider = (typeof ciCdChoices)[number]['value'];
+
+export const ciCdGeneratorNamespace = (provider: CiCdProvider) => `jhipster:ci-cd:${provider}` as const;

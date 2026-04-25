@@ -32,6 +32,12 @@ Options:
 Commands:
   app                             [Default] Create a new JHipster application based on the selected options
   ci-cd                           Create pipeline scripts for popular Continuous Integration/Continuous Deployment tools
+  ci-cd:azure                     Create an Azure Pipelines CI/CD pipeline
+  ci-cd:circle                    Create a CircleCI CI/CD pipeline
+  ci-cd:github                    Create a GitHub Actions CI/CD pipeline
+  ci-cd:gitlab                    Create a GitLab CI/CD pipeline
+  ci-cd:jenkins                   Create a Jenkins CI/CD pipeline
+  ci-cd:travis                    Create a Travis CI/CD pipeline
   docker-compose                  Create all required Docker deployment configuration for the selected applications
   download <jdlFiles...>          Download jdl file from template repository
   ci-utils [options]              Download jdl file from template repository

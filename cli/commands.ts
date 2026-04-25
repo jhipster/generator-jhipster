@@ -49,6 +49,24 @@ const defaultCommands = {
   'ci-cd': {
     desc: 'Create pipeline scripts for popular Continuous Integration/Continuous Deployment tools',
   },
+  'ci-cd:azure': {
+    desc: 'Create an Azure Pipelines CI/CD pipeline',
+  },
+  'ci-cd:circle': {
+    desc: 'Create a CircleCI CI/CD pipeline',
+  },
+  'ci-cd:github': {
+    desc: 'Create a GitHub Actions CI/CD pipeline',
+  },
+  'ci-cd:gitlab': {
+    desc: 'Create a GitLab CI/CD pipeline',
+  },
+  'ci-cd:jenkins': {
+    desc: 'Create a Jenkins CI/CD pipeline',
+  },
+  'ci-cd:travis': {
+    desc: 'Create a Travis CI/CD pipeline',
+  },
   cloudfoundry: {
     desc: 'Generate a `deploy/cloudfoundry` folder with a specific manifest.yml to deploy to Cloud Foundry',
     removed: removedV8,

@@ -16,6 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import chalk from 'chalk';
 import { parse as parseYaml } from 'yaml';
 
 import { mutateData } from '../../../../lib/utils/object.ts';
@@ -28,9 +29,23 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<C
       await this.composeWithBlueprints();
     }
 
-    if (this.options.commandName === 'ci-cd') {
+    if (this.options.commandName?.startsWith('ci-cd')) {
       await this.dependsOnBootstrap('app');
     }
+  }
+
+  get initializing() {
+    return this.asInitializingTaskGroup({
+      sayHello() {
+        if (this.options.commandName?.startsWith('ci-cd')) {
+          this.log.log(chalk.white('Welcome to the JHipster CI/CD Sub-Generator'));
+        }
+      },
+    });
+  }
+
+  get [BaseSimpleApplicationGenerator.INITIALIZING]() {
+    return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
   get loading() {

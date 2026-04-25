@@ -16,6 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import command from './support/command.ts';
-
-export default command;
+export { default } from './generator.ts';
+export { default as command } from './command.ts';
