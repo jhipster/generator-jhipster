@@ -722,7 +722,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   get #jhipsterGeneratorRelativePath(): string {
     if (!this.#jhipsterGeneratorRelativePath_) {
       try {
-        this.#jhipsterGeneratorRelativePath_ = requireNamespace(this.options.namespace).generator.replace(':', '/generators/');
+        this.#jhipsterGeneratorRelativePath_ = requireNamespace(this.options.namespace, {
+          allowPackageOnlyNamespace: false,
+        }).generator.replace(':', '/generators/');
       } catch {
         throw new Error('Could not determine the generator name');
       }
