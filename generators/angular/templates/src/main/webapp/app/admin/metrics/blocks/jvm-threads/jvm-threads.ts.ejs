@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, computed, input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, computed, input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
 <%_ if (enableTranslation) { _%>
@@ -30,6 +30,7 @@ import { MetricsModalThreads } from '../metrics-modal-threads/metrics-modal-thre
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-jvm-threads',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './jvm-threads.html',
   imports: [NgbProgressbar, DecimalPipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
 })

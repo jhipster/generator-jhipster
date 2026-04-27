@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import dayjs from 'dayjs/esm';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
@@ -37,6 +37,7 @@ import { TrackerService } from './core/tracker/tracker.service';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-app',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<<%- jhiPrefixDashed %>-main />',
   imports: [
     Main,

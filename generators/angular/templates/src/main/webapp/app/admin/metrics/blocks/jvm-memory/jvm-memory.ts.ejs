@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input } from '@angular/core';
 import { KeyValuePipe, DecimalPipe } from '@angular/common';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
@@ -28,6 +28,7 @@ import { JvmMetrics } from 'app/admin/metrics/metrics.model';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-jvm-memory',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './jvm-memory.html',
   imports: [NgbProgressbar, KeyValuePipe, DecimalPipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
 })

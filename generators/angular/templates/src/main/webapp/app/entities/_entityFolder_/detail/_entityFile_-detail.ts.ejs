@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, <% if (anyFieldIsBlobDerived) { %>inject, <% } %>input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, <% if (anyFieldIsBlobDerived) { %>inject, <% } %>input } from '@angular/core';
 <%_ if (entityFileName !== 'authority' && updatableEntity) { _%>
 import { RouterLink } from '@angular/router';
 <%_ } _%>
@@ -38,6 +38,7 @@ import { DataUtils } from 'app/core/util/data-util.service';
 <%_ } _%>
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
     selector: '<%- jhiPrefixDashed %>-<%- entityFileName %>-detail',
     templateUrl: './<%- entityFileName %>-detail.html',
     imports: [

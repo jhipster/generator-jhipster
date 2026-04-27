@@ -103,7 +103,7 @@ describe("UserManagement Management Delete Component", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/delete/user-management-delete-dialog.ts": {
-    "contents": "import { Component, inject } from "@angular/core";
+    "contents": "import { Component, ChangeDetectionStrategy, inject } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap/modal";
 
@@ -114,6 +114,7 @@ import { UserManagementService } from "../service/user-management.service";
 import { ITEM_DELETED_EVENT } from "app/config/navigation.constants";
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./user-management-delete-dialog.html",
   imports: [FormsModule, FontAwesomeModule, AlertError],
 })
@@ -285,7 +286,7 @@ describe("UserManagement Management Detail Component", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/detail/user-management-detail.ts": {
-    "contents": "import { Component, input } from "@angular/core";
+    "contents": "import { Component, ChangeDetectionStrategy, input } from "@angular/core";
 import { RouterLink } from "@angular/router";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
@@ -299,6 +300,7 @@ import {
 import { IUserManagement } from "../user-management.model";
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "jhi-user-management-detail",
   templateUrl: "./user-management-detail.html",
   imports: [
@@ -753,6 +755,7 @@ describe("UserManagement Management Component", () => {
   "src/main/webapp/app/entities/admin/user-management/list/user-management.ts": {
     "contents": "import {
   Component,
+  ChangeDetectionStrategy,
   computed,
   effect,
   inject,
@@ -807,6 +810,7 @@ import { UserManagementService } from "../service/user-management.service";
 import { UserManagementDeleteDialog } from "../delete/user-management-delete-dialog";
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "jhi-user-management",
   templateUrl: "./user-management.html",
   imports: [
@@ -2247,7 +2251,13 @@ describe("UserManagement Management Update Component", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.ts": {
-    "contents": "import { Component, inject, signal, OnInit } from "@angular/core";
+    "contents": "import {
+  Component,
+  ChangeDetectionStrategy,
+  inject,
+  signal,
+  OnInit,
+} from "@angular/core";
 import { HttpResponse } from "@angular/common/http";
 import { ActivatedRoute } from "@angular/router";
 import { Observable } from "rxjs";
@@ -2265,6 +2275,7 @@ import { IUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "jhi-user-management-update",
   templateUrl: "./user-management-update.html",
   imports: [FontAwesomeModule, AlertError, ReactiveFormsModule],

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit, signal } from '@angular/core';
 import {
   RouterLink,
 <%_ if (!locals.databaseTypeCassandra) { _%>
@@ -58,6 +58,7 @@ import { UserManagementDeleteDialog } from '../delete/user-management-delete-dia
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-user-mgmt',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './user-management.html',
   imports: [
     RouterLink,

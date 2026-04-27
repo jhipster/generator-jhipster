@@ -16,13 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap/alert';
 
 import { AlertService, AlertModel } from 'app/core/util/alert.service';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-alert',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './alert.html',
   imports: [NgbAlert],
 })

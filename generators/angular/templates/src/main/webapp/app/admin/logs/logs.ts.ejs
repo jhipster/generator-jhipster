@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, inject, OnInit, signal } from '@angular/core';
 import {
   finalize,
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
@@ -40,6 +40,7 @@ import { GatewayRoutesService } from '../gateway/gateway-routes.service';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-logs',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './logs.html',
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
   providers: [GatewayRoutesService],

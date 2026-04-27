@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
 import { KeyValuePipe } from '@angular/common';
 
 <%_ if (enableTranslation) { _%>
@@ -29,6 +29,7 @@ import { GatewayRoute } from './gateway-route.model';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-gateway',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './gateway.html',
   providers: [GatewayRoutesService],
   imports: [KeyValuePipe, FontAwesomeModule<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],

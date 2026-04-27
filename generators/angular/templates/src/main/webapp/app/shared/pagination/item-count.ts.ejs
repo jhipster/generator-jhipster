@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, input, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
 <%_ if (enableTranslation) { _%>
 import TranslateDirective from '../language/translate.directive';
 <%_ } _%>
@@ -26,6 +26,7 @@ import TranslateDirective from '../language/translate.directive';
  */
 @Component({
   selector: '<%- jhiPrefixDashed %>-item-count',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
 <%_ if (enableTranslation) { _%>
     <div <%- jhiPrefix %>Translate="global.item-count" [translateValues]="{ first: first(), second: second(), total: total() }"></div>

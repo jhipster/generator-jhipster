@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
@@ -28,6 +28,7 @@ import { GarbageCollector } from 'app/admin/metrics/metrics.model';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-metrics-garbagecollector',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './metrics-garbagecollector.html',
   imports: [NgbProgressbar, DecimalPipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
 })

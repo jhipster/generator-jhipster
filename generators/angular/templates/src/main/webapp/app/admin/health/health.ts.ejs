@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { KeyValuePipe } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
@@ -32,6 +32,7 @@ import HealthModal from './modal/health-modal';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-health',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './health.html',
   imports: [
 <%_ if (enableTranslation) { _%>

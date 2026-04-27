@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { DatePipe } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input } from '@angular/core';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
@@ -29,6 +29,7 @@ import { IUserManagement } from '../user-management.model';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-user-mgmt-detail',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './user-management-detail.html',
   imports: [FontAwesomeModule, DatePipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
 })

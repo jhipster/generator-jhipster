@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, signal, OnInit<% if (enableTranslation) { %>, OnDestroy<% } %> } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, OnInit<% if (enableTranslation) { %>, OnDestroy<% } %> } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { Subscription } from 'rxjs';
@@ -27,6 +27,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-error',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   <% if (enableTranslation) { %>imports: [TranslateDirective, TranslateModule],<% } %>
   templateUrl: './error.html',
 })

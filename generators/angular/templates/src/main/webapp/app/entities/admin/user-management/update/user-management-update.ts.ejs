@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, computed, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
@@ -48,6 +48,7 @@ const newUser: IUserManagement = {
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-user-management-update',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './user-management-update.html',
   imports: [
 <%_ if (enableTranslation) { _%>

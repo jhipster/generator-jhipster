@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { KeyValuePipe, JsonPipe } from '@angular/common';
 <%_ if (enableTranslation) { _%>
@@ -31,6 +31,7 @@ import { Bean, PropertySource } from './configuration.model';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-configuration',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './configuration.html',
   imports: [FontAwesomeModule, FormsModule, SortDirective, SortByDirective, KeyValuePipe, JsonPipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
 })

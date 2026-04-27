@@ -28,7 +28,7 @@
 
     const componentName = entityAngularName;
 _%>
-import { Component, computed, effect, inject, OnInit, signal, WritableSignal, untracked } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, effect, inject, OnInit, signal, WritableSignal, untracked } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 <%_ if (!paginationNo) { _%>
 import { HttpHeaders } from '@angular/common/http';
@@ -99,6 +99,7 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 <%_ } _%>
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
     selector: '<%- jhiPrefixDashed %>-<%- entityFileName %>',
     templateUrl: './<%- entityFileName %>.html',
     imports: [
