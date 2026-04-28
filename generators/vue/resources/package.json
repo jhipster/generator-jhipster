@@ -27,7 +27,7 @@
     "@tsconfig/node18": "18.2.6",
     "@types/node": "22.19.17",
     "@vitejs/plugin-vue": "6.0.6",
-    "@vue/test-utils": "2.4.8",
+    "@vue/test-utils": "2.4.9",
     "@vue/tsconfig": "0.9.1",
     "autoprefixer": "10.5.0",
     "axios-mock-adapter": "2.1.0",
