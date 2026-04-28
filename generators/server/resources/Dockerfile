@@ -43,7 +43,7 @@ FROM redis:8.6.2
 FROM apache/kafka-native:4.2.0
 LABEL ALIAS=kafka
 
-FROM apachepulsar/pulsar:4.2.0
+FROM apachepulsar/pulsar:4.2.1
 LABEL ALIAS=pulsar
 
 FROM sonarqube:26.4.0.121862-community
