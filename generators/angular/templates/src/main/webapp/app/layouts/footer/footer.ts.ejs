@@ -16,13 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-footer',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './footer.html',
 <%_ if (enableTranslation) { _%>
   imports: [TranslateDirective],

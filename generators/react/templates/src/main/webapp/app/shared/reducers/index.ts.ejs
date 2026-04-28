@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { ReducersMapObject, combineReducers } from '@reduxjs/toolkit';
-import { loadingBarReducer as loadingBar } from 'react-redux-loading-bar';
+import loadingBar from 'app/shared/reducers/loading-bar';
 
 <%_ if (enableTranslation) { _%>
 import locale from './locale';

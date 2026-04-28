@@ -20,13 +20,14 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
+import { describe, expect, it, vi } from 'vitest';
 
 import initStore from 'app/config/store';
 import Header from './header';
 <%_ if (applicationTypeGateway && microfrontend) { _%>
 
-jest.mock('@module-federation/utilities', () => ({
-  importRemote: jest.fn(() => Promise.reject(new Error('Test only'))),
+vi.mock('@module-federation/utilities', () => ({
+  importRemote: vi.fn(() => Promise.reject(new Error('Test only'))),
 }));
 <%_ } _%>
 

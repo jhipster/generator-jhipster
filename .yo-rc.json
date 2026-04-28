@@ -1,0 +1,5 @@
+{
+  "generator-jhipster": {
+    "defaultCommand": "generate-generator"
+  }
+}

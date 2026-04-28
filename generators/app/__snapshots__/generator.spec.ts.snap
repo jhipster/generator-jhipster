@@ -40,6 +40,7 @@ Options:
   --skip-fake-data                         Skip generation of fake data for development
   --websocket <value>                      Provide websocket option for the application when skipping server side generation
   --db <value>                             Provide DB name for the application when skipping server side generation
+  --dev-database-type <value>              Development database (choices: "postgresql", "mysql", "mariadb", "oracle", "mssql", "h2Disk", "h2Memory")
   --reactive                               Generate a reactive backend
   --service-discovery-type <value>         Service discovery type (choices: "consul", "eureka", "no")
   --auth <value>                           Provide authentication type for the application when skipping server side generation (choices: "jwt", "oauth2", "session")
@@ -58,7 +59,6 @@ Options:
   --recreate-initial-changelog             Recreate the initial database changelog based on the current config
   --skip-db-changelog                      Skip the generation of database migrations
   --incremental-changelog                  Creates incremental database changelogs
-  --dev-database-type <value>              Development database (choices: "postgresql", "mysql", "mariadb", "oracle", "mssql", "h2Disk", "h2Memory")
   --cache-provider <value>                 Cache provider (choices: "no", "caffeine", "ehcache", "hazelcast", "infinispan", "memcached", "redis")
   --enable-hibernate-cache                 Enable hibernate cache
   --client-framework <value>               Provide client framework for the application (choices: "angular", "react", "vue", "no")

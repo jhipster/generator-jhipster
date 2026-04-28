@@ -24,7 +24,7 @@ import { IQueryParams, serializeAxiosError } from 'app/shared/reducers/reducer.u
 
 const initialState = {
   loading: false,
-  errorMessage: null,
+  errorMessage: null as string | null,
   users: [] as readonly IUser[],
   authorities: [] as any[],
   user: defaultValue,
@@ -145,7 +145,7 @@ export const UserManagementSlice = createSlice({
         state.loading = false;
         state.updating = false;
         state.updateSuccess = false;
-        state.errorMessage = action.error.message;
+        state.errorMessage = action.error.message!;
       });
   },
 });

@@ -16,14 +16,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { basename, resolve } from 'node:path';
 import { before, it, describe, expect } from 'esmocha';
 
 import Generator from './index.ts';
 
 import { getGeneratorNamespace, shouldSupportFeatures, testBlueprintSupport } from '#test-support';
-import { defaultHelpers as helpers, result } from '#testing';
-  
+import { defaultHelpers as helpers, resultWithGenerator } from '#testing';
+
+const result = resultWithGenerator<Generator>();
 const generator = getGeneratorNamespace(import.meta.dirname);
 
 describe(`generator - ${generator}`, () => {

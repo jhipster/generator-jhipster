@@ -32,7 +32,7 @@ export const customizeForMicroservices = (applicationsWithEntities: Record<strin
     for (const mf of microfrontends) {
       const { baseName, clientFramework } = applicationsWithEntities[mf.baseName].config;
       if (clientFramework !== gatewayClientFramework) {
-        throw Error(
+        throw new Error(
           `Using different client frameworks in microfrontends is not supported. Tried to use: ${gatewayClientFramework} with ${clientFramework} (${baseName})`,
         );
       }

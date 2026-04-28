@@ -19,7 +19,7 @@
 <%_ if (clientTestFrameworkVitest) { _%>
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
-import { Component, DebugElement, Type, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, DebugElement, Type, inject } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { FaIconComponent, FaIconLibrary } from '@fortawesome/angular-fontawesome';
@@ -30,6 +30,7 @@ import { SortDirective } from './sort.directive';
 import { SortState, sortStateSignal } from './sort-state';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [SortDirective, SortByDirective, FaIconComponent],
   template: `
     <table>

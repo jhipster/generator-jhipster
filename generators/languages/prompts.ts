@@ -70,10 +70,10 @@ export const askForLanguages = asPromptingTask<LanguagesGenerator>(async functio
       default: () => this.jhipsterConfigWithDefaults.languages,
     },
   ]);
-  const { languages } = answers as { languages: string[] };
+  const { languages } = answers;
   if (languages) {
     if (control.existingProject) {
-      this.languagesToApply.push(...languages.filter(newLang => !currentLanguages.includes(newLang)));
+      this.languagesToApply.push(...languages.filter((newLang: string) => !currentLanguages.includes(newLang)));
     } else {
       this.languagesToApply.push(...languages);
     }

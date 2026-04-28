@@ -118,7 +118,6 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<
   get preparingEachEntityRelationship() {
     return this.asPreparingEachEntityRelationshipTaskGroup({
       prepareRelationship({ entity, relationship }) {
-        relationship.relationshipName;
         mutateData(relationship, {
           __override__: false,
           propertyTranslationKey: ({ relationshipName }) => `${entity.i18nKeyPrefix}.${relationshipName}`,

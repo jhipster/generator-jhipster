@@ -105,7 +105,7 @@ describe('generator commands', () => {
           expectGeneratorTestOption().toBe(value);
         }
 
-        if (!['application', 'context', 'storage', 'blueprint'].includes(scope)) {
+        if (!['context', 'blueprint'].includes(scope)) {
           expectContextTestOption().toBeUndefined();
         } else if (Array.isArray(value)) {
           expectContextTestOption().toEqual(value);
@@ -121,7 +121,7 @@ describe('generator commands', () => {
           expectBlueprintConfigTestOption().toBe(value);
         }
 
-        if (!['application', 'context', 'storage', 'blueprint'].includes(scope)) {
+        if (!['context', 'blueprint'].includes(scope)) {
           expectApplicationTestOption().toBeUndefined();
         } else if (Array.isArray(value)) {
           expectApplicationTestOption().toEqual(value);

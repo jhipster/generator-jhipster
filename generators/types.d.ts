@@ -28,6 +28,7 @@ export type GeneratorsWithBootstrap =
   | 'client'
   | 'common'
   | 'docker'
+  | 'generate-blueprint'
   | 'java-simple-application'
   | 'java'
   | 'javascript-simple-application'
@@ -81,6 +82,9 @@ type GeneratorsByNamespace = {
   'jhipster:export-jdl': import('./export-jdl/generator.ts').default;
   'generate-blueprint': import('./generate-blueprint/generator.ts').default;
   'jhipster:generate-blueprint': import('./generate-blueprint/generator.ts').default;
+  'jhipster:generate-blueprint:bootstrap': import('./generate-blueprint/generators/bootstrap/generator.ts').default;
+  'jhipster:generate-blueprint:local': import('./generate-blueprint/generators/local/generator.ts').default;
+  'jhipster:generate-blueprint:standalone': import('./generate-blueprint/generators/standalone/generator.ts').default;
   git: import('./git/generator.ts').default;
   'jhipster:git': import('./git/generator.ts').default;
   heroku: import('./heroku/generator.ts').default;

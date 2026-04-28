@@ -16,14 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-{
-  "extends": "./tsconfig",
-  "include": ["<%- this.relativeDir(clientRootDir, clientSrcDir) %>app", "<%- this.relativeDir(clientRootDir, clientSrcDir) %>microfrontends"],
-  "exclude": [],
-  "compilerOptions": {
-    "paths": {
-      "app/*": ["<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/*"]
-   },
-    "types": ["jest", "webpack-env"]
-  }
-}
+import { fileURLToPath, URL } from 'node:url';
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      app: fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/', import.meta.url)),
+    },
+  },
+});

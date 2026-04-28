@@ -17,7 +17,7 @@ Launch all your infrastructure by running: `docker compose up -d`.
 <%_ } _%>
 
 ### Applications and dependencies:
-<%_ for(const app of appConfigs) { _%>
+<%_ for (const app of appConfigs) { _%>
 - <%- app.baseName %> (<%- app.applicationType %> application)
 - <%- app.baseName %>'s <%- app.databaseTypeSql ? app.prodDatabaseType : app.databaseType %> database
   <%_ if (app.searchEngineAny && !app.searchEngineCouchbase) { _%>

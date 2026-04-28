@@ -31,7 +31,9 @@ import type {
   Application as CypressApplication,
   Config as CypressConfig,
   Entity as CypressEntity,
+  Features as CypressFeatures,
   Field as CypressField,
+  Options as CypressOptions,
 } from './types.ts';
 
 const { ANGULAR } = clientFrameworkTypes;
@@ -40,6 +42,10 @@ const WAIT_TIMEOUT = 3 * 60000;
 
 export default class CypressGenerator extends BaseApplicationGenerator<CypressEntity, CypressApplication, CypressConfig> {
   angularSchematic = false;
+
+  constructor(args?: string[], options?: CypressOptions, features?: CypressFeatures) {
+    super(args, options, { ...features, loadCommand: ['jhipster:server'] });
+  }
 
   async beforeQueue() {
     if (!this.fromBlueprint) {

@@ -51,6 +51,25 @@ describe(`generator - ${generator}`, () => {
       expect(runResult.getStateSnapshot()).toMatchSnapshot();
     });
 
+    it('should use the supported prometheus registry dependency', () => {
+      const javaDefinitions = runResult.sourceCallsArg.addJavaDefinitions.flat();
+      const dependencies = javaDefinitions.flatMap(definition => {
+        if (definition && typeof definition === 'object' && 'dependencies' in definition && Array.isArray(definition.dependencies)) {
+          return definition.dependencies;
+        }
+        return [];
+      });
+
+      expect(dependencies).toEqual(
+        expect.arrayContaining([expect.objectContaining({ groupId: 'io.micrometer', artifactId: 'micrometer-registry-prometheus' })]),
+      );
+      expect(dependencies).not.toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ groupId: 'io.micrometer', artifactId: 'micrometer-registry-prometheus-simpleclient' }),
+        ]),
+      );
+    });
+
     it('should match application snapshot', () => {
       expect(runResult.application).toMatchSnapshot({
         user: expect.any(Object),

@@ -20,6 +20,7 @@ import { asWritingTask } from '../../../../base-application/support/task-type-in
 import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../../../base-application/types.d.ts';
 import { clientRootTemplatesBlock } from '../../../../client/support/files.ts';
 
+/** @deprecated */
 export const writeEslintClientRootConfigFile = asWritingTask<BaseApplicationEntity, BaseApplicationApplication<BaseApplicationEntity>>(
   async function writingEslintFile({ application }) {
     await this.writeFiles({

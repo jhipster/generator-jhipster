@@ -43,6 +43,8 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
 
 export type Application<E extends BaseApplicationEntity = Entity> = ExportApplicationPropertiesFromCommand<typeof Command> &
   CommonApplication<E> &
-  JavaApplication<E>;
+  JavaApplication<E> & {
+    devDatabaseTypeH2Any?: boolean;
+  };
 
 export type { JavaSource as Source };

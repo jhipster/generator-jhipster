@@ -130,6 +130,9 @@ export default class BaseGenerator<
       const { storeBlueprintVersion, storeJHipsterVersion, queueCommandTasks = true } = this.features;
       if (this.fromBlueprint && storeBlueprintVersion && !this.options.reproducibleTests) {
         try {
+          if (this.blueprintConfig!.blueprintVersion) {
+            this.getContextData(this.#getBlueprintOldVersionKey(), { factory: () => this.blueprintConfig!.blueprintVersion });
+          }
           const blueprintPackageJson = JSON.parse(readFileSync(this._meta!.packagePath!, 'utf8'));
           this.blueprintConfig!.blueprintVersion = blueprintPackageJson.version;
         } catch {
@@ -143,6 +146,18 @@ export default class BaseGenerator<
         this._queueCurrentJHipsterCommandTasks();
       }
     });
+  }
+
+  #getBlueprintOldVersionKey(): string {
+    return `oldVersion:${this.rootGeneratorName()}`;
+  }
+
+  #getBlueprintOldVersion(): string | undefined {
+    try {
+      return this.getContextData(this.#getBlueprintOldVersionKey());
+    } catch {
+      return undefined;
+    }
   }
 
   /**
@@ -159,6 +174,26 @@ export default class BaseGenerator<
         let jhipsterOldVersion: string | null;
         let environmentHasDockerCompose: undefined | boolean;
         const customizeRemoveFiles: ((file: string) => string | undefined)[] = [];
+
+        const collectCleanupFiles = (cleanup: CleanupArgumentType) =>
+          Object.entries(cleanup).map(([version, files]) => {
+            const stringFiles: string[] = [];
+            for (const file of files) {
+              if (Array.isArray(file)) {
+                const [condition, ...fileParts] = file;
+                if (condition) {
+                  stringFiles.push(...fileParts);
+                }
+              } else {
+                stringFiles.push(file);
+              }
+            }
+            return {
+              removedInVersion: version,
+              files: stringFiles,
+            };
+          });
+
         return {
           get existingProject(): boolean {
             try {
@@ -229,20 +264,18 @@ export default class BaseGenerator<
               oldVersion = this.jhipsterOldVersion;
             }
             await Promise.all(
-              Object.entries(cleanup).map(async ([version, files]) => {
-                const stringFiles: string[] = [];
-                for (const file of files) {
-                  if (Array.isArray(file)) {
-                    const [condition, ...fileParts] = file;
-                    if (condition) {
-                      stringFiles.push(...fileParts);
-                    }
-                  } else {
-                    stringFiles.push(file);
-                  }
-                }
-                await this.removeFiles({ oldVersion, removedInVersion: version }, ...stringFiles);
-              }),
+              collectCleanupFiles(cleanup).map(async ({ removedInVersion, files }) =>
+                this.removeFiles({ oldVersion, removedInVersion }, ...files),
+              ),
+            );
+          },
+          async cleanupBlueprintFiles(cleanup: CleanupArgumentType) {
+            const oldVersion = generator.#getBlueprintOldVersion();
+            if (!oldVersion) return;
+            await Promise.all(
+              collectCleanupFiles(cleanup).map(async ({ removedInVersion, files }) =>
+                this.removeFiles({ oldVersion, removedInVersion }, ...files),
+              ),
             );
           },
         };

@@ -201,7 +201,11 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
             const entities = this.exportedEntities;
             await this.composeWithJHipster(this.entitiesGenerator, {
               generatorArgs: entities.map(entity => entity.name),
-              generatorOptions,
+              generatorOptions: {
+                ...generatorOptions,
+                // Generation should match entities command behavior.
+                commandName: 'entities',
+              },
             });
           } else {
             for (const app of this.applications) {

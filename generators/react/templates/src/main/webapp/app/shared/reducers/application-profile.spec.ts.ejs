@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import axios from 'axios';
+import { describe, expect, it, vi } from 'vitest';
 
 import profile, { getProfile } from './application-profile';
 
@@ -65,11 +66,11 @@ describe('Profile reducer tests', () => {
 
   describe('Actions', () => {
     const resolvedObject = { value: 'whatever' };
-    const getState = jest.fn();
-    const dispatch = jest.fn();
+    const getState = vi.fn();
+    const dispatch = vi.fn();
     const extra = {};
     beforeEach(() => {
-      axios.get = jest.fn().mockResolvedValue(resolvedObject);
+      axios.get = vi.fn().mockResolvedValue(resolvedObject);
     });
 
     it('dispatches GET_SESSION_PENDING and GET_SESSION_FULFILLED actions', async () => {

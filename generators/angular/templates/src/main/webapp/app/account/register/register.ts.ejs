@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, AfterViewInit, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { Component, ChangeDetectionStrategy, AfterViewInit, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -34,6 +34,7 @@ import PasswordStrengthBar from '../password/password-strength-bar/password-stre
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-register',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
 <%_ if (enableTranslation) { _%>
     TranslateDirective,

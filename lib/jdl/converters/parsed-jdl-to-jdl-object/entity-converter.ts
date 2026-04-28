@@ -51,7 +51,7 @@ export function convertEntities(
         ]) ?? [],
       ),
     });
-    const jdlFields = jdlFieldGetterFunction.call(undefined, parsedEntity);
+    const jdlFields = jdlFieldGetterFunction(parsedEntity);
     jdlEntity.addFields(jdlFields);
     return jdlEntity;
   });

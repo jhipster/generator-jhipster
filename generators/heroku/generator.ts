@@ -26,7 +26,6 @@ import BaseApplicationGenerator from '../base-application/index.ts';
 import { JAVA_COMPATIBLE_VERSIONS, RECOMMENDED_JAVA_VERSION, SERVER_MAIN_RES_DIR } from '../generator-constants.ts';
 import { addGradlePluginCallback, applyFromGradleCallback } from '../java-simple-application/generators/gradle/internal/needles.ts';
 import { createPomStorage } from '../java-simple-application/generators/maven/support/pom-store.ts';
-import { prepareSqlApplicationProperties } from '../spring-boot/generators/data-relational/support/index.ts';
 
 import { mavenProfileContent } from './templates.ts';
 import type {
@@ -199,20 +198,6 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
 
   get [BaseApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
-  }
-
-  get preparing() {
-    return this.asPreparingTaskGroup({
-      properties({ application }) {
-        if (application.databaseTypeSql) {
-          prepareSqlApplicationProperties({ application: application as any });
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get default() {

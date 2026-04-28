@@ -41,6 +41,7 @@ export const convertConfigToOption = <const T extends ConfigSpec<any>>(name: str
     name: cli?.name ?? name,
     default: config.default ?? cli?.default,
     description: config.description ?? cli?.description,
+    env: config.cli?.env,
     choices,
     scope: config.scope,
     type: type!,

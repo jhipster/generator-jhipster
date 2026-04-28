@@ -188,7 +188,7 @@ export const AuthenticationSlice = createSlice({
 <%_ if (!authenticationTypeOauth2) { _%>
       .addCase(authenticate.rejected, (state, action) => ({
         ...initialState,
-        errorMessage: action.error.message,
+        errorMessage: action.error.message!,
         showModalLogin: true,
         loginError: true,
       }))
@@ -208,7 +208,7 @@ export const AuthenticationSlice = createSlice({
 <%_ if (!authenticationTypeOauth2) { _%>
         showModalLogin: true,
 <%_ } _%>
-        errorMessage: action.error.message,
+        errorMessage: action.error.message!,
       }))
       .addCase(getAccount.fulfilled, (state, action) => {
         const isAuthenticated = action.payload?.data?.activated;

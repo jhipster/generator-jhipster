@@ -343,7 +343,7 @@ export function createAuthorityEntity(
       fieldValidateRules: [Validations.MAXLENGTH, Validations.REQUIRED],
       fieldValidateRulesMaxlength: 50,
       builtIn: true,
-    } as BaseApplicationField,
+    },
   ]);
 
   return authorityEntity;

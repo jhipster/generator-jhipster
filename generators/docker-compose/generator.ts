@@ -184,7 +184,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           if (appConfig.applicationTypeGateway || appConfig.applicationTypeMonolith) {
             if (deployment.keycloakSecrets === undefined && appConfig.authenticationTypeOauth2) {
               faker.seed(stringHashCode(appConfig.baseName));
-              deployment.keycloakSecrets = Array.from(Array(6), () => faker.string.uuid());
+              deployment.keycloakSecrets = Array.from(new Array(6), () => faker.string.uuid());
             }
             deployment.keycloakRedirectUris += `"http://localhost:${appConfig.composePort}/*", "https://localhost:${appConfig.composePort}/*", `;
             if (appConfig.devServerPort !== undefined) {

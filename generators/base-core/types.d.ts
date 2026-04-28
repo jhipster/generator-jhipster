@@ -25,6 +25,7 @@ export type GenericTask<ThisType, Arg1Type> = (this: ThisType, arg1: Arg1Type) =
 
 export type Config = {
   autoCrlf?: boolean;
+  defaultCommand?: string;
 };
 
 export type Options = YeomanOptions & {
@@ -86,7 +87,7 @@ export type Features = YeomanFeatures & {
    * Queue tasks to load and prepare properties from command.
    * This is useful for bootstrap generator.
    */
-  loadCommand?: JHipsterCommandDefinition[];
+  loadCommand?: JHipsterCommandDefinition[] | string[];
 
   /**
    * Skip load and prepare properties from command.

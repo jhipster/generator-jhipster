@@ -34,9 +34,9 @@ import { encodeCsrfToken } from 'app/shared/jhipster/encode-csrf-token';
 import cookie from 'app/shared/util/cookie-utils';
 <%_ } _%>
 
-let stompClient = null;
+let stompClient: any = null;
 
-let subscriber = null;
+let subscriber: any = null;
 let connection: Promise<any>;
 let connectedPromise: any = null;
 let listener: Observable<any>;
@@ -62,7 +62,7 @@ export const sendActivity = (page: string) => {
 
 const subscribe = () => {
   connection.then(() => {
-    subscriber = stompClient.subscribe('/topic/tracker', data => {
+    subscriber = stompClient!.subscribe('/topic/tracker', data => {
       listenerObserver.next(JSON.parse(data.body));
     });
   });
@@ -78,7 +78,7 @@ const connect = () => {
 
   // building absolute path so that websocket doesn't fail when deploying with a context path
   const loc = globalThis.location;
-  const baseHref = document.querySelector('base').getAttribute('href').replace(/\/$/, '');
+  const baseHref = document.querySelector('base')!.getAttribute('href')!.replace(/\/$/, '');
 
   const headers = {};
 <%_ if (authenticationUsesCsrf) { _%>

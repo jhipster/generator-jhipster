@@ -79,6 +79,30 @@ const command = {
       },
       scope: 'none',
     },
+    databaseType: {
+      cli: {
+        type: String,
+        hide: true,
+      },
+      choices: ['sql', 'mongodb', 'couchbase', 'cassandra', 'neo4j', 'no'],
+      scope: 'storage',
+    },
+    devDatabaseType: {
+      description: 'Development database',
+      cli: {
+        type: String,
+      },
+      choices: ['postgresql', 'mysql', 'mariadb', 'oracle', 'mssql', 'h2Disk', 'h2Memory'],
+      scope: 'storage',
+    },
+    prodDatabaseType: {
+      cli: {
+        type: String,
+        hide: true,
+      },
+      choices: ['postgresql', 'mysql', 'mariadb', 'oracle', 'mssql'],
+      scope: 'storage',
+    },
   },
   import: ['common', 'spring-boot'],
 } as const satisfies JHipsterCommandDefinition<any>;

@@ -38,9 +38,8 @@ jobs:
       versionSpec: $(NODE_VERSION)
     displayName: 'TOOLS: install Node.js'
 <%_ } _%>
-<%_ if (cypressTests) {
-  const commented = applicationTypeGateway ? '# ' : '';
-_%>
+<%_ if (cypressTests) { _%>
+  <%_ const commented = applicationTypeGateway ? '# ' : ''; _%>
   <%- commented %>- task: Bash@3
   <%- commented %>  inputs:
   <%- commented %>    targetType: 'inline'
@@ -111,9 +110,8 @@ _%>
       customCommand: ' run java:jar:prod'
     displayName: 'TESTS: packaging'
 <%_ } _%>
-<%_ if (cypressTests) {
-    const commented = applicationTypeGateway ? '# ' : '';
-_%>
+<%_ if (cypressTests) { _%>
+  <%_ const commented = applicationTypeGateway ? '# ' : ''; _%>
   <%- commented %>- task: Npm@1
   <%- commented %>  inputs:
   <%- commented %>    command: 'custom'
@@ -129,7 +127,7 @@ _%>
   <%- commented %>    command: 'custom'
   <%- commented %>    customCommand: ' run ci:e2e:run'
   <%- commented %>  displayName: 'E2E: Run'
-  <%_ if(cypressTests) { _%>
+  <%_ if (cypressTests) { _%>
   <%- commented %>  env:
   <%- commented %>    CYPRESS_ENABLE_RECORD: <%- ciCdIntegrationsCypressDashboard %>
   <%- commented %>    CYPRESS_PROJECT_ID: $(CYPRESS_PROJECT_ID)

@@ -71,18 +71,20 @@ export const askForServerSideOpts = asPromptingTask(async function (this: Spring
               name: 'Cassandra',
             });
           }
-          opts.push({
-            value: 'couchbase',
-            name: '[BETA] Couchbase',
-          });
-          opts.push({
-            value: NEO4J,
-            name: '[BETA] Neo4j',
-          });
-          opts.push({
-            value: NO_DATABASE,
-            name: 'No database',
-          });
+          opts.push(
+            {
+              value: 'couchbase',
+              name: '[BETA] Couchbase',
+            },
+            {
+              value: NEO4J,
+              name: '[BETA] Neo4j',
+            },
+            {
+              value: NO_DATABASE,
+              name: 'No database',
+            },
+          );
           return opts;
         },
         default: this.jhipsterConfigWithDefaults.databaseType,

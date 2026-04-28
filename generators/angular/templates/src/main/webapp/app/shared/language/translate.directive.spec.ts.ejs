@@ -19,13 +19,14 @@
 <%_ if (clientTestFrameworkVitest) { _%>
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import TranslateDirective from './translate.directive';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [TranslateDirective],
   template: `<div <%- jhiPrefix %>Translate="test"></div>`,
 })

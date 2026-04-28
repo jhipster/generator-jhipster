@@ -61,7 +61,7 @@ export function checkConfigKeys(definedTokensMap: Record<string, TokenType>, use
 function checkForUselessConfigurationKeys(definedTokensMap: Record<string, TokenType>, usedConfigKeys: string[]) {
   const redundantConfigKeys = difference(usedConfigKeys, Object.keys(definedTokensMap));
   if (!isEmpty(redundantConfigKeys)) {
-    throw Error(`Useless configuration keys: [ ${redundantConfigKeys.join(', ')} ]`);
+    throw new Error(`Useless configuration keys: [ ${redundantConfigKeys.join(', ')} ]`);
   }
 }
 
@@ -72,6 +72,6 @@ function checkForMissingConfigurationKeys(definedTokensMap: Record<string, Token
 
   const missingConfigKeys = difference(definedConfigKeyNames, usedConfigKeys);
   if (!isEmpty(missingConfigKeys)) {
-    throw Error(`Missing configuration keys: [ ${missingConfigKeys.join(', ')} ]`);
+    throw new Error(`Missing configuration keys: [ ${missingConfigKeys.join(', ')} ]`);
   }
 }

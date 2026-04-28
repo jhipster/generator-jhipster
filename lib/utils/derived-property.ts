@@ -27,7 +27,7 @@ export const applyDerivedProperty = <const Prop extends string>(
 ) => {
   const camelCaseProp = camelCase(property);
   let actualValue = data[camelCaseProp] ?? defaultValue;
-  actualValue = actualValue === false && possibleValues.includes('no' as any) ? 'no' : actualValue;
+  actualValue = actualValue === false && possibleValues.includes('no') ? 'no' : actualValue;
   const flattenedChoices = flatChoices(possibleValues);
   let isAny = false;
   for (const value of flattenedChoices) {
@@ -41,7 +41,7 @@ export const applyDerivedProperty = <const Prop extends string>(
     data[derivedPropertyName(property, 'any')] ??= isAny;
   }
   if (addNo) {
-    if (flattenedChoices.includes('no' as any)) {
+    if (flattenedChoices.includes('no')) {
       throw new Error('Possible values already include "no"');
     }
     data[derivedPropertyName(property, 'no')] ??= !isAny;
@@ -80,6 +80,7 @@ export const buildMutateDataForProperty = <
     prefix = property as unknown as Prefix,
     suffix = '' as S,
     array,
+    anyCheck,
     valCheck = array ? (data, value) => (data[property] as any)?.includes(value) ?? false : (data, value) => data[property] === value,
   }: {
     prefix?: Prefix;
@@ -88,6 +89,7 @@ export const buildMutateDataForProperty = <
     array?: IsArray;
     /** Set callback argument as any to avoid type mismatch */
     anyData?: IsAny;
+    anyCheck?: (value: any, choices: Values) => boolean;
     /** Callback logic */
     valCheck?: (data: Data, value: any) => boolean;
   } = {},
@@ -96,7 +98,8 @@ export const buildMutateDataForProperty = <
     [K in Values[number] as ReturnType<typeof derivedPropertyName<Prefix, K, S>>]: (data: Data) => boolean;
   }
 > => {
-  return Object.fromEntries(
-    possibleValues.map(value => [derivedPropertyName(prefix, value, suffix), (data: Data) => valCheck(data, value)]),
-  ) as any;
+  return Object.fromEntries([
+    ...possibleValues.map(value => [derivedPropertyName(prefix, value, suffix), (data: Data) => valCheck(data, value)]),
+    ...(anyCheck ? [[derivedPropertyName(prefix, 'any', suffix), (data: Data) => anyCheck(data[property], possibleValues)]] : []),
+  ]);
 };

@@ -28,8 +28,8 @@ import { serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
 const initialState = {
   loading: false,
-  errorMessage: null,
-  successMessage: null,
+  errorMessage: null as string | null,
+  successMessage: null as string | null,
   updateSuccess: false,
   updateFailure: false,
 };
@@ -48,7 +48,7 @@ export const saveAccountSettings: (account: any) => AppThunk = account => async 
     }
 <% } %>
 <% if (enableTranslation && enableI18nRTL) { %>
-    document.querySelector('html').setAttribute('dir', isRTL(account.langKey) ? 'rtl' : 'ltr');
+    document.querySelector('html')!.setAttribute('dir', isRTL(account.langKey) ? 'rtl' : 'ltr');
 <% } %>
   dispatch(getSession());
 };

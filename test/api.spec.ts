@@ -20,14 +20,17 @@ import { describe, expect, it } from 'esmocha';
 
 describe('public api', () => {
   it('generator-jhipster/testing should match snapshot', async () => {
-    expect(Object.keys(await import('generator-jhipster/testing' as string))).toMatchSnapshot();
+    const mod = 'generator-jhipster/testing';
+    expect(Object.keys(await import(mod))).toMatchSnapshot();
   });
 
   it('generator-jhipster/ci should match snapshot', async () => {
-    expect(Object.keys(await import('generator-jhipster/ci' as string))).toMatchSnapshot();
+    const mod = 'generator-jhipster/ci';
+    expect(Object.keys(await import(mod))).toMatchSnapshot();
   });
 
   it('should import nested sub-generators', async () => {
-    expect(await import('generator-jhipster/generators/spring-cloud/generators/kafka' as string)).toBeDefined();
+    const mod = 'generator-jhipster/generators/spring-cloud/generators/kafka';
+    expect(await import(mod)).toBeDefined();
   });
 });

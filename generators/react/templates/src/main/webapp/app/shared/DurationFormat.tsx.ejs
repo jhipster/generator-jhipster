@@ -14,7 +14,7 @@ export const DurationFormat = ({ value, blankOnInvalid, locale }: IDurationForma
   }
 
   if (!locale) {
-    locale = TranslatorContext.context.locale;
+    locale = TranslatorContext.context.locale ?? undefined;
   }
 
   return (

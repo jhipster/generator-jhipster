@@ -19,17 +19,17 @@
 package <%- entityAbsolutePackage %>.service.mapper;
 
 <%_ const getOriginalField = field => field.originalField || field;
-  const uuidMapMethod = restProperties.some(property => property.relatedField?.fieldTypeUUID);
-  const byteMapMethod = restProperties.some(property => property.relatedField?.fieldTypeBytes);
-  const dtoRelationships = restProperties.filter(property => property.relationshipName && !property.otherEntity.embedded);
-  let otherEntitiesFields = otherEntities
-    .filter(otherEntity => dtoRelationships.some(relationship => relationship.otherEntity === otherEntity))
-    .map(otherEntity =>
-      dtoRelationships
-        .filter(relationship => relationship.otherEntity === otherEntity)
-        .map(({ relatedField, collection }) => ({ otherEntity, relatedField, collection })),
-    )
-    .flat();
+    const uuidMapMethod = restProperties.some(property => property.relatedField?.fieldTypeUUID);
+    const byteMapMethod = restProperties.some(property => property.relatedField?.fieldTypeBytes);
+    const dtoRelationships = restProperties.filter(property => property.relationshipName && !property.otherEntity.embedded);
+    let otherEntitiesFields = otherEntities
+      .filter(otherEntity => dtoRelationships.some(relationship => relationship.otherEntity === otherEntity))
+      .map(otherEntity =>
+        dtoRelationships
+          .filter(relationship => relationship.otherEntity === otherEntity)
+          .map(({ relatedField, collection }) => ({ otherEntity, relatedField, collection })),
+      )
+      .flat();
 _%>
 <%_ for (const a of otherEntitiesFields) { _%>
   <%_ a.collection = a.collection || otherEntitiesFields.some(b => a.otherEntity === b.otherEntity && getOriginalField(a.relatedField) === getOriginalField(b.relatedField) && b.collection === true); _%>
@@ -62,25 +62,24 @@ import java.util.UUID;
 @Mapper(componentModel = "spring")
 public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, <%- persistClass %>> {
 <%_ if (!embedded) { _%>
-  <%_ let renMapAnotEnt = false; /*Render Mapping Annotation during Entity to DTO conversion?*/ _%>
+  <%_ let renMapAnotEnt = false; /* Render Mapping Annotation during Entity to DTO conversion? */ _%>
   <%_ for (relationship of dtoRelationships) { _%>
     <%_ renMapAnotEnt = true;
-      let qualifiedByName = relationship.otherEntity.entityInstance + this._.upperFirst(relationship.otherEntityField);
-      qualifiedByName = qualifiedByName + (relationship.collection ? 'Set' : '');
+        let qualifiedByName = relationship.otherEntity.entityInstance + this._.upperFirst(relationship.otherEntityField);
+        qualifiedByName = qualifiedByName + (relationship.collection ? 'Set' : '');
     _%>
     @Mapping(target = "<%- relationship.propertyName %>", source = "<%- relationship.propertyName %>", qualifiedByName="<%- qualifiedByName %>")
   <%_ } _%>
-  <%_ for (const field of fields.filter(field => field.mapstructExpression)) {
-      renMapAnotEnt = true;
-  _%>
+  <%_ for (const field of fields.filter(field => field.mapstructExpression)) { _%>
+    <%_ renMapAnotEnt = true; _%>
     @Mapping( target = "<%- field.propertyName %>", expression = "<%- field.mapstructExpression %>")
   <%_ } _%>
   <%_ if (renMapAnotEnt) { _%>
     <%- dtoClass %> toDto(<%- persistClass %> s);
   <%_ } _%>
 
-  <%_ let renMapAnotDto = false; /*Render Mapping Annotation during DTO to Entity conversion?*/ _%>
-  <%_ if(primaryKey.ids.length > 1) { _%>
+  <%_ let renMapAnotDto = false; /* Render Mapping Annotation during DTO to Entity conversion? */ _%>
+  <%_ if (primaryKey.ids.length > 1) { _%>
     <%_ renMapAnotDto = true; _%>
     <%_ for (const id of primaryKey.ids) { _%>
     @Mapping(target = "id.<%- id.name %>", source = "<%- id.nameDotted %>")
@@ -90,10 +89,9 @@ public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, 
     <%_ if (!relationship.ownerSide) { _%>
       <%_ renMapAnotDto = true; _%>
     @Mapping(target = "<%- relationship.propertyName %>", ignore = true)
-    <%_ }
-    if (relationship.collection && fluentMethods) {
-      renMapAnotDto = true;
-    _%>
+    <%_ } _%>
+    <%_ if (relationship.collection && fluentMethods) { _%>
+      <%_ renMapAnotDto = true; _%>
     @Mapping(target = "remove<%- relationship.relationshipNameCapitalized %>", ignore = true)
     <%_ } _%>
   <%_ } _%>

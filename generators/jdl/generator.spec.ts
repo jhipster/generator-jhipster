@@ -71,6 +71,11 @@ describe(`generator - ${generator}`, () => {
         expect(calls.at(-1)?.arguments).toStrictEqual([['Foo'], expect.any(Object)]);
       });
 
+      it('should pass commandName entities to entities generator', () => {
+        const calls = runResult.getGeneratorMock(MOCKED_ENTITIES).calls;
+        expect(calls.at(-1)?.arguments[1]).toMatchObject({ commandName: 'entities' });
+      });
+
       it('should write expected files', () => {
         expect(runResult.getSnapshot()).toEqual({
           '.jhipster/Foo.json': expect.objectContaining({ contents: expect.any(String), stateCleared: 'modified' }),
@@ -93,6 +98,11 @@ describe(`generator - ${generator}`, () => {
         runResult.assertGeneratorComposedOnce(MOCKED_ENTITIES);
         const calls = runResult.getGeneratorMock(MOCKED_ENTITIES).calls;
         expect(calls.at(-1)?.arguments).toStrictEqual([['Foo'], expect.any(Object)]);
+      });
+
+      it('should pass commandName entities to entities generator', () => {
+        const calls = runResult.getGeneratorMock(MOCKED_ENTITIES).calls;
+        expect(calls.at(-1)?.arguments[1]).toMatchObject({ commandName: 'entities' });
       });
 
       it('should write expected files', () => {

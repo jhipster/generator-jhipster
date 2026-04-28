@@ -24,15 +24,8 @@ import { lowerFirst, upperFirst } from 'lodash-es';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
-import { loadCommandConfigsIntoApplication, loadCommandConfigsKeysIntoTemplatesContext } from '../../../../lib/command/load.ts';
-import { lookupCommandsConfigs } from '../../../../lib/command/lookup-commands-configs.ts';
-import { packageJson } from '../../../../lib/index.ts';
-import { getConfigWithDefaults } from '../../../../lib/jhipster/default-application-options.ts';
 import type { Entity as BaseEntity } from '../../../../lib/jhipster/types/entity.ts';
-import { mutateData, removeFieldsWithNullishValues } from '../../../../lib/utils/index.ts';
-import { loadDerivedConfig } from '../../../base-core/internal/config-def.ts';
-import { isWin32 } from '../../../base-core/support/index.ts';
-import serverCommand from '../../../server/command.ts';
+import { isWin32, mutateData } from '../../../../lib/utils/index.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-boot/generators/data-relational/types.ts';
 import type { Application as SpringBootApplication } from '../../../spring-boot/types.ts';
 import { mutateApplication } from '../../application.ts';
@@ -112,26 +105,6 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
           devDatabaseTypeH2Any: undefined,
         });
       },
-      loadNodeDependencies({ application }) {
-        this.loadNodeDependencies(application.nodeDependencies, {
-          prettier: packageJson.dependencies.prettier,
-          'prettier-plugin-java': packageJson.dependencies['prettier-plugin-java'],
-          'prettier-plugin-packagejson': packageJson.dependencies['prettier-plugin-packagejson'],
-        });
-
-        this.loadNodeDependenciesFromPackageJson(
-          application.nodeDependencies,
-          this.fetchFromInstalledJHipster('common', 'resources', 'package.json'),
-        );
-      },
-      loadDefaults({ application, applicationDefaults }) {
-        let { applyDefaults } = this.options;
-        applyDefaults ??= getConfigWithDefaults as any;
-        applicationDefaults(applyDefaults!(application));
-      },
-      serverConfig({ application }) {
-        loadDerivedConfig(serverCommand.configs, { application });
-      },
       loadApplication({ applicationDefaults, application }) {
         applicationDefaults(
           {
@@ -142,20 +115,18 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
           mutateApplication,
         );
         mutateData(application as unknown as SpringBootApplication, {
-          buildToolUnknown: ({ buildTool }) => !['gradle', 'maven'].includes(buildTool!),
+          buildToolUnknown: ({ buildTool }) => !['gradle', 'maven'].includes(buildTool),
         });
       },
-      /**
-       * Avoid having undefined keys in the application object when rendering ejs templates
-       */
-      async loadApplicationKeys({ application }) {
-        const { applyDefaults = getConfigWithDefaults, commandsConfigs = await lookupCommandsConfigs() } = this.options;
-        loadCommandConfigsIntoApplication({
-          source: applyDefaults(removeFieldsWithNullishValues(this.config.getAll())),
-          application,
-          commandsConfigs,
-        });
-      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.preparing;
+  }
+
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
       prepareApplication({ application }) {
         if (application.microfrontends && application.microfrontends.length > 0) {
           application.microfrontends.forEach(microfrontend => {
@@ -181,8 +152,8 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
-    return this.preparing;
+  get [BaseApplicationGenerator.POST_PREPARING]() {
+    return this.postPreparing;
   }
 
   get configuringEachEntity() {
@@ -456,23 +427,6 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
 
   get default() {
     return this.asDefaultTaskGroup({
-      /**
-       * Avoid having undefined keys in the application object when rendering ejs templates
-       */
-      async loadApplicationKeys({ application }) {
-        if (this.options.commandsConfigs) {
-          // Load keys passed from cli
-          loadCommandConfigsKeysIntoTemplatesContext({
-            templatesContext: application,
-            commandsConfigs: this.options.commandsConfigs,
-          });
-        }
-        // Load keys from main generators
-        loadCommandConfigsKeysIntoTemplatesContext({
-          templatesContext: application,
-          commandsConfigs: await lookupCommandsConfigs(),
-        });
-      },
       task({ application }) {
         const packageJsonFiles = [this.destinationPath('package.json')];
         if (application.clientRootDir) {

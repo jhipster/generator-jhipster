@@ -1,6 +1,18 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`generator - javascript-simple-application:eslint with defaults options should call source snapshot 1`] = `{}`;
+exports[`generator - javascript-simple-application:eslint with defaults options should call source snapshot 1`] = `
+{
+  "mergeClientPackageJson": [
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": undefined,
+      },
+    },
+  ],
+}
+`;
 
 exports[`generator - javascript-simple-application:eslint with defaults options should match files snapshot 1`] = `
 {
@@ -8,10 +20,10 @@ exports[`generator - javascript-simple-application:eslint with defaults options 
     "contents": Any<String>,
   },
   "eslint.config.ts": {
-    "contents": "import globals from 'globals';
+    "contents": "import { defineConfig } from 'eslint/config';
 import prettier from 'eslint-plugin-prettier/recommended';
+import globals from 'globals';
 import tseslint from 'typescript-eslint';
-import { defineConfig } from 'eslint/config';
 // jhipster-needle-eslint-add-import - JHipster will add additional import here
 
 export default defineConfig(
@@ -25,17 +37,6 @@ export default defineConfig(
   // jhipster-needle-eslint-add-config - JHipster will add additional config here
   prettier,
 );
-",
-    "stateCleared": "modified",
-  },
-  "package.json": {
-    "contents": "{
-  "devDependencies": {
-    "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
-    "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
-    "jiti": "JITI_VERSION"
-  }
-}
 ",
     "stateCleared": "modified",
   },

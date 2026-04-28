@@ -24,7 +24,7 @@ import { AppThunk } from 'app/config/store';
 
 const initialState = {
   loading: false,
-  errorMessage: null,
+  errorMessage: null as string | null,
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
   gateway: {
     routes: []
@@ -44,7 +44,7 @@ const initialState = {
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
   tracker: {
-    activities: []
+    activities: [] as { sessionId: string; page: string }[]
   },
 <%_ } _%>
   totalItems: 0
@@ -113,9 +113,9 @@ export const AdministrationSlice = createSlice({
 <%_ if (communicationSpringWebsocket) { _%>
     websocketActivityMessage(state, action) {
       // filter out activities from the same session
-      const uniqueActivities = state.tracker.activities.filter(activity => activity.sessionId !== action.payload.sessionId);
+      const uniqueActivities = state.tracker.activities.filter((activity: { sessionId: string }) => activity.sessionId !== action.payload.sessionId);
       // remove any activities with the page of logout
-      const activities = [...uniqueActivities, action.payload].filter(activity => activity.page !== 'logout');
+      const activities = [...uniqueActivities, action.payload].filter((activity: { page: string }) => activity.page !== 'logout');
       state.tracker = { activities };
     },
 <%_ } _%>
@@ -199,7 +199,7 @@ export const AdministrationSlice = createSlice({
   <%_ } _%>
         ),
         (state, action) => {
-          state.errorMessage = action.error.message;
+          state.errorMessage = action.error.message!;
           state.loading = false;
         },
       );

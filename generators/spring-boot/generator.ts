@@ -51,6 +51,8 @@ import type {
   Application as SpringBootApplication,
   Config as SpringBootConfig,
   Entity as SpringBootEntity,
+  Features,
+  Options,
   Options as SpringBootOptions,
   Source as SpringBootSource,
   SpringBootModule,
@@ -76,6 +78,10 @@ export class SpringBootApplicationGenerator extends BaseApplicationGenerator<
 
 export default class SpringBootGenerator extends SpringBootApplicationGenerator {
   fakeKeytool!: boolean;
+
+  constructor(args?: string[], options?: Options, features?: Features) {
+    super(args, options, { ...features, loadCommand: ['jhipster:client'] });
+  }
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -943,7 +949,7 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
             dependencies: [
               { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-hppc' },
               { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-jsr310' },
-              { groupId: 'io.micrometer', artifactId: 'micrometer-registry-prometheus-simpleclient' },
+              { groupId: 'io.micrometer', artifactId: 'micrometer-registry-prometheus' },
               { groupId: 'org.apache.commons', artifactId: 'commons-lang3' },
               { groupId: 'org.mapstruct', artifactId: 'mapstruct', versionRef: 'mapstruct' },
               { groupId: 'org.mapstruct', artifactId: 'mapstruct-processor', versionRef: 'mapstruct', scope: 'annotationProcessor' },

@@ -17,6 +17,7 @@
  * limitations under the License.
  */
 export * from './needles.ts';
-export * from './os.ts';
+// TODO Backwards compatibility, to be removed in v10
+export * from '../../../lib/utils/os.ts';
 export * from './properties-file.ts';
 export * from './write-files.ts';

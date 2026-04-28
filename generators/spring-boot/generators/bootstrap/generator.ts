@@ -74,7 +74,7 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
 
         mutateData(dockerApplicationEnvironment as any, {
           _JAVA_OPTIONS: '-Xmx512m -Xms256m',
-          SPRING_PROFILES_ACTIVE: 'prod,api-docs',
+          SPRING_PROFILES_ACTIVE: 'prod,api-docs,secret-samples',
           MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED: 'true',
         });
 
@@ -117,13 +117,13 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
 
         if (application.databaseTypeSql) {
           const databaseName = application.prodDatabaseTypeMysql || application.prodDatabaseTypeMariadb ? baseName.toLowerCase() : baseName;
-          const jdbcUrl = getJdbcUrl(application.prodDatabaseType, {
+          const jdbcUrl = getJdbcUrl(application.prodDatabaseType!, {
             hostname: application.prodDatabaseType,
             databaseName,
           });
           if (application.reactive) {
             mutateData(dockerApplicationEnvironment as any, {
-              SPRING_R2DBC_URL: getR2dbcUrl(application.prodDatabaseType, {
+              SPRING_R2DBC_URL: getR2dbcUrl(application.prodDatabaseType!, {
                 hostname: application.prodDatabaseType,
                 databaseName,
               }),

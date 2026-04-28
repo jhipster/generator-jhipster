@@ -33,7 +33,7 @@ java {
     sourceCompatibility=<%- javaVersion %>
     targetCompatibility=<%- javaVersion %>
 }
-assert System.properties["java.specification.version"] == <%- javaCompatibleVersions.map(ver => `"${ver}"`).join(' || '); %>
+assert System.properties["java.specification.version"] == <%- javaCompatibleVersions.map(ver => `"${ver}"`).join(' || ') %>
 
 repositories {
     mavenCentral()

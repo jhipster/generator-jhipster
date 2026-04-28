@@ -397,9 +397,8 @@ export const <%- entityReactName %> = () => {
                         {<%- entityInstance %>.<%- primaryKey.name %>}
                       </Button>
                     </td>
-<%_ for (field of fields) {
-  const { fieldType, fieldName, fieldIsEnum } = field;
-_%>
+<%_ for (field of fields) { _%>
+  <%_ const { fieldType, fieldName, fieldIsEnum } = field; _%>
   <%_ if (fieldName !== primaryKey.name) { _%>
                     <td>
     <%_ if (field.fieldTypeBoolean) { _%>
@@ -413,9 +412,8 @@ _%>
     <%_ } else if (fieldIsEnum && enableTranslation) { _%>
                       <Translate contentKey={`<%- frontendAppName %>.<%- fieldType %>.${<%- entityInstance %>.<%- fieldName %>}`} />
     <%_ } else if (field.fieldTypeBinary) { _%>
-      <%_ // blobFields
-        if (!field.blobContentTypeText) {
-      _%>
+      <%_ // blobFields _%>
+      <%_ if (!field.blobContentTypeText) { _%>
                         {<%- entityInstance %>.<%- fieldName %> ? (
                           <div>
                             {<%- entityInstance %>.<%- fieldName %>ContentType ? (
@@ -440,11 +438,11 @@ _%>
                     </td>
   <%_ } _%>
 <%_ } _%>
-<%_ for (relationship of relationships) {
-  const { otherEntity, relationshipFieldName, relationshipFieldNamePlural } = relationship;
-  const otherEntityPkName = relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.name || 'id';
-  const { otherEntityField } = relationship;
-_%>
+<%_ for (relationship of relationships) { _%>
+  <%_ const { otherEntity, relationshipFieldName, relationshipFieldNamePlural } = relationship;
+      const otherEntityPkName = relationship.otherEntity.primaryKey && relationship.otherEntity.primaryKey.name || 'id';
+      const { otherEntityField } = relationship;
+  _%>
   <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
                     <td>
     <%_ if (relationship.otherEntityUser) { _%>
@@ -473,10 +471,10 @@ _%>
                         <Link to={`/<%- otherEntity.entityPage %>/${<%- `${entityInstance}.${relationshipFieldName}.${otherEntityPkName}}` %>`}>
                           {<%- `${entityInstance}.${relationshipFieldName}.${otherEntityField}` %>}
                         </Link> : ''}
+      <%_ } _%>
     <%_ } _%>
-  <%_ } _%>
                       </td>
-<%_ } _%>
+  <%_ } _%>
 <%_ } _%>
                       <td className="text-end">
                         <div className="btn-group flex-btn-group-container">
@@ -487,7 +485,7 @@ _%>
                           <Button as={Link as any} to={`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}/edit<% if (paginationPagination) { %>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<% } %>`} variant="primary" size="sm" data-cy="entityEditButton">
                             <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                           </Button>
-                          <Button onClick={() => <% if (entityInstance !== 'window' ) { %>window.<% } %>location.href=`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}/delete<% if (paginationPagination) { %>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<% } %>`} variant="danger" size="sm" data-cy="entityDeleteButton">
+                          <Button onClick={() => <% if (entityInstance !== 'window') { %>globalThis.<% } %>location.href=`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}/delete<% if (paginationPagination) { %>?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}<% } %>`} variant="danger" size="sm" data-cy="entityDeleteButton">
                             <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
                           </Button>
 <%_ } _%>
@@ -518,7 +516,7 @@ _%>
               page={paginationState.activePage}
               total={totalItems}
               itemsPerPage={paginationState.itemsPerPage}
-              <% { if (enableTranslation) { %>i18nEnabled<% }} %>
+              <% if (enableTranslation) { %>i18nEnabled<% } %>
             />
           </div>
           <div className="justify-content-center d-flex">

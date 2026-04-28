@@ -3,10 +3,8 @@
 exports[`application mutation test expects mutateApplication to match snapshot 1`] = `
 {
   "clientBundlerName": "esbuild",
-  "clientDistDir": "dist/",
   "clientFrameworkBuiltIn": false,
   "clientI18nDir": "clientSrcDiri18n/",
-  "clientTestDir": "clientRootDirtest/",
   "clientTestFrameworkName": "Client Test Framework",
   "clientThemeAny": true,
   "clientThemeNone": false,
@@ -16,6 +14,6 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "messageHeaderNameParam": "x-basenameapp-params",
   "microfrontend": "clientFrameworkAny",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
-  "withAdminUi": "applicationTypeMicroservice",
+  "withAdminUi": false,
 }
 `;

@@ -3,8 +3,8 @@
   "exclude": ["**/*.spec.*", "**/__*/**", "**/node_modules", "**/.*/"],
   "compilerOptions": {
     /* Language and Environment */
-    "target": "ES2022" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
-    "lib": ["ES2022"] /* Specify a set of bundled library declaration files that describe the target runtime environment. */,
+    "target": "ES2025" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+    "lib": ["ES2025"] /* Specify a set of bundled library declaration files that describe the target runtime environment. */,
     "types": ["node"],
 
     /* Modules */
@@ -20,8 +20,6 @@
     "declaration": true,
 
     /* Interop Constraints */
-    "allowSyntheticDefaultImports": true /* Allow 'import x from y' when a module doesn't have a default export. */,
-    "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
     "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
     "isolatedModules": true /* Ensure that each file can be safely transpiled independently. */,
 

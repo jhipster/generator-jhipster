@@ -49,7 +49,7 @@ export const fromMatrix = <T extends Record<string, any> = ConfigAll>(configMatr
             // @ts-expect-error fix type
             appendTitle(previousName as string, config, value),
             {
-              ...(previousConfig as Record<string, ValueType>),
+              ...previousConfig,
               [config]: value,
             },
           ];

@@ -126,37 +126,30 @@ export default defineConfig(
     },
   },
   prettier,
-  ejs.configs.base,
-  {
-    files: ['**/*.ejs'],
-    plugins: {
-      '@stylistic': stylistic,
+  ejs.configs.customize(
+    {
+      html: 'never',
+      prettierBlacklist: true,
+      stylisticBlacklist: true,
+      experimental: true,
+      allowedGlobals: ['wrapMono', 'generateEntityClientEnumImports', 'getOriginalField'],
     },
-    linterOptions: {
-      reportUnusedDisableDirectives: 'error',
-    },
-    rules: {
-      'ejs-templates/prefer-raw': 'error',
-      'ejs-templates/prefer-slurping-codeonly': 'error',
-      'ejs-templates/experimental-prefer-slurp-multiline': 'error',
-      'ejs-templates/prefer-single-line-tags': ['error', { mode: 'braces' }],
-      'ejs-templates/slurp-newline': 'error',
+    stylistic.configs.customize({
+      jsx: false,
+      semi: true,
+    }),
+    {
+      rules: {
+        'ejs-templates/prefer-output': 'off',
 
-      'prettier/prettier': 'off',
-      ...js.configs.recommended.rules,
-      ...jsRules,
-      'prefer-destructuring': ['error', { array: false, object: true }],
-      '@stylistic/no-multi-spaces': 'error',
-      '@stylistic/comma-spacing': 'error',
-      '@stylistic/object-curly-spacing': ['error', 'always'],
-      '@stylistic/space-infix-ops': 'error',
-      '@stylistic/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: 'never' }],
-      '@stylistic/semi': 'error',
-      '@stylistic/comma-dangle': ['error', 'always-multiline'],
-      '@stylistic/template-curly-spacing': 'error',
-
-      'ejs-templates/indent': 'error',
-      'ejs-templates/format': 'error',
+        ...js.configs.recommended.rules,
+        ...jsRules,
+        'prefer-destructuring': ['error', { array: false, object: true }],
+        '@stylistic/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: 'never' }],
+        '@stylistic/comma-dangle': ['error', 'always-multiline'],
+        '@stylistic/max-statements-per-line': 'off',
+        '@stylistic/no-mixed-operators': 'off',
+      },
     },
-  },
+  ),
 );

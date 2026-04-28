@@ -24,6 +24,7 @@ export * from './logger.ts';
 export * from './lookup.ts';
 export * from './namespace.ts';
 export * from './object.ts';
+export * from './os.ts';
 export * from './path.ts';
 export * from './secret.ts';
 export * from './string.ts';

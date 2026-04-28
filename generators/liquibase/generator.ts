@@ -42,12 +42,12 @@ import type {
 import BaseEntityChangesGenerator from '../base-entity-changes/index.ts';
 import type { BaseChangelog } from '../base-entity-changes/types.ts';
 import { mutateField as commonMutateField } from '../common/entity.ts';
-import type { Entity as CommonEntity, Field as CommonField } from '../common/types.ts';
+import type { Field as CommonField } from '../common/types.ts';
 import { prepareEntity as prepareEntityForServer } from '../java/support/index.ts';
 import type { MavenProperty } from '../java-simple-application/generators/maven/types.ts';
 import { getFKConstraintName, getUXConstraintName, prepareField as prepareServerFieldForTemplates } from '../server/support/index.ts';
 import type { Entity as ServerEntity } from '../server/types.ts';
-import { prepareSqlApplicationProperties } from '../spring-boot/generators/data-relational/support/index.ts';
+import { getJdbcUrl, prepareSqlApplicationProperties } from '../spring-boot/generators/data-relational/support/index.ts';
 import type { Application as SpringDataRelationalApplication } from '../spring-boot/generators/data-relational/types.ts';
 
 import { addEntityFiles, fakeFiles, updateConstraintsFiles, updateEntityFiles, updateMigrateFiles } from './changelog-files.ts';
@@ -78,12 +78,15 @@ const {
   CommonDBTypes: { LONG: TYPE_LONG, INTEGER: TYPE_INTEGER },
 } = fieldTypes;
 
-export default class LiquibaseGenerator<
-  Entity extends LiquibaseEntity = LiquibaseEntity,
-  Application extends LiquibaseApplication<Entity> = LiquibaseApplication<Entity>,
-> extends BaseEntityChangesGenerator<Entity, Application, LiquibaseConfig, LiquibaseOptions, LiquibaseSource> {
+export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
+  LiquibaseEntity,
+  LiquibaseApplication<LiquibaseEntity>,
+  LiquibaseConfig,
+  LiquibaseOptions,
+  LiquibaseSource
+> {
   numberOfRows!: number;
-  databaseChangelogs: BaseChangelog<Entity>[] = [];
+  databaseChangelogs: BaseChangelog<LiquibaseEntity>[] = [];
   injectBuildTool = true;
   injectLogs = true;
 
@@ -92,26 +95,12 @@ export default class LiquibaseGenerator<
       await this.composeWithBlueprints();
     }
 
-    if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrap('java');
-      await this.dependsOnBootstrap('common');
-    }
+    await this.dependsOnBootstrap('java');
+    await this.dependsOnBootstrap('server');
   }
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      preparing({ application }) {
-        this.numberOfRows = application.clientFrameworkReact ? 10 : 30;
-        application.liquibaseDefaultSchemaName = '';
-        // Generate h2 properties at master.xml for blueprints that uses h2 for tests or others purposes.
-        application.liquibaseAddH2Properties ??= application.devDatabaseTypeH2Any;
-      },
-      liquibaseNeo4j({ application }) {
-        // TODO drop hardcoded version
-        if (application.databaseTypeNeo4j && application.javaManagedProperties['liquibase.version'] === '5.0.2') {
-          application.javaDependencies['liquibase-neo4j'] = '5.0.0';
-        }
-      },
       checkDatabaseCompatibility({ application }) {
         if (!application.databaseTypeSql && !application.databaseTypeNeo4j) {
           throw new Error(`Database type ${application.databaseType} is not supported`);
@@ -121,6 +110,48 @@ export default class LiquibaseGenerator<
           // Add sql related derived properties
           // TODO fix types
           prepareSqlApplicationProperties({ application: application as any });
+        }
+      },
+      preparing({ application, applicationDefaults }) {
+        applicationDefaults({
+          liquibaseDefaultSchemaName: '',
+          // Generate h2 properties at master.xml for blueprints that uses h2 for tests or others purposes.
+          liquibaseAddH2Properties: data => data.devDatabaseTypeH2Any,
+          prodLiquibaseUrl: data => {
+            if (data.databaseTypeNeo4j) {
+              return 'jdbc:neo4j:bolt://localhost:7687';
+            }
+            return getJdbcUrl(data.prodDatabaseType, {
+              databaseName: data.prodDatabaseName,
+              hostname: 'localhost',
+              skipExtraOptions: true,
+            });
+          },
+          devLiquibaseUrl: data => {
+            if (!data.devDatabaseTypeH2Any) {
+              return data.prodLiquibaseUrl;
+            }
+            return getJdbcUrl(data.devDatabaseType, {
+              ...(data.devDatabaseTypeH2Memory ?
+                {
+                  protocolSuffix: 'h2:tcp://',
+                  localDirectory: 'localhost:18080/mem:',
+                }
+              : {
+                  // eslint-disable-next-line no-template-curly-in-string
+                  buildDirectory: data.buildToolGradle ? `./${data.temporaryDir}` : '${project.build.directory}/',
+                }),
+              databaseName: application.devDatabaseName,
+              skipExtraOptions: true,
+            });
+          },
+        });
+        this.numberOfRows = application.clientFrameworkReact ? 10 : 30;
+      },
+      liquibaseNeo4j({ application }) {
+        // TODO drop hardcoded version
+        if (application.databaseTypeNeo4j && application.javaManagedProperties['liquibase.version'] === '5.0.2') {
+          application.javaDependencies['liquibase-neo4j'] = '5.0.0';
         }
       },
       addNeedles({ source, application }) {
@@ -200,9 +231,9 @@ export default class LiquibaseGenerator<
               this.jhipsterConfigWithDefaults as BaseApplicationApplication<BaseApplicationEntity>,
             );
             // TODO fix types
-            prepareEntity(entity as unknown as CommonEntity, this);
+            prepareEntity(entity, this);
             // TODO fix types
-            prepareEntityForServer(entity, application as any);
+            prepareEntityForServer(entity, application);
             if (!entity.embedded && !entity.primaryKey) {
               prepareEntityPrimaryKeyForTemplates.call(this, { entity: entity as unknown as EntityAll, application });
             }
@@ -239,7 +270,7 @@ export default class LiquibaseGenerator<
         for (const databaseChangelog of changes) {
           if (databaseChangelog.newEntity) {
             this.databaseChangelogs.push(
-              this.prepareChangelog({
+              this.#prepareChangelog({
                 databaseChangelog: {
                   ...databaseChangelog,
                   changelogData: { ...databaseChangelog.changelogData! },
@@ -249,7 +280,7 @@ export default class LiquibaseGenerator<
             );
           } else if (databaseChangelog.addedFields.length > 0 || databaseChangelog.removedFields.length > 0) {
             this.databaseChangelogs.push(
-              this.prepareChangelog({
+              this.#prepareChangelog({
                 databaseChangelog: {
                   ...databaseChangelog,
                   changelogData: { ...databaseChangelog.changelogData! },
@@ -275,7 +306,7 @@ export default class LiquibaseGenerator<
               databaseChangelog.addedDefaultValueFields.length > 0)
           ) {
             this.databaseChangelogs.push(
-              this.prepareChangelog({
+              this.#prepareChangelog({
                 databaseChangelog: {
                   ...databaseChangelog,
                   changelogData: { ...databaseChangelog.changelogData! },
@@ -364,7 +395,7 @@ export default class LiquibaseGenerator<
           liquibase: liquibaseVersion,
         } = javaDependencies;
 
-        const relationalApplication = application as SpringDataRelationalApplication;
+        const relationalApplication = application as unknown as SpringDataRelationalApplication;
         const databaseTypeProfile = relationalApplication.devDatabaseTypeH2Any ? 'prod' : undefined;
 
         let liquibasePluginHibernateDialect;
@@ -612,8 +643,8 @@ export default class LiquibaseGenerator<
     databaseChangelog,
     source,
   }: {
-    entity: Entity;
-    databaseChangelog: BaseChangelog<Entity>;
+    entity: LiquibaseEntity;
+    databaseChangelog: BaseChangelog<LiquibaseEntity>;
     source: LiquibaseSource;
   }) {
     const fileName = `${databaseChangelog.changelogDate}_added_entity_${entity.entityClass}`;
@@ -669,8 +700,7 @@ export default class LiquibaseGenerator<
     }
 
     if (this._requiresWritingFakeData(changelogData)) {
-      promises.push(this.writeFiles({ sections: fakeFiles, context }));
-      promises.push(this.writeFiles({ sections: updateMigrateFiles, context }));
+      promises.push(this.writeFiles({ sections: fakeFiles, context }), this.writeFiles({ sections: updateMigrateFiles, context }));
     }
 
     if (this._requiresConstraintUpdates(changelogData)) {
@@ -700,8 +730,8 @@ export default class LiquibaseGenerator<
     changelogData,
     source,
   }: {
-    entity: Entity;
-    databaseChangelog: BaseChangelog<Entity>;
+    entity: LiquibaseEntity;
+    databaseChangelog: BaseChangelog<LiquibaseEntity>;
     changelogData: any;
     source: LiquibaseSource;
   }) {
@@ -751,7 +781,13 @@ export default class LiquibaseGenerator<
     return `${leadingWhitespace ? ' ' : ''}${field.liquibaseDefaultValueAttributeName}="${escape(field.liquibaseDefaultValueAttributeValue)}"`;
   }
 
-  prepareChangelog({ databaseChangelog, application }: { databaseChangelog: BaseChangelog<Entity>; application: Application }) {
+  #prepareChangelog({
+    databaseChangelog,
+    application,
+  }: {
+    databaseChangelog: BaseChangelog<LiquibaseEntity>;
+    application: LiquibaseApplication<LiquibaseEntity>;
+  }) {
     if (!databaseChangelog.changelogDate) {
       databaseChangelog.changelogDate = this.nextTimestamp();
     }
@@ -874,7 +910,7 @@ export default class LiquibaseGenerator<
     return databaseChangelog;
   }
 
-  writeChangelog({ databaseChangelog }: { databaseChangelog: BaseChangelog<Entity> }): Promise<any[]> | undefined {
+  writeChangelog({ databaseChangelog }: { databaseChangelog: BaseChangelog<LiquibaseEntity> }): Promise<any[]> | undefined {
     const { writeContext: context, changelogData } = databaseChangelog;
     if (databaseChangelog.newEntity) {
       return this._writeLiquibaseFiles({ context, changelogData });

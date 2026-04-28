@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit, AfterViewInit, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, AfterViewInit, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router<% if (generateUserManagement) { %>, RouterLink<% } %> } from '@angular/router';
 
@@ -29,6 +29,7 @@ import { AccountService } from 'app/core/auth/account.service';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-login',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
 <%_ if (enableTranslation) { _%>
     TranslateDirective,

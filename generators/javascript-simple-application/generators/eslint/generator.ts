@@ -20,6 +20,8 @@ import { createNeedleCallback } from '../../../base-core/support/needles.ts';
 import { JavascriptSimpleApplicationGenerator } from '../../generator.ts';
 
 export default class EslintGenerator extends JavascriptSimpleApplicationGenerator {
+  fromInit?: boolean;
+
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -33,6 +35,8 @@ export default class EslintGenerator extends JavascriptSimpleApplicationGenerato
   get preparing() {
     return this.asPreparingTaskGroup({
       loadNodeDependencies({ application }) {
+        if (!this.fromInit) return;
+
         this.loadNodeDependencies(application.nodeDependencies, {
           jiti: application.jhipsterPackageJson.devDependencies.jiti,
         });
@@ -42,10 +46,10 @@ export default class EslintGenerator extends JavascriptSimpleApplicationGenerato
           this.fetchFromInstalledJHipster('javascript-simple-application', 'resources', 'package.json'),
         );
       },
-      source({ source }) {
+      source({ application, source }) {
         source.addEslintConfig = ({ import: importToAdd, config }) =>
           this.editFile(
-            'eslint.config.ts',
+            `${this.fromInit ? '' : application.clientRootDir}eslint.config.ts`,
             config ? createNeedleCallback({ needle: 'eslint-add-config', contentToAdd: config }) : content => content,
             importToAdd ? createNeedleCallback({ needle: 'eslint-add-import', contentToAdd: importToAdd }) : content => content,
           );
@@ -64,9 +68,12 @@ export default class EslintGenerator extends JavascriptSimpleApplicationGenerato
       async cleanup({ control }) {
         await control.cleanupFiles({
           '9.0.0-alpha.0': [
-            // Try to remove possibles old eslint config files
-            'eslint.config.js',
-            'eslint.config.mjs',
+            [
+              this.fromInit!,
+              // Try to remove possibles old eslint config files
+              'eslint.config.js',
+              'eslint.config.mjs',
+            ],
           ],
         });
       },
@@ -75,6 +82,7 @@ export default class EslintGenerator extends JavascriptSimpleApplicationGenerato
           blocks: [
             {
               templates: ['eslint.config.ts.jhi'],
+              renameTo: data => `${this.fromInit ? '' : data.clientRootDir}eslint.config.ts.jhi`,
             },
           ],
           context: application,
@@ -89,14 +97,19 @@ export default class EslintGenerator extends JavascriptSimpleApplicationGenerato
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      addDependencies({ application }) {
-        this.packageJson.merge({
+      addDependencies({ application, source }) {
+        const packageJson = {
           devDependencies: {
             'eslint-config-prettier': application.nodeDependencies['eslint-config-prettier'],
             'eslint-plugin-prettier': application.nodeDependencies['eslint-plugin-prettier'],
             jiti: application.nodeDependencies.jiti,
           },
-        });
+        };
+        if (this.fromInit) {
+          this.packageJson.merge(packageJson);
+        } else {
+          source.mergeClientPackageJson!(packageJson);
+        }
       },
     });
   }

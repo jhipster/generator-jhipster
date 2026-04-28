@@ -6,6 +6,7 @@ import { TranslatorContext } from 'react-jhipster';
 <%_ } _%>
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { Authority } from 'app/shared/jhipster/constants';
 import PrivateRoute, { hasAnyAuthority } from './private-route';
@@ -37,7 +38,7 @@ describe('private-route component', () => {
   // All tests will go here
   it('Should throw error when falsy children are provided', () => {
     const originalError = console.error;
-    console.error = jest.fn();
+    console.error = vi.fn();
     expect(() =>
       wrapper(<PrivateRoute>{null}</PrivateRoute>, {
         isAuthenticated: true,
@@ -93,7 +94,7 @@ describe('private-route component', () => {
             </PrivateRoute>
           }
         />
-        <Route path="<% if(authenticationTypeOauth2) { %>/sign-in<% } else { %>/login<% } %>" element={<div>Login</div>} />
+        <Route path="<% if (authenticationTypeOauth2) { %>/sign-in<% } else { %>/login<% } %>" element={<div>Login</div>} />
       </Routes>,
       {
         isAuthenticated: false,

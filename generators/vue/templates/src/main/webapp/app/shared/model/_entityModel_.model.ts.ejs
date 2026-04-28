@@ -17,9 +17,9 @@
  limitations under the License.
 -%>
 <%_ const variablesWithTypes = this.generateEntityClientFields(primaryKey, fields.filter(field => !field.id), relationships, dto, customDateType = 'Date', embedded);
-const typeImports = this.generateEntityClientImports(relationships, dto);
-const defaultVariablesValues = this.generateEntityClientFieldDefaultValues(fields.filter(field => !field.id));
-const enumImports = this.generateEntityClientEnumImports(fields.filter(field => !field.id));
+    const typeImports = this.generateEntityClientImports(relationships, dto);
+    const defaultVariablesValues = this.generateEntityClientFieldDefaultValues(fields.filter(field => !field.id));
+    const enumImports = this.generateEntityClientEnumImports(fields.filter(field => !field.id));
 _%>
 <%_ for (const [importedType, importedPath] of typeImports) { _%>
   <%_ if (importedType !== 'I'.concat(entityAngularName)) { _%>

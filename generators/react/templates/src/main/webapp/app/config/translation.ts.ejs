@@ -36,7 +36,7 @@ export const locales = Object.keys(languages).sort();
 export const isRTL = (lang: string): boolean => languages[lang] && languages[lang].rtl;
 
 export const setTextDirection = (lang: string) => {
-  document.querySelector('html').setAttribute('dir', isRTL(lang) ? 'rtl' : 'ltr');
+  document.querySelector('html')!.setAttribute('dir', isRTL(lang) ? 'rtl' : 'ltr');
 };
 <%_ } _%>
 

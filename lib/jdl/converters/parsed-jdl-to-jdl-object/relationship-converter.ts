@@ -53,9 +53,9 @@ export function convertRelationships(
       commentInFrom: formatComment(parsedRelationship.from.documentation),
       commentInTo: formatComment(parsedRelationship.to.documentation),
       options: {
-        global: annotationToOptionConverter.call(undefined, parsedRelationship.options.global),
-        source: annotationToOptionConverter.call(undefined, parsedRelationship.options.source),
-        destination: annotationToOptionConverter.call(undefined, parsedRelationship.options.destination),
+        global: annotationToOptionConverter(parsedRelationship.options.global),
+        source: annotationToOptionConverter(parsedRelationship.options.source),
+        destination: annotationToOptionConverter(parsedRelationship.options.destination),
       },
     };
     if (!relationshipConfiguration.injectedFieldInFrom && !relationshipConfiguration.injectedFieldInTo) {

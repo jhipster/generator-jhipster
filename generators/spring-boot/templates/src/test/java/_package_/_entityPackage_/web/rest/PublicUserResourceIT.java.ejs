@@ -104,7 +104,7 @@ class PublicUserResourceIT {
 
 <%_ const DEFAULT_USER = { firstName: 'john', lastName: 'doe' }; _%>
 <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-    private static final String DEFAULT_<%- field.fieldName.toUpperCase() %> = "<%- DEFAULT_USER [field.fieldName] %>";
+    private static final String DEFAULT_<%- field.fieldName.toUpperCase() %> = "<%- DEFAULT_USER[field.fieldName] %>";
 <%_ } _%>
 
     @Autowired

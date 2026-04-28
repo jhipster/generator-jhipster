@@ -17,9 +17,10 @@
  limitations under the License.
 -%>
 <%_ const entityActionName = entityInstance.toUpperCase();
-const entityActionNamePlural = entityInstancePlural.toUpperCase();
+    const entityActionNamePlural = entityInstancePlural.toUpperCase();
 _%>
 import axios from 'axios';
+import { describe, expect, it, vi } from 'vitest';
 
 import { configureStore } from '@reduxjs/toolkit';
 <%_ if (paginationInfiniteScroll) { _%>
@@ -267,18 +268,18 @@ describe('Entities reducer tests', () => {
     let store;
 
     const resolvedObject = { value: 'whatever' };
-    const getState = jest.fn();
-    const dispatch = jest.fn();
+    const getState = vi.fn();
+    const dispatch = vi.fn();
     const extra = {};
     beforeEach(() => {
       store = configureStore({
         reducer: (state = [], action) => [...state, action],
       });
-      axios.get = jest.fn().mockResolvedValue(resolvedObject);
-      axios.post = jest.fn().mockResolvedValue(resolvedObject);
-      axios.put = jest.fn().mockResolvedValue(resolvedObject);
-      axios.patch = jest.fn().mockResolvedValue(resolvedObject);
-      axios.delete = jest.fn().mockResolvedValue(resolvedObject);
+      axios.get = vi.fn().mockResolvedValue(resolvedObject);
+      axios.post = vi.fn().mockResolvedValue(resolvedObject);
+      axios.put = vi.fn().mockResolvedValue(resolvedObject);
+      axios.patch = vi.fn().mockResolvedValue(resolvedObject);
+      axios.delete = vi.fn().mockResolvedValue(resolvedObject);
     });
 
     it('dispatches FETCH_<%- entityActionName %>_LIST actions', async () => {

@@ -17,8 +17,8 @@
  limitations under the License.
 -%>
 <%_ const tsKeyId = primaryKey.tsSampleValues[0];
-const requiresRestTypeConversion = (!builtInUserManagement && anyFieldIsDateDerived) || (builtInUserManagement && !userManagement.skipClient);
-const entityRestName = requiresRestTypeConversion ? `Rest${entityAngularName}` : `I${entityAngularName}`;
+    const requiresRestTypeConversion = (!builtInUserManagement && anyFieldIsDateDerived) || (builtInUserManagement && !userManagement.skipClient);
+    const entityRestName = requiresRestTypeConversion ? `Rest${entityAngularName}` : `I${entityAngularName}`;
 _%>
 <%_ if (clientTestFrameworkVitest) { _%>
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';

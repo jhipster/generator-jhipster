@@ -171,7 +171,10 @@ __jhiTransformTranslateStringify__('global')
     let jhiTranslateReplacer: ReturnType<typeof createJhiTranslateReplacer>;
 
     beforeEach(() => {
-      jhiTranslateReplacer = createJhiTranslateReplacer(opts => JSON.stringify(opts), { prefixPattern: '>\\s*', suffixPattern: '\\s*<' });
+      jhiTranslateReplacer = createJhiTranslateReplacer(opts => JSON.stringify(opts), {
+        prefixPattern: String.raw`>\s*`,
+        suffixPattern: String.raw`\s*<`,
+      });
     });
 
     it('should replace __jhiTranslateFoo__ function', () => {

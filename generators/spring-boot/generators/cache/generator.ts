@@ -56,11 +56,6 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      cancel() {
-        if (this.jhipsterConfigWithDefaults.cacheProvider === 'no') {
-          this.cancelCancellableTasks();
-        }
-      },
       loadDependabot({ application }) {
         this.loadJavaDependenciesFromGradleCatalog(application.javaDependencies, true);
       },
@@ -270,7 +265,7 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
           for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtInUser)) {
             source.addEntityToCache?.({
               entityAbsoluteClass: entity.entityAbsoluteClass,
-              relationships: entity.relationships as any,
+              relationships: entity.relationships,
             });
           }
         }

@@ -37,7 +37,7 @@ export function getCst(input: string, runtime: JDLRuntime, options?: ParseOption
   const lexResult = runtime.lexer.tokenize(input);
 
   if (lexResult.errors.length > 0) {
-    throw Error(lexResult.errors[0].message);
+    throw new Error(lexResult.errors[0].message);
   }
 
   runtime.parser.input = lexResult.tokens;
@@ -65,7 +65,7 @@ function throwParserError(errors: IRecognitionException[]) {
   const errorMessage = `${parserError.name}: ${parserError.message}`;
   const { token } = parserError;
   const errorMessageLocation = token.tokenType === EOF ? '' : `\n\tat line: ${token.startLine}, column: ${token.startColumn}`;
-  throw Error(`${errorMessage}${errorMessageLocation}`);
+  throw new Error(`${errorMessage}${errorMessageLocation}`);
 }
 
 function throwErrorAboutInvalidToken(parserError: IRecognitionException) {
@@ -73,9 +73,11 @@ function throwErrorAboutInvalidToken(parserError: IRecognitionException) {
   const errorMessageBeginning = `Found an invalid token '${token.image}'`;
   const errorMessageLocation = token.tokenType === EOF ? '' : `, at line: ${token.startLine} and column: ${token.startColumn}`;
   const errorMessageComplement = 'Please make sure your JDL content does not use invalid characters, keywords or options.';
-  throw Error(`${parserError.name}: ${errorMessageBeginning}${errorMessageLocation}.\n\t${errorMessageComplement}`);
+  throw new Error(`${parserError.name}: ${errorMessageBeginning}${errorMessageLocation}.\n\t${errorMessageComplement}`);
 }
 
 function throwSyntaxError(errors: IRecognitionException[]) {
-  throw Error(errors.map(error => `${error.message}\n\tat line: ${error.token.startLine}, column: ${error.token.startColumn}`).join('\n'));
+  throw new Error(
+    errors.map(error => `${error.message}\n\tat line: ${error.token.startLine}, column: ${error.token.startColumn}`).join('\n'),
+  );
 }

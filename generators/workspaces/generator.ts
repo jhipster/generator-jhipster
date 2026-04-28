@@ -72,6 +72,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
     return this.asConfiguringTaskGroup({
       defaults() {
         (this.jhipsterConfig as ProjectNameConfig).baseName ??= 'workspaces';
+        this.jhipsterConfig.defaultCommand ??= 'workspaces';
       },
       async configureUsingFiles() {
         if (!this.generateWorkspaces) return;
@@ -105,7 +106,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
         }
 
         if (typeof this.generateApplications === 'function') {
-          await this.generateApplications.call(this);
+          await this.generateApplications();
         } else {
           for (const appName of this.appsFolders) {
             await this.composeWithJHipster(this.entrypointGenerator ?? this.generateWith, {

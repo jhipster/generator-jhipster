@@ -81,6 +81,10 @@ const command = {
         { value: 'eureka', name: 'JHipster Registry (legacy, uses Eureka, provides Spring Cloud Config support)' },
         { value: 'no', name: 'No service discovery' },
       ],
+      internal: {
+        alias: 'serviceDiscovery',
+        type: String,
+      },
       scope: 'storage',
     },
     jwtSecretKey: {
@@ -185,14 +189,6 @@ const command = {
           gen.jhipsterConfig.defaultPackaging = 'war';
         }
       },
-    },
-    databaseType: {
-      cli: {
-        type: String,
-        hide: true,
-      },
-      choices: ['sql', 'mongodb', 'couchbase', 'cassandra', 'neo4j', 'no'],
-      scope: 'storage',
     },
     databaseMigration: {
       description: 'Database migration',

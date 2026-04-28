@@ -385,7 +385,7 @@ const getPropertyBuilder =
 
     const { generator, data } = context;
     const value = prop in data ? data[prop] : undefined;
-    if (prop in jhipster7deprecatedProperties) {
+    if (prop in jhipster7deprecatedProperties && !(prop in Object)) {
       const { replacement, get, behaviorOnlyReason } = jhipster7deprecatedProperties[prop];
       const fallBackValue = get(context);
       const valueDesc = prop in data ? `Value: ${value}, ` : '';

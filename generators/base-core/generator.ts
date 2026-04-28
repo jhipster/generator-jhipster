@@ -28,7 +28,7 @@ import latestVersion from 'latest-version';
 import { get, kebabCase, merge, mergeWith, set, snakeCase } from 'lodash-es';
 import semver, { lt as semverLessThan } from 'semver';
 import { simpleGit } from 'simple-git';
-import type { PackageJson } from 'type-fest';
+import type { PackageJson, SetRequired } from 'type-fest';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import type Environment from 'yeoman-environment';
 import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-generator';
@@ -42,9 +42,15 @@ import type {
   ParsableCommand,
 } from '../../lib/command/index.ts';
 import { convertConfigToOption, extractArgumentsFromConfigs } from '../../lib/command/index.ts';
+import {
+  getCommandBlueprintLoadingMutations,
+  getCommandDefaultMutations,
+  getCommandDerivedPropertyMutations,
+} from '../../lib/command/mutations.ts';
 import { packageJson } from '../../lib/index.ts';
 import { CRLF, LF, type Logger, hasCrlf, mutateData, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.ts';
 import baseCommand from '../base/command.ts';
+import type BaseGenerator from '../base/generator.ts';
 import { dockerPlaceholderGenerator } from '../docker/utils.ts';
 import { GENERATOR_JHIPSTER } from '../generator-constants.ts';
 import { getGradleLibsVersionsProperties } from '../java-simple-application/generators/gradle/support/dependabot-gradle.ts';
@@ -59,7 +65,7 @@ import type {
   WriteContext,
   WriteFileOptions,
 } from './api.ts';
-import { convertWriteFileSectionsToBlocks, loadConfig, loadConfigDefaults, loadDerivedConfig } from './internal/index.ts';
+import { convertWriteFileSectionsToBlocks, loadConfig } from './internal/index.ts';
 import { createJHipster7Context } from './internal/jhipster7-context.ts';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.ts';
 import { type NeedleInsertion, createNeedleCallback, joinCallbacks } from './support/index.ts';
@@ -100,35 +106,35 @@ export default class CoreGenerator<
   Options extends CoreOptions = CoreOptions,
   Features extends CoreFeatures = CoreFeatures,
 > extends YeomanGenerator<Config, Options, Features> {
-  static asPriority = asPriority;
+  static readonly asPriority = asPriority;
 
-  static INITIALIZING = asPriority(INITIALIZING);
+  static readonly INITIALIZING = asPriority(INITIALIZING);
 
-  static PROMPTING = asPriority(PROMPTING);
+  static readonly PROMPTING = asPriority(PROMPTING);
 
-  static CONFIGURING = asPriority(CONFIGURING);
+  static readonly CONFIGURING = asPriority(CONFIGURING);
 
-  static COMPOSING = asPriority(COMPOSING);
+  static readonly COMPOSING = asPriority(COMPOSING);
 
-  static COMPOSING_COMPONENT = asPriority(COMPOSING_COMPONENT);
+  static readonly COMPOSING_COMPONENT = asPriority(COMPOSING_COMPONENT);
 
-  static LOADING = asPriority(LOADING);
+  static readonly LOADING = asPriority(LOADING);
 
-  static PREPARING = asPriority(PREPARING);
+  static readonly PREPARING = asPriority(PREPARING);
 
-  static POST_PREPARING = asPriority(POST_PREPARING);
+  static readonly POST_PREPARING = asPriority(POST_PREPARING);
 
-  static DEFAULT = asPriority(DEFAULT);
+  static readonly DEFAULT = asPriority(DEFAULT);
 
-  static WRITING = asPriority(WRITING);
+  static readonly WRITING = asPriority(WRITING);
 
-  static POST_WRITING = asPriority(POST_WRITING);
+  static readonly POST_WRITING = asPriority(POST_WRITING);
 
-  static INSTALL = asPriority(INSTALL);
+  static readonly INSTALL = asPriority(INSTALL);
 
-  static POST_INSTALL = asPriority(POST_INSTALL);
+  static readonly POST_INSTALL = asPriority(POST_INSTALL);
 
-  static END = asPriority(END);
+  static readonly END = asPriority(END);
 
   useVersionPlaceholders?: boolean;
   skipChecks?: boolean;
@@ -200,6 +206,12 @@ export default class CoreGenerator<
         this._queueCurrentJHipsterCommandTasks();
       });
     }
+  }
+
+  get #commandsToLoad(): Set<string> {
+    return this.getContextData('jhipster:loadedNamespaces', {
+      factory: () => new Set<string>(),
+    });
   }
 
   get context(): any {
@@ -336,47 +348,78 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       },
     });
 
-    const { loadCommand = [], skipLoadCommand } = this.features;
+    const { loadCommand = [], skipLoadCommand = true } = this.features;
+    if (skipLoadCommand) {
+      return;
+    }
 
-    this.queueTask({
-      queueName: QUEUES.LOADING_QUEUE,
-      taskName: 'loadCurrentCommand',
-      cancellable: true,
-      async method() {
-        if (!skipLoadCommand) {
-          try {
-            const command = await this.#getCurrentJHipsterCommand();
-            if (!command.configs) return;
+    const commandWithConfigs = (command: JHipsterCommandDefinition): command is SetRequired<JHipsterCommandDefinition, 'configs'> =>
+      !!command.configs;
 
-            const context = this.context;
-            loadConfig.call(this, command.configs, { application: context });
-            loadDerivedConfig(command.configs, { application: context });
-          } catch {
-            // Ignore non existing command
-          }
+    const mergeCommandsConfigs = (commands: JHipsterCommandDefinition[]): JHipsterConfigs => {
+      const mergedConfigs: JHipsterConfigs = {};
+      for (const command of commands.filter(commandWithConfigs)) {
+        Object.assign(mergedConfigs, command.configs);
+      }
+      return mergedConfigs;
+    };
 
-          const split = this.options.namespace.split(':');
-          if (split.length === 3 && split[2] === 'bootstrap') {
-            const parentMeta = this.env.getGeneratorMeta(this.options.namespace.replace(':bootstrap', ''));
-            const parentModule: any = await parentMeta?.importModule?.();
-            if (parentModule?.command?.configs) {
-              const context = this.context;
-              if (context) {
-                loadConfig.call(this, parentModule.command.configs, { application: context });
-                loadDerivedConfig(parentModule.command.configs, { application: context });
-              }
+    const collectNamespaceCommands = async (
+      { loadImports }: { loadImports: boolean },
+      ...namespaces: string[]
+    ): Promise<JHipsterCommandDefinition[]> => {
+      const result: JHipsterCommandDefinition[] = [];
+      for (let namespace of namespaces) {
+        namespace = namespace.includes(':') ? namespace : `jhipster:${namespace}`;
+        const commandsToLoad = this.#commandsToLoad;
+        if (!commandsToLoad.has(namespace)) {
+          commandsToLoad.add(namespace);
+          const commandMeta = this.env.getGeneratorMeta(namespace);
+          const commandModule: any = await commandMeta?.importModule?.();
+          const command = commandModule?.command as JHipsterCommandDefinition | undefined;
+          if (command) {
+            result.push(command);
+            if (loadImports) {
+              result.push(...(await collectNamespaceCommands({ loadImports: true }, ...(command.import ?? []))));
             }
           }
         }
+      }
+      return result;
+    };
 
-        if (loadCommand.length > 0) {
-          const context = this.context;
-          for (const commandToLoad of loadCommand) {
-            if (commandToLoad.configs) {
-              loadConfig.call(this, commandToLoad.configs, { application: context });
-              loadDerivedConfig(commandToLoad.configs, { application: context });
+    const directCommands: JHipsterCommandDefinition[] = [];
+    let directCommandsMergedConfigs: JHipsterConfigs = {};
+    this.queueTask({
+      queueName: QUEUES.LOADING_QUEUE,
+      taskName: 'loadingCommand',
+      cancellable: true,
+      async method() {
+        try {
+          const commandsToLoad = this.#commandsToLoad;
+          if (!commandsToLoad.has(this.options.namespace)) {
+            const command = await this.#getCurrentJHipsterCommand();
+            if (command.configs) {
+              commandsToLoad.add(this.options.namespace);
+              directCommands.push(command);
+            } else {
+              directCommands.push(...(await collectNamespaceCommands({ loadImports: false }, this.options.namespace)));
             }
           }
+        } catch {
+          // Ignore non existing command
+        }
+
+        const split = this.options.namespace.split(':');
+        if (split.length === 3 && split[2] === 'bootstrap') {
+          const mainNamespace = this.options.namespace.replace(':bootstrap', '');
+          directCommands.push(...(await collectNamespaceCommands({ loadImports: false }, mainNamespace)));
+        }
+
+        directCommandsMergedConfigs = mergeCommandsConfigs(directCommands);
+
+        if (this.blueprintStorage) {
+          mutateData(this.context, getCommandBlueprintLoadingMutations(this as unknown as BaseGenerator, directCommandsMergedConfigs));
         }
       },
     });
@@ -386,25 +429,37 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       taskName: 'preparingCurrentCommand',
       cancellable: true,
       async method() {
-        if (!skipLoadCommand) {
-          try {
-            const command = await this.#getCurrentJHipsterCommand();
-            if (!command.configs) return;
+        mutateData(
+          this.context,
+          getCommandDefaultMutations(directCommandsMergedConfigs),
+          getCommandDerivedPropertyMutations(directCommandsMergedConfigs),
+        );
 
-            const context = this.context;
-            loadConfigDefaults(command.configs, { context, scopes: ['blueprint', 'storage', 'context'] });
-          } catch {
-            // Ignore non existing command
-          }
-        }
-
-        if (loadCommand.length > 0) {
-          const context = this.context;
-          for (const commandToLoad of loadCommand) {
-            if (commandToLoad.configs) {
-              loadConfigDefaults(commandToLoad.configs, { context, scopes: ['blueprint', 'storage', 'context'] });
-            }
-          }
+        const imports = directCommands.flatMap(command => command.import ?? []);
+        if (imports.length > 0 || loadCommand.length > 0) {
+          // Populate imported commands and loadCommand, to allow the generator itself to load them.
+          this.queueTask({
+            queueName: QUEUES.PREPARING_QUEUE,
+            taskName: 'preparingImportedCommand',
+            cancellable: true,
+            async method() {
+              const importedCommandNamespaces = [
+                ...loadCommand.filter(l => typeof l === 'string'),
+                ...loadCommand.filter(l => typeof l === 'object').flatMap(l => l.import ?? []),
+                ...imports,
+              ];
+              const importedCommands = [
+                ...loadCommand.filter(l => typeof l === 'object'),
+                ...(await collectNamespaceCommands({ loadImports: true }, ...importedCommandNamespaces)),
+              ];
+              const mergedImportedConfigs = mergeCommandsConfigs(importedCommands);
+              mutateData(
+                this.context,
+                getCommandDefaultMutations(mergedImportedConfigs),
+                getCommandDerivedPropertyMutations(mergedImportedConfigs),
+              );
+            },
+          });
         }
       },
     });
@@ -492,6 +547,10 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   }
 
   #parseJHipsterCommand(commandDef: JHipsterCommandDefinition) {
+    // @ts-expect-error removed property.
+    if (!this.skipChecks && commandDef.options) {
+      throw new Error('Options are not supported anymore in JHipster commands, please use configs instead');
+    }
     if (commandDef.arguments) {
       this._parseJHipsterArguments(commandDef.arguments);
     } else if (commandDef.configs) {
@@ -1418,8 +1477,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    */
   createGit(options?: Parameters<typeof simpleGit>[0]) {
     return simpleGit({ baseDir: this.destinationPath(), ...options }).env({
-      ...process.env,
-      LANG: 'en',
+      HOME: process.env.HOME,
+      PATH: process.env.PATH,
+      LANG: 'C',
+      LC_ALL: 'C',
     });
   }
 }

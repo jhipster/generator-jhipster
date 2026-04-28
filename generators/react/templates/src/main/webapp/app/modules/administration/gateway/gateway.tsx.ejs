@@ -34,7 +34,7 @@ export const GatewayPage = () => {
   }, []);
 
   const metadata = instance => {
-    const spans = [];
+    const spans: React.JSX.Element[] = [];
     Object.keys(instance).map((key) => {
       spans.push((
         <span key={key.toString() + 'value'}>

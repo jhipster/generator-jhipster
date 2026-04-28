@@ -19,6 +19,7 @@
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
+import { describe, expect, it, vi } from 'vitest';
 
 <%_ if (authenticationTypeOauth2) { _%>
 import { getLoginUrl } from 'app/shared/util/url-utils';

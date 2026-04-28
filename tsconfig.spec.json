@@ -5,8 +5,7 @@
   "compilerOptions": {
     "noEmit": true,
     "noImplicitAny": true,
-    // Disable for test files that have type-checking variables
-    "noUnusedLocals": false,
-    "noUnusedParameters": false
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   }
 }

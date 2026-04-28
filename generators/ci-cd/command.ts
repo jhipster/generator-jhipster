@@ -216,9 +216,7 @@ const command = {
         type: String,
       },
       scope: 'context',
-      default() {
-        return kebabCase(this.jhipsterConfigWithDefaults.baseName);
-      },
+      default: data => kebabCase(data.baseName),
     },
     buildTool: {
       ...buildTool,

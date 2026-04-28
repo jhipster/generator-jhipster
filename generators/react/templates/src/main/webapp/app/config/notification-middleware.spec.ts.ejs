@@ -19,6 +19,7 @@
 
 import { configureStore } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 <%_ if (enableTranslation) { _%>
 import { TranslatorContext } from 'react-jhipster';
 <%_ } _%>
@@ -28,10 +29,10 @@ import { INVALID_PASSWORD_TYPE } from 'app/shared/jhipster/constants';
 
 import notificationMiddleware from './notification-middleware';
 
-jest.mock('react-toastify', () => ({
+vi.mock('react-toastify', () => ({
   toast: {
-    error: jest.fn(),
-    success: jest.fn(),
+    error: vi.fn(),
+    success: vi.fn(),
   },
 }));
 
@@ -57,7 +58,7 @@ describe('Notification Middleware', () => {
 
   const DEFAULT_ERROR = {
     type: ERROR_TYPE,
-    error: new Error('foo'),
+    error: { message: 'foo' },
   };
   const VALIDATION_ERROR = {
     type: ERROR_TYPE,
@@ -193,13 +194,13 @@ describe('Notification Middleware', () => {
 <%_ } _%>
   beforeEach(() => {
     store = makeStore();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     // ignore console errors
-    jest.spyOn(globalThis.console, 'error').mockImplementation();
+    vi.spyOn(globalThis.console, 'error').mockImplementation();
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('should not trigger a toast message but should return action', () => {

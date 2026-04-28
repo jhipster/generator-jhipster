@@ -44,6 +44,7 @@ export const mutateApplicationLoading = {
 
 export const mutateApplicationPreparing = {
   __override__: false,
+  backendType: 'Java',
   springDataDescription: ({ databaseType, reactive }) => {
     let springDataDatabase: string;
     if (databaseType === 'sql') {

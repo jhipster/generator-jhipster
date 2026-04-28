@@ -34,7 +34,7 @@ export default class JDLOptions {
       throw new Error("Can't add nil option.");
     }
     if (option.getType() === 'UNARY') {
-      addUnaryOption(this.options, option as JDLUnaryOption);
+      addUnaryOption(this.options, option);
     } else {
       addBinaryOption(this.options, option as JDLBinaryOption);
     }

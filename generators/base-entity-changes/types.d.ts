@@ -47,7 +47,7 @@ export type BaseChangelog<E extends BaseApplicationEntity = BaseApplicationEntit
     authenticationType?: string;
     jhiPrefix?: string;
     reactive: boolean | undefined;
-    incrementalChangelog: never;
+    incrementalChangelog: boolean;
     recreateInitialChangelog: boolean;
   };
   newEntity: boolean;

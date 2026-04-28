@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit, signal } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
@@ -38,6 +38,7 @@ const initialAccount: Account = {} as Account;
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-settings',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
 <%_ if (enableTranslation) { _%>
     TranslateDirective,

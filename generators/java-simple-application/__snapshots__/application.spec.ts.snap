@@ -3,6 +3,12 @@
 exports[`application mutation test expects mutateApplication to match snapshot 1`] = `
 {
   "addOpenapiGeneratorPlugin": true,
+  "backendTypeJavaAny": true,
+  "buildTool": "maven",
+  "clientDistDir": "target/classes/static/",
+  "clientRootDir": "",
+  "clientSrcDir": "src/main/webapp/",
+  "clientTestDir": "src/test/javascript/",
   "domains": [],
   "emptyOrReactive": "",
   "entityPackages": [],
@@ -73,6 +79,7 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "srcTestJava": "src/test/java/",
   "srcTestJavascript": "src/test/javascript/",
   "srcTestResources": "src/test/resources/",
+  "temporaryDir": "target/",
   "withGeneratedFlag": false,
   "wrapMono": [Function],
 }

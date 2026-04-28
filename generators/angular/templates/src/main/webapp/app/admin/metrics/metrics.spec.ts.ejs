@@ -27,7 +27,7 @@ import { of } from 'rxjs';
 
 import Metrics from './metrics';
 import { MetricsService } from './metrics.service';
-import { MetricsModel, Thread, ThreadDump } from './metrics.model';
+import { MetricsModel, Thread } from './metrics.model';
 
 describe('Metrics', () => {
   let comp: Metrics;
@@ -63,7 +63,7 @@ describe('Metrics', () => {
           },
         },
       } as unknown as MetricsModel;
-      const threadDump = { threads: [{ threadName: 'thread 1' } as Thread] } as ThreadDump;
+      const threadDump = { threads: [{ threadName: 'thread 1' } as Thread] };
 
       <%- clientTestFramework %>.spyOn(service, 'getMetrics').mockReturnValue(of(metrics));
       <%- clientTestFramework %>.spyOn(service, 'threadDump').mockReturnValue(of(threadDump));

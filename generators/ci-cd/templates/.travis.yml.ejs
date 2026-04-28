@@ -43,7 +43,7 @@ env:
 <%_ if (buildToolMaven) { _%>
     - MAVEN_USER_HOME=$HOME/.m2/repository/
 <%_ } _%>
-<%_ if(cypressTests) { _%>
+<%_ if (cypressTests) { _%>
     - CYPRESS_ENABLE_RECORD: <%- ciCdIntegrationsCypressDashboard %>
 <%_ } _%>
 before_install:
@@ -93,9 +93,8 @@ script:
   - ./gradlew deployHeroku
   <%_ } _%>
 <%_ } _%>
-<%_ if (cypressTests) {
-    const commented = applicationTypeGateway ? '# ' : '';
-_%>
+<%_ if (cypressTests) { _%>
+  <%_ const commented = applicationTypeGateway ? '# ' : ''; _%>
   <%- commented %>- <%- nodePackageManager %> run ci:e2e:package
   <%- commented %>- <%- nodePackageManager %> run ci:e2e:prepare
   <%- commented %>- <%- nodePackageManager %> run ci:e2e:run

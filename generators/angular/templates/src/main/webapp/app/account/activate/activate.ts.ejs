@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { mergeMap } from 'rxjs/operators';
 <%_ if (enableTranslation) { _%>
@@ -28,6 +28,7 @@ import { ActivateService } from './activate.service';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-activate',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
   templateUrl: './activate.html',
 })

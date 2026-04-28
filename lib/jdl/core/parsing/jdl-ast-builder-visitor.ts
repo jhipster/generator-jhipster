@@ -201,7 +201,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
           optionValue = Number.parseInt(valueImage, 10);
           break;
         case 'DECIMAL':
-          optionValue = parseFloat(valueImage);
+          optionValue = Number.parseFloat(valueImage);
           break;
         case 'TRUE':
           optionValue = true;

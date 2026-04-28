@@ -92,6 +92,7 @@ import angular from 'angular-eslint';
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/no-shadow': ['error'],
       '@typescript-eslint/no-unnecessary-condition': 'error',
+      '@typescript-eslint/no-unnecessary-type-arguments': 'off',
       '@typescript-eslint/no-unsafe-argument': 'off',
       '@typescript-eslint/no-unsafe-assignment': 'off',
       '@typescript-eslint/no-unsafe-call': 'off',
@@ -124,7 +125,7 @@ import angular from 'angular-eslint';
     },
   },
   {
-    files: ['**/*.html'],
+    files: ['<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.html'],
     extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
     rules: {
       '@angular-eslint/template/click-events-have-key-events': 'off',

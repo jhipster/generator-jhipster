@@ -82,7 +82,7 @@ function forEach(passedFunction: (optionName: BinaryOptionType) => void): void {
   if (!passedFunction) {
     throw new Error('A function has to be passed to loop over the binary options.');
   }
-  optionNames.forEach(optionName => passedFunction(optionName as BinaryOptionType));
+  optionNames.forEach(optionName => passedFunction(optionName));
 }
 
 function exists(passedOption: JDLOptionName, passedValue?: any) {

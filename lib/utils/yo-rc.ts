@@ -19,7 +19,7 @@ export const mergeYoRcContent = <const OldConfig extends YoRcFileContent, const 
   oldConfig: OldConfig,
   newConfig: NewConfig,
 ): Merge<OldConfig, NewConfig> => {
-  const merged: YoRcFileContent = { [YO_RC_CONFIG_KEY]: {} as YoRcConfigValue };
+  const merged: YoRcFileContent = { [YO_RC_CONFIG_KEY]: {} };
   for (const ns of new Set([...Object.keys(oldConfig), ...Object.keys(newConfig)])) {
     merged[ns] = { ...oldConfig[ns], ...newConfig[ns] };
   }

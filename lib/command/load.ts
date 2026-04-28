@@ -38,6 +38,9 @@ function loadConfigIntoContext<Context>(
   }
 }
 
+/**
+ * @deprecated
+ */
 export function loadCommandConfigsIntoApplication<Context>(
   this: Context,
   options: {
@@ -55,6 +58,9 @@ export function loadCommandConfigsIntoApplication<Context>(
   });
 }
 
+/**
+ * @deprecated
+ */
 export function loadCommandConfigsKeysIntoTemplatesContext<Context>(
   this: Context,
   options: {
