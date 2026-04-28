@@ -40,7 +40,7 @@ export default class InfoGenerator extends BaseCoreGenerator<
   constructor(args?: string[], options?: CoreOptions, features?: CoreFeatures) {
     super(args, options, {
       customInstallTask: isInfoCommand(options!.commandName),
-      customCommitTask: isInfoCommand(options!.commandName),
+      customCommitTask: isInfoCommand(options!.commandName) ? () => {} : undefined,
       ...features,
     });
   }

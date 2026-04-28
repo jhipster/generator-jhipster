@@ -101,7 +101,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
 
   useNpmWrapperInstallTask() {
     this.setFeatures({
-      customInstallTask: async (preferredPm, defaultInstallTask) => {
+      customInstallTask: async (preferredPm: string | undefined, defaultInstallTask: () => Promise<boolean>) => {
         const buildTool = this.jhipsterConfigWithDefaults.buildTool;
         if (
           (preferredPm && preferredPm !== 'npm') ||

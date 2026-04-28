@@ -521,12 +521,12 @@ class JHipsterTest extends YeomanTest {
 
   // @ts-expect-error testing types should be improved
   run<GeneratorType extends YeomanGenerator<GeneratorTestOptions> = YeomanGenerator<GeneratorTestOptions>>(
-    GeneratorOrNamespace: string | GetGeneratorConstructor<GeneratorType>,
+    GeneratorOrNamespace: string | (new (...arguments_: any[]) => YeomanGenerator<GeneratorTestOptions>),
     settings?: RunContextSettings,
     envOptions?: EnvironmentOptions & { createEnv?: any },
   ): JHipsterRunContext {
     return super
-      .run<GeneratorType>(GeneratorOrNamespace, settings, envOptions)
+      .run<GeneratorType>(GeneratorOrNamespace as string | GetGeneratorConstructor<GeneratorType>, settings, envOptions)
       .withOptions({
         jdlDefinition: getDefaultJDLApplicationConfig(),
       } as any)
