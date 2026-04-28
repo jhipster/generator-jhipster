@@ -95,7 +95,7 @@ export class UsersService {
 <%_ for (const field of fields.filter(field => field.fieldTypeTemporal)) { _%>
       <%- field.fieldName %>: restUser.<%- field.fieldName %> ? dayjs(restUser.<%- field.fieldName %>) : undefined,
 <%_ } _%>
-      authorities: restUser.authorities?.map(authority => ({ name: authority as unknown as string })),
+      authorities: restUser.authorities,
     };
   }
 }
@@ -158,7 +158,9 @@ export class UserManagementService extends UsersService {
 
     authorities(): Observable<string[]> {
 <%_ if (generateBuiltInAuthorityEntity) { _%>
-        return this.http.get<string[]>(this.applicationConfigService.getEndpointFor('api/authorities'));
+        return this.http
+          .get<Array<string | { name: string }>>(this.applicationConfigService.getEndpointFor('api/authorities'))
+          .pipe(map(authorities => authorities.map(authority => (typeof authority === 'string' ? authority : authority.name))));
 <%_ } else { _%>
         return of([Authority.ADMIN, Authority.USER]);
 <%_ } _%>
@@ -192,7 +194,7 @@ export class UserManagementService extends UsersService {
     <%- field.fieldName %>: user.<%- field.fieldName %>?.format(DATE_FORMAT) ?? null,
   <%_ } _%>
 <%_ } _%>
-      authorities: user.authorities?.map(authority => authority.name),
+      authorities: user.authorities,
     };
   }
 

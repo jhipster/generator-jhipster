@@ -16,11 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
-import { of, EMPTY, Observable } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { EMPTY, Observable, of } from 'rxjs';
+import { catchError, mergeMap } from 'rxjs/operators';
 
 import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
 import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
@@ -29,34 +29,48 @@ const <%- entityInstance %>Resolve = (route: ActivatedRouteSnapshot): Observable
 <%_ if (builtInUserManagement) { _%>
   const login = route.params['login'];
   if (login) {
-    return inject(<%- entityAngularName %>Service)
-      .find(login)
-      .pipe(
-        mergeMap((<%- entityInstance %>: HttpResponse<I<%- entityAngularName %>>) => {
-          if (<%- entityInstance %>.body) {
-            return of(<%- entityInstance %>.body);
-          } else {
-            inject(Router).navigate(['404']);
-            return EMPTY;
-          }
-        }),
-      );
+    const router = inject(Router);
+    const service = inject(<%- entityAngularName %>Service);
+    return service.find(login).pipe(
+      mergeMap((<%- entityInstance %>) => {
+        if (<%- entityInstance %>.body) {
+          return of(<%- entityInstance %>.body);
+        }
+        router.navigate(['404']);
+        return EMPTY;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 404) {
+          router.navigate(['404']);
+        } else {
+          router.navigate(['error']);
+        }
+        return EMPTY;
+      }),
+    );
   }
 <%_ } else { _%>
   const id = route.params['<%- primaryKey.name %>'];
   if (id) {
-    return inject(<%- entityAngularName %>Service)
-      .find(id)
-      .pipe(
-        mergeMap((<%- entityInstance %>: HttpResponse<I<%- entityAngularName %>>) => {
-          if (<%- entityInstance %>.body) {
-            return of(<%- entityInstance %>.body);
-          } else {
-            inject(Router).navigate(['404']);
-            return EMPTY;
-          }
-        }),
-      );
+    const router = inject(Router);
+    const service = inject(<%- entityAngularName %>Service);
+    return service.find(id).pipe(
+      mergeMap((<%- entityInstance %>) => {
+        if (<%- entityInstance %>.body) {
+          return of(<%- entityInstance %>.body);
+        }
+        router.navigate(['404']);
+        return EMPTY;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 404) {
+          router.navigate(['404']);
+        } else {
+          router.navigate(['error']);
+        }
+        return EMPTY;
+      }),
+    );
   }
 <%_ } _%>
   return of(null);

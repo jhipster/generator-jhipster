@@ -16,8 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const tsKeyId = primaryKey.tsSampleValues[0];
-_%>
 <%_ if (clientTestFrameworkVitest) { _%>
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
@@ -26,6 +24,7 @@ import { HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { sampleWithRequiredData } from '../<%- entityFileName %>.test-samples';
 import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
 
 import { <%- entityAngularName %>DeleteDialog } from './<%- entityFileName %>-delete-dialog';
@@ -49,14 +48,15 @@ describe('<%- entityAngularName %> Management Delete Component', () => {
   describe('confirmDelete', () => {
     it('should call delete service on confirmDelete', () => {
       // GIVEN
+      const login = sampleWithRequiredData.login!;
       <%- clientTestFramework %>.spyOn(service, 'delete').mockReturnValue(of(new HttpResponse({ body: {} })));
       <%- clientTestFramework %>.spyOn(mockActiveModal, 'close');
 
       // WHEN
-      comp.confirmDelete(<%- tsKeyId %>);
+      comp.confirmDelete(login);
 
       // THEN
-      expect(service.delete).toHaveBeenCalledWith(<%- tsKeyId %>);
+      expect(service.delete).toHaveBeenCalledWith(login);
       expect(mockActiveModal.close).toHaveBeenCalledWith('deleted');
     });
 

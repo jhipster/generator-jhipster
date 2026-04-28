@@ -113,7 +113,7 @@ export class <%- entityAngularNamePlural %>Service {
       <%- field.fieldName %>: rest<%- entityAngularName %>.<%- field.fieldName %> ? dayjs(rest<%- entityAngularName %>.<%- field.fieldName %>) : undefined,
   <%_ } _%>
   <%_ if (builtInUserManagement) { _%>
-      authorities: rest<%- entityAngularName %>.authorities?.map(authority => ({ name: authority as unknown as string })),
+      authorities: rest<%- entityAngularName %>.authorities,
   <%_ } _%>
     }
   }
@@ -201,8 +201,8 @@ export class <%- entityAngularName %>Service extends <%- entityAngularNamePlural
     authorities(): Observable<string[]> {
   <%_ if (generateBuiltInAuthorityEntity) { _%>
         return this.http
-          .get<{ name: string }[]>(this.applicationConfigService.getEndpointFor('api/authorities'))
-          .pipe(map(authorities => authorities.map(a => a.name)));
+          .get<Array<string | { name: string }>>(this.applicationConfigService.getEndpointFor('api/authorities'))
+          .pipe(map(authorities => authorities.map(authority => (typeof authority === 'string' ? authority : authority.name))));
   <%_ } else { _%>
         return of([Authority.ADMIN, Authority.USER]);
   <%_ } _%>
@@ -239,7 +239,7 @@ export class <%- entityAngularName %>Service extends <%- entityAngularNamePlural
     <%_ } _%>
   <%_ } _%>
   <%_ if (builtInUserManagement) { _%>
-      authorities: <%- entityInstance %>.authorities?.map(authority => authority.name),
+      authorities: <%- entityInstance %>.authorities,
   <%_ } _%>
     };
   }

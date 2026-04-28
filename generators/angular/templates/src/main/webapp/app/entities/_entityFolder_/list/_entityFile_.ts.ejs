@@ -143,7 +143,7 @@ export class <%- componentName %> implements OnInit {
     subscription: Subscription | null = null;
     readonly <%- entityInstancePlural %> = signal<I<%- entityAngularName %>[]>([]);
 <%_ if (builtInUserManagement) { _%>
-    currentAccount = inject(AccountService).trackCurrentAccount();
+    currentAccount = inject(AccountService).account;
 <%_ } _%>
 
     sortState = sortStateSignal({});
@@ -183,6 +183,17 @@ export class <%- componentName %> implements OnInit {
 <%_ if (!readOnly) { _%>
   protected modalService = inject(NgbModal);
 <%_ } _%>
+<%_ if (primaryKey) { _%>
+    track<%- primaryKey.nameCapitalized %> = (item: I<%- entityAngularName %>): <% if (builtInUserManagement) { %>string<% } else { %><%- primaryKey.tsType %><% } %> =>
+      this.<%- entityInstance %>Service.get<%- entityAngularName %>Identifier(item);
+
+<%_ } _%>
+<%_ if (builtInUserManagement) { _%>
+    setActive(<%- entityInstance %>: I<%- entityAngularName %>, isActivated: boolean): void {
+      this.<%- entityInstance %>Service.update({ ...<%- entityInstance %>, activated: isActivated }).subscribe(() => this.load());
+    }
+
+<%_ } _%>
 
   constructor() {
 <%_ if (!paginationNo) { _%>
@@ -196,15 +207,6 @@ export class <%- componentName %> implements OnInit {
     effect(() => {
       this.<%- entityInstancePlural %>.<% if (paginationInfiniteScroll) { %>update(<%- entityInstancePlural %> => <% } else { %>set(<% } %>this.fillComponentAttributesFromResponseBody([...this.<%- entityInstance %>Service.<%- entityInstancePlural %>()]<% if (paginationInfiniteScroll) { %>, <%- entityInstancePlural %><% } %>));
     });
-<%_ if (primaryKey) { _%>
-    track<%- primaryKey.nameCapitalized %> = (item: I<%- entityAngularName %>): <% if (builtInUserManagement) { %>string<% } else { %><%- primaryKey.tsType %><% } %> => this.<%- entityInstance %>Service.get<%- entityAngularName %>Identifier(item);
-<%_ } _%>
-<%_ if (builtInUserManagement) { _%>
-
-    setActive(<%- entityInstance %>: I<%- entityAngularName %>, isActivated: boolean): void {
-      this.<%- entityInstance %>Service.update({ ...<%- entityInstance %>, activated: isActivated }).subscribe(() => this.load());
-    }
-<%_ } _%>
 <%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
     effect(() => {
       const filterOptions = this.filterOptions();

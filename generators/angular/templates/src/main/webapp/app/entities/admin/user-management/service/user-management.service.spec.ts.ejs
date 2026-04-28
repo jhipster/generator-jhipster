@@ -16,8 +16,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const tsKeyId = primaryKey.tsSampleValues[0];
-_%>
 <%_ if (clientTestFrameworkVitest) { _%>
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
@@ -67,7 +65,7 @@ describe('User Management Service', () => {
             const returnedFromService = { ...requireRestSample };
             const expected = { ...sampleWithRequiredData };
 
-            service.find(<%- tsKeyId %>).subscribe(resp => expectedResult = resp.body);
+            service.find(sampleWithRequiredData.login!).subscribe(resp => expectedResult = resp.body);
 
             const req = httpMock.expectOne({ method: 'GET' });
             req.flush(returnedFromService);
@@ -131,7 +129,7 @@ describe('User Management Service', () => {
         it('should delete a User', () => {
             const expected = true;
 
-            service.delete(<%- tsKeyId %>).subscribe(resp => expectedResult = resp.ok);
+            service.delete(sampleWithRequiredData.login!).subscribe(resp => expectedResult = resp.ok);
 
             const req = httpMock.expectOne({ method: 'DELETE' });
             req.flush({ status: 200 });

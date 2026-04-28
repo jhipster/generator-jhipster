@@ -138,7 +138,7 @@ export class UserManagement implements OnInit {
     subscription: Subscription | null = null;
     readonly users = signal<IUser[]>([]);
     authorities = signal<string[]>([]);
-    currentAccount = inject(AccountService).trackCurrentAccount();
+    currentAccount = inject(AccountService).account;
 
     sortState = sortStateSignal({});
 <%_ if (searchEngineAny) { _%>
