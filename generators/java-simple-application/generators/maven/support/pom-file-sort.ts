@@ -16,8 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { X2jOptions, XmlBuilderOptions } from 'fast-xml-parser';
-import { XMLBuilder, XMLParser } from 'fast-xml-parser';
+import { type X2jOptions, XMLBuilder, XMLParser, type XmlBuilderOptions } from 'fast-xml-parser';
 
 import { formatPomFirstLevel, sortPomProject } from '../internal/pom-sort.ts';
 import { defaultXmlBuildOptions, defaultXmlParserOptions } from '../internal/xml-store.ts';

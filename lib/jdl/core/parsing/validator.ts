@@ -16,8 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { CstElement, CstNode, ICstVisitor, IToken, TokenType } from 'chevrotain';
-import { tokenMatcher as matchesToken } from 'chevrotain';
+import { type CstElement, type CstNode, type ICstVisitor, type IToken, type TokenType, tokenMatcher as matchesToken } from 'chevrotain';
 import { first, flatten, includes } from 'lodash-es';
 
 import {

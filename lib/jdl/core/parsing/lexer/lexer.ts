@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 
-import type { ITokenConfig, TokenType } from 'chevrotain';
-import { Lexer } from 'chevrotain';
+import { type ITokenConfig, Lexer, type TokenType } from 'chevrotain';
 
 import { relationshipOptions } from '../../built-in-options/index.ts';
 

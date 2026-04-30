@@ -20,8 +20,14 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
 import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
-import type { Matrix } from '../../lib/testing/index.ts';
-import { AuthenticationTypeMatrix, defaultHelpers as helpers, extendMatrix, fromMatrix, runResult } from '../../lib/testing/index.ts';
+import {
+  AuthenticationTypeMatrix,
+  type Matrix,
+  defaultHelpers as helpers,
+  extendMatrix,
+  fromMatrix,
+  runResult,
+} from '../../lib/testing/index.ts';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
 
 import Generator from './generator.ts';

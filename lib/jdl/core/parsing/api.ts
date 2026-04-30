@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 
-import type { CstNode, IRecognitionException } from 'chevrotain';
-import { EOF } from 'chevrotain';
+import { type CstNode, EOF, type IRecognitionException } from 'chevrotain';
 
 import type { JDLRuntime } from '../types/runtime.ts';
 

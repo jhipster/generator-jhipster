@@ -8,8 +8,7 @@ import { merge, snakeCase } from 'lodash-es';
 import type { EmptyObject } from 'type-fest';
 import type Environment from 'yeoman-environment';
 import type { EnvironmentOptions } from 'yeoman-environment';
-import { RunContext, YeomanTest, result } from 'yeoman-test';
-import type { RunContextSettings, RunResult } from 'yeoman-test';
+import { RunContext, type RunContextSettings, type RunResult, YeomanTest, result } from 'yeoman-test';
 
 import EnvironmentBuilder, { generatorsLookup, jhipsterGeneratorsLookup } from '../../cli/environment-builder.ts';
 import { buildJHipster, createProgram } from '../../cli/program.ts';

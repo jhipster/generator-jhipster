@@ -26,8 +26,7 @@ import { type MemFsEditor, type MemFsEditorFile, create as createMemFsEditor } f
 import { downloadJdlFile } from '../../cli/download.ts';
 import EnvironmentBuilder from '../../cli/environment-builder.ts';
 import { CLI_NAME } from '../../cli/utils.ts';
-import type { ApplicationWithEntities } from '../../lib/jdl/jdl-importer.ts';
-import { createImporterFromContent } from '../../lib/jdl/jdl-importer.ts';
+import { type ApplicationWithEntities, createImporterFromContent } from '../../lib/jdl/jdl-importer.ts';
 import { mergeYoRcContent } from '../../lib/utils/yo-rc.ts';
 import BaseGenerator from '../base/index.ts';
 import { normalizeBlueprintName } from '../base/internal/blueprint.ts';

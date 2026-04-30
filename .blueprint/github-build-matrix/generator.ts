@@ -2,8 +2,15 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import BaseGenerator from '../../generators/base-core/index.ts';
-import { convertToGitHubMatrix, getGithubOutputFile, getGithubSamplesGroup, setGithubTaskOutput } from '../../lib/ci/index.ts';
-import type { GitHubMatrixGroup, JHipsterGitHubInputMatrix, WorkflowSamples } from '../../lib/ci/index.ts';
+import {
+  type GitHubMatrixGroup,
+  type JHipsterGitHubInputMatrix,
+  type WorkflowSamples,
+  convertToGitHubMatrix,
+  getGithubOutputFile,
+  getGithubSamplesGroup,
+  setGithubTaskOutput,
+} from '../../lib/ci/index.ts';
 import { testIntegrationFolder } from '../constants.ts';
 
 import type { eventNameChoices, workflowChoices } from './command.ts';

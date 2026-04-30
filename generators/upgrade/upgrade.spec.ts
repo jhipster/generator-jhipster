@@ -1,6 +1,5 @@
 import { before, describe, expect, it } from 'esmocha';
-import { mkdirSync, writeFileSync } from 'node:fs';
-import type { PathOrFileDescriptor } from 'node:fs';
+import { type PathOrFileDescriptor, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
 import { execaCommandSync } from 'execa';

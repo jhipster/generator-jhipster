@@ -16,8 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { CstNode, TokenType } from 'chevrotain';
-import { CstParser } from 'chevrotain';
+import { type CstNode, CstParser, type TokenType } from 'chevrotain';
 
 import { NAME } from './lexer/shared-tokens.ts';
 

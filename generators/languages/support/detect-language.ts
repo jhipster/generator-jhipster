@@ -19,8 +19,7 @@
 
 import osLocale from 'os-locale';
 
-import type { Language } from './languages.ts';
-import { findLanguageForTag, supportedLanguages } from './languages.ts';
+import { type Language, findLanguageForTag, supportedLanguages } from './languages.ts';
 
 const detectLanguage = (languages: readonly Language[] = supportedLanguages) => {
   const locale = osLocale();

@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 
-import type { AbstractIssueArgs } from './abstract-issue.ts';
-import AbstractIssue from './abstract-issue.ts';
+import AbstractIssue, { type AbstractIssueArgs } from './abstract-issue.ts';
 
 type EntityIssueArgs = AbstractIssueArgs & { enumName: string };
 

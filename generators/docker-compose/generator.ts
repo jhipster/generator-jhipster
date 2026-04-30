@@ -27,8 +27,7 @@ import { monitoringTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index
 import { createBase64Secret, stringHashCode } from '../../lib/utils/index.ts';
 import { normalizePath as normalize } from '../../lib/utils/path.ts';
 import { createFaker } from '../base-application/support/index.ts';
-import type { Deployment as BaseDeployment, WorkspacesApplication } from '../base-workspaces/index.ts';
-import BaseWorkspacesGenerator from '../base-workspaces/index.ts';
+import BaseWorkspacesGenerator, { type Deployment as BaseDeployment, type WorkspacesApplication } from '../base-workspaces/index.ts';
 import { checkDocker } from '../base-workspaces/internal/docker-base.ts';
 import {
   askForClustersModeWorkspace,

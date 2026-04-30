@@ -1,7 +1,13 @@
 import { before, describe, expect, it } from 'esmocha';
 
-import type { DelayedMutation, MutateDataParam } from './object.ts';
-import { createDelayedMutationContext, finalizeMutations, mutateData, removeFieldsWithNullishValues } from './object.ts';
+import {
+  type DelayedMutation,
+  type MutateDataParam,
+  createDelayedMutationContext,
+  finalizeMutations,
+  mutateData,
+  removeFieldsWithNullishValues,
+} from './object.ts';
 
 // __override__ field should be accepted.
 ({

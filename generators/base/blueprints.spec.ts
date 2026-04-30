@@ -1,6 +1,5 @@
 import { before, describe, expect, it } from 'esmocha';
-import type { Mock } from 'node:test';
-import { mock } from 'node:test';
+import { type Mock, mock } from 'node:test';
 
 import { packageJson } from '../../lib/index.ts';
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
