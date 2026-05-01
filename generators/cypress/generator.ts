@@ -277,9 +277,9 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
             'cypress-audit': application.nodeDependencies['cypress-audit'],
           },
           scripts: {
-            'cypress:audits': 'cypress open --e2e --config-file cypress-audits.config.js',
-            'e2e:cypress:audits:headless': 'npm run e2e:cypress -- --config-file cypress-audits.config.js',
-            'e2e:cypress:audits': 'cypress run --e2e --browser chrome --config-file cypress-audits.config.js',
+            'cypress:audits': 'cypress open --e2e --config-file cypress-audits.config.ts',
+            'e2e:cypress:audits:headless': 'npm run e2e:cypress -- --config-file cypress-audits.config.ts',
+            'e2e:cypress:audits': 'cypress run --e2e --browser chrome --config-file cypress-audits.config.ts',
           },
         });
       },
