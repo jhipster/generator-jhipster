@@ -8425,7 +8425,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
         "Entity[Simple]",
         "Entity[Microservice]",
         "Entity[EntityWithCustomId]",
-        "Entity[UserManagement]",
       ],
       "source": "TaskParameter[source]",
     },
