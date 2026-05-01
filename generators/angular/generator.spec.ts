@@ -214,7 +214,7 @@ describe(`generator - ${clientFramework}`, () => {
 
   describe('builtIn UserManagementEntity', () => {
     before(async () => {
-      await dryRunHelpers
+      await helpers
         .runJHipster(generator)
         .withJHipsterConfig(
           {

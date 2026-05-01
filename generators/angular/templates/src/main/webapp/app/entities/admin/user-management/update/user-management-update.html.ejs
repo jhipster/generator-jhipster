@@ -142,7 +142,6 @@ _%>
                 </div>
             <% if (field.autoGenerate) { %>}<% } %>
 <%_ } _%>
-<%_ if (builtInUserManagement) { _%>
       <div class="mb-3">
         <label class="form-check">
           <input
@@ -155,7 +154,7 @@ _%>
           <span>__jhiTranslateTag__('userManagement.activated')</span>
         </label>
       </div>
-  <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     @if (languages && languages.length > 0) {
       <div class="mb-3">
         <label class="form-label" for="langKey">__jhiTranslateTag__('userManagement.langKey')</label>
@@ -166,7 +165,7 @@ _%>
         </select>
       </div>
     }
-  <%_ } _%>
+<%_ } _%>
       <div class="mb-3">
         <label class="form-label" for="field_authority">__jhiTranslateTag__('userManagement.profiles')</label>
         <select class="form-control" id="field_authority" multiple name="authority" formControlName="authorities">
@@ -175,7 +174,6 @@ _%>
         }
         </select>
       </div>
-<%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => rel.otherEntity.primaryKey)) {
   const { otherEntity, relationshipName, propertyName, otherEntityField, relationshipRequired, otherEntityName, relationshipFieldName, relationshipFieldNamePlural } = relationship;
 _%>

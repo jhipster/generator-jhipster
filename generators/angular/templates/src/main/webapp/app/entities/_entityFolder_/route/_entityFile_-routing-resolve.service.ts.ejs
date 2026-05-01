@@ -26,30 +26,6 @@ import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
 import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
 
 const <%- entityInstance %>Resolve = (route: ActivatedRouteSnapshot): Observable<null | I<%- entityAngularName %>> => {
-<%_ if (builtInUserManagement) { _%>
-  const login = route.params['login'];
-  if (login) {
-    const router = inject(Router);
-    const service = inject(<%- entityAngularName %>Service);
-    return service.find(login).pipe(
-      mergeMap((<%- entityInstance %>) => {
-        if (<%- entityInstance %>.body) {
-          return of(<%- entityInstance %>.body);
-        }
-        router.navigate(['404']);
-        return EMPTY;
-      }),
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 404) {
-          router.navigate(['404']);
-        } else {
-          router.navigate(['error']);
-        }
-        return EMPTY;
-      }),
-    );
-  }
-<%_ } else { _%>
   const id = route.params['<%- primaryKey.name %>'];
   if (id) {
     const router = inject(Router);
@@ -72,7 +48,6 @@ const <%- entityInstance %>Resolve = (route: ActivatedRouteSnapshot): Observable
       }),
     );
   }
-<%_ } _%>
   return of(null);
 };
 
