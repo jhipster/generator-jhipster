@@ -33,7 +33,7 @@ const baseConfig: Config = {
 
     // Configure unused-imports rule
     'no-unused-vars': 'off',
-    'import-x/no-duplicates': 'error',
+    'import-x/no-duplicates': ['error', { 'prefer-inline': true }],
     'import-x/no-useless-path-segments': 'error',
     'import-x/order': [
       'error',

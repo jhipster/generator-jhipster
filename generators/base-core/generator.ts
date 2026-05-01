@@ -33,15 +33,16 @@ import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import type Environment from 'yeoman-environment';
 import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-generator';
 
-import type {
-  ExportGeneratorOptionsFromCommand,
-  ExportStoragePropertiesFromCommand,
-  JHipsterArguments,
-  JHipsterCommandDefinition,
-  JHipsterConfigs,
-  ParsableCommand,
+import {
+  type ExportGeneratorOptionsFromCommand,
+  type ExportStoragePropertiesFromCommand,
+  type JHipsterArguments,
+  type JHipsterCommandDefinition,
+  type JHipsterConfigs,
+  type ParsableCommand,
+  convertConfigToOption,
+  extractArgumentsFromConfigs,
 } from '../../lib/command/index.ts';
-import { convertConfigToOption, extractArgumentsFromConfigs } from '../../lib/command/index.ts';
 import {
   getCommandBlueprintLoadingMutations,
   getCommandDefaultMutations,
