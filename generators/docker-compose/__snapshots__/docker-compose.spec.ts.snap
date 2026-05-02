@@ -106,10 +106,8 @@ jhipster:
       - 8080:8080
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8080/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -147,10 +145,8 @@ jhipster:
       - JHIPSTER_SLEEP=20
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -297,10 +293,8 @@ jhipster:
       - 8080:8080
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8080/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -335,10 +329,8 @@ jhipster:
       - JHIPSTER_SLEEP=10
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -553,10 +545,8 @@ jhipster:
       - 8080:8080
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8080/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -593,10 +583,8 @@ jhipster:
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -634,10 +622,8 @@ jhipster:
       - SPRING_ELASTICSEARCH_URIS=http://mspsql-elasticsearch:9200
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -685,10 +671,8 @@ jhipster:
       - SPRING_MONGODB_URI=mongodb://msmongodb-mongodb:27017/msmongodb
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -724,10 +708,8 @@ jhipster:
       - SPRING_LIQUIBASE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb?useLegacyDatetimeCode=false
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -936,10 +918,8 @@ jhipster:
       - 8080:8080
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8080/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -981,10 +961,8 @@ jhipster:
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -1027,10 +1005,8 @@ jhipster:
       - SPRING_ELASTICSEARCH_URIS=http://mspsql-elasticsearch:9200
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -1087,10 +1063,8 @@ jhipster:
       - JHIPSTER_SLEEP=20
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -1130,10 +1104,8 @@ jhipster:
       - SPRING_LIQUIBASE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb?useLegacyDatetimeCode=false
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -1367,10 +1339,8 @@ jhipster:
       - 8080:8080
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8080/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -1407,10 +1377,8 @@ jhipster:
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -1448,10 +1416,8 @@ jhipster:
       - SPRING_ELASTICSEARCH_URIS=http://mspsql-elasticsearch:9200
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -1499,10 +1465,8 @@ jhipster:
       - SPRING_MONGODB_URI=mongodb://msmongodb-mongodb:27017/msmongodb
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -1701,10 +1665,8 @@ jhipster:
       - 8080:8080
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8080/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -1741,10 +1703,8 @@ jhipster:
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -1782,10 +1742,8 @@ jhipster:
       - SPRING_ELASTICSEARCH_URIS=http://mspsql-elasticsearch:9200
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -1837,10 +1795,8 @@ jhipster:
       - JHIPSTER_SLEEP=20
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -1875,10 +1831,8 @@ jhipster:
       - SPRING_LIQUIBASE_URL=jdbc:mariadb://msmariadb-mariadb:3306/msmariadb?useLegacyDatetimeCode=false
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -2028,10 +1982,8 @@ jhipster:
       - 8080:8080
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8080/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -2068,10 +2020,8 @@ jhipster:
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -2218,10 +2168,8 @@ jhipster:
       - 8080:8080
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8080/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -2258,10 +2206,8 @@ jhipster:
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -2433,10 +2379,8 @@ management:
       - 8080:8080
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8080/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -2473,10 +2417,8 @@ management:
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -2712,10 +2654,8 @@ jhipster:
       - 8080:8080
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8080/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -2752,10 +2692,8 @@ jhipster:
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -2870,10 +2808,8 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
       - 8080:8080
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8080/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -3002,10 +2938,8 @@ jhipster:
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -3134,10 +3068,8 @@ jhipster:
       - 8080:8080
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8080/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -3264,10 +3196,8 @@ jhipster:
       - SPRING_LIQUIBASE_URL=jdbc:mysql://msmysql-mysql:3306/msmysql?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8081/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8081; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
@@ -3378,10 +3308,8 @@ Launch all your infrastructure by running: \`docker compose up -d\`.
       - 8080:8080
     healthcheck:
       test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8080/management/health
+        - CMD-SHELL
+        - "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8080; printf \\"GET /management/health HTTP/1.0\\\\r\\\\nHost: localhost\\\\r\\\\n\\\\r\\\\n\\" >&3; grep -q \\"\\\\\\"status\\\\\\":\\\\\\"UP\\\\\\"\\" <&3'"
       interval: 5s
       timeout: 5s
       retries: 40
