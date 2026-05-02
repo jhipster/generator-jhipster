@@ -63,7 +63,7 @@ public class SqlTestContainersSpringContextCustomizerFactory implements ContextC
                     log.info("Warming up the sql database");
                     if (null == prodTestcontainer) {
                         try {
-                            Class<? extends SqlTestContainer> containerClass = (Class<? extends SqlTestContainer>) Class.forName(this.getClass().getPackageName() + ".DatabaseTestcontainer");
+                            Class<? extends SqlTestContainer> containerClass = Class.forName(this.getClass().getPackageName() + ".DatabaseTestcontainer").asSubclass(SqlTestContainer.class);
                             prodTestcontainer = beanFactory.createBean(containerClass);
                             beanFactory.registerSingleton(containerClass.getName(), prodTestcontainer);
                             /**
