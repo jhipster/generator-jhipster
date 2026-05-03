@@ -134,7 +134,10 @@ function setRelationshipsToEntity(relatedRelationships: RelationshipsRelatedToEn
     if (splitField.otherEntityField) {
       convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
     }
-    relationshipToConvert.injectedFieldInTo = relationshipToConvert.injectedFieldInTo ?? lowerFirst(relationshipToConvert.from);
+    // Do NOT mutate the shared JDL relationship object here. The injectedFieldInTo field is used
+    // by getRelatedRelationships() to decide whether to include a relationship in the 'to' list.
+    // Mutating it would cause subsequent entity processing to incorrectly include this relationship
+    // again, resulting in duplicate properties on the source entity.
 
     setOptionsForRelationshipDestinationSide(relationshipToConvert, convertedRelationship);
     const convertedEntityRelationships = convertedRelationships.get(entityName)!;
