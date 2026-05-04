@@ -192,7 +192,10 @@ export default class extends GenerateBlueprintBaseGenerator {
       prepare({ application }) {
         const { cli, cliName, baseName } = application;
         application.githubRepository = this.jhipsterConfig.githubRepository ?? `jhipster/generator-jhipster-${baseName}`;
-        application.blueprintMjsExtension = application.ts ? 'ts' : application.js ? 'js' : 'mjs';
+        application.blueprintMjsExtension =
+          application.ts ? 'ts'
+          : application.js ? 'js'
+          : 'mjs';
         if (cli) {
           application.cliName = cliName ?? `jhipster-${baseName}`;
         }
@@ -339,9 +342,8 @@ export default class extends GenerateBlueprintBaseGenerator {
         const { cli, cliName } = application;
         if (!cli || !cliName || this.jhipsterConfig[LOCAL_BLUEPRINT_OPTION]) return;
         const isTypeScript = Boolean(application.ts);
-        const publishedFiles = isTypeScript
-          ? defaultPublishedFiles.map(f => f.replace('.?(c|m)js', '.?(c|m)(j|t)s'))
-          : defaultPublishedFiles;
+        const publishedFiles =
+          isTypeScript ? defaultPublishedFiles.map(f => f.replace('.?(c|m)js', '.?(c|m)(j|t)s')) : defaultPublishedFiles;
         this.packageJson.merge({
           bin: {
             [cliName]: 'cli/cli.cjs',
