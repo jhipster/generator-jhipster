@@ -143,7 +143,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
               sections: {
                 clientI18nFiles: [
                   {
-                    condition: ctx => ctx.clientFrameworkVue && ctx.enableTranslation && !ctx.microfrontend,
+                    condition: ctx => ctx.enableTranslation && ctx.clientBundlerVite,
                     path: `${CLIENT_MAIN_SRC_DIR}/i18n/`,
                     renameTo: context => `${context.clientI18nDir}${context.lang}/${context.lang}.js`,
                     templates: ['index.js'],
