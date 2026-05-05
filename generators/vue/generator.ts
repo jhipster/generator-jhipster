@@ -354,7 +354,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
         }
       },
       addMicrofrontendDependencies({ application, source }) {
-        const { clientBundlerVite, clientBundlerWebpack, enableTranslation, microfrontend } = application;
+        const { applicationTypeGateway, clientBundlerVite, clientBundlerWebpack, enableTranslation, microfrontend } = application;
         if (!microfrontend) return;
         if (clientBundlerVite) {
           source.mergeClientPackageJson!({
@@ -363,9 +363,15 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
             },
           });
         } else if (clientBundlerWebpack) {
+          if (applicationTypeGateway) {
+            source.mergeClientPackageJson!({
+              devDependencies: {
+                '@module-federation/enhanced': null,
+              },
+            });
+          }
           source.mergeClientPackageJson!({
             devDependencies: {
-              '@module-federation/enhanced': null,
               'browser-sync-webpack-plugin': null,
               'copy-webpack-plugin': null,
               'css-loader': null,
