@@ -186,13 +186,6 @@ or joined the [JHipster team](https://www.jhipster.tech/team/).
 
 AI coding assistants (GitHub Copilot, Claude, Cursor, and similar tools) are welcome, but their use comes with responsibilities. See [`AGENTS.md`](AGENTS.md) for the instructions these tools should follow when working on this codebase.
 
-When an AI assistant contributes materially to a change (beyond trivial autocomplete):
-
-- **Disclose it** in the pull request description (a short note is enough, e.g. _"Scaffolding and initial tests were generated with GitHub Copilot, then reviewed and adjusted manually."_).
-- **Credit it** in the commit message using a `Co-authored-by:` trailer, for example:
-  ```
-  Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
-  ```
 - **You remain responsible for the change.** Before submitting, you must read, understand, and test the code — including anything the assistant produced. Do not submit AI output you have not verified.
 - **The normal bar still applies.** Tests, lint, type-check, and all other Coding Rules above must pass. AI assistance does not lower the review bar; if anything, reviewers will look more carefully at AI-generated diffs.
 
