@@ -64,7 +64,7 @@
     {
       "name": "stack-vue-no-db",
       "jdl-samples": "stack-vue-no-db",
-      "skip-frontend-tests": "backend tests only",
+      "skip-frontend-tests": "true",
       "generatorOptions": {
         "workspaces": true,
         "monorepository": true
