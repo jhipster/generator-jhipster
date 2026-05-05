@@ -1,6 +1,6 @@
 import { type ComputedRef, inject, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import <% if (microfrontend) { %>* as <% } %>SockJS from 'sockjs-client';
+import <% if (clientBundlerWebpack) { %>* as <% } %>SockJS from 'sockjs-client';
 import { map } from 'rxjs';
 import { RxStomp, RxStompState } from '@stomp/rx-stomp';
 import Cookies from 'js-cookie';
