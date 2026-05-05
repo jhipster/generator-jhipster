@@ -126,7 +126,7 @@ export default class VueGenerator extends ClientApplicationGenerator {
         if (clientBundlerWebpack) {
           javaNodeBuildPaths?.push('webpack/');
         } else if (clientBundlerVite) {
-          javaNodeBuildPaths?.push('vite.config.mts');
+          javaNodeBuildPaths?.push('vite.config.ts');
         }
       },
       prepareForTemplates({ application, source }) {
