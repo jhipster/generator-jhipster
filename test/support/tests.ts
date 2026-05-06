@@ -1,8 +1,6 @@
 import { before, describe, esmocha, expect, it } from 'esmocha';
 import { existsSync } from 'node:fs';
 
-import { buildJHipster } from '../../cli/index.ts';
-import type JHipsterCommand from '../../cli/jhipster-command.ts';
 import { ENTITY_PRIORITY_NAMES, PRIORITY_NAMES, PRIORITY_NAMES_LIST } from '../../generators/base-application/priorities.ts';
 import type CoreGenerator from '../../generators/base-core/index.ts';
 import { CONTEXT_DATA_APPLICATION_KEY } from '../../generators/base-simple-application/support/constants.ts';
@@ -25,16 +23,7 @@ const {
 } = PRIORITY_NAMES;
 
 export const getCommandHelpOutput = async (command?: string) => {
-  await helpers.prepareTemporaryDir();
-  const program = await buildJHipster();
-  const cmd = command ? (program.commands.find(cmd => cmd.name() === command) as JHipsterCommand) : program;
-  if (!cmd) {
-    throw new Error(`Command ${command} not found.`);
-  }
-  if (command) {
-    await cmd._lazyBuildCommandCallBack!();
-  }
-  return cmd.configureOutput({ getOutHelpWidth: () => 1000, getErrHelpWidth: () => 1000 }).helpInformation();
+  return helpers.getCommandHelpOutput(command);
 };
 
 export const testOptions = (data: { generatorPath: string; customOptions: Record<string, unknown> }) => {
