@@ -53,9 +53,9 @@ final class Neo4jMigrations {
             ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
             Resource[] resources;
             try {
-              resources = resourcePatternResolver.getResources("classpath:config/neo4j/migrations/user__*.json");
+                resources = resourcePatternResolver.getResources("classpath:config/neo4j/migrations/user__*.json");
             } catch (IOException e) {
-              throw new MigrationsException("Could not load user definition resources.", e);
+                throw new MigrationsException("Could not load user definition resources.", e);
             }
 
             JavaType type = om.getTypeFactory().
