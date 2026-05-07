@@ -51,7 +51,7 @@ export default class extends BaseGenerator {
                 disabled: !springBootDefaults,
               },
               'generate-blueprint': {
-                disabled: !generateBlueprint,
+                disabled: !generateBlueprint && !devBlueprint,
               },
               graalvm: {
                 disabled: !graalvm,

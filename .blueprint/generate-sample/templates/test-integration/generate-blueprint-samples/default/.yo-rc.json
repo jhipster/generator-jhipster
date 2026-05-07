@@ -3,6 +3,7 @@
     "additionalSubGenerators": "",
     "baseName": "foo",
     "cli": true,
+    "defaultCommand": "generate-blueprint",
     "localBlueprint": false,
     "generators": {
       "client": {
