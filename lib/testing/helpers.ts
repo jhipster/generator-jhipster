@@ -413,7 +413,7 @@ plugins {
 
   private withContextData(key: string, sharedData: any): this {
     this.onEnvironment(env => {
-      const contextMap: Map<string, any> = (env as Environment).getContextMap(this.targetDirectory!);
+      const contextMap: Map<string, any> = env.getContextMap(this.targetDirectory!);
       contextMap.set(key, sharedData);
     });
     return this;
@@ -437,7 +437,7 @@ plugins {
 
   public prepareEnvironment() {
     return this.onEnvironment(async env => {
-      await new EnvironmentBuilder(env as Environment).prepare();
+      await new EnvironmentBuilder(env).prepare();
     });
   }
 
@@ -478,7 +478,9 @@ plugins {
       );
     }
 
-    runResult.composedMockedGenerators = composedGeneratorsToCheck.filter(gen => runResult.mockedGenerators[gen]?.mock.callCount() > 0);
+    runResult.composedMockedGenerators = composedGeneratorsToCheck.filter(
+      gen => (runResult.mockedGenerators[gen] as unknown as ReturnType<typeof mock.fn>)?.mock.callCount() > 0,
+    );
 
     runResult.application = runResult.generator.getContextData(CONTEXT_DATA_APPLICATION_KEY, { factory: () => undefined });
     const entitiesMap: Map<string, Entity> | undefined = runResult.generator.getContextData(CONTEXT_DATA_APPLICATION_ENTITIES_KEY, {
@@ -572,7 +574,7 @@ class JHipsterTest extends YeomanTest {
     return context.withEnvironmentRun(async function (this, env) {
       // Customize program to throw an error instead of exiting the process on cli parse error.
       const program = createProgram().exitOverride();
-      await buildJHipster({ program, env: env as Environment, silent: true, ...buildJHipsterOptions });
+      await buildJHipster({ program, env, silent: true, ...buildJHipsterOptions });
       await program.parseAsync(['jhipster', 'jhipster', ...(Array.isArray(command) ? command : command.split(' '))]);
       // Put the rootGenerator in context to be used in result assertions.
       this.generator = env.rootGenerator();
