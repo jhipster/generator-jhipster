@@ -31,7 +31,7 @@ import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %
 import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './<%- entityFileName %>-delete-dialog.html',
     imports: [
 <%_ if (enableTranslation) { _%>
