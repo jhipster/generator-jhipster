@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, ChangeDetectionStrategy, inject, OnInit<% if (enableTranslation) { %>, RendererFactory2, Renderer2<% } %> } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit<% if (enableTranslation) { %>, DOCUMENT, RendererFactory2, Renderer2<% } %> } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
@@ -41,6 +41,7 @@ import PageRibbon from '../profiles/page-ribbon';
 export default class Main implements OnInit {
 <%_ if (enableTranslation) { _%>
   private readonly renderer: Renderer2;
+  private readonly htmlElement: HTMLElement;
 <%_ } _%>
 
   private readonly router = inject(Router);
@@ -50,13 +51,15 @@ export default class Main implements OnInit {
   private readonly findLanguageFromKeyPipe = inject(FindLanguageFromKeyPipe);
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
+  private readonly document = inject(DOCUMENT);
   private readonly translateService = inject(TranslateService);
   private readonly rootRenderer = inject(RendererFactory2);
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
 
   constructor() {
-    this.renderer = this.rootRenderer.createRenderer(document.querySelector('html'), null);
+    this.htmlElement = this.document.documentElement;
+    this.renderer = this.rootRenderer.createRenderer(this.htmlElement, null);
   }
 <%_ } _%>
 
@@ -68,7 +71,7 @@ export default class Main implements OnInit {
     this.translateService.onLangChange.subscribe((langChangeEvent: LangChangeEvent) => {
       this.appPageTitleStrategy.updateTitle(this.router.routerState.snapshot);
       dayjs.locale(langChangeEvent.lang);
-      this.renderer.setAttribute(document.querySelector('html'), 'lang', langChangeEvent.lang);
+      this.renderer.setAttribute(this.htmlElement, 'lang', langChangeEvent.lang);
 
   <%_ if (enableI18nRTL) { _%>
       this.updatePageDirection();
@@ -79,7 +82,7 @@ export default class Main implements OnInit {
 
 <%_ if (enableI18nRTL) { _%>
   private updatePageDirection(): void {
-    this.renderer.setAttribute(document.querySelector('html'), 'dir', this.findLanguageFromKeyPipe.isRTL(this.translateService.getCurrentLang()) ? 'rtl' : 'ltr');
+    this.renderer.setAttribute(this.htmlElement, 'dir', this.findLanguageFromKeyPipe.isRTL(this.translateService.getCurrentLang()) ? 'rtl' : 'ltr');
   }
 <%_ } _%>
 }
