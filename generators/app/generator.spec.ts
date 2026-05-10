@@ -17,29 +17,30 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'esmocha';
-import { basename } from 'node:path';
 
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
-import { getCommandHelpOutput, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.ts';
+import { createTestHelpers, runResult } from '../../lib/testing/index.ts';
+import { testBlueprintSupport } from '../../test/support/tests.ts';
 
-import Generator from './index.ts';
+const helpers = createTestHelpers({
+  importMeta: import.meta,
+});
 
-const generator = basename(import.meta.dirname);
-
-describe(`generator - ${generator}`, () => {
-  shouldSupportFeatures(Generator);
+describe(`generator - ${helpers.commandName}`, () => {
+  it('should support features parameter', async () => {
+    expect(await helpers.forwardsFeaturesParameter()).toBe(true);
+  });
   describe('help', () => {
     it('should print expected information', async () => {
-      expect(await getCommandHelpOutput(generator)).toMatchSnapshot();
+      expect(await helpers.getCommandHelpOutput()).toMatchSnapshot();
     });
   });
-  describe('blueprint support', () => testBlueprintSupport(generator));
+  describe('blueprint support', () => testBlueprintSupport(helpers.commandName!));
 
   describe('jdlStore', () => {
     describe('with application', () => {
       before(async () => {
         await helpers
-          .runJHipster(generator)
+          .runJHipster()
           .withJHipsterConfig({
             jdlStore: 'app.jdl',
             skipServer: true,
@@ -56,7 +57,7 @@ describe(`generator - ${generator}`, () => {
     describe('with application and entities', () => {
       before(async () => {
         await helpers
-          .runJHipster(generator)
+          .runJHipster()
           .withJHipsterConfig(
             {
               jdlStore: 'app.jdl',
@@ -77,7 +78,7 @@ describe(`generator - ${generator}`, () => {
     describe('with incremental changelog application and entities', () => {
       before(async () => {
         await helpers
-          .runJHipster(generator)
+          .runJHipster()
           .withJHipsterConfig(
             {
               jdlStore: 'app.jdl',
@@ -99,7 +100,7 @@ describe(`generator - ${generator}`, () => {
   describe('questions', () => {
     describe('without answers', () => {
       before(async () => {
-        await helpers.runJHipster(generator).withSkipWritingPriorities();
+        await helpers.runJHipster().withSkipWritingPriorities();
       });
 
       it('should match order', () => {
@@ -133,7 +134,7 @@ describe(`generator - ${generator}`, () => {
     describe('with gateway, gradle and no cacheProvider', () => {
       before(async () => {
         await helpers
-          .runJHipster(generator)
+          .runJHipster()
           .withAnswers({ applicationType: 'gateway', buildTool: 'gradle', cacheProvider: 'no' })
           .withSkipWritingPriorities();
       });
@@ -170,10 +171,7 @@ describe(`generator - ${generator}`, () => {
 
     describe('with microservice', () => {
       before(async () => {
-        await helpers
-          .runJHipster(generator)
-          .withAnswers({ applicationType: 'microservice', databaseType: 'mongodb' })
-          .withSkipWritingPriorities();
+        await helpers.runJHipster().withAnswers({ applicationType: 'microservice', databaseType: 'mongodb' }).withSkipWritingPriorities();
       });
 
       it('should match order', () => {
