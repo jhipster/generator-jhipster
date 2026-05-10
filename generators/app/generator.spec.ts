@@ -40,8 +40,7 @@ describe(`generator - ${helpers.commandName}`, () => {
     describe('with application', () => {
       before(async () => {
         await helpers
-          .runDefault()
-          .withJHipsterContextOptions()
+          .runJHipster()
           .withJHipsterConfig({
             jdlStore: 'app.jdl',
             skipServer: true,
@@ -58,8 +57,7 @@ describe(`generator - ${helpers.commandName}`, () => {
     describe('with application and entities', () => {
       before(async () => {
         await helpers
-          .runDefault()
-          .withJHipsterContextOptions()
+          .runJHipster()
           .withJHipsterConfig(
             {
               jdlStore: 'app.jdl',
@@ -80,8 +78,7 @@ describe(`generator - ${helpers.commandName}`, () => {
     describe('with incremental changelog application and entities', () => {
       before(async () => {
         await helpers
-          .runDefault()
-          .withJHipsterContextOptions()
+          .runJHipster()
           .withJHipsterConfig(
             {
               jdlStore: 'app.jdl',
@@ -103,7 +100,7 @@ describe(`generator - ${helpers.commandName}`, () => {
   describe('questions', () => {
     describe('without answers', () => {
       before(async () => {
-        await helpers.runDefault().withJHipsterContextOptions().withSkipWritingPriorities();
+        await helpers.runJHipster().withSkipWritingPriorities();
       });
 
       it('should match order', () => {
@@ -137,8 +134,7 @@ describe(`generator - ${helpers.commandName}`, () => {
     describe('with gateway, gradle and no cacheProvider', () => {
       before(async () => {
         await helpers
-          .runDefault()
-          .withJHipsterContextOptions()
+          .runJHipster()
           .withAnswers({ applicationType: 'gateway', buildTool: 'gradle', cacheProvider: 'no' })
           .withSkipWritingPriorities();
       });
@@ -175,11 +171,7 @@ describe(`generator - ${helpers.commandName}`, () => {
 
     describe('with microservice', () => {
       before(async () => {
-        await helpers
-          .runDefault()
-          .withJHipsterContextOptions()
-          .withAnswers({ applicationType: 'microservice', databaseType: 'mongodb' })
-          .withSkipWritingPriorities();
+        await helpers.runJHipster().withAnswers({ applicationType: 'microservice', databaseType: 'mongodb' }).withSkipWritingPriorities();
       });
 
       it('should match order', () => {

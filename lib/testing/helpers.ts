@@ -542,13 +542,22 @@ class JHipsterTest extends YeomanTest {
     return getCommandHelpOutput(commandName);
   }
 
+  runJHipster(jhipsterSettings?: RunJHipster, settings?: RunContextSettings, envOptions?: EnvironmentOptions): JHipsterRunContext;
   runJHipster(jhipsterGenerator: string, settings?: RunContextSettings, envOptions?: EnvironmentOptions): JHipsterRunContext;
   runJHipster(jhipsterGenerator: string, options?: RunJHipster): JHipsterRunContext;
   runJHipster(
-    jhipsterGenerator: string,
+    jhipsterGenerator: string | RunJHipster | undefined,
     settings: RunContextSettings | RunJHipster | undefined,
     envOptions?: EnvironmentOptions,
   ): JHipsterRunContext {
+    let jhipsterSettings: RunJHipster | undefined;
+    if (typeof jhipsterGenerator === 'object' || jhipsterGenerator === undefined) {
+      jhipsterSettings = jhipsterGenerator;
+      jhipsterGenerator = undefined;
+      if (jhipsterGenerator === undefined) {
+        return this.runDefault(settings as RunContextSettings | undefined, envOptions).withJHipsterContextOptions(jhipsterSettings);
+      }
+    }
     const generatorSpec =
       !isAbsolute(jhipsterGenerator) && !jhipsterGenerator.startsWith('@') ? toJHipsterNamespace(jhipsterGenerator) : jhipsterGenerator;
     const isRunJHipster = (opt: any): opt is RunJHipster | undefined =>
