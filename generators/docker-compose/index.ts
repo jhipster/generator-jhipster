@@ -18,3 +18,4 @@
  */
 export { default } from './generator.ts';
 export { default as command } from './command.ts';
+export type { Config, Deployment, Features, Options, Source, WorkspacesApplication } from '../base-workspaces/types.d.ts';

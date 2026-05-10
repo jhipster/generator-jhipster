@@ -40,6 +40,8 @@ import type {
 import type { GradleNeedleOptions, Source as GradleSource } from './generators/gradle/types.ts';
 import type { MavenDefinition, Source as MavenSource } from './generators/maven/types.ts';
 
+export type { Features } from '../base-simple-application/types.ts';
+
 type Command = CommandTypeMap<typeof command>;
 
 export type JavaDependencyVersion = {

@@ -72,7 +72,7 @@ type AuthenticationProperties = OptionWithDerivedProperties<'authenticationType'
   Oauth2Application &
   SessionApplication;
 
-export type Application<E extends Entity> = Command['Application'] &
+export type Application<E extends Entity = Entity> = Command['Application'] &
   BaseApplicationAddedApplicationProperties<E> &
   JavascriptSimpleApplicationApplication &
   ApplicationProperties &

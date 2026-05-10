@@ -18,5 +18,4 @@
  */
 export { default } from './generator.ts';
 export { default as command } from './command.ts';
-export { files as commonFiles } from './files-common.ts';
-export type { Application, Config, Entity, Field, Options, Relationship, Source } from './types.ts';
+export type { Application, Config, Entity, Features, Field, Options, Relationship, Source } from './types.ts';

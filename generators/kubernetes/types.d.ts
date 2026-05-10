@@ -30,6 +30,8 @@ import type command from './command.ts';
 import type bootstrapCommand from './generators/bootstrap/command.ts';
 import type { helmConstants, kubernetesConstants } from './support/constants.ts';
 
+export type { Features } from '../base-workspaces/types.ts';
+
 type KubernetesDeployment = typeof kubernetesConstants & typeof helmConstants & {};
 
 type Command = CommandTypeMap<typeof command>;

@@ -19,8 +19,9 @@
 import type { CommandTypeMap } from '../../lib/command/types.ts';
 import type { Config as BaseWorkspacesConfig, Options as BaseWorkspacesOptions } from '../base-workspaces/types.d.ts';
 
-export type { WorkspacesApplication } from '../base-workspaces/types.ts';
 import type command from './command.ts';
+
+export type { Deployment, Features, Source, WorkspacesApplication } from '../base-workspaces/types.ts';
 
 type Command = CommandTypeMap<typeof command>;
 

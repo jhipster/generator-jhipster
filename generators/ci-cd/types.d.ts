@@ -17,10 +17,11 @@
  * limitations under the License.
  */
 import type { CommandTypeMap } from '../../lib/command/types.ts';
-import type { Application as SimpleApplication } from '../base-simple-application/types.d.ts';
 import type { Application as DockerApplication } from '../docker/types.d.ts';
 
 import type command from './command.ts';
+
+export type { Config, Features, Options, Source } from '../base-simple-application/types.d.ts';
 
 type Command = CommandTypeMap<typeof command>;
 
@@ -33,4 +34,4 @@ type CICDApplicationProperties = Command['Application'] & {
   githubActions: Record<string, string>;
 };
 
-export type Application = SimpleApplication & DockerApplication & CICDApplicationProperties;
+export type Application = DockerApplication & CICDApplicationProperties;
