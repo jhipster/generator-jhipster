@@ -23,6 +23,8 @@
   "devDependencies": {
     "@eslint/js": "10.0.1",
     "@module-federation/enhanced": "2.4.0",
+    "@module-federation/runtime": "2.4.0",
+    "@module-federation/vite": "1.15.4",
     "@pinia/testing": "1.0.3",
     "@tsconfig/node18": "18.2.6",
     "@types/node": "22.19.18",

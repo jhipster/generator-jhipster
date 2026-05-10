@@ -359,7 +359,8 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
         if (clientBundlerVite) {
           source.mergeClientPackageJson!({
             devDependencies: {
-              '@originjs/vite-plugin-federation': '1.3.6',
+              ...(applicationTypeGateway ? { '@module-federation/runtime': null } : {}),
+              '@module-federation/vite': null,
             },
           });
         } else if (clientBundlerWebpack) {

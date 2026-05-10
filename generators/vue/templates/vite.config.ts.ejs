@@ -17,6 +17,9 @@
  limitations under the License.
 -%>
 import { fileURLToPath, URL } from 'node:url';
+<%_ if (microfrontend && clientBundlerVite) { _%>
+import { createRequire } from 'node:module';
+<%_ } _%>
 import path from 'node:path';
 import { normalizePath } from 'vite';
 
@@ -29,11 +32,9 @@ import {
 import vue from '@vitejs/plugin-vue';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 <%_ if (microfrontend && clientBundlerVite) { _%>
-import federation from "@originjs/vite-plugin-federation";
+import { federation } from '@module-federation/vite';
 
-  <%_ if (applicationTypeGateway) { _%>
-const sharedAppVersion = '0.0.0';
-  <%_ } _%>
+const moduleFederationConfig = createRequire(import.meta.url)('./module-federation.config.cjs');
 <%_ } _%>
 
 const { getAbsoluteFSPath } = await import('swagger-ui-dist');
@@ -131,52 +132,7 @@ config = mergeConfig(config, {
     target: ['chrome89', 'edge89', 'firefox89', 'safari15'],
   },
   plugins: [
-    federation({
-      name: '<%- lowercaseBaseName %>',
-  <%_ if (applicationTypeGateway) { _%>
-      remotes: {
-    <%_ for (const remote of microfrontends) { _%>
-        '@<%- remote.lowercaseBaseName %>': `/<%- remote.endpointPrefix %>/assets/remoteEntry.js`,
-    <%_ } _%>
-      },
-  <%_ } _%>
-  <%_ if (applicationTypeMicroservice) { _%>
-      exposes: {
-        './entities-router': './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/router/entities',
-        './entities-menu': './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entities-menu.vue',
-      },
-  <%_ } _%>
-      shared: {
-        '@vuelidate/core': {},
-        '@vuelidate/validators': {},
-        axios: {},
-        // 'bootstrap-vue': {},
-        vue: {
-          packagePath: 'vue/dist/vue.esm-bundler.js',
-        },
-        'vue-i18n': {},
-        'vue-router': {},
-        pinia: {},
-        '@/shared/jhipster/constants': {
-          packagePath: './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/shared/jhipster/constants',
-  <%_ if (applicationTypeGateway) { _%>
-          version: sharedAppVersion,
-  <%_ } _%>
-        },
-        '@/shared/alert/alert.service': {
-          packagePath: './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/shared/alert/alert.service',
-  <%_ if (applicationTypeGateway) { _%>
-          version: sharedAppVersion,
-  <%_ } _%>
-        },
-        '@/locale/translation.service': {
-          packagePath: './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/locale/translation.service',
-  <%_ if (applicationTypeGateway) { _%>
-          version: sharedAppVersion,
-  <%_ } _%>
-        },
-      },
-    }),
+    federation(moduleFederationConfig),
   ],
 });
 <%_ } _%>

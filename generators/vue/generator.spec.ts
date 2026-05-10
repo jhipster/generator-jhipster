@@ -198,4 +198,44 @@ describe(`generator - ${clientFramework}`, () => {
       });
     });
   });
+
+  describe('with vite gateway microfrontend', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({
+          ...commonConfig,
+          applicationType: 'gateway',
+          authenticationType: 'jwt',
+          baseName: 'gatewaymf',
+          clientBundler: 'vite',
+          microfrontend: true,
+          microfrontends: [{ baseName: 'remotemf' }],
+          withAdminUi: true,
+        })
+        .withSharedApplication({ getWebappTranslation: () => 'translations', gatewayServicesApiAvailable: true })
+        .withMockedSource()
+        .withMockedGenerators(['jhipster:common', 'jhipster:client:i18n']);
+    });
+
+    it('should add module federation dependencies required by generated vite gateway files', () => {
+      expect(runResult.sourceCallsArg.mergeClientPackageJson).toContainEqual({
+        devDependencies: {
+          '@module-federation/runtime': null,
+          '@module-federation/vite': null,
+        },
+      });
+      expect(JSON.stringify(runResult.sourceCallsArg.mergeClientPackageJson)).not.toContain('@originjs/vite-plugin-federation');
+      runResult.assertFileContent('src/main/webapp/app/main.ts', "import { init } from '@module-federation/runtime';");
+    });
+
+    it('should wire vite federation plugin to the generated module federation config', () => {
+      runResult.assertFileContent('vite.config.ts', "import { federation } from '@module-federation/vite';");
+      runResult.assertFileContent(
+        'vite.config.ts',
+        "const moduleFederationConfig = createRequire(import.meta.url)('./module-federation.config.cjs');",
+      );
+      runResult.assertFileContent('vite.config.ts', 'federation(moduleFederationConfig)');
+    });
+  });
 });
