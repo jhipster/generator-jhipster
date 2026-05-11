@@ -16,6 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+import { navbarSelector } from "../support/commands";
+
 describe('Lighthouse Audits', () => {
     beforeEach(() => {
       cy.visit('/');
@@ -42,5 +44,6 @@ describe('Lighthouse Audits', () => {
         screenEmulation: {disabled: true}
       };
       cy.lighthouse(customThresholds, desktopConfig);
+      cy.get(navbarSelector).should('be.visible');
     });
 });
