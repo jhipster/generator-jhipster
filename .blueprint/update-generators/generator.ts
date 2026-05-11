@@ -19,14 +19,12 @@
 import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 
-import BaseGenerator from '../../generators/base/index.ts';
-import BaseApplicationGenerator from '../../generators/base-application/index.ts';
 import BaseCoreGenerator from '../../generators/base-core/index.ts';
 import { createNeedleCallback } from '../../generators/base-core/support/needles.ts';
-import BaseSimpleApplicationGenerator from '../../generators/base-simple-application/index.ts';
-import BaseWorkspacesGenerator from '../../generators/base-workspaces/index.ts';
 import { getPackageRoot, getSourceRoot } from '../../lib/index.ts';
 import { lookupGenerators, lookupGeneratorsWithNamespace } from '../../lib/utils/lookup.ts';
+
+import { detectGeneratorType, getExportedTypesForBaseType } from './internal/detect-generator-type.ts';
 
 const licenseHeader = `/**
  * Copyright 2013-2026 the original author or authors from the JHipster project.
@@ -47,9 +45,6 @@ const licenseHeader = `/**
  * limitations under the License.
  */`;
 
-// eslint-disable-next-line no-prototype-builtins
-const isPrototypeOfOrIsSame = (base: any, obj: any): boolean => base === obj || base.prototype.isPrototypeOf(obj.prototype);
-
 export default class UpdateGeneratorsGenerator extends BaseCoreGenerator {
   async beforeQueue() {
     this.destinationRoot(getPackageRoot());
@@ -62,31 +57,8 @@ export default class UpdateGeneratorsGenerator extends BaseCoreGenerator {
         const generators = await lookupGenerators({ firstLevelOnly: true, absolute: true });
         for (const generator of generators) {
           const generatorModule = await import(generator);
-          const isCoreGenerator = isPrototypeOfOrIsSame(BaseCoreGenerator, generatorModule.default);
-          if (!isCoreGenerator) {
-            throw new Error(`Generator ${generator} does not extend BaseCoreGenerator`);
-          }
-
-          let parentGenerator = 'base-core';
-          const typesToExport = ['Config', 'Features', 'Options'];
-          if (isPrototypeOfOrIsSame(BaseGenerator, generatorModule.default)) {
-            parentGenerator = 'base';
-            typesToExport.push('Source');
-
-            if (isPrototypeOfOrIsSame(BaseSimpleApplicationGenerator, generatorModule.default)) {
-              parentGenerator = 'base-simple-application';
-              typesToExport.push('Application');
-
-              if (isPrototypeOfOrIsSame(BaseApplicationGenerator, generatorModule.default)) {
-                parentGenerator = 'base-application';
-                typesToExport.push('Entity', 'Field', 'Relationship');
-              }
-            } else if (isPrototypeOfOrIsSame(BaseWorkspacesGenerator, generatorModule.default)) {
-              parentGenerator = 'base-workspaces';
-              typesToExport.push('Deployment', 'WorkspacesApplication');
-            }
-          }
-
+          const parentGenerator = await detectGeneratorType(generatorModule);
+          const typesToExport = getExportedTypesForBaseType(parentGenerator);
           const exportedGenerators = Object.keys(generatorModule).filter(
             key => key.startsWith('Command') && typeof generatorModule[key] === 'function',
           );
