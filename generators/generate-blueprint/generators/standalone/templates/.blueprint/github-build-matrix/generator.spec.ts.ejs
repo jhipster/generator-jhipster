@@ -2,10 +2,14 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import { basename, join } from 'node:path';
 
 import { getGithubSamplesGroups } from 'generator-jhipster/ci';
-import { defaultHelpers as helpers, resultWithGenerator } from 'generator-jhipster/testing';
+import { createTestHelpers, typedResult } from 'generator-jhipster/testing';
+
 import type Generator from './index.js';
 
-const result = resultWithGenerator<Generator>();
+const helpers = createTestHelpers<Generator>({
+  importMeta: import.meta,
+});
+const result = typedResult<Generator>();
 const generator = basename(import.meta.dirname);
 
 describe(`generator - ${generator}`, async () => {
@@ -13,7 +17,7 @@ describe(`generator - ${generator}`, async () => {
   for (const workflow of groups.map(sample => sample.split('.')[0])) {
     describe(`with ${workflow}`, () => {
       beforeAll(async () => {
-        await helpers.runJHipster(join(import.meta.dirname, 'index.ts'), { prepareEnvironment: true }).withArguments(workflow);
+        await helpers.runDefault().withArguments(workflow);
       });
 
       it('should match matrix value', () => {
