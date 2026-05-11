@@ -25,7 +25,7 @@ import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '
 
 import Generator from './index.ts';
 
-const { CYPRESS } = testFrameworkTypes;
+const { CYPRESS, PLAYWRIGHT } = testFrameworkTypes;
 
 const generator = basename(import.meta.dirname);
 
@@ -35,7 +35,7 @@ describe(`generator - ${generator}`, () => {
   checkEnforcements({ client: true }, generator);
 
   describe('composing', () => {
-    const mockedComposedGenerators = ['jhipster:common', 'jhipster:languages', 'jhipster:cypress'];
+    const mockedComposedGenerators = ['jhipster:common', 'jhipster:languages', 'jhipster:cypress', 'jhipster:playwright'];
 
     describe('with translation disabled', () => {
       const options = { enableTranslation: false };
@@ -116,6 +116,28 @@ describe(`generator - ${generator}`, () => {
       });
       it('should compose with jhipster:cypress', () => {
         runResult.assertGeneratorComposedOnce('jhipster:cypress');
+      });
+    });
+
+    describe('with playwright', () => {
+      const options = { testFrameworks: [PLAYWRIGHT] };
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withSharedApplication({ getWebappTranslation: () => 'translations' })
+          .withJHipsterConfig(options)
+          .withSkipWritingPriorities()
+          .withMockedGenerators(mockedComposedGenerators);
+      });
+
+      it('should compose with jhipster:common', () => {
+        runResult.assertGeneratorComposedOnce('jhipster:common');
+      });
+      it('should compose with jhipster:languages', () => {
+        runResult.assertGeneratorComposedOnce('jhipster:languages');
+      });
+      it('should compose with jhipster:playwright', () => {
+        runResult.assertGeneratorComposedOnce('jhipster:playwright');
       });
     });
   });

@@ -16,7 +16,7 @@ const GENERATOR_APP = 'app';
 const { H2_DISK, MYSQL, SQL } = databaseTypes;
 const { EHCACHE } = cacheTypes;
 const { JWT } = authenticationTypes;
-const { CYPRESS } = testFrameworkTypes;
+const { CYPRESS, PLAYWRIGHT } = testFrameworkTypes;
 const { ANGULAR } = clientFrameworkTypes;
 const { MAVEN } = buildToolTypes;
 
@@ -52,6 +52,37 @@ describe('generator - client - prompts', () => {
 
       it('should write testFrameworks with cypress value to .yo-rc.json', () => {
         runResult.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { testFrameworks: [CYPRESS] } });
+      });
+    });
+
+    describe('with playwright value', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(GENERATOR_APP)
+          .withSharedApplication({ getWebappTranslation: () => 'translations' })
+          .withAnswers({
+            baseName: 'sampleMysql',
+            packageName: 'com.mycompany.myapp',
+            applicationType: APPLICATION_TYPE_MONOLITH,
+            databaseType: SQL,
+            devDatabaseType: H2_DISK,
+            prodDatabaseType: MYSQL,
+            cacheProvider: EHCACHE,
+            authenticationType: JWT,
+            enableTranslation: true,
+            nativeLanguage: 'en',
+            languages: ['en', 'fr'],
+            clientTestFrameworks: [PLAYWRIGHT],
+            buildTool: MAVEN,
+            clientFramework: ANGULAR,
+            clientTheme: 'none',
+          })
+          .withSkipWritingPriorities()
+          .withMockedGenerators(mockedComposedGenerators);
+      });
+
+      it('should write testFrameworks with playwright value to .yo-rc.json', () => {
+        runResult.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': { testFrameworks: [PLAYWRIGHT] } });
       });
     });
   });

@@ -36,7 +36,7 @@ import type {
 } from './types.d.ts';
 
 const { ANGULAR, NO: CLIENT_FRAMEWORK_NO } = clientFrameworkTypes;
-const { CYPRESS } = testFrameworkTypes;
+const { CYPRESS, PLAYWRIGHT } = testFrameworkTypes;
 
 export class ClientApplicationGenerator<
   Entity extends ClientEntity = ClientEntity,
@@ -118,6 +118,9 @@ export default class ClientGenerator extends ClientApplicationGenerator {
         }
         if (Array.isArray(testFrameworks) && testFrameworks.includes(CYPRESS)) {
           await this.composeWithJHipster('cypress');
+        }
+        if (Array.isArray(testFrameworks) && testFrameworks.includes(PLAYWRIGHT)) {
+          await this.composeWithJHipster('playwright');
         }
       },
     });

@@ -1,0 +1,74 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { expect, type Page, test } from '@playwright/test';
+
+import { credentials } from '../../support/login';
+import {
+  accountMenuSelector,
+  errorLoginSelector,
+  loginItemSelector,
+  logoutItemSelector,
+  passwordLoginSelector,
+  submitLoginSelector,
+  titleLoginSelector,
+  usernameLoginSelector,
+} from '../../support/selectors';
+
+const authenticationUrl = '/api/<% if (authenticationTypeSession) { %>authentication<% } else { %>authenticate<% } %>';
+
+async function openLogin(page: Page) {
+  await page.goto('/');
+  await page.locator(accountMenuSelector).click();
+  await page.locator(loginItemSelector).click();
+}
+
+test.describe('login page', () => {
+  test.beforeEach(async ({ page }) => {
+    await openLogin(page);
+  });
+
+  test('greets with sign in', async ({ page }) => {
+    await expect(page.locator(titleLoginSelector)).toBeVisible();
+  });
+
+  test('errors when password is incorrect', async ({ page }) => {
+    const responsePromise = page.waitForResponse(response => response.url().includes(authenticationUrl) && response.request().method() === 'POST');
+
+    await page.locator(usernameLoginSelector).fill(credentials.username);
+    await page.locator(passwordLoginSelector).fill('bad-password');
+    await page.locator(submitLoginSelector).click();
+
+    const response = await responsePromise;
+    expect(response.status()).toBe(401);
+    await expect(page.locator(errorLoginSelector)).toBeVisible();
+  });
+
+  test('goes to home page when successfully logging in', async ({ page }) => {
+    const responsePromise = page.waitForResponse(response => response.url().includes(authenticationUrl) && response.request().method() === 'POST');
+
+    await page.locator(usernameLoginSelector).fill(credentials.username);
+    await page.locator(passwordLoginSelector).fill(credentials.password);
+    await page.locator(submitLoginSelector).click();
+
+    const response = await responsePromise;
+    expect(response.status()).toBe(200);
+    await page.locator(accountMenuSelector).click();
+    await expect(page.locator(logoutItemSelector)).toBeVisible();
+  });
+});
