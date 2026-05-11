@@ -43,7 +43,7 @@ export interface Entity<F extends Field = Field, R extends ClientRelationship = 
   entityAngularReadAuthorities?: string;
 }
 
-export type Application<E extends Entity> = {
+export type Application<E extends Entity = Entity> = {
   /** @experimental to be replaced with needles */
   angularEntities?: E[];
   angularLocaleId?: string;

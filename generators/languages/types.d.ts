@@ -29,6 +29,8 @@ import type {
 import type { LanguagesAddedApplicationProperties } from './application.ts';
 import type command from './command.ts';
 
+export type { Features } from '../base-application/types.d.ts';
+
 type Command = CommandTypeMap<typeof command>;
 
 export type Config = BaseApplicationConfig & Command['Config'];

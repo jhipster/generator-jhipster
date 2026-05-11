@@ -22,6 +22,8 @@ import type { Config as ProjectNameConfig, Options as ProjectNameOptions, Source
 
 import type command from './command.ts';
 
+export type { Features } from '../base-application/types.ts';
+
 type Command = CommandTypeMap<typeof command>;
 
 export type Config = Command['Config'] & ProjectNameConfig;

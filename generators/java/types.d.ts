@@ -27,6 +27,7 @@ import type {
 
 export type {
   ConditionalJavaDefinition,
+  Features,
   JavaArtifact,
   JavaArtifactType,
   JavaArtifactVersion,

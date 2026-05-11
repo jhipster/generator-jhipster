@@ -22,6 +22,8 @@ import type { Config as BaseConfig, Options as BaseOptions } from '../base/types
 
 import type command from './command.ts';
 
+export type { Features, Source } from '../base/types.ts';
+
 type Command = CommandTypeMap<typeof command>;
 
 export type Config = BaseConfig & Command['Config'];

@@ -16,9 +16,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * Register generator-base at yeoman-environment
- */
 export { default } from './generator.ts';
-export type { Application, Config, Entity, Field, Options, Relationship, Source } from './types.ts';
+export type { Application, Config, Entity, Features, Field, Options, Relationship, Source } from './types.ts';
