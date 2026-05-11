@@ -21,9 +21,9 @@ import { before, it, describe, expect } from 'esmocha';
 import Generator from './index.ts';
 
 import { getGeneratorNamespace, shouldSupportFeatures, testBlueprintSupport } from '#test-support';
-import { defaultHelpers as helpers, resultWithGenerator } from '#testing';
+import { defaultHelpers as helpers, typedResult } from '#testing';
 
-const result = resultWithGenerator<Generator>();
+const result = typedResult<Generator>();
 const generator = getGeneratorNamespace(import.meta.dirname);
 
 describe(`generator - ${generator}`, () => {

@@ -1,3 +1,4 @@
+export { typedResult } from 'yeoman-test';
 export {
   type FakeBlueprintOptions,
   basicHelpers,
