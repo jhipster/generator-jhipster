@@ -18,7 +18,7 @@
  */
 import { before, describe, expect, it } from 'esmocha';
 
-import { createTestHelpers, result } from '../../lib/testing/index.ts';
+import { createTestHelpers, typedResult } from '../../lib/testing/index.ts';
 import { testBlueprintSupport } from '../../test/support/tests.ts';
 
 import type Generator from './generator.ts';
@@ -26,6 +26,7 @@ import type Generator from './generator.ts';
 const helpers = createTestHelpers<Generator>({
   importMeta: import.meta,
 });
+const result = typedResult<Generator>();
 
 describe(`generator - ${helpers.commandName}`, () => {
   it('should support features parameter', async () => {

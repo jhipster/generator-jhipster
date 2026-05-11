@@ -95,6 +95,11 @@ const coreRunResult = result as JHipsterRunResult;
  */
 export const resultWithGenerator = <T extends BaseCoreGenerator>(): JHipsterRunResult<T> => runResult as unknown as JHipsterRunResult<T>;
 
+/**
+ * Custom typedResult that returns a JHipsterRunResult instead of RunResult
+ */
+export const typedResult = <T extends BaseCoreGenerator>(): JHipsterRunResult<T> => runResult as unknown as JHipsterRunResult<T>;
+
 export { coreRunResult, runResult, runResult as result };
 
 const toJHipsterNamespace = (ns: string) => (/^jhipster[:-]/.test(ns) ? ns : `jhipster:${ns}`);
