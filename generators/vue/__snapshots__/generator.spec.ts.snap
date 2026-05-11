@@ -1752,12 +1752,12 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
-  "clientBundler": "webpack",
+  "clientBundler": "vite",
   "clientBundlerAny": true,
   "clientBundlerEsbuild": false,
-  "clientBundlerName": "Webpack",
-  "clientBundlerVite": false,
-  "clientBundlerWebpack": true,
+  "clientBundlerName": "Vite",
+  "clientBundlerVite": true,
+  "clientBundlerWebpack": false,
   "clientDistDir": "dist/",
   "clientFramework": "vue",
   "clientFrameworkAngular": false,
@@ -1833,8 +1833,8 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "devDatabaseTypeMysql": false,
   "devDatabaseTypeOracle": false,
   "devDatabaseTypePostgresql": true,
-  "devServerPort": 9060,
-  "devServerPortProxy": 9000,
+  "devServerPort": 9000,
+  "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
   "dockerContainers": Any<Object>,
   "dockerServices": [],
@@ -2470,27 +2470,6 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "clientRoot/vitest.config.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/webpack/config.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/package.json": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/vue.utils.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/webpack.common.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/webpack.microfrontend.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/webpack.prod.js": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -2507,6 +2486,16 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
         "Entity[Microservice]",
         "Entity[EntityWithCustomId]",
       ],
+    },
+  ],
+  "addExternalResourceToRoot": [
+    {
+      "comment": "Workaround https://github.com/axios/axios/issues/5622",
+      "resource": "<script>const global = globalThis;</script>",
+    },
+    {
+      "comment": "Load vue main",
+      "resource": "<script type="module" src="./app/index.ts"></script>",
     },
   ],
   "addSonarProperties": [
@@ -2531,41 +2520,20 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
       },
     ],
   ],
-  "addWebpackConfig": [
-    {
-      "config": "require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })",
-    },
-  ],
   "mergeClientPackageJson": [
     {
       "scripts": {
-        "webapp:build:dev": "npm run webpack -- --mode development --env stats=minimal",
-        "webapp:build:prod": "npm run webpack -- --mode production --env stats=minimal",
-        "webapp:dev": "npm run webpack-dev-server -- --mode development --env stats=normal",
-        "webpack": "webpack --config webpack/webpack.common.js",
-        "webpack-dev-server": "webpack serve --config webpack/webpack.common.js",
+        "vite-build": "vite build",
+        "vite-serve": "vite",
+        "webapp:build:dev": "npm run vite-build",
+        "webapp:build:prod": "npm run vite-build",
+        "webapp:dev": "npm run vite-serve",
+        "webapp:serve": "npm run vite-serve",
       },
     },
     {
       "devDependencies": {
-        "browser-sync-webpack-plugin": null,
-        "copy-webpack-plugin": null,
-        "css-loader": null,
-        "css-minimizer-webpack-plugin": null,
-        "html-webpack-plugin": null,
-        "mini-css-extract-plugin": null,
-        "postcss-loader": null,
-        "sass-loader": null,
-        "terser-webpack-plugin": null,
-        "ts-loader": null,
-        "vue-loader": null,
-        "vue-style-loader": null,
-        "webpack": null,
-        "webpack-bundle-analyzer": null,
-        "webpack-cli": null,
-        "webpack-dev-server": null,
-        "webpack-merge": null,
-        "workbox-webpack-plugin": null,
+        "@module-federation/vite": null,
       },
     },
     {
@@ -2615,12 +2583,12 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
-  "clientBundler": "webpack",
+  "clientBundler": "vite",
   "clientBundlerAny": true,
   "clientBundlerEsbuild": false,
-  "clientBundlerName": "Webpack",
-  "clientBundlerVite": false,
-  "clientBundlerWebpack": true,
+  "clientBundlerName": "Vite",
+  "clientBundlerVite": true,
+  "clientBundlerWebpack": false,
   "clientDistDir": "dist/",
   "clientFramework": "vue",
   "clientFrameworkAngular": false,
@@ -2696,8 +2664,8 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "devDatabaseTypeMysql": false,
   "devDatabaseTypeOracle": false,
   "devDatabaseTypePostgresql": true,
-  "devServerPort": 9060,
-  "devServerPortProxy": 9000,
+  "devServerPort": 9000,
+  "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
   "dockerContainers": Any<Object>,
   "dockerServices": [],
@@ -3392,27 +3360,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "vitest.config.ts": {
     "stateCleared": "modified",
   },
-  "webpack/config.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/package.json": {
-    "stateCleared": "modified",
-  },
-  "webpack/vue.utils.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.common.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.microfrontend.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -3426,6 +3373,16 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
         "Entity[Microservice]",
         "Entity[EntityWithCustomId]",
       ],
+    },
+  ],
+  "addExternalResourceToRoot": [
+    {
+      "comment": "Workaround https://github.com/axios/axios/issues/5622",
+      "resource": "<script>const global = globalThis;</script>",
+    },
+    {
+      "comment": "Load vue main",
+      "resource": "<script type="module" src="./app/index.ts"></script>",
     },
   ],
   "addSonarProperties": [
@@ -3450,43 +3407,20 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
       },
     ],
   ],
-  "addWebpackConfig": [
-    {
-      "config": "require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })",
-    },
-  ],
   "mergeClientPackageJson": [
     {
       "scripts": {
-        "webapp:build:dev": "npm run webpack -- --mode development --env stats=minimal",
-        "webapp:build:prod": "npm run webpack -- --mode production --env stats=minimal",
-        "webapp:dev": "npm run webpack-dev-server -- --mode development --env stats=normal",
-        "webpack": "webpack --config webpack/webpack.common.js",
-        "webpack-dev-server": "webpack serve --config webpack/webpack.common.js",
+        "vite-build": "vite build",
+        "vite-serve": "vite",
+        "webapp:build:dev": "npm run vite-build",
+        "webapp:build:prod": "npm run vite-build",
+        "webapp:dev": "npm run vite-serve",
+        "webapp:serve": "npm run vite-serve",
       },
     },
     {
       "devDependencies": {
-        "browser-sync-webpack-plugin": null,
-        "copy-webpack-plugin": null,
-        "css-loader": null,
-        "css-minimizer-webpack-plugin": null,
-        "folder-hash": null,
-        "html-webpack-plugin": null,
-        "merge-jsons-webpack-plugin": null,
-        "mini-css-extract-plugin": null,
-        "postcss-loader": null,
-        "sass-loader": null,
-        "terser-webpack-plugin": null,
-        "ts-loader": null,
-        "vue-loader": null,
-        "vue-style-loader": null,
-        "webpack": null,
-        "webpack-bundle-analyzer": null,
-        "webpack-cli": null,
-        "webpack-dev-server": null,
-        "webpack-merge": null,
-        "workbox-webpack-plugin": null,
+        "@module-federation/vite": null,
       },
     },
     {
