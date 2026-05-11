@@ -114,9 +114,9 @@ describe(`generator - ${generator}`, () => {
   describe('with custom properties values', () => {
     before(async () => {
       await helpers
-        .runJHipster(generator)
+        .runJHipster<Generator>(generator)
         .withJHipsterConfig({})
-        .onGenerator((generator: any) => {
+        .onGenerator(generator => {
           generator.generateEntities = false;
           generator.generateEnums = false;
           generator.useJakartaValidation = false;

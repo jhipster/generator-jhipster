@@ -18,10 +18,12 @@
  */
 import { before, describe, expect, it } from 'esmocha';
 
-import { createTestHelpers, runResult } from '../../lib/testing/index.ts';
+import { createTestHelpers, result } from '../../lib/testing/index.ts';
 import { testBlueprintSupport } from '../../test/support/tests.ts';
 
-const helpers = createTestHelpers({
+import type Generator from './generator.ts';
+
+const helpers = createTestHelpers<Generator>({
   importMeta: import.meta,
 });
 
@@ -51,7 +53,7 @@ describe(`generator - ${helpers.commandName}`, () => {
       });
 
       it('should match snapshot', () => {
-        expect(runResult.getSnapshot()).toMatchSnapshot();
+        expect(result.getSnapshot()).toMatchSnapshot();
       });
     });
     describe('with application and entities', () => {
@@ -71,7 +73,7 @@ describe(`generator - ${helpers.commandName}`, () => {
       });
 
       it('should match snapshot', () => {
-        expect(runResult.getSnapshot()).toMatchSnapshot();
+        expect(result.getSnapshot()).toMatchSnapshot();
       });
     });
 
@@ -93,7 +95,7 @@ describe(`generator - ${helpers.commandName}`, () => {
       });
 
       it('should match snapshot', () => {
-        expect(runResult.getSnapshot()).toMatchSnapshot();
+        expect(result.getSnapshot()).toMatchSnapshot();
       });
     });
   });
@@ -104,7 +106,7 @@ describe(`generator - ${helpers.commandName}`, () => {
       });
 
       it('should match order', () => {
-        expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
+        expect(result.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
 [
   "baseName",
   "applicationType",
@@ -140,7 +142,7 @@ describe(`generator - ${helpers.commandName}`, () => {
       });
 
       it('should match order', () => {
-        expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
+        expect(result.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
 [
   "baseName",
   "applicationType",
@@ -175,7 +177,7 @@ describe(`generator - ${helpers.commandName}`, () => {
       });
 
       it('should match order', () => {
-        expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
+        expect(result.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
 [
   "baseName",
   "applicationType",
