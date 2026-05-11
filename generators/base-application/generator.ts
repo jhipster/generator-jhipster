@@ -272,6 +272,10 @@ export default class BaseApplicationGenerator<
     return {};
   }
 
+  get loadingEntities() {
+    return {};
+  }
+
   get preparingEachEntity() {
     return {};
   }
