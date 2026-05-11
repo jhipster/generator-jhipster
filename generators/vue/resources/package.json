@@ -49,7 +49,7 @@
     "postcss-url": "10.1.3",
     "rimraf": "6.1.3",
     "sass": "1.70.0",
-    "sass-loader": "16.0.7",
+    "sass-loader": "16.0.8",
     "terser-webpack-plugin": "5.5.0",
     "ts-loader": "9.5.7",
     "typescript": "6.0.3",
