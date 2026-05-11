@@ -21,7 +21,7 @@ jobs:
         with:
           generator-path: generator-jhipster-<%- baseName %>
         if: always()
-      - run: cli.cjs generate-sample --all
+      - run: <%- blueprintCliName %> generate-sample --all
         continue-on-error: true
       - run: npm run backend:build-cache --workspaces
         continue-on-error: true

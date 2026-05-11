@@ -93,6 +93,7 @@ export default class JavascriptGenerator extends JavascriptSimpleApplicationGene
           version: '0.0.0',
           description: projectDescription,
           license: 'UNLICENSED',
+          type: 'module',
         });
 
         if (packageJsonNodeEngine) {

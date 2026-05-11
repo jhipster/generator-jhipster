@@ -33,6 +33,7 @@ type Command = CommandTypeMap<typeof command>;
 export type Application = Command['Application'] &
   BaseSimpleApplicationApplication & {
     blueprintMjsExtension: string;
+    blueprintCliName: string;
     commands: string[];
     blueprintsPath: string;
   };

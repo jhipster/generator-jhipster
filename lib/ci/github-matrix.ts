@@ -28,6 +28,9 @@ export type GitHubMatrix = {
   sample: string;
   'samples-group'?: string;
   'sample-type'?: string;
+  'sample-file'?: string;
+  'sample-folder'?: string;
+  generatorOptions?: Record<string, unknown>;
   args?: string;
   'jwt-secret-key'?: string;
   jdl?: string;

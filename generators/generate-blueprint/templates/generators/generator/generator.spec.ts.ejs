@@ -18,14 +18,15 @@
 -%>
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import { defaultHelpers as helpers, result } from 'generator-jhipster/testing';
+import { createTestHelpers, typedResult } from 'generator-jhipster/testing';
 
-const SUB_GENERATOR = '<%- subGenerator %>';
-<%_ if (customGenerator) { _%>
-const SUB_GENERATOR_NAMESPACE = `jhipster-<%- application.baseName %>:${SUB_GENERATOR}`;
-<%_ } else { _%>
-const BLUEPRINT_NAMESPACE = `jhipster:${SUB_GENERATOR}`;
-<%_ } _%>
+import type Generator from './generator.js';
+
+const helpers = createTestHelpers<Generator>({
+  importMeta: import.meta,
+  defaultGenerator: 'jhipster<%- customGenerator ? `-${application.baseName}` : '' %>:<%- subGenerator %>',
+});
+const result = typedResult<Generator>();
 
 describe('SubGenerator <%- subGenerator %> of <%- application.baseName %> JHipster blueprint', () => {
   describe('run', () => {
@@ -34,7 +35,7 @@ describe('SubGenerator <%- subGenerator %> of <%- application.baseName %> JHipst
 <%_ if (subGenerator === 'jdl') { _%>
         .runJDL('application { }')
 <%_ } else { _%>
-        .run(<%- customGenerator ? 'SUB_GENERATOR_NAMESPACE' : 'BLUEPRINT_NAMESPACE' %>)
+        .runDefault()
 <%_ } _%>
         .withJHipsterConfig()
         .withOptions({

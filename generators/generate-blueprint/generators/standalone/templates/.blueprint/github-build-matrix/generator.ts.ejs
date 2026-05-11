@@ -1,0 +1,29 @@
+import { join } from 'node:path';
+import BaseCoreGenerator from 'generator-jhipster/generators/base-core';
+import { type GitHubMatrixOutput, convertToGitHubMatrix, getGithubOutputFile, getGithubSamplesGroup, setGithubTaskOutput } from 'generator-jhipster/ci';
+
+export default class extends BaseCoreGenerator {
+  samplesFolder?: string;
+  samplesGroup?: string;
+  matrix?: GitHubMatrixOutput;
+
+  get [BaseCoreGenerator.WRITING]() {
+    return this.asAnyTaskGroup({
+      async buildMatrix() {
+        const { samplesGroup = 'samples' } = this;
+        const templatePath = this.templatePath('../../generate-sample/templates/');
+        const samplesFolder = this.samplesFolder ? join(templatePath, this.samplesFolder) : templatePath;
+        const { samples, warnings } = await getGithubSamplesGroup(samplesFolder, samplesGroup);
+        if (warnings.length > 0) {
+          this.log.info(warnings.join('\n'));
+        }
+        this.matrix = convertToGitHubMatrix(samples);
+        const githubOutputFile = getGithubOutputFile();
+        this.log.info('matrix', this.matrix);
+        if (githubOutputFile) {
+          setGithubTaskOutput('matrix', JSON.stringify(this.matrix));
+        }
+      },
+    });
+  }
+}

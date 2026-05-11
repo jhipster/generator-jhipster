@@ -25,7 +25,7 @@ import { BLUEPRINT_API_VERSION } from '../../../generator-constants.ts';
 import { GENERATE_SNAPSHOTS } from '../../constants.ts';
 import { GenerateBlueprintBaseGenerator } from '../../generator.ts';
 
-const defaultPublishedFiles = ['generators', '!**/__*', '!**/*.snap', '!**/*.spec.?(c|m)js'];
+const defaultPublishedFiles = ['generators', '!**/__*', '!**/*.snap', '!**/*.spec.?(c|m)?(j|t)s'];
 
 export default class StandaloneBlueprintGenerator extends GenerateBlueprintBaseGenerator {
   recreatePackageLock!: boolean;
@@ -36,6 +36,8 @@ export default class StandaloneBlueprintGenerator extends GenerateBlueprintBaseG
     }
 
     await this.dependsOnBootstrap('generate-blueprint');
+    const initGenerator = await this.dependsOnJHipster('init');
+    initGenerator.generateReadme = false;
   }
 
   get configuring() {
@@ -50,9 +52,24 @@ export default class StandaloneBlueprintGenerator extends GenerateBlueprintBaseG
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
+  get preparing() {
+    return this.asPreparingTaskGroup({
+      async preparing({ applicationDefaults }) {
+        applicationDefaults({
+          blueprintCliName: data => `cli.c${data.javascriptBlueprint ? 'j' : 't'}s`,
+        });
+      },
+    });
+  }
+
+  get [GenerateBlueprintBaseGenerator.PREPARING]() {
+    return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
   get writing() {
     return this.asWritingTaskGroup({
       async writeBlueprintFiles({ application }) {
+        const extension = application.javascriptBlueprint ? 'mjs' : 'ts';
         await this.writeFiles({
           blocks: [
             {
@@ -63,24 +80,25 @@ export default class StandaloneBlueprintGenerator extends GenerateBlueprintBaseG
                 'eslint.config.ts.jhi.blueprint',
                 'README.md',
                 'tsconfig.json',
-                'vitest.config.ts',
-                'vitest.test-setup.ts',
-                '.blueprint/cli/commands.mjs',
-                '.blueprint/generate-sample/command.mjs',
-                '.blueprint/generate-sample/generator.mjs',
-                '.blueprint/generate-sample/index.mjs',
+                `vitest.config.ts`,
+                `vitest.test-setup.ts`,
+                `.blueprint/cli/commands.${extension}`,
+                `.blueprint/generate-sample/command.${extension}`,
+                `.blueprint/generate-sample/generator.${extension}`,
+                `.blueprint/generate-sample/index.${extension}`,
+                ...(application.javascriptBlueprint ? [] : ['generators/base-generator.ts']),
                 // Always write cli for devBlueprint usage
-                'cli/cli.cjs',
-                { sourceFile: 'cli/cli-customizations.cjs', override: false },
+                `cli/${application.blueprintCliName}`,
+                { sourceFile: `cli/cli-customizations.c${application.javascriptBlueprint ? 'j' : 't'}s`, override: false },
               ],
             },
             {
               condition: ctx => ctx.githubWorkflows,
               templates: [
-                '.blueprint/github-build-matrix/command.mjs',
-                '.blueprint/github-build-matrix/generator.mjs',
-                '.blueprint/github-build-matrix/generator.spec.mjs',
-                '.blueprint/github-build-matrix/index.mjs',
+                `.blueprint/github-build-matrix/command.${extension}`,
+                `.blueprint/github-build-matrix/generator.${extension}`,
+                `.blueprint/github-build-matrix/generator.spec.${extension}`,
+                `.blueprint/github-build-matrix/index.${extension}`,
               ],
             },
             {
@@ -149,9 +167,9 @@ export default class StandaloneBlueprintGenerator extends GenerateBlueprintBaseG
           files: defaultPublishedFiles,
           scripts: {
             ejslint: 'ejslint generators/**/*.ejs',
-            lint: 'eslint .',
+            lint: 'eslint',
             'lint-fix': 'npm run ejslint && npm run lint -- --fix',
-            pretest: 'npm run prettier-check && npm run lint',
+            pretest: 'npm run prettier-check && npm run lint && tsc',
             test: 'vitest run',
             'update-snapshot': 'vitest run --update',
             vitest: 'vitest',
@@ -173,13 +191,20 @@ export default class StandaloneBlueprintGenerator extends GenerateBlueprintBaseG
             node: jhipsterPackageJson.engines.node,
           },
         });
+        if (!application.javascriptBlueprint) {
+          this.packageJson.merge({
+            devDependencies: {
+              typescript: mainDependencies.typescript,
+            },
+          });
+        }
       },
       addCliToPackageJson({ application }) {
         const { cli, cliName } = application;
         if (!cli || !cliName) return;
         this.packageJson.merge({
           bin: {
-            [cliName]: 'cli/cli.cjs',
+            [cliName]: `cli/${application.blueprintCliName}`,
           },
           files: ['cli', ...defaultPublishedFiles],
         });

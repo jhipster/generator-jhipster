@@ -16,11 +16,5 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-module.exports = {
-<% for (const command of commands.toSorted()) { %>
-  '<%- command %>': {
-    desc: 'Run <%- command %> sub-generator (<%- baseName %> blueprint)',
-    blueprint: 'generator-jhipster-<%- baseName %>',
-  },
-<% } %>
-};
+export { <%- application.dynamic ? 'createGenerator' : 'default' %> } from './generator.ts';
+export { default as command } from './command.ts';

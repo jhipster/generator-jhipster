@@ -31,6 +31,13 @@ import {
 
 const command = {
   configs: {
+    javascriptBlueprint: {
+      description: 'Generate a javascript blueprint',
+      cli: {
+        type: Boolean,
+      },
+      scope: 'storage',
+    },
     caret: {
       cli: {
         description: 'Use caret in package.json engines',
