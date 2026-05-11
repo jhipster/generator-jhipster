@@ -90,6 +90,9 @@ type HelpersDefaults = {
 const runResult = result as JHipsterRunResult<BaseApplicationGenerator>;
 const coreRunResult = result as JHipsterRunResult;
 
+/**
+ * @deprecated see typedResult
+ */
 export const resultWithGenerator = <T extends BaseCoreGenerator>(): JHipsterRunResult<T> => runResult as unknown as JHipsterRunResult<T>;
 
 export { coreRunResult, runResult, runResult as result };
