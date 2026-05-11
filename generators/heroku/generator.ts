@@ -400,9 +400,8 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
 
       addHerokuBuildPlugin({ application }) {
         if (!application.buildToolGradle) return;
-        // TODO addGradlePluginCallback is an internal api, switch to source api when converted to BaseSimpleApplicationGenerator
+        // TODO switch to source api, composing with build-tool may be needed.
         this.editFile('build.gradle', addGradlePluginCallback({ id: 'com.heroku.sdk.heroku-gradle', version: '1.0.4' }));
-        // TODO applyFromGradleCallback is an internal api, switch to source api when converted to BaseSimpleApplicationGenerator
         this.editFile('build.gradle', applyFromGradleCallback({ script: 'gradle/heroku.gradle' }));
       },
 
