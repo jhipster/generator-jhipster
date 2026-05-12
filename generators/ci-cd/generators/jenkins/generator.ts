@@ -34,15 +34,7 @@ export default class CiCdJenkinsGenerator extends BaseSimpleApplicationGenerator
   get writing() {
     return this.asWritingTaskGroup({
       async writeFiles({ application }) {
-        if (!this.provider) {
-          return;
-        }
-
-        const rootTemplatesPath = this.fetchFromInstalledJHipster('ci-cd/templates');
         await this.writeFiles({
-          rootTemplatesPath,
-          blocks: [
-            {
               templates: [
                 {
                   sourceFile: 'jenkins/Jenkinsfile',
@@ -57,8 +49,6 @@ export default class CiCdJenkinsGenerator extends BaseSimpleApplicationGenerator
                   destinationFile: ctx => `${ctx.srcMainResources}idea.gdsl`,
                 },
               ],
-            },
-          ],
           context: application,
         });
       },

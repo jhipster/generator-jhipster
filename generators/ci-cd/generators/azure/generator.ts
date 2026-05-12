@@ -34,14 +34,8 @@ export default class CiCdAzureGenerator extends BaseSimpleApplicationGenerator<C
   get writing() {
     return this.asWritingTaskGroup({
       async writeFiles({ application }) {
-        if (!this.provider) {
-          return;
-        }
-
-        const rootTemplatesPath = this.fetchFromInstalledJHipster('ci-cd/templates');
         await this.writeFiles({
-          rootTemplatesPath,
-          blocks: [{ templates: ['azure-pipelines.yml'] }],
+          templates: ['azure-pipelines.yml'],
           context: application,
         });
       },

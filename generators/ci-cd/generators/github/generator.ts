@@ -34,14 +34,8 @@ export default class CiCdGithubGenerator extends BaseSimpleApplicationGenerator<
   get writing() {
     return this.asWritingTaskGroup({
       async writeFiles({ application }) {
-        if (!this.provider) {
-          return;
-        }
-
-        const rootTemplatesPath = this.fetchFromInstalledJHipster('ci-cd/templates');
         await this.writeFiles({
-          rootTemplatesPath,
-          blocks: [{ templates: ['.github/workflows/main.yml'] }],
+          templates: ['.github/workflows/main.yml'],
           context: application,
         });
       },
