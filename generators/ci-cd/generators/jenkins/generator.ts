@@ -35,20 +35,20 @@ export default class CiCdJenkinsGenerator extends BaseSimpleApplicationGenerator
     return this.asWritingTaskGroup({
       async writeFiles({ application }) {
         await this.writeFiles({
-              templates: [
-                {
-                  sourceFile: 'jenkins/Jenkinsfile',
-                  destinationFile: 'Jenkinsfile',
-                },
-                {
-                  sourceFile: 'jenkins/jenkins.yml',
-                  destinationFile: ctx => `${ctx.dockerServicesDir}jenkins.yml`,
-                },
-                {
-                  sourceFile: 'jenkins/idea.gdsl',
-                  destinationFile: ctx => `${ctx.srcMainResources}idea.gdsl`,
-                },
-              ],
+          templates: [
+            {
+              sourceFile: 'jenkins/Jenkinsfile',
+              destinationFile: 'Jenkinsfile',
+            },
+            {
+              sourceFile: 'jenkins/jenkins.yml',
+              destinationFile: ctx => `${ctx.dockerServicesDir}jenkins.yml`,
+            },
+            {
+              sourceFile: 'jenkins/idea.gdsl',
+              destinationFile: ctx => `${ctx.srcMainResources}idea.gdsl`,
+            },
+          ],
           context: application,
         });
       },
