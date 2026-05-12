@@ -33,5 +33,5 @@ export function join(set: Set<unknown>, separator = ',', quoted = false) {
   if (!set) {
     throw new Error('A Set must be passed so as to join elements.');
   }
-  return arrayJoin(Array.from(set), separator, quoted);
+  return arrayJoin([...set], separator, quoted);
 }
