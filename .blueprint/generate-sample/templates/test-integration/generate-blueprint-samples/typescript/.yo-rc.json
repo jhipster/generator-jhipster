@@ -194,8 +194,8 @@
         "sbs": false
       }
     },
+    "githubWorkflows": true,
     "javascriptBlueprint": false,
-    "jhipsterVersion": "9.0.1",
     "localBlueprint": false,
     "prettierDefaultIndent": 2,
     "projectName": "CiTest",

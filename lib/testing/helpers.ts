@@ -74,6 +74,8 @@ type JHipsterRunResult<GeneratorType extends BaseCoreGenerator = BaseCoreGenerat
 
   createJHipster: (ns: string) => JHipsterRunContext;
 
+  assertJHipsterConfigContent: (expected: Record<string, any>) => void;
+
   application?: ApplicationAll;
 
   entities?: Record<string, Entity>;
@@ -487,6 +489,8 @@ plugins {
     });
     runResult.entities = entitiesMap ? Object.fromEntries(entitiesMap.entries()) : undefined;
     runResult.createJHipster = (gen: string) => runResult.create(toJHipsterNamespace(gen)) as JHipsterRunContext;
+    runResult.assertJHipsterConfigContent = (expected: Record<string, any>) =>
+      runResult.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': expected });
 
     return runResult;
   }
