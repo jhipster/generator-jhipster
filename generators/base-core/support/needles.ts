@@ -22,7 +22,7 @@ import { transformContents } from '@yeoman/transform';
 import { escapeRegExp, kebabCase } from 'lodash-es';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 
-import type { CascatedEditFileCallback, EditFileCallback } from '../api.ts';
+import type { CascadedEditFileCallback, EditFileCallback } from '../api.ts';
 import type CoreGenerator from '../index.ts';
 
 import { joinCallbacks } from './write-files.ts';
@@ -286,7 +286,7 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
 };
 
 /**
- * Create an callback to insert the new content into existing content.
+ * Create a callback to insert the new content into existing content.
  *
  * A `contentToAdd` of string type will remove leading `\n`.
  * Leading `\n` allows a prettier template formatting.
@@ -367,12 +367,12 @@ export function createBaseNeedle<Generator extends CoreGenerator = CoreGenerator
   this: Generator,
   options: NeedleFileInsertion,
   needles: Record<string, string>,
-): CascatedEditFileCallback<Generator>;
+): CascadedEditFileCallback<Generator>;
 export function createBaseNeedle<Generator extends CoreGenerator = CoreGenerator>(
   this: Generator | void,
   options: NeedleFileInsertion | Record<string, string>,
   needles?: Record<string, string>,
-): EditFileCallback<Generator> | CascatedEditFileCallback<Generator> {
+): EditFileCallback<Generator> | CascadedEditFileCallback<Generator> {
   const actualNeedles = (needles ??= options as Record<string, string>);
   const actualOptions: Partial<NeedleFileInsertion> | undefined = needles === undefined ? {} : options;
 
