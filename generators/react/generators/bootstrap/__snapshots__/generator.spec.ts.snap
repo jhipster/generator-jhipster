@@ -60,7 +60,7 @@ exports[`generator - react:bootstrap bootstrapping default config should prepare
   "clientThemeVariantDark": false,
   "clientThemeVariantLight": false,
   "clientThemeVariantPrimary": false,
-  "commandName": undefined,
+  "commandName": "react:bootstrap",
   "communicationSpringWebsocket": undefined,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,

@@ -481,6 +481,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
   "generators/ci-cd/generators/circle/templates/template-file-ci-cd:circle.ejs": {
     "stateCleared": "modified",
   },
+  "generators/ci-cd/generators/common/command.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/common/generator.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/common/generator.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/common/index.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/ci-cd/generators/common/templates/template-file-ci-cd:common.ejs": {
+    "stateCleared": "modified",
+  },
   "generators/ci-cd/generators/github/command.ts": {
     "stateCleared": "modified",
   },

@@ -72,7 +72,7 @@ exports[`generator - angular:bootstrap bootstrapping default config should prepa
   "clientThemeVariantDark": false,
   "clientThemeVariantLight": false,
   "clientThemeVariantPrimary": false,
-  "commandName": undefined,
+  "commandName": "angular:bootstrap",
   "communicationSpringWebsocket": undefined,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,

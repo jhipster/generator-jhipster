@@ -20,7 +20,7 @@ exports[`generator - javascript-simple-application:bootstrap bootstrapping defau
   "clientSrcDir": "src/main/webapp/",
   "clientTestDir": "src/test/javascript/",
   "clientTheme": "none",
-  "commandName": undefined,
+  "commandName": "javascript-simple-application:bootstrap",
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,
   "dasherizedBaseName": "jhipster",
