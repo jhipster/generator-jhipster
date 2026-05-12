@@ -170,8 +170,8 @@ At samples folder, a `jhipster-samples.code-workspace` is generated. It provides
 CI tests use the following commands:
 
 ```
-npm ci:backend:test
-npm ci:frontend:test
+npm run ci:backend:test
+npm run ci:frontend:test
 npm run ci:e2e:package # Builds the application
 npm run ci:e2e:prepare # Starts the application using docker
 npm run ci:e2e:run # Runs e2e tests
