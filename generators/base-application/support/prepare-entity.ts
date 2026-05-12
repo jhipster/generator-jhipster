@@ -500,7 +500,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
   const types = entity.relationships
     .filter(rel => rel.otherEntity.primaryKey)
     .flatMap(rel => rel.otherEntity.primaryKey!.fields.map(f => f.fieldType));
-  entity.otherEntityPrimaryKeyTypes = Array.from(new Set(types));
+  entity.otherEntityPrimaryKeyTypes = [...new Set(types)];
   entity.otherEntityPrimaryKeyTypesIncludesUUID = types.includes(UUID);
 
   entity.relationships.forEach(relationship => {
