@@ -125,7 +125,7 @@ function getConfigForClientApplication(options: ApplicationDefaults = {}): Appli
   }
   switch (clientFramework) {
     case 'vue': {
-      options.clientBundler ??= options.microfrontend || options.applicationType === 'microservice' ? 'webpack' : 'vite';
+      options.clientBundler ??= 'vite';
       options.devServerPort ??= options.clientBundler === 'webpack' ? 9060 : 9000;
       break;
     }

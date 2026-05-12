@@ -359,19 +359,21 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
         if (clientBundlerVite) {
           source.mergeClientPackageJson!({
             devDependencies: {
-              '@originjs/vite-plugin-federation': '1.3.6',
+              '@module-federation/runtime': null,
+              '@module-federation/vite': null,
             },
           });
         } else if (clientBundlerWebpack) {
           if (applicationTypeGateway) {
             source.mergeClientPackageJson!({
               devDependencies: {
-                '@module-federation/enhanced': null,
+                '@module-federation/runtime': null,
               },
             });
           }
           source.mergeClientPackageJson!({
             devDependencies: {
+              '@module-federation/enhanced': null,
               'browser-sync-webpack-plugin': null,
               'copy-webpack-plugin': null,
               'css-loader': null,
@@ -446,7 +448,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
       end({ application }) {
         this.log.ok(`Vue ${application.nodeDependencies.vue} application generated successfully.`);
         this.log.log(
-          chalk.green(`  Start your Webpack development server with:
+          chalk.green(`  Start your ${application.clientBundlerName} development server with:
   ${chalk.yellow.bold(`${application.nodePackageManager} start`)}
 `),
         );

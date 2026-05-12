@@ -71,7 +71,8 @@ describe(`generator - ${clientFramework}`, () => {
       });
 
       it('should match application snapshot', () => {
-        const application = runResult.application;
+        const application = { ...runResult.application! };
+        delete application.autoCrlf;
         expect(application).toMatchSnapshot({
           addLanguageCallbacks: expect.any(Array),
           customizeTemplatePaths: expect.any(Array),
@@ -118,6 +119,18 @@ describe(`generator - ${clientFramework}`, () => {
         runResult.assertNoFileContent(`${clientRootDir}package.json`, /VERSION_MANAGED_BY_CLIENT_ANGULAR/);
         runResult.assertNoFileContent(`${clientRootDir}package.json`, /VERSION_MANAGED_BY_CLIENT_REACT/);
         runResult.assertNoFileContent(`${clientRootDir}package.json`, /VERSION_MANAGED_BY_CLIENT_VUE/);
+      });
+
+      it('should configure Vite module federation for Vite microfrontends', () => {
+        const application = runResult.application!;
+        const viteConfigFile = `${clientRootDir}vite.config.ts`;
+        if (application.microfrontend && application.clientBundlerVite) {
+          runResult.assertFileContent(viteConfigFile, "import { federation } from '@module-federation/vite';");
+          runResult.assertFileContent(viteConfigFile, "filename: 'remoteEntry.js'");
+          runResult.assertNoFileContent(viteConfigFile, '@originjs/vite-plugin-federation');
+        } else {
+          runResult.assertNoFileContent(viteConfigFile, '@module-federation/vite');
+        }
       });
 
       describe('withAdminUi', () => {
