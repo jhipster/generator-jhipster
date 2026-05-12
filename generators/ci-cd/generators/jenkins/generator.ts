@@ -16,21 +16,60 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../../../base-simple-application/index.ts';
-import { BaseCiCdGenerator } from '../../support/generator.ts';
+import BaseSimpleApplicationGenerator from '../../../base-simple-application/index.ts';
+import type { Application as CiCdApplication } from '../../types.ts';
 
-export default class CiCdJenkinsGenerator extends BaseCiCdGenerator {
+export default class CiCdJenkinsGenerator extends BaseSimpleApplicationGenerator<CiCdApplication> {
   readonly provider = 'jenkins' as const;
 
   async beforeQueue() {
-    await super.beforeQueue();
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints();
+    }
+
+    await this.dependsOnBootstrap('ci-cd');
+    await this.dependsOnJHipster('jhipster:ci-cd:common');
   }
 
   get writing() {
-    return super.writing;
+    return this.asWritingTaskGroup({
+      async writeFiles({ application }) {
+        if (!this.provider) {
+          return;
+        }
+
+        const rootTemplatesPath = this.fetchFromInstalledJHipster('ci-cd/templates');
+        await this.writeFiles({
+          rootTemplatesPath,
+          blocks: [
+            {
+              templates: [
+                {
+                  sourceFile: 'jenkins/Jenkinsfile',
+                  destinationFile: 'Jenkinsfile',
+                },
+                {
+                  sourceFile: 'jenkins/jenkins.yml',
+                  destinationFile: ctx => `${ctx.dockerServicesDir}jenkins.yml`,
+                },
+                {
+                  sourceFile: 'jenkins/idea.gdsl',
+                  destinationFile: ctx => `${ctx.srcMainResources}idea.gdsl`,
+                },
+              ],
+            },
+          ],
+          context: application,
+        });
+      },
+    });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
-    return super[BaseApplicationGenerator.WRITING];
+  get [BaseSimpleApplicationGenerator.WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.writing);
+  }
+
+  shouldAskForPrompts() {
+    return true;
   }
 }
