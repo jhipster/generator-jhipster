@@ -1,4 +1,3 @@
-export { typedResult } from 'yeoman-test';
 export {
   type FakeBlueprintOptions,
   basicHelpers,
@@ -14,6 +13,7 @@ export {
   resultWithGenerator,
   runResult,
   skipPrettierHelpers,
+  typedResult,
 } from './helpers.ts';
 export * from './mutate-data.ts';
 

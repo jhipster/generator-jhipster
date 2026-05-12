@@ -4,8 +4,34 @@
     "baseName": "foo",
     "cli": true,
     "defaultCommand": "generate-blueprint",
-    "localBlueprint": false,
+    "entities": [],
     "generators": {
+      "angular": {
+        "command": true,
+        "priorities": [
+          "initializing",
+          "prompting",
+          "configuring",
+          "composing",
+          "loading",
+          "preparing",
+          "configuringEachEntity",
+          "loadingEntities",
+          "preparingEachEntity",
+          "preparingEachEntityField",
+          "preparingEachEntityRelationship",
+          "postPreparingEachEntity",
+          "default",
+          "writing",
+          "writingEntities",
+          "postWriting",
+          "postWritingEntities",
+          "install",
+          "postInstall",
+          "end"
+        ],
+        "sbs": false
+      },
       "client": {
         "command": false,
         "priorities": [
@@ -75,29 +101,6 @@
         ],
         "sbs": false
       },
-      "server": {
-        "command": false,
-        "priorities": [
-          "initializing",
-          "prompting",
-          "configuring",
-          "composing",
-          "loading",
-          "preparing",
-          "preparingEachEntity",
-          "preparingEachEntityField",
-          "preparingEachEntityRelationship",
-          "postPreparingEachEntity",
-          "default",
-          "writing",
-          "writingEntities",
-          "postWriting",
-          "postWritingEntities",
-          "install",
-          "end"
-        ],
-        "sbs": false
-      },
       "jdl": {
         "command": true,
         "priorities": [
@@ -107,45 +110,8 @@
           "composing",
           "loading",
           "preparing",
-          "configuringEachEntity",
-          "loadingEntities",
-          "preparingEachEntity",
-          "preparingEachEntityField",
-          "preparingEachEntityRelationship",
-          "postPreparingEachEntity",
           "default",
-          "writing",
-          "writingEntities",
           "postWriting",
-          "postWritingEntities",
-          "loadingTranslations",
-          "install",
-          "postInstall",
-          "end"
-        ],
-        "sbs": false
-      },
-      "spring-data-relational": {
-        "command": true,
-        "priorities": [
-          "initializing",
-          "prompting",
-          "configuring",
-          "composing",
-          "loading",
-          "preparing",
-          "configuringEachEntity",
-          "loadingEntities",
-          "preparingEachEntity",
-          "preparingEachEntityField",
-          "preparingEachEntityRelationship",
-          "postPreparingEachEntity",
-          "default",
-          "writing",
-          "writingEntities",
-          "postWriting",
-          "postWritingEntities",
-          "loadingTranslations",
           "install",
           "postInstall",
           "end"
@@ -172,14 +138,36 @@
           "writingEntities",
           "postWriting",
           "postWritingEntities",
-          "loadingTranslations",
           "install",
           "postInstall",
           "end"
         ],
         "sbs": false
       },
-      "angular": {
+      "server": {
+        "command": false,
+        "priorities": [
+          "initializing",
+          "prompting",
+          "configuring",
+          "composing",
+          "loading",
+          "preparing",
+          "preparingEachEntity",
+          "preparingEachEntityField",
+          "preparingEachEntityRelationship",
+          "postPreparingEachEntity",
+          "default",
+          "writing",
+          "writingEntities",
+          "postWriting",
+          "postWritingEntities",
+          "install",
+          "end"
+        ],
+        "sbs": false
+      },
+      "spring-data-relational": {
         "command": true,
         "priorities": [
           "initializing",
@@ -199,7 +187,6 @@
           "writingEntities",
           "postWriting",
           "postWritingEntities",
-          "loadingTranslations",
           "install",
           "postInstall",
           "end"
@@ -207,7 +194,8 @@
         "sbs": false
       }
     },
-    "mainGenerator": "generate-blueprint",
+    "jhipsterVersion": "9.0.0",
+    "localBlueprint": false,
     "prettierDefaultIndent": 2,
     "projectName": "CiTest",
     "subGenerators": ["client", "common", "cypress", "server", "jdl", "spring-data-relational", "languages", "angular"]

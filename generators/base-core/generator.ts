@@ -562,10 +562,10 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     }
   }
 
-  #parseJHipsterConfigs(configs: JHipsterConfigs = {}, common = false) {
+  #parseJHipsterConfigs(configs: JHipsterConfigs = {}) {
     Object.entries(configs).forEach(([optionName, configDesc]) => {
       const optionsDesc = convertConfigToOption(optionName, configDesc);
-      if (!optionsDesc?.type || (common && configDesc.scope === 'generator')) return;
+      if (!optionsDesc?.type) return;
 
       let optionValue;
       const { name, type } = optionsDesc;

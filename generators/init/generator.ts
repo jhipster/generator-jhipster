@@ -39,6 +39,7 @@ export default class InitGenerator extends BaseSimpleApplicationGenerator<InitAp
       async compose() {
         await this.composeWithJHipster('git');
         const generatorOptions = { fromInit: true };
+        await this.composeWithJHipster('jhipster:javascript-simple-application');
         await this.composeWithJHipster('jhipster:javascript-simple-application:prettier', { generatorOptions });
         await this.composeWithJHipster('jhipster:javascript-simple-application:husky', { generatorOptions });
         await this.composeWithJHipster('jhipster:javascript-simple-application:eslint', { generatorOptions });

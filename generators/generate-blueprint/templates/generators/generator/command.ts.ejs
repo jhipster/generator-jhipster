@@ -16,11 +16,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-module.exports = {
-<% for (const command of commands.toSorted()) { %>
-  '<%- command %>': {
-    desc: 'Run <%- command %> sub-generator (<%- baseName %> blueprint)',
-    blueprint: 'generator-jhipster-<%- baseName %>',
+import type { JHipsterCommandDefinition } from 'generator-jhipster';
+<%_ if (!sbs && !customGenerator) { _%>
+import { command as parentGeneratorCommand } from 'generator-jhipster/generators/<%- subGenerator %>';
+
+const { configs: parentGeneratorConfigs, arguments: parentGeneratorArguments } = parentGeneratorCommand as JHipsterCommandDefinition;
+<%_ } _%>
+
+export default {
+  configs: {
+<%_ if (!sbs && !customGenerator) { _%>
+    ...parentGeneratorConfigs,
+<%_ } _%>
   },
-<% } %>
-};
+<%_ if (!sbs && !customGenerator) { _%>
+  arguments: {
+    ...parentGeneratorArguments,
+  },
+<%_ } _%>
+} as const satisfies JHipsterCommandDefinition;
