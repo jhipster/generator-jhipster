@@ -19,32 +19,71 @@
 import { before, describe, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
-import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.ts';
+import { createTestHelpers, typedResult } from '../../lib/testing/index.ts';
+import { testBlueprintSupport } from '../../test/support/tests.ts';
 
-import Generator from './index.ts';
+import type Generator from './index.ts';
 
 const generator = basename(import.meta.dirname);
+const helpers = createTestHelpers<Generator>({
+  importMeta: import.meta,
+});
+const result = typedResult<Generator>();
 
 const mockedGenerators = ['jhipster:init'];
 
 describe(`generator - ${generator}`, () => {
-  shouldSupportFeatures(Generator);
-  describe('blueprint support', () => testBlueprintSupport(generator));
+  it('should support features parameter', async () => {
+    expect(await helpers.forwardsFeaturesParameter()).toBe(true);
+  });
+  describe('help', () => {
+    it('should print expected information', async () => {
+      expect(await helpers.getCommandHelpOutput()).toMatchSnapshot();
+    });
+  });
+  describe('blueprint support', () => testBlueprintSupport(helpers.commandName!));
+
+  describe('migration', () => {
+    describe('javascriptBlueprint option', () => {
+      describe('blueprints prior to v9.0.1', () => {
+        before(async () => {
+          await helpers.runJHipster().withJHipsterConfig({ jhipsterVersion: '9.0.0' }).commitFiles().withMockedGenerators(mockedGenerators);
+        });
+
+        it('should to true', () => {
+          result.assertJHipsterConfigContent({
+            javascriptBlueprint: true,
+          });
+        });
+      });
+
+      describe('blueprints after v9.0.1', () => {
+        before(async () => {
+          await helpers.runJHipster().withJHipsterConfig({ jhipsterVersion: '9.0.1' }).commitFiles().withMockedGenerators(mockedGenerators);
+        });
+
+        it('should not set', () => {
+          result.assertJHipsterConfigContent({
+            javascriptBlueprint: undefined,
+          });
+        });
+      });
+    });
+  });
 
   describe('with', () => {
     describe('default config', () => {
       before(async () => {
-        await helpers.runJHipster(generator).withJHipsterConfig().withMockedGenerators(mockedGenerators);
+        await helpers.runJHipster().withJHipsterConfig().withMockedGenerators(mockedGenerators);
       });
       it('should compose with init generator', () => {
-        runResult.assertGeneratorComposedOnce('jhipster:init');
+        result.assertGeneratorComposedOnce('jhipster:init');
       });
       it('should write files and match snapshot', () => {
-        expect(runResult.getStateSnapshot()).toMatchSnapshot();
+        expect(result.getStateSnapshot()).toMatchSnapshot();
       });
       it('should match application snapshot', () => {
-        const application = runResult.application;
+        const application = result.application;
         expect(application).toMatchSnapshot({
           jhipsterPackageJson: expect.any(Object),
         });
@@ -52,16 +91,16 @@ describe(`generator - ${generator}`, () => {
     });
     describe('all option', () => {
       before(async () => {
-        await helpers.runJHipster(generator).withOptions({ allGenerators: true }).withMockedGenerators(mockedGenerators);
+        await helpers.runJHipster().withOptions({ allGenerators: true }).withMockedGenerators(mockedGenerators);
       });
       it('should compose with init generator', () => {
-        runResult.assertGeneratorComposedOnce('jhipster:init');
+        result.assertGeneratorComposedOnce('jhipster:init');
       });
       it('should match snapshot', () => {
-        expect(runResult.getStateSnapshot()).toMatchSnapshot();
+        expect(result.getStateSnapshot()).toMatchSnapshot();
       });
       it('should match application snapshot', () => {
-        const application = runResult.application;
+        const application = result.application;
         expect(application).toMatchSnapshot({
           jhipsterPackageJson: expect.any(Object),
           generators: expect.any(Object),
@@ -71,13 +110,13 @@ describe(`generator - ${generator}`, () => {
     });
     describe('local-blueprint option', () => {
       before(async () => {
-        await helpers.runJHipster(generator).withOptions({ localBlueprint: true }).withMockedGenerators(mockedGenerators);
+        await helpers.runJHipster().withOptions({ localBlueprint: true }).withMockedGenerators(mockedGenerators);
       });
       it('should not compose with init generator', () => {
-        runResult.assertGeneratorNotComposed('jhipster:init');
+        result.assertGeneratorNotComposed('jhipster:init');
       });
       it('should match snapshot', () => {
-        expect(runResult.getStateSnapshot()).toMatchInlineSnapshot(`
+        expect(result.getStateSnapshot()).toMatchInlineSnapshot(`
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -86,7 +125,7 @@ describe(`generator - ${generator}`, () => {
 `);
       });
       it('should match application snapshot', () => {
-        const application = runResult.application;
+        const application = result.application;
         expect(application).toMatchSnapshot({
           jhipsterPackageJson: expect.any(Object),
         });
@@ -95,15 +134,15 @@ describe(`generator - ${generator}`, () => {
     describe('local-blueprint option and app generator', () => {
       before(async () => {
         await helpers
-          .runJHipster(generator)
+          .runJHipster()
           .withOptions({ localBlueprint: true, subGenerators: ['app'], allPriorities: true })
           .withMockedGenerators(mockedGenerators);
       });
       it('should not compose with init generator', () => {
-        runResult.assertGeneratorNotComposed('jhipster:init');
+        result.assertGeneratorNotComposed('jhipster:init');
       });
       it('should write java files with gradle build tool and match snapshot', () => {
-        expect(runResult.getStateSnapshot()).toMatchInlineSnapshot(`
+        expect(result.getStateSnapshot()).toMatchInlineSnapshot(`
 {
   ".blueprint/app/command.ts": {
     "stateCleared": "modified",
@@ -124,7 +163,7 @@ describe(`generator - ${generator}`, () => {
 `);
       });
       it('should match application snapshot', () => {
-        const application = runResult.application;
+        const application = result.application;
         expect(application).toMatchSnapshot({
           jhipsterPackageJson: expect.any(Object),
         });

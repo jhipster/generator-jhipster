@@ -1,5 +1,43 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
+exports[`generator - generate-blueprint help should print expected information 1`] = `
+"Usage: jhipster generate-blueprint [options]
+
+Generate a blueprint
+
+Options:
+  --auto-crlf                          Detect line endings
+  --remove-needles                     Remove needles, needles are used by entity and language generators to inject code
+  --javascript-blueprint               Generate a javascript blueprint
+  --caret                              Use caret in package.json engines
+  --defaults                           Use default values for the generator
+  --git-dependency <value>             Use git dependency (eg: github:jhipster/generator-jhipster#main)
+  --cli-name <value>                   CLI name
+  --skip-workflows                     Skip github workflows
+  --ignore-existing-generators         Ignore existing generators
+  --github-repository <value>          Github Repository
+  --github-workflows                   Generate github workflows
+  --generate-snapshots                 Generate test snapshots
+  --sub-generators <value...>          Sub generators to generate
+  --additional-sub-generators <value>  Comma separated additional sub generators to generate
+  --dynamic                            Generate dynamic generators (advanced)
+  --js                                 Use js extension
+  --local-blueprint                    Generate a local blueprint
+  --cli                                Generate a cli for the blueprint
+  --all-generators                     Generate every sub generator
+  --all-priorities                     Generate every priority
+  --skip-git                           Skip git repository initialization
+  --force-git                          Force commit to git repository
+  --commit-msg <value>                 Commit changes (implies forceGit)
+  --monorepository                     Use monorepository
+  --base-name <value>                  Application base name
+  --prettier-tab-width <value>         Default tab width for prettier (default: 2)
+  --skip-commit-hook                   Skip adding husky commit hooks
+  --recreate-package-lock              Recreate package lock
+  -h, --help                           display help for command
+"
+`;
+
 exports[`generator - generate-blueprint with all option should match application snapshot 1`] = `
 {
   "additionalSubGenerators": "",
