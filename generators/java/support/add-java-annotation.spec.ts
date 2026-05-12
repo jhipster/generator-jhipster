@@ -171,7 +171,7 @@ import com.mycompany.myapp.Foo;
 public class MyTest {}`);
       });
 
-      it('should add the annotation with multiples parameter using callback and import', () => {
+      it('should add the annotation with multiple parameters using callback and import', () => {
         expect(
           addJavaAnnotation(
             `package com.mycompany.myapp;

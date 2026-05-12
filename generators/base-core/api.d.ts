@@ -4,9 +4,9 @@ export type EditFileCallback<Generator = CoreGenerator> = (this: Generator, cont
 
 export type EditFileOptions = { create?: boolean; ignoreNonExisting?: boolean | string; assertModified?: boolean; autoCrlf?: boolean };
 
-export type CascatedEditFileCallback<Generator = CoreGenerator> = (
+export type CascadedEditFileCallback<Generator = CoreGenerator> = (
   ...callbacks: EditFileCallback<Generator>[]
-) => CascatedEditFileCallback<Generator>;
+) => CascadedEditFileCallback<Generator>;
 
 type DataCallback<Type, DataType, Generator = CoreGenerator> = Type | ((this: Generator, data: DataType) => Type);
 

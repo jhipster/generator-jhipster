@@ -59,7 +59,7 @@ import type GeneratorsByNamespace from '../types.ts';
 import type { GeneratorsWithBootstrap } from '../types.ts';
 
 import type {
-  CascatedEditFileCallback,
+  CascadedEditFileCallback,
   EditFileCallback,
   EditFileOptions,
   ValidationResult,
@@ -1224,24 +1224,24 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * // Throws if `foo.txt` doesn't exists or append the content.
    * editFile('foo.txt', content => content + 'foo.txt content');
    * @example
-   * // Appends `foo.txt` content if whether exists or not.
+   * // Appends `foo.txt` content whether it exists or not.
    * editFile('foo.txt', { create: true }, content => content + 'foo.txt content');
    * @example
-   * // Appends `foo.txt` content if whether exists or not using the returned cascaded callback.
+   * // Appends `foo.txt` content whether it exists or not using the returned cascaded callback.
    * editFile('foo.txt')(content => content + 'foo.txt content');
    */
-  editFile(file: string, ...transformCallbacks: EditFileCallback<this>[]): CascatedEditFileCallback<this>;
+  editFile(file: string, ...transformCallbacks: EditFileCallback<this>[]): CascadedEditFileCallback<this>;
   editFile(
     file: string,
     options: EditFileOptions | NeedleInsertion,
     ...transformCallbacks: EditFileCallback<this>[]
-  ): CascatedEditFileCallback<this>;
+  ): CascadedEditFileCallback<this>;
 
   editFile(
     file: string,
     options?: EditFileOptions | EditFileCallback<this> | NeedleInsertion,
     ...transformCallbacks: EditFileCallback<this>[]
-  ): CascatedEditFileCallback<this> {
+  ): CascadedEditFileCallback<this> {
     let actualOptions: EditFileOptions;
     if (typeof options === 'function') {
       transformCallbacks = [options, ...transformCallbacks];
@@ -1283,7 +1283,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
     }
 
     let newContent = originalContent;
-    const writeCallback = (...callbacks: EditFileCallback<this>[]): CascatedEditFileCallback<this> => {
+    const writeCallback = (...callbacks: EditFileCallback<this>[]): CascadedEditFileCallback<this> => {
       const { autoCrlf = this.jhipsterConfigWithDefaults.autoCrlf, assertModified } = actualOptions;
       try {
         const fileHasCrlf = autoCrlf && hasCrlf(newContent);
