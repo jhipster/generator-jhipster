@@ -49,7 +49,7 @@ To generate a new application, you can run the following command in your termina
 node bin/jhipster.cjs generate-sample ng-default --global
 ```
 
-From the root of your cloned `generator-jhipster` project, this will generate a sample application in the current folder using the local version of JHipster. ng-default is the name of the sample application, you can replace it with any other sample name in the [code samples](./test-integration/samples) to generate a sample application. By default, the sample will be generated in the `../jhipster-samples` folder.
+From the root of your cloned `generator-jhipster` project, this will generate a sample application in the current folder using the local version of JHipster. ng-default is the name of the sample application, you can replace it with any other sample name in the [code samples](./.blueprint/generate-sample/templates/test-integration/samples) to generate a sample application. By default, the sample will be generated in the `../jhipster-samples` folder.
 For workspaces, an additional `jhipster-samples.code-workspace` file will be generated in the same folder, which can be used to open the samples in a single VSCode workspace. Still, you'll need to delete the `jhipster-samples.code-workspace` file if you want to generate another workspace sample in the same folder.
 
 #### Generating a new application using npm link
@@ -104,7 +104,7 @@ It is possible to debug JHipster's code using a Node.js debugger. To achieve thi
 
 #### Debugging with VSCode
 
-To start debugging JHipster with **VSCode**, open the generator code in your workspace and simply press F5 (or click the green arrow in the **Debug** menu reachable with Ctrl/Cmd+Shift+D). This will start the generator in debug mode and generate files in the [test-integration/samples/app-sample-dev](test-integration/samples/app-sample-dev) folder.
+To start debugging JHipster with **VSCode**, open the generator code in your workspace and simply press F5 (or click the green arrow in the **Debug** menu reachable with Ctrl/Cmd+Shift+D). This will start the generator in debug mode and generate files in the [.blueprint/generate-sample/templates/test-integration/samples/app-sample-dev](.blueprint/generate-sample/templates/test-integration/samples/app-sample-dev) folder.
 
 It is also possible to debug sub generators by selecting one of the other debug options (for example `jhipster entity`). Those debug configurations are specified in the `.vscode/launch.json` file.
 
@@ -117,7 +117,7 @@ If you want to test a specific generator, you can create a new Node.js run confi
 application-parameters="generate-sample ms-ng-oauth2-mongodb-caffeine --global" path-to-js-file="bin/jhipster.cjs" typescript-loader="bundled" working-dir="$PROJECT_DIR$"
 ```
 
-ms-ng-oauth2-mongodb-caffeine is the name of the sample application, you can replace it with any other sample name in the [code samples](./test-integration/samples) to generate a sample application. By default, the sample will be generated in the `../jhipster-samples` folder.
+ms-ng-oauth2-mongodb-caffeine is the name of the sample application, you can replace it with any other sample name in the [code samples](./.blueprint/generate-sample/templates/test-integration/samples) to generate a sample application. By default, the sample will be generated in the `../jhipster-samples` folder.
 
 ## Generator implementation
 
@@ -170,8 +170,8 @@ At samples folder, a `jhipster-samples.code-workspace` is generated. It provides
 CI tests use the following commands:
 
 ```
-npm ci:backend:test
-npm ci:frontend:test
+npm run ci:backend:test
+npm run ci:frontend:test
 npm run ci:e2e:package # Builds the application
 npm run ci:e2e:prepare # Starts the application using docker
 npm run ci:e2e:run # Runs e2e tests
