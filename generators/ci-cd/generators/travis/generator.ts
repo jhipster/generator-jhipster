@@ -26,27 +26,11 @@ export default class CiCdTravisGenerator extends BaseCiCdGenerator {
     await super.beforeQueue();
   }
 
-  get preparing() {
-    return super.preparing;
-  }
-
-  get [BaseApplicationGenerator.PREPARING]() {
-    return super[BaseApplicationGenerator.PREPARING];
-  }
-
   get writing() {
     return super.writing;
   }
 
   get [BaseApplicationGenerator.WRITING]() {
     return super[BaseApplicationGenerator.WRITING];
-  }
-
-  get postWriting() {
-    return super.postWriting;
-  }
-
-  get [BaseApplicationGenerator.POST_WRITING]() {
-    return super[BaseApplicationGenerator.POST_WRITING];
   }
 }

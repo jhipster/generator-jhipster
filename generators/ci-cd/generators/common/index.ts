@@ -16,21 +16,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../../../base-simple-application/index.ts';
-import { BaseCiCdGenerator } from '../../support/generator.ts';
-
-export default class CiCdJenkinsGenerator extends BaseCiCdGenerator {
-  readonly provider = 'jenkins' as const;
-
-  async beforeQueue() {
-    await super.beforeQueue();
-  }
-
-  get writing() {
-    return super.writing;
-  }
-
-  get [BaseApplicationGenerator.WRITING]() {
-    return super[BaseApplicationGenerator.WRITING];
-  }
-}
+export { default } from './generator.ts';

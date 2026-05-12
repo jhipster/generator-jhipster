@@ -60,6 +60,7 @@ type GeneratorsByNamespace = {
   'jhipster:ci-cd:azure': import('./ci-cd/generators/azure/generator.ts').default;
   'jhipster:ci-cd:bootstrap': import('./ci-cd/generators/bootstrap/generator.ts').default;
   'jhipster:ci-cd:circle': import('./ci-cd/generators/circle/generator.ts').default;
+  'jhipster:ci-cd:common': import('./ci-cd/generators/common/generator.ts').default;
   'jhipster:ci-cd:github': import('./ci-cd/generators/github/generator.ts').default;
   'jhipster:ci-cd:gitlab': import('./ci-cd/generators/gitlab/generator.ts').default;
   'jhipster:ci-cd:jenkins': import('./ci-cd/generators/jenkins/generator.ts').default;

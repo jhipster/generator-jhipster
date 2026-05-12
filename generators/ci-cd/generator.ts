@@ -19,7 +19,6 @@
 import type { Config as BaseApplicationConfig } from '../base-application/types.d.ts';
 import BaseApplicationGenerator from '../base-simple-application/index.ts';
 
-import { applyCiCdDeployConfiguration } from './support/generator.ts';
 import { ciCdGeneratorNamespace } from './support/providers.ts';
 import type { Application as CiCdApplication } from './types.ts';
 
@@ -71,18 +70,6 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
 
   get [BaseApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
-  }
-
-  get postWriting() {
-    return this.asPostWritingTaskGroup({
-      postWriting({ application }) {
-        applyCiCdDeployConfiguration(this, application);
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
   shouldAskForPrompts() {
