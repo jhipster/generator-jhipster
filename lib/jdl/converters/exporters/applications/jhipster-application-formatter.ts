@@ -41,7 +41,7 @@ export function formatApplicationsToExport(applications: Record<string, JDLAppli
 }
 
 /**
- * Exports JDL a application to a JDL file in the current directory.
+ * Exports a JDL application to a JDL file in the current directory.
  * @param {Object} application - the JDL application to export.
  * @return {Object} the exported application in its final form.
  */
