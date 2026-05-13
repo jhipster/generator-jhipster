@@ -14,7 +14,7 @@ export type WriteFileTemplate<DataType, Generator = CoreGenerator> =
   | string
   | ((this: Generator, data: DataType) => string)
   | {
-      condition?: DataCallback<boolean, DataType, Generator>;
+      condition?: DataCallback<boolean | undefined, DataType, Generator>;
       /** source file */
       sourceFile?: DataCallback<string, DataType, Generator>;
       /** destination file */
@@ -41,7 +41,7 @@ export type WriteFileBlock<DataType, Generator = CoreGenerator> = {
   /** generate destinationFile based on sourceFile */
   renameTo?: (this: Generator, data: DataType, filePath: string) => string;
   /** condition to enable to write the block */
-  condition?: (this: Generator, data: DataType) => boolean | undefined;
+  condition?: DataCallback<boolean | undefined, DataType, Generator>;
   /** transforms (files processing) to be applied */
   transform?: boolean | (() => string)[];
   templates: WriteFileTemplate<DataType, Generator>[];

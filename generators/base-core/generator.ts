@@ -953,26 +953,19 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     }
 
     const normalizeEjs = (file: string) => file.replace('.ejs', '');
-    const resolveCallback = (maybeCallback: boolean | string | ((data: any) => any) | undefined, fallback?: boolean | string) => {
-      if (maybeCallback === undefined) {
-        if (typeof fallback === 'function') {
-          return resolveCallback(fallback);
-        }
-        return fallback;
-      }
-      if (typeof maybeCallback === 'boolean' || typeof maybeCallback === 'string') {
-        return maybeCallback;
-      }
+    const resolveCallback = <ReturnType extends boolean | string | undefined>(
+      maybeCallback: ReturnType | ((data: any) => ReturnType),
+    ): ReturnType => {
       if (typeof maybeCallback === 'function') {
-        return maybeCallback.call(this, templateData) || false;
+        return resolveCallback(maybeCallback.call(this, templateData));
       }
-      throw new Error(`Type not supported ${maybeCallback}`);
+      return maybeCallback;
     };
 
     type RenderTemplateParam = {
       condition?: boolean;
-      sourceFile: string;
-      destinationFile: string;
+      sourceFile: string | ((data: any) => string);
+      destinationFile: string | ((data: any) => string);
       options?: { renderOptions?: any };
       noEjs?: boolean;
       transform?: any[];
@@ -988,9 +981,10 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       transform,
       binary,
     }: RenderTemplateParam): Promise<undefined | string> => {
-      if (condition !== undefined && !resolveCallback(condition, true)) {
+      if (condition !== undefined && !resolveCallback(condition)) {
         return undefined;
       }
+      sourceFile = resolveCallback(sourceFile);
       const extension = extname(sourceFile);
       const isBinary = binary || ['.png', '.jpg', '.gif', '.svg', '.ico'].includes(extension);
       const appendEjs = noEjs === undefined ? !isBinary && extension !== '.ejs' : !noEjs;
@@ -1128,15 +1122,14 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
           assert(typeof block === 'object', `Block must be an object for ${blockSpecPath}`);
           assert(Array.isArray(block.templates), `Block templates must be an array for ${blockSpecPath}`);
-          const condition = resolveCallback(blockConditionCallback);
-          if (condition !== undefined && !condition) {
+          if (blockConditionCallback !== undefined && !resolveCallback(blockConditionCallback)) {
             return undefined;
           }
           if (typeof blockPathValue === 'function') {
             throw new TypeError(`Block path should be static for ${blockSpecPath}`);
           }
-          const blockPath = resolveCallback(blockFromCallback, blockPathValue);
-          const blockTo = resolveCallback(blockToCallback, blockPath) || blockPath;
+          const blockPath = resolveCallback(blockFromCallback) ?? resolveCallback(blockPathValue);
+          const blockTo = resolveCallback(blockToCallback) ?? resolveCallback(blockPath);
           return block.templates.map((fileSpec, fileIdx) => {
             const fileSpecPath = `${blockSpecPath}[${fileIdx}]`;
             assert(
@@ -1176,17 +1169,19 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
               throw new Error(`Transform ${fileTransform} value is not supported`);
             }
 
-            const normalizedFile = resolveCallback(sourceFile || file);
+            const normalizedFile = resolveCallback(sourceFile) ?? resolveCallback(file);
+            if (normalizedFile === undefined) {
+              throw new Error(`sourceFile is required for ${fileSpecPath}`);
+            }
             sourceFile = join(blockPath, normalizedFile);
-            destinationFile = join(resolveCallback(destinationFile || renameTo, normalizedFile));
+            destinationFile = resolveCallback(destinationFile) ?? resolveCallback(renameTo) ?? normalizedFile;
             if (blockRenameTo) {
               destinationFile = this.destinationPath(blockRenameTo.call(this, templateData, destinationFile));
             } else {
               destinationFile = this.destinationPath(blockTo, destinationFile);
             }
 
-            const override = resolveCallback(fileSpec.override);
-            if (override !== undefined && !override && this.fs.exists(destinationFile.replace(/\.jhi$/, ''))) {
+            if (fileSpec.override !== undefined && !resolveCallback(fileSpec.override) && this.fs.exists(destinationFile.replace(/\.jhi$/, ''))) {
               this.log.debug(`skipping file ${destinationFile}`);
               return undefined;
             }
