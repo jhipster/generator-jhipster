@@ -150,7 +150,7 @@ export default abstract class BaseEntityChangesGenerator<
     // Compare entity changes and create changelogs
     return entityNames.map(entityName => {
       const newConfig = entitiesByName[entityName];
-      const newFields = (newConfig.fields || []).filter((field: any) => !field.transient);
+      const newFields = (newConfig.fields || []).filter(field => !field.transient);
       const newRelationships = newConfig.relationships || [];
 
       const oldConfig = previousEntitiesByName[entityName];
@@ -168,7 +168,7 @@ export default abstract class BaseEntityChangesGenerator<
 
       this._debug(`Calculating diffs for ${entityName}`);
 
-      const oldFields = (oldConfig.fields || []).filter((field: any) => !field.transient);
+      const oldFields = (oldConfig.fields || []).filter(field => !field.transient);
       const oldFieldNames: string[] = oldFields.filter(field => !field.id).map(field => field.fieldName);
       const newFieldNames: string[] = newFields.filter(field => !field.id).map(field => field.fieldName);
 
