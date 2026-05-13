@@ -20,15 +20,14 @@ import BaseSimpleApplicationGenerator from '../../../base-simple-application/ind
 import type { Application as CiCdApplication } from '../../types.ts';
 
 export default class CiCdJenkinsGenerator extends BaseSimpleApplicationGenerator<CiCdApplication> {
-  readonly provider = 'jenkins' as const;
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
 
     await this.dependsOnBootstrap('ci-cd');
-    await this.dependsOnJHipster('jhipster:ci-cd:common');
+    const common = await this.dependsOnJHipster('jhipster:ci-cd:common');
+    common.ciCd.push('jenkins');
   }
 
   get writing() {
@@ -57,9 +56,5 @@ export default class CiCdJenkinsGenerator extends BaseSimpleApplicationGenerator
 
   get [BaseSimpleApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
-  }
-
-  shouldAskForPrompts() {
-    return true;
   }
 }

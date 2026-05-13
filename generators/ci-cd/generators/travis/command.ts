@@ -17,17 +17,8 @@
  * limitations under the License.
  */
 import type { JHipsterCommandDefinition } from '../../../../lib/command/index.ts';
-import command from '../../support/command.ts';
 
 export default {
-  configs: {
-    ...command.configs,
-    ciCd: {
-      default: ['travis'],
-      internal: {
-        type: Array,
-      },
-      scope: 'context',
-    },
-  },
+  configs: {},
+  import: ['jhipster:ci-cd'],
 } as const satisfies JHipsterCommandDefinition<any>;
