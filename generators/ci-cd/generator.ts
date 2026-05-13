@@ -38,6 +38,25 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
     }
   }
 
+  get composing() {
+    return this.asComposingTaskGroup({
+      async composeProviders() {
+        if (this.context.ciCd?.length) {
+          const common = await this.composeWithJHipster('jhipster:ci-cd:common');
+          common.ciCd.push(...this.context.ciCd);
+
+          for (const ciCd of this.context.ciCd ?? []) {
+            await this.composeWithJHipster(ciCdGeneratorNamespace(ciCd));
+          }
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
+  }
+
   get preparing() {
     return this.asPreparingTaskGroup({
       preparing({ applicationDefaults }) {
@@ -56,20 +75,6 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
-  }
-
-  get composing() {
-    return this.asComposingTaskGroup({
-      async composeProviders() {
-        for (const ciCd of this.context.ciCd ?? []) {
-          await this.composeWithJHipster(ciCdGeneratorNamespace(ciCd));
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   shouldAskForPrompts() {

@@ -18,9 +18,12 @@
  */
 import BaseSimpleApplicationGenerator from '../../../base-simple-application/index.ts';
 import { createPomStorage } from '../../../java-simple-application/generators/maven/support/pom-store.ts';
+import type { CiCdProvider } from '../../support/providers.ts';
 import type { Application as CiCdApplication } from '../../types.ts';
 
 export default class CommonGenerator extends BaseSimpleApplicationGenerator<CiCdApplication> {
+  readonly ciCd: CiCdProvider[] = [];
+
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -35,6 +38,7 @@ export default class CommonGenerator extends BaseSimpleApplicationGenerator<CiCd
     return this.asPreparingTaskGroup({
       preparing({ applicationDefaults }) {
         applicationDefaults({
+          ciCd: this.ciCd,
           gitLabIndent: ({ sendBuildToGitlab }) => (sendBuildToGitlab ? '    ' : ''),
           indent: ({ insideDocker, gitLabIndent }) => {
             let indent = insideDocker ? '    ' : '';
@@ -96,5 +100,9 @@ export default class CommonGenerator extends BaseSimpleApplicationGenerator<CiCd
 
   get [BaseSimpleApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
+  }
+
+  shouldAskForPrompts() {
+    return true;
   }
 }

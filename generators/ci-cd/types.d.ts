@@ -20,18 +20,21 @@ import type { CommandTypeMap } from '../../lib/command/types.ts';
 import type { Application as DockerApplication } from '../docker/types.d.ts';
 
 import type command from './command.ts';
+import type commonCommand from './generators/common/command.ts';
 
 export type { Config, Features, Options, Source } from '../base-simple-application/types.d.ts';
 
 type Command = CommandTypeMap<typeof command>;
+type CommonCommand = CommandTypeMap<typeof commonCommand>;
 
-type CICDApplicationProperties = Command['Application'] & {
-  gitLabIndent?: string;
-  indent?: string;
-  testFrameworks?: string[];
-  cypressTests?: boolean;
-  javaVersion?: string;
-  githubActions: Record<string, string>;
-};
+type CICDApplicationProperties = Command['Application'] &
+  CommonCommand['Application'] & {
+    gitLabIndent?: string;
+    indent?: string;
+    testFrameworks?: string[];
+    cypressTests?: boolean;
+    javaVersion?: string;
+    githubActions: Record<string, string>;
+  };
 
 export type Application = DockerApplication & CICDApplicationProperties;

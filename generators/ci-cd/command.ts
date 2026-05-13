@@ -16,6 +16,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import command from './support/command.ts';
+import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
+import buildToolCommand from '../java-simple-application/generators/build-tool/command.ts';
+
+import { ciCdChoices } from './support/providers.ts';
+
+const { buildTool } = buildToolCommand.configs;
+
+const command = {
+  configs: {
+    ciCd: {
+      argument: {
+        type: Array,
+      },
+      prompt: {
+        type: 'checkbox',
+        message: 'What CI/CD pipeline do you want to generate?',
+      },
+      choices: ciCdChoices,
+      internal: {
+        type: Array,
+      },
+      scope: 'context',
+    },
+    buildTool: {
+      ...buildTool,
+      cli: {
+        ...buildTool.cli,
+        hide: true,
+      },
+      prompt: undefined,
+    },
+  },
+  import: ['jhipster:ci-cd:common'],
+} as const satisfies JHipsterCommandDefinition;
 
 export default command;

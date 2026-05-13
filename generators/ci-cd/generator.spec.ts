@@ -40,7 +40,6 @@ describe(`generator - ${generator}`, () => {
         expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
 [
   "ciCd",
-  "ciCdIntegrations",
 ]
 `);
       });

@@ -19,38 +19,21 @@
 import chalk from 'chalk';
 import { intersection, kebabCase } from 'lodash-es';
 
-import type { JHipsterCommandDefinition } from '../../../lib/command/index.ts';
-import buildToolCommand from '../../java-simple-application/generators/build-tool/command.ts';
+import type { JHipsterCommandDefinition } from '../../../../lib/command/index.ts';
+import type { CiCdProvider } from '../../support/providers.ts';
 
-import { ciCdChoices } from './providers.ts';
-
-const { buildTool } = buildToolCommand.configs;
+import type Generator from './generator.ts';
 
 const includesAnyValue = (values: string[] | undefined, expected: string[]) => Boolean(values && intersection(values, expected).length > 0);
 
-const getCiCdValues = (generator: any, answers: any) =>
-  answers.ciCd ?? generator.context.ciCd ?? (generator.provider ? [generator.provider] : undefined);
+const getCiCdValues = (generator: Generator): CiCdProvider[] => generator.ciCd;
 
-const includesValue = (generator: any, answers: any, expected: string[]) => includesAnyValue(getCiCdValues(generator, answers), expected);
+const includesValue = (generator: Generator, expected: string[]) => includesAnyValue(getCiCdValues(generator), expected);
 
 const includesIntegrations = (answers: any, values: string[]) => includesAnyValue(answers.ciCdIntegrations, values);
 
 const command = {
   configs: {
-    ciCd: {
-      argument: {
-        type: Array,
-      },
-      prompt: {
-        type: 'checkbox',
-        message: 'What CI/CD pipeline do you want to generate?',
-      },
-      choices: ciCdChoices,
-      internal: {
-        type: Array,
-      },
-      scope: 'context',
-    },
     ciCdIntegrations: {
       prompt: {
         type: 'checkbox',
@@ -82,7 +65,7 @@ const command = {
     },
     insideDocker: {
       prompt: generator => ({
-        when: answers => includesValue(generator, answers, ['jenkins', 'gitlab']),
+        when: () => includesValue(generator, ['jenkins', 'gitlab']),
         type: 'confirm',
         message: 'Would you like to perform the build in a Docker container ?',
         default: false,
@@ -94,7 +77,7 @@ const command = {
     },
     sendBuildToGitlab: {
       prompt: generator => ({
-        when: answers => includesValue(generator, answers, ['jenkins']),
+        when: () => includesValue(generator, ['jenkins']),
         type: 'confirm',
         message: 'Would you like to send build status to GitLab ?',
         default: false,
@@ -154,7 +137,7 @@ const command = {
     },
     sonarName: {
       prompt: generator => ({
-        when: answers => includesValue(generator, answers, ['jenkins']) && includesIntegrations(answers, ['sonar']),
+        when: answers => includesValue(generator, ['jenkins']) && includesIntegrations(answers, ['sonar']),
         type: 'input',
         message: `${chalk.yellow('*Sonar*')}: what is the name of the Sonar server ?`,
       }),
@@ -166,8 +149,7 @@ const command = {
     },
     sonarUrl: {
       prompt: generator => ({
-        when: answers =>
-          includesValue(generator, answers, ['jenkins', 'github', 'gitlab', 'travis']) && includesIntegrations(answers, ['sonar']),
+        when: answers => includesValue(generator, ['jenkins', 'github', 'gitlab', 'travis']) && includesIntegrations(answers, ['sonar']),
         type: 'input',
         message: `${chalk.yellow('*Sonar*')}: what is the URL of the Sonar server ?`,
       }),
@@ -179,8 +161,7 @@ const command = {
     },
     sonarOrga: {
       prompt: generator => ({
-        when: answers =>
-          includesValue(generator, answers, ['jenkins', 'github', 'gitlab', 'travis']) && includesIntegrations(answers, ['sonar']),
+        when: answers => includesValue(generator, ['jenkins', 'github', 'gitlab', 'travis']) && includesIntegrations(answers, ['sonar']),
         type: 'input',
         message: `${chalk.yellow('*Sonar*')}: what is the Organization of the Sonar server ?`,
       }),
@@ -191,10 +172,10 @@ const command = {
     },
     dockerImage: {
       prompt: generator => ({
-        when: answers => includesValue(generator, answers, ['github']) && includesIntegrations(answers, ['publishDocker']),
+        when: answers => includesValue(generator, ['github']) && includesIntegrations(answers, ['publishDocker']),
         type: 'input',
         message: `${chalk.yellow('*Docker*')}: what is the name of the image ?`,
-        default: () => `jhipster/${generator.jhipsterConfigWithDefaults.dasherizedBaseName}`,
+        default: () => `jhipster/${kebabCase(generator.jhipsterConfigWithDefaults.baseName)}`,
       }),
       internal: {
         type: String,
@@ -213,15 +194,7 @@ const command = {
       scope: 'context',
       default: data => kebabCase(data.baseName),
     },
-    buildTool: {
-      ...buildTool,
-      cli: {
-        ...buildTool.cli,
-        hide: true,
-      },
-      prompt: undefined,
-    },
   },
-} as const satisfies JHipsterCommandDefinition<any>;
+} as const satisfies JHipsterCommandDefinition<Generator>;
 
 export default command;
