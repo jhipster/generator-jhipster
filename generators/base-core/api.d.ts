@@ -53,7 +53,7 @@ export type WriteFileOptions<DataType, Generator = CoreGenerator> = {
   /** transforms (files processing) to be applied */
   transform?: EditFileCallback<Generator>[];
   /** context to be used as template data */
-  context?: any;
+  context?: DataType;
   /** config passed to render methods */
   renderOptions?: Record<string, object>;
   /**

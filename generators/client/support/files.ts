@@ -11,14 +11,14 @@ export const replaceEntityFilePath = (data: any, filepath: string) =>
 
 const CLIENT_TEMPLATES_SRC_DIR = CLIENT_MAIN_SRC_DIR;
 
-type ClientFileBlock = WriteFileBlock<ClientApplication>;
+type ClientFileBlock<Data = ClientApplication> = WriteFileBlock<Data>;
 type RelativeWriteFileBlock = ClientFileBlock & {
   relativePath?: string;
 };
 
-export function clientRootTemplatesBlock(blockOrRelativePath?: string): Pick<ClientFileBlock, 'path' | 'renameTo'>;
-export function clientRootTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): ClientFileBlock;
-export function clientRootTemplatesBlock(blockOrRelativePath: string | RelativeWriteFileBlock = ''): Partial<ClientFileBlock> {
+export function clientRootTemplatesBlock(blockOrRelativePath?: string): Pick<ClientFileBlock<any>, 'path' | 'renameTo'>;
+export function clientRootTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): ClientFileBlock<any>;
+export function clientRootTemplatesBlock(blockOrRelativePath: string | RelativeWriteFileBlock = ''): Partial<ClientFileBlock<any>> {
   return clientBlock({
     srcPath: '',
     destProperty: 'clientRootDir',
@@ -26,9 +26,9 @@ export function clientRootTemplatesBlock(blockOrRelativePath: string | RelativeW
   });
 }
 
-export function clientSrcTemplatesBlock(blockOrRelativePath?: string): Pick<ClientFileBlock, 'path' | 'renameTo'>;
-export function clientSrcTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): ClientFileBlock;
-export function clientSrcTemplatesBlock(blockOrRelativePath: string | RelativeWriteFileBlock = ''): Partial<ClientFileBlock> {
+export function clientSrcTemplatesBlock(blockOrRelativePath?: string): Pick<ClientFileBlock<any>, 'path' | 'renameTo'>;
+export function clientSrcTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): ClientFileBlock<any>;
+export function clientSrcTemplatesBlock(blockOrRelativePath: string | RelativeWriteFileBlock = ''): Partial<ClientFileBlock<any>> {
   return clientBlock({
     srcPath: CLIENT_TEMPLATES_SRC_DIR,
     destProperty: 'clientSrcDir',
@@ -36,9 +36,9 @@ export function clientSrcTemplatesBlock(blockOrRelativePath: string | RelativeWr
   });
 }
 
-export function clientApplicationTemplatesBlock(blockOrRelativePath?: string): Pick<ClientFileBlock, 'path' | 'renameTo'>;
-export function clientApplicationTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): ClientFileBlock;
-export function clientApplicationTemplatesBlock(blockOrRelativePath: string | RelativeWriteFileBlock = ''): Partial<ClientFileBlock> {
+export function clientApplicationTemplatesBlock(blockOrRelativePath?: string): Pick<ClientFileBlock<any>, 'path' | 'renameTo'>;
+export function clientApplicationTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): ClientFileBlock<any>;
+export function clientApplicationTemplatesBlock(blockOrRelativePath: string | RelativeWriteFileBlock = ''): Partial<ClientFileBlock<any>> {
   return clientBlock({
     srcPath: CLIENT_TEMPLATES_SRC_DIR,
     relativeToSrc: 'app/',
@@ -57,7 +57,7 @@ function clientBlock({
   destProperty: string;
   blockOrRelativePath: string | RelativeWriteFileBlock;
   relativeToSrc?: string;
-}): ClientFileBlock | Pick<ClientFileBlock, 'path' | 'renameTo'> {
+}): ClientFileBlock<any> | Pick<ClientFileBlock<any>, 'path' | 'renameTo'> {
   const block: RelativeWriteFileBlock | undefined = typeof blockOrRelativePath === 'string' ? undefined : blockOrRelativePath;
   const blockRenameTo = typeof block?.renameTo === 'function' ? block.renameTo : undefined;
   const relativePath: string = typeof blockOrRelativePath === 'string' ? blockOrRelativePath : (blockOrRelativePath.relativePath ?? '');
