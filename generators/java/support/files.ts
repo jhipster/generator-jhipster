@@ -57,13 +57,11 @@ export function javaWriteFileSection<const Data = JavaWriteFileData>(section: Wr
   return section;
 }
 
-type RelativeWriteFileBlock = JavaWriteFileBlock & { relativePath?: string };
+type RelativeWriteFileBlock<Data = JavaWriteFileData> = JavaWriteFileBlock<Data> & { relativePath?: string };
 
+export function javaMainPackageTemplatesBlock(blockOrRelativePath?: string): Pick<WriteFileBlock<any>, 'path' | 'renameTo'>;
 export function javaMainPackageTemplatesBlock<Data = JavaWriteFileData>(
-  blockOrRelativePath?: string,
-): Pick<WriteFileBlock<any>, 'path' | 'renameTo'>;
-export function javaMainPackageTemplatesBlock<Data = JavaWriteFileData>(
-  blockOrRelativePath: RelativeWriteFileBlock,
+  blockOrRelativePath: RelativeWriteFileBlock<Data>,
 ): JavaWriteFileBlock<any>;
 export function javaMainPackageTemplatesBlock(
   blockOrRelativePath: string | RelativeWriteFileBlock = '',
@@ -75,11 +73,9 @@ export function javaMainPackageTemplatesBlock(
   });
 }
 
+export function javaMainResourceTemplatesBlock(blockOrRelativePath?: string): Pick<JavaWriteFileBlock<any>, 'path' | 'renameTo'>;
 export function javaMainResourceTemplatesBlock<Data = JavaWriteFileData>(
-  blockOrRelativePath?: string,
-): Pick<JavaWriteFileBlock<any>, 'path' | 'renameTo'>;
-export function javaMainResourceTemplatesBlock<Data = JavaWriteFileData>(
-  blockOrRelativePath: RelativeWriteFileBlock,
+  blockOrRelativePath: RelativeWriteFileBlock<Data>,
 ): JavaWriteFileBlock<any>;
 export function javaMainResourceTemplatesBlock(
   blockOrRelativePath: string | RelativeWriteFileBlock = '',
@@ -91,10 +87,10 @@ export function javaMainResourceTemplatesBlock(
   });
 }
 
+export function javaTestResourceTemplatesBlock(blockOrRelativePath?: string): Pick<WriteFileBlock<any>, 'path' | 'renameTo'>;
 export function javaTestResourceTemplatesBlock<Data = JavaWriteFileData>(
-  blockOrRelativePath?: string,
-): Pick<WriteFileBlock<any>, 'path' | 'renameTo'>;
-export function javaTestResourceTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): JavaWriteFileBlock<any>;
+  blockOrRelativePath: RelativeWriteFileBlock<Data>,
+): JavaWriteFileBlock<any>;
 export function javaTestResourceTemplatesBlock(
   blockOrRelativePath: string | RelativeWriteFileBlock = '',
 ): JavaWriteFileBlock<any> | Pick<JavaWriteFileBlock<any>, 'path' | 'renameTo'> {
@@ -105,10 +101,10 @@ export function javaTestResourceTemplatesBlock(
   });
 }
 
+export function javaTestPackageTemplatesBlock(blockOrRelativePath?: string): Pick<WriteFileBlock<any>, 'path' | 'renameTo'>;
 export function javaTestPackageTemplatesBlock<Data = JavaWriteFileData>(
-  blockOrRelativePath?: string,
-): Pick<WriteFileBlock<any>, 'path' | 'renameTo'>;
-export function javaTestPackageTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): JavaWriteFileBlock<any>;
+  blockOrRelativePath: RelativeWriteFileBlock<Data>,
+): JavaWriteFileBlock<any>;
 export function javaTestPackageTemplatesBlock(
   blockOrRelativePath: string | RelativeWriteFileBlock = '',
 ): JavaWriteFileBlock<any> | Pick<JavaWriteFileBlock<any>, 'path' | 'renameTo'> {
