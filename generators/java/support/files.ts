@@ -61,13 +61,13 @@ type RelativeWriteFileBlock = JavaWriteFileBlock & { relativePath?: string };
 
 export function javaMainPackageTemplatesBlock<Data = JavaWriteFileData>(
   blockOrRelativePath?: string,
-): Pick<WriteFileBlock<Data>, 'path' | 'renameTo'>;
+): Pick<WriteFileBlock<any>, 'path' | 'renameTo'>;
 export function javaMainPackageTemplatesBlock<Data = JavaWriteFileData>(
   blockOrRelativePath: RelativeWriteFileBlock,
-): JavaWriteFileBlock<Data>;
+): JavaWriteFileBlock<any>;
 export function javaMainPackageTemplatesBlock(
   blockOrRelativePath: string | RelativeWriteFileBlock = '',
-): JavaWriteFileBlock | Pick<JavaWriteFileBlock, 'path' | 'renameTo'> {
+): JavaWriteFileBlock<any> | Pick<JavaWriteFileBlock<any>, 'path' | 'renameTo'> {
   return javaBlock({
     srcPath: `${SERVER_MAIN_SRC_DIR}_package_/`,
     destProperty: 'javaPackageSrcDir',
@@ -77,13 +77,13 @@ export function javaMainPackageTemplatesBlock(
 
 export function javaMainResourceTemplatesBlock<Data = JavaWriteFileData>(
   blockOrRelativePath?: string,
-): Pick<JavaWriteFileBlock<Data>, 'path' | 'renameTo'>;
+): Pick<JavaWriteFileBlock<any>, 'path' | 'renameTo'>;
 export function javaMainResourceTemplatesBlock<Data = JavaWriteFileData>(
   blockOrRelativePath: RelativeWriteFileBlock,
-): JavaWriteFileBlock<Data>;
+): JavaWriteFileBlock<any>;
 export function javaMainResourceTemplatesBlock(
   blockOrRelativePath: string | RelativeWriteFileBlock = '',
-): JavaWriteFileBlock | Pick<JavaWriteFileBlock, 'path' | 'renameTo'> {
+): JavaWriteFileBlock<any> | Pick<JavaWriteFileBlock<any>, 'path' | 'renameTo'> {
   return javaBlock({
     srcPath: SERVER_MAIN_RES_DIR,
     destProperty: 'srcMainResources',
@@ -93,11 +93,11 @@ export function javaMainResourceTemplatesBlock(
 
 export function javaTestResourceTemplatesBlock<Data = JavaWriteFileData>(
   blockOrRelativePath?: string,
-): Pick<WriteFileBlock<Data>, 'path' | 'renameTo'>;
-export function javaTestResourceTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): JavaWriteFileBlock;
+): Pick<WriteFileBlock<any>, 'path' | 'renameTo'>;
+export function javaTestResourceTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): JavaWriteFileBlock<any>;
 export function javaTestResourceTemplatesBlock(
   blockOrRelativePath: string | RelativeWriteFileBlock = '',
-): JavaWriteFileBlock | Pick<JavaWriteFileBlock, 'path' | 'renameTo'> {
+): JavaWriteFileBlock<any> | Pick<JavaWriteFileBlock<any>, 'path' | 'renameTo'> {
   return javaBlock({
     srcPath: SERVER_TEST_RES_DIR,
     destProperty: 'srcTestResources',
@@ -107,11 +107,11 @@ export function javaTestResourceTemplatesBlock(
 
 export function javaTestPackageTemplatesBlock<Data = JavaWriteFileData>(
   blockOrRelativePath?: string,
-): Pick<WriteFileBlock<Data>, 'path' | 'renameTo'>;
-export function javaTestPackageTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): JavaWriteFileBlock;
+): Pick<WriteFileBlock<any>, 'path' | 'renameTo'>;
+export function javaTestPackageTemplatesBlock(blockOrRelativePath: RelativeWriteFileBlock): JavaWriteFileBlock<any>;
 export function javaTestPackageTemplatesBlock(
   blockOrRelativePath: string | RelativeWriteFileBlock = '',
-): JavaWriteFileBlock | Pick<JavaWriteFileBlock, 'path' | 'renameTo'> {
+): JavaWriteFileBlock<any> | Pick<JavaWriteFileBlock<any>, 'path' | 'renameTo'> {
   return javaBlock({
     srcPath: `${SERVER_TEST_SRC_DIR}_package_/`,
     destProperty: 'javaPackageTestDir',
@@ -127,7 +127,7 @@ function javaBlock({
   srcPath: string;
   destProperty: string;
   blockOrRelativePath: string | RelativeWriteFileBlock;
-}): JavaWriteFileBlock | Pick<JavaWriteFileBlock, 'path' | 'renameTo'> {
+}): JavaWriteFileBlock<any> | Pick<JavaWriteFileBlock<any>, 'path' | 'renameTo'> {
   const block: RelativeWriteFileBlock | undefined = typeof blockOrRelativePath === 'string' ? undefined : blockOrRelativePath;
   const blockRenameTo = typeof block?.renameTo === 'function' ? block.renameTo : undefined;
   const relativePath: string = typeof blockOrRelativePath === 'string' ? blockOrRelativePath : (blockOrRelativePath.relativePath ?? '');

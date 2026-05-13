@@ -912,21 +912,21 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   /**
    * write the given files using provided options.
    */
-  async writeFiles<DataType = any>(options: WriteFileOptions<DataType, this>): Promise<string[]> {
+  async writeFiles<DataType>(options: WriteFileOptions<DataType, this>): Promise<string[]> {
     const paramCount = Object.keys(options).filter(key => ['sections', 'blocks', 'templates'].includes(key)).length;
     assert(paramCount > 0, 'One of sections, blocks or templates is required');
     assert(paramCount === 1, 'Only one of sections, blocks or templates must be provided');
 
-    let { context: templateData = {} } = options;
+    let templateData: DataType = options.context ?? {} as DataType;
     const { rootTemplatesPath, customizeTemplatePath = file => file, transform: methodTransform = [] } = options;
     const startTime = new Date().getMilliseconds();
     const { customizeTemplatePaths: contextCustomizeTemplatePaths = [] } = templateData as WriteContext;
 
     const { jhipster7Migration } = this.features;
     if (jhipster7Migration) {
-      templateData = createJHipster7Context(this, options.context ?? {}, {
+      templateData = createJHipster7Context(this, templateData as any, {
         log: jhipster7Migration === 'verbose' ? (msg: string) => this.log.info(msg) : () => {},
-      });
+      }) as DataType;
     }
 
     /* Build lookup order first has preference.
@@ -1068,8 +1068,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           await this.copyTemplateAsync(sourceFileFrom, targetFile);
         } else {
           let useAsync = true;
-          if (templateData.entityClass) {
-            if (!templateData.baseName) {
+          if ((templateData as any).entityClass) {
+            if (!(templateData as any).baseName) {
               throw new Error('baseName is required at templates context');
             }
             const sourceBasename = basename(sourceFileFrom);
@@ -1094,9 +1094,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           } else if (noEjs) {
             this.copyTemplate(sourceFileFrom, targetFile, copyOptions);
           } else if (useAsync) {
-            await this.renderTemplateAsync(sourceFileFrom, targetFile, templateData, copyOptions);
+            await this.renderTemplateAsync(sourceFileFrom, targetFile, templateData as any, copyOptions);
           } else {
-            this.renderTemplate(sourceFileFrom, targetFile, templateData, copyOptions);
+            this.renderTemplate(sourceFileFrom, targetFile, templateData as any, copyOptions);
           }
         }
       } catch (error) {
