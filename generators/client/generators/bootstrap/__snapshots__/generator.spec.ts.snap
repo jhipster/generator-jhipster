@@ -60,7 +60,7 @@ exports[`generator - client:bootstrap bootstrapping default config should prepar
   "clientThemeVariantDark": false,
   "clientThemeVariantLight": false,
   "clientThemeVariantPrimary": false,
-  "commandName": undefined,
+  "commandName": "client:bootstrap",
   "communicationSpringWebsocket": undefined,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,

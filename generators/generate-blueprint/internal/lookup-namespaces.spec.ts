@@ -42,6 +42,7 @@ describe('lookupGeneratorsNamespaces', () => {
   "ci-cd:azure",
   "ci-cd:bootstrap",
   "ci-cd:circle",
+  "ci-cd:common",
   "ci-cd:github",
   "ci-cd:gitlab",
   "ci-cd:jenkins",

@@ -16,37 +16,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import BaseApplicationGenerator from '../../../base-simple-application/index.ts';
-import { BaseCiCdGenerator } from '../../support/generator.ts';
+import BaseSimpleApplicationGenerator from '../../../base-simple-application/index.ts';
+import type { Application as CiCdApplication } from '../../types.ts';
 
-export default class CiCdGitlabGenerator extends BaseCiCdGenerator {
+export default class CiCdGitlabGenerator extends BaseSimpleApplicationGenerator<CiCdApplication> {
   readonly provider = 'gitlab' as const;
 
   async beforeQueue() {
-    await super.beforeQueue();
-  }
+    if (!this.fromBlueprint) {
+      await this.composeWithBlueprints();
+    }
 
-  get preparing() {
-    return super.preparing;
-  }
-
-  get [BaseApplicationGenerator.PREPARING]() {
-    return super[BaseApplicationGenerator.PREPARING];
+    await this.dependsOnBootstrap('ci-cd');
+    await this.dependsOnJHipster('jhipster:ci-cd:common');
   }
 
   get writing() {
-    return super.writing;
+    return this.asWritingTaskGroup({
+      async writeFiles({ application }) {
+        await this.writeFiles({
+          templates: ['.gitlab-ci.yml'],
+          context: application,
+        });
+      },
+    });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
-    return super[BaseApplicationGenerator.WRITING];
+  get [BaseSimpleApplicationGenerator.WRITING]() {
+    return this.delegateTasksToBlueprint(() => this.writing);
   }
 
-  get postWriting() {
-    return super.postWriting;
-  }
-
-  get [BaseApplicationGenerator.POST_WRITING]() {
-    return super[BaseApplicationGenerator.POST_WRITING];
+  shouldAskForPrompts() {
+    return true;
   }
 }

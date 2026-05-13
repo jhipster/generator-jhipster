@@ -429,9 +429,9 @@ plugins {
   }
 
   public withCommandName(): this {
-    if (typeof this.Generator === 'string' && this.Generator.match(/^(jhipster:)?[a-zA-Z0-9-]*$/)) {
+    if (typeof this.Generator === 'string' && this.Generator.match(/^(jhipster:)?[a-zA-Z0-9:-]*$/)) {
       // Set the commandName to the entrypoint generator name.
-      this.withOptions({ commandName: this.Generator.split(':').pop() });
+      this.withOptions({ commandName: this.Generator.replace('jhipster:', '') });
     }
     return this;
   }
