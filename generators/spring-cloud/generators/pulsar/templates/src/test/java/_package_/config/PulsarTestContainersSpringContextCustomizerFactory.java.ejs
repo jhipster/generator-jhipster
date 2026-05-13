@@ -58,7 +58,7 @@ public class PulsarTestContainersSpringContextCustomizerFactory implements Conte
                         beanFactory.registerSingleton(PulsarTestContainer.class.getName(), pulsarBean);
                         // ((DefaultListableBeanFactory)beanFactory).registerDisposableBean(PulsarTestContainer.class.getName(), pulsarBean);
                     }
-                    testValues = 
+                    testValues =
                         testValues.and(
                             "spring.pulsar.client.service-url=" + pulsarBean.getPulsarContainer().getPulsarBrokerUrl(),
                             "spring.pulsar.administration.service-url=" + pulsarBean.getPulsarContainer().getHttpServiceUrl()
