@@ -343,14 +343,14 @@ class <%- entityClass %>ResourceIT {
           updatedTextString = value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
         }
       } catch (error) {
-        this.log.warn(`Error generating test value for entity "${entityClass 
-          }" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern 
+        this.log.warn(`Error generating test value for entity "${entityClass
+          }" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern
           }", generating default values for this field. Detailed error message: "${error.message}".`);
       }
       if (sampleTextString === updatedTextString) {
         updatedTextString = `${updatedTextString}B`;
-        this.log.warn(`Randomly generated first and second test values for entity "${entityClass 
-          }" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern 
+        this.log.warn(`Randomly generated first and second test values for entity "${entityClass
+          }" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern
           }" in file "${entityClass}ResourceIT" where equal, added symbol "B" to second value.`);
       }
     }
@@ -847,31 +847,31 @@ _%>
         // Update the entity
     <%_ if (reactive) { _%>
         webTestClient.put().uri(
-          ENTITY_API_URL_ID, 
+          ENTITY_API_URL_ID,
       <%_ if (dtoMapstruct) { _%>
-          updated<%- dtoClass %> 
+          updated<%- dtoClass %>
       <%_ } else { _%>
-          updated<%- persistClass %> 
+          updated<%- persistClass %>
       <%_ } _%>
             .<%- primaryKey.propertySupplierName %>()
         )
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(om.writeValueAsBytes(
       <%_ if (dtoMapstruct) { _%>
-                updated<%- dtoClass %> 
+                updated<%- dtoClass %>
       <%_ } else { _%>
-                updated<%- persistClass %> 
+                updated<%- persistClass %>
       <%_ } _%>
             ))
             .exchange()
             .expectStatus().isOk();
     <%_ } else { _%>
         rest<%- entityClass %>MockMvc.perform(put(
-            ENTITY_API_URL_ID, 
+            ENTITY_API_URL_ID,
       <%_ if (dtoMapstruct) { _%>
-            updated<%- dtoClass %> 
+            updated<%- dtoClass %>
       <%_ } else { _%>
-            updated<%- persistClass %> 
+            updated<%- persistClass %>
       <%_ } _%>
                 .<%- primaryKey.propertySupplierName %>()
         )
@@ -881,9 +881,9 @@ _%>
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(
       <%_ if (dtoMapstruct) { _%>
-                updated<%- dtoClass %> 
+                updated<%- dtoClass %>
       <%_ } else { _%>
-                updated<%- persistClass %> 
+                updated<%- persistClass %>
       <%_ } _%>
             ))
         )
@@ -1869,7 +1869,7 @@ _%>
     <%_ } _%>
   <%_ } _%>
   <%_ if (!databaseTypeCouchbase) { _%>
-        inserted<%- persistClass %> = 
+        inserted<%- persistClass %> =
   <%_ } _%>
         <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
   <%_ if (searchEngineElasticsearch) { _%>

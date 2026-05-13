@@ -39,7 +39,7 @@ export const notificationInterceptor: HttpInterceptorFn = (req, next) => {
             translationKey: message.alertKey,
             translationParams: { param: message.param },
           });
-        } else 
+        } else
 <%_ } _%>
         if (message.alertMessage) {
           alertService.addAlert({
