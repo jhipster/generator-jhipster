@@ -28,7 +28,7 @@ const appendTitle = <K extends string>(title: string, config: K, value: any): st
 };
 
 /**
- * Create a matrix from a options
+ * Create a matrix from options
  * @example
  * const matrix = fromMatrix({ a: [true, false], b: [true, false] });
  * // {
