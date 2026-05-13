@@ -1181,7 +1181,11 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
               destinationFile = this.destinationPath(blockTo, destinationFile);
             }
 
-            if (fileSpec.override !== undefined && !resolveCallback(fileSpec.override) && this.fs.exists(destinationFile.replace(/\.jhi$/, ''))) {
+            if (
+              fileSpec.override !== undefined &&
+              !resolveCallback(fileSpec.override) &&
+              this.fs.exists(destinationFile.replace(/\.jhi$/, ''))
+            ) {
               this.log.debug(`skipping file ${destinationFile}`);
               return undefined;
             }
