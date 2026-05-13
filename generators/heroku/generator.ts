@@ -31,7 +31,7 @@ import { mavenProfileContent } from './templates.ts';
 import type { Application as HerokuApplication, Config as HerokuConfig, Options as HerokuOptions } from './types.ts';
 
 type StreamLike = {
-  on(event: 'data', listener: (chunk: any) => void): any;
+  on(event: 'data', listener: (chunk: Buffer | string) => void): unknown;
 };
 
 export default class HerokuGenerator extends BaseSimpleApplicationGenerator<HerokuApplication, HerokuConfig, HerokuOptions> {
@@ -544,13 +544,13 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
 
   printChildOutput<const T extends { stdout?: StreamLike | null; stderr?: StreamLike | null }>(
     child: T,
-    log = (data: any) => this.log.verboseInfo(data),
+    log = (data: string) => this.log.verboseInfo(data),
   ): T {
     const { stdout, stderr } = child;
-    stdout!.on('data', (data: any) => {
+    stdout!.on('data', (data: Buffer | string) => {
       data.toString().split(/\r?\n/).filter(Boolean).forEach(log);
     });
-    stderr!.on('data', (data: any) => {
+    stderr!.on('data', (data: Buffer | string) => {
       data.toString().split(/\r?\n/).filter(Boolean).forEach(log);
     });
     return child;

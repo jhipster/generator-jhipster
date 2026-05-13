@@ -134,7 +134,7 @@ function generateFakeDataForField(
   this: CoreGenerator,
   field: BaseApplicationField,
   faker: FakerWithRandexp,
-  changelogDate: any,
+  changelogDate: Date,
   type: 'csv' | 'cypress' | 'json-serializable' | 'ts' = 'csv',
 ) {
   let originalData: string | number | boolean | Date | undefined;
