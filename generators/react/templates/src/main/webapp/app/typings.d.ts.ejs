@@ -19,15 +19,15 @@
 declare const VERSION: string;
 declare const SERVER_API_URL: string;
 declare const DEVELOPMENT: string;
-<%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation && microfrontend) { _%>
 declare const I18N_HASH: string;
-<%_ } _%>
 
 declare module '*.json' {
   const value: any;
   export default value;
 }
 
+<%_ } _%>
 declare module '*.scss' {
   const content: { [className: string]: string };
   export default content;

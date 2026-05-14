@@ -57,11 +57,13 @@ export default class ReactBootstrapGenerator extends ClientApplicationGenerator 
             }),
           );
 
-          this.editFile(
-            `${clientRootDir}webpack/webpack.common.js`,
-            { ignoreNonExisting },
-            createWebpackUpdateLanguagesNeedleCallback(allLanguages, this.relativeDir(clientRootDir, clientI18nDir)),
-          );
+          if (application.microfrontend) {
+            this.editFile(
+              `${clientRootDir}webpack/webpack.common.js`,
+              { ignoreNonExisting },
+              createWebpackUpdateLanguagesNeedleCallback(allLanguages, this.relativeDir(clientRootDir, clientI18nDir)),
+            );
+          }
         });
       },
     });

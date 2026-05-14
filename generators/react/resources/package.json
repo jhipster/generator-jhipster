@@ -7,6 +7,7 @@
     "axios": "1.16.1",
     "bootstrap": "5.3.8",
     "bootswatch": "5.3.8",
+    "deepmerge": "4.3.1",
     "path-browserify": "1.0.1",
     "react": "19.2.6",
     "react-bootstrap": "2.10.10",

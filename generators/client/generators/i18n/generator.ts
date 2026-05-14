@@ -140,16 +140,14 @@ export default class I18NGenerator extends ClientApplicationGenerator {
         await Promise.all(
           this.languagesToGenerate.map(({ languageTag }) =>
             this.writeFiles({
-              sections: {
-                clientI18nFiles: [
-                  {
-                    condition: ctx => ctx.enableTranslation && ctx.clientBundlerVite,
-                    path: `${CLIENT_MAIN_SRC_DIR}/i18n/`,
-                    renameTo: context => `${context.clientI18nDir}${context.lang}/${context.lang}.js`,
-                    templates: ['index.js'],
-                  },
-                ],
-              },
+              templates: [
+                {
+                  condition: (data: any) =>
+                    data.enableTranslation && (data.clientBundlerVite || (data.clientFrameworkReact && !data.microfrontend)),
+                  sourceFile: data => `${CLIENT_MAIN_SRC_DIR}/i18n/index_${data.clientBundler}.js`,
+                  destinationFile: data => `${data.clientI18nDir}${data.lang}/${data.lang}.js`,
+                },
+              ],
               context: {
                 ...application,
                 lang: languageTag,
