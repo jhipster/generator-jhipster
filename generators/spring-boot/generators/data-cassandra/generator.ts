@@ -81,16 +81,10 @@ export default class CassandraGenerator extends SpringBootApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      addTestSpringFactory({ source, application }) {
-        source.addTestSpringFactory?.({
-          key: 'org.springframework.test.context.ContextCustomizerFactory',
-          value: `${application.packageName}.config.CassandraTestContainersSpringContextCustomizerFactory`,
-        });
-      },
       addDependencies({ application, source }) {
         const { reactive, javaDependencies } = application;
 
-        source.addSpringBootModule?.(`spring-boot-starter-data-cassandra${reactive ? '-reactive' : ''}`);
+        source.addSpringBootModule?.(`spring-boot-starter-data-cassandra${reactive ? '-reactive' : ''}`, 'spring-boot-testcontainers');
         source.addJavaDependencies?.([
           { groupId: 'org.apache.cassandra', artifactId: 'java-driver-mapper-runtime' },
           { groupId: 'commons-codec', artifactId: 'commons-codec' },
@@ -103,7 +97,14 @@ export default class CassandraGenerator extends SpringBootApplicationGenerator {
       },
       integrationTest({ application, source }) {
         source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
-          annotations: [{ package: `${application.packageName}.config`, annotation: 'EmbeddedCassandra' }],
+          imports: [`${application.packageName}.config.CassandraTestContainer`],
+          annotations: [
+            {
+              package: 'org.springframework.boot.testcontainers.context',
+              annotation: 'ImportTestcontainers',
+              parameters: (_, cb) => cb.addKeyValue('value', 'CassandraTestContainer.class'),
+            },
+          ],
         });
       },
     });

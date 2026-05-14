@@ -37,4 +37,8 @@ export default asWritingTask(function cleanupCassandraFilesTask({ application, c
   if (control.isJhipsterVersionLessThan('7.10.0')) {
     this.removeFile(`${application.javaPackageTestDir}config/TestContainersSpringContextCustomizerFactory.java`);
   }
+  if (control.isJhipsterVersionLessThan('9.1.0')) {
+    this.removeFile(`${application.javaPackageTestDir}config/CassandraTestContainersSpringContextCustomizerFactory.java`);
+    this.removeFile(`${application.javaPackageTestDir}config/EmbeddedCassandra.java`);
+  }
 });
