@@ -23,7 +23,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
-<%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation && microfrontend) { _%>
 const { hashElement } = require('folder-hash');
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 <%_ } _%>
@@ -53,7 +53,7 @@ const getTsLoaderRule = () => {
 
 module.exports = async options => {
   const development = options.env === 'development';
-<%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation && microfrontend) { _%>
   const languagesHash = await hashElement(path.resolve(__dirname, '../<%- this.relativeDir(clientRootDir, clientSrcDir) %>i18n'), {
     algo: 'md5',
     encoding: 'hex',
@@ -113,7 +113,7 @@ return merge(
       LOG_LEVEL: development ? 'info' : 'error',
     }),
     new webpack.DefinePlugin({
-<%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation && microfrontend) { _%>
       I18N_HASH: JSON.stringify(languagesHash.hash),
 <%_ } _%>
       DEVELOPMENT: JSON.stringify(development),
@@ -154,7 +154,7 @@ return merge(
       inject: 'body',
       base: '/',
     }),
-<%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation && microfrontend) { _%>
     new MergeJsonWebpackPlugin({
       output: {
         groupBy: [

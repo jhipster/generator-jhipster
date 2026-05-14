@@ -75,8 +75,12 @@
     "html-webpack-plugin": "<%- nodeDependencies['html-webpack-plugin'] %>",
     "identity-obj-proxy": "<%- nodeDependencies['identity-obj-proxy'] %>",
 <%_ if (enableTranslation) { _%>
+  <%_ if (microfrontend) { _%>
     "folder-hash": "<%- nodeDependencies['folder-hash'] %>",
     "merge-jsons-webpack-plugin": "<%- nodeDependencies['merge-jsons-webpack-plugin'] %>",
+  <%_ } else { _%>
+    "deepmerge": null,
+  <%_ } _%>
 <%_ } _%>
     "mini-css-extract-plugin": "<%- nodeDependencies['mini-css-extract-plugin'] %>",
     "postcss-loader": "<%- nodeDependencies['postcss-loader'] %>",
