@@ -128,7 +128,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -615,7 +615,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -1796,7 +1796,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -5315,7 +5315,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -8762,7 +8762,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -9478,7 +9478,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -10597,7 +10597,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -11457,7 +11457,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -13289,7 +13289,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -13790,7 +13790,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -17129,7 +17129,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -18096,7 +18096,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -20107,7 +20107,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -20827,7 +20827,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
