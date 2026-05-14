@@ -1,10 +1,14 @@
+<%_ if (microfrontend) { _%>
 import axios from 'axios';
+<%_ } _%>
 import { describe, expect, it, vi } from 'vitest';
 import { TranslatorContext } from 'react-jhipster';
 
 import locale, { setLocale, updateLocale, loaded, addTranslationSourcePrefix } from 'app/shared/reducers/locale';
+<%_ if (!microfrontend) { _%>
 
-vi.mock('../../../i18n/<%- nativeLanguage %>/<%- nativeLanguage %>.js', () => ({ default: {} }));
+vi.mock('../../../i18n/<%- nativeLanguage %>/<%- nativeLanguage %>.js', () => ({ default: { key: 'value' } }));
+<%_ } _%>
 
 const defaultLocale = '<%- nativeLanguage %>';
 const dispatch = vi.fn();
@@ -46,10 +50,12 @@ describe('Locale reducer tests', () => {
 
   describe('setLocale reducer', () => {
     describe('with default language loaded', () => {
+<%_ if (microfrontend) { _%>
       beforeEach(() => {
         axios.get = vi.fn().mockResolvedValue({ key: 'value' });
       });
 
+<%_ } _%>
       it('dispatches updateLocale action for default locale', async () => {
         TranslatorContext.setDefaultLocale(defaultLocale);
         expect(Object.keys(TranslatorContext.context.translations)).not.toContainEqual(defaultLocale);
@@ -69,10 +75,12 @@ describe('Locale reducer tests', () => {
     });
 
     describe('with no language loaded', () => {
+<%_ if (microfrontend) { _%>
       beforeEach(() => {
         axios.get = vi.fn().mockResolvedValue({ key: 'value' });
       });
 
+<%_ } _%>
       it('dispatches loaded and updateLocale action for default locale', async () => {
         TranslatorContext.setDefaultLocale(defaultLocale);
         expect(Object.keys(TranslatorContext.context.translations)).not.toContainEqual(defaultLocale);
@@ -96,10 +104,12 @@ describe('Locale reducer tests', () => {
     const sourcePrefix = 'foo/';
 
     describe('with no prefixes and keys loaded', () => {
+<%_ if (microfrontend) { _%>
       beforeEach(() => {
         axios.get = vi.fn().mockResolvedValue({ key: 'value' });
       });
 
+<%_ } _%>
       it('dispatches loaded action with keys and sourcePrefix', async () => {
         const getState = vi.fn(() => ({
           locale: { currentLocale: defaultLocale, sourcePrefixes: [], loadedLocales: [], loadedKeys: [] },
@@ -118,10 +128,12 @@ describe('Locale reducer tests', () => {
     });
 
     describe('with prefix already added', () => {
+<%_ if (microfrontend) { _%>
       beforeEach(() => {
         axios.get = vi.fn().mockResolvedValue({ key: 'value' });
       });
 
+<%_ } _%>
       it("doesn't dispatch loaded action", async () => {
         const getState = vi.fn(() => ({
           locale: { currentLocale: defaultLocale, sourcePrefixes: [sourcePrefix], loadedLocales: [], loadedKeys: [] },
@@ -140,10 +152,12 @@ describe('Locale reducer tests', () => {
     });
 
     describe('with key already loaded', () => {
+<%_ if (microfrontend) { _%>
       beforeEach(() => {
         axios.get = vi.fn().mockResolvedValue({ key: 'value' });
       });
 
+<%_ } _%>
       it("doesn't dispatch loaded action", async () => {
         const getState = vi.fn(() => ({
           locale: { currentLocale: defaultLocale, sourcePrefixes: [], loadedLocales: [], loadedKeys: [`${sourcePrefix}${defaultLocale}`] },
