@@ -4,6 +4,8 @@ import { TranslatorContext } from 'react-jhipster';
 
 import locale, { setLocale, updateLocale, loaded, addTranslationSourcePrefix } from 'app/shared/reducers/locale';
 
+vi.mock('../../../i18n/<%- nativeLanguage %>/<%- nativeLanguage %>.js', () => ({ default: {} }));
+
 const defaultLocale = '<%- nativeLanguage %>';
 const dispatch = vi.fn();
 const extra = {};
