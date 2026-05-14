@@ -50,7 +50,7 @@ describe(`generator - ${generator}`, () => {
           await helpers.runJHipster().withJHipsterConfig({ jhipsterVersion: '9.0.0' }).commitFiles().withMockedGenerators(mockedGenerators);
         });
 
-        it('should to true', () => {
+        it('should set javascriptBlueprint to true', () => {
           result.assertJHipsterConfigContent({
             javascriptBlueprint: true,
           });

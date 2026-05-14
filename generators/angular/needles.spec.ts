@@ -28,7 +28,7 @@ const postWritingTask = asPostWritingEntitiesTask<AngularEntity, AngularApplicat
   });
 });
 
-describe('needle API Angular angular generator : JHipster with blueprint', () => {
+describe('needle API Angular generator : JHipster with blueprint', () => {
   before(async () => {
     await helpers
       .runJHipster('angular')

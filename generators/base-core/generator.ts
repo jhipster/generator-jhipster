@@ -811,7 +811,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   ): Promise<GeneratorsByNamespace[G]>;
   async composeWithJHipster(gen: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator>;
   async composeWithJHipster(gen: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator> {
-    assert(typeof gen === 'string', 'generator should to be a string');
+    assert(typeof gen === 'string', 'generator should be a string');
     let generator: string = gen;
     if (!isAbsolute(generator)) {
       const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
@@ -1277,7 +1277,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         }
         throw new Error(`Unable to find ${filePath}. ${errorMessage}`);
       }
-      // allow to edit non existing files
+      // allow editing non-existing files
       originalContent = '';
     }
 

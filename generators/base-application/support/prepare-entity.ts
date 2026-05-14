@@ -382,7 +382,7 @@ function fieldToId(field: BaseApplicationField): any {
 /**
  * Copy required application config into entity.
  * Some entity features are related to the backend instead of the current app.
- * This allows to entities files based on the backend features.
+ * This allows generating entity files based on the backend features.
  */
 export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntity>>(
   this: CoreGenerator | void,

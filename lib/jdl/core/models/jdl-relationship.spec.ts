@@ -156,7 +156,7 @@ describe('jdl - JDLRelationship', () => {
       });
     });
 
-    it('should return an unique representation of the relationship', () => {
+    it('should return a unique representation of the relationship', () => {
       expect(relationship.getId()).toBe(
         `${relationship.type}_${relationship.from}{${relationship.injectedFieldInFrom}}_${relationship.to}`,
       );

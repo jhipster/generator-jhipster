@@ -221,7 +221,7 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
     return null;
   }
 
-  // Replacements using functions allows to replace multiples needles
+  // Replacements using functions allow replacing multiple needles
   if (typeof contentToAdd !== 'function' && regexp.test(content)) {
     throw new Error(`Multiple needles found for ${needle}`);
   }
