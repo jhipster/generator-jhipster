@@ -12,16 +12,13 @@ export default class TranslationService {
   }
 <%_ if (microfrontend) { _%>
 
-  async loadTranslations({ currentLanguage, urlPrefix, hash }: { currentLanguage: string; urlPrefix: string; hash: string }) {
+  loadTranslations({ currentLanguage, urlPrefix, hash }: { currentLanguage: string; urlPrefix: string; hash: string }) {
     if (!this.i18n) return;
-    try {
-      const translations = await axios.get(`${urlPrefix}i18n/${currentLanguage}.json?_=${hash}`);
-      if (translations.data) {
-        this.i18n.mergeLocaleMessage(currentLanguage, translations.data);
+    axios.get(`${urlPrefix}i18n/${currentLanguage}.json?_=${hash}`).then((res: any) => {
+      if (res.data) {
+        this.i18n.mergeLocaleMessage(currentLanguage, res.data);
       }
-    } catch (error) {
-      console.error(`Error loading translations for ${currentLanguage}:`, error);
-    }
+    });
   }
 <%_ } _%>
 
