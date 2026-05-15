@@ -2548,6 +2548,7 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
     },
     {
       "devDependencies": {
+        "@module-federation/enhanced": null,
         "browser-sync-webpack-plugin": null,
         "copy-webpack-plugin": null,
         "css-loader": null,
@@ -3467,6 +3468,7 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     },
     {
       "devDependencies": {
+        "@module-federation/enhanced": null,
         "browser-sync-webpack-plugin": null,
         "copy-webpack-plugin": null,
         "css-loader": null,
