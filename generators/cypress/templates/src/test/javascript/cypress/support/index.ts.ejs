@@ -51,3 +51,6 @@ import './management';
 <%_ if (authenticationTypeOauth2) { _%>
 import './oauth2';
 <%_ } _%>
+import installLogsCollector from 'cypress-terminal-report/src/installLogsCollector'
+
+installLogsCollector()
