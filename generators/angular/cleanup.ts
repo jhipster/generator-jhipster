@@ -275,7 +275,6 @@ export default asWritingTask<AngularEntity, AngularApplication<AngularEntity>>(f
     this.removeFile(`${application.clientSrcDir}app/admin/metrics/metrics.route.ts`);
     this.removeFile(`${application.clientSrcDir}app/layouts/navbar/navbar.route.ts`);
     this.removeFile(`${application.clientSrcDir}app/shared/shared-libs.module.ts`);
-    this.removeFile(`${application.clientSrcDir}app/shared/shared-libs.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/login/login.module.ts`);
     this.removeFile(`${application.clientSrcDir}app/login/login.route.ts`);
     this.removeFile(`${application.clientSrcDir}app/admin/tracker/tracker.route.ts`);
