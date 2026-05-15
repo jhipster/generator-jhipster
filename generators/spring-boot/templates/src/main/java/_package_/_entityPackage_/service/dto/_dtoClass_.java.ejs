@@ -135,7 +135,7 @@ public class <%- dtoClass %> implements Serializable {
 <%_ if (!embedded) { _%>
 
         <%- dtoClass %> <%- dtoInstance %> = (<%- dtoClass %>) o;
-        if (<%- idNames.map(n => `this.${n} == null`).join(' && ') %>){
+        if (<%- idNames.map(n => `this.${n} == null`).join(' && ') %>) {
             return false;
         }
         return <%- idNames.map(n => `Objects.equals(this.${n}, ${dtoInstance}.${n})`).join(' &&\n            ') %>;
