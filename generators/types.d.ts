@@ -76,6 +76,8 @@ type GeneratorsByNamespace = {
   'jhipster:common:bootstrap': import('./common/generators/bootstrap/generator.ts').default;
   cypress: import('./cypress/generator.ts').default;
   'jhipster:cypress': import('./cypress/generator.ts').default;
+  playwright: import('./playwright/generator.ts').default;
+  'jhipster:playwright': import('./playwright/generator.ts').default;
   docker: import('./docker/generator.ts').default;
   'jhipster:docker': import('./docker/generator.ts').default;
   'docker-compose': import('./docker-compose/generator.ts').default;

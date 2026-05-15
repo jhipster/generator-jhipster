@@ -20,7 +20,7 @@ const patterns = {
   common: ['generators/{app,common,docker,languages}/**'],
   devBlueprint: ['.blueprint/generate-sample/**', '.blueprint/github-build-matrix/**'],
   devserverWorkflow: ['.github/workflows/devserver.yml'],
-  e2e: ['generators/cypress/**'],
+  e2e: ['generators/{cypress,playwright}/**'],
   generateBlueprint: ['generators/{generate-blueprint,javascript-simple-application,ci-cd/generators/bootstrap}/**'],
   graalvm: [
     'generators/java-simple-application/generators/graalvm/**',

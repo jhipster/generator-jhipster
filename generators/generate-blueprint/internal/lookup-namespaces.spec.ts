@@ -99,6 +99,7 @@ describe('lookupGeneratorsNamespaces', () => {
   "languages",
   "languages:bootstrap",
   "liquibase",
+  "playwright",
   "project-name",
   "project-name:bootstrap",
   "react",

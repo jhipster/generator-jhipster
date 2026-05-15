@@ -5,12 +5,14 @@
   "devDependencies": {
     "@cypress/code-coverage": "4.0.3",
     "@cypress/schematic": "5.0.0",
+    "@playwright/test": "1.60.0",
     "babel-loader": "10.1.1",
     "babel-plugin-istanbul": "8.0.0",
     "cypress": "15.15.0",
     "cypress-audit": "1.1.0",
     "cypress-monocart-coverage": "1.0.1",
     "eslint-plugin-cypress": "6.4.1",
+    "eslint-plugin-playwright": "2.10.2",
     "lighthouse": "13.3.0",
     "nyc": "18.0.0",
     "swagger-ui-dist": "5.32.6"
