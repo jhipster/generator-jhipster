@@ -133,6 +133,7 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
             const { baseName } = microfrontend;
             mutateData(microfrontend, {
               lowercaseBaseName: baseName.toLowerCase(),
+              moduleFederationName: ({ lowercaseBaseName }) => lowercaseBaseName.replaceAll('-', '_'),
               capitalizedBaseName: upperFirst(baseName),
               endpointPrefix: `services/${baseName.toLowerCase()}`,
             });

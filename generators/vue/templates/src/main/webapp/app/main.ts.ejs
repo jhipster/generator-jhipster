@@ -39,7 +39,7 @@ init({
   remotes: [
   <%_ for (const remote of microfrontends) { _%>
     {
-      name: '<%- remote.lowercaseBaseName %>',
+      name: '<%- remote.moduleFederationName %>',
       entry: '/<%- remote.endpointPrefix %>/remoteEntry.js',
     },
   <%_ } _%>
