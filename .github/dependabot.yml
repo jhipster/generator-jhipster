@@ -121,6 +121,19 @@ updates:
       - 'skip-changelog'
 
   - package-ecosystem: 'npm'
+    directory: '/generators/cypress/resources/'
+    rebase-strategy: 'auto'
+    schedule:
+      interval: 'daily'
+      time: '07:00'
+    open-pull-requests-limit: 10
+    versioning-strategy: increase
+    labels:
+      - 'theme: front'
+      - 'theme: dependencies'
+      - 'skip-changelog'
+
+  - package-ecosystem: 'npm'
     directory: '/generators/javascript-simple-application/resources/'
     rebase-strategy: 'auto'
     schedule:

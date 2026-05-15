@@ -105,7 +105,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster('client', 'resources', 'package.json'),
+          this.fetchFromInstalledJHipster('cypress', 'resources', 'package.json'),
         );
       },
       prepareForTemplates({ applicationDefaults }) {
