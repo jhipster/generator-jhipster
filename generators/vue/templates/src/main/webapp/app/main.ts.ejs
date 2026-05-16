@@ -32,19 +32,16 @@ import TranslationService from '@/locale/translation.service';
 import { useTrackerService } from './admin/tracker/tracker.service';
 <%_ } _%>
 <%_ if (applicationTypeGateway && microfrontend) { _%>
-import { init } from '@module-federation/enhanced/runtime';
+import { registerRemotes } from '@module-federation/enhanced/runtime';
 
-init({
-  name: '<%- lowercaseBaseName %>',
-  remotes: [
+registerRemotes([
   <%_ for (const remote of microfrontends) { _%>
-    {
-      name: '<%- remote.moduleFederationName %>',
-      entry: '/<%- remote.endpointPrefix %>/remoteEntry.js',
-    },
+  {
+    name: '<%- remote.moduleFederationName %>',
+    entry: '/<%- remote.endpointPrefix %>/remoteEntry.js',
+  },
   <%_ } _%>
-  ],
-});
+]);
 <%_ } _%>
 
 const pinia = createPinia();
