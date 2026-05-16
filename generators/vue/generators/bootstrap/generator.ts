@@ -66,7 +66,7 @@ export default class VueBootstrapGenerator extends ClientApplicationGenerator {
                   lang =>
                     `    './i18n-${lang.languageTag}': './${this.relativeDir(clientRootDir, clientSrcDir)}i18n/${lang.languageTag}/${lang.languageTag}.js',`,
                 ),
-                needle: 'jhipster-needle-expose-language',
+                needle: 'jhipster-needle-expose',
               }),
             );
           }
