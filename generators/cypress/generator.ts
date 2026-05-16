@@ -253,6 +253,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
         clientPackageJson.merge({
           devDependencies: {
             cypress: application.nodeDependencies.cypress,
+            'cypress-terminal-report': null,
             'eslint-plugin-cypress': application.nodeDependencies['eslint-plugin-cypress'],
           },
         });
