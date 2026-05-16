@@ -1,3 +1,6 @@
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+import { loadRemote } from '@module-federation/enhanced/runtime';
+<%_ } _%>
 import axios from 'axios';
 import { type Composer } from 'vue-i18n';
 import dayjs from 'dayjs';
@@ -6,31 +9,27 @@ import languages from '@/shared/config/languages';
 export default class TranslationService {
   private readonly i18n: Composer;
   private readonly languages = languages();
+  private readonly loadedLanguages: Set<string> = new Set();
 
   constructor(i18n: Composer) {
     this.i18n = i18n;
   }
-<%_ if (microfrontend) { _%>
-
-  loadTranslations({ currentLanguage, urlPrefix, hash }: { currentLanguage: string; urlPrefix: string; hash: string }) {
-    if (!this.i18n) return;
-    axios.get(`${urlPrefix}i18n/${currentLanguage}.json?_=${hash}`).then((res: any) => {
-      if (res.data) {
-        this.i18n.mergeLocaleMessage(currentLanguage, res.data);
-      }
-    });
-  }
-<%_ } _%>
 
   async refreshTranslation(newLanguage: string) {
-    if (this.i18n && !this.i18n.messages[newLanguage]) {
-<%_ if (microfrontend) { _%>
-      const res = await axios.get(`i18n/${newLanguage}.json?_=${I18N_HASH}`);
-      this.i18n.setLocaleMessage(newLanguage, res.data);
-<%_ } else { _%>
-      const translations = (await import(`../../i18n/${newLanguage}/${newLanguage}.js`)).default;
-      this.i18n.setLocaleMessage(newLanguage, translations);
+    if (this.i18n && !this.loadedLanguages.has(newLanguage)) {
+      const translations = await import(`../../i18n/${newLanguage}/${newLanguage}.js`);
+      this.i18n.setLocaleMessage(newLanguage, translations.default);
+<%_ if (applicationTypeGateway && microfrontend) { _%>
+
+      await Promise.all([
+  <%_ for (const remote of microfrontends) { _%>
+        loadRemote<any>(`<%- remote.moduleFederationName %>/i18n-${newLanguage}`)
+          .then(<%- remote.moduleFederationName %>Translations => this.i18n.mergeLocaleMessage(newLanguage, <%- remote.moduleFederationName %>Translations.default)),
+  <%_ } _%>
+      ]);
 <%_ } _%>
+
+      this.loadedLanguages.add(newLanguage);
     }
   }
 

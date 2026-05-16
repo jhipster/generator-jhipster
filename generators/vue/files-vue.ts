@@ -58,11 +58,6 @@ export const vueFiles = asWriteFilesSection({
       ...clientApplicationTemplatesBlock(),
       templates: ['index.ts', 'core/error/error-loading.vue'],
     },
-    {
-      condition: generator => generator.applicationTypeMicroservice,
-      ...clientApplicationTemplatesBlock(),
-      templates: ['entities/entities-menu.spec.ts'],
-    },
   ],
   sass: [
     {
