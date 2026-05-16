@@ -355,7 +355,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
         }
       },
       addMicrofrontendDependencies({ application, source }) {
-        const { clientBundlerVite, clientBundlerWebpack, enableTranslation, microfrontend } = application;
+        const { clientBundlerVite, clientBundlerWebpack, microfrontend } = application;
         if (!microfrontend) return;
         if (clientBundlerVite) {
           source.mergeClientPackageJson!({
@@ -385,12 +385,6 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
               'webpack-dev-server': null,
               'webpack-merge': null,
               'workbox-webpack-plugin': null,
-              ...(enableTranslation ?
-                {
-                  'folder-hash': null,
-                  'merge-jsons-webpack-plugin': null,
-                }
-              : {}),
             },
           });
         }
