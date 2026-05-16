@@ -29,7 +29,7 @@ import {
 import vue from '@vitejs/plugin-vue';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 <%_ if (microfrontend && clientBundlerVite) { _%>
-import federation from "@originjs/vite-plugin-federation";
+import { ModuleFederationPlugin } from '@module-federation/vite';
 
   <%_ if (applicationTypeGateway) { _%>
 const sharedAppVersion = '0.0.0';
@@ -130,7 +130,7 @@ config = mergeConfig(config, {
     target: ['chrome89', 'edge89', 'firefox89', 'safari15'],
   },
   plugins: [
-    federation({
+    ModuleFederationPlugin({
       name: '<%- lowercaseBaseName %>',
   <%_ if (applicationTypeGateway) { _%>
       remotes: {
@@ -145,11 +145,12 @@ config = mergeConfig(config, {
         './entities-menu': './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entities-menu.vue',
       },
   <%_ } _%>
+      filename: 'remoteEntry.js',
+      shareScope: 'default',
       shared: {
         '@vuelidate/core': {},
         '@vuelidate/validators': {},
         axios: {},
-        // 'bootstrap-vue': {},
         vue: {
           packagePath: 'vue/dist/vue.esm-bundler.js',
         },
