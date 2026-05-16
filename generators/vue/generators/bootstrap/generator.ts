@@ -40,7 +40,7 @@ export default class VueBootstrapGenerator extends ClientApplicationGenerator {
         applicationDefaults(mutateApplication);
       },
       translations({ application }) {
-        application.addLanguageCallbacks.push((_newLanguages, allLanguages) => {
+        application.addLanguageCallbacks.push((newLanguages, allLanguages) => {
           const { enableTranslation, clientSrcDir, clientI18nDir, clientRootDir } = application;
           if (!enableTranslation) return;
 
@@ -56,6 +56,20 @@ export default class VueBootstrapGenerator extends ClientApplicationGenerator {
               needle: 'jhipster-needle-i18n-language-key-pipe',
             }),
           );
+
+          if (application.microfrontend && application.applicationTypeMicroservice) {
+            this.editFile(
+              `${clientRootDir}module-federation.config.cjs`,
+              { ignoreNonExisting },
+              createNeedleCallback({
+                contentToAdd: newLanguages.map(
+                  lang =>
+                    `    './i18n-${lang.languageTag}': './${this.relativeDir(clientRootDir, clientSrcDir)}i18n/${lang.languageTag}/${lang.languageTag}.js',`,
+                ),
+                needle: 'jhipster-needle-expose-language',
+              }),
+            );
+          }
 
           const generateDateTimeFormat = (language: string): string => `'${language}': {
   short: { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' },

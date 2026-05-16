@@ -2128,9 +2128,6 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "clientRoot/src/app/entities/entities-menu.component.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/entities/entities-menu.spec.ts": {
-    "stateCleared": "modified",
-  },
   "clientRoot/src/app/entities/entities-menu.vue": {
     "stateCleared": "modified",
   },
@@ -3042,9 +3039,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entities-menu.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/entities/entities-menu.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/entities-menu.vue": {

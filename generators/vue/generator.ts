@@ -303,6 +303,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
             `${application.clientSrcDir}app/config/error.constants.ts`,
             `${application.clientSrcDir}app/shared/security/authority.ts`,
           ],
+          '9.0.1': [`${application.clientSrcDir}app/entities/entities-menu.spec.ts`],
         });
       },
       cleanupOldFilesTask,
