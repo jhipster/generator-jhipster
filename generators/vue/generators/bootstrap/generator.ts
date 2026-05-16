@@ -18,10 +18,7 @@
  */
 import { createNeedleCallback } from '../../../base-core/support/needles.ts';
 import { ClientApplicationGenerator } from '../../../client/generator.ts';
-import {
-  createDayjsUpdateLanguagesEditFileCallback,
-  createWebpackUpdateLanguagesNeedleCallback,
-} from '../../../client/support/update-languages.ts';
+import { createDayjsUpdateLanguagesEditFileCallback } from '../../../client/support/update-languages.ts';
 import { generateLanguagesWebappOptions } from '../../../languages/support/languages.ts';
 import { mutateApplication } from '../../application.ts';
 
@@ -41,7 +38,7 @@ export default class VueBootstrapGenerator extends ClientApplicationGenerator {
       },
       translations({ application }) {
         application.addLanguageCallbacks.push((newLanguages, allLanguages) => {
-          const { enableTranslation, clientSrcDir, clientI18nDir, clientRootDir } = application;
+          const { enableTranslation, clientSrcDir, clientRootDir } = application;
           if (!enableTranslation) return;
 
           const { ignoreNeedlesError: ignoreNonExisting } = this;
@@ -85,14 +82,6 @@ export default class VueBootstrapGenerator extends ClientApplicationGenerator {
               needle: 'jhipster-needle-i18n-language-date-time-format',
             }),
           );
-
-          if (application.clientBundlerWebpack) {
-            this.editFile(
-              `${clientRootDir}webpack/webpack.common.js`,
-              { ignoreNonExisting },
-              createWebpackUpdateLanguagesNeedleCallback(allLanguages, this.relativeDir(clientRootDir, clientI18nDir)),
-            );
-          }
         });
       },
     });
