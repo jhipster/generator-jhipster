@@ -53,7 +53,7 @@ services:
     # By default the JHipster Registry runs with the "dev" and "native"
     # Spring profiles.
     # "native" profile means the filesystem is used to store data, see
-    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
+    # https://docs.spring.io/spring-cloud-config/docs/current/reference/html/
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=dev<% if (usesOauth2) { %>,oauth2<% } %>
