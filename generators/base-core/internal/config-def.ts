@@ -1,5 +1,4 @@
-import type { CommandConfigScope, JHipsterConfigs } from '../../../lib/command/index.ts';
-import { applyDerivedProperty } from '../../../lib/utils/derived-property.ts';
+import type { JHipsterConfigs } from '../../../lib/command/index.ts';
 import type BaseGenerator from '../../base/generator.ts';
 import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../base-application/types.d.ts';
 import type CoreGenerator from '../index.ts';
@@ -45,28 +44,3 @@ export function loadConfig(
     }
   }
 }
-
-/** @deprecated */
-export const loadDerivedConfig = (configsDef: JHipsterConfigs, { application }: { application: any }) => {
-  for (const [name, def] of Object.entries(configsDef)) {
-    if (['storage', 'blueprint', 'context'].includes(def.scope) && def.choices) {
-      applyDerivedProperty(application, name, def.choices, { addAny: true });
-      if (name === 'serviceDiscoveryType') {
-        application.serviceDiscovery = application.serviceDiscoveryType;
-        applyDerivedProperty(application, 'serviceDiscovery', def.choices, { addAny: true });
-      }
-    }
-  }
-};
-
-/** @deprecated */
-export const loadConfigDefaults = (configsDef: JHipsterConfigs, { context, scopes }: { context: any; scopes: CommandConfigScope[] }) => {
-  for (const [name, def] of Object.entries(configsDef)) {
-    if (context[name] === undefined) {
-      if (scopes.includes(def.scope)) {
-        const defaultValue = def.default ?? def.cli?.default;
-        context[name] = typeof defaultValue === 'function' ? defaultValue(context) : defaultValue;
-      }
-    }
-  }
-};
