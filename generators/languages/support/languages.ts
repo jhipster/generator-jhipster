@@ -20,7 +20,6 @@
 /**
  * Converts xx-yy to xx_yy.
  * @param language
- * @returns
  */
 export function languageSnakeCase(language: string): string {
   return language.replace(/-/g, '_');
@@ -38,7 +37,6 @@ export function languageSnakeCase(language: string): string {
  * // returns xx-Latn-YY-modifier
  * languageUpperCaseCountry('xx-Latn-yy-modifier');
  * @param language
- * @returns
  */
 function languageUpperCaseCountry(language: string): string {
   const split = splitLanguageTag(language);
@@ -49,7 +47,6 @@ function languageUpperCaseCountry(language: string): string {
 /**
  * Convert a language tag to java locale tag.
  * @param language
- * @returns
  */
 export function languageToJavaLanguage(language: string): string {
   return languageSnakeCase(languageUpperCaseCountry(language));
@@ -295,7 +292,6 @@ type LanguageIdParts = { language: string; script?: string; country?: string; va
 /**
  * Split a language tag.
  * @param languageTag
- * @returns
  */
 function splitLanguageTag(languageTag: string): LanguageIdParts {
   const [language, ...split] = languageTag.split('-');
@@ -314,7 +310,6 @@ function splitLanguageTag(languageTag: string): LanguageIdParts {
 /**
  * Build a language tag.
  * @param parts
- * @returns
  */
 function buildLanguageTag(parts: LanguageIdParts): string {
   const { language, script, country, variant } = parts;

@@ -33,7 +33,6 @@ function relationshipBaseDataEquals(relationshipA: LiquibaseRelationship, relati
  * Whether the two relationships are absolutely equal
  * @param relationshipA
  * @param relationshipB
- * @returns
  */
 export function relationshipEquals(relationshipA: LiquibaseRelationship, relationshipB: LiquibaseRelationship) {
   return (
@@ -48,7 +47,6 @@ export function relationshipEquals(relationshipA: LiquibaseRelationship, relatio
  * Whether the two relationships are equal, except for the foreign key on handlers, indicating that foreign key recreation is sufficient
  * @param relationshipA
  * @param relationshipB
- * @returns
  */
 export function relationshipNeedsForeignKeyRecreationOnly(relationshipA: LiquibaseRelationship, relationshipB: LiquibaseRelationship) {
   return (
