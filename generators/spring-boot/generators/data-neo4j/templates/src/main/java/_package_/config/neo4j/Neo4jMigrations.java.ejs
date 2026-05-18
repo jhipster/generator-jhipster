@@ -64,13 +64,10 @@ final class Neo4jMigrations {
             String userLabel = "<%- jhiTablePrefix %>_user";
             String authorityLabel = "<%- jhiTablePrefix %>_authority";
 
-            String query = String.format(
-                    "CREATE (u:%s) SET u = $user WITH u " +
-                    "UNWIND $authorities AS authority " +
-                    "MERGE (a:%s {name: authority}) " +
-                    "CREATE (u) - [:HAS_AUTHORITY] -> (a) ",
-                userLabel, authorityLabel
-            );
+            String query = ("CREATE (u:%s) SET u = $user WITH u " +
+                "UNWIND $authorities AS authority " +
+                "MERGE (a:%s {name: authority}) " +
+                "CREATE (u) - [:HAS_AUTHORITY] -> (a) ").formatted(userLabel, authorityLabel);
 
             try (Session session = context.getSession()) {
 

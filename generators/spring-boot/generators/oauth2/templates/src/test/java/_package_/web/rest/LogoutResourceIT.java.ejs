@@ -50,8 +50,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 <%_ } _%>
 
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -83,7 +83,7 @@ class LogoutResourceIT {
     @BeforeEach
     void before() <% if (!reactive) { %>throws Exception <% } %>{
         claims = new HashMap<>();
-        claims.put("groups", Collections.singletonList(AuthoritiesConstants.USER));
+        claims.put("groups", List.of(AuthoritiesConstants.USER));
         claims.put("sub", 123);
 
 <%_ if (reactive) { _%>

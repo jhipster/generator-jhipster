@@ -96,12 +96,9 @@ import java.time.ZoneOffset;
 <%_ if (databaseTypeSql && !authenticationTypeOauth2) { _%>
 import java.time.LocalDateTime;
 <%_ } _%>
-<%_ if (!authenticationTypeOauth2 || reactive) { _%>
 import java.util.List;
-<%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 <%_ } _%>
@@ -546,7 +543,7 @@ class UserServiceIT {
     }
 
     private OAuth2AuthenticationToken createMockOAuth2AuthenticationToken(Map<String, Object> userDetails) {
-        Collection<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
+        Collection<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
             "anonymous",
             "anonymous",

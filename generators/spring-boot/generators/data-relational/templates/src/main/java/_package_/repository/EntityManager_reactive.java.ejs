@@ -271,7 +271,7 @@ public class EntityManager {
                 // Create a table alias with the same name as the table
                 Table.aliased(camelCaseToSnakeCase(tableName), tableName),
                 // Use a composite alias of "tableName_columnName"
-                String.format("%s_%s", tableName, columnName)
+                "%s_%s".formatted(tableName, columnName)
             )
         );
     }
