@@ -198,11 +198,8 @@ import java.util.ArrayList;
 <%_ if (anyFieldIsBlobDerived) { _%>
 import java.util.Base64;
 <%_ } _%>
-<%_ if (searchEngineElasticsearch && !reactive) { _%>
-import java.util.Collections;
-  <%_ if (paginationNo) { _%>
+<%_ if (searchEngineElasticsearch && !reactive && paginationNo) { _%>
 import java.util.stream.Stream;
-  <%_ } _%>
 <%_ } _%>
 import java.util.List;
 <%_ if (anyFieldIsUUID || primaryKey.typeString || otherEntityPrimaryKeyTypesIncludesUUID) { _%>

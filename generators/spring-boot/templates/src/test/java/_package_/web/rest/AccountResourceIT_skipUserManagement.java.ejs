@@ -50,11 +50,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ } else { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
 <%_ } _%>
-<%_ if (reactive && searchEngineElasticsearch) { _%>
-import reactor.core.publisher.Mono;
-
-import static org.mockito.Mockito.*;
-<%_ } _%>
 
 /**
  * Integration tests for the {@link AccountResource} REST controller.

@@ -71,9 +71,6 @@ import org.springframework.test.web.servlet.MockMvc;
 <%_ if (databaseTypeSql && !reactive) { _%>
 import org.springframework.transaction.annotation.Transactional;
 <%_ } _%>
-<%_ if (reactive && searchEngineElasticsearch) { _%>
-import reactor.core.publisher.Mono;
-<%_ } _%>
 import java.time.Instant;
 <%_ if (authenticationTypeSession && !reactive && (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase)) { _%>
 import java.time.LocalDate;
