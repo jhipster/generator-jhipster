@@ -31,7 +31,7 @@ public interface DatabaseTestcontainer {
     @Container
     <%- testcontainerClass %><%- useTestcontainersV1 ? '<?>' : '' %> databaseContainer = <%- useTestcontainersV1 ? `(${testcontainerClass}) ` : '' %>new <%- testcontainerClass %><%- useTestcontainersV1 ? '<>' : '' %>("<%- testcontainerDockerImageName %>")
         .withDatabaseName("<%- baseName %>")
-        <%- testcontainerClassInitialization _%>
+        <%- testcontainerClassInitialization %>
         .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(DatabaseTestcontainer.class)))
         .withReuse(true);
 

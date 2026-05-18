@@ -45,7 +45,7 @@ public class DatabaseTestcontainer implements SqlTestContainer, InitializingBean
         if (null == databaseContainer) {
             databaseContainer = <%- useTestcontainersV1 ? `(${testcontainerClass}) ` : '' %>new <%- testcontainerClass %><%- useTestcontainersV1 ? '<>' : '' %>("<%- testcontainerDockerImageName %>")
                 .withDatabaseName("<%- baseName %>")
-                <%- testcontainerClassInitialization _%>
+                <%- testcontainerClassInitialization %>
                 .withLogConsumer(new Slf4jLogConsumer(LOG))
                 .withReuse(true);
         }
