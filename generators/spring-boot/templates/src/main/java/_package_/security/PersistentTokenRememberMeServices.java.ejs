@@ -225,7 +225,7 @@ public class PersistentTokenRememberMeServices extends AbstractRememberMeService
     private PersistentToken getPersistentToken(String[] cookieTokens) {
         if (cookieTokens.length != 2) {
             throw new InvalidCookieException(
-                "Cookie token did not contain " + 2 + " tokens, but contained '" + Arrays.asList(cookieTokens) + "'"
+                "Cookie token did not contain " + 2 + " tokens, but contained '" + List.of(cookieTokens) + "'"
             );
         }
         String presentedSeries = cookieTokens[0];

@@ -21,7 +21,6 @@ package <%- packageName %>.config;
 import java.util.List;
 
 <%_ if (databaseTypeSql) { _%>
-import java.util.Arrays;
 import tech.jhipster.config.JHipsterConstants;
 <%_ } _%>
 
@@ -53,7 +52,7 @@ public class SqlTestContainersSpringContextCustomizerFactory implements ContextC
                 TestPropertyValues testValues = TestPropertyValues.empty();
                 EmbeddedSQL sqlAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedSQL.class);
 <%_ if (prodDatabaseType !== devDatabaseType) { _%>
-                boolean usingTestProdProfile = Arrays.asList(context.getEnvironment().getActiveProfiles()).contains("test" + JHipsterConstants.SPRING_PROFILE_PRODUCTION);
+                boolean usingTestProdProfile = List.of(context.getEnvironment().getActiveProfiles()).contains("test" + JHipsterConstants.SPRING_PROFILE_PRODUCTION);
                 if (null != sqlAnnotation && usingTestProdProfile) {
 <%_ } else { _%>
                 if (null != sqlAnnotation) {
