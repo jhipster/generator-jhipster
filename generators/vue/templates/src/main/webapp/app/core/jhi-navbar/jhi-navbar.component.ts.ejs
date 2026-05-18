@@ -17,7 +17,7 @@ import EntitiesMenu from '@/entities/entities-menu.vue';
 import { useStore } from '@/store';
 import { useRouter } from 'vue-router';
 <%_ if (applicationTypeGateway && microfrontend) { _%>
-import { loadRemote } from '@module-federation/enhanced/runtime';
+import { loadRemote } from '@module-federation/runtime';
 <%_ } _%>
 
 export default defineComponent({
