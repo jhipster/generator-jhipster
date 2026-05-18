@@ -40,6 +40,7 @@ exports[`generator - vue gateway-jwt-skipUserManagement(true)-withAdminUi(false)
   "clientBundlerAny": true,
   "clientBundlerEsbuild": false,
   "clientBundlerName": "Vite",
+  "clientBundlerRsbuild": false,
   "clientBundlerVite": true,
   "clientBundlerWebpack": false,
   "clientDistDir": "dist/",
@@ -868,6 +869,7 @@ exports[`generator - vue gateway-oauth2-withAdminUi(true)-skipJhipsterDependenci
   "clientBundlerAny": true,
   "clientBundlerEsbuild": false,
   "clientBundlerName": "Vite",
+  "clientBundlerRsbuild": false,
   "clientBundlerVite": true,
   "clientBundlerWebpack": false,
   "clientDistDir": "dist/",
@@ -1752,12 +1754,13 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
-  "clientBundler": "webpack",
+  "clientBundler": "rsbuild",
   "clientBundlerAny": true,
   "clientBundlerEsbuild": false,
-  "clientBundlerName": "Webpack",
+  "clientBundlerName": "Rsbuild",
+  "clientBundlerRsbuild": true,
   "clientBundlerVite": false,
-  "clientBundlerWebpack": true,
+  "clientBundlerWebpack": false,
   "clientDistDir": "dist/",
   "clientFramework": "vue",
   "clientFrameworkAngular": false,
@@ -1833,8 +1836,8 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "devDatabaseTypeMysql": false,
   "devDatabaseTypeOracle": false,
   "devDatabaseTypePostgresql": true,
-  "devServerPort": 9060,
-  "devServerPortProxy": 9000,
+  "devServerPort": 3000,
+  "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
   "dockerContainers": Any<Object>,
   "dockerServices": [],
@@ -2039,6 +2042,9 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "clientRoot/package.json": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/rsbuild.config.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/404.html": {
@@ -2467,27 +2473,6 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "clientRoot/vitest.config.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/webpack/config.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/package.json": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/vue.utils.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/webpack.common.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/webpack.microfrontend.js": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/webpack/webpack.prod.js": {
-    "stateCleared": "modified",
-  },
   "package.json": {
     "stateCleared": "modified",
   },
@@ -2528,42 +2513,25 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
       },
     ],
   ],
-  "addWebpackConfig": [
-    {
-      "config": "require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })",
-    },
-  ],
   "mergeClientPackageJson": [
     {
+      "devDependencies": {
+        "@rsbuild/core": null,
+        "@rsbuild/plugin-sass": null,
+        "@rsbuild/plugin-vue": null,
+      },
       "scripts": {
-        "webapp:build:dev": "npm run webpack -- --mode development --env stats=minimal",
-        "webapp:build:prod": "npm run webpack -- --mode production --env stats=minimal",
-        "webapp:dev": "npm run webpack-dev-server -- --mode development --env stats=normal",
-        "webpack": "webpack --config webpack/webpack.common.js",
-        "webpack-dev-server": "webpack serve --config webpack/webpack.common.js",
+        "build": "rsbuild build",
+        "start": "rsbuild dev",
+        "webapp:build:dev": "npm run build -- --mode=development",
+        "webapp:build:prod": "npm run build -- --mode=production",
+        "webapp:dev": "npm run start",
+        "webapp:serve": "npm start",
       },
     },
     {
       "devDependencies": {
-        "@module-federation/enhanced": null,
-        "browser-sync-webpack-plugin": null,
-        "copy-webpack-plugin": null,
-        "css-loader": null,
-        "css-minimizer-webpack-plugin": null,
-        "html-webpack-plugin": null,
-        "mini-css-extract-plugin": null,
-        "postcss-loader": null,
-        "sass-loader": null,
-        "terser-webpack-plugin": null,
-        "ts-loader": null,
-        "vue-loader": null,
-        "vue-style-loader": null,
-        "webpack": null,
-        "webpack-bundle-analyzer": null,
-        "webpack-cli": null,
-        "webpack-dev-server": null,
-        "webpack-merge": null,
-        "workbox-webpack-plugin": null,
+        "@module-federation/rsbuild-plugin": null,
       },
     },
     {
@@ -2613,12 +2581,13 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
-  "clientBundler": "webpack",
+  "clientBundler": "rsbuild",
   "clientBundlerAny": true,
   "clientBundlerEsbuild": false,
-  "clientBundlerName": "Webpack",
+  "clientBundlerName": "Rsbuild",
+  "clientBundlerRsbuild": true,
   "clientBundlerVite": false,
-  "clientBundlerWebpack": true,
+  "clientBundlerWebpack": false,
   "clientDistDir": "dist/",
   "clientFramework": "vue",
   "clientFrameworkAngular": false,
@@ -2694,8 +2663,8 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "devDatabaseTypeMysql": false,
   "devDatabaseTypeOracle": false,
   "devDatabaseTypePostgresql": true,
-  "devServerPort": 9060,
-  "devServerPortProxy": 9000,
+  "devServerPort": 3000,
+  "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
   "dockerContainers": Any<Object>,
   "dockerServices": [],
@@ -2890,6 +2859,9 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "package.json": {
+    "stateCleared": "modified",
+  },
+  "rsbuild.config.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/404.html": {
@@ -3387,27 +3359,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "vitest.config.ts": {
     "stateCleared": "modified",
   },
-  "webpack/config.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/package.json": {
-    "stateCleared": "modified",
-  },
-  "webpack/vue.utils.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.common.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.dev.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.microfrontend.js": {
-    "stateCleared": "modified",
-  },
-  "webpack/webpack.prod.js": {
-    "stateCleared": "modified",
-  },
 }
 `;
 
@@ -3445,42 +3396,25 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
       },
     ],
   ],
-  "addWebpackConfig": [
-    {
-      "config": "require('./webpack.microfrontend')({ serve: options.env.WEBPACK_SERVE })",
-    },
-  ],
   "mergeClientPackageJson": [
     {
+      "devDependencies": {
+        "@rsbuild/core": null,
+        "@rsbuild/plugin-sass": null,
+        "@rsbuild/plugin-vue": null,
+      },
       "scripts": {
-        "webapp:build:dev": "npm run webpack -- --mode development --env stats=minimal",
-        "webapp:build:prod": "npm run webpack -- --mode production --env stats=minimal",
-        "webapp:dev": "npm run webpack-dev-server -- --mode development --env stats=normal",
-        "webpack": "webpack --config webpack/webpack.common.js",
-        "webpack-dev-server": "webpack serve --config webpack/webpack.common.js",
+        "build": "rsbuild build",
+        "start": "rsbuild dev",
+        "webapp:build:dev": "npm run build -- --mode=development",
+        "webapp:build:prod": "npm run build -- --mode=production",
+        "webapp:dev": "npm run start",
+        "webapp:serve": "npm start",
       },
     },
     {
       "devDependencies": {
-        "@module-federation/enhanced": null,
-        "browser-sync-webpack-plugin": null,
-        "copy-webpack-plugin": null,
-        "css-loader": null,
-        "css-minimizer-webpack-plugin": null,
-        "html-webpack-plugin": null,
-        "mini-css-extract-plugin": null,
-        "postcss-loader": null,
-        "sass-loader": null,
-        "terser-webpack-plugin": null,
-        "ts-loader": null,
-        "vue-loader": null,
-        "vue-style-loader": null,
-        "webpack": null,
-        "webpack-bundle-analyzer": null,
-        "webpack-cli": null,
-        "webpack-dev-server": null,
-        "webpack-merge": null,
-        "workbox-webpack-plugin": null,
+        "@module-federation/rsbuild-plugin": null,
       },
     },
     {
@@ -3535,6 +3469,7 @@ exports[`generator - vue monolith-jwt-skipUserManagement(false)-withAdminUi(true
   "clientBundlerAny": true,
   "clientBundlerEsbuild": false,
   "clientBundlerName": "Vite",
+  "clientBundlerRsbuild": false,
   "clientBundlerVite": true,
   "clientBundlerWebpack": false,
   "clientDistDir": "dist/",
@@ -4508,6 +4443,7 @@ exports[`generator - vue monolith-oauth2-withAdminUi(false)-skipJhipsterDependen
   "clientBundlerAny": true,
   "clientBundlerEsbuild": false,
   "clientBundlerName": "Vite",
+  "clientBundlerRsbuild": false,
   "clientBundlerVite": true,
   "clientBundlerWebpack": false,
   "clientDistDir": "dist/",
@@ -5310,6 +5246,7 @@ exports[`generator - vue monolith-session-skipUserManagement(true)-withAdminUi(f
   "clientBundlerAny": true,
   "clientBundlerEsbuild": false,
   "clientBundlerName": "Vite",
+  "clientBundlerRsbuild": false,
   "clientBundlerVite": true,
   "clientBundlerWebpack": false,
   "clientDistDir": "dist/",

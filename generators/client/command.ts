@@ -89,7 +89,7 @@ const command = {
         tokenType: 'NAME',
         tokenValuePattern: ALPHANUMERIC_PATTERN,
       },
-      choices: ['webpack', 'vite', 'esbuild'],
+      choices: ['webpack', 'vite', 'esbuild', 'rsbuild'],
       scope: 'storage',
     },
     devServerPort: {

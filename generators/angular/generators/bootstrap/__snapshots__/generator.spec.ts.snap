@@ -41,6 +41,7 @@ exports[`generator - angular:bootstrap bootstrapping default config should prepa
   "clientBundlerAny": true,
   "clientBundlerEsbuild": true,
   "clientBundlerName": "esbuild",
+  "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": false,
   "clientDistDir": "dist/",

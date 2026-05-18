@@ -66,6 +66,7 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "clientBundlerAny": true,
   "clientBundlerEsbuild": true,
   "clientBundlerName": "esbuild",
+  "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": false,
   "clientDistDir": "target/classes/static/",

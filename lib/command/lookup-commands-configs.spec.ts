@@ -13,6 +13,7 @@ describe('jdl options', () => {
     expect(jdlConfigs.map(([name]) => name)).toMatchInlineSnapshot(`
 [
   "removeNeedles",
+  "clientBundler",
   "clientTestFramework",
   "incrementalChangelog",
   "feignClient",

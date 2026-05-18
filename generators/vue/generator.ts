@@ -63,6 +63,14 @@ export default class VueGenerator extends ClientApplicationGenerator {
 
   get configuring() {
     return this.asConfiguringTaskGroup({
+      configMigration({ control }) {
+        if (
+          control.isJhipsterVersionLessThan('9.0.1') &&
+          (this.jhipsterConfig.microfrontend || this.jhipsterConfig.applicationType === 'microservice')
+        ) {
+          this.jhipsterConfig.clientBundler = 'webpack';
+        }
+      },
       configureDevServerPort({ control }) {
         if (this.jhipsterConfig.devServerPort === undefined) return;
         if (control.isJhipsterVersionLessThan('8.7.4')) {
@@ -117,7 +125,7 @@ export default class VueGenerator extends ClientApplicationGenerator {
         }
       },
       async javaNodeBuildPaths({ application }) {
-        const { clientBundlerVite, clientBundlerWebpack, microfrontend, javaNodeBuildPaths } = application;
+        const { clientBundlerRsbuild, clientBundlerVite, clientBundlerWebpack, microfrontend, javaNodeBuildPaths } = application;
 
         javaNodeBuildPaths?.push('.postcssrc.js', 'tsconfig.json', 'tsconfig.app.json');
         if (microfrontend) {
@@ -125,8 +133,12 @@ export default class VueGenerator extends ClientApplicationGenerator {
         }
         if (clientBundlerWebpack) {
           javaNodeBuildPaths?.push('webpack/');
-        } else if (clientBundlerVite) {
+        }
+        if (clientBundlerVite) {
           javaNodeBuildPaths?.push('vite.config.ts');
+        }
+        if (clientBundlerRsbuild) {
+          javaNodeBuildPaths?.push('rsbuild.config.ts');
         }
       },
       prepareForTemplates({ application, source }) {
@@ -330,7 +342,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addPackageJsonScripts({ application, source }) {
-        const { clientBundlerVite, clientBundlerWebpack, nodePackageManager } = application;
+        const { clientBundlerRsbuild, clientBundlerVite, clientBundlerWebpack, nodePackageManager } = application;
         if (clientBundlerVite) {
           source.mergeClientPackageJson!({
             scripts: {
@@ -342,7 +354,8 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
               'vite-build': 'vite build',
             },
           });
-        } else if (clientBundlerWebpack) {
+        }
+        if (clientBundlerWebpack) {
           source.mergeClientPackageJson!({
             scripts: {
               'webapp:build:dev': `${nodePackageManager} run webpack -- --mode development --env stats=minimal`,
@@ -353,9 +366,26 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
             },
           });
         }
+        if (clientBundlerRsbuild) {
+          source.mergeClientPackageJson!({
+            devDependencies: {
+              '@rsbuild/core': null,
+              '@rsbuild/plugin-sass': null,
+              '@rsbuild/plugin-vue': null,
+            },
+            scripts: {
+              start: 'rsbuild dev',
+              build: 'rsbuild build',
+              'webapp:build:dev': `${nodePackageManager} run build -- --mode=development`,
+              'webapp:build:prod': `${nodePackageManager} run build -- --mode=production`,
+              'webapp:dev': `${nodePackageManager} run start`,
+              'webapp:serve': `${nodePackageManager} start`,
+            },
+          });
+        }
       },
       addMicrofrontendDependencies({ application, source }) {
-        const { clientBundlerVite, clientBundlerWebpack, microfrontend } = application;
+        const { applicationTypeGateway, clientBundlerRsbuild, clientBundlerVite, clientBundlerWebpack, microfrontend } = application;
         if (!microfrontend) return;
         if (clientBundlerVite) {
           source.mergeClientPackageJson!({
@@ -363,7 +393,8 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
               '@originjs/vite-plugin-federation': '1.3.6',
             },
           });
-        } else if (clientBundlerWebpack) {
+        }
+        if (clientBundlerWebpack) {
           source.mergeClientPackageJson!({
             devDependencies: {
               '@module-federation/enhanced': null,
@@ -385,6 +416,18 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
               'webpack-dev-server': null,
               'webpack-merge': null,
               'workbox-webpack-plugin': null,
+            },
+          });
+        }
+        if (clientBundlerRsbuild) {
+          source.mergeClientPackageJson!({
+            devDependencies: {
+              '@module-federation/rsbuild-plugin': null,
+              ...(applicationTypeGateway ?
+                {
+                  '@module-federation/enhanced': null,
+                }
+              : {}),
             },
           });
         }

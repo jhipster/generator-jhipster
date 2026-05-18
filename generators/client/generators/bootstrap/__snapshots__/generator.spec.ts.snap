@@ -29,6 +29,7 @@ exports[`generator - client:bootstrap bootstrapping default config should prepar
   "clientBundlerAny": true,
   "clientBundlerEsbuild": true,
   "clientBundlerName": "esbuild",
+  "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": false,
   "clientDistDir": "dist/",
