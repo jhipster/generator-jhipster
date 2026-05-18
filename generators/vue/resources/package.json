@@ -12,7 +12,7 @@
     "bootstrap-vue-next": "0.45.3",
     "bootswatch": "5.3.8",
     "deepmerge": "4.3.1",
-    "js-cookie": "3.0.6",
+    "js-cookie": "3.0.7",
     "pinia": "3.0.4",
     "rxjs": "7.8.2",
     "sockjs-client": "1.6.1",
