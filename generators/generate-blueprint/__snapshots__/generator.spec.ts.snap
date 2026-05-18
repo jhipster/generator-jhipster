@@ -140,9 +140,6 @@ exports[`generator - generate-blueprint with all option should match application
     "husky": "HUSKY_VERSION",
     "lint-staged": "LINT_STAGED_VERSION",
     "npm": "NPM_VERSION",
-    "prettier": "PRETTIER_VERSION",
-    "prettier-plugin-java": "PRETTIER_PLUGIN_JAVA_VERSION",
-    "prettier-plugin-packagejson": "PRETTIER_PLUGIN_PACKAGEJSON_VERSION",
     "wait-on": "WAIT_ON_VERSION",
   },
   "nodePackageManager": "npm",
@@ -1016,6 +1013,21 @@ exports[`generator - generate-blueprint with all option should match snapshot 1`
     "stateCleared": "modified",
   },
   "generators/java-simple-application/generators/openapi-generator/templates/template-file-java-simple-application:openapi-generator.ejs": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/prettier/command.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/prettier/generator.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/prettier/generator.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/prettier/index.ts": {
+    "stateCleared": "modified",
+  },
+  "generators/java-simple-application/generators/prettier/templates/template-file-java-simple-application:prettier.ejs": {
     "stateCleared": "modified",
   },
   "generators/java-simple-application/index.ts": {
@@ -1905,9 +1917,6 @@ exports[`generator - generate-blueprint with default config should match applica
     "husky": "HUSKY_VERSION",
     "lint-staged": "LINT_STAGED_VERSION",
     "npm": "NPM_VERSION",
-    "prettier": "PRETTIER_VERSION",
-    "prettier-plugin-java": "PRETTIER_PLUGIN_JAVA_VERSION",
-    "prettier-plugin-packagejson": "PRETTIER_PLUGIN_PACKAGEJSON_VERSION",
     "wait-on": "WAIT_ON_VERSION",
   },
   "nodePackageManager": "npm",
@@ -2119,9 +2128,6 @@ exports[`generator - generate-blueprint with local-blueprint option and app gene
     "husky": "HUSKY_VERSION",
     "lint-staged": "LINT_STAGED_VERSION",
     "npm": "NPM_VERSION",
-    "prettier": "PRETTIER_VERSION",
-    "prettier-plugin-java": "PRETTIER_PLUGIN_JAVA_VERSION",
-    "prettier-plugin-packagejson": "PRETTIER_PLUGIN_PACKAGEJSON_VERSION",
     "wait-on": "WAIT_ON_VERSION",
   },
   "nodePackageManager": "npm",
@@ -2262,9 +2268,6 @@ exports[`generator - generate-blueprint with local-blueprint option should match
     "husky": "HUSKY_VERSION",
     "lint-staged": "LINT_STAGED_VERSION",
     "npm": "NPM_VERSION",
-    "prettier": "PRETTIER_VERSION",
-    "prettier-plugin-java": "PRETTIER_PLUGIN_JAVA_VERSION",
-    "prettier-plugin-packagejson": "PRETTIER_PLUGIN_PACKAGEJSON_VERSION",
     "wait-on": "WAIT_ON_VERSION",
   },
   "nodePackageManager": "npm",

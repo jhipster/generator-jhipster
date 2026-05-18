@@ -79,6 +79,7 @@ describe('lookupGeneratorsNamespaces', () => {
   "java-simple-application:jib",
   "java-simple-application:maven",
   "java-simple-application:openapi-generator",
+  "java-simple-application:prettier",
   "java:bootstrap",
   "java:domain",
   "java:gatling",

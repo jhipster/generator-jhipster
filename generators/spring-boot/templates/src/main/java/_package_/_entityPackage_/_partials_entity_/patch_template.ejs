@@ -43,7 +43,7 @@ _%>
   <% } %>
     return existing<%- entityClass %>;
     })
-  <%_ } %>
+  <%_ } _%>
   .<%- mapOrFlatMap %>(<%- entityInstance %>Repository::save)
   <%_ if (searchEngineElasticsearch) { _%>
     .<%- mapOrFlatMap %>(saved<%- entityClass %> -> {

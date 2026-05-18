@@ -17,14 +17,14 @@
  * limitations under the License.
  */
 import { before, describe, expect, it } from 'esmocha';
-import { basename } from 'node:path';
-
-import { defaultHelpers as helpers, result } from '../../lib/testing/index.ts';
-import { shouldSupportFeatures, testBlueprintSupport } from '../../test/support/tests.ts';
 
 import Generator from './index.ts';
 
-const generator = basename(import.meta.dirname);
+import { getGeneratorNamespace, shouldSupportFeatures, testBlueprintSupport } from '#test-support';
+import { defaultHelpers as helpers, typedResult } from '#testing';
+
+const result = typedResult<Generator>();
+const generator = getGeneratorNamespace(import.meta.dirname);
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
@@ -44,17 +44,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should compose with generators', () => {
-      expect(result.composedMockedGenerators).toMatchInlineSnapshot(`
-[
-  "jhipster:java-simple-application:prettier",
-]
-`);
+      expect(result.composedMockedGenerators).toMatchInlineSnapshot(`[]`);
     });
-  });
-
-  it('packageName with reserved keyword', async () => {
-    await expect(helpers.runJHipster(generator).withJHipsterConfig({ packageName: 'com.public.myapp' })).rejects.toThrow(
-      'The package name "com.public.myapp" contains a reserved Java keyword "public".',
-    );
   });
 });
