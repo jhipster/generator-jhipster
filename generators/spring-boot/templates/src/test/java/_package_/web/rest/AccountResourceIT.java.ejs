@@ -290,7 +290,7 @@ class AccountResourceIT {
         validUser.setImageUrl("http://placehold.it/50x50");
 <%_ } _%>
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        validUser.setAuthorities(Set.of(AuthoritiesConstants.USER));
         assertThat(userRepository.findOneByLogin("test-register-valid")<% if (reactive) { %>.blockOptional()<% } %>).isEmpty();
 
 <%_ if (reactive) { _%>
@@ -329,7 +329,7 @@ class AccountResourceIT {
         invalidUser.setImageUrl("http://placehold.it/50x50");
 <%_ } _%>
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        invalidUser.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
 <%_ if (!reactive) { _%>
         restAccountMockMvc.perform(
@@ -405,7 +405,7 @@ class AccountResourceIT {
         invalidUser.setImageUrl("http://placehold.it/50x50");
 <%_ } _%>
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        invalidUser.setAuthorities(Set.of(AuthoritiesConstants.USER));
         return invalidUser;
     }
 
@@ -425,7 +425,7 @@ class AccountResourceIT {
         firstUser.setImageUrl("http://placehold.it/50x50");
 <%_ } _%>
         firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        firstUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        firstUser.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
         // Duplicate login, different email
         ManagedUserVM secondUser = new ManagedUserVM();
@@ -521,7 +521,7 @@ class AccountResourceIT {
         firstUser.setImageUrl("http://placehold.it/50x50");
 <%_ } _%>
         firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        firstUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        firstUser.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
         // Register first user
 <%_ if (reactive) { _%>
@@ -649,7 +649,7 @@ class AccountResourceIT {
         validUser.setImageUrl("http://placehold.it/50x50");
 <%_ } _%>
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
+        validUser.setAuthorities(Set.of(AuthoritiesConstants.ADMIN));
 
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/register")
@@ -754,7 +754,7 @@ class AccountResourceIT {
         userDTO.setImageUrl("http://placehold.it/50x50");
 <%_ } _%>
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.ADMIN));
 
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/account")
@@ -816,7 +816,7 @@ class AccountResourceIT {
         userDTO.setImageUrl("http://placehold.it/50x50");
 <%_ } _%>
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.ADMIN));
 
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/account")
@@ -884,7 +884,7 @@ class AccountResourceIT {
         userDTO.setImageUrl("http://placehold.it/50x50");
 <%_ } _%>
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.ADMIN));
 
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/account")
@@ -937,7 +937,7 @@ class AccountResourceIT {
         userDTO.setImageUrl("http://placehold.it/50x50");
 <%_ } _%>
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.ADMIN));
 
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/account")

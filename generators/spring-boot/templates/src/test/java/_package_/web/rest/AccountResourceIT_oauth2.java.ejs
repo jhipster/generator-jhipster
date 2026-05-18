@@ -55,8 +55,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
   <%_ } _%>
 
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 <%_ } else { _%>
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -112,7 +112,7 @@ class AccountResourceIT {
     @BeforeEach
     void setup() {
         claims = new HashMap<>();
-        claims.put("groups", Collections.singletonList(AuthoritiesConstants.ADMIN));
+        claims.put("groups", List.of(AuthoritiesConstants.ADMIN));
         claims.put("sub", "jane");
         claims.put("email", "jane.doe@jhipster.com");
     }

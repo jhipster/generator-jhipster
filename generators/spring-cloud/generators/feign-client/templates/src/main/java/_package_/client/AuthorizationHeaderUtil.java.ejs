@@ -89,14 +89,14 @@ public class AuthorizationHeaderUtil {
                         throw new OAuth2AuthorizationException(new OAuth2Error("access_denied", "The token is expired", null));
                     }
                 }
-                String authorizationHeaderValue = String.format("%s %s", tokenType, accessTokenValue);
+                String authorizationHeaderValue = "%s %s".formatted(tokenType, accessTokenValue);
                 return Optional.of(authorizationHeaderValue);
             }
 
         } else if (authentication instanceof JwtAuthenticationToken) {
             JwtAuthenticationToken accessToken = (JwtAuthenticationToken) authentication;
             String tokenValue = accessToken.getToken().getTokenValue();
-            String authorizationHeaderValue = String.format("%s %s", OAuth2AccessToken.TokenType.BEARER.getValue(), tokenValue);
+            String authorizationHeaderValue = "%s %s".formatted(OAuth2AccessToken.TokenType.BEARER.getValue(), tokenValue);
             return Optional.of(authorizationHeaderValue);
         }
         return Optional.empty();

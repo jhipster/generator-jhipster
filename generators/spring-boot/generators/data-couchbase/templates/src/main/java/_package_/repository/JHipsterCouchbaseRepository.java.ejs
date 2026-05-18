@@ -30,8 +30,6 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 <%_ } _%>
 
-import static java.lang.String.format;
-
 /**
  * Couchbase specific {@link org.springframework.data.repository.Repository} interface that use KV first approach to optimize requests.
  */
@@ -47,12 +45,12 @@ public interface JHipsterCouchbaseRepository<T, ID> extends <% if (reactive) { %
                 .map(order -> {
                     String property = order.getProperty();
                     if ("id".equals(property)) {
-                        return order.withProperty(format("meta(%s).id", prefix));
+                        return order.withProperty("meta(%s).id".formatted(prefix));
                     }
                     if (prefix.isEmpty()) {
                         return order;
                     }
-                    return order.withProperty(format("%s.%s", prefix, property));
+                    return order.withProperty("%s.%s".formatted(prefix, property));
                 })
                 .toList());
         return new org.springframework.data.couchbase.core.query.Query()

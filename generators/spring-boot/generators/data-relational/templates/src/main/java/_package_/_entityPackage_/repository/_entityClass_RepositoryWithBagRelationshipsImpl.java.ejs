@@ -18,7 +18,6 @@
 -%>
 package <%- entityAbsolutePackage %>.repository;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.HashMap;
@@ -67,7 +66,7 @@ public class <%- entityClass %>RepositoryWithBagRelationshipsImpl implements <%-
 <%_ for (const relationship of relationships.filter(relationship => relationship.bagRelationship)) { _%>
             .map(this::fetch<%- relationship.relationshipNameCapitalizedPlural %>)
 <%_ } _%>
-            .orElse(Collections.emptyList());
+            .orElse(List.of());
     }
 <%_ for (const relationship of relationships.filter(relationship => relationship.bagRelationship)) { _%>
 
@@ -92,7 +91,7 @@ public class <%- entityClass %>RepositoryWithBagRelationshipsImpl implements <%-
             )
             .setParameter(<%- entityInstancePlural.toUpperCase() %>_PARAMETER, <%- entityInstancePlural %>)
             .getResultList();
-        Collections.sort(result, (o1, o2) -> Integer.compare(order.get(o1.<%- primaryKey.propertySupplierName %>()), order.get(o2.<%- primaryKey.propertySupplierName %>())));
+        result.sort((o1, o2) -> Integer.compare(order.get(o1.<%- primaryKey.propertySupplierName %>()), order.get(o2.<%- primaryKey.propertySupplierName %>())));
         return result;
     }
 <%_ } _%>
