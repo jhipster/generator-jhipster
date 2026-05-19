@@ -376,8 +376,7 @@ public class SecurityConfiguration {
                     user
                         .getAuthorities()
                         .forEach(authority -> {
-                            if (authority instanceof OidcUserAuthority) {
-                                OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
+                            if (authority instanceof OidcUserAuthority oidcUserAuthority) {
                                 mappedAuthorities.addAll(
                                     SecurityUtils.extractAuthorityFromClaims(oidcUserAuthority.getUserInfo().getClaims())
                                 );
