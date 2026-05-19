@@ -34,8 +34,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -102,7 +102,7 @@ class CustomClaimConverterIT {
             .containsEntry("preferred_username", USERNAME)
             .containsEntry("given_name", NAME)
             .containsEntry("family_name", FAMILY_NAME)
-            .containsEntry("groups", Arrays.asList(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
+            .containsEntry("groups", List.of(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
     }
 
     @Test
@@ -143,7 +143,7 @@ class CustomClaimConverterIT {
             .containsEntry("preferred_username", USERNAME)
             .containsEntry("given_name", NAME)
             .containsEntry("family_name", FAMILY_NAME)
-            .containsEntry("roles", Arrays.asList(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
+            .containsEntry("roles", List.of(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
     }
 
     @Test

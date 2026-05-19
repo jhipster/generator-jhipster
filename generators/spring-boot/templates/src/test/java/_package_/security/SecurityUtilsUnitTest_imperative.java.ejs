@@ -98,9 +98,9 @@ class SecurityUtilsUnitTest {
     @Test
     void testExtractAuthorityFromClaims() {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("groups", Arrays.asList(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
+        claims.put("groups", List.of(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
 
-        List<GrantedAuthority> expectedAuthorities = Arrays.asList(
+        List<GrantedAuthority> expectedAuthorities = List.of(
             new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN),
             new SimpleGrantedAuthority(AuthoritiesConstants.USER)
         );
@@ -113,9 +113,9 @@ class SecurityUtilsUnitTest {
     @Test
     void testExtractAuthorityFromClaims_NamespacedRoles() {
         Map<String, Object> claims = new HashMap<>();
-        claims.put(SecurityUtils.CLAIMS_NAMESPACE + "roles", Arrays.asList(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
+        claims.put(SecurityUtils.CLAIMS_NAMESPACE + "roles", List.of(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
 
-        List<GrantedAuthority> expectedAuthorities = Arrays.asList(
+        List<GrantedAuthority> expectedAuthorities = List.of(
             new SimpleGrantedAuthority(AuthoritiesConstants.ADMIN),
             new SimpleGrantedAuthority(AuthoritiesConstants.USER)
         );
