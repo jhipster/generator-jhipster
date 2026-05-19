@@ -114,10 +114,10 @@ public final class SecurityUtils {
             return jwt.getSubject();
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
-        } else if (authentication instanceof JwtAuthenticationToken) {
-            return (String) ((JwtAuthenticationToken) authentication).getToken().getClaims().get("preferred_username");
-        } else if (authentication.getPrincipal() instanceof DefaultOidcUser) {
-            Map<String, Object> attributes = ((DefaultOidcUser) authentication.getPrincipal()).getAttributes();
+        } else if (authentication instanceof JwtAuthenticationToken jwtToken) {
+            return (String) jwtToken.getToken().getClaims().get("preferred_username");
+        } else if (authentication.getPrincipal() instanceof DefaultOidcUser oidcUser) {
+            Map<String, Object> attributes = oidcUser.getAttributes();
             if (attributes.containsKey("preferred_username")) {
                 return (String) attributes.get("preferred_username");
             }
@@ -241,8 +241,8 @@ public final class SecurityUtils {
 <%_ if (!reactive) { _%>
     private static Stream<String> getAuthorities(Authentication authentication) {
   <%_ if (authenticationTypeOauth2) { _%>
-        Collection<? extends GrantedAuthority> authorities = authentication instanceof JwtAuthenticationToken ?
-            extractAuthorityFromClaims(((JwtAuthenticationToken) authentication).getToken().getClaims())
+        Collection<? extends GrantedAuthority> authorities = authentication instanceof JwtAuthenticationToken jwtToken
+            ? extractAuthorityFromClaims(jwtToken.getToken().getClaims())
             : authentication.getAuthorities();
         return authorities.stream()
   <%_ } else { _%>
