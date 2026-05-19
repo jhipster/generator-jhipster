@@ -33,6 +33,7 @@ export const vueFiles = asWriteFilesSection({
         'tsconfig.vitest.json',
         'vite.config.ts',
         'vitest.config.ts',
+        { condition: data => data.clientBundlerRsbuild, file: 'rsbuild.config.ts' },
       ],
     }),
   ],

@@ -29,6 +29,7 @@ exports[`generator - vue:bootstrap bootstrapping default config should prepare a
   "clientBundlerAny": true,
   "clientBundlerEsbuild": false,
   "clientBundlerName": "Vite",
+  "clientBundlerRsbuild": false,
   "clientBundlerVite": true,
   "clientBundlerWebpack": false,
   "clientDistDir": "dist/",

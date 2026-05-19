@@ -61,7 +61,7 @@ export default class VueBootstrapGenerator extends ClientApplicationGenerator {
               createNeedleCallback({
                 contentToAdd: newLanguages.map(
                   lang =>
-                    `    './i18n-${lang.languageTag}': './${this.relativeDir(clientRootDir, clientSrcDir)}i18n/${lang.languageTag}/${lang.languageTag}.js',`,
+                    `    './i18n-${lang.languageTag}': './${application.clientBundlerRsbuild ? '' : this.relativeDir(clientRootDir, clientSrcDir)}i18n/${lang.languageTag}/${lang.languageTag}.js',`,
                 ),
                 needle: 'jhipster-needle-expose',
               }),

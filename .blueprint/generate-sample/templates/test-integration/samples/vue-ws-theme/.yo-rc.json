@@ -5,6 +5,7 @@
     "baseName": "jhipster",
     "buildTool": "maven",
     "cacheProvider": "ehcache",
+    "clientBundler": "rsbuild",
     "clientFramework": "vue",
     "clientTheme": "lux",
     "clientThemeVariant": "primary",
