@@ -82,13 +82,13 @@ const connect = () => {
 
   const headers = {};
 <%_ if (authenticationUsesCsrf) { _%>
-  const url = '//' + loc.host + baseHref + '/websocket/tracker';
+  const url = `//${loc.host}${baseHref}/websocket/tracker`;
   headers[CSRF_TOKEN_HEADER_NAME] = encodeCsrfToken(cookie.read(CSRF_TOKEN_COOKIE_NAME));
 <%_ } else { _%>
-  let url = '//' + loc.host + baseHref + '/websocket/tracker';
+  let url = `//${loc.host}${baseHref}/websocket/tracker`;
   const authToken = Storage.local.get('<%- jhiPrefixDashed %>-authenticationToken') || Storage.session.get('<%- jhiPrefixDashed %>-authenticationToken');
   if (authToken) {
-    url += '?access_token=' + authToken;
+    url += `?access_token=${authToken}`;
   }
 <%_ } _%>
   const socket = new SockJS(url);
