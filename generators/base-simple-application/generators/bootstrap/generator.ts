@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { packageJson } from '../../../../lib/index.ts';
 import { getConfigWithDefaults } from '../../../../lib/jhipster/default-application-options.ts';
 import { finalizeMutations, removeFieldsWithNullishValues } from '../../../../lib/utils/object.ts';
 import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
@@ -82,12 +81,6 @@ export default class BaseSimpleApplicationBootstrapGenerator extends BaseSimpleA
         applicationDefaults(mutateApplicationPreparing);
       },
       loadNodeDependencies({ application }) {
-        this.loadNodeDependencies(application.nodeDependencies, {
-          prettier: packageJson.dependencies.prettier,
-          'prettier-plugin-java': packageJson.dependencies['prettier-plugin-java'],
-          'prettier-plugin-packagejson': packageJson.dependencies['prettier-plugin-packagejson'],
-        });
-
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
           this.fetchFromInstalledJHipster('common', 'resources', 'package.json'),

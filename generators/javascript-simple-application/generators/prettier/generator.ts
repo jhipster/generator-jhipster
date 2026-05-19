@@ -42,7 +42,6 @@ export default class PrettierGenerator extends JavascriptSimpleApplicationGenera
       loadNodeDependencies({ application }) {
         this.loadNodeDependencies(application.nodeDependencies, {
           prettier: packageJson.dependencies.prettier,
-          'prettier-plugin-java': packageJson.dependencies['prettier-plugin-java'],
           'prettier-plugin-packagejson': packageJson.dependencies['prettier-plugin-packagejson'],
         });
       },

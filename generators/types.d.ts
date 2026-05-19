@@ -112,6 +112,7 @@ type GeneratorsByNamespace = {
   'jhipster:java-simple-application:jib': import('./java-simple-application/generators/jib/generator.ts').default;
   'jhipster:java-simple-application:maven': import('./java-simple-application/generators/maven/generator.ts').default;
   'jhipster:java-simple-application:openapi-generator': import('./java-simple-application/generators/openapi-generator/generator.ts').default;
+  'jhipster:java-simple-application:prettier': import('./java-simple-application/generators/prettier/generator.ts').default;
   'jhipster:java:bootstrap': import('./java/generators/bootstrap/generator.ts').default;
   'jhipster:java:domain': import('./java/generators/domain/generator.ts').default;
   'jhipster:java:gatling': import('./java/generators/gatling/generator.ts').default;
