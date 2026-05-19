@@ -512,63 +512,63 @@ public class UserRepository {
         userDao = userTokenMapper.userTokenDao(CqlIdentifier.fromCql(cassandraProperties.getKeyspaceName()));
   <%_ } _%>
 
-        findOneByActivationKeyStmt = session.prepare(
-            "SELECT id " +
-                "FROM user_by_activation_key " +
-                "WHERE activation_key = :activation_key")<% if (reactive) { %>.block()<% } %>;
+        findOneByActivationKeyStmt = session.prepare("""
+            SELECT id
+            FROM user_by_activation_key
+            WHERE activation_key = :activation_key""")<% if (reactive) { %>.block()<% } %>;
 
-        findOneByResetKeyStmt = session.prepare(
-            "SELECT id " +
-                "FROM user_by_reset_key " +
-                "WHERE reset_key = :reset_key")<% if (reactive) { %>.block()<% } %>;
+        findOneByResetKeyStmt = session.prepare("""
+            SELECT id
+            FROM user_by_reset_key
+            WHERE reset_key = :reset_key""")<% if (reactive) { %>.block()<% } %>;
 
-        insertByActivationKeyStmt = session.prepare(
-            "INSERT INTO user_by_activation_key (activation_key, id) " +
-                "VALUES (:activation_key, :id)")<% if (reactive) { %>.block()<% } %>;
+        insertByActivationKeyStmt = session.prepare("""
+            INSERT INTO user_by_activation_key (activation_key, id)
+            VALUES (:activation_key, :id)""")<% if (reactive) { %>.block()<% } %>;
 
-        insertByResetKeyStmt = session.prepare(
-            "INSERT INTO user_by_reset_key (reset_key, id) " +
-                "VALUES (:reset_key, :id)")<% if (reactive) { %>.block()<% } %>;
+        insertByResetKeyStmt = session.prepare("""
+            INSERT INTO user_by_reset_key (reset_key, id)
+            VALUES (:reset_key, :id)""")<% if (reactive) { %>.block()<% } %>;
 
   <%_ if (reactive) { _%>
-        deleteByIdStmt = session.prepare(
-            "DELETE FROM user " +
-                "WHERE id = :id").block();
+        deleteByIdStmt = session.prepare("""
+            DELETE FROM user
+            WHERE id = :id""").block();
 
   <%_ } _%>
-        deleteByActivationKeyStmt = session.prepare(
-            "DELETE FROM user_by_activation_key " +
-                "WHERE activation_key = :activation_key")<% if (reactive) { %>.block()<% } %>;
+        deleteByActivationKeyStmt = session.prepare("""
+            DELETE FROM user_by_activation_key
+            WHERE activation_key = :activation_key""")<% if (reactive) { %>.block()<% } %>;
 
-        deleteByResetKeyStmt = session.prepare(
-            "DELETE FROM user_by_reset_key " +
-                "WHERE reset_key = :reset_key")<% if (reactive) { %>.block()<% } %>;
+        deleteByResetKeyStmt = session.prepare("""
+            DELETE FROM user_by_reset_key
+            WHERE reset_key = :reset_key""")<% if (reactive) { %>.block()<% } %>;
 
-        findOneByLoginStmt = session.prepare(
-            "SELECT id " +
-                "FROM user_by_login " +
-                "WHERE login = :login")<% if (reactive) { %>.block()<% } %>;
+        findOneByLoginStmt = session.prepare("""
+            SELECT id
+            FROM user_by_login
+            WHERE login = :login""")<% if (reactive) { %>.block()<% } %>;
 
-        insertByLoginStmt = session.prepare(
-            "INSERT INTO user_by_login (login, id) " +
-                "VALUES (:login, :id)")<% if (reactive) { %>.block()<% } %>;
+        insertByLoginStmt = session.prepare("""
+            INSERT INTO user_by_login (login, id)
+            VALUES (:login, :id)""")<% if (reactive) { %>.block()<% } %>;
 
-        deleteByLoginStmt = session.prepare(
-            "DELETE FROM user_by_login " +
-                "WHERE login = :login")<% if (reactive) { %>.block()<% } %>;
+        deleteByLoginStmt = session.prepare("""
+            DELETE FROM user_by_login
+            WHERE login = :login""")<% if (reactive) { %>.block()<% } %>;
 
-        findOneByEmailStmt = session.prepare(
-            "SELECT id " +
-                "FROM user_by_email " +
-                "WHERE email     = :email")<% if (reactive) { %>.block()<% } %>;
+        findOneByEmailStmt = session.prepare("""
+            SELECT id
+            FROM user_by_email
+            WHERE email     = :email""")<% if (reactive) { %>.block()<% } %>;
 
-        insertByEmailStmt = session.prepare(
-            "INSERT INTO user_by_email (email, id) " +
-                "VALUES (:email, :id)")<% if (reactive) { %>.block()<% } %>;
+        insertByEmailStmt = session.prepare("""
+            INSERT INTO user_by_email (email, id)
+            VALUES (:email, :id)""")<% if (reactive) { %>.block()<% } %>;
 
-        deleteByEmailStmt = session.prepare(
-            "DELETE FROM user_by_email " +
-                "WHERE email = :email")<% if (reactive) { %>.block()<% } %>;
+        deleteByEmailStmt = session.prepare("""
+            DELETE FROM user_by_email
+            WHERE email = :email""")<% if (reactive) { %>.block()<% } %>;
 
         truncateStmt = session.prepare("TRUNCATE user")<% if (reactive) { %>.block()<% } %>;
 
