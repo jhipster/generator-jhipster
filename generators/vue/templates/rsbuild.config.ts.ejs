@@ -17,7 +17,6 @@
  limitations under the License.
 -%>
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
 import { defineConfig } from '@rsbuild/core';
 import { pluginSass } from '@rsbuild/plugin-sass';
@@ -26,32 +25,36 @@ import { getAbsoluteFSPath } from 'swagger-ui-dist';
 <%_ if (microfrontend) { _%>
 import { ModuleFederationPlugin } from '@module-federation/enhanced/rspack';
 
-import mfConfig from './module-federation.config.cjs';
+import mfConfig from './module-federation.config.ts';
 <%_ } _%>
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 export default defineConfig({
-  root: path.join(__dirname, '<%- this.relativeDir(clientRootDir, clientSrcDir) %>'),
+  root: path.join(import.meta.dirname, '<%- this.relativeDir(clientRootDir, clientSrcDir) %>'),
   resolve: {
     alias: {
       vue$: 'vue/dist/vue.esm-bundler.js',
-      '@content': path.resolve(__dirname, './<%- this.relativeDir(clientRootDir, clientSrcDir) %>content'),
-      '@': path.resolve(__dirname, './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app'),
+      '@content': path.resolve(import.meta.dirname, './<%- this.relativeDir(clientRootDir, clientSrcDir) %>content'),
+      '@': path.resolve(import.meta.dirname, './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app'),
     },
   },
   plugins: [
     pluginVue(),
     pluginSass(),
   ],
-<%_ if (microfrontend) { _%>
   tools: {
     rspack: {
+<%_ if (microfrontend) { _%>
       plugins: [new ModuleFederationPlugin(mfConfig)],
+<%_ } _%>
+      cache: {
+        type: 'persistent',
+        storage: {
+          type: 'filesystem',
+          directory: path.resolve(import.meta.dirname, './<%- this.relativeDir(clientRootDir, temporaryDir) %>rsbuild/'),
+        },
+      },
     },
   },
-<%_ } _%>
   output: {
 <%_ if (microfrontend) { _%>
   <%_ if (applicationTypeMicroservice) { _%>
@@ -62,7 +65,7 @@ export default defineConfig({
 <%_ } _%>
     cleanDistPath: true,
     distPath: {
-      root: path.join(__dirname, './<%- this.relativeDir(clientRootDir, clientDistDir) %>'),
+      root: path.join(import.meta.dirname, './<%- this.relativeDir(clientRootDir, clientDistDir) %>'),
     },
     copy: [
       ...['js', 'css', 'html', 'png'].map(ext => ({

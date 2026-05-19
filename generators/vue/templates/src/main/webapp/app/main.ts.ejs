@@ -38,7 +38,7 @@ registerRemotes([
   <%_ for (const remote of microfrontends) { _%>
   {
     name: '<%- remote.moduleFederationName %>',
-    entry: '/<%- remote.endpointPrefix %>/remoteEntry.js',
+    entry: '<%- remote.endpointPrefix %>/mf-manifest.json',
   },
   <%_ } _%>
 ]);

@@ -2038,7 +2038,7 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "clientRoot/eslint.config.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/module-federation.config.cjs": {
+  "clientRoot/module-federation.config.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/package.json": {
@@ -2855,7 +2855,7 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "eslint.config.ts": {
     "stateCleared": "modified",
   },
-  "module-federation.config.cjs": {
+  "module-federation.config.ts": {
     "stateCleared": "modified",
   },
   "package.json": {

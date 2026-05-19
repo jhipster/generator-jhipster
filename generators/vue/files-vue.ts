@@ -39,8 +39,12 @@ export const vueFiles = asWriteFilesSection({
   ],
   microfrontend: [
     clientRootTemplatesBlock({
-      condition: generator => generator.microfrontend,
+      condition: data => data.microfrontend && data.clientBundlerWebpack,
       templates: ['module-federation.config.cjs'],
+    }),
+    clientRootTemplatesBlock({
+      condition: data => data.microfrontend && !data.clientBundlerWebpack,
+      templates: ['module-federation.config.ts'],
     }),
     clientRootTemplatesBlock({
       condition: ctx => ctx.clientBundlerWebpack,
