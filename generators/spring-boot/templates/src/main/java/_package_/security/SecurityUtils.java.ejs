@@ -139,12 +139,21 @@ public final class SecurityUtils {
   <%_ if (reactive) { _%>
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
+            .flatMap(authentication -> Mono.justOrEmpty(extractCredentials(authentication)));
   <%_ } else { _%>
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
+            .map(SecurityUtils::extractCredentials);
   <%_ } _%>
-            .filter(authentication -> authentication.getCredentials() instanceof String)
-            .map(authentication -> (String) authentication.getCredentials());
+    }
+
+    private static String extractCredentials(Authentication authentication) {
+        if (authentication.getCredentials() instanceof String token) {
+            return token;
+        } else if (authentication.getCredentials() instanceof Jwt jwt) {
+            return jwt.getTokenValue();
+        }
+        return null;
     }
   <%_ if (user) { _%>
 
