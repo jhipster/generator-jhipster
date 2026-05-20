@@ -24,8 +24,7 @@ _%>
 import { Component, ChangeDetectionStrategy, inject, signal, OnInit<% if (anyFieldHasImageContentType) { %>, ElementRef<% } %> } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize<% if (relationships.some(rel => rel.persistableRelationship)) { %>, map<% } %> } from 'rxjs/operators';
+import { finalize<% if (relationships.some(rel => rel.persistableRelationship)) { %>, map<% } %>, Observable } from 'rxjs';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>

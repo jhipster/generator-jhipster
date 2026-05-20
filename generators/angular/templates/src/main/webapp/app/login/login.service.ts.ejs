@@ -21,8 +21,7 @@ import { inject, Injectable } from '@angular/core';
 import { Location } from '@angular/common';
 
 <%_ } else { _%>
-import { Observable } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap, Observable } from 'rxjs';
 
 import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';

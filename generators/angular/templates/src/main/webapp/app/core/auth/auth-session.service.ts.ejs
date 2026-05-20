@@ -18,9 +18,10 @@
 -%>
 import { inject, Injectable } from '@angular/core';
 import { HttpClient<% if (!authenticationTypeOauth2) { %>, HttpHeaders<% } %> } from '@angular/common/http';
-import { Observable } from 'rxjs';
 <%_ if (!authenticationTypeOauth2) { _%>
-import { map } from 'rxjs/operators';
+import { map, Observable } from 'rxjs';
+<%_ } else { _%>
+import { Observable } from 'rxjs';
 <%_ } _%>
 
 import { ApplicationConfigService } from '../config/application-config.service';
