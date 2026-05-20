@@ -110,7 +110,7 @@ export default () => next => action => {
           const { errorMessage<% if (enableTranslation) { %>, errorKey, param<% } %> } = getMessageFromHeaders(response.headers ?? {});
 <%_ if (enableTranslation) { _%>
           if (errorKey) {
-            const entityName = translate('global.menu.entities.' + param);
+            const entityName = translate(`global.menu.entities.${param}`);
             addErrorAlert({ key: errorKey, data: { entityName } });
           } else
 <%_ } _%>

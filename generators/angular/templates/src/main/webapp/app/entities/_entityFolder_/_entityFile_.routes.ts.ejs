@@ -28,7 +28,7 @@ const <%- entityInstance %>Route: Routes = [
     loadComponent: () => import('./list/<%- entityFileName %>').then(m => m.<%- entityAngularName %>),
     data: {
 <%_ if (primaryKey.typeLong && primaryKey.autoGenerate) { _%>
-      defaultSort: '<%- primaryKey.name %>,' + ASC,
+      defaultSort: `<%- primaryKey.name %>,${ASC}`,
 <%_ } _%>
 <%_ if (entityAngularReadAuthorities) { _%>
       authorities: [<%- entityAngularReadAuthorities %>],
