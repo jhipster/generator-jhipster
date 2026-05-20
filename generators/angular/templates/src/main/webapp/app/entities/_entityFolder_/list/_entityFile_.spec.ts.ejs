@@ -23,6 +23,7 @@ _%>
 <%_ if (clientTestFrameworkVitest) { _%>
 import { MockInstance, afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
+import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import {
   ComponentFixture, TestBed,
@@ -65,8 +66,7 @@ describe('<%- entityAngularName %> Management Component', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-<%_ if (enableTranslation) { _%>
-            imports: [TranslateModule.forRoot()],
+<%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],
 <%_ } _%>
             providers: [
                 provideHttpClientTesting(),
@@ -182,9 +182,13 @@ describe('<%- entityAngularName %> Management Component', () => {
 
 <%_ } _%>
     describe('track<%- primaryKey.nameCapitalized %>', () => {
-        it('should forward to <%- entityInstance %>Service', () => {
+        it('should forward to <%- entityInstance %>Service.get<%- entityAngularName %>Identifier', () => {
             const entity = <%- tsPrimaryKeySamples[0] %>;
+  <%_ if (clientTestFrameworkVitest) { _%>
             <%- clientTestFramework %>.spyOn(service, 'get<%- entityAngularName %>Identifier');
+  <%_ } else { _%>
+            <%- clientTestFramework %>.spyOn(service, 'get<%- entityAngularName %>Identifier').and.returnValue(entity.<%- primaryKey.name %>);
+  <%_ } _%>
             const <%- primaryKey.name %> = comp.track<%- primaryKey.nameCapitalized %>(entity);
             expect(service.get<%- entityAngularName %>Identifier).toHaveBeenCalledWith(entity);
             expect(<%- primaryKey.name %>).toBe(entity.<%- primaryKey.name %>);

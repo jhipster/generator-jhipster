@@ -34,14 +34,8 @@ import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './<%- entityFileName %>-delete-dialog.html',
     imports: [
-<%_ if (enableTranslation) { _%>
-      TranslateDirective,
-      TranslateModule,
-<%_ } _%>
-      FormsModule,
-      FontAwesomeModule,
-      AlertError,
-    ],
+<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, 
+<%_ } _%>FormsModule, FontAwesomeModule, AlertError],
 })
 export class <%- entityAngularName %>DeleteDialog {
     <%- entityInstance %>?: I<%- entityAngularName %>;
@@ -53,8 +47,8 @@ export class <%- entityAngularName %>DeleteDialog {
         this.activeModal.dismiss();
     }
 
-    confirmDelete(<%- primaryKey.name %>: <%- tsKeyType %>): void {
-        this.<%- entityInstance %>Service.delete(<%- primaryKey.name %>).subscribe(() => {
+    confirmDelete(id: <%- tsKeyType %>): void {
+        this.<%- entityInstance %>Service.delete(id).subscribe(() => {
             this.activeModal.close(ITEM_DELETED_EVENT);
         });
     }

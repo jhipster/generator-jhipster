@@ -34,14 +34,9 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { HttpHeaders } from '@angular/common/http';
 <%_ } _%>
 import { ActivatedRoute, Data, ParamMap, Router, RouterLink } from '@angular/router';
-import {
-  combineLatest,
-<%_ if (!readOnly) { _%>
-  filter,
-<%_ } _%>
-  Subscription,
-  tap,
-} from 'rxjs';
+import { combineLatest
+<%_ if (!readOnly) { _%>, filter
+<%_ } _%>, Subscription, tap } from 'rxjs';
 <%_ if (!readOnly) { _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
 <%_ } _%>
@@ -81,7 +76,7 @@ import {
 <%_ } _%>
   DEFAULT_SORT_DATA
 } from 'app/config/navigation.constants';
-import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
+import { EntityArrayResponseType, <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
 <%_ if (!readOnly) { _%>
 import { <%- entityAngularName %>DeleteDialog } from '../delete/<%- entityFileName %>-delete-dialog';
 <%_ } _%>
@@ -183,6 +178,11 @@ export class <%- componentName %> implements OnInit {
 <%_ if (!readOnly) { _%>
   protected modalService = inject(NgbModal);
 <%_ } _%>
+<%_ if (primaryKey) { _%>
+    track<%- primaryKey.nameCapitalized %> = (item: I<%- entityAngularName %>): <%- primaryKey.tsType %> =>
+      this.<%- entityInstance %>Service.get<%- entityAngularName %>Identifier(item);
+
+<%_ } _%>
 
   constructor() {
 <%_ if (!paginationNo) { _%>
@@ -194,14 +194,9 @@ export class <%- componentName %> implements OnInit {
     });
 <%_ } _%>
     effect(() => {
-<%_ if (paginationInfiniteScroll) { _%>
-      this.<%- entityInstancePlural %>.update(<%- entityInstancePlural %> => this.fillComponentAttributesFromResponseBody([...this.<%- entityInstance %>Service.<%- entityInstancePlural %>()], <%- entityInstancePlural %>));
-<%_ } else { _%>
-      this.<%- entityInstancePlural %>.set(this.fillComponentAttributesFromResponseBody([...this.<%- entityInstance %>Service.<%- entityInstancePlural %>()]));
-<%_ } _%>
+      this.<%- entityInstancePlural %>.<% if (paginationInfiniteScroll) { %>update(<%- entityInstancePlural %> => <% } else { %>set(<% } %>this.fillComponentAttributesFromResponseBody([...this.<%- entityInstance %>Service.<%- entityInstancePlural %>()]<% if (paginationInfiniteScroll) { %>, <%- entityInstancePlural %><% } %>));
     });
-<% if (jpaMetamodelFiltering && paginationPagination) { %>
-
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
     effect(() => {
       const filterOptions = this.filterOptions();
       if (filterOptions) {
@@ -214,10 +209,6 @@ export class <%- componentName %> implements OnInit {
 <%_ } _%>
   }
 
-<%_ if (primaryKey) { _%>
-    track<%- primaryKey.nameCapitalized %> = (item: I<%- entityAngularName %>): <%- primaryKey.tsType %> => this.<%- entityInstance %>Service.get<%- entityAngularName %>Identifier(item);
-
-<%_ } _%>
     ngOnInit(): void {
       this.subscription = combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
         tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
@@ -414,7 +405,9 @@ export class <%- componentName %> implements OnInit {
       this.links.set({});
 
 <%_ } _%>
-      const queryParamsObj<% if (jpaMetamodelFiltering && paginationPagination) { %>: any<% } %> = {
+      const queryParamsObj
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>: any
+<%_ } _%> = {
 <%_ if (searchEngineAny) { _%>
         search: currentSearch,
 <%_ } _%>
