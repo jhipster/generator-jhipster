@@ -23,9 +23,8 @@ import { beforeAll, describe, expect, it, vi } from 'vitest';
 <%_ if (enableTranslation) { _%>
 import { TranslatorContext } from 'react-jhipster';
 <%_ } _%>
-import { MESSAGE_ALERT_HEADER_NAME, MESSAGE_ERROR_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from 'app/shared/jhipster/constants';
+import { INVALID_PASSWORD_TYPE, MESSAGE_ALERT_HEADER_NAME, MESSAGE_ERROR_HEADER_NAME, MESSAGE_PARAM_HEADER_NAME } from 'app/shared/jhipster/constants';
 import { ProblemWithMessageType } from 'app/shared/jhipster/problem-details';
-import { INVALID_PASSWORD_TYPE } from 'app/shared/jhipster/constants';
 
 import notificationMiddleware from './notification-middleware';
 
