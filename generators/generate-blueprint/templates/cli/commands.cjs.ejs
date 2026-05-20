@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 module.exports = {
-<% for (const command of commands) { %>
+<% for (const command of commands.toSorted()) { %>
   '<%- command %>': {
     desc: 'Run <%- command %> sub-generator (<%- baseName %> blueprint)',
     blueprint: 'generator-jhipster-<%- baseName %>',

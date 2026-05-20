@@ -31,6 +31,6 @@ public class UserFeignClientInterceptor implements RequestInterceptor {
     @Override
     public void apply(RequestTemplate template) {
         SecurityUtils.getCurrentUserJWT()
-            .ifPresent(s -> template.header(AUTHORIZATION_HEADER,String.format("%s %s", BEARER, s)));
+            .ifPresent(s -> template.header(AUTHORIZATION_HEADER, "%s %s".formatted(BEARER, s)));
     }
 }

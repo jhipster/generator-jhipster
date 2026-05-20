@@ -82,7 +82,6 @@ import jakarta.servlet.http.HttpServletRequest;
 <%_ } _%>
 import java.net.URI;
 import java.util.List;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -161,11 +160,11 @@ _%>
 
     private ProblemDetailWithCause getProblemDetailWithCause(Throwable ex) {
 <%_ if (!skipUserManagement) { _%>
-        if(ex instanceof <%- packageName %>.service.UsernameAlreadyUsedException)
+        if (ex instanceof <%- packageName %>.service.UsernameAlreadyUsedException)
             return (ProblemDetailWithCause) new LoginAlreadyUsedException().getBody();
-        if(ex instanceof <%- packageName %>.service.EmailAlreadyUsedException)
+        if (ex instanceof <%- packageName %>.service.EmailAlreadyUsedException)
             return (ProblemDetailWithCause) new EmailAlreadyUsedException().getBody();
-        if(ex instanceof <%- packageName %>.service.InvalidPasswordException)
+        if (ex instanceof <%- packageName %>.service.InvalidPasswordException)
             return (ProblemDetailWithCause) new InvalidPasswordException().getBody();
 
   <%_ if (reactive) { _%>
@@ -178,7 +177,7 @@ _%>
         }
   <%_ } _%>
 <%_ } _%>
-        if(ex instanceof ErrorResponseException exp && exp.getBody() instanceof ProblemDetailWithCause problemDetailWithCause)
+        if (ex instanceof ErrorResponseException exp && exp.getBody() instanceof ProblemDetailWithCause problemDetailWithCause)
             return problemDetailWithCause;
         return ProblemDetailWithCauseBuilder.instance().withStatus(toStatus(ex).value()).build();
     }
@@ -210,7 +209,7 @@ _%>
         if (problemProperties == null || !problemProperties.containsKey(PATH_KEY))
             problem.setProperty(PATH_KEY, getPathValue(request));
 
-        if((err instanceof <% if (reactive) { %> WebExchangeBindException <% } else { %> MethodArgumentNotValidException <% } %> fieldException) &&
+        if ((err instanceof <% if (reactive) { %> WebExchangeBindException <% } else { %> MethodArgumentNotValidException <% } %> fieldException) &&
                 (problemProperties == null || !problemProperties.containsKey(FIELD_ERRORS_KEY)))
             problem.setProperty(FIELD_ERRORS_KEY, getFieldErrors(fieldException));
 
@@ -272,10 +271,10 @@ _%>
     }
 
     private String getMappedMessageKey(Throwable err) {
-        if(err instanceof MethodArgumentNotValidException) {
+        if (err instanceof MethodArgumentNotValidException) {
             return ErrorConstants.ERR_VALIDATION;
 <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
-        } else if(err instanceof ConcurrencyFailureException
+        } else if (err instanceof ConcurrencyFailureException
                 || err.getCause() instanceof ConcurrencyFailureException) {
             return ErrorConstants.ERR_CONCURRENCY_FAILURE;
 <%_ } _%>
@@ -293,7 +292,7 @@ _%>
     }
 
     private String getCustomizedErrorDetails(Throwable err) {
-        Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
+        Collection<String> activeProfiles = List.of(env.getActiveProfiles());
         if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
             if (err instanceof HttpMessageConversionException) return "Unable to convert http message";
 <%_ if (!databaseTypeNo) { _%>
@@ -308,9 +307,9 @@ _%>
         // Where we disagree with Spring defaults
         if (err instanceof AccessDeniedException) return HttpStatus.FORBIDDEN;
 <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
-        if(err instanceof ConcurrencyFailureException) return HttpStatus.CONFLICT;
+        if (err instanceof ConcurrencyFailureException) return HttpStatus.CONFLICT;
 <%_ } _%>
-        if(err instanceof BadCredentialsException) return HttpStatus.UNAUTHORIZED;
+        if (err instanceof BadCredentialsException) return HttpStatus.UNAUTHORIZED;
 <%_ if (reactive) { _%>
         if (err instanceof UsernameNotFoundException) return HttpStatus.UNAUTHORIZED;
 <%_ } _%>
@@ -318,7 +317,7 @@ _%>
     }
 
     private URI getPathValue(<%- requestClass %> request) {
-        if(request == null) return URI.create("about:blank");
+        if (request == null) return URI.create("about:blank");
         return <% if (reactive) { %> request.getRequest().getURI()<% } else { %> URI.create(extractURI(request))<% } %>;
     }
 
@@ -335,7 +334,7 @@ _%>
     }
 <%_ if (reactive) { _%>
     private HttpHeaders updateContentType(HttpHeaders headers) {
-        if(headers == null) {
+        if (headers == null) {
             headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
         }
@@ -344,7 +343,7 @@ _%>
 <%_ } _%>
 
     public Optional<ProblemDetailWithCause> buildCause(final Throwable throwable, <%- requestClass %> request) {
-        if(throwable != null && isCasualChainEnabled()) {
+        if (throwable != null && isCasualChainEnabled()) {
             return Optional.of(customizeProblem(getProblemDetailWithCause(throwable), throwable, request));
         }
         return Optional.ofNullable(null);

@@ -987,18 +987,20 @@ describe('UserManagement routing resolve service', () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/route/user-management-routing-resolve.service.ts": {
-    "contents": "import { HttpErrorResponse } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
-import { EMPTY, Observable, of } from 'rxjs';
-import { catchError, mergeMap } from 'rxjs/operators';
+    "contents": "import { HttpErrorResponse } from "@angular/common/http";
+import { inject } from "@angular/core";
+import { ActivatedRouteSnapshot, Router } from "@angular/router";
 
-import { IUserManagement } from '../user-management.model';
-import { UserManagementService } from '../service/user-management.service';
+import { catchError, EMPTY, Observable, of } from "rxjs";
 
-const userManagementResolve = (route: ActivatedRouteSnapshot): Observable<null | IUserManagement> => {
-  const id = route.params['login'];
-  if (id) {
+import { IUserManagement } from "../user-management.model";
+import { UserManagementService } from "../service/user-management.service";
+
+const userManagementResolve = (
+  route: ActivatedRouteSnapshot,
+): Observable<null | IUserManagement> => {
+  const login = route.params["login"];
+  if (login) {
     const router = inject(Router);
     const service = inject(UserManagementService);
     return service.find(id).pipe(
@@ -1946,11 +1948,20 @@ describe('UserManagement Management Update Component', () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.ts": {
-    "contents": "import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+    "contents": "import {
+  Component,
+  ChangeDetectionStrategy,
+  inject,
+  signal,
+  OnInit,
+} from "@angular/core";
+import { HttpResponse } from "@angular/common/http";
+import { ActivatedRoute } from "@angular/router";
+import { finalize, Observable } from "rxjs";
+
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { AlertError } from "app/shared/alert/alert-error";
+import { ReactiveFormsModule } from "@angular/forms";
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AlertError } from 'app/shared/alert/alert-error';
@@ -2202,6 +2213,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientBundlerAny": true,
   "clientBundlerEsbuild": true,
   "clientBundlerName": "esbuild",
+  "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": false,
   "clientDistDir": "dist/",
@@ -3250,6 +3262,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientBundlerAny": true,
   "clientBundlerEsbuild": true,
   "clientBundlerName": "esbuild",
+  "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": false,
   "clientDistDir": "dist/",
@@ -4518,6 +4531,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientBundlerAny": true,
   "clientBundlerEsbuild": false,
   "clientBundlerName": "Webpack",
+  "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": true,
   "clientDistDir": "dist/",
@@ -5565,6 +5579,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "clientBundlerAny": true,
   "clientBundlerEsbuild": false,
   "clientBundlerName": "Webpack",
+  "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": true,
   "clientDistDir": "dist/",
@@ -6751,6 +6766,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "clientBundlerAny": true,
   "clientBundlerEsbuild": true,
   "clientBundlerName": "esbuild",
+  "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": false,
   "clientDistDir": "dist/",
@@ -8207,6 +8223,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "clientBundlerAny": true,
   "clientBundlerEsbuild": true,
   "clientBundlerName": "esbuild",
+  "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": false,
   "clientDistDir": "dist/",
@@ -9223,6 +9240,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "clientBundlerAny": true,
   "clientBundlerEsbuild": true,
   "clientBundlerName": "esbuild",
+  "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": false,
   "clientDistDir": "dist/",

@@ -19,8 +19,7 @@
 
 import { merge } from '../utils/object-utils.ts';
 
-import type { RuleLevel } from './rule-levels.ts';
-import { INFO } from './rule-levels.ts';
+import { INFO, type RuleLevel } from './rule-levels.ts';
 
 /**
  * Represents a rule for the linters.

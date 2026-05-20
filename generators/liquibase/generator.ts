@@ -771,7 +771,6 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
    * Create the fitting liquibase default value attribute for a field.
    * @param field
    * @param leadingWhitespace
-   * @returns
    */
   createDefaultValueLiquibaseAttribute(field: LiquibaseField, leadingWhitespace = false) {
     if (field.liquibaseDefaultValueAttributeValue === undefined) {

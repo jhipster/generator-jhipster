@@ -18,4 +18,4 @@
  */
 export { default } from './generator.ts';
 export { default as command } from './command.ts';
-export { files, generatorFiles } from './files.ts';
+export type { Application, Config, Features, Options, Source } from './types.ts';

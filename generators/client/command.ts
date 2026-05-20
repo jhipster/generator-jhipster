@@ -84,7 +84,12 @@ const command = {
         type: String,
         hide: true,
       },
-      choices: ['webpack', 'vite', 'esbuild'],
+      jdl: {
+        type: 'string',
+        tokenType: 'NAME',
+        tokenValuePattern: ALPHANUMERIC_PATTERN,
+      },
+      choices: ['webpack', 'vite', 'esbuild', 'rsbuild'],
       scope: 'storage',
     },
     devServerPort: {

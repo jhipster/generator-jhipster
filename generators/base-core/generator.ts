@@ -33,15 +33,16 @@ import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import type Environment from 'yeoman-environment';
 import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-generator';
 
-import type {
-  ExportGeneratorOptionsFromCommand,
-  ExportStoragePropertiesFromCommand,
-  JHipsterArguments,
-  JHipsterCommandDefinition,
-  JHipsterConfigs,
-  ParsableCommand,
+import {
+  type ExportGeneratorOptionsFromCommand,
+  type ExportStoragePropertiesFromCommand,
+  type JHipsterArguments,
+  type JHipsterCommandDefinition,
+  type JHipsterConfigs,
+  type ParsableCommand,
+  convertConfigToOption,
+  extractArgumentsFromConfigs,
 } from '../../lib/command/index.ts';
-import { convertConfigToOption, extractArgumentsFromConfigs } from '../../lib/command/index.ts';
 import {
   getCommandBlueprintLoadingMutations,
   getCommandDefaultMutations,
@@ -58,7 +59,7 @@ import type GeneratorsByNamespace from '../types.ts';
 import type { GeneratorsWithBootstrap } from '../types.ts';
 
 import type {
-  CascatedEditFileCallback,
+  CascadedEditFileCallback,
   EditFileCallback,
   EditFileOptions,
   ValidationResult,
@@ -561,10 +562,10 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     }
   }
 
-  #parseJHipsterConfigs(configs: JHipsterConfigs = {}, common = false) {
+  #parseJHipsterConfigs(configs: JHipsterConfigs = {}) {
     Object.entries(configs).forEach(([optionName, configDesc]) => {
       const optionsDesc = convertConfigToOption(optionName, configDesc);
-      if (!optionsDesc?.type || (common && configDesc.scope === 'generator')) return;
+      if (!optionsDesc?.type) return;
 
       let optionValue;
       const { name, type } = optionsDesc;
@@ -722,7 +723,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   get #jhipsterGeneratorRelativePath(): string {
     if (!this.#jhipsterGeneratorRelativePath_) {
       try {
-        this.#jhipsterGeneratorRelativePath_ = requireNamespace(this.options.namespace).generator.replace(':', '/generators/');
+        this.#jhipsterGeneratorRelativePath_ = requireNamespace(this.options.namespace, {
+          allowPackageOnlyNamespace: false,
+        }).generator.replace(':', '/generators/');
       } catch {
         throw new Error('Could not determine the generator name');
       }
@@ -808,7 +811,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   ): Promise<GeneratorsByNamespace[G]>;
   async composeWithJHipster(gen: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator>;
   async composeWithJHipster(gen: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator> {
-    assert(typeof gen === 'string', 'generator should to be a string');
+    assert(typeof gen === 'string', 'generator should be a string');
     let generator: string = gen;
     if (!isAbsolute(generator)) {
       const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
@@ -909,21 +912,21 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   /**
    * write the given files using provided options.
    */
-  async writeFiles<DataType = any>(options: WriteFileOptions<DataType, this>): Promise<string[]> {
+  async writeFiles<DataType>(options: WriteFileOptions<DataType, this>): Promise<string[]> {
     const paramCount = Object.keys(options).filter(key => ['sections', 'blocks', 'templates'].includes(key)).length;
     assert(paramCount > 0, 'One of sections, blocks or templates is required');
     assert(paramCount === 1, 'Only one of sections, blocks or templates must be provided');
 
-    let { context: templateData = {} } = options;
+    let templateData: DataType = options.context ?? ({} as DataType);
     const { rootTemplatesPath, customizeTemplatePath = file => file, transform: methodTransform = [] } = options;
     const startTime = new Date().getMilliseconds();
     const { customizeTemplatePaths: contextCustomizeTemplatePaths = [] } = templateData as WriteContext;
 
     const { jhipster7Migration } = this.features;
     if (jhipster7Migration) {
-      templateData = createJHipster7Context(this, options.context ?? {}, {
+      templateData = createJHipster7Context(this, templateData as any, {
         log: jhipster7Migration === 'verbose' ? (msg: string) => this.log.info(msg) : () => {},
-      });
+      }) as DataType;
     }
 
     /* Build lookup order first has preference.
@@ -950,26 +953,19 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     }
 
     const normalizeEjs = (file: string) => file.replace('.ejs', '');
-    const resolveCallback = (maybeCallback: boolean | string | ((data: any) => any) | undefined, fallback?: boolean | string) => {
-      if (maybeCallback === undefined) {
-        if (typeof fallback === 'function') {
-          return resolveCallback(fallback);
-        }
-        return fallback;
-      }
-      if (typeof maybeCallback === 'boolean' || typeof maybeCallback === 'string') {
-        return maybeCallback;
-      }
+    const resolveCallback = <ReturnType extends boolean | string | undefined>(
+      maybeCallback: ReturnType | ((data: any) => ReturnType),
+    ): ReturnType => {
       if (typeof maybeCallback === 'function') {
-        return maybeCallback.call(this, templateData) || false;
+        return resolveCallback(maybeCallback.call(this, templateData));
       }
-      throw new Error(`Type not supported ${maybeCallback}`);
+      return maybeCallback;
     };
 
     type RenderTemplateParam = {
       condition?: boolean;
-      sourceFile: string;
-      destinationFile: string;
+      sourceFile: string | ((data: any) => string);
+      destinationFile: string | ((data: any) => string);
       options?: { renderOptions?: any };
       noEjs?: boolean;
       transform?: any[];
@@ -985,9 +981,10 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       transform,
       binary,
     }: RenderTemplateParam): Promise<undefined | string> => {
-      if (condition !== undefined && !resolveCallback(condition, true)) {
+      if (condition !== undefined && !resolveCallback(condition)) {
         return undefined;
       }
+      sourceFile = resolveCallback(sourceFile);
       const extension = extname(sourceFile);
       const isBinary = binary || ['.png', '.jpg', '.gif', '.svg', '.ico'].includes(extension);
       const appendEjs = noEjs === undefined ? !isBinary && extension !== '.ejs' : !noEjs;
@@ -1065,8 +1062,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           await this.copyTemplateAsync(sourceFileFrom, targetFile);
         } else {
           let useAsync = true;
-          if (templateData.entityClass) {
-            if (!templateData.baseName) {
+          if ((templateData as any).entityClass) {
+            if (!(templateData as any).baseName) {
               throw new Error('baseName is required at templates context');
             }
             const sourceBasename = basename(sourceFileFrom);
@@ -1091,9 +1088,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           } else if (noEjs) {
             this.copyTemplate(sourceFileFrom, targetFile, copyOptions);
           } else if (useAsync) {
-            await this.renderTemplateAsync(sourceFileFrom, targetFile, templateData, copyOptions);
+            await this.renderTemplateAsync(sourceFileFrom, targetFile, templateData as any, copyOptions);
           } else {
-            this.renderTemplate(sourceFileFrom, targetFile, templateData, copyOptions);
+            this.renderTemplate(sourceFileFrom, targetFile, templateData as any, copyOptions);
           }
         }
       } catch (error) {
@@ -1125,15 +1122,14 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
           assert(typeof block === 'object', `Block must be an object for ${blockSpecPath}`);
           assert(Array.isArray(block.templates), `Block templates must be an array for ${blockSpecPath}`);
-          const condition = resolveCallback(blockConditionCallback);
-          if (condition !== undefined && !condition) {
+          if (blockConditionCallback !== undefined && !resolveCallback(blockConditionCallback)) {
             return undefined;
           }
           if (typeof blockPathValue === 'function') {
             throw new TypeError(`Block path should be static for ${blockSpecPath}`);
           }
-          const blockPath = resolveCallback(blockFromCallback, blockPathValue);
-          const blockTo = resolveCallback(blockToCallback, blockPath) || blockPath;
+          const blockPath = resolveCallback(blockFromCallback) ?? resolveCallback(blockPathValue);
+          const blockTo = resolveCallback(blockToCallback) ?? resolveCallback(blockPath);
           return block.templates.map((fileSpec, fileIdx) => {
             const fileSpecPath = `${blockSpecPath}[${fileIdx}]`;
             assert(
@@ -1173,17 +1169,23 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
               throw new Error(`Transform ${fileTransform} value is not supported`);
             }
 
-            const normalizedFile = resolveCallback(sourceFile || file);
+            const normalizedFile = resolveCallback(sourceFile) ?? resolveCallback(file);
+            if (normalizedFile === undefined) {
+              throw new Error(`sourceFile is required for ${fileSpecPath}`);
+            }
             sourceFile = join(blockPath, normalizedFile);
-            destinationFile = join(resolveCallback(destinationFile || renameTo, normalizedFile));
+            destinationFile = resolveCallback(destinationFile) ?? resolveCallback(renameTo) ?? normalizedFile;
             if (blockRenameTo) {
               destinationFile = this.destinationPath(blockRenameTo.call(this, templateData, destinationFile));
             } else {
               destinationFile = this.destinationPath(blockTo, destinationFile);
             }
 
-            const override = resolveCallback(fileSpec.override);
-            if (override !== undefined && !override && this.fs.exists(destinationFile.replace(/\.jhi$/, ''))) {
+            if (
+              fileSpec.override !== undefined &&
+              !resolveCallback(fileSpec.override) &&
+              this.fs.exists(destinationFile.replace(/\.jhi$/, ''))
+            ) {
               this.log.debug(`skipping file ${destinationFile}`);
               return undefined;
             }
@@ -1221,24 +1223,24 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * // Throws if `foo.txt` doesn't exists or append the content.
    * editFile('foo.txt', content => content + 'foo.txt content');
    * @example
-   * // Appends `foo.txt` content if whether exists or not.
+   * // Appends `foo.txt` content whether it exists or not.
    * editFile('foo.txt', { create: true }, content => content + 'foo.txt content');
    * @example
-   * // Appends `foo.txt` content if whether exists or not using the returned cascaded callback.
+   * // Appends `foo.txt` content whether it exists or not using the returned cascaded callback.
    * editFile('foo.txt')(content => content + 'foo.txt content');
    */
-  editFile(file: string, ...transformCallbacks: EditFileCallback<this>[]): CascatedEditFileCallback<this>;
+  editFile(file: string, ...transformCallbacks: EditFileCallback<this>[]): CascadedEditFileCallback<this>;
   editFile(
     file: string,
     options: EditFileOptions | NeedleInsertion,
     ...transformCallbacks: EditFileCallback<this>[]
-  ): CascatedEditFileCallback<this>;
+  ): CascadedEditFileCallback<this>;
 
   editFile(
     file: string,
     options?: EditFileOptions | EditFileCallback<this> | NeedleInsertion,
     ...transformCallbacks: EditFileCallback<this>[]
-  ): CascatedEditFileCallback<this> {
+  ): CascadedEditFileCallback<this> {
     let actualOptions: EditFileOptions;
     if (typeof options === 'function') {
       transformCallbacks = [options, ...transformCallbacks];
@@ -1275,12 +1277,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         }
         throw new Error(`Unable to find ${filePath}. ${errorMessage}`);
       }
-      // allow to edit non existing files
+      // allow editing non-existing files
       originalContent = '';
     }
 
     let newContent = originalContent;
-    const writeCallback = (...callbacks: EditFileCallback<this>[]): CascatedEditFileCallback<this> => {
+    const writeCallback = (...callbacks: EditFileCallback<this>[]): CascadedEditFileCallback<this> => {
       const { autoCrlf = this.jhipsterConfigWithDefaults.autoCrlf, assertModified } = actualOptions;
       try {
         const fileHasCrlf = autoCrlf && hasCrlf(newContent);

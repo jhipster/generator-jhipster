@@ -24,7 +24,6 @@ export const LF = '\n';
  * Check if a string contains CRLF line endings.
  *
  * @param str
- * @returns
  */
 export const hasCrlf = (str?: string): boolean => Boolean(str?.includes(CRLF));
 

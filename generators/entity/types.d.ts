@@ -23,6 +23,9 @@ import type { Source as BaseApplicationSource } from '../base-application/types.
 
 import type command from './command.ts';
 
+export type { Features } from '../base-application/types.ts';
+export type { FieldAll as Field, RelationshipAll as Relationship } from '../../lib/types/application-all.ts';
+
 type Command = CommandTypeMap<typeof command>;
 
 export type Config = Command['Config'] & ConfigAll;

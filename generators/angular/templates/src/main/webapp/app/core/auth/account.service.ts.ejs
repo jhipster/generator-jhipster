@@ -23,8 +23,7 @@ import { Router } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
-import { Observable, of } from 'rxjs';
-import { catchError, shareReplay, tap } from 'rxjs/operators';
+import { catchError, Observable, of, shareReplay, tap } from 'rxjs';
 
 import { Account } from 'app/core/auth/account.model';
 import { StateStorageService } from 'app/core/auth/state-storage.service';

@@ -18,10 +18,7 @@
  */
 import { createNeedleCallback } from '../../../base-core/support/needles.ts';
 import { ClientApplicationGenerator } from '../../../client/generator.ts';
-import {
-  createDayjsUpdateLanguagesEditFileCallback,
-  createWebpackUpdateLanguagesNeedleCallback,
-} from '../../../client/support/update-languages.ts';
+import { createDayjsUpdateLanguagesEditFileCallback } from '../../../client/support/update-languages.ts';
 import { generateLanguagesWebappOptions } from '../../../languages/support/languages.ts';
 import { mutateApplication } from '../../application.ts';
 
@@ -40,8 +37,8 @@ export default class VueBootstrapGenerator extends ClientApplicationGenerator {
         applicationDefaults(mutateApplication);
       },
       translations({ application }) {
-        application.addLanguageCallbacks.push((_newLanguages, allLanguages) => {
-          const { enableTranslation, clientSrcDir, clientI18nDir, clientRootDir } = application;
+        application.addLanguageCallbacks.push((newLanguages, allLanguages) => {
+          const { enableTranslation, clientSrcDir, clientRootDir } = application;
           if (!enableTranslation) return;
 
           const { ignoreNeedlesError: ignoreNonExisting } = this;
@@ -57,6 +54,20 @@ export default class VueBootstrapGenerator extends ClientApplicationGenerator {
             }),
           );
 
+          if (application.microfrontend && application.applicationTypeMicroservice) {
+            this.editFile(
+              `${clientRootDir}module-federation.config.${application.clientBundlerWebpack ? 'cjs' : 'ts'}`,
+              { ignoreNonExisting },
+              createNeedleCallback({
+                contentToAdd: newLanguages.map(
+                  lang =>
+                    `    './i18n-${lang.languageTag}': './${application.clientBundlerRsbuild ? '' : this.relativeDir(clientRootDir, clientSrcDir)}i18n/${lang.languageTag}/${lang.languageTag}.js',`,
+                ),
+                needle: 'jhipster-needle-expose',
+              }),
+            );
+          }
+
           const generateDateTimeFormat = (language: string): string => `'${language}': {
   short: { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' },
   medium: { year: 'numeric', month: 'short', day: 'numeric', weekday: 'short', hour: 'numeric', minute: 'numeric' },
@@ -71,14 +82,6 @@ export default class VueBootstrapGenerator extends ClientApplicationGenerator {
               needle: 'jhipster-needle-i18n-language-date-time-format',
             }),
           );
-
-          if (application.clientBundlerWebpack) {
-            this.editFile(
-              `${clientRootDir}webpack/webpack.common.js`,
-              { ignoreNonExisting },
-              createWebpackUpdateLanguagesNeedleCallback(allLanguages, this.relativeDir(clientRootDir, clientI18nDir)),
-            );
-          }
         });
       },
     });

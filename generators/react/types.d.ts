@@ -20,6 +20,6 @@ import type { Application as ClientApplication } from '../client/types.d.ts';
 
 import type { ReactAddedApplicationProperties } from './application.ts';
 
-export type { Config, Options, Relationship, Source } from '../client/types.d.ts';
+export type { Config, Entity, Features, Field, Options, Relationship, Source } from '../client/types.d.ts';
 
 export type Application = ClientApplication & ReactAddedApplicationProperties;

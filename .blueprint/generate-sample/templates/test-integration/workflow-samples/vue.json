@@ -30,7 +30,7 @@
       }
     },
     {
-      "name": "vue-h2disk-ws-theme",
+      "name": "vue-rsbuild-h2disk-ws-theme",
       "app-sample": "vue-ws-theme",
       "entity": "sql",
       "generatorOptions": {
@@ -64,7 +64,7 @@
     {
       "name": "stack-vue-no-db",
       "jdl-samples": "stack-vue-no-db",
-      "skip-frontend-tests": "backend tests only",
+      "skip-frontend-tests": "true",
       "generatorOptions": {
         "workspaces": true,
         "monorepository": true

@@ -27,6 +27,10 @@ jobs:
     defaults:
       run:
         working-directory: ${{ github.workspace }}/app
+    strategy:
+      fail-fast: false
+      matrix:
+        sample: ['javascript', 'typescript']
     if: >-
       !contains(github.event.head_commit.message, '[ci skip]') &&
       !contains(github.event.head_commit.message, '[skip ci]') &&
@@ -61,15 +65,29 @@ jobs:
       - uses: jhipster/actions/build-jhipster-bom@v1
         with:
           jhipster-bom-ref: ${{ steps.jhipster-output.outputs.jhipster-bom-branch }}
+      - run: mkdir generator-jhipster-foo
+        working-directory: ${{ github.workspace }}
       - name: 'GENERATION: generate blueprint'
         run: |
-          cd ..
-          mkdir generator-jhipster-foo
-          cd generator-jhipster-foo
-          cp ${{ github.workspace }}/generator-jhipster/.blueprint/generate-sample/templates/test-integration/generate-blueprint-samples/default/.yo-rc.json .
-          jhipster.cjs generate-blueprint --force --link-jhipster-dependency --generate-snapshots
+          jhipster.cjs generate-sample generate-blueprint-samples/${{ matrix.sample }} --sample-yorc-folder --entities-sample none --link-jhipster-dependency --generate-snapshots
           npm link
           cat package.json
+        working-directory: ${{ github.workspace }}/generator-jhipster-foo
+        env:
+          JHI_FOLDER_APP: ${{ github.workspace }}/generator-jhipster-foo
+      - uses: jhipster/actions/compare-sample@v1
+        id: compare
+        if: >-
+          github.event.pull_request &&
+          !contains(github.event.pull_request.labels.*.name, 'pr: disable-compare')
+        with:
+          generator-path: generator-jhipster
+          application-folder: generator-jhipster-foo
+          compare-folder: generator-jhipster-foo
+          cmd: jhipster.cjs generate-sample generate-blueprint-samples/${{ matrix.sample }} --sample-yorc-folder --entities-sample none --link-jhipster-dependency --skip-checks --skip-install --no-insight
+        env:
+          # generate-sample uses JHI_FOLDER_APP to generate the application.
+          JHI_FOLDER_APP: ${{ github.workspace }}/base/generator-jhipster-foo
       - name: 'GENERATION: project'
         run: jhipster-foo --defaults --client-test-frameworks cypress --skip-jhipster-dependencies
         env:

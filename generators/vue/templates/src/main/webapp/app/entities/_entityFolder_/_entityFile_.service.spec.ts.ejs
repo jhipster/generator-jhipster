@@ -26,7 +26,7 @@ import dayjs from 'dayjs';
 <%_ } _%>
 
 <%_ if (anyFieldIsLocalDate || anyFieldIsInstant || anyFieldIsZonedDateTime) { _%>
-import { 
+import {
   <%_ if (anyFieldIsLocalDate) { _%>
   DATE_FORMAT,
   <%_ } if (anyFieldIsInstant || anyFieldIsZonedDateTime) { _%>

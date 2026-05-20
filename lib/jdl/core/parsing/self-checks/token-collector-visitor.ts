@@ -17,20 +17,20 @@
  * limitations under the License.
  */
 
-import type {
-  Alternation,
-  Alternative,
-  NonTerminal,
-  Option,
-  Repetition,
-  RepetitionMandatory,
-  RepetitionMandatoryWithSeparator,
-  RepetitionWithSeparator,
-  Rule,
-  Terminal,
-  TokenType,
+import {
+  type Alternation,
+  type Alternative,
+  GAstVisitor,
+  type NonTerminal,
+  type Option,
+  type Repetition,
+  type RepetitionMandatory,
+  type RepetitionMandatoryWithSeparator,
+  type RepetitionWithSeparator,
+  type Rule,
+  type Terminal,
+  type TokenType,
 } from 'chevrotain';
-import { GAstVisitor } from 'chevrotain';
 
 export default class TokenCollectorVisitor extends GAstVisitor {
   visitNonTerminal(_node: NonTerminal) {}

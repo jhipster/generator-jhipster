@@ -67,7 +67,7 @@ public interface <%- entityClass %>Service {
      * @param <%- restInstance %> the entity to update.
      * @return the persisted entity.
      */
-     <% if (reactive) { %>Mono<<% } %><%- restClass %><% if (reactive) { %>><% } %> update(<%- restClass %> <%- restInstance %>);
+    <% if (reactive) { %>Mono<<% } %><%- restClass %><% if (reactive) { %>><% } %> update(<%- restClass %> <%- restInstance %>);
 
     /**
      * Partially updates a <%- entityInstance %>.
@@ -88,20 +88,20 @@ public interface <%- entityClass %>Service {
 
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering && reactive) { _%>
-      /**
-      * Find <%- entityInstancePlural %> by criteria.
-      *<% if (!paginationNo) { %>
-      * @param pageable the pagination information.<% } %>
-      * @return the list of entities.
-      */
-      <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findByCriteria(<%- entityClass %>Criteria criteria<% if (!paginationNo) { %>, Pageable pageable<% } %>);
+    /**
+     * Find <%- entityInstancePlural %> by criteria.
+     *<% if (!paginationNo) { %>
+     * @param pageable the pagination information.<% } %>
+     * @return the list of entities.
+     */
+    <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findByCriteria(<%- entityClass %>Criteria criteria<% if (!paginationNo) { %>, Pageable pageable<% } %>);
 
-      /**
-      * Find the count of <%- entityInstancePlural %> by criteria.
-      * @param criteria filtering criteria
-      * @return the count of <%- entityInstancePlural %>
-      */
-      public Mono<Long> countByCriteria(<%- entityClass %>Criteria criteria);
+    /**
+     * Find the count of <%- entityInstancePlural %> by criteria.
+     * @param criteria filtering criteria
+     * @return the count of <%- entityInstancePlural %>
+     */
+    public Mono<Long> countByCriteria(<%- entityClass %>Criteria criteria);
 <%_ } _%>
 
 <%_ for (const relationship of relationships) { _%>

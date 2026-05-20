@@ -6,7 +6,9 @@ Object.assign(globalThis as any, {
   IS_REACT_ACT_ENVIRONMENT: true,
   SERVER_API_URL: '',
   VERSION: '0.0.1-test',
+<%_ if (enableTranslation && microfrontend) { _%>
   I18N_HASH: 'test',
+<%_ } _%>
   DEVELOPMENT: false,
 });
 

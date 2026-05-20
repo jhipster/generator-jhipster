@@ -28,16 +28,11 @@ import {
 <%_ } _%>
   Observable<% if (builtInUserManagement && !generateBuiltInAuthorityEntity) { %>, of<% } %>,
 <%_ if (searchEngineAny) { _%>
-  asapScheduler,
   scheduled,
 <%_ } _%>
 } from 'rxjs';
 <%_ if (builtInUserManagement && !generateBuiltInAuthorityEntity) { _%>
 import { Authority } from 'app/shared/jhipster/constants';
-<%_ } _%>
-
-<%_ if (searchEngineAny) { _%>
-import { catchError } from 'rxjs/operators';
 <%_ } _%>
 
 <%_ if (anyFieldIsDateDerived) { _%>

@@ -34,8 +34,13 @@ export type LocaleState = Readonly<typeof initialState>;
 
 const loadLocaleAndRegisterLocaleFile = async (locale: string, prefix: string) => {
   if (prefix || !Object.keys(TranslatorContext.context.translations).includes(locale)) {
+<%_ if (microfrontend) { _%>
     const response = await axios.get(`${prefix}i18n/${locale}.json?_=${I18N_HASH}`, { baseURL: '' });
     TranslatorContext.registerTranslations(locale, response.data);
+<%_ } else { _%>
+    const translations = await import(`../../../i18n/${locale}/${locale}.js`);
+    TranslatorContext.registerTranslations(locale, translations.default);
+<%_ } _%>
   }
 };
 

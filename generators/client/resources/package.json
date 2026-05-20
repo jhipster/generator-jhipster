@@ -3,17 +3,7 @@
     "dayjs": "1.11.20"
   },
   "devDependencies": {
-    "@cypress/code-coverage": "4.0.3",
-    "@cypress/schematic": "5.0.0",
-    "babel-loader": "10.1.1",
-    "babel-plugin-istanbul": "8.0.0",
-    "cypress": "15.14.1",
-    "cypress-audit": "1.1.0",
-    "cypress-monocart-coverage": "1.0.1",
-    "eslint-plugin-cypress": "6.3.1",
-    "lighthouse": "13.1.0",
-    "nyc": "18.0.0",
-    "swagger-ui-dist": "5.32.5"
+    "swagger-ui-dist": "5.32.6"
   },
   "packageManager": "npm@11"
 }

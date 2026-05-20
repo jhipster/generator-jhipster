@@ -16,21 +16,68 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { dirname } from 'node:path';
+import { existsSync } from 'node:fs';
+import { dirname, join } from 'node:path';
 
 import BaseCoreGenerator from '../../generators/base-core/index.ts';
 import { createNeedleCallback } from '../../generators/base-core/support/needles.ts';
-import { getSourceRoot } from '../../lib/index.ts';
-import { lookupGeneratorsWithNamespace } from '../../lib/utils/lookup.ts';
+import { getPackageRoot, getSourceRoot } from '../../lib/index.ts';
+import { lookupGenerators, lookupGeneratorsWithNamespace } from '../../lib/utils/lookup.ts';
+
+import { detectGeneratorType, getExportedTypesForBaseType } from './internal/detect-generator-type.ts';
+
+const licenseHeader = `/**
+ * Copyright 2013-2026 the original author or authors from the JHipster project.
+ *
+ * This file is part of the JHipster project, see https://www.jhipster.tech/
+ * for more information.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */`;
 
 export default class UpdateGeneratorsGenerator extends BaseCoreGenerator {
   async beforeQueue() {
+    this.destinationRoot(getPackageRoot());
     await this.composeWith('jhipster:bootstrap');
   }
 
   get [BaseCoreGenerator.WRITING]() {
     return this.asAnyTaskGroup({
-      async writing() {
+      async writeFiles() {
+        const generators = await lookupGenerators({ firstLevelOnly: true, absolute: true });
+        for (const generator of generators) {
+          const generatorModule = await import(generator);
+          const parentGenerator = await detectGeneratorType(generatorModule);
+          const typesToExport = getExportedTypesForBaseType(parentGenerator);
+          const exportedGenerators = Object.keys(generatorModule).filter(
+            key => key.startsWith('Command') && typeof generatorModule[key] === 'function',
+          );
+          exportedGenerators.push('default');
+          const commandExport =
+            existsSync(join(dirname(generator), 'command.ts')) ? `\nexport { default as command } from './command.ts';` : '';
+          const existsTypes = existsSync(join(dirname(generator), 'types.d.ts'));
+          const typesExportSource = existsTypes ? './types.ts' : `../${parentGenerator}/types.d.ts`;
+
+          this.writeDestination(
+            generator,
+            `${licenseHeader}
+export { ${exportedGenerators.toSorted().join(', ')} } from './generator.ts';${commandExport}
+export type { ${typesToExport.toSorted().join(', ')} } from '${typesExportSource}';
+`,
+          );
+        }
+      },
+      async writeTypes() {
         const generators = lookupGeneratorsWithNamespace().map(({ namespace, generator }) => ({
           namespace: `jhipster:${namespace}`,
           generator: getSourceRoot(generator),

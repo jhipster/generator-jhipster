@@ -1,8 +1,7 @@
 import { kebabCase, lowerFirst, snakeCase, startCase, upperFirst } from 'lodash-es';
 
 import type { DerivedBooleanPropertiesOf } from '../../lib/command/types.ts';
-import type { FieldType } from '../../lib/jhipster/field-types.ts';
-import { BlobTypes, fieldTypesValues } from '../../lib/jhipster/field-types.ts';
+import { BlobTypes, type FieldType, fieldTypesValues } from '../../lib/jhipster/field-types.ts';
 import { type ValidationType, validationTypes } from '../../lib/jhipster/index.ts';
 import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.ts';
 import type { Field as BaseField } from '../../lib/jhipster/types/field.ts';

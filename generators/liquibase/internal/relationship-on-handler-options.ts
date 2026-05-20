@@ -25,7 +25,6 @@ const validOptions = new Set(['NO ACTION', 'RESTRICT', 'CASCADE', 'SET NULL', 'S
  * Checks that the value is a valid option for foreign key on handlers, and returns it if it is. If it isn't, resets the value to undefined.
  * @param onValue
  * @param generator
- * @returns
  */
 export function checkAndReturnRelationshipOnValue(onValue: string | undefined, { log }: { log: Logger }) {
   let result = onValue;

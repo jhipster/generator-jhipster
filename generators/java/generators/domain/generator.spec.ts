@@ -1,12 +1,13 @@
 import { before, describe, expect, it } from 'esmocha';
 import { basename, resolve } from 'node:path';
 
-import { defaultHelpers as helpers, result } from '../../../../lib/testing/index.ts';
+import { defaultHelpers as helpers, typedResult } from '../../../../lib/testing/index.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.ts';
 
 import Generator from './index.ts';
 
 const generator = `${basename(resolve(import.meta.dirname, '../../'))}:${basename(import.meta.dirname)}`;
+const result = typedResult<Generator>();
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
@@ -58,7 +59,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should have options defaults set', () => {
-      const generator: any = result.generator;
+      const generator = result.generator;
       expect(generator.generateEntities).toBe(true);
       expect(generator.generateEnums).toBe(true);
       expect(generator.useJakartaValidation).toBe(true);
@@ -114,9 +115,9 @@ describe(`generator - ${generator}`, () => {
   describe('with custom properties values', () => {
     before(async () => {
       await helpers
-        .runJHipster(generator)
+        .runJHipster<Generator>(generator)
         .withJHipsterConfig({})
-        .onGenerator((generator: any) => {
+        .onGenerator(generator => {
           generator.generateEntities = false;
           generator.generateEnums = false;
           generator.useJakartaValidation = false;
@@ -124,7 +125,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should not override custom values', () => {
-      const generator: any = result.generator;
+      const generator = result.generator;
       expect(generator.generateEntities).toBe(false);
       expect(generator.generateEnums).toBe(false);
       expect(generator.useJakartaValidation).toBe(false);

@@ -2049,7 +2049,7 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             ).toThrow(/^unexpected character: ->-<-/);
           });
         });
-        describe('such as a invalid pattern', () => {
+        describe('such as an invalid pattern', () => {
           it('should report a syntax error', () => {
             expect(() =>
               parse(

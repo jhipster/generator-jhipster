@@ -25,7 +25,7 @@ export default class UserManagementService {
 
   retrieve(
 <%_ if (!databaseTypeCassandra) { _%>
-    req?: any 
+    req?: any
 <%_ } _%>
   ): Promise<any> {
     return axios.get(`api/admin/users<% if (!databaseTypeCassandra) { %>?${buildPaginationQueryOpts(req)}<% } %>`);

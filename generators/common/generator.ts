@@ -21,8 +21,7 @@ import { isFileStateModified } from 'mem-fs-editor/state';
 import { CheckRepoActions } from 'simple-git';
 
 import BaseApplicationGenerator from '../base-application/index.ts';
-import type { PropertiesFileLines } from '../base-core/support/index.ts';
-import { editPropertiesFileCallback } from '../base-core/support/index.ts';
+import { type PropertiesFileLines, editPropertiesFileCallback } from '../base-core/support/index.ts';
 import { createPrettierTransform } from '../bootstrap/support/prettier-support.ts';
 
 import { writeFiles } from './files.ts';

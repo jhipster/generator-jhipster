@@ -19,8 +19,7 @@
 import { inject, Injectable, effect } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, NavigationEnd, Event } from '@angular/router';
-import { Subscription, Observer } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, Observer, Subscription } from 'rxjs';
 
 import SockJS from 'sockjs-client';
 import { RxStomp } from '@stomp/rx-stomp';

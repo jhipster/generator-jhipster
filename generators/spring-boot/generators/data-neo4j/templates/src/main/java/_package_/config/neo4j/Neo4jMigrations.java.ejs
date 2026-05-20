@@ -53,9 +53,9 @@ final class Neo4jMigrations {
             ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
             Resource[] resources;
             try {
-              resources = resourcePatternResolver.getResources("classpath:config/neo4j/migrations/user__*.json");
+                resources = resourcePatternResolver.getResources("classpath:config/neo4j/migrations/user__*.json");
             } catch (IOException e) {
-              throw new MigrationsException("Could not load user definition resources.", e);
+                throw new MigrationsException("Could not load user definition resources.", e);
             }
 
             JavaType type = om.getTypeFactory().
@@ -64,13 +64,12 @@ final class Neo4jMigrations {
             String userLabel = "<%- jhiTablePrefix %>_user";
             String authorityLabel = "<%- jhiTablePrefix %>_authority";
 
-            String query = String.format(
-                    "CREATE (u:%s) SET u = $user WITH u " +
-                    "UNWIND $authorities AS authority " +
-                    "MERGE (a:%s {name: authority}) " +
-                    "CREATE (u) - [:HAS_AUTHORITY] -> (a) ",
-                userLabel, authorityLabel
-            );
+            String query = """
+                CREATE (u:%s) SET u = $user WITH u
+                UNWIND $authorities AS authority
+                MERGE (a:%s {name: authority})
+                CREATE (u) - [:HAS_AUTHORITY] -> (a)
+                """.formatted(userLabel, authorityLabel);
 
             try (Session session = context.getSession()) {
 

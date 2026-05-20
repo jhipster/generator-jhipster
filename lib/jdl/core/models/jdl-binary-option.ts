@@ -20,8 +20,7 @@
 import BinaryOptions from '../built-in-options/binary-options.ts';
 import { join } from '../utils/set-utils.ts';
 
-import type { JDLOptionParams } from './abstract-jdl-option.ts';
-import AbstractJDLOption from './abstract-jdl-option.ts';
+import AbstractJDLOption, { type JDLOptionParams } from './abstract-jdl-option.ts';
 
 /**
  * For options like the DTO, the service, etc.

@@ -32,7 +32,13 @@ type MicroservicesArchitectureApplication = {
 };
 
 type GatewayApplication = MicroservicesArchitectureApplication & {
-  microfrontends: { baseName: string; lowercaseBaseName?: string; capitalizedBaseName?: string; endpointPrefix?: string }[];
+  microfrontends: {
+    baseName: string;
+    lowercaseBaseName: string;
+    moduleFederationName: string;
+    capitalizedBaseName: string;
+    endpointPrefix: string;
+  }[];
 };
 
 /*
@@ -72,7 +78,7 @@ type AuthenticationProperties = OptionWithDerivedProperties<'authenticationType'
   Oauth2Application &
   SessionApplication;
 
-export type Application<E extends Entity> = Command['Application'] &
+export type Application<E extends Entity = Entity> = Command['Application'] &
   BaseApplicationAddedApplicationProperties<E> &
   JavascriptSimpleApplicationApplication &
   ApplicationProperties &

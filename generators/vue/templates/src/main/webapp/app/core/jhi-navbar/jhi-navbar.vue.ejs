@@ -42,7 +42,7 @@
             <span>{{ t$('global.menu.home') }}</span>
           </span>
         </b-nav-item>
-        <b-nav-item-dropdown no-size="true" end id="entity-menu" v-if="authenticated" active-class="active" class="pointer" data-cy="entity">
+        <b-nav-item-dropdown :no-size="true" end id="entity-menu" v-if="authenticated" active-class="active" class="pointer" data-cy="entity">
           <template #button-content>
             <span class="navbar-dropdown-menu">
               <font-awesome-icon icon="th-list" />
@@ -52,7 +52,7 @@
           <entities-menu></entities-menu>
 <%_ if (applicationTypeGateway && microfrontend) { _%>
   <%_ for (const microfrontend of microfrontends) { _%>
-          <<%- microfrontend.lowercaseBaseName %>-menu></<%- microfrontend.lowercaseBaseName %>-menu>
+          <<%- microfrontend.moduleFederationName %>-menu></<%- microfrontend.moduleFederationName %>-menu>
   <%_ } _%>
 <%_ } _%>
           <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
@@ -170,7 +170,7 @@
             <font-awesome-icon icon="sign-out-alt" />
             <span>{{ t$('global.menu.account.logout') }}</span>
           </b-dropdown-item>
-          <b-dropdown-item data-cy="login" v-if="!authenticated" @click="showLogin()" id="login" active-class="active">
+          <b-dropdown-item data-cy="login" v-if="!authenticated" @click="<% if (authenticationTypeOauth2) { %>login<% } else { %>showLogin<% } %>()" id="login" active-class="active">
             <font-awesome-icon icon="sign-in-alt" />
             <span>{{ t$('global.menu.account.login') }}</span>
           </b-dropdown-item>
@@ -237,7 +237,7 @@
 
 .logo-img {
   height: 100%;
-  background: url('/content/images/logo-jhipster.png') no-repeat center center;
+  background: url('<%- clientBundlerRsbuild ? '@' : '/' %>content/images/logo-jhipster.png') no-repeat center center;
   background-size: contain;
   width: 100%;
   filter: drop-shadow(0 0 0.05rem white);

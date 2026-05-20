@@ -163,7 +163,7 @@ public class UserMapper {
     @Mapping(target = "id", source = "id")
     public Set<<%- user.dtoClass %>> toDtoIdSet(Set<<%- user.persistClass %>> users) {
         if (users == null) {
-            return Collections.emptySet();
+            return Set.of();
         }
 
         Set<<%- user.dtoClass %>> userSet = new HashSet<>();
@@ -194,7 +194,7 @@ public class UserMapper {
     @Mapping(target = "login", source = "login")
     public Set<<%- user.dtoClass %>> toDtoLoginSet(Set<<%- user.persistClass %>> users) {
         if ( users == null ) {
-            return Collections.emptySet();
+            return Set.of();
         }
 
         Set<<%- user.dtoClass %>> userSet = new HashSet<>();

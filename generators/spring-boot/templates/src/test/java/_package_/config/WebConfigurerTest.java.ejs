@@ -18,7 +18,6 @@
 -%>
 package <%- packageName %>.config;
 
-import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.config.JHipsterProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,9 +28,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import jakarta.servlet.*;
-<%_ if (!skipClient) { _%>
-import java.nio.file.Path;
-<%_ } _%>
 import java.util.*;
 
 <%_ if (!skipClient) { _%>
@@ -71,9 +67,9 @@ class WebConfigurerTest {
 
     @Test
     void shouldCorsFilterOnApiPath() throws Exception {
-        props.getCors().setAllowedOrigins(Collections.singletonList("other.domain.com"));
-        props.getCors().setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-        props.getCors().setAllowedHeaders(Collections.singletonList("*"));
+        props.getCors().setAllowedOrigins(List.of("other.domain.com"));
+        props.getCors().setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        props.getCors().setAllowedHeaders(List.of("*"));
         props.getCors().setMaxAge(1800L);
         props.getCors().setAllowCredentials(true);
 
@@ -100,9 +96,9 @@ class WebConfigurerTest {
 
     @Test
     void shouldCorsFilterOnOtherPath() throws Exception {
-        props.getCors().setAllowedOrigins(Collections.singletonList("*"));
-        props.getCors().setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-        props.getCors().setAllowedHeaders(Collections.singletonList("*"));
+        props.getCors().setAllowedOrigins(List.of("*"));
+        props.getCors().setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        props.getCors().setAllowedHeaders(List.of("*"));
         props.getCors().setMaxAge(1800L);
         props.getCors().setAllowCredentials(true);
 

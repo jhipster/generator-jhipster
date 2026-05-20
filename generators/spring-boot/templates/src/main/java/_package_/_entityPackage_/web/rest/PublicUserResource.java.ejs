@@ -29,9 +29,6 @@ import java.util.stream.StreamSupport;
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>
 import org.springframework.data.domain.Sort;
-  <%_ if (reactive) { _%>
-import java.util.Collections;
-  <%_ } _%>
 <%_ } _%>
 import <%- packageName %>.service.UserService;
 import <%- packageName %>.service.dto.<%- user.dtoClass %>;
@@ -71,7 +68,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 <%_ if (reactive) { _%>
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Arrays;
 <%_ } else { _%>
 import java.util.*;
 <%_ } _%>
@@ -83,7 +79,7 @@ import java.util.stream.StreamSupport;
 @RequestMapping("/api")
 public class PublicUserResource {
 <%_ if (!authenticationTypeOauth2) { _%>
-    private static final List<String> ALLOWED_ORDERED_PROPERTIES = Collections.unmodifiableList(Arrays.asList("id", "login", "firstName", "lastName", "email", "activated", "langKey"));
+    private static final List<String> ALLOWED_ORDERED_PROPERTIES = List.of("id", "login", "firstName", "lastName", "email", "activated", "langKey");
 <%_ } _%>
 
     private static final Logger LOG = LoggerFactory.getLogger(PublicUserResource.class);

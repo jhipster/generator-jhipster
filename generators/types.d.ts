@@ -57,7 +57,14 @@ type GeneratorsByNamespace = {
   'jhipster:bootstrap': import('./bootstrap/generator.ts').default;
   'ci-cd': import('./ci-cd/generator.ts').default;
   'jhipster:ci-cd': import('./ci-cd/generator.ts').default;
+  'jhipster:ci-cd:azure': import('./ci-cd/generators/azure/generator.ts').default;
   'jhipster:ci-cd:bootstrap': import('./ci-cd/generators/bootstrap/generator.ts').default;
+  'jhipster:ci-cd:circle': import('./ci-cd/generators/circle/generator.ts').default;
+  'jhipster:ci-cd:common': import('./ci-cd/generators/common/generator.ts').default;
+  'jhipster:ci-cd:github': import('./ci-cd/generators/github/generator.ts').default;
+  'jhipster:ci-cd:gitlab': import('./ci-cd/generators/gitlab/generator.ts').default;
+  'jhipster:ci-cd:jenkins': import('./ci-cd/generators/jenkins/generator.ts').default;
+  'jhipster:ci-cd:travis': import('./ci-cd/generators/travis/generator.ts').default;
   client: import('./client/generator.ts').default;
   'jhipster:client': import('./client/generator.ts').default;
   'jhipster:client:bootstrap': import('./client/generators/bootstrap/generator.ts').default;
@@ -105,6 +112,7 @@ type GeneratorsByNamespace = {
   'jhipster:java-simple-application:jib': import('./java-simple-application/generators/jib/generator.ts').default;
   'jhipster:java-simple-application:maven': import('./java-simple-application/generators/maven/generator.ts').default;
   'jhipster:java-simple-application:openapi-generator': import('./java-simple-application/generators/openapi-generator/generator.ts').default;
+  'jhipster:java-simple-application:prettier': import('./java-simple-application/generators/prettier/generator.ts').default;
   'jhipster:java:bootstrap': import('./java/generators/bootstrap/generator.ts').default;
   'jhipster:java:domain': import('./java/generators/domain/generator.ts').default;
   'jhipster:java:gatling': import('./java/generators/gatling/generator.ts').default;

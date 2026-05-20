@@ -81,7 +81,7 @@ public enum Test {
       });
     });
 
-    describe('addItemsToJavaEnumFile with existing value to a inner enum', () => {
+    describe('addItemsToJavaEnumFile with existing value to an inner enum', () => {
       before(async () => {
         const javaFile = 'src/main/java/com/exampla/Test.java';
         const fileContent = `package com.example;

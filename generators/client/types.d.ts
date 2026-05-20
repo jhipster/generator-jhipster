@@ -19,7 +19,7 @@ import type { Entity } from './entity.ts';
 
 type Command = CommandTypeMap<typeof command>;
 
-export * from './entity.ts';
+export type { Entity, Field, Relationship } from './entity.ts';
 
 export type { CommonFeatures as Features };
 

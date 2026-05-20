@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 
-import type { ITokenConfig } from 'chevrotain';
-import { createToken } from 'chevrotain';
+import { type ITokenConfig, createToken } from 'chevrotain';
 import { isString } from 'lodash-es';
 
 import { KEYWORD, NAME, namePattern } from './shared-tokens.ts';

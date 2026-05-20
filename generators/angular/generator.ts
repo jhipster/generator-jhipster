@@ -31,11 +31,11 @@ import type { Config as SpringBootConfig } from '../spring-boot/types.d.ts';
 import cleanupOldFilesTask from './cleanup.ts';
 import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-angular.ts';
 import { writeFiles } from './files-angular.ts';
-import type { addItemToMenu } from './support/index.ts';
 import {
   addEntitiesRoute,
   addIconImport,
   addItemToAdminMenu,
+  type addItemToMenu,
   addRoute,
   addToEntitiesMenu,
   isTranslatedAngularFile,

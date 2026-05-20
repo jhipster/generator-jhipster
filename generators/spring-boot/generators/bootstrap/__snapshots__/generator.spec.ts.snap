@@ -44,7 +44,7 @@ exports[`generator - spring-boot:bootstrap bootstrapping default config should p
   "clientRootDir": "",
   "clientSrcDir": "src/main/webapp/",
   "clientTestDir": "src/test/javascript/",
-  "commandName": undefined,
+  "commandName": "spring-boot:bootstrap",
   "communicationSpringWebsocket": undefined,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,

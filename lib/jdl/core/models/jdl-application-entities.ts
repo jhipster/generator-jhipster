@@ -56,7 +56,7 @@ export default class JDLApplicationEntities {
   }
 
   toArray(): string[] {
-    return Array.from(this.entityNames);
+    return [...this.entityNames];
   }
 
   size(): number {

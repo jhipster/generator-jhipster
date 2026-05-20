@@ -26,13 +26,14 @@ import type {
 
 import type command from './command.ts';
 
-export type { Features } from '../base-simple-application/types.d.ts';
+export type { Features, Source } from '../javascript-simple-application/types.d.ts';
 
 type Command = CommandTypeMap<typeof command>;
 
 export type Application = Command['Application'] &
   BaseSimpleApplicationApplication & {
     blueprintMjsExtension: string;
+    blueprintCliName: string;
     commands: string[];
     blueprintsPath: string;
   };

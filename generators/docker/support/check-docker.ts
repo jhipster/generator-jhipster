@@ -31,7 +31,7 @@ export const checkDocker = async function (this: CoreGenerator) {
     this.log.error(
       chalk.red(
         `Docker version 1.10.0 or later is not installed on your computer.
-         Read http://docs.docker.com/engine/installation/#installation
+         Read https://docs.docker.com/engine/install/#installation
 `,
       ),
     );
@@ -46,7 +46,7 @@ export const checkDocker = async function (this: CoreGenerator) {
       chalk.red(
         `Docker version 1.10.0 or later is not installed on your computer.
                                Docker version found: ${dockerVersion}
-                               Read http://docs.docker.com/engine/installation/#installation`,
+                               Read https://docs.docker.com/engine/install/#installation`,
       ),
     );
     throw new Error();

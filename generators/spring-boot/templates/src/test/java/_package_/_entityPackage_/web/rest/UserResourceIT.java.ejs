@@ -310,7 +310,7 @@ class UserResourceIT {
         userDTO.setImageUrl(DEFAULT_IMAGEURL);
   <%_ } _%>
         userDTO.setLangKey(DEFAULT_LANGKEY);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
   <%_ if (reactive) { _%>
         var returned<%- restClass %> = webTestClient.post().uri("/api/admin/users")
@@ -372,7 +372,7 @@ class UserResourceIT {
         userDTO.setImageUrl(DEFAULT_IMAGEURL);
   <%_ } _%>
         userDTO.setLangKey(DEFAULT_LANGKEY);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
         // An entity with an existing ID cannot be created, so this API call must fail
   <%_ if (reactive) { _%>
@@ -416,7 +416,7 @@ class UserResourceIT {
         userDTO.setImageUrl(DEFAULT_IMAGEURL);
   <%_ } _%>
         userDTO.setLangKey(DEFAULT_LANGKEY);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
         // Create the User
   <%_ if (reactive) { _%>
@@ -460,7 +460,7 @@ class UserResourceIT {
         userDTO.setImageUrl(DEFAULT_IMAGEURL);
   <%_ } _%>
         userDTO.setLangKey(DEFAULT_LANGKEY);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
         // Create the User
   <%_ if (reactive) { _%>
@@ -620,7 +620,7 @@ class UserResourceIT {
         userDTO.setLastModifiedBy(updatedUser.getLastModifiedBy());
         userDTO.setLastModifiedDate(updatedUser.getLastModifiedDate());
   <%_ } _%>
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
   <%_ if (reactive) { _%>
         webTestClient.put().uri("/api/admin/users")
@@ -680,7 +680,7 @@ class UserResourceIT {
         userDTO.setLastModifiedBy(updatedUser.getLastModifiedBy());
         userDTO.setLastModifiedDate(updatedUser.getLastModifiedDate());
   <%_ } _%>
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
   <%_ if (reactive) { _%>
         webTestClient.put().uri("/api/admin/users")
@@ -764,7 +764,7 @@ class UserResourceIT {
         userDTO.setLastModifiedBy(updatedUser.getLastModifiedBy());
         userDTO.setLastModifiedDate(updatedUser.getLastModifiedDate());
   <%_ } _%>
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
   <%_ if (reactive) { _%>
         webTestClient.put().uri("/api/admin/users")
@@ -834,7 +834,7 @@ class UserResourceIT {
         userDTO.setLastModifiedBy(updatedUser.getLastModifiedBy());
         userDTO.setLastModifiedDate(updatedUser.getLastModifiedDate());
   <%_ } _%>
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
 
   <%_ if (reactive) { _%>
         webTestClient.put().uri("/api/admin/users")

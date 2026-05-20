@@ -26,7 +26,6 @@ import { upperFirst } from 'lodash-es';
  * See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
  *
  * @param beanName
- * @return
  */
 export const javaBeanCase = (beanName: string): string => {
   const secondLetter = beanName.charAt(1);

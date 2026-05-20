@@ -26,7 +26,6 @@ const MUTATION_CONTEXT_SYMBOL = '__MutationContext__';
 /**
  * Copy and remove null and undefined values
  * @param object
- * @returns
  */
 
 export function removeFieldsWithNullishValues<const T extends Record<string, any>>(object: T): T {
@@ -36,7 +35,6 @@ export function removeFieldsWithNullishValues<const T extends Record<string, any
 /**
  * Copy and remove null and undefined values
  * @param object
- * @returns
  */
 
 function filterValue<const T extends Record<string, any>>(
@@ -179,13 +177,13 @@ const applyDelayedMutations = (
         if (result === DelayedMutation) {
           if (throwOnDelay) {
             throw new Error(
-              `Mutation for key ${key} is still delayed, passing defaults should return an valid value instead of Delay Symbol`,
+              `Mutation for key ${key} is still delayed, passing defaults should return a valid value instead of Delay Symbol`,
             );
           }
           continue;
         } else if (result === undefined) {
           if (throwOnDelay) {
-            throw new Error(`Mutation for key ${key} is undefined, passing defaults should return an valid value`);
+            throw new Error(`Mutation for key ${key} is undefined, passing defaults should return a valid value`);
           }
         }
         delete delayedContext[key];

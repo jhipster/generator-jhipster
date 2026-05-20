@@ -382,7 +382,7 @@ function fieldToId(field: BaseApplicationField): any {
 /**
  * Copy required application config into entity.
  * Some entity features are related to the backend instead of the current app.
- * This allows to entities files based on the backend features.
+ * This allows generating entity files based on the backend features.
  */
 export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntity>>(
   this: CoreGenerator | void,
@@ -500,7 +500,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
   const types = entity.relationships
     .filter(rel => rel.otherEntity.primaryKey)
     .flatMap(rel => rel.otherEntity.primaryKey!.fields.map(f => f.fieldType));
-  entity.otherEntityPrimaryKeyTypes = Array.from(new Set(types));
+  entity.otherEntityPrimaryKeyTypes = [...new Set(types)];
   entity.otherEntityPrimaryKeyTypesIncludesUUID = types.includes(UUID);
 
   entity.relationships.forEach(relationship => {

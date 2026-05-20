@@ -1,8 +1,10 @@
 import path from 'node:path';
 
 import { getDefaultJDLApplicationConfig, getDefaultRuntime } from '../../../jdl-config/jhipster-jdl-config.ts';
-import type { JHipsterYoRcContentAndJDLWrapper } from '../../converters/json-to-jdl-application-converter.ts';
-import { convertApplicationsToJDL as originalConvertApplicationsToJDL } from '../../converters/json-to-jdl-application-converter.ts';
+import {
+  type JHipsterYoRcContentAndJDLWrapper,
+  convertApplicationsToJDL as originalConvertApplicationsToJDL,
+} from '../../converters/json-to-jdl-application-converter.ts';
 import { convertApplications as originalConvertApplications } from '../../converters/parsed-jdl-to-jdl-object/application-converter.ts';
 import { parseFromConfigurationObject as originalParseFromConfigurationObject } from '../../converters/parsed-jdl-to-jdl-object/parsed-jdl-to-jdl-object-converter.ts';
 import {

@@ -62,8 +62,8 @@ export default class AbstractJDLOption {
     if (!option) {
       return false;
     }
-    addAll(this.entityNames, Array.from(option.entityNames.values()));
-    addAll(this.excludedNames, Array.from(option.excludedNames.values()));
+    addAll(this.entityNames, [...option.entityNames.values()]);
+    addAll(this.excludedNames, [...option.excludedNames.values()]);
     return true;
   }
 

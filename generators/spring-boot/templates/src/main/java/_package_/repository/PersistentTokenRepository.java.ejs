@@ -101,20 +101,22 @@ public class PersistentTokenRepository {
         PersistentTokenMapper persistentTokenMapper = new PersistentTokenMapperBuilder(session).build();
         persistentTokenDao = persistentTokenMapper.persistentTokenDao(CqlIdentifier.fromCql(cassandraProperties.getKeyspaceName()));
 
-        findPersistentTokenSeriesByUserIdStmt = session.prepare(
-            "SELECT persistent_token_series " +
-            "FROM persistent_token_by_user " +
-            "WHERE user_id = :user_id");
+        findPersistentTokenSeriesByUserIdStmt = session.prepare("""
+            SELECT persistent_token_series
+            FROM persistent_token_by_user
+            WHERE user_id = :user_id""");
 
-        insertPersistentTokenSeriesByUserIdStmt = session.prepare(
-            "INSERT INTO persistent_token_by_user (user_id, persistent_token_series) " +
-                "VALUES (:user_id, :persistent_token_series) " +
-                "USING TTL 2592000"); // 30 days
+        // 30 days TTL
+        insertPersistentTokenSeriesByUserIdStmt = session.prepare("""
+            INSERT INTO persistent_token_by_user (user_id, persistent_token_series)
+            VALUES (:user_id, :persistent_token_series)
+            USING TTL 2592000""");
 
-        insertPersistentTokenStmt = session.prepare(
-            "INSERT INTO persistent_token (series, token_date, user_agent, token_value, login, user_id, ip_address) " +
-                "VALUES (:series, :token_date, :user_agent, :token_value, :login, :user_id, :ip_address) " +
-                "USING TTL 2592000"); // 30 days
+        // 30 days TTL
+        insertPersistentTokenStmt = session.prepare("""
+            INSERT INTO persistent_token (series, token_date, user_agent, token_value, login, user_id, ip_address)
+            VALUES (:series, :token_date, :user_agent, :token_value, :login, :user_id, :ip_address)
+            USING TTL 2592000""");
 
         deletePersistentTokenSeriesByUserIdStmt = session.prepare(
             "DELETE FROM persistent_token_by_user WHERE user_id = :user_id AND persistent_token_series = :persistent_token_series"

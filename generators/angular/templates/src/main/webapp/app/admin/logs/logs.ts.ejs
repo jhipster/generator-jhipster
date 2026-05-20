@@ -22,7 +22,7 @@ import {
 <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
   map,
 <%_ } _%>
-} from 'rxjs/operators';
+} from 'rxjs';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
@@ -48,7 +48,7 @@ import { GatewayRoutesService } from '../gateway/gateway-routes.service';
   imports: [
 <%_ if (enableTranslation) { _%>
     TranslateDirective,
-    TranslateModule, 
+    TranslateModule,
 <%_ } _%>
     FontAwesomeModule,
     FormsModule,

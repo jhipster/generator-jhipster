@@ -1,4 +1,20 @@
-export * from './helpers.ts';
+export {
+  type FakeBlueprintOptions,
+  basicHelpers,
+  coreRunResult,
+  createBlueprintFiles,
+  createJHipsterConfigFiles,
+  createTestHelpers,
+  defaultHelpers,
+  defineDefaults,
+  dryRunHelpers,
+  resetDefaults,
+  result,
+  resultWithGenerator,
+  runResult,
+  skipPrettierHelpers,
+  typedResult,
+} from './helpers.ts';
 export * from './mutate-data.ts';
 
 // test matrix

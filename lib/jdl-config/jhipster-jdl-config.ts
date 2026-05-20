@@ -72,15 +72,17 @@ export const buildJDLApplicationConfig = (configs: JHipsterConfigs): JDLApplicat
   };
 };
 
-let defaultJDLApplicationConfig: JDLApplicationConfig;
+let defaultJDLApplicationConfig: Readonly<JDLApplicationConfig>;
 export const getDefaultJDLApplicationConfig = () => {
-  defaultJDLApplicationConfig ??= buildJDLApplicationConfig({
-    ...springBootCommand.configs,
-    ...bootstrapCommand.configs,
-    ...clientCommand.configs,
-    ...liquibaseCommand.configs,
-    ...gatewayCommand.configs,
-  });
+  defaultJDLApplicationConfig ??= Object.freeze(
+    buildJDLApplicationConfig({
+      ...springBootCommand.configs,
+      ...bootstrapCommand.configs,
+      ...clientCommand.configs,
+      ...liquibaseCommand.configs,
+      ...gatewayCommand.configs,
+    }),
+  );
   return defaultJDLApplicationConfig;
 };
 

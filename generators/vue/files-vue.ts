@@ -33,13 +33,18 @@ export const vueFiles = asWriteFilesSection({
         'tsconfig.vitest.json',
         'vite.config.ts',
         'vitest.config.ts',
+        { condition: data => data.clientBundlerRsbuild, file: 'rsbuild.config.ts' },
       ],
     }),
   ],
   microfrontend: [
     clientRootTemplatesBlock({
-      condition: generator => generator.microfrontend,
+      condition: data => data.microfrontend && data.clientBundlerWebpack,
       templates: ['module-federation.config.cjs'],
+    }),
+    clientRootTemplatesBlock({
+      condition: data => data.microfrontend && !data.clientBundlerWebpack,
+      templates: ['module-federation.config.ts'],
     }),
     clientRootTemplatesBlock({
       condition: ctx => ctx.clientBundlerWebpack,
@@ -57,11 +62,6 @@ export const vueFiles = asWriteFilesSection({
       condition: generator => generator.microfrontend,
       ...clientApplicationTemplatesBlock(),
       templates: ['index.ts', 'core/error/error-loading.vue'],
-    },
-    {
-      condition: generator => generator.applicationTypeMicroservice,
-      ...clientApplicationTemplatesBlock(),
-      templates: ['entities/entities-menu.spec.ts'],
     },
   ],
   sass: [

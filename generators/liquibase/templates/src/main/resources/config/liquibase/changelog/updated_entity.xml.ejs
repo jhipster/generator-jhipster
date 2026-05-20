@@ -92,7 +92,7 @@ _%>
     <%_ const joinTableRelations = addedRelationships
                 .filter(rel => rel.shouldWriteJoinTable)
                 .filter(rel => !relationshipsToRecreateForeignKeysOnly.includes(rel));
-            if(joinTableRelations.length > 0) {
+            if (joinTableRelations.length > 0) {
     _%>
       <%_ for (relationship of joinTableRelations) { _%>
 

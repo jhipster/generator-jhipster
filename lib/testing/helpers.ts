@@ -1,17 +1,17 @@
 import assert from 'node:assert';
 import { randomInt } from 'node:crypto';
-import { isAbsolute, join } from 'node:path';
+import { isAbsolute, join, relative } from 'node:path';
 import { mock } from 'node:test';
 
 import type { BaseGenerator as YeomanGenerator, GetGeneratorConstructor } from '@yeoman/types';
-import { merge, snakeCase } from 'lodash-es';
+import { merge, pick, snakeCase } from 'lodash-es';
 import type { EmptyObject } from 'type-fest';
 import type Environment from 'yeoman-environment';
 import type { EnvironmentOptions } from 'yeoman-environment';
-import { RunContext, YeomanTest, result } from 'yeoman-test';
-import type { RunContextSettings, RunResult } from 'yeoman-test';
+import { RunContext, type RunContextSettings, type RunResult, YeomanTest, createHelpers, result } from 'yeoman-test';
 
 import EnvironmentBuilder, { generatorsLookup, jhipsterGeneratorsLookup } from '../../cli/environment-builder.ts';
+import type JHipsterCommand from '../../cli/jhipster-command.ts';
 import { buildJHipster, createProgram } from '../../cli/program.ts';
 import type { CliCommand } from '../../cli/types.ts';
 import BaseGenerator from '../../generators/base/index.ts';
@@ -31,7 +31,13 @@ import type { Relationship } from '../jhipster/types/relationship.d.ts';
 import type { ApplicationAll } from '../types/application-all.ts';
 import type { ConfigAll as ApplicationConfiguration, OptionsAll } from '../types/command-all.ts';
 import getGenerator, { getGeneratorRelativeFolder } from '../utils/get-generator.ts';
-import { createDelayedMutationContext, createJHipsterLogger, lookupGeneratorsWithNamespace, normalizePathEnd } from '../utils/index.ts';
+import {
+  createDelayedMutationContext,
+  createJHipsterLogger,
+  lookupGeneratorsWithNamespace,
+  normalizePath,
+  normalizePathEnd,
+} from '../utils/index.ts';
 
 type GeneratorTestOptions = OptionsAll;
 type WithJHipsterGenerators = {
@@ -68,6 +74,8 @@ type JHipsterRunResult<GeneratorType extends BaseCoreGenerator = BaseCoreGenerat
 
   createJHipster: (ns: string) => JHipsterRunContext;
 
+  assertJHipsterConfigContent: (expected: Record<string, any>) => void;
+
   application?: ApplicationAll;
 
   entities?: Record<string, Entity>;
@@ -84,13 +92,17 @@ type HelpersDefaults = {
 const runResult = result as JHipsterRunResult<BaseApplicationGenerator>;
 const coreRunResult = result as JHipsterRunResult;
 
+/**
+ * @deprecated see typedResult
+ */
 export const resultWithGenerator = <T extends BaseCoreGenerator>(): JHipsterRunResult<T> => runResult as unknown as JHipsterRunResult<T>;
 
-export { coreRunResult, runResult, runResult as result };
+/**
+ * Custom typedResult that returns a JHipsterRunResult instead of RunResult
+ */
+export const typedResult = <T extends BaseCoreGenerator>(): JHipsterRunResult<T> => runResult as unknown as JHipsterRunResult<T>;
 
-const DEFAULT_TEST_SETTINGS = { forwardCwd: true };
-const DEFAULT_TEST_OPTIONS = { skipInstall: true };
-const DEFAULT_TEST_ENV_OPTIONS = { skipInstall: true, dryRun: false };
+export { coreRunResult, runResult, runResult as result };
 
 const toJHipsterNamespace = (ns: string) => (/^jhipster[:-]/.test(ns) ? ns : `jhipster:${ns}`);
 const allGenerators: (keyof GeneratorsByNamespace)[] = lookupGeneratorsWithNamespace()
@@ -199,19 +211,7 @@ export const createBlueprintFiles = (
   };
 };
 
-const commonTestOptions = {
-  reproducible: true,
-  skipChecks: true,
-  reproducibleTests: true,
-  noInsight: true,
-  useVersionPlaceholders: true,
-  fakeKeytool: true,
-  skipGit: true,
-  skipEslint: true,
-  skipForks: true,
-} as const;
-
-class JHipsterRunContext extends RunContext<BaseCoreGenerator> {
+class JHipsterRunContext<Generator extends BaseCoreGenerator = BaseCoreGenerator> extends RunContext<Generator> {
   public sharedSource!: Record<string, any>;
   private sharedApplication!: Record<string, any>;
   private readonly workspaceApplications: string[] = [];
@@ -219,7 +219,7 @@ class JHipsterRunContext extends RunContext<BaseCoreGenerator> {
   private generateApplicationsSet = false;
 
   withOptions(options: Partial<Omit<OptionsAll, 'env' | 'resolved' | 'namespace'> & Record<string, any>>): this {
-    return super.withOptions(options);
+    return super.withOptions(options as any);
   }
 
   withJHipsterConfig<Config extends EmptyObject>(
@@ -414,7 +414,7 @@ plugins {
 
   private withContextData(key: string, sharedData: any): this {
     this.onEnvironment(env => {
-      const contextMap: Map<string, any> = (env as Environment).getContextMap(this.targetDirectory!);
+      const contextMap: Map<string, any> = env.getContextMap(this.targetDirectory!);
       contextMap.set(key, sharedData);
     });
     return this;
@@ -429,21 +429,21 @@ plugins {
   }
 
   public withCommandName(): this {
-    if (typeof this.Generator === 'string' && this.Generator.match(/^(jhipster:)?[a-zA-Z0-9-]*$/)) {
+    if (typeof this.Generator === 'string' && this.Generator.match(/^(jhipster:)?[a-zA-Z0-9:-]*$/)) {
       // Set the commandName to the entrypoint generator name.
-      this.withOptions({ commandName: this.Generator.split(':').pop() });
+      this.withOptions({ commandName: this.Generator.replace('jhipster:', '') });
     }
     return this;
   }
 
   public prepareEnvironment() {
     return this.onEnvironment(async env => {
-      await new EnvironmentBuilder(env as Environment).prepare();
+      await new EnvironmentBuilder(env).prepare();
     });
   }
 
-  async run(): Promise<RunResult<BaseCoreGenerator>> {
-    const runResult = (await super.run()) as unknown as JHipsterRunResult;
+  async run(): Promise<RunResult<Generator>> {
+    const runResult = (await super.run()) as unknown as JHipsterRunResult<Generator>;
     if (this.sharedSource) {
       // Convert big objects to an identifier to avoid big snapshot and serialization issues.
       const cleanupArguments: any = (args: any[] | any[][]) =>
@@ -479,7 +479,9 @@ plugins {
       );
     }
 
-    runResult.composedMockedGenerators = composedGeneratorsToCheck.filter(gen => runResult.mockedGenerators[gen]?.mock.callCount() > 0);
+    runResult.composedMockedGenerators = composedGeneratorsToCheck.filter(
+      gen => (runResult.mockedGenerators[gen] as unknown as ReturnType<typeof mock.fn>)?.mock.callCount() > 0,
+    );
 
     runResult.application = runResult.generator.getContextData(CONTEXT_DATA_APPLICATION_KEY, { factory: () => undefined });
     const entitiesMap: Map<string, Entity> | undefined = runResult.generator.getContextData(CONTEXT_DATA_APPLICATION_ENTITIES_KEY, {
@@ -487,6 +489,8 @@ plugins {
     });
     runResult.entities = entitiesMap ? Object.fromEntries(entitiesMap.entries()) : undefined;
     runResult.createJHipster = (gen: string) => runResult.create(toJHipsterNamespace(gen)) as JHipsterRunContext;
+    runResult.assertJHipsterConfigContent = (expected: Record<string, any>) =>
+      runResult.assertJsonFileContent('.yo-rc.json', { 'generator-jhipster': expected });
 
     return runResult;
   }
@@ -498,11 +502,10 @@ plugins {
     method: (this: BaseCoreGenerator, ...args: any[]) => any,
   ): this {
     return this.onGenerator(async gen => {
-      const generator = gen as BaseApplicationGenerator;
-      generator.on('queueOwnTasks', () => {
-        const priority = generator._queues[priorityName];
+      gen.on('queueOwnTasks', () => {
+        const priority = gen._queues[priorityName];
         const queueName = priority.queueName ?? priority.priorityName;
-        generator.queueTask({
+        gen.queueTask({
           taskName: `test-task${randomInt(1000)}`,
           queueName,
           method,
@@ -512,58 +515,96 @@ plugins {
   }
 }
 
-class JHipsterTest extends YeomanTest {
-  constructor() {
-    super();
-
-    this.adapterOptions = { log: createJHipsterLogger() };
+export const getCommandHelpOutput = async (command?: string) => {
+  const program = await buildJHipster();
+  const cmd = command ? (program.commands.find(cmd => cmd.name() === command) as JHipsterCommand) : program;
+  if (!cmd) {
+    throw new Error(`Command ${command} not found.`);
   }
+  if (command) {
+    await cmd._lazyBuildCommandCallBack!();
+  }
+  return cmd.configureOutput({ getOutHelpWidth: () => 1000, getErrHelpWidth: () => 1000 }).helpInformation();
+};
+
+class JHipsterTest<JHipsterTestGenerator extends BaseCoreGenerator = BaseCoreGenerator> extends YeomanTest {
+  commandName?: string;
 
   // @ts-expect-error testing types should be improved
-  run<GeneratorType extends YeomanGenerator<GeneratorTestOptions> = YeomanGenerator<GeneratorTestOptions>>(
+  override run<GeneratorType extends JHipsterTestGenerator = JHipsterTestGenerator>(
     GeneratorOrNamespace: string | GetGeneratorConstructor<GeneratorType>,
     settings?: RunContextSettings,
     envOptions?: EnvironmentOptions & { createEnv?: any },
-  ): JHipsterRunContext {
-    return super
-      .run<GeneratorType>(GeneratorOrNamespace, settings, envOptions)
-      .withOptions({
-        jdlDefinition: getDefaultJDLApplicationConfig(),
-      } as any)
-      .withAdapterOptions({ log: createJHipsterLogger() }) as unknown as JHipsterRunContext;
+  ): JHipsterRunContext<GeneratorType> {
+    return super.run<GeneratorType>(GeneratorOrNamespace, settings, envOptions) as any;
   }
 
-  runJHipster(jhipsterGenerator: string, settings?: RunContextSettings, envOptions?: EnvironmentOptions): JHipsterRunContext;
-  runJHipster(jhipsterGenerator: string, options?: RunJHipster): JHipsterRunContext;
-  runJHipster(
+  // @ts-expect-error testing types should be improved
+  override runDefault<Generator extends JHipsterTestGenerator = JHipsterTestGenerator>(
+    settings?: RunContextSettings,
+    envOptions?: EnvironmentOptions & { createEnv?: any },
+  ): JHipsterRunContext<Generator> {
+    return super.runDefault<Generator>(settings, envOptions) as unknown as JHipsterRunContext<Generator>;
+  }
+
+  async forwardsFeaturesParameter(Generator?: any): Promise<boolean> {
+    Generator ??= (await import(getGenerator(this.defaultGenerator!))).default;
+    const instance = new Generator([], { help: true, namespace: 'foo', resolved: 'bar', env: { cwd: 'foo' } }, { uniqueBy: 'bar' });
+    return instance.features!.uniqueBy === 'bar';
+  }
+
+  async getCommandHelpOutput(commandName = this.commandName!): Promise<string> {
+    await this.prepareTemporaryDir();
+    return getCommandHelpOutput(commandName);
+  }
+
+  runJHipster<Generator extends JHipsterTestGenerator = JHipsterTestGenerator>(
+    jhipsterSettings?: RunJHipster,
+    settings?: RunContextSettings,
+    envOptions?: EnvironmentOptions,
+  ): JHipsterRunContext<Generator>;
+  runJHipster<Generator extends JHipsterTestGenerator = JHipsterTestGenerator>(
     jhipsterGenerator: string,
+    settings?: RunContextSettings,
+    envOptions?: EnvironmentOptions,
+  ): JHipsterRunContext<Generator>;
+  runJHipster<Generator extends JHipsterTestGenerator = JHipsterTestGenerator>(
+    jhipsterGenerator: string,
+    options?: RunJHipster,
+  ): JHipsterRunContext<Generator>;
+  runJHipster<Generator extends JHipsterTestGenerator = JHipsterTestGenerator>(
+    jhipsterGenerator: string | RunJHipster | undefined,
     settings: RunContextSettings | RunJHipster | undefined,
     envOptions?: EnvironmentOptions,
-  ): JHipsterRunContext {
+  ): JHipsterRunContext<Generator> {
+    let jhipsterSettings: RunJHipster | undefined;
+    if (typeof jhipsterGenerator === 'object' || jhipsterGenerator === undefined) {
+      jhipsterSettings = jhipsterGenerator;
+      jhipsterGenerator = undefined;
+      if (jhipsterGenerator === undefined) {
+        return this.runDefault<Generator>(settings as RunContextSettings | undefined, envOptions).withJHipsterContextOptions(
+          jhipsterSettings,
+        );
+      }
+    }
     const generatorSpec =
       !isAbsolute(jhipsterGenerator) && !jhipsterGenerator.startsWith('@') ? toJHipsterNamespace(jhipsterGenerator) : jhipsterGenerator;
     const isRunJHipster = (opt: any): opt is RunJHipster | undefined =>
       envOptions === undefined && (opt === undefined || 'useMock' in opt || 'useDefaultMocks' in opt || 'prepareEnvironment' in opt);
     if (isRunJHipster(settings)) {
-      return this.run(generatorSpec).withJHipsterContextOptions(settings);
+      return this.run<Generator>(generatorSpec).withJHipsterContextOptions(settings);
     }
 
-    return this.run(getGenerator(generatorSpec), settings, envOptions).withJHipsterGenerators().withCommandName();
+    return this.run<Generator>(getGenerator(generatorSpec), settings, envOptions).withJHipsterGenerators().withCommandName();
   }
 
-  runCli(
+  runCli<Generator extends JHipsterTestGenerator = JHipsterTestGenerator>(
     command: string | string[],
     options: { commands?: Record<string, CliCommand>; prepareEnvironment?: boolean; entrypointGenerator?: string } = {},
-  ): JHipsterRunContext {
+  ): JHipsterRunContext<Generator> {
     const { prepareEnvironment, ...buildJHipsterOptions } = options;
     // Use a dummy generator which will not be used to match yeoman-test requirement.
-    const context = this.run(
-      this.createDummyGenerator(BaseCoreGenerator),
-      { namespace: 'non-used-dummy:generator' },
-      {
-        sharedOptions: { ...(commonTestOptions as any) },
-      },
-    );
+    const context = this.run<Generator>(this.createDummyGenerator(BaseCoreGenerator), { namespace: 'non-used-dummy:generator' });
     if (prepareEnvironment) {
       context.prepareEnvironment();
     } else {
@@ -573,15 +614,19 @@ class JHipsterTest extends YeomanTest {
     return context.withEnvironmentRun(async function (this, env) {
       // Customize program to throw an error instead of exiting the process on cli parse error.
       const program = createProgram().exitOverride();
-      await buildJHipster({ program, env: env as Environment, silent: true, ...buildJHipsterOptions });
+      await buildJHipster({ program, env, silent: true, ...buildJHipsterOptions });
       await program.parseAsync(['jhipster', 'jhipster', ...(Array.isArray(command) ? command : command.split(' '))]);
       // Put the rootGenerator in context to be used in result assertions.
       this.generator = env.rootGenerator();
     });
   }
 
-  runJHipsterDeployment(jhipsterGenerator: string, settings?: RunContextSettings, envOptions?: EnvironmentOptions): JHipsterRunContext {
-    return this.runJHipsterInApplication(jhipsterGenerator, settings, envOptions).withOptions({
+  runJHipsterDeployment<Generator extends JHipsterTestGenerator = JHipsterTestGenerator>(
+    jhipsterGenerator: string,
+    settings?: RunContextSettings,
+    envOptions?: EnvironmentOptions,
+  ): JHipsterRunContext<Generator> {
+    return this.runJHipsterInApplication<Generator>(jhipsterGenerator, settings, envOptions).withOptions({
       destinationRoot: join(runResult.cwd, jhipsterGenerator.split(':').pop()!),
     });
   }
@@ -589,20 +634,32 @@ class JHipsterTest extends YeomanTest {
   /**
    * Run a generator in current application context.
    */
-  runJHipsterInApplication(jhipsterGenerator: string, settings?: RunContextSettings, envOptions?: EnvironmentOptions): JHipsterRunContext {
-    const context = runResult.create(getGenerator(jhipsterGenerator), settings, envOptions) as JHipsterRunContext;
+  runJHipsterInApplication<Generator extends JHipsterTestGenerator = JHipsterTestGenerator>(
+    jhipsterGenerator: string,
+    settings?: RunContextSettings,
+    envOptions?: EnvironmentOptions,
+  ): JHipsterRunContext<Generator> {
+    const context = runResult.create(getGenerator(jhipsterGenerator), settings, envOptions) as JHipsterRunContext<Generator>;
     return context.withJHipsterGenerators();
   }
 
-  runJDL(jdl: string, settings?: RunContextSettings, envOptions?: EnvironmentOptions): JHipsterRunContext {
-    return this.runJHipster('jdl', settings, envOptions).withOptions({ inline: jdl });
+  runJDL<Generator extends JHipsterTestGenerator = JHipsterTestGenerator>(
+    jdl: string,
+    settings?: RunContextSettings,
+    envOptions?: EnvironmentOptions,
+  ): JHipsterRunContext<Generator> {
+    return this.runJHipster<Generator>('jdl', settings, envOptions).withOptions({ inline: jdl });
   }
 
   /**
    * Run the JDL generator in current application context.
    */
-  runJDLInApplication(jdl: string, settings?: RunContextSettings, envOptions?: EnvironmentOptions): JHipsterRunContext {
-    return this.runJHipsterInApplication('jdl', settings, envOptions).withOptions({ inline: jdl });
+  runJDLInApplication<Generator extends JHipsterTestGenerator = JHipsterTestGenerator>(
+    jdl: string,
+    settings?: RunContextSettings,
+    envOptions?: EnvironmentOptions,
+  ): JHipsterRunContext<Generator> {
+    return this.runJHipsterInApplication<Generator>('jdl', settings, envOptions).withOptions({ inline: jdl });
   }
 
   runTestBlueprintGenerator() {
@@ -627,7 +684,7 @@ class JHipsterTest extends YeomanTest {
   }
 
   // @ts-expect-error testing types should be improved
-  create<GeneratorType extends YeomanGenerator<GeneratorTestOptions> = YeomanGenerator<GeneratorTestOptions>>(
+  override create<GeneratorType extends YeomanGenerator<GeneratorTestOptions> = YeomanGenerator<GeneratorTestOptions>>(
     GeneratorOrNamespace: string | GetGeneratorConstructor<GeneratorType>,
     settings?: RunContextSettings,
     envOptions?: EnvironmentOptions,
@@ -653,38 +710,127 @@ class JHipsterTest extends YeomanTest {
   }
 
   async createEnv(options: EnvironmentOptions): Promise<Environment> {
-    options.generatorLookupOptions ??= {};
-    // Default to lookup for source generators only inside tests.
-    options.generatorLookupOptions.lookups ??= generatorsLookup;
     return EnvironmentBuilder.create(options).getEnvironment();
   }
 }
 
-export function createTestHelpers(options: any = {}) {
-  const { environmentOptions = {} } = options;
-  const sharedOptions = {
-    ...DEFAULT_TEST_OPTIONS,
-    ...environmentOptions.sharedOptions,
+type HelperOptions = Omit<Parameters<typeof createHelpers>[0], 'generatorOptions'> & {
+  generatorOptions?: Partial<OptionsAll>;
+  commandName?: string;
+};
+type MergeableHelperOptions = Pick<HelperOptions, 'adapterOptions' | 'environmentOptions' | 'settings' | 'generatorOptions'>;
+type Presets = 'default' | 'basic' | 'skipPrettier' | 'dryRun';
+
+const helpersPresets: Record<Presets | 'jhipster', MergeableHelperOptions> = {
+  jhipster: {
+    settings: { forwardCwd: true },
+    generatorOptions: {
+      skipInstall: true,
+      // TODO remove jdlDefinition.
+      jdlDefinition: getDefaultJDLApplicationConfig(),
+    },
+    environmentOptions: {
+      dryRun: false,
+      generatorLookupOptions: {
+        // Default to lookup for source generators only inside tests.
+        lookups: generatorsLookup,
+      },
+      sharedOptions: {
+        useVersionPlaceholders: true,
+        reproducible: true,
+        skipChecks: true,
+        reproducibleTests: true,
+        fakeKeytool: true,
+        skipGit: true,
+        skipEslint: true,
+      } as any,
+    },
+  },
+  default: {
+    generatorOptions: { skipPrettier: true },
+    environmentOptions: { dryRun: true },
+  },
+  basic: {},
+  skipPrettier: { generatorOptions: { skipPrettier: true } },
+  dryRun: { environmentOptions: { dryRun: true } },
+};
+
+const mergeHelperOptions = (...opts: MergeableHelperOptions[]): Required<MergeableHelperOptions> => {
+  const ret: Required<MergeableHelperOptions> = {
+    adapterOptions: {},
+    environmentOptions: {},
+    generatorOptions: {},
+    settings: {},
   };
-  const helper = new JHipsterTest();
-  helper.settings = { ...DEFAULT_TEST_SETTINGS, ...options.settings };
-  helper.environmentOptions = { ...DEFAULT_TEST_ENV_OPTIONS, ...environmentOptions, sharedOptions };
-  helper.generatorOptions = { ...DEFAULT_TEST_OPTIONS, ...options.generatorOptions };
+  for (const opt of opts) {
+    ret.adapterOptions = { ...ret.adapterOptions, ...opt.adapterOptions };
+    ret.generatorOptions = { ...ret.generatorOptions, ...opt.generatorOptions };
+    ret.settings = { ...ret.settings, ...opt.settings };
+    ret.environmentOptions = {
+      ...ret.environmentOptions,
+      ...opt.environmentOptions,
+      generatorLookupOptions: {
+        ...ret.environmentOptions.generatorLookupOptions,
+        ...opt.environmentOptions?.generatorLookupOptions,
+      },
+      sharedOptions: {
+        ...ret.environmentOptions?.sharedOptions,
+        ...opt.environmentOptions?.sharedOptions,
+      },
+    };
+  }
+  return ret;
+};
+
+export function createTestHelpers<JHipsterTestGenerator extends BaseCoreGenerator = BaseCoreGenerator>(
+  preset: Presets,
+): JHipsterTest<JHipsterTestGenerator>;
+export function createTestHelpers<JHipsterTestGenerator extends BaseCoreGenerator = BaseCoreGenerator>(
+  options?: HelperOptions,
+  preset?: Presets,
+): JHipsterTest<JHipsterTestGenerator>;
+export function createTestHelpers<JHipsterTestGenerator extends BaseCoreGenerator = BaseCoreGenerator>(
+  options: HelperOptions | Presets = {},
+  preset: Presets = 'default',
+): JHipsterTest<JHipsterTestGenerator> {
+  if (typeof options === 'string') {
+    preset = options;
+    options = {};
+  }
+  if (options.importMeta) {
+    const generatorDirname = (options.importMeta as ImportMeta).dirname;
+    const relativePath = relative(getPackageRoot(), generatorDirname);
+    if (relativePath.startsWith('generators')) {
+      const parts = normalizePath(relativePath)
+        .split('/')
+        .filter(part => part && part !== 'generators');
+      const commandName = parts.join(':');
+      options.defaultGenerator ??= `jhipster:${commandName}`;
+      options.generatorOptions ??= {};
+      options.generatorOptions.commandName = commandName;
+      options.commandName = commandName;
+    }
+  }
+  const mergeableOptions = pick(options, 'adapterOptions', 'environmentOptions', 'generatorOptions', 'settings');
   // @ts-expect-error testing types should be improved
-  helper.getRunContextType = () => JHipsterRunContext;
-  return helper;
+  return createHelpers<JHipsterTest<JHipsterTestGenerator>>({
+    factory: () => new JHipsterTest<JHipsterTestGenerator>(),
+    defaultGenerator: './generator.ts',
+    getRunContextType: () => JHipsterRunContext,
+    ...options,
+    ...mergeHelperOptions(
+      helpersPresets.jhipster,
+      helpersPresets[preset],
+      { adapterOptions: { log: createJHipsterLogger() } },
+      mergeableOptions,
+    ),
+  });
 }
 
-export const basicHelpers = createTestHelpers({ generatorOptions: { ...commonTestOptions } });
+export const basicHelpers = createTestHelpers('basic');
 
-export const defaultHelpers = createTestHelpers({
-  generatorOptions: { skipPrettier: true, ...commonTestOptions },
-  environmentOptions: { dryRun: true },
-});
+export const defaultHelpers = createTestHelpers('default');
 
-export const skipPrettierHelpers = createTestHelpers({ generatorOptions: { skipPrettier: true, ...commonTestOptions } });
+export const skipPrettierHelpers = createTestHelpers('skipPrettier');
 
-export const dryRunHelpers = createTestHelpers({
-  generatorOptions: { ...commonTestOptions },
-  environmentOptions: { dryRun: true },
-});
+export const dryRunHelpers = createTestHelpers('dryRun');

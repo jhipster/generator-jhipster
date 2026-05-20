@@ -170,6 +170,13 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
   });
 
   describe('<%- entityNameCapitalized %> page', () => {
+<%_ if (enableTranslation) { _%>
+    it('should have translated page title', () => {
+      cy.visit(<%- entityInstance %>PageUrl);
+      cy.getEntityHeading('<%- entityNameCapitalized %>').should('not.contain', '<%- i18nKeyPrefix %>.home.title');
+    });
+
+<%_ } _%>
 <%_ if (!readOnly) { _%>
     describe('create button click', () => {
       beforeEach(() => {

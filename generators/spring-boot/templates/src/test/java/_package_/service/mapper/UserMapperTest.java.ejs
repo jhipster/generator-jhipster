@@ -24,9 +24,6 @@ import <%- packageName %>.service.dto.<%- user.adminUserDto %>;
 import <%- packageName %>.service.dto.<%- user.dtoClass %>;
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
 import <%- packageName %>.domain.Authority;
-<%_ } else { _%>
-import java.util.stream.Stream;
-import java.util.stream.Collectors;
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>
 import org.apache.commons.lang3.RandomStringUtils;
@@ -93,7 +90,7 @@ class UserMapperTest {
         authorities.add(authority);
         user.setAuthorities(authorities);
 <%_ } else { _%>
-        user.setAuthorities(Stream.of(AuthoritiesConstants.USER).collect(Collectors.toSet()));
+        user.setAuthorities(Set.of(AuthoritiesConstants.USER));
 <%_ } _%>
 
         userDto = new <%- user.adminUserDto %>(user);

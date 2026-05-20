@@ -205,7 +205,6 @@ export default class BaseApplicationGenerator<
 
   /**
    * Get Entities configuration path
-   * @returns
    */
   getEntitiesConfigPath(...args: string[]): string {
     return this.destinationPath(JHIPSTER_CONFIG_DIR, ...args);
@@ -214,7 +213,6 @@ export default class BaseApplicationGenerator<
   /**
    * Get Entity configuration path
    * @param entityName Entity name
-   * @returns
    */
   getEntityConfigPath(entityName: string): string {
     return this.getEntitiesConfigPath(`${upperFirst(entityName)}.json`);
@@ -269,6 +267,10 @@ export default class BaseApplicationGenerator<
    * Configuring each entity should configure entities.
    */
   get configuringEachEntity() {
+    return {};
+  }
+
+  get loadingEntities() {
     return {};
   }
 

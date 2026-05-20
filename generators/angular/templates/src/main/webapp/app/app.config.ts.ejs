@@ -19,7 +19,7 @@
 import { ApplicationConfig, LOCALE_ID, importProvidersFrom, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router, RouterFeatures, TitleStrategy, provideRouter, withComponentInputBinding, withDebugTracing, withNavigationErrorHandler, NavigationError } from '@angular/router';
-import { ServiceWorkerModule } from '@angular/service-worker';
+import { provideServiceWorker } from '@angular/service-worker';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 <%_ if (authenticationTypeJwt) { _%>
 import { authInterceptor } from 'app/core/interceptor/auth.interceptor';
@@ -62,14 +62,14 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes, ...routerFeatures),
     // Set this to true to enable service worker (PWA)
-    importProvidersFrom(ServiceWorkerModule.register('ngsw-worker.js', { enabled: false })),
+    provideServiceWorker('ngsw-worker.js', { enabled: false }),
 <%_ if (enableTranslation) { _%>
     importProvidersFrom(TranslationModule),
 <%_ } _%>
     provideHttpClient(
       withInterceptors([
 <%_ if (authenticationTypeJwt) { _%>
-        authInterceptor, 
+        authInterceptor,
 <%_ } _%>
         authExpiredInterceptor,
         errorHandlerInterceptor,

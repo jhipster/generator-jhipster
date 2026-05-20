@@ -83,7 +83,7 @@ const command = {
       scope: 'generator',
     },
   },
-  import: ['app', 'workspaces'],
+  import: ['app', 'workspaces', 'generate-blueprint'],
 } as const satisfies JHipsterCommandDefinition<any>;
 
 export default command;

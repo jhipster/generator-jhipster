@@ -31,7 +31,7 @@ export default class ListJDLApplicationConfigurationOption extends JDLApplicatio
   }
 
   getValue(): string[] {
-    return Array.from(this.value);
+    return [...this.value];
   }
 
   toString(): string {

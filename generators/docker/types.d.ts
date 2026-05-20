@@ -9,6 +9,8 @@ import type {
 import type { DockerAddedApplicationLoadingProperties, DockerAddedApplicationPreparingProperties } from './application.ts';
 import type command from './command.ts';
 
+export type { Features } from '../base-simple-application/types.d.ts';
+
 type Command = CommandTypeMap<typeof command>;
 
 export type Config = BaseSimpleApplicationConfig & Command['Config'];

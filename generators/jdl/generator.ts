@@ -26,8 +26,8 @@ import { type MemFsEditor, type MemFsEditorFile, create as createMemFsEditor } f
 import { downloadJdlFile } from '../../cli/download.ts';
 import EnvironmentBuilder from '../../cli/environment-builder.ts';
 import { CLI_NAME } from '../../cli/utils.ts';
-import type { ApplicationWithEntities } from '../../lib/jdl/jdl-importer.ts';
-import { createImporterFromContent } from '../../lib/jdl/jdl-importer.ts';
+import type { YoRcFileContent } from '../../lib/constants/yeoman.ts';
+import { type ApplicationWithEntities, createImporterFromContent } from '../../lib/jdl/jdl-importer.ts';
 import { mergeYoRcContent } from '../../lib/utils/yo-rc.ts';
 import BaseGenerator from '../base/index.ts';
 import { normalizeBlueprintName } from '../base/internal/blueprint.ts';
@@ -301,7 +301,7 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
       const fs: MemFsEditor = sharedFs ? createMemFsEditor(sharedFs) : this.fs;
       if (config) {
         const configFile = this.destinationPath(`${appPath}.yo-rc.json`);
-        const oldConfig: any = fs.readJSON(configFile, {});
+        const oldConfig: YoRcFileContent = fs.readJSON(configFile, {}) as YoRcFileContent;
         if (Array.isArray(config.blueprints)) {
           config = {
             ...config,

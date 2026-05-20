@@ -46,7 +46,7 @@ exports[`generator - server:bootstrap bootstrapping default config should prepar
   "clientSrcDir": "src/main/webapp/",
   "clientTestDir": "src/test/javascript/",
   "clientTheme": "none",
-  "commandName": undefined,
+  "commandName": "server:bootstrap",
   "communicationSpringWebsocket": undefined,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,

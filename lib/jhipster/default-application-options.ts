@@ -125,8 +125,14 @@ function getConfigForClientApplication(options: ApplicationDefaults = {}): Appli
   }
   switch (clientFramework) {
     case 'vue': {
-      options.clientBundler ??= options.microfrontend || options.applicationType === 'microservice' ? 'webpack' : 'vite';
-      options.devServerPort ??= options.clientBundler === 'webpack' ? 9060 : 9000;
+      options.clientBundler ??= options.microfrontend || options.applicationType === 'microservice' ? 'rsbuild' : 'vite';
+      if (options.clientBundler === 'webpack') {
+        options.devServerPort ??= 9060;
+      } else if (options.clientBundler === 'vite') {
+        options.devServerPort ??= 9000;
+      } else if (options.clientBundler === 'rsbuild') {
+        options.devServerPort ??= 3000;
+      }
       break;
     }
     case 'react': {

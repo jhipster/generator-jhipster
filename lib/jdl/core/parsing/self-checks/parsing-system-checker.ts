@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 
-import type { Rule, TokenType } from 'chevrotain';
-import { Lexer } from 'chevrotain';
+import { Lexer, type Rule, type TokenType } from 'chevrotain';
 import { difference, flatMap, includes, isEmpty, reject, some, uniq, values } from 'lodash-es';
 
 import TokenCollectorVisitor from './token-collector-visitor.ts';

@@ -204,7 +204,7 @@ describe('cli', () => {
       getCommand.mockImplementation(actualGetCommand);
 
       const BaseGenerator = (await import('../generators/base/index.ts')).default;
-      env = (await helpers.createTestEnv()) as FullEnvironment;
+      env = await helpers.createTestEnv();
       generator = new (helpers.createDummyGenerator(BaseGenerator))([], { env });
       env.run = esmocha.fn<typeof env.run>((...args) => {
         runArgs = args;

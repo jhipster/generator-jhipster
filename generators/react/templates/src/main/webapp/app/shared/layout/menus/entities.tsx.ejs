@@ -29,8 +29,8 @@ const EntitiesMenuItems = React.lazy(() => import('app/entities/menu').catch(() 
   <%_ if (applicationTypeGateway) { _%>
     <%_ for (const remote of microfrontends) { _%>
 const <%- remote.capitalizedBaseName %>EntitiesMenuItems = React.lazy(async () => importRemote<any>({
-  url: `./services/<%- remote.lowercaseBaseName %>`,
-  scope: '<%- remote.lowercaseBaseName %>',
+  url: `./services/<%- remote.moduleFederationName %>`,
+  scope: '<%- remote.moduleFederationName %>',
   module: './entities-menu',
 }).catch(() => import('app/shared/error/error-loading')));
 

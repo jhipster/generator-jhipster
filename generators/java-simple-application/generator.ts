@@ -29,7 +29,6 @@ import {
   matchMainJavaFiles,
   packageInfoTransform,
 } from '../java/support/index.ts';
-import type { Source as JavascriptSource } from '../javascript-simple-application/types.ts';
 
 import type {
   Application as JavaSimpleApplicationApplication,
@@ -101,6 +100,18 @@ export default class JavaGenerator extends JavaSimpleApplicationGenerator {
 
   get [JavaSimpleApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
+  }
+
+  get composing() {
+    return this.asComposingTaskGroup({
+      async composing() {
+        await this.composeWithJHipster('jhipster:java-simple-application:prettier');
+      },
+    });
+  }
+
+  get [JavaSimpleApplicationGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   get loading() {
@@ -191,29 +202,6 @@ export default class JavaGenerator extends JavaSimpleApplicationGenerator {
 
   get [JavaSimpleApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
-  }
-
-  get postWriting() {
-    return this.asPostWritingTaskGroup({
-      addPrettierJava({ application, source }) {
-        const clientSource = source as JavascriptSource;
-        if (clientSource.mergePrettierConfig) {
-          clientSource.mergePrettierConfig({
-            plugins: ['prettier-plugin-java'],
-            overrides: [{ files: '*.java', options: { tabWidth: 4 } }],
-          });
-          this.packageJson.merge({
-            devDependencies: {
-              'prettier-plugin-java': application.nodeDependencies['prettier-plugin-java'],
-            },
-          });
-        }
-      },
-    });
-  }
-
-  get [JavaSimpleApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
   /**

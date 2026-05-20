@@ -21,14 +21,12 @@ package <%- packageName %>.config;
 import java.util.List;
 
 <%_ if (databaseTypeSql) { _%>
-import java.util.Arrays;
 import tech.jhipster.config.JHipsterConstants;
 <%_ } _%>
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.beans.factory.support.DefaultSingletonBeanRegistry;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.context.ConfigurableApplicationContext;
 
@@ -54,7 +52,7 @@ public class SqlTestContainersSpringContextCustomizerFactory implements ContextC
                 TestPropertyValues testValues = TestPropertyValues.empty();
                 EmbeddedSQL sqlAnnotation = AnnotatedElementUtils.findMergedAnnotation(testClass, EmbeddedSQL.class);
 <%_ if (prodDatabaseType !== devDatabaseType) { _%>
-                boolean usingTestProdProfile = Arrays.asList(context.getEnvironment().getActiveProfiles()).contains("test" + JHipsterConstants.SPRING_PROFILE_PRODUCTION);
+                boolean usingTestProdProfile = List.of(context.getEnvironment().getActiveProfiles()).contains("test" + JHipsterConstants.SPRING_PROFILE_PRODUCTION);
                 if (null != sqlAnnotation && usingTestProdProfile) {
 <%_ } else { _%>
                 if (null != sqlAnnotation) {
@@ -63,7 +61,7 @@ public class SqlTestContainersSpringContextCustomizerFactory implements ContextC
                     log.info("Warming up the sql database");
                     if (null == prodTestcontainer) {
                         try {
-                            Class<? extends SqlTestContainer> containerClass = (Class<? extends SqlTestContainer>) Class.forName(this.getClass().getPackageName() + ".DatabaseTestcontainer");
+                            Class<? extends SqlTestContainer> containerClass = Class.forName(this.getClass().getPackageName() + ".DatabaseTestcontainer").asSubclass(SqlTestContainer.class);
                             prodTestcontainer = beanFactory.createBean(containerClass);
                             beanFactory.registerSingleton(containerClass.getName(), prodTestcontainer);
                             /**
@@ -77,7 +75,7 @@ public class SqlTestContainersSpringContextCustomizerFactory implements ContextC
                     testValues = testValues.and("spring.r2dbc.url=" + prodTestcontainer.getTestContainer().getJdbcUrl().replace("jdbc", "r2dbc")<% if (prodDatabaseTypeMariadb) { %>.replace("mariadb", "mysql")<% } else if (prodDatabaseTypeMssql) { %>.replace(";encrypt=false", "")<% } %> + "<%- prodDatabaseExtraOptions %>");
                     testValues = testValues.and("spring.r2dbc.username=" + prodTestcontainer.getTestContainer().getUsername());
                     testValues = testValues.and("spring.r2dbc.password=" + prodTestcontainer.getTestContainer().getPassword());
-                    testValues = testValues.and("spring.liquibase.url=" + prodTestcontainer.getTestContainer().getJdbcUrl()  + "<%- prodDatabaseExtraOptions %>");
+                    testValues = testValues.and("spring.liquibase.url=" + prodTestcontainer.getTestContainer().getJdbcUrl() + "<%- prodDatabaseExtraOptions %>");
 <%_ } else { _%>
                     testValues = testValues.and("spring.datasource.url=" + prodTestcontainer.getTestContainer().getJdbcUrl() + "<%- prodDatabaseExtraOptions %>");
                     testValues = testValues.and("spring.datasource.username=" + prodTestcontainer.getTestContainer().getUsername());
