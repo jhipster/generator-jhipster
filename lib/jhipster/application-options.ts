@@ -184,8 +184,6 @@ export const jhipsterOptionValues = {
   [optionNames.JHIPSTER_VERSION]: '',
   [optionNames.JWT_SECRET_KEY]: '',
   [optionNames.LANGUAGES]: [],
-  [optionNames.MICROFRONTEND]: false,
-  [optionNames.MICROFRONTENDS]: [],
   [optionNames.NODE_PACKAGE_MANAGER]: {
     npm: 'npm',
   },

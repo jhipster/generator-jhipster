@@ -1827,7 +1827,7 @@ exports[`generator - react microservice-jwt-skipUserManagement(false)-withAdminU
   "messageHeaderNameError": "x-jhipsterapp-error",
   "messageHeaderNameParam": "x-jhipsterapp-params",
   "microfrontend": true,
-  "microfrontends": undefined,
+  "microfrontends": [],
   "monorepository": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {
@@ -2623,7 +2623,7 @@ exports[`generator - react microservice-oauth2-withAdminUi(true)-skipJhipsterDep
   "messageHeaderNameError": "x-jhipsterapp-error",
   "messageHeaderNameParam": "x-jhipsterapp-params",
   "microfrontend": true,
-  "microfrontends": undefined,
+  "microfrontends": [],
   "monorepository": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {

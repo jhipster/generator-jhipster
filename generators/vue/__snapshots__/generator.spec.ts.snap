@@ -1942,7 +1942,7 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "messageHeaderNameError": "x-jhipsterapp-error",
   "messageHeaderNameParam": "x-jhipsterapp-params",
   "microfrontend": true,
-  "microfrontends": undefined,
+  "microfrontends": [],
   "monorepository": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {
@@ -2760,7 +2760,7 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "messageHeaderNameError": "x-jhipsterapp-error",
   "messageHeaderNameParam": "x-jhipsterapp-params",
   "microfrontend": true,
-  "microfrontends": undefined,
+  "microfrontends": [],
   "monorepository": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {

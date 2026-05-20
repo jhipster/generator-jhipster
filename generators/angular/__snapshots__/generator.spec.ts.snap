@@ -5028,7 +5028,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "messageHeaderNameError": "x-jhipsterapp-error",
   "messageHeaderNameParam": "x-jhipsterapp-params",
   "microfrontend": true,
-  "microfrontends": undefined,
+  "microfrontends": [],
   "monorepository": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {
@@ -6066,7 +6066,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "messageHeaderNameError": "x-jhipsterapp-error",
   "messageHeaderNameParam": "x-jhipsterapp-params",
   "microfrontend": true,
-  "microfrontends": undefined,
+  "microfrontends": [],
   "monorepository": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {

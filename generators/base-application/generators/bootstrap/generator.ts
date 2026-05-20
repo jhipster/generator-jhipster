@@ -138,14 +138,7 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
               endpointPrefix: `services/${baseName.toLowerCase()}`,
             });
           });
-        } else if (application.microfrontend) {
-          application.microfrontends = [];
         }
-        application.microfrontend =
-          application.microfrontend ||
-          (application.applicationTypeMicroservice && !application.skipClient) ||
-          (application.applicationTypeGateway && application.microfrontends && application.microfrontends.length > 0);
-
         if (application.microfrontend && application.applicationTypeMicroservice && !application.gatewayServerPort) {
           application.gatewayServerPort = 8080;
         }

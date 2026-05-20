@@ -58,7 +58,6 @@ exports[`generator - javascript-simple-application:bootstrap bootstrapping defau
   "languages": Any<Array>,
   "lowercaseBaseName": "jhipster",
   "messageBroker": "no",
-  "microfrontend": false,
   "nativeLanguage": "en",
   "nodeDependencies": Any<Object>,
   "nodePackageManager": "npm",

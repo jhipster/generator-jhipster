@@ -60,6 +60,7 @@ export const mutateApplication = {
     }
     return false;
   },
+  microfrontends: ({ microfrontend }, { delayMarker, undefinedMarker }) => delayMarker ?? (microfrontend ? [] : undefinedMarker),
   clientFrameworkBuiltIn: ({ clientFramework }) => ['angular', 'vue', 'react'].includes(clientFramework!),
   clientThemeNone: ({ clientTheme }) => !clientTheme || clientTheme === 'none',
   clientThemeAny: ({ clientThemeNone }) => !clientThemeNone,

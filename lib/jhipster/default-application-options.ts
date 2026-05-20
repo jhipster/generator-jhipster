@@ -117,7 +117,6 @@ function getConfigForClientApplication(options: ApplicationDefaults = {}): Appli
   if (clientFramework === NO_CLIENT_FRAMEWORK) {
     return options;
   }
-  options[OptionNames.MICROFRONTEND] ??= Boolean(options[OptionNames.MICROFRONTENDS]?.length);
   if (!options[CLIENT_THEME]) {
     options[CLIENT_THEME] = OptionValues[CLIENT_THEME];
   } else if (options[CLIENT_THEME] !== OptionValues[CLIENT_THEME] && !options[CLIENT_THEME_VARIANT]) {
