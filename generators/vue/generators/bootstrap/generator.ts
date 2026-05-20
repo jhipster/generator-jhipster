@@ -34,7 +34,9 @@ export default class VueBootstrapGenerator extends ClientApplicationGenerator {
   get preparing() {
     return this.asPreparingTaskGroup({
       defaults({ applicationDefaults }) {
-        applicationDefaults(mutateApplication);
+        applicationDefaults(mutateApplication, {
+          nodeWebappBuildTarget: ({ clientBundlerRsbuild }) => `webapp:build${clientBundlerRsbuild ? ':prod' : ''}`,
+        });
       },
       translations({ application }) {
         application.addLanguageCallbacks.push((newLanguages, allLanguages) => {

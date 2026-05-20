@@ -64,7 +64,7 @@ def webapp = tasks.register('webapp', NpmTask) {
 
     dependsOn(npmInstall)
 
-    args = ["run", "webapp:build"]
+    args = ["run", "<%- nodeWebappBuildTarget %>"]
     environment = [APP_VERSION: project.version]
 }
 <%_ } _%>
