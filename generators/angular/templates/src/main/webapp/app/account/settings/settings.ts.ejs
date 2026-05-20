@@ -19,10 +19,8 @@
 import { Component, ChangeDetectionStrategy, inject, OnInit, signal } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 <%_ if (enableTranslation) { _%>
-import { TranslateService } from '@ngx-translate/core';
-import { TranslateDirective } from 'app/shared/language';
-import { TranslateModule } from '@ngx-translate/core';
-import { FindLanguageFromKeyPipe } from 'app/shared/language';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { FindLanguageFromKeyPipe, TranslateDirective } from 'app/shared/language';
 <%_ } _%>
 import { catchError, of } from 'rxjs';
 

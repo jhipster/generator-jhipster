@@ -20,9 +20,8 @@ import { Component, ChangeDetectionStrategy, inject, signal, OnInit<% if (enable
 import { ActivatedRoute } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { Subscription } from 'rxjs';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateDirective } from 'app/shared/language';
-import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 
 @Component({
