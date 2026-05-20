@@ -1098,8 +1098,7 @@ describe("UserManagement routing resolve service", () => {
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, Router } from "@angular/router";
 
-import { EMPTY, Observable, of } from "rxjs";
-import { catchError } from "rxjs/operators";
+import { catchError, EMPTY, Observable, of } from "rxjs";
 
 import { IUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
@@ -2260,8 +2259,7 @@ describe("UserManagement Management Update Component", () => {
 } from "@angular/core";
 import { HttpResponse } from "@angular/common/http";
 import { ActivatedRoute } from "@angular/router";
-import { Observable } from "rxjs";
-import { finalize } from "rxjs/operators";
+import { finalize, Observable } from "rxjs";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { AlertError } from "app/shared/alert/alert-error";

@@ -28,8 +28,7 @@ import {
 } from '@angular/router';
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, takeUntil } from 'rxjs';
 <%_ } _%>
 
 <%_ if (enableTranslation) { _%>
