@@ -36,7 +36,7 @@ const shareDependencies = ({ skipList = [] }: { skipList?: string[] } = {}) =>
 export default {
   name: '<%- lowercaseBaseName.replaceAll('-', '_') %>',
   exposes: {
-<%_ if (applicationTypeMicroservice) { _%>
+<%_ if (applicationTypeMicroservice || exposeMicrofrontend) { _%>
     './entities-router': './<%- clientBundlerRsbuild ? '' : this.relativeDir(clientRootDir, clientSrcDir) %>app/router/entities.ts',
     './entities-menu': './<%- clientBundlerRsbuild ? '' : this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entities-menu.vue',
 <%_ } _%>

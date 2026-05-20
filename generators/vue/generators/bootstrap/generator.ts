@@ -51,6 +51,14 @@ export default class VueBootstrapGenerator extends ClientApplicationGenerator {
           nodeWebappBuildTarget: ({ clientBundlerRsbuild }) => `webapp:build${clientBundlerRsbuild ? ':prod' : ''}`,
         });
       },
+      microfrontend({ application }) {
+        if (application.exposeMicrofrontend && application.microfrontends) {
+          application.microfrontends.unshift({
+            baseName: application.baseName,
+            endpointPrefix: '.',
+          } as any);
+        }
+      },
       translations({ application }) {
         application.addLanguageCallbacks.push((newLanguages, allLanguages) => {
           const { enableTranslation, clientSrcDir, clientRootDir } = application;
@@ -69,7 +77,7 @@ export default class VueBootstrapGenerator extends ClientApplicationGenerator {
             }),
           );
 
-          if (application.microfrontend && application.applicationTypeMicroservice) {
+          if (application.microfrontend && (application.applicationTypeMicroservice || application.exposeMicrofrontend)) {
             this.editFile(
               `${clientRootDir}module-federation.config.${application.clientBundlerWebpack ? 'cjs' : 'ts'}`,
               { ignoreNonExisting },

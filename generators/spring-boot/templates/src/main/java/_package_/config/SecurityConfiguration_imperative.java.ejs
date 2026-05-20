@@ -188,7 +188,7 @@ public class SecurityConfiguration {
                     .requestMatchers("/content/**").permitAll()
                     .requestMatchers("/resources/**").permitAll()
   <%_ } else if (clientBundlerRsbuild) { _%>
-                    .requestMatchers("/static/**").permitAll()
+                    .requestMatchers("/static/**", "/content/**").permitAll()
   <%_ } else { _%>
                     .requestMatchers("/app/**").permitAll()
                     .requestMatchers("/i18n/**").permitAll()
