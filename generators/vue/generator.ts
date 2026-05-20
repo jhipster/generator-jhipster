@@ -68,7 +68,7 @@ export default class VueGenerator extends ClientApplicationGenerator {
           control.isJhipsterVersionLessThan('9.0.1') &&
           (this.jhipsterConfig.microfrontend || this.jhipsterConfig.applicationType === 'microservice')
         ) {
-          this.jhipsterConfig.clientBundler = 'webpack';
+          this.jhipsterConfig.clientBundler ??= 'webpack';
         }
       },
       configureDevServerPort({ control }) {
@@ -129,7 +129,7 @@ export default class VueGenerator extends ClientApplicationGenerator {
 
         javaNodeBuildPaths?.push('.postcssrc.js', 'tsconfig.json', 'tsconfig.app.json');
         if (microfrontend) {
-          javaNodeBuildPaths?.push('module-federation.config.cjs');
+          javaNodeBuildPaths?.push(`module-federation.config.${application.clientBundlerWebpack ? 'cjs' : 'ts'}`);
         }
         if (clientBundlerWebpack) {
           javaNodeBuildPaths?.push('webpack/');

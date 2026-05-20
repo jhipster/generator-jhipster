@@ -16,23 +16,24 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-const packageJson = require('./package.json');
+import type { createModuleFederationConfig } from '@module-federation/sdk';
+
+import packageJson from './package.json' with { type: 'json' };
 
 // Microfrontend api, should match across gateway and microservices.
 const apiVersion = '0.0.1';
 
 const sharedDefaults = { singleton: true, strictVersion: true, requiredVersion: apiVersion };
-const shareMappings = (...mappings) => Object.fromEntries(mappings.map(map => [map, { ...sharedDefaults, version: apiVersion }]));
+const shareMappings = (...mappings: string[]) => Object.fromEntries(mappings.map(map => [map, { ...sharedDefaults, version: apiVersion }]));
 
-const shareDependencies = ({ skipList = [] } = {}) =>
+const shareDependencies = ({ skipList = [] }: { skipList?: string[] } = {}) =>
   Object.fromEntries(
     Object.entries(packageJson.dependencies)
       .filter(([dependency]) => !skipList.includes(dependency))
       .map(([dependency, version]) => [dependency, { ...sharedDefaults, version, requiredVersion: version }]),
   );
 
-/** @type {import('@module-federation/runtime').Options} */
-module.exports = {
+export default {
   name: '<%- lowercaseBaseName.replaceAll('-', '_') %>',
   exposes: {
 <%_ if (applicationTypeMicroservice) { _%>
@@ -53,4 +54,4 @@ module.exports = {
   },
   dts: false,
   manifest: true,
-};
+} as const satisfies Parameters<typeof createModuleFederationConfig>[0];

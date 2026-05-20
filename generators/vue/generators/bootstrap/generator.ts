@@ -56,7 +56,7 @@ export default class VueBootstrapGenerator extends ClientApplicationGenerator {
 
           if (application.microfrontend && application.applicationTypeMicroservice) {
             this.editFile(
-              `${clientRootDir}module-federation.config.cjs`,
+              `${clientRootDir}module-federation.config.${application.clientBundlerWebpack ? 'cjs' : 'ts'}`,
               { ignoreNonExisting },
               createNeedleCallback({
                 contentToAdd: newLanguages.map(
