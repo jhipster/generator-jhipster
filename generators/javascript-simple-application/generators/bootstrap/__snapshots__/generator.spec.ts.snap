@@ -64,6 +64,7 @@ exports[`generator - javascript-simple-application:bootstrap bootstrapping defau
   "nodePackageManager": "npm",
   "nodePackageManagerCommand": "npm",
   "nodeVersion": "NODE_VERSION",
+  "nodeWebappBuildTarget": "webapp:build",
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": Any<Object>,
   "packageName": "com.mycompany.myapp",

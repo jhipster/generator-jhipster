@@ -142,7 +142,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
       },
       frontendMavenPlugin({ application, source }) {
         if (!application.buildToolMaven) return;
-        const { javaDependencies, nodeDependencies, nodeVersion } = application;
+        const { javaDependencies, nodeDependencies, nodeWebappBuildTarget, nodeVersion } = application;
 
         source.addMavenDefinition!({
           properties: [
@@ -291,7 +291,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
                           </goals>
                           <phase>generate-resources</phase>
                           <configuration>
-                              <arguments>run webapp:build</arguments>
+                              <arguments>run ${nodeWebappBuildTarget}</arguments>
                               <environmentVariables>
                                   <APP_VERSION>\${project.version}</APP_VERSION>
                               </environmentVariables>
