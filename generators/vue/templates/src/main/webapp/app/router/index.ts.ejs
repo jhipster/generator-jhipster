@@ -1,6 +1,6 @@
 import { createRouter as createVueRouter, createWebHistory<% if (applicationTypeGateway && microfrontend) { %>, type RouteRecordRaw<% } %> } from 'vue-router';
 <%_ if (applicationTypeGateway && microfrontend) { _%>
-import { loadRemote } from '@module-federation/enhanced/runtime';
+import { loadRemote } from '@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime';
 <%_ } _%>
 
 const Home = () => import('@/core/home/home.vue');

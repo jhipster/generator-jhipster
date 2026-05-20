@@ -166,7 +166,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
           if (application.exposeMicrofrontend) {
             application.microfrontends.unshift({
               baseName: application.baseName,
-              endpointPrefix: '.',
+              endpointPrefix: '',
             } as any);
           }
 

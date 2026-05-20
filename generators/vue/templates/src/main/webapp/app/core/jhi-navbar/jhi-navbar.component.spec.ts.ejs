@@ -33,7 +33,7 @@ import { useLoginModal } from '@/account/login-modal';
 import JhiNavbar from './jhi-navbar.vue';
 <%_ if (applicationTypeGateway && microfrontend) { _%>
 
-vi.mock('@module-federation/enhanced/runtime', () => ({
+vi.mock('@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime', () => ({
   loadRemote: vitest.fn(() => Promise.reject(new Error('Test only'))),
 }));
 <%_ } _%>

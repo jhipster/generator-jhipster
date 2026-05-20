@@ -406,8 +406,14 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
         if (!microfrontend) return;
         if (clientBundlerVite) {
           source.mergeClientPackageJson!({
+            dependencies:
+              applicationTypeGateway ?
+                {
+                  '@module-federation/runtime': null,
+                }
+              : {},
             devDependencies: {
-              '@originjs/vite-plugin-federation': '1.3.6',
+              '@module-federation/vite': null,
             },
           });
         }

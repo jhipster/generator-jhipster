@@ -35,7 +35,7 @@ import TranslationService from '@/locale/translation.service';
 import { useTrackerService } from './admin/tracker/tracker.service';
 <%_ } _%>
 <%_ if (applicationTypeGateway && microfrontend) { _%>
-import { registerRemotes } from '@module-federation/enhanced/runtime';
+import { registerRemotes } from '@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime';
 
 registerRemotes([
   <%_ for (const remote of microfrontends) { _%>
