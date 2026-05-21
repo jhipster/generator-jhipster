@@ -1,4 +1,4 @@
-import { computed, <% if (applicationTypeGateway && microfrontend) { %>defineAsyncComponent, <% } %>defineComponent, inject, ref, type Ref } from 'vue';
+import { computed, <% if (microfrontend) { %>defineAsyncComponent, <% } %>defineComponent, inject, ref, type Ref } from 'vue';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
@@ -19,7 +19,7 @@ import EntitiesMenu from '@/entities/entities-menu.vue';
 
 import { useStore } from '@/store';
 import { useRouter } from 'vue-router';
-<%_ if (applicationTypeGateway && microfrontend) { _%>
+<%_ if (microfrontend) { _%>
 import { loadRemote } from '@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime';
 <%_ } _%>
 
@@ -30,7 +30,7 @@ export default defineComponent({
     // Load entities menu exposed by microfrontend
 <%_ } _%>
     <%- exposeMicrofrontend ? '// ' : '' %>'entities-menu': EntitiesMenu,
-<%_ if (applicationTypeGateway && microfrontend) { _%>
+<%_ if (microfrontend) { _%>
   <%_ for (const remote of microfrontends) { _%>
     '<%- remote.moduleFederationName %>-menu': defineAsyncComponent(() => {
       return loadRemote<any>('<%- remote.moduleFederationName %>/entities-menu')

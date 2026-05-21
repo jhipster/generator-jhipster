@@ -1856,7 +1856,7 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "endpointPrefix": "services/jhipster",
   "entities": Any<Array>,
   "entitySuffix": "",
-  "exposeMicrofrontend": false,
+  "exposeMicrofrontend": true,
   "feignClient": false,
   "filterEntitiesAndPropertiesForClient": [Function],
   "filterEntitiesForClient": [Function],
@@ -1945,7 +1945,15 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "messageHeaderNameError": "x-jhipsterapp-error",
   "messageHeaderNameParam": "x-jhipsterapp-params",
   "microfrontend": true,
-  "microfrontends": [],
+  "microfrontends": [
+    {
+      "baseName": "jhipster",
+      "capitalizedBaseName": "Jhipster",
+      "endpointPrefix": "",
+      "lowercaseBaseName": "jhipster",
+      "moduleFederationName": "jhipster",
+    },
+  ],
   "monorepository": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {
@@ -2537,6 +2545,7 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
     },
     {
       "devDependencies": {
+        "@module-federation/enhanced": null,
         "@module-federation/rsbuild-plugin": null,
       },
     },
@@ -2685,7 +2694,7 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "endpointPrefix": "services/jhipster",
   "entities": Any<Array>,
   "entitySuffix": "",
-  "exposeMicrofrontend": false,
+  "exposeMicrofrontend": true,
   "feignClient": false,
   "filterEntitiesAndPropertiesForClient": [Function],
   "filterEntitiesForClient": [Function],
@@ -2764,7 +2773,15 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "messageHeaderNameError": "x-jhipsterapp-error",
   "messageHeaderNameParam": "x-jhipsterapp-params",
   "microfrontend": true,
-  "microfrontends": [],
+  "microfrontends": [
+    {
+      "baseName": "jhipster",
+      "capitalizedBaseName": "Jhipster",
+      "endpointPrefix": "",
+      "lowercaseBaseName": "jhipster",
+      "moduleFederationName": "jhipster",
+    },
+  ],
   "monorepository": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {
@@ -3422,6 +3439,7 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     },
     {
       "devDependencies": {
+        "@module-federation/enhanced": null,
         "@module-federation/rsbuild-plugin": null,
       },
     },

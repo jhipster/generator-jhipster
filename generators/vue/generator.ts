@@ -402,16 +402,13 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
         }
       },
       addMicrofrontendDependencies({ application, source }) {
-        const { applicationTypeGateway, clientBundlerRsbuild, clientBundlerVite, clientBundlerWebpack, microfrontend } = application;
+        const { clientBundlerRsbuild, clientBundlerVite, clientBundlerWebpack, microfrontend } = application;
         if (!microfrontend) return;
         if (clientBundlerVite) {
           source.mergeClientPackageJson!({
-            dependencies:
-              applicationTypeGateway ?
-                {
-                  '@module-federation/runtime': null,
-                }
-              : {},
+            dependencies: {
+              '@module-federation/runtime': null,
+            },
             devDependencies: {
               '@module-federation/vite': null,
             },
@@ -446,11 +443,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
           source.mergeClientPackageJson!({
             devDependencies: {
               '@module-federation/rsbuild-plugin': null,
-              ...(applicationTypeGateway ?
-                {
-                  '@module-federation/enhanced': null,
-                }
-              : {}),
+              '@module-federation/enhanced': null,
             },
           });
         }

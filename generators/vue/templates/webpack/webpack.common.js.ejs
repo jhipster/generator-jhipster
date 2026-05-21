@@ -19,7 +19,7 @@ module.exports = async (env, options) => {
     {
       mode: options.mode,
       context: resolve(),
-<%_ if (applicationTypeGateway && microfrontend) { _%>
+<%_ if (microfrontend) { _%>
       experiments: {
         topLevelAwait: true,
       },
