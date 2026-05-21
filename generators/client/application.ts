@@ -44,6 +44,18 @@ export type ClientAddedApplicationProperties = {
   messageHeaderNameAlert: string;
   messageHeaderNameError: string;
   messageHeaderNameParam: string;
+
+  microfrontend: boolean;
+  microfrontends:
+    | {
+        baseName: string;
+        lowercaseBaseName: string;
+        moduleFederationName: string;
+        capitalizedBaseName: string;
+        endpointPrefix: string;
+      }[]
+    | undefined;
+  exposeMicrofrontend: boolean;
 };
 
 export const mutateApplication = {
@@ -61,6 +73,7 @@ export const mutateApplication = {
     return false;
   },
   microfrontends: ({ microfrontend }, { delayMarker, undefinedMarker }) => delayMarker ?? (microfrontend ? [] : undefinedMarker),
+  exposeMicrofrontend: (_, { delayMarker }) => delayMarker ?? false,
   clientFrameworkBuiltIn: ({ clientFramework }) => ['angular', 'vue', 'react'].includes(clientFramework!),
   clientThemeNone: ({ clientTheme }) => !clientTheme || clientTheme === 'none',
   clientThemeAny: ({ clientThemeNone }) => !clientThemeNone,

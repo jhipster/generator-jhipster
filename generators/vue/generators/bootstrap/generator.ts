@@ -17,12 +17,12 @@
  * limitations under the License.
  */
 import { createNeedleCallback } from '../../../base-core/support/needles.ts';
-import { ClientApplicationGenerator } from '../../../client/generator.ts';
 import { createDayjsUpdateLanguagesEditFileCallback } from '../../../client/support/update-languages.ts';
 import { generateLanguagesWebappOptions } from '../../../languages/support/languages.ts';
 import { mutateApplication } from '../../application.ts';
+import { VueApplicationGenerator } from '../../generator.ts';
 
-export default class VueBootstrapGenerator extends ClientApplicationGenerator {
+export default class VueBootstrapGenerator extends VueApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -50,14 +50,6 @@ export default class VueBootstrapGenerator extends ClientApplicationGenerator {
           devServerPortProxy: (ctx, { data }) => (ctx.clientBundlerWebpack ? 9000 + (data.applicationIndex ?? 0) : undefined),
           nodeWebappBuildTarget: ({ clientBundlerRsbuild }) => `webapp:build${clientBundlerRsbuild ? ':prod' : ''}`,
         });
-      },
-      microfrontend({ application }) {
-        if (application.exposeMicrofrontend && application.microfrontends) {
-          application.microfrontends.unshift({
-            baseName: application.baseName,
-            endpointPrefix: '.',
-          } as any);
-        }
       },
       translations({ application }) {
         application.addLanguageCallbacks.push((newLanguages, allLanguages) => {
@@ -110,7 +102,7 @@ export default class VueBootstrapGenerator extends ClientApplicationGenerator {
     });
   }
 
-  get [ClientApplicationGenerator.PREPARING]() {
+  get [VueApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 }

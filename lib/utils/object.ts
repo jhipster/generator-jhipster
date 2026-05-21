@@ -270,7 +270,7 @@ export function mutateData<T extends Record<string | number, any>>(
               throw new Error(`Context should be a mutation context to use delayed mutations, missing context for key: ${key}`);
             }
           } else {
-            (context as any)[key] = result;
+            (context as any)[key] = result === UndefinedMutation ? undefined : result;
           }
         }
       } else if (!(key in context) || context[key] === undefined || override === true) {

@@ -32,6 +32,7 @@ export type CommonAddedApplicationProperties = {
 
   devServerPort: number;
   serverPort: number;
+  gatewayServerPort: number | undefined;
 
   loginRegex?: string;
 
@@ -68,6 +69,7 @@ export const mutateApplication = {
 
   devServerPort: (_, { delayMarker }) => delayMarker ?? 9060,
   serverPort: ({ applicationTypeMicroservice }) => (applicationTypeMicroservice ? 8081 : 8080),
+  gatewayServerPort: (ctx, { undefinedMarker }) => (ctx.microfrontend && ctx.applicationTypeMicroservice ? 8080 : undefinedMarker),
 
   generateInMemoryUserCredentials: data =>
     data.generateAuthenticationApi && data.skipUserManagement && !data.authenticationTypeUsesRemoteAuthorization,

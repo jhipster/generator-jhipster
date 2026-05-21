@@ -23,7 +23,6 @@ import type { Application as VueApplication } from './types.ts';
 export type VueAddedApplicationProperties = {
   vueBootstrapBsTheme: string;
   vueBootstrapVariant: string;
-  exposeMicrofrontend: boolean;
 };
 
 export const mutateApplication = {
