@@ -27,6 +27,7 @@ export type VueAddedApplicationProperties = {
 
 export const mutateApplication = {
   __override__: false,
+  exposeMicrofrontend: ({ microfrontend, applicationTypeGateway }) => microfrontend && applicationTypeGateway,
   /**
    * Color mode https://getbootstrap.com/docs/5.3/customize/color-modes/
    */

@@ -20,7 +20,7 @@ import assert from 'node:assert';
 
 import { passthrough } from '@yeoman/transform';
 import chalk from 'chalk';
-import { lowerFirst, upperFirst } from 'lodash-es';
+import { lowerFirst } from 'lodash-es';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
@@ -123,31 +123,6 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.preparing;
-  }
-
-  get postPreparing() {
-    return this.asPostPreparingTaskGroup({
-      prepareApplication({ application }) {
-        if (application.microfrontends && application.microfrontends.length > 0) {
-          application.microfrontends.forEach(microfrontend => {
-            const { baseName } = microfrontend;
-            mutateData(microfrontend, {
-              lowercaseBaseName: baseName.toLowerCase(),
-              moduleFederationName: ({ lowercaseBaseName }) => lowercaseBaseName.replaceAll('-', '_'),
-              capitalizedBaseName: upperFirst(baseName),
-              endpointPrefix: `services/${baseName.toLowerCase()}`,
-            });
-          });
-        }
-        if (application.microfrontend && application.applicationTypeMicroservice && !application.gatewayServerPort) {
-          application.gatewayServerPort = 8080;
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.POST_PREPARING]() {
-    return this.postPreparing;
   }
 
   get configuringEachEntity() {

@@ -36,7 +36,10 @@ export const createRouter = () => createVueRouter({
     ...account,
 <%_ } _%>
     ...admin,
-    entities,
+<%_ if (exposeMicrofrontend) { _%>
+    // Load entities route exposed by microfrontend
+<%_ } _%>
+    <%- exposeMicrofrontend ? '// ' : '' %>entities,
     ...pages
   ]
 });

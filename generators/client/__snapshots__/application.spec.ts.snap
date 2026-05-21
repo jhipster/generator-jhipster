@@ -8,6 +8,7 @@ exports[`application mutation test expects mutateApplication to match snapshot 1
   "clientTestFrameworkName": "Client Test Framework",
   "clientThemeAny": true,
   "clientThemeNone": false,
+  "exposeMicrofrontend": false,
   "frontendAppName": "baseNameApp",
   "messageHeaderNameAlert": "x-basenameapp-alert",
   "messageHeaderNameError": "x-basenameapp-error",

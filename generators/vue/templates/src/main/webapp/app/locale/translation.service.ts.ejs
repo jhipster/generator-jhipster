@@ -17,8 +17,12 @@ export default class TranslationService {
 
   async refreshTranslation(newLanguage: string) {
     if (this.i18n && !this.loadedLanguages.has(newLanguage)) {
-      const translations = await import(`../../i18n/${newLanguage}/${newLanguage}.js`);
-      this.i18n.setLocaleMessage(newLanguage, translations.default);
+<%_ if (exposeMicrofrontend) { _%>
+      this.i18n.setLocaleMessage(newLanguage, {});
+      // Load translations exposed by microfrontend
+<%_ } _%>
+      <%- exposeMicrofrontend ? '// ' : '' %>const translations = await import(`../../i18n/${newLanguage}/${newLanguage}.js`);
+      <%- exposeMicrofrontend ? '// ' : '' %>this.i18n.setLocaleMessage(newLanguage, translations.default);
 <%_ if (applicationTypeGateway && microfrontend) { _%>
 
       await Promise.all([

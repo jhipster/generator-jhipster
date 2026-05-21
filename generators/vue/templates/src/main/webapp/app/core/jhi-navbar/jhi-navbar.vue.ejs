@@ -49,7 +49,10 @@
               <span class="no-bold">{{ t$('global.menu.entities.main') }}</span>
             </span>
           </template>
-          <entities-menu></entities-menu>
+<%_ if (exposeMicrofrontend) { _%>
+          <!-- Load entities menu exposed by microfrontend -->
+<%_ } _%>
+          <%- exposeMicrofrontend ? '<!-- ' : '' %><entities-menu></entities-menu><%- exposeMicrofrontend ? ' -->' : '' %>
 <%_ if (applicationTypeGateway && microfrontend) { _%>
   <%_ for (const microfrontend of microfrontends) { _%>
           <<%- microfrontend.moduleFederationName %>-menu></<%- microfrontend.moduleFederationName %>-menu>

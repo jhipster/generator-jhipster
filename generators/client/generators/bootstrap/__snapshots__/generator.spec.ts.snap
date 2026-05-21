@@ -130,6 +130,7 @@ exports[`generator - client:bootstrap bootstrapping default config should prepar
   "endpointPrefix": "",
   "entities": Any<Array>,
   "entitySuffix": "",
+  "exposeMicrofrontend": false,
   "feignClient": false,
   "filterEntitiesAndPropertiesForClient": Any<Function>,
   "filterEntitiesForClient": Any<Function>,

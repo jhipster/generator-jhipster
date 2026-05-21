@@ -17,12 +17,12 @@
  * limitations under the License.
  */
 import { createNeedleCallback } from '../../../base-core/support/needles.ts';
-import { ClientApplicationGenerator } from '../../../client/generator.ts';
 import { createDayjsUpdateLanguagesEditFileCallback } from '../../../client/support/update-languages.ts';
 import { generateLanguagesWebappOptions } from '../../../languages/support/languages.ts';
 import { mutateApplication } from '../../application.ts';
+import { VueApplicationGenerator } from '../../generator.ts';
 
-export default class VueBootstrapGenerator extends ClientApplicationGenerator {
+export default class VueBootstrapGenerator extends VueApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -69,7 +69,7 @@ export default class VueBootstrapGenerator extends ClientApplicationGenerator {
             }),
           );
 
-          if (application.microfrontend && application.applicationTypeMicroservice) {
+          if (application.microfrontend && (application.applicationTypeMicroservice || application.exposeMicrofrontend)) {
             this.editFile(
               `${clientRootDir}module-federation.config.${application.clientBundlerWebpack ? 'cjs' : 'ts'}`,
               { ignoreNonExisting },
@@ -102,7 +102,7 @@ export default class VueBootstrapGenerator extends ClientApplicationGenerator {
     });
   }
 
-  get [ClientApplicationGenerator.PREPARING]() {
+  get [VueApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 }

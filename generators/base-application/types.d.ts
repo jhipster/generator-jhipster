@@ -25,22 +25,6 @@ export type Options = JavascriptSimpleApplicationOptions & Command['Options'];
 export type { Features } from '../base-simple-application/types.ts';
 export type { Source } from '../base-simple-application/types.ts';
 
-/* ApplicationType Start */
-type MicroservicesArchitectureApplication = {
-  microfrontend: boolean;
-  gatewayServerPort: number;
-};
-
-type GatewayApplication = MicroservicesArchitectureApplication & {
-  microfrontends?: {
-    baseName: string;
-    lowercaseBaseName: string;
-    moduleFederationName: string;
-    capitalizedBaseName: string;
-    endpointPrefix: string;
-  }[];
-};
-
 /*
 Deterministic option causes types to be too complex
 type ApplicationType = DeterministicOptionWithDerivedProperties<
@@ -49,9 +33,7 @@ type ApplicationType = DeterministicOptionWithDerivedProperties<
   [Record<string, never>, GatewayApplication, MicroservicesArchitectureApplication]
 >;
 */
-type ApplicationProperties = OptionWithDerivedProperties<'applicationType', ['monolith', 'gateway', 'microservice']> &
-  GatewayApplication &
-  MicroservicesArchitectureApplication;
+type ApplicationProperties = OptionWithDerivedProperties<'applicationType', ['monolith', 'gateway', 'microservice']>;
 
 type JwtApplication = {
   jwtSecretKey: string;

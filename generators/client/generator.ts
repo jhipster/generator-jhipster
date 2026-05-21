@@ -17,7 +17,10 @@
  * limitations under the License.
  */
 
+import { upperFirst } from 'lodash-es';
+
 import { clientFrameworkTypes, testFrameworkTypes } from '../../lib/jhipster/index.ts';
+import { mutateData } from '../../lib/utils/object.ts';
 import BaseApplicationGenerator from '../base-application/index.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
 import { isReservedTypescriptKeyword } from '../javascript-simple-application/support/reserved-words.ts';
@@ -154,6 +157,35 @@ export default class ClientGenerator extends ClientApplicationGenerator {
 
   get [ClientApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
+  }
+
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      microfrontend({ application }) {
+        if (application.microfrontends) {
+          if (application.exposeMicrofrontend) {
+            application.microfrontends.unshift({
+              baseName: application.baseName,
+              endpointPrefix: '.',
+            } as any);
+          }
+
+          application.microfrontends.forEach(microfrontend => {
+            const { baseName } = microfrontend;
+            mutateData(microfrontend, {
+              lowercaseBaseName: baseName.toLowerCase(),
+              moduleFederationName: ({ lowercaseBaseName }) => lowercaseBaseName.replaceAll('-', '_'),
+              capitalizedBaseName: upperFirst(baseName),
+              endpointPrefix: `services/${baseName.toLowerCase()}`,
+            });
+          });
+        }
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING]() {
+    return this.postPreparing;
   }
 
   get preparingEachEntity() {
