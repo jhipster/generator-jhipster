@@ -129,6 +129,7 @@ exports[`generator - angular:bootstrap bootstrapping default config should prepa
   "enableTranslation": true,
   "endpointPrefix": "",
   "entitySuffix": "",
+  "exposeMicrofrontend": false,
   "feignClient": false,
   "filterEntitiesAndPropertiesForClient": Any<Function>,
   "filterEntitiesForClient": Any<Function>,

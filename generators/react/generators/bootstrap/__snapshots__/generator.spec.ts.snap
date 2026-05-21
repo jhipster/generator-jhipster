@@ -94,6 +94,7 @@ exports[`generator - react:bootstrap bootstrapping default config should prepare
   "enableTranslation": true,
   "endpointPrefix": "",
   "entitySuffix": "",
+  "exposeMicrofrontend": false,
   "filterEntitiesAndPropertiesForClient": Any<Function>,
   "filterEntitiesForClient": Any<Function>,
   "filterEntityPropertiesForClient": Any<Function>,
