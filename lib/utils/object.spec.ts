@@ -3,6 +3,7 @@ import { before, describe, expect, it } from 'esmocha';
 import {
   type DelayedMutation,
   type MutateDataParam,
+  type UndefinedMutation,
   createDelayedMutationContext,
   finalizeMutations,
   mutateData,
@@ -28,7 +29,12 @@ _shouldAcceptStringProperties.str satisfies
   // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
   | typeof DelayedMutation
   // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
-  | ((ctx: { str: string }, opts: { delayMarker: typeof DelayedMutation; defaults: boolean }) => string | typeof DelayedMutation)
+  | typeof UndefinedMutation
+  | ((
+      ctx: { str: string },
+      opts: { delayMarker: typeof DelayedMutation; undefinedMarker: typeof UndefinedMutation; data: { str: string } },
+      // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
+    ) => string | typeof DelayedMutation | typeof UndefinedMutation)
   | undefined;
 
 const _shouldAcceptNumberProperties: MutateDataParam<{ nr: number }> = {
@@ -37,7 +43,10 @@ const _shouldAcceptNumberProperties: MutateDataParam<{ nr: number }> = {
 
 _shouldAcceptNumberProperties.nr satisfies
   | number
-  | ((ctx: { nr: number }, opts: { delayMarker: typeof DelayedMutation; defaults: boolean }) => number | typeof DelayedMutation)
+  | ((
+      ctx: { nr: number },
+      opts: { delayMarker: typeof DelayedMutation; undefinedMarker: typeof UndefinedMutation; data: { nr: number } },
+    ) => number | typeof DelayedMutation | typeof UndefinedMutation)
   | undefined;
 
 ({

@@ -37,7 +37,11 @@ export default class ReactBootstrapGenerator extends ClientApplicationGenerator 
   get preparing() {
     return this.asPreparingTaskGroup({
       defaults({ applicationDefaults }) {
-        applicationDefaults(mutateApplication);
+        applicationDefaults(mutateApplication, {
+          clientBundler: 'webpack',
+          devServerPort: (_, { data }) => 9060 + (data.applicationIndex ?? 0),
+          devServerPortProxy: (ctx, { data }) => (ctx.clientBundlerWebpack ? 9000 + (data.applicationIndex ?? 0) : undefined),
+        });
       },
       translations({ application }) {
         application.addLanguageCallbacks.push((_newLanguages, allLanguages) => {

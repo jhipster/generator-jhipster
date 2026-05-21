@@ -41,6 +41,21 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
     await this.dependsOnBootstrap('common');
   }
 
+  get composing() {
+    return this.asComposingTaskGroup({
+      async composing() {
+        const { clientFramework } = this.jhipsterConfigWithDefaults;
+        if (['angular', 'react', 'vue'].includes(clientFramework as string)) {
+          await this.composeWithJHipster(`jhipster:${clientFramework}:bootstrap`);
+        }
+      },
+    });
+  }
+
+  get [ClientApplicationGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
+  }
+
   get preparing() {
     return this.asPreparingTaskGroup({
       loadDefaults({ applicationDefaults }) {

@@ -48,18 +48,19 @@ export type ClientAddedApplicationProperties = {
 
 export const mutateApplication = {
   __override__: false,
-  clientI18nDir: data => `${data.clientSrcDir}i18n/`,
+  clientI18nDir: ctx => `${ctx.clientSrcDir}i18n/`,
   webappLoginRegExp: LOGIN_REGEX_JS,
   frontendAppName: ({ baseName }) => getFrontendAppName({ baseName }),
-  microfrontend: application => {
-    if (application.applicationTypeMicroservice) {
-      return application.clientFrameworkAny ?? false;
+  microfrontend: (ctx, { data }) => {
+    if (ctx.applicationTypeMicroservice) {
+      return ctx.clientFrameworkAny ?? false;
     }
-    if (application.applicationTypeGateway) {
-      return application.microfrontends && application.microfrontends.length > 0;
+    if (ctx.applicationTypeGateway) {
+      return (data.microfrontends?.length ?? 0) > 0;
     }
     return false;
   },
+  microfrontends: ({ microfrontend }, { delayMarker, undefinedMarker }) => delayMarker ?? (microfrontend ? [] : undefinedMarker),
   clientFrameworkBuiltIn: ({ clientFramework }) => ['angular', 'vue', 'react'].includes(clientFramework!),
   clientThemeNone: ({ clientTheme }) => !clientTheme || clientTheme === 'none',
   clientThemeAny: ({ clientThemeNone }) => !clientThemeNone,
