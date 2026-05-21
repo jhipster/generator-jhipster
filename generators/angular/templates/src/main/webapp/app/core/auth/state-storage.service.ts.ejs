@@ -17,11 +17,14 @@
  limitations under the License.
 -%>
 import { Injectable } from '@angular/core';
+<%_ if (authenticationTypeJwt) { _%>
+import { AUTHENTICATION_TOKEN_KEY } from 'app/shared/jhipster/constants';
+<%_ } _%>
 
 @Injectable({ providedIn: 'root' })
 export class StateStorageService {
   private readonly previousUrlKey = 'previousUrl';
-  private readonly authenticationKey = '<%- jhiPrefixDashed %>-authenticationToken';
+  private readonly authenticationKey = AUTHENTICATION_TOKEN_KEY;
 <%_ if (enableTranslation) { _%>
   private readonly localeKey = 'locale';
 <%_ } _%>

@@ -21,6 +21,9 @@ import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
+<%_ if (authenticationTypeJwt) { _%>
+import { AUTHENTICATION_TOKEN_KEY } from 'app/shared/jhipster/constants';
+<%_ } _%>
 import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
 import { StateStorageService } from './state-storage.service';
 
@@ -46,13 +49,13 @@ describe('Auth JWT', () => {
     });
 
     it('should return token from session storage if local storage is empty', () => {
-      sessionStorage.setItem('<%- jhiPrefixDashed %>-authenticationToken', JSON.stringify('sessionStorageToken'));
+      sessionStorage.setItem(AUTHENTICATION_TOKEN_KEY, JSON.stringify('sessionStorageToken'));
       const result = service.getToken();
       expect(result).toEqual('sessionStorageToken');
     });
 
     it('should return token from localstorage storage', () => {
-      localStorage.setItem('<%- jhiPrefixDashed %>-authenticationToken', JSON.stringify('localStorageToken'));
+      localStorage.setItem(AUTHENTICATION_TOKEN_KEY, JSON.stringify('localStorageToken'));
       const result = service.getToken();
       expect(result).toEqual('localStorageToken');
     });

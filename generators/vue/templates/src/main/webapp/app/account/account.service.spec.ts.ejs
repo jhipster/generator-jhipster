@@ -4,6 +4,9 @@ import axios from 'axios';
 import { createTestingPinia } from '@pinia/testing';
 import AccountService from './account.service';
 import { type AccountStore, useStore } from '@/store';
+<%_ if (authenticationTypeJwt) { _%>
+import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
+<%_ } _%>
 
 const resetStore = (store: AccountStore) => {
   store.$reset();
@@ -23,7 +26,7 @@ describe('Account Service test suite', () => {
   beforeEach(() => {
     localStorage.clear();
 <%_ if (authenticationTypeJwt) { _%>
-    localStorage.setItem('<%- jhiPrefixDashed %>-authenticationToken', 'token');
+    localStorage.setItem(AUTHENTICATION_TOKEN_KEY, 'token');
 <%_ } %>
     axiosStub.get.mockReset();
     resetStore(store);
