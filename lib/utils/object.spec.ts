@@ -32,7 +32,7 @@ _shouldAcceptStringProperties.str satisfies
   | typeof UndefinedMutation
   | ((
       ctx: { str: string },
-      opts: { delayMarker: typeof DelayedMutation; undefinedMarker: typeof UndefinedMutation },
+      opts: { delayMarker: typeof DelayedMutation; undefinedMarker: typeof UndefinedMutation; data: { str: string } },
       // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
     ) => string | typeof DelayedMutation | typeof UndefinedMutation)
   | undefined;
@@ -45,7 +45,7 @@ _shouldAcceptNumberProperties.nr satisfies
   | number
   | ((
       ctx: { nr: number },
-      opts: { delayMarker: typeof DelayedMutation; undefinedMarker: typeof UndefinedMutation },
+      opts: { delayMarker: typeof DelayedMutation; undefinedMarker: typeof UndefinedMutation; data: { nr: number } },
     ) => number | typeof DelayedMutation | typeof UndefinedMutation)
   | undefined;
 

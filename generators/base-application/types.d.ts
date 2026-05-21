@@ -32,7 +32,7 @@ type MicroservicesArchitectureApplication = {
 };
 
 type GatewayApplication = MicroservicesArchitectureApplication & {
-  microfrontends: {
+  microfrontends?: {
     baseName: string;
     lowercaseBaseName: string;
     moduleFederationName: string;

@@ -66,7 +66,7 @@ export const mutateApplication = {
   authenticationUsesCsrf: ({ authenticationType }) => ['oauth2', 'session'].includes(authenticationType!),
   endpointPrefix: ({ applicationType, lowercaseBaseName }) => (applicationType === 'microservice' ? `services/${lowercaseBaseName}` : ''),
 
-  devServerPort: 9060,
+  devServerPort: (_, { delayMarker }) => delayMarker ?? 9060,
   serverPort: ({ applicationTypeMicroservice }) => (applicationTypeMicroservice ? 8081 : 8080),
 
   generateInMemoryUserCredentials: data =>

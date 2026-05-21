@@ -35,6 +35,19 @@ export default class VueBootstrapGenerator extends ClientApplicationGenerator {
     return this.asPreparingTaskGroup({
       defaults({ applicationDefaults }) {
         applicationDefaults(mutateApplication, {
+          clientBundler: ctx => (ctx.microfrontend || ctx.applicationTypeMicroservice ? 'rsbuild' : 'vite'),
+          devServerPort: (ctx, { data }) => {
+            let port;
+            if (ctx.clientBundlerWebpack) {
+              port = 9060;
+            } else if (ctx.clientBundlerRsbuild) {
+              port = 3000;
+            } else {
+              port = 9000;
+            }
+            return port + (data.applicationIndex ?? 0);
+          },
+          devServerPortProxy: (ctx, { data }) => (ctx.clientBundlerWebpack ? 9000 + (data.applicationIndex ?? 0) : undefined),
           nodeWebappBuildTarget: ({ clientBundlerRsbuild }) => `webapp:build${clientBundlerRsbuild ? ':prod' : ''}`,
         });
       },

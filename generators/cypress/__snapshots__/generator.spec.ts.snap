@@ -8,9 +8,6 @@ exports[`generator - cypress jwt-cypressAudit(false)-angular-withAdminUi(false)-
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "clientRoot/angular.json": {
-    "stateCleared": "modified",
-  },
   "clientRoot/cypress.config.ts": {
     "stateCleared": "modified",
   },
@@ -163,9 +160,6 @@ exports[`generator - cypress oauth2-cypressAudit(false)-angular-withAdminUi(fals
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "angular.json": {
     "stateCleared": "modified",
   },
   "cypress.config.ts": {
@@ -352,9 +346,6 @@ exports[`generator - cypress session-cypressAudit(false)-angular-withAdminUi(fal
     "stateCleared": "modified",
   },
   ".yo-rc.json": {
-    "stateCleared": "modified",
-  },
-  "angular.json": {
     "stateCleared": "modified",
   },
   "cypress.config.ts": {
