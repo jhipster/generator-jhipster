@@ -24,7 +24,9 @@ import { AUTHENTICATION_TOKEN_KEY } from 'app/shared/jhipster/constants';
 @Injectable({ providedIn: 'root' })
 export class StateStorageService {
   private readonly previousUrlKey = 'previousUrl';
+<%_ if (authenticationTypeJwt) { _%>
   private readonly authenticationKey = AUTHENTICATION_TOKEN_KEY;
+<%_ } _%>
 <%_ if (enableTranslation) { _%>
   private readonly localeKey = 'locale';
 <%_ } _%>
@@ -41,6 +43,7 @@ export class StateStorageService {
   clearUrl(): void {
     sessionStorage.removeItem(this.previousUrlKey);
   }
+<%_ if (authenticationTypeJwt) { _%>
 
   storeAuthenticationToken(authenticationToken: string, rememberMe: boolean): void {
     authenticationToken = JSON.stringify(authenticationToken);
@@ -61,6 +64,7 @@ export class StateStorageService {
     sessionStorage.removeItem(this.authenticationKey);
     localStorage.removeItem(this.authenticationKey);
   }
+<%_ } _%>
 <%_ if (enableTranslation) { _%>
 
   storeLocale(locale: string): void {
