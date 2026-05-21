@@ -17,7 +17,7 @@
       "entity": "sqlfull"
     },
     {
-      "name": "vue-fulli18n-mysql-es",
+      "name": "vue-federation-fulli18n-mysql-es",
       "app-sample": "vue-fulli18n-es",
       "entity": "sql"
     },
