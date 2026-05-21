@@ -12,6 +12,9 @@ import type AccountService from '@/account/account.service';
 <%_ if (enableTranslation) { _%>
 import languages from '@/shared/config/languages';
 <%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
+import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
+<%_ } _%>
 import EntitiesMenu from '@/entities/entities-menu.vue';
 
 import { useStore } from '@/store';
@@ -75,8 +78,8 @@ export default defineComponent({
 
     const logout = async () => {
 <%_ if (authenticationTypeJwt) { _%>
-      localStorage.removeItem('<%- jhiPrefixDashed %>-authenticationToken');
-      sessionStorage.removeItem('<%- jhiPrefixDashed %>-authenticationToken');
+      localStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
+      sessionStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
       store.logout();
       if (router.currentRoute.value.path !== '/') {
         router.push('/');

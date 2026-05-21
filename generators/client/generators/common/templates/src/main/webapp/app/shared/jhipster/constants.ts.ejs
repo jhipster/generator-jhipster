@@ -23,6 +23,10 @@ export const MESSAGE_PARAM_HEADER_NAME = '<%- messageHeaderNameParam %>';
 export const CSRF_TOKEN_HEADER_NAME = 'X-XSRF-TOKEN';
 export const CSRF_TOKEN_COOKIE_NAME = 'XSRF-TOKEN';
 <%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
+
+export const AUTHENTICATION_TOKEN_KEY = '<%- jhiPrefixDashed %>-authenticationToken';
+<%_ } _%>
 
 export enum Authority {
   ADMIN = 'ROLE_ADMIN',

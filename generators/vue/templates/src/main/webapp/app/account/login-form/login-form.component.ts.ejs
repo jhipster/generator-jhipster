@@ -22,6 +22,9 @@ import { useRoute, useRouter } from 'vue-router';
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
+<%_ if (authenticationTypeJwt) { _%>
+import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
+<%_ } _%>
 import { useLoginModal } from '@/account/login-modal';
 import type AccountService from '../account.service';
 
@@ -49,11 +52,11 @@ export default defineComponent({
         if (bearerToken?.startsWith('Bearer ')) {
           const jwt = bearerToken.slice(7, bearerToken.length);
           if (rememberMe.value) {
-            localStorage.setItem('<%- jhiPrefixDashed %>-authenticationToken', jwt);
-            sessionStorage.removeItem('<%- jhiPrefixDashed %>-authenticationToken');
+            localStorage.setItem(AUTHENTICATION_TOKEN_KEY, jwt);
+            sessionStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
           } else {
-            sessionStorage.setItem('<%- jhiPrefixDashed %>-authenticationToken', jwt);
-            localStorage.removeItem('<%- jhiPrefixDashed %>-authenticationToken');
+            sessionStorage.setItem(AUTHENTICATION_TOKEN_KEY, jwt);
+            localStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
           }
         }
 <%_ } else { _%>
