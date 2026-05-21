@@ -70,7 +70,7 @@
     "vite": "8.0.13",
     "vitest": "4.1.7",
     "vitest-sonar-reporter": "3.0.0",
-    "webpack": "5.106.2",
+    "webpack": "5.107.0",
     "webpack-cli": "7.0.2",
     "webpack-dev-server": "5.2.4",
     "webpack-merge": "6.0.1",
