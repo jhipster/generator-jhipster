@@ -67,7 +67,7 @@
     "ts-loader": "9.5.7",
     "typescript": "6.0.3",
     "typescript-eslint": "8.59.4",
-    "vite": "8.0.13",
+    "vite": "8.0.14",
     "vitest": "4.1.7",
     "vitest-sonar-reporter": "3.0.0",
     "webpack": "5.107.1",
