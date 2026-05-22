@@ -10,7 +10,7 @@ import { useStore<% if (enableTranslation) { %>, useTranslationStore<% } %> } fr
 import { setupAxiosInterceptors } from '@/shared/config/axios-interceptor';
 
 import App from './app.vue';
-import router<% if (applicationTypeGateway && microfrontend) { %>, { lazyRoutes }<% } %> from './router';
+import router<% if (microfrontend) { %>, { lazyRoutes }<% } %> from './router';
 import { initFortAwesome<% if (enableTranslation) { %>, initI18N<% } %> } from '@/shared/config/config';
 import { initBootstrapVue } from '@/shared/config/config-bootstrap-vue';
 import JhiItemCount from '@/shared/jhi-item-count.vue';
@@ -34,8 +34,8 @@ import TranslationService from '@/locale/translation.service';
 <%_ if (communicationSpringWebsocket) { _%>
 import { useTrackerService } from './admin/tracker/tracker.service';
 <%_ } _%>
-<%_ if (applicationTypeGateway && microfrontend) { _%>
-import { registerRemotes } from '@module-federation/enhanced/runtime';
+<%_ if (microfrontend) { _%>
+import { registerRemotes } from '@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime';
 
 registerRemotes([
   <%_ for (const remote of microfrontends) { _%>

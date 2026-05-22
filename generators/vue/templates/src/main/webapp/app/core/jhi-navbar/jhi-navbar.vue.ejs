@@ -53,7 +53,7 @@
           <!-- Load entities menu exposed by microfrontend -->
 <%_ } _%>
           <%- exposeMicrofrontend ? '<!-- ' : '' %><entities-menu></entities-menu><%- exposeMicrofrontend ? ' -->' : '' %>
-<%_ if (applicationTypeGateway && microfrontend) { _%>
+<%_ if (microfrontend) { _%>
   <%_ for (const microfrontend of microfrontends) { _%>
           <<%- microfrontend.moduleFederationName %>-menu></<%- microfrontend.moduleFederationName %>-menu>
   <%_ } _%>
