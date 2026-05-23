@@ -19,6 +19,7 @@
 
 const Options = {
   BUILT_IN_ENTITY: 'builtInEntity',
+  CASCADE: 'cascade',
 } as const;
 
 function exists(option: string): boolean {
