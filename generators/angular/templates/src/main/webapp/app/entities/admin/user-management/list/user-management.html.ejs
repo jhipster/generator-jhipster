@@ -42,18 +42,18 @@
       <thead>
         <tr<% if (!locals.databaseTypeCassandra) { %> <%- jhiPrefix %>Sort [(sortState)]="sortState" (sortChange)="transition($event)"<% } %>>
           <th scope="col"<% if (!locals.databaseTypeCassandra) { %> <%- jhiPrefix %>SortBy="id"<% } %>>
-            <span>__jhiTranslateTag__('global.field.id')</span><% if (locals.databaseType !== 'cassandra') { %> <fa-icon icon="sort" /><% } %>
+            <span>__jhiTranslateTag__('global.field.id')</span><%- (locals.databaseType !== 'cassandra') ? ' <fa-icon icon="sort" />' : '' %>
           </th>
           <th scope="col"<% if (!locals.databaseTypeCassandra) { %> <%- jhiPrefix %>SortBy="login"<% } %>>
-            <span>__jhiTranslateTag__('userManagement.login')</span><% if (locals.databaseType !== 'cassandra') { %> <fa-icon icon="sort" /><% } %>
+            <span>__jhiTranslateTag__('userManagement.login')</span><%- (locals.databaseType !== 'cassandra') ? ' <fa-icon icon="sort" />' : '' %>
           </th>
           <th scope="col"<% if (!locals.databaseTypeCassandra) { %> <%- jhiPrefix %>SortBy="email"<% } %>>
-            <span>__jhiTranslateTag__('userManagement.email')</span><% if (locals.databaseType !== 'cassandra') { %> <fa-icon icon="sort" /><% } %>
+            <span>__jhiTranslateTag__('userManagement.email')</span><%- (locals.databaseType !== 'cassandra') ? ' <fa-icon icon="sort" />' : '' %>
           </th>
           <th scope="col"></th>
 <%_ if (enableTranslation) { _%>
           <th scope="col"<% if (!locals.databaseTypeCassandra) { %> <%- jhiPrefix %>SortBy="langKey"<% } %>>
-            <span>__jhiTranslateTag__('userManagement.langKey')</span><% if (locals.databaseType !== 'cassandra') { %> <fa-icon icon="sort" /><% } %>
+            <span>__jhiTranslateTag__('userManagement.langKey')</span><%- (locals.databaseType !== 'cassandra') ? ' <fa-icon icon="sort" />' : '' %>
           </th>
 <%_ } _%>
           <th scope="col"><span>__jhiTranslateTag__('userManagement.profiles')</span></th>

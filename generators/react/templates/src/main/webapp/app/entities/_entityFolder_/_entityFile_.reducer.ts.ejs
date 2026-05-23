@@ -203,7 +203,7 @@ export const <%- entityReactName %>Slice = createEntitySlice({
         searchEntities,
 <%_ } _%>
         ), (state, action) => {
-          const { data<% if (!paginationNo) { %>, headers<% } %> } = action.payload;
+          const { data<%- (!paginationNo) ? ', headers' : '' %> } = action.payload;
 <%_ if (paginationInfiniteScroll) { _%>
           const links = getPageNumberFromLinkHeader(headers.link);
 <%_ } _%>

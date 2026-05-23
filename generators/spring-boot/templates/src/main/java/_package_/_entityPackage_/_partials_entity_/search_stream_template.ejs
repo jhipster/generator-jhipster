@@ -22,7 +22,7 @@
         try {
 <%_ if (!viaService) { _%>
   <%_ if (reactive) { _%>
-            return <%- entityInstance %><% if (searchEngineElasticsearch) { %>Search<% } %>Repository
+            return <%- entityInstance %><%- (searchEngineElasticsearch) ? 'Search' : '' %>Repository
                 .search(query)
     <%_ if (dtoMapstruct) { %>
                 .map(<%- entityToDtoReference %>)
@@ -35,7 +35,7 @@
             return StreamSupport
                 .stream(<%- entityInstance %>SearchRepository.search(query).spliterator(), false)
     <%_ } else { _%>
-                return <%- entityInstance %>Repository.search(query)<% if (!dtoMapstruct) { %>;<% } else { %>.stream()<% } %>
+                return <%- entityInstance %>Repository.search(query)<%- (!dtoMapstruct) ? ';' : '.stream()' %>
     <%_ } _%>
     <%_ if (dtoMapstruct) { _%>
                 .map(<%- entityToDtoReference %>)
@@ -45,7 +45,7 @@
     <%_ } _%>
   <%_ } _%>
 <%_ } else { _%>
-            return <%- entityInstance %>Service.search(query)<% if (reactive && fromResource) { %>.collectList()<% } %>;
+            return <%- entityInstance %>Service.search(query)<%- (reactive && fromResource) ? '.collectList()' : '' %>;
 <%_ } _%>
         } catch (RuntimeException e) {
     <% if (searchEngineElasticsearch && fromResource) { %>

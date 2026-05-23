@@ -140,7 +140,7 @@ export default defineConfig(
     }),
     {
       rules: {
-        'ejs-templates/prefer-output': 'off',
+        'ejs-templates/prefer-output': 'error',
 
         ...js.configs.recommended.rules,
         ...jsRules,

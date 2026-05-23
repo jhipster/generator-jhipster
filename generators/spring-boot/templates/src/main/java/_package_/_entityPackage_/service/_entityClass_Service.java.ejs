@@ -59,7 +59,7 @@ public interface <%- entityClass %>Service {
      * @param <%- restInstance %> the entity to save.
      * @return the persisted entity.
      */
-    <% if (reactive) { %>Mono<<% } %><%- restClass %><% if (reactive) { %>><% } %> save(<%- restClass %> <%- restInstance %>);
+    <%- (reactive) ? 'Mono<' : '' %><%- restClass %><%- (reactive) ? '>' : '' %> save(<%- restClass %> <%- restInstance %>);
 
     /**
      * Updates a <%- entityInstance %>.
@@ -67,7 +67,7 @@ public interface <%- entityClass %>Service {
      * @param <%- restInstance %> the entity to update.
      * @return the persisted entity.
      */
-    <% if (reactive) { %>Mono<<% } %><%- restClass %><% if (reactive) { %>><% } %> update(<%- restClass %> <%- restInstance %>);
+    <%- (reactive) ? 'Mono<' : '' %><%- restClass %><%- (reactive) ? '>' : '' %> update(<%- restClass %> <%- restInstance %>);
 
     /**
      * Partially updates a <%- entityInstance %>.
@@ -75,7 +75,7 @@ public interface <%- entityClass %>Service {
      * @param <%- restInstance %> the entity to update partially.
      * @return the persisted entity.
      */
-    <% if (reactive) { %>Mono<% } else { %>Optional<% } %><<%- restClass %>> partialUpdate(<%- restClass %> <%- restInstance %>);
+    <%- (reactive) ? 'Mono' : 'Optional' %><<%- restClass %>> partialUpdate(<%- restClass %> <%- restInstance %>);
 <%_ if (!jpaMetamodelFiltering) { _%>
 
     /**
@@ -84,7 +84,7 @@ public interface <%- entityClass %>Service {
      * @param pageable the pagination information.<% } %>
      * @return the list of entities.
      */
-    <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findAll(<% if (!paginationNo) { %>Pageable pageable<% } %>);
+    <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findAll(<%- (!paginationNo) ? 'Pageable pageable' : '' %>);
 
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering && reactive) { _%>
@@ -94,7 +94,7 @@ public interface <%- entityClass %>Service {
      * @param pageable the pagination information.<% } %>
      * @return the list of entities.
      */
-    <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findByCriteria(<%- entityClass %>Criteria criteria<% if (!paginationNo) { %>, Pageable pageable<% } %>);
+    <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findByCriteria(<%- entityClass %>Criteria criteria<%- (!paginationNo) ? ', Pageable pageable' : '' %>);
 
     /**
      * Find the count of <%- entityInstancePlural %> by criteria.
@@ -172,6 +172,6 @@ public interface <%- entityClass %>Service {
   <%_ } _%>
      * @return the list of entities.
      */
-    <% if (!paginationNo) { %><%- pageOrFlux %><<%- restClass %><% } else { %><%- listOrFlux %><<%- restClass %><% } %>> search(String query<% if (!paginationNo) { %>, Pageable pageable<% } %>);
+    <% if (!paginationNo) { %><%- pageOrFlux %><<%- restClass %><% } else { %><%- listOrFlux %><<%- restClass %><% } %>> search(String query<%- (!paginationNo) ? ', Pageable pageable' : '' %>);
 <%_ } _%>
 }

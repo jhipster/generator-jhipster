@@ -54,7 +54,7 @@
 <%_ if (fieldsWithDocumentation.length > 0) { _%>,
             "help": {
   <%_ for (const [key, field] of Object.entries(fieldsWithDocumentation)) { _%>
-                "<%- field.fieldName %>": "<%- field.documentation %>"<% if (key < fieldsWithDocumentation.length - 1) { %>,<% } %>
+                "<%- field.fieldName %>": "<%- field.documentation %>"<%- (key < fieldsWithDocumentation.length - 1) ? ',' : '' %>
   <%_ } _%>
             }
 <%_ } _%>

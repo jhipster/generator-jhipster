@@ -13,7 +13,7 @@
  limitations under the License.
 -%>
 # ===================================================================
-# Spring Cloud <% if (serviceDiscoveryConsul) { %>Consul <% } %>Config bootstrap configuration for the "dev" profile
+# Spring Cloud <%- (serviceDiscoveryConsul) ? 'Consul ' : '' %>Config bootstrap configuration for the "dev" profile
 # In prod profile, properties will be overwritten by the ones defined in bootstrap-prod.yml
 # ===================================================================
 <%_ if (serviceDiscoveryEureka) { _%>

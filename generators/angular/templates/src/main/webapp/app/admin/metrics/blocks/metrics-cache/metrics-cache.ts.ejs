@@ -30,7 +30,7 @@ import { filterNaN } from 'app/core/util/operators';
   selector: '<%- jhiPrefixDashed %>-metrics-cache',
   templateUrl: './metrics-cache.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [KeyValuePipe, DecimalPipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
+  imports: [KeyValuePipe, DecimalPipe<%- (enableTranslation) ? ', TranslateDirective, TranslateModule' : '' %>],
 })
 export class MetricsCache {
   /**

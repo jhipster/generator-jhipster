@@ -84,7 +84,7 @@ spring:
   devtools:
     restart:
       enabled: true
-      additional-exclude: static/**<% if (devDatabaseTypeH2Any) { %>,.h2.server.properties<% } %>
+      additional-exclude: static/**<%- (devDatabaseTypeH2Any) ? ',.h2.server.properties' : '' %>
     livereload:
       enabled: false # we use Webpack dev server + BrowserSync for livereload
 <%_ if (devDatabaseTypeH2Any && 'dockerServices' in locals && dockerServices?.length) { _%>
@@ -181,7 +181,7 @@ spring:
   <%_ if (!skipFakeData) { _%>
     # Remove 'faker' if you do not want the sample data to be loaded automatically
   <%_ } _%>
-    contexts: dev<% if (!skipFakeData) { %>, faker<% } %>
+    contexts: dev<%- (!skipFakeData) ? ', faker' : '' %>
   <%_ if (databaseTypeSql && reactive) { _%>
     url: <%- devJdbcUrl %>
   <%_ } _%>

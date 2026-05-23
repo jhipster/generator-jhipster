@@ -40,7 +40,7 @@ describe('login page', () => {
   });
 
   beforeEach(() => {
-    cy.intercept('POST', '/api/<% if (authenticationTypeSession) { %>authentication<% } else { %>authenticate<% } %>').as('authenticate');
+    cy.intercept('POST', '/api/<%- (authenticationTypeSession) ? 'authentication' : 'authenticate' %>').as('authenticate');
   });
 
   it('greets with signin', () => {
@@ -58,7 +58,7 @@ describe('login page', () => {
     cy.get(passwordLoginSelector).should('be.visible').type('a-password');
     cy.get(submitLoginSelector).click();
 <%_ if (!clientFrameworkReact) { _%>
-    cy.wait('@authenticate').then(({ response }) => expect(response?.statusCode).to.equal(<% if (authenticationTypeSession) { %>401<% } else { %>400<% } %>));
+    cy.wait('@authenticate').then(({ response }) => expect(response?.statusCode).to.equal(<%- (authenticationTypeSession) ? '401' : '400' %>));
 <%_ } _%>
     // login page should stay open when login fails
     cy.get(titleLoginSelector).should('be.visible');
@@ -68,7 +68,7 @@ describe('login page', () => {
     cy.get(usernameLoginSelector).should('be.visible').type('a-login');
     cy.get(submitLoginSelector).click();
 <%_ if (!clientFrameworkReact) { _%>
-    cy.wait('@authenticate').then(({ response }) => expect(response?.statusCode).to.equal(<% if (authenticationTypeSession) { %>401<% } else { %>400<% } %>));
+    cy.wait('@authenticate').then(({ response }) => expect(response?.statusCode).to.equal(<%- (authenticationTypeSession) ? '401' : '400' %>));
     cy.get(errorLoginSelector).should('be.visible');
 <%_ } else { _%>
     // login page should stay open when login fails

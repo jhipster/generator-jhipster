@@ -1,4 +1,4 @@
-package <%- entityAbsolutePackage %>.<% if (jpaMetamodelFiltering && reactive) { %>domain<% } else { %>service<% } %>.criteria;
+package <%- entityAbsolutePackage %>.<%- (jpaMetamodelFiltering && reactive) ? 'domain' : 'service' %>.criteria;
 
 import java.io.Serial;
 import java.io.Serializable;

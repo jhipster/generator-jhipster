@@ -18,12 +18,12 @@
       <table class="table table-striped" aria-describedby="Users">
         <thead>
         <tr>
-          <th scope="col"<% if (!databaseTypeCassandra) { %> @click="changeOrder('id')"<% } %>><span>{{ t$('global.field.id') }}</span><% if (!databaseTypeCassandra) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator><% } %></th>
-          <th scope="col"<% if (!databaseTypeCassandra) { %> @click="changeOrder('login')"<% } %>><span>{{ t$('userManagement.login') }}</span><% if (!databaseTypeCassandra) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'login'"></jhi-sort-indicator><% } %></th>
-          <th scope="col"<% if (!databaseTypeCassandra) { %> @click="changeOrder('email')"<% } %>><span>{{ t$('userManagement.email') }}</span><% if (!databaseTypeCassandra) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'email'"></jhi-sort-indicator><% } %></th>
+          <th scope="col"<%- (!databaseTypeCassandra) ? ' @click="changeOrder(\'id\')"' : '' %>><span>{{ t$('global.field.id') }}</span><%- (!databaseTypeCassandra) ? ' <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="\'id\'"></jhi-sort-indicator>' : '' %></th>
+          <th scope="col"<%- (!databaseTypeCassandra) ? ' @click="changeOrder(\'login\')"' : '' %>><span>{{ t$('userManagement.login') }}</span><%- (!databaseTypeCassandra) ? ' <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="\'login\'"></jhi-sort-indicator>' : '' %></th>
+          <th scope="col"<%- (!databaseTypeCassandra) ? ' @click="changeOrder(\'email\')"' : '' %>><span>{{ t$('userManagement.email') }}</span><%- (!databaseTypeCassandra) ? ' <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="\'email\'"></jhi-sort-indicator>' : '' %></th>
           <th scope="col"></th>
 <%_ if (enableTranslation) { _%>
-          <th scope="col"<% if (!databaseTypeCassandra) { %> @click="changeOrder('langKey')"<% } %>> <span>{{ t$('userManagement.langKey') }}</span><% if (!databaseTypeCassandra) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'langKey'"></jhi-sort-indicator><% } %></th>
+          <th scope="col"<%- (!databaseTypeCassandra) ? ' @click="changeOrder(\'langKey\')"' : '' %>> <span>{{ t$('userManagement.langKey') }}</span><%- (!databaseTypeCassandra) ? ' <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="\'langKey\'"></jhi-sort-indicator>' : '' %></th>
 <%_ } _%>
           <th scope="col"><span>{{ t$('userManagement.profiles') }}</span></th>
 <%_ if (!databaseTypeCassandra) { _%>
@@ -46,7 +46,7 @@
               <button class="btn btn-success btn-sm" @click="setActive(user, false)" v-if="user.activated"
                       :disabled="username === user.login">{{ t$('userManagement.activated') }}</button>
             </td>
-            <% if (enableTranslation) { %><td>{{user.langKey}}</td><% } %>
+            <%- (enableTranslation) ? '<td>{{user.langKey}}</td>' : '' %>
             <td>
               <div v-for="authority of user.authorities" :key="authority">
                   <span class="badge bg-info">{{ authority }}</span>

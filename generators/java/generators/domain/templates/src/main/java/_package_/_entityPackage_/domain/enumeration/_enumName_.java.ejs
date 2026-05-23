@@ -39,13 +39,13 @@ public enum <%- enumName %> {
 <%- enumWithCustomValue.comment %>
     <%_ } _%>
     <%_ if (enumWithCustomValue.name === enumWithCustomValue.value) { _%>
-    <%- enumWithCustomValue.name %><% if (index < enumValues.length - 1) { %>,<% } else { %>;<% } %>
+    <%- enumWithCustomValue.name %><%- (index < enumValues.length - 1) ? ',' : ';' %>
     <%_ } else { _%>
-    <%- enumWithCustomValue.name %>("<%- enumWithCustomValue.value %>")<% if (index < enumValues.length - 1) { %>,<% } else { %>;<% } %>
+    <%- enumWithCustomValue.name %>("<%- enumWithCustomValue.value %>")<%- (index < enumValues.length - 1) ? ',' : ';' %>
     <%_ } _%>
   <%_ } _%>
   <%_ if (!withoutCustomValues) { _%>
-    private<% if (withCustomValues) { %> final<% } %> String value;
+    private<%- (withCustomValues) ? ' final' : '' %> String value;
 
     <%_ if (withSomeCustomValues) { _%>
     <%- enumName %>() {}

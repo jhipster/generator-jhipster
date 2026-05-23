@@ -22,7 +22,7 @@
     const returnPrefix = returnDirectly ? 'return' : `${instanceType} ${restInstance} =`;
 _%>
 <%_ if (!viaService) { _%>
-        <%- returnPrefix %> <%- entityInstance %>Repository.<% if (implementsEagerLoadApis) { %>findOneWithEagerRelationships(id)<% } else { %>findById(id)<% } %><% if (!dtoMapstruct) { %>;<% } else { %>
+        <%- returnPrefix %> <%- entityInstance %>Repository.<%- (implementsEagerLoadApis) ? 'findOneWithEagerRelationships(id)' : 'findById(id)' %><% if (!dtoMapstruct) { %>;<% } else { %>
             .map(<%- entityToDtoReference %>);<% } %>
 <%_ } else { _%>
         <%- returnPrefix %> <%- entityInstance %>Service.findOne(id);

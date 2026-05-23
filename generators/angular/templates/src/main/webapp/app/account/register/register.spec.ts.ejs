@@ -66,8 +66,8 @@ describe('Register', () => {
   });
 
   it('should update success to true after creating an account', inject(
-    [RegisterService<% if (enableTranslation) { %>, TranslateService<% } %>],
-    (service: RegisterService<% if (enableTranslation) { %>, mockTranslateService: TranslateService<% } %>) => {
+    [RegisterService<%- (enableTranslation) ? ', TranslateService' : '' %>],
+    (service: RegisterService<%- (enableTranslation) ? ', mockTranslateService: TranslateService' : '' %>) => {
       <%- clientTestFramework %>.spyOn(service, 'save').mockReturnValue(of({}));
 <%_ if (enableTranslation) { _%>
       <%- clientTestFramework %>.spyOn(mockTranslateService, 'getCurrentLang').mockReturnValue('<%- nativeLanguage %>');

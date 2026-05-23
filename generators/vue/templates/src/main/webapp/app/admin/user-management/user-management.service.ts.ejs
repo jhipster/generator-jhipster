@@ -28,7 +28,7 @@ export default class UserManagementService {
     req?: any
 <%_ } _%>
   ): Promise<any> {
-    return axios.get(`api/admin/users<% if (!databaseTypeCassandra) { %>?${buildPaginationQueryOpts(req)}<% } %>`);
+    return axios.get(`api/admin/users<%- (!databaseTypeCassandra) ? '?${buildPaginationQueryOpts(req)}' : '' %>`);
   }
 
   retrieveAuthorities(): Promise<any> {

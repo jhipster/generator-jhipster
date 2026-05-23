@@ -76,7 +76,7 @@ export const GatewayPage = () => {
             {route.serviceInstances.map((instance) =>
               <tr key={instance.instanceInfo + '-info'}>
                 <td><a href={instance.uri} target="_blank" rel="noopener noreferrer">{instance.uri}</a></td>
-                <td>{badgeInfo(<% if (serviceDiscoveryConsul) { %>instance.healthService<% } else { %>instance.instanceInfo<% } %>)}</td>
+                <td>{badgeInfo(<%- (serviceDiscoveryConsul) ? 'instance.healthService' : 'instance.instanceInfo' %>)}</td>
                 <td>{metadata(instance.metadata)}</td>
               </tr>
             )}

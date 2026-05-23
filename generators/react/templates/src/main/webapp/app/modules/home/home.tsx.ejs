@@ -70,7 +70,7 @@ export const Home = () => {
             <div>
               <Alert variant="warning">
                 <Translate contentKey="global.messages.info.authenticated.prefix">If you want to </Translate>
-                <% if (!enableTranslation) { %><span>&nbsp;</span><% } %>
+                <%- (!enableTranslation) ? '<span>&nbsp;</span>' : '' %>
 <%_ if (authenticationTypeOauth2) { _%>
                 <a
                   className="alert-link"

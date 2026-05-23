@@ -47,7 +47,7 @@ import org.springframework.data.couchbase.core.mapping.event.ValidatingCouchbase
 <%_ if (!reactive) { _%>
 import org.springframework.data.couchbase.repository.auditing.EnableCouchbaseAuditing;
 <%_ } _%>
-import org.springframework.data.couchbase.repository.config.Enable<% if (reactive) { %>Reactive<% } %>CouchbaseRepositories;
+import org.springframework.data.couchbase.repository.config.Enable<%- (reactive) ? 'Reactive' : '' %>CouchbaseRepositories;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
@@ -66,9 +66,9 @@ import reactor.core.publisher.Flux;
 @Configuration
 @EnableConfigurationProperties(CouchbaseProperties.class)
 @Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)
-@Enable<% if (reactive) { %>Reactive<% } %>CouchbaseRepositories(
+@Enable<%- (reactive) ? 'Reactive' : '' %>CouchbaseRepositories(
 <%_ if (searchEngineElasticsearch) { %>
-    includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <% if (reactive) { %>Reactive<% } %>CouchbaseRepository.class),
+    includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <%- (reactive) ? 'Reactive' : '' %>CouchbaseRepository.class),
 <%_ } _%>
     basePackages = "<%- packageName %>.repository"
 )
@@ -88,7 +88,7 @@ public class DatabaseConfiguration extends AbstractCouchbaseConfiguration {
     public DatabaseConfiguration(JHipsterProperties jHipsterProperties, CouchbaseProperties couchbaseProperties) {
         this.jHipsterProperties = jHipsterProperties;
         this.couchbaseProperties = couchbaseProperties;
-        <% if (reactive) { %>allowPageable();<% } %>
+        <%- (reactive) ? 'allowPageable();' : '' %>
     }
 
 <%_ if (reactive) { _%>

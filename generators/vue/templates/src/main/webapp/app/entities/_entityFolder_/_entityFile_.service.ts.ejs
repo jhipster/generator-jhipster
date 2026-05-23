@@ -11,10 +11,10 @@ const baseSearchApiUrl = '<%- entityApi %>api/<%- entityApiUrl %>/_search?query=
 
 export default class <%- entityAngularName %>Service {
 <%_ if (searchEngineAny) { _%>
-  search(query<% if (!paginationNo) { %>, paginationQuery<% } %>) : Promise<any> {
+  search(query<%- (!paginationNo) ? ', paginationQuery' : '' %>) : Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      axios.get(`${baseSearchApiUrl}${query}<% if (!paginationNo) { %>&${buildPaginationQueryOpts(paginationQuery)}<% } %>`).then(res => {
-        resolve(<% if (!paginationNo) { %>res<% } else { %>res.data<% } %>);
+      axios.get(`${baseSearchApiUrl}${query}<%- (!paginationNo) ? '&${buildPaginationQueryOpts(paginationQuery)}' : '' %>`).then(res => {
+        resolve(<%- (!paginationNo) ? 'res' : 'res.data' %>);
       }).catch(err => { reject(err); });
     });
   }
@@ -28,9 +28,9 @@ export default class <%- entityAngularName %>Service {
     });
   }
 
-  retrieve(<% if (!paginationNo) { %>paginationQuery?: any<% } %>) : Promise<any> {
+  retrieve(<%- (!paginationNo) ? 'paginationQuery?: any' : '' %>) : Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      axios.get(baseApiUrl<% if (!paginationNo) { %> + `?${buildPaginationQueryOpts(paginationQuery)}` <% } %>).then(res => {
+      axios.get(baseApiUrl<%- (!paginationNo) ? ' + `?${buildPaginationQueryOpts(paginationQuery)}` ' : '' %>).then(res => {
         resolve(res);
       }).catch(err => { reject(err); });
     });
