@@ -70,6 +70,22 @@ class SecurityUtilsUnitTest {
         assertThat(jwt).isEqualTo("token");
     }
 
+    @Test
+    void testGetCurrentUserJWTFromJwtCredentials() {
+        var now = Instant.now();
+        var jwt = Jwt.withTokenValue("token")
+            .issuedAt(now)
+            .expiresAt(now.plusSeconds(60))
+            .header("Test", "test")
+            .build();
+
+        String currentUserJwt = SecurityUtils.getCurrentUserJWT()
+            .contextWrite(ReactiveSecurityContextHolder.withAuthentication(new UsernamePasswordAuthenticationToken("admin", jwt)))
+            .block();
+
+        assertThat(currentUserJwt).isEqualTo("token");
+    }
+
   <%_ if (user) { _%>
     @Test
     void testGetCurrentUserId() {
