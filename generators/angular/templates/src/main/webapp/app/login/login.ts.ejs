@@ -18,7 +18,7 @@
 -%>
 import { Component, ChangeDetectionStrategy, OnInit, AfterViewInit, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router<% if (generateUserManagement) { %>, RouterLink<% } %> } from '@angular/router';
+import { Router<%- (generateUserManagement) ? ', RouterLink' : '' %> } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';

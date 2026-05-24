@@ -1,17 +1,17 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.common with an alias.
-import { createApp, provide, computed, watch<% if (enableTranslation) { %>, onMounted<% } %> } from 'vue';
+import { createApp, provide, computed, watch<%- (enableTranslation) ? ', onMounted' : '' %> } from 'vue';
 import { createPinia, storeToRefs } from 'pinia'
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
-import { useStore<% if (enableTranslation) { %>, useTranslationStore<% } %> } from '@/store';
+import { useStore<%- (enableTranslation) ? ', useTranslationStore' : '' %> } from '@/store';
 import { setupAxiosInterceptors } from '@/shared/config/axios-interceptor';
 
 import App from './app.vue';
-import router<% if (microfrontend) { %>, { lazyRoutes }<% } %> from './router';
-import { initFortAwesome<% if (enableTranslation) { %>, initI18N<% } %> } from '@/shared/config/config';
+import router<%- (microfrontend) ? ', { lazyRoutes }' : '' %> from './router';
+import { initFortAwesome<%- (enableTranslation) ? ', initI18N' : '' %> } from '@/shared/config/config';
 import { initBootstrapVue } from '@/shared/config/config-bootstrap-vue';
 import JhiItemCount from '@/shared/jhi-item-count.vue';
 import JhiSortIndicator from '@/shared/sort/jhi-sort-indicator.vue';
@@ -142,7 +142,7 @@ const app = createApp({
           localStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
 <%_ } _%>
           store.logout();
-          if (!url.endsWith('api/account') && !url.endsWith('api/<% if (authenticationTypeSession) { %>authentication<% } else { %>authenticate<% } %>')) {
+          if (!url.endsWith('api/account') && !url.endsWith('api/<%- (authenticationTypeSession) ? 'authentication' : 'authenticate' %>')) {
             // Ask for a new authentication
 <%_ if (authenticationTypeOauth2) { _%>
             window.location.reload();

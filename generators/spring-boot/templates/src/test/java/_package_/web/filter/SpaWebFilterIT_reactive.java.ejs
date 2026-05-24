@@ -34,7 +34,7 @@ class SpaWebFilterIT {
     void testFilterDoesNotForwardToIndexForApi() {
         webTestClient
             .get()
-            .uri("/api/<% if (!applicationTypeMicroservice) { %>authenticate<% } else { %>users<% } %>")
+            .uri("/api/<%- (!applicationTypeMicroservice) ? 'authenticate' : 'users' %>")
             .exchange()
             .expectStatus().is2xxSuccessful();
     }

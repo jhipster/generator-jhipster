@@ -71,7 +71,7 @@ describe('Alert Error Component', () => {
       eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: { status: 0 } });
       // THEN
       expect(comp.alerts().length).toBe(1);
-      expect(comp.alerts()[0].<%- mainAlertField %>).toBe(<% if (enableTranslation) { %>'error.server.not.reachable'<% } else { %>'Server not reachable'<% } %>);
+      expect(comp.alerts()[0].<%- mainAlertField %>).toBe(<%- (enableTranslation) ? '\'error.server.not.reachable\'' : '\'Server not reachable\'' %>);
     });
 
     it('should display an alert on status 404', () => {
@@ -79,7 +79,7 @@ describe('Alert Error Component', () => {
       eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: { status: 404 } });
       // THEN
       expect(comp.alerts().length).toBe(1);
-      expect(comp.alerts()[0].<%- mainAlertField %>).toBe(<% if (enableTranslation) { %>'error.url.not.found'<% } else { %>'Not found'<% } %>);
+      expect(comp.alerts()[0].<%- mainAlertField %>).toBe(<%- (enableTranslation) ? '\'error.url.not.found\'' : '\'Not found\'' %>);
     });
 
     it('should display an alert on generic error', () => {
@@ -146,7 +146,7 @@ describe('Alert Error Component', () => {
       eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: response });
       // THEN
       expect(comp.alerts().length).toBe(1);
-      expect(comp.alerts()[0].<%- mainAlertField %>).toBe(<% if (enableTranslation) { %>'error.Size'<% } else { %>'Error on field "MinField"'<% } %>);
+      expect(comp.alerts()[0].<%- mainAlertField %>).toBe(<%- (enableTranslation) ? '\'error.Size\'' : '\'Error on field "MinField"\'' %>);
     });
 
     it('should display an alert on status 400 for error headers', () => {
@@ -183,7 +183,7 @@ describe('Alert Error Component', () => {
       eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: response });
       // THEN
       expect(comp.alerts().length).toBe(1);
-      expect(comp.alerts()[0].<%- mainAlertField %>).toBe(<% if (enableTranslation) { %>'error.http.500'<% } else { %>'Detailed error message'<% } %>);
+      expect(comp.alerts()[0].<%- mainAlertField %>).toBe(<%- (enableTranslation) ? '\'error.http.500\'' : '\'Detailed error message\'' %>);
     });
   });
 });

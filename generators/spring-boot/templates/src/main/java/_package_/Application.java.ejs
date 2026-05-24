@@ -45,8 +45,8 @@ import java.util.Optional;
 import org.springframework.boot.h2console.autoconfigure.H2ConsoleAutoConfiguration;
 <%_ } _%>
 
-@SpringBootApplication(<% if (devDatabaseTypeH2Any) { %>exclude = { H2ConsoleAutoConfiguration.class }<% } %>)
-@EnableConfigurationProperties({<% if (databaseMigrationLiquibase) { %>LiquibaseProperties.class, <% } %>ApplicationProperties.class})
+@SpringBootApplication(<%- (devDatabaseTypeH2Any) ? 'exclude = { H2ConsoleAutoConfiguration.class }' : '' %>)
+@EnableConfigurationProperties({<%- (databaseMigrationLiquibase) ? 'LiquibaseProperties.class, ' : '' %>ApplicationProperties.class})
 public class <%- mainClass %> {
 
     private static final Logger LOG = LoggerFactory.getLogger(<%- mainClass %>.class);

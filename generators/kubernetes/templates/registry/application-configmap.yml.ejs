@@ -25,8 +25,8 @@ metadata:
 data:
   application.yml: |-
     configserver:
-      name: <% if (serviceDiscoveryEureka) { %> JHipster Registry<% } %><% if (serviceDiscoveryConsul) { %>Consul<% } %>
-      status: Connected to <% if (serviceDiscoveryEureka) { %>the JHipster Registry<% } %><% if (serviceDiscoveryConsul) { %>Consul<% } %> running in Kubernetes
+      name: <%- (serviceDiscoveryEureka) ? ' JHipster Registry' : '' %><%- (serviceDiscoveryConsul) ? 'Consul' : '' %>
+      status: Connected to <%- (serviceDiscoveryEureka) ? 'the JHipster Registry' : '' %><%- (serviceDiscoveryConsul) ? 'Consul' : '' %> running in Kubernetes
 <%_ if (serviceDiscoveryEureka) { _%>
     eureka:
       client:

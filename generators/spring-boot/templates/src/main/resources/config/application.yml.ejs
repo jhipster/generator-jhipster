@@ -126,7 +126,7 @@ management:
         liveness:
           include: livenessState
         readiness:
-          include: readinessState<% if (databaseTypeSql && !reactive) { %>,db<% } %>
+          include: readinessState<%- (databaseTypeSql && !reactive) ? ',db' : '' %>
     jhimetrics:
       access: read-only
   info:
@@ -207,7 +207,7 @@ spring:
     <%_ if (reactive) { _%>
         webflux:
           default-filters:
-            - <% if (authenticationTypeJwt) { %>JWTRelay<% } else { %>TokenRelay<% } %>
+            - <%- (authenticationTypeJwt) ? 'JWTRelay' : 'TokenRelay' %>
     <%_ } else { _%>
         webmvc:
     <%_ } _%>
@@ -298,7 +298,7 @@ spring:
       hibernate.type.preferred_instant_jdbc_type: TIMESTAMP
       hibernate.id.new_generator_mappings: true
       hibernate.connection.provider_disables_autocommit: true
-      hibernate.cache.use_second_level_cache: <% if (enableHibernateCache) { %>true<% } else { %>false<% } %>
+      hibernate.cache.use_second_level_cache: <%- (enableHibernateCache) ? 'true' : 'false' %>
       hibernate.cache.use_query_cache: false
       hibernate.generate_statistics: false
       # modify batch size as necessary
@@ -337,7 +337,7 @@ spring:
     basename: i18n/messages
   main:
     allow-bean-definition-overriding: true
-  <% if (reactive) { %>webflux<% } else { %>mvc<% } %>:
+  <%- (reactive) ? 'webflux' : 'mvc' %>:
     problemdetails:
       enabled: true
 <%_ if (databaseTypeMongodb && springBoot4) { _%>

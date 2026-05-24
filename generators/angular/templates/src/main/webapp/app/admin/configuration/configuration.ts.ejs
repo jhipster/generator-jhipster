@@ -33,7 +33,7 @@ import { Bean, PropertySource } from './configuration.model';
   selector: '<%- jhiPrefixDashed %>-configuration',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './configuration.html',
-  imports: [FontAwesomeModule, FormsModule, SortDirective, SortByDirective, KeyValuePipe, JsonPipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
+  imports: [FontAwesomeModule, FormsModule, SortDirective, SortByDirective, KeyValuePipe, JsonPipe<%- (enableTranslation) ? ', TranslateDirective, TranslateModule' : '' %>],
 })
 export default class Configuration implements OnInit {
   readonly allBeans = signal<Bean[] | undefined>(undefined);

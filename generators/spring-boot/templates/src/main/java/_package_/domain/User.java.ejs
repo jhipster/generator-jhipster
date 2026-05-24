@@ -109,10 +109,10 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
   <%_ if (!reactive) { _%>
 @Entity
   <%_ } _%>
-@Table(<% if (!reactive) { %>name = <% } %>"<%- user.entityTableName %>")
+@Table(<%- (!reactive) ? 'name = ' : '' %>"<%- user.entityTableName %>")
 <%_ } _%>
 <%_ if (enableHibernateCache) { _%>
-@Cache(usage = CacheConcurrencyStrategy.<% if (!cacheProviderInfinispan) { %>NONSTRICT_<% } %>READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.<%- (!cacheProviderInfinispan) ? 'NONSTRICT_' : '' %>READ_WRITE)
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
 @org.springframework.data.mongodb.core.mapping.Document(collection = "<%- jhiTablePrefix %>_user")
@@ -136,7 +136,7 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
 <%_ if (searchEngineElasticsearch) { _%>
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "user")
 <%_ } _%>
-public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends AbstractAuditingEntity<<%- user.primaryKey.type %>><% } %> implements Serializable<% if (databaseTypeSql && reactive && requiresPersistableImplementation) { %>, Persistable<<% if (user.primaryKey.hasUUID) { %>UUID<% } else { %>String<% } %>><% } %> {
+public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends AbstractAuditingEntity<<%- user.primaryKey.type %>><% } %> implements Serializable<% if (databaseTypeSql && reactive && requiresPersistableImplementation) { %>, Persistable<<%- (user.primaryKey.hasUUID) ? 'UUID' : 'String' %>><% } %> {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -382,7 +382,7 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
     private String resetKey;
 
   <%_ if (databaseTypeSql || (databaseTypeCassandra && reactive)) { _%>
-    @Column(<% if (!reactive) { %>name = <% } %>"reset_date")
+    @Column(<%- (!reactive) ? 'name = ' : '' %>"reset_date")
   <%_ } else if (databaseTypeMongodb) { _%>
     @Field("reset_date")
   <%_ } else if (databaseTypeCouchbase) { _%>
@@ -538,11 +538,11 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
         this.langKey = langKey;
     }
 
-    public Set<<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>Authority<% } else { %>String<% } %>> getAuthorities() {
+    public Set<<%- (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) ? 'Authority' : 'String' %>> getAuthorities() {
         return authorities;
     }
 
-    public void setAuthorities(Set<<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>Authority<% } else { %>String<% } %>> authorities) {
+    public void setAuthorities(Set<<%- (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) ? 'Authority' : 'String' %>> authorities) {
         this.authorities = authorities;
     }
 <%_ if (authenticationTypeSession && databaseTypeSql && !reactive) { _%>

@@ -54,7 +54,7 @@ import org.hibernate.type.SqlTypes;
   <%_ } _%>
   <%_ if (field.fieldTypeUUID && (prodDatabaseTypeMysql || prodDatabaseTypeMariadb)) { _%>
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    @Column(name = "<%- field.fieldNameAsDatabaseColumn %>", length = 36<% if (field.fieldValidationRequired) { %>, nullable = false<% } %><% if (field.fieldValidationUnique) { %>, unique = true<% } %>)
+    @Column(name = "<%- field.fieldNameAsDatabaseColumn %>", length = 36<%- (field.fieldValidationRequired) ? ', nullable = false' : '' %><%- (field.fieldValidationUnique) ? ', unique = true' : '' %>)
   <%_ } else { _%>
     @Column(
       name = "<%- field.fieldNameAsDatabaseColumn %>"
@@ -91,7 +91,7 @@ import org.hibernate.type.SqlTypes;
   <%_ if (relationship.relationshipOneToMany) { -%>
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "<%- relationship.otherEntityRelationshipName %>")
   <%_ } else if (relationship.relationshipManyToOne) { -%>
-    @ManyToOne(<% if (relationship.relationshipRequired) { %>optional = false<% } else { %>fetch = FetchType.LAZY<% } %>)
+    @ManyToOne(<%- (relationship.relationshipRequired) ? 'optional = false' : 'fetch = FetchType.LAZY' %>)
     <%_ if (relationship.relationshipValidate && relationship.relationshipRequired) { _%>
     @NotNull
     <%_ } _%>
@@ -122,7 +122,7 @@ import org.hibernate.type.SqlTypes;
     }, allowSetters = true)
     <%_ } _%>
     <%_ if (relationship.ownerSide) { -%>
-    @OneToOne(fetch = FetchType.LAZY<% if (relationship.relationshipRequired) { %>, optional = false<% } %>)
+    @OneToOne(fetch = FetchType.LAZY<%- (relationship.relationshipRequired) ? ', optional = false' : '' %>)
       <%_ if (relationship.relationshipValidate && relationship.relationshipRequired) { _%>
     @NotNull
       <%_ } _%>

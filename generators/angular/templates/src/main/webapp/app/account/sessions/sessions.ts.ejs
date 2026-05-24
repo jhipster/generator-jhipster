@@ -31,7 +31,7 @@ import { Account } from 'app/core/auth/account.model';
 @Component({
   selector: '<%- jhiPrefixDashed %>-sessions',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DatePipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
+  imports: [DatePipe<%- (enableTranslation) ? ', TranslateDirective, TranslateModule' : '' %>],
   templateUrl: './sessions.html',
 })
 export default class Sessions implements OnInit {

@@ -17,9 +17,9 @@
         </thead>
         <tbody>
           <tr v-for="health of healthData" :key="health.name">
-            <td><% if (enableTranslation) { %><span />{{ t$('health.indicator.' + baseName(health.name)) }}<% } else { %><span class="text-capitalize">{{ baseName(health.name) }}</span><% } %> {{ subSystemName(health.name) }}</td>
+            <td><%- (enableTranslation) ? '<span />{{ t$(\'health.indicator.\' + baseName(health.name)) }}' : '<span class="text-capitalize">{{ baseName(health.name) }}</span>' %> {{ subSystemName(health.name) }}</td>
             <td class="text-center">
-              <span class="badge" :class="getBadgeClass(health.status)"><% if (enableTranslation) { %>{{ t$('health.status.' + health.status) }}<% } else { %>{{ health.status }}<% } %></span>
+              <span class="badge" :class="getBadgeClass(health.status)"><%- (enableTranslation) ? '{{ t$(\'health.status.\' + health.status) }}' : '{{ health.status }}' %></span>
             </td>
             <td class="text-center">
               <a class="hand" @click="showHealth(health)" v-if="health.details || health.error">

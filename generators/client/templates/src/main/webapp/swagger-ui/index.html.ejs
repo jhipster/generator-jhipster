@@ -86,7 +86,7 @@
           const services = [<%- [{ route: lowercaseBaseName }, ...(locals.gatewayRoutes ?? [])].map(({ route }) => `'${route}'`) %>];
   <%_ } else { _%>
           const response = await axios.get('/management/health/discoveryComposite', axiosConfig);
-          const services = response.data?.components?.discoveryClient?.details?.services<% if (serviceDiscoveryConsul) { %>.filter(service => service !== 'consul')<% } %>;
+          const services = response.data?.components?.discoveryClient?.details?.services<%- (serviceDiscoveryConsul) ? '.filter(service => service !== \'consul\')' : '' %>;
   <%_ } _%>
           console.log(`Services`, services);
 

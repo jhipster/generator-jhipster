@@ -225,17 +225,17 @@ describe('Notification Middleware', () => {
 
   it('should trigger an error toast message and return error for 400 response code', () => {
     expect(store.dispatch(VALIDATION_ERROR).error.response.data.message).toEqual('error.validation');
-    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining(<% if (enableTranslation) { %>'error.Size'<% } else { %>'Error on field "MinField"'<% } %>));
+    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining(<%- (enableTranslation) ? '\'error.Size\'' : '\'Error on field "MinField"\'' %>));
   });
 
   it('should trigger an error toast message and return error for 404 response code', () => {
     expect(store.dispatch(NOT_FOUND_ERROR).error.response.data.message).toEqual('Not found');
-    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining(<% if (enableTranslation) { %>'error.url.not.found'<% } else { %>'Not found'<% } %>));
+    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining(<%- (enableTranslation) ? '\'error.url.not.found\'' : '\'Not found\'' %>));
   });
 
   it('should trigger an error toast message and return error for 0 response code', () => {
     expect(store.dispatch(NO_SERVER_ERROR).error.response.status).toEqual(0);
-    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining(<% if (enableTranslation) { %>'error.server.not.reachable'<% } else { %>'Server not reachable'<% } %>));
+    expect(toast.error).toHaveBeenCalledWith(expect.stringContaining(<%- (enableTranslation) ? '\'error.server.not.reachable\'' : '\'Server not reachable\'' %>));
   });
 
   it('should trigger an error toast message and return error for headers containing errors', () => {

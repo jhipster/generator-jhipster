@@ -30,7 +30,7 @@ import { JvmMetrics } from 'app/admin/metrics/metrics.model';
   selector: '<%- jhiPrefixDashed %>-jvm-memory',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './jvm-memory.html',
-  imports: [NgbProgressbar, KeyValuePipe, DecimalPipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
+  imports: [NgbProgressbar, KeyValuePipe, DecimalPipe<%- (enableTranslation) ? ', TranslateDirective, TranslateModule' : '' %>],
 })
 export class JvmMemory {
   /**

@@ -42,7 +42,7 @@
 <%_ if (generateBuiltInUserEntity) { _%>
   <%_ const idField = user.primaryKey.fields[0]; _%>
         <createTable tableName="<%- user.entityTableName %>">
-            <column name="id" type="<%- idField.columnType %>"<% if (idField.liquibaseAutoIncrement) { %> autoIncrement="true" startWith="1050"<% } %>>
+            <column name="id" type="<%- idField.columnType %>"<%- (idField.liquibaseAutoIncrement) ? ' autoIncrement="true" startWith="1050"' : '' %>>
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="login" type="varchar(50)">
@@ -170,7 +170,7 @@
 
     <changeSet author="jhipster" id="00000000000002" context="test">
         <createTable tableName="<%- jhiTablePrefix %>_date_time_wrapper">
-            <column<% if (isAutoIncrementDB) { %> autoIncrement="true"<% } %> name="id" type="BIGINT">
+            <column<%- (isAutoIncrementDB) ? ' autoIncrement="true"' : '' %> name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="<%- jhiTablePrefix %>_date_time_wrapperPK"/>
             </column>
             <column name="instant" type="timestamp"/>

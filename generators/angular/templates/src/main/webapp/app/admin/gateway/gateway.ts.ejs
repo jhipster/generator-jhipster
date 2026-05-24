@@ -32,7 +32,7 @@ import { GatewayRoute } from './gateway-route.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './gateway.html',
   providers: [GatewayRoutesService],
-  imports: [KeyValuePipe, FontAwesomeModule<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
+  imports: [KeyValuePipe, FontAwesomeModule<%- (enableTranslation) ? ', TranslateDirective, TranslateModule' : '' %>],
 })
 export default class Gateway implements OnInit {
   gatewayRoutes: GatewayRoute[] = [];

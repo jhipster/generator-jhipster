@@ -58,7 +58,7 @@
             ,
             "help": {
   <%_ for (const field of fieldsWithDoc) { _%>
-                "<%- field.fieldName %>": "<%- field.documentation %>"<% if (field !== lastField) { %>,<% } %>
+                "<%- field.fieldName %>": "<%- field.documentation %>"<%- (field !== lastField) ? ',' : '' %>
   <%_ } _%>
             }
 <%_ } _%>
