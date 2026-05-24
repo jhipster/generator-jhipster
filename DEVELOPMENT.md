@@ -100,7 +100,7 @@ As modifying the JHipster generator includes modifying Java and JavaScript templ
 
 ### Use a debugger
 
-It is possible to debug JHipster's code using a Node.js debugger. To achieve this setup your debugger to launch `cli/jhipster.js`.
+It is possible to debug JHipster's code using a Node.js debugger. To achieve this setup your debugger to launch `cli/jhipster.cjs`.
 
 #### Debugging with VSCode
 
