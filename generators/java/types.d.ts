@@ -46,9 +46,9 @@ export type Field = BaseApplicationField &
   JavaAddedFieldProperties &
   JavaAddedValidatedFieldProperties &
   Property & {
-    // TODO move to spring-boog?
+    // TODO move to spring-boot?
     fieldJavaBuildSpecification?: string;
-    // TODO move to spring-boog?
+    // TODO move to spring-boot?
     propertyJavaCustomFilter?: { type: string; superType: string; fieldType: string };
   };
 
