@@ -140,8 +140,6 @@ export default defineConfig(
     }),
     {
       rules: {
-        'ejs-templates/prefer-output': 'error',
-
         ...js.configs.recommended.rules,
         ...jsRules,
         'prefer-destructuring': ['error', { array: false, object: true }],
