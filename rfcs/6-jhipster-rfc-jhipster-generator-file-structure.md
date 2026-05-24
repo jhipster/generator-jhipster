@@ -48,7 +48,7 @@ The JHipster generator will be organized into several types of generators, each 
   <!-- prettier-ignore -->
   - Contexts and object injection in functions (application, entities, etc.)
   <!-- prettier-ignore -->
-  - Facade of useful methods and functions (writing, propmting, etc.)
+  - Facade of useful methods and functions (writing, prompting, etc.)
 - **Feature Generators**: These generators add specific features or functionalities of jhipster (cucumber, kubernetes, ...). They can be used to extend the capabilities of the base generator by extending its core functionality.
 - **Bootstrap Generators**: These generators are used to bootstrap the Features generators by executing common tasks that are common to many of them.
 
