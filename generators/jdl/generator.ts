@@ -254,7 +254,7 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
         this.log.info(`Generating ${this.exportedDeployments.length} deployments`);
         for (const deployment of this.exportedDeployments) {
           const deploymentConfig = deployment[GENERATOR_JHIPSTER];
-          const deploymentType = deploymentConfig.deploymentType;
+          const { deploymentType } = deploymentConfig;
           this.log.debug(`Generating deployment: ${JSON.stringify(deploymentConfig, null, 2)}`);
 
           await this.composeWithJHipster(deploymentType, {

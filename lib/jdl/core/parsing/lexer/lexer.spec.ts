@@ -43,7 +43,7 @@ describe('jdl - JDLLexer', () => {
     });
 
     it('should lex a simple valid JDL text', () => {
-      const tokens = lexingResult.tokens;
+      const { tokens } = lexingResult;
       expect(tokens.length).toBe(15);
       expect(tokens[0].image).toBe('entity');
       expect(tokens[1].image).toBe('JobHistory');
@@ -77,7 +77,7 @@ describe('jdl - JDLLexer', () => {
     });
 
     it('should report the errors', () => {
-      const errors = lexingResult.errors;
+      const { errors } = lexingResult;
       expect(errors).toHaveLength(1);
       expect(errors[0].line).toBe(4);
       expect(errors[0].column).toBe(6);

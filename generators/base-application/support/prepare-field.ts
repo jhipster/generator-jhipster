@@ -173,7 +173,7 @@ function generateFakeDataForField(
     }
   } else if (field.fieldIsEnum) {
     if (field.enumValues && field.enumValues.length > 0) {
-      const enumValues = field.enumValues;
+      const { enumValues } = field;
       data = enumValues[faker.number.int(enumValues.length - 1)].name;
     } else {
       this.log.warn(`Enum ${field.fieldType} is not valid`);
@@ -292,7 +292,7 @@ export function prepareCommonFieldForTemplates(
   defaults(field, {
     entity: entityWithConfig,
   });
-  const fieldType = field.fieldType;
+  const { fieldType } = field;
 
   if (field.fieldIsEnum) {
     if ((Object.values(fieldTypesValues) as string[]).includes(fieldType)) {

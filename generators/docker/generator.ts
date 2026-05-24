@@ -59,7 +59,7 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
       // Run in the post preparing phase to be able to use the application prepared by every other generators.
       // This generator is not guaranteed to be run before spring-boot bootstrap, so we should postpone the preparation.
       async dockerServices({ application }) {
-        const dockerServices = application.dockerServices;
+        const { dockerServices } = application;
         if (application.authenticationTypeOauth2) {
           dockerServices.push('keycloak');
 

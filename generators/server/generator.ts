@@ -182,7 +182,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
 
       configureFields({ application, entityConfig, entityName }) {
         // Validate entity json field content
-        const fields = entityConfig.fields;
+        const { fields } = entityConfig;
         fields!.forEach(field => {
           // Migration from JodaTime to Java Time
           if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
@@ -213,7 +213,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
 
       configureRelationships({ entityConfig, entityName }) {
         // Validate entity json relationship content
-        const relationships = entityConfig.relationships;
+        const { relationships } = entityConfig;
         relationships!.forEach(relationship => {
           this._validateRelationship(entityName, relationship);
 
@@ -303,7 +303,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
    * @return {true|string} true for a valid value or error message.
    */
   _validateTableName(entityTableName: string, prodDatabaseType: string, entity: ServerEntity): true | string {
-    const jhiTablePrefix = (entity as any).jhiTablePrefix;
+    const { jhiTablePrefix } = entity as any;
     const instructions = `You can specify a different table name in your JDL file or change it in .jhipster/${entity.name}.json file and then run again 'jhipster entity ${entity.name}.'`;
 
     if (!/^(\w*)$/.test(entityTableName)) {

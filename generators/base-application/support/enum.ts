@@ -81,7 +81,7 @@ const getEnums = (enums: string[], customValuesState: EnumValuesData, comments?:
 };
 
 const extractEnumInstance = (field: Pick<BaseApplicationField, 'fieldType'>): string => {
-  const fieldType = field.fieldType;
+  const { fieldType } = field;
   return lowerFirst(fieldType);
 };
 

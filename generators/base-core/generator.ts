@@ -1050,7 +1050,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         }
         sourceFileFrom = file.resolvedSourceFile;
         targetFile = file.destinationFile;
-        templatesRoots = file.templatesRoots;
+        ({ templatesRoots } = file);
       }
 
       if (sourceFileFrom === undefined) {

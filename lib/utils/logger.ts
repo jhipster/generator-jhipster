@@ -93,7 +93,7 @@ export const createJHipsterLogger = (options: LoggerOptions & { namespace?: stri
 
   const logger = createLogger({ ...options, loggers: customJHipsterLogger });
   const cliLogger = namespace === CLI_LOGGER;
-  let debugEnabled = options.debugEnabled;
+  let { debugEnabled } = options;
   if (cliLogger) {
     debugEnabled = debugEnabled || process.argv.includes('-d') || process.argv.includes('--debug'); // Need this early
     if (debugEnabled) {

@@ -12,8 +12,7 @@ export const jsRules: Record<string, string | [string, ...any[]]> = {
   'no-var': 'error',
   'object-shorthand': 'error',
   'prefer-const': 'error',
-  // TODO object needs to be enabled { array: false, object: true }
-  'prefer-destructuring': ['error', { array: false }],
+  'prefer-destructuring': ['error', { array: false, object: true }],
   'prefer-object-has-own': 'error',
   'prefer-object-spread': 'error',
   'prefer-template': 'error',

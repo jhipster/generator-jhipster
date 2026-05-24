@@ -93,7 +93,7 @@ const commonDefaultOptions: ApplicationDefaults = {
 
 export function getConfigWithDefaults(customOptions: ApplicationDefaults = {}): ApplicationDefaults {
   const options = { ...customOptions };
-  const applicationType = options.applicationType;
+  const { applicationType } = options;
   if (isWin32) {
     options.autoCrlf ??= true;
   }

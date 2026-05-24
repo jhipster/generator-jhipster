@@ -48,7 +48,7 @@ export const askForDirectoryPath = asPromptingTask(async function askForDirector
         type: 'checkbox',
         name: 'appsFolders',
         when: async answers => {
-          const directoryPath = answers.directoryPath;
+          const { directoryPath } = answers;
           appsFolders = (await findApplicationFolders(this, directoryPath)).filter(
             app => app !== 'jhipster-registry' && app !== 'registry',
           );
