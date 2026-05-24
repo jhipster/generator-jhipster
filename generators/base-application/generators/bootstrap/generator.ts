@@ -376,12 +376,12 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
         derivedPrimaryKeyProperties(entity.primaryKey);
       },
       processDerivedPrimaryKeyFields({ entity }) {
-        const primaryKey = entity.primaryKey;
+        const { primaryKey } = entity;
         if (!primaryKey || primaryKey.composite || !primaryKey.derived) {
           return;
         }
         // derivedPrimary uses '@MapsId', which requires for each relationship id field to have corresponding field in the model
-        const derivedFields = primaryKey.derivedFields;
+        const { derivedFields } = primaryKey;
         entity.fields.unshift(...derivedFields!);
       },
       prepareEntityDerivedProperties({ entity }) {

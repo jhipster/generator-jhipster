@@ -112,7 +112,7 @@ export default abstract class BaseEntityChangesGenerator<
     application,
     entities: paramEntities,
   }: Pick<Tasks['DefaultTaskParam'], 'application' | 'entities'>): BaseEntityChangesChangelog<Entity>[] {
-    const recreateInitialChangelog = this.recreateInitialChangelog;
+    const { recreateInitialChangelog } = this;
     const { incrementalChangelog } = application;
     const entityNames = paramEntities.filter(e => !e.builtIn).map(e => e.name);
 

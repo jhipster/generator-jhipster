@@ -95,7 +95,7 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
       async generateSample() {
         if (extname(this.sampleName) === '.jdl' || this.sampleYorcFolder || this.sampleOnly) return;
 
-        const sample = this.sample;
+        const { sample } = this;
         assert.ok(sample, `Sample ${this.sampleName} not found`);
 
         let generatorOptions: any = {

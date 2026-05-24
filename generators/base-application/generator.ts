@@ -75,7 +75,7 @@ const {
   POST_WRITING_ENTITIES_QUEUE,
 } = QUEUES;
 
-const asPriority = BaseGenerator.asPriority;
+const { asPriority } = BaseGenerator;
 
 const PRIORITY_WITH_ENTITIES_TO_LOAD = new Set<string>([LOADING_ENTITIES]);
 const PRIORITY_WITH_ENTITIES = new Set<string>([DEFAULT]);

@@ -146,7 +146,7 @@ function makeJDLImporter(content: ParsedJDLApplications, configuration: JDLAppli
 
 function getJDLObject(parsedJDLContent: ParsedJDLApplications, configuration: JDLApplicationConfiguration, runtime: JDLRuntime) {
   let baseName = configuration.applicationName;
-  let applicationType = configuration.applicationType;
+  let { applicationType } = configuration;
 
   if (configuration.application) {
     baseName ??= configuration.application[GENERATOR_JHIPSTER].baseName;
@@ -176,7 +176,7 @@ function checkForErrors(jdlObject: JDLObject) {
 function importOnlyEntities(jdlObject: JDLObject, configuration: JDLApplicationConfiguration) {
   let { applicationName } = configuration;
 
-  let application = configuration.application;
+  let { application } = configuration;
   application ??= readCurrentPathYoRcFile();
   if (application?.[GENERATOR_JHIPSTER]) {
     applicationName ??= application[GENERATOR_JHIPSTER].baseName;
@@ -254,11 +254,10 @@ function importDeployments(deployments: Record<string, JDLDeployment>) {
 
 function exportJSONEntities(entities: JDLJSONEntity[], configuration: JDLApplicationConfiguration): JSONEntity[] {
   let baseName = configuration.applicationName;
-  let applicationType = configuration.applicationType;
+  let { applicationType } = configuration;
 
   if (configuration.application) {
-    baseName = configuration.application[GENERATOR_JHIPSTER].baseName;
-    applicationType = configuration.application[GENERATOR_JHIPSTER].applicationType;
+    ({ baseName, applicationType } = configuration.application[GENERATOR_JHIPSTER]);
   }
 
   return exportEntities({

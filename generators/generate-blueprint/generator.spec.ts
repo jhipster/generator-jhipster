@@ -83,7 +83,7 @@ describe(`generator - ${generator}`, () => {
         expect(result.getStateSnapshot()).toMatchSnapshot();
       });
       it('should match application snapshot', () => {
-        const application = result.application;
+        const { application } = result;
         expect(application).toMatchSnapshot({
           jhipsterPackageJson: expect.any(Object),
         });
@@ -100,7 +100,7 @@ describe(`generator - ${generator}`, () => {
         expect(result.getStateSnapshot()).toMatchSnapshot();
       });
       it('should match application snapshot', () => {
-        const application = result.application;
+        const { application } = result;
         expect(application).toMatchSnapshot({
           jhipsterPackageJson: expect.any(Object),
           generators: expect.any(Object),
@@ -125,7 +125,7 @@ describe(`generator - ${generator}`, () => {
 `);
       });
       it('should match application snapshot', () => {
-        const application = result.application;
+        const { application } = result;
         expect(application).toMatchSnapshot({
           jhipsterPackageJson: expect.any(Object),
         });
@@ -163,7 +163,7 @@ describe(`generator - ${generator}`, () => {
 `);
       });
       it('should match application snapshot', () => {
-        const application = result.application;
+        const { application } = result;
         expect(application).toMatchSnapshot({
           jhipsterPackageJson: expect.any(Object),
         });

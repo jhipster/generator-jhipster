@@ -71,7 +71,7 @@ export const askForMicroserviceJson = asPromptingTask<EntityGenerator>(async fun
     return undefined;
   }
 
-  const databaseType = this.jhipsterConfig.databaseType;
+  const { databaseType } = this.jhipsterConfig;
 
   const answers = await this.prompt([
     {
@@ -184,7 +184,7 @@ export function askForFieldsToRemove(this: EntityGenerator) {
   ]).then(props => {
     if (props.confirmRemove) {
       this.log.log(chalk.red(`\nRemoving fields: ${props.fieldsToRemove}\n`));
-      const fields = this.entityConfig.fields;
+      const { fields } = this.entityConfig;
       for (let i = fields.length - 1; i >= 0; i -= 1) {
         const field = this.entityConfig.fields[i];
         if (props.fieldsToRemove.includes(field.fieldName)) {
@@ -242,7 +242,7 @@ export function askForRelationsToRemove(this: EntityGenerator) {
   ]).then(props => {
     if (props.confirmRemove) {
       this.log.log(chalk.red(`\nRemoving relationships: ${props.relsToRemove}\n`));
-      const relationships = this.entityConfig.relationships;
+      const { relationships } = this.entityConfig;
       for (let i = relationships.length - 1; i >= 0; i -= 1) {
         const rel = relationships[i];
         if ((props.relsToRemove as string[]).includes(`${rel.relationshipName}:${rel.relationshipType}`)) {
@@ -402,8 +402,8 @@ export function askForPagination(this: EntityGenerator) {
 async function askForField(this: EntityGenerator) {
   const context = this.entityData;
   this.log.log(chalk.green(`\nGenerating field #${this.entityConfig.fields.length + 1}\n`));
-  const databaseType = context.databaseType;
-  const clientFramework = context.clientFramework;
+  const { databaseType } = context;
+  const { clientFramework } = context;
   const possibleFiltering = databaseType === SQL && !context.reactive;
   const fieldAddAnswer = await this.prompt([
     {
@@ -723,7 +723,7 @@ async function askForField(this: EntityGenerator) {
 async function askForRelationship(this: EntityGenerator, ...args: any[]) {
   const [{ application }] = args;
   const context = this.entityData;
-  const name = context.name;
+  const { name } = context;
   this.log.log(chalk.green('\nGenerating relationships to other entities\n'));
   const addRelationshipAnswers = await this.prompt([
     {

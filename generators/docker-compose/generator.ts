@@ -289,7 +289,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
           }
           if (appConfig.searchEngineElasticsearch) {
             // Add search engine configuration
-            const searchEngine = appConfig.searchEngine;
+            const { searchEngine } = appConfig;
             const searchEngineYaml = parseYaml(this.fs.read(`${path}/src/main/docker/${searchEngine}.yml`));
             const searchEngineConfig = searchEngineYaml.services[searchEngine];
             delete searchEngineConfig.ports;

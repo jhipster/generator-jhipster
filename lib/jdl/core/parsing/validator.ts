@@ -149,7 +149,7 @@ interface JDLCstVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
 }
 
 export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDLRuntime) {
-  const parser = runtime.parser;
+  const { parser } = runtime;
   parser.parse();
   const BaseJDLCSTVisitorWithDefaults = parser.getBaseCstVisitorConstructorWithDefaults() as unknown as JDLCstVisitor<any, any>;
 
