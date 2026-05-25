@@ -98,7 +98,7 @@ public class OAuth2TestUtil {
         authorizedClientService.saveAuthorizedClient(
             new OAuth2AuthorizedClient(clientRegistration, authentication.getName(), token),
             authentication
-        )<%- (reactive) ? '.block()' : '' %>;
+        )<%- reactive ? '.block()' : '' %>;
 
         return authentication;
     }

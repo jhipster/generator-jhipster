@@ -142,6 +142,7 @@ export default defineConfig(
       rules: {
         ...js.configs.recommended.rules,
         ...jsRules,
+        'no-extra-parens': ['error', 'all'],
         'prefer-destructuring': ['error', { array: false, object: true }],
         '@stylistic/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: 'never' }],
         '@stylistic/comma-dangle': ['error', 'always-multiline'],

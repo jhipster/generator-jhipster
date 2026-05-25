@@ -38,7 +38,7 @@ jib {
     }
     container {
         entrypoint = ["bash", "-c", "/entrypoint.sh"]
-        ports = ["<%- serverPort %>"<%- (cacheProviderHazelcast) ? ', "5701/udp" ' : '' %>]
+        ports = ["<%- serverPort %>"<%- cacheProviderHazelcast ? ', "5701/udp" ' : '' %>]
         environment = [
 <%_ if (cacheProviderInfinispan) { _%>
             JAVA_OPTS: "-Djgroups.tcp.address=NON_LOOPBACK -Djava.net.preferIPv4Stack=true",

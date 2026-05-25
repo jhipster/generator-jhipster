@@ -120,8 +120,8 @@ export const AdministrationSlice = createSlice({
     },
 <%_ } _%>
   },
-  extraReducers(<%- (withAdminUi || (applicationTypeGateway && gatewayServicesApiAvailable)) ? 'builder' : '' %>) {
-<%_ if (withAdminUi || (applicationTypeGateway && gatewayServicesApiAvailable)) { _%>
+  extraReducers(<%- withAdminUi || applicationTypeGateway && gatewayServicesApiAvailable ? 'builder' : '' %>) {
+<%_ if (withAdminUi || applicationTypeGateway && gatewayServicesApiAvailable) { _%>
     builder
   <%_ if (applicationTypeGateway && gatewayServicesApiAvailable) { _%>
       .addCase(getGatewayRoutes.fulfilled, (state, action) => {

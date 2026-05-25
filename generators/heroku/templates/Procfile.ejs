@@ -16,4 +16,4 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-web: java $JAVA_OPTS <%- (applicationTypeGateway || dynoSize === 'Basic') ? '-Xmx256m' : '' %> -jar <%- (buildToolMaven) ? 'target' : '' %><%- (buildToolGradle) ? 'build/libs' : '' %>/*.jar --spring.profiles.active=prod,heroku<%- (databaseTypeMongodb) ? ' --spring.data.mongodb.database=$(echo "$MONGODB_URI" | sed "s/^.*:[0-9]*\\///g")' : '' %>
+web: java $JAVA_OPTS <%- applicationTypeGateway || dynoSize === 'Basic' ? '-Xmx256m' : '' %> -jar <%- buildToolMaven ? 'target' : '' %><%- buildToolGradle ? 'build/libs' : '' %>/*.jar --spring.profiles.active=prod,heroku<%- databaseTypeMongodb ? ' --spring.data.mongodb.database=$(echo "$MONGODB_URI" | sed "s/^.*:[0-9]*\\///g")' : '' %>

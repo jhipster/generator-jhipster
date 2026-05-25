@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { inject, Injectable } from '@angular/core';
-import { HttpClient<%- (!authenticationTypeOauth2) ? ', HttpHeaders' : '' %> } from '@angular/common/http';
+import { HttpClient<%- !authenticationTypeOauth2 ? ', HttpHeaders' : '' %> } from '@angular/common/http';
 <%_ if (!authenticationTypeOauth2) { _%>
 import { map, Observable } from 'rxjs';
 <%_ } else { _%>

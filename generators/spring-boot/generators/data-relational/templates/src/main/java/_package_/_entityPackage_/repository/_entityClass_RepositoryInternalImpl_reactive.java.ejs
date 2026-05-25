@@ -56,7 +56,7 @@ import org.springframework.data.relational.core.sql.Condition;
 import org.springframework.data.relational.core.sql.Conditions;
 import org.springframework.data.relational.core.sql.Expression;
 import org.springframework.data.relational.core.sql.Select;
-import org.springframework.data.relational.core.sql.SelectBuilder.SelectFromAndJoin<%- (reactiveEagerRelations.length > 0) ? 'Condition' : '' %>;
+import org.springframework.data.relational.core.sql.SelectBuilder.SelectFromAndJoin<%- reactiveEagerRelations.length > 0 ? 'Condition' : '' %>;
 import org.springframework.data.relational.core.sql.Table;
 import org.springframework.data.relational.repository.support.MappingRelationalEntityInformation;
 import org.springframework.r2dbc.core.DatabaseClient;
@@ -151,7 +151,7 @@ class <%- entityClass %>RepositoryInternalImpl extends SimpleR2dbcRepository<<%-
 <%_ for (const rel of reactiveEagerRelations) { _%>
         columns.addAll(<%- rel.otherEntity.entityNameCapitalized %>SqlHelper.getColumns(<%- rel.relationshipName %>Table, "<%- rel.relationshipName %>"));
 <%_ } _%>
-        SelectFromAndJoin<%- (reactiveEagerRelations.length > 0) ? 'Condition' : '' %> selectFrom = Select.builder().select(columns).from(entityTable)
+        SelectFromAndJoin<%- reactiveEagerRelations.length > 0 ? 'Condition' : '' %> selectFrom = Select.builder().select(columns).from(entityTable)
 <%_ for (const rel of reactiveEagerRelations) { _%>
             .leftOuterJoin(<%- rel.relationshipName %>Table).on(Column.create("<%- rel.joinColumnNames[0] %>", entityTable)).equals(Column.create("<%- rel.otherEntity.primaryKey.fields[0].columnName %>", <%- rel.relationshipName %>Table))
 <%_ } _%>;
@@ -209,7 +209,7 @@ class <%- entityClass %>RepositoryInternalImpl extends SimpleR2dbcRepository<<%-
             return entityManager.insert(entity);
         }
 <%_ } _%>
-        return super.save(entity)<%- (containsBagRelationships) ? '.flatMap((S e) -> updateRelations(e))' : '' %>;
+        return super.save(entity)<%- containsBagRelationships ? '.flatMap((S e) -> updateRelations(e))' : '' %>;
     }
 
 <%_ if (containsBagRelationships) { _%>

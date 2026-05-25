@@ -51,7 +51,7 @@
             >
             </b-form-input>
           </b-form-group>
-          <b-form-checkbox id="rememberMe" name="rememberMe" v-model="rememberMe" checked <%- (authenticationTypeSession && databaseTypeNo) ? ' hidden' : '' %>>
+          <b-form-checkbox id="rememberMe" name="rememberMe" v-model="rememberMe" checked <%- authenticationTypeSession && databaseTypeNo ? ' hidden' : '' %>>
             <span>{{ t$('login.form.rememberme') }}</span>
           </b-form-checkbox>
           <div>

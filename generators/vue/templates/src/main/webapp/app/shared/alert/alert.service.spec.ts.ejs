@@ -82,7 +82,7 @@ describe('Alert Service test suite', () => {
     const httpErrorResponse = {
       status: 400,
       headers: {
-        [MESSAGE_ERROR_HEADER_NAME]: <%- (enableTranslation) ? 'translationKey' : 'message' %>,
+        [MESSAGE_ERROR_HEADER_NAME]: <%- enableTranslation ? 'translationKey' : 'message' %>,
         [MESSAGE_PARAM_HEADER_NAME]: 'dummyEntity',
       },
     };

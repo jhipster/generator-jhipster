@@ -91,12 +91,12 @@ public class <%- dtoClass %> implements Serializable {
     @NotNull
   <%_ } _%>
   <%_ if (property.propertyApiDescription) { _%>
-    @Schema(description = "<%- property.propertyApiDescription %>"<%- (required) ? ', requiredMode = Schema.RequiredMode.REQUIRED' : '' %>)
+    @Schema(description = "<%- property.propertyApiDescription %>"<%- required ? ', requiredMode = Schema.RequiredMode.REQUIRED' : '' %>)
   <%_ } _%>
   <%_ if (property.fieldTypeBytes && databaseTypeSql) { _%>
     @Lob
   <%_ } _%>
-    private <%- property.propertyDtoJavaType %> <%- property.propertyName %><%- (property.collection && relationship) ? ' = new HashSet<>()' : '' %>;
+    private <%- property.propertyDtoJavaType %> <%- property.propertyName %><%- property.collection && relationship ? ' = new HashSet<>()' : '' %>;
   <%_ if (property.fieldWithContentType) { _%>
 
     private String <%- property.propertyName %>ContentType;
@@ -159,7 +159,7 @@ public class <%- dtoClass %> implements Serializable {
         return "<%- dtoClass %>{" +
 <%_ for ([idx, property] of restProperties.entries()) { _%>
   <%_ const isQuoted = property.fieldName && !property.fieldTypeNumeric; _%>
-            "<%- idx === 0 ? '' : ', ' %><%- property.propertyName %>=<%- (isQuoted) ? '\'' : '' %>" + <%- property.propertySupplierName %>() <%- (isQuoted) ? '+ "\'" ' : '' %>+
+            "<%- idx === 0 ? '' : ', ' %><%- property.propertyName %>=<%- isQuoted ? '\'' : '' %>" + <%- property.propertySupplierName %>() <%- isQuoted ? '+ "\'" ' : '' %>+
 <%_ } _%>
             "}";
     }

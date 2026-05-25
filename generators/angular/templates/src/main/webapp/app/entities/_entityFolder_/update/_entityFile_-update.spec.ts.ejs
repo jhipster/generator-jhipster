@@ -106,7 +106,7 @@ describe('<%- entityAngularName %> Management Update Component', () => {
                 <%- clientTestFramework %>.spyOn(<%- otherEntity.entityInstance %>Service, 'query').mockReturnValue(of(new HttpResponse({ body: <%- otherEntity.entityInstance %>Collection })));
                 const additional<%- otherEntity.entityAngularNamePlural %> = [
     <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
-                    <%- (relationship.collection) ? '...' : '' %><%- relationship.propertyName %>,
+                    <%- relationship.collection ? '...' : '' %><%- relationship.propertyName %>,
     <%_ } _%>
                 ];
                 const expectedCollection: I<%- otherEntity.entityAngularName %>[] = [...additional<%- otherEntity.entityAngularNamePlural %>, ...<%- otherEntity.entityInstance %>Collection];

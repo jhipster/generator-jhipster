@@ -173,7 +173,7 @@
             <font-awesome-icon icon="sign-out-alt" />
             <span>{{ t$('global.menu.account.logout') }}</span>
           </b-dropdown-item>
-          <b-dropdown-item data-cy="login" v-if="!authenticated" @click="<%- (authenticationTypeOauth2) ? 'login' : 'showLogin' %>()" id="login" active-class="active">
+          <b-dropdown-item data-cy="login" v-if="!authenticated" @click="<%- authenticationTypeOauth2 ? 'login' : 'showLogin' %>()" id="login" active-class="active">
             <font-awesome-icon icon="sign-in-alt" />
             <span>{{ t$('global.menu.account.login') }}</span>
           </b-dropdown-item>

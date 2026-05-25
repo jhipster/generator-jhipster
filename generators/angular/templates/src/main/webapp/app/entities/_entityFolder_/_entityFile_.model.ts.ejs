@@ -34,14 +34,14 @@ export interface I<%- entityAngularName %> {
   <%_ const { fieldName/* , fieldValidationRequired */, id } = field;
       const tsType = `${field.fieldIsEnum ? 'keyof typeof ' : ''}${field.tsType}`;
   _%>
-  <%- fieldName %><%- (!id /* && !fieldValidationRequired */) ? '?' : '' %>: <%- tsType %><%- (!id /* && !fieldValidationRequired */) ? ' | null' : '' %>;
+  <%- fieldName %><%- !id /* && !fieldValidationRequired */ ? '?' : '' %>: <%- tsType %><%- !id /* && !fieldValidationRequired */ ? ' | null' : '' %>;
   <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-  <%- fieldName %>ContentType<%- (!id /* && !fieldValidationRequired */) ? '?' : '' %>: string<%- (!id /* && !fieldValidationRequired */) ? ' | null' : '' %>,
+  <%- fieldName %>ContentType<%- !id /* && !fieldValidationRequired */ ? '?' : '' %>: string<%- !id /* && !fieldValidationRequired */ ? ' | null' : '' %>,
   <%_ } _%>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => rel.persistableRelationship || rel.relationshipEagerLoad)) { _%>
   <%_ const { propertyName, otherEntity, collection, otherEntityField } = relationship; _%>
-  <%- propertyName %>?: <%- (!otherEntity.embedded && (dtoMapstruct || otherEntity.builtInUser)) ? 'Pick<' : '' %>I<%- otherEntity.entityAngularName %><% if (!otherEntity.embedded && (dtoMapstruct || otherEntity.builtInUser)) { %>, '<%- otherEntity.primaryKey.name %>'<% if (otherEntity.primaryKey.name !== otherEntityField) { %> | '<%- otherEntityField %>'<% } %>><% } %><%- (collection) ? '[]' : '' %> | null;
+  <%- propertyName %>?: <%- !otherEntity.embedded && (dtoMapstruct || otherEntity.builtInUser) ? 'Pick<' : '' %>I<%- otherEntity.entityAngularName %><% if (!otherEntity.embedded && (dtoMapstruct || otherEntity.builtInUser)) { %>, '<%- otherEntity.primaryKey.name %>'<% if (otherEntity.primaryKey.name !== otherEntityField) { %> | '<%- otherEntityField %>'<% } %>><% } %><%- collection ? '[]' : '' %> | null;
 <%_ } _%>
 }
 <%_ if (!readOnly && primaryKey) { _%>

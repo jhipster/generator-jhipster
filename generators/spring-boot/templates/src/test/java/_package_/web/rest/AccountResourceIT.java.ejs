@@ -201,7 +201,7 @@ class AccountResourceIT {
 
     @Test
     @WithMockUser(TEST_USER_LOGIN)
-    void testGetExistingAccount()<%- (!reactive) ? ' throws Exception' : '' %> {
+    void testGetExistingAccount()<%- !reactive ? ' throws Exception' : '' %> {
         Set<String> authorities = new HashSet<>();
         authorities.add(AuthoritiesConstants.ADMIN);
 
@@ -215,7 +215,7 @@ class AccountResourceIT {
 <%_ } _%>
         user.setLangKey("en");
         user.setAuthorities(authorities);
-        userService.createUser(user)<%- (reactive) ? '.block()' : '' %>;
+        userService.createUser(user)<%- reactive ? '.block()' : '' %>;
 
 <%_ if (reactive) { _%>
         accountWebTestClient.get().uri("/api/account")
@@ -288,7 +288,7 @@ class AccountResourceIT {
 <%_ } _%>
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         validUser.setAuthorities(Set.of(AuthoritiesConstants.USER));
-        assertThat(userRepository.findOneByLogin("test-register-valid")<%- (reactive) ? '.blockOptional()' : '' %>).isEmpty();
+        assertThat(userRepository.findOneByLogin("test-register-valid")<%- reactive ? '.blockOptional()' : '' %>).isEmpty();
 
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/register")
@@ -305,7 +305,7 @@ class AccountResourceIT {
             .andExpect(status().isCreated());
 <%_ } _%>
 
-        assertThat(userRepository.findOneByLogin("test-register-valid")<%- (reactive) ? '.blockOptional()' : '' %>).isPresent();
+        assertThat(userRepository.findOneByLogin("test-register-valid")<%- reactive ? '.blockOptional()' : '' %>).isPresent();
 
         userService.deleteUser("test-register-valid")<%- reactorBlock %>;
     }
@@ -346,7 +346,7 @@ class AccountResourceIT {
             .expectStatus().isBadRequest();
 <%_ } _%>
 
-        Optional<<%- user.persistClass %>> user = userRepository.findOneByEmailIgnoreCase("funky@example.com")<%- (reactive) ? '.blockOptional()' : '' %>;
+        Optional<<%- user.persistClass %>> user = userRepository.findOneByEmailIgnoreCase("funky@example.com")<%- reactive ? '.blockOptional()' : '' %>;
         assertThat(user).isEmpty();
     }
 
@@ -379,7 +379,7 @@ class AccountResourceIT {
             .andExpect(status().isBadRequest());
 <%_ } _%>
 
-        Optional<<%- user.persistClass %>> user = userRepository.findOneByLogin("bob")<%- (reactive) ? '.blockOptional()' : '' %>;
+        Optional<<%- user.persistClass %>> user = userRepository.findOneByLogin("bob")<%- reactive ? '.blockOptional()' : '' %>;
         assertThat(user).isEmpty();
     }
 
@@ -478,10 +478,10 @@ class AccountResourceIT {
             .andExpect(status().isCreated());
 <%_ } _%>
 
-        Optional<<%- user.persistClass %>> testUser = userRepository.findOneByEmailIgnoreCase("alice2@example.com")<%- (reactive) ? '.blockOptional()' : '' %>;
+        Optional<<%- user.persistClass %>> testUser = userRepository.findOneByEmailIgnoreCase("alice2@example.com")<%- reactive ? '.blockOptional()' : '' %>;
         assertThat(testUser).isPresent();
         testUser.orElseThrow().setActivated(true);
-        userRepository.save(testUser.orElseThrow())<%- (reactive) ? '.block()' : '' %>;
+        userRepository.save(testUser.orElseThrow())<%- reactive ? '.block()' : '' %>;
 
         // Second (already activated) user
 <%_ if (reactive) { _%>
@@ -536,7 +536,7 @@ class AccountResourceIT {
             .andExpect(status().isCreated());
 <%_ } _%>
 
-        Optional<<%- user.persistClass %>> testUser1 = userRepository.findOneByLogin("test-register-duplicate-email")<%- (reactive) ? '.blockOptional()' : '' %>;
+        Optional<<%- user.persistClass %>> testUser1 = userRepository.findOneByLogin("test-register-duplicate-email")<%- reactive ? '.blockOptional()' : '' %>;
         assertThat(testUser1).isPresent();
 
         // Duplicate email, different login
@@ -568,10 +568,10 @@ class AccountResourceIT {
             .andExpect(status().isCreated());
 <%_ } _%>
 
-        Optional<<%- user.persistClass %>> testUser2 = userRepository.findOneByLogin("test-register-duplicate-email")<%- (reactive) ? '.blockOptional()' : '' %>;
+        Optional<<%- user.persistClass %>> testUser2 = userRepository.findOneByLogin("test-register-duplicate-email")<%- reactive ? '.blockOptional()' : '' %>;
         assertThat(testUser2).isEmpty();
 
-        Optional<<%- user.persistClass %>> testUser3 = userRepository.findOneByLogin("test-register-duplicate-email-2")<%- (reactive) ? '.blockOptional()' : '' %>;
+        Optional<<%- user.persistClass %>> testUser3 = userRepository.findOneByLogin("test-register-duplicate-email-2")<%- reactive ? '.blockOptional()' : '' %>;
         assertThat(testUser3).isPresent();
 
         // Duplicate email - with uppercase email address
@@ -604,12 +604,12 @@ class AccountResourceIT {
             .andExpect(status().isCreated());
 <%_ } _%>
 
-        Optional<<%- user.persistClass %>> testUser4 = userRepository.findOneByLogin("test-register-duplicate-email-3")<%- (reactive) ? '.blockOptional()' : '' %>;
+        Optional<<%- user.persistClass %>> testUser4 = userRepository.findOneByLogin("test-register-duplicate-email-3")<%- reactive ? '.blockOptional()' : '' %>;
         assertThat(testUser4).isPresent();
         assertThat(testUser4.orElseThrow().getEmail()).isEqualTo("test-register-duplicate-email@example.com");
 
         testUser4.orElseThrow().setActivated(true);
-        userService.updateUser((new <%- user.adminUserDto %>(testUser4.orElseThrow())))<%- (reactive) ? '.block()' : '' %>;
+        userService.updateUser((new <%- user.adminUserDto %>(testUser4.orElseThrow())))<%- reactive ? '.block()' : '' %>;
 
         // Register 4th (already activated) user
 <%_ if (reactive) { _%>
@@ -663,10 +663,10 @@ class AccountResourceIT {
             .andExpect(status().isCreated());
 <%_ } _%>
 
-        Optional<<%- user.persistClass %>> userDup = userRepository.findOne<%- (databaseTypeSql) ? 'WithAuthorities' : '' %>ByLogin("badguy")<%- (reactive) ? '.blockOptional()' : '' %>;
+        Optional<<%- user.persistClass %>> userDup = userRepository.findOne<%- databaseTypeSql ? 'WithAuthorities' : '' %>ByLogin("badguy")<%- reactive ? '.blockOptional()' : '' %>;
         assertThat(userDup).isPresent();
         assertThat(userDup.orElseThrow().getAuthorities()).hasSize(1)
-            .containsExactly(<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>authorityRepository.findById(AuthoritiesConstants.USER)<%- reactiveBlockOrElseThrow %><% } %><%- (databaseTypeCassandra || databaseTypeCouchbase) ? 'AuthoritiesConstants.USER' : '' %>);
+            .containsExactly(<% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { %>authorityRepository.findById(AuthoritiesConstants.USER)<%- reactiveBlockOrElseThrow %><% } %><%- databaseTypeCassandra || databaseTypeCouchbase ? 'AuthoritiesConstants.USER' : '' %>);
 
         userService.deleteUser("badguy")<%- reactorBlock %>;
     }
@@ -675,7 +675,7 @@ class AccountResourceIT {
 <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
 <%_ } _%>
-    void testActivateAccount()<%- (!reactive) ? ' throws Exception' : '' %> {
+    void testActivateAccount()<%- !reactive ? ' throws Exception' : '' %> {
         final String activationKey = "some activation key";
         <%- user.persistClass %> user = new <%- user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
@@ -690,7 +690,7 @@ class AccountResourceIT {
         user.setCreatedBy(Constants.SYSTEM);
 <%_ } _%>
 
-        userRepository.save<%- (databaseTypeSql && !reactive) ? 'AndFlush' : '' %>(user)<%- (reactive) ? '.block()' : '' %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
 
 <%_ if (reactive) { _%>
         accountWebTestClient.get().uri("/api/activate?key={activationKey}", activationKey)
@@ -711,7 +711,7 @@ class AccountResourceIT {
 <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
 <%_ } _%>
-    void testActivateAccountWithWrongKey() <%- (!reactive) ? 'throws Exception ' : '' %>{
+    void testActivateAccountWithWrongKey() <%- !reactive ? 'throws Exception ' : '' %>{
 <%_ if (reactive) { _%>
         accountWebTestClient.get().uri("/api/activate?key=wrongActivationKey")
             .exchange()
@@ -739,7 +739,7 @@ class AccountResourceIT {
 <%_ if (databaseTypeSql && reactive) { _%>
         user.setCreatedBy(Constants.SYSTEM);
 <%_ } _%>
-        userRepository.save<%- (databaseTypeSql && !reactive) ? 'AndFlush' : '' %>(user)<%- (reactive) ? '.block()' : '' %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
 
         <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>();
         userDTO.setLogin("not-used");
@@ -768,7 +768,7 @@ class AccountResourceIT {
             .andExpect(status().isOk());
 <%_ } _%>
 
-        <%- user.persistClass %> updatedUser = userRepository.findOne<%- (databaseTypeSql) ? 'WithAuthorities' : '' %>ByLogin(user.getLogin())<%- reactiveBlockOrElseNull %>;
+        <%- user.persistClass %> updatedUser = userRepository.findOne<%- databaseTypeSql ? 'WithAuthorities' : '' %>ByLogin(user.getLogin())<%- reactiveBlockOrElseNull %>;
         assertThat(updatedUser.getFirstName()).isEqualTo(userDTO.getFirstName());
         assertThat(updatedUser.getLastName()).isEqualTo(userDTO.getLastName());
         assertThat(updatedUser.getEmail()).isEqualTo(userDTO.getEmail());
@@ -801,7 +801,7 @@ class AccountResourceIT {
         user.setCreatedBy(Constants.SYSTEM);
 <%_ } _%>
 
-        userRepository.save<%- (databaseTypeSql && !reactive) ? 'AndFlush' : '' %>(user)<%- (reactive) ? '.block()' : '' %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
 
         <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>();
         userDTO.setLogin("not-used");
@@ -833,7 +833,7 @@ class AccountResourceIT {
             .andExpect(status().isBadRequest());
 <%_ } _%>
 
-        assertThat(userRepository.findOneByEmailIgnoreCase("invalid email")<%- (reactive) ? '.blockOptional()' : '' %>).isNotPresent();
+        assertThat(userRepository.findOneByEmailIgnoreCase("invalid email")<%- reactive ? '.blockOptional()' : '' %>).isNotPresent();
 
         userService.deleteUser("save-invalid-email")<%- reactorBlock %>;
     }
@@ -855,7 +855,7 @@ class AccountResourceIT {
 <%_ if (databaseTypeSql && reactive) { _%>
         user.setCreatedBy(Constants.SYSTEM);
 <%_ } _%>
-        userRepository.save<%- (databaseTypeSql && !reactive) ? 'AndFlush' : '' %>(user)<%- (reactive) ? '.block()' : '' %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
 
         <%- user.persistClass %> anotherUser = new <%- user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
@@ -869,7 +869,7 @@ class AccountResourceIT {
         anotherUser.setCreatedBy(Constants.SYSTEM);
 <%_ } _%>
 
-        userRepository.save<%- (databaseTypeSql && !reactive) ? 'AndFlush' : '' %>(anotherUser)<%- (reactive) ? '.block()' : '' %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(anotherUser)<%- reactive ? '.block()' : '' %>;
 
         <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>();
         userDTO.setLogin("not-used");
@@ -922,7 +922,7 @@ class AccountResourceIT {
 <%_ if (databaseTypeSql && reactive) { _%>
         user.setCreatedBy(Constants.SYSTEM);
 <%_ } _%>
-        userRepository.save<%- (databaseTypeSql && !reactive) ? 'AndFlush' : '' %>(user)<%- (reactive) ? '.block()' : '' %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
 
         <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>();
         userDTO.setLogin("not-used");
@@ -974,7 +974,7 @@ class AccountResourceIT {
 <%_ if (databaseTypeSql && reactive) { _%>
         user.setCreatedBy(Constants.SYSTEM);
 <%_ } _%>
-        userRepository.save<%- (databaseTypeSql && !reactive) ? 'AndFlush' : '' %>(user)<%- (reactive) ? '.block()' : '' %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
 
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/account/change-password")
@@ -1017,7 +1017,7 @@ class AccountResourceIT {
 <%_ if (databaseTypeSql && reactive) { _%>
         user.setCreatedBy(Constants.SYSTEM);
 <%_ } _%>
-        userRepository.save<%- (databaseTypeSql && !reactive) ? 'AndFlush' : '' %>(user)<%- (reactive) ? '.block()' : '' %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
 
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/account/change-password")
@@ -1058,7 +1058,7 @@ class AccountResourceIT {
 <%_ if (databaseTypeSql && reactive) { _%>
         user.setCreatedBy(Constants.SYSTEM);
 <%_ } _%>
-        userRepository.save<%- (databaseTypeSql && !reactive) ? 'AndFlush' : '' %>(user)<%- (reactive) ? '.block()' : '' %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
 
         String newPassword = RandomStringUtils.insecure().next(ManagedUserVM.PASSWORD_MIN_LENGTH - 1);
 
@@ -1102,7 +1102,7 @@ class AccountResourceIT {
 <%_ if (databaseTypeSql && reactive) { _%>
         user.setCreatedBy(Constants.SYSTEM);
 <%_ } _%>
-        userRepository.save<%- (databaseTypeSql && !reactive) ? 'AndFlush' : '' %>(user)<%- (reactive) ? '.block()' : '' %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
 
         String newPassword = RandomStringUtils.insecure().next(ManagedUserVM.PASSWORD_MAX_LENGTH + 1);
 
@@ -1146,7 +1146,7 @@ class AccountResourceIT {
 <%_ if (databaseTypeSql && reactive) { _%>
         user.setCreatedBy(Constants.SYSTEM);
 <%_ } _%>
-        userRepository.save<%- (databaseTypeSql && !reactive) ? 'AndFlush' : '' %>(user)<%- (reactive) ? '.block()' : '' %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
 
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/account/change-password")
@@ -1177,7 +1177,7 @@ class AccountResourceIT {
     @Transactional
   <%_ } _%>
     @WithMockUser("current-sessions")
-    void testGetCurrentSessions() <%- (!reactive) ? 'throws Exception ' : '' %>{
+    void testGetCurrentSessions() <%- !reactive ? 'throws Exception ' : '' %>{
         <%- user.persistClass %> user = new <%- user.persistClass %>();
   <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
@@ -1188,7 +1188,7 @@ class AccountResourceIT {
   <%_ if (databaseTypeSql && reactive) { _%>
         user.setCreatedBy(Constants.SYSTEM);
   <%_ } _%>
-        userRepository.save<%- (databaseTypeSql && !reactive) ? 'AndFlush' : '' %>(user)<%- (reactive) ? '.block()' : '' %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
 
         PersistentToken token = new PersistentToken();
         token.setSeries("current-sessions");
@@ -1207,7 +1207,7 @@ class AccountResourceIT {
   <% } %>
         token.setIpAddress("127.0.0.1");
         token.setUserAgent("Test agent");
-        persistentTokenRepository.save<%- (databaseTypeSql && !reactive) ? 'AndFlush' : '' %>(token);
+        persistentTokenRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(token);
 
         restAccountMockMvc
             .perform(get("/api/account/sessions"))
@@ -1215,7 +1215,7 @@ class AccountResourceIT {
             .andExpect(jsonPath("$.[*].series").value(hasItem(token.getSeries())))
             .andExpect(jsonPath("$.[*].ipAddress").value(hasItem(token.getIpAddress())))
             .andExpect(jsonPath("$.[*].userAgent").value(hasItem(token.getUserAgent())))
-            .andExpect(jsonPath("$.[*].tokenDate").value(hasItem(containsString(<%- (databaseTypeCassandra) ? '"2017-03-28T15:25:57.123Z"' : 'token.getTokenDate().toString()' %>))));
+            .andExpect(jsonPath("$.[*].tokenDate").value(hasItem(containsString(<%- databaseTypeCassandra ? '"2017-03-28T15:25:57.123Z"' : 'token.getTokenDate().toString()' %>))));
 
         persistentTokenRepository.delete(token);
         userService.deleteUser("current-sessions")<%- reactorBlock %>;
@@ -1226,7 +1226,7 @@ class AccountResourceIT {
     @Transactional
   <%_ } _%>
     @WithMockUser("invalidate-session")
-    void testInvalidateSession() <%- (!reactive) ? 'throws Exception ' : '' %>{
+    void testInvalidateSession() <%- !reactive ? 'throws Exception ' : '' %>{
         <%- user.persistClass %> user = new <%- user.persistClass %>();
   <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
@@ -1237,7 +1237,7 @@ class AccountResourceIT {
   <%_ if (databaseTypeSql && reactive) { _%>
         user.setCreatedBy(Constants.SYSTEM);
   <%_ } _%>
-        userRepository.save<%- (databaseTypeSql && !reactive) ? 'AndFlush' : '' %>(user)<%- (reactive) ? '.block()' : '' %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
 
         PersistentToken token = new PersistentToken();
         token.setSeries("invalidate-session");
@@ -1256,7 +1256,7 @@ class AccountResourceIT {
   <%_ } _%>
         token.setIpAddress("127.0.0.1");
         token.setUserAgent("Test agent");
-        persistentTokenRepository.save<%- (databaseTypeSql && !reactive) ? 'AndFlush' : '' %>(token);
+        persistentTokenRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(token);
 
         assertThat(persistentTokenRepository.findByUser(user)).hasSize(1);
 
@@ -1278,7 +1278,7 @@ class AccountResourceIT {
 <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
 <%_ } _%>
-    void testRequestPasswordReset()<%- (!reactive) ? ' throws Exception' : '' %> {
+    void testRequestPasswordReset()<%- !reactive ? ' throws Exception' : '' %> {
         <%- user.persistClass %> user = new <%- user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
@@ -1291,7 +1291,7 @@ class AccountResourceIT {
 <%_ if (databaseTypeSql && reactive) { _%>
         user.setCreatedBy(Constants.SYSTEM);
 <%_ } _%>
-        userRepository.save<%- (databaseTypeSql && !reactive) ? 'AndFlush' : '' %>(user)<%- (reactive) ? '.block()' : '' %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
 
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/account/reset-password/init")
@@ -1315,7 +1315,7 @@ class AccountResourceIT {
 <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
 <%_ } _%>
-    void testRequestPasswordResetUpperCaseEmail()<%- (!reactive) ? ' throws Exception' : '' %> {
+    void testRequestPasswordResetUpperCaseEmail()<%- !reactive ? ' throws Exception' : '' %> {
         <%- user.persistClass %> user = new <%- user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
@@ -1328,7 +1328,7 @@ class AccountResourceIT {
 <%_ if (databaseTypeSql && reactive) { _%>
         user.setCreatedBy(Constants.SYSTEM);
 <%_ } _%>
-        userRepository.save<%- (databaseTypeSql && !reactive) ? 'AndFlush' : '' %>(user)<%- (reactive) ? '.block()' : '' %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
 
 <%_ if (reactive) { _%>
         accountWebTestClient.post().uri("/api/account/reset-password/init")
@@ -1356,7 +1356,7 @@ class AccountResourceIT {
             .exchange()
             .expectStatus().isOk();
 <%_ } else { _%>
-    void testRequestPasswordResetWrongEmail() <%- (!reactive) ? 'throws Exception ' : '' %>{
+    void testRequestPasswordResetWrongEmail() <%- !reactive ? 'throws Exception ' : '' %>{
         restAccountMockMvc.perform(
             post("/api/account/reset-password/init")
                 .content("password-reset-wrong-email@example.com")<% if (authenticationUsesCsrf) { %>
@@ -1382,7 +1382,7 @@ class AccountResourceIT {
 <%_ if (databaseTypeSql && reactive) { _%>
         user.setCreatedBy(Constants.SYSTEM);
 <%_ } _%>
-        userRepository.save<%- (databaseTypeSql && !reactive) ? 'AndFlush' : '' %>(user)<%- (reactive) ? '.block()' : '' %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
 
         KeyAndPasswordVM keyAndPassword = new KeyAndPasswordVM();
         keyAndPassword.setKey(user.getResetKey());
@@ -1426,7 +1426,7 @@ class AccountResourceIT {
 <%_ if (databaseTypeSql && reactive) { _%>
         user.setCreatedBy(Constants.SYSTEM);
 <%_ } _%>
-        userRepository.save<%- (databaseTypeSql && !reactive) ? 'AndFlush' : '' %>(user)<%- (reactive) ? '.block()' : '' %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
 
         KeyAndPasswordVM keyAndPassword = new KeyAndPasswordVM();
         keyAndPassword.setKey(user.getResetKey());

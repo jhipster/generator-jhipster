@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%- entityAbsolutePackage %>.service<%- (serviceImpl) ? '.impl' : '' %>;
+package <%- entityAbsolutePackage %>.service<%- serviceImpl ? '.impl' : '' %>;
 
 <%_ const serviceClassName = serviceImpl ? `${entityClass}ServiceImpl` : `${entityClass}Service`;
     const mapper = `${entityInstance}Mapper`;
@@ -73,10 +73,10 @@ import java.util.function.Consumer;
 <%_ if (primaryKey.typeUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
-<%_ if (fieldsContainNoOwnerOneToOne || (paginationNo && ((searchEngine) || dtoMapstruct))) { _%>
+<%_ if (fieldsContainNoOwnerOneToOne || paginationNo && (searchEngine || dtoMapstruct)) { _%>
 import java.util.stream.Collectors;
 <%_ } _%>
-<%_ if (fieldsContainNoOwnerOneToOne || (paginationNo && searchEngineElasticsearch)) { _%>
+<%_ if (fieldsContainNoOwnerOneToOne || paginationNo && searchEngineElasticsearch) { _%>
 import java.util.stream.StreamSupport;
 <%_ } _%>
 
@@ -101,7 +101,7 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
 <%_ if (serviceImpl) { _%>
     @Override
 <%_ } _%>
-    public <%- (reactive) ? 'Mono<' : '' %><%- restClass %><%- (reactive) ? '>' : '' %> save(<%- restClass %> <%- restInstance %>) {
+    public <%- reactive ? 'Mono<' : '' %><%- restClass %><%- reactive ? '>' : '' %> save(<%- restClass %> <%- restInstance %>) {
         LOG.debug("Request to save <%- entityClass %> : {}", <%- restInstance %>);
 <%- include(`/_global_partials_entity_/save_template_${reactive ? 'reactive' : 'imperative'}`, { saveNewEntityOperation: true, returnDirectly: true }) -%>
     }
@@ -118,7 +118,7 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
   <%_ if (serviceImpl) { _%>
     @Override
   <%_ } _%>
-    public <%- (reactive) ? 'Mono<' : '' %><%- restClass %><%- (reactive) ? '>' : '' %> update(<%- restClass %> <%- restInstance %>) {
+    public <%- reactive ? 'Mono<' : '' %><%- restClass %><%- reactive ? '>' : '' %> update(<%- restClass %> <%- restInstance %>) {
         LOG.debug("Request to update <%- entityClass %> : {}", <%- restInstance %>);
 <%- include(`/_global_partials_entity_/save_template_${reactive ? 'reactive' : 'imperative'}`, { saveNewEntityOperation: false, returnDirectly: true }) -%>
     }
@@ -134,7 +134,7 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
   <%_ if (serviceImpl) { _%>
     @Override
   <%_ } _%>
-    public <%- (reactive) ? 'Mono' : 'Optional' %><<%- restClass %>> partialUpdate(<%- restClass %> <%- restInstance %>) {
+    public <%- reactive ? 'Mono' : 'Optional' %><<%- restClass %>> partialUpdate(<%- restClass %> <%- restInstance %>) {
         LOG.debug("Request to partially update <%- entityClass %> : {}", <%- restInstance %>);
 <%- include('../../_partials_entity_/patch_template', { isService: true, viaService: false }) -%>
     }
@@ -157,14 +157,14 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
   <%_ if (databaseTypeSql) { _%>
     @Transactional(readOnly = true)
   <%_ } _%>
-    public <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findAll(<%- (!paginationNo) ? 'Pageable pageable' : '' %>) {
+    public <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findAll(<%- !paginationNo ? 'Pageable pageable' : '' %>) {
         LOG.debug("Request to get all <%- entityClassPlural %>");
   <%_ if (paginationNo) { _%>
-        return <%- entityInstance %>Repository.findAll()<% if (dtoMapstruct) { %><%- (!reactive) ? '.stream()' : '' %>
+        return <%- entityInstance %>Repository.findAll()<% if (dtoMapstruct) { %><%- !reactive ? '.stream()' : '' %>
             .map(<%- entityToDtoReference %>)<% if (!reactive) { %>
             .collect(Collectors.toCollection(LinkedList::new))<% } } %>;
   <%_ } else { _%>
-        return <%- entityInstance %>Repository.findAll<%- (reactive) ? 'By' : '' %>(pageable)<% if (!dtoMapstruct) { %>;<% } else { %>
+        return <%- entityInstance %>Repository.findAll<%- reactive ? 'By' : '' %>(pageable)<% if (!dtoMapstruct) { %>;<% } else { %>
             .map(<%- entityToDtoReference %>);<% } %>
   <%_ } _%>
     }
@@ -187,7 +187,7 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
   <%_ if (databaseTypeSql) { _%>
     @Transactional(readOnly = true)
   <%_ } _%>
-    public <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findByCriteria(<%- entityClass %>Criteria criteria<%- (!paginationNo) ? ', Pageable pageable' : '' %>) {
+    public <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findByCriteria(<%- entityClass %>Criteria criteria<%- !paginationNo ? ', Pageable pageable' : '' %>) {
         LOG.debug("Request to get all <%- entityClassPlural %> by Criteria");
   <%_ if (paginationNo) { _%>
         return <%- entityInstance %>Repository.findByCriteria(criteria, null)<% if (dtoMapstruct) { %>.map(<%- entityToDtoReference %>)<% } %>;
@@ -300,12 +300,12 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
   <%_ if (databaseTypeSql) { _%>
     @Transactional(readOnly = true)
   <%_ } _%>
-    public <% if (!paginationNo) { %><%- pageOrFlux %><<%- restClass %><% } else { %><%- listOrFlux %><<%- restClass %><% } %>> search(String query<%- (!paginationNo) ? ', Pageable pageable' : '' %>) {
+    public <% if (!paginationNo) { %><%- pageOrFlux %><<%- restClass %><% } else { %><%- listOrFlux %><<%- restClass %><% } %>> search(String query<%- !paginationNo ? ', Pageable pageable' : '' %>) {
   <%_ if (paginationNo) { _%>
         LOG.debug("Request to search <%- entityClassPlural %> for query {}", query);<%- include('../../_partials_entity_/search_stream_template', { viaService: false, fromResource: false }) -%>
   <%_ } else { _%>
         LOG.debug("Request to search for a page of <%- entityClassPlural %> for query {}", query);
-        return <%- entityInstance %><%- (searchEngineElasticsearch) ? 'Search' : '' %>Repository.search(query, pageable)
+        return <%- entityInstance %><%- searchEngineElasticsearch ? 'Search' : '' %>Repository.search(query, pageable)
     <%_ if (!dtoMapstruct) { _%>;
     <%_ } else { _%>
             .map(<%- entityToDtoReference %>);

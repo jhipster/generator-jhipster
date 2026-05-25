@@ -22,7 +22,7 @@ export default defineComponent({
     return {
       authenticated,
       username,
-      <%- (authenticationTypeOauth2) ? 'login' : 'showLogin' %>,
+      <%- authenticationTypeOauth2 ? 'login' : 'showLogin' %>,
 <%_ if (enableTranslation) { _%>
       t$: useI18n().t,
 <%_ } _%>

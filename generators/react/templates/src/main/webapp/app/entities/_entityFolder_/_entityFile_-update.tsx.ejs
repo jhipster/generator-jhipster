@@ -23,7 +23,7 @@ import {
   Row,
   Col,
   FormText,
-  <%- (anyFieldHasDocumentation) ? 'OverlayTrigger, Tooltip,' : '' %>
+  <%- anyFieldHasDocumentation ? 'OverlayTrigger, Tooltip,' : '' %>
 } from 'react-bootstrap';
 import {
   isNumber,
@@ -31,7 +31,7 @@ import {
   translate,
   ValidatedField,
   ValidatedForm,
-  <%- (anyFieldHasFileBasedContentType) ? ' ValidatedBlobField,' : '' %>
+  <%- anyFieldHasFileBasedContentType ? ' ValidatedBlobField,' : '' %>
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -96,7 +96,7 @@ export const <%- entityReactName %>Update = () => {
 <%_ } _%>
 
   const handleClose = () => {
-    navigate('/<%- entityPage %>'<%- (paginationPagination) ? ' + location.search' : '' %>);
+    navigate('/<%- entityPage %>'<%- paginationPagination ? ' + location.search' : '' %>);
   }
 
   useEffect(() => {

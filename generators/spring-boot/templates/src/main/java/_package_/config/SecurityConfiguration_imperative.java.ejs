@@ -48,7 +48,7 @@ import <%- packageName %>.web.filter.SpaWebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 <%_ } _%>
-<%_ if (authenticationTypeJwt || (authenticationTypeOauth2 && applicationTypeMicroservice)) { _%>
+<%_ if (authenticationTypeJwt || authenticationTypeOauth2 && applicationTypeMicroservice) { _%>
 import org.springframework.security.config.http.SessionCreationPolicy;
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
@@ -135,7 +135,7 @@ public class SecurityConfiguration {
     private String issuerUri;
 <%_ } _%>
 
-    public SecurityConfiguration(<%- (devDatabaseTypeH2Any) ? 'Environment env, ' : '' %><%- (authenticationTypeSession && generateUserManagement) ? 'RememberMeServices rememberMeServices, ' : '' %> JHipsterProperties jHipsterProperties) {
+    public SecurityConfiguration(<%- devDatabaseTypeH2Any ? 'Environment env, ' : '' %><%- authenticationTypeSession && generateUserManagement ? 'RememberMeServices rememberMeServices, ' : '' %> JHipsterProperties jHipsterProperties) {
 <%_ if (devDatabaseTypeH2Any) { _%>
         this.env = env;
 <%_ } _%>
@@ -153,7 +153,7 @@ public class SecurityConfiguration {
 <%_ } _%>
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http)<%- (!springBoot4) ? ' throws Exception' : '' %> {
+    public SecurityFilterChain filterChain(HttpSecurity http)<%- !springBoot4 ? ' throws Exception' : '' %> {
         http
 <%_ if (!applicationTypeMicroservice) { _%>
             .cors(withDefaults())

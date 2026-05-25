@@ -14,7 +14,7 @@
 
         <div class="alert alert-warning" v-if="!authenticated">
           <span>{{ t$('global.messages.info.authenticated.prefix') }}</span>
-          <a class="alert-link" @click="<%- (authenticationTypeOauth2) ? 'login' : 'showLogin' %>()">{{ t$('global.messages.info.authenticated.link') }}</a
+          <a class="alert-link" @click="<%- authenticationTypeOauth2 ? 'login' : 'showLogin' %>()">{{ t$('global.messages.info.authenticated.link') }}</a
           ><span v-html="t$('global.messages.info.authenticated.suffix')"
             >, you can try the default accounts:<br />- Administrator (login="admin" and password="admin") <br />- User (login="user" and
             password="user").</span

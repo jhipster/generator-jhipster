@@ -18,7 +18,7 @@
 -%>
 <%_ const mapper = `${entityInstance}Mapper`;
     const entityToDtoReference = `${mapper}::` + 'toDto';
-    const reactiveSql = (databaseTypeSql && reactive);
+    const reactiveSql = databaseTypeSql && reactive;
 _%>
 <%_ for (const relationship of relationships) { _%>
   <%_ if (relationship.relationshipOneToOne && !relationship.ownerSide) { _%>

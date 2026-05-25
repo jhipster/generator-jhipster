@@ -1,4 +1,4 @@
-import { createRouter as createVueRouter, createWebHistory<%- (microfrontend) ? ', type RouteRecordRaw' : '' %> } from 'vue-router';
+import { createRouter as createVueRouter, createWebHistory<%- microfrontend ? ', type RouteRecordRaw' : '' %> } from 'vue-router';
 <%_ if (microfrontend) { _%>
 import { loadRemote } from '@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime';
 <%_ } _%>

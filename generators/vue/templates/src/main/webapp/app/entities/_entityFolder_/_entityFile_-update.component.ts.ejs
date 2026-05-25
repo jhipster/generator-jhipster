@@ -8,7 +8,7 @@ import { useVuelidate } from '@vuelidate/core'
 <%_ if (anyFieldIsBlobDerived) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>
-import { useValidation<%- (anyFieldIsTimeDerived) ? ', useDateFormat' : '' %> } from '@/shared/composables';
+import { useValidation<%- anyFieldIsTimeDerived ? ', useDateFormat' : '' %> } from '@/shared/composables';
 import { useAlertService } from '@/shared/alert/alert.service';
 
 <%_ const allRelationshipsThatNeedSelectOptions = Object

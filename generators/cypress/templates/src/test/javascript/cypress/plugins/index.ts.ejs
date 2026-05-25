@@ -36,7 +36,7 @@ import { pa11y, prepareAudit } from 'cypress-audit';
 const VALID_CATEGORIES = new Set(['performance', 'accessibility', 'best-practices', 'seo']);
 <%_ } _%>
 
-export default <%- (cypressCoverage) ? 'async ' : '' %>(on: Cypress.PluginEvents, config: Cypress.PluginConfigOptions) => {
+export default <%- cypressCoverage ? 'async ' : '' %>(on: Cypress.PluginEvents, config: Cypress.PluginConfigOptions) => {
   installLogsPrinter(on);
   on('before:browser:launch', (browser, launchOptions) => {
 <%_ if (cypressAudit) { _%>

@@ -19,7 +19,7 @@
 #common configuration shared between all applications
 configserver:
   name: Service Registry
-  status: Connected to <%- (serviceDiscoveryEureka) ? 'the JHipster Registry' : '' %><%- (serviceDiscoveryConsul) ? 'Consul' : '' %> running in Docker
+  status: Connected to <%- serviceDiscoveryEureka ? 'the JHipster Registry' : '' %><%- serviceDiscoveryConsul ? 'Consul' : '' %> running in Docker
 
 jhipster:
   security:
