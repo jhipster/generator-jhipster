@@ -140,6 +140,8 @@ export default defineConfig(
     }),
     {
       rules: {
+        'ejs-templates/no-output-negated-ternary': 'error',
+
         ...js.configs.recommended.rules,
         ...jsRules,
         'no-extra-parens': ['error', 'all'],
