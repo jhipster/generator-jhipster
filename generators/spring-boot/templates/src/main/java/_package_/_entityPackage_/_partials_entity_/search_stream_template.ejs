@@ -35,7 +35,7 @@
             return StreamSupport
                 .stream(<%- entityInstance %>SearchRepository.search(query).spliterator(), false)
     <%_ } else { _%>
-                return <%- entityInstance %>Repository.search(query)<%- !dtoMapstruct ? ';' : '.stream()' %>
+                return <%- entityInstance %>Repository.search(query)<%- dtoMapstruct ? '.stream()' : ';' %>
     <%_ } _%>
     <%_ if (dtoMapstruct) { _%>
                 .map(<%- entityToDtoReference %>)

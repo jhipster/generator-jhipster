@@ -407,7 +407,7 @@ class UserServiceIT {
   <%_ if (searchEngineElasticsearch) { _%>
 
         // Verify Elasticsearch mock
-        verify(spiedUserSearchRepository, times(1)).delete<%- !reactive ? 'FromIndex' : '' %>(user);
+        verify(spiedUserSearchRepository, times(1)).delete<%- reactive ? '' : 'FromIndex' %>(user);
   <%_ } _%>
     }
 
@@ -438,7 +438,7 @@ class UserServiceIT {
   <%_ if (searchEngineElasticsearch) { _%>
 
         // Verify Elasticsearch mock
-        verify(spiedUserSearchRepository, never()).delete<%- !reactive ? 'FromIndex' : '' %>(user);
+        verify(spiedUserSearchRepository, never()).delete<%- reactive ? '' : 'FromIndex' %>(user);
   <%_ } _%>
     }
 <%_ } _%>

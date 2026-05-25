@@ -32,7 +32,7 @@ _%>
         return ResponseEntity.ok().body(entityList);
     <%_ } else { _%>
         Page<<%- restClass %>> page = <%- entityInstance %>QueryService.findByCriteria(criteria, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<%- !reactive ? 'ServletUriComponentsBuilder.fromCurrentRequest()' : 'ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders())' %>, page);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(<%- reactive ? 'ForwardedHeaderUtils.adaptFromForwardedHeaders(request.getURI(), request.getHeaders())' : 'ServletUriComponentsBuilder.fromCurrentRequest()' %>, page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     <%_ } _%>
   <%_ } else { _%>

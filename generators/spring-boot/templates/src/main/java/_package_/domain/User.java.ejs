@@ -109,10 +109,10 @@ import static org.springframework.data.couchbase.core.mapping.id.GenerationStrat
   <%_ if (!reactive) { _%>
 @Entity
   <%_ } _%>
-@Table(<%- !reactive ? 'name = ' : '' %>"<%- user.entityTableName %>")
+@Table(<%- reactive ? '' : 'name = ' %>"<%- user.entityTableName %>")
 <%_ } _%>
 <%_ if (enableHibernateCache) { _%>
-@Cache(usage = CacheConcurrencyStrategy.<%- !cacheProviderInfinispan ? 'NONSTRICT_' : '' %>READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.<%- cacheProviderInfinispan ? '' : 'NONSTRICT_' %>READ_WRITE)
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
 @org.springframework.data.mongodb.core.mapping.Document(collection = "<%- jhiTablePrefix %>_user")
@@ -382,7 +382,7 @@ public class <%- user.persistClass %><% if (generateSpringAuditor) { %> extends 
     private String resetKey;
 
   <%_ if (databaseTypeSql || databaseTypeCassandra && reactive) { _%>
-    @Column(<%- !reactive ? 'name = ' : '' %>"reset_date")
+    @Column(<%- reactive ? '' : 'name = ' %>"reset_date")
   <%_ } else if (databaseTypeMongodb) { _%>
     @Field("reset_date")
   <%_ } else if (databaseTypeCouchbase) { _%>

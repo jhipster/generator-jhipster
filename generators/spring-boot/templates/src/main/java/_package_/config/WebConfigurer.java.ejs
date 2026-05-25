@@ -93,7 +93,7 @@ import java.util.concurrent.TimeUnit;
  * Configuration of web application with Servlet 3.0 APIs.
  */
 @Configuration
-public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitializer<%- !skipClient ? ', WebServerFactoryCustomizer<WebServerFactory>' : '' %><% } %><%- reactive ? 'WebFluxConfigurer' : '' %> {
+public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitializer<%- skipClient ? '' : ', WebServerFactoryCustomizer<WebServerFactory>' %><% } %><%- reactive ? 'WebFluxConfigurer' : '' %> {
 
     private static final Logger LOG = LoggerFactory.getLogger(WebConfigurer.class);
 

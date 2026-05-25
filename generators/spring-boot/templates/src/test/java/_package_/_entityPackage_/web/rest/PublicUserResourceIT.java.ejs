@@ -186,7 +186,7 @@ class PublicUserResourceIT {
 <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
 <%_ } _%>
-    void getAllPublicUsers()<%- !reactive ? ' throws Exception' : '' %> {
+    void getAllPublicUsers()<%- reactive ? '' : ' throws Exception' %> {
         // Initialize the database
         userRepository.<%- databaseTypeSql && reactive && authenticationTypeOauth2 ? 'create' : 'save' %><%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
 

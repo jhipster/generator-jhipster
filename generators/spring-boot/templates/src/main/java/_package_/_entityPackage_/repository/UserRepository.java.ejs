@@ -229,7 +229,7 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
   <%_ } _%>
 
   <%_ if (databaseTypeNeo4j) { _%>
-    <%- !reactive ? '// See https://github.com/neo4j/sdn-rx/issues/51' : '' %>
+    <%- reactive ? '' : '// See https://github.com/neo4j/sdn-rx/issues/51' %>
     <%- listOrFlux %><<%- user.persistClass %>> findAll();
 
   <%_ } _%>
@@ -500,7 +500,7 @@ public class UserRepository {
 
     private PreparedStatement truncateByEmailStmt;
 
-    public UserRepository(<%- reactive ? 'ReactiveCassandraTemplate cqlTemplate, Reactive' : 'Cql' %>Session session, Validator validator<%- !reactive ? ', CassandraProperties cassandraProperties' : '' %>) {
+    public UserRepository(<%- reactive ? 'ReactiveCassandraTemplate cqlTemplate, Reactive' : 'Cql' %>Session session, Validator validator<%- reactive ? '' : ', CassandraProperties cassandraProperties' %>) {
         this.session = session;
         this.validator = validator;
   <%_ if (reactive) { _%>

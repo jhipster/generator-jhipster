@@ -141,7 +141,7 @@ public class UserService {
     private final CacheManager cacheManager;
   <%_ } _%>
 
-    public UserService(UserRepository userRepository<%- !authenticationTypeOauth2 ? ', PasswordEncoder passwordEncoder' : '' %><%- searchEngineElasticsearch ? ', UserSearchRepository userSearchRepository' : '' %><% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { %><%- authenticationTypeSession && !reactive ? ', PersistentTokenRepository persistentTokenRepository' : '' %>, AuthorityRepository authorityRepository<% } %><%- cacheProviderAny ? ', CacheManager cacheManager' : '' %>) {
+    public UserService(UserRepository userRepository<%- authenticationTypeOauth2 ? '' : ', PasswordEncoder passwordEncoder' %><%- searchEngineElasticsearch ? ', UserSearchRepository userSearchRepository' : '' %><% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { %><%- authenticationTypeSession && !reactive ? ', PersistentTokenRepository persistentTokenRepository' : '' %>, AuthorityRepository authorityRepository<% } %><%- cacheProviderAny ? ', CacheManager cacheManager' : '' %>) {
         this.userRepository = userRepository;
   <%_ if (!authenticationTypeOauth2) { _%>
         this.passwordEncoder = passwordEncoder;
@@ -681,7 +681,7 @@ public class UserService {
     <%_ if (databaseTypeSql) { _%>
     @Transactional
     <%_ } _%>
-    <%- !databaseTypeSql ? 'private ' : 'public ' %>Mono<<%- user.persistClass %>> saveUser(<%- user.persistClass %> user<%- databaseTypeSql && authenticationTypeOauth2 ? ', boolean forceCreate' : '' %>) {
+    <%- databaseTypeSql ? 'public ' : 'private ' %>Mono<<%- user.persistClass %>> saveUser(<%- user.persistClass %> user<%- databaseTypeSql && authenticationTypeOauth2 ? ', boolean forceCreate' : '' %>) {
     <%_ if (databaseTypeCassandra) { _%>
         return userRepository.save(user);
     <%_ } else { _%>
@@ -772,7 +772,7 @@ public class UserService {
     @Transactional(readOnly = true)
     <%_ } _%>
     public <%- reactive ? 'Flux' : 'Page' %><<%- user.dtoClass %>> getAllPublicUsers(Pageable pageable) {
-        return userRepository.findAllBy<%- !databaseTypeCouchbase ? 'IdNotNullAnd' : '' %>ActivatedIsTrue(pageable).map(<%- user.dtoClass %>::new);
+        return userRepository.findAllBy<%- databaseTypeCouchbase ? '' : 'IdNotNullAnd' %>ActivatedIsTrue(pageable).map(<%- user.dtoClass %>::new);
     }
 
     <%_ if (reactive) { _%>
@@ -786,13 +786,13 @@ public class UserService {
     <%_ } _%>
   <%_ } else { /* Cassandra */ _%>
     public <%- reactive ? 'Flux' : 'List' %><<%- user.adminUserDto %>> getAllManagedUsers() {
-        return userRepository.findAll()<%- !reactive ? '.stream()' : '' %>
+        return userRepository.findAll()<%- reactive ? '' : '.stream()' %>
             .map(<%- user.adminUserDto %>::new)<% if (!reactive) { %>
             .toList()<% } %>;
     }
 
     public <%- reactive ? 'Flux' : 'List' %><<%- user.dtoClass %>> getAllPublicUsers() {
-        return userRepository.findAll()<%- !reactive ? '.stream()' : '' %>
+        return userRepository.findAll()<%- reactive ? '' : '.stream()' %>
             .filter(user -> user.isActivated())
             .map(<%- user.dtoClass %>::new)<% if (!reactive) { %>
             .toList()<% } %>;
@@ -898,7 +898,7 @@ public class UserService {
     @Transactional(readOnly = true)
     <%_ } _%>
     public <%- reactive ? 'Flux' : 'List' %><String> getAuthorities() {
-        return authorityRepository.findAll()<%- !reactive ? '.stream()' : '' %>.map(Authority::getName)<%- !reactive ? '.toList()' : '' %>;
+        return authorityRepository.findAll()<%- reactive ? '' : '.stream()' %>.map(Authority::getName)<%- reactive ? '' : '.toList()' %>;
     }
   <%_ } _%>
   <%_ if (authenticationTypeOauth2) { _%>
@@ -907,7 +907,7 @@ public class UserService {
         // save authorities in to sync user roles/groups between IdP and JHipster's local database
     <%_ if (reactive) { _%>
         Collection<String> userAuthorities =
-            user.getAuthorities().stream()<%- !databaseTypeCouchbase ? '.map(Authority::getName)' : '' %>.toList();
+            user.getAuthorities().stream()<%- databaseTypeCouchbase ? '' : '.map(Authority::getName)' %>.toList();
 
         return getAuthorities().collectList()
             .flatMapMany(dbAuthorities -> {

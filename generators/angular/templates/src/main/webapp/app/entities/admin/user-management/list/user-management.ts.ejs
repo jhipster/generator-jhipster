@@ -135,7 +135,7 @@ export class UserManagement implements OnInit {
       .subscribe({
         next: (res: HttpResponse<IUserManagement[]>) => {
           this.isLoading.set(false);
-          this.onSuccess(res.body<%- !locals.databaseTypeCassandra ? ', res.headers' : '' %>);
+          this.onSuccess(res.body<%- locals.databaseTypeCassandra ? '' : ', res.headers' %>);
         },
         error: () => this.isLoading.set(false),
       });
@@ -162,7 +162,7 @@ export class UserManagement implements OnInit {
   }
 <%_ } _%>
 
-  private onSuccess(users: IUserManagement[] | null<%- !locals.databaseTypeCassandra ? ', headers: HttpHeaders' : '' %>): void {
+  private onSuccess(users: IUserManagement[] | null<%- locals.databaseTypeCassandra ? '' : ', headers: HttpHeaders' %>): void {
 <%_ if (!locals.databaseTypeCassandra) { _%>
     this.totalItems.set(Number(headers.get(TOTAL_COUNT_RESPONSE_HEADER)));
 <%_ } _%>
