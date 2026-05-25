@@ -158,7 +158,7 @@ public class UserResource {
      */
     @PostMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public <% if (reactive) { %>Mono<ResponseEntity<<%- user.persistClass %>>><% } else { %>ResponseEntity<<%- user.persistClass %>><% } %> createUser(@Valid @RequestBody <%- user.adminUserDto %> userDTO)<%- (!reactive) ? ' throws URISyntaxException' : '' %> {
+    public <% if (reactive) { %>Mono<ResponseEntity<<%- user.persistClass %>>><% } else { %>ResponseEntity<<%- user.persistClass %>><% } %> createUser(@Valid @RequestBody <%- user.adminUserDto %> userDTO)<%- !reactive ? ' throws URISyntaxException' : '' %> {
         LOG.debug("REST request to save User : {}", userDTO);
 
         if (userDTO.getId() != null) {
@@ -186,7 +186,7 @@ public class UserResource {
             .map(user -> {
                 try {
                     return ResponseEntity.created(new URI("/api/admin/users/" + user.getLogin()))
-                        .headers(HeaderUtil.createAlert(applicationName, <%- (enableTranslation) ? ' "userManagement.created"' : ' "A user is created with identifier " + user.getLogin()' %>, user.getLogin()))
+                        .headers(HeaderUtil.createAlert(applicationName, <%- enableTranslation ? ' "userManagement.created"' : ' "A user is created with identifier " + user.getLogin()' %>, user.getLogin()))
                         .body(user);
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
@@ -201,7 +201,7 @@ public class UserResource {
             <%- user.persistClass %> newUser = userService.createUser(userDTO);
             mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/admin/users/" + newUser.getLogin()))
-                .headers(HeaderUtil.createAlert(applicationName, <%- (enableTranslation) ? ' "userManagement.created"' : ' "A user is created with identifier " + newUser.getLogin()' %>, newUser.getLogin()))
+                .headers(HeaderUtil.createAlert(applicationName, <%- enableTranslation ? ' "userManagement.created"' : ' "A user is created with identifier " + newUser.getLogin()' %>, newUser.getLogin()))
                 .body(newUser);
         }
 <%_ } _%>
@@ -239,7 +239,7 @@ public class UserResource {
             })
             .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
             .map(user -> ResponseEntity.ok()
-                .headers(HeaderUtil.createAlert(applicationName, <%- (enableTranslation) ? '"userManagement.updated"' : '"A user is updated with identifier " + userDTO.getLogin()' %>, userDTO.getLogin()))
+                .headers(HeaderUtil.createAlert(applicationName, <%- enableTranslation ? '"userManagement.updated"' : '"A user is updated with identifier " + userDTO.getLogin()' %>, userDTO.getLogin()))
                 .body(user)
             );
 <%_ } else { _%>
@@ -256,7 +256,7 @@ public class UserResource {
         Optional<<%- user.adminUserDto %>> updatedUser = userService.updateUser(userDTO);
 
         return ResponseUtil.wrapOrNotFound(updatedUser,
-            HeaderUtil.createAlert(applicationName, <%- (enableTranslation) ? '"userManagement.updated"' : '"A user is updated with identifier " + userDTO.getLogin()' %>, userDTO.getLogin()));
+            HeaderUtil.createAlert(applicationName, <%- enableTranslation ? '"userManagement.updated"' : '"A user is updated with identifier " + userDTO.getLogin()' %>, userDTO.getLogin()));
 <%_ } _%>
     }
 
@@ -307,7 +307,7 @@ public class UserResource {
     }
 
 <%_ } else { /* Cassandra */ _%>
-    public <%- (reactive) ? 'Flux' : 'List' %><<%- user.adminUserDto %>> getAllUsers() {
+    public <%- reactive ? 'Flux' : 'List' %><<%- user.adminUserDto %>> getAllUsers() {
         LOG.debug("REST request to get all User for an admin");
         return userService.getAllManagedUsers();
     }
@@ -349,12 +349,12 @@ public class UserResource {
     public Mono<ResponseEntity<Void>> deleteUser(@PathVariable("login") @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
         LOG.debug("REST request to delete User: {}", login);
         return userService.deleteUser(login)
-        .then(Mono.just(ResponseEntity.noContent().headers(HeaderUtil.createAlert( applicationName, <%- (enableTranslation) ? ' "userManagement.deleted"' : ' "A user is deleted with identifier " + login' %>, login)).build()));
+        .then(Mono.just(ResponseEntity.noContent().headers(HeaderUtil.createAlert( applicationName, <%- enableTranslation ? ' "userManagement.deleted"' : ' "A user is deleted with identifier " + login' %>, login)).build()));
 <%_ } else { _%>
     public ResponseEntity<Void> deleteUser(@PathVariable("login") @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
         LOG.debug("REST request to delete User: {}", login);
         userService.deleteUser(login);
-        return ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName, <%- (enableTranslation) ? ' "userManagement.deleted"' : ' "A user is deleted with identifier " + login' %>, login)).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName, <%- enableTranslation ? ' "userManagement.deleted"' : ' "A user is deleted with identifier " + login' %>, login)).build();
 <%_ } _%>
     }
 }

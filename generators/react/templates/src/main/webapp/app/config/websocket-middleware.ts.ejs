@@ -25,7 +25,7 @@ import { Storage } from 'react-jhipster';
 <%_ } _%>
 
 import { websocketActivityMessage } from 'app/modules/administration/administration.reducer';
-import { getAccount<%- (authenticationTypeJwt) ? ', logoutSession' : ',logoutServer' %> } from 'app/shared/reducers/authentication';
+import { getAccount<%- authenticationTypeJwt ? ', logoutSession' : ',logoutServer' %> } from 'app/shared/reducers/authentication';
 <%_ if (authenticationTypeJwt) { _%>
 import { AUTHENTICATION_TOKEN_KEY } from 'app/shared/jhipster/constants';
 <%_ } _%>
@@ -134,7 +134,7 @@ export default store => next => action => {
         return store.dispatch(websocketActivityMessage(activity));
       });
     }
-  } else if (getAccount.rejected.match(action) || <%- (authenticationTypeJwt) ? 'action.type === logoutSession().type' : 'logoutServer.pending.match(action)' %>) {
+  } else if (getAccount.rejected.match(action) || <%- authenticationTypeJwt ? 'action.type === logoutSession().type' : 'logoutServer.pending.match(action)' %>) {
     unsubscribe();
     disconnect();
   }

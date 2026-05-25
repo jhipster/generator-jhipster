@@ -42,9 +42,9 @@ import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
 <%_ if (searchEngineElasticsearch) { _%>
-import org.springframework.data.mongodb.repository.<%- (reactive) ? 'Reactive' : '' %>MongoRepository;
+import org.springframework.data.mongodb.repository.<%- reactive ? 'Reactive' : '' %>MongoRepository;
 <%_ } _%>
-import org.springframework.data.mongodb.repository.config.Enable<%- (reactive) ? 'Reactive' : '' %>MongoRepositories;
+import org.springframework.data.mongodb.repository.config.Enable<%- reactive ? 'Reactive' : '' %>MongoRepositories;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,9 +52,9 @@ import java.util.List;
 @Configuration
 @EnableMongock
 <%_ if (searchEngineElasticsearch) { _%>
-@Enable<%- (reactive) ? 'Reactive' : '' %>MongoRepositories(basePackages = "<%- packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <%- (reactive) ? 'Reactive' : '' %>MongoRepository.class))
+@Enable<%- reactive ? 'Reactive' : '' %>MongoRepositories(basePackages = "<%- packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <%- reactive ? 'Reactive' : '' %>MongoRepository.class))
 <%_ } else { _%>
-@Enable<%- (reactive) ? 'Reactive' : '' %>MongoRepositories("<%- packageName %>.repository")
+@Enable<%- reactive ? 'Reactive' : '' %>MongoRepositories("<%- packageName %>.repository")
 <%_ } _%>
 @Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)
 <%_ if (reactive) { _%>

@@ -93,7 +93,7 @@ public final class SecurityUtils {
      *
      * @return the login of the current user.
      */
-    public static <%- (reactive) ? 'Mono' : 'Optional' %><String> getCurrentUserLogin() {
+    public static <%- reactive ? 'Mono' : 'Optional' %><String> getCurrentUserLogin() {
 <%_ if (reactive) { _%>
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
@@ -135,7 +135,7 @@ public final class SecurityUtils {
      *
      * @return the JWT of the current user.
      */
-    public static <%- (reactive) ? 'Mono' : 'Optional' %><String> getCurrentUserJWT() {
+    public static <%- reactive ? 'Mono' : 'Optional' %><String> getCurrentUserJWT() {
   <%_ if (reactive) { _%>
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
@@ -182,7 +182,7 @@ public final class SecurityUtils {
      *
      * @return true if the user is authenticated, false otherwise.
      */
-    public static <%- (reactive) ? 'Mono<Boolean>' : 'boolean' %> isAuthenticated() {
+    public static <%- reactive ? 'Mono<Boolean>' : 'boolean' %> isAuthenticated() {
 <%_ if (reactive) { _%>
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
@@ -204,7 +204,7 @@ public final class SecurityUtils {
      * @param authorities the authorities to check.
      * @return true if the current user has any of the authorities, false otherwise.
      */
-    public static <%- (reactive) ? 'Mono<Boolean>' : 'boolean' %> hasCurrentUserAnyOfAuthorities(String... authorities) {
+    public static <%- reactive ? 'Mono<Boolean>' : 'boolean' %> hasCurrentUserAnyOfAuthorities(String... authorities) {
 <%_ if (reactive) { _%>
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
@@ -229,7 +229,7 @@ public final class SecurityUtils {
      * @param authorities the authorities to check.
      * @return true if the current user has none of the authorities, false otherwise.
      */
-    public static <%- (reactive) ? 'Mono<Boolean>' : 'boolean' %> hasCurrentUserNoneOfAuthorities(String... authorities) {
+    public static <%- reactive ? 'Mono<Boolean>' : 'boolean' %> hasCurrentUserNoneOfAuthorities(String... authorities) {
 <%_ if (reactive) { _%>
         return hasCurrentUserAnyOfAuthorities(authorities).map(result -> !result);
 <%_ } else { _%>
@@ -243,7 +243,7 @@ public final class SecurityUtils {
      * @param authority the authority to check.
      * @return true if the current user has the authority, false otherwise.
      */
-    public static <%- (reactive) ? 'Mono<Boolean>' : 'boolean' %> hasCurrentUserThisAuthority(String authority) {
+    public static <%- reactive ? 'Mono<Boolean>' : 'boolean' %> hasCurrentUserThisAuthority(String authority) {
         return hasCurrentUserAnyOfAuthorities(authority);
     }
 
@@ -278,7 +278,7 @@ public final class SecurityUtils {
         return roles.stream().filter(role -> role.startsWith("ROLE_")).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
 <%_ } _%>
-<%_ if (generateAuthenticationApi && ((authenticationTypeOauth2 && !syncUserWithIdp) || (authenticationTypeJwt && skipUserManagement))) { _%>
+<%_ if (generateAuthenticationApi && (authenticationTypeOauth2 && !syncUserWithIdp || authenticationTypeJwt && skipUserManagement)) { _%>
 
     public static Map<String, Object> extractDetailsFromTokenAttributes(Map<String, Object> attributes) {
         Map<String, Object> details = new HashMap<>();

@@ -25,30 +25,30 @@ import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
 <%_ } _%>
 
-import org.springframework.data.neo4j.repository.config.Enable<%- (reactive) ? 'Reactive' : '' %>Neo4jRepositories;
-import org.springframework.data.neo4j.repository.<%- (reactive) ? 'Reactive' : '' %>Neo4jRepository;
+import org.springframework.data.neo4j.repository.config.Enable<%- reactive ? 'Reactive' : '' %>Neo4jRepositories;
+import org.springframework.data.neo4j.repository.<%- reactive ? 'Reactive' : '' %>Neo4jRepository;
 <%_ if (reactive) { _%>
 
 import org.neo4j.driver.Driver;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.neo4j.core.<%- (reactive) ? 'Reactive' : '' %>DatabaseSelectionProvider;
-import org.springframework.data.neo4j.core.transaction.<%- (reactive) ? 'Reactive' : '' %>Neo4jTransactionManager;
-import org.springframework.data.neo4j.repository.config.<%- (reactive) ? 'Reactive' : '' %>Neo4jRepositoryConfigurationExtension;
-import org.springframework.transaction.<%- (reactive) ? 'Reactive' : '' %>TransactionManager;
+import org.springframework.data.neo4j.core.<%- reactive ? 'Reactive' : '' %>DatabaseSelectionProvider;
+import org.springframework.data.neo4j.core.transaction.<%- reactive ? 'Reactive' : '' %>Neo4jTransactionManager;
+import org.springframework.data.neo4j.repository.config.<%- reactive ? 'Reactive' : '' %>Neo4jRepositoryConfigurationExtension;
+import org.springframework.transaction.<%- reactive ? 'Reactive' : '' %>TransactionManager;
 <%_ } _%>
 
 @Configuration
 <%_ if (searchEngineElasticsearch) { _%>
-@Enable<%- (reactive) ? 'Reactive' : '' %>Neo4jRepositories(basePackages = "<%- packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <%- (reactive) ? 'Reactive' : '' %>Neo4jRepository.class))
+@Enable<%- reactive ? 'Reactive' : '' %>Neo4jRepositories(basePackages = "<%- packageName %>.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = <%- reactive ? 'Reactive' : '' %>Neo4jRepository.class))
 <%_ } else { _%>
-@Enable<%- (reactive) ? 'Reactive' : '' %>Neo4jRepositories("<%- packageName %>.repository")
+@Enable<%- reactive ? 'Reactive' : '' %>Neo4jRepositories("<%- packageName %>.repository")
 <%_ } _%>
 public class DatabaseConfiguration {
 <%_ if (reactive) { _%>
 
-     @Bean(<%- (reactive) ? 'Reactive' : '' %>Neo4jRepositoryConfigurationExtension.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
-     public <%- (reactive) ? 'Reactive' : '' %>TransactionManager transactionManager(Driver driver, <%- (reactive) ? 'Reactive' : '' %>DatabaseSelectionProvider databaseNameProvider) {
-         return new <%- (reactive) ? 'Reactive' : '' %>Neo4jTransactionManager(driver, databaseNameProvider);
+     @Bean(<%- reactive ? 'Reactive' : '' %>Neo4jRepositoryConfigurationExtension.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+     public <%- reactive ? 'Reactive' : '' %>TransactionManager transactionManager(Driver driver, <%- reactive ? 'Reactive' : '' %>DatabaseSelectionProvider databaseNameProvider) {
+         return new <%- reactive ? 'Reactive' : '' %>Neo4jTransactionManager(driver, databaseNameProvider);
      }
 <%_ } _%>
 }

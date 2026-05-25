@@ -53,7 +53,7 @@ const openAPIItem = () => (
 
 <% if (devDatabaseTypeH2Any) { %>
 const databaseItem = () => (
-  <DropdownItem as="a" href="<%- (reactive) ? 'http://localhost:8092/' : './h2-console/' %>" target="_tab">
+  <DropdownItem as="a" href="<%- reactive ? 'http://localhost:8092/' : './h2-console/' %>" target="_tab">
     <FontAwesomeIcon icon={faDatabase} /> <Translate contentKey="global.menu.admin.database">Database</Translate>
   </DropdownItem>
 );

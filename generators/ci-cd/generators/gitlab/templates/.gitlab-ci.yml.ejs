@@ -276,7 +276,7 @@ sonar-analyze:
 maven-package:
     stage: package
     script:
-        - ./mvnw -ntp verify <%- (ciCdIntegrationsDeploy) ? 'deploy ' : '' %>-Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
+        - ./mvnw -ntp verify <%- ciCdIntegrationsDeploy ? 'deploy ' : '' %>-Pprod -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
     artifacts:
         paths:
             - target/*.jar

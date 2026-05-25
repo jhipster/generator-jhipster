@@ -32,7 +32,7 @@ import { MetricsModalThreads } from '../metrics-modal-threads/metrics-modal-thre
   selector: '<%- jhiPrefixDashed %>-jvm-threads',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './jvm-threads.html',
-  imports: [NgbProgressbar, DecimalPipe<%- (enableTranslation) ? ', TranslateDirective, TranslateModule' : '' %>],
+  imports: [NgbProgressbar, DecimalPipe<%- enableTranslation ? ', TranslateDirective, TranslateModule' : '' %>],
 })
 export class JvmThreads {
   readonly threads = input<Thread[] | undefined>();

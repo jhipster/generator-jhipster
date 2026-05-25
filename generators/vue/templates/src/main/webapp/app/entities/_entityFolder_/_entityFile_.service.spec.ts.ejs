@@ -288,7 +288,7 @@ describe('Service Tests', () => {
 <%_ } _%>
         }, returnedFromService);
         axiosStub.get.mockResolvedValue([returnedFromService]);
-        return service.retrieve(<%- (!paginationNo) ? '{ sort: {}, page: 0, size: 10 }' : '' %>).then((res) => {
+        return service.retrieve(<%- !paginationNo ? '{ sort: {}, page: 0, size: 10 }' : '' %>).then((res) => {
           expect(res).toContainEqual(expected);
         });
       });

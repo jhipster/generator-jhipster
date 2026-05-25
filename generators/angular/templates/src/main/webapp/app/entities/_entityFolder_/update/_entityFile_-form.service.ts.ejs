@@ -144,7 +144,7 @@ export class <%- entityAngularName %>FormService {
 <%_ for (const relationship of relationships.filter(relationship => relationship.persistableRelationship)) { _%>
   <%_ const { relationshipRequired, propertyName, collection } = relationship; _%>
       <%- propertyName %>: new FormControl(
-        <%- entityInstance %>RawValue.<%- propertyName %><%- (collection) ? ' ?? []' : '' %>
+        <%- entityInstance %>RawValue.<%- propertyName %><%- collection ? ' ?? []' : '' %>
   <%_ if (!collection && relationshipRequired) { _%>
         , {
           validators: [Validators.required],

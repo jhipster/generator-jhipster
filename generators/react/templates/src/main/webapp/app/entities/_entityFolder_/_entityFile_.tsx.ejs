@@ -21,7 +21,7 @@ import React, { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 <%_ } _%>
 import { Link, useLocation, useNavigate } from 'react-router';
-import { Button, <%- (searchEngineAny) ? 'FormControl, InputGroup, Form, Row, Col, ' : '' %>Table } from 'react-bootstrap';
+import { Button, <%- searchEngineAny ? 'FormControl, InputGroup, Form, Row, Col, ' : '' %>Table } from 'react-bootstrap';
 import {
 <%_ if (anyFieldIsBlobDerived) { _%>
   <%_ if (anyFieldHasFileBasedContentType) { _%>
@@ -29,8 +29,8 @@ import {
   <%_ } _%>
   byteSize,
 <%_ } _%>
-  Translate<%- (searchEngineAny) ? ', translate' : '' %>
-  <%- (anyFieldIsDateDerived) ? ', TextFormat' : '' %>
+  Translate<%- searchEngineAny ? ', translate' : '' %>
+  <%- anyFieldIsDateDerived ? ', TextFormat' : '' %>
 <%_ if (paginationNo) { _%>
   , getSortState
 <%_ } else { _%>
@@ -253,7 +253,7 @@ export const <%- entityReactName %> = () => {
 <%_ } else { _%>
     sortEntities();
 <%_ } _%>
-  }, [<% if (paginationInfiniteScroll) { %>sorting<% } else if (paginationPagination) { %>paginationState.activePage, paginationState.order, paginationState.sort<% } else { %>sortState.order, sortState.sort<% } %><%- (searchEngineAny) ? ', search' : '' %>]);
+  }, [<% if (paginationInfiniteScroll) { %>sorting<% } else if (paginationPagination) { %>paginationState.activePage, paginationState.order, paginationState.sort<% } else { %>sortState.order, sortState.sort<% } %><%- searchEngineAny ? ', search' : '' %>]);
 
 <%_ if (paginationPagination) { _%>
   useEffect(() => {
@@ -482,10 +482,10 @@ export const <%- entityReactName %> = () => {
                             <FontAwesomeIcon icon="eye" /> <span className="d-none d-md-inline" ><Translate contentKey="entity.action.view">View</Translate></span>
                           </Button>
 <%_ if (!readOnly) { _%>
-                          <Button as={Link as any} to={`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}/edit<%- (paginationPagination) ? '?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}' : '' %>`} variant="primary" size="sm" data-cy="entityEditButton">
+                          <Button as={Link as any} to={`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}/edit<%- paginationPagination ? '?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}' : '' %>`} variant="primary" size="sm" data-cy="entityEditButton">
                             <FontAwesomeIcon icon="pencil-alt" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.edit">Edit</Translate></span>
                           </Button>
-                          <Button onClick={() => <%- (entityInstance !== 'window') ? 'globalThis.' : '' %>location.href=`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}/delete<%- (paginationPagination) ? '?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}' : '' %>`} variant="danger" size="sm" data-cy="entityDeleteButton">
+                          <Button onClick={() => <%- entityInstance !== 'window' ? 'globalThis.' : '' %>location.href=`/<%- entityPage %>/${<%- entityInstance %>.<%- primaryKey.name %>}/delete<%- paginationPagination ? '?page=${paginationState.activePage}&sort=${paginationState.sort},${paginationState.order}' : '' %>`} variant="danger" size="sm" data-cy="entityDeleteButton">
                             <FontAwesomeIcon icon="trash" /> <span className="d-none d-md-inline"><Translate contentKey="entity.action.delete">Delete</Translate></span>
                           </Button>
 <%_ } _%>
@@ -516,7 +516,7 @@ export const <%- entityReactName %> = () => {
               page={paginationState.activePage}
               total={totalItems}
               itemsPerPage={paginationState.itemsPerPage}
-              <%- (enableTranslation) ? 'i18nEnabled' : '' %>
+              <%- enableTranslation ? 'i18nEnabled' : '' %>
             />
           </div>
           <div className="justify-content-center d-flex">

@@ -46,7 +46,7 @@ export default defineComponent({
       error403.value = route.meta.error403 ?? false;
       error404.value = route.meta.error404 ?? false;
       if (!authenticated.value && error403.value) {
-        <%- (authenticationTypeOauth2) ? 'login' : 'showLogin' %>();
+        <%- authenticationTypeOauth2 ? 'login' : 'showLogin' %>();
       }
     }
 

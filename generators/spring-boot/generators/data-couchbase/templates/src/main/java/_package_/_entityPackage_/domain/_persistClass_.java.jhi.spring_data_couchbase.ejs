@@ -192,7 +192,7 @@ import java.util.stream.Collectors;
 <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>CustomRemoveSection) { -&>
     public <%- persistClass %> remove<%- relationship.relationshipNameCapitalized %>(<%- relationship.otherEntity.persistClass %> <%- relationship.otherEntityName %>) {
         this.<%- relationship.relationshipFieldNamePlural %>.remove(<%- relationship.otherEntityName %>);
-  <%_ if (!relationship.otherEntity.embedded || (embedded && relationship.ownerSide)) { _%>
+  <%_ if (!relationship.otherEntity.embedded || embedded && relationship.ownerSide) { _%>
     <%_ if (!relationship.otherEntity.embedded) { _%>
         this.<%- relationship.relationshipFieldName %>Ids.remove(<%- relationship.otherEntityName %>.<%- relationship.otherEntity.primaryKey.propertySupplierName %>());
     <%_ } _%>

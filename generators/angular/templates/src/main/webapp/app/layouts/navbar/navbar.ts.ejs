@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, ChangeDetectionStrategy, inject, signal, OnInit, effect<%- (microfrontend && enableTranslation && applicationTypeGateway) ? ', createNgModule, Injector' : '' %> } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, OnInit, effect<%- microfrontend && enableTranslation && applicationTypeGateway ? ', createNgModule, Injector' : '' %> } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateModule, TranslateService } from '@ngx-translate/core';

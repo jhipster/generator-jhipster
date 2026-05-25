@@ -31,7 +31,7 @@ import { IUserManagement } from '../user-management.model';
   selector: '<%- jhiPrefixDashed %>-user-mgmt-detail',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './user-management-detail.html',
-  imports: [FontAwesomeModule, DatePipe<%- (enableTranslation) ? ', TranslateDirective, TranslateModule' : '' %>],
+  imports: [FontAwesomeModule, DatePipe<%- enableTranslation ? ', TranslateDirective, TranslateModule' : '' %>],
 })
 export class UserManagementDetail {
   readonly userManagement = input<IUserManagement | null>(null);

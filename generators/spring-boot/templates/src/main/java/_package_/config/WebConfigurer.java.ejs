@@ -30,7 +30,7 @@ import tech.jhipster.config.ApplicationProperties;
 import tech.jhipster.config.h2.H2ConfigurationHelper;
 <%_ } _%>
 <%_ if (!skipClient && reactive) { _%>
-import tech.jhipster.web.filter.<%- (reactive) ? 'reactive.' : '' %>CachingHttpHeadersFilter;
+import tech.jhipster.web.filter.<%- reactive ? 'reactive.' : '' %>CachingHttpHeadersFilter;
 <%_ } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +54,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.data.web.ReactivePageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.ReactiveSortHandlerMethodArgumentResolver;
 <%_ } _%>
-<%_ if (!reactive || (devDatabaseTypeH2Any && reactive)) { _%>
+<%_ if (!reactive || devDatabaseTypeH2Any && reactive) { _%>
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 <%_ } _%>
@@ -93,7 +93,7 @@ import java.util.concurrent.TimeUnit;
  * Configuration of web application with Servlet 3.0 APIs.
  */
 @Configuration
-public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitializer<%- (!skipClient) ? ', WebServerFactoryCustomizer<WebServerFactory>' : '' %><% } %><%- (reactive) ? 'WebFluxConfigurer' : '' %> {
+public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitializer<%- !skipClient ? ', WebServerFactoryCustomizer<WebServerFactory>' : '' %><% } %><%- reactive ? 'WebFluxConfigurer' : '' %> {
 
     private static final Logger LOG = LoggerFactory.getLogger(WebConfigurer.class);
 
@@ -103,7 +103,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
 <%_ } _%>
     private final JHipsterProperties jHipsterProperties;
 
-    public WebConfigurer(<%- (!reactive || devDatabaseTypeH2Any) ? 'Environment env, ' : '' %>JHipsterProperties jHipsterProperties) {
+    public WebConfigurer(<%- !reactive || devDatabaseTypeH2Any ? 'Environment env, ' : '' %>JHipsterProperties jHipsterProperties) {
 <%_ if (!reactive) { _%>
         this.env = env;
 <%_ } _%>
@@ -142,7 +142,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
      */
     @Override
     public void customize(WebServerFactory server) {
-        // When running in an IDE or with <%- (buildToolGradle) ? './gradlew bootRun' : './mvnw spring-boot:run' %>, set location of the static web assets.
+        // When running in an IDE or with <%- buildToolGradle ? './gradlew bootRun' : './mvnw spring-boot:run' %>, set location of the static web assets.
         setLocationForStaticAssets(server);
     }
 
@@ -174,7 +174,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
 <%_ } _%>
 
     @Bean
-    public <%- (reactive) ? 'CorsConfigurationSource corsConfigurationSource()' : 'CorsFilter corsFilter()' %> {
+    public <%- reactive ? 'CorsConfigurationSource corsConfigurationSource()' : 'CorsFilter corsFilter()' %> {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = jHipsterProperties.getCors();
         if (!CollectionUtils.isEmpty(config.getAllowedOrigins()) || !CollectionUtils.isEmpty(config.getAllowedOriginPatterns())) {
@@ -189,7 +189,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
             source.registerCorsConfiguration("/*/management/**", config);
 <%_ } _%>
         }
-        return <%- (reactive) ? 'source' : 'new CorsFilter(source)' %>;
+        return <%- reactive ? 'source' : 'new CorsFilter(source)' %>;
     }
 <%_ if (reactive) { _%>
 

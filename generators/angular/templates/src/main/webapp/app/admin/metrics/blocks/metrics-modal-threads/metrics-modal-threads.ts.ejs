@@ -30,7 +30,7 @@ import { Thread, ThreadState } from 'app/admin/metrics/metrics.model';
   selector: '<%- jhiPrefixDashed %>-thread-modal',
   templateUrl: './metrics-modal-threads.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FontAwesomeModule<%- (enableTranslation) ? ', TranslateDirective, TranslateModule' : '' %>],
+  imports: [FontAwesomeModule<%- enableTranslation ? ', TranslateDirective, TranslateModule' : '' %>],
 })
 export class MetricsModalThreads implements OnInit {
   ThreadState = ThreadState;

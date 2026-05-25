@@ -50,7 +50,7 @@ export type AuthenticationState = Readonly<typeof initialState>;
 
 // Actions
 
-export const getSession = (): AppThunk => <%- (enableTranslation) ? 'async' : '' %> (
+export const getSession = (): AppThunk => <%- enableTranslation ? 'async' : '' %> (
   dispatch,
 <%_ if (enableTranslation) { _%>
   getState,
@@ -222,7 +222,7 @@ export const AuthenticationSlice = createSlice({
         };
       })
 <%_ if (!authenticationTypeJwt) { _%>
-      .addCase(logoutServer.fulfilled, (<%- (authenticationTypeOauth2) ? 'state, action' : '' %>) => ({
+      .addCase(logoutServer.fulfilled, (<%- authenticationTypeOauth2 ? 'state, action' : '' %>) => ({
         ...initialState,
   <%_ if (!authenticationTypeOauth2) { _%>
         showModalLogin: true
@@ -242,7 +242,7 @@ export const AuthenticationSlice = createSlice({
   },
 });
 
-export const { <%- (authenticationTypeJwt) ? 'logoutSession,' : '' %> authError, clearAuth } = AuthenticationSlice.actions;
+export const { <%- authenticationTypeJwt ? 'logoutSession,' : '' %> authError, clearAuth } = AuthenticationSlice.actions;
 
 // Reducer
 export default AuthenticationSlice.reducer;

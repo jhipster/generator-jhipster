@@ -50,7 +50,7 @@ class ExceptionTranslatorIT {
 
     @Test
     void testConcurrencyFailure() throws Exception {
-        mockMvc.perform(get("/api/exception-translator-test/concurrency-failure")<%- (authenticationUsesCsrf) ? '.with(csrf())' : '' %>)
+        mockMvc.perform(get("/api/exception-translator-test/concurrency-failure")<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>)
             .andExpect(status().isConflict())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value(ErrorConstants.ERR_CONCURRENCY_FAILURE));
@@ -59,7 +59,7 @@ class ExceptionTranslatorIT {
 
     @Test
     void testMethodArgumentNotValid() throws Exception {
-         mockMvc.perform(post("/api/exception-translator-test/method-argument").content("{}").contentType(MediaType.APPLICATION_JSON)<%- (authenticationUsesCsrf) ? '.with(csrf())' : '' %>)
+         mockMvc.perform(post("/api/exception-translator-test/method-argument").content("{}").contentType(MediaType.APPLICATION_JSON)<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>)
              .andExpect(status().isBadRequest())
              .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
              .andExpect(jsonPath("$.message").value(ErrorConstants.ERR_VALIDATION))
@@ -70,7 +70,7 @@ class ExceptionTranslatorIT {
 
     @Test
     void testMissingServletRequestPartException() throws Exception {
-        mockMvc.perform(get("/api/exception-translator-test/missing-servlet-request-part")<%- (authenticationUsesCsrf) ? '.with(csrf())' : '' %>)
+        mockMvc.perform(get("/api/exception-translator-test/missing-servlet-request-part")<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>)
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value("error.http.400"));
@@ -78,7 +78,7 @@ class ExceptionTranslatorIT {
 
     @Test
     void testMissingServletRequestParameterException() throws Exception {
-        mockMvc.perform(get("/api/exception-translator-test/missing-servlet-request-parameter")<%- (authenticationUsesCsrf) ? '.with(csrf())' : '' %>)
+        mockMvc.perform(get("/api/exception-translator-test/missing-servlet-request-parameter")<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>)
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value("error.http.400"));
@@ -86,7 +86,7 @@ class ExceptionTranslatorIT {
 
     @Test
     void testAccessDenied() throws Exception {
-        mockMvc.perform(get("/api/exception-translator-test/access-denied")<%- (authenticationUsesCsrf) ? '.with(csrf())' : '' %>)
+        mockMvc.perform(get("/api/exception-translator-test/access-denied")<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>)
             .andExpect(status().isForbidden())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value("error.http.403"))
@@ -95,7 +95,7 @@ class ExceptionTranslatorIT {
 
     @Test
     void testUnauthorized() throws Exception {
-        mockMvc.perform(get("/api/exception-translator-test/unauthorized")<%- (authenticationUsesCsrf) ? '.with(csrf())' : '' %>)
+        mockMvc.perform(get("/api/exception-translator-test/unauthorized")<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>)
             .andExpect(status().isUnauthorized())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value("error.http.401"))
@@ -105,7 +105,7 @@ class ExceptionTranslatorIT {
 
     @Test
     void testMethodNotSupported() throws Exception {
-        mockMvc.perform(post("/api/exception-translator-test/access-denied")<%- (authenticationUsesCsrf) ? '.with(csrf())' : '' %>)
+        mockMvc.perform(post("/api/exception-translator-test/access-denied")<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>)
             .andExpect(status().isMethodNotAllowed())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value("error.http.405"))
@@ -114,7 +114,7 @@ class ExceptionTranslatorIT {
 
     @Test
     void testExceptionWithResponseStatus() throws Exception {
-        mockMvc.perform(get("/api/exception-translator-test/response-status")<%- (authenticationUsesCsrf) ? '.with(csrf())' : '' %>)
+        mockMvc.perform(get("/api/exception-translator-test/response-status")<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>)
             .andExpect(status().isBadRequest())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value("error.http.400"))
@@ -123,7 +123,7 @@ class ExceptionTranslatorIT {
 
     @Test
     void testInternalServerError() throws Exception {
-        mockMvc.perform(get("/api/exception-translator-test/internal-server-error")<%- (authenticationUsesCsrf) ? '.with(csrf())' : '' %>)
+        mockMvc.perform(get("/api/exception-translator-test/internal-server-error")<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>)
             .andExpect(status().isInternalServerError())
             .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
             .andExpect(jsonPath("$.message").value("error.http.500"))

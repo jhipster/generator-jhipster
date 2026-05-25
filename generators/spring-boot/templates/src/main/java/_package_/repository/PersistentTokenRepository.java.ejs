@@ -70,7 +70,7 @@ import java.util.Set;
  * <%- springDataDescription %> repository for the {@link PersistentToken} entity.
  */
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j) { _%>
-public interface PersistentTokenRepository extends <%- (databaseTypeSql) ? 'JpaRepository' : '' %><%- (databaseTypeMongodb) ? 'MongoRepository' : '' %><%- (databaseTypeNeo4j) ? 'Neo4jRepository' : '' %><PersistentToken, String> {
+public interface PersistentTokenRepository extends <%- databaseTypeSql ? 'JpaRepository' : '' %><%- databaseTypeMongodb ? 'MongoRepository' : '' %><%- databaseTypeNeo4j ? 'Neo4jRepository' : '' %><PersistentToken, String> {
 
     List<PersistentToken> findByUser(<%- user.persistClass %> user);
 
