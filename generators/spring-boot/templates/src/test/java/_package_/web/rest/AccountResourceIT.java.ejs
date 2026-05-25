@@ -201,7 +201,7 @@ class AccountResourceIT {
 
     @Test
     @WithMockUser(TEST_USER_LOGIN)
-    void testGetExistingAccount()<%- !reactive ? ' throws Exception' : '' %> {
+    void testGetExistingAccount()<%- reactive ? '' : ' throws Exception' %> {
         Set<String> authorities = new HashSet<>();
         authorities.add(AuthoritiesConstants.ADMIN);
 
@@ -675,7 +675,7 @@ class AccountResourceIT {
 <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
 <%_ } _%>
-    void testActivateAccount()<%- !reactive ? ' throws Exception' : '' %> {
+    void testActivateAccount()<%- reactive ? '' : ' throws Exception' %> {
         final String activationKey = "some activation key";
         <%- user.persistClass %> user = new <%- user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
@@ -711,7 +711,7 @@ class AccountResourceIT {
 <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
 <%_ } _%>
-    void testActivateAccountWithWrongKey() <%- !reactive ? 'throws Exception ' : '' %>{
+    void testActivateAccountWithWrongKey() <%- reactive ? '' : 'throws Exception ' %>{
 <%_ if (reactive) { _%>
         accountWebTestClient.get().uri("/api/activate?key=wrongActivationKey")
             .exchange()
@@ -1177,7 +1177,7 @@ class AccountResourceIT {
     @Transactional
   <%_ } _%>
     @WithMockUser("current-sessions")
-    void testGetCurrentSessions() <%- !reactive ? 'throws Exception ' : '' %>{
+    void testGetCurrentSessions() <%- reactive ? '' : 'throws Exception ' %>{
         <%- user.persistClass %> user = new <%- user.persistClass %>();
   <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
@@ -1226,7 +1226,7 @@ class AccountResourceIT {
     @Transactional
   <%_ } _%>
     @WithMockUser("invalidate-session")
-    void testInvalidateSession() <%- !reactive ? 'throws Exception ' : '' %>{
+    void testInvalidateSession() <%- reactive ? '' : 'throws Exception ' %>{
         <%- user.persistClass %> user = new <%- user.persistClass %>();
   <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
@@ -1278,7 +1278,7 @@ class AccountResourceIT {
 <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
 <%_ } _%>
-    void testRequestPasswordReset()<%- !reactive ? ' throws Exception' : '' %> {
+    void testRequestPasswordReset()<%- reactive ? '' : ' throws Exception' %> {
         <%- user.persistClass %> user = new <%- user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
@@ -1315,7 +1315,7 @@ class AccountResourceIT {
 <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
 <%_ } _%>
-    void testRequestPasswordResetUpperCaseEmail()<%- !reactive ? ' throws Exception' : '' %> {
+    void testRequestPasswordResetUpperCaseEmail()<%- reactive ? '' : ' throws Exception' %> {
         <%- user.persistClass %> user = new <%- user.persistClass %>();
 <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
@@ -1356,7 +1356,7 @@ class AccountResourceIT {
             .exchange()
             .expectStatus().isOk();
 <%_ } else { _%>
-    void testRequestPasswordResetWrongEmail() <%- !reactive ? 'throws Exception ' : '' %>{
+    void testRequestPasswordResetWrongEmail() <%- reactive ? '' : 'throws Exception ' %>{
         restAccountMockMvc.perform(
             post("/api/account/reset-password/init")
                 .content("password-reset-wrong-email@example.com")<% if (authenticationUsesCsrf) { %>

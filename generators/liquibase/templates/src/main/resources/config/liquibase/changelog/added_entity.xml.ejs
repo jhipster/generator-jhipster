@@ -100,7 +100,7 @@
     -->
     <changeSet id="<%- changelogDate %>-1-data" author="jhipster" context="faker">
         <loadData
-                  file="../fake-data/<%- !entity.incrementalChangelog ? entity.entityTableName : `${databaseChangelog.changelogDate}_entity_${entity.entityTableName}` %>.csv"
+                  file="../fake-data/<%- entity.incrementalChangelog ? `${databaseChangelog.changelogDate}_entity_${entity.entityTableName}` : entity.entityTableName %>.csv"
                   relativeToChangelogFile="true"
                   separator=";"
                   tableName="<%- entity.entityTableName %>"

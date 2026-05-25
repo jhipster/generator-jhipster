@@ -27,7 +27,7 @@ import { Router } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
-import { of<%- !authenticationTypeOauth2 ? ', Subject' : '' %> } from 'rxjs';
+import { of<%- authenticationTypeOauth2 ? '' : ', Subject' %> } from 'rxjs';
 
 import { AccountService } from 'app/core/auth/account.service';
 <%_ if (authenticationTypeOauth2) { _%>

@@ -158,7 +158,7 @@ public class UserResource {
      */
     @PostMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public <% if (reactive) { %>Mono<ResponseEntity<<%- user.persistClass %>>><% } else { %>ResponseEntity<<%- user.persistClass %>><% } %> createUser(@Valid @RequestBody <%- user.adminUserDto %> userDTO)<%- !reactive ? ' throws URISyntaxException' : '' %> {
+    public <% if (reactive) { %>Mono<ResponseEntity<<%- user.persistClass %>>><% } else { %>ResponseEntity<<%- user.persistClass %>><% } %> createUser(@Valid @RequestBody <%- user.adminUserDto %> userDTO)<%- reactive ? '' : ' throws URISyntaxException' %> {
         LOG.debug("REST request to save User : {}", userDTO);
 
         if (userDTO.getId() != null) {

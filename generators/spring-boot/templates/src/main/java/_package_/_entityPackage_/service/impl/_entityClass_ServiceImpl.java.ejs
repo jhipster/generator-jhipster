@@ -157,10 +157,10 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
   <%_ if (databaseTypeSql) { _%>
     @Transactional(readOnly = true)
   <%_ } _%>
-    public <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findAll(<%- !paginationNo ? 'Pageable pageable' : '' %>) {
+    public <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findAll(<%- paginationNo ? '' : 'Pageable pageable' %>) {
         LOG.debug("Request to get all <%- entityClassPlural %>");
   <%_ if (paginationNo) { _%>
-        return <%- entityInstance %>Repository.findAll()<% if (dtoMapstruct) { %><%- !reactive ? '.stream()' : '' %>
+        return <%- entityInstance %>Repository.findAll()<% if (dtoMapstruct) { %><%- reactive ? '' : '.stream()' %>
             .map(<%- entityToDtoReference %>)<% if (!reactive) { %>
             .collect(Collectors.toCollection(LinkedList::new))<% } } %>;
   <%_ } else { _%>
@@ -187,7 +187,7 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
   <%_ if (databaseTypeSql) { _%>
     @Transactional(readOnly = true)
   <%_ } _%>
-    public <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findByCriteria(<%- entityClass %>Criteria criteria<%- !paginationNo ? ', Pageable pageable' : '' %>) {
+    public <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findByCriteria(<%- entityClass %>Criteria criteria<%- paginationNo ? '' : ', Pageable pageable' %>) {
         LOG.debug("Request to get all <%- entityClassPlural %> by Criteria");
   <%_ if (paginationNo) { _%>
         return <%- entityInstance %>Repository.findByCriteria(criteria, null)<% if (dtoMapstruct) { %>.map(<%- entityToDtoReference %>)<% } %>;
@@ -300,7 +300,7 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
   <%_ if (databaseTypeSql) { _%>
     @Transactional(readOnly = true)
   <%_ } _%>
-    public <% if (!paginationNo) { %><%- pageOrFlux %><<%- restClass %><% } else { %><%- listOrFlux %><<%- restClass %><% } %>> search(String query<%- !paginationNo ? ', Pageable pageable' : '' %>) {
+    public <% if (!paginationNo) { %><%- pageOrFlux %><<%- restClass %><% } else { %><%- listOrFlux %><<%- restClass %><% } %>> search(String query<%- paginationNo ? '' : ', Pageable pageable' %>) {
   <%_ if (paginationNo) { _%>
         LOG.debug("Request to search <%- entityClassPlural %> for query {}", query);<%- include('../../_partials_entity_/search_stream_template', { viaService: false, fromResource: false }) -%>
   <%_ } else { _%>

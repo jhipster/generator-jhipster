@@ -34,9 +34,9 @@ export interface I<%- entityAngularName %> {
   <%_ const { fieldName/* , fieldValidationRequired */, id } = field;
       const tsType = `${field.fieldIsEnum ? 'keyof typeof ' : ''}${field.tsType}`;
   _%>
-  <%- fieldName %><%- !id /* && !fieldValidationRequired */ ? '?' : '' %>: <%- tsType %><%- !id /* && !fieldValidationRequired */ ? ' | null' : '' %>;
+  <%- fieldName %><%- id ? '' : '?' %>: <%- tsType %><%- id ? '' : ' | null' %>;
   <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
-  <%- fieldName %>ContentType<%- !id /* && !fieldValidationRequired */ ? '?' : '' %>: string<%- !id /* && !fieldValidationRequired */ ? ' | null' : '' %>,
+  <%- fieldName %>ContentType<%- id ? '' : '?' %>: string<%- id ? '' : ' | null' %>,
   <%_ } _%>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => rel.persistableRelationship || rel.relationshipEagerLoad)) { _%>

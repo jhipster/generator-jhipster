@@ -84,7 +84,7 @@ public interface <%- entityClass %>Service {
      * @param pageable the pagination information.<% } %>
      * @return the list of entities.
      */
-    <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findAll(<%- !paginationNo ? 'Pageable pageable' : '' %>);
+    <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findAll(<%- paginationNo ? '' : 'Pageable pageable' %>);
 
 <%_ } _%>
 <%_ if (jpaMetamodelFiltering && reactive) { _%>
@@ -94,7 +94,7 @@ public interface <%- entityClass %>Service {
      * @param pageable the pagination information.<% } %>
      * @return the list of entities.
      */
-    <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findByCriteria(<%- entityClass %>Criteria criteria<%- !paginationNo ? ', Pageable pageable' : '' %>);
+    <% if (paginationNo) { %><%- listOrFlux %><% } else { %><%- pageOrFlux %><% } %><<%- restClass %>> findByCriteria(<%- entityClass %>Criteria criteria<%- paginationNo ? '' : ', Pageable pageable' %>);
 
     /**
      * Find the count of <%- entityInstancePlural %> by criteria.
@@ -172,6 +172,6 @@ public interface <%- entityClass %>Service {
   <%_ } _%>
      * @return the list of entities.
      */
-    <% if (!paginationNo) { %><%- pageOrFlux %><<%- restClass %><% } else { %><%- listOrFlux %><<%- restClass %><% } %>> search(String query<%- !paginationNo ? ', Pageable pageable' : '' %>);
+    <% if (!paginationNo) { %><%- pageOrFlux %><<%- restClass %><% } else { %><%- listOrFlux %><<%- restClass %><% } %>> search(String query<%- paginationNo ? '' : ', Pageable pageable' %>);
 <%_ } _%>
 }
