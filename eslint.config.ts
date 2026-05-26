@@ -132,7 +132,7 @@ export default defineConfig(
       prettierBlacklist: true,
       stylisticBlacklist: true,
       experimental: true,
-      allowedGlobals: ['wrapMono', 'generateEntityClientEnumImports', 'getOriginalField', 'generateFakeData'],
+      allowedGlobals: ['wrapMono', 'generateEntityClientEnumImports', 'getOriginalField', 'generateFakeData', 'parseInt'],
     },
     stylistic.configs.customize({
       jsx: false,

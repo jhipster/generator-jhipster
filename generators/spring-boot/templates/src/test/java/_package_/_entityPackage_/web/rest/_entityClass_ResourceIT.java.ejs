@@ -282,11 +282,11 @@ class <%- entityClass %>ResourceIT {
   if (field.fieldValidate === true) {
     if (field.fieldValidationMax) {
       defaultValue = field.fieldValidateRulesMax;
-      updatedValue = Integer.parseInt(field.fieldValidateRulesMax) - 1;
+      updatedValue = parseInt(field.fieldValidateRulesMax) - 1;
     }
     if (field.fieldValidationMin) {
       defaultValue = field.fieldValidateRulesMin;
-      updatedValue = Integer.parseInt(field.fieldValidateRulesMin) + 1;
+      updatedValue = parseInt(field.fieldValidateRulesMin) + 1;
     }
     if (field.fieldValidationMinBytes) {
       defaultValue = field.fieldValidateRulesMinbytes;
