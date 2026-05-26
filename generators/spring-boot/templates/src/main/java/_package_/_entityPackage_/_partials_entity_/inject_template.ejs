@@ -54,7 +54,7 @@ _%>
 <%_ } _%>
     public <%- constructorName %>(
 <%_ for (const bean of beans) { _%>
-        <%- bean.class %> <%- bean.instance %><% if (bean !== beans[beans.length - 1]) { %>,<% } %>
+        <%- bean.class %> <%- bean.instance %><%- bean !== beans[beans.length - 1] ? ',' : '' %>
 <%_ } _%>
     ) {
 <%_ for (const bean of beans) { _%>
