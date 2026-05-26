@@ -83,7 +83,7 @@ public interface <%- entityClass %>Repository extends JHipsterCouchbaseRepositor
 
     default <%- pageOrFlux %><<%- persistClass %>> findAll(Pageable pageable) {
         return
-        <% if (!reactive) { %>new PageImpl<>(<% } %>
+        <%- reactive ? '' : 'new PageImpl<>(' %>
             findAll(pageableStatement(pageable, "b"))
         <% if (!reactive) { %>,
             pageable,
@@ -108,9 +108,9 @@ public interface <%- entityClass %>Repository extends JHipsterCouchbaseRepositor
 
     default <%- pageOrFlux %><<%- persistClass %>> search(String queryString, Pageable pageable) {
         return
-            <% if (!reactive) { %>new PageImpl<>(<% } %>
+            <%- reactive ? '' : 'new PageImpl<>(' %>
                 search(queryString, pageableStatement(pageable, "b"))
-            <% if (!reactive) { %>)<% } %>;
+            <%- reactive ? '' : ')' %>;
     }
 
     @ScanConsistency(query = QueryScanConsistency.NOT_BOUNDED)

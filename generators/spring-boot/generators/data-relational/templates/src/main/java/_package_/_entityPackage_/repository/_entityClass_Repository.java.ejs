@@ -61,21 +61,21 @@ public interface <%- entityClass %>Repository extends <% if (containsBagRelation
 
   <%_ const containsToOneEagerRelationship = relationships.some(relationship => relationship.relationshipEagerLoad && !relationship.bagRelationship); _%>
     default Optional<<%- persistClass %>> findOneWithEagerRelationships(<%- primaryKey.type %> <%- primaryKey.name %>) {
-        return <% if (containsBagRelationships) { %>this.fetchBagRelationships(<% } %>
-            this.<% if (containsToOneEagerRelationship) { %>findOneWithToOneRelationships<% } else { %>findById<% } %>(<%- primaryKey.name %>)
-        <% if (containsBagRelationships) { %>)<% } %>;
+        return <%- containsBagRelationships ? 'this.fetchBagRelationships(' : '' %>
+            this.<%- containsToOneEagerRelationship ? 'findOneWithToOneRelationships' : 'findById' %>(<%- primaryKey.name %>)
+        <%- containsBagRelationships ? ')' : '' %>;
     }
 
     default List<<%- persistClass %>> findAllWithEagerRelationships() {
-        return <% if (containsBagRelationships) { %>this.fetchBagRelationships(<% } %>
-            this.<% if (containsToOneEagerRelationship) { %>findAllWithToOneRelationships<% } else { %>findAll<% } %>()
-        <% if (containsBagRelationships) { %>)<% } %>;
+        return <%- containsBagRelationships ? 'this.fetchBagRelationships(' : '' %>
+            this.<%- containsToOneEagerRelationship ? 'findAllWithToOneRelationships' : 'findAll' %>()
+        <%- containsBagRelationships ? ')' : '' %>;
     }
 
     default Page<<%- persistClass %>> findAllWithEagerRelationships(Pageable pageable) {
-        return <% if (containsBagRelationships) { %>this.fetchBagRelationships(<% } %>
-            this.<% if (containsToOneEagerRelationship) { %>findAllWithToOneRelationships<% } else { %>findAll<% } %>(pageable)
-        <% if (containsBagRelationships) { %>)<% } %>;
+        return <%- containsBagRelationships ? 'this.fetchBagRelationships(' : '' %>
+            this.<%- containsToOneEagerRelationship ? 'findAllWithToOneRelationships' : 'findAll' %>(pageable)
+        <%- containsBagRelationships ? ')' : '' %>;
     }
   <%_ if (containsToOneEagerRelationship) { _%>
 
