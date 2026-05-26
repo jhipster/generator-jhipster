@@ -1,4 +1,3 @@
-<%# eslint-disable -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -18,22 +17,25 @@
  limitations under the License.
 -%>
 <%_ const relationshipType = relationship.relationshipType,
-relationshipName = relationship.relationshipName,
-ownerSide = relationship.ownerSide,
-onDelete = relationship.onDelete,
-onUpdate = relationship.onUpdate;
-if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide)) {
-    const constraintName = this.getFKConstraintName(entity.entityTableName, relationshipName, prodDatabaseType);
-    let baseColumnNames;
-    let referencedColumnNames;
-    if (relationshipType === 'one-to-one' && ownerSide && relationship.id) {
-        baseColumnNames = relationship.otherEntity.primaryKey.fields.map(field => field.columnName).join(',');
-        referencedColumnNames = relationship.otherEntity.primaryKey.fields.map(field => field.columnName).join(',');
-    } else if (relationship.otherEntity) {
-        baseColumnNames = relationship.otherEntity.primaryKey.fields.map(field => `${relationship.columnName}_${field.columnName}`).join(',');
-        referencedColumnNames = relationship.otherEntity.primaryKey.fields.map(field => field.columnName).join(',');
-    }
+    relationshipName = relationship.relationshipName,
+    ownerSide = relationship.ownerSide,
+    onDelete = relationship.onDelete,
+    onUpdate = relationship.onUpdate;
 _%>
+<%_ if (relationshipType === 'many-to-one' || (relationshipType === 'one-to-one' && ownerSide)) { _%>
+  <%_ const constraintName = this.getFKConstraintName(entity.entityTableName, relationshipName, prodDatabaseType);
+      let baseColumnNames;
+      let referencedColumnNames;
+  _%>
+  <%_ if (relationshipType === 'one-to-one' && ownerSide && relationship.id) { _%>
+    <%_ baseColumnNames = relationship.otherEntity.primaryKey.fields.map(field => field.columnName).join(',');
+        referencedColumnNames = relationship.otherEntity.primaryKey.fields.map(field => field.columnName).join(',');
+    _%>
+  <%_ } else if (relationship.otherEntity) { _%>
+    <%_ baseColumnNames = relationship.otherEntity.primaryKey.fields.map(field => `${relationship.columnName}_${field.columnName}`).join(',');
+        referencedColumnNames = relationship.otherEntity.primaryKey.fields.map(field => field.columnName).join(',');
+    _%>
+  <%_ } _%>
 
         <addForeignKeyConstraint baseColumnNames="<%- baseColumnNames %>"
                                  baseTableName="<%- entity.entityTableName %>"
@@ -67,9 +69,8 @@ _%>
                                  constraintName="<%- relationship.joinTable.otherConstraintName %>"
                                  referencedColumnNames="<%- relationship.otherEntity.primaryKey.fields.map(field => field.columnName).join(', ') %>"
                                  referencedTableName="<%- relationship.otherEntity.entityTableName %>"
-  <%_ if (relationship.otherRelationship) {
-            // User object is not supporting this right now
-  _%>
+  <%_ if (relationship.otherRelationship) { _%>
+    <%_ // User object is not supporting this right now _%>
     <%_ if (relationship.otherRelationship.onDelete) { _%>
                                  onDelete="<%- relationship.otherRelationship.onDelete %>"
     <%_ } _%>

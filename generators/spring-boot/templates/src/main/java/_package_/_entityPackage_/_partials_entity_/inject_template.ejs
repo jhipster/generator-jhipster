@@ -1,4 +1,3 @@
-<%# eslint-disable -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -17,36 +16,37 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ const beans = [];
-  if (viaService) {
-    beans.push({ class: `${entityClass}Service`, instance: `${entityInstance}Service` });
-    if (!readOnly) {
-      beans.push({ class: `${entityClass}Repository`, instance: `${entityInstance}Repository` });
-    }
-    if (queryService && !reactive) {
-      beans.push({ class: `${entityClass}QueryService`, instance: `${entityInstance}QueryService` });
-    }
-    if (isUsingMapsId && !isController) {
-      const mapsIdRepoInstance = `${mapsIdAssoc.otherEntity.entityInstance}Repository`;
-      beans.push({ class: `${mapsIdAssoc.otherEntity.entityNameCapitalized}Repository`, instance: mapsIdRepoInstance });
-    }
-  } else {
-    beans.push({ class: `${entityClass}Repository`, instance: `${entityInstance}Repository` });
-    if (dtoMapstruct) {
-      beans.push({ class: `${entityClass}Mapper`, instance: `${entityInstance}Mapper` });
-    }
-    if (searchEngineElasticsearch) {
-      beans.push({ class: `${entityClass}SearchRepository`, instance: `${entityInstance}SearchRepository` });
-    }
-    if (isUsingMapsId) {
-      const mapsIdRepoInstance = `${mapsIdAssoc.otherEntity.entityInstance}Repository`;
-      beans.push({ class: `${mapsIdAssoc.otherEntity.entityNameCapitalized}Repository`, instance: mapsIdRepoInstance });
-    }
-  }
-  if (saveUserSnapshot && (viaService || constructorName.endsWith('Resource'))) {
-    beans.push({ class: 'UserRepository', instance: 'userRepository' });
-  }
-_%>
+<%_ const beans = []; _%>
+<%_ if (viaService) { _%>
+  <%_ beans.push({ class: `${entityClass}Service`, instance: `${entityInstance}Service` }); _%>
+  <%_ if (!readOnly) { _%>
+    <%_ beans.push({ class: `${entityClass}Repository`, instance: `${entityInstance}Repository` }); _%>
+  <%_ } _%>
+  <%_ if (queryService && !reactive) { _%>
+    <%_ beans.push({ class: `${entityClass}QueryService`, instance: `${entityInstance}QueryService` }); _%>
+  <%_ } _%>
+  <%_ if (isUsingMapsId && !isController) { _%>
+    <%_ const mapsIdRepoInstance = `${mapsIdAssoc.otherEntity.entityInstance}Repository`;
+        beans.push({ class: `${mapsIdAssoc.otherEntity.entityNameCapitalized}Repository`, instance: mapsIdRepoInstance });
+    _%>
+  <%_ } _%>
+<%_ } else { _%>
+  <%_ beans.push({ class: `${entityClass}Repository`, instance: `${entityInstance}Repository` }); _%>
+  <%_ if (dtoMapstruct) { _%>
+    <%_ beans.push({ class: `${entityClass}Mapper`, instance: `${entityInstance}Mapper` }); _%>
+  <%_ } _%>
+  <%_ if (searchEngineElasticsearch) { _%>
+    <%_ beans.push({ class: `${entityClass}SearchRepository`, instance: `${entityInstance}SearchRepository` }); _%>
+  <%_ } _%>
+  <%_ if (isUsingMapsId) { _%>
+    <%_ const mapsIdRepoInstance = `${mapsIdAssoc.otherEntity.entityInstance}Repository`;
+        beans.push({ class: `${mapsIdAssoc.otherEntity.entityNameCapitalized}Repository`, instance: mapsIdRepoInstance });
+    _%>
+  <%_ } _%>
+<%_ } _%>
+<%_ if (saveUserSnapshot && (viaService || constructorName.endsWith('Resource'))) { _%>
+  <%_ beans.push({ class: 'UserRepository', instance: 'userRepository' }); _%>
+<%_ } _%>
 
 <%_ for (const bean of beans) { _%>
     private final <%- bean.class %> <%- bean.instance %>;

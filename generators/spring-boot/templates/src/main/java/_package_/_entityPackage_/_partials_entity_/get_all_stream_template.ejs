@@ -1,4 +1,3 @@
-<%# eslint-disable -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -17,23 +16,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%
-const mapper = `${entityInstance}Mapper`;
+<% const mapper = `${entityInstance}Mapper`;
 const entityToDtoReference = `${mapper}::` + 'toDto';
 const reactiveSql = (databaseTypeSql && reactive);
 let toResponseEntityPrefix = '';
-let toResponseEntityPostfix = '';
-if (!paginationNo) {
-  if (reactiveSql) {
-    toResponseEntityPostfix = '.map(ResponseEntity::ok)';
-  } else {
-    toResponseEntityPrefix = 'new ResponseEntity<>(';
-    toResponseEntityPostfix = ', HttpStatus.OK)';
-  }
-}
-for (const relationship of relationships) {
-  if (relationship.relationshipOneToOne && !relationship.ownerSide) {
-%>
+let toResponseEntityPostfix = ''; _%>
+<%_ if (!paginationNo) { _%>
+  <%_ if (reactiveSql) { _%>
+    <%_ toResponseEntityPostfix = '.map(ResponseEntity::ok)'; _%>
+  <%_ } else { _%>
+    <%_ toResponseEntityPrefix = 'new ResponseEntity<>(';
+        toResponseEntityPostfix = ', HttpStatus.OK)';
+    _%>
+  <%_ } _%>
+<%_ } _%>
+<%_ for (const relationship of relationships) { _%>
+  <%_ if (relationship.relationshipOneToOne && !relationship.ownerSide) { %>
         if ("<%- relationship.relationshipName.toLowerCase() %>-is-null".equals(filter)) {
             LOG.debug("REST request to get all <%- entityClass %>s where <%- relationship.relationshipName %> is null");
     <%_ if (viaService) { _%>

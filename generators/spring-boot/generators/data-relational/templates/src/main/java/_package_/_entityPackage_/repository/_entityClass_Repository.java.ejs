@@ -1,4 +1,3 @@
-<%# eslint-disable -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -63,7 +62,7 @@ public interface <%- entityClass %>Repository extends <% if (containsBagRelation
     default Optional<<%- persistClass %>> findOneWithEagerRelationships(<%- primaryKey.type %> <%- primaryKey.name %>) {
         return <% if (containsBagRelationships) { %>this.fetchBagRelationships(<% } %>
             this.<% if (containsToOneEagerRelationship) { %>findOneWithToOneRelationships<% } else { %>findById<% } %>(<%- primaryKey.name %>)
-        <%  if (containsBagRelationships) { %>)<% } %>;
+        <% if (containsBagRelationships) { %>)<% } %>;
     }
 
     default List<<%- persistClass %>> findAllWithEagerRelationships() {
@@ -79,23 +78,26 @@ public interface <%- entityClass %>Repository extends <% if (containsBagRelation
     }
   <%_ if (containsToOneEagerRelationship) { _%>
 
-    @Query(value = "select <%- entityJpqlInstance %> from <%- persistClass %> <%- entityJpqlInstance %><%
-      for (const relationship of relationships) {
-        if (relationship.relationshipEagerLoad && !relationship.bagRelationship) { %> left join fetch <%- entityJpqlInstance %>.<%- relationship.propertyName %><% }
-      } %>",
+    @Query(value = "select <%- entityJpqlInstance %> from <%- persistClass %> <%- entityJpqlInstance %>
+    <% for (const relationship of relationships) { _%>
+      <%_ if (relationship.relationshipEagerLoad && !relationship.bagRelationship) { %> left join fetch <%- entityJpqlInstance %>.<%- relationship.propertyName %>
+      <% } _%>
+    <%_ } %>",
         countQuery = "select count(<%- entityJpqlInstance %>) from <%- persistClass %> <%- entityJpqlInstance %>")
     Page<<%- persistClass %>> findAllWithToOneRelationships(Pageable pageable);
 
-    @Query("select <%- entityJpqlInstance %> from <%- persistClass %> <%- entityJpqlInstance %><%
-      for (const relationship of relationships) {
-        if (relationship.relationshipEagerLoad && !relationship.bagRelationship) { %> left join fetch <%- entityJpqlInstance %>.<%- relationship.propertyName %><% }
-      } %>")
+    @Query("select <%- entityJpqlInstance %> from <%- persistClass %> <%- entityJpqlInstance %>
+    <% for (const relationship of relationships) { _%>
+      <%_ if (relationship.relationshipEagerLoad && !relationship.bagRelationship) { %> left join fetch <%- entityJpqlInstance %>.<%- relationship.propertyName %>
+      <% } _%>
+    <%_ } %>")
     List<<%- persistClass %>> findAllWithToOneRelationships();
 
-    @Query("select <%- entityJpqlInstance %> from <%- persistClass %> <%- entityJpqlInstance %><%
-      for (const relationship of relationships) {
-        if (relationship.relationshipEagerLoad && !relationship.bagRelationship) { %> left join fetch <%- entityJpqlInstance %>.<%- relationship.propertyName %><% }
-      } %> where <%- entityJpqlInstance %>.id =:id")
+    @Query("select <%- entityJpqlInstance %> from <%- persistClass %> <%- entityJpqlInstance %>
+    <% for (const relationship of relationships) { _%>
+      <%_ if (relationship.relationshipEagerLoad && !relationship.bagRelationship) { %> left join fetch <%- entityJpqlInstance %>.<%- relationship.propertyName %>
+      <% } _%>
+    <%_ } %> where <%- entityJpqlInstance %>.id =:id")
     Optional<<%- persistClass %>> findOneWithToOneRelationships(@Param("id") <%- primaryKey.type %> id);
   <%_ } _%>
 <%_ } _%>
