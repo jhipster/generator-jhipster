@@ -132,7 +132,7 @@ export default defineConfig(
       prettierBlacklist: true,
       stylisticBlacklist: true,
       experimental: true,
-      allowedGlobals: ['wrapMono', 'generateEntityClientEnumImports', 'getOriginalField'],
+      allowedGlobals: ['wrapMono', 'generateEntityClientEnumImports', 'getOriginalField', 'generateFakeData'],
     },
     stylistic.configs.customize({
       jsx: false,
@@ -144,7 +144,7 @@ export default defineConfig(
 
         ...js.configs.recommended.rules,
         ...jsRules,
-        'no-extra-parens': ['error', 'all'],
+        'no-extra-parens': ['error', 'all', { nestedBinaryExpressions: false, ternaryOperandBinaryExpressions: false }],
         'prefer-destructuring': ['error', { array: false, object: true }],
         '@stylistic/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: 'never' }],
         '@stylistic/comma-dangle': ['error', 'always-multiline'],

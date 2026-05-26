@@ -25,10 +25,10 @@ import {
     const skipCreateTest
       = graalvmSupport
         || !cypressBootstrapEntities
-      || requiredRelationships.some(rel => rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.derived)
-      || requiredRelationships.some(rel => rel.otherEntity.builtInUser || rel.otherEntity === this.entity)
-      || requiredRelationships.map(rel => rel.otherEntity.relationships).flat().some(rel => rel.relationshipRequired)
-      || !entityFakeData
+        || requiredRelationships.some(rel => rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.derived)
+        || requiredRelationships.some(rel => rel.otherEntity.builtInUser || rel.otherEntity === this.entity)
+        || requiredRelationships.map(rel => rel.otherEntity.relationships).flat().some(rel => rel.relationshipRequired)
+        || !entityFakeData
       ? '.skip' : '';
 
     const reason = graalvmSupport ? 'graalvm is failing.' : 'cannot create a required entity with relationship with required relationships.';
