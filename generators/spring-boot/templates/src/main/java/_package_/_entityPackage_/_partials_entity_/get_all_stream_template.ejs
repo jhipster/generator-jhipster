@@ -37,7 +37,7 @@ for (const relationship of relationships) {
         if ("<%- relationship.relationshipName.toLowerCase() %>-is-null".equals(filter)) {
             LOG.debug("REST request to get all <%- entityClass %>s where <%- relationship.relationshipName %> is null");
     <%_ if (viaService) { _%>
-            return <%- toResponseEntityPrefix %><%- entityInstance %>Service.findAllWhere<%- relationship.relationshipNameCapitalized %>IsNull()<% if (reactiveSql) { %>.collectList()<% } %><%- toResponseEntityPostfix %>;
+            return <%- toResponseEntityPrefix %><%- entityInstance %>Service.findAllWhere<%- relationship.relationshipNameCapitalized %>IsNull()<%- reactiveSql ? '.collectList()' : '' %><%- toResponseEntityPostfix %>;
     <%_ } else { _%>
       <%_ if (reactiveSql) { _%>
             return <%- toResponseEntityPrefix %><%- entityInstance %>Repository

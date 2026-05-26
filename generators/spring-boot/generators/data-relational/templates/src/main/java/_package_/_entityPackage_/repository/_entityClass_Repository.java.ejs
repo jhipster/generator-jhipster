@@ -63,7 +63,7 @@ public interface <%- entityClass %>Repository extends <% if (containsBagRelation
     default Optional<<%- persistClass %>> findOneWithEagerRelationships(<%- primaryKey.type %> <%- primaryKey.name %>) {
         return <% if (containsBagRelationships) { %>this.fetchBagRelationships(<% } %>
             this.<% if (containsToOneEagerRelationship) { %>findOneWithToOneRelationships<% } else { %>findById<% } %>(<%- primaryKey.name %>)
-        <%  if (containsBagRelationships) { %>)<% } %>;
+        <% if (containsBagRelationships) { %>)<% } %>;
     }
 
     default List<<%- persistClass %>> findAllWithEagerRelationships() {
