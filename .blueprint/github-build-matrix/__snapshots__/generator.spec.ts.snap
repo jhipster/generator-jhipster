@@ -20,9 +20,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "entity": "sqlfull",
       "sonar-analyse": "true",
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "ng-default-additional-webpack (n[1]/j[2])",
@@ -46,9 +44,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
         "clientBundler": "webpack"
       },
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "ng-mysql-es-noi18n-mapsid (n[2]/j[2])",
@@ -66,9 +62,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "app-sample": "ng-mysql-es-noi18n-mapsid",
       "entity": "sql",
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "ng-mongodb-kafka-cucumber (n[2]/j[1])",
@@ -90,9 +84,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
         "defaultEnvironment": "dev"
       },
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "ng-h2mem-ws-nol2 (n[0]/j[2])",
@@ -113,9 +105,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
         "defaultEnvironment": "dev"
       },
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "ng-couchbase (n[1]/j[1])",
@@ -133,9 +123,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "app-sample": "ng-couchbase",
       "entity": "couchbase",
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "ng-gradle-couchbase-search (n[0]/j[2])",
@@ -154,9 +142,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "app-sample": "ng-gradle-couchbase-search",
       "entity": "couchbase",
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "ng-gradle-fr (n[2]/j[2])",
@@ -175,9 +161,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "app-sample": "ng-gradle-fr",
       "entity": "sql",
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "ng-gradle-mariadb-oauth2-infinispan (n[2]/j[2])",
@@ -199,9 +183,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
         "defaultEnvironment": "dev"
       },
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "ng-gradle-h2disk-ws-nocache (n[2]/j[1])",
@@ -224,9 +206,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
         "defaultPackaging": "war"
       },
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "ng-webflux-mongodb (n[2]/j[0])",
@@ -244,9 +224,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "app-sample": "webflux-mongodb",
       "entity": "mongodb",
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "ng-webflux-gradle-mongodb-oauth2-webpack (n[0]/j[1])",
@@ -265,9 +243,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "app-sample": "webflux-mongodb-oauth2",
       "entity": "mongodb",
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "ng-webflux-psql-default-webpack (n[0]/j[2])",
@@ -285,9 +261,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "app-sample": "webflux-psql",
       "entity": "sql",
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "ng-webflux-psql-additional (n[2]/j[2])",
@@ -304,9 +278,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "name": "ng-webflux-psql-additional",
       "jdl-samples": "webflux-psql,custom-domain",
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "ng-webflux-gradle-session-h2mem-es-webpack (n[2]/j[2])",
@@ -328,9 +300,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       },
       "entity": "sqllight",
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "ng-webflux-couchbase (n[1]/j[2])",
@@ -348,9 +318,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "app-sample": "webflux-couchbase",
       "entity": "couchbase",
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "ms-ng-oauth2-mongodb-caffeine (n[1]/j[1])",
@@ -373,9 +341,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
         "monorepository": true
       },
       "workspaces": "true",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "mf-ng-eureka-jwt-psql-ehcache (n[0]/j[1])",
@@ -397,9 +363,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
         "monorepository": true
       },
       "workspaces": "true",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "ms-mf-ng-consul-oauth2-neo4j (n[0]/j[1])",
@@ -421,9 +385,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
         "monorepository": true
       },
       "workspaces": "true",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     }
   ]
 }"
@@ -442,9 +404,7 @@ exports[`generator - github-build-matrix with devserver should match matrix valu
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "args": "--sample-yorc-folder --entities-sample sqllight --client-bundler esbuild",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "ng-default-webpack",
@@ -456,9 +416,7 @@ exports[`generator - github-build-matrix with devserver should match matrix valu
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "args": "--sample-yorc-folder --entities-sample sqllight --client-bundler webpack",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "react-default",
@@ -470,9 +428,7 @@ exports[`generator - github-build-matrix with devserver should match matrix valu
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "args": "--sample-yorc-folder --entities-sample sqllight",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "vue-default",
@@ -484,9 +440,7 @@ exports[`generator - github-build-matrix with devserver should match matrix valu
       "default-environment": "prod",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "args": "--sample-yorc-folder --entities-sample sqllight",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     }
   ]
 }"
@@ -508,9 +462,7 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "args": "jdl",
       "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    databaseType cassandra\\n    buildTool maven\\n    authenticationType jwt\\n  }\\n}",
       "samples-group": "docker-compose-integration",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "cassandra-reactive(true)-gradle-elasticsearch-oauth2-consul-kafka",
@@ -525,9 +477,7 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "args": "jdl",
       "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    databaseType cassandra\\n    reactive true\\n    buildTool gradle\\n    searchEngine elasticsearch\\n    authenticationType oauth2\\n    serviceDiscoveryType consul\\n    messageBroker kafka\\n  }\\n}",
       "samples-group": "docker-compose-integration",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "mongodb-maven-jwt-kafka",
@@ -542,9 +492,7 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "args": "jdl",
       "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    databaseType mongodb\\n    buildTool maven\\n    authenticationType jwt\\n    messageBroker kafka\\n  }\\n}",
       "samples-group": "docker-compose-integration",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "mongodb-reactive(true)-gradle-elasticsearch-oauth2-consul",
@@ -559,9 +507,7 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "args": "jdl",
       "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    databaseType mongodb\\n    reactive true\\n    buildTool gradle\\n    searchEngine elasticsearch\\n    authenticationType oauth2\\n    serviceDiscoveryType consul\\n  }\\n}",
       "samples-group": "docker-compose-integration",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "neo4j-maven-jwt-eureka",
@@ -576,9 +522,7 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "args": "jdl",
       "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    databaseType neo4j\\n    buildTool maven\\n    authenticationType jwt\\n    serviceDiscoveryType eureka\\n  }\\n}",
       "samples-group": "docker-compose-integration",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "neo4j-reactive(true)-gradle-elasticsearch-oauth2-eureka-kafka",
@@ -593,9 +537,7 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "args": "jdl",
       "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    databaseType neo4j\\n    reactive true\\n    buildTool gradle\\n    searchEngine elasticsearch\\n    authenticationType oauth2\\n    serviceDiscoveryType eureka\\n    messageBroker kafka\\n  }\\n}",
       "samples-group": "docker-compose-integration",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "postgresql-cacheProvider(no)-maven-jwt-eureka-kafka",
@@ -610,9 +552,7 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "args": "jdl",
       "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    prodDatabaseType postgresql\\n    cacheProvider no\\n    buildTool maven\\n    authenticationType jwt\\n    serviceDiscoveryType eureka\\n    messageBroker kafka\\n  }\\n}",
       "samples-group": "docker-compose-integration",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "mysql-memcached-gradle-elasticsearch-oauth2-eureka",
@@ -627,9 +567,7 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "args": "jdl",
       "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    prodDatabaseType mysql\\n    cacheProvider memcached\\n    buildTool gradle\\n    searchEngine elasticsearch\\n    authenticationType oauth2\\n    serviceDiscoveryType eureka\\n  }\\n}",
       "samples-group": "docker-compose-integration",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "mariadb-redis-maven-jwt-consul",
@@ -644,9 +582,7 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "args": "jdl",
       "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    prodDatabaseType mariadb\\n    cacheProvider redis\\n    buildTool maven\\n    authenticationType jwt\\n    serviceDiscoveryType consul\\n  }\\n}",
       "samples-group": "docker-compose-integration",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "postgresql-reactive(true)-gradle-elasticsearch-oauth2-kafka",
@@ -661,9 +597,7 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "args": "jdl",
       "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    prodDatabaseType postgresql\\n    reactive true\\n    buildTool gradle\\n    searchEngine elasticsearch\\n    authenticationType oauth2\\n    messageBroker kafka\\n  }\\n}",
       "samples-group": "docker-compose-integration",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "mysql-reactive(true)-maven-jwt-consul-kafka",
@@ -678,9 +612,7 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "args": "jdl",
       "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    prodDatabaseType mysql\\n    reactive true\\n    buildTool maven\\n    authenticationType jwt\\n    serviceDiscoveryType consul\\n    messageBroker kafka\\n  }\\n}",
       "samples-group": "docker-compose-integration",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "mariadb-reactive(true)-gradle-elasticsearch-oauth2",
@@ -695,9 +627,7 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "args": "jdl",
       "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    prodDatabaseType mariadb\\n    reactive true\\n    buildTool gradle\\n    searchEngine elasticsearch\\n    authenticationType oauth2\\n  }\\n}",
       "samples-group": "docker-compose-integration",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "h2",
@@ -712,9 +642,7 @@ exports[`generator - github-build-matrix with docker-compose-integration should 
       "args": "jdl",
       "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    devDatabaseType h2Disk\\n  }\\n}",
       "samples-group": "docker-compose-integration",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     }
   ]
 }"
@@ -724,21 +652,15 @@ exports[`generator - github-build-matrix with generators should match matrix val
 "{
   "database-changelog": {
     "disabled": false,
-    "build-jhipster-bom": true,
-    "jhipster-bom-branch": "main",
-    "jhipster-bom-cicd-version": "0.0.0-CICD"
+    "build-jhipster-bom": false
   },
   "generate-blueprint": {
     "disabled": false,
-    "build-jhipster-bom": true,
-    "jhipster-bom-branch": "main",
-    "jhipster-bom-cicd-version": "0.0.0-CICD"
+    "build-jhipster-bom": false
   },
   "graalvm": {
     "disabled": false,
-    "build-jhipster-bom": true,
-    "jhipster-bom-branch": "main",
-    "jhipster-bom-cicd-version": "0.0.0-CICD"
+    "build-jhipster-bom": false
   }
 }"
 `;
@@ -757,9 +679,7 @@ exports[`generator - github-build-matrix with graalvm should match matrix value 
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    buildTool maven\\n    graalvmSupport true\\n  }\\n}",
       "samples-group": "graalvm",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "maven-reactive(true)",
@@ -772,9 +692,7 @@ exports[`generator - github-build-matrix with graalvm should match matrix value 
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    buildTool maven\\n    reactive true\\n    graalvmSupport true\\n  }\\n}",
       "samples-group": "graalvm",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "gradle",
@@ -787,9 +705,7 @@ exports[`generator - github-build-matrix with graalvm should match matrix value 
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    buildTool gradle\\n    graalvmSupport true\\n  }\\n}",
       "samples-group": "graalvm",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "gradle-reactive(true)",
@@ -802,9 +718,7 @@ exports[`generator - github-build-matrix with graalvm should match matrix value 
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "jdl": "application {\\n  config {\\n    testFrameworks [cypress]\\n    buildTool gradle\\n    reactive true\\n    graalvmSupport true\\n  }\\n}",
       "samples-group": "graalvm",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     }
   ]
 }"
@@ -829,9 +743,7 @@ exports[`generator - github-build-matrix with react should match matrix value 1`
       "app-sample": "react-default",
       "entity": "sqlfull",
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "react-maven-h2mem-memcached (n[2]/j[1])",
@@ -852,9 +764,7 @@ exports[`generator - github-build-matrix with react should match matrix value 1`
         "defaultEnvironment": "dev"
       },
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "react-gradle-mysql-es-noi18n-mapsid (n[0]/j[1])",
@@ -873,9 +783,7 @@ exports[`generator - github-build-matrix with react should match matrix value 1`
       "app-sample": "react-gradle-mysql-es-noi18n-mapsid",
       "entity": "sql",
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "react-gradle-cassandra-session-redis (n[2]/j[1])",
@@ -894,9 +802,7 @@ exports[`generator - github-build-matrix with react should match matrix value 1`
       "app-sample": "react-gradle-cassandra-session-redis",
       "entity": "cassandra",
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "ms-react-consul-jwt-cassandra-redis (n[2]/j[1])",
@@ -918,9 +824,7 @@ exports[`generator - github-build-matrix with react should match matrix value 1`
         "monorepository": true
       },
       "workspaces": "true",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "ms-mf-react-eureka-oauth2-mariadb-infinispan (n[1]/j[1])",
@@ -942,9 +846,7 @@ exports[`generator - github-build-matrix with react should match matrix value 1`
         "monorepository": true
       },
       "workspaces": "true",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     }
   ]
 }"
@@ -969,9 +871,7 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
       "app-sample": "vue-default",
       "entity": "sqlfull",
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "vue-default-additional (n[2]/j[1])",
@@ -990,9 +890,7 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
       "entity": "none",
       "jdl-entity": "custom-id",
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "vue-noi18n-mysql-ws-oauth2 (n[2]/j[1])",
@@ -1010,9 +908,7 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
       "app-sample": "vue-noi18n-ws-oauth2",
       "entity": "sqlfull",
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "vue-federation-fulli18n-mysql-es (n[1]/j[2])",
@@ -1030,9 +926,7 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
       "app-sample": "vue-fulli18n-es",
       "entity": "sql",
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "vue-gradle-h2mem-ws-session (n[0]/j[0])",
@@ -1054,9 +948,7 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
         "defaultEnvironment": "dev"
       },
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "vue-rsbuild-h2disk-ws-theme (n[0]/j[1])",
@@ -1077,9 +969,7 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
         "defaultEnvironment": "dev"
       },
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "vue-session-cassandra-fr (n[0]/j[1])",
@@ -1100,9 +990,7 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
         "defaultEnvironment": "dev"
       },
       "workspaces": "false",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "ms-vue-eureka-jwt-couchbase-hazelcast (n[0]/j[1])",
@@ -1124,9 +1012,7 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
         "monorepository": true
       },
       "workspaces": "true",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "ms-mf-vue-consul-oauth2-mysql-memcached (n[2]/j[1])",
@@ -1148,9 +1034,7 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
         "monorepository": true
       },
       "workspaces": "true",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     },
     {
       "job-name": "stack-vue-no-db (n[1]/j[0])",
@@ -1172,9 +1056,7 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
         "monorepository": true
       },
       "workspaces": "true",
-      "build-jhipster-bom": true,
-      "jhipster-bom-branch": "main",
-      "jhipster-bom-cicd-version": "0.0.0-CICD"
+      "build-jhipster-bom": false
     }
   ]
 }"
