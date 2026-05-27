@@ -1,4 +1,4 @@
-<%# eslint-disable ejs-templates/prefer-single-line-tags, ejs-templates/experimental-prefer-slurp-multiline, ejs-templates/indent, ejs-templates/format, ejs-templates/no-complex-statements, ejs-templates/no-function-block, ejs-templates/no-global-function-call -%>
+<%# eslint-disable ejs-templates/prefer-single-line-tags, ejs-templates/experimental-prefer-slurp-multiline, ejs-templates/indent, ejs-templates/no-complex-statements, ejs-templates/no-function-block, ejs-templates/no-global-function-call -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -21,67 +21,64 @@ package <%- entityAbsolutePackage %>.web.rest;
 
 import static <%- entityAbsolutePackage %>.domain.<%- persistClass %>Asserts.*;
 import static <%- packageName %>.web.rest.TestUtil.createUpdateProxyForBean;
-<%_
-const filterTestableRelationships = (reactive ? reactiveEagerRelations : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
-const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
-const hasUserRepository
-  = (requiresDeleteAllUsers && hasRelationshipWithBuiltInUser)
-    || filterTestableRelationships.some(rel => rel.otherEntity.builtInUser)
-    || (isUsingMapsId && (!dtoMapstruct && serviceNo) && mapsIdAssoc?.otherEntity?.entityNameCapitalized === 'User');
+<%_ const filterTestableRelationships = (reactive ? reactiveEagerRelations : relationships).filter(rel => rel.persistableRelationship && !rel.otherEntity.hasCyclicRequiredRelationship);
+    const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
+    const hasUserRepository
+      = (requiresDeleteAllUsers && hasRelationshipWithBuiltInUser)
+        || filterTestableRelationships.some(rel => rel.otherEntity.builtInUser)
+        || (isUsingMapsId && (!dtoMapstruct && serviceNo) && mapsIdAssoc?.otherEntity?.entityNameCapitalized === 'User');
 
-let callBlock = '';
-let callListBlock = '';
-if (reactive) {
-  callBlock = '.block()';
-  callListBlock = '.collectList().block()';
-}
-let saveMethod = 'save';
-if (!reactive && databaseTypeSql) {
-  saveMethod = 'saveAndFlush';
-}
-let createEntityPrefix = '';
-let createEntityPostfix = '';
-if (databaseTypeSql && reactive) {
-  createEntityPrefix = 'em.insert(';
-  createEntityPostfix = ').block()';
-}
-let idValue = `${persistInstance}.${primaryKey.propertySupplierName}()`;
-if (primaryKey.typeLong || primaryKey.typeInteger) {
-  idValue = `${idValue}.intValue()`;
-} else if (primaryKey.typeUUID) {
-  idValue = `${idValue}.toString()`;
-}
-let transactionalAnnotation = '';
-if (databaseTypeSql && !reactive) {
-  transactionalAnnotation = '\n    @Transactional';
-}
-
+    let callBlock = '';
+    let callListBlock = '';
+    if (reactive) {
+      callBlock = '.block()';
+      callListBlock = '.collectList().block()';
+    }
+    let saveMethod = 'save';
+    if (!reactive && databaseTypeSql) {
+      saveMethod = 'saveAndFlush';
+    }
+    let createEntityPrefix = '';
+    let createEntityPostfix = '';
+    if (databaseTypeSql && reactive) {
+      createEntityPrefix = 'em.insert(';
+      createEntityPostfix = ').block()';
+    }
+    let idValue = `${persistInstance}.${primaryKey.propertySupplierName}()`;
+    if (primaryKey.typeLong || primaryKey.typeInteger) {
+      idValue = `${idValue}.intValue()`;
+    } else if (primaryKey.typeUUID) {
+      idValue = `${idValue}.toString()`;
+    }
+    let transactionalAnnotation = '';
+    if (databaseTypeSql && !reactive) {
+      transactionalAnnotation = '\n    @Transactional';
+    }
 _%>
 <%_ if (entityAbsolutePackage !== packageName) { _%>
 import <%- packageName %>.web.rest.TestUtil;
 <% } %>
 import <%- packageName %>.IntegrationTest;
 import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
-<%_
-const imported = [];
-for (relationship of relationships) { // import entities in required relationships
-  const { relationshipValidate } = relationship;
-  const isUsingMapsIdL1 = relationship.id;
-  if (!imported.includes(relationship.otherEntity.entityNameCapitalized)) {
-    if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) { _%>
-import <%- entityAbsolutePackage %>.domain.<%- relationship.otherEntity.persistClass %>;
-<%_
-          imported.push(relationship.otherEntity.entityNameCapitalized);
-    }
-  }
-}
+<%_ const imported = [];
+    for (relationship of relationships) { // import entities in required relationships
+    const { relationshipValidate } = relationship;
+    const isUsingMapsIdL1 = relationship.id;
+    if (!imported.includes(relationship.otherEntity.entityNameCapitalized)) {
+      if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) {
 _%>
-<%_
-if (jpaMetamodelFiltering && reactive) {
-  for (const relationship of filterTestableRelationships) { _%>
+import <%- entityAbsolutePackage %>.domain.<%- relationship.otherEntity.persistClass %>;
+<%_ imported.push(relationship.otherEntity.entityNameCapitalized);
+    }
+    }
+    }
+_%>
+<%_ if (jpaMetamodelFiltering && reactive) {
+      for (const relationship of filterTestableRelationships) {
+_%>
 import <%- entityAbsolutePackage %>.repository.<%- relationship.otherEntity.entityNameCapitalized %>Repository;
 <%_ }
- }
+    }
 _%>
 <%_ if (hasUserRepository) { _%>
 import <%- user.entityAbsolutePackage %>.repository.UserRepository;
@@ -243,10 +240,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.awaitility.Awaitility.await;
 <%_ } _%>
 <%_ for (const field of fields.filter(field => !field.transient)) {
-  if (field.fieldIsEnum) { _%>
+      if (field.fieldIsEnum) {
+_%>
 import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
 <%_ }
-}
+    }
 _%>
 /**
  * Integration tests for the {@link <%- entityClass %>Resource} REST controller.
@@ -270,86 +268,86 @@ class <%- entityClass %>ResourceIT {
     private static final DateTimeFormatter LOCAL_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
 <%_ } _%>
 <%_ for (field of fieldsToTest) {
-  const defaultValueName = `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}`;
-  const updatedValueName = `UPDATED_${field.fieldNameUnderscored.toUpperCase()}`;
-  const smallerValueName = `SMALLER_${field.fieldNameUnderscored.toUpperCase()}`;
-  const needsSmallerValueName = jpaMetamodelFiltering && field.filterableField
-    && (field.fieldTypeNumeric || field.fieldTypeDuration || field.fieldTypeLocalDate || field.fieldTypeZonedDateTime);
+      const defaultValueName = `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}`;
+      const updatedValueName = `UPDATED_${field.fieldNameUnderscored.toUpperCase()}`;
+      const smallerValueName = `SMALLER_${field.fieldNameUnderscored.toUpperCase()}`;
+      const needsSmallerValueName = jpaMetamodelFiltering && field.filterableField
+        && (field.fieldTypeNumeric || field.fieldTypeDuration || field.fieldTypeLocalDate || field.fieldTypeZonedDateTime);
 
-  let defaultValue = 1;
-  let updatedValue = 2;
+      let defaultValue = 1;
+      let updatedValue = 2;
 
-  if (field.fieldValidate === true) {
-    if (field.fieldValidationMax) {
-      defaultValue = field.fieldValidateRulesMax;
-      updatedValue = parseInt(field.fieldValidateRulesMax) - 1;
-    }
-    if (field.fieldValidationMin) {
-      defaultValue = field.fieldValidateRulesMin;
-      updatedValue = parseInt(field.fieldValidateRulesMin) + 1;
-    }
-    if (field.fieldValidationMinBytes) {
-      defaultValue = field.fieldValidateRulesMinbytes;
-      updatedValue = field.fieldValidateRulesMinbytes;
-    }
-    if (field.fieldValidationMaxBytes) {
-      updatedValue = field.fieldValidateRulesMaxbytes;
-    }
-  }
-
-  const { fieldType } = field;
-  const isEnum = field.fieldIsEnum;
-  let enumValue1;
-  let enumValue2;
-  if (isEnum) {
-    const { enumValues } = field;
-    enumValue1 = enumValues[0];
-    if (enumValues.length > 1) {
-      enumValue2 = enumValues[1];
-    } else {
-      enumValue2 = enumValue1;
-    }
-  }
-
-  if (field.fieldTypeString || field.blobContentTypeText) {
-    // Generate Strings, using the min and max string length if they are configured
-    let sampleTextString = '';
-    let updatedTextString = '';
-    let sampleTextLength = 10;
-    if (field.fieldValidateRulesMinlength > sampleTextLength) {
-      sampleTextLength = field.fieldValidateRulesMinlength;
-    }
-    if (field.fieldValidateRulesMaxlength < sampleTextLength) {
-      sampleTextLength = field.fieldValidateRulesMaxlength;
-    }
-    for (let i = 0; i < sampleTextLength; i++) {
-      sampleTextString += 'A';
-      updatedTextString += 'B';
-    }
-    if (field.fieldValidateRulesPattern !== undefined) {
-      // Generate Strings, using pattern
-      try {
-        const patternRegExp = new RegExp(field.fieldValidateRulesPattern);
-        // set infinite repetitions max range
-        if (!patternRegExp.test(sampleTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
-          const value = field.generateFakeDataFromPattern();
-          sampleTextString = value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+      if (field.fieldValidate === true) {
+        if (field.fieldValidationMax) {
+          defaultValue = field.fieldValidateRulesMax;
+          updatedValue = parseInt(field.fieldValidateRulesMax) - 1;
         }
-        if (!patternRegExp.test(updatedTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
-          const value = field.generateFakeDataFromPattern();
-          updatedTextString = value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+        if (field.fieldValidationMin) {
+          defaultValue = field.fieldValidateRulesMin;
+          updatedValue = parseInt(field.fieldValidateRulesMin) + 1;
         }
-      } catch (error) {
-        this.log.warn(`Error generating test value for entity "${entityClass
+        if (field.fieldValidationMinBytes) {
+          defaultValue = field.fieldValidateRulesMinbytes;
+          updatedValue = field.fieldValidateRulesMinbytes;
+        }
+        if (field.fieldValidationMaxBytes) {
+          updatedValue = field.fieldValidateRulesMaxbytes;
+        }
+      }
+
+      const { fieldType } = field;
+      const isEnum = field.fieldIsEnum;
+      let enumValue1;
+      let enumValue2;
+      if (isEnum) {
+        const { enumValues } = field;
+        enumValue1 = enumValues[0];
+        if (enumValues.length > 1) {
+          enumValue2 = enumValues[1];
+        } else {
+          enumValue2 = enumValue1;
+        }
+      }
+
+      if (field.fieldTypeString || field.blobContentTypeText) {
+        // Generate Strings, using the min and max string length if they are configured
+        let sampleTextString = '';
+        let updatedTextString = '';
+        let sampleTextLength = 10;
+        if (field.fieldValidateRulesMinlength > sampleTextLength) {
+          sampleTextLength = field.fieldValidateRulesMinlength;
+        }
+        if (field.fieldValidateRulesMaxlength < sampleTextLength) {
+          sampleTextLength = field.fieldValidateRulesMaxlength;
+        }
+        for (let i = 0; i < sampleTextLength; i++) {
+          sampleTextString += 'A';
+          updatedTextString += 'B';
+        }
+        if (field.fieldValidateRulesPattern !== undefined) {
+          // Generate Strings, using pattern
+          try {
+            const patternRegExp = new RegExp(field.fieldValidateRulesPattern);
+            // set infinite repetitions max range
+            if (!patternRegExp.test(sampleTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
+              const value = field.generateFakeDataFromPattern();
+              sampleTextString = value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+            }
+            if (!patternRegExp.test(updatedTextString.replace(/\\"/g, '"').replace(/\\\\/g, '\\'))) {
+              const value = field.generateFakeDataFromPattern();
+              updatedTextString = value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+            }
+          } catch (error) {
+            this.log.warn(`Error generating test value for entity "${entityClass
           }" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern
-          }", generating default values for this field. Detailed error message: "${error.message}".`);
+        }", generating default values for this field. Detailed error message: "${error.message}".`);
       }
       if (sampleTextString === updatedTextString) {
         updatedTextString = `${updatedTextString}B`;
         this.log.warn(`Randomly generated first and second test values for entity "${entityClass
-          }" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern
-          }" in file "${entityClass}ResourceIT" where equal, added symbol "B" to second value.`);
-      }
+      }" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern
+    }" in file "${entityClass}ResourceIT" where equal, added symbol "B" to second value.`);
+    }
     }
 _%>
 
@@ -520,12 +518,12 @@ _%>
     private <%- persistClass %> inserted<%- persistClass %>;
 
 <%_ if (jpaMetamodelFiltering && reactive) {
-for (const relationship of filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser)) {
+      for (const relationship of filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser)) {
 _%>
     @Autowired
     private <%- relationship.otherEntity.persistClass %>Repository <%- relationship.otherEntity.persistInstance %>Repository;
 <%_ }
-}
+    }
 _%>
 <%_ for (const fieldStatus of ['DEFAULT_', 'UPDATED_']) { _%>
   <%_ const createInstance = fieldStatus === 'UPDATED_' ? `updated${persistClass}` : persistInstance; _%>
@@ -569,12 +567,11 @@ _%>
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
-  <%_
-  const alreadyGeneratedEntities = [];
-  for (relationship of persistableRelationships) {
-    const { otherEntity, relationshipValidate, otherEntityName } = relationship;
-    const mapsIdUse = relationship.id;
-    if ((relationshipValidate !== null && relationshipValidate && !relationship.otherEntity.hasCyclicRequiredRelationship) || mapsIdUse) {
+  <%_ const alreadyGeneratedEntities = [];
+      for (relationship of persistableRelationships) {
+        const { otherEntity, relationshipValidate, otherEntityName } = relationship;
+        const mapsIdUse = relationship.id;
+        if ((relationshipValidate !== null && relationshipValidate && !relationship.otherEntity.hasCyclicRequiredRelationship) || mapsIdUse) {
   _%>
         // Add required entity
       <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) === -1) { _%>
@@ -622,12 +619,13 @@ _%>
 <%_ } _%>
 
 <%_ if (databaseTypeSql && reactive) {
-  const alreadyGeneratedDeletionCalls = [];
+      const alreadyGeneratedDeletionCalls = [];
 _%>
     public static void deleteEntities(EntityManager em) {
         try {
   <%_ for (const rel of relationships) {
-    if (rel.shouldWriteJoinTable) { _%>
+        if (rel.shouldWriteJoinTable) {
+  _%>
                 em.deleteAll("<%- rel.joinTable.name %>").block();
     <%_ } _%>
   <%_ } _%>
@@ -636,11 +634,12 @@ _%>
             // It can fail, if other entities are still referring this - it will be removed later.
         }
   <%_ for (const rel of relationships) {
-    if ((rel.relationshipValidate || rel.id) && !alreadyGeneratedDeletionCalls.includes(rel.otherEntityName)) { _%>
+        if ((rel.relationshipValidate || rel.id) && !alreadyGeneratedDeletionCalls.includes(rel.otherEntityName)) {
+  _%>
         <%- rel.otherEntity.entityNameCapitalized %>ResourceIT.deleteEntities(em);
   <%_ alreadyGeneratedDeletionCalls.push(rel.otherEntityName);
-    }
-  }
+      }
+      }
   _%>
     }
 
@@ -684,11 +683,11 @@ _%>
   <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
   <%_ } _%>
-  <%_
-      // overwrite the id field again with null
+  <%_ // overwrite the id field again with null
       // the create method here is supposed to be used for other tests as well,
       // which may expect an id to be set (at least in the reactive stack)
-      if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
+      if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) {
+  _%>
         <%- persistInstance %>.<%- primaryKey.propertyConsumerName %>(null);
   <%_ } _%>
         // Create the <%- entityClass %>
@@ -807,9 +806,9 @@ _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
     <%_ } _%>
     <%_ for (relationship of relationships) {
-      const { otherEntity, otherEntityName } = relationship;
-      const mapsIdUse = relationship.id;
-      if (mapsIdUse) {
+          const { otherEntity, otherEntityName } = relationship;
+          const mapsIdUse = relationship.id;
+          if (mapsIdUse) {
     _%>
         // Add a new parent entity
         <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) === -1) { _%>
@@ -904,10 +903,10 @@ _%>
   <%_ } _%>
   <%_ for (field of fieldsToTest) { _%>
     <%_ if (field.fieldValidate) {
-      let required = false;
-      if (!field.fieldTypeBytes && field.fieldValidate && field.fieldValidationRequired) {
-        required = true;
-      }
+          let required = false;
+          if (!field.fieldTypeBytes && field.fieldValidate && field.fieldValidationRequired) {
+            required = true;
+          }
     _%>
       <%_ if (required) { _%>
 
@@ -1021,12 +1020,9 @@ _%>
   <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
             <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE))<%- reactive ? '' : ')' %>
   <%_ } _%>
-            <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<%
-  if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
+            <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><%
-  if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%
-    if (databaseTypeCassandra) { %>.array()<% } %>)<% } else
+  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
   if (field.fieldTypeLong) { %>.intValue()<% } else
   if (field.fieldTypeFloat) { %>.doubleValue()<% } else
   if (field.fieldTypeBigDecimal) { %>)<% } else
@@ -1116,12 +1112,9 @@ _%>
   <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
             <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.<%- field.fieldName %>ContentType").value(<%- reactive ? 'is(' : '' %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE))
   <%_ } _%>
-            <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.<%- field.fieldName %>").value(<%- reactive ? 'is(' : '' %><%
-  if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
+            <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.<%- field.fieldName %>").value(<%- reactive ? 'is(' : '' %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><%
-  if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%
-    if (databaseTypeCassandra) { %>.array()<% } %>)<% } else
+  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
   if (field.fieldTypeLong) { %>.intValue()<% } else
   if (field.fieldTypeFloat) { %>.doubleValue()<% } else
   if (field.fieldTypeBigDecimal) { %>)<% } else
@@ -1219,21 +1212,21 @@ _%>
     }
 
     <%_ }
-    // the range criteria
-    if (searchBy.fieldTypeNumeric || searchBy.fieldTypeDuration || searchBy.fieldTypeLocalDate || searchBy.fieldTypeZonedDateTime) {
-      const defaultValue = `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}`;
-      let biggerValue = `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}`;
-      const smallerValue = `SMALLER_${searchBy.fieldNameUnderscored.toUpperCase()}`;
-      if (searchBy.fieldValidate && searchBy.fieldValidationMax) {
-          // if maximum is specified the updated variable is smaller than the default one!
-        if (searchBy.fieldTypeBigDecimal) {
+        // the range criteria
+        if (searchBy.fieldTypeNumeric || searchBy.fieldTypeDuration || searchBy.fieldTypeLocalDate || searchBy.fieldTypeZonedDateTime) {
+          const defaultValue = `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}`;
+          let biggerValue = `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}`;
+          const smallerValue = `SMALLER_${searchBy.fieldNameUnderscored.toUpperCase()}`;
+          if (searchBy.fieldValidate && searchBy.fieldValidationMax) {
+            // if maximum is specified the updated variable is smaller than the default one!
+            if (searchBy.fieldTypeBigDecimal) {
               biggerValue = `(${defaultValue}.add(BigDecimal.ONE))`;
-        } else if (searchBy.fieldTypeDuration || searchBy.fieldTypeLocalDate || searchBy.fieldTypeZonedDateTime) {
+            } else if (searchBy.fieldTypeDuration || searchBy.fieldTypeLocalDate || searchBy.fieldTypeZonedDateTime) {
               biggerValue = `(${defaultValue}.plus(1, ChronoUnit.DAYS))`;
-        } else {
+            } else {
               biggerValue = `(${defaultValue} + 1)`;
-        }
-      }
+            }
+          }
     _%>
 
     @Test<%- transactionalAnnotation %>
@@ -1331,12 +1324,11 @@ _%>
         // Get all the <%- entityInstance %>List where <%- relationship.relationshipFieldName %> equals to <%- relationship.relationshipFieldName %>Id
         default<%- entityClass %>ShouldBeFound("<%- relationship.relationshipFieldName %>Id.equals=" + <%- relationship.relationshipFieldName %>Id);
 
-    <%_
-    const initInvalidPrimaryKey = {
-        String: '"invalid-id"',
-        Long: `(${relationship.relationshipFieldName}Id + 1)`,
-        UUID: 'UUID.randomUUID()',
-    }[relationship.otherEntity.primaryKey.type];
+    <%_ const initInvalidPrimaryKey = {
+          String: '"invalid-id"',
+          Long: `(${relationship.relationshipFieldName}Id + 1)`,
+          UUID: 'UUID.randomUUID()',
+        }[relationship.otherEntity.primaryKey.type];
     _%>
         // Get all the <%- entityInstance %>List where <%- relationship.relationshipFieldName %> equals to <%- initInvalidPrimaryKey %>
         default<%- entityClass %>ShouldNotBeFound("<%- relationship.relationshipFieldName %>Id.equals=" + <%- initInvalidPrimaryKey %>);
@@ -1366,8 +1358,7 @@ _%>
             .jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if
       (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
       if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-      if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><%
-      if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
+      if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
       if (field.fieldTypeLong) { %>.intValue()<% } else
       if (field.fieldTypeFloat) { %>.doubleValue()<% } else
       if (field.fieldTypeBigDecimal) { %>)<% } else
@@ -1402,20 +1393,17 @@ _%>
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
     <%_ const primaryKeyConversion = {
-                Long: '.intValue()',
-                UUID: '.toString()',
-            }[primaryKey.type] || '';
+          Long: '.intValue()',
+          UUID: '.toString()',
+        }[primaryKey.type] || '';
     _%>
             .andExpect(jsonPath("$.[*].<%- primaryKey.name %>").value(hasItem(<%- persistInstance %>.<%- primaryKey.propertySupplierName %>()<%- primaryKeyConversion %>)))<% for (const field of fieldsToTest) { %>
       <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
             .andExpect(jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE)))
       <%_ } _%>
-            .andExpect(jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<%
-    if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
+            .andExpect(jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
     if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-    if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><%
-    if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%
-      if (databaseTypeCassandra) { %>.array()<% } %>)<% } else
+    if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
     if (field.fieldTypeLong) { %>.intValue()<% } else
     if (field.fieldTypeFloat) { %>.doubleValue()<% } else
     if (field.fieldTypeBigDecimal) { %>)<% } else
@@ -1688,14 +1676,13 @@ _%>
   <%_ } _%>
     }
 
-  <%_
-    const prepareFieldForPatchTest = (field, includeCb) => {
-      const includeField = includeCb();
-      const fieldNameUnderscoreUppercased = field.fieldNameUnderscored.toUpperCase();
-      const updateWithValue = includeField ? `UPDATED_${fieldNameUnderscoreUppercased}` : 'null';
-      const testWithConstant = includeField ? `UPDATED_${fieldNameUnderscoreUppercased}` : `DEFAULT_${fieldNameUnderscoreUppercased}`;
-      return { includeField, updateWithValue, testWithConstant, ...field };
-    };
+  <%_ const prepareFieldForPatchTest = (field, random) => {
+        const includeField = random ? faker.datatype.boolean() : true;
+        const fieldNameUnderscoreUppercased = field.fieldNameUnderscored.toUpperCase();
+        const updateWithValue = includeField ? `UPDATED_${fieldNameUnderscoreUppercased}` : 'null';
+        const testWithConstant = includeField ? `UPDATED_${fieldNameUnderscoreUppercased}` : `DEFAULT_${fieldNameUnderscoreUppercased}`;
+        return { includeField, updateWithValue, testWithConstant, ...field };
+      };
   _%>
     @Test<%- transactionalAnnotation %>
     void partialUpdate<%- entityClass %>WithPatch() throws Exception {
@@ -1707,7 +1694,7 @@ _%>
   <%_ } _%>
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
-  <%_ const fieldsToIncludeInPartialPatchTest = fieldsToTest.map(field => prepareFieldForPatchTest(field, () => faker.datatype.boolean())); _%>
+  <%_ const fieldsToIncludeInPartialPatchTest = fieldsToTest.map(field => prepareFieldForPatchTest(field, true)); _%>
 <%- include('/_global_partials_entity_/it_patch_update.partial.java.ejs', { fields: fieldsToIncludeInPartialPatchTest, saveMethod, callBlock, callListBlock }) -%>
 
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
@@ -1727,7 +1714,7 @@ _%>
   <%_ } _%>
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
-  <%_ const fieldsToIncludeInFullPatchTest = fieldsToTest.map(field => prepareFieldForPatchTest(field, () => true)); _%>
+  <%_ const fieldsToIncludeInFullPatchTest = fieldsToTest.map(field => prepareFieldForPatchTest(field, false)); _%>
 <%- include('/_global_partials_entity_/it_patch_update.partial.java.ejs', { fields: fieldsToIncludeInFullPatchTest, saveMethod, callBlock, callListBlock }) -%>
 
         assertSameRepositoryCount(databaseSizeBeforeUpdate);
@@ -1941,12 +1928,9 @@ _%>
     <%_ if (field.fieldTypeBinary && !field.blobContentTypeText) { _%>
             <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.[*].<%- field.fieldName %>ContentType").value(hasItem(<%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %>_CONTENT_TYPE))<%- reactive ? '' : ')' %>
     <%_ } _%>
-            <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<%
-  if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
+            <%- reactive ? '.' : '.andExpect(' %>jsonPath("$.[*].<%- field.fieldName %>").value(hasItem(<% if (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
   if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
-  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><%
-  if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%
-    if (databaseTypeCassandra) { %>.array()<% } %>)<% } else
+  if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><% if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
   if (field.fieldTypeLong) { %>.intValue()<% } else
   if (field.fieldTypeFloat) { %>.doubleValue()<% } else
   if (field.fieldTypeBigDecimal) { %>)<% } else
