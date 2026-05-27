@@ -1,4 +1,4 @@
-<%# eslint-disable ejs-templates/prefer-single-line-tags, ejs-templates/indent, ejs-templates/prefer-output -%>
+<%# eslint-disable ejs-templates/prefer-single-line-tags, ejs-templates/indent -%>
 import {
   entityTableSelector,
   entityDetailsButtonSelector,
@@ -55,12 +55,12 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
   let username: string;
   let password: string;
 <%_ if (!readOnly) { _%>
-  <% if (skipCreateTest) { %>// <% } %>const <%- entityInstance %>Sample = <%- JSON.stringify(this.generateTestEntity(sampleFields)) %>;
+  <%- skipCreateTest ? '// ' : '' %>const <%- entityInstance %>Sample = <%- JSON.stringify(this.generateTestEntity(sampleFields)) %>;
 <%_ } _%>
 
   let <%- entityInstance %>;
 <%_ for (otherEntity of requiredOtherEntities) { _%>
-  <% if (skipCreateTest) { %>// <% } %>let <%- otherEntity.entityInstance %>;
+  <%- skipCreateTest ? '// ' : '' %>let <%- otherEntity.entityInstance %>;
 <%_ } _%>
 
   before(() => {
@@ -278,8 +278,8 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
         cy.url().should('match', <%- entityInstance %>PageUrlPattern);
       });
 
-      <% if (jpaMetamodelFiltering && clientFrameworkVue && requiredRelationships.length) { %>// Reason: jpaMetamodelFiltering with required relationship missbehavior<% } %>
-      it<% if (jpaMetamodelFiltering && clientFrameworkVue && requiredRelationships.length) { %>.skip<% } %>('edit button click should load edit <%- entityNameCapitalized %> page and save', () => {
+      <%- (jpaMetamodelFiltering && clientFrameworkVue && requiredRelationships.length) ? '// Reason: jpaMetamodelFiltering with required relationship missbehavior' : '' %>
+      it<%- (jpaMetamodelFiltering && clientFrameworkVue && requiredRelationships.length) ? '.skip' : '' %>('edit button click should load edit <%- entityNameCapitalized %> page and save', () => {
         cy.get(entityEditButtonSelector).first().click();
         cy.getEntityCreateUpdateHeading('<%- entityNameCapitalized %>');
         cy.get(entityCreateSaveButtonSelector).click();
@@ -318,7 +318,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
   });
 <%_ if (!readOnly) { _%>
 
-  describe<% if (skipUserManagementCreatePage) { %>.skip<% } %>('new <%- entityNameCapitalized %> page', () => {
+  describe<%- skipUserManagementCreatePage ? '.skip' : '' %>('new <%- entityNameCapitalized %> page', () => {
     beforeEach(() => {
       cy.visit(<%- entityInstance %>PageUrl);
       cy.get(entityCreateButtonSelector).click();

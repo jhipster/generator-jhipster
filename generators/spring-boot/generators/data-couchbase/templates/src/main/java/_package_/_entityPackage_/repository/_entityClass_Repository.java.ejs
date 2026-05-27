@@ -1,4 +1,4 @@
-<%# eslint-disable ejs-templates/prefer-single-line-tags, ejs-templates/experimental-prefer-slurp-multiline, ejs-templates/indent, ejs-templates/format, ejs-templates/prefer-output -%>
+<%# eslint-disable ejs-templates/prefer-single-line-tags, ejs-templates/experimental-prefer-slurp-multiline, ejs-templates/format -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -55,7 +55,7 @@ import static <%- entityAbsoluteClass %>.TYPE_NAME;
 @Repository
 public interface <%- entityClass %>Repository extends JHipsterCouchbaseRepository<<%- persistClass %>, <%- primaryKey.type %>><% if (jpaMetamodelFiltering) { %>, JpaSpecificationExecutor<<%- persistClass %>><% } %><% if (searchEngineAny) { %>, CouchbaseSearchRepository<<%- persistClass %>, <%- primaryKey.type %>><% } %> {
 <%_ const notEmbeddedRelationships = relationships.filter(relationship => !relationship.otherEntity.embedded);
-  if (notEmbeddedRelationships.length !== 0) {
+    if (notEmbeddedRelationships.length !== 0) {
 %>
     String SELECT = "SELECT meta(b).id as __id, meta(b).cas as __cas, b.*" + <%
       for (const relationship of notEmbeddedRelationships) {
@@ -83,7 +83,7 @@ public interface <%- entityClass %>Repository extends JHipsterCouchbaseRepositor
 
     default <%- pageOrFlux %><<%- persistClass %>> findAll(Pageable pageable) {
         return
-        <% if (!reactive) { %>new PageImpl<>(<% } %>
+        <%- reactive ? '' : 'new PageImpl<>(' %>
             findAll(pageableStatement(pageable, "b"))
         <% if (!reactive) { %>,
             pageable,
@@ -99,8 +99,8 @@ public interface <%- entityClass %>Repository extends JHipsterCouchbaseRepositor
     <%- listOrFlux %><<%- persistClass %>> findAll();
 
     @Query(SELECT + " USE KEYS $1" + JOIN)
-    <%- optionalOrMono %><<%- persistClass %>> findById(String id);<%
-    } _%>
+    <%- optionalOrMono %><<%- persistClass %>> findById(String id);
+<%_ } _%>
 
 <%_ if (searchEngineAny && notEmbeddedRelationships.length !== 0) { _%>
     @Query(SELECT + JOIN + WHERE + " AND " + SEARCH_CONDITION)
@@ -108,9 +108,9 @@ public interface <%- entityClass %>Repository extends JHipsterCouchbaseRepositor
 
     default <%- pageOrFlux %><<%- persistClass %>> search(String queryString, Pageable pageable) {
         return
-            <% if (!reactive) { %>new PageImpl<>(<% } %>
+            <%- reactive ? '' : 'new PageImpl<>(' %>
                 search(queryString, pageableStatement(pageable, "b"))
-            <% if (!reactive) { %>)<% } %>;
+            <%- reactive ? '' : ')' %>;
     }
 
     @ScanConsistency(query = QueryScanConsistency.NOT_BOUNDED)

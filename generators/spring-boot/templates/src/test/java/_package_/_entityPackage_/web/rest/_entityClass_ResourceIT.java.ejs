@@ -1,4 +1,4 @@
-<%# eslint-disable ejs-templates/prefer-single-line-tags, ejs-templates/experimental-prefer-slurp-multiline, ejs-templates/indent, ejs-templates/format, ejs-templates/prefer-output, ejs-templates/no-complex-statements, ejs-templates/no-function-block, ejs-templates/no-global-function-call -%>
+<%# eslint-disable ejs-templates/prefer-single-line-tags, ejs-templates/experimental-prefer-slurp-multiline, ejs-templates/indent, ejs-templates/format, ejs-templates/no-complex-statements, ejs-templates/no-function-block, ejs-templates/no-global-function-call -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -530,12 +530,12 @@ _%>
 <%_ for (const fieldStatus of ['DEFAULT_', 'UPDATED_']) { _%>
   <%_ const createInstance = fieldStatus === 'UPDATED_' ? `updated${persistClass}` : persistInstance; _%>
     /**
-     * Create an <% if (fieldStatus === 'UPDATED_') { %>updated <% } %>entity for this test.
+     * Create an <%- (fieldStatus === 'UPDATED_') ? 'updated ' : '' %>entity for this test.
      *
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static <%- persistClass %> create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (databaseTypeSql && anyRelationshipIsRequired) { %>EntityManager em<% } %>) {
+    public static <%- persistClass %> create<%- (fieldStatus === 'UPDATED_') ? 'Updated' : '' %>Entity(<%- (databaseTypeSql && anyRelationshipIsRequired) ? 'EntityManager em' : '' %>) {
   <%_ if (fluentMethods) { _%>
         <% if (!anyRelationshipIsRequired) { %>return <% } else { %><%- persistClass %> <%- createInstance %> = <% } %>new <%- persistClass %>()
     <%_ if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
@@ -579,7 +579,7 @@ _%>
         // Add required entity
       <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) === -1) { _%>
         <%_ if (relationship.otherEntityUser) { /* TODO or other entity has no unique fields */ _%>
-        <%- relationship.otherEntity.persistClass %> <%- otherEntityName %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<% if (databaseTypeSql && otherEntity.anyRelationshipIsRequired) { %>em<% } %>)<%- createEntityPostfix %>;
+        <%- relationship.otherEntity.persistClass %> <%- otherEntityName %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<%- (databaseTypeSql && otherEntity.anyRelationshipIsRequired) ? 'em' : '' %>)<%- createEntityPostfix %>;
           <%_ if (databaseTypeSql && !reactive) { _%>
         em.persist(<%- otherEntityName %>);
         em.flush();
@@ -593,7 +593,7 @@ _%>
             <%_ if (!isUsingMapsId || fieldStatus !== 'UPDATED_') { _%>
         if (TestUtil.findAll(em, <%- relationship.otherEntity.persistClass %>.class).isEmpty()) {
             <%_ } _%>
-            <%- otherEntityName %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (relationship.otherEntity.anyRelationshipIsRequired) { %>em<% } %>)<%- createEntityPostfix %>;
+            <%- otherEntityName %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<%- (fieldStatus === 'UPDATED_') ? 'Updated' : '' %>Entity(<%- relationship.otherEntity.anyRelationshipIsRequired ? 'em' : '' %>)<%- createEntityPostfix %>;
             em.persist(<%- otherEntityName %>);
             em.flush();
             <%_ if (!isUsingMapsId || fieldStatus !== 'UPDATED_') { _%>
@@ -602,7 +602,7 @@ _%>
         }
             <%_ } _%>
           <%_ } else { _%>
-        <%- otherEntityName %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<% if (fieldStatus === 'UPDATED_') { %>Updated<% } %>Entity(<% if (databaseType === 'sql' && otherEntity.anyRelationshipIsRequired) { %>em<% } %>)<%- createEntityPostfix %>;
+        <%- otherEntityName %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<%- (fieldStatus === 'UPDATED_') ? 'Updated' : '' %>Entity(<%- (databaseType === 'sql' && otherEntity.anyRelationshipIsRequired) ? 'em' : '' %>)<%- createEntityPostfix %>;
           <%_ } _%>
           <%_ if (databaseTypeMongodb) { _%>
         <%- otherEntityName %>.<%- primaryKey.propertyConsumerName %>("fixed-id-for-tests");
@@ -654,7 +654,7 @@ _%>
 <%_ } _%>
     @BeforeEach
     void initTest() {
-        <%- persistInstance %> = createEntity(<% if (databaseTypeSql && anyRelationshipIsRequired) { %>em<% } %>);
+        <%- persistInstance %> = createEntity(<%- (databaseTypeSql && anyRelationshipIsRequired) ? 'em' : '' %>);
     }
 
     @AfterEach
@@ -813,7 +813,7 @@ _%>
     _%>
         // Add a new parent entity
         <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) === -1) { _%>
-        <%- relationship.otherEntity.persistClass %> <%- otherEntityName %> = <%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<% if (!relationship.otherEntityUser) { %>Updated<% } %>Entity(<% if (databaseTypeSql && otherEntity.anyRelationshipIsRequired) { %>em<% } %>);
+        <%- relationship.otherEntity.persistClass %> <%- otherEntityName %> = <%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<%- relationship.otherEntityUser ? '' : 'Updated' %>Entity(<%- (databaseTypeSql && otherEntity.anyRelationshipIsRequired) ? 'em' : '' %>);
           <%_ if (databaseTypeSql && !reactive) { _%>
         em.persist(<%- otherEntityName %>);
         em.flush();
@@ -930,7 +930,7 @@ _%>
             .exchange()
             .expectStatus().isBadRequest();
         <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(post(ENTITY_API_URL)<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
+        rest<%- entityClass %>MockMvc.perform(post(ENTITY_API_URL)<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -992,7 +992,7 @@ _%>
 <%_ } _%>
 
     @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%- entityClassPlural %>() <%- reactive ? '' : 'throws Exception ' %>{
         // Initialize the database
 <%_ if (!primaryKey.derived) { _%>
   <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
@@ -1043,11 +1043,11 @@ _%>
     }
 <% if (implementsEagerLoadApis && !databaseTypeNeo4j && !databaseTypeCouchbase) { %>
     @SuppressWarnings({"unchecked"})
-    void getAll<%- entityClassPlural %>WithEagerRelationshipsIsEnabled() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%- entityClassPlural %>WithEagerRelationshipsIsEnabled() <%- reactive ? '' : 'throws Exception ' %>{
   <%_ if (!serviceNo) { _%>
-        when(<%- entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(<% if (reactive) { %>Flux.empty()<% } else { %>new PageImpl(new ArrayList<>())<% }%>);
+        when(<%- entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(<%- reactive ? 'Flux.empty()' : 'new PageImpl(new ArrayList<>())' %>);
   <%_ } else { _%>
-        when(<%- entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(<% if (reactive) { %>Flux.empty()<% } else { %>new PageImpl(new ArrayList<>())<% }%>);
+        when(<%- entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(<%- reactive ? 'Flux.empty()' : 'new PageImpl(new ArrayList<>())' %>);
   <%_ } _%>
 
   <%_ if (reactive) { _%>
@@ -1067,11 +1067,11 @@ _%>
     }
 
     @SuppressWarnings({"unchecked"})
-    void getAll<%- entityClassPlural %>WithEagerRelationshipsIsNotEnabled() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%- entityClassPlural %>WithEagerRelationshipsIsNotEnabled() <%- reactive ? '' : 'throws Exception ' %>{
   <%_ if (!serviceNo) { _%>
-        when(<%- entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(<% if (reactive) { %>Flux.empty()<% } else { %>new PageImpl(new ArrayList<>())<% }%>);
+        when(<%- entityInstance %>ServiceMock.findAllWithEagerRelationships(any())).thenReturn(<%- reactive ? 'Flux.empty()' : 'new PageImpl(new ArrayList<>())' %>);
   <%_ } else { _%>
-        when(<%- entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(<% if (reactive) { %>Flux.empty()<% } else { %>new PageImpl(new ArrayList<>())<% }%>);
+        when(<%- entityInstance %>RepositoryMock.findAllWithEagerRelationships(any())).thenReturn(<%- reactive ? 'Flux.empty()' : 'new PageImpl(new ArrayList<>())' %>);
   <%_ } _%>
 
   <%_ if (reactive) { _%>
@@ -1082,12 +1082,12 @@ _%>
         rest<%- entityClass %>MockMvc.perform(get(ENTITY_API_URL + "?eagerload=false"))
             .andExpect(status().isOk());
   <%_ } _%>
-        verify(<%- entityInstance %>RepositoryMock, times(1)).findAll<% if (reactive) { %>WithEagerRelationships(any()<% } else { %>(any(Pageable.class)<% } %>);
+        verify(<%- entityInstance %>RepositoryMock, times(1)).findAll<%- reactive ? 'WithEagerRelationships(any()' : '(any(Pageable.class)' %>);
     }
 <%_ } _%>
 
     @Test<%- transactionalAnnotation %>
-    void get<%- entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
+    void get<%- entityClass %>() <%- reactive ? '' : 'throws Exception ' %>{
         // Initialize the database
 <%_ if (!primaryKey.derived) { _%>
   <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
@@ -1139,7 +1139,7 @@ _%>
 <%_ if (jpaMetamodelFiltering) { %>
 
     @Test<%- transactionalAnnotation %>
-    void get<%- entityClassPlural %>ByIdFiltering() <% if (!reactive) { %>throws Exception <% } %>{
+    void get<%- entityClassPlural %>ByIdFiltering() <%- reactive ? '' : 'throws Exception ' %>{
         // Initialize the database
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
@@ -1158,7 +1158,7 @@ _%>
     <%_ if (searchBy.filterableField) { _%>
 
     @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsEqualToSomething() <%- reactive ? '' : 'throws Exception ' %>{
         // Initialize the database
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
@@ -1170,7 +1170,7 @@ _%>
     }
 
     @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsInShouldWork() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsInShouldWork() <%- reactive ? '' : 'throws Exception ' %>{
         // Initialize the database
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
@@ -1182,7 +1182,7 @@ _%>
     }
 
     @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsNullOrNotNull() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsNullOrNotNull() <%- reactive ? '' : 'throws Exception ' %>{
         // Initialize the database
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
@@ -1195,7 +1195,7 @@ _%>
     <%_ } _%>
     <%_ if (searchBy.fieldTypeString) { _%>
     @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>ContainsSomething() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>ContainsSomething() <%- reactive ? '' : 'throws Exception ' %>{
         // Initialize the database
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
@@ -1207,7 +1207,7 @@ _%>
     }
 
     @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>NotContainsSomething() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>NotContainsSomething() <%- reactive ? '' : 'throws Exception ' %>{
         // Initialize the database
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
@@ -1237,7 +1237,7 @@ _%>
     _%>
 
     @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsGreaterThanOrEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsGreaterThanOrEqualToSomething() <%- reactive ? '' : 'throws Exception ' %>{
         // Initialize the database
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
@@ -1249,7 +1249,7 @@ _%>
     }
 
     @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsLessThanOrEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsLessThanOrEqualToSomething() <%- reactive ? '' : 'throws Exception ' %>{
         // Initialize the database
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
@@ -1261,7 +1261,7 @@ _%>
     }
 
     @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsLessThanSomething() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsLessThanSomething() <%- reactive ? '' : 'throws Exception ' %>{
         // Initialize the database
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
@@ -1273,7 +1273,7 @@ _%>
     }
 
     @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsGreaterThanSomething() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsGreaterThanSomething() <%- reactive ? '' : 'throws Exception ' %>{
         // Initialize the database
         inserted<%- persistClass %> = <%- entityInstance %>Repository.<%- saveMethod %>(<%- persistInstance %>)<%- callBlock %>;
 
@@ -1289,7 +1289,7 @@ _%>
   <%_ for (const relationship of filterTestableRelationships) { _%>
 
     @Test<%- transactionalAnnotation %>
-    void getAll<%- entityClassPlural %>By<%- relationship.relationshipNameCapitalized %>IsEqualToSomething() <% if (!reactive) { %>throws Exception <% } %>{
+    void getAll<%- entityClassPlural %>By<%- relationship.relationshipNameCapitalized %>IsEqualToSomething() <%- reactive ? '' : 'throws Exception ' %>{
     <%_ if ((relationship.relationshipValidate && relationship.relationshipOneToOne) || relationship.id) { _%>
         // Get already existing entity
         <%- relationship.otherEntity.persistClass %> <%- relationship.relationshipFieldName %> = <%- persistInstance %>.<%- relationship.propertySupplierName %>();
@@ -1298,12 +1298,12 @@ _%>
         <%- relationship.otherEntity.persistClass %> <%- relationship.relationshipFieldName %>;
         if (TestUtil.findAll(em, <%- relationship.otherEntity.persistClass %>.class).isEmpty()) {
             <%- entityInstance %>Repository.saveAndFlush(<%- persistInstance %>);
-            <%- relationship.relationshipFieldName %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<% if (relationship.otherEntity.anyRelationshipIsRequired) { %>em<% } %>);
+            <%- relationship.relationshipFieldName %> = <%- createEntityPrefix %><%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<%- relationship.otherEntity.anyRelationshipIsRequired ? 'em' : '' %>);
         } else {
             <%- relationship.relationshipFieldName %> = TestUtil.findAll(em, <%- relationship.otherEntity.persistClass %>.class).get(0);
         }
       <%_ } else { _%>
-        <%- relationship.otherEntity.persistClass %> <%- relationship.relationshipFieldName %> = <%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<% if (relationship.otherEntity.anyRelationshipIsRequired) { %>em<% } %>);
+        <%- relationship.otherEntity.persistClass %> <%- relationship.relationshipFieldName %> = <%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.createEntity(<%- relationship.otherEntity.anyRelationshipIsRequired ? 'em' : '' %>);
       <%_ } _%>
       <%_ if (reactive) { _%>
         <%- relationship.otherEntity.persistInstance %>Repository.<%- saveMethod %>(<%- relationship.relationshipFieldName %>)<%- callBlock %>;
@@ -1343,7 +1343,7 @@ _%>
     }
 
   <%_ } _%>
-    private void default<%- entityClass %>Filtering (String shouldBeFound, String shouldNotBeFound) <% if (!reactive) { %>throws Exception <% } %>{
+    private void default<%- entityClass %>Filtering (String shouldBeFound, String shouldNotBeFound) <%- reactive ? '' : 'throws Exception ' %>{
         default<%- entityClass %>ShouldBeFound(shouldBeFound);
         default<%- entityClass %>ShouldNotBeFound(shouldNotBeFound);
     }
@@ -1367,7 +1367,7 @@ _%>
       (field.fieldTypeBinary && !field.blobContentTypeText) { %>Base64.getEncoder().encodeToString(<% } else
       if (field.fieldTypeZonedDateTime) { %>sameInstant(<% } else
       if (field.fieldTypeBigDecimal) { %>sameNumber(<% } %><%- `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}` %><%
-      if (field.fieldTypeBinary && !field.blobContentTypeText) { %><% if (databaseTypeCassandra) { %>.array()<% } %>)<% } else
+      if (field.fieldTypeBinary && !field.blobContentTypeText) { %><%- databaseTypeCassandra ? '.array()' : '' %>)<% } else
       if (field.fieldTypeLong) { %>.intValue()<% } else
       if (field.fieldTypeFloat) { %>.doubleValue()<% } else
       if (field.fieldTypeBigDecimal) { %>)<% } else
@@ -1483,7 +1483,7 @@ _%>
 
 <%_ } _%>
     @Test<%- transactionalAnnotation %>
-    void getNonExisting<%- entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
+    void getNonExisting<%- entityClass %>() <%- reactive ? '' : 'throws Exception ' %>{
         // Get the <%- entityInstance %>
 <%_ if (reactive) { _%>
         webTestClient.get().uri(ENTITY_API_URL_ID, <% if (primaryKey.typeInteger) { %>Integer.MAX_VALUE<% } else if (primaryKey.typeLong || primaryKey.typeString) { %>Long.MAX_VALUE<% } else if (primaryKey.typeUUID) { %>UUID.randomUUID().toString()<% } %>)
@@ -1542,7 +1542,7 @@ _%>
             .exchange()
             .expectStatus().isOk();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- dtoMapstruct ? dtoInstance : `updated${persistClass}` %>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
+        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- dtoMapstruct ? dtoInstance : `updated${persistClass}` %>.<%- primaryKey.propertySupplierName %>())<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(<%- dtoMapstruct ? dtoInstance : `updated${persistClass}` %>)))
             .andExpect(status().isOk());
@@ -1594,7 +1594,7 @@ _%>
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- restInstance %>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
+        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- restInstance %>.<%- primaryKey.propertySupplierName %>())<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -1633,7 +1633,7 @@ _%>
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
+        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -1671,7 +1671,7 @@ _%>
             .exchange()
             .expectStatus().isEqualTo(405);
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL)<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
+        rest<%- entityClass %>MockMvc.perform(put(ENTITY_API_URL)<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
             .contentType(MediaType.APPLICATION_JSON)
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isMethodNotAllowed());
@@ -1758,7 +1758,7 @@ _%>
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- restInstance %>.<%- primaryKey.propertySupplierName %>())<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
+        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- restInstance %>.<%- primaryKey.propertySupplierName %>())<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
             .contentType("application/merge-patch+json")
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -1796,7 +1796,7 @@ _%>
             .exchange()
             .expectStatus().isBadRequest();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
+        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL_ID, <%- primaryKey.javaValueGenerator %>)<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
             .contentType("application/merge-patch+json")
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isBadRequest());
@@ -1834,7 +1834,7 @@ _%>
             .exchange()
             .expectStatus().isEqualTo(405);
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL)<% if (authenticationUsesCsrf) { %>.with(csrf())<% } %>
+        rest<%- entityClass %>MockMvc.perform(patch(ENTITY_API_URL)<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
             .contentType("application/merge-patch+json")
             .content(om.writeValueAsBytes(<%- restInstance %>)))
             .andExpect(status().isMethodNotAllowed());
@@ -1855,7 +1855,7 @@ _%>
 <%_ if (!readOnly) { _%>
 
     @Test<%- transactionalAnnotation %>
-    void delete<%- entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
+    void delete<%- entityClass %>() <%- reactive ? '' : 'throws Exception ' %>{
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
@@ -1884,7 +1884,7 @@ _%>
             .exchange()
             .expectStatus().isNoContent();
   <%_ } else { _%>
-        rest<%- entityClass %>MockMvc.perform(delete(ENTITY_API_URL_ID, <%- persistInstance %>.<%- primaryKey.propertySupplierName %>()<% if (primaryKey.typeUUID && databaseTypeSql) { %>.toString()<% } %>)<% if (authenticationUsesCsrf) { %>.with(csrf())<% }%>
+        rest<%- entityClass %>MockMvc.perform(delete(ENTITY_API_URL_ID, <%- persistInstance %>.<%- primaryKey.propertySupplierName %>()<%- (primaryKey.typeUUID && databaseTypeSql) ? '.toString()' : '' %>)<%- authenticationUsesCsrf ? '.with(csrf())' : '' %>
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
   <%_ } _%>
@@ -1907,7 +1907,7 @@ _%>
     @Timeout(value = 15, unit = TimeUnit.MINUTES)
   <%_ } _%>
     @Test<%- transactionalAnnotation %>
-    void search<%- entityClass %>() <% if (!reactive) { %>throws Exception <% } %>{
+    void search<%- entityClass %>() <%- reactive ? '' : 'throws Exception ' %>{
         // Initialize the database
   <%_ if (!primaryKey.derived) { _%>
     <%_ for (field of primaryKey.fields.filter(f => !f.autoGenerateByRepository)) { _%>
@@ -1919,7 +1919,7 @@ _%>
         <%- entityInstance %>SearchRepository.save(<%- persistInstance %>)<%- callBlock %>;
   <%_ } else if (searchEngineCouchbase) { _%>
         // Wait for the <%- entityInstance %> to be indexed
-        TestUtil.retryUntilNotEmpty(() -> <%- entityInstance %>Repository.search("id:" + <%- entityInstance %>.<%- primaryKey.propertySupplierName %>())<% if (reactive) { %>.collectList().block()<% } %>);
+        TestUtil.retryUntilNotEmpty(() -> <%- entityInstance %>Repository.search("id:" + <%- entityInstance %>.<%- primaryKey.propertySupplierName %>())<%- reactive ? '.collectList().block()' : '' %>);
   <%_ } _%>
 
         // Search the <%- entityInstance %>
