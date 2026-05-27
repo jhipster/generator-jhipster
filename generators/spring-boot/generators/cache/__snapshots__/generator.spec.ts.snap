@@ -506,7 +506,11 @@ exports[`generator - spring-boot:cache infinispan-gradle should match source cal
           {
             "annotation": "AutoConfigureCache",
             "package": "org.springframework.boot.cache.test.autoconfigure",
+            "parameters": [Function],
           },
+        ],
+        "imports": [
+          "org.springframework.boot.autoconfigure.cache.CacheType",
         ],
       },
     ],
@@ -598,7 +602,11 @@ exports[`generator - spring-boot:cache infinispan-maven should match source call
           {
             "annotation": "AutoConfigureCache",
             "package": "org.springframework.boot.cache.test.autoconfigure",
+            "parameters": [Function],
           },
+        ],
+        "imports": [
+          "org.springframework.boot.autoconfigure.cache.CacheType",
         ],
       },
     ],

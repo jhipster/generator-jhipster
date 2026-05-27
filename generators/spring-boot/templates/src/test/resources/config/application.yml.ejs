@@ -172,6 +172,11 @@ jhipster:
   clientApp:
     name: "<%- locals.frontendAppName %>"
 <%_ } _%>
+<%_ if (cacheProviderInfinispan) { _%>
+  cache:
+    infinispan:
+      config-file: org/infinispan/configuration/default-jgroups-tcp.xml
+<%_ } _%>
   mail:
     from: <%- baseName %>@localhost.com
     base-url: http://127.0.0.1:8080
