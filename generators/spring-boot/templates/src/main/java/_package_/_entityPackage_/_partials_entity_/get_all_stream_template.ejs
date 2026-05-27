@@ -33,6 +33,7 @@
    for (const relationship of relationships) {
      if (relationship.relationshipOneToOne && !relationship.ownerSide) {
 _%>
+
         if ("<%- relationship.relationshipName.toLowerCase() %>-is-null".equals(filter)) {
             LOG.debug("REST request to get all <%- entityClass %>s where <%- relationship.relationshipName %> is null");
     <%_ if (viaService) { _%>
