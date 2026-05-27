@@ -234,10 +234,12 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
           });
         } else if (application.cacheProviderInfinispan) {
           source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
+            imports: ['org.springframework.boot.autoconfigure.cache.CacheType'],
             annotations: [
               {
                 package: 'org.springframework.boot.cache.test.autoconfigure',
                 annotation: 'AutoConfigureCache',
+                parameters: (_, cb) => cb.addKeyValue('cacheProvider', 'CacheType.INFINISPAN'),
               },
             ],
           });
