@@ -99,8 +99,8 @@ public interface <%- entityClass %>Repository extends JHipsterCouchbaseRepositor
     <%- listOrFlux %><<%- persistClass %>> findAll();
 
     @Query(SELECT + " USE KEYS $1" + JOIN)
-    <%- optionalOrMono %><<%- persistClass %>> findById(String id);<%
-    } _%>
+    <%- optionalOrMono %><<%- persistClass %>> findById(String id);
+<%_ } _%>
 
 <%_ if (searchEngineAny && notEmbeddedRelationships.length !== 0) { _%>
     @Query(SELECT + JOIN + WHERE + " AND " + SEARCH_CONDITION)
