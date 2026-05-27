@@ -4,7 +4,7 @@
     "@cypress/schematic": "5.0.0",
     "babel-loader": "10.1.1",
     "babel-plugin-istanbul": "8.0.0",
-    "cypress": "15.15.0",
+    "cypress": "15.16.0",
     "cypress-audit": "1.1.0",
     "cypress-monocart-coverage": "1.0.1",
     "cypress-terminal-report": "7.3.3",
