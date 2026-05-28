@@ -1758,12 +1758,12 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
-  "clientBundler": "rsbuild",
+  "clientBundler": "vite",
   "clientBundlerAny": true,
   "clientBundlerEsbuild": false,
-  "clientBundlerName": "Rsbuild",
-  "clientBundlerRsbuild": true,
-  "clientBundlerVite": false,
+  "clientBundlerName": "Vite",
+  "clientBundlerRsbuild": false,
+  "clientBundlerVite": true,
   "clientBundlerWebpack": false,
   "clientDistDir": "dist/",
   "clientFramework": "vue",
@@ -1840,7 +1840,7 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "devDatabaseTypeMysql": false,
   "devDatabaseTypeOracle": false,
   "devDatabaseTypePostgresql": true,
-  "devServerPort": 3000,
+  "devServerPort": 9000,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
   "dockerContainers": Any<Object>,
@@ -1970,7 +1970,7 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   "nodePackageManager": "npm",
   "nodePackageManagerCommand": "npm",
   "nodeVersion": "NODE_VERSION",
-  "nodeWebappBuildTarget": "webapp:build:prod",
+  "nodeWebappBuildTarget": "webapp:build",
   "packageFolder": undefined,
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {},
@@ -2056,9 +2056,6 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
     "stateCleared": "modified",
   },
   "clientRoot/package.json": {
-    "stateCleared": "modified",
-  },
-  "clientRoot/rsbuild.config.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/404.html": {
@@ -2505,6 +2502,16 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
       ],
     },
   ],
+  "addExternalResourceToRoot": [
+    {
+      "comment": "Workaround https://github.com/axios/axios/issues/5622",
+      "resource": "<script>const global = globalThis;</script>",
+    },
+    {
+      "comment": "Load vue main",
+      "resource": "<script type="module" src="./app/index.ts"></script>",
+    },
+  ],
   "addSonarProperties": [
     [
       {
@@ -2529,24 +2536,21 @@ exports[`generator - vue microservice-jwt-skipUserManagement(false)-withAdminUi(
   ],
   "mergeClientPackageJson": [
     {
-      "devDependencies": {
-        "@rsbuild/core": null,
-        "@rsbuild/plugin-sass": null,
-        "@rsbuild/plugin-vue": null,
-      },
       "scripts": {
-        "build": "rsbuild build",
-        "start": "rsbuild dev",
-        "webapp:build:dev": "npm run build -- --mode=development",
-        "webapp:build:prod": "npm run build -- --mode=production",
-        "webapp:dev": "npm run start",
-        "webapp:serve": "npm start",
+        "vite-build": "vite build",
+        "vite-serve": "vite",
+        "webapp:build:dev": "npm run vite-build",
+        "webapp:build:prod": "npm run vite-build",
+        "webapp:dev": "npm run vite-serve",
+        "webapp:serve": "npm run vite-serve",
       },
     },
     {
+      "dependencies": {
+        "@module-federation/runtime": null,
+      },
       "devDependencies": {
-        "@module-federation/enhanced": null,
-        "@module-federation/rsbuild-plugin": null,
+        "@module-federation/vite": null,
       },
     },
     {
@@ -2596,12 +2600,12 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
-  "clientBundler": "rsbuild",
+  "clientBundler": "vite",
   "clientBundlerAny": true,
   "clientBundlerEsbuild": false,
-  "clientBundlerName": "Rsbuild",
-  "clientBundlerRsbuild": true,
-  "clientBundlerVite": false,
+  "clientBundlerName": "Vite",
+  "clientBundlerRsbuild": false,
+  "clientBundlerVite": true,
   "clientBundlerWebpack": false,
   "clientDistDir": "dist/",
   "clientFramework": "vue",
@@ -2678,7 +2682,7 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "devDatabaseTypeMysql": false,
   "devDatabaseTypeOracle": false,
   "devDatabaseTypePostgresql": true,
-  "devServerPort": 3000,
+  "devServerPort": 9000,
   "devServerPortProxy": undefined,
   "dockerApplicationEnvironment": {},
   "dockerContainers": Any<Object>,
@@ -2798,7 +2802,7 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   "nodePackageManager": "npm",
   "nodePackageManagerCommand": "npm",
   "nodeVersion": "NODE_VERSION",
-  "nodeWebappBuildTarget": "webapp:build:prod",
+  "nodeWebappBuildTarget": "webapp:build",
   "packageFolder": undefined,
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {},
@@ -2884,9 +2888,6 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
     "stateCleared": "modified",
   },
   "package.json": {
-    "stateCleared": "modified",
-  },
-  "rsbuild.config.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/404.html": {
@@ -3399,6 +3400,16 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
       ],
     },
   ],
+  "addExternalResourceToRoot": [
+    {
+      "comment": "Workaround https://github.com/axios/axios/issues/5622",
+      "resource": "<script>const global = globalThis;</script>",
+    },
+    {
+      "comment": "Load vue main",
+      "resource": "<script type="module" src="./app/index.ts"></script>",
+    },
+  ],
   "addSonarProperties": [
     [
       {
@@ -3423,24 +3434,21 @@ exports[`generator - vue microservice-oauth2-withAdminUi(true)-skipJhipsterDepen
   ],
   "mergeClientPackageJson": [
     {
-      "devDependencies": {
-        "@rsbuild/core": null,
-        "@rsbuild/plugin-sass": null,
-        "@rsbuild/plugin-vue": null,
-      },
       "scripts": {
-        "build": "rsbuild build",
-        "start": "rsbuild dev",
-        "webapp:build:dev": "npm run build -- --mode=development",
-        "webapp:build:prod": "npm run build -- --mode=production",
-        "webapp:dev": "npm run start",
-        "webapp:serve": "npm start",
+        "vite-build": "vite build",
+        "vite-serve": "vite",
+        "webapp:build:dev": "npm run vite-build",
+        "webapp:build:prod": "npm run vite-build",
+        "webapp:dev": "npm run vite-serve",
+        "webapp:serve": "npm run vite-serve",
       },
     },
     {
+      "dependencies": {
+        "@module-federation/runtime": null,
+      },
       "devDependencies": {
-        "@module-federation/enhanced": null,
-        "@module-federation/rsbuild-plugin": null,
+        "@module-federation/vite": null,
       },
     },
     {

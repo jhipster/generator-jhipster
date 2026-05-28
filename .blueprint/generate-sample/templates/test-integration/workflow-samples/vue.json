@@ -31,7 +31,7 @@
       }
     },
     {
-      "name": "vue-rsbuild-h2disk-ws-theme",
+      "name": "vue-vite-h2disk-ws-theme",
       "app-sample": "vue-ws-theme",
       "entity": "sql",
       "generatorOptions": {
