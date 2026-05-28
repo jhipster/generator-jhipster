@@ -54,9 +54,6 @@ nbdist/
 # Editor / IDE — Vim
 *.sw?
 
-# Git
-.git
-
 # Documentation
 /docs
 
