@@ -1,9 +1,9 @@
 <&_ if (fragment.testingSection) { -&>
 ### Gatling
 
-Performance tests are run by [Gatling](https://gatling.io/) and written in Scala. They're located in [src/test/java/gatling/simulations](src/test/java/gatling/simulations).
+Performance tests are run by [Gatling](https://gatling.io/) and written in Java. They're located in [src/test/java/gatling/simulations](src/test/java/gatling/simulations).
 
-You can execute all Gatling tests with
+You can execute all Gatling tests with:
 
 ```bash
 <%_ if (buildToolMaven) { _%>
@@ -13,8 +13,47 @@ You can execute all Gatling tests with
 <%_ } _%>
 ```
 
+<%_ if (applicationTypeMicroservice) { _%>
+> **Note for microservice architectures:** Gatling tests in this microservice are designed to run via the **gateway**,
+> which handles authentication and routes requests to the microservice using the `/services/<%= baseName.toLowerCase() %>/` prefix.
+> Make sure the gateway is running before executing these tests.
+>
+> For **OAuth2/OIDC** architectures, the gateway is the only application that can authenticate users.
+> Run Gatling tests from the gateway project instead of this microservice directly.
+>
+> To override the target URL (defaults to the gateway at `http://localhost:<%= gatewayServerPort || 8080 %>`):
+> ```bash
+<%_ if (buildToolMaven) { _%>
+> ./mvnw gatling:test -DbaseURL=http://localhost:<%= gatewayServerPort || 8080 %>
+<%_ } else { _%>
+> ./gradlew gatlingRun -DbaseURL=http://localhost:<%= gatewayServerPort || 8080 %>
+<%_ } _%>
+> ```
+<%_ } else { _%>
+To override the target URL (defaults to `http://localhost:<%= serverPort %>`):
+```bash
+<%_ if (buildToolMaven) { _%>
+./mvnw gatling:test -DbaseURL=http://localhost:<%= serverPort %>
+<%_ } else { _%>
+./gradlew gatlingRun -DbaseURL=http://localhost:<%= serverPort %>
+<%_ } _%>
+```
+<%_ } _%>
+
+You can also control the number of concurrent users and ramp-up duration:
+
+```bash
+<%_ if (buildToolMaven) { _%>
+./mvnw gatling:test -Dusers=10 -Dramp=30
+<%_ } else { _%>
+./gradlew gatlingRun -Dusers=10 -Dramp=30
+<%_ } _%>
+```
+
 <&_ } -&>
 
 <&_ if (fragment.referenceSection) { -&>
 - [Gatling](https://gatling.io/)
+- [Gatling Maven Plugin](https://docs.gatling.io/reference/integrations/build-tools/maven-plugin/)
+- [Gatling Gradle Plugin](https://docs.gatling.io/reference/integrations/build-tools/gradle-plugin/)
 <&_ } -&>
