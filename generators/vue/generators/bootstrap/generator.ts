@@ -48,7 +48,7 @@ export default class VueBootstrapGenerator extends VueApplicationGenerator {
             return port + (data.applicationIndex ?? 0);
           },
           devServerPortProxy: (ctx, { data }) => (ctx.clientBundlerWebpack ? 9000 + (data.applicationIndex ?? 0) : undefined),
-          nodeWebappBuildTarget: () => 'webapp:build',
+          nodeWebappBuildTarget: ({ clientBundlerRsbuild }) => `webapp:build${clientBundlerRsbuild ? ':prod' : ''}`,
         });
       },
       translations({ application }) {
