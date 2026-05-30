@@ -366,7 +366,7 @@ export const files = asWriteFilesSection({
       ...clientApplicationTemplatesBlock(),
       templates: [
         'shared/language/index.ts',
-        'shared/language/translation.module.ts',
+        'shared/language/translation.provider.ts',
         'shared/language/find-language-from-key.pipe.ts',
         'shared/language/translate.directive.ts',
       ],

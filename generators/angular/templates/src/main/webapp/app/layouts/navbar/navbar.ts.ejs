@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, ChangeDetectionStrategy, inject, signal, OnInit, effect<%- microfrontend && enableTranslation && applicationTypeGateway ? ', createNgModule, Injector' : '' %> } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, OnInit, effect<%- microfrontend && enableTranslation && applicationTypeGateway ? ', EnvironmentInjector' : '' %> } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -40,7 +40,7 @@ import { AccountService } from 'app/core/auth/account.service';
 import { LoginService } from 'app/login/login.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
 <% if (microfrontend && applicationTypeGateway) { %>
-import { loadNavbarItems, loadTranslationModule } from 'app/core/microfrontend';
+import { loadLazyTranslation, loadNavbarItems } from 'app/core/microfrontend';
 <%_ } _%>
 import { environment } from 'environments/environment';
 import NavbarItem from './navbar-item.model';
@@ -87,7 +87,7 @@ export default class Navbar implements OnInit {
   private readonly translateService = inject(TranslateService);
   private readonly stateStorageService = inject(StateStorageService);
   <%_ if (applicationTypeGateway && microfrontend) { _%>
-  private readonly injector = inject(Injector);
+  private readonly injector = inject(EnvironmentInjector);
   <%_ } _%>
 <%_ } _%>
 <%_ if (applicationTypeGateway && microfrontend) { _%>
@@ -155,8 +155,8 @@ export default class Navbar implements OnInit {
         this.<%- remote.moduleFederationName %>EntityNavbarItems.set(items);
     <%_ if (enableTranslation && applicationTypeGateway) { _%>
         try {
-          const LazyTranslationModule = await loadTranslationModule('<%- remote.moduleFederationName %>');
-          createNgModule(LazyTranslationModule, this.injector);
+          const applyLazyTranslation = await loadLazyTranslation('<%- remote.moduleFederationName %>');
+          applyLazyTranslation(this.injector);
         } catch (error) {
           // eslint-disable-next-line no-console
           console.log('Error loading <%- remote.moduleFederationName %> translation module', error);
