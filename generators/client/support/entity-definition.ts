@@ -19,6 +19,7 @@
 
 import { clientFrameworkTypes, fieldTypes, validations } from '../../../lib/jhipster/index.ts';
 import type { PrimaryKey, RelationshipWithEntity } from '../../base-application/types.ts';
+import type { DatabaseProperty } from '../../liquibase/types.d.ts';
 import type { Entity as ClientEntity, Field as ClientField, Relationship as ClientRelationship } from '../types.d.ts';
 
 import { filterRelevantRelationships } from './template-utils.ts';
@@ -80,7 +81,7 @@ const generateEntityClientFields = (
   }
   fields.forEach(field => {
     const { fieldType, fieldName } = field;
-    const nullable = !field.id && (field as any).nullable;
+    const nullable = !field.id && (field as DatabaseProperty).nullable;
     let tsType = 'any';
     if (field.fieldIsEnum) {
       tsType = `keyof typeof ${fieldType}`;

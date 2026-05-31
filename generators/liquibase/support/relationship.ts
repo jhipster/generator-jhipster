@@ -76,7 +76,7 @@ export function prepareRelationshipForLiquibase({
 
   if (relationship.shouldWriteJoinTable) {
     const joinTableName = relationship.joinTable!.name;
-    const { prodDatabaseType } = entity as any;
+    const { prodDatabaseType } = entity;
     mutateData(relationship.joinTable!, {
       constraintName: getFKConstraintName(joinTableName, entity.entityTableName, { prodDatabaseType }).value,
       otherConstraintName: getFKConstraintName(joinTableName, relationship.columnName!, { prodDatabaseType }).value,

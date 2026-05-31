@@ -58,7 +58,7 @@ export default function prepareField(
   field: ServerField & LiquibaseField & SpringBootField & SpringDataRelationalField,
   generator: CoreGenerator,
 ) {
-  const { reactive: entityReactive, prodDatabaseType: entityProdDatabaseType } = entityWithConfig as any;
+  const { reactive: entityReactive, prodDatabaseType: entityProdDatabaseType } = entityWithConfig;
   if (field.id && entityWithConfig.primaryKey) {
     field.autoGenerate ??= !entityWithConfig.primaryKey.composite && ([INTEGER, LONG, UUID] as string[]).includes(field.fieldType);
 
