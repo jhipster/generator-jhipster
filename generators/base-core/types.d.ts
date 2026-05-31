@@ -19,6 +19,7 @@
 import type { BaseFeatures as YeomanFeatures, BaseOptions as YeomanOptions } from 'yeoman-generator';
 
 import type { JHipsterCommandDefinition, JHipsterConfigs } from '../../lib/command/types.ts';
+import type { ApplicationType } from '../../lib/core/application-types.ts';
 import type { JDLApplicationConfig } from '../../lib/jdl/core/types/parsing.ts';
 
 export type GenericTask<ThisType, Arg1Type> = (this: ThisType, arg1: Arg1Type) => unknown;
@@ -26,6 +27,10 @@ export type GenericTask<ThisType, Arg1Type> = (this: ThisType, arg1: Arg1Type) =
 export type Config = {
   autoCrlf?: boolean;
   defaultCommand?: string;
+  applicationType?: ApplicationType;
+  clientFramework?: 'angular' | 'react' | 'vue' | 'no';
+  skipServer?: boolean;
+  skipClient?: boolean;
 };
 
 export type Options = YeomanOptions & {
