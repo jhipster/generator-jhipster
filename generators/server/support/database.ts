@@ -126,7 +126,7 @@ export function getDBTypeFromDBValue(db: string): string {
  * @param {boolean} [options.noSnakeCase = false] - do not convert names to snakecase
  * @param {string} [options.prefix = '']
  * @param {string} [options.separator = '__']
- * @return {string} db referente name
+ * @return {string} db reference name
  */
 export function calculateDbNameWithLimit(
   tableOrEntityName: string,

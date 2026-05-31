@@ -177,8 +177,8 @@ function setOptionsForRelationshipDestinationSide(relationshipToConvert: JDLRela
 
 /**
  * Parses the string "<relationshipName>(<otherEntityField>)"
- * @param{String} field
- * @return{Object} where 'relationshipName' is the relationship name and
+ * @param {String} field
+ * @return {Object} where 'relationshipName' is the relationship name and
  *                'otherEntityField' is the other entity field name
  */
 function extractField(field?: string | null) {
