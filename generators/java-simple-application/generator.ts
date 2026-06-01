@@ -211,7 +211,7 @@ export default class JavaGenerator extends JavaSimpleApplicationGenerator {
    * @example
    * // disable checks
    * checkJava() {}
-   * @examples
+   * @example
    * // enforce java lts versions
    * checkJava() {
    *   super.checkJava(['8', '11', '17'], { throwOnError: true });
