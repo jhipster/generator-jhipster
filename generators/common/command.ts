@@ -20,6 +20,9 @@ import chalk from 'chalk';
 
 import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 import { applicationTypesChoices } from '../../lib/core/application-types.ts';
+import authenticationTypes from '../../lib/jhipster/authentication-types.ts';
+
+const { JWT, OAUTH2, SESSION } = authenticationTypes;
 
 const command = {
   configs: {
@@ -46,6 +49,19 @@ const command = {
         description: 'Skip the server-side application generation',
         type: Boolean,
       },
+      scope: 'storage',
+    },
+    authenticationType: {
+      cli: {
+        name: 'auth',
+        description: 'Provide authentication type for the application when skipping server side generation',
+        type: String,
+      },
+      choices: [
+        { value: JWT, name: 'JWT authentication (stateless, with a token)' },
+        { value: OAUTH2, name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)' },
+        { value: SESSION, name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)' },
+      ],
       scope: 'storage',
     },
     skipUserManagement: {
