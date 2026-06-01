@@ -179,7 +179,7 @@ export function derivedPrimaryKeyProperties(primaryKey: PrimaryKey) {
     typeString: primaryKey.type === STRING,
     typeLong: primaryKey.type === LONG,
     typeInteger: primaryKey.type === INTEGER,
-    typeNumeric: !primaryKey.composite && (primaryKey.fields[0] as any).fieldTypeNumeric,
+    typeNumeric: !primaryKey.composite && (primaryKey.fields[0] as FieldAll).fieldTypeNumeric,
   });
 }
 

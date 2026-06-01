@@ -122,7 +122,7 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
           .filter(relationship => relationship.ignoreOtherSideProperty === undefined)
           .forEach(relationship => {
             relationship.ignoreOtherSideProperty =
-              (application as any).databaseType !== 'neo4j' &&
+              application.databaseType !== 'neo4j' &&
               !entity.embedded &&
               !relationship.otherEntity.embedded &&
               relationship.otherEntity.relationships.length > 0;

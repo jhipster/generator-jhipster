@@ -168,12 +168,11 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
       },
       applyGradleScript({ source, application }) {
         if (application.buildToolGradle) {
-          const applicationAny = application as any;
-          if (applicationAny.cacheProviderCaffeine) {
+          if (application.cacheProviderCaffeine) {
             source.addGradleDependencyCatalogVersion?.({ name: 'typesafe', version: application.javaDependencies?.typesafe });
             source.addGradleBuildSrcDependencyCatalogVersion?.({ name: 'typesafe', version: application.javaDependencies?.typesafe });
           }
-          if (applicationAny.cacheProviderHazelcast) {
+          if (application.cacheProviderHazelcast) {
             source.addGradleDependencyCatalogVersion?.({
               name: 'hazelcast-spring',
               version: application.javaDependencies?.['hazelcast-spring'],
@@ -182,7 +181,7 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
               name: 'hazelcast-spring',
               version: application.javaDependencies?.['hazelcast-spring'],
             });
-            if (applicationAny.enableHibernateCache) {
+            if (application.enableHibernateCache) {
               source.addGradleDependencyCatalogVersion?.({
                 name: 'hazelcast-hibernate53',
                 version: application.javaDependencies?.['hazelcast-hibernate53'],

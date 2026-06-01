@@ -264,8 +264,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
       checkForTableName({ application, entity }) {
-        const databaseType =
-          (entity as any).prodDatabaseType ?? application.prodDatabaseType ?? entity.databaseType ?? application.databaseType;
+        const databaseType = entity.prodDatabaseType ?? application.prodDatabaseType ?? entity.databaseType ?? application.databaseType;
         const validation = this._validateTableName(entity.entityTableName, databaseType, entity);
         if (validation !== true) {
           throw new Error(validation);
