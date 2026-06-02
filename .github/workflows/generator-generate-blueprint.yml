@@ -88,6 +88,9 @@ jobs:
         env:
           # generate-sample uses JHI_FOLDER_APP to generate the application.
           JHI_FOLDER_APP: ${{ github.workspace }}/base/generator-jhipster-foo
+      - name: 'Test Blueprint'
+        run: npm test
+        working-directory: ${{ github.workspace }}/generator-jhipster-foo
       - name: 'GENERATION: project'
         run: jhipster-foo --defaults --client-test-frameworks cypress --skip-jhipster-dependencies
         env:
