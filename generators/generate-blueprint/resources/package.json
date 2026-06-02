@@ -3,7 +3,7 @@
     "ejs-lint": "2.0.1",
     "eslint": "10.4.0",
     "globals": "17.6.0",
-    "vitest": "4.1.7"
+    "vitest": "4.1.8"
   },
   "packageManager": "npm@11"
 }
