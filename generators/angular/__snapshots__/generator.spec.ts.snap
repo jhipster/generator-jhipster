@@ -4574,7 +4574,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/shared/language/translate.directive.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/shared/language/translation.module.ts": {
+  "clientRoot/src/app/shared/language/translation.provider.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/pagination/index.ts": {
@@ -6785,7 +6785,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/shared/language/translate.directive.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/shared/language/translation.module.ts": {
+  "src/main/webapp/app/shared/language/translation.provider.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/pagination/index.ts": {
@@ -8259,7 +8259,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/shared/language/translate.directive.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/shared/language/translation.module.ts": {
+  "src/main/webapp/app/shared/language/translation.provider.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/pagination/index.ts": {
