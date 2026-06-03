@@ -109,7 +109,7 @@
     "clean": "rimraf dist",
     "compile": "tsc",
     "copy-files": "cpy \"**\" \"!**/*.(js|cjs|mjs|ts|cts|mts|snap)\" \"!**/__*/*\" \"../dist/generators\" --cwd=generators --dot",
-    "copy-types": "cpy \"**/*.d.(|c|m)ts\" \"../dist/generators\" --cwd=generators && cpy \"**/*.d.(|c|m)ts\" \"../dist/lib\" --cwd=lib",
+    "copy-types": "cpy \"**/*.d.(|c|m)ts\" \"../dist/generators\" --cwd=generators && cpy \"(cli|lib)/**/*.d.(|c|m)ts\" \"../dist\" --cwd=lib",
     "eslint": "eslint . --max-warnings 5",
     "jdl:test": "esmocha lib/jdl --no-insight --forbid-only -p",
     "jdl:test-watch": "npm run jdl:test -- --watch",
