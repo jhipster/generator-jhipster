@@ -80,8 +80,6 @@ export default class AlertService {
       case 400: {
         const message = getMessageFromHeaders(headers);
 <%_ if (enableTranslation) { _%>
-<%_ } _%>
-<%_ if (enableTranslation) { _%>
         if (message.errorKey && message.param) {
           errorMessage = this.i18n.t(message.errorKey!, { entityName: this.i18n.t(`global.menu.entities.${message.param!}`) }).toString();
         } else if (message.errorKey) {
