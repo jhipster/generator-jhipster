@@ -10,7 +10,6 @@ exports[`generator - common:bootstrap bootstrapping default config should prepar
   "applicationTypeMicroservice": false,
   "applicationTypeMonolith": true,
   "authenticationType": "jwt",
-  "authenticationTypeAny": true,
   "authenticationTypeJwt": true,
   "authenticationTypeOauth2": false,
   "authenticationTypeSession": false,

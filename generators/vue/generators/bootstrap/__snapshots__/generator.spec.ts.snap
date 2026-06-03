@@ -10,7 +10,6 @@ exports[`generator - vue:bootstrap bootstrapping default config should prepare a
   "applicationTypeMicroservice": false,
   "applicationTypeMonolith": true,
   "authenticationType": "jwt",
-  "authenticationTypeAny": true,
   "authenticationTypeJwt": true,
   "authenticationTypeOauth2": false,
   "authenticationTypeSession": false,
