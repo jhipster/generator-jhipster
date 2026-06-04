@@ -46,7 +46,7 @@ LABEL ALIAS=kafka
 FROM apachepulsar/pulsar:4.2.1
 LABEL ALIAS=pulsar
 
-FROM sonarqube:26.5.0.122743-community
+FROM sonarqube:26.6.0.123539-community
 LABEL ALIAS=sonar
 
 FROM hashicorp/consul:2.0.0
