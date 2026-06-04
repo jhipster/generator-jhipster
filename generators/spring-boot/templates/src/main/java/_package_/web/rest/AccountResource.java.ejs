@@ -42,6 +42,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 <%_ if (reactive) { _%>
@@ -80,16 +81,23 @@ public class AccountResource {
     private final UserService userService;
 
     private final MailService mailService;
+
+    private final PasswordEncoder passwordEncoder;
 <%_ if (authenticationTypeSession && !reactive) { _%>
 
     private final PersistentTokenRepository persistentTokenRepository;
 <%_ } _%>
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService<%- authenticationTypeSession && !reactive ? ', PersistentTokenRepository persistentTokenRepository' : '' %>) {
-
+    public AccountResource(
+        UserRepository userRepository,
+        UserService userService,
+        MailService mailService,
+        PasswordEncoder passwordEncoder<%- authenticationTypeSession && !reactive ? ', PersistentTokenRepository persistentTokenRepository' : '' %>
+    ) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.passwordEncoder = passwordEncoder;
 <%_ if (authenticationTypeSession && !reactive) { _%>
         this.persistentTokenRepository = persistentTokenRepository;
 <%_ } _%>
@@ -332,13 +340,19 @@ public class AccountResource {
         }
 <%_ if (reactive) { _%>
         return userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey())
-            .switchIfEmpty(Mono.error(new AccountResourceException("No user was found for this reset key")))
+            .switchIfEmpty(
+                Mono.defer(() -> {
+                    passwordEncoder.encode(keyAndPassword.getNewPassword());
+                    return Mono.error(new AccountResourceException("No user was found for this reset key"));
+                })
+            )
             .then();
 <%_ } else { _%>
         Optional<<%- user.persistClass %>> user =
             userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
 
         if (!user.isPresent()) {
+            passwordEncoder.encode(keyAndPassword.getNewPassword());
             throw new AccountResourceException("No user was found for this reset key");
         }
 <%_ } _%>
