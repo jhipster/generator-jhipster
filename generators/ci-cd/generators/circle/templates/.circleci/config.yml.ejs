@@ -65,12 +65,9 @@ jobs:
                     - node_modules
 <%_ if (buildToolMaven) { _%>
                     - ~/.m2
-<%_ } else if (buildToolGradle) { _%>
-                    - ~/.gradle
-<%_ } _%>
-<%_ if (buildToolMaven) { _%>
                 key: v1-dependencies-{{ checksum "pom.xml" }}-{{ checksum "package-lock.json" }}
 <%_ } else if (buildToolGradle) { _%>
+                    - ~/.gradle
                 key: v1-dependencies-{{ checksum "build.gradle" }}-{{ checksum "package-lock.json" }}
 <%_ } _%>
 

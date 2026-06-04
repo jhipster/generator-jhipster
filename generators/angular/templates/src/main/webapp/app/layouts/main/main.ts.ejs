@@ -54,8 +54,6 @@ export default class Main implements OnInit {
   private readonly document = inject(DOCUMENT);
   private readonly translateService = inject(TranslateService);
   private readonly rootRenderer = inject(RendererFactory2);
-<%_ } _%>
-<%_ if (enableTranslation) { _%>
 
   constructor() {
     this.htmlElement = this.document.documentElement;

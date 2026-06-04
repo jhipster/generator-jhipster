@@ -54,11 +54,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ if (reactive) { _%>
 import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
+import org.springframework.http.HttpStatus;
 <%_ } else { _%>
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-<%_ } _%>
-<%_ if (reactive) { _%>
-import org.springframework.http.HttpStatus;
 <%_ } _%>
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
