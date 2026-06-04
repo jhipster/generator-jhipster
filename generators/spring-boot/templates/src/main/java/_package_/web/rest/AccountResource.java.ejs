@@ -42,6 +42,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 <%_ if (reactive) { _%>
 import java.util.Objects;
@@ -50,6 +51,8 @@ import reactor.core.publisher.Mono;
 import java.util.*;
 <%_ } _%>
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 <%_ if (authenticationTypeSession && !reactive) { _%>
 import java.nio.charset.StandardCharsets;
 import java.net.URLDecoder;
@@ -60,8 +63,10 @@ import java.net.URLDecoder;
  */
 @RestController
 @RequestMapping("/api")
+@Validated
 public class AccountResource {
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     private static class AccountResourceException extends RuntimeException {
         private AccountResourceException(String message) {
             super(message);
@@ -101,6 +106,7 @@ public class AccountResource {
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public <%- reactive ? 'Mono<Void>' : 'void' %> registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
+        LOG.debug("REST request to register account");
         if (isPasswordLengthInvalid(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
@@ -122,6 +128,7 @@ public class AccountResource {
      */
     @GetMapping("/activate")
     public <%- reactive ? 'Mono<Void>' : 'void' %> activateAccount(@RequestParam(value = "key") String key) {
+        LOG.debug("REST request to activate account");
 <%_ if (reactive) { _%>
         return userService.activateRegistration(key)
             .switchIfEmpty(Mono.error(new AccountResourceException("No user was found for this activation key")))
@@ -156,6 +163,7 @@ public class AccountResource {
      */
     @GetMapping("/account")
     public <%- wrapMono(user.adminUserDto) %> getAccount() {
+        LOG.debug("REST request to get account");
         return userService.getUserWithAuthorities()
             .map(<%- user.adminUserDto %>::new)
 <%_ if (reactive) { _%>
@@ -175,6 +183,7 @@ public class AccountResource {
     @PostMapping("/account")
 <%_ if (reactive) { _%>
     public Mono<Void> saveAccount(@Valid @RequestBody <%- user.adminUserDto %> userDTO) {
+        LOG.debug("REST request to save account");
         return SecurityUtils.getCurrentUserLogin()
             .switchIfEmpty(Mono.error(new AccountResourceException("Current user login not found")))
             .flatMap(userLogin -> userRepository.findOneByEmailIgnoreCase(userDTO.getEmail())
@@ -191,6 +200,7 @@ public class AccountResource {
                     userDTO.getLangKey()<%- user.hasImageField ? ', userDTO.getImageUrl()' : '' %>));
 <%_ } else { _%>
     public void saveAccount(@Valid @RequestBody <%- user.adminUserDto %> userDTO) {
+        LOG.debug("REST request to save account");
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
         Optional<<%- user.persistClass %>> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.orElseThrow().getLogin().equalsIgnoreCase(userLogin))) {
@@ -213,6 +223,7 @@ public class AccountResource {
      */
     @PostMapping(path = "/account/change-password")
     public <%- reactive ? 'Mono<Void>' : 'void' %> changePassword(@RequestBody PasswordChangeDTO passwordChangeDto) {
+        LOG.debug("REST request to change password");
         if (isPasswordLengthInvalid(passwordChangeDto.getNewPassword())) {
             throw new InvalidPasswordException();
         }
@@ -228,6 +239,7 @@ public class AccountResource {
      */
     @GetMapping("/account/sessions")
     public List<PersistentToken> getCurrentSessions() {
+        LOG.debug("REST request to get current sessions");
         return persistentTokenRepository.findByUser(
             userRepository
                 .findOneByLogin(
@@ -278,7 +290,8 @@ public class AccountResource {
      */
     @PostMapping(path = "/account/reset-password/init")
 <%_ if (reactive) { _%>
-    public Mono<Void> requestPasswordReset(@RequestBody String mail) {
+    public Mono<Void> requestPasswordReset(@RequestBody @Email @Size(min = 5, max = 254) String mail) {
+        LOG.debug("REST request to request password reset");
         return userService
             .requestPasswordReset(mail)
             .doOnSuccess(user -> {
@@ -292,7 +305,8 @@ public class AccountResource {
             })
             .then();
 <%_ } else { _%>
-    public void requestPasswordReset(@RequestBody String mail) {
+    public void requestPasswordReset(@RequestBody @Email @Size(min = 5, max = 254) String mail) {
+        LOG.debug("REST request to request password reset");
         Optional<<%- user.persistClass %>> user = userService.requestPasswordReset(mail);
         if (user.isPresent()) {
             mailService.sendPasswordResetMail(user.orElseThrow());
