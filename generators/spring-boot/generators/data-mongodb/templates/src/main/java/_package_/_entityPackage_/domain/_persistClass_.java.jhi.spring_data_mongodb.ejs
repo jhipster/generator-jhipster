@@ -67,11 +67,9 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 
   <%_ } else if (relationship.relationshipManyToMany) { _%>
     @Field("<%- relationship.relationshipFieldNamePlural %>")
-  <%_ } else { _%>
-    <%_ if (!relationship.otherEntity.embedded) { _%>
-      <%_ if (relationship.ownerSide) { _%>
+  <%_ } else if (!relationship.otherEntity.embedded) { _%>
+    <%_ if (relationship.ownerSide) { _%>
     @Field("<%- relationship.relationshipFieldName %>")
-      <%_ } _%>
     <%_ } _%>
   <%_ } _%>
 

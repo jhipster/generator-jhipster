@@ -63,8 +63,7 @@ import org.springframework.web.cors.CorsConfiguration;
 <%_ if (!reactive) { _%>
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-<%_ } _%>
-<%_ if (reactive) { _%>
+<%_ } else { _%>
 import org.springframework.web.cors.reactive.CorsConfigurationSource;;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.reactive.config.WebFluxConfigurer;

@@ -24,8 +24,7 @@ import { importRemote } from '@module-federation/utilities';
 
 <%_ if (!authenticationTypeOauth2) { _%>
 import Login from 'app/modules/login/login';
-<%_ } _%>
-<%_ if (authenticationTypeOauth2) { _%>
+<%_ } else { _%>
 import LoginRedirect from 'app/modules/login/login-redirect';
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>

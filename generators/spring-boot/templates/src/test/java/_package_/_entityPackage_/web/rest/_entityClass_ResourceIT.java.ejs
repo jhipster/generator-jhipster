@@ -144,8 +144,7 @@ import org.springframework.security.test.context.TestSecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 <%_ if (reactive) { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
-<%_ } _%>
-<%_ if (!reactive) { _%>
+<%_ } else { _%>
 import org.springframework.test.web.servlet.MockMvc;
   <%_ if (databaseTypeSql) { _%>
 import org.springframework.transaction.annotation.Transactional;

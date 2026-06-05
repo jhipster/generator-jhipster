@@ -325,8 +325,7 @@ interface UserRepositoryInternal<% if (!authenticationTypeOauth2) { %> extends D
   <%_ if (!authenticationTypeOauth2) { _%>
     Mono<<%- user.persistClass %>> findOneWithAuthoritiesByEmailIgnoreCase(String email);
 
-  <%_ } _%>
-  <%_ if (authenticationTypeOauth2) { _%>
+  <%_ } else { _%>
 
     Mono<<%- user.persistClass %>> create(<%- user.persistClass %> user);
   <%_ } _%>

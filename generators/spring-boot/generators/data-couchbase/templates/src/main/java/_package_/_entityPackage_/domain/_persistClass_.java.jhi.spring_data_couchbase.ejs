@@ -89,10 +89,8 @@ import java.util.stream.Collectors;
     <%_ } _%>
   <%_ } else if (relationship.relationshipManyToMany) { _%>
     @N1qlJoin(on = "lks.<%- relationship.relationshipFieldNamePlural %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
-  <%_ } else { _%>
-    <%_ if (!relationship.otherEntity.embedded) { _%>
+  <%_ } else if (!relationship.otherEntity.embedded) { _%>
     @N1qlJoin(on = "lks.<%- relationship.relationshipFieldName %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
-    <%_ } _%>
   <%_ } _%>
 
 <&_ } -&>
