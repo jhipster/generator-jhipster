@@ -61,9 +61,7 @@ import java.util.stream.Collectors;
 <&_ if (fragment.field<%- field.fieldNameCapitalized %>AnnotationSection) { -&>
   <%_ if (field.id && !embedded) { _%>
     @Id
-    <%_ if (field.id && !embedded) { _%>
     @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)
-    <%_ } _%>
   <%_ } else { _%>
     @Field
   <%_ } _%>

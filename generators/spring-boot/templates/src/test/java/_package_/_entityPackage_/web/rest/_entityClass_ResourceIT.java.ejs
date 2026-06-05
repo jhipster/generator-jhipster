@@ -1379,12 +1379,8 @@ _%>
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody()
-    <%_ if (reactive) { _%>
                 .jsonPath("$")
                 .value(is(1));
-    <%_ } else { _%>
-                .json("1");
-    <%_ } _%>
     }
   <%_ } else { _%>
     private void default<%- entityClass %>ShouldBeFound(String filter) throws Exception {
@@ -1445,12 +1441,8 @@ _%>
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
-    <%_ if (reactive) { _%>
             .jsonPath("$")
             .value(is(0));
-    <%_ } else { _%>
-            .json("0");
-    <%_ } _%>
     }
   <%_ } else { _%>
     private void default<%- entityClass %>ShouldNotBeFound(String filter) throws Exception {

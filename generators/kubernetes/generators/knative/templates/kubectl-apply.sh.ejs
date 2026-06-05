@@ -37,11 +37,9 @@ logSummary() {
         echo "<%- appConfig.baseName %> - http://<%- appConfig.baseName.toLowerCase() %>.<%- kubernetesNamespace %>.<%- ingressDomain %>"
       <%_ } _%>
     <%_ } _%>
-    <%_ if (istio) { _%>
         echo "Jaeger - http://jaeger.istio-system.<%- ingressDomain %>"
         echo "Grafana - http://grafana.istio-system.<%- ingressDomain %>"
         echo "Kiali - http://kiali.istio-system.<%- ingressDomain %>"
-    <%_ } _%>
   <%_ } _%>
         echo "#####################################################"
 <%_ } _%>
