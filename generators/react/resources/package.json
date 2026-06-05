@@ -28,7 +28,7 @@
   "devDependencies": {
     "@eslint-react/eslint-plugin": "5.8.12",
     "@eslint/js": "10.0.1",
-    "@module-federation/enhanced": "2.5.0",
+    "@module-federation/enhanced": "2.5.1",
     "@module-federation/utilities": "3.1.83",
     "@testing-library/react": "16.3.2",
     "@types/node": "22.19.19",
