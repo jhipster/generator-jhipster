@@ -167,8 +167,6 @@ public class SecurityConfiguration {
 <%_ } _%>
 <%_ if (!skipClient) { _%>
             .addFilterAfter(new SpaWebFilter(), BasicAuthenticationFilter.class)
-<%_ } _%>
-<%_ if (!skipClient) { _%>
             .headers(headers -> headers
                 .contentSecurityPolicy(csp -> csp.policyDirectives(jHipsterProperties.getSecurity().getContentSecurityPolicy()))
                 .frameOptions(FrameOptionsConfig::sameOrigin)
