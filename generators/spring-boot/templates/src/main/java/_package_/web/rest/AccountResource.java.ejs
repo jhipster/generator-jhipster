@@ -342,6 +342,8 @@ public class AccountResource {
         return userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey())
             .switchIfEmpty(
                 Mono.defer(() -> {
+                    // Dummy hash to prevent reset-key enumeration via response-time timing attack:
+                    // mirrors the bcrypt cost of a successful path so both branches take equal time.
                     passwordEncoder.encode(keyAndPassword.getNewPassword());
                     return Mono.error(new AccountResourceException("No user was found for this reset key"));
                 })
@@ -352,6 +354,8 @@ public class AccountResource {
             userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
 
         if (!user.isPresent()) {
+            // Dummy hash to prevent reset-key enumeration via response-time timing attack:
+            // mirrors the bcrypt cost of a successful path so both branches take equal time.
             passwordEncoder.encode(keyAndPassword.getNewPassword());
             throw new AccountResourceException("No user was found for this reset key");
         }
