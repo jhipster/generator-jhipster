@@ -179,9 +179,7 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     @Query(FIND_IDS_QUERY + " AND activated = false AND activationKey IS NOT NULL AND createdDate < $1")
     <%- listOrFlux %><User> findAllIdsByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant dateTime);
     <%_ } _%>
-  <%_ } _%>
 
-  <%_ if (!authenticationTypeOauth2) { _%>
     <%- databaseTypeCouchbase ? 'default ' : '' %><%- optionalOrMono %><<%- user.persistClass %>> findOneByResetKey(String resetKey)<% if (!databaseTypeCouchbase) { %>;<% } else { %> {
         return findIdByResetKey(resetKey)
             .map(User::getId)
@@ -191,9 +189,7 @@ public interface UserRepository extends <% if (databaseTypeSql) { %>JpaRepositor
     @Query(FIND_IDS_QUERY + " AND resetKey = $1")
     <%- optionalOrMono %><User> findIdByResetKey(String resetKey);
     <%_ } _%>
-  <%_ } _%>
 
-  <%_ if (!authenticationTypeOauth2) { _%>
     <%_ if (databaseTypeCouchbase || databaseTypeMongodb || databaseTypeNeo4j) { _%>
       <%_ if (cacheProviderAny) { _%>
     @Cacheable(cacheNames = USERS_BY_EMAIL_CACHE, unless="#result == null")

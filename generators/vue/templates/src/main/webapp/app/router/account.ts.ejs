@@ -7,7 +7,7 @@ import {Authority} from "@/shared/jhipster/constants";
   const ResetPasswordFinish = () => import('@/account/reset-password/finish/reset-password-finish.vue');
   const ChangePassword = () => import('@/account/change-password/change-password.vue');
   const Settings = () => import('@/account/settings/settings.vue');
-  <%_ if (authenticationTypeSession && generateUserManagement) { _%>
+  <%_ if (authenticationTypeSession) { _%>
   const Sessions = () => import('@/account/sessions/sessions.vue');
   <%_ } _%>
 <%_ } _%>

@@ -903,7 +903,7 @@ _%>
   <%_ for (field of fieldsToTest) { _%>
     <%_ if (field.fieldValidate) {
           let required = false;
-          if (!field.fieldTypeBytes && field.fieldValidate && field.fieldValidationRequired) {
+          if (!field.fieldTypeBytes && field.fieldValidationRequired) {
             required = true;
           }
     _%>

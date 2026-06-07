@@ -155,9 +155,7 @@ export const <%- entityReactName %> = () => {
     });
     dispatch(getEntities({}));
   };
-<%_ } _%>
 
-<%_ if (paginationInfiniteScroll) { _%>
   useEffect(() => {
     resetAll();
   }, []);
