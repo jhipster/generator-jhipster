@@ -23,7 +23,7 @@
         <frontend-maven-plugin.version>2.0.0</frontend-maven-plugin.version>
         <gatling-maven-plugin.version>4.21.7</gatling-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
-        <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
         <maven-antrun-plugin.version>3.2.0</maven-antrun-plugin.version>
         <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
         <modernizer-maven-plugin.version>3.4.0</modernizer-maven-plugin.version>
