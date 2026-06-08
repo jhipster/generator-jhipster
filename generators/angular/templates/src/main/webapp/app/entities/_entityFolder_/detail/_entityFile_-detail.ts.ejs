@@ -71,9 +71,7 @@ export class <%- entityAngularName %>Detail {
 
 <%_ if (anyFieldIsBlobDerived) { _%>
     protected dataUtils = inject(DataUtils);
-<%_ } _%>
 
-<%_ if (anyFieldIsBlobDerived) { _%>
     byteSize(base64String: string): string {
         return this.dataUtils.byteSize(base64String);
     }

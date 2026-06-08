@@ -75,8 +75,7 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-<%_ } _%>
-<%_ if (!authenticationTypeOauth2) { _%>
+<%_ } else { _%>
 import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ } _%>
 import org.springframework.stereotype.Service;

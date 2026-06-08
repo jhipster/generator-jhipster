@@ -144,8 +144,7 @@ import org.springframework.security.test.context.TestSecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 <%_ if (reactive) { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
-<%_ } _%>
-<%_ if (!reactive) { _%>
+<%_ } else { _%>
 import org.springframework.test.web.servlet.MockMvc;
   <%_ if (databaseTypeSql) { _%>
 import org.springframework.transaction.annotation.Transactional;
@@ -904,7 +903,7 @@ _%>
   <%_ for (field of fieldsToTest) { _%>
     <%_ if (field.fieldValidate) {
           let required = false;
-          if (!field.fieldTypeBytes && field.fieldValidate && field.fieldValidationRequired) {
+          if (!field.fieldTypeBytes && field.fieldValidationRequired) {
             required = true;
           }
     _%>
@@ -1380,12 +1379,8 @@ _%>
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody()
-    <%_ if (reactive) { _%>
                 .jsonPath("$")
                 .value(is(1));
-    <%_ } else { _%>
-                .json("1");
-    <%_ } _%>
     }
   <%_ } else { _%>
     private void default<%- entityClass %>ShouldBeFound(String filter) throws Exception {
@@ -1446,12 +1441,8 @@ _%>
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
             .expectBody()
-    <%_ if (reactive) { _%>
             .jsonPath("$")
             .value(is(0));
-    <%_ } else { _%>
-            .json("0");
-    <%_ } _%>
     }
   <%_ } else { _%>
     private void default<%- entityClass %>ShouldNotBeFound(String filter) throws Exception {

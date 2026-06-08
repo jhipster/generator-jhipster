@@ -35,9 +35,7 @@ export default class Error implements OnInit<%- enableTranslation ? ', OnDestroy
 <%_ if (enableTranslation) { _%>
   errorKey?: string;
   langChangeSubscription?: Subscription;
-<%_ } _%>
 
-<%_ if (enableTranslation) { _%>
   private readonly translateService = inject(TranslateService);
 <%_ } _%>
   private readonly route = inject(ActivatedRoute);

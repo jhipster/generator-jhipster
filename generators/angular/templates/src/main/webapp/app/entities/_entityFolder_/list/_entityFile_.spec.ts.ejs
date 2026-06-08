@@ -45,9 +45,7 @@ import {
 } from 'rxjs';
 <%_ if (!readOnly) { _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
-<%_ } _%>
 
-<%_ if (!readOnly) { _%>
 import { sampleWithRequiredData } from '../<%- entityFileName %>.test-samples';
 <%_ } _%>
 import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';

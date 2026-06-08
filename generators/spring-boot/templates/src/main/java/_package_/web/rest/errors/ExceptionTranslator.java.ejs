@@ -55,8 +55,7 @@ import org.springframework.http.MediaType;
 import tech.jhipster.web.rest.errors.ExceptionTranslation;
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-<%_ } _%>
-<%_ if (!reactive) { _%>
+<%_ } else { _%>
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;

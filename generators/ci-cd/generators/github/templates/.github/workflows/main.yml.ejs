@@ -156,12 +156,10 @@ jobs:
             <%- commented %>  run: <%- nodePackageManager %> run ci:e2e:prepare
             <%- commented %>- name: 'E2E: Run'
             <%- commented %>  run: <%- nodePackageManager %> run ci:e2e:run
-  <%_ if (cypressTests) { _%>
             <%- commented %>  env:
             <%- commented %>    CYPRESS_ENABLE_RECORD: <%- ciCdIntegrationsCypressDashboard %>
             <%- commented %>    CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
             <%- commented %>    CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-  <%_ } _%>
             <%- commented %>- name: 'E2E: Teardown'
             <%- commented %>  run: <%- nodePackageManager %> run ci:e2e:teardown
 <%_ } _%>
