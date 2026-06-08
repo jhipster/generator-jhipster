@@ -24,7 +24,7 @@ import type { Application as AngularApplication, Entity as AngularEntity } from 
 export const files = asWriteFilesSection({
   jhipsterProject: [
     {
-      templates: ['README.md.jhi.client.angular'],
+      templates: ['README.md.jhi.client.angular', '.gitignore.jhi.angular'],
     },
   ],
   common: [
