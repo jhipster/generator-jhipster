@@ -28,26 +28,38 @@ for (const { namespace, generator } of generators) {
     }
 
     if (namespace.endsWith(':bootstrap') || namespace.endsWith('-bootstrap')) {
-      // Bootstrap should not block generation and should not change configuration.
-      it('should not have a prompting phase', () => {
-        expect(classPropertyNames.includes(generatorModule.default.PROMPTING)).toBeFalsy();
-      });
-      // Configuration may not be ready at this point. Required composing should be composed at beforeQueue.
-      // Optional composing should be done later in loading phase.
-      it('should not have a composing phase', () => {
-        expect(classPropertyNames.includes(generatorModule.default.COMPOSING)).toBeFalsy();
-      });
-      // Same reason as composing.
-      it('should not have a composingComponent phase', () => {
-        expect(classPropertyNames.includes(generatorModule.default.COMPOSING_COMPONENT)).toBeFalsy();
-      });
-      // Bootstrap should not write anything, it should only prepare configuration for the generators.
-      it('should not have a writing phase', () => {
-        expect(classPropertyNames.includes(generatorModule.default.WRITING)).toBeFalsy();
-      });
-      // Same reason as writing.
-      it('should not have a postWriting phase', () => {
-        expect(classPropertyNames.includes(generatorModule.default.POST_WRITING)).toBeFalsy();
+      // Bootstrap should not have any of these priorities, it should only prepare context for the generators.
+      it(`should not have any conflicting priorities`, () => {
+        const forbiddenPriorities = [
+          // Bootstrap should not block generation and should not change configuration.
+          generatorModule.default.PROMPTING,
+          // Bootstrap should not change configuration.
+          generatorModule.default.CONFIGURING,
+          // Configuration may not be ready at this point. Bootstrap generator are queued before normal generators.
+          // Example:
+          // app generator depends on app:bootstrap -> client:bootstrap.
+          // client:bootstrap composing will be queued before app composing, so client:bootstrap will compose before client have been queued.
+          //
+          // Required composing should be composed at beforeQueue.
+          // Optional composing should be done later in loading phase.
+          generatorModule.default.COMPOSING,
+          // Same reason as composing.
+          generatorModule.default.COMPOSING_COMPONENT,
+          // Bootstrap should not write anything, it should only prepare context for the generators.
+          generatorModule.default.WRITING,
+          // Same reason as writing.
+          generatorModule.default.POST_WRITING,
+        ].filter(Boolean);
+        for (const priority of forbiddenPriorities) {
+          if (
+            ['base-simple-application:bootstrap', 'base-workspaces:bootstrap'].includes(namespace) &&
+            generatorModule.default.CONFIGURING === priority
+          ) {
+            // TODO move configuration from bootstrap to generators, then remove this exception.
+            continue;
+          }
+          expect(classPropertyNames).not.toContain(priority);
+        }
       });
     }
   });
