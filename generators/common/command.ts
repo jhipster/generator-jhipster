@@ -48,17 +48,18 @@ const command = {
       },
       scope: 'storage',
     },
-    auth: {
+    authenticationType: {
       cli: {
+        name: 'auth',
         description: 'Provide authentication type for the application when skipping server side generation',
         type: String,
       },
-      configure: (gen, value) => {
-        if (value) {
-          (gen.jhipsterConfig as { authenticationType?: string }).authenticationType = value;
-        }
-      },
-      scope: 'none',
+      choices: [
+        { value: 'jwt', name: 'JWT authentication (stateless, with a token)' },
+        { value: 'oauth2', name: 'OAuth 2.0 / OIDC Authentication (stateful, works with Keycloak and Okta)' },
+        { value: 'session', name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)' },
+      ],
+      scope: 'storage',
     },
     skipUserManagement: {
       description: 'Skip the user management module during app generation',
