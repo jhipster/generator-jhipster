@@ -68,6 +68,9 @@
               "<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui"
             ],
             "styles": [
+<%_ if (clientThemeAny) { _%>
+              "https://googleapis.com",
+<%_ } _%>
               "<%- this.relativeDir(clientRootDir, clientSrcDir) %>content/scss/vendor.scss",
               "<%- this.relativeDir(clientRootDir, clientSrcDir) %>content/scss/global.scss"
             ],
