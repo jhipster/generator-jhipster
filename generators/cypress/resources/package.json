@@ -9,7 +9,7 @@
     "cypress-monocart-coverage": "1.0.1",
     "cypress-terminal-report": "7.3.3",
     "eslint-plugin-cypress": "6.4.1",
-    "lighthouse": "13.3.0",
+    "lighthouse": "13.4.0",
     "nyc": "18.0.0"
   },
   "packageManager": "npm@11"
