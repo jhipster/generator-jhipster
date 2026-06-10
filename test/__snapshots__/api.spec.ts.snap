@@ -32,6 +32,19 @@ exports[`public api generator-jhipster/ci should match snapshot 1`] = `
 ]
 `;
 
+exports[`public api generator-jhipster/cli should match snapshot 1`] = `
+[
+  "buildCommands",
+  "buildJHipster",
+  "createProgram",
+  "done",
+  "printJHipsterLogo",
+  "runJHipster",
+  "logger",
+  "EnvironmentBuilder",
+]
+`;
+
 exports[`public api generator-jhipster/testing should match snapshot 1`] = `
 [
   "AuthenticationTypeMatrix",
