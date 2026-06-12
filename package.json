@@ -159,7 +159,7 @@
     "os-locale": "8.0.0",
     "p-transform": "5.0.1",
     "parse-gitignore": "2.0.0",
-    "piscina": "5.1.4",
+    "piscina": "5.2.0",
     "pluralize": "8.0.0",
     "prettier": "3.8.4",
     "prettier-plugin-java": "2.9.7",
