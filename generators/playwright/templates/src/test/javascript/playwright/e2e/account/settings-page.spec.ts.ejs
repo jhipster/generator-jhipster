@@ -1,0 +1,159 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import { test, expect } from '@playwright/test';
+import {
+  firstNameSettingsSelector,
+  lastNameSettingsSelector,
+  submitSettingsSelector,
+  emailSettingsSelector,
+  getCredentials,
+  login,
+  clickOnSettingsItem,
+} from '../../support/commands';
+import type { Account } from '../../support/account';
+import { getAccount, saveAccount } from '../../support/account';
+
+test.describe('/account/settings', () => {
+  let adminUsername: string;
+  let adminPassword: string;
+  let username: string;
+  let password: string;
+
+  const testUserEmail = 'user@localhost.fr';
+  let originalUserAccount: Account;
+  let testUserAccount: Account;
+
+  test.beforeAll(() => {
+    const credentials = getCredentials();
+    adminUsername = credentials.adminUsername;
+    adminPassword = credentials.adminPassword;
+    username = credentials.username;
+    password = credentials.password;
+  });
+
+  test.beforeEach(async ({ page }) => {
+    await login(page, username, password);
+
+    // On first run, fetch the original account and set up test email
+    if (!originalUserAccount) {
+      originalUserAccount = await getAccount(page);
+      testUserAccount = { ...originalUserAccount, email: testUserEmail };
+      const status = await saveAccount(page, testUserAccount);
+      expect(status).toBe(200);
+    }
+
+    await page.goto('/account/settings');
+    await expect(page.locator(emailSettingsSelector)).toHaveValue(testUserEmail);
+  });
+
+  test.afterEach(async ({ page }) => {
+    await login(page, username, password);
+    const status = await saveAccount(page, testUserAccount);
+    expect(status).toBe(200);
+  });
+
+  test.afterAll(async ({ browser }) => {
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    await page.goto('/');
+    await login(page, username, password);
+    const status = await saveAccount(page, originalUserAccount);
+    expect(status).toBe(200);
+    await context.close();
+  });
+
+  test('should be accessible through menu', async ({ page }) => {
+    await page.goto('/');
+    await clickOnSettingsItem(page);
+    await expect(page).toHaveURL(/\/account\/settings$/);
+  });
+
+  test("should be able to change 'user' firstname settings", async ({ page }) => {
+    const savePromise = page.waitForResponse(resp =>
+      resp.url().includes('/api/account') && resp.request().method() === 'POST'
+    );
+    await page.locator(firstNameSettingsSelector).clear();
+    await page.locator(firstNameSettingsSelector).fill('jhipster');
+    await page.locator(submitSettingsSelector).click();
+    const response = await savePromise;
+    expect(response.status()).toBe(200);
+  });
+
+  test("should be able to change 'user' lastname settings", async ({ page }) => {
+    const savePromise = page.waitForResponse(resp =>
+      resp.url().includes('/api/account') && resp.request().method() === 'POST'
+    );
+    await page.locator(lastNameSettingsSelector).clear();
+    await page.locator(firstNameSettingsSelector).fill('jhipster');
+    await page.locator(lastNameSettingsSelector).fill('retspihj');
+    await page.locator(submitSettingsSelector).click();
+    const response = await savePromise;
+    expect(response.status()).toBe(200);
+  });
+
+  test("should be able to change 'user' email settings", async ({ page }) => {
+    const savePromise = page.waitForResponse(resp =>
+      resp.url().includes('/api/account') && resp.request().method() === 'POST'
+    );
+    await page.locator(emailSettingsSelector).clear();
+    await page.locator(firstNameSettingsSelector).fill('jhipster');
+    await page.locator(emailSettingsSelector).fill('user@localhost.fr');
+    await page.locator(submitSettingsSelector).click();
+    const response = await savePromise;
+    expect(response.status()).toBe(200);
+  });
+
+  test.describe('if there is another user with an email', () => {
+    let originalAdminAccount: Account;
+    const testAdminEmail = 'admin@localhost.fr';
+
+    test.beforeAll(async ({ browser }) => {
+      const context = await browser.newContext();
+      const page = await context.newPage();
+      await page.goto('/');
+      await login(page, adminUsername, adminPassword);
+      originalAdminAccount = await getAccount(page);
+      const status = await saveAccount(page, { ...originalAdminAccount, email: testAdminEmail });
+      expect(status).toBe(200);
+      await context.close();
+    });
+
+    test.afterAll(async ({ browser }) => {
+      const context = await browser.newContext();
+      const page = await context.newPage();
+      await page.goto('/');
+      await login(page, adminUsername, adminPassword);
+      const status = await saveAccount(page, originalAdminAccount);
+      expect(status).toBe(200);
+      await context.close();
+    });
+
+    test("should not be able to change 'user' email to same value", async ({ page }) => {
+      const savePromise = page.waitForResponse(resp =>
+        resp.url().includes('/api/account') && resp.request().method() === 'POST'
+      );
+      await page.locator(emailSettingsSelector).clear();
+      await page.locator(firstNameSettingsSelector).fill('jhipster');
+      await page.locator(emailSettingsSelector).fill(testAdminEmail);
+      await page.locator(submitSettingsSelector).click();
+      const response = await savePromise;
+      expect(response.status()).toBe(400);
+    });
+  });
+});
