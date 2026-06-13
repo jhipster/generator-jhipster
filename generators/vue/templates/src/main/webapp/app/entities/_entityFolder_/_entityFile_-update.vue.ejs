@@ -11,11 +11,13 @@
                     </div>
 <%_ for (field of fields.filter(field => !field.id)) { _%>
   <%_ const { fieldName, fieldType, fieldTypeBlobContent } = field;
-      const fieldInputClass = 'form-control';
+      const fieldInputClass = field.fieldTypeBoolean ? 'form-check-input' : 'form-control';
       const translationKey = `${i18nKeyPrefix}.${fieldName}`;
   _%>
-                    <div class="mb-3">
+                    <div class="mb-3<%- field.fieldTypeBoolean ? ' form-check' : '' %>">
+  <%_ if (!field.fieldTypeBoolean) { _%>
                         <label class="form-control-label" for="<%- entityFileName %>">{{ t$('<%- translationKey %>') }}</label>
+  <%_ } _%>
   <%_ if (field.fieldIsEnum) { _%>
                         <select class="form-control" name="<%- fieldName %>" :class="{'valid': !v$.<%- fieldName %>.$invalid, 'invalid': v$.<%- fieldName %>.$invalid }" v-model="v$.<%- fieldName %>.$model" id="<%- entityFileName %>-<%- fieldName %>" data-cy="<%- fieldName %>" <%- field.fieldValidate === true && field.fieldValidateRules.includes('required') ? ' required' : '' %>>
     <%_ const enumPrefix = `${frontendAppName}.${fieldType}`; _%>
@@ -92,6 +94,9 @@
                             v-model="<%- entityInstance %>.<%- fieldName %>ContentType" />
       <%_ } _%>
     <%_ } _%>
+  <%_ } _%>
+  <%_ if (field.fieldTypeBoolean) { _%>
+                        <label class="form-check-label" for="<%- entityFileName %>-<%- fieldName %>">{{ t$('<%- translationKey %>') }}</label>
   <%_ } _%>
   <%_ if (field.fieldValidate) { _%>
                         <div v-if="v$.<%- fieldName %>.$anyDirty && v$.<%- fieldName %>.$invalid">
