@@ -763,6 +763,44 @@ describe('jdl - JDLToJSONRelationshipConverter', () => {
           });
         });
       });
+      describe('when multiple unidirectional OneToOne relationships point from the same source to the same target (issue #33264)', () => {
+        // Reproduces: relationship OneToOne { Order{recipient} to Member  Order{publisher} to Member }
+        // Both relationships are unidirectional (no injectedFieldInTo), so Member should NOT get
+        // duplicate "order" back-references injected by the converter.
+        let relationshipsForOrder: ReturnType<typeof convert>['get'];
+        let relationshipsForMember: ReturnType<typeof convert>['get'];
+
+        before(() => {
+          const recipientRelationship = new JDLRelationship({
+            from: 'Order',
+            to: 'Member',
+            type: ONE_TO_ONE,
+            injectedFieldInFrom: 'recipient',
+          });
+          const publisherRelationship = new JDLRelationship({
+            from: 'Order',
+            to: 'Member',
+            type: ONE_TO_ONE,
+            injectedFieldInFrom: 'publisher',
+          });
+          const returned = convert([recipientRelationship, publisherRelationship], ['Order', 'Member']);
+          relationshipsForOrder = returned.get('Order');
+          relationshipsForMember = returned.get('Member');
+        });
+
+        it('should add both relationships to Order without duplicates', () => {
+          expect(relationshipsForOrder).toHaveLength(2);
+          const names = relationshipsForOrder!.map((r: any) => r.relationshipName);
+          expect(names).toContain('recipient');
+          expect(names).toContain('publisher');
+        });
+
+        it('should not inject any back-reference relationships into Member', () => {
+          // Member has no injectedFieldInTo, so the converter must not add anything to Member.
+          // The converter initialises an empty array for every entity, so we check length === 0.
+          expect(relationshipsForMember ?? []).toHaveLength(0);
+        });
+      });
     });
   });
 });

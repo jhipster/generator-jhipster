@@ -129,7 +129,17 @@ export const addOtherRelationship = <const R extends BaseApplicationRelationship
   otherEntity: BaseApplicationEntity,
   relationship: R,
 ): RelationshipWithEntity<R, BaseApplicationEntity> => {
-  relationship.otherEntityRelationshipName = relationship.otherEntityRelationshipName ?? lowerFirst(entity.name);
+  if (!relationship.otherEntityRelationshipName) {
+    // Generate a unique back-reference name to avoid duplicate properties when multiple
+    // relationships from the same source entity point to the same target entity.
+    // e.g. Order{recipient} to Member and Order{publisher} to Member would both default
+    // to "order" on Member — instead use the relationship name as a disambiguator.
+    const baseName = lowerFirst(entity.name);
+    const existingNames = new Set((otherEntity.relationships ?? []).map(r => r.relationshipName));
+    relationship.otherEntityRelationshipName = existingNames.has(baseName)
+      ? `${baseName}As${upperFirst(relationship.relationshipName)}`
+      : baseName;
+  }
   const otherRelationship = {
     otherEntityName: lowerFirst(entity.name),
     otherEntityRelationshipName: relationship.relationshipName,
