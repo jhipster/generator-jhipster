@@ -150,7 +150,7 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
       },
       liquibaseNeo4j({ application }) {
         // TODO drop hardcoded version
-        if (application.databaseTypeNeo4j && application.javaManagedProperties['liquibase.version'] === '5.0.2') {
+        if (application.databaseTypeNeo4j && application.javaManagedProperties['liquibase.version'] === '5.0.3') {
           application.javaDependencies['liquibase-neo4j'] = '5.0.0';
         }
       },
