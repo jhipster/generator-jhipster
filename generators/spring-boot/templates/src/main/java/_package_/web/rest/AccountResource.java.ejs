@@ -48,6 +48,7 @@ import org.springframework.web.bind.annotation.*;
 <%_ if (reactive) { _%>
 import java.util.Objects;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 <%_ } else { _%>
 import java.util.*;
 <%_ } _%>
@@ -67,7 +68,7 @@ import java.net.URLDecoder;
 @Validated
 public class AccountResource {
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Account resource request invalid")
     private static class AccountResourceException extends RuntimeException {
         private AccountResourceException(String message) {
             super(message);
@@ -341,12 +342,15 @@ public class AccountResource {
 <%_ if (reactive) { _%>
         return userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey())
             .switchIfEmpty(
-                Mono.defer(() -> {
-                    // Dummy hash to prevent reset-key enumeration via response-time timing attack:
-                    // mirrors the bcrypt cost of a successful path so both branches take equal time.
-                    passwordEncoder.encode(keyAndPassword.getNewPassword());
-                    return Mono.error(new AccountResourceException("No user was found for this reset key"));
-                })
+                Mono.defer(() ->
+                    Mono.fromRunnable(() -> {
+                        // Dummy hash to prevent reset-key enumeration via response-time timing attack:
+                        // mirrors the bcrypt cost of a successful path so both branches take equal time.
+                        passwordEncoder.encode(keyAndPassword.getNewPassword());
+                    })
+                        .subscribeOn(Schedulers.boundedElastic())
+                        .then(Mono.error(new AccountResourceException("No user was found for this reset key")))
+                )
             )
             .then();
 <%_ } else { _%>

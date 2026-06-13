@@ -1385,7 +1385,7 @@ class AccountResourceIT {
 <%_ if (reactive) { _%>
     void testRequestPasswordResetTooLongEmail() {
         accountWebTestClient.post().uri("/api/account/reset-password/init")
-            .bodyValue(RandomStringUtils.insecure().nextAlphanumeric(255))
+            .bodyValue("a".repeat(250) + "@x.co")
             .exchange()
             .expectStatus().isBadRequest();
     }
@@ -1393,7 +1393,7 @@ class AccountResourceIT {
     void testRequestPasswordResetTooLongEmail() <%- reactive ? '' : 'throws Exception ' %>{
         restAccountMockMvc.perform(
             post("/api/account/reset-password/init")
-                .content(RandomStringUtils.insecure().nextAlphanumeric(255))<% if (authenticationUsesCsrf) { %>
+                .content("a".repeat(250) + "@x.co")<% if (authenticationUsesCsrf) { %>
                 .with(csrf())<% } %>)
             .andExpect(status().isBadRequest());
     }
