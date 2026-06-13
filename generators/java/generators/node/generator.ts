@@ -103,11 +103,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
     this.setFeatures({
       customInstallTask: async (preferredPm, defaultInstallTask) => {
         const { buildTool } = this.jhipsterConfigWithDefaults;
-        if (
-          (preferredPm && preferredPm !== 'npm') ||
-          (this.jhipsterConfig as any).skipClient ||
-          (buildTool !== 'gradle' && buildTool !== 'maven')
-        ) {
+        if ((preferredPm && preferredPm !== 'npm') || this.jhipsterConfig.skipClient || (buildTool !== 'gradle' && buildTool !== 'maven')) {
           await defaultInstallTask();
           return;
         }
