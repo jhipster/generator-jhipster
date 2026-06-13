@@ -46,6 +46,8 @@ import org.springframework.context.annotation.Import;
 <%_ } _%>
 public class TestSecurityConfiguration {
 
+    private static final String NO_END_SESSION_ENDPOINT_REGISTRATION_ID = "oidc-no-end-session-endpoint";
+
     @Bean
     ClientRegistration clientRegistration() {
         return clientRegistrationBuilder().build();
@@ -53,7 +55,13 @@ public class TestSecurityConfiguration {
 
     @Bean
     <%- reactivePrefix %>ClientRegistrationRepository clientRegistrationRepository(ClientRegistration clientRegistration) {
-        return new InMemory<%- reactivePrefix %>ClientRegistrationRepository(clientRegistration);
+        return new InMemory<%- reactivePrefix %>ClientRegistrationRepository(
+            clientRegistration,
+            ClientRegistration.withClientRegistration(clientRegistration)
+                .registrationId(NO_END_SESSION_ENDPOINT_REGISTRATION_ID)
+                .providerConfigurationMetadata(Map.of())
+                .build()
+        );
     }
 
     private ClientRegistration.Builder clientRegistrationBuilder() {
