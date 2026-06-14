@@ -142,21 +142,15 @@ class PublicUserResourceIT {
 <%_ if (!databaseTypeCassandra && !requiresDeleteAllUsers) { _%>
     private Long numberOfUsers;
 
-    @BeforeEach
-    void countUsers() {
-        numberOfUsers = userRepository.count()<%- reactorBlock %>;
-    }
-
-<%_ } _%>
-<%_ if (reactive && authenticationUsesCsrf) { _%>
-    @BeforeEach
-    void setupCsrf() {
-        webTestClient = webTestClient.mutateWith(csrf());
-    }
-
 <%_ } _%>
     @BeforeEach
     void initTest() {
+<%_ if (!databaseTypeCassandra && !requiresDeleteAllUsers) { _%>
+        numberOfUsers = userRepository.count()<%- reactorBlock %>;
+<%_ } _%>
+<%_ if (reactive && authenticationUsesCsrf) { _%>
+        webTestClient = webTestClient.mutateWith(csrf());
+<%_ } _%>
         user = UserResourceIT.initTestUser();
     }
 
