@@ -77,9 +77,9 @@ class UserMapperTest {
 <%_ } _%>
 <%_ if (generateSpringAuditor) { _%>
         user.setCreatedBy(DEFAULT_LOGIN);
-        user.setCreatedDate(Instant.now());
+        user.setCreatedDate(Instant.parse("2023-11-14T22:13:20Z"));
         user.setLastModifiedBy(DEFAULT_LOGIN);
-        user.setLastModifiedDate(Instant.now());
+        user.setLastModifiedDate(Instant.parse("2023-11-14T22:13:20Z"));
 <%_ } _%>
         user.setLangKey("en");
 
