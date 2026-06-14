@@ -79,6 +79,7 @@ import reactor.core.publisher.Mono;
 <%_ if (!reactive) { _%>
 import jakarta.servlet.http.HttpServletRequest;
 <%_ } _%>
+import jakarta.validation.ConstraintViolationException;
 import java.net.URI;
 import java.util.List;
 import java.util.Collection;
@@ -265,12 +266,12 @@ _%>
     }
 
     private URI getMappedType(Throwable err) {
-        if (err instanceof MethodArgumentNotValidException) return ErrorConstants.CONSTRAINT_VIOLATION_TYPE;
+        if (err instanceof MethodArgumentNotValidException || err instanceof ConstraintViolationException) return ErrorConstants.CONSTRAINT_VIOLATION_TYPE;
         return ErrorConstants.DEFAULT_TYPE;
     }
 
     private String getMappedMessageKey(Throwable err) {
-        if (err instanceof MethodArgumentNotValidException) {
+        if (err instanceof MethodArgumentNotValidException || err instanceof ConstraintViolationException) {
             return ErrorConstants.ERR_VALIDATION;
 <%_ if (!databaseTypeNo && !databaseTypeCassandra) { _%>
         } else if (err instanceof ConcurrencyFailureException
@@ -286,7 +287,7 @@ _%>
     }
 
     private String getCustomizedTitle(Throwable err) {
-        if (err instanceof MethodArgumentNotValidException) return "Method argument not valid";
+        if (err instanceof MethodArgumentNotValidException || err instanceof ConstraintViolationException) return "Method argument not valid";
         return null;
     }
 
@@ -312,6 +313,7 @@ _%>
 <%_ if (reactive) { _%>
         if (err instanceof UsernameNotFoundException) return HttpStatus.UNAUTHORIZED;
 <%_ } _%>
+        if (err instanceof ConstraintViolationException) return HttpStatus.BAD_REQUEST;
         return null;
     }
 
