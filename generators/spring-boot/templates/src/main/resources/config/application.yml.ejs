@@ -219,7 +219,7 @@ spring:
               predicates:
                 - name: Path
                   args:
-                    pattern: "'/services/'+serviceId.toLowerCase()+'/**'"
+                    pattern: "'/services/'+serviceId+'/**'"
               filters:
                 - StripPrefix=2
     <%_ } _%>
