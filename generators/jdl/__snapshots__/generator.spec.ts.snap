@@ -193,6 +193,7 @@ Options:
   --jdl-store <value>                      JDL store
   --skip-client                            Skip the client-side application generation
   --skip-server                            Skip the server-side application generation
+  --auth <value>                           Provide authentication type for the application when skipping server side generation (choices: "jwt", "oauth2", "session")
   --application-type <value>               Application type to generate (choices: "monolith", "gateway", "microservice")
   --server-port <value>                    Server port to use (default: 8080)
   --prettier-tab-width <value>             Default tab width for prettier (default: 2)
@@ -206,7 +207,6 @@ Options:
   --dev-database-type <value>              Development database (choices: "postgresql", "mysql", "mariadb", "oracle", "mssql", "h2Disk", "h2Memory")
   --reactive                               Generate a reactive backend
   --service-discovery-type <value>         Service discovery type (choices: "consul", "eureka", "no")
-  --auth <value>                           Provide authentication type for the application when skipping server side generation (choices: "jwt", "oauth2", "session")
   --feign-client                           Generate a feign client (default: false)
   --sync-user-with-idp                     Allow relationships with User for oauth2 applications
   --database-migration <value>             Database migration (choices: "liquibase", "no")

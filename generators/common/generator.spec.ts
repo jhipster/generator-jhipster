@@ -107,6 +107,24 @@ describe(`generator - ${generator}`, () => {
   });
 
   describe('with', () => {
+    describe('--auth option', () => {
+      before(async () => {
+        await helpers
+          .runJHipster(generator)
+          .withOptions({ auth: 'oauth2', skipServer: true })
+          .withJHipsterConfig()
+          .withMockedGenerators(mockedGenerators)
+          .withSkipWritingPriorities();
+      });
+
+      it('should store authenticationType', () => {
+        runResult.assertJHipsterConfigContent({
+          authenticationType: 'oauth2',
+          skipServer: true,
+        });
+      });
+    });
+
     describe('default config', () => {
       before(async () => {
         await helpers.runJHipster(generator).withJHipsterConfig().withMockedGenerators(mockedGenerators);
