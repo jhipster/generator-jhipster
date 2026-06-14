@@ -559,6 +559,40 @@ entity Customer {
     });
   });
 
+  describe('when removing a blob field with content type', () => {
+    before(async () => {
+      await helpers.runJDL(`
+${jdlApplication}
+entity Customer {
+    name String
+    contract AnyBlob
+}
+`);
+
+      await helpers
+        .runJDLInApplication(
+          `
+${jdlApplication}
+entity Customer {
+    name String
+}
+`,
+        )
+        .withMockedSource({ except: exceptSourceMethods })
+        .withMockedJHipsterGenerators({ except: exceptMockedGenerators })
+        .withOptions({
+          creationTimestamp: '2020-01-02',
+        });
+    });
+
+    it('should drop the blob field content type column', () => {
+      const updatedChangelog = `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_Customer.xml`;
+
+      runResult.assertFileContent(updatedChangelog, 'column name="contract"');
+      runResult.assertFileContent(updatedChangelog, 'column name="contract_content_type"');
+    });
+  });
+
   describe('when adding a relationship', () => {
     before(async () => {
       await helpers

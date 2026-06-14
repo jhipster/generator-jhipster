@@ -50,6 +50,10 @@
         <dropColumn tableName="<%- entity.entityTableName %>">
   <%_ for (field of removedFields) { _%>
             <column name="<%- field.columnName %>"/>
+    <%_ if (field.shouldCreateContentType) { _%>
+            <column name="<%- field.columnName %>_content_type"/>
+  <%_ }
+    _%>
   <%_ } _%>
         </dropColumn>
     </changeSet>
