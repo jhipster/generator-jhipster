@@ -556,13 +556,25 @@ export default class HerokuGenerator extends BaseSimpleApplicationGenerator<Hero
     return child;
   }
 
+  private stderrContainsVerifyAccountUrl(stderr: string): boolean {
+    const urlMatches = stderr.match(/https?:\/\/[^\s)]+/g) ?? [];
+    return urlMatches.some(urlText => {
+      try {
+        const parsed = new URL(urlText);
+        return parsed.host === 'heroku.com' && (parsed.pathname === '/verify' || parsed.pathname === '/verify/');
+      } catch {
+        return false;
+      }
+    });
+  }
+
   checkAddOnReturn({ addOn, stdout, stderr }: { addOn: string; stdout: string; stderr: string }) {
     if (stdout) {
       this.log.ok(`Created ${addOn} add-on`);
       this.log.ok(stdout);
     } else if (stderr) {
       const verifyAccountUrl = 'https://heroku.com/verify';
-      if (stderr.includes(verifyAccountUrl)) {
+      if (this.stderrContainsVerifyAccountUrl(stderr)) {
         this.log.error(`Account must be verified to use addons. Please go to: ${verifyAccountUrl}`);
         throw new Error(stderr);
       } else {
