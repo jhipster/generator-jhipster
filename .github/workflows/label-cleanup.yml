@@ -20,6 +20,8 @@
 name: Cleanup Labels
 on:
   issues: { types: [closed] }
+permissions:
+  issues: write
 jobs:
   remove-labels:
     runs-on: ubuntu-latest

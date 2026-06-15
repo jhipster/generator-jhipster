@@ -20,6 +20,8 @@
 name: Triage issues
 on:
   issues: { types: [opened] }
+permissions:
+  issues: write
 jobs:
   apply-label:
     runs-on: ubuntu-latest
