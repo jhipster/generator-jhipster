@@ -196,10 +196,10 @@
     "jiti": "2.7.0",
     "jsdoc": "4.0.5",
     "rimraf": "6.1.3",
-    "yeoman-test": "11.5.3"
+    "yeoman-test": "11.6.0"
   },
   "peerDependencies": {
-    "yeoman-test": "11.5.3"
+    "yeoman-test": "11.6.0"
   },
   "peerDependenciesMeta": {
     "yeoman-test": {
