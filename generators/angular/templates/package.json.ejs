@@ -89,6 +89,11 @@
   "config": {
     "default_environment": "prod"
   },
+  "overrides": {
+    "@angular/common": "$@angular/common",
+    "@angular/core": "$@angular/core",
+    "typescript": "$typescript"
+  },
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "<%- nodePackageManager %> run lint -- --fix",
