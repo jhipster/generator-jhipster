@@ -79,6 +79,7 @@ updates:
           - '@angular-devkit/*'
           - '@fortawesome/angular-fontawesome'
           - '@ng-bootstrap/*'
+          - 'angular-eslint'
           - 'ngx-cookie-service'
           - 'ngx-infinite-scroll'
           - 'typescript'
