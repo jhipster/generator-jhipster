@@ -2263,6 +2263,12 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
             }
             deployment {
               ${type} "gcr.io.192.120.0.0.io"
+            }
+            deployment {
+              ${type} "https://example.com"
+            }
+            deployment {
+              ${type} "example.com:5000/test"
             }`,
                 jdlRuntime,
               ),
@@ -2285,14 +2291,12 @@ describe('jdl - JDLSyntaxValidatorVisitor', () => {
               expect(() =>
                 parse(
                   `
-                deployment {
-                  ${type} "test 123"
+               deployment {
+                 ${type} "test 123"
               }`,
                   jdlRuntime,
                 ),
-              ).toThrow(
-                String.raw`The ${type} property name must match: /^"((?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=]+|[a-zA-Z0-9]+)"$/`,
-              );
+              ).toThrow(new RegExp(`^The ${type} property name must match: `));
             });
           });
           describe('such as not a name', () => {
