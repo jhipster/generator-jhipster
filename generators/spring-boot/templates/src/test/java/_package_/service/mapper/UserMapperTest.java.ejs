@@ -76,10 +76,11 @@ class UserMapperTest {
         user.setImageUrl("image_url");
 <%_ } _%>
 <%_ if (generateSpringAuditor) { _%>
+        Instant creationTimestamp = Instant.parse("2023-11-14T22:13:20Z");
         user.setCreatedBy(DEFAULT_LOGIN);
-        user.setCreatedDate(Instant.parse("2023-11-14T22:13:20Z"));
+        user.setCreatedDate(creationTimestamp);
         user.setLastModifiedBy(DEFAULT_LOGIN);
-        user.setLastModifiedDate(Instant.parse("2023-11-14T22:13:20Z"));
+        user.setLastModifiedDate(creationTimestamp);
 <%_ } _%>
         user.setLangKey("en");
 
