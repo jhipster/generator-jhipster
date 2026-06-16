@@ -51,7 +51,6 @@ _%>
 describe('<%- entityNameCapitalized %> e2e test', () => {
 
   const <%- entityInstance %>PageUrl = '/<%- entityPage %>';
-  const <%- entityInstance %>PageUrlPattern = new RegExp('/<%- entityPage %>(\\?.*)?$');
   let username: string;
   let password: string;
 <%_ if (!readOnly) { _%>
@@ -163,7 +162,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
       }
     });;
     cy.getEntityHeading('<%- entityNameCapitalized %>').should('exist');
-    cy.url().should('match', <%- entityInstance %>PageUrlPattern);
+    cy.location('pathname').should('eq', <%- entityInstance %>PageUrl);
   });
 
   describe('<%- entityNameCapitalized %> page', () => {
@@ -183,14 +182,14 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
 
       it('should load create <%- entityNameCapitalized %> page', () => {
         cy.get(entityCreateButtonSelector).click();
-        cy.url().should('match', new RegExp('/<%- entityPage %>/new$'));
+        cy.location('pathname').should('eq', `${<%- entityInstance %>PageUrl}/new`);
         cy.getEntityCreateUpdateHeading('<%- entityNameCapitalized %>');
         cy.get(entityCreateSaveButtonSelector).should('exist');
         cy.get(entityCreateCancelButtonSelector).click();
         cy.wait('@entitiesRequest').then(({ response }) => {
           expect(response?.statusCode).to.equal(200);
         });
-        cy.url().should('match', <%- entityInstance %>PageUrlPattern);
+        cy.location('pathname').should('eq', <%- entityInstance %>PageUrl);
       });
     });
 
@@ -263,7 +262,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
         cy.wait('@entitiesRequest').then(({ response }) => {
           expect(response?.statusCode).to.equal(200);
         });
-        cy.url().should('match', <%- entityInstance %>PageUrlPattern);
+        cy.location('pathname').should('eq', <%- entityInstance %>PageUrl);
       });
 
 <%_ if (!readOnly && updatableEntity) { _%>
@@ -275,7 +274,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
         cy.wait('@entitiesRequest').then(({ response }) => {
           expect(response?.statusCode).to.equal(200);
         });
-        cy.url().should('match', <%- entityInstance %>PageUrlPattern);
+        cy.location('pathname').should('eq', <%- entityInstance %>PageUrl);
       });
 
       <%- (jpaMetamodelFiltering && clientFrameworkVue && requiredRelationships.length) ? '// Reason: jpaMetamodelFiltering with required relationship missbehavior' : '' %>
@@ -286,7 +285,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
         cy.wait('@entitiesRequest').then(({ response }) => {
           expect(response?.statusCode).to.equal(200);
         });
-        cy.url().should('match', <%- entityInstance %>PageUrlPattern);
+        cy.location('pathname').should('eq', <%- entityInstance %>PageUrl);
       });
 
 <%_ } _%>
@@ -308,7 +307,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
         cy.wait('@entitiesRequest').then(({ response }) => {
           expect(response?.statusCode).to.equal(200);
         });
-        cy.url().should('match', <%- entityInstance %>PageUrlPattern);
+        cy.location('pathname').should('eq', <%- entityInstance %>PageUrl);
   <% if (cypressBootstrapEntities) { %>
         <%- entityInstance %> = undefined;
   <%_ } _%>
@@ -374,7 +373,7 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
       cy.wait('@entitiesRequest').then(({ response }) => {
         expect(response?.statusCode).to.equal(200);
       });
-      cy.url().should('match', <%- entityInstance %>PageUrlPattern);
+      cy.location('pathname').should('eq', <%- entityInstance %>PageUrl);
     });
   });
 <%_ } _%>
