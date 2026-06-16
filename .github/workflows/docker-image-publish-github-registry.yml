@@ -28,6 +28,9 @@ on:
     tags:
       - 'v*.*.*'
 
+permissions:
+  contents: read
+
 env:
   FORCE_COLOR: 1
 jobs:
