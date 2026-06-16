@@ -23,7 +23,7 @@ export const filterData = ({ files, ...data }: InfoData): InfoData => {
       file =>
         // Forbid any package.json file for security reasons.
         path.basename(file.filename).toLowerCase() !== 'package.json' &&
-        (file.filename === '.yo-rc.json' || file.filename.endsWith('.jdl') || file.filename.match(/\.jhipster\/(\w*)+\.json$/)),
+        (file.filename === '.yo-rc.json' || file.filename.endsWith('.jdl') || /\.jhipster\/\w+\.json$/.test(file.filename)),
     ),
   };
 };
