@@ -110,6 +110,11 @@
     "webpack-notifier": "<%- nodeDependencies['webpack-notifier'] %>",
     "workbox-webpack-plugin": "<%- nodeDependencies['workbox-webpack-plugin'] %>"
   },
+  <%# An unknown dependency pulls in outdated react and react-dom, override them -%>
+  "overrides": {
+    "react": "$react",
+    "react-dom": "$react-dom"
+  },
   "engines": {
     "node": ">=<%- nodeVersion %>"
   },
