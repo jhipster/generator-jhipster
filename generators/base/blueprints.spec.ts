@@ -310,6 +310,9 @@ describe('generator - base - local blueprint', () => {
   "local-blueprint.txt": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
 }
 `);
     });

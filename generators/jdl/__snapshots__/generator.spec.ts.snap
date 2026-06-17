@@ -173,7 +173,6 @@ Options:
   --force-git                              Force commit to git repository
   --commit-msg <value>                     Commit changes (implies forceGit)
   --monorepository                         Use monorepository
-  --defaults                               Execute jhipster with default config
   --jhi-prefix <value>                     Add prefix before services, controllers and states name
   --entity-suffix <value>                  Add suffix after entities name
   --dto-suffix <value>                     Add suffix after dtos name
@@ -184,6 +183,7 @@ Options:
   --blueprints <value>                     A comma separated list of one or more generator blueprints to use for the sub generators, e.g. --blueprints kotlin,vuejs
   --disable-blueprints                     Disable blueprints support
   -d, --debug                              Enable debugger
+  --defaults                               Execute jhipster with default config
   --reproducible                           Try to reproduce changelog
   --node-package-manager <value>           Force an unsupported client package manager
   --ignore-errors                          Don't fail on prettier errors.

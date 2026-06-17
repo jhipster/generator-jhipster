@@ -22,7 +22,6 @@ import { camelCase } from 'lodash-es';
 
 import BaseApplicationGenerator from '../base-application/index.ts';
 import type { Application as CommonApplication, Config as CommonConfig, Entity as CommonEntity } from '../common/types.ts';
-import { getDefaultAppName } from '../project-name/support/index.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
 import { checkNode } from './support/index.ts';
@@ -33,9 +32,8 @@ export default class AppGenerator extends BaseApplicationGenerator<CommonEntity,
       await this.composeWithBlueprints();
     }
 
-    if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrap('app');
-    }
+    await this.dependsOnJHipster('javascript-simple-application');
+    await this.dependsOnBootstrap('app');
   }
 
   get initializing() {
@@ -75,8 +73,6 @@ export default class AppGenerator extends BaseApplicationGenerator<CommonEntity,
       defaults() {
         if (!this.options.reproducible) {
           this.config.defaults({
-            baseName: getDefaultAppName({ cwd: this.destinationPath() }),
-            creationTimestamp: Date.now(),
             defaultCommand: 'app',
           });
         }

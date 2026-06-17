@@ -29,9 +29,9 @@ export default class InitGenerator extends BaseSimpleApplicationGenerator<InitAp
       await this.composeWithBlueprints();
     }
 
-    if (!this.delegateToBlueprint) {
-      await this.dependsOnJHipster('jhipster:javascript-simple-application:bootstrap');
-    }
+    const projectNameGenerator = await this.dependsOnJHipster('project-name');
+    projectNameGenerator.javaApplication = false;
+    await this.dependsOnJHipster('jhipster:javascript-simple-application:bootstrap');
   }
 
   get composing() {

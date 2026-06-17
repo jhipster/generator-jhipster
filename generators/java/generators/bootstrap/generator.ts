@@ -31,8 +31,6 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
       await this.composeWithBlueprints();
     }
 
-    const projectNameGenerator = await this.dependsOnJHipster('project-name');
-    projectNameGenerator.javaApplication = true;
     await this.dependsOnBootstrap('base-application');
     await this.dependsOnBootstrap('java-simple-application');
     if (!this.delegateToBlueprint) {
