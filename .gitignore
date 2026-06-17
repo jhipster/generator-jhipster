@@ -41,3 +41,4 @@ generators/**/.gradle
 
 # Local JHipster app output (e.g. integration / manual testing)
 jhipster-keycloak-test/
+.claude/
