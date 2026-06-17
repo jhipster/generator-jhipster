@@ -178,6 +178,12 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
           annotations: [{ package: `${application.packageName}.config`, annotation: 'EmbeddedNeo4j' }],
         });
       },
+      blockhound({ application, source }) {
+        const { reactive } = application;
+        if (reactive) {
+          source.addAllowBlockingCallsInside!({ classPath: 'org.neo4j.driver.internal.util.Futures', method: 'blockingGet' });
+        }
+      },
     });
   }
 
