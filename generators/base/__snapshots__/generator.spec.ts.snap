@@ -23,6 +23,7 @@ Options:
   --experimental                  Enable experimental features. Please note that these features may be unstable and may undergo breaking changes at any time
   --disable-blueprints            Disable blueprints support
   -d, --debug                     Enable debugger
+  --defaults                      Execute jhipster with default config
   --reproducible                  Try to reproduce changelog
   --node-package-manager <value>  Force an unsupported client package manager
   --ignore-errors                 Don't fail on prettier errors.

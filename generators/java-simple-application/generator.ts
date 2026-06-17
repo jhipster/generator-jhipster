@@ -57,6 +57,7 @@ export default class JavaGenerator extends JavaSimpleApplicationGenerator {
       await this.composeWithBlueprints();
     }
 
+    await this.dependsOnJHipster('project-name');
     await this.dependsOnBootstrap('java-simple-application');
   }
 

@@ -28,7 +28,6 @@ export default class BaseSimpleApplicationBootstrapGenerator extends BaseSimpleA
     }
 
     await this.dependsOnBootstrap('project-name');
-    await this.dependsOnJHipster('project-name');
   }
 
   get configuring() {
