@@ -458,6 +458,15 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           },
         ]);
       },
+      overrides() {
+        this.packageJson.merge({
+          overrides: {
+            '@angular/common': '$@angular/common',
+            '@angular/core': '$@angular/core',
+            typescript: '$typescript',
+          },
+        });
+      },
     });
   }
 
