@@ -17,7 +17,6 @@ exports[`generator - vue:bootstrap bootstrapping default config should prepare a
   "authenticationTypeUsesRemoteAuthorization": false,
   "authenticationUsesCsrf": false,
   "authority": Any<Object>,
-  "autoCrlf": true,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,

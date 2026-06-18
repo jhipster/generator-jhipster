@@ -82,30 +82,6 @@ Options:
 
 exports[`generator - app jdlStore with application and entities should match snapshot 1`] = `
 {
-  ".jhipster/Bar.json": {
-    "contents": "{
-  "annotations": {
-    "changelogDate": "20200101000200"
-  },
-  "fields": [],
-  "name": "Bar",
-  "relationships": []
-}
-",
-    "stateCleared": "modified",
-  },
-  ".jhipster/Foo.json": {
-    "contents": "{
-  "annotations": {
-    "changelogDate": "20200101000100"
-  },
-  "fields": [],
-  "name": "Foo",
-  "relationships": []
-}
-",
-    "stateCleared": "modified",
-  },
   ".yo-rc.json": {
     "contents": "{
   "generator-jhipster": {
@@ -123,7 +99,13 @@ exports[`generator - app jdlStore with application and entities should match sna
     skipClient true
     skipServer true
   }
+
+  entities Foo, Bar
 }
+@ChangelogDate("20200101000100")
+entity Foo
+@ChangelogDate("20200101000200")
+entity Bar
 ",
     "stateCleared": "modified",
   },
@@ -200,7 +182,13 @@ exports[`generator - app jdlStore with incremental changelog application and ent
     skipClient true
     skipServer true
   }
+
+  entities Foo, Bar
 }
+@ChangelogDate("20200101000100")
+entity Foo
+@ChangelogDate("20200101000200")
+entity Bar
 ",
     "stateCleared": "modified",
   },
