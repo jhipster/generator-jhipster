@@ -79,6 +79,7 @@ const {
   COMPOSING,
   COMPOSING_COMPONENT,
   LOADING,
+  COMPOSING_BOOTSTRAP,
   PREPARING,
   POST_PREPARING,
   DEFAULT,
@@ -120,6 +121,8 @@ export default class CoreGenerator<
   static readonly COMPOSING_COMPONENT = asPriority(COMPOSING_COMPONENT);
 
   static readonly LOADING = asPriority(LOADING);
+
+  static readonly COMPOSING_BOOTSTRAP = asPriority(COMPOSING_BOOTSTRAP);
 
   static readonly PREPARING = asPriority(PREPARING);
 

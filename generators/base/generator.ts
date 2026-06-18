@@ -476,6 +476,25 @@ export default class BaseGenerator<
   /**
    * Priority API stub for blueprints.
    *
+   * Loading should be used to load application configuration from jhipster configuration.
+   * Before this priority the configuration should be considered dirty, while each generator configures itself at configuring priority, another generator composed at composing priority can still change it.
+   */
+  get composingBootstrap() {
+    return {};
+  }
+
+  /**
+   * Utility method to get typed objects for autocomplete.
+   */
+  asComposingBootstrapTaskGroup<const T extends Record<string, GenericTask<this, Tasks['ComposingBootstrapTaskParam']>>>(
+    taskGroup: T,
+  ): Record<keyof T, GenericTask<any, Tasks['ComposingBootstrapTaskParam']>> {
+    return taskGroup;
+  }
+
+  /**
+   * Priority API stub for blueprints.
+   *
    * Preparing should be used to generate derived properties.
    */
   get preparing() {
