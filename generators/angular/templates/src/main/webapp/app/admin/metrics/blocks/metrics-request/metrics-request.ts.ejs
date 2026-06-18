@@ -20,7 +20,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { KeyValuePipe, DecimalPipe } from '@angular/common';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateDirective as NgxTranslateDirective, TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
 
 import { NgbProgressbar } from '@ng-bootstrap/ng-bootstrap/progressbar';
@@ -31,7 +31,7 @@ import { filterNaN } from 'app/core/util/operators';
   selector: '<%- jhiPrefixDashed %>-metrics-request',
   templateUrl: './metrics-request.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgbProgressbar, KeyValuePipe, DecimalPipe<%- enableTranslation ? ', TranslateDirective, TranslateModule' : '' %>],
+  imports: [NgbProgressbar, KeyValuePipe, DecimalPipe<%- enableTranslation ? ', TranslateDirective, NgxTranslateDirective' : '' %>],
 })
 export class MetricsRequest {
   /**

@@ -21,7 +21,7 @@ import { DecimalPipe } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateDirective as NgxTranslateDirective, TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
 
 import { NgbProgressbar } from '@ng-bootstrap/ng-bootstrap/progressbar';
@@ -32,7 +32,7 @@ import { MetricsModalThreads } from '../metrics-modal-threads/metrics-modal-thre
   selector: '<%- jhiPrefixDashed %>-jvm-threads',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './jvm-threads.html',
-  imports: [NgbProgressbar, DecimalPipe<%- enableTranslation ? ', TranslateDirective, TranslateModule' : '' %>],
+  imports: [NgbProgressbar, DecimalPipe<%- enableTranslation ? ', TranslateDirective, NgxTranslateDirective' : '' %>],
 })
 export class JvmThreads {
   readonly threads = input<Thread[] | undefined>();

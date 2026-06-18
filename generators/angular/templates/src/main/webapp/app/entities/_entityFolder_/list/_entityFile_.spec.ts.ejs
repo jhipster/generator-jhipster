@@ -35,7 +35,7 @@ import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faEye, faPencilAlt, faPlus<%- searchEngineAny ? ', faSearch' : '' %>, faSort, faSortDown, faSortUp, faSync, faTimes } from '@fortawesome/free-solid-svg-icons';
 <%_ if (enableTranslation) { _%>
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
 import {
   of,
@@ -64,9 +64,11 @@ describe('<%- entityAngularName %> Management Component', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
 <%_ if (enableTranslation) { _%>
-            imports: [TranslateModule.forRoot()],
 <%_ } _%>
             providers: [
+<%_ if (enableTranslation) { _%>
+        provideTranslateService(),
+<%_ } _%>
                 provideHttpClientTesting(),
                 {
                     provide: ActivatedRoute,

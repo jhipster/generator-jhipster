@@ -22,7 +22,7 @@ import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 import { ComponentRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 <%_ if (enableTranslation) { _%>
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
 
 import ItemCount from './item-count';
@@ -37,11 +37,11 @@ describe('ItemCount test', () => {
     () => {
       TestBed.configureTestingModule({
 <%_ if (enableTranslation) { _%>
-        imports: [
-          TranslateModule.forRoot(),
-        ],
 <%_ } _%>
-      });
+<%_ if (enableTranslation) { _%>
+      providers: [provideTranslateService()],
+<%_ } _%>
+});
     }
   );
 

@@ -20,14 +20,14 @@ import { Component, ChangeDetectionStrategy, inject, signal, OnInit<%- enableTra
 import { ActivatedRoute } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { Subscription } from 'rxjs';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService, TranslateDirective as NgxTranslateDirective, TranslatePipe } from '@ngx-translate/core';
 import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-error',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  <%- enableTranslation ? 'imports: [TranslateDirective, TranslateModule],' : '' %>
+  <%- enableTranslation ? 'imports: [TranslateDirective, NgxTranslateDirective],' : '' %>
   templateUrl: './error.html',
 })
 export default class Error implements OnInit<%- enableTranslation ? ', OnDestroy' : '' %> {

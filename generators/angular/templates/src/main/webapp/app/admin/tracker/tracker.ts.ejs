@@ -24,7 +24,7 @@ import { TrackerService } from 'app/core/tracker/tracker.service';
 import { TrackerActivity } from 'app/core/tracker/tracker-activity.model';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateDirective as NgxTranslateDirective, TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
 
 @Component({
@@ -34,7 +34,8 @@ import { TranslateModule } from '@ngx-translate/core';
     DatePipe,
 <%_ if (enableTranslation) { _%>
     TranslateDirective,
-    TranslateModule,
+    NgxTranslateDirective,
+    TranslatePipe,
 <%_ } _%>
   ],
   templateUrl: './tracker.html',

@@ -41,7 +41,7 @@ import { AlertError } from 'app/shared/alert/alert-error';
 import { Alert } from 'app/shared/alert/alert';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateDirective as NgxTranslateDirective, TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
 import { NgbPagination } from '@ng-bootstrap/ng-bootstrap/pagination';
 <%_ if (!locals.databaseTypeCassandra) { _%>
@@ -68,7 +68,8 @@ import { UserManagementDeleteDialog } from '../delete/user-management-delete-dia
     NgbPagination,
 <%_ if (enableTranslation) { _%>
     TranslateDirective,
-    TranslateModule,
+    NgxTranslateDirective,
+    TranslatePipe,
 <%_ } _%>
 <%_ if (!locals.databaseTypeCassandra) { _%>
     SortDirective,

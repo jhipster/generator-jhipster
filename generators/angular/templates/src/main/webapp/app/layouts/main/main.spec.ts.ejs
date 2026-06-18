@@ -26,7 +26,7 @@ import { Title } from '@angular/platform-browser';
 import { Router, TitleStrategy } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
-import { InterpolatableTranslationObject, LangChangeEvent, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { InterpolatableTranslationObject, LangChangeEvent, TranslateService, provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
 import { Subject, of } from 'rxjs';
 
@@ -55,10 +55,10 @@ describe('Main', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-<%_ if (enableTranslation) { _%>
-      imports: [TranslateModule.forRoot()],
-<%_ } _%>
       providers: [
+<%_ if (enableTranslation) { _%>
+        provideTranslateService(),
+<%_ } _%>
         Title,
 <%_ if (enableI18nRTL) { _%>
         FindLanguageFromKeyPipe,

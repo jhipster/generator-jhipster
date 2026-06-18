@@ -21,7 +21,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 <%_ if (enableTranslation) { _%>
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService, TranslateDirective as NgxTranslateDirective, TranslatePipe } from '@ngx-translate/core';
 import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
 
@@ -35,7 +35,8 @@ import PasswordStrengthBar from '../password/password-strength-bar/password-stre
   imports: [
 <%_ if (enableTranslation) { _%>
     TranslateDirective,
-    TranslateModule,
+    NgxTranslateDirective,
+    TranslatePipe,
 <%_ } _%>
     RouterLink,
     ReactiveFormsModule,
