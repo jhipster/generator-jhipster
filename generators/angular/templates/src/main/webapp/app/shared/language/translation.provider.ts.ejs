@@ -77,14 +77,13 @@ export function loadLazyTranslation(parentInjector: EnvironmentInjector): void {
   const injector = createEnvironmentInjector(
     provideChildTranslateService({
       loader: provideTranslateHttpLoader({ prefix: 'services/<%- lowercaseBaseName %>/i18n/', suffix: `.json?_=${I18N_HASH}` }),
-      extend: true,
     }),
     parentInjector,
   );
   runInInjectionContext(injector, () => {
     const translateService = inject(TranslateService);
     const translateLoader = inject(TranslateLoader);
-    const currentLang = translateService.getCurrentLang();
+    const currentLang = translateService.getCurrentLang() ?? '<%- nativeLanguage %>';
     translateLoader.getTranslation(currentLang).subscribe(translation => {
       translateService.setTranslation(currentLang, translation);
     });
