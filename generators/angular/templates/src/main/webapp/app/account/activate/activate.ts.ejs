@@ -21,7 +21,6 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { mergeMap } from 'rxjs';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
-import { TranslateDirective as NgxTranslateDirective, TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
 
 import { ActivateService } from './activate.service';
@@ -29,7 +28,7 @@ import { ActivateService } from './activate.service';
 @Component({
   selector: '<%- jhiPrefixDashed %>-activate',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink<%- enableTranslation ? ', TranslateDirective, NgxTranslateDirective' : '' %>],
+  imports: [RouterLink<%- enableTranslation ? ', TranslateDirective' : '' %>],
   templateUrl: './activate.html',
 })
 export default class Activate implements OnInit {

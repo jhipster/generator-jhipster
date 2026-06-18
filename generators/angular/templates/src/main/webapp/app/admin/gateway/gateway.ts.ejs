@@ -21,7 +21,6 @@ import { KeyValuePipe } from '@angular/common';
 
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
-import { TranslateDirective as NgxTranslateDirective, TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { GatewayRoutesService } from './gateway-routes.service';
@@ -32,7 +31,7 @@ import { GatewayRoute } from './gateway-route.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './gateway.html',
   providers: [GatewayRoutesService],
-  imports: [KeyValuePipe, FontAwesomeModule<%- enableTranslation ? ', TranslateDirective, NgxTranslateDirective' : '' %>],
+  imports: [KeyValuePipe, FontAwesomeModule<%- enableTranslation ? ', TranslateDirective' : '' %>],
 })
 export default class Gateway implements OnInit {
   gatewayRoutes: GatewayRoute[] = [];

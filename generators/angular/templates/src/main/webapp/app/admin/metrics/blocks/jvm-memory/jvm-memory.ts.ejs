@@ -20,7 +20,6 @@ import { Component, ChangeDetectionStrategy, input } from '@angular/core';
 import { KeyValuePipe, DecimalPipe } from '@angular/common';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
-import { TranslateDirective as NgxTranslateDirective, TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
 
 import { NgbProgressbar } from '@ng-bootstrap/ng-bootstrap/progressbar';
@@ -30,7 +29,7 @@ import { JvmMetrics } from 'app/admin/metrics/metrics.model';
   selector: '<%- jhiPrefixDashed %>-jvm-memory',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './jvm-memory.html',
-  imports: [NgbProgressbar, KeyValuePipe, DecimalPipe<%- enableTranslation ? ', TranslateDirective, NgxTranslateDirective' : '' %>],
+  imports: [NgbProgressbar, KeyValuePipe, DecimalPipe<%- enableTranslation ? ', TranslateDirective' : '' %>],
 })
 export class JvmMemory {
   /**

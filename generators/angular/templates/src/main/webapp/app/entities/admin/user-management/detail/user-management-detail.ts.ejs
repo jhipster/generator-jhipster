@@ -21,7 +21,6 @@ import { Component, ChangeDetectionStrategy, input } from '@angular/core';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
-import { TranslateDirective as NgxTranslateDirective, TranslatePipe } from '@ngx-translate/core';
 import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
 
@@ -31,7 +30,7 @@ import { IUserManagement } from '../user-management.model';
   selector: '<%- jhiPrefixDashed %>-user-mgmt-detail',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './user-management-detail.html',
-  imports: [FontAwesomeModule, DatePipe<%- enableTranslation ? ', TranslateDirective, NgxTranslateDirective' : '' %>],
+  imports: [FontAwesomeModule, DatePipe<%- enableTranslation ? ', TranslateDirective' : '' %>],
 })
 export class UserManagementDetail {
   readonly userManagement = input<IUserManagement | null>(null);

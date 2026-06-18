@@ -22,7 +22,6 @@ import { ActivatedRoute } from '@angular/router';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
-import { TranslateDirective as NgxTranslateDirective, TranslatePipe } from '@ngx-translate/core';
 
 import { LANGUAGES } from 'app/config/language.constants';
 <%_ } _%>
@@ -53,8 +52,6 @@ const newUser: IUserManagement = {
 <%_ if (enableTranslation) { _%>
     FindLanguageFromKeyPipe,
     TranslateDirective,
-    NgxTranslateDirective,
-    TranslatePipe,
 <%_ } _%>
     FontAwesomeModule,
     AlertError,

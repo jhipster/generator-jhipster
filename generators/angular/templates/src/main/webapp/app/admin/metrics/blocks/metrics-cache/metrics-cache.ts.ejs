@@ -20,7 +20,6 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { KeyValuePipe, DecimalPipe } from '@angular/common';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
-import { TranslateDirective as NgxTranslateDirective, TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
 
 import { CacheMetrics } from 'app/admin/metrics/metrics.model';
@@ -30,7 +29,7 @@ import { filterNaN } from 'app/core/util/operators';
   selector: '<%- jhiPrefixDashed %>-metrics-cache',
   templateUrl: './metrics-cache.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [KeyValuePipe, DecimalPipe<%- enableTranslation ? ', TranslateDirective, NgxTranslateDirective' : '' %>],
+  imports: [KeyValuePipe, DecimalPipe<%- enableTranslation ? ', TranslateDirective' : '' %>],
 })
 export class MetricsCache {
   /**

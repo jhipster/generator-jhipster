@@ -23,7 +23,6 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap/modal';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
-import { TranslateDirective as NgxTranslateDirective, TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
 import { AlertError } from 'app/shared/alert/alert-error';
 import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
@@ -36,8 +35,6 @@ import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
     imports: [
 <%_ if (enableTranslation) { _%>
       TranslateDirective,
-      NgxTranslateDirective,
-    TranslatePipe,
 <%_ } _%>
       FormsModule,
       FontAwesomeModule,

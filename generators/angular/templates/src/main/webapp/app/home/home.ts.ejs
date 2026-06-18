@@ -33,7 +33,6 @@ import { Subject, takeUntil } from 'rxjs';
 
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
-import { TranslateDirective as NgxTranslateDirective, TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import { LoginService } from 'app/login/login.service';
@@ -49,8 +48,6 @@ import { Account } from 'app/core/auth/account.model';
   imports: [
 <%_ if (enableTranslation) { _%>
     TranslateDirective,
-    NgxTranslateDirective,
-    TranslatePipe,
 <%_ } _%>
 <%_ if (generateUserManagement) { _%>
     RouterLink,

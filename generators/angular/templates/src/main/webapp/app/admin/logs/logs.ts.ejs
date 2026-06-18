@@ -27,7 +27,6 @@ import {
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
-import { TranslateDirective as NgxTranslateDirective, TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
 import { FormsModule } from '@angular/forms';
 import { SlicePipe } from '@angular/common';
@@ -48,8 +47,6 @@ import { GatewayRoutesService } from '../gateway/gateway-routes.service';
   imports: [
 <%_ if (enableTranslation) { _%>
     TranslateDirective,
-    NgxTranslateDirective,
-    TranslatePipe,
 <%_ } _%>
     FontAwesomeModule,
     FormsModule,

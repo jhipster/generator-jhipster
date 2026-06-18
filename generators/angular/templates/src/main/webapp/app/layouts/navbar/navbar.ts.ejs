@@ -19,7 +19,7 @@
 import { Component, ChangeDetectionStrategy, inject, signal, OnInit, effect<%- microfrontend && enableTranslation && applicationTypeGateway ? ', EnvironmentInjector' : '' %> } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 <%_ if (enableTranslation) { _%>
-import { TranslateService, TranslateDirective as NgxTranslateDirective, TranslatePipe } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
 
 import { StateStorageService } from 'app/core/auth/state-storage.service';
@@ -61,8 +61,6 @@ import NavbarItem from './navbar-item.model';
     ActiveMenuDirective,
     FindLanguageFromKeyPipe,
     TranslateDirective,
-    NgxTranslateDirective,
-    TranslatePipe,
 <%_ } _%>
   ],
 })

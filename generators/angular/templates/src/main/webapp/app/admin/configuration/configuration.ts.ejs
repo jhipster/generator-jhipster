@@ -21,7 +21,6 @@ import { FormsModule } from '@angular/forms';
 import { KeyValuePipe, JsonPipe } from '@angular/common';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
-import { TranslateDirective as NgxTranslateDirective, TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -33,7 +32,7 @@ import { Bean, PropertySource } from './configuration.model';
   selector: '<%- jhiPrefixDashed %>-configuration',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './configuration.html',
-  imports: [FontAwesomeModule, FormsModule, SortDirective, SortByDirective, KeyValuePipe, JsonPipe<%- enableTranslation ? ', TranslateDirective, NgxTranslateDirective' : '' %>],
+  imports: [FontAwesomeModule, FormsModule, SortDirective, SortByDirective, KeyValuePipe, JsonPipe<%- enableTranslation ? ', TranslateDirective' : '' %>],
 })
 export default class Configuration implements OnInit {
   readonly allBeans = signal<Bean[] | undefined>(undefined);
