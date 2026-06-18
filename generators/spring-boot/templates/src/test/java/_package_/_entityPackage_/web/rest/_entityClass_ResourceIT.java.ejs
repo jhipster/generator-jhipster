@@ -176,10 +176,7 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.ZoneOffset;
 <%_ } _%>
-<%_ if (anyFieldIsLocalDate || anyFieldIsZonedDateTime) { _%>
-import java.time.ZoneId;
-<%_ } _%>
-<%_ if (anyFieldIsInstant) { _%>
+<%_ if (jpaMetamodelFiltering && fieldsToTest.some(field => field.filterableField && field.fieldValidate && field.fieldValidationMax && (field.fieldTypeDuration || field.fieldTypeLocalDate || field.fieldTypeZonedDateTime))) { _%>
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
 <%_ if (anyFieldIsLocalTime) { _%>
@@ -394,21 +391,21 @@ _%>
   <%_ } else if (field.fieldTypeLocalDate) { _%>
 
     private static final LocalDate <%- defaultValueName %> = LocalDate.ofEpochDay(0L);
-    private static final LocalDate <%- updatedValueName %> = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate <%- updatedValueName %> = LocalDate.parse("<%- new Date(creationTimestamp).toISOString().split('T')[0] %>");
     <%_ if (needsSmallerValueName) { _%>
     private static final LocalDate <%- smallerValueName %> = LocalDate.ofEpochDay(-1L);
     <%_ } _%>
   <%_ } else if (field.fieldTypeInstant) { _%>
 
     private static final Instant <%- defaultValueName %> = Instant.ofEpochMilli(0L);
-    private static final Instant <%- updatedValueName %> = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private static final Instant <%- updatedValueName %> = Instant.ofEpochMilli(<%- creationTimestamp %>L);
     <%_ if (needsSmallerValueName) { _%>
     private static final Instant <%- smallerValueName %> = Instant.ofEpochMilli(-1L);
     <%_ } _%>
   <%_ } else if (field.fieldTypeZonedDateTime) { _%>
 
     private static final ZonedDateTime <%- defaultValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
-    private static final ZonedDateTime <%- updatedValueName %> = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+    private static final ZonedDateTime <%- updatedValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(<%- creationTimestamp %>L), ZoneOffset.UTC);
     <%_ if (needsSmallerValueName) { _%>
     private static final ZonedDateTime <%- smallerValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
     <%_ } _%>
