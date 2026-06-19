@@ -86,7 +86,7 @@ export function loadLazyTranslation(parentInjector: EnvironmentInjector): void {
     const translateLoader = inject(TranslateLoader);
     const currentLang = translateService.getCurrentLang() ?? '<%- nativeLanguage %>';
     translateLoader.getTranslation(currentLang).subscribe(translation => {
-      translateService.setTranslation(currentLang, translation);
+      translateService.setTranslation(currentLang, translation, true);
     });
   });
 }
