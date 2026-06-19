@@ -42,11 +42,6 @@ describe('Alert Error Component', () => {
   beforeEach(
     () => {
       TestBed.configureTestingModule({
-        imports: [
-<%_ if (enableTranslation) { _%>
-          
-<%_ } _%>
-        ],
         providers: [
 <%_ if (enableTranslation) { _%>
         provideTranslateService(),
