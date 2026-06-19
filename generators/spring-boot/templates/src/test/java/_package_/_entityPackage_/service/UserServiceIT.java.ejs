@@ -201,16 +201,14 @@ class UserServiceIT {
 <%_ if (!databaseTypeCassandra && !requiresDeleteAllUsers) { _%>
     private Long numberOfUsers;
 
-    @BeforeEach
-    void countUsers() {
-        numberOfUsers = userRepository.count()<%- reactorBlock %>;
-    }
-
 <%_ } _%>
     @BeforeEach
     void init() {
 <%_ if (databaseTypeCouchbase) { _%>
         mockAuthentication();
+<%_ } _%>
+<%_ if (!databaseTypeCassandra && !requiresDeleteAllUsers) { _%>
+        numberOfUsers = userRepository.count()<%- reactorBlock %>;
 <%_ } _%>
 <%_ if (!databaseTypeNo) { _%>
         user = new <%- user.persistClass %>();
