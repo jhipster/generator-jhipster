@@ -102,6 +102,7 @@ exports[`generator - app jdlStore with application and entities should match sna
 
   entities Foo, Bar
 }
+
 @ChangelogDate("20200101000100")
 entity Foo
 @ChangelogDate("20200101000200")
@@ -185,6 +186,7 @@ exports[`generator - app jdlStore with incremental changelog application and ent
 
   entities Foo, Bar
 }
+
 @ChangelogDate("20200101000100")
 entity Foo
 @ChangelogDate("20200101000200")
