@@ -150,15 +150,6 @@ export default class Navbar implements OnInit {
     loadNavbarItems('<%- remote.moduleFederationName %>').then(
       async items => {
         this.<%- remote.moduleFederationName %>EntityNavbarItems.set(items);
-    <%_ if (enableTranslation && applicationTypeGateway) { _%>
-        try {
-          const applyLazyTranslation = await loadLazyTranslation('<%- remote.moduleFederationName %>');
-          applyLazyTranslation(this.injector);
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.log('Error loading <%- remote.moduleFederationName %> translation module', error);
-        }
-    <%_ } _%>
       },
       (error: unknown) => {
         // eslint-disable-next-line no-console

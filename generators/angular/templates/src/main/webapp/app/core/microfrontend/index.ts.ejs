@@ -29,13 +29,6 @@ export const loadNavbarItems = async (service: string): Promise<NavbarItem[]> =>
     exposedModule: './entity-navbar-items',
   }).then(({ EntityNavbarItems }) => EntityNavbarItems);
 
-export const loadLazyTranslation = async (service: string): Promise<(parentInjector: EnvironmentInjector) => void> =>
-  loadRemoteModule<{ loadLazyTranslation: (parentInjector: EnvironmentInjector) => void }>({
-    type: 'module',
-    remoteEntry: `./services/${service}/remoteEntry.js`,
-    exposedModule: './translation-provider',
-  }).then(({ loadLazyTranslation: apply }) => apply);
-
 export const loadEntityRoutes = (service: string): Promise<Type<any>> =>
   loadRemoteModule<Type<any>>({
     type: 'module',
