@@ -115,32 +115,6 @@ _%>
                     <th scope="col">
                         <span>__jhiTranslateTag__('userManagement.profiles')</span>
                     </th>
-<%_ if (!databaseTypeCassandra) { _%>
-                    <th scope="col" <%- jhiPrefix %>SortBy="createdBy">
-                        <div class="d-flex">
-                            <span>__jhiTranslateTag__('userManagement.createdBy')</span>
-                            <fa-icon class="p-1" icon="sort" />
-                        </div>
-                    </th>
-                    <th scope="col" <%- jhiPrefix %>SortBy="createdDate">
-                        <div class="d-flex">
-                            <span>__jhiTranslateTag__('userManagement.createdDate')</span>
-                            <fa-icon class="p-1" icon="sort" />
-                        </div>
-                    </th>
-                    <th scope="col" <%- jhiPrefix %>SortBy="lastModifiedBy">
-                        <div class="d-flex">
-                            <span>__jhiTranslateTag__('userManagement.lastModifiedBy')</span>
-                            <fa-icon class="p-1" icon="sort" />
-                        </div>
-                    </th>
-                    <th scope="col" <%- jhiPrefix %>SortBy="lastModifiedDate">
-                        <div class="d-flex">
-                            <span>__jhiTranslateTag__('userManagement.lastModifiedDate')</span>
-                            <fa-icon class="p-1" icon="sort" />
-                        </div>
-                    </th>
-<%_ } _%>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -225,12 +199,6 @@ _%>
                         </div>
                     }
                     </td>
-<%_ if (!databaseTypeCassandra) { _%>
-                    <td>{{ <%- entityInstance %>.createdBy }}</td>
-                    <td>{{ <%- entityInstance %>.createdDate | date: 'dd/MM/yy HH:mm' }}</td>
-                    <td>{{ <%- entityInstance %>.lastModifiedBy }}</td>
-                    <td>{{ <%- entityInstance %>.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</td>
-<%_ } _%>
                     <td class="text-end">
                         <div class="btn-group">
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>

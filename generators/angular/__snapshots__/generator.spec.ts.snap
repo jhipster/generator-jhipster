@@ -389,30 +389,6 @@ export class UserManagementDetail {
                     <th scope="col">
                         <span>Profiles</span>
                     </th>
-                    <th scope="col" jhiSortBy="createdBy">
-                        <div class="d-flex">
-                            <span>Created by</span>
-                            <fa-icon class="p-1" icon="sort" />
-                        </div>
-                    </th>
-                    <th scope="col" jhiSortBy="createdDate">
-                        <div class="d-flex">
-                            <span>Created date</span>
-                            <fa-icon class="p-1" icon="sort" />
-                        </div>
-                    </th>
-                    <th scope="col" jhiSortBy="lastModifiedBy">
-                        <div class="d-flex">
-                            <span>Modified by</span>
-                            <fa-icon class="p-1" icon="sort" />
-                        </div>
-                    </th>
-                    <th scope="col" jhiSortBy="lastModifiedDate">
-                        <div class="d-flex">
-                            <span>Modified date</span>
-                            <fa-icon class="p-1" icon="sort" />
-                        </div>
-                    </th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -435,10 +411,6 @@ export class UserManagementDetail {
                         </div>
                     }
                     </td>
-                    <td>{{ userManagement.createdBy }}</td>
-                    <td>{{ userManagement.createdDate | date: 'dd/MM/yy HH:mm' }}</td>
-                    <td>{{ userManagement.lastModifiedBy }}</td>
-                    <td>{{ userManagement.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</td>
                     <td class="text-end">
                         <div class="btn-group">
                             <a [routerLink]="['/user-management', userManagement.login, 'view']"
