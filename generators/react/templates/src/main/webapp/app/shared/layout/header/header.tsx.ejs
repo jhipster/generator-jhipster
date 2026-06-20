@@ -19,7 +19,7 @@
 import './header.scss';
 
 import React, { useEffect, useRef } from 'react';
-import { Translate<% if (enableTranslation) { %>, Storage<% } %> } from 'react-jhipster';
+import { Translate<%- enableTranslation ? ', Storage' : '' %> } from 'react-jhipster';
 import {
   Navbar,
   Nav,
@@ -99,7 +99,7 @@ const Header = (props: IHeaderProps) => {
             <Home />
             {props.isAuthenticated && <EntitiesMenu />}
             {props.isAuthenticated && props.isAdmin &&
-            <AdminMenu showOpenAPI={props.isOpenAPIEnabled} <% if (devDatabaseTypeH2Any) { %>showDatabase={!props.isInProduction}<% } %> />}
+            <AdminMenu showOpenAPI={props.isOpenAPIEnabled} <%- devDatabaseTypeH2Any ? 'showDatabase={!props.isInProduction}' : '' %> />}
 <%_ if (enableTranslation) { _%>
             <LocaleMenu currentLocale={props.currentLocale} onClick={handleLocaleChange} />
 <%_ } _%>

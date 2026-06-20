@@ -40,7 +40,7 @@ const ENUM_PROP_VALUE_PATTERN = /^[A-Za-z]\w*$/;
 const METHOD_NAME_PATTERN = /^[A-Za-z][A-Za-z0-9-_]*$/;
 
 // const PASSWORD_PATTERN = /^(.+)$/;
-const REPONAME_PATTERN = /^"((?:http(s)?:\/\/)?[\w.-]+(?:\.[\w.-]+)+[\w\-._~:/?#[\]@!$&'()*+,;=]+|[a-zA-Z0-9]+)"$/;
+const REPONAME_PATTERN = /^"((?:https?:\/\/)?(?:[\w-]+\.)+[\w-]+(?:[:/?#][\w\-._~:/?#[\]@!$&'()*+,;=]*)?|[a-zA-Z0-9]+)"$/;
 const KUBERNETES_STORAGE_CLASS_NAME = /^"[A-Za-z]*"$/;
 const PATH_PATTERN = /^"([^/]+).*"$/;
 
@@ -149,7 +149,7 @@ interface JDLCstVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
 }
 
 export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDLRuntime) {
-  const parser = runtime.parser;
+  const { parser } = runtime;
   parser.parse();
   const BaseJDLCSTVisitorWithDefaults = parser.getBaseCstVisitorConstructorWithDefaults() as unknown as JDLCstVisitor<any, any>;
 

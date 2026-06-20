@@ -38,6 +38,7 @@ export type JavascriptSimpleApplicationPreparingAddedApplicationProperties = {
   nodeVersion: string;
   nodePackageManager: string;
   nodePackageManagerCommand: string;
+  nodeWebappBuildTarget: string;
 
   packageJsonNodeEngine?: boolean | string;
 
@@ -70,6 +71,7 @@ export const mutateApplicationPreparing = {
   nodeVersion: RECOMMENDED_NODE_VERSION,
   nodePackageManager: 'npm',
   nodePackageManagerCommand: ({ nodePackageManager }) => nodePackageManager,
+  nodeWebappBuildTarget: (_, { delayMarker }) => delayMarker ?? 'webapp:build',
 
   clientRootDir: (_, { delayMarker }) => delayMarker ?? '',
   clientDistDir: (_, { delayMarker }) => delayMarker ?? 'dist/',

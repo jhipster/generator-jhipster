@@ -290,12 +290,12 @@ export class <%- componentName %> implements OnInit {
   }
 
     navigateToWithComponentValues(event: SortState): void {
-      this.handleNavigation(<% if (paginationPagination) { %>this.page(), <% } %>event<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngineAny) { %>, this.currentSearch()<% } %>);
+      this.handleNavigation(<%- paginationPagination ? 'this.page(), ' : '' %>event<%- jpaMetamodelFiltering && paginationPagination ? ', this.filters.filterOptions' : '' %><%- searchEngineAny ? ', this.currentSearch()' : '' %>);
     }
 
 <%_ if (paginationPagination) { _%>
     navigateToPage(page: number): void {
-      this.handleNavigation(page, this.sortState()<% if (jpaMetamodelFiltering && paginationPagination) { %>, this.filters.filterOptions<% } %><% if (searchEngineAny) { %>, this.currentSearch()<% } %>);
+      this.handleNavigation(page, this.sortState()<%- jpaMetamodelFiltering && paginationPagination ? ', this.filters.filterOptions' : '' %><%- searchEngineAny ? ', this.currentSearch()' : '' %>);
     }
 
 <%_ } _%>
@@ -367,7 +367,7 @@ export class <%- componentName %> implements OnInit {
 <%_ if (paginationPagination) { _%>
       const pageToLoad: number = this.page();
 <%_ } _%>
-      const queryObject<% if ((jpaMetamodelFiltering && paginationPagination) || searchEngine) { %>: any <% } %> = {
+      const queryObject<%- jpaMetamodelFiltering && paginationPagination || searchEngine ? ': any ' : '' %> = {
 <%_ if (paginationPagination) { _%>
         page: pageToLoad - 1,
 <%_ } _%>
@@ -400,14 +400,12 @@ export class <%- componentName %> implements OnInit {
       this.<%- entityInstance %>Service.<%- entityInstancePlural %>Params.set(queryObject);
     }
 
-    protected handleNavigation(<% if (paginationPagination) { %>page: number, <% } %>sortState: SortState<% if (jpaMetamodelFiltering && paginationPagination) { %>, filterOptions?: IFilterOption[]<% } %><% if (searchEngineAny) { %>, currentSearch?: string<% } %>): void {
+    protected handleNavigation(<%- paginationPagination ? 'page: number, ' : '' %>sortState: SortState<%- jpaMetamodelFiltering && paginationPagination ? ', filterOptions?: IFilterOption[]' : '' %><%- searchEngineAny ? ', currentSearch?: string' : '' %>): void {
 <%_ if (paginationInfiniteScroll) { _%>
       this.links.set({});
 
 <%_ } _%>
-      const queryParamsObj
-<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>: any
-<%_ } _%> = {
+      const queryParamsObj<%- jpaMetamodelFiltering && paginationPagination ? ': any' : '' %> = {
 <%_ if (searchEngineAny) { _%>
         search: currentSearch,
 <%_ } _%>

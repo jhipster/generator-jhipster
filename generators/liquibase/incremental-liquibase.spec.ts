@@ -1040,7 +1040,7 @@ entity Customer {
     it('should create entity initial fake data', () => {
       runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/fake-data/20200101000100_entity_one.csv`]);
     });
-    it('should create entity update changelog with dropColumn and dropForeignKeyContraint', () => {
+    it('should create entity update changelog with dropColumn and dropForeignKeyConstraint', () => {
       runResult.assertFile([`${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`]);
       runResult.assertFileContent(
         `${SERVER_MAIN_RES_DIR}config/liquibase/changelog/20200102000100_updated_entity_One.xml`,

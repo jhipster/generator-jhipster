@@ -30,7 +30,8 @@
           Spring Boot configuration key.
     -->
         <loadUpdateData
-                  file="config/liquibase/fake-data/<%- changelogDate %>_entity_<%- entityTableName %>.csv"
+                  file="../fake-data/<%- changelogDate %>_entity_<%- entityTableName %>.csv"
+                  relativeToChangelogFile="true"
                   separator=";"
                   onlyUpdate="true"
                   primaryKey="id"

@@ -21,15 +21,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 <%_ if (enableTranslation) { _%>
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
 
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/shared/jhipster/error.constants';
 import { RegisterService } from './register.service';
-<%_ if (enableTranslation) { _%>
-import { TranslateDirective } from 'app/shared/language';
-import { TranslateModule } from '@ngx-translate/core';
-<%_ } _%>
 import PasswordStrengthBar from '../password/password-strength-bar/password-strength-bar';
 
 @Component({

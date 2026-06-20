@@ -28,10 +28,6 @@ import applicationProfile from './application-profile';
 import administration from 'app/modules/administration/administration.reducer';
 <%_ if (generateUserManagement) { _%>
 import userManagement from 'app/modules/administration/user-management/user-management.reducer';
-<%_ } else if (authenticationTypeOauth2) { _%>
-import userManagement from './user-management';
-<%_ } _%>
-<%_ if (generateUserManagement) { _%>
 import register from 'app/modules/account/register/register.reducer';
 import activate from 'app/modules/account/activate/activate.reducer';
 import password from 'app/modules/account/password/password.reducer';
@@ -40,6 +36,8 @@ import passwordReset from 'app/modules/account/password-reset/password-reset.red
   <%_ if (authenticationTypeSession) { _%>
 import sessions from 'app/modules/account/sessions/sessions.reducer';
   <%_ } _%>
+<%_ } else if (authenticationTypeOauth2) { _%>
+import userManagement from './user-management';
 <%_ } _%>
 <%_ if (applicationTypeMonolith) { _%>
 import entitiesReducers from 'app/entities/reducers';

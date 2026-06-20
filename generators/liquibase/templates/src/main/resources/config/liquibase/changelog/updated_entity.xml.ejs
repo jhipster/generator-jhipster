@@ -1,4 +1,4 @@
-<%# eslint-disable -%>
+<%# eslint-disable ejs-templates/prefer-single-line-tags -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -30,7 +30,7 @@
     <%_ if (field.shouldCreateContentType) { _%>
             <column name="<%- field.columnName %>_content_type" type="varchar(255)"/>
   <%_ }
-    } // End for (field of addedFields)
+      } // End for (field of addedFields)
   _%>
         </addColumn>
   <%_ for (field of addedFields) {
@@ -55,22 +55,22 @@
     </changeSet>
 <%_ } _%>
 <%_ if (addedRelationships && addedRelationships.length > 0) {
-    let hasRelationShips = false;
-    let hasJoinRelationShips = false;
-    let hasRelationshipWithFieldUpdates = false;
-    for (relationship of addedRelationships) {
+      let hasRelationShips = false;
+      let hasJoinRelationShips = false;
+      let hasRelationshipWithFieldUpdates = false;
+      for (relationship of addedRelationships) {
         if (relationship.shouldWriteRelationship) {
-            hasRelationShips = true;
+          hasRelationShips = true;
         } else if (relationship.shouldWriteJoinTable) {
-            hasJoinRelationShips = true;
+          hasJoinRelationShips = true;
         }
 
         // at least one relationship must update fields
         if (!relationshipsToRecreateForeignKeysOnly.includes(relationship)) {
-            hasRelationshipWithFieldUpdates = true;
+          hasRelationshipWithFieldUpdates = true;
         }
-    }
-    if (hasRelationShips || hasJoinRelationShips) {
+      }
+      if (hasRelationShips || hasJoinRelationShips) {
 _%>
 
     <!--
@@ -80,8 +80,8 @@ _%>
     <%_ if (hasRelationShips && hasRelationshipWithFieldUpdates) { _%>
         <addColumn tableName="<%- entity.entityTableName %>">
       <%_ for (relationship of addedRelationships) {
-                if (relationship.shouldWriteRelationship && !relationshipsToRecreateForeignKeysOnly.includes(relationship)) {
-                    for (const otherEntityPkField of relationship.otherEntity.primaryKey.fields) {
+            if (relationship.shouldWriteRelationship && !relationshipsToRecreateForeignKeysOnly.includes(relationship)) {
+              for (const otherEntityPkField of relationship.otherEntity.primaryKey.fields) {
       _%>
                 <column name="<%- relationship.columnName %>_<%- otherEntityPkField.columnName %>" type="<%- otherEntityPkField.columnType %>"/>
           <%_ } _%>
@@ -90,9 +90,9 @@ _%>
         </addColumn>
     <%_ } _%>
     <%_ const joinTableRelations = addedRelationships
-                .filter(rel => rel.shouldWriteJoinTable)
-                .filter(rel => !relationshipsToRecreateForeignKeysOnly.includes(rel));
-            if (joinTableRelations.length > 0) {
+          .filter(rel => rel.shouldWriteJoinTable)
+          .filter(rel => !relationshipsToRecreateForeignKeysOnly.includes(rel));
+        if (joinTableRelations.length > 0) {
     _%>
       <%_ for (relationship of joinTableRelations) { _%>
 
@@ -116,24 +116,24 @@ _%>
   <%_ } _%>
 <%_ } _%>
 <%_ /* ======== Start removed relationships exists ======== */
-if (removedRelationships && removedRelationships.length) {
-    let hasRelationShips = false;
-    let hasJoinRelationShips = false;
-    let hasRelationshipWithFieldUpdates = false;
-    for (relationship of removedRelationships) {
+    if (removedRelationships && removedRelationships.length) {
+      let hasRelationShips = false;
+      let hasJoinRelationShips = false;
+      let hasRelationshipWithFieldUpdates = false;
+      for (relationship of removedRelationships) {
         if (relationship.shouldWriteRelationship) {
-            hasRelationShips = true;
+          hasRelationShips = true;
         } else if (relationship.shouldWriteJoinTable) {
-            hasJoinRelationShips = true;
+          hasJoinRelationShips = true;
         }
 
         // at least one relationship must update fields
         if (!relationshipsToRecreateForeignKeysOnly.includes(relationship)) {
-            hasRelationshipWithFieldUpdates = true;
+          hasRelationshipWithFieldUpdates = true;
         }
-    }
-    /* ======== Start removed relationships should be written ======== */
-    if (hasRelationShips || hasJoinRelationShips) {
+      }
+      /* ======== Start removed relationships should be written ======== */
+      if (hasRelationShips || hasJoinRelationShips) {
 _%>
 
     <!--
@@ -142,22 +142,22 @@ _%>
     <changeSet id="<%- changelogDate %>-1-drop-relationships" author="jhipster">
     <%_ /* ======== Start hasRelationShips ======== */
         if (hasRelationShips) {
-            /* ======== Start dropForeignKeyConstraint ======== */
-            for (relationship of removedRelationships) {
-                if (relationship.shouldWriteRelationship) {
+          /* ======== Start dropForeignKeyConstraint ======== */
+          for (relationship of removedRelationships) {
+            if (relationship.shouldWriteRelationship) {
     _%>
         <dropForeignKeyConstraint baseTableName="<%- entity.entityTableName %>" constraintName="<%- this.getFKConstraintName(entity.entityTableName, relationship.relationshipName, prodDatabaseType) %>"/>
       <%_ }
-            }
+          }
 
-            if (hasRelationshipWithFieldUpdates) {
+          if (hasRelationshipWithFieldUpdates) {
             /* ======== End dropForeignKeyConstraint ======== */
       _%>
         <dropColumn tableName="<%- entity.entityTableName %>">
         <%_ /* ======== Start drop relationship columns ======== */
             for (relationship of removedRelationships) {
-                if (relationship.shouldWriteRelationship && !relationshipsToRecreateForeignKeysOnly.includes(relationship)) {
-                    for (const otherEntityPkField of relationship.otherEntity.primaryKey.fields) {
+              if (relationship.shouldWriteRelationship && !relationshipsToRecreateForeignKeysOnly.includes(relationship)) {
+                for (const otherEntityPkField of relationship.otherEntity.primaryKey.fields) {
         _%>
             <column name="<%- relationship.columnName %>_<%- otherEntityPkField.columnName %>"/>
             <%_ } _%>
@@ -172,7 +172,7 @@ _%>
     _%>
     <%_ /* ======== Start for joinTable ======== */
         for (relationship of removedRelationships) {
-            if (relationship.shouldWriteJoinTable) {
+          if (relationship.shouldWriteJoinTable) {
     _%>
         <dropTable cascadeConstraints="true" tableName="<%- relationship.joinTable.name %>"/>
     <%_ }
@@ -182,8 +182,8 @@ _%>
     </changeSet>
 <%_ }
     /* ======== End removed relationships should be written ======== */
-}
-/* ======== End removed relationships exists ======== */
+    }
+    /* ======== End removed relationships exists ======== */
 _%>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->

@@ -61,7 +61,6 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
       preparing({ applicationDefaults }) {
         applicationDefaults(mutateApplication, {
           jwtSecretKey: undefined,
-          gatewayServerPort: undefined,
         });
       },
       syncUserWithIdp({ application }) {

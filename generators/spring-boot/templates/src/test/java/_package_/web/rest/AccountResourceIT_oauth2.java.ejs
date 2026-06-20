@@ -130,7 +130,7 @@ class AccountResourceIT {
 <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
 <%_ } _%>
-    void testGetExistingAccount() <% if (!reactive) { %>throws Exception <% } %>{
+    void testGetExistingAccount() <%- reactive ? '' : 'throws Exception ' %>{
 <%_ if (reactive) { _%>
         webTestClient
             .mutateWith(mockAuthentication(registerAuthenticationToken(authorizedClientService, clientRegistration, authenticationToken(claims))))
@@ -164,7 +164,7 @@ class AccountResourceIT {
     }
 
     @Test
-    void testGetUnknownAccount() <% if (!reactive) { %>throws Exception <% } %>{
+    void testGetUnknownAccount() <%- reactive ? '' : 'throws Exception ' %>{
 <%_ if (reactive) { _%>
         webTestClient.get().uri("/api/account")
             .accept(MediaType.APPLICATION_JSON)
@@ -179,7 +179,7 @@ class AccountResourceIT {
 
     @Test
     @WithUnauthenticatedMockUser
-    void testNonAuthenticatedUser() <% if (!reactive) { %>throws Exception <% } %>{
+    void testNonAuthenticatedUser() <%- reactive ? '' : 'throws Exception ' %>{
 <%_ if (reactive) { _%>
         webTestClient.get().uri("/api/authenticate")
             .exchange()
@@ -192,7 +192,7 @@ class AccountResourceIT {
 
     @Test
     @WithMockUser(TEST_USER_LOGIN)
-    void testAuthenticatedUser() <% if (!reactive) { %>throws Exception <% } %>{
+    void testAuthenticatedUser() <%- reactive ? '' : 'throws Exception ' %>{
 <%_ if (reactive) { _%>
         webTestClient
             .get().uri("/api/authenticate")

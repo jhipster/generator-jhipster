@@ -36,9 +36,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.oauth2.client.<% if (reactive) { %>Reactive<% } %>OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.<%- reactive ? 'Reactive' : '' %>OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.<% if (reactive) { %>Reactive<% } %>ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.<%- reactive ? 'Reactive' : '' %>ClientRegistrationRepository;
 <%_ if (reactive) { _%>
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -61,10 +61,10 @@ import java.util.Map;
 class LogoutResourceIT {
 
     @Autowired
-    private <% if (reactive) { %>Reactive<% } %>ClientRegistrationRepository registrations;
+    private <%- reactive ? 'Reactive' : '' %>ClientRegistrationRepository registrations;
 
     @Autowired
-    private <% if (!reactive) { %>Web<% } %>ApplicationContext context;
+    private <%- reactive ? '' : 'Web' %>ApplicationContext context;
 
     @Autowired
     private <%- reactivePrefix %>OAuth2AuthorizedClientService authorizedClientService;
@@ -81,7 +81,7 @@ class LogoutResourceIT {
     private Map<String, Object> claims;
 
     @BeforeEach
-    void before() <% if (!reactive) { %>throws Exception <% } %>{
+    void before() <%- reactive ? '' : 'throws Exception ' %>{
         claims = new HashMap<>();
         claims.put("groups", List.of(AuthoritiesConstants.USER));
         claims.put("sub", 123);
@@ -103,7 +103,7 @@ class LogoutResourceIT {
     }
 
     @Test
-    void getLogoutInformation() <% if (!reactive) { %>throws Exception <% } %>{
+    void getLogoutInformation() <%- reactive ? '' : 'throws Exception ' %>{
         final String ORIGIN_URL = "http://localhost:8080";
 <%_ if (reactive) { _%>
         String logoutUrl = this.registrations.findByRegistrationId("oidc")

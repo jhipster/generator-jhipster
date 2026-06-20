@@ -20,12 +20,9 @@ import './home.scss';
 
 <%_ if (authenticationTypeOauth2) { _%>
 import React, { useEffect } from 'react';
-<%_ } else { _%>
-import React from 'react';
-<%_ } _%>
-<%_ if (authenticationTypeOauth2) { _%>
 import { useLocation, useNavigate } from 'react-router';
 <%_ } else { _%>
+import React from 'react';
 import { Link } from 'react-router';
 <%_ } _%>
 import { Translate } from 'react-jhipster';
@@ -70,7 +67,7 @@ export const Home = () => {
             <div>
               <Alert variant="warning">
                 <Translate contentKey="global.messages.info.authenticated.prefix">If you want to </Translate>
-                <% if (!enableTranslation) { %><span>&nbsp;</span><% } %>
+                <%- enableTranslation ? '' : '<span>&nbsp;</span>' %>
 <%_ if (authenticationTypeOauth2) { _%>
                 <a
                   className="alert-link"

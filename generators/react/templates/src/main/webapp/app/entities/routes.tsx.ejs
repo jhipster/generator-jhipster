@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import React from 'react';
-import { Route } from 'react-router';<% if (!hasNonBuiltInEntity) { %>// eslint-disable-line<% } %>
+import { Route } from 'react-router';<%- hasNonBuiltInEntity ? '' : '// eslint-disable-line' %>
 
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 
@@ -25,8 +25,6 @@ import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 import { ReducersMapObject, combineReducers } from '@reduxjs/toolkit';
 
 import getStore from 'app/config/store';
-<%_ } _%>
-<%_ if (microfrontend || applicationTypeGateway) { _%>
 
 import entitiesReducers from './reducers';
 <%_ } _%>

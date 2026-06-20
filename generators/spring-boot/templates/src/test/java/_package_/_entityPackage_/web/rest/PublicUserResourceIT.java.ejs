@@ -142,21 +142,15 @@ class PublicUserResourceIT {
 <%_ if (!databaseTypeCassandra && !requiresDeleteAllUsers) { _%>
     private Long numberOfUsers;
 
-    @BeforeEach
-    void countUsers() {
-        numberOfUsers = userRepository.count()<%- reactorBlock %>;
-    }
-
-<%_ } _%>
-<%_ if (reactive && authenticationUsesCsrf) { _%>
-    @BeforeEach
-    void setupCsrf() {
-        webTestClient = webTestClient.mutateWith(csrf());
-    }
-
 <%_ } _%>
     @BeforeEach
     void initTest() {
+<%_ if (!databaseTypeCassandra && !requiresDeleteAllUsers) { _%>
+        numberOfUsers = userRepository.count()<%- reactorBlock %>;
+<%_ } _%>
+<%_ if (reactive && authenticationUsesCsrf) { _%>
+        webTestClient = webTestClient.mutateWith(csrf());
+<%_ } _%>
         user = UserResourceIT.initTestUser();
     }
 
@@ -186,9 +180,9 @@ class PublicUserResourceIT {
 <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
 <%_ } _%>
-    void getAllPublicUsers()<% if (!reactive) { %> throws Exception<% } %> {
+    void getAllPublicUsers()<%- reactive ? '' : ' throws Exception' %> {
         // Initialize the database
-        userRepository.<% if (databaseTypeSql && reactive && authenticationTypeOauth2) { %>create<% } else { %>save<% } %><% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<%- databaseTypeSql && reactive && authenticationTypeOauth2 ? 'create' : 'save' %><%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
 
         // Get all the users
 <%_ if (reactive) { _%>
@@ -209,7 +203,7 @@ class PublicUserResourceIT {
   <%_ } _%>
             .jsonPath("$.[*].langKey").doesNotHaveJsonPath();
 <%_ } else { _%>
-        restUserMockMvc.perform(get("/api/users<% if (databaseTypeSql) { %>?sort=id,desc<% } %>")
+        restUserMockMvc.perform(get("/api/users<%- databaseTypeSql ? '?sort=id,desc' : '' %>")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -233,7 +227,7 @@ class PublicUserResourceIT {
   <%_ } _%>
     void getAllUsersSortedByParameters() throws Exception {
         // Initialize the database
-        userRepository.<% if (reactive) { %>save<% } else { %>saveAndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<%- reactive ? 'save' : 'saveAndFlush' %>(user)<%- reactive ? '.block()' : '' %>;
 
   <%_ if (reactive) { _%>
             webTestClient.get().uri("/api/users?sort=resetKey,desc").accept(MediaType.APPLICATION_JSON).exchange().expectStatus().isBadRequest();

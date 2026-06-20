@@ -59,7 +59,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should have options defaults set', () => {
-      const generator = result.generator;
+      const { generator } = result;
       expect(generator.generateEntities).toBe(true);
       expect(generator.generateEnums).toBe(true);
       expect(generator.useJakartaValidation).toBe(true);
@@ -125,7 +125,7 @@ describe(`generator - ${generator}`, () => {
     });
 
     it('should not override custom values', () => {
-      const generator = result.generator;
+      const { generator } = result;
       expect(generator.generateEntities).toBe(false);
       expect(generator.generateEnums).toBe(false);
       expect(generator.useJakartaValidation).toBe(false);

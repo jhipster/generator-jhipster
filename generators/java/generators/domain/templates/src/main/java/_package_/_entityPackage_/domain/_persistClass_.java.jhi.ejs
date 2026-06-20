@@ -122,7 +122,7 @@ public class <%- persistClass %> <&- fragments.extendsSection() -&>implements Se
 <%- field.fieldJavadoc %>
   <%_ } _%>
   <%_ if (!dtoMapstruct && field.fieldApiDescription) { _%>
-    @Schema(description = "<%- field.fieldApiDescription %>"<% if (field.fieldValidationRequired) { %>, required = true<% } %>)
+    @Schema(description = "<%- field.fieldApiDescription %>"<%- field.fieldValidationRequired ? ', required = true' : '' %>)
   <%_ } _%>
 <&- fragments.field<%- field.fieldNameCapitalized %>AnnotationSection() -&>
     private <%- field.javaFieldType %> <%- field.fieldName %>;
@@ -140,7 +140,7 @@ public class <%- persistClass %> <&- fragments.extendsSection() -&>implements Se
 <%_ for (relationship of relationships) { _%>
   <%_ if (relationship.relationshipApiDescription) { _%>
 <%- relationship.relationshipJavadoc %>
-    <%_ if (!dtoMapstruct && relationship.relationshipApiDescription) { _%>
+    <%_ if (!dtoMapstruct) { _%>
     @Schema(description = "<%- relationship.relationshipApiDescription %>")
     <%_ } _%>
   <%_ } _%>
@@ -364,7 +364,7 @@ public class <%- persistClass %> <&- fragments.extendsSection() -&>implements Se
 <%_ } _%>
 <%_ for (const field of fields.filter(field => !field.id && !field.transient)) { _%>
   <%_ const isNumeric = field.fieldTypeNumeric; _%>
-            ", <%- field.fieldName %>=<% if (!isNumeric) { %>'<% } %>" + <%- field.propertySupplierName %>() <% if (!isNumeric) { %>+ "'" <% } %>+
+            ", <%- field.fieldName %>=<%- isNumeric ? '' : '\'' %>" + <%- field.propertySupplierName %>() <%- isNumeric ? '' : '+ "\'" ' %>+
   <%_ if (field.fieldWithContentType) { _%>
             ", <%- field.fieldName %>ContentType='" + <%- field.propertySupplierName %>ContentType() + "'" +
   <%_ } _%>

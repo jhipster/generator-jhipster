@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 // eslint-disable @typescript-eslint/no-unsafe-return
-import { Type } from '@angular/core';
+import { EnvironmentInjector, Type } from '@angular/core';
 import { loadRemoteModule } from '@angular-architects/module-federation-runtime';
 
 import NavbarItem from 'app/layouts/navbar/navbar-item.model';
@@ -29,12 +29,12 @@ export const loadNavbarItems = async (service: string): Promise<NavbarItem[]> =>
     exposedModule: './entity-navbar-items',
   }).then(({ EntityNavbarItems }) => EntityNavbarItems);
 
-export const loadTranslationModule = async (service: string): Promise<Type<any>> =>
-  loadRemoteModule<{ LazyTranslationModule: Type<any> }>({
+export const loadLazyTranslation = async (service: string): Promise<(parentInjector: EnvironmentInjector) => void> =>
+  loadRemoteModule<{ loadLazyTranslation: (parentInjector: EnvironmentInjector) => void }>({
     type: 'module',
     remoteEntry: `./services/${service}/remoteEntry.js`,
-    exposedModule: './translation-module',
-  }).then(({ LazyTranslationModule }) => LazyTranslationModule);
+    exposedModule: './translation-provider',
+  }).then(({ loadLazyTranslation: apply }) => apply);
 
 export const loadEntityRoutes = (service: string): Promise<Type<any>> =>
   loadRemoteModule<Type<any>>({

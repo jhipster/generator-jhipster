@@ -67,12 +67,12 @@ describe(`generator - ${generator}`, () => {
 
       it('should compose with entities', () => {
         runResult.assertGeneratorComposedOnce(MOCKED_ENTITIES);
-        const calls = runResult.getGeneratorMock(MOCKED_ENTITIES).calls;
+        const { calls } = runResult.getGeneratorMock(MOCKED_ENTITIES);
         expect(calls.at(-1)?.arguments).toStrictEqual([['Foo'], expect.any(Object)]);
       });
 
       it('should pass commandName entities to entities generator', () => {
-        const calls = runResult.getGeneratorMock(MOCKED_ENTITIES).calls;
+        const { calls } = runResult.getGeneratorMock(MOCKED_ENTITIES);
         expect(calls.at(-1)?.arguments[1]).toMatchObject({ commandName: 'entities' });
       });
 
@@ -96,12 +96,12 @@ describe(`generator - ${generator}`, () => {
 
       it('should compose with entities', () => {
         runResult.assertGeneratorComposedOnce(MOCKED_ENTITIES);
-        const calls = runResult.getGeneratorMock(MOCKED_ENTITIES).calls;
+        const { calls } = runResult.getGeneratorMock(MOCKED_ENTITIES);
         expect(calls.at(-1)?.arguments).toStrictEqual([['Foo'], expect.any(Object)]);
       });
 
       it('should pass commandName entities to entities generator', () => {
-        const calls = runResult.getGeneratorMock(MOCKED_ENTITIES).calls;
+        const { calls } = runResult.getGeneratorMock(MOCKED_ENTITIES);
         expect(calls.at(-1)?.arguments[1]).toMatchObject({ commandName: 'entities' });
       });
 
@@ -187,7 +187,7 @@ describe(`generator - ${generator}`, () => {
       });
       it('should compose with app', () => {
         runResult.assertGeneratorComposedOnce(MOCKED_APP);
-        const calls = runResult.getGeneratorMock(MOCKED_APP).calls;
+        const { calls } = runResult.getGeneratorMock(MOCKED_APP);
         expect(calls.at(-1)?.arguments).toStrictEqual([[], expect.not.objectContaining({ applicationWithEntities: expect.any(Object) })]);
       });
       it('should write expected files', () => {
@@ -225,7 +225,7 @@ describe(`generator - ${generator}`, () => {
       });
       it('should compose with workspaces', () => {
         runResult.assertGeneratorComposedOnce(MOCKED_WORKSPACES);
-        const calls = runResult.getGeneratorMock(MOCKED_WORKSPACES).calls;
+        const { calls } = runResult.getGeneratorMock(MOCKED_WORKSPACES);
         expect(calls.at(-1)?.arguments).toStrictEqual([
           [],
           expect.objectContaining({ workspacesFolders: ['jhipster', 'jhipster2'], generateApplications: expect.any(Function) }),
@@ -246,7 +246,7 @@ describe(`generator - ${generator}`, () => {
 
       it('should compose with entities', () => {
         expect(runResult.getGeneratorComposeCount(MOCKED_ENTITIES)).toBe(2);
-        const calls = runResult.getGeneratorMock(MOCKED_ENTITIES).calls;
+        const { calls } = runResult.getGeneratorMock(MOCKED_ENTITIES);
         expect(calls.at(-1)?.arguments).toStrictEqual([['Bar'], expect.any(Object)]);
       });
       it('should not compose with app', () => {

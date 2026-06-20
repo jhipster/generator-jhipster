@@ -44,14 +44,14 @@
             <table class="table table-striped" aria-describedby="<%- entityInstancePlural %>">
                 <thead>
                 <tr>
-                    <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%- primaryKey.name %>')"<% } %>><span>{{ t$('global.field.id') }}</span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator><% } %></th>
+                    <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%- primaryKey.name %>')"<% } %>><span>{{ t$('global.field.id') }}</span><%- paginationNo ? '' : ' <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="\'id\'"></jhi-sort-indicator>' %></th>
 <%_ for (field of fields.filter(field => !field.id)) { _%>
                     <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%- field.fieldName %>')"<% } %>><span>{{ t$('<%- `${i18nKeyPrefix}.${field.fieldName}` %>') }}</span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%- field.fieldName %>'"></jhi-sort-indicator><% } %></th>
 <%_ } _%>
 <%_ for (relationship of relationships) { _%>
   <%_ if (relationship.persistableRelationship && (paginationNo || !relationship.collection)) { _%>
     <%_ const fieldName = `.${relationship.otherEntityField}`; _%>
-                    <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%- relationship.relationshipName + (fieldName) %>')"<% } %>><span>{{ t$('<%- `${i18nKeyPrefix}.${relationship.relationshipName}` %>') }}</span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%- relationship.relationshipName + (fieldName) %>'"></jhi-sort-indicator><% } %></th>
+                    <th scope="col"<% if (!paginationNo) { %> @click="changeOrder('<%- relationship.relationshipName + fieldName %>')"<% } %>><span>{{ t$('<%- `${i18nKeyPrefix}.${relationship.relationshipName}` %>') }}</span><% if (!paginationNo) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'<%- relationship.relationshipName + fieldName %>'"></jhi-sort-indicator><% } %></th>
   <%_ } _%>
 <%_ } _%>
                     <th scope="col"></th>

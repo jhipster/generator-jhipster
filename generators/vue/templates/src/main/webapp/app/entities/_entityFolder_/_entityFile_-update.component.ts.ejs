@@ -8,7 +8,7 @@ import { useVuelidate } from '@vuelidate/core'
 <%_ if (anyFieldIsBlobDerived) { _%>
 import useDataUtils from '@/shared/data/data-utils.service';
 <%_ } _%>
-import { useValidation<% if (anyFieldIsTimeDerived) { %>, useDateFormat<% } %> } from '@/shared/composables';
+import { useValidation<%- anyFieldIsTimeDerived ? ', useDateFormat' : '' %> } from '@/shared/composables';
 import { useAlertService } from '@/shared/alert/alert.service';
 
 <%_ const allRelationshipsThatNeedSelectOptions = Object
@@ -187,7 +187,7 @@ export default defineComponent({
 <%_ if (enableTranslation) { _%>
             this.t$('<%- i18nAlertHeaderPrefix %>.updated', { 'param' : param.<%- primaryKey.name %> })
 <%_ } else { _%>
-            'A <%- entityAngularName %> is updated with identifier ' + param.<%- primaryKey.name %>
+            `A <%- entityAngularName %> is updated with identifier ${param.<%- primaryKey.name %>}`
 <%_ } _%>
           );
         }).catch(error => {
@@ -202,7 +202,7 @@ export default defineComponent({
 <%_ if (enableTranslation) { _%>
             this.t$('<%- i18nAlertHeaderPrefix %>.created', { param: param.<%- primaryKey.name %> }).toString()
 <%_ } else { _%>
-            'A <%- entityAngularName %> is created with identifier ' + param.<%- primaryKey.name %>
+            `A <%- entityAngularName %> is created with identifier ${param.<%- primaryKey.name %>}`
 <%_ } _%>
           );
         }).catch(error => {

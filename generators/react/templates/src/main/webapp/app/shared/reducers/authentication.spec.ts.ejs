@@ -23,6 +23,9 @@ import { Storage } from 'react-jhipster';
 <%_ } _%>
 import { configureStore, createReducer } from '@reduxjs/toolkit';
 
+<%_ if (authenticationTypeJwt) { _%>
+import { AUTHENTICATION_TOKEN_KEY } from 'app/shared/jhipster/constants';
+<%_ } _%>
 import authentication, {
   getSession,
   getAccount,
@@ -280,7 +283,7 @@ describe('Authentication reducer tests', () => {
       });
     });
     it('clears the session token on clearAuthToken', async () => {
-      const AUTH_TOKEN_KEY = '<%- jhiPrefixDashed %>-authenticationToken';
+      const AUTH_TOKEN_KEY = AUTHENTICATION_TOKEN_KEY;
       const loginResponse = { headers: { authorization: 'Bearer TestToken' } };
       axios.post = vi.fn().mockResolvedValue(loginResponse);
 
@@ -292,7 +295,7 @@ describe('Authentication reducer tests', () => {
       expect(Storage.local.get(AUTH_TOKEN_KEY)).toBe(undefined);
     });
     it('clears the local storage token on clearAuthToken', async () => {
-      const AUTH_TOKEN_KEY = '<%- jhiPrefixDashed %>-authenticationToken';
+      const AUTH_TOKEN_KEY = AUTHENTICATION_TOKEN_KEY;
       const loginResponse = { headers: { authorization: 'Bearer TestToken' } };
       axios.post = vi.fn().mockResolvedValue(loginResponse);
 

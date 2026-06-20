@@ -198,7 +198,7 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
         );
         for (const app of applications) {
           const originalImageName = app.baseName.toLowerCase();
-          const targetImageName = app.targetImageName;
+          const { targetImageName } = app;
           if (originalImageName !== targetImageName) {
             this.log.verboseInfo(`  ${chalk.cyan(`docker image tag ${originalImageName} ${targetImageName}`)}`);
           }

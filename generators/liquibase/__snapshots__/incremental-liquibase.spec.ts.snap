@@ -173,7 +173,8 @@ exports[`generator - app - --incremental-changelog when adding a field with cons
           Spring Boot configuration key.
     -->
         <loadUpdateData
-                  file="config/liquibase/fake-data/20200102000100_entity_customer.csv"
+                  file="../fake-data/20200102000100_entity_customer.csv"
+                  relativeToChangelogFile="true"
                   separator=";"
                   onlyUpdate="true"
                   primaryKey="id"
@@ -320,7 +321,8 @@ exports[`generator - app - --incremental-changelog when adding a field without c
           Spring Boot configuration key.
     -->
         <loadUpdateData
-                  file="config/liquibase/fake-data/20200102000100_entity_customer.csv"
+                  file="../fake-data/20200102000100_entity_customer.csv"
+                  relativeToChangelogFile="true"
                   separator=";"
                   onlyUpdate="true"
                   primaryKey="id"
@@ -507,7 +509,8 @@ exports[`generator - app - --incremental-changelog when adding a many-to-many re
           Spring Boot configuration key.
     -->
         <loadUpdateData
-                  file="config/liquibase/fake-data/20200102000100_entity_one.csv"
+                  file="../fake-data/20200102000100_entity_one.csv"
+                  relativeToChangelogFile="true"
                   separator=";"
                   onlyUpdate="true"
                   primaryKey="id"
@@ -689,7 +692,8 @@ exports[`generator - app - --incremental-changelog when adding a relationship sh
           Spring Boot configuration key.
     -->
         <loadUpdateData
-                  file="config/liquibase/fake-data/20200102000100_entity_one.csv"
+                  file="../fake-data/20200102000100_entity_one.csv"
+                  relativeToChangelogFile="true"
                   separator=";"
                   onlyUpdate="true"
                   primaryKey="id"
@@ -865,7 +869,8 @@ exports[`generator - app - --incremental-changelog when adding a relationship wi
           Spring Boot configuration key.
     -->
         <loadUpdateData
-                  file="config/liquibase/fake-data/20200102000100_entity_one.csv"
+                  file="../fake-data/20200102000100_entity_one.csv"
+                  relativeToChangelogFile="true"
                   separator=";"
                   onlyUpdate="true"
                   primaryKey="id"
@@ -1228,7 +1233,8 @@ exports[`generator - app - --incremental-changelog when creating entities with d
     -->
     <changeSet id="20200101000100-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/20200101000100_entity_one.csv"
+                  file="../fake-data/20200101000100_entity_one.csv"
+                  relativeToChangelogFile="true"
                   separator=";"
                   tableName="one"
                   usePreparedStatements="true">
@@ -1282,7 +1288,8 @@ exports[`generator - app - --incremental-changelog when creating entities with d
     -->
     <changeSet id="20200101000200-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/20200101000200_entity_two.csv"
+                  file="../fake-data/20200101000200_entity_two.csv"
+                  relativeToChangelogFile="true"
                   separator=";"
                   tableName="two"
                   usePreparedStatements="true">
@@ -1782,7 +1789,8 @@ exports[`generator - app - --incremental-changelog when initially creating an ap
     -->
     <changeSet id="20200101000100-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/20200101000100_entity_one.csv"
+                  file="../fake-data/20200101000100_entity_one.csv"
+                  relativeToChangelogFile="true"
                   separator=";"
                   tableName="one"
                   usePreparedStatements="true">
@@ -1857,7 +1865,8 @@ exports[`generator - app - --incremental-changelog when initially creating an ap
     -->
     <changeSet id="20200101000200-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/20200101000200_entity_another.csv"
+                  file="../fake-data/20200101000200_entity_another.csv"
+                  relativeToChangelogFile="true"
                   separator=";"
                   tableName="another"
                   usePreparedStatements="true">
@@ -1950,7 +1959,8 @@ exports[`generator - app - --incremental-changelog when modifying a relationship
           Spring Boot configuration key.
     -->
         <loadUpdateData
-                  file="config/liquibase/fake-data/20200103000100_entity_one.csv"
+                  file="../fake-data/20200103000100_entity_one.csv"
+                  relativeToChangelogFile="true"
                   separator=";"
                   onlyUpdate="true"
                   primaryKey="id"
@@ -2052,7 +2062,8 @@ exports[`generator - app - --incremental-changelog when modifying an existing re
           Spring Boot configuration key.
     -->
         <loadUpdateData
-                  file="config/liquibase/fake-data/20200103000100_entity_one.csv"
+                  file="../fake-data/20200103000100_entity_one.csv"
+                  relativeToChangelogFile="true"
                   separator=";"
                   onlyUpdate="true"
                   primaryKey="id"
@@ -2116,7 +2127,8 @@ exports[`generator - app - --incremental-changelog when modifying default values
           Spring Boot configuration key.
     -->
         <loadUpdateData
-                  file="config/liquibase/fake-data/20200102000100_entity_one.csv"
+                  file="../fake-data/20200102000100_entity_one.csv"
+                  relativeToChangelogFile="true"
                   separator=";"
                   onlyUpdate="true"
                   primaryKey="id"
@@ -2184,7 +2196,8 @@ exports[`generator - app - --incremental-changelog when modifying default values
           Spring Boot configuration key.
     -->
         <loadUpdateData
-                  file="config/liquibase/fake-data/20200102000200_entity_two.csv"
+                  file="../fake-data/20200102000200_entity_two.csv"
+                  relativeToChangelogFile="true"
                   separator=";"
                   onlyUpdate="true"
                   primaryKey="id"
@@ -2259,7 +2272,8 @@ exports[`generator - app - --incremental-changelog when modifying default values
           Spring Boot configuration key.
     -->
         <loadUpdateData
-                  file="config/liquibase/fake-data/20200102000300_entity_one.csv"
+                  file="../fake-data/20200102000300_entity_one.csv"
+                  relativeToChangelogFile="true"
                   separator=";"
                   onlyUpdate="true"
                   primaryKey="id"
@@ -2351,7 +2365,8 @@ exports[`generator - app - --incremental-changelog when modifying default values
           Spring Boot configuration key.
     -->
         <loadUpdateData
-                  file="config/liquibase/fake-data/20200102000400_entity_two.csv"
+                  file="../fake-data/20200102000400_entity_two.csv"
+                  relativeToChangelogFile="true"
                   separator=";"
                   onlyUpdate="true"
                   primaryKey="id"
@@ -2610,7 +2625,8 @@ exports[`generator - app - --incremental-changelog when modifying fields and rel
           Spring Boot configuration key.
     -->
         <loadUpdateData
-                  file="config/liquibase/fake-data/20200102000100_entity_one.csv"
+                  file="../fake-data/20200102000100_entity_one.csv"
+                  relativeToChangelogFile="true"
                   separator=";"
                   onlyUpdate="true"
                   primaryKey="id"
@@ -2678,7 +2694,8 @@ exports[`generator - app - --incremental-changelog when modifying fields and rel
           Spring Boot configuration key.
     -->
         <loadUpdateData
-                  file="config/liquibase/fake-data/20200102000200_entity_another.csv"
+                  file="../fake-data/20200102000200_entity_another.csv"
+                  relativeToChangelogFile="true"
                   separator=";"
                   onlyUpdate="true"
                   primaryKey="id"
@@ -2763,7 +2780,8 @@ exports[`generator - app - --incremental-changelog when modifying fields and rel
           Spring Boot configuration key.
     -->
         <loadUpdateData
-                  file="config/liquibase/fake-data/20200102000400_entity_another.csv"
+                  file="../fake-data/20200102000400_entity_another.csv"
+                  relativeToChangelogFile="true"
                   separator=";"
                   onlyUpdate="true"
                   primaryKey="id"

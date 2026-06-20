@@ -30,7 +30,7 @@ import { GarbageCollector } from 'app/admin/metrics/metrics.model';
   selector: '<%- jhiPrefixDashed %>-metrics-garbagecollector',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './metrics-garbagecollector.html',
-  imports: [NgbProgressbar, DecimalPipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
+  imports: [NgbProgressbar, DecimalPipe<%- enableTranslation ? ', TranslateDirective, TranslateModule' : '' %>],
 })
 export class MetricsGarbageCollector {
   /**

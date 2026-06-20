@@ -61,9 +61,7 @@ import java.util.stream.Collectors;
 <&_ if (fragment.field<%- field.fieldNameCapitalized %>AnnotationSection) { -&>
   <%_ if (field.id && !embedded) { _%>
     @Id
-    <%_ if (field.id && !embedded) { _%>
     @GeneratedValue(strategy = UNIQUE, delimiter = ID_DELIMITER)
-    <%_ } _%>
   <%_ } else { _%>
     @Field
   <%_ } _%>
@@ -89,10 +87,8 @@ import java.util.stream.Collectors;
     <%_ } _%>
   <%_ } else if (relationship.relationshipManyToMany) { _%>
     @N1qlJoin(on = "lks.<%- relationship.relationshipFieldNamePlural %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
-  <%_ } else { _%>
-    <%_ if (!relationship.otherEntity.embedded) { _%>
+  <%_ } else if (!relationship.otherEntity.embedded) { _%>
     @N1qlJoin(on = "lks.<%- relationship.relationshipFieldName %>=meta(rks).id", fetchType = FetchType.IMMEDIATE)
-    <%_ } _%>
   <%_ } _%>
 
 <&_ } -&>
@@ -192,7 +188,7 @@ import java.util.stream.Collectors;
 <&_ if (fragment.relationship<%- relationship.relationshipNameCapitalized %>CustomRemoveSection) { -&>
     public <%- persistClass %> remove<%- relationship.relationshipNameCapitalized %>(<%- relationship.otherEntity.persistClass %> <%- relationship.otherEntityName %>) {
         this.<%- relationship.relationshipFieldNamePlural %>.remove(<%- relationship.otherEntityName %>);
-  <%_ if (!relationship.otherEntity.embedded || (embedded && relationship.ownerSide)) { _%>
+  <%_ if (!relationship.otherEntity.embedded || embedded && relationship.ownerSide) { _%>
     <%_ if (!relationship.otherEntity.embedded) { _%>
         this.<%- relationship.relationshipFieldName %>Ids.remove(<%- relationship.otherEntityName %>.<%- relationship.otherEntity.primaryKey.propertySupplierName %>());
     <%_ } _%>

@@ -79,7 +79,7 @@ class AccountResourceIT {
 <%_ if (!authenticationTypeJwt) { _%>
     @WithMockUser(username = TEST_USER_LOGIN, authorities = AuthoritiesConstants.ADMIN)
 <%_ } _%>
-    void testGetExistingAccount() <% if (!reactive) { %>throws Exception <% } %>{
+    void testGetExistingAccount() <%- reactive ? '' : 'throws Exception ' %>{
 <%_ if (reactive) { _%>
         accountWebTestClient.get().uri("/api/account")
             .accept(MediaType.APPLICATION_JSON)
@@ -109,7 +109,7 @@ class AccountResourceIT {
 
     @Test
     @WithUnauthenticatedMockUser
-    void testNonAuthenticatedUser() <% if (!reactive) { %>throws Exception <% } %>{
+    void testNonAuthenticatedUser() <%- reactive ? '' : 'throws Exception ' %>{
 <%_ if (reactive) { _%>
         accountWebTestClient.get().uri("/api/authenticate")
             .exchange()
@@ -122,7 +122,7 @@ class AccountResourceIT {
 
     @Test
     @WithMockUser(TEST_USER_LOGIN)
-    void testAuthenticatedUser() <% if (!reactive) { %>throws Exception <% } %>{
+    void testAuthenticatedUser() <%- reactive ? '' : 'throws Exception ' %>{
 <%_ if (reactive) { _%>
         accountWebTestClient
             .get().uri("/api/authenticate")

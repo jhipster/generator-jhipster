@@ -47,7 +47,7 @@ describe('jdl - Grammar tests', () => {
       before(() => {
         const content = parseFromContent(`MIN = 42
 MAX = 43`);
-        constants = content.constants;
+        ({ constants } = content);
       });
 
       it('should parse them', () => {
@@ -64,7 +64,7 @@ MAX = 43`);
 
       before(() => {
         const content = parseFromContent('MIN = 42.42');
-        constants = content.constants;
+        ({ constants } = content);
       });
 
       it('should parse them', () => {
@@ -214,7 +214,7 @@ application {
   }
 }
 `);
-        applications = content.applications;
+        ({ applications } = content);
       });
 
       it('should parse them', () => {
@@ -1614,7 +1614,7 @@ entity A {
   D to E with builtInEntity
 }
 `);
-          relationships = content.relationships;
+          ({ relationships } = content);
         });
 
         it('should add them', () => {
@@ -1695,7 +1695,7 @@ entity A {
 
         before(() => {
           const content = parseFromContent('relationship OneToOne { @id A to B }');
-          relationships = content.relationships;
+          ({ relationships } = content);
         });
 
         it('should parse them', () => {
@@ -1733,7 +1733,7 @@ entity A {
 
         before(() => {
           const content = parseFromContent('relationship OneToOne { A to @id B }');
-          relationships = content.relationships;
+          ({ relationships } = content);
         });
 
         it('should parse them', () => {
@@ -1771,7 +1771,7 @@ entity A {
 
         before(() => {
           const content = parseFromContent('relationship OneToOne { @id A to @id B }');
-          relationships = content.relationships;
+          ({ relationships } = content);
         });
 
         it('should parse them', () => {

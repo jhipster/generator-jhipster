@@ -333,6 +333,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             ],
             `${application.clientSrcDir}app/config/uib-pagination.config.ts`,
           ],
+          '9.1.1': [[application.enableTranslation, `${application.clientSrcDir}app/shared/language/translation.module.ts`]],
           '8.0.0-beta.1': [
             `${application.clientRootDir}jest.js`,
             `${application.clientSrcDir}app/shared/shared.module.ts.ejs`,

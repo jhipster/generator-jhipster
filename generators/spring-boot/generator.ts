@@ -464,7 +464,7 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
           const classProperties = Object.entries(classStructure).map(([name, type]) => ({
             name,
             type: Array.isArray(type) ? type[0] : type,
-            defaultVaue: Array.isArray(type) ? ` = ${type[1]}` : '',
+            defaultValue: Array.isArray(type) ? ` = ${type[1]}` : '',
             beanName: javaBeanCase(name),
           }));
           return source.addApplicationPropertiesContent!({
@@ -475,7 +475,7 @@ public ${propertyType} get${javaBeanCase(propertyName)}() {
 }
 `,
             propertyClass: `public static class ${propertyType} {
-${classProperties.map(({ name, type, defaultVaue }) => `\n    private ${type} ${name}${defaultVaue};`).join('\n')}
+${classProperties.map(({ name, type, defaultValue }) => `\n    private ${type} ${name}${defaultValue};`).join('\n')}
 ${classProperties.map(({ name, type, beanName }) => `\n    public ${type} get${beanName}() {\n        return ${name};\n    }\n`).join('\n')}
 ${classProperties
   .map(({ name, type, beanName }) => `\n    public void set${beanName}(${type} ${name}) {\n        this.${name} = ${name};\n    }`)

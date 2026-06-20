@@ -43,9 +43,8 @@ export default class JavascriptGenerator extends JavascriptSimpleApplicationGene
       await this.composeWithBlueprints();
     }
 
-    if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrap('javascript-simple-application');
-    }
+    await this.dependsOnJHipster('project-name');
+    await this.dependsOnBootstrap('javascript-simple-application');
   }
 
   get configuring() {

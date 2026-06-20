@@ -45,7 +45,7 @@ export default class ServerGenerator extends JavaApplicationGenerator {
         const javaTestLog =
           '-Dlogging.level.org.springframework=OFF -Dlogging.level.org.springframework.web=OFF -Dlogging.level.org.springframework.security=OFF';
 
-        const buildTool = application.buildTool;
+        const { buildTool } = application;
         let e2ePackage = 'target/e2e';
         if (buildTool === 'maven') {
           const excludeWebapp = application.skipClient ? '' : ' -Dskip.installnodenpm -Dskip.npm';

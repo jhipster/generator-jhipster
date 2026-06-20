@@ -179,7 +179,7 @@ describe('Entities reducer tests', () => {
 
   describe('Successes', () => {
     it('should fetch all entities', () => {
-      const payload = { data: [{ 1: 'fake1' }, { 2: 'fake2' }]<% if (!paginationNo) { %>, headers: { 'x-total-count': 123<% if (paginationInfiniteScroll) { %>, link: ';'<% } %> }<% } %> };
+      const payload = { data: [{ 1: 'fake1' }, { 2: 'fake2' }]<% if (!paginationNo) { %>, headers: { 'x-total-count': 123<%- paginationInfiniteScroll ? ', link: \';\'' : '' %> }<% } %> };
 <%_ if (paginationInfiniteScroll) { _%>
       const links = getPageNumberFromLinkHeader(payload.headers.link);
 <%_ } _%>
@@ -200,7 +200,7 @@ describe('Entities reducer tests', () => {
     });
 <%_ if (searchEngineAny) { _%>
     it('should search all entities', () => {
-      const payload = { data: [{ 1: 'fake1' }, { 2: 'fake2' }]<% if (!paginationNo) { %>, headers: { 'x-total-count': 123<% if (paginationInfiniteScroll) { %>, link: ';'<% } %> }<% } %> };
+      const payload = { data: [{ 1: 'fake1' }, { 2: 'fake2' }]<% if (!paginationNo) { %>, headers: { 'x-total-count': 123<%- paginationInfiniteScroll ? ', link: \';\'' : '' %> }<% } %> };
   <%_ if (paginationInfiniteScroll) { _%>
       const links = getPageNumberFromLinkHeader(payload.headers.link);
   <%_ } _%>

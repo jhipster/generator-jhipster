@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, ChangeDetectionStrategy, inject, OnInit<% if (enableTranslation) { %>, DOCUMENT, RendererFactory2, Renderer2<% } %> } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit<%- enableTranslation ? ', DOCUMENT, RendererFactory2, Renderer2' : '' %> } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
@@ -54,8 +54,6 @@ export default class Main implements OnInit {
   private readonly document = inject(DOCUMENT);
   private readonly translateService = inject(TranslateService);
   private readonly rootRenderer = inject(RendererFactory2);
-<%_ } _%>
-<%_ if (enableTranslation) { _%>
 
   constructor() {
     this.htmlElement = this.document.documentElement;

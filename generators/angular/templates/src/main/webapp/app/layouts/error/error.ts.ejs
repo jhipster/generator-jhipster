@@ -16,29 +16,26 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, ChangeDetectionStrategy, inject, signal, OnInit<% if (enableTranslation) { %>, OnDestroy<% } %> } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, OnInit<%- enableTranslation ? ', OnDestroy' : '' %> } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { Subscription } from 'rxjs';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateDirective } from 'app/shared/language';
-import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-error',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  <% if (enableTranslation) { %>imports: [TranslateDirective, TranslateModule],<% } %>
+  <%- enableTranslation ? 'imports: [TranslateDirective, TranslateModule],' : '' %>
   templateUrl: './error.html',
 })
-export default class Error implements OnInit<% if (enableTranslation) { %>, OnDestroy<% } %> {
+export default class Error implements OnInit<%- enableTranslation ? ', OnDestroy' : '' %> {
   readonly errorMessage = signal<string | undefined>(undefined);
 <%_ if (enableTranslation) { _%>
   errorKey?: string;
   langChangeSubscription?: Subscription;
-<%_ } _%>
 
-<%_ if (enableTranslation) { _%>
   private readonly translateService = inject(TranslateService);
 <%_ } _%>
   private readonly route = inject(ActivatedRoute);

@@ -81,8 +81,7 @@ import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.security.oauth2.jwt.*;
-<%_ } _%>
-<%_ if (!authenticationTypeOauth2) { _%>
+<%_ } else { _%>
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
@@ -222,6 +221,7 @@ public class SecurityConfiguration {
                     "/resources/**",
 <%_ } else if (clientBundlerRsbuild) { _%>
                     "/static/**",
+                    "/content/**",
 <%_ } else { _%>
                     "/app/**",
                     "/i18n/**",

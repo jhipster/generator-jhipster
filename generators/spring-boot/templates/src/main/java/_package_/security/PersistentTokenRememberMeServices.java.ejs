@@ -137,7 +137,7 @@ public class PersistentTokenRememberMeServices extends AbstractRememberMeService
                 token.setIpAddress(request.getRemoteAddr());
                 token.setUserAgent(request.getHeader("User-Agent"));
                 try {
-                    persistentTokenRepository.save<% if (databaseTypeSql) { %>AndFlush<% } %>(token);
+                    persistentTokenRepository.save<%- databaseTypeSql ? 'AndFlush' : '' %>(token);
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
                 } catch (DataAccessException e) {
 <%_ } else if (databaseTypeCassandra) { _%>
@@ -170,13 +170,13 @@ public class PersistentTokenRememberMeServices extends AbstractRememberMeService
             t.setUserId(u.getId());
 <%_ } _%>
             t.setTokenValue(RandomUtil.generateRandomAlphanumericString());
-            t.setTokenDate(<% if (databaseTypeCassandra) { %>Instant.now()<% } else { %>LocalDate.now()<% } %>);
+            t.setTokenDate(<%- databaseTypeCassandra ? 'Instant.now()' : 'LocalDate.now()' %>);
             t.setIpAddress(request.getRemoteAddr());
             t.setUserAgent(request.getHeader("User-Agent"));
             return t;
         }).orElseThrow(() -> new UsernameNotFoundException("User " + login + " was not found in the database"));
         try {
-            persistentTokenRepository.save<% if (databaseTypeSql) { %>AndFlush<% } %>(token);
+            persistentTokenRepository.save<%- databaseTypeSql ? 'AndFlush' : '' %>(token);
             addCookie(token, request, response);
 <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
         } catch (DataAccessException e) {

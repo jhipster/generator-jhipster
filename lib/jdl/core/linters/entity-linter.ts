@@ -66,7 +66,7 @@ function checkForDuplicatedEntities(entityDeclarations: CstNode[]) {
 }
 
 function checkForUselessEntityBraces(entityDeclaration: CstNode) {
-  const entityBody = entityDeclaration.children.entityBody;
+  const { entityBody } = entityDeclaration.children;
   const nextTokensAfterRelationshipType = (entityBody?.[0] as CstNode)?.children;
   const onlyCurlyBracesAsRelationshipBody = entityBody && Object.keys(nextTokensAfterRelationshipType).length === 2;
   if (onlyCurlyBracesAsRelationshipBody) {

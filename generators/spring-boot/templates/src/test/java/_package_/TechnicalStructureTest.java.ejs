@@ -56,7 +56,7 @@ class TechnicalStructureTest {
 <%_ } _%>
         .whereLayer("Web").mayOnlyBeAccessedByLayers("Config")
         .whereLayer("Service").mayOnlyBeAccessedByLayers("Web", "Config")
-        .whereLayer("Security").mayOnlyBeAccessedByLayers("Config", <% if (hasClientLayer) { %>"Client", <% } %>"Service", "Web")
+        .whereLayer("Security").mayOnlyBeAccessedByLayers("Config", <%- hasClientLayer ? '"Client", ' : '' %>"Service", "Web")
 <%_ if (hasDomainLayer) { _%>
         .whereLayer("Persistence").mayOnlyBeAccessedByLayers("Service", "Security", "Web", "Config")
         .whereLayer("Domain").mayOnlyBeAccessedByLayers("Persistence", "Service", "Security", "Web", "Config")

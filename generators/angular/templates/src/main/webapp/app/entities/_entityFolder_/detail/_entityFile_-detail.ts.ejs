@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, ChangeDetectionStrategy, <% if (anyFieldIsBlobDerived) { %>inject, <% } %>input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, <%- anyFieldIsBlobDerived ? 'inject, ' : '' %>input } from '@angular/core';
 <%_ if (entityFileName !== 'authority' && updatableEntity) { _%>
 import { RouterLink } from '@angular/router';
 <%_ } _%>
@@ -71,9 +71,7 @@ export class <%- entityAngularName %>Detail {
 
 <%_ if (anyFieldIsBlobDerived) { _%>
     protected dataUtils = inject(DataUtils);
-<%_ } _%>
 
-<%_ if (anyFieldIsBlobDerived) { _%>
     byteSize(base64String: string): string {
         return this.dataUtils.byteSize(base64String);
     }

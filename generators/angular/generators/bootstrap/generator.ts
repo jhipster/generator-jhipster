@@ -40,6 +40,13 @@ export default class BootstrapGenerator extends AngularApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      defaults({ applicationDefaults }) {
+        applicationDefaults({
+          clientBundler: ctx => (ctx.microfrontend || ctx.applicationTypeMicroservice ? 'webpack' : 'esbuild'),
+          devServerPort: (_, { data }) => 4200 + (data.applicationIndex ?? 0),
+          devServerPortProxy: (ctx, { data }) => (ctx.clientBundlerWebpack ? 9000 + (data.applicationIndex ?? 0) : undefined),
+        });
+      },
       translations({ application }) {
         application.addLanguageCallbacks.push((_newLanguages, allLanguages) => {
           const { enableTranslation, clientSrcDir, clientRootDir, clientI18nDir } = application;

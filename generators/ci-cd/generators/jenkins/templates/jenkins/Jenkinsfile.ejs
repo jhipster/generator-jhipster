@@ -97,7 +97,7 @@ node {
 <%- indent %>        sh "./mvnw -ntp com.heroku.sdk:heroku-maven-plugin:3.0.7:deploy -DskipTests -Pprod -Dheroku.buildpacks=heroku/jvm -Dheroku.appName=<%- herokuAppName %>"
   <%_ } else { _%>
 <%- indent %>    stage('packaging') {
-<%- indent %>        sh "./mvnw -ntp verify -P-webapp <% if (ciCdIntegrationsDeploy) { %>deploy <% } %>-Pprod -DskipTests"
+<%- indent %>        sh "./mvnw -ntp verify -P-webapp <%- ciCdIntegrationsDeploy ? 'deploy ' : '' %>-Pprod -DskipTests"
   <%_ } _%>
 <%- indent %>        archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
 <%- indent %>    }

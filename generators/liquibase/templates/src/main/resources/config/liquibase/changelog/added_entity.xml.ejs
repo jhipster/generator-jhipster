@@ -30,7 +30,7 @@
     <changeSet id="<%- changelogDate %>-1" author="jhipster">
         <createTable tableName="<%- entity.entityTableName %>"<%- this.formatAsLiquibaseRemarks(entity.documentation, true) %>>
 <%_ for (field of fields) { _%>
-            <column name="<%- field.columnName %>" type="<%- field.columnType %>"<%- this.createDefaultValueLiquibaseAttribute(field, true) -%><%- this.formatAsLiquibaseRemarks(field.documentation, true) %><% if (field.id && field.liquibaseAutoIncrement) { %> autoIncrement="true" startWith="1500"<% } %>>
+            <column name="<%- field.columnName %>" type="<%- field.columnType %>"<%- this.createDefaultValueLiquibaseAttribute(field, true) -%><%- this.formatAsLiquibaseRemarks(field.documentation, true) %><%- field.id && field.liquibaseAutoIncrement ? ' autoIncrement="true" startWith="1500"' : '' %>>
   <%_ if (field.id) { _%>
                 <constraints primaryKey="true" nullable="false"/>
   <%_ } else if (field.unique) { _%>
@@ -46,7 +46,7 @@
   <%_ } _%>
 <%_ } _%>
 <%_ for (relationship of relationships) { _%>
-  <%_ if ((relationship.relationshipType === 'many-to-one' || (relationship.relationshipType === 'one-to-one' && relationship.ownerSide)) && !relationship.id) { _%>
+  <%_ if ((relationship.relationshipType === 'many-to-one' || relationship.relationshipType === 'one-to-one' && relationship.ownerSide) && !relationship.id) { _%>
     <%_ for (const idField of relationship.otherEntity.primaryKey.fields) { _%>
       <%_ const uniqueConstraintName = relationship.relationshipType === 'one-to-one' ? this.getUXConstraintName(entity.entityTableName, `${relationship.columnName}_${idField.columnName}`, entity.prodDatabaseType) : null; _%>
             <column name="<%- relationship.columnName %>_<%- idField.columnName %>" type="<%- idField.columnType %>">
@@ -100,7 +100,8 @@
     -->
     <changeSet id="<%- changelogDate %>-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/<%- !entity.incrementalChangelog ? entity.entityTableName : `${databaseChangelog.changelogDate}_entity_${entity.entityTableName}` %>.csv"
+                  file="../fake-data/<%- entity.incrementalChangelog ? `${databaseChangelog.changelogDate}_entity_${entity.entityTableName}` : entity.entityTableName %>.csv"
+                  relativeToChangelogFile="true"
                   separator=";"
                   tableName="<%- entity.entityTableName %>"
                   usePreparedStatements="true">

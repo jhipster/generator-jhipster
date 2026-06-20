@@ -3,6 +3,10 @@ import * as setupAxiosConfig from './axios-interceptor';
 import axios from 'axios';
 import MockAdapter from "axios-mock-adapter";
 
+<%_ if (authenticationTypeJwt) { _%>
+import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
+<%_ } _%>
+
 const mock = new MockAdapter(axios);
 
 describe('Axios interceptor', () => {
@@ -13,7 +17,7 @@ describe('Axios interceptor', () => {
 
   it('should use localStorage to provide bearer', () => {
 <%_ if (authenticationTypeJwt) { _%>
-    localStorage.setItem('<%- jhiPrefixDashed %>-authenticationToken', 'auth');
+    localStorage.setItem(AUTHENTICATION_TOKEN_KEY, 'auth');
 <%_ } _%>
     const result = setupAxiosConfig.onRequestSuccess(() => console.log('A problem occurred'));
 
@@ -25,7 +29,7 @@ describe('Axios interceptor', () => {
 
   it('should use sessionStorage to provide bearer', () => {
 <%_ if (authenticationTypeJwt) { _%>
-    sessionStorage.setItem('<%- jhiPrefixDashed %>-authenticationToken', 'auth');
+    sessionStorage.setItem(AUTHENTICATION_TOKEN_KEY, 'auth');
 <%_ } _%>
     const result = setupAxiosConfig.onRequestSuccess(() => console.log('A problem occurred'));
 

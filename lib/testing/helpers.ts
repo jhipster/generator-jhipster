@@ -480,7 +480,7 @@ plugins {
     }
 
     runResult.composedMockedGenerators = composedGeneratorsToCheck.filter(
-      gen => (runResult.mockedGenerators[gen] as unknown as ReturnType<typeof mock.fn>)?.mock.callCount() > 0,
+      gen => (runResult.mockedGenerators[gen] as ReturnType<typeof mock.fn>)?.mock.callCount() > 0,
     );
 
     runResult.application = runResult.generator.getContextData(CONTEXT_DATA_APPLICATION_KEY, { factory: () => undefined });

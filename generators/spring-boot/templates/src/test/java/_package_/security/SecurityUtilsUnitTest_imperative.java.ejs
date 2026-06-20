@@ -137,6 +137,21 @@ class SecurityUtilsUnitTest {
         Optional<String> jwt = SecurityUtils.getCurrentUserJWT();
         assertThat(jwt).contains("token");
     }
+
+    @Test
+    void testGetCurrentUserJWTFromJwtCredentials() {
+        SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+        var now = Instant.now();
+        var jwt = Jwt.withTokenValue("token")
+            .issuedAt(now)
+            .expiresAt(now.plusSeconds(60))
+            .header("Test", "test")
+            .build();
+        securityContext.setAuthentication(new UsernamePasswordAuthenticationToken("admin", jwt));
+        SecurityContextHolder.setContext(securityContext);
+        Optional<String> currentUserJwt = SecurityUtils.getCurrentUserJWT();
+        assertThat(currentUserJwt).contains("token");
+    }
   <%_ if (user) { _%>
 
     @Test

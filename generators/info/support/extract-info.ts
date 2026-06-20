@@ -23,7 +23,7 @@ export const filterData = ({ files, ...data }: InfoData): InfoData => {
       file =>
         // Forbid any package.json file for security reasons.
         path.basename(file.filename).toLowerCase() !== 'package.json' &&
-        (file.filename === '.yo-rc.json' || file.filename.endsWith('.jdl') || file.filename.match(/\.jhipster\/(\w*)+\.json$/)),
+        (file.filename === '.yo-rc.json' || file.filename.endsWith('.jdl') || /\.jhipster\/\w+\.json$/.test(file.filename)),
     ),
   };
 };
@@ -56,7 +56,7 @@ export const extractDataFromInfo = (info: string): InfoData => {
       } else if (title.includes('JDL definitions')) {
         const applicationMatches = body.match(/application\s*\{/g) ?? [];
         if (applicationMatches.length > 0) {
-          // JDL definitions can be be a placeholder
+          // JDL definitions can be a placeholder
           const jdlCount = files.filter(file => file.type === 'jdl').length;
           files.push({ filename: jdlCount === 0 ? 'app.jdl' : `app-${jdlCount}.jdl`, content: body.trim(), type: 'jdl' });
           jdlApplications ??= applicationMatches.length;

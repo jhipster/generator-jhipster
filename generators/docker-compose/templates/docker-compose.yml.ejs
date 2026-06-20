@@ -56,7 +56,7 @@ services:
     # https://docs.spring.io/spring-cloud-config/docs/current/reference/html/
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=dev<% if (usesOauth2) { %>,oauth2<% } %>
+      - SPRING_PROFILES_ACTIVE=dev<%- usesOauth2 ? ',oauth2' : '' %>
       - SPRING_SECURITY_USER_PASSWORD=<%- adminPassword %>
       - JHIPSTER_REGISTRY_PASSWORD=<%- adminPassword %>
       - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native

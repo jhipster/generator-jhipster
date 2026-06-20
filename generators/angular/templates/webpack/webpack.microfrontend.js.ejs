@@ -45,7 +45,7 @@ module.exports = (config, options, targetOptions) => {
 <%_ if (applicationTypeMicroservice) { _%>
     exposes: {
   <%_ if (enableTranslation) { _%>
-      './translation-module': 'app/shared/language/translation.module.ts',
+      './translation-provider': 'app/shared/language/translation.provider.ts',
   <%_ } _%>
       './entity-navbar-items': 'app/entities/entity-navbar-items.ts',
       './entity-routes': 'app/entities/entity.routes.ts',

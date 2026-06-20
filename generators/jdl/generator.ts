@@ -254,7 +254,7 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
         this.log.info(`Generating ${this.exportedDeployments.length} deployments`);
         for (const deployment of this.exportedDeployments) {
           const deploymentConfig = deployment[GENERATOR_JHIPSTER];
-          const deploymentType = deploymentConfig.deploymentType;
+          const { deploymentType } = deploymentConfig;
           this.log.debug(`Generating deployment: ${JSON.stringify(deploymentConfig, null, 2)}`);
 
           await this.composeWithJHipster(deploymentType, {
@@ -281,7 +281,7 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
         const envOptions: any = { cwd, logCwd: rootCwd, sharedFs: application.sharedFs, adapter };
         const generatorOptions = { ...this.options, ...options, skipPriorities: ['prompting'] };
 
-        // Install should happen at the root of the monorepository. Force skip install at childs.
+        // Install should happen at the root of the monorepository. Force skip install at children.
         if ((this.options as GitOptions).monorepository) {
           generatorOptions.skipInstall = true;
         }

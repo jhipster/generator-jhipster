@@ -93,7 +93,7 @@ const commonDefaultOptions: ApplicationDefaults = {
 
 export function getConfigWithDefaults(customOptions: ApplicationDefaults = {}): ApplicationDefaults {
   const options = { ...customOptions };
-  const applicationType = options.applicationType;
+  const { applicationType } = options;
   if (isWin32) {
     options.autoCrlf ??= true;
   }
@@ -117,40 +117,11 @@ function getConfigForClientApplication(options: ApplicationDefaults = {}): Appli
   if (clientFramework === NO_CLIENT_FRAMEWORK) {
     return options;
   }
-  options[OptionNames.MICROFRONTEND] ??= Boolean(options[OptionNames.MICROFRONTENDS]?.length);
   if (!options[CLIENT_THEME]) {
     options[CLIENT_THEME] = OptionValues[CLIENT_THEME];
   } else if (options[CLIENT_THEME] !== OptionValues[CLIENT_THEME] && !options[CLIENT_THEME_VARIANT]) {
     options[CLIENT_THEME_VARIANT] = 'primary';
   }
-  switch (clientFramework) {
-    case 'vue': {
-      options.clientBundler ??= options.microfrontend || options.applicationType === 'microservice' ? 'rsbuild' : 'vite';
-      if (options.clientBundler === 'webpack') {
-        options.devServerPort ??= 9060;
-      } else if (options.clientBundler === 'vite') {
-        options.devServerPort ??= 9000;
-      } else if (options.clientBundler === 'rsbuild') {
-        options.devServerPort ??= 3000;
-      }
-      break;
-    }
-    case 'react': {
-      options.clientBundler ??= 'webpack';
-      options.devServerPort ??= 9060;
-      break;
-    }
-    case 'angular': {
-      options.clientBundler ??= options.microfrontend || options.applicationType === 'microservice' ? 'webpack' : 'esbuild';
-      options.devServerPort ??= 4200;
-      break;
-    }
-    default: {
-      options.devServerPort ??= 9060;
-      break;
-    }
-  }
-  options.devServerPortProxy ??= options.clientBundler === 'webpack' ? 9000 : undefined;
 
   return options;
 }

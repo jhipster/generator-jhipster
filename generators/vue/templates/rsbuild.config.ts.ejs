@@ -23,7 +23,7 @@ import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginVue } from '@rsbuild/plugin-vue';
 import { getAbsoluteFSPath } from 'swagger-ui-dist';
 <%_ if (microfrontend) { _%>
-import { ModuleFederationPlugin } from '@module-federation/enhanced/rspack';
+import { pluginModuleFederation } from '@module-federation/rsbuild-plugin';
 
 import mfConfig from './module-federation.config.ts';
 <%_ } _%>
@@ -40,11 +40,16 @@ export default defineConfig({
   plugins: [
     pluginVue(),
     pluginSass(),
+<%_ if (microfrontend) { _%>
+    pluginModuleFederation(mfConfig),
+<%_ } _%>
   ],
   tools: {
     rspack: {
 <%_ if (microfrontend) { _%>
-      plugins: [new ModuleFederationPlugin(mfConfig)],
+      output: {
+        chunkFormat: 'array-push',
+      },
 <%_ } _%>
       cache: {
         type: 'persistent',

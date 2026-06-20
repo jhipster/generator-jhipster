@@ -31,8 +31,6 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
       await this.composeWithBlueprints();
     }
 
-    const projectNameGenerator = await this.dependsOnJHipster('project-name');
-    projectNameGenerator.javaApplication = true;
     await this.dependsOnBootstrap('base-application');
     await this.dependsOnBootstrap('java-simple-application');
     if (!this.delegateToBlueprint) {
@@ -122,7 +120,7 @@ export default class JavaBootstrapGenerator extends JavaApplicationGenerator {
           .filter(relationship => relationship.ignoreOtherSideProperty === undefined)
           .forEach(relationship => {
             relationship.ignoreOtherSideProperty =
-              (application as any).databaseType !== 'neo4j' &&
+              application.databaseType !== 'neo4j' &&
               !entity.embedded &&
               !relationship.otherEntity.embedded &&
               relationship.otherEntity.relationships.length > 0;

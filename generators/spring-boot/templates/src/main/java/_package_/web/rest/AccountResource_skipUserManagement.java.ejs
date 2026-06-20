@@ -168,7 +168,7 @@ public class AccountResource {
         private Map<String, Object> details;
 <%_ } _%>
 
-        UserVM(String login, Set<String> authorities<% if (authenticationTypeOauth2 || authenticationTypeJwt) { %>, Map<String, Object> details<% } %>) {
+        UserVM(String login, Set<String> authorities<%- authenticationTypeOauth2 || authenticationTypeJwt ? ', Map<String, Object> details' : '' %>) {
             this.login = login;
             this.authorities = authorities;
 <%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>

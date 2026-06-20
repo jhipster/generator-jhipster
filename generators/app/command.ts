@@ -20,13 +20,6 @@ import type { JHipsterCommandDefinition } from '../../lib/command/index.ts';
 
 const command = {
   configs: {
-    defaults: {
-      cli: {
-        description: 'Execute jhipster with default config',
-        type: Boolean,
-      },
-      scope: 'none',
-    },
     jhiPrefix: {
       cli: {
         description: 'Add prefix before services, controllers and states name',

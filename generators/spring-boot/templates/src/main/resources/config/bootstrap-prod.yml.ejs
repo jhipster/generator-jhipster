@@ -13,7 +13,7 @@
  limitations under the License.
 -%>
 # ===================================================================
-# Spring Cloud <% if (serviceDiscoveryConsul) { %>Consul <% } %>Config bootstrap configuration for the "prod" profile
+# Spring Cloud <%- serviceDiscoveryConsul ? 'Consul ' : '' %>Config bootstrap configuration for the "prod" profile
 # ===================================================================
 
 spring:

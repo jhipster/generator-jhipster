@@ -20,7 +20,7 @@ package <%- entityAbsolutePackage %>.repository;
 
 import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
 
-import org.springframework.data.cassandra.repository.<% if (reactive) { %>Reactive<% } %>CassandraRepository;
+import org.springframework.data.cassandra.repository.<%- reactive ? 'Reactive' : '' %>CassandraRepository;
 import org.springframework.stereotype.Repository;
 <%_ if (primaryKey.typeUUID) { _%>
 
@@ -31,5 +31,5 @@ import java.util.UUID;
  * <%- springDataDescription %> repository for the <%- persistClass %> entity.
  */
 @Repository
-public interface <%- entityClass %>Repository extends <% if (reactive) { %>Reactive<% } %>CassandraRepository<<%- persistClass %>, <%- primaryKey.type %>> {
+public interface <%- entityClass %>Repository extends <%- reactive ? 'Reactive' : '' %>CassandraRepository<<%- persistClass %>, <%- primaryKey.type %>> {
 }

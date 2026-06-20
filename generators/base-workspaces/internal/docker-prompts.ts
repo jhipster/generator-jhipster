@@ -70,7 +70,7 @@ export const askForApplicationType = asPromptingTask(async function askForApplic
 export const askForPath = asPromptingTask(async function askForPath(this: BaseKubernetesGenerator, { control }) {
   if (!this.shouldAskForPrompts({ control })) return;
 
-  const deploymentApplicationType = this.jhipsterConfigWithDefaults.deploymentApplicationType;
+  const { deploymentApplicationType } = this.jhipsterConfigWithDefaults;
   let messageAskForPath;
   if (deploymentApplicationType === APPLICATION_TYPE_MONOLITH) {
     messageAskForPath = 'Enter the root directory where your applications are located';

@@ -21,6 +21,9 @@ import { type MountingOptions, shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 import { type RouteLocation } from 'vue-router';
 import { createTestingPinia } from '@pinia/testing';
+<%_ if (authenticationTypeJwt) { _%>
+import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
+<%_ } _%>
 
 import AccountService from '../account.service';
 import LoginForm from './login-form.vue';
@@ -113,7 +116,7 @@ describe('LoginForm Component', () => {
     });
 
     expect(loginForm.authenticationError).toBeFalsy();
-    expect(localStorage.getItem('<%- jhiPrefixDashed %>-authenticationToken')).toEqual(jwtSecret);
+    expect(localStorage.getItem(AUTHENTICATION_TOKEN_KEY)).toEqual(jwtSecret);
   });
 
   it('should store token if authentication is OK in session', async () => {
@@ -136,7 +139,7 @@ describe('LoginForm Component', () => {
     });
 
     expect(loginForm.authenticationError).toBeFalsy();
-    expect(sessionStorage.getItem('<%- jhiPrefixDashed %>-authenticationToken')).toEqual(jwtSecret);
+    expect(sessionStorage.getItem(AUTHENTICATION_TOKEN_KEY)).toEqual(jwtSecret);
   });
 <%_ } else { _%>
   it('should authentication be KO', async () => {

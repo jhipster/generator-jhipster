@@ -215,6 +215,19 @@ describe('extract-info', () => {
 `);
     });
 
+    it('should reject empty .jhipster json filename', () => {
+      const data = {
+        yoRcBlank: true,
+        files: [{ filename: '.jhipster/.json', content: '{}', type: 'json' as const }],
+      };
+      expect(filterData(data)).toMatchInlineSnapshot(`
+{
+  "files": [],
+  "yoRcBlank": true,
+}
+`);
+    });
+
     it('should filter out non-matching files', () => {
       const data = {
         yoRcBlank: true,

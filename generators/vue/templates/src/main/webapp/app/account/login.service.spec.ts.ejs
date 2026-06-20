@@ -11,7 +11,7 @@ describe('Login Service test suite', () => {
   let loginService: LoginService;
 
   beforeEach(() => {
-    loginService = new LoginService(<% if (!authenticationTypeOauth2) { %>{ emit: vi.fn() }<% } %>);
+    loginService = new LoginService(<%- authenticationTypeOauth2 ? '' : '{ emit: vi.fn() }' %>);
   });
 
 <%_ if (authenticationTypeOauth2) { _%>

@@ -44,7 +44,7 @@ export const <%- entityReactName %>DeleteDialog = () => {
   const updateSuccess = useAppSelector(state => state.<%- entityReactState %>.updateSuccess);
 
   const handleClose = () => {
-    navigate('/<%- entityPage %>'<% if (paginationPagination) { %> + pageLocation.search<% } %>);
+    navigate('/<%- entityPage %>'<%- paginationPagination ? ' + pageLocation.search' : '' %>);
   };
 
   useEffect(() => {

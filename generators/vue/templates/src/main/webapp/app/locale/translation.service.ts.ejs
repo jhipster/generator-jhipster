@@ -1,5 +1,5 @@
-<%_ if (applicationTypeGateway && microfrontend) { _%>
-import { loadRemote } from '@module-federation/enhanced/runtime';
+<%_ if (microfrontend) { _%>
+import { loadRemote } from '@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime';
 <%_ } _%>
 import axios from 'axios';
 import { type Composer } from 'vue-i18n';
@@ -17,9 +17,13 @@ export default class TranslationService {
 
   async refreshTranslation(newLanguage: string) {
     if (this.i18n && !this.loadedLanguages.has(newLanguage)) {
-      const translations = await import(`../../i18n/${newLanguage}/${newLanguage}.js`);
-      this.i18n.setLocaleMessage(newLanguage, translations.default);
-<%_ if (applicationTypeGateway && microfrontend) { _%>
+<%_ if (exposeMicrofrontend) { _%>
+      this.i18n.setLocaleMessage(newLanguage, {});
+      // Load translations exposed by microfrontend
+<%_ } _%>
+      <%- exposeMicrofrontend ? '// ' : '' %>const translations = await import(`../../i18n/${newLanguage}/${newLanguage}.js`);
+      <%- exposeMicrofrontend ? '// ' : '' %>this.i18n.setLocaleMessage(newLanguage, translations.default);
+<%_ if (microfrontend) { _%>
 
       await Promise.all([
   <%_ for (const remote of microfrontends) { _%>

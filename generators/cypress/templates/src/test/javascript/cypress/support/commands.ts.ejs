@@ -90,9 +90,9 @@ export const configurationPageHeadingSelector = '[data-cy="configurationPageHead
 // End Specific Selector Attributes for Cypress
 // ***********************************************
 
-export const classInvalid = <% if (clientFrameworkAngular) { %>'ng-invalid';<% } else { %>'is-invalid'<% } %>;
+export const classInvalid = <%- clientFrameworkAngular ? '\'ng-invalid\';' : '\'is-invalid\'' %>;
 
-export const classValid = <% if (clientFrameworkAngular) { %>'ng-valid'<% } else { %>'is-valid'<% } %>;
+export const classValid = <%- clientFrameworkAngular ? '\'ng-valid\'' : '\'is-valid\'' %>;
 
 Cypress.Commands.add('authenticatedRequest', (data) => {
 <%_ if (authenticationTypeJwt) { _%>

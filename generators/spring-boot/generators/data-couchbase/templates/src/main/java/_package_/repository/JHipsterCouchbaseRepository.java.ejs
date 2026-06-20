@@ -35,7 +35,7 @@ import java.util.List;
  */
 @NoRepositoryBean
 @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-public interface JHipsterCouchbaseRepository<T, ID> extends <% if (reactive) { %>Reactive<% } %>CouchbaseRepository<T, ID> {
+public interface JHipsterCouchbaseRepository<T, ID> extends <%- reactive ? 'Reactive' : '' %>CouchbaseRepository<T, ID> {
 
     String FIND_IDS_QUERY = "SELECT meta().id as __id, 0 as __cas FROM #{#n1ql.bucket}.#{#n1ql.scope}.#{#n1ql.collection} WHERE #{#n1ql.filter}";
 
@@ -64,7 +64,7 @@ public interface JHipsterCouchbaseRepository<T, ID> extends <% if (reactive) { %
         return findAllById(toIds(findAllIds()));
     }
 
-    default <%- pageOrFlux %><T> findAll<% if (reactive) { %>By<% } %>(Pageable pageable) {
+    default <%- pageOrFlux %><T> findAll<%- reactive ? 'By' : '' %>(Pageable pageable) {
 <%_ if (reactive) { _%>
         return findAllById(toIds(findAllIds(pageable)));
 <%_ } else { _%>
@@ -77,7 +77,7 @@ public interface JHipsterCouchbaseRepository<T, ID> extends <% if (reactive) { %
         return findAllById(toIds(findAllIds(sort)));
     }
 
-    default <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> deleteAll() {
+    default <%- reactive ? 'Mono<Void>' : 'void' %> deleteAll() {
 <%_ if (reactive) { _%>
         return toIds(findAllIds())
             .collectList()

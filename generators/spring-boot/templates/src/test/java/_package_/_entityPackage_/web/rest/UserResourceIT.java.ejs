@@ -201,18 +201,6 @@ class UserResourceIT {
 <%_ if (!databaseTypeCassandra && !requiresDeleteAllUsers) { _%>
     private Long numberOfUsers;
 
-    @BeforeEach
-    void countUsers() {
-        numberOfUsers = userRepository.count()<%- reactorBlock %>;
-    }
-
-<%_ } _%>
-<%_ if (reactive && authenticationUsesCsrf) { _%>
-    @BeforeEach
-    void setupCsrf() {
-        webTestClient = webTestClient.mutateWith(csrf());
-    }
-
 <%_ } _%>
     /**
      * Create a User.
@@ -222,15 +210,15 @@ class UserResourceIT {
      */
     public static <%- user.persistClass %> createEntity() {
         <%- user.persistClass %> persistUser = new <%- user.persistClass %>();
-<%_ if (databaseTypeCassandra || (authenticationTypeOauth2 && !databaseTypeCouchbase)) { _%>
+<%_ if (databaseTypeCassandra || authenticationTypeOauth2 && !databaseTypeCouchbase) { _%>
         persistUser.setId(UUID.randomUUID().toString());
 <%_ } _%>
-        persistUser.setLogin(DEFAULT_LOGIN<% if (databaseTypeSql) { %> + RandomStringUtils.insecure().nextAlphabetic(5)<% } %>);
+        persistUser.setLogin(DEFAULT_LOGIN<%- databaseTypeSql ? ' + RandomStringUtils.insecure().nextAlphabetic(5)' : '' %>);
 <%_ if (!authenticationTypeOauth2) { _%>
         persistUser.setPassword(RandomStringUtils.insecure().nextAlphanumeric(60));
 <%_ } _%>
         persistUser.setActivated(true);
-        persistUser.setEmail(<% if (databaseTypeSql) { %>RandomStringUtils.insecure().nextAlphabetic(5) + <% } %>DEFAULT_EMAIL);
+        persistUser.setEmail(<%- databaseTypeSql ? 'RandomStringUtils.insecure().nextAlphabetic(5) + ' : '' %>DEFAULT_EMAIL);
         persistUser.setFirstName(DEFAULT_FIRSTNAME);
         persistUser.setLastName(DEFAULT_LASTNAME);
 <%_ if (!databaseTypeCassandra) { _%>
@@ -265,6 +253,12 @@ class UserResourceIT {
 
     @BeforeEach
     void initTest() {
+<%_ if (!databaseTypeCassandra && !requiresDeleteAllUsers) { _%>
+        numberOfUsers = userRepository.count()<%- reactorBlock %>;
+<%_ } _%>
+<%_ if (reactive && authenticationUsesCsrf) { _%>
+        webTestClient = webTestClient.mutateWith(csrf());
+<%_ } _%>
         user = initTestUser();
     }
 
@@ -399,9 +393,9 @@ class UserResourceIT {
   <%_ } _%>
     void createUserWithExistingLogin() throws Exception {
         // Initialize the database
-        userRepository.<%- saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<%- saveMethod %>(user)<%- reactive ? '.block()' : '' %>;
   <%_ if (searchEngineElasticsearch) { _%>
-        userSearchRepository.save(user)<% if (reactive) { %>.block()<% } %>;
+        userSearchRepository.save(user)<%- reactive ? '.block()' : '' %>;
   <%_ } _%>
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
@@ -443,9 +437,9 @@ class UserResourceIT {
   <%_ } _%>
     void createUserWithExistingEmail() throws Exception {
         // Initialize the database
-        userRepository.<%- saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<%- saveMethod %>(user)<%- reactive ? '.block()' : '' %>;
   <%_ if (searchEngineElasticsearch) { _%>
-        userSearchRepository.save(user)<% if (reactive) { %>.block()<% } %>;
+        userSearchRepository.save(user)<%- reactive ? '.block()' : '' %>;
   <%_ } _%>
         int databaseSizeBeforeCreate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
@@ -485,18 +479,18 @@ class UserResourceIT {
   <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
   <%_ } _%>
-    void getAllUsers()<% if (!reactive) { %> throws Exception<% } %> {
+    void getAllUsers()<%- reactive ? '' : ' throws Exception' %> {
         // Initialize the database
-        userRepository.<% if (databaseTypeSql && reactive && authenticationTypeOauth2) { %>create<% } else { %><%- saveMethod %><% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<% if (databaseTypeSql && reactive && authenticationTypeOauth2) { %>create<% } else { %><%- saveMethod %><% } %>(user)<%- reactive ? '.block()' : '' %>;
 
         // Get all the users
   <%_ if (reactive) { _%>
-        <%- user.adminUserDto %> foundUser = webTestClient.get().uri("/api/admin/users<% if (user.primaryKey.typeNumeric) { %>?sort=id,desc<% } %>")
+        <%- user.adminUserDto %> foundUser = webTestClient.get().uri("/api/admin/users<%- user.primaryKey.typeNumeric ? '?sort=id,desc' : '' %>")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
             .expectHeader().contentType(MediaType.APPLICATION_JSON)
-            .returnResult(<%- user.adminUserDto %>.class).getResponseBody()<% if (!user.primaryKey.typeNumeric) { %>.filter(e -> DEFAULT_LOGIN.equals(e.getLogin()))<% } %>.blockFirst();
+            .returnResult(<%- user.adminUserDto %>.class).getResponseBody()<%- user.primaryKey.typeNumeric ? '' : '.filter(e -> DEFAULT_LOGIN.equals(e.getLogin()))' %>.blockFirst();
         assertThat(foundUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(foundUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(foundUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
@@ -506,7 +500,7 @@ class UserResourceIT {
     <%_ } _%>
         assertThat(foundUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
   <%_ } else { _%>
-        restUserMockMvc.perform(get("/api/admin/users<% if (user.primaryKey.typeNumeric) { %>?sort=id,desc<% } %>")
+        restUserMockMvc.perform(get("/api/admin/users<%- user.primaryKey.typeNumeric ? '?sort=id,desc' : '' %>")
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -525,9 +519,9 @@ class UserResourceIT {
   <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
   <%_ } _%>
-    void getUser()<% if (!reactive) { %> throws Exception<% } %> {
+    void getUser()<%- reactive ? '' : ' throws Exception' %> {
         // Initialize the database
-        userRepository.<% if (databaseTypeSql && reactive && authenticationTypeOauth2) { %>create<% } else { %><%- saveMethod %><% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<% if (databaseTypeSql && reactive && authenticationTypeOauth2) { %>create<% } else { %><%- saveMethod %><% } %>(user)<%- reactive ? '.block()' : '' %>;
 
   <%_ if (searchEngineElasticsearch) { _%>
         userSearchRepository.save(user);
@@ -579,7 +573,7 @@ class UserResourceIT {
   <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
   <%_ } _%>
-    void getNonExistingUser()<% if (!reactive) { %> throws Exception<% } %> {
+    void getNonExistingUser()<%- reactive ? '' : ' throws Exception' %> {
   <%_ if (reactive) { _%>
         webTestClient.get().uri("/api/admin/users/unknown")
             .exchange()
@@ -596,12 +590,12 @@ class UserResourceIT {
   <%_ } _%>
     void updateUser() throws Exception {
         // Initialize the database
-        userRepository.<%- saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<%- saveMethod %>(user)<%- reactive ? '.block()' : '' %>;
         int databaseSizeBeforeUpdate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
 
         // Update the user
-        <%- user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>orElseThrow<% } %>();
+        <%- user.persistClass %> updatedUser = userRepository.findById(user.getId()).<%- reactive ? 'block' : 'orElseThrow' %>();
 
         <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>();
         userDTO.setId(updatedUser.getId());
@@ -656,12 +650,12 @@ class UserResourceIT {
   <%_ } _%>
     void updateUserLogin() throws Exception {
         // Initialize the database
-        userRepository.<%- saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<%- saveMethod %>(user)<%- reactive ? '.block()' : '' %>;
         int databaseSizeBeforeUpdate = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
 
         // Update the user
-        <%- user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>orElseThrow<% } %>();
+        <%- user.persistClass %> updatedUser = userRepository.findById(user.getId()).<%- reactive ? 'block' : 'orElseThrow' %>();
 
         <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>();
         userDTO.setId(updatedUser.getId());
@@ -717,7 +711,7 @@ class UserResourceIT {
   <%_ } _%>
     void updateUserExistingEmail() throws Exception {
         // Initialize the database with 2 users
-        userRepository.<%- saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<%- saveMethod %>(user)<%- reactive ? '.block()' : '' %>;
   <%_ if (searchEngineElasticsearch) { _%>
         userSearchRepository.save(user);
   <%_ } _%>
@@ -739,13 +733,13 @@ class UserResourceIT {
   <%_ if (databaseTypeSql && reactive) { _%>
         anotherUser.setCreatedBy(Constants.SYSTEM);
   <%_ } _%>
-        userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(anotherUser)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(anotherUser)<%- reactive ? '.block()' : '' %>;
   <%_ if (searchEngineElasticsearch) { _%>
         userSearchRepository.save(anotherUser);
   <%_ } _%>
 
         // Update the user
-        <%- user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>orElseThrow<% } %>();
+        <%- user.persistClass %> updatedUser = userRepository.findById(user.getId()).<%- reactive ? 'block' : 'orElseThrow' %>();
 
         <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>();
         userDTO.setId(updatedUser.getId());
@@ -787,7 +781,7 @@ class UserResourceIT {
   <%_ } _%>
     void updateUserExistingLogin() throws Exception {
         // Initialize the database
-        userRepository.<%- saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<%- saveMethod %>(user)<%- reactive ? '.block()' : '' %>;
   <%_ if (searchEngineElasticsearch) { _%>
         userSearchRepository.save(user);
   <%_ } _%>
@@ -809,13 +803,13 @@ class UserResourceIT {
   <%_ if (databaseTypeSql && reactive) { _%>
         anotherUser.setCreatedBy(Constants.SYSTEM);
   <%_ } _%>
-        userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(anotherUser)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(anotherUser)<%- reactive ? '.block()' : '' %>;
   <%_ if (searchEngineElasticsearch) { _%>
         userSearchRepository.save(anotherUser);
   <%_ } _%>
 
         // Update the user
-        <%- user.persistClass %> updatedUser = userRepository.findById(user.getId()).<% if (reactive) { %>block<% } else { %>orElseThrow<% } %>();
+        <%- user.persistClass %> updatedUser = userRepository.findById(user.getId()).<%- reactive ? 'block' : 'orElseThrow' %>();
 
         <%- user.adminUserDto %> userDTO = new <%- user.adminUserDto %>();
         userDTO.setId(updatedUser.getId());
@@ -855,9 +849,9 @@ class UserResourceIT {
   <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
   <%_ } _%>
-    void deleteUser()<% if (!reactive) { %> throws Exception<% } %> {
+    void deleteUser()<%- reactive ? '' : ' throws Exception' %> {
         // Initialize the database
-        userRepository.<%- saveMethod %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.<%- saveMethod %>(user)<%- reactive ? '.block()' : '' %>;
         int databaseSizeBeforeDelete = userRepository.findAll()<% if (reactive) { %>
             .collectList().block()<% } %>.size();
 
@@ -902,6 +896,6 @@ class UserResourceIT {
         // The security filter chain clears the security context after remote calls
         SecurityContextHolder.setContext(TestSecurityContextHolder.getContext());
 <%_ } _%>
-        userAssertion.accept(userRepository.findAll()<% if (reactive) { %>.collectList().block()<% } %>);
+        userAssertion.accept(userRepository.findAll()<%- reactive ? '.collectList().block()' : '' %>);
     }
 }

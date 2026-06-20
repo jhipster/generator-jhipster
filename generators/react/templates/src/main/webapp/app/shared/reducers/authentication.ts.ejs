@@ -23,11 +23,12 @@ import { Storage } from 'react-jhipster';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { serializeAxiosError } from './reducer.utils';
 
-import { AppThunk } from 'app/config/store';
-<% if (enableTranslation) { %>import { setLocale } from 'app/shared/reducers/locale';<% } %>
-
 <%_ if (authenticationTypeJwt) { _%>
-const AUTH_TOKEN_KEY = '<%- jhiPrefixDashed %>-authenticationToken';
+import { AUTHENTICATION_TOKEN_KEY } from 'app/shared/jhipster/constants';
+<%_ } _%>
+import { AppThunk } from 'app/config/store';
+<%_ if (enableTranslation) { _%>
+import { setLocale } from 'app/shared/reducers/locale';
 <%_ } _%>
 
 export const initialState = {
@@ -49,7 +50,7 @@ export type AuthenticationState = Readonly<typeof initialState>;
 
 // Actions
 
-export const getSession = (): AppThunk => <% if (enableTranslation) { %>async<% } %> (
+export const getSession = (): AppThunk => <%- enableTranslation ? 'async' : '' %> (
   dispatch,
 <%_ if (enableTranslation) { _%>
   getState,
@@ -108,9 +109,9 @@ export const login: (username: string, password: string, rememberMe?: boolean) =
     if (bearerToken?.startsWith('Bearer ')) {
       const jwt = bearerToken.slice(7, bearerToken.length);
       if (rememberMe) {
-        Storage.local.set(AUTH_TOKEN_KEY, jwt);
+        Storage.local.set(AUTHENTICATION_TOKEN_KEY, jwt);
       } else {
-        Storage.session.set(AUTH_TOKEN_KEY, jwt);
+        Storage.session.set(AUTHENTICATION_TOKEN_KEY, jwt);
       }
     }
     dispatch(getSession());
@@ -119,11 +120,11 @@ export const login: (username: string, password: string, rememberMe?: boolean) =
 
 <%_ if (authenticationTypeJwt) { _%>
 export const clearAuthToken = () => {
-  if (Storage.local.get(AUTH_TOKEN_KEY)) {
-    Storage.local.remove(AUTH_TOKEN_KEY);
+  if (Storage.local.get(AUTHENTICATION_TOKEN_KEY)) {
+    Storage.local.remove(AUTHENTICATION_TOKEN_KEY);
   }
-  if (Storage.session.get(AUTH_TOKEN_KEY)) {
-    Storage.session.remove(AUTH_TOKEN_KEY);
+  if (Storage.session.get(AUTHENTICATION_TOKEN_KEY)) {
+    Storage.session.remove(AUTHENTICATION_TOKEN_KEY);
   }
 };
 
@@ -221,7 +222,7 @@ export const AuthenticationSlice = createSlice({
         };
       })
 <%_ if (!authenticationTypeJwt) { _%>
-      .addCase(logoutServer.fulfilled, (<% if (authenticationTypeOauth2) { %>state, action<% } %>) => ({
+      .addCase(logoutServer.fulfilled, (<%- authenticationTypeOauth2 ? 'state, action' : '' %>) => ({
         ...initialState,
   <%_ if (!authenticationTypeOauth2) { _%>
         showModalLogin: true
@@ -241,7 +242,7 @@ export const AuthenticationSlice = createSlice({
   },
 });
 
-export const { <% if (authenticationTypeJwt) { %>logoutSession,<% } %> authError, clearAuth } = AuthenticationSlice.actions;
+export const { <%- authenticationTypeJwt ? 'logoutSession,' : '' %> authError, clearAuth } = AuthenticationSlice.actions;
 
 // Reducer
 export default AuthenticationSlice.reducer;

@@ -218,7 +218,7 @@ export default class BaseGenerator<
           },
           customizeRemoveFiles,
           isJhipsterVersionLessThan(version: string): boolean {
-            const jhipsterOldVersion = this.jhipsterOldVersion;
+            const { jhipsterOldVersion } = this;
             return jhipsterOldVersion ? semverLessThan(jhipsterOldVersion, version) : false;
           },
           async removeFiles(assertions: { oldVersion?: string; removedInVersion?: string } | string, ...files: string[]) {
@@ -307,13 +307,13 @@ export default class BaseGenerator<
       this.getContextData(CONTEXT_DATA_REPRODUCIBLE_TIMESTAMP, { replacement: now });
 
       // Reproducible build can create future timestamp, save it.
-      const lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
+      const { lastLiquibaseTimestamp } = this.jhipsterConfig;
       if (!lastLiquibaseTimestamp || now.getTime() > lastLiquibaseTimestamp) {
         this.config.set('lastLiquibaseTimestamp', now.getTime());
       }
     } else {
       // Get and store lastLiquibaseTimestamp, a future timestamp can be used
-      const lastLiquibaseTimestamp = this.jhipsterConfig.lastLiquibaseTimestamp;
+      const { lastLiquibaseTimestamp } = this.jhipsterConfig;
       if (lastLiquibaseTimestamp) {
         const lastTimestampDate = new Date(lastLiquibaseTimestamp);
         if (lastTimestampDate >= now) {

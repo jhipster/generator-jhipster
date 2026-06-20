@@ -94,7 +94,6 @@ export const writeEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularAp
           readOnly: true,
         },
       });
-
     } else if (entity.builtInUserManagement) {
       await this.writeFiles({
         sections: { model: [entityModelFiles], service: [entityServiceFiles], client: angularFiles.client },

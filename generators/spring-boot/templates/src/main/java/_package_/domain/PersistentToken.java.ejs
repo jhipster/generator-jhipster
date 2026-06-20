@@ -142,7 +142,7 @@ public class PersistentToken implements Serializable {
 <%_ } else if (databaseTypeCassandra && reactive) { _%>
     @Column(name = "token_date")
 <%_ } _%>
-    private <% if (!databaseTypeCassandra) { %>LocalDate<% } else { %>Instant<% } %> tokenDate;
+    private <%- databaseTypeCassandra ? 'Instant' : 'LocalDate' %> tokenDate;
 
     //an IPV6 address max length is 39 characters
     @Size(min = 0, max = 39)
@@ -155,7 +155,7 @@ public class PersistentToken implements Serializable {
 <%_ } _%>
     private String ipAddress;
 
-<%_ if (databaseTypeSql || (databaseTypeCassandra && reactive)) { _%>
+<%_ if (databaseTypeSql || databaseTypeCassandra && reactive) { _%>
     @Column(name = "user_agent")
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
@@ -203,11 +203,11 @@ public class PersistentToken implements Serializable {
         this.tokenValue = tokenValue;
     }
 
-    public <% if (!databaseTypeCassandra) { %>LocalDate<% } else { %>Instant<% } %> getTokenDate() {
+    public <%- databaseTypeCassandra ? 'Instant' : 'LocalDate' %> getTokenDate() {
         return tokenDate;
     }
 
-    public void setTokenDate(<% if (!databaseTypeCassandra) { %>LocalDate<% } else { %>Instant<% } %> tokenDate) {
+    public void setTokenDate(<%- databaseTypeCassandra ? 'Instant' : 'LocalDate' %> tokenDate) {
         this.tokenDate = tokenDate;
     }
 

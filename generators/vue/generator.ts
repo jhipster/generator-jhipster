@@ -22,9 +22,9 @@ import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
 import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.ts';
-import type { Features, Field, Options } from '../base-application/types.ts';
+import BaseApplicationGenerator from '../base-application/generator.ts';
+import type { Field } from '../base-application/types.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
-import { ClientApplicationGenerator } from '../client/generator.ts';
 import {
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
@@ -38,13 +38,30 @@ import cleanupOldFilesTask from './cleanup.ts';
 import { cleanupEntitiesFiles, postWriteEntityFiles, writeEntityFiles } from './entity-files-vue.ts';
 import { writeEntitiesFiles, writeFiles } from './files-vue.ts';
 import { convertTranslationsSupport, isTranslatedVueFile, translateVueFilesTransform } from './support/index.ts';
+import type {
+  Application as VueApplication,
+  Config as VueConfig,
+  Entity as VueEntity,
+  Features as VueFeatures,
+  Options as VueOptions,
+  Source as VueSource,
+} from './types.ts';
 
 const { CommonDBTypes } = fieldTypes;
 const { VUE } = clientFrameworkTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
 
-export default class VueGenerator extends ClientApplicationGenerator {
-  constructor(args?: string[], options?: Options, features?: Features) {
+export class VueApplicationGenerator extends BaseApplicationGenerator<
+  VueEntity,
+  VueApplication,
+  VueConfig,
+  VueOptions,
+  VueSource,
+  VueFeatures
+> {}
+
+export default class VueGenerator extends VueApplicationGenerator {
+  constructor(args?: string[], options?: VueOptions, features?: VueFeatures) {
     super(args, options, { ...features, loadCommand: ['jhipster:server'] });
   }
 
@@ -82,7 +99,7 @@ export default class VueGenerator extends ClientApplicationGenerator {
     });
   }
 
-  get [ClientApplicationGenerator.CONFIGURING]() {
+  get [VueApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
@@ -98,7 +115,7 @@ export default class VueGenerator extends ClientApplicationGenerator {
     });
   }
 
-  get [ClientApplicationGenerator.COMPOSING]() {
+  get [VueApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
@@ -254,7 +271,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     });
   }
 
-  get [ClientApplicationGenerator.PREPARING]() {
+  get [VueApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
@@ -288,7 +305,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     });
   }
 
-  get [ClientApplicationGenerator.DEFAULT]() {
+  get [VueApplicationGenerator.DEFAULT]() {
     return this.delegateTasksToBlueprint(() => this.default);
   }
 
@@ -323,7 +340,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     });
   }
 
-  get [ClientApplicationGenerator.WRITING]() {
+  get [VueApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -335,7 +352,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     });
   }
 
-  get [ClientApplicationGenerator.WRITING_ENTITIES]() {
+  get [VueApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
@@ -385,12 +402,15 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
         }
       },
       addMicrofrontendDependencies({ application, source }) {
-        const { applicationTypeGateway, clientBundlerRsbuild, clientBundlerVite, clientBundlerWebpack, microfrontend } = application;
+        const { clientBundlerRsbuild, clientBundlerVite, clientBundlerWebpack, microfrontend } = application;
         if (!microfrontend) return;
         if (clientBundlerVite) {
           source.mergeClientPackageJson!({
+            dependencies: {
+              '@module-federation/runtime': null,
+            },
             devDependencies: {
-              '@originjs/vite-plugin-federation': '1.3.6',
+              '@module-federation/vite': null,
             },
           });
         }
@@ -423,11 +443,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
           source.mergeClientPackageJson!({
             devDependencies: {
               '@module-federation/rsbuild-plugin': null,
-              ...(applicationTypeGateway ?
-                {
-                  '@module-federation/enhanced': null,
-                }
-              : {}),
+              '@module-federation/enhanced': null,
             },
           });
         }
@@ -459,7 +475,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     });
   }
 
-  get [ClientApplicationGenerator.POST_WRITING]() {
+  get [VueApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
@@ -469,7 +485,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     });
   }
 
-  get [ClientApplicationGenerator.POST_WRITING_ENTITIES]() {
+  get [VueApplicationGenerator.POST_WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.postWritingEntities);
   }
 
@@ -486,7 +502,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     });
   }
 
-  get [ClientApplicationGenerator.END]() {
+  get [VueApplicationGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
   }
 

@@ -68,7 +68,7 @@ export default () => next => action => {
    * The notification middleware serves to add success and error notifications
    */
   if (isFulfilledAction(action) && payload?.headers) {
-    const { alertMessage<% if (enableTranslation) { %>, alertKey, param<% } %> } = getMessageFromHeaders(payload.headers);
+    const { alertMessage<%- enableTranslation ? ', alertKey, param' : '' %> } = getMessageFromHeaders(payload.headers);
 <%_ if (enableTranslation) { _%>
     if (alertKey) {
       toast.success(translate(alertKey, { param }));
@@ -107,10 +107,10 @@ export default () => next => action => {
         if (problem?.fieldErrors) {
           getFieldErrorsToasts(problem.fieldErrors).forEach(message => addErrorAlert(message));
         } else {
-          const { errorMessage<% if (enableTranslation) { %>, errorKey, param<% } %> } = getMessageFromHeaders(response.headers ?? {});
+          const { errorMessage<%- enableTranslation ? ', errorKey, param' : '' %> } = getMessageFromHeaders(response.headers ?? {});
 <%_ if (enableTranslation) { _%>
           if (errorKey) {
-            const entityName = translate('global.menu.entities.' + param);
+            const entityName = translate(`global.menu.entities.${param}`);
             addErrorAlert({ key: errorKey, data: { entityName } });
           } else
 <%_ } _%>

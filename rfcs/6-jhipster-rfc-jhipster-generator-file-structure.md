@@ -23,7 +23,7 @@ Improving the file structure of the JHipster generator is essential for several 
 - **Ease of Use**: A more intuitive file structure can improve the developer experience, making it easier to find and use the generator's features. This can lead to increased adoption and contribution from the community.
 - **Scalability**: As the generator grows and evolves, a well-organized file structure will help manage complexity and ensure that the codebase remains manageable.
 - **Consistency**: Establishing conventions for file organization will lead to a more consistent codebase, making it easier for developers to follow best practices and contribute effectively.
-- **Extensibility**: A modular file structure will facilitate the addition of new features and technologies, allowing the generator to adapt to changing requirements and trends in the software development landscape. Also to support leverage and ease the maintainance of third party blueprint providers in the long term.
+- **Extensibility**: A modular file structure will facilitate the addition of new features and technologies, allowing the generator to adapt to changing requirements and trends in the software development landscape. Also to support leverage and ease the maintenance of third party blueprint providers in the long term.
 
 ## Guide-level explanation
 
@@ -48,7 +48,7 @@ The JHipster generator will be organized into several types of generators, each 
   <!-- prettier-ignore -->
   - Contexts and object injection in functions (application, entities, etc.)
   <!-- prettier-ignore -->
-  - Facade of useful methods and functions (writing, propmting, etc.)
+  - Facade of useful methods and functions (writing, prompting, etc.)
 - **Feature Generators**: These generators add specific features or functionalities of jhipster (cucumber, kubernetes, ...). They can be used to extend the capabilities of the base generator by extending its core functionality.
 - **Bootstrap Generators**: These generators are used to bootstrap the Features generators by executing common tasks that are common to many of them.
 

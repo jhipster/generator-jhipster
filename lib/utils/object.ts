@@ -68,9 +68,12 @@ export const pickFields = (source: Record<string | number, any>, fields: (string
   Object.fromEntries(fields.map(field => [field, source[field]]));
 
 export const DelayedMutation = '__DelayedMutation__';
-export type MutateDataCallbackOptions = {
+export const UndefinedMutation = '__UndefinedMutation__';
+export type MutateDataCallbackOptions<Data extends object> = {
   /** Marker to be returned when a property needs to be delayed */
   delayMarker?: typeof DelayedMutation;
+  undefinedMarker: typeof UndefinedMutation;
+  data: Data;
 };
 
 export type MutateDataParam<T extends object> = Simplify<
@@ -79,8 +82,8 @@ export type MutateDataParam<T extends object> = Simplify<
     : Key extends ReadonlyKeysOf<T> ? never
     : Key extends keyof T ?
       T[Key] extends Function ?
-        (ctx: T, opts: MutateDataCallbackOptions) => T[Key] | typeof DelayedMutation
-      : T[Key] | ((ctx: T, opts: MutateDataCallbackOptions) => T[Key] | typeof DelayedMutation)
+        (ctx: T, opts: MutateDataCallbackOptions<T>) => T[Key] | typeof DelayedMutation | typeof UndefinedMutation
+      : T[Key] | ((ctx: T, opts: MutateDataCallbackOptions<T>) => T[Key] | typeof DelayedMutation | typeof UndefinedMutation)
     : never;
   }>
 >;
@@ -95,7 +98,9 @@ export type MutateDataPropertiesWithRequiredProperties<D extends Record<string, 
 
 const OverrideMutation = Symbol('OverrideMutation');
 
-export type MutateDataFunction = ((ctx: any, opts: MutateDataCallbackOptions) => any) & { [OverrideMutation]?: boolean };
+export type MutateDataFunction<Data extends object = any> = ((ctx: Data, opts: MutateDataCallbackOptions<Data>) => any) & {
+  [OverrideMutation]?: boolean;
+};
 type MutationContextOptions = {
   autoDelay?: boolean;
   delayContext: Record<string, MutateDataFunction[]>;
@@ -145,7 +150,9 @@ const handleMutateDataCallback = (fn: MutateDataFunction, context: any, { defaul
   try {
     return fn(
       autoDelay ? createNotYetDefinedProxy(context) : context,
-      mutationContext && !defaults ? { delayMarker: DelayedMutation } : {},
+      mutationContext && !defaults ?
+        { delayMarker: DelayedMutation, undefinedMarker: UndefinedMutation, data: context }
+      : { undefinedMarker: UndefinedMutation, data: context },
     );
   } catch (error) {
     if (error instanceof PropertyNotYetDefinedError) {
@@ -185,6 +192,8 @@ const applyDelayedMutations = (
           if (throwOnDelay) {
             throw new Error(`Mutation for key ${key} is undefined, passing defaults should return a valid value`);
           }
+        } else if (result === UndefinedMutation) {
+          result = undefined;
         }
         delete delayedContext[key];
         (context as any)[key] = result;
@@ -261,7 +270,7 @@ export function mutateData<T extends Record<string | number, any>>(
               throw new Error(`Context should be a mutation context to use delayed mutations, missing context for key: ${key}`);
             }
           } else {
-            (context as any)[key] = result;
+            (context as any)[key] = result === UndefinedMutation ? undefined : result;
           }
         }
       } else if (!(key in context) || context[key] === undefined || override === true) {

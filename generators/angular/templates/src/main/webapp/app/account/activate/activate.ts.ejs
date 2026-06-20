@@ -29,7 +29,7 @@ import { ActivateService } from './activate.service';
 @Component({
   selector: '<%- jhiPrefixDashed %>-activate',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
+  imports: [RouterLink<%- enableTranslation ? ', TranslateDirective, TranslateModule' : '' %>],
   templateUrl: './activate.html',
 })
 export default class Activate implements OnInit {

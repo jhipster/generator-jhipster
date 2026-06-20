@@ -22,8 +22,8 @@
  * Filter Number
  *
  * @param {string} input - input to filter
- * @param isSigned - flag indicating whether to check for signed number or not
- * @param isDecimal - flag indicating whether to check for decimal number or not
+ * @param {boolean} isSigned - flag indicating whether to check for signed number or not
+ * @param {boolean} isDecimal - flag indicating whether to check for decimal number or not
  * @returns {number} parsed number if valid input; <code>NaN</code> otherwise
  */
 const filterNumber = (input: any, isSigned = false, isDecimal = false) => {

@@ -82,7 +82,7 @@ class DomainUserDetailsServiceIT {
 
     @Autowired
     @Qualifier("userDetailsService")
-    private <% if (reactive) { %>Reactive<% } %>UserDetailsService domainUserDetailsService;
+    private <%- reactive ? 'Reactive' : '' %>UserDetailsService domainUserDetailsService;
 
     public <%- user.persistClass %> getUserOne() {
         <%- user.persistClass %> userOne = new <%- user.persistClass %>();
@@ -154,35 +154,35 @@ class DomainUserDetailsServiceIT {
 
     @Test
     void assertThatUserCanBeFoundByLogin() {
-        UserDetails userDetails = domainUserDetailsService.<% if (reactive) { %>find<% } else { %>loadUser<% } %>ByUsername(USER_ONE_LOGIN)<% if (reactive) { %>.block()<% } %>;
+        UserDetails userDetails = domainUserDetailsService.<%- reactive ? 'find' : 'loadUser' %>ByUsername(USER_ONE_LOGIN)<%- reactive ? '.block()' : '' %>;
         assertThat(userDetails).isNotNull();
         assertThat(userDetails.getUsername()).isEqualTo(USER_ONE_LOGIN);
     }
 
     @Test
     void assertThatUserCanBeFoundByLoginIgnoreCase() {
-        UserDetails userDetails = domainUserDetailsService.<% if (reactive) { %>find<% } else { %>loadUser<% } %>ByUsername(USER_ONE_LOGIN.toUpperCase(Locale.ENGLISH))<% if (reactive) { %>.block()<% } %>;
+        UserDetails userDetails = domainUserDetailsService.<%- reactive ? 'find' : 'loadUser' %>ByUsername(USER_ONE_LOGIN.toUpperCase(Locale.ENGLISH))<%- reactive ? '.block()' : '' %>;
         assertThat(userDetails).isNotNull();
         assertThat(userDetails.getUsername()).isEqualTo(USER_ONE_LOGIN);
     }
 
     @Test
     void assertThatUserCanBeFoundByEmail() {
-        UserDetails userDetails = domainUserDetailsService.<% if (reactive) { %>find<% } else { %>loadUser<% } %>ByUsername(USER_TWO_EMAIL)<% if (reactive) { %>.block()<% } %>;
+        UserDetails userDetails = domainUserDetailsService.<%- reactive ? 'find' : 'loadUser' %>ByUsername(USER_TWO_EMAIL)<%- reactive ? '.block()' : '' %>;
         assertThat(userDetails).isNotNull();
         assertThat(userDetails.getUsername()).isEqualTo(USER_TWO_LOGIN);
     }
 
     @Test
     void assertThatUserCanBeFoundByEmailIgnoreCase() {
-        UserDetails userDetails = domainUserDetailsService.<% if (reactive) { %>find<% } else { %>loadUser<% } %>ByUsername(USER_TWO_EMAIL.toUpperCase(Locale.ENGLISH))<% if (reactive) { %>.block()<% } %>;
+        UserDetails userDetails = domainUserDetailsService.<%- reactive ? 'find' : 'loadUser' %>ByUsername(USER_TWO_EMAIL.toUpperCase(Locale.ENGLISH))<%- reactive ? '.block()' : '' %>;
         assertThat(userDetails).isNotNull();
         assertThat(userDetails.getUsername()).isEqualTo(USER_TWO_LOGIN);
     }
 
     @Test
     void assertThatEmailIsPrioritizedOverLogin() {
-        UserDetails userDetails = domainUserDetailsService.<% if (reactive) { %>find<% } else { %>loadUser<% } %>ByUsername(USER_ONE_EMAIL)<% if (reactive) { %>.block()<% } %>;
+        UserDetails userDetails = domainUserDetailsService.<%- reactive ? 'find' : 'loadUser' %>ByUsername(USER_ONE_EMAIL)<%- reactive ? '.block()' : '' %>;
         assertThat(userDetails).isNotNull();
         assertThat(userDetails.getUsername()).isEqualTo(USER_ONE_LOGIN);
     }
@@ -190,6 +190,6 @@ class DomainUserDetailsServiceIT {
     @Test
     void assertThatUserNotActivatedExceptionIsThrownForNotActivatedUsers() {
         assertThatExceptionOfType(UserNotActivatedException.class).isThrownBy(
-            () -> domainUserDetailsService.<% if (reactive) { %>find<% } else { %>loadUser<% } %>ByUsername(USER_THREE_LOGIN)<% if (reactive) { %>.block()<% } %>);
+            () -> domainUserDetailsService.<%- reactive ? 'find' : 'loadUser' %>ByUsername(USER_THREE_LOGIN)<%- reactive ? '.block()' : '' %>);
     }
 }

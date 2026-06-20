@@ -158,7 +158,7 @@ export default defineComponent({
   <%_ if (enableTranslation) { _%>
         const message = t$('<%- i18nAlertHeaderPrefix %>.deleted', { param : removeId.value }).toString();
   <%_ } else { _%>
-        const message = 'A <%- entityAngularName %> is deleted with identifier ' + removeId.value;
+        const message = `A <%- entityAngularName %> is deleted with identifier ${removeId.value}`;
   <%_ } _%>
         alertService.showInfo(message, { variant: 'danger' });
         removeId.value = null;

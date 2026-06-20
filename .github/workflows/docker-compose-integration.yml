@@ -25,6 +25,8 @@ concurrency:
 on:
   pull_request:
     types: [closed, opened, synchronize, reopened]
+permissions:
+  contents: read
 env:
   FORCE_COLOR: 2
 jobs:

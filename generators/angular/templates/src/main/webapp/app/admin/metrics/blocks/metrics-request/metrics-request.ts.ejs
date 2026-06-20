@@ -31,7 +31,7 @@ import { filterNaN } from 'app/core/util/operators';
   selector: '<%- jhiPrefixDashed %>-metrics-request',
   templateUrl: './metrics-request.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgbProgressbar, KeyValuePipe, DecimalPipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
+  imports: [NgbProgressbar, KeyValuePipe, DecimalPipe<%- enableTranslation ? ', TranslateDirective, TranslateModule' : '' %>],
 })
 export class MetricsRequest {
   /**

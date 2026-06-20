@@ -100,7 +100,7 @@ import { UserManagementService } from '../service/user-management.service';
 import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './user-management-delete-dialog.html',
     imports: [
 FormsModule, FontAwesomeModule, AlertError],
@@ -275,7 +275,7 @@ import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'ap
 import { IUserManagement } from '../user-management.model';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     selector: 'jhi-user-management-detail',
     templateUrl: './user-management-detail.html',
     imports: [
@@ -288,7 +288,6 @@ import { IUserManagement } from '../user-management.model';
 })
 export class UserManagementDetail {
     readonly userManagement = input<IUserManagement | null>(null);
-
 
 
     previousState(): void {
@@ -739,7 +738,7 @@ import { EntityArrayResponseType, UserManagementService } from '../service/user-
 import { UserManagementDeleteDialog } from '../delete/user-management-delete-dialog';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     selector: 'jhi-user-management',
     templateUrl: './user-management.html',
     imports: [
@@ -845,8 +844,7 @@ export class UserManagement implements OnInit {
     }
 
     protected handleNavigation(page: number, sortState: SortState): void {
-      const queryParamsObj
-= {
+      const queryParamsObj = {
         page,
         size: this.itemsPerPage(),
         sort: this.sortService.buildSortParam(sortState),
@@ -987,20 +985,18 @@ describe('UserManagement routing resolve service', () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/route/user-management-routing-resolve.service.ts": {
-    "contents": "import { HttpErrorResponse } from "@angular/common/http";
-import { inject } from "@angular/core";
-import { ActivatedRouteSnapshot, Router } from "@angular/router";
+    "contents": "import { HttpErrorResponse } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { EMPTY, Observable, of } from 'rxjs';
+import { catchError, mergeMap } from 'rxjs/operators';
 
-import { catchError, EMPTY, Observable, of } from "rxjs";
+import { IUserManagement } from '../user-management.model';
+import { UserManagementService } from '../service/user-management.service';
 
-import { IUserManagement } from "../user-management.model";
-import { UserManagementService } from "../service/user-management.service";
-
-const userManagementResolve = (
-  route: ActivatedRouteSnapshot,
-): Observable<null | IUserManagement> => {
-  const login = route.params["login"];
-  if (login) {
+const userManagementResolve = (route: ActivatedRouteSnapshot): Observable<null | IUserManagement> => {
+  const id = route.params['login'];
+  if (id) {
     const router = inject(Router);
     const service = inject(UserManagementService);
     return service.find(id).pipe(
@@ -1241,7 +1237,6 @@ import {
   Observable,
 } from 'rxjs';
 
-
 import dayjs from 'dayjs/esm';
 
 import { isPresent } from 'app/core/util/operators';
@@ -1265,9 +1260,6 @@ export type NewRestUserManagement = RestOf<NewUserManagement>;
 
 export type PartialUpdateRestUserManagement = RestOf<PartialUpdateUserManagement>;
 
-export type EntityResponseType = HttpResponse<IUserManagement>;
-export type EntityArrayResponseType = HttpResponse<IUserManagement[]>;
-
 @Injectable()
 export class UserManagementsService {
   readonly userManagementsParams = signal<Record<string, string | number | boolean | readonly (string | number | boolean)[]> | undefined>(undefined);
@@ -1278,7 +1270,11 @@ export class UserManagementsService {
     }
     return { url: this.resourceUrl, params };
   });
-  readonly userManagements = computed(() => (this.userManagementsResource.value() ?? [])
+  /**
+   * This signal holds the list of userManagement that have been fetched. It is updated when the userManagementsResource emits a new value.
+   * In case of error while fetching the userManagements, the signal is set to an empty array.
+   */
+  readonly userManagements = computed(() => (this.userManagementsResource.hasValue() ? this.userManagementsResource.value() : [])
     .map(item => this.convertValueFromServer(item))
   );
   protected readonly applicationConfigService = inject(ApplicationConfigService);
@@ -1289,7 +1285,7 @@ export class UserManagementsService {
       ...restUserManagement,
       createdDate: restUserManagement.createdDate ? dayjs(restUserManagement.createdDate) : undefined,
       lastModifiedDate: restUserManagement.lastModifiedDate ? dayjs(restUserManagement.lastModifiedDate) : undefined,
-      authorities: restUserManagement.authorities,
+      authorities: restUserManagement.authorities?.map(authority => ({ name: authority as unknown as string })),
     }
   }
 
@@ -1299,43 +1295,44 @@ export class UserManagementsService {
 export class UserManagementService extends UserManagementsService {
     protected readonly http = inject(HttpClient);
 
-    create(userManagement: NewUserManagement): Observable<EntityResponseType> {
+    create(userManagement: NewUserManagement): Observable<IUserManagement> {
         const copy = this.convertValueFromClient(userManagement);
-        return this.http.post<RestUserManagement>(this.resourceUrl,
-                 copy ,
-                { observe: 'response' })
+        return this.http.post<RestUserManagement>(
+          this.resourceUrl,
+           copy 
+        )
         .pipe(map(res => this.convertResponseFromServer(res)));
     }
 
-    update(userManagement: IUserManagement): Observable<EntityResponseType> {
+    update(userManagement: IUserManagement): Observable<IUserManagement> {
         const copy = this.convertValueFromClient(userManagement);
         return this.http.put<RestUserManagement>(\`\${this.resourceUrl}/\${encodeURIComponent(this.getUserManagementIdentifier(userManagement))}\`,
                  copy ,
-                { observe: 'response' })
+                )
         .pipe(map(res => this.convertResponseFromServer(res)));
     }
 
-    partialUpdate(userManagement: PartialUpdateUserManagement): Observable<EntityResponseType> {
+    partialUpdate(userManagement: PartialUpdateUserManagement): Observable<IUserManagement> {
         const copy = this.convertValueFromClient(userManagement);
         return this.http.patch<RestUserManagement>(\`\${this.resourceUrl}/\${encodeURIComponent(this.getUserManagementIdentifier(userManagement))}\`,
                  copy ,
-                { observe: 'response' })
+                )
         .pipe(map(res => this.convertResponseFromServer(res)));
     }
 
-    find(id: string): Observable<EntityResponseType> {
-        return this.http.get<RestUserManagement>(\`\${this.resourceUrl}/\${encodeURIComponent(id)}\`, { observe: 'response' })
+    find(login: string): Observable<IUserManagement> {
+        return this.http.get<RestUserManagement>(\`\${this.resourceUrl}/\${encodeURIComponent(login)}\`)
             .pipe(map(res => this.convertResponseFromServer(res)));
     }
 
-    query(req?: any): Observable<EntityArrayResponseType> {
+    query(req?: any): Observable<HttpResponse<IUserManagement[]>> {
         const options = createRequestOption(req);
         return this.http.get<RestUserManagement[]>(this.resourceUrl, { params: options, observe: 'response' })
-            .pipe(map(res => this.convertResponseArrayFromServer(res)));
+            .pipe(map(res => res.clone({ body: this.convertResponseArrayFromServer(res.body!) })));
     }
 
-    delete(id: string): Observable<HttpResponse<{}>> {
-        return this.http.delete(\`\${this.resourceUrl}/\${encodeURIComponent(id)}\`, { observe: 'response' });
+    delete(login: string): Observable<undefined> {
+        return this.http.delete<undefined>(\`\${this.resourceUrl}/\${encodeURIComponent(login)}\`);
     }
 
 
@@ -1345,12 +1342,6 @@ export class UserManagementService extends UserManagementsService {
 
     compareUserManagement(o1: Pick<IUserManagement, 'login'> | null, o2: Pick<IUserManagement, 'login'> | null): boolean {
         return o1 && o2 ? this.getUserManagementIdentifier(o1) === this.getUserManagementIdentifier(o2) : o1 === o2;
-    }
-
-    authorities(): Observable<string[]> {
-        return this.http
-          .get<Array<string | { name: string }>>(this.applicationConfigService.getEndpointFor('api/authorities'))
-          .pipe(map(authorities => authorities.map(authority => (typeof authority === 'string' ? authority : authority.name))));
     }
 
     addUserManagementToCollectionIfMissing<Type extends Pick<IUserManagement, 'login'>>(userManagementCollection: Type[], ...userManagementsToCheck: (Type | null | undefined)[]): Type[] {
@@ -1375,20 +1366,16 @@ export class UserManagementService extends UserManagementsService {
       ...userManagement,
     createdDate: userManagement.createdDate?.toJSON() ?? null,
     lastModifiedDate: userManagement.lastModifiedDate?.toJSON() ?? null,
-      authorities: userManagement.authorities,
+      authorities: userManagement.authorities?.map(authority => authority.name),
     };
   }
 
-  protected convertResponseFromServer(res: HttpResponse<RestUserManagement>): HttpResponse<IUserManagement> {
-    return res.clone({
-      body: res.body ? this.convertValueFromServer(res.body) : null,
-    });
+  protected convertResponseFromServer(res: RestUserManagement): IUserManagement {
+    return this.convertValueFromServer(res);
   }
 
-  protected convertResponseArrayFromServer(res: HttpResponse<RestUserManagement[]>): HttpResponse<IUserManagement[]> {
-    return res.clone({
-      body: res.body ? res.body.map(item => this.convertValueFromServer(item)) : null,
-    });
+  protected convertResponseArrayFromServer(res: RestUserManagement[]): IUserManagement[] {
+    return res.map(item => this.convertValueFromServer(item));
   }
 }
 ",
@@ -1948,20 +1935,10 @@ describe('UserManagement Management Update Component', () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.ts": {
-    "contents": "import {
-  Component,
-  ChangeDetectionStrategy,
-  inject,
-  signal,
-  OnInit,
-} from "@angular/core";
-import { HttpResponse } from "@angular/common/http";
-import { ActivatedRoute } from "@angular/router";
-import { finalize, Observable } from "rxjs";
-
-import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
-import { AlertError } from "app/shared/alert/alert-error";
-import { ReactiveFormsModule } from "@angular/forms";
+    "contents": "import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
+import { finalize, Observable } from 'rxjs';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AlertError } from 'app/shared/alert/alert-error';
@@ -1972,7 +1949,7 @@ import { IUserManagement } from '../user-management.model';
 import { UserManagementService } from '../service/user-management.service';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     selector: 'jhi-user-management-update',
     templateUrl: './user-management-update.html',
     imports: [
@@ -2308,6 +2285,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "endpointPrefix": "",
   "entities": Any<Array>,
   "entitySuffix": "",
+  "exposeMicrofrontend": false,
   "feignClient": false,
   "filterEntitiesAndPropertiesForClient": [Function],
   "filterEntitiesForClient": [Function],
@@ -2395,7 +2373,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "messageHeaderNameAlert": "x-jhipsterapp-alert",
   "messageHeaderNameError": "x-jhipsterapp-error",
   "messageHeaderNameParam": "x-jhipsterapp-params",
-  "microfrontend": undefined,
+  "microfrontend": false,
   "microfrontends": undefined,
   "monorepository": undefined,
   "nativeLanguage": "en",
@@ -2413,6 +2391,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "nodePackageManager": "npm",
   "nodePackageManagerCommand": "npm",
   "nodeVersion": "NODE_VERSION",
+  "nodeWebappBuildTarget": "webapp:build",
   "packageFolder": undefined,
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {},
@@ -3356,6 +3335,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "endpointPrefix": "",
   "entities": Any<Array>,
   "entitySuffix": "",
+  "exposeMicrofrontend": false,
   "feignClient": false,
   "filterEntitiesAndPropertiesForClient": [Function],
   "filterEntitiesForClient": [Function],
@@ -3433,7 +3413,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "messageHeaderNameAlert": "x-jhipsterapp-alert",
   "messageHeaderNameError": "x-jhipsterapp-error",
   "messageHeaderNameParam": "x-jhipsterapp-params",
-  "microfrontend": undefined,
+  "microfrontend": false,
   "microfrontends": undefined,
   "monorepository": undefined,
   "nativeLanguage": "en",
@@ -3451,6 +3431,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "nodePackageManager": "npm",
   "nodePackageManagerCommand": "npm",
   "nodeVersion": "NODE_VERSION",
+  "nodeWebappBuildTarget": "webapp:build",
   "packageFolder": undefined,
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {},
@@ -4256,7 +4237,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/shared/language/translate.directive.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/shared/language/translation.module.ts": {
+  "clientRoot/src/app/shared/language/translation.provider.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/pagination/index.ts": {
@@ -4625,6 +4606,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "endpointPrefix": "services/jhipster",
   "entities": Any<Array>,
   "entitySuffix": "",
+  "exposeMicrofrontend": false,
   "feignClient": false,
   "filterEntitiesAndPropertiesForClient": [Function],
   "filterEntitiesForClient": [Function],
@@ -4713,7 +4695,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "messageHeaderNameError": "x-jhipsterapp-error",
   "messageHeaderNameParam": "x-jhipsterapp-params",
   "microfrontend": true,
-  "microfrontends": undefined,
+  "microfrontends": [],
   "monorepository": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {
@@ -4730,6 +4712,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "nodePackageManager": "npm",
   "nodePackageManagerCommand": "npm",
   "nodeVersion": "NODE_VERSION",
+  "nodeWebappBuildTarget": "webapp:build",
   "packageFolder": undefined,
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {},
@@ -5673,6 +5656,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "endpointPrefix": "services/jhipster",
   "entities": Any<Array>,
   "entitySuffix": "",
+  "exposeMicrofrontend": false,
   "feignClient": false,
   "filterEntitiesAndPropertiesForClient": [Function],
   "filterEntitiesForClient": [Function],
@@ -5751,7 +5735,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "messageHeaderNameError": "x-jhipsterapp-error",
   "messageHeaderNameParam": "x-jhipsterapp-params",
   "microfrontend": true,
-  "microfrontends": undefined,
+  "microfrontends": [],
   "monorepository": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {
@@ -5768,6 +5752,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "nodePackageManager": "npm",
   "nodePackageManagerCommand": "npm",
   "nodeVersion": "NODE_VERSION",
+  "nodeWebappBuildTarget": "webapp:build",
   "packageFolder": undefined,
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {},
@@ -6465,7 +6450,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/shared/language/translate.directive.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/shared/language/translation.module.ts": {
+  "src/main/webapp/app/shared/language/translation.provider.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/pagination/index.ts": {
@@ -6860,6 +6845,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "endpointPrefix": "",
   "entities": Any<Array>,
   "entitySuffix": "",
+  "exposeMicrofrontend": false,
   "feignClient": false,
   "filterEntitiesAndPropertiesForClient": [Function],
   "filterEntitiesForClient": [Function],
@@ -6955,6 +6941,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "nodePackageManager": "npm",
   "nodePackageManagerCommand": "npm",
   "nodeVersion": "NODE_VERSION",
+  "nodeWebappBuildTarget": "webapp:build",
   "packageFolder": undefined,
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {},
@@ -7950,7 +7937,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/shared/language/translate.directive.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/shared/language/translation.module.ts": {
+  "src/main/webapp/app/shared/language/translation.provider.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/pagination/index.ts": {
@@ -8317,6 +8304,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "endpointPrefix": "",
   "entities": Any<Array>,
   "entitySuffix": "",
+  "exposeMicrofrontend": false,
   "feignClient": false,
   "filterEntitiesAndPropertiesForClient": [Function],
   "filterEntitiesForClient": [Function],
@@ -8422,6 +8410,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "nodePackageManager": "npm",
   "nodePackageManagerCommand": "npm",
   "nodeVersion": "NODE_VERSION",
+  "nodeWebappBuildTarget": "webapp:build",
   "packageFolder": undefined,
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {},
@@ -9335,6 +9324,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "endpointPrefix": "",
   "entities": Any<Array>,
   "entitySuffix": "",
+  "exposeMicrofrontend": false,
   "feignClient": false,
   "filterEntitiesAndPropertiesForClient": [Function],
   "filterEntitiesForClient": [Function],
@@ -9440,6 +9430,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "nodePackageManager": "npm",
   "nodePackageManagerCommand": "npm",
   "nodeVersion": "NODE_VERSION",
+  "nodeWebappBuildTarget": "webapp:build",
   "packageFolder": undefined,
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {},

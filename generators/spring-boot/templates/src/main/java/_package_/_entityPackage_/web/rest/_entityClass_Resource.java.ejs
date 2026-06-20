@@ -1,4 +1,3 @@
-<%# eslint-disable -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -58,7 +57,7 @@ import tech.jhipster.web.util.HeaderUtil;
 <%_ if (!paginationNo) { _%>
 import tech.jhipster.web.util.PaginationUtil;
 <%_ } _%>
-import tech.jhipster.web.util.<% if (reactive) { %>reactive.<% } %>ResponseUtil;
+import tech.jhipster.web.util.<%- reactive ? 'reactive.' : '' %>ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -144,12 +143,7 @@ public class <%- entityClass %>Resource {
     private static final Logger LOG = LoggerFactory.getLogger(<%- entityClass %>Resource.class);
 <%_ if (!readOnly) { _%>
 
-  <%_ let entityName = entityInstance;
-  if (clientRootFolder && !skipUiGrouping) {
-    entityName = this._.camelCase(`${clientRootFolder}${entityClass}`);
-  }
-  _%>
-    private static final String ENTITY_NAME = "<%- entityName %>";
+    private static final String ENTITY_NAME = "<%- clientRootFolder && !skipUiGrouping ? this._.camelCase(`${clientRootFolder}${entityClass}`) : entityInstance %>";
 
     @Value("${jhipster.clientApp.name:<%- camelizedBaseName %>}")
     private String applicationName;
@@ -158,7 +152,7 @@ public class <%- entityClass %>Resource {
     const instanceName = restInstance;
     const mapper = `${entityInstance}Mapper`;
     const entityToDtoReference = `${mapper}::` + 'toDto';
-_%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService, constructorName: `${entityClass}Resource`, queryService: jpaMetamodelFiltering, isUsingMapsId, mapsIdAssoc, isController: true, reactive }); -%>
+_%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService, constructorName: `${entityClass}Resource`, queryService: jpaMetamodelFiltering, isUsingMapsId, mapsIdAssoc, isController: true, reactive }) -%>
 <%_ if (!readOnly) { _%>
 
     /**
@@ -172,7 +166,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
   <%_ if (entitySpringPreAuthorize) { _%>
     @PreAuthorize("<%- entitySpringPreAuthorize %>")
   <%_ } _%>
-    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%- instanceType %>><% if (reactive) { %>><% } %> create<%- entityClass %>(<% if (anyPropertyHasValidation) { %>@Valid <% } %>@RequestBody <%- instanceType %> <%- instanceName %>) throws URISyntaxException {
+    public <%- reactive ? 'Mono<' : '' %>ResponseEntity<<%- instanceType %>><%- reactive ? '>' : '' %> create<%- entityClass %>(<%- anyPropertyHasValidation ? '@Valid ' : '' %>@RequestBody <%- instanceType %> <%- instanceName %>) throws URISyntaxException {
         LOG.debug("REST request to save <%- entityClass %> : {}", <%- instanceName %>);
   <%_ if (primaryKey.autoGenerate) { _%>
         if (<%- instanceName %>.<%- primaryKey.propertySupplierName %>() != null) {
@@ -217,7 +211,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
                 }
   <%_ } _%>
   <%_ if (serviceNo) { _%>
-<%- include(`/_global_partials_entity_/save_template_${reactive ? 'reactive' : 'imperative'}`, { saveNewEntityOperation: true, returnDirectly: false }); -%>
+<%- include(`/_global_partials_entity_/save_template_${reactive ? 'reactive' : 'imperative'}`, { saveNewEntityOperation: true, returnDirectly: false }) -%>
   <%_ } _%>
   <%_ if (reactive) { _%>
     <%_ if (!serviceNo) { _%>
@@ -227,7 +221,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
             .map(result -> {
                 try {
                     return ResponseEntity.created(new URI("/api/<%- entityApiUrl %>/" + result.<%- primaryKey.propertySupplierName %>()))
-                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, result.<%- primaryKey.propertySupplierName %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
+                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, result.<%- primaryKey.propertySupplierName %>()<%- primaryKey.typeString ? '' : '.toString()' %>))
                         .body(result);
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
@@ -241,7 +235,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
         <%- restInstance %> = <%- entityInstance %>Service.save(<%- instanceName %>);
     <%_ } _%>
         return ResponseEntity.created(new URI("/api/<%- entityApiUrl %>/" + <%- restInstance %>.<%- primaryKey.propertySupplierName %>()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, <%- restInstance %>.<%- primaryKey.propertySupplierName %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, <%- restInstance %>.<%- primaryKey.propertySupplierName %>()<%- primaryKey.typeString ? '' : '.toString()' %>))
             .body(<%- restInstance %>);
   <%_ } _%>
     }
@@ -262,9 +256,9 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
   <%_ if (entitySpringPreAuthorize) { _%>
     @PreAuthorize("<%- entitySpringPreAuthorize %>")
   <%_ } _%>
-    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%- instanceType %>><% if (reactive) { %>><% } %> update<%- entityClass %>(
+    public <%- reactive ? 'Mono<' : '' %>ResponseEntity<<%- instanceType %>><%- reactive ? '>' : '' %> update<%- entityClass %>(
         @PathVariable(value = "<%- primaryKey.name %>", required = false) final <%- primaryKey.type %> <%- primaryKey.name %>,
-        <% if (anyPropertyHasValidation) { %>@Valid <% } %>@RequestBody <%- restClass %> <%- restInstance %>
+        <%- anyPropertyHasValidation ? '@Valid ' : '' %>@RequestBody <%- restClass %> <%- restInstance %>
     ) throws URISyntaxException {
         LOG.debug("REST request to update <%- entityClass %> : {}, {}", <%- primaryKey.name %>, <%- instanceName %>);
         if (<%- instanceName %>.<%- primaryKey.propertySupplierName %>() == null) {
@@ -303,7 +297,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
     <% } %>
   <%_ } _%>
   <%_ if (serviceNo) { _%>
-<%- include(`/_global_partials_entity_/save_template_${reactive ? 'reactive' : 'imperative'}`, { saveNewEntityOperation: false, returnDirectly: false }); -%>
+<%- include(`/_global_partials_entity_/save_template_${reactive ? 'reactive' : 'imperative'}`, { saveNewEntityOperation: false, returnDirectly: false }) -%>
   <%_ } _%>
   <%_ if (reactive) { _%>
     <%_ if (!serviceNo) { _%>
@@ -312,7 +306,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
     <%_ } _%>
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
                 .map(result -> ResponseEntity.ok()
-                    .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, result.<%- primaryKey.propertySupplierName %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
+                    .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, result.<%- primaryKey.propertySupplierName %>()<%- primaryKey.typeString ? '' : '.toString()' %>))
                     .body(result)
                 );
         });
@@ -321,7 +315,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
         <%- restInstance %> = <%- entityInstance %>Service.update(<%- restInstance %>);
     <%_ } _%>
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, <%- restInstance %>.<%- primaryKey.propertySupplierName %>()<% if (!primaryKey.typeString) { %>.toString()<% } %>))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, <%- restInstance %>.<%- primaryKey.propertySupplierName %>()<%- primaryKey.typeString ? '' : '.toString()' %>))
             .body(<%- restInstance %>);
   <%_ } _%>
     }
@@ -341,9 +335,9 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
   <%_ if (entitySpringPreAuthorize) { _%>
     @PreAuthorize("<%- entitySpringPreAuthorize %>")
   <%_ } _%>
-    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%- instanceType %>><% if (reactive) { %>><% } %> partialUpdate<%- entityClass %>(
+    public <%- reactive ? 'Mono<' : '' %>ResponseEntity<<%- instanceType %>><%- reactive ? '>' : '' %> partialUpdate<%- entityClass %>(
         @PathVariable(value = "<%- primaryKey.name %>", required = false) final <%- primaryKey.type %> <%- primaryKey.name %>,
-        <% if (anyPropertyHasValidation) { %>@NotNull <% } %>@RequestBody <%- instanceType %> <%- instanceName %>
+        <%- anyPropertyHasValidation ? '@NotNull ' : '' %>@RequestBody <%- instanceType %> <%- instanceName %>
     ) throws URISyntaxException {
         LOG.debug("REST request to partial update <%- entityClass %> partially : {}, {}", <%- primaryKey.name %>, <%- instanceName %>);
         if (<%- instanceName %>.<%- primaryKey.propertySupplierName %>() == null) {
@@ -380,19 +374,19 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
     <% } %>
   <%_ } _%>
 
-            <%- include('../../_partials_entity_/patch_template', { isService: false, viaService }); -%>
+            <%- include('../../_partials_entity_/patch_template', { isService: false, viaService }) -%>
   <%_ if (reactive) { _%>
             return result
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
                 .map(res -> ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, res.<%- primaryKey.propertySupplierName %>()<% if (primaryKey.type !== 'String') { %>.toString()<% } %>))
+                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, res.<%- primaryKey.propertySupplierName %>()<%- (primaryKey.type !== 'String') ? '.toString()' : '' %>))
                 .body(res)
             );
         });
   <%_ } else { _%>
             return ResponseUtil.wrapOrNotFound(
                 result,
-                HeaderUtil.createEntityUpdateAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, <%- instanceName %>.<%- primaryKey.propertySupplierName %>()<% if (primaryKey.type !== 'String') { %>.toString()<% } %>)
+                HeaderUtil.createEntityUpdateAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, <%- instanceName %>.<%- primaryKey.propertySupplierName %>()<%- (primaryKey.type !== 'String') ? '.toString()' : '' %>)
             );
   <%_ } _%>
     }
@@ -428,7 +422,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
 <%_ if (entitySpringReadPreAuthorize) { _%>
     @PreAuthorize("<%- entitySpringReadPreAuthorize %>")
 <%_ } _%>
-<%- include('../../_partials_entity_/get_all_template', { viaService }); -%>
+<%- include('../../_partials_entity_/get_all_template', { viaService }) -%>
 
 <%_ if (!jpaMetamodelFiltering && reactive && paginationNo) { _%>
     /**
@@ -469,8 +463,8 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
 <%_ if (entitySpringReadPreAuthorize) { _%>
     @PreAuthorize("<%- entitySpringReadPreAuthorize %>")
 <%_ } _%>
-    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<<%- instanceType %>><% if (reactive) { %>><% } %> get<%- entityClass %>(@PathVariable("id") <%- primaryKey.type %> id) {
-        LOG.debug("REST request to get <%- entityClass %> : {}", id);<%- include('../../_partials_entity_/get_template', { viaService, returnDirectly:false, implementsEagerLoadApis }); -%>
+    public <%- reactive ? 'Mono<' : '' %>ResponseEntity<<%- instanceType %>><%- reactive ? '>' : '' %> get<%- entityClass %>(@PathVariable("id") <%- primaryKey.type %> id) {
+        LOG.debug("REST request to get <%- entityClass %> : {}", id);<%- include('../../_partials_entity_/get_template', { viaService, returnDirectly: false, implementsEagerLoadApis }) -%>
         return ResponseUtil.wrapOrNotFound(<%- instanceName %>);
     }
 <%_ if (!readOnly) { _%>
@@ -485,21 +479,21 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
   <%_ if (entitySpringPreAuthorize) { _%>
     @PreAuthorize("<%- entitySpringPreAuthorize %>")
   <%_ } _%>
-    public <% if (reactive) { %>Mono<<% } %>ResponseEntity<Void><% if (reactive) { %>><% } %> delete<%- entityClass %>(@PathVariable("id") <%- primaryKey.type %> id) {
+    public <%- reactive ? 'Mono<' : '' %>ResponseEntity<Void><%- reactive ? '>' : '' %> delete<%- entityClass %>(@PathVariable("id") <%- primaryKey.type %> id) {
         LOG.debug("REST request to delete <%- entityClass %> : {}", id);
-<%- include('../../_partials_entity_/delete_template', { viaService, fromResource: true }); -%>
+<%- include('../../_partials_entity_/delete_template', { viaService, fromResource: true }) -%>
   <%_ if (reactive) { _%>
     <%_ if (databaseTypeCouchbase) { _%>
             .then(Mono.just(ResponseEntity.noContent()
-                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, id<% if (primaryKey.type !== 'String') { %>.toString()<% } %>)).build())
+                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, id<%- (primaryKey.type !== 'String') ? '.toString()' : '' %>)).build())
             );
     <%_ } else { %>
             .then(Mono.just(ResponseEntity.noContent()
-                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, id<% if (primaryKey.type !== 'String') { %>.toString()<% } %>)).build())
+                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, id<%- (primaryKey.type !== 'String') ? '.toString()' : '' %>)).build())
         );
     <%_ } _%>
   <%_ } else { _%>
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, id<% if (!primaryKey.fields[0].fieldTypeString) { %>.toString()<% } %>)).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, id<%- primaryKey.fields[0].fieldTypeString ? '' : '.toString()' %>)).build();
   <%_ } _%>
     }
 <%_ } _%>
@@ -522,7 +516,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
   <%_ if (entitySpringReadPreAuthorize) { _%>
     @PreAuthorize("<%- entitySpringReadPreAuthorize %>")
   <%_ } _%>
-<%- include('../../_partials_entity_/search_template', { viaService }); -%>
+<%- include('../../_partials_entity_/search_template', { viaService }) -%>
 <%_ } _%>
 <%_ if (updatableEntity && !viaService && !dtoMapstruct && fields.some(field => !field.id && !field.transient)) { _%>
 

@@ -49,8 +49,11 @@
               <span class="no-bold">{{ t$('global.menu.entities.main') }}</span>
             </span>
           </template>
-          <entities-menu></entities-menu>
-<%_ if (applicationTypeGateway && microfrontend) { _%>
+<%_ if (exposeMicrofrontend) { _%>
+          <!-- Load entities menu exposed by microfrontend -->
+<%_ } _%>
+          <%- exposeMicrofrontend ? '<!-- ' : '' %><entities-menu></entities-menu><%- exposeMicrofrontend ? ' -->' : '' %>
+<%_ if (microfrontend) { _%>
   <%_ for (const microfrontend of microfrontends) { _%>
           <<%- microfrontend.moduleFederationName %>-menu></<%- microfrontend.moduleFederationName %>-menu>
   <%_ } _%>
@@ -170,7 +173,7 @@
             <font-awesome-icon icon="sign-out-alt" />
             <span>{{ t$('global.menu.account.logout') }}</span>
           </b-dropdown-item>
-          <b-dropdown-item data-cy="login" v-if="!authenticated" @click="<% if (authenticationTypeOauth2) { %>login<% } else { %>showLogin<% } %>()" id="login" active-class="active">
+          <b-dropdown-item data-cy="login" v-if="!authenticated" @click="<%- authenticationTypeOauth2 ? 'login' : 'showLogin' %>()" id="login" active-class="active">
             <font-awesome-icon icon="sign-in-alt" />
             <span>{{ t$('global.menu.account.login') }}</span>
           </b-dropdown-item>

@@ -20,7 +20,7 @@ import assert from 'node:assert';
 
 import { passthrough } from '@yeoman/transform';
 import chalk from 'chalk';
-import { lowerFirst, upperFirst } from 'lodash-es';
+import { lowerFirst } from 'lodash-es';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
@@ -123,38 +123,6 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
 
   get [BaseApplicationGenerator.PREPARING]() {
     return this.preparing;
-  }
-
-  get postPreparing() {
-    return this.asPostPreparingTaskGroup({
-      prepareApplication({ application }) {
-        if (application.microfrontends && application.microfrontends.length > 0) {
-          application.microfrontends.forEach(microfrontend => {
-            const { baseName } = microfrontend;
-            mutateData(microfrontend, {
-              lowercaseBaseName: baseName.toLowerCase(),
-              moduleFederationName: ({ lowercaseBaseName }) => lowercaseBaseName.replaceAll('-', '_'),
-              capitalizedBaseName: upperFirst(baseName),
-              endpointPrefix: `services/${baseName.toLowerCase()}`,
-            });
-          });
-        } else if (application.microfrontend) {
-          application.microfrontends = [];
-        }
-        application.microfrontend =
-          application.microfrontend ||
-          (application.applicationTypeMicroservice && !application.skipClient) ||
-          (application.applicationTypeGateway && application.microfrontends && application.microfrontends.length > 0);
-
-        if (application.microfrontend && application.applicationTypeMicroservice && !application.gatewayServerPort) {
-          application.gatewayServerPort = 8080;
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.POST_PREPARING]() {
-    return this.postPreparing;
   }
 
   get configuringEachEntity() {
@@ -408,12 +376,12 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
         derivedPrimaryKeyProperties(entity.primaryKey);
       },
       processDerivedPrimaryKeyFields({ entity }) {
-        const primaryKey = entity.primaryKey;
+        const { primaryKey } = entity;
         if (!primaryKey || primaryKey.composite || !primaryKey.derived) {
           return;
         }
         // derivedPrimary uses '@MapsId', which requires for each relationship id field to have corresponding field in the model
-        const derivedFields = primaryKey.derivedFields;
+        const { derivedFields } = primaryKey;
         entity.fields.unshift(...derivedFields!);
       },
       prepareEntityDerivedProperties({ entity }) {

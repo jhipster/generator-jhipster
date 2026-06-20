@@ -207,36 +207,31 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
           },
         });
 
-        if (applications.some(app => app.clientFrameworkAngular)) {
-          const {
-            dependencies: { rxjs },
-            devDependencies: { webpack: webpackVersion, 'browser-sync': browserSyncVersion },
-          } = this.readResourcesPackageJson(this.fetchFromInstalledJHipster('angular', 'resources', 'package.json'));
-
-          this.packageJson.merge({
-            devDependencies: {
-              rxjs, // Set version to workaround https://github.com/npm/cli/issues/4437
-            },
-            overrides: {
-              'browser-sync': browserSyncVersion,
-              webpack: webpackVersion,
-            },
-          });
-        }
-
-        if (applications.some(app => app.clientFrameworkReact)) {
-          const {
-            dependencies: { react: reactVersion, 'react-dom': reactDomVersion },
-            devDependencies: { 'browser-sync': browserSyncVersion },
-          } = this.readResourcesPackageJson(this.fetchFromInstalledJHipster('react', 'resources', 'package.json'));
-
-          this.packageJson.merge({
-            overrides: {
-              'browser-sync': browserSyncVersion,
-              react: reactVersion,
-              'react-dom': reactDomVersion,
-            },
-          });
+        // Copy overrides from workspaces
+        for (const appFolder of this.workspacesConfig.appsFolders) {
+          const { overrides, dependencies, devDependencies } =
+            this.readDestinationJSON(this.destinationPath(appFolder, 'package.json')) ?? ({} as any);
+          if (overrides) {
+            const allDependencies = { ...dependencies, ...devDependencies };
+            const replacePlaceholder = (value: any) => {
+              if (typeof value === 'string' && value.startsWith('$')) {
+                const dependencyName = value.substring(1);
+                return allDependencies[dependencyName] ?? value;
+              }
+              return value;
+            };
+            const replaceOverrides = (obj: any) => {
+              for (const [key, value] of Object.entries(obj)) {
+                if (typeof value === 'string') {
+                  obj[key] = replacePlaceholder(value);
+                } else if (typeof value === 'object' && value !== null) {
+                  replaceOverrides(value);
+                }
+              }
+              return obj;
+            };
+            this.packageJson.merge({ overrides: replaceOverrides(overrides) });
+          }
         }
 
         if (applications.some(app => app.backendTypeJavaAny)) {

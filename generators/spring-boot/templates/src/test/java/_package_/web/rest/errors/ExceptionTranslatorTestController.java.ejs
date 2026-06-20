@@ -77,7 +77,7 @@ public class ExceptionTranslatorTestController {
 
     public static class Test<%- dtoSuffix %> {
 
-        @NotNull<% if (reactive) { %>(message = "must not be null")<% } %>
+        @NotNull<%- reactive ? '(message = "must not be null")' : '' %>
         private String test;
 
         public String getTest() {

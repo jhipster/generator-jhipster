@@ -87,7 +87,7 @@ const LoginModal = (props: ILoginModalProps) => {
                   isTouched={touchedFields.password}
                 />
                 <ValidatedField
-                  <% if (authenticationTypeSession && databaseTypeNo) { %> hidden<% } %>
+                  <%- authenticationTypeSession && databaseTypeNo ? ' hidden' : '' %>
                   name="rememberMe"
                   type="checkbox"
                   check

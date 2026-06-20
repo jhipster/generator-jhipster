@@ -24,7 +24,7 @@ import { languagesAsChoices } from './support/languages.ts';
 
 export const askI18n = asPromptingTask<LanguagesGenerator>(async function askI18n() {
   if (!this.askForMoreLanguages) return;
-  const nativeLanguage = this.jhipsterConfig.nativeLanguage;
+  const { nativeLanguage } = this.jhipsterConfig;
   const answers = await this.prompt(
     [
       {
@@ -62,7 +62,7 @@ export const askForLanguages = asPromptingTask<LanguagesGenerator>(async functio
       message: 'Please choose additional languages to install',
       choices: () => {
         const languageOptions = [...this.supportedLanguages.values()];
-        const nativeLanguage = this.jhipsterConfigWithDefaults.nativeLanguage;
+        const { nativeLanguage } = this.jhipsterConfigWithDefaults;
         const choices = languagesAsChoices(languageOptions.filter(l => l.languageTag !== nativeLanguage));
         const defaults = this.jhipsterConfigWithDefaults.languages ?? [];
         return [...choices.filter(({ value }) => defaults.includes(value)), ...choices.filter(({ value }) => !defaults.includes(value))];

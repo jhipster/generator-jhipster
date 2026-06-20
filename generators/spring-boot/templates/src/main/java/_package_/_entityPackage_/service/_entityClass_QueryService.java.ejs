@@ -55,7 +55,7 @@ import <%- entityAbsolutePackage %>.service.mapper.<%- entityClass %>Mapper;
  * Service for executing complex queries for {@link <%- persistClass %>} entities in the database.
  * The main input is a {@link <%- entityClass %>Criteria} which gets converted to {@link Specification},
  * in a way that all the filters must apply.
- * It returns a {@link <% if (paginationNo) { %>List<% } else { %>Page<% } %>} of {@link <%- restClass %>} which fulfills the criteria.
+ * It returns a {@link <%- paginationNo ? 'List' : 'Page' %>} of {@link <%- restClass %>} which fulfills the criteria.
  */
 @Service
 <%_ if (databaseTypeSql) { _%>
@@ -77,9 +77,9 @@ public class <%- serviceClassName %> extends QueryService<<%- persistClass %>> {
         LOG.debug("find by criteria : {}", criteria);
         final Specification<<%- persistClass %>> specification = createSpecification(criteria);
   <%_ if (dtoMapstruct) { _%>
-        return <%- entityListToDto %>(<% if (containsBagRelationships) { %><%- repository %>.fetchBagRelationships(<% } %><%- repository %>.findAll(specification)<% if (containsBagRelationships) { %>)<% } %>);
+        return <%- entityListToDto %>(<% if (containsBagRelationships) { %><%- repository %>.fetchBagRelationships(<% } %><%- repository %>.findAll(specification)<%- containsBagRelationships ? ')' : '' %>);
   <%_ } else { _%>
-        return <% if (containsBagRelationships) { %><%- repository %>.fetchBagRelationships(<% } %><%- repository %>.findAll(specification)<% if (containsBagRelationships) { %>)<% } %>;
+        return <% if (containsBagRelationships) { %><%- repository %>.fetchBagRelationships(<% } %><%- repository %>.findAll(specification)<%- containsBagRelationships ? ')' : '' %>;
   <%_ } _%>
     }
 <%_ } else { _%>
@@ -95,10 +95,10 @@ public class <%- serviceClassName %> extends QueryService<<%- persistClass %>> {
         LOG.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<<%- persistClass %>> specification = createSpecification(criteria);
   <%_ if (dtoMapstruct) { _%>
-        return <% if (containsBagRelationships) { %><%- repository %>.fetchBagRelationships(<% } %><%- repository %>.findAll(specification, page)<% if (containsBagRelationships) { %>)<% } %>
+        return <% if (containsBagRelationships) { %><%- repository %>.fetchBagRelationships(<% } %><%- repository %>.findAll(specification, page)<%- containsBagRelationships ? ')' : '' %>
             .map(<%- entityToDtoReference %>);
   <%_ } else { _%>
-        return <% if (containsBagRelationships) { %><%- repository %>.fetchBagRelationships(<% } %><%- repository %>.findAll(specification, page)<% if (containsBagRelationships) { %>)<% } %>;
+        return <% if (containsBagRelationships) { %><%- repository %>.fetchBagRelationships(<% } %><%- repository %>.findAll(specification, page)<%- containsBagRelationships ? ')' : '' %>;
   <%_ } _%>
     }
 <%_ } _%>
@@ -122,7 +122,7 @@ public class <%- serviceClassName %> extends QueryService<<%- persistClass %>> {
      */
     protected Specification<<%- persistClass %>> createSpecification(<%- criteria %> criteria) {
         Specification<<%- persistClass %>> specification = Specification.unrestricted();
-<%_ const eagerRelationships = relationships.filter(rel => rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide)); _%>
+<%_ const eagerRelationships = relationships.filter(rel => rel.relationshipType === 'many-to-one' || rel.relationshipType === 'one-to-one' && rel.ownerSide); _%>
 <%_ if (eagerRelationships.length > 0) { _%>
         specification = specification.and((root, query, builder) -> {
             if (Long.class != query.getResultType()) {

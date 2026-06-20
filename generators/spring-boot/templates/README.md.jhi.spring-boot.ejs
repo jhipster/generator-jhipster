@@ -27,7 +27,7 @@ This is a "<%- applicationType %>" application intended to be part of a microser
 <%_ } _%>
 <%_ if (serviceDiscoveryAny) { _%>
 
-This application is configured for Service Discovery and Configuration with <% if (serviceDiscoveryEureka) { %>the JHipster-Registry<% } %><% if (serviceDiscoveryConsul) { %>Consul<% } %>. On launch, it will refuse to start if it is not able to connect to <% if (serviceDiscoveryEureka) { %>the JHipster-Registry at [http://localhost:8761](http://localhost:8761)<% } %><% if (serviceDiscoveryConsul) { %>Consul at [http://localhost:8500](http://localhost:8500)<% } %>.<% if (serviceDiscoveryEureka) { %> For more information, read our documentation on [JHipster Registry](<%- documentationArchiveUrl %>/jhipster-registry/).<% } %><% if (serviceDiscoveryConsul) { %> For more information, read our documentation on [Consul][<%- documentationArchiveUrl %>/consul/).<% } %>
+This application is configured for Service Discovery and Configuration with <%- serviceDiscoveryEureka ? 'the JHipster-Registry' : '' %><%- serviceDiscoveryConsul ? 'Consul' : '' %>. On launch, it will refuse to start if it is not able to connect to <%- serviceDiscoveryEureka ? 'the JHipster-Registry at [http://localhost:8761](http://localhost:8761)' : '' %><%- serviceDiscoveryConsul ? 'Consul at [http://localhost:8500](http://localhost:8500)' : '' %>.<% if (serviceDiscoveryEureka) { %> For more information, read our documentation on [JHipster Registry](<%- documentationArchiveUrl %>/jhipster-registry/).<% } %><% if (serviceDiscoveryConsul) { %> For more information, read our documentation on [Consul][<%- documentationArchiveUrl %>/consul/).<% } %>
 <%_ } _%>
 
 <&_ } -&>
@@ -59,7 +59,7 @@ JHipster installs Node and npm locally using the build tool by default. This wra
 To start your application in the dev profile, run:
 
 ```bash
-<% if (buildToolMaven) { %>./mvnw<% } %><% if (buildToolGradle) { %>./gradlew<% } %>
+<%- buildToolMaven ? './mvnw' : '' %><%- buildToolGradle ? './gradlew' : '' %>
 ```
 
 For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
@@ -281,7 +281,7 @@ docker compose -f src/main/docker/sonar.yml up -d
 
 Note: we have turned off forced authentication redirect for UI in [src/main/docker/sonar.yml](src/main/docker/sonar.yml) for out of the box experience while trying out SonarQube, for real use cases turn it back on.
 
-You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner)<% if (buildTool) { %> or by using the <% if (buildTool === 'maven') { %>maven<% } %><% if (buildTool === 'gradle') { %>gradle<% } %> plugin<% } %>.
+You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner)<% if (buildTool) { %> or by using the <%- buildTool === 'maven' ? 'maven' : '' %><%- buildTool === 'gradle' ? 'gradle' : '' %> plugin<% } %>.
 
 Then, run a Sonar analysis:
 
