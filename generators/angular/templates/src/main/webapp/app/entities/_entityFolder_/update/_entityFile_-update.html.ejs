@@ -64,7 +64,7 @@
                             </button>
                         </div>
                     }
-                        <input type="file" id="file_<%- fieldName %>" data-cy="<%- fieldName %>" (change)="setFileData($event, '<%- fieldName %>', <% if (fieldTypeBlobContent === 'image') { %>true)" accept="image/*"<% if (enableTranslation) { %> <%- jhiPrefix %>Translate="entity.action.addimage"<% } %><% } else { %>false)"<% if (enableTranslation) { %> <%- jhiPrefix %>Translate="entity.action.addblob"<% } %><% } %>/>
+                        <input type="file" id="file_<%- fieldName %>" data-cy="<%- fieldName %>" (change)="setFileData($event, '<%- fieldName %>', <% if (fieldTypeBlobContent === 'image') { %>true)" accept="image/*"<% if (enableTranslation) { %> <%- jhiPrefix %>Translate="entity.action.addimage"<% } %><% } else { %>false)"<% if (enableTranslation) { %> <%- jhiPrefix %>Translate="entity.action.addblob"<% } %><% } %> aria-label="<%- fieldNameHumanized %>"/>
                     </div>
     <%_ } _%>
     <%_ if (field.fieldTypeLocalDate) { _%>
