@@ -24,7 +24,9 @@
             <div>
                 <<%- jhiPrefixDashed %>-alert-error />
 <%_ for (const field of fields.filter(field => !field.hidden)) { _%>
-  <%_ const { fieldName, fieldNameHumanized, fieldType, fieldTypeBlobContent, readonly } = field; _%>
+  <%_ const { fieldName, fieldNameHumanized, fieldType, fieldTypeBlobContent, readonly } = field;
+      const readonlyAttr = readonly ? ' [readonly]="true"' : '';
+  _%>
 
             <% if (field.autoGenerate) { %>@if (editForm.controls.<%- field.fieldName %>.value !== null) {<% } %>
                 <% if (field.fieldTypeBinary && !field.blobContentTypeText || field.fieldValidate) { %>@let <%- fieldName %>Ref = editForm.get('<%- fieldName %>')!;<% } %>
@@ -69,22 +71,22 @@
     <%_ } _%>
     <%_ if (field.fieldTypeLocalDate) { _%>
                     <div class="input-group">
-                        <input id="field_<%- fieldName %>" data-cy="<%- fieldName %>" type="text" class="form-control" name="<%- fieldName %>" ngbDatepicker #<%- fieldName %>Dp="ngbDatepicker" formControlName="<%- fieldName %>"<%- readonly ? ' [readonly]="true"' : '' %>/>
+                        <input id="field_<%- fieldName %>" data-cy="<%- fieldName %>" type="text" class="form-control" name="<%- fieldName %>" ngbDatepicker #<%- fieldName %>Dp="ngbDatepicker" formControlName="<%- fieldName %>"<%- readonlyAttr %>/>
                         <button type="button" class="btn btn-secondary" (click)="<%- fieldName %>Dp.toggle()"><fa-icon icon="calendar-alt" /></button>
                     </div>
     <%_ } else if (field.fieldTypeTimed) { _%>
                     <div class="d-flex">
-                        <input id="field_<%- fieldName %>" data-cy="<%- fieldName %>" type="<%- field.htmlInputType %>" class="form-control" name="<%- fieldName %>" formControlName="<%- fieldName %>" placeholder="YYYY-MM-DD HH:mm"<%- readonly ? ' [readonly]="true"' : '' %>/>
+                        <input id="field_<%- fieldName %>" data-cy="<%- fieldName %>" type="<%- field.htmlInputType %>" class="form-control" name="<%- fieldName %>" formControlName="<%- fieldName %>" placeholder="YYYY-MM-DD HH:mm"<%- readonlyAttr %>/>
                     </div>
     <%_ } else if (field.blobContentTypeText) { _%>
                     <textarea class="form-control" name="<%- fieldName %>" id="field_<%- fieldName %>" data-cy="<%- fieldName %>"
-                              formControlName="<%- fieldName %>"<%- readonly ? ' [readonly]="true"' : '' %>></textarea>
+                              formControlName="<%- fieldName %>"<%- readonlyAttr %>></textarea>
     <%_ } else if (field.fieldTypeBoolean) { _%>
                     <input type="<%- field.htmlInputType %>" class="form-check" name="<%- fieldName %>" id="field_<%- fieldName %>"
-                           data-cy="<%- fieldName %>" formControlName="<%- fieldName %>" <%- readonly ? ' [readonly]="true"' : '' %>/>
+                           data-cy="<%- fieldName %>" formControlName="<%- fieldName %>" <%- readonlyAttr %>/>
     <%_ } else if (field.fieldTypeLocalTime) { _%>
                     <input type="time" class="form-control" name="<%- fieldName %>" id="field_<%- fieldName %>" data-cy="<%- fieldName %>"
-                           formControlName="<%- fieldName %>"<%- readonly ? ' [readonly]="true"' : '' %>/>
+                           formControlName="<%- fieldName %>"<%- readonlyAttr %>/>
     <%_ } else { _%>
                     <input type="<%- field.htmlInputType %>" class="form-control" name="<%- fieldName %>" id="field_<%- fieldName %>" data-cy="<%- fieldName %>"
                            formControlName="<%- fieldName %>"<% if (field.id && !field.autoGenerate) { %> [readonly]="editForm.get('<%- primaryKey.name %>')!.disabled"<% } else if (readonly) { %> [readonly]="true"<% } %>/>
@@ -98,42 +100,42 @@
                 @if (<%- fieldName %>Ref.invalid && (<%- fieldName %>Ref.dirty || <%- fieldName %>Ref.touched)) {
                     <div>
     <%_ if (field.fieldValidationRequired) { _%>
-                    @if (editForm.get('<%- fieldName %>')?.errors?.required) {
+                    @if (<%- fieldName %>Ref.errors?.required) {
                         <small class="form-text text-danger">__jhiTranslateTag__('entity.validation.required')</small>
                     }
     <%_ } _%>
     <%_ if (field.fieldValidationMinLength) { _%>
-                    @if (editForm.get('<%- fieldName %>')?.errors?.minlength) {
+                    @if (<%- fieldName %>Ref.errors?.minlength) {
                         <small class="form-text text-danger">__jhiTranslateValidationTag__('entity.validation.minlength', { "min": <%- field.fieldValidateRulesMinlength %> })</small>
                     }
     <%_ } _%>
     <%_ if (field.fieldValidationMaxLength) { _%>
-                    @if (editForm.get('<%- fieldName %>')?.errors?.maxlength) {
+                    @if (<%- fieldName %>Ref.errors?.maxlength) {
                         <small class="form-text text-danger">__jhiTranslateValidationTag__('entity.validation.maxlength', { "max": <%- field.fieldValidateRulesMaxlength %> })</small>
                     }
     <%_ } _%>
     <%_ if (field.fieldValidationMin) { _%>
-                    @if (editForm.get('<%- fieldName %>')?.errors?.min) {
+                    @if (<%- fieldName %>Ref.errors?.min) {
                         <small class="form-text text-danger">__jhiTranslateValidationTag__('entity.validation.min', { "min": <%- field.fieldValidateRulesMin %> })</small>
                     }
     <%_ } _%>
     <%_ if (field.fieldValidationMax) { _%>
-                    @if (editForm.get('<%- fieldName %>')?.errors?.max) {
+                    @if (<%- fieldName %>Ref.errors?.max) {
                         <small class="form-text text-danger">__jhiTranslateValidationTag__('entity.validation.max', { "max": <%- field.fieldValidateRulesMax %> })</small>
                     }
     <%_ } _%>
     <%_ if (field.fieldValidationPattern) { _%>
-                    @if (editForm.get('<%- fieldName %>')?.errors?.pattern) {
+                    @if (<%- fieldName %>Ref.errors?.pattern) {
                         <small class="form-text text-danger">__jhiTranslateValidationTag__('entity.validation.pattern', { "pattern": "<%- fieldNameHumanized %>" })</small>
                     }
     <%_ } _%>
     <%_ if (field.fieldTypeNumeric || field.fieldTypeDuration) { _%>
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.get('<%- fieldName %>')?.errors?.number">__jhiTranslateTag__('entity.validation.number')</small>
+                            [hidden]="!<%- fieldName %>Ref.errors?.number">__jhiTranslateTag__('entity.validation.number')</small>
     <%_ } _%>
     <%_ if (field.fieldTypeTimed) { _%>
                         <small class="form-text text-danger"
-                            [hidden]="!editForm.get('<%- fieldName %>')?.errors?.datetimelocal">__jhiTranslateTag__('entity.validation.datetimelocal')</small>
+                            [hidden]="!<%- fieldName %>Ref.errors?.datetimelocal">__jhiTranslateTag__('entity.validation.datetimelocal')</small>
     <%_ } _%>
                     </div>
                 }

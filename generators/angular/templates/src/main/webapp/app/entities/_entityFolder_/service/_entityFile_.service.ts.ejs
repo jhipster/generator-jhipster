@@ -19,6 +19,8 @@
 <%_ const searchType = paginationPagination || paginationInfiniteScroll ? 'SearchWithPagination' : 'Search';
     const requiresRestTypeConversion = !builtInUserManagement && anyFieldIsDateDerived || builtInUserManagement && !userManagement.skipClient;
     const entityRestName = requiresRestTypeConversion ? `Rest${entityAngularName}` : `I${entityAngularName}`;
+    const bodyArg = requiresRestTypeConversion ? 'copy' : entityInstance;
+    const convertResponsePipe = requiresRestTypeConversion ? '.pipe(map(res => this.convertResponseFromServer(res)))' : '';
 _%>
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpResponse, httpResource } from '@angular/common/http';
@@ -128,9 +130,9 @@ export class <%- entityAngularName %>Service extends <%- entityAngularNamePlural
   <%_ } _%>
         return this.http.post<<%- entityRestName %>>(
           this.resourceUrl,
-          <% if (requiresRestTypeConversion) { %> copy <% } else { %> <%- entityInstance %> <% } %>
+          <%- bodyArg %>
         )
-        <%- requiresRestTypeConversion ? '.pipe(map(res => this.convertResponseFromServer(res)))' : '' %>;
+        <%- convertResponsePipe %>;
     }
 <%_ } _%>
 <%_ if (!readOnly && updatableEntity) { _%>
@@ -140,9 +142,9 @@ export class <%- entityAngularName %>Service extends <%- entityAngularNamePlural
         const copy = this.convertValueFromClient(<%- entityInstance %>);
   <%_ } _%>
         return this.http.put<<%- entityRestName %>>(`${this.resourceUrl}/${encodeURIComponent(this.get<%- entityAngularName %>Identifier(<%- entityInstance %>))}`,
-                <% if (requiresRestTypeConversion) { %> copy <% } else { %> <%- entityInstance %> <% } %>,
+                <%- bodyArg %>,
                 )
-        <%- requiresRestTypeConversion ? '.pipe(map(res => this.convertResponseFromServer(res)))' : '' %>;
+        <%- convertResponsePipe %>;
     }
 
     partialUpdate(<%- entityInstance %>: PartialUpdate<%- entityAngularName %>): Observable<I<%- entityAngularName %>> {
@@ -150,15 +152,15 @@ export class <%- entityAngularName %>Service extends <%- entityAngularNamePlural
         const copy = this.convertValueFromClient(<%- entityInstance %>);
   <%_ } _%>
         return this.http.patch<<%- entityRestName %>>(`${this.resourceUrl}/${encodeURIComponent(this.get<%- entityAngularName %>Identifier(<%- entityInstance %>))}`,
-                <% if (requiresRestTypeConversion) { %> copy <% } else { %> <%- entityInstance %> <% } %>,
+                <%- bodyArg %>,
                 )
-        <%- requiresRestTypeConversion ? '.pipe(map(res => this.convertResponseFromServer(res)))' : '' %>;
+        <%- convertResponsePipe %>;
     }
 <%_ } _%>
 
     find(<%- primaryKey.name %>: <%- tsKeyType %>): Observable<I<%- entityAngularName %>> {
         return this.http.get<<%- entityRestName %>>(`${this.resourceUrl}/${encodeURIComponent(<%- primaryKey.name %>)}`)
-            <%- requiresRestTypeConversion ? '.pipe(map(res => this.convertResponseFromServer(res)))' : '' %>;
+            <%- convertResponsePipe %>;
     }
 
     query(req?: any): Observable<HttpResponse<I<%- entityAngularName %>[]>> {
