@@ -1915,13 +1915,13 @@ export class UserManagementFormService {
           />
           @if (loginRef.invalid && (loginRef.dirty || loginRef.touched)) {
           <div>
-            @if (editForm.get('login')?.errors?.required) {
+            @if (loginRef.errors?.required) {
             <small class="form-text text-danger">This field is required.</small>
-            } @if (editForm.get('login')?.errors?.maxlength) {
+            } @if (loginRef.errors?.maxlength) {
             <small class="form-text text-danger"
               >This field cannot be longer than 50 characters.</small
             >
-            } @if (editForm.get('login')?.errors?.pattern) {
+            } @if (loginRef.errors?.pattern) {
             <small class="form-text text-danger"
               >This field should follow pattern for Login.</small
             >
@@ -1944,7 +1944,7 @@ export class UserManagementFormService {
           @if (firstNameRef.invalid && (firstNameRef.dirty ||
           firstNameRef.touched)) {
           <div>
-            @if (editForm.get('firstName')?.errors?.maxlength) {
+            @if (firstNameRef.errors?.maxlength) {
             <small class="form-text text-danger"
               >This field cannot be longer than 50 characters.</small
             >
@@ -1967,7 +1967,7 @@ export class UserManagementFormService {
           @if (lastNameRef.invalid && (lastNameRef.dirty ||
           lastNameRef.touched)) {
           <div>
-            @if (editForm.get('lastName')?.errors?.maxlength) {
+            @if (lastNameRef.errors?.maxlength) {
             <small class="form-text text-danger"
               >This field cannot be longer than 50 characters.</small
             >
@@ -1989,13 +1989,13 @@ export class UserManagementFormService {
           />
           @if (emailRef.invalid && (emailRef.dirty || emailRef.touched)) {
           <div>
-            @if (editForm.get('email')?.errors?.required) {
+            @if (emailRef.errors?.required) {
             <small class="form-text text-danger">This field is required.</small>
-            } @if (editForm.get('email')?.errors?.minlength) {
+            } @if (emailRef.errors?.minlength) {
             <small class="form-text text-danger"
               >This field is required to be at least 5 characters.</small
             >
-            } @if (editForm.get('email')?.errors?.maxlength) {
+            } @if (emailRef.errors?.maxlength) {
             <small class="form-text text-danger"
               >This field cannot be longer than 191 characters.</small
             >
