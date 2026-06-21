@@ -38,7 +38,7 @@ jobs:
       matrix: ${{ steps.build.outputs.matrix }}
       empty-matrix: ${{ steps.build.outputs.empty-matrix }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 1
       - run: echo "node-version=$(cat ${{ github.workspace }}/generators/init/resources/.node-version)" >> $GITHUB_OUTPUT
@@ -65,7 +65,7 @@ jobs:
       # Install all tools and check configuration
       #----------------------------------------------------------------------
       - name: 'SETUP: Checkout generator-jhipster'
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           path: generator-jhipster
           fetch-depth: 2
