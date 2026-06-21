@@ -117,28 +117,28 @@ import java.util.stream.Collectors;
 public class UserService {
 <%_ if (!databaseTypeNo) { _%>
 
-    private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
+    protected static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
-    private final UserRepository userRepository;
+    protected final UserRepository userRepository;
   <%_ if (!authenticationTypeOauth2) { _%>
 
-    private final PasswordEncoder passwordEncoder;
+    protected final PasswordEncoder passwordEncoder;
   <%_ } _%>
   <%_ if (searchEngineElasticsearch) { _%>
 
-    private final UserSearchRepository userSearchRepository;
+    protected final UserSearchRepository userSearchRepository;
   <%_ } _%>
   <%_ if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { _%>
     <%_ if (authenticationTypeSession  && !reactive) { _%>
 
-    private final PersistentTokenRepository persistentTokenRepository;
+    protected final PersistentTokenRepository persistentTokenRepository;
     <%_ } _%>
 
-    private final AuthorityRepository authorityRepository;
+    protected final AuthorityRepository authorityRepository;
   <%_ } _%>
   <%_ if (cacheProviderAny) { _%>
 
-    private final CacheManager cacheManager;
+    protected final CacheManager cacheManager;
   <%_ } _%>
 
     public UserService(UserRepository userRepository<% if (!authenticationTypeOauth2) { %>, PasswordEncoder passwordEncoder<% } %><% if (searchEngineElasticsearch) { %>, UserSearchRepository userSearchRepository<% } %><% if (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) { %><% if (authenticationTypeSession && !reactive) { %>, PersistentTokenRepository persistentTokenRepository<% } %>, AuthorityRepository authorityRepository<% } %><% if (cacheProviderAny) { %>, CacheManager cacheManager<% } %>) {
@@ -389,7 +389,7 @@ public class UserService {
     }
 
     <%_ if (!reactive) { _%>
-    private boolean removeNonActivatedUser(<%= user.persistClass %> existingUser) {
+    protected boolean removeNonActivatedUser(<%= user.persistClass %> existingUser) {
         if (existingUser.isActivated()) {
             return false;
         }
@@ -1033,7 +1033,7 @@ public class UserService {
   <%_ } _%>
     }
 
-    private static <%= databaseTypeNo ? user.adminUserDto : user.persistClass %> getUser(Map<String, Object> details) {
+    protected static <%= databaseTypeNo ? user.adminUserDto : user.persistClass %> getUser(Map<String, Object> details) {
         <%= databaseTypeNo ? user.adminUserDto : user.persistClass %> user = new <%= databaseTypeNo ? user.adminUserDto : user.persistClass %>();
         Boolean activated = Boolean.TRUE;
         String sub = String.valueOf(details.get("sub"));
@@ -1096,7 +1096,7 @@ public class UserService {
 <%_ } _%>
 <%_ if (cacheProviderAny && !databaseTypeNo) { _%>
 
-    private void clearUserCaches(<%= user.persistClass %> user) {
+    protected void clearUserCaches(<%= user.persistClass %> user) {
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evictIfPresent(user.getLogin());
         if (user.getEmail() != null) {
             Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evictIfPresent(user.getEmail());
@@ -1104,3 +1104,4 @@ public class UserService {
     }
 <%_ } _%>
 }
+
