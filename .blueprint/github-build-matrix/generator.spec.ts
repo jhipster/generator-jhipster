@@ -1,13 +1,13 @@
 import { before, describe, expect, it } from 'esmocha';
 import { basename, join } from 'node:path';
 
-import { defaultHelpers as helpers, resultWithGenerator } from '../../lib/testing/index.ts';
+import { defaultHelpers as helpers, typedResult } from '../../lib/testing/index.ts';
 import { shouldSupportFeatures } from '../../test/support/index.ts';
 
 import { workflowChoices } from './command.ts';
 import Generator from './generator.ts';
 
-const runResult = resultWithGenerator<Generator>();
+const runResult = typedResult<Generator>();
 const generator = basename(import.meta.dirname);
 
 describe(`generator - ${generator}`, () => {

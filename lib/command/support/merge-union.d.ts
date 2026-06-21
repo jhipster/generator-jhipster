@@ -8,10 +8,14 @@ type _MergeUnionKnownKeys<BaseType, Keys extends keyof BaseType = keyof BaseType
 };
 
 export type MergeUnion<BaseType> =
-  IsNever<BaseType> extends false
-    ? Simplify<
-        _MergeUnionKnownKeys<BaseType> & {
-          [K in KeysOfUnion<BaseType>]?: BaseType extends object ? (K extends keyof BaseType ? BaseType[K] : never) : never;
-        }
-      >
-    : Record<string, never>;
+  IsNever<BaseType> extends false ?
+    Simplify<
+      _MergeUnionKnownKeys<BaseType> & {
+        [K in KeysOfUnion<BaseType>]?: BaseType extends object ?
+          K extends keyof BaseType ?
+            BaseType[K]
+          : never
+        : never;
+      }
+    >
+  : Record<string, never>;

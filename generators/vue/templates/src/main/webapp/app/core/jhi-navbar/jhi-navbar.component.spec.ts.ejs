@@ -31,9 +31,9 @@ import type LoginService from '@/account/login.service';
 import { useLoginModal } from '@/account/login-modal';
 <%_ } _%>
 import JhiNavbar from './jhi-navbar.vue';
-<%_ if (applicationTypeGateway && microfrontend) { _%>
+<%_ if (microfrontend) { _%>
 
-vitest.mock('@module-federation/enhanced/runtime', () => ({
+vi.mock('@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime', () => ({
   loadRemote: vitest.fn(() => Promise.reject(new Error('Test only'))),
 }));
 <%_ } _%>
@@ -60,7 +60,7 @@ describe('JhiNavbar', () => {
   beforeEach(() => {
     router = createRouter();
 <%_ if (authenticationUsesCsrf) { _%>
-    loginService = { login: vitest.fn(), logout: vitest.fn() };
+    loginService = { login: vi.fn(), logout: vi.fn() };
 <%_ } _%>
     const wrapper = shallowMount(JhiNavbar, {
       global: {
@@ -114,7 +114,7 @@ describe('JhiNavbar', () => {
   });
 
   it('should use login service', () => {
-    jhiNavbar.<% if (authenticationTypeOauth2) { %>login<% } else { %>showLogin<% } %>();
+    jhiNavbar.<%- authenticationTypeOauth2 ? 'login' : 'showLogin' %>();
 
 <%_ if (authenticationTypeOauth2) { _%>
     expect(loginService.login).toHaveBeenCalled();

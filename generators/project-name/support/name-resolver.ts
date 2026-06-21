@@ -23,7 +23,7 @@ import { camelCase } from 'lodash-es';
 const defaultName = 'jhipster';
 
 export const validateJavaApplicationName = (name: string) => {
-  if (!/^([\w]*)$/.test(name)) {
+  if (!/^\w*$/.test(name)) {
     return 'Your base name cannot contain special characters or a blank space';
   }
   if (name.includes('_')) {

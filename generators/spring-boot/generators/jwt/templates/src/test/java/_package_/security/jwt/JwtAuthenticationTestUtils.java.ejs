@@ -1,15 +1,15 @@
-package <%= packageName %>.security.jwt;
+package <%- packageName %>.security.jwt;
 
-import static <%= packageName %>.security.SecurityUtils.AUTHORITIES_CLAIM;
-import static <%= packageName %>.security.SecurityUtils.JWT_ALGORITHM;
-import static <%= packageName %>.security.AuthoritiesConstants.ADMIN;
+import static <%- packageName %>.security.SecurityUtils.AUTHORITIES_CLAIM;
+import static <%- packageName %>.security.SecurityUtils.JWT_ALGORITHM;
+import static <%- packageName %>.security.AuthoritiesConstants.ADMIN;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import java.time.Instant;
-import java.util.Collections;
+import java.util.List;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -29,12 +29,12 @@ public class JwtAuthenticationTestUtils {
 
     public static final String BEARER = "Bearer ";
 
-<%_ if (!springBoot4) { _%>
+  <%_ if (!springBoot4) { _%>
     @Bean
     private HandlerMappingIntrospector mvcHandlerMappingIntrospector() {
         return new HandlerMappingIntrospector();
     }
-<%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 <%_ if (applicationTypeMicroservice && !reactive) { _%>
 
@@ -62,7 +62,7 @@ public class JwtAuthenticationTestUtils {
             .issuedAt(now)
             .expiresAt(now.plusSeconds(60))
             .subject(user)
-            .claims(customClaim -> customClaim.put(AUTHORITIES_CLAIM, Collections.singletonList(ADMIN)))
+            .claims(customClaim -> customClaim.put(AUTHORITIES_CLAIM, List.of(ADMIN)))
             .build();
 
         JwsHeader jwsHeader = JwsHeader.with(JWT_ALGORITHM).build();

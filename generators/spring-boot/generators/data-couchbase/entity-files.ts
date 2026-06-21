@@ -55,7 +55,7 @@ export const entityFiles = asWriteFilesSection({
         {
           file: 'config/couchmove/changelog/entity.fts',
           renameTo: generator =>
-            `config/couchmove/changelog/V${parseInt(generator.changelogDate, 10) + 10}__${generator.entityInstance.toLowerCase()}.fts`,
+            `config/couchmove/changelog/V${Number.parseInt(generator.changelogDate, 10) + 10}__${generator.entityInstance.toLowerCase()}.fts`,
         },
       ],
     },

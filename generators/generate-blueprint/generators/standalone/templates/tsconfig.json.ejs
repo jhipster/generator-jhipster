@@ -1,0 +1,33 @@
+/* tsconfig.json is provided for ui autocomplete support, jhipster types are experimental */
+{
+  "include": [".blueprint/**/*.ts", "./cli", "./generators", "*.ts"],
+  "compilerOptions": {
+    /* Language and Environment */
+    "target": "ES2025" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+    "types": ["node"],
+
+    /* Modules */
+    "rootDir": "./" /* Specify the root folder within your source files. */,
+
+    /* JavaScript Support */
+    "allowJs": true /* Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files. */,
+
+    /* Emit */
+    "noEmit": true,
+
+    /* Interop Constraints */
+    "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
+    "isolatedModules": true /* Ensure that each file can be safely transpiled without relying on other imports. */,
+    "rewriteRelativeImportExtensions": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+
+    /* Type Checking */
+    "noUnusedLocals": true /* Report errors on unused local variables. */,
+    "noUnusedParameters": true /* Report errors on unused parameters. */,
+    "noImplicitAny": false,
+
+    /* Completeness */
+    "skipLibCheck": true /* Skip type checking all .d.ts files. */
+  }
+}

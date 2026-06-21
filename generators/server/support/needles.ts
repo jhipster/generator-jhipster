@@ -18,10 +18,9 @@
  */
 import assert from 'node:assert';
 
-import type { CascatedEditFileCallback } from '../../base-core/api.ts';
+import type { CascadedEditFileCallback } from '../../base-core/api.ts';
 import type CoreGenerator from '../../base-core/index.ts';
-import type { NeedleCallback } from '../../base-core/support/needles.ts';
-import { createBaseNeedle } from '../../base-core/support/needles.ts';
+import { type NeedleCallback, createBaseNeedle } from '../../base-core/support/needles.ts';
 
 export type ApplicationPropertiesNeedles = {
   property?: string;
@@ -69,7 +68,7 @@ export function insertContentIntoApplicationProperties(
   this: CoreGenerator | void,
   application: { javaPackageSrcDir: string } | ApplicationPropertiesNeedles,
   needles?: ApplicationPropertiesNeedles,
-): NeedleCallback | CascatedEditFileCallback {
+): NeedleCallback | CascadedEditFileCallback {
   if (needles) {
     assert.ok(this, 'Generator context is required');
 

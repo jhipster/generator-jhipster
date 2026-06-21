@@ -18,18 +18,25 @@
 -%>
 import './header.scss';
 
-import React<% if (enableI18nRTL) { %>, { useEffect }<% } %> from 'react';
-import { Translate<% if (enableTranslation) { %>, Storage<% } %> } from 'react-jhipster';
+import React, { useEffect, useRef } from 'react';
+import { Translate<%- enableTranslation ? ', Storage' : '' %> } from 'react-jhipster';
 import {
   Navbar,
   Nav,
 } from 'react-bootstrap';
-import LoadingBar from 'react-redux-loading-bar';
+import LoadingBar, { LoadingBarRef } from 'react-top-loading-bar';
 
 import { Home, Brand } from './header-components';
-import { AdminMenu, EntitiesMenu, AccountMenu<%_ if (enableTranslation) { _%>, LocaleMenu<%_ } _%>} from '../menus';
+import {
+  AdminMenu,
+  EntitiesMenu,
+  AccountMenu,
 <%_ if (enableTranslation) { _%>
-import { useAppDispatch } from 'app/config/store';
+  LocaleMenu,
+<%_ } _%>
+} from '../menus';
+import { useAppDispatch, useAppSelector } from 'app/config/store';
+<%_ if (enableTranslation) { _%>
 import { setLocale } from 'app/shared/reducers/locale';
 <%_ } _%>
 
@@ -55,6 +62,17 @@ const Header = (props: IHeaderProps) => {
   }
 <%_ } _%>
 
+  const loadingBarRef = useRef<LoadingBarRef>(null);
+  const loadingCount = useAppSelector(state => state.loadingBar.count);
+
+  useEffect(() => {
+    if (loadingCount > 0) {
+      loadingBarRef.current?.continuousStart();
+    } else {
+      loadingBarRef.current?.complete();
+    }
+  }, [loadingCount]);
+
   const renderDevRibbon = () => !props.isInProduction && (
     <div className="ribbon dev">
       <a href="">
@@ -67,15 +85,13 @@ const Header = (props: IHeaderProps) => {
     </div>
   );
 
-
-
   /* jhipster-needle-add-element-to-menu - JHipster will add new menu items here */
 
   return (
     <div id="app-header">
       {renderDevRibbon()}
-      <LoadingBar className="loading-bar"/>
-      <Navbar data-cy="navbar" <% if (clientThemeNone || !clientThemeVariantLight) { %>data-bs-theme="dark"<% } else { %>data-bs-theme="light"<% } %> expand="md" fixed="top" className="<%_ if (clientThemeNone) { _%>jh-navbar<%_ } else { _%>bg-<%= clientThemeVariant %><%_ } _%>" collapseOnSelect>
+      <LoadingBar ref={loadingBarRef} className="loading-bar" color="#009cd8" />
+      <Navbar data-cy="navbar" data-bs-theme="<%- reactBootstrapBsTheme %>" expand="md" fixed="top" className="<% if (clientThemeNone) { %>jh-navbar<% } else { %>bg-<%- reactBootstrapVariant %><% } %>" collapseOnSelect>
         <Navbar.Toggle aria-controls="header-tabs" aria-label="Menu" />
         <Brand />
         <Navbar.Collapse id="header-tabs">
@@ -83,10 +99,10 @@ const Header = (props: IHeaderProps) => {
             <Home />
             {props.isAuthenticated && <EntitiesMenu />}
             {props.isAuthenticated && props.isAdmin &&
-            <AdminMenu showOpenAPI={props.isOpenAPIEnabled} <% if (devDatabaseTypeH2Any) { %> showDatabase={!props.isInProduction} <%_ } _%> />}
-          <%_ if (enableTranslation) { _%>
+            <AdminMenu showOpenAPI={props.isOpenAPIEnabled} <%- devDatabaseTypeH2Any ? 'showDatabase={!props.isInProduction}' : '' %> />}
+<%_ if (enableTranslation) { _%>
             <LocaleMenu currentLocale={props.currentLocale} onClick={handleLocaleChange} />
-          <%_ } _%>
+<%_ } _%>
             <AccountMenu isAuthenticated={props.isAuthenticated} />
           </Nav>
         </Navbar.Collapse>

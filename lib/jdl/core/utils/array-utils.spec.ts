@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { describe, expect, it } from 'esmocha';
 
 import deduplicate from './array-utils.ts';
 
@@ -28,18 +26,18 @@ describe('jdl - ArrayUtils', () => {
     describe('when not passing an array', () => {
       it('should return an empty array', () => {
         // @ts-expect-error
-        expect(deduplicate()).to.deep.equal([]);
+        expect(deduplicate()).toEqual([]);
       });
     });
     describe('when passing an array', () => {
       describe('without duplicates', () => {
         it('should not change it', () => {
-          expect(deduplicate([1, 2, 3, 4])).to.deep.equal([1, 2, 3, 4]);
+          expect(deduplicate([1, 2, 3, 4])).toEqual([1, 2, 3, 4]);
         });
       });
       describe('with duplicates', () => {
         it('should remove the duplicates from it', () => {
-          expect(deduplicate([1, 2, 2, 1, 3])).to.deep.equal([1, 2, 3]);
+          expect(deduplicate([1, 2, 2, 1, 3])).toEqual([1, 2, 3]);
         });
       });
     });

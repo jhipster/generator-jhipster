@@ -33,7 +33,7 @@ export const cleanEntity = entity => {
 };
 
 /**
- * Simply map a list of element to a list a object with the element as id.
+ * Simply map a list of elements to a list of objects with the element as id.
  *
  * @param idList Elements to map.
  * @returns The list of objects with mapped ids.
@@ -52,9 +52,7 @@ export const overrideSortStateWithQueryParams = (paginationBaseState: ISortBaseS
 };
 
 export const overridePaginationStateWithQueryParams = (paginationBaseState: IPaginationBaseState, locationSearch: string) => {
-  const sortedPaginationState: IPaginationBaseState = <IPaginationBaseState>(
-    overrideSortStateWithQueryParams(paginationBaseState, locationSearch)
-  );
+  const sortedPaginationState: IPaginationBaseState = overrideSortStateWithQueryParams(paginationBaseState, locationSearch) as IPaginationBaseState;
   const params = new URLSearchParams(locationSearch);
   const page = params.get('page');
   if (page) {

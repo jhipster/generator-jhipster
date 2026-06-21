@@ -41,18 +41,19 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
     await this.dependsOnBootstrap('common');
   }
 
-  get loading() {
-    return this.asLoadingTaskGroup({
-      cancel({ application }) {
-        if (application.skipClient) {
-          this.cancelCancellableTasks();
+  get composingBootstrap() {
+    return this.asComposingBootstrapTaskGroup({
+      async composing({ application }) {
+        const { clientFramework = this.jhipsterConfigWithDefaults.clientFramework } = application;
+        if (['angular', 'react', 'vue'].includes(clientFramework as string)) {
+          await this.composeWithJHipster(`jhipster:${clientFramework}:bootstrap`);
         }
       },
     });
   }
 
-  get [ClientApplicationGenerator.LOADING]() {
-    return this.loading;
+  get [ClientApplicationGenerator.COMPOSING_BOOTSTRAP]() {
+    return this.delegateTasksToBlueprint(() => this.composingBootstrap);
   }
 
   get preparing() {
@@ -78,9 +79,9 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
         mutateData(entity, mutateEntity, {
           __override__: false,
           entityPage: ({ microserviceName, entityFileName }) =>
-            microserviceName && application.microfrontend && application.applicationTypeMicroservice
-              ? `${microserviceName.toLowerCase()}/${entityFileName}`
-              : `${entityFileName}`,
+            microserviceName && application.microfrontend && application.applicationTypeMicroservice ?
+              `${microserviceName.toLowerCase()}/${entityFileName}`
+            : entityFileName,
         });
       },
     });

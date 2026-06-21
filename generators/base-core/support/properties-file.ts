@@ -56,7 +56,7 @@ export const editPropertiesFileCallback = (
     const { sortFile = false } = options;
     if (sortFile) {
       if (typeof properties === 'function') {
-        throw new Error('Cannot use a function to edit properties file with sortFile enabled');
+        throw new TypeError('Cannot use a function to edit properties file with sortFile enabled');
       }
       const obj = dotProperties.parse(content ?? '');
       for (const { key, value, valueSep } of properties) {

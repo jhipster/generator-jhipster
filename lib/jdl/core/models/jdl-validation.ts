@@ -35,7 +35,7 @@ export default class JDLValidation {
   }
 
   toString() {
-    let string = `${this.name}`;
+    let string = this.name;
     if (this.value || this.value === 0) {
       string += `(${formatValidationValue(this.name, this.value)})`;
     }

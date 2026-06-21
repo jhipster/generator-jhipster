@@ -29,10 +29,10 @@ import {
 <%_ } _%>
 } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import { loadingBarMiddleware } from 'react-redux-loading-bar';
 
 import sharedReducers from 'app/shared/reducers';
 import errorMiddleware from './error-middleware';
+import loadingBarMiddleware from './loading-bar-middleware';
 import notificationMiddleware from './notification-middleware';
 import loggerMiddleware from './logger-middleware';
 <%_ if (communicationSpringWebsocket) { _%>
@@ -50,7 +50,7 @@ const store = configureStore({
     }).concat(
       errorMiddleware,
       notificationMiddleware,
-      loadingBarMiddleware(),
+      loadingBarMiddleware,
 <%_ if (communicationSpringWebsocket) { _%>
       websocketMiddleware,
 <%_ } _%>

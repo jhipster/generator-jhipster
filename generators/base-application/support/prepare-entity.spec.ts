@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { beforeEach, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { beforeEach, describe, expect, it } from 'esmocha';
 
 import { formatDateForChangelog } from '../../base/support/index.ts';
 import type { Entity as BaseApplicationEntity } from '../types.d.ts';
@@ -40,7 +38,7 @@ describe('generator - base-application - support - prepareEntity', () => {
           entity = prepareEntityPrimaryKeyForTemplates({ entity });
         });
         it('should adopt id field as @Id', () => {
-          expect(entity.fields[0]).to.eql({
+          expect(entity.fields[0]).toEqual({
             autoGenerate: true,
             fieldName: 'id',
             fieldType: 'CustomType',
@@ -50,14 +48,14 @@ describe('generator - base-application - support - prepareEntity', () => {
         });
 
         it('should contain correct structure', () => {
-          expect(entity.primaryKey).to.deep.include({
+          expect(entity.primaryKey).toMatchObject({
             name: 'id',
             nameCapitalized: 'Id',
             type: 'CustomType',
             derived: false,
             composite: false,
           });
-          expect(entity.primaryKey.fields[0]).to.equal(entity.fields[0]);
+          expect(entity.primaryKey.fields[0]).toBe(entity.fields[0]);
         });
       });
 
@@ -77,7 +75,7 @@ describe('generator - base-application - support - prepareEntity', () => {
           });
         });
         it('should not adopt id field as @Id', () => {
-          expect(entity.fields[0]).to.eql({
+          expect(entity.fields[0]).toEqual({
             fieldName: 'id',
             fieldType: 'CustomType',
             path: ['id'],
@@ -181,8 +179,8 @@ describe('generator - base-application - support - prepareEntity', () => {
         });
 
         it('should prepare correct primaryKey for entity1', () => {
-          expect(entity1.primaryKey.fields).to.have.lengthOf(1);
-          expect(entity1.primaryKey).to.deep.include({
+          expect(entity1.primaryKey.fields).toHaveLength(1);
+          expect(entity1.primaryKey).toMatchObject({
             name: 'id',
             nameCapitalized: 'Id',
             type: 'String',
@@ -190,12 +188,12 @@ describe('generator - base-application - support - prepareEntity', () => {
             derived: false,
             composite: false,
           });
-          expect(entity1.primaryKey.fields[0]).to.equal(entity1.fields[0]);
+          expect(entity1.primaryKey.fields[0]).toBe(entity1.fields[0]);
         });
 
         it('should prepare correct primaryKey for entity2', () => {
-          expect(entity2.primaryKey.fields).to.have.lengthOf(1);
-          expect(entity2.primaryKey).to.deep.include({
+          expect(entity2.primaryKey.fields).toHaveLength(1);
+          expect(entity2.primaryKey).toMatchObject({
             name: 'uuid',
             nameCapitalized: 'Uuid',
             type: 'UUID',
@@ -203,27 +201,27 @@ describe('generator - base-application - support - prepareEntity', () => {
             derived: false,
             composite: false,
           });
-          expect(entity2.primaryKey.fields[0]).to.equal(entity2.fields[0]);
+          expect(entity2.primaryKey.fields[0]).toBe(entity2.fields[0]);
         });
 
         it('should prepare correct primaryKey for one-to-one relationship id', () => {
-          expect(entity3.primaryKey.fields).to.have.lengthOf(1);
-          expect(entity3.primaryKey).to.deep.include({
+          expect(entity3.primaryKey.fields).toHaveLength(1);
+          expect(entity3.primaryKey).toMatchObject({
             name: 'uuid',
             nameCapitalized: 'Uuid',
             type: 'UUID',
             derived: true,
             composite: false,
           });
-          expect(entity3.primaryKey.fields[0]).to.deep.include({
+          expect(entity3.primaryKey.fields[0]).toMatchObject({
             fieldName: 'uuid',
             autoGenerate: true,
           });
         });
 
         it('should prepare correct primaryKey for entity4', () => {
-          expect(entity4.primaryKey.fields).to.have.lengthOf(3);
-          expect(entity4.primaryKey).to.deep.include({
+          expect(entity4.primaryKey.fields).toHaveLength(3);
+          expect(entity4.primaryKey).toMatchObject({
             name: 'id',
             nameCapitalized: 'Id',
             type: 'Entity4Id',
@@ -233,14 +231,14 @@ describe('generator - base-application - support - prepareEntity', () => {
         });
 
         it('should prepare correct own id', () => {
-          expect(entity4.primaryKey.fields[0]).to.deep.include({
+          expect(entity4.primaryKey.fields[0]).toMatchObject({
             fieldName: 'uuid',
           });
         });
 
         it('should prepare correct relationship id field', () => {
           const field = entity4.primaryKey.fields[1];
-          expect(field).to.deep.include({
+          expect(field).toMatchObject({
             ...entity1.primaryKey.fields[0],
             fieldName: 'otherEntity1Id',
             fieldNameCapitalized: 'OtherEntity1Id',
@@ -254,7 +252,7 @@ describe('generator - base-application - support - prepareEntity', () => {
 
         it('should prepare correct relationship id ids', () => {
           const field = entity4.primaryKey.ids[1];
-          expect(field).to.deep.include({
+          expect(field).toMatchObject({
             name: 'otherEntity1Id',
             nameCapitalized: 'OtherEntity1Id',
             nameDotted: 'otherEntity1.id',
@@ -266,7 +264,7 @@ describe('generator - base-application - support - prepareEntity', () => {
 
         it('should prepare correct relationship id with derived primaryKey field', () => {
           const field = entity4.primaryKey.fields[2];
-          expect(field).to.deep.include({
+          expect(field).toMatchObject({
             ...entity3.primaryKey.fields[0],
             derived: true,
             fieldName: 'otherEntity3Uuid',
@@ -280,7 +278,7 @@ describe('generator - base-application - support - prepareEntity', () => {
 
         it('should prepare correct relationship id with derived primaryKey field ids', () => {
           const field = entity4.primaryKey.ids[2];
-          expect(field).to.deep.include({
+          expect(field).toMatchObject({
             name: 'otherEntity3Uuid',
             nameCapitalized: 'OtherEntity3Uuid',
             nameDotted: 'otherEntity3.uuid',

@@ -18,16 +18,10 @@
 -%>
 printWidth: 140
 singleQuote: true
-tabWidth: <%= prettierTabWidth %>
+tabWidth: <%- prettierTabWidth %>
 useTabs: false
 
 arrowParens: avoid
 bracketSameLine: false
 
-<%_ if (locals.clientFrameworkAngular) { _%>
-overrides:
-  - files: "*.html"
-    options:
-      parser: angular
-<%_ } _%>
 <&- fragments.render({ join: '\n\n' }) &>

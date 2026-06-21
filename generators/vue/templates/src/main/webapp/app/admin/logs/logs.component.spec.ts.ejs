@@ -1,22 +1,21 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
-import sinon from 'sinon';
 import Logs from './logs.vue';
 import LogsService from './logs.service';
 
 type LogsComponentType = InstanceType<typeof Logs>;
 
 const axiosStub = {
-  get: sinon.stub(axios, 'get'),
-  post: sinon.stub(axios, 'post'),
+  get: vi.spyOn(axios, 'get'),
+  post: vi.spyOn(axios, 'post'),
 };
 
 describe('Logs Component', () => {
   let logs: LogsComponentType;
 
   beforeEach(() => {
-    axiosStub.get.resolves({});
+    axiosStub.get.mockResolvedValue({});
     const wrapper = shallowMount(Logs, {
       global: {
         stubs: {
@@ -42,21 +41,21 @@ describe('Logs Component', () => {
       await logs.$nextTick();
 
       // THEN
-      expect(axiosStub.get.calledWith('management/loggers')).toBeTruthy();
+      expect(axiosStub.get).toHaveBeenCalledWith('management/loggers');
     });
   });
 
   describe('change log level', () => {
     it('should change log level correctly', async () => {
-      axiosStub.post.resolves({});
+      axiosStub.post.mockResolvedValue({});
 
       // WHEN
       logs.updateLevel('main', 'ERROR');
       await logs.$nextTick();
 
       // THEN
-      expect(axiosStub.post.calledWith('management/loggers/main', { configuredLevel: 'ERROR' })).toBeTruthy();
-      expect(axiosStub.get.calledWith('management/loggers')).toBeTruthy();
+      expect(axiosStub.post).toHaveBeenCalledWith('management/loggers/main', { configuredLevel: 'ERROR' });
+      expect(axiosStub.get).toHaveBeenCalledWith('management/loggers');
     });
   });
 

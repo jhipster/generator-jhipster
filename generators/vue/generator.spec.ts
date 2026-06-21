@@ -2,11 +2,15 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
 import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
-import { buildClientSamples, defaultHelpers as helpers, entitiesClientSamples as entities, runResult } from '../../lib/testing/index.ts';
+import { buildClientSamples, createTestHelpers, entitiesClientSamples as entities, runResult } from '../../lib/testing/index.ts';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.ts';
 
 import Generator from './index.ts';
+
+const helpers = createTestHelpers({
+  importMeta: import.meta,
+});
 
 const generator = basename(import.meta.dirname);
 
@@ -48,6 +52,64 @@ describe(`generator - ${clientFramework}`, () => {
   describe('blueprint support', () => testBlueprintSupport(generator));
   checkEnforcements({ client: true }, generator);
 
+  describe('migration', () => {
+    describe('clientBundler option', () => {
+      describe('microservice application prior to v9.0.1', () => {
+        before(async () => {
+          await helpers
+            .runJHipster()
+            .withJHipsterConfig({ jhipsterVersion: '9.0.0', applicationType: 'microservice' })
+            .commitFiles()
+            .withSharedApplication({ getWebappTranslation: () => 'translations' })
+            .withSkipWritingPriorities()
+            .withMockedJHipsterGenerators();
+        });
+
+        it('should set clientBundler to webpack', () => {
+          runResult.assertJHipsterConfigContent({
+            clientBundler: 'webpack',
+          });
+        });
+      });
+
+      describe('microfrontend application prior to v9.0.1', () => {
+        before(async () => {
+          await helpers
+            .runJHipster()
+            .withJHipsterConfig({ jhipsterVersion: '9.0.0', microfrontend: true })
+            .commitFiles()
+            .withSharedApplication({ getWebappTranslation: () => 'translations' })
+            .withSkipWritingPriorities()
+            .withMockedJHipsterGenerators();
+        });
+
+        it('should set clientBundler to webpack', () => {
+          runResult.assertJHipsterConfigContent({
+            clientBundler: 'webpack',
+          });
+        });
+      });
+
+      describe('microservice/microfrontend application after v9.0.1', () => {
+        before(async () => {
+          await helpers
+            .runJHipster()
+            .withJHipsterConfig({ jhipsterVersion: '9.0.1', applicationType: 'microservice', microfrontend: true })
+            .commitFiles()
+            .withSharedApplication({ getWebappTranslation: () => 'translations' })
+            .withSkipWritingPriorities()
+            .withMockedJHipsterGenerators();
+        });
+
+        it('should not set clientBundler', () => {
+          runResult.assertJHipsterConfigContent({
+            clientBundler: undefined,
+          });
+        });
+      });
+    });
+  });
+
   it('samples matrix should match snapshot', () => {
     expect(testSamples).toMatchSnapshot();
   });
@@ -71,7 +133,7 @@ describe(`generator - ${clientFramework}`, () => {
       });
 
       it('should match application snapshot', () => {
-        const application = runResult.application;
+        const { application } = runResult;
         expect(application).toMatchSnapshot({
           addLanguageCallbacks: expect.any(Array),
           customizeTemplatePaths: expect.any(Array),
@@ -84,26 +146,26 @@ describe(`generator - ${clientFramework}`, () => {
           prettierExtensions: expect.any(Array),
           prettierFolders: expect.any(Array),
           supportedLanguages: expect.any(Array),
-          ...(application?.generateBuiltInUserEntity
-            ? {
-                user: expect.any(Object),
-              }
-            : {}),
-          ...(application?.generateBuiltInAuthorityEntity
-            ? {
-                authority: expect.any(Object),
-              }
-            : {}),
-          ...(application?.generateUserManagement
-            ? {
-                userManagement: expect.any(Object),
-              }
-            : {}),
-          ...(application?.enableTranslation
-            ? {
-                languagesToGenerateDefinition: expect.any(Array),
-              }
-            : {}),
+          ...(application?.generateBuiltInUserEntity ?
+            {
+              user: expect.any(Object),
+            }
+          : {}),
+          ...(application?.generateBuiltInAuthorityEntity ?
+            {
+              authority: expect.any(Object),
+            }
+          : {}),
+          ...(application?.generateUserManagement ?
+            {
+              userManagement: expect.any(Object),
+            }
+          : {}),
+          ...(application?.enableTranslation ?
+            {
+              languagesToGenerateDefinition: expect.any(Array),
+            }
+          : {}),
         });
       });
 
@@ -123,7 +185,7 @@ describe(`generator - ${clientFramework}`, () => {
       describe('withAdminUi', () => {
         const { applicationType, withAdminUi, enableTranslation } = sampleConfig;
         const clientSrcDir = `${clientRootDir}${clientRootDir ? 'src/' : CLIENT_MAIN_SRC_DIR}`;
-        const generateAdminUi = applicationType !== 'microservice' && withAdminUi;
+        const generateAdminUi = withAdminUi;
         const adminUiComponents = generateAdminUi ? 'should generate admin ui components' : 'should not generate admin ui components';
 
         it(adminUiComponents, () => {

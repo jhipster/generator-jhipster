@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 
-import type { Rule, TokenType } from 'chevrotain';
-import { Lexer } from 'chevrotain';
+import { Lexer, type Rule, type TokenType } from 'chevrotain';
 import { difference, flatMap, includes, isEmpty, reject, some, uniq, values } from 'lodash-es';
 
 import TokenCollectorVisitor from './token-collector-visitor.ts';
@@ -61,7 +60,7 @@ export function checkConfigKeys(definedTokensMap: Record<string, TokenType>, use
 function checkForUselessConfigurationKeys(definedTokensMap: Record<string, TokenType>, usedConfigKeys: string[]) {
   const redundantConfigKeys = difference(usedConfigKeys, Object.keys(definedTokensMap));
   if (!isEmpty(redundantConfigKeys)) {
-    throw Error(`Useless configuration keys: [ ${redundantConfigKeys.join(', ')} ]`);
+    throw new Error(`Useless configuration keys: [ ${redundantConfigKeys.join(', ')} ]`);
   }
 }
 
@@ -72,6 +71,6 @@ function checkForMissingConfigurationKeys(definedTokensMap: Record<string, Token
 
   const missingConfigKeys = difference(definedConfigKeyNames, usedConfigKeys);
   if (!isEmpty(missingConfigKeys)) {
-    throw Error(`Missing configuration keys: [ ${missingConfigKeys.join(', ')} ]`);
+    throw new Error(`Missing configuration keys: [ ${missingConfigKeys.join(', ')} ]`);
   }
 }

@@ -17,18 +17,18 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: <%= baseName.toLowerCase() %>
+name: <%- baseName.toLowerCase() %>
 services:
   mariadb:
     image: <%- dockerContainers.mariadb %>
     volumes:
       - ./config/mariadb:/etc/mysql/conf.d:ro
     # volumes:
-    #   - ~/volumes/jhipster/<%= baseName %>/mariadb/:/var/lib/mariadb/
+    #   - ~/volumes/jhipster/<%- baseName %>/mariadb/:/var/lib/mariadb/
     environment:
       - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=yes
       - MARIADB_ALLOW_EMPTY_PASSWORD=yes
-      - MARIADB_DATABASE=<%= baseName.toLowerCase() %>
+      - MARIADB_DATABASE=<%- baseName.toLowerCase() %>
 <%_ if (locals.prodDatabasePassword) { _%>
       - MARIADB_PASSWORD=<%- locals.prodDatabasePassword %>
 <%_ } _%>

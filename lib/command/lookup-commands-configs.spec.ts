@@ -1,19 +1,19 @@
 import { before, describe, expect, it } from 'esmocha';
 
-import type { ImportState } from '../jdl/jdl-importer.ts';
-import { createImporterFromContent } from '../jdl/jdl-importer.ts';
+import { type ImportState, createImporterFromContent } from '../jdl/jdl-importer.ts';
 
 import { lookupCommandsConfigs } from './lookup-commands-configs.ts';
 
 const jhipsterConfigsWithJDL = await lookupCommandsConfigs({ filter: config => Boolean(config.jdl) });
 
 describe('jdl options', () => {
-  const jdlConfigs = Object.entries(jhipsterConfigsWithJDL!);
+  const jdlConfigs = Object.entries(jhipsterConfigsWithJDL);
 
   it('jdl configs names should match snapshot', () => {
     expect(jdlConfigs.map(([name]) => name)).toMatchInlineSnapshot(`
 [
   "removeNeedles",
+  "clientBundler",
   "clientTestFramework",
   "incrementalChangelog",
   "feignClient",

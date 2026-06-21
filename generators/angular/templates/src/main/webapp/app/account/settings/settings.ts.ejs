@@ -16,16 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit, signal } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 <%_ if (enableTranslation) { _%>
-import { TranslateService } from '@ngx-translate/core';
-import { TranslateDirective } from 'app/shared/language';
-import { TranslateModule } from '@ngx-translate/core';
-import { FindLanguageFromKeyPipe } from 'app/shared/language';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { FindLanguageFromKeyPipe, TranslateDirective } from 'app/shared/language';
 <%_ } _%>
-import { of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, of } from 'rxjs';
 
 import { AlertError } from 'app/shared/alert/alert-error';
 import { AccountService } from 'app/core/auth/account.service';
@@ -37,8 +34,17 @@ import { LANGUAGES } from 'app/config/language.constants';
 const initialAccount: Account = {} as Account;
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-settings',
-  imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, FindLanguageFromKeyPipe, <%_ } _%>AlertError, ReactiveFormsModule],
+  selector: '<%- jhiPrefixDashed %>-settings',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+<%_ if (enableTranslation) { _%>
+    TranslateDirective,
+    TranslateModule,
+    FindLanguageFromKeyPipe,
+<%_ } _%>
+    AlertError,
+    ReactiveFormsModule,
+  ],
   templateUrl: './settings.html',
 })
 export default class Settings implements OnInit {

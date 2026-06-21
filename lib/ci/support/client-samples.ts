@@ -12,9 +12,9 @@ const CLIENT_ADDITIONAL_CONFIG_MATRIX = {
 };
 
 export const buildClientSamples = (commonConfig?: ConfigAll): Matrix => {
-  let clientMatrix = {
-    ...fromMatrix<ConfigAll>(MatrixMonolith),
-    ...fromMatrix<ConfigAll>(MatrixMicroserviceGateway),
+  let clientMatrix: Matrix = {
+    ...fromMatrix(MatrixMonolith),
+    ...fromMatrix(MatrixMicroserviceGateway),
   };
 
   clientMatrix = extendFilteredMatrix(clientMatrix, sample => sample.authenticationType !== 'oauth2', {

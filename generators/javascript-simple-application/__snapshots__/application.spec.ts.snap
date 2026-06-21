@@ -2,15 +2,17 @@
 
 exports[`application mutation test expects mutateApplication to match snapshot 1`] = `
 {
+  "clientDistDir": "dist/",
   "clientPackageJsonScripts": {},
   "clientRootDir": "",
   "clientSrcDir": "src/main/webapp/",
+  "clientTestDir": "src/test/javascript/",
   "jhipsterPackageJson": "jhipsterPackageJson",
   "jhipsterVersion": "jhipsterVersion",
-  "nodeDependencies": {},
   "nodePackageManager": "npm",
   "nodePackageManagerCommand": "npm",
   "nodeVersion": "nodeVersion",
+  "nodeWebappBuildTarget": "webapp:build",
   "packageJsonScripts": {},
   "prettierExtensions": [
     "md",

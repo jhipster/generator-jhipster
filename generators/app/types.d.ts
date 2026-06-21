@@ -16,13 +16,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { HandleCommandTypes } from '../../lib/command/types.ts';
-import type { Config as BaseApplicationConfig, Options as BaseApplicationOptions } from '../base-application/types.ts';
+import type { CommandTypeMap } from '../../lib/command/types.ts';
+import type {
+  Application as ClientApplication,
+  Config as ClientConfig,
+  Entity as ClientEntity,
+  Features as ClientFeatures,
+  Field as ClientField,
+  Options as ClientOptions,
+  Relationship as ClientRelationship,
+  Source as ClientSource,
+} from '../client/types.d.ts';
+import type {
+  Application as ServerApplication,
+  Config as ServerConfig,
+  Entity as ServerEntity,
+  Features as ServerFeatures,
+  Field as ServerField,
+  Options as ServerOptions,
+  Relationship as ServerRelationship,
+  Source as ServerSource,
+} from '../server/types.d.ts';
 
 import type command from './command.ts';
 
-type Command = HandleCommandTypes<typeof command>;
+type Command = CommandTypeMap<typeof command>;
 
-export type Config = Command['Config'] & BaseApplicationConfig;
+export type Config = Command['Config'] & ClientConfig & ServerConfig;
 
-export type Options = Command['Options'] & BaseApplicationOptions;
+export type Features = ClientFeatures & ServerFeatures;
+
+export type Options = Command['Options'] & ClientOptions & ServerOptions;
+
+export type Source = ClientSource & ServerSource;
+
+export type Field = ClientField & ServerField;
+
+export interface Relationship extends ClientRelationship, ServerRelationship {}
+
+export type Entity<F extends Field = Field, R extends Relationship = Relationship> = ClientEntity<F, R> & ServerEntity<F, R>;
+
+export type Application<E extends Entity = Entity> = Command['Application'] & ClientApplication<E> & ServerApplication<E>;

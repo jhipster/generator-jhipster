@@ -22,6 +22,7 @@ const files = {
         fieldName: 'countryId',
         fieldType: 'Long',
         documentation: 'The country Id',
+        options: { id: true },
       },
       {
         fieldName: 'countryName',
@@ -80,6 +81,7 @@ const files = {
         relationshipType: 'many-to-one',
         otherEntityField: 'foo',
         otherEntityRelationshipName: 'employee',
+        options: { destinationAnnotation: true },
       },
       {
         relationshipType: 'one-to-many',
@@ -100,10 +102,12 @@ const files = {
       {
         fieldName: 'employeeId',
         fieldType: 'Long',
+        options: { id: true },
       },
       {
         fieldName: 'employeeUuid',
         fieldType: 'UUID',
+        options: { customAnnotation: 'customValue' },
       },
       {
         fieldName: 'firstName',

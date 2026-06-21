@@ -95,7 +95,7 @@ export default asWritingEntitiesTask(async function writeEntitiesTask({ applicat
       await this.writeFiles({
         blocks: [
           {
-            condition: generator => generator.reactive && generator.requiresPersistableImplementation,
+            condition: (generator: any) => generator.reactive && generator.requiresPersistableImplementation,
             ...javaMainPackageTemplatesBlock('_entityPackage_'),
             templates: ['domain/_persistClass_Callback.java'],
           },

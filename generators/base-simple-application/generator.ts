@@ -19,13 +19,14 @@
 import type { ComposeOptions } from 'yeoman-generator';
 
 import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.ts';
-import { mutateData } from '../../lib/utils/index.ts';
+import { createDelayedMutationContext, mutateData } from '../../lib/utils/index.ts';
 import BaseGenerator from '../base/index.ts';
 import { PRIORITY_NAMES } from '../base-core/priorities.ts';
 import type { GenericTask } from '../base-core/types.ts';
 import type GeneratorsByNamespace from '../types.ts';
 
-import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from './support/index.ts';
+import { sanitizeConfigForNodeApplications } from './support/config-hardening.ts';
+import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SANITIZATION_KEY, CONTEXT_DATA_SOURCE_KEY } from './support/index.ts';
 import type { SimpleTaskTypes } from './tasks.ts';
 import type {
   Application as BaseSimpleApplicationApplication,
@@ -35,12 +36,14 @@ import type {
   Source as BaseSimpleApplicationSource,
 } from './types.ts';
 
-const { LOADING, PREPARING, POST_PREPARING, DEFAULT, WRITING, POST_WRITING, PRE_CONFLICTS, INSTALL, END } = PRIORITY_NAMES;
+const { LOADING, COMPOSING_BOOTSTRAP, PREPARING, POST_PREPARING, DEFAULT, WRITING, POST_WRITING, PRE_CONFLICTS, INSTALL, END } =
+  PRIORITY_NAMES;
 
 const PRIORITY_WITH_SOURCE = new Set<string>([PREPARING, POST_PREPARING, POST_WRITING]);
 const PRIORITY_WITH_APPLICATION_DEFAULTS = new Set<string>([PREPARING, LOADING]);
 const PRIORITY_WITH_APPLICATION = new Set<string>([
   LOADING,
+  COMPOSING_BOOTSTRAP,
   PREPARING,
   POST_PREPARING,
   DEFAULT,
@@ -69,25 +72,47 @@ export default class BaseSimpleApplicationGenerator<
   Tasks extends SimpleTaskTypes<Application, Source> = SimpleTaskTypes<Application, Source>,
 > extends BaseGenerator<Config, Options, Source, Features, Tasks> {
   constructor(args?: string[], options?: Options, features?: Features) {
-    super(args, options, { storeJHipsterVersion: true, storeBlueprintVersion: true, ...features } as Features);
+    super(args, options, {
+      storeJHipsterVersion: true,
+      storeBlueprintVersion: true,
+      skipLoadCommand: false,
+      configTransform: (...args) => {
+        const configTransform = this.getContextData(CONTEXT_DATA_SANITIZATION_KEY, {
+          factory: () => (config: Record<string, any>, configKey?: string | undefined) => {
+            const cleanups = sanitizeConfigForNodeApplications(config, { depth: -1, keyPath: configKey });
+            for (const [key, { oldValue, newValue }] of Object.entries(cleanups)) {
+              this.log.warn(
+                `The configuration property '${key}' contained a template literal which has been sanitized for security hardening. Original value: '${oldValue}', new value: '${newValue}'`,
+              );
+            }
+            return config;
+          },
+        });
+        return configTransform(...args);
+      },
+      ...features,
+    } as Features);
   }
 
   override get context(): Application {
-    return this.getContextData(CONTEXT_DATA_APPLICATION_KEY, {
-      factory: () => ({ nodeDependencies: {}, customizeTemplatePaths: [], user: undefined }) as unknown as Application,
-    });
+    return this.#application;
   }
 
   get #source(): Record<string, any> {
     return this.getContextData(CONTEXT_DATA_SOURCE_KEY, { factory: () => ({}) });
   }
 
+  get #application(): Application {
+    return this.getContextData(CONTEXT_DATA_APPLICATION_KEY, {
+      factory: () => createDelayedMutationContext<Application>({ autoDelay: true }),
+    });
+  }
+
   /**
    * JHipster config with default values fallback
    */
   override get jhipsterConfigWithDefaults(): Readonly<Config> {
-    const configWithDefaults = getConfigWithDefaults(super.jhipsterConfigWithDefaults);
-    return configWithDefaults as Config;
+    return getConfigWithDefaults(super.jhipsterConfigWithDefaults) as Config;
   }
 
   /**
@@ -112,20 +137,30 @@ export default class BaseSimpleApplicationGenerator<
    * @protected
    */
   protected getTaskFirstArgForPriority(priorityName: (typeof PRIORITY_NAMES)[keyof typeof PRIORITY_NAMES]): any {
-    const { source, application, applicationDefaults } = getFirstArgForPriority(priorityName);
+    return this.getApplicationArgForPriority(getFirstArgForPriority(priorityName));
+  }
 
-    const args: Record<string, any> = {};
+  protected getApplicationArgForPriority({
+    source,
+    application,
+    applicationDefaults,
+  }: {
+    source?: boolean;
+    application?: boolean;
+    applicationDefaults?: boolean;
+  }): { application?: any; source?: any; applicationDefaults?: any } {
+    const taskArg: { application?: any; source?: any; applicationDefaults?: any } = {};
     if (application) {
-      args.application = this.context;
-    }
-    if (source) {
-      args.source = this.#source;
+      taskArg.application = this.#application;
     }
     if (applicationDefaults) {
-      args.applicationDefaults = (...args: any[]): void =>
-        mutateData(this.context, ...args.map(data => ({ __override__: false, ...data })));
+      taskArg.applicationDefaults = (...args: any[]): void =>
+        mutateData(this.#application, ...args.map(data => ({ __override__: false, ...data })));
     }
-    return args;
+    if (source) {
+      taskArg.source = this.#source;
+    }
+    return taskArg;
   }
 
   /**

@@ -26,8 +26,8 @@ import { type MemFsEditor, type MemFsEditorFile, create as createMemFsEditor } f
 import { downloadJdlFile } from '../../cli/download.ts';
 import EnvironmentBuilder from '../../cli/environment-builder.ts';
 import { CLI_NAME } from '../../cli/utils.ts';
-import type { ApplicationWithEntities } from '../../lib/jdl/jdl-importer.ts';
-import { createImporterFromContent } from '../../lib/jdl/jdl-importer.ts';
+import type { YoRcFileContent } from '../../lib/constants/yeoman.ts';
+import { type ApplicationWithEntities, createImporterFromContent } from '../../lib/jdl/jdl-importer.ts';
 import { mergeYoRcContent } from '../../lib/utils/yo-rc.ts';
 import BaseGenerator from '../base/index.ts';
 import { normalizeBlueprintName } from '../base/internal/blueprint.ts';
@@ -126,7 +126,7 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
           this.jdlContents.push(this.inline);
         }
         for (const jdlFile of this.jdlFiles ?? []) {
-          this.jdlContents.push(this.readDestination(jdlFile)?.toString() ?? '');
+          this.jdlContents.push(this.readDestination(jdlFile) ?? '');
         }
       },
       async parseJDL() {
@@ -147,12 +147,12 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
 
         const applicationsWithEntities = Object.values(importState.exportedApplicationsWithEntities);
         this.applications =
-          applicationsWithEntities.length === 1
-            ? applicationsWithEntities
-            : [
-                ...applicationsWithEntities.filter((app: ApplicationWithEntitiesAndPath) => app.config.applicationType === 'gateway'),
-                ...applicationsWithEntities.filter((app: ApplicationWithEntitiesAndPath) => app.config.applicationType !== 'gateway'),
-              ];
+          applicationsWithEntities.length === 1 ?
+            applicationsWithEntities
+          : [
+              ...applicationsWithEntities.filter((app: ApplicationWithEntitiesAndPath) => app.config.applicationType === 'gateway'),
+              ...applicationsWithEntities.filter((app: ApplicationWithEntitiesAndPath) => app.config.applicationType !== 'gateway'),
+            ];
       },
       configure() {
         const nrApplications = this.applications.length;
@@ -201,7 +201,11 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
             const entities = this.exportedEntities;
             await this.composeWithJHipster(this.entitiesGenerator, {
               generatorArgs: entities.map(entity => entity.name),
-              generatorOptions,
+              generatorOptions: {
+                ...generatorOptions,
+                // Generation should match entities command behavior.
+                commandName: 'entities',
+              },
             });
           } else {
             for (const app of this.applications) {
@@ -250,7 +254,7 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
         this.log.info(`Generating ${this.exportedDeployments.length} deployments`);
         for (const deployment of this.exportedDeployments) {
           const deploymentConfig = deployment[GENERATOR_JHIPSTER];
-          const deploymentType = deploymentConfig.deploymentType;
+          const { deploymentType } = deploymentConfig;
           this.log.debug(`Generating deployment: ${JSON.stringify(deploymentConfig, null, 2)}`);
 
           await this.composeWithJHipster(deploymentType, {
@@ -277,7 +281,7 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
         const envOptions: any = { cwd, logCwd: rootCwd, sharedFs: application.sharedFs, adapter };
         const generatorOptions = { ...this.options, ...options, skipPriorities: ['prompting'] };
 
-        // Install should happen at the root of the monorepository. Force skip install at childs.
+        // Install should happen at the root of the monorepository. Force skip install at children.
         if ((this.options as GitOptions).monorepository) {
           generatorOptions.skipInstall = true;
         }
@@ -297,7 +301,7 @@ export default class JdlGenerator extends BaseGenerator<JdlConfig, JdlOptions> {
       const fs: MemFsEditor = sharedFs ? createMemFsEditor(sharedFs) : this.fs;
       if (config) {
         const configFile = this.destinationPath(`${appPath}.yo-rc.json`);
-        const oldConfig: any = fs.readJSON(configFile, {});
+        const oldConfig: YoRcFileContent = fs.readJSON(configFile, {}) as YoRcFileContent;
         if (Array.isArray(config.blueprints)) {
           config = {
             ...config,

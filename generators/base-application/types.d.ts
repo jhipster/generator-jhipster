@@ -1,4 +1,4 @@
-import type { HandleCommandTypes } from '../../lib/command/types.ts';
+import type { CommandTypeMap } from '../../lib/command/types.ts';
 import type {
   Application as JavascriptSimpleApplicationApplication,
   Config as JavascriptSimpleApplicationConfig,
@@ -12,7 +12,7 @@ import type { OptionWithDerivedProperties } from './internal/types/application-o
 
 export type * from './entity.ts';
 
-type Command = HandleCommandTypes<typeof bootstrapCommand>;
+type Command = CommandTypeMap<typeof bootstrapCommand>;
 
 export type Config = JavascriptSimpleApplicationConfig &
   Command['Config'] & {
@@ -25,16 +25,6 @@ export type Options = JavascriptSimpleApplicationOptions & Command['Options'];
 export type { Features } from '../base-simple-application/types.ts';
 export type { Source } from '../base-simple-application/types.ts';
 
-/* ApplicationType Start */
-type MicroservicesArchitectureApplication = {
-  microfrontend: boolean;
-  gatewayServerPort: number;
-};
-
-type GatewayApplication = MicroservicesArchitectureApplication & {
-  microfrontends: { baseName: string; lowercaseBaseName?: string; capitalizedBaseName?: string; endpointPrefix?: string }[];
-};
-
 /*
 Deterministic option causes types to be too complex
 type ApplicationType = DeterministicOptionWithDerivedProperties<
@@ -43,9 +33,7 @@ type ApplicationType = DeterministicOptionWithDerivedProperties<
   [Record<string, never>, GatewayApplication, MicroservicesArchitectureApplication]
 >;
 */
-type ApplicationProperties = OptionWithDerivedProperties<'applicationType', ['monolith', 'gateway', 'microservice']> &
-  GatewayApplication &
-  MicroservicesArchitectureApplication;
+type ApplicationProperties = OptionWithDerivedProperties<'applicationType', ['monolith', 'gateway', 'microservice']>;
 
 type JwtApplication = {
   jwtSecretKey: string;
@@ -72,7 +60,7 @@ type AuthenticationProperties = OptionWithDerivedProperties<'authenticationType'
   Oauth2Application &
   SessionApplication;
 
-export type Application<E extends Entity> = Command['Application'] &
+export type Application<E extends Entity = Entity> = Command['Application'] &
   BaseApplicationAddedApplicationProperties<E> &
   JavascriptSimpleApplicationApplication &
   ApplicationProperties &

@@ -31,7 +31,7 @@ export default class JDLUnaryOption extends AbstractJDLOption {
 
   toString(): string {
     const entityNames = join(this.entityNames, ', ');
-    entityNames.slice(1, entityNames.length - 1);
+    entityNames.slice(1, -1);
     const firstPart = `${this.name} ${entityNames}`;
     if (this.excludedNames.size === 0) {
       return firstPart;

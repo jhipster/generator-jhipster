@@ -17,12 +17,9 @@
  * limitations under the License.
  */
 
-import { after, afterEach, before, beforeEach, describe, expect as jestExpect, it } from 'esmocha';
+import { after, afterEach, before, beforeEach, describe, esmocha, expect, it } from 'esmocha';
 import assert from 'node:assert';
 import fs from 'node:fs';
-
-import { expect } from 'chai';
-import sinon from 'sinon';
 
 import { createBlueprintFiles, defaultHelpers as helpers } from '../lib/testing/index.ts';
 
@@ -117,39 +114,39 @@ describe('cli - EnvironmentBuilder', () => {
       envBuilder = EnvironmentBuilder.create();
     });
     it('should return an EnvironmentBuilder', () => {
-      expect(envBuilder).to.not.be.undefined;
-      expect(envBuilder.getEnvironment()).to.not.be.undefined;
-      expect(envBuilder.getEnvironment().adapter).to.not.be.undefined;
-      expect(envBuilder.getEnvironment().sharedOptions).to.not.be.undefined;
+      expect(envBuilder).not.toBeUndefined();
+      expect(envBuilder.getEnvironment()).not.toBeUndefined();
+      expect(envBuilder.getEnvironment().adapter).not.toBeUndefined();
+      expect(envBuilder.getEnvironment().sharedOptions).not.toBeUndefined();
     });
   });
 
   describe('createDefaultBuilder', () => {
-    let createSpy: sinon.SinonSpy;
-    let _lookupJHipsterSpy: sinon.SinonSpy;
-    let _loadBlueprintsSpy: sinon.SinonSpy;
-    let _lookupBlueprintsSpy: sinon.SinonSpy;
+    let createSpy: ReturnType<typeof esmocha.spyOn>;
+    let _lookupJHipsterSpy: ReturnType<typeof esmocha.spyOn>;
+    let _loadBlueprintsSpy: ReturnType<typeof esmocha.spyOn>;
+    let _lookupBlueprintsSpy: ReturnType<typeof esmocha.spyOn>;
 
     beforeEach(async () => {
       await helpers.prepareTemporaryDir();
-      createSpy = sinon.spy(EnvironmentBuilder, 'create');
-      _lookupJHipsterSpy = sinon.spy(EnvironmentBuilder.prototype, '_lookupJHipster');
-      _loadBlueprintsSpy = sinon.spy(EnvironmentBuilder.prototype, '_loadBlueprints');
-      _lookupBlueprintsSpy = sinon.spy(EnvironmentBuilder.prototype, '_lookupBlueprints');
+      createSpy = esmocha.spyOn(EnvironmentBuilder, 'create');
+      _lookupJHipsterSpy = esmocha.spyOn(EnvironmentBuilder.prototype, '_lookupJHipster');
+      _loadBlueprintsSpy = esmocha.spyOn(EnvironmentBuilder.prototype, '_loadBlueprints');
+      _lookupBlueprintsSpy = esmocha.spyOn(EnvironmentBuilder.prototype, '_lookupBlueprints');
       // Use localOnly to lookup at local node_modules only to improve lookup speed.
       await EnvironmentBuilder.createDefaultBuilder();
     });
     afterEach(() => {
-      createSpy.restore();
-      _lookupJHipsterSpy.restore();
-      _loadBlueprintsSpy.restore();
-      _lookupBlueprintsSpy.restore();
+      createSpy.mockRestore();
+      _lookupJHipsterSpy.mockRestore();
+      _loadBlueprintsSpy.mockRestore();
+      _lookupBlueprintsSpy.mockRestore();
     });
     it('should call create, _lookupJHipster, _loadBlueprints and _lookupBlueprints', () => {
-      expect(createSpy.callCount).to.be.equal(1);
-      expect(_lookupJHipsterSpy.callCount).to.be.equal(1);
-      expect(_loadBlueprintsSpy.callCount).to.be.equal(1);
-      expect(_lookupBlueprintsSpy.callCount).to.be.equal(1);
+      expect(createSpy.mock.calls.length).toBe(1);
+      expect(_lookupJHipsterSpy.mock.calls.length).toBe(1);
+      expect(_loadBlueprintsSpy.mock.calls.length).toBe(1);
+      expect(_lookupBlueprintsSpy.mock.calls.length).toBe(1);
     });
   });
 
@@ -171,7 +168,7 @@ describe('cli - EnvironmentBuilder', () => {
       });
 
       it('returns an empty object', () => {
-        expect(blueprintsWithVersion).to.deep.equal({});
+        expect(blueprintsWithVersion).toEqual({});
       });
     });
 
@@ -193,7 +190,7 @@ describe('cli - EnvironmentBuilder', () => {
       });
 
       it('returns blueprints with no version', () => {
-        expect(blueprintsWithVersion).to.deep.equal({
+        expect(blueprintsWithVersion).toEqual({
           'generator-jhipster-vuejs': undefined,
           'generator-jhipster-dotnet': undefined,
         });
@@ -217,7 +214,7 @@ describe('cli - EnvironmentBuilder', () => {
       });
 
       it('returns an empty object', () => {
-        expect(blueprintsWithVersion).to.deep.equal({});
+        expect(blueprintsWithVersion).toEqual({});
       });
     });
 
@@ -241,7 +238,7 @@ describe('cli - EnvironmentBuilder', () => {
       });
 
       it('returns the blueprints names & versions', () => {
-        expect(blueprintsWithVersion).to.deep.equal({
+        expect(blueprintsWithVersion).toEqual({
           'generator-jhipster-beeblebrox': 'latest',
           'generator-jhipster-h2g2-answer': '42',
         });
@@ -276,7 +273,7 @@ describe('cli - EnvironmentBuilder', () => {
       });
 
       it('returns the blueprints names & versions, .yo-rc taking precedence', () => {
-        expect(blueprintsWithVersion).to.deep.equal({
+        expect(blueprintsWithVersion).toEqual({
           'generator-jhipster-vuejs': 'latest',
           'generator-jhipster-dotnet': undefined,
           'generator-jhipster-h2g2-answer': '42',
@@ -311,14 +308,14 @@ describe('cli - EnvironmentBuilder', () => {
       });
 
       it('should load all blueprints', () => {
-        expect(envBuilder.getEnvironment().isPackageRegistered('jhipster-cli')).to.be.true;
-        expect(envBuilder.getEnvironment().isPackageRegistered('jhipster-cli-shared')).to.be.true;
+        expect(envBuilder.getEnvironment().isPackageRegistered('jhipster-cli')).toBe(true);
+        expect(envBuilder.getEnvironment().isPackageRegistered('jhipster-cli-shared')).toBe(true);
       });
 
       it('should load all generators', () => {
-        expect(envBuilder.getEnvironment().get('jhipster-cli:foo')).to.not.be.undefined;
-        expect(envBuilder.getEnvironment().get('jhipster-cli-shared:foo')).to.not.be.undefined;
-        expect(envBuilder.getEnvironment().get('jhipster-cli-shared:bar')).to.not.be.undefined;
+        expect(envBuilder.getEnvironment().get('jhipster-cli:foo')).not.toBeUndefined();
+        expect(envBuilder.getEnvironment().get('jhipster-cli-shared:foo')).not.toBeUndefined();
+        expect(envBuilder.getEnvironment().get('jhipster-cli-shared:bar')).not.toBeUndefined();
       });
     });
   });
@@ -349,13 +346,13 @@ describe('cli - EnvironmentBuilder', () => {
       });
 
       it('should load sharedOptions', () => {
-        jestExpect(envBuilder.getEnvironment().sharedOptions.fooBar).toMatchObject(jestExpect.arrayContaining(['fooValue']));
-        expect(envBuilder.getEnvironment().sharedOptions.single).to.be.true;
+        expect(envBuilder.getEnvironment().sharedOptions.fooBar).toMatchObject(expect.arrayContaining(['fooValue']));
+        expect(envBuilder.getEnvironment().sharedOptions.single).toBe(true);
       });
 
       it('should merge sharedOptions', () => {
-        jestExpect(envBuilder.getEnvironment().sharedOptions.fooBar).toMatchObject(jestExpect.arrayContaining(['fooValue']));
-        jestExpect(envBuilder.getEnvironment().sharedOptions.fooBar).toMatchObject(jestExpect.arrayContaining(['barValue']));
+        expect(envBuilder.getEnvironment().sharedOptions.fooBar).toMatchObject(expect.arrayContaining(['fooValue']));
+        expect(envBuilder.getEnvironment().sharedOptions.fooBar).toMatchObject(expect.arrayContaining(['barValue']));
       });
     });
   });

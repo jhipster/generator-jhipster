@@ -22,25 +22,19 @@ import type { Options as ExecaOptions } from 'execa';
 import { kebabCase } from 'lodash-es';
 import { globSync } from 'tinyglobby';
 
-import BaseApplicationGenerator from '../base-application/index.ts';
+import BaseSimpleApplicationGenerator from '../base-simple-application/index.ts';
 import { JAVA_COMPATIBLE_VERSIONS, RECOMMENDED_JAVA_VERSION, SERVER_MAIN_RES_DIR } from '../generator-constants.ts';
 import { addGradlePluginCallback, applyFromGradleCallback } from '../java-simple-application/generators/gradle/internal/needles.ts';
 import { createPomStorage } from '../java-simple-application/generators/maven/support/pom-store.ts';
-import { prepareSqlApplicationProperties } from '../spring-boot/generators/data-relational/support/index.ts';
 
 import { mavenProfileContent } from './templates.ts';
-import type {
-  Application as HerokuApplication,
-  Config as HerokuConfig,
-  Entity as HerokuEntity,
-  Options as HerokuOptions,
-} from './types.ts';
+import type { Application as HerokuApplication, Config as HerokuConfig, Options as HerokuOptions } from './types.ts';
 
 type StreamLike = {
-  on(event: 'data', listener: (chunk: any) => void): any;
+  on(event: 'data', listener: (chunk: Buffer | string) => void): unknown;
 };
 
-export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEntity, HerokuApplication, HerokuConfig, HerokuOptions> {
+export default class HerokuGenerator extends BaseSimpleApplicationGenerator<HerokuApplication, HerokuConfig, HerokuOptions> {
   hasHerokuCli!: boolean;
 
   herokuAppName?: string;
@@ -97,7 +91,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
     });
   }
 
-  get [BaseApplicationGenerator.INITIALIZING]() {
+  get [BaseSimpleApplicationGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
   }
 
@@ -183,7 +177,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
     });
   }
 
-  get [BaseApplicationGenerator.PROMPTING]() {
+  get [BaseSimpleApplicationGenerator.PROMPTING]() {
     return this.delegateTasksToBlueprint(() => this.prompting);
   }
 
@@ -197,22 +191,8 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
     });
   }
 
-  get [BaseApplicationGenerator.LOADING]() {
+  get [BaseSimpleApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
-  }
-
-  get preparing() {
-    return this.asPreparingTaskGroup({
-      properties({ application }) {
-        if (application.databaseTypeSql) {
-          prepareSqlApplicationProperties({ application: application as any });
-        }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get default() {
@@ -393,7 +373,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
     });
   }
 
-  get [BaseApplicationGenerator.DEFAULT]() {
+  get [BaseSimpleApplicationGenerator.DEFAULT]() {
     return this.delegateTasksToBlueprint(() => this.default);
   }
 
@@ -420,9 +400,8 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
 
       addHerokuBuildPlugin({ application }) {
         if (!application.buildToolGradle) return;
-        // TODO addGradlePluginCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
+        // TODO switch to source api, composing with build-tool may be needed.
         this.editFile('build.gradle', addGradlePluginCallback({ id: 'com.heroku.sdk.heroku-gradle', version: '1.0.4' }));
-        // TODO applyFromGradleCallback is an internal api, switch to source api when converted to BaseApplicationGenerator
         this.editFile('build.gradle', applyFromGradleCallback({ script: 'gradle/heroku.gradle' }));
       },
 
@@ -434,7 +413,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [BaseSimpleApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -523,7 +502,7 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
     });
   }
 
-  get [BaseApplicationGenerator.END]() {
+  get [BaseSimpleApplicationGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
   }
 
@@ -565,13 +544,13 @@ export default class HerokuGenerator extends BaseApplicationGenerator<HerokuEnti
 
   printChildOutput<const T extends { stdout?: StreamLike | null; stderr?: StreamLike | null }>(
     child: T,
-    log = (data: any) => this.log.verboseInfo(data),
+    log = (data: string) => this.log.verboseInfo(data),
   ): T {
     const { stdout, stderr } = child;
-    stdout!.on('data', (data: any) => {
+    stdout!.on('data', (data: Buffer | string) => {
       data.toString().split(/\r?\n/).filter(Boolean).forEach(log);
     });
-    stderr!.on('data', (data: any) => {
+    stderr!.on('data', (data: Buffer | string) => {
       data.toString().split(/\r?\n/).filter(Boolean).forEach(log);
     });
     return child;

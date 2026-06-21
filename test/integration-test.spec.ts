@@ -18,8 +18,7 @@
  */
 import { before, describe, it } from 'esmocha';
 import assert from 'node:assert';
-import fs, { existsSync, writeFileSync } from 'node:fs';
-import type { PathOrFileDescriptor } from 'node:fs';
+import fs, { type PathOrFileDescriptor, existsSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
 import sortKeys from 'sort-keys';

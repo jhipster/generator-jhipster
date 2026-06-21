@@ -42,8 +42,8 @@ describe('Data Utils Service Test', () => {
   describe('openFile', () => {
     it('should open the file in the new window', () => {
       const newWindow = { ...window };
-      window.open = <%= clientTestFramework %>.fn(() => newWindow);
-      window.URL.createObjectURL = <%= clientTestFramework %>.fn();
+      window.open = <%- clientTestFramework %>.fn(() => newWindow);
+      window.URL.createObjectURL = <%- clientTestFramework %>.fn();
       // 'JHipster' in base64 is 'SkhpcHN0ZXI='
       const data = 'SkhpcHN0ZXI=';
       const contentType = 'text/plain';

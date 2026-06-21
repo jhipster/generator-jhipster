@@ -16,13 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.security.oauth2;
+package <%- packageName %>.security.oauth2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import <%= packageName %>.security.AuthoritiesConstants;
-import <%= packageName %>.security.SecurityUtils;
-import <%= packageName %>.IntegrationTest;
+import <%- packageName %>.security.AuthoritiesConstants;
+import <%- packageName %>.security.SecurityUtils;
+import <%- packageName %>.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -34,8 +34,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -102,7 +102,7 @@ class CustomClaimConverterIT {
             .containsEntry("preferred_username", USERNAME)
             .containsEntry("given_name", NAME)
             .containsEntry("family_name", FAMILY_NAME)
-            .containsEntry("groups", Arrays.asList(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
+            .containsEntry("groups", List.of(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
     }
 
     @Test
@@ -143,7 +143,7 @@ class CustomClaimConverterIT {
             .containsEntry("preferred_username", USERNAME)
             .containsEntry("given_name", NAME)
             .containsEntry("family_name", FAMILY_NAME)
-            .containsEntry("roles", Arrays.asList(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
+            .containsEntry("roles", List.of(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
     }
 
     @Test

@@ -16,25 +16,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { relative } from 'node:path';
+
 import { globSync } from 'tinyglobby';
 
 import { getSourceRoot } from '../index.ts';
 
 type LookupGeneratorsOptions = {
   firstLevelOnly?: boolean;
+  absolute?: boolean;
 };
 
-export const lookupGenerators = ({ firstLevelOnly }: LookupGeneratorsOptions = {}) =>
+export const lookupGenerators = ({ firstLevelOnly, absolute }: LookupGeneratorsOptions = {}) =>
   globSync([`generators/*/index.{t,j}s`, ...(firstLevelOnly ? [] : [`generators/*/generators/*/index.{t,j}s`])], {
     onlyFiles: true,
     cwd: getSourceRoot(),
+    absolute,
   }).sort();
+
+const toNamespace = (generatorRelativePath: string) =>
+  generatorRelativePath
+    .replace(/\/index\.[tj]s$/, '')
+    .replace(/generators\//g, '')
+    .replaceAll('/', ':');
 
 export const lookupGeneratorsWithNamespace = (options?: LookupGeneratorsOptions): { namespace: string; generator: string }[] =>
   lookupGenerators(options).map(gen => ({
     generator: gen,
-    namespace: gen
-      .replace(/\/index\.[tj]s$/, '')
-      .replace(/generators\//g, '')
-      .replaceAll('/', ':'),
+    namespace: toNamespace(options?.absolute ? relative(getSourceRoot(), gen) : gen),
   }));

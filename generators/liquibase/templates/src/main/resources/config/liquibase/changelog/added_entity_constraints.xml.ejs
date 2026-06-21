@@ -18,9 +18,9 @@
 -%>
 <%- include('/liquibase-changelog-header') -%>
     <!--
-        Added the constraints for entity <%= entity.entityClass %>.
+        Added the constraints for entity <%- entity.entityClass %>.
     -->
-    <changeSet id="<%= changelogDate %>-2" author="jhipster">
+    <changeSet id="<%- changelogDate %>-2" author="jhipster">
 <%_ for (relationship of relationships) { _%>
 <%- include('./add_relationship_constraints', { entity, relationship, prodDatabaseType }) -%>
 <%_ } _%>

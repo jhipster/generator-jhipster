@@ -22,9 +22,9 @@ import chalk from 'chalk';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
 import { clientFrameworkTypes, fieldTypes } from '../../lib/jhipster/index.ts';
+import BaseApplicationGenerator from '../base-application/generator.ts';
 import type { Field } from '../base-application/types.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
-import { ClientApplicationGenerator } from '../client/generator.ts';
 import {
   generateEntityClientEnumImports as getClientEnumImportsFormat,
   generateEntityClientFields as getHydratedEntityClientFields,
@@ -32,19 +32,39 @@ import {
 } from '../client/support/index.ts';
 import type { Field as ClientField } from '../client/types.ts';
 import { JAVA_WEBAPP_SOURCES_DIR } from '../index.ts';
-import { writeEslintClientRootConfigFile } from '../javascript-simple-application/generators/eslint/support/tasks.ts';
 import type { Config as SpringBootConfig } from '../spring-boot/types.d.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
 import { cleanupEntitiesFiles, postWriteEntityFiles, writeEntityFiles } from './entity-files-vue.ts';
 import { writeEntitiesFiles, writeFiles } from './files-vue.ts';
 import { convertTranslationsSupport, isTranslatedVueFile, translateVueFilesTransform } from './support/index.ts';
+import type {
+  Application as VueApplication,
+  Config as VueConfig,
+  Entity as VueEntity,
+  Features as VueFeatures,
+  Options as VueOptions,
+  Source as VueSource,
+} from './types.ts';
 
 const { CommonDBTypes } = fieldTypes;
 const { VUE } = clientFrameworkTypes;
 const TYPE_BOOLEAN = CommonDBTypes.BOOLEAN;
 
-export default class VueGenerator extends ClientApplicationGenerator {
+export class VueApplicationGenerator extends BaseApplicationGenerator<
+  VueEntity,
+  VueApplication,
+  VueConfig,
+  VueOptions,
+  VueSource,
+  VueFeatures
+> {}
+
+export default class VueGenerator extends VueApplicationGenerator {
+  constructor(args?: string[], options?: VueOptions, features?: VueFeatures) {
+    super(args, options, { ...features, loadCommand: ['jhipster:server'] });
+  }
+
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -60,6 +80,14 @@ export default class VueGenerator extends ClientApplicationGenerator {
 
   get configuring() {
     return this.asConfiguringTaskGroup({
+      configMigration({ control }) {
+        if (
+          control.isJhipsterVersionLessThan('9.0.1') &&
+          (this.jhipsterConfig.microfrontend || this.jhipsterConfig.applicationType === 'microservice')
+        ) {
+          this.jhipsterConfig.clientBundler ??= 'webpack';
+        }
+      },
       configureDevServerPort({ control }) {
         if (this.jhipsterConfig.devServerPort === undefined) return;
         if (control.isJhipsterVersionLessThan('8.7.4')) {
@@ -71,13 +99,14 @@ export default class VueGenerator extends ClientApplicationGenerator {
     });
   }
 
-  get [ClientApplicationGenerator.CONFIGURING]() {
+  get [VueApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
   }
 
   get composing() {
     return this.asComposingTaskGroup({
       async composing() {
+        await this.composeWithJHipster('jhipster:javascript-simple-application:eslint');
         await this.composeWithJHipster('jhipster:client:common');
         if ((this.jhipsterConfigWithDefaults as SpringBootConfig).websocket === 'spring-websocket') {
           await this.composeWithJHipster('jhipster:client:encode-csrf-token');
@@ -86,7 +115,7 @@ export default class VueGenerator extends ClientApplicationGenerator {
     });
   }
 
-  get [ClientApplicationGenerator.COMPOSING]() {
+  get [VueApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
   }
 
@@ -113,16 +142,20 @@ export default class VueGenerator extends ClientApplicationGenerator {
         }
       },
       async javaNodeBuildPaths({ application }) {
-        const { clientBundlerVite, clientBundlerWebpack, microfrontend, javaNodeBuildPaths } = application;
+        const { clientBundlerRsbuild, clientBundlerVite, clientBundlerWebpack, microfrontend, javaNodeBuildPaths } = application;
 
         javaNodeBuildPaths?.push('.postcssrc.js', 'tsconfig.json', 'tsconfig.app.json');
         if (microfrontend) {
-          javaNodeBuildPaths?.push('module-federation.config.cjs');
+          javaNodeBuildPaths?.push(`module-federation.config.${application.clientBundlerWebpack ? 'cjs' : 'ts'}`);
         }
         if (clientBundlerWebpack) {
           javaNodeBuildPaths?.push('webpack/');
-        } else if (clientBundlerVite) {
-          javaNodeBuildPaths?.push('vite.config.mts');
+        }
+        if (clientBundlerVite) {
+          javaNodeBuildPaths?.push('vite.config.ts');
+        }
+        if (clientBundlerRsbuild) {
+          javaNodeBuildPaths?.push('rsbuild.config.ts');
         }
       },
       prepareForTemplates({ application, source }) {
@@ -153,7 +186,7 @@ export default class VueGenerator extends ClientApplicationGenerator {
               entityFileName,
               entityNameHumanized,
               entityPage,
-              entityTranslationKeyMenu,
+              entityTranslationKeyMenuPath,
               entityAngularName,
               readOnly,
             } = entity;
@@ -164,10 +197,10 @@ export default class VueGenerator extends ClientApplicationGenerator {
                 needle: 'jhipster-needle-add-entity-to-router-import',
                 contentToAdd: `const ${entityAngularName} = () => import('@/entities/${entityFolderName}/${entityFileName}.vue');
 const ${entityAngularName}Details = () => import('@/entities/${entityFolderName}/${entityFileName}-details.vue');${
-                  readOnly
-                    ? ''
-                    : `
+                  readOnly ? '' : (
+                    `
 const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/${entityFileName}-update.vue');`
+                  )
                 }`,
                 contentToCheck: `import('@/entities/${entityFolderName}/${entityFileName}.vue');`,
               }),
@@ -189,9 +222,8 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   component: ${entityAngularName}Details,
   meta: { authorities: [Authority.USER] }
 },${
-                  readOnly
-                    ? ''
-                    : `
+                  readOnly ? '' : (
+                    `
 {
   path: '${entityPage}/new',
   name: '${entityAngularName}Create',
@@ -204,6 +236,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
   component: ${entityAngularName}Update,
   meta: { authorities: [Authority.USER] }
 },`
+                  )
                 }`,
                 contentToCheck: `path: '${entityFileName}'`,
               }),
@@ -227,7 +260,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
                 needle: 'add-entity-to-menu',
                 contentToAdd: `<b-dropdown-item to="/${entityPage}">
   <font-awesome-icon icon="asterisk" />
-  <span>${enableTranslation ? `{{ $t('global.menu.entities.${entityTranslationKeyMenu}') }}` : entityNameHumanized}</span>
+  <span>${enableTranslation ? `{{ $t('${entityTranslationKeyMenuPath}') }}` : entityNameHumanized}</span>
 </b-dropdown-item>`,
                 contentToCheck: `<b-dropdown-item to="/${entityPage}">`,
               }),
@@ -238,7 +271,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     });
   }
 
-  get [ClientApplicationGenerator.PREPARING]() {
+  get [VueApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
@@ -272,7 +305,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     });
   }
 
-  get [ClientApplicationGenerator.DEFAULT]() {
+  get [VueApplicationGenerator.DEFAULT]() {
     return this.delegateTasksToBlueprint(() => this.default);
   }
 
@@ -299,15 +332,15 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
             `${application.clientSrcDir}app/config/error.constants.ts`,
             `${application.clientSrcDir}app/shared/security/authority.ts`,
           ],
+          '9.0.1': [`${application.clientSrcDir}app/entities/entities-menu.spec.ts`],
         });
       },
       cleanupOldFilesTask,
-      writeEslintClientRootConfigFile,
       writeFiles,
     });
   }
 
-  get [ClientApplicationGenerator.WRITING]() {
+  get [VueApplicationGenerator.WRITING]() {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
@@ -319,14 +352,14 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     });
   }
 
-  get [ClientApplicationGenerator.WRITING_ENTITIES]() {
+  get [VueApplicationGenerator.WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.writingEntities);
   }
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addPackageJsonScripts({ application, source }) {
-        const { clientBundlerVite, clientBundlerWebpack, nodePackageManager } = application;
+        const { clientBundlerRsbuild, clientBundlerVite, clientBundlerWebpack, nodePackageManager } = application;
         if (clientBundlerVite) {
           source.mergeClientPackageJson!({
             scripts: {
@@ -338,7 +371,8 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
               'vite-build': 'vite build',
             },
           });
-        } else if (clientBundlerWebpack) {
+        }
+        if (clientBundlerWebpack) {
           source.mergeClientPackageJson!({
             scripts: {
               'webapp:build:dev': `${nodePackageManager} run webpack -- --mode development --env stats=minimal`,
@@ -349,17 +383,38 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
             },
           });
         }
+        if (clientBundlerRsbuild) {
+          source.mergeClientPackageJson!({
+            devDependencies: {
+              '@rsbuild/core': null,
+              '@rsbuild/plugin-sass': null,
+              '@rsbuild/plugin-vue': null,
+            },
+            scripts: {
+              start: 'rsbuild dev',
+              build: 'rsbuild build',
+              'webapp:build:dev': `${nodePackageManager} run build -- --mode=development`,
+              'webapp:build:prod': `${nodePackageManager} run build -- --mode=production`,
+              'webapp:dev': `${nodePackageManager} run start`,
+              'webapp:serve': `${nodePackageManager} start`,
+            },
+          });
+        }
       },
       addMicrofrontendDependencies({ application, source }) {
-        const { clientBundlerVite, clientBundlerWebpack, enableTranslation, microfrontend } = application;
+        const { clientBundlerRsbuild, clientBundlerVite, clientBundlerWebpack, microfrontend } = application;
         if (!microfrontend) return;
         if (clientBundlerVite) {
           source.mergeClientPackageJson!({
+            dependencies: {
+              '@module-federation/runtime': null,
+            },
             devDependencies: {
-              '@originjs/vite-plugin-federation': '1.3.6',
+              '@module-federation/vite': null,
             },
           });
-        } else if (clientBundlerWebpack) {
+        }
+        if (clientBundlerWebpack) {
           source.mergeClientPackageJson!({
             devDependencies: {
               '@module-federation/enhanced': null,
@@ -381,12 +436,14 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
               'webpack-dev-server': null,
               'webpack-merge': null,
               'workbox-webpack-plugin': null,
-              ...(enableTranslation
-                ? {
-                    'folder-hash': null,
-                    'merge-jsons-webpack-plugin': null,
-                  }
-                : {}),
+            },
+          });
+        }
+        if (clientBundlerRsbuild) {
+          source.mergeClientPackageJson!({
+            devDependencies: {
+              '@module-federation/rsbuild-plugin': null,
+              '@module-federation/enhanced': null,
             },
           });
         }
@@ -418,7 +475,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     });
   }
 
-  get [ClientApplicationGenerator.POST_WRITING]() {
+  get [VueApplicationGenerator.POST_WRITING]() {
     return this.delegateTasksToBlueprint(() => this.postWriting);
   }
 
@@ -428,7 +485,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     });
   }
 
-  get [ClientApplicationGenerator.POST_WRITING_ENTITIES]() {
+  get [VueApplicationGenerator.POST_WRITING_ENTITIES]() {
     return this.delegateTasksToBlueprint(() => this.postWritingEntities);
   }
 
@@ -445,7 +502,7 @@ const ${entityAngularName}Update = () => import('@/entities/${entityFolderName}/
     });
   }
 
-  get [ClientApplicationGenerator.END]() {
+  get [VueApplicationGenerator.END]() {
     return this.delegateTasksToBlueprint(() => this.end);
   }
 

@@ -48,19 +48,19 @@ export const mavenDefinition = ({
             </jvmArgs>
         </configuration>`,
     },
-    ...(reactive || !databaseTypeSql
-      ? []
-      : [
-          {
-            groupId: hibernate7 ? 'org.hibernate.orm' : 'org.hibernate.orm.tooling',
-            artifactId: hibernate7 ? 'hibernate-maven-plugin' : 'hibernate-enhance-maven-plugin',
-            version: '${hibernate.version}',
-            additionalContent: `
+    ...(reactive || !databaseTypeSql ?
+      []
+    : [
+        {
+          groupId: hibernate7 ? 'org.hibernate.orm' : 'org.hibernate.orm.tooling',
+          artifactId: hibernate7 ? 'hibernate-maven-plugin' : 'hibernate-enhance-maven-plugin',
+          version: '${hibernate.version}',
+          additionalContent: `
                 <configuration>
                     <enableLazyInitialization>true</enableLazyInitialization>
                 </configuration>`,
-          },
-        ]),
+        },
+      ]),
   ],
   profiles: [
     {
@@ -73,8 +73,8 @@ export const mavenDefinition = ({
         </properties>
         <build>
             <plugins>${
-              databaseTypeSql && !reactive
-                ? `
+              databaseTypeSql && !reactive ?
+                `
                 <plugin>
                     <groupId>org.hibernate.orm${hibernate7 ? '' : '.tooling'}</groupId>
                     <artifactId>hibernate-${hibernate7 ? '' : 'enhance-'}maven-plugin</artifactId>
@@ -86,7 +86,7 @@ export const mavenDefinition = ({
                         </execution>
                     </executions>
                 </plugin>`
-                : ``
+              : ``
             }
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

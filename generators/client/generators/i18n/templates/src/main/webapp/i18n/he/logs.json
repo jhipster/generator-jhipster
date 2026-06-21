@@ -1,11 +1,11 @@
 {
-    "logs": {
-      "title": "יומנים",
-      "nbloggers": "ישנם {{ total }} רכיבי לוג.",
-      "filter": "סינון",
-      "table": {
-        "name": "שם",
-        "level": "רמה"
-      }
+  "logs": {
+    "title": "יומנים",
+    "nbloggers": "ישנם {{ total }} רכיבי לוג.",
+    "filter": "סינון",
+    "table": {
+      "name": "שם",
+      "level": "רמה"
     }
+  }
 }

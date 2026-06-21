@@ -50,6 +50,6 @@ export default class ConfigurationService {
       }
     }
     // by default, use the default ApplicationContext Id
-    return res['contexts']['<%= baseName %>']['beans'];
+    return res['contexts']['<%- baseName %>']['beans'];
   }
 }

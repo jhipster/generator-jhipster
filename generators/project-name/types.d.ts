@@ -16,13 +16,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { HandleCommandTypes } from '../../lib/command/types.ts';
+import type { CommandTypeMap } from '../../lib/command/types.ts';
 import type { Config as BaseConfig, Options as BaseOptions, Source as BaseSource } from '../base/types.ts';
 
 import type { ProjectNameAddedApplicationProperties } from './application.ts';
 import type command from './command.ts';
 
-type Command = HandleCommandTypes<typeof command>;
+export type { Features } from '../base/types.ts';
+
+type Command = CommandTypeMap<typeof command>;
 
 export type Config = Command['Config'] & BaseConfig;
 

@@ -23,6 +23,7 @@ import {
   createWebpackUpdateLanguagesNeedleCallback,
 } from '../../../client/support/update-languages.ts';
 import { generateLanguagesWebappOptions } from '../../../languages/support/languages.ts';
+import { mutateApplication } from '../../application.ts';
 
 export default class ReactBootstrapGenerator extends ClientApplicationGenerator {
   async beforeQueue() {
@@ -35,6 +36,13 @@ export default class ReactBootstrapGenerator extends ClientApplicationGenerator 
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      defaults({ applicationDefaults }) {
+        applicationDefaults(mutateApplication, {
+          clientBundler: 'webpack',
+          devServerPort: (_, { data }) => 9060 + (data.applicationIndex ?? 0),
+          devServerPortProxy: (ctx, { data }) => (ctx.clientBundlerWebpack ? 9000 + (data.applicationIndex ?? 0) : undefined),
+        });
+      },
       translations({ application }) {
         application.addLanguageCallbacks.push((_newLanguages, allLanguages) => {
           const { enableTranslation, clientSrcDir, clientRootDir, clientI18nDir } = application;
@@ -53,11 +61,13 @@ export default class ReactBootstrapGenerator extends ClientApplicationGenerator 
             }),
           );
 
-          this.editFile(
-            `${clientRootDir}webpack/webpack.common.js`,
-            { ignoreNonExisting },
-            createWebpackUpdateLanguagesNeedleCallback(allLanguages, this.relativeDir(clientRootDir, clientI18nDir)),
-          );
+          if (application.microfrontend) {
+            this.editFile(
+              `${clientRootDir}webpack/webpack.common.js`,
+              { ignoreNonExisting },
+              createWebpackUpdateLanguagesNeedleCallback(allLanguages, this.relativeDir(clientRootDir, clientI18nDir)),
+            );
+          }
         });
       },
     });

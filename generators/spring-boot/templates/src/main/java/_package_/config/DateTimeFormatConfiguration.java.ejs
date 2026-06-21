@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.config;
+package <%- packageName %>.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
@@ -31,7 +31,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * Configure the converters to use the ISO format for dates by default.
  */
 @Configuration
-public class DateTimeFormatConfiguration implements Web<% if (reactive) { %>Flux<% } else { %>Mvc<% } %>Configurer {
+public class DateTimeFormatConfiguration implements Web<%- reactive ? 'Flux' : 'Mvc' %>Configurer {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {

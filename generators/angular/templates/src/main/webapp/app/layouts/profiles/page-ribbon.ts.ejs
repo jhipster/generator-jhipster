@@ -16,9 +16,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, Injector, OnInit, Signal, inject } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Component, ChangeDetectionStrategy, Injector, OnInit, Signal, inject } from '@angular/core';
+import { map, Observable } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 <%_ if (enableTranslation) { _%>
@@ -28,7 +27,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ProfileService } from './profile.service';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-page-ribbon',
+  selector: '<%- jhiPrefixDashed %>-page-ribbon',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (ribbonEnvSignal?.(); as ribbonEnv) {
       <div class="ribbon">
@@ -37,7 +37,9 @@ import { ProfileService } from './profile.service';
     }
   `,
   styleUrl: './page-ribbon.scss',
-  <%_ if (enableTranslation) { _%>imports: [TranslateDirective, TranslateModule],<%_ } _%>
+<%_ if (enableTranslation) { _%>
+  imports: [TranslateDirective, TranslateModule],
+<%_ } _%>
 })
 export default class PageRibbon implements OnInit {
   ribbonEnvSignal?: Signal<string | undefined>;

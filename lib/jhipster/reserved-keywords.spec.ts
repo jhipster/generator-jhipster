@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { describe, expect, it } from 'esmocha';
 
 import reservedKeywords from './reserved-keywords.ts';
 
@@ -27,69 +25,69 @@ describe('jdl - ReservedKeywords', () => {
   describe('isReserved', () => {
     describe('when passing a nil or empty keyword', () => {
       it('should return false', () => {
-        expect(reservedKeywords.isReserved()).to.be.false;
-        expect(reservedKeywords.isReserved('', '')).to.be.false;
+        expect(reservedKeywords.isReserved()).toBe(false);
+        expect(reservedKeywords.isReserved('', '')).toBe(false);
       });
     });
     describe('when passing a valid keyword', () => {
       it('should return false', () => {
-        expect(reservedKeywords.isReserved('ValidKeyword', 'JHIPSTER')).to.be.false;
-        expect(reservedKeywords.isReserved('ACCOUNT', 'JAVA')).to.be.false;
+        expect(reservedKeywords.isReserved('ValidKeyword', 'JHIPSTER')).toBe(false);
+        expect(reservedKeywords.isReserved('ACCOUNT', 'JAVA')).toBe(false);
       });
     });
     describe('when passing an invalid jhipster keyword, no matter the case', () => {
       it('should return true', () => {
-        expect(reservedKeywords.isReserved('Account', 'JHIPSTER')).to.be.true;
-        expect(reservedKeywords.isReserved('account', 'jhipster')).to.be.true;
-        expect(reservedKeywords.isReserved('ACCOUNT', 'JHIPSTER')).to.be.true;
-        expect(reservedKeywords.isReserved('ACCOUNT', 'jhipster')).to.be.true;
+        expect(reservedKeywords.isReserved('Account', 'JHIPSTER')).toBe(true);
+        expect(reservedKeywords.isReserved('account', 'jhipster')).toBe(true);
+        expect(reservedKeywords.isReserved('ACCOUNT', 'JHIPSTER')).toBe(true);
+        expect(reservedKeywords.isReserved('ACCOUNT', 'jhipster')).toBe(true);
       });
     });
     describe('when passing an invalid keyword for different types', () => {
       it('should return true', () => {
-        expect(reservedKeywords.isReserved('ACCOUNT', 'jhipster')).to.be.true;
-        expect(reservedKeywords.isReserved('SUPER', 'JAVA')).to.be.true;
-        expect(reservedKeywords.isReserved('ACCESSIBLE', 'MYSQL')).to.be.true;
-        expect(reservedKeywords.isReserved('ANALYSE', 'POSTGRESQL')).to.be.true;
-        expect(reservedKeywords.isReserved('ADD', 'CASSANDRA')).to.be.true;
-        expect(reservedKeywords.isReserved('ACTIVATE', 'ORACLE')).to.be.true;
-        expect(reservedKeywords.isReserved('DOCUMENT', 'MONGODB')).to.be.true;
-        expect(reservedKeywords.isReserved('ALL', 'COUCHBASE')).to.be.true;
+        expect(reservedKeywords.isReserved('ACCOUNT', 'jhipster')).toBe(true);
+        expect(reservedKeywords.isReserved('SUPER', 'JAVA')).toBe(true);
+        expect(reservedKeywords.isReserved('ACCESSIBLE', 'MYSQL')).toBe(true);
+        expect(reservedKeywords.isReserved('ANALYSE', 'POSTGRESQL')).toBe(true);
+        expect(reservedKeywords.isReserved('ADD', 'CASSANDRA')).toBe(true);
+        expect(reservedKeywords.isReserved('ACTIVATE', 'ORACLE')).toBe(true);
+        expect(reservedKeywords.isReserved('DOCUMENT', 'MONGODB')).toBe(true);
+        expect(reservedKeywords.isReserved('ALL', 'COUCHBASE')).toBe(true);
       });
     });
   });
   describe('isReservedClassName', () => {
     describe('when passing a valid entity name', () => {
       it('should return false', () => {
-        expect(reservedKeywords.isReservedClassName('document')).to.be.false;
-        expect(reservedKeywords.isReservedClassName('region')).to.be.false;
+        expect(reservedKeywords.isReservedClassName('document')).toBe(false);
+        expect(reservedKeywords.isReservedClassName('region')).toBe(false);
       });
     });
     describe('when passing an invalid entity name', () => {
       it('should return true', () => {
-        expect(reservedKeywords.isReservedClassName('CONTINUE')).to.be.true;
-        expect(reservedKeywords.isReservedClassName('ACCOUNT')).to.be.true;
+        expect(reservedKeywords.isReservedClassName('CONTINUE')).toBe(true);
+        expect(reservedKeywords.isReservedClassName('ACCOUNT')).toBe(true);
       });
     });
   });
   describe('isReservedFieldName', () => {
     describe('when passing a valid field name', () => {
       it('should return false', () => {
-        expect(reservedKeywords.isReservedFieldName('item')).to.be.false;
-        expect(reservedKeywords.isReservedFieldName('mySuperField')).to.be.false;
+        expect(reservedKeywords.isReservedFieldName('item')).toBe(false);
+        expect(reservedKeywords.isReservedFieldName('mySuperField')).toBe(false);
       });
     });
     describe('when passing an invalid Java field name', () => {
       it('should return true', () => {
-        expect(reservedKeywords.isReservedFieldName('private')).to.be.true;
-        expect(reservedKeywords.isReservedFieldName('class')).to.be.true;
+        expect(reservedKeywords.isReservedFieldName('private')).toBe(true);
+        expect(reservedKeywords.isReservedFieldName('class')).toBe(true);
       });
     });
     describe('when passing an invalid Angular field name', () => {
       it('should return true', () => {
-        expect(reservedKeywords.isReservedFieldName('injectable')).to.be.true;
-        expect(reservedKeywords.isReservedFieldName('injectable', 'angular')).to.be.true;
-        expect(reservedKeywords.isReservedFieldName('status', 'angular')).to.be.false;
+        expect(reservedKeywords.isReservedFieldName('injectable')).toBe(true);
+        expect(reservedKeywords.isReservedFieldName('injectable', 'angular')).toBe(true);
+        expect(reservedKeywords.isReservedFieldName('status', 'angular')).toBe(false);
       });
     });
   });

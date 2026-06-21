@@ -19,6 +19,7 @@
 
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
 import type { ConfigAll } from '../types/command-all.ts';
+import { isWin32 } from '../utils/index.ts';
 
 import applicationOptions from './application-options.ts';
 import authenticationTypes from './authentication-types.ts';
@@ -91,14 +92,21 @@ const commonDefaultOptions: ApplicationDefaults = {
 };
 
 export function getConfigWithDefaults(customOptions: ApplicationDefaults = {}): ApplicationDefaults {
-  const applicationType = customOptions.applicationType;
+  const options = { ...customOptions };
+  const { applicationType } = options;
+  if (isWin32) {
+    options.autoCrlf ??= true;
+  }
+  if (options.graalvmSupport) {
+    options[CACHE_PROVIDER] = NO_CACHE_PROVIDER;
+  }
   if (applicationType === APPLICATION_TYPE_GATEWAY) {
-    return getConfigForGatewayApplication(customOptions);
+    return getConfigForGatewayApplication(options);
   }
   if (applicationType === APPLICATION_TYPE_MICROSERVICE) {
-    return getConfigForMicroserviceApplication(customOptions);
+    return getConfigForMicroserviceApplication(options);
   }
-  return getConfigForMonolithApplication(customOptions);
+  return getConfigForMonolithApplication(options);
 }
 
 function getConfigForClientApplication(options: ApplicationDefaults = {}): ApplicationDefaults {
@@ -109,34 +117,11 @@ function getConfigForClientApplication(options: ApplicationDefaults = {}): Appli
   if (clientFramework === NO_CLIENT_FRAMEWORK) {
     return options;
   }
-  options[OptionNames.MICROFRONTEND] ??= Boolean(options[OptionNames.MICROFRONTENDS]?.length);
   if (!options[CLIENT_THEME]) {
     options[CLIENT_THEME] = OptionValues[CLIENT_THEME];
   } else if (options[CLIENT_THEME] !== OptionValues[CLIENT_THEME] && !options[CLIENT_THEME_VARIANT]) {
     options[CLIENT_THEME_VARIANT] = 'primary';
   }
-  switch (clientFramework) {
-    case 'vue': {
-      options.clientBundler ??= options.microfrontend || options.applicationType === 'microservice' ? 'webpack' : 'vite';
-      options.devServerPort ??= options.clientBundler === 'webpack' ? 9060 : 9000;
-      break;
-    }
-    case 'react': {
-      options.clientBundler ??= 'webpack';
-      options.devServerPort ??= 9060;
-      break;
-    }
-    case 'angular': {
-      options.clientBundler ??= options.microfrontend || options.applicationType === 'microservice' ? 'webpack' : 'esbuild';
-      options.devServerPort ??= 4200;
-      break;
-    }
-    default: {
-      options.devServerPort ??= 9060;
-      break;
-    }
-  }
-  options.devServerPortProxy ??= options.clientBundler === 'webpack' ? 9000 : undefined;
 
   return options;
 }

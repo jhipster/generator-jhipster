@@ -23,11 +23,12 @@ import type {
   Relationship as ClientRelationship,
 } from '../client/types.d.ts';
 
-export type { Config, Options, Relationship, Source } from '../client/types.d.ts';
+export type { Config, Features, Options, Relationship, Source } from '../client/types.d.ts';
 
 export type Field = ClientField & {
   fieldTsDefaultValue?: string;
   defaultValue?: string;
+  fieldValidateRulesPatternAngular?: string;
 };
 
 export interface Entity<F extends Field = Field, R extends ClientRelationship = ClientRelationship> extends ClientEntity<F, R> {
@@ -42,7 +43,7 @@ export interface Entity<F extends Field = Field, R extends ClientRelationship = 
   entityAngularReadAuthorities?: string;
 }
 
-export type Application<E extends Entity> = {
+export type Application<E extends Entity = Entity> = {
   /** @experimental to be replaced with needles */
   angularEntities?: E[];
   angularLocaleId?: string;

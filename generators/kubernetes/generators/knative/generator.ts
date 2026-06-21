@@ -198,7 +198,7 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
         );
         for (const app of applications) {
           const originalImageName = app.baseName.toLowerCase();
-          const targetImageName = app.targetImageName;
+          const { targetImageName } = app;
           if (originalImageName !== targetImageName) {
             this.log.verboseInfo(`  ${chalk.cyan(`docker image tag ${originalImageName} ${targetImageName}`)}`);
           }
@@ -217,7 +217,7 @@ export default class KubernetesKnativeGenerator extends BaseKubernetesGenerator 
                 app.targetImageName
               }`;
             }
-            this.log.log(`${chalk.cyan(`${runCommand}`)} in ${this.workspacePath(app.appFolder!)}`);
+            this.log.log(`${chalk.cyan(runCommand)} in ${this.workspacePath(app.appFolder!)}`);
           }
         }
         this.log.log('\nYou can deploy all your apps by running the following script:');

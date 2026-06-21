@@ -1,4 +1,4 @@
-import type { HandleCommandTypes } from '../../lib/command/types.ts';
+import type { CommandTypeMap } from '../../lib/command/types.ts';
 import type {
   Entity as BaseApplicationEntity,
   Field as BaseApplicationField,
@@ -20,7 +20,7 @@ import type { LiquibaseColumnType, LiquibaseLoadColumnType } from './support/pre
 
 export type Features = BaseEntityChangesFeatures;
 
-type Command = HandleCommandTypes<typeof command>;
+type Command = CommandTypeMap<typeof command>;
 
 export type Config = BaseEntityChangesConfig & Command['Config'];
 
@@ -109,4 +109,7 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
 export type Application<E extends Entity> = JavaApplication<E> & {
   liquibaseDefaultSchemaName: string;
   liquibaseAddH2Properties: boolean;
+  prodLiquibaseUrl: string;
+  devLiquibaseUrl: string;
+  incrementalChangelog: boolean;
 };

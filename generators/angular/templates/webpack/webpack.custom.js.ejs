@@ -18,7 +18,7 @@
 -%>
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
-const path = require('path');
+const path = require('node:path');
 <%_ if (enableTranslation) { _%>
 const { hashElement } = require('folder-hash');
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
@@ -33,7 +33,7 @@ const proxyConfig = require('./proxy.conf');
 
 module.exports = async (config, options, targetOptions) => {
 <%_ if (enableTranslation) { _%>
-  const languagesHash = await hashElement(path.resolve(__dirname, '<%= this.relativeDir(clientRootDir + 'webpack/', clientSrcDir) %>i18n'), {
+  const languagesHash = await hashElement(path.resolve(__dirname, '<%- this.relativeDir(`${clientRootDir}webpack/`, clientSrcDir) %>i18n'), {
     algo: 'md5',
     encoding: 'hex',
     files: { include: ['*.json'] },
@@ -44,7 +44,7 @@ module.exports = async (config, options, targetOptions) => {
   if (config.mode === 'development') {
     config.plugins.push(
       new WebpackNotifierPlugin({
-        title: '<%= humanizedBaseName %>',
+        title: '<%- humanizedBaseName %>',
         contentImage: path.join(__dirname, 'logo-jhipster.png'),
       }),
     );
@@ -64,7 +64,7 @@ module.exports = async (config, options, targetOptions) => {
           port: <%- devServerPortProxy %>,
           https: tls,
           proxy: {
-            target: `http${tls ? 's' : ''}://localhost:${targetOptions.target === 'serve' ? '<%= devServerPort %>' : '<%= applicationTypeMicroservice ? gatewayServerPort : serverPort %>'}`,
+            target: `http${tls ? 's' : ''}://localhost:${targetOptions.target === 'serve' ? '<%- devServerPort %>' : '<%- applicationTypeMicroservice ? gatewayServerPort : serverPort %>'}`,
             ws: true,
             proxyOptions: {
               changeOrigin: false, //pass the Host header to the backend unchanged https://github.com/Browsersync/browser-sync/issues/430
@@ -142,7 +142,7 @@ module.exports = async (config, options, targetOptions) => {
       // (see the `jhipster.cors` common JHipster property in the `application-*.yml` configurations)
       SERVER_API_URL: JSON.stringify(environment.SERVER_API_URL),
     }),
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     new MergeJsonWebpackPlugin({
       output: {
         groupBy: [
@@ -150,7 +150,7 @@ module.exports = async (config, options, targetOptions) => {
         ],
       },
     })
-    <%_ } _%>
+<%_ } _%>
   );
 
   config = merge(

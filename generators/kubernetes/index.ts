@@ -16,5 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default as command } from './command.ts';
 export { default } from './generator.ts';
+export { default as command } from './command.ts';
+export type { Config, Deployment, Features, Options, Source, WorkspacesApplication } from './types.ts';

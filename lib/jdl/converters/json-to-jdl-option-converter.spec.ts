@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import { unaryOptions } from '../core/built-in-options/index.ts';
 import JDLObject from '../core/models/jdl-object.ts';
@@ -40,7 +38,7 @@ describe('jdl - JSONToJDLOptionConverter', () => {
       });
 
       it('should return an empty jdl object', () => {
-        expect(jdlObject.getOptionQuantity()).to.equal(0);
+        expect(jdlObject.getOptionQuantity()).toBe(0);
       });
     });
     describe('when passing a jdl object', () => {
@@ -57,7 +55,7 @@ describe('jdl - JSONToJDLOptionConverter', () => {
       });
 
       it('should add the converted options', () => {
-        expect(jdlObject.getOptionsForName(SKIP_CLIENT)).not.to.be.undefined;
+        expect(jdlObject.getOptionsForName(SKIP_CLIENT)).not.toBeUndefined();
       });
     });
   });

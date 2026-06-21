@@ -66,8 +66,8 @@ describe('Configuration', () => {
           },
         },
       ];
-      <%= clientTestFramework %>.spyOn(service, 'getBeans').mockReturnValue(of(beans));
-      <%= clientTestFramework %>.spyOn(service, 'getPropertySources').mockReturnValue(of(propertySources));
+      <%- clientTestFramework %>.spyOn(service, 'getBeans').mockReturnValue(of(beans));
+      <%- clientTestFramework %>.spyOn(service, 'getPropertySources').mockReturnValue(of(propertySources));
 
       // WHEN
       comp.ngOnInit();

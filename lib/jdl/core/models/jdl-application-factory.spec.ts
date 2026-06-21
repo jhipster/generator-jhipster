@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
 import { createRuntime } from '../runtime.ts';
@@ -38,7 +36,7 @@ describe('jdl - JDLApplicationFactory', () => {
       });
 
       it('should create the app', () => {
-        expect(application.getConfigurationOptionValue('applicationType')).to.equal(APPLICATION_TYPE_MICROSERVICE);
+        expect(application.getConfigurationOptionValue('applicationType')).toBe(APPLICATION_TYPE_MICROSERVICE);
       });
     });
     describe(`when passing a ${APPLICATION_TYPE_GATEWAY} config`, () => {
@@ -49,7 +47,7 @@ describe('jdl - JDLApplicationFactory', () => {
       });
 
       it('should create the app', () => {
-        expect(application.getConfigurationOptionValue('applicationType')).to.equal(APPLICATION_TYPE_GATEWAY);
+        expect(application.getConfigurationOptionValue('applicationType')).toBe(APPLICATION_TYPE_GATEWAY);
       });
     });
     describe(`when passing a ${APPLICATION_TYPE_MONOLITH} config`, () => {
@@ -60,7 +58,7 @@ describe('jdl - JDLApplicationFactory', () => {
       });
 
       it('should create the app', () => {
-        expect(application.getConfigurationOptionValue('applicationType')).to.equal(APPLICATION_TYPE_MONOLITH);
+        expect(application.getConfigurationOptionValue('applicationType')).toBe(APPLICATION_TYPE_MONOLITH);
       });
     });
   });

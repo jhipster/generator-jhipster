@@ -17,11 +17,11 @@
  limitations under the License.
 -%>
 <%_ if (kubernetesUseDynamicStorage) { _%>
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: PersistentVolumeClaim
 metadata:
   name: keycloak-postgresql-pvc
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
 spec:
   accessModes:
   - ReadWriteOnce
@@ -29,26 +29,26 @@ spec:
     requests:
       storage: 2Gi
   <%_ if (kubernetesStorageClassName) { _%>
-  storageClassName: <%= kubernetesStorageClassName %>
+  storageClassName: <%- kubernetesStorageClassName %>
   <%_ } _%>
 ---
 <%_ } _%>
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: Secret
 metadata:
   name: keycloak-postgresql
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
   labels:
     app: keycloak-postgresql
 type: Opaque
 data:
-  postgresql-password: <%= Buffer.from(dbRandomPassword).toString('base64') %>
+  postgresql-password: <%- Buffer.from(dbRandomPassword).toString('base64') %>
 ---
-apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
+apiVersion: <%- KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
   name: keycloak-postgresql
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
 spec:
   replicas: 1
   selector:
@@ -92,11 +92,11 @@ spec:
             memory: "1Gi"
             cpu: "1"
 ---
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: Service
 metadata:
   name: keycloak-postgresql
-  namespace: <%= kubernetesNamespace %>
+  namespace: <%- kubernetesNamespace %>
 spec:
   selector:
     app: keycloak-postgresql

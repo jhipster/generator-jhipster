@@ -128,7 +128,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -161,7 +161,7 @@ kustomize() {
 
 scaffold() {
     // this will build the source and apply the manifests the K8s target. To turn the working directory
-    // into a CI/CD space, initilaize it with \`skaffold dev\`
+    // into a CI/CD space, initialize it with \`skaffold dev\`
     skaffold run
 }
 
@@ -615,7 +615,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -649,7 +649,7 @@ kustomize() {
 
 scaffold() {
     // this will build the source and apply the manifests the K8s target. To turn the working directory
-    // into a CI/CD space, initilaize it with \`skaffold dev\`
+    // into a CI/CD space, initialize it with \`skaffold dev\`
     skaffold run
 }
 
@@ -1796,7 +1796,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -1833,7 +1833,7 @@ kustomize() {
 
 scaffold() {
     // this will build the source and apply the manifests the K8s target. To turn the working directory
-    // into a CI/CD space, initilaize it with \`skaffold dev\`
+    // into a CI/CD space, initialize it with \`skaffold dev\`
     skaffold run
 }
 
@@ -5315,7 +5315,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -5355,7 +5355,7 @@ kustomize() {
 
 scaffold() {
     // this will build the source and apply the manifests the K8s target. To turn the working directory
-    // into a CI/CD space, initilaize it with \`skaffold dev\`
+    // into a CI/CD space, initialize it with \`skaffold dev\`
     skaffold run
 }
 
@@ -8762,7 +8762,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -8801,7 +8801,7 @@ kustomize() {
 
 scaffold() {
     // this will build the source and apply the manifests the K8s target. To turn the working directory
-    // into a CI/CD space, initilaize it with \`skaffold dev\`
+    // into a CI/CD space, initialize it with \`skaffold dev\`
     skaffold run
 }
 
@@ -9478,7 +9478,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -9512,7 +9512,7 @@ kustomize() {
 
 scaffold() {
     // this will build the source and apply the manifests the K8s target. To turn the working directory
-    // into a CI/CD space, initilaize it with \`skaffold dev\`
+    // into a CI/CD space, initialize it with \`skaffold dev\`
     skaffold run
 }
 
@@ -10597,7 +10597,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -10634,7 +10634,7 @@ kustomize() {
 
 scaffold() {
     // this will build the source and apply the manifests the K8s target. To turn the working directory
-    // into a CI/CD space, initilaize it with \`skaffold dev\`
+    // into a CI/CD space, initialize it with \`skaffold dev\`
     skaffold run
 }
 
@@ -11457,7 +11457,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -11495,7 +11495,7 @@ kustomize() {
 
 scaffold() {
     // this will build the source and apply the manifests the K8s target. To turn the working directory
-    // into a CI/CD space, initilaize it with \`skaffold dev\`
+    // into a CI/CD space, initialize it with \`skaffold dev\`
     skaffold run
 }
 
@@ -13289,7 +13289,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -13321,7 +13321,7 @@ kustomize() {
 
 scaffold() {
     // this will build the source and apply the manifests the K8s target. To turn the working directory
-    // into a CI/CD space, initilaize it with \`skaffold dev\`
+    // into a CI/CD space, initialize it with \`skaffold dev\`
     skaffold run
 }
 
@@ -13790,7 +13790,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -13836,7 +13836,7 @@ kustomize() {
 
 scaffold() {
     // this will build the source and apply the manifests the K8s target. To turn the working directory
-    // into a CI/CD space, initilaize it with \`skaffold dev\`
+    // into a CI/CD space, initialize it with \`skaffold dev\`
     skaffold run
 }
 
@@ -16228,7 +16228,6 @@ spec:
         configMap:
           name: jhipster-grafana-dashboard
       restartPolicy: OnFailure
-
 ",
     "stateCleared": "modified",
   },
@@ -16698,7 +16697,6 @@ spec:
 kind: Namespace
 metadata:
   name: mynamespace
-
 ",
     "stateCleared": "modified",
   },
@@ -17131,7 +17129,7 @@ The default setting are optimized for middle-scale clusters. You are free to inc
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -17165,7 +17163,7 @@ kustomize() {
 
 scaffold() {
     // this will build the source and apply the manifests the K8s target. To turn the working directory
-    // into a CI/CD space, initilaize it with \`skaffold dev\`
+    // into a CI/CD space, initialize it with \`skaffold dev\`
     skaffold run
 }
 
@@ -17390,7 +17388,6 @@ spec:
 kind: Namespace
 metadata:
   name: mynamespace
-
 ",
     "stateCleared": "modified",
   },
@@ -18099,7 +18096,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -18137,7 +18134,7 @@ kustomize() {
 
 scaffold() {
     // this will build the source and apply the manifests the K8s target. To turn the working directory
-    // into a CI/CD space, initilaize it with \`skaffold dev\`
+    // into a CI/CD space, initialize it with \`skaffold dev\`
     skaffold run
 }
 
@@ -20110,7 +20107,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -20144,7 +20141,7 @@ kustomize() {
 
 scaffold() {
     // this will build the source and apply the manifests the K8s target. To turn the working directory
-    // into a CI/CD space, initilaize it with \`skaffold dev\`
+    // into a CI/CD space, initialize it with \`skaffold dev\`
     skaffold run
 }
 
@@ -20189,7 +20186,6 @@ patchesJson6902:
 kind: Namespace
 metadata:
   name: jhipsternamespace
-
 ",
     "stateCleared": "modified",
   },
@@ -20831,7 +20827,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-apply.sh
 
-usage(){
+usage() {
  cat << EOF
 
  Usage: $0 -f
@@ -20865,7 +20861,7 @@ kustomize() {
 
 scaffold() {
     // this will build the source and apply the manifests the K8s target. To turn the working directory
-    // into a CI/CD space, initilaize it with \`skaffold dev\`
+    // into a CI/CD space, initialize it with \`skaffold dev\`
     skaffold run
 }
 
@@ -20909,7 +20905,6 @@ patchesJson6902:
 kind: Namespace
 metadata:
   name: jhipsternamespace
-
 ",
     "stateCleared": "modified",
   },

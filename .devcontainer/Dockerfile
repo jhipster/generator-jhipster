@@ -10,12 +10,10 @@ ARG NODE_VERSION
 # Copy required generator-jhipster resource to detect node and npm versions
 COPY /package.json /tmp/generator-jhipster/
 COPY /generators /tmp/generator-jhipster/generators
-COPY /test-integration /tmp/generator-jhipster/test-integration
 
-RUN /tmp/generator-jhipster/test-integration/scripts/99-print-node-version.sh
-RUN export NODE_VERSION=${NODE_VERSION:-$(/tmp/generator-jhipster/test-integration/scripts/99-print-node-version.sh)}; \
+RUN export NODE_VERSION=${NODE_VERSION:-$(cat /tmp/generator-jhipster/generators/init/resources/.node-version)}; \
   su -p vscode -c "umask 0002 && . /usr/local/share/nvm/nvm.sh && nvm install $NODE_VERSION 2>&1";
-RUN npm install -g npm@$(/tmp/generator-jhipster/test-integration/scripts/99-print-npm-version.sh); \
+RUN npm install -g npm@$(node -e "process.stdout.write(require('/tmp/generator-jhipster/generators/common/resources/package.json').devDependencies.npm)"); \
   npm cache clean --force
 
 # Remove generator-jhipster for final image

@@ -1,14 +1,14 @@
 {
-    "error": {
-        "title": "Vealeht!",
-        "http": {
-            "400": "Vigane päring.",
-            "403": "Teil puuduvad õigused selle lehe nägemiseks.",
-            "404": "Lehte ei ole olemas.",
-            "405": "See URL ei toeta teie poolt kasutatud HTTP päringu meetodit.",
-            "500": "Serveri sisemine viga."
-        },
-        "concurrencyFailure": "Teine kasutaja muutis teiega samal ajal andmeid. Teie muutused on tagasi lükatud.",
-        "validation": "Valideerimisviga serveris."
-    }
+  "error": {
+    "title": "Vealeht!",
+    "http": {
+      "400": "Vigane päring.",
+      "403": "Teil puuduvad õigused selle lehe nägemiseks.",
+      "404": "Lehte ei ole olemas.",
+      "405": "See URL ei toeta teie poolt kasutatud HTTP päringu meetodit.",
+      "500": "Serveri sisemine viga."
+    },
+    "concurrencyFailure": "Teine kasutaja muutis teiega samal ajal andmeid. Teie muutused on tagasi lükatud.",
+    "validation": "Valideerimisviga serveris."
+  }
 }

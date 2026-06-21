@@ -21,14 +21,14 @@ const postWritingTask = asPostWritingEntitiesTask<AngularEntity, AngularApplicat
         entityUrl: 'entityUrl',
         i18nKeyPrefix: 'entity',
         entityPage: 'entityPage',
-        entityTranslationKeyMenu: 'entityTranslationKeyMenu',
+        entityTranslationKeyMenuPath: 'entityTranslationKeyMenuPath',
         entityNameHumanized: 'entityNameHumanized',
       } as AngularEntity,
     ],
   });
 });
 
-describe('needle API Angular angular generator : JHipster with blueprint', () => {
+describe('needle API Angular generator : JHipster with blueprint', () => {
   before(async () => {
     await helpers
       .runJHipster('angular')
@@ -45,7 +45,7 @@ describe('needle API Angular angular generator : JHipster with blueprint', () =>
             <li>
               <a class="dropdown-item" routerLink="/entityPage" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="collapseNavbar()">
                 <fa-icon icon="asterisk" [fixedWidth]="true" />
-                <span jhiTranslate="global.menu.entities.entityTranslationKeyMenu">entityNameHumanized</span>
+                <span jhiTranslate="entityTranslationKeyMenuPath">entityNameHumanized</span>
               </a>
             </li>
 `,

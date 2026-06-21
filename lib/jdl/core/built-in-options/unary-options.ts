@@ -36,7 +36,7 @@ export default {
       throw new Error('A function has to be passed to loop over the unary options.');
     }
     optionNames.forEach(optionName => {
-      passedFunction(optionName as UnaryOptionType);
+      passedFunction(optionName);
     });
   },
   exists: (optionName: string) => (Object.values(Options) as string[]).includes(optionName),

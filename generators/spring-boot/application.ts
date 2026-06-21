@@ -44,15 +44,16 @@ export const mutateApplicationLoading = {
 
 export const mutateApplicationPreparing = {
   __override__: false,
+  backendType: 'Java',
   springDataDescription: ({ databaseType, reactive }) => {
     let springDataDatabase: string;
-    if (databaseType !== 'sql') {
+    if (databaseType === 'sql') {
+      springDataDatabase = reactive ? 'R2DBC' : 'JPA';
+    } else {
       springDataDatabase = getDatabaseTypeData(databaseType as string).name;
       if (reactive) {
         springDataDatabase += ' reactive';
       }
-    } else {
-      springDataDatabase = reactive ? 'R2DBC' : 'JPA';
     }
     return `Spring Data ${springDataDatabase}`;
   },

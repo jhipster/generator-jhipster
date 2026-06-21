@@ -19,7 +19,7 @@
 import chalk from 'chalk';
 import type { ExecaError } from 'execa';
 
-import { isWin32 } from '../../../base-core/support/os.ts';
+import { isWin32 } from '../../../../lib/utils/index.ts';
 import { GRADLE_BUILD_SRC_MAIN_DIR } from '../../../generator-constants.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
 
@@ -44,7 +44,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
         javaNodeBuildPaths.push(srcMainWebapp, 'package-lock.json', 'package.json');
         if (buildToolMaven) {
           // Gradle throws an error if the directory does not exist
-          javaNodeBuildPaths.push(clientDistDir!);
+          javaNodeBuildPaths.push(clientDistDir);
         }
       },
     });
@@ -102,7 +102,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
   useNpmWrapperInstallTask() {
     this.setFeatures({
       customInstallTask: async (preferredPm, defaultInstallTask) => {
-        const buildTool = this.jhipsterConfigWithDefaults.buildTool;
+        const { buildTool } = this.jhipsterConfigWithDefaults;
         if (
           (preferredPm && preferredPm !== 'npm') ||
           (this.jhipsterConfig as any).skipClient ||
@@ -142,7 +142,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
       },
       frontendMavenPlugin({ application, source }) {
         if (!application.buildToolMaven) return;
-        const { javaDependencies, nodeDependencies, nodeVersion } = application;
+        const { javaDependencies, nodeDependencies, nodeWebappBuildTarget, nodeVersion } = application;
 
         source.addMavenDefinition!({
           properties: [
@@ -291,7 +291,7 @@ export default class NodeGenerator extends JavaApplicationGenerator {
                           </goals>
                           <phase>generate-resources</phase>
                           <configuration>
-                              <arguments>run webapp:build</arguments>
+                              <arguments>run ${nodeWebappBuildTarget}</arguments>
                               <environmentVariables>
                                   <APP_VERSION>\${project.version}</APP_VERSION>
                               </environmentVariables>

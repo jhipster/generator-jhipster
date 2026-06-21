@@ -1,15 +1,15 @@
 {
-    "sessions": {
-        "title": "Sesiuni active pentru [<strong>{{username}}</strong>]",
-        "table": {
-            "ipaddress": "Adresa IP",
-            "useragent": "User Agent",
-            "date": "Data",
-            "button": "Invalidare"
-        },
-        "messages": {
-            "success": "<strong>Sesiune invalidată!</strong>",
-            "error": "<strong>Eroare!</strong> Sesiunea nu a putut fi invalidată."
-        }
+  "sessions": {
+    "title": "Sesiuni active pentru [<strong>{{username}}</strong>]",
+    "table": {
+      "ipaddress": "Adresa IP",
+      "useragent": "User Agent",
+      "date": "Data",
+      "button": "Invalidare"
+    },
+    "messages": {
+      "success": "<strong>Sesiune invalidată!</strong>",
+      "error": "<strong>Eroare!</strong> Sesiunea nu a putut fi invalidată."
     }
+  }
 }

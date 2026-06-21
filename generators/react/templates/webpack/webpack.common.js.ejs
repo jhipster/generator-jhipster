@@ -16,14 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-const path = require('path');
+const path = require('node:path');
 const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
-<%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation && microfrontend) { _%>
 const { hashElement } = require('folder-hash');
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 <%_ } _%>
@@ -53,8 +53,8 @@ const getTsLoaderRule = () => {
 
 module.exports = async options => {
   const development = options.env === 'development';
-<%_ if (enableTranslation) { _%>
-  const languagesHash = await hashElement(path.resolve(__dirname, '../<%= this.relativeDir(clientRootDir, clientSrcDir) %>i18n'), {
+<%_ if (enableTranslation && microfrontend) { _%>
+  const languagesHash = await hashElement(path.resolve(__dirname, '../<%- this.relativeDir(clientRootDir, clientSrcDir) %>i18n'), {
     algo: 'md5',
     encoding: 'hex',
     files: { include: ['*.json'] },
@@ -66,7 +66,7 @@ return merge(
   cache: {
     // 1. Set cache type to filesystem
     type: 'filesystem',
-    cacheDirectory: path.resolve(__dirname, '../<%= this.relativeDir(clientRootDir, temporaryDir) %>webpack'),
+    cacheDirectory: path.resolve(__dirname, '../<%- this.relativeDir(clientRootDir, temporaryDir) %>webpack'),
     buildDependencies: {
       // 2. Add your config as buildDependency to get cache invalidation on config change
       config: [
@@ -94,7 +94,7 @@ return merge(
       {
         test: /\.tsx?$/,
         use: getTsLoaderRule(options.env),
-        include: [utils.root('./<%= this.relativeDir(clientRootDir, clientSrcDir) %>app')],
+        include: [utils.root('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>app')],
         exclude: [utils.root('node_modules')]
       },
       {
@@ -113,7 +113,7 @@ return merge(
       LOG_LEVEL: development ? 'info' : 'error',
     }),
     new webpack.DefinePlugin({
-<%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation && microfrontend) { _%>
       I18N_HASH: JSON.stringify(languagesHash.hash),
 <%_ } _%>
       DEVELOPMENT: JSON.stringify(development),
@@ -139,22 +139,22 @@ return merge(
           from: path.join(path.dirname(require.resolve('axios/package.json')), 'dist/axios.min.js'),
           to: 'swagger-ui/',
         },
-        { from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/', to: 'swagger-ui/' },
+        { from: './<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/', to: 'swagger-ui/' },
 <%_ } _%>
-        { from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>content/', to: 'content/' },
-        { from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>favicon.ico', to: 'favicon.ico' },
-        { from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>manifest.webapp', to: 'manifest.webapp' },
+        { from: './<%- this.relativeDir(clientRootDir, clientSrcDir) %>content/', to: 'content/' },
+        { from: './<%- this.relativeDir(clientRootDir, clientSrcDir) %>favicon.ico', to: 'favicon.ico' },
+        { from: './<%- this.relativeDir(clientRootDir, clientSrcDir) %>manifest.webapp', to: 'manifest.webapp' },
         // jhipster-needle-add-assets-to-webpack - JHipster will add/remove third-party resources in this array
-        { from: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>robots.txt', to: 'robots.txt' }
+        { from: './<%- this.relativeDir(clientRootDir, clientSrcDir) %>robots.txt', to: 'robots.txt' }
       ],
     }),
     new HtmlWebpackPlugin({
-      template: './<%= this.relativeDir(clientRootDir, clientSrcDir) %>index.html',
+      template: './<%- this.relativeDir(clientRootDir, clientSrcDir) %>index.html',
       chunksSortMode: 'auto',
       inject: 'body',
       base: '/',
     }),
-<%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation && microfrontend) { _%>
     new MergeJsonWebpackPlugin({
       output: {
         groupBy: [

@@ -19,8 +19,6 @@
 
 import { javaMainPackageTemplatesBlock } from '../../../java/support/files.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';
-import type { Source as SpringBootSource } from '../../index.ts';
-import type { Application as SpringDataRelationalApplication } from '../data-relational/types.d.ts';
 
 import cleanupTask from './cleanup.ts';
 import writeTask from './files.ts';
@@ -49,23 +47,6 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
 
   get [SpringBootApplicationGenerator.COMPOSING]() {
     return this.delegateTasksToBlueprint(() => this.composing);
-  }
-
-  get preparing() {
-    return this.asPreparingTaskGroup({
-      async preparing({ application }) {
-        const relationalApplication = application as SpringDataRelationalApplication;
-        relationalApplication.devLiquibaseUrl = 'jdbc:neo4j:bolt://localhost:7687';
-        relationalApplication.devDatabaseUsername = '';
-        relationalApplication.devDatabasePassword = '';
-        relationalApplication.devJdbcDriver = null;
-        relationalApplication.devHibernateDialect = null;
-      },
-    });
-  }
-
-  get [SpringBootApplicationGenerator.PREPARING]() {
-    return this.delegateTasksToBlueprint(() => this.preparing);
   }
 
   get configuringEachEntity() {
@@ -162,7 +143,7 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
   get postWriting() {
     return this.asPostWritingTaskGroup({
       addTestSpringFactory({ source, application }) {
-        (source as SpringBootSource).addTestSpringFactory?.({
+        source.addTestSpringFactory?.({
           key: 'org.springframework.test.context.ContextCustomizerFactory',
           value: `${application.packageName}.config.Neo4jTestContainersSpringContextCustomizerFactory`,
         });
@@ -196,6 +177,12 @@ export default class Neo4jGenerator extends SpringBootApplicationGenerator {
         source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
           annotations: [{ package: `${application.packageName}.config`, annotation: 'EmbeddedNeo4j' }],
         });
+      },
+      blockhound({ application, source }) {
+        const { reactive } = application;
+        if (reactive) {
+          source.addAllowBlockingCallsInside!({ classPath: 'org.neo4j.driver.internal.util.Futures', method: 'blockingGet' });
+        }
       },
     });
   }

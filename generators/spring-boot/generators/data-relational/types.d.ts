@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { HandleCommandTypes } from '../../../../lib/command/types.ts';
+import type { CommandTypeMap } from '../../../../lib/command/types.ts';
 import type { Entity as BaseApplicationEntity } from '../../../base-application/types.ts';
 import type {
   Application as SpringBootApplication,
@@ -30,7 +30,7 @@ import type {
 
 import type command from './command.ts';
 
-type CommandTypes = HandleCommandTypes<typeof command>;
+type CommandTypes = CommandTypeMap<typeof command>;
 
 export type Config = SpringBootConfig & CommandTypes['Config'];
 export type Options = SpringBootOptions & CommandTypes['Options'];
@@ -52,10 +52,6 @@ export interface Entity<F extends SpringBootField = SpringBootField, R extends R
   entityJpqlInstance: string;
 }
 
-type LiquibaseApplication = {
-  incrementalChangelog: boolean;
-};
-
 export type TestcontainerSupport = {
   testcontainerClass?: string;
   testcontainerClassPackage?: string;
@@ -64,7 +60,6 @@ export type TestcontainerSupport = {
 };
 
 export type Application<E extends BaseApplicationEntity = Entity> = SpringBootApplication<E> &
-  LiquibaseApplication &
   TestcontainerSupport &
   CommandTypes['Application'] & {
     devDatabaseExtraOptions: string;
@@ -74,12 +69,10 @@ export type Application<E extends BaseApplicationEntity = Entity> = SpringBootAp
     devDatabaseType: string;
     prodDatabaseType: string;
     devDatabaseTypeMysql: boolean;
-    devDatabaseTypeH2Any?: boolean;
 
     devDatabaseName?: string;
     devJdbcUrl?: string;
     devJdbcDriver?: string | null;
-    devLiquibaseUrl?: string;
     devHibernateDialect?: string | null;
     devR2dbcUrl?: string;
     devDatabaseUsername?: string;
@@ -89,7 +82,6 @@ export type Application<E extends BaseApplicationEntity = Entity> = SpringBootAp
     prodJdbcUrl?: string;
     prodJdbcDriver?: string;
     prodHibernateDialect?: string;
-    prodLiquibaseUrl?: string;
     prodR2dbcUrl?: string;
     prodDatabaseUsername?: string;
     prodDatabasePassword?: string;

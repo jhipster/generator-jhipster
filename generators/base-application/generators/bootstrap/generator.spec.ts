@@ -55,4 +55,38 @@ describe(`generator - ${generator}`, () => {
       expect(result.composedMockedGenerators).toMatchInlineSnapshot(`[]`);
     });
   });
+
+  describe('security hardening', () => {
+    before(async () => {
+      await helpers
+        .runJHipster(generator)
+        .withJHipsterConfig({ skipUserManagement: true }, [
+          {
+            name: 'Foo',
+            // eslint-disable-next-line no-template-curly-in-string
+            annotations: { entityProperty: '${foo}' },
+            fields: [
+              {
+                fieldName: 'myField',
+                fieldType: 'String',
+                // eslint-disable-next-line no-template-curly-in-string
+                fieldValidateRulesPattern: '${injected}',
+                // eslint-disable-next-line no-template-curly-in-string
+                options: { fieldProperty: '${foot}' },
+              },
+            ],
+          },
+        ])
+        .withSkipWritingPriorities();
+    });
+
+    it('should be applied to entity config', () => {
+      expect(result.entities?.Foo).toMatchObject(
+        expect.objectContaining({
+          entityProperty: '',
+          fields: expect.arrayContaining([expect.objectContaining({ fieldProperty: '', fieldValidateRulesPattern: '' })]),
+        }),
+      );
+    });
+  });
 });

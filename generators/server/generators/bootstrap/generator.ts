@@ -24,8 +24,8 @@ import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { loadRequiredConfigIntoEntity } from '../../../base-application/support/index.ts';
 import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../../base-application/types.d.ts';
 import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../../../base-workspaces/internal/docker-dependencies.ts';
+import prepareSqlApplicationProperties from '../../../spring-boot/generators/data-relational/support/application-properties.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-boot/generators/data-relational/types.d.ts';
-import serverCommand from '../../command.ts';
 import {
   addEntitiesOtherRelationships,
   getPrimaryKeyValue,
@@ -35,18 +35,9 @@ import {
   preparePostEntityServerDerivedProperties,
   prepareRelationship,
 } from '../../support/index.ts';
-import type {
-  Application as ServerApplication,
-  Entity as ServerEntity,
-  Features as ServerFeatures,
-  Options as ServerOptions,
-} from '../../types.ts';
+import type { Application as ServerApplication, Entity as ServerEntity } from '../../types.ts';
 
 export default class ServerBootstrapGenerator extends BaseApplicationGenerator<ServerEntity, ServerApplication> {
-  constructor(args?: string[], options?: ServerOptions, features?: ServerFeatures) {
-    super(args, options, { loadCommand: [serverCommand], ...features });
-  }
-
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -59,22 +50,28 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
     await this.dependsOnBootstrap('common');
   }
 
-  get composing() {
-    return this.asComposingTaskGroup({
-      async composeBackendType() {
-        if (!this.jhipsterConfig.backendType || ['spring-boot', 'java'].includes(this.jhipsterConfig.backendType.toLowerCase())) {
+  get composingBootstrap() {
+    return this.asComposingBootstrapTaskGroup({
+      async composeBackendType({ application }) {
+        const { backendType = this.jhipsterConfigWithDefaults.backendType } = application;
+        if (!backendType || ['spring-boot', 'java'].includes(backendType.toLowerCase())) {
           await this.composeWithJHipster('jhipster:spring-boot:bootstrap');
         }
       },
     });
   }
 
-  get [BaseApplicationGenerator.COMPOSING]() {
-    return this.delegateTasksToBlueprint(() => this.composing);
+  get [BaseApplicationGenerator.COMPOSING_BOOTSTRAP]() {
+    return this.delegateTasksToBlueprint(() => this.composingBootstrap);
   }
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      sql({ application }) {
+        if (application.databaseTypeSql || application.databaseTypeNeo4j) {
+          prepareSqlApplicationProperties({ application: application as any });
+        }
+      },
       properties({ application }) {
         mutateData(application as unknown as SpringDataRelationalApplication, {
           devDatabaseTypeH2Any: ({ devDatabaseType }) => devDatabaseType === 'h2Disk' || devDatabaseType === 'h2Memory',
@@ -112,7 +109,7 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
         // springBoot4 is prepared in preparing phase of spring-boot generator
         loadDockerElasticsearchVersion.call(this, {
           springBoot4: application.springBoot4,
-          dockerContainers: application.dockerContainers!,
+          dockerContainers: application.dockerContainers,
         });
       },
     });
@@ -162,8 +159,8 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
 
           dtoMapstruct: ({ dto }) => dto === 'mapstruct' || dto === 'any',
           dtoAny: ({ dto }) => dto && dto !== 'no',
-          restClass: ({ dtoAny, dtoClass, persistClass }) => (dtoAny ? dtoClass! : persistClass!),
-          restInstance: ({ dtoAny, dtoInstance, persistInstance }) => (dtoAny ? dtoInstance! : persistInstance!),
+          restClass: ({ dtoAny, dtoClass, persistClass }) => (dtoAny ? dtoClass! : persistClass),
+          restInstance: ({ dtoAny, dtoInstance, persistInstance }) => (dtoAny ? dtoInstance! : persistInstance),
         });
         loadRequiredConfigDerivedProperties(entity);
       },
@@ -220,9 +217,9 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
           if (entity.primaryKey) {
             entity.resetFakerSeed!(`${application.baseName}post-prepare-server`);
             entity.primaryKey.javaSampleValues ??= [
-              getPrimaryKeyValue(entity.primaryKey, application.databaseType, 1),
-              getPrimaryKeyValue(entity.primaryKey, application.databaseType, 2),
-              getPrimaryKeyValue(entity.primaryKey, application.databaseType, entity.faker!.number.int({ min: 10, max: 100 })),
+              getPrimaryKeyValue(entity.primaryKey, application.databaseType!, 1),
+              getPrimaryKeyValue(entity.primaryKey, application.databaseType!, 2),
+              getPrimaryKeyValue(entity.primaryKey, application.databaseType!, entity.faker!.number.int({ min: 10, max: 100 })),
             ];
           }
         }

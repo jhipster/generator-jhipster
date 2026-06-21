@@ -79,6 +79,7 @@ updates:
           - '@angular-devkit/*'
           - '@fortawesome/angular-fontawesome'
           - '@ng-bootstrap/*'
+          - 'angular-eslint'
           - 'ngx-cookie-service'
           - 'ngx-infinite-scroll'
           - 'typescript'
@@ -109,6 +110,19 @@ updates:
 
   - package-ecosystem: 'npm'
     directory: '/generators/client/resources/'
+    rebase-strategy: 'auto'
+    schedule:
+      interval: 'daily'
+      time: '07:00'
+    open-pull-requests-limit: 10
+    versioning-strategy: increase
+    labels:
+      - 'theme: front'
+      - 'theme: dependencies'
+      - 'skip-changelog'
+
+  - package-ecosystem: 'npm'
+    directory: '/generators/cypress/resources/'
     rebase-strategy: 'auto'
     schedule:
       interval: 'daily'

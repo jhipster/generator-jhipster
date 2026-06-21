@@ -1,15 +1,15 @@
 {
-    "sessions": {
-        "title": "Kasutaja [<strong>{{username}}</strong>] aktiivsed sessioonid",
-        "table": {
-            "ipaddress": "IP aadress",
-            "useragent": "Veebilehitseja",
-            "date": "Kuupäev",
-            "button": "Lõpeta sessioon"
-        },
-        "messages": {
-            "success": "<strong>Sessioon lõpetatud!</strong>",
-            "error": "<strong>Tekkis viga!</strong> Sessiooni ei saanud lõpetada."
-        }
+  "sessions": {
+    "title": "Kasutaja [<strong>{{username}}</strong>] aktiivsed sessioonid",
+    "table": {
+      "ipaddress": "IP aadress",
+      "useragent": "Veebilehitseja",
+      "date": "Kuupäev",
+      "button": "Lõpeta sessioon"
+    },
+    "messages": {
+      "success": "<strong>Sessioon lõpetatud!</strong>",
+      "error": "<strong>Tekkis viga!</strong> Sessiooni ei saanud lõpetada."
     }
+  }
 }

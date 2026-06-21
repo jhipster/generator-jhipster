@@ -24,7 +24,7 @@ import { IQueryParams, serializeAxiosError } from 'app/shared/reducers/reducer.u
 
 const initialState = {
   loading: false,
-  errorMessage: null,
+  errorMessage: null as string | null,
   users: [] as readonly IUser[],
   authorities: [] as any[],
   user: defaultValue,
@@ -121,9 +121,9 @@ export const UserManagementSlice = createSlice({
       .addMatcher(isFulfilled(getUsers, getUsersAsAdmin), (state, action) => {
         state.loading = false;
         state.users = action.payload.data;
-      <%_ if (!databaseTypeCassandra) { _%>
+<%_ if (!databaseTypeCassandra) { _%>
         state.totalItems = Number.parseInt(action.payload.headers['x-total-count'], 10);
-      <%_ } _%>
+<%_ } _%>
       })
       .addMatcher(isFulfilled(createUser, updateUser), (state, action) => {
         state.updating = false;
@@ -145,7 +145,7 @@ export const UserManagementSlice = createSlice({
         state.loading = false;
         state.updating = false;
         state.updateSuccess = false;
-        state.errorMessage = action.error.message;
+        state.errorMessage = action.error.message!;
       });
   },
 });

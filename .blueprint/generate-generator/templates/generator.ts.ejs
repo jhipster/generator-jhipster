@@ -86,7 +86,7 @@ export default class <%- generatorClass %>Generator extends BaseApplicationGener
   }
 
   get writing() {
-    return this.asWritingTaskGroup({
+    return this.asAnyTaskGroup({
       async writing({ application }) {
         await this.writeFiles({
           blocks: [],

@@ -72,8 +72,9 @@ export default class BuildToolGenerator extends JavaApplicationGenerator {
               // If a version is provided, convert to version ref using artifactId
               versionRef ??= version ? artifact.artifactId : undefined;
               version = versionRef ? `\${${versionRef}.version}` : undefined;
-              const additionalContent = exclusions?.length
-                ? `<exclusions>${exclusions
+              const additionalContent =
+                exclusions?.length ?
+                  `<exclusions>${exclusions
                     .map(
                       e => `
                 <exclusion>

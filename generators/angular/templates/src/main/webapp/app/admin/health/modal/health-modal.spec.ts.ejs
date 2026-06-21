@@ -98,7 +98,7 @@ describe('HealthModal', () => {
   describe('dismiss', () => {
     it('should call dismiss when dismiss modal is called', () => {
       // GIVEN
-      const spy = <%= clientTestFramework %>.spyOn(mockActiveModal, 'dismiss');
+      const spy = <%- clientTestFramework %>.spyOn(mockActiveModal, 'dismiss');
 
       // WHEN
       comp.dismiss();

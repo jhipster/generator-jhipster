@@ -1,6 +1,5 @@
 import { before, describe, expect, it } from 'esmocha';
-import type { Mock } from 'node:test';
-import { mock } from 'node:test';
+import { type Mock, mock } from 'node:test';
 
 import { packageJson } from '../../lib/index.ts';
 import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
@@ -126,7 +125,7 @@ describe('generator - base - with blueprint', () => {
       ).rejects.toThrow(/targets JHipster v1.1.1 and is not compatible with this JHipster version/));
   });
 
-  describe('generate application with a engines compatible blueprint', () => {
+  describe('generate application with an engines compatible blueprint', () => {
     before(async () => {
       await helpers
         .runTestBlueprintGenerator()
@@ -156,7 +155,7 @@ describe('generator - base - with blueprint', () => {
     });
   });
 
-  describe('generate application with a engines conflicting version blueprint', () => {
+  describe('generate application with an engines conflicting version blueprint', () => {
     it('throws an error', () =>
       expect(() =>
         helpers
@@ -309,6 +308,9 @@ describe('generator - base - local blueprint', () => {
     "stateCleared": "modified",
   },
   "local-blueprint.txt": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
     "stateCleared": "modified",
   },
 }

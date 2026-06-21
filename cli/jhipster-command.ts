@@ -31,8 +31,8 @@ import {
 import type { CliCommandOptions } from './types.ts';
 
 export default class JHipsterCommand extends Command {
-  configs = {};
-  blueprintConfigs = {};
+  configs: JHipsterConfigs = {};
+  blueprintConfigs: JHipsterConfigs = {};
   generatorNamespaces: string[] = [];
   _lazyBuildCommandCallBack?: (this: JHipsterCommand, args?: string | string[]) => Promise<void>;
   private _excessArgumentsCallback?: (this: JHipsterCommand, receivedArgs: string[]) => void;
@@ -54,8 +54,8 @@ export default class JHipsterCommand extends Command {
   /**
    * Register a callback to be executed before _parseCommand.
    * Used to lazy load options.
-   * @param {} lazyBuildCommandCallBack
-   * @return {JHipsterCommand} this;
+   * @param lazyBuildCommandCallBack
+   * @returns {JHipsterCommand} this
    */
   lazyBuildCommand(lazyBuildCommandCallBack: (this: JHipsterCommand, args?: string | string[]) => Promise<void>): this {
     this._lazyBuildCommandCallBack = lazyBuildCommandCallBack;

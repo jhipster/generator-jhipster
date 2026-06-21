@@ -1,15 +1,15 @@
 {
-    "sessions": {
-        "title": "[<strong>{{username}}</strong>] учун фаол сессиялар",
-        "table": {
-            "ipaddress": "IP манзил",
-            "useragent": "Фойдаланувчи Агент",
-            "date": "Сана",
-            "button": "Якунлаш"
-        },
-        "messages": {
-            "success": "<strong>Сессия тугади!</strong>",
-            "error": "<strong>Хатокик юз берди!</strong> Сессия тугатилмади."
-        }
+  "sessions": {
+    "title": "[<strong>{{username}}</strong>] учун фаол сессиялар",
+    "table": {
+      "ipaddress": "IP манзил",
+      "useragent": "Фойдаланувчи Агент",
+      "date": "Сана",
+      "button": "Якунлаш"
+    },
+    "messages": {
+      "success": "<strong>Сессия тугади!</strong>",
+      "error": "<strong>Хатокик юз берди!</strong> Сессия тугатилмади."
     }
+  }
 }

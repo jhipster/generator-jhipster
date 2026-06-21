@@ -44,7 +44,7 @@ export const applyChangesToFile = ({ templateFile, oldFileContents, newFileConte
     .filter(({ lines }) => lines.some(line => line.startsWith('+') || line.startsWith('-')));
 
   // apply hunk by hunk, since if a hunk fails, the rest of the file will be skipped
-  const content = readFileSync(templateFile, 'utf8').toString();
+  const content = readFileSync(templateFile, 'utf8');
   let applied = content;
   let failures = 0;
   let success = 0;

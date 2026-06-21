@@ -1,4 +1,4 @@
-import type { HandleCommandTypes } from '../../lib/command/types.ts';
+import type { CommandTypeMap } from '../../lib/command/types.ts';
 import type { OptionWithDerivedProperties } from '../base-application/internal/types/application-options.ts';
 import type { Entity as BaseApplicationEntity, RelationshipWithEntity } from '../base-application/types.ts';
 import type { Config as CommonConfig } from '../common/types.d.ts';
@@ -28,8 +28,10 @@ import type cacheCommand from './generators/cache/command.ts';
 import type springBootDependencies4 from './resources/spring-boot-dependencies-4.ts';
 import type springBootDependencies3 from './resources/spring-boot-dependencies.ts';
 
-type Command = HandleCommandTypes<typeof command>;
-type CacheCommand = HandleCommandTypes<typeof cacheCommand>;
+export type { Features } from '../server/types.d.ts';
+
+type Command = CommandTypeMap<typeof command>;
+type CacheCommand = CommandTypeMap<typeof cacheCommand>;
 
 export type SpringBootModule = keyof (typeof springBootDependencies3)['modules'] | keyof (typeof springBootDependencies4)['modules'];
 
@@ -89,6 +91,7 @@ export interface Entity<F extends Field = Field, R extends Relationship = Relati
 
   reactiveOtherEntities: Set<this>;
   reactiveUniqueEntityTypes: Set<string>;
+  requiresPersistableImplementation?: boolean;
 }
 
 export type Source = JavaSource &
@@ -139,14 +142,6 @@ export type Source = JavaSource &
     addEntryToCache?(entry: { entry: string }): void;
     addEntityToCache?(entry: { entityAbsoluteClass: string; relationships?: { propertyName: string; collection: boolean }[] }): void;
   };
-
-type ImperativeApplication = {
-  reactive: false;
-};
-
-type ReactiveApplication = {
-  reactive: true;
-};
 
 type DatabaseTypeApplication = OptionWithDerivedProperties<'databaseType', ['sql', 'no', 'cassandra', 'couchbase', 'mongodb', 'neo4j']>;
 

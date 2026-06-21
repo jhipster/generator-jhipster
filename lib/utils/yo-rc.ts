@@ -4,8 +4,7 @@ import { join } from 'node:path';
 import { upperFirst } from 'lodash-es';
 import type { Merge } from 'type-fest';
 
-import type { YoRcConfigValue, YoRcFileContent } from '../constants/yeoman.ts';
-import { YO_RC_FILE } from '../constants/yeoman.ts';
+import { YO_RC_FILE, type YoRcConfigValue, type YoRcFileContent } from '../constants/yeoman.ts';
 import type { Entity } from '../jhipster/types/entity.ts';
 import type { YoRcJHipsterContent } from '../jhipster/types/yo-rc.ts';
 
@@ -15,14 +14,11 @@ type ConfigWithCreationTimestamp = {
   creationTimestamp?: number;
 };
 
-export const mergeYoRcContent = <
-  const OldConfig extends YoRcFileContent<YoRcConfigValue, string>,
-  const NewConfig extends YoRcFileContent<YoRcConfigValue, string>,
->(
+export const mergeYoRcContent = <const OldConfig extends YoRcFileContent, const NewConfig extends YoRcFileContent>(
   oldConfig: OldConfig,
   newConfig: NewConfig,
 ): Merge<OldConfig, NewConfig> => {
-  const merged: YoRcFileContent<YoRcConfigValue, string> = { [YO_RC_CONFIG_KEY]: {} as YoRcConfigValue };
+  const merged: YoRcFileContent = { [YO_RC_CONFIG_KEY]: {} };
   for (const ns of new Set([...Object.keys(oldConfig), ...Object.keys(newConfig)])) {
     merged[ns] = { ...oldConfig[ns], ...newConfig[ns] };
   }

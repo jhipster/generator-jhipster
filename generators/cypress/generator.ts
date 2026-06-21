@@ -31,7 +31,9 @@ import type {
   Application as CypressApplication,
   Config as CypressConfig,
   Entity as CypressEntity,
+  Features as CypressFeatures,
   Field as CypressField,
+  Options as CypressOptions,
 } from './types.ts';
 
 const { ANGULAR } = clientFrameworkTypes;
@@ -40,6 +42,10 @@ const WAIT_TIMEOUT = 3 * 60000;
 
 export default class CypressGenerator extends BaseApplicationGenerator<CypressEntity, CypressApplication, CypressConfig> {
   angularSchematic = false;
+
+  constructor(args?: string[], options?: CypressOptions, features?: CypressFeatures) {
+    super(args, options, { ...features, loadCommand: ['jhipster:server'] });
+  }
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -99,7 +105,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
       loadPackageJson({ application }) {
         this.loadNodeDependenciesFromPackageJson(
           application.nodeDependencies,
-          this.fetchFromInstalledJHipster('client', 'resources', 'package.json'),
+          this.fetchFromInstalledJHipster('cypress', 'resources', 'package.json'),
         );
       },
       prepareForTemplates({ applicationDefaults }) {
@@ -130,8 +136,9 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
           'ci:e2e:run': 'concurrently -k -s first -n application,e2e -c red,blue npm:ci:e2e:server:start npm:e2e:headless',
           'ci:e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue npm:app:start npm:e2e:headless`,
           'e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue npm:app:start npm:e2e`,
-          'e2e:devserver': this.angularSchematic
-            ? `concurrently -k -s first -n backend,e2e -c red,blue npm:backend:start "npm run ci:server:await && ng e2e --configuration ${application.cypressCoverage ? 'coverage' : 'run'}"`
+          'e2e:devserver':
+            this.angularSchematic ?
+              `concurrently -k -s first -n backend,e2e -c red,blue npm:backend:start "npm run ci:server:await && ng e2e --configuration ${application.cypressCoverage ? 'coverage' : 'run'}"`
             : `concurrently -k -s first -n backend,frontend,e2e -c red,yellow,blue npm:backend:start npm:start "wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:${devServerPortE2e} && npm run e2e:headless -- -c baseUrl=http://localhost:${devServerPortE2e}"`,
         });
 
@@ -246,6 +253,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
         clientPackageJson.merge({
           devDependencies: {
             cypress: application.nodeDependencies.cypress,
+            'cypress-terminal-report': null,
             'eslint-plugin-cypress': application.nodeDependencies['eslint-plugin-cypress'],
           },
         });
@@ -270,9 +278,9 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
             'cypress-audit': application.nodeDependencies['cypress-audit'],
           },
           scripts: {
-            'cypress:audits': 'cypress open --e2e --config-file cypress-audits.config.js',
-            'e2e:cypress:audits:headless': 'npm run e2e:cypress -- --config-file cypress-audits.config.js',
-            'e2e:cypress:audits': 'cypress run --e2e --browser chrome --config-file cypress-audits.config.js',
+            'cypress:audits': 'cypress open --e2e --config-file cypress-audits.config.ts',
+            'e2e:cypress:audits:headless': 'npm run e2e:cypress -- --config-file cypress-audits.config.ts',
+            'e2e:cypress:audits': 'cypress run --e2e --browser chrome --config-file cypress-audits.config.ts',
           },
         });
       },

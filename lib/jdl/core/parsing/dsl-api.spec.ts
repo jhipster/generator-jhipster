@@ -17,17 +17,14 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import { createRuntime } from '../runtime.ts';
 
-import { getSyntacticAutoCompleteSuggestions, parse } from './api.ts';
+import { parse } from './api.ts';
 
 describe('jdl - JDL DSL API', () => {
   const jdlRuntime = createRuntime();
-  const { tokens } = jdlRuntime;
 
   describe('when wanting an AST', () => {
     describe('with a valid input', () => {
@@ -38,8 +35,8 @@ describe('jdl - JDL DSL API', () => {
       });
 
       it('should return an AST', () => {
-        expect(ast.entities).to.have.lengthOf(1);
-        expect(ast.entities[0]).to.deep.equal({
+        expect(ast.entities).toHaveLength(1);
+        expect(ast.entities[0]).toEqual({
           name: 'A',
           tableName: undefined,
           annotations: [{ optionName: 'service', optionValue: 'serviceClass', type: 'BINARY' }],
@@ -65,11 +62,11 @@ describe('jdl - JDL DSL API', () => {
       });
 
       it('should throw an error with the offset information', () => {
-        expect(parseInvalidToken).to.throw('offset: 7');
+        expect(parseInvalidToken).toThrow('offset: 7');
       });
 
       it('should throw an error with the unexpected character', () => {
-        expect(parseInvalidToken).to.throw('±');
+        expect(parseInvalidToken).toThrow('±');
       });
     });
 
@@ -82,11 +79,18 @@ describe('jdl - JDL DSL API', () => {
         });
 
         it('should throw an error with position information', () => {
-          expect(parseWrongClosingBraces).to.throw().and.to.have.property('message').that.includes('line: 1').that.includes('column: 17');
+          let errorMessage = '';
+          try {
+            parseWrongClosingBraces();
+          } catch (error: any) {
+            errorMessage = error?.message ?? '';
+          }
+          expect(errorMessage).toContain('line: 1');
+          expect(errorMessage).toContain('column: 17');
         });
 
         it('should throw an error with typeof MismatchTokenException', () => {
-          expect(parseWrongClosingBraces).to.throw('MismatchedTokenException');
+          expect(parseWrongClosingBraces).toThrow('MismatchedTokenException');
         });
       });
 
@@ -98,14 +102,14 @@ describe('jdl - JDL DSL API', () => {
         });
 
         it('should throw an error with typeof MismatchTokenException', () => {
-          expect(parseMissingClosingBraces).to.throw('MismatchedTokenException');
+          expect(parseMissingClosingBraces).toThrow('MismatchedTokenException');
         });
 
         it('should throw an error without any location information', () => {
           // The 'EOF' token that is found instead of the expected '}' is a virtual token
           // It has no location information to report, An error (api.js) handler may choose
           // to manually add the last line/column in that case.
-          expect(parseMissingClosingBraces).to.not.throw('line: 1');
+          expect(parseMissingClosingBraces).not.toThrow('line: 1');
         });
       });
     });
@@ -114,73 +118,7 @@ describe('jdl - JDL DSL API', () => {
       it('should throw an error', () => {
         // lower case entityName first char
         const invalidInput = 'entity person { }';
-        expect(() => parse(invalidInput, jdlRuntime)).to.throw(/.+\/\^\[A-Z][^]+line: 1.+column: 8/);
-      });
-    });
-  });
-
-  describe('when wanting an auto-completion', () => {
-    describe('with an empty text', () => {
-      let result: ReturnType<typeof getSyntacticAutoCompleteSuggestions>;
-
-      before(() => {
-        result = getSyntacticAutoCompleteSuggestions('', jdlRuntime);
-      });
-
-      it('should provide suggestions', () => {
-        expect(result).to.have.lengthOf(11);
-        expect(result).to.have.members([
-          tokens.AT,
-          tokens.APPLICATION,
-          tokens.DEPLOYMENT,
-          tokens.NAME,
-          tokens.ENTITY,
-          tokens.RELATIONSHIP,
-          tokens.ENUM,
-          tokens.JAVADOC,
-          tokens.UNARY_OPTION,
-          tokens.BINARY_OPTION,
-          tokens.USE,
-        ]);
-      });
-    });
-    describe('with a custom start rule', () => {
-      let result: ReturnType<typeof getSyntacticAutoCompleteSuggestions>;
-
-      before(() => {
-        const input = 'lastName string ';
-        result = getSyntacticAutoCompleteSuggestions(input, jdlRuntime, { startRule: 'fieldDeclaration' });
-      });
-
-      it('should provide suggestions', () => {
-        expect(result).to.have.lengthOf(5);
-        // Note that because we are using token Inheritance with the MIN_MAX_KEYWORD an auto-complete provider would have
-        // to translate this to concrete tokens (MIN/MAX/MAX_BYTES/MIN_BYTES/...)
-        expect(result).to.have.members([tokens.REQUIRED, tokens.UNIQUE, tokens.MIN_MAX_KEYWORD, tokens.PATTERN, tokens.JAVADOC]);
-      });
-    });
-    describe('with a default start rule', () => {
-      let result: ReturnType<typeof getSyntacticAutoCompleteSuggestions>;
-
-      before(() => {
-        const input = 'entity person { lastName string ';
-        result = getSyntacticAutoCompleteSuggestions(input, jdlRuntime);
-      });
-
-      it('should provide suggestions', () => {
-        expect(result).to.have.lengthOf(9);
-        expect(result).to.have.members([
-          tokens.REQUIRED,
-          tokens.UNIQUE,
-          tokens.MIN_MAX_KEYWORD,
-          tokens.PATTERN,
-          // Note that this will have more suggestions than the previous spec as there is a deeper rule stack.
-          tokens.COMMA,
-          tokens.RCURLY,
-          tokens.JAVADOC,
-          tokens.AT,
-          tokens.NAME,
-        ]);
+        expect(() => parse(invalidInput, jdlRuntime)).toThrow(/.+\/\^\[A-Z][^]+line: 1.+column: 8/);
       });
     });
   });

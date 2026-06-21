@@ -201,9 +201,8 @@ The entity ${context.name} is being updated.
             }
           }
           if (this.entityConfig.clientRootFolder === undefined) {
-            context.clientRootFolder = this.entityConfig.clientRootFolder = context.skipUiGrouping
-              ? ''
-              : this.entityConfig.microserviceName;
+            context.clientRootFolder = this.entityConfig.clientRootFolder =
+              context.skipUiGrouping ? '' : this.entityConfig.microserviceName;
           }
         }
       },

@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { describe, expect, it } from 'esmocha';
 
 import deploymentOptions from './deployment-options.ts';
 
@@ -30,18 +28,18 @@ describe('jdl - DeploymentOptions', () => {
     describe('exists', () => {
       describe('when passing a nil arg', () => {
         it('should return false', () => {
-          expect(DeploymentTypes.exists()).to.be.false;
+          expect(DeploymentTypes.exists()).toBe(false);
         });
       });
       describe('when passing an invalid type', () => {
         it('should return false', () => {
-          expect(DeploymentTypes.exists('NotAType')).to.be.false;
+          expect(DeploymentTypes.exists('NotAType')).toBe(false);
         });
       });
       describe('when passing a valid type', () => {
         it('should return true', () => {
-          expect(DeploymentTypes.exists(DeploymentTypes.DOCKERCOMPOSE)).to.be.true;
-          expect(DeploymentTypes.exists(DeploymentTypes.KUBERNETES)).to.be.true;
+          expect(DeploymentTypes.exists(DeploymentTypes.DOCKERCOMPOSE)).toBe(true);
+          expect(DeploymentTypes.exists(DeploymentTypes.KUBERNETES)).toBe(true);
         });
       });
     });
@@ -51,12 +49,12 @@ describe('jdl - DeploymentOptions', () => {
     describe('defaults', () => {
       describe('when passing no args', () => {
         it('should return docker deployment config', () => {
-          expect(() => Options.defaults()).to.throw(/^Deployment type is required$/);
+          expect(() => Options.defaults()).toThrow(/^Deployment type is required$/);
         });
       });
       describe('when passing kubernetes as arg', () => {
         it('should return kubernetes deployment config', () => {
-          expect(Options.defaults('kubernetes')).to.eql({
+          expect(Options.defaults('kubernetes')).toEqual({
             appsFolders: [],
             clusteredDbApps: [],
             directoryPath: '../',

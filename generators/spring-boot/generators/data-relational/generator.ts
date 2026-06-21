@@ -32,7 +32,7 @@ import {
   getTestcontainerSupport,
   javaSqlDatabaseArtifacts,
 } from './internal/dependencies.ts';
-import { getDBCExtraOption, getJdbcUrl, getR2dbcUrl, prepareSqlApplicationProperties } from './support/index.ts';
+import { getDBCExtraOption, getJdbcUrl, getR2dbcUrl } from './support/index.ts';
 import type {
   Application as SpringDataRelationalApplication,
   Config as SpringDataRelationalConfig,
@@ -76,7 +76,6 @@ export default class SqlGenerator extends BaseApplicationGenerator<
   get preparing() {
     return this.asPreparingTaskGroup({
       async preparing({ application, applicationDefaults }) {
-        prepareSqlApplicationProperties({ application });
         application.devDatabaseExtraOptions = getDBCExtraOption(application.devDatabaseType);
         application.prodDatabaseExtraOptions = getDBCExtraOption(application.prodDatabaseType);
 
@@ -123,9 +122,8 @@ export default class SqlGenerator extends BaseApplicationGenerator<
     return this.asPreparingEachEntityRelationshipTaskGroup({
       prepareRelationship({ application, relationship }) {
         if (application.reactive) {
-          relationship.relationshipSqlSafeName = isReservedTableName(relationship.relationshipName, SQL)
-            ? `e_${relationship.relationshipName}`
-            : relationship.relationshipName;
+          relationship.relationshipSqlSafeName =
+            isReservedTableName(relationship.relationshipName, SQL) ? `e_${relationship.relationshipName}` : relationship.relationshipName;
         }
       },
     });
@@ -199,8 +197,9 @@ export default class SqlGenerator extends BaseApplicationGenerator<
           inProfile: devDatabaseTypeH2Any ? 'prod' : undefined,
           javaDependencies,
         });
-        const h2Definitions = devDatabaseTypeH2Any
-          ? getH2MavenDefinition({
+        const h2Definitions =
+          devDatabaseTypeH2Any ?
+            getH2MavenDefinition({
               implementsTestcontainersSupport: Boolean(application.testcontainerClass),
               packageFolder,
             })

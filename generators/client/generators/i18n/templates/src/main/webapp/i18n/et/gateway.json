@@ -1,15 +1,15 @@
 {
-    "gateway": {
-        "title": "Lüüs",
-        "routes": {
-            "title": "Praegused ruutingud",
-            "url": "URL",
-            "service": "teenus",
-            "servers": "Saadaolevad serverid",
-            "error": "Hoiatus: ükski server pole kättesaadav!"
-        },
-        "refresh": {
-            "button": "Värskenda"
-        }
+  "gateway": {
+    "title": "Lüüs",
+    "routes": {
+      "title": "Praegused ruutingud",
+      "url": "URL",
+      "service": "teenus",
+      "servers": "Saadaolevad serverid",
+      "error": "Hoiatus: ükski server pole kättesaadav!"
+    },
+    "refresh": {
+      "button": "Värskenda"
     }
+  }
 }

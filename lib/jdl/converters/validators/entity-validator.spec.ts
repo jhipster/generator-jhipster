@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import { JDLEntity } from '../../core/models/index.ts';
 
@@ -36,7 +34,7 @@ describe('jdl - EntityValidator', () => {
     describe('when not passing an entity', () => {
       it('should fail', () => {
         // @ts-expect-error invalid api test
-        expect(() => validator.validate()).to.throw(/^No entity\.$/);
+        expect(() => validator.validate()).toThrow(/^No entity\.$/);
       });
     });
     describe('when passing an entity', () => {
@@ -48,13 +46,13 @@ describe('jdl - EntityValidator', () => {
                 name: 'A',
               }),
             ),
-          ).not.to.throw();
+          ).not.toThrow();
         });
       });
       describe('without any attribute', () => {
         it('should fail', () => {
           // @ts-expect-error invalid api test
-          expect(() => validator.validate({})).to.throw(/^The entity attribute name was not found\.$/);
+          expect(() => validator.validate({})).toThrow(/^The entity attribute name was not found\.$/);
         });
       });
     });

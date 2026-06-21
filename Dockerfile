@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM eclipse-temurin:17-focal
+FROM eclipse-temurin:21-noble
 
 # copy sources
 COPY . /home/jhipster/generator-jhipster
@@ -67,7 +67,7 @@ RUN \
 
 # expose the working directory, the Tomcat port, the BrowserSync ports
 USER jhipster
-ENV PATH $PATH:/usr/bin
+ENV PATH=$PATH:/usr/bin
 WORKDIR "/home/jhipster/app"
 VOLUME ["/home/jhipster/app"]
 EXPOSE 8080 9000 3001

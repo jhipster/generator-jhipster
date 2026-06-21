@@ -16,10 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.config;
+package <%- packageName %>.config;
 
 <%_ if (reactive) { _%>
-import <%= springBoot4 ? 'tools' : 'com.fasterxml' %>.jackson.databind.ObjectMapper;
+import <%- springBoot4 ? 'tools' : 'com.fasterxml' %>.jackson.databind.ObjectMapper;
 <%_ } _%>
 <%_ if (!skipClient || devDatabaseTypeH2Any) { _%>
 import tech.jhipster.config.JHipsterConstants;
@@ -30,7 +30,7 @@ import tech.jhipster.config.ApplicationProperties;
 import tech.jhipster.config.h2.H2ConfigurationHelper;
 <%_ } _%>
 <%_ if (!skipClient && reactive) { _%>
-import tech.jhipster.web.filter.<% if (reactive) { %>reactive.<% } %>CachingHttpHeadersFilter;
+import tech.jhipster.web.filter.<%- reactive ? 'reactive.' : '' %>CachingHttpHeadersFilter;
 <%_ } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,16 +45,16 @@ import org.springframework.boot.webflux.autoconfigure.ResourceHandlerRegistratio
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 <%_ if (reactive) { _%>
-    <%_ if (!skipClient) { _%>
+  <%_ if (!skipClient) { _%>
 import org.springframework.context.annotation.Profile;
-    <%_ } _%>
+  <%_ } _%>
 import org.springframework.core.annotation.Order;
 <%_ } _%>
 <%_ if (reactive && !databaseTypeNo) { _%>
 import org.springframework.data.web.ReactivePageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.ReactiveSortHandlerMethodArgumentResolver;
 <%_ } _%>
-<%_ if (!reactive || (devDatabaseTypeH2Any && reactive)) { _%>
+<%_ if (!reactive || devDatabaseTypeH2Any && reactive) { _%>
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 <%_ } _%>
@@ -63,26 +63,25 @@ import org.springframework.web.cors.CorsConfiguration;
 <%_ if (!reactive) { _%>
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-<%_ } _%>
-<%_ if (reactive) { _%>
+<%_ } else { _%>
 import org.springframework.web.cors.reactive.CorsConfigurationSource;;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 import org.springframework.web.reactive.result.method.HandlerMethodArgumentResolver;
 import org.springframework.web.server.WebExceptionHandler;
-import <%= packageName %>.web.rest.errors.ExceptionTranslator;
+import <%- packageName %>.web.rest.errors.ExceptionTranslator;
 import tech.jhipster.web.rest.errors.ReactiveWebExceptionHandler;
 <%_ } _%>
 <%_ if (!reactive) { _%>
 
 import jakarta.servlet.*;
-    <%_ if (!skipClient) { _%>
+  <%_ if (!skipClient) { _%>
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
 import static java.net.URLDecoder.decode;
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 <%_ if (reactive && !skipClient) { _%>
 
@@ -93,7 +92,7 @@ import java.util.concurrent.TimeUnit;
  * Configuration of web application with Servlet 3.0 APIs.
  */
 @Configuration
-public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitializer<% if (!skipClient) { %>, WebServerFactoryCustomizer<WebServerFactory><% } %><% } %><% if (reactive) { %>WebFluxConfigurer<% } %> {
+public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitializer<%- skipClient ? '' : ', WebServerFactoryCustomizer<WebServerFactory>' %><% } %><%- reactive ? 'WebFluxConfigurer' : '' %> {
 
     private static final Logger LOG = LoggerFactory.getLogger(WebConfigurer.class);
 
@@ -103,7 +102,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
 <%_ } _%>
     private final JHipsterProperties jHipsterProperties;
 
-    public WebConfigurer(<% if (!reactive || devDatabaseTypeH2Any) { %>Environment env, <% } %>JHipsterProperties jHipsterProperties) {
+    public WebConfigurer(<%- !reactive || devDatabaseTypeH2Any ? 'Environment env, ' : '' %>JHipsterProperties jHipsterProperties) {
 <%_ if (!reactive) { _%>
         this.env = env;
 <%_ } _%>
@@ -142,7 +141,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
      */
     @Override
     public void customize(WebServerFactory server) {
-        // When running in an IDE or with <% if (buildToolGradle) { %>./gradlew bootRun<% } else { %>./mvnw spring-boot:run<% } %>, set location of the static web assets.
+        // When running in an IDE or with <%- buildToolGradle ? './gradlew bootRun' : './mvnw spring-boot:run' %>, set location of the static web assets.
         setLocationForStaticAssets(server);
     }
 
@@ -150,7 +149,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
         if (server instanceof ConfigurableServletWebServerFactory servletWebServer) {
             File root;
             String prefixPath = resolvePathPrefix();
-            root = Path.of(prefixPath + "<%= clientDistDir %>").toFile();
+            root = Path.of(prefixPath + "<%- clientDistDir %>").toFile();
             if (root.exists() && root.isDirectory()) {
                 servletWebServer.setDocumentRoot(root);
             }
@@ -164,7 +163,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
         String fullExecutablePath = decode(this.getClass().getResource("").getPath(), StandardCharsets.UTF_8);
         String rootPath = Path.of(".").toUri().normalize().getPath();
         String extractedPath = fullExecutablePath.replace(rootPath, "");
-        int extractionEndIndex = extractedPath.indexOf("<%= temporaryDir %>");
+        int extractionEndIndex = extractedPath.indexOf("<%- temporaryDir %>");
         if (extractionEndIndex <= 0) {
             return "";
         }
@@ -174,7 +173,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
 <%_ } _%>
 
     @Bean
-    public <% if (reactive) { %>CorsConfigurationSource corsConfigurationSource()<% } else { %>CorsFilter corsFilter()<% } %> {
+    public <%- reactive ? 'CorsConfigurationSource corsConfigurationSource()' : 'CorsFilter corsFilter()' %> {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = jHipsterProperties.getCors();
         if (!CollectionUtils.isEmpty(config.getAllowedOrigins()) || !CollectionUtils.isEmpty(config.getAllowedOriginPatterns())) {
@@ -189,7 +188,7 @@ public class WebConfigurer implements <% if (!reactive) { %>ServletContextInitia
             source.registerCorsConfiguration("/*/management/**", config);
 <%_ } _%>
         }
-        return <% if (reactive) { %>source<% } else { %>new CorsFilter(source)<% } %>;
+        return <%- reactive ? 'source' : 'new CorsFilter(source)' %>;
     }
 <%_ if (reactive) { _%>
 

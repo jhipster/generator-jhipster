@@ -118,7 +118,7 @@ export default function prepareField(application: LiquibaseApplication<Liquibase
     shouldDropDefaultValue: data =>
       !data.liquibaseDefaultValueAttributeValue && (data.fieldType === ZONED_DATE_TIME || data.fieldType === INSTANT),
     shouldCreateContentType: data => data.fieldType === BYTES && data.fieldTypeBlobContent !== TEXT,
-    columnRequired: data => data.nullable === false || (data.fieldValidate === true && data.fieldValidateRules?.includes('required')),
+    columnRequired: data => data.nullable === false || (data.fieldValidate && data.fieldValidateRules?.includes('required')),
     nullable: data => !data.columnRequired,
     liquibaseGenerateFakeData: true,
   });

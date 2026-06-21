@@ -1,6 +1,9 @@
 import axios from 'axios';
 
 import { type AccountStore } from '@/store';
+<%_ if (authenticationTypeJwt) { _%>
+import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
+<%_ } _%>
 
 export default class AccountService {
   constructor(private readonly store: AccountStore) {}
@@ -47,7 +50,7 @@ export default class AccountService {
       return this.store.logon;
     }
 <%_ if (authenticationTypeJwt) { _%>
-    const token = localStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken') ?? sessionStorage.getItem('<%=jhiPrefixDashed %>-authenticationToken');
+    const token = localStorage.getItem(AUTHENTICATION_TOKEN_KEY) ?? sessionStorage.getItem(AUTHENTICATION_TOKEN_KEY);
     if (this.authenticated && this.userAuthorities && token) {
 <%_ } else { _%>
     if (this.authenticated && this.userAuthorities) {

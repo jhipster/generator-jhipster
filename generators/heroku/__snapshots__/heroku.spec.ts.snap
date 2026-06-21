@@ -155,7 +155,8 @@ server:
     "stateCleared": "modified",
   },
   "system.properties": {
-    "contents": "java.runtime.version=17 ",
+    "contents": "java.runtime.version=17
+",
     "stateCleared": "modified",
   },
 }
@@ -370,7 +371,8 @@ server:
     "stateCleared": "modified",
   },
   "system.properties": {
-    "contents": "java.runtime.version=11 ",
+    "contents": "java.runtime.version=11
+",
     "stateCleared": "modified",
   },
 }
@@ -583,7 +585,8 @@ server:
     "stateCleared": "modified",
   },
   "system.properties": {
-    "contents": "java.runtime.version=11 ",
+    "contents": "java.runtime.version=11
+",
     "stateCleared": "modified",
   },
 }
@@ -851,7 +854,8 @@ server:
     "stateCleared": "modified",
   },
   "system.properties": {
-    "contents": "java.runtime.version=11 ",
+    "contents": "java.runtime.version=11
+",
     "stateCleared": "modified",
   },
 }
@@ -1066,7 +1070,8 @@ server:
     "stateCleared": "modified",
   },
   "system.properties": {
-    "contents": "java.runtime.version=11 ",
+    "contents": "java.runtime.version=11
+",
     "stateCleared": "modified",
   },
 }
@@ -1303,7 +1308,8 @@ server:
     "stateCleared": "modified",
   },
   "system.properties": {
-    "contents": "java.runtime.version=11 ",
+    "contents": "java.runtime.version=11
+",
     "stateCleared": "modified",
   },
 }
@@ -1531,7 +1537,8 @@ server:
     "stateCleared": "modified",
   },
   "system.properties": {
-    "contents": "java.runtime.version=11 ",
+    "contents": "java.runtime.version=11
+",
     "stateCleared": "modified",
   },
 }
@@ -1733,7 +1740,8 @@ server:
     "stateCleared": "modified",
   },
   "system.properties": {
-    "contents": "java.runtime.version=JAVA_VERSION ",
+    "contents": "java.runtime.version=JAVA_VERSION
+",
     "stateCleared": "modified",
   },
 }

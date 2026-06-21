@@ -60,7 +60,7 @@ function convertValidation(
 ): JDLValidation {
   let { value } = validation;
   if (validation.constant) {
-    value = constantValueGetter.call(undefined, value as string);
+    value = constantValueGetter(value as string);
   }
   if (validation.key === PATTERN) {
     value = formatThePatternValidationValue(value as string);

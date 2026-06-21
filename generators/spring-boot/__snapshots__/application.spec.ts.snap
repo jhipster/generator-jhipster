@@ -2,6 +2,7 @@
 
 exports[`application mutation test expects mutateApplication to match snapshot 1`] = `
 {
+  "backendType": "Java",
   "devActiveProfiles": [],
   "prodActiveProfiles": [],
   "springDataDescription": "Spring Data Unknown reactive",

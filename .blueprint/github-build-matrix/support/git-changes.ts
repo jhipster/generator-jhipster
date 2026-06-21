@@ -18,7 +18,7 @@ const patterns = {
   ci: ['.github/{actions,workflows}/**', join(testIntegrationRelativeFolder, '{,jdl}samples/**')],
   client: ['generators/{client,init,javascript-simple-application}/**'],
   common: ['generators/{app,common,docker,languages}/**'],
-  devBlueprint: ['.blueprint/**'],
+  devBlueprint: ['.blueprint/generate-sample/**', '.blueprint/github-build-matrix/**'],
   devserverWorkflow: ['.github/workflows/devserver.yml'],
   e2e: ['generators/cypress/**'],
   generateBlueprint: ['generators/{generate-blueprint,javascript-simple-application,ci-cd/generators/bootstrap}/**'],

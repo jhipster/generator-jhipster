@@ -40,7 +40,7 @@ export const getJavaValueGeneratorForType = (type: string) => {
     return 'longCount.incrementAndGet()';
   }
   throw new Error(`Java type ${type} does not have a random generator implemented`);
-}
+};
 
 /**
  * @private
@@ -57,7 +57,7 @@ export const getPrimaryKeyValue = (primaryKey: PrimaryKey | string, databaseType
       .map(ref => getPrimaryKeyValue(ref.fieldType, databaseType, defaultValue))
       .join(', ')})`;
   }
-  const random = ![1,2].includes(defaultValue);
+  const random = ![1, 2].includes(defaultValue);
   const primaryKeyType = typeof primaryKey === 'string' ? primaryKey : primaryKey.type;
   if (primaryKeyType === STRING) {
     if (databaseType === SQL && random) {
@@ -69,4 +69,4 @@ export const getPrimaryKeyValue = (primaryKey: PrimaryKey | string, databaseType
     return getJavaValueGeneratorForType(primaryKeyType);
   }
   return `${defaultValue}L`;
-}
+};

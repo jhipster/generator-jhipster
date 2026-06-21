@@ -50,6 +50,9 @@ const COMPOSING_COMPONENT_QUEUE = `${QUEUE_PREFIX}${COMPOSING_COMPONENT}`;
 const LOADING = 'loading';
 const LOADING_QUEUE = `${QUEUE_PREFIX}${LOADING}`;
 
+const COMPOSING_BOOTSTRAP = 'composingBootstrap';
+const COMPOSING_BOOTSTRAP_QUEUE = `${QUEUE_PREFIX}${COMPOSING_BOOTSTRAP}`;
+
 const PREPARING = 'preparing';
 const PREPARING_QUEUE = `${QUEUE_PREFIX}${PREPARING}`;
 
@@ -105,8 +108,14 @@ export const CUSTOM_PRIORITIES = (
     {
       priorityName: LOADING,
       queueName: LOADING_QUEUE,
-      before: PREPARING,
+      before: COMPOSING_BOOTSTRAP,
       args: generator => (generator as CoreGenerator).getArgsForPriority(LOADING),
+    },
+    {
+      priorityName: COMPOSING_BOOTSTRAP,
+      queueName: COMPOSING_BOOTSTRAP_QUEUE,
+      before: PREPARING,
+      args: generator => (generator as CoreGenerator).getArgsForPriority(COMPOSING_BOOTSTRAP),
     },
     {
       priorityName: PREPARING,
@@ -173,6 +182,7 @@ export const PRIORITY_NAMES = {
   COMPOSING,
   COMPOSING_COMPONENT,
   LOADING,
+  COMPOSING_BOOTSTRAP,
   PREPARING,
   POST_PREPARING,
 
@@ -194,6 +204,7 @@ export const PRIORITY_NAMES_LIST = [
   COMPOSING,
   COMPOSING_COMPONENT,
   LOADING,
+  COMPOSING_BOOTSTRAP,
   PREPARING,
   POST_PREPARING,
 
@@ -214,6 +225,7 @@ export const QUEUES = {
   COMPOSING_QUEUE,
   COMPOSING_COMPONENT_QUEUE,
   LOADING_QUEUE,
+  COMPOSING_BOOTSTRAP_QUEUE,
   PREPARING_QUEUE,
   POST_PREPARING_QUEUE,
 

@@ -25,7 +25,7 @@
   });
 -&>
 <%_ if (!application.dynamic) { _%>
-import <%= generatorClass %>Generator from 'generator-jhipster/generators/<%= jhipsterGenerator %>';
+import <%- generatorClass %>Generator from 'generator-jhipster/generators/<%- jhipsterGenerator %>';
 <%_ } _%>
 <%_ if (priorities.find(priority => priority.name === 'initializing')) { _%>
 import command from './command.<%- blueprintMjsExtension %>';
@@ -34,20 +34,20 @@ import command from './command.<%- blueprintMjsExtension %>';
 <%_ if (application.dynamic) { _%>
 // eslint-disable-next-line import/prefer-default-export
 export async function createGenerator(env) {
-  /** @type {typeof import('generator-jhipster/generators/<%= jhipsterGenerator %>').default} */
-  let <%= generatorClass %>Generator;
+  /** @type {typeof import('generator-jhipster/generators/<%- jhipsterGenerator %>').default} */
+  let <%- generatorClass %>Generator;
   try {
     // Try to use locally installed generator-jhipster
-    <%= generatorClass %>Generator = (await import('generator-jhipster/generators/<%= jhipsterGenerator %>')).default;
+    <%- generatorClass %>Generator = (await import('generator-jhipster/generators/<%- jhipsterGenerator %>')).default;
   } catch {
     // Fallback to the currently running jhipster.
-    const jhipsterGenerator = 'jhipster:<%= generator %>';
-    <%= generatorClass %>Generator = await env.requireGenerator(jhipsterGenerator);
+    const jhipsterGenerator = 'jhipster:<%- generator %>';
+    <%- generatorClass %>Generator = await env.requireGenerator(jhipsterGenerator);
   }
 
-  return class extends <%= generatorClass %>Generator {
+  return class extends <%- generatorClass %>Generator {
 <%_ } else { _%>
-export default class extends <%= generatorClass %>Generator {
+export default class extends <%- generatorClass %>Generator {
 <%_ } _%>
   constructor(args, opts, features) {
     super(args, opts, {
@@ -73,12 +73,12 @@ export default class extends <%= generatorClass %>Generator {
 <&- fragments.<%- priority.name %>Section() -&>
 <& if (!fragments.<%- priority.name %>Section()) { -&>
 
-  get [<%= generatorClass %>Generator.<%= priority.constant %>]() {
-    return this.<%= priority.asTaskGroup %>({
+  get [<%- generatorClass %>Generator.<%- priority.constant %>]() {
+    return this.<%- priority.asTaskGroup %>({
   <%_ if (!sbs && !customGenerator) { _%>
-      ...super.<%= priority.name %>,
+      ...super.<%- priority.name %>,
   <%_ } _%>
-      async <%= priority.name %>TemplateTask(
+      async <%- priority.name %>TemplateTask(
   <%_ if (priority.name === 'writing') { _%>
         { application }
   <%_ } _%>
@@ -87,7 +87,7 @@ export default class extends <%= generatorClass %>Generator {
         await this.writeFiles({
           sections: {
             files: [
-              { templates: ['template-file-<%= generator %>'] },
+              { templates: ['template-file-<%- generator %>'] },
             ],
           },
           context: application,

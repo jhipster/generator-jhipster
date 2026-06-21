@@ -158,7 +158,7 @@ export default class GatewayGenerator extends BaseApplicationGenerator<
       packageJsonE2eScripts({ application, entities }) {
         if (application.applicationTypeGateway) {
           const { serverPort, lowercaseBaseName } = application;
-          const microservices = [...new Set(entities.map(entity => entity.microserviceName))].filter(Boolean).map(ms => ms!.toLowerCase());
+          const microservices = [...new Set(entities.map(entity => entity.microserviceName))].filter(Boolean).map(ms => ms.toLowerCase());
           const scriptsStorage = this.packageJson.createStorage('scripts');
           const waitServices = microservices
             .concat(lowercaseBaseName)

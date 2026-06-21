@@ -5,7 +5,7 @@ services:
     ports:
       - '9000:9000'
     healthcheck:
-      test: wget -qO- http://localhost:9000/api/system/status | grep -q -e '"status":"UP"' -e '"status":"DB_MIGRATION_NEEDED"' -e '"status":"DB_MIGRATION_RUNNING"' > /dev/null
+      test: curl -sf http://localhost:9000/api/system/status | grep -q -e '"status":"UP"' -e '"status":"DB_MIGRATION_NEEDED"' -e '"status":"DB_MIGRATION_RUNNING"' > /dev/null
       interval: 5s
       timeout: 5s
       retries: 30

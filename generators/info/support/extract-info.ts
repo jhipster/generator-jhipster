@@ -1,17 +1,31 @@
+import path from 'node:path';
+
 import { removeFieldsWithNullishValues } from '../../../lib/utils/index.ts';
 import { GENERATOR_JHIPSTER } from '../../generator-constants.ts';
 
 export type InfoFile = { filename: string; content: string; type: 'jdl' | 'yo-rc' | 'entity-jdl' | 'json' };
 
 export type InfoData = {
-  yoRcContent: string | undefined;
-  jdlDefinitions: string | undefined;
-  jdlApplications: number | undefined;
-  jdlEntitiesDefinitions: string | undefined;
+  yoRcContent?: string;
+  jdlDefinitions?: string;
+  jdlApplications?: number;
+  jdlEntitiesDefinitions?: string;
   yoRcBlank: boolean;
   yoRcValid?: boolean;
   files: InfoFile[];
-  workspacesFolders: string[] | undefined;
+  workspacesFolders?: string[];
+};
+
+export const filterData = ({ files, ...data }: InfoData): InfoData => {
+  return {
+    ...data,
+    files: files.filter(
+      file =>
+        // Forbid any package.json file for security reasons.
+        path.basename(file.filename).toLowerCase() !== 'package.json' &&
+        (file.filename === '.yo-rc.json' || file.filename.endsWith('.jdl') || /\.jhipster\/\w+\.json$/.test(file.filename)),
+    ),
+  };
 };
 
 export const extractDataFromInfo = (info: string): InfoData => {
@@ -20,7 +34,7 @@ export const extractDataFromInfo = (info: string): InfoData => {
   let jdlEntitiesDefinitions: string | undefined;
   let jdlDefinitions: string | undefined;
   let jdlApplications: number | undefined;
-  let workspacesFolders;
+  let workspacesFolders: string[] | undefined;
   const files: InfoFile[] = [];
 
   for (const match of info.matchAll(regexp)) {
@@ -39,12 +53,15 @@ export const extractDataFromInfo = (info: string): InfoData => {
       } else if (title.includes('JDL entity definitions')) {
         jdlEntitiesDefinitions = body.trim();
         files.push({ filename: 'entities.jdl', content: jdlEntitiesDefinitions, type: 'entity-jdl' });
-      } else if (title.includes('JDL definitions') && (body.match(/application\s*\{/g) || []).length > 0) {
-        // JDL definitions can be be a placeholder
-        const jdlCount = files.filter(file => file.type === 'jdl').length;
-        files.push({ filename: jdlCount === 0 ? 'app.jdl' : `app-${jdlCount}.jdl`, content: body.trim(), type: 'jdl' });
-        jdlApplications ??= (body.match(/application\s*\{/g) || []).length;
-        jdlDefinitions ??= body.trim();
+      } else if (title.includes('JDL definitions')) {
+        const applicationMatches = body.match(/application\s*\{/g) ?? [];
+        if (applicationMatches.length > 0) {
+          // JDL definitions can be a placeholder
+          const jdlCount = files.filter(file => file.type === 'jdl').length;
+          files.push({ filename: jdlCount === 0 ? 'app.jdl' : `app-${jdlCount}.jdl`, content: body.trim(), type: 'jdl' });
+          jdlApplications ??= applicationMatches.length;
+          jdlDefinitions ??= body.trim();
+        }
       }
     }
   }
@@ -71,14 +88,16 @@ export const extractDataFromInfo = (info: string): InfoData => {
     jdlEntitiesDefinitions = undefined;
   }
 
-  return removeFieldsWithNullishValues({
-    yoRcContent,
-    jdlEntitiesDefinitions,
-    jdlDefinitions,
-    yoRcBlank,
-    yoRcValid,
-    files,
-    workspacesFolders,
-    jdlApplications,
-  });
+  return filterData(
+    removeFieldsWithNullishValues({
+      yoRcContent,
+      jdlEntitiesDefinitions,
+      jdlDefinitions,
+      yoRcBlank,
+      yoRcValid,
+      files,
+      workspacesFolders,
+      jdlApplications,
+    }),
+  );
 };

@@ -10,12 +10,12 @@ describe('generator - base - internal - blueprint', () => {
       const actual = parseBlueprints(expected);
       assert.deepStrictEqual(actual, expected);
     });
-    it('returns a array if empty string', () => {
+    it('returns an array if empty string', () => {
       const expected: any[] = [];
       const actual = parseBlueprints('');
       assert.deepStrictEqual(actual, expected);
     });
-    it('returns a array if not string', () => {
+    it('returns an array if not string', () => {
       assert.deepStrictEqual(parseBlueprints(), []);
     });
     it('adds generator-jhipster prefix if it is absent', () => {
@@ -45,7 +45,7 @@ describe('generator - base - internal - blueprint', () => {
   });
   describe('::mergeBlueprints', () => {
     describe('not passing arguments', () => {
-      it('returns a empty array', () => {
+      it('returns an empty array', () => {
         const expected: any[] = [];
         const actual = mergeBlueprints();
         assert.deepStrictEqual(actual, expected);

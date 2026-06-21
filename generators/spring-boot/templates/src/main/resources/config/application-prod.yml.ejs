@@ -36,7 +36,7 @@ logging:
     ROOT: INFO
     tech.jhipster: INFO
 <%_ if (packageName !== 'tech.jhipster') { _%>
-    <%= packageName %>: INFO
+    <%- packageName %>: INFO
 <%_ } _%>
 <%_ if (databaseTypeNeo4j) { _%>
     org.neo4j.driver: WARN
@@ -60,8 +60,8 @@ org:
   <%_ if (!databaseMigrationLiquibase) { _%>
     migrations:
       locations-to-scan:
-      packages-to-scan: <%= packageName %>.config.neo4j
-      installed-by: <%= baseName %>
+      packages-to-scan: <%- packageName %>.config.neo4j
+      installed-by: <%- baseName %>
   <%_ } _%>
 <%_ } _%>
 management:
@@ -99,7 +99,7 @@ spring:
         max-attempts: 100
       uri: http://admin:${jhipster.registry.password}@localhost:8761/config
       # name of the config server's property source (file.yml) that we want to use
-      name: <%= baseName %>
+      name: <%- baseName %>
       profile: prod
       label: main # toggle to switch to a different version of the configuration as stored in git
       # it can be set to any label, branch or commit of the configuration source Git repository
@@ -130,13 +130,13 @@ spring:
 <%_ if (databaseTypeMongodb && !springBoot4) { _%>
   data:
     mongodb:
-      uri: mongodb://localhost:27017/<%= baseName %>
+      uri: mongodb://localhost:27017/<%- baseName %>
 <%_ } _%>
 <%_ if (databaseTypeCassandra) { _%>
   cassandra:
     contact-points: localhost
     compression: LZ4
-    keyspace-name: <%= baseName %>
+    keyspace-name: <%- baseName %>
     local-datacenter: datacenter1
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
@@ -162,7 +162,7 @@ spring:
 <%_ } _%>
 <%_ if (databaseTypeMongodb && springBoot4) { _%>
   mongodb:
-    uri: mongodb://localhost:27017/<%= baseName %>
+    uri: mongodb://localhost:27017/<%- baseName %>
 <%_ } _%>
 <%_ if (databaseTypeSql && reactive) { _%>
   r2dbc:
@@ -173,7 +173,7 @@ spring:
 
 # ===================================================================
 # To enable TLS in production, generate a certificate using:
-# keytool -genkey -alias <%= baseName.toLowerCase() %> -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
+# keytool -genkey -alias <%- baseName.toLowerCase() %> -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
 #
 # You can also use Let's Encrypt:
 # See details in topic "Create a Java Keystore (.JKS) from Let's Encrypt Certificates" on https://maximilian-boehm.com/en-gb/blog
@@ -191,7 +191,7 @@ spring:
 #     ciphers: TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 ,TLS_DHE_RSA_WITH_AES_128_GCM_SHA256 ,TLS_DHE_RSA_WITH_AES_256_GCM_SHA384 ,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA,TLS_RSA_WITH_CAMELLIA_256_CBC_SHA,TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA,TLS_RSA_WITH_CAMELLIA_128_CBC_SHA
 # ===================================================================
 server:
-  port: <%= serverPort %>
+  port: <%- serverPort %>
   shutdown: graceful # see https://docs.spring.io/spring-boot/reference/web/graceful-shutdown.html#web.graceful-shutdown
   compression:
     enabled: true
@@ -220,8 +220,8 @@ jhipster:
 <%_ if (databaseTypeCouchbase) { _%>
   database:
     couchbase:
-      bucket-name: <%= baseName %>
-      scope-name: <%= camelizedBaseName %>
+      bucket-name: <%- baseName %>
+      scope-name: <%- camelizedBaseName %>
 <%_ } _%>
 <%_ if (!cacheProviderNo) { _%>
   cache: # Cache configuration

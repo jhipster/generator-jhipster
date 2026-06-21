@@ -16,27 +16,27 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= entityAbsolutePackage %>.service.mapper;
+package <%- entityAbsolutePackage %>.service.mapper;
 
-import static <%= entityAbsoluteClass %>Asserts.*;
-import static <%= entityAbsoluteClass %>TestSamples.*;
+import static <%- entityAbsoluteClass %>Asserts.*;
+import static <%- entityAbsoluteClass %>TestSamples.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class <%= entityClass %>MapperTest {
+class <%- entityClass %>MapperTest {
 
-    private <%= entityClass %>Mapper <%= entityInstance %>Mapper;
+    private <%- entityClass %>Mapper <%- entityInstance %>Mapper;
 
     @BeforeEach
     void setUp() {
-        <%= entityInstance %>Mapper = new <%= entityClass %>MapperImpl();
+        <%- entityInstance %>Mapper = new <%- entityClass %>MapperImpl();
     }
 
     @Test
     void shouldConvertToDtoAndBack() {
-        var expected = get<%= persistClass %>Sample1();
-        var actual = <%= entityInstance %>Mapper.toEntity(<%= entityInstance %>Mapper.toDto(expected));
-        assert<%= persistClass %>AllPropertiesEquals(expected, actual);
+        var expected = get<%- persistClass %>Sample1();
+        var actual = <%- entityInstance %>Mapper.toEntity(<%- entityInstance %>Mapper.toDto(expected));
+        assert<%- persistClass %>AllPropertiesEquals(expected, actual);
     }
 }

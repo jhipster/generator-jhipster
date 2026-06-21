@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= entityAbsolutePackage %>.domain;
+package <%- entityAbsolutePackage %>.domain;
 
 import org.reactivestreams.Publisher;
 import org.springframework.data.r2dbc.mapping.OutboundRow;
@@ -28,15 +28,15 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 @Component
-public class <%= persistClass %>Callback implements AfterSaveCallback<<%= persistClass %>>, AfterConvertCallback<<%= persistClass %>> {
+public class <%- persistClass %>Callback implements AfterSaveCallback<<%- persistClass %>>, AfterConvertCallback<<%- persistClass %>> {
 
     @Override
-    public Publisher<<%= persistClass %>> onAfterConvert(<%= persistClass %> entity, SqlIdentifier table) {
+    public Publisher<<%- persistClass %>> onAfterConvert(<%- persistClass %> entity, SqlIdentifier table) {
         return Mono.just(entity.setIsPersisted());
     }
 
     @Override
-    public Publisher<<%= persistClass %>> onAfterSave(<%= persistClass %> entity, OutboundRow outboundRow,
+    public Publisher<<%- persistClass %>> onAfterSave(<%- persistClass %> entity, OutboundRow outboundRow,
             SqlIdentifier table) {
         return Mono.just(entity.setIsPersisted());
     }

@@ -1,10 +1,10 @@
 {
-    "configuration": {
-        "title": "Настройки",
-        "filter": "Фильтр (по префиксу)",
-        "table": {
-            "prefix": "Префикс",
-            "properties": "Свойства"
-        }
+  "configuration": {
+    "title": "Настройки",
+    "filter": "Фильтр (по префиксу)",
+    "table": {
+      "prefix": "Префикс",
+      "properties": "Свойства"
     }
+  }
 }

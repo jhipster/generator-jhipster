@@ -55,7 +55,7 @@ export function mergeBlueprints(...blueprintsToMerge: Blueprint[][]): Blueprint[
   }
   blueprintsToMerge.forEach(blueprints => {
     if (!Array.isArray(blueprints)) {
-      throw new Error('Only arrays are supported.');
+      throw new TypeError('Only arrays are supported.');
     }
   });
   return removeBlueprintDuplicates(blueprintsToMerge.flat());

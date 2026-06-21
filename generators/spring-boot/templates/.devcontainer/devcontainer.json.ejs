@@ -1,19 +1,19 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.209.6/containers/java
 {
-  "name": "<%= capitalizedBaseName %>",
+  "name": "<%- capitalizedBaseName %>",
   "build": {
     "dockerfile": "Dockerfile",
     "args": {
       // Update the VARIANT arg to pick a Java version: 17, 19
       // Append -bullseye or -buster to pin to an OS version.
       // Use the -bullseye variants on local arm64/Apple Silicon.
-      "VARIANT": "<%= javaVersion %>-bullseye",
+      "VARIANT": "<%- javaVersion %>-bullseye",
       // Options
       // maven and gradle wrappers are used by default, we don't need them installed globally
-      // "INSTALL_MAVEN": "<%= buildToolMaven %>",
-      // "INSTALL_GRADLE": "<%= buildToolGradle %>",
-      "NODE_VERSION": "<%= nodeVersion %>"
+      // "INSTALL_MAVEN": "<%- buildToolMaven %>",
+      // "INSTALL_GRADLE": "<%- buildToolGradle %>",
+      "NODE_VERSION": "<%- nodeVersion %>"
     }
   },
 
@@ -26,10 +26,10 @@
 
       // Add the IDs of extensions you want installed when the container is created.
       "extensions": [
-<%_ if(clientFrameworkAngular) { _%>
+<%_ if (clientFrameworkAngular) { _%>
         "angular.ng-template",
 <%_ } _%>
-<%_ if(!skipClient) { _%>
+<%_ if (!skipClient) { _%>
         "christian-kohler.npm-intellisense",
         "firsttris.vscode-jest-runner",
         "ms-vscode.vscode-typescript-tslint-plugin",
@@ -44,17 +44,17 @@
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   "forwardPorts": [
-<%_ if(clientFrameworkAngular) { _%>
+<%_ if (clientFrameworkAngular) { _%>
     4200,
 <%_ } _%>
-<%_ if(clientFrameworkReact || clientFrameworkVue) { _%>
+<%_ if (clientFrameworkReact || clientFrameworkVue) { _%>
     9060,
 <%_ } _%>
-<%_ if(!skipClient) { _%>
+<%_ if (!skipClient) { _%>
     3001,
     9000,
 <%_ } _%>
-    <%= serverPort %>
+    <%- serverPort %>
   ],
 
   // Use 'postCreateCommand' to run commands after the container is created.

@@ -1,14 +1,14 @@
-name: <%= app.baseName.toLowerCase() %>
+name: <%- app.baseName.toLowerCase() %>
 version: 1.0.0
 appVersion: 1.0.0
-description: <%= app.baseName.toLowerCase() %> is a JHipster based <%= app.applicationType %> application
+description: <%- app.baseName.toLowerCase() %> is a JHipster based <%- app.applicationType %> application
 icon: https://www.jhipster.tech/images/logo/logo-jhipster-drink-coffee.svg
 keywords:
 - spring
 - angular
 - react
 - JHipster
-- <%= app.baseName.toLowerCase() %>
+- <%- app.baseName.toLowerCase() %>
 home: https://www.jhipster.tech/
 sources:
 - https://github.com/jhipster/generator-jhipster.git
@@ -18,27 +18,27 @@ maintainers:
 dependencies:
 <%_ if (app.prodDatabaseTypeMysql) { _%>
 - name: mysql
-  version: <%= HELM_MYSQL %>
+  version: <%- HELM_MYSQL %>
   repository: https://charts.helm.sh/stable
   condition: mysql.enabled
 <%_ } else if (app.prodDatabaseTypePostgresql) { _%>
 - name: postgresql
-  version: <%= HELM_POSTGRESQL %>
+  version: <%- HELM_POSTGRESQL %>
   repository: https://charts.bitnami.com/bitnami
   condition: postgresql.enabled
 <%_ } else if (app.prodDatabaseTypeMariadb) { _%>
 - name: mariadb
-  version: <%= HELM_MARIADB %>
+  version: <%- HELM_MARIADB %>
   repository: https://charts.bitnami.com/bitnami
   condition: mariadb.enabled
 <%_ } else if (app.databaseTypeMongodb) { _%>
 - name: mongodb-replicaset
-  version: <%= HELM_MONGODB_REPLICASET %>
+  version: <%- HELM_MONGODB_REPLICASET %>
   repository: https://charts.helm.sh/stable
   condition: mongodb.enabled
 <%_ } else if (app.databaseTypeCouchbase) { _%>
 - name: couchbase-operator
-  version: <%= HELM_COUCHBASE_OPERATOR %>
+  version: <%- HELM_COUCHBASE_OPERATOR %>
   repository: https://couchbase-partners.github.io/helm-charts/
   condition: couchbase-operator.enabled
 <%_ } _%>

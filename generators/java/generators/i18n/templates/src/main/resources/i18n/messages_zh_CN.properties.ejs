@@ -24,18 +24,18 @@ error.message=消息:
 
 <%_ if (generateUserManagement) { _%>
 # Activation email
-email.activation.title=<%= baseName %> 激活账号
+email.activation.title=<%- baseName %> 激活账号
 email.activation.greeting=亲爱的 {0}
-email.activation.text1=您的 <%= baseName %> 账号已创建成功, 请点击下列链接启用您的账号:
+email.activation.text1=您的 <%- baseName %> 账号已创建成功, 请点击下列链接启用您的账号:
 email.activation.text2=祝您使用愉快,
-email.signature=<%= baseName %> 团队
+email.signature=<%- baseName %> 团队
 
 # Creation email
-email.creation.text1=您的 <%= baseName %>   账户已经创建， 请点击以下链接访问：
+email.creation.text1=您的 <%- baseName %>   账户已经创建， 请点击以下链接访问：
 
 # Reset email
-email.reset.title=<%= baseName %> 密码重置
+email.reset.title=<%- baseName %> 密码重置
 email.reset.greeting=亲爱的 {0}
-email.reset.text1=您的 <%= baseName %>账号密码重置请求已收到, 请点击以下链接重置密码:
+email.reset.text1=您的 <%- baseName %>账号密码重置请求已收到, 请点击以下链接重置密码:
 email.reset.text2=祝您使用愉快,
 <%_ } _%>

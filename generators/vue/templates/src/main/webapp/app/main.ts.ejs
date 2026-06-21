@@ -1,20 +1,23 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.common with an alias.
-import { createApp, provide, computed, watch<% if (enableTranslation) { %>, onMounted<% } %> } from 'vue';
+import { createApp, provide, computed, watch<%- enableTranslation ? ', onMounted' : '' %> } from 'vue';
 import { createPinia, storeToRefs } from 'pinia'
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
 
-import { useStore<% if (enableTranslation) { %>, useTranslationStore<% } %> } from '@/store';
+import { useStore<%- enableTranslation ? ', useTranslationStore' : '' %> } from '@/store';
 import { setupAxiosInterceptors } from '@/shared/config/axios-interceptor';
 
 import App from './app.vue';
-import router<% if (applicationTypeGateway && microfrontend) { %>, { lazyRoutes }<% } %> from './router';
-import { initFortAwesome<% if (enableTranslation) { %>, initI18N<% } %> } from '@/shared/config/config';
+import router<%- microfrontend ? ', { lazyRoutes }' : '' %> from './router';
+import { initFortAwesome<%- enableTranslation ? ', initI18N' : '' %> } from '@/shared/config/config';
 import { initBootstrapVue } from '@/shared/config/config-bootstrap-vue';
 import JhiItemCount from '@/shared/jhi-item-count.vue';
 import JhiSortIndicator from '@/shared/sort/jhi-sort-indicator.vue';
+<%_ if (authenticationTypeJwt) { _%>
+import { AUTHENTICATION_TOKEN_KEY } from '@/shared/jhipster/constants';
+<%_ } _%>
 <%_ if (authenticationUsesCsrf) { _%>
 import LoginService from '@/account/login.service';
 <%_ } _%>
@@ -31,20 +34,17 @@ import TranslationService from '@/locale/translation.service';
 <%_ if (communicationSpringWebsocket) { _%>
 import { useTrackerService } from './admin/tracker/tracker.service';
 <%_ } _%>
-<%_ if (applicationTypeGateway && microfrontend) { _%>
-import { init } from '@module-federation/enhanced/runtime';
+<%_ if (microfrontend) { _%>
+import { registerRemotes } from '@module-federation/<%- clientBundlerVite ? '' : 'enhanced/' %>runtime';
 
-init({
-  name: '<%= lowercaseBaseName %>',
-  remotes: [
+registerRemotes([
   <%_ for (const remote of microfrontends) { _%>
-    {
-      name: '<%= remote.lowercaseBaseName %>',
-      entry: '/<%= remote.endpointPrefix %>/remoteEntry.js',
-    },
+  {
+    name: '<%- remote.moduleFederationName %>',
+    entry: '<%- remote.endpointPrefix %>/mf-manifest.json',
+  },
   <%_ } _%>
-  ],
-});
+]);
 <%_ } _%>
 
 const pinia = createPinia();
@@ -137,8 +137,12 @@ const app = createApp({
         const status = error.status || error.response?.status;
         if (status === 401) {
           // Store logged out state.
+<%_ if (authenticationTypeJwt) { _%>
+          sessionStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
+          localStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
+<%_ } _%>
           store.logout();
-          if (!url.endsWith('api/account') && !url.endsWith('api/<% if (authenticationTypeSession) { %>authentication<% } else { %>authenticate<% } %>')) {
+          if (!url.endsWith('api/account') && !url.endsWith('api/<%- authenticationTypeSession ? 'authentication' : 'authenticate' %>')) {
             // Ask for a new authentication
 <%_ if (authenticationTypeOauth2) { _%>
             window.location.reload();
@@ -170,9 +174,6 @@ const app = createApp({
 <%_ if (communicationSpringWebsocket) { _%>
 
     provide('trackerService', useTrackerService({ authenticated }));
-<%_ } _%>
-<%_ if (enableTranslation && applicationTypeMicroservice && microfrontend) { _%>
-    provide('microfrontendI18n', false);
 <%_ } _%>
   },
   template: '<App/>',

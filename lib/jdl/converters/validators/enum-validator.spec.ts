@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import { JDLEnum } from '../../core/models/index.ts';
 
@@ -36,7 +34,7 @@ describe('jdl - EnumValidator', () => {
     describe('when not passing anything', () => {
       it('should fail', () => {
         // @ts-expect-error invalid api test
-        expect(() => validator.validate()).to.throw(/^No enum\.$/);
+        expect(() => validator.validate()).toThrow(/^No enum\.$/);
       });
     });
     describe('when passing an enum', () => {
@@ -50,13 +48,13 @@ describe('jdl - EnumValidator', () => {
         });
 
         it('should not fail', () => {
-          expect(() => validator.validate(jdlEnum)).not.to.throw();
+          expect(() => validator.validate(jdlEnum)).not.toThrow();
         });
       });
       describe('when not passing any attribute', () => {
         it('should fail', () => {
           // @ts-expect-error invalid api test
-          expect(() => validator.validate({})).to.throw(/^The enum attribute name was not found\.$/);
+          expect(() => validator.validate({})).toThrow(/^The enum attribute name was not found\.$/);
         });
       });
     });

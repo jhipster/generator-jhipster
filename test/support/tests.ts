@@ -1,10 +1,6 @@
-import { before, describe, expect, it } from 'esmocha';
+import { before, describe, esmocha, expect, it } from 'esmocha';
 import { existsSync } from 'node:fs';
 
-import sinon from 'sinon';
-
-import { buildJHipster } from '../../cli/index.ts';
-import type JHipsterCommand from '../../cli/jhipster-command.ts';
 import { ENTITY_PRIORITY_NAMES, PRIORITY_NAMES, PRIORITY_NAMES_LIST } from '../../generators/base-application/priorities.ts';
 import type CoreGenerator from '../../generators/base-core/index.ts';
 import { CONTEXT_DATA_APPLICATION_KEY } from '../../generators/base-simple-application/support/constants.ts';
@@ -27,16 +23,7 @@ const {
 } = PRIORITY_NAMES;
 
 export const getCommandHelpOutput = async (command?: string) => {
-  await helpers.prepareTemporaryDir();
-  const program = await buildJHipster();
-  const cmd = command ? (program.commands.find(cmd => cmd.name() === command) as JHipsterCommand) : program;
-  if (!cmd) {
-    throw new Error(`Command ${command} not found.`);
-  }
-  if (command) {
-    await cmd._lazyBuildCommandCallBack!();
-  }
-  return cmd.configureOutput({ getOutHelpWidth: () => 1000, getErrHelpWidth: () => 1000 }).helpInformation();
+  return helpers.getCommandHelpOutput(command);
 };
 
 export const testOptions = (data: { generatorPath: string; customOptions: Record<string, unknown> }) => {
@@ -207,8 +194,8 @@ export const testBlueprintSupport = (
   const addSpies = (generator: CoreGenerator) => {
     const { taskPrefix = '' } = generator.features;
     const apiPrefix = taskPrefix ? '' : '_';
-    const prioritiesSpy = sinon.spy();
-    const prioritiesTasks: Record<string, sinon.SinonSpy> = {};
+    const prioritiesSpy = esmocha.fn();
+    const prioritiesTasks: Record<string, ReturnType<typeof esmocha.fn>> = {};
     let prioritiesCount = 0;
     [...PRIORITY_NAMES_LIST, ...workspacesPriorityList].forEach(priority => {
       let callback;
@@ -222,7 +209,7 @@ export const testBlueprintSupport = (
       }
       const property = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(generator), `${apiPrefix}${priority}`);
       if (property) {
-        const task = sinon.spy();
+        const task = esmocha.fn();
         prioritiesTasks[priority] = task;
         if (property.value && typeof property.value === 'function') {
           (generator as any)[`${apiPrefix}${priority}`] = () => {
@@ -244,7 +231,11 @@ export const testBlueprintSupport = (
     return { prioritiesSpy, prioritiesCount, prioritiesTasks };
   };
   describe('with blueprint', () => {
-    let spy: { prioritiesSpy: sinon.SinonSpy; prioritiesCount: number; prioritiesTasks: Record<string, sinon.SinonSpy> };
+    let spy: {
+      prioritiesSpy: ReturnType<typeof esmocha.fn>;
+      prioritiesCount: number;
+      prioritiesTasks: Record<string, ReturnType<typeof esmocha.fn>>;
+    };
     before(async () => {
       await helpers
         .runJHipster(generatorName)
@@ -261,16 +252,20 @@ export const testBlueprintSupport = (
     });
     if (bootstrapGenerator) {
       it('should call every priority', () => {
-        expect(spy.prioritiesSpy.callCount).toBe(spy.prioritiesCount);
+        expect(spy.prioritiesSpy.mock.calls.length).toBe(spy.prioritiesCount);
       });
     } else {
       it('should not call any priority', () => {
-        expect(spy.prioritiesSpy.callCount).toBe(0);
+        expect(spy.prioritiesSpy.mock.calls.length).toBe(0);
       });
     }
   });
   describe('with sbs blueprint', () => {
-    let spy: { prioritiesSpy: sinon.SinonSpy; prioritiesCount: number; prioritiesTasks: Record<string, sinon.SinonSpy> };
+    let spy: {
+      prioritiesSpy: ReturnType<typeof esmocha.fn>;
+      prioritiesCount: number;
+      prioritiesTasks: Record<string, ReturnType<typeof esmocha.fn>>;
+    };
     before(async function () {
       if (skipSbsBlueprint) {
         this.skip();
@@ -281,26 +276,26 @@ export const testBlueprintSupport = (
         .withMockedGenerators([`jhipster-foo-sbs:${generatorName}`])
         .withJHipsterConfig(
           {},
-          entity
-            ? [
-                {
-                  name: 'One',
-                  fields: [{ fieldName: 'id', fieldType: 'Long' }],
-                  relationships: [{ relationshipName: 'relationship', otherEntityName: 'Two', relationshipType: 'many-to-one' }],
-                },
-                {
-                  name: 'Two',
-                  fields: [
-                    { fieldName: 'id', fieldType: 'Long' },
-                    { fieldName: 'name', fieldType: 'String' },
-                  ],
-                  relationships: [
-                    { relationshipName: 'relationship1', otherEntityName: 'One', relationshipType: 'many-to-one' },
-                    { relationshipName: 'relationship2', otherEntityName: 'Two', relationshipType: 'many-to-one' },
-                  ],
-                },
-              ]
-            : undefined,
+          entity ?
+            [
+              {
+                name: 'One',
+                fields: [{ fieldName: 'id', fieldType: 'Long' }],
+                relationships: [{ relationshipName: 'relationship', otherEntityName: 'Two', relationshipType: 'many-to-one' }],
+              },
+              {
+                name: 'Two',
+                fields: [
+                  { fieldName: 'id', fieldType: 'Long' },
+                  { fieldName: 'name', fieldType: 'String' },
+                ],
+                relationships: [
+                  { relationshipName: 'relationship1', otherEntityName: 'One', relationshipType: 'many-to-one' },
+                  { relationshipName: 'relationship2', otherEntityName: 'Two', relationshipType: 'many-to-one' },
+                ],
+              },
+            ]
+          : undefined,
         )
         .commitFiles()
         .withOptions({ blueprint: ['foo-sbs'] })
@@ -309,17 +304,13 @@ export const testBlueprintSupport = (
         });
 
       // simulate a sbs blueprint
-      Object.defineProperty(
-        (context.mockedGenerators[`jhipster-foo-sbs:${generatorName}`] as unknown as Function).prototype,
-        'sbsBlueprint',
-        {
-          get() {
-            return true;
-          },
-          enumerable: true,
-          configurable: true,
+      Object.defineProperty((context.mockedGenerators[`jhipster-foo-sbs:${generatorName}`] as Function).prototype, 'sbsBlueprint', {
+        get() {
+          return true;
         },
-      );
+        enumerable: true,
+        configurable: true,
+      });
 
       await context;
     });
@@ -327,7 +318,7 @@ export const testBlueprintSupport = (
       expect(runResult.assertGeneratorComposedOnce(`jhipster-foo-sbs:${generatorName}`));
     });
     it('should call every priority', () => {
-      expect(spy.prioritiesSpy.callCount).toBe(spy.prioritiesCount);
+      expect(spy.prioritiesSpy.mock.calls.length).toBe(spy.prioritiesCount);
     });
     [...PRIORITY_NAMES_LIST, ...workspacesPriorityList]
       .filter(priority => !Object.values(ENTITY_PRIORITY_NAMES).includes(priority as any))
@@ -337,7 +328,7 @@ export const testBlueprintSupport = (
             this.skip();
             return;
           }
-          expect(spy.prioritiesTasks[priority].callCount).toBe(1);
+          expect(spy.prioritiesTasks[priority].mock.calls.length).toBe(1);
         });
       });
     if (entity) {
@@ -347,7 +338,7 @@ export const testBlueprintSupport = (
             this.skip();
             return;
           }
-          expect(spy.prioritiesTasks[priority].callCount).toBe(1);
+          expect(spy.prioritiesTasks[priority].mock.calls.length).toBe(1);
         });
       });
       [CONFIGURING_EACH_ENTITY, PREPARING_EACH_ENTITY, POST_PREPARING_EACH_ENTITY].forEach(priority => {
@@ -356,7 +347,7 @@ export const testBlueprintSupport = (
             this.skip();
             return;
           }
-          expect(spy.prioritiesTasks[priority].callCount).toBe(2);
+          expect(spy.prioritiesTasks[priority].mock.calls.length).toBe(2);
         });
       });
       it(`should call ${PREPARING_EACH_ENTITY_FIELD} tasks 3 times`, function () {
@@ -364,14 +355,14 @@ export const testBlueprintSupport = (
           this.skip();
           return;
         }
-        expect(spy.prioritiesTasks[PREPARING_EACH_ENTITY_FIELD].callCount).toBe(3);
+        expect(spy.prioritiesTasks[PREPARING_EACH_ENTITY_FIELD].mock.calls.length).toBe(3);
       });
       it(`should call ${PREPARING_EACH_ENTITY_RELATIONSHIP} tasks 3 times`, function () {
         if (!spy.prioritiesTasks[PREPARING_EACH_ENTITY_RELATIONSHIP]) {
           this.skip();
           return;
         }
-        expect(spy.prioritiesTasks[PREPARING_EACH_ENTITY_RELATIONSHIP].callCount).toBe(3);
+        expect(spy.prioritiesTasks[PREPARING_EACH_ENTITY_RELATIONSHIP].mock.calls.length).toBe(3);
       });
     }
   });

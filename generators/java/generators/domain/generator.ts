@@ -19,6 +19,7 @@
 import { mutateData } from '../../../../lib/utils/index.ts';
 import { getEnumInfo } from '../../../base-application/support/index.ts';
 import type { Source as CommonSource } from '../../../common/types.d.ts';
+import { mutateValidatedField } from '../../application.ts';
 import { JavaApplicationGenerator } from '../../generator.ts';
 import { javaTestPackageTemplatesBlock } from '../../support/index.ts';
 import { isReservedJavaKeyword } from '../../support/reserved-keywords.ts';
@@ -88,9 +89,8 @@ export default class DomainGenerator extends JavaApplicationGenerator {
       },
       prepareEntity({ entity, relationship }) {
         if (entity.dtoMapstruct) {
-          relationship.propertyDtoJavaType = relationship.collection
-            ? `Set<${relationship.otherEntity.dtoClass}>`
-            : relationship.otherEntity.dtoClass;
+          relationship.propertyDtoJavaType =
+            relationship.collection ? `Set<${relationship.otherEntity.dtoClass}>` : relationship.otherEntity.dtoClass;
         }
       },
     });
@@ -104,6 +104,12 @@ export default class DomainGenerator extends JavaApplicationGenerator {
     return this.asPostPreparingEachEntityTaskGroup({
       checkForCircularRelationships({ entity }) {
         entity.skipJunitTests = entity.hasCyclicRequiredRelationship ? 'Cyclic required relationships detected' : undefined;
+      },
+
+      validators({ entity }) {
+        for (const field of entity.fields.filter(f => f.fieldValidate)) {
+          mutateData(field, mutateValidatedField);
+        }
       },
     });
   }

@@ -16,11 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.config;
+package <%- packageName %>.config;
 
-import static <%= packageName %>.security.SecurityUtils.JWT_ALGORITHM;
+import static <%- packageName %>.security.SecurityUtils.JWT_ALGORITHM;
 
-import <%= packageName %>.management.SecurityMetersService;
+import <%- packageName %>.management.SecurityMetersService;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;
 import javax.crypto.SecretKey;
@@ -30,9 +30,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.oauth2.jwt.<%= reactive ? 'Reactive' : '' %>JwtDecoder;
+import org.springframework.security.oauth2.jwt.<%- reactive ? 'Reactive' : '' %>JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.Nimbus<%= reactive ? 'Reactive' : '' %>JwtDecoder;
+import org.springframework.security.oauth2.jwt.Nimbus<%- reactive ? 'Reactive' : '' %>JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 <%_ if (communicationSpringWebsocket) { %>
 import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
@@ -48,8 +48,8 @@ public class SecurityJwtConfiguration {
     private String jwtKey;
 
     @Bean
-    public <%= reactive ? 'Reactive' : '' %>JwtDecoder jwtDecoder(SecurityMetersService metersService) {
-        Nimbus<%= reactive ? 'Reactive' : '' %>JwtDecoder jwtDecoder = Nimbus<%= reactive ? 'Reactive' : '' %>JwtDecoder.withSecretKey(getSecretKey()).macAlgorithm(JWT_ALGORITHM).build();
+    public <%- reactive ? 'Reactive' : '' %>JwtDecoder jwtDecoder(SecurityMetersService metersService) {
+        Nimbus<%- reactive ? 'Reactive' : '' %>JwtDecoder jwtDecoder = Nimbus<%- reactive ? 'Reactive' : '' %>JwtDecoder.withSecretKey(getSecretKey()).macAlgorithm(JWT_ALGORITHM).build();
         return token -> {
 <%_ if (reactive) { %>
             try {

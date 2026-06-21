@@ -33,13 +33,14 @@ const shareDependencies = ({ skipList = [] } = {}) =>
 
 /** @type {import('@module-federation/runtime').Options} */
 module.exports = {
-  name: '<%= lowercaseBaseName %>',
-<%_ if (applicationTypeMicroservice) { _%>
+  name: '<%- lowercaseBaseName.replaceAll('-', '_') %>',
   exposes: {
-    './entities-router': './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/router/entities.ts',
-    './entities-menu': './<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entities-menu.vue',
-  },
+<%_ if (applicationTypeMicroservice || exposeMicrofrontend) { _%>
+    './entities-router': './<%- clientBundlerRsbuild ? '' : this.relativeDir(clientRootDir, clientSrcDir) %>app/router/entities.ts',
+    './entities-menu': './<%- clientBundlerRsbuild ? '' : this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entities-menu.vue',
 <%_ } _%>
+    // jhipster-needle-expose
+  },
   filename: 'remoteEntry.js',
   shareScope: 'default',
   shared: {
@@ -51,5 +52,5 @@ module.exports = {
     ),
   },
   dts: false,
-  manifest: false,
+  manifest: true,
 };

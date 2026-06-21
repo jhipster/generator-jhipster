@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: <%= baseName.toLowerCase() %>
+name: <%- baseName.toLowerCase() %>
 services:
   mysql:
     image: <%- dockerContainers.mysql %>
@@ -25,7 +25,7 @@ services:
       - ./config/mysql:/etc/mysql/conf.d:ro
     environment:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-      - MYSQL_DATABASE=<%= baseName.toLowerCase() %>
+      - MYSQL_DATABASE=<%- baseName.toLowerCase() %>
 <%_ if (locals.prodDatabasePassword) { _%>
       - MYSQL_PASSWORD=<%- locals.prodDatabasePassword %>
 <%_ } _%>

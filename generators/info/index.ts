@@ -17,3 +17,5 @@
  * limitations under the License.
  */
 export { default } from './generator.ts';
+export { default as command } from './command.ts';
+export type { Config, Features, Options } from '../base-core/types.d.ts';

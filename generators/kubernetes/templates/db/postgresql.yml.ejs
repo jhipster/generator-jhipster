@@ -17,11 +17,11 @@
  limitations under the License.
 -%>
 <%_ if (kubernetesUseDynamicStorage) { _%>
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: PersistentVolumeClaim
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-postgresql-pvc
-  namespace: <%= kubernetesNamespace %>
+  name: <%- app.baseName.toLowerCase() %>-postgresql-pvc
+  namespace: <%- kubernetesNamespace %>
 spec:
   accessModes:
   - ReadWriteOnce
@@ -29,35 +29,35 @@ spec:
     requests:
       storage: 2Gi
   <%_ if (kubernetesStorageClassName) { _%>
-  storageClassName: <%= kubernetesStorageClassName %>
+  storageClassName: <%- kubernetesStorageClassName %>
   <%_ } _%>
 ---
 <%_ } _%>
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: Secret
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-postgresql
-  namespace: <%= kubernetesNamespace %>
+  name: <%- app.baseName.toLowerCase() %>-postgresql
+  namespace: <%- kubernetesNamespace %>
   labels:
-    app: <%= app.baseName.toLowerCase() %>-postgresql
+    app: <%- app.baseName.toLowerCase() %>-postgresql
 type: Opaque
 data:
-  postgresql-password: <%= Buffer.from(dbRandomPassword).toString('base64') %>
+  postgresql-password: <%- Buffer.from(dbRandomPassword).toString('base64') %>
 ---
-apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
+apiVersion: <%- KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-postgresql
-  namespace: <%= kubernetesNamespace %>
+  name: <%- app.baseName.toLowerCase() %>-postgresql
+  namespace: <%- kubernetesNamespace %>
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: <%= app.baseName.toLowerCase() %>-postgresql
+      app: <%- app.baseName.toLowerCase() %>-postgresql
   template:
     metadata:
       labels:
-        app: <%= app.baseName.toLowerCase() %>-postgresql
+        app: <%- app.baseName.toLowerCase() %>-postgresql
 <%_ if (istio) { _%>
       annotations:
         sidecar.istio.io/inject: "false"
@@ -67,7 +67,7 @@ spec:
       - name: data
 <%_ if (kubernetesUseDynamicStorage) { _%>
         persistentVolumeClaim:
-          claimName: <%= app.baseName.toLowerCase() %>-postgresql-pvc
+          claimName: <%- app.baseName.toLowerCase() %>-postgresql-pvc
 <%_ } else { _%>
         emptyDir: {}
 <%_ } _%>
@@ -76,11 +76,11 @@ spec:
         image: <%- dockerContainers.postgresql %>
         env:
         - name: POSTGRES_USER
-          value: <%= app.baseName %>
+          value: <%- app.baseName %>
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: <%= app.baseName.toLowerCase() %>-postgresql
+              name: <%- app.baseName.toLowerCase() %>-postgresql
               key: postgresql-password
         ports:
         - containerPort: 5432
@@ -96,13 +96,13 @@ spec:
             memory: "1Gi"
             cpu: "1"
 ---
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: Service
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-postgresql
-  namespace: <%= kubernetesNamespace %>
+  name: <%- app.baseName.toLowerCase() %>-postgresql
+  namespace: <%- kubernetesNamespace %>
 spec:
   selector:
-    app: <%= app.baseName.toLowerCase() %>-postgresql
+    app: <%- app.baseName.toLowerCase() %>-postgresql
   ports:
   - port: 5432

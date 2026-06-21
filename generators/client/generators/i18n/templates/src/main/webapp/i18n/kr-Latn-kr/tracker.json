@@ -1,12 +1,12 @@
 {
-    "tracker": {
-        "title": "Paydalanıwshınıń ámeldegi aktivligi",
-        "table": {
-            "userlogin": "Paydalanıwshı ",
-            "ipaddress": "IP adres",
-            "userAgent": "User agent",
-            "page": "Ámeldegi bet",
-            "time": "Sáne"
-        }
+  "tracker": {
+    "title": "Paydalanıwshınıń ámeldegi aktivligi",
+    "table": {
+      "userlogin": "Paydalanıwshı ",
+      "ipaddress": "IP adres",
+      "userAgent": "User agent",
+      "page": "Ámeldegi bet",
+      "time": "Sáne"
     }
+  }
 }

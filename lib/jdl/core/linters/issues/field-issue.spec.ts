@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { describe, expect, it } from 'esmocha';
 
 import FieldIssue from './field-issue.ts';
 
@@ -28,25 +26,25 @@ describe('jdl - FieldIssue', () => {
     describe('when not passing any arg', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => new FieldIssue()).to.throw(/^An issue must at least have a rule name\.$/);
+        expect(() => new FieldIssue()).toThrow(/^An issue must at least have a rule name\.$/);
       });
     });
     describe('when not passing a rule name', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => new FieldIssue({})).to.throw(/^An issue must at least have a rule name\.$/);
+        expect(() => new FieldIssue({})).toThrow(/^An issue must at least have a rule name\.$/);
       });
     });
     describe('when not passing an entity name', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => new FieldIssue({ ruleName: 'Toto' })).to.throw(/^A field name and its entity's name must be passed\.$/);
+        expect(() => new FieldIssue({ ruleName: 'Toto' })).toThrow(/^A field name and its entity's name must be passed\.$/);
       });
     });
     describe('when not passing a field name', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => new FieldIssue({ ruleName: 'Toto', entityName: 'A' })).to.throw(
+        expect(() => new FieldIssue({ ruleName: 'Toto', entityName: 'A' })).toThrow(
           /^A field name and its entity's name must be passed\.$/,
         );
       });

@@ -16,15 +16,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { stringHashCode } from '../../lib/utils/string.ts';
 import { CommandBaseGenerator } from '../base/index.ts';
-import { CONTEXT_DATA_EXISTING_PROJECT } from '../base/support/constants.ts';
+import { createFaker } from '../base-application/support/faker.ts';
 
 import type command from './command.ts';
 import { getDefaultAppName } from './support/index.ts';
 import { validateProjectName } from './support/name-resolver.ts';
 
 export default class ProjectNameGenerator extends CommandBaseGenerator<typeof command> {
-  javaApplication?: boolean;
+  javaApplication = true;
   defaultBaseName: () => string = () =>
     getDefaultAppName({
       cwd: this.destinationPath(),
@@ -35,10 +36,6 @@ export default class ProjectNameGenerator extends CommandBaseGenerator<typeof co
     validateProjectName(input, { javaApplication: this.javaApplication });
 
   async beforeQueue() {
-    this.getContextData(CONTEXT_DATA_EXISTING_PROJECT, {
-      factory: () => Boolean(this.options.defaults || (this.jhipsterConfig.baseName !== undefined && this.config.existed)),
-    });
-
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }
@@ -60,5 +57,33 @@ export default class ProjectNameGenerator extends CommandBaseGenerator<typeof co
 
   get [CommandBaseGenerator.INITIALIZING]() {
     return this.delegateTasksToBlueprint(() => this.initializing);
+  }
+
+  get configuring() {
+    return this.asConfiguringTaskGroup({
+      async defaults() {
+        if (!this.jhipsterConfig.baseName) {
+          this.jhipsterConfig.baseName = this.defaultBaseName();
+        }
+        if (!this.jhipsterConfig.creationTimestamp) {
+          if (this.options.reproducible) {
+            const faker = await createFaker();
+            faker.seed(stringHashCode(this.jhipsterConfig.baseName));
+            this.jhipsterConfig.creationTimestamp = faker.date
+              .recent({
+                days: 30,
+                refDate: new Date(2024, 0, 1),
+              })
+              .getTime();
+          } else {
+            this.jhipsterConfig.creationTimestamp = Date.now();
+          }
+        }
+      },
+    });
+  }
+
+  get [CommandBaseGenerator.CONFIGURING]() {
+    return this.delegateTasksToBlueprint(() => this.configuring);
   }
 }

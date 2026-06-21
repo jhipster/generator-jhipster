@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.config;
+package <%- packageName %>.config;
 
 import ch.qos.logback.classic.LoggerContext;
 import tech.jhipster.config.JHipsterProperties;
@@ -35,8 +35,8 @@ import org.springframework.cloud.consul.serviceregistry.ConsulRegistration;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 <%_ } _%>
 import org.springframework.context.annotation.Configuration;
-import <%= springBoot4 ? 'tools' : 'com.fasterxml' %>.jackson.core.<%= springBoot4 ? 'JacksonException' : 'JsonProcessingException' %>;
-import <%= springBoot4 ? 'tools' : 'com.fasterxml' %>.jackson.databind.ObjectMapper;
+import <%- springBoot4 ? 'tools' : 'com.fasterxml' %>.jackson.core.<%- springBoot4 ? 'JacksonException' : 'JsonProcessingException' %>;
+import <%- springBoot4 ? 'tools' : 'com.fasterxml' %>.jackson.databind.ObjectMapper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,7 +61,7 @@ public class LoggingConfiguration {
 <%_ if (serviceDiscoveryAny && (applicationTypeMicroservice || applicationTypeGateway)) { _%>
                                 ObjectProvider<BuildProperties> buildProperties,
 <%_ } _%>
-                                ObjectMapper mapper) throws <%= springBoot4 ? 'JacksonException' : 'JsonProcessingException' %> {
+                                ObjectMapper mapper) throws <%- springBoot4 ? 'JacksonException' : 'JsonProcessingException' %> {
 
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
 

@@ -70,7 +70,7 @@ describe('jdl - OptionConverter', () => {
             convertedOptions = convertOptions(
               {
                 [optionName]: {
-                  [optionValue]: { list: ['A'], excluded: ['B'] } as ParsedJDLOption,
+                  [optionValue]: { list: ['A'], excluded: ['B'] },
                 },
               },
               [],

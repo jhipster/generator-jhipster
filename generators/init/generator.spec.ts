@@ -56,6 +56,7 @@ describe(`generator - ${generator}`, () => {
         expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
   "jhipster:git",
+  "jhipster:javascript-simple-application",
   "jhipster:javascript-simple-application:eslint",
   "jhipster:javascript-simple-application:husky",
   "jhipster:javascript-simple-application:prettier",

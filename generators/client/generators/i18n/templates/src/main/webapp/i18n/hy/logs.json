@@ -1,11 +1,11 @@
 {
-    "logs": {
-        "title": "Logs",
-        "nbloggers": "There are {{ total }} loggers.",
-        "filter": "Filter",
-        "table": {
-            "name": "Անուն",
-            "level": "Մակարդակ"
-        }
+  "logs": {
+    "title": "Logs",
+    "nbloggers": "There are {{ total }} loggers.",
+    "filter": "Filter",
+    "table": {
+      "name": "Անուն",
+      "level": "Մակարդակ"
     }
+  }
 }

@@ -7,7 +7,7 @@
         <button class="btn btn-info me-2" @click="handleSyncList" :disabled="isLoading">
           <font-awesome-icon icon="sync" :spin="isLoading"></font-awesome-icon> <span>{{ t$('userManagement.home.refreshListLabel') }}</span>
         </button>
-        <router-link custom v-slot="{ navigate }" :to="{name: '<%= jhiPrefixCapitalized %>UserCreate'}">
+        <router-link custom v-slot="{ navigate }" :to="{name: '<%- jhiPrefixCapitalized %>UserCreate'}">
           <button @click="navigate" class="btn btn-primary jh-create-entity" data-cy="entityCreateButton">
             <font-awesome-icon icon="plus"></font-awesome-icon> <span>{{ t$('userManagement.home.createLabel') }}</span>
           </button>
@@ -18,12 +18,12 @@
       <table class="table table-striped" aria-describedby="Users">
         <thead>
         <tr>
-          <th scope="col"<% if (!databaseTypeCassandra) { %> @click="changeOrder('id')"<% } %>><span>{{ t$('global.field.id') }}</span><% if (!databaseTypeCassandra) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator><% } %></th>
-          <th scope="col"<% if (!databaseTypeCassandra) { %> @click="changeOrder('login')"<% } %>><span>{{ t$('userManagement.login') }}</span><% if (!databaseTypeCassandra) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'login'"></jhi-sort-indicator><% } %></th>
-          <th scope="col"<% if (!databaseTypeCassandra) { %> @click="changeOrder('email')"<% } %>><span>{{ t$('userManagement.email') }}</span><% if (!databaseTypeCassandra) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'email'"></jhi-sort-indicator><% } %></th>
+          <th scope="col"<%- databaseTypeCassandra ? '' : ' @click="changeOrder(\'id\')"' %>><span>{{ t$('global.field.id') }}</span><%- databaseTypeCassandra ? '' : ' <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="\'id\'"></jhi-sort-indicator>' %></th>
+          <th scope="col"<%- databaseTypeCassandra ? '' : ' @click="changeOrder(\'login\')"' %>><span>{{ t$('userManagement.login') }}</span><%- databaseTypeCassandra ? '' : ' <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="\'login\'"></jhi-sort-indicator>' %></th>
+          <th scope="col"<%- databaseTypeCassandra ? '' : ' @click="changeOrder(\'email\')"' %>><span>{{ t$('userManagement.email') }}</span><%- databaseTypeCassandra ? '' : ' <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="\'email\'"></jhi-sort-indicator>' %></th>
           <th scope="col"></th>
 <%_ if (enableTranslation) { _%>
-          <th scope="col"<% if (!databaseTypeCassandra) { %> @click="changeOrder('langKey')"<% } %>> <span>{{ t$('userManagement.langKey') }}</span><% if (!databaseTypeCassandra) { %> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'langKey'"></jhi-sort-indicator><% } %></th>
+          <th scope="col"<%- databaseTypeCassandra ? '' : ' @click="changeOrder(\'langKey\')"' %>> <span>{{ t$('userManagement.langKey') }}</span><%- databaseTypeCassandra ? '' : ' <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="\'langKey\'"></jhi-sort-indicator>' %></th>
 <%_ } _%>
           <th scope="col"><span>{{ t$('userManagement.profiles') }}</span></th>
 <%_ if (!databaseTypeCassandra) { _%>
@@ -37,7 +37,7 @@
         <tbody v-if ="users">
           <tr v-for="user in users" :key="user.id" :id="user.login" data-cy="entityTable">
             <td>
-              <router-link :to="{name: '<%= jhiPrefixCapitalized %>UserView', params: {userId: user.login}}">{{user.id}}</router-link></td>
+              <router-link :to="{name: '<%- jhiPrefixCapitalized %>UserView', params: {userId: user.login}}">{{user.id}}</router-link></td>
             <td>{{user.login}}</td>
             <td class="jhi-user-email">{{user.email}}</td>
             <td>
@@ -46,7 +46,7 @@
               <button class="btn btn-success btn-sm" @click="setActive(user, false)" v-if="user.activated"
                       :disabled="username === user.login">{{ t$('userManagement.activated') }}</button>
             </td>
-            <% if (enableTranslation) { %><td>{{user.langKey}}</td><% } %>
+            <%- enableTranslation ? '<td>{{user.langKey}}</td>' : '' %>
             <td>
               <div v-for="authority of user.authorities" :key="authority">
                   <span class="badge bg-info">{{ authority }}</span>
@@ -59,13 +59,13 @@
 <%_ } _%>
             <td class="text-end">
               <div class="btn-group">
-                <router-link :to="{name: '<%= jhiPrefixCapitalized %>UserView', params: {userId: user.login}}" custom v-slot="{ navigate }">
+                <router-link :to="{name: '<%- jhiPrefixCapitalized %>UserView', params: {userId: user.login}}" custom v-slot="{ navigate }">
                   <button @click="navigate" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
                     <font-awesome-icon icon="eye"></font-awesome-icon>
                     <span class="d-none d-md-inline">{{ t$('entity.action.view') }}</span>
                   </button>
                 </router-link>
-                <router-link :to="{name: '<%= jhiPrefixCapitalized %>UserEdit', params: {userId: user.login}}" custom v-slot="{ navigate }">
+                <router-link :to="{name: '<%- jhiPrefixCapitalized %>UserEdit', params: {userId: user.login}}" custom v-slot="{ navigate }">
                   <button @click="navigate" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">
                     <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                     <span class="d-none d-md-inline">{{ t$('entity.action.edit') }}</span>
@@ -82,7 +82,7 @@
       </table>
       <b-modal ref="removeUser" id="removeUser" :title="t$('entity.delete.title')" @ok="deleteUser()" data-cy="userManagementDeleteDialogHeading">
           <div class="modal-body">
-              <p id="<%= jhiPrefixDashed %>-delete-user-heading">{{ t$('userManagement.delete.question', { 'login': removeId}) }}</p>
+              <p id="<%- jhiPrefixDashed %>-delete-user-heading">{{ t$('userManagement.delete.question', { 'login': removeId}) }}</p>
           </div>
           <template #footer>
             <div>

@@ -16,9 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_
-const tsKeyId = user.primaryKey.tsSampleValues[0];
-_%>
+<%_ const tsKeyId = user.primaryKey.tsSampleValues[0]; _%>
 <%_ if (clientTestFrameworkVitest) { _%>
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
@@ -39,7 +37,9 @@ import { UserManagementDetail } from './user-management-detail';
 describe('User Management Detail Component', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
+<%_ if (enableTranslation) { _%>
+      imports: [TranslateModule.forRoot()],
+<%_ } _%>
       providers: [
         provideRouter(
           [

@@ -44,7 +44,7 @@ export const RegisterPage = () => {
   const currentLocale = useAppSelector(state => state.locale.currentLocale);
 <%_ } _%>
 
-  const handleValidSubmit = ({ username, email, firstPassword }) => {
+  const handleValidSubmit = ({ username, email, firstPassword }: Record<string, any>) => {
 <%_ if (enableTranslation) { _%>
     dispatch(handleRegister({ login: username, email, password: firstPassword, langKey: currentLocale }));
 <%_ } else { _%>

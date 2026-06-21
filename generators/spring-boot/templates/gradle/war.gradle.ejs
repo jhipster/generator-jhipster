@@ -20,15 +20,15 @@ apply plugin: "war"
 
 bootWar {
 <%_ if (!skipClient) { _%>
-    webAppDirectory = file("<%= locals.clientDistDir %>")
+    webAppDirectory = file("<%- locals.clientDistDir %>")
 <%_ } _%>
-    mainClass = "<%= packageName %>.<%= mainClass %>"
+    mainClass = "<%- packageName %>.<%- mainClass %>"
     includes = ["WEB-INF/**", "META-INF/**"]
 }
 
 war {
 <%_ if (!skipClient) { _%>
-    webAppDirectory = file("<%= locals.clientDistDir %>")
+    webAppDirectory = file("<%- locals.clientDistDir %>")
 <%_ } _%>
     enabled = true
     archiveExtension = "war.original"

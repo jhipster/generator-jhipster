@@ -34,7 +34,7 @@ export const GENERATOR_NAME = 'generator-jhipster';
 export function writeConfigFile(config: YoRcJHipsterContent, yoRcPath = YO_RC_FILE): void {
   let newYoRc: YoRcJHipsterContent = { ...config };
   if (doesFileExist(yoRcPath)) {
-    const yoRc = readYoRcFile(yoRcPath) as YoRcJHipsterContent;
+    const yoRc = readYoRcFile(yoRcPath);
     newYoRc = mergeYoRcContent(yoRc, config);
   }
   fs.writeFileSync(yoRcPath, JSON.stringify(newYoRc, null, 2).concat('\n'));

@@ -18,7 +18,7 @@
  */
 
 export default function deduplicate<T>(array: T[]): T[] {
-  return Array.from(new Set(array));
+  return [...new Set(array)];
 }
 
 export function join(set: unknown[], separator = ',', quoted = false) {

@@ -22,7 +22,7 @@ import eslint from '@eslint/js';
 import angular from 'angular-eslint';
 <&_ } -&>
 <&_ if (fragment.configSection) { -&>
-  { ignores: ['<%- this.relativeDir(clientRootDir, clientDistDir) %>', '<%- temporaryDir %>'<% if (clientTestFrameworkVitest) { %>, 'dist/'<% } %>] },
+  { ignores: ['<%- this.relativeDir(clientRootDir, clientDistDir) %>', '<%- temporaryDir %>', '<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/'<%- clientTestFrameworkVitest ? ', \'dist/\'' : '' %>] },
   eslint.configs.recommended,
   {
     files: ['**/*.{js,cjs,mjs}'],
@@ -47,7 +47,7 @@ import angular from 'angular-eslint';
         'error',
         {
           type: 'element',
-          prefix: '<%= jhiPrefixDashed %>',
+          prefix: '<%- jhiPrefixDashed %>',
           style: 'kebab-case',
         },
       ],
@@ -55,7 +55,7 @@ import angular from 'angular-eslint';
         'error',
         {
           type: 'attribute',
-          prefix: '<%= jhiPrefix %>',
+          prefix: '<%- jhiPrefix %>',
           style: 'camelCase',
         },
       ],
@@ -92,6 +92,7 @@ import angular from 'angular-eslint';
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/no-shadow': ['error'],
       '@typescript-eslint/no-unnecessary-condition': 'error',
+      '@typescript-eslint/no-unnecessary-type-arguments': 'off',
       '@typescript-eslint/no-unsafe-argument': 'off',
       '@typescript-eslint/no-unsafe-assignment': 'off',
       '@typescript-eslint/no-unsafe-call': 'off',
@@ -124,7 +125,7 @@ import angular from 'angular-eslint';
     },
   },
   {
-    files: ['**/*.html'],
+    files: ['<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.html'],
     extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
     rules: {
       '@angular-eslint/template/click-events-have-key-events': 'off',

@@ -31,6 +31,13 @@ export type Control = {
    * cleanupFiles('4.0.0', { '6.0.0': ['file1', 'file2', [application.shouldRemove, 'file3']] })
    */
   cleanupFiles: (cleanup: CleanupArgumentType) => Promise<void> | ((oldVersion: string, cleanup: CleanupArgumentType) => Promise<void>);
+
+  /**
+   * Cleanup Blueprint files conditionally based on version and condition.
+   * @example
+   * cleanupBlueprintFiles({ '6.0.0': ['file1', 'file2', [application.shouldRemove, 'file3']] })
+   */
+  cleanupBlueprintFiles: (cleanup: CleanupArgumentType) => Promise<void>;
 };
 
 export type Config = CoreConfig &

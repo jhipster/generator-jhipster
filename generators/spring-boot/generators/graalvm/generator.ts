@@ -102,13 +102,13 @@ export default class GraalvmGenerator extends SpringBootApplicationGenerator {
             staticImports: ['com.tngtech.archunit.core.domain.JavaClass.Predicates.simpleNameEndingWith'],
           },
           contents =>
-            contents.includes('__BeanFactoryRegistrations')
-              ? contents
-              : contents.replace(
-                  '.ignoreDependency(belongToAnyOf',
-                  `.ignoreDependency(simpleNameEndingWith("_BeanFactoryRegistrations"), alwaysTrue())
+            contents.includes('__BeanFactoryRegistrations') ? contents : (
+              contents.replace(
+                '.ignoreDependency(belongToAnyOf',
+                `.ignoreDependency(simpleNameEndingWith("_BeanFactoryRegistrations"), alwaysTrue())
     .ignoreDependency(belongToAnyOf`,
-                ),
+              )
+            ),
         );
       },
       nativeHints({ source }) {

@@ -29,7 +29,6 @@ import {
   matchMainJavaFiles,
   packageInfoTransform,
 } from '../java/support/index.ts';
-import type { Source as JavascriptSource } from '../javascript-simple-application/types.ts';
 
 import type {
   Application as JavaSimpleApplicationApplication,
@@ -58,6 +57,7 @@ export default class JavaGenerator extends JavaSimpleApplicationGenerator {
       await this.composeWithBlueprints();
     }
 
+    await this.dependsOnJHipster('project-name');
     await this.dependsOnBootstrap('java-simple-application');
   }
 
@@ -101,6 +101,18 @@ export default class JavaGenerator extends JavaSimpleApplicationGenerator {
 
   get [JavaSimpleApplicationGenerator.CONFIGURING]() {
     return this.delegateTasksToBlueprint(() => this.configuring);
+  }
+
+  get composing() {
+    return this.asComposingTaskGroup({
+      async composing() {
+        await this.composeWithJHipster('jhipster:java-simple-application:prettier');
+      },
+    });
+  }
+
+  get [JavaSimpleApplicationGenerator.COMPOSING]() {
+    return this.delegateTasksToBlueprint(() => this.composing);
   }
 
   get loading() {
@@ -148,11 +160,11 @@ export default class JavaGenerator extends JavaSimpleApplicationGenerator {
             packageInfoTransform({
               javaRoots: [root],
               javadocs: {
-                ...Object.fromEntries(application.packageInfoJavadocs!.map(doc => [doc.packageName, doc.documentation])),
+                ...Object.fromEntries(application.packageInfoJavadocs.map(doc => [doc.packageName, doc.documentation])),
                 [`${application.packageName}`]: 'Application root.',
                 [`${application.packageName}.config`]: 'Application configuration.',
                 ...Object.fromEntries(
-                  application.entityPackages!.flatMap(pkg => [
+                  application.entityPackages.flatMap(pkg => [
                     [`${pkg}.domain`, 'Domain objects.'],
                     [`${pkg}.repository`, 'Repository layer.'],
                     [`${pkg}.service`, 'Service layer.'],
@@ -193,29 +205,6 @@ export default class JavaGenerator extends JavaSimpleApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.writing);
   }
 
-  get postWriting() {
-    return this.asPostWritingTaskGroup({
-      addPrettierJava({ application, source }) {
-        const clientSource = source as JavascriptSource;
-        if (clientSource.mergePrettierConfig) {
-          clientSource.mergePrettierConfig({
-            plugins: ['prettier-plugin-java'],
-            overrides: [{ files: '*.java', options: { tabWidth: 4 } }],
-          });
-          this.packageJson.merge({
-            devDependencies: {
-              'prettier-plugin-java': application.nodeDependencies['prettier-plugin-java'],
-            },
-          });
-        }
-      },
-    });
-  }
-
-  get [JavaSimpleApplicationGenerator.POST_WRITING]() {
-    return this.delegateTasksToBlueprint(() => this.postWriting);
-  }
-
   /**
    * Check if a supported Java is installed
    *
@@ -223,7 +212,7 @@ export default class JavaGenerator extends JavaSimpleApplicationGenerator {
    * @example
    * // disable checks
    * checkJava() {}
-   * @examples
+   * @example
    * // enforce java lts versions
    * checkJava() {
    *   super.checkJava(['8', '11', '17'], { throwOnError: true });

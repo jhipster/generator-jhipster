@@ -98,35 +98,34 @@ export const ConfigurationPage = () => {
               }
         </tbody>
       </Table>
-      {env.propertySources
-        && env.propertySources.map((envKey, envIndex) => (
-            <div key={envIndex}>
-              <h4>
-                <span>{envKey.name}</span>
-              </h4>
-              <Table className="table table-sm table-striped table-bordered table-responsive d-table">
-                <thead>
-                  <tr key={envIndex}>
-                    <th className="w-40">Property</th>
-                    <th className="w-60">Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Object.keys(envKey.properties)
-                    .filter(envFilterFn)
-                    .map((propKey, propIndex) => (
-                      <tr key={propIndex}>
-                        <td className="break">{propKey}</td>
-                        <td className="break">
-                          <span className="float-end badge bg-secondary break">{envKey.properties[propKey].value}</span>
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </Table>
-            </div>
-          ))
-        }
+      {env.propertySources?.map((envKey, envIndex) => (
+          <div key={envIndex}>
+            <h4>
+              <span>{envKey.name}</span>
+            </h4>
+            <Table className="table table-sm table-striped table-bordered table-responsive d-table">
+              <thead>
+                <tr key={envIndex}>
+                  <th className="w-40">Property</th>
+                  <th className="w-60">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.keys(envKey.properties)
+                  .filter(envFilterFn)
+                  .map((propKey, propIndex) => (
+                    <tr key={propIndex}>
+                      <td className="break">{propKey}</td>
+                      <td className="break">
+                        <span className="float-end badge bg-secondary break">{envKey.properties[propKey].value}</span>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </Table>
+          </div>
+        ))
+      }
     </div>
   );
 };

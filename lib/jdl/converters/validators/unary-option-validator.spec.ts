@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import JDLUnaryOption from '../../core/models/jdl-unary-option.ts';
 
@@ -36,19 +34,19 @@ describe('jdl - UnaryOptionValidator', () => {
     describe('when not passing anything', () => {
       it('should fail', () => {
         // @ts-expect-error invalid api test
-        expect(() => validator.validate()).to.throw(/^No unary option\.$/);
+        expect(() => validator.validate()).toThrow(/^No unary option\.$/);
       });
     });
     describe('when passing an unary option', () => {
       describe('with all its required attributes', () => {
         it('should not fail', () => {
-          expect(() => validator.validate(new JDLUnaryOption({ name: 'skipClient' }))).not.to.throw();
+          expect(() => validator.validate(new JDLUnaryOption({ name: 'skipClient' }))).not.toThrow();
         });
       });
       describe('without any of its required attributes', () => {
         it('should fail', () => {
           // @ts-expect-error invalid api test
-          expect(() => validator.validate({})).to.throw(
+          expect(() => validator.validate({})).toThrow(
             /^The unary option attributes name, entityNames, excludedNames, getType were not found\.$/,
           );
         });

@@ -27,8 +27,9 @@ export const files = asWriteFilesSection({
         'eslint.config.ts.jhi.react',
         'package.json',
         'tsconfig.json',
-        'tsconfig.test.json',
-        'jest.conf.js',
+        'tsconfig.vitest.json',
+        'vite.config.ts',
+        'vitest.config.ts',
         'webpack/package.json',
         'webpack/environment.js',
         'webpack/webpack.common.js',
@@ -61,6 +62,7 @@ export const files = asWriteFilesSection({
         'config/notification-middleware.ts',
         'config/store.ts',
         'config/icon-loader.ts',
+        'config/loading-bar-middleware.ts',
       ],
     },
     {
@@ -112,6 +114,7 @@ export const files = asWriteFilesSection({
         'shared/reducers/reducer.utils.ts',
         'shared/reducers/authentication.ts',
         'shared/reducers/application-profile.ts',
+        'shared/reducers/loading-bar.ts',
       ],
     },
     {

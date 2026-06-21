@@ -28,9 +28,8 @@ import {
   generateEntityClientFields as getHydratedEntityClientFields,
   generateEntityClientImports as formatEntityClientImports,
 } from '../client/support/index.ts';
-import type { Entity as ClientEntity, Field as ClientField } from '../client/types.ts';
+import type { Entity as ClientEntity, Features, Field as ClientField, Options } from '../client/types.ts';
 import { JAVA_WEBAPP_SOURCES_DIR } from '../index.ts';
-import { writeEslintClientRootConfigFile } from '../javascript-simple-application/generators/eslint/support/tasks.ts';
 import type { Config as SpringBootConfig } from '../spring-boot/types.d.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
@@ -45,6 +44,10 @@ const { REACT } = clientFrameworkTypes;
 export default class ReactGenerator extends ClientApplicationGenerator<
   ClientEntity<ClientField & { fieldValidateRulesPatternReact?: string }> & { entityReactState?: string }
 > {
+  constructor(args?: string[], options?: Options, features?: Features) {
+    super(args, options, { ...features, loadCommand: ['jhipster:server'] });
+  }
+
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -61,6 +64,7 @@ export default class ReactGenerator extends ClientApplicationGenerator<
   get composing() {
     return this.asComposingTaskGroup({
       async composing() {
+        await this.composeWithJHipster('jhipster:javascript-simple-application:eslint');
         await this.composeWithJHipster('jhipster:client:common');
         if ((this.jhipsterConfigWithDefaults as SpringBootConfig).websocket === 'spring-websocket') {
           await this.composeWithJHipster('jhipster:client:encode-csrf-token');
@@ -99,7 +103,7 @@ export default class ReactGenerator extends ClientApplicationGenerator<
       async javaNodeBuildPaths({ application }) {
         const { clientBundlerWebpack, javaNodeBuildPaths } = application;
 
-        javaNodeBuildPaths?.push('.postcss.config.js', 'tsconfig.json');
+        javaNodeBuildPaths?.push('.postcss.config.js', 'tsconfig.json', 'vite.config.ts', 'vitest.config.ts');
         if (clientBundlerWebpack) {
           javaNodeBuildPaths?.push('webpack/');
         }
@@ -119,8 +123,9 @@ export default class ReactGenerator extends ClientApplicationGenerator<
         };
 
         source.addClientStyle = ({ style, comment }) => {
-          comment = comment
-            ? `/* ==========================================================================
+          comment =
+            comment ?
+              `/* ==========================================================================
 ${comment}
 ========================================================================== */
 `
@@ -147,7 +152,7 @@ ${comment}
               entityFileName,
               entityPage,
               entityUrl,
-              entityTranslationKeyMenu,
+              entityTranslationKeyMenuPath,
               entityNameHumanized,
             } = entity;
 
@@ -156,7 +161,7 @@ ${comment}
               createNeedleCallback({
                 needle: 'add-entity-to-menu',
                 contentToAdd: `<MenuItem icon="asterisk" to="/${entityPage}">
-  ${application.enableTranslation ? `<Translate contentKey="global.menu.entities.${entityTranslationKeyMenu}" />` : `${entityNameHumanized}`}
+  ${application.enableTranslation ? `<Translate contentKey="${entityTranslationKeyMenuPath}" />` : entityNameHumanized}
 </MenuItem>`,
               }),
             );
@@ -195,9 +200,8 @@ ${comment}
   get preparingEachEntity() {
     return this.asPreparingEachEntityTaskGroup({
       react({ application, entity }) {
-        entity.entityReactState = application.applicationTypeMonolith
-          ? entity.entityInstance
-          : `${application.lowercaseBaseName}.${entity.entityInstance}`;
+        entity.entityReactState =
+          application.applicationTypeMonolith ? entity.entityInstance : `${application.lowercaseBaseName}.${entity.entityInstance}`;
       },
     });
   }
@@ -252,7 +256,6 @@ ${comment}
         });
       },
       cleanupOldFilesTask,
-      writeEslintClientRootConfigFile,
       writeFiles,
     });
   }
@@ -274,29 +277,6 @@ ${comment}
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
-      clientBundler({ application, source }) {
-        const { nodeDependencies } = application;
-        source.mergeClientPackageJson!({
-          overrides: {
-            'browser-sync': nodeDependencies['browser-sync'],
-            'react-redux-loading-bar': {
-              react: '$react',
-              'react-dom': '$react-dom',
-            },
-          },
-        });
-        if (application.clientRootDir) {
-          this.packageJson.merge({
-            overrides: {
-              'browser-sync': application.nodeDependencies['browser-sync'],
-              'react-redux-loading-bar': {
-                react: '$react',
-                'react-dom': '$react-dom',
-              },
-            },
-          });
-        }
-      },
       addMicrofrontendDependencies({ application, source }) {
         if (!application.microfrontend) return;
         const { applicationTypeGateway } = application;
@@ -325,8 +305,8 @@ ${comment}
         const { clientI18nDir, clientDistDir, clientSrcDir, temporaryDir } = application;
         source.addSonarProperties?.([
           { key: 'sonar.test.inclusions', value: `${clientSrcDir}app/**/*.spec.ts, ${clientSrcDir}app/**/*.spec.tsx`, valueSep: ', ' },
-          { key: 'sonar.testExecutionReportPaths', value: `${temporaryDir}test-results/jest/TESTS-results-sonar.xml` },
-          { key: 'sonar.javascript.lcov.reportPaths', value: `${temporaryDir}test-results/lcov.info` },
+          { key: 'sonar.testExecutionReportPaths', value: `${temporaryDir}test-results/jest/TESTS-results-vitest.xml` },
+          { key: 'sonar.javascript.lcov.reportPaths', value: `${temporaryDir}test-results/lcov-report/lcov.info` },
           {
             key: 'sonar.exclusions',
             value: `${clientSrcDir}content/**/*.*, ${clientI18nDir}*.ts, ${clientDistDir}**/*.*`,

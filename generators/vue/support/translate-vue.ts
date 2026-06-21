@@ -126,9 +126,9 @@ export function replaceTranslations({
   getWebappTranslation: GetWebappTranslationCallback;
 }) {
   const regex =
-    type === 'ts'
-      ? /(?:this.)?(t\$|i18n.t)\((?<key>[^),]*)(?:,\s*{(?<data>[^)]*)})?\)\.toString\(\)/g
-      : /t\$\((?<key>[^),]*)(?:,\s*{(?<data>[^)]*)})?\)/g;
+    type === 'ts' ?
+      /(?:this.)?(t\$|i18n.t)\((?<key>[^),]*)(?:,\s*{(?<data>[^)]*)})?\)\.toString\(\)/g
+    : /t\$\((?<key>[^),]*)(?:,\s*{(?<data>[^)]*)})?\)/g;
   return content.replaceAll(regex, (_complete, ...args) => {
     const groups: Record<string, string> = args.pop();
     const key = groups.key.slice(1, -1).replaceAll(String.raw`\'`, "'");
@@ -147,7 +147,7 @@ export function replaceTranslations({
         value = value.trim();
         if (/^\d+$/.test(value)) {
           // convert integer
-          value = parseInt(value, 10);
+          value = Number.parseInt(value, 10);
         } else if (/^'.*'$/.test(value) || /^".*"$/.test(value)) {
           // extract string value
           value = value.substring(1, value.length - 1);

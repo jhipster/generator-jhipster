@@ -108,13 +108,13 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
       templates: ['central-server-config/README.md'],
     },
     {
-      condition: ctx => ctx.dockerServices!.includes('consul'),
+      condition: ctx => ctx.dockerServices.includes('consul'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['consul.yml', 'config/git2consul.json', 'central-server-config/_consul_/application.yml'],
     },
     {
-      condition: ctx => ctx.dockerServices!.includes('eureka'),
+      condition: ctx => ctx.dockerServices.includes('eureka'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: [
@@ -127,7 +127,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
   applicationFiles: [
     {
       path: TEMPLATES_DOCKER_DIR,
-      condition: ctx => ctx.dockerServices!.includes('app') || ctx.backendTypeSpringBoot,
+      condition: ctx => ctx.dockerServices.includes('app') || ctx.backendTypeSpringBoot,
       renameTo,
       templates: ['app.yml'],
     },
@@ -167,7 +167,7 @@ export const dockerFiles = asWriteFilesSection<DockerApplication>({
       templates: ['pulsar.yml'],
     },
     {
-      condition: generator => !!generator.dockerServices.includes('swagger-editor'),
+      condition: generator => generator.dockerServices.includes('swagger-editor'),
       path: TEMPLATES_DOCKER_DIR,
       renameTo,
       templates: ['swagger-editor.yml'],

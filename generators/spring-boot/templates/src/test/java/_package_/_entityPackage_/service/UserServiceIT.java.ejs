@@ -16,29 +16,29 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.service;
+package <%- packageName %>.service;
 
-import <%= packageName %>.IntegrationTest;
-import <%= packageName %>.config.Constants;
+import <%- packageName %>.IntegrationTest;
+import <%- packageName %>.config.Constants;
 <%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
-import <%= packageName %>.domain.PersistentToken;
+import <%- packageName %>.domain.PersistentToken;
 <%_ } _%>
 <%_ if (!databaseTypeNo) { _%>
-import <%= user.entityAbsoluteClass %>;
+import <%- user.entityAbsoluteClass %>;
 <%_ } _%>
 <%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
-import <%= packageName %>.repository.PersistentTokenRepository;
+import <%- packageName %>.repository.PersistentTokenRepository;
 <%_ } _%>
 <%_ if (searchEngineElasticsearch) { _%>
-import <%= packageName %>.repository.search.UserSearchRepository;
+import <%- packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
 <%_ if (!databaseTypeNo) { _%>
-import <%= packageName %>.repository.UserRepository;
+import <%- packageName %>.repository.UserRepository;
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
-import <%= packageName %>.security.AuthoritiesConstants;
+import <%- packageName %>.security.AuthoritiesConstants;
 <%_ } _%>
-import <%= packageName %>.service.dto.<%= user.adminUserDto %>;
+import <%- packageName %>.service.dto.<%- user.adminUserDto %>;
 <%_ if (!authenticationTypeOauth2 && (databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase)) { _%>
 
 import tech.jhipster.security.RandomUtil;
@@ -96,12 +96,9 @@ import java.time.ZoneOffset;
 <%_ if (databaseTypeSql && !authenticationTypeOauth2) { _%>
 import java.time.LocalDateTime;
 <%_ } _%>
-<%_ if (!authenticationTypeOauth2 || reactive) { _%>
 import java.util.List;
-<%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 <%_ } _%>
@@ -113,7 +110,7 @@ import java.util.UUID;
 <%_ } _%>
 
 <%_ if (databaseTypeCouchbase) { _%>
-import static <%= packageName %>.web.rest.TestUtil.mockAuthentication;
+import static <%- packageName %>.web.rest.TestUtil.mockAuthentication;
 <%_ } _%>
 import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (searchEngineElasticsearch) { _%>
@@ -177,9 +174,9 @@ class UserServiceIT {
 <%_ if (searchEngineElasticsearch) { _%>
 
     /**
-     * This repository is mocked in the <%= packageName %>.repository.search test package.
+     * This repository is mocked in the <%- packageName %>.repository.search test package.
      *
-     * @see <%= packageName %>.repository.search.UserSearchRepositoryMockConfiguration
+     * @see <%- packageName %>.repository.search.UserSearchRepositoryMockConfiguration
      */
     @MockitoSpyBean
     private UserSearchRepository spiedUserSearchRepository;
@@ -192,10 +189,10 @@ class UserServiceIT {
     @MockitoBean
     private DateTimeProvider dateTimeProvider;
 <%_ } _%>
-    <%_ if (!databaseTypeNo) { _%>
+<%_ if (!databaseTypeNo) { _%>
 
-    private <%= user.persistClass %> user;
-    <%_ } _%>
+    private <%- user.persistClass %> user;
+<%_ } _%>
 
 <%_ if (authenticationTypeOauth2) { _%>
     private Map<String, Object> userDetails;
@@ -204,19 +201,17 @@ class UserServiceIT {
 <%_ if (!databaseTypeCassandra && !requiresDeleteAllUsers) { _%>
     private Long numberOfUsers;
 
-    @BeforeEach
-    void countUsers() {
-        numberOfUsers = userRepository.count()<%- reactorBlock %>;
-    }
-
 <%_ } _%>
     @BeforeEach
     void init() {
 <%_ if (databaseTypeCouchbase) { _%>
         mockAuthentication();
 <%_ } _%>
+<%_ if (!databaseTypeCassandra && !requiresDeleteAllUsers) { _%>
+        numberOfUsers = userRepository.count()<%- reactorBlock %>;
+<%_ } _%>
 <%_ if (!databaseTypeNo) { _%>
-        user = new <%= user.persistClass %>();
+        user = new <%- user.persistClass %>();
   <%_ if (databaseTypeCassandra) { _%>
         user.setId(UUID.randomUUID().toString());
   <%_ } _%>
@@ -266,9 +261,9 @@ class UserServiceIT {
         persistentTokenRepository.deleteAll();
 <%_ } _%>
 <%_ if (requiresDeleteAllUsers) { _%>
-    <%_ if (databaseTypeSql && reactive) { _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
         userRepository.deleteAllUserAuthorities()<%- reactorBlock %>;
-    <%_ } _%>
+  <%_ } _%>
         userRepository.deleteAll()<%- reactorBlock %>;
 <%_ } else { _%>
         userService.deleteUser(DEFAULT_LOGIN)<%- reactorBlock %>;
@@ -285,7 +280,7 @@ class UserServiceIT {
     @Transactional
   <%_ } _%>
     void testRemoveOldPersistentTokens() {
-        userRepository.save<% if (databaseTypeSql) { %>AndFlush<% } %>(user);
+        userRepository.save<%- databaseTypeSql ? 'AndFlush' : '' %>(user);
         int existingCount = persistentTokenRepository.findByUser(user).size();
         LocalDate today = LocalDate.now();
         generateUserToken(user, "1111-1111", today);
@@ -302,11 +297,11 @@ class UserServiceIT {
     @Transactional
   <%_ } _%>
     void assertThatUserMustExistToResetPassword() {
-        userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
-        Optional<<%= user.persistClass %>> maybeUser = userService.requestPasswordReset("invalid.login@localhost")<% if (reactive) { %>.blockOptional()<% } %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
+        Optional<<%- user.persistClass %>> maybeUser = userService.requestPasswordReset("invalid.login@localhost")<%- reactive ? '.blockOptional()' : '' %>;
         assertThat(maybeUser).isNotPresent();
 
-        maybeUser = userService.requestPasswordReset(user.getEmail())<% if (reactive) { %>.blockOptional()<% } %>;
+        maybeUser = userService.requestPasswordReset(user.getEmail())<%- reactive ? '.blockOptional()' : '' %>;
         assertThat(maybeUser).isPresent();
         assertThat(maybeUser.orElse(null).getEmail()).isEqualTo(user.getEmail());
         assertThat(maybeUser.orElse(null).getResetDate()).isNotNull();
@@ -319,11 +314,11 @@ class UserServiceIT {
   <%_ } _%>
     void assertThatOnlyActivatedUserCanRequestPasswordReset() {
         user.setActivated(false);
-        userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
 
-        Optional<<%= user.persistClass %>> maybeUser = userService.requestPasswordReset(user.getLogin())<% if (reactive) { %>.blockOptional()<% } %>;
+        Optional<<%- user.persistClass %>> maybeUser = userService.requestPasswordReset(user.getLogin())<%- reactive ? '.blockOptional()' : '' %>;
         assertThat(maybeUser).isNotPresent();
-        userRepository.delete(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.delete(user)<%- reactive ? '.block()' : '' %>;
     }
 
     @Test
@@ -336,11 +331,11 @@ class UserServiceIT {
         user.setActivated(true);
         user.setResetDate(daysAgo);
         user.setResetKey(resetKey);
-        userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
 
-        Optional<<%= user.persistClass %>> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey())<% if (reactive) { %>.blockOptional()<% } %>;
+        Optional<<%- user.persistClass %>> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey())<%- reactive ? '.blockOptional()' : '' %>;
         assertThat(maybeUser).isNotPresent();
-        userRepository.delete(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.delete(user)<%- reactive ? '.block()' : '' %>;
     }
 
     @Test
@@ -352,11 +347,11 @@ class UserServiceIT {
         user.setActivated(true);
         user.setResetDate(daysAgo);
         user.setResetKey("1234");
-        userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
 
-        Optional<<%= user.persistClass %>> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey())<% if (reactive) { %>.blockOptional()<% } %>;
+        Optional<<%- user.persistClass %>> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey())<%- reactive ? '.blockOptional()' : '' %>;
         assertThat(maybeUser).isNotPresent();
-        userRepository.delete(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.delete(user)<%- reactive ? '.block()' : '' %>;
     }
 
     @Test
@@ -370,15 +365,15 @@ class UserServiceIT {
         user.setActivated(true);
         user.setResetDate(daysAgo);
         user.setResetKey(resetKey);
-        userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
 
-        Optional<<%= user.persistClass %>> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey())<% if (reactive) { %>.blockOptional()<% } %>;
+        Optional<<%- user.persistClass %>> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey())<%- reactive ? '.blockOptional()' : '' %>;
         assertThat(maybeUser).isPresent();
         assertThat(maybeUser.orElse(null).getResetDate()).isNull();
         assertThat(maybeUser.orElse(null).getResetKey()).isNull();
         assertThat(maybeUser.orElse(null).getPassword()).isNotEqualTo(oldPassword);
 
-        userRepository.delete(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.delete(user)<%- reactive ? '.block()' : '' %>;
     }
 
     @Test
@@ -392,15 +387,15 @@ class UserServiceIT {
   <%_ } _%>
         user.setActivated(false);
         user.setActivationKey(RandomStringUtils.insecure().next(20));
-        <%= user.persistClass %> dbUser = userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        <%- user.persistClass %> dbUser = userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
         dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
-        userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
   <%_ if (databaseTypeSql && reactive) { _%>
         LocalDateTime threeDaysAgo = LocalDateTime.ofInstant(now.minus(3, ChronoUnit.DAYS), ZoneOffset.UTC);
   <%_ } else { _%>
         Instant threeDaysAgo = now.minus(3, ChronoUnit.DAYS);
   <%_ } _%>
-        List<<%= user.persistClass %>> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo)<% if (reactive) { %>
+        List<<%- user.persistClass %>> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo)<% if (reactive) { %>
             .collectList().block()<% } %>;
         assertThat(users).isNotEmpty();
         userService.removeNotActivatedUsers();
@@ -410,7 +405,7 @@ class UserServiceIT {
   <%_ if (searchEngineElasticsearch) { _%>
 
         // Verify Elasticsearch mock
-        verify(spiedUserSearchRepository, times(1)).delete<% if (!reactive) { %>FromIndex<% } %>(user);
+        verify(spiedUserSearchRepository, times(1)).delete<%- reactive ? '' : 'FromIndex' %>(user);
   <%_ } _%>
     }
 
@@ -421,33 +416,33 @@ class UserServiceIT {
     void assertThatNotActivatedUsersWithNullActivationKeyCreatedBefore3DaysAreNotDeleted() {
         Instant now = Instant.now();
   <%_ if (databaseTypeSql && !reactive) { _%>
-        when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)<% if (databaseTypeSql && reactive) { %>.atOffset(ZoneOffset.UTC)<% } %>));
+        when(dateTimeProvider.getNow()).thenReturn(Optional.of(now.minus(4, ChronoUnit.DAYS)<%- databaseTypeSql && reactive ? '.atOffset(ZoneOffset.UTC)' : '' %>));
   <%_ } _%>
         user.setActivated(false);
-        <%= user.persistClass %> dbUser = userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        <%- user.persistClass %> dbUser = userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
         dbUser.setCreatedDate(now.minus(4, ChronoUnit.DAYS));
-        userRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(user)<% if (reactive) { %>.block()<% } %>;
+        userRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(user)<%- reactive ? '.block()' : '' %>;
   <%_ if (databaseTypeSql && reactive) { _%>
         LocalDateTime threeDaysAgo = LocalDateTime.ofInstant(now.minus(3, ChronoUnit.DAYS), ZoneOffset.UTC);
   <%_ } else { _%>
         Instant threeDaysAgo = now.minus(3, ChronoUnit.DAYS);
   <%_ } _%>
-        List<<%= user.persistClass %>> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo)<% if (reactive) { %>
+        List<<%- user.persistClass %>> users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(threeDaysAgo)<% if (reactive) { %>
             .collectList().block()<% } %>;
         assertThat(users).isEmpty();
         userService.removeNotActivatedUsers();
-        Optional<<%= user.persistClass %>> maybeDbUser = userRepository.findById(dbUser.getId())<% if (reactive) { %>.blockOptional()<% } %>;
+        Optional<<%- user.persistClass %>> maybeDbUser = userRepository.findById(dbUser.getId())<%- reactive ? '.blockOptional()' : '' %>;
         assertThat(maybeDbUser).contains(dbUser);
   <%_ if (searchEngineElasticsearch) { _%>
 
         // Verify Elasticsearch mock
-        verify(spiedUserSearchRepository, never()).delete<% if (!reactive) { %>FromIndex<% } %>(user);
+        verify(spiedUserSearchRepository, never()).delete<%- reactive ? '' : 'FromIndex' %>(user);
   <%_ } _%>
     }
 <%_ } _%>
 <%_ if ((databaseTypeSql || databaseTypeMongodb || databaseTypeNeo4j || databaseTypeCouchbase) && authenticationTypeSession && !reactive) { _%>
 
-    private void generateUserToken(<%= user.persistClass %> user, String tokenSeries, LocalDate localDate) {
+    private void generateUserToken(<%- user.persistClass %> user, String tokenSeries, LocalDate localDate) {
         PersistentToken token = new PersistentToken();
         token.setSeries(tokenSeries);<% if (databaseTypeCouchbase) { %>
         token.setLogin(user.getLogin());<% } else { %>
@@ -456,7 +451,7 @@ class UserServiceIT {
         token.setTokenDate(localDate);
         token.setIpAddress("127.0.0.1");
         token.setUserAgent("Test agent");
-        persistentTokenRepository.save<% if (databaseTypeSql && !reactive) { %>AndFlush<% } %>(token);
+        persistentTokenRepository.save<%- databaseTypeSql && !reactive ? 'AndFlush' : '' %>(token);
     }
 <%_ } _%>
 
@@ -467,7 +462,7 @@ class UserServiceIT {
   <%_ } _%>
     void testDefaultUserDetails() {
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
-        <%= user.adminUserDto %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
+        <%- user.adminUserDto %> userDTO = userService.getUserFromAuthentication(authentication)<%- reactive ? '.block()' : '' %>;
 
         assertThat(userDTO.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(userDTO.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
@@ -487,7 +482,7 @@ class UserServiceIT {
         userDetails.put("preferred_username", "TEST");
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
-        <%= user.adminUserDto %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
+        <%- user.adminUserDto %> userDTO = userService.getUserFromAuthentication(authentication)<%- reactive ? '.block()' : '' %>;
 
         assertThat(userDTO.getLogin()).isEqualTo("test");
     }
@@ -501,7 +496,7 @@ class UserServiceIT {
         userDetails.put("locale", "en-US");
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
-        <%= user.adminUserDto %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
+        <%- user.adminUserDto %> userDTO = userService.getUserFromAuthentication(authentication)<%- reactive ? '.block()' : '' %>;
 
         assertThat(userDTO.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
     }
@@ -514,7 +509,7 @@ class UserServiceIT {
         userDetails.put("locale", "it-IT");
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
-        <%= user.adminUserDto %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
+        <%- user.adminUserDto %> userDTO = userService.getUserFromAuthentication(authentication)<%- reactive ? '.block()' : '' %>;
 
         assertThat(userDTO.getLangKey()).isEqualTo("it");
     }
@@ -527,7 +522,7 @@ class UserServiceIT {
         userDetails.put("locale", "en_US");
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
-        <%= user.adminUserDto %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
+        <%- user.adminUserDto %> userDTO = userService.getUserFromAuthentication(authentication)<%- reactive ? '.block()' : '' %>;
 
         assertThat(userDTO.getLangKey()).isEqualTo("en");
     }
@@ -540,13 +535,13 @@ class UserServiceIT {
         userDetails.put("locale", "en-US");
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
-        <%= user.adminUserDto %> userDTO = userService.getUserFromAuthentication(authentication)<% if (reactive) { %>.block()<% } %>;
+        <%- user.adminUserDto %> userDTO = userService.getUserFromAuthentication(authentication)<%- reactive ? '.block()' : '' %>;
 
         assertThat(userDTO.getLangKey()).isEqualTo("en");
     }
 
     private OAuth2AuthenticationToken createMockOAuth2AuthenticationToken(Map<String, Object> userDetails) {
-        Collection<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
+        Collection<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
             "anonymous",
             "anonymous",

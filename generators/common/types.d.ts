@@ -1,4 +1,4 @@
-import type { HandleCommandTypes } from '../../lib/command/types.ts';
+import type { CommandTypeMap } from '../../lib/command/types.ts';
 import type appCommand from '../app/command.ts';
 import type {
   Config as BaseApplicationConfig,
@@ -22,10 +22,10 @@ import type { Entity } from './entity.ts';
 export * from './entity.ts';
 export type { BaseApplicationFeatures as Features };
 
-type Command = HandleCommandTypes<typeof command>;
-type AppCommand = HandleCommandTypes<typeof appCommand>;
-type HuskyCommand = HandleCommandTypes<typeof huskyCommand>;
-type PrettierCommand = HandleCommandTypes<typeof prettierCommand>;
+type Command = CommandTypeMap<typeof command>;
+type AppCommand = CommandTypeMap<typeof appCommand>;
+type HuskyCommand = CommandTypeMap<typeof huskyCommand>;
+type PrettierCommand = CommandTypeMap<typeof prettierCommand>;
 
 export type Config = BaseApplicationConfig &
   Command['Config'] &

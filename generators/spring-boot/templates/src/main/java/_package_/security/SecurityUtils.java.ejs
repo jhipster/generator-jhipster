@@ -16,10 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.security;
+package <%- packageName %>.security;
 <%_ if (generateAuthenticationApi && (authenticationTypeOauth2 || authenticationTypeJwt)) { _%>
 
-import <%= packageName %>.config.Constants;
+import <%- packageName %>.config.Constants;
 <%_ } _%>
 
 import org.springframework.security.core.Authentication;
@@ -40,7 +40,6 @@ import org.springframework.security.oauth2.core.ClaimAccessor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
   <%_ if (reactive) { _%>
@@ -49,7 +48,7 @@ import reactor.core.publisher.Mono;
 import java.util.stream.Stream;
   <%_ } _%>
 <%_ } else { _%>
-import java.util.Arrays;
+import java.util.List;
   <%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
   <%_ } else { _%>
@@ -94,7 +93,7 @@ public final class SecurityUtils {
      *
      * @return the login of the current user.
      */
-    public static <% if (reactive) { %>Mono<% } else { %>Optional<% } %><String> getCurrentUserLogin() {
+    public static <%- reactive ? 'Mono' : 'Optional' %><String> getCurrentUserLogin() {
 <%_ if (reactive) { _%>
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
@@ -115,10 +114,10 @@ public final class SecurityUtils {
             return jwt.getSubject();
 <%_ } _%>
 <%_ if (authenticationTypeOauth2) { _%>
-        } else if (authentication instanceof JwtAuthenticationToken) {
-            return (String) ((JwtAuthenticationToken) authentication).getToken().getClaims().get("preferred_username");
-        } else if (authentication.getPrincipal() instanceof DefaultOidcUser) {
-            Map<String, Object> attributes = ((DefaultOidcUser) authentication.getPrincipal()).getAttributes();
+        } else if (authentication instanceof JwtAuthenticationToken jwtToken) {
+            return (String) jwtToken.getToken().getClaims().get("preferred_username");
+        } else if (authentication.getPrincipal() instanceof DefaultOidcUser oidcUser) {
+            Map<String, Object> attributes = oidcUser.getAttributes();
             if (attributes.containsKey("preferred_username")) {
                 return (String) attributes.get("preferred_username");
             }
@@ -136,16 +135,25 @@ public final class SecurityUtils {
      *
      * @return the JWT of the current user.
      */
-    public static <% if (reactive) { %>Mono<% } else { %>Optional<% } %><String> getCurrentUserJWT() {
+    public static <%- reactive ? 'Mono' : 'Optional' %><String> getCurrentUserJWT() {
   <%_ if (reactive) { _%>
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
+            .flatMap(authentication -> Mono.justOrEmpty(extractCredentials(authentication)));
   <%_ } else { _%>
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
+            .map(SecurityUtils::extractCredentials);
   <%_ } _%>
-            .filter(authentication -> authentication.getCredentials() instanceof String)
-            .map(authentication -> (String) authentication.getCredentials());
+    }
+
+    private static String extractCredentials(Authentication authentication) {
+        if (authentication.getCredentials() instanceof String token) {
+            return token;
+        } else if (authentication.getCredentials() instanceof Jwt jwt) {
+            return jwt.getTokenValue();
+        }
+        return null;
     }
   <%_ if (user) { _%>
 
@@ -154,7 +162,7 @@ public final class SecurityUtils {
      *
      * @return the Id of the current user.
      */
-    public static <%- optionalOrMono %><<%= user.primaryKey.type %>> getCurrentUserId() {
+    public static <%- optionalOrMono %><<%- user.primaryKey.type %>> getCurrentUserId() {
     <%_ if (reactive) { _%>
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
@@ -174,7 +182,7 @@ public final class SecurityUtils {
      *
      * @return true if the user is authenticated, false otherwise.
      */
-    public static <% if (reactive) { %>Mono<Boolean><% } else { %>boolean<% } %> isAuthenticated() {
+    public static <%- reactive ? 'Mono<Boolean>' : 'boolean' %> isAuthenticated() {
 <%_ if (reactive) { _%>
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
@@ -196,7 +204,7 @@ public final class SecurityUtils {
      * @param authorities the authorities to check.
      * @return true if the current user has any of the authorities, false otherwise.
      */
-    public static <% if (reactive) { %>Mono<Boolean><% } else { %>boolean<% } %> hasCurrentUserAnyOfAuthorities(String... authorities) {
+    public static <%- reactive ? 'Mono<Boolean>' : 'boolean' %> hasCurrentUserAnyOfAuthorities(String... authorities) {
 <%_ if (reactive) { _%>
         return ReactiveSecurityContextHolder.getContext()
             .map(SecurityContext::getAuthentication)
@@ -205,12 +213,12 @@ public final class SecurityUtils {
                 authorityList
                     .stream()
                     .map(GrantedAuthority::getAuthority)
-                    .anyMatch(authority -> Arrays.asList(authorities).contains(authority))
+                    .anyMatch(authority -> List.of(authorities).contains(authority))
             );
 <%_ } else { _%>
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return (
-            authentication != null && getAuthorities(authentication).anyMatch(authority -> Arrays.asList(authorities).contains(authority))
+            authentication != null && getAuthorities(authentication).anyMatch(authority -> List.of(authorities).contains(authority))
         );
 <%_ } _%>
     }
@@ -221,7 +229,7 @@ public final class SecurityUtils {
      * @param authorities the authorities to check.
      * @return true if the current user has none of the authorities, false otherwise.
      */
-    public static <% if (reactive) { %>Mono<Boolean><% } else { %>boolean<% } %> hasCurrentUserNoneOfAuthorities(String... authorities) {
+    public static <%- reactive ? 'Mono<Boolean>' : 'boolean' %> hasCurrentUserNoneOfAuthorities(String... authorities) {
 <%_ if (reactive) { _%>
         return hasCurrentUserAnyOfAuthorities(authorities).map(result -> !result);
 <%_ } else { _%>
@@ -235,15 +243,15 @@ public final class SecurityUtils {
      * @param authority the authority to check.
      * @return true if the current user has the authority, false otherwise.
      */
-    public static <% if (reactive) { %>Mono<Boolean><% } else { %>boolean<% } %> hasCurrentUserThisAuthority(String authority) {
+    public static <%- reactive ? 'Mono<Boolean>' : 'boolean' %> hasCurrentUserThisAuthority(String authority) {
         return hasCurrentUserAnyOfAuthorities(authority);
     }
 
 <%_ if (!reactive) { _%>
     private static Stream<String> getAuthorities(Authentication authentication) {
   <%_ if (authenticationTypeOauth2) { _%>
-        Collection<? extends GrantedAuthority> authorities = authentication instanceof JwtAuthenticationToken ?
-            extractAuthorityFromClaims(((JwtAuthenticationToken) authentication).getToken().getClaims())
+        Collection<? extends GrantedAuthority> authorities = authentication instanceof JwtAuthenticationToken jwtToken
+            ? extractAuthorityFromClaims(jwtToken.getToken().getClaims())
             : authentication.getAuthorities();
         return authorities.stream()
   <%_ } else { _%>
@@ -270,7 +278,7 @@ public final class SecurityUtils {
         return roles.stream().filter(role -> role.startsWith("ROLE_")).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
 <%_ } _%>
-<%_ if (generateAuthenticationApi && ((authenticationTypeOauth2 && !syncUserWithIdp) || (authenticationTypeJwt && skipUserManagement))) { _%>
+<%_ if (generateAuthenticationApi && (authenticationTypeOauth2 && !syncUserWithIdp || authenticationTypeJwt && skipUserManagement)) { _%>
 
     public static Map<String, Object> extractDetailsFromTokenAttributes(Map<String, Object> attributes) {
         Map<String, Object> details = new HashMap<>();

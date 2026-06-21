@@ -41,11 +41,11 @@ sharedDependencies = {
 // eslint-disable-next-line no-unused-vars
 module.exports = (config, options, targetOptions) => {
   return withModuleFederationPlugin({
-    name: '<%= lowercaseBaseName %>',
+    name: '<%- lowercaseBaseName %>',
 <%_ if (applicationTypeMicroservice) { _%>
     exposes: {
   <%_ if (enableTranslation) { _%>
-      './translation-module': 'app/shared/language/translation.module.ts',
+      './translation-provider': 'app/shared/language/translation.provider.ts',
   <%_ } _%>
       './entity-navbar-items': 'app/entities/entity-navbar-items.ts',
       './entity-routes': 'app/entities/entity.routes.ts',

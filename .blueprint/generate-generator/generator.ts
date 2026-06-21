@@ -6,6 +6,10 @@ import BaseCoreGenerator from '../../generators/base-core/index.ts';
 export default class extends BaseCoreGenerator {
   generatorNamespace!: string;
 
+  async beforeQueue() {
+    await this.dependsOnJHipster('bootstrap');
+  }
+
   get [BaseCoreGenerator.WRITING]() {
     return this.asAnyTaskGroup({
       async writing() {

@@ -59,7 +59,7 @@ export const importJDLTransform = ({
     const importState = importer.import();
     const applicationWithEntities = Object.values(importState.exportedApplicationsWithEntities);
     if (applicationWithEntities.length !== 1) {
-      throw new Error(`JDL stores supports only jdls  with 1 application, found ${applicationWithEntities.length}`);
+      throw new Error(`JDL store supports only jdls with 1 application, found ${applicationWithEntities.length}`);
     }
 
     const { config, namespaceConfigs, entities } = applicationWithEntities[0];

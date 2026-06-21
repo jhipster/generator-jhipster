@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, input, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, computed } from '@angular/core';
 <%_ if (enableTranslation) { _%>
 import TranslateDirective from '../language/translate.directive';
 <%_ } _%>
@@ -25,10 +25,11 @@ import TranslateDirective from '../language/translate.directive';
  * A component that will take care of item count statistics of a pagination.
  */
 @Component({
-  selector: '<%= jhiPrefixDashed %>-item-count',
+  selector: '<%- jhiPrefixDashed %>-item-count',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
 <%_ if (enableTranslation) { _%>
-    <div <%= jhiPrefix %>Translate="global.item-count" [translateValues]="{ first: first(), second: second(), total: total() }"></div>
+    <div <%- jhiPrefix %>Translate="global.item-count" [translateValues]="{ first: first(), second: second(), total: total() }"></div>
 <%_ } else { _%>
     <div>__jhiTransformTranslate__('global.item-count', { "first": "{{ first() }}", "second": "{{ second() }}", "total": "{{ total() }}" })</div>
 <%_ } _%>

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.client;
+package <%- packageName %>.client;
 
 import java.net.URI;
 import java.time.Duration;
@@ -65,8 +65,7 @@ public class AuthorizationHeaderUtil {
 
     public Optional<String> getAuthorizationHeader() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication instanceof OAuth2AuthenticationToken) {
-            OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
+        if (authentication instanceof OAuth2AuthenticationToken oauthToken) {
             String name = oauthToken.getName();
             String registrationId = oauthToken.getAuthorizedClientRegistrationId();
             OAuth2AuthorizedClient client = clientService.loadAuthorizedClient(
@@ -89,14 +88,13 @@ public class AuthorizationHeaderUtil {
                         throw new OAuth2AuthorizationException(new OAuth2Error("access_denied", "The token is expired", null));
                     }
                 }
-                String authorizationHeaderValue = String.format("%s %s", tokenType, accessTokenValue);
+                String authorizationHeaderValue = "%s %s".formatted(tokenType, accessTokenValue);
                 return Optional.of(authorizationHeaderValue);
             }
 
-        } else if (authentication instanceof JwtAuthenticationToken) {
-            JwtAuthenticationToken accessToken = (JwtAuthenticationToken) authentication;
+        } else if (authentication instanceof JwtAuthenticationToken accessToken) {
             String tokenValue = accessToken.getToken().getTokenValue();
-            String authorizationHeaderValue = String.format("%s %s", OAuth2AccessToken.TokenType.BEARER.getValue(), tokenValue);
+            String authorizationHeaderValue = "%s %s".formatted(OAuth2AccessToken.TokenType.BEARER.getValue(), tokenValue);
             return Optional.of(authorizationHeaderValue);
         }
         return Optional.empty();

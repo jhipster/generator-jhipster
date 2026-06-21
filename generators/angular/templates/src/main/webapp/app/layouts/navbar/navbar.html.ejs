@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<nav data-cy="navbar" class="navbar navbar-<% if (clientThemeNone || clientThemeVariantPrimary) { %>dark<% } else { %><%= clientThemeVariant %><% } %> navbar-expand-md <% if (clientThemeNone) { %>bg-dark<% } else { %>bg-<%= clientThemeVariant %><% } %>">
+<nav data-cy="navbar" class="navbar navbar-<% if (clientThemeNone || clientThemeVariantPrimary) { %>dark<% } else { %><%- clientThemeVariant %><% } %> navbar-expand-md <% if (clientThemeNone) { %>bg-dark<% } else { %>bg-<%- clientThemeVariant %><% } %>">
   <div class="container-fluid">
   <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
     <span class="logo-img"></span>
@@ -31,7 +31,7 @@
     aria-controls="navbarResponsive"
     aria-expanded="false"
     aria-label="Toggle navigation"
-    (click)="toggleNavbar()"
+    (click)="isNavbarCollapsed.update(isNavbarCollapsed => !isNavbarCollapsed)"
   >
     <fa-icon icon="bars" />
   </a>
@@ -52,8 +52,9 @@
           display="dynamic"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
+          data-cy="entity"
         >
-          <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu" data-cy="entity">
+          <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu">
             <span>
               <fa-icon icon="th-list" />
               <span>__jhiTranslateTag__('global.menu.entities.main')</span>
@@ -63,12 +64,12 @@
             <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
 <%_ if (applicationTypeGateway && microfrontend) { _%>
   <%_ for (const remote of microfrontends) { _%>
-          @if (<%= remote.lowercaseBaseName %>EntityNavbarItems().length === 0) {
+          @if (<%- remote.moduleFederationName %>EntityNavbarItems().length === 0) {
             <li>
-              <span class="dropdown-item">Failed to load <%= remote.lowercaseBaseName %> entities</span>
+              <span class="dropdown-item">Failed to load <%- remote.moduleFederationName %> entities</span>
             </li>
           }
-          @for (entityNavbarItem of <%= remote.lowercaseBaseName %>EntityNavbarItems(); track $index) {
+          @for (entityNavbarItem of <%- remote.moduleFederationName %>EntityNavbarItems(); track $index) {
             <li>
               <a
                 class="dropdown-item"
@@ -80,7 +81,7 @@
                 <fa-icon icon="asterisk" [fixedWidth]="true" />
                 <span
     <%_ if (enableTranslation) { _%>
-               [<%= jhiPrefix %>Translate]="entityNavbarItem.translationKey"
+               [<%- jhiPrefix %>Translate]="entityNavbarItem.translationKey"
     <%_ } _%>
                 >{{entityNavbarItem.name}}</span>
               </a>
@@ -92,14 +93,15 @@
         </li>
       }
       <li
-        *<%= jhiPrefix %>HasAnyAuthority="'ROLE_ADMIN'"
+        *<%- jhiPrefix %>HasAnyAuthority="'ROLE_ADMIN'"
         ngbDropdown
         class="nav-item dropdown pointer"
         display="dynamic"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
+        data-cy="adminMenu"
       >
-        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu" data-cy="adminMenu">
+        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="admin-menu">
           <span>
             <fa-icon icon="users-cog" />
             <span>__jhiTranslateTag__('global.menu.admin.main')</span>
@@ -112,14 +114,6 @@
             <a class="dropdown-item" routerLink="/admin/gateway" routerLinkActive="active" (click)="collapseNavbar()">
               <fa-icon icon="road" [fixedWidth]="true" />
               <span>__jhiTranslateTag__('global.menu.admin.gateway')</span>
-            </a>
-          </li>
-<%_ } _%>
-<%_ if (generateUserManagement && userManagement.skipClient) { _%>
-          <li>
-            <a class="dropdown-item" routerLink="/admin/user-management" routerLinkActive="active" (click)="collapseNavbar()">
-              <fa-icon icon="users" [fixedWidth]="true" />
-              <span>__jhiTranslateTag__('global.menu.admin.userManagement')</span>
             </a>
           </li>
 <%_ } _%>
@@ -191,16 +185,16 @@
         <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="languagesnavBarDropdown">
         @for (language of languages; track $index) {
           <li>
-            <a class="dropdown-item" [<%= jhiPrefix %>ActiveMenu]="language" href="javascript:void(0);" (click)="changeLanguage(language);collapseNavbar();">{{ language | findLanguageFromKey }}</a>
+            <a class="dropdown-item" [<%- jhiPrefix %>ActiveMenu]="language" href="javascript:void(0);" (click)="changeLanguage(language);collapseNavbar();">{{ language | findLanguageFromKey }}</a>
           </li>
         }
         </ul>
       </li>
     }
 <%_ } _%>
-      <li ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      <li ngbDropdown class="nav-item dropdown pointer" display="dynamic" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" data-cy="accountMenu">
         @let accountRef = account();
-        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu" data-cy="accountMenu">
+        <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu">
         @if (!accountRef?.imageUrl) {
           <span>
             <fa-icon icon="user" />

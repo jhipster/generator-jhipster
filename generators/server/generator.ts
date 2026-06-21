@@ -97,9 +97,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
       configureGateway({ application, entityConfig }) {
         if (application.applicationTypeGateway) {
           entityConfig.databaseType ??= application.databaseType;
-          if (entityConfig.clientRootFolder === undefined) {
-            entityConfig.clientRootFolder = entityConfig.skipUiGrouping ? '' : entityConfig.microserviceName;
-          }
+          entityConfig.clientRootFolder ??= entityConfig.skipUiGrouping ? '' : entityConfig.microserviceName;
         }
       },
       configureEntitySearchEngine({ application, entityConfig }) {
@@ -160,10 +158,12 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
           entityConfig.prodDatabaseType ?? application.prodDatabaseType ?? entityConfig.databaseType ?? application.databaseType;
         const entityTableName = entityConfig.entityTableName ?? hibernateSnakeCase(entityName);
         const fixedEntityTableName =
-          (isReservedTableName(entityTableName, databaseType) || (devDatabaseTypeH2Any && isReservedH2Keyword(entityTableName))) &&
-          jhiTablePrefix
-            ? `${jhiTablePrefix}_${entityTableName}`
-            : entityTableName;
+          (
+            (isReservedTableName(entityTableName, databaseType!) || (devDatabaseTypeH2Any && isReservedH2Keyword(entityTableName))) &&
+            jhiTablePrefix
+          ) ?
+            `${jhiTablePrefix}_${entityTableName}`
+          : entityTableName;
         if (fixedEntityTableName !== entityTableName) {
           entityConfig.entityTableName = fixedEntityTableName;
         }
@@ -182,7 +182,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
 
       configureFields({ application, entityConfig, entityName }) {
         // Validate entity json field content
-        const fields = entityConfig.fields;
+        const { fields } = entityConfig;
         fields!.forEach(field => {
           // Migration from JodaTime to Java Time
           if (field.fieldType === 'DateTime' || field.fieldType === 'Date') {
@@ -213,7 +213,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
 
       configureRelationships({ entityConfig, entityName }) {
         // Validate entity json relationship content
-        const relationships = entityConfig.relationships;
+        const { relationships } = entityConfig;
         relationships!.forEach(relationship => {
           this._validateRelationship(entityName, relationship);
 
@@ -264,8 +264,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
   get postPreparingEachEntity() {
     return this.asPostPreparingEachEntityTaskGroup({
       checkForTableName({ application, entity }) {
-        const databaseType =
-          (entity as any).prodDatabaseType ?? application.prodDatabaseType ?? entity.databaseType ?? application.databaseType;
+        const databaseType = entity.prodDatabaseType ?? application.prodDatabaseType ?? entity.databaseType ?? application.databaseType;
         const validation = this._validateTableName(entity.entityTableName, databaseType, entity);
         if (validation !== true) {
           throw new Error(validation);
@@ -303,7 +302,7 @@ export default class JHipsterServerGenerator extends BaseApplicationGenerator<
    * @return {true|string} true for a valid value or error message.
    */
   _validateTableName(entityTableName: string, prodDatabaseType: string, entity: ServerEntity): true | string {
-    const jhiTablePrefix = (entity as any).jhiTablePrefix;
+    const { jhiTablePrefix } = entity as any;
     const instructions = `You can specify a different table name in your JDL file or change it in .jhipster/${entity.name}.json file and then run again 'jhipster entity ${entity.name}.'`;
 
     if (!/^(\w*)$/.test(entityTableName)) {
@@ -341,7 +340,9 @@ ${instructions}`,
 
     if (field.fieldValidateRules !== undefined) {
       if (!Array.isArray(field.fieldValidateRules)) {
-        throw new Error(`fieldValidateRules is not an array in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`);
+        throw new TypeError(
+          `fieldValidateRules is not an array in .jhipster/${entityName}.json for field ${stringifyApplicationData(field)}`,
+        );
       }
       field.fieldValidateRules.forEach(fieldValidateRule => {
         if (!SUPPORTED_VALIDATION_RULES.includes(fieldValidateRule)) {

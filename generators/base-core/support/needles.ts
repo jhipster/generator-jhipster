@@ -22,7 +22,7 @@ import { transformContents } from '@yeoman/transform';
 import { escapeRegExp, kebabCase } from 'lodash-es';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 
-import type { CascatedEditFileCallback, EditFileCallback } from '../api.ts';
+import type { CascadedEditFileCallback, EditFileCallback } from '../api.ts';
 import type CoreGenerator from '../index.ts';
 
 import { joinCallbacks } from './write-files.ts';
@@ -104,12 +104,52 @@ const isArrayOfContentToAdd = (value: unknown): value is ContentToAdd[] => {
   return Array.isArray(value) && value.every(item => typeof item === 'object' && 'content' in item);
 };
 
-export const createNeedleRegexp = (needle: string): RegExp =>
-  new RegExp(String.raw`(?://|<!--|\{?/\*|#) ${needle}(?: [^$\n]*)?(?:$|\n)`, 'g');
+const needleMarkers = `(?:${['//', '<!--', String.raw`\{?/\*`, '#'].join('|')})`;
+export const createNeedleRegexp = (needle: string, start = false): RegExp =>
+  new RegExp(String.raw`${needleMarkers} ${needle}${start ? '-start' : ''}(?: [^\r\n]*)?$`, 'gm');
 
 type NeedleLinePosition = {
+  /**
+   * Position of the needle line start.
+   */
   start: number;
+  /**
+   * Position of the needle next line start or end of content.
+   */
   end: number;
+};
+
+const lineStartBefore = (content: string, index: number): number => {
+  const fromIndex = Math.max(index - 1, 0);
+  const lfIndex = content.lastIndexOf('\n', fromIndex);
+  const crlfIndex = content.lastIndexOf('\r\n', fromIndex);
+
+  if (lfIndex === -1 && crlfIndex === -1) {
+    return 0;
+  }
+
+  return crlfIndex > lfIndex ? crlfIndex + 2 : lfIndex + 1;
+};
+
+const lineStartAfter = (content: string, index: number): number => {
+  const lfIndex = content.indexOf('\n', index);
+  const crlfIndex = content.indexOf('\r\n', index);
+
+  if (lfIndex === -1 && crlfIndex === -1) {
+    throw new Error('Line break not found after needle');
+  }
+
+  return crlfIndex !== -1 && crlfIndex < lfIndex ? crlfIndex + 2 : lfIndex + 1;
+};
+
+const getMatchedNeedleLinePosition = (content: string, index: number): NeedleLinePosition => {
+  const needleLineIndex = lineStartBefore(content, index);
+  try {
+    const nextLineIndex = lineStartAfter(content, index);
+    return { start: needleLineIndex, end: nextLineIndex };
+  } catch {
+    return { start: needleLineIndex, end: content.length };
+  }
 };
 
 export const getNeedlesPositions = (content: string, needle = String.raw`jhipster-needle-(?:[-\w]*)`): NeedleLinePosition[] => {
@@ -120,8 +160,7 @@ export const getNeedlesPositions = (content: string, needle = String.raw`jhipste
     if (needlesWhiteList.some(whileList => match![0].includes(whileList))) {
       continue;
     }
-    const needleLineIndex = content.lastIndexOf('\n', match.index) + 1;
-    positions.unshift({ start: needleLineIndex, end: regexp.lastIndex });
+    positions.unshift(getMatchedNeedleLinePosition(content, match.index));
   }
   return positions;
 };
@@ -139,8 +178,9 @@ export const checkContentIn = (contentToCheck: string | RegExp, content: string,
 
   let re: RegExp;
   if (typeof contentToCheck === 'string') {
-    const pattern = ignoreWhitespaces
-      ? convertToPrettierExpressions(escapeRegExp(contentToCheck))
+    const pattern =
+      ignoreWhitespaces ?
+        convertToPrettierExpressions(escapeRegExp(contentToCheck))
       : contentToCheck
           .split('\n')
           .map(line => String.raw`\s*${escapeRegExp(line)}`)
@@ -157,7 +197,7 @@ const addNeedlePrefix = (needle: string): string => {
 };
 
 const hasNeedleStart = (content: string, needle: string): boolean => {
-  const regexpStart = new RegExp(`(?://|<!--|\\{?/\\*|#) ${addNeedlePrefix(needle)}-start(?:.*)\n`, 'g');
+  const regexpStart = createNeedleRegexp(needle, true);
   const startMatch = regexpStart.exec(content);
   return Boolean(startMatch);
 };
@@ -181,16 +221,16 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
     return null;
   }
 
-  // Replacements using functions allows to replace multiples needles
+  // Replacements using functions allow replacing multiple needles
   if (typeof contentToAdd !== 'function' && regexp.test(content)) {
     throw new Error(`Multiple needles found for ${needle}`);
   }
 
-  const regexpStart = new RegExp(`(?://|<!--|\\{?/\\*|#) ${needle}-start(?:.*)\n`, 'g');
+  const regexpStart = createNeedleRegexp(needle, true);
   const startMatch = regexpStart.exec(content);
   if (startMatch) {
-    const needleLineIndex = content.lastIndexOf('\n', firstMatch.index) + 1;
-    content = content.slice(0, startMatch.index + startMatch[0].length) + content.slice(needleLineIndex);
+    // Remove the content between start and end needles.
+    content = content.slice(0, lineStartAfter(content, startMatch.index)) + content.slice(lineStartBefore(content, firstMatch.index));
     regexp.lastIndex = 0;
     firstMatch = regexp.exec(content);
     if (!firstMatch) {
@@ -200,19 +240,18 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
 
   const needleIndex = firstMatch.index;
 
-  const needleLineIndex = content.lastIndexOf('\n', needleIndex) + 1;
+  const needleLineIndex = lineStartBefore(content, needleIndex);
   const beforeContent = content.slice(0, needleLineIndex);
   const afterContent = content.slice(needleLineIndex);
   const needleIndent = needleIndex - needleLineIndex;
 
   if (typeof contentToAdd === 'function') {
-    const newContent = contentToAdd(content, {
+    return contentToAdd(content, {
       needleIndex,
       needleLineIndex,
       needleIndent,
       indentPrefix: ' '.repeat(needleIndent),
     });
-    return newContent;
   }
   contentToAdd = Array.isArray(contentToAdd) ? contentToAdd : [contentToAdd];
   if (autoIndent) {
@@ -243,12 +282,11 @@ export const insertContentBeforeNeedle = ({ content, contentToAdd, needle, autoI
     contentToAdd = contentToAdd.map(line => (line.length > identToRemove ? line.slice(identToRemove) : ''));
   }
 
-  const newContent = `${beforeContent}${contentToAdd.join('\n')}\n${afterContent}`;
-  return newContent;
+  return `${beforeContent}${contentToAdd.join('\n')}\n${afterContent}`;
 };
 
 /**
- * Create an callback to insert the new content into existing content.
+ * Create a callback to insert the new content into existing content.
  *
  * A `contentToAdd` of string type will remove leading `\n`.
  * Leading `\n` allows a prettier template formatting.
@@ -268,24 +306,27 @@ export const createNeedleCallback = <Generator extends CoreGenerator = CoreGener
   assert(contentToAdd, 'contentToAdd is required');
 
   return function (content, filePath) {
+    if (contentToCheck && checkContentIn(contentToCheck, content, ignoreWhitespaces)) {
+      return content;
+    }
+    const contentHasNeedleStart = hasNeedleStart(content, addNeedlePrefix(needle));
     if (isArrayOfContentToAdd(contentToAdd)) {
-      contentToAdd = contentToAdd.filter(({ content: itemContent, contentToCheck }) => {
-        return !checkContentIn(contentToCheck ?? itemContent, content, ignoreWhitespaces);
-      });
+      if (!contentHasNeedleStart) {
+        contentToAdd = contentToAdd.filter(({ content: itemContent, contentToCheck }) => {
+          return !checkContentIn(contentToCheck ?? itemContent, content, ignoreWhitespaces);
+        });
+      }
       if (contentToAdd.length === 0) {
         return content;
       }
       contentToAdd = contentToAdd.map(({ content }) => content);
-    }
-    if (contentToCheck && checkContentIn(contentToCheck, content, ignoreWhitespaces)) {
-      return content;
     }
     if (typeof contentToAdd !== 'function') {
       if (typeof contentToAdd === 'string' && contentToAdd.startsWith('\n')) {
         contentToAdd = contentToAdd.slice(1);
       }
       contentToAdd = Array.isArray(contentToAdd) ? contentToAdd : [contentToAdd];
-      if (!needle || !hasNeedleStart(content, needle)) {
+      if (!needle || !contentHasNeedleStart) {
         contentToAdd = contentToAdd.filter(eachContent => !checkContentIn(eachContent, content, ignoreWhitespaces));
       }
       if (contentToAdd.length === 0) {
@@ -326,14 +367,14 @@ export function createBaseNeedle<Generator extends CoreGenerator = CoreGenerator
   this: Generator,
   options: NeedleFileInsertion,
   needles: Record<string, string>,
-): CascatedEditFileCallback<Generator>;
+): CascadedEditFileCallback<Generator>;
 export function createBaseNeedle<Generator extends CoreGenerator = CoreGenerator>(
   this: Generator | void,
   options: NeedleFileInsertion | Record<string, string>,
   needles?: Record<string, string>,
-): EditFileCallback<Generator> | CascatedEditFileCallback<Generator> {
+): EditFileCallback<Generator> | CascadedEditFileCallback<Generator> {
   const actualNeedles = (needles ??= options as Record<string, string>);
-  const actualOptions: Partial<NeedleFileInsertion> | undefined = needles === undefined ? {} : (options as NeedleFileInsertion);
+  const actualOptions: Partial<NeedleFileInsertion> | undefined = needles === undefined ? {} : options;
 
   assert(actualNeedles, 'needles is required');
   const { needlesPrefix, filePath, ...needleOptions } = actualOptions;

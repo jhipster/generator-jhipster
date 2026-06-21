@@ -134,7 +134,7 @@ function generateFakeDataForField(
   this: CoreGenerator,
   field: BaseApplicationField,
   faker: FakerWithRandexp,
-  changelogDate: any,
+  changelogDate: Date,
   type: 'csv' | 'cypress' | 'json-serializable' | 'ts' = 'csv',
 ) {
   let originalData: string | number | boolean | Date | undefined;
@@ -147,7 +147,7 @@ function generateFakeDataForField(
   ] as const) {
     if (prop in field && typeof field[prop] === 'string') {
       try {
-        field[prop] = parseInt(field[prop], 10);
+        field[prop] = Number.parseInt(field[prop], 10);
       } catch {
         throw new Error(`Error parsing ${prop} for field ${field.fieldName}`);
       }
@@ -173,7 +173,7 @@ function generateFakeDataForField(
     }
   } else if (field.fieldIsEnum) {
     if (field.enumValues && field.enumValues.length > 0) {
-      const enumValues = field.enumValues;
+      const { enumValues } = field;
       data = enumValues[faker.number.int(enumValues.length - 1)].name;
     } else {
       this.log.warn(`Enum ${field.fieldType} is not valid`);
@@ -237,7 +237,7 @@ function generateFakeDataForField(
   }
 
   // Validation rules
-  if (data !== undefined && field.fieldValidate === true && field.fieldValidateRules) {
+  if (data !== undefined && field.fieldValidate && field.fieldValidateRules) {
     const { fieldValidateRulesMinlength = 0, fieldValidateRulesMaxlength } = field;
     // manage String max length
     if (field.fieldValidateRules.includes(MAXLENGTH) && fieldValidateRulesMaxlength !== undefined) {
@@ -292,7 +292,7 @@ export function prepareCommonFieldForTemplates(
   defaults(field, {
     entity: entityWithConfig,
   });
-  const fieldType = field.fieldType;
+  const { fieldType } = field;
 
   if (field.fieldIsEnum) {
     if ((Object.values(fieldTypesValues) as string[]).includes(fieldType)) {
@@ -309,10 +309,10 @@ export function prepareCommonFieldForTemplates(
 
   field.fieldValidate = Array.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
   defaults(field, {
-    nullable: !(field.fieldValidate === true && field.fieldValidateRules!.includes(REQUIRED)),
+    nullable: !(field.fieldValidate && field.fieldValidateRules!.includes(REQUIRED)),
   });
-  field.unique = field.fieldValidate === true && field.fieldValidateRules!.includes(UNIQUE);
-  if (field.fieldValidate === true && field.fieldValidateRules!.includes(MAXLENGTH)) {
+  field.unique = field.fieldValidate && field.fieldValidateRules!.includes(UNIQUE);
+  if (field.fieldValidate && field.fieldValidateRules!.includes(MAXLENGTH)) {
     field.maxlength = field.fieldValidateRulesMaxlength || 255;
   }
 
@@ -337,7 +337,7 @@ export function prepareCommonFieldForTemplates(
   field.generateFakeData = (type = 'csv') => {
     let generated = generateFakeDataForField.call(generator, field, faker, entityWithConfig.changelogDateForRecent, type);
     // manage uniqueness
-    if ((field.fieldValidate === true && field.fieldValidateRules!.includes(UNIQUE)) || field.id) {
+    if ((field.fieldValidate && field.fieldValidateRules!.includes(UNIQUE)) || field.id) {
       let i = 0;
       while (field.uniqueValue!.includes(generated.originalData)) {
         if (i++ === 5) {

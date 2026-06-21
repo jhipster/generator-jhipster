@@ -1,11 +1,7 @@
 node_modules
 node_modules_container
-docs
 .git
-jdl/**/.jhipster/**
 .vscode-test
-**/templates/**/
-**/jdl-core.min.js
 **/generated-serialized-grammar.js
 test/fixtures/**
 dist

@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.client;
+package <%- packageName %>.client;
 
-import <%= packageName %>.security.SecurityUtils;
+import <%- packageName %>.security.SecurityUtils;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import org.springframework.stereotype.Component;
@@ -31,6 +31,6 @@ public class UserFeignClientInterceptor implements RequestInterceptor {
     @Override
     public void apply(RequestTemplate template) {
         SecurityUtils.getCurrentUserJWT()
-            .ifPresent(s -> template.header(AUTHORIZATION_HEADER,String.format("%s %s", BEARER, s)));
+            .ifPresent(s -> template.header(AUTHORIZATION_HEADER, "%s %s".formatted(BEARER, s)));
     }
 }

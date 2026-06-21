@@ -27,14 +27,12 @@ import type { Config as ClientConfig } from '../client/types.ts';
 
 import { askForLanguages, askI18n } from './prompts.ts';
 import { CONTEXT_DATA_SUPPORTED_LANGUAGES } from './support/constants.ts';
-import type { Language } from './support/languages.ts';
-import { findLanguageForTag } from './support/languages.ts';
+import { type Language, findLanguageForTag } from './support/languages.ts';
 import type {
   Application as LanguagesApplication,
   Config as LanguagesConfig,
   Entity as LanguagesEntity,
   Options as LanguagesOptions,
-  Source as LanguagesSource,
 } from './types.ts';
 
 const { NO: NO_CLIENT_FRAMEWORK, ANGULAR } = clientFrameworkTypes;
@@ -46,8 +44,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
   LanguagesEntity,
   LanguagesApplication<LanguagesEntity>,
   LanguagesConfig,
-  LanguagesOptions,
-  LanguagesSource
+  LanguagesOptions
 > {
   askForMoreLanguages!: boolean;
   askForNativeLanguage!: boolean;

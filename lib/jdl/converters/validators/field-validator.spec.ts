@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import JDLField from '../../core/models/jdl-field.ts';
 
@@ -36,7 +34,7 @@ describe('jdl - FieldValidator', () => {
     describe('when not passing anything', () => {
       it('should fail', () => {
         // @ts-expect-error invalid api test
-        expect(() => validator.validate()).to.throw(/^No field\.$/);
+        expect(() => validator.validate()).toThrow(/^No field\.$/);
       });
     });
     describe('when passing a field', () => {
@@ -51,13 +49,13 @@ describe('jdl - FieldValidator', () => {
         });
 
         it('should not fail', () => {
-          expect(() => validator.validate(field)).not.to.throw();
+          expect(() => validator.validate(field)).not.toThrow();
         });
       });
       describe('when not passing any attribute', () => {
         it('should fail', () => {
           // @ts-expect-error invalid api test
-          expect(() => validator.validate({})).to.throw(/^The field attributes name, type were not found\.$/);
+          expect(() => validator.validate({})).toThrow(/^The field attributes name, type were not found\.$/);
         });
       });
     });

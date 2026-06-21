@@ -16,10 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { defineComponent, provide } from 'vue';
+import { defineComponent, provide, type Component } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { storeToRefs } from 'pinia';
-import { BToastOrchestrator } from 'bootstrap-vue-next';
+import { BApp } from 'bootstrap-vue-next';
 
 <%_ if (!authenticationTypeOauth2) { _%>
 import { useLoginModal } from '@/account/login-modal';
@@ -34,7 +34,7 @@ import '@/shared/config/dayjs';
 export default defineComponent({
   name: 'App',
   components: {
-    BToastOrchestrator,
+    BApp: BApp as Component,
     Ribbon,
     JhiNavbar,
 <%_ if (!authenticationTypeOauth2) { _%>

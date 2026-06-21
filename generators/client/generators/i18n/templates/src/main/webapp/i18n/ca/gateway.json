@@ -1,15 +1,15 @@
 {
-    "gateway": {
-        "title": "Gateway",
-        "routes": {
-            "title": "Rutes actuals",
-            "url": "URL",
-            "service": "servei",
-            "servers": "Servidors disponibles",
-            "error": "Advertència: cap servidor disponible!"
-        },
-        "refresh": {
-            "button": "Refrescar"
-        }
+  "gateway": {
+    "title": "Gateway",
+    "routes": {
+      "title": "Rutes actuals",
+      "url": "URL",
+      "service": "servei",
+      "servers": "Servidors disponibles",
+      "error": "Advertència: cap servidor disponible!"
+    },
+    "refresh": {
+      "button": "Refrescar"
     }
+  }
 }

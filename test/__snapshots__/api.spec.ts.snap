@@ -75,5 +75,6 @@ exports[`public api generator-jhipster/testing should match snapshot 1`] = `
   "resultWithGenerator",
   "runResult",
   "skipPrettierHelpers",
+  "typedResult",
 ]
 `;

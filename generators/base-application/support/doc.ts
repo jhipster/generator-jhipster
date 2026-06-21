@@ -32,7 +32,7 @@ const isSimpleText = (previousLine: string, text: string) => !previousLine.endsW
 export const formatDocAsSingleLine = (text: string): string => {
   let [description, ...rows] = text.split('\n');
   // discard blank rows
-  rows = rows.map(row => row.trim()).filter(row => row);
+  rows = rows.map(row => row.trim()).filter(Boolean);
   for (const row of rows) {
     // if simple text then put space between row strings
     if (isSimpleText(description, row)) {

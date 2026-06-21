@@ -72,6 +72,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
     return this.asConfiguringTaskGroup({
       defaults() {
         (this.jhipsterConfig as ProjectNameConfig).baseName ??= 'workspaces';
+        this.jhipsterConfig.defaultCommand ??= 'workspaces';
       },
       async configureUsingFiles() {
         if (!this.generateWorkspaces) return;
@@ -79,7 +80,7 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
         if (existsSync(this.destinationPath('docker-compose'))) {
           this.workspacesConfig.dockerCompose = true;
         }
-        this.workspacesConfig.appsFolders = [...new Set([...(this.workspacesConfig.packages ?? []), ...this.appsFolders!])];
+        this.workspacesConfig.appsFolders = [...new Set([...(this.workspacesConfig.packages ?? []), ...this.appsFolders])];
         delete this.workspacesConfig.packages;
       },
     });
@@ -105,9 +106,9 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
         }
 
         if (typeof this.generateApplications === 'function') {
-          await this.generateApplications.call(this);
+          await this.generateApplications();
         } else {
-          for (const appName of this.appsFolders!) {
+          for (const appName of this.appsFolders) {
             await this.composeWithJHipster(this.entrypointGenerator ?? this.generateWith, {
               generatorOptions: { destinationRoot: this.destinationPath(appName) },
             });
@@ -206,36 +207,31 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
           },
         });
 
-        if (applications.some(app => app.clientFrameworkAngular)) {
-          const {
-            dependencies: { rxjs },
-            devDependencies: { webpack: webpackVersion, 'browser-sync': browserSyncVersion },
-          } = this.readResourcesPackageJson(this.fetchFromInstalledJHipster('angular', 'resources', 'package.json'));
-
-          this.packageJson.merge({
-            devDependencies: {
-              rxjs, // Set version to workaround https://github.com/npm/cli/issues/4437
-            },
-            overrides: {
-              'browser-sync': browserSyncVersion,
-              webpack: webpackVersion,
-            },
-          });
-        }
-
-        if (applications.some(app => app.clientFrameworkReact)) {
-          const {
-            dependencies: { react: reactVersion, 'react-dom': reactDomVersion },
-            devDependencies: { 'browser-sync': browserSyncVersion },
-          } = this.readResourcesPackageJson(this.fetchFromInstalledJHipster('react', 'resources', 'package.json'));
-
-          this.packageJson.merge({
-            overrides: {
-              'browser-sync': browserSyncVersion,
-              react: reactVersion,
-              'react-dom': reactDomVersion,
-            },
-          });
+        // Copy overrides from workspaces
+        for (const appFolder of this.workspacesConfig.appsFolders) {
+          const { overrides, dependencies, devDependencies } =
+            this.readDestinationJSON(this.destinationPath(appFolder, 'package.json')) ?? ({} as any);
+          if (overrides) {
+            const allDependencies = { ...dependencies, ...devDependencies };
+            const replacePlaceholder = (value: any) => {
+              if (typeof value === 'string' && value.startsWith('$')) {
+                const dependencyName = value.substring(1);
+                return allDependencies[dependencyName] ?? value;
+              }
+              return value;
+            };
+            const replaceOverrides = (obj: any) => {
+              for (const [key, value] of Object.entries(obj)) {
+                if (typeof value === 'string') {
+                  obj[key] = replacePlaceholder(value);
+                } else if (typeof value === 'object' && value !== null) {
+                  replaceOverrides(value);
+                }
+              }
+              return obj;
+            };
+            this.packageJson.merge({ overrides: replaceOverrides(overrides) });
+          }
         }
 
         if (applications.some(app => app.backendTypeJavaAny)) {
@@ -266,17 +262,17 @@ export default class WorkspacesGenerator extends BaseWorkspacesGenerator<any, Wo
 
   createConcurrentlyScript(...scripts: string[]) {
     const scriptsList = scripts.flatMap(script => {
-      const packageScripts = this.appsFolders!.map(packageName => [
+      const packageScripts = this.appsFolders.map(packageName => [
         `${script}:${packageName}`,
         `npm run ${script} --workspace ${packageName} --if-present`,
       ]);
-      packageScripts.push([script, `concurrently ${this.appsFolders!.map(packageName => `npm:${script}:${packageName}`).join(' ')}`]);
+      packageScripts.push([script, `concurrently ${this.appsFolders.map(packageName => `npm:${script}:${packageName}`).join(' ')}`]);
       return packageScripts;
     });
     return Object.fromEntries(scriptsList);
   }
 
   createWorkspacesScript(...scripts: string[]) {
-    return Object.fromEntries(scripts.map(script => [`${script}`, `npm run ${script} --workspaces --if-present`]));
+    return Object.fromEntries(scripts.map(script => [script, `npm run ${script} --workspaces --if-present`]));
   }
 }

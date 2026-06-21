@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.config;
+package <%- packageName %>.config;
 
 <%_ if (enableHibernateCache) { _%>
 import org.hibernate.cache.jcache.ConfigSettings;
@@ -61,15 +61,15 @@ public class CacheConfiguration {
             createCache(cm, "oAuth2Authentication");
 <%_ } _%>
 <%_ if (generateBuiltInUserEntity) { _%>
-            createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_LOGIN_CACHE);
-            createCache(cm, <%= packageName %>.repository.UserRepository.USERS_BY_EMAIL_CACHE);
+            createCache(cm, <%- packageName %>.repository.UserRepository.USERS_BY_LOGIN_CACHE);
+            createCache(cm, <%- packageName %>.repository.UserRepository.USERS_BY_EMAIL_CACHE);
   <%_ if (enableHibernateCache) { _%>
-            createCache(cm, <%= user.entityAbsoluteClass %>.class.getName());
-            createCache(cm, <%= packageName %>.domain.Authority.class.getName());
-            createCache(cm, <%= user.entityAbsoluteClass %>.class.getName() + ".authorities");
+            createCache(cm, <%- user.entityAbsoluteClass %>.class.getName());
+            createCache(cm, <%- packageName %>.domain.Authority.class.getName());
+            createCache(cm, <%- user.entityAbsoluteClass %>.class.getName() + ".authorities");
     <%_ if (authenticationTypeSession) { _%>
-            createCache(cm, <%= packageName %>.domain.PersistentToken.class.getName());
-            createCache(cm, <%= user.entityAbsoluteClass %>.class.getName() + ".persistentTokens");
+            createCache(cm, <%- packageName %>.domain.PersistentToken.class.getName());
+            createCache(cm, <%- user.entityAbsoluteClass %>.class.getName() + ".persistentTokens");
     <%_ } _%>
   <%_ } _%>
 <%_ } _%>

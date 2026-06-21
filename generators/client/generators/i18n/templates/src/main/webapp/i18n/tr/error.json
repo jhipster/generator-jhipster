@@ -1,14 +1,14 @@
 {
-    "error": {
-        "title": "Hata Sayfası!",
-        "http": {
-            "400": "Hatalı istek.",
-            "403": "Bu sayfaya erişmeye yetkiniz yoktur.",
-            "404": "Bu sayfa mevcut değil.",
-            "405": "Kullandığınız HTTP metodu bu URL için desteklenmiyor.",
-            "500": "Dahili sunucu hatası."
-        },
-        "concurrencyFailure": "Farklı bir kullanıcı bu verileri sizinle aynı anda değiştirdi. Bu yüzden değişiklikleriniz reddedildi.",
-        "validation": "Sunucuda doğrulama hatası oluştu."
-    }
+  "error": {
+    "title": "Hata Sayfası!",
+    "http": {
+      "400": "Hatalı istek.",
+      "403": "Bu sayfaya erişmeye yetkiniz yoktur.",
+      "404": "Bu sayfa mevcut değil.",
+      "405": "Kullandığınız HTTP metodu bu URL için desteklenmiyor.",
+      "500": "Dahili sunucu hatası."
+    },
+    "concurrencyFailure": "Farklı bir kullanıcı bu verileri sizinle aynı anda değiştirdi. Bu yüzden değişiklikleriniz reddedildi.",
+    "validation": "Sunucuda doğrulama hatası oluştu."
+  }
 }

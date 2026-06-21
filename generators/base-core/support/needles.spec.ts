@@ -26,6 +26,7 @@ import {
   convertToPrettierExpressions,
   createBaseNeedle,
   createNeedleCallback,
+  getNeedlesPositions,
   insertContentBeforeNeedle,
 } from './needles.ts';
 
@@ -259,6 +260,136 @@ ${needlePrefix} jhipster-needle-a-needle"
           ).toThrow();
         });
       });
+    });
+    for (const [needleSuffix, description] of [
+      ['', 'empty string'],
+      ['\n', 'newline'],
+      [' - foo', 'dash'],
+      ['\r\n', 'carriage return newline'],
+    ]) {
+      const needle = 'a-needle';
+      const contentToAdd = `a bar value
+another bar value`;
+
+      describe(`${description} suffixed needles`, () => {
+        it('should not insert content without a leading space', () => {
+          const oldContent = `// jhipster-needle-${needle}${needleSuffix}`;
+          const content = insertContentBeforeNeedle({
+            content: oldContent,
+            contentToAdd,
+            needle,
+          });
+
+          expect(content).toBe(`${contentToAdd}
+${oldContent}`);
+        });
+      });
+    }
+
+    it('should replace content between start and end needles', () => {
+      const content = insertContentBeforeNeedle({
+        content: `// jhipster-needle-a-needle-start
+old content
+// jhipster-needle-a-needle
+`,
+        contentToAdd: 'new content',
+        needle: 'a-needle',
+      });
+
+      expect(content).toBe(`// jhipster-needle-a-needle-start
+new content
+// jhipster-needle-a-needle
+`);
+    });
+  });
+
+  describe('getNeedlesPositions', () => {
+    it('should return empty array for content without needles', () => {
+      expect(getNeedlesPositions('just some content')).toEqual([]);
+    });
+
+    it('should find a single needle with unix line endings', () => {
+      const content = `line 1
+// jhipster-needle-test
+line 3`;
+      const positions = getNeedlesPositions(content);
+      expect(positions).toHaveLength(1);
+      expect(positions[0]).toMatchObject({ start: 7, end: 31 });
+    });
+
+    it('should find a single needle with windows line endings', () => {
+      const content = `line 1\r\n// jhipster-needle-test\r\nline 3`;
+      const positions = getNeedlesPositions(content);
+      expect(positions).toHaveLength(1);
+      expect(positions[0]).toMatchObject({ start: 8 });
+    });
+
+    it('should find multiple needles in reverse order', () => {
+      const content = `// jhipster-needle-first
+some content
+// jhipster-needle-second
+more content
+// jhipster-needle-third`;
+      const positions = getNeedlesPositions(content);
+      expect(positions).toHaveLength(3);
+      // positions are unshifted so they come in reverse order
+      expect(positions[0].start).toBeGreaterThan(positions[1].start);
+      expect(positions[1].start).toBeGreaterThan(positions[2].start);
+    });
+
+    it('should skip whitelisted needles', () => {
+      const content = `// jhipster-needle-liquibase-add-incremental-changelog
+// jhipster-needle-test`;
+      const positions = getNeedlesPositions(content);
+      expect(positions).toHaveLength(1);
+      expect(positions[0].end).toBeGreaterThan(55);
+    });
+
+    it('should find needles with different comment prefixes', () => {
+      const tests = [
+        `<!-- jhipster-needle-html -->
+`,
+        `// jhipster-needle-js
+content`,
+        `# jhipster-needle-py
+content`,
+        `/* jhipster-needle-java */
+content
+`,
+      ];
+      tests.forEach(content => {
+        const positions = getNeedlesPositions(content);
+        expect(positions.length).toBeGreaterThanOrEqual(1);
+      });
+    });
+
+    it('should find needle at the start of content', () => {
+      const content = '// jhipster-needle-test\nsome content';
+      const positions = getNeedlesPositions(content);
+      expect(positions).toHaveLength(1);
+      expect(positions[0].start).toBe(0);
+    });
+
+    it('should find needle at the end of content without newline', () => {
+      const content = 'some content\n// jhipster-needle-test';
+      const positions = getNeedlesPositions(content);
+      expect(positions).toHaveLength(1);
+      expect(positions[0].start).toBe(13);
+    });
+
+    it('should support custom needle pattern', () => {
+      const content = `// custom-needle-one
+// jhipster-needle-test
+// custom-needle-two`;
+      const positions = getNeedlesPositions(content, String.raw`custom-needle-(?:[-\w]*)`);
+      expect(positions).toHaveLength(2);
+    });
+
+    it('should handle needles with additional text after them', () => {
+      const content = `// jhipster-needle-test - some description
+// jhipster-needle-another - more text`;
+      const positions = getNeedlesPositions(content);
+      expect(positions).toHaveLength(2);
     });
   });
 

@@ -73,7 +73,7 @@ describe('/account/settings', () => {
   it('should be accessible through menu', () => {
     cy.visit('');
     cy.clickOnSettingsItem();
-    cy.url().should('match', /\/account\/settings$/);
+    cy.location('pathname').should('eq', '/account/settings');
   });
 
   it("should be able to change 'user' firstname settings", () => {

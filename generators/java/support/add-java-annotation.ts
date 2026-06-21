@@ -22,8 +22,8 @@ export type JavaImportType = { staticImport?: boolean };
 
 const addJavaImportToContent = (content: string, identifier: string, { staticImport }: JavaImportType = {}) => {
   const importStatement = `import ${staticImport ? 'static ' : ''}${identifier};`;
-  return new RegExp(escapeRegExp(importStatement)).test(content)
-    ? content
+  return new RegExp(escapeRegExp(importStatement)).test(content) ?
+      content
     : content.replace(/(package [\w.]+;\n\n?)/, `$1${importStatement}\n`);
 };
 
@@ -152,9 +152,9 @@ const addJavaAnnotationToContent = (content: string, annotationDef: JavaAnnotati
       },
     });
     const serializedParam =
-      typeof returnedParameters === 'string'
-        ? returnedParameters
-        : serializeJavaAnnotationParameters(returnedParameters ?? parsedParameters);
+      typeof returnedParameters === 'string' ? returnedParameters : (
+        serializeJavaAnnotationParameters(returnedParameters ?? parsedParameters)
+      );
     annotationToAdd = serializedParam ? `${annotation}(${serializedParam})` : annotation;
   } else {
     annotationToAdd = annotation;

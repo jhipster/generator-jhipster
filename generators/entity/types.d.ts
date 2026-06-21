@@ -16,14 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { HandleCommandTypes } from '../../lib/command/types.ts';
+import type { CommandTypeMap } from '../../lib/command/types.ts';
 import type { ApplicationAll, EntityAll } from '../../lib/types/application-all.ts';
 import type { ConfigAll, OptionsAll } from '../../lib/types/command-all.ts';
 import type { Source as BaseApplicationSource } from '../base-application/types.ts';
 
 import type command from './command.ts';
 
-type Command = HandleCommandTypes<typeof command>;
+export type { Features } from '../base-application/types.ts';
+export type { FieldAll as Field, RelationshipAll as Relationship } from '../../lib/types/application-all.ts';
+
+type Command = CommandTypeMap<typeof command>;
 
 export type Config = Command['Config'] & ConfigAll;
 

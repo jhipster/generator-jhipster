@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { describe, expect, it } from 'esmocha';
 
 import validations from './validations.ts';
 
@@ -31,20 +29,20 @@ describe('jdl - Validations', () => {
   describe('exists', () => {
     describe('when checking for a valid validation', () => {
       it('should return true', () => {
-        expect(validations.Validations.exists(MAXBYTES)).to.be.true;
+        expect(validations.Validations.exists(MAXBYTES)).toBe(true);
       });
     });
     describe('when checking for an invalid validation', () => {
       it('should return false', () => {
-        expect(validations.Validations.exists('NOTHING')).to.be.false;
+        expect(validations.Validations.exists('NOTHING')).toBe(false);
       });
     });
   });
   describe('needsValue', () => {
     describe('when checking whether a validation needs a value', () => {
       it('should return so', () => {
-        expect(validations.Validations.needsValue(MAXLENGTH)).to.be.true;
-        expect(validations.Validations.needsValue(REQUIRED)).to.be.false;
+        expect(validations.Validations.needsValue(MAXLENGTH)).toBe(true);
+        expect(validations.Validations.needsValue(REQUIRED)).toBe(false);
       });
     });
   });

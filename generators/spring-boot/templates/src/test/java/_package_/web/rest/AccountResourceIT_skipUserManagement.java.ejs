@@ -16,23 +16,23 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.web.rest;
+package <%- packageName %>.web.rest;
 
 import static org.hamcrest.Matchers.hasItem;
 <%_ if (authenticationTypeJwt) { _%>
-import static <%= packageName %>.security.jwt.JwtAuthenticationTestUtils.createValidTokenForUser;
+import static <%- packageName %>.security.jwt.JwtAuthenticationTestUtils.createValidTokenForUser;
 import org.springframework.beans.factory.annotation.Value;
   <%_ if (!reactive) { _%>
-import static <%= packageName %>.security.jwt.JwtAuthenticationTestUtils.BEARER;
+import static <%- packageName %>.security.jwt.JwtAuthenticationTestUtils.BEARER;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
   <%_ } _%>
 <%_ } _%>
 
 <%_ if (reactive && searchEngineElasticsearch) { _%>
-import <%= packageName %>.repository.search.UserSearchRepository;
+import <%- packageName %>.repository.search.UserSearchRepository;
 <%_ } _%>
-import <%= packageName %>.IntegrationTest;
-import <%= packageName %>.security.AuthoritiesConstants;
+import <%- packageName %>.IntegrationTest;
+import <%- packageName %>.security.AuthoritiesConstants;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 <%_ if (reactive) { _%>
@@ -49,11 +49,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 <%_ } else { _%>
 import org.springframework.test.web.reactive.server.WebTestClient;
-<%_ } _%>
-<%_ if (reactive && searchEngineElasticsearch) { _%>
-import reactor.core.publisher.Mono;
-
-import static org.mockito.Mockito.*;
 <%_ } _%>
 
 /**
@@ -84,7 +79,7 @@ class AccountResourceIT {
 <%_ if (!authenticationTypeJwt) { _%>
     @WithMockUser(username = TEST_USER_LOGIN, authorities = AuthoritiesConstants.ADMIN)
 <%_ } _%>
-    void testGetExistingAccount() <% if (!reactive) { %>throws Exception <% } %>{
+    void testGetExistingAccount() <%- reactive ? '' : 'throws Exception ' %>{
 <%_ if (reactive) { _%>
         accountWebTestClient.get().uri("/api/account")
             .accept(MediaType.APPLICATION_JSON)
@@ -114,7 +109,7 @@ class AccountResourceIT {
 
     @Test
     @WithUnauthenticatedMockUser
-    void testNonAuthenticatedUser() <% if (!reactive) { %>throws Exception <% } %>{
+    void testNonAuthenticatedUser() <%- reactive ? '' : 'throws Exception ' %>{
 <%_ if (reactive) { _%>
         accountWebTestClient.get().uri("/api/authenticate")
             .exchange()
@@ -127,7 +122,7 @@ class AccountResourceIT {
 
     @Test
     @WithMockUser(TEST_USER_LOGIN)
-    void testAuthenticatedUser() <% if (!reactive) { %>throws Exception <% } %>{
+    void testAuthenticatedUser() <%- reactive ? '' : 'throws Exception ' %>{
 <%_ if (reactive) { _%>
         accountWebTestClient
             .get().uri("/api/authenticate")

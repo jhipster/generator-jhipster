@@ -1,0 +1,93 @@
+<%#
+ Copyright 2013-2026 the original author or authors from the JHipster project.
+
+ This file is part of the JHipster project, see https://www.jhipster.tech/
+ for more information.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-%>
+import {
+<%_ if (applicationTypeMicroservice) { _%>
+  EnvironmentInjector,
+<%_ } _%>
+  EnvironmentProviders,
+  Provider,
+<%_ if (applicationTypeMicroservice) { _%>
+  createEnvironmentInjector,
+<%_ } _%>
+  inject,
+  provideAppInitializer,
+<%_ if (applicationTypeMicroservice) { _%>
+  runInInjectionContext,
+<%_ } _%>
+} from '@angular/core';
+import {
+  MissingTranslationHandler,
+  TranslateLoader,
+  TranslateService,
+<%_ if (applicationTypeMicroservice) { _%>
+  provideChildTranslateService,
+<%_ } _%>
+  provideTranslateService,
+} from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
+
+import { missingTranslationHandler<%- clientBundlerEsbuild ? ', translatePartialLoader' : '' %> } from 'app/config/translation.config';
+import { StateStorageService } from 'app/core/auth/state-storage.service';
+
+export function provideTranslation(): (Provider | EnvironmentProviders)[] {
+  return [
+    provideTranslateService({
+<%_ if (clientBundlerEsbuild) { _%>
+      loader: {
+        provide: TranslateLoader,
+        useFactory: translatePartialLoader,
+      },
+<%_ } else { _%>
+      loader: provideTranslateHttpLoader({ prefix: './i18n/', suffix: `.json?_=${I18N_HASH}` }),
+<%_ } _%>
+      missingTranslationHandler: {
+        provide: MissingTranslationHandler,
+        useFactory: missingTranslationHandler,
+      },
+    }),
+    provideAppInitializer(() => {
+      const translateService = inject(TranslateService);
+      const stateStorageService = inject(StateStorageService);
+      translateService.setFallbackLang('<%- nativeLanguage %>');
+      // if the user has changed the language and navigates away from the application and back to it, then use the previously chosen language
+      const langKey = stateStorageService.getLocale() ?? '<%- nativeLanguage %>';
+      translateService.use(langKey);
+    }),
+  ];
+}
+<%_ if (applicationTypeMicroservice) { _%>
+
+export function loadLazyTranslation(parentInjector: EnvironmentInjector): void {
+  const injector = createEnvironmentInjector(
+    provideChildTranslateService({
+      loader: provideTranslateHttpLoader({ prefix: 'services/<%- lowercaseBaseName %>/i18n/', suffix: `.json?_=${I18N_HASH}` }),
+      extend: true,
+    }),
+    parentInjector,
+  );
+  runInInjectionContext(injector, () => {
+    const translateService = inject(TranslateService);
+    const translateLoader = inject(TranslateLoader);
+    const currentLang = translateService.getCurrentLang();
+    translateLoader.getTranslation(currentLang).subscribe(translation => {
+      translateService.setTranslation(currentLang, translation);
+    });
+  });
+}
+<%_ } _%>

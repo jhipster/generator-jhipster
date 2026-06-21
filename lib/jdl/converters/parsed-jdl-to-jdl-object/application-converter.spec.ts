@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
 import { convertApplications, createJDLApplication } from '../../core/__test-support__/index.ts';
@@ -32,7 +30,7 @@ describe('jdl - ApplicationConverter', () => {
     describe('when not passing applications', () => {
       it('should fail', () => {
         // @ts-expect-error
-        expect(() => convertApplications()).to.throw(/^Applications have to be passed so as to be converted\.$/);
+        expect(() => convertApplications()).toThrow(/^Applications have to be passed so as to be converted\.$/);
       });
     });
     describe('when passing applications', () => {
@@ -62,7 +60,7 @@ describe('jdl - ApplicationConverter', () => {
         });
 
         it(`should convert it as a ${APPLICATION_TYPE_MONOLITH}`, () => {
-          expect(convertedApplication).to.deep.equal(expectedApplication);
+          expect(convertedApplication).toEqual(expectedApplication);
         });
       });
       describe('when passing a configuration object', () => {
@@ -96,7 +94,7 @@ describe('jdl - ApplicationConverter', () => {
           });
 
           it('should use it', () => {
-            expect(convertedApplication).to.deep.equal(expectedApplication);
+            expect(convertedApplication).toEqual(expectedApplication);
           });
         });
         describe('with blueprints', () => {
@@ -130,7 +128,7 @@ describe('jdl - ApplicationConverter', () => {
             });
 
             it('should add the prefix', () => {
-              expect(convertedApplication).to.deep.equal(expectedApplication);
+              expect(convertedApplication).toEqual(expectedApplication);
             });
           });
         });
@@ -161,7 +159,7 @@ describe('jdl - ApplicationConverter', () => {
         });
 
         it('should include them', () => {
-          expect(convertedApplication).to.deep.equal(expectedApplication);
+          expect(convertedApplication).toEqual(expectedApplication);
         });
       });
       describe('when including some entities in an application', () => {
@@ -184,7 +182,7 @@ describe('jdl - ApplicationConverter', () => {
           it('should not fail', () => {
             expect(() => {
               convertApplications(applicationsToConvert);
-            }).not.to.throw();
+            }).not.toThrow();
           });
         });
       });
@@ -214,7 +212,7 @@ describe('jdl - ApplicationConverter', () => {
         });
 
         it('should exclude them', () => {
-          expect(convertedApplication).to.deep.equal(expectedApplication);
+          expect(convertedApplication).toEqual(expectedApplication);
         });
       });
       describe('when having entity options in an application', () => {
@@ -242,7 +240,7 @@ describe('jdl - ApplicationConverter', () => {
           });
 
           it('should fail', () => {
-            expect(() => convertApplications(applicationsToConvert)).to.throw(
+            expect(() => convertApplications(applicationsToConvert)).toThrow(
               /^The entity C in the dto option isn't declared in mono's entity list\.$/,
             );
           });
@@ -271,7 +269,7 @@ describe('jdl - ApplicationConverter', () => {
           });
 
           it('should include them', () => {
-            expect(convertedApplications[0].options.size()).to.equal(1);
+            expect(convertedApplications[0].options.size()).toBe(1);
           });
         });
       });

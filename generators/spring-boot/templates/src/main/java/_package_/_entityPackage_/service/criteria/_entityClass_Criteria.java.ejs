@@ -1,4 +1,4 @@
-package <%- entityAbsolutePackage %>.<%_ if(jpaMetamodelFiltering && reactive) { _%>domain<%_ } else { _%>service<%_ } _%>.criteria;
+package <%- entityAbsolutePackage %>.<%- jpaMetamodelFiltering && reactive ? 'domain' : 'service' %>.criteria;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -9,7 +9,7 @@ import java.util.function.BiFunction;
 import org.springdoc.core.annotations.ParameterObject;
 import tech.jhipster.service.Criteria;
 <%_ for (const field of fields) { _%>
-  <%_ if (field.fieldIsEnum === true) { _%>
+  <%_ if (field.fieldIsEnum) { _%>
 import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
   <%_ } _%>
 <%_ } _%>

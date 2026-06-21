@@ -42,12 +42,12 @@ export const liquibaseFiles = asWriteFilesSection({
       ],
     },
     {
-      condition: generator => Boolean(generator.generateUserManagement),
+      condition: generator => generator.generateUserManagement,
       path: SERVER_MAIN_RES_DIR,
       templates: ['config/liquibase/data/user.csv', 'config/liquibase/data/user_authority.csv'],
     },
     {
-      condition: generator => Boolean(generator.generateBuiltInAuthorityEntity),
+      condition: generator => generator.generateBuiltInAuthorityEntity,
       path: SERVER_MAIN_RES_DIR,
       templates: ['config/liquibase/data/authority.csv'],
     },

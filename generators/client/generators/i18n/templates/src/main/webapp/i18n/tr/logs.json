@@ -1,11 +1,11 @@
 {
-    "logs": {
-        "title": "Sistem günlükleri",
-        "nbloggers": "Toplam {{ total }} kayıt var.",
-        "filter": "Filtre",
-        "table": {
-            "name": "Adı",
-            "level": "Seviye"
-        }
+  "logs": {
+    "title": "Sistem günlükleri",
+    "nbloggers": "Toplam {{ total }} kayıt var.",
+    "filter": "Filtre",
+    "table": {
+      "name": "Adı",
+      "level": "Seviye"
     }
+  }
 }

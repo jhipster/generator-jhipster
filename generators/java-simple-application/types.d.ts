@@ -18,7 +18,7 @@
  */
 import type { RequireOneOrNone } from 'type-fest';
 
-import type { HandleCommandTypes } from '../../lib/command/types.ts';
+import type { CommandTypeMap } from '../../lib/command/types.ts';
 import type { EditFileCallback } from '../base-core/api.ts';
 import type { PropertiesFileKeyUpdate } from '../base-core/support/index.ts';
 import type {
@@ -28,6 +28,7 @@ import type {
   Source as BaseSimpleApplicationSource,
 } from '../base-simple-application/types.ts';
 import type { JavaAnnotation } from '../java/support/add-java-annotation.ts';
+import type { Application as JavascriptSimpleApplicationApplication } from '../javascript-simple-application/types.ts';
 
 import type { JavaSimpleApplicationAddedApplicationProperties } from './application.ts';
 import type command from './command.ts';
@@ -39,7 +40,9 @@ import type {
 import type { GradleNeedleOptions, Source as GradleSource } from './generators/gradle/types.ts';
 import type { MavenDefinition, Source as MavenSource } from './generators/maven/types.ts';
 
-type Command = HandleCommandTypes<typeof command>;
+export type { Features } from '../base-simple-application/types.ts';
+
+type Command = CommandTypeMap<typeof command>;
 
 export type JavaDependencyVersion = {
   name: string;
@@ -148,5 +151,6 @@ export type Source = BaseSimpleApplicationSource &
 
 export type Application = Command['Application'] &
   BaseSimpleApplicationApplication &
+  JavascriptSimpleApplicationApplication &
   JavaSimpleApplicationAddedApplicationProperties &
   BuildToolApplication;

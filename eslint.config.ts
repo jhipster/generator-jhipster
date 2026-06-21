@@ -1,18 +1,24 @@
 import js from '@eslint/js';
+import stylistic from '@stylistic/eslint-plugin';
 import { type Config, defineConfig } from 'eslint/config';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
-// @ts-ignore: missing types
-import chai from 'eslint-plugin-chai-friendly';
+import ejs from 'eslint-plugin-ejs-templates';
 import imports from 'eslint-plugin-import-x';
 import n from 'eslint-plugin-n';
 import prettier from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 import ts from 'typescript-eslint';
 
+import { jsRules } from './lib/eslint/base.ts';
 import jhipster from './lib/eslint/index.ts';
+
+const tsFiles = ['**/*.{ts,mts,cts}'];
+const jsFiles = ['**/*.{js,cjs,mjs}'];
+const jsTsFiles = [...jsFiles, ...tsFiles];
 
 export default defineConfig(
   {
+    files: jsTsFiles,
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',
@@ -20,18 +26,24 @@ export default defineConfig(
         ...globals.node,
       },
     },
+    rules: {
+      ...js.configs.recommended.rules,
+    },
   },
-  { ignores: ['dist'] },
-  js.configs.recommended,
-  jhipster.base,
+  { ignores: ['dist', 'docs'] },
   {
+    files: jsTsFiles,
+    ...jhipster.base,
+  },
+  {
+    files: jsTsFiles,
     plugins: { n },
     rules: {
       'n/prefer-node-protocol': 'error',
     },
   },
   {
-    files: ['**/*.ts'],
+    files: tsFiles,
     ...ts.configs.recommended[0],
     ...ts.configs.stylistic[0],
     languageOptions: {
@@ -42,8 +54,15 @@ export default defineConfig(
     },
     rules: {
       '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/no-unnecessary-template-expression': 'error',
       '@typescript-eslint/no-floating-promises': 'error',
+      '@typescript-eslint/prefer-optional-chain': 'error',
+      '@typescript-eslint/no-unnecessary-type-conversion': 'error',
       '@typescript-eslint/consistent-type-definitions': 'off',
+      '@typescript-eslint/no-unnecessary-type-assertion': 'error',
+      '@typescript-eslint/no-unnecessary-type-arguments': 'off',
+      '@typescript-eslint/prefer-readonly': 'error',
+      '@typescript-eslint/no-redundant-type-constituents': 'error',
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
@@ -59,6 +78,7 @@ export default defineConfig(
     },
   },
   {
+    files: jsTsFiles,
     ...(imports.flatConfigs.recommended as Config),
     ...(imports.flatConfigs.typescript as Config),
     languageOptions: {
@@ -78,6 +98,7 @@ export default defineConfig(
     },
   },
   {
+    files: jsTsFiles,
     rules: {
       eqeqeq: ['error', 'smart'],
       'no-use-before-define': ['error', 'nofunc'],
@@ -104,9 +125,32 @@ export default defineConfig(
       ],
     },
   },
-  {
-    ...(chai.configs.recommendedFlat as Config),
-    files: ['jdl/**/*.spec.{js,ts}'],
-  },
   prettier,
+  ejs.configs.customize(
+    {
+      html: 'never',
+      prettierBlacklist: true,
+      stylisticBlacklist: true,
+      experimental: true,
+      allowedGlobals: ['wrapMono', 'generateEntityClientEnumImports', 'getOriginalField', 'generateFakeData', 'parseInt'],
+    },
+    stylistic.configs.customize({
+      jsx: false,
+      semi: true,
+    }),
+    {
+      rules: {
+        'ejs-templates/no-output-negated-ternary': 'error',
+
+        ...js.configs.recommended.rules,
+        ...jsRules,
+        'no-extra-parens': ['error', 'all', { nestedBinaryExpressions: false, ternaryOperandBinaryExpressions: false }],
+        'prefer-destructuring': ['error', { array: false, object: true }],
+        '@stylistic/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: 'never' }],
+        '@stylistic/comma-dangle': ['error', 'always-multiline'],
+        '@stylistic/max-statements-per-line': 'off',
+        '@stylistic/no-mixed-operators': 'off',
+      },
+    },
+  ),
 );

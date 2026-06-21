@@ -19,24 +19,7 @@
 import type { JHipsterCommandDefinition } from '../../../../lib/command/index.ts';
 
 const command = {
-  configs: {
-    devDatabaseType: {
-      description: 'Development database',
-      cli: {
-        type: String,
-      },
-      choices: ['postgresql', 'mysql', 'mariadb', 'oracle', 'mssql', 'h2Disk', 'h2Memory'],
-      scope: 'storage',
-    },
-    prodDatabaseType: {
-      cli: {
-        type: String,
-        hide: true,
-      },
-      choices: ['postgresql', 'mysql', 'mariadb', 'oracle', 'mssql'],
-      scope: 'storage',
-    },
-  },
+  configs: {},
 } as const satisfies JHipsterCommandDefinition;
 
 export default command;

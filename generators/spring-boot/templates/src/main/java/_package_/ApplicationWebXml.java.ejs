@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>;
+package <%- packageName %>;
 
 import tech.jhipster.config.DefaultProfileUtil;
 
@@ -33,6 +33,6 @@ public class ApplicationWebXml extends SpringBootServletInitializer {
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         // set a default to use when no profile is configured.
         DefaultProfileUtil.addDefaultProfile(application.application());
-        return application.sources(<%= mainClass %>.class);
+        return application.sources(<%- mainClass %>.class);
     }
 }

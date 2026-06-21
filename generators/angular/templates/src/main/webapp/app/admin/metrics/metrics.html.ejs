@@ -30,16 +30,16 @@
 @let metricsRef = metrics();
 @if (metricsRef && !updatingMetrics()) {
   <div class="row">
-    <<%= jhiPrefixDashed %>-jvm-memory class="col-md-4" [updating]="updatingMetrics()" [jvmMemoryMetrics]="metricsRef.jvm" />
+    <<%- jhiPrefixDashed %>-jvm-memory class="col-md-4" [updating]="updatingMetrics()" [jvmMemoryMetrics]="metricsRef.jvm" />
 
-    <<%= jhiPrefixDashed %>-jvm-threads class="col-md-4" [threads]="threads()" />
+    <<%- jhiPrefixDashed %>-jvm-threads class="col-md-4" [threads]="threads()" />
 
-    <<%= jhiPrefixDashed %>-metrics-system class="col-md-4" [updating]="updatingMetrics()" [systemMetrics]="metricsRef.processMetrics" />
+    <<%- jhiPrefixDashed %>-metrics-system class="col-md-4" [updating]="updatingMetrics()" [systemMetrics]="metricsRef.processMetrics" />
   </div>
 }
 
 @if (metricsRef?.garbageCollector; as metricsRefGarbageCollector) {
-  <<%= jhiPrefixDashed %>-metrics-garbagecollector
+  <<%- jhiPrefixDashed %>-metrics-garbagecollector
     [updating]="updatingMetrics()"
     [garbageCollectorMetrics]="metricsRefGarbageCollector" />
 }
@@ -49,25 +49,25 @@
 }
 
 @if (metricsRef?.['http.server.requests']; as metricsRefHttpServerRequests) {
-  <<%= jhiPrefixDashed %>-metrics-request
+  <<%- jhiPrefixDashed %>-metrics-request
     [updating]="updatingMetrics()"
     [requestMetrics]="metricsRefHttpServerRequests" />
 }
 
 @if (metricsRef?.services; as metricsRefServices) {
-  <<%= jhiPrefixDashed %>-metrics-endpoints-requests
+  <<%- jhiPrefixDashed %>-metrics-endpoints-requests
     [updating]="updatingMetrics()"
     [endpointsRequestsMetrics]="metricsRefServices" />
 }
 
 @if (metricsRef?.cache; as metricsRefCache) {
-  <<%= jhiPrefixDashed %>-metrics-cache
+  <<%- jhiPrefixDashed %>-metrics-cache
     [updating]="updatingMetrics()"
     [cacheMetrics]="metricsRefCache" />
 }
 
 @if (metricsRef && metricsKeyExistsAndObjectNotEmpty('databases')) {
-  <<%= jhiPrefixDashed %>-metrics-datasource
+  <<%- jhiPrefixDashed %>-metrics-datasource
     [updating]="updatingMetrics()"
     [datasourceMetrics]="metricsRef.databases" />
 }

@@ -17,14 +17,14 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: <%= baseName.toLowerCase() %>
+name: <%- baseName.toLowerCase() %>
 services:
   postgresql:
     image: <%- dockerContainers.postgresql %>
     # volumes:
-    #   - ~/volumes/jhipster/<%= baseName %>/postgresql/:/var/lib/postgresql/data/
+    #   - ~/volumes/jhipster/<%- baseName %>/postgresql/:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=<%= baseName %>
+      - POSTGRES_USER=<%- baseName %>
 <%_ if (locals.prodDatabasePassword) { _%>
       - POSTGRES_PASSWORD=<%- locals.prodDatabasePassword %>
 <%_ } _%>

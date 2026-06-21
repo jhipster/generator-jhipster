@@ -95,7 +95,7 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
       async generateSample() {
         if (extname(this.sampleName) === '.jdl' || this.sampleYorcFolder || this.sampleOnly) return;
 
-        const sample = this.sample;
+        const { sample } = this;
         assert.ok(sample, `Sample ${this.sampleName} not found`);
 
         let generatorOptions: any = {
@@ -126,7 +126,11 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
       async generateYoRcSample() {
         if (!this.sampleYorcFolder || this.sampleOnly) return;
 
-        await this.composeWithJHipster(GENERATOR_APP, { generatorOptions: { destinationRoot: this.projectFolder } });
+        const yoRc = (this.fs.readJSON(`${this.projectFolder}/.yo-rc.json`) as any)?.['generator-jhipster'] as unknown as
+          | typeof this.jhipsterConfig
+          | undefined;
+        const defaultCommand = yoRc?.defaultCommand ?? GENERATOR_APP;
+        await this.composeWithJHipster(defaultCommand, { generatorOptions: { destinationRoot: this.projectFolder } });
       },
       async updateVscodeWorkspace() {
         if (this.global) {

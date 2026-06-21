@@ -1,0 +1,34 @@
+import type { JHipsterCommandDefinition } from 'generator-jhipster';
+import type {
+  Application as BaseApplication,
+  Config as BaseConfig,
+  Entity as BaseEntity,
+  Options as BaseOptions,
+  Source as BaseSource,
+} from 'generator-jhipster/generators/app';
+import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
+
+type <%- upperFirstCamelCaseBaseName %>BlueprintConfig = any;
+
+type <%- upperFirstCamelCaseBaseName %>Entity = BaseEntity;
+
+export type <%- upperFirstCamelCaseBaseName %>Application = BaseApplication<<%- upperFirstCamelCaseBaseName %>Entity> & {
+  <%- upperFirstCamelCaseBaseName %>EventChangelogDate: string;
+  auditedEntities: string[];
+};
+
+type <%- upperFirstCamelCaseBaseName %>Options = BaseOptions;
+
+type <%- upperFirstCamelCaseBaseName %>Source = BaseSource;
+
+export default class <%- upperFirstCamelCaseBaseName %>ApplicationGenerator extends BaseApplicationGenerator<
+  <%- upperFirstCamelCaseBaseName %>Entity,
+  <%- upperFirstCamelCaseBaseName %>Application,
+  BaseConfig,
+  <%- upperFirstCamelCaseBaseName %>Options,
+  <%- upperFirstCamelCaseBaseName %>Source
+> {
+  declare blueprintConfig: <%- upperFirstCamelCaseBaseName %>BlueprintConfig;
+}
+
+export const asCommand = <const Def extends JHipsterCommandDefinition<<%- upperFirstCamelCaseBaseName %>ApplicationGenerator>>(command: Def): Def => command;

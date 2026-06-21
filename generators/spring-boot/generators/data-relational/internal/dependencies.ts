@@ -114,8 +114,9 @@ export const getH2MavenDefinition = ({
   implementsTestcontainersSupport: boolean;
   packageFolder: string;
 }): DatabaseTypeDependencies => {
-  const excludeContainerPlugin: MavenPlugin[] = implementsTestcontainersSupport
-    ? [
+  const excludeContainerPlugin: MavenPlugin[] =
+    implementsTestcontainersSupport ?
+      [
         {
           inProfile: 'dev',
           groupId: 'org.apache.maven.plugins',
@@ -160,8 +161,8 @@ export const getDatabaseTypeMavenDefinition: (
       dependencies: [{ inProfile, ...jdbc }, ...testContainerDeps],
     },
     r2dbc:
-      databaseType !== 'oracle'
-        ? { dependencies: [{ inProfile, ...javaSqlDatabaseArtifacts[databaseType].r2dbc }] } // r2dbc uses jdbc for testcontainers.
-        : {},
+      databaseType === 'oracle' ?
+        {} // r2dbc uses jdbc for testcontainers.
+      : { dependencies: [{ inProfile, ...javaSqlDatabaseArtifacts[databaseType].r2dbc }] },
   };
 };

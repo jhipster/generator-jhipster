@@ -35,7 +35,9 @@ describe('MetricsModalThreads', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      <%_ if (enableTranslation) { _%>imports: [TranslateModule.forRoot()],<%_ } _%>
+<%_ if (enableTranslation) { _%>
+      imports: [TranslateModule.forRoot()],
+<%_ } _%>
       providers: [NgbActiveModal],
     });
   });
@@ -316,7 +318,7 @@ describe('MetricsModalThreads', () => {
   describe('dismiss', () => {
     it('should call dismiss function for modal on dismiss', () => {
       // GIVEN
-      <%= clientTestFramework %>.spyOn(mockActiveModal, 'dismiss');
+      <%- clientTestFramework %>.spyOn(mockActiveModal, 'dismiss');
 
       // WHEN
       comp.dismiss();

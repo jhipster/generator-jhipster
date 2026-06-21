@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= entityAbsolutePackage %>.repository;
+package <%- entityAbsolutePackage %>.repository;
 
-import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
+import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
 
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.stereotype.Repository;
@@ -28,8 +28,8 @@ import java.util.UUID;
 <%_ } _%>
 
 /**
- * <%= springDataDescription %> repository for the <%= persistClass %> entity.
+ * <%- springDataDescription %> repository for the <%- persistClass %> entity.
  */
 @SuppressWarnings("unused")
 @Repository
-public interface <%= entityClass %>Repository extends R2dbcRepository<<%= persistClass %>, <%= primaryKey.type %>> {}
+public interface <%- entityClass %>Repository extends R2dbcRepository<<%- persistClass %>, <%- primaryKey.type %>> {}

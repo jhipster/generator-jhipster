@@ -16,18 +16,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { HandleCommandTypes } from '../../lib/command/types.ts';
+import type { CommandTypeMap } from '../../lib/command/types.ts';
 import type {
-  Application as BaseApplicationApplication,
-  Config as BaseApplicationConfig,
-  Entity as BaseApplicationEntity,
-  Options as BaseApplicationOptions,
-  Source as BaseApplicationSource,
-} from '../base-application/types.ts';
+  Application as BaseSimpleApplicationApplication,
+  Config as BaseSimpleApplicationConfig,
+  Options as BaseSimpleApplicationOptions,
+  Source as BaseSimpleApplicationSource,
+} from '../base-simple-application/types.ts';
 
 import type command from './command.ts';
 
-type Command = HandleCommandTypes<typeof command>;
+export type { Features } from '../base-simple-application/types.ts';
+
+type Command = CommandTypeMap<typeof command>;
 
 type HerokuOptions = {
   skipBuild: boolean;
@@ -37,10 +38,10 @@ type HerokuOptions = {
   herokuJavaVersion?: string;
 };
 
-export type Config = Command['Config'] & BaseApplicationConfig & HerokuOptions;
+export type Config = Command['Config'] & BaseSimpleApplicationConfig & HerokuOptions;
 
-export type Options = Command['Options'] & BaseApplicationOptions & HerokuOptions;
+export type Options = Command['Options'] & BaseSimpleApplicationOptions & HerokuOptions;
 
-export { BaseApplicationEntity as Entity, BaseApplicationSource as Source };
+export { BaseSimpleApplicationSource as Source };
 
-export type Application<E extends BaseApplicationEntity = BaseApplicationEntity> = Command['Application'] & BaseApplicationApplication<E>;
+export type Application = Command['Application'] & BaseSimpleApplicationApplication;

@@ -50,20 +50,22 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
 
     await this.dependsOnBootstrap('docker');
     if (!this.delegateToBlueprint) {
-      await this.dependsOnBootstrap('common');
+      await this.dependsOnBootstrap('server');
     }
   }
 
-  get preparing() {
-    return this.asPreparingTaskGroup({
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      // Run in the post preparing phase to be able to use the application prepared by every other generators.
+      // This generator is not guaranteed to be run before spring-boot bootstrap, so we should postpone the preparation.
       async dockerServices({ application }) {
-        const dockerServices = application.dockerServices;
+        const { dockerServices } = application;
         if (application.authenticationTypeOauth2) {
           dockerServices.push('keycloak');
 
           const faker = await createFaker();
           faker.seed(stringHashCode(application.baseName));
-          application.keycloakSecrets = Array.from(Array(6), () => faker.string.uuid());
+          application.keycloakSecrets = Array.from(new Array(6), () => faker.string.uuid());
         }
         if (application.searchEngineElasticsearch) {
           dockerServices.push('elasticsearch');
@@ -147,8 +149,8 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
-    return this.preparing;
+  get [BaseApplicationGenerator.POST_PREPARING]() {
+    return this.postPreparing;
   }
 
   get writing() {
@@ -202,8 +204,9 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
         }
 
         if (application.dockerServices.includes('eureka')) {
-          const depends_on = application.authenticationTypeOauth2
-            ? {
+          const depends_on =
+            application.authenticationTypeOauth2 ?
+              {
                 keycloak: {
                   condition: SERVICE_HEALTHY,
                 },

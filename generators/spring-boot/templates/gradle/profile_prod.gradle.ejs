@@ -38,7 +38,7 @@ bootRun {
 }
 
 <%_ if (!skipClient) { _%>
-task webapp(type: NpmTask) {
+def webapp = tasks.register('webapp', NpmTask) {
     dependsOn(npmInstall)
     args = ["run", "webapp:prod"]
     environment = [APP_VERSION: project.version]
@@ -67,7 +67,7 @@ processResources {
 <%_ } _%>
 }
 
-task integrationTest(type: Test) {
+def integrationTest = tasks.register('integrationTest', Test) {
     maxHeapSize = "1G"
     useJUnitPlatform()
     description = "Execute integration tests."
@@ -92,10 +92,10 @@ task integrationTest(type: Test) {
         ]
     }
 <%_ } _%>
+    dependsOn(tasks.named('test'))
 }
-integrationTest.dependsOn(test)
 
 <%_ if (!skipClient) { _%>
-processResources.dependsOn(webapp)
-bootJar.dependsOn(processResources)
+tasks.named('processResources').configure { dependsOn(webapp) }
+tasks.named('bootJar').configure { dependsOn(tasks.named('processResources')) }
 <%_ } _%>

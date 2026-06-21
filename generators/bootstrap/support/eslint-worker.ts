@@ -1,5 +1,6 @@
 import eslint from 'eslint';
 import { defineConfig } from 'eslint/config';
+import java from 'eslint-plugin-java-lang';
 import ts from 'typescript-eslint';
 
 import jhipster from '../../../lib/eslint/index.ts';
@@ -39,6 +40,7 @@ export default async ({
             reportUnusedDisableDirectives: 'off',
           },
         },
+        extensions.split(',').includes('java') ? java.configs.recommended : {},
       ),
     });
   }

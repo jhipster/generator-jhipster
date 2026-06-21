@@ -1,7 +1,6 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
-import sinon from 'sinon';
 
 import { createTestingPinia } from '@pinia/testing';
 import { useStore } from '@/store';
@@ -18,17 +17,17 @@ const pinia = createTestingPinia({ stubActions: false });
 const store = useStore();
 
 const axiosStub = {
-  get: sinon.stub(axios, 'get'),
-  delete: sinon.stub(axios, 'delete'),
+  get: vi.spyOn(axios, 'get'),
+  delete: vi.spyOn(axios, 'delete'),
 };
 
 describe('Sessions Component', () => {
   let sessions: SessionsComponentType;
 
   beforeEach(() => {
-    axiosStub.get.reset();
-    axiosStub.get.resolves({ data: [] });
-    axiosStub.delete.reset();
+    axiosStub.get.mockReset();
+    axiosStub.get.mockResolvedValue({ data: [] });
+    axiosStub.delete.mockReset();
 
     store.setAuthentication({
       login: 'username',
@@ -43,7 +42,7 @@ describe('Sessions Component', () => {
   });
 
   it('should call remote service on init', () => {
-    expect(axiosStub.get.callCount).toEqual(1);
+    expect(axiosStub.get).toHaveBeenCalledOnce();
   });
 
   it('should have good username', () => {
@@ -52,9 +51,9 @@ describe('Sessions Component', () => {
 
   it('should invalidate a session', async () => {
     // Given
-    axiosStub.get.reset();
-    axiosStub.get.resolves({ data: [] });
-    axiosStub.delete.resolves();
+    axiosStub.get.mockReset();
+    axiosStub.get.mockResolvedValue({ data: [] });
+    axiosStub.delete.mockResolvedValue(undefined);
 
     // When
     await sessions.invalidate('session');
@@ -63,14 +62,14 @@ describe('Sessions Component', () => {
     // Then
     expect(sessions.error).toBeNull();
     expect(sessions.success).toEqual('OK');
-    expect(axiosStub.get.callCount).toEqual(1);
+    expect(axiosStub.get).toHaveBeenCalledOnce();
   });
 
   it('should fail to invalidate session', async () => {
     // Given
-    axiosStub.get.reset();
-    axiosStub.get.resolves({ data: [] });
-    axiosStub.delete.rejects();
+    axiosStub.get.mockReset();
+    axiosStub.get.mockResolvedValue({ data: [] });
+    axiosStub.delete.mockRejectedValue(new Error());
 
     // When
     await sessions.invalidate('session');
@@ -79,6 +78,6 @@ describe('Sessions Component', () => {
     // Then
     expect(sessions.success).toBeNull();
     expect(sessions.error).toEqual('ERROR');
-    expect(axiosStub.get.callCount).toEqual(0);
+    expect(axiosStub.get).not.toHaveBeenCalled();
   });
 });

@@ -11,11 +11,11 @@ spring:
       bindings:
         binding-out-0:
           content-type: text/plain
-          group: <%= dasherizedBaseName %>
+          group: <%- dasherizedBaseName %>
         kafkaConsumer-in-0:
           destination: sse-topic
           content-type: text/plain
-          group: <%= dasherizedBaseName %>
+          group: <%- dasherizedBaseName %>
         kafkaProducer-out-0:
           content-type: text/plain
-          group: <%= dasherizedBaseName %>
+          group: <%- dasherizedBaseName %>

@@ -20,26 +20,24 @@ import assert from 'node:assert';
 
 import { passthrough } from '@yeoman/transform';
 import chalk from 'chalk';
-import { lowerFirst, upperFirst } from 'lodash-es';
+import { lowerFirst } from 'lodash-es';
 import type { MemFsEditorFile } from 'mem-fs-editor';
 import { isFileStateModified } from 'mem-fs-editor/state';
 
-import { loadCommandConfigsIntoApplication, loadCommandConfigsKeysIntoTemplatesContext } from '../../../../lib/command/load.ts';
-import { lookupCommandsConfigs } from '../../../../lib/command/lookup-commands-configs.ts';
-import { packageJson } from '../../../../lib/index.ts';
-import { getConfigWithDefaults } from '../../../../lib/jhipster/default-application-options.ts';
 import type { Entity as BaseEntity } from '../../../../lib/jhipster/types/entity.ts';
-import { mutateData, removeFieldsWithNullishValues } from '../../../../lib/utils/index.ts';
-import { loadDerivedConfig } from '../../../base-core/internal/config-def.ts';
-import { isWin32 } from '../../../base-core/support/index.ts';
-import serverCommand from '../../../server/command.ts';
+import { isWin32, mutateData } from '../../../../lib/utils/index.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-boot/generators/data-relational/types.ts';
 import type { Application as SpringBootApplication } from '../../../spring-boot/types.ts';
 import { mutateApplication } from '../../application.ts';
 import { mutateRelationship, mutateRelationshipWithEntity } from '../../entity.ts';
 import BaseApplicationGenerator from '../../index.ts';
 import { convertFieldBlobType, getBlobContentType, isFieldBinaryType, isFieldBlobType } from '../../internal/types/field-types.ts';
-import { createAuthorityEntity, createUserEntity, createUserManagementEntity } from '../../internal/utils.ts';
+import {
+  createAuthorityEntity,
+  createUserEntity,
+  createUserManagementEntity,
+  getChangelogDateForBuiltInEntities,
+} from '../../internal/utils.ts';
 import {
   addFakerToEntity,
   derivedPrimaryKeyProperties,
@@ -52,18 +50,11 @@ import {
   prepareRelationship,
   stringifyApplicationData,
 } from '../../support/index.ts';
-import type {
-  Application as BaseApplicationApplication,
-  Config as BaseApplicationConfig,
-  Entity as BaseApplicationEntity,
-  Options as BaseApplicationOptions,
-} from '../../types.ts';
+import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../types.ts';
 
 export default class BootstrapBaseApplicationGenerator extends BaseApplicationGenerator<
   BaseApplicationEntity,
-  BaseApplicationApplication<BaseApplicationEntity>,
-  BaseApplicationConfig,
-  BaseApplicationOptions
+  BaseApplicationApplication<BaseApplicationEntity>
 > {
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -114,26 +105,6 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
           devDatabaseTypeH2Any: undefined,
         });
       },
-      loadNodeDependencies({ application }) {
-        this.loadNodeDependencies(application.nodeDependencies, {
-          prettier: packageJson.dependencies.prettier,
-          'prettier-plugin-java': packageJson.dependencies['prettier-plugin-java'],
-          'prettier-plugin-packagejson': packageJson.dependencies['prettier-plugin-packagejson'],
-        });
-
-        this.loadNodeDependenciesFromPackageJson(
-          application.nodeDependencies,
-          this.fetchFromInstalledJHipster('common', 'resources', 'package.json'),
-        );
-      },
-      loadDefaults({ application, applicationDefaults }) {
-        let { applyDefaults } = this.options;
-        applyDefaults ??= getConfigWithDefaults as any;
-        applicationDefaults(applyDefaults!(application));
-      },
-      serverConfig({ application }) {
-        loadDerivedConfig(serverCommand.configs, { application });
-      },
       loadApplication({ applicationDefaults, application }) {
         applicationDefaults(
           {
@@ -144,41 +115,8 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
           mutateApplication,
         );
         mutateData(application as unknown as SpringBootApplication, {
-          buildToolUnknown: ({ buildTool }) => !['gradle', 'maven'].includes(buildTool!),
+          buildToolUnknown: ({ buildTool }) => !['gradle', 'maven'].includes(buildTool),
         });
-      },
-      /**
-       * Avoid having undefined keys in the application object when rendering ejs templates
-       */
-      async loadApplicationKeys({ application }) {
-        const { applyDefaults = getConfigWithDefaults, commandsConfigs = await lookupCommandsConfigs() } = this.options;
-        loadCommandConfigsIntoApplication({
-          source: applyDefaults(removeFieldsWithNullishValues(this.config.getAll())),
-          application,
-          commandsConfigs,
-        });
-      },
-      prepareApplication({ application }) {
-        if (application.microfrontends && application.microfrontends.length > 0) {
-          application.microfrontends.forEach(microfrontend => {
-            const { baseName } = microfrontend;
-            mutateData(microfrontend, {
-              lowercaseBaseName: baseName.toLowerCase(),
-              capitalizedBaseName: upperFirst(baseName),
-              endpointPrefix: `services/${baseName.toLowerCase()}`,
-            });
-          });
-        } else if (application.microfrontend) {
-          application.microfrontends = [];
-        }
-        application.microfrontend =
-          application.microfrontend ||
-          (application.applicationTypeMicroservice && !application.skipClient) ||
-          (application.applicationTypeGateway && application.microfrontends && application.microfrontends.length > 0);
-
-        if (application.microfrontend && application.applicationTypeMicroservice && !application.gatewayServerPort) {
-          application.gatewayServerPort = 8080;
-        }
       },
     });
   }
@@ -189,7 +127,7 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
 
   get configuringEachEntity() {
     return this.asConfiguringEachEntityTaskGroup({
-      configureEntity({ entityStorage, entityConfig }) {
+      configureEntity({ application, entityName, entityStorage, entityConfig }) {
         entityStorage.defaults({ fields: [], relationships: [], annotations: {} });
 
         for (const field of entityConfig.fields!.filter(field => field.fieldType === 'byte[]')) {
@@ -202,7 +140,15 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
           delete entityConfig.changelogDate;
         }
         if (!entityConfig.annotations!.changelogDate) {
-          entityConfig.annotations!.changelogDate = this.nextTimestamp();
+          if (
+            (entityName === 'UserManagement' && application.generateUserManagement) ||
+            (entityName === 'User' && application.generateBuiltInUserEntity) ||
+            (entityName === 'Authority' && application.generateBuiltInAuthorityEntity)
+          ) {
+            entityConfig.annotations!.changelogDate = getChangelogDateForBuiltInEntities(this.jhipsterConfig.creationTimestamp)[entityName];
+          } else {
+            entityConfig.annotations!.changelogDate = this.nextTimestamp();
+          }
           entityStorage.save();
         }
       },
@@ -223,13 +169,13 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
 
           if (!relationship.relationshipSide) {
             // Try to create relationshipSide based on best bet.
-            if (relationship.ownerSide !== undefined) {
-              relationship.relationshipSide = relationship.ownerSide ? 'left' : 'right';
-            } else {
+            if (relationship.ownerSide === undefined) {
               // Missing ownerSide (one-to-many/many-to-one relationships) depends on the otherSide existence.
               const unidirectionalRelationship = !relationship.otherEntityRelationshipName;
               const bidirectionalOneToManySide = !unidirectionalRelationship && relationship.relationshipType === 'one-to-many';
               relationship.relationshipSide = unidirectionalRelationship || bidirectionalOneToManySide ? 'left' : 'right';
+            } else {
+              relationship.relationshipSide = relationship.ownerSide ? 'left' : 'right';
             }
           }
 
@@ -430,12 +376,12 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
         derivedPrimaryKeyProperties(entity.primaryKey);
       },
       processDerivedPrimaryKeyFields({ entity }) {
-        const primaryKey = entity.primaryKey;
+        const { primaryKey } = entity;
         if (!primaryKey || primaryKey.composite || !primaryKey.derived) {
           return;
         }
         // derivedPrimary uses '@MapsId', which requires for each relationship id field to have corresponding field in the model
-        const derivedFields = primaryKey.derivedFields;
+        const { derivedFields } = primaryKey;
         entity.fields.unshift(...derivedFields!);
       },
       prepareEntityDerivedProperties({ entity }) {
@@ -450,23 +396,6 @@ export default class BootstrapBaseApplicationGenerator extends BaseApplicationGe
 
   get default() {
     return this.asDefaultTaskGroup({
-      /**
-       * Avoid having undefined keys in the application object when rendering ejs templates
-       */
-      async loadApplicationKeys({ application }) {
-        if (this.options.commandsConfigs) {
-          // Load keys passed from cli
-          loadCommandConfigsKeysIntoTemplatesContext({
-            templatesContext: application,
-            commandsConfigs: this.options.commandsConfigs,
-          });
-        }
-        // Load keys from main generators
-        loadCommandConfigsKeysIntoTemplatesContext({
-          templatesContext: application,
-          commandsConfigs: await lookupCommandsConfigs(),
-        });
-      },
       task({ application }) {
         const packageJsonFiles = [this.destinationPath('package.json')];
         if (application.clientRootDir) {

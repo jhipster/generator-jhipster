@@ -19,9 +19,9 @@
 export class AlertErrorModel {
   constructor(
     public message: string,
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     public key?: string,
     public params?: Record<string, unknown>
-    <%_ } _%>
+<%_ } _%>
   ) {}
 }

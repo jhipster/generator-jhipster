@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 
-import type { ITokenConfig } from 'chevrotain';
-import { createToken } from 'chevrotain';
+import { type ITokenConfig, createToken } from 'chevrotain';
 import { isString } from 'lodash-es';
 
 import { KEYWORD, NAME, namePattern } from './shared-tokens.ts';
@@ -33,9 +32,7 @@ export default function createTokenFromConfig(config: ITokenConfig) {
   // a Concise way to resolve the problem without manually adding the "longer_alt" property dozens of times.
   if (isString(config.pattern) && namePattern.test(config.pattern)) {
     config.longer_alt = NAME;
-    if (!config.categories) {
-      config.categories = [];
-    }
+    config.categories ??= [];
     if (!Array.isArray(config.categories)) {
       config.categories = [config.categories];
     }

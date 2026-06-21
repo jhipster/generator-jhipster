@@ -19,7 +19,7 @@
 # This configuration uses 'http' and is not recommended for production use.
 # Refer https://istio.io/latest/docs/tasks/observability/gateways/ for a more secure 'https' config
 # using a self signed certificate and prefer that for production use
-apiVersion: <%= KUBERNETES_ISTIO_NETWORKING_API_VERSION %>
+apiVersion: <%- KUBERNETES_ISTIO_NETWORKING_API_VERSION %>
 kind: Gateway
 metadata:
   name: grafana-observability-gateway
@@ -33,22 +33,22 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - grafana.istio-system.<%= ingressDomain %>
+    - grafana.istio-system.<%- ingressDomain %>
   - port:
       number: 80
       name: http2
       protocol: HTTP2
     hosts:
-    - grafana.istio-system.<%= ingressDomain %>
+    - grafana.istio-system.<%- ingressDomain %>
 ---
-apiVersion: <%= KUBERNETES_ISTIO_NETWORKING_API_VERSION %>
+apiVersion: <%- KUBERNETES_ISTIO_NETWORKING_API_VERSION %>
 kind: VirtualService
 metadata:
   name: grafana-gw-virtualservice
   namespace: istio-system
 spec:
   hosts:
-  - grafana.istio-system.<%= ingressDomain %>
+  - grafana.istio-system.<%- ingressDomain %>
   gateways:
   - grafana-observability-gateway
   http:

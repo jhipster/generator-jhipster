@@ -51,6 +51,8 @@ import type {
   Application as SpringBootApplication,
   Config as SpringBootConfig,
   Entity as SpringBootEntity,
+  Features,
+  Options,
   Options as SpringBootOptions,
   Source as SpringBootSource,
   SpringBootModule,
@@ -76,6 +78,10 @@ export class SpringBootApplicationGenerator extends BaseApplicationGenerator<
 
 export default class SpringBootGenerator extends SpringBootApplicationGenerator {
   fakeKeytool!: boolean;
+
+  constructor(args?: string[], options?: Options, features?: Features) {
+    super(args, options, { ...features, loadCommand: ['jhipster:client'] });
+  }
 
   async beforeQueue() {
     if (!this.fromBlueprint) {
@@ -458,7 +464,7 @@ public void set${javaBeanCase(propertyName)}(${propertyType} ${propertyName}) {
           const classProperties = Object.entries(classStructure).map(([name, type]) => ({
             name,
             type: Array.isArray(type) ? type[0] : type,
-            defaultVaue: Array.isArray(type) ? ` = ${type[1]}` : '',
+            defaultValue: Array.isArray(type) ? ` = ${type[1]}` : '',
             beanName: javaBeanCase(name),
           }));
           return source.addApplicationPropertiesContent!({
@@ -469,7 +475,7 @@ public ${propertyType} get${javaBeanCase(propertyName)}() {
 }
 `,
             propertyClass: `public static class ${propertyType} {
-${classProperties.map(({ name, type, defaultVaue }) => `\n    private ${type} ${name}${defaultVaue};`).join('\n')}
+${classProperties.map(({ name, type, defaultValue }) => `\n    private ${type} ${name}${defaultValue};`).join('\n')}
 ${classProperties.map(({ name, type, beanName }) => `\n    public ${type} get${beanName}() {\n        return ${name};\n    }\n`).join('\n')}
 ${classProperties
   .map(({ name, type, beanName }) => `\n    public void set${beanName}(${type} ${name}) {\n        this.${name} = ${name};\n    }`)
@@ -704,7 +710,6 @@ ${classProperties
       async writeFiles({ application }) {
         return this.writeFiles({
           sections: serverFiles,
-          rootTemplatesPath: ['', '../../java/generators/domain/templates/'],
           context: application,
         });
       },
@@ -944,7 +949,7 @@ ${application.jhipsterDependenciesVersion?.includes('-CICD') ? '' : '// '}mavenL
             dependencies: [
               { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-hppc' },
               { groupId: 'com.fasterxml.jackson.datatype', artifactId: 'jackson-datatype-jsr310' },
-              { groupId: 'io.micrometer', artifactId: 'micrometer-registry-prometheus-simpleclient' },
+              { groupId: 'io.micrometer', artifactId: 'micrometer-registry-prometheus' },
               { groupId: 'org.apache.commons', artifactId: 'commons-lang3' },
               { groupId: 'org.mapstruct', artifactId: 'mapstruct', versionRef: 'mapstruct' },
               { groupId: 'org.mapstruct', artifactId: 'mapstruct-processor', versionRef: 'mapstruct', scope: 'annotationProcessor' },

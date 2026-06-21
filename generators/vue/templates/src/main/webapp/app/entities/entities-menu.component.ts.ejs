@@ -10,34 +10,12 @@ import {
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
-<%_ if (enableTranslation && applicationTypeMicroservice) { _%>
-import type TranslationService from '@/locale/translation.service';
-<%_ } _%>
 
 export default defineComponent({
   name: 'EntitiesMenu',
 <%_ if (enableTranslation) { _%>
   setup() {
     const i18n = useI18n();
-  <%_ if (applicationTypeMicroservice) { _%>
-    const microfrontendI18n = inject('microfrontendI18n', true);
-    const translationService = inject<TranslationService>('translationService');
-    const currentLanguage = inject<ComputedRef<string>>('currentLanguage');
-
-    const loadLanguage = async () => {
-      if (microfrontendI18n) {
-        const languageToLoad = currentLanguage.value;
-        await translationService.loadTranslations({ currentLanguage: languageToLoad, urlPrefix: '<%= endpointPrefix %>/', hash: I18N_HASH });
-      }
-    };
-
-    onMounted(() => loadLanguage());
-    watch(
-      () => i18n.locale,
-      () => loadLanguage(),
-    );
-
-  <%_ } _%>
     return {
       t$: i18n.t,
     };

@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, expect as jestExpect, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import { APPLICATION_TYPE_GATEWAY, APPLICATION_TYPE_MICROSERVICE, APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
 import fieldTypes from '../../../jhipster/field-types.ts';
@@ -56,7 +54,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
           expect(() => {
             // @ts-expect-error
             parseFromConfigurationObject({});
-          }).to.throw(/^The parsed JDL content must be passed\.$/);
+          }).toThrow(/^The parsed JDL content must be passed\.$/);
         });
       });
     });
@@ -72,8 +70,8 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         });
 
         it('should build a JDLObject', () => {
-          expect(jdlObject).not.to.be.null;
-          expect(jdlObject.entities.Department).to.deep.equal(
+          expect(jdlObject).not.toBeNull();
+          expect(jdlObject.entities.Department).toEqual(
             new JDLEntity({
               name: 'Department',
               tableName: undefined,
@@ -108,7 +106,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
               },
             }),
           );
-          expect(jdlObject.entities.JobHistory).to.deep.eq(
+          expect(jdlObject.entities.JobHistory).toEqual(
             new JDLEntity({
               name: 'JobHistory',
               tableName: undefined,
@@ -126,13 +124,13 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
               comment: 'JobHistory comment.',
             }),
           );
-          expect(jdlObject.getEnum('JobType')).to.deep.equal(
+          expect(jdlObject.getEnum('JobType')).toEqual(
             new JDLEnum({
               name: 'JobType',
               values: [{ key: 'TYPE1' }, { key: 'TYPE2' }],
             }),
           );
-          expect(jdlObject.entities.Job).to.deep.eq(
+          expect(jdlObject.entities.Job).toEqual(
             new JDLEntity({
               name: 'Job',
               tableName: undefined,
@@ -163,7 +161,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
               },
             }),
           );
-          expect(jdlObject.getOptions()).to.deep.eq([
+          expect(jdlObject.getOptions()).toEqual([
             new JDLUnaryOption({
               name: unaryOptions.SKIP_SERVER,
               entityNames: new Set(['Country']),
@@ -228,8 +226,8 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         });
 
         it('should add it', () => {
-          expect(relationship?.isInjectedFieldInFromRequired).to.be.true;
-          expect(relationship?.isInjectedFieldInToRequired).to.be.false;
+          expect(relationship?.isInjectedFieldInFromRequired).toBe(true);
+          expect(relationship?.isInjectedFieldInToRequired).toBe(false);
         });
       });
       describe("with a field name 'id'", () => {
@@ -243,7 +241,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         });
 
         it('should add it', () => {
-          expect(jdlObject.entities.A).to.deep.eq(
+          expect(jdlObject.entities.A).toEqual(
             new JDLEntity({
               name: 'A',
               tableName: undefined,
@@ -269,8 +267,8 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         });
 
         it('should be processed', () => {
-          expect(jdlObject.relationships.getManyToOne('ManyToOne_A{user}_User')?.to).to.equal('User');
-          expect(jdlObject.relationships.getOneToOne('OneToOne_B{user}_User')?.to).to.equal('User');
+          expect(jdlObject.relationships.getManyToOne('ManyToOne_A{user}_User')?.to).toBe('User');
+          expect(jdlObject.relationships.getOneToOne('OneToOne_B{user}_User')?.to).toBe('User');
         });
       });
       describe('with Authority entity as destination for a relationship', () => {
@@ -284,8 +282,8 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         });
 
         it('is processed', () => {
-          expect(jdlObject.relationships.getManyToOne('ManyToOne_A{authority}_Authority')?.to).to.equal('Authority');
-          expect(jdlObject.relationships.getOneToOne('OneToOne_B{authority}_Authority')?.to).to.equal('Authority');
+          expect(jdlObject.relationships.getManyToOne('ManyToOne_A{authority}_Authority')?.to).toBe('Authority');
+          expect(jdlObject.relationships.getOneToOne('OneToOne_B{authority}_Authority')?.to).toBe('Authority');
         });
       });
       describe('with an invalid option', () => {
@@ -322,13 +320,13 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         });
 
         it('should add it', () => {
-          expect(jdlObject.getEnum('MyEnum')).to.deep.eq(
+          expect(jdlObject.getEnum('MyEnum')).toEqual(
             new JDLEnum({
               name: 'MyEnum',
               values: [{ key: 'AAA' }, { key: 'BBB' }, { key: 'CCC' }],
             }),
           );
-          expect(jdlObject.entities.MyEntity.fields.sourceType).to.deep.eq(enumField);
+          expect(jdlObject.entities.MyEntity.fields.sourceType).toEqual(enumField);
         });
       });
       describe('when using the noFluentMethods option', () => {
@@ -343,7 +341,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         });
 
         it('should add it correctly', () => {
-          expect(jdlObject.getOptions()).to.deep.eq([
+          expect(jdlObject.getOptions()).toEqual([
             new JDLUnaryOption({
               name: unaryOptions.NO_FLUENT_METHOD,
               entityNames: new Set(['A']),
@@ -362,19 +360,19 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         });
 
         it('should accept them', () => {
-          expect(jdlObject.entities.A.fields.name.comment).to.equal('abc');
-          expect(jdlObject.entities.A.fields.thing.comment).to.equal('def');
-          expect(jdlObject.entities.A.fields.another.comment).to.equal(undefined);
+          expect(jdlObject.entities.A.fields.name.comment).toBe('abc');
+          expect(jdlObject.entities.A.fields.thing.comment).toBe('def');
+          expect(jdlObject.entities.A.fields.another.comment).toBe(undefined);
         });
         describe('when having both forms of comments', () => {
           it('should accept the one defined first', () => {
-            expect(jdlObject.entities.B.fields.name.comment).to.equal('xyz');
+            expect(jdlObject.entities.B.fields.name.comment).toBe('xyz');
           });
         });
         describe('when using commas', () => {
           it('should assign the comment to the next field', () => {
-            expect(jdlObject.entities.C.fields.name.comment).to.be.undefined;
-            expect(jdlObject.entities.C.fields.thing.comment).to.equal('abc');
+            expect(jdlObject.entities.C.fields.name.comment).toBeUndefined();
+            expect(jdlObject.entities.C.fields.thing.comment).toBe('abc');
           });
         });
       });
@@ -392,19 +390,19 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
 
         describe('checking the options', () => {
           it('should parse them', () => {
-            expect(options.length).to.equal(7);
-            expect(options[0].name).to.equal('skipClient');
-            expect(options[1].name).to.equal('skipServer');
-            expect(options[2].name).to.equal(DTO);
-            expect(options[2].value).to.equal(MAPSTRUCT);
-            expect(options[3].name).to.equal('service');
-            expect(options[3].value).to.equal(SERVICE_IMPL);
-            expect(options[4].name).to.equal('service');
-            expect(options[4].value).to.equal(SERVICE_CLASS);
-            expect(options[5].name).to.equal('pagination');
-            expect(options[5].value).to.equal(INFINITE_SCROLL);
-            expect(options[6].name).to.equal('pagination');
-            expect(options[6].value).to.equal(PAGINATION);
+            expect(options.length).toBe(7);
+            expect(options[0].name).toBe('skipClient');
+            expect(options[1].name).toBe('skipServer');
+            expect(options[2].name).toBe(DTO);
+            expect(options[2].value).toBe(MAPSTRUCT);
+            expect(options[3].name).toBe('service');
+            expect(options[3].value).toBe(SERVICE_IMPL);
+            expect(options[4].name).toBe('service');
+            expect(options[4].value).toBe(SERVICE_CLASS);
+            expect(options[5].name).toBe('pagination');
+            expect(options[5].value).toBe(INFINITE_SCROLL);
+            expect(options[6].name).toBe('pagination');
+            expect(options[6].value).toBe(PAGINATION);
           });
         });
       });
@@ -419,10 +417,10 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         });
 
         it('should assign them correctly', () => {
-          expect(jdlObject.entities.TestEntity.fields.first.comment).to.equal('first comment');
-          expect(jdlObject.entities.TestEntity.fields.second.comment).to.equal('second comment');
-          expect(jdlObject.entities.TestEntity2.fields.first.comment).to.equal('first comment');
-          expect(jdlObject.entities.TestEntity2.fields.second.comment).to.equal('second comment');
+          expect(jdlObject.entities.TestEntity.fields.first.comment).toBe('first comment');
+          expect(jdlObject.entities.TestEntity.fields.second.comment).toBe('second comment');
+          expect(jdlObject.entities.TestEntity2.fields.first.comment).toBe('first comment');
+          expect(jdlObject.entities.TestEntity2.fields.second.comment).toBe('second comment');
         });
       });
       describe('when having constants', () => {
@@ -436,7 +434,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         });
 
         it("should assign the constants' value when needed", () => {
-          expect(jdlObject.entities.A.fields.name.validations).to.deep.equal({
+          expect(jdlObject.entities.A.fields.name.validations).toEqual({
             minlength: {
               name: 'minlength',
               value: '1',
@@ -446,7 +444,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
               value: '42',
             },
           });
-          expect(jdlObject.entities.A.fields.content.validations).to.deep.equal({
+          expect(jdlObject.entities.A.fields.content.validations).toEqual({
             minbytes: {
               name: 'minbytes',
               value: '20',
@@ -456,7 +454,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
               value: '40',
             },
           });
-          expect(jdlObject.entities.A.fields.count.validations).to.deep.equal({
+          expect(jdlObject.entities.A.fields.count.validations).toEqual({
             min: {
               name: 'min',
               value: '0',
@@ -481,7 +479,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
               parsedContent: input,
             });
           } catch (error) {
-            expect((error as Error).name).to.equal('IllegalOptionException');
+            expect((error as Error).name).toBe('IllegalOptionException');
           }
         });
       });
@@ -497,7 +495,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         });
 
         it('should parse it', () => {
-          jestExpect(parsedConfig).toMatchInlineSnapshot(`
+          expect(parsedConfig).toMatchInlineSnapshot(`
 JDLApplication {
   "config": JDLApplicationConfiguration {
     "namespace": undefined,
@@ -547,11 +545,11 @@ JDLApplication {
         });
 
         it('should parse it', () => {
-          expect(deployment.appsFolders).to.deep.equal(new Set(['tata', 'titi']));
+          expect(deployment.appsFolders).toEqual(new Set(['tata', 'titi']));
           delete deployment.appsFolders;
           delete deployment.clusteredDbApps;
 
-          jestExpect(deployment).toMatchInlineSnapshot(`
+          expect(deployment).toMatchInlineSnapshot(`
 JDLDeployment {
   "deploymentType": "docker-compose",
   "directoryPath": "../",
@@ -581,8 +579,8 @@ JDLDeployment {
         });
 
         it('should work', () => {
-          expect(filterOption.entityNames.has('*')).to.be.true;
-          expect(filterOption.excludedNames.has('B')).to.be.true;
+          expect(filterOption.entityNames.has('*')).toBe(true);
+          expect(filterOption.excludedNames.has('B')).toBe(true);
         });
       });
       describe('when parsing entities with a custom client root folder', () => {
@@ -601,7 +599,7 @@ JDLDeployment {
           });
 
           it('should set the microservice name as clientRootFolder', () => {
-            expect(clientRootFolderOption.value).to.equal('ms');
+            expect(clientRootFolderOption.value).toBe('ms');
           });
         });
         describe('inside any other app', () => {
@@ -618,9 +616,9 @@ JDLDeployment {
           });
 
           it("should set the option's value", () => {
-            expect(clientRootFolderOption.entityNames.has('*')).to.be.true;
-            expect(clientRootFolderOption.excludedNames.has('C')).to.be.true;
-            expect(clientRootFolderOption.value).to.equal('test-root');
+            expect(clientRootFolderOption.entityNames.has('*')).toBe(true);
+            expect(clientRootFolderOption.excludedNames.has('C')).toBe(true);
+            expect(clientRootFolderOption.value).toBe('test-root');
           });
         });
       });
@@ -640,8 +638,8 @@ JDLDeployment {
           });
 
           it('should add it to every entity', () => {
-            expect(jdlObject.getOptionQuantity()).to.equal(2);
-            expect(microserviceOption.entityNames).to.deep.equal(new Set(['A', 'B', 'C', 'D', 'E', 'F', 'G']));
+            expect(jdlObject.getOptionQuantity()).toBe(2);
+            expect(microserviceOption.entityNames).toEqual(new Set(['A', 'B', 'C', 'D', 'E', 'F', 'G']));
           });
         });
         describe('with the microservice option in the JDL', () => {
@@ -659,8 +657,8 @@ JDLDeployment {
           });
 
           it('does not automatically setup the microservice option', () => {
-            expect(jdlObject.getOptionQuantity()).to.equal(2);
-            expect(microserviceOption.entityNames).to.deep.equal(new Set(['A']));
+            expect(jdlObject.getOptionQuantity()).toBe(2);
+            expect(microserviceOption.entityNames).toEqual(new Set(['A']));
           });
         });
       });
@@ -676,7 +674,7 @@ JDLDeployment {
         });
 
         it('should add the application entities in the application object', () => {
-          jestExpect(entityNames).toMatchInlineSnapshot(`
+          expect(entityNames).toMatchInlineSnapshot(`
 [
   "BankAccount",
 ]
@@ -701,12 +699,12 @@ JDLDeployment {
         });
 
         it('should add a default one', () => {
-          expect(relationshipOneToOne?.injectedFieldInTo).to.equal('a');
-          expect(relationshipOneToOne?.injectedFieldInFrom).to.equal('b');
-          expect(relationshipOneToMany?.injectedFieldInTo).to.equal('a');
-          expect(relationshipOneToMany?.injectedFieldInFrom).to.equal('b');
-          expect(relationshipManyToMany?.injectedFieldInTo).to.equal('a');
-          expect(relationshipManyToMany?.injectedFieldInFrom).to.equal('b');
+          expect(relationshipOneToOne?.injectedFieldInTo).toBe('a');
+          expect(relationshipOneToOne?.injectedFieldInFrom).toBe('b');
+          expect(relationshipOneToMany?.injectedFieldInTo).toBe('a');
+          expect(relationshipOneToMany?.injectedFieldInFrom).toBe('b');
+          expect(relationshipManyToMany?.injectedFieldInTo).toBe('a');
+          expect(relationshipManyToMany?.injectedFieldInFrom).toBe('b');
         });
       });
       describe('when parsing entities with annotations', () => {
@@ -733,7 +731,7 @@ JDLDeployment {
           });
 
           it('should set the annotations as options', () => {
-            jestExpect(entityA.annotations).toMatchInlineSnapshot(`
+            expect(entityA.annotations).toMatchInlineSnapshot(`
 {
   "dto": "mapstruct",
   "myCustomBinaryOption": "customValue",
@@ -742,7 +740,7 @@ JDLDeployment {
   "skipClient": true,
 }
 `);
-            jestExpect(entityB.annotations).toMatchInlineSnapshot(`
+            expect(entityB.annotations).toMatchInlineSnapshot(`
 {
   "dto": "mapstruct",
   "myCustomUnaryOption": true,
@@ -750,7 +748,7 @@ JDLDeployment {
   "service": "serviceClass",
 }
 `);
-            jestExpect(entityC.annotations).toMatchInlineSnapshot(`
+            expect(entityC.annotations).toMatchInlineSnapshot(`
 {
   "filter": true,
   "myCustomBinaryOption": "customValue2",
@@ -758,13 +756,13 @@ JDLDeployment {
   "skipClient": true,
 }
 `);
-            expect(fieldAnnotation).to.deep.equal(true);
-            jestExpect(relationshipAnnotationOnSource).toMatchInlineSnapshot(`
+            expect(fieldAnnotation).toEqual(true);
+            expect(relationshipAnnotationOnSource).toMatchInlineSnapshot(`
 {
   "annotationOnSource": "toto",
 }
 `);
-            jestExpect(relationshipAnnotationOnDestination).toMatchInlineSnapshot(`
+            expect(relationshipAnnotationOnDestination).toMatchInlineSnapshot(`
 {
   "annotationOnDestination": true,
 }
@@ -794,7 +792,7 @@ JDLDeployment {
           });
 
           it('should set the annotations as options with lower-case letters first', () => {
-            jestExpect(entityA.annotations).toMatchInlineSnapshot(`
+            expect(entityA.annotations).toMatchInlineSnapshot(`
 {
   "dto": "mapstruct",
   "myCustomBinaryOption": "customValue",
@@ -803,7 +801,7 @@ JDLDeployment {
   "skipClient": true,
 }
 `);
-            jestExpect(entityB.annotations).toMatchInlineSnapshot(`
+            expect(entityB.annotations).toMatchInlineSnapshot(`
 {
   "dto": "mapstruct",
   "myCustomUnaryOption": true,
@@ -811,7 +809,7 @@ JDLDeployment {
   "service": "serviceClass",
 }
 `);
-            jestExpect(entityC.annotations).toMatchInlineSnapshot(`
+            expect(entityC.annotations).toMatchInlineSnapshot(`
 {
   "filter": true,
   "myCustomBinaryOption": "customValue2",
@@ -819,13 +817,13 @@ JDLDeployment {
   "skipClient": true,
 }
 `);
-            expect(fieldAnnotation).to.deep.equal(true);
-            jestExpect(relationshipAnnotationOnSource).toMatchInlineSnapshot(`
+            expect(fieldAnnotation).toEqual(true);
+            expect(relationshipAnnotationOnSource).toMatchInlineSnapshot(`
 {
   "annotationOnSource": true,
 }
 `);
-            jestExpect(relationshipAnnotationOnDestination).toMatchInlineSnapshot(`
+            expect(relationshipAnnotationOnDestination).toMatchInlineSnapshot(`
 {
   "annotationOnDestination": true,
 }
@@ -851,21 +849,21 @@ JDLDeployment {
 
         describe('correctly should set the options', () => {
           it('should set the annotations as options with lower-case letters first', () => {
-            jestExpect(entityA.annotations).toMatchInlineSnapshot(`
+            expect(entityA.annotations).toMatchInlineSnapshot(`
 {
   "dto": "mapstruct",
   "service": "serviceClass",
   "skipClient": true,
 }
 `);
-            jestExpect(entityB.annotations).toMatchInlineSnapshot(`
+            expect(entityB.annotations).toMatchInlineSnapshot(`
 {
   "dto": "mapstruct",
   "paginate": "pagination",
   "service": "serviceClass",
 }
 `);
-            jestExpect(entityC.annotations).toMatchInlineSnapshot(`
+            expect(entityC.annotations).toMatchInlineSnapshot(`
 {
   "embedded": true,
   "filter": true,
@@ -890,7 +888,7 @@ JDLDeployment {
 
         it('formats it', () => {
           // @ts-expect-error FIXME
-          expect(jdlObject.getEntity('Alumni').fields.firstName.validations.pattern.value.includes(String.raw`\'`)).be.true;
+          expect(jdlObject.getEntity('Alumni').fields.firstName.validations.pattern.value.includes(String.raw`\'`)).toBe(true);
         });
       });
       describe('when parsing a JDL with the unique constraint', () => {
@@ -905,8 +903,8 @@ JDLDeployment {
         });
 
         it('should accept it', () => {
-          expect(jdlObject.entities.A.fields.myString.validations.unique).not.to.be.undefined;
-          expect(jdlObject.entities.A.fields.myInteger.validations.unique).not.to.be.undefined;
+          expect(jdlObject.entities.A.fields.myString.validations.unique).not.toBeUndefined();
+          expect(jdlObject.entities.A.fields.myInteger.validations.unique).not.toBeUndefined();
         });
       });
       describe('when parsing a JDL relationship with built in entity enabled', () => {
@@ -921,7 +919,7 @@ JDLDeployment {
         });
 
         it('should set it', () => {
-          expect(jdlObject.relationships.getOneToOne('OneToOne_A{b}_B')?.options.global).to.deep.equal({
+          expect(jdlObject.relationships.getOneToOne('OneToOne_A{b}_B')?.options.global).toEqual({
             builtInEntity: true,
           });
         });
@@ -949,7 +947,7 @@ entity B
               parseFromConfigurationObject({
                 parsedContent,
               }),
-            ).to.throw(/^The entity B in the readOnly option isn't declared in testApp1's entity list.$/);
+            ).toThrow(/^The entity B in the readOnly option isn't declared in testApp1's entity list.$/);
           });
         });
         describe('if the entity list contains all the entities mentioned in options', () => {
@@ -990,8 +988,8 @@ skipClient D
           });
 
           it('should parse them', () => {
-            expect(optionsForFirstApplication.size()).to.equal(3);
-            expect(optionsForSecondApplication.size()).to.equal(1);
+            expect(optionsForFirstApplication.size()).toBe(3);
+            expect(optionsForSecondApplication.size()).toBe(1);
           });
         });
       });

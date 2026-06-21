@@ -28,7 +28,7 @@ const appendTitle = <K extends string>(title: string, config: K, value: any): st
 };
 
 /**
- * Create a matrix from a options
+ * Create a matrix from options
  * @example
  * const matrix = fromMatrix({ a: [true, false], b: [true, false] });
  * // {
@@ -49,7 +49,7 @@ export const fromMatrix = <T extends Record<string, any> = ConfigAll>(configMatr
             // @ts-expect-error fix type
             appendTitle(previousName as string, config, value),
             {
-              ...(previousConfig as Record<string, ValueType>),
+              ...previousConfig,
               [config]: value,
             },
           ];
@@ -130,16 +130,16 @@ export const buildSamplesFromMatrix = (
   { commonConfig = {} }: { commonConfig?: Record<string, unknown> } = {},
 ): Record<string, Record<string, unknown>> =>
   sortKeys(
-    commonConfig
-      ? Object.fromEntries(
-          Object.entries(samples).map(([name, sample]) => [
-            name,
-            {
-              ...sample,
-              ...commonConfig,
-            },
-          ]),
-        )
-      : samples,
+    commonConfig ?
+      Object.fromEntries(
+        Object.entries(samples).map(([name, sample]) => [
+          name,
+          {
+            ...sample,
+            ...commonConfig,
+          },
+        ]),
+      )
+    : samples,
     { deep: true },
   );

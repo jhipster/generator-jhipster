@@ -17,10 +17,8 @@
  limitations under the License.
 -%>
 
-<%_
-    let uuidConversionNeeded = (reactive && !prodDatabaseTypePostgresql);
-_%>
-package <%= packageName %>.config;
+<%_ const uuidConversionNeeded = reactive && !prodDatabaseTypePostgresql; _%>
+package <%- packageName %>.config;
 
 import tech.jhipster.config.JHipsterConstants;
 <%_ if (devDatabaseTypeH2Any) { _%>
@@ -74,11 +72,10 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.Collections;
 import java.util.List;
-    <%_ if (uuidConversionNeeded) { _%>
+  <%_ if (uuidConversionNeeded) { _%>
 import java.util.UUID;
-    <%_ } _%>
+  <%_ } _%>
 <%_ } _%>
 
 @Configuration
@@ -133,7 +130,7 @@ public class DatabaseConfiguration {
     }
 <%_ } _%>
 <% if (uuidConversionNeeded) { %>
-   /**
+    /**
     * Simple singleton to convert {@link UUID}s to their {@link String} representation.
     */
     @WritingConverter

@@ -26,8 +26,11 @@ import { JDLEntity, JDLEnum } from '../core/models/index.ts';
 import JDLBinaryOption from '../core/models/jdl-binary-option.ts';
 import JDLField from '../core/models/jdl-field.ts';
 import JDLObject from '../core/models/jdl-object.ts';
-import type { JDLRelationshipModel, JDLRelationshipOptions, JDLSourceEntitySide } from '../core/models/jdl-relationship.ts';
-import JDLRelationship from '../core/models/jdl-relationship.ts';
+import JDLRelationship, {
+  type JDLRelationshipModel,
+  type JDLRelationshipOptions,
+  type JDLSourceEntitySide,
+} from '../core/models/jdl-relationship.ts';
 import JDLUnaryOption from '../core/models/jdl-unary-option.ts';
 import JDLValidation from '../core/models/jdl-validation.ts';
 import type { JSONEntity, JSONField, JSONRelationship } from '../core/types/json-config.ts';
@@ -97,6 +100,7 @@ function convertJSONToJDLField(field: JSONField): JDLField {
     name: lowerFirst(field.fieldName),
     type: field.fieldType,
     comment: field.documentation,
+    options: field.options,
   });
   addValidations(jdlField, field);
   return jdlField;
@@ -216,6 +220,12 @@ function getRelationship(relationship: JSONRelationship, entityName: string) {
     isInjectedFieldInToRequired: destinationSideAttributes.injectedFieldInDestinationIsRequired ?? false,
     commentInTo: destinationSideAttributes.commentForDestinationEntity,
   };
+  if (destinationSideAttributes.optionsForDestinationEntity) {
+    relationshipConfiguration.options = {
+      ...relationshipConfiguration.options,
+      destination: destinationSideAttributes.optionsForDestinationEntity,
+    };
+  }
   return new JDLRelationship(relationshipConfiguration);
 }
 
@@ -252,6 +262,7 @@ function getDestinationEntitySideAttributes(
     injectedFieldInDestinationEntity,
     injectedFieldInDestinationIsRequired,
     commentForDestinationEntity,
+    optionsForDestinationEntity: foundDestinationSideEntity.options,
   };
 }
 
@@ -294,13 +305,13 @@ function addEntityOptionsToJDL(entity: JSONEntity, entityName: string): void {
   if (entity.microserviceName !== undefined) {
     addBinaryOptionToJDL(MICROSERVICE, entity.microserviceName, entityName);
   }
-  if (entity.jpaMetamodelFiltering === true) {
+  if (entity.jpaMetamodelFiltering) {
     addUnaryOptionToJDL(FILTER, entityName);
   }
-  if (entity.readOnly === true) {
+  if (entity.readOnly) {
     addUnaryOptionToJDL(READ_ONLY, entityName);
   }
-  if (entity.embedded === true) {
+  if (entity.embedded) {
     addUnaryOptionToJDL(EMBEDDED, entityName);
   }
   if (entity.clientRootFolder) {

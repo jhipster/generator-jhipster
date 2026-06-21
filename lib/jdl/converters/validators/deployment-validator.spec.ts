@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import { APPLICATION_TYPE_MICROSERVICE } from '../../../core/application-types.ts';
 import deploymentOptions from '../../../jhipster/deployment-options.ts';
@@ -39,7 +37,7 @@ describe('jdl - DeploymentValidator', () => {
     describe('when no deployment is passed', () => {
       it('should fail', () => {
         // @ts-expect-error invalid api test
-        expect(() => validator.validate()).to.throw(/^No deployment\.$/);
+        expect(() => validator.validate()).toThrow(/^No deployment\.$/);
       });
     });
     describe('when a deployment is passed', () => {
@@ -55,7 +53,7 @@ describe('jdl - DeploymentValidator', () => {
                 // @ts-expect-error FIXME
                 serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
               }),
-            ).to.throw(/^The deployment attribute appsFolders was not found.$/);
+            ).toThrow(/^The deployment attribute appsFolders was not found.$/);
           });
         });
         describe('without directoryPath', () => {
@@ -69,7 +67,7 @@ describe('jdl - DeploymentValidator', () => {
                 // @ts-expect-error FIXME
                 serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
               }),
-            ).to.throw(/^The deployment attribute directoryPath was not found.$/);
+            ).toThrow(/^The deployment attribute directoryPath was not found.$/);
           });
         });
         describe('without monitoring', () => {
@@ -83,7 +81,7 @@ describe('jdl - DeploymentValidator', () => {
                 // @ts-expect-error FIXME
                 serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
               }),
-            ).not.to.throw();
+            ).not.toThrow();
           });
         });
         describe('with microservices', () => {
@@ -103,7 +101,7 @@ describe('jdl - DeploymentValidator', () => {
                     applicationType: APPLICATION_TYPE_MICROSERVICE,
                   },
                 ),
-              ).to.throw(/^A gateway type must be provided when dealing with microservices and the deployment type is docker-compose.$/);
+              ).toThrow(/^A gateway type must be provided when dealing with microservices and the deployment type is docker-compose.$/);
             });
           });
         });
@@ -116,7 +114,7 @@ describe('jdl - DeploymentValidator', () => {
                 directoryPath: '../',
                 monitoring: 'no',
               }),
-            ).not.to.throw();
+            ).not.toThrow();
           });
         });
       });
@@ -132,7 +130,7 @@ describe('jdl - DeploymentValidator', () => {
                 // @ts-expect-error FIXME
                 serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
               }),
-            ).to.throw(/^The deployment attribute appsFolders was not found.$/);
+            ).toThrow(/^The deployment attribute appsFolders was not found.$/);
           });
         });
         describe('without directoryPath', () => {
@@ -146,7 +144,7 @@ describe('jdl - DeploymentValidator', () => {
                 // @ts-expect-error FIXME
                 serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
               }),
-            ).to.throw(/^The deployment attribute directoryPath was not found.$/);
+            ).toThrow(/^The deployment attribute directoryPath was not found.$/);
           });
         });
         describe('without monitoring, dockerPushCommand, dockerRepositoryName, kubernetesNamespace, kubernetesUseDynamicStorage, kubernetesStorageClassName or istio and an ingressDomain', () => {
@@ -160,7 +158,7 @@ describe('jdl - DeploymentValidator', () => {
                 // @ts-expect-error FIXME
                 serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
               }),
-            ).not.to.throw();
+            ).not.toThrow();
           });
         });
         describe('without kubernetesServiceType', () => {
@@ -173,7 +171,7 @@ describe('jdl - DeploymentValidator', () => {
                 // @ts-expect-error FIXME
                 serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
               }),
-            ).to.throw(/^A kubernetes service type must be provided when dealing with kubernetes-related deployments.$/);
+            ).toThrow(/^A kubernetes service type must be provided when dealing with kubernetes-related deployments.$/);
           });
         });
         describe('with istio', () => {
@@ -189,7 +187,7 @@ describe('jdl - DeploymentValidator', () => {
                   kubernetesServiceType: Options.kubernetesServiceType.loadBalancer,
                   istio: true,
                 }),
-              ).to.throw(
+              ).toThrow(
                 /^An ingress domain must be provided when dealing with kubernetes-related deployments, with istio and when the service type is ingress.$/,
               );
             });
@@ -207,7 +205,7 @@ describe('jdl - DeploymentValidator', () => {
                   // @ts-expect-error FIXME
                   serviceDiscoveryType: Options.serviceDiscoveryType.eureka,
                 }),
-              ).to.throw(
+              ).toThrow(
                 /^An ingress type is required when dealing with kubernetes-related deployments and when the service type is ingress.$/,
               );
             });
@@ -223,7 +221,7 @@ describe('jdl - DeploymentValidator', () => {
             appsFolders: ['beers', 'burgers'],
             directoryPath: '../',
           }),
-        ).to.throw(/^The deployment type whatever isn't supported.$/);
+        ).toThrow(/^The deployment type whatever isn't supported.$/);
       });
     });
   });

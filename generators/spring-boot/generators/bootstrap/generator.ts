@@ -16,6 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import assert from 'node:assert';
+
 import { mutateData } from '../../../../lib/utils/object.ts';
 import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
 import { SpringBootApplicationGenerator } from '../../generator.ts';
@@ -47,7 +49,7 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
     return this.asPreparingTaskGroup({
       defaults({ applicationDefaults }) {
         applicationDefaults(mutateApplicationPreparing, {
-          springBoot4: data => Boolean(!(data.databaseTypeSql && data.reactive) && !data.databaseTypeCouchbase),
+          springBoot4: data => !(data.databaseTypeSql && data.reactive) && !data.databaseTypeCouchbase,
         });
       },
       hibernate({ application, applicationDefaults }) {
@@ -72,7 +74,7 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
 
         mutateData(dockerApplicationEnvironment as any, {
           _JAVA_OPTIONS: '-Xmx512m -Xms256m',
-          SPRING_PROFILES_ACTIVE: 'prod,api-docs',
+          SPRING_PROFILES_ACTIVE: 'prod,api-docs,secret-samples',
           MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED: 'true',
         });
 
@@ -115,13 +117,13 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
 
         if (application.databaseTypeSql) {
           const databaseName = application.prodDatabaseTypeMysql || application.prodDatabaseTypeMariadb ? baseName.toLowerCase() : baseName;
-          const jdbcUrl = getJdbcUrl(application.prodDatabaseType, {
+          const jdbcUrl = getJdbcUrl(application.prodDatabaseType!, {
             hostname: application.prodDatabaseType,
             databaseName,
           });
           if (application.reactive) {
             mutateData(dockerApplicationEnvironment as any, {
-              SPRING_R2DBC_URL: getR2dbcUrl(application.prodDatabaseType, {
+              SPRING_R2DBC_URL: getR2dbcUrl(application.prodDatabaseType!, {
                 hostname: application.prodDatabaseType,
                 databaseName,
               }),
@@ -172,5 +174,30 @@ export default class BootstrapGenerator extends SpringBootApplicationGenerator {
 
   get [SpringBootApplicationGenerator.POST_PREPARING]() {
     return this.postPreparing;
+  }
+  get preparingEachEntityField() {
+    return this.asPreparingEachEntityFieldTaskGroup({
+      prepareField({ entity, field }) {
+        if (field.mapstructExpression) {
+          assert.equal(
+            entity.dto,
+            'mapstruct',
+            `@MapstructExpression requires an Entity with mapstruct dto [${entity.name}.${field.fieldName}].`,
+          );
+          // Remove from Entity.java and liquibase.
+          field.transient = true;
+          // Disable update form.
+          field.readonly = true;
+        }
+
+        mutateData(field, {
+          fieldSupportsSortBy: !field.transient,
+        });
+      },
+    });
+  }
+
+  get [SpringBootApplicationGenerator.PREPARING_EACH_ENTITY_FIELD]() {
+    return this.preparingEachEntityField;
   }
 }

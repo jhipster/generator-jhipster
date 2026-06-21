@@ -17,11 +17,11 @@
  limitations under the License.
 -%>
 <%_ const reactivePrefix = reactive ? 'Reactive' : ''; _%>
-package <%= packageName %>.web.rest;
+package <%- packageName %>.web.rest;
 
-import static <%= packageName %>.test.util.OAuth2TestUtil.ID_TOKEN;
-import static <%= packageName %>.test.util.OAuth2TestUtil.authenticationToken;
-import static <%= packageName %>.test.util.OAuth2TestUtil.registerAuthenticationToken;
+import static <%- packageName %>.test.util.OAuth2TestUtil.ID_TOKEN;
+import static <%- packageName %>.test.util.OAuth2TestUtil.authenticationToken;
+import static <%- packageName %>.test.util.OAuth2TestUtil.registerAuthenticationToken;
 <%_ if (reactive) { _%>
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.*;
 <%_ } else { _%>
@@ -29,16 +29,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 <%_ } _%>
 
-import <%= packageName %>.IntegrationTest;
-import <%= packageName %>.security.AuthoritiesConstants;
+import <%- packageName %>.IntegrationTest;
+import <%- packageName %>.security.AuthoritiesConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.oauth2.client.<% if (reactive) { %>Reactive<% } %>OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.<%- reactive ? 'Reactive' : '' %>OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.<% if (reactive) { %>Reactive<% } %>ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.<%- reactive ? 'Reactive' : '' %>ClientRegistrationRepository;
 <%_ if (reactive) { _%>
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -50,8 +50,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 <%_ } _%>
 
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -61,13 +61,13 @@ import java.util.Map;
 class LogoutResourceIT {
 
     @Autowired
-    private <% if (reactive) { %>Reactive<% } %>ClientRegistrationRepository registrations;
+    private <%- reactive ? 'Reactive' : '' %>ClientRegistrationRepository registrations;
 
     @Autowired
-    private <% if (!reactive) { %>Web<% } %>ApplicationContext context;
+    private <%- reactive ? '' : 'Web' %>ApplicationContext context;
 
     @Autowired
-    private <%= reactivePrefix %>OAuth2AuthorizedClientService authorizedClientService;
+    private <%- reactivePrefix %>OAuth2AuthorizedClientService authorizedClientService;
 
     @Autowired
     private ClientRegistration clientRegistration;
@@ -81,9 +81,9 @@ class LogoutResourceIT {
     private Map<String, Object> claims;
 
     @BeforeEach
-    void before() <% if (!reactive) { %>throws Exception <% } %>{
+    void before() <%- reactive ? '' : 'throws Exception ' %>{
         claims = new HashMap<>();
-        claims.put("groups", Collections.singletonList(AuthoritiesConstants.USER));
+        claims.put("groups", List.of(AuthoritiesConstants.USER));
         claims.put("sub", 123);
 
 <%_ if (reactive) { _%>
@@ -103,7 +103,7 @@ class LogoutResourceIT {
     }
 
     @Test
-    void getLogoutInformation() <% if (!reactive) { %>throws Exception <% } %>{
+    void getLogoutInformation() <%- reactive ? '' : 'throws Exception ' %>{
         final String ORIGIN_URL = "http://localhost:8080";
 <%_ if (reactive) { _%>
         String logoutUrl = this.registrations.findByRegistrationId("oidc")

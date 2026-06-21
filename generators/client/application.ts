@@ -20,7 +20,7 @@ import { startCase } from 'lodash-es';
 
 import { getFrontendAppName } from '../../lib/utils/basename.ts';
 import type { MutateDataParam, MutateDataPropertiesWithRequiredProperties } from '../../lib/utils/object.ts';
-import { CLIENT_TEST_SRC_DIR, LOGIN_REGEX_JS } from '../generator-constants.ts';
+import { LOGIN_REGEX_JS } from '../generator-constants.ts';
 
 import type { GetWebappTranslationCallback } from './translation.ts';
 import type { Application as ClientApplication, Entity as ClientEntity } from './types.ts';
@@ -44,30 +44,42 @@ export type ClientAddedApplicationProperties = {
   messageHeaderNameAlert: string;
   messageHeaderNameError: string;
   messageHeaderNameParam: string;
+
+  microfrontend: boolean;
+  microfrontends:
+    | {
+        baseName: string;
+        lowercaseBaseName: string;
+        moduleFederationName: string;
+        capitalizedBaseName: string;
+        endpointPrefix: string;
+      }[]
+    | undefined;
+  exposeMicrofrontend: boolean;
 };
 
 export const mutateApplication = {
   __override__: false,
-  clientI18nDir: data => `${data.clientSrcDir}i18n/`,
+  clientI18nDir: ctx => `${ctx.clientSrcDir}i18n/`,
   webappLoginRegExp: LOGIN_REGEX_JS,
-  clientDistDir: 'dist/',
-  clientTestDir: ({ clientRootDir }) => `${clientRootDir}${clientRootDir ? 'test/' : CLIENT_TEST_SRC_DIR}`,
   frontendAppName: ({ baseName }) => getFrontendAppName({ baseName }),
-  microfrontend: application => {
-    if (application.applicationTypeMicroservice) {
-      return application.clientFrameworkAny ?? false;
+  microfrontend: (ctx, { data }) => {
+    if (ctx.applicationTypeMicroservice) {
+      return ctx.clientFrameworkAny ?? false;
     }
-    if (application.applicationTypeGateway) {
-      return application.microfrontends && application.microfrontends.length > 0;
+    if (ctx.applicationTypeGateway) {
+      return (data.microfrontends?.length ?? 0) > 0;
     }
     return false;
   },
+  microfrontends: ({ microfrontend }, { delayMarker, undefinedMarker }) => delayMarker ?? (microfrontend ? [] : undefinedMarker),
+  exposeMicrofrontend: (_, { delayMarker }) => delayMarker ?? false,
   clientFrameworkBuiltIn: ({ clientFramework }) => ['angular', 'vue', 'react'].includes(clientFramework!),
   clientThemeNone: ({ clientTheme }) => !clientTheme || clientTheme === 'none',
   clientThemeAny: ({ clientThemeNone }) => !clientThemeNone,
   clientBundlerName: ctx => (ctx.clientBundlerEsbuild ? 'esbuild' : startCase(ctx.clientBundler)),
   clientTestFrameworkName: ctx => startCase(ctx.clientTestFramework),
-  withAdminUi: ctx => ctx.applicationTypeMicroservice,
+  withAdminUi: ctx => !ctx.applicationTypeMicroservice,
 
   messageHeaderNameAlert: ({ frontendAppName }) => `x-${frontendAppName.toLowerCase()}-alert`,
   messageHeaderNameError: ({ frontendAppName }) => `x-${frontendAppName.toLowerCase()}-error`,

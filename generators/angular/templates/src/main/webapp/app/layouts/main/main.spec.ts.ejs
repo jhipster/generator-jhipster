@@ -20,7 +20,7 @@
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
 import { DOCUMENT } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Title } from '@angular/platform-browser';
 import { Router, TitleStrategy } from '@angular/router';
@@ -66,7 +66,7 @@ describe('Main', () => {
         {
           provide: AccountService,
           useValue: {
-            identity: <%= clientTestFramework %>.fn(() => of(null)),
+            identity: <%- clientTestFramework %>.fn(() => of(null)),
           },
         },
         { provide: TitleStrategy, useClass: AppPageTitleStrategy },
@@ -86,30 +86,30 @@ describe('Main', () => {
 <%_ } _%>
     router = TestBed.inject(Router);
     document = TestBed.inject(DOCUMENT);
-    <%_ if (enableTranslation) { _%>
+<%_ if (enableTranslation) { _%>
     langChangeSubject = new Subject<LangChangeEvent>();
     Object.defineProperty(translateService, 'onLangChange', {
       value: langChangeSubject,
       writable: true,
     });
-    <%_ } _%>
+<%_ } _%>
   });
 
   describe('page title', () => {
-    const defaultPageTitle = '<% if (enableTranslation) { %>global.title<% } else { %><%= humanizedBaseName %><% } %>';
+    const defaultPageTitle = '<% if (enableTranslation) { %>global.title<% } else { %><%- humanizedBaseName %><% } %>';
     const parentRoutePageTitle = 'parentTitle';
     const childRoutePageTitle = 'childTitle';
 <%_ if (enableTranslation) { _%>
-    const langChangeEvent: LangChangeEvent = { lang: '<%= nativeLanguage %>', translations: {} as InterpolatableTranslationObject };
+    const langChangeEvent: LangChangeEvent = { lang: '<%- nativeLanguage %>', translations: {} };
 <%_ } _%>
 
     beforeEach(() => {
       routerState.snapshot.root = { data: {} };
 <%_ if (enableTranslation) { _%>
-      <%= clientTestFramework %>.spyOn(translateService, 'get').mockImplementation((key: string | string[]) => of(`${key as string} translated`));
-      <%= clientTestFramework %>.spyOn(translateService, 'getCurrentLang').mockReturnValue('<%= nativeLanguage %>');
+      <%- clientTestFramework %>.spyOn(translateService, 'get').mockImplementation((key: string | string[]) => of(`${key as string} translated`));
+      <%- clientTestFramework %>.spyOn(translateService, 'getCurrentLang').mockReturnValue('<%- nativeLanguage %>');
 <%_ } _%>
-      <%= clientTestFramework %>.spyOn(titleService, 'setTitle');
+      <%- clientTestFramework %>.spyOn(titleService, 'setTitle');
       comp.ngOnInit();
     });
 
@@ -119,7 +119,7 @@ describe('Main', () => {
         await router.navigateByUrl('');
 
         // THEN
-        expect(document.title).toBe(defaultPageTitle<% if (enableTranslation) { %> + ' translated'<% } %>);
+        expect(document.title).toBe(defaultPageTitle<%- enableTranslation ? ' + \' translated\'' : '' %>);
       });
 
       it('should set page title to root route pageTitle if there is no child routes', async () => {
@@ -130,7 +130,7 @@ describe('Main', () => {
         await router.navigateByUrl('');
 
         // THEN
-        expect(document.title).toBe(parentRoutePageTitle<% if (enableTranslation) { %> + ' translated'<% } %>);
+        expect(document.title).toBe(parentRoutePageTitle<%- enableTranslation ? ' + \' translated\'' : '' %>);
       });
 
       it('should set page title to child route pageTitle if child routes exist and pageTitle is set for child route', async () => {
@@ -147,7 +147,7 @@ describe('Main', () => {
         await router.navigateByUrl('home');
 
         // THEN
-        expect(document.title).toBe(childRoutePageTitle<% if (enableTranslation) { %> + ' translated'<% } %>);
+        expect(document.title).toBe(childRoutePageTitle<%- enableTranslation ? ' + \' translated\'' : '' %>);
       });
 
       it('should set page title to parent route pageTitle if child routes exists but pageTitle is not set for child route data', async () => {
@@ -164,7 +164,7 @@ describe('Main', () => {
         await router.navigateByUrl('home');
 
         // THEN
-        expect(document.title).toBe(parentRoutePageTitle<% if (enableTranslation) { %> + ' translated'<% } %>);
+        expect(document.title).toBe(parentRoutePageTitle<%- enableTranslation ? ' + \' translated\'' : '' %>);
       });
     });
 <%_ if (enableTranslation) { _%>
@@ -262,9 +262,9 @@ describe('Main', () => {
 
       // WHEN
   <%_ if (enableI18nRTL) { _%>
-      findLanguageFromKeyPipe.isRTL = <%= clientTestFramework %>.fn(() => false);
+      findLanguageFromKeyPipe.isRTL = <%- clientTestFramework %>.fn(() => false);
   <%_ } _%>
-      langChangeSubject.next({ lang: 'lang1', translations: {} as InterpolatableTranslationObject });
+      langChangeSubject.next({ lang: 'lang1', translations: {} });
 
       // THEN
       expect(document.querySelector('html')?.getAttribute('lang')).toEqual('lang1');
@@ -274,9 +274,9 @@ describe('Main', () => {
 
       // WHEN
   <%_ if (enableI18nRTL) { _%>
-      findLanguageFromKeyPipe.isRTL = <%= clientTestFramework %>.fn(() => true);
+      findLanguageFromKeyPipe.isRTL = <%- clientTestFramework %>.fn(() => true);
   <%_ } _%>
-      langChangeSubject.next({ lang: 'lang2', translations: {} as InterpolatableTranslationObject });
+      langChangeSubject.next({ lang: 'lang2', translations: {} });
 
       // THEN
       expect(document.querySelector('html')?.getAttribute('lang')).toEqual('lang2');
@@ -289,6 +289,7 @@ describe('Main', () => {
 });
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: '',
 })
 export class Blank {}

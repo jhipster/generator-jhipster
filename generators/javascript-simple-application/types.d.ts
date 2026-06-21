@@ -18,6 +18,8 @@ import type EslintCommand from './generators/eslint/command.ts';
 import type HuskyCommand from './generators/husky/command.ts';
 import type PrettierCommand from './generators/prettier/command.ts';
 
+export type { Features } from '../base-simple-application/types.d.ts';
+
 export type Config = BaseSimpleApplicationConfig &
   ExportStoragePropertiesFromCommand<typeof EslintCommand> &
   ExportStoragePropertiesFromCommand<typeof HuskyCommand> &

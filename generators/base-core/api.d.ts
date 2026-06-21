@@ -4,9 +4,9 @@ export type EditFileCallback<Generator = CoreGenerator> = (this: Generator, cont
 
 export type EditFileOptions = { create?: boolean; ignoreNonExisting?: boolean | string; assertModified?: boolean; autoCrlf?: boolean };
 
-export type CascatedEditFileCallback<Generator = CoreGenerator> = (
+export type CascadedEditFileCallback<Generator = CoreGenerator> = (
   ...callbacks: EditFileCallback<Generator>[]
-) => CascatedEditFileCallback<Generator>;
+) => CascadedEditFileCallback<Generator>;
 
 type DataCallback<Type, DataType, Generator = CoreGenerator> = Type | ((this: Generator, data: DataType) => Type);
 
@@ -14,7 +14,7 @@ export type WriteFileTemplate<DataType, Generator = CoreGenerator> =
   | string
   | ((this: Generator, data: DataType) => string)
   | {
-      condition?: DataCallback<boolean, DataType, Generator>;
+      condition?: DataCallback<boolean | undefined, DataType, Generator>;
       /** source file */
       sourceFile?: DataCallback<string, DataType, Generator>;
       /** destination file */
@@ -40,8 +40,8 @@ export type WriteFileBlock<DataType, Generator = CoreGenerator> = {
   path?: ((this: Generator, data: DataType) => string) | string;
   /** generate destinationFile based on sourceFile */
   renameTo?: (this: Generator, data: DataType, filePath: string) => string;
-  /** condition to enable to write the block */
-  condition?: (this: Generator, data: DataType) => boolean | undefined;
+  /** condition to enable writing the block */
+  condition?: DataCallback<boolean | undefined, DataType, Generator>;
   /** transforms (files processing) to be applied */
   transform?: boolean | (() => string)[];
   templates: WriteFileTemplate<DataType, Generator>[];
@@ -53,7 +53,7 @@ export type WriteFileOptions<DataType, Generator = CoreGenerator> = {
   /** transforms (files processing) to be applied */
   transform?: EditFileCallback<Generator>[];
   /** context to be used as template data */
-  context?: any;
+  context?: DataType;
   /** config passed to render methods */
   renderOptions?: Record<string, object>;
   /**

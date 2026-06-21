@@ -18,8 +18,8 @@
 -%>
 {
     "global": {
-        "title": "<%= capitalizedBaseName %>",
-        "browsehappy": "<strong>Güncel olmayan</strong> bir tarayıcı kullanıyorsunuz. Lütfen kullanım kalitenizi arttırmak için <a href=\"http://browsehappy.com/?locale=tr\">tarayıcınızı yükseltin</a>.",
+        "title": "<%- capitalizedBaseName %>",
+        "browsehappy": "<strong>Güncel olmayan</strong> bir tarayıcı kullanıyorsunuz. Lütfen kullanım kalitenizi arttırmak için <a href=\"https://browsehappy.com/?locale=tr\">tarayıcınızı yükseltin</a>.",
         "menu": {
             "home": "Ana Sayfa",
             "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
@@ -159,7 +159,7 @@
         "idnull": "Geçersiz ID",
         "idinvalid": "Geçersiz Id",
         "idnotfound": "ID bulunamadı",
- <%_ if (searchEngineElasticsearch) { _%>
+<%_ if (searchEngineElasticsearch) { _%>
         "querySyntaxError": "Invalid search query",
 <%_ } _%>
         "file": {

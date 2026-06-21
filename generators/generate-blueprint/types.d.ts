@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { HandleCommandTypes } from '../../lib/command/types.ts';
+import type { CommandTypeMap } from '../../lib/command/types.ts';
 import type { Options as GitOptions } from '../git/types.d.ts';
 import type {
   Application as BaseSimpleApplicationApplication,
@@ -26,13 +26,14 @@ import type {
 
 import type command from './command.ts';
 
-export type { Features } from '../base-simple-application/types.d.ts';
+export type { Features, Source } from '../javascript-simple-application/types.d.ts';
 
-type Command = HandleCommandTypes<typeof command>;
+type Command = CommandTypeMap<typeof command>;
 
 export type Application = Command['Application'] &
   BaseSimpleApplicationApplication & {
     blueprintMjsExtension: string;
+    blueprintCliName: string;
     commands: string[];
     blueprintsPath: string;
   };
@@ -42,8 +43,6 @@ export type Config = Command['Config'] & BaseSimpleApplicationConfig;
 export type Options = Command['Options'] & BaseSimpleApplicationOptions & GitOptions;
 
 export type TemplateData = Application & {
-  skipWorkflows: boolean;
-  ignoreExistingGenerators: boolean;
   application: Application;
   generator: string;
   customGenerator: boolean;

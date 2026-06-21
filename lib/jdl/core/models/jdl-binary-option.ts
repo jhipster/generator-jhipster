@@ -20,8 +20,7 @@
 import BinaryOptions from '../built-in-options/binary-options.ts';
 import { join } from '../utils/set-utils.ts';
 
-import type { JDLOptionParams } from './abstract-jdl-option.ts';
-import AbstractJDLOption from './abstract-jdl-option.ts';
+import AbstractJDLOption, { type JDLOptionParams } from './abstract-jdl-option.ts';
 
 /**
  * For options like the DTO, the service, etc.
@@ -32,7 +31,7 @@ export default class JDLBinaryOption extends AbstractJDLOption {
   constructor(args: JDLOptionParams & { value: string }) {
     super(args);
     if (typeof args.value !== 'string') {
-      throw new Error('A binary option must have a value.');
+      throw new TypeError('A binary option must have a value.');
     }
     this.value = args.value;
   }
@@ -43,7 +42,7 @@ export default class JDLBinaryOption extends AbstractJDLOption {
 
   toString(): string {
     const entityNames = join(this.entityNames, ', ');
-    entityNames.slice(1, entityNames.length - 1);
+    entityNames.slice(1, -1);
     let optionName = this.name;
     if (this.name === BinaryOptions.Options.PAGINATION) {
       optionName = 'paginate';

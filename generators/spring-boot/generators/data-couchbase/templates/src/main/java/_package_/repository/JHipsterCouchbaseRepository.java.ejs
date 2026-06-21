@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.repository;
+package <%- packageName %>.repository;
 
 import com.couchbase.client.java.query.QueryScanConsistency;
 import org.springframework.data.couchbase.repository.*;
@@ -30,18 +30,12 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 <%_ } _%>
 
-import static java.lang.String.format;
-
 /**
  * Couchbase specific {@link org.springframework.data.repository.Repository} interface that use KV first approach to optimize requests.
  */
-<%_
-    let listOrFlux = reactive ? 'Flux' : 'List';
-    let pageOrFlux = reactive ? 'Flux' : 'Page';
-_%>
 @NoRepositoryBean
 @ScanConsistency(query = QueryScanConsistency.REQUEST_PLUS)
-public interface JHipsterCouchbaseRepository<T, ID> extends <% if (reactive) { %>Reactive<% } %>CouchbaseRepository<T, ID> {
+public interface JHipsterCouchbaseRepository<T, ID> extends <%- reactive ? 'Reactive' : '' %>CouchbaseRepository<T, ID> {
 
     String FIND_IDS_QUERY = "SELECT meta().id as __id, 0 as __cas FROM #{#n1ql.bucket}.#{#n1ql.scope}.#{#n1ql.collection} WHERE #{#n1ql.filter}";
 
@@ -51,12 +45,12 @@ public interface JHipsterCouchbaseRepository<T, ID> extends <% if (reactive) { %
                 .map(order -> {
                     String property = order.getProperty();
                     if ("id".equals(property)) {
-                        return order.withProperty(format("meta(%s).id", prefix));
+                        return order.withProperty("meta(%s).id".formatted(prefix));
                     }
                     if (prefix.isEmpty()) {
                         return order;
                     }
-                    return order.withProperty(format("%s.%s", prefix, property));
+                    return order.withProperty("%s.%s".formatted(prefix, property));
                 })
                 .toList());
         return new org.springframework.data.couchbase.core.query.Query()
@@ -66,11 +60,11 @@ public interface JHipsterCouchbaseRepository<T, ID> extends <% if (reactive) { %
             .export();
     }
 
-    default <%= listOrFlux %><T> findAll() {
+    default <%- listOrFlux %><T> findAll() {
         return findAllById(toIds(findAllIds()));
     }
 
-    default <%= pageOrFlux %><T> findAll<% if (reactive) { %>By<% } %>(Pageable pageable) {
+    default <%- pageOrFlux %><T> findAll<%- reactive ? 'By' : '' %>(Pageable pageable) {
 <%_ if (reactive) { _%>
         return findAllById(toIds(findAllIds(pageable)));
 <%_ } else { _%>
@@ -79,11 +73,11 @@ public interface JHipsterCouchbaseRepository<T, ID> extends <% if (reactive) { %
 <%_ } _%>
     }
 
-    default <%= listOrFlux %><T> findAll(Sort sort) {
+    default <%- listOrFlux %><T> findAll(Sort sort) {
         return findAllById(toIds(findAllIds(sort)));
     }
 
-    default <% if (reactive) { %>Mono<Void><% } else { %>void<% } %> deleteAll() {
+    default <%- reactive ? 'Mono<Void>' : 'void' %> deleteAll() {
 <%_ if (reactive) { _%>
         return toIds(findAllIds())
             .collectList()
@@ -94,16 +88,16 @@ public interface JHipsterCouchbaseRepository<T, ID> extends <% if (reactive) { %
     }
 
     @Query(FIND_IDS_QUERY)
-    <%= listOrFlux %><T> findAllIds();
+    <%- listOrFlux %><T> findAllIds();
 
     @Query(FIND_IDS_QUERY)
-    <%= pageOrFlux %><T> findAllIds(Pageable pageable);
+    <%- pageOrFlux %><T> findAllIds(Pageable pageable);
 
     @Query(FIND_IDS_QUERY)
-    <%= listOrFlux %><T> findAllIds(Sort sort);
+    <%- listOrFlux %><T> findAllIds(Sort sort);
 
     @SuppressWarnings("unchecked")
-    default <%= listOrFlux %><ID> toIds(<%= listOrFlux %><T> entities) {
+    default <%- listOrFlux %><ID> toIds(<%- listOrFlux %><T> entities) {
 <%_ if (reactive) { _%>
         return entities.mapNotNull(entity -> (ID) getEntityInformation().getId(entity));
 <%_ } else { _%>

@@ -18,7 +18,7 @@
 -%>
 <&_ if (fragment.importsSection) { -&>
 import eslint from '@eslint/js';
-import react from 'eslint-plugin-react/configs/recommended.js';
+import react from '@eslint-react/eslint-plugin';
 <&_ } -&>
 <&_ if (fragment.configSection) { -&>
   { ignores: ['<%- this.relativeDir(clientRootDir, clientDistDir) %>', '<%- temporaryDir %>'] },
@@ -31,21 +31,21 @@ import react from 'eslint-plugin-react/configs/recommended.js';
   },
   {
     files: ['<%- this.relativeDir(clientRootDir, clientSrcDir) %>**/*.{ts,tsx}'],
-    extends: [...tseslint.configs.recommendedTypeChecked, react],
-    settings: {
-      react: {
-        version: 'detect',
-      },
-    },
+    extends: [...tseslint.configs.recommendedTypeChecked, react.configs['recommended-type-checked']],
     languageOptions: {
       globals: {
         ...globals.browser,
       },
       parserOptions: {
-        project: ['./tsconfig.json', './tsconfig.test.json'],
+        project: ['./tsconfig.json', './tsconfig.vitest.json'],
       },
     },
     rules: {
+      '@eslint-react/exhaustive-deps': 'off',
+      '@eslint-react/use-state': 'off',
+      '@eslint-react/rules-of-hooks': 'off',
+      '@eslint-react/set-state-in-effect': 'off',
+      '@eslint-react/no-array-index-key': 'off',
       '@typescript-eslint/member-ordering': [
         'error',
         {
@@ -67,6 +67,7 @@ import react from 'eslint-plugin-react/configs/recommended.js';
       '@typescript-eslint/interface-name-prefix': 'off',
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/unbound-method': 'off',
+      '@typescript-eslint/no-unnecessary-type-assertion': 'off',
       '@typescript-eslint/array-type': 'error',
       '@typescript-eslint/no-misused-promises': 'off',
       '@typescript-eslint/no-shadow': 'error',
@@ -87,8 +88,6 @@ import react from 'eslint-plugin-react/configs/recommended.js';
       'default-case': 'error',
       complexity: ['warn', 40],
       'no-invalid-this': 'off',
-      'react/prop-types': 'off',
-      'react/display-name': 'off',
     },
   },
   {

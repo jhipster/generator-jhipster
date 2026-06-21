@@ -20,14 +20,23 @@
 <%_ if (clientFrameworkVue) { _%>
   "extends": "@vue/tsconfig/tsconfig.dom.json",
 <%_ } else { _%>
-  "extends": "<%= this.relativeDir(cypressDir, clientRootDir) %>tsconfig.json",
+  "extends": "<%- this.relativeDir(cypressDir, clientRootDir) %>tsconfig.json",
 <%_ } _%>
   "compilerOptions": {
+<%_ if (clientFrameworkVue || clientFrameworkReact) { _%>
+    "ignoreDeprecations": "6.0",
+<%_ } _%>
     "baseUrl": "./",
     "sourceMap": false,
+<%_ if (clientFrameworkReact) { _%>
+    "outDir": null,
+    "rootDir": null,
+<%_ } _%>
+<%_ if (clientFrameworkAngular) { _%>
     "outDir": "<%- this.relativeDir(cypressDir, temporaryDir) %>cypress/tsc",
+<%_ } _%>
     "target": "es2018",
     "types": ["cypress", "node"]
   },
-  "include": ["./<%= this.relativeDir(cypressDir, clientRootDir) %>cypress*.config.ts", "./**/*.ts"]
+  "include": ["./<%- this.relativeDir(cypressDir, clientRootDir) %>cypress*.config.ts", "./**/*.ts"]
 }

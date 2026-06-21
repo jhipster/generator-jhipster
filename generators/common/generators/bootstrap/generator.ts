@@ -61,7 +61,6 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
       preparing({ applicationDefaults }) {
         applicationDefaults(mutateApplication, {
           jwtSecretKey: undefined,
-          gatewayServerPort: undefined,
         });
       },
       syncUserWithIdp({ application }) {
@@ -117,7 +116,7 @@ export default class BootstrapGenerator extends BaseApplicationGenerator<CommonE
         }
       },
       hasNonBuiltInEntity({ application, entities }) {
-        application.hasNonBuiltInEntity = entities.filter(e => !e.builtIn).length > 0;
+        application.hasNonBuiltInEntity = entities.some(e => !e.builtIn);
       },
     });
   }

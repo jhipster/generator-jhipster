@@ -385,32 +385,28 @@ const getPropertyBuilder =
 
     const { generator, data } = context;
     const value = prop in data ? data[prop] : undefined;
-    if (prop in jhipster7deprecatedProperties) {
+    if (prop in jhipster7deprecatedProperties && !(prop in Object)) {
       const { replacement, get, behaviorOnlyReason } = jhipster7deprecatedProperties[prop];
       const fallBackValue = get(context);
       const valueDesc = prop in data ? `Value: ${value}, ` : '';
       if (!behaviorOnlyReason) {
         log(
-          `Template data ${chalk.yellow(String(prop))} was removed and should be replaced with ${chalk.yellow(replacement)}. ${valueDesc}FallbackValue: ${fallBackValue}`,
+          `Template data ${chalk.yellow(prop)} was removed and should be replaced with ${chalk.yellow(replacement)}. ${valueDesc}FallbackValue: ${fallBackValue}`,
         );
       }
       return value ?? fallBackValue;
     }
     if (prop?.startsWith?.('DOCKER_')) {
       const container = camelCase(prop.replace('DOCKER_', '').replace('_CONTAINER', ''));
-      log(
-        `Template data ${chalk.yellow(String(prop))} was removed and should be replaced with ${chalk.yellow(
-          `dockerContainers.${container}`,
-        )}.`,
-      );
+      log(`Template data ${chalk.yellow(prop)} was removed and should be replaced with ${chalk.yellow(`dockerContainers.${container}`)}.`);
       return value ?? data.dockerContainers?.[container];
     }
     if (prop in data) {
       return value;
     }
     if (prop in generator) {
-      log(`Template data ${chalk.yellow(String(prop))} is a generator property.`);
-      log(`Change the template to '${chalk.yellow(`this.${String(prop)}`)}'`);
+      log(`Template data ${chalk.yellow(prop)} is a generator property.`);
+      log(`Change the template to '${chalk.yellow(`this.${prop}`)}'`);
       return generator[prop as keyof typeof generator];
     }
     // console.log(`Template data '${chalk.yellow(String(prop))}' not found. Check your data.`);

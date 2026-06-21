@@ -16,11 +16,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { CONTEXT_DATA_EXISTING_PROJECT } from '../../../base/support/constants.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { mutateApplication } from '../../application.ts';
 
 export default class BootstrapGenerator extends BaseApplicationGenerator {
   async beforeQueue() {
+    const existingProject = this.options.defaults || (this.jhipsterConfig.baseName !== undefined && this.config.existed);
+    this.getContextData(CONTEXT_DATA_EXISTING_PROJECT, {
+      factory: () => existingProject,
+    });
+
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
     }

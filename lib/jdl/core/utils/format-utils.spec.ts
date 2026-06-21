@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { describe, expect, it } from 'esmocha';
 
 import { formatComment } from './format-utils.ts';
 
@@ -37,27 +35,27 @@ describe('jdl - FormatUtils', () => {
 
       describe(buildTestTitle(oneLineComment1), () => {
         it(`should return ${buildTestTitle(expectedResult1)}`, () => {
-          expect(formatComment(oneLineComment1)).to.equal(expectedResult1);
+          expect(formatComment(oneLineComment1)).toBe(expectedResult1);
         });
       });
       describe(buildTestTitle(oneLineComment2), () => {
         it(`should return ${buildTestTitle(expectedResult1)}`, () => {
-          expect(formatComment(oneLineComment2)).to.equal(expectedResult1);
+          expect(formatComment(oneLineComment2)).toBe(expectedResult1);
         });
       });
       describe(buildTestTitle(oneLineComment3), () => {
         it(`should return ${buildTestTitle(expectedResult2)}`, () => {
-          expect(formatComment(oneLineComment3)).to.equal(expectedResult2);
+          expect(formatComment(oneLineComment3)).toBe(expectedResult2);
         });
       });
       describe(buildTestTitle(oneLineComment4), () => {
         it(`should return ${buildTestTitle(expectedResult3)}`, () => {
-          expect(formatComment(oneLineComment4)).to.equal(expectedResult3);
+          expect(formatComment(oneLineComment4)).toBe(expectedResult3);
         });
       });
       describe(buildTestTitle(oneLineComment5), () => {
         it(`should return ${buildTestTitle(expectedResult3)}`, () => {
-          expect(formatComment(oneLineComment5)).to.equal(expectedResult3);
+          expect(formatComment(oneLineComment5)).toBe(expectedResult3);
         });
       });
     });
@@ -71,17 +69,17 @@ describe('jdl - FormatUtils', () => {
 
       describe(buildTestTitle(multiLineComment1), () => {
         it(`should return ${buildTestTitle(expectedResult1)}`, () => {
-          expect(formatComment(multiLineComment1)).to.equal(expectedResult1);
+          expect(formatComment(multiLineComment1)).toBe(expectedResult1);
         });
       });
       describe(buildTestTitle(multiLineComment2), () => {
         it(`should return ${buildTestTitle(expectedResult2)}`, () => {
-          expect(formatComment(multiLineComment2)).to.equal(expectedResult2);
+          expect(formatComment(multiLineComment2)).toBe(expectedResult2);
         });
       });
       describe(buildTestTitle(multiLineComment3), () => {
         it(`should return ${buildTestTitle(expectedResult3)}`, () => {
-          expect(formatComment(multiLineComment3)).to.equal(expectedResult3);
+          expect(formatComment(multiLineComment3)).toBe(expectedResult3);
         });
       });
     });

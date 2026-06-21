@@ -36,7 +36,7 @@ spring:
   <%_ if (devDatabaseTypeH2Any) { _%>
   r2dbc:
     url: <%- this.getR2DBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, itests: true, buildDirectory: `./${temporaryDir}`, prodDatabaseType }) %>
-    username: <%= lowercaseBaseName %>
+    username: <%- lowercaseBaseName %>
     password:
   liquibase:
     url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, itests: true, buildDirectory: `./${temporaryDir}`, prodDatabaseType }) %>
@@ -46,7 +46,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
   <%_ if (devDatabaseTypeH2Any) { _%>
     url: <%- this.getJDBCUrl(devDatabaseType, { databaseName: lowercaseBaseName, itests: true, buildDirectory: `./${temporaryDir}`, prodDatabaseType }) %>
-    username: <%= baseName %>
+    username: <%- baseName %>
     password:
   <%_ } _%>
     hikari:
@@ -78,4 +78,3 @@ spring:
       hibernate.timezone.default_storage: NORMALIZE
       hibernate.query.fail_on_pagination_over_collection_fetch: true
 <%_ } _%>
-

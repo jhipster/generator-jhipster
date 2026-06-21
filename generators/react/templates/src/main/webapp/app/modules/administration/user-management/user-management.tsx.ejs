@@ -27,8 +27,7 @@ import {
   getPaginationState
 } from 'react-jhipster';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
-import { faSync, faPlus, faEye, faPencilAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faPencilAlt, faPlus, faSort, faSortDown, faSortUp, faSync, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import { APP_DATE_FORMAT } from 'app/config/constants';
 import { ASC, DESC, ITEMS_PER_PAGE, SORT } from 'app/shared/util/pagination.constants';
@@ -233,7 +232,7 @@ export const UserManagement = () => {
 <%_ if (!databaseTypeCassandra) { _%>
         { totalItems && (<div className={ users?.length > 0 ? '' : 'd-none' }>
           <div className="justify-content-center d-flex">
-            <JhiItemCount page={pagination.activePage} total={totalItems} itemsPerPage={pagination.itemsPerPage} <% { if (enableTranslation) { %>i18nEnabled<% }} %> />
+            <JhiItemCount page={pagination.activePage} total={totalItems} itemsPerPage={pagination.itemsPerPage} <%- enableTranslation ? 'i18nEnabled' : '' %> />
           </div>
           <div className="justify-content-center d-flex">
             <JhiPagination

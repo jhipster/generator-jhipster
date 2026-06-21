@@ -72,14 +72,14 @@ function createUnknownJDLConfigurationOption(
   if (typeof value === 'boolean') {
     type = 'boolean';
   } else if (/^\d+$/.test(value as string)) {
-    value = parseInt(value as string, 10);
+    value = Number.parseInt(value as string, 10);
     type = 'integer';
   } else if (Array.isArray(value)) {
     type = 'list';
   } else if (typeof value === 'string') {
     type = 'string';
   } else {
-    throw new Error(`Unknown value type for option ${name}`);
+    throw new TypeError(`Unknown value type for option ${name}`);
   }
   return createJDLConfigurationOption(type, name, value, runtime);
 }

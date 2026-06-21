@@ -18,8 +18,8 @@
 -%>
 {
     "global": {
-        "title": "<%= capitalizedBaseName %>",
-        "browsehappy": "आप एक <strong>पुराने</strong> ब्राउज़र का उपयोग कर रहें हैं। कृपया अपने अनुभव में सुधार करने के लिए अपने <a href=\"http://browsehappy.com/?locale=en\">ब्राउज़र को अपग्रेड करें</a>",
+        "title": "<%- capitalizedBaseName %>",
+        "browsehappy": "आप एक <strong>पुराने</strong> ब्राउज़र का उपयोग कर रहें हैं। कृपया अपने अनुभव में सुधार करने के लिए अपने <a href=\"https://browsehappy.com/?locale=en\">ब्राउज़र को अपग्रेड करें</a>",
         "menu": {
             "home": "होम",
             "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
@@ -138,8 +138,8 @@
             "maxbytes": "यह फ़ील्ड {{ max }} बाइट्स से अधिक नहीं होना चाहिए।",
             "pattern": "यह फ़ील्ड {{ pattern }} पैटर्न का पालन करना चाहिए।",
             "number": "यह फ़ील्ड कोई संख्या होनी चाहिए।",
-                "datetimelocal": "यह फ़ील्ड कोई दिनांक या समय होनी चाहिए।",
-                "patternLogin": "This field can only contain letters, digits and e-mail addresses."
+            "datetimelocal": "यह फ़ील्ड कोई दिनांक या समय होनी चाहिए।",
+            "patternLogin": "This field can only contain letters, digits and e-mail addresses."
         },
         "filters": {
           "set": "Following filters are set",
@@ -159,7 +159,7 @@
         "idnull": "Invalid ID",
         "idinvalid": "Invalid Id",
         "idnotfound": "ID cannot be found",
- <%_ if (searchEngineElasticsearch) { _%>
+<%_ if (searchEngineElasticsearch) { _%>
         "querySyntaxError": "Invalid search query",
 <%_ } _%>
         "file": {

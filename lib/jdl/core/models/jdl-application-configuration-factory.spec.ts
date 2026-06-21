@@ -75,7 +75,7 @@ JDLApplicationConfiguration {
 `);
         });
       });
-      describe('containing a integer option', () => {
+      describe('containing an integer option', () => {
         let createdConfiguration: JDLApplicationConfiguration;
 
         before(() => {

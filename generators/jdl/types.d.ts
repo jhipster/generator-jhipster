@@ -1,10 +1,12 @@
-import type { HandleCommandTypes } from '../../lib/command/types.ts';
+import type { CommandTypeMap } from '../../lib/command/types.ts';
 import type { ApplicationType } from '../../lib/core/application-types.ts';
 import type { Config as BaseConfig, Options as BaseOptions } from '../base/types.ts';
 
 import type command from './command.ts';
 
-type Command = HandleCommandTypes<typeof command>;
+export type { Features, Source } from '../base/types.ts';
+
+type Command = CommandTypeMap<typeof command>;
 
 type JdlOptions = {
   baseName?: string;

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { KeyValuePipe } from '@angular/common';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap/modal';
 
@@ -27,9 +27,16 @@ import { TranslateModule } from '@ngx-translate/core';
 import { HealthKey, HealthDetails } from '../health.model';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-health-modal',
+  selector: '<%- jhiPrefixDashed %>-health-modal',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './health-modal.html',
-  imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%>KeyValuePipe],
+  imports: [
+<%_ if (enableTranslation) { _%>
+    TranslateDirective,
+    TranslateModule,
+<%_ } _%>
+    KeyValuePipe,
+  ],
 })
 export default class HealthModal {
   health?: { key: HealthKey; value: HealthDetails };

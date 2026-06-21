@@ -104,10 +104,10 @@ export default class I18NGenerator extends ClientApplicationGenerator {
     return this.asDefaultTaskGroup({
       languagesToGenerate({ application }) {
         this.languagesToGenerate =
-          application.enableTranslation && application.languagesToGenerateDefinition
-            ? application.languagesToGenerateDefinition
-            : // Generate native language + English as fallback, ensuring no duplicates if native language is English. Translation will fallback to English if a translation is missing for the native language.
-              [...new Set([application.nativeLanguage, 'en'])].map(lang => findLanguageForTag(lang, application.supportedLanguages)!);
+          application.enableTranslation && application.languagesToGenerateDefinition ?
+            application.languagesToGenerateDefinition
+            // Generate native language + English as fallback, ensuring no duplicates if native language is English. Translation will fallback to English if a translation is missing for the native language.
+          : [...new Set([application.nativeLanguage, 'en'])].map(lang => findLanguageForTag(lang, application.supportedLanguages)!);
       },
       async loadNativeLanguage({ application }) {
         application.translations = application.translations ?? {};
@@ -140,16 +140,14 @@ export default class I18NGenerator extends ClientApplicationGenerator {
         await Promise.all(
           this.languagesToGenerate.map(({ languageTag }) =>
             this.writeFiles({
-              sections: {
-                clientI18nFiles: [
-                  {
-                    condition: ctx => ctx.clientFrameworkVue && ctx.enableTranslation && !ctx.microfrontend,
-                    path: `${CLIENT_MAIN_SRC_DIR}/i18n/`,
-                    renameTo: context => `${context.clientI18nDir}${context.lang}/${context.lang}.js`,
-                    templates: ['index.js'],
-                  },
-                ],
-              },
+              templates: [
+                {
+                  condition: (data: any) =>
+                    data.enableTranslation && (data.clientFrameworkVue || (data.clientFrameworkReact && !data.microfrontend)),
+                  sourceFile: data => `${CLIENT_MAIN_SRC_DIR}/i18n/index_${data.clientBundler}.js`,
+                  destinationFile: data => `${data.clientI18nDir}${data.lang}/${data.lang}.js`,
+                },
+              ],
               context: {
                 ...application,
                 lang: languageTag,
@@ -210,7 +208,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
                     ],
                   },
                   {
-                    condition: context => context.communicationSpringWebsocket,
+                    condition: (context: any) => context.communicationSpringWebsocket,
                     from: context => `${CLIENT_MAIN_SRC_DIR}/i18n/${context.lang}/`,
                     to: context => `${context.clientI18nDir}${context.lang}/`,
                     transform: false,

@@ -17,12 +17,12 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: <%= baseName.toLowerCase() %>
+name: <%- baseName.toLowerCase() %>
 services:
   neo4j:
     image: <%- dockerContainers.neo4j %>
     # volumes:
-    #   - ~/volumes/jhipster/<%= baseName %>/neo4j/:/data
+    #   - ~/volumes/jhipster/<%- baseName %>/neo4j/:/data
     environment:
       - NEO4J_AUTH=none
     # If you want to expose these ports outside your dev PC,

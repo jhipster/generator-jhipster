@@ -24,7 +24,7 @@ export type BaseChangelogData = {
   fields: Field[];
   addedFields: any[];
   removedFields: any[];
-  relationships: RelationshipWithEntity<BaseApplicationRelationship, BaseApplicationEntity<Field, BaseApplicationRelationship>>[];
+  relationships: RelationshipWithEntity<BaseApplicationRelationship, BaseApplicationEntity<Field>>[];
   addedRelationships: any[];
   removedRelationships: any[];
   relationshipsToRecreateForeignKeysOnly: any[];
@@ -47,7 +47,7 @@ export type BaseChangelog<E extends BaseApplicationEntity = BaseApplicationEntit
     authenticationType?: string;
     jhiPrefix?: string;
     reactive: boolean | undefined;
-    incrementalChangelog: never;
+    incrementalChangelog: boolean;
     recreateInitialChangelog: boolean;
   };
   newEntity: boolean;

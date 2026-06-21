@@ -39,7 +39,7 @@ describe('Logs', () => {
     async () => {
       await TestBed.configureTestingModule({
         imports: [Logs],
-        providers: [provideHttpClientTesting(), LogsService<%= applicationTypeGateway && gatewayServicesApiAvailable ? ', GatewayRoutesService' : '' %>],
+        providers: [provideHttpClientTesting(), LogsService<%- applicationTypeGateway && gatewayServicesApiAvailable ? ', GatewayRoutesService' : '' %>],
       }).compileComponents();
     }
   );
@@ -60,7 +60,7 @@ describe('Logs', () => {
     it('should call load all on init', () => {
       // GIVEN
       const log = new Log('main', 'WARN');
-      <%= clientTestFramework %>.spyOn(service, 'findAll').mockReturnValue(
+      <%- clientTestFramework %>.spyOn(service, 'findAll').mockReturnValue(
         of({
           loggers: {
             main: {
@@ -83,8 +83,8 @@ describe('Logs', () => {
     it('should change log level correctly', () => {
       // GIVEN
       const log = new Log('main', 'ERROR');
-      <%= clientTestFramework %>.spyOn(service, 'changeLevel').mockReturnValue(of({}));
-      <%= clientTestFramework %>.spyOn(service, 'findAll').mockReturnValue(
+      <%- clientTestFramework %>.spyOn(service, 'changeLevel').mockReturnValue(of({}));
+      <%- clientTestFramework %>.spyOn(service, 'findAll').mockReturnValue(
         of({
           loggers: {
             main: {

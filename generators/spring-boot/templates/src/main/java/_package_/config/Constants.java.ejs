@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.config;
+package <%- packageName %>.config;
 
 /**
  * Application constants.
@@ -31,7 +31,7 @@ public final class Constants {
 <%_ if (generateBuiltInUserEntity || databaseTypeSql || databaseTypeMongodb || databaseTypeCouchbase) { _%>
     public static final String SYSTEM = "system";
 <%_ } _%>
-    public static final String DEFAULT_LANGUAGE = "<%= nativeLanguage %>";
+    public static final String DEFAULT_LANGUAGE = "<%- nativeLanguage %>";
 <%_ if (databaseTypeCouchbase) { _%>
     public static final String ID_DELIMITER = "__";
 <%_ } _%>

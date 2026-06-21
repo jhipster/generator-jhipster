@@ -17,11 +17,11 @@
  limitations under the License.
 -%>
 <%_ if (kubernetesUseDynamicStorage) { _%>
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: PersistentVolumeClaim
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-elasticsearch-pvc
-  namespace: <%= kubernetesNamespace %>
+  name: <%- app.baseName.toLowerCase() %>-elasticsearch-pvc
+  namespace: <%- kubernetesNamespace %>
 spec:
   accessModes:
   - ReadWriteOnce
@@ -29,24 +29,24 @@ spec:
     requests:
       storage: 2Gi
   <%_ if (kubernetesStorageClassName) { _%>
-  storageClassName: <%= kubernetesStorageClassName %>
+  storageClassName: <%- kubernetesStorageClassName %>
   <%_ } _%>
 ---
 <%_ } _%>
-apiVersion: <%= KUBERNETES_DEPLOYMENT_API_VERSION %>
+apiVersion: <%- KUBERNETES_DEPLOYMENT_API_VERSION %>
 kind: Deployment
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-elasticsearch
-  namespace: <%= kubernetesNamespace %>
+  name: <%- app.baseName.toLowerCase() %>-elasticsearch
+  namespace: <%- kubernetesNamespace %>
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: <%= app.baseName.toLowerCase() %>-elasticsearch
+      app: <%- app.baseName.toLowerCase() %>-elasticsearch
   template:
     metadata:
       labels:
-        app: <%= app.baseName.toLowerCase() %>-elasticsearch
+        app: <%- app.baseName.toLowerCase() %>-elasticsearch
 <%_ if (istio) { _%>
       annotations:
         sidecar.istio.io/inject: "false"
@@ -58,7 +58,7 @@ spec:
       - name: data
 <%_ if (kubernetesUseDynamicStorage) { _%>
         persistentVolumeClaim:
-          claimName: <%= app.baseName.toLowerCase() %>-elasticsearch-pvc
+          claimName: <%- app.baseName.toLowerCase() %>-elasticsearch-pvc
 <%_ } else { _%>
         emptyDir: {}
 <%_ } _%>
@@ -95,14 +95,14 @@ spec:
             memory: "2Gi"
             cpu: "1"
 ---
-apiVersion: <%= KUBERNETES_CORE_API_VERSION %>
+apiVersion: <%- KUBERNETES_CORE_API_VERSION %>
 kind: Service
 metadata:
-  name: <%= app.baseName.toLowerCase() %>-elasticsearch
-  namespace: <%= kubernetesNamespace %>
+  name: <%- app.baseName.toLowerCase() %>-elasticsearch
+  namespace: <%- kubernetesNamespace %>
 spec:
   selector:
-    app: <%= app.baseName.toLowerCase() %>-elasticsearch
+    app: <%- app.baseName.toLowerCase() %>-elasticsearch
   ports:
   - port: 9200
     name: http

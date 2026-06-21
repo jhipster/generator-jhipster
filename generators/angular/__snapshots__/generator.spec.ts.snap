@@ -43,11 +43,11 @@ exports[`generator - angular builtIn UserManagementEntity should match snapshot 
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/delete/user-management-delete-dialog.spec.ts": {
-    "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from "vitest";
+    "contents": "import { beforeEach, describe, expect, it, vitest } from "vitest";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { HttpResponse } from "@angular/common/http";
-import { of } from "rxjs";
+
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap/modal";
+import { of } from "rxjs";
 
 import { UserManagementService } from "../service/user-management.service";
 
@@ -72,9 +72,7 @@ describe("UserManagement Management Delete Component", () => {
   describe("confirmDelete", () => {
     it("should call delete service on confirmDelete", () => {
       // GIVEN
-      vitest
-        .spyOn(service, "delete")
-        .mockReturnValue(of(new HttpResponse({ body: {} })));
+      vitest.spyOn(service, "delete").mockReturnValue(of(undefined));
       vitest.spyOn(mockActiveModal, "close");
 
       // WHEN
@@ -105,7 +103,7 @@ describe("UserManagement Management Delete Component", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/delete/user-management-delete-dialog.ts": {
-    "contents": "import { Component, inject } from "@angular/core";
+    "contents": "import { Component, ChangeDetectionStrategy, inject } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap/modal";
 
@@ -116,6 +114,7 @@ import { UserManagementService } from "../service/user-management.service";
 import { ITEM_DELETED_EVENT } from "app/config/navigation.constants";
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./user-management-delete-dialog.html",
   imports: [FormsModule, FontAwesomeModule, AlertError],
 })
@@ -245,7 +244,7 @@ describe("UserManagement Management Detail Component", () => {
                   (m) => m.UserManagementDetail,
                 ),
               resolve: {
-                userManagement: () => of({ login: "Pattie.Kertzmann" }),
+                userManagement: () => of({ login: "Oswald.Kertzmann" }),
               },
             },
           ],
@@ -270,14 +269,14 @@ describe("UserManagement Management Detail Component", () => {
 
       // THEN
       expect(instance.userManagement()).toEqual(
-        expect.objectContaining({ login: "Pattie.Kertzmann" }),
+        expect.objectContaining({ login: "Oswald.Kertzmann" }),
       );
     });
   });
 
   describe("PreviousState", () => {
     it("should navigate to previous state", () => {
-      vitest.spyOn(window.history, "back");
+      vitest.spyOn(globalThis.history, "back");
       comp.previousState();
       expect(globalThis.history.back).toHaveBeenCalled();
     });
@@ -287,7 +286,7 @@ describe("UserManagement Management Detail Component", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/detail/user-management-detail.ts": {
-    "contents": "import { Component, input } from "@angular/core";
+    "contents": "import { Component, ChangeDetectionStrategy, input } from "@angular/core";
 import { RouterLink } from "@angular/router";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
@@ -301,6 +300,7 @@ import {
 import { IUserManagement } from "../user-management.model";
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "jhi-user-management-detail",
   templateUrl: "./user-management-detail.html",
   imports: [
@@ -503,7 +503,6 @@ export class UserManagementDetail {
   it,
   vitest,
 } from "vitest";
-import { HttpHeaders, HttpResponse } from "@angular/common/http";
 import {
   provideHttpClientTesting,
   HttpTestingController,
@@ -597,7 +596,7 @@ describe("UserManagement Management Component", () => {
     // WHEN
     TestBed.tick();
     const req = httpMock.expectOne({ method: "GET" });
-    req.flush([{ login: "Pattie.Kertzmann" }], {
+    req.flush([{ login: "Oswald.Kertzmann" }], {
       headers: {
         link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
       },
@@ -607,7 +606,7 @@ describe("UserManagement Management Component", () => {
     // THEN
     expect(comp.isLoading()).toEqual(false);
     expect(comp.userManagements()[0]).toEqual(
-      expect.objectContaining({ login: "Pattie.Kertzmann" }),
+      expect.objectContaining({ login: "Oswald.Kertzmann" }),
     );
   });
 
@@ -621,7 +620,7 @@ describe("UserManagement Management Component", () => {
     comp.load();
     await vitest.runAllTimersAsync();
     const req2 = httpMock.expectOne({ method: "GET" });
-    req2.flush([{ login: "Pattie.Kertzmann" }], {
+    req2.flush([{ login: "Oswald.Kertzmann" }], {
       headers: {
         link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
       },
@@ -632,7 +631,7 @@ describe("UserManagement Management Component", () => {
     expect(req.cancelled).toBeTruthy();
     expect(comp.isLoading()).toEqual(false);
     expect(comp.userManagements()[0]).toEqual(
-      expect.objectContaining({ login: "Pattie.Kertzmann" }),
+      expect.objectContaining({ login: "Oswald.Kertzmann" }),
     );
   });
 
@@ -651,7 +650,7 @@ describe("UserManagement Management Component", () => {
     comp.load();
     TestBed.tick();
     const successReq = httpMock.expectOne({ method: "GET" });
-    successReq.flush([{ login: "Pattie.Kertzmann" }], {
+    successReq.flush([{ login: "Oswald.Kertzmann" }], {
       headers: {
         link: '<http://localhost/api/foo?page=1&size=20>; rel="next"',
       },
@@ -660,13 +659,13 @@ describe("UserManagement Management Component", () => {
 
     // THEN - subscription is still alive and second load succeeds
     expect(comp.userManagements()[0]).toEqual(
-      expect.objectContaining({ login: "Pattie.Kertzmann" }),
+      expect.objectContaining({ login: "Oswald.Kertzmann" }),
     );
   });
 
   describe("trackLogin", () => {
     it("should forward to userManagementService", () => {
-      const entity = { login: "Pattie.Kertzmann" };
+      const entity = { login: "Oswald.Kertzmann" };
       vitest.spyOn(service, "getUserManagementIdentifier");
       const login = comp.trackLogin(entity);
       expect(service.getUserManagementIdentifier).toHaveBeenCalledWith(entity);
@@ -756,6 +755,7 @@ describe("UserManagement Management Component", () => {
   "src/main/webapp/app/entities/admin/user-management/list/user-management.ts": {
     "contents": "import {
   Component,
+  ChangeDetectionStrategy,
   computed,
   effect,
   inject,
@@ -810,6 +810,7 @@ import { UserManagementService } from "../service/user-management.service";
 import { UserManagementDeleteDialog } from "../delete/user-management-delete-dialog";
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "jhi-user-management",
   templateUrl: "./user-management.html",
   imports: [
@@ -853,15 +854,11 @@ export class UserManagement implements OnInit {
       }
     });
     effect(() => {
-      if (this.userManagementService.userManagementsResource.hasValue()) {
-        this.userManagements.set(
-          this.fillComponentAttributesFromResponseBody([
-            ...this.userManagementService.userManagements(),
-          ]),
-        );
-      } else {
-        this.userManagements.set([]);
-      }
+      this.userManagements.set(
+        this.fillComponentAttributesFromResponseBody([
+          ...this.userManagementService.userManagements(),
+        ]),
+      );
     });
   }
 
@@ -962,15 +959,16 @@ export class UserManagement implements OnInit {
   },
   "src/main/webapp/app/entities/admin/user-management/route/user-management-routing-resolve.service.spec.ts": {
     "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from "vitest";
+
+import { HttpErrorResponse } from "@angular/common/http";
 import { TestBed } from "@angular/core/testing";
-import { HttpResponse } from "@angular/common/http";
 import {
   ActivatedRouteSnapshot,
   ActivatedRoute,
   Router,
   convertToParamMap,
 } from "@angular/router";
-import { of } from "rxjs";
+import { lastValueFrom, of, throwError } from "rxjs";
 
 import { IUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
@@ -1004,9 +1002,7 @@ describe("UserManagement routing resolve service", () => {
   describe("resolve", () => {
     it("should return IUserManagement returned by find", async () => {
       // GIVEN
-      service.find = vitest.fn((login) =>
-        of(new HttpResponse({ body: { login } })),
-      );
+      service.find = vitest.fn((login) => of({ login }));
       mockActivatedRouteSnapshot.params = { login: "ABC" };
 
       // WHEN
@@ -1048,21 +1044,48 @@ describe("UserManagement routing resolve service", () => {
       // GIVEN
       vitest
         .spyOn(service, "find")
-        .mockReturnValue(of(new HttpResponse<IUserManagement>({ body: null })));
+        .mockReturnValue(
+          throwError(
+            () =>
+              new HttpErrorResponse({ status: 404, statusText: "Not Found" }),
+          ),
+        );
       mockActivatedRouteSnapshot.params = { login: "ABC" };
 
       // WHEN
-      await new Promise<void>((resolve) => {
-        TestBed.runInInjectionContext(() => {
-          userManagementResolve(mockActivatedRouteSnapshot).subscribe({
-            complete() {
-              // THEN
-              expect(service.find).toHaveBeenCalledWith("ABC");
-              expect(mockRouter.navigate).toHaveBeenCalledWith(["404"]);
-              resolve();
-            },
-          });
-        });
+      await TestBed.runInInjectionContext(async () => {
+        await expect(
+          lastValueFrom(userManagementResolve(mockActivatedRouteSnapshot)),
+        ).rejects.toThrow("no elements in sequence");
+        // THEN
+        expect(service.find).toHaveBeenCalledWith("ABC");
+        expect(mockRouter.navigate).toHaveBeenCalledWith(["404"]);
+      });
+    });
+
+    it("should route to error page if server returns an error other than 404", async () => {
+      // GIVEN
+      vitest
+        .spyOn(service, "find")
+        .mockReturnValue(
+          throwError(
+            () =>
+              new HttpErrorResponse({
+                status: 500,
+                statusText: "Internal Server Error",
+              }),
+          ),
+        );
+      mockActivatedRouteSnapshot.params = { login: "ABC" };
+
+      // WHEN
+      await TestBed.runInInjectionContext(async () => {
+        await expect(
+          lastValueFrom(userManagementResolve(mockActivatedRouteSnapshot)),
+        ).rejects.toThrow("no elements in sequence");
+        // THEN
+        expect(service.find).toHaveBeenCalledWith("ABC");
+        expect(mockRouter.navigate).toHaveBeenCalledWith(["error"]);
       });
     });
   });
@@ -1071,11 +1094,11 @@ describe("UserManagement routing resolve service", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/route/user-management-routing-resolve.service.ts": {
-    "contents": "import { inject } from "@angular/core";
-import { HttpResponse } from "@angular/common/http";
+    "contents": "import { HttpErrorResponse } from "@angular/common/http";
+import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, Router } from "@angular/router";
-import { of, EMPTY, Observable } from "rxjs";
-import { mergeMap } from "rxjs/operators";
+
+import { catchError, EMPTY, Observable, of } from "rxjs";
 
 import { IUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
@@ -1085,19 +1108,20 @@ const userManagementResolve = (
 ): Observable<null | IUserManagement> => {
   const login = route.params["login"];
   if (login) {
-    return inject(UserManagementService)
-      .find(login)
-      .pipe(
-        mergeMap((userManagement: HttpResponse<IUserManagement>) => {
-          if (userManagement.body) {
-            return of(userManagement.body);
-          } else {
-            inject(Router).navigate(["404"]);
-            return EMPTY;
-          }
-        }),
-      );
+    const router = inject(Router);
+    const service = inject(UserManagementService);
+    return service.find(login).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 404) {
+          router.navigate(["404"]);
+        } else {
+          router.navigate(["error"]);
+        }
+        return EMPTY;
+      }),
+    );
   }
+
   return of(null);
 };
 
@@ -1152,7 +1176,7 @@ describe("UserManagement Service", () => {
       const returnedFromService = { ...requireRestSample };
       const expected = { ...sampleWithRequiredData };
 
-      service.find("ABC").subscribe((resp) => (expectedResult = resp.body));
+      service.find("ABC").subscribe((resp) => (expectedResult = resp));
 
       const req = httpMock.expectOne({ method: "GET" });
       req.flush(returnedFromService);
@@ -1166,7 +1190,7 @@ describe("UserManagement Service", () => {
 
       service
         .create(userManagement)
-        .subscribe((resp) => (expectedResult = resp.body));
+        .subscribe((resp) => (expectedResult = resp));
 
       const req = httpMock.expectOne({ method: "POST" });
       req.flush(returnedFromService);
@@ -1180,7 +1204,7 @@ describe("UserManagement Service", () => {
 
       service
         .update(userManagement)
-        .subscribe((resp) => (expectedResult = resp.body));
+        .subscribe((resp) => (expectedResult = resp));
 
       const req = httpMock.expectOne({ method: "PUT" });
       req.flush(returnedFromService);
@@ -1194,7 +1218,7 @@ describe("UserManagement Service", () => {
 
       service
         .partialUpdate(patchObject)
-        .subscribe((resp) => (expectedResult = resp.body));
+        .subscribe((resp) => (expectedResult = resp));
 
       const req = httpMock.expectOne({ method: "PATCH" });
       req.flush(returnedFromService);
@@ -1215,13 +1239,10 @@ describe("UserManagement Service", () => {
     });
 
     it("should delete a UserManagement", () => {
-      const expected = true;
+      service.delete("ABC").subscribe();
 
-      service.delete("ABC").subscribe((resp) => (expectedResult = resp.ok));
-
-      const req = httpMock.expectOne({ method: "DELETE" });
-      req.flush({ status: 200 });
-      expect(expectedResult).toBe(expected);
+      const requests = httpMock.match({ method: "DELETE" });
+      expect(requests.length).toBe(1);
     });
 
     describe("addUserManagementToCollectionIfMissing", () => {
@@ -1324,7 +1345,7 @@ describe("UserManagement Service", () => {
       });
 
       it("should return false if one entity is null", () => {
-        const entity1 = { login: "Pattie.Kertzmann" };
+        const entity1 = { login: "Oswald.Kertzmann" };
         const entity2 = null;
 
         const compareResult1 = service.compareUserManagement(entity1, entity2);
@@ -1335,8 +1356,8 @@ describe("UserManagement Service", () => {
       });
 
       it("should return false if primaryKey differs", () => {
-        const entity1 = { login: "Pattie.Kertzmann" };
-        const entity2 = { login: "Betsy.Schiller33" };
+        const entity1 = { login: "Oswald.Kertzmann" };
+        const entity2 = { login: "Beth.Schiller33" };
 
         const compareResult1 = service.compareUserManagement(entity1, entity2);
         const compareResult2 = service.compareUserManagement(entity2, entity1);
@@ -1346,8 +1367,8 @@ describe("UserManagement Service", () => {
       });
 
       it("should return false if primaryKey matches", () => {
-        const entity1 = { login: "Pattie.Kertzmann" };
-        const entity2 = { login: "Pattie.Kertzmann" };
+        const entity1 = { login: "Oswald.Kertzmann" };
+        const entity2 = { login: "Oswald.Kertzmann" };
 
         const compareResult1 = service.compareUserManagement(entity1, entity2);
         const compareResult2 = service.compareUserManagement(entity2, entity1);
@@ -1396,9 +1417,6 @@ export type NewRestUserManagement = RestOf<NewUserManagement>;
 export type PartialUpdateRestUserManagement =
   RestOf<PartialUpdateUserManagement>;
 
-export type EntityResponseType = HttpResponse<IUserManagement>;
-export type EntityArrayResponseType = HttpResponse<IUserManagement[]>;
-
 @Injectable()
 export class UserManagementsService {
   readonly userManagementsParams = signal<
@@ -1415,10 +1433,15 @@ export class UserManagementsService {
     }
     return { url: this.resourceUrl, params };
   });
+  /**
+   * This signal holds the list of userManagement that have been fetched. It is updated when the userManagementsResource emits a new value.
+   * In case of error while fetching the userManagements, the signal is set to an empty array.
+   */
   readonly userManagements = computed(() =>
-    (this.userManagementsResource.value() ?? []).map((item) =>
-      this.convertValueFromServer(item),
-    ),
+    (this.userManagementsResource.hasValue()
+      ? this.userManagementsResource.value()
+      : []
+    ).map((item) => this.convertValueFromServer(item)),
   );
   protected readonly applicationConfigService = inject(
     ApplicationConfigService,
@@ -1448,59 +1471,59 @@ export class UserManagementsService {
 export class UserManagementService extends UserManagementsService {
   protected readonly http = inject(HttpClient);
 
-  create(userManagement: NewUserManagement): Observable<EntityResponseType> {
+  create(userManagement: NewUserManagement): Observable<IUserManagement> {
     const copy = this.convertValueFromClient(userManagement);
     return this.http
-      .post<RestUserManagement>(this.resourceUrl, copy, { observe: "response" })
+      .post<RestUserManagement>(this.resourceUrl, copy)
       .pipe(map((res) => this.convertResponseFromServer(res)));
   }
 
-  update(userManagement: IUserManagement): Observable<EntityResponseType> {
+  update(userManagement: IUserManagement): Observable<IUserManagement> {
     const copy = this.convertValueFromClient(userManagement);
     return this.http
       .put<RestUserManagement>(
         \`\${this.resourceUrl}/\${encodeURIComponent(this.getUserManagementIdentifier(userManagement))}\`,
         copy,
-        { observe: "response" },
       )
       .pipe(map((res) => this.convertResponseFromServer(res)));
   }
 
   partialUpdate(
     userManagement: PartialUpdateUserManagement,
-  ): Observable<EntityResponseType> {
+  ): Observable<IUserManagement> {
     const copy = this.convertValueFromClient(userManagement);
     return this.http
       .patch<RestUserManagement>(
         \`\${this.resourceUrl}/\${encodeURIComponent(this.getUserManagementIdentifier(userManagement))}\`,
         copy,
-        { observe: "response" },
       )
       .pipe(map((res) => this.convertResponseFromServer(res)));
   }
 
-  find(login: string): Observable<EntityResponseType> {
+  find(login: string): Observable<IUserManagement> {
     return this.http
       .get<RestUserManagement>(
         \`\${this.resourceUrl}/\${encodeURIComponent(login)}\`,
-        { observe: "response" },
       )
       .pipe(map((res) => this.convertResponseFromServer(res)));
   }
 
-  query(req?: any): Observable<EntityArrayResponseType> {
+  query(req?: any): Observable<HttpResponse<IUserManagement[]>> {
     const options = createRequestOption(req);
     return this.http
       .get<
         RestUserManagement[]
       >(this.resourceUrl, { params: options, observe: "response" })
-      .pipe(map((res) => this.convertResponseArrayFromServer(res)));
+      .pipe(
+        map((res) =>
+          res.clone({ body: this.convertResponseArrayFromServer(res.body!) }),
+        ),
+      );
   }
 
-  delete(login: string): Observable<HttpResponse<{}>> {
-    return this.http.delete(
+  delete(login: string): Observable<undefined> {
+    return this.http.delete<undefined>(
       \`\${this.resourceUrl}/\${encodeURIComponent(login)}\`,
-      { observe: "response" },
     );
   }
 
@@ -1566,21 +1589,15 @@ export class UserManagementService extends UserManagementsService {
   }
 
   protected convertResponseFromServer(
-    res: HttpResponse<RestUserManagement>,
-  ): HttpResponse<IUserManagement> {
-    return res.clone({
-      body: res.body ? this.convertValueFromServer(res.body) : null,
-    });
+    res: RestUserManagement,
+  ): IUserManagement {
+    return this.convertValueFromServer(res);
   }
 
   protected convertResponseArrayFromServer(
-    res: HttpResponse<RestUserManagement[]>,
-  ): HttpResponse<IUserManagement[]> {
-    return res.clone({
-      body: res.body
-        ? res.body.map((item) => this.convertValueFromServer(item))
-        : null,
-    });
+    res: RestUserManagement[],
+  ): IUserManagement[] {
+    return res.map((item) => this.convertValueFromServer(item));
   }
 }
 ",
@@ -1766,8 +1783,8 @@ export class UserManagementFormService {
             Validators.required,
             Validators.maxLength(50),
             Validators.pattern(
-              String.raw\`^[a-zA-Z0-9!$&*+=?^_\\\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$\`,
-            ),
+              "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
+            ), // NOSONAR
           ],
         },
       ),
@@ -1801,9 +1818,7 @@ export class UserManagementFormService {
     form: UserManagementFormGroup,
   ): IUserManagement | NewUserManagement {
     return this.convertUserManagementRawValueToUserManagement(
-      form.getRawValue() as
-        | UserManagementFormRawValue
-        | NewUserManagementFormRawValue,
+      form.getRawValue(),
     );
   }
 
@@ -1830,7 +1845,7 @@ export class UserManagementFormService {
 
     return {
       login: null,
-      activated: false,
+      activated: true,
       createdDate: currentTime,
       lastModifiedDate: currentTime,
     };
@@ -2142,7 +2157,7 @@ describe("UserManagement Management Update Component", () => {
 
   describe("ngOnInit", () => {
     it("should update editForm", () => {
-      const userManagement: IUserManagement = { login: "Betsy.Schiller33" };
+      const userManagement: IUserManagement = { login: "Beth.Schiller33" };
 
       activatedRoute.data = of({ userManagement });
       comp.ngOnInit();
@@ -2154,8 +2169,8 @@ describe("UserManagement Management Update Component", () => {
   describe("save", () => {
     it("should call update service on save for existing entity", () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<IUserManagement>>();
-      const userManagement = { login: "Pattie.Kertzmann" };
+      const saveSubject = new Subject<IUserManagement>();
+      const userManagement = { login: "Oswald.Kertzmann" };
       vitest
         .spyOn(userManagementFormService, "getUserManagement")
         .mockReturnValue(userManagement);
@@ -2169,7 +2184,7 @@ describe("UserManagement Management Update Component", () => {
       // WHEN
       comp.save();
       expect(comp.isSaving()).toEqual(true);
-      saveSubject.next(new HttpResponse({ body: userManagement }));
+      saveSubject.next(userManagement);
       saveSubject.complete();
 
       // THEN
@@ -2183,8 +2198,8 @@ describe("UserManagement Management Update Component", () => {
 
     it("should call create service on save for new entity", () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<IUserManagement>>();
-      const userManagement = { login: "Pattie.Kertzmann" };
+      const saveSubject = new Subject<IUserManagement>();
+      const userManagement = { login: "Oswald.Kertzmann" };
       vitest
         .spyOn(userManagementFormService, "getUserManagement")
         .mockReturnValue({ login: null });
@@ -2198,7 +2213,7 @@ describe("UserManagement Management Update Component", () => {
       // WHEN
       comp.save();
       expect(comp.isSaving()).toEqual(true);
-      saveSubject.next(new HttpResponse({ body: userManagement }));
+      saveSubject.next(userManagement);
       saveSubject.complete();
 
       // THEN
@@ -2210,8 +2225,8 @@ describe("UserManagement Management Update Component", () => {
 
     it("should set isSaving to false on error", () => {
       // GIVEN
-      const saveSubject = new Subject<HttpResponse<IUserManagement>>();
-      const userManagement = { login: "Pattie.Kertzmann" };
+      const saveSubject = new Subject<IUserManagement>();
+      const userManagement = { login: "Oswald.Kertzmann" };
       vitest
         .spyOn(userManagementService, "update")
         .mockReturnValue(saveSubject);
@@ -2235,11 +2250,16 @@ describe("UserManagement Management Update Component", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.ts": {
-    "contents": "import { Component, inject, signal, OnInit } from "@angular/core";
+    "contents": "import {
+  Component,
+  ChangeDetectionStrategy,
+  inject,
+  signal,
+  OnInit,
+} from "@angular/core";
 import { HttpResponse } from "@angular/common/http";
 import { ActivatedRoute } from "@angular/router";
-import { Observable } from "rxjs";
-import { finalize } from "rxjs/operators";
+import { finalize, Observable } from "rxjs";
 
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { AlertError } from "app/shared/alert/alert-error";
@@ -2253,6 +2273,7 @@ import { IUserManagement } from "../user-management.model";
 import { UserManagementService } from "../service/user-management.service";
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: "jhi-user-management-update",
   templateUrl: "./user-management-update.html",
   imports: [FontAwesomeModule, AlertError, ReactiveFormsModule],
@@ -2299,7 +2320,7 @@ export class UserManagementUpdate implements OnInit {
   }
 
   protected subscribeToSaveResponse(
-    result: Observable<HttpResponse<IUserManagement>>,
+    result: Observable<IUserManagement | null>,
   ): void {
     result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
       next: () => this.onSaveSuccess(),
@@ -2423,15 +2444,15 @@ import { IUserManagement, NewUserManagement } from "./user-management.model";
 
 export const sampleWithRequiredData: IUserManagement = {
   login: "Rickey.Sauer",
-  email: "Linwood5@hotmail.com",
+  email: "Lia5@hotmail.com",
 };
 
 export const sampleWithPartialData: IUserManagement = {
   id: 2737,
-  login: "Hector_Klein32",
-  firstName: "Monty",
+  login: "Guillermo_Klein32",
+  firstName: "Mitchel",
   lastName: "Mitchell",
-  email: "Guadalupe.Franey@gmail.com",
+  email: "Gordon.Franey@gmail.com",
   imageUrl: "mash meanwhile youthfully",
   activated: false,
   lastModifiedDate: dayjs("2019-12-31T10:49"),
@@ -2439,8 +2460,8 @@ export const sampleWithPartialData: IUserManagement = {
 
 export const sampleWithFullData: IUserManagement = {
   id: 26558,
-  login: "Cecelia72",
-  firstName: "Letha",
+  login: "Catherine72",
+  firstName: "Lenore",
   lastName: "Bode",
   email: "Samuel_Altenwerth65@hotmail.com",
   imageUrl: "ew nor",
@@ -2452,7 +2473,7 @@ export const sampleWithFullData: IUserManagement = {
 };
 
 export const sampleWithNewData: NewUserManagement = {
-  email: "Joannie82@yahoo.com",
+  email: "Jevon82@yahoo.com",
   login: null,
 };
 
@@ -2469,8 +2490,6 @@ Object.freeze(sampleWithFullData);
 exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(true) should match application snapshot 1`] = `
 {
   "addLanguageCallbacks": Any<Array>,
-  "addOpenapiGeneratorPlugin": undefined,
-  "additionalSubGenerators": undefined,
   "angularLocaleId": "en",
   "anyEntityHasRelationshipWithUser": false,
   "applicationType": "gateway",
@@ -2478,7 +2497,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "applicationTypeGateway": true,
   "applicationTypeMicroservice": false,
   "applicationTypeMonolith": false,
-  "appsFolders": undefined,
   "authenticationType": "jwt",
   "authenticationTypeAny": true,
   "authenticationTypeJwt": true,
@@ -2486,7 +2504,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": false,
   "authenticationUsesCsrf": false,
-  "autoCrlf": undefined,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -2507,16 +2524,14 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
-  "caret": undefined,
-  "cli": undefined,
-  "cliName": undefined,
   "clientBundler": "esbuild",
   "clientBundlerAny": true,
   "clientBundlerEsbuild": true,
   "clientBundlerName": "esbuild",
+  "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": false,
-  "clientDistDir": "target/classes/static/",
+  "clientDistDir": "dist/",
   "clientFramework": "angular",
   "clientFrameworkAngular": true,
   "clientFrameworkAny": true,
@@ -2549,8 +2564,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "communicationSpringWebsocket": undefined,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,
-  "cypressAudit": undefined,
-  "cypressCoverage": undefined,
   "dasherizedBaseName": "jhipster",
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,
@@ -2570,13 +2583,13 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     "USER",
   ],
   "defaultAdminUsername": "admin",
-  "defaultEnvironment": undefined,
-  "defaultEnvironmentAny": false,
+  "defaultEnvironment": "prod",
+  "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
-  "defaultEnvironmentProd": false,
-  "defaultPackaging": undefined,
-  "defaultPackagingAny": false,
-  "defaultPackagingJar": false,
+  "defaultEnvironmentProd": true,
+  "defaultPackaging": "jar",
+  "defaultPackagingAny": true,
+  "defaultPackagingJar": true,
   "defaultPackagingWar": false,
   "defaultUserPassword": "admin",
   "defaultUserRoles": [
@@ -2602,8 +2615,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "dtoSuffix": "DTO",
-  "dynamic": undefined,
-  "enableGradleDevelocity": undefined,
+  "enableGradleDevelocity": false,
   "enableHibernateCache": false,
   "enableI18nRTL": false,
   "enableSwaggerCodegen": false,
@@ -2611,7 +2623,8 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "endpointPrefix": "",
   "entities": Any<Array>,
   "entitySuffix": "",
-  "feignClient": undefined,
+  "exposeMicrofrontend": false,
+  "feignClient": false,
   "filterEntitiesAndPropertiesForClient": [Function],
   "filterEntitiesForClient": [Function],
   "filterEntityPropertiesForClient": [Function],
@@ -2624,8 +2637,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "generateInMemoryUserCredentials": true,
   "generateUserManagement": false,
   "getWebappTranslation": [Function],
-  "githubRepository": undefined,
-  "githubWorkflows": undefined,
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
   "hasNonBuiltInEntity": true,
@@ -2646,13 +2657,11 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "humanizedBaseName": "JHipster",
   "incrementalChangelog": undefined,
   "javaNodeBuildPaths": Any<Array>,
-  "jdlStore": undefined,
   "jhiPrefix": "jhi",
   "jhiPrefixCapitalized": "Jhi",
   "jhiPrefixDashed": "jhi",
   "jhipsterPackageJson": Any<Object>,
   "jhipsterVersion": "JHIPSTER_VERSION",
-  "js": undefined,
   "jwtSecretKey": undefined,
   "languages": Any<Array>,
   "languagesDefinition": [
@@ -2692,7 +2701,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
       "rtl": false,
     },
   ],
-  "localBlueprint": undefined,
   "loginRegex": "^(?>[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
   "lowercaseBaseName": "jhipster",
   "messageBroker": "no",
@@ -2703,7 +2711,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "messageHeaderNameAlert": "x-jhipsterapp-alert",
   "messageHeaderNameError": "x-jhipsterapp-error",
   "messageHeaderNameParam": "x-jhipsterapp-params",
-  "microfrontend": undefined,
+  "microfrontend": false,
   "microfrontends": undefined,
   "monorepository": undefined,
   "nativeLanguage": "en",
@@ -2721,14 +2729,14 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "nodePackageManager": "npm",
   "nodePackageManagerCommand": "npm",
   "nodeVersion": "NODE_VERSION",
+  "nodeWebappBuildTarget": "webapp:build",
   "packageFolder": undefined,
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {},
   "packageName": "com.mycompany.myapp",
-  "pkType": undefined,
   "prettierExtensions": Any<Array>,
   "prettierFolders": Any<Array>,
-  "prettierTabWidth": undefined,
+  "prettierTabWidth": 2,
   "prodDatabaseType": "postgresql",
   "prodDatabaseTypeAny": true,
   "prodDatabaseTypeMariadb": false,
@@ -2740,9 +2748,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "projectVersion": undefined,
   "reactive": true,
   "rememberMeKey": undefined,
-  "removeNeedles": undefined,
   "routes": undefined,
-  "sampleWritten": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
   "searchEngineCouchbase": false,
@@ -2768,10 +2774,9 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "skipUserManagement": true,
   "srcMain": "src/main/",
   "srcTest": "src/test/",
-  "subGenerators": undefined,
   "supportedLanguages": Any<Array>,
   "syncUserWithIdp": false,
-  "temporaryDir": "target/",
+  "temporaryDir": "temp/",
   "testFrameworks": [],
   "typescriptEslint": true,
   "upperFirstCamelCaseBaseName": "Jhipster",
@@ -3487,15 +3492,15 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "target/test-results/TESTS-results-sonar-vitest.xml",
+        "value": "temp/test-results/TESTS-results-sonar-vitest.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "target/test-results/lcov.info",
+        "value": "temp/test-results/lcov.info",
       },
       {
         "key": "sonar.exclusions",
-        "value": "clientRoot/src/content/**/*.*, clientRoot/src/i18n/*.ts, target/classes/static/**/*.*",
+        "value": "clientRoot/src/content/**/*.*, clientRoot/src/i18n/*.ts, dist/**/*.*",
         "valueSep": ", ",
       },
     ],
@@ -3508,6 +3513,25 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
         "tinyglobby": null,
       },
     },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": "JITI_VERSION",
+      },
+    },
+  ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "src/**/*.html",
+          "options": {
+            "parser": "angular",
+          },
+        },
+      ],
+    },
   ],
 }
 `;
@@ -3515,8 +3539,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
 exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)-clientRoot/-websocket(true) should match application snapshot 1`] = `
 {
   "addLanguageCallbacks": Any<Array>,
-  "addOpenapiGeneratorPlugin": undefined,
-  "additionalSubGenerators": undefined,
   "angularLocaleId": "en",
   "anyEntityHasRelationshipWithUser": false,
   "applicationType": "gateway",
@@ -3524,7 +3546,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "applicationTypeGateway": true,
   "applicationTypeMicroservice": false,
   "applicationTypeMonolith": false,
-  "appsFolders": undefined,
   "authenticationType": "oauth2",
   "authenticationTypeAny": true,
   "authenticationTypeJwt": false,
@@ -3533,7 +3554,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "authenticationTypeUsesRemoteAuthorization": true,
   "authenticationUsesCsrf": true,
   "authority": Any<Object>,
-  "autoCrlf": undefined,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -3554,16 +3574,14 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
-  "caret": undefined,
-  "cli": undefined,
-  "cliName": undefined,
   "clientBundler": "esbuild",
   "clientBundlerAny": true,
   "clientBundlerEsbuild": true,
   "clientBundlerName": "esbuild",
+  "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": false,
-  "clientDistDir": "target/classes/static/",
+  "clientDistDir": "dist/",
   "clientFramework": "angular",
   "clientFrameworkAngular": true,
   "clientFrameworkAny": true,
@@ -3596,8 +3614,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "communicationSpringWebsocket": undefined,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,
-  "cypressAudit": undefined,
-  "cypressCoverage": undefined,
   "dasherizedBaseName": "jhipster",
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,
@@ -3617,13 +3633,13 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "USER",
   ],
   "defaultAdminUsername": "admin",
-  "defaultEnvironment": undefined,
-  "defaultEnvironmentAny": false,
+  "defaultEnvironment": "prod",
+  "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
-  "defaultEnvironmentProd": false,
-  "defaultPackaging": undefined,
-  "defaultPackagingAny": false,
-  "defaultPackagingJar": false,
+  "defaultEnvironmentProd": true,
+  "defaultPackaging": "jar",
+  "defaultPackagingAny": true,
+  "defaultPackagingJar": true,
   "defaultPackagingWar": false,
   "defaultUserPassword": "user",
   "defaultUserRoles": [
@@ -3648,8 +3664,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "dtoSuffix": "DTO",
-  "dynamic": undefined,
-  "enableGradleDevelocity": undefined,
+  "enableGradleDevelocity": false,
   "enableHibernateCache": false,
   "enableI18nRTL": false,
   "enableSwaggerCodegen": false,
@@ -3657,7 +3672,8 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "endpointPrefix": "",
   "entities": Any<Array>,
   "entitySuffix": "",
-  "feignClient": undefined,
+  "exposeMicrofrontend": false,
+  "feignClient": false,
   "filterEntitiesAndPropertiesForClient": [Function],
   "filterEntitiesForClient": [Function],
   "filterEntityPropertiesForClient": [Function],
@@ -3670,8 +3686,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "getWebappTranslation": [Function],
-  "githubRepository": undefined,
-  "githubWorkflows": undefined,
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
   "hasNonBuiltInEntity": true,
@@ -3692,13 +3706,11 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "humanizedBaseName": "JHipster",
   "incrementalChangelog": undefined,
   "javaNodeBuildPaths": Any<Array>,
-  "jdlStore": undefined,
   "jhiPrefix": "jhi",
   "jhiPrefixCapitalized": "Jhi",
   "jhiPrefixDashed": "jhi",
   "jhipsterPackageJson": Any<Object>,
   "jhipsterVersion": "JHIPSTER_VERSION",
-  "js": undefined,
   "jwtSecretKey": undefined,
   "languages": Any<Array>,
   "languagesDefinition": [
@@ -3728,7 +3740,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     "fr",
   ],
   "languagesToGenerateDefinition": Any<Array>,
-  "localBlueprint": undefined,
   "loginRegex": "^(?>[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
   "lowercaseBaseName": "jhipster",
   "messageBroker": "no",
@@ -3739,7 +3750,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "messageHeaderNameAlert": "x-jhipsterapp-alert",
   "messageHeaderNameError": "x-jhipsterapp-error",
   "messageHeaderNameParam": "x-jhipsterapp-params",
-  "microfrontend": undefined,
+  "microfrontend": false,
   "microfrontends": undefined,
   "monorepository": undefined,
   "nativeLanguage": "en",
@@ -3757,14 +3768,14 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "nodePackageManager": "npm",
   "nodePackageManagerCommand": "npm",
   "nodeVersion": "NODE_VERSION",
+  "nodeWebappBuildTarget": "webapp:build",
   "packageFolder": undefined,
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {},
   "packageName": "com.mycompany.myapp",
-  "pkType": undefined,
   "prettierExtensions": Any<Array>,
   "prettierFolders": Any<Array>,
-  "prettierTabWidth": undefined,
+  "prettierTabWidth": 2,
   "prodDatabaseType": "postgresql",
   "prodDatabaseTypeAny": true,
   "prodDatabaseTypeMariadb": false,
@@ -3776,9 +3787,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "projectVersion": undefined,
   "reactive": true,
   "rememberMeKey": undefined,
-  "removeNeedles": undefined,
   "routes": undefined,
-  "sampleWritten": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
   "searchEngineCouchbase": false,
@@ -3804,10 +3813,9 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "skipUserManagement": true,
   "srcMain": "src/main/",
   "srcTest": "src/test/",
-  "subGenerators": undefined,
   "supportedLanguages": Any<Array>,
   "syncUserWithIdp": true,
-  "temporaryDir": "target/",
+  "temporaryDir": "temp/",
   "testFrameworks": [],
   "typescriptEslint": true,
   "upperFirstCamelCaseBaseName": "Jhipster",
@@ -4566,7 +4574,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientRoot/src/app/shared/language/translate.directive.ts": {
     "stateCleared": "modified",
   },
-  "clientRoot/src/app/shared/language/translation.module.ts": {
+  "clientRoot/src/app/shared/language/translation.provider.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/shared/pagination/index.ts": {
@@ -4752,15 +4760,15 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "target/test-results/TESTS-results-sonar-vitest.xml",
+        "value": "temp/test-results/TESTS-results-sonar-vitest.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "target/test-results/lcov.info",
+        "value": "temp/test-results/lcov.info",
       },
       {
         "key": "sonar.exclusions",
-        "value": "clientRoot/src/content/**/*.*, clientRoot/src/i18n/*.ts, target/classes/static/**/*.*",
+        "value": "clientRoot/src/content/**/*.*, clientRoot/src/i18n/*.ts, dist/**/*.*",
         "valueSep": ", ",
       },
     ],
@@ -4776,6 +4784,25 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
         "tinyglobby": null,
       },
     },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": "JITI_VERSION",
+      },
+    },
+  ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "src/**/*.html",
+          "options": {
+            "parser": "angular",
+          },
+        },
+      ],
+    },
   ],
 }
 `;
@@ -4783,8 +4810,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
 exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-clientRoot/-websocket(false) should match application snapshot 1`] = `
 {
   "addLanguageCallbacks": Any<Array>,
-  "addOpenapiGeneratorPlugin": undefined,
-  "additionalSubGenerators": undefined,
   "angularLocaleId": "en",
   "anyEntityHasRelationshipWithUser": false,
   "applicationType": "microservice",
@@ -4792,7 +4817,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "applicationTypeGateway": false,
   "applicationTypeMicroservice": true,
   "applicationTypeMonolith": false,
-  "appsFolders": undefined,
   "authenticationType": "jwt",
   "authenticationTypeAny": true,
   "authenticationTypeJwt": true,
@@ -4800,7 +4824,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": false,
   "authenticationUsesCsrf": false,
-  "autoCrlf": undefined,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -4821,16 +4844,14 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
-  "caret": undefined,
-  "cli": undefined,
-  "cliName": undefined,
   "clientBundler": "webpack",
   "clientBundlerAny": true,
   "clientBundlerEsbuild": false,
   "clientBundlerName": "Webpack",
+  "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": true,
-  "clientDistDir": "target/classes/static/",
+  "clientDistDir": "dist/",
   "clientFramework": "angular",
   "clientFrameworkAngular": true,
   "clientFrameworkAny": true,
@@ -4863,8 +4884,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "communicationSpringWebsocket": undefined,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,
-  "cypressAudit": undefined,
-  "cypressCoverage": undefined,
   "dasherizedBaseName": "jhipster",
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,
@@ -4884,13 +4903,13 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "USER",
   ],
   "defaultAdminUsername": "admin",
-  "defaultEnvironment": undefined,
-  "defaultEnvironmentAny": false,
+  "defaultEnvironment": "prod",
+  "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
-  "defaultEnvironmentProd": false,
-  "defaultPackaging": undefined,
-  "defaultPackagingAny": false,
-  "defaultPackagingJar": false,
+  "defaultEnvironmentProd": true,
+  "defaultPackaging": "jar",
+  "defaultPackagingAny": true,
+  "defaultPackagingJar": true,
   "defaultPackagingWar": false,
   "defaultUserPassword": "user",
   "defaultUserRoles": [
@@ -4915,8 +4934,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "dtoSuffix": "DTO",
-  "dynamic": undefined,
-  "enableGradleDevelocity": undefined,
+  "enableGradleDevelocity": false,
   "enableHibernateCache": true,
   "enableI18nRTL": false,
   "enableSwaggerCodegen": false,
@@ -4924,7 +4942,8 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "endpointPrefix": "services/jhipster",
   "entities": Any<Array>,
   "entitySuffix": "",
-  "feignClient": undefined,
+  "exposeMicrofrontend": false,
+  "feignClient": false,
   "filterEntitiesAndPropertiesForClient": [Function],
   "filterEntitiesForClient": [Function],
   "filterEntityPropertiesForClient": [Function],
@@ -4937,8 +4956,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "getWebappTranslation": [Function],
-  "githubRepository": undefined,
-  "githubWorkflows": undefined,
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
   "hasNonBuiltInEntity": true,
@@ -4959,13 +4976,11 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "humanizedBaseName": "JHipster",
   "incrementalChangelog": undefined,
   "javaNodeBuildPaths": Any<Array>,
-  "jdlStore": undefined,
   "jhiPrefix": "jhi",
   "jhiPrefixCapitalized": "Jhi",
   "jhiPrefixDashed": "jhi",
   "jhipsterPackageJson": Any<Object>,
   "jhipsterVersion": "JHIPSTER_VERSION",
-  "js": undefined,
   "jwtSecretKey": undefined,
   "languages": Any<Array>,
   "languagesDefinition": [
@@ -5005,7 +5020,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
       "rtl": false,
     },
   ],
-  "localBlueprint": undefined,
   "loginRegex": "^(?>[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
   "lowercaseBaseName": "jhipster",
   "messageBroker": "no",
@@ -5017,7 +5031,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "messageHeaderNameError": "x-jhipsterapp-error",
   "messageHeaderNameParam": "x-jhipsterapp-params",
   "microfrontend": true,
-  "microfrontends": undefined,
+  "microfrontends": [],
   "monorepository": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {
@@ -5034,14 +5048,14 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "nodePackageManager": "npm",
   "nodePackageManagerCommand": "npm",
   "nodeVersion": "NODE_VERSION",
+  "nodeWebappBuildTarget": "webapp:build",
   "packageFolder": undefined,
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {},
   "packageName": "com.mycompany.myapp",
-  "pkType": undefined,
   "prettierExtensions": Any<Array>,
   "prettierFolders": Any<Array>,
-  "prettierTabWidth": undefined,
+  "prettierTabWidth": 2,
   "prodDatabaseType": "postgresql",
   "prodDatabaseTypeAny": true,
   "prodDatabaseTypeMariadb": false,
@@ -5053,9 +5067,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "projectVersion": undefined,
   "reactive": false,
   "rememberMeKey": undefined,
-  "removeNeedles": undefined,
   "routes": undefined,
-  "sampleWritten": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
   "searchEngineCouchbase": false,
@@ -5081,10 +5093,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "skipUserManagement": false,
   "srcMain": "src/main/",
   "srcTest": "src/test/",
-  "subGenerators": undefined,
   "supportedLanguages": Any<Array>,
   "syncUserWithIdp": false,
-  "temporaryDir": "target/",
+  "temporaryDir": "temp/",
   "testFrameworks": [],
   "typescriptEslint": true,
   "upperFirstCamelCaseBaseName": "Jhipster",
@@ -5788,15 +5799,15 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "target/test-results/TESTS-results-sonar-vitest.xml",
+        "value": "temp/test-results/TESTS-results-sonar-vitest.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "target/test-results/lcov.info",
+        "value": "temp/test-results/lcov.info",
       },
       {
         "key": "sonar.exclusions",
-        "value": "clientRoot/src/content/**/*.*, clientRoot/src/i18n/*.ts, target/classes/static/**/*.*",
+        "value": "clientRoot/src/content/**/*.*, clientRoot/src/i18n/*.ts, dist/**/*.*",
         "valueSep": ", ",
       },
     ],
@@ -5822,6 +5833,25 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
         "webpack": "WEBPACK_VERSION",
       },
     },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": "JITI_VERSION",
+      },
+    },
+  ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "src/**/*.html",
+          "options": {
+            "parser": "angular",
+          },
+        },
+      ],
+    },
   ],
 }
 `;
@@ -5829,8 +5859,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
 exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(false) should match application snapshot 1`] = `
 {
   "addLanguageCallbacks": Any<Array>,
-  "addOpenapiGeneratorPlugin": undefined,
-  "additionalSubGenerators": undefined,
   "angularLocaleId": "en",
   "anyEntityHasRelationshipWithUser": false,
   "applicationType": "microservice",
@@ -5838,7 +5866,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "applicationTypeGateway": false,
   "applicationTypeMicroservice": true,
   "applicationTypeMonolith": false,
-  "appsFolders": undefined,
   "authenticationType": "oauth2",
   "authenticationTypeAny": true,
   "authenticationTypeJwt": false,
@@ -5846,7 +5873,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": true,
   "authenticationUsesCsrf": true,
-  "autoCrlf": undefined,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -5867,16 +5893,14 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
-  "caret": undefined,
-  "cli": undefined,
-  "cliName": undefined,
   "clientBundler": "webpack",
   "clientBundlerAny": true,
   "clientBundlerEsbuild": false,
   "clientBundlerName": "Webpack",
+  "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": true,
-  "clientDistDir": "target/classes/static/",
+  "clientDistDir": "dist/",
   "clientFramework": "angular",
   "clientFrameworkAngular": true,
   "clientFrameworkAny": true,
@@ -5909,8 +5933,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "communicationSpringWebsocket": undefined,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,
-  "cypressAudit": undefined,
-  "cypressCoverage": undefined,
   "dasherizedBaseName": "jhipster",
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,
@@ -5930,13 +5952,13 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "USER",
   ],
   "defaultAdminUsername": "admin",
-  "defaultEnvironment": undefined,
-  "defaultEnvironmentAny": false,
+  "defaultEnvironment": "prod",
+  "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
-  "defaultEnvironmentProd": false,
-  "defaultPackaging": undefined,
-  "defaultPackagingAny": false,
-  "defaultPackagingJar": false,
+  "defaultEnvironmentProd": true,
+  "defaultPackaging": "jar",
+  "defaultPackagingAny": true,
+  "defaultPackagingJar": true,
   "defaultPackagingWar": false,
   "defaultUserPassword": "user",
   "defaultUserRoles": [
@@ -5961,8 +5983,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "dtoSuffix": "DTO",
-  "dynamic": undefined,
-  "enableGradleDevelocity": undefined,
+  "enableGradleDevelocity": false,
   "enableHibernateCache": true,
   "enableI18nRTL": false,
   "enableSwaggerCodegen": false,
@@ -5970,7 +5991,8 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "endpointPrefix": "services/jhipster",
   "entities": Any<Array>,
   "entitySuffix": "",
-  "feignClient": undefined,
+  "exposeMicrofrontend": false,
+  "feignClient": false,
   "filterEntitiesAndPropertiesForClient": [Function],
   "filterEntitiesForClient": [Function],
   "filterEntityPropertiesForClient": [Function],
@@ -5983,8 +6005,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "getWebappTranslation": [Function],
-  "githubRepository": undefined,
-  "githubWorkflows": undefined,
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
   "hasNonBuiltInEntity": true,
@@ -6005,13 +6025,11 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "humanizedBaseName": "JHipster",
   "incrementalChangelog": undefined,
   "javaNodeBuildPaths": Any<Array>,
-  "jdlStore": undefined,
   "jhiPrefix": "jhi",
   "jhiPrefixCapitalized": "Jhi",
   "jhiPrefixDashed": "jhi",
   "jhipsterPackageJson": Any<Object>,
   "jhipsterVersion": "JHIPSTER_VERSION",
-  "js": undefined,
   "jwtSecretKey": undefined,
   "languages": Any<Array>,
   "languagesDefinition": [
@@ -6041,7 +6059,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "fr",
   ],
   "languagesToGenerateDefinition": Any<Array>,
-  "localBlueprint": undefined,
   "loginRegex": "^(?>[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
   "lowercaseBaseName": "jhipster",
   "messageBroker": "no",
@@ -6053,7 +6070,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "messageHeaderNameError": "x-jhipsterapp-error",
   "messageHeaderNameParam": "x-jhipsterapp-params",
   "microfrontend": true,
-  "microfrontends": undefined,
+  "microfrontends": [],
   "monorepository": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {
@@ -6070,14 +6087,14 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "nodePackageManager": "npm",
   "nodePackageManagerCommand": "npm",
   "nodeVersion": "NODE_VERSION",
+  "nodeWebappBuildTarget": "webapp:build",
   "packageFolder": undefined,
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {},
   "packageName": "com.mycompany.myapp",
-  "pkType": undefined,
   "prettierExtensions": Any<Array>,
   "prettierFolders": Any<Array>,
-  "prettierTabWidth": undefined,
+  "prettierTabWidth": 2,
   "prodDatabaseType": "postgresql",
   "prodDatabaseTypeAny": true,
   "prodDatabaseTypeMariadb": false,
@@ -6089,9 +6106,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "projectVersion": undefined,
   "reactive": false,
   "rememberMeKey": undefined,
-  "removeNeedles": undefined,
   "routes": undefined,
-  "sampleWritten": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
   "searchEngineCouchbase": false,
@@ -6117,10 +6132,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "skipUserManagement": true,
   "srcMain": "src/main/",
   "srcTest": "src/test/",
-  "subGenerators": undefined,
   "supportedLanguages": Any<Array>,
   "syncUserWithIdp": false,
-  "temporaryDir": "target/",
+  "temporaryDir": "temp/",
   "testFrameworks": [],
   "typescriptEslint": true,
   "upperFirstCamelCaseBaseName": "Jhipster",
@@ -6128,7 +6142,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "webappEnumerationsDir": "src/main/webapp/app/entities/enumerations/",
   "webappLoginRegExp": "^[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$",
   "websocket": false,
-  "withAdminUi": false,
+  "withAdminUi": true,
   "withGeneratedFlag": undefined,
 }
 `;
@@ -6166,6 +6180,144 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/WEB-INF/web.xml": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/configuration/configuration.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/health.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/modal/health-modal.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/modal/health-modal.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/health/modal/health-modal.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/log.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/logs/logs.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/jvm-memory/jvm-memory.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/jvm-memory/jvm-memory.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/jvm-threads/jvm-threads.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/jvm-threads/jvm-threads.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-cache/metrics-cache.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-cache/metrics-cache.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-datasource/metrics-datasource.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-datasource/metrics-datasource.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-endpoints-requests/metrics-endpoints-requests.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-garbagecollector/metrics-garbagecollector.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-request/metrics-request.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-request/metrics-request.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-system/metrics-system.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-system/metrics-system.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.html": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.model.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.service.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/metrics/metrics.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/app-page-title-strategy.ts": {
@@ -6633,7 +6785,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "src/main/webapp/app/shared/language/translate.directive.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/shared/language/translation.module.ts": {
+  "src/main/webapp/app/shared/language/translation.provider.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/pagination/index.ts": {
@@ -6830,15 +6982,15 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "target/test-results/TESTS-results-sonar-vitest.xml",
+        "value": "temp/test-results/TESTS-results-sonar-vitest.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "target/test-results/lcov.info",
+        "value": "temp/test-results/lcov.info",
       },
       {
         "key": "sonar.exclusions",
-        "value": "src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.ts, target/classes/static/**/*.*",
+        "value": "src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.ts, dist/**/*.*",
         "valueSep": ", ",
       },
     ],
@@ -6868,6 +7020,25 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
         "webpack": "WEBPACK_VERSION",
       },
     },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": "JITI_VERSION",
+      },
+    },
+  ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "src/main/webapp/**/*.html",
+          "options": {
+            "parser": "angular",
+          },
+        },
+      ],
+    },
   ],
 }
 `;
@@ -6875,8 +7046,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
 exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(true)-skipJhipsterDependencies(true)-enableTranslation(true)--websocket(true) should match application snapshot 1`] = `
 {
   "addLanguageCallbacks": Any<Array>,
-  "addOpenapiGeneratorPlugin": undefined,
-  "additionalSubGenerators": undefined,
   "angularLocaleId": "en",
   "anyEntityHasRelationshipWithUser": false,
   "applicationType": "monolith",
@@ -6884,7 +7053,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "applicationTypeGateway": false,
   "applicationTypeMicroservice": false,
   "applicationTypeMonolith": true,
-  "appsFolders": undefined,
   "authenticationType": "jwt",
   "authenticationTypeAny": true,
   "authenticationTypeJwt": true,
@@ -6893,7 +7061,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "authenticationTypeUsesRemoteAuthorization": false,
   "authenticationUsesCsrf": false,
   "authority": Any<Object>,
-  "autoCrlf": undefined,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -6914,16 +7081,14 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
-  "caret": undefined,
-  "cli": undefined,
-  "cliName": undefined,
   "clientBundler": "esbuild",
   "clientBundlerAny": true,
   "clientBundlerEsbuild": true,
   "clientBundlerName": "esbuild",
+  "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": false,
-  "clientDistDir": "target/classes/static/",
+  "clientDistDir": "dist/",
   "clientFramework": "angular",
   "clientFrameworkAngular": true,
   "clientFrameworkAny": true,
@@ -6956,8 +7121,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "communicationSpringWebsocket": undefined,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,
-  "cypressAudit": undefined,
-  "cypressCoverage": undefined,
   "dasherizedBaseName": "jhipster",
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,
@@ -6977,13 +7140,13 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "USER",
   ],
   "defaultAdminUsername": "admin",
-  "defaultEnvironment": undefined,
-  "defaultEnvironmentAny": false,
+  "defaultEnvironment": "prod",
+  "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
-  "defaultEnvironmentProd": false,
-  "defaultPackaging": undefined,
-  "defaultPackagingAny": false,
-  "defaultPackagingJar": false,
+  "defaultEnvironmentProd": true,
+  "defaultPackaging": "jar",
+  "defaultPackagingAny": true,
+  "defaultPackagingJar": true,
   "defaultPackagingWar": false,
   "defaultUserPassword": "user",
   "defaultUserRoles": [
@@ -7008,8 +7171,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "dtoSuffix": "DTO",
-  "dynamic": undefined,
-  "enableGradleDevelocity": undefined,
+  "enableGradleDevelocity": false,
   "enableHibernateCache": true,
   "enableI18nRTL": false,
   "enableSwaggerCodegen": false,
@@ -7017,7 +7179,8 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "endpointPrefix": "",
   "entities": Any<Array>,
   "entitySuffix": "",
-  "feignClient": undefined,
+  "exposeMicrofrontend": false,
+  "feignClient": false,
   "filterEntitiesAndPropertiesForClient": [Function],
   "filterEntitiesForClient": [Function],
   "filterEntityPropertiesForClient": [Function],
@@ -7030,8 +7193,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": true,
   "getWebappTranslation": [Function],
-  "githubRepository": undefined,
-  "githubWorkflows": undefined,
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
   "hasNonBuiltInEntity": true,
@@ -7052,13 +7213,11 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "humanizedBaseName": "JHipster",
   "incrementalChangelog": undefined,
   "javaNodeBuildPaths": Any<Array>,
-  "jdlStore": undefined,
   "jhiPrefix": "jhi",
   "jhiPrefixCapitalized": "Jhi",
   "jhiPrefixDashed": "jhi",
   "jhipsterPackageJson": Any<Object>,
   "jhipsterVersion": "JHIPSTER_VERSION",
-  "js": undefined,
   "jwtSecretKey": undefined,
   "languages": Any<Array>,
   "languagesDefinition": [
@@ -7088,7 +7247,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     "fr",
   ],
   "languagesToGenerateDefinition": Any<Array>,
-  "localBlueprint": undefined,
   "loginRegex": "^(?>[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
   "lowercaseBaseName": "jhipster",
   "messageBroker": "no",
@@ -7117,14 +7275,14 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "nodePackageManager": "npm",
   "nodePackageManagerCommand": "npm",
   "nodeVersion": "NODE_VERSION",
+  "nodeWebappBuildTarget": "webapp:build",
   "packageFolder": undefined,
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {},
   "packageName": "com.mycompany.myapp",
-  "pkType": undefined,
   "prettierExtensions": Any<Array>,
   "prettierFolders": Any<Array>,
-  "prettierTabWidth": undefined,
+  "prettierTabWidth": 2,
   "prodDatabaseType": "postgresql",
   "prodDatabaseTypeAny": true,
   "prodDatabaseTypeMariadb": false,
@@ -7136,9 +7294,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "projectVersion": undefined,
   "reactive": false,
   "rememberMeKey": undefined,
-  "removeNeedles": undefined,
   "routes": undefined,
-  "sampleWritten": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
   "searchEngineCouchbase": false,
@@ -7164,10 +7320,9 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "skipUserManagement": false,
   "srcMain": "src/main/",
   "srcTest": "src/test/",
-  "subGenerators": undefined,
   "supportedLanguages": Any<Array>,
   "syncUserWithIdp": false,
-  "temporaryDir": "target/",
+  "temporaryDir": "temp/",
   "testFrameworks": [],
   "typescriptEslint": true,
   "upperFirstCamelCaseBaseName": "Jhipster",
@@ -7699,6 +7854,12 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/entities/admin/user-management/list/user-management.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/entities/admin/user-management/route/user-management-routing-resolve.service.spec.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/entities/admin/user-management/route/user-management-routing-resolve.service.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/entities/admin/user-management/service/user-management.service.spec.ts": {
     "stateCleared": "modified",
   },
@@ -8098,7 +8259,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "src/main/webapp/app/shared/language/translate.directive.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/shared/language/translation.module.ts": {
+  "src/main/webapp/app/shared/language/translation.provider.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/pagination/index.ts": {
@@ -8268,6 +8429,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
         "Entity[Simple]",
         "Entity[Microservice]",
         "Entity[EntityWithCustomId]",
+        "Entity[UserManagement]",
       ],
       "source": "TaskParameter[source]",
     },
@@ -8281,15 +8443,15 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "target/test-results/TESTS-results-sonar-vitest.xml",
+        "value": "temp/test-results/TESTS-results-sonar-vitest.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "target/test-results/lcov.info",
+        "value": "temp/test-results/lcov.info",
       },
       {
         "key": "sonar.exclusions",
-        "value": "src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.ts, target/classes/static/**/*.*",
+        "value": "src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.ts, dist/**/*.*",
         "valueSep": ", ",
       },
     ],
@@ -8305,6 +8467,25 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
         "tinyglobby": null,
       },
     },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": "JITI_VERSION",
+      },
+    },
+  ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "src/main/webapp/**/*.html",
+          "options": {
+            "parser": "angular",
+          },
+        },
+      ],
+    },
   ],
 }
 `;
@@ -8312,8 +8493,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
 exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(false) should match application snapshot 1`] = `
 {
   "addLanguageCallbacks": Any<Array>,
-  "addOpenapiGeneratorPlugin": undefined,
-  "additionalSubGenerators": undefined,
   "angularLocaleId": "en",
   "anyEntityHasRelationshipWithUser": false,
   "applicationType": "monolith",
@@ -8321,7 +8500,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "applicationTypeGateway": false,
   "applicationTypeMicroservice": false,
   "applicationTypeMonolith": true,
-  "appsFolders": undefined,
   "authenticationType": "oauth2",
   "authenticationTypeAny": true,
   "authenticationTypeJwt": false,
@@ -8329,7 +8507,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": true,
   "authenticationUsesCsrf": true,
-  "autoCrlf": undefined,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -8350,16 +8527,14 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
-  "caret": undefined,
-  "cli": undefined,
-  "cliName": undefined,
   "clientBundler": "esbuild",
   "clientBundlerAny": true,
   "clientBundlerEsbuild": true,
   "clientBundlerName": "esbuild",
+  "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": false,
-  "clientDistDir": "target/classes/static/",
+  "clientDistDir": "dist/",
   "clientFramework": "angular",
   "clientFrameworkAngular": true,
   "clientFrameworkAny": true,
@@ -8392,8 +8567,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "communicationSpringWebsocket": undefined,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,
-  "cypressAudit": undefined,
-  "cypressCoverage": undefined,
   "dasherizedBaseName": "jhipster",
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,
@@ -8413,13 +8586,13 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     "USER",
   ],
   "defaultAdminUsername": "admin",
-  "defaultEnvironment": undefined,
-  "defaultEnvironmentAny": false,
+  "defaultEnvironment": "prod",
+  "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
-  "defaultEnvironmentProd": false,
-  "defaultPackaging": undefined,
-  "defaultPackagingAny": false,
-  "defaultPackagingJar": false,
+  "defaultEnvironmentProd": true,
+  "defaultPackaging": "jar",
+  "defaultPackagingAny": true,
+  "defaultPackagingJar": true,
   "defaultPackagingWar": false,
   "defaultUserPassword": "user",
   "defaultUserRoles": [
@@ -8444,8 +8617,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "dtoSuffix": "DTO",
-  "dynamic": undefined,
-  "enableGradleDevelocity": undefined,
+  "enableGradleDevelocity": false,
   "enableHibernateCache": true,
   "enableI18nRTL": false,
   "enableSwaggerCodegen": false,
@@ -8453,7 +8625,8 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "endpointPrefix": "",
   "entities": Any<Array>,
   "entitySuffix": "",
-  "feignClient": undefined,
+  "exposeMicrofrontend": false,
+  "feignClient": false,
   "filterEntitiesAndPropertiesForClient": [Function],
   "filterEntitiesForClient": [Function],
   "filterEntityPropertiesForClient": [Function],
@@ -8466,8 +8639,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "generateInMemoryUserCredentials": false,
   "generateUserManagement": false,
   "getWebappTranslation": [Function],
-  "githubRepository": undefined,
-  "githubWorkflows": undefined,
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
   "hasNonBuiltInEntity": true,
@@ -8488,13 +8659,11 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "humanizedBaseName": "JHipster",
   "incrementalChangelog": undefined,
   "javaNodeBuildPaths": Any<Array>,
-  "jdlStore": undefined,
   "jhiPrefix": "jhi",
   "jhiPrefixCapitalized": "Jhi",
   "jhiPrefixDashed": "jhi",
   "jhipsterPackageJson": Any<Object>,
   "jhipsterVersion": "JHIPSTER_VERSION",
-  "js": undefined,
   "jwtSecretKey": undefined,
   "languages": Any<Array>,
   "languagesDefinition": [
@@ -8534,7 +8703,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
       "rtl": false,
     },
   ],
-  "localBlueprint": undefined,
   "loginRegex": "^(?>[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
   "lowercaseBaseName": "jhipster",
   "messageBroker": "no",
@@ -8563,14 +8731,14 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "nodePackageManager": "npm",
   "nodePackageManagerCommand": "npm",
   "nodeVersion": "NODE_VERSION",
+  "nodeWebappBuildTarget": "webapp:build",
   "packageFolder": undefined,
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {},
   "packageName": "com.mycompany.myapp",
-  "pkType": undefined,
   "prettierExtensions": Any<Array>,
   "prettierFolders": Any<Array>,
-  "prettierTabWidth": undefined,
+  "prettierTabWidth": 2,
   "prodDatabaseType": "postgresql",
   "prodDatabaseTypeAny": true,
   "prodDatabaseTypeMariadb": false,
@@ -8582,9 +8750,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "projectVersion": undefined,
   "reactive": false,
   "rememberMeKey": undefined,
-  "removeNeedles": undefined,
   "routes": undefined,
-  "sampleWritten": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
   "searchEngineCouchbase": false,
@@ -8610,10 +8776,9 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "skipUserManagement": true,
   "srcMain": "src/main/",
   "srcTest": "src/test/",
-  "subGenerators": undefined,
   "supportedLanguages": Any<Array>,
   "syncUserWithIdp": false,
-  "temporaryDir": "target/",
+  "temporaryDir": "temp/",
   "testFrameworks": [],
   "typescriptEslint": true,
   "upperFirstCamelCaseBaseName": "Jhipster",
@@ -9299,15 +9464,15 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "target/test-results/TESTS-results-sonar-vitest.xml",
+        "value": "temp/test-results/TESTS-results-sonar-vitest.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "target/test-results/lcov.info",
+        "value": "temp/test-results/lcov.info",
       },
       {
         "key": "sonar.exclusions",
-        "value": "src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.ts, target/classes/static/**/*.*",
+        "value": "src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.ts, dist/**/*.*",
         "valueSep": ", ",
       },
     ],
@@ -9320,6 +9485,25 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
         "tinyglobby": null,
       },
     },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": "JITI_VERSION",
+      },
+    },
+  ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "src/main/webapp/**/*.html",
+          "options": {
+            "parser": "angular",
+          },
+        },
+      ],
+    },
   ],
 }
 `;
@@ -9327,8 +9511,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
 exports[`generator - angular monolith-session-skipUserManagement(true)-withAdminUi(false)-skipJhipsterDependencies(false)-enableTranslation(false)-websocket(true) should match application snapshot 1`] = `
 {
   "addLanguageCallbacks": Any<Array>,
-  "addOpenapiGeneratorPlugin": undefined,
-  "additionalSubGenerators": undefined,
   "angularLocaleId": "en",
   "anyEntityHasRelationshipWithUser": false,
   "applicationType": "monolith",
@@ -9336,7 +9518,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "applicationTypeGateway": false,
   "applicationTypeMicroservice": false,
   "applicationTypeMonolith": true,
-  "appsFolders": undefined,
   "authenticationType": "session",
   "authenticationTypeAny": true,
   "authenticationTypeJwt": false,
@@ -9344,7 +9525,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "authenticationTypeSession": true,
   "authenticationTypeUsesRemoteAuthorization": false,
   "authenticationUsesCsrf": true,
-  "autoCrlf": undefined,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -9365,16 +9545,14 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "cacheProviderRedis": false,
   "camelizedBaseName": "jhipster",
   "capitalizedBaseName": "Jhipster",
-  "caret": undefined,
-  "cli": undefined,
-  "cliName": undefined,
   "clientBundler": "esbuild",
   "clientBundlerAny": true,
   "clientBundlerEsbuild": true,
   "clientBundlerName": "esbuild",
+  "clientBundlerRsbuild": false,
   "clientBundlerVite": false,
   "clientBundlerWebpack": false,
-  "clientDistDir": "target/classes/static/",
+  "clientDistDir": "dist/",
   "clientFramework": "angular",
   "clientFrameworkAngular": true,
   "clientFrameworkAny": true,
@@ -9407,8 +9585,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "communicationSpringWebsocket": undefined,
   "creationTimestamp": 1577836800000,
   "customizeTemplatePaths": Any<Array>,
-  "cypressAudit": undefined,
-  "cypressCoverage": undefined,
   "dasherizedBaseName": "jhipster",
   "databaseMigration": "liquibase",
   "databaseMigrationAny": true,
@@ -9428,13 +9604,13 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     "USER",
   ],
   "defaultAdminUsername": "admin",
-  "defaultEnvironment": undefined,
-  "defaultEnvironmentAny": false,
+  "defaultEnvironment": "prod",
+  "defaultEnvironmentAny": true,
   "defaultEnvironmentDev": false,
-  "defaultEnvironmentProd": false,
-  "defaultPackaging": undefined,
-  "defaultPackagingAny": false,
-  "defaultPackagingJar": false,
+  "defaultEnvironmentProd": true,
+  "defaultPackaging": "jar",
+  "defaultPackagingAny": true,
+  "defaultPackagingJar": true,
   "defaultPackagingWar": false,
   "defaultUserPassword": "admin",
   "defaultUserRoles": [
@@ -9460,8 +9636,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "dockerServicesDir": "src/main/docker/",
   "documentationArchiveUrl": "https://www.jhipster.tech/documentation-archive/vJHIPSTER_VERSION",
   "dtoSuffix": "DTO",
-  "dynamic": undefined,
-  "enableGradleDevelocity": undefined,
+  "enableGradleDevelocity": false,
   "enableHibernateCache": true,
   "enableI18nRTL": false,
   "enableSwaggerCodegen": false,
@@ -9469,7 +9644,8 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "endpointPrefix": "",
   "entities": Any<Array>,
   "entitySuffix": "",
-  "feignClient": undefined,
+  "exposeMicrofrontend": false,
+  "feignClient": false,
   "filterEntitiesAndPropertiesForClient": [Function],
   "filterEntitiesForClient": [Function],
   "filterEntityPropertiesForClient": [Function],
@@ -9482,8 +9658,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "generateInMemoryUserCredentials": true,
   "generateUserManagement": false,
   "getWebappTranslation": [Function],
-  "githubRepository": undefined,
-  "githubWorkflows": undefined,
   "graalvmSupport": undefined,
   "gradleDevelocityHost": undefined,
   "hasNonBuiltInEntity": true,
@@ -9504,13 +9678,11 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "humanizedBaseName": "JHipster",
   "incrementalChangelog": undefined,
   "javaNodeBuildPaths": Any<Array>,
-  "jdlStore": undefined,
   "jhiPrefix": "jhi",
   "jhiPrefixCapitalized": "Jhi",
   "jhiPrefixDashed": "jhi",
   "jhipsterPackageJson": Any<Object>,
   "jhipsterVersion": "JHIPSTER_VERSION",
-  "js": undefined,
   "jwtSecretKey": undefined,
   "languages": Any<Array>,
   "languagesDefinition": [
@@ -9550,7 +9722,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
       "rtl": false,
     },
   ],
-  "localBlueprint": undefined,
   "loginRegex": "^(?>[a-zA-Z0-9!$&*+=?^_\`{|}~.-]+@[a-zA-Z0-9-]+(?:\\\\.[a-zA-Z0-9-]+)*)|(?>[_.@A-Za-z0-9-]+)$",
   "lowercaseBaseName": "jhipster",
   "messageBroker": "no",
@@ -9579,14 +9750,14 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "nodePackageManager": "npm",
   "nodePackageManagerCommand": "npm",
   "nodeVersion": "NODE_VERSION",
+  "nodeWebappBuildTarget": "webapp:build",
   "packageFolder": undefined,
   "packageJsonNodeEngine": undefined,
   "packageJsonScripts": {},
   "packageName": "com.mycompany.myapp",
-  "pkType": undefined,
   "prettierExtensions": Any<Array>,
   "prettierFolders": Any<Array>,
-  "prettierTabWidth": undefined,
+  "prettierTabWidth": 2,
   "prodDatabaseType": "postgresql",
   "prodDatabaseTypeAny": true,
   "prodDatabaseTypeMariadb": false,
@@ -9598,9 +9769,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "projectVersion": undefined,
   "reactive": false,
   "rememberMeKey": undefined,
-  "removeNeedles": undefined,
   "routes": undefined,
-  "sampleWritten": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
   "searchEngineCouchbase": false,
@@ -9626,10 +9795,9 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "skipUserManagement": true,
   "srcMain": "src/main/",
   "srcTest": "src/test/",
-  "subGenerators": undefined,
   "supportedLanguages": Any<Array>,
   "syncUserWithIdp": false,
-  "temporaryDir": "target/",
+  "temporaryDir": "temp/",
   "testFrameworks": [],
   "typescriptEslint": true,
   "upperFirstCamelCaseBaseName": "Jhipster",
@@ -10324,15 +10492,15 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
       },
       {
         "key": "sonar.testExecutionReportPaths",
-        "value": "target/test-results/TESTS-results-sonar-vitest.xml",
+        "value": "temp/test-results/TESTS-results-sonar-vitest.xml",
       },
       {
         "key": "sonar.javascript.lcov.reportPaths",
-        "value": "target/test-results/lcov.info",
+        "value": "temp/test-results/lcov.info",
       },
       {
         "key": "sonar.exclusions",
-        "value": "src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.ts, target/classes/static/**/*.*",
+        "value": "src/main/webapp/content/**/*.*, src/main/webapp/i18n/*.ts, dist/**/*.*",
         "valueSep": ", ",
       },
     ],
@@ -10344,6 +10512,25 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
         "@angular/build": null,
         "tinyglobby": null,
       },
+    },
+    {
+      "devDependencies": {
+        "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
+        "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "jiti": "JITI_VERSION",
+      },
+    },
+  ],
+  "mergePrettierConfig": [
+    {
+      "overrides": [
+        {
+          "files": "src/main/webapp/**/*.html",
+          "options": {
+            "parser": "angular",
+          },
+        },
+      ],
     },
   ],
 }

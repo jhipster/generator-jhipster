@@ -19,7 +19,7 @@
 apply plugin: "com.heroku.sdk.heroku-gradle"
 
 heroku {
-    appName = "<%= herokuAppName %>"
+    appName = "<%- herokuAppName %>"
     buildpacks = ["heroku/jvm"]
 }
 
@@ -43,7 +43,8 @@ if (System.getenv("DYNO") != null) {
 // Task stage is used by Heroku, see also
 // https://devcenter.heroku.com/articles/deploying-gradle-apps-on-heroku
 // and GRADLE_TASK configuration variable.
-task stage(dependsOn: "bootJar") {
+tasks.register('stage') {
+    dependsOn('bootJar')
 }
 
 gradle.taskGraph.whenReady {taskGraph ->

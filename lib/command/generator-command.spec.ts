@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'esmocha';
 
 import type { GeneratorMeta } from '@yeoman/types';
-import type FullEnvironment from 'yeoman-environment';
 
 import BaseApplicationGenerator from '../../generators/base-application/generator.ts';
 import { defaultHelpers as helpers, runResult } from '../testing/index.ts';
@@ -50,7 +49,7 @@ const runDummyCli = (cliArgs: string, config: JHipsterConfig) => {
         throw new Error('command not set');
       }
 
-      const metaStore: Record<string, GeneratorMeta> = (env as FullEnvironment).getGeneratorsMeta();
+      const metaStore: Record<string, GeneratorMeta> = env.getGeneratorsMeta();
       const generatorMeta = {
         ...dummyMeta,
         namespace: 'jhipster:dummy',
@@ -105,7 +104,7 @@ describe('generator commands', () => {
           expectGeneratorTestOption().toBe(value);
         }
 
-        if (!['application', 'context', 'storage', 'blueprint'].includes(scope)) {
+        if (!['context', 'blueprint'].includes(scope)) {
           expectContextTestOption().toBeUndefined();
         } else if (Array.isArray(value)) {
           expectContextTestOption().toEqual(value);
@@ -121,7 +120,7 @@ describe('generator commands', () => {
           expectBlueprintConfigTestOption().toBe(value);
         }
 
-        if (!['application', 'context', 'storage', 'blueprint'].includes(scope)) {
+        if (!['context', 'blueprint'].includes(scope)) {
           expectApplicationTestOption().toBeUndefined();
         } else if (Array.isArray(value)) {
           expectApplicationTestOption().toEqual(value);

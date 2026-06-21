@@ -34,7 +34,7 @@ export const mutateMockedData = (...mutations: MutateDataParam<any>[]) => {
   const data = {};
   const proxy = new Proxy(data, {
     get: (target: any, p: string | symbol) => {
-      return target[p] === undefined ? p : target[p];
+      return typeof p !== 'symbol' && target[p] === undefined ? p : target[p];
     },
     set: (target: any, p: string | symbol, value: any) => {
       target[p] = value;
@@ -54,15 +54,21 @@ export const mutateMockedCompleteData = (...mutations: MutateDataParam<any>[]) =
   }
   const proxy = new Proxy(data, {
     get: (target: any, p: string | symbol) => {
+      if (typeof p === 'symbol') {
+        return target[p];
+      }
       return target[p] === undefined ? (proxyGeneratedProperties[p] ?? p) : target[p];
     },
     set: (target: any, p: string | symbol, value: any) => {
-      if (proxyGeneratedProperties[p] !== value) {
+      if (typeof p === 'symbol' || proxyGeneratedProperties[p] !== value) {
         target[p] = value;
       }
       return true;
     },
-    has: (_target: any) => {
+    has: (target: any, p: string | symbol) => {
+      if (typeof p === 'symbol') {
+        return target[p];
+      }
       return true;
     },
   });

@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { describe, expect, it } from 'esmocha';
 
 import validations from '../jdl/core/built-in-options/validations.ts';
 
@@ -36,20 +34,20 @@ describe('jdl - FieldTypes', () => {
         expect(() => {
           // @ts-expect-error invalid argument
           fieldTypes.isCommonDBType(null);
-        }).to.throw(/^The passed type must not be nil\.$/);
+        }).toThrow(/^The passed type must not be nil\.$/);
         expect(() => {
           fieldTypes.isCommonDBType('');
-        }).to.throw(/^The passed type must not be nil\.$/);
+        }).toThrow(/^The passed type must not be nil\.$/);
       });
     });
     describe('when passing a false type', () => {
       it('should return false', () => {
-        expect(fieldTypes.isCommonDBType('UNKNOWN-TYPE')).to.be.false;
+        expect(fieldTypes.isCommonDBType('UNKNOWN-TYPE')).toBe(false);
       });
     });
     describe('when passing a valid type', () => {
       it('should return true', () => {
-        expect(fieldTypes.isCommonDBType(fieldTypes.CommonDBTypes.BIG_DECIMAL)).to.be.true;
+        expect(fieldTypes.isCommonDBType(fieldTypes.CommonDBTypes.BIG_DECIMAL)).toBe(true);
       });
     });
   });
@@ -59,25 +57,25 @@ describe('jdl - FieldTypes', () => {
         expect(() => {
           // @ts-expect-error
           fieldTypes.hasValidation();
-        }).to.throw(/^The passed type and value must not be nil\.$/);
+        }).toThrow(/^The passed type and value must not be nil\.$/);
         expect(() => {
           // @ts-expect-error invalid argument
           fieldTypes.hasValidation(null, MAXLENGTH);
-        }).to.throw(/^The passed type and value must not be nil\.$/);
+        }).toThrow(/^The passed type and value must not be nil\.$/);
         expect(() => {
           // @ts-expect-error
           fieldTypes.hasValidation('UNKNOWN-TYPE');
-        }).to.throw(/^The passed type and value must not be nil\.$/);
+        }).toThrow(/^The passed type and value must not be nil\.$/);
       });
     });
     describe('when passing a false argument', () => {
       it('should return false', () => {
-        expect(fieldTypes.hasValidation(fieldTypes.CommonDBTypes.BIG_DECIMAL, PATTERN)).to.be.false;
+        expect(fieldTypes.hasValidation(fieldTypes.CommonDBTypes.BIG_DECIMAL, PATTERN)).toBe(false);
       });
     });
     describe('when passing a valid argument', () => {
       it('should return true', () => {
-        expect(fieldTypes.hasValidation(fieldTypes.CommonDBTypes.BIG_DECIMAL, MIN)).to.be.true;
+        expect(fieldTypes.hasValidation(fieldTypes.CommonDBTypes.BIG_DECIMAL, MIN)).toBe(true);
       });
     });
   });

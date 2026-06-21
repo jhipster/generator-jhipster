@@ -16,7 +16,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { removeFieldsWithNullishValues } from '../../../../lib/utils/object.ts';
+import { getConfigWithDefaults } from '../../../../lib/jhipster/default-application-options.ts';
+import { finalizeMutations, removeFieldsWithNullishValues } from '../../../../lib/utils/object.ts';
 import { mutateApplicationLoading, mutateApplicationPreparing } from '../../application.ts';
 import BaseSimpleApplicationGenerator from '../../index.ts';
 
@@ -27,7 +28,6 @@ export default class BaseSimpleApplicationBootstrapGenerator extends BaseSimpleA
     }
 
     await this.dependsOnBootstrap('project-name');
-    await this.dependsOnJHipster('project-name');
   }
 
   get configuring() {
@@ -44,6 +44,14 @@ export default class BaseSimpleApplicationBootstrapGenerator extends BaseSimpleA
 
   get loading() {
     return this.asLoadingTaskGroup({
+      cleanup({ application }) {
+        // Null values may be set by prompts, remove them.
+        for (const key of Object.keys(application)) {
+          if (application[key] === null) {
+            delete application[key];
+          }
+        }
+      },
       loadConfig({ applicationDefaults }) {
         applicationDefaults(
           removeFieldsWithNullishValues(this.config.getAll()),
@@ -71,10 +79,33 @@ export default class BaseSimpleApplicationBootstrapGenerator extends BaseSimpleA
 
         applicationDefaults(mutateApplicationPreparing);
       },
+      loadNodeDependencies({ application }) {
+        this.loadNodeDependenciesFromPackageJson(
+          application.nodeDependencies,
+          this.fetchFromInstalledJHipster('common', 'resources', 'package.json'),
+        );
+      },
+      loadDefaults({ application, applicationDefaults }) {
+        let { applyDefaults } = this.options;
+        applyDefaults ??= getConfigWithDefaults as any;
+        applicationDefaults(applyDefaults!(application));
+      },
     });
   }
 
   get [BaseSimpleApplicationGenerator.PREPARING]() {
     return this.preparing;
+  }
+
+  get postPreparing() {
+    return this.asPostPreparingTaskGroup({
+      finalizeApplicationMutations({ application }) {
+        finalizeMutations(application);
+      },
+    });
+  }
+
+  get [BaseSimpleApplicationGenerator.POST_PREPARING]() {
+    return this.postPreparing;
   }
 }

@@ -24,18 +24,18 @@ error.message=הודעה:
 
 <%_ if (generateUserManagement) { _%>
 # Activation e-mail
-email.activation.title=אקטיבציית חשבון <%= baseName %>
+email.activation.title=אקטיבציית חשבון <%- baseName %>
 email.activation.greeting=שלום {0}
-email.activation.text1=החשבון שלך ב־<%= baseName %> נוצר. אנא לחץ על הקישור למטה כדי לאשר את החשבון:
+email.activation.text1=החשבון שלך ב־<%- baseName %> נוצר. אנא לחץ על הקישור למטה כדי לאשר את החשבון:
 email.activation.text2=בברכה,
-email.signature=צוות <%= baseName %>
+email.signature=צוות <%- baseName %>
 
 # Creation email
-email.creation.text1=החשבון שלך ב־<%= baseName %> נוצר. אנא לחץ על הקישור למטה כדי להיכנס:
+email.creation.text1=החשבון שלך ב־<%- baseName %> נוצר. אנא לחץ על הקישור למטה כדי להיכנס:
 
 # Reset email
-email.reset.title=איפוס סיסמה לחשבון <%= baseName %>
+email.reset.title=איפוס סיסמה לחשבון <%- baseName %>
 email.reset.greeting=שלום {0}
-email.reset.text1=התקבלה בקשה לאיפוס סיסמה לחשבון שלך ב־<%= baseName %>. אנא לחץ על הקישור למטה כדי לאפס את הסיסמה:
+email.reset.text1=התקבלה בקשה לאיפוס סיסמה לחשבון שלך ב־<%- baseName %>. אנא לחץ על הקישור למטה כדי לאפס את הסיסמה:
 email.reset.text2=בברכה,
 <%_ } _%>

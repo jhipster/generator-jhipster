@@ -24,7 +24,7 @@ import { languagesAsChoices } from './support/languages.ts';
 
 export const askI18n = asPromptingTask<LanguagesGenerator>(async function askI18n() {
   if (!this.askForMoreLanguages) return;
-  const nativeLanguage = this.jhipsterConfig.nativeLanguage;
+  const { nativeLanguage } = this.jhipsterConfig;
   const answers = await this.prompt(
     [
       {
@@ -62,7 +62,7 @@ export const askForLanguages = asPromptingTask<LanguagesGenerator>(async functio
       message: 'Please choose additional languages to install',
       choices: () => {
         const languageOptions = [...this.supportedLanguages.values()];
-        const nativeLanguage = this.jhipsterConfigWithDefaults.nativeLanguage;
+        const { nativeLanguage } = this.jhipsterConfigWithDefaults;
         const choices = languagesAsChoices(languageOptions.filter(l => l.languageTag !== nativeLanguage));
         const defaults = this.jhipsterConfigWithDefaults.languages ?? [];
         return [...choices.filter(({ value }) => defaults.includes(value)), ...choices.filter(({ value }) => !defaults.includes(value))];
@@ -70,10 +70,10 @@ export const askForLanguages = asPromptingTask<LanguagesGenerator>(async functio
       default: () => this.jhipsterConfigWithDefaults.languages,
     },
   ]);
-  const { languages } = answers as { languages: string[] };
+  const { languages } = answers;
   if (languages) {
     if (control.existingProject) {
-      this.languagesToApply.push(...languages.filter(newLang => !currentLanguages.includes(newLang)));
+      this.languagesToApply.push(...languages.filter((newLang: string) => !currentLanguages.includes(newLang)));
     } else {
       this.languagesToApply.push(...languages);
     }

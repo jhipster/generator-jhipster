@@ -17,9 +17,8 @@
  * limitations under the License.
  */
 
-import { beforeEach, describe, expect as jestExpect, it } from 'esmocha';
+import { beforeEach, describe, expect, it } from 'esmocha';
 
-import { expect } from 'chai';
 import helpers from 'yeoman-test';
 
 import { APPLICATION_TYPE_MONOLITH } from '../core/application-types.ts';
@@ -57,7 +56,7 @@ describe('jdl - integration tests', () => {
     });
 
     it('should keep the same JDL content', () => {
-      expect(writtenContent.toString()).to.equal(originalContent.toString());
+      expect(writtenContent.toString()).toBe(originalContent.toString());
     });
   });
 
@@ -88,10 +87,10 @@ entity A
       });
 
       it('stringified JDL should match original jdl', () => {
-        jestExpect(convertedJdl).toEqual(expectedJdl);
+        expect(convertedJdl).toEqual(expectedJdl);
       });
       it('should result matching', () => {
-        jestExpect(result).toMatchInlineSnapshot(`
+        expect(result).toMatchInlineSnapshot(`
 Map {
   "jhipster" => [
     JSONEntity {
@@ -152,12 +151,12 @@ relationship ManyToOne {
       });
 
       it('should add relationship at both sides', () => {
-        jestExpect(result.get(applicationName)![0].relationships.length).toBe(1);
-        jestExpect(result.get(applicationName)![1].relationships.length).toBe(1);
+        expect(result.get(applicationName)![0].relationships.length).toBe(1);
+        expect(result.get(applicationName)![1].relationships.length).toBe(1);
       });
 
       it('should result matching', () => {
-        jestExpect(result).toMatchInlineSnapshot(`
+        expect(result).toMatchInlineSnapshot(`
 Map {
   "jhipster" => [
     JSONEntity {
@@ -249,16 +248,16 @@ relationship ManyToOne {
       });
 
       it('convert back to jdl', () => {
-        jestExpect(convertedJdl).toBe(jdl);
+        expect(convertedJdl).toBe(jdl);
       });
 
       it('should add relationship at one side', () => {
-        jestExpect(result.get(applicationName)![0].relationships.length).toBe(1);
-        jestExpect(result.get(applicationName)![1].relationships.length).toBe(0);
+        expect(result.get(applicationName)![0].relationships.length).toBe(1);
+        expect(result.get(applicationName)![1].relationships.length).toBe(0);
       });
 
       it('should result matching', () => {
-        jestExpect(result).toMatchInlineSnapshot(`
+        expect(result).toMatchInlineSnapshot(`
 Map {
   "jhipster" => [
     JSONEntity {
@@ -344,12 +343,12 @@ relationship ManyToOne {
       });
 
       it('should add relationship at both sides', () => {
-        jestExpect(result.get(applicationName)![0].relationships.length).toBe(1);
-        jestExpect(result.get(applicationName)![1].relationships.length).toBe(1);
+        expect(result.get(applicationName)![0].relationships.length).toBe(1);
+        expect(result.get(applicationName)![1].relationships.length).toBe(1);
       });
 
       it('should result matching', () => {
-        jestExpect(result).toMatchInlineSnapshot(`
+        expect(result).toMatchInlineSnapshot(`
 Map {
   "jhipster" => [
     JSONEntity {
@@ -443,7 +442,7 @@ application {
 
       it('should throw error', () => {
         const importer = createImporterFromContent(jdl);
-        jestExpect(() => importer.import()).toThrow(/Blueprint namespace config foo requires the blueprint foo/);
+        expect(() => importer.import()).toThrow(/Blueprint namespace config foo requires the blueprint foo/);
       });
     });
 
@@ -479,7 +478,7 @@ application {
       });
 
       it('should result matching', () => {
-        jestExpect(result[applicationName]).toMatchInlineSnapshot(`
+        expect(result[applicationName]).toMatchInlineSnapshot(`
 {
   "config": {
     "baseName": "jhipster",

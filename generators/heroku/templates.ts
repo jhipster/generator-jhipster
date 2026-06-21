@@ -42,10 +42,10 @@ export const mavenProfileContent = (data: any) => {
                             <defaultSchemaName></defaultSchemaName>
                             <username>\${env.JDBC_DATABASE_USERNAME}</username>
                             <password>\${env.JDBC_DATABASE_PASSWORD}</password>${
-                              data.prodHibernateDialect && data.hibernateNamingPhysicalStrategy && data.hibernateNamingImplicitStrategy
-                                ? `
+                              data.prodHibernateDialect && data.hibernateNamingPhysicalStrategy && data.hibernateNamingImplicitStrategy ?
+                                `
                             <referenceUrl>hibernate:spring:${data.packageName}.domain?dialect=${data.prodHibernateDialect}&amp;hibernate.physical_naming_strategy=${data.hibernateNamingPhysicalStrategy}&amp;hibernate.implicit_naming_strategy=${data.hibernateNamingImplicitStrategy}</referenceUrl>`
-                                : ''
+                              : ''
                             }
                             <verbose>true</verbose>
                             <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>

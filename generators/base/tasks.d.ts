@@ -16,6 +16,7 @@ export type TaskTypes<S extends BaseSource = BaseSource> = {
   ConfiguringTaskParam: TaskParamWithControl;
   ComposingTaskParam: TaskParamWithControl;
   LoadingTaskParam: TaskParamWithControl;
+  ComposingBootstrapTaskParam: TaskParamWithControl;
   PreparingTaskParam: TaskParamWithSource<S>;
   PostPreparingTaskParam: TaskParamWithSource<S>;
   DefaultTaskParam: TaskParamWithControl;

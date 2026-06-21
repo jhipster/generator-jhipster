@@ -123,7 +123,6 @@ dependencies:
   },
   "knative/csvc-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
-
 ",
     "stateCleared": "modified",
   },
@@ -1204,7 +1203,6 @@ dependencies:
   },
   "knative/csvc-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
-
 ",
     "stateCleared": "modified",
   },
@@ -2061,7 +2059,6 @@ dependencies:
   },
   "knative/csvc-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
-
 ",
     "stateCleared": "modified",
   },
@@ -3111,7 +3108,6 @@ dependencies:
   },
   "knative/csvc-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
-
 ",
     "stateCleared": "modified",
   },
@@ -4021,7 +4017,6 @@ dependencies:
   },
   "knative/csvc-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
-
 ",
     "stateCleared": "modified",
   },
@@ -5844,7 +5839,6 @@ prometheus/grafana customisation
 {{- define "grafana.fullname" -}}
 {{- default "jhipster-grafana" -}}
 {{- end -}}
-
 ",
     "stateCleared": "modified",
   },
@@ -8876,7 +8870,6 @@ spec:
 kind: Namespace
 metadata:
   name: mynamespace
-
 ",
     "stateCleared": "modified",
   },
@@ -8988,7 +8981,6 @@ dependencies:
   },
   "knative/csvc-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
-
 ",
     "stateCleared": "modified",
   },
@@ -9673,7 +9665,6 @@ spec:
 kind: Namespace
 metadata:
   name: mynamespace
-
 ",
     "stateCleared": "modified",
   },
@@ -9784,7 +9775,6 @@ dependencies:
   },
   "knative/csvc-knative/templates/_helpers.tpl": {
     "contents": "{{/* vim: set filetype=mustache: */}}
-
 ",
     "stateCleared": "modified",
   },
@@ -10522,7 +10512,6 @@ spec:
 kind: Namespace
 metadata:
   name: jhipsternamespace
-
 ",
     "stateCleared": "modified",
   },
@@ -10757,7 +10746,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-knative-apply.sh
 
-logSummary(){
+logSummary() {
     echo ""
         echo "#####################################################"
         echo "Please find the below useful endpoints,"
@@ -12008,7 +11997,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-knative-apply.sh
 
-logSummary(){
+logSummary() {
     echo ""
         echo "#####################################################"
         echo "Please find the below useful endpoints,"
@@ -12794,7 +12783,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-knative-apply.sh
 
-logSummary(){
+logSummary() {
     echo ""
         echo "#####################################################"
         echo "Please find the below useful endpoints,"
@@ -13758,7 +13747,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-knative-apply.sh
 
-logSummary(){
+logSummary() {
     echo ""
         echo "#####################################################"
         echo "Please find the below useful endpoints,"
@@ -14615,7 +14604,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-knative-apply.sh
 
-logSummary(){
+logSummary() {
     echo ""
         echo "#####################################################"
         echo "Please find the below useful endpoints,"
@@ -16508,7 +16497,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-knative-apply.sh
 
-logSummary(){
+logSummary() {
     echo ""
         echo "#####################################################"
         echo "Please find the below useful endpoints,"
@@ -18887,7 +18876,6 @@ spec:
         configMap:
           name: jhipster-grafana-dashboard
       restartPolicy: OnFailure
-
 ",
     "stateCleared": "modified",
   },
@@ -19422,7 +19410,6 @@ spec:
 kind: Namespace
 metadata:
   name: mynamespace
-
 ",
     "stateCleared": "modified",
   },
@@ -19925,7 +19912,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-knative-apply.sh
 
-logSummary(){
+logSummary() {
     echo ""
         echo "#####################################################"
         echo "Please find the below useful endpoints,"
@@ -20147,7 +20134,6 @@ spec:
 kind: Namespace
 metadata:
   name: mynamespace
-
 ",
     "stateCleared": "modified",
   },
@@ -20897,7 +20883,7 @@ spec:
 # Files are ordered in proper order with needed wait for the dependent custom resource definitions to get initialized.
 # Usage: bash kubectl-knative-apply.sh
 
-logSummary(){
+logSummary() {
     echo ""
         echo "#####################################################"
         echo "Please find the below useful endpoints,"
@@ -20925,7 +20911,6 @@ logSummary
 kind: Namespace
 metadata:
   name: jhipsternamespace
-
 ",
     "stateCleared": "modified",
   },

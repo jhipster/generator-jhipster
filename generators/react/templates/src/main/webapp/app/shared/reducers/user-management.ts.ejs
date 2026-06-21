@@ -23,7 +23,7 @@ import { IUser } from 'app/shared/model/user.model';
 import { IQueryParams, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
 
 const initialState = {
-  errorMessage: null,
+  errorMessage: null as string | null,
   users: [] as readonly IUser[],
 };
 
@@ -50,7 +50,7 @@ export const UserManagementSlice = createSlice({
     builder
       .addCase(getUsers.pending, state => state)
       .addCase(getUsers.rejected, (state, action) => {
-        state.errorMessage = action.error.message;
+        state.errorMessage = action.error.message ?? null;
       })
       .addCase(getUsers.fulfilled, (state, action) => {
         state.users = action.payload.data;

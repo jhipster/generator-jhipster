@@ -125,6 +125,7 @@ export default function prepareEntity(entityWithConfig: BaseApplicationEntity, g
 
   if (entityWithConfig.changelogDate) {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-conversion
       entityWithConfig.changelogDateForRecent = parseChangelog(String(entityWithConfig.changelogDate));
     } catch (error: unknown) {
       throw new Error(`Error parsing changelog date for entity ${entityName}: ${(error as Error).message}`, { cause: error });
@@ -178,7 +179,7 @@ export function derivedPrimaryKeyProperties(primaryKey: PrimaryKey) {
     typeString: primaryKey.type === STRING,
     typeLong: primaryKey.type === LONG,
     typeInteger: primaryKey.type === INTEGER,
-    typeNumeric: !primaryKey.composite && (primaryKey.fields[0] as any).fieldTypeNumeric,
+    typeNumeric: !primaryKey.composite && (primaryKey.fields[0] as FieldAll).fieldTypeNumeric,
   });
 }
 
@@ -247,13 +248,13 @@ export function prepareEntityPrimaryKeyForTemplates(
               return idCount === 1 ? field.fieldName : `${relationship.relationshipName}${field.fieldNameCapitalized}`;
             },
             get fieldNameCapitalized() {
-              return idCount === 1
-                ? field.fieldNameCapitalized
+              return idCount === 1 ?
+                  field.fieldNameCapitalized
                 : `${relationship.relationshipNameCapitalized}${field.fieldNameCapitalized}`;
             },
             get columnName() {
-              return idCount === 1
-                ? (field as FieldAll).columnName
+              return idCount === 1 ?
+                  (field as FieldAll).columnName
                 : `${hibernateSnakeCase(relationship.relationshipName)}_${(field as FieldAll).columnName}`;
             },
           }));
@@ -381,7 +382,7 @@ function fieldToId(field: BaseApplicationField): any {
 /**
  * Copy required application config into entity.
  * Some entity features are related to the backend instead of the current app.
- * This allows to entities files based on the backend features.
+ * This allows generating entity files based on the backend features.
  */
 export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntity>>(
   this: CoreGenerator | void,
@@ -464,10 +465,10 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
     .map(relationship => [relationship.otherEntity.entityNameCapitalized, relationship] as const)
     .reduce(
       (relationshipsByOtherEntity, [type, relationship]) => {
-        if (!relationshipsByOtherEntity[type]) {
-          relationshipsByOtherEntity[type] = [relationship];
-        } else {
+        if (relationshipsByOtherEntity[type]) {
           relationshipsByOtherEntity[type].push(relationship);
+        } else {
+          relationshipsByOtherEntity[type] = [relationship];
         }
         return relationshipsByOtherEntity;
       },
@@ -499,7 +500,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
   const types = entity.relationships
     .filter(rel => rel.otherEntity.primaryKey)
     .flatMap(rel => rel.otherEntity.primaryKey!.fields.map(f => f.fieldType));
-  entity.otherEntityPrimaryKeyTypes = Array.from(new Set(types));
+  entity.otherEntityPrimaryKeyTypes = [...new Set(types)];
   entity.otherEntityPrimaryKeyTypesIncludesUUID = types.includes(UUID);
 
   entity.relationships.forEach(relationship => {
@@ -530,7 +531,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
   entity.regularEagerRelations = entity.eagerRelations.filter(rel => rel.id !== true);
 
   entity.reactiveEagerRelations = entity.relationships.filter(
-    rel => rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide === true),
+    rel => rel.relationshipType === 'many-to-one' || (rel.relationshipType === 'one-to-one' && rel.ownerSide),
   );
   entity.reactiveRegularEagerRelations = entity.reactiveEagerRelations.filter(rel => rel.id !== true);
 }

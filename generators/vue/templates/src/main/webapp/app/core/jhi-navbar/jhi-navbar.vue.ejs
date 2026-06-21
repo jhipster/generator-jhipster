@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 <template>
-  <b-navbar data-cy="navbar" toggleable="md" variant="<%_ if (clientThemeNone || !clientThemeVariantLight) { _%>dark<%_ } else { _%>light<%_ } _%>" data-bs-theme="<%_ if (clientThemeNone || !clientThemeVariantLight) { _%>dark<%_ } else { _%>light<%_ } _%>">
+  <b-navbar data-cy="navbar" toggleable="md" variant="<%- vueBootstrapVariant %>" data-bs-theme="<%- vueBootstrapBsTheme %>">
     <b-navbar-brand class="logo" b-link to="/">
       <span class="logo-img"></span>
       <span class="navbar-title">{{ t$('global.title') }}</span> <span class="navbar-version">{{ version }}</span>
@@ -42,17 +42,20 @@
             <span>{{ t$('global.menu.home') }}</span>
           </span>
         </b-nav-item>
-        <b-nav-item-dropdown no-size="true" end id="entity-menu" v-if="authenticated" active-class="active" class="pointer" data-cy="entity">
+        <b-nav-item-dropdown :no-size="true" end id="entity-menu" v-if="authenticated" active-class="active" class="pointer" data-cy="entity">
           <template #button-content>
             <span class="navbar-dropdown-menu">
               <font-awesome-icon icon="th-list" />
               <span class="no-bold">{{ t$('global.menu.entities.main') }}</span>
             </span>
           </template>
-          <entities-menu></entities-menu>
-<%_ if (applicationTypeGateway && microfrontend) { _%>
+<%_ if (exposeMicrofrontend) { _%>
+          <!-- Load entities menu exposed by microfrontend -->
+<%_ } _%>
+          <%- exposeMicrofrontend ? '<!-- ' : '' %><entities-menu></entities-menu><%- exposeMicrofrontend ? ' -->' : '' %>
+<%_ if (microfrontend) { _%>
   <%_ for (const microfrontend of microfrontends) { _%>
-          <<%= microfrontend.lowercaseBaseName %>-menu></<%= microfrontend.lowercaseBaseName %>-menu>
+          <<%- microfrontend.moduleFederationName %>-menu></<%- microfrontend.moduleFederationName %>-menu>
   <%_ } _%>
 <%_ } _%>
           <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
@@ -170,7 +173,7 @@
             <font-awesome-icon icon="sign-out-alt" />
             <span>{{ t$('global.menu.account.logout') }}</span>
           </b-dropdown-item>
-          <b-dropdown-item data-cy="login" v-if="!authenticated" @click="showLogin()" id="login" active-class="active">
+          <b-dropdown-item data-cy="login" v-if="!authenticated" @click="<%- authenticationTypeOauth2 ? 'login' : 'showLogin' %>()" id="login" active-class="active">
             <font-awesome-icon icon="sign-in-alt" />
             <span>{{ t$('global.menu.account.login') }}</span>
           </b-dropdown-item>
@@ -237,7 +240,7 @@
 
 .logo-img {
   height: 100%;
-  background: url('/content/images/logo-jhipster.png') no-repeat center center;
+  background: url('<%- clientBundlerRsbuild ? '@' : '/' %>content/images/logo-jhipster.png') no-repeat center center;
   background-size: contain;
   width: 100%;
   filter: drop-shadow(0 0 0.05rem white);

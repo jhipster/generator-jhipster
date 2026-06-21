@@ -18,7 +18,7 @@
 -%>
 #!/usr/bin/env bash
 
-KEYSPACE_NAME=<%= baseName.toLowerCase() %>
+KEYSPACE_NAME=<%- baseName.toLowerCase() %>
 
 unset scripts
 declare -A scripts

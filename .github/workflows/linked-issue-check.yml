@@ -21,6 +21,8 @@ name: Linked Issue Check
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+permissions:
+  contents: read
 env:
   FORCE_COLOR: 2
 jobs:
@@ -58,7 +60,7 @@ jobs:
       # Install all tools and check configuration
       #----------------------------------------------------------------------
       - name: 'SETUP: Checkout generator-jhipster'
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           path: generator-jhipster
           fetch-depth: 2

@@ -107,7 +107,7 @@ describe(`generator - ${generator}`, () => {
           .commitFiles()
           .withJHipsterGenerators({ useDefaultMocks: true })
           .withTask('postWriting', async function (this, { control }) {
-            jhipsterOldVersion = control.jhipsterOldVersion;
+            ({ jhipsterOldVersion } = control);
           });
       });
 

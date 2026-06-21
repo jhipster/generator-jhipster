@@ -1177,7 +1177,6 @@ services:
       #- ENV_DOCKER_REGISTRY_USE_SSL=1
     ports:
       - 5080:80
-
 ",
     "stateCleared": "modified",
   },
@@ -1417,7 +1416,6 @@ services:
       #- ENV_DOCKER_REGISTRY_USE_SSL=1
     ports:
       - 5080:80
-
 ",
     "stateCleared": "modified",
   },
@@ -2609,7 +2607,6 @@ services:
       #- ENV_DOCKER_REGISTRY_USE_SSL=1
     ports:
       - 5080:80
-
 ",
     "stateCleared": "modified",
   },
@@ -3069,7 +3066,6 @@ services:
       #- ENV_DOCKER_REGISTRY_USE_SSL=1
     ports:
       - 5080:80
-
 ",
     "stateCleared": "modified",
   },

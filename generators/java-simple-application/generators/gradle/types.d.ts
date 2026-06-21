@@ -1,6 +1,6 @@
 import type { RequireOneOrNone } from 'type-fest';
 
-import type { HandleCommandTypes } from '../../../../lib/command/types.ts';
+import type { CommandTypeMap } from '../../../../lib/command/types.ts';
 import type { Source as BaseApplicationSource } from '../../../base-simple-application/types.ts';
 import type {
   Application as JavaSimpleApplicationApplication,
@@ -71,7 +71,7 @@ export type Source = BaseApplicationSource & {
   addGradleBuildSrcDependencyCatalogLibraries?(catalogVersion: GradleLibrary[]): void;
 };
 
-type Command = HandleCommandTypes<typeof GradleCommand>;
+type Command = CommandTypeMap<typeof GradleCommand>;
 
 export type Config = Command['Config'] & JavaSimpleApplicationConfig;
 

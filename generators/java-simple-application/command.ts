@@ -46,9 +46,9 @@ const command = {
         message: 'What is your default Java package name?',
         default: gen.jhipsterConfigWithDefaults.packageName,
         validate: (input: string) =>
-          /^([a-z_][a-z0-9_]*(\.[a-z_][a-z0-9_]*)*)$/.test(input)
-            ? true
-            : 'The package name you have provided is not a valid Java package name.',
+          /^([a-z_][a-z0-9_]*(\.[a-z_][a-z0-9_]*)*)$/.test(input) ? true : (
+            'The package name you have provided is not a valid Java package name.'
+          ),
       }),
       scope: 'storage',
       description: 'The package name for the generated application',

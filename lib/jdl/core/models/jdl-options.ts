@@ -34,7 +34,7 @@ export default class JDLOptions {
       throw new Error("Can't add nil option.");
     }
     if (option.getType() === 'UNARY') {
-      addUnaryOption(this.options, option as JDLUnaryOption);
+      addUnaryOption(this.options, option);
     } else {
       addBinaryOption(this.options, option as JDLBinaryOption);
     }
@@ -44,7 +44,7 @@ export default class JDLOptions {
   getOptions(): AbstractJDLOption[] {
     const options: any[] = [];
     Object.values(this.options).forEach(item => {
-      if (item.getType && item.getType() === 'UNARY') {
+      if (item.getType?.() === 'UNARY') {
         options.push(item);
         return;
       }
@@ -64,7 +64,7 @@ export default class JDLOptions {
     if (!optionName) {
       return false;
     }
-    return !!this.options[optionName] || this.getOptions().filter(option => option.name === optionName).length !== 0;
+    return !!this.options[optionName] || this.getOptions().some(option => option.name === optionName);
   }
 
   size(): number {
@@ -106,9 +106,9 @@ function addBinaryOption(options: Record<string, any>, optionToAdd: JDLBinaryOpt
     options[name] = {
       [value]: optionToAdd,
     };
-  } else if (!options[name][value]) {
-    options[name][value] = optionToAdd;
-  } else {
+  } else if (options[name][value]) {
     options[name][value].addEntitiesFromAnotherOption(optionToAdd);
+  } else {
+    options[name][value] = optionToAdd;
   }
 }

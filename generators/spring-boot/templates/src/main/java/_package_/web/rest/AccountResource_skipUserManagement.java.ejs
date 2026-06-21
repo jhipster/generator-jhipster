@@ -16,11 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.web.rest;
+package <%- packageName %>.web.rest;
 
-import <%= packageName %>.security.SecurityUtils;
+import <%- packageName %>.security.SecurityUtils;
 <%_ if (generateBuiltInAuthorityEntity) { _%>
-import <%= packageName %>.domain.Authority;
+import <%- packageName %>.domain.Authority;
 
 <%_ } _%>
 
@@ -43,7 +43,7 @@ import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.UserDetails;
   <%_ } else { _%>
-import <%= packageName %>.security.SecurityUtils;
+import <%- packageName %>.security.SecurityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
   <%_ } _%>
 <%_ } _%>
@@ -93,8 +93,8 @@ public class AccountResource {
 <%_ if (reactive) { _%>
   <%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
     public Mono<UserVM> getAccount(Principal principal) {
-        if (principal instanceof AbstractAuthenticationToken) {
-            return Mono.just(getUserFromAuthentication((AbstractAuthenticationToken) principal));
+        if (principal instanceof AbstractAuthenticationToken authToken) {
+            return Mono.just(getUserFromAuthentication(authToken));
         } else {
             throw new AccountResourceException("User could not be found");
         }
@@ -105,10 +105,10 @@ public class AccountResource {
             .map(SecurityContext::getAuthentication)
             .map(authentication -> {
                 String login;
-                if (authentication.getPrincipal() instanceof UserDetails) {
-                    login = ((UserDetails) authentication.getPrincipal()).getUsername();
-                } else if (authentication.getPrincipal() instanceof String) {
-                    login = (String) authentication.getPrincipal();
+                if (authentication.getPrincipal() instanceof UserDetails userDetails) {
+                    login = userDetails.getUsername();
+                } else if (authentication.getPrincipal() instanceof String principal) {
+                    login = principal;
                 } else {
                     throw new AccountResourceException();
                 }
@@ -125,8 +125,8 @@ public class AccountResource {
 <%_ } else { _%>
   <%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
     public UserVM getAccount(Principal principal) {
-        if (principal instanceof AbstractAuthenticationToken) {
-            return getUserFromAuthentication((AbstractAuthenticationToken) principal);
+        if (principal instanceof AbstractAuthenticationToken authToken) {
+            return getUserFromAuthentication(authToken);
         } else {
             throw new AccountResourceException("User could not be found");
         }
@@ -168,7 +168,7 @@ public class AccountResource {
         private Map<String, Object> details;
 <%_ } _%>
 
-        UserVM(String login, Set<String> authorities<% if (authenticationTypeOauth2 || authenticationTypeJwt) { %>, Map<String, Object> details<% } %>) {
+        UserVM(String login, Set<String> authorities<%- authenticationTypeOauth2 || authenticationTypeJwt ? ', Map<String, Object> details' : '' %>) {
             this.login = login;
             this.authorities = authorities;
 <%_ if (authenticationTypeOauth2 || authenticationTypeJwt) { _%>
@@ -199,11 +199,11 @@ public class AccountResource {
 
     private static UserVM getUserFromAuthentication(AbstractAuthenticationToken authToken) {
         Map<String, Object> attributes;
-        if (authToken instanceof JwtAuthenticationToken) {
-            attributes = ((JwtAuthenticationToken) authToken).getTokenAttributes();
+        if (authToken instanceof JwtAuthenticationToken jwtToken) {
+            attributes = jwtToken.getTokenAttributes();
   <%_ if (authenticationTypeOauth2) { _%>
-        } else if (authToken instanceof OAuth2AuthenticationToken) {
-            attributes = ((OAuth2AuthenticationToken) authToken).getPrincipal().getAttributes();
+        } else if (authToken instanceof OAuth2AuthenticationToken oauthToken) {
+            attributes = oauthToken.getPrincipal().getAttributes();
   <%_ } _%>
         } else {
             throw new IllegalArgumentException("AuthenticationToken is not OAuth2 or JWT!");

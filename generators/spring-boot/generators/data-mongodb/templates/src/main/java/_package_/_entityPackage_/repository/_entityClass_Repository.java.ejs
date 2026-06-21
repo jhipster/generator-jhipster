@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= entityAbsolutePackage %>.repository;
+package <%- entityAbsolutePackage %>.repository;
 
-import <%= entityAbsolutePackage %>.domain.<%= persistClass %>;
+import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
 
 <%_ if (implementsEagerLoadApis) { _%>
 import org.springframework.data.domain.Page;
@@ -39,19 +39,19 @@ import java.util.UUID;
 <%_ } _%>
 
 /**
- * <%= springDataDescription %> repository for the <%= persistClass %> entity.
+ * <%- springDataDescription %> repository for the <%- persistClass %> entity.
  */
 @Repository
-public interface <%= entityClass %>Repository extends MongoRepository<<%= persistClass %>, <%= primaryKey.type %>> {
+public interface <%- entityClass %>Repository extends MongoRepository<<%- persistClass %>, <%- primaryKey.type %>> {
 <%_ if (implementsEagerLoadApis) { _%>
 
     @Query("{}")
-    Page<<%= persistClass %>> findAllWithEagerRelationships(Pageable pageable);
+    Page<<%- persistClass %>> findAllWithEagerRelationships(Pageable pageable);
 
     @Query("{}")
-    List<<%= persistClass %>> findAllWithEagerRelationships();
+    List<<%- persistClass %>> findAllWithEagerRelationships();
 
     @Query("{'id': ?0}")
-    Optional<<%= persistClass %>> findOneWithEagerRelationships(<%= primaryKey.type %> id);
+    Optional<<%- persistClass %>> findOneWithEagerRelationships(<%- primaryKey.type %> id);
 <%_ } _%>
 }

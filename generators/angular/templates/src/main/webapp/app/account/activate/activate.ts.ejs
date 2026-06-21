@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap } from 'rxjs';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
 import { TranslateModule } from '@ngx-translate/core';
@@ -27,8 +27,9 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ActivateService } from './activate.service';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-activate',
-  imports: [RouterLink<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
+  selector: '<%- jhiPrefixDashed %>-activate',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink<%- enableTranslation ? ', TranslateDirective, TranslateModule' : '' %>],
   templateUrl: './activate.html',
 })
 export default class Activate implements OnInit {

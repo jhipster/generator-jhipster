@@ -60,7 +60,7 @@ export function parseChangelog(changelogDate: string): Date {
     throw new Error('changelogDate is required.');
   }
   if (typeof changelogDate !== 'string') {
-    throw new Error(`changelogDate ${changelogDate} must be a string.`);
+    throw new TypeError(`changelogDate ${changelogDate} must be a string.`);
   }
   if (changelogDate.length !== 14) {
     throw new Error(`changelogDate ${changelogDate} is not a valid changelogDate.`);
@@ -72,7 +72,7 @@ export function parseChangelog(changelogDate: string): Date {
   const formattedDate = `${year}-${month}-${day}T${changelogDate.slice(8, 10)}:${changelogDate.slice(10, 12)}:${changelogDate.slice(12, 14)}+00:00`;
   const parsedTimestamp = Date.parse(formattedDate);
   if (Number.isNaN(parsedTimestamp)) {
-    throw new Error(`changelogDate ${changelogDate} is not a valid date.`);
+    throw new TypeError(`changelogDate ${changelogDate} is not a valid date.`);
   }
   return new Date(parsedTimestamp);
 }

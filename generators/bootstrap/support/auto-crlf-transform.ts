@@ -54,8 +54,10 @@ export function detectCrLf(filePath: string): Promise<boolean | undefined> {
 
 const autoCrlfTransform = async ({ baseDir }: { baseDir: string }) => {
   const git = simpleGit({ baseDir }).env({
-    ...process.env,
-    LANG: 'en',
+    HOME: process.env.HOME,
+    PATH: process.env.PATH,
+    LANG: 'C',
+    LC_ALL: 'C',
   });
 
   if (!(await git.checkIsRepo())) {

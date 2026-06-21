@@ -53,13 +53,18 @@ const openAPIItem = () => (
 
 <% if (devDatabaseTypeH2Any) { %>
 const databaseItem = () => (
-  <DropdownItem as="a" href="<% if (reactive) { %>http://localhost:8092/<% } else { %>./h2-console/<% } %>" target="_tab">
+  <DropdownItem as="a" href="<%- reactive ? 'http://localhost:8092/' : './h2-console/' %>" target="_tab">
     <FontAwesomeIcon icon={faDatabase} /> <Translate contentKey="global.menu.admin.database">Database</Translate>
   </DropdownItem>
 );
 <%_ } _%>
 
-export const AdminMenu = ({ showOpenAPI <% if (devDatabaseTypeH2Any) { %>, showDatabase <%_ } _%>}) => (
+export const AdminMenu = ({
+  showOpenAPI,
+<%_ if (devDatabaseTypeH2Any) { _%>
+  showDatabase,
+<%_ } _%>
+}) => (
   <NavDropdown icon="users-cog" name={translate('global.menu.admin.main')} id="admin-menu" data-cy="adminMenu">
       {adminMenuItems()}
       {showOpenAPI && openAPIItem()}
@@ -68,5 +73,3 @@ export const AdminMenu = ({ showOpenAPI <% if (devDatabaseTypeH2Any) { %>, showD
 <%_ } _%>
   </NavDropdown>
 );
-
-export default AdminMenu;

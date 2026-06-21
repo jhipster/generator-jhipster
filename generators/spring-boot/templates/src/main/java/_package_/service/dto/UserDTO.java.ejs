@@ -16,10 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.service.dto;
+package <%- packageName %>.service.dto;
 
 <%_ if (!databaseTypeNo) { _%>
-import <%= user.entityAbsoluteClass %>;
+import <%- user.entityAbsoluteClass %>;
 <%_ } _%>
 
 import java.io.Serial;
@@ -32,38 +32,38 @@ import java.util.UUID;
 /**
  * A DTO representing a user, with only the public attributes.
  */
-public class <%= user.dtoClass %> implements Serializable {
+public class <%- user.dtoClass %> implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private <%= user.primaryKey.type %> id;
+    private <%- user.primaryKey.type %> id;
 
     private String login;
 
 <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-    private String <%= field.fieldName %>;
+    private String <%- field.fieldName %>;
 <%_ } _%>
 
 <%_ if (!databaseTypeNo) { _%>
-    public <%= user.dtoClass %>() {
+    public <%- user.dtoClass %>() {
         // Empty constructor needed for Jackson.
     }
 
-    public <%= user.dtoClass %>(<%= user.persistClass %> user) {
+    public <%- user.dtoClass %>(<%- user.persistClass %> user) {
         this.id = user.getId();
         // Customize it here if you need, or not, firstName/lastName/etc
         this.login = user.getLogin();
   <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-        this.<%= field.fieldName %> = user.<%= field.propertySupplierName %>();
+        this.<%- field.fieldName %> = user.<%- field.propertySupplierName %>();
   <%_ } _%>
     }
 
 <%_ } _%>
-    public <%= user.primaryKey.type %> getId() {
+    public <%- user.primaryKey.type %> getId() {
         return id;
     }
 
-    public void setId(<%= user.primaryKey.type %> id) {
+    public void setId(<%- user.primaryKey.type %> id) {
         this.id = id;
     }
 
@@ -76,12 +76,12 @@ public class <%= user.dtoClass %> implements Serializable {
     }
 
 <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-    public String <%= field.propertySupplierName %>() {
-        return <%= field.fieldName %>;
+    public String <%- field.propertySupplierName %>() {
+        return <%- field.fieldName %>;
     }
 
-    public void <%= field.propertyConsumerName %>(String <%= field.fieldName %>) {
-        this.<%= field.fieldName %> = <%= field.fieldName %>;
+    public void <%- field.propertyConsumerName %>(String <%- field.fieldName %>) {
+        this.<%- field.fieldName %> = <%- field.fieldName %>;
     }
 
 <%_ } _%>
@@ -94,14 +94,14 @@ public class <%= user.dtoClass %> implements Serializable {
             return false;
         }
 
-        <%= user.dtoClass %> userDTO = (<%= user.dtoClass %>) o;
+        <%- user.dtoClass %> userDTO = (<%- user.dtoClass %>) o;
         if (userDTO.getId() == null || getId() == null) {
             return false;
         }
 
         return Objects.equals(getId(), userDTO.getId()) &&
 <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-            Objects.equals(<%= field.propertySupplierName %>(), userDTO.<%= field.propertySupplierName %>()) &&
+            Objects.equals(<%- field.propertySupplierName %>(), userDTO.<%- field.propertySupplierName %>()) &&
 <%_ } _%>
             Objects.equals(getLogin(), userDTO.getLogin());
     }
@@ -120,11 +120,11 @@ public class <%= user.dtoClass %> implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
-        return "<%= user.dtoClass %>{" +
+        return "<%- user.dtoClass %>{" +
             "id='" + id + '\'' +
             ", login='" + login + '\'' +
 <%_ for (field of user.fields.filter(field => !field.builtIn && field.relatedByOtherEntity)) { _%>
-            ", <%= field.fieldName %>='" + <%= field.fieldName %> + '\'' +
+            ", <%- field.fieldName %>='" + <%- field.fieldName %> + '\'' +
 <%_ } _%>
             "}";
     }

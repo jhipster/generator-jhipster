@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { describe, expect, it } from 'esmocha';
 
 import relationshipOptions from './relationship-options.ts';
 
@@ -29,12 +27,12 @@ describe('jdl - RelationshipOptions', () => {
   describe('exists', () => {
     describe('when the option does not exist', () => {
       it('should return false', () => {
-        expect(exists('toto')).to.be.false;
+        expect(exists('toto')).toBe(false);
       });
     });
     describe('when the option exists', () => {
       it('should return true', () => {
-        expect(exists(BUILT_IN_ENTITY)).to.be.true;
+        expect(exists(BUILT_IN_ENTITY)).toBe(true);
       });
     });
   });

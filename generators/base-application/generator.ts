@@ -19,12 +19,9 @@
 import { upperFirst } from 'lodash-es';
 import type { ComposeOptions, Storage } from 'yeoman-generator';
 
-import { getConfigWithDefaults } from '../../lib/jhipster/default-application-options.ts';
 import type { Entity as BaseEntity } from '../../lib/jhipster/types/entity.ts';
-import { mutateData } from '../../lib/utils/index.ts';
 import type { GenericTask } from '../base-core/types.ts';
 import BaseGenerator from '../base-simple-application/index.ts';
-import { CONTEXT_DATA_APPLICATION_KEY, CONTEXT_DATA_SOURCE_KEY } from '../base-simple-application/support/index.ts';
 import { JHIPSTER_CONFIG_DIR } from '../generator-constants.ts';
 import type GeneratorsByNamespace from '../types.ts';
 
@@ -49,6 +46,7 @@ import type {
 
 const {
   LOADING,
+  COMPOSING_BOOTSTRAP,
   PREPARING,
   POST_PREPARING,
   CONFIGURING_EACH_ENTITY,
@@ -78,7 +76,7 @@ const {
   POST_WRITING_ENTITIES_QUEUE,
 } = QUEUES;
 
-const asPriority = BaseGenerator.asPriority;
+const { asPriority } = BaseGenerator;
 
 const PRIORITY_WITH_ENTITIES_TO_LOAD = new Set<string>([LOADING_ENTITIES]);
 const PRIORITY_WITH_ENTITIES = new Set<string>([DEFAULT]);
@@ -88,6 +86,7 @@ const PRIORITY_WITH_SOURCE = new Set<string>([PREPARING, POST_PREPARING, POST_WR
 const PRIORITY_WITH_APPLICATION_DEFAULTS = new Set<string>([PREPARING, LOADING]);
 const PRIORITY_WITH_APPLICATION = new Set<string>([
   LOADING,
+  COMPOSING_BOOTSTRAP,
   PREPARING,
   POST_PREPARING,
 
@@ -130,24 +129,24 @@ export default class BaseApplicationGenerator<
   Features extends BaseApplicationFeatures = BaseApplicationFeatures,
   Tasks extends DefaultTasks<Entity, Application, Source> = DefaultTasks<Entity, Application, Source>,
 > extends BaseGenerator<Application, Config, Options, Source, Features, Tasks> {
-  static CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
+  static readonly CONFIGURING_EACH_ENTITY = asPriority(CONFIGURING_EACH_ENTITY);
 
-  static LOADING_ENTITIES = asPriority(LOADING_ENTITIES);
+  static readonly LOADING_ENTITIES = asPriority(LOADING_ENTITIES);
 
-  static PREPARING_EACH_ENTITY = asPriority(PREPARING_EACH_ENTITY);
+  static readonly PREPARING_EACH_ENTITY = asPriority(PREPARING_EACH_ENTITY);
 
-  static PREPARING_EACH_ENTITY_FIELD = asPriority(PREPARING_EACH_ENTITY_FIELD);
+  static readonly PREPARING_EACH_ENTITY_FIELD = asPriority(PREPARING_EACH_ENTITY_FIELD);
 
-  static PREPARING_EACH_ENTITY_RELATIONSHIP = asPriority(PREPARING_EACH_ENTITY_RELATIONSHIP);
+  static readonly PREPARING_EACH_ENTITY_RELATIONSHIP = asPriority(PREPARING_EACH_ENTITY_RELATIONSHIP);
 
-  static POST_PREPARING_EACH_ENTITY = asPriority(POST_PREPARING_EACH_ENTITY);
+  static readonly POST_PREPARING_EACH_ENTITY = asPriority(POST_PREPARING_EACH_ENTITY);
 
-  static WRITING_ENTITIES = asPriority(WRITING_ENTITIES);
+  static readonly WRITING_ENTITIES = asPriority(WRITING_ENTITIES);
 
-  static POST_WRITING_ENTITIES = asPriority(POST_WRITING_ENTITIES);
+  static readonly POST_WRITING_ENTITIES = asPriority(POST_WRITING_ENTITIES);
 
   constructor(args?: string[], options?: Options, features?: Features) {
-    super(args, options, { storeJHipsterVersion: true, storeBlueprintVersion: true, ...features } as Features);
+    super(args, options, features);
 
     if (this.options.help) {
       return;
@@ -167,12 +166,6 @@ export default class BaseApplicationGenerator<
     });
   }
 
-  get #application(): Application {
-    return this.getContextData(CONTEXT_DATA_APPLICATION_KEY, {
-      factory: () => ({}) as unknown as Application,
-    });
-  }
-
   get #entities(): Map<string, BaseEntity> {
     return this.getContextData(CONTEXT_DATA_APPLICATION_ENTITIES_KEY, { factory: () => new Map() });
   }
@@ -183,17 +176,6 @@ export default class BaseApplicationGenerator<
       entityName: key,
       entity: value as any,
     }));
-  }
-
-  get #source(): Record<string, any> {
-    return this.getContextData(CONTEXT_DATA_SOURCE_KEY, { factory: () => ({}) });
-  }
-
-  /**
-   * JHipster config with default values fallback
-   */
-  override get jhipsterConfigWithDefaults(): Readonly<Config> {
-    return getConfigWithDefaults(super.jhipsterConfigWithDefaults) as Config;
   }
 
   /**
@@ -225,7 +207,6 @@ export default class BaseApplicationGenerator<
 
   /**
    * Get Entities configuration path
-   * @returns
    */
   getEntitiesConfigPath(...args: string[]): string {
     return this.destinationPath(JHIPSTER_CONFIG_DIR, ...args);
@@ -234,7 +215,6 @@ export default class BaseApplicationGenerator<
   /**
    * Get Entity configuration path
    * @param entityName Entity name
-   * @returns
    */
   getEntityConfigPath(entityName: string): string {
     return this.getEntitiesConfigPath(`${upperFirst(entityName)}.json`);
@@ -248,7 +228,7 @@ export default class BaseApplicationGenerator<
   getEntityConfig(entityName: string, create = false): Storage | undefined {
     const entityPath = this.getEntityConfigPath(entityName);
     if (!create && !this.fs.exists(entityPath)) return undefined;
-    return this.createStorage(entityPath);
+    return this.createStorage(entityPath, { transform: this.features.configTransform });
   }
 
   /**
@@ -289,6 +269,10 @@ export default class BaseApplicationGenerator<
    * Configuring each entity should configure entities.
    */
   get configuringEachEntity() {
+    return {};
+  }
+
+  get loadingEntities() {
     return {};
   }
 
@@ -408,7 +392,7 @@ export default class BaseApplicationGenerator<
    * @param {string} seed
    */
   resetEntitiesFakeData(seed: string | undefined): void {
-    seed = `${this.#application.baseName}-${seed}`;
+    seed = `${this.context.baseName}-${seed}`;
     this.log.debug(`Resetting entities seed with '${seed}'`);
     for (const entity of this.#entities.values()) {
       (entity as Entity).resetFakerSeed?.(seed);
@@ -428,18 +412,8 @@ export default class BaseApplicationGenerator<
    * @protected
    */
   protected getTaskFirstArgForPriority(priorityName: string): any {
-    const { source, application, applicationDefaults, entitiesToLoad, entities, filteredEntities } = getFirstArgForPriority(priorityName);
-
-    const args: Record<string, any> = {};
-    if (source) {
-      args.source = this.#source;
-    }
-    if (application) {
-      args.application = this.#application;
-    }
-    if (applicationDefaults) {
-      args.applicationDefaults = (...args: any[]) => mutateData(this.#application, ...args.map(data => ({ __override__: false, ...data })));
-    }
+    const { application, applicationDefaults, source, entitiesToLoad, entities, filteredEntities } = getFirstArgForPriority(priorityName);
+    const args = this.getApplicationArgForPriority({ application, applicationDefaults, source }) as Record<string, any>;
     if (entitiesToLoad) {
       args.entitiesToLoad = this.#getEntitiesDataToLoad();
     }
@@ -480,7 +454,7 @@ export default class BaseApplicationGenerator<
    * @returns {string[]}
    */
   #getEntitiesDataToLoad(): EntityToLoad<any>[] {
-    const application = this.#application;
+    const application = this.context;
     const builtInEntities: string[] = [];
     if (application.generateBuiltInUserEntity) {
       // Reorder User entity to be the first one to be loaded

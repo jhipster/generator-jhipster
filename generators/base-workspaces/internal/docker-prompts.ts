@@ -70,7 +70,7 @@ export const askForApplicationType = asPromptingTask(async function askForApplic
 export const askForPath = asPromptingTask(async function askForPath(this: BaseKubernetesGenerator, { control }) {
   if (!this.shouldAskForPrompts({ control })) return;
 
-  const deploymentApplicationType = this.jhipsterConfigWithDefaults.deploymentApplicationType;
+  const { deploymentApplicationType } = this.jhipsterConfigWithDefaults;
   let messageAskForPath;
   if (deploymentApplicationType === APPLICATION_TYPE_MONOLITH) {
     messageAskForPath = 'Enter the root directory where your applications are located';
@@ -92,8 +92,8 @@ export const askForPath = asPromptingTask(async function askForPath(this: BaseKu
               const appsFolders = getAppFolders.call(this, path, deploymentApplicationType);
 
               if (appsFolders.length === 0) {
-                return deploymentApplicationType === APPLICATION_TYPE_MONOLITH
-                  ? `No monolith found in ${path}`
+                return deploymentApplicationType === APPLICATION_TYPE_MONOLITH ?
+                    `No monolith found in ${path}`
                   : `No microservice or gateway found in ${path}`;
               }
               return true;

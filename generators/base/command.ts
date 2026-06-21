@@ -70,6 +70,13 @@ const command = {
       },
       scope: 'generator',
     },
+    defaults: {
+      cli: {
+        description: 'Execute jhipster with default config',
+        type: Boolean,
+      },
+      scope: 'none',
+    },
     reproducible: {
       description: 'Try to reproduce changelog',
       cli: {

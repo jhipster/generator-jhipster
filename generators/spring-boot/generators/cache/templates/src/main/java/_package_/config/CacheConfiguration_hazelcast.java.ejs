@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.config;
+package <%- packageName %>.config;
 
 import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.config.JHipsterProperties;
@@ -91,13 +91,13 @@ public class CacheConfiguration {
     @Bean
     public HazelcastInstance hazelcastInstance(JHipsterProperties jHipsterProperties) {
         LOG.debug("Configuring Hazelcast");
-        HazelcastInstance hazelCastInstance = Hazelcast.getHazelcastInstanceByName("<%= baseName %>");
+        HazelcastInstance hazelCastInstance = Hazelcast.getHazelcastInstanceByName("<%- baseName %>");
         if (hazelCastInstance != null) {
             LOG.debug("Hazelcast already initialized");
             return hazelCastInstance;
         }
         Config config = new Config();
-        config.setInstanceName("<%= baseName %>");
+        config.setInstanceName("<%- baseName %>");
 <%_ if (serviceDiscoveryAny) { _%>
         config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
         if (this.registration == null) {
@@ -142,12 +142,12 @@ public class CacheConfiguration {
             config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
             config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(false);
         }
-      <%_ } _%>
+<%_ } _%>
         config.setManagementCenterConfig(new ManagementCenterConfig());
         config.addMapConfig(initializeDefaultMapConfig(jHipsterProperties));
-  <%_ if (enableHibernateCache) { _%>
+<%_ if (enableHibernateCache) { _%>
         config.addMapConfig(initializeDomainMapConfig(jHipsterProperties));
-  <%_ } _%>
+<%_ } _%>
         return Hazelcast.newHazelcastInstance(config);
     }
 
@@ -182,7 +182,7 @@ public class CacheConfiguration {
     }
 
     private MapConfig initializeDomainMapConfig(JHipsterProperties jHipsterProperties) {
-        MapConfig mapConfig = new MapConfig("<%= packageName %>.domain.*");
+        MapConfig mapConfig = new MapConfig("<%- packageName %>.domain.*");
         mapConfig.setTimeToLiveSeconds(jHipsterProperties.getCache().getHazelcast().getTimeToLiveSeconds());
         return mapConfig;
     }

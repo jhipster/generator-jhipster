@@ -25,18 +25,17 @@ import BaseApplicationGenerator from '../base-application/index.ts';
 import { createNeedleCallback } from '../base-core/support/index.ts';
 import { generateEntityClientEnumImports as getClientEnumImportsFormat } from '../client/support/index.ts';
 import { JAVA_WEBAPP_SOURCES_DIR } from '../index.ts';
-import { writeEslintClientRootConfigFile } from '../javascript-simple-application/generators/eslint/support/tasks.ts';
 import { defaultLanguage } from '../languages/support/index.ts';
 import type { Config as SpringBootConfig } from '../spring-boot/types.d.ts';
 
 import cleanupOldFilesTask from './cleanup.ts';
 import { cleanupEntitiesFiles, postWriteEntitiesFiles, writeEntitiesFiles } from './entity-files-angular.ts';
 import { writeFiles } from './files-angular.ts';
-import type { addItemToMenu } from './support/index.ts';
 import {
   addEntitiesRoute,
   addIconImport,
   addItemToAdminMenu,
+  type addItemToMenu,
   addRoute,
   addToEntitiesMenu,
   isTranslatedAngularFile,
@@ -95,6 +94,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
   get composing() {
     return this.asComposingTaskGroup({
       async composing() {
+        await this.composeWithJHipster('jhipster:javascript-simple-application:eslint');
         await this.composeWithJHipster('jhipster:client:common');
         if ((this.jhipsterConfigWithDefaults as SpringBootConfig).websocket === 'spring-websocket') {
           await this.composeWithJHipster('jhipster:client:encode-csrf-token');
@@ -161,10 +161,10 @@ export default class AngularGenerator extends AngularApplicationGenerator {
                   content: `{
   name: '${entity.entityAngularName}',
   route: '/${entity.entityPage}',${
-    application.enableTranslation
-      ? `
-  translationKey: 'global.menu.entities.${entity.entityTranslationKey}',`
-      : ''
+    application.enableTranslation ?
+      `
+  translationKey: '${entity.entityTranslationKeyMenuPath}',`
+    : ''
   }
   },`,
                 })),
@@ -281,6 +281,8 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             }
             return returnValue;
           },
+          fieldValidateRulesPatternAngular: ({ fieldValidateRulesPattern }) =>
+            fieldValidateRulesPattern?.replace(/\\\\/g, '\\').replace(/\\/g, '\\\\').replace(/'/g, "\\'"),
         });
       },
     });
@@ -331,6 +333,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             ],
             `${application.clientSrcDir}app/config/uib-pagination.config.ts`,
           ],
+          '9.1.1': [[application.enableTranslation, `${application.clientSrcDir}app/shared/language/translation.module.ts`]],
           '8.0.0-beta.1': [
             `${application.clientRootDir}jest.js`,
             `${application.clientSrcDir}app/shared/shared.module.ts.ejs`,
@@ -360,7 +363,6 @@ export default class AngularGenerator extends AngularApplicationGenerator {
         });
       },
       cleanupOldFilesTask,
-      writeEslintClientRootConfigFile,
       writeFiles,
     });
   }
@@ -382,6 +384,13 @@ export default class AngularGenerator extends AngularApplicationGenerator {
 
   get postWriting() {
     return this.asPostWritingTaskGroup({
+      addPrettierConfig({ application, source }) {
+        source.mergePrettierConfig?.({
+          overrides: [
+            { files: `${this.relativeDir(application.clientRootDir, application.clientSrcDir)}**/*.html`, options: { parser: 'angular' } },
+          ],
+        });
+      },
       clientBundler({ application, source }) {
         const { clientBundlerEsbuild, enableTranslation, nodeDependencies } = application;
         if (clientBundlerEsbuild) {
@@ -395,8 +404,9 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           });
         } else {
           source.mergeClientPackageJson!({
-            dependencies: enableTranslation
-              ? {
+            dependencies:
+              enableTranslation ?
+                {
                   '@ngx-translate/http-loader': null,
                 }
               : {},

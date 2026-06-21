@@ -73,38 +73,37 @@ import <%- `${otherEntity.entityAbsolutePackage}.service.dto.${otherEntity.dtoCl
 <%_ } _%>
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class <%- dtoClass %> implements Serializable {
-
 <%_ for (property of restProperties) { _%>
-  <%_ if (typeof property.propertyJavadoc) { _%>
+
+  <%_ if (property.propertyJavadoc) { _%>
 <%- property.propertyJavadoc %>
-  <%_ }
-  const field = property.fieldName ? property : undefined;
-  const relationship = property.relationshipName ? property : undefined;
-  const required = field && field.fieldValidate && field.fieldValidationRequired;
+  <%_ } _%>
+  <%_ const field = property.fieldName ? property : undefined;
+      const relationship = property.relationshipName ? property : undefined;
+      const required = field && field.fieldValidate && field.fieldValidationRequired;
   _%>
   <%_ if (field) { _%>
     <%_ if (property.fieldValidate) { _%>
-    <%- include('/_global_partials_entity_/field_validators', {field, reactive}); -%>
+    <%- field.javaFieldValidatorsPartial %>
     <%_ } _%>
   <%_ } _%>
   <%_ if (relationship && relationship.relationshipRequired) { _%>
     @NotNull
   <%_ } _%>
   <%_ if (property.propertyApiDescription) { _%>
-    @Schema(description = "<%- property.propertyApiDescription %>"<% if (required) { %>, requiredMode = Schema.RequiredMode.REQUIRED<% } %>)
+    @Schema(description = "<%- property.propertyApiDescription %>"<%- required ? ', requiredMode = Schema.RequiredMode.REQUIRED' : '' %>)
   <%_ } _%>
   <%_ if (property.fieldTypeBytes && databaseTypeSql) { _%>
     @Lob
   <%_ } _%>
-    private <%- property.propertyDtoJavaType %> <%- property.propertyName %><% if (property.collection && relationship) { %> = new HashSet<>()<% } %>;
-
+    private <%- property.propertyDtoJavaType %> <%- property.propertyName %><%- property.collection && relationship ? ' = new HashSet<>()' : '' %>;
   <%_ if (property.fieldWithContentType) { _%>
-    private String <%- property.propertyName %>ContentType;
-  <%_ }
-}
-_%>
 
+    private String <%- property.propertyName %>ContentType;
+  <%_ } _%>
+<%_ } _%>
 <%_ for (property of restProperties) { _%>
+
     public <%- property.propertyDtoJavaType %> <%- property.propertySupplierName %>() {
         return <%- property.propertyName %>;
     }
@@ -123,8 +122,8 @@ _%>
     }
   <%_ } _%>
 <%_ } _%>
+<%_ const idNames = primaryKey ? [...primaryKey.fields.map(f => f.propertyName)] : []; _%>
 
-<%_ const idNames = primaryKey ? [...primaryKey.fields.map(f => f.propertyName)] : [] _%>
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -133,10 +132,10 @@ _%>
         if (!(o instanceof <%- dtoClass %>)) {
             return false;
         }
-
 <%_ if (!embedded) { _%>
+
         <%- dtoClass %> <%- dtoInstance %> = (<%- dtoClass %>) o;
-        if (<%- idNames.map(n => `this.${n} == null`).join(' && ') %>){
+        if (<%- idNames.map(n => `this.${n} == null`).join(' && ') %>) {
             return false;
         }
         return <%- idNames.map(n => `Objects.equals(this.${n}, ${dtoInstance}.${n})`).join(' &&\n            ') %>;
@@ -158,9 +157,9 @@ _%>
     @Override
     public String toString() {
         return "<%- dtoClass %>{" +
-<%_ for ([idx, property] of restProperties.entries()) {
-  const isQuoted = property.fieldName && !property.fieldTypeNumeric _%>
-            "<%- idx === 0 ? '' : ', ' %><%- property.propertyName %>=<% if (isQuoted) { %>'<% } %>" + <%- property.propertySupplierName %>() <% if (isQuoted) { %>+ "'" <% } %>+
+<%_ for ([idx, property] of restProperties.entries()) { _%>
+  <%_ const isQuoted = property.fieldName && !property.fieldTypeNumeric; _%>
+            "<%- idx === 0 ? '' : ', ' %><%- property.propertyName %>=<%- isQuoted ? '\'' : '' %>" + <%- property.propertySupplierName %>() <%- isQuoted ? '+ "\'" ' : '' %>+
 <%_ } _%>
             "}";
     }

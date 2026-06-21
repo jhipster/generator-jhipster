@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import JDLApplicationEntities from './jdl-application-entities.ts';
 
@@ -34,7 +32,7 @@ describe('jdl - JDLApplicationEntities', () => {
 
       it('should fail', () => {
         // @ts-expect-error invalid api test
-        expect(() => jdlApplicationEntities.add()).to.throw(/^An entity name has to be passed so as to be added\.$/);
+        expect(() => jdlApplicationEntities.add()).toThrow(/^An entity name has to be passed so as to be added\.$/);
       });
     });
     describe('when passing an entity name', () => {
@@ -47,7 +45,7 @@ describe('jdl - JDLApplicationEntities', () => {
         });
 
         it('should not add it', () => {
-          expect(jdlApplicationEntities.size()).to.equal(1);
+          expect(jdlApplicationEntities.size()).toBe(1);
         });
       });
       describe('that is not already present', () => {
@@ -59,7 +57,7 @@ describe('jdl - JDLApplicationEntities', () => {
         });
 
         it('should add it', () => {
-          expect(jdlApplicationEntities.size()).to.equal(2);
+          expect(jdlApplicationEntities.size()).toBe(2);
         });
       });
     });
@@ -74,7 +72,7 @@ describe('jdl - JDLApplicationEntities', () => {
       });
 
       it('should not alter the state', () => {
-        expect(jdlApplicationEntities.size()).to.equal(1);
+        expect(jdlApplicationEntities.size()).toBe(1);
       });
     });
     describe('when passing a falsy name', () => {
@@ -87,7 +85,7 @@ describe('jdl - JDLApplicationEntities', () => {
       });
 
       it('should not alter the state', () => {
-        expect(jdlApplicationEntities.size()).to.equal(1);
+        expect(jdlApplicationEntities.size()).toBe(1);
       });
     });
     describe('when passing entity names', () => {
@@ -99,7 +97,7 @@ describe('jdl - JDLApplicationEntities', () => {
       });
 
       it('should alter the state without duplicates', () => {
-        expect(jdlApplicationEntities.size()).to.equal(3);
+        expect(jdlApplicationEntities.size()).toBe(3);
       });
     });
   });
@@ -113,7 +111,7 @@ describe('jdl - JDLApplicationEntities', () => {
 
       it('should not fail', () => {
         // @ts-expect-error invalid api test
-        expect(() => jdlApplicationEntities.forEach()).not.to.throw();
+        expect(() => jdlApplicationEntities.forEach()).not.toThrow();
       });
     });
     describe('when passing a function', () => {
@@ -127,7 +125,7 @@ describe('jdl - JDLApplicationEntities', () => {
       });
 
       it('should iterate over the entities', () => {
-        expect(result).to.equal('A, B');
+        expect(result).toBe('A, B');
       });
     });
   });
@@ -140,7 +138,7 @@ describe('jdl - JDLApplicationEntities', () => {
       });
 
       it('should return an empty list', () => {
-        expect(jdlApplicationEntities.toArray()).to.deep.equal([]);
+        expect(jdlApplicationEntities.toArray()).toEqual([]);
       });
     });
     describe('when there are entities', () => {
@@ -151,7 +149,7 @@ describe('jdl - JDLApplicationEntities', () => {
       });
 
       it('should return 2', () => {
-        expect(jdlApplicationEntities.toArray()).to.deep.equal(['A', 'B']);
+        expect(jdlApplicationEntities.toArray()).toEqual(['A', 'B']);
       });
     });
   });
@@ -164,7 +162,7 @@ describe('jdl - JDLApplicationEntities', () => {
       });
 
       it('should return 0', () => {
-        expect(jdlApplicationEntities.size()).to.equal(0);
+        expect(jdlApplicationEntities.size()).toBe(0);
       });
     });
     describe('when there are entities', () => {
@@ -175,7 +173,7 @@ describe('jdl - JDLApplicationEntities', () => {
       });
 
       it('should return 2', () => {
-        expect(jdlApplicationEntities.size()).to.equal(2);
+        expect(jdlApplicationEntities.size()).toBe(2);
       });
     });
   });
@@ -188,7 +186,7 @@ describe('jdl - JDLApplicationEntities', () => {
       });
 
       it('should return an empty string', () => {
-        expect(jdlApplicationEntities.toString()).to.equal('');
+        expect(jdlApplicationEntities.toString()).toBe('');
       });
     });
     describe('when there is an entity', () => {
@@ -199,7 +197,7 @@ describe('jdl - JDLApplicationEntities', () => {
       });
 
       it('should return it', () => {
-        expect(jdlApplicationEntities.toString()).to.equal('entities A');
+        expect(jdlApplicationEntities.toString()).toBe('entities A');
       });
     });
     describe('when there are entities', () => {
@@ -210,7 +208,7 @@ describe('jdl - JDLApplicationEntities', () => {
       });
 
       it('should return them separated', () => {
-        expect(jdlApplicationEntities.toString()).to.equal('entities A, B');
+        expect(jdlApplicationEntities.toString()).toBe('entities A, B');
       });
     });
   });

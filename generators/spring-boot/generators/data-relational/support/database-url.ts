@@ -66,7 +66,6 @@ export default function getDatabaseUrl(databaseType: string, protocol: 'r2dbc' |
  *
  * @param databaseType
  * @param options
- * @returns
  */
 export function getJdbcUrl(databaseType: string, options?: DatabaseUrlOptions) {
   return getDatabaseUrl(databaseType, 'jdbc', options);
@@ -77,7 +76,6 @@ export function getJdbcUrl(databaseType: string, options?: DatabaseUrlOptions) {
  *
  * @param databaseType
  * @param options
- * @returns
  */
 export function getR2dbcUrl(databaseType: string, options?: DatabaseUrlOptions) {
   return getDatabaseUrl(databaseType, 'r2dbc', options);

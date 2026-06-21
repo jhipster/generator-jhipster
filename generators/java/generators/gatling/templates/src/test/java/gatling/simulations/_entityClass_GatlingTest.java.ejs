@@ -37,13 +37,13 @@ import io.gatling.javaapi.core.Simulation;
 import io.gatling.javaapi.http.HttpProtocolBuilder;
 
 /**
- * Performance test for the <%= entityClass %> entity.
+ * Performance test for the <%- entityClass %> entity.
  *
  * @see <a href="https://github.com/jhipster/generator-jhipster/tree/v<%- jhipsterVersion %>/generators/gatling#logging-tips">Logging tips</a>
  */
-public class <%= entityClass %>GatlingTest extends Simulation {
+public class <%- entityClass %>GatlingTest extends Simulation {
 
-    String baseURL = Optional.ofNullable(System.getProperty("baseURL")).orElse("http://localhost:<%= serverPort %>");
+    String baseURL = Optional.ofNullable(System.getProperty("baseURL")).orElse("http://localhost:<%- serverPort %>");
 
     HttpProtocolBuilder httpConf = http
         .baseUrl(baseURL)
@@ -154,35 +154,35 @@ public class <%= entityClass %>GatlingTest extends Simulation {
         .check(status().is(200)))
         .pause(10)
         .repeat(2).on(
-            exec(http("Get all <%= entityInstancePlural %>")
-            .get("<% if (applicationTypeMicroservice) { %>/services/<%= baseName.toLowerCase() %><% } %>/api/<%= entityApiUrl %>")
+            exec(http("Get all <%- entityInstancePlural %>")
+            .get("<% if (applicationTypeMicroservice) { %>/services/<%- baseName.toLowerCase() %><% } %>/api/<%- entityApiUrl %>")
             .headers(headersHttpAuthenticated)
             .check(status().is(200)))
             .pause(Duration.ofSeconds(10), Duration.ofSeconds(20))
-            .exec(http("Create new <%= entityInstance %>")
-            .post("<% if (applicationTypeMicroservice) { %>/services/<%= baseName.toLowerCase() %><% } %>/api/<%= entityApiUrl %>")
+            .exec(http("Create new <%- entityInstance %>")
+            .post("<% if (applicationTypeMicroservice) { %>/services/<%- baseName.toLowerCase() %><% } %>/api/<%- entityApiUrl %>")
             .headers(headersHttpAuthenticated)
             .body(StringBody("{" +
-<%_ fields.filter(f => !(f.id && f.autoGenerate)).forEach((field, idx) => { _%>
-                "<%= idx === 0 ? '' : ', ' %>\"<%= field.fieldName %>\": <% if (field.fieldTypeString) { %>\"SAMPLE_TEXT\"<% } else if (field.fieldTypeNumeric) { %>0<% } else if (field.fieldTypeTemporal) { %>\"2020-01-01T00:00:00.000Z\"<% } else if (field.fieldIsEnum) { %>\"<%= field.enumValues[0].name %>\"<% } else { %>null<% } %>" +
-<%_ }); _%>
+<%_ for (const [idx, field] of fields.filter(f => !(f.id && f.autoGenerate)).entries()) { _%>
+                "<%- idx === 0 ? '' : ', ' %>\"<%- field.fieldName %>\": <% if (field.fieldTypeString) { %>\"SAMPLE_TEXT\"<% } else if (field.fieldTypeNumeric) { %>0<% } else if (field.fieldTypeTemporal) { %>\"2020-01-01T00:00:00.000Z\"<% } else if (field.fieldIsEnum) { %>\"<%- field.enumValues[0].name %>\"<% } else { %>null<% } %>" +
+<%_ } _%>
                 "}")).asJson()
             .check(status().is(201))
-            .check(headerRegex("Location", "(.*)").saveAs("new_<%= entityInstance %>_url"))).exitHereIfFailed()
+            .check(headerRegex("Location", "(.*)").saveAs("new_<%- entityInstance %>_url"))).exitHereIfFailed()
             .pause(10)
             .repeat(5).on(
-                exec(http("Get created <%= entityInstance %>")
-                .get("<% if (applicationTypeMicroservice) { %>/services/<%= baseName.toLowerCase() %><% } %>${new_<%= entityInstance %>_url}")
+                exec(http("Get created <%- entityInstance %>")
+                .get("<% if (applicationTypeMicroservice) { %>/services/<%- baseName.toLowerCase() %><% } %>${new_<%- entityInstance %>_url}")
                 .headers(headersHttpAuthenticated))
                 .pause(10)
             )
-            .exec(http("Delete created <%= entityInstance %>")
-            .delete("<% if (applicationTypeMicroservice) { %>/services/<%= baseName.toLowerCase() %><% } %>${new_<%= entityInstance %>_url}")
+            .exec(http("Delete created <%- entityInstance %>")
+            .delete("<% if (applicationTypeMicroservice) { %>/services/<%- baseName.toLowerCase() %><% } %>${new_<%- entityInstance %>_url}")
             .headers(headersHttpAuthenticated))
             .pause(10)
         );
 
-    ScenarioBuilder users = scenario("Test the <%= entityClass %> entity").exec(scn);
+    ScenarioBuilder users = scenario("Test the <%- entityClass %> entity").exec(scn);
 
     {
         setUp(

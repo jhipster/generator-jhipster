@@ -16,9 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.web.rest;
+package <%- packageName %>.web.rest;
 
-import <%= packageName %>.IntegrationTest;
+import <%- packageName %>.IntegrationTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 <%_ if (authenticationUsesCsrf) { _%>
@@ -52,8 +52,8 @@ import org.springframework.util.MimeTypeUtils;
 @WithMockUser
 @ImportAutoConfiguration(TestChannelBinderConfiguration.class)
 @ActiveProfiles({ "kafka" })
-class <%= upperFirstCamelCaseBaseName %>KafkaResourceIT {
-    private static String KAFKA_API = "/api/<%= dasherizedBaseName %>-kafka/{command}";
+class <%- upperFirstCamelCaseBaseName %>KafkaResourceIT {
+    private static String KAFKA_API = "/api/<%- dasherizedBaseName %>-kafka/{command}";
 
     @Autowired
     private WebTestClient client;

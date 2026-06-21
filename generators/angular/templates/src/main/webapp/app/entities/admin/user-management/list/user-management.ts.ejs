@@ -16,10 +16,21 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { RouterLink<%_ if (!locals.databaseTypeCassandra) { _%>, ActivatedRoute, Router<%_ } _%> } from '@angular/router';
+import { Component, ChangeDetectionStrategy, inject, OnInit, signal } from '@angular/core';
+import {
+  RouterLink,
+<%_ if (!locals.databaseTypeCassandra) { _%>
+  ActivatedRoute,
+  Router,
+<%_ } _%>
+} from '@angular/router';
 import { DatePipe } from '@angular/common';
-import { HttpResponse<%_ if (!locals.databaseTypeCassandra) { %>, HttpHeaders <% } %>} from '@angular/common/http';
+import {
+  HttpResponse,
+<%_ if (!locals.databaseTypeCassandra) { %>
+  HttpHeaders,
+<%_ } _%>
+} from '@angular/common/http';
 <%_ if (!locals.databaseTypeCassandra) { _%>
 import { combineLatest } from 'rxjs';
 <%_ } _%>
@@ -46,7 +57,8 @@ import { IUserManagement } from '../user-management.model';
 import { UserManagementDeleteDialog } from '../delete/user-management-delete-dialog';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-user-mgmt',
+  selector: '<%- jhiPrefixDashed %>-user-mgmt',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './user-management.html',
   imports: [
     RouterLink,
@@ -97,7 +109,7 @@ export class UserManagement implements OnInit {
     this.userService.update({ ...userManagement, activated: isActivated }).subscribe(() => this.loadAll());
   }
 
-  trackIdentity(item: IUserManagement): <%= user.primaryKey.tsType %> {
+  trackIdentity(item: IUserManagement): <%- user.primaryKey.tsType %> {
     return item.id!;
   }
 
@@ -123,7 +135,7 @@ export class UserManagement implements OnInit {
       .subscribe({
         next: (res: HttpResponse<IUserManagement[]>) => {
           this.isLoading.set(false);
-          this.onSuccess(res.body<% if (!locals.databaseTypeCassandra) { %>, res.headers<% } %>);
+          this.onSuccess(res.body<%- locals.databaseTypeCassandra ? '' : ', res.headers' %>);
         },
         error: () => this.isLoading.set(false),
       });
@@ -150,7 +162,7 @@ export class UserManagement implements OnInit {
   }
 <%_ } _%>
 
-  private onSuccess(users: IUserManagement[] | null<% if (!locals.databaseTypeCassandra) { %>, headers: HttpHeaders<% } %>): void {
+  private onSuccess(users: IUserManagement[] | null<%- locals.databaseTypeCassandra ? '' : ', headers: HttpHeaders' %>): void {
 <%_ if (!locals.databaseTypeCassandra) { _%>
     this.totalItems.set(Number(headers.get(TOTAL_COUNT_RESPONSE_HEADER)));
 <%_ } _%>

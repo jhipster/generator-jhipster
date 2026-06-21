@@ -32,8 +32,9 @@ export default asPostPreparingEachEntityTask<LiquibaseEntity, LiquibaseApplicati
     const userIdType = primaryKey.type;
     const idField = primaryKey.fields[0];
     const idFieldName = idField.fieldName ?? 'id';
-    const liquibaseFakeData = application.generateUserManagement
-      ? [
+    const liquibaseFakeData =
+      application.generateUserManagement ?
+        [
           { [idFieldName]: ([TYPE_INTEGER, TYPE_LONG] as string[]).includes(userIdType) ? 1 : idField.generateFakeData!() },
           { [idFieldName]: ([TYPE_INTEGER, TYPE_LONG] as string[]).includes(userIdType) ? 2 : idField.generateFakeData!() },
         ]

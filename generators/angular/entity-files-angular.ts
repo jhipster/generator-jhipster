@@ -74,7 +74,9 @@ export const userManagementFiles = asWriteEntityFilesSection({
   userManagement: [
     clientApplicationTemplatesBlock({
       templates: [
-        'entities/admin/user-management/user-management.routes.ts',
+        'entities/_entityFolder_/_entityFile_.routes.ts',
+        'entities/_entityFolder_/route/_entityFile_-routing-resolve.service.ts',
+        'entities/_entityFolder_/route/_entityFile_-routing-resolve.service.spec.ts',
         'entities/admin/user-management/user-management.model.ts',
         'entities/admin/user-management/list/user-management.html',
         'entities/admin/user-management/list/user-management.spec.ts',
@@ -132,6 +134,9 @@ export const postWriteEntitiesFiles = asPostWritingEntitiesTask<AngularEntity, A
     const entities = (application.filterEntitiesForClient ?? filterEntitiesForClient)(taskParam.entities).filter(
       entity => !entity.builtInUser && !entity.embedded && !entity.entityClientModelOnly,
     );
+    if (application.generateUserManagement && application.userManagement!.skipClient) {
+      entities.push(application.userManagement!);
+    }
     source.addEntitiesToClient({ ...taskParam, entities });
   },
 );

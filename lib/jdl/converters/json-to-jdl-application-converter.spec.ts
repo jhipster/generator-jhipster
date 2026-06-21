@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import { APPLICATION_TYPE_MONOLITH } from '../../core/application-types.ts';
 import { convertApplicationsToJDL } from '../core/__test-support__/index.ts';
@@ -40,7 +38,7 @@ describe('jdl - JSONToJDLApplicationConverter', () => {
       });
 
       it('should return an empty jdl object', () => {
-        expect(jdlObject.getApplicationQuantity()).to.equal(0);
+        expect(jdlObject.getApplicationQuantity()).toBe(0);
       });
     });
     describe('when not passing a jdl object', () => {
@@ -53,7 +51,7 @@ describe('jdl - JSONToJDLApplicationConverter', () => {
       });
 
       it('should return the converted applications', () => {
-        expect(jdlObject.applications.toto).to.deep.equal(
+        expect(jdlObject.applications.toto).toEqual(
           createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime),
         );
       });
@@ -71,10 +69,10 @@ describe('jdl - JSONToJDLApplicationConverter', () => {
       });
 
       it('should add the converted applications', () => {
-        expect(jdlObject.applications.tata).to.deep.equal(
+        expect(jdlObject.applications.tata).toEqual(
           createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'tata' }, runtime),
         );
-        expect(jdlObject.applications.toto).to.deep.equal(
+        expect(jdlObject.applications.toto).toEqual(
           createJDLApplication({ applicationType: APPLICATION_TYPE_MONOLITH, baseName: 'toto' }, runtime),
         );
       });

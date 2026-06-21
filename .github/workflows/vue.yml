@@ -33,6 +33,8 @@ on:
       - 'generators/react/**'
   pull_request:
     types: [closed, opened, synchronize, reopened]
+permissions:
+  contents: read
 env:
   FORCE_COLOR: 2
 jobs:
@@ -48,7 +50,7 @@ jobs:
       workflow-vue: ${{ steps.build.outputs.workflow-vue }}
     steps:
       - name: 'SETUP: Checkout generator-jhipster'
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 2
       - run: echo "node-version=$(cat ${{ github.workspace }}/generators/init/resources/.node-version)" >> $GITHUB_OUTPUT
@@ -87,7 +89,7 @@ jobs:
       # Install all tools and check configuration
       #----------------------------------------------------------------------
       - name: 'SETUP: Checkout generator-jhipster'
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           path: generator-jhipster
           fetch-depth: 2
@@ -99,6 +101,9 @@ jobs:
           maven-cache: true
           gradle-cache: ${{ matrix.gradle-cache }}
           binary-dir: ${{ github.workspace }}/generator-jhipster/bin
+      - name: 'WORKAROUND: Node.js 22 require(esm) V8 crash'
+        if: startsWith(matrix.node-version, '22')
+        run: echo "NODE_OPTIONS=${NODE_OPTIONS:+$NODE_OPTIONS }--no-experimental-require-module" >> $GITHUB_ENV
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------

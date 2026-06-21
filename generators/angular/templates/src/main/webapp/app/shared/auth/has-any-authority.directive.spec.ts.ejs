@@ -19,7 +19,7 @@
 <%_ if (clientTestFrameworkVitest) { _%>
 import { afterEach, beforeEach, describe, expect, it, vitest, type Mock } from 'vitest';
 <%_ } _%>
-import { Component, ElementRef, WritableSignal, signal, viewChild } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ElementRef, WritableSignal, signal, viewChild } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 <%_ if (enableTranslation) { _%>
@@ -32,21 +32,21 @@ import { AccountService } from 'app/core/auth/account.service';
 import HasAnyAuthorityDirective from './has-any-authority.directive';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [HasAnyAuthorityDirective],
-  template: `<div *<%= jhiPrefix %>HasAnyAuthority="'ROLE_ADMIN'" #content></div>`,
+  template: `<div *<%- jhiPrefix %>HasAnyAuthority="'ROLE_ADMIN'" #content></div>`,
 })
 class TestHasAnyAuthorityDirective {
   content = viewChild<ElementRef>('content');
 }
 
 describe('HasAnyAuthorityDirective tests', () => {
-  let mockAccountService: AccountService;
   let currentAccount: WritableSignal<Account | null>;
   let hasAnyAuthority: Mock;
 
   beforeEach(() => {
     currentAccount = signal<Account | null>({ activated: true, authorities: [] } as any);
-    hasAnyAuthority = <%= clientTestFramework %>.fn((): boolean => Boolean(currentAccount()));
+    hasAnyAuthority = <%- clientTestFramework %>.fn((): boolean => Boolean(currentAccount()));
 
     TestBed.configureTestingModule({
 <%_ if (enableTranslation) { _%>
@@ -62,11 +62,9 @@ describe('HasAnyAuthorityDirective tests', () => {
         },
       ],
     });
-
-    mockAccountService = TestBed.inject(AccountService);
   });
 
-  describe('set <%= jhiPrefix %>HasAnyAuthority', () => {
+  describe('set <%- jhiPrefix %>HasAnyAuthority', () => {
     it('should show restricted content to user if user has required role', () => {
       // GIVEN
       const fixture = TestBed.createComponent(TestHasAnyAuthorityDirective);

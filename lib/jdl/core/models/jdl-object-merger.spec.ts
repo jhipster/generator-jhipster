@@ -17,9 +17,7 @@
  * limitations under the License.
  */
 
-import { before, describe, it } from 'esmocha';
-
-import { expect } from 'chai';
+import { before, describe, expect, it } from 'esmocha';
 
 import { APPLICATION_TYPE_MONOLITH } from '../../../core/application-types.ts';
 import fieldTypes from '../../../jhipster/field-types.ts';
@@ -42,13 +40,13 @@ describe('jdl - JDLObjectMerger', () => {
     describe('when not passing the first object', () => {
       it('should fail', () => {
         // @ts-expect-error invalid argument
-        expect(() => mergeJDLObjects(undefined, {})).to.throw(/^Can't merge nil JDL objects\.$/);
+        expect(() => mergeJDLObjects(undefined, {})).toThrow(/^Can't merge nil JDL objects\.$/);
       });
     });
     describe('when not passing the second object', () => {
       it('should fail', () => {
         // @ts-expect-error invalid argument
-        expect(() => mergeJDLObjects({}, undefined)).to.throw(/^Can't merge nil JDL objects\.$/);
+        expect(() => mergeJDLObjects({}, undefined)).toThrow(/^Can't merge nil JDL objects\.$/);
       });
     });
     describe('when passing two jdl objects', () => {
@@ -71,25 +69,25 @@ describe('jdl - JDLObjectMerger', () => {
       });
 
       it('should not modify the first JDL object', () => {
-        expect(originalFirstJDLObjectToString).to.equal(firstJDLObjectAfterMergeToString);
+        expect(originalFirstJDLObjectToString).toBe(firstJDLObjectAfterMergeToString);
       });
       it('should not modify the second JDL object', () => {
-        expect(originalSecondJDLObjectToString).to.equal(secondJDLObjectAfterMergeToString);
+        expect(originalSecondJDLObjectToString).toBe(secondJDLObjectAfterMergeToString);
       });
       it('should merge the applications', () => {
-        expect(merged.getApplicationQuantity()).to.equal(2);
+        expect(merged.getApplicationQuantity()).toBe(2);
       });
       it('should merge the entities', () => {
-        expect(merged.getEntityQuantity()).to.equal(3);
+        expect(merged.getEntityQuantity()).toBe(3);
       });
       it('should merge the enums', () => {
-        expect(merged.getEnumQuantity()).to.equal(2);
+        expect(merged.getEnumQuantity()).toBe(2);
       });
       it('should merge the relationships', () => {
-        expect(merged.getRelationshipQuantity()).to.equal(2);
+        expect(merged.getRelationshipQuantity()).toBe(2);
       });
       it('should merge the options', () => {
-        expect(merged.getOptionQuantity()).to.equal(2);
+        expect(merged.getOptionQuantity()).toBe(2);
       });
     });
   });

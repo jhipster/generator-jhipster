@@ -20,10 +20,10 @@ import { Directive, OnInit, ElementRef, Renderer2, inject, input } from '@angula
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 @Directive({
-  selector: '[<%= jhiPrefix %>ActiveMenu]',
+  selector: '[<%- jhiPrefix %>ActiveMenu]',
 })
 export default class ActiveMenuDirective implements OnInit {
-  readonly <%= jhiPrefix %>ActiveMenu = input();
+  readonly <%- jhiPrefix %>ActiveMenu = input();
 
   private readonly el = inject(ElementRef);
   private readonly renderer = inject(Renderer2);
@@ -38,7 +38,7 @@ export default class ActiveMenuDirective implements OnInit {
   }
 
   updateActiveFlag(selectedLanguage: string): void {
-    if (this.<%= jhiPrefix %>ActiveMenu() === selectedLanguage) {
+    if (this.<%- jhiPrefix %>ActiveMenu() === selectedLanguage) {
       this.renderer.addClass(this.el.nativeElement, 'active');
     } else {
       this.renderer.removeClass(this.el.nativeElement, 'active');

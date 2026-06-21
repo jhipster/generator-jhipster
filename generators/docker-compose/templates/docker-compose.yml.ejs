@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 services:
-<%_ for(let i = 0; i < appConfigs.length; i++) { _%>
+<%_ for (let i = 0; i < appConfigs.length; i++) { _%>
 <%- appsYaml[i] %>
 <%_ } _%>
 <%_ if (useKafka) { _%>
@@ -53,12 +53,12 @@ services:
     # By default the JHipster Registry runs with the "dev" and "native"
     # Spring profiles.
     # "native" profile means the filesystem is used to store data, see
-    # http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html
+    # https://docs.spring.io/spring-cloud-config/docs/current/reference/html/
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=dev<% if (usesOauth2) { %>,oauth2<% } %>
-      - SPRING_SECURITY_USER_PASSWORD=<%= adminPassword %>
-      - JHIPSTER_REGISTRY_PASSWORD=<%= adminPassword %>
+      - SPRING_PROFILES_ACTIVE=dev<%- usesOauth2 ? ',oauth2' : '' %>
+      - SPRING_SECURITY_USER_PASSWORD=<%- adminPassword %>
+      - JHIPSTER_REGISTRY_PASSWORD=<%- adminPassword %>
       - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=native
       - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_SEARCH_LOCATIONS=file:./central-config
       # - SPRING_CLOUD_CONFIG_SERVER_COMPOSITE_0_TYPE=git

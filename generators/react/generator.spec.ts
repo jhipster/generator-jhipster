@@ -55,7 +55,7 @@ describe(`generator - ${clientFramework}`, () => {
       });
 
       it('should match application snapshot', () => {
-        const application = runResult.application;
+        const { application } = runResult;
         expect(application).toMatchSnapshot({
           addLanguageCallbacks: expect.any(Array),
           customizeTemplatePaths: expect.any(Array),
@@ -68,26 +68,26 @@ describe(`generator - ${clientFramework}`, () => {
           prettierExtensions: expect.any(Array),
           prettierFolders: expect.any(Array),
           supportedLanguages: expect.any(Array),
-          ...(application?.generateBuiltInUserEntity
-            ? {
-                user: expect.any(Object),
-              }
-            : {}),
-          ...(application?.generateBuiltInAuthorityEntity
-            ? {
-                authority: expect.any(Object),
-              }
-            : {}),
-          ...(application?.generateUserManagement
-            ? {
-                userManagement: expect.any(Object),
-              }
-            : {}),
-          ...(application?.enableTranslation
-            ? {
-                languagesToGenerateDefinition: expect.any(Array),
-              }
-            : {}),
+          ...(application?.generateBuiltInUserEntity ?
+            {
+              user: expect.any(Object),
+            }
+          : {}),
+          ...(application?.generateBuiltInAuthorityEntity ?
+            {
+              authority: expect.any(Object),
+            }
+          : {}),
+          ...(application?.generateUserManagement ?
+            {
+              userManagement: expect.any(Object),
+            }
+          : {}),
+          ...(application?.enableTranslation ?
+            {
+              languagesToGenerateDefinition: expect.any(Array),
+            }
+          : {}),
         });
       });
 
@@ -107,7 +107,7 @@ describe(`generator - ${clientFramework}`, () => {
       describe('withAdminUi', () => {
         const { applicationType, withAdminUi, enableTranslation } = sampleConfig;
         const clientSrcDir = `${clientRootDir}${clientRootDir ? 'src/' : CLIENT_MAIN_SRC_DIR}`;
-        const generateAdminUi = applicationType !== 'microservice' && withAdminUi;
+        const generateAdminUi = withAdminUi;
         const adminUiComponents = generateAdminUi ? 'should generate admin ui components' : 'should not generate admin ui components';
 
         it(adminUiComponents, () => {

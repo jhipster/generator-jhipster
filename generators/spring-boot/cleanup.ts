@@ -211,6 +211,6 @@ export default asWritingTask(async function cleanupTask(this, taskParam) {
   }
 
   await control.cleanupFiles({
-    '8.6.1': [[application.authenticationTypeOauth2!, `${application.javaPackageSrcDir}security/oauth2/JwtGrantedAuthorityConverter.java`]],
+    '8.6.1': [[application.authenticationTypeOauth2, `${application.javaPackageSrcDir}security/oauth2/JwtGrantedAuthorityConverter.java`]],
   });
 });

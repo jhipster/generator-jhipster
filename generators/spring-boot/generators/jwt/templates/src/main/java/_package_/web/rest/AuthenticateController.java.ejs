@@ -16,14 +16,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.web.rest;
+package <%- packageName %>.web.rest;
 
-import static <%= packageName %>.security.SecurityUtils.AUTHORITIES_CLAIM;
-import static <%= packageName %>.security.SecurityUtils.JWT_ALGORITHM;
-import static <%= packageName %>.security.SecurityUtils.USER_ID_CLAIM;
+import static <%- packageName %>.security.SecurityUtils.AUTHORITIES_CLAIM;
+import static <%- packageName %>.security.SecurityUtils.JWT_ALGORITHM;
+import static <%- packageName %>.security.SecurityUtils.USER_ID_CLAIM;
 
-import <%= packageName %>.web.rest.vm.LoginVM;
-import <%= packageName %>.security.DomainUserDetailsService.UserWithId;
+import <%- packageName %>.web.rest.vm.LoginVM;
+import <%- packageName %>.security.DomainUserDetailsService.UserWithId;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

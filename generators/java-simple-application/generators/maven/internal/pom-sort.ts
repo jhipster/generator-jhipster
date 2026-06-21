@@ -168,7 +168,7 @@ const sortProjectLike = <P extends MavenProjectLike>(projectLike: P, options: { 
 export const sortPomProject = <const T extends MavenProject>(project: T): T => {
   project = sortProjectLike(project);
   if (Array.isArray(project.profiles?.profile)) {
-    project.profiles.profile = sortProfiles(project.profiles!.profile!.map(profile => sortProjectLike(profile, { sortPlugins: false })));
+    project.profiles.profile = sortProfiles(project.profiles.profile.map(profile => sortProjectLike(profile, { sortPlugins: false })));
   } else if (project.profiles?.profile) {
     project.profiles.profile = sortProjectLike(project.profiles.profile, { sortPlugins: false });
   }

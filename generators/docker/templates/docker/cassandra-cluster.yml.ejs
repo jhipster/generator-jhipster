@@ -17,13 +17,13 @@
  limitations under the License.
 -%>
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: <%= baseName.toLowerCase() %>
+name: <%- baseName.toLowerCase() %>
 services:
   cassandra:
-    container_name: <%= baseName.toLowerCase() %>-cassandra
+    container_name: <%- baseName.toLowerCase() %>-cassandra
     image: <%- dockerContainers.cassandra %>
     # volumes:
-    #   - ~/volumes/jhipster/<%= baseName %>/cassandra/:/var/lib/cassandra/data
+    #   - ~/volumes/jhipster/<%- baseName %>/cassandra/:/var/lib/cassandra/data
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix
     ports:
@@ -35,10 +35,10 @@ services:
   cassandra-node:
     image: <%- dockerContainers.cassandra %>
     environment:
-      - CASSANDRA_SEEDS=<%= baseName.toLowerCase() %>-cassandra
+      - CASSANDRA_SEEDS=<%- baseName.toLowerCase() %>-cassandra
   cassandra-migration:
     environment:
-      - CASSANDRA_CONTACT_POINT=<%= baseName.toLowerCase() %>-cassandra
+      - CASSANDRA_CONTACT_POINT=<%- baseName.toLowerCase() %>-cassandra
       - USER=docker-cassandra-migration
       # - DEBUG_LOG=1 # uncomment to show debug logs during the migration process
       - CREATE_KEYSPACE_SCRIPT=create-keyspace-prod.cql

@@ -20,6 +20,14 @@ import type { JHipsterCommandDefinition } from '../../../../lib/command/index.ts
 
 const command = {
   configs: {
+    fromInit: {
+      description: 'Generate eslint config using init defaults',
+      cli: {
+        type: Boolean,
+        hide: true,
+      },
+      scope: 'generator',
+    },
     typescriptEslint: {
       cli: {
         type: Boolean,

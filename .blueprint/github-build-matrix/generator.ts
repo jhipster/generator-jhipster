@@ -2,8 +2,15 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 import BaseGenerator from '../../generators/base-core/index.ts';
-import { convertToGitHubMatrix, getGithubOutputFile, getGithubSamplesGroup, setGithubTaskOutput } from '../../lib/ci/index.ts';
-import type { GitHubMatrixGroup, JHipsterGitHubInputMatrix, WorkflowSamples } from '../../lib/ci/index.ts';
+import {
+  type GitHubMatrixGroup,
+  type JHipsterGitHubInputMatrix,
+  type WorkflowSamples,
+  convertToGitHubMatrix,
+  getGithubOutputFile,
+  getGithubSamplesGroup,
+  setGithubTaskOutput,
+} from '../../lib/ci/index.ts';
 import { testIntegrationFolder } from '../constants.ts';
 
 import type { eventNameChoices, workflowChoices } from './command.ts';
@@ -23,7 +30,7 @@ export default class extends BaseGenerator {
         const useChanges = this.eventName === 'pull_request';
         const changes = await getGitChanges({ allTrue: !useChanges });
         const { base, common, devBlueprint, client, e2e, generateBlueprint, graalvm, java, workspaces, springBootDefaults } = changes;
-        const hasWorkflowChanges = Boolean((changes as Record<string, boolean>)[`${this.workflow}Workflow`]);
+        const hasWorkflowChanges = (changes as Record<string, boolean>)[`${this.workflow}Workflow`];
 
         let matrix: GitHubMatrixGroup = {};
         let convertToGitHubMatrixInclude = true;
@@ -44,7 +51,7 @@ export default class extends BaseGenerator {
                 disabled: !springBootDefaults,
               },
               'generate-blueprint': {
-                disabled: !generateBlueprint,
+                disabled: !generateBlueprint && !devBlueprint,
               },
               graalvm: {
                 disabled: !graalvm,

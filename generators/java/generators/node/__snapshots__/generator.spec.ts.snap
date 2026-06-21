@@ -56,7 +56,6 @@ exports[`generator - java:node with defaults options should call source snapshot
                                   <include>package-lock.json</include>
                                   <include>package.json</include>
                                   <include>src/main/webapp/**/*.*</include>
-                                  <include>target/classes/static/**/*.*</include>
                               </includes>
                               <excludes>
                                   <exclude>**/app/**/service-worker.js</exclude>

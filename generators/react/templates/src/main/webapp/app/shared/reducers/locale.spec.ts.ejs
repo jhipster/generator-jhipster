@@ -1,11 +1,17 @@
+<%_ if (microfrontend) { _%>
 import axios from 'axios';
-import sinon from 'sinon';
+<%_ } _%>
+import { describe, expect, it, vi } from 'vitest';
 import { TranslatorContext } from 'react-jhipster';
 
 import locale, { setLocale, updateLocale, loaded, addTranslationSourcePrefix } from 'app/shared/reducers/locale';
+<%_ if (!microfrontend) { _%>
 
-const defaultLocale = '<%= nativeLanguage %>';
-const dispatch = jest.fn();
+vi.mock('../../../i18n/<%- nativeLanguage %>/<%- nativeLanguage %>.js', () => ({ default: { key: 'value' } }));
+<%_ } _%>
+
+const defaultLocale = '<%- nativeLanguage %>';
+const dispatch = vi.fn();
 const extra = {};
 
 describe('Locale reducer tests', () => {
@@ -44,15 +50,17 @@ describe('Locale reducer tests', () => {
 
   describe('setLocale reducer', () => {
     describe('with default language loaded', () => {
+<%_ if (microfrontend) { _%>
       beforeEach(() => {
-        axios.get = sinon.stub().returns(Promise.resolve({ key: 'value' }));
+        axios.get = vi.fn().mockResolvedValue({ key: 'value' });
       });
 
+<%_ } _%>
       it('dispatches updateLocale action for default locale', async () => {
         TranslatorContext.setDefaultLocale(defaultLocale);
         expect(Object.keys(TranslatorContext.context.translations)).not.toContainEqual(defaultLocale);
 
-        const getState = jest.fn(() => ({ locale: { sourcePrefixes: '', loadedLocales: [defaultLocale], loadedKeys: [] } }));
+        const getState = vi.fn(() => ({ locale: { sourcePrefixes: '', loadedLocales: [defaultLocale], loadedKeys: [] } }));
 
         const result = await setLocale(defaultLocale)(dispatch, getState, extra);
 
@@ -67,15 +75,17 @@ describe('Locale reducer tests', () => {
     });
 
     describe('with no language loaded', () => {
+<%_ if (microfrontend) { _%>
       beforeEach(() => {
-        axios.get = sinon.stub().returns(Promise.resolve({ key: 'value' }));
+        axios.get = vi.fn().mockResolvedValue({ key: 'value' });
       });
 
+<%_ } _%>
       it('dispatches loaded and updateLocale action for default locale', async () => {
         TranslatorContext.setDefaultLocale(defaultLocale);
         expect(Object.keys(TranslatorContext.context.translations)).not.toContainEqual(defaultLocale);
 
-        const getState = jest.fn(() => ({ locale: { sourcePrefixes: [], loadedLocales: [], loadedKeys: [] } }));
+        const getState = vi.fn(() => ({ locale: { sourcePrefixes: [], loadedLocales: [], loadedKeys: [] } }));
 
         const result = await setLocale(defaultLocale)(dispatch, getState, extra);
 
@@ -94,12 +104,14 @@ describe('Locale reducer tests', () => {
     const sourcePrefix = 'foo/';
 
     describe('with no prefixes and keys loaded', () => {
+<%_ if (microfrontend) { _%>
       beforeEach(() => {
-        axios.get = sinon.stub().returns(Promise.resolve({ key: 'value' }));
+        axios.get = vi.fn().mockResolvedValue({ key: 'value' });
       });
 
+<%_ } _%>
       it('dispatches loaded action with keys and sourcePrefix', async () => {
-        const getState = jest.fn(() => ({
+        const getState = vi.fn(() => ({
           locale: { currentLocale: defaultLocale, sourcePrefixes: [], loadedLocales: [], loadedKeys: [] },
         }));
 
@@ -116,12 +128,14 @@ describe('Locale reducer tests', () => {
     });
 
     describe('with prefix already added', () => {
+<%_ if (microfrontend) { _%>
       beforeEach(() => {
-        axios.get = sinon.stub().returns(Promise.resolve({ key: 'value' }));
+        axios.get = vi.fn().mockResolvedValue({ key: 'value' });
       });
 
+<%_ } _%>
       it("doesn't dispatch loaded action", async () => {
-        const getState = jest.fn(() => ({
+        const getState = vi.fn(() => ({
           locale: { currentLocale: defaultLocale, sourcePrefixes: [sourcePrefix], loadedLocales: [], loadedKeys: [] },
         }));
 
@@ -138,12 +152,14 @@ describe('Locale reducer tests', () => {
     });
 
     describe('with key already loaded', () => {
+<%_ if (microfrontend) { _%>
       beforeEach(() => {
-        axios.get = sinon.stub().returns(Promise.resolve({ key: 'value' }));
+        axios.get = vi.fn().mockResolvedValue({ key: 'value' });
       });
 
+<%_ } _%>
       it("doesn't dispatch loaded action", async () => {
-        const getState = jest.fn(() => ({
+        const getState = vi.fn(() => ({
           locale: { currentLocale: defaultLocale, sourcePrefixes: [], loadedLocales: [], loadedKeys: [`${sourcePrefix}${defaultLocale}`] },
         }));
 

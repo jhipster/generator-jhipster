@@ -28,23 +28,30 @@ import latestVersion from 'latest-version';
 import { get, kebabCase, merge, mergeWith, set, snakeCase } from 'lodash-es';
 import semver, { lt as semverLessThan } from 'semver';
 import { simpleGit } from 'simple-git';
-import type { PackageJson } from 'type-fest';
+import type { PackageJson, SetRequired } from 'type-fest';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import type Environment from 'yeoman-environment';
 import YeomanGenerator, { type ComposeOptions, type Storage } from 'yeoman-generator';
 
-import type {
-  ExportGeneratorOptionsFromCommand,
-  ExportStoragePropertiesFromCommand,
-  JHipsterArguments,
-  JHipsterCommandDefinition,
-  JHipsterConfigs,
-  ParsableCommand,
+import {
+  type ExportGeneratorOptionsFromCommand,
+  type ExportStoragePropertiesFromCommand,
+  type JHipsterArguments,
+  type JHipsterCommandDefinition,
+  type JHipsterConfigs,
+  type ParsableCommand,
+  convertConfigToOption,
+  extractArgumentsFromConfigs,
 } from '../../lib/command/index.ts';
-import { convertConfigToOption, extractArgumentsFromConfigs } from '../../lib/command/index.ts';
+import {
+  getCommandBlueprintLoadingMutations,
+  getCommandDefaultMutations,
+  getCommandDerivedPropertyMutations,
+} from '../../lib/command/mutations.ts';
 import { packageJson } from '../../lib/index.ts';
 import { CRLF, LF, type Logger, hasCrlf, mutateData, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.ts';
 import baseCommand from '../base/command.ts';
+import type BaseGenerator from '../base/generator.ts';
 import { dockerPlaceholderGenerator } from '../docker/utils.ts';
 import { GENERATOR_JHIPSTER } from '../generator-constants.ts';
 import { getGradleLibsVersionsProperties } from '../java-simple-application/generators/gradle/support/dependabot-gradle.ts';
@@ -52,14 +59,14 @@ import type GeneratorsByNamespace from '../types.ts';
 import type { GeneratorsWithBootstrap } from '../types.ts';
 
 import type {
-  CascatedEditFileCallback,
+  CascadedEditFileCallback,
   EditFileCallback,
   EditFileOptions,
   ValidationResult,
   WriteContext,
   WriteFileOptions,
 } from './api.ts';
-import { convertWriteFileSectionsToBlocks, loadConfig, loadConfigDefaults, loadDerivedConfig } from './internal/index.ts';
+import { convertWriteFileSectionsToBlocks, loadConfig } from './internal/index.ts';
 import { createJHipster7Context } from './internal/jhipster7-context.ts';
 import { CUSTOM_PRIORITIES, PRIORITY_NAMES, PRIORITY_PREFIX, QUEUES } from './priorities.ts';
 import { type NeedleInsertion, createNeedleCallback, joinCallbacks } from './support/index.ts';
@@ -72,6 +79,7 @@ const {
   COMPOSING,
   COMPOSING_COMPONENT,
   LOADING,
+  COMPOSING_BOOTSTRAP,
   PREPARING,
   POST_PREPARING,
   DEFAULT,
@@ -100,35 +108,37 @@ export default class CoreGenerator<
   Options extends CoreOptions = CoreOptions,
   Features extends CoreFeatures = CoreFeatures,
 > extends YeomanGenerator<Config, Options, Features> {
-  static asPriority = asPriority;
+  static readonly asPriority = asPriority;
 
-  static INITIALIZING = asPriority(INITIALIZING);
+  static readonly INITIALIZING = asPriority(INITIALIZING);
 
-  static PROMPTING = asPriority(PROMPTING);
+  static readonly PROMPTING = asPriority(PROMPTING);
 
-  static CONFIGURING = asPriority(CONFIGURING);
+  static readonly CONFIGURING = asPriority(CONFIGURING);
 
-  static COMPOSING = asPriority(COMPOSING);
+  static readonly COMPOSING = asPriority(COMPOSING);
 
-  static COMPOSING_COMPONENT = asPriority(COMPOSING_COMPONENT);
+  static readonly COMPOSING_COMPONENT = asPriority(COMPOSING_COMPONENT);
 
-  static LOADING = asPriority(LOADING);
+  static readonly LOADING = asPriority(LOADING);
 
-  static PREPARING = asPriority(PREPARING);
+  static readonly COMPOSING_BOOTSTRAP = asPriority(COMPOSING_BOOTSTRAP);
 
-  static POST_PREPARING = asPriority(POST_PREPARING);
+  static readonly PREPARING = asPriority(PREPARING);
 
-  static DEFAULT = asPriority(DEFAULT);
+  static readonly POST_PREPARING = asPriority(POST_PREPARING);
 
-  static WRITING = asPriority(WRITING);
+  static readonly DEFAULT = asPriority(DEFAULT);
 
-  static POST_WRITING = asPriority(POST_WRITING);
+  static readonly WRITING = asPriority(WRITING);
 
-  static INSTALL = asPriority(INSTALL);
+  static readonly POST_WRITING = asPriority(POST_WRITING);
 
-  static POST_INSTALL = asPriority(POST_INSTALL);
+  static readonly INSTALL = asPriority(INSTALL);
 
-  static END = asPriority(END);
+  static readonly POST_INSTALL = asPriority(POST_INSTALL);
+
+  static readonly END = asPriority(END);
 
   useVersionPlaceholders?: boolean;
   skipChecks?: boolean;
@@ -173,10 +183,10 @@ export default class CoreGenerator<
 
     if (!this.options.help) {
       /* Force config to use 'generator-jhipster' namespace. */
-      this._config = this._getStorage('generator-jhipster');
+      this._config = this._getStorage('generator-jhipster', { transform: this.features.configTransform });
 
       /* JHipster config using proxy mode used as a plain object instead of using get/set. */
-      this.jhipsterConfig = this.config.createProxy() as Config;
+      this.jhipsterConfig = this.config.createProxy();
 
       /* Options parsing must be executed after forcing jhipster storage namespace and after sharedData have been populated */
       this.#parseJHipsterConfigs(baseCommand.configs);
@@ -202,6 +212,12 @@ export default class CoreGenerator<
     }
   }
 
+  get #commandsToLoad(): Set<string> {
+    return this.getContextData('jhipster:loadedNamespaces', {
+      factory: () => new Set<string>(),
+    });
+  }
+
   get context(): any {
     return undefined;
   }
@@ -217,7 +233,7 @@ export default class CoreGenerator<
    * JHipster config with default values fallback
    */
   get jhipsterConfigWithDefaults(): Readonly<Config> {
-    return removeFieldsWithNullishValues(this.config.getAll()) as Config;
+    return removeFieldsWithNullishValues(this.config.getAll());
   }
 
   /**
@@ -336,47 +352,78 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       },
     });
 
-    const { loadCommand = [], skipLoadCommand } = this.features;
+    const { loadCommand = [], skipLoadCommand = true } = this.features;
+    if (skipLoadCommand) {
+      return;
+    }
 
-    this.queueTask({
-      queueName: QUEUES.LOADING_QUEUE,
-      taskName: 'loadCurrentCommand',
-      cancellable: true,
-      async method() {
-        if (!skipLoadCommand) {
-          try {
-            const command = await this.#getCurrentJHipsterCommand();
-            if (!command.configs) return;
+    const commandWithConfigs = (command: JHipsterCommandDefinition): command is SetRequired<JHipsterCommandDefinition, 'configs'> =>
+      !!command.configs;
 
-            const context = this.context;
-            loadConfig.call(this, command.configs, { application: context });
-            loadDerivedConfig(command.configs, { application: context });
-          } catch {
-            // Ignore non existing command
-          }
+    const mergeCommandsConfigs = (commands: JHipsterCommandDefinition[]): JHipsterConfigs => {
+      const mergedConfigs: JHipsterConfigs = {};
+      for (const command of commands.filter(commandWithConfigs)) {
+        Object.assign(mergedConfigs, command.configs);
+      }
+      return mergedConfigs;
+    };
 
-          const split = this.options.namespace.split(':');
-          if (split.length === 3 && split[2] === 'bootstrap') {
-            const parentMeta = this.env.getGeneratorMeta(this.options.namespace.replace(':bootstrap', ''));
-            const parentModule: any = await parentMeta?.importModule?.();
-            if (parentModule?.command?.configs) {
-              const context = this.context;
-              if (context) {
-                loadConfig.call(this, parentModule.command.configs, { application: context });
-                loadDerivedConfig(parentModule.command.configs, { application: context });
-              }
+    const collectNamespaceCommands = async (
+      { loadImports }: { loadImports: boolean },
+      ...namespaces: string[]
+    ): Promise<JHipsterCommandDefinition[]> => {
+      const result: JHipsterCommandDefinition[] = [];
+      for (let namespace of namespaces) {
+        namespace = namespace.includes(':') ? namespace : `jhipster:${namespace}`;
+        const commandsToLoad = this.#commandsToLoad;
+        if (!commandsToLoad.has(namespace)) {
+          commandsToLoad.add(namespace);
+          const commandMeta = this.env.getGeneratorMeta(namespace);
+          const commandModule: any = await commandMeta?.importModule?.();
+          const command = commandModule?.command as JHipsterCommandDefinition | undefined;
+          if (command) {
+            result.push(command);
+            if (loadImports) {
+              result.push(...(await collectNamespaceCommands({ loadImports: true }, ...(command.import ?? []))));
             }
           }
         }
+      }
+      return result;
+    };
 
-        if (loadCommand.length > 0) {
-          const context = this.context;
-          for (const commandToLoad of loadCommand) {
-            if (commandToLoad.configs) {
-              loadConfig.call(this, commandToLoad.configs, { application: context });
-              loadDerivedConfig(commandToLoad.configs, { application: context });
+    const directCommands: JHipsterCommandDefinition[] = [];
+    let directCommandsMergedConfigs: JHipsterConfigs = {};
+    this.queueTask({
+      queueName: QUEUES.LOADING_QUEUE,
+      taskName: 'loadingCommand',
+      cancellable: true,
+      async method() {
+        try {
+          const commandsToLoad = this.#commandsToLoad;
+          if (!commandsToLoad.has(this.options.namespace)) {
+            const command = await this.#getCurrentJHipsterCommand();
+            if (command.configs) {
+              commandsToLoad.add(this.options.namespace);
+              directCommands.push(command);
+            } else {
+              directCommands.push(...(await collectNamespaceCommands({ loadImports: false }, this.options.namespace)));
             }
           }
+        } catch {
+          // Ignore non existing command
+        }
+
+        const split = this.options.namespace.split(':');
+        if (split.length === 3 && split[2] === 'bootstrap') {
+          const mainNamespace = this.options.namespace.replace(':bootstrap', '');
+          directCommands.push(...(await collectNamespaceCommands({ loadImports: false }, mainNamespace)));
+        }
+
+        directCommandsMergedConfigs = mergeCommandsConfigs(directCommands);
+
+        if (this.blueprintStorage) {
+          mutateData(this.context, getCommandBlueprintLoadingMutations(this as unknown as BaseGenerator, directCommandsMergedConfigs));
         }
       },
     });
@@ -386,25 +433,37 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       taskName: 'preparingCurrentCommand',
       cancellable: true,
       async method() {
-        if (!skipLoadCommand) {
-          try {
-            const command = await this.#getCurrentJHipsterCommand();
-            if (!command.configs) return;
+        mutateData(
+          this.context,
+          getCommandDefaultMutations(directCommandsMergedConfigs),
+          getCommandDerivedPropertyMutations(directCommandsMergedConfigs),
+        );
 
-            const context = this.context;
-            loadConfigDefaults(command.configs, { context, scopes: ['blueprint', 'storage', 'context'] });
-          } catch {
-            // Ignore non existing command
-          }
-        }
-
-        if (loadCommand.length > 0) {
-          const context = this.context;
-          for (const commandToLoad of loadCommand) {
-            if (commandToLoad.configs) {
-              loadConfigDefaults(commandToLoad.configs, { context, scopes: ['blueprint', 'storage', 'context'] });
-            }
-          }
+        const imports = directCommands.flatMap(command => command.import ?? []);
+        if (imports.length > 0 || loadCommand.length > 0) {
+          // Populate imported commands and loadCommand, to allow the generator itself to load them.
+          this.queueTask({
+            queueName: QUEUES.PREPARING_QUEUE,
+            taskName: 'preparingImportedCommand',
+            cancellable: true,
+            async method() {
+              const importedCommandNamespaces = [
+                ...loadCommand.filter(l => typeof l === 'string'),
+                ...loadCommand.filter(l => typeof l === 'object').flatMap(l => l.import ?? []),
+                ...imports,
+              ];
+              const importedCommands = [
+                ...loadCommand.filter(l => typeof l === 'object'),
+                ...(await collectNamespaceCommands({ loadImports: true }, ...importedCommandNamespaces)),
+              ];
+              const mergedImportedConfigs = mergeCommandsConfigs(importedCommands);
+              mutateData(
+                this.context,
+                getCommandDefaultMutations(mergedImportedConfigs),
+                getCommandDerivedPropertyMutations(mergedImportedConfigs),
+              );
+            },
+          });
         }
       },
     });
@@ -492,6 +551,10 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   }
 
   #parseJHipsterCommand(commandDef: JHipsterCommandDefinition) {
+    // @ts-expect-error removed property.
+    if (!this.skipChecks && commandDef.options) {
+      throw new Error('Options are not supported anymore in JHipster commands, please use configs instead');
+    }
     if (commandDef.arguments) {
       this._parseJHipsterArguments(commandDef.arguments);
     } else if (commandDef.configs) {
@@ -502,10 +565,10 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     }
   }
 
-  #parseJHipsterConfigs(configs: JHipsterConfigs = {}, common = false) {
+  #parseJHipsterConfigs(configs: JHipsterConfigs = {}) {
     Object.entries(configs).forEach(([optionName, configDesc]) => {
       const optionsDesc = convertConfigToOption(optionName, configDesc);
-      if (!optionsDesc || !optionsDesc.type || (common && configDesc.scope === 'generator')) return;
+      if (!optionsDesc?.type) return;
 
       let optionValue;
       const { name, type } = optionsDesc;
@@ -596,7 +659,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
               if (!this.blueprintStorage) {
                 throw new Error('Blueprint storage is not initialized');
               }
-              this.blueprintStorage!.set(argumentName, convertedValue);
+              this.blueprintStorage.set(argumentName, convertedValue);
               break;
             }
           }
@@ -663,7 +726,9 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   get #jhipsterGeneratorRelativePath(): string {
     if (!this.#jhipsterGeneratorRelativePath_) {
       try {
-        this.#jhipsterGeneratorRelativePath_ = requireNamespace(this.options.namespace).generator.replace(':', '/generators/');
+        this.#jhipsterGeneratorRelativePath_ = requireNamespace(this.options.namespace, {
+          allowPackageOnlyNamespace: false,
+        }).generator.replace(':', '/generators/');
       } catch {
         throw new Error('Could not determine the generator name');
       }
@@ -749,7 +814,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   ): Promise<GeneratorsByNamespace[G]>;
   async composeWithJHipster(gen: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator>;
   async composeWithJHipster(gen: string, options?: ComposeOptions<CoreGenerator>): Promise<CoreGenerator> {
-    assert(typeof gen === 'string', 'generator should to be a string');
+    assert(typeof gen === 'string', 'generator should be a string');
     let generator: string = gen;
     if (!isAbsolute(generator)) {
       const namespace = generator.includes(':') ? generator : `jhipster:${generator}`;
@@ -850,21 +915,21 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
   /**
    * write the given files using provided options.
    */
-  async writeFiles<DataType = any>(options: WriteFileOptions<DataType, this>): Promise<string[]> {
+  async writeFiles<DataType>(options: WriteFileOptions<DataType, this>): Promise<string[]> {
     const paramCount = Object.keys(options).filter(key => ['sections', 'blocks', 'templates'].includes(key)).length;
     assert(paramCount > 0, 'One of sections, blocks or templates is required');
     assert(paramCount === 1, 'Only one of sections, blocks or templates must be provided');
 
-    let { context: templateData = {} } = options;
+    let templateData: DataType = options.context ?? ({} as DataType);
     const { rootTemplatesPath, customizeTemplatePath = file => file, transform: methodTransform = [] } = options;
     const startTime = new Date().getMilliseconds();
     const { customizeTemplatePaths: contextCustomizeTemplatePaths = [] } = templateData as WriteContext;
 
     const { jhipster7Migration } = this.features;
     if (jhipster7Migration) {
-      templateData = createJHipster7Context(this, options.context ?? {}, {
+      templateData = createJHipster7Context(this, templateData as any, {
         log: jhipster7Migration === 'verbose' ? (msg: string) => this.log.info(msg) : () => {},
-      });
+      }) as DataType;
     }
 
     /* Build lookup order first has preference.
@@ -891,26 +956,19 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
     }
 
     const normalizeEjs = (file: string) => file.replace('.ejs', '');
-    const resolveCallback = (maybeCallback: boolean | string | ((data: any) => any) | undefined, fallback?: boolean | string) => {
-      if (maybeCallback === undefined) {
-        if (typeof fallback === 'function') {
-          return resolveCallback(fallback);
-        }
-        return fallback;
-      }
-      if (typeof maybeCallback === 'boolean' || typeof maybeCallback === 'string') {
-        return maybeCallback;
-      }
+    const resolveCallback = <ReturnType extends boolean | string | undefined>(
+      maybeCallback: ReturnType | ((data: any) => ReturnType),
+    ): ReturnType => {
       if (typeof maybeCallback === 'function') {
-        return maybeCallback.call(this, templateData) || false;
+        return resolveCallback(maybeCallback.call(this, templateData));
       }
-      throw new Error(`Type not supported ${maybeCallback}`);
+      return maybeCallback;
     };
 
     type RenderTemplateParam = {
       condition?: boolean;
-      sourceFile: string;
-      destinationFile: string;
+      sourceFile: string | ((data: any) => string);
+      destinationFile: string | ((data: any) => string);
       options?: { renderOptions?: any };
       noEjs?: boolean;
       transform?: any[];
@@ -926,9 +984,10 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
       transform,
       binary,
     }: RenderTemplateParam): Promise<undefined | string> => {
-      if (condition !== undefined && !resolveCallback(condition, true)) {
+      if (condition !== undefined && !resolveCallback(condition)) {
         return undefined;
       }
+      sourceFile = resolveCallback(sourceFile);
       const extension = extname(sourceFile);
       const isBinary = binary || ['.png', '.jpg', '.gif', '.svg', '.ico'].includes(extension);
       const appendEjs = noEjs === undefined ? !isBinary && extension !== '.ejs' : !noEjs;
@@ -994,7 +1053,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         }
         sourceFileFrom = file.resolvedSourceFile;
         targetFile = file.destinationFile;
-        templatesRoots = file.templatesRoots;
+        ({ templatesRoots } = file);
       }
 
       if (sourceFileFrom === undefined) {
@@ -1006,8 +1065,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           await this.copyTemplateAsync(sourceFileFrom, targetFile);
         } else {
           let useAsync = true;
-          if (templateData.entityClass) {
-            if (!templateData.baseName) {
+          if ((templateData as any).entityClass) {
+            if (!(templateData as any).baseName) {
               throw new Error('baseName is required at templates context');
             }
             const sourceBasename = basename(sourceFileFrom);
@@ -1020,8 +1079,8 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
             ...options?.renderOptions,
             // Set root for ejs to lookup for partials.
             root: templatesRoots,
-            // ejs caching cause problem https://github.com/jhipster/generator-jhipster/pull/20757
-            cache: false,
+            // multiple roots causes ejs caching issues due to cache key issues.
+            cache: templatesRoots.length === 1,
           };
           const copyOptions = { noGlob: true, transformOptions };
           if (appendEjs) {
@@ -1032,9 +1091,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
           } else if (noEjs) {
             this.copyTemplate(sourceFileFrom, targetFile, copyOptions);
           } else if (useAsync) {
-            await this.renderTemplateAsync(sourceFileFrom, targetFile, templateData, copyOptions);
+            await this.renderTemplateAsync(sourceFileFrom, targetFile, templateData as any, copyOptions);
           } else {
-            this.renderTemplate(sourceFileFrom, targetFile, templateData, copyOptions);
+            this.renderTemplate(sourceFileFrom, targetFile, templateData as any, copyOptions);
           }
         }
       } catch (error) {
@@ -1066,15 +1125,14 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
           assert(typeof block === 'object', `Block must be an object for ${blockSpecPath}`);
           assert(Array.isArray(block.templates), `Block templates must be an array for ${blockSpecPath}`);
-          const condition = resolveCallback(blockConditionCallback);
-          if (condition !== undefined && !condition) {
+          if (blockConditionCallback !== undefined && !resolveCallback(blockConditionCallback)) {
             return undefined;
           }
           if (typeof blockPathValue === 'function') {
-            throw new Error(`Block path should be static for ${blockSpecPath}`);
+            throw new TypeError(`Block path should be static for ${blockSpecPath}`);
           }
-          const blockPath = resolveCallback(blockFromCallback, blockPathValue);
-          const blockTo = resolveCallback(blockToCallback, blockPath) || blockPath;
+          const blockPath = resolveCallback(blockFromCallback) ?? resolveCallback(blockPathValue);
+          const blockTo = resolveCallback(blockToCallback) ?? resolveCallback(blockPath);
           return block.templates.map((fileSpec, fileIdx) => {
             const fileSpecPath = `${blockSpecPath}[${fileIdx}]`;
             assert(
@@ -1114,17 +1172,23 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
               throw new Error(`Transform ${fileTransform} value is not supported`);
             }
 
-            const normalizedFile = resolveCallback(sourceFile || file);
+            const normalizedFile = resolveCallback(sourceFile) ?? resolveCallback(file);
+            if (normalizedFile === undefined) {
+              throw new Error(`sourceFile is required for ${fileSpecPath}`);
+            }
             sourceFile = join(blockPath, normalizedFile);
-            destinationFile = join(resolveCallback(destinationFile || renameTo, normalizedFile));
+            destinationFile = resolveCallback(destinationFile) ?? resolveCallback(renameTo) ?? normalizedFile;
             if (blockRenameTo) {
               destinationFile = this.destinationPath(blockRenameTo.call(this, templateData, destinationFile));
             } else {
               destinationFile = this.destinationPath(blockTo, destinationFile);
             }
 
-            const override = resolveCallback(fileSpec.override);
-            if (override !== undefined && !override && this.fs.exists(destinationFile.replace(/\.jhi$/, ''))) {
+            if (
+              fileSpec.override !== undefined &&
+              !resolveCallback(fileSpec.override) &&
+              this.fs.exists(destinationFile.replace(/\.jhi$/, ''))
+            ) {
               this.log.debug(`skipping file ${destinationFile}`);
               return undefined;
             }
@@ -1162,24 +1226,24 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * // Throws if `foo.txt` doesn't exists or append the content.
    * editFile('foo.txt', content => content + 'foo.txt content');
    * @example
-   * // Appends `foo.txt` content if whether exists or not.
+   * // Appends `foo.txt` content whether it exists or not.
    * editFile('foo.txt', { create: true }, content => content + 'foo.txt content');
    * @example
-   * // Appends `foo.txt` content if whether exists or not using the returned cascaded callback.
+   * // Appends `foo.txt` content whether it exists or not using the returned cascaded callback.
    * editFile('foo.txt')(content => content + 'foo.txt content');
    */
-  editFile(file: string, ...transformCallbacks: EditFileCallback<this>[]): CascatedEditFileCallback<this>;
+  editFile(file: string, ...transformCallbacks: EditFileCallback<this>[]): CascadedEditFileCallback<this>;
   editFile(
     file: string,
     options: EditFileOptions | NeedleInsertion,
     ...transformCallbacks: EditFileCallback<this>[]
-  ): CascatedEditFileCallback<this>;
+  ): CascadedEditFileCallback<this>;
 
   editFile(
     file: string,
     options?: EditFileOptions | EditFileCallback<this> | NeedleInsertion,
     ...transformCallbacks: EditFileCallback<this>[]
-  ): CascatedEditFileCallback<this> {
+  ): CascadedEditFileCallback<this> {
     let actualOptions: EditFileOptions;
     if (typeof options === 'function') {
       transformCallbacks = [options, ...transformCallbacks];
@@ -1199,7 +1263,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     let originalContent: string | undefined | null;
     try {
-      originalContent = this.readDestination(filePath) as string;
+      originalContent = this.readDestination(filePath);
     } catch {
       // null return should be treated like an error.
     }
@@ -1216,12 +1280,12 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         }
         throw new Error(`Unable to find ${filePath}. ${errorMessage}`);
       }
-      // allow to edit non existing files
+      // allow editing non-existing files
       originalContent = '';
     }
 
     let newContent = originalContent;
-    const writeCallback = (...callbacks: EditFileCallback<this>[]): CascatedEditFileCallback<this> => {
+    const writeCallback = (...callbacks: EditFileCallback<this>[]): CascadedEditFileCallback<this> => {
       const { autoCrlf = this.jhipsterConfigWithDefaults.autoCrlf, assertModified } = actualOptions;
       try {
         const fileHasCrlf = autoCrlf && hasCrlf(newContent);
@@ -1322,7 +1386,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
       gradleCatalog = gradleCatalog ? this.jhipsterTemplatePath(tomlFile) : this.templatePath(tomlFile);
     }
 
-    const gradleLibsVersions = this.readTemplate(gradleCatalog)?.toString();
+    const gradleLibsVersions = this.readTemplate(gradleCatalog);
     if (gradleLibsVersions) {
       Object.assign(javaDependencies, this.prepareDependencies(getGradleLibsVersionsProperties(gradleLibsVersions), 'java'));
     }
@@ -1418,8 +1482,10 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    */
   createGit(options?: Parameters<typeof simpleGit>[0]) {
     return simpleGit({ baseDir: this.destinationPath(), ...options }).env({
-      ...process.env,
-      LANG: 'en',
+      HOME: process.env.HOME,
+      PATH: process.env.PATH,
+      LANG: 'C',
+      LC_ALL: 'C',
     });
   }
 }

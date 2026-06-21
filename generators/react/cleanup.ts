@@ -86,4 +86,8 @@ export default asWritingTask<ClientEntity, ClientApplication>(function cleanupOl
       this.removeFile(`${application.srcMainWebapp}microfrontends/entities-routes.tsx`);
     }
   }
+  if (control.isJhipsterVersionLessThan('9.0.1')) {
+    this.removeFile('jest.conf.js');
+    this.removeFile('tsconfig.test.json');
+  }
 });

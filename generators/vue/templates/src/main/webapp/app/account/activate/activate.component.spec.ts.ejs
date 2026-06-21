@@ -16,11 +16,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { afterAll, beforeEach, describe, expect, it, vitest } from 'vitest';
+import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { type ComponentMountingOptions, shallowMount } from '@vue/test-utils';
 import { createTestingPinia } from '@pinia/testing';
 import axios from 'axios';
-import sinon from 'sinon';
 
 import Activate from './activate.vue';
 
@@ -28,13 +27,13 @@ type ActivateComponentType = InstanceType<typeof Activate>;
 
 const route = { query: { key: 'key' } };
 
-vitest.mock('vue-router', () => ({
+vi.mock('vue-router', () => ({
   useRoute: () => route,
 }));
 
 const axiosStub = {
-  get: sinon.stub(axios, 'get'),
-  post: sinon.stub(axios, 'post'),
+  get: vi.spyOn(axios, 'get'),
+  post: vi.spyOn(axios, 'post'),
 };
 
 describe('Activate Component', () => {
@@ -50,11 +49,11 @@ describe('Activate Component', () => {
   });
 
   afterAll(() => {
-    sinon.restore();
+    vi.restoreAllMocks();
   });
 
   it('should display error when activation fails', async () => {
-    axiosStub.get.rejects({});
+    axiosStub.get.mockRejectedValue({});
 
     const wrapper = shallowMount(Activate, mountOptions);
     activate = wrapper.vm;
@@ -65,7 +64,7 @@ describe('Activate Component', () => {
   });
 
   it('should display success when activation succeeds', async () => {
-    axiosStub.get.resolves({});
+    axiosStub.get.mockResolvedValue({});
 
     const wrapper = shallowMount(Activate, mountOptions);
     activate = wrapper.vm;

@@ -16,15 +16,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-package <%= packageName %>.web.rest;
+package <%- packageName %>.web.rest;
 
-import static <%= packageName %>.test.util.OAuth2TestUtil.TEST_USER_LOGIN;
-import static <%= packageName %>.test.util.OAuth2TestUtil.registerAuthenticationToken;
+import static <%- packageName %>.test.util.OAuth2TestUtil.TEST_USER_LOGIN;
+import static <%- packageName %>.test.util.OAuth2TestUtil.registerAuthenticationToken;
 <%_ if (reactive) { _%>
-import static <%= packageName %>.test.util.OAuth2TestUtil.authenticationToken;
+import static <%- packageName %>.test.util.OAuth2TestUtil.authenticationToken;
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.*;
 <%_ } else { _%>
-import static <%= packageName %>.test.util.OAuth2TestUtil.testAuthenticationToken;
+import static <%- packageName %>.test.util.OAuth2TestUtil.testAuthenticationToken;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
   <%_ if (searchEngineElasticsearch) { _%>
@@ -32,10 +32,10 @@ import static org.mockito.Mockito.*;
   <%_ } _%>
 <%_ } _%>
 
-import <%= packageName %>.IntegrationTest;
-import <%= packageName %>.security.AuthoritiesConstants;
+import <%- packageName %>.IntegrationTest;
+import <%- packageName %>.security.AuthoritiesConstants;
 <%_ if (syncUserWithIdp) { _%>
-import <%= packageName %>.repository.UserRepository;
+import <%- packageName %>.repository.UserRepository;
 <%_ } _%>
 
 import org.junit.jupiter.api.Test;
@@ -51,12 +51,9 @@ import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTest
 import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.test.web.reactive.server.WebTestClient;
-  <%_ if (searchEngineElasticsearch) { _%>
-import reactor.core.publisher.Mono;
-  <%_ } _%>
 
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 <%_ } else { _%>
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -112,7 +109,7 @@ class AccountResourceIT {
     @BeforeEach
     void setup() {
         claims = new HashMap<>();
-        claims.put("groups", Collections.singletonList(AuthoritiesConstants.ADMIN));
+        claims.put("groups", List.of(AuthoritiesConstants.ADMIN));
         claims.put("sub", "jane");
         claims.put("email", "jane.doe@jhipster.com");
     }
@@ -122,9 +119,9 @@ class AccountResourceIT {
     @AfterEach
     void cleanup() {
         // Remove syncUserWithIdp users
-    <%_ if (databaseTypeSql && reactive) { _%>
+  <%_ if (databaseTypeSql && reactive) { _%>
         userRepository.deleteAllUserAuthorities()<%- reactorBlock %>;
-    <%_ } _%>
+  <%_ } _%>
         userRepository.deleteAll()<%- reactorBlock %>;
     }
 
@@ -133,7 +130,7 @@ class AccountResourceIT {
 <%_ if (databaseTypeSql && !reactive) { _%>
     @Transactional
 <%_ } _%>
-    void testGetExistingAccount() <% if (!reactive) { %>throws Exception <% } %>{
+    void testGetExistingAccount() <%- reactive ? '' : 'throws Exception ' %>{
 <%_ if (reactive) { _%>
         webTestClient
             .mutateWith(mockAuthentication(registerAuthenticationToken(authorizedClientService, clientRegistration, authenticationToken(claims))))
@@ -167,7 +164,7 @@ class AccountResourceIT {
     }
 
     @Test
-    void testGetUnknownAccount() <% if (!reactive) { %>throws Exception <% } %>{
+    void testGetUnknownAccount() <%- reactive ? '' : 'throws Exception ' %>{
 <%_ if (reactive) { _%>
         webTestClient.get().uri("/api/account")
             .accept(MediaType.APPLICATION_JSON)
@@ -182,7 +179,7 @@ class AccountResourceIT {
 
     @Test
     @WithUnauthenticatedMockUser
-    void testNonAuthenticatedUser() <% if (!reactive) { %>throws Exception <% } %>{
+    void testNonAuthenticatedUser() <%- reactive ? '' : 'throws Exception ' %>{
 <%_ if (reactive) { _%>
         webTestClient.get().uri("/api/authenticate")
             .exchange()
@@ -195,7 +192,7 @@ class AccountResourceIT {
 
     @Test
     @WithMockUser(TEST_USER_LOGIN)
-    void testAuthenticatedUser() <% if (!reactive) { %>throws Exception <% } %>{
+    void testAuthenticatedUser() <%- reactive ? '' : 'throws Exception ' %>{
 <%_ if (reactive) { _%>
         webTestClient
             .get().uri("/api/authenticate")

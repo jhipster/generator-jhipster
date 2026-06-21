@@ -16,20 +16,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, signal, effect } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, effect } from '@angular/core';
 <%_ if (generateUserManagement || !authenticationTypeOauth2) { _%>
 import {
-<%_ if (!authenticationTypeOauth2) { _%>
+  <%_ if (!authenticationTypeOauth2) { _%>
   Router,
-<%_ } _%>
-<%_ if (generateUserManagement) { _%>
+  <%_ } _%>
+  <%_ if (generateUserManagement) { _%>
   RouterLink,
-<%_ } _%>
+  <%_ } _%>
 } from '@angular/router';
 <%_ } _%>
 <%_ if (!authenticationTypeOauth2) { _%>
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, takeUntil } from 'rxjs';
 <%_ } _%>
 
 <%_ if (enableTranslation) { _%>
@@ -43,10 +42,19 @@ import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-home',
+  selector: '<%- jhiPrefixDashed %>-home',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home.html',
   styleUrl: './home.scss',
-  imports: [<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, <%_ } _%><%_ if (generateUserManagement) { _%>RouterLink<%_ } _%>],
+  imports: [
+<%_ if (enableTranslation) { _%>
+    TranslateDirective,
+    TranslateModule,
+<%_ } _%>
+<%_ if (generateUserManagement) { _%>
+    RouterLink,
+<%_ } _%>
+  ],
 })
 export default class Home {
   public readonly account = inject(AccountService).account;

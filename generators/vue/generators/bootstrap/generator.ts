@@ -17,14 +17,12 @@
  * limitations under the License.
  */
 import { createNeedleCallback } from '../../../base-core/support/needles.ts';
-import { ClientApplicationGenerator } from '../../../client/generator.ts';
-import {
-  createDayjsUpdateLanguagesEditFileCallback,
-  createWebpackUpdateLanguagesNeedleCallback,
-} from '../../../client/support/update-languages.ts';
+import { createDayjsUpdateLanguagesEditFileCallback } from '../../../client/support/update-languages.ts';
 import { generateLanguagesWebappOptions } from '../../../languages/support/languages.ts';
+import { mutateApplication } from '../../application.ts';
+import { VueApplicationGenerator } from '../../generator.ts';
 
-export default class VueBootstrapGenerator extends ClientApplicationGenerator {
+export default class VueBootstrapGenerator extends VueApplicationGenerator {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -35,9 +33,27 @@ export default class VueBootstrapGenerator extends ClientApplicationGenerator {
 
   get preparing() {
     return this.asPreparingTaskGroup({
+      defaults({ applicationDefaults }) {
+        applicationDefaults(mutateApplication, {
+          clientBundler: ctx => (ctx.microfrontend || ctx.applicationTypeMicroservice ? 'rsbuild' : 'vite'),
+          devServerPort: (ctx, { data }) => {
+            let port;
+            if (ctx.clientBundlerWebpack) {
+              port = 9060;
+            } else if (ctx.clientBundlerRsbuild) {
+              port = 3000;
+            } else {
+              port = 9000;
+            }
+            return port + (data.applicationIndex ?? 0);
+          },
+          devServerPortProxy: (ctx, { data }) => (ctx.clientBundlerWebpack ? 9000 + (data.applicationIndex ?? 0) : undefined),
+          nodeWebappBuildTarget: ({ clientBundlerRsbuild }) => `webapp:build${clientBundlerRsbuild ? ':prod' : ''}`,
+        });
+      },
       translations({ application }) {
-        application.addLanguageCallbacks.push((_newLanguages, allLanguages) => {
-          const { enableTranslation, clientSrcDir, clientI18nDir, clientRootDir } = application;
+        application.addLanguageCallbacks.push((newLanguages, allLanguages) => {
+          const { enableTranslation, clientSrcDir, clientRootDir } = application;
           if (!enableTranslation) return;
 
           const { ignoreNeedlesError: ignoreNonExisting } = this;
@@ -53,6 +69,20 @@ export default class VueBootstrapGenerator extends ClientApplicationGenerator {
             }),
           );
 
+          if (application.microfrontend && (application.applicationTypeMicroservice || application.exposeMicrofrontend)) {
+            this.editFile(
+              `${clientRootDir}module-federation.config.${application.clientBundlerWebpack ? 'cjs' : 'ts'}`,
+              { ignoreNonExisting },
+              createNeedleCallback({
+                contentToAdd: newLanguages.map(
+                  lang =>
+                    `    './i18n-${lang.languageTag}': './${application.clientBundlerWebpack ? this.relativeDir(clientRootDir, clientSrcDir) : ''}i18n/${lang.languageTag}/${lang.languageTag}.js',`,
+                ),
+                needle: 'jhipster-needle-expose',
+              }),
+            );
+          }
+
           const generateDateTimeFormat = (language: string): string => `'${language}': {
   short: { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' },
   medium: { year: 'numeric', month: 'short', day: 'numeric', weekday: 'short', hour: 'numeric', minute: 'numeric' },
@@ -67,20 +97,12 @@ export default class VueBootstrapGenerator extends ClientApplicationGenerator {
               needle: 'jhipster-needle-i18n-language-date-time-format',
             }),
           );
-
-          if (application.clientBundlerWebpack) {
-            this.editFile(
-              `${clientRootDir}webpack/webpack.common.js`,
-              { ignoreNonExisting },
-              createWebpackUpdateLanguagesNeedleCallback(allLanguages, this.relativeDir(clientRootDir, clientI18nDir)),
-            );
-          }
         });
       },
     });
   }
 
-  get [ClientApplicationGenerator.PREPARING]() {
+  get [VueApplicationGenerator.PREPARING]() {
     return this.delegateTasksToBlueprint(() => this.preparing);
   }
 }

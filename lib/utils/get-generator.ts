@@ -1,19 +1,20 @@
 import { existsSync } from 'node:fs';
 import { isAbsolute, join, resolve } from 'node:path';
 
-export const getGeneratorRelativeFolder = (generatorName: string) => {
-  generatorName = generatorName.replace('jhipster:', '');
-  return join('generators', generatorName.split(':').join('/generators/'));
+import { getSourceRoot } from '../index.ts';
+
+export const getGeneratorRelativeFolder = (generatorNamespace: string) => {
+  generatorNamespace = generatorNamespace.replace('jhipster:', '');
+  return join('generators', generatorNamespace.split(':').join('/generators/'));
 };
 
-export const getGeneratorFolder = (generatorName: string) =>
-  resolve(import.meta.dirname, '../..', getGeneratorRelativeFolder(generatorName));
+export const getGeneratorFolder = (generatorNamespace: string) => resolve(getSourceRoot(), getGeneratorRelativeFolder(generatorNamespace));
 
-const getGenerator = (generatorName: string) => {
-  if (isAbsolute(generatorName)) {
-    return generatorName;
+const getGenerator = (generatorNamespace: string) => {
+  if (isAbsolute(generatorNamespace)) {
+    return generatorNamespace;
   }
-  const generatorFolder = getGeneratorFolder(generatorName);
+  const generatorFolder = getGeneratorFolder(generatorNamespace);
   const resolved = resolve(generatorFolder, 'index.ts');
   if (existsSync(resolved)) {
     return resolved;

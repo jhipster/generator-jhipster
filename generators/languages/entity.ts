@@ -36,6 +36,7 @@ type LanguagesAddedEntityProperties = {
   entityI18nVariant: string;
   entityTranslationKey: string;
   entityTranslationKeyMenu: string;
+  entityTranslationKeyMenuPath: string;
 };
 
 export interface Entity<F extends BaseApplicationField = BaseApplicationField, R extends BaseApplicationRelationship = Relationship>
@@ -51,4 +52,5 @@ export const mutateEntity = {
     data.clientRootFolder ? camelCase(`${data.clientRootFolder}-${data.entityInstance}`) : data.entityInstance,
   entityTranslationKeyMenu: data =>
     camelCase(data.clientRootFolder ? `${data.clientRootFolder}-${data.entityNameKebabCase}` : data.entityNameKebabCase),
+  entityTranslationKeyMenuPath: data => `global.menu.entities.${data.entityTranslationKeyMenu}`,
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<Entity>, LanguagesAddedEntityProperties>;

@@ -56,11 +56,6 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
 
   get preparing() {
     return this.asPreparingTaskGroup({
-      cancel() {
-        if (this.jhipsterConfigWithDefaults.cacheProvider === 'no') {
-          this.cancelCancellableTasks();
-        }
-      },
       loadDependabot({ application }) {
         this.loadJavaDependenciesFromGradleCatalog(application.javaDependencies, true);
       },
@@ -173,12 +168,11 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
       },
       applyGradleScript({ source, application }) {
         if (application.buildToolGradle) {
-          const applicationAny = application as any;
-          if (applicationAny.cacheProviderCaffeine) {
+          if (application.cacheProviderCaffeine) {
             source.addGradleDependencyCatalogVersion?.({ name: 'typesafe', version: application.javaDependencies?.typesafe });
             source.addGradleBuildSrcDependencyCatalogVersion?.({ name: 'typesafe', version: application.javaDependencies?.typesafe });
           }
-          if (applicationAny.cacheProviderHazelcast) {
+          if (application.cacheProviderHazelcast) {
             source.addGradleDependencyCatalogVersion?.({
               name: 'hazelcast-spring',
               version: application.javaDependencies?.['hazelcast-spring'],
@@ -187,7 +181,7 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
               name: 'hazelcast-spring',
               version: application.javaDependencies?.['hazelcast-spring'],
             });
-            if (applicationAny.enableHibernateCache) {
+            if (application.enableHibernateCache) {
               source.addGradleDependencyCatalogVersion?.({
                 name: 'hazelcast-hibernate53',
                 version: application.javaDependencies?.['hazelcast-hibernate53'],
@@ -239,10 +233,12 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
           });
         } else if (application.cacheProviderInfinispan) {
           source.editJavaFile!(`${application.javaPackageTestDir}IntegrationTest.java`, {
+            imports: ['org.springframework.boot.autoconfigure.cache.CacheType'],
             annotations: [
               {
                 package: 'org.springframework.boot.cache.test.autoconfigure',
                 annotation: 'AutoConfigureCache',
+                parameters: (_, cb) => cb.addKeyValue('cacheProvider', 'CacheType.INFINISPAN'),
               },
             ],
           });
@@ -270,7 +266,7 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
           for (const entity of entities.filter(entity => !entity.skipServer && !entity.builtInUser)) {
             source.addEntityToCache?.({
               entityAbsoluteClass: entity.entityAbsoluteClass,
-              relationships: entity.relationships as any,
+              relationships: entity.relationships,
             });
           }
         }

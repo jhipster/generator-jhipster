@@ -17,8 +17,7 @@
  * limitations under the License.
  */
 
-import type { ITokenConfig } from 'chevrotain';
-import { Lexer } from 'chevrotain';
+import { type ITokenConfig, Lexer } from 'chevrotain';
 
 import applicationOptions from '../../../../jhipster/application-options.ts';
 import { KEYWORD, UNARY_OPTION } from '../../parsing/lexer/shared-tokens.ts';

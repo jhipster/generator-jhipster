@@ -40,7 +40,6 @@ describe(`generator - ${generator}`, () => {
         expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
 [
   "ciCd",
-  "ciCdIntegrations",
 ]
 `);
       });
@@ -92,12 +91,50 @@ describe(`generator - ${generator}`, () => {
       });
     });
 
+    describe('with ci-cd:github', () => {
+      before(async () => {
+        await helpers.runCli('ci-cd:github').withJHipsterConfig().withSkipWritingPriorities();
+      });
+
+      it('should populate context', () => {
+        expect(runResult.application!.ciCd).toEqual(['github']);
+      });
+
+      it('should ask provider prompts', () => {
+        expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
+[
+  "ciCdIntegrations",
+]
+`);
+      });
+    });
+
     describe('with jenkins', () => {
       before(async () => {
         await helpers.runCli('ci-cd jenkins').withJHipsterConfig().withSkipWritingPriorities();
       });
 
       it('should not ask ciCd question', () => {
+        expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
+[
+  "ciCdIntegrations",
+  "insideDocker",
+  "sendBuildToGitlab",
+]
+`);
+      });
+    });
+
+    describe('with ci-cd:jenkins', () => {
+      before(async () => {
+        await helpers.runCli('ci-cd:jenkins').withJHipsterConfig().withSkipWritingPriorities();
+      });
+
+      it('should populate context', () => {
+        expect(runResult.application!.ciCd).toEqual(['jenkins']);
+      });
+
+      it('should ask provider prompts', () => {
         expect(runResult.askedQuestions.map(({ name }) => name)).toMatchInlineSnapshot(`
 [
   "ciCdIntegrations",

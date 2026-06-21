@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
 <%_ if (enableTranslation) { _%>
@@ -29,8 +29,9 @@ import { SessionsService } from './sessions.service';
 import { Account } from 'app/core/auth/account.model';
 
 @Component({
-  selector: '<%= jhiPrefixDashed %>-sessions',
-  imports: [DatePipe<% if (enableTranslation) { %>, TranslateDirective, TranslateModule<% } %>],
+  selector: '<%- jhiPrefixDashed %>-sessions',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [DatePipe<%- enableTranslation ? ', TranslateDirective, TranslateModule' : '' %>],
   templateUrl: './sessions.html',
 })
 export default class Sessions implements OnInit {
