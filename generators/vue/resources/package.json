@@ -28,7 +28,7 @@
     "@module-federation/vite": "1.16.9",
     "@pinia/testing": "1.0.3",
     "@rsbuild/core": "2.0.15",
-    "@rsbuild/plugin-sass": "1.5.3",
+    "@rsbuild/plugin-sass": "2.0.0",
     "@rsbuild/plugin-vue": "1.2.9",
     "@tsconfig/node18": "18.2.6",
     "@types/node": "22.20.0",
