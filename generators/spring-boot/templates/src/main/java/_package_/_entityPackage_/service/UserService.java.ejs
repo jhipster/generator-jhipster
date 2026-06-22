@@ -116,7 +116,7 @@ import java.util.stream.Collectors;
 public class UserService {
 <%_ if (!databaseTypeNo) { _%>
 
-    protected static final Logger LOG = LoggerFactory.getLogger(UserService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
     protected final UserRepository userRepository;
   <%_ if (!authenticationTypeOauth2) { _%>
