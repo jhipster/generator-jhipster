@@ -388,7 +388,7 @@ public class UserService {
     }
 
     <%_ if (!reactive) { _%>
-    private boolean removeNonActivatedUser(<%- user.persistClass %> existingUser) {
+    protected boolean removeNonActivatedUser(<%- user.persistClass %> existingUser) {
 
         if (existingUser.isActivated()) {
             return false;
