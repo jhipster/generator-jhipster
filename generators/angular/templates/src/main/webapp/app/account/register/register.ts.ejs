@@ -95,7 +95,7 @@ export default class Register implements AfterViewInit {
     if (password === confirmPassword) {
       const { login, email } = this.registerForm.getRawValue();
       this.registerService
-        .save({ login, email, password, langKey: <% if (enableTranslation) { %>this.translateService.getCurrentLang() ?? '<%- nativeLanguage %>'<% } else { %>'<%- nativeLanguage %>'<% } %> })
+        .save({ login, email, password, langKey: <% if (enableTranslation) { %>this.translateService.getCurrentLang() ?? <% } %>'<%- nativeLanguage %>' })
         .subscribe({ next: () => (this.success.set(true)), error: response => this.processError(response) });
     } else {
       this.doNotMatch.set(true);
