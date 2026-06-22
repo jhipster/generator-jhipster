@@ -41,19 +41,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import java.util.ArrayList;
+<%_ } _%>
 import java.util.List;
-  <%_ if (reactive) { _%>
+<%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
-  <%_ } else { _%>
-import java.util.stream.Stream;
-  <%_ } _%>
 <%_ } else { _%>
-import java.util.List;
-  <%_ if (reactive) { _%>
-import reactor.core.publisher.Mono;
-  <%_ } else { _%>
 import java.util.stream.Stream;
-  <%_ } _%>
 <%_ } _%>
 <%_ if (authenticationTypeOauth2 || authenticationTypeJwt || !reactive) { _%>
 import java.util.Optional;
