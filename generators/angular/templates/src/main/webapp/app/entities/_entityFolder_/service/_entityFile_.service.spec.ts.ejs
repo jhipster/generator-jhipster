@@ -134,7 +134,7 @@ describe('<%- entityAngularName %> Service', () => {
             service.delete(<%- tsKeyId %>).subscribe();
 
             const requests = httpMock.match({ method: 'DELETE' });
-            expect(requests.length).toBe(1);
+            expect(requests).toHaveLength(1);
         });
 <%_ } _%>
 

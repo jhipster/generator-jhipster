@@ -1032,7 +1032,7 @@ describe("UserManagement routing resolve service", () => {
             next(result) {
               // THEN
               expect(service.find).not.toHaveBeenCalled();
-              expect(result).toEqual(null);
+              expect(result).toBeNull();
               resolve();
             },
           });
@@ -1242,7 +1242,7 @@ describe("UserManagement Service", () => {
       service.delete("ABC").subscribe();
 
       const requests = httpMock.match({ method: "DELETE" });
-      expect(requests.length).toBe(1);
+      expect(requests).toHaveLength(1);
     });
 
     describe("addUserManagementToCollectionIfMissing", () => {
