@@ -35,14 +35,14 @@ describe('Health', () => {
   let fixture: ComponentFixture<Health>;
   let service: HealthService;
 
+<%_ if (enableTranslation) { _%>
   beforeEach(() => {
     TestBed.configureTestingModule({
-<%_ if (enableTranslation) { _%>
       providers: [provideTranslateService()],
-<%_ } _%>
-});
+    });
   });
 
+<%_ } _%>
   beforeEach(() => {
     fixture = TestBed.createComponent(Health);
     comp = fixture.componentInstance;

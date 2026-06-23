@@ -34,14 +34,14 @@ describe('Metrics', () => {
   let fixture: ComponentFixture<Metrics>;
   let service: MetricsService;
 
+<%_ if (enableTranslation) { _%>
   beforeEach(() => {
     TestBed.configureTestingModule({
-<%_ if (enableTranslation) { _%>
       providers: [provideTranslateService()],
-<%_ } _%>
-});
+    });
   });
 
+<%_ } _%>
   beforeEach(() => {
     fixture = TestBed.createComponent(Metrics);
     comp = fixture.componentInstance;

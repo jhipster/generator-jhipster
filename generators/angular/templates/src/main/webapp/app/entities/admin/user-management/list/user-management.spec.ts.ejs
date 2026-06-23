@@ -56,7 +56,10 @@ describe('User Management Component', () => {
       providers: [
 <%_ if (enableTranslation) { _%>
         provideTranslateService(),
-<%_ } _%>AccountService, { provide: ActivatedRoute, useValue: { data, queryParamMap } }],
+<%_ } _%>
+        AccountService,
+        { provide: ActivatedRoute, useValue: { data, queryParamMap } },
+      ],
     });
   });
 

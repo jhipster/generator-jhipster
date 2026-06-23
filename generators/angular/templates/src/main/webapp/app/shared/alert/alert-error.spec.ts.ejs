@@ -39,16 +39,17 @@ describe('Alert Error Component', () => {
   let eventManager: EventManager;
   let alertService: AlertService;
 
-  beforeEach(
-    () => {
-      TestBed.configureTestingModule({
-        providers: [
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
 <%_ if (enableTranslation) { _%>
         provideTranslateService(),
-<%_ } _%>EventManager, AlertService],
-      });
-    }
-  );
+<%_ } _%>
+        EventManager,
+        AlertService,
+      ],
+    });
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AlertError);

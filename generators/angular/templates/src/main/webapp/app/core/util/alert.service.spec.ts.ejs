@@ -35,8 +35,8 @@ describe('Alert Service Test', () => {
 <%_ } _%>
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
 <%_ if (enableTranslation) { _%>
+    TestBed.configureTestingModule({
       providers: [
         provideTranslateService({
           missingTranslationHandler: {
@@ -45,8 +45,8 @@ describe('Alert Service Test', () => {
           },
         }),
       ],
-<%_ } _%>
     });
+<%_ } _%>
     service = TestBed.inject(AlertService);
 <%_ if (enableTranslation) { _%>
     translateService = TestBed.inject(TranslateService);

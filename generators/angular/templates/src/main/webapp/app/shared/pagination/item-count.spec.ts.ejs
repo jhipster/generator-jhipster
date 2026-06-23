@@ -33,16 +33,16 @@ describe('ItemCount test', () => {
   let fixture: ComponentFixture<ItemCount>;
   const inputParams = 'params';
 
+<%_ if (enableTranslation) { _%>
   beforeEach(
     () => {
       TestBed.configureTestingModule({
-<%_ if (enableTranslation) { _%>
-      providers: [provideTranslateService()],
-<%_ } _%>
-});
+        providers: [provideTranslateService()],
+      });
     }
   );
 
+<%_ } _%>
   beforeEach(() => {
     fixture = TestBed.createComponent(ItemCount);
     comp = fixture.componentInstance;

@@ -38,7 +38,9 @@ describe('MetricsModalThreads', () => {
       providers: [
 <%_ if (enableTranslation) { _%>
         provideTranslateService(),
-<%_ } _%>NgbActiveModal],
+<%_ } _%>
+        NgbActiveModal,
+      ],
     });
   });
 
