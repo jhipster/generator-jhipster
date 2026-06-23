@@ -78,7 +78,7 @@ describe('HealthModal', () => {
       expect(result).toEqual('1024.00 MB');
     });
 
-    it('should return string value', () => {
+    it('should return number value as string when health key is not diskSpace', () => {
       // GIVEN
       comp.health = {
         key: 'mail',
