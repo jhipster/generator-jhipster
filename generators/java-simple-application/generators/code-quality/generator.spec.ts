@@ -48,6 +48,30 @@ describe(`generator - ${generator}`, () => {
       expect(result.sourceCallsArg).toMatchSnapshot();
     });
 
+    it('should not override existing maven properties when loading sonar properties', () => {
+      type MavenPluginDefinition = {
+        groupId?: string;
+        artifactId?: string;
+        additionalContent?: string;
+      };
+      type MavenDefinition = {
+        pluginManagement?: MavenPluginDefinition[];
+      };
+
+      const mavenDefinitions = result.sourceCallsArg.addMavenDefinition as MavenDefinition[];
+      const sonarMavenDefinition = mavenDefinitions.find(definition =>
+        definition.pluginManagement?.some(
+          plugin => plugin.groupId === 'org.codehaus.mojo' && plugin.artifactId === 'properties-maven-plugin',
+        ),
+      );
+
+      const propertiesPlugin = sonarMavenDefinition?.pluginManagement?.find(
+        plugin => plugin.groupId === 'org.codehaus.mojo' && plugin.artifactId === 'properties-maven-plugin',
+      );
+
+      expect(propertiesPlugin?.additionalContent).toContain('<override>false</override>');
+    });
+
     it('should compose with generators', () => {
       expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
