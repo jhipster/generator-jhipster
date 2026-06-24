@@ -29,9 +29,9 @@
        toResponseEntityPostfix = ', HttpStatus.OK)';
      }
    }
-   for (const relationship of relationships) {
-     if (relationship.relationshipOneToOne && !relationship.ownerSide) {
 _%>
+<%_ for (const relationship of relationships) { _%>
+  <%_ if (relationship.relationshipOneToOne && !relationship.ownerSide) { _%>
 
         if ("<%- relationship.relationshipName.toLowerCase() %>-is-null".equals(filter)) {
             LOG.debug("REST request to get all <%- entityClass %>s where <%- relationship.relationshipName %> is null");

@@ -24,11 +24,11 @@ import {
     // We cannot generate a required entity with relationship with required relationships.
     const skipCreateTest
       = graalvmSupport
-        || !cypressBootstrapEntities
-        || requiredRelationships.some(rel => rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.derived)
-        || requiredRelationships.some(rel => rel.otherEntity.builtInUser || rel.otherEntity === this.entity)
-        || requiredRelationships.map(rel => rel.otherEntity.relationships).flat().some(rel => rel.relationshipRequired)
-        || !entityFakeData
+      || !cypressBootstrapEntities
+      || requiredRelationships.some(rel => rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.derived)
+      || requiredRelationships.some(rel => rel.otherEntity.builtInUser || rel.otherEntity === this.entity)
+      || requiredRelationships.map(rel => rel.otherEntity.relationships).flat().some(rel => rel.relationshipRequired)
+      || !entityFakeData
       ? '.skip' : '';
 
     const reason = graalvmSupport ? 'graalvm is failing.' : 'cannot create a required entity with relationship with required relationships.';
@@ -326,14 +326,14 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
 
     <% if (skipCreateTest) { %>// Reason: <%- reason %><% } %>
     it<%- skipCreateTest %>('should create an instance of <%- entityNameCapitalized %>', () => {
-  <%_ for (const field of fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden && !field.readonly)) {
-        const { fieldName, fieldIsEnum } = field;
+  <%_ for (const field of fields.filter(field => (!field.id || !field.autoGenerate) && !field.hidden && !field.readonly)) { _%>
+    <%_ const { fieldName, fieldIsEnum } = field;
         let fieldValue = !entityFakeData ? field.generateFakeData('cypress') : entityFakeData[field.fieldName];
         if (fieldValue === undefined) {
           continue;
         }
         fieldValue = typeof fieldValue === 'string' ? fieldValue.replaceAll('\\', '\\\\').replaceAll("'", "\\'") : fieldValue;
-  _%>
+    _%>
 
     <%_ if (field.fieldTypeBoolean) { _%>
       cy.get(`[data-cy="<%- fieldName %>"]`).should('<%- field.fieldTsDefaultValue === 'true' ? '' : 'not.' %>be.checked');
