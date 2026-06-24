@@ -23,7 +23,7 @@ import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 <%_ if (enableTranslation) { _%>
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
 
 import { EventManager } from 'app/core/util/event-manager.service';
@@ -39,18 +39,17 @@ describe('Alert Error Component', () => {
   let eventManager: EventManager;
   let alertService: AlertService;
 
-  beforeEach(
-    () => {
-      TestBed.configureTestingModule({
-        imports: [
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
 <%_ if (enableTranslation) { _%>
-          TranslateModule.forRoot(),
+        provideTranslateService(),
 <%_ } _%>
-        ],
-        providers: [EventManager, AlertService],
-      });
-    }
-  );
+        EventManager,
+        AlertService,
+      ],
+    });
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AlertError);

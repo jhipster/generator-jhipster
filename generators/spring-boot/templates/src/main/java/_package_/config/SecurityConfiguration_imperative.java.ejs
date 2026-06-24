@@ -216,6 +216,7 @@ public class SecurityConfiguration {
                     .requestMatchers("/services/*/*.js").permitAll()
                     .requestMatchers("/services/*/*.txt").permitAll()
                     .requestMatchers("/services/*/*.json").permitAll()
+                    .requestMatchers("/services/*/i18n/*.json").permitAll()
                     .requestMatchers("/services/*/*.js.map").permitAll()
   <%_ } _%>
                     .requestMatchers("/services/*/management/health/readiness").permitAll()

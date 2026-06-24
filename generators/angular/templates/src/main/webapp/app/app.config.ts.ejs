@@ -60,12 +60,12 @@ if (environment.DEBUG_INFO_ENABLED) {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes, ...routerFeatures),
-    // Set this to true to enable service worker (PWA)
-    provideServiceWorker('ngsw-worker.js', { enabled: false }),
 <%_ if (enableTranslation) { _%>
     provideTranslation(),
 <%_ } _%>
+    provideRouter(routes, ...routerFeatures),
+    // Set this to true to enable service worker (PWA)
+    provideServiceWorker('ngsw-worker.js', { enabled: false }),
     provideHttpClient(
       withInterceptors([
 <%_ if (authenticationTypeJwt) { _%>

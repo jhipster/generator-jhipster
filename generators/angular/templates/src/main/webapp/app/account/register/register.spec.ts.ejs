@@ -23,7 +23,7 @@ import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 <%_ if (enableTranslation) { _%>
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
 
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/shared/jhipster/error.constants';
@@ -37,10 +37,10 @@ describe('Register', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-<%_ if (enableTranslation) { _%>
-      imports: [TranslateModule.forRoot()],
-<%_ } _%>
       providers: [
+<%_ if (enableTranslation) { _%>
+        provideTranslateService(),
+<%_ } _%>
         {
           provide: ActivatedRoute,
           useValue: {}

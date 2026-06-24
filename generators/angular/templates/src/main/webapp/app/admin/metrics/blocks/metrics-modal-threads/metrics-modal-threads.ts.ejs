@@ -20,7 +20,6 @@ import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/cor
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap/modal';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
-import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -30,7 +29,7 @@ import { Thread, ThreadState } from 'app/admin/metrics/metrics.model';
   selector: '<%- jhiPrefixDashed %>-thread-modal',
   templateUrl: './metrics-modal-threads.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FontAwesomeModule<%- enableTranslation ? ', TranslateDirective, TranslateModule' : '' %>],
+  imports: [FontAwesomeModule<%- enableTranslation ? ', TranslateDirective' : '' %>],
 })
 export class MetricsModalThreads implements OnInit {
   ThreadState = ThreadState;

@@ -20,7 +20,6 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
-import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 
 import { Databases } from 'app/admin/metrics/metrics.model';
@@ -30,7 +29,7 @@ import { filterNaN } from 'app/core/util/operators';
   selector: '<%- jhiPrefixDashed %>-metrics-datasource',
   templateUrl: './metrics-datasource.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DecimalPipe<%- enableTranslation ? ', TranslateDirective, TranslateModule' : '' %>],
+  imports: [DecimalPipe<%- enableTranslation ? ', TranslateDirective' : '' %>],
 })
 export class MetricsDatasource {
   /**

@@ -24,7 +24,7 @@ import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
 
 import { Authority } from 'app/shared/jhipster/constants';
@@ -65,12 +65,10 @@ describe('Account Service', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-<%_ if (enableTranslation) { _%>
-      imports: [
-        TranslateModule.forRoot(),
-      ],
-<%_ } _%>
       providers: [
+<%_ if (enableTranslation) { _%>
+        provideTranslateService(),
+<%_ } _%>
         provideHttpClientTesting(),
         {
           provide: StateStorageService,

@@ -25,7 +25,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
 import { of<%- authenticationTypeOauth2 ? '' : ', Subject' %> } from 'rxjs';
 
@@ -48,10 +48,10 @@ describe('Home Component', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-<%_ if (enableTranslation) { _%>
-      imports: [TranslateModule.forRoot()],
-<%_ } _%>
       providers: [
+<%_ if (enableTranslation) { _%>
+        provideTranslateService(),
+<%_ } _%>
         {
           provide: AccountService,
           useValue: {

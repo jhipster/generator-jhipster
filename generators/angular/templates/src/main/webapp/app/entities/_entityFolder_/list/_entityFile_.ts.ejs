@@ -51,7 +51,7 @@ import { Alert } from 'app/shared/alert/alert';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
 import { sortStateSignal, SortDirective, SortByDirective, type SortState, SortService } from 'app/shared/sort';
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
@@ -114,7 +114,7 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
       SortByDirective,
 <%_ if (enableTranslation) { _%>
       TranslateDirective,
-      TranslateModule,
+      TranslatePipe,
 <%_ } _%>
 <%_ if (anyFieldIsDuration) { _%>
       DurationPipe,

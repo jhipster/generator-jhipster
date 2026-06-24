@@ -20,7 +20,6 @@ import { Component, OnInit, ChangeDetectionStrategy, inject, signal } from '@ang
 import { combineLatest } from 'rxjs';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
-import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -42,7 +41,6 @@ import { MetricsSystem } from './blocks/metrics-system/metrics-system';
   imports: [
 <%_ if (enableTranslation) { _%>
     TranslateDirective,
-    TranslateModule,
 <%_ } _%>
     FontAwesomeModule,
     JvmMemory,

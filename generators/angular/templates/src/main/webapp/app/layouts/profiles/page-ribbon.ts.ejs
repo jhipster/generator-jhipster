@@ -22,7 +22,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
-import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 import { ProfileService } from './profile.service';
 
@@ -38,7 +37,7 @@ import { ProfileService } from './profile.service';
   `,
   styleUrl: './page-ribbon.scss',
 <%_ if (enableTranslation) { _%>
-  imports: [TranslateDirective, TranslateModule],
+  imports: [TranslateDirective],
 <%_ } _%>
 })
 export default class PageRibbon implements OnInit {

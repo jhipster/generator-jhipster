@@ -22,7 +22,7 @@ import { Router<%- generateUserManagement ? ', RouterLink' : '' %> } from '@angu
 
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
 import { LoginService } from 'app/login/login.service';
 import { AccountService } from 'app/core/auth/account.service';
@@ -33,7 +33,7 @@ import { AccountService } from 'app/core/auth/account.service';
   imports: [
 <%_ if (enableTranslation) { _%>
     TranslateDirective,
-    TranslateModule,
+    TranslatePipe,
 <%_ } _%>
     ReactiveFormsModule,
 <%_ if (generateUserManagement) { _%>
