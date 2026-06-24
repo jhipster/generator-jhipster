@@ -228,7 +228,7 @@ describe('<%- entityAngularName %> Management Component', () => {
     let req = httpMock.expectOne({ method: 'GET' });
     req.flush([<%- testEntityPrimaryKey %>], { headers: { link: '<http://localhost/api/foo?page=1&size=20>; rel="next"' } });
     await vitest.runAllTimersAsync();
-    expect(comp.<%- entityInstancePlural %>().length).toEqual(1);
+    expect(comp.<%- entityInstancePlural %>()).toHaveLength(1);
     expect(comp.<%- entityInstancePlural %>()[0]).toEqual(expect.objectContaining(<%- testEntityPrimaryKey %>));
 
     // WHEN
@@ -238,7 +238,7 @@ describe('<%- entityAngularName %> Management Component', () => {
     req = httpMock.expectOne({ method: 'GET' });
     req.flush([<%- testEntityPrimaryKey2 %>], { headers: { link: '<http://localhost/api/foo?page=0&size=20>; rel="prev",<http://localhost/api/foo?page=2&size=20>; rel="next"' } });
     await vitest.runAllTimersAsync();
-    expect(comp.<%- entityInstancePlural %>().length).toEqual(2);
+    expect(comp.<%- entityInstancePlural %>()).toHaveLength(2);
     expect(comp.<%- entityInstancePlural %>()[1]).toEqual(expect.objectContaining(<%- testEntityPrimaryKey2 %>));
 
     comp.loadNextPage();
@@ -247,7 +247,7 @@ describe('<%- entityAngularName %> Management Component', () => {
     req = httpMock.expectOne({ method: 'GET' });
     req.flush([<%- testEntityPrimaryKey2 %>], { headers: { link: '<http://localhost/api/foo?page=0&size=20>; rel="prev",<http://localhost/api/foo?page=2&size=20>; rel="next"' } });
     await vitest.runAllTimersAsync();
-    expect(comp.<%- entityInstancePlural %>().length).toEqual(2);
+    expect(comp.<%- entityInstancePlural %>()).toHaveLength(2);
     expect(comp.<%- entityInstancePlural %>()[1]).toEqual(expect.objectContaining(<%- testEntityPrimaryKey2 %>));
   });
 <%_ } _%>
