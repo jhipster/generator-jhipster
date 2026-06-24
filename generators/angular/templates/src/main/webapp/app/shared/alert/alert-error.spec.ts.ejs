@@ -70,7 +70,7 @@ describe('Alert Error Component', () => {
       // GIVEN
       eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: { status: 0 } });
       // THEN
-      expect(comp.alerts().length).toBe(1);
+      expect(comp.alerts()).toHaveLength(1);
       expect(comp.alerts()[0].<%- mainAlertField %>).toBe(<%- enableTranslation ? '\'error.server.not.reachable\'' : '\'Server not reachable\'' %>);
     });
 
@@ -78,7 +78,7 @@ describe('Alert Error Component', () => {
       // GIVEN
       eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: { status: 404 } });
       // THEN
-      expect(comp.alerts().length).toBe(1);
+      expect(comp.alerts()).toHaveLength(1);
       expect(comp.alerts()[0].<%- mainAlertField %>).toBe(<%- enableTranslation ? '\'error.url.not.found\'' : '\'Not found\'' %>);
     });
 
@@ -87,7 +87,7 @@ describe('Alert Error Component', () => {
       eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: { error: { message: 'Error Message' } } });
       eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: { error: 'Second Error Message' } });
       // THEN
-      expect(comp.alerts().length).toBe(2);
+      expect(comp.alerts()).toHaveLength(2);
       expect(comp.alerts()[0].<%- mainAlertField %>).toBe('Error Message');
       expect(comp.alerts()[1].<%- mainAlertField %>).toBe('Second Error Message');
     });
@@ -109,7 +109,7 @@ describe('Alert Error Component', () => {
       });
       eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: response });
       // THEN
-      expect(comp.alerts().length).toBe(1);
+      expect(comp.alerts()).toHaveLength(1);
       expect(comp.alerts()[0].<%- mainAlertField %>).toBe('error.validation');
     });
 
@@ -123,7 +123,7 @@ describe('Alert Error Component', () => {
       });
       eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: response });
       // THEN
-      expect(comp.alerts().length).toBe(1);
+      expect(comp.alerts()).toHaveLength(1);
       expect(comp.alerts()[0].<%- mainAlertField %>).toBe('Bad Request');
     });
 
@@ -145,7 +145,7 @@ describe('Alert Error Component', () => {
       });
       eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: response });
       // THEN
-      expect(comp.alerts().length).toBe(1);
+      expect(comp.alerts()).toHaveLength(1);
       expect(comp.alerts()[0].<%- mainAlertField %>).toBe(<%- enableTranslation ? '\'error.Size\'' : '\'Error on field "MinField"\'' %>);
     });
 
@@ -163,7 +163,7 @@ describe('Alert Error Component', () => {
       });
       eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: response });
       // THEN
-      expect(comp.alerts().length).toBe(1);
+      expect(comp.alerts()).toHaveLength(1);
       expect(comp.alerts()[0].<%- mainAlertField %>).toBe('header.error');
     });
 
@@ -182,7 +182,7 @@ describe('Alert Error Component', () => {
       });
       eventManager.broadcast({ name: '<%- frontendAppName %>.httpError', content: response });
       // THEN
-      expect(comp.alerts().length).toBe(1);
+      expect(comp.alerts()).toHaveLength(1);
       expect(comp.alerts()[0].<%- mainAlertField %>).toBe(<%- enableTranslation ? '\'error.http.500\'' : '\'Detailed error message\'' %>);
     });
   });
