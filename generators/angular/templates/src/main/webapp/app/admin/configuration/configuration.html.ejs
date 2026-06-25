@@ -20,8 +20,8 @@
   <div>
     <h2 id="configuration-page-heading" data-cy="configurationPageHeading">__jhiTranslateTag__('configuration.title')</h2>
 
-    <span>__jhiTranslateTag__('configuration.filter')</span>
-    <input type="text" [ngModel]="beansFilter()" (ngModelChange)="beansFilter.set($event)" class="form-control" />
+    <label for="configuration-filter">__jhiTranslateTag__('configuration.filter')</label>
+    <input id="configuration-filter" type="text" [ngModel]="beansFilter()" (ngModelChange)="beansFilter.set($event)" class="form-control" />
 
     <h3 id="spring-configuration">Spring configuration</h3>
 

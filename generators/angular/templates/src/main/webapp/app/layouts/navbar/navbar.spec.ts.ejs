@@ -24,7 +24,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 <%_ if (enableTranslation) { _%>
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
 
 import { ProfileInfo } from 'app/layouts/profiles/profile-info.model';
@@ -54,10 +54,10 @@ describe('Navbar Component', () => {
   beforeEach(
     () => {
       TestBed.configureTestingModule({
-<%_ if (enableTranslation) { _%>
-        imports: [TranslateModule.forRoot()],
-<%_ } _%>
         providers: [
+<%_ if (enableTranslation) { _%>
+        provideTranslateService(),
+<%_ } _%>
           {
             provide: ActivatedRoute,
             useValue: {}

@@ -2066,6 +2066,7 @@ exports[`generator - generate-blueprint with local-blueprint option and app gene
         "composing",
         "composingComponent",
         "loading",
+        "composingBootstrap",
         "preparing",
         "postPreparing",
         "default",

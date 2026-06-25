@@ -25,7 +25,7 @@ import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
 import { of } from 'rxjs';
 
@@ -53,10 +53,13 @@ describe('User Management Component', () => {
       }),
     );
     TestBed.configureTestingModule({
+      providers: [
 <%_ if (enableTranslation) { _%>
-      imports: [TranslateModule.forRoot()],
+        provideTranslateService(),
 <%_ } _%>
-      providers: [AccountService, { provide: ActivatedRoute, useValue: { data, queryParamMap } }],
+        AccountService,
+        { provide: ActivatedRoute, useValue: { data, queryParamMap } },
+      ],
     });
   });
 

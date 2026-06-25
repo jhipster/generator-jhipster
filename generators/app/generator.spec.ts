@@ -39,6 +39,27 @@ describe(`generator - ${helpers.commandName}`, () => {
   });
   describe('blueprint support', () => testBlueprintSupport(helpers.commandName!));
 
+  describe('prompting', () => {
+    describe('vue clientFramework', () => {
+      before(async () => {
+        await helpers.runJHipster().withAnswers({ clientFramework: 'vue' }).withSkipWritingPriorities();
+      });
+
+      it('should write clientFramework', () => {
+        result.assertJsonFileContent('.yo-rc.json', {
+          'generator-jhipster': {
+            clientFramework: 'vue',
+          },
+        });
+      });
+      it('should set clientBundler to vite', () => {
+        expect(result.application).toMatchObject({
+          clientBundler: 'vite',
+        });
+      });
+    });
+  });
+
   describe('jdlStore', () => {
     describe('with application', () => {
       before(async () => {

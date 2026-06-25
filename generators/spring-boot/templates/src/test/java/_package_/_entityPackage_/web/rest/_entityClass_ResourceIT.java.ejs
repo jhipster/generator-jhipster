@@ -1,4 +1,4 @@
-<%# eslint-disable ejs-templates/prefer-single-line-tags, ejs-templates/experimental-prefer-slurp-multiline, ejs-templates/indent, ejs-templates/no-complex-statements, ejs-templates/no-function-block, ejs-templates/no-global-function-call -%>
+<%# eslint-disable ejs-templates/experimental-prefer-slurp-multiline, @stylistic/indent-binary-ops, ejs-templates/no-complex-statements, ejs-templates/no-function-block, ejs-templates/no-global-function-call -%>
 <%#
  Copyright 2013-2026 the original author or authors from the JHipster project.
 
@@ -25,8 +25,8 @@ import static <%- packageName %>.web.rest.TestUtil.createUpdateProxyForBean;
     const fieldsToTest = fields.filter(field => !field.id && !field.autoGenerate && !field.transient);
     const hasUserRepository
       = (requiresDeleteAllUsers && hasRelationshipWithBuiltInUser)
-        || filterTestableRelationships.some(rel => rel.otherEntity.builtInUser)
-        || (isUsingMapsId && (!dtoMapstruct && serviceNo) && mapsIdAssoc?.otherEntity?.entityNameCapitalized === 'User');
+      || filterTestableRelationships.some(rel => rel.otherEntity.builtInUser)
+      || (isUsingMapsId && (!dtoMapstruct && serviceNo) && mapsIdAssoc?.otherEntity?.entityNameCapitalized === 'User');
 
     let callBlock = '';
     let callListBlock = '';
@@ -60,26 +60,24 @@ import <%- packageName %>.web.rest.TestUtil;
 <% } %>
 import <%- packageName %>.IntegrationTest;
 import <%- entityAbsolutePackage %>.domain.<%- persistClass %>;
-<%_ const imported = [];
-    for (relationship of relationships) { // import entities in required relationships
-    const { relationshipValidate } = relationship;
-    const isUsingMapsIdL1 = relationship.id;
-    if (!imported.includes(relationship.otherEntity.entityNameCapitalized)) {
-      if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) {
-_%>
+<%_ const imported = []; _%>
+<%_ for (relationship of relationships) { _%>
+  <%_ // import entities in required relationships
+      const { relationshipValidate } = relationship;
+      const isUsingMapsIdL1 = relationship.id;
+  _%>
+  <%_ if (!imported.includes(relationship.otherEntity.entityNameCapitalized)) { _%>
+    <%_ if ((relationshipValidate !== null && relationshipValidate === true) || jpaMetamodelFiltering || (isUsingMapsIdL1 === true)) { _%>
 import <%- entityAbsolutePackage %>.domain.<%- relationship.otherEntity.persistClass %>;
-<%_ imported.push(relationship.otherEntity.entityNameCapitalized);
-    }
-    }
-    }
-_%>
-<%_ if (jpaMetamodelFiltering && reactive) {
-      for (const relationship of filterTestableRelationships) {
-_%>
+      <%_ imported.push(relationship.otherEntity.entityNameCapitalized); _%>
+    <%_ } _%>
+  <%_ } _%>
+<%_ } _%>
+<%_ if (jpaMetamodelFiltering && reactive) { _%>
+  <%_ for (const relationship of filterTestableRelationships) { _%>
 import <%- entityAbsolutePackage %>.repository.<%- relationship.otherEntity.entityNameCapitalized %>Repository;
-<%_ }
-    }
-_%>
+  <%_ } _%>
+<%_ } _%>
 <%_ if (hasUserRepository) { _%>
 import <%- user.entityAbsolutePackage %>.repository.UserRepository;
 <%_ } _%>
@@ -176,10 +174,7 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.ZoneOffset;
 <%_ } _%>
-<%_ if (anyFieldIsLocalDate || anyFieldIsZonedDateTime) { _%>
-import java.time.ZoneId;
-<%_ } _%>
-<%_ if (anyFieldIsInstant) { _%>
+<%_ if (jpaMetamodelFiltering && fieldsToTest.some(field => field.filterableField && field.fieldValidate && field.fieldValidationMax && (field.fieldTypeDuration || field.fieldTypeLocalDate || field.fieldTypeZonedDateTime))) { _%>
 import java.time.temporal.ChronoUnit;
 <%_ } _%>
 <%_ if (anyFieldIsLocalTime) { _%>
@@ -238,13 +233,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 <%_ if (searchEngineElasticsearch) { _%>
 import static org.awaitility.Awaitility.await;
 <%_ } _%>
-<%_ for (const field of fields.filter(field => !field.transient)) {
-      if (field.fieldIsEnum) {
-_%>
+<%_ for (const field of fields.filter(field => !field.transient)) { _%>
+  <%_ if (field.fieldIsEnum) { _%>
 import <%- entityAbsolutePackage %>.domain.enumeration.<%- field.fieldType %>;
-<%_ }
-    }
-_%>
+  <%_ } _%>
+<%_ } _%>
 /**
  * Integration tests for the {@link <%- entityClass %>Resource} REST controller.
  */
@@ -266,8 +259,8 @@ class <%- entityClass %>ResourceIT {
 
     private static final DateTimeFormatter LOCAL_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm:ss");
 <%_ } _%>
-<%_ for (field of fieldsToTest) {
-      const defaultValueName = `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}`;
+<%_ for (field of fieldsToTest) { _%>
+  <%_ const defaultValueName = `DEFAULT_${field.fieldNameUnderscored.toUpperCase()}`;
       const updatedValueName = `UPDATED_${field.fieldNameUnderscored.toUpperCase()}`;
       const smallerValueName = `SMALLER_${field.fieldNameUnderscored.toUpperCase()}`;
       const needsSmallerValueName = jpaMetamodelFiltering && field.filterableField
@@ -307,9 +300,9 @@ class <%- entityClass %>ResourceIT {
           enumValue2 = enumValue1;
         }
       }
-
-      if (field.fieldTypeString || field.blobContentTypeText) {
-        // Generate Strings, using the min and max string length if they are configured
+  _%>
+  <%_ if (field.fieldTypeString || field.blobContentTypeText) { _%>
+    <%_ // Generate Strings, using the min and max string length if they are configured
         let sampleTextString = '';
         let updatedTextString = '';
         let sampleTextLength = 10;
@@ -340,15 +333,15 @@ class <%- entityClass %>ResourceIT {
             this.log.warn(`Error generating test value for entity "${entityClass
           }" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern
         }", generating default values for this field. Detailed error message: "${error.message}".`);
-      }
-      if (sampleTextString === updatedTextString) {
-        updatedTextString = `${updatedTextString}B`;
-        this.log.warn(`Randomly generated first and second test values for entity "${entityClass
-      }" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern
-    }" in file "${entityClass}ResourceIT" where equal, added symbol "B" to second value.`);
-    }
-    }
-_%>
+        }
+        if (sampleTextString === updatedTextString) {
+          updatedTextString = `${updatedTextString}B`;
+          this.log.warn(`Randomly generated first and second test values for entity "${entityClass
+        }" field "${field.fieldName}" with pattern "${field.fieldValidateRulesPattern
+        }" in file "${entityClass}ResourceIT" where equal, added symbol "B" to second value.`);
+        }
+        }
+    _%>
 
     private static final String <%- defaultValueName %> = "<%- sampleTextString %>";
     private static final String <%- updatedValueName %> = "<%- updatedTextString %>";
@@ -394,21 +387,21 @@ _%>
   <%_ } else if (field.fieldTypeLocalDate) { _%>
 
     private static final LocalDate <%- defaultValueName %> = LocalDate.ofEpochDay(0L);
-    private static final LocalDate <%- updatedValueName %> = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate <%- updatedValueName %> = LocalDate.parse("<%- new Date(creationTimestamp).toISOString().split('T')[0] %>");
     <%_ if (needsSmallerValueName) { _%>
     private static final LocalDate <%- smallerValueName %> = LocalDate.ofEpochDay(-1L);
     <%_ } _%>
   <%_ } else if (field.fieldTypeInstant) { _%>
 
     private static final Instant <%- defaultValueName %> = Instant.ofEpochMilli(0L);
-    private static final Instant <%- updatedValueName %> = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private static final Instant <%- updatedValueName %> = Instant.ofEpochMilli(<%- creationTimestamp %>L);
     <%_ if (needsSmallerValueName) { _%>
     private static final Instant <%- smallerValueName %> = Instant.ofEpochMilli(-1L);
     <%_ } _%>
   <%_ } else if (field.fieldTypeZonedDateTime) { _%>
 
     private static final ZonedDateTime <%- defaultValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
-    private static final ZonedDateTime <%- updatedValueName %> = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+    private static final ZonedDateTime <%- updatedValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(<%- creationTimestamp %>L), ZoneOffset.UTC);
     <%_ if (needsSmallerValueName) { _%>
     private static final ZonedDateTime <%- smallerValueName %> = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
     <%_ } _%>
@@ -516,14 +509,12 @@ _%>
 
     private <%- persistClass %> inserted<%- persistClass %>;
 
-<%_ if (jpaMetamodelFiltering && reactive) {
-      for (const relationship of filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser)) {
-_%>
+<%_ if (jpaMetamodelFiltering && reactive) { _%>
+  <%_ for (const relationship of filterTestableRelationships.filter(rel => !rel.otherEntity.builtInUser)) { _%>
     @Autowired
     private <%- relationship.otherEntity.persistClass %>Repository <%- relationship.otherEntity.persistInstance %>Repository;
-<%_ }
-    }
-_%>
+  <%_ } _%>
+<%_ } _%>
 <%_ for (const fieldStatus of ['DEFAULT_', 'UPDATED_']) { _%>
   <%_ const createInstance = fieldStatus === 'UPDATED_' ? `updated${persistClass}` : persistInstance; _%>
     /**
@@ -566,12 +557,12 @@ _%>
       <%_ } _%>
     <%_ } _%>
   <%_ } _%>
-  <%_ const alreadyGeneratedEntities = [];
-      for (relationship of persistableRelationships) {
-        const { otherEntity, relationshipValidate, otherEntityName } = relationship;
+  <%_ const alreadyGeneratedEntities = []; _%>
+  <%_ for (relationship of persistableRelationships) { _%>
+    <%_ const { otherEntity, relationshipValidate, otherEntityName } = relationship;
         const mapsIdUse = relationship.id;
-        if ((relationshipValidate !== null && relationshipValidate && !relationship.otherEntity.hasCyclicRequiredRelationship) || mapsIdUse) {
-  _%>
+    _%>
+    <%_ if ((relationshipValidate !== null && relationshipValidate && !relationship.otherEntity.hasCyclicRequiredRelationship) || mapsIdUse) { _%>
         // Add required entity
       <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) === -1) { _%>
         <%_ if (relationship.otherEntityUser) { /* TODO or other entity has no unique fields */ _%>
@@ -617,14 +608,12 @@ _%>
     }
 <%_ } _%>
 
-<%_ if (databaseTypeSql && reactive) {
-      const alreadyGeneratedDeletionCalls = [];
-_%>
+<%_ if (databaseTypeSql && reactive) { _%>
+  <%_ const alreadyGeneratedDeletionCalls = []; _%>
     public static void deleteEntities(EntityManager em) {
         try {
-  <%_ for (const rel of relationships) {
-        if (rel.shouldWriteJoinTable) {
-  _%>
+  <%_ for (const rel of relationships) { _%>
+    <%_ if (rel.shouldWriteJoinTable) { _%>
                 em.deleteAll("<%- rel.joinTable.name %>").block();
     <%_ } _%>
   <%_ } _%>
@@ -632,14 +621,12 @@ _%>
         } catch (Exception e) {
             // It can fail, if other entities are still referring this - it will be removed later.
         }
-  <%_ for (const rel of relationships) {
-        if ((rel.relationshipValidate || rel.id) && !alreadyGeneratedDeletionCalls.includes(rel.otherEntityName)) {
-  _%>
+  <%_ for (const rel of relationships) { _%>
+    <%_ if ((rel.relationshipValidate || rel.id) && !alreadyGeneratedDeletionCalls.includes(rel.otherEntityName)) { _%>
         <%- rel.otherEntity.entityNameCapitalized %>ResourceIT.deleteEntities(em);
-  <%_ alreadyGeneratedDeletionCalls.push(rel.otherEntityName);
-      }
-      }
-  _%>
+      <%_ alreadyGeneratedDeletionCalls.push(rel.otherEntityName); _%>
+    <%_ } _%>
+  <%_ } _%>
     }
 
 <%_ } _%>
@@ -685,8 +672,8 @@ _%>
   <%_ // overwrite the id field again with null
       // the create method here is supposed to be used for other tests as well,
       // which may expect an id to be set (at least in the reactive stack)
-      if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) {
   _%>
+  <%_ if (reactive && databaseTypeSql && primaryKey.typeUUID && !isUsingMapsId) { _%>
         <%- persistInstance %>.<%- primaryKey.propertyConsumerName %>(null);
   <%_ } _%>
         // Create the <%- entityClass %>
@@ -804,11 +791,11 @@ _%>
     <%_ if (searchEngineElasticsearch) { _%>
         int searchDatabaseSizeBefore = IterableUtil.sizeOf(<%- entityInstance %>SearchRepository.findAll()<%- callListBlock %>);
     <%_ } _%>
-    <%_ for (relationship of relationships) {
-          const { otherEntity, otherEntityName } = relationship;
+    <%_ for (relationship of relationships) { _%>
+      <%_ const { otherEntity, otherEntityName } = relationship;
           const mapsIdUse = relationship.id;
-          if (mapsIdUse) {
-    _%>
+      _%>
+      <%_ if (mapsIdUse) { _%>
         // Add a new parent entity
         <%_ if (alreadyGeneratedEntities.indexOf(otherEntityName) === -1) { _%>
         <%- relationship.otherEntity.persistClass %> <%- otherEntityName %> = <%- relationship.otherEntity.entityNameCapitalized %>ResourceIT.create<%- relationship.otherEntityUser ? '' : 'Updated' %>Entity(<%- (databaseTypeSql && otherEntity.anyRelationshipIsRequired) ? 'em' : '' %>);
@@ -901,12 +888,12 @@ _%>
     }
   <%_ } _%>
   <%_ for (field of fieldsToTest) { _%>
-    <%_ if (field.fieldValidate) {
-          let required = false;
+    <%_ if (field.fieldValidate) { _%>
+      <%_ let required = false;
           if (!field.fieldTypeBytes && field.fieldValidationRequired) {
             required = true;
           }
-    _%>
+      _%>
       <%_ if (required) { _%>
 
     @Test<%- transactionalAnnotation %>
@@ -1210,10 +1197,10 @@ _%>
         );
     }
 
-    <%_ }
-        // the range criteria
-        if (searchBy.fieldTypeNumeric || searchBy.fieldTypeDuration || searchBy.fieldTypeLocalDate || searchBy.fieldTypeZonedDateTime) {
-          const defaultValue = `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}`;
+    <%_ } _%>
+    <%_ // the range criteria _%>
+    <%_ if (searchBy.fieldTypeNumeric || searchBy.fieldTypeDuration || searchBy.fieldTypeLocalDate || searchBy.fieldTypeZonedDateTime) { _%>
+      <%_ const defaultValue = `DEFAULT_${searchBy.fieldNameUnderscored.toUpperCase()}`;
           let biggerValue = `UPDATED_${searchBy.fieldNameUnderscored.toUpperCase()}`;
           const smallerValue = `SMALLER_${searchBy.fieldNameUnderscored.toUpperCase()}`;
           if (searchBy.fieldValidate && searchBy.fieldValidationMax) {
@@ -1226,7 +1213,7 @@ _%>
               biggerValue = `(${defaultValue} + 1)`;
             }
           }
-    _%>
+      _%>
 
     @Test<%- transactionalAnnotation %>
     void getAll<%- entityClassPlural %>By<%- searchBy.fieldInJavaBeanMethod %>IsGreaterThanOrEqualToSomething() <%- reactive ? '' : 'throws Exception ' %>{

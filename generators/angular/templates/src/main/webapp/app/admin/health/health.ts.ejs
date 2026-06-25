@@ -23,7 +23,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
 
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
-import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HealthService } from './health.service';
@@ -37,7 +36,6 @@ import HealthModal from './modal/health-modal';
   imports: [
 <%_ if (enableTranslation) { _%>
     TranslateDirective,
-    TranslateModule,
 <%_ } _%>
     FontAwesomeModule,
     KeyValuePipe,

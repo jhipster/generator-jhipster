@@ -29,6 +29,6 @@ jobs:
     if: ${{ github.repository == 'jhipster/generator-jhipster' }}
     steps:
       - name: 'Checkout Repository'
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: 'Dependency Review'
         uses: actions/dependency-review-action@v5

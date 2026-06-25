@@ -26,7 +26,7 @@ import { RouterTestingHarness } from '@angular/router/testing';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 <%_ if (enableTranslation) { _%>
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
 import { of } from 'rxjs';
 
@@ -37,10 +37,10 @@ import { UserManagementDetail } from './user-management-detail';
 describe('User Management Detail Component', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-<%_ if (enableTranslation) { _%>
-      imports: [TranslateModule.forRoot()],
-<%_ } _%>
       providers: [
+<%_ if (enableTranslation) { _%>
+        provideTranslateService(),
+<%_ } _%>
         provideRouter(
           [
             {

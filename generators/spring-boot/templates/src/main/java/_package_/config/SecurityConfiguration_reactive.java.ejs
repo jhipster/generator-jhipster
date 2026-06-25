@@ -291,6 +291,7 @@ public class SecurityConfiguration {
                     .pathMatchers("/services/*/*.js").permitAll()
                     .pathMatchers("/services/*/*.txt").permitAll()
                     .pathMatchers("/services/*/*.json").permitAll()
+                    .pathMatchers("/services/*/i18n/*.json").permitAll()
                     .pathMatchers("/services/*/*.js.map").permitAll()
   <%_ } _%>
                     .pathMatchers("/services/*/management/health/readiness").permitAll()

@@ -22,7 +22,6 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap/modal';
 
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
-import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 import { HealthKey, HealthDetails } from '../health.model';
 
@@ -33,7 +32,6 @@ import { HealthKey, HealthDetails } from '../health.model';
   imports: [
 <%_ if (enableTranslation) { _%>
     TranslateDirective,
-    TranslateModule,
 <%_ } _%>
     KeyValuePipe,
   ],
