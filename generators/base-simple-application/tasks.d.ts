@@ -55,6 +55,7 @@ export type SimpleTaskTypes<
   {
     BootstrapApplicationTaskParam: TaskParamWithControl & ApplicationDefaultsTaskParam<A>;
     LoadingTaskParam: TaskParamWithApplication<A> & ApplicationDefaultsTaskParam<A>;
+    ComposingBootstrapTaskParam: TaskParamWithApplication<A> & ApplicationDefaultsTaskParam<A>;
     PreparingTaskParam: TaskParamWithSource<S> & TaskParamWithApplication<A> & ApplicationDefaultsTaskParam<A>;
     PostPreparingTaskParam: TaskParamWithSource<S> & TaskParamWithApplication<A>;
     DefaultTaskParam: TaskParamWithApplication<A>;

@@ -23,9 +23,8 @@
 
             <div>
                 <<%- jhiPrefixDashed %>-alert-error />
-<%_ for (const field of fields.filter(field => !field.hidden)) {
-  const { fieldName, fieldNameHumanized, fieldType, fieldTypeBlobContent, readonly } = field;
-_%>
+<%_ for (const field of fields.filter(field => !field.hidden)) { _%>
+  <%_ const { fieldName, fieldNameHumanized, fieldType, fieldTypeBlobContent, readonly } = field; _%>
 
             <% if (field.autoGenerate) { %>@if (editForm.controls.<%- field.fieldName %>.value !== null) {<% } %>
                 <% if (field.fieldTypeBinary && !field.blobContentTypeText || field.fieldValidate) { %>@let <%- fieldName %>Ref = editForm.get('<%- fieldName %>')!;<% } %>
@@ -70,22 +69,22 @@ _%>
     <%_ } _%>
     <%_ if (field.fieldTypeLocalDate) { _%>
                     <div class="input-group">
-                        <input id="field_<%- fieldName %>" data-cy="<%- fieldName %>" type="text" class="form-control" name="<%- fieldName %>" ngbDatepicker #<%- fieldName %>Dp="ngbDatepicker" formControlName="<%- fieldName %>"<% if (readonly) { %> [readonly]="true"<% } %>/>
+                        <input id="field_<%- fieldName %>" data-cy="<%- fieldName %>" type="text" class="form-control" name="<%- fieldName %>" ngbDatepicker #<%- fieldName %>Dp="ngbDatepicker" formControlName="<%- fieldName %>"<%- readonly ? ' [readonly]="true"' : '' %>/>
                         <button type="button" class="btn btn-secondary" (click)="<%- fieldName %>Dp.toggle()"><fa-icon icon="calendar-alt" /></button>
                     </div>
     <%_ } else if (field.fieldTypeTimed) { _%>
                     <div class="d-flex">
-                        <input id="field_<%- fieldName %>" data-cy="<%- fieldName %>" type="<%- field.htmlInputType %>" class="form-control" name="<%- fieldName %>" formControlName="<%- fieldName %>" placeholder="YYYY-MM-DD HH:mm"<% if (readonly) { %> [readonly]="true"<% } %>/>
+                        <input id="field_<%- fieldName %>" data-cy="<%- fieldName %>" type="<%- field.htmlInputType %>" class="form-control" name="<%- fieldName %>" formControlName="<%- fieldName %>" placeholder="YYYY-MM-DD HH:mm"<%- readonly ? ' [readonly]="true"' : '' %>/>
                     </div>
     <%_ } else if (field.blobContentTypeText) { _%>
                     <textarea class="form-control" name="<%- fieldName %>" id="field_<%- fieldName %>" data-cy="<%- fieldName %>"
-                              formControlName="<%- fieldName %>"<% if (readonly) { %> [readonly]="true"<% } %>></textarea>
+                              formControlName="<%- fieldName %>"<%- readonly ? ' [readonly]="true"' : '' %>></textarea>
     <%_ } else if (field.fieldTypeBoolean) { _%>
                     <input type="<%- field.htmlInputType %>" class="form-check" name="<%- fieldName %>" id="field_<%- fieldName %>"
-                           data-cy="<%- fieldName %>" formControlName="<%- fieldName %>" <% if (readonly) { %> [readonly]="true"<% } %>/>
+                           data-cy="<%- fieldName %>" formControlName="<%- fieldName %>" <%- readonly ? ' [readonly]="true"' : '' %>/>
     <%_ } else if (field.fieldTypeLocalTime) { _%>
                     <input type="time" class="form-control" name="<%- fieldName %>" id="field_<%- fieldName %>" data-cy="<%- fieldName %>"
-                           formControlName="<%- fieldName %>"<% if (readonly) { %> [readonly]="true"<% } %>/>
+                           formControlName="<%- fieldName %>"<%- readonly ? ' [readonly]="true"' : '' %>/>
     <%_ } else { _%>
                     <input type="<%- field.htmlInputType %>" class="form-control" name="<%- fieldName %>" id="field_<%- fieldName %>" data-cy="<%- fieldName %>"
                            formControlName="<%- fieldName %>"<% if (field.id && !field.autoGenerate) { %> [readonly]="editForm.get('<%- primaryKey.name %>')!.disabled"<% } else if (readonly) { %> [readonly]="true"<% } %>/>
@@ -140,7 +139,7 @@ _%>
                 }
   <%_ } _%>
                 </div>
-            <% if (field.autoGenerate) { %>}<% } %>
+            <%- field.autoGenerate ? '}' : '' %>
 <%_ } _%>
       <div class="mb-3">
         <label class="form-check">
@@ -170,13 +169,12 @@ _%>
         <label class="form-label" for="field_authority">__jhiTranslateTag__('userManagement.profiles')</label>
         <select class="form-control" id="field_authority" multiple name="authority" formControlName="authorities">
         @for (authority of authorities(); track $index) {
-          <option [value]="authority<% if (generateBuiltInAuthorityEntity) { %>.name<% } %>"><% if (generateBuiltInAuthorityEntity) { %>{{ authority.name }}<% } else { %>{{ authority }}<% } %></option>
+          <option [value]="authority<%- generateBuiltInAuthorityEntity ? '.name' : '' %>"><%- generateBuiltInAuthorityEntity ? '{{ authority.name }}' : '{{ authority }}' %></option>
         }
         </select>
       </div>
-<%_ for (const relationship of relationships.filter(rel => rel.otherEntity.primaryKey)) {
-  const { otherEntity, relationshipName, propertyName, otherEntityField, relationshipRequired, otherEntityName, relationshipFieldName, relationshipFieldNamePlural } = relationship;
-_%>
+<%_ for (const relationship of relationships.filter(rel => rel.otherEntity.primaryKey)) { _%>
+  <%_ const { otherEntity, relationshipName, propertyName, otherEntityField, relationshipRequired, otherEntityName, relationshipFieldName, relationshipFieldNamePlural } = relationship; _%>
   <%_ if (relationship.persistableRelationship && !relationship.collection) { _%>
 
                 <div class="mb-3">

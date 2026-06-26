@@ -43,9 +43,6 @@ import org.springframework.transaction.annotation.Transactional;
 <%_ if (reactive) { _%>
 import reactor.core.publisher.Mono;
 <%_ } _%>
-<%_ if (user?.primaryKey?.hasUUID) { _%>
-import java.util.UUID;
-<%_ } _%>
 
 import java.util.*;
 

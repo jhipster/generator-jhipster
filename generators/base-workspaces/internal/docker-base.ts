@@ -39,11 +39,11 @@ export const checkImages = function checkImages(
 ) {
   this.log.log('\nChecking Docker images in applications directories...');
 
-  let imagePath = '';
-  let runCommand = '';
   let hasWarning = false;
   let warningMessage = 'To generate the missing Docker image(s), please run:\n';
   for (const app of applications) {
+    let imagePath;
+    let runCommand;
     if (app.buildTool === MAVEN) {
       imagePath = this.workspacePath(app.appFolder!, '/target/jib-cache');
       runCommand = `./mvnw -ntp -Pprod verify jib:dockerBuild${process.arch === 'arm64' ? ' -Djib-maven-plugin.architecture=arm64' : ''}`;

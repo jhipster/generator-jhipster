@@ -10,6 +10,7 @@ exports[`generator - react:bootstrap bootstrapping default config should prepare
   "applicationTypeMicroservice": false,
   "applicationTypeMonolith": true,
   "authenticationType": "jwt",
+  "authenticationTypeAny": true,
   "authenticationTypeJwt": true,
   "authenticationTypeOauth2": false,
   "authenticationTypeSession": false,

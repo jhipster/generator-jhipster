@@ -79,6 +79,7 @@ const {
   COMPOSING,
   COMPOSING_COMPONENT,
   LOADING,
+  COMPOSING_BOOTSTRAP,
   PREPARING,
   POST_PREPARING,
   DEFAULT,
@@ -120,6 +121,8 @@ export default class CoreGenerator<
   static readonly COMPOSING_COMPONENT = asPriority(COMPOSING_COMPONENT);
 
   static readonly LOADING = asPriority(LOADING);
+
+  static readonly COMPOSING_BOOTSTRAP = asPriority(COMPOSING_BOOTSTRAP);
 
   static readonly PREPARING = asPriority(PREPARING);
 
@@ -1297,9 +1300,9 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
         this.writeDestination(filePath, fileHasCrlf ? normalizeLineEndings(newContent, CRLF) : newContent);
       } catch (error: unknown) {
         if (error instanceof Error) {
-          throw new Error(`Error editing file ${filePath}: ${error.message} at ${error.stack}`);
+          throw new Error(`Error editing file ${filePath}: ${error.message} at ${error.stack}`, { cause: error });
         }
-        throw new Error(`Unknown Error ${error}`);
+        throw new Error(`Unknown Error ${error}`, { cause: error });
       }
       return writeCallback;
     };

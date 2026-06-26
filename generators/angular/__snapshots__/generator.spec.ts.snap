@@ -1271,7 +1271,7 @@ export class UserManagementService extends UserManagementsService {
         const copy = this.convertValueFromClient(userManagement);
         return this.http.post<RestUserManagement>(
           this.resourceUrl,
-           copy 
+          copy
         )
         .pipe(map(res => this.convertResponseFromServer(res)));
     }
@@ -1279,7 +1279,7 @@ export class UserManagementService extends UserManagementsService {
     update(userManagement: IUserManagement): Observable<IUserManagement> {
         const copy = this.convertValueFromClient(userManagement);
         return this.http.put<RestUserManagement>(\`\${this.resourceUrl}/\${encodeURIComponent(this.getUserManagementIdentifier(userManagement))}\`,
-                 copy ,
+                copy,
                 )
         .pipe(map(res => this.convertResponseFromServer(res)));
     }
@@ -1287,7 +1287,7 @@ export class UserManagementService extends UserManagementsService {
     partialUpdate(userManagement: PartialUpdateUserManagement): Observable<IUserManagement> {
         const copy = this.convertValueFromClient(userManagement);
         return this.http.patch<RestUserManagement>(\`\${this.resourceUrl}/\${encodeURIComponent(this.getUserManagementIdentifier(userManagement))}\`,
-                 copy ,
+                copy,
                 )
         .pipe(map(res => this.convertResponseFromServer(res)));
     }

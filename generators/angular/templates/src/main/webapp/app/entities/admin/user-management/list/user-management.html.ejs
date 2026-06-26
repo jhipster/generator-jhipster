@@ -29,7 +29,7 @@
 
             <button id="jh-create-entity" data-cy="entityCreateButton" class="btn btn-primary jh-create-entity create-<%- entityUrl %>" [routerLink]="['/<%- entityPage %>/new']">
                 <fa-icon icon="plus" />
-                <span <% if (searchEngineAny) { %>class="hidden-sm-down" <% } %>>__jhiTranslateTag__('<%- i18nKeyPrefix %>.home.createLabel')</span>
+                <span <%- searchEngineAny ? 'class="hidden-sm-down" ' : '' %>>__jhiTranslateTag__('<%- i18nKeyPrefix %>.home.createLabel')</span>
             </button>
 <%_ } _%>
         </div>
@@ -73,26 +73,25 @@
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>
                 <tr <%- jhiPrefix %>Sort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
-<%_ for (const field of fields.filter(field => !field.hidden && !field.hideListView)) {
-    const { fieldSupportsSortBy } = field;
-_%>
+<%_ for (const field of fields.filter(field => !field.hidden && !field.hideListView)) { _%>
+  <%_ const { fieldSupportsSortBy } = field; _%>
                     <th scope="col"<% if (fieldSupportsSortBy) { %> <%- jhiPrefix %>SortBy="<%- field.fieldName %>"<% } %>>
                         <div class="d-flex">
                             <span>__jhiTranslateTag__('<%- field.propertyTranslationKey %>')</span>
   <%_ if (fieldSupportsSortBy) { _%>
-                        <% if (searchEngineAny && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>@if (!currentSearch()) {<% } %>
+                        <%- (searchEngineAny && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) ? '@if (!currentSearch()) {' : '' %>
                             <fa-icon class="p-1" icon="sort" />
-                        <% if (searchEngineAny && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) { %>}<% } %>
+                        <%- (searchEngineAny && !field.fieldTypeBoolean && !field.fieldTypeNumeric && !field.fieldTypeTemporal) ? '}' : '' %>
   <%_ } _%>
                         </div>
                     </th>
 <%_ } _%>
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
-  <%_ if (relationship.persistableRelationship && (!relationship.collection || paginationNo)) {
-    const fieldName = `.${relationship.otherEntityField}`;
-    const { fieldSupportsSortBy: relatedFieldSupportsSortBy } = relationship.relatedField;
-  _%>
-                    <th scope="col"<% if (relatedFieldSupportsSortBy) { %> <%- jhiPrefix %>SortBy="<%- relationship.relationshipName + (fieldName) %>"<% } %>>
+  <%_ if (relationship.persistableRelationship && (!relationship.collection || paginationNo)) { _%>
+    <%_ const fieldName = `.${relationship.otherEntityField}`;
+        const { fieldSupportsSortBy: relatedFieldSupportsSortBy } = relationship.relatedField;
+    _%>
+                    <th scope="col"<% if (relatedFieldSupportsSortBy) { %> <%- jhiPrefix %>SortBy="<%- relationship.relationshipName + fieldName %>"<% } %>>
                         <div class="d-flex">
                             <span>__jhiTranslateTag__('<%- relationship.propertyTranslationKey %>')</span>
     <%_ if (relatedFieldSupportsSortBy) { _%>
@@ -118,15 +117,16 @@ _%>
                     <th scope="col"></th>
                 </tr>
             </thead>
-            <tbody<% if (paginationInfiniteScroll) { %> infinite-scroll (scrolled)="loadNextPage()" [infiniteScrollDisabled]="!hasMorePage()" [infiniteScrollDistance]="0"<% } %>>
+            <tbody<%- paginationInfiniteScroll ? ' infinite-scroll (scrolled)="loadNextPage()" [infiniteScrollDisabled]="!hasMorePage()" [infiniteScrollDistance]="0"' : '' %>>
             @for (<%- entityInstance %> of <%- entityInstancePlural %>(); track track<%- primaryKey.nameCapitalized %>(<%- entityInstance %>)) {
                 <tr data-cy="entityTable">
 <%_ const primaryKeyField = primaryKey.name;
-const routerLink = ` [routerLink]="['/${entityPage}', ${entityInstance}.${primaryKeyField}, 'view']"`;
-for (field of fields.filter(field => !field.hidden)) {
-    const { fieldName } = field;
-    const { fieldType } = field;
+    const routerLink = ` [routerLink]="['/${entityPage}', ${entityInstance}.${primaryKeyField}, 'view']"`;
 _%>
+<%_ for (field of fields.filter(field => !field.hidden)) { _%>
+  <%_ const { fieldName } = field;
+      const { fieldType } = field;
+  _%>
   <%_ if (field.fieldTypeBinary && field.blobContentTypeImage) { _%>
                     <td>
                     @if (<%- entityInstance %>.<%- fieldName %>) {
@@ -144,8 +144,8 @@ _%>
                     }
                     </td>
   <%_ } else if (field.fieldIsEnum) { _%>
-                    <%# TODO: import enum and use its key as label _%>
-                    <td<% if (field.id) { %>><a<%- routerLink %><% } %>>__jhiTranslateTagEnum__('<%- frontendAppName %>.<%- fieldType %>', { "value": "<%- entityInstance %>.<%- fieldName %> ?? 'null'" })<% if (field.id) { %></a><% } %></td>
+                    <%# TODO: import enum and use its key as label -%>
+                    <td<% if (field.id) { %>><a<%- routerLink %><% } %>>__jhiTranslateTagEnum__('<%- frontendAppName %>.<%- fieldType %>', { "value": "<%- entityInstance %>.<%- fieldName %> ?? 'null'" })<%- field.id ? '</a>' : '' %></td>
   <%_ } else if (field.fieldTypeTimed) { _%>
                     <td>{{ <%- entityInstance %>.<%- fieldName %> | formatMediumDatetime }}</td>
   <%_ } else if (field.fieldTypeLocalDate) { _%>
@@ -153,14 +153,14 @@ _%>
   <%_ } else if (field.fieldTypeDuration) { _%>
                     <td title="{{ <%- entityInstance %>.<%- fieldName %> }}">{{ <%- entityInstance %>.<%- fieldName %> | duration }}</td>
   <%_ } else { _%>
-                    <td<% if (field.id) { %>><a<%- routerLink %><% } %>>{{ <%- entityInstance %>.<%- fieldName %> }}<% if (field.id) { %></a><% } %></td>
+                    <td<% if (field.id) { %>><a<%- routerLink %><% } %>>{{ <%- entityInstance %>.<%- fieldName %> }}<%- field.id ? '</a>' : '' %></td>
   <%_ } _%>
 <%_ } _%>
-<%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) {
-    const { relationshipFieldName } = relationship;
-    const { relationshipFieldNamePlural } = relationship;
-    const { otherEntityField } = relationship;
-_%>
+<%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
+  <%_ const { relationshipFieldName } = relationship;
+      const { relationshipFieldNamePlural } = relationship;
+      const { otherEntityField } = relationship;
+  _%>
   <%_ if (relationship.persistableRelationship && (!relationship.collection || paginationNo)) { _%>
                     <td>
     <%_ if (relationship.otherEntityUser) { _%>
@@ -195,15 +195,14 @@ _%>
                     <td>
                     @for (authority of <%- entityInstance %>.authorities; track $index) {
                         <div>
-                            <span class="badge bg-info">{{ authority<% if (generateBuiltInAuthorityEntity) { %>.name<% } %> }}</span>
+                            <span class="badge bg-info">{{ authority<%- generateBuiltInAuthorityEntity ? '.name' : '' %> }}</span>
                         </div>
                     }
                     </td>
                     <td class="text-end">
                         <div class="btn-group">
 <%_ for (const relationship of relationships.filter(rel => !rel.otherEntity.embedded)) { _%>
-  <%_ if (relationship.otherEntity.jpaMetamodelFiltering && relationship.otherEntity.paginationPagination && relationship.collection && !relationship.persistableRelationship) {
-  _%>
+  <%_ if (relationship.otherEntity.jpaMetamodelFiltering && relationship.otherEntity.paginationPagination && relationship.collection && !relationship.persistableRelationship) { _%>
                             <button type="submit"
                                     [routerLink]="['/<%- relationship.otherEntity.entityPage %>']"
                                     [queryParams]="{ 'filter[<%- relationship.otherEntityRelationshipName %>Id.in]': <%- entityInstance %>.<%- primaryKey.name %> }"

@@ -2,6 +2,7 @@ import assert from 'node:assert';
 import { randomInt } from 'node:crypto';
 import { isAbsolute, join, relative } from 'node:path';
 import { mock } from 'node:test';
+import { pathToFileURL } from 'node:url';
 
 import type { BaseGenerator as YeomanGenerator, GetGeneratorConstructor } from '@yeoman/types';
 import { merge, pick, snakeCase } from 'lodash-es';
@@ -358,7 +359,7 @@ class JHipsterRunContext<Generator extends BaseCoreGenerator = BaseCoreGenerator
     return super.withMockedGenerators(generators).onEnvironment(env => {
       for (const gen of generators.filter(gen => gen.startsWith('jhipster:'))) {
         const meta = (env as any).store.getMeta(gen);
-        meta!.importModule = () => import(getGenerator(gen));
+        meta!.importModule = () => import(pathToFileURL(getGenerator(gen)).href);
       }
     });
   }
@@ -548,7 +549,7 @@ class JHipsterTest<JHipsterTestGenerator extends BaseCoreGenerator = BaseCoreGen
   }
 
   async forwardsFeaturesParameter(Generator?: any): Promise<boolean> {
-    Generator ??= (await import(getGenerator(this.defaultGenerator!))).default;
+    Generator ??= (await import(pathToFileURL(getGenerator(this.defaultGenerator!)).href)).default;
     const instance = new Generator([], { help: true, namespace: 'foo', resolved: 'bar', env: { cwd: 'foo' } }, { uniqueBy: 'bar' });
     return instance.features!.uniqueBy === 'bar';
   }

@@ -182,11 +182,11 @@ describe('<%- entityAngularName %> Management Component', () => {
     describe('track<%- primaryKey.nameCapitalized %>', () => {
         it('should forward to <%- entityInstance %>Service.get<%- entityAngularName %>Identifier', () => {
             const entity = <%- tsPrimaryKeySamples[0] %>;
-  <%_ if (clientTestFrameworkVitest) { _%>
+<%_ if (clientTestFrameworkVitest) { _%>
             <%- clientTestFramework %>.spyOn(service, 'get<%- entityAngularName %>Identifier');
-  <%_ } else { _%>
+<%_ } else { _%>
             <%- clientTestFramework %>.spyOn(service, 'get<%- entityAngularName %>Identifier').and.returnValue(entity.<%- primaryKey.name %>);
-  <%_ } _%>
+<%_ } _%>
             const <%- primaryKey.name %> = comp.track<%- primaryKey.nameCapitalized %>(entity);
             expect(service.get<%- entityAngularName %>Identifier).toHaveBeenCalledWith(entity);
             expect(<%- primaryKey.name %>).toBe(entity.<%- primaryKey.name %>);

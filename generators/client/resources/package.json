@@ -3,7 +3,7 @@
     "dayjs": "1.11.21"
   },
   "devDependencies": {
-    "swagger-ui-dist": "5.32.6"
+    "swagger-ui-dist": "5.32.7"
   },
   "packageManager": "npm@11"
 }
