@@ -21,7 +21,7 @@ import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 <%_ } _%>
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 <%_ if (enableTranslation) { _%>
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
 import { of } from 'rxjs';
 
@@ -34,14 +34,14 @@ describe('Metrics', () => {
   let fixture: ComponentFixture<Metrics>;
   let service: MetricsService;
 
+<%_ if (enableTranslation) { _%>
   beforeEach(() => {
     TestBed.configureTestingModule({
-<%_ if (enableTranslation) { _%>
-      imports: [TranslateModule.forRoot()],
-<%_ } _%>
+      providers: [provideTranslateService()],
     });
   });
 
+<%_ } _%>
   beforeEach(() => {
     fixture = TestBed.createComponent(Metrics);
     comp = fixture.componentInstance;

@@ -23,7 +23,6 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap/modal';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
-import { TranslateModule } from '@ngx-translate/core';
 <%_ } _%>
 import { AlertError } from 'app/shared/alert/alert-error';
 import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
@@ -34,8 +33,13 @@ import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './<%- entityFileName %>-delete-dialog.html',
     imports: [
-<%_ if (enableTranslation) { _%>TranslateDirective, TranslateModule, 
-<%_ } _%>FormsModule, FontAwesomeModule, AlertError],
+<%_ if (enableTranslation) { _%>
+      TranslateDirective,
+<%_ } _%>
+      FormsModule,
+      FontAwesomeModule,
+      AlertError,
+    ],
 })
 export class <%- entityAngularName %>DeleteDialog {
     <%- entityInstance %>?: I<%- entityAngularName %>;
@@ -47,8 +51,8 @@ export class <%- entityAngularName %>DeleteDialog {
         this.activeModal.dismiss();
     }
 
-    confirmDelete(id: <%- tsKeyType %>): void {
-        this.<%- entityInstance %>Service.delete(id).subscribe(() => {
+    confirmDelete(<%- primaryKey.name %>: <%- tsKeyType %>): void {
+        this.<%- entityInstance %>Service.delete(<%- primaryKey.name %>).subscribe(() => {
             this.activeModal.close(ITEM_DELETED_EVENT);
         });
     }

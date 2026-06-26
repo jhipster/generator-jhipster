@@ -29,18 +29,13 @@ import { finalize<%- relationships.some(rel => rel.persistableRelationship) ? ',
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
   <%_ if (builtInUserManagement) { _%>
 import { LANGUAGES } from 'app/config/language.constants';
 import { FindLanguageFromKeyPipe } from 'app/shared/language';
   <%_ } _%>
 <%_ } _%>
-<%_ let anyFieldHasTypeLocalDate = false; _%>
-<%_ for (const field of fields.filter(field => !field.hidden)) { _%>
-  <%_ if (field.fieldTypeLocalDate) { _%>
-    <%_ anyFieldHasTypeLocalDate = true; _%>
-  <%_ } _%>
-<%_ } _%>
+<%_ const anyFieldHasTypeLocalDate = fields.some(field => !field.hidden && field.fieldTypeLocalDate); _%>
 <%_ if (anyFieldHasTypeLocalDate) { _%>
 import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap/datepicker';
 <%_ } _%>
@@ -76,14 +71,22 @@ import { <%- importedType %> } from '<%- importedPath %>';
     templateUrl: './<%- entityFileName %>-update.html',
     imports: [
 <%_ if (enableTranslation) { _%>
-TranslateDirective, TranslateModule
-  <%_ if (builtInUserManagement) { %>, FindLanguageFromKeyPipe
-  <%_ } _%>,
-<%_ } _%>FontAwesomeModule, AlertError, ReactiveFormsModule
-<%_ if (anyFieldHasTypeLocalDate) { _%>, NgbInputDatepicker
+      TranslateDirective,
+      TranslatePipe,
+  <%_ if (builtInUserManagement) { _%>
+      FindLanguageFromKeyPipe,
+  <%_ } _%>
 <%_ } _%>
-<%_ if (anyFieldHasDocumentation) { _%>, NgbTooltip
-<%_ } _%>],
+      FontAwesomeModule,
+      AlertError,
+      ReactiveFormsModule,
+<%_ if (anyFieldHasTypeLocalDate) { _%>
+      NgbInputDatepicker,
+<%_ } _%>
+<%_ if (anyFieldHasDocumentation) { _%>
+      NgbTooltip,
+<%_ } _%>
+    ],
 })
 export class <%- entityAngularName %>Update implements OnInit {
     readonly isSaving = signal(false);
@@ -194,7 +197,7 @@ export class <%- entityAngularName %>Update implements OnInit {
         this.isSaving.set(true);
         const <%- entityInstance %> = this.<%- entityInstance %>FormService.get<%- entityAngularName %>(this.editForm);
 <%_ if (updatableEntity) { _%>
-        if (<%- entityInstance %>.<% if (builtInUserManagement) { %>id<% } else { %><%- primaryKey.name %><% } %> === null) {
+        if (<%- entityInstance %>.<%- builtInUserManagement ? 'id' : primaryKey.name %> === null) {
 <%_ } _%>
             this.subscribeToSaveResponse(this.<%- entityInstance %>Service.create(<%- entityInstance %>));
 <%_ if (updatableEntity) { _%>
@@ -204,7 +207,7 @@ export class <%- entityAngularName %>Update implements OnInit {
 <%_ } _%>
     }
 
-    protected subscribeToSaveResponse(result: Observable<HttpResponse<I<%- entityAngularName %>>>): void {
+    protected subscribeToSaveResponse(result: Observable<I<%- entityAngularName %> | null>): void {
         result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
             next: () => this.onSaveSuccess(),
             error: () => this.onSaveError()
@@ -233,12 +236,14 @@ export class <%- entityAngularName %>Update implements OnInit {
     <%_ const relationshipsWithCustomSharedOptions = relationshipsByEntityNeedingOptions.filter(rel => !relationshipsWithCustomUniqueOptions.includes(rel)); _%>
     <%_ if (relationshipsWithCustomSharedOptions.length > 0) { _%>
       <%_ const { otherEntity } = relationshipsByEntityNeedingOptions[0]; _%>
-        this.<%- otherEntity.entityInstancePlural %>SharedCollection.set(this.<%- otherEntity.entityInstance %>Service.add<%- otherEntity.entityAngularName %>ToCollectionIfMissing<I<%- otherEntity.entityAngularName %>>(
-            this.<%- otherEntity.entityInstancePlural %>SharedCollection(),
+        this.<%- otherEntity.entityInstancePlural %>SharedCollection.update(<%- otherEntity.entityInstancePlural %> =>
+            this.<%- otherEntity.entityInstance %>Service.add<%- otherEntity.entityAngularName %>ToCollectionIfMissing<I<%- otherEntity.entityAngularName %>>(
+                <%- otherEntity.entityInstancePlural %>,
       <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
-            <%- relationship.collection ? '...(' : '' %><%- entityInstance %>.<%- relationship.propertyName %><%- relationship.collection ? ' ?? [])' : '' %>,
+                <%- relationship.collection ? '...(' : '' %><%- entityInstance %>.<%- relationship.propertyName %><%- relationship.collection ? ' ?? [])' : '' %>,
       <%_ } _%>
-        ));
+            ),
+        );
     <%_ } _%>
     <%_ for (const relationship of relationshipsWithCustomUniqueOptions) { _%>
       <%_ const { otherEntity } = relationship; _%>

@@ -28,6 +28,10 @@ Support this project by becoming a sponsor! [Become a sponsor](https://opencolle
 
 **Thank you to our sponsors!**
 
+### Gold sponsors
+
+[![GoldSponsors][gold-sponsors-image]][gold-sponsors-url]
+
 ### Bronze sponsors
 
 [![BronzeSponsors][bronze-sponsors-image]][bronze-sponsors-url]
@@ -128,6 +132,8 @@ Additional builds at [hipster-labs/jhipster-daily-builds](https://github.com/hip
 [backers-url]: https://opencollective.com/generator-jhipster
 [bronze-sponsors-image]: https://opencollective.com/generator-jhipster/tiers/bronze-sponsor.svg?avatarHeight=120&width=890
 [bronze-sponsors-url]: https://opencollective.com/generator-jhipster
+[gold-sponsors-image]: https://opencollective.com/generator-jhipster/tiers/gold-sponsor.svg?avatarHeight=180&width=890
+[gold-sponsors-url]: https://opencollective.com/generator-jhipster
 [issue-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=BUG_REPORT.md
 [feature-template]: https://github.com/jhipster/generator-jhipster/issues/new?template=FEATURE_REQUEST.md
 [npmcharts-image]: https://img.shields.io/npm/dm/generator-jhipster.svg?label=Downloads&style=flat

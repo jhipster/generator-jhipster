@@ -80,7 +80,11 @@ export default class Main implements OnInit {
 
 <%_ if (enableI18nRTL) { _%>
   private updatePageDirection(): void {
-    this.renderer.setAttribute(this.htmlElement, 'dir', this.findLanguageFromKeyPipe.isRTL(this.translateService.getCurrentLang()) ? 'rtl' : 'ltr');
+    this.renderer.setAttribute(
+      this.htmlElement,
+      'dir',
+      this.findLanguageFromKeyPipe.isRTL(this.translateService.getCurrentLang() ?? '<%- nativeLanguage %>') ? 'rtl' : 'ltr',
+    );
   }
 <%_ } _%>
 }

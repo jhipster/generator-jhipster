@@ -22,7 +22,7 @@ import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap/modal';
 <%_ if (enableTranslation) { _%>
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
 
 import { MetricsModalThreads } from './metrics-modal-threads';
@@ -35,10 +35,12 @@ describe('MetricsModalThreads', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      providers: [
 <%_ if (enableTranslation) { _%>
-      imports: [TranslateModule.forRoot()],
+        provideTranslateService(),
 <%_ } _%>
-      providers: [NgbActiveModal],
+        NgbActiveModal,
+      ],
     });
   });
 

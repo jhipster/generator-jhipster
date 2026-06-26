@@ -19,7 +19,7 @@
 import { Component, ChangeDetectionStrategy, inject, signal, OnInit, effect<%- microfrontend && enableTranslation && applicationTypeGateway ? ', EnvironmentInjector' : '' %> } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 <%_ if (enableTranslation) { _%>
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 <%_ } _%>
 
 import { StateStorageService } from 'app/core/auth/state-storage.service';
@@ -61,7 +61,6 @@ import NavbarItem from './navbar-item.model';
     ActiveMenuDirective,
     FindLanguageFromKeyPipe,
     TranslateDirective,
-    TranslateModule,
 <%_ } _%>
   ],
 })
@@ -149,17 +148,8 @@ export default class Navbar implements OnInit {
     // Lazy load microfrontend entities.
   <%_ for (const remote of microfrontends) { _%>
     loadNavbarItems('<%- remote.moduleFederationName %>').then(
-      async items => {
+      items => {
         this.<%- remote.moduleFederationName %>EntityNavbarItems.set(items);
-    <%_ if (enableTranslation && applicationTypeGateway) { _%>
-        try {
-          const applyLazyTranslation = await loadLazyTranslation('<%- remote.moduleFederationName %>');
-          applyLazyTranslation(this.injector);
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.log('Error loading <%- remote.moduleFederationName %> translation module', error);
-        }
-    <%_ } _%>
       },
       (error: unknown) => {
         // eslint-disable-next-line no-console

@@ -103,7 +103,10 @@ import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
     changeDetection: ChangeDetectionStrategy.OnPush,
     templateUrl: './user-management-delete-dialog.html',
     imports: [
-FormsModule, FontAwesomeModule, AlertError],
+      FormsModule,
+      FontAwesomeModule,
+      AlertError,
+    ],
 })
 export class UserManagementDeleteDialog {
     userManagement?: IUserManagement;
@@ -115,8 +118,8 @@ export class UserManagementDeleteDialog {
         this.activeModal.dismiss();
     }
 
-    confirmDelete(id: string): void {
-        this.userManagementService.delete(id).subscribe(() => {
+    confirmDelete(login: string): void {
+        this.userManagementService.delete(login).subscribe(() => {
             this.activeModal.close(ITEM_DELETED_EVENT);
         });
     }
@@ -457,7 +460,6 @@ export class UserManagementDetail {
   },
   "src/main/webapp/app/entities/admin/user-management/list/user-management.spec.ts": {
     "contents": "import { MockInstance, afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import {
   ComponentFixture, TestBed,
@@ -595,7 +597,7 @@ describe('UserManagement Management Component', () => {
   });
 
     describe('trackLogin', () => {
-        it('should forward to userManagementService.getUserManagementIdentifier', () => {
+        it('should forward to userManagementService', () => {
             const entity = {login: 'Oswald.Kertzmann'};
             vitest.spyOn(service, 'getUserManagementIdentifier');
             const login = comp.trackLogin(entity);
@@ -902,7 +904,7 @@ describe('UserManagement routing resolve service', () => {
             next(result) {
               // THEN
               expect(service.find).not.toHaveBeenCalled();
-              expect(result).toEqual(null);
+              expect(result).toBeNull();
               resolve();
             },
           });
@@ -1094,7 +1096,7 @@ describe('UserManagement Service', () => {
             service.delete('ABC').subscribe();
 
             const requests = httpMock.match({ method: 'DELETE' });
-            expect(requests.length).toBe(1);
+            expect(requests).toHaveLength(1);
         });
 
 
@@ -1925,8 +1927,10 @@ import { UserManagementService } from '../service/user-management.service';
     selector: 'jhi-user-management-update',
     templateUrl: './user-management-update.html',
     imports: [
-FontAwesomeModule, AlertError, ReactiveFormsModule
-],
+      FontAwesomeModule,
+      AlertError,
+      ReactiveFormsModule,
+    ],
 })
 export class UserManagementUpdate implements OnInit {
     readonly isSaving = signal(false);
@@ -1968,7 +1972,7 @@ export class UserManagementUpdate implements OnInit {
         }
     }
 
-    protected subscribeToSaveResponse(result: Observable<HttpResponse<IUserManagement>>): void {
+    protected subscribeToSaveResponse(result: Observable<IUserManagement | null>): void {
         result.pipe(finalize(() => this.onSaveFinalize())).subscribe({
             next: () => this.onSaveSuccess(),
             error: () => this.onSaveError()

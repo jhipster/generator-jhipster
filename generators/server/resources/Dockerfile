@@ -40,7 +40,7 @@ FROM memcached:1.6.42-alpine
 
 FROM redis:8.8.0
 
-FROM apache/kafka-native:4.2.0
+FROM apache/kafka-native:4.3.1
 LABEL ALIAS=kafka
 
 FROM apachepulsar/pulsar:4.2.2
@@ -61,7 +61,7 @@ LABEL ALIAS=prometheus-alertmanager
 FROM quay.io/coreos/prometheus-operator:v0.42.1
 LABEL ALIAS=prometheus-operator
 
-FROM grafana/grafana:13.0.2
+FROM grafana/grafana:13.1.0
 LABEL ALIAS=grafana
 
 FROM quay.io/coreos/grafana-watcher:v0.0.8
