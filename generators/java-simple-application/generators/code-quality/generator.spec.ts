@@ -48,10 +48,12 @@ describe(`generator - ${generator}`, () => {
       expect(result.sourceCallsArg).toMatchSnapshot();
     });
 
-    it('should not generate an invalid checkstyle module', () => {
+    it('should generate a valid checkstyle config', () => {
       result.assertNoFileContent('checkstyle.xml', 'TreeWalker');
       result.assertNoFileContent('checkstyle.xml', 'MissingJavadocMethod');
       result.assertNoFileContent('checkstyle.xml', 'allowMissingPropertyJavadoc');
+      result.assertFileContent('checkstyle.xml', '<module name="Checker">');
+      result.assertFileContent('checkstyle.xml', 'io.spring.nohttp.checkstyle.check.NoHttpCheck');
     });
 
     it('should compose with generators', () => {
@@ -81,10 +83,12 @@ describe(`generator - ${generator}`, () => {
       expect(result.sourceCallsArg).toMatchSnapshot();
     });
 
-    it('should not generate an invalid checkstyle module', () => {
+    it('should generate a valid checkstyle config', () => {
       result.assertNoFileContent('checkstyle.xml', 'TreeWalker');
       result.assertNoFileContent('checkstyle.xml', 'MissingJavadocMethod');
       result.assertNoFileContent('checkstyle.xml', 'allowMissingPropertyJavadoc');
+      result.assertFileContent('checkstyle.xml', '<module name="Checker">');
+      result.assertFileContent('checkstyle.xml', 'io.spring.nohttp.checkstyle.check.NoHttpCheck');
     });
 
     it('should generate a valid spotless target', () => {
