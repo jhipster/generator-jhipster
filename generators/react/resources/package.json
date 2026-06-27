@@ -1,7 +1,7 @@
 {
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "7.2.0",
-    "@fortawesome/free-solid-svg-icons": "7.2.0",
+    "@fortawesome/fontawesome-svg-core": "7.3.0",
+    "@fortawesome/free-solid-svg-icons": "7.3.0",
     "@fortawesome/react-fontawesome": "3.3.1",
     "@reduxjs/toolkit": "2.12.0",
     "axios": "1.18.1",
@@ -26,7 +26,7 @@
     "webstomp-client": "1.2.6"
   },
   "devDependencies": {
-    "@eslint-react/eslint-plugin": "5.9.2",
+    "@eslint-react/eslint-plugin": "5.9.3",
     "@eslint/js": "10.0.1",
     "@module-federation/enhanced": "2.6.0",
     "@module-federation/utilities": "3.1.83",
@@ -70,7 +70,7 @@
     "vite": "8.1.0",
     "vitest": "4.1.9",
     "vitest-sonar-reporter": "3.0.0",
-    "webpack": "5.107.2",
+    "webpack": "5.108.0",
     "webpack-cli": "7.0.3",
     "webpack-dev-server": "5.2.5",
     "webpack-merge": "6.0.1",
