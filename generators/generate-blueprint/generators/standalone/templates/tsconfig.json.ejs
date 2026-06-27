@@ -26,8 +26,13 @@
     "noUnusedLocals": true /* Report errors on unused local variables. */,
     "noUnusedParameters": true /* Report errors on unused parameters. */,
     "noImplicitAny": false,
-
-    /* Completeness */
+<%_ if (javascriptBlueprint) { _%>
+    /* Typescript v5 compatibility */
+    "module": "node16",
+    "allowSyntheticDefaultImports": true /* Allow 'import x from y' when a module doesn't have a default export. */,
+    "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
+    "strict": true,
+<%_ } _%>
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   }
 }
