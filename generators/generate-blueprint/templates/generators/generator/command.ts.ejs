@@ -23,6 +23,8 @@ import { command as parentGeneratorCommand } from 'generator-jhipster/generators
 const { configs: parentGeneratorConfigs, arguments: parentGeneratorArguments } = parentGeneratorCommand as JHipsterCommandDefinition;
 <%_ } _%>
 
+import type Generator from './generator.js';
+
 export default {
   configs: {
 <%_ if (!sbs && !customGenerator) { _%>
@@ -34,4 +36,4 @@ export default {
     ...parentGeneratorArguments,
   },
 <%_ } _%>
-} as const satisfies JHipsterCommandDefinition;
+} as const satisfies JHipsterCommandDefinition<Generator>;
