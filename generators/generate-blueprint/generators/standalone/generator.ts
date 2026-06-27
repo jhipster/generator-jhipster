@@ -152,7 +152,7 @@ export default class StandaloneBlueprintGenerator extends GenerateBlueprintBaseG
         }
       },
       packageJson({ application }) {
-        const { jhipsterPackageJson } = application;
+        const { javascriptBlueprint, jhipsterPackageJson } = application;
         const mainDependencies: Record<string, string> = {
           ...jhipsterPackageJson.dependencies,
           ...jhipsterPackageJson.devDependencies,
@@ -169,7 +169,7 @@ export default class StandaloneBlueprintGenerator extends GenerateBlueprintBaseG
             ejslint: 'ejslint generators/**/*.ejs',
             lint: 'eslint',
             'lint-fix': 'npm run ejslint && npm run lint -- --fix',
-            pretest: 'npm run prettier-check && npm run lint && tsc',
+            pretest: `npm run prettier-check && npm run lint${javascriptBlueprint ? '' : ' && tsc'}`,
             test: 'vitest run',
             'update-snapshot': 'vitest run --update',
             vitest: 'vitest',
