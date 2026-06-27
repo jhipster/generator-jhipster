@@ -22,19 +22,15 @@
 <module name="Checker">
 
     <!-- Configure checker to use UTF-8 encoding -->
-    <property name="charset" value="UTF-8"/>
+    <property name="charset" value="UTF-8" />
     <!-- Configure checker to run on files with these extensions -->
-    <property name="fileExtensions" value=""/>
+    <property name="fileExtensions" value="" />
     <!-- For detailed checkstyle configuration, see https://github.com/spring-io/nohttp/tree/master/nohttp-checkstyle -->
-    <module name="io.spring.nohttp.checkstyle.check.NoHttpCheck">
-<%_ if (buildToolMaven) { _%>
-        <property name="allowlist" value="^\Qhttp://maven.apache.org/POM/4.0.0&#10;^\Qhttp://www.w3.org/2001/XMLSchema-instance"/>
-<%_ } _%>
-    </module>
+    <module name="io.spring.nohttp.checkstyle.check.NoHttpCheck" />
     <!-- Allow suppression with comments
        // CHECKSTYLE:OFF
        ... ignored content ...
        // CHECKSTYLE:ON
     -->
-    <module name="SuppressWithPlainTextCommentFilter"/>
+    <module name="SuppressWithPlainTextCommentFilter" />
 </module>
