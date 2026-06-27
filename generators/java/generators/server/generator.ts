@@ -70,7 +70,7 @@ export default class ServerGenerator extends JavaApplicationGenerator {
             'app:start': './gradlew',
             'backend:info': './gradlew -v',
             'backend:doc:test': `./gradlew javadoc ${excludeWebapp}`,
-            'backend:nohttp:test': `./gradlew checkstyleNohttp ${excludeWebapp}`,
+            'backend:nohttp:test': `./gradlew checkstyleNohttp checkstyleMain spotlessCheck ${excludeWebapp}`,
             'backend:start': `./gradlew ${excludeWebapp}`,
             'java:jar': './gradlew bootJar -x test -x integrationTest',
             'java:war': './gradlew bootWar -Pwar -x test -x integrationTest',

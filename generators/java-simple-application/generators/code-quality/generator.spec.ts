@@ -48,6 +48,14 @@ describe(`generator - ${generator}`, () => {
       expect(result.sourceCallsArg).toMatchSnapshot();
     });
 
+    it('should generate a valid checkstyle config', () => {
+      result.assertNoFileContent('checkstyle.xml', 'TreeWalker');
+      result.assertNoFileContent('checkstyle.xml', 'MissingJavadocMethod');
+      result.assertNoFileContent('checkstyle.xml', 'allowMissingPropertyJavadoc');
+      result.assertFileContent('checkstyle.xml', '<module name="Checker">');
+      result.assertFileContent('checkstyle.xml', 'io.spring.nohttp.checkstyle.check.NoHttpCheck');
+    });
+
     it('should compose with generators', () => {
       expect(result.getComposedGenerators()).toMatchInlineSnapshot(`
 [
@@ -73,6 +81,20 @@ describe(`generator - ${generator}`, () => {
 
     it('should call source snapshot', () => {
       expect(result.sourceCallsArg).toMatchSnapshot();
+    });
+
+    it('should generate a valid checkstyle config', () => {
+      result.assertNoFileContent('checkstyle.xml', 'TreeWalker');
+      result.assertNoFileContent('checkstyle.xml', 'MissingJavadocMethod');
+      result.assertNoFileContent('checkstyle.xml', 'allowMissingPropertyJavadoc');
+      result.assertFileContent('checkstyle.xml', '<module name="Checker">');
+      result.assertFileContent('checkstyle.xml', 'io.spring.nohttp.checkstyle.check.NoHttpCheck');
+    });
+
+    it('should generate a valid spotless target', () => {
+      const gradleFile = 'buildSrc/src/main/groovy/jhipster.code-quality-conventions.gradle';
+      result.assertFileContent(gradleFile, "target 'src/*/java/**/*.java'");
+      result.assertNoFileContent(gradleFile, /target\s*=/);
     });
 
     it('should compose with generators', () => {
