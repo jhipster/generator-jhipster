@@ -48,7 +48,7 @@ runs:
     - name: 'mvn(imperative): cache dependencies'
       run: |
         echo "::group::maven(imperative)"
-        jhipster.cjs generate-sample cache.jdl --skip-install --workspaces --monorepository --skip-git --skip-jhipster-dependencies
+        jhipster.mjs generate-sample cache.jdl --skip-install --workspaces --monorepository --skip-git --skip-jhipster-dependencies
         npm run backend:build-cache -- --ntp || true
         cd app1
         ./npmw -v
@@ -63,7 +63,7 @@ runs:
     - name: 'mvn(reactive): cache dependencies'
       run: |
         echo "::group::maven(reactive)"
-        jhipster.cjs generate-sample cache.jdl --skip-install --workspaces --reactive --websocket no --monorepository --skip-git --skip-jhipster-dependencies
+        jhipster.mjs generate-sample cache.jdl --skip-install --workspaces --reactive --websocket no --monorepository --skip-git --skip-jhipster-dependencies
         npm install --force
         npm run backend:build-cache -- --ntp || true
         echo "::endgroup::"
@@ -77,7 +77,7 @@ runs:
     - name: 'gradle(imperative): cache dependencies'
       run: |
         echo "::group::gradle(imperative)"
-        jhipster.cjs generate-sample cache.jdl --skip-install --workspaces --build gradle --monorepository --skip-git --skip-jhipster-dependencies
+        jhipster.mjs generate-sample cache.jdl --skip-install --workspaces --build gradle --monorepository --skip-git --skip-jhipster-dependencies
         npm install --force
         npm run backend:build-cache || true
         cd app1
@@ -93,7 +93,7 @@ runs:
     - name: 'gradle(reactive): cache dependencies'
       run: |
         echo "::group::gradle(reactive)"
-        jhipster.cjs generate-sample cache.jdl --skip-install --workspaces --build gradle --reactive --websocket no --monorepository --skip-git --skip-jhipster-dependencies
+        jhipster.mjs generate-sample cache.jdl --skip-install --workspaces --build gradle --reactive --websocket no --monorepository --skip-git --skip-jhipster-dependencies
         npm install --force
         npm run backend:build-cache || true
         echo "::endgroup::"

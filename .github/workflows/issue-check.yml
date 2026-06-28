@@ -76,9 +76,9 @@ jobs:
           jhipster-bom-ref: main
       - name: 'GENERATION: project'
         id: project
-        run: jhipster.cjs from-issue ${{ inputs.issue || github.event.issue.number }} --no-code-workspace --disable-blueprints
+        run: jhipster.mjs from-issue ${{ inputs.issue || github.event.issue.number }} --no-code-workspace --disable-blueprints
       - name: 'GENERATION: jhipster info'
-        run: jhipster.cjs info
+        run: jhipster.mjs info
       #----------------------------------------------------------------------
       # Launch tests
       #----------------------------------------------------------------------

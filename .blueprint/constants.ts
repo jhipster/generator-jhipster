@@ -8,7 +8,7 @@ export const testIntegrationRelativeFolder = '.blueprint/generate-sample/templat
 export const testIntegrationFolder = join(packageRoot, testIntegrationRelativeFolder);
 export const samplesFolder = join(testIntegrationFolder, 'samples');
 
-export const jhipsterBin = join(packageRoot, 'bin/jhipster.cjs');
+export const jhipsterBin = join(packageRoot, 'bin/jhipster.mjs');
 
 export const jdlSamplesFolder = join(testIntegrationFolder, 'jdl-samples');
 export const dailyBuildsFolder = join(testIntegrationFolder, 'daily-builds');

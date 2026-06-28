@@ -62,7 +62,7 @@ jobs:
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
-      - run: jhipster.cjs ci-utils --export-github-output
+      - run: jhipster.mjs ci-utils --export-github-output
         id: jhipster-output
       - uses: jhipster/actions/build-jhipster-bom@v1
         with:
@@ -71,7 +71,7 @@ jobs:
         working-directory: ${{ github.workspace }}
       - name: 'GENERATION: generate blueprint'
         run: |
-          jhipster.cjs generate-sample generate-blueprint-samples/${{ matrix.sample }} --sample-yorc-folder --entities-sample none --link-jhipster-dependency --generate-snapshots
+          jhipster.mjs generate-sample generate-blueprint-samples/${{ matrix.sample }} --sample-yorc-folder --entities-sample none --link-jhipster-dependency --generate-snapshots
           npm link
           cat package.json
         working-directory: ${{ github.workspace }}/generator-jhipster-foo
@@ -86,14 +86,14 @@ jobs:
           generator-path: generator-jhipster
           application-folder: generator-jhipster-foo
           compare-folder: generator-jhipster-foo
-          cmd: jhipster.cjs generate-sample generate-blueprint-samples/${{ matrix.sample }} --sample-yorc-folder --entities-sample none --link-jhipster-dependency --skip-checks --skip-install --no-insight
+          cmd: jhipster.mjs generate-sample generate-blueprint-samples/${{ matrix.sample }} --sample-yorc-folder --entities-sample none --link-jhipster-dependency --skip-checks --skip-install --no-insight
         env:
           # generate-sample uses JHI_FOLDER_APP to generate the application.
           JHI_FOLDER_APP: ${{ github.workspace }}/base/generator-jhipster-foo
       - name: 'GENERATION: project'
         run: jhipster-foo --defaults --client-test-frameworks cypress --skip-jhipster-dependencies
         env:
-          JHI_CLI: jhipster.cjs
+          JHI_CLI: jhipster.mjs
           JHIPSTER_DEPENDENCIES_VERSION: ${{ steps.jhipster-output.outputs.jhipster-dependencies-version }}
       - name: 'GENERATION: jhipster info'
         run: jhipster info

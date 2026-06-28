@@ -6,7 +6,7 @@ import { execa } from 'execa';
 import { getPackageRoot } from '../lib/index.ts';
 import { basicHelpers as helpers, runResult } from '../lib/testing/index.ts';
 
-const jhipsterCli = join(getPackageRoot(), 'bin/jhipster.cjs');
+const jhipsterCli = join(getPackageRoot(), 'bin/jhipster.mjs');
 
 describe('allows customizing JDL definitions', () => {
   it('accepts a custom JDL definition', async () => {

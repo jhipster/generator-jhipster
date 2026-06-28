@@ -48,7 +48,7 @@ jobs:
           node-version: ${{ steps.node-version.outputs.node-version }}
       - run: npm ci --prod --engine-strict --ignore-scripts
       - id: build
-        run: bin/jhipster.cjs github-build-matrix docker-compose-integration --event-name ${{ github.event_name }}
+        run: bin/jhipster.mjs github-build-matrix docker-compose-integration --event-name ${{ github.event_name }}
   applications:
     name: ${{ matrix.job-name }}
     needs: build-matrix
@@ -83,13 +83,13 @@ jobs:
         with:
           jhipster-bom-ref: main
       - name: Generate project
-        run: jhipster.cjs ${{ matrix.args }} --defaults
+        run: jhipster.mjs ${{ matrix.args }} --defaults
         env:
           JHIPSTER_DEPENDENCIES_VERSION: 0.0.0-CICD
           JHI_SKIP_JHIPSTER_DEPENDENCIES: true
           JHI_PROFILE: ${{ matrix.default-environment }}
           JHI_JDL: ${{ matrix.jdl }}
-      - run: jhipster.cjs info
+      - run: jhipster.mjs info
       - run: ${{ matrix.cmd-e2e }}
         id: e2e
       - name: Upload cypress screenshots

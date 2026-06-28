@@ -59,7 +59,7 @@ jobs:
           binary-dir: ${{ github.workspace }}/bin
       - run: npm ci --prod --engine-strict --ignore-scripts
       - name: Parse POM
-        run: jhipster.cjs update-spring-boot ${{ inputs.springBootVersion }} ${{ inputs.repository }} --force
+        run: jhipster.mjs update-spring-boot ${{ inputs.springBootVersion }} ${{ inputs.repository }} --force
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v8
         with:

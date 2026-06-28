@@ -100,7 +100,7 @@ export const command = {
 
 describe('cli', () => {
   const __filename = fileURLToPath(import.meta.url);
-  const jhipsterCli = join(dirname(__filename), '..', 'bin', 'jhipster.cjs');
+  const jhipsterCli = join(dirname(__filename), '..', 'bin', 'jhipster.mjs');
   const logger = { verboseInfo: esmocha.fn(), warn: esmocha.fn(), fatal: esmocha.fn(), debug: esmocha.fn() };
   const getCommand = esmocha.fn<typeof actualGetCommand>();
   let mockCli: (argv: string[], opts?: Record<string, any>) => Promise<JHipsterCommand>;

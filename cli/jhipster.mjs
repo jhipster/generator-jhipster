@@ -18,7 +18,4 @@
  * limitations under the License.
  */
 
-// Executable should be written in commonjs https://github.com/nodejs/modules/issues/152.
-(async () => {
-  await import('./cli.ts');
-})();
+import './cli.ts';

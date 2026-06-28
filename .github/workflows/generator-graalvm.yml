@@ -46,7 +46,7 @@ jobs:
           node-version: ${{ steps.node-version.outputs.node-version }}
       - run: npm ci --prod --engine-strict --ignore-scripts
       - id: build
-        run: bin/jhipster.cjs github-build-matrix graalvm --event-name ${{ github.event_name }}
+        run: bin/jhipster.mjs github-build-matrix graalvm --event-name ${{ github.event_name }}
   applications:
     name: ${{ matrix.job-name }}
     runs-on: ${{ matrix.os }}
@@ -82,13 +82,13 @@ jobs:
       - run: npm ci --prod --engine-strict --ignore-scripts
         working-directory: ${{ github.workspace }}/generator-jhipster
       - name: 'GENERATION: project'
-        run: jhipster.cjs jdl --skip-jhipster-dependencies --skip-install
+        run: jhipster.mjs jdl --skip-jhipster-dependencies --skip-install
         env:
           JHI_FOLDER_APP: ${{ github.workspace }}/app
           JHIPSTER_DEPENDENCIES_VERSION: ${{ matrix.jhipster-bom-cicd-version }}
           JHI_JWT_SECRET_KEY: ${{ matrix.jwt-secret-key }}
           JHI_JDL: ${{ matrix.jdl }}
-      - run: jhipster.cjs info
+      - run: jhipster.mjs info
       #----------------------------------------------------------------------
       # Detect changes against base commit
       #----------------------------------------------------------------------
@@ -99,7 +99,7 @@ jobs:
           !contains(github.event.pull_request.labels.*.name, 'pr: disable-compare')
         with:
           generator-path: generator-jhipster
-          cmd: jhipster.cjs jdl --skip-jhipster-dependencies --skip-install
+          cmd: jhipster.mjs jdl --skip-jhipster-dependencies --skip-install
         env:
           # generate-sample uses JHI_FOLDER_APP to generate the application.
           JHI_FOLDER_APP: ${{ github.workspace }}/base/app

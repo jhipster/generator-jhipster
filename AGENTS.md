@@ -25,13 +25,13 @@ Snapshots live next to specs as `*.snap` and are committed. Never hand-edit them
 
 Two options (see `DEVELOPMENT.md`):
 
-- JIT: `alias jhipster="$PWD/bin/jhipster.cjs"` — no build step needed.
+- JIT: `alias jhipster="$PWD/bin/jhipster.mjs"` — no build step needed.
 - Linked build: `npm run build && npm link`; rebuild after changes.
   On generated apps use `jhipster --skip-jhipster-dependencies` plus `npm link generator-jhipster` so the dev version is picked up. `jhipster --install-path` shows which copy is active.
 
 ## Big-picture architecture
 
-- CLI entry: `cli/jhipster.cjs` → `cli/cli.ts` (env checks) → `cli/program.ts` (commander parsing, generator/blueprint lookup) → spawns a Yeoman Environment which runs the selected generator.
+- CLI entry: `cli/jhipster.mjs` → `cli/cli.ts` (env checks) → `cli/program.ts` (commander parsing, generator/blueprint lookup) → spawns a Yeoman Environment which runs the selected generator.
 - Generator hierarchy (extend the lowest level that has what you need):
   `GeneratorBaseCore` → `GeneratorBase` (blueprint composition) → `GeneratorApplication` (entity APIs).
 - Each generator lives in `generators/<name>/` with a fixed layout:

@@ -52,7 +52,7 @@ jobs:
       - run: npm ci --engine-strict --ignore-scripts
       - run: npm run prettier:check
       - run: npm pack
-      - run: npx -y --package generator-jhipster-$(./bin/jhipster.cjs --version).tgz jhipster --version
+      - run: npx -y --package generator-jhipster-$(./bin/jhipster.mjs --version).tgz jhipster --version
       - run: npm test
         if: >-
           !contains(github.event.head_commit.message, '[ci skip]') &&

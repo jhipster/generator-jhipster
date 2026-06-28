@@ -2,7 +2,7 @@
  * Microservice stack sample to test compilation and base microfrontend functionality.
  *
  * @example
- * jhipster.cjs generate-sample mf-simple.jdl --client-framework vue
+ * jhipster.mjs generate-sample mf-simple.jdl --client-framework vue
  */
 
 application {

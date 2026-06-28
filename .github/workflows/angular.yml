@@ -60,7 +60,7 @@ jobs:
           node-version: ${{ steps.node-version.outputs.node-version }}
       - run: npm ci --prod --engine-strict --ignore-scripts
       - id: build
-        run: bin/jhipster.cjs github-build-matrix angular --event-name ${{ github.event_name }}
+        run: bin/jhipster.mjs github-build-matrix angular --event-name ${{ github.event_name }}
   applications:
     name: ${{ matrix.job-name }}
     runs-on: ${{ matrix.os || 'ubuntu-latest' }}
@@ -110,12 +110,12 @@ jobs:
       - run: npm ci --prod --engine-strict --ignore-scripts
         working-directory: ${{ github.workspace }}/generator-jhipster
       - name: 'GENERATION: project'
-        run: jhipster.cjs generate-sample ${{ matrix.sample }} --skip-jhipster-dependencies --skip-checks --skip-install --no-insight
+        run: jhipster.mjs generate-sample ${{ matrix.sample }} --skip-jhipster-dependencies --skip-checks --skip-install --no-insight
         env:
           JHI_FOLDER_APP: ${{ github.workspace }}/app
           JHIPSTER_DEPENDENCIES_VERSION: ${{ matrix.jhipster-bom-cicd-version }}
           JHI_JWT_SECRET_KEY: ${{ matrix.jwt-secret-key }}
-      - run: jhipster.cjs info
+      - run: jhipster.mjs info
       #----------------------------------------------------------------------
       # Detect changes against base commit
       #----------------------------------------------------------------------
@@ -127,7 +127,7 @@ jobs:
           !contains(github.event.pull_request.labels.*.name, 'pr: disable-compare')
         with:
           generator-path: generator-jhipster
-          cmd: jhipster.cjs generate-sample ${{ matrix.sample }} --skip-jhipster-dependencies --skip-checks --skip-install --no-insight
+          cmd: jhipster.mjs generate-sample ${{ matrix.sample }} --skip-jhipster-dependencies --skip-checks --skip-install --no-insight
         env:
           # generate-sample uses JHI_FOLDER_APP to generate the application.
           JHI_FOLDER_APP: ${{ github.workspace }}/base/app

@@ -21,11 +21,11 @@ To run it you need to compile to JavaScript or use a just-in-time compilation. `
 
 #### Running jit executable
 
-The executable is located at `bin/jhipster.cjs`.
+The executable is located at `bin/jhipster.mjs`.
 You can alias it to `jhipster` command:
 
 ```shell
-alias jhipster="GLOBAL_PATH/generator-jhipster/bin/jhipster.cjs"
+alias jhipster="GLOBAL_PATH/generator-jhipster/bin/jhipster.mjs"
 ```
 
 #### Globally linked compiled package
@@ -41,12 +41,12 @@ In your cloned `generator-jhipster` project, run `npm ci` and then run `npm link
 
 For testing, you will want to generate an application, and there is a specific issue here: for each application, JHipster installs a local version of itself. This is made to enable several applications to each use a specific JHipster version (application A uses JHipster 3.1.0, and application B uses JHipster 3.2.0).
 
-#### Generating new applications from the tests samples using node bin/jhipster.cjs
+#### Generating new applications from the tests samples using node bin/jhipster.mjs
 
 To generate a new application, you can run the following command in your terminal:
 
 ```shell
-node bin/jhipster.cjs generate-sample ng-default --global
+node bin/jhipster.mjs generate-sample ng-default --global
 ```
 
 From the root of your cloned `generator-jhipster` project, this will generate a sample application in the current folder using the local version of JHipster. ng-default is the name of the sample application, you can replace it with any other sample name in the [code samples](./.blueprint/generate-sample/templates/test-integration/samples) to generate a sample application. By default, the sample will be generated in the `../jhipster-samples` folder.
@@ -100,7 +100,7 @@ As modifying the JHipster generator includes modifying Java and JavaScript templ
 
 ### Use a debugger
 
-It is possible to debug JHipster's code using a Node.js debugger. To achieve this setup your debugger to launch `cli/jhipster.cjs`.
+It is possible to debug JHipster's code using a Node.js debugger. To achieve this setup your debugger to launch `cli/jhipster.mjs`.
 
 #### Debugging with VSCode
 
@@ -114,7 +114,7 @@ When you start intelliJ IDEA on the `generator-jhipster` project, you'll have ac
 If you want to test a specific generator, you can create a new Node.js run configuration with the following settings:
 
 ```
-application-parameters="generate-sample ms-ng-oauth2-mongodb-caffeine --global" path-to-js-file="bin/jhipster.cjs" typescript-loader="bundled" working-dir="$PROJECT_DIR$"
+application-parameters="generate-sample ms-ng-oauth2-mongodb-caffeine --global" path-to-js-file="bin/jhipster.mjs" typescript-loader="bundled" working-dir="$PROJECT_DIR$"
 ```
 
 ms-ng-oauth2-mongodb-caffeine is the name of the sample application, you can replace it with any other sample name in the [code samples](./.blueprint/generate-sample/templates/test-integration/samples) to generate a sample application. By default, the sample will be generated in the `../jhipster-samples` folder.
@@ -149,7 +149,7 @@ Fixing lint and prettier errors
 ## Generating and testing samples
 
 Sample generating is provided by `generator-jhipster` local blueprint which we will refer as `dev blueprint`.
-The dev blueprint is enabled by running jhipster in JIT mode (executing `./bin/jhipster.cjs` file relative to this file).
+The dev blueprint is enabled by running jhipster in JIT mode (executing `./bin/jhipster.mjs` file relative to this file).
 
 ### Generating samples using dev blueprint
 

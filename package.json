@@ -93,7 +93,7 @@
   "main": "./dist/generators/index.js",
   "types": "./dist/generators/index.d.ts",
   "bin": {
-    "jhipster": "dist/cli/jhipster.cjs"
+    "jhipster": "dist/cli/jhipster.mjs"
   },
   "files": [
     "dist",
