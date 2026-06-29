@@ -458,6 +458,17 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           },
         ]);
       },
+      overrides({ source }) {
+        const overrides = {
+          'ngx-infinite-scroll': {
+            '@angular/common': '$@angular/common',
+            '@angular/core': '$@angular/core',
+          },
+          // typescript: '$typescript',
+        };
+        this.packageJson.merge({ overrides });
+        source.mergeClientPackageJson!({ overrides });
+      },
     });
   }
 
