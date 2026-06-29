@@ -152,6 +152,7 @@ public class <%- entityClass %>Resource {
     const instanceName = restInstance;
     const mapper = `${entityInstance}Mapper`;
     const entityToDtoReference = `${mapper}::` + 'toDto';
+    const idToString = primaryKey.typeString ? '' : '.toString()';
 _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService, constructorName: `${entityClass}Resource`, queryService: jpaMetamodelFiltering, isUsingMapsId, mapsIdAssoc, isController: true, reactive }) -%>
 <%_ if (!readOnly) { _%>
 
@@ -183,19 +184,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
         }
   <%_ } _%>
   <%_ if (saveUserSnapshot) { _%>
-    <% for (const userRelationship of relationships.filter(rel => rel.otherEntity.builtInUser)) { %>
-      <%_ if (userRelationship.collection) { _%>
-        if (<%- instanceName %>.<%- userRelationship.propertySupplierName %>() != null) {
-            // Save users in case they are new and only exist in gateway
-            userRepository.saveAll(<%- instanceName %>.<%- userRelationship.propertySupplierName %>());
-        }
-      <%_ } else { _%>
-        if (<%- instanceName %>.<%- userRelationship.propertySupplierName %>() != null) {
-            // Save user in case it's new and only exists in gateway
-            userRepository.save(<%- instanceName %>.<%- userRelationship.propertySupplierName %>());
-        }
-      <%_ } _%>
-    <% } %>
+<%- include('../../_partials_entity_/save_user_snapshot_template') -%>
   <%_ } _%>
   <%_ if (!isUsingMapsId) { _%>
     <%_ for (field of primaryKey.fields.filter(f => f.autoGenerateByService)) { _%>
@@ -221,7 +210,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
             .map(result -> {
                 try {
                     return ResponseEntity.created(new URI("/api/<%- entityApiUrl %>/" + result.<%- primaryKey.propertySupplierName %>()))
-                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, result.<%- primaryKey.propertySupplierName %>()<%- primaryKey.typeString ? '' : '.toString()' %>))
+                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, result.<%- primaryKey.propertySupplierName %>()<%- idToString %>))
                         .body(result);
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
@@ -235,7 +224,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
         <%- restInstance %> = <%- entityInstance %>Service.save(<%- instanceName %>);
     <%_ } _%>
         return ResponseEntity.created(new URI("/api/<%- entityApiUrl %>/" + <%- restInstance %>.<%- primaryKey.propertySupplierName %>()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, <%- restInstance %>.<%- primaryKey.propertySupplierName %>()<%- primaryKey.typeString ? '' : '.toString()' %>))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, <%- restInstance %>.<%- primaryKey.propertySupplierName %>()<%- idToString %>))
             .body(<%- restInstance %>);
   <%_ } _%>
     }
@@ -261,12 +250,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
         <%- anyPropertyHasValidation ? '@Valid ' : '' %>@RequestBody <%- restClass %> <%- restInstance %>
     ) throws URISyntaxException {
         LOG.debug("REST request to update <%- entityClass %> : {}, {}", <%- primaryKey.name %>, <%- instanceName %>);
-        if (<%- instanceName %>.<%- primaryKey.propertySupplierName %>() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(<%- primaryKey.name %>, <%- instanceName %>.<%- primaryKey.propertySupplierName %>())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
+<%- include('../../_partials_entity_/validate_id_template') -%>
 
   <%_ if (reactive) { _%>
         return <%- entityInstance %>Repository
@@ -282,19 +266,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
   <%_ } _%>
 
   <%_ if (saveUserSnapshot) { _%>
-    <% for (const userRelationship of relationships.filter(rel => rel.otherEntity.builtInUser)) { %>
-      <%_ if (userRelationship.collection) { _%>
-        if (<%- instanceName %>.<%- userRelationship.propertySupplierName %>() != null) {
-            // Save users in case they are new and only exist in gateway
-            userRepository.saveAll(<%- instanceName %>.<%- userRelationship.propertySupplierName %>());
-        }
-      <%_ } else { _%>
-        if (<%- instanceName %>.<%- userRelationship.propertySupplierName %>() != null) {
-            // Save user in case it's new and only exists in gateway
-            userRepository.save(<%- instanceName %>.<%- userRelationship.propertySupplierName %>());
-        }
-      <%_ } _%>
-    <% } %>
+<%- include('../../_partials_entity_/save_user_snapshot_template') -%>
   <%_ } _%>
   <%_ if (serviceNo) { _%>
 <%- include(`/_global_partials_entity_/save_template_${reactive ? 'reactive' : 'imperative'}`, { saveNewEntityOperation: false, returnDirectly: false }) -%>
@@ -306,7 +278,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
     <%_ } _%>
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
                 .map(result -> ResponseEntity.ok()
-                    .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, result.<%- primaryKey.propertySupplierName %>()<%- primaryKey.typeString ? '' : '.toString()' %>))
+                    .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, result.<%- primaryKey.propertySupplierName %>()<%- idToString %>))
                     .body(result)
                 );
         });
@@ -315,7 +287,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
         <%- restInstance %> = <%- entityInstance %>Service.update(<%- restInstance %>);
     <%_ } _%>
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, <%- restInstance %>.<%- primaryKey.propertySupplierName %>()<%- primaryKey.typeString ? '' : '.toString()' %>))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, <%- restInstance %>.<%- primaryKey.propertySupplierName %>()<%- idToString %>))
             .body(<%- restInstance %>);
   <%_ } _%>
     }
@@ -340,12 +312,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
         <%- anyPropertyHasValidation ? '@NotNull ' : '' %>@RequestBody <%- instanceType %> <%- instanceName %>
     ) throws URISyntaxException {
         LOG.debug("REST request to partial update <%- entityClass %> partially : {}, {}", <%- primaryKey.name %>, <%- instanceName %>);
-        if (<%- instanceName %>.<%- primaryKey.propertySupplierName %>() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(<%- primaryKey.name %>, <%- instanceName %>.<%- primaryKey.propertySupplierName %>())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
+<%- include('../../_partials_entity_/validate_id_template') -%>
 
   <%_ if (reactive) { _%>
         return <%- entityInstance %>Repository.existsById(<%- primaryKey.name %>).flatMap(exists -> {
@@ -359,19 +326,7 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
   <%_ } _%>
 
   <%_ if (saveUserSnapshot) { _%>
-    <% for (const userRelationship of relationships.filter(rel => rel.otherEntity.builtInUser)) { %>
-      <%_ if (userRelationship.collection) { _%>
-        if (<%- instanceName %>.<%- userRelationship.propertySupplierName %>() != null) {
-            // Save users in case they are new and only exist in gateway
-            userRepository.saveAll(<%- instanceName %>.<%- userRelationship.propertySupplierName %>());
-        }
-      <%_ } else { _%>
-        if (<%- instanceName %>.<%- userRelationship.propertySupplierName %>() != null) {
-            // Save user in case it's new and only exists in gateway
-            userRepository.save(<%- instanceName %>.<%- userRelationship.propertySupplierName %>());
-        }
-      <%_ } _%>
-    <% } %>
+<%- include('../../_partials_entity_/save_user_snapshot_template') -%>
   <%_ } _%>
 
             <%- include('../../_partials_entity_/patch_template', { isService: false, viaService }) -%>
@@ -379,14 +334,14 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
             return result
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
                 .map(res -> ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, res.<%- primaryKey.propertySupplierName %>()<%- (primaryKey.type !== 'String') ? '.toString()' : '' %>))
+                .headers(HeaderUtil.createEntityUpdateAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, res.<%- primaryKey.propertySupplierName %>()<%- idToString %>))
                 .body(res)
             );
         });
   <%_ } else { _%>
             return ResponseUtil.wrapOrNotFound(
                 result,
-                HeaderUtil.createEntityUpdateAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, <%- instanceName %>.<%- primaryKey.propertySupplierName %>()<%- (primaryKey.type !== 'String') ? '.toString()' : '' %>)
+                HeaderUtil.createEntityUpdateAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, <%- instanceName %>.<%- primaryKey.propertySupplierName %>()<%- idToString %>)
             );
   <%_ } _%>
     }
@@ -485,11 +440,11 @@ _%><%- include('../../_partials_entity_/inject_template', { readOnly, viaService
   <%_ if (reactive) { _%>
     <%_ if (databaseTypeCouchbase) { _%>
             .then(Mono.just(ResponseEntity.noContent()
-                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, id<%- (primaryKey.type !== 'String') ? '.toString()' : '' %>)).build())
+                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, id<%- idToString %>)).build())
             );
     <%_ } else { %>
             .then(Mono.just(ResponseEntity.noContent()
-                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, id<%- (primaryKey.type !== 'String') ? '.toString()' : '' %>)).build())
+                .headers(HeaderUtil.createEntityDeletionAlert(applicationName, <%- enableTranslation %>, ENTITY_NAME, id<%- idToString %>)).build())
         );
     <%_ } _%>
   <%_ } else { _%>
