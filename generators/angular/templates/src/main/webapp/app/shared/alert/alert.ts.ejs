@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, ChangeDetectionStrategy, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnDestroy } from '@angular/core';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap/alert';
 
 import { AlertService, AlertModel } from 'app/core/util/alert.service';
@@ -27,14 +27,10 @@ import { AlertService, AlertModel } from 'app/core/util/alert.service';
   templateUrl: './alert.html',
   imports: [NgbAlert],
 })
-export class Alert implements OnInit, OnDestroy {
-  readonly alerts = signal<AlertModel[]>([]);
+export class Alert implements OnDestroy {
+  readonly alerts = this.alertService.alerts;
 
   private readonly alertService = inject(AlertService);
-
-  ngOnInit(): void {
-    this.alerts.set(this.alertService.get());
-  }
 
   setClasses(alert: AlertModel): Record<string, boolean> {
     const classes = { 'jhi-toast': Boolean(alert.toast) };
@@ -49,6 +45,6 @@ export class Alert implements OnInit, OnDestroy {
   }
 
   close(alert: AlertModel): void {
-    alert.close?.(this.alerts());
+    alert.close?.();
   }
 }
