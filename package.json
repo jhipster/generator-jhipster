@@ -172,7 +172,7 @@
     "tinyglobby": "0.2.17",
     "type-fest": "5.7.0",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.62.0",
+    "typescript-eslint": "8.62.1",
     "yaml": "2.9.0",
     "yeoman-environment": "6.1.0",
     "yeoman-generator": "8.2.2"
