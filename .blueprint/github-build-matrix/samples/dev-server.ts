@@ -28,7 +28,7 @@ export const devServerMatrix = {
     },
     'ng-default-webpack': {
       sample: 'samples/ng-default',
-      args: '--auth oauth2 --sample-yorc-folder --entities-sample sqllight --client-bundler webpack',
+      args: '--sample-yorc-folder --entities-sample sqllight --client-bundler webpack',
     },
   },
   react: {
