@@ -1511,9 +1511,10 @@ export class UserManagementService extends UserManagementsService {
   query(req?: any): Observable<HttpResponse<IUserManagement[]>> {
     const options = createRequestOption(req);
     return this.http
-      .get<
-        RestUserManagement[]
-      >(this.resourceUrl, { params: options, observe: "response" })
+      .get<RestUserManagement[]>(this.resourceUrl, {
+        params: options,
+        observe: "response",
+      })
       .pipe(
         map((res) =>
           res.clone({ body: this.convertResponseArrayFromServer(res.body!) }),
@@ -1719,8 +1720,7 @@ type PartialWithRequiredKeyOf<T extends { login: unknown }> = Partial<
  * It accepts IUserManagement for edit and NewUserManagementFormGroupInput for create.
  */
 type UserManagementFormGroupInput =
-  | IUserManagement
-  | PartialWithRequiredKeyOf<NewUserManagement>;
+  IUserManagement | PartialWithRequiredKeyOf<NewUserManagement>;
 
 /**
  * Type that converts some properties for forms.
@@ -1770,6 +1770,7 @@ export class UserManagementFormService {
         ...this.getFormDefaults(),
         ...(userManagement ?? { login: null }),
       });
+
     return new FormGroup<UserManagementFormGroupContent>({
       id: new FormControl(userManagementRawValue.id),
       login: new FormControl(
@@ -1853,8 +1854,7 @@ export class UserManagementFormService {
 
   private convertUserManagementRawValueToUserManagement(
     rawUserManagement:
-      | UserManagementFormRawValue
-      | NewUserManagementFormRawValue,
+      UserManagementFormRawValue | NewUserManagementFormRawValue,
   ): IUserManagement | NewUserManagement {
     return {
       ...rawUserManagement,

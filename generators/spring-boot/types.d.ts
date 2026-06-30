@@ -36,8 +36,7 @@ type CacheCommand = CommandTypeMap<typeof cacheCommand>;
 export type SpringBootModule = keyof (typeof springBootDependencies3)['modules'] | keyof (typeof springBootDependencies4)['modules'];
 
 export type SpringBootProperties =
-  | keyof (typeof springBootDependencies3)['properties']
-  | keyof (typeof springBootDependencies4)['properties'];
+  keyof (typeof springBootDependencies3)['properties'] | keyof (typeof springBootDependencies4)['properties'];
 
 export type Config = Command['Config'] & CacheCommand['Config'] & JavaConfig & ServerConfig & CommonConfig;
 
