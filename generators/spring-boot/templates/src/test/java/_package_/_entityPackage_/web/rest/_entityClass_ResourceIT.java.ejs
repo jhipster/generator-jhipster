@@ -216,12 +216,10 @@ import static org.hamcrest.Matchers.hasItem;
 <%_ if (reactive) { _%>
 import static org.hamcrest.Matchers.is;
 <%_ } _%>
-<%_ if (authenticationUsesCsrf) { _%>
-  <%_ if (reactive) { _%>
+<%_ if (authenticationUsesCsrf && reactive) { _%>
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
-  <%_ } else { _%>
+<%_ } else if (authenticationUsesCsrf) { _%>
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-  <%_ } _%>
 <%_ } _%>
 <%_ if (searchEngineElasticsearch || implementsEagerLoadApis) { _%>
 import static org.mockito.Mockito.*;

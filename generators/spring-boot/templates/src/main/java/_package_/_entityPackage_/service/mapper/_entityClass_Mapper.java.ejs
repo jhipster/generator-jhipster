@@ -106,12 +106,10 @@ public interface <%- entityClass %>Mapper extends EntityMapper<<%- dtoClass %>, 
     <%_ for (const field of otherEntity.primaryKey.fields) { _%>
     @Mapping(target = "<%- field.propertyName %>", source = "<%- field.propertyName %>")
     <%_ } _%>
-    <%_ if (!relatedField.id) { _%>
-      <%_ if (relatedField.mapstructExpression) { _%>
+    <%_ if (!relatedField.id && relatedField.mapstructExpression) { _%>
     @Mapping(target = "<%- relatedField.propertyName %>", expression = "<%- relatedField.mapstructExpression %>")
-      <%_ } else { _%>
+    <%_ } else if (!relatedField.id) { _%>
     @Mapping(target = "<%- relatedField.propertyName %>", source = "<%- relatedField.propertyName %>")
-      <%_ } _%>
     <%_ } _%>
     <%_ if (relatedField.mapstructExpression) { _%>
     <%- otherEntity.dtoClass %> toDto<%- this._.upperFirst(mapperName) %>(<%- otherEntity.persistClass %> s);
