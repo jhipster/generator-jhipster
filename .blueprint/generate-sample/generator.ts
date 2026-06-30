@@ -146,8 +146,7 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
         if (!this.sampleYorcFolder || this.sampleOnly) return;
 
         const yoRc = (this.fs.readJSON(`${this.projectFolder}/.yo-rc.json`) as any)?.['generator-jhipster'] as unknown as
-          | typeof this.jhipsterConfig
-          | undefined;
+          typeof this.jhipsterConfig | undefined;
         const defaultCommand = yoRc?.defaultCommand ?? GENERATOR_APP;
         await this.composeWithJHipster(defaultCommand, { generatorOptions: { destinationRoot: this.projectFolder } });
       },

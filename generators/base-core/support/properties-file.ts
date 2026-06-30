@@ -48,8 +48,7 @@ const getNewValue: PropertiesFileValueCallback = (newValue, oldValue?, sep?): st
  */
 export const editPropertiesFileCallback = (
   properties:
-    | PropertiesFileKeyUpdate[]
-    | ((lines: PropertiesFileLines, newValueCallback: PropertiesFileValueCallback) => PropertiesFileLines),
+    PropertiesFileKeyUpdate[] | ((lines: PropertiesFileLines, newValueCallback: PropertiesFileValueCallback) => PropertiesFileLines),
   options: { sortFile?: boolean } = {},
 ): EditFileCallback => {
   return (content: string) => {
