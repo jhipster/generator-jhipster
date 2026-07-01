@@ -279,12 +279,6 @@ ${comment}
     return this.asPostWritingTaskGroup({
       addMicrofrontendDependencies({ application, source }) {
         if (!application.microfrontend) return;
-        const { applicationTypeGateway } = application;
-        if (applicationTypeGateway) {
-          source.mergeClientPackageJson!({
-            devDependencies: { '@module-federation/utilities': null },
-          });
-        }
         source.mergeClientPackageJson!({
           devDependencies: { '@module-federation/enhanced': null },
         });
