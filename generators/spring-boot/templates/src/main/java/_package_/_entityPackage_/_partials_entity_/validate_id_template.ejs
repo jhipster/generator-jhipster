@@ -16,24 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import type { JHipsterCommandDefinition } from 'generator-jhipster';
-<%_ if (!sbs && !customGenerator) { _%>
-import { command as parentGeneratorCommand } from 'generator-jhipster/generators/<%- subGenerator %>';
-
-const { configs: parentGeneratorConfigs, arguments: parentGeneratorArguments } = parentGeneratorCommand as JHipsterCommandDefinition;
-<%_ } _%>
-
-import type Generator from './generator.js';
-
-export default {
-  configs: {
-<%_ if (!sbs && !customGenerator) { _%>
-    ...parentGeneratorConfigs,
-<%_ } _%>
-  },
-<%_ if (!sbs && !customGenerator) { _%>
-  arguments: {
-    ...parentGeneratorArguments,
-  },
-<%_ } _%>
-} as const satisfies JHipsterCommandDefinition<Generator>;
+        if (<%- restInstance %>.<%- primaryKey.propertySupplierName %>() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(<%- primaryKey.name %>, <%- restInstance %>.<%- primaryKey.propertySupplierName %>())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }

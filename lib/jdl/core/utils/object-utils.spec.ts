@@ -763,8 +763,7 @@ describe('jdl - ObjectUtils', () => {
         type ObjectType = {
           documentation: string;
           fields: (
-            | { id: number; theAnswer: number; notTheAnswer?: undefined }
-            | { id: number; notTheAnswer: number; theAnswer?: undefined }
+            { id: number; theAnswer: number; notTheAnswer?: undefined } | { id: number; notTheAnswer: number; theAnswer?: undefined }
           )[];
           relationships: { id: number; anotherField: number }[];
           dto: string;

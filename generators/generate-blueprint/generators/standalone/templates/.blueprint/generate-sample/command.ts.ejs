@@ -19,9 +19,11 @@
 import type { JHipsterCommandDefinition } from 'generator-jhipster';
 import { getGithubSamplesGroup, getGithubSamplesGroups } from 'generator-jhipster/ci';
 
+import type Generator from './generator.js';
+
 const DEFAULT_SAMPLES_GROUP = 'samples';
 
-const command = {
+export default {
   arguments: {
     sampleName: {
       type: String,
@@ -73,6 +75,4 @@ const command = {
     },
   },
   import: ['app'],
-} as const satisfies JHipsterCommandDefinition<import('./generator.js').default>;
-
-export default command;
+} as const satisfies JHipsterCommandDefinition<Generator>;

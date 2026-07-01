@@ -1299,15 +1299,19 @@ export class UserManagementService extends UserManagementsService {
             .pipe(map(res => this.convertResponseFromServer(res)));
     }
 
-    query(req?: any): Observable<HttpResponse<IUserManagement[]>> {
-        const options = createRequestOption(req);
-        return this.http.get<RestUserManagement[]>(this.resourceUrl, { params: options, observe: 'response' })
-            .pipe(map(res => res.clone({ body: this.convertResponseArrayFromServer(res.body!) })));
-    }
-
-    delete(login: string): Observable<undefined> {
-        return this.http.delete<undefined>(\`\${this.resourceUrl}/\${encodeURIComponent(login)}\`);
-    }
+  query(req?: any): Observable<HttpResponse<IUserManagement[]>> {
+    const options = createRequestOption(req);
+    return this.http
+      .get<RestUserManagement[]>(this.resourceUrl, {
+        params: options,
+        observe: "response",
+      })
+      .pipe(
+        map((res) =>
+          res.clone({ body: this.convertResponseArrayFromServer(res.body!) }),
+        ),
+      );
+  }
 
 
     getUserManagementIdentifier(userManagement: Pick<IUserManagement, 'login'>): string {
@@ -1458,7 +1462,8 @@ type PartialWithRequiredKeyOf<T extends { login: unknown }> = Partial<Omit<T, 'l
  * Type for createFormGroup and resetForm argument.
  * It accepts IUserManagement for edit and NewUserManagementFormGroupInput for create.
  */
-type UserManagementFormGroupInput = IUserManagement | PartialWithRequiredKeyOf<NewUserManagement>;
+type UserManagementFormGroupInput =
+  IUserManagement | PartialWithRequiredKeyOf<NewUserManagement>;
 
 /**
  * Type that converts some properties for forms.
@@ -1494,13 +1499,10 @@ export type UserManagementFormGroup = FormGroup<UserManagementFormGroupContent>;
 export class UserManagementFormService {
   createUserManagementFormGroup(userManagement?: UserManagementFormGroupInput): UserManagementFormGroup {
     const userManagementRawValue =
-      this.convertUserManagementToUserManagementRawValue(
-        {
-          ...this.getFormDefaults(),
-          ...userManagement ?? { login: null },
-        }
-      )
-    ;
+      this.convertUserManagementToUserManagementRawValue({
+        ...this.getFormDefaults(),
+        ...(userManagement ?? { login: null }),
+      });
 
     return new FormGroup<UserManagementFormGroupContent>({
       id: new FormControl(
@@ -1596,7 +1598,10 @@ export class UserManagementFormService {
     };
   }
 
-  private convertUserManagementRawValueToUserManagement(rawUserManagement: UserManagementFormRawValue | NewUserManagementFormRawValue): IUserManagement | NewUserManagement {
+  private convertUserManagementRawValueToUserManagement(
+    rawUserManagement:
+      UserManagementFormRawValue | NewUserManagementFormRawValue,
+  ): IUserManagement | NewUserManagement {
     return {
       ...rawUserManagement,
       createdDate: dayjs(rawUserManagement.createdDate, DATE_TIME_FORMAT),

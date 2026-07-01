@@ -115,11 +115,7 @@ export type CommandConfigType = typeof String | typeof Boolean | typeof Number |
  * Can be a literal value or a callback that receives the config context and returns a literal value.
  */
 export type CommandConfigDefault<ConfigContext> =
-  | string
-  | boolean
-  | number
-  | readonly string[]
-  | ((this: ConfigContext | void, ctx: any) => string | boolean | number | readonly string[]);
+  string | boolean | number | readonly string[] | ((this: ConfigContext | void, ctx: any) => string | boolean | number | readonly string[]);
 
 /** Raw CLI option type accepted by yeoman-generator, extended with `Object` support. */
 type CliSpecType = CliOptionSpec['type'] | typeof Object | typeof Array;

@@ -220,7 +220,11 @@ export default abstract class BaseEntityChangesGenerator<
         .filter(oldField => !removedFieldNames.includes(oldField.fieldName))
         .filter(
           // field was not removed, so check its default value
-          oldField => this.doDefaultValuesDiffer(oldField, newFields.find(newField => newField.fieldName === oldField.fieldName)!),
+          oldField =>
+            this.doDefaultValuesDiffer(
+              oldField,
+              newFields.find(newField => newField.fieldName === oldField.fieldName)!,
+            ),
         );
 
       // find the new fields that have not been added newly anyway or otherwise where the old field had a different default value
@@ -228,7 +232,11 @@ export default abstract class BaseEntityChangesGenerator<
         .filter(newField => !addedFieldNames.includes(newField.fieldName))
         .filter(
           // field was not added newly, so check its default value
-          newField => this.doDefaultValuesDiffer(oldFields.find(oldField => oldField.fieldName === newField.fieldName)!, newField),
+          newField =>
+            this.doDefaultValuesDiffer(
+              oldFields.find(oldField => oldField.fieldName === newField.fieldName)!,
+              newField,
+            ),
         );
 
       return {

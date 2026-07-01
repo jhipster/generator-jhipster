@@ -44,7 +44,7 @@ The JHipster generator will be organized into several types of generators, each 
 
 - **Base Generators**: These are the core generators that provide the basic functionality of the downstream JHipster generator in the inheritance chain. This includes:
   <!-- prettier-ignore -->
-  - Tasks and Priorities 
+  - Tasks and Priorities
   <!-- prettier-ignore -->
   - Contexts and object injection in functions (application, entities, etc.)
   <!-- prettier-ignore -->
