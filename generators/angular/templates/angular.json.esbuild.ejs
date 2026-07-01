@@ -82,7 +82,7 @@
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": <%- new Boolean(microfrontend) %>,
-              "extractLicenses": true,
+              "extractLicenses": <%- !microfrontend %>,
               "budgets": [
                 {
                   "type": "initial",
