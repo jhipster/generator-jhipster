@@ -310,7 +310,7 @@ public class <%- serviceClassName %><% if (serviceImpl) { %> implements <%- enti
 <%_ } _%>
 <%_ if (updatableEntity && !dtoMapstruct && fields.some(field => !field.id && !field.transient)) { _%>
 
-    private <T> void updateIfPresent(Consumer<T> setter, T value) {
+    protected <T> void updateIfPresent(Consumer<T> setter, T value) {
         if (value != null) {
             setter.accept(value);
         }
