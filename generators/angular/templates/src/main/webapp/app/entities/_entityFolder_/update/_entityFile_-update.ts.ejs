@@ -30,6 +30,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
 import { TranslatePipe } from '@ngx-translate/core';
+  <%_ if (builtInUserManagement) { _%>
+import { LANGUAGES } from 'app/config/language.constants';
+import { FindLanguageFromKeyPipe } from 'app/shared/language';
+  <%_ } _%>
 <%_ } _%>
 <%_ const anyFieldHasTypeLocalDate = fields.some(field => !field.hidden && field.fieldTypeLocalDate); _%>
 <%_ if (anyFieldHasTypeLocalDate) { _%>
@@ -69,6 +73,9 @@ import { <%- importedType %> } from '<%- importedPath %>';
 <%_ if (enableTranslation) { _%>
       TranslateDirective,
       TranslatePipe,
+  <%_ if (builtInUserManagement) { _%>
+      FindLanguageFromKeyPipe,
+  <%_ } _%>
 <%_ } _%>
       FontAwesomeModule,
       AlertError,
@@ -84,6 +91,12 @@ import { <%- importedType %> } from '<%- importedPath %>';
 export class <%- entityAngularName %>Update implements OnInit {
     readonly isSaving = signal(false);
     <%- entityInstance %>: I<%- entityAngularName %> | null = null;
+<%_ if (builtInUserManagement) { _%>
+    authorities = signal<string[]>([]);
+  <%_ if (enableTranslation) { _%>
+    languages: string[] | null = null;
+  <%_ } _%>
+<%_ } _%>
 <%_ for (const [importedType] of enumImports) { _%>
     <%- this._.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
 <%_ } _%>
@@ -133,6 +146,12 @@ export class <%- entityAngularName %>Update implements OnInit {
                 this.updateForm(<%- entityInstance %>);
             }
 
+<%_ if (builtInUserManagement) { _%>
+            this.<%- entityInstance %>Service.authorities().subscribe(authorities => this.authorities.set(authorities));
+  <%_ if (enableTranslation) { _%>
+            this.languages = LANGUAGES;
+  <%_ } _%>
+<%_ } _%>
 <%_ if (relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded).length > 0) { _%>
             this.loadRelationshipsOptions();
 <%_ } _%>
@@ -178,7 +197,7 @@ export class <%- entityAngularName %>Update implements OnInit {
         this.isSaving.set(true);
         const <%- entityInstance %> = this.<%- entityInstance %>FormService.get<%- entityAngularName %>(this.editForm);
 <%_ if (updatableEntity) { _%>
-        if (<%- entityInstance %>.<%- primaryKey.name %> === null) {
+        if (<%- entityInstance %>.<%- builtInUserManagement ? 'id' : primaryKey.name %> === null) {
 <%_ } _%>
             this.subscribeToSaveResponse(this.<%- entityInstance %>Service.create(<%- entityInstance %>));
 <%_ if (updatableEntity) { _%>

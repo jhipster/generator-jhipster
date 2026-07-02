@@ -19,31 +19,35 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
-
-import { catchError, EMPTY, Observable, of } from 'rxjs';
+import { EMPTY, Observable, of } from 'rxjs';
+import { catchError, mergeMap } from 'rxjs/operators';
 
 import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
 import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
 
 const <%- entityInstance %>Resolve = (route: ActivatedRouteSnapshot): Observable<null | I<%- entityAngularName %>> => {
-  const <%- primaryKey.name %> = route.params['<%- primaryKey.name %>'];
-  if (<%- primaryKey.name %>) {
+  const id = route.params['<%- primaryKey.name %>'];
+  if (id) {
     const router = inject(Router);
     const service = inject(<%- entityAngularName %>Service);
-    return service
-      .find(<%- primaryKey.name %>)
-      .pipe(
-        catchError((error: HttpErrorResponse) => {
-          if (error.status === 404) {
-            router.navigate(['404']);
-          } else {
-            router.navigate(['error']);
-          }
-          return EMPTY;
-        }),
-      );
+    return service.find(id).pipe(
+      mergeMap((<%- entityInstance %>) => {
+        if (<%- entityInstance %>.body) {
+          return of(<%- entityInstance %>.body);
+        }
+        router.navigate(['404']);
+        return EMPTY;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 404) {
+          router.navigate(['404']);
+        } else {
+          router.navigate(['error']);
+        }
+        return EMPTY;
+      }),
+    );
   }
-
   return of(null);
 };
 
