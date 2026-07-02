@@ -28,7 +28,7 @@ import { defineConfig } from 'eslint/config';
 import prettier from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 <%_ if (typescriptEslint) { _%>
-import tseslint from 'typescript-eslint';
+import ts from 'typescript-eslint';
 <%_ } _%>
 <&- fragments.importsSection() -&>
 // jhipster-needle-eslint-add-import - JHipster will add additional import here
@@ -41,6 +41,23 @@ export default defineConfig(
       },
     },
   },
+<%_ if (typescriptEslint) { _%>
+  {
+    files: ['**/*.ts'],
+    ...ts.configs.recommended[0],
+    ...ts.configs.stylistic[0],
+    languageOptions: {
+      parser: ts.parser,
+      parserOptions: {
+        project: ['./tsconfig.json'],
+      },
+    },
+    rules: {
+      '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/no-floating-promises': 'error',
+    },
+  },
+<%_ } _%>
 <&- fragments.configSection() -&>
   // jhipster-needle-eslint-add-config - JHipster will add additional config here
 <%_ if (locals.clientFrameworkAngular) { _%>
