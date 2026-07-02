@@ -64,8 +64,7 @@ import org.springframework.cache.annotation.Cacheable;
 <%_ if (databaseTypeSql || databaseTypeCouchbase || databaseTypeMongodb || databaseTypeNeo4j) { _%>
 import org.springframework.data.domain.*;
 <%_ } _%>
-<%_ if (databaseTypeSql) { _%>
-  <%_ if (reactive) { _%>
+<%_ if (databaseTypeSql && reactive) { _%>
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.data.r2dbc.convert.R2dbcConverter;
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
@@ -77,10 +76,9 @@ import org.springframework.data.relational.core.sql.Table;
 
 import static org.springframework.data.relational.core.query.Criteria.where;
 import static org.springframework.data.relational.core.query.Query.query;
-  <%_ } else { _%>
+<%_ } else if (databaseTypeSql) { _%>
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-  <%_ } _%>
 <%_ } _%>
 <%_ if (databaseTypeMongodb) { _%>
 import org.springframework.data.mongodb.repository.<%- reactive ? 'Reactive' : '' %>MongoRepository;
