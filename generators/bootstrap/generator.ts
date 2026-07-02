@@ -190,7 +190,7 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
         await createPrettierTransform.call(this, {
           ignoreErrors,
           prettierPackageJson: true,
-          prettierJava: !(this.jhipsterConfig as any).skipServer,
+          prettierJava: !this.jhipsterConfig.skipServer,
           extensions: this.prettierExtensions.join(','),
           prettierOptions: this.prettierOptions,
         }),
