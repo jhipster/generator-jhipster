@@ -31,7 +31,6 @@
   "license": "Apache-2.0",
   "author": {
     "name": "Julien Dubois",
-    "email": "",
     "url": "https://github.com/jdubois"
   },
   "type": "module",
