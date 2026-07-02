@@ -84,6 +84,7 @@ function clientBlock({
     path: `${srcPath}${relativeToSrc}${relativePath}`,
     ...block,
     renameTo(this: CoreGenerator, data: any, filePath: string) {
+      filePath = filePath.replace(/_([a-zA-Z]*)$/g, '');
       return `${data[destProperty]}${relativeToSrc}${replaceEntityFilePath(data, relativePath) ?? ''}${
         replaceEntityFilePath(data, blockRenameTo?.call?.(this, data, filePath) ?? filePath) ?? ''
       }`;

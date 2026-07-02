@@ -77,21 +77,21 @@ export const userManagementFiles = asWriteEntityFilesSection({
         'entities/_entityFolder_/_entityFile_.routes.ts',
         'entities/_entityFolder_/route/_entityFile_-routing-resolve.service.ts',
         'entities/_entityFolder_/route/_entityFile_-routing-resolve.service.spec.ts',
-        'entities/admin/user-management/user-management.model.ts',
-        'entities/admin/user-management/list/user-management.html',
-        'entities/admin/user-management/list/user-management.spec.ts',
-        'entities/admin/user-management/list/user-management.ts',
-        'entities/admin/user-management/detail/user-management-detail.html',
-        'entities/admin/user-management/detail/user-management-detail.spec.ts',
-        'entities/admin/user-management/detail/user-management-detail.ts',
-        'entities/admin/user-management/update/user-management-update.html',
-        'entities/admin/user-management/update/user-management-update.spec.ts',
-        'entities/admin/user-management/update/user-management-update.ts',
+        'entities/_entityFolder_/_entityFile_.model.ts_userManagement',
+        'entities/_entityFolder_/list/_entityFile_.html_userManagement',
+        'entities/_entityFolder_/list/_entityFile_.ts_userManagement',
+        'entities/_entityFolder_/list/_entityFile_.spec.ts_userManagement',
+        'entities/_entityFolder_/detail/_entityFile_-detail.html_userManagement',
+        'entities/_entityFolder_/detail/_entityFile_-detail.spec.ts_userManagement',
+        'entities/_entityFolder_/detail/_entityFile_-detail.ts_userManagement',
+        'entities/_entityFolder_/update/_entityFile_-update.html_userManagement',
+        'entities/_entityFolder_/update/_entityFile_-update.spec.ts_userManagement',
+        'entities/_entityFolder_/update/_entityFile_-update.ts_userManagement',
         'entities/_entityFolder_/delete/_entityFile_-delete-dialog.html',
         'entities/_entityFolder_/delete/_entityFile_-delete-dialog.ts',
         'entities/_entityFolder_/delete/_entityFile_-delete-dialog.spec.ts',
-        'entities/admin/user-management/service/user-management.service.spec.ts',
-        'entities/admin/user-management/service/user-management.service.ts',
+        'entities/_entityFolder_/service/_entityFile_.service.spec.ts_userManagement',
+        'entities/_entityFolder_/service/_entityFile_.service.ts_userManagement',
       ],
     }),
   ],
@@ -112,13 +112,11 @@ export const writeEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularAp
           readOnly: true,
         },
       });
-
-      if (application.generateUserManagement && application.userManagement!.skipClient) {
-        await this.writeFiles({
-          sections: userManagementFiles,
-          context: { ...application, ...application.userManagement },
-        });
-      }
+    } else if (entity.builtInUserManagement) {
+      await this.writeFiles({
+        sections: userManagementFiles,
+        context: { ...application, ...entity },
+      });
     } else {
       await this.writeFiles({
         sections: entity.entityClientModelOnly ? { model: [entityModelFiles] } : angularFiles,
