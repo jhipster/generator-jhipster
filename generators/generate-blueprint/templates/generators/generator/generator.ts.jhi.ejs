@@ -25,11 +25,7 @@
   });
 -&>
 <%_ if (!application.dynamic) { _%>
-  <%_ if (customGenerator) { _%>
-import <%- parentGenerator %>Generator, { type Features, type Options } from '../base-generator.ts';
-  <%_ } else { _%>
-import <%- parentGenerator %>Generator, { type Features, type Options } from 'generator-jhipster/generators/<%- jhipsterGenerator %>';
-  <%_ } _%>
+import <%- parentGenerator %>Generator, { type Features, type Options } from '<%- parentGeneratorImport %>';
 <%_ } _%>
 <%_ if (priorities.find(priority => priority.name === 'initializing')) { _%>
 import command from './command.<%- blueprintMjsExtension %>';

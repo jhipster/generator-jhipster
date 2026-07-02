@@ -25,7 +25,7 @@
   });
 -&>
 <%_ if (!application.dynamic) { _%>
-import <%- generatorClass %>Generator from 'generator-jhipster/generators/<%- jhipsterGenerator %>';
+import <%- parentGenerator %>Generator from 'generator-jhipster/generators/<%- jhipsterGenerator %>';
 <%_ } _%>
 <%_ if (priorities.find(priority => priority.name === 'initializing')) { _%>
 import command from './command.<%- blueprintMjsExtension %>';
@@ -35,19 +35,19 @@ import command from './command.<%- blueprintMjsExtension %>';
 // eslint-disable-next-line import/prefer-default-export
 export async function createGenerator(env) {
   /** @type {typeof import('generator-jhipster/generators/<%- jhipsterGenerator %>').default} */
-  let <%- generatorClass %>Generator;
+  let <%- parentGenerator %>Generator;
   try {
     // Try to use locally installed generator-jhipster
-    <%- generatorClass %>Generator = (await import('generator-jhipster/generators/<%- jhipsterGenerator %>')).default;
+    <%- parentGenerator %>Generator = (await import('generator-jhipster/generators/<%- jhipsterGenerator %>')).default;
   } catch {
     // Fallback to the currently running jhipster.
     const jhipsterGenerator = 'jhipster:<%- generator %>';
-    <%- generatorClass %>Generator = await env.requireGenerator(jhipsterGenerator);
+    <%- parentGenerator %>Generator = await env.requireGenerator(jhipsterGenerator);
   }
 
-  return class extends <%- generatorClass %>Generator {
+  return class extends <%- parentGenerator %>Generator {
 <%_ } else { _%>
-export default class extends <%- generatorClass %>Generator {
+export default class extends <%- parentGenerator %>Generator {
 <%_ } _%>
   constructor(args, opts, features) {
     super(args, opts, {
@@ -73,7 +73,7 @@ export default class extends <%- generatorClass %>Generator {
 <&- fragments.<%- priority.name %>Section() -&>
 <& if (!fragments.<%- priority.name %>Section()) { -&>
 
-  get [<%- generatorClass %>Generator.<%- priority.constant %>]() {
+  get [<%- parentGenerator %>Generator.<%- priority.constant %>]() {
     return this.<%- priority.asTaskGroup %>({
   <%_ if (!sbs && !customGenerator) { _%>
       ...super.<%- priority.name %>,
