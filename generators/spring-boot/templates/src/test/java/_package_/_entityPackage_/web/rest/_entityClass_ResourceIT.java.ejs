@@ -481,13 +481,15 @@ class <%- entityClass %>ResourceIT {
 
     @Autowired
     private <%- entityClass %>Mapper <%- entityInstance %>Mapper;
-<%_ } if (!serviceNo) { _%>
+<%_ } _%>
+<%_ if (!serviceNo) { _%>
   <%_ if (implementsEagerLoadApis) { _%>
 
     @Mock
     private <%- entityClass %>Service <%- entityInstance %>ServiceMock;
   <%_ } _%>
-<%_ } if (searchEngineElasticsearch) { _%>
+<%_ } _%>
+<%_ if (searchEngineElasticsearch) { _%>
 
     @Autowired
     private <%- entityClass %>SearchRepository <%- entityInstance %>SearchRepository;
