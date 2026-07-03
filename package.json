@@ -31,7 +31,6 @@
   "license": "Apache-2.0",
   "author": {
     "name": "Julien Dubois",
-    "email": "",
     "url": "https://github.com/jdubois"
   },
   "type": "module",
@@ -122,7 +121,7 @@
     "pretest": "npm run lint && npm run check-types",
     "test": "esmocha test generators cli .blueprint lib --forbid-only",
     "update-snapshot": "esmocha --no-insight --no-parallel --update-snapshot --",
-    "update-snapshots": "esmocha test generators cli .blueprint lib/jdl lib --forbid-only --update-snapshot --enable-source-maps"
+    "update-snapshots": "esmocha test generators cli .blueprint lib --forbid-only --update-snapshot --enable-source-maps"
   },
   "dependencies": {
     "@eslint/js": "10.0.1",
@@ -207,7 +206,7 @@
   },
   "engines": {
     "node": "^22.18.0 || >=24.11.0",
-    "npm": ">=8.0.0"
+    "npm": ">=10.0.0"
   },
   "collective": {
     "type": "opencollective",
