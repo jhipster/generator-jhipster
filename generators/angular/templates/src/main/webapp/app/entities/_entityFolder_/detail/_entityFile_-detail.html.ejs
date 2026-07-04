@@ -31,7 +31,7 @@
       <dl class="row-md jh-entity-details">
 <%_ for (const field of fields.filter(field => !field.hidden)) { _%>
   <%_ const { fieldName, fieldType } = field; _%>
-        <dt><span<% if (field.documentation) { if (enableTranslation) { %> [ngbTooltip]="'<%- i18nKeyPrefix %>.help.<%- fieldName %>' | translate"<% } else { %> ngbTooltip="<%- field.documentation %>"<% } } %>>__jhiTranslateTag__('<%- field.propertyTranslationKey %>')</span></dt>
+        <dt><span<% if (field.documentation && enableTranslation) { %> [ngbTooltip]="'<%- i18nKeyPrefix %>.help.<%- fieldName %>' | translate"<% } else if (field.documentation) { %> ngbTooltip="<%- field.documentation %>"<% } %>>__jhiTranslateTag__('<%- field.propertyTranslationKey %>')</span></dt>
         <dd>
   <%_ if (field.fieldIsEnum) { _%>
           <%# TODO: import enum and use its key as label -%>
