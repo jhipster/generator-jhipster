@@ -31,7 +31,7 @@ FROM cassandra:5.0.8
 FROM mcr.microsoft.com/mssql/server:2019-CU16-GDR1-ubuntu-20.04
 LABEL ALIAS=mssql
 
-FROM neo4j:5.26.27
+FROM neo4j:5.26.28
 
 FROM hazelcast/management-center:5.11.0
 LABEL ALIAS=hazelcast
@@ -52,7 +52,7 @@ LABEL ALIAS=sonar
 FROM hashicorp/consul:2.0.1
 LABEL ALIAS=consul
 
-FROM prom/prometheus:v3.12.0
+FROM prom/prometheus:v3.13.0
 LABEL ALIAS=prometheus
 
 FROM prom/alertmanager:v0.33.0

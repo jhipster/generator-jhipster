@@ -62,17 +62,23 @@ import java.io.Serial;
 import java.io.Serializable;
 <%_ if (anyFieldIsBigDecimal) { _%>
 import java.math.BigDecimal;
-<%_ } if (anyFieldIsInstant) { _%>
+<%_ } _%>
+<%_ if (anyFieldIsInstant) { _%>
 import java.time.Instant;
-<%_ } if (anyFieldIsLocalDate) { _%>
+<%_ } _%>
+<%_ if (anyFieldIsLocalDate) { _%>
 import java.time.LocalDate;
-<%_ } if (anyFieldIsZonedDateTime) { _%>
+<%_ } _%>
+<%_ if (anyFieldIsZonedDateTime) { _%>
 import java.time.ZonedDateTime;
-<%_ } if (anyFieldIsLocalTime) { _%>
+<%_ } _%>
+<%_ if (anyFieldIsLocalTime) { _%>
 import java.time.LocalTime;
-<%_ } if (anyFieldIsDuration) { _%>
+<%_ } _%>
+<%_ if (anyFieldIsDuration) { _%>
 import java.time.Duration;
-<%_ } if (entityContainsCollectionField) { _%>
+<%_ } _%>
+<%_ if (entityContainsCollectionField) { _%>
 import java.util.HashSet;
 import java.util.Set;
 <%_ } _%>

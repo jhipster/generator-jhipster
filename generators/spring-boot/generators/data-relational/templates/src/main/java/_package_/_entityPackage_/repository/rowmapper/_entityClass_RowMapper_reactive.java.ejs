@@ -20,17 +20,23 @@ package <%- entityAbsolutePackage %>.repository.rowmapper;
 
 <%_ if (anyFieldIsBigDecimal) { _%>
 import java.math.BigDecimal;
-<%_ } if (anyFieldIsInstant) { _%>
+<%_ } _%>
+<%_ if (anyFieldIsInstant) { _%>
 import java.time.Instant;
-<%_ } if (anyFieldIsLocalDate) { _%>
+<%_ } _%>
+<%_ if (anyFieldIsLocalDate) { _%>
 import java.time.LocalDate;
-<%_ } if (anyFieldIsZonedDateTime) { _%>
+<%_ } _%>
+<%_ if (anyFieldIsZonedDateTime) { _%>
 import java.time.ZonedDateTime;
-<%_ } if (anyFieldIsLocalTime) { _%>
+<%_ } _%>
+<%_ if (anyFieldIsLocalTime) { _%>
 import java.time.LocalTime;
-<%_ } if (anyFieldIsDuration) { _%>
+<%_ } _%>
+<%_ if (anyFieldIsDuration) { _%>
 import java.time.Duration;
-<%_ } if (anyFieldIsUUID || otherEntityPrimaryKeyTypesIncludesUUID) { _%>
+<%_ } _%>
+<%_ if (anyFieldIsUUID || otherEntityPrimaryKeyTypesIncludesUUID) { _%>
 import java.util.UUID;
 <%_ } _%>
 import java.util.function.BiFunction;
