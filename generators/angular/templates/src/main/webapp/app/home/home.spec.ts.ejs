@@ -16,9 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (clientTestFrameworkVitest) { _%>
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-<%_ } _%>
 import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 <%_ if (!authenticationTypeOauth2) { _%>
@@ -55,14 +53,14 @@ describe('Home Component', () => {
         {
           provide: AccountService,
           useValue: {
-            isAuthenticated: <%- clientTestFramework %>.fn(),
+            isAuthenticated: vitest.fn(),
           },
         },
 <%_ if (authenticationTypeOauth2) { _%>
         {
           provide: LoginService,
           useValue: {
-            login: <%- clientTestFramework %>.fn(),
+            login: vitest.fn(),
           },
         },
 <%_ } _%>
@@ -74,11 +72,11 @@ describe('Home Component', () => {
     fixture = TestBed.createComponent(Home);
     comp = fixture.componentInstance;
     mockAccountService = TestBed.inject(AccountService);
-    mockAccountService.identity = <%- clientTestFramework %>.fn(() => of(null));
+    mockAccountService.identity = vitest.fn(() => of(null));
 <%_ if (!authenticationTypeOauth2) { _%>
 
     mockRouter = TestBed.inject(Router);
-    <%- clientTestFramework %>.spyOn(mockRouter, 'navigate');
+    vitest.spyOn(mockRouter, 'navigate');
 
 <%_ } else { _%>
     mockLoginService = TestBed.inject(LoginService);

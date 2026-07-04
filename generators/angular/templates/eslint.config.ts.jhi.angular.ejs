@@ -22,7 +22,7 @@ import eslint from '@eslint/js';
 import angular from 'angular-eslint';
 <&_ } -&>
 <&_ if (fragment.configSection) { -&>
-  { ignores: ['<%- this.relativeDir(clientRootDir, clientDistDir) %>', '<%- temporaryDir %>', '<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/'<%- clientTestFrameworkVitest ? ', \'dist/\'' : '' %>] },
+  { ignores: ['<%- this.relativeDir(clientRootDir, clientDistDir) %>', '<%- temporaryDir %>', '<%- this.relativeDir(clientRootDir, clientSrcDir) %>swagger-ui/', 'dist/'] },
   eslint.configs.recommended,
   {
     files: ['**/*.{js,cjs,mjs}'],
