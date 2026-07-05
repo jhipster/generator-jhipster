@@ -98,7 +98,7 @@ export type UserManagementState = Readonly<typeof initialState>;
 
 export const UserManagementSlice = createSlice({
   name: 'userManagement',
-  initialState: initialState as UserManagementState,
+  initialState,
   reducers: {
     reset() {
       return initialState;
