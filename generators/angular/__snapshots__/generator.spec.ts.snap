@@ -2196,7 +2196,7 @@ describe("UserManagement Management Update Component", () => {
       expect(comp.isSaving()).toEqual(false);
     });
 
-    it("should call create service on save for new entity", () => {
+    it("should call update service on save for new entity", () => {
       // GIVEN
       const saveSubject = new Subject<IUserManagement>();
       const userManagement = { login: "Oswald.Kertzmann" };
@@ -2204,7 +2204,7 @@ describe("UserManagement Management Update Component", () => {
         .spyOn(userManagementFormService, "getUserManagement")
         .mockReturnValue({ login: null });
       vitest
-        .spyOn(userManagementService, "create")
+        .spyOn(userManagementService, "update")
         .mockReturnValue(saveSubject);
       vitest.spyOn(comp, "previousState");
       activatedRoute.data = of({ userManagement: null });
@@ -2218,7 +2218,9 @@ describe("UserManagement Management Update Component", () => {
 
       // THEN
       expect(userManagementFormService.getUserManagement).toHaveBeenCalled();
-      expect(userManagementService.create).toHaveBeenCalled();
+      expect(userManagementService.update).toHaveBeenCalledWith(
+        expect.objectContaining({ login: null }),
+      );
       expect(comp.isSaving()).toEqual(false);
       expect(comp.previousState).toHaveBeenCalled();
     });
@@ -2309,7 +2311,7 @@ export class UserManagementUpdate implements OnInit {
       this.editForm,
     );
     this.subscribeToSaveResponse(
-      this.userManagementService.update(userManagement),
+      this.userManagementService.update(userManagement as IUserManagement),
     );
   }
 
