@@ -23,9 +23,7 @@
     const testEntityPrimaryKey0 = tsPrimaryKeySamples[0];
     const testEntityPrimaryKey1 = tsPrimaryKeySamples[1];
 _%>
-<%_ if (clientTestFrameworkVitest) { _%>
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-<%_ } _%>
 import { HttpResponse } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -103,14 +101,14 @@ describe('<%- entityAngularName %> Management Update Component', () => {
     <%_ } _%>
 
                 const <%- otherEntity.entityInstance %>Collection: I<%- otherEntity.entityAngularName %>[] = [<%- otherEntity.tsPrimaryKeySamples[0] %>];
-                <%- clientTestFramework %>.spyOn(<%- otherEntity.entityInstance %>Service, 'query').mockReturnValue(of(new HttpResponse({ body: <%- otherEntity.entityInstance %>Collection })));
+                vitest.spyOn(<%- otherEntity.entityInstance %>Service, 'query').mockReturnValue(of(new HttpResponse({ body: <%- otherEntity.entityInstance %>Collection })));
                 const additional<%- otherEntity.entityAngularNamePlural %> = [
     <%_ for (const relationship of relationshipsWithCustomSharedOptions) { _%>
                     <%- relationship.collection ? '...' : '' %><%- relationship.propertyName %>,
     <%_ } _%>
                 ];
                 const expectedCollection: I<%- otherEntity.entityAngularName %>[] = [...additional<%- otherEntity.entityAngularNamePlural %>, ...<%- otherEntity.entityInstance %>Collection];
-                <%- clientTestFramework %>.spyOn(<%- otherEntity.entityInstance %>Service, 'add<%- otherEntity.entityAngularName %>ToCollectionIfMissing').mockReturnValue(expectedCollection);
+                vitest.spyOn(<%- otherEntity.entityInstance %>Service, 'add<%- otherEntity.entityAngularName %>ToCollectionIfMissing').mockReturnValue(expectedCollection);
 
                 activatedRoute.data = of({ <%- entityInstance %> });
                 comp.ngOnInit();
@@ -132,9 +130,9 @@ describe('<%- entityAngularName %> Management Update Component', () => {
                 <%- entityInstance %>.<%- relationship.propertyName %> = <%- relationship.propertyName %>;
 
                 const <%- relationship.propertyName %>Collection: I<%- otherEntity.entityAngularName %>[] = [<%- otherEntity.tsPrimaryKeySamples[0] %>];
-                <%- clientTestFramework %>.spyOn(<%- otherEntity.entityInstance %>Service, 'query').mockReturnValue(of(new HttpResponse({ body: <%- relationship.propertyName %>Collection })));
+                vitest.spyOn(<%- otherEntity.entityInstance %>Service, 'query').mockReturnValue(of(new HttpResponse({ body: <%- relationship.propertyName %>Collection })));
                 const expectedCollection: I<%- otherEntity.entityAngularName %>[] = [<%- relationship.propertyName %>, ...<%- relationship.propertyName %>Collection];
-                <%- clientTestFramework %>.spyOn(<%- otherEntity.entityInstance %>Service, 'add<%- otherEntity.entityAngularName %>ToCollectionIfMissing').mockReturnValue(expectedCollection);
+                vitest.spyOn(<%- otherEntity.entityInstance %>Service, 'add<%- otherEntity.entityAngularName %>ToCollectionIfMissing').mockReturnValue(expectedCollection);
 
                 activatedRoute.data = of({ <%- entityInstance %> });
                 comp.ngOnInit();
@@ -176,9 +174,9 @@ describe('<%- entityAngularName %> Management Update Component', () => {
             // GIVEN
             const saveSubject = new Subject<I<%- entityAngularName %>>();
             const <%- entityInstance %> = <%- testEntityPrimaryKey0 %>;
-            <%- clientTestFramework %>.spyOn(<%- entityInstance %>FormService, 'get<%- entityAngularName %>').mockReturnValue(<%- entityInstance %>);
-            <%- clientTestFramework %>.spyOn(<%- entityInstance %>Service, 'update').mockReturnValue(saveSubject);
-            <%- clientTestFramework %>.spyOn(comp, 'previousState');
+            vitest.spyOn(<%- entityInstance %>FormService, 'get<%- entityAngularName %>').mockReturnValue(<%- entityInstance %>);
+            vitest.spyOn(<%- entityInstance %>Service, 'update').mockReturnValue(saveSubject);
+            vitest.spyOn(comp, 'previousState');
             activatedRoute.data = of({ <%- entityInstance %> });
             comp.ngOnInit();
 
@@ -200,9 +198,9 @@ describe('<%- entityAngularName %> Management Update Component', () => {
             // GIVEN
             const saveSubject = new Subject<I<%- entityAngularName %>>();
             const <%- entityInstance %> = <%- testEntityPrimaryKey0 %>;
-            <%- clientTestFramework %>.spyOn(<%- entityInstance %>FormService, 'get<%- entityAngularName %>').mockReturnValue({ <%- primaryKey.name %>: null });
-            <%- clientTestFramework %>.spyOn(<%- entityInstance %>Service, 'create').mockReturnValue(saveSubject);
-            <%- clientTestFramework %>.spyOn(comp, 'previousState');
+            vitest.spyOn(<%- entityInstance %>FormService, 'get<%- entityAngularName %>').mockReturnValue({ <%- primaryKey.name %>: null });
+            vitest.spyOn(<%- entityInstance %>Service, 'create').mockReturnValue(saveSubject);
+            vitest.spyOn(comp, 'previousState');
             activatedRoute.data = of({ <%- entityInstance %>: null });
             comp.ngOnInit();
 
@@ -224,8 +222,8 @@ describe('<%- entityAngularName %> Management Update Component', () => {
             // GIVEN
             const saveSubject = new Subject<I<%- entityAngularName %>>();
             const <%- entityInstance %> = <%- testEntityPrimaryKey0 %>;
-            <%- clientTestFramework %>.spyOn(<%- entityInstance %>Service, 'update').mockReturnValue(saveSubject);
-            <%- clientTestFramework %>.spyOn(comp, 'previousState');
+            vitest.spyOn(<%- entityInstance %>Service, 'update').mockReturnValue(saveSubject);
+            vitest.spyOn(comp, 'previousState');
             activatedRoute.data = of({ <%- entityInstance %> });
             comp.ngOnInit();
 
@@ -252,7 +250,7 @@ describe('<%- entityAngularName %> Management Update Component', () => {
             it('should forward to <%- otherEntity.entityInstance %>Service', () => {
                 const entity = <%- otherEntity.tsPrimaryKeySamples[0] %>;
                 const entity2 = <%- otherEntity.tsPrimaryKeySamples[1] %>;
-                <%- clientTestFramework %>.spyOn(<%- otherEntity.entityInstance %>Service, 'compare<%- otherEntity.entityAngularName %>');
+                vitest.spyOn(<%- otherEntity.entityInstance %>Service, 'compare<%- otherEntity.entityAngularName %>');
                 comp.compare<%- otherEntity.entityAngularName %>(entity, entity2);
                 expect(<%- otherEntity.entityInstance %>Service.compare<%- otherEntity.entityAngularName %>).toHaveBeenCalledWith(entity, entity2);
             });
