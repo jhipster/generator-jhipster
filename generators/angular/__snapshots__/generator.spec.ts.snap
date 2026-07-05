@@ -2196,7 +2196,7 @@ describe("UserManagement Management Update Component", () => {
       expect(comp.isSaving()).toEqual(false);
     });
 
-    it("should call update service on save for new entity", () => {
+    it("should call update service on save for new manual-id entity", () => {
       // GIVEN
       const saveSubject = new Subject<IUserManagement>();
       const userManagement = { login: "Oswald.Kertzmann" };
