@@ -2308,15 +2308,9 @@ export class UserManagementUpdate implements OnInit {
     const userManagement = this.userManagementFormService.getUserManagement(
       this.editForm,
     );
-    if (userManagement.login === null) {
-      this.subscribeToSaveResponse(
-        this.userManagementService.create(userManagement),
-      );
-    } else {
-      this.subscribeToSaveResponse(
-        this.userManagementService.update(userManagement),
-      );
-    }
+    this.subscribeToSaveResponse(
+      this.userManagementService.update(userManagement),
+    );
   }
 
   protected subscribeToSaveResponse(
