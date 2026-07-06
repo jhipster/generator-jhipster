@@ -361,8 +361,9 @@ describe('<%- entityNameCapitalized %> e2e test', () => {
   <%_ } _%>
 
   <%_ if (anyFieldHasFileBasedContentType) { _%>
-      // since cypress clicks submit too fast before the blob fields are validated
-      cy.wait(200); // eslint-disable-line cypress/no-unnecessary-waiting
+      // The blob fields are validated asynchronously; wait for the form to become valid
+      // (save button enabled) instead of a fixed delay before submitting.
+      cy.get(entityCreateSaveButtonSelector).should('be.enabled');
   <%_ } _%>
       cy.get(entityCreateSaveButtonSelector).click();
 
