@@ -16,9 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (clientTestFrameworkVitest) { _%>
 import { afterEach, beforeEach, describe, expect, it, vitest, type Mock } from 'vitest';
-<%_ } _%>
 import { Component, ChangeDetectionStrategy, ElementRef, WritableSignal, signal, viewChild } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
@@ -46,7 +44,7 @@ describe('HasAnyAuthorityDirective tests', () => {
 
   beforeEach(() => {
     currentAccount = signal<Account | null>({ activated: true, authorities: [] } as any);
-    hasAnyAuthority = <%- clientTestFramework %>.fn((): boolean => Boolean(currentAccount()));
+    hasAnyAuthority = vitest.fn((): boolean => Boolean(currentAccount()));
 
     TestBed.configureTestingModule({
       providers: [

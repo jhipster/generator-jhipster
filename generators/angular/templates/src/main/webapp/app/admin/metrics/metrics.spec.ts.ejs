@@ -16,9 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (clientTestFrameworkVitest) { _%>
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-<%_ } _%>
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 <%_ if (enableTranslation) { _%>
 import { provideTranslateService } from '@ngx-translate/core';
@@ -65,8 +63,8 @@ describe('Metrics', () => {
       } as unknown as MetricsModel;
       const threadDump = { threads: [{ threadName: 'thread 1' } as Thread] };
 
-      <%- clientTestFramework %>.spyOn(service, 'getMetrics').mockReturnValue(of(metrics));
-      <%- clientTestFramework %>.spyOn(service, 'threadDump').mockReturnValue(of(threadDump));
+      vitest.spyOn(service, 'getMetrics').mockReturnValue(of(metrics));
+      vitest.spyOn(service, 'threadDump').mockReturnValue(of(threadDump));
 
       // WHEN
       comp.ngOnInit();

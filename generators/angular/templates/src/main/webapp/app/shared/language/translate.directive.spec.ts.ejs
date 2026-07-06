@@ -16,9 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-<%_ if (clientTestFrameworkVitest) { _%>
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-<%_ } _%>
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
@@ -48,7 +46,7 @@ describe('TranslateDirective Tests', () => {
   });
 
   it('should change HTML', () => {
-    const spy = <%- clientTestFramework %>.spyOn(translateService, 'get');
+    const spy = vitest.spyOn(translateService, 'get');
 
     fixture.detectChanges();
 

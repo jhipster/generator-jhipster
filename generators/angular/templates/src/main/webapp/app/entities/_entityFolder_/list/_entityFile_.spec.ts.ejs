@@ -20,9 +20,7 @@
     const testEntityPrimaryKey = tsPrimaryKeySamples[0];
     const testEntityPrimaryKey2 = tsPrimaryKeySamples[1];
 _%>
-<%_ if (clientTestFrameworkVitest) { _%>
 import { MockInstance, afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-<%_ } _%>
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import {
   ComponentFixture, TestBed,
@@ -103,7 +101,7 @@ describe('<%- entityAngularName %> Management Component', () => {
         fixture = TestBed.createComponent(<%- entityAngularName %>);
         comp = fixture.componentInstance;
         service = TestBed.inject(<%- entityAngularName %>Service);
-        routerNavigateSpy = <%- clientTestFramework %>.spyOn(comp.router, 'navigate');
+        routerNavigateSpy = vitest.spyOn(comp.router, 'navigate');
 
     const library = TestBed.inject(FaIconLibrary);
     library.addIcons(faEye, faPencilAlt, faPlus<%- searchEngineAny ? ', faSearch' : '' %>, faSort, faSortDown, faSortUp, faSync, faTimes);
@@ -182,7 +180,7 @@ describe('<%- entityAngularName %> Management Component', () => {
     describe('track<%- primaryKey.nameCapitalized %>', () => {
         it('should forward to <%- entityInstance %>Service', () => {
             const entity = <%- tsPrimaryKeySamples[0] %>;
-            <%- clientTestFramework %>.spyOn(service, 'get<%- entityAngularName %>Identifier');
+            vitest.spyOn(service, 'get<%- entityAngularName %>Identifier');
             const <%- primaryKey.name %> = comp.track<%- primaryKey.nameCapitalized %>(entity);
             expect(service.get<%- entityAngularName %>Identifier).toHaveBeenCalledWith(entity);
             expect(<%- primaryKey.name %>).toBe(entity.<%- primaryKey.name %>);
@@ -273,12 +271,12 @@ describe('<%- entityAngularName %> Management Component', () => {
       // NgbModal is not a singleton using TestBed.inject.
       // ngbModal = TestBed.inject(NgbModal);
       ngbModal = (comp as any).modalService;
-      <%- clientTestFramework %>.spyOn(ngbModal, 'open').mockReturnValue(deleteModalMock);
+      vitest.spyOn(ngbModal, 'open').mockReturnValue(deleteModalMock);
     });
 
     it('on confirm should call load', inject([], () => {
       // GIVEN
-      <%- clientTestFramework %>.spyOn(comp, 'load');
+      vitest.spyOn(comp, 'load');
 
       // WHEN
       comp.delete(sampleWithRequiredData);
@@ -291,7 +289,7 @@ describe('<%- entityAngularName %> Management Component', () => {
 
     it('on dismiss should call load', inject([], () => {
       // GIVEN
-      <%- clientTestFramework %>.spyOn(comp, 'load');
+      vitest.spyOn(comp, 'load');
 
       // WHEN
       comp.delete(sampleWithRequiredData);

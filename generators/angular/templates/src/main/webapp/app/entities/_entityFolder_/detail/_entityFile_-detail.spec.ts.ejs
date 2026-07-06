@@ -17,9 +17,7 @@
  limitations under the License.
 -%>
 <%_ const testEntity = tsPrimaryKeySamples[0]; _%>
-<%_ if (clientTestFrameworkVitest) { _%>
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-<%_ } _%>
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
@@ -66,7 +64,7 @@ describe('<%- entityAngularName %> Management Detail Component', () => {
     library.addIcons(faPencilAlt);
 <%_ if (anyFieldIsBlobDerived) { _%>
     dataUtils = TestBed.inject(DataUtils);
-    <%- clientTestFramework %>.spyOn(window, 'open').mockImplementation(() => null);
+    vitest.spyOn(window, 'open').mockImplementation(() => null);
 <%_ } _%>
   });
 
@@ -87,7 +85,7 @@ describe('<%- entityAngularName %> Management Detail Component', () => {
 
   describe('PreviousState', () => {
     it('should navigate to previous state', () => {
-      <%- clientTestFramework %>.spyOn(globalThis.history, 'back');
+      vitest.spyOn(globalThis.history, 'back');
       comp.previousState();
       expect(globalThis.history.back).toHaveBeenCalled();
     });
@@ -97,7 +95,7 @@ describe('<%- entityAngularName %> Management Detail Component', () => {
   describe('byteSize', () => {
     it('should call byteSize from DataUtils', () => {
       // GIVEN
-      <%- clientTestFramework %>.spyOn(dataUtils, 'byteSize');
+      vitest.spyOn(dataUtils, 'byteSize');
       const fakeBase64 = 'fake base64';
 
       // WHEN
@@ -111,15 +109,11 @@ describe('<%- entityAngularName %> Management Detail Component', () => {
   describe('openFile', () => {
     it('should call openFile from DataUtils', () => {
       const newWindow = { ...window };
-  <%_ if (clientTestFrameworkVitest) { _%>
       vitest.stubGlobal('open', vitest.fn(() => newWindow));
-  <%_ } else { _%>
-      window.open = <%- clientTestFramework %>.fn(() => newWindow);
-  <%_ } _%>
-      window.onload = <%- clientTestFramework %>.fn(() => newWindow) as any;
-      window.URL.createObjectURL = <%- clientTestFramework %>.fn() as any;
+      window.onload = vitest.fn(() => newWindow) as any;
+      window.URL.createObjectURL = vitest.fn() as any;
       // GIVEN
-      <%- clientTestFramework %>.spyOn(dataUtils, 'openFile');
+      vitest.spyOn(dataUtils, 'openFile');
       const fakeContentType = 'fake content type';
       const fakeBase64 = 'fake base64';
 
