@@ -12,7 +12,7 @@
     "react": "19.2.7",
     "react-bootstrap": "2.10.10",
     "react-dom": "19.2.7",
-    "react-hook-form": "7.80.0",
+    "react-hook-form": "7.81.0",
     "react-jhipster": "1.0.3",
     "react-redux": "9.3.0",
     "react-router": "8.1.0",
