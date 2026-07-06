@@ -84,7 +84,6 @@ exports[`generator - ci-cd cli with multiples values should match context snapsh
   "clientTestDir": "src/test/javascript/",
   "clientTestFramework": "vitest",
   "clientTestFrameworkAny": true,
-  "clientTestFrameworkJest": false,
   "clientTestFrameworkName": "Vitest",
   "clientTestFrameworkVitest": true,
   "clientTestFrameworks": undefined,

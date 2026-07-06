@@ -156,8 +156,8 @@ const command = {
         tokenValuePattern: ALPHANUMERIC_PATTERN,
       },
       scope: 'storage',
-      choices: ['jest', 'vitest'],
-      default: ctx => (ctx?.clientFramework === 'vue' || ctx?.clientFramework === 'angular' ? 'vitest' : 'jest'),
+      choices: ['vitest'],
+      default: 'vitest',
     },
     clientTestFrameworks: {
       description: 'Client test frameworks',
