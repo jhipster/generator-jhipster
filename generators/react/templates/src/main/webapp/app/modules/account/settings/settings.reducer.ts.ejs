@@ -59,7 +59,7 @@ export const updateAccount = createAsyncThunk('settings/update_account', async (
 
 export const SettingsSlice = createSlice({
   name: 'settings',
-  initialState: initialState as SettingsState,
+  initialState,
   reducers: {
     reset() {
       return initialState;
