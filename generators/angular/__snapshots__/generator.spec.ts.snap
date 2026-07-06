@@ -3524,7 +3524,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     {
       "overrides": [
         {
-          "files": "src/**/*.html",
+          "files": "clientRoot/src/**/*.html",
           "options": {
             "parser": "angular",
           },
@@ -4794,7 +4794,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     {
       "overrides": [
         {
-          "files": "src/**/*.html",
+          "files": "clientRoot/src/**/*.html",
           "options": {
             "parser": "angular",
           },
@@ -5842,7 +5842,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     {
       "overrides": [
         {
-          "files": "src/**/*.html",
+          "files": "clientRoot/src/**/*.html",
           "options": {
             "parser": "angular",
           },
