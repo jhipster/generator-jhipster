@@ -426,6 +426,17 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           });
         }
       },
+      addMicrofrontendDependencies({ application, source }) {
+        const { clientBundlerWebpack, microfrontend } = application;
+        if (!microfrontend) return;
+        if (clientBundlerWebpack) {
+          source.mergeClientPackageJson!({
+            devDependencies: {
+              '@module-federation/enhanced': null,
+            },
+          });
+        }
+      },
       addWebsocketDependencies({ application, source }) {
         const { authenticationTypeSession, communicationSpringWebsocket, nodeDependencies } = application;
         const dependencies: Record<string, string> = {};
