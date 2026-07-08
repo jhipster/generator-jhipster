@@ -18,20 +18,12 @@
 -%>
 // eslint-disable @typescript-eslint/no-unsafe-return
 import { EnvironmentInjector, Type } from '@angular/core';
-import { loadRemoteModule } from '@angular-architects/module-federation-runtime';
+import { loadRemote } from '@module-federation/enhanced/runtime';
 
 import NavbarItem from 'app/layouts/navbar/navbar-item.model';
 
 export const loadNavbarItems = async (service: string): Promise<NavbarItem[]> =>
-  loadRemoteModule<{ EntityNavbarItems: NavbarItem[] }>({
-    type: 'module',
-    remoteEntry: `./services/${service}/remoteEntry.js`,
-    exposedModule: './entity-navbar-items',
-  }).then(({ EntityNavbarItems }) => EntityNavbarItems);
+  loadRemote<{ EntityNavbarItems: NavbarItem[] }>(`${service}/entity-navbar-items`).then(({ EntityNavbarItems }) => EntityNavbarItems);
 
 export const loadEntityRoutes = (service: string): Promise<Type<any>> =>
-  loadRemoteModule<Type<any>>({
-    type: 'module',
-    remoteEntry: `./services/${service}/remoteEntry.js`,
-    exposedModule: './entity-routes',
-  });
+  loadRemote<Type<any>>(`${service}/entity-routes`);
