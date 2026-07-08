@@ -458,6 +458,13 @@ export default class AngularGenerator extends AngularApplicationGenerator {
           },
         ]);
       },
+      overrides({ source }) {
+        const overrides = {
+          typescript: '$typescript',
+        };
+        this.packageJson.merge({ overrides });
+        source.mergeClientPackageJson!({ overrides });
+      },
     });
   }
 
