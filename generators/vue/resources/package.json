@@ -31,7 +31,7 @@
     "@rsbuild/plugin-sass": "2.0.1",
     "@rsbuild/plugin-vue": "2.0.1",
     "@tsconfig/node18": "18.2.6",
-    "@types/node": "22.20.0",
+    "@types/node": "22.20.1",
     "@vitejs/plugin-vue": "6.0.7",
     "@vue/test-utils": "2.4.11",
     "@vue/tsconfig": "0.9.1",
