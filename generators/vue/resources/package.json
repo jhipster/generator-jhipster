@@ -24,7 +24,7 @@
   "devDependencies": {
     "@eslint/js": "10.0.1",
     "@module-federation/enhanced": "2.6.0",
-    "@module-federation/rsbuild-plugin": "2.6.0",
+    "@module-federation/rsbuild-plugin": "2.7.0",
     "@module-federation/vite": "1.16.13",
     "@pinia/testing": "1.0.3",
     "@rsbuild/core": "2.1.5",
