@@ -12,5 +12,5 @@
     "lighthouse": "13.4.0",
     "nyc": "18.0.0"
   },
-  "packageManager": "npm@11"
+  "packageManager": "npm@12"
 }

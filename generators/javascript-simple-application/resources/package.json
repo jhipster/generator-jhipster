@@ -5,5 +5,5 @@
     "husky": "9.1.7",
     "lint-staged": "17.0.8"
   },
-  "packageManager": "npm@11"
+  "packageManager": "npm@12"
 }

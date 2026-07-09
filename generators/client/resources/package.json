@@ -5,5 +5,5 @@
   "devDependencies": {
     "swagger-ui-dist": "5.32.9"
   },
-  "packageManager": "npm@11"
+  "packageManager": "npm@12"
 }

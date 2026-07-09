@@ -25,6 +25,8 @@ concurrency:
 env:
   NODE_OPTIONS: --dns-result-order=ipv4first
   FORCE_COLOR: 2
+  # npm 12 blocks dependency install scripts by default; re-enable so Cypress/generator-jhipster postinstall/prepare run (allowScripts)
+  NPM_CONFIG_DANGEROUSLY_ALLOW_ALL_SCRIPTS: true
 on:
   push:
     branches:
@@ -58,7 +60,7 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: ${{ steps.node-version.outputs.node-version }}
-      - run: npm ci --prod --engine-strict --ignore-scripts
+      - run: npm ci --production --engine-strict --ignore-scripts
       - id: build
         run: bin/jhipster.cjs github-build-matrix devserver --event-name ${{ github.event_name }}
   applications:
@@ -92,7 +94,7 @@ jobs:
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
-      - run: npm ci --prod --engine-strict --ignore-scripts
+      - run: npm ci --production --engine-strict --ignore-scripts
         working-directory: ${{ github.workspace }}/generator-jhipster
       - name: 'GENERATION: project'
         run: jhipster.cjs generate-sample ${{ matrix.sample }} --skip-jhipster-dependencies --skip-install ${{ matrix.args }}
