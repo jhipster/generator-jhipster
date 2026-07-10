@@ -110,8 +110,8 @@ describe('<%- entityAngularName %> Management Detail Component', () => {
     it('should call openFile from DataUtils', () => {
       const newWindow = { ...window };
       vitest.stubGlobal('open', vitest.fn(() => newWindow));
-      window.onload = vitest.fn(() => newWindow) as any;
-      window.URL.createObjectURL = vitest.fn() as any;
+      window.onload = vitest.fn(() => newWindow);
+      window.URL.createObjectURL = vitest.fn();
       // GIVEN
       vitest.spyOn(dataUtils, 'openFile');
       const fakeContentType = 'fake content type';
