@@ -107,7 +107,7 @@ export default class BaseGenerator<
       }
 
       try {
-        // Fallback to the original generator if the file does not exists in the blueprint.
+        // Fallback to the original generator if the file does not exist in the blueprint.
         const blueprintedTemplatePath = this.jhipsterTemplatePath();
         if (!this.jhipsterTemplatesFolders.includes(blueprintedTemplatePath)) {
           this.jhipsterTemplatesFolders.push(blueprintedTemplatePath);
