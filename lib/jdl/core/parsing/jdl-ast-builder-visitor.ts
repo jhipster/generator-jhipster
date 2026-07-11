@@ -75,70 +75,74 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       };
 
       if (context.constantDeclaration) {
-        const constants = context.constantDeclaration.map(this.visit, this);
+        const constants = context.constantDeclaration.map(element => this.visit(element));
         constants.forEach(currConst => {
           ast.constants[currConst.name] = currConst.value;
         });
       }
 
       if (context.applicationDeclaration) {
-        ast.applications = context.applicationDeclaration.map(this.visit, this);
+        ast.applications = context.applicationDeclaration.map(element => this.visit(element));
       }
 
       if (context.deploymentDeclaration) {
-        ast.deployments = context.deploymentDeclaration.map(this.visit, this);
+        ast.deployments = context.deploymentDeclaration.map(element => this.visit(element));
       }
 
       if (context.entityDeclaration) {
-        ast.entities = context.entityDeclaration.map(this.visit, this);
+        ast.entities = context.entityDeclaration.map(element => this.visit(element));
       }
 
       if (context.relationDeclaration) {
-        ast.relationships = context.relationDeclaration.flatMap(this.visit, this);
+        ast.relationships = context.relationDeclaration.flatMap(element => this.visit(element));
       }
 
       if (context.enumDeclaration) {
-        ast.enums = context.enumDeclaration.map(this.visit, this);
+        ast.enums = context.enumDeclaration.map(element => this.visit(element));
       }
 
       if (context.unaryOptionDeclaration) {
-        context.unaryOptionDeclaration.map(this.visit, this).forEach((option: ParsedJDLOption) => {
-          if (!ast.options[option.optionName]) {
-            ast.options[option.optionName] = {};
-          }
-          const astResult = ast.options[option.optionName];
+        context.unaryOptionDeclaration
+          .map(element => this.visit(element))
+          .forEach((option: ParsedJDLOption) => {
+            if (!ast.options[option.optionName]) {
+              ast.options[option.optionName] = {};
+            }
+            const astResult = ast.options[option.optionName];
 
-          const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
-          astResult.list = entityList;
-          astResult.excluded = excludedEntityList;
-        });
+            const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
+            astResult.list = entityList;
+            astResult.excluded = excludedEntityList;
+          });
       }
 
       if (context.binaryOptionDeclaration) {
-        context.binaryOptionDeclaration.map(this.visit, this).forEach((option: ParsedJDLBinaryOption) => {
-          if (option.optionName === 'paginate') {
-            // TODO drop for v9
-            logger.warn('The paginate option is deprecated, please use pagination instead.');
-            option.optionName = 'pagination';
-          }
-          const newOption = !ast.options[option.optionName];
-          if (newOption) {
-            ast.options[option.optionName] = {};
-          }
-          const optionValuesMap = ast.options[option.optionName] as Record<string, ParsedJDLOptionConfig>;
-          if (!optionValuesMap[option.optionValue]) {
-            optionValuesMap[option.optionValue] = { list: [], excluded: [] };
-          }
-          const astResult = optionValuesMap[option.optionValue];
+        context.binaryOptionDeclaration
+          .map(element => this.visit(element))
+          .forEach((option: ParsedJDLBinaryOption) => {
+            if (option.optionName === 'paginate') {
+              // TODO drop for v9
+              logger.warn('The paginate option is deprecated, please use pagination instead.');
+              option.optionName = 'pagination';
+            }
+            const newOption = !ast.options[option.optionName];
+            if (newOption) {
+              ast.options[option.optionName] = {};
+            }
+            const optionValuesMap = ast.options[option.optionName] as Record<string, ParsedJDLOptionConfig>;
+            if (!optionValuesMap[option.optionValue]) {
+              optionValuesMap[option.optionValue] = { list: [], excluded: [] };
+            }
+            const astResult = optionValuesMap[option.optionValue];
 
-          const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
-          astResult.list = entityList;
-          astResult.excluded = excludedEntityList;
-        });
+            const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
+            astResult.list = entityList;
+            astResult.excluded = excludedEntityList;
+          });
       }
 
       if (context.useOptionDeclaration) {
-        ast.useOptions = context.useOptionDeclaration.map(this.visit, this);
+        ast.useOptions = context.useOptionDeclaration.map(element => this.visit(element));
       }
 
       return ast;
@@ -304,7 +308,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
 
     relationDeclaration(context: Record<'relationshipType' | 'relationshipBody', CstNode[]>) {
       const cardinality = this.visit(context.relationshipType);
-      const relationshipBodies = context.relationshipBody.map(this.visit, this);
+      const relationshipBodies = context.relationshipBody.map(element => this.visit(element));
 
       relationshipBodies.forEach(relationshipBody => {
         relationshipBody.cardinality = cardinality;
@@ -320,9 +324,10 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
     relationshipBody(
       context: Record<'from' | 'to' | 'annotationOnSourceSide' | 'annotationOnDestinationSide' | 'relationshipOptions', CstNode[]>,
     ) {
-      const optionsForTheSourceSide = context.annotationOnSourceSide ? context.annotationOnSourceSide.map(this.visit, this) : [];
+      const optionsForTheSourceSide =
+        context.annotationOnSourceSide ? context.annotationOnSourceSide.map(element => this.visit(element)) : [];
       const optionsForTheDestinationSide =
-        context.annotationOnDestinationSide ? context.annotationOnDestinationSide.map(this.visit, this) : [];
+        context.annotationOnDestinationSide ? context.annotationOnDestinationSide.map(element => this.visit(element)) : [];
 
       const from = this.visit(context.from);
       const to = this.visit(context.to);
@@ -374,7 +379,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
     }
 
     relationshipOptions(context: Record<'relationshipOption', CstNode[]>) {
-      return context.relationshipOption.map(this.visit, this).reduce((final, current) => [...final, current], []);
+      return context.relationshipOption.map(element => this.visit(element)).reduce((final, current) => [...final, current], []);
     }
 
     relationshipOption(context: Record<'BUILT_IN_ENTITY', IToken[]>) {
@@ -398,7 +403,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
     }
 
     enumPropList(context: Record<'enumProp', CstNode[]>) {
-      return context.enumProp.map(this.visit, this);
+      return context.enumProp.map(element => this.visit(element));
     }
 
     enumProp(context: Record<'enumPropKey' | 'enumPropValue' | 'enumPropValueWithQuotes' | 'JAVADOC', IToken[]>) {
@@ -441,7 +446,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
     }
 
     exclusion(context: Record<'NAME', IToken[]>) {
-      return context.NAME.map(nameToken => nameToken.image, this);
+      return context.NAME.map(nameToken => nameToken.image);
     }
 
     unaryOptionDeclaration(context: Record<'UNARY_OPTION', IToken[]> & Record<'filterDef' | 'exclusion', CstNode[]>) {
@@ -459,7 +464,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
     filterDef(context: Record<'NAME' | 'STAR', IToken[]>) {
       let entityList: any[] = [];
       if (context.NAME) {
-        entityList = context.NAME.map(nameToken => nameToken.image, this);
+        entityList = context.NAME.map(nameToken => nameToken.image);
       }
 
       const entityOnlyListContainsAll = entityList.length === 1 && entityList[0] === 'all';
@@ -483,7 +488,9 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       const config: Record<string, string | boolean> = {};
 
       if (context.deploymentConfigDeclaration) {
-        const configProps: { key: string; value: string | boolean }[] = context.deploymentConfigDeclaration.map(this.visit, this);
+        const configProps: { key: string; value: string | boolean }[] = context.deploymentConfigDeclaration.map(element =>
+          this.visit(element),
+        );
         configProps.forEach(configProp => {
           config[configProp.key] = configProp.value;
         });
@@ -543,44 +550,50 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       }
 
       if (context.unaryOptionDeclaration) {
-        context.unaryOptionDeclaration.map(this.visit, this).forEach(option => {
-          if (!applicationSubDeclaration.options![option.optionName]) {
-            applicationSubDeclaration.options![option.optionName] = {};
-          }
-          const astResult = applicationSubDeclaration.options![option.optionName];
+        context.unaryOptionDeclaration
+          .map(element => this.visit(element))
+          .forEach(option => {
+            if (!applicationSubDeclaration.options![option.optionName]) {
+              applicationSubDeclaration.options![option.optionName] = {};
+            }
+            const astResult = applicationSubDeclaration.options![option.optionName];
 
-          const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
-          astResult.list = entityList;
-          astResult.excluded = excludedEntityList;
-        });
+            const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
+            astResult.list = entityList;
+            astResult.excluded = excludedEntityList;
+          });
       }
 
       if (context.binaryOptionDeclaration) {
-        context.binaryOptionDeclaration.map(this.visit, this).forEach(option => {
-          if (option.optionName === 'paginate') {
-            // TODO drop for v9
-            logger.warn('The paginate option is deprecated, please use pagination instead.');
-            option.optionName = 'pagination';
-          }
-          if (!applicationSubDeclaration.options![option.optionName]) {
-            applicationSubDeclaration.options![option.optionName] = {};
-          }
-          const optionValuesMap = applicationSubDeclaration.options![option.optionName] as Record<string, ParsedJDLOptionConfig>;
-          if (!optionValuesMap[option.optionValue]) {
-            optionValuesMap[option.optionValue] = { list: [], excluded: [] };
-          }
-          const astResult = optionValuesMap[option.optionValue];
+        context.binaryOptionDeclaration
+          .map(element => this.visit(element))
+          .forEach(option => {
+            if (option.optionName === 'paginate') {
+              // TODO drop for v9
+              logger.warn('The paginate option is deprecated, please use pagination instead.');
+              option.optionName = 'pagination';
+            }
+            if (!applicationSubDeclaration.options![option.optionName]) {
+              applicationSubDeclaration.options![option.optionName] = {};
+            }
+            const optionValuesMap = applicationSubDeclaration.options![option.optionName] as Record<string, ParsedJDLOptionConfig>;
+            if (!optionValuesMap[option.optionValue]) {
+              optionValuesMap[option.optionValue] = { list: [], excluded: [] };
+            }
+            const astResult = optionValuesMap[option.optionValue];
 
-          const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
-          astResult.list = entityList;
-          astResult.excluded = excludedEntityList;
-        });
+            const { entityList, excludedEntityList } = getOptionEntityAndExcludedEntityLists(astResult, option);
+            astResult.list = entityList;
+            astResult.excluded = excludedEntityList;
+          });
       }
 
       if (context.useOptionDeclaration) {
-        context.useOptionDeclaration.map(this.visit, this).forEach(option => {
-          applicationSubDeclaration.useOptions!.push(option);
-        });
+        context.useOptionDeclaration
+          .map(element => this.visit(element))
+          .forEach(option => {
+            applicationSubDeclaration.useOptions!.push(option);
+          });
       }
 
       return applicationSubDeclaration;
@@ -591,7 +604,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
 
       const namespace = context.namespace[0].image;
       if (context.applicationNamespaceConfigDeclaration) {
-        const configProps = context.applicationNamespaceConfigDeclaration.map(this.visit, this);
+        const configProps = context.applicationNamespaceConfigDeclaration.map(element => this.visit(element));
         configProps.forEach(configProp => {
           config[configProp.key] = configProp.value;
         });
@@ -638,7 +651,7 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
       const config: any = {};
 
       if (context.applicationConfigDeclaration) {
-        const configProps = context.applicationConfigDeclaration.map(this.visit, this);
+        const configProps = context.applicationConfigDeclaration.map(element => this.visit(element));
         configProps.forEach(configProp => {
           config[configProp.key] = configProp.value;
         });
@@ -684,21 +697,21 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
     }
 
     qualifiedName(context: Record<'NAME', IToken[]>) {
-      return context.NAME.map(namePart => namePart.image, this).join('.');
+      return context.NAME.map(namePart => namePart.image).join('.');
     }
 
     list(context: Record<'NAME', IToken[]>) {
       if (!context.NAME) {
         return [];
       }
-      return context.NAME.map(namePart => namePart.image, this);
+      return context.NAME.map(namePart => namePart.image);
     }
 
     quotedList(context: Record<'STRING', IToken[]>) {
       if (!context.STRING) {
         return [];
       }
-      return context.STRING.map(namePart => namePart.image.slice(1, -1), this);
+      return context.STRING.map(namePart => namePart.image.slice(1, -1));
     }
   }
 
