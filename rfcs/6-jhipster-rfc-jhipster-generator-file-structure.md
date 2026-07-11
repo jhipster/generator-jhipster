@@ -99,7 +99,7 @@ This structure allows for a clear separation of concerns, with each base generat
 **index.ts**: This file serves as the entry point for the base generator, exporting the main functionality and any public methods or classes that should be accessible to other generators. Usually exposes the generator class, api, types and tasks.
 
 **generator.ts**: This file contains the main generator class that extends the JHipster base generator class.
-It should contains:
+It should contain:
 
 - Facade of support methods and functions that can be used by the downstream generator (`write() {return import {'./support/write.ts'}.writeFile}`).
 - Loading of contextual objects (application, entities, etc.) and their injection in the priorities methods.
