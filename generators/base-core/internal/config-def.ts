@@ -44,12 +44,9 @@ export function loadConfig(
       if (value === undefined || value === null) {
         let source = config;
         if (!source) {
-          switch (def.scope) {
-            case 'blueprint': {
-              // TODO Convert type to BaseGenerator
-              source = (this as BaseGenerator).blueprintStorage!.getAll();
-              break;
-            }
+          if (def.scope === 'blueprint') {
+            // TODO Convert type to BaseGenerator
+            source = (this as BaseGenerator).blueprintStorage!.getAll();
           }
         }
 
