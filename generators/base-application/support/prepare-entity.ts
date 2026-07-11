@@ -387,7 +387,7 @@ function fieldToId(field: BaseApplicationField): any {
 export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntity>>(
   this: CoreGenerator | void,
   entity: E,
-  config: BaseApplicationApplication<BaseApplicationEntity>,
+  config: BaseApplicationApplication,
 ): E {
   mutateData(entity as Partial<ServerEntity>, {
     __override__: false,

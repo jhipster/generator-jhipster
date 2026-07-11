@@ -22,7 +22,7 @@ import { upperFirst } from 'lodash-es';
 import { mutateData } from '../../../../lib/utils/index.ts';
 import BaseApplicationGenerator from '../../../base-application/index.ts';
 import { loadRequiredConfigIntoEntity } from '../../../base-application/support/index.ts';
-import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../../base-application/types.d.ts';
+import type { Application as BaseApplicationApplication } from '../../../base-application/types.d.ts';
 import { loadDockerDependenciesTask, loadDockerElasticsearchVersion } from '../../../base-workspaces/internal/docker-dependencies.ts';
 import prepareSqlApplicationProperties from '../../../spring-boot/generators/data-relational/support/application-properties.ts';
 import type { Application as SpringDataRelationalApplication } from '../../../spring-boot/generators/data-relational/types.d.ts';
@@ -123,11 +123,7 @@ export default class ServerBootstrapGenerator extends BaseApplicationGenerator<S
     return this.asLoadingEntitiesTaskGroup({
       loadingEntities({ entitiesToLoad }) {
         for (const { entityBootstrap } of entitiesToLoad) {
-          loadRequiredConfigIntoEntity.call(
-            this,
-            entityBootstrap,
-            this.jhipsterConfigWithDefaults as BaseApplicationApplication<BaseApplicationEntity>,
-          );
+          loadRequiredConfigIntoEntity.call(this, entityBootstrap, this.jhipsterConfigWithDefaults as BaseApplicationApplication);
         }
       },
       requiredOtherSideRelationships({ entitiesToLoad }) {

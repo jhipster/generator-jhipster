@@ -26,10 +26,7 @@ import type { Application as AngularApplication, Entity as AngularEntity, Source
 
 import { defaultHelpers as helpers, runResult } from '#testing';
 
-const postWritingTask = asPostWritingEntitiesTask<AngularEntity, AngularApplication<AngularEntity>, AngularSource>(function ({
-  source,
-  application,
-}) {
+const postWritingTask = asPostWritingEntitiesTask<AngularEntity, AngularApplication, AngularSource>(function ({ source, application }) {
   source.addEntitiesToClient({
     application,
     entities: [

@@ -52,10 +52,7 @@ import {
 } from '../../support/index.ts';
 import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../types.ts';
 
-export default class BootstrapBaseApplicationGenerator extends BaseApplicationGenerator<
-  BaseApplicationEntity,
-  BaseApplicationApplication<BaseApplicationEntity>
-> {
+export default class BootstrapBaseApplicationGenerator extends BaseApplicationGenerator<BaseApplicationEntity, BaseApplicationApplication> {
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();

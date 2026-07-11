@@ -19,7 +19,7 @@
 
 import type { JHipsterConfigs } from '../../../lib/command/index.ts';
 import type BaseGenerator from '../../base/generator.ts';
-import type { Application as BaseApplicationApplication, Entity as BaseApplicationEntity } from '../../base-application/types.d.ts';
+import type { Application as BaseApplicationApplication } from '../../base-application/types.d.ts';
 import type CoreGenerator from '../index.ts';
 import type { Config as BaseCoreConfig } from '../types.d.ts';
 
@@ -27,11 +27,11 @@ import type { Config as BaseCoreConfig } from '../types.d.ts';
 export function loadConfig(
   this: CoreGenerator,
   configsDef: JHipsterConfigs | undefined,
-  data: { application: BaseApplicationApplication<BaseApplicationEntity> },
+  data: { application: BaseApplicationApplication },
 ): void;
 export function loadConfig(
   configsDef: JHipsterConfigs | undefined,
-  data: { application: BaseApplicationApplication<BaseApplicationEntity>; config?: BaseCoreConfig },
+  data: { application: BaseApplicationApplication; config?: BaseCoreConfig },
 ): void;
 export function loadConfig(
   this: CoreGenerator | void,

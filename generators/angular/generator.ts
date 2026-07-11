@@ -55,7 +55,7 @@ const { ANGULAR } = clientFrameworkTypes;
 
 export class AngularApplicationGenerator extends BaseApplicationGenerator<
   AngularEntity,
-  AngularApplication<AngularEntity>,
+  AngularApplication,
   AngularConfig,
   AngularOptions,
   AngularSource
