@@ -43,9 +43,7 @@ export default <%- cypressCoverage ? 'async ' : '' %>(on: Cypress.PluginEvents, 
     prepareAudit(launchOptions);
 <%_ } _%>
     if (browser.name === 'chrome' && browser.isHeadless) {
-      launchOptions.args.push('--disable-gpu');
-      launchOptions.args.push('--no-sandbox');
-      launchOptions.args.push('--disable-dev-shm-usage');
+      launchOptions.args.push('--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage');
       return launchOptions;
     }
   });
