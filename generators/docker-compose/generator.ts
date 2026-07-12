@@ -200,7 +200,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
 
           if (yamlConfig.environment) {
             yamlConfig.environment = yamlConfig.environment.map((envOption: string) => {
-              // Doesn't applies to keycloak, jhipster-registry and consul.
+              // Doesn't apply to keycloak, jhipster-registry and consul.
               // docker-compose changes the container name to `${lowercaseBaseName}-${databaseType}`.
               // we need to update the environment urls to the new container host.
               [

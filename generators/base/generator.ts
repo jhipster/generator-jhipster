@@ -531,7 +531,7 @@ export default class BaseGenerator<
   /**
    * Priority API stub for blueprints.
    *
-   * Default priority should used as misc customizations.
+   * Default priority should be used as misc customizations.
    */
   get default() {
     return {};
@@ -549,7 +549,7 @@ export default class BaseGenerator<
   /**
    * Priority API stub for blueprints.
    *
-   * Writing priority should used to write files.
+   * Writing priority should be used to write files.
    */
   get writing() {
     return {};
@@ -567,7 +567,7 @@ export default class BaseGenerator<
   /**
    * Priority API stub for blueprints.
    *
-   * PostWriting priority should used to customize files.
+   * PostWriting priority should be used to customize files.
    */
   get postWriting() {
     return {};
@@ -603,7 +603,7 @@ export default class BaseGenerator<
   /**
    * Priority API stub for blueprints.
    *
-   * PostWriting priority should used to customize files.
+   * PostWriting priority should be used to customize files.
    */
   get postInstall() {
     return {};
@@ -621,7 +621,7 @@ export default class BaseGenerator<
   /**
    * Priority API stub for blueprints.
    *
-   * End priority should used to say good bye and print instructions.
+   * End priority should be used to say good bye and print instructions.
    */
   get end() {
     return {};

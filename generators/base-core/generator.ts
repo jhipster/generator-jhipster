@@ -1223,7 +1223,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
    * Edit file content.
    * Edits an empty file if `options.create` is truthy or no callback is passed.
    * @example
-   * // Throws if `foo.txt` doesn't exists or append the content.
+   * // Throws if `foo.txt` doesn't exist or append the content.
    * editFile('foo.txt', content => content + 'foo.txt content');
    * @example
    * // Appends `foo.txt` content whether it exists or not.
