@@ -25,8 +25,9 @@ import type CoreGenerator from '../../generators/base-core/index.ts';
 import { CONTEXT_DATA_APPLICATION_KEY } from '../../generators/base-simple-application/support/constants.ts';
 import { WORKSPACES_PRIORITY_NAMES } from '../../generators/base-workspaces/priorities.ts';
 import { GENERATOR_JHIPSTER } from '../../generators/generator-constants.ts';
-import { runResult, skipPrettierHelpers as helpers } from '../../lib/testing/index.ts';
 import getGenerator from '../../lib/utils/get-generator.ts';
+
+import { runResult, skipPrettierHelpers as helpers } from '#testing';
 
 const workspacesPriorityList = Object.values(WORKSPACES_PRIORITY_NAMES);
 

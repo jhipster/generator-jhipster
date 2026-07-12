@@ -19,9 +19,9 @@
 
 import { beforeEach, describe, expect, it } from 'esmocha';
 
-import { defaultHelpers as helpers } from '../lib/testing/index.ts';
-
 import { createProgram } from './program.ts';
+
+import { defaultHelpers as helpers } from '#testing';
 
 describe('cli - program', () => {
   beforeEach(async () => {

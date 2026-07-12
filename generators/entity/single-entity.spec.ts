@@ -19,8 +19,9 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
-import { defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
 import { CLIENT_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR, SERVER_MAIN_SRC_DIR } from '../generator-constants.ts';
+
+import { defaultHelpers as helpers, result as runResult } from '#testing';
 
 const GENERATOR_ENTITY = 'entity';
 

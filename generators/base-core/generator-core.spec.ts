@@ -19,11 +19,12 @@
 
 import { before, beforeEach, describe, expect, it } from 'esmocha';
 
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { createJHipsterLogger } from '../../lib/utils/index.ts';
 
 import Base from './index.ts';
 import { editPropertiesFileCallback } from './support/properties-file.ts';
+
+import { defaultHelpers as helpers, runResult } from '#testing';
 
 const BaseGenerator: any = Base.prototype;
 

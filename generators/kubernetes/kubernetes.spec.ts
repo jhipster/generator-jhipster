@@ -19,7 +19,7 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
+import { defaultHelpers as helpers, runResult } from '#testing';
 
 const GENERATOR_KUBERNETES = 'kubernetes';
 

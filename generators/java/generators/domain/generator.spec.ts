@@ -20,10 +20,11 @@
 import { before, describe, expect, it } from 'esmocha';
 import { basename, resolve } from 'node:path';
 
-import { defaultHelpers as helpers, typedResult } from '../../../../lib/testing/index.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.ts';
 
 import Generator from './index.ts';
+
+import { defaultHelpers as helpers, typedResult } from '#testing';
 
 const generator = `${basename(resolve(import.meta.dirname, '../../'))}:${basename(import.meta.dirname)}`;
 const result = typedResult<Generator>();
