@@ -107,7 +107,7 @@ export default class BaseGenerator<
       }
 
       try {
-        // Fallback to the original generator if the file does not exists in the blueprint.
+        // Fallback to the original generator if the file does not exist in the blueprint.
         const blueprintedTemplatePath = this.jhipsterTemplatePath();
         if (!this.jhipsterTemplatesFolders.includes(blueprintedTemplatePath)) {
           this.jhipsterTemplatesFolders.push(blueprintedTemplatePath);
@@ -291,7 +291,7 @@ export default class BaseGenerator<
     // Use started counter or use stored creationTimestamp if creationTimestamp option is passed
     const creationTimestamp = this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;
     let now = new Date();
-    // Milliseconds is ignored for changelogDate.
+    // Milliseconds are ignored for changelogDate.
     now.setMilliseconds(0);
     // Run reproducible timestamp when regenerating the project with reproducible option or a specific timestamp.
     if (reproducible || creationTimestamp) {
