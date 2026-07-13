@@ -20,10 +20,9 @@
 import { before, describe, expect, it } from 'esmocha';
 import { basename, join } from 'node:path';
 
-import { shouldSupportFeatures } from '../../test/support/index.ts';
-
 import Generator from './generator.ts';
 
+import { shouldSupportFeatures } from '#test-support';
 import { defaultHelpers as helpers, runResult } from '#testing';
 
 const generator = basename(import.meta.dirname);

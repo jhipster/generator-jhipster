@@ -20,11 +20,10 @@
 import { before, describe, expect, it } from 'esmocha';
 import { basename, join } from 'node:path';
 
-import { shouldSupportFeatures } from '../../test/support/index.ts';
-
 import { workflowChoices } from './command.ts';
 import Generator from './generator.ts';
 
+import { shouldSupportFeatures } from '#test-support';
 import { defaultHelpers as helpers, typedResult } from '#testing';
 
 const runResult = typedResult<Generator>();

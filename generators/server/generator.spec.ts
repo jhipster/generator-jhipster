@@ -19,11 +19,10 @@
 import { before, describe, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
-import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
-
 import { filterBasicServerGenerators, shouldComposeWithCouchbase } from './__test-support/index.ts';
 import Generator from './index.ts';
 
+import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '#test-support';
 import { defaultHelpers as helpers, result as runResult } from '#testing';
 
 const generator = basename(import.meta.dirname);

@@ -20,10 +20,10 @@ import { before, describe, it } from 'esmocha';
 import { basename } from 'node:path';
 
 import { testFrameworkTypes } from '../../lib/jhipster/index.ts';
-import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
 
 import Generator from './index.ts';
 
+import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '#test-support';
 import { defaultHelpers as helpers, result, runResult } from '#testing';
 
 const { CYPRESS } = testFrameworkTypes;
