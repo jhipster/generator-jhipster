@@ -73,7 +73,7 @@ export const loadEntitiesAnnotations = (entities: BaseApplicationEntity[]): void
 
 export const loadEntitiesOtherSide = (
   entities: BaseApplicationEntity[],
-  { application }: { application?: BaseApplicationApplication<BaseApplicationEntity> } = {},
+  { application }: { application?: BaseApplicationApplication } = {},
 ): ValidationResult => {
   const result: { warning: string[] } = { warning: [] };
   for (const entity of entities) {

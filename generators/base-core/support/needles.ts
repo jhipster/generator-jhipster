@@ -192,9 +192,7 @@ export const checkContentIn = (contentToCheck: string | RegExp, content: string,
   return re.test(content);
 };
 
-const addNeedlePrefix = (needle: string): string => {
-  return needle.includes('jhipster-needle-') ? needle : `jhipster-needle-${needle}`;
-};
+const addNeedlePrefix = (needle: string): string => (needle.includes('jhipster-needle-') ? needle : `jhipster-needle-${needle}`);
 
 const hasNeedleStart = (content: string, needle: string): boolean => {
   const regexpStart = createNeedleRegexp(needle, true);
