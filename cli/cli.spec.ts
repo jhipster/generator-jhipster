@@ -29,12 +29,13 @@ import { coerce } from 'semver';
 import type FullEnvironment from 'yeoman-environment';
 
 import type { JHipsterCommandDefinition } from '../generators/index.ts';
-import { createBlueprintFiles, defaultHelpers as helpers } from '../lib/testing/index.ts';
 
 import type JHipsterCommand from './jhipster-command.ts';
 import { createProgram } from './program.ts';
 import type { CliCommand } from './types.ts';
 import { getCommand as actualGetCommand } from './utils.ts';
+
+import { createBlueprintFiles, defaultHelpers as helpers } from '#testing';
 
 const cliBlueprintFiles = {
   'cli/commands.js': `export default {

@@ -21,9 +21,10 @@ import { before, describe, expect, it } from 'esmocha';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import path, { basename, join } from 'node:path';
 
-import { runResult, skipPrettierHelpers as helpers } from '../../lib/testing/index.ts';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.ts';
 import type GeneratorsByNamespace from '../types.ts';
+
+import { runResult, skipPrettierHelpers as helpers } from '#testing';
 
 const exceptSourceMethods = ['addLiquibaseChangelog', 'addLiquibaseIncrementalChangelog', 'addLiquibaseConstraintsChangelog'];
 

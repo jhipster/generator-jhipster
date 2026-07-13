@@ -21,17 +21,12 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
 import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
-import {
-  buildClientSamples,
-  defaultHelpers as helpers,
-  dryRunHelpers,
-  entitiesClientSamples as entities,
-  runResult,
-} from '../../lib/testing/index.ts';
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.ts';
 
 import Generator from './index.ts';
+
+import { buildClientSamples, defaultHelpers as helpers, dryRunHelpers, entitiesClientSamples as entities, runResult } from '#testing';
 
 const generator = basename(import.meta.dirname);
 

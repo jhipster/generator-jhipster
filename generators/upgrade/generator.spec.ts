@@ -21,11 +21,12 @@ import { basename } from 'node:path';
 
 import { simpleGit } from 'simple-git';
 
-import { defaultHelpers as helpers, result } from '../../lib/testing/index.ts';
 import { shouldSupportFeatures } from '../../test/support/tests.ts';
 
 import Generator from './index.ts';
 import { UPGRADE_BRANCH } from './support/index.ts';
+
+import { defaultHelpers as helpers, result } from '#testing';
 
 const generator = basename(import.meta.dirname);
 

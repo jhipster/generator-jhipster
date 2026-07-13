@@ -20,10 +20,11 @@
 import { before, describe, it } from 'esmocha';
 
 import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
-import { dryRunHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
 import { CLIENT_WEBPACK_DIR } from '../generator-constants.ts';
 
 import ClientGenerator from './index.ts';
+
+import { dryRunHelpers as helpers, result as runResult } from '#testing';
 
 const { ANGULAR, REACT } = clientFrameworkTypes;
 

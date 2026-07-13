@@ -20,6 +20,8 @@
 import { before, describe, expect, it } from 'esmocha';
 
 import { cacheTypes, databaseTypes } from '../../../../lib/jhipster/index.ts';
+import { filterBasicServerGenerators } from '../../../server/__test-support/index.ts';
+
 import {
   buildSamplesFromMatrix,
   buildServerMatrix,
@@ -28,8 +30,7 @@ import {
   extendFilteredMatrix,
   extendMatrix,
   runResult,
-} from '../../../../lib/testing/index.ts';
-import { filterBasicServerGenerators } from '../../../server/__test-support/index.ts';
+} from '#testing';
 
 const GENERATOR_SERVER = 'server';
 

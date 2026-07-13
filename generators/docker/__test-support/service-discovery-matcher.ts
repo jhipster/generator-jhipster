@@ -19,8 +19,9 @@
 
 import { it } from 'esmocha';
 
-import { matchWrittenConfig, matchWrittenFiles } from '../../../lib/testing/index.ts';
 import { JAVA_DOCKER_DIR } from '../../generator-constants.ts';
+
+import { matchWrittenConfig, matchWrittenFiles } from '#testing';
 
 const expectedEurekaFiles = () => {
   return [

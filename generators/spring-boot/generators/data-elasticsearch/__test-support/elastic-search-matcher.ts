@@ -19,8 +19,9 @@
 
 import { it } from 'esmocha';
 
-import { matchWrittenConfig, matchWrittenFiles, runResult } from '../../../../../lib/testing/index.ts';
 import { JAVA_DOCKER_DIR, SERVER_MAIN_SRC_DIR } from '../../../../generator-constants.ts';
+
+import { matchWrittenConfig, matchWrittenFiles, runResult } from '#testing';
 
 const expectedElasticsearchFiles = () => [`${JAVA_DOCKER_DIR}elasticsearch.yml`];
 

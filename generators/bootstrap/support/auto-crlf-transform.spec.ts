@@ -19,9 +19,9 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
-import { defaultHelpers as helpers } from '../../../lib/testing/index.ts';
-
 import { detectCrLf } from './auto-crlf-transform.ts';
+
+import { defaultHelpers as helpers } from '#testing';
 
 describe('generator - bootstrap - utils', () => {
   describe('::detectCrLf', () => {

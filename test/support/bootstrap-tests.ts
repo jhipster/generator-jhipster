@@ -19,7 +19,7 @@
 
 import { before, describe, expect, it } from 'esmocha';
 
-import { defaultHelpers as helpers, entitiesSimple, runResult } from '../../lib/testing/index.ts';
+import { defaultHelpers as helpers, entitiesSimple, runResult } from '#testing';
 
 const expectedNonRecursiveObject = (object: any, except: string[] = []) => {
   const properties = Object.keys(object).filter(key => !except.includes(key));

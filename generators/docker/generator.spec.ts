@@ -20,6 +20,12 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
 import { cacheTypes, databaseTypes, searchEngineTypes, serviceDiscoveryTypes } from '../../lib/jhipster/index.ts';
+import { shouldSupportFeatures } from '../../test/support/tests.ts';
+import { matchElasticSearchDocker } from '../spring-boot/generators/data-elasticsearch/__test-support/elastic-search-matcher.ts';
+
+import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.ts';
+import Generator from './index.ts';
+
 import {
   buildSamplesFromMatrix,
   buildServerMatrix,
@@ -27,12 +33,7 @@ import {
   extendFilteredMatrix,
   extendMatrix,
   runResult,
-} from '../../lib/testing/index.ts';
-import { shouldSupportFeatures } from '../../test/support/tests.ts';
-import { matchElasticSearchDocker } from '../spring-boot/generators/data-elasticsearch/__test-support/elastic-search-matcher.ts';
-
-import { matchConsul, matchEureka } from './__test-support/service-discovery-matcher.ts';
-import Generator from './index.ts';
+} from '#testing';
 
 const { CASSANDRA, COUCHBASE, MONGODB, NEO4J, MARIADB, MSSQL, MYSQL, ORACLE, POSTGRESQL } = databaseTypes;
 const { NO: NO_SEARCH_ENGINE, ELASTICSEARCH } = searchEngineTypes;

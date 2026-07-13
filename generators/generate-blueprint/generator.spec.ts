@@ -19,10 +19,11 @@
 import { before, describe, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
-import { createTestHelpers, typedResult } from '../../lib/testing/index.ts';
 import { testBlueprintSupport } from '../../test/support/tests.ts';
 
 import type Generator from './index.ts';
+
+import { createTestHelpers, typedResult } from '#testing';
 
 const generator = basename(import.meta.dirname);
 const helpers = createTestHelpers<Generator>({

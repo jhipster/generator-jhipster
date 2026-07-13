@@ -20,10 +20,11 @@
 import { before, describe, it } from 'esmocha';
 import { basename } from 'node:path';
 
-import { basicHelpers, defaultHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.ts';
 
 import { supportedLanguages } from './support/index.ts';
+
+import { basicHelpers, defaultHelpers as helpers, result as runResult } from '#testing';
 
 const generator = basename(import.meta.dirname);
 
