@@ -117,7 +117,7 @@ export default class DockerComposeGenerator extends BaseWorkspacesGenerator {
       configureBaseDeployment({ applications }) {
         this.jhipsterConfig.jwtSecretKey ??= createBase64Secret(this.options.reproducibleTests);
         if (applications.some(app => app.serviceDiscoveryTypeEureka)) {
-          this.jhipsterConfig.adminPassword = this.jhipsterConfig.adminPassword ?? 'admin';
+          this.jhipsterConfig.adminPassword ??= 'admin';
         }
       },
     });

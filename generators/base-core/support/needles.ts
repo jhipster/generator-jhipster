@@ -376,8 +376,8 @@ export function createBaseNeedle<Generator extends CoreGenerator = CoreGenerator
 
   assert(actualNeedles, 'needles is required');
   const { needlesPrefix, filePath, ...needleOptions } = actualOptions;
-  needleOptions.optional = needleOptions.optional ?? false;
-  needleOptions.ignoreWhitespaces = needleOptions.ignoreWhitespaces ?? true;
+  needleOptions.optional ??= false;
+  needleOptions.ignoreWhitespaces ??= true;
 
   const callbacks = Object.entries(actualNeedles)
     .filter(([_key, contentToAdd]) => contentToAdd)

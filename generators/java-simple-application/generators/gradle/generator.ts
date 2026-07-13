@@ -109,7 +109,7 @@ export default class GradleGenerator extends BaseSimpleApplicationGenerator<Grad
         source.addGradleDependencies = (dependencies, options = {}) => {
           const { gradleFile } = gradleNeedleOptionsWithDefaults(options);
           if (gradleFile === 'build.gradle') {
-            source._gradleDependencies = source._gradleDependencies ?? [];
+            source._gradleDependencies ??= [];
             source._gradleDependencies.push(...dependencies);
             this.queueTask({
               method: () => {
