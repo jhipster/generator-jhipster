@@ -99,8 +99,8 @@ export const loadEntitiesOtherSide = (
       const otherRelationship = findOtherRelationshipInRelationships(entity.name, relationship, otherEntity.relationships ?? []);
       if (otherRelationship) {
         relationship.otherRelationship = otherRelationship as RelationshipWithEntity<BaseApplicationRelationship, BaseApplicationEntity>;
-        otherRelationship.otherEntityRelationshipName = otherRelationship.otherEntityRelationshipName ?? relationship.relationshipName;
-        relationship.otherEntityRelationshipName = relationship.otherEntityRelationshipName ?? otherRelationship.relationshipName;
+        otherRelationship.otherEntityRelationshipName ??= relationship.relationshipName;
+        relationship.otherEntityRelationshipName ??= otherRelationship.relationshipName;
         if (
           otherRelationship.otherEntityRelationshipName !== relationship.relationshipName ||
           relationship.otherEntityRelationshipName !== otherRelationship.relationshipName
@@ -129,7 +129,7 @@ export const addOtherRelationship = <const R extends BaseApplicationRelationship
   otherEntity: BaseApplicationEntity,
   relationship: R,
 ): RelationshipWithEntity<R, BaseApplicationEntity> => {
-  relationship.otherEntityRelationshipName = relationship.otherEntityRelationshipName ?? lowerFirst(entity.name);
+  relationship.otherEntityRelationshipName ??= lowerFirst(entity.name);
   const otherRelationship = {
     otherEntityName: lowerFirst(entity.name),
     otherEntityRelationshipName: relationship.relationshipName,
@@ -139,7 +139,7 @@ export const addOtherRelationship = <const R extends BaseApplicationRelationship
     ownerSide: !relationship.ownerSide,
     otherRelationship: relationship,
   } as any;
-  otherEntity.relationships = otherEntity.relationships ?? [];
+  otherEntity.relationships ??= [];
   otherEntity.relationships.push(otherRelationship);
   return otherRelationship;
 };

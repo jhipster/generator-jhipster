@@ -408,8 +408,8 @@ export const buildJHipster = async ({
   if (env) {
     commands = { ...SUB_GENERATORS, ...commands };
   } else {
-    envBuilder = envBuilder ?? (await createEnvBuilder());
-    env = env ?? envBuilder.getEnvironment();
+    envBuilder ??= await createEnvBuilder();
+    env ??= envBuilder.getEnvironment();
     commands = { ...SUB_GENERATORS, ...(await envBuilder.getBlueprintCommands()), ...commands };
   }
 

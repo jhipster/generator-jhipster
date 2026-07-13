@@ -134,7 +134,7 @@ function setRelationshipsToEntity(relatedRelationships: RelationshipsRelatedToEn
     if (splitField.otherEntityField) {
       convertedRelationship.otherEntityField = lowerFirst(splitField.otherEntityField);
     }
-    relationshipToConvert.injectedFieldInTo = relationshipToConvert.injectedFieldInTo ?? lowerFirst(relationshipToConvert.from);
+    relationshipToConvert.injectedFieldInTo ??= lowerFirst(relationshipToConvert.from);
 
     setOptionsForRelationshipDestinationSide(relationshipToConvert, convertedRelationship);
     const convertedEntityRelationships = convertedRelationships.get(entityName)!;

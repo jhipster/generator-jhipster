@@ -79,7 +79,7 @@ export default class UpgradeGenerator extends BaseGenerator<UpgradeConfig, Upgra
         if (this.silent) {
           this.spawnStdio = 'ignore';
         }
-        this.executable = this.executable ?? this.options.programName ?? 'jhipster';
+        this.executable ??= this.options.programName ?? 'jhipster';
         this.createEnvBuilder = this.options.createEnvBuilder ?? EnvironmentBuilder.createDefaultBuilder;
       },
 

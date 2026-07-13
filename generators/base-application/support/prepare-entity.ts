@@ -199,7 +199,7 @@ export function prepareEntityPrimaryKeyForTemplates(
     let idField = entityWithConfig.fields.find(field => field.fieldName === 'id');
     if (idField) {
       idField.id = true;
-      idField.autoGenerate = idField.autoGenerate ?? true;
+      idField.autoGenerate ??= true;
     } else {
       if (entityWithConfig.microserviceName && !application?.microfrontend) {
         this?.log.warn(
