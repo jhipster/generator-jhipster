@@ -434,7 +434,7 @@ export default class BaseApplicationGenerator<
   /**
    * @private
    * Get entities to configure.
-   * This method doesn't filter entities. An filtered config can be changed at this priority.
+   * This method doesn't filter entities. A filtered config can be changed at this priority.
    * @returns {string[]}
    */
   #getEntitiesDataToConfigure(): ConfiguringEachEntityTaskParam<Entity, Application>[] {
@@ -450,7 +450,7 @@ export default class BaseApplicationGenerator<
   /**
    * @private
    * Get entities to load.
-   * This method doesn't filter entities. An filtered config can be changed at this priority.
+   * This method doesn't filter entities. A filtered config can be changed at this priority.
    * @returns {string[]}
    */
   #getEntitiesDataToLoad(): EntityToLoad<any>[] {

@@ -28,7 +28,8 @@ import {
   databaseTypes,
   testFrameworkTypes,
 } from '../../lib/jhipster/index.ts';
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
+
+import { defaultHelpers as helpers, runResult } from '#testing';
 
 const GENERATOR_APP = 'app';
 

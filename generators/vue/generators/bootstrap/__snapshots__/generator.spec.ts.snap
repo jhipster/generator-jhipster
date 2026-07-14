@@ -48,7 +48,6 @@ exports[`generator - vue:bootstrap bootstrapping default config should prepare a
   "clientTestDir": "src/test/javascript/",
   "clientTestFramework": "vitest",
   "clientTestFrameworkAny": true,
-  "clientTestFrameworkJest": false,
   "clientTestFrameworkName": "Vitest",
   "clientTestFrameworkVitest": true,
   "clientTestFrameworks": undefined,

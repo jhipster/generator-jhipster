@@ -21,9 +21,9 @@ import { after, afterEach, before, beforeEach, describe, esmocha, expect, it } f
 import assert from 'node:assert';
 import fs from 'node:fs';
 
-import { createBlueprintFiles, defaultHelpers as helpers } from '../lib/testing/index.ts';
-
 import EnvironmentBuilder from './environment-builder.ts';
+
+import { createBlueprintFiles, defaultHelpers as helpers } from '#testing';
 
 const cliBlueprintFiles = {
   'cli/commands.js': `export default {

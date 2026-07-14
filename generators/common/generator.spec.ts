@@ -19,11 +19,12 @@
 import { before, describe, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
-import { basicHelpers, defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
-import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
 import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
 
 import Generator from './index.ts';
+
+import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '#test-support';
+import { basicHelpers, defaultHelpers as helpers, runResult } from '#testing';
 
 const generator = basename(import.meta.dirname);
 

@@ -600,12 +600,9 @@ class JHipsterTest<JHipsterTestGenerator extends BaseCoreGenerator = BaseCoreGen
     let jhipsterSettings: RunJHipster | undefined;
     if (typeof jhipsterGenerator === 'object' || jhipsterGenerator === undefined) {
       jhipsterSettings = jhipsterGenerator;
-      jhipsterGenerator = undefined;
-      if (jhipsterGenerator === undefined) {
-        return this.runDefault<Generator>(settings as RunContextSettings | undefined, envOptions).withJHipsterContextOptions(
-          jhipsterSettings,
-        );
-      }
+      return this.runDefault<Generator>(settings as RunContextSettings | undefined, envOptions).withJHipsterContextOptions(
+        jhipsterSettings,
+      );
     }
     const generatorSpec =
       !isAbsolute(jhipsterGenerator) && !jhipsterGenerator.startsWith('@') ? toJHipsterNamespace(jhipsterGenerator) : jhipsterGenerator;

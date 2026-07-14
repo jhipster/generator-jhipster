@@ -119,18 +119,16 @@ export default class OpenapiGeneratorGenerator extends JavaApplicationGenerator 
           },
         );
 
-        if (addOpenapiGeneratorPlugin) {
-          if (buildToolGradle) {
-            source.addGradleBuildSrcDependencyCatalogLibraries?.([
-              {
-                libraryName: 'openapi-generator',
-                module: 'org.openapitools:openapi-generator-gradle-plugin',
-                version: javaDependencies['gradle-openapi-generator'],
-                scope: 'implementation',
-              },
-            ]);
-            source.addGradlePlugin?.({ id: 'jhipster.openapi-generator-conventions' });
-          }
+        if (addOpenapiGeneratorPlugin && buildToolGradle) {
+          source.addGradleBuildSrcDependencyCatalogLibraries?.([
+            {
+              libraryName: 'openapi-generator',
+              module: 'org.openapitools:openapi-generator-gradle-plugin',
+              version: javaDependencies['gradle-openapi-generator'],
+              scope: 'implementation',
+            },
+          ]);
+          source.addGradlePlugin?.({ id: 'jhipster.openapi-generator-conventions' });
         }
       },
     });

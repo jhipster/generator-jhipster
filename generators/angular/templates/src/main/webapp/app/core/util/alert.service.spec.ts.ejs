@@ -261,7 +261,7 @@ describe('Alert Service Test', () => {
     );
   });
 
-  it('should produce a info message', () => {
+  it('should produce an info message', () => {
     expect(service.addAlert({ type: 'info', message: 'Hello Jhipster' })).toEqual(
       expect.objectContaining({
         type: 'info',
@@ -272,7 +272,7 @@ describe('Alert Service Test', () => {
 
 <%_ if (enableTranslation) { _%>
 
-  it('should produce a info message with translated message if key exists', () => {
+  it('should produce an info message with translated message if key exists', () => {
     translateService.setTranslation('en', {
       'hello.jhipster': 'Translated message',
     });
@@ -284,7 +284,7 @@ describe('Alert Service Test', () => {
     );
   });
 
-  it('should produce a info message with provided message if key does not exists', () => {
+  it('should produce an info message with provided message if key does not exists', () => {
     expect(service.addAlert({ type: 'info', message: 'Hello Jhipster', translationKey: 'hello.jhipster' })).toEqual(
       expect.objectContaining({
         type: 'info',
@@ -293,7 +293,7 @@ describe('Alert Service Test', () => {
     );
   });
 
-  it('should produce a info message with provided key if translation key does not exist in translations and message is not provided', () => {
+  it('should produce an info message with provided key if translation key does not exist in translations and message is not provided', () => {
     expect(service.addAlert({ type: 'info', translationKey: 'hello.jhipster' })).toEqual(
       expect.objectContaining({
         type: 'info',

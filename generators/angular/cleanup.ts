@@ -27,7 +27,7 @@ import type { Application as AngularApplication, Entity as AngularEntity } from 
  * need to be removed.
  */
 
-export default asWritingTask<AngularEntity, AngularApplication<AngularEntity>>(function cleanupOldFilesTask({ application, control }) {
+export default asWritingTask<AngularEntity, AngularApplication>(function cleanupOldFilesTask({ application, control }) {
   if (control.isJhipsterVersionLessThan('3.2.0')) {
     // removeFile and removeFolder methods should be called here for files and folders to cleanup
     this.removeFile(`${application.clientSrcDir}app/components/form/uib-pager.config.js`);

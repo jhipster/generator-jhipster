@@ -58,7 +58,7 @@ const defaultLookupOptions = Object.freeze({
 type EnvironmentOptions = ConstructorParameters<typeof Environment>[0];
 
 const createEnvironment = (options: EnvironmentOptions = {}) => {
-  options.adapter = options.adapter ?? new QueuedAdapter({ log: createJHipsterLogger() });
+  options.adapter ??= new QueuedAdapter({ log: createJHipsterLogger() });
   return new Environment({
     ...options,
     generatorLookupOptions: { ...defaultLookupOptions, ...options.generatorLookupOptions },
@@ -317,7 +317,7 @@ export default class EnvironmentBuilder {
   async getBlueprintCommands() {
     let blueprintsPackagePath = await this._getBlueprintPackagePaths();
     if (this.devBlueprintPath) {
-      blueprintsPackagePath = blueprintsPackagePath ?? [];
+      blueprintsPackagePath ??= [];
       blueprintsPackagePath.push([devBlueprintNamespace, this.devBlueprintPath]);
       if (this.localBlueprintExists) {
         blueprintsPackagePath.push([localBlueprintNamespace, this.localBlueprintPath]);

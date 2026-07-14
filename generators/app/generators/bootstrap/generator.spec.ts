@@ -20,10 +20,11 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename, resolve } from 'node:path';
 
 import { fieldTypes } from '../../../../lib/jhipster/index.ts';
-import { defaultHelpers as helpers, result as runResult } from '../../../../lib/testing/index.ts';
 import { shouldSupportFeatures } from '../../../../test/support/tests.ts';
 
 import Generator from './generator.ts';
+
+import { defaultHelpers as helpers, result as runResult } from '#testing';
 
 const {
   CommonDBTypes: { UUID },

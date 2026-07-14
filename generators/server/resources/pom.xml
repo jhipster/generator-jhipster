@@ -18,10 +18,10 @@
         <picocli.version>4.7.7</picocli.version>
 
         <!-- Plugin versions -->
-        <checkstyle.version>13.7.0</checkstyle.version>
+        <checkstyle.version>13.8.0</checkstyle.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
         <frontend-maven-plugin.version>2.0.1</frontend-maven-plugin.version>
-        <gatling-maven-plugin.version>4.21.7</gatling-maven-plugin.version>
+        <gatling-maven-plugin.version>4.21.9</gatling-maven-plugin.version>
         <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
         <jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
         <maven-antrun-plugin.version>3.2.0</maven-antrun-plugin.version>

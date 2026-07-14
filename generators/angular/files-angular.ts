@@ -472,7 +472,7 @@ export const files = asWriteFilesSection({
   ],
 });
 
-export const writeFiles = asWritingTask<AngularEntity, AngularApplication<AngularEntity>>(async function writeFiles({ application }) {
+export const writeFiles = asWritingTask<AngularEntity, AngularApplication>(async function writeFiles({ application }) {
   if (!application.clientFrameworkAngular) return;
 
   await this.writeFiles({

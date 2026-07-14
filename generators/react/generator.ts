@@ -380,7 +380,7 @@ ${comment}
   }
 
   /**
-   * get the an upperFirst camelCase value.
+   * get the upperFirst camelCase value.
    * @param {string} value string to convert
    */
   upperFirstCamelCase(value: string): string {

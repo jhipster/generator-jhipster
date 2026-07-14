@@ -19,8 +19,9 @@
 
 import { afterEach, beforeEach, describe, esmocha, expect, it } from 'esmocha';
 
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
 import { SERVER_MAIN_RES_DIR } from '../generator-constants.ts';
+
+import { defaultHelpers as helpers, runResult } from '#testing';
 
 const GENERATOR_HEROKU = 'heroku';
 const expectedFiles = {

@@ -200,14 +200,20 @@ export class <%- entityAngularName %>Update implements OnInit {
     save(): void {
         this.isSaving.set(true);
         const <%- entityInstance %> = this.<%- entityInstance %>FormService.get<%- entityAngularName %>(this.editForm);
-<%_ if (updatableEntity) { _%>
+<%_ if (primaryKey.autoGenerate) { _%>
+  <%_ if (updatableEntity) { _%>
         if (<%- entityInstance %>.<%- primaryKey.name %> === null) {
-<%_ } _%>
             this.subscribeToSaveResponse(this.<%- entityInstance %>Service.create(<%- entityInstance %>));
-<%_ if (updatableEntity) { _%>
         } else {
             this.subscribeToSaveResponse(this.<%- entityInstance %>Service.update(<%- entityInstance %>));
         }
+  <%_ } else { _%>
+        this.subscribeToSaveResponse(this.<%- entityInstance %>Service.create(<%- entityInstance %>));
+  <%_ } _%>
+<%_ } else if (updatableEntity) { _%>
+        this.subscribeToSaveResponse(this.<%- entityInstance %>Service.update(<%- entityInstance %> as I<%- entityAngularName %>));
+<%_ } else { _%>
+        this.subscribeToSaveResponse(this.<%- entityInstance %>Service.create(<%- entityInstance %>));
 <%_ } _%>
     }
 

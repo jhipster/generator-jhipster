@@ -20,10 +20,11 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename, resolve } from 'node:path';
 
 import { databaseTypes } from '../../../../lib/jhipster/index.ts';
-import { buildServerSamples, defaultHelpers as helpers, entitiesSimple as entities, runResult } from '../../../../lib/testing/index.ts';
 import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.ts';
 import { filterBasicServerGenerators, shouldComposeWithLiquibase } from '../../../server/__test-support/index.ts';
 import Generator from '../../../server/index.ts';
+
+import { buildServerSamples, defaultHelpers as helpers, entitiesSimple as entities, runResult } from '#testing';
 
 const generator = `${basename(resolve(import.meta.dirname, '../../'))}:${basename(import.meta.dirname)}`;
 

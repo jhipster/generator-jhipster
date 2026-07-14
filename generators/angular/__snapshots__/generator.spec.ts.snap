@@ -837,7 +837,7 @@ export class UserManagement implements OnInit {
   "src/main/webapp/app/entities/admin/user-management/route/user-management-routing-resolve.service.spec.ts": {
     "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 import { lastValueFrom, of, throwError } from 'rxjs';
@@ -874,7 +874,7 @@ describe('UserManagement routing resolve service', () => {
   describe('resolve', () => {
     it('should return IUserManagement returned by find', async () => {
       // GIVEN
-      service.find = vitest.fn(login => of(new HttpResponse({ body: { login } })));
+      service.find = vitest.fn(login => of({ login }));
       mockActivatedRouteSnapshot.params = { login: 'ABC' };
 
       // WHEN
@@ -926,20 +926,6 @@ describe('UserManagement routing resolve service', () => {
       });
     });
 
-    it('should route to 404 page if response body is empty', async () => {
-      // GIVEN
-      vitest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse<IUserManagement>({ body: null })));
-      mockActivatedRouteSnapshot.params = { login: 'ABC' };
-
-      // WHEN
-      await TestBed.runInInjectionContext(async () => {
-        await expect(lastValueFrom(userManagementResolve(mockActivatedRouteSnapshot))).rejects.toThrow('no elements in sequence');
-        // THEN
-        expect(service.find).toHaveBeenCalledWith('ABC');
-        expect(mockRouter.navigate).toHaveBeenCalledWith(['404']);
-      });
-    });
-
     it('should route to error page if server returns an error other than 404', async () => {
       // GIVEN
       vitest.spyOn(service, 'find').mockReturnValue(throwError(() => new HttpErrorResponse({ status: 500, statusText: 'Internal Server Error' })));
@@ -962,35 +948,31 @@ describe('UserManagement routing resolve service', () => {
     "contents": "import { HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
-import { EMPTY, Observable, of } from 'rxjs';
-import { catchError, mergeMap } from 'rxjs/operators';
+
+import { catchError, EMPTY, Observable, of } from 'rxjs';
 
 import { IUserManagement } from '../user-management.model';
 import { UserManagementService } from '../service/user-management.service';
 
 const userManagementResolve = (route: ActivatedRouteSnapshot): Observable<null | IUserManagement> => {
-  const id = route.params['login'];
-  if (id) {
+  const login = route.params['login'];
+  if (login) {
     const router = inject(Router);
     const service = inject(UserManagementService);
-    return service.find(id).pipe(
-      mergeMap((userManagement) => {
-        if (userManagement.body) {
-          return of(userManagement.body);
-        }
-        router.navigate(['404']);
-        return EMPTY;
-      }),
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 404) {
-          router.navigate(['404']);
-        } else {
-          router.navigate(['error']);
-        }
-        return EMPTY;
-      }),
-    );
+    return service
+      .find(login)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 404) {
+            router.navigate(['404']);
+          } else {
+            router.navigate(['error']);
+          }
+          return EMPTY;
+        }),
+      );
   }
+
   return of(null);
 };
 
@@ -1217,6 +1199,7 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { IUserManagement, NewUserManagement } from '../user-management.model';
+import { IAuthority } from 'app/entities/admin/authority/authority.model';
 
 export type PartialUpdateUserManagement = Partial<IUserManagement> & Pick<IUserManagement, 'login'>;
 
@@ -1299,19 +1282,19 @@ export class UserManagementService extends UserManagementsService {
             .pipe(map(res => this.convertResponseFromServer(res)));
     }
 
-  query(req?: any): Observable<HttpResponse<IUserManagement[]>> {
-    const options = createRequestOption(req);
-    return this.http
-      .get<RestUserManagement[]>(this.resourceUrl, {
-        params: options,
-        observe: "response",
-      })
-      .pipe(
-        map((res) =>
-          res.clone({ body: this.convertResponseArrayFromServer(res.body!) }),
-        ),
-      );
-  }
+    authorities(): Observable<IAuthority[]> {
+        return this.http.get<IAuthority[]>(this.applicationConfigService.getEndpointFor('api/authorities'));
+    }
+
+    query(req?: any): Observable<HttpResponse<IUserManagement[]>> {
+        const options = createRequestOption(req);
+        return this.http.get<RestUserManagement[]>(this.resourceUrl, { params: options, observe: 'response' })
+            .pipe(map(res => res.clone({ body: this.convertResponseArrayFromServer(res.body!) })));
+    }
+
+    delete(login: string): Observable<undefined> {
+        return this.http.delete<undefined>(\`\${this.resourceUrl}/\${encodeURIComponent(login)}\`);
+    }
 
 
     getUserManagementIdentifier(userManagement: Pick<IUserManagement, 'login'>): string {
@@ -1462,8 +1445,7 @@ type PartialWithRequiredKeyOf<T extends { login: unknown }> = Partial<Omit<T, 'l
  * Type for createFormGroup and resetForm argument.
  * It accepts IUserManagement for edit and NewUserManagementFormGroupInput for create.
  */
-type UserManagementFormGroupInput =
-  IUserManagement | PartialWithRequiredKeyOf<NewUserManagement>;
+type UserManagementFormGroupInput = IUserManagement | PartialWithRequiredKeyOf<NewUserManagement>;
 
 /**
  * Type that converts some properties for forms.
@@ -1499,10 +1481,13 @@ export type UserManagementFormGroup = FormGroup<UserManagementFormGroupContent>;
 export class UserManagementFormService {
   createUserManagementFormGroup(userManagement?: UserManagementFormGroupInput): UserManagementFormGroup {
     const userManagementRawValue =
-      this.convertUserManagementToUserManagementRawValue({
-        ...this.getFormDefaults(),
-        ...(userManagement ?? { login: null }),
-      });
+      this.convertUserManagementToUserManagementRawValue(
+        {
+          ...this.getFormDefaults(),
+          ...userManagement ?? { login: null },
+        }
+      )
+    ;
 
     return new FormGroup<UserManagementFormGroupContent>({
       id: new FormControl(
@@ -1598,10 +1583,7 @@ export class UserManagementFormService {
     };
   }
 
-  private convertUserManagementRawValueToUserManagement(
-    rawUserManagement:
-      UserManagementFormRawValue | NewUserManagementFormRawValue,
-  ): IUserManagement | NewUserManagement {
+  private convertUserManagementRawValueToUserManagement(rawUserManagement: UserManagementFormRawValue | NewUserManagementFormRawValue): IUserManagement | NewUserManagement {
     return {
       ...rawUserManagement,
       createdDate: dayjs(rawUserManagement.createdDate, DATE_TIME_FORMAT),
@@ -1865,12 +1847,12 @@ describe('UserManagement Management Update Component', () => {
             expect(comp.isSaving()).toEqual(false);
         });
 
-        it('should call create service on save for new entity', () => {
+        it('should call update service on save for new entity', () => {
             // GIVEN
             const saveSubject = new Subject<IUserManagement>();
             const userManagement = {login: 'Oswald.Kertzmann'};
             vitest.spyOn(userManagementFormService, 'getUserManagement').mockReturnValue({ login: null });
-            vitest.spyOn(userManagementService, 'create').mockReturnValue(saveSubject);
+            vitest.spyOn(userManagementService, 'update').mockReturnValue(saveSubject);
             vitest.spyOn(comp, 'previousState');
             activatedRoute.data = of({ userManagement: null });
             comp.ngOnInit();
@@ -1883,7 +1865,7 @@ describe('UserManagement Management Update Component', () => {
 
             // THEN
             expect(userManagementFormService.getUserManagement).toHaveBeenCalled();
-            expect(userManagementService.create).toHaveBeenCalled();
+            expect(userManagementService.update).toHaveBeenCalledWith(expect.objectContaining({ login: null }));
             expect(comp.isSaving()).toEqual(false);
             expect(comp.previousState).toHaveBeenCalled();
         });
@@ -1926,6 +1908,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { UserManagementFormService, UserManagementFormGroup } from './user-management-form.service';
 import { IUserManagement } from '../user-management.model';
 import { UserManagementService } from '../service/user-management.service';
+import { IAuthority } from 'app/entities/admin/authority/authority.model';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -1940,7 +1923,7 @@ import { UserManagementService } from '../service/user-management.service';
 export class UserManagementUpdate implements OnInit {
     readonly isSaving = signal(false);
     userManagement: IUserManagement | null = null;
-    authorities = signal<string[]>([]);
+    authorities = signal<IAuthority[]>([]);
 
 
     protected userManagementService = inject(UserManagementService);
@@ -1970,11 +1953,7 @@ export class UserManagementUpdate implements OnInit {
     save(): void {
         this.isSaving.set(true);
         const userManagement = this.userManagementFormService.getUserManagement(this.editForm);
-        if (userManagement.id === null) {
-            this.subscribeToSaveResponse(this.userManagementService.create(userManagement));
-        } else {
-            this.subscribeToSaveResponse(this.userManagementService.update(userManagement));
-        }
+        this.subscribeToSaveResponse(this.userManagementService.update(userManagement as IUserManagement));
     }
 
     protected subscribeToSaveResponse(result: Observable<IUserManagement | null>): void {
@@ -2146,6 +2125,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": false,
   "authenticationUsesCsrf": false,
+  "autoCrlf": true,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -2188,7 +2168,6 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
   "clientTestDir": "clientRoot/test/",
   "clientTestFramework": "vitest",
   "clientTestFrameworkAny": true,
-  "clientTestFrameworkJest": false,
   "clientTestFrameworkName": "Vitest",
   "clientTestFrameworkVitest": true,
   "clientTestFrameworks": undefined,
@@ -3167,7 +3146,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
     {
       "overrides": [
         {
-          "files": "src/**/*.html",
+          "files": "clientRoot\\src\\**\\*.html",
           "options": {
             "parser": "angular",
           },
@@ -3196,6 +3175,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "authenticationTypeUsesRemoteAuthorization": true,
   "authenticationUsesCsrf": true,
   "authority": Any<Object>,
+  "autoCrlf": true,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -3238,7 +3218,6 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
   "clientTestDir": "clientRoot/test/",
   "clientTestFramework": "vitest",
   "clientTestFrameworkAny": true,
-  "clientTestFrameworkJest": false,
   "clientTestFrameworkName": "Vitest",
   "clientTestFrameworkVitest": true,
   "clientTestFrameworks": undefined,
@@ -4438,7 +4417,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
     {
       "overrides": [
         {
-          "files": "src/**/*.html",
+          "files": "clientRoot\\src\\**\\*.html",
           "options": {
             "parser": "angular",
           },
@@ -4466,6 +4445,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": false,
   "authenticationUsesCsrf": false,
+  "autoCrlf": true,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -4508,7 +4488,6 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "clientTestDir": "clientRoot/test/",
   "clientTestFramework": "vitest",
   "clientTestFrameworkAny": true,
-  "clientTestFrameworkJest": false,
   "clientTestFrameworkName": "Vitest",
   "clientTestFrameworkVitest": true,
   "clientTestFrameworks": undefined,
@@ -5487,7 +5466,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     {
       "overrides": [
         {
-          "files": "src/**/*.html",
+          "files": "clientRoot\\src\\**\\*.html",
           "options": {
             "parser": "angular",
           },
@@ -5515,6 +5494,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": true,
   "authenticationUsesCsrf": true,
+  "autoCrlf": true,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -5557,7 +5537,6 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "clientTestDir": "src/test/javascript/",
   "clientTestFramework": "vitest",
   "clientTestFrameworkAny": true,
-  "clientTestFrameworkJest": false,
   "clientTestFrameworkName": "Vitest",
   "clientTestFrameworkVitest": true,
   "clientTestFrameworks": undefined,
@@ -6674,7 +6653,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     {
       "overrides": [
         {
-          "files": "src/main/webapp/**/*.html",
+          "files": "src\\main\\webapp\\**\\*.html",
           "options": {
             "parser": "angular",
           },
@@ -6703,6 +6682,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "authenticationTypeUsesRemoteAuthorization": false,
   "authenticationUsesCsrf": false,
   "authority": Any<Object>,
+  "autoCrlf": true,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -6745,7 +6725,6 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
   "clientTestDir": "src/test/javascript/",
   "clientTestFramework": "vitest",
   "clientTestFrameworkAny": true,
-  "clientTestFrameworkJest": false,
   "clientTestFrameworkName": "Vitest",
   "clientTestFrameworkVitest": true,
   "clientTestFrameworks": undefined,
@@ -8133,7 +8112,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
     {
       "overrides": [
         {
-          "files": "src/main/webapp/**/*.html",
+          "files": "src\\main\\webapp\\**\\*.html",
           "options": {
             "parser": "angular",
           },
@@ -8161,6 +8140,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "authenticationTypeSession": false,
   "authenticationTypeUsesRemoteAuthorization": true,
   "authenticationUsesCsrf": true,
+  "autoCrlf": true,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -8203,7 +8183,6 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
   "clientTestDir": "src/test/javascript/",
   "clientTestFramework": "vitest",
   "clientTestFrameworkAny": true,
-  "clientTestFrameworkJest": false,
   "clientTestFrameworkName": "Vitest",
   "clientTestFrameworkVitest": true,
   "clientTestFrameworks": undefined,
@@ -9151,7 +9130,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
     {
       "overrides": [
         {
-          "files": "src/main/webapp/**/*.html",
+          "files": "src\\main\\webapp\\**\\*.html",
           "options": {
             "parser": "angular",
           },
@@ -9179,6 +9158,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "authenticationTypeSession": true,
   "authenticationTypeUsesRemoteAuthorization": false,
   "authenticationUsesCsrf": true,
+  "autoCrlf": true,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
@@ -9221,7 +9201,6 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
   "clientTestDir": "src/test/javascript/",
   "clientTestFramework": "vitest",
   "clientTestFrameworkAny": true,
-  "clientTestFrameworkJest": false,
   "clientTestFrameworkName": "Vitest",
   "clientTestFrameworkVitest": true,
   "clientTestFrameworks": undefined,
@@ -10179,7 +10158,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
     {
       "overrides": [
         {
-          "files": "src/main/webapp/**/*.html",
+          "files": "src\\main\\webapp\\**\\*.html",
           "options": {
             "parser": "angular",
           },

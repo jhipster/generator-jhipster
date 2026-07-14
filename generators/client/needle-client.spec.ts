@@ -19,10 +19,11 @@
 
 import { before, describe, it } from 'esmocha';
 
-import { dryRunHelpers as helpers, result as runResult } from '../../lib/testing/index.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.ts';
 
 import ClientGenerator from './index.ts';
+
+import { dryRunHelpers as helpers, result as runResult } from '#testing';
 
 type MockBlueprintSubGenConstructorParamsT = ConstructorParameters<typeof ClientGenerator>;
 

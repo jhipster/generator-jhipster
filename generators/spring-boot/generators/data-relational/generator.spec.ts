@@ -21,6 +21,9 @@ import { before, describe, expect, it } from 'esmocha';
 import { basename, resolve } from 'node:path';
 
 import { cacheTypes, databaseTypes } from '../../../../lib/jhipster/index.ts';
+import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.ts';
+import Generator from '../../../server/index.ts';
+
 import {
   buildSamplesFromMatrix,
   buildServerMatrix,
@@ -28,9 +31,7 @@ import {
   extendFilteredMatrix,
   extendMatrix,
   runResult,
-} from '../../../../lib/testing/index.ts';
-import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.ts';
-import Generator from '../../../server/index.ts';
+} from '#testing';
 
 const generator = `${basename(resolve(import.meta.dirname, '../../'))}:${basename(import.meta.dirname)}`;
 

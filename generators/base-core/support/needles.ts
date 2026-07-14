@@ -192,9 +192,7 @@ export const checkContentIn = (contentToCheck: string | RegExp, content: string,
   return re.test(content);
 };
 
-const addNeedlePrefix = (needle: string): string => {
-  return needle.includes('jhipster-needle-') ? needle : `jhipster-needle-${needle}`;
-};
+const addNeedlePrefix = (needle: string): string => (needle.includes('jhipster-needle-') ? needle : `jhipster-needle-${needle}`);
 
 const hasNeedleStart = (content: string, needle: string): boolean => {
   const regexpStart = createNeedleRegexp(needle, true);
@@ -378,8 +376,8 @@ export function createBaseNeedle<Generator extends CoreGenerator = CoreGenerator
 
   assert(actualNeedles, 'needles is required');
   const { needlesPrefix, filePath, ...needleOptions } = actualOptions;
-  needleOptions.optional = needleOptions.optional ?? false;
-  needleOptions.ignoreWhitespaces = needleOptions.ignoreWhitespaces ?? true;
+  needleOptions.optional ??= false;
+  needleOptions.ignoreWhitespaces ??= true;
 
   const callbacks = Object.entries(actualNeedles)
     .filter(([_key, contentToAdd]) => contentToAdd)

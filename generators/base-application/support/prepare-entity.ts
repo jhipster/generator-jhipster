@@ -199,7 +199,7 @@ export function prepareEntityPrimaryKeyForTemplates(
     let idField = entityWithConfig.fields.find(field => field.fieldName === 'id');
     if (idField) {
       idField.id = true;
-      idField.autoGenerate = idField.autoGenerate ?? true;
+      idField.autoGenerate ??= true;
     } else {
       if (entityWithConfig.microserviceName && !application?.microfrontend) {
         this?.log.warn(
@@ -387,7 +387,7 @@ function fieldToId(field: BaseApplicationField): any {
 export function loadRequiredConfigIntoEntity<const E extends Partial<ServerEntity>>(
   this: CoreGenerator | void,
   entity: E,
-  config: BaseApplicationApplication<BaseApplicationEntity>,
+  config: BaseApplicationApplication,
 ): E {
   mutateData(entity as Partial<ServerEntity>, {
     __override__: false,
@@ -522,7 +522,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
   });
   entity.relationshipsContainEagerLoad = entity.relationships.some(relationship => relationship.relationshipEagerLoad);
   entity.containsBagRelationships = entity.relationships.some(relationship => relationship.bagRelationship);
-  entity.implementsEagerLoadApis = // Cassandra doesn't provides *WithEagerRelationships apis
+  entity.implementsEagerLoadApis = // Cassandra doesn't provide *WithEagerRelationships apis
     !([CASSANDRA, COUCHBASE, NEO4J] as string[]).includes(entity.databaseType) &&
     // Only sql and mongodb provides *WithEagerRelationships apis for imperative implementation
     (entity.reactive || ([SQL, MONGODB] as string[]).includes(entity.databaseType)) &&

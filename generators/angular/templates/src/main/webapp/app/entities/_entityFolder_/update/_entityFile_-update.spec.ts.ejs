@@ -194,6 +194,7 @@ describe('<%- entityAngularName %> Management Update Component', () => {
         });
 
 <%_ } _%>
+<%_ if (primaryKey.autoGenerate || !updatableEntity) { _%>
         it('should call create service on save for new entity', () => {
             // GIVEN
             const saveSubject = new Subject<I<%- entityAngularName %>>();
@@ -216,6 +217,30 @@ describe('<%- entityAngularName %> Management Update Component', () => {
             expect(comp.isSaving()).toEqual(false);
             expect(comp.previousState).toHaveBeenCalled();
         });
+<%_ } else { _%>
+        it('should call update service on save for new entity', () => {
+            // GIVEN
+            const saveSubject = new Subject<I<%- entityAngularName %>>();
+            const <%- entityInstance %> = <%- testEntityPrimaryKey0 %>;
+            vitest.spyOn(<%- entityInstance %>FormService, 'get<%- entityAngularName %>').mockReturnValue({ <%- primaryKey.name %>: null });
+            vitest.spyOn(<%- entityInstance %>Service, 'update').mockReturnValue(saveSubject);
+            vitest.spyOn(comp, 'previousState');
+            activatedRoute.data = of({ <%- entityInstance %>: null });
+            comp.ngOnInit();
+
+            // WHEN
+            comp.save();
+            expect(comp.isSaving()).toEqual(true);
+            saveSubject.next(<%- entityInstance %>);
+            saveSubject.complete();
+
+            // THEN
+            expect(<%- entityInstance %>FormService.get<%- entityAngularName %>).toHaveBeenCalled();
+            expect(<%- entityInstance %>Service.update).toHaveBeenCalledWith(expect.objectContaining({ <%- primaryKey.name %>: null }));
+            expect(comp.isSaving()).toEqual(false);
+            expect(comp.previousState).toHaveBeenCalled();
+        });
+<%_ } _%>
 <%_ if (updatableEntity) { _%>
 
         it('should set isSaving to false on error', () => {

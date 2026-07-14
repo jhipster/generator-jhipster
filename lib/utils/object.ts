@@ -162,10 +162,7 @@ const handleMutateDataCallback = (fn: MutateDataFunction, context: any, { defaul
   }
 };
 
-const applyDelayedMutations = (
-  context: ContextWithMutationOptions<object>,
-  opts?: { defaults?: boolean; throwOnDelay?: boolean },
-): boolean => {
+const applyDelayedMutations = (context: ContextWithMutationOptions, opts?: { defaults?: boolean; throwOnDelay?: boolean }): boolean => {
   let mutationApplied = false;
   const delayedContext = context[MUTATION_CONTEXT_SYMBOL].delayContext;
   if (delayedContext) {

@@ -18,10 +18,11 @@
  */
 import { before, describe, expect, it } from 'esmocha';
 
-import { createTestHelpers, typedResult } from '../../lib/testing/index.ts';
 import { testBlueprintSupport } from '../../test/support/tests.ts';
 
 import type Generator from './generator.ts';
+
+import { createTestHelpers, typedResult } from '#testing';
 
 const helpers = createTestHelpers<Generator>({
   importMeta: import.meta,

@@ -79,10 +79,7 @@ export const angularFiles = {
   ],
 };
 
-export const writeEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularApplication<AngularEntity>>(async function ({
-  application,
-  entities,
-}) {
+export const writeEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularApplication>(async function ({ application, entities }) {
   for (const entity of (application.filterEntitiesAndPropertiesForClient ?? filterEntitiesAndPropertiesForClient)(entities)) {
     if (entity.builtInUser) {
       await this.writeFiles({
@@ -112,7 +109,7 @@ export const writeEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularAp
   }
 });
 
-export const postWriteEntitiesFiles = asPostWritingEntitiesTask<AngularEntity, AngularApplication<AngularEntity>, AngularSource>(
+export const postWriteEntitiesFiles = asPostWritingEntitiesTask<AngularEntity, AngularApplication, AngularSource>(
   async function (this, taskParam) {
     const { application, source } = taskParam;
     const entities = (application.filterEntitiesForClient ?? filterEntitiesForClient)(taskParam.entities).filter(
@@ -122,11 +119,7 @@ export const postWriteEntitiesFiles = asPostWritingEntitiesTask<AngularEntity, A
   },
 );
 
-export const cleanupEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularApplication<AngularEntity>>(function ({
-  application,
-  entities,
-  control,
-}) {
+export const cleanupEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularApplication>(function ({ application, entities, control }) {
   for (const entity of (application.filterEntitiesForClient ?? filterEntitiesForClient)(entities).filter(entity => !entity.builtIn)) {
     const { entityFolderName, entityFileName, name: entityName } = entity;
     if (control.isJhipsterVersionLessThan('5.0.0')) {

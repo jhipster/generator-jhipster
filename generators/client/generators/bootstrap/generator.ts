@@ -114,9 +114,9 @@ export default class ClientBootstrap extends ClientApplicationGenerator {
           return entities;
         };
       },
-      async postPreparingEntity({ entities }) {
+      postPreparingEntity({ entities }) {
         for (const entity of entities) {
-          await preparePostEntityClientDerivedProperties(entity);
+          preparePostEntityClientDerivedProperties(entity);
         }
       },
     });

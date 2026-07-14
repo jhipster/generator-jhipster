@@ -13,7 +13,7 @@ LABEL ALIAS=consul-config-loader
 FROM postgres:18.4
 LABEL ALIAS=postgresql
 
-FROM quay.io/keycloak/keycloak:26.6.4
+FROM quay.io/keycloak/keycloak:26.7.0
 LABEL ALIAS=keycloak
 
 FROM mysql:9.7.1
@@ -23,7 +23,7 @@ FROM mariadb:12.3.2
 FROM mongo:8.2.11
 LABEL ALIAS=mongodb
 
-FROM couchbase/server:8.0.1
+FROM couchbase/server:8.0.2
 LABEL ALIAS=couchbase
 
 FROM cassandra:5.0.8
@@ -36,23 +36,23 @@ FROM neo4j:5.26.28
 FROM hazelcast/management-center:5.11.0
 LABEL ALIAS=hazelcast
 
-FROM memcached:1.6.42-alpine
+FROM memcached:1.6.45-alpine
 
 FROM redis:8.8.0
 
 FROM apache/kafka-native:4.3.1
 LABEL ALIAS=kafka
 
-FROM apachepulsar/pulsar:4.2.2
+FROM apachepulsar/pulsar:4.2.3
 LABEL ALIAS=pulsar
 
-FROM sonarqube:26.6.0.123539-community
+FROM sonarqube:26.7.0.124771-community
 LABEL ALIAS=sonar
 
-FROM hashicorp/consul:2.0.1
+FROM hashicorp/consul:2.0.2
 LABEL ALIAS=consul
 
-FROM prom/prometheus:v3.13.0
+FROM prom/prometheus:v3.13.1
 LABEL ALIAS=prometheus
 
 FROM prom/alertmanager:v0.33.1

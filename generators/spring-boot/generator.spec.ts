@@ -20,13 +20,14 @@
 import { before, describe, expect, it } from 'esmocha';
 import { basename } from 'node:path';
 
-import { defaultHelpers as helpers, runResult } from '../../lib/testing/index.ts';
-import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '../../test/support/index.ts';
 import { PRIORITY_NAMES } from '../base-application/priorities.ts';
 import { asPostWritingTask } from '../base-application/support/task-type-inference.ts';
 import { filterBasicServerGenerators } from '../server/__test-support/index.ts';
 
 import Generator from './generator.ts';
+
+import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '#test-support';
+import { defaultHelpers as helpers, runResult } from '#testing';
 
 const generator = basename(import.meta.dirname);
 

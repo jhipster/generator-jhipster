@@ -21,6 +21,12 @@ import { basename, join, resolve } from 'node:path';
 
 import { APPLICATION_TYPE_MICROSERVICE } from '../../../../lib/core/application-types.ts';
 import { authenticationTypes, databaseTypes, searchEngineTypes } from '../../../../lib/jhipster/index.ts';
+import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.ts';
+import { filterBasicServerGenerators } from '../../../server/__test-support/index.ts';
+
+import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.ts';
+import Generator from './generator.ts';
+
 import {
   buildSamplesFromMatrix,
   buildServerMatrix,
@@ -28,12 +34,7 @@ import {
   entitiesServerSamples as entities,
   extendMatrix,
   runResult,
-} from '../../../../lib/testing/index.ts';
-import { shouldSupportFeatures, testBlueprintSupport } from '../../../../test/support/tests.ts';
-import { filterBasicServerGenerators } from '../../../server/__test-support/index.ts';
-
-import { matchElasticSearch, matchElasticSearchUser } from './__test-support/elastic-search-matcher.ts';
-import Generator from './generator.ts';
+} from '#testing';
 
 const generator = `${basename(resolve(import.meta.dirname, '../../'))}:${basename(import.meta.dirname)}`;
 
