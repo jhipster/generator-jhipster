@@ -61,14 +61,13 @@ _%>
      */
     @GetMapping("/count")
     public <%- reactive ? 'Mono<' : '' %>ResponseEntity<Long><%- reactive ? '>' : '' %> count<%- entityClassPlural %>(<%- entityClass %>Criteria criteria) {
-    <% if (!reactive) { %>
         LOG.debug("REST request to count <%- entityClassPlural %> by criteria: {}", criteria);
+  <%_ if (!reactive) { _%>
         return ResponseEntity.ok().body(<%- entityInstance %>QueryService.countByCriteria(criteria));
-    <% } else { %>
-        LOG.debug("REST request to count <%- entityClassPlural %> by criteria: {}", criteria);
+  <%_ } else { _%>
         return <%- entityInstance %>Service.countByCriteria(criteria)
                 .map(count -> ResponseEntity.status(HttpStatus.OK).body(count));
-    <% } %>
+  <%_ } _%>
     }
 <%_ } else { _%>
   <%_ if (paginationNo) { _%>

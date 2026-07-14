@@ -116,7 +116,7 @@
             <span>{{ t$('global.menu.admin.apidocs') }}</span>
           </b-dropdown-item>
 <%_ if (locals.devDatabaseTypeH2Any || locals.databaseTypeCouchbase) { _%>
-          <b-dropdown-item v-if="!inProduction" href='<% if (locals.databaseTypeCouchbase) { %>http://localhost:8092/<% } else if (locals.reactive) { %>http://localhost:8092/<% } else { %>./h2-console/<% } %>' target="_tab">
+          <b-dropdown-item v-if="!inProduction" href='<%- locals.databaseTypeCouchbase || locals.reactive ? 'http://localhost:8092/' : './h2-console/' %>' target="_tab">
             <font-awesome-icon icon="database" />
             <span>{{ t$('global.menu.admin.database') }}</span>
           </b-dropdown-item>
