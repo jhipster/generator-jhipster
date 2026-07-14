@@ -17,7 +17,6 @@ exports[`generator - angular:bootstrap bootstrapping default config should prepa
   "authenticationTypeUsesRemoteAuthorization": false,
   "authenticationUsesCsrf": false,
   "authority": Any<Object>,
-  "autoCrlf": true,
   "backendType": "Java",
   "backendTypeJavaAny": true,
   "backendTypeSpringBoot": true,
