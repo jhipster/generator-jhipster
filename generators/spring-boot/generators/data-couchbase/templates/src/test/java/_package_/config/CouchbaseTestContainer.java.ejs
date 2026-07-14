@@ -30,8 +30,8 @@ import org.testcontainers.junit.jupiter.Container;
 public interface CouchbaseTestContainer {
     String BUCKET_NAME = "testBucket";
     // ponytail: container reports "started" once management API is up, but KV service can still
-    // be warming up on loaded CI runners; a generous startup timeout plus SDK-side timeouts below
-    // (see connection-string params) cover both ends of that gap.
+    // be warming up on loaded CI runners; a generous startup timeout plus the env timeouts below
+    // cover both ends of that gap.
     Duration CONTAINER_STARTUP_TIMEOUT = Duration.ofMinutes(5);
 
     @Container
@@ -42,12 +42,13 @@ public interface CouchbaseTestContainer {
 
     @DynamicPropertySource
     static void registerProperties(DynamicPropertyRegistry registry) {
-        // kv_timeout/connect_timeout are SDK connection-string options, applied regardless of how
-        // the Cluster bean is built; default kv_timeout (~2.5s) is too tight right after container startup.
-        registry.add(
-            "spring.couchbase.connection-string",
-            () -> couchbaseContainer.getConnectionString() + "?kv_timeout=10s&connect_timeout=15s&kv_connect_timeout=15s"
-        );
+        registry.add("spring.couchbase.connection-string", couchbaseContainer::getConnectionString);
+        // Spring Boot's auto-configuration always builds a ClusterEnvironment from these
+        // spring.couchbase.env.* properties; the SDK rejects connection-string query params
+        // once a ClusterEnvironment exists, so timeouts must be set this way instead. Default
+        // key-value timeout (~2.5s) is too tight right after container startup.
+        registry.add("spring.couchbase.env.timeouts.connect", () -> "15s");
+        registry.add("spring.couchbase.env.timeouts.key-value", () -> "10s");
         registry.add("spring.couchbase.username", couchbaseContainer::getUsername);
         registry.add("spring.couchbase.password", couchbaseContainer::getPassword);
         registry.add("jhipster.database.couchbase.bucket-name", () -> BUCKET_NAME);
