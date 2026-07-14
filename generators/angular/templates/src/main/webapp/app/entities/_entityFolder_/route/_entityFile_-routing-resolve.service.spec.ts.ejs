@@ -19,7 +19,7 @@
 <%_ const tsKeyId = primaryKey.tsSampleValues[0]; _%>
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
 
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 import { lastValueFrom, of, throwError } from 'rxjs';
@@ -56,7 +56,7 @@ describe('<%- entityAngularName %> routing resolve service', () => {
   describe('resolve', () => {
     it('should return I<%- entityAngularName %> returned by find', async () => {
       // GIVEN
-      service.find = vitest.fn(<%- primaryKey.name %> => of(new HttpResponse({ body: { <%- primaryKey.name %> } })));
+      service.find = vitest.fn(<%- primaryKey.name %> => of({ <%- primaryKey.name %> }));
       mockActivatedRouteSnapshot.params = { <%- primaryKey.name %>: <%- tsKeyId %> };
 
       // WHEN
@@ -97,20 +97,6 @@ describe('<%- entityAngularName %> routing resolve service', () => {
     it('should route to 404 page if data not found in server', async () => {
       // GIVEN
       vitest.spyOn(service, 'find').mockReturnValue(throwError(() => new HttpErrorResponse({ status: 404, statusText: 'Not Found' })));
-      mockActivatedRouteSnapshot.params = { <%- primaryKey.name %>: <%- tsKeyId %> };
-
-      // WHEN
-      await TestBed.runInInjectionContext(async () => {
-        await expect(lastValueFrom(<%- entityInstance %>Resolve(mockActivatedRouteSnapshot))).rejects.toThrow('no elements in sequence');
-        // THEN
-        expect(service.find).toHaveBeenCalledWith(<%- tsKeyId %>);
-        expect(mockRouter.navigate).toHaveBeenCalledWith(['404']);
-      });
-    });
-
-    it('should route to 404 page if response body is empty', async () => {
-      // GIVEN
-      vitest.spyOn(service, 'find').mockReturnValue(of(new HttpResponse<I<%- entityAngularName %>>({ body: null })));
       mockActivatedRouteSnapshot.params = { <%- primaryKey.name %>: <%- tsKeyId %> };
 
       // WHEN

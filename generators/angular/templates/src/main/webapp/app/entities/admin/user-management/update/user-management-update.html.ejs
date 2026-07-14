@@ -29,7 +29,7 @@
             <% if (field.autoGenerate) { %>@if (editForm.controls.<%- field.fieldName %>.value !== null) {<% } %>
                 <% if (field.fieldTypeBinary && !field.blobContentTypeText || field.fieldValidate) { %>@let <%- fieldName %>Ref = editForm.get('<%- fieldName %>')!;<% } %>
                 <div class="mb-3">
-                    <label class="form-label" for="field_<%- fieldName %>"<% if (field.documentation) { if (enableTranslation) { %> [ngbTooltip]="'<%- i18nKeyPrefix %>.help.<%- fieldName %>' | translate"<% } else { %> ngbTooltip="<%- field.documentation %>"<% } } %>>__jhiTranslateTag__('<%- field.propertyTranslationKey %>')</label>
+                    <label class="form-label" for="field_<%- fieldName %>"<% if (field.documentation && enableTranslation) { %> [ngbTooltip]="'<%- i18nKeyPrefix %>.help.<%- fieldName %>' | translate"<% } else if (field.documentation) { %> ngbTooltip="<%- field.documentation %>"<% } %>>__jhiTranslateTag__('<%- field.propertyTranslationKey %>')</label>
   <%_ if (field.fieldIsEnum) { _%>
                     <select class="form-control" name="<%- fieldName %>" formControlName="<%- fieldName %>" id="field_<%- fieldName %>" data-cy="<%- fieldName %>">
     <%_ const enumPrefix = `${frontendAppName}.${fieldType}`; _%>

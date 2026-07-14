@@ -20,6 +20,7 @@
       .values(relationshipsByOtherEntity)
       .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
       .filter(relationships => relationships.length > 0);
+    const authorityRelationship = builtInUserManagement && generateBuiltInAuthorityEntity ? relationships.find(rel => rel.relationshipName === 'authority') : undefined;
 _%>
 import { Component, ChangeDetectionStrategy, inject, signal, OnInit<%- anyFieldHasImageContentType ? ', ElementRef' : '' %> } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
@@ -48,6 +49,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { <%- entityAngularName %>FormService, <%- entityAngularName %>FormGroup } from './<%- entityFileName %>-form.service';
 import { I<%- entityAngularName %> } from '../<%- entityFileName %>.model';
 import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
+<%_ if (authorityRelationship) { _%>
+import { I<%- authorityRelationship.otherEntity.entityAngularName %> } from 'app/entities/<%- authorityRelationship.otherEntity.entityFolderName %>/<%- authorityRelationship.otherEntity.entityFileName %>.model';
+<%_ } _%>
 <%_ if (anyFieldIsBlobDerived) { _%>
 import { AlertErrorModel } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
@@ -92,7 +96,7 @@ export class <%- entityAngularName %>Update implements OnInit {
     readonly isSaving = signal(false);
     <%- entityInstance %>: I<%- entityAngularName %> | null = null;
 <%_ if (builtInUserManagement) { _%>
-    authorities = signal<string[]>([]);
+    authorities = signal<<%- generateBuiltInAuthorityEntity ? `I${authorityRelationship.otherEntity.entityAngularName}[]` : 'string[]' %>>([]);
   <%_ if (enableTranslation) { _%>
     languages: string[] | null = null;
   <%_ } _%>
@@ -197,7 +201,7 @@ export class <%- entityAngularName %>Update implements OnInit {
         this.isSaving.set(true);
         const <%- entityInstance %> = this.<%- entityInstance %>FormService.get<%- entityAngularName %>(this.editForm);
 <%_ if (updatableEntity) { _%>
-        if (<%- entityInstance %>.<%- builtInUserManagement ? 'id' : primaryKey.name %> === null) {
+        if (<%- entityInstance %>.<%- primaryKey.name %> === null) {
 <%_ } _%>
             this.subscribeToSaveResponse(this.<%- entityInstance %>Service.create(<%- entityInstance %>));
 <%_ if (updatableEntity) { _%>

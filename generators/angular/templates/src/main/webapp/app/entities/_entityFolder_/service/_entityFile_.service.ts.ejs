@@ -21,6 +21,7 @@
     const entityRestName = requiresRestTypeConversion ? `Rest${entityAngularName}` : `I${entityAngularName}`;
     const bodyArg = requiresRestTypeConversion ? 'copy' : entityInstance;
     const convertResponsePipe = requiresRestTypeConversion ? '.pipe(map(res => this.convertResponseFromServer(res)))' : '';
+    const authorityRelationship = builtInUserManagement && generateBuiltInAuthorityEntity ? relationships.find(rel => rel.relationshipName === 'authority') : undefined;
 _%>
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpResponse, httpResource } from '@angular/common/http';
@@ -33,6 +34,9 @@ import {
   map,
 <%_ } _%>
   Observable,
+<%_ if (builtInUserManagement && !generateBuiltInAuthorityEntity) { _%>
+  of,
+<%_ } _%>
 <%_ if (searchEngineAny) { _%>
   scheduled,
 <%_ } _%>
@@ -52,6 +56,12 @@ import { createRequestOption } from 'app/core/request/request-util';
 import { <%- searchType %> } from 'app/core/request/request.model';
 <%_ } _%>
 import { I<%- entityAngularName %><% if (!readOnly) { %>, New<%- entityAngularName %><% } %> } from '../<%- entityFileName %>.model';
+<%_ if (authorityRelationship) { _%>
+import { I<%- authorityRelationship.otherEntity.entityAngularName %> } from 'app/entities/<%- authorityRelationship.otherEntity.entityFolderName %>/<%- authorityRelationship.otherEntity.entityFileName %>.model';
+<%_ } _%>
+<%_ if (builtInUserManagement && !generateBuiltInAuthorityEntity) { _%>
+import { Authority } from 'app/shared/jhipster/constants';
+<%_ } _%>
 <%_ if (!readOnly && updatableEntity) { _%>
 
 export type PartialUpdate<%- entityAngularName %> = Partial<I<%- entityAngularName %>> & Pick<I<%- entityAngularName %>, '<%- primaryKey.name %>'>;
@@ -163,6 +173,16 @@ export class <%- entityAngularName %>Service extends <%- entityAngularNamePlural
             <%- convertResponsePipe %>;
     }
 
+<%_ if (builtInUserManagement) { _%>
+    authorities(): Observable<<%- generateBuiltInAuthorityEntity ? `I${authorityRelationship.otherEntity.entityAngularName}[]` : 'string[]' %>> {
+  <%_ if (generateBuiltInAuthorityEntity) { _%>
+        return this.http.get<I<%- authorityRelationship.otherEntity.entityAngularName %>[]>(this.applicationConfigService.getEndpointFor('api/authorities'<% if ((applicationTypeGateway || applicationTypeMicroservice) && locals.microserviceName) { %>, '<%- microserviceName.toLowerCase() %>'<% } %>));
+  <%_ } else { _%>
+        return of([Authority.ADMIN, Authority.USER]);
+  <%_ } _%>
+    }
+
+<%_ } _%>
     query(req?: any): Observable<HttpResponse<I<%- entityAngularName %>[]>> {
         const options = createRequestOption(req);
         return this.http.get<<%- entityRestName %>[]>(this.resourceUrl, { params: options, observe: 'response' })
