@@ -57,6 +57,19 @@ export default class extends GenerateBlueprintBaseGenerator {
     super(args, options, { storeJHipsterVersion: true, ...features });
   }
 
+  applySubGeneratorDefaults(subGenerator: string, allPriorities?: boolean) {
+    const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator);
+    if (this.options.defaults) {
+      subGeneratorStorage.defaults({
+        ...defaultSubGeneratorConfig(),
+        ...(allPriorities ? { [PRIORITIES]: BASE_PRIORITY_NAMES_LIST } : {}),
+      });
+    } else if (allPriorities) {
+      subGeneratorStorage.defaults({ [PRIORITIES]: BASE_PRIORITY_NAMES_LIST });
+    }
+    return subGeneratorStorage;
+  }
+
   async beforeQueue() {
     if (!this.fromBlueprint) {
       await this.composeWithBlueprints();
@@ -90,10 +103,7 @@ export default class extends GenerateBlueprintBaseGenerator {
         const { allPriorities } = this.options;
         const subGenerators = (this.jhipsterConfig.subGenerators ?? []) as string[];
         for (const subGenerator of subGenerators) {
-          const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator);
-          if (allPriorities) {
-            subGeneratorStorage.defaults({ [PRIORITIES]: BASE_PRIORITY_NAMES_LIST });
-          }
+          const subGeneratorStorage = this.applySubGeneratorDefaults(subGenerator, allPriorities);
           await this.prompt(subGeneratorPrompts({ subGenerator, localBlueprint, additionalSubGenerator: false }), subGeneratorStorage);
         }
       },
@@ -105,10 +115,7 @@ export default class extends GenerateBlueprintBaseGenerator {
           .split(',')
           .map(sub => sub.trim())
           .filter(Boolean)) {
-          const subGeneratorStorage = this.getSubGeneratorStorage(subGenerator);
-          if (allPriorities) {
-            subGeneratorStorage.defaults({ [PRIORITIES]: BASE_PRIORITY_NAMES_LIST });
-          }
+          const subGeneratorStorage = this.applySubGeneratorDefaults(subGenerator, allPriorities);
           await this.prompt(subGeneratorPrompts({ subGenerator, localBlueprint, additionalSubGenerator: true }), subGeneratorStorage);
         }
       },
