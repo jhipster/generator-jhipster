@@ -23,6 +23,7 @@ import { basename } from 'node:path';
 import { clientFrameworkTypes } from '../../lib/jhipster/index.ts';
 import { CLIENT_MAIN_SRC_DIR } from '../generator-constants.ts';
 
+import { buildAngularPrettierHtmlGlob } from './generator.ts';
 import Generator from './index.ts';
 
 import { checkEnforcements, shouldSupportFeatures, testBlueprintSupport } from '#test-support';
@@ -88,6 +89,13 @@ describe(`generator - ${clientFramework}`, () => {
   describe('blueprint support', () => testBlueprintSupport(generator));
 
   checkEnforcements({ client: true }, generator);
+
+  describe('prettier configuration', () => {
+    it('uses POSIX globs for Angular HTML overrides', () => {
+      expect(buildAngularPrettierHtmlGlob('src/main/webapp/')).toBe('src/main/webapp/**/*.html');
+      expect(buildAngularPrettierHtmlGlob('src\\main\\webapp\\')).toBe('src/main/webapp/**/*.html');
+    });
+  });
 
   it('samples matrix should match snapshot', () => {
     expect(testSamples).toMatchSnapshot();

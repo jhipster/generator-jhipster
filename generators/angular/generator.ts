@@ -53,6 +53,9 @@ import type {
 
 const { ANGULAR } = clientFrameworkTypes;
 
+export const buildAngularPrettierHtmlGlob = (clientSrcDir: string) =>
+  path.posix.join(clientSrcDir.replaceAll(path.win32.sep, path.posix.sep), '**/*.html');
+
 export class AngularApplicationGenerator extends BaseApplicationGenerator<
   AngularEntity,
   AngularApplication,
@@ -388,7 +391,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
     return this.asPostWritingTaskGroup({
       addPrettierConfig({ application, source }) {
         source.mergePrettierConfig?.({
-          overrides: [{ files: path.join(application.clientSrcDir, '**/*.html'), options: { parser: 'angular' } }],
+          overrides: [{ files: buildAngularPrettierHtmlGlob(application.clientSrcDir), options: { parser: 'angular' } }],
         });
       },
       clientBundler({ application, source }) {
