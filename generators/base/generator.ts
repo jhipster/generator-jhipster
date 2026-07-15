@@ -585,7 +585,7 @@ export default class BaseGenerator<
   /**
    * Priority API stub for blueprints.
    *
-   * Install priority should used to prepare the project.
+   * Install priority should be used to prepare the project.
    */
   get install() {
     return {};
@@ -670,7 +670,7 @@ export default class BaseGenerator<
           // If sbsBlueprint, add templatePath to the original generator templatesFolder.
           this.jhipsterTemplatesFolders.unshift(blueprintGenerator.templatePath());
         } else {
-          // If the blueprints does not sets sbsBlueprint property, ignore normal workflow.
+          // If the blueprints do not set sbsBlueprint property, ignore normal workflow.
           this.delegateToBlueprint = true;
           this.#checkBlueprintImplementsPriorities(blueprintGenerator);
         }
