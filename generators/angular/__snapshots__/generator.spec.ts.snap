@@ -746,9 +746,6 @@ export class UserManagement implements OnInit {
   protected readonly activatedRoute = inject(ActivatedRoute);
   protected readonly sortService = inject(SortService);
   protected modalService = inject(NgbModal);
-    trackLogin = (item: IUserManagement): string =>
-      this.userManagementService.getUserManagementIdentifier(item);
-
 
   constructor() {
     effect(() => {
@@ -761,6 +758,9 @@ export class UserManagement implements OnInit {
       this.userManagements.set(this.fillComponentAttributesFromResponseBody([...this.userManagementService.userManagements()]));
     });
   }
+
+    trackLogin = (item: IUserManagement): string =>
+      this.userManagementService.getUserManagementIdentifier(item);
 
     ngOnInit(): void {
       this.subscription = combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(

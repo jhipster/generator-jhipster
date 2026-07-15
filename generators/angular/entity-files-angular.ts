@@ -112,7 +112,13 @@ export const writeEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularAp
 export const postWriteEntitiesFiles = asPostWritingEntitiesTask<AngularEntity, AngularApplication, AngularSource>(
   async function (this, taskParam) {
     const { application, source } = taskParam;
-    const entities = (application.filterEntitiesForClient ?? filterEntitiesForClient)(taskParam.entities).filter(
+    // taskParam.entities is filtered down to the entities passed to this generator run (e.g. a single new entity),
+    // so the UserManagement built-in needs to be added back in to keep its nav link/route needle up to date.
+    const allEntities =
+      application.generateUserManagement && !taskParam.entities.some(entity => entity.builtInUserManagement) ?
+        [...taskParam.entities, application.userManagement!]
+      : taskParam.entities;
+    const entities = (application.filterEntitiesForClient ?? filterEntitiesForClient)(allEntities).filter(
       entity => !entity.builtInUser && !entity.embedded && !entity.entityClientModelOnly,
     );
     source.addEntitiesToClient({ ...taskParam, entities });

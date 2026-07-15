@@ -61,7 +61,9 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should match context snapshot', () => {
-        expect(runResult.application).toMatchSnapshot({
+        // autoCrlf is only set on win32 and never appears in Linux CI-generated snapshots.
+        const { autoCrlf: _autoCrlf, ...application } = runResult.application as any;
+        expect(application).toMatchSnapshot({
           jhipsterPackageJson: expect.any(Object),
           javaDependencies: expect.any(Object),
           dockerContainers: expect.any(Object),

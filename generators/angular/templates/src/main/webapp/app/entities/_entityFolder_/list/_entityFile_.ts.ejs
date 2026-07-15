@@ -178,11 +178,6 @@ export class <%- componentName %> implements OnInit {
 <%_ if (!readOnly) { _%>
   protected modalService = inject(NgbModal);
 <%_ } _%>
-<%_ if (primaryKey) { _%>
-    track<%- primaryKey.nameCapitalized %> = (item: I<%- entityAngularName %>): <%- primaryKey.tsType %> =>
-      this.<%- entityInstance %>Service.get<%- entityAngularName %>Identifier(item);
-
-<%_ } _%>
 
   constructor() {
 <%_ if (!paginationNo) { _%>
@@ -209,6 +204,11 @@ export class <%- componentName %> implements OnInit {
 <%_ } _%>
   }
 
+<%_ if (primaryKey) { _%>
+    track<%- primaryKey.nameCapitalized %> = (item: I<%- entityAngularName %>): <%- primaryKey.tsType %> =>
+      this.<%- entityInstance %>Service.get<%- entityAngularName %>Identifier(item);
+
+<%_ } _%>
     ngOnInit(): void {
       this.subscription = combineLatest([this.activatedRoute.queryParamMap, this.activatedRoute.data]).pipe(
         tap(([params, data]) => this.fillComponentAttributeFromRoute(params, data)),
