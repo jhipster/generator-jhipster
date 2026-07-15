@@ -26,7 +26,7 @@
     "@module-federation/enhanced": "2.7.0",
     "@module-federation/rsbuild-plugin": "2.7.0",
     "@module-federation/vite": "1.18.0",
-    "@pinia/testing": "1.0.3",
+    "@pinia/testing": "2.0.0",
     "@rsbuild/core": "2.1.5",
     "@rsbuild/plugin-sass": "2.0.1",
     "@rsbuild/plugin-vue": "2.0.1",
