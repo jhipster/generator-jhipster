@@ -144,6 +144,20 @@ describe(`generator - ${generator}`, () => {
           });
         }
       });
+
+      it('keeps backend wait before root headless e2e for workspace clients', () => {
+        const { clientRootDir } = sampleConfig;
+        if (!clientRootDir) {
+          return;
+        }
+
+        runResult.assertJsonFileContent('package.json', {
+          scripts: {
+            'pree2e:headless': 'npm run ci:server:await --if-present',
+            'e2e:headless': `npm run -w ${clientRootDir} e2e:headless`,
+          },
+        });
+      });
     });
   });
 });

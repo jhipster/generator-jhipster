@@ -71,6 +71,9 @@ exports[`generator - cypress jwt-cypressAudit(false)-angular-withAdminUi(false)-
   "clientRoot/test/cypress/tsconfig.json": {
     "stateCleared": "modified",
   },
+  "package.json": {
+    "stateCleared": "modified",
+  },
 }
 `;
 
@@ -149,6 +152,9 @@ exports[`generator - cypress jwt-cypressAudit(true)-vue-withAdminUi(true)-cypres
     "stateCleared": "modified",
   },
   "clientRoot/test/cypress/tsconfig.json": {
+    "stateCleared": "modified",
+  },
+  "package.json": {
     "stateCleared": "modified",
   },
 }
