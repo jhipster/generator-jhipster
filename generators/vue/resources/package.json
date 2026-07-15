@@ -14,19 +14,19 @@
     "bootswatch": "5.3.8",
     "deepmerge": "4.3.1",
     "js-cookie": "3.0.8",
-    "pinia": "3.0.4",
+    "pinia": "4.0.2",
     "rxjs": "7.8.2",
     "sockjs-client": "1.6.1",
     "vue": "3.5.39",
     "vue-i18n": "11.4.6",
-    "vue-router": "5.1.0"
+    "vue-router": "5.2.0"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
     "@module-federation/enhanced": "2.7.0",
     "@module-federation/rsbuild-plugin": "2.7.0",
     "@module-federation/vite": "1.18.0",
-    "@pinia/testing": "1.0.3",
+    "@pinia/testing": "2.0.1",
     "@rsbuild/core": "2.1.5",
     "@rsbuild/plugin-sass": "2.0.1",
     "@rsbuild/plugin-vue": "2.0.1",
