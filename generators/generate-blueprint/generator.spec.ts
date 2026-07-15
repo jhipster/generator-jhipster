@@ -1,3 +1,4 @@
+
 /**
  * Copyright 2013-2026 the original author or authors from the JHipster project.
  *
@@ -48,17 +49,24 @@ describe(`generator - ${generator}`, () => {
     before(async () => {
       await helpers
         .runJHipster()
-        .withOptions({ defaults: true, subGenerators: ['app'] })
+        .withOptions({ defaults: true, subGenerators: ['app'], additionalSubGenerators: 'custom, app' })
         .withAnswers({ sbs: false, command: true, priorities: ['writing'] })
         .withSkipWritingPriorities()
         .withMockedGenerators(mockedGenerators);
     });
 
-    it('should apply defaults to selected sub-generators without prompting', () => {
+    it('should apply defaults to selected and additional sub-generators without prompting', () => {
       expect(result.generator.getSubGeneratorStorage('app').getAll()).toMatchObject({
         sbs: true,
         command: false,
         priorities: [],
+        written: false,
+      });
+      expect(result.generator.getSubGeneratorStorage('custom').getAll()).toMatchObject({
+        sbs: true,
+        command: false,
+        priorities: [],
+        written: false,
       });
     });
   });
