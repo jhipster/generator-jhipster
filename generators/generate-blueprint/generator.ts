@@ -19,6 +19,7 @@
 
 import { camelCase, snakeCase, upperFirst } from 'lodash-es';
 
+import { mutateData } from '../../lib/utils/object.ts';
 import { PRIORITY_NAMES_LIST as BASE_PRIORITY_NAMES_LIST } from '../base-core/priorities.ts';
 import BaseSimpleApplicationGenerator from '../base-simple-application/index.ts';
 
@@ -38,6 +39,7 @@ import type {
   Config as GenerateBlueprintConfig,
   Features as GenerateBlueprintFeatures,
   Options as GenerateBlueprintOptions,
+  TemplateData,
 } from './types.ts';
 
 export class GenerateBlueprintBaseGenerator extends BaseSimpleApplicationGenerator<
@@ -175,9 +177,11 @@ export default class extends GenerateBlueprintBaseGenerator {
       },
       async writingGenerators({ application }) {
         if (!application.generators) return;
+        const { javascriptBlueprint, upperFirstCamelCaseBaseName } = application;
         const templateExtension = application.javascriptBlueprint ? 'mjs' : 'ts';
         const outputExtension = application.javascriptBlueprint ? application.blueprintMjsExtension : 'ts';
         for (const generator of Object.keys(application.generators)) {
+          const generatorContext: TemplateData = { ...application } as TemplateData;
           const subGeneratorStorage = this.getSubGeneratorStorage(generator);
           const subGeneratorConfig = subGeneratorStorage.getAll();
           const priorities: { name: string; asTaskGroup: string; constant: string }[] = (subGeneratorConfig[PRIORITIES] || []).map(
@@ -188,19 +192,23 @@ export default class extends GenerateBlueprintBaseGenerator {
             }),
           );
           const customGenerator = !lookupGeneratorsNamespaces().includes(generator);
-          const jhipsterGenerator = customGenerator || subGeneratorConfig.sbs ? 'base-application' : generator;
-          const generatorClass = upperFirst(camelCase(jhipsterGenerator));
+          const hasCustomBaseGenerator = customGenerator && !javascriptBlueprint;
+          mutateData(generatorContext, {
+            jhipsterGenerator: customGenerator ? 'base-application' : generator,
+            parentGenerator: ctx =>
+              hasCustomBaseGenerator ? `${upperFirstCamelCaseBaseName}Application` : upperFirst(camelCase(ctx.jhipsterGenerator)),
+            parentGeneratorImport: ctx =>
+              hasCustomBaseGenerator ? '../base-generator.ts' : `generator-jhipster/generators/${ctx.jhipsterGenerator}`,
+          });
+
           const subTemplateData = {
-            ...application,
+            ...generatorContext,
             application,
             ...defaultSubGeneratorConfig(),
             ...subGeneratorConfig,
             generator,
-            parentGenerator: customGenerator ? generatorClass : generatorClass,
             customGenerator,
-            jhipsterGenerator,
             subGenerator: generator,
-            generatorClass,
             priorities,
           };
           await this.writeFiles<typeof subTemplateData>({
