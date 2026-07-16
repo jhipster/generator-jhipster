@@ -3512,6 +3512,7 @@ exports[`generator - angular gateway-jwt-skipUserManagement(true)-withAdminUi(fa
       "devDependencies": {
         "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
         "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "globals": "GLOBALS_VERSION",
         "jiti": "JITI_VERSION",
       },
     },
@@ -4782,6 +4783,7 @@ exports[`generator - angular gateway-oauth2-withAdminUi(true)-skipJhipsterDepend
       "devDependencies": {
         "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
         "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "globals": "GLOBALS_VERSION",
         "jiti": "JITI_VERSION",
       },
     },
@@ -5830,6 +5832,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
       "devDependencies": {
         "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
         "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "globals": "GLOBALS_VERSION",
         "jiti": "JITI_VERSION",
       },
     },
@@ -7016,6 +7019,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
       "devDependencies": {
         "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
         "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "globals": "GLOBALS_VERSION",
         "jiti": "JITI_VERSION",
       },
     },
@@ -8462,6 +8466,7 @@ exports[`generator - angular monolith-jwt-skipUserManagement(false)-withAdminUi(
       "devDependencies": {
         "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
         "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "globals": "GLOBALS_VERSION",
         "jiti": "JITI_VERSION",
       },
     },
@@ -9479,6 +9484,7 @@ exports[`generator - angular monolith-oauth2-withAdminUi(false)-skipJhipsterDepe
       "devDependencies": {
         "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
         "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "globals": "GLOBALS_VERSION",
         "jiti": "JITI_VERSION",
       },
     },
@@ -10506,6 +10512,7 @@ exports[`generator - angular monolith-session-skipUserManagement(true)-withAdmin
       "devDependencies": {
         "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
         "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "globals": "GLOBALS_VERSION",
         "jiti": "JITI_VERSION",
       },
     },

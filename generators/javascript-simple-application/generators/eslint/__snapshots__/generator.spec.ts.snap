@@ -7,6 +7,7 @@ exports[`generator - javascript-simple-application:eslint with defaults options 
       "devDependencies": {
         "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
         "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
+        "globals": undefined,
         "jiti": undefined,
       },
     },

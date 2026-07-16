@@ -24,6 +24,17 @@
       "entity": "cassandra"
     },
     {
+      "name": "react-default-windows",
+      "app-sample": "none",
+      "environment": "dev",
+      "os": "windows-latest",
+      "generatorOptions": {
+        "defaults": true,
+        "devDatabaseType": "h2Disk",
+        "clientFramework": "react"
+      }
+    },
+    {
       "name": "ms-react-consul-jwt-cassandra-redis",
       "jdl-samples": "ms-react-consul-jwt-cassandra-redis",
       "generatorOptions": {

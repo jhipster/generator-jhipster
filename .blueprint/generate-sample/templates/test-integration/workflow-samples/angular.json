@@ -108,6 +108,17 @@
       "entity": "couchbase"
     },
     {
+      "name": "ng-default-windows",
+      "app-sample": "none",
+      "environment": "dev",
+      "os": "windows-latest",
+      "generatorOptions": {
+        "defaults": true,
+        "devDatabaseType": "h2Disk",
+        "clientFramework": "angular"
+      }
+    },
+    {
       "name": "ms-ng-oauth2-mongodb-caffeine",
       "jdl-samples": "ms-ng-oauth2-mongodb-caffeine",
       "generatorOptions": {
