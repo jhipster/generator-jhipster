@@ -205,9 +205,7 @@ export const createBlueprintFiles = (
   blueprintPackage: string,
   { packageJson, generator = 'test-blueprint', generatorContent, files = {} }: FakeBlueprintOptions = {},
 ) => {
-  generatorContent =
-    generatorContent ??
-    `export const createGenerator = async env => {
+  generatorContent ??= `export const createGenerator = async env => {
     const BaseGenerator = await env.requireGenerator('jhipster:base');
     return class extends BaseGenerator {
       get [BaseGenerator.INITIALIZING]() {
