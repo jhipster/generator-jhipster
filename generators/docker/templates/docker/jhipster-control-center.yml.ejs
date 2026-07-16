@@ -63,7 +63,7 @@ services:
       - SPRING_PROFILES_ACTIVE=prod,api-docs,<%- discoveryProfile %><%- authenticationTypeOauth2 ? ',oauth2' : '' %>
 <%_ if (authenticationTypeJwt) { _%>
       - SPRING_SECURITY_USER_PASSWORD=admin
-      # The token should have the same value than the one declared in you Spring configuration under the jhipster.security.authentication.jwt.base64-secret configuration's entry
+      # The token should have the same value as the one declared in you Spring configuration under the jhipster.security.authentication.jwt.base64-secret configuration's entry
       - JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET=<%- jwtSecretKey %>
 <%_ } else if (authenticationTypeOauth2) { _%>
       # For keycloak to work, you need to add '127.0.0.1 keycloak' to your hosts file
