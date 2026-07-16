@@ -177,6 +177,12 @@ export class UserManagementDeleteDialog {
         <dd>
           <span>{{ userManagementRef.lastModifiedDate | formatMediumDatetime }}</span>
         </dd>
+        <dt><span>Profiles</span></dt>
+        <dd>
+        @for (authority of userManagementRef.authorities; track $index) {
+          <span class="badge bg-info">{{ authority.name }}</span>
+        }
+        </dd>
       </dl>
 
       <button type="submit"
@@ -191,12 +197,6 @@ export class UserManagementDeleteDialog {
           class="btn btn-primary">
         <fa-icon icon="pencil-alt" />&nbsp;<span>Edit</span>
       </button>
-        <dt><span>Profiles</span></dt>
-        <dd>
-        @for (authority of userManagementRef.authorities; track $index) {
-          <span class="badge bg-info">{{ authority.name }}</span>
-        }
-        </dd>
     </div>
     }
   </div>

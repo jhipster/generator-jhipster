@@ -98,6 +98,12 @@
         </dd>
   <%_ } _%>
 <%_ } _%>
+        <dt><span>__jhiTranslateTag__('userManagement.profiles')</span></dt>
+        <dd>
+        @for (authority of <%- entityInstance %>Ref.authorities; track $index) {
+          <span class="badge bg-info">{{ authority<%- generateBuiltInAuthorityEntity ? '.name' : '' %> }}</span>
+        }
+        </dd>
       </dl>
 
       <button type="submit"
@@ -114,12 +120,6 @@
         <fa-icon icon="pencil-alt" />&nbsp;<span>__jhiTranslateTag__('entity.action.edit')</span>
       </button>
 <%_ } _%>
-        <dt><span>__jhiTranslateTag__('userManagement.profiles')</span></dt>
-        <dd>
-        @for (authority of <%- entityInstance %>Ref.authorities; track $index) {
-          <span class="badge bg-info">{{ authority<%- generateBuiltInAuthorityEntity ? '.name' : '' %> }}</span>
-        }
-        </dd>
     </div>
     }
   </div>
