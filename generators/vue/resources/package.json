@@ -1,7 +1,7 @@
 {
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "7.3.0",
-    "@fortawesome/free-solid-svg-icons": "7.3.0",
+    "@fortawesome/fontawesome-svg-core": "7.3.1",
+    "@fortawesome/free-solid-svg-icons": "7.3.1",
     "@fortawesome/vue-fontawesome": "3.3.2",
     "@module-federation/runtime": "2.7.0",
     "@stomp/rx-stomp": "2.4.0",
