@@ -20,11 +20,12 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./<%- this.relativeDir(clientRootDir, temporaryDir) %>out-tsc/app",
-    "types": ["@angular/localize"]
+    "types": ["@angular/localize", "node"]
   },
   "files": [
-<%_ if (microfrontend && applicationTypeMicroservice) { _%>
+<%_ if (microfrontend) { _%>
     "<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entity-navbar-items.ts",
+    "<%- this.relativeDir(clientRootDir, clientSrcDir) %>app/entities/entity.routes.ts",
 <%_ } _%>
 <%_ if (communicationSpringWebsocket) { _%>
     "<%- this.relativeDir(clientRootDir, clientSrcDir) %>sockjs-client.polyfill.ts",

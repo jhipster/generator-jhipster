@@ -23,7 +23,8 @@ import { loadRemote } from '@module-federation/enhanced/runtime';
 import NavbarItem from 'app/layouts/navbar/navbar-item.model';
 
 export const loadNavbarItems = async (service: string): Promise<NavbarItem[]> =>
-  loadRemote<{ EntityNavbarItems: NavbarItem[] }>(`${service}/entity-navbar-items`).then(({ EntityNavbarItems }) => EntityNavbarItems);
-
+  loadRemote<{ default: NavbarItem[] }>(`${service}/entity-navbar-items`).then(items => items?.default ?? []);
+  
 export const loadEntityRoutes = (service: string): Promise<Type<any>> =>
-  loadRemote<Type<any>>(`${service}/entity-routes`);
+  loadRemote<Type<any>>(`${service}/entity-routes`) as Promise<Type<any>>;
+

@@ -21,7 +21,7 @@ import { Title } from '@angular/platform-browser';
 import { Router, RouterFeatures, TitleStrategy, provideRouter, withComponentInputBinding, withDebugTracing, withNavigationErrorHandler, NavigationError } from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-<%_ if (applicationTypeGateway && microfrontend) { _%>
+<%_ if (microfrontend) { _%>
 import { registerRemotes } from '@module-federation/enhanced/runtime';
 <%_ } _%>
 import { NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap/datepicker';
@@ -41,13 +41,13 @@ import FindLanguageFromKeyPipe from 'app/shared/language/find-language-from-key.
 import routes from './app.routes';
 import { NgbDateDayjsAdapter } from './config/datepicker-adapter';
 import { AppPageTitleStrategy } from './app-page-title-strategy';
-<%_ if (applicationTypeGateway && microfrontend) { _%>
+<%_ if (microfrontend) { _%>
 
 registerRemotes([
   <%_ for (const remote of microfrontends) { _%>
   {
     name: '<%- remote.lowercaseBaseName %>',
-    entry: '/<%- remote.endpointPrefix %>/remoteEntry.js',
+    entry: '<%- remote.endpointPrefix %>/mf-manifest.json',
   },
   <%_ } _%>
 ]);

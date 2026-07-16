@@ -70,7 +70,7 @@ describe('Navbar Component', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(Navbar);
     comp = fixture.componentInstance;
-<%_ if (applicationTypeGateway && microfrontend) { _%>
+<%_ if (microfrontend) { _%>
     comp.loadMicrofrontendsEntities = vitest.fn();
 <%_ } _%>
     accountService = TestBed.inject(AccountService);

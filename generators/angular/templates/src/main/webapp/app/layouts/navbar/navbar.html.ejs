@@ -62,31 +62,32 @@
           </a>
           <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
             <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
-<%_ if (applicationTypeGateway && microfrontend) { _%>
+<%_ if (microfrontend) { _%>
   <%_ for (const remote of microfrontends) { _%>
-          @if (<%- remote.moduleFederationName %>EntityNavbarItems().length === 0) {
+          @if (<%- remote.moduleFederationName %>EntityNavbarItems(); as <%- remote.moduleFederationName %>Entities) {
+            @for (entityNavbarItem of <%- remote.moduleFederationName %>Entities; track $index) {
+              <li>
+                <a
+                  class="dropdown-item"
+                  [routerLink]="entityNavbarItem.route"
+                  routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: true }"
+                  (click)="collapseNavbar()"
+                >
+                  <fa-icon icon="asterisk" [fixedWidth]="true" />
+                  <span
+    <%_ if (enableTranslation) { _%>
+                 [<%- jhiPrefix %>Translate]="entityNavbarItem.translationKey"
+    <%_ } _%>
+                  >{{entityNavbarItem.name}}</span>
+                </a>
+              </li>
+            }
+          } @else {
             <li>
               <span class="dropdown-item">Failed to load <%- remote.moduleFederationName %> entities</span>
             </li>
           }
-          @for (entityNavbarItem of <%- remote.moduleFederationName %>EntityNavbarItems(); track $index) {
-            <li>
-              <a
-                class="dropdown-item"
-                [routerLink]="entityNavbarItem.route"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                (click)="collapseNavbar()"
-              >
-                <fa-icon icon="asterisk" [fixedWidth]="true" />
-                <span
-    <%_ if (enableTranslation) { _%>
-               [<%- jhiPrefix %>Translate]="entityNavbarItem.translationKey"
-    <%_ } _%>
-                >{{entityNavbarItem.name}}</span>
-              </a>
-            </li>
-        }
   <%_ } _%>
 <%_ } _%>
           </ul>

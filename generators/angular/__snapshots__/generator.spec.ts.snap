@@ -4935,7 +4935,7 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "endpointPrefix": "services/jhipster",
   "entities": Any<Array>,
   "entitySuffix": "",
-  "exposeMicrofrontend": false,
+  "exposeMicrofrontend": true,
   "feignClient": false,
   "filterEntitiesAndPropertiesForClient": [Function],
   "filterEntitiesForClient": [Function],
@@ -5024,7 +5024,16 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
   "messageHeaderNameError": "x-jhipsterapp-error",
   "messageHeaderNameParam": "x-jhipsterapp-params",
   "microfrontend": true,
-  "microfrontends": [],
+  "microfrontends": [
+    {
+      "baseName": "jhipster",
+      "capitalizedBaseName": "Jhipster",
+      "endpointPrefix": "",
+      "lowercaseBaseName": "jhipster",
+      "moduleFederationName": "jhipster",
+      "self": true,
+    },
+  ],
   "monorepository": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {
@@ -5203,6 +5212,9 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/interceptor/notification.interceptor.ts": {
+    "stateCleared": "modified",
+  },
+  "clientRoot/src/app/core/microfrontend/index.ts": {
     "stateCleared": "modified",
   },
   "clientRoot/src/app/core/request/request-util.ts": {
@@ -5828,6 +5840,11 @@ exports[`generator - angular microservice-jwt-skipUserManagement(false)-withAdmi
     },
     {
       "devDependencies": {
+        "@module-federation/enhanced": null,
+      },
+    },
+    {
+      "devDependencies": {
         "eslint-config-prettier": "ESLINT_CONFIG_PRETTIER_VERSION",
         "eslint-plugin-prettier": "ESLINT_PLUGIN_PRETTIER_VERSION",
         "jiti": "JITI_VERSION",
@@ -5983,7 +6000,7 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "endpointPrefix": "services/jhipster",
   "entities": Any<Array>,
   "entitySuffix": "",
-  "exposeMicrofrontend": false,
+  "exposeMicrofrontend": true,
   "feignClient": false,
   "filterEntitiesAndPropertiesForClient": [Function],
   "filterEntitiesForClient": [Function],
@@ -6062,7 +6079,16 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
   "messageHeaderNameError": "x-jhipsterapp-error",
   "messageHeaderNameParam": "x-jhipsterapp-params",
   "microfrontend": true,
-  "microfrontends": [],
+  "microfrontends": [
+    {
+      "baseName": "jhipster",
+      "capitalizedBaseName": "Jhipster",
+      "endpointPrefix": "",
+      "lowercaseBaseName": "jhipster",
+      "moduleFederationName": "jhipster",
+      "self": true,
+    },
+  ],
   "monorepository": undefined,
   "nativeLanguage": "en",
   "nativeLanguageDefinition": {
@@ -6379,6 +6405,9 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/interceptor/notification.interceptor.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/core/microfrontend/index.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/core/request/request-util.ts": {
@@ -7010,6 +7039,11 @@ exports[`generator - angular microservice-oauth2-withAdminUi(true)-skipJhipsterD
       "overrides": {
         "browser-sync": "BROWSER_SYNC_VERSION",
         "webpack": "WEBPACK_VERSION",
+      },
+    },
+    {
+      "devDependencies": {
+        "@module-federation/enhanced": null,
       },
     },
     {
