@@ -81,24 +81,29 @@ export default defineComponent({
       localStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
       sessionStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
       store.logout();
-      if (router.currentRoute.value.path !== '/') {
-        router.push('/');
-      }
 <%_ } else { _%>
       const response = await loginService.logout();
       store.logout();
+
   <%_ if (authenticationTypeOauth2) { _%>
-      window.location.href = response.data.logoutUrl;
-      const next = response.data?.logoutUrl ?? '/';
-      if (router.currentRoute.value.path !== next) {
-        await router.push(next);
+      const next = response.data?.logoutUrl;
+
+      if (next) {
+        window.location.href = next;
+        if (/^https?:\/\//i.test(next)) {
+          return;
+        }
+        if (router.currentRoute.value.path !== next) {
+          await router.push(next);
+        }
+        return;
       }
-  <%_ } else { _%>
+
+  <%_ } _%>
+<%_ } _%>
       if (router.currentRoute.value.path !== '/') {
         await router.push('/');
       }
-  <%_ } _%>
-<%_ } _%>
     },
 
     return {

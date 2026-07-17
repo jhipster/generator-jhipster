@@ -149,6 +149,20 @@ describe('JhiNavbar', () => {
     expect(jhiNavbar.authenticated).toBeFalsy();
 <%_ } _%>
   });
+<%_ if (authenticationTypeOauth2) { _%>
+
+  it('logout should not navigate with router for external url', async () => {
+    store.setAuthentication({ login: 'test' });
+    const logoutUrl = 'http://keycloak:9080/logout';
+    (loginService.logout as any).mockReturnValue(Promise.resolve({ data: { logoutUrl } }));
+    const routerPushSpy = vi.spyOn(router, 'push');
+
+    await jhiNavbar.logout();
+
+    expect(loginService.logout).toHaveBeenCalled();
+    expect(routerPushSpy).not.toHaveBeenCalled();
+  });
+<%_ } _%>
 
   it('should determine active route', async () => {
     await router.push('/forbidden');
