@@ -708,7 +708,7 @@ import {
   ITEM_DELETED_EVENT,
   DEFAULT_SORT_DATA
 } from 'app/config/navigation.constants';
-import { EntityArrayResponseType, UserManagementService } from '../service/user-management.service';
+import { UserManagementService } from '../service/user-management.service';
 import { UserManagementDeleteDialog } from '../delete/user-management-delete-dialog';
 
 @Component({
@@ -812,6 +812,7 @@ export class UserManagement implements OnInit {
       const queryObject: any  = {
         page: pageToLoad - 1,
         size: this.itemsPerPage(),
+        eagerload: true,
         sort: this.sortService.buildSortParam(this.sortState()),
       };
       this.userManagementService.userManagementsParams.set(queryObject);
@@ -2000,6 +2001,7 @@ export interface IUserManagement {
   createdDate?: dayjs.Dayjs | null;
   lastModifiedBy?: string | null;
   lastModifiedDate?: dayjs.Dayjs | null;
+  authorities?: Pick<IAuthority, 'name'>[] | null;
 }
 
 export type NewUserManagement = Omit<IUserManagement, 'login'> & { login: null };

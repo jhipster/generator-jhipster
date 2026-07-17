@@ -283,6 +283,7 @@ export function createUserManagementEntity(
         relationshipName: 'authority',
         relationshipType: 'many-to-many',
         relationshipIgnoreBackReference: true,
+        relationshipEagerLoad: true,
         propertyTranslationKey: 'userManagement.profiles',
       },
     ]);

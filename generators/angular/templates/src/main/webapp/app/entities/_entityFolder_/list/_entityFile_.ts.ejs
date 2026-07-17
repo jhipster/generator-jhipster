@@ -76,7 +76,7 @@ import {
 <%_ } _%>
   DEFAULT_SORT_DATA
 } from 'app/config/navigation.constants';
-import { EntityArrayResponseType, <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
+import { <%- entityAngularName %>Service } from '../service/<%- entityFileName %>.service';
 <%_ if (!readOnly) { _%>
 import { <%- entityAngularName %>DeleteDialog } from '../delete/<%- entityFileName %>-delete-dialog';
 <%_ } _%>
