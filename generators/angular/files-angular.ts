@@ -108,12 +108,8 @@ export const files = asWriteFilesSection({
       templates: ['webpack/webpack.microfrontend.js'],
     }),
     clientApplicationTemplatesBlock({
-      condition: data => data.microfrontend && data.applicationTypeGateway,
-      templates: ['core/microfrontend/index.ts'],
-    }),
-    clientApplicationTemplatesBlock({
-      condition: data => data.microfrontend && data.applicationTypeMicroservice,
-      templates: ['entities/entity-navbar-items.ts'],
+      condition: data => data.microfrontend,
+      templates: ['core/microfrontend/index.ts', 'entities/entity-navbar-items.ts'],
     }),
   ],
   angularMain: [

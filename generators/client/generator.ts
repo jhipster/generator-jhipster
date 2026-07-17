@@ -165,6 +165,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
         if (application.microfrontends) {
           if (application.exposeMicrofrontend) {
             application.microfrontends.unshift({
+              self: true,
               baseName: application.baseName,
               endpointPrefix: '',
             } as any);
@@ -177,6 +178,7 @@ export default class ClientGenerator extends ClientApplicationGenerator {
               moduleFederationName: ({ lowercaseBaseName }) => lowercaseBaseName.replaceAll('-', '_'),
               capitalizedBaseName: upperFirst(baseName),
               endpointPrefix: `services/${baseName.toLowerCase()}`,
+              self: false,
             });
           });
         }

@@ -51,9 +51,6 @@ export default class App {
 <%_ if (communicationSpringWebsocket) { _%>
     this.trackerService.setup();
 <%_ } _%>
-<%_ if (applicationTypeMicroservice) { _%>
-    this.applicationConfigService.setMicrofrontend();
-<%_ } _%>
     this.applicationConfigService.setEndpointPrefix(SERVER_API_URL);
     registerLocaleData(locale);
     this.iconLibrary.addIcons(...fontAwesomeIcons);

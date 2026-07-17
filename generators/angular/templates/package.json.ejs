@@ -52,12 +52,6 @@
 <%_ if (skipServer) { _%>
     "sonar-scanner": "3.1.0",
 <%_ } _%>
-<%_ if (microfrontend) { _%>
-  <%_ if (applicationTypeGateway) { _%>
-    "@angular-architects/module-federation-runtime": "<%- nodeDependencies['@angular-architects/module-federation-runtime'] %>",
-  <%_ } _%>
-    "@angular-architects/module-federation": "<%- nodeDependencies['@angular-architects/module-federation'] %>",
-<%_ } _%>
     "@vitest/coverage-v8": "<%- nodeDependencies.vitest %>",
     "@angular/build": "<%- nodeDependencies['@angular/cli'] %>",
     "@angular/cli": "<%- nodeDependencies['@angular/cli'] %>",

@@ -16,20 +16,24 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, ChangeDetectionStrategy, Injector, OnInit, Signal, inject } from '@angular/core';
-import { map, Observable } from 'rxjs';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
+import { catchError, map, of } from 'rxjs';
 
 <%_ if (enableTranslation) { _%>
+
 import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
+
+import type { ProfileInfo } from './profile-info.model';
 import { ProfileService } from './profile.service';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-page-ribbon',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    @if (ribbonEnvSignal?.(); as ribbonEnv) {
+    @if (ribbonEnvSignal(); as ribbonEnv) {
       <div class="ribbon">
         <a href="">__jhiTranslateTagEnum__('global.ribbon', { "value": "ribbonEnv ?? ''" })</a>
       </div>
@@ -40,13 +44,20 @@ import { ProfileService } from './profile.service';
   imports: [TranslateDirective],
 <%_ } _%>
 })
-export default class PageRibbon implements OnInit {
-  ribbonEnvSignal?: Signal<string | undefined>;
-  private readonly injector = inject(Injector);
-  private readonly profileService = inject(ProfileService);
+export default class PageRibbon {
+  readonly ribbonEnvSignal = signal<string | undefined>(undefined);
 
-  ngOnInit(): void {
-    const ribbonEnv$: Observable<string | undefined> = this.profileService.getProfileInfo().pipe(map(profileInfo => profileInfo.ribbonEnv));
-    this.ribbonEnvSignal = toSignal(ribbonEnv$, { injector: this.injector });
+  private readonly profileService = inject(ProfileService);
+  private readonly destroyRef = inject(DestroyRef);
+
+  constructor() {
+    this.profileService
+      .getProfileInfo()
+      .pipe(
+        map((profileInfo: ProfileInfo) => profileInfo.ribbonEnv),
+        catchError(() => of(undefined)),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(ribbonEnv => this.ribbonEnvSignal.set(ribbonEnv));
   }
 }
