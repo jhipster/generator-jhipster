@@ -18,7 +18,6 @@
  */
 
 import chalk from 'chalk';
-import type { Options as ExecaOptions } from 'execa';
 import { kebabCase } from 'lodash-es';
 import { globSync } from 'tinyglobby';
 
@@ -33,6 +32,8 @@ import type { Application as HerokuApplication, Config as HerokuConfig, Options 
 type StreamLike = {
   on(event: 'data', listener: (chunk: Buffer | string) => void): unknown;
 };
+
+type ExecaOptions = NonNullable<Parameters<HerokuGenerator['spawn']>[2]>;
 
 export default class HerokuGenerator extends BaseSimpleApplicationGenerator<HerokuApplication, HerokuConfig, HerokuOptions> {
   hasHerokuCli!: boolean;
