@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit, ChangeDetectionStrategy, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { combineLatest } from 'rxjs';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
@@ -37,7 +37,6 @@ import { MetricsSystem } from './blocks/metrics-system/metrics-system';
 @Component({
   selector: '<%- jhiPrefixDashed %>-metrics',
   templateUrl: './metrics.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
 <%_ if (enableTranslation) { _%>
     TranslateDirective,

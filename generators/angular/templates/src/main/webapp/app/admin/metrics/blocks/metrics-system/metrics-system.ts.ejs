@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { DecimalPipe, DatePipe } from '@angular/common';
 
 import { NgbProgressbar } from '@ng-bootstrap/ng-bootstrap/progressbar';
@@ -25,7 +25,6 @@ import { ProcessMetrics } from 'app/admin/metrics/metrics.model';
 @Component({
   selector: '<%- jhiPrefixDashed %>-metrics-system',
   templateUrl: './metrics-system.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [NgbProgressbar, DecimalPipe, DatePipe],
 })
 export class MetricsSystem {

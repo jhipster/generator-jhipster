@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, ChangeDetectionStrategy, inject, signal, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Subscription } from 'rxjs';
 
@@ -28,7 +28,6 @@ import { TranslateDirective } from 'app/shared/language';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-tracker',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     DatePipe,
 <%_ if (enableTranslation) { _%>

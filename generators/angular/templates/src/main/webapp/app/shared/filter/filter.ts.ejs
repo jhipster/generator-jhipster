@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { IFilterOptions } from './filter.model';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
@@ -8,7 +8,6 @@ import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-filter',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
 <%_ if (enableTranslation) { _%>
     TranslateDirective,
