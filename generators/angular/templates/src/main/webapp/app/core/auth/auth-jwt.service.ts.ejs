@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 
@@ -28,7 +28,7 @@ type JwtToken = {
   id_token: string;
 };
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class AuthServerProvider {
   private readonly http = inject(HttpClient);
   private readonly stateStorageService = inject(StateStorageService);
