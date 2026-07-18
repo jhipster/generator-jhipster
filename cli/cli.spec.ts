@@ -24,7 +24,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import type { BaseGenerator, GeneratorMeta } from '@yeoman/types';
-import { execaCommandSync } from 'execa';
+import { execaSync } from 'execa';
 import { coerce } from 'semver';
 import type FullEnvironment from 'yeoman-environment';
 
@@ -153,17 +153,17 @@ describe('cli', () => {
   });
 
   it('--help should run without errors', () => {
-    const { stdout } = execaCommandSync(`${jhipsterCli} --help`);
+    const { stdout } = execaSync`${jhipsterCli} --help`;
     expect(stdout).toMatch(/For more info visit/);
   });
 
   it('--version should run without errors', () => {
-    const { stdout } = execaCommandSync(`${jhipsterCli} --version`);
+    const { stdout } = execaSync`${jhipsterCli} --version`;
     expect(coerce(stdout)).toBeTruthy();
   });
 
   it('should return error on unknown command', () => {
-    expect(() => execaCommandSync(`${jhipsterCli} junkcmd`)).toThrow(
+    expect(() => execaSync`${jhipsterCli} junkcmd`).toThrow(
       expect.objectContaining({
         exitCode: 1,
         message: expect.stringContaining('is not a known command'),
@@ -448,7 +448,7 @@ describe('cli', () => {
         });
 
         it('should execute callback with error and print info', () => {
-          expect(() => execaCommandSync(`${jhipsterCli} foo --blueprints bar`)).toThrow(
+          expect(() => execaSync`${jhipsterCli} foo --blueprints bar`).toThrow(
             expect.objectContaining({
               exitCode: 1,
               stdout: expect.stringContaining('No custom commands found within blueprint: generator-jhipster-bar'),
@@ -468,7 +468,7 @@ describe('cli', () => {
         });
 
         it('should execute callback with error and print info', () => {
-          expect(() => execaCommandSync(`${jhipsterCli} foo --blueprints bar,baz`)).toThrow(
+          expect(() => execaSync`${jhipsterCli} foo --blueprints bar,baz`).toThrow(
             expect.objectContaining({
               exitCode: 1,
               stdout: expect.stringContaining('No custom commands found within blueprint: generator-jhipster-baz'),

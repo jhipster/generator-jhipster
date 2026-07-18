@@ -21,7 +21,7 @@ import { after, afterEach, before, describe, esmocha, expect, it, resetAllMocks 
 
 import type checkJava from './check-java.ts';
 
-const { execaCommandSync } = await esmocha.mock('execa', import('execa'));
+const { execaSync } = await esmocha.mock('execa', import('execa'));
 
 const baseResult = {
   cwd: '',
@@ -47,7 +47,7 @@ describe('generator - server - checkJava', () => {
     let result: ReturnType<typeof checkJava>;
 
     before(async () => {
-      execaCommandSync.mockReturnValue({ ...baseResult, stderr });
+      execaSync.mockReturnValue({ ...baseResult, stderr });
       const { default: checkJava } = await import('./check-java.ts');
       result = checkJava([]);
     });
@@ -66,7 +66,7 @@ describe('generator - server - checkJava', () => {
     let result: ReturnType<typeof checkJava>;
 
     before(async () => {
-      execaCommandSync.mockReturnValue({ ...baseResult, exitCode, stderr });
+      execaSync.mockReturnValue({ ...baseResult, exitCode, stderr });
       const { default: checkJava } = await import('./check-java.ts');
       result = checkJava([]);
     });
@@ -80,7 +80,7 @@ describe('generator - server - checkJava', () => {
     let result: ReturnType<typeof checkJava>;
 
     before(async () => {
-      execaCommandSync.mockImplementation(() => {
+      execaSync.mockImplementation(() => {
         throw new Error('foo');
       });
       const { default: checkJava } = await import('./check-java.ts');
