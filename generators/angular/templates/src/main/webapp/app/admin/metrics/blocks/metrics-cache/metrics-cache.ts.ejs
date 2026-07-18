@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { KeyValuePipe, DecimalPipe } from '@angular/common';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
@@ -28,7 +28,6 @@ import { filterNaN } from 'app/core/util/operators';
 @Component({
   selector: '<%- jhiPrefixDashed %>-metrics-cache',
   templateUrl: './metrics-cache.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [KeyValuePipe, DecimalPipe<%- enableTranslation ? ', TranslateDirective' : '' %>],
 })
 export class MetricsCache {

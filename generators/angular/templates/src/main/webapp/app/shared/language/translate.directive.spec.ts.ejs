@@ -17,14 +17,13 @@
  limitations under the License.
 -%>
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 
 import TranslateDirective from './translate.directive';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [TranslateDirective],
   template: `<div <%- jhiPrefix %>Translate="test"></div>`,
 })

@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { catchError, map, of } from 'rxjs';
@@ -31,7 +31,6 @@ import { ProfileService } from './profile.service';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-page-ribbon',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (ribbonEnvSignal(); as ribbonEnv) {
       <div class="ribbon">

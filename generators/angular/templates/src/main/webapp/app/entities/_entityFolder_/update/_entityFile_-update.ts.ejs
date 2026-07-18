@@ -21,7 +21,7 @@
       .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
       .filter(relationships => relationships.length > 0);
 _%>
-import { Component, ChangeDetectionStrategy, inject, signal, OnInit<%- anyFieldHasImageContentType ? ', ElementRef' : '' %> } from '@angular/core';
+import { Component, inject, signal, OnInit<%- anyFieldHasImageContentType ? ', ElementRef' : '' %> } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { finalize<%- relationships.some(rel => rel.persistableRelationship) ? ', map' : '' %>, Observable } from 'rxjs';
@@ -62,7 +62,6 @@ import { <%- importedType %> } from '<%- importedPath %>';
 <%_ } _%>
 
 @Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
     selector: '<%- jhiPrefixDashed %>-<%- entityFileName %>-update',
     templateUrl: './<%- entityFileName %>-update.html',
     imports: [
