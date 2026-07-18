@@ -16,13 +16,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Injectable, inject } from "@angular/core";
+import { inject, Service } from "@angular/core";
 import { RouterStateSnapshot, TitleStrategy } from "@angular/router";
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from "@ngx-translate/core";
 <%_ } _%>
 
-@Injectable()
+@Service()
 export class AppPageTitleStrategy extends TitleStrategy {
 <%_ if (enableTranslation) { _%>
   private readonly translateService = inject(TranslateService);

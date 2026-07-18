@@ -1387,7 +1387,7 @@ describe("UserManagement Service", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/service/user-management.service.ts": {
-    "contents": "import { computed, inject, Injectable, signal } from "@angular/core";
+    "contents": "import { computed, inject, Service, signal } from "@angular/core";
 import { HttpClient, HttpResponse, httpResource } from "@angular/common/http";
 import { map, Observable } from "rxjs";
 
@@ -1417,7 +1417,7 @@ export type NewRestUserManagement = RestOf<NewUserManagement>;
 export type PartialUpdateRestUserManagement =
   RestOf<PartialUpdateUserManagement>;
 
-@Injectable()
+@Service()
 export class UserManagementsService {
   readonly userManagementsParams = signal<
     | Record<
@@ -1467,7 +1467,7 @@ export class UserManagementsService {
   }
 }
 
-@Injectable({ providedIn: "root" })
+@Service()
 export class UserManagementService extends UserManagementsService {
   protected readonly http = inject(HttpClient);
 
@@ -1701,7 +1701,7 @@ describe("UserManagement Form Service", () => {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-form.service.ts": {
-    "contents": "import { Injectable } from "@angular/core";
+    "contents": "import { Service } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 
 import dayjs from "dayjs/esm";
@@ -1760,7 +1760,7 @@ type UserManagementFormGroupContent = {
 
 export type UserManagementFormGroup = FormGroup<UserManagementFormGroupContent>;
 
-@Injectable({ providedIn: "root" })
+@Service()
 export class UserManagementFormService {
   createUserManagementFormGroup(
     userManagement?: UserManagementFormGroupInput,

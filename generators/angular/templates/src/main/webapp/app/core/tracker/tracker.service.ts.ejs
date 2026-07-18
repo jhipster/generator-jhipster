@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { inject, Injectable, effect } from '@angular/core';
+import { effect, inject, Service } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, NavigationEnd, Event } from '@angular/router';
 import { filter, map, Observer, Subscription } from 'rxjs';
@@ -40,7 +40,7 @@ import { Account } from '../auth/account.model';
 const DESTINATION_TRACKER = '/topic/tracker';
 const DESTINATION_ACTIVITY = '/topic/activity';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class TrackerService {
   private rxStomp?: RxStomp;
   private routerSubscription: Subscription | null = null;
