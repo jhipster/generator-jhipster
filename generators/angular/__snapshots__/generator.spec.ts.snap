@@ -716,7 +716,7 @@ describe("UserManagement Management Component", () => {
       deleteModalMock = { componentInstance: {}, closed: new Subject() };
       // NgbModal is not a singleton using TestBed.inject.
       // ngbModal = TestBed.inject(NgbModal);
-      ngbModal = (comp as any).modalService;
+      ngbModal = (comp as unknown as { modalService: NgbModal }).modalService;
       vitest.spyOn(ngbModal, "open").mockReturnValue(deleteModalMock);
     });
 
