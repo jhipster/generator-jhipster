@@ -77,6 +77,11 @@
     "vitest": null,
     "vitest-sonar-reporter": null
   },
+<%_ if (skipServer) { _%>
+  "allowScripts": {
+    "sonar-scanner": true
+  },
+<%_ } _%>
   "engines": {
     "node": ">=<%- nodeVersion %>"
   },

@@ -23,8 +23,6 @@ permissions:
   contents: read
 env:
   FORCE_COLOR: 2
-  # npm 12 blocks dependency install scripts by default; re-enable so Cypress/generator-jhipster postinstall/prepare run (allowScripts)
-  NPM_CONFIG_DANGEROUSLY_ALLOW_ALL_SCRIPTS: true
 jobs:
   check-generator-database-changelog-liquibase:
     name: ${{ matrix.app-type }}

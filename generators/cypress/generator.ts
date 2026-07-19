@@ -257,6 +257,11 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
             'cypress-terminal-report': null,
             'eslint-plugin-cypress': application.nodeDependencies['eslint-plugin-cypress'],
           },
+          // npm >= 12 blocks dependency install scripts unless explicitly allowed.
+          // Cypress downloads its binary from a postinstall script.
+          allowScripts: {
+            cypress: true,
+          },
         });
         if (application.cypressCoverage && this.angularSchematic) {
           clientPackageJson.merge({

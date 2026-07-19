@@ -23,7 +23,10 @@ permissions:
   contents: read
 env:
   FORCE_COLOR: 2
-  # npm 12 blocks dependency install scripts by default; re-enable so Cypress/generator-jhipster postinstall/prepare run (allowScripts)
+  # generator-jhipster is linked here as a file: dependency (--link-jhipster-dependency) and its
+  # prepare script builds dist/. npm 12 blocks prepare for non-registry sources, and allowScripts
+  # does NOT cover them (verified: neither "pkg" nor "pkg@version" unblocks a file: dependency),
+  # so the blanket escape hatch is the only option until npm supports allowScripts for local deps.
   NPM_CONFIG_DANGEROUSLY_ALLOW_ALL_SCRIPTS: true
 jobs:
   check-generator-generate-blueprint:

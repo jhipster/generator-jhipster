@@ -110,6 +110,11 @@
     "webpack-notifier": "<%- nodeDependencies['webpack-notifier'] %>",
     "workbox-webpack-plugin": "<%- nodeDependencies['workbox-webpack-plugin'] %>"
   },
+<%_ if (skipServer) { _%>
+  "allowScripts": {
+    "sonar-scanner": true
+  },
+<%_ } _%>
   <%# An unknown dependency pulls in outdated react and react-dom, override them -%>
   "overrides": {
     "react": "$react",
