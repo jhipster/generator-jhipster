@@ -21,7 +21,7 @@ import { DOCUMENT } from '@angular/common';
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Title } from '@angular/platform-browser';
-import { Router, TitleStrategy } from '@angular/router';
+import { Data, Router, TitleStrategy } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
 import { InterpolatableTranslationObject, LangChangeEvent, TranslateService, provideTranslateService } from '@ngx-translate/core';
@@ -47,7 +47,7 @@ describe('Main', () => {
   let findLanguageFromKeyPipe: FindLanguageFromKeyPipe;
   <%_ } _%>
 <%_ } _%>
-  const routerState: any = { snapshot: { root: { data: {} } } };
+  const routerState = { snapshot: { root: { data: {} as Data } } };
   let router: Router;
   let document: Document;
 
