@@ -23,8 +23,6 @@
   "extends": "<%- this.relativeDir(cypressDir, clientRootDir) %>tsconfig.json",
 <%_ } _%>
   "compilerOptions": {
-    "ignoreDeprecations": "6.0",
-    "baseUrl": "./",
     "sourceMap": false,
 <%_ if (clientFrameworkReact || clientFrameworkAngular) { _%>
     "outDir": null,
