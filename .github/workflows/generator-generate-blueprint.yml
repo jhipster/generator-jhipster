@@ -23,11 +23,6 @@ permissions:
   contents: read
 env:
   FORCE_COLOR: 2
-  # generator-jhipster is linked here as a file: dependency (--link-jhipster-dependency) and its
-  # prepare script builds dist/. npm 12 blocks prepare for non-registry sources, and allowScripts
-  # does NOT cover them (verified: neither "pkg" nor "pkg@version" unblocks a file: dependency),
-  # so the blanket escape hatch is the only option until npm supports allowScripts for local deps.
-  NPM_CONFIG_DANGEROUSLY_ALLOW_ALL_SCRIPTS: true
 jobs:
   check-generator-generate-blueprint:
     runs-on: ubuntu-latest
@@ -61,6 +56,10 @@ jobs:
           maven-cache: true
           binary-dir: ${{ github.workspace }}/generator-jhipster/bin
       - run: npm ci --ignore-scripts
+        working-directory: ${{ github.workspace }}/generator-jhipster
+      # The blueprint links generator-jhipster as a file: dependency, whose prepare script builds
+      # dist/. npm 12 blocks prepare for non-registry sources, so build it explicitly instead.
+      - run: npm run build
         working-directory: ${{ github.workspace }}/generator-jhipster
       - run: npm link
         working-directory: ${{ github.workspace }}/generator-jhipster
