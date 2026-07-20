@@ -161,7 +161,7 @@
     "piscina": "5.3.0",
     "pluralize": "8.0.0",
     "prettier": "3.9.5",
-    "prettier-plugin-java": "2.10.2",
+    "prettier-plugin-java": "2.10.3",
     "prettier-plugin-packagejson": "3.0.2",
     "prettier-plugin-properties": "0.3.1",
     "randexp": "0.5.3",
