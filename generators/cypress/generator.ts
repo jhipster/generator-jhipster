@@ -54,6 +54,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
 
     if (!this.delegateToBlueprint) {
       await this.dependsOnBootstrap('client');
+      await this.dependsOnJHipster('javascript-simple-application');
     }
   }
 
@@ -138,19 +139,19 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
           'e2e:dev': `concurrently -k -s first -n application,e2e -c red,blue npm:app:start npm:e2e`,
           'e2e:devserver':
             this.angularSchematic ?
-              `concurrently -k -s first -n backend,e2e -c red,blue npm:backend:start "npm run ci:server:await && ng e2e --configuration ${application.cypressCoverage ? 'coverage' : 'run'}"`
+              `concurrently -k -s first -n backend,e2e -c red,blue npm:backend:start "npm run ci:server:await --if-present && ng e2e --configuration ${application.cypressCoverage ? 'coverage' : 'run'}"`
             : `concurrently -k -s first -n backend,frontend,e2e -c red,yellow,blue npm:backend:start npm:start "wait-on -t ${WAIT_TIMEOUT} http-get://127.0.0.1:${devServerPortE2e} && npm run e2e:headless -- -c baseUrl=http://localhost:${devServerPortE2e}"`,
         });
 
+        Object.assign(application.packageJsonScripts, {
+          'pree2e:headless': 'npm run ci:server:await --if-present',
+        });
+
         if (application.clientRootDir) {
-          // Add scripts to map to client package.json
-          Object.assign(application.packageJsonScripts, {
-            'e2e:headless': `npm run -w ${application.clientRootDir} e2e:headless`,
-          });
-        } else if (application.backendTypeJavaAny) {
-          Object.assign(application.clientPackageJsonScripts, {
-            'pree2e:headless': 'npm run ci:server:await',
-          });
+          // Add scripts forwarding to client package.json
+          for (const script of ['e2e:headless'].filter(script => application.clientPackageJsonScripts[script])) {
+            application.packageJsonScripts[script] = `npm run -w ${application.clientRootDir} ${script}`;
+          }
         }
       },
     });
@@ -263,7 +264,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
               'cypress-monocart-coverage': null,
             },
             scripts: {
-              'pree2e:cypress:coverage': 'npm run ci:server:await',
+              'pree2e:cypress:coverage': 'npm run ci:server:await --if-present',
               'e2e:cypress:coverage': 'ng e2e --configuration coverage',
             },
           });
@@ -297,7 +298,7 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
           },
           scripts: {
             'clean-coverage': 'rimraf .nyc_output coverage',
-            'pree2e:cypress:coverage': 'npm run clean-coverage && npm run ci:server:await',
+            'pree2e:cypress:coverage': 'npm run clean-coverage && npm run ci:server:await --if-present',
             'e2e:cypress:coverage': 'npm run e2e:cypress:headed',
             'poste2e:cypress:coverage': 'nyc report',
             'prewebapp:instrumenter': 'npm run clean-www && npm run clean-coverage',

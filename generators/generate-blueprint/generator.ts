@@ -196,7 +196,7 @@ export default class extends GenerateBlueprintBaseGenerator {
             ...defaultSubGeneratorConfig(),
             ...subGeneratorConfig,
             generator,
-            parentGenerator: customGenerator ? generatorClass : generatorClass,
+            parentGenerator: generatorClass,
             customGenerator,
             jhipsterGenerator,
             subGenerator: generator,

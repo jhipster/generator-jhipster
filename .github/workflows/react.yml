@@ -55,7 +55,7 @@ jobs:
           fetch-depth: 2
       - run: echo "node-version=$(cat ${{ github.workspace }}/generators/init/resources/.node-version)" >> $GITHUB_OUTPUT
         id: node-version
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ steps.node-version.outputs.node-version }}
       - run: npm ci --prod --engine-strict --ignore-scripts
@@ -67,6 +67,7 @@ jobs:
     needs: build-matrix
     defaults:
       run:
+        shell: bash
         working-directory: ${{ github.workspace }}/app
     if: >-
       !contains(github.event.head_commit.message, '[angular]') &&
@@ -116,6 +117,8 @@ jobs:
           JHIPSTER_DEPENDENCIES_VERSION: ${{ matrix.jhipster-bom-cicd-version }}
           JHI_JWT_SECRET_KEY: ${{ matrix.jwt-secret-key }}
       - run: jhipster.cjs info
+      # Make sure that the script-shell is set to bash, otherwise npm scripts will fail on Windows runners
+      - run: npm config -L project set script-shell=bash
       #----------------------------------------------------------------------
       # Detect changes against base commit
       #----------------------------------------------------------------------
@@ -163,12 +166,12 @@ jobs:
         timeout-minutes: 15
       - name: 'TESTS: Start docker compose containers for e2e tests'
         id: docker-compose
-        if: steps.compare.outputs.equals != 'true'
+        if: steps.compare.outputs.equals != 'true' && runner.os == 'Linux'
         run: npm run ci:e2e:prepare
         timeout-minutes: 5
       - name: 'E2E: Run'
         id: e2e
-        if: steps.compare.outputs.equals != 'true'
+        if: steps.compare.outputs.equals != 'true' && runner.os == 'Linux'
         run: npm run ci:e2e:run --if-present
         timeout-minutes: 15
       - name: Store the application
@@ -199,7 +202,7 @@ jobs:
           name: screenshots-${{ matrix.sample }}
           path: ${{ github.workspace }}/app/**/cypress/screenshots
       - name: Dump docker logs
-        if: always()
+        if: always() && runner.os == 'Linux'
         uses: jwalton/gh-docker-logs@v2
   check-react:
     permissions:

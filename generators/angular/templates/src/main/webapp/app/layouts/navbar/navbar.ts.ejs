@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, ChangeDetectionStrategy, inject, signal, OnInit, effect<%- microfrontend && enableTranslation && applicationTypeGateway ? ', EnvironmentInjector' : '' %> } from '@angular/core';
+import { Component, inject, signal, OnInit, effect<%- microfrontend && enableTranslation ? ', EnvironmentInjector' : '' %> } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
@@ -37,7 +37,7 @@ import { Account } from 'app/core/auth/account.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { LoginService } from 'app/login/login.service';
 import { ProfileService } from 'app/layouts/profiles/profile.service';
-<% if (microfrontend && applicationTypeGateway) { %>
+<% if (microfrontend) { %>
 import { loadLazyTranslation, loadNavbarItems } from 'app/core/microfrontend';
 <%_ } _%>
 import { environment } from 'environments/environment';
@@ -45,7 +45,6 @@ import NavbarItem from './navbar-item.model';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-navbar',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
   imports: [
@@ -73,9 +72,9 @@ export default class Navbar implements OnInit {
   readonly openAPIEnabled = signal(false);
   readonly version: string;
   readonly account = inject(AccountService).account;
-<%_ if (applicationTypeGateway && microfrontend) { _%>
+<%_ if (microfrontend) { _%>
   <%_ for (const remote of microfrontends) { _%>
-  <%- remote.moduleFederationName %>EntityNavbarItems = signal<NavbarItem[]>([]);
+  <%- remote.moduleFederationName %>EntityNavbarItems = signal<NavbarItem[] | null>(null);
   <%_ } _%>
 <%_ } _%>
 
@@ -83,11 +82,11 @@ export default class Navbar implements OnInit {
 <%_ if (enableTranslation) { _%>
   private readonly translateService = inject(TranslateService);
   private readonly stateStorageService = inject(StateStorageService);
-  <%_ if (applicationTypeGateway && microfrontend) { _%>
+  <%_ if (microfrontend) { _%>
   private readonly injector = inject(EnvironmentInjector);
   <%_ } _%>
 <%_ } _%>
-<%_ if (applicationTypeGateway && microfrontend) { _%>
+<%_ if (microfrontend) { _%>
   private readonly accountService = inject(AccountService);
 <%_ } _%>
   private readonly profileService = inject(ProfileService);
@@ -100,7 +99,7 @@ export default class Navbar implements OnInit {
     } else {
       this.version = '';
     }
-<%_ if (applicationTypeGateway && microfrontend) { _%>
+<%_ if (microfrontend) { _%>
 
     effect(() => {
       if (this.accountService.account()) {
@@ -142,7 +141,7 @@ export default class Navbar implements OnInit {
     this.router.navigate(['']);
   }
 
-<%_ if (applicationTypeGateway && microfrontend) { _%>
+<%_ if (microfrontend) { _%>
 
   loadMicrofrontendsEntities(): void {
     // Lazy load microfrontend entities.

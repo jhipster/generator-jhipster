@@ -17,7 +17,7 @@
  limitations under the License.
 -%>
 import { HttpClient } from '@angular/common/http';
-import { Injectable, Signal, effect, inject, signal } from '@angular/core';
+import { effect, inject, Service, Signal, signal } from '@angular/core';
 import { Router } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
@@ -29,7 +29,7 @@ import { Account } from 'app/core/auth/account.model';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
 import { ApplicationConfigService } from '../config/application-config.service';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class AccountService {
   private readonly userIdentity = signal<Account | null>(null);
   // eslint-disable-next-line @typescript-eslint/member-ordering

@@ -16,11 +16,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { inject, Injectable } from '@angular/core';
+import { inject, Service } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { CSRF_TOKEN_COOKIE_NAME } from 'app/shared/jhipster/constants';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class CSRFService {
   private readonly cookieService = inject(CookieService);
 

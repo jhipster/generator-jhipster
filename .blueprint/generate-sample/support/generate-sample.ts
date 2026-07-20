@@ -97,12 +97,19 @@ export const generateSample = async (
       sample,
     };
   }
-  const isDailySample = isDaily(appSample);
 
-  memFs.copy(
-    join(isDailySample ? dailyBuildsFolder : samplesFolder, isDailySample ? appSample.replace(DAILY_PREFIX, '') : appSample, '.yo-rc.json'),
-    join(destProjectFolder, '.yo-rc.json'),
-  );
+  if (appSample !== 'none') {
+    const isDailySample = isDaily(appSample);
+
+    memFs.copy(
+      join(
+        isDailySample ? dailyBuildsFolder : samplesFolder,
+        isDailySample ? appSample.replace(DAILY_PREFIX, '') : appSample,
+        '.yo-rc.json',
+      ),
+      join(destProjectFolder, '.yo-rc.json'),
+    );
+  }
 
   // Generate the application
   return {

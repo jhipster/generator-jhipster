@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { inject, Injectable, SecurityContext } from '@angular/core';
+import { inject, SecurityContext, Service } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 <%_ if (enableTranslation) { _%>
 import { TranslateService } from '@ngx-translate/core';
@@ -40,9 +40,7 @@ export interface AlertModel {
   close?: (alerts: AlertModel[]) => void;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class AlertService {
   timeout = 5000;
   toast = false;

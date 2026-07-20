@@ -59,17 +59,10 @@ spec:
           value: scripts
         - name: KC_PROXY
           value: "edge"
-<%_ if (ingressTypeGke) { _%>
         - name: KC_HOSTNAME_URL
-          value: https://keycloak.<%- kubernetesNamespace %>.<%- ingressDomain %>
+          value: http<%- ingressTypeGke ? 's' : '' %>://keycloak.<%- kubernetesNamespace %>.<%- ingressDomain %>
         - name: KC_HOSTNAME_ADMIN_URL
-          value: https://keycloak.<%- kubernetesNamespace %>.<%- ingressDomain %>
-<%_ } else { _%>
-        - name: KC_HOSTNAME_URL
-          value: http://keycloak.<%- kubernetesNamespace %>.<%- ingressDomain %>
-        - name: KC_HOSTNAME_ADMIN_URL
-          value: http://keycloak.<%- kubernetesNamespace %>.<%- ingressDomain %>
-<%_ } _%>
+          value: http<%- ingressTypeGke ? 's' : '' %>://keycloak.<%- kubernetesNamespace %>.<%- ingressDomain %>
         - name: KC_CACHE_STACK
           value: "kubernetes"
         - name: JAVA_OPTS_APPEND

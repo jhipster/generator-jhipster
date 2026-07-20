@@ -23,7 +23,7 @@
     const convertResponsePipe = requiresRestTypeConversion ? '.pipe(map(res => this.convertResponseFromServer(res)))' : '';
     const authorityRelationship = builtInUserManagement && generateBuiltInAuthorityEntity ? relationships.find(rel => rel.relationshipName === 'authority') : undefined;
 _%>
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Service, signal } from '@angular/core';
 import { HttpClient, HttpResponse, httpResource } from '@angular/common/http';
 import {
 <%_ if (searchEngineAny) { _%>
@@ -90,7 +90,7 @@ export type PartialUpdate<%- entityRestName %> = RestOf<PartialUpdate<%- entityA
   <%_ } _%>
 <%_ } _%>
 
-@Injectable()
+@Service()
 export class <%- entityAngularNamePlural %>Service {
   readonly <%- entityInstancePlural %>Params = signal<Record<string, string | number | boolean | readonly (string | number | boolean)[]> | undefined>(undefined);
   readonly <%- entityInstancePlural %>Resource = httpResource<<%- entityRestName %>[]>(() => {
@@ -129,7 +129,7 @@ export class <%- entityAngularNamePlural %>Service {
 <%_ } _%>
 }
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class <%- entityAngularName %>Service extends <%- entityAngularNamePlural %>Service {
     protected readonly http = inject(HttpClient);
 

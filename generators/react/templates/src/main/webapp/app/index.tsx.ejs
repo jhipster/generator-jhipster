@@ -21,19 +21,16 @@ import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { bindActionCreators } from 'redux';
 <%_ if (applicationTypeGateway && microfrontend) { _%>
-import { init } from '@module-federation/enhanced/runtime';
+import { registerRemotes } from '@module-federation/enhanced/runtime';
 
-init({
-  name: '<%- lowercaseBaseName %>',
-  remotes: [
+registerRemotes([
   <%_ for (const remote of microfrontends) { _%>
-    {
-      name: '<%- remote.lowercaseBaseName %>',
-      entry: '/<%- remote.endpointPrefix %>/remoteEntry.js',
-    },
+  {
+    name: '<%- remote.lowercaseBaseName %>',
+    entry: '/<%- remote.endpointPrefix %>/remoteEntry.js',
+  },
   <%_ } _%>
-  ],
-});
+]);
 <%_ } _%>
 
 import getStore from 'app/config/store';

@@ -388,7 +388,7 @@ export default class AngularGenerator extends AngularApplicationGenerator {
     return this.asPostWritingTaskGroup({
       addPrettierConfig({ application, source }) {
         source.mergePrettierConfig?.({
-          overrides: [{ files: path.join(application.clientSrcDir, '**/*.html'), options: { parser: 'angular' } }],
+          overrides: [{ files: path.posix.join(application.clientSrcDir, '**/*.html'), options: { parser: 'angular' } }],
         });
       },
       clientBundler({ application, source }) {
@@ -422,6 +422,17 @@ export default class AngularGenerator extends AngularApplicationGenerator {
             overrides: {
               'browser-sync': nodeDependencies['browser-sync'],
               webpack: nodeDependencies.webpack,
+            },
+          });
+        }
+      },
+      addMicrofrontendDependencies({ application, source }) {
+        const { clientBundlerWebpack, microfrontend } = application;
+        if (!microfrontend) return;
+        if (clientBundlerWebpack) {
+          source.mergeClientPackageJson!({
+            devDependencies: {
+              '@module-federation/enhanced': null,
             },
           });
         }

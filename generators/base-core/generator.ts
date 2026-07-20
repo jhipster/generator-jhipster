@@ -411,7 +411,7 @@ You can ignore this error by passing '--skip-checks' to jhipster command.`);
             }
           }
         } catch {
-          // Ignore non existing command
+          // Ignore non-existing command
         }
 
         const split = this.options.namespace.split(':');

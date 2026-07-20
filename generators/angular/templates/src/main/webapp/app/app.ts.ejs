@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import dayjs from 'dayjs/esm';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
@@ -33,7 +33,6 @@ import { TrackerService } from './core/tracker/tracker.service';
 
 @Component({
   selector: '<%- jhiPrefixDashed %>-app',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: '<<%- jhiPrefixDashed %>-main />',
   imports: [
     Main,
@@ -50,9 +49,6 @@ export default class App {
   constructor() {
 <%_ if (communicationSpringWebsocket) { _%>
     this.trackerService.setup();
-<%_ } _%>
-<%_ if (applicationTypeMicroservice) { _%>
-    this.applicationConfigService.setMicrofrontend();
 <%_ } _%>
     this.applicationConfigService.setEndpointPrefix(SERVER_API_URL);
     registerLocaleData(locale);

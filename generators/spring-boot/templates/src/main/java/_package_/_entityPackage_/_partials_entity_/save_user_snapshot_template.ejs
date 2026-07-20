@@ -17,15 +17,13 @@
  limitations under the License.
 -%>
 <% for (const userRelationship of relationships.filter(rel => rel.otherEntity.builtInUser)) { %>
-  <%_ if (userRelationship.collection) { _%>
         if (<%- restInstance %>.<%- userRelationship.propertySupplierName %>() != null) {
+  <%_ if (userRelationship.collection) { _%>
             // Save users in case they are new and only exist in gateway
             userRepository.saveAll(<%- restInstance %>.<%- userRelationship.propertySupplierName %>());
-        }
   <%_ } else { _%>
-        if (<%- restInstance %>.<%- userRelationship.propertySupplierName %>() != null) {
             // Save user in case it's new and only exists in gateway
             userRepository.save(<%- restInstance %>.<%- userRelationship.propertySupplierName %>());
-        }
   <%_ } _%>
+        }
 <% } %>

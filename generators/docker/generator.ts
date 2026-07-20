@@ -328,7 +328,7 @@ export default class DockerGenerator extends BaseApplicationGenerator<Applicatio
    * Returns the R2DBC URL for a databaseType
    *
    * @param {string} databaseType
-   * @param {*} options: databaseName, and required infos that depends of databaseType (hostname, localDirectory, ...)
+   * @param {*} options: databaseName, and required infos that depends on databaseType (hostname, localDirectory, ...)
    */
   getR2DBCUrl(...args: Parameters<typeof getR2dbcUrl>) {
     return getR2dbcUrl(...args);
