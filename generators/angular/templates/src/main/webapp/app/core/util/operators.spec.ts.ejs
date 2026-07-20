@@ -17,15 +17,9 @@
  limitations under the License.
 -%>
 import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
-import { filterNaN, isPresent } from './operators';
+import { filterNaN } from './operators';
 
 describe('Operators Test', () => {
-  describe('isPresent', () => {
-    it('should remove null and undefined values', () => {
-      expect([1, null, undefined].filter(isPresent)).toEqual([1]);
-    });
-  });
-
   describe('filterNaN', () => {
     it('should return 0 for NaN', () => {
       expect(filterNaN(Number.NaN)).toBe(0);

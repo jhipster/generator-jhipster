@@ -42,7 +42,6 @@ import {
 import dayjs from 'dayjs/esm';
 <%_ } _%>
 
-import { isPresent } from 'app/core/util/operators';
 <%_ if (anyFieldIsLocalDate) { _%>
 import { DATE_FORMAT } from 'app/config/input.constants';
 <%_ } _%>
@@ -195,7 +194,7 @@ export class <%- entityAngularName %>Service extends <%- entityAngularNamePlural
     }
 
     add<%- entityAngularName %>ToCollectionIfMissing<Type extends Pick<I<%- entityAngularName %>, '<%- primaryKey.name %>'>>(<%- entityInstance %>Collection: Type[], ...<%- entityInstancePlural %>ToCheck: (Type | null | undefined)[]): Type[] {
-        const <%- entityInstancePlural %>: Type[] = <%- entityInstancePlural %>ToCheck.filter(isPresent);
+        const <%- entityInstancePlural %>: Type[] = <%- entityInstancePlural %>ToCheck.filter(<%- entityInstance %>Item => <%- entityInstance %>Item !== null && <%- entityInstance %>Item !== undefined);
         if (<%- entityInstancePlural %>.length > 0) {
             const <%- entityInstance %>CollectionIdentifiers = <%- entityInstance %>Collection.map(<%- entityInstance %>Item => this.get<%- entityAngularName %>Identifier(<%- entityInstance %>Item));
             const <%- entityInstancePlural %>ToAdd = <%- entityInstancePlural %>.filter(<%- entityInstance %>Item => {
