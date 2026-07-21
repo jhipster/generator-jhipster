@@ -18,7 +18,7 @@
     "rxjs": "7.8.2",
     "sockjs-client": "1.6.1",
     "vue": "3.5.40",
-    "vue-i18n": "11.4.6",
+    "vue-i18n": "11.4.7",
     "vue-router": "5.2.0"
   },
   "devDependencies": {
