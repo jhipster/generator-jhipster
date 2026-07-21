@@ -55,9 +55,7 @@ jobs:
         with:
           maven-cache: true
           binary-dir: ${{ github.workspace }}/generator-jhipster/bin
-      - run: npm ci --ignore-scripts
-        working-directory: ${{ github.workspace }}/generator-jhipster
-      - run: npm link
+      - run: npm ci
         working-directory: ${{ github.workspace }}/generator-jhipster
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
