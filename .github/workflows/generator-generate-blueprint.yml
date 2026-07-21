@@ -94,7 +94,7 @@ jobs:
           JHI_CLI: jhipster.cjs
           JHIPSTER_DEPENDENCIES_VERSION: ${{ steps.jhipster-output.outputs.jhipster-dependencies-version }}
       - name: 'GENERATION: jhipster info'
-        run: jhipster info
+        run: jhipster.cjs info
       #----------------------------------------------------------------------
       # Launch tests
       #----------------------------------------------------------------------
