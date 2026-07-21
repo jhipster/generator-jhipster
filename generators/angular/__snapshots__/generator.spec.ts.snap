@@ -1389,7 +1389,6 @@ import { map, Observable } from "rxjs";
 
 import dayjs from "dayjs/esm";
 
-import { isPresent } from "app/core/util/operators";
 import { ApplicationConfigService } from "app/core/config/application-config.service";
 import { createRequestOption } from "app/core/request/request-util";
 import { IUserManagement, NewUserManagement } from "../user-management.model";
@@ -1546,7 +1545,10 @@ export class UserManagementService extends UserManagementsService {
     userManagementCollection: Type[],
     ...userManagementsToCheck: (Type | null | undefined)[]
   ): Type[] {
-    const userManagements: Type[] = userManagementsToCheck.filter(isPresent);
+    const userManagements: Type[] = userManagementsToCheck.filter(
+      (userManagementItem) =>
+        userManagementItem !== null && userManagementItem !== undefined,
+    );
     if (userManagements.length > 0) {
       const userManagementCollectionIdentifiers = userManagementCollection.map(
         (userManagementItem) =>
