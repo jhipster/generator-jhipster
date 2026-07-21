@@ -257,6 +257,9 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
             'cypress-terminal-report': null,
             'eslint-plugin-cypress': application.nodeDependencies['eslint-plugin-cypress'],
           },
+          allowScripts: {
+            cypress: true,
+          },
         });
         if (application.cypressCoverage && this.angularSchematic) {
           clientPackageJson.merge({
