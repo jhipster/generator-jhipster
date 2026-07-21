@@ -77,5 +77,5 @@
     "webpack-notifier": "1.15.0",
     "workbox-webpack-plugin": "7.4.1"
   },
-  "packageManager": "npm@11"
+  "packageManager": "npm@12"
 }

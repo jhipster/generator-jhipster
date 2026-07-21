@@ -16,6 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+const path = require('path');
 const { ModuleFederationPlugin } = require('@module-federation/enhanced/webpack');
 const packageJson = require('../package.json');
 // Microfrontend api, should match across gateway and microservices.
@@ -40,6 +41,9 @@ sharedDependencies = {
 
 module.exports = () => {
   return {
+    resolve: {
+      modules: [path.resolve(__dirname, '../<%- this.relativeDir(clientRootDir, clientSrcDir) %>'), 'node_modules'],
+    },
     optimization: {
       moduleIds: 'named',
       chunkIds: 'named',
