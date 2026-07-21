@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`generator - ci-cd:jenkins with defaults options should match files snapshot 1`] = `
+{
+  ".yo-rc.json": {
+    "stateCleared": "modified",
+  },
+  "Jenkinsfile": {
+    "stateCleared": "modified",
+  },
+  "src/main/docker/jenkins.yml": {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/idea.gdsl": {
+    "stateCleared": "modified",
+  },
+}
+`;

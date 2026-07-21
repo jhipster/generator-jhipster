@@ -45,7 +45,7 @@ jobs:
 <%_ if (!skipClient) { _%>
             JHI_DISABLE_WEBPACK_LOGS: true
 <%_ } _%>
-<%_ if (clientFrameworkAngular) { _%>
+<%_ if (locals.clientFrameworkAngular) { _%>
             NG_CLI_ANALYTICS: false
 <%_ } _%>
 <%_ if (enableGradleDevelocity) { _%>
