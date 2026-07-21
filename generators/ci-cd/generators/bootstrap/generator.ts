@@ -20,6 +20,7 @@ import chalk from 'chalk';
 import { parse as parseYaml } from 'yaml';
 
 import { mutateData } from '../../../../lib/utils/object.ts';
+import type { Config as BaseApplicationConfig } from '../../../base-application/types.d.ts';
 import BaseSimpleApplicationGenerator from '../../../base-simple-application/index.ts';
 import type { Application as CiCdApplication } from '../../types.ts';
 
@@ -61,6 +62,21 @@ export default class BootstrapGenerator extends BaseSimpleApplicationGenerator<C
 
   get [BaseSimpleApplicationGenerator.LOADING]() {
     return this.delegateTasksToBlueprint(() => this.loading);
+  }
+
+  get composingBootstrap() {
+    return this.asComposingBootstrapTaskGroup({
+      async composingBootstrap() {
+        const { backendType = 'Java' } = this.jhipsterConfig as BaseApplicationConfig;
+        if (['Java', 'SpringBoot'].includes(backendType)) {
+          await this.dependsOnBootstrap('java');
+        }
+      },
+    });
+  }
+
+  get [BaseSimpleApplicationGenerator.COMPOSING_BOOTSTRAP]() {
+    return this.delegateTasksToBlueprint(() => this.composingBootstrap);
   }
 
   get preparing() {
