@@ -233,8 +233,10 @@ export default class I18NGenerator extends ClientApplicationGenerator {
       },
       async writeEntityFiles({ application, entities }) {
         const entitiesToWriteTranslationFor = entities.filter(entity => !entity.skipClient && !entity.builtInUser);
-        if (application.userManagement?.skipClient) {
-          entitiesToWriteTranslationFor.push(application.userManagement);
+        // entities may be filtered down to a single new entity, so the UserManagement built-in needs to be
+        // added back in to keep its translation file up to date, regardless of its own skipClient value.
+        if (application.generateUserManagement && !entitiesToWriteTranslationFor.some(entity => entity.builtInUserManagement)) {
+          entitiesToWriteTranslationFor.push(application.userManagement!);
         }
 
         // Copy each

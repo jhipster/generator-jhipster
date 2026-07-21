@@ -36,6 +36,13 @@ const expectedNonRecursiveObject = (object: any, except: string[] = []) => {
   };
 };
 
+// autoCrlf is only set on win32 (lib/jhipster/default-application-options.ts) and never appears
+// in Linux CI-generated snapshots, so it must be excluded from cross-platform snapshot comparisons.
+const omitEnvironmentSpecific = (object: any) => {
+  const { autoCrlf: _autoCrlf, ...rest } = object;
+  return rest;
+};
+
 const expectedField = (field: any) => expectedNonRecursiveObject(field, ['path', 'fieldValidateRules']);
 
 const expectedRelationship = (relationship: any) => expectedNonRecursiveObject(relationship, []);
@@ -62,7 +69,8 @@ export const testBootstrapApplication = (generator: string, config: any = {}) =>
       });
 
       it('should prepare application', () => {
-        expect(runResult.application).toMatchSnapshot(expectedNonRecursiveObject(runResult.application));
+        const application = omitEnvironmentSpecific(runResult.application);
+        expect(application).toMatchSnapshot(expectedNonRecursiveObject(application));
       });
     });
   });
@@ -79,7 +87,8 @@ export const testBootstrapEntities = (generator: string, config: any = {}) => {
         expect(Object.keys(runResult.entities!)).toMatchSnapshot();
       });
       it('should prepare application', () => {
-        expect(runResult.application).toMatchSnapshot(expectedNonRecursiveObject(runResult.application));
+        const application = omitEnvironmentSpecific(runResult.application);
+        expect(application).toMatchSnapshot(expectedNonRecursiveObject(application));
       });
       it('should prepare entities', () => {
         const expected = Object.fromEntries(Object.entries(runResult.entities!).map(([name, entity]) => [name, expectedEntity(entity)]));

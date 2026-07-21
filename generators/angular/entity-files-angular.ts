@@ -36,6 +36,15 @@ export const builtInFiles = asWriteEntityFilesSection({
   service: [entityServiceFiles],
 });
 
+const userManagementHtmlFiles = clientApplicationTemplatesBlock({
+  templates: [
+    'entities/admin/user-management/list/user-management.html',
+    'entities/admin/user-management/update/user-management-update.html',
+    'entities/admin/user-management/detail/user-management-detail.html',
+    'entities/admin/user-management/delete/user-management-delete-dialog.html',
+  ],
+});
+
 export const angularFiles = {
   model: [entityModelFiles],
   service: [entityServiceFiles],
@@ -70,33 +79,6 @@ export const angularFiles = {
   ],
 };
 
-export const userManagementFiles = asWriteEntityFilesSection({
-  userManagement: [
-    clientApplicationTemplatesBlock({
-      templates: [
-        'entities/_entityFolder_/_entityFile_.routes.ts',
-        'entities/_entityFolder_/route/_entityFile_-routing-resolve.service.ts',
-        'entities/_entityFolder_/route/_entityFile_-routing-resolve.service.spec.ts',
-        'entities/admin/user-management/user-management.model.ts',
-        'entities/admin/user-management/list/user-management.html',
-        'entities/admin/user-management/list/user-management.spec.ts',
-        'entities/admin/user-management/list/user-management.ts',
-        'entities/admin/user-management/detail/user-management-detail.html',
-        'entities/admin/user-management/detail/user-management-detail.spec.ts',
-        'entities/admin/user-management/detail/user-management-detail.ts',
-        'entities/admin/user-management/update/user-management-update.html',
-        'entities/admin/user-management/update/user-management-update.spec.ts',
-        'entities/admin/user-management/update/user-management-update.ts',
-        'entities/_entityFolder_/delete/_entityFile_-delete-dialog.html',
-        'entities/_entityFolder_/delete/_entityFile_-delete-dialog.ts',
-        'entities/_entityFolder_/delete/_entityFile_-delete-dialog.spec.ts',
-        'entities/admin/user-management/service/user-management.service.spec.ts',
-        'entities/admin/user-management/service/user-management.service.ts',
-      ],
-    }),
-  ],
-});
-
 export const writeEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularApplication>(async function ({ application, entities }) {
   for (const entity of (application.filterEntitiesAndPropertiesForClient ?? filterEntitiesAndPropertiesForClient)(entities)) {
     if (entity.builtInUser) {
@@ -109,13 +91,15 @@ export const writeEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularAp
           readOnly: true,
         },
       });
-
-      if (application.generateUserManagement && application.userManagement!.skipClient) {
-        await this.writeFiles({
-          sections: userManagementFiles,
-          context: { ...application, ...application.userManagement },
-        });
-      }
+    } else if (entity.builtInUserManagement) {
+      await this.writeFiles({
+        sections: { model: [entityModelFiles], service: [entityServiceFiles], client: angularFiles.client },
+        context: { ...application, ...entity },
+      });
+      await this.writeFiles({
+        sections: { client: [userManagementHtmlFiles] },
+        context: { ...application, ...entity },
+      });
     } else {
       await this.writeFiles({
         sections: entity.entityClientModelOnly ? { model: [entityModelFiles] } : angularFiles,
@@ -128,12 +112,15 @@ export const writeEntitiesFiles = asWritingEntitiesTask<AngularEntity, AngularAp
 export const postWriteEntitiesFiles = asPostWritingEntitiesTask<AngularEntity, AngularApplication, AngularSource>(
   async function (this, taskParam) {
     const { application, source } = taskParam;
-    const entities = (application.filterEntitiesForClient ?? filterEntitiesForClient)(taskParam.entities).filter(
+    // taskParam.entities is filtered down to the entities passed to this generator run (e.g. a single new entity),
+    // so the UserManagement built-in needs to be added back in to keep its nav link/route needle up to date.
+    const allEntities =
+      application.generateUserManagement && !taskParam.entities.some(entity => entity.builtInUserManagement) ?
+        [...taskParam.entities, application.userManagement!]
+      : taskParam.entities;
+    const entities = (application.filterEntitiesForClient ?? filterEntitiesForClient)(allEntities).filter(
       entity => !entity.builtInUser && !entity.embedded && !entity.entityClientModelOnly,
     );
-    if (application.generateUserManagement && application.userManagement!.skipClient) {
-      entities.push(application.userManagement!);
-    }
     source.addEntitiesToClient({ ...taskParam, entities });
   },
 );

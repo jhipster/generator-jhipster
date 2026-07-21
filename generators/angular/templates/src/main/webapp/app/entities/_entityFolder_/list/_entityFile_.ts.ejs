@@ -34,14 +34,9 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { HttpHeaders } from '@angular/common/http';
 <%_ } _%>
 import { ActivatedRoute, Data, ParamMap, Router, RouterLink } from '@angular/router';
-import {
-  combineLatest,
-<%_ if (!readOnly) { _%>
-  filter,
-<%_ } _%>
-  Subscription,
-  tap,
-} from 'rxjs';
+import { combineLatest
+<%_ if (!readOnly) { _%>, filter
+<%_ } _%>, Subscription, tap } from 'rxjs';
 <%_ if (!readOnly) { _%>
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
 <%_ } _%>
@@ -193,14 +188,9 @@ export class <%- componentName %> implements OnInit {
     });
 <%_ } _%>
     effect(() => {
-<%_ if (paginationInfiniteScroll) { _%>
-      this.<%- entityInstancePlural %>.update(<%- entityInstancePlural %> => this.fillComponentAttributesFromResponseBody([...this.<%- entityInstance %>Service.<%- entityInstancePlural %>()], <%- entityInstancePlural %>));
-<%_ } else { _%>
-      this.<%- entityInstancePlural %>.set(this.fillComponentAttributesFromResponseBody([...this.<%- entityInstance %>Service.<%- entityInstancePlural %>()]));
-<%_ } _%>
+      this.<%- entityInstancePlural %>.<% if (paginationInfiniteScroll) { %>update(<%- entityInstancePlural %> => <% } else { %>set(<% } %>this.fillComponentAttributesFromResponseBody([...this.<%- entityInstance %>Service.<%- entityInstancePlural %>()]<% if (paginationInfiniteScroll) { %>, <%- entityInstancePlural %><% } %>));
     });
-<% if (jpaMetamodelFiltering && paginationPagination) { %>
-
+<%_ if (jpaMetamodelFiltering && paginationPagination) { _%>
     effect(() => {
       const filterOptions = this.filterOptions();
       if (filterOptions) {
@@ -214,7 +204,8 @@ export class <%- componentName %> implements OnInit {
   }
 
 <%_ if (primaryKey) { _%>
-    track<%- primaryKey.nameCapitalized %> = (item: I<%- entityAngularName %>): <%- primaryKey.tsType %> => this.<%- entityInstance %>Service.get<%- entityAngularName %>Identifier(item);
+    track<%- primaryKey.nameCapitalized %> = (item: I<%- entityAngularName %>): <%- primaryKey.tsType %> =>
+      this.<%- entityInstance %>Service.get<%- entityAngularName %>Identifier(item);
 
 <%_ } _%>
     ngOnInit(): void {
