@@ -114,6 +114,7 @@
       "os": "windows-latest",
       "generatorOptions": {
         "defaults": true,
+        "creationTimestamp": "2020-01-02",
         "devDatabaseType": "h2Disk",
         "clientFramework": "angular"
       }
