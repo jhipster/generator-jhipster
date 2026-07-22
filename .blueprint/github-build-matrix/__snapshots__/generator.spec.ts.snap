@@ -369,6 +369,7 @@ exports[`generator - github-build-matrix with angular should match matrix value 
       "environment": "dev",
       "generatorOptions": {
         "defaults": true,
+        "creationTimestamp": "2020-01-02",
         "devDatabaseType": "h2Disk",
         "clientFramework": "angular"
       },
@@ -940,6 +941,7 @@ exports[`generator - github-build-matrix with react should match matrix value 1`
       "environment": "dev",
       "generatorOptions": {
         "defaults": true,
+        "creationTimestamp": "2020-01-02",
         "devDatabaseType": "h2Disk",
         "clientFramework": "react"
       },
@@ -1172,6 +1174,7 @@ exports[`generator - github-build-matrix with vue should match matrix value 1`] 
       "generatorOptions": {
         "defaults": true,
         "devDatabaseType": "h2Disk",
+        "creationTimestamp": "2020-01-02",
         "clientFramework": "vue"
       },
       "workspaces": "false",
