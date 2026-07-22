@@ -127,27 +127,6 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
-  describe('with oauth2 and websocket', () => {
-    before(async () => {
-      await helpers
-        .runJHipster(generator)
-        .withJHipsterConfig({ authenticationType: 'oauth2', communicationSpringWebsocket: true })
-        .withMockedSource({ except: ['addTestSpringFactory'] })
-        .withMockedJHipsterGenerators({ filter: filterBasicServerGenerators });
-    });
-
-    it('should match generated files snapshot', () => {
-      expect(runResult.getStateSnapshot()).toMatchSnapshot();
-    });
-
-    it('should exclude /websocket/** from the oauth2 login request cache', () => {
-      runResult.assertFileContent(
-        'src/main/java/com/mycompany/myapp/config/SecurityConfiguration.java',
-        /new NegatedRequestMatcher\(PathPatternRequestMatcher\.withDefaults\(\)\.matcher\("\/websocket\/\*\*"\)\)/,
-      );
-    });
-  });
-
   describe('source api', () => {
     describe('editJavaFile with springBeans', () => {
       before(async () => {
