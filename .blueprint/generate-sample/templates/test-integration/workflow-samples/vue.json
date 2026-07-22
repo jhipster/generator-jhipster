@@ -54,6 +54,7 @@
       "generatorOptions": {
         "defaults": true,
         "devDatabaseType": "h2Disk",
+        "creationTimestamp": "2020-01-02",
         "clientFramework": "vue"
       }
     },
