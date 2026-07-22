@@ -257,9 +257,6 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
             'cypress-terminal-report': null,
             'eslint-plugin-cypress': application.nodeDependencies['eslint-plugin-cypress'],
           },
-          allowScripts: {
-            cypress: true,
-          },
         });
         if (application.cypressCoverage && this.angularSchematic) {
           clientPackageJson.merge({
@@ -272,6 +269,11 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
             },
           });
         }
+        this.packageJson.merge({
+          allowScripts: {
+            cypress: true,
+          },
+        });
       },
       configureAudits({ application }) {
         if (!application.cypressAudit) return;
