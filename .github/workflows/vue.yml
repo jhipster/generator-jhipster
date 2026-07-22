@@ -94,7 +94,7 @@ jobs:
         with:
           path: generator-jhipster
           fetch-depth: 2
-      - uses: jhipster/actions/setup-runner@v1
+      - uses: jhipster/actions/setup-runner@v2
         with:
           node-version: ${{ matrix.node-version }}
           java-version: ${{ matrix.java-version }}
@@ -122,7 +122,7 @@ jobs:
       #----------------------------------------------------------------------
       # Detect changes against base commit
       #----------------------------------------------------------------------
-      - uses: jhipster/actions/compare-sample@v1
+      - uses: jhipster/actions/compare-sample@v2
         id: compare
         if: >-
           github.event.pull_request &&
@@ -139,7 +139,7 @@ jobs:
       #----------------------------------------------------------------------
       # Launch tests
       #----------------------------------------------------------------------
-      - uses: jhipster/actions/build-jhipster-bom@v1
+      - uses: jhipster/actions/build-jhipster-bom@v2
         if: matrix.build-jhipster-bom && steps.compare.outputs.equals != 'true'
         with:
           jhipster-bom-ref: ${{ matrix.jhipster-bom-branch }}

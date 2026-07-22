@@ -53,7 +53,7 @@ jobs:
           fetch-depth: 0
       - run: echo "node-version=$(cat ${{ github.workspace }}/generators/init/resources/.node-version)" >> $GITHUB_OUTPUT
         id: node-version
-      - uses: jhipster/actions/setup-runner@v1
+      - uses: jhipster/actions/setup-runner@v2
         with:
           node-version: ${{ steps.node-version.outputs.node-version }}
           binary-dir: ${{ github.workspace }}/bin
