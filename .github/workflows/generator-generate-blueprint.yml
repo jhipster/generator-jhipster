@@ -57,14 +57,6 @@ jobs:
           binary-dir: ${{ github.workspace }}/generator-jhipster/bin
       - run: npm ci --ignore-scripts
         working-directory: ${{ github.workspace }}/generator-jhipster
-      # The blueprint links generator-jhipster as a file: dependency, whose prepare script builds
-      # dist/. npm 12 blocks prepare for non-registry sources, so build it explicitly instead.
-      # The JHipster bin is dist/cli/jhipster.cjs, built by prepare. npm 12 blocks prepare for local
-      # sources, so npm link would produce no usable bin. Build explicitly before linking.
-      - run: npm run build
-        working-directory: ${{ github.workspace }}/generator-jhipster
-      - run: npm link
-        working-directory: ${{ github.workspace }}/generator-jhipster
       #----------------------------------------------------------------------
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
@@ -102,7 +94,7 @@ jobs:
           JHI_CLI: jhipster.cjs
           JHIPSTER_DEPENDENCIES_VERSION: ${{ steps.jhipster-output.outputs.jhipster-dependencies-version }}
       - name: 'GENERATION: jhipster info'
-        run: jhipster info
+        run: jhipster.cjs info
       #----------------------------------------------------------------------
       # Launch tests
       #----------------------------------------------------------------------
