@@ -22,7 +22,7 @@ application {
     databaseType no
     jhiPrefix custom
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
-    packageName com.okta.developer.gateway_jwt
+    packageName com.okta.developer.gateway_oauth2
     serviceDiscoveryType no
     testFrameworks [cypress]
   }
@@ -39,7 +39,7 @@ application {
     databaseType no
     enableSwaggerCodegen true
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
-    packageName com.okta.developer.gateway_oauth2
+    packageName com.okta.developer.gateway_jwt
     serverPort 8081
     serviceDiscoveryType no
   }
