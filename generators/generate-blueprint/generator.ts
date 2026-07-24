@@ -71,6 +71,19 @@ export default class extends GenerateBlueprintBaseGenerator {
         }
         if (this.options.defaults) {
           this.config.defaults(defaultConfig({ config: this.jhipsterConfig }));
+
+          const selectedSubGenerators = (this.jhipsterConfig.subGenerators ?? []) as string[];
+          const additionalSubGenerators = this.jhipsterConfig.additionalSubGenerators ?? '';
+          const subGenerators = [
+            ...selectedSubGenerators,
+            ...additionalSubGenerators
+              .split(',')
+              .map(subGenerator => subGenerator.trim())
+              .filter(Boolean),
+          ];
+          for (const subGenerator of new Set(subGenerators)) {
+            this.getSubGeneratorStorage(subGenerator).defaults(defaultSubGeneratorConfig());
+          }
         }
       },
     });
