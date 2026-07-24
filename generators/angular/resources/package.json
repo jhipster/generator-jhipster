@@ -18,8 +18,8 @@
   "devDependencies": {
     "@angular-builders/custom-esbuild": "22.0.1",
     "@angular-builders/custom-webpack": "22.0.1",
-    "@angular/build": "22.0.7",
-    "@angular/cli": "22.0.7",
+    "@angular/build": "22.0.8",
+    "@angular/cli": "22.0.8",
     "@eslint/js": "10.0.1",
     "@module-federation/enhanced": "2.8.0",
     "@types/folder-hash": "4.0.4",
