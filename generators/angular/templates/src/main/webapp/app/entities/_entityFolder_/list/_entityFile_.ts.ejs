@@ -27,6 +27,10 @@
       .join(', ');
 
     const componentName = entityAngularName;
+
+    const anyRelationshipRequiresTranslatePipe = relationships
+      .filter(rel => !rel.otherEntity.embedded)
+      .some(rel => rel.otherEntity.jpaMetamodelFiltering && rel.otherEntity.paginationPagination && rel.collection && !rel.persistableRelationship);
 _%>
 import { Component, computed, effect, inject, OnInit, signal, WritableSignal, untracked } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -51,6 +55,8 @@ import { Alert } from 'app/shared/alert/alert';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
+<%_ } _%>
+<%_ if (enableTranslation && (searchEngineAny || anyRelationshipRequiresTranslatePipe)) { _%>
 import { TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
 import { sortStateSignal, SortDirective, SortByDirective, type SortState, SortService } from 'app/shared/sort';
@@ -113,6 +119,8 @@ import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
       SortByDirective,
 <%_ if (enableTranslation) { _%>
       TranslateDirective,
+<%_ } _%>
+<%_ if (enableTranslation && (searchEngineAny || anyRelationshipRequiresTranslatePipe)) { _%>
       TranslatePipe,
 <%_ } _%>
 <%_ if (anyFieldIsDuration) { _%>

@@ -29,6 +29,8 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap/tooltip';
 <%_ } _%>
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
+<%_ } _%>
+<%_ if (enableTranslation && anyFieldHasDocumentation) { _%>
 import { TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
 import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
@@ -49,6 +51,8 @@ import { DataUtils } from 'app/core/util/data-util.service';
       AlertError,
 <%_ if (enableTranslation) { _%>
       TranslateDirective,
+<%_ } _%>
+<%_ if (enableTranslation && anyFieldHasDocumentation) { _%>
       TranslatePipe,
 <%_ } _%>
 <%_ if (entityFileName !== 'authority' && updatableEntity) { _%>
