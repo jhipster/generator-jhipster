@@ -29,6 +29,8 @@ import { finalize<%- relationships.some(rel => rel.persistableRelationship) ? ',
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
+<%_ } _%>
+<%_ if (angularEntityUpdateRequiresTranslationPipe) { _%>
 import { TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
 <%_ const anyFieldHasTypeLocalDate = fields.some(field => !field.hidden && field.fieldTypeLocalDate); _%>
@@ -67,6 +69,8 @@ import { <%- importedType %> } from '<%- importedPath %>';
     imports: [
 <%_ if (enableTranslation) { _%>
       TranslateDirective,
+<%_ } _%>
+<%_ if (angularEntityUpdateRequiresTranslationPipe) { _%>
       TranslatePipe,
 <%_ } _%>
       FontAwesomeModule,
