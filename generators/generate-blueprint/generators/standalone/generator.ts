@@ -211,25 +211,29 @@ export default class StandaloneBlueprintGenerator extends GenerateBlueprintBaseG
       },
       addGeneratorJHipsterDependency({ application }) {
         const { jhipsterPackageJson } = application;
-        const exactDependency = {
-          'generator-jhipster':
-            this.options.linkJhipsterDependency ?
-              `file:${this.relativeDir(this.destinationRoot(), getPackageRoot())}`
-            : jhipsterPackageJson.version,
-        };
-        const caretDependency = {
-          'generator-jhipster': `^${jhipsterPackageJson.version}`,
-        };
+        const caretDependency = `^${jhipsterPackageJson.version}`;
+        const enginesVersion = this.jhipsterConfig.dynamic || !this.jhipsterConfig.caret ? jhipsterPackageJson.version : caretDependency;
+        let dependencySpec: string;
+        if (application.gitDependency && !this.jhipsterConfig.dynamic) {
+          dependencySpec = application.gitDependency;
+        } else if (this.options.linkJhipsterDependency) {
+          dependencySpec = `file:${this.relativeDir(this.destinationRoot(), getPackageRoot())}`;
+        } else {
+          dependencySpec = jhipsterPackageJson.version;
+        }
+        const jhipsterDependency = (spec: string) => ({ 'generator-jhipster': spec });
+        let allowScripts = undefined;
+        if (dependencySpec !== jhipsterPackageJson.version) {
+          allowScripts = { [dependencySpec]: true };
+        }
+        this.packageJson.merge({
+          allowScripts,
+          [this.jhipsterConfig.dynamic ? 'devDependencies' : 'dependencies']: jhipsterDependency(dependencySpec),
+          engines: jhipsterDependency(enginesVersion),
+        });
         if (this.jhipsterConfig.dynamic) {
           this.packageJson.merge({
-            devDependencies: exactDependency,
-            peerDependencies: caretDependency,
-            engines: caretDependency,
-          });
-        } else {
-          this.packageJson.merge({
-            dependencies: application.gitDependency ? { 'generator-jhipster': application.gitDependency } : exactDependency,
-            engines: this.jhipsterConfig.caret ? caretDependency : exactDependency,
+            peerDependencies: jhipsterDependency(caretDependency),
           });
         }
       },

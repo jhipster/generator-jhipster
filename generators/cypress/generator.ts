@@ -269,6 +269,11 @@ export default class CypressGenerator extends BaseApplicationGenerator<CypressEn
             },
           });
         }
+        this.packageJson.merge({
+          allowScripts: {
+            cypress: true,
+          },
+        });
       },
       configureAudits({ application }) {
         if (!application.cypressAudit) return;

@@ -5,5 +5,5 @@
     "globals": "17.7.0",
     "vitest": "4.1.10"
   },
-  "packageManager": "npm@11"
+  "packageManager": "npm@12"
 }

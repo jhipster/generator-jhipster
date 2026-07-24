@@ -58,6 +58,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 <%_ if (authenticationTypeOauth2) { _%>
 import static org.springframework.security.oauth2.core.oidc.StandardClaimNames.PREFERRED_USERNAME;
 
+  <%_ if (communicationSpringWebsocket && !applicationTypeMicroservice) { _%>
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
+import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
+  <%_ } _%>
 import <%- packageName %>.security.oauth2.AudienceValidator;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -276,6 +281,17 @@ public class SecurityConfiguration {
 <%_ } else if (authenticationTypeOauth2) { _%>
   <%_ if (!applicationTypeMicroservice) { _%>
             .oauth2Login(oauth2 -> oauth2.loginPage("/").userInfoEndpoint(userInfo -> userInfo.oidcUserService(this.oidcUserService())))
+    <%_ if (communicationSpringWebsocket) { _%>
+            // Prevent the SockJS info polling request from being saved and replayed as the
+            // post-login redirect target (see https://github.com/jhipster/generator-jhipster/issues/28685)
+            .requestCache(cache -> {
+                HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
+                requestCache.setRequestMatcher(
+                    new NegatedRequestMatcher(PathPatternRequestMatcher.withDefaults().matcher("/websocket/**"))
+                );
+                cache.requestCache(requestCache);
+            })
+    <%_ } _%>
   <%_ } else { _%>
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
   <%_ } _%>

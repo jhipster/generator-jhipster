@@ -44,7 +44,7 @@ stages:
 <%_ } _%>
 <%_ if (buildToolGradle) { _%>
 before_script:
-  <%_ if (clientFrameworkAngular) { _%>
+  <%_ if (locals.clientFrameworkAngular) { _%>
     - export NG_CLI_ANALYTICS="false"
   <%_ } _%>
     - export GRADLE_USER_HOME=`pwd`/.gradle
@@ -177,7 +177,7 @@ deploy-to-production:
 <%_ } _%>
 <%_ if (buildToolMaven) { _%>
 before_script:
-  <%_ if (clientFrameworkAngular) { _%>
+  <%_ if (locals.clientFrameworkAngular) { _%>
     - export NG_CLI_ANALYTICS="false"
   <%_ } _%>
     - export MAVEN_USER_HOME=`pwd`/.maven

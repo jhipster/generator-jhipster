@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import type { Config as BaseApplicationConfig } from '../base-application/types.d.ts';
 import BaseApplicationGenerator from '../base-simple-application/index.ts';
 
 import { ciCdGeneratorNamespace } from './support/providers.ts';
@@ -29,13 +28,6 @@ export default class CiCdGenerator extends BaseApplicationGenerator<CiCdApplicat
     }
 
     await this.dependsOnBootstrap('ci-cd');
-
-    if (!this.delegateToBlueprint && this.options.commandName === 'ci-cd') {
-      const { backendType = 'Java' } = this.jhipsterConfig as BaseApplicationConfig;
-      if (['Java', 'SpringBoot'].includes(backendType)) {
-        await this.dependsOnBootstrap('java');
-      }
-    }
   }
 
   get composing() {
