@@ -438,10 +438,10 @@ export default class AngularGenerator extends AngularApplicationGenerator {
         }
       },
       addWebsocketDependencies({ application, source }) {
-        const { authenticationTypeSession, communicationSpringWebsocket, nodeDependencies } = application;
+        const { authenticationUsesCsrf, communicationSpringWebsocket, nodeDependencies } = application;
         const dependencies: Record<string, string> = {};
         if (communicationSpringWebsocket) {
-          if (authenticationTypeSession) {
+          if (authenticationUsesCsrf) {
             dependencies['ngx-cookie-service'] = nodeDependencies['ngx-cookie-service'];
           }
           source.mergeClientPackageJson!({
