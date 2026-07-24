@@ -52,6 +52,7 @@ file("sonar-project.properties").withReader {
 }
 
 spotless {
+    lineEndings 'UNIX'
     java {
         target 'src/*/java/**/*.java'
         // removeUnusedImports()
