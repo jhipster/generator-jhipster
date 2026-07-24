@@ -218,6 +218,7 @@ export default class CodeQualityGenerator extends JavaSimpleApplicationGenerator
               version: '${spotless-maven-plugin.version}',
               additionalContent: `
                 <configuration>
+                    <lineEndings>UNIX</lineEndings>
                     <java>
                         <!-- <removeUnusedImports/> -->
                     </java>

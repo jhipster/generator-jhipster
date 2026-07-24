@@ -117,6 +117,7 @@ exports[`generator - java-simple-application:code-quality with defaults options 
         {
           "additionalContent": "
                 <configuration>
+                    <lineEndings>UNIX</lineEndings>
                     <java>
                         <!-- <removeUnusedImports/> -->
                     </java>
