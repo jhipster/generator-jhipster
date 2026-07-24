@@ -41,6 +41,9 @@ export interface Entity<F extends Field = Field, R extends ClientRelationship = 
   generateEntityClientEnumImports?: (fields: any) => Map<any, any>;
   entityAngularAuthorities?: string;
   entityAngularReadAuthorities?: string;
+  angularEntityListRequiresTranslationPipe?: boolean;
+  angularEntityDetailsRequiresTranslationPipe?: boolean;
+  angularEntityUpdateRequiresTranslationPipe?: boolean;
 }
 
 export type Application<E extends Entity = Entity> = {

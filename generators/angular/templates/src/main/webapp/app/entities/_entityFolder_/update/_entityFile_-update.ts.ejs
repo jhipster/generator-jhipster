@@ -20,7 +20,6 @@
       .values(relationshipsByOtherEntity)
       .map(relationships => relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded))
       .filter(relationships => relationships.length > 0);
-    const anyFieldIsEnum = fields.some(field => !field.hidden && field.fieldIsEnum);
 _%>
 import { Component, inject, signal, OnInit<%- anyFieldHasImageContentType ? ', ElementRef' : '' %> } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
@@ -31,7 +30,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
-<%_ if (enableTranslation && (anyFieldHasDocumentation || anyFieldIsEnum)) { _%>
+<%_ if (angularEntityUpdateRequiresTranslationPipe) { _%>
 import { TranslatePipe } from '@ngx-translate/core';
 <%_ } _%>
 <%_ const anyFieldHasTypeLocalDate = fields.some(field => !field.hidden && field.fieldTypeLocalDate); _%>
@@ -71,7 +70,7 @@ import { <%- importedType %> } from '<%- importedPath %>';
 <%_ if (enableTranslation) { _%>
       TranslateDirective,
 <%_ } _%>
-<%_ if (enableTranslation && (anyFieldHasDocumentation || anyFieldIsEnum)) { _%>
+<%_ if (angularEntityUpdateRequiresTranslationPipe) { _%>
       TranslatePipe,
 <%_ } _%>
       FontAwesomeModule,

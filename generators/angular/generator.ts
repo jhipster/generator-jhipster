@@ -294,6 +294,35 @@ export default class AngularGenerator extends AngularApplicationGenerator {
     return this.delegateTasksToBlueprint(() => this.preparingEachEntityField);
   }
 
+  get postPreparingEachEntity() {
+    return this.asPostPreparingEachEntityTaskGroup({
+      prepareTranslationPipeUsage({ application: { enableTranslation }, entity }) {
+        mutateData(entity as AngularEntity & { searchEngineAny?: boolean }, {
+          angularEntityDetailsRequiresTranslationPipe: ({ fields }) =>
+            enableTranslation && fields.some(field => !field.hidden && Boolean(field.documentation)),
+          angularEntityUpdateRequiresTranslationPipe: ({ angularEntityDetailsRequiresTranslationPipe, fields }) =>
+            Boolean(angularEntityDetailsRequiresTranslationPipe) ||
+            (enableTranslation && fields.some(field => !field.hidden && field.fieldIsEnum)),
+          angularEntityListRequiresTranslationPipe: ({ searchEngineAny, relationships }) =>
+            enableTranslation &&
+            (Boolean(searchEngineAny) ||
+              relationships.some(
+                relationship =>
+                  !relationship.otherEntity.embedded &&
+                  relationship.otherEntity.jpaMetamodelFiltering &&
+                  relationship.otherEntity.paginationPagination &&
+                  relationship.collection &&
+                  !relationship.persistableRelationship,
+              )),
+        });
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
+    return this.delegateTasksToBlueprint(() => this.postPreparingEachEntity);
+  }
+
   get default() {
     return this.asDefaultTaskGroup({
       queueTranslateTransform({ application }) {
