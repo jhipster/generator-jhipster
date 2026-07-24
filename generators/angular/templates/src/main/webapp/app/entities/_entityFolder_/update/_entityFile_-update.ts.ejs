@@ -31,10 +31,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
 import { TranslateDirective } from 'app/shared/language';
 import { TranslatePipe } from '@ngx-translate/core';
-  <%_ if (builtInUserManagement) { _%>
-import { LANGUAGES } from 'app/config/language.constants';
-import { FindLanguageFromKeyPipe } from 'app/shared/language';
-  <%_ } _%>
 <%_ } _%>
 <%_ const anyFieldHasTypeLocalDate = fields.some(field => !field.hidden && field.fieldTypeLocalDate); _%>
 <%_ if (anyFieldHasTypeLocalDate) { _%>
@@ -76,9 +72,6 @@ import { <%- importedType %> } from '<%- importedPath %>';
 <%_ if (enableTranslation) { _%>
       TranslateDirective,
       TranslatePipe,
-  <%_ if (builtInUserManagement) { _%>
-      FindLanguageFromKeyPipe,
-  <%_ } _%>
 <%_ } _%>
       FontAwesomeModule,
       AlertError,
@@ -96,9 +89,6 @@ export class <%- entityAngularName %>Update implements OnInit {
     <%- entityInstance %>: I<%- entityAngularName %> | null = null;
 <%_ if (builtInUserManagement) { _%>
     authorities = signal<<%- generateBuiltInAuthorityEntity ? `I${authorityRelationship.otherEntity.entityAngularName}[]` : 'string[]' %>>([]);
-  <%_ if (enableTranslation) { _%>
-    languages: string[] | null = null;
-  <%_ } _%>
 <%_ } _%>
 <%_ for (const [importedType] of enumImports) { _%>
     <%- this._.lowerFirst(importedType) %>Values = Object.keys(<%- importedType %>);
@@ -141,6 +131,11 @@ export class <%- entityAngularName %>Update implements OnInit {
     compare<%- otherEntity.entityAngularName %> = (o1: I<%- otherEntity.entityAngularName %> | null, o2: I<%- otherEntity.entityAngularName %> | null): boolean =>
         this.<%- otherEntity.entityInstance %>Service.compare<%- otherEntity.entityAngularName %>(o1, o2);
 <%_ } _%>
+<%_ if (authorityRelationship) { _%>
+
+    compareAuthorityByName = (o1: Pick<I<%- authorityRelationship.otherEntity.entityAngularName %>, 'name'> | null, o2: Pick<I<%- authorityRelationship.otherEntity.entityAngularName %>, 'name'> | null): boolean =>
+        o1?.name === o2?.name;
+<%_ } _%>
 
     ngOnInit(): void {
         this.activatedRoute.data.subscribe(({ <%- entityInstance %> }) => {
@@ -151,9 +146,6 @@ export class <%- entityAngularName %>Update implements OnInit {
 
 <%_ if (builtInUserManagement) { _%>
             this.<%- entityInstance %>Service.authorities().subscribe(authorities => this.authorities.set(authorities));
-  <%_ if (enableTranslation) { _%>
-            this.languages = LANGUAGES;
-  <%_ } _%>
 <%_ } _%>
 <%_ if (relationships.filter(rel => rel.persistableRelationship && !rel.otherEntity.embedded).length > 0) { _%>
             this.loadRelationshipsOptions();

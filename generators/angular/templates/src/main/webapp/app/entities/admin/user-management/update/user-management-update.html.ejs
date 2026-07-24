@@ -142,34 +142,17 @@
             <%- field.autoGenerate ? '}' : '' %>
 <%_ } _%>
       <div class="mb-3">
-        <label class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            id="activated"
-            name="activated"
-            formControlName="activated"
-          />
-          <span>__jhiTranslateTag__('userManagement.activated')</span>
-        </label>
-      </div>
-<%_ if (enableTranslation) { _%>
-    @if (languages && languages.length > 0) {
-      <div class="mb-3">
-        <label class="form-label" for="langKey">__jhiTranslateTag__('userManagement.langKey')</label>
-        <select class="form-control" id="langKey" name="langKey" formControlName="langKey">
-        @for (language of languages; track $index) {
-          <option [value]="language">{{ language | findLanguageFromKey }}</option>
-        }
-        </select>
-      </div>
-    }
-<%_ } _%>
-      <div class="mb-3">
         <label class="form-label" for="field_authority">__jhiTranslateTag__('userManagement.profiles')</label>
-        <select class="form-control" id="field_authority" multiple name="authority" formControlName="authorities">
+        <select
+          class="form-control"
+          id="field_authority"
+          multiple
+          name="authority"
+          formControlName="authorities"
+          <%- generateBuiltInAuthorityEntity ? '[compareWith]="compareAuthorityByName"' : '' %>
+        >
         @for (authority of authorities(); track $index) {
-          <option [value]="authority<%- generateBuiltInAuthorityEntity ? '.name' : '' %>"><%- generateBuiltInAuthorityEntity ? '{{ authority.name }}' : '{{ authority }}' %></option>
+          <option [<%- generateBuiltInAuthorityEntity ? 'ngValue]="authority"' : 'value]="authority"' %>><%- generateBuiltInAuthorityEntity ? '{{ authority.name }}' : '{{ authority }}' %></option>
         }
         </select>
       </div>
