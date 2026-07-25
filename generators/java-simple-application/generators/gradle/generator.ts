@@ -122,7 +122,7 @@ export default class GradleGenerator extends BaseSimpleApplicationGenerator<Grad
             });
             return;
           }
-          dependencies = [...dependencies].sort(sortDependencies);
+          dependencies = dependencies.toSorted(sortDependencies);
           this.editFile(gradleFile, addGradleDependenciesCallback(dependencies));
         };
         source.addGradleDependency = (dependency, options) => source.addGradleDependencies!([dependency], options);
@@ -140,7 +140,7 @@ export default class GradleGenerator extends BaseSimpleApplicationGenerator<Grad
         source.addGradleDependencyCatalogVersion = (version, options) => source.addGradleDependencyCatalogVersions!([version], options);
         source.addGradleDependencyCatalogLibraries = (libs, options = {}) => {
           const { gradleFile, gradleVersionCatalogFile } = gradleNeedleOptionsWithDefaults(options);
-          libs = [...libs].sort((a, b) => a.libraryName.localeCompare(b.libraryName));
+          libs = libs.toSorted((a, b) => a.libraryName.localeCompare(b.libraryName));
           this.editFile(gradleVersionCatalogFile, addGradleDependencyCatalogLibrariesCallback(libs));
           source.addGradleDependencies!(libs.filter(lib => lib.scope) as GradleDependency[], { gradleFile });
         };
