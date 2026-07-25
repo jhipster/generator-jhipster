@@ -17,7 +17,11 @@
  * limitations under the License.
  */
 
+import type { Config } from 'eslint/config';
+
 import base from './base.ts';
 import recommended from './recommended.ts';
 
-export default { recommended, base };
+const configs: { recommended: Config; base: Config } = { recommended, base };
+
+export default configs;
