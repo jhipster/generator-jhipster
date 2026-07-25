@@ -100,7 +100,7 @@ export class FilterOptions implements IFilterOptions {
     const matchingParams = params.keys.filter(paramKey => filterRegex.test(paramKey));
     for (const matchingParam of matchingParams) {
       const matches = filterRegex.exec(matchingParam);
-      if (matches && matches.length > 1) {
+      if (matches?.[1]) {
         this.getFilterOptionByName(matches[1], true).addValue(...params.getAll(matchingParam));
       }
     }

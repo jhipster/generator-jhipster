@@ -25,7 +25,7 @@ import {
     const skipCreateTest
       = graalvmSupport
       || !cypressBootstrapEntities
-      || requiredRelationships.some(rel => rel.otherEntity.primaryKey && rel.otherEntity.primaryKey.derived)
+      || requiredRelationships.some(rel => rel.otherEntity.primaryKey?.derived)
       || requiredRelationships.some(rel => rel.otherEntity.builtInUser || rel.otherEntity === this.entity)
       || requiredRelationships.map(rel => rel.otherEntity.relationships).flat().some(rel => rel.relationshipRequired)
       || !entityFakeData

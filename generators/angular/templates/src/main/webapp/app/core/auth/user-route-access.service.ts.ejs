@@ -38,7 +38,7 @@ export const UserRouteAccessService: CanActivateFn = (next: ActivatedRouteSnapsh
       if (account) {
         const { authorities } = next.data;
 
-        if (!authorities || authorities.length === 0 || accountService.hasAnyAuthority(authorities)) {
+        if (!authorities?.length || accountService.hasAnyAuthority(authorities)) {
           return true;
         }
 

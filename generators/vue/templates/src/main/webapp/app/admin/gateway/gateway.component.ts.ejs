@@ -18,7 +18,7 @@ export default defineComponent({
 <%_ if (serviceDiscoveryConsul) { _%>
         gatewayRoutes.value = res.data.map(gatewayRoute => {
           gatewayRoute.serviceInstances = gatewayRoute.serviceInstances.map(serviceInstance => {
-            if (serviceInstance.healthService && serviceInstance.healthService.checks) {
+            if (serviceInstance.healthService?.checks) {
               if (
                 serviceInstance.healthService.checks.filter((check: any) => check.status === 'PASSING').length ===
                 serviceInstance.healthService.checks.length
