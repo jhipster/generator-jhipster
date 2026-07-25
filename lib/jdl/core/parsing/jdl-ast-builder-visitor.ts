@@ -535,16 +535,16 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
 
       if (context.applicationSubConfig) {
         // Apparently the pegjs grammar only returned the last config
-        applicationSubDeclaration.config = this.visit(context.applicationSubConfig[context.applicationSubConfig.length - 1]);
+        applicationSubDeclaration.config = this.visit(context.applicationSubConfig.at(-1)!);
       }
       if (context.applicationSubNamespaceConfig) {
-        const { namespace, config } = this.visit(context.applicationSubNamespaceConfig[context.applicationSubNamespaceConfig.length - 1]);
+        const { namespace, config } = this.visit(context.applicationSubNamespaceConfig.at(-1)!);
         applicationSubDeclaration.namespaceConfigs![namespace] = config;
       }
 
       if (context.applicationSubEntities) {
         // Apparently the pegjs grammar only returned the last entities
-        applicationSubDeclaration.entitiesOptions = this.visit(context.applicationSubEntities[context.applicationSubEntities.length - 1]);
+        applicationSubDeclaration.entitiesOptions = this.visit(context.applicationSubEntities.at(-1)!);
       }
 
       if (context.unaryOptionDeclaration) {
@@ -768,7 +768,7 @@ function getBinaryOptionFromContext(
   visitor: ICstVisitor<any, any>,
 ) {
   const entityListWithOptionValue: string[] = visitor.visit(context.entityList);
-  const optionValue = entityListWithOptionValue[entityListWithOptionValue.length - 1];
+  const optionValue = entityListWithOptionValue.at(-1);
   const list = entityListWithOptionValue.slice(0, -1);
 
   let excluded = [];
