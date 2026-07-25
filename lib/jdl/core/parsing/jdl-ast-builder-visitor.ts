@@ -324,10 +324,8 @@ export const buildJDLAstBuilderVisitor = (runtime: JDLRuntime) => {
     relationshipBody(
       context: Record<'from' | 'to' | 'annotationOnSourceSide' | 'annotationOnDestinationSide' | 'relationshipOptions', CstNode[]>,
     ) {
-      const optionsForTheSourceSide =
-        context.annotationOnSourceSide ? context.annotationOnSourceSide.map(element => this.visit(element)) : [];
-      const optionsForTheDestinationSide =
-        context.annotationOnDestinationSide ? context.annotationOnDestinationSide.map(element => this.visit(element)) : [];
+      const optionsForTheSourceSide = context.annotationOnSourceSide?.map(element => this.visit(element)) ?? [];
+      const optionsForTheDestinationSide = context.annotationOnDestinationSide?.map(element => this.visit(element)) ?? [];
 
       const from = this.visit(context.from);
       const to = this.visit(context.to);

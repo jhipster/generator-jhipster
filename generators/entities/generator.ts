@@ -32,7 +32,7 @@ export default class EntitiesGenerator extends BaseApplicationGenerator {
       loadArguments() {
         this.jhipsterConfig.entities = this.jhipsterConfig.entities || [];
 
-        if (!this.entities || this.entities.length === 0) {
+        if (!this.entities?.length) {
           this.entities = this.getExistingEntityNames();
         } else {
           for (const entity of this.entities) {

@@ -40,7 +40,7 @@ export function languageSnakeCase(language: string): string {
  */
 function languageUpperCaseCountry(language: string): string {
   const split = splitLanguageTag(language);
-  split.country = split.country ? split.country.toUpperCase() : split.country;
+  split.country = split.country?.toUpperCase();
   return buildLanguageTag(split);
 }
 
@@ -65,7 +65,7 @@ const languageToAngularLanguage = (languageTag: string): string => languageUpper
 
 const languageToDayjsLanguage = (languageTag: string): string => {
   const split = splitLanguageTag(languageTag);
-  split.script = split.script ? split.script.toLowerCase() : split.script;
+  split.script = split.script?.toLowerCase();
   return buildLanguageTag(split);
 };
 
