@@ -172,7 +172,7 @@ function generateFakeDataForField(
       data = undefined;
     }
   } else if (field.fieldIsEnum) {
-    if (field.enumValues && field.enumValues.length > 0) {
+    if (field.enumValues?.length) {
       const { enumValues } = field;
       data = enumValues[faker.number.int(enumValues.length - 1)].name;
     } else {

@@ -157,7 +157,7 @@ export default class LanguagesGenerator extends BaseApplicationGenerator<
           // Set native language as first language.
           this.jhipsterConfig.languages = [...new Set([nativeLanguage, ...this.jhipsterConfig.languages!])];
         }
-        if (this.languagesToApply && this.languagesToApply.length > 0) {
+        if (this.languagesToApply?.length) {
           // Save new languages.
           this.jhipsterConfig.languages = [...new Set([...this.jhipsterConfig.languages!, ...this.languagesToApply])];
         }

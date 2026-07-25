@@ -103,7 +103,7 @@ export const mutateField = {
     primaryKeyTypes.includes(javaFieldType as any) ? getJavaValueGeneratorForType(javaFieldType) : undefined,
   javaValueGenerator: ({ fieldJavaValueGenerator }) => fieldJavaValueGenerator,
   fieldValidateRulesPatternJava: ({ fieldValidateRulesPattern }) =>
-    fieldValidateRulesPattern ? fieldValidateRulesPattern.replace(/\\/g, '\\\\').replace(/"/g, String.raw`\"`) : fieldValidateRulesPattern,
+    fieldValidateRulesPattern?.replace(/\\/g, '\\\\').replace(/"/g, String.raw`\"`),
 } as const satisfies MutateDataPropertiesWithRequiredProperties<MutateDataParam<JavaField>, JavaAddedFieldProperties>;
 
 export type JavaAddedValidatedFieldProperties = JavaAddedPropertyProperties & {

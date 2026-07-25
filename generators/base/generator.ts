@@ -748,7 +748,7 @@ export default class BaseGenerator<
       await this.env.lookup({ filterPaths: true, packagePatterns: missingBlueprints });
     }
 
-    if (blueprints && blueprints.length > 0) {
+    if (blueprints?.length) {
       blueprints.forEach(blueprint => {
         blueprint.version = this.#findBlueprintVersion(blueprint.name) ?? blueprint.version;
       });
@@ -759,7 +759,7 @@ export default class BaseGenerator<
       const namespaces = blueprints.map(blueprint => packageNameToNamespace(blueprint.name));
       // Verify if the blueprints have been registered.
       const missing = namespaces.filter(namespace => !this.env.isPackageRegistered(namespace));
-      if (missing && missing.length > 0) {
+      if (missing?.length) {
         throw new Error(`Some blueprints were not found ${missing}, you should install them manually`);
       }
       blueprints.forEach(blueprint => {

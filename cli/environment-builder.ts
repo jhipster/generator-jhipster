@@ -277,7 +277,7 @@ export default class EnvironmentBuilder {
       blueprint => !this.env.isPackageRegistered(packageNameToNamespace(blueprint)),
     );
 
-    if (missingBlueprints && missingBlueprints.length > 0) {
+    if (missingBlueprints?.length) {
       // Lookup for blueprints.
       await this.env.lookup({
         ...options,
@@ -431,7 +431,7 @@ export default class EnvironmentBuilder {
   async _getBlueprintCommands(
     blueprintPackagePaths: [string, string | undefined][] | undefined,
   ): Promise<Record<string, CliCommand> | undefined> {
-    if (!blueprintPackagePaths || blueprintPackagePaths.length === 0) {
+    if (!blueprintPackagePaths?.length) {
       return undefined;
     }
     let result: Record<string, CliCommand> = {};
