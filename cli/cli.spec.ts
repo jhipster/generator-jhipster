@@ -20,8 +20,7 @@
 import { after, afterEach, before, beforeEach, describe, esmocha, expect, it, resetAllMocks } from 'esmocha';
 import assert from 'node:assert';
 import { fork } from 'node:child_process';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 
 import type { BaseGenerator, GeneratorMeta } from '@yeoman/types';
 import { execaSync } from 'execa';
@@ -119,8 +118,7 @@ export const command = {
 };
 
 describe('cli', () => {
-  const __filename = fileURLToPath(import.meta.url);
-  const jhipsterCli = join(dirname(__filename), '..', 'bin', 'jhipster.cjs');
+  const jhipsterCli = join(import.meta.dirname, '..', 'bin', 'jhipster.cjs');
   const logger = { verboseInfo: esmocha.fn(), warn: esmocha.fn(), fatal: esmocha.fn(), debug: esmocha.fn() };
   const getCommand = esmocha.fn<typeof actualGetCommand>();
   let mockCli: (argv: string[], opts?: Record<string, any>) => Promise<JHipsterCommand>;
@@ -241,7 +239,7 @@ describe('cli', () => {
             importModule: async () => ({
               command,
             }),
-            resolved: __filename,
+            resolved: import.meta.filename,
             instantiateHelp: <G>() => Promise.resolve(generator as G),
             packageNamespace: undefined,
             importGenerator: undefined as any,
