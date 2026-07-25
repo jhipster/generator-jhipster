@@ -30,7 +30,7 @@ export default class EntitiesGenerator extends BaseApplicationGenerator {
   get initializing() {
     return this.asInitializingTaskGroup({
       loadArguments() {
-        this.jhipsterConfig.entities = this.jhipsterConfig.entities || [];
+        this.jhipsterConfig.entities ||= [];
 
         if (!this.entities?.length) {
           this.entities = this.getExistingEntityNames();

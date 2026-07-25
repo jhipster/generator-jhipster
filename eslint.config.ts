@@ -112,6 +112,7 @@ export default defineConfig(
     files: jsTsFiles,
     rules: {
       eqeqeq: ['error', 'smart'],
+      'logical-assignment-operators': 'error',
       'no-use-before-define': ['error', 'nofunc'],
       'no-multi-str': 'error',
       'no-irregular-whitespace': 'error',

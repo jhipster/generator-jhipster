@@ -76,7 +76,7 @@ function updateEntityToGenerateWithExistingOne(applicationPath: string, entity: 
   try {
     const fileOnDisk = readEntityFile<JSONEntity>(applicationPath, entity.name);
     if (!entity.annotations?.changelogDate && fileOnDisk?.annotations?.changelogDate) {
-      entity.annotations = entity.annotations || {};
+      entity.annotations ||= {};
       entity.annotations.changelogDate = fileOnDisk.annotations.changelogDate;
       return { ...fileOnDisk, ...entity } as JSONEntity;
     }

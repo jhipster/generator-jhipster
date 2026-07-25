@@ -92,7 +92,7 @@ export const loadEntitiesOtherSide = (
         }
         throw new Error(`Error at entity ${entity.name}: could not find the entity ${relationship.otherEntityName}`);
       }
-      otherEntity.otherRelationships = otherEntity.otherRelationships || [];
+      otherEntity.otherRelationships ||= [];
       otherEntity.otherRelationships.push(relationship);
 
       relationship.otherEntity = otherEntity;

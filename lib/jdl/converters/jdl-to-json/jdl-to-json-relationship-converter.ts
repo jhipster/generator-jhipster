@@ -146,7 +146,7 @@ function setOptionsForRelationshipSourceSide(
   relationshipToConvert: JDLRelationship,
   convertedRelationship: Partial<JSONRelationship>,
 ): void {
-  convertedRelationship.options = convertedRelationship.options || {};
+  convertedRelationship.options ||= {};
   relationshipToConvert.forEachGlobalOption((optionName, optionValue) => {
     if (optionName === BUILT_IN_ENTITY) {
       convertedRelationship.relationshipWithBuiltInEntity = optionValue;
@@ -163,7 +163,7 @@ function setOptionsForRelationshipSourceSide(
 }
 
 function setOptionsForRelationshipDestinationSide(relationshipToConvert: JDLRelationship, convertedRelationship: JSONRelationship): void {
-  convertedRelationship.options = convertedRelationship.options || {};
+  convertedRelationship.options ||= {};
   relationshipToConvert.forEachGlobalOption((optionName, optionValue) => {
     convertedRelationship.options![optionName] = optionValue;
   });

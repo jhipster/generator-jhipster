@@ -132,7 +132,7 @@ export default function prepareEntity(entityWithConfig: BaseApplicationEntity, g
     }
   }
 
-  entityWithConfig.useMicroserviceJson = entityWithConfig.useMicroserviceJson || entityWithConfig.microserviceName !== undefined;
+  entityWithConfig.useMicroserviceJson ||= entityWithConfig.microserviceName !== undefined;
   entityWithConfig.microserviceAppName = '';
   if ((generator.jhipsterConfig as any).applicationType === APPLICATION_TYPE_GATEWAY && entityWithConfig.useMicroserviceJson) {
     if (!entityWithConfig.microserviceName) {
@@ -458,8 +458,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
   const oneToOneRelationships = relationships.filter(({ relationshipType }) => relationshipType === 'one-to-one');
   entity.fieldsContainNoOwnerOneToOne = oneToOneRelationships.some(({ ownerSide }) => !ownerSide);
 
-  entity.anyPropertyHasValidation =
-    entity.anyPropertyHasValidation || relationships.some(({ relationshipValidate }) => relationshipValidate);
+  entity.anyPropertyHasValidation ||= relationships.some(({ relationshipValidate }) => relationshipValidate);
 
   const relationshipsByOtherEntity = relationships
     .map(relationship => [relationship.otherEntity.entityNameCapitalized, relationship] as const)
@@ -478,7 +477,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
   entity.relationshipsByOtherEntity = relationshipsByOtherEntity;
   entity.differentRelationships = relationshipsByOtherEntity;
 
-  entity.anyPropertyHasValidation = entity.anyPropertyHasValidation || fields.some(({ fieldValidate }) => fieldValidate);
+  entity.anyPropertyHasValidation ||= fields.some(({ fieldValidate }) => fieldValidate);
 
   entity.otherEntities = uniq(entity.relationships.map(rel => rel.otherEntity));
 
@@ -493,8 +492,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
 
   if (entity.primaryKey) {
     derivedPrimaryKeyProperties(entity.primaryKey);
-    entity.requiresPersistableImplementation =
-      entity.requiresPersistableImplementation || entity.fields.some(field => field.requiresPersistableImplementation);
+    entity.requiresPersistableImplementation ||= entity.fields.some(field => field.requiresPersistableImplementation);
   }
 
   const types = entity.relationships
@@ -537,7 +535,7 @@ function preparePostEntityCommonDerivedPropertiesNotTyped(entity: EntityAll) {
 }
 
 export async function addFakerToEntity(entityWithConfig: BaseApplicationEntity, nativeLanguage = 'en') {
-  entityWithConfig.faker = entityWithConfig.faker || (await createFaker(nativeLanguage));
+  entityWithConfig.faker ||= await createFaker(nativeLanguage);
   entityWithConfig.resetFakerSeed = (suffix = '') =>
     entityWithConfig.faker!.seed(stringHashCode(entityWithConfig.name.toLowerCase() + suffix));
   entityWithConfig.resetFakerSeed();
