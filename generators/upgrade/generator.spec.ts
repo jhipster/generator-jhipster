@@ -81,7 +81,7 @@ describe(`generator - ${generator}`, () => {
         }),
     ).rejects.toThrow('You are on the upgrade branch, please switch to another branch before upgrading.');
   });
-  describe('with createEnvBuilder option', async () => {
+  describe('with createEnvBuilder option', () => {
     let createEnvBuilder: any;
 
     before(async () => {
@@ -103,7 +103,7 @@ describe(`generator - ${generator}`, () => {
       expect(createEnvBuilder).toHaveBeenCalledTimes(1);
     });
   });
-  describe('with createEnvBuilder and applyConfig options', async () => {
+  describe('with createEnvBuilder and applyConfig options', () => {
     let createEnvBuilder: any;
 
     before(async () => {
@@ -126,7 +126,7 @@ describe(`generator - ${generator}`, () => {
       expect(createEnvBuilder).toHaveBeenCalledTimes(2);
     });
   });
-  describe('with programName option', async () => {
+  describe('with programName option', () => {
     before(async () => {
       await helpers
         .runJHipster(generator)
@@ -154,7 +154,7 @@ describe(`generator - ${generator}`, () => {
     });
   });
 
-  describe('with programName and executable options', async () => {
+  describe('with programName and executable options', () => {
     before(async () => {
       await helpers
         .runJHipster(generator)
