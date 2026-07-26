@@ -273,11 +273,13 @@ type ExtractConfigType<C extends ParsableConfig> =
   : undefined;
 
 /** Converts wrapper types (`Boolean`, `String`, `Number`) to their primitive equivalents. */
+/* eslint-disable @typescript-eslint/no-wrapper-object-types -- the wrapper types are the input being unwrapped here */
 type UnwrapPrimitive<T> =
   T extends Boolean ? boolean
   : T extends String ? string
   : T extends Number ? number
   : T;
+/* eslint-enable @typescript-eslint/no-wrapper-object-types */
 
 /** Extracts the string value from a choice entry that is either a bare string or a `{ value: string }` object. */
 type ExtractChoiceValue<Choice extends string | { value: string }> =

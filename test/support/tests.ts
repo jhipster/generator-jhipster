@@ -324,13 +324,17 @@ export const testBlueprintSupport = (
         });
 
       // simulate a sbs blueprint
-      Object.defineProperty((context.mockedGenerators[`jhipster-foo-sbs:${generatorName}`] as Function).prototype, 'sbsBlueprint', {
-        get() {
-          return true;
+      Object.defineProperty(
+        (context.mockedGenerators[`jhipster-foo-sbs:${generatorName}`] as new (...args: any[]) => any).prototype,
+        'sbsBlueprint',
+        {
+          get() {
+            return true;
+          },
+          enumerable: true,
+          configurable: true,
         },
-        enumerable: true,
-        configurable: true,
-      });
+      );
 
       await context;
     });

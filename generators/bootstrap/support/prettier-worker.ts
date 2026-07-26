@@ -20,7 +20,7 @@
 import { type Options, format, resolveConfig } from 'prettier';
 import prettierPluginJava from 'prettier-plugin-java';
 import prettierPluginPackagejson from 'prettier-plugin-packagejson';
-// @ts-ignore No types available
+// @ts-expect-error No types available
 import prettierPluginProperties from 'prettier-plugin-properties';
 
 import { addLineNumbers } from '../internal/transform-utils.ts';
