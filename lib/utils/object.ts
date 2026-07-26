@@ -81,7 +81,7 @@ export type MutateDataParam<T extends object> = Simplify<
     [Key in keyof (T & { __override__?: boolean })]?: Key extends '__override__' ? boolean
     : Key extends ReadonlyKeysOf<T> ? never
     : Key extends keyof T ?
-      T[Key] extends Function ?
+      T[Key] extends (...args: any[]) => any ?
         (ctx: T, opts: MutateDataCallbackOptions<T>) => T[Key] | typeof DelayedMutation | typeof UndefinedMutation
       : T[Key] | ((ctx: T, opts: MutateDataCallbackOptions<T>) => T[Key] | typeof DelayedMutation | typeof UndefinedMutation)
     : never;

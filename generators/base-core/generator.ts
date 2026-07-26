@@ -1393,7 +1393,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
   }
 
   readResourcesPackageJson(
-    packageJsonFile: string = 'package.json',
+    packageJsonFile = 'package.json',
   ): Omit<PackageJson.PackageJsonStandard, 'dependencies' | 'devDependencies'> &
     Record<'dependencies' | 'devDependencies', Record<string, string>> {
     packageJsonFile = this.resourcesPath(packageJsonFile);

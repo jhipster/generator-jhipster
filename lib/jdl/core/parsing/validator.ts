@@ -134,8 +134,7 @@ const deploymentConfigPropsValidations = {
   },
 } as const;
 
-interface JDLCstVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
-  new (): JDLCstVisitor<IN, OUT>;
+interface JDLCstVisitorInstance<IN, OUT> extends ICstVisitor<IN, OUT> {
   constantDeclaration(context: any): void;
   entityDeclaration(context: any): void;
   fieldDeclaration(context: any): void;
@@ -147,6 +146,8 @@ interface JDLCstVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
   entityList(context: any): void;
   exclusion(context: any): void;
 }
+
+type JDLCstVisitor<IN, OUT> = new () => JDLCstVisitorInstance<IN, OUT>;
 
 export default function performAdditionalSyntaxChecks(cst: CstNode, runtime: JDLRuntime) {
   const { parser } = runtime;

@@ -44,8 +44,7 @@ export default defineConfig(
   },
   {
     files: tsFiles,
-    ...ts.configs.recommended[0],
-    ...ts.configs.stylistic[0],
+    extends: [ts.configs.recommended, ts.configs.stylistic],
     languageOptions: {
       parser: ts.parser,
       parserOptions: {
