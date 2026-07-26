@@ -208,8 +208,8 @@ The entity ${context.name} is being updated.
       },
 
       loadEntitySpecificOptions({ application }) {
-        this.entityData.skipClient = this.entityData.skipClient || this.entityConfig.skipClient;
-        this.entityData.databaseType = this.entityData.databaseType || this.entityConfig.databaseType || application.databaseType;
+        this.entityData.skipClient ||= this.entityConfig.skipClient;
+        this.entityData.databaseType ||= this.entityConfig.databaseType || application.databaseType;
       },
 
       validateEntityName() {

@@ -193,9 +193,9 @@ function mergeDefaultsWithOverrides(
     ...defaultOptions,
     ...overrides,
   };
-  mergedOptions.options.global = mergedOptions.options.global || {};
-  mergedOptions.options.source = mergedOptions.options.source || {};
-  mergedOptions.options.destination = mergedOptions.options.destination || {};
+  mergedOptions.options.global ||= {};
+  mergedOptions.options.source ||= {};
+  mergedOptions.options.destination ||= {};
   return mergedOptions;
 }
 

@@ -110,6 +110,7 @@ export default class I18NGenerator extends ClientApplicationGenerator {
           : [...new Set([application.nativeLanguage, 'en'])].map(lang => findLanguageForTag(lang, application.supportedLanguages)!);
       },
       async loadNativeLanguage({ application }) {
+        // eslint-disable-next-line logical-assignment-operators -- translations is not declared as optional, ??= would not type-check
         application.translations = application.translations ?? {};
         this.translationData = new TranslationData({ generator: this, translations: application.translations });
         const { clientI18nDir, enableTranslation, nativeLanguage } = application;
