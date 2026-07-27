@@ -21,7 +21,7 @@ a lot of cognitive overhead (avoid double negation in code: `if (!skipClient) {}
 
 [guide-level-explanation]: #guide-level-explanation
 
-Basically, options should always be inclusive and follow this simple rules:
+Basically, options should always be inclusive and follow these simple rules:
 
 - If the option is not defined by the end user: we'll take a reasonable default.
 - If the option is specified, we'll take the decision of the end user.

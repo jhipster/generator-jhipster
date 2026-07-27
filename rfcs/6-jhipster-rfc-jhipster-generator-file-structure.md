@@ -170,7 +170,7 @@ It includes a lot of changes to the current file structure and conventions, whic
 
 [unresolved-questions]: #unresolved-questions
 
-The fine grained implementation details of each file as not been discussed yet, such as:
+The fine grained implementation details of each file has not been discussed yet, such as:
 
 - The amount and granularity of methods in the mutate (by file, by component, etc.) and support files.
 

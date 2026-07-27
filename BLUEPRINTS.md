@@ -32,7 +32,7 @@ So regenerate every file ignoring `.yo-resolve` executing `jhipster generate-blu
 
 ### Blueprint dependencies
 
-`generator-jhipster` have every dependency using an exact version.
+`generator-jhipster` has every dependency using an exact version.
 If the blueprint uses exact versions too, duplicated dependencies with different versions will be added to `node_modules`.
 For this reason try to _avoid exact version at blueprint dependencies_ and disable auto updates since dependencies will be updated every time the blueprint is regenerated using `generate-blueprint`.
 

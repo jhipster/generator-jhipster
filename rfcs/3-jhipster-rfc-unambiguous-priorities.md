@@ -18,7 +18,7 @@ This RFC proposes to change priority declaration in a more unambiguous way. Maki
 
 Priorities are currently implemented as a getter with a non `_` prefixed name, and any new function with a non `_` prefixed name will be queued as a task at `default` priority. JavaScript standard is that `_` prefixed name is private method, and non `_` prefixed name are class members instead of tasks. We should try to follow JavaScript standards.
 
-JHipster workflow is clear and each priority has it's purpose. This makes tasks outside priorities useless and its drawbacks overcome its benefits. We don't need to queue any tasks outside our declared priorities.
+JHipster workflow is clear and each priority has its purpose. This makes tasks outside priorities useless and its drawbacks overcome its benefits. We don't need to queue any tasks outside our declared priorities.
 
 ## Guide-level explanation
 
@@ -68,7 +68,7 @@ While this works, an unambiguous notation would improve understanding of the wor
   }
 
   anOrdinaryClassMember() {
-    console.log('I am not been executed, why? I am just and ordinary function.');
+    console.log('I am not been executed, why? I am just an ordinary function.');
   }
 ```
 
