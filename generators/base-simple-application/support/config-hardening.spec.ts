@@ -38,6 +38,20 @@ describe('generator - base-simple-application - support - config-hardening', () 
     });
   });
 
+  it('sanitizes placeholders that are only assembled once an inner match is removed', () => {
+    // `$` + `${}` + `{injected}`: stripping the empty placeholder joins the remaining characters
+    // into a new one, so a single replace pass leaves a live template literal behind.
+    const reassembling = '$' + '${}' + '{injected}';
+    const config: any = { foo: `prefix-${reassembling}-suffix` };
+
+    const cleanups = sanitizeConfigForNodeApplications(config);
+
+    expect(config.foo).toBe('prefix--suffix');
+    expect(cleanups).toEqual({
+      foo: { oldValue: `prefix-${reassembling}-suffix`, newValue: 'prefix--suffix' },
+    });
+  });
+
   it('does not fail on non-writable properties', () => {
     const config = {} as Record<string, string>;
 
