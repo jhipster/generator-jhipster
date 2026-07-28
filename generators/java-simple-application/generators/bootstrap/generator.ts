@@ -35,6 +35,8 @@ export default class BootstrapGenerator extends JavaSimpleApplicationGenerator {
       await this.composeWithBlueprints();
     }
 
+    const bootstrapGenerator = await this.dependsOnJHipster('bootstrap');
+    bootstrapGenerator.prettierJava = true;
     await this.dependsOnBootstrap('base-simple-application');
   }
 
