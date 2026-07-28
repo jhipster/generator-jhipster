@@ -100,9 +100,8 @@ export const convertToPrettierExpressions = (str: string): string =>
     .replace(/(?! )(>|\\\))/g, String.raw`,?\n?[\s]*$1`)
     .replace(/\s+/g, String.raw`[\s\n]*`);
 
-const isArrayOfContentToAdd = (value: unknown): value is ContentToAdd[] => {
-  return Array.isArray(value) && value.every(item => typeof item === 'object' && 'content' in item);
-};
+const isArrayOfContentToAdd = (value: unknown): value is ContentToAdd[] =>
+  Array.isArray(value) && value.every(item => typeof item === 'object' && 'content' in item);
 
 const needleMarkers = `(?:${['//', '<!--', String.raw`\{?/\*`, '#'].join('|')})`;
 export const createNeedleRegexp = (needle: string, start = false): RegExp =>
@@ -310,9 +309,9 @@ export const createNeedleCallback = <Generator extends CoreGenerator = CoreGener
     const contentHasNeedleStart = hasNeedleStart(content, addNeedlePrefix(needle));
     if (isArrayOfContentToAdd(contentToAdd)) {
       if (!contentHasNeedleStart) {
-        contentToAdd = contentToAdd.filter(({ content: itemContent, contentToCheck }) => {
-          return !checkContentIn(contentToCheck ?? itemContent, content, ignoreWhitespaces);
-        });
+        contentToAdd = contentToAdd.filter(
+          ({ content: itemContent, contentToCheck }) => !checkContentIn(contentToCheck ?? itemContent, content, ignoreWhitespaces),
+        );
       }
       if (contentToAdd.length === 0) {
         return content;

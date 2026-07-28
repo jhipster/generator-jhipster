@@ -367,9 +367,8 @@ export default class LiquibaseGenerator extends BaseEntityChangesGenerator<
         }
 
         const { javaDependencies } = application;
-        const shouldAddProperty = (property: string, value: string) => {
-          return value && !source.hasJavaProperty?.(property) && application.javaManagedProperties[property] !== value;
-        };
+        const shouldAddProperty = (property: string, value: string) =>
+          value && !source.hasJavaProperty?.(property) && application.javaManagedProperties[property] !== value;
         const checkProperty = (property: string) => {
           if (!source.hasJavaManagedProperty?.(property) && !source.hasJavaProperty?.(property)) {
             const message = `${property} is required by maven-liquibase-plugin, make sure to add it to your pom.xml`;
