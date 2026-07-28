@@ -39,7 +39,7 @@
         "scavengetime": "Scavenge time"
       },
       "http": {
-        "title": "HTTP requests (time in millisecond)",
+        "title": "HTTP requests (time in milliseconds)",
         "active": "සක්\u200Dරීය ඉල්ලීම්:",
         "total": "මුළු ඉල්ලීම්:",
         "table": {
@@ -87,7 +87,7 @@
     },
     "datasource": {
       "usage": "Connection Pool Usage",
-      "title": "DataSource statistics (time in millisecond)",
+      "title": "DataSource statistics (time in milliseconds)",
       "name": "Pool usage",
       "count": "ගණන්",
       "mean": "මධ්යන්ය",
