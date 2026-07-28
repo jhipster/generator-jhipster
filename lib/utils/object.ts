@@ -130,9 +130,8 @@ export const createDelayedMutationContext = <T extends object>(options: Omit<Mut
   return context;
 };
 
-const isMutationContext = <T extends object>(context: T): context is ContextWithMutationOptions<T> => {
-  return context && typeof context === 'object' && MUTATION_CONTEXT_SYMBOL in context && context[MUTATION_CONTEXT_SYMBOL] !== undefined;
-};
+const isMutationContext = <T extends object>(context: T): context is ContextWithMutationOptions<T> =>
+  context && typeof context === 'object' && MUTATION_CONTEXT_SYMBOL in context && context[MUTATION_CONTEXT_SYMBOL] !== undefined;
 
 const createNotYetDefinedProxy = (target: Record<string | number, any>): any =>
   new Proxy(target, {

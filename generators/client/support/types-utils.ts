@@ -95,8 +95,7 @@ const getTypescriptKeyType = (primaryKey: FieldType | PrimaryKey) => {
  * @private
  * Find type for Typescript
  */
-export const getTypescriptType = (fieldType: keyof typeof tsTypesByFieldType): ValueOf<typeof tsTypesByFieldType> => {
-  return tsTypesByFieldType[fieldType];
-};
+export const getTypescriptType = (fieldType: keyof typeof tsTypesByFieldType): ValueOf<typeof tsTypesByFieldType> =>
+  tsTypesByFieldType[fieldType];
 
 export default getTypescriptKeyType;

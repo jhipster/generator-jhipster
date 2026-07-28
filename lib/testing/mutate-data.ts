@@ -18,8 +18,8 @@
  */
 import { type MutateDataParam, mutateData } from '../utils/object.ts';
 
-export const prepareMutationTest = (data: any) => {
-  return Object.entries(data).reduce(
+export const prepareMutationTest = (data: any) =>
+  Object.entries(data).reduce(
     (acc, [name, value]) => {
       const cleanupName = name.replace(/(Loading|Preparing)$/, '');
       acc[cleanupName] ??= [];
@@ -28,14 +28,11 @@ export const prepareMutationTest = (data: any) => {
     },
     {} as Record<string, any[]>,
   );
-};
 
 export const mutateMockedData = (...mutations: MutateDataParam<any>[]) => {
   const data = {};
   const proxy = new Proxy(data, {
-    get: (target: any, p: string | symbol) => {
-      return typeof p !== 'symbol' && target[p] === undefined ? p : target[p];
-    },
+    get: (target: any, p: string | symbol) => (typeof p !== 'symbol' && target[p] === undefined ? p : target[p]),
     set: (target: any, p: string | symbol, value: any) => {
       target[p] = value;
       return true;

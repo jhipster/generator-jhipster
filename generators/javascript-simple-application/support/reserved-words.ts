@@ -68,6 +68,5 @@ export const typescriptReservedKeywords = [
 
 type ReservedTypescriptKeyword = (typeof typescriptReservedKeywords)[number];
 
-export const isReservedTypescriptKeyword = (keyword: string): keyword is ReservedTypescriptKeyword => {
-  return (typescriptReservedKeywords as readonly string[]).includes(keyword.toUpperCase());
-};
+export const isReservedTypescriptKeyword = (keyword: string): keyword is ReservedTypescriptKeyword =>
+  (typescriptReservedKeywords as readonly string[]).includes(keyword.toUpperCase());
