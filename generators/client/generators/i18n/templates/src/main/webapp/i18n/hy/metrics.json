@@ -57,7 +57,7 @@
       }
     },
     "servicesstats": {
-      "title": "Services statistics (time in millisecond)",
+      "title": "Services statistics (time in milliseconds)",
       "table": {
         "name": "Service name",
         "count": "Count",
@@ -87,7 +87,7 @@
     },
     "datasource": {
       "usage": "Usage",
-      "title": "DataSource statistics (time in millisecond)",
+      "title": "DataSource statistics (time in milliseconds)",
       "name": "Pool usage",
       "count": "Count",
       "mean": "Mean",
