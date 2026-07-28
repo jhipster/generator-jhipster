@@ -40,7 +40,7 @@ export default function prepareRelationship(
   ignoreMissingRequiredRelationship = false,
 ) {
   const entityName = entityWithConfig.name;
-  // Look for fields at the other other side of the relationship
+  // Look for fields at the other side of the relationship
   const { otherRelationship, relationshipOneToMany, relationshipName, otherEntity } = relationship;
   if (
     !otherRelationship &&

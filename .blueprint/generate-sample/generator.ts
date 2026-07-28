@@ -61,7 +61,7 @@ export default class extends BaseGenerator<Config & { entities: string[] }> {
             {
               type: 'confirm',
               name: 'confirmProjectFolder',
-              message: `Do you wan't to generate the sample in a folder named ${this.sampleName}?`,
+              message: `Do you want to generate the sample in a folder named ${this.sampleName}?`,
               default: true,
             },
           ]);
