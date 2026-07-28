@@ -41,17 +41,15 @@ export const prepareSample = async (
   return Promise.all(
     files.map(async ({ filename, content, type }) => {
       filename = join(projectFolder, filename);
-      if (filename.endsWith('.yo-rc.json')) {
-        if (await isFile(filename)) {
-          const { jwtSecretKey, rememberMeKey } = JSON.parse(await readFile(filename, 'utf-8'))[GENERATOR_JHIPSTER];
-          if (jwtSecretKey || rememberMeKey) {
-            const newContent: YoRcContent = JSON.parse(content);
-            mutateData(newContent[GENERATOR_JHIPSTER], { jwtSecretKey, rememberMeKey });
-            if (removeBlueprints) {
-              delete newContent[GENERATOR_JHIPSTER].blueprints;
-            }
-            content = JSON.stringify(newContent, null, 2);
+      if (filename.endsWith('.yo-rc.json') && (await isFile(filename))) {
+        const { jwtSecretKey, rememberMeKey } = JSON.parse(await readFile(filename, 'utf-8'))[GENERATOR_JHIPSTER];
+        if (jwtSecretKey || rememberMeKey) {
+          const newContent: YoRcContent = JSON.parse(content);
+          mutateData(newContent[GENERATOR_JHIPSTER], { jwtSecretKey, rememberMeKey });
+          if (removeBlueprints) {
+            delete newContent[GENERATOR_JHIPSTER].blueprints;
           }
+          content = JSON.stringify(newContent, null, 2);
         }
       }
       return { filename, content, type };

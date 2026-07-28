@@ -187,13 +187,11 @@ export const askForOptionalItems = asPromptingTask(async function askForOptional
       value: 'searchEngine:couchbase',
     });
   }
-  if (!reactive) {
-    if (applicationType === APPLICATION_TYPE_MONOLITH || applicationType === APPLICATION_TYPE_GATEWAY) {
-      choices.push({
-        name: 'WebSockets using Spring Websocket',
-        value: 'websocket:spring-websocket',
-      });
-    }
+  if (!reactive && (applicationType === APPLICATION_TYPE_MONOLITH || applicationType === APPLICATION_TYPE_GATEWAY)) {
+    choices.push({
+      name: 'WebSockets using Spring Websocket',
+      value: 'websocket:spring-websocket',
+    });
   }
   choices.push(
     {

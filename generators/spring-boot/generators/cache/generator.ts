@@ -98,21 +98,15 @@ export default class SpringCacheGenerator extends SpringBootApplicationGenerator
   get writing() {
     return this.asWritingTaskGroup({
       async cleanup({ application, control }) {
-        if (application.cacheProviderHazelcast) {
-          if (control.isJhipsterVersionLessThan('3.12.0')) {
-            this.removeFile(`${application.javaPackageSrcDir}config/hazelcast/HazelcastCacheRegionFactory.java`);
-            this.removeFile(`${application.javaPackageSrcDir}config/hazelcast/package-info.java`);
-          }
+        if (application.cacheProviderHazelcast && control.isJhipsterVersionLessThan('3.12.0')) {
+          this.removeFile(`${application.javaPackageSrcDir}config/hazelcast/HazelcastCacheRegionFactory.java`);
+          this.removeFile(`${application.javaPackageSrcDir}config/hazelcast/package-info.java`);
         }
-        if (application.cacheProviderRedis) {
-          if (control.isJhipsterVersionLessThan('7.8.2')) {
-            this.removeFile(`${application.javaPackageTestDir}RedisTestContainerExtension.java`);
-          }
+        if (application.cacheProviderRedis && control.isJhipsterVersionLessThan('7.8.2')) {
+          this.removeFile(`${application.javaPackageTestDir}RedisTestContainerExtension.java`);
         }
-        if (application.buildToolGradle) {
-          if (control.isJhipsterVersionLessThan('8.1.1')) {
-            this.removeFile('gradle/cache.gradle');
-          }
+        if (application.buildToolGradle && control.isJhipsterVersionLessThan('8.1.1')) {
+          this.removeFile('gradle/cache.gradle');
         }
         await control.cleanupFiles({
           '8.9.1': [[application.cacheProviderInfinispan, `${application.javaPackageSrcDir}config/CacheFactoryConfiguration.java`]],
