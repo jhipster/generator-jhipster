@@ -121,7 +121,9 @@ describe(`generator - ${generator}`, () => {
 {
   ".jhipster/EntityA.json": {
     "contents": "{
-  "name": "EntityA",
+  "annotations": {
+    "changelogDate": "20220129025419"
+  },
   "changelogDate": "20220129025419",
   "dto": "mapstruct",
   "fields": [
@@ -141,17 +143,17 @@ describe(`generator - ${generator}`, () => {
       }
     }
   ],
-  "relationships": [],
-  "annotations": {
-    "changelogDate": "20220129025419"
-  }
+  "name": "EntityA",
+  "relationships": []
 }
 ",
     "stateCleared": "modified",
   },
   ".jhipster/User.json": {
     "contents": "{
-  "name": "User",
+  "annotations": {
+    "changelogDate": "20220129025420"
+  },
   "changelogDate": "20220129025420",
   "fields": [
     {
@@ -159,10 +161,8 @@ describe(`generator - ${generator}`, () => {
       "fieldType": "UUID"
     }
   ],
-  "relationships": [],
-  "annotations": {
-    "changelogDate": "20220129025420"
-  }
+  "name": "User",
+  "relationships": []
 }
 ",
     "stateCleared": "modified",
@@ -219,7 +219,10 @@ describe(`generator - ${generator}`, () => {
 {
   ".jhipster/EntityA.json": {
     "contents": "{
-  "name": "EntityA",
+  "annotations": {
+    "angularJSSuffix": "js-suffix",
+    "changelogDate": "20220129025419"
+  },
   "changelogDate": "20220129025419",
   "fields": [
     {
@@ -227,10 +230,7 @@ describe(`generator - ${generator}`, () => {
       "fieldType": "UUID"
     }
   ],
-  "annotations": {
-    "angularJSSuffix": "js-suffix",
-    "changelogDate": "20220129025419"
-  },
+  "name": "EntityA",
   "relationships": []
 }
 ",

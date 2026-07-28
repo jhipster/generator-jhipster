@@ -58,6 +58,7 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
   skipPrettier?: boolean;
   skipEslint?: boolean;
   prettierExtensions: string[] = PRETTIER_EXTENSIONS.split(',');
+  prettierJava = false;
   prettierOptions: PrettierOptions = { plugins: [] };
   refreshOnCommit = false;
 
@@ -190,7 +191,7 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
         await createPrettierTransform.call(this, {
           ignoreErrors,
           prettierPackageJson: true,
-          prettierJava: !(this.jhipsterConfig as any).skipServer,
+          prettierJava: this.prettierJava,
           extensions: this.prettierExtensions.join(','),
           prettierOptions: this.prettierOptions,
         }),
