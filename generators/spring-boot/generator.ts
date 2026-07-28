@@ -112,10 +112,12 @@ export default class SpringBootGenerator extends SpringBootApplicationGenerator 
   get configuring() {
     return this.asConfiguringTaskGroup({
       syncUserWithIdpMigration({ control }) {
-        if (this.jhipsterConfig.syncUserWithIdp === undefined && this.jhipsterConfigWithDefaults.authenticationType === 'oauth2') {
-          if (control.isJhipsterVersionLessThan('8.1.1')) {
-            this.jhipsterConfig.syncUserWithIdp = true;
-          }
+        if (
+          this.jhipsterConfig.syncUserWithIdp === undefined &&
+          this.jhipsterConfigWithDefaults.authenticationType === 'oauth2' &&
+          control.isJhipsterVersionLessThan('8.1.1')
+        ) {
+          this.jhipsterConfig.syncUserWithIdp = true;
         }
       },
       feignMigration({ control }) {

@@ -29,12 +29,10 @@ const validOptions = new Set(['NO ACTION', 'RESTRICT', 'CASCADE', 'SET NULL', 'S
 export function checkAndReturnRelationshipOnValue(onValue: string | undefined, { log }: { log: Logger }) {
   let result = onValue;
 
-  if (result) {
-    if (!validOptions.has(result)) {
-      log.warn(`Invalid value '${result}' for onDelete or onUpdate - resetting to undefined.`);
+  if (result && !validOptions.has(result)) {
+    log.warn(`Invalid value '${result}' for onDelete or onUpdate - resetting to undefined.`);
 
-      result = undefined;
-    }
+    result = undefined;
   }
 
   return result;

@@ -33,10 +33,8 @@ export const cleanupOldFiles = asWritingEntitiesTask<SpringBootEntity, SpringBoo
   control,
   entities,
 }) {
-  if (control.isJhipsterVersionLessThan('7.6.1')) {
-    if (searchEngineElasticsearch) {
-      this.removeFile(`${srcMainJava}${packageFolder}/repository/search/SortToFieldSortBuilderConverter.java`);
-    }
+  if (control.isJhipsterVersionLessThan('7.6.1') && searchEngineElasticsearch) {
+    this.removeFile(`${srcMainJava}${packageFolder}/repository/search/SortToFieldSortBuilderConverter.java`);
   }
   if (control.isJhipsterVersionLessThan('7.7.1')) {
     this.removeFile(`${srcMainJava}${packageFolder}/repository/search/SortToSortBuilderListConverter.java`);

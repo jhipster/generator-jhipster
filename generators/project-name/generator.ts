@@ -46,10 +46,8 @@ export default class ProjectNameGenerator extends CommandBaseGenerator<typeof co
   get initializing() {
     return this.asInitializingTaskGroup({
       parseOptions() {
-        if (this.options.defaults) {
-          if (!this.jhipsterConfig.baseName) {
-            this.jhipsterConfig.baseName = this.defaultBaseName();
-          }
+        if (this.options.defaults && !this.jhipsterConfig.baseName) {
+          this.jhipsterConfig.baseName = this.defaultBaseName();
         }
       },
     });
