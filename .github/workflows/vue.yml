@@ -178,6 +178,9 @@ jobs:
         if: steps.compare.outputs.equals != 'true' && runner.os == 'Linux'
         run: npm run ci:e2e:run --if-present
         timeout-minutes: 15
+        env:
+          CYPRESS_video: >-
+            ${{ contains(github.event.pull_request.labels.*.name, 'ci: cypress-video') && 'true' || 'false' }}
       - name: Store the application
         uses: actions/upload-artifact@v7
         if: always() && (steps.backend.outcome == 'failure' || steps.e2e.outcome == 'failure' || steps.frontend.outcome == 'failure' || steps.packaging.outcome == 'failure' || steps.docker-compose.outcome == 'failure')
@@ -199,12 +202,14 @@ jobs:
         with:
           name: log-${{ matrix.sample }}
           path: ${{ github.workspace }}/app/**/test-results/**/*.xml
-      - name: 'E2E: Store failure screenshots'
+      - name: 'E2E: Store failure cypress assets'
         uses: actions/upload-artifact@v7
         if: always() && steps.e2e.outcome == 'failure'
         with:
-          name: screenshots-${{ matrix.sample }}
-          path: ${{ github.workspace }}/app/**/cypress/screenshots
+          name: cypress-${{ matrix.sample }}
+          path: |
+            ${{ github.workspace }}/app/**/cypress/screenshots
+            ${{ github.workspace }}/app/**/cypress/videos
       - name: Dump docker logs
         if: always() && runner.os == 'Linux'
         uses: jwalton/gh-docker-logs@v2
