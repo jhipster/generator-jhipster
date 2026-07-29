@@ -6,7 +6,7 @@ exports[`generator - generate-blueprint help should print expected information 1
 Generate a blueprint
 
 Options:
-  --auto-crlf                          Detect line endings
+  --auto-crlf                          Detect line endings (default: false)
   --javascript-blueprint               Generate a javascript blueprint
   --caret                              Use caret in package.json engines
   --defaults                           Use default values for the generator
