@@ -699,7 +699,7 @@ export default class BaseGenerator<
     }
     if (this.features.uniqueGlobally && composedBlueprints.length) {
       // TODO: Evaluate blueprint support in uniqueGlobally generators (bootstrap generator).
-      this.log.warn('Blueprint support in bootstrap generator is deprecated.');
+      this.log.warn('Blueprint support in the bootstrap generator may not be applied when it runs within a workspace.');
     }
     return composedBlueprints;
   }
