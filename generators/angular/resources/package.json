@@ -21,7 +21,7 @@
     "@angular/build": "22.0.8",
     "@angular/cli": "22.0.8",
     "@eslint/js": "10.0.1",
-    "@module-federation/enhanced": "2.8.0",
+    "@module-federation/enhanced": "2.8.1",
     "@types/folder-hash": "4.0.4",
     "@types/node": "22.20.1",
     "@types/sockjs-client": "1.5.4",
