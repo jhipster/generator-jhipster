@@ -208,6 +208,7 @@ exports[`generator - angular:bootstrap bootstrapping default config should prepa
   "projectVersion": undefined,
   "reactive": false,
   "rememberMeKey": undefined,
+  "removeNeedles": undefined,
   "routes": undefined,
   "searchEngine": "no",
   "searchEngineAny": false,
