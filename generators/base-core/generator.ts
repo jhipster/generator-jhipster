@@ -49,7 +49,16 @@ import {
   getCommandDerivedPropertyMutations,
 } from '../../lib/command/mutations.ts';
 import { packageJson } from '../../lib/index.ts';
-import { CRLF, LF, type Logger, hasCrlf, mutateData, normalizeLineEndings, removeFieldsWithNullishValues } from '../../lib/utils/index.ts';
+import {
+  CRLF,
+  LF,
+  type Logger,
+  hasCrlf,
+  isWin32,
+  mutateData,
+  normalizeLineEndings,
+  removeFieldsWithNullishValues,
+} from '../../lib/utils/index.ts';
 import baseCommand from '../base/command.ts';
 import type BaseGenerator from '../base/generator.ts';
 import { dockerPlaceholderGenerator } from '../docker/utils.ts';
@@ -1286,7 +1295,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     let newContent = originalContent;
     const writeCallback = (...callbacks: EditFileCallback<this>[]): CascadedEditFileCallback<this> => {
-      const { autoCrlf = this.options.autoCrlf, assertModified } = actualOptions;
+      const { autoCrlf = isWin32, assertModified } = actualOptions;
       try {
         const fileHasCrlf = autoCrlf && hasCrlf(newContent);
         newContent = joinCallbacks(...callbacks).call(this, fileHasCrlf ? normalizeLineEndings(newContent, LF) : newContent, filePath);
