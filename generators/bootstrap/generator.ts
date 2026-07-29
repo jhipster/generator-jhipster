@@ -203,7 +203,8 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
     }
 
     const autoCrlfTransforms: FileTransform<MemFsEditorFile>[] = [];
-    if (this.jhipsterConfigWithDefaults.autoCrlf) {
+    if (this.options.autoCrlf) {
+      this.log.info('autoCrlf is enabled, line endings will be detected and normalized');
       autoCrlfTransforms.push(await autoCrlfTransform({ baseDir: this.destinationPath() }));
     }
 
