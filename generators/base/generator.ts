@@ -287,6 +287,9 @@ export default class BaseGenerator<
    * Generate a timestamp to be used by Liquibase changelogs.
    */
   nextTimestamp(): string {
+    if (this.features.uniqueGlobally) {
+      throw new Error('Timestamp generation is not supported in unique globally generators.');
+    }
     const reproducible = Boolean(this.options.reproducible);
     // Use started counter or use stored creationTimestamp if creationTimestamp option is passed
     const creationTimestamp = this.options.creationTimestamp ? this.config.get('creationTimestamp') : undefined;
@@ -737,7 +740,11 @@ export default class BaseGenerator<
       this.log.warn('--blueprint option is deprecated. Please use --blueprints instead');
       argvBlueprints = union(blueprint, argvBlueprints.split(',')).join(',');
     }
-    const blueprints = mergeBlueprints(parseBlueprints(argvBlueprints), this.jhipsterConfig.blueprints ?? []);
+    if (this.features.uniqueGlobally) {
+      // TODO: Evaluate blueprint support in uniqueGlobally generators for JHipster 10
+      this.log.warn('Blueprint support in bootstrap generator is deprecated.');
+    }
+    const blueprints = mergeBlueprints(parseBlueprints(argvBlueprints), this.config.get('blueprints') ?? []);
 
     // EnvironmentBuilder already looks for blueprint when running from cli, this is required for tests.
     // Can be removed once the tests uses EnvironmentBuilder.
@@ -752,7 +759,7 @@ export default class BaseGenerator<
       blueprints.forEach(blueprint => {
         blueprint.version = this.#findBlueprintVersion(blueprint.name) ?? blueprint.version;
       });
-      this.jhipsterConfig.blueprints = blueprints;
+      this.config.set('blueprints', blueprints);
     }
 
     if (!this.skipChecks) {
