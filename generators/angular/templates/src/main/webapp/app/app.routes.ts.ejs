@@ -26,7 +26,7 @@ import { Authority } from 'app/shared/jhipster/constants';
 import { loadEntityRoutes } from './core/microfrontend';
 <%_ } _%>
 
-import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
+import { userRouteAccessService } from 'app/core/auth/user-route-access.service';
 
 const routes: Routes = [
   {
@@ -45,7 +45,7 @@ const routes: Routes = [
     data: {
       authorities: [Authority.ADMIN],
     },
-    canActivate: [UserRouteAccessService],
+    canActivate: [userRouteAccessService],
     loadChildren: () => import('./admin/admin.routes'),
   },
 <%_ } _%>

@@ -18,7 +18,7 @@
 -%>
 import { Routes } from '@angular/router';
 
-import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
+import { userRouteAccessService } from 'app/core/auth/user-route-access.service';
 import <%- entityAngularName %>Resolve from './route/<%- entityFileName %>-routing-resolve.service';
 import { ASC } from 'app/config/navigation.constants';
 
@@ -34,7 +34,7 @@ const <%- entityInstance %>Route: Routes = [
       authorities: [<%- entityAngularReadAuthorities %>],
 <%_ } _%>
     },
-    canActivate: [UserRouteAccessService],
+    canActivate: [userRouteAccessService],
   },
   {
     path: ':<%- primaryKey.name %>/view',
@@ -47,7 +47,7 @@ const <%- entityInstance %>Route: Routes = [
       authorities: [<%- entityAngularReadAuthorities %>],
     },
 <%_ } _%>
-    canActivate: [UserRouteAccessService]
+    canActivate: [userRouteAccessService]
   },
 <%_ if (!readOnly) { _%>
   {
@@ -61,7 +61,7 @@ const <%- entityInstance %>Route: Routes = [
       authorities: [<%- entityAngularAuthorities %>],
     },
   <%_ } _%>
-    canActivate: [UserRouteAccessService]
+    canActivate: [userRouteAccessService]
   },
 <%_ } _%>
 <%_ if (!readOnly && updatableEntity) { _%>
@@ -76,7 +76,7 @@ const <%- entityInstance %>Route: Routes = [
       authorities: [<%- entityAngularAuthorities %>],
     },
   <%_ } _%>
-    canActivate: [UserRouteAccessService]
+    canActivate: [userRouteAccessService]
   },
 <%_ } _%>
 ];
