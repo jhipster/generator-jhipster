@@ -697,6 +697,10 @@ export default class BaseGenerator<
         this.generatorCommand = blueprintCommand;
       }
     }
+    if (this.features.uniqueGlobally && composedBlueprints.length) {
+      // TODO: Evaluate blueprint support in uniqueGlobally generators (bootstrap generator).
+      this.log.warn('Blueprint support in bootstrap generator is deprecated.');
+    }
     return composedBlueprints;
   }
 
@@ -739,10 +743,6 @@ export default class BaseGenerator<
       }
       this.log.warn('--blueprint option is deprecated. Please use --blueprints instead');
       argvBlueprints = union(blueprint, argvBlueprints.split(',')).join(',');
-    }
-    if (this.features.uniqueGlobally) {
-      // TODO: Evaluate blueprint support in uniqueGlobally generators for JHipster 10
-      this.log.warn('Blueprint support in bootstrap generator is deprecated.');
     }
     const blueprints = mergeBlueprints(parseBlueprints(argvBlueprints), this.config.get('blueprints') ?? []);
 
