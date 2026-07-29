@@ -212,5 +212,13 @@ export default asWritingTask(async function cleanupTask(this, taskParam) {
 
   await control.cleanupFiles({
     '8.6.1': [[application.authenticationTypeOauth2, `${application.javaPackageSrcDir}security/oauth2/JwtGrantedAuthorityConverter.java`]],
+    '9.0.1': [
+      [
+        application.reactive,
+        `${application.javaPackageSrcDir}aop/logging/LoggingAspect.java`,
+        `${application.javaPackageSrcDir}aop/logging/package-info.java`,
+        `${application.javaPackageSrcDir}config/LoggingAspectConfiguration.java`,
+      ],
+    ],
   });
 });

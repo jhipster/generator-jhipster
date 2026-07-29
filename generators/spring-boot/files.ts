@@ -286,19 +286,25 @@ export const baseServerFiles = asWriteFilesSection<SpringBootApplication>({
       ],
     },
   ],
+  aspect: [
+    {
+      condition: data => !data.reactive,
+      path: `${SERVER_MAIN_SRC_DIR}_package_/`,
+      renameTo: moveToJavaPackageSrcDir,
+      templates: ['aop/logging/LoggingAspect.java', 'config/LoggingAspectConfiguration.java'],
+    },
+  ],
   serverJavaConfig: [
     {
       path: `${SERVER_MAIN_SRC_DIR}_package_/`,
       renameTo: moveToJavaPackageSrcDir,
       templates: [
-        'aop/logging/LoggingAspect.java',
         'config/AsyncConfiguration.java',
         'config/CRLFLogConverter.java',
         'config/DateTimeFormatConfiguration.java',
         'config/LoggingConfiguration.java',
         'config/ApplicationProperties.java',
         'config/JacksonConfiguration.java',
-        'config/LoggingAspectConfiguration.java',
         'config/WebConfigurer.java',
       ],
     },
