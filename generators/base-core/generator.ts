@@ -1286,7 +1286,7 @@ templates: ${JSON.stringify(existingTemplates, null, 2)}`;
 
     let newContent = originalContent;
     const writeCallback = (...callbacks: EditFileCallback<this>[]): CascadedEditFileCallback<this> => {
-      const { autoCrlf = this.jhipsterConfigWithDefaults.autoCrlf, assertModified } = actualOptions;
+      const { autoCrlf = this.options.autoCrlf, assertModified } = actualOptions;
       try {
         const fileHasCrlf = autoCrlf && hasCrlf(newContent);
         newContent = joinCallbacks(...callbacks).call(this, fileHasCrlf ? normalizeLineEndings(newContent, LF) : newContent, filePath);

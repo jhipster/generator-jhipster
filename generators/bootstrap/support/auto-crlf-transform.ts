@@ -26,7 +26,7 @@ import { isFileStateModified } from 'mem-fs-editor/state';
 import { transform } from 'p-transform';
 import { simpleGit } from 'simple-git';
 
-import { CRLF, normalizeLineEndings } from '../../../lib/utils/index.ts';
+import { CRLF, isWin32, normalizeLineEndings } from '../../../lib/utils/index.ts';
 
 /**
  * Detect the file first line endings
@@ -79,11 +79,11 @@ const autoCrlfTransform = async ({ baseDir }: { baseDir: string }) => {
         const attrs = Object.fromEntries(
           (await git.raw('check-attr', 'binary', 'eol', '--', relative(baseDir, file.path)))
             .split(/\r\n|\r|\n/)
-            .map(attr => attr.split(':'))
+            .map(attr => attr.split(': '))
             .map(([_file, attr, value]) => [attr, value]),
         );
 
-        if (attrs.eol === 'crlf' || (attrs.binary !== 'set' && attrs.eol !== 'lf' && (await detectCrLf(file.path)))) {
+        if (attrs.eol === 'crlf' || (attrs.binary !== 'set' && attrs.eol !== 'lf' && isWin32)) {
           file.contents = Buffer.from(normalizeLineEndings(file.contents!.toString(), CRLF));
         }
       }

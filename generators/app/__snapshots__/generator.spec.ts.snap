@@ -6,7 +6,7 @@ exports[`generator - app help should print expected information 1`] = `
 [Default] Create a new JHipster application based on the selected options
 
 Options:
-  --auto-crlf                              Detect line endings
+  --auto-crlf                              Detect line endings (default: false)
   --jhi-prefix <value>                     Add prefix before services, controllers and states name
   --entity-suffix <value>                  Add suffix after entities name
   --dto-suffix <value>                     Add suffix after dtos name

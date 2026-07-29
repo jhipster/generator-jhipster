@@ -941,6 +941,7 @@ exports[`generator - github-build-matrix with react should match matrix value 1`
       "environment": "dev",
       "generatorOptions": {
         "defaults": true,
+        "buildTool": "gradle",
         "creationTimestamp": "2020-01-02",
         "devDatabaseType": "h2Disk",
         "clientFramework": "react"

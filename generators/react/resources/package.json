@@ -51,6 +51,7 @@
     "happy-dom": "20.11.1",
     "html-webpack-plugin": "5.6.8",
     "identity-obj-proxy": "3.0.0",
+    "jiti": "2.7.0",
     "merge-jsons-webpack-plugin": "2.0.1",
     "mini-css-extract-plugin": "2.10.2",
     "postcss-loader": "8.2.1",
