@@ -185,8 +185,11 @@ export default class CoreGenerator<
       /* Force config to use 'generator-jhipster' namespace. */
       this._config = this._getStorage('generator-jhipster', { transform: this.features.configTransform });
 
-      /* JHipster config using proxy mode used as a plain object instead of using get/set. */
-      this.jhipsterConfig = this.config.createProxy();
+      // Ignore jhipsterConfig in uniqueGlobally generators, as it should not be dependent on a specific project.
+      if (!this.features.uniqueGlobally) {
+        /* JHipster config using proxy mode used as a plain object instead of using get/set. */
+        this.jhipsterConfig = this.config.createProxy();
+      }
 
       /* Options parsing must be executed after forcing jhipster storage namespace and after sharedData have been populated */
       this.#parseJHipsterConfigs(baseCommand.configs);
@@ -233,6 +236,9 @@ export default class CoreGenerator<
    * JHipster config with default values fallback
    */
   get jhipsterConfigWithDefaults(): Readonly<Config> {
+    if (this.features.uniqueGlobally) {
+      throw new Error('jhipsterConfigWithDefaults is not available in uniqueGlobally generators');
+    }
     return removeFieldsWithNullishValues(this.config.getAll());
   }
 

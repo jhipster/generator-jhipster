@@ -16,15 +16,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { describe } from 'esmocha';
+import { describe, expect } from 'esmocha';
 import { basename } from 'node:path';
 
 import { shouldSupportFeatures } from '../../test/support/tests.ts';
 
 import Generator from './index.ts';
 
+import { defaultHelpers as helpers } from '#testing';
+
 const generator = basename(import.meta.dirname);
 
 describe(`generator - ${generator}`, () => {
   shouldSupportFeatures(Generator);
+
+  describe('instance', () => {
+    let bootstrapGenerator: Generator;
+
+    beforeEach(async () => {
+      bootstrapGenerator = await helpers.instantiateDummyGenerator(Generator);
+    });
+
+    it('should not set jhipsterConfig', () => {
+      expect(bootstrapGenerator.jhipsterConfig).toBeUndefined();
+    });
+
+    it('should reject jhipsterConfigWithDefaults access', () => {
+      expect(() => bootstrapGenerator.jhipsterConfigWithDefaults).toThrow(
+        'jhipsterConfigWithDefaults is not available in uniqueGlobally generators',
+      );
+    });
+  });
 });

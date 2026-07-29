@@ -127,7 +127,7 @@ const command = {
       scope: 'none',
     },
     removeNeedles: {
-      description: 'Remove needles; they are used by entity and language generators to inject code',
+      description: 'Remove needles; they are used by entity and language generators to inject code into files',
       cli: {
         type: Boolean,
       },

@@ -61,9 +61,9 @@ export default class BootstrapGenerator extends CommandBaseGenerator<typeof comm
   prettierJava = false;
   prettierOptions: PrettierOptions = { plugins: [] };
   refreshOnCommit = false;
-  // TODO: this feature is specific to a project; it depends on https://github.com/SBoudrias/mem-fs/issues/67 being implemented so we can add a transform to remove needles based on the file meta.
-  // Meta should be set on the writeFiles API based on the application.removeNeedles config.
-  /** @experimental should be dropped if a meta-based transform is implemented */
+  // TODO: This feature is project-specific; it depends on https://github.com/SBoudrias/mem-fs/issues/67 being implemented so we can add a transform to remove needles based on file metadata.
+  // Metadata should be set on the writeFiles API based on the application.removeNeedles config.
+  /** @experimental This should be dropped if a meta-based transform is implemented */
   removeNeedles = false;
 
   constructor(args?: string[], options?: BaseOptions, features?: BaseFeatures) {
