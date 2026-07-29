@@ -237,7 +237,7 @@ export default class CoreGenerator<
    */
   get jhipsterConfigWithDefaults(): Readonly<Config> {
     if (this.features.uniqueGlobally) {
-      throw new Error('jhipsterConfigWithDefaults is not available in the uniqueGlobally generator');
+      throw new Error('jhipsterConfigWithDefaults is not available in uniqueGlobally generators');
     }
     return removeFieldsWithNullishValues(this.config.getAll());
   }
