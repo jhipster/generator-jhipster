@@ -718,7 +718,11 @@ class JHipsterTest<JHipsterTestGenerator extends BaseCoreGenerator = BaseCoreGen
   }
 
   async instantiateDummyBaseCoreGenerator(): Promise<BaseCoreGenerator> {
-    return new (this.createDummyGenerator(BaseCoreGenerator))([], {
+    return this.instantiateDummyGenerator(BaseCoreGenerator);
+  }
+
+  async instantiateDummyGenerator<const G extends new (...args: any[]) => YeomanGenerator>(Generator: G): Promise<InstanceType<G>> {
+    return new (this.createDummyGenerator(Generator as any))([], {
       namespace: 'dummy:generator',
       env: await this.createTestEnv(),
     });
