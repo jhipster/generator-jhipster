@@ -26,7 +26,7 @@ import { LoginService } from 'app/login/login.service';
 <%_ } _%>
 import { StateStorageService } from './state-storage.service';
 
-export const UserRouteAccessService: CanActivateFn = (next: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
+export const userRouteAccessService: CanActivateFn = (next: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
   const accountService = inject(AccountService);
   const router = inject(Router);
   const stateStorageService = inject(StateStorageService);
