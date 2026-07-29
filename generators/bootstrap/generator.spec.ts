@@ -43,7 +43,7 @@ describe(`generator - ${generator}`, () => {
 
     it('should reject jhipsterConfigWithDefaults access', () => {
       expect(() => bootstrapGenerator.jhipsterConfigWithDefaults).toThrow(
-        'jhipsterConfigWithDefaults is not available in the uniqueGlobally generator',
+        'jhipsterConfigWithDefaults is not available in uniqueGlobally generators',
       );
     });
   });
