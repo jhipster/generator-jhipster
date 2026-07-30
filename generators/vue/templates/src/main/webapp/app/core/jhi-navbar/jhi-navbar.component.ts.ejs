@@ -17,6 +17,7 @@
  limitations under the License.
 -%>
 import { computed, <%- microfrontend ? 'defineAsyncComponent, ' : '' %>defineComponent, inject, ref, type Ref } from 'vue';
+import { storeToRefs } from 'pinia'
 <%_ if (enableTranslation) { _%>
 import { useI18n } from 'vue-i18n';
 <%_ } _%>
@@ -83,7 +84,7 @@ export default defineComponent({
 
     const openAPIEnabled = computed(() => store.activeProfiles.includes('api-docs'));
     const inProduction = computed(() => store.activeProfiles.includes('prod'));
-    const authenticated = computed(() => store.authenticated);
+    const { authenticated } = storeToRefs(store)
 
     const subIsActive = (input: string | string[]) => {
       const paths = Array.isArray(input) ? input : [input];
