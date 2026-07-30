@@ -8,7 +8,7 @@
     "@vuelidate/core": "2.0.3",
     "@vuelidate/validators": "2.0.4",
     "@vueuse/core": "14.4.0",
-    "axios": "1.18.1",
+    "axios": "1.19.0",
     "bootstrap": "5.3.7",
     "bootstrap-vue-next": "0.45.9",
     "bootswatch": "5.3.8",
