@@ -43,7 +43,7 @@ export default defineComponent({
     const totalItems = ref(0);
 <%_ } _%>
 <%_ if (paginationInfiniteScroll) { _%>
-    const links: Ref<any> = ref({});
+    const links: Ref = ref({});
 <%_ } _%>
 
     const <%- entityInstancePlural %>: Ref<I<%- entityAngularName %>[]> = ref([]);

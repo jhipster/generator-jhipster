@@ -69,8 +69,8 @@ export default defineComponent({
     const errorUserExists: Ref<string> = ref('');
     const success: Ref<boolean> = ref(false);
 
-    const confirmPassword: Ref<any> = ref(null);
-    const registerAccount: Ref<any> = ref({
+    const confirmPassword: Ref = ref(null);
+    const registerAccount: Ref = ref({
       login: undefined,
       email: undefined,
       password: undefined,

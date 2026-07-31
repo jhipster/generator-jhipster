@@ -63,7 +63,7 @@ export default defineComponent({
     const store = useStore();
 
     const version = `v${APP_VERSION}`;
-    const hasAnyAuthorityValues: Ref<any> = ref({});
+    const hasAnyAuthorityValues: Ref = ref({});
 
     const openAPIEnabled = computed(() => store.activeProfiles.includes('api-docs'));
     const inProduction = computed(() => store.activeProfiles.includes('prod'));

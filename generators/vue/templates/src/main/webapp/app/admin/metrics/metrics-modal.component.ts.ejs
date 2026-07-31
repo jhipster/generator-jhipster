@@ -14,7 +14,7 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const threadDumpFilter: Ref<any> = ref('');
+    const threadDumpFilter: Ref = ref('');
     const filteredThreadDump = computed(() => filterBy(props.threadDump, { filterByTerm: threadDumpFilter.value }));
 
     const threadDumpData = computed(() => {
