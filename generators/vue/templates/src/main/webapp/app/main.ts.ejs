@@ -90,7 +90,7 @@ const app = createApp({
     const translationService = new TranslationService(i18n);
 
     const changeLanguage = async (newLanguage: string) => {
-      if (i18n.locale.value !== newLanguage) {
+      if (newLanguage && i18n.locale.value !== newLanguage) {
         await translationService.refreshTranslation(newLanguage);
         translationStore.setCurrentLanguage(newLanguage);
       }
@@ -103,7 +103,7 @@ const app = createApp({
       () => store.account,
       async value => {
         if (!translationService.getLocalStoreLanguage()) {
-          await changeLanguage(value.langKey);
+          await changeLanguage(value?.langKey);
         }
       },
     );
@@ -158,7 +158,7 @@ const app = createApp({
           localStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
 <%_ } _%>
           store.logout();
-          if (!url.endsWith('api/account') && !url.endsWith('api/<%- authenticationTypeSession ? 'authentication' : 'authenticate' %>')) {
+          if (!url?.endsWith('api/account') && !url?.endsWith('api/<%- authenticationTypeSession ? 'authentication' : 'authenticate' %>')) {
             // Ask for a new authentication
 <%_ if (authenticationTypeOauth2) { _%>
             window.location.reload();
