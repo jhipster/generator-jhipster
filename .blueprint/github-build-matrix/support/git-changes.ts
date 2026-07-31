@@ -44,7 +44,7 @@ const patterns = {
   graalvm: [
     'generators/java-simple-application/generators/graalvm/**',
     'generators/spring-boot/*',
-    'generators/spring-boot/{resources,templates,generators/bootstrap,generators/data-relational,generators/liquibase,generators/jwt}/**',
+    'generators/spring-boot/{resources,templates,generators/bootstrap,generators/data-relational,generators/graalvm,generators/liquibase,generators/jwt}/**',
     'generators/liquibase/**',
   ],
   java: ['generators/{java,java-simple-application,liquibase,server,spring*}/**'],
