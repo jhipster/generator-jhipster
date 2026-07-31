@@ -34,6 +34,8 @@ import reactor.core.publisher.Mono;
 @Component
 public class OAuth2ReactiveRefreshTokensWebFilter implements WebFilter {
 
+    private static final String LOGOUT_PATH = "/api/logout";
+
     private final ReactiveOAuth2AuthorizedClientManager clientManager;
 
     public OAuth2ReactiveRefreshTokensWebFilter(ReactiveOAuth2AuthorizedClientManager clientManager) {
@@ -41,6 +43,10 @@ public class OAuth2ReactiveRefreshTokensWebFilter implements WebFilter {
     }
 
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        if (LOGOUT_PATH.equals(exchange.getRequest().getPath().value())) {
+            return chain.filter(exchange);
+        }
+
         return exchange
             .getPrincipal()
             .filter(principal -> principal instanceof OAuth2AuthenticationToken)
