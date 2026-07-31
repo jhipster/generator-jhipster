@@ -102,10 +102,6 @@ jobs:
           maven-cache: true
           gradle-cache: ${{ matrix.gradle-cache }}
           binary-dir: ${{ github.workspace }}/generator-jhipster/bin
-      # Fail git operations on line ending mismatches, and make sure that JHipster generates crlf line endings on Windows correctly.
-      - run: |
-          git config --global core.autocrlf false
-          git config --global core.safecrlf true
       - name: 'WORKAROUND: Node.js 22 require(esm) V8 crash'
         if: startsWith(matrix.node-version, '22')
         run: echo "NODE_OPTIONS=${NODE_OPTIONS:+$NODE_OPTIONS }--no-experimental-require-module" >> $GITHUB_ENV
