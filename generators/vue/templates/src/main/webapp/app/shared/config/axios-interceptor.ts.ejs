@@ -37,15 +37,27 @@ const onRequestSuccess = config => {
   return config;
 };
 const setupAxiosInterceptors = (onUnauthenticated, onServerError) => {
-  const onResponseError = err => {
-    const status = err.status || err.response?.status;
+  const onResponseError = error => {
+    if (error.response) {
+      console.error('❌ [Axios Response Error]', {
+        status: error.response.status,
+        statusText: error.response.statusText,
+        data: error.response.data,
+        headers: error.response.headers,
+      });
+    } else if (error.request) {
+      console.error('❌ [Axios Error - No Response Received]', error.request);
+    } else {
+      console.error('❌ [Axios Error Message]', error.message);
+    }
+    const status = error.status || error.response?.status;
     if (status === 403 || status === 401) {
-      return onUnauthenticated(err);
+      return onUnauthenticated(error);
     }
     if (status >= 500) {
-      return onServerError(err);
+      return onServerError(error);
     }
-    return Promise.reject(err);
+    return Promise.reject(error);
   };
 
   if (axios.interceptors) {
