@@ -33,8 +33,7 @@ const { getAbsoluteFSPath } = await import('swagger-ui-dist');
 const swaggerUiPath = getAbsoluteFSPath();
 const webappDir = fileURLToPath(new URL('./<%- this.relativeDir(clientRootDir, clientSrcDir) %>/', import.meta.url));
 
-// eslint-disable-next-line prefer-const
-let config = defineConfig({
+const config = defineConfig({
   plugins: [
     vue(),
     viteStaticCopy({
