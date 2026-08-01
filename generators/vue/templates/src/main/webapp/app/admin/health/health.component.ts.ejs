@@ -58,7 +58,7 @@ export default defineComponent({
     },
     showHealth(health: any): void {
       this.currentHealth = health;
-      (<any>this.$refs.healthModal).show();
+      (this.$refs.healthModal as any).show();
     },
     subSystemName(name: string): string {
       return this.healthService.getSubSystemName(name);
