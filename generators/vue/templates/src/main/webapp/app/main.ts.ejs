@@ -121,11 +121,9 @@ const app = createApp({
       }
       if (to.meta?.authorities && to.meta.authorities.length > 0) {
         const value = await accountService.hasAnyAuthorityAndCheckAuth(to.meta.authorities);
-        if (!value) {
-          if (from.path !== '/forbidden') {
-            next({ path: '/forbidden' });
-            return;
-          }
+        if (!value && from.path !== '/forbidden') {
+          next({ path: '/forbidden' });
+          return;
         }
       }
       next();
