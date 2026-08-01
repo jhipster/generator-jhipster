@@ -151,13 +151,13 @@ export default defineComponent({
     },
     prepareRemove(instance): void {
       this.removeId = instance.login;
-      if (<any>this.$refs.removeUser) {
-        (<any>this.$refs.removeUser).show();
+      if (this.$refs.removeUser as any) {
+        (this.$refs.removeUser as any).show();
       }
     },
     closeDialog(): void {
-      if (<any>this.$refs.removeUser) {
-        (<any>this.$refs.removeUser).hide();
+      if (this.$refs.removeUser as any) {
+        (this.$refs.removeUser as any).hide();
       }
     },
   },
