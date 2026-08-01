@@ -14,8 +14,8 @@ export default defineComponent({
   setup() {
     const healthService = inject('healthService', () => new HealthService(), true);
 
-    const healthData: Ref<any> = ref(null);
-    const currentHealth: Ref<any> = ref(null);
+    const healthData: Ref = ref(null);
+    const currentHealth: Ref = ref(null);
     const updatingHealth = ref(false);
 
     return {

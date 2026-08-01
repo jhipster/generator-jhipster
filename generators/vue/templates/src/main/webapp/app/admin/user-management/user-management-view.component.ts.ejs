@@ -17,7 +17,7 @@ export default defineComponent({
     const alertService = inject('alertService', () => useAlertService(), true);
     const userManagementService = inject('userManagementService', () => new UserManagementService(), true);
 
-    const user: Ref<any> = ref(null);
+    const user: Ref = ref(null);
 
     async function loadUser(userId: string) {
       try {
