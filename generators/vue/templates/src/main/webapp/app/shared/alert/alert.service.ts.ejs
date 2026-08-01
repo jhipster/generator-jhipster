@@ -44,7 +44,7 @@ export default class AlertService {
   }
 
   showInfo(toastMessage: string, props: BToastProps = {}) {
-    this.toast.show!({
+    this.toast.show({
       props: {
         pos: 'top-center',
         title: 'Info',
@@ -81,9 +81,9 @@ export default class AlertService {
         const message = getMessageFromHeaders(headers);
 <%_ if (enableTranslation) { _%>
         if (message.errorKey && message.param) {
-          errorMessage = this.i18n.t(message.errorKey!, { entityName: this.i18n.t(`global.menu.entities.${message.param!}`) }).toString();
+          errorMessage = this.i18n.t(message.errorKey, { entityName: this.i18n.t(`global.menu.entities.${message.param}`) }).toString();
         } else if (message.errorKey) {
-          errorMessage = this.i18n.t(message.errorKey!).toString();
+          errorMessage = this.i18n.t(message.errorKey).toString();
         } else
 <%_ } _%>
         if (message.errorMessage) {
