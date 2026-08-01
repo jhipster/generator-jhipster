@@ -63,9 +63,9 @@ describe('Register Component', () => {
     expect(register.errorEmailExists).toBe('');
     expect(register.errorUserExists).toBe('');
     expect(register.confirmPassword).toBeNull();
-    expect(register.registerAccount.login).toBe(undefined);
-    expect(register.registerAccount.password).toBe(undefined);
-    expect(register.registerAccount.email).toBe(undefined);
+    expect(register.registerAccount.login).toBeUndefined();
+    expect(register.registerAccount.password).toBeUndefined();
+    expect(register.registerAccount.email).toBeUndefined();
   });
 
   it('should open login modal when asked to', () => {
