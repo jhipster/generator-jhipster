@@ -28,13 +28,13 @@ describe('Health Modal Component', () => {
   });
 
   describe('baseName and subSystemName', () => {
-    it('should use healthService', () => {
+    it('should use healthService to get base name', () => {
       healthModal.baseName('base');
 
       expect(healthService.getBaseName).toHaveBeenCalled();
     });
 
-    it('should use healthService', () => {
+    it('should use healthService to get sub system name', () => {
       healthModal.subSystemName('base');
 
       expect(healthService.getSubSystemName).toHaveBeenCalled();
