@@ -1,11 +1,7 @@
 import axios, { type AxiosPromise } from 'axios';
 
 export default class HealthService {
-  separator: string;
-
-  constructor() {
-    this.separator = '.';
-  }
+  separator = '.';
 
   checkHealth(): AxiosPromise<any> {
     return axios.get('management/health');
