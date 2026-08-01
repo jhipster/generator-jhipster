@@ -54,9 +54,7 @@ export default defineComponent({
 <%_ if (enableTranslation) { _%>
     const changeLanguage = inject<(string) => Promise<void>>('changeLanguage');
 
-    const isActiveLanguage = (key: string) => {
-      return key === currentLanguage.value;
-    };
+    const isActiveLanguage = (key: string) => key === currentLanguage.value;
 <%_ } _%>
 
     const router = useRouter();
@@ -71,9 +69,8 @@ export default defineComponent({
 
     const subIsActive = (input: string | string[]) => {
       const paths = Array.isArray(input) ? input : [input];
-      return paths.some(path => {
-        return router.currentRoute.value.path.startsWith(path); // current path starts with this path string
-      });
+      // current path starts with this path string
+      return paths.some(path => router.currentRoute.value.path.startsWith(path));
     };
 
     const logout = async () => {

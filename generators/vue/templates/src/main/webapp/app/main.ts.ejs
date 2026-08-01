@@ -154,9 +154,7 @@ const app = createApp({
         }
         return Promise.reject(error);
       },
-      error => {
-        return Promise.reject(error);
-      },
+      error => Promise.reject(error),
     );
 
     const { authenticated } = storeToRefs(store);
