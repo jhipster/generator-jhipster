@@ -180,7 +180,7 @@ describe('jdl - JDLApplication', () => {
     });
     describe('when passing an entity name', () => {
       describe('that has not already been added', () => {
-        let entityNames;
+        let entityNames: string[];
 
         before(() => {
           const application = new JDLApplication(undefined, runtime);
@@ -189,11 +189,11 @@ describe('jdl - JDLApplication', () => {
         });
 
         it('should add it', () => {
-          expect(entityNames.length).toBe(1);
+          expect(entityNames).toHaveLength(1);
         });
       });
       describe('that has already been added', () => {
-        let entityNames;
+        let entityNames: string[];
 
         before(() => {
           const application = new JDLApplication(undefined, runtime);
@@ -203,14 +203,14 @@ describe('jdl - JDLApplication', () => {
         });
 
         it('should not add it', () => {
-          expect(entityNames.length).toBe(1);
+          expect(entityNames).toHaveLength(1);
         });
       });
     });
   });
   describe('addEntityNames', () => {
     describe('when not passing entity names', () => {
-      let entityNames;
+      let entityNames: string[];
 
       before(() => {
         const application = new JDLApplication(
@@ -227,11 +227,11 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should not alter the entity names', () => {
-        expect(entityNames.length).toBe(2);
+        expect(entityNames).toHaveLength(2);
       });
     });
     describe('when passing an empty list', () => {
-      let entityNames;
+      let entityNames: string[];
 
       before(() => {
         const application = new JDLApplication(
@@ -248,7 +248,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should not alter the entity names', () => {
-        expect(entityNames.length).toBe(2);
+        expect(entityNames).toHaveLength(2);
       });
     });
     describe('when passing entity names', () => {
@@ -268,13 +268,13 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should update the entity names', () => {
-        expect(application.getEntityNames().length).toBe(3);
+        expect(application.getEntityNames()).toHaveLength(3);
       });
     });
   });
   describe('getEntityNames', () => {
     describe('when there is no entity', () => {
-      let entityNames;
+      let entityNames: string[];
 
       before(() => {
         const jdlApplication = new JDLApplication(undefined, runtime);
@@ -282,11 +282,11 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should return an empty list', () => {
-        expect(entityNames.length).toBe(0);
+        expect(entityNames).toHaveLength(0);
       });
     });
     describe('when there are entities', () => {
-      let entityNames;
+      let entityNames: string[];
 
       before(() => {
         const jdlApplication = new JDLApplication(
@@ -300,7 +300,7 @@ describe('jdl - JDLApplication', () => {
       });
 
       it('should return the entity list', () => {
-        expect(entityNames.length).toBe(2);
+        expect(entityNames).toHaveLength(2);
       });
     });
   });

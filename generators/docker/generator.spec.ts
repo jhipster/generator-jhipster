@@ -109,7 +109,7 @@ describe(`generator - ${generator}`, () => {
       });
 
       it('should not generate any file inside src/', () => {
-        expect(Object.keys(runResult.getStateSnapshot('**/src/**')).length).toBe(0);
+        expect(Object.keys(runResult.getStateSnapshot('**/src/**'))).toHaveLength(0);
       });
     });
   });

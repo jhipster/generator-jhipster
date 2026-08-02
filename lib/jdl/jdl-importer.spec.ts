@@ -149,7 +149,7 @@ relationship OneToOne {
       it('should return the import state', () => {
         expect(returned.exportedEntities).toHaveLength(1);
         expect(returned.exportedApplications).toHaveLength(2);
-        expect(Object.keys(returned.exportedApplicationsWithEntities).length).toBe(2);
+        expect(Object.keys(returned.exportedApplicationsWithEntities)).toHaveLength(2);
         expect(returned.exportedDeployments).toHaveLength(0);
       });
       it('should export the application contents', () => {
@@ -255,8 +255,8 @@ relationship OneToOne {
       });
 
       it('should generate correct import state', () => {
-        expect(importState.exportedApplications.length).toEqual(3);
-        expect(importState.exportedEntities.length).toEqual(4);
+        expect(importState.exportedApplications).toHaveLength(3);
+        expect(importState.exportedEntities).toHaveLength(4);
       });
 
       it('should return the corresponding exportedApplicationsWithEntities', () => {
