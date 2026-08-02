@@ -26,7 +26,7 @@ describe('generator - liquibase - support - formatting', () => {
     describe('when formatting a nil text', () => {
       it('returns it', () => {
         // @ts-expect-error
-        expect(formatAsLiquibaseRemarks()).toEqual(undefined);
+        expect(formatAsLiquibaseRemarks()).toBeUndefined();
       });
     });
     describe('when formatting an empty text', () => {
