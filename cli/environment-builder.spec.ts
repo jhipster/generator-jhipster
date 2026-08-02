@@ -114,10 +114,10 @@ describe('cli - EnvironmentBuilder', () => {
       envBuilder = EnvironmentBuilder.create();
     });
     it('should return an EnvironmentBuilder', () => {
-      expect(envBuilder).not.toBeUndefined();
-      expect(envBuilder.getEnvironment()).not.toBeUndefined();
-      expect(envBuilder.getEnvironment().adapter).not.toBeUndefined();
-      expect(envBuilder.getEnvironment().sharedOptions).not.toBeUndefined();
+      expect(envBuilder).toBeDefined();
+      expect(envBuilder.getEnvironment()).toBeDefined();
+      expect(envBuilder.getEnvironment().adapter).toBeDefined();
+      expect(envBuilder.getEnvironment().sharedOptions).toBeDefined();
     });
   });
 
@@ -313,9 +313,9 @@ describe('cli - EnvironmentBuilder', () => {
       });
 
       it('should load all generators', () => {
-        expect(envBuilder.getEnvironment().get('jhipster-cli:foo')).not.toBeUndefined();
-        expect(envBuilder.getEnvironment().get('jhipster-cli-shared:foo')).not.toBeUndefined();
-        expect(envBuilder.getEnvironment().get('jhipster-cli-shared:bar')).not.toBeUndefined();
+        expect(envBuilder.getEnvironment().get('jhipster-cli:foo')).toBeDefined();
+        expect(envBuilder.getEnvironment().get('jhipster-cli-shared:foo')).toBeDefined();
+        expect(envBuilder.getEnvironment().get('jhipster-cli-shared:bar')).toBeDefined();
       });
     });
   });

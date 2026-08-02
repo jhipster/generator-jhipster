@@ -903,8 +903,8 @@ JDLDeployment {
         });
 
         it('should accept it', () => {
-          expect(jdlObject.entities.A.fields.myString.validations.unique).not.toBeUndefined();
-          expect(jdlObject.entities.A.fields.myInteger.validations.unique).not.toBeUndefined();
+          expect(jdlObject.entities.A.fields.myString.validations.unique).toBeDefined();
+          expect(jdlObject.entities.A.fields.myInteger.validations.unique).toBeDefined();
         });
       });
       describe('when parsing a JDL relationship with built in entity enabled', () => {

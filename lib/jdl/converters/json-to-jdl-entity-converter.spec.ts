@@ -172,22 +172,22 @@ describe('jdl - JSONToJDLEntityConverter', () => {
 
       describe('when parsing JSON entities to JDL', () => {
         it('should parse unidirectional OneToOne relationships', () => {
-          expect(jdlObject.relationships.getOneToOne('OneToOne_Department{location}_Location')).not.toBeUndefined();
+          expect(jdlObject.relationships.getOneToOne('OneToOne_Department{location}_Location')).toBeDefined();
         });
         it('should parse bidirectional OneToOne relationships', () => {
-          expect(jdlObject.relationships.getOneToOne('OneToOne_Country{region}_Region{country}')).not.toBeUndefined();
+          expect(jdlObject.relationships.getOneToOne('OneToOne_Country{region}_Region{country}')).toBeDefined();
         });
         it('should parse bidirectional ManyToOne relationships', () => {
-          expect(jdlObject.relationships.getManyToOne('ManyToOne_Employee{department(foo)}_Department{employee}')).not.toBeUndefined();
+          expect(jdlObject.relationships.getManyToOne('ManyToOne_Employee{department(foo)}_Department{employee}')).toBeDefined();
         });
         it('should parse bidirectional OneToMany relationships', () => {
-          expect(jdlObject.relationships.getOneToMany('OneToMany_Employee{job}_Job{employee}')).not.toBeUndefined();
+          expect(jdlObject.relationships.getOneToMany('OneToMany_Employee{job}_Job{employee}')).toBeDefined();
         });
         it('should parse unidirectional ManyToOne relationships', () => {
-          expect(jdlObject.relationships.getManyToOne('ManyToOne_Employee{manager}_Employee')).not.toBeUndefined();
+          expect(jdlObject.relationships.getManyToOne('ManyToOne_Employee{manager}_Employee')).toBeDefined();
         });
         it('should parse ManyToMany relationships', () => {
-          expect(jdlObject.relationships.getManyToMany('ManyToMany_Job{task(title)}_Task{job}')).not.toBeUndefined();
+          expect(jdlObject.relationships.getManyToMany('ManyToMany_Job{task(title)}_Task{job}')).toBeDefined();
         });
         it('should parse comments in relationships for owner', () => {
           const relationship = jdlObject.relationships.getManyToOne('ManyToOne_Employee{department(foo)}_Department{employee}');
@@ -243,7 +243,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
           ]);
           const result = convertEntitiesToJDL(entities);
           const relationship = result.relationships.getOneToMany('OneToMany_EntityA{entityB}_EntityB{entityA}');
-          expect(relationship).not.toBeUndefined();
+          expect(relationship).toBeDefined();
           expect(relationship!.options.destination).toEqual({ destAnnotation: true });
         });
         it('should parse required relationships in owner', () => {
@@ -274,7 +274,7 @@ describe('jdl - JSONToJDLEntityConverter', () => {
             });
 
             it('should parse relationships to the JHipster managed User entity', () => {
-              expect(jdlObject.relationships.getOneToOne('OneToOne_Country{user}_User')).not.toBeUndefined();
+              expect(jdlObject.relationships.getOneToOne('OneToOne_Country{user}_User')).toBeDefined();
             });
           });
         });
