@@ -236,6 +236,9 @@ describe('jdl - JDLUnaryOption', () => {
 
     before(() => {
       option = new JDLUnaryOption({ name: unaryOptions.SKIP_CLIENT });
+    });
+
+    it('should stringify the option', () => {
       expect(option.toString()).toBe(`${unaryOptions.SKIP_CLIENT} *`);
       option.addEntityName('D');
       expect(option.toString()).toBe(`${unaryOptions.SKIP_CLIENT} D`);
@@ -246,9 +249,6 @@ describe('jdl - JDLUnaryOption', () => {
       expect(option.toString()).toBe(`${unaryOptions.SKIP_CLIENT} D, E, F except A`);
       option.excludeEntityName('B');
       option.excludeEntityName('C');
-    });
-
-    it('should stringify the option', () => {
       expect(option.toString()).toBe(`${unaryOptions.SKIP_CLIENT} D, E, F except A, B, C`);
     });
   });
