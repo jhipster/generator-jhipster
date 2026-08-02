@@ -529,8 +529,7 @@ content to add2
       spy.mockImplementation(() => undefined as any);
       createBaseNeedle.call(generator, { filePath }, needles);
       expect(generator.editFile).toHaveBeenCalledTimes(1);
-      expect(spy.mock.lastCall?.[0]).toBe(filePath);
-      expect(spy.mock.lastCall?.[1]).toBeInstanceOf(Function);
+      expect(spy).toHaveBeenLastCalledWith(filePath, expect.any(Function));
     });
   });
 });
