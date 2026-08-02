@@ -25,7 +25,7 @@ describe('generator > java', () => {
   describe('injectJavaConstructorParam', () => {
     describe('not passing content', () => {
       it('should return a function', () => {
-        expect(typeof injectJavaConstructorParam({ className: 'Foo', param: 'Bar' }) === 'function').toBe(true);
+        expect(injectJavaConstructorParam({ className: 'Foo', param: 'Bar' })).toBeInstanceOf(Function);
       });
     });
     describe('passing a valid constructor', () => {
@@ -79,7 +79,7 @@ describe('generator > java', () => {
   describe('injectJavaField', () => {
     describe('not passing content', () => {
       it('should return a function', () => {
-        expect(typeof injectJavaField({ className: 'Foo', field: 'bar' }) === 'function').toBe(true);
+        expect(injectJavaField({ className: 'Foo', field: 'bar' })).toBeInstanceOf(Function);
       });
     });
     describe('passing a valid constructor', () => {
@@ -113,7 +113,7 @@ describe('generator > java', () => {
   describe('injectJavaConstructorSetter', () => {
     describe('not passing content', () => {
       it('should return a function', () => {
-        expect(typeof injectJavaConstructorSetter({ className: 'Foo', setter: 'this.foo = foo;' }) === 'function').toBe(true);
+        expect(injectJavaConstructorSetter({ className: 'Foo', setter: 'this.foo = foo;' })).toBeInstanceOf(Function);
       });
     });
     describe('passing a valid constructor', () => {
