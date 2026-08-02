@@ -143,10 +143,10 @@ describe('cli - EnvironmentBuilder', () => {
       _lookupBlueprintsSpy.mockRestore();
     });
     it('should call create, _lookupJHipster, _loadBlueprints and _lookupBlueprints', () => {
-      expect(createSpy.mock.calls.length).toBe(1);
-      expect(_lookupJHipsterSpy.mock.calls.length).toBe(1);
-      expect(_loadBlueprintsSpy.mock.calls.length).toBe(1);
-      expect(_lookupBlueprintsSpy.mock.calls.length).toBe(1);
+      expect(createSpy).toHaveBeenCalledTimes(1);
+      expect(_lookupJHipsterSpy).toHaveBeenCalledTimes(1);
+      expect(_loadBlueprintsSpy).toHaveBeenCalledTimes(1);
+      expect(_lookupBlueprintsSpy).toHaveBeenCalledTimes(1);
     });
   });
 
