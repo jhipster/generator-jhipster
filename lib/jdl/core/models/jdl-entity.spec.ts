@@ -49,7 +49,7 @@ describe('jdl - JDLEntity', () => {
       });
 
       it('should not use any value', () => {
-        expect(entity.tableName).toBe(undefined);
+        expect(entity.tableName).toBeUndefined();
       });
     });
     describe('when passing arguments', () => {

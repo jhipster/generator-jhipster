@@ -48,7 +48,7 @@ describe('generator - bootstrap - utils', () => {
     });
     describe('passing a single line file', () => {
       it('should return undefined', async () => {
-        expect(await detectCrLf('lf-single.txt')).toBe(undefined);
+        expect(await detectCrLf('lf-single.txt')).toBeUndefined();
       });
     });
   });

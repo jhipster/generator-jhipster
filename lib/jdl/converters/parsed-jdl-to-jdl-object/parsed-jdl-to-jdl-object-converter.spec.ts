@@ -362,7 +362,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
         it('should accept them', () => {
           expect(jdlObject.entities.A.fields.name.comment).toBe('abc');
           expect(jdlObject.entities.A.fields.thing.comment).toBe('def');
-          expect(jdlObject.entities.A.fields.another.comment).toBe(undefined);
+          expect(jdlObject.entities.A.fields.another.comment).toBeUndefined();
         });
         describe('when having both forms of comments', () => {
           it('should accept the one defined first', () => {

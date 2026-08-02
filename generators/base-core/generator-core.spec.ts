@@ -50,7 +50,7 @@ describe('generator - base-core', () => {
           type: String,
         },
       });
-      expect(base.jdlFiles).toBe(undefined);
+      expect(base.jdlFiles).toBeUndefined();
     });
     it('undefined positional arguments', async () => {
       const base = new Dummy([], { positionalArguments: [], env: await helpers.createTestEnv() });
@@ -59,7 +59,7 @@ describe('generator - base-core', () => {
           type: String,
         },
       });
-      expect(base.jdlFiles).toBe(undefined);
+      expect(base.jdlFiles).toBeUndefined();
     });
     it('undefined argument', async () => {
       const base = new Dummy([undefined], { env: await helpers.createTestEnv() });
@@ -68,7 +68,7 @@ describe('generator - base-core', () => {
           type: String,
         },
       });
-      expect(base.jdlFiles).toBe(undefined);
+      expect(base.jdlFiles).toBeUndefined();
     });
     it('undefined positional arguments', async () => {
       const base = new Dummy([], { positionalArguments: [undefined], env: await helpers.createTestEnv() });
@@ -77,7 +77,7 @@ describe('generator - base-core', () => {
           type: String,
         },
       });
-      expect(base.jdlFiles).toBe(undefined);
+      expect(base.jdlFiles).toBeUndefined();
     });
     it('string arguments', async () => {
       const base = new Dummy(['foo'], { env: await helpers.createTestEnv() });
