@@ -294,7 +294,7 @@ describe('jdl - DefaultApplicationOptions', () => {
         expect(options.withAdminUi).toBe(false);
       });
       it('should not remove the server skipping option', () => {
-        expect(options.skipServer).not.toBeUndefined();
+        expect(options.skipServer).toBeDefined();
       });
     });
   });

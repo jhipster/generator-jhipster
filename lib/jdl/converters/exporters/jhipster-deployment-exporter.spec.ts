@@ -83,7 +83,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
           });
 
           it('should format it', () => {
-            expect(content['generator-jhipster']).not.toBeUndefined();
+            expect(content['generator-jhipster']).toBeDefined();
             const config = content['generator-jhipster'];
             expect(config).toMatchInlineSnapshot(`
 {
@@ -115,7 +115,7 @@ describe('jdl - JHipsterDeploymentExporter', () => {
           });
 
           it('should format it', () => {
-            expect(content['generator-jhipster']).not.toBeUndefined();
+            expect(content['generator-jhipster']).toBeDefined();
             const config = content['generator-jhipster'];
             expect(config).toMatchInlineSnapshot(`
 {

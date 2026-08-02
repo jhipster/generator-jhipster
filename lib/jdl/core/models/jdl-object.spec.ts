@@ -135,7 +135,7 @@ describe('jdl - JDLObject', () => {
         });
 
         it('should return undefined', () => {
-          expect(jdlObject.getApplication('toto')).not.toBeUndefined();
+          expect(jdlObject.getApplication('toto')).toBeDefined();
         });
       });
     });
@@ -311,7 +311,7 @@ describe('jdl - JDLObject', () => {
 
     describe('when passing a name', () => {
       it('should return the entity', () => {
-        expect(jdlObject.getEntity('A')).not.toBeUndefined();
+        expect(jdlObject.getEntity('A')).toBeDefined();
       });
     });
   });
