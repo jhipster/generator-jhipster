@@ -73,7 +73,7 @@ describe('jdl - JDLOptions', () => {
         });
 
         it('should not duplicate it', () => {
-          expect(options.getOptions().length).toBe(2);
+          expect(options.getOptions()).toHaveLength(2);
         });
         it('should merge the entity names and excluded names', () => {
           expect(options.getOptions()[0]).toEqual(

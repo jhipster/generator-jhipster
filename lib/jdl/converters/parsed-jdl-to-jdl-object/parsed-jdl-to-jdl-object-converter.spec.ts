@@ -390,7 +390,7 @@ describe('jdl - ParsedJDLToJDLObjectConverter', () => {
 
         describe('checking the options', () => {
           it('should parse them', () => {
-            expect(options.length).toBe(7);
+            expect(options).toHaveLength(7);
             expect(options[0].name).toBe('skipClient');
             expect(options[1].name).toBe('skipServer');
             expect(options[2].name).toBe(DTO);

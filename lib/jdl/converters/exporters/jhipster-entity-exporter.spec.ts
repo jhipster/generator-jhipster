@@ -566,7 +566,7 @@ describe('jdl - JHipsterEntityExporter', () => {
             });
 
             it('should return the entities that should be inside the microservice', () => {
-              expect(returnedContent.length).toBe(2);
+              expect(returnedContent).toHaveLength(2);
             });
           });
         });

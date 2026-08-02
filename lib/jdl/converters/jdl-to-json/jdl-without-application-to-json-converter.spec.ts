@@ -70,7 +70,7 @@ describe('jdl - JDLWithoutApplicationToJSONConverter', () => {
       });
 
       it('should return a list with no entity', () => {
-        expect(result.get('toto')?.length).toBe(0);
+        expect(result.get('toto')).toHaveLength(0);
       });
     });
     describe('when passing a JDL object with entities', () => {
