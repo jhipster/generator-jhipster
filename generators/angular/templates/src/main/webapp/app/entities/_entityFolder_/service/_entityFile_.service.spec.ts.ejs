@@ -148,7 +148,7 @@ describe('<%- entityAngularName %> Service', () => {
 
             const req = httpMock.expectOne({ method: 'GET' });
             req.flush(null, { status: 500, statusText: 'Internal Server Error' });
-            expect(expectedResult).toBe(null);
+            expect(expectedResult).toBeNull();
         });
 <%_ } _%>
 
