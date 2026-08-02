@@ -756,7 +756,7 @@ JDLDeployment {
   "skipClient": true,
 }
 `);
-            expect(fieldAnnotation).toEqual(true);
+            expect(fieldAnnotation).toBe(true);
             expect(relationshipAnnotationOnSource).toMatchInlineSnapshot(`
 {
   "annotationOnSource": "toto",
@@ -817,7 +817,7 @@ JDLDeployment {
   "skipClient": true,
 }
 `);
-            expect(fieldAnnotation).toEqual(true);
+            expect(fieldAnnotation).toBe(true);
             expect(relationshipAnnotationOnSource).toMatchInlineSnapshot(`
 {
   "annotationOnSource": true,

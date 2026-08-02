@@ -56,7 +56,7 @@ describe('generator - server - support - doc', () => {
   describe('formatDocAsApiDescription', () => {
     describe('when formatting a nil text', () => {
       it('returns it', () => {
-        expect(formatDocAsApiDescription()).toEqual(undefined);
+        expect(formatDocAsApiDescription()).toBeUndefined();
       });
     });
     describe('when formatting an empty text', () => {
