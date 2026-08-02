@@ -325,7 +325,7 @@ JSONEntity {
         });
 
         it('should log the automatic setting of the option', () => {
-          expect(loggerSpy.mock.calls[0]?.[0]).toBe(
+          expect(loggerSpy).toHaveBeenCalledWith(
             "The dto option is set for A, the 'serviceClass' value for the 'service' is gonna be set for this entity if " +
               'no other value has been set.',
           );
@@ -389,7 +389,7 @@ JSONEntity {
         });
 
         it('should log the automatic setting of the option', () => {
-          expect(loggerSpy.mock.calls[0]?.[0]).toBe(
+          expect(loggerSpy).toHaveBeenCalledWith(
             "The filter option is set for A, the 'serviceClass' value for the 'service' is gonna be set for this " +
               'entity if no other value has been set.',
           );
