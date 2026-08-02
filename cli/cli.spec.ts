@@ -726,7 +726,7 @@ export const command = {
         });
 
         it('should print error', () => {
-          expect(stderr.includes('Generator jhipster-non-existing not found.')).toBe(true);
+          expect(stderr).toContain('Generator jhipster-non-existing not found.');
         });
         it('should exit with code 1', () => {
           expect(exitCode).toBe(1);

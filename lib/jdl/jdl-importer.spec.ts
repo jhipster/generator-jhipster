@@ -344,7 +344,7 @@ relationship OneToOne {
       });
 
       it('escapes the quote', () => {
-        expect(returned.exportedEntities[0].fields[0].fieldValidateRulesPattern.includes(String.raw`\'`)).toBe(true);
+        expect(returned.exportedEntities[0].fields[0].fieldValidateRulesPattern).toContain(String.raw`\'`);
       });
     });
     describe('when parsing JDL applications and deployment config', () => {
