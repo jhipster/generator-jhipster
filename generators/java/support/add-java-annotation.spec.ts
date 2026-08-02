@@ -25,7 +25,7 @@ describe('generator > java', () => {
   describe('addJavaImport', () => {
     describe('not passing content', () => {
       it('should return a function', () => {
-        expect(typeof addJavaImport('foo') === 'function').toBe(true);
+        expect(addJavaImport('foo')).toBeInstanceOf(Function);
       });
     });
 
@@ -74,7 +74,7 @@ import static com.mycompany.myapp.Foo;
   describe('addJavaAnnotation', () => {
     describe('not passing content', () => {
       it('should return a function', () => {
-        expect(typeof addJavaAnnotation({ annotation: 'Foo' }) === 'function').toBe(true);
+        expect(addJavaAnnotation({ annotation: 'Foo' })).toBeInstanceOf(Function);
       });
     });
 

@@ -25,7 +25,7 @@ import { joinCallbacks } from './write-files.ts';
 describe('generator - base - support - writeFiles', () => {
   describe('joinCallbacks', () => {
     it('should return a function', () => {
-      expect(typeof joinCallbacks()).toBe('function');
+      expect(joinCallbacks()).toBeInstanceOf(Function);
     });
 
     it('without callbacks, should return the original content', () => {
