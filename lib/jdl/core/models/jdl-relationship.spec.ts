@@ -107,7 +107,7 @@ describe('jdl - JDLRelationship', () => {
         });
       });
     });
-    describe('when passing an unidirectional many-to-one relationship', () => {
+    describe('when passing an unidirectional one-to-one relationship', () => {
       describe('and disabling the conversion to a bidirectional relationship', () => {
         let relationship: JDLRelationship;
 
@@ -125,7 +125,7 @@ describe('jdl - JDLRelationship', () => {
         });
       });
     });
-    describe('when passing an unidirectional many-to-one relationship', () => {
+    describe('when passing an unidirectional many-to-many relationship', () => {
       describe('and disabling the conversion to a bidirectional relationship', () => {
         let relationship: JDLRelationship;
 
