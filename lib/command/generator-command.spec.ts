@@ -102,7 +102,7 @@ describe('generator commands', () => {
         { argument = false, expectUndefinedOption = false }: { argument?: boolean; expectUndefinedOption?: boolean } = {},
       ) => {
         if (expectUndefinedOption) {
-          expectGeneratorOptionsTestOption().toBe(undefined);
+          expectGeneratorOptionsTestOption().toBeUndefined();
         } else if (argument) {
           // Argument is passed through positionalArguments option.
           expectGeneratorOptionsTestOption().toBeUndefined();
