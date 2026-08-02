@@ -486,10 +486,7 @@ describe('jdl - JHipsterEntityExporter', () => {
             });
 
             it('should return every entity', () => {
-              expect(returnedContent.length).toBe(7);
-              ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach(entityName => {
-                expect(returnedContent.filter(entity => entity.name === entityName) !== undefined).toBe(true);
-              });
+              expect(returnedContent.map(entity => entity.name)).toEqual(['A', 'B', 'C', 'D', 'E', 'F', 'G']);
             });
           });
           describe('and when microservice entities are passed', () => {
