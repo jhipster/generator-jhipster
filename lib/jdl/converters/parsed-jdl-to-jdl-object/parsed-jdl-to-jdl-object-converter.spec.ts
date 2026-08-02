@@ -887,8 +887,7 @@ JDLDeployment {
         });
 
         it('formats it', () => {
-          // @ts-expect-error FIXME
-          expect(jdlObject.getEntity('Alumni').fields.firstName.validations.pattern.value.includes(String.raw`\'`)).toBe(true);
+          expect(jdlObject.getEntity('Alumni').fields.firstName.validations.pattern.value).toContain(String.raw`\'`);
         });
       });
       describe('when parsing a JDL with the unique constraint', () => {
