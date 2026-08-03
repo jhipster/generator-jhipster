@@ -106,7 +106,7 @@ describe('Account Service test suite', () => {
     });
   });
 
-  it('should init service as not authenticated and return authority user', async () => {
+  it('should init service as not authenticated and not return authority user', async () => {
     axiosStub.get.mockRejectedValue(new Error());
     accountService = new AccountService(store);
     await accountService.update();

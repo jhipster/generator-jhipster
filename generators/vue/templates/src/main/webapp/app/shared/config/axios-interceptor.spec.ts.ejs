@@ -53,7 +53,7 @@ describe('Axios errors interceptor', () => {
       expect(callback).toHaveBeenCalled();
     }
   });
-  it('should use callback 50x errors', async () => {
+  it('should use callback on 50x errors', async () => {
     const callback = vi.fn();
 
     setupAxiosConfig.setupAxiosInterceptors(() => {}, callback);
