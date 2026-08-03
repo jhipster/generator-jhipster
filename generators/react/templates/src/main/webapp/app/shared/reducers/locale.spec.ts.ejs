@@ -183,7 +183,7 @@ describe('Locale reducer tests', () => {
         initialState = { currentLocale: defaultLocale, sourcePrefixes: [], loadedLocales: [], loadedKeys: [] };
       });
 
-      it("and empty parameter, don't adds anything", () => {
+      it("and empty parameter, doesn't add anything", () => {
         const expectedState = { currentLocale: defaultLocale, sourcePrefixes: [], loadedLocales: [], loadedKeys: [] };
 
         const localeState = locale(initialState, loaded({}));

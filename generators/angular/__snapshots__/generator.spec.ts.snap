@@ -82,8 +82,10 @@ describe("UserManagement Management Delete Component", () => {
       expect(service.delete).toHaveBeenCalledWith("ABC");
       expect(mockActiveModal.close).toHaveBeenCalledWith("deleted");
     });
+  });
 
-    it("should not call delete service on clear", () => {
+  describe("cancel", () => {
+    it("should not call delete service on cancel", () => {
       // GIVEN
       vitest.spyOn(service, "delete");
       vitest.spyOn(mockActiveModal, "close");
