@@ -56,13 +56,8 @@ describe('jdl - JDLUnaryOption', () => {
       });
 
       it('should removes the dupes', () => {
-        expect(option.entityNames.size).toBe(3);
-        expect(option.entityNames.has('A')).toBe(true);
-        expect(option.entityNames.has('B')).toBe(true);
-        expect(option.entityNames.has('C')).toBe(true);
-        expect(option.excludedNames.size).toBe(2);
-        expect(option.excludedNames.has('E')).toBe(true);
-        expect(option.excludedNames.has('D')).toBe(true);
+        expect(option.entityNames).toEqual(new Set(['A', 'B', 'C']));
+        expect(option.excludedNames).toEqual(new Set(['E', 'D']));
       });
     });
   });
@@ -78,8 +73,7 @@ describe('jdl - JDLUnaryOption', () => {
     });
 
     it('should set the entity names', () => {
-      expect(option.entityNames.size).toBe(1);
-      expect(option.entityNames.has('A')).toBe(true);
+      expect(option.entityNames).toEqual(new Set(['A']));
     });
   });
   describe('addEntityName', () => {
