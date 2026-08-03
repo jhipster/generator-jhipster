@@ -94,7 +94,8 @@ package-lock.json
     "stateCleared": "modified",
   },
   ".prettierrc": {
-    "contents": "printWidth: 140
+    "contents": "endOfLine: auto
+printWidth: 140
 singleQuote: true
 tabWidth: 2
 useTabs: false
