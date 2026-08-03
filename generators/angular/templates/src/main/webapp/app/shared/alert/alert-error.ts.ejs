@@ -70,11 +70,11 @@ export class AlertError implements OnDestroy {
   }
 
   close(alert: AlertModel): void {
-    alert.close?.(this.alerts());
+    alert.close?.();
   }
 
   private addErrorAlert(message?: string<%- enableTranslation ? ', translationKey?: string, translationParams?: Record<string, unknown>' : '' %>): void {
-    this.alertService.addAlert({ type: 'danger', message<%- enableTranslation ? ', translationKey, translationParams' : '' %> }, this.alerts());
+    this.alertService.addAlert({ type: 'danger', message<%- enableTranslation ? ', translationKey, translationParams' : '' %> }, this.alerts);
   }
 
   private handleHttpError(response: EventWithContent<unknown> | string): void {
