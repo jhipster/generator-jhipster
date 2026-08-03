@@ -219,7 +219,7 @@ export class UserManagementDeleteDialog {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/detail/user-management-detail.spec.ts": {
-    "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from "vitest";
+    "contents": "import { beforeEach, describe, expect, it, vitest } from "vitest";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { provideRouter, withComponentInputBinding } from "@angular/router";
 import { RouterTestingHarness } from "@angular/router/testing";
@@ -956,7 +956,7 @@ export class UserManagement implements OnInit {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/route/user-management-routing-resolve.service.spec.ts": {
-    "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from "vitest";
+    "contents": "import { beforeEach, describe, expect, it, vitest } from "vitest";
 
 import { HttpErrorResponse } from "@angular/common/http";
 import { TestBed } from "@angular/core/testing";
@@ -1128,7 +1128,7 @@ export default userManagementResolve;
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/service/user-management.service.spec.ts": {
-    "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from "vitest";
+    "contents": "import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { TestBed } from "@angular/core/testing";
 import {
   provideHttpClientTesting,
@@ -1605,7 +1605,7 @@ export class UserManagementService extends UserManagementsService {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-form.service.spec.ts": {
-    "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from "vitest";
+    "contents": "import { beforeEach, describe, expect, it } from "vitest";
 import { TestBed } from "@angular/core/testing";
 
 import {
@@ -2114,7 +2114,7 @@ export class UserManagementFormService {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/entities/admin/user-management/update/user-management-update.spec.ts": {
-    "contents": "import { afterEach, beforeEach, describe, expect, it, vitest } from "vitest";
+    "contents": "import { beforeEach, describe, expect, it, vitest } from "vitest";
 import { HttpResponse } from "@angular/common/http";
 import { provideHttpClientTesting } from "@angular/common/http/testing";
 import { ComponentFixture, TestBed } from "@angular/core/testing";

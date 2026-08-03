@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { afterEach, beforeEach, describe, expect, it, vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { DOCUMENT } from '@angular/common';
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -24,7 +24,7 @@ import { Title } from '@angular/platform-browser';
 import { Data, Router, TitleStrategy } from '@angular/router';
 
 <%_ if (enableTranslation) { _%>
-import { InterpolatableTranslationObject, LangChangeEvent, TranslateService, provideTranslateService } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateService, provideTranslateService } from '@ngx-translate/core';
 <%_ } _%>
 import { Subject, of } from 'rxjs';
 

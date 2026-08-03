@@ -27,7 +27,6 @@ import { configureStore, createReducer } from '@reduxjs/toolkit';
 import { AUTHENTICATION_TOKEN_KEY } from 'app/shared/jhipster/constants';
 <%_ } _%>
 import authentication, {
-  getSession,
   getAccount,
 <%_ if (!authenticationTypeOauth2) { _%>
   authenticate,
@@ -42,9 +41,6 @@ import authentication, {
   clearAuth,
   initialState,
 } from 'app/shared/reducers/authentication';
-<%_ if (enableTranslation) { _%>
-import { updateLocale, setLocale } from 'app/shared/reducers/locale';
-<%_ } _%>
 
 describe('Authentication reducer tests', () => {
   function isAccountEmpty(state): boolean {
